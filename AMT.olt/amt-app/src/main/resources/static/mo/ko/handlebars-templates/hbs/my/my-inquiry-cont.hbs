@@ -1,0 +1,21 @@
+<dl class="question">
+	<dt>상담내용</dt>
+	<dd>
+		{{#if (isExist this.info.inquiryFileList)}}
+			<div class="attached">
+				{{#each this.info.inquiryFileList}}
+					<img src="{{this.fileUrl}}" alt="">
+				{{/each}}
+			</div>
+		{{/if}}
+		<pre class="text">{{this.info.inquiryBodyText}}</pre>
+	</dd>
+</dl>
+{{#if (eq this.YN 'Y')}}
+	<dl class="answer">
+		<dt>상담원답변</dt>
+		<dd>
+			<pre class="text">{{this.responseBodyText}}</pre>
+		</dd>
+	</dl>
+{{/if}}

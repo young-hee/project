@@ -1,0 +1,273 @@
+<html ap:decorate="~{layout/layout-member-join}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents member_login">
+
+		<div class="ui_toggle_contents view_keyboard">
+			<button class="toggle_btn">PC 키보드 보기 <i class="ico_down"></i></button>
+			<div>
+				<img ap:src="@{/images/member/img_keyboard.png}" alt="pc 용 키보드 배열">
+			</div>
+		</div>
+
+		<form th:method="${method}" id="sub" th:action="${returnUrl}">
+			<th:block th:if="${pVal}" th:each="item : ${pVal}">
+				<th:block th:if="${pVal}" th:each="item : ${pVal}">
+					<input  type="hidden" th:name="${item.key}" th:value="${item.value}">
+				</th:block>
+			</th:block>
+		</form>
+		
+		<form class="login" method="post" action="/loginRedirect">
+			<fieldset class="form">
+				<legend class="sr_only">휴대폰 간편 로그인</legend>
+				<div class="input_wrap">
+					<input type="text" title="이름 입력" name="custNm" placeholder="이름을 입력하세요">
+				</div>
+				<div class="input_group">
+					<div class="select_wrap w30p">
+						<select name="phoneNumber1" required="required" title="휴대폰 사업자 식별번호 선택" data-msg-required="휴대전화 사업자 식별번호를 입력해주세요.">
+							<option value="010">010</option>
+							<option value="011">011</option>
+							<option value="016">016</option>
+							<option value="017">017</option>
+							<option value="018">018</option>
+							<option value="019">019</option>
+						</select>
+					</div>
+					<div class="gap"></div>
+					<div class="input_wrap"><input type="tel" name="phoneNumber2" required="required" title="휴대폰 번호 입력" maxlength="8" placeholder="휴대폰 번호 입력('-' 생략)" data-msg-required="휴대폰번호를 입력해 주세요."></div>
+				</div>
+				<div class="btn_login_wrap">
+					<a href="javascript:;" id="send-sms" class="bg_purple">인증번호 발송</a>
+				</div>
+				<div class="btn_login_wrap mgt20">
+					<a href="javascript:;" onclick="location.replace('/login')" class="bg_white">일반 로그인</a>
+				</div>
+			</fieldset>
+			
+			<fieldset style="display:none;" class="form">
+				<legend class="sr_only">휴대폰 인증 번호</legend>
+				<div class="input_wrap">
+					<input type="tel" name="smsNum" required="required" title="인증번호를 입력하세요." maxlength="8" placeholder="인증번호를 입력하세요." data-msg-required="인증번호를 입력해 주세요.">
+				</div>
+				<div class="tel_confirm_time">
+					<span>남은시간</span><span name="timer">3:00</span>
+				</div>
+				<div class="tel_confirm_num_resend">
+					<a href="javascript:;" id="btn_re_send_sms" class="" title="인증번호 재전송">인증번호 재전송</a>
+				</div>
+				<ul class="tel_confirm_num_txt">
+					<li>신규 고객님의 경우 인증후 회원가입이 됩니다.</li>
+					<li>본인인증후 ID 존재시 해당 ID로 자동 로그인되며,<br />본인인증 5회 실패시 당일 휴대폰 간편로그인이 제한됩니다.</li>
+				</ul>
+				<div class="btn_login_wrap">
+					<a href="javascript:;" id="complete" class="bg_purple">인증하기</a>
+				</div>
+			</fieldset>
+		</form>
+		<hr class="div m20">
+
+		<div class="btn_login_wrap">
+			<a href="javascript:;" onclick="location.replace('/guestOrder')" class="bg_white_arrow"><span>비회원 로그인</span></a>
+		</div>
+
+		<div class="member_menu">
+			<a href="/customer/signup">회원가입</a><a href="/customer/find/find-id">아이디찾기</a><a href="/customer/find/find-pwd">비밀번호찾기</a>
+		</div>
+
+	</div>
+
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+<script>
+
+function back() {
+    location.href = "/main";
+}
+$('#send-sms, #btn_re_send_sms').on('click', function() {
+    sendSms();
+    return false;
+});
+$('#complete').on('click', function() {
+	if (!t.isRunning()) {
+	    AP.modal.alert("입력시간 초과했습니다. 인증번호 재전송 버튼을 눌러 인증 절차를 다시 진행하십시오.");
+	    return;
+	}
+	loginProcess();
+    return false;
+});
+
+var def_Time = 3,
+    def_TimeCnt = 3,
+    t = new AP.common.timeCountDown(def_Time, function() {
+    	$('.result_box p').hide();
+    	$('#time-over').show();
+	}),
+    certTimeCnt = 0,
+    extTimeCnt = 0;
+
+var returnUrl = '[[${returnUrl}]]';
+if (returnUrl == '') returnUrl = "/main";
+
+$('form [name=redirectUrl]').val(returnUrl);
+
+var incsNo;
+function sendSms() {
+	var $form = $('form');
+    $form.validate().settings.ignore = "[name=smsNum]";
+    if($form.valid()) {
+    	$('#send-sms').attr("disabled", "disabled");
+
+        AP.api.mobileLoginRequest({}, AP.common.getFormData($form)).done(function(data) {
+            //성공
+            if (data) {
+            	incsNo = data.incsNo;
+                AP.modal.alert("인증번호가 전송되었습니다.");
+                $('#req-field').hide();
+                $('#rsp-field').show();
+                certTimeCnt = 2;
+                if (t.isRunning()) {
+                    t.stop();
+                }
+                t.start();
+
+            } else {
+                AP.modal.alert("[ajax.done]실패")
+            }
+        }).fail(function(xhr, textStatus, errorThrown) {
+
+            if (xhr.errorCode == 0) {
+                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+            } else if (xhr.errorCode == 'EAPI001') {
+                var contents = new Object();
+                contents.title = "인증실패";
+                contents.contents = data.message;
+                contents.confirmLabel = "확인";
+                AP.modal.info(contents).addListener('modal-close', function(e) {});
+            } else {
+                AP.modal.alert(xhr.errorMessage)
+            }
+        }).always(function() {
+            $("#send-sms").removeAttr("disabled");
+            //성공, 실패
+        });
+    }
+}
+
+function loginProcess() {
+    var $form = $('form');
+    $form.validate().settings.ignore = "";
+    if ($form.valid()) {
+
+        $("#complete").attr("disabled", "disabled");
+        AP.api.mobileLogin({}, {
+        	'incsNo':incsNo,
+        	'smsNum':$('[name=smsNum]').val()
+        	
+        }, AP.common.getFormData($form)).done(function(data) {
+
+            if (data.sleep == 'Y') {
+                var contents = new Object();
+                contents.title = "알림";
+                contents.contents = data.message;
+                contents.confirmLabel = data.message;
+                AP.modal.info(contents).addListener('modal-close', function(e) {
+                    location.href = "/customer/signup";
+                });
+
+            } else if (data.old == 'Y') {
+                changeInfoModal();
+            } else if (data.changePw == 'Y') {
+                var contents = new Object();
+                contents.title = "알림";
+                contents.contents = data.message;
+                contents.cancelLabel = "다음에 변경";
+                contents.confirmLabel = "비밀번호 변경";
+
+                AP.modal.info(contents).addListener('modal-close', function(e) {
+                    if (e.closeType == 'close' || e.closeType == 'cancel') {
+                        location.href = returnUrl;
+                    } else if (e.closeType == 'confirm') {
+                        changePassword();
+                    }
+                    console.log(e.closeType); //close, confirm, cancel
+                });
+            } else {
+            	loginComplete();
+            }
+
+        }).fail(function(xhr, textStatus, errorThrown) {
+            if (xhr.errorCode == 0) {
+                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+            } else if (xhr.errorCode == 401) {
+          	  $('.result_box p').hide();
+          	  $('#err_cert').show();
+          	  $('#err_count').html(xhr.responseJSON.dailyFailureCount);
+            } else if (xhr.errorCode == 'ESAL062') {
+                AP.modal.alert("일일 인증실패 횟수를 초과했습니다.");
+            } else {
+                AP.modal.alert(xhr.errorMessage)
+            }
+        }).always(function() {
+            //성공, 실패
+            $("#complete").removeAttr("disabled");
+        });
+    }
+}
+
+$('input[type=tel]').keydown(function (event) {
+    if (event.keyCode) {
+        var code = event.keyCode;
+        if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+            return true;
+        } else {
+            return false;
+        }
+    } else if (e.which) {
+        var code = e.which;
+        if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+});
+$('input[type=tel]').keyup(function (event) {
+	event = event || window.event;
+	var keyID = (event.which) ? event.which : event.keyCode;
+	if ( keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39 ) 
+		return;
+	else
+		event.target.value = event.target.value.replace(/[^0-9]/g, "");
+});
+
+function loginComplete() {
+
+    if (/Android/i.test(navigator.userAgent)) {
+        location.href = "webview://mobile?action=login";
+    	try {
+    		window.webview.mobile('login');
+    	} catch(e) {
+    	}
+    } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        location.href = "webview://mobile?action=login";
+    }
+    setTimeout(function() {
+        if ($('#sub').attr('method') == 'POST')
+            $('#sub').submit();
+        else
+            location.href = $('#sub').attr('action').replace('?isRequiredLogin=true', '');
+    }, 1);
+
+}
+
+</script>
+</th:block>
+
+</body>
+</html>

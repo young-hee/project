@@ -1,0 +1,100 @@
+<html ap:decorate="~{layout/layout-sub}">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page contents -->
+		<div class="ap_contents">
+
+			<!-- breadcrumbe -->
+			<th:block ap:replace="~{common/fragment/breadcrumb-only}"/>
+			<!-- // breadcrumbe -->
+
+			<!-- com_cont -->
+			<div class="ap_com_cont mypage">
+				<!-- aside_area -->
+				<th:block ap:replace="~{html/page/my/fragment/my-menu}"/>
+				<!-- aside_area -->
+
+				<!-- cont_area -->
+				<div class="cont_area">
+					<div class="sub_title">
+						<!-- page title -->
+						<th:block ap:replace="~{common/fragment/page-title}"/>
+						<!-- // page title -->
+					</div>
+					<div class="panel bg_white my_onepay">
+
+						<div class="onepay_manage slide" data-ix-options="move-length:1;loop:false;datum-point:20px">
+							<div class="ix-list-viewport">
+								<ul class="ix-list-items">
+									<li class="ix-list-item">
+										<div class="card">
+											<img ap:src="@{/images/card_img/appay_bc.png}" alt="BC카드">
+											<div class="card_info">
+												<span class="default">대표카드</span>
+												<p class="card_name">신한(개인)</p>
+												<p class="card_num">5186 69** **** 5248</p>
+												<div class="page_btns">
+													<button type="button" class="btn_modify"><span class="sr_only">수정</span></button>
+													<button type="button" class="btn_del"><span class="sr_only">삭제</span></button>
+												</div>
+											</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="card">
+											<img ap:src="@{/images/card_img/appay_citi.png}" alt="citi 카드">
+											<div class="card_info">
+												<span class="default">대표카드</span>
+												<p class="card_name">신한(개인)</p>
+												<p class="card_num">5186 69** **** 5248</p>
+												<div class="page_btns">
+													<button type="button" class="btn_modify"><span class="sr_only">수정</span></button>
+													<button type="button" class="btn_del"><span class="sr_only">삭제</span></button>
+												</div>
+											</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="card add">
+											<button class="btn_add"><span class="sr_only">카드추가</span></button>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<div class="ix-controller">
+								<div class="slide_direction">
+									<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
+									<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
+									<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
+								</div>
+							</div>
+						</div>
+
+						<ul class="list_bullet_dot">
+							<li>대표카드로 설정된 카드는 Apmall ONE pay 결제 시 자동으로 결제에 사용됩니다.</li>
+							<li>카드정보는 (주)엘지유플러스 전자결제에서만 관리되며  Apmall에서는 저장되지 않습니다.</li>
+							<li>휴대폰 분실 등을 통한 타인의 자동결제에 대해서는 Apmall에서 책임지지 않습니다.</li>
+							<li>일부 프로모션에서 적용되지 않는 브랜드, 상품이 있을 수 있습니다.</li>
+						</ul>
+					</div>
+				</div>
+				<!-- // cont_area -->
+
+			</div>
+			<!-- // com_cont -->
+
+		</div>
+		<!-- // page contents -->
+	</div><!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script>
+			$( '.ui_input_images' ).inputImages();
+			$( '.onepay_manage.slide' ).ixSlideMax();
+		</script>
+	</th:block>
+</body>
+</html>

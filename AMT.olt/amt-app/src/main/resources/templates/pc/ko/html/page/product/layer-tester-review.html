@@ -1,0 +1,127 @@
+<html ap:decorate="~{layout/only-contents}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="modal_dimmed"></div>
+	<div class="layer_popup" style="display: block;">
+		<div class="layer_wrap beauty_tester_review" style="margin-top:-448px;">
+			<dl class="layer">
+				<dt class="layer_title"><span class="sr_only">리뷰</span></dt>
+				<dd class="layer_cont">
+					<!--/* 슬라이드 */-->
+					<div class="slide" data-ix-options="view-length:1; loop:false">
+						<div class="ix-list-viewport">
+							<ul class="ix-list-items">
+								<li class="ix-list-item type_full" style="background-image:url(/pc/ko/images/dummy/img_beautytester_review_02.jpg);">
+									<img ap:src="@{/images/dummy/img_beautytester_review_02.jpg}" alt="">
+									<div class="review_info">
+										<div class="product_rating">
+											<span class="mark_star_sm star4"><span class="sr_only">구매 평점 별 5개 중 1개</span></span>
+										</div>
+										<p class="review_title">매트한 쿠션을 찾는분들에게<br>딱이에요</p>
+										<div class="prd_option"><span>헤라 블랙쿠션 17호 바닐라</span></div>
+										<div class="editor_info">
+											<span>amo***</span><span>VVIP</span><span class="date">2018.01.30</span>
+										</div>
+									</div>
+								</li>
+								<li class="ix-list-item type_vertical">
+									<div class="img">
+										<img ap:src="@{/images/dummy/img_beautytester_review_03.jpg}" alt="">
+									</div>
+									<p class="text">
+										정말 유명한 블랙쿠션!!<br>
+										너무 궁금해서 저도 한번 사용해봤어요<br>
+										블랙박스에서 케이스를 꺼내면 고급진 블랙 케이스가
+										뙇!! ㅎㅎ  반들반들 만지기 아까워요 ㅠㅠ
+									</p>
+								</li>
+								<li class="ix-list-item type_landscape">
+									<div class="img">
+										<img ap:src="@{/images/dummy/img_beautytester_review_03.jpg}" alt="">
+									</div>
+									<p class="text">
+										정말 유명한 블랙쿠션!!<br>
+										너무 궁금해서 저도 한번 사용해봤어요<br>
+										블랙박스에서 케이스를 꺼내면 고급진 블랙 케이스가
+										뙇!! ㅎㅎ  반들반들 만지기 아까워요 ㅠㅠ
+									</p>
+								</li>
+								<li class="ix-list-item type_full" >
+									<div class="img">
+										<img ap:src="@{/images/dummy/img_beautytester_review_04.jpg}" alt="">
+									</div>
+									<p class="text">
+										정말 유명한 블랙쿠션!!<br>
+										너무 궁금해서 저도 한번 사용해봤어요<br>
+										블랙박스에서 케이스를 꺼내면 고급진 블랙 케이스가
+										뙇!! ㅎㅎ  반들반들 만지기 아까워요 ㅠㅠ
+									</p>
+								</li>
+								<li class="ix-list-item type_divide_horizontal">
+									<div class="img">
+										<img ap:src="@{/images/dummy/img_beautytester_review_03.jpg}" alt="">
+									</div>
+									<div class="img">
+										<img ap:src="@{/images/dummy/img_beautytester_review_02.jpg}" alt="">
+									</div>
+									<p class="text">
+										정말 유명한 블랙쿠션!!<br>
+										너무 궁금해서 저도 한번 사용해봤어요<br>
+										블랙박스에서 케이스를 꺼내면 고급진 블랙 케이스가
+										뙇!! ㅎㅎ  반들반들 만지기 아까워요 ㅠㅠ
+									</p>
+								</li>
+								<li class="ix-list-item type_divide_vertical">
+									<div class="img">
+										<img ap:src="@{/images/dummy/img_beautytester_review_02.jpg}" alt="">
+									</div>
+									<div class="img">
+										<img ap:src="@{/images/dummy/img_beautytester_review_03.jpg}" alt="">
+									</div>
+									<p class="text">
+										정말 유명한 블랙쿠션!!<br>
+										너무 궁금해서 저도 한번 사용해봤어요<br>
+										블랙박스에서 케이스를 꺼내면 고급진 블랙 케이스가
+										뙇!! ㅎㅎ  반들반들 만지기 아까워요 ㅠㅠ
+									</p>
+								</li>
+							</ul>
+						</div>
+						<div class="ix-controller"><!--/* 첫번째 슬라이스 에만 white 클래스 추가 */-->
+							<div class="paging"><b class="current">1 </b><span class="total">/2</span></div>	<!--/* 슬라이드에 페이징 추가 */-->
+							<div class="slide_direction">
+								<a class="ix-btn-prev" href="#"><span class="sr_only">이전</span></a>
+								<a class="ix-btn-next" href="#"><span class="sr_only">다음</span></a>
+							</div>
+							<a href="#none" class="btn_good"><i class="ico_thumb"></i><span>도움이 되요 <b class="num">58</b></span></a>
+						</div>
+					</div>
+				</dd>
+			</dl>
+			<button type="button" class="layer_close"><span class="sr_only">레이어 닫기</span></button>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script>
+		$( '.slide' ).on( 'ixSlideMax:init ixSlideMax:change' , changeHandler );
+		$( '.slide' ).ixSlideMax();
+
+		function changeHandler () {
+			$( '.slide' ).find( '.ix-list-item' ).each(function () {
+				if ( $( this ).attr( 'aria-hidden' ) === 'true' ) {
+					$( this ).removeClass( 'active' );
+				} else {
+					$( this ).addClass( 'active' );
+				}
+			});
+		}
+	</script>
+</th:block>
+
+</body>
+</html>

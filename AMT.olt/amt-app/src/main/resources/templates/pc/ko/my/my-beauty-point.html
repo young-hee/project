@@ -1,0 +1,126 @@
+<html ap:decorate="~{layout/layout-sub}">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page contents -->
+		<div class="ap_contents">
+
+			<!-- pbreadcrumbe -->
+			<th:block ap:replace="~{common/fragment/breadcrumb-only}"/>
+			<!-- // pbreadcrumbe -->
+
+			<!-- com_cont -->
+			<div class="ap_com_cont mypage">
+				<!-- aside_area -->
+				<th:block ap:replace="~{html/page/my/fragment/my-menu}"/>
+				<!-- aside_area -->
+
+				<!-- cont_area -->
+				<div class="cont_area my_beauty_point">
+					<div class="sub_title">
+						<!-- page title -->
+						<th:block ap:replace="~{common/fragment/page-title}"/>
+						<!-- // page title -->
+					</div>
+					<div class="panel table_layout">
+						<div><em th:text="${#IntegUtil.toCommaNumber(point.rmnPt)}">123,456P</em> <span>사용가능합니다.</span></div>
+						<div class="align_right">
+							<a href="#" class="btn_lg_gradient">만료예정 뷰티포인트</a>
+							<button type="button" class="btn_lg_gradient">뷰티포인트 정책안내</button>
+						</div>
+					</div>
+
+					<div class="date_search table_layout body">
+						<div>조회 기간</div>
+						<div class="ui_multiple_date_picker">
+							<div class="date_btn_set">
+					            <span><input type="radio" class="select_range_date" name="radio5" id="radio5_0" value="all" checked=""><label for="radio5_0">전체</label></span>
+					            <span><input type="radio" class="select_range_date" name="radio5" id="radio5_1" value="1weeks"><label for="radio5_1">1주일</label></span>
+					            <span><input type="radio" class="select_range_date" name="radio5" id="radio5_2" value="1months"><label for="radio5_2">1개월</label></span>
+					            <span><input type="radio" class="select_range_date" name="radio5" id="radio5_3" value="3months"><label for="radio5_3">3개월</label></span>
+					            <span><input type="radio" class="select_range_date" name="radio5" id="radio5_4" value="6months"><label for="radio5_4">6개월</label></span>
+					            <span><input type="radio" class="select_range_date" name="radio5" id="radio5_5" value="1years"><label for="radio5_5">12개월</label></span>
+							</div>
+					        <div class="input_date_group" style="display:none;">
+					            <div class="input_wrap" style="display:none;">
+					                <input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+					                <input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+					            </div>
+					            <div class="date_info_area" id="date1">
+					                <span class="sr_only">시작일</span> <span class="start_date"></span> ~ <span class="sr_only">종료일</span> <span class="end_date"></span> <span class="date_text">까지의 사용 및 적립 내역</span>
+					            </div>
+				            </div>
+						</div>
+						<div><button class="btn_sm_form" type="button"><span class="ie_press">검색</span></button></div>
+					</div>
+
+            		<div ap:replace="~{my/fragment/point-fragment :: beauty-point-list}"></div>
+				</div>
+				<!-- // cont_area -->
+
+			</div>
+			<!-- // com_cont -->
+
+		</div>
+		<!-- // page contents -->
+	</div><!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script>
+
+		var date = null;
+			//multiple date picker적용
+			$( '.ui_multiple_date_picker' ).multipleDatePicker({
+				defaultRangeDate: 'all',
+				minDate: moment().subtract( 50, 'years' )
+			}).on( 'multiple-date-picker-change', function (e) {
+				console.log( e.type, e.date );
+				date = e.date;
+			    $.get("/my/page/info/beautyPointListFragment?startDt="+e.date.startDate + "&endDt="+e.date.endDate + "&tlmcCd="+$('select[name=tlmcCd]').val(), function(data) {
+			    	date = e.date;
+			    	$(".pbody").remove();
+			    	$(".body").after(data);
+			    	$('#date2').html($('#date1').html());
+			    });
+			});
+			
+			
+		$('select[name=tlmcCd]').change(function() {
+
+			if(date == null) {
+			    $.get("/my/page/info/beautyPointListFragment?pageNumber=1&tlmcCd="+$('select[name=tlmcCd]').val(), function(data) {
+			    	$(".pbody").remove();
+			    	$(".body").after(data);
+			    	$('#date2').html($('#date1').html());
+			    });
+			} else {
+				$.get("/my/page/info/beautyPointListFragment?startDt="+date.startDate + "&endDt="+date.endDate + "&tlmcCd="+$('select[name=tlmcCd]').val(), function(data) {
+			    	$(".pbody").remove();
+			    	$(".body").after(data);
+			    	$('#date2').html($('#date1').html());
+			    });
+			}
+		});
+		function more(page) {
+			if(page == 0 || page == null) return;
+			if(date != null) {
+			    $.get("/my/page/info/beautyPointListBodyFragment?pageNumber=" + page + "&startDt="+date.startDate + "&endDt="+date.endDate + "&tlmcCd="+$('select[name=tlmcCd]').val(), function(data) {
+			    	$('.pagination').remove();
+			    	$(".board_list2").replaceWith(data);
+			    	$('#date2').html($('#date1').html());
+			    });
+			} else {
+			    $.get("/my/page/info/beautyPointListBodyFragment?pageNumber=" + page + "&tlmcCd="+$('select[name=tlmcCd]').val(), function(data) {
+			    	$('.pagination').remove();
+			    	$(".board_list2").replaceWith(data);
+			    	$('#date2').html($('#date1').html());
+			    });
+			}
+			
+		}
+		</script>
+	</th:block>
+</body>
+</html>

@@ -1,0 +1,3326 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>APMall : Html list (PC)</title>
+	<style>
+		*{margin:0; padding:0;}
+		body{ font:12px/1 "Malgun Gothic", "맑은 고딕"}
+		h1{padding:1em; color:#fff; background:#333; font-size:20px; text-align:center; font-weight:normal;}
+		h1 a{color:#fff}
+		.guide_tab{position:relative; width:100%; padding-top:4em;}
+		.guide_tab:before{content:''; position:absolute; top:37px; left:0; right:0; z-index: 1; height:1px; background:#333;}
+		.guide_tab>dt{position:absolute; top:0; left:0;}
+		.guide_tab>dt>a{display:block; min-width:80px; height:36px; padding:0 1em; text-align:center; background:#fff; font-size:13px; cursor: pointer; white-space:nowrap; color:#333; border:1px solid #333;}
+		.guide_tab>dt>a:before{content:''; display:inline-block; width:0; height:110%; vertical-align: middle;}
+		.guide_tab>dt.on>a{background:#333; color:#fff; font-weight:bold;}
+		.guide_tab>dt.on + dd{display:block;}
+		.guide_tab>dd>div{overflow:auto;}
+		.guide_tab>dd table{width:100%; margin:10px 0; border-collapse: collapse;}
+		.guide_tab>dd table td,
+		.guide_tab>dd table th{padding:8px 5px; border-right:1px solid #e4dcd3; border-bottom:1px solid #e4dcd3; line-height: 1.2em; word-break: keep-all;}
+		.guide_tab>dd table th{padding:8px 0; border-top:1px solid #e4dcd3; background:#eaeaea;}
+		.guide_tab>dd table td.date {color:red;}
+		.pubchk {color:red; text-align:center;}
+		.jsdate.new:after,
+		.date.new:after{content:'NEW'; display:inline-block; margin:-2px 0 0 5px; padding:1px 3px 2px 2px; background:#f00; color:#fff; border-radius: 3px; line-height:1; vertical-align: middle; font-size:10px;}
+		.del,
+		.del td{text-decoration: line-through;}
+		.count{position:absolute; top:15px; right:0;}
+		.count>span:nth-child(1){color:#00f}
+		.count>span:nth-child(2){color:#f00;}
+		.count>span:nth-child(3){padding:0 5px; background:#f00; color:#fff;}
+		[class^="btn_update"]{padding:5px 10px; margin-right:4px; color:#fff; border-radius: 3px; border:0; vertical-align: middle; letter-spacing: -1px; font-size:0.9em;}
+		.btn_update_filter.active{background:#f00;}
+		.btn_update_filter{background:#002c5e;}
+		#toTop{display:none; position:fixed; bottom:3em; right:3em;}
+		#toTop button{width:3em; height:3em; border:0; border-radius: 50%; background:rgba(0, 0, 0, 0.5); font-size:1.5em; color:#fff;}
+		@media screen and (max-width:768px){
+			.count{top:1em;}
+			.guide_tab{padding-top:280px; margin-top:20px;}
+			.guide_tab>dt{width:calc(50% - 3px);}
+			.guide_tab>dt:nth-of-type(even){left:auto; right:0;}
+			.guide_tab>dt:nth-of-type(2){top:0;}
+			.guide_tab>dt:nth-of-type(3){top:45px;}
+			.guide_tab>dt:nth-of-type(4){top:45px;}
+			.guide_tab>dt:nth-of-type(5){top:90px;}
+			.guide_tab>dt:nth-of-type(6){top:90px;}
+			.guide_tab>dt:nth-of-type(7){top:135px;}
+			.guide_tab>dt:nth-of-type(8){top:135px;}
+			.guide_tab>dt:nth-of-type(9){top:180px;}
+			.guide_tab>dt:nth-of-type(10){top:180px;}
+			.guide_tab>dt:nth-of-type(11){top:225px;}
+			.guide_tab>dt:nth-of-type(12){top:225px;}
+
+		}
+
+		.preview_window_wrap {position:fixed; top:137px; left:0; z-index:1000; background:#fff; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4), 0 6px 20px 0 rgba(0,0,0,0.4); overflow:hidden; border-radius:2px;}
+		.preview_window_wrap.size100 {width:1280px; height:calc(940px + 20px);}
+		.preview_window_wrap.size70 {width:calc(1280px * 0.7); height:calc(940px * 0.7 + 20px);}
+		.preview_window_wrap.size50 {width:calc(1280px * 0.5); height:calc(940px * 0.5 + 20px);}
+		.preview_window_wrap .title_bar {position:absolute; top:0; left:0; width:100%; height:16px; background:linear-gradient(0deg, #000000 0, #4d4d4d 100%); color:#fff; padding-top:4px; cursor:move;}
+		.preview_window_wrap.deactive .title_bar {background:#858585;}
+		.preview_window_wrap iframe {margin-top:20px; width:1280px; height:940px; transform-origin: 0 0;}
+		.preview_window_wrap.size100 iframe {transform:scale(1);}
+		.preview_window_wrap.size70 iframe {transform:scale(0.7);}
+		.preview_window_wrap.size50 iframe {transform:scale(0.5);}
+		.preview_window_wrap input {position:absolute; top:2px; background:transparent; color:#fff; border:0;}
+		.preview_window_wrap input:hover {color:#2196f3;}
+		.preview_window_wrap .btn_close {right:10px;}
+		.preview_window_wrap .btn_copy{right:25px}
+		.preview_window_wrap .size:nth-of-type(5){right:60px}
+		.preview_window_wrap .size:nth-of-type(4){right:95px}
+		.preview_window_wrap .size:nth-of-type(3){right:125px}
+		.preview_window_wrap .transparent {position:absolute; right:0; top:20px; width:100%; height:calc(100% - 20px); background:rgba(0,0,0,0); display:none;}
+		.btn_preview_window{background:#2196f3;}
+		.file.on{background:#e4dcd3;}
+	</style>
+</head>
+<body style="height:auto;">
+<h1>APMall : HTML LIST (PC) | <span><a href="/html?_viewtype_=mo">Mobile</a></span></h1>
+<div style="margin:1em;">
+	<span><b>Filtering : </b></span>
+	<input type="button" class="btn_update_filter filter_all active" value="전체 보기">
+	<input type="button" class="btn_update_filter filter_prev_week" value="지난주 업데이트 보기">
+	<input type="button" class="btn_update_filter filter_week" value="금주 업데이트 보기"> : 오늘날짜 기준 &nbsp;&nbsp;&nbsp;
+	<input type="button" class="btn_update btn_preview_window" value="Preview Window">
+</div>
+<div style="position:relative; margin:1em;">
+	<div class="count">총 : <span></span>, 완료 : <span></span>, 진행율 : <span></span></div>
+	<dl class="guide_tab">
+		<dt class="viewAll on"><a>전체보기</a></dt>
+		<dt><a>가이드</a></dt>
+		<dd>
+			<div>
+				<b>가이드</b>
+				<table>
+					<colgroup>
+						<col style="width:10%; border-left:1px solid #e4dcd3;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:*">
+					</colgroup>
+					<thead>
+					<tr>
+						<th rowspan="2">depth 1</th>
+						<th rowspan="2">depth 2</th>
+						<th rowspan="2">depth 3</th>
+						<th rowspan="2">depth 4</th>
+						<th rowspan="2">depth 5</th>
+						<th rowspan="2">Link</th>
+						<th colspan="3">html</th>
+						<th colspan="2">front-end</th>
+						<th rowspan="2">검수완료</th>
+						<th rowspan="2">메모</th>
+					</tr>
+					<tr>
+						<th>작업자</th>
+						<th>완료일</th>
+						<th>완료예정일</th>
+						<th>담당자</th>
+						<th>완료일</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td class="d1">guide</td>
+						<td class="d2">html guide</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td><a href="/html/guide/index" target="preview">index.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date">07-17</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-20</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo">공통가이드(버튼, 셀렉트, 팝업, 폼) 작업</td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">Javascript 기본 guide</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td><a href="/html/guide/js" target="preview">js.html</a></td>
+						<td class="name"></td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate">03-28</td>
+						<td class="pubchk"></td>
+						<td class="memo">약관모달, login 추가</td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">layout</td>
+						<td class="d3">메인</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td><a href="/html/guide/page-main.html" target="preview">page-main.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date">07-23</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-13<br>(레이아웃),<br>08-14(메인)</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo">헤더/푸터/햄버거메뉴 작업 완료, 추후 footer 문구수정예정</td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">서브메인(overview 페이지)</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td><a href="/html/guide/page-sub.html" target="preview">page-sub.html</a></td>
+						<td class="name"></td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">서브 페이지</td>
+						<td class="d3">상품</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td><a href="/html/guide/page-product.html" target="preview">page-product.html</a></td>
+						<td class="name"></td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">마이</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td><a href="/html/guide/page-my.html" target="preview">page-my.html</a></td>
+						<td class="name"></td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">map</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td><a href="/html/guide/map.html" target="preview">map.html</a></td>
+						<td class="name"></td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">video</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td><a href="/html/guide/video.html" target="preview">video.html</a></td>
+						<td class="name"></td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">lazy load</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td><a href="/html/guide/lazy-load.html" target="preview">lazy-load.html</a></td>
+						<td class="name"></td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">Slide banner</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td><a href="/html/guide/banner.html" target="preview">banner.html</a></td>
+						<td class="name"></td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">loading</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td><a href="/html/guide/loading.html" target="preview">loading.html</a></td>
+						<td class="name"></td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</dd>
+		<dt><a>공통</a></dt>
+		<dd>
+			<div>
+				<b>공통</b>
+				<table class="html_list">
+					<colgroup>
+						<col style="width:10%; border-left:1px solid #e4dcd3;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:80px">
+						<col style="width:10%;">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:*">
+					</colgroup>
+					<thead>
+					<tr>
+						<th rowspan="2">depth 1</th>
+						<th rowspan="2">depth 2</th>
+						<th rowspan="2">depth 3</th>
+						<th rowspan="2">depth 4</th>
+						<th rowspan="2">depth 5</th>
+						<th rowspan="2">화면ID</th>
+						<th rowspan="2">Link</th>
+						<th colspan="3">html</th>
+						<th colspan="2">front-end</th>
+						<th rowspan="2">검수완료</th>
+						<th rowspan="2">메모</th>
+					</tr>
+					<tr>
+						<th>작업자</th>
+						<th>완료일</th>
+						<th>완료예정일</th>
+						<th>담당자</th>
+						<th>완료일</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td class="d1">공통</td>
+						<td class="d2">[Layer] 신고하기</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/common/report.html" target="preview">report.html</a></td>
+						<td class="name"></td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">이용약관</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/폴더/파일명.html" target="preview">파일명.html</a></td>
+						<td class="name"></td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo">* 디자인 미수급</td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">패밀리사이트</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/common/layer-familysite.html" target="preview">layer-familysite.html</a></td>
+						<td class="name"></td>
+						<td class="date">07-18</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-13</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</dd>
+		<dt><a>전시</a></dt>
+		<dd>
+			<div>
+				<b>전시</b>
+				<table class="html_list">
+					<colgroup>
+						<col style="width:10%; border-left:1px solid #e4dcd3;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:80px">
+						<col style="width:10%;">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:*">
+					</colgroup>
+					<thead>
+					<tr>
+						<th rowspan="2">depth 1</th>
+						<th rowspan="2">depth 2</th>
+						<th rowspan="2">depth 3</th>
+						<th rowspan="2">depth 4</th>
+						<th rowspan="2">depth 5</th>
+						<th rowspan="2">화면ID</th>
+						<th rowspan="2">Link</th>
+						<th colspan="3">html</th>
+						<th colspan="2">front-end</th>
+						<th rowspan="2">검수완료</th>
+						<th rowspan="2">메모</th>
+					</tr>
+					<tr>
+						<th>작업자</th>
+						<th>완료일</th>
+						<th>완료예정일</th>
+						<th>담당자</th>
+						<th>완료일</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td class="d1">메인</td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/main/home.html" target="preview">home.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">08-14(메인)</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">대카테고리</td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/product/product-list.html" target="preview">product-list.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date">07-25</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-25</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">중카테고리</td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/product/product-list2.html" target="preview">product-list2.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date">07-27</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-27</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">소카테고리</td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/product/product-list3.html" target="preview">product-list3.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date">07-27</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-27</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">이벤트</td>
+						<td class="d2">목록</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/event/event-list.html" target="preview">event-list.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">상세</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/event/event-view.html" target="preview">event-view.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[layer] 쿠폰 다운로드 완료</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/event/layer-event-01.html" target="preview">layer-event-01.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[layer] 사은품 당첨</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/event/layer-event-02.html" target="preview">layer-event-02.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[layer] 상품명 당첨</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/event/layer-event-03.html" target="preview">layer-event-03.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[layer] 포인트 적립</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/event/layer-event-04.html" target="preview">layer-event-04.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[layer] 당첨 X</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/event/layer-event-05.html" target="preview">layer-event-05.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">뷰티테스터</td>
+						<td class="d3">목록/상세</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/event/beauty-tester.html" target="preview">beauty-tester.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">테스터발표</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/event/beauty-tester.1.html" target="preview">beauty-tester.1.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">리뷰등록</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/event/beauty-tester.2.html" target="preview">beauty-tester.2.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">베스트리뷰발표</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/event/beauty-tester.3.html" target="preview">beauty-tester.3.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">매거진</td>
+						<td class="d2">목록</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/magazine/magazine.html" target="preview">magazine.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date">07-31</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-31</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">상세</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/magazine/magazine-view.html" target="preview">magazine-view.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date">08-01</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">08-01</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[Layer] 알림</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/magazine/layer-magazine-01.html" target="preview">layer-magazine-01.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[Layer] 확인 1</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/magazine/layer-magazine-02.html" target="preview">layer-magazine-02.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[Layer] 확인 2</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/magazine/layer-magazine-03.html" target="preview">layer-magazine-03.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">랭킹</td>
+						<td class="d2">[Tab] 실시간 많이 본 상품</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/ranking/ranking-live.html" target="preview">ranking-live.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">[Tab] 주간 구매 많은 상품</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/ranking/ranking-weekly.html" target="preview">ranking-weekly.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">브랜드</td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/brand/brand-home.html" target="preview">brand-home.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">브랜드관</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/brand/brand-main.html" target="preview">brand-main.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">depth1 / 카테고리 max</td>
+						<td class="d3">목록</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/brand/brand-depth-01.html" target="preview">brand-depth-01.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[Layer]브랜드스토리</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/brand/layer-brand-story.html" target="preview">layer-brand-story.html</a></td>
+						<td class="name"></td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">쿠폰/혜택</td>
+						<td class="d2">쿠폰존</td>
+						<td class="d3">[Tab]쿠폰존(등급별혜택)<br>[Tab]VIP 라운지<br>[Tab]출석체크</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/coupon/coupon.html" target="preview">coupon.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4">[Layer] APmall 고객 등급별 혜택</td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/폴더/파일명.html" target="preview">파일명.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo">* 디자인 미수급</td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4">[Layer] 로그인</td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/coupon/layer-coupon-01.html" target="preview">layer-coupon-01.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4">[Layer] 출석체크 완료</td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/coupon/layer-coupon-02.html" target="preview">layer-coupon-02.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4">[layer] 브랜드 Today쿠폰</td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/coupon/layer-coupon-03.html" target="preview">layer-coupon-03.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">플러스 맴버십</td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/membership/membership.html" target="preview">membership.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">가입하기(결제하기)</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/membership/membership-join.html" target="preview">membership-join.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">더 큰 할인</td>
+						<td class="d2">1+1 행사</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/event/one-plus-one.html" target="preview">one-plus-one.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">Sale</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/event/sale.html" target="preview">sale.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr class="link">
+						<td class="d1"></td>
+						<td class="d2">투데이 핫딜</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/event/hotdeal.html" target="preview">hotdeal.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo">더 큰 할인 링크</td>
+					</tr>
+					<tr>
+						<td class="d1">구매금액대별 사은품</td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/event/gift.html" target="preview">gift.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">스페셜 기프트</td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/event/special-gift.html" target="preview">special-gift.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">쿠션존</td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/폴더/파일명.html" target="preview">파일명.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo">* 디자인 미수급</td>
+					</tr>
+					<tr>
+						<td class="d1">쇼핑TIP</td>
+						<td class="d2">[Tab]할인<br>[Tab]사은품<br>[Tab]포인트<br>[Tab]배송</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/util/shopping.html" target="preview">shopping.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">신규혜택</td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/util/new-benefit.html" target="preview">new-benefit.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">카드혜택</td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/util/card-benefit.html" target="preview">card-benefit.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">퍼시픽샵</td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/폴더/파일명.html" target="preview">파일명.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo">* 디자인 미수급</td>
+					</tr>
+					<tr>
+						<td class="d1">이슈 & 테마</td>
+						<td class="d2">A type</td>
+						<td class="d3">목록</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/product/issue_typeA.html" target="preview">issue_typeA.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">B type</td>
+						<td class="d3">목록</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/product/issue_typeB.html" target="preview">issue_typeB.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</dd>
+		<dt><a>상품</a></dt>
+		<dd>
+			<div>
+				<b>상품</b>
+				<table class="html_list">
+					<colgroup>
+						<col style="width:10%; border-left:1px solid #e4dcd3;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:80px">
+						<col style="width:10%;">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:*">
+					</colgroup>
+					<thead>
+					<tr>
+						<th rowspan="2">depth 1</th>
+						<th rowspan="2">depth 2</th>
+						<th rowspan="2">depth 3</th>
+						<th rowspan="2">depth 4</th>
+						<th rowspan="2">depth 5</th>
+						<th rowspan="2">화면ID</th>
+						<th rowspan="2">Link</th>
+						<th colspan="3">html</th>
+						<th colspan="2">front-end</th>
+						<th rowspan="2">검수완료</th>
+						<th rowspan="2">메모</th>
+					</tr>
+					<tr>
+						<th>작업자</th>
+						<th>완료일</th>
+						<th>완료예정일</th>
+						<th>담당자</th>
+						<th>완료일</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td class="d1">상품공통</td>
+						<td class="d2">[layer]share</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/product/layer-sns-share.html" target="preview">layer-sns-share.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-27</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-30</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">카드사 혜택정보</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/product/layer-card-benefit.html" target="preview">layer-card-benefit.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-27</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-30</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">상품 상세</td>
+						<td class="d2">[Tab]상품정보<br>[Tab]상품리뷰<br>[Tab]배송정보</td>
+						<td class="d3">minimum case</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/product/product-detail.html" target="preview">product-detail.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-27</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-27</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">full case</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/product/product-detail-full.html" target="preview">product-detail-full.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-27</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-27</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">[layer]테스터리뷰</td>
+						<td class="d3"><span style="color:red;">(추후 뷰티테스터 코딩할때 작업!!)</span></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/product/layer-tester-review.html" target="preview">layer-tester-review.html</a></td>
+						<td class="name"></td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">[layer]상품리뷰상세</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/product/layer-photo-review.html" target="preview">layer-photo-review.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-27</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-30</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">[layer]APmall 앱 다운로드</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/product/layer-app.html" target="preview">layer-app.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-27</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-27</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">[layer]전성분 확인</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/product/layer-all-component.html" target="preview">layer-all-component.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-30</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-30</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</dd>
+		<dt><a>회원</a></dt>
+		<dd>
+			<div>
+				<b>로그인</b> <b>회원가입</b>
+				<table class="html_list">
+					<colgroup>
+						<col style="width:10%; border-left:1px solid #e4dcd3;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:80px">
+						<col style="width:10%;">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:*">
+					</colgroup>
+					<thead>
+					<tr>
+						<th rowspan="2">depth 1</th>
+						<th rowspan="2">depth 2</th>
+						<th rowspan="2">depth 3</th>
+						<th rowspan="2">depth 4</th>
+						<th rowspan="2">depth 5</th>
+						<th rowspan="2">화면ID</th>
+						<th rowspan="2">Link</th>
+						<th colspan="3">html</th>
+						<th colspan="2">front-end</th>
+						<th rowspan="2">검수완료</th>
+						<th rowspan="2">메모</th>
+					</tr>
+					<tr>
+						<th>작업자</th>
+						<th>완료일</th>
+						<th>완료예정일</th>
+						<th>담당자</th>
+						<th>완료일</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td class="d1">공통</td>
+						<td class="d2">[layer] 팝업</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/member/layer-member.html" target="preview">layer-member.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date">07-19</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo">회원관련 모든 팝업</td>
+					</tr>
+					<tr>
+						<td class="d1">로그인</td>
+						<td class="d2">[Tab]일반로그인<br>[Tab]휴대폰 로그인<br>[Tab]비회원 주문조회</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/member/login.html" target="preview">login.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date">07-19</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-19</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">로그인</td>
+						<td class="d2">[Tab]휴대폰 인증</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/member/login_phone.html" target="preview">login_phone.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date">07-19</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-19</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">아이디/비밀번호 찾기</td>
+						<td class="d2">아이디찾기</td>
+						<td class="d3">정보입력</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/member/find-id.1.html" target="preview">find-id.1.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">통합몰에서 사용</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">결과있음</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/member/find-id.2.html" target="preview">find-id.2.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">통합몰에서 사용</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">결과없음</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/member/find-id.3.html" target="preview">find-id.3.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">통합몰에서 사용</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">통합회원이 아닌경우</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/member/find-id.4.html" target="preview">find-id.4.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">통합몰에서 사용</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">비밀번호 찾기</td>
+						<td class="d3">정보입력</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/member/find-pwd.1.html" target="preview">find-pwd.1.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">통합몰에서 사용</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">완료</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/member/find-pwd.2.html" target="preview">find-pwd.2.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">통합몰에서 사용</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">회원가입</td>
+						<td class="d2">약관동의</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/member/member-join.1.html" target="preview">member-join.1.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date">07-19</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-19</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">정보입력</td>
+						<td class="d3">내국인</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/member/member-join.2.html" target="preview">member-join.2.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date">07-19</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-19</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo">타인명의 휴대전화 인증 페이지 동일<br />팝업 : [layer] 팝업 내(comfirm 팝업) 텍스트 주석 처리</td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">외국인</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/member/member-join.3.html" target="preview">member-join.3.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date">07-19</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-19</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">가입완료</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/member/member-join.4.1.html" target="preview">member-join.4.1.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">통합몰에서 사용</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">포인트가 있는 경우</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/member/member-join.4.2.html" target="preview">member-join.4.2.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">통합몰에서 사용</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">이미 가입된 회원</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/member/member-join.4.3.html" target="preview">member-join.4.3.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">통합몰에서 사용</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</dd>
+		<dt><a>주문/결제</a></dt>
+		<dd>
+			<div>
+				<b>장바구니</b> <b>주문/결제</b>
+				<table class="html_list">
+					<colgroup>
+						<col style="width:10%; border-left:1px solid #e4dcd3;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:80px">
+						<col style="width:10%;">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:*">
+					</colgroup>
+					<thead>
+					<tr>
+						<th rowspan="2">depth 1</th>
+						<th rowspan="2">depth 2</th>
+						<th rowspan="2">depth 3</th>
+						<th rowspan="2">depth 4</th>
+						<th rowspan="2">depth 5</th>
+						<th rowspan="2">화면ID</th>
+						<th rowspan="2">Link</th>
+						<th colspan="3">html</th>
+						<th colspan="2">front-end</th>
+						<th rowspan="2">검수완료</th>
+						<th rowspan="2">메모</th>
+					</tr>
+					<tr>
+						<th>작업자</th>
+						<th>완료일</th>
+						<th>완료예정일</th>
+						<th>담당자</th>
+						<th>완료일</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td class="d1">장바구니</td>
+						<td class="d2">회원</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/order/cart.html" target="preview">cart.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-23</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-18</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">비회원</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/order/no-cart.html" target="preview">no-cart.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-23</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-18</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">비회원</td>
+						<td class="d3">이용약관</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/order/no-cart-terms.html" target="preview">no-cart-terms.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-23</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-23</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">빈 장바구니</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/order/cart-basic.html" target="preview">cart-basic.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-23</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-23</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1">주문/결제</td>
+						<td class="d2">회원</td>
+						<td class="d3">주문서</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/order/payment.html" target="preview">payment.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-23</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-19</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">주문완료</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/order/payment-fin.html" target="preview">payment-fin.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-23</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-23</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[Layer] 선물포장서비스</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/order/layer-gift.html" target="preview">layer-gift.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-23</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-19</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">비회원</td>
+						<td class="d3">주문서</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/order/no-payment.html" target="preview">no-payment.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-23</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-19</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">주문완료</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/order/no-payment-fin.html" target="preview">no-payment-fin.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-23</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-19</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[Layer] 로그인</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/order/layer-login.html" target="preview">layer-login.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-23</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-19</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[Layer] 쿠폰</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/order/layer-cupon.html" target="preview">layer-cupon.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date">07-23</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-23</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[Layer] 기프트카드</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/order/layer-giftcard.html" target="preview">layer-giftcard.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date">07-23</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-23</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[Layer] 우편번호</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/order/layer-address.html" target="preview">layer-address.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-23</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-23</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk">O</td>
+						<td class="memo"></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</dd>
+		<dt><a>마이</a></dt>
+		<dd>
+			<div>
+				<b>마이파우치</b>
+				<table class="html_list">
+					<colgroup>
+						<col style="width:10%; border-left:1px solid #e4dcd3;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:80px">
+						<col style="width:10%;">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:*">
+					</colgroup>
+					<thead>
+					<tr>
+						<th rowspan="2">depth 1</th>
+						<th rowspan="2">depth 2</th>
+						<th rowspan="2">depth 3</th>
+						<th rowspan="2">depth 4</th>
+						<th rowspan="2">depth 5</th>
+						<th rowspan="2">화면ID</th>
+						<th rowspan="2">Link</th>
+						<th colspan="3">html</th>
+						<th colspan="2">front-end</th>
+						<th rowspan="2">검수완료</th>
+						<th rowspan="2">메모</th>
+					</tr>
+					<tr>
+						<th>작업자</th>
+						<th>완료일</th>
+						<th>완료예정일</th>
+						<th>담당자</th>
+						<th>완료일</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td class="d1">마이파우치(overview)</td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-pouch.html" target="preview">my-pouch.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-31</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-31</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">등급별 노출 상태</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-pouch-02.html" target="preview">my-pouch-02.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-31</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-31</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">임직원</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-pouch-employee.html" target="preview">my-pouch-employee.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-31</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-31</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">[layer] 배송안내</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-my-pouch-01.html" target="preview">layer-my-pouch-01.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-31</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-31</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr class="del">
+						<td class="d1"></td>
+						<td class="d2">[layer] 닉네임변경</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-my-pouch-02.html" target="preview">layer-my-pouch-02.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">[layer] 등급별혜택안내</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-my-pouch-03.html" target="preview">layer-my-pouch-03.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-31</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-31</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">나의 뷰티포인트</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-beauty-point.html" target="preview">my-beauty-point.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-31</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-31</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[layer] 뷰티포인트 정책안내</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-my-beauty-point.html" target="preview">layer-my-beauty-point.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-31</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-31</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">나의 쿠폰</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-coupon.html" target="preview">my-coupon.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-31</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-31</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[layer] 쿠폰안내</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-my-coupon-01.html" target="preview">layer-my-coupon-01.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-31</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-31</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[layer] 적용 브랜드</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-my-coupon-02.html" target="preview">layer-my-coupon-02.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-31</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-31</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[layer] 적용 가능 상품</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-my-coupon-03.html" target="preview">layer-my-coupon-03.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-31</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-31</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[layer] 추가사은품</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-my-coupon-04.html" target="preview">layer-my-coupon-04.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-31</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-31</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[layer] 적용가능상품 + 추가사은품 + 적용브랜드</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-my-coupon-05.html" target="preview">layer-my-coupon-05.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date">07-31</td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh">07-31</td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">나의 기프트 카드</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-gift-card.html" target="preview">my-gift-card.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">예치금/계좌관리</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-deposit.html" target="preview">my-deposit.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[layer] 환불 계좌 등록/변경</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-my-deposit.html" target="preview">layer-my-deposit.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">주문/배송조회</td>
+						<td class="d3">주문내역</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-order-01.html" target="preview">my-order-01.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4">상세</td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-order-01-detail.html" target="preview">my-order-01-detail.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4">[layer]주문취소</td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-my-order-01.html" target="preview">layer-my-order-01.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">취소현황</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-order-02.html" target="preview">my-order-02.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4">상세</td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-order-02-detail.html" target="preview">my-order-02-detail.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">반품현황</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-order-03.html" target="preview">my-order-03.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4">상세</td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-order-03-detail.html" target="preview">my-order-03-detail.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4">신청</td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-order-03-detail-02.html" target="preview">my-order-03-detail-02.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">교환현황</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-order-04.html" target="preview">my-order-04.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4">상세</td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-order-04-detail.html" target="preview">my-order-04-detail.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4">신청</td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-order-04-detail-02.html" target="preview">my-order-04-detail-02.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">증빙서류발급</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-order-05.html" target="preview">my-order-05.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">배송지관리</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-delivery.html" target="preview">my-delivery.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[layer]신규등록</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-my-delivery-01.html" target="preview">layer-my-delivery-01.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">1:1 상담</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-inquiry.html" target="preview">my-inquiry.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">[layer]상담 평가</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-my-inquiry.html" target="preview">layer-my-inquiry.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">좋아요</td>
+						<td class="d3">전체</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-like-01.html" target="preview">my-like-01.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">목록없을때</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-like-00.html" target="preview">my-like-00.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">상품</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-like-02.html" target="preview">my-like-02.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">브랜드</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-like-03.html" target="preview">my-like-03.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">이벤트</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-like-04.html" target="preview">my-like-04.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">구매리뷰</td>
+						<td class="d3">미작성 리뷰</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-review-01.html" target="preview">my-review-01.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">작성한 리뷰</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-review-02.html" target="preview">my-review-02.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3"></td>
+						<td class="d4">구매리뷰 작성</td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-my-review.html" target="preview">layer-my-review.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">ONE pay 카드관리</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/my-onepay.html" target="preview">my-onepay.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">카드등록</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-my-onepay-02.html" target="preview">layer-my-onepay-02.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">카드수정</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-my-onepay-01.html" target="preview">layer-my-onepay-01.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">회원정보 수정</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-member-info-01.html" target="preview">layer-member-info-01.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">검색 결과 30개 이상인 경우</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-member-info-02.html" target="preview">layer-member-info-02.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">휴대전화 번호 변경</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-member-info-03.html" target="preview">layer-member-info-03.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">개인정보 이용 및 수집에 대한 동의(선택)</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/my/layer-member-info-04.html" target="preview">layer-member-info-04.html</a></td>
+						<td class="name">김연희</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+
+					</tbody>
+				</table>
+			</div>
+		</dd>
+		<dt><a>고객센터</a></dt>
+		<dd>
+			<div>
+				<b>고객센터</b>
+				<table class="html_list">
+					<colgroup>
+						<col style="width:10%; border-left:1px solid #e4dcd3;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:80px">
+						<col style="width:10%;">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:*">
+					</colgroup>
+					<thead>
+					<tr>
+						<th rowspan="2">depth 1</th>
+						<th rowspan="2">depth 2</th>
+						<th rowspan="2">depth 3</th>
+						<th rowspan="2">depth 4</th>
+						<th rowspan="2">depth 5</th>
+						<th rowspan="2">화면ID</th>
+						<th rowspan="2">Link</th>
+						<th colspan="3">html</th>
+						<th colspan="2">front-end</th>
+						<th rowspan="2">검수완료</th>
+						<th rowspan="2">메모</th>
+					</tr>
+					<tr>
+						<th>작업자</th>
+						<th>완료일</th>
+						<th>완료예정일</th>
+						<th>담당자</th>
+						<th>완료일</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td class="d1">고객센터</td>
+						<td class="d2">공지사항</td>
+						<td class="d3">List</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/cs/notice-list.html" target="_blank">notice-list.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">View</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/cs/notice-view.html" target="_blank">notice-view.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">FAQ</td>
+						<td class="d3">List, View</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/cs/faq.html" target="_blank">faq.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">[Layer] 1:1 상담등록</td>
+						<td class="d3">Write</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/cs/layer-consulting.html" target="_blank">layer-consulting.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">[Layer] 주문상품 선택</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/cs/layer-select.html" target="_blank">layer-select.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</dd>
+		<dt><a>검색</a></dt>
+		<dd>
+			<div>
+				<b>검색</b>
+				<table class="html_list">
+					<colgroup>
+						<col style="width:10%; border-left:1px solid #e4dcd3;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:80px">
+						<col style="width:10%;">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:*">
+					</colgroup>
+					<thead>
+					<tr>
+						<th rowspan="2">depth 1</th>
+						<th rowspan="2">depth 2</th>
+						<th rowspan="2">depth 3</th>
+						<th rowspan="2">depth 4</th>
+						<th rowspan="2">depth 5</th>
+						<th rowspan="2">화면ID</th>
+						<th rowspan="2">Link</th>
+						<th colspan="3">html</th>
+						<th colspan="2">front-end</th>
+						<th rowspan="2">검수완료</th>
+						<th rowspan="2">메모</th>
+					</tr>
+					<tr>
+						<th>작업자</th>
+						<th>완료일</th>
+						<th>완료예정일</th>
+						<th>담당자</th>
+						<th>완료일</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">검색결과</td>
+						<td class="d3">기본형</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/search/search.html" target="preview">search.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">추천검색어 없을 경우</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/search/search-02.html" target="preview">search-02.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">검색결과 없음</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/search/search-03.html" target="preview">search-03.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2"></td>
+						<td class="d3">연관브랜드없는경우</td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/search/search-04.html" target="preview">search-04.html</a></td>
+						<td class="name">이인경</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</dd>
+		<dt><a>기타</a></dt>
+		<dd>
+			<div>
+				<b>기타</b>
+				<table class="html_list">
+					<colgroup>
+						<col style="width:10%; border-left:1px solid #e4dcd3;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:80px">
+						<col style="width:10%;">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:80px">
+						<col style="width:*">
+					</colgroup>
+					<thead>
+					<tr>
+						<th rowspan="2">depth 1</th>
+						<th rowspan="2">depth 2</th>
+						<th rowspan="2">depth 3</th>
+						<th rowspan="2">depth 4</th>
+						<th rowspan="2">depth 5</th>
+						<th rowspan="2">화면ID</th>
+						<th rowspan="2">Link</th>
+						<th colspan="3">html</th>
+						<th colspan="2">front-end</th>
+						<th rowspan="2">검수완료</th>
+						<th rowspan="2">메모</th>
+					</tr>
+					<tr>
+						<th>작업자</th>
+						<th>완료일</th>
+						<th>완료예정일</th>
+						<th>담당자</th>
+						<th>완료일</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td class="d1">오류</td>
+						<td class="d2">시스템 점검 안내</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/common/error.1.html" target="preview">error.1.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">찾을수 없는 페이지</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/common/error.2.html" target="preview">error.2.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">서비스 접속불량</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/common/error.3.html" target="preview">error.3.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">페이지 접근제한</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/common/error.4.html" target="preview">error.4.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					<tr>
+						<td class="d1"></td>
+						<td class="d2">브라우저 호환성안내</td>
+						<td class="d3"></td>
+						<td class="d4"></td>
+						<td class="d5"></td>
+						<td class="id"></td>
+						<td class="file"><a href="/html/page/common/error.5.html" target="preview">error.5.html</a></td>
+						<td class="name">황혜정</td>
+						<td class="date"></td><!-- 날짜를 넣으면 완료 : 형식 00-00 -->
+						<td class="finsh"></td>
+						<td class="jsname">유태종</td>
+						<td class="jsdate"></td>
+						<td class="pubchk"></td>
+						<td class="memo"></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</dd>
+	</dl>
+</div>
+<br>
+<script ap:src="@{/js/libs/jquery-1.12.3.min.js}"></script>
+<script ap:src="@{/js/libs/moment.min.js}"></script>
+<script>
+	$(function(){
+		var ww = $(window).width();
+		var wh = $(window).height();
+		// guide tab
+		var tm = $('.guide_tab>dt');
+		var tc = $('.guide_tab>dd');
+		var btnAll = $('.viewAll');
+		var menu = tm.not(btnAll);
+
+		tc.show();
+		btnAll.on('click', function(){
+			tm.not($(this).addClass('on')).removeClass('on');
+			tc.show();
+		});
+		menu.on('click', function(){
+			tm.not($(this).addClass('on')).removeClass('on');
+			$(this).next('dd').show().siblings('dd').hide();
+		});
+		if(ww > 768){
+			$('.guide_tab>dt').not(':first').each(function(){
+				var p = $(this).prevAll('dt');
+				var pw = p.outerWidth();
+				var pl = p.position().left;
+				var tmw = pw + pl + 5;
+				$(this).css('left', tmw);
+			});
+		}
+
+
+		//count
+		var total=$('.html_list .file').length;
+		var complete= total - $('.html_list .pubchk:empty').length;
+		var per = (complete/total*100).toFixed(1);
+
+		$('.count span').eq(0).text(total + 'p');
+		$('.count span').eq(1).text(complete + 'p');
+		$('.count span').eq(2).text(per + '%');
+		//update
+		var now = new Date();
+		var month = (now.getMonth()+1)>9 ? '' + (now.getMonth()+1): '0'+ (now.getMonth()+1);
+		var day = now.getDate() >9 ? '' + now.getDate() : '0' + now.getDate();
+		var today = month + '-' + day;
+
+		$('.date, .jsdate').each(function(){
+			if(!$(this).is(':empty')){
+				var update = $(this).text().slice(0,5);
+				if(update == today){
+					$(this).addClass('new');
+				}
+			}
+		});
+		// to top
+		var scrollDiv = document.createElement('div');
+		$(scrollDiv).attr('id', 'toTop').html('<button type="button">↑</button>').appendTo('body');
+		$(window).scroll(function(){
+			if ($(this).scrollTop() != 0) {
+				$('#toTop').fadeIn();
+			} else {
+				$('#toTop').fadeOut();
+			}
+		});
+		$('#toTop').click(function(){
+			$('body,html').animate({scrollTop: 0},	600);
+			return false;
+		});
+
+		/** ========== 주간업데이트 보기 ========== */
+		(function () {
+			//금주 업데이트
+			$( '.btn_update_filter.filter_week' ).on( 'click', function (e) {
+				var currentDay = new Date().getDay(),
+					minDate = moment().subtract( currentDay + 1, 'days' ),
+					maxDate = minDate.clone().add( 6, 'days' );
+
+				$( this ).addClass( 'active' ).siblings().removeClass( 'active' );
+
+				$( 'table > tbody > tr' ).each( function ( idx, el ) {
+					filtering( $(el), minDate, maxDate );
+				});
+			});
+
+			//이전주 업데이트
+			$( '.btn_update_filter.filter_prev_week' ).on( 'click', function (e) {
+				var currentDay = new Date().getDay(),
+					minDate = moment().subtract( currentDay + 1 + 7, 'days' ),
+					maxDate = minDate.clone().add( 6, 'days' );
+
+				$( this ).addClass( 'active' ).siblings().removeClass( 'active' );
+
+				$( 'table > tbody > tr' ).each( function ( idx, el ) {
+					filtering( $(el), minDate, maxDate );
+				});
+			});
+
+			//전체보기
+			$( '.btn_update_filter.filter_all' ).on( 'click', function (e) {
+				$( this ).addClass( 'active' ).siblings().removeClass( 'active' );
+				$( 'table > tbody > tr' ).show();
+			});
+
+
+			function filtering ( $tr, minDate, maxDate ) {
+				var check1 = $tr.find( 'td.date' ).text(),
+					check2 = $tr.find( 'td.jsdate' ).text();
+
+				if ( isUpdate(check1, minDate, maxDate) || isUpdate(check2, minDate, maxDate) ) {
+					$tr.show();
+				} else {
+					$tr.hide();
+				}
+			}
+
+			function isUpdate ( str, minDate, maxDate ) {
+				var result = false,
+					date = getDateString( str );
+
+				if ( date ) {
+					date = moment( moment().format('YYYY') + '-' + date );
+
+					if ( moment(maxDate).isAfter(date) && moment(minDate).isBefore(date) ) {
+						result = true;
+					}
+
+					return result;
+				}
+
+				return result;
+			}
+
+			function getDateString ( str ) {
+				var result;
+
+				if ( str ) {
+					var dateAry = str.match( /([0-9]{2})-([0-9]{2})/g );
+
+					if ( dateAry ) {
+						result = dateAry[0];
+					}
+				}
+
+				return result;
+			}
+		})();
+
+		/** ========== Preview Window 보기 ========== */
+		(function () {
+			var _previewIdx = 0;
+
+			$( '.btn_preview_window' ).on( 'click', function (e) {
+				_previewIdx++;
+				var posX = 0, posY = 0;
+
+				var $preview = $( '<div class="preview_window_wrap size50" data-name="preview' + _previewIdx + '"><div class="title_bar"><span>&nbsp;:: Preview</span></div><iframe name="preview' + _previewIdx + '" frameborder="0" scrolling="yes"></iframe><input type="button" class="btn_close" value="X"><input type="button" class="btn_copy" value="URL"><input type="button" class="size" value="50%"><input type="button" class="size" value="70%"><input type="button" class="size" value="100%"><div class="transparent"></div></div>' );
+
+				$( 'body' ).append( $preview );
+				activeWindow( $preview );
+				if ( $('.preview_window_wrap').length > 1 ) {
+					$preview.css({
+						left: Math.round( Math.random() * 100 ) + 'px',
+						top: 137 + Math.round( Math.random() * 100 ) + 'px'
+					});
+				}
+
+				//close
+				$preview.find( '.btn_close' ).on( 'click', function (e) {
+					$preview.find( '.btn_close' ).off( 'click' );
+					$preview.find( '.title_bar' ).off( 'dregstart mousedown' );
+					$preview.find( '.btn_copy' ).off( 'click' );
+					$preview.remove();
+
+					activeWindow( $('.preview_window_wrap:eq(0)') );
+				});
+
+				//url copy
+				$preview.find( '.btn_copy' ).on( 'click', function (e) {
+					var location = window.frames[$preview.data('name')].location,
+						url = location.pathname + location.search,
+						$input = $( '<input type="text" value="' + url + '" style="position:absolute">' );
+
+					$( 'body' ).append( $input );
+					$input.select();
+					document.execCommand( 'Copy' );
+					$input.remove();
+					alert( '"' + location.pathname + '" 복사 되었습니다.' );
+				});
+
+				//size
+				$preview.find( '.size' ).on( 'click', function (e) {
+					e.preventDefault();
+					var size = $( this ).val();
+					$preview.removeClass( 'size70 size50' ).addClass( 'size' + parseFloat(size) );
+				});
+
+				//drag
+				$preview.find( '.title_bar' ).on( 'dregstart mousedown', function (e) {
+					e.preventDefault();
+					if ( e.type === 'mousedown' ) {
+						activeWindow( $preview );
+						$( '.preview_window_wrap .transparent' ).show();
+						posX = e.offsetX;
+						posY = e.offsetY;
+						$( window ).on( 'mousemove mouseup', moveHandler );
+					}
+				});
+
+				function activeWindow ( $el ) {
+					$el.removeClass( 'deactive' ).css( 'z-index', 1000 ).siblings( '.preview_window_wrap' ).addClass( 'deactive' ).css( 'z-index', 999 );
+					$( '.file > a' ).attr( 'target', $el.data('name') );
+				}
+
+				function moveHandler (e) {
+					e.preventDefault();
+					var top = e.clientY - posY;
+					if ( top < 0 ) top = 0;
+
+					$preview.css({
+						left: ( e.clientX - posX ) + 'px',
+						top: top + 'px'
+					});
+
+					if ( e.type === 'mouseup' ) {
+						$( '.preview_window_wrap .transparent' ).hide();
+						$( window ).off( 'mousemove mouseup', moveHandler );
+					}
+				}
+			});
+
+			$( '.file > a' ).on( 'click', function (e) {
+				var title = 'Preview',
+					target = $( this ).attr( 'target' ),
+					$target = $( '.preview_window_wrap[data-name="' + target + '"]' );
+
+				$( this ).parent().siblings( '.d1, .d2, .d3, .d4, .d5' ).each( function () {
+					var text = $( this ).text();
+					if ( text ) title = text;
+				});
+
+				$target.find( '.title_bar > span' ).html( '&nbsp;:: ' + title );
+				$( '.file' ).removeClass( 'on' );
+				$( this ).parent().addClass( 'on' );
+			});
+		})();
+	})
+</script>
+</body>
+</html>

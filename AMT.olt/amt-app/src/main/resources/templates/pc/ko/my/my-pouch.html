@@ -1,0 +1,677 @@
+<html ap:decorate="~{layout/layout-sub}">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page contents -->
+		<div class="ap_contents">
+
+			<!-- page title -->
+			<th:block ap:replace="~{common/fragment/breadcrumb-only}"/>
+			<!-- // page title -->
+
+			<!-- com_cont -->
+			<div class="ap_com_cont mypage">
+				<!-- aside_area -->
+				<th:block ap:replace="~{html/page/my/fragment/my-menu}"/>
+				<!-- aside_area -->
+
+				<!-- cont_area -->
+				<div class="cont_area">
+					<div class="my_pouch">
+						<div class="panel bg_white my_info">
+							<div class="my_info_head">
+								<dl class="grade_02">
+									<!--/*
+										grade_01 : welcome,
+										grade_02 : vip,
+										grade_03 : vip+,
+										grade_04 : vvip,
+										grade_05 : vvip+
+									*/-->
+									<dt><span th:text="${session.LOGIN_USER.member.name.name1}">홍길동</span>님은 <em th:text="${session.LOGIN_USER.member.memberLevelName}">WELCOME</em> 고객입니다.</dt>
+									<dd>2018년 02월 기준 <strong>VIP 되기 위한 구매금액 127,330원</strong></dd>
+								</dl>
+								<div>
+									<button type="button" class="btn_lg_gradient">회원등급 혜택</button>
+									<a href="/my/page/info/changeUserInfo" class="btn_lg_gradient">회원정보 수정</a>
+								</div>
+							</div>
+							<div class="my_info_bottom">
+								<dl class="btp">
+									<dt>뷰티포인트 <small>일반회원</small></dt>
+									<dd><a href="#"><strong th:text="${#IntegUtil.toCommaNumber(session.LOGIN_USER.member.remainBeautyPoint)}">999,999</strong>P</a></dd>
+								</dl>
+								<dl class="coupon">
+									<dt>쿠폰</dt>
+									<dd><a href="#"><strong th:text="${session.LOGIN_USER.member.keepingCouponQty}">999,999</strong>개</a></dd>
+								</dl>
+								<dl class="giftcard">
+									<dt>키프트카드</dt>
+									<dd><a href="#"><strong th:text="${#IntegUtil.toCommaNumber(session.LOGIN_USER.member.remainDeposit)}">999,999</strong>원</a></dd>
+								</dl>
+							</div>
+						</div>
+						<div class="mypage_banner">
+							<a href="#"><img ap:src="@{/images/dummy/my_pouch_banner.jpg}" alt="가입 즉시 기프트카드를 드리는 플러스멤버십"></a>
+						</div>
+
+						<div class="title_wrap">
+							<h3 class="h_title">최근 한달간 나의 주문</h3>
+							<button type="button" class="delivery_desc">배송안내</button>
+							<a href="#" class="link_order_list">주문내역 전체보기 <i class="ico_arr_s"></i></a>
+						</div>
+						<div class="panel bg_white">
+							<ul class="shipping_state">
+								<li th:classappend="${ordReceptCnt != 0} 'on':null">
+									<a href="#"><em th:text="${ordReceptCnt}">0</em><span>주문접수</span></a>
+								</li>
+								<li th:classappend="${payCompleteCnt != 0} 'on':null">
+									<a href="#"><em th:text="${payCompleteCnt}">0</em><span>주문완료</span></a>
+								</li>
+								<li th:classappend="${preparingCnt != 0} 'on':null">
+									<a href="#"><em th:text="${preparingCnt}">0</em><span>상품준비</span></a>
+								</li>
+								<li  th:classappend="${shippingCnt != 0} 'on':null">
+									<a href="#"><em th:text="${shippingCnt}">3</em><span>배송중</span></a>
+								</li>
+								<li th:classappend="${shipCompleteCnt != 0} 'on':null">
+									<a href="#"><em th:text="${shipCompleteCnt}">0</em><span>배송완료</span></a>
+								</li>
+							</ul>
+						</div>
+						<div class="my_order_list ui_accordion" data-open-type="single">
+							<dl>
+								<dt class="on">
+									<button type="button">
+										<div>
+											<p class="prd_name">크리미 크리스탈 아이라이너 워터프루프 외 <strong>6건</strong></p>
+											<p>
+												<em>주문일자</em>
+												<span>2018.02.06</span>
+												<em class="pdl20">주문번호</em>
+												<span>002831849</span>
+											</p>
+										</div>
+										<div class="price">
+											23,500<span>원</span>
+										</div>
+										<div>상품포장중</div>
+									</button>
+								</dt>
+								<dd>
+									<div class="order_list">
+										<ul>
+											<li>
+												<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb.jpg}" alt=""></div>
+												<div class="info">
+													<p class="name">마몽드 페탈 스파 클렌징 오일</p>
+													<div class="price">
+														<strong>23,500<span class="won">원</span></strong>
+														<del>30,000원</del>
+													</div>
+												</div>
+												<div class="quantity">99</div>
+											</li>
+											<li>
+												<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb.jpg}" alt=""></div>
+												<div class="info">
+													<p class="name">마몽드 페탈 스파 클렌징 오일</p>
+													<div class="price">
+														<strong>23,500<span class="won">원</span></strong>
+														<del>30,000원</del>
+													</div>
+												</div>
+												<div class="quantity">99</div>
+											</li>
+											<li>
+												<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb.jpg}" alt=""></div>
+												<div class="info">
+													<p class="name">마몽드 페탈 스파 클렌징 오일</p>
+													<div class="price">
+														<strong>23,500<span class="won">원</span></strong>
+														<del>30,000원</del>
+													</div>
+												</div>
+												<div class="quantity">99</div>
+											</li>
+											<li>
+												<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb.jpg}" alt=""></div>
+												<div class="info">
+													<p class="name">마몽드 페탈 스파 클렌징 오일</p>
+													<div class="price">
+														<strong>23,500<span class="won">원</span></strong>
+														<del>30,000원</del>
+													</div>
+												</div>
+												<div class="quantity">99</div>
+											</li>
+										</ul>
+									</div>
+									<div class="page_btns">
+										<button type="button" class="btn_lg_gradient">배송조회</button>
+										<button type="button" class="btn_lg_gradient">구매후기</button>
+									</div>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<button type="button">
+										<div>
+											<p class="prd_name">크리미 크리스탈 아이라이너 워터프루프 외 <strong>6건</strong></p>
+											<p>
+												<em>주문일자</em>
+												<span>2018.02.06</span>
+												<em class="pdl20">주문번호</em>
+												<span>002831849</span>
+											</p>
+										</div>
+										<div class="price">
+											23,500<span>원</span>
+										</div>
+										<div>상품포장중</div>
+									</button>
+								</dt>
+								<dd>
+									<div class="order_list">
+										<ul>
+											<li>
+												<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb.jpg}" alt=""></div>
+												<div class="info">
+													<p class="name">마몽드 페탈 스파 클렌징 오일</p>
+													<div class="price">
+														<strong>23,500<span class="won">원</span></strong>
+														<del>30,000원</del>
+													</div>
+												</div>
+												<div class="quantity">99</div>
+											</li>
+											<li>
+												<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb.jpg}" alt=""></div>
+												<div class="info">
+													<p class="name">마몽드 페탈 스파 클렌징 오일</p>
+													<div class="price">
+														<strong>23,500<span class="won">원</span></strong>
+														<del>30,000원</del>
+													</div>
+												</div>
+												<div class="quantity">99</div>
+											</li>
+											<li>
+												<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb.jpg}" alt=""></div>
+												<div class="info">
+													<p class="name">마몽드 페탈 스파 클렌징 오일</p>
+													<div class="price">
+														<strong>23,500<span class="won">원</span></strong>
+														<del>30,000원</del>
+													</div>
+												</div>
+												<div class="quantity">99</div>
+											</li>
+											<li>
+												<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb.jpg}" alt=""></div>
+												<div class="info">
+													<p class="name">마몽드 페탈 스파 클렌징 오일</p>
+													<div class="price">
+														<strong>23,500<span class="won">원</span></strong>
+														<del>30,000원</del>
+													</div>
+												</div>
+												<div class="quantity">99</div>
+											</li>
+										</ul>
+									</div>
+									<div class="page_btns">
+										<button type="button" class="btn_lg_gradient">배송조회</button>
+										<button type="button" class="btn_lg_gradient">구매후기</button>
+									</div>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<button type="button">
+										<div>
+											<p class="prd_name">크리미 크리스탈 아이라이너 워터프루프 외 <strong>6건</strong></p>
+											<p>
+												<em>주문일자</em>
+												<span>2018.02.06</span>
+												<em class="pdl20">주문번호</em>
+												<span>002831849</span>
+											</p>
+										</div>
+										<div class="price">
+											23,500<span>원</span>
+										</div>
+										<div>상품포장중</div>
+									</button>
+								</dt>
+								<dd>
+									<div class="order_list">
+										<ul>
+											<li>
+												<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb.jpg}" alt=""></div>
+												<div class="info">
+													<p class="name">마몽드 페탈 스파 클렌징 오일</p>
+													<div class="price">
+														<strong>23,500<span class="won">원</span></strong>
+														<del>30,000원</del>
+													</div>
+												</div>
+												<div class="quantity">99</div>
+											</li>
+											<li>
+												<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb.jpg}" alt=""></div>
+												<div class="info">
+													<p class="name">마몽드 페탈 스파 클렌징 오일</p>
+													<div class="price">
+														<strong>23,500<span class="won">원</span></strong>
+														<del>30,000원</del>
+													</div>
+												</div>
+												<div class="quantity">99</div>
+											</li>
+											<li>
+												<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb.jpg}" alt=""></div>
+												<div class="info">
+													<p class="name">마몽드 페탈 스파 클렌징 오일</p>
+													<div class="price">
+														<strong>23,500<span class="won">원</span></strong>
+														<del>30,000원</del>
+													</div>
+												</div>
+												<div class="quantity">99</div>
+											</li>
+											<li>
+												<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb.jpg}" alt=""></div>
+												<div class="info">
+													<p class="name">마몽드 페탈 스파 클렌징 오일</p>
+													<div class="price">
+														<strong>23,500<span class="won">원</span></strong>
+														<del>30,000원</del>
+													</div>
+												</div>
+												<div class="quantity">99</div>
+											</li>
+										</ul>
+									</div>
+									<div class="page_btns">
+										<button type="button" class="btn_lg_gradient">배송조회</button>
+										<button type="button" class="btn_lg_gradient">구매후기</button>
+									</div>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<button type="button">
+										<div>
+											<p class="prd_name">크리미 크리스탈 아이라이너 워터프루프 외 <strong>6건</strong></p>
+											<p>
+												<em>주문일자</em>
+												<span>2018.02.06</span>
+												<em class="pdl20">주문번호</em>
+												<span>002831849</span>
+											</p>
+										</div>
+										<div class="price">
+											23,500<span>원</span>
+										</div>
+										<div>상품포장중</div>
+									</button>
+								</dt>
+								<dd>
+									<div class="order_list">
+										<ul>
+											<li>
+												<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb.jpg}" alt=""></div>
+												<div class="info">
+													<p class="name">마몽드 페탈 스파 클렌징 오일</p>
+													<div class="price">
+														<strong>23,500<span class="won">원</span></strong>
+														<del>30,000원</del>
+													</div>
+												</div>
+												<div class="quantity">99</div>
+											</li>
+											<li>
+												<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb.jpg}" alt=""></div>
+												<div class="info">
+													<p class="name">마몽드 페탈 스파 클렌징 오일</p>
+													<div class="price">
+														<strong>23,500<span class="won">원</span></strong>
+														<del>30,000원</del>
+													</div>
+												</div>
+												<div class="quantity">99</div>
+											</li>
+											<li>
+												<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb.jpg}" alt=""></div>
+												<div class="info">
+													<p class="name">마몽드 페탈 스파 클렌징 오일</p>
+													<div class="price">
+														<strong>23,500<span class="won">원</span></strong>
+														<del>30,000원</del>
+													</div>
+												</div>
+												<div class="quantity">99</div>
+											</li>
+											<li>
+												<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb.jpg}" alt=""></div>
+												<div class="info">
+													<p class="name">마몽드 페탈 스파 클렌징 오일</p>
+													<div class="price">
+														<strong>23,500<span class="won">원</span></strong>
+														<del>30,000원</del>
+													</div>
+												</div>
+												<div class="quantity">99</div>
+											</li>
+										</ul>
+									</div>
+									<div class="page_btns">
+										<button type="button" class="btn_lg_gradient">배송조회</button>
+										<button type="button" class="btn_lg_gradient">구매후기</button>
+									</div>
+								</dd>
+							</dl>
+						</div>
+
+						<div class="title_wrap">
+							<h3 class="h_title">홍길동님! 혹시 이 상품은 어떠세요?</h3>
+						</div>
+						<div class="panel bg_white recommended_item">
+							<div class="slide" data-ix-options="view-length:5;">
+								<div class="ix-list-viewport list_product wide155">
+									<ul class="ix-list-items">
+										<li class="ix-list-item">
+											<div class="product_box">
+												<a href="#none">
+													<div class="visual_section">
+														<img ap:src="@{/images/dummy/img_product_thumb_guide_05.jpg}" alt="플라워 에센스 마스크">
+														<img ap:src="@{/images/dummy/img_product_thumb_08.jpg}" alt="플라워 에센스 마스크">
+														<div class="benefit">
+															<span class="special">스페셜기프트</span>
+															<span class="gift">기프트카드</span>
+														</div>
+														<div class="soldout">
+															<span>일시품절</span>
+														</div>
+														<div class="work_box">
+															<ul class="item_user">
+																<li>
+																	<a href="#none" role="button">
+																		<i class="ico_favorite"></i><!-- active : on -->
+																		<span class="sr_only">좋아요</span>
+																	</a>
+																</li>
+																<li>
+																	<a href="#none" role="button">
+																		<i class="ico_basket"></i>
+																		<span class="sr_only">장바구니</span>
+																	</a>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<div class="info_section">
+														<p class="txt_name">[NEW] 베이비 선쿠션리미 티드 SPF32 PA++</p>
+														<div class="price_atc">
+															<span class="txt_price"><em>218,500</em>원</span>
+														</div>
+														<div class="user_atc">
+															<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
+															<span class="txt_review">리뷰 000</span>
+														</div>
+													</div>
+												</a>
+											</div>
+										</li>
+										<li class="ix-list-item">
+											<div class="product_box">
+												<a href="#none">
+													<div class="visual_section">
+														<img ap:src="@{/images/dummy/img_product_thumb_guide_05.jpg}" alt="플라워 에센스 마스크">
+														<img ap:src="@{/images/dummy/img_product_thumb_08.jpg}" alt="플라워 에센스 마스크">
+														<div class="benefit">
+															<span class="special">스페셜기프트</span>
+															<span class="gift">기프트카드</span>
+														</div>
+														<div class="soldout">
+															<span>일시품절</span>
+														</div>
+														<div class="work_box">
+															<ul class="item_user">
+																<li>
+																	<a href="#none" role="button">
+																		<i class="ico_favorite"></i><!-- active : on -->
+																		<span class="sr_only">좋아요</span>
+																	</a>
+																</li>
+																<li>
+																	<a href="#none" role="button">
+																		<i class="ico_basket"></i>
+																		<span class="sr_only">장바구니</span>
+																	</a>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<div class="info_section">
+														<p class="txt_name">프리메라</p>
+														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미 티드 SPF32 PA+</p>
+														<div class="price_atc">
+															<span class="txt_price"><em>218,500</em>원</span>
+														</div>
+														<div class="user_atc">
+															<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
+															<span class="txt_review">리뷰 000</span>
+														</div>
+													</div>
+												</a>
+											</div>
+										</li>
+										<li class="ix-list-item">
+											<div class="product_box">
+												<a href="#none">
+													<div class="visual_section">
+														<img ap:src="@{/images/dummy/img_product_thumb_guide_05.jpg}" alt="플라워 에센스 마스크">
+														<img ap:src="@{/images/dummy/img_product_thumb_08.jpg}" alt="플라워 에센스 마스크">
+														<div class="benefit">
+															<span class="special">스페셜기프트</span>
+															<span class="gift">기프트카드</span>
+														</div>
+														<div class="soldout">
+															<span>일시품절</span>
+														</div>
+														<div class="work_box">
+															<ul class="item_user">
+																<li>
+																	<a href="#none" role="button">
+																		<i class="ico_favorite"></i><!-- active : on -->
+																		<span class="sr_only">좋아요</span>
+																	</a>
+																</li>
+																<li>
+																	<a href="#none" role="button">
+																		<i class="ico_basket"></i>
+																		<span class="sr_only">장바구니</span>
+																	</a>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<div class="info_section">
+														<p class="txt_name">프리메라</p>
+														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미 티드 SPF32 PA+</p>
+														<div class="price_atc">
+															<span class="txt_price"><em>218,500</em>원</span>
+														</div>
+														<div class="user_atc">
+															<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
+															<span class="txt_review">리뷰 000</span>
+														</div>
+													</div>
+												</a>
+											</div>
+										</li>
+										<li class="ix-list-item">
+											<div class="product_box">
+												<a href="#none">
+													<div class="visual_section">
+														<img ap:src="@{/images/dummy/img_product_thumb_guide_05.jpg}" alt="플라워 에센스 마스크">
+														<img ap:src="@{/images/dummy/img_product_thumb_08.jpg}" alt="플라워 에센스 마스크">
+														<div class="benefit">
+															<span class="special">스페셜기프트</span>
+															<span class="gift">기프트카드</span>
+														</div>
+														<div class="soldout">
+															<span>일시품절</span>
+														</div>
+														<div class="work_box">
+															<ul class="item_user">
+																<li>
+																	<a href="#none" role="button">
+																		<i class="ico_favorite"></i><!-- active : on -->
+																		<span class="sr_only">좋아요</span>
+																	</a>
+																</li>
+																<li>
+																	<a href="#none" role="button">
+																		<i class="ico_basket"></i>
+																		<span class="sr_only">장바구니</span>
+																	</a>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<div class="info_section">
+														<p class="txt_name">프리메라</p>
+														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미 티드 SPF32 PA+</p>
+														<div class="price_atc">
+															<span class="txt_price"><em>218,500</em>원</span>
+														</div>
+														<div class="user_atc">
+															<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
+															<span class="txt_review">리뷰 000</span>
+														</div>
+													</div>
+												</a>
+											</div>
+										</li>
+										<li class="ix-list-item">
+											<div class="product_box">
+												<a href="#none">
+													<div class="visual_section">
+														<img ap:src="@{/images/dummy/img_product_thumb_guide_05.jpg}" alt="플라워 에센스 마스크">
+														<img ap:src="@{/images/dummy/img_product_thumb_08.jpg}" alt="플라워 에센스 마스크">
+														<div class="benefit">
+															<span class="special">스페셜기프트</span>
+															<span class="gift">기프트카드</span>
+														</div>
+														<div class="soldout">
+															<span>일시품절</span>
+														</div>
+														<div class="work_box">
+															<ul class="item_user">
+																<li>
+																	<a href="#none" role="button">
+																		<i class="ico_favorite"></i><!-- active : on -->
+																		<span class="sr_only">좋아요</span>
+																	</a>
+																</li>
+																<li>
+																	<a href="#none" role="button">
+																		<i class="ico_basket"></i>
+																		<span class="sr_only">장바구니</span>
+																	</a>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<div class="info_section">
+														<p class="txt_name">프리메라</p>
+														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미 티드 SPF32 PA+</p>
+														<div class="price_atc">
+															<span class="txt_price"><em>218,500</em>원</span>
+														</div>
+														<div class="user_atc">
+															<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
+															<span class="txt_review">리뷰 000</span>
+														</div>
+													</div>
+												</a>
+											</div>
+										</li>
+										<li class="ix-list-item">
+											<div class="product_box">
+												<a href="#none">
+													<div class="visual_section">
+														<img ap:src="@{/images/dummy/img_product_thumb_guide_05.jpg}" alt="플라워 에센스 마스크">
+														<img ap:src="@{/images/dummy/img_product_thumb_08.jpg}" alt="플라워 에센스 마스크">
+														<div class="benefit">
+															<span class="special">스페셜기프트</span>
+															<span class="gift">기프트카드</span>
+														</div>
+														<div class="soldout">
+															<span>일시품절</span>
+														</div>
+														<div class="work_box">
+															<ul class="item_user">
+																<li>
+																	<a href="#none" role="button">
+																		<i class="ico_favorite"></i><!-- active : on -->
+																		<span class="sr_only">좋아요</span>
+																	</a>
+																</li>
+																<li>
+																	<a href="#none" role="button">
+																		<i class="ico_basket"></i>
+																		<span class="sr_only">장바구니</span>
+																	</a>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<div class="info_section">
+														<p class="txt_name">프리메라</p>
+														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미 티드 SPF32 PA+</p>
+														<div class="price_atc">
+															<span class="txt_price"><em>218,500</em>원</span>
+														</div>
+														<div class="user_atc">
+															<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
+															<span class="txt_review">리뷰 000</span>
+														</div>
+													</div>
+												</a>
+											</div>
+										</li>
+									</ul>
+								</div>
+								<div class="ix-controller">
+									<div class="slide_direction">
+										<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
+										<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- // cont_area -->
+
+			</div>
+			<!-- // com_cont -->
+
+		</div>
+		<!-- // page contents -->
+	</div><!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script>
+			$( '.ui_input_images' ).inputImages();
+			$( '.recommended_item .slide' ).ixSlideMax();
+		</script>
+	</th:block>
+</body>
+</html>

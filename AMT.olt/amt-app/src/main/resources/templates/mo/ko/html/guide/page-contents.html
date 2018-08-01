@@ -1,0 +1,1840 @@
+<html ap:decorate="~{layout/layout-contents}">
+<head>
+    <title>서브페이지 레이아웃</title>
+</head>
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+
+            <div class="ap_contents">
+				<!--/* category  */-->
+				<th:block ap:replace="~{common/fragment/sub-category}"/>
+				<!--/* 컨텐츠 영역은 section 단위로 이동가능 */-->
+				<div class="section">
+					패딩 없는
+				</div>
+				<div class="section pd_sm">
+					패딩 13
+				</div>
+				<div class="section pd_md">
+					패딩 20/16
+				</div>
+				<div class="section pd_lg">
+					패딩 20/30
+				</div>
+				<!--/* 동영상 */-->
+				<div class="section video_wrap">
+					<!--/* 섬네일 용 이미지 버튼 안들어갈때는 삭제 */-->
+					<button type="button" class="thumbnail"><img ap:src="@{/images/dummy/img_video.jpg}" alt=""></button>
+					<iframe class="youtube_video" width="750" height="420" src="https://www.youtube.com/embed/4uLivcdjRlc?enablejsapi=1" frameborder="0" allowfullscreen data-vendor="youtube" data-ratio="true" data-mute="false"></iframe>
+				</div>
+				<!--/* 이미지 배너 */-->
+				<div class="section banner">
+					<a href="#none"><img ap:src="@{/images/dummy/img_banner.jpg}" alt="배너내용"></a>
+				</div>
+				<!--/* 이미지 + 텍스트 배너 : 추가타입은 page-banner.html */-->
+				<div class="section banner white">
+					<a href="#none" class="lazy_load_wrap">
+						<img src="" data-src="/mo/ko/images/dummy/img_banner_03.jpg" alt="" class="lazy_load">
+						<div class="banner_info align_center">
+							<p class="copy">입술에 빛나는<br>그녀의 트루컬러</p>
+							<p class="text">온라인 단독 선런칭<br>런칭 기념 추가4종 사은품 증정</p>
+						</div>
+					</a>
+				</div>
+				<!--/* 슬라이드 */-->
+				<div class="section slide" data-ix-options="view-length:1;">
+					<div class="ix-list-viewport">
+						<ul class="ix-list-items">
+							<li class="ix-list-item">
+								<a href="#none">
+									<img alt="배너 내용" ap:src="@{/images/dummy/img_banner_01.jpg}">
+								</a>
+							</li>
+							<li class="ix-list-item">
+								<a href="#none">
+									<img alt="배너 내용" ap:src="@{/images/dummy/img_banner_02.jpg}">
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="ix-controller overlay">
+						<div class="paging"><span class="current">1</span> / <span class="total">2</span></div>
+						<button type="button" class="btn_view_all">전체보기</button>
+					</div>
+				</div>
+				<!--/* 컨텐츠 블록 제목 */-->
+				<h3 class="h_title d2"><b>실시간 이슈 상품</b></h3>
+				<!--/* 선택 버튼 */-->
+				<div class="section check_btn_set type2">
+					<span><input type="radio" name="price" id="price1"><label for="price1">~3만원</label></span>
+					<span><input type="radio" name="price" id="price2"><label for="price2">3~5만원</label></span>
+					<span><input type="radio" name="price" id="price3" checked><label for="price3">5~7만원</label></span>
+					<span><input type="radio" name="price" id="price4"><label for="price4">7만원~</label></span>
+				</div>
+				<!--/* sort filter */-->
+				<div class="sort_filter"><!-- 스크롤시 fixed -->
+					<div class="ui_table">
+						<div>총 <b class="num">150</b>개의 상품</div>
+						<div class="sort"><button type="button" onclick="$('.sort').toggleClass('open');"><i class="ico_sort"></i> <span>판매순</span></button>
+							<ul>
+								<li><button type="button" class="on">판매순</button></li> <!--/* 선택되어있는 상태 */-->
+								<li><button type="button">신상품순</button></li>
+								<li><button type="button">평점순</button></li>
+								<li><button type="button">가격이 높은 순</button></li>
+								<li><button type="button">가격이 낮은순</button></li>
+							</ul>
+						</div>
+						<div class="view">
+							<!--/* col2 class toggle 텍스트 1단보기 2단 보기 */-->
+							<button type="button" onclick="$(this).find('i').toggleClass('col2')"><i class="ico_view"></i><span class="sr_only">1단 보기</span></button>
+						</div>
+						<div class="filter">
+							<button type="button" class="on"><span>필터</span></button> <!--/* 선택된 필터가 있을 경우 on 클래스 */-->
+						</div>
+					</div>
+					<div class="tag_group scrollable_x" style="display: block;">
+						<span class="tag">스페셜기프트 <button class="ui_close" type="button"><span class="sr_only">필터 삭제</span></button></span>
+						<span class="tag">프리메라 <button class="ui_close" type="button"><span class="sr_only">필터 삭제</span></button></span>
+						<span class="tag">에뛰드 하우스 <button class="ui_close" type="button"><span class="sr_only">필터 삭제</span></button></span>
+						<span class="tag">에뛰드 하우스 <button class="ui_close" type="button"><span class="sr_only">필터 삭제</span></button></span>
+					</div>
+				</div>
+				<!--/* 상품 카드타입 목록 형태 */-->
+				<ul class="product_list card_type">
+					<li class="product">
+						<!--/* 비주얼 영역 */-->
+						<a href="#none">
+							<div class="product_visual">
+								<!--/* 100% 타입 */-->
+								<div class="lazy_load_wrap">
+									<img src="" data-src="/mo/ko/images/dummy/img_item_full.jpg" alt="" class="lazy_load">
+								</div>
+								<!--/* 좋아요 애니메이션 : 나타날때 zoomIn 사라질때 zommOut 클래스 */-->
+								<span class="good animated500ms"><i class="ico_lg_good"></i></span>
+							</div>
+							<div class="product_info">
+								<!--/* 서브텍스트 */-->
+								<p class="text ellipsis">찬란히 빛나기 위해 태양을 프리즘 하다</p>
+								<!--/* 메인텍스트 */-->
+								<p class="product_name"><b>헤라 선 메이트 엑설런스</b></p>
+								<button type="button" class="btn_toggle" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+							</div>
+						</a>
+						<div class="related_info">
+							<span class="tags">
+								<span class="badge special">스페셜기프트</span>
+								<span class="badge gift">기프트카드</span>
+							</span>
+							<a href="#none" class="btn_brand"><span>헤라</span><i class="ico_arr_s"></i></a>
+						</div>
+					</li>
+					<li class="product">
+						<!--/* 비주얼 영역 */-->
+						<a href="#none">
+							<div class="product_visual">
+								<!--/* 정사각 썸네일 타입 */-->
+								<div class="lazy_load_wrap thumb">
+									<img src="" data-src="/mo/ko/images/dummy/img_item_thumb.jpg" alt="" class="lazy_load">
+								</div>
+								<!--/* 일시품절 */-->
+								<span class="out_of_stock"><span class="badge">일시품절</span></span>
+							</div>
+							<div class="product_info">
+								<!--/* 상품명 */-->
+								<p class="product_name">제품명이 길어지면 한줄 말줄임 제품명이 길어지면 한줄 말줄임</p>
+								<!--/* 가격정보 */-->
+								<div class="price_area">
+									<em class="discount num">28%</em>
+									<b class="price">
+										<span class="num">32,000</span>원
+									</b>
+									<del><span class="num">45,000</span>원</del>
+								</div>
+								<!--/* 평점 리뷰 */-->
+								<div class="product_rating">
+									<span class="rating">
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s"></i>
+										<span class="sr_only">4점</span>
+									</span>
+									<span>리뷰 <span class="num">360</span></span>
+								</div>
+								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+							</div>
+						</a>
+						<div class="related_info">
+							<span class="tags">
+								<span class="badge gift">기프트카드</span>
+							</span>
+							<a href="#none" class="btn_brand"><span>헤라</span><i class="ico_arr_s"></i></a>
+						</div>
+					</li>
+					<li class="product">
+						<!--/* 비주얼 영역 */-->
+						<a href="#none">
+							<div class="product_visual">
+								<!--/* 정사각 썸네일 타입 */-->
+								<div class="lazy_load_wrap thumb">
+									<img src="" data-src="/mo/ko/images/dummy/img_item_02.jpg" alt="" class="lazy_load">
+								</div>
+							</div>
+							<div class="product_info">
+								<!--/* 상품명 */-->
+								<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+								<!--/* 가격정보 */-->
+								<div class="price_area">
+									<em class="num">1+1</em>
+									<b class="price">
+										<span class="num">32,000</span>원
+									</b>
+								</div>
+								<!--/* 평점 리뷰 */-->
+								<div class="product_rating">
+									<span class="rating">
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s"></i>
+										<span class="sr_only">4점</span>
+									</span>
+									<span>리뷰 <span class="num">360</span></span>
+								</div>
+								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+							</div>
+						</a>
+						<div class="related_info">
+							<a href="#none" class="btn_brand"><span>헤라</span><i class="ico_arr_s"></i></a>
+						</div>
+					</li>
+				</ul>
+				<!--/* 상품 목록 1단/2단 뷰 스위치 형태 */-->
+				<ul class="product_list">
+					<!--/* 상품 1개 */-->
+					<li class="product">
+						<!--/* 비주얼 영역 */-->
+						<a href="#none">
+							<div class="product_visual">
+								<!--/* 정사각 썸네일 타입 */-->
+								<div class="lazy_load_wrap">
+									<img src="" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="" class="lazy_load">
+								</div>
+								<!--/* 일시품절 */-->
+								<span class="out_of_stock"><span class="badge">일시품절</span></span>
+							</div>
+							<div class="product_info">
+								<!--/* 브랜드 */-->
+								<p class="brand"><b>마몽드</b></p>
+								<!--/* 상품명 */-->
+								<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+								<!--/* 가격정보 */-->
+								<div class="price_area">
+									<em class="discount num">28%</em>
+									<b class="price">
+										<span class="num">32,000</span>원
+									</b>
+									<del><span class="num">45,000</span>원</del>
+								</div>
+								<!--/* 평점 리뷰 */-->
+								<div class="product_rating">
+									<span class="rating">
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s"></i>
+										<span class="sr_only">4점</span>
+									</span>
+									<span>리뷰 <span class="num">360</span></span>
+								</div>
+								<!--/* 태그 */-->
+								<div class="tags">
+									<span class="badge special">스페셜기프트</span>
+									<span class="badge gift">기프트카드</span>
+								</div>
+								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+							</div>
+						</a>
+					</li>
+					<li class="product">
+						<!--/* 비주얼 영역 */-->
+						<a href="#none">
+							<div class="product_visual">
+								<!--/* 정사각 썸네일 타입 */-->
+								<div class="lazy_load_wrap">
+									<img src="" data-src="/mo/ko/images/dummy/img_item_02.jpg" alt="" class="lazy_load">
+								</div>
+							</div>
+							<div class="product_info">
+								<!--/* 브랜드 */-->
+								<p class="brand"><b>라네즈</b></p>
+								<!--/* 상품명 */-->
+								<p class="product_name">스킨베일 커버 파운데이션 EX SPF25 PA++ 30ml</p>
+								<!--/* 가격정보 */-->
+								<div class="price_area">
+									<em class="num">1+1</em>
+									<b class="price">
+										<span class="num">32,000</span>원
+									</b>
+								</div>
+								<!--/* 평점 리뷰 */-->
+								<div class="product_rating">
+									<span class="rating">
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s"></i>
+										<span class="sr_only">4점</span>
+									</span>
+									<span>리뷰 <span class="num">360</span></span>
+								</div>
+								<!--/* 태그 */-->
+								<div class="tags">
+									<span class="badge special">스페셜기프트</span>
+								</div>
+								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+							</div>
+						</a>
+
+					</li>
+					<li class="product">
+						<!--/* 비주얼 영역 */-->
+						<a href="#none">
+							<div class="product_visual">
+								<!--/* 정사각 썸네일 타입 */-->
+								<div class="lazy_load_wrap">
+									<img src="" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load">
+								</div>
+							</div>
+							<div class="product_info">
+								<!--/* 브랜드 */-->
+								<p class="brand"><b>리리코스 마린에너지</b></p>
+								<!--/* 상품명 */-->
+								<p class="product_name">인텐시브 오일 20ml</p>
+								<!--/* 가격정보 */-->
+								<div class="price_area">
+									<b class="price"><span class="num">32,000</span>원</b>
+								</div>
+								<!--/* 평점 리뷰 */-->
+								<div class="product_rating">
+									<span class="rating">
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s"></i>
+										<span class="sr_only">4점</span>
+									</span>
+									<span>리뷰 <span class="num">360</span></span>
+								</div>
+								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+							</div>
+						</a>
+					</li>
+					<li class="product">
+						<!--/* 비주얼 영역 */-->
+						<a href="#none">
+							<div class="product_visual">
+								<!--/* 정사각 썸네일 타입 */-->
+								<div class="lazy_load_wrap">
+									<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
+								</div>
+							</div>
+							<div class="product_info">
+								<!--/* 브랜드 */-->
+								<p class="brand"><b>리리코스 마린에너지</b></p>
+								<!--/* 상품명 */-->
+								<p class="product_name">인텐시브 오일 20ml 인텐시브 오일 20ml 인텐시브 오일 20ml 인텐시브 오일 20ml</p>
+								<!--/* 가격정보 */-->
+								<div class="price_area">
+									<b class="price"><span class="num">32,000</span>원</b>
+								</div>
+								<!--/* 평점 리뷰 */-->
+								<div class="product_rating">
+									<span class="rating">
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s"></i>
+										<span class="sr_only">4점</span>
+									</span>
+									<span>리뷰 <span class="num">360</span></span>
+								</div>
+								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+							</div>
+						</a>
+					</li>
+					<li class="product">
+						<!--/* 비주얼 영역 */-->
+						<a href="#none">
+							<div class="product_visual">
+								<!--/* 정사각 썸네일 타입 */-->
+								<div class="lazy_load_wrap">
+									<img src="" data-src="/mo/ko/images/dummy/img_item_05.jpg" alt="" class="lazy_load">
+								</div>
+							</div>
+							<div class="product_info">
+								<!--/* 브랜드 */-->
+								<p class="brand"><b>헤라</b></p>
+								<!--/* 상품명 */-->
+								<p class="product_name">루즈홀릭 크림</p>
+								<!--/* 가격정보 */-->
+								<div class="price_area">
+									<b class="price"><span class="num">32,000</span>원</b>
+								</div>
+								<!--/* 평점 리뷰 */-->
+								<div class="product_rating">
+									<span class="rating">
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s"></i>
+										<span class="sr_only">4점</span>
+									</span>
+									<span>리뷰 <span class="num">360</span></span>
+								</div>
+								<!--/* 컬러칩 */-->
+								<div class="product_color">
+									<span style="background:#9c282a"><span class="sr_only">옵션명</span></span>
+									<span style="background:#d6181c"><span class="sr_only">옵션명</span></span>
+									<span style="background:#9c2846"><span class="sr_only">옵션명</span></span>
+									<span style="background:#cb3d3f"><span class="sr_only">옵션명</span></span>
+									<span style="background:#ef5052"><span class="sr_only">옵션명</span></span>
+									<span style="background:#9c282a"><span class="sr_only">옵션명</span></span>
+									<span style="background:#d6181c"><span class="sr_only">옵션명</span></span>
+									<span style="background:#9c2846"><span class="sr_only">옵션명</span></span>
+									<span style="background:#cb3d3f"><span class="sr_only">옵션명</span></span>
+									<span style="background:#ef5052"><span class="sr_only">옵션명</span></span>
+									<span class="more"></span>
+								</div>
+								<!--/* 태그 */-->
+								<div class="tags">
+									<span class="badge gift">기프트카드</span>
+								</div>
+								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+							</div>
+						</a>
+					</li>
+					<li class="product">
+						<!--/* 비주얼 영역 */-->
+						<a href="#none">
+							<div class="product_visual">
+								<!--/* 정사각 썸네일 타입 */-->
+								<div class="lazy_load_wrap">
+									<img src="" data-src="/mo/ko/images/dummy/img_item_06.jpg" alt="" class="lazy_load">
+								</div>
+							</div>
+							<div class="product_info">
+								<!--/* 브랜드 */-->
+								<p class="brand"><b>헤라</b></p>
+								<!--/* 상품명 */-->
+								<p class="product_name">루즈홀릭 크림</p>
+								<!--/* 가격정보 */-->
+								<div class="price_area">
+									<b class="price"><span class="num">32,000</span>원</b>
+								</div>
+								<!--/* 평점 리뷰 */-->
+								<div class="product_rating">
+									<span class="rating">
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s"></i>
+										<span class="sr_only">4점</span>
+									</span>
+									<span>리뷰 <span class="num">360</span></span>
+								</div>
+								<!--/* 컬러칩 */-->
+								<div class="product_color">
+									18가지 컬러 선택 가능
+								</div>
+								<!--/* 태그 */-->
+								<div class="tags">
+									<span class="badge gift">기프트카드</span>
+								</div>
+								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+							</div>
+						</a>
+					</li>
+					<li class="product">
+						<a href="#none">
+							<div class="product_visual">
+								<div class="lazy_load_wrap">
+									<img src="" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="" class="lazy_load">
+								</div>
+							</div>
+							<div class="product_info">
+								<p class="brand"><b>리리코스 마린에너지</b></p>
+								<p class="product_name">인텐시브 오일 20ml 인텐시브 오일 20ml 인텐시브 오일 20ml 인텐시브 오일 20ml</p>
+								<div class="price_area">
+									<b class="price"><span class="num">32,000</span>원</b>
+								</div>
+								<div class="product_rating">
+									<span class="rating">
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s"></i>
+										<span class="sr_only">4점</span>
+									</span>
+									<span>리뷰 <span class="num">360</span></span>
+								</div>
+								<div class="product_color">
+									<span style="background:#9c282a"><span class="sr_only">옵션명</span></span>
+									<span style="background:#d6181c"><span class="sr_only">옵션명</span></span>
+									<span style="background:#9c2846"><span class="sr_only">옵션명</span></span>
+									<span style="background:#cb3d3f"><span class="sr_only">옵션명</span></span>
+									<span style="background:#ef5052"><span class="sr_only">옵션명</span></span>
+									<span style="background:#9c282a"><span class="sr_only">옵션명</span></span>
+									<span style="background:#d6181c"><span class="sr_only">옵션명</span></span>
+									<span style="background:#9c2846"><span class="sr_only">옵션명</span></span>
+									<span style="background:#cb3d3f"><span class="sr_only">옵션명</span></span>
+									<span style="background:#ef5052"><span class="sr_only">옵션명</span></span>
+									<span class="more"></span>
+								</div>
+								<div class="tags">
+									<span class="badge gift">기프트카드</span>
+								</div>
+								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+							</div>
+						</a>
+					</li>
+				</ul>
+				<!--/* 2단일때 col2 클래스 추가 */-->
+				<ul class="product_list col2">
+					<!--/* 상품 1개 */-->
+					<li class="product">
+						<!--/* 비주얼 영역 */-->
+						<a href="#none">
+							<div class="product_visual">
+								<!--/* 정사각 썸네일 타입 */-->
+								<div class="lazy_load_wrap">
+									<img src="" data-src="/mo/ko/images/dummy/img_item_06.jpg" alt="" class="lazy_load">
+								</div>
+								<!--/* 일시품절 */-->
+								<span class="out_of_stock"><span class="badge">일시품절</span></span>
+							</div>
+							<div class="product_info">
+								<!--/* 브랜드 */-->
+								<p class="brand"><b>마몽드</b></p>
+								<!--/* 상품명 */-->
+								<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+								<!--/* 가격정보 */-->
+								<div class="price_area">
+									<em class="discount num">28%</em>
+									<b class="price">
+										<span class="num">32,000</span>원
+									</b>
+									<del><span class="num">45,000</span>원</del>
+								</div>
+								<!--/* 평점 리뷰 */-->
+								<div class="product_rating">
+									<span class="rating">
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s"></i>
+										<span class="sr_only">4점</span>
+									</span>
+									<span>리뷰 <span class="num">360</span></span>
+								</div>
+								<!--/* 태그 */-->
+								<div class="tags">
+									<span class="badge special">스페셜기프트</span>
+									<span class="badge gift">기프트카드</span>
+								</div>
+								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+							</div>
+						</a>
+					</li>
+					<li class="product">
+						<!--/* 비주얼 영역 */-->
+						<a href="#none">
+							<div class="product_visual">
+								<!--/* 정사각 썸네일 타입 */-->
+								<div class="lazy_load_wrap">
+									<img src="" data-src="/mo/ko/images/dummy/img_item_05.jpg" alt="" class="lazy_load">
+								</div>
+							</div>
+							<div class="product_info">
+								<!--/* 브랜드 */-->
+								<p class="brand"><b>라네즈</b></p>
+								<!--/* 상품명 */-->
+								<p class="product_name">스킨베일 커버 파운데이션 EX SPF25 PA++ 30ml</p>
+								<!--/* 가격정보 */-->
+								<div class="price_area">
+									<em class="num">1+1</em>
+									<b class="price">
+										<span class="num">32,000</span>원
+									</b>
+								</div>
+								<!--/* 평점 리뷰 */-->
+								<div class="product_rating">
+									<span class="rating">
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s"></i>
+										<span class="sr_only">4점</span>
+									</span>
+									<span>리뷰 <span class="num">360</span></span>
+								</div>
+								<!--/* 태그 */-->
+								<div class="tags">
+									<span class="badge special">스페셜기프트</span>
+								</div>
+								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+							</div>
+						</a>
+
+					</li>
+					<li class="product">
+						<!--/* 비주얼 영역 */-->
+						<a href="#none">
+							<div class="product_visual">
+								<!--/* 정사각 썸네일 타입 */-->
+								<div class="lazy_load_wrap">
+									<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
+								</div>
+							</div>
+							<div class="product_info">
+								<!--/* 브랜드 */-->
+								<p class="brand"><b>리리코스 마린에너지</b></p>
+								<!--/* 상품명 */-->
+								<p class="product_name">인텐시브 오일 20ml</p>
+								<!--/* 가격정보 */-->
+								<div class="price_area">
+									<b class="price"><span class="num">32,000</span>원</b>
+								</div>
+								<!--/* 평점 리뷰 */-->
+								<div class="product_rating">
+									<span class="rating">
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s"></i>
+										<span class="sr_only">4점</span>
+									</span>
+									<span>리뷰 <span class="num">360</span></span>
+								</div>
+								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+							</div>
+						</a>
+					</li>
+					<li class="product">
+						<!--/* 비주얼 영역 */-->
+						<a href="#none">
+							<div class="product_visual">
+								<!--/* 정사각 썸네일 타입 */-->
+								<div class="lazy_load_wrap">
+									<img src="" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load">
+								</div>
+							</div>
+							<div class="product_info">
+								<!--/* 브랜드 */-->
+								<p class="brand"><b>리리코스 마린에너지</b></p>
+								<!--/* 상품명 */-->
+								<p class="product_name">인텐시브 오일 20ml 인텐시브 오일 20ml 인텐시브 오일 20ml 인텐시브 오일 20ml</p>
+								<!--/* 가격정보 */-->
+								<div class="price_area">
+									<b class="price"><span class="num">32,000</span>원</b>
+								</div>
+								<!--/* 평점 리뷰 */-->
+								<div class="product_rating">
+									<span class="rating">
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s"></i>
+										<span class="sr_only">4점</span>
+									</span>
+									<span>리뷰 <span class="num">360</span></span>
+								</div>
+								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+							</div>
+						</a>
+					</li>
+					<li class="product">
+						<!--/* 비주얼 영역 */-->
+						<a href="#none">
+							<div class="product_visual">
+								<!--/* 정사각 썸네일 타입 */-->
+								<div class="lazy_load_wrap">
+									<img src="" data-src="/mo/ko/images/dummy/img_item_02.jpg" alt="" class="lazy_load">
+								</div>
+							</div>
+							<div class="product_info">
+								<!--/* 브랜드 */-->
+								<p class="brand"><b>헤라</b></p>
+								<!--/* 상품명 */-->
+								<p class="product_name">루즈홀릭 크림</p>
+								<!--/* 가격정보 */-->
+								<div class="price_area">
+									<b class="price"><span class="num">32,000</span>원</b>
+								</div>
+								<!--/* 평점 리뷰 */-->
+								<div class="product_rating">
+									<span class="rating">
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s"></i>
+										<span class="sr_only">4점</span>
+									</span>
+									<span>리뷰 <span class="num">360</span></span>
+								</div>
+								<!--/* 컬러칩 */-->
+								<div class="product_color">
+									<span style="background:#9c282a"><span class="sr_only">옵션명</span></span>
+									<span style="background:#d6181c"><span class="sr_only">옵션명</span></span>
+									<span style="background:#9c2846"><span class="sr_only">옵션명</span></span>
+									<span style="background:#cb3d3f"><span class="sr_only">옵션명</span></span>
+									<span style="background:#ef5052"><span class="sr_only">옵션명</span></span>
+									<span style="background:#9c282a"><span class="sr_only">옵션명</span></span>
+									<span style="background:#d6181c"><span class="sr_only">옵션명</span></span>
+									<span style="background:#9c2846"><span class="sr_only">옵션명</span></span>
+									<span style="background:#cb3d3f"><span class="sr_only">옵션명</span></span>
+									<span style="background:#ef5052"><span class="sr_only">옵션명</span></span>
+									<span class="more"></span>
+								</div>
+								<!--/* 태그 */-->
+								<div class="tags">
+									<span class="badge gift">기프트카드</span>
+								</div>
+								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+							</div>
+						</a>
+					</li>
+					<li class="product">
+						<a href="#none">
+							<div class="product_visual">
+								<div class="lazy_load_wrap">
+									<img src="" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="" class="lazy_load">
+								</div>
+							</div>
+							<div class="product_info">
+								<p class="brand"><b>리리코스 마린에너지</b></p>
+								<p class="product_name">인텐시브 오일 20ml 인텐시브 오일 20ml 인텐시브 오일 20ml 인텐시브 오일 20ml</p>
+								<div class="price_area">
+									<b class="price"><span class="num">32,000</span>원</b>
+								</div>
+								<div class="product_rating">
+									<span class="rating">
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s"></i>
+										<span class="sr_only">4점</span>
+									</span>
+									<span>리뷰 <span class="num">360</span></span>
+								</div>
+								<div class="product_color">
+									<span style="background:#9c282a"><span class="sr_only">옵션명</span></span>
+									<span style="background:#d6181c"><span class="sr_only">옵션명</span></span>
+									<span style="background:#9c2846"><span class="sr_only">옵션명</span></span>
+									<span style="background:#cb3d3f"><span class="sr_only">옵션명</span></span>
+									<span style="background:#ef5052"><span class="sr_only">옵션명</span></span>
+									<span style="background:#9c282a"><span class="sr_only">옵션명</span></span>
+									<span style="background:#d6181c"><span class="sr_only">옵션명</span></span>
+									<span style="background:#9c2846"><span class="sr_only">옵션명</span></span>
+									<span style="background:#cb3d3f"><span class="sr_only">옵션명</span></span>
+									<span style="background:#ef5052"><span class="sr_only">옵션명</span></span>
+									<span class="more"></span>
+								</div>
+								<div class="tags">
+									<span class="badge gift">기프트카드</span>
+								</div>
+								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+							</div>
+						</a>
+					</li>
+				</ul>
+				<h3 class="h_title d2"><b>실시간 인기쿠션</b> <small>업데이트 2018.00.00</small></h3>
+				<div class="section">
+					<div class="slide one-half" data-ix-options="auto-play:true; view-length:2; move-length:1;">
+						<div class="ix-list-viewport">
+							<ul class="ix-list-items card_type">
+								<li class="ix-list-item">
+									<a href="#none" class="product">
+										<!--/* 비주얼 영역 */-->
+										<div class="product_visual">
+											<span class="rank num"><b>1</b></span>
+											<div class="lazy_load_wrap thumb">
+												<img src="" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="" class="lazy_load">
+											</div>
+											<span class="tags">
+												<span class="badge special">스페셜기프트</span>
+												<span class="badge gift">기프트카드</span>
+											</span>
+										</div>
+										<div class="product_info">
+											<!--/* 상품명 */-->
+											<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+											<!--/* 가격정보 */-->
+											<div class="price_area">
+												<em class="discount num">28%</em>
+												<b class="price">
+													<span class="num">32,000</span>원
+												</b>
+												<del><span class="num">45,000</span>원</del>
+											</div>
+											<!--/* 평점 리뷰 */-->
+											<div class="product_rating">
+												<span class="rating">
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s"></i>
+													<span class="sr_only">4점</span>
+												</span>
+												<span>리뷰 <span class="num">360</span></span>
+											</div>
+											<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+											<p class="review ellipsis row2">리뷰 내용 2줄 노출 리뷰 내용 2줄 노출 리뷰 내용 2줄 노출 리뷰 내용 2줄 노출리뷰 내용 2줄 노출 리뷰 내용 2줄 노출 리뷰 내용 2줄 노출 리뷰 내용 2줄 노출</p>
+										</div>
+									</a>
+								</li>
+								<li class="ix-list-item">
+									<a href="#none" class="product">
+										<!--/* 비주얼 영역 */-->
+										<div class="product_visual">
+											<span class="rank num"><b>2</b></span>
+											<div class="lazy_load_wrap thumb">
+												<img src="" data-src="/mo/ko/images/dummy/img_item_02.jpg" alt="" class="lazy_load">
+											</div>
+											<span class="tags">
+												<span class="badge gift">기프트카드</span>
+											</span>
+										</div>
+										<div class="product_info">
+											<!--/* 상품명 */-->
+											<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+											<!--/* 가격정보 */-->
+											<div class="price_area">
+												<em class="discount num">28%</em>
+												<b class="price">
+													<span class="num">32,000</span>원
+												</b>
+												<del><span class="num">45,000</span>원</del>
+											</div>
+											<!--/* 평점 리뷰 */-->
+											<div class="product_rating">
+												<span class="rating">
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s"></i>
+													<span class="sr_only">4점</span>
+												</span>
+												<span>리뷰 <span class="num">360</span></span>
+											</div>
+											<p class="review ellipsis row2">실시간 인기 급상승 쿠션!<br>리뷰를 작성해주세요.</p>
+											<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+										</div>
+									</a>
+								</li>
+								<li class="ix-list-item">
+									<a href="#none" class="product">
+										<!--/* 비주얼 영역 */-->
+										<div class="product_visual">
+											<span class="rank num"><b>3</b></span>
+											<div class="lazy_load_wrap thumb">
+												<img src="" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load">
+											</div>
+										</div>
+										<div class="product_info">
+											<!--/* 상품명 */-->
+											<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+											<!--/* 가격정보 */-->
+											<div class="price_area">
+												<em class="discount num">28%</em>
+												<b class="price">
+													<span class="num">32,000</span>원
+												</b>
+												<del><span class="num">45,000</span>원</del>
+											</div>
+											<!--/* 평점 리뷰 */-->
+											<div class="product_rating">
+												<span class="rating">
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s"></i>
+													<span class="sr_only">4점</span>
+												</span>
+												<span>리뷰 <span class="num">360</span></span>
+											</div>
+											<p class="review ellipsis row2">실시간 인기 급상승 쿠션!<br>리뷰를 작성해주세요.</p>
+											<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+										</div>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<h3 class="h_title d2"><b>스페셜 기프트</b></h3>
+				<ul class="product_list card_type">
+						<li class="product">
+							<a href="#none">
+								<!--/* 비주얼 영역 */-->
+								<div class="product_visual bg">
+									<div class="lazy_load_wrap thumb">
+										<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="{상품명}" class="lazy_load">
+									</div>
+								</div>
+							</a>
+							<!--/* special gift */-->
+							<div class="special_gift">
+								<span class="ico_plus"></span>
+								<ul class="scrollable_x">
+									<li><a href="#none">
+										<div class="lazy_load_wrap">
+											<img src="" data-src="/mo/ko/images/dummy/img_gift_01.jpg" alt="{추가증정 상품명}" class="lazy_load">
+										</div>
+									</a></li>
+									<li><a href="#none">
+										<div class="lazy_load_wrap">
+											<img src="" data-src="/mo/ko/images/dummy/img_gift_02.jpg" alt="{추가증정 상품명}" class="lazy_load">
+										</div>
+									</a></li>
+									<li><a href="#none">
+										<div class="lazy_load_wrap">
+											<img src="" data-src="/mo/ko/images/dummy/img_gift_03.jpg" alt="{추가증정 상품명}" class="lazy_load">
+										</div>
+									</a></li>
+									<li><a href="#none">
+										<div class="lazy_load_wrap">
+											<img src="" data-src="/mo/ko/images/dummy/img_gift_04.jpg" alt="{추가증정 상품명}" class="lazy_load">
+										</div>
+									</a></li>
+								</ul>
+							</div>
+							<div class="product_info">
+								<!--/* 상품명 */-->
+								<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+								<!--/* 가격정보 */-->
+								<div class="price_area">
+									<em class="discount num">28%</em>
+									<b class="price">
+										<span class="num">32,000</span>원
+									</b>
+									<del><span class="num">45,000</span>원</del>
+								</div>
+								<!--/* 평점 리뷰 */-->
+								<div class="product_rating">
+									<span class="rating">
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s"></i>
+										<span class="sr_only">4점</span>
+									</span>
+									<span>리뷰 <span class="num">360</span></span>
+								</div>
+								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+							</div>
+						</li>
+						<li class="ix-list-item product">
+							<a href="#none">
+								<!--/* 비주얼 영역 */-->
+								<div class="product_visual bg">
+									<div class="lazy_load_wrap thumb">
+										<img src="" data-src="/mo/ko/images/dummy/img_item_05.jpg" alt="{상품명}" class="lazy_load">
+									</div>
+								</div>
+							</a>
+							<!--/* special gift */-->
+							<div class="special_gift">
+								<span class="ico_plus"></span>
+								<ul class="scrollable_x">
+									<li><a href="#none">
+										<div class="lazy_load_wrap">
+											<img src="" data-src="/mo/ko/images/dummy/img_gift_05.jpg" alt="{추가증정 상품명}" class="lazy_load">
+										</div>
+									</a></li>
+									<li><a href="#none">
+										<div class="lazy_load_wrap">
+											<img src="" data-src="/mo/ko/images/dummy/img_gift_01.jpg" alt="{추가증정 상품명}" class="lazy_load">
+										</div>
+									</a></li>
+									<li><a href="#none">
+										<div class="lazy_load_wrap">
+											<img src="" data-src="/mo/ko/images/dummy/img_gift_02.jpg" alt="{추가증정 상품명}" class="lazy_load">
+										</div>
+									</a></li>
+									<li><a href="#none">
+										<div class="lazy_load_wrap">
+											<img src="" data-src="/mo/ko/images/dummy/img_gift_03.jpg" alt="{추가증정 상품명}" class="lazy_load">
+										</div>
+									</a></li>
+								</ul>
+							</div>
+							<div class="product_info">
+								<!--/* 상품명 */-->
+								<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+								<!--/* 가격정보 */-->
+								<div class="price_area">
+									<em class="discount num">28%</em>
+									<b class="price">
+										<span class="num">32,000</span>원
+									</b>
+									<del><span class="num">45,000</span>원</del>
+								</div>
+								<!--/* 평점 리뷰 */-->
+								<div class="product_rating">
+									<span class="rating">
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s"></i>
+										<span class="sr_only">4점</span>
+									</span>
+									<span>리뷰 <span class="num">360</span></span>
+								</div>
+								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+							</div>
+						</li>
+						<li class="ix-list-item product">
+							<a href="#none">
+								<!--/* 비주얼 영역 */-->
+								<div class="product_visual bg">
+									<div class="lazy_load_wrap thumb">
+										<img src="" data-src="/mo/ko/images/dummy/img_item_06.jpg" alt="{상품명}" class="lazy_load">
+									</div>
+								</div>
+							</a>
+							<!--/* special gift */-->
+							<div class="special_gift">
+								<span class="ico_plus"></span>
+								<ul class="scrollable_x">
+									<li><a href="#none">
+										<div class="lazy_load_wrap">
+											<img src="" data-src="/mo/ko/images/dummy/img_gift_04.jpg" alt="{추가증정 상품명}" class="lazy_load">
+										</div>
+									</a></li>
+									<li><a href="#none">
+										<div class="lazy_load_wrap">
+											<img src="" data-src="/mo/ko/images/dummy/img_gift_05.jpg" alt="{추가증정 상품명}" class="lazy_load">
+										</div>
+									</a></li>
+									<li><a href="#none">
+										<div class="lazy_load_wrap">
+											<img src="" data-src="/mo/ko/images/dummy/img_gift_01.jpg" alt="{추가증정 상품명}" class="lazy_load">
+										</div>
+									</a></li>
+									<li><a href="#none">
+										<div class="lazy_load_wrap">
+											<img src="" data-src="/mo/ko/images/dummy/img_gift_02.jpg" alt="{추가증정 상품명}" class="lazy_load">
+										</div>
+									</a></li>
+								</ul>
+							</div>
+							<div class="product_info">
+								<!--/* 상품명 */-->
+								<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+								<!--/* 가격정보 */-->
+								<div class="price_area">
+									<em class="discount num">28%</em>
+									<b class="price">
+										<span class="num">32,000</span>원
+									</b>
+									<del><span class="num">45,000</span>원</del>
+								</div>
+								<!--/* 평점 리뷰 */-->
+								<div class="product_rating">
+									<span class="rating">
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s on"></i>
+										<i class="ico_star_s"></i>
+										<span class="sr_only">4점</span>
+									</span>
+									<span>리뷰 <span class="num">360</span></span>
+								</div>
+								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+							</div>
+						</li>
+					</ul>
+				<!--/* 상품 목록 좌우 스크롤 2개 반  */-->
+				<div class="section pd_md">
+					<dl>
+						<dt class="h_title d3">홍길동 고객님을 위한 추천 상품</dt>
+						<dd class="product_slide">
+							<ul class="two_half">
+								<li class="product">
+									<a href="#none">
+										<!--/* 비주얼 영역 */-->
+										<div class="product_visual">
+											<div class="lazy_load_wrap">
+												<img src="" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load">
+											</div>
+											<div class="out_of_stock"><span class="badge">일시품절</span></div>
+										</div>
+										<div class="product_info">
+											<p class="brand"><b>라네즈</b></p>
+											<p class="product_name">루즈홀릭 크림</p>
+											<!--/* 가격정보 */-->
+											<div class="price_area">
+												<em class="discount num"><b>30</b>%</em>
+												<span class="price"><b class="num">32,000</b>원</span>
+												<del>32,000원</del>
+											</div>
+											<!--/* 평점 리뷰 */-->
+											<div class="product_rating">
+												<span class="rating">
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s"></i>
+													<span class="sr_only">4점</span>
+												</span>
+												<span>리뷰 <span class="num">360</span></span>
+											</div>
+										</div>
+									</a>
+								</li>
+								<li class="product">
+									<!--/* 비주얼 영역 */-->
+									<a href="#none">
+										<div class="product_visual">
+											<div class="lazy_load_wrap">
+												<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
+											</div>
+										</div>
+										<div class="product_info">
+											<p class="brand"><b>라네즈</b></p>
+											<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+											<!--/* 가격정보 */-->
+											<div class="price_area">
+												<span class="price"><b class="num">32,000</b>원</span>
+												<del>32,000원</del>
+											</div>
+											<!--/* 평점 리뷰 */-->
+											<div class="product_rating">
+												<span class="rating">
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s"></i>
+													<span class="sr_only">4점</span>
+												</span>
+												<span>리뷰 <span class="num">360</span></span>
+											</div>
+											<!--/* 태그 */-->
+											<div class="tags">
+												<span class="badge special">스페셜기프트</span>
+												<span class="badge gift">기프트카드</span>
+											</div>
+										</div>
+									</a>
+								</li>
+								<li class="product">
+									<!--/* 비주얼 영역 */-->
+									<a href="#none">
+										<div class="product_visual">
+											<div class="lazy_load_wrap">
+												<img src="" data-src="/mo/ko/images/dummy/img_item_05.jpg" alt="" class="lazy_load">
+											</div>
+										</div>
+										<div class="product_info">
+											<p class="brand"><b>라네즈</b></p>
+											<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+											<!--/* 가격정보 */-->
+											<div class="price_area">
+												<span class="price"><b class="num">32,000</b>원</span>
+												<del>32,000원</del>
+											</div>
+											<!--/* 평점 리뷰 */-->
+											<div class="product_rating">
+												<span class="rating">
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s"></i>
+													<span class="sr_only">4점</span>
+												</span>
+												<span>리뷰 <span class="num">360</span></span>
+											</div>
+										</div>
+									</a>
+								</li>
+								<li class="product">
+									<!--/* 비주얼 영역 */-->
+									<a href="#none">
+										<div class="product_visual">
+											<div class="lazy_load_wrap">
+												<img src="" data-src="/mo/ko/images/dummy/img_item_06.jpg" alt="" class="lazy_load">
+											</div>
+										</div>
+										<div class="product_info">
+											<p class="brand"><b>라네즈</b></p>
+											<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+											<!--/* 가격정보 */-->
+											<div class="price_area">
+												<span class="price"><b class="num">32,000</b>원</span>
+												<del>32,000원</del>
+											</div>
+											<!--/* 평점 리뷰 */-->
+											<div class="product_rating">
+												<span class="rating">
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s on"></i>
+													<i class="ico_star_s"></i>
+													<span class="sr_only">4점</span>
+												</span>
+												<span>리뷰 <span class="num">360</span></span>
+											</div>
+										</div>
+									</a>
+								</li>
+							</ul>
+						</dd>
+					</dl>
+				</div>
+				<!--/* 상품 목록 좌우 스크롤 3개 반  */-->
+				<div class="section pd_lg">
+					<dl>
+						<dt class="h_title d3">최근 관심상품</dt>
+						<dd class="product_slide">
+							<ul class="three_half">
+								<li class="product">
+									<!--/* 비주얼 영역 */-->
+									<a href="#none">
+										<div class="product_visual">
+											<div class="lazy_load_wrap">
+												<img src="" data-src="/mo/ko/images/dummy/img_item_02.jpg" alt="" class="lazy_load">
+											</div>
+										</div>
+										<div class="product_info">
+											<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+											<!--/* 가격정보 */-->
+											<div class="price_area">
+												<span class="price"><span class="num">32,000</span>원</span>
+											</div>
+										</div>
+									</a>
+								</li>
+								<li class="product">
+									<!--/* 비주얼 영역 */-->
+									<a href="#none">
+										<div class="product_visual bg">
+											<div class="lazy_load_wrap">
+												<img src="" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load">
+											</div>
+										</div>
+										<div class="product_info">
+											<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+											<!--/* 가격정보 */-->
+											<div class="price_area">
+												<span class="price"><span class="num">32,000</span>원</span>
+											</div>
+										</div>
+									</a>
+								</li>
+								<li class="product">
+									<!--/* 비주얼 영역 */-->
+									<a href="#none">
+										<div class="product_visual bg">
+											<div class="lazy_load_wrap">
+												<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
+											</div>
+										</div>
+										<div class="product_info">
+											<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+											<!--/* 가격정보 */-->
+											<div class="price_area">
+												<span class="price"><span class="num">32,000</span>원</span>
+											</div>
+										</div>
+									</a>
+								</li>
+								<li class="product">
+									<!--/* 비주얼 영역 */-->
+									<a href="#none">
+										<div class="product_visual bg">
+											<div class="lazy_load_wrap">
+												<img src="" data-src="/mo/ko/images/dummy/img_item_05.jpg" alt="" class="lazy_load">
+											</div>
+										</div>
+										<div class="product_info">
+											<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+											<!--/* 가격정보 */-->
+											<div class="price_area">
+												<span class="price"><span class="num">32,000</span>원</span>
+											</div>
+										</div>
+									</a>
+								</li>
+								<li class="product">
+									<!--/* 비주얼 영역 */-->
+									<a href="#none">
+										<div class="product_visual bg">
+											<div class="lazy_load_wrap">
+												<img src="" data-src="/mo/ko/images/dummy/img_item_06.jpg" alt="" class="lazy_load">
+											</div>
+										</div>
+										<div class="product_info">
+											<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+											<!--/* 가격정보 */-->
+											<div class="price_area">
+												<span class="price"><span class="num">32,000</span>원</span>
+											</div>
+										</div>
+									</a>
+								</li>
+							</ul>
+						</dd>
+					</dl>
+					<!--/* 더보기 버튼이 있는 경우 */-->
+					<a href="#none" class="more"><span class="sr_only">최근 관심상품</span><i class="ico_navi_s next"></i></a>
+				</div>
+				<!--/* 상품 슬라이드 버티컬 */-->
+				<div class="section pd_lg">
+					<dl>
+						<dt class="h_title d3">실시간 인기 쿠션 <small>업데이트 2017.01.01</small></dt>
+						<dd class="vertical_slide slide" data-ix-options="view-length:3; axis:vertical; auto-play:true; datum-point:-20px;">
+							<div class="ix-list-viewport">
+								<ul class="ix-list-items">
+									<li class="ix-list-item">
+										<a href="#none" class="clear product">
+											<div class="product_visual bg">
+												<div class="lazy_load_wrap">
+													<img src="" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load">
+												</div>
+											</div>
+											<div class="product_info">
+												<p class="product_name">
+													<b class="num">01</b><br>
+													<b>[대용량] 더마 리페어 시카크림</b>
+												</p>
+												<p class="exp">몇년째 쓰고 있는 미스트 쿠션 항상 믿고 사용합니다. 커버력이 최고에요</p>
+											</div>
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="#none" class="clear product">
+											<div class="product_visual bg">
+												<div class="lazy_load_wrap">
+													<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
+												</div>
+											</div>
+											<div class="product_info">
+												<p class="product_name">
+													<b class="num">02</b><br>
+													<b>[대용량] 더마 리페어 시카크림</b>
+												</p>
+												<p class="exp">몇년째 쓰고 있는 미스트 쿠션 항상 믿고 사용합니다. 커버력이 최고에요</p>
+											</div>
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="#none" class="clear product">
+											<div class="product_visual bg">
+												<div class="lazy_load_wrap">
+													<img src="" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load">
+												</div>
+											</div>
+											<div class="product_info">
+												<p class="product_name">
+													<b class="num">03</b><br>
+													<b>[대용량] 더마 리페어 시카크림</b>
+												</p>
+												<p class="exp">몇년째 쓰고 있는 미스트 쿠션 항상 믿고 사용합니다. 커버력이 최고에요</p>
+											</div>
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="#none" class="clear product">
+											<div class="product_visual bg">
+												<div class="lazy_load_wrap">
+													<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
+												</div>
+											</div>
+											<div class="product_info">
+												<p class="product_name">
+													<b class="num">04</b><br>
+													<b>[대용량] 더마 리페어 시카크림</b>
+												</p>
+												<p class="exp">몇년째 쓰고 있는 미스트 쿠션 항상 믿고 사용합니다. 커버력이 최고에요</p>
+											</div>
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="#none" class="clear product">
+											<div class="product_visual bg">
+												<div class="lazy_load_wrap">
+													<img src="" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load">
+												</div>
+											</div>
+											<div class="product_info">
+												<p class="product_name">
+													<b class="num">05</b><br>
+													<b>[대용량] 더마 리페어 시카크림</b>
+												</p>
+												<p class="exp">몇년째 쓰고 있는 미스트 쿠션 항상 믿고 사용합니다. 커버력이 최고에요</p>
+											</div>
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="#none" class="clear product">
+											<div class="product_visual bg">
+												<div class="lazy_load_wrap">
+													<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
+												</div>
+											</div>
+											<div class="product_info">
+												<p class="product_name">
+													<b class="num">06</b><br>
+													<b>[대용량] 더마 리페어 시카크림</b>
+												</p>
+												<p class="exp">몇년째 쓰고 있는 미스트 쿠션 항상 믿고 사용합니다. 커버력이 최고에요</p>
+											</div>
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="#none" class="clear product">
+											<div class="product_visual bg">
+												<div class="lazy_load_wrap">
+													<img src="" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load">
+												</div>
+											</div>
+											<div class="product_info">
+												<p class="product_name">
+													<b class="num">07</b><br>
+													<b>[대용량] 더마 리페어 시카크림</b>
+												</p>
+												<p class="exp">몇년째 쓰고 있는 미스트 쿠션 항상 믿고 사용합니다. 커버력이 최고에요</p>
+											</div>
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="#none" class="clear product">
+											<div class="product_visual bg">
+												<div class="lazy_load_wrap">
+													<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
+												</div>
+											</div>
+											<div class="product_info">
+												<p class="product_name">
+													<b class="num">08</b><br>
+													<b>[대용량] 더마 리페어 시카크림</b>
+												</p>
+												<p class="exp">몇년째 쓰고 있는 미스트 쿠션 항상 믿고 사용합니다. 커버력이 최고에요</p>
+											</div>
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="#none" class="clear product">
+											<div class="product_visual bg">
+												<div class="lazy_load_wrap">
+													<img src="" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load">
+												</div>
+											</div>
+											<div class="product_info">
+												<p class="product_name">
+													<b class="num">09</b><br>
+													<b>[대용량] 더마 리페어 시카크림</b>
+												</p>
+												<p class="exp">몇년째 쓰고 있는 미스트 쿠션 항상 믿고 사용합니다. 커버력이 최고에요</p>
+											</div>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</dd>
+					</dl>
+				</div>
+				<!--/* 상품 슬라이드 투데이 핫딜 */-->
+				<div class="section center_slide" style="background-color:#d3f6e7 ; background-image:url(/mo/ko/images/dummy/bg_center_slide.png);"> <!--/* 관리자 등록 bg */-->
+					<dl>
+						<dt class="slide_title">
+							<a href="#none" class="h_title d1">투데이 핫딜</a>
+							<span class="ui_remain_timer">
+								<b class="hour"></b>:<b class="minute"></b>:<b class="second"></b>
+							</span>
+						</dt>
+						<dd class="slide one_half" data-ix-options="view-length:2; move-length:1; datum-point:10%;">
+							<div class="ix-list-viewport">
+								<ul class="ix-list-items product_list card_type">
+									<li class="ix-list-item">
+										<a href="#none" class="product">
+											<div class="product_visual bg">
+												<div class="lazy_load_wrap thumb">
+													<img src="" data-src="/mo/ko/images/dummy/img_item_06.jpg" alt="" class="lazy_load">
+												</div>
+												<span class="count">10개 남음</span>
+												<span class="tags">
+													<span class="badge special">스페셜기프트</span>
+													<span class="badge gift">기프트카드</span>
+												</span>
+											</div>
+											<div class="product_info">
+												<p class="brand">헤라</p>
+												<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+												<div class="price_area">
+													<em class="discount num"><b>28</b>%</em>
+													<span class="price">
+														<b class="num">32,000</b>원
+													</span>
+													<del><span class="num">45,000</span>원</del>
+												</div>
+												<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+											</div>
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="#none" class="product">
+											<div class="product_visual bg">
+												<div class="lazy_load_wrap thumb">
+													<img src="" data-src="/mo/ko/images/dummy/img_item_05.jpg" alt="" class="lazy_load">
+												</div>
+												<span class="count">10개 남음</span>
+											</div>
+											<div class="product_info">
+												<p class="brand">헤라</p>
+												<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+												<div class="price_area">
+													<em class="discount num"><b>28</b>%</em>
+													<span class="price">
+														<b class="num">32,000</b>원
+													</span>
+													<del><span class="num">45,000</span>원</del>
+												</div>
+												<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+											</div>
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="#none" class="product">
+											<div class="product_visual bg">
+												<div class="lazy_load_wrap thumb">
+													<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
+												</div>
+												<span class="count">10개 남음</span>
+											</div>
+											<div class="product_info">
+												<p class="brand">헤라</p>
+												<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+												<div class="price_area">
+													<em class="discount num"><b>28</b>%</em>
+													<span class="price">
+														<b class="num">32,000</b>원
+													</span>
+													<del><span class="num">45,000</span>원</del>
+												</div>
+												<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+											</div>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</dd>
+					</dl>
+				</div>
+				<!--/* 상품 슬라이드 스페셜 기프트 */-->
+				<div class="section center_slide" style="background-color:#eed7d9; background-image:url(/mo/ko/images/dummy/bg_center_slide.png);"> <!--/* 관리자 등록 bg */-->
+					<dl>
+						<dt class="slide_title"><a href="#none" class="h_title d1">스페셜 기프트</a><span>Ap몰이 드리는 최고의 선물</span></dt>
+						<dd class="slide one_half" data-ix-options="view-length:2; move-length:1; datum-point:10%;">
+							<div class="ix-list-viewport">
+								<ul class="ix-list-items product_list plus_gift">
+									<li class="ix-list-item">
+										<a href="#none">
+											<div class="product bg">
+												<div class="product_visual">
+													<div class="lazy_load_wrap thumb">
+														<img src="" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load">
+													</div>
+												</div>
+												<div class="product_info">
+													<p class="brand">헤라</p>
+													<p class="ellipsis row2">[대용량] 더마 리페어 시카크림</p>
+													<!--/* 가격정보 */-->
+													<div class="price_area">
+														<b class="price"><span class="num">32,000</span>원</b>
+													</div>
+												</div>
+											</div>
+											<div class="special_gift">
+												<div class="ui_table">
+													<span><img ap:src="@{/images/dummy/img_gift_01.jpg}" alt=""></span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="#none">
+											<div class="product bg">
+												<div class="product_visual">
+													<div class="lazy_load_wrap thumb">
+														<img src="" data-src="/mo/ko/images/dummy/img_item_02.jpg" alt="" class="lazy_load">
+													</div>
+												</div>
+												<div class="product_info">
+													<p class="brand">프리메라</p>
+													<p class="ellipsis row2">[대용량] [NEW] 알파인 베리 워터리  크림 에디션</p>
+													<!--/* 가격정보 */-->
+													<div class="price_area">
+														<b class="price"><span class="num">32,000</span>원</b>
+													</div>
+												</div>
+											</div>
+											<div class="special_gift">
+												<div class="ui_table">
+													<span><img ap:src="@{/images/dummy/img_gift_01.jpg}" alt=""></span>
+													<span><img ap:src="@{/images/dummy/img_gift_02.jpg}" alt=""></span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="#none">
+											<div class="product bg">
+												<div class="product_visual">
+													<div class="lazy_load_wrap thumb">
+														<img src="" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="" class="lazy_load">
+													</div>
+												</div>
+												<div class="product_info">
+													<p class="brand">헤라</p>
+													<p class="ellipsis row2">[대용량] 더마 리페어 시카크림</p>
+													<!--/* 가격정보 */-->
+													<div class="price_area">
+														<b class="price"><span class="num">32,000</span>원</b>
+													</div>
+												</div>
+											</div>
+											<div class="special_gift">
+												<div class="ui_table">
+													<span><img ap:src="@{/images/dummy/img_gift_01.jpg}" alt=""></span>
+													<span><img ap:src="@{/images/dummy/img_gift_02.jpg}" alt=""></span>
+													<span><img ap:src="@{/images/dummy/img_gift_03.jpg}" alt=""></span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="#none">
+											<div class="product bg">
+												<div class="product_visual">
+													<div class="lazy_load_wrap thumb">
+														<img src="" data-src="/mo/ko/images/dummy/img_item_06.jpg" alt="" class="lazy_load">
+													</div>
+												</div>
+												<div class="product_info">
+													<p class="brand">헤라</p>
+													<p class="ellipsis row2">[대용량] 더마 리페어 시카크림</p>
+													<!--/* 가격정보 */-->
+													<div class="price_area">
+														<b class="price"><span class="num">32,000</span>원</b>
+													</div>
+												</div>
+											</div>
+											<div class="special_gift">
+												<div class="ui_table">
+													<span><img ap:src="@{/images/dummy/img_gift_01.jpg}" alt=""></span>
+													<span><img ap:src="@{/images/dummy/img_gift_02.jpg}" alt=""></span>
+													<span><img ap:src="@{/images/dummy/img_gift_03.jpg}" alt=""></span>
+													<span><img ap:src="@{/images/dummy/img_gift_04.jpg}" alt=""></span>
+												</div>
+											</div>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</dd>
+					</dl>
+				</div>
+				<!--/* 상품 슬라이드 구매금액대별 사은품 */-->
+				<div class="section center_slide freebies" style="background-color:#dbe3f9; background-image:url(/mo/ko/images/dummy/bg_center_slide.png);"> <!--/* 관리자 등록 bg */-->
+					<dl>
+						<dt class="slide_title"><a href="#none" class="h_title d1">구매금액대별사은품</a><span>사은품~ 꼭 확인하세요!</span></dt>
+						<dd class="slide one_half" data-ix-options="view-length:2; move-length:1; datum-point:10%;">
+							<div class="ix-list-viewport">
+								<ul class="ix-list-items product_list card_type">
+									<li class="ix-list-item">
+										<a href="#none" class="product">
+											<div class="product_visual bg">
+												<div class="lazy_load_wrap thumb">
+													<img src="" data-src="/mo/ko/images/dummy/img_item_02.jpg" alt="" class="lazy_load">
+												</div>
+											</div>
+											<div class="product_info">
+												<p class="title">5만원이상 10만원 미만 구매고객께</p>
+												<p><b class="eng">TYPE 01</b></p>
+												<p class="exp">클렌징으로 산뜻한 피부</p>
+											</div>
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="#none" class="product">
+											<div class="product_visual bg">
+												<div class="lazy_load_wrap thumb">
+													<img src="" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load">
+												</div>
+											</div>
+											<div class="product_info">
+												<p class="title">5만원이상 10만원 미만 구매고객께</p>
+												<p><b class="eng">TYPE 01</b></p>
+												<p class="exp">클렌징으로 산뜻한 피부</p>
+											</div>
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="#none" class="product">
+											<div class="product_visual bg">
+												<div class="lazy_load_wrap thumb">
+													<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
+												</div>
+											</div>
+											<div class="product_info">
+												<p class="title">5만원이상 10만원 미만 구매고객께</p>
+												<p><b class="eng">TYPE 01</b></p>
+												<p class="exp">클렌징으로 산뜻한 피부</p>
+											</div>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</dd>
+					</dl>
+				</div>
+				<!--/* 상품 슬라이드 리미티드에디션 */-->
+				<div class="section center_slide" style="background-color:#e5ddf2; background-image:url(/mo/ko/images/dummy/bg_center_slide.png);"> <!--/* 관리자 등록 bg */-->
+					<dl>
+						<dt class="slide_title"><a href="#none" class="h_title d1">리미티드 에디션</a><span>나만 알고 싶은 특별한 에디션</span></dt>
+						<dd class="slide one_half" data-ix-options="view-length:2; move-length:1; datum-point:10%;">
+							<div class="ix-list-viewport">
+								<ul class="ix-list-items product_list card_type">
+									<li class="ix-list-item">
+										<a href="#none" class="product">
+											<div class="product_visual bg">
+												<div class="lazy_load_wrap thumb">
+													<img src="" data-src="/mo/ko/images/dummy/img_item_05.jpg" alt="" class="lazy_load">
+												</div>
+												<span class="badge gift">기프트카드</span>
+											</div>
+											<div class="product_info">
+												<p class="brand">헤라</p>
+												<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+												<div class="price_area">
+													<em class="discount num"><b>28</b>%</em>
+													<span class="price">
+														<b class="num">32,000</b>원
+													</span>
+													<del><span class="num">45,000</span>원</del>
+												</div>
+												<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+											</div>
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="#none" class="product">
+											<div class="product_visual bg">
+												<div class="lazy_load_wrap thumb">
+													<img src="" data-src="/mo/ko/images/dummy/img_item_06.jpg" alt="" class="lazy_load">
+												</div>
+											</div>
+											<div class="product_info">
+												<p class="brand">헤라</p>
+												<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+												<div class="price_area">
+													<em class="discount num"><b>28</b>%</em>
+													<span class="price">
+														<b class="num">32,000</b>원
+													</span>
+													<del><span class="num">45,000</span>원</del>
+												</div>
+												<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+											</div>
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="#none" class="product">
+											<div class="product_visual bg">
+												<div class="lazy_load_wrap thumb">
+													<img src="" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="" class="lazy_load">
+												</div>
+											</div>
+											<div class="product_info">
+												<p class="brand">헤라</p>
+												<p class="product_name">[대용량] 더마 리페어 시카크림</p>
+												<div class="price_area">
+													<em class="discount num"><b>28</b>%</em>
+													<span class="price">
+														<b class="num">32,000</b>원
+													</span>
+													<del><span class="num">45,000</span>원</del>
+												</div>
+												<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+											</div>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</dd>
+					</dl>
+				</div>
+				<!--/* accordion */-->
+				<div class="section ui_accordion">
+					<dl>
+						<dt><span class="title">전성분 확인하기</span><button type="button"><i class="ico_down"></i><span class="sr_only">더보기</span></button></dt>
+						<dd>
+							<div class="cont">
+								내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용
+							</div>
+						</dd>
+					</dl>
+				</div>
+				<div class="section ui_accordion">
+					<dl>
+						<dt><span class="title">상세정보제공고시</span><button type="button"><i class="ico_down"></i><span class="sr_only">더보기</span></button></dt>
+						<dd>
+							<div class="cont">
+								내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용
+							</div>
+						</dd>
+					</dl>
+				</div>
+            </div>
+            
+        </div>
+
+    <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+    <th:block ap:fragment="layout-endpoint">
+		<script>
+			$('.slide').ixSlideMax();
+			$( '.youtube_video' ).video();
+			$( '.ui_remain_timer' ).remainTimer();
+		</script>
+    </th:block>
+
+</body>
+</html>

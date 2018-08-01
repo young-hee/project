@@ -1,0 +1,22 @@
+{{#xif this.totalCount '>' 0}}
+	{{#each this.list}}
+		<tr class="selected">
+			<td class="align_left">
+				<span class="check_wrap label_only">
+					<input type="radio" class="table_striped" name="order" id="o_{{this.ordSn}}">
+					<label for="o_{{this.ordSn}}">주문번호 : {{this.ordHistNo}}<br> {{this.ordName}} </label>
+				</span>
+			</td>
+			<td>{{this.ordStatusCode}}</td>
+		</tr>
+	{{/each}}
+{{else}}
+	<tr>
+		<td colspan="2">
+			<div class="section notice">
+				<i class="ico"></i>
+				<p class="text">주문내역이 없습니다.</p>
+			</div>
+		</td>
+	</tr>
+{{/xif}}

@@ -1,0 +1,7 @@
+this["AP"] = this["AP"] || {};
+this["AP"]["handlebars"] = this["AP"]["handlebars"] || {};
+this["AP"]["handlebars"]["cs"] = this["AP"]["handlebars"]["cs"] || {};
+
+this["AP"]["handlebars"]["cs"]["layer-inquiry"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "<dl class=\"layer fixed_top\"> <!--/* 헤더, 버튼 fixed 스타일, 헤더만 고정할때 fixed_top */-->\n	<dt class=\"layer_title\">주문선택</dt>\n	<dd class=\"layer_cont\">\n		<div class=\"section pd_md no_margin\">\n			<div class=\"customer_center\">\n			<p class=\"text_center\">상담을 원하는 주문 번호를 선택하세요.</p>\n			<br>\n			<table class=\"ui_table_striped data_table align_center\">\n				<caption class=\"sr_only\">상담을 위한 주문목록 선택 으로 주문번호/상품명, 주문상태로 구성</caption>\n				<colgroup>\n					<col>\n					<col style=\"width:80px\">\n				</colgroup>\n				<thead>\n				<tr>\n					<th scope=\"col\">주문번호/상품명</th>\n					<th scope=\"col\">주문상태</th>\n				</tr>\n				</thead>\n				<tbody id=\"more\">\n				</tbody>\n			</table>\n			<button type=\"button\" class=\"btn_lg_more w100p\" id=\"b_more\">더보기 </button>\n			<div class=\"loading\" style=\"height:100px;\"> <!-- 로딩이 들어가야 하는 영역 높이값 inline으로..-->\n				<img alt=\"로딩중\" src=\"/mo/ko/images/common/loading_sm.gif\">\n			</div>\n			<div class=\"page_btns\">\n				<button class=\"btn_md_neutral\" type=\"button\" id=\"b_apply\" disabled>적용</button>\n			</div>\n		</div>\n		</div>\n	</dd>\n</dl>";
+},"useData":true});

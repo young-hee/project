@@ -1,0 +1,59 @@
+@charset "UTF-8";
+
+/* 레이어 팝업 */
+.layer_popup{position:absolute; top:0; left:0; right:0; bottom:0; display:none; z-index: 100; -webkit-overflow-scrolling:touch;}
+.layer_popup,
+.layer_dimmed{position:fixed; top:0; left:0; right:0; bottom:0;}
+.layer_dimmed{background:rgba(0, 0, 0, 0.3);}
+.layer_popup .layer_dimmed.dimmed_transparent{opacity:0;}
+.layer_wrap{position:absolute; top:50%; left:12%; right:12%; }
+.layer{width:100%; min-height:100%; background:#fff;}
+.layer_title{padding:24px 23px 0; font-size:16px; font-weight:bold; color:#000;}
+.layer_cont{padding:24px 23px 19px;}
+.layer_cont.no_padding{padding:0;}
+.layer_btns{text-align:right; padding:24px;}
+/* .layer_btns>*{float:none; width:auto !important; padding:10px; font-size:16px; color:#782fff;} */
+.layer_btns>* + *{margin-left:45px !important;}
+.layer_cont .layer_btns{padding:24px 0 0 0;}
+.layer_popup:not(.fullpage) .layer_close{position:absolute; top:-16px; right:-16px; z-index:2; width:33px; height:33px; background:#000; border-radius:50%;}
+.layer_cont .layer_btns [class^="btn_"]:disabled{background: #eee !important; color: #fff !important;}
+
+
+.layer_btns.clear{padding:17px 24px 17px 10px;}
+.layer_btns.clear .check_wrap{margin: -3px 0; line-height: 25px;}
+
+@media screen and (max-width:320px){
+	.layer_wrap{left:10%; right:10%;}
+}
+
+/* fullpage */
+.layer_popup.fullpage{display:block;}
+.layer_popup.fullpage .layer_wrap{top:0; left:0; right:0; bottom:0;}
+.layer_popup.fullpage .layer{padding:0;}
+.layer_popup.fullpage .layer.transparent{background: transparent;}
+.layer_popup.fullpage .layer_title{height:50px; padding:12px 0 10px 0;line-height: 1.5; border-bottom:1px solid #e6e6e6; background:#fff; font-size:17px; text-align:center;}
+.layer_popup.fullpage .layer_cont{padding:0;}
+.layer_popup.fullpage .layer_btns{width:100%; margin:0; padding:0; text-align:center;}
+.layer_popup.fullpage .layer_btns:after{content:''; display:block; clear:both;}
+.layer_popup.fullpage .layer_btns>*{float:left; width:50% !important; margin:0 !important;}
+.layer_popup.fullpage .layer_btns>*:only-child{width:100% !important;}
+.layer_popup.fullpage .layer_close{position:absolute; top:0; right:0; z-index: 3; width:50px; height:50px; padding:0;}
+.layer_popup.fullpage [class*="fixed"] .layer_cont{overflow:auto; position:absolute; top:50px; left:0; right:0; bottom:50px;}
+.layer_popup.fullpage .layer.fixed_top .layer_cont{bottom:0;}
+.layer_popup.fullpage  .fixed .layer_btns{position:fixed; bottom:0; left:0; }
+.layer_popup.fullpage  [class*="fixed"] + .layer_close{position:fixed;}
+.layer_popup.fullpage.black .layer{background:rgba(0,0,0,0.5);}
+.layer_popup.fullpage.black .layer_title{border-bottom:#000; background:transparent; color:#fff;}
+.layer_popup.fullpage.black hr.div{background:#000;}
+.layer_popup.fullpage .btn_back{position:absolute; top:0; left:0; z-index: 3; width:50px; height:50px; padding:0;}
+.layer_popup.fullpage .btn_edit{position:absolute; top:8px; right:50px; height: 33px; padding: 2px 10px 0; color:#fff; font-size: 15px; border:1px solid #fff; border-radius: 5px;}
+.layer_popup.fullpage .btn_submit{position:absolute; top:8px; right:0; height: 33px; padding: 0 10px; font-size: 17px; color:#782fff;}
+.layer_popup.fullpage .btn_submit:disabled{color:#999; background:transparent !important;}
+.layer_popup.fullpage .btn_review_delete{position:absolute; top:8px; left:0;  height: 33px; padding: 0 10px; font-size: 17px;}
+.layer_popup.fullpage .layer_cont>.section:only-child{min-height:calc(100% - 9px);}
+
+/* 툴팁 */
+.layer_tooltip{display:none; position:absolute; left: 15px; right: 15px; width: auto; z-index: 10; padding:0 15px; background:#fff; border:1px solid #e5e5e5; font-size:13px;}
+.layer_tooltip dt{padding:14px 0; border-bottom:1px solid #ebebeb;}
+.layer_tooltip dd{padding:14px 0;}
+.layer_tooltip .ui_close{position:absolute; top:12px; right:15px; opacity:.7;}

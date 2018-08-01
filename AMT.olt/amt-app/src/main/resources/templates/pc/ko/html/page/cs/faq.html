@@ -1,0 +1,192 @@
+<html ap:decorate="~{layout/layout-sub}">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page contents -->
+		<div class="ap_contents bg_white">
+
+			<!-- page title -->
+			<th:block ap:replace="~{common/fragment/breadcrumb-only}"/>
+			<!-- // page title -->
+
+			<!-- com_cont -->
+			<div class="ap_com_cont">
+				<!-- aside_area -->
+				<th:block ap:replace="~{cs/fragment/cs-info}"/>
+				<!-- aside_area -->
+
+				<!-- cont_area -->
+				<div class="cont_area">
+
+					<!--/* tab menu wrap */-->
+					<div class="ui_tab">
+						<div class="tab_menu w220">
+							<ul>
+								<li><a href="#none">공지사항</a></li>
+								<li class="on"><a href="#none">FAQ</a></li>
+							</ul>
+						</div>
+						<!--/* [S] 내용 */-->
+						<div class="tab_cont">
+							<h3 class="sr_only">FAQ</h3>
+							<div class="board_box">
+								<!--/* board_menu_area */-->
+								<div class="board_menu_area">
+									<ul>
+										<li class="on"><button type="button"><span>전체FAQ</span></button></li><!--/* active : on */-->
+										<li><button type="button"><span>상품</span></button></li>
+										<li><button type="button"><span>결제/배송</span></button></li>
+										<li><button type="button"><span>반품/교환</span></button></li>
+										<li><button type="button"><span>포인트/이벤트/쿠폰</span></button></li>
+										<li><button type="button"><span>사이트이용</span></button></li>
+										<li><button type="button"><span>플러스멤버십</span></button></li>
+									</ul>
+								</div>
+								<!--/* board_toggle */-->
+								<div class="board_toggle">
+									<table>
+										<caption class="sr_only">FAQ</caption>
+										<colgroup>
+											<col width="80">
+											<col width="*">
+										</colgroup>
+										<thead>
+										<tr>
+											<th scope="col">번호</th>
+											<th scope="col">질문</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr>
+											<td>100</td>
+											<td class="cont">
+												<div class="qna_box">
+													<div class="question">
+														<span class="txt_question">
+															Q <span class="sr_only">질문</span>
+														</span>
+														<button type="button" title="답변 보기">
+															<span>
+																<span class="type">[결제/배송]</span>
+																갑자기 주문취소 문자가 왔어요
+															</span>
+														</button>
+													</div>
+													<div class="answer">
+														<span class="txt_answer">
+															A <span class="sr_only">답변</span>
+														</span>
+														제 유형에 따른 환불 소요 기간은 다음과 같습니다.
+													</div>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td class="cont">
+												<div class="qna_box">
+													<div class="question">
+														<span class="txt_question">
+															Q <span class="sr_only">질문</span>
+														</span>
+														<button type="button" title="답변 보기">
+															<span>
+																<span class="type">[타입]</span>
+																뷰티포인트 결제 가능한 브랜드 상품일지라도 할인쿠폰 등으로 할인을 받은 경우에는 뷰티포인트 결제가 불가한가요?
+																이제 상품 금액만큼 뷰티포인트가 없어도 교환할 수 있는 건가요?
+															</span>
+														</button>
+													</div>
+													<div class="answer">
+														<span class="txt_answer">
+															A <span class="sr_only">답변</span>
+														</span>
+														답변
+													</div>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td class="cont">
+												<div class="qna_box">
+													<div class="question">
+														<span class="txt_question">
+															Q <span class="sr_only">질문</span>
+														</span>
+														<button type="button" title="답변 보기">
+															<span>
+																<span class="type">[타입]</span>
+																질문
+															</span>
+														</button>
+													</div>
+													<div class="answer">
+														<span class="txt_answer">
+															A <span class="sr_only">답변</span>
+														</span>
+														답변
+													</div>
+												</div>
+											</td>
+										</tr>
+										<tr><!-- 등록된 게시물이 없을 경우 -->
+											<td colspan="2">
+												원하시는 내용을 찾을수가 없어요.<br>다른 검색어로 검색해주시겠어요?
+											</td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+
+								<!--/* pagination */-->
+								<div class="pagination bg_gray">
+									<a href="#none" class="navi prev">&lt;<span class="sr_only">이전</span></a>
+									<span class="current">1</span>
+									<a href="#none">2</a>
+									<a href="#none">3</a>
+									<a href="#none">4</a>
+									<a href="#none">5</a>
+									<a href="#none">6</a>
+									<a href="#none">7</a>
+									<a href="#none">8</a>
+									<a href="#none">9</a>
+									<a href="#none">10</a>
+									<a href="#none" class="navi next">&gt;<span class="sr_only">다음</span></a>
+								</div>
+								<script type="text/javascript">
+									// 임시 테스트용입니다.
+									$('.board_toggle .answer').hide();
+
+									$('.board_toggle .qna_box button').click(function(e){
+										if ($(this).parent().hasClass('on')){
+											$(this).attr('title','답변 보기').parent().removeClass('on').next('.answer').hide();
+										} else {
+											$(this).parents('.board_toggle').find('.question').removeClass('on').children('button').attr('title','답변 보기').parent().next('.answer').hide();
+											$(this).attr('title','답변 보기 닫기').parent().addClass('on').next('.answer').show();
+										}
+										return false;
+									});
+								</script>
+							</div>
+						</div>
+						<!--/* [E] 내용 */-->
+					</div>
+
+				</div>
+				<!-- // cont_area -->
+
+			</div>
+			<!-- // com_cont -->
+
+		</div>
+		<!-- // page contents -->
+	</div><!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+
+	</th:block>
+</body>
+</html>

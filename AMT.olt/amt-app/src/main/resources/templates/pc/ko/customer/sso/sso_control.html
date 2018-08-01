@@ -1,0 +1,170 @@
+<%@page import="com.pacific.sso.util.SsoUtil"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="euc-kr"%>
+<%@ page import="java.io.*" %>
+<%@ page import="java.util.*" %>
+<%@page import="com.pacific.common.SITEProperty"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.net.InetAddress"%>
+<html>
+<head>
+<title>SSO control page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="GENERATOR" content="Rational Software Architect">
+	<style type="text/css">
+	    .tdTitle { font-weight: bold; font-size: 11pt; text-align: center; color:#202020;background-color: #eeeeee;}
+	    .tdName { font-weight: bold; width: 150px;padding:3 0 0 10;  color:#707070; }
+	    .tdView { font-weight: bold; width: 350px;padding:3 0 0 10; }
+	    td{  font-family: "굴림", "굴림체"; font-size: 9pt; font-style: normal; color:#3300FF; text-decoration: none;word-break:break-all}
+	    a:hover {  font-family: "굴림", "굴림체"; font-size: 9pt; font-style: normal; color: A91C8B; text-decoration: none}
+	
+	    body {
+	         font-size: 9pt;
+	        scrollbar-face-color:#FFFFFF;
+	        scrollbar-highlight-color: #CFCFCF;
+	        scrollbar-3dlight-color: #FFFFFF;
+	        scrollbar-shadow-color: #CFCFCF;
+	        scrollbar-darkshadow-color: #FFFFFF;
+	        scrollbar-track-color: #FFFFFF;
+	        scrollbar-arrow-color:#CFCFCF}
+	    .title { font-family: "굴림"; font-size: 10px; color: #A01BA0; font-weight: bold }
+	    .text { font-family: "굴림"; font-size: 10px; color: #333333; line-height: 20px}
+	     .hdnDiv {
+	        display:none
+	     }
+	</style>
+</head>
+<body>
+<script>
+	function ssodbOnOff(param) {
+		var frm = document.frm;
+		if(confirm("Are you sure ?")) {
+			frm.act.value="save";
+			frm.appldb.value=param;
+			frm.submit();
+		}
+	}
+	function saveFilter() {
+		var frm = document.frm;
+		if(confirm("Are you sure ?")) {
+			frm.act.value="saveFilter";
+			frm.submit();
+		}
+	}
+</script>
+<%
+	response.setHeader("Pragma","No-cache");
+	response.setDateHeader("Expires",0);
+	response.setHeader("Cache-Control","no-cache");
+	
+	
+	SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+	Date curDt = new Date();
+	
+	String siteCd= SITEProperty.getProperty("SITE_CD");
+	
+	// -------------------------------------------------------------
+	
+	String act = request.getParameter("act");
+	String applySsoDbParam = request.getParameter("appldb");
+	
+	try {
+		if("save".equals(act)) {
+			if("true".equals(applySsoDbParam)) {
+				SsoUtil.setSSODBApply(siteCd, true);
+			}
+			
+			if("false".equals(applySsoDbParam)) {
+				SsoUtil.setSSODBApply(siteCd, false);
+			}
+		}
+		
+		if("saveFilter".equals(act)) {
+			String filterStr = request.getParameter("filterlist");
+			SsoUtil.setDBFilterList(siteCd, filterStr);
+		}
+	}catch(Exception ex) {
+		out.println("<pre>");
+		out.println(ex.getMessage());
+		out.println("</pre>");
+	}
+	
+	/*
+	SSO 처리 정보를 확인 / 수정하는 페이지
+	*/
+	
+	
+	boolean applySsoDb = SsoUtil.isSSODBApply(siteCd);
+	String gatewayUrl =  SITEProperty.getProperty("SSO_GW_URL");
+	String filterList = SsoUtil.getDBFilterList(siteCd,"\n");
+	
+	boolean validGW = SsoUtil.validSsoGateway(siteCd, gatewayUrl, request);
+	String ctxPath = request.getContextPath();
+	
+	InetAddress address = InetAddress.getLocalHost();
+	
+%>
+
+<h2>SSO Control page for <%=siteCd %> (<%=fmt.format(curDt) %>)</h2>
+
+<table border="1" cellspacing="0" cellpadding="3" bordercolor="#9BB7C1">
+     <tr>
+         <td colspan='2' class='tdTitle'>SERVER</td>
+     </tr>
+     <tr>
+         <td class='tdName'>HostName</td>
+         <td class='tdView'><%=address.getHostName()%>
+                 <% if("apxbrwas01".equals(address.getHostName())){ out.print("[43번]");}%>
+                 <% if("apxbrwas02".equals(address.getHostName())){ out.print("[44번]");}%>
+                 <% if("apxbrwas03".equals(address.getHostName())){ out.print("[253번]");}%>                                
+         </td>
+     </tr>
+     <tr>
+         <td class='tdName'>HostAddress</td>
+         <td class='tdView'><%=address.getHostAddress()%>&nbsp;</td>
+     </tr>
+     <tr>
+         <td class='tdName'>My IP[RemoteAddr]</td>
+         <td class='tdView'><%=request.getRemoteAddr()%>&nbsp;</td>
+     </tr>
+     <tr>
+         <td class='tdName'>SSO properties</td>
+         <td class='tdView'><%=SsoUtil.getSsoProperty().getPropDirectory()%></td>
+     </tr>
+ </table>
+ <br>
+ <hr>
+
+<form action="<%=ctxPath %>/common/sso_control.jsp" name="frm" method="post">
+	<input type="hidden" name="act" value="">
+	<input type="hidden" name="appldb" value="<%=applySsoDb %>">
+
+<table border="1" cellspacing="0" cellpadding="3" bordercolor="#9BB7C1">
+	<tbody>
+		<tr>
+			<td class='tdName'>SSO DB조회</td>
+			<td class='tdView'><%=applySsoDb %></td>
+			<td>
+				<input type="button" value="on"  onclick="ssodbOnOff('true')">
+				<input type="button" value="off" onclick="ssodbOnOff('false')">
+			</td>
+		</tr>
+		<tr>
+			<td class='tdName'>SSO Gateway</td>
+			<td class='tdView'><%=gatewayUrl %></td>
+			<td><%=validGW %></td>
+		</tr>
+		<tr>
+			<td class='tdName'>SSO 처리 예외 filter</td>
+			<td>
+				<textarea rows="10" cols="50" name="filterlist"><%=filterList %></textarea>
+			</td>
+			<td>
+				<input type="button" value="Apply Filter" onclick="saveFilter()">
+			</td>
+		</tr>
+	</tbody>
+</table>
+</form>
+
+</body>
+</html>

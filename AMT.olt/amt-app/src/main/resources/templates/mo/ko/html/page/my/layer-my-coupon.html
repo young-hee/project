@@ -1,0 +1,145 @@
+<html ap:decorate="~{layout/only-contents}">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<button type="button" onclick="$(this).next('.layer_popup').show();" class="btn_md_primary w100p">쿠폰안내</button>
+	<div class="layer_popup">
+		<div class="layer_dimmed"></div>
+		<div class="layer_wrap">
+			<dl class="layer mypage">
+				<dt class="layer_title">쿠폰 안내</dt>
+				<dd class="layer_cont">
+					<p class="text">대상 : WELCOME, VIP, VVIP, VIP+,VVIP+<br>
+						적용 브랜드 : 베리떼<br>
+						혜택 : 3,000원 할인<br>
+						최소 결제금액 : 1원<br>
+						만료일 : 2018.05.31
+					</p>
+				</dd>
+				<dd class="layer_btns">
+					<button class="btn_default_modal_confirm" type="button">확인</button>
+				</dd>
+			</dl>
+		</div>
+	</div>
+	<hr class="div m10">
+	<button type="button" onclick="$(this).next('.layer_popup').show();" class="btn_md_primary w100p">브랜드 안내</button>
+	<div class="layer_popup">
+		<div class="layer_dimmed"></div>
+		<div class="layer_wrap">
+			<dl class="layer mypage">
+				<dt class="layer_title">브랜드 안내</dt>
+				<dd class="layer_cont">
+					<p class="text">적용 브랜드 : 베리떼</p>
+				</dd>
+				<dd class="layer_btns">
+					<button class="btn_default_modal_confirm" type="button">확인</button>
+				</dd>
+			</dl>
+		</div>
+	</div>
+	<hr class="div m10">
+	<button type="button" onclick="$(this).next('.layer_popup').show();" class="btn_md_primary w100p">상품/사은품 안내</button>
+	<div class="layer_popup">
+		<div class="layer_dimmed"></div>
+		<div class="layer_wrap">
+			<dl class="layer mypage">
+				<dt class="layer_title">상품 안내 <!-- 사은품 안내 --></dt>
+				<dd class="layer_cont">
+					<ul class="product_list">
+						<li class="product"><!--/* 첫번째 상품에만 margin-top:0 */-->
+							<a href="#none">
+								<div class="product_visual">
+									<img ap:src="@{/images/dummy/img_item_04.jpg}" alt="">
+								</div>
+								<div class="product_info">
+									<b class="brand">리리코스 마린에너지</b>
+									<div class="product_name">스킨베일 커버 파운데이션 EX SPF25 PA++ 30ml</div>
+									<div class="product_area"><b>34,000</b>원</div>
+								</div>
+							</a>
+						</li>
+					</ul>
+				</dd>
+				<dd class="layer_btns">
+					<button class="btn_default_modal_confirm" type="button">확인</button>
+				</dd>
+			</dl>
+		</div>
+	</div>
+	<hr class="div m10">
+	<button type="button" onclick="$(this).next('.layer_popup').show();" class="btn_md_primary w100p">쿠폰정보</button>
+	<div class="layer_popup">
+		<div class="layer_dimmed"></div>
+		<div class="layer_wrap">
+			<dl class="layer mypage">
+				<dt class="layer_title">쿠폰 정보</dt>
+				<dd class="layer_cont">
+					<ul class="coupon_list">
+						<li>
+							<p class="title">적용 가능 상품</p>
+							<ul class="product_list">
+								<li class="product">
+									<a href="#none">
+										<div class="product_visual">
+											<img ap:src="@{/images/dummy/img_item_04.jpg}" alt="">
+										</div>
+										<div class="product_info">
+											<b class="brand">리리코스 마린에너지</b>
+											<div class="product_name">스킨베일 커버 파운데이션 EX SPF25 PA++ 30ml</div>
+											<div class="product_area"><b>34,000</b>원</div>
+										</div>
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<p class="title">추가 사은품</p>
+							<ul class="product_list">
+								<li class="product">
+									<a href="#none">
+										<div class="product_visual">
+											<img ap:src="@{/images/dummy/img_item_04.jpg}" alt="">
+										</div>
+										<div class="product_info">
+											<b class="brand">리리코스 마린에너지</b>
+											<div class="product_name">스킨베일 커버 파운데이션 EX SPF25 PA++ 30ml</div>
+											<div class="product_area"><b>34,000</b>원</div>
+										</div>
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<p class="title">브랜드 안내</p>
+							<p class="text">적용 브랜드 : 베리떼</p>
+						</li>
+					</ul>
+				</dd>
+				<dd class="layer_btns">
+					<button class="btn_default_modal_confirm" type="button">확인</button>
+				</dd>
+			</dl>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+<script>
+/*팝업열기*/
+$('.layer_btns .btn_default_modal_confirm').click(function(){
+		$('.layer_popup').hide();
+});
+
+/*팝업위치*/
+$('.btn_md_primary').click(function(){
+	var layerH = $(this).next('.layer_popup').find('.layer_wrap').outerHeight() / 2;
+	$(this).next('.layer_popup').find('.layer_wrap').css('margin-top',-layerH);
+});
+
+</script>
+</th:block>
+
+</body>
+</html>

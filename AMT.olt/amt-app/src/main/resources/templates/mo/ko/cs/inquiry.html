@@ -1,0 +1,206 @@
+<html ap:decorate="~{layout/layout-contents}">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents ap_cs">
+		<div class="section pd_md no_margin">
+			<form class="validate">
+				<fieldset class="form inquiry">
+					<legend class="sr_only">문의 정보 입력</legend>
+					<div class="select_wrap">
+						<select name="foReceivedInquiryTypeSn" title="문의 유형 선택">
+							<option value="all">전체</option>
+							<option th:each=" t : ${type}" th:value="${t.inquiryTypeSn}" th:text="${t.inquiryTypeName}">매장픽업</option>
+						</select>
+					</div>
+					<button type="button" class="btn_lg_neutral w100p mgt10" id="b_inqOrd">문의할 주문/제품 선택</button>
+					<input type="hidden" name="ordHistNo" id="ordHistNo">
+					<div class="attached mgt10">
+					</div>
+					<div class="input_wrap mgt20">
+						<input type="text" name="inquiryTitle" placeholder="제목" required="required" data-msg="제목을 입력해 주세요." maxlength="200">
+					</div>
+					<div class="textarea">
+						<textarea name="inquiryBodyText" placeholder="내용" required="required" data-msg="내용을 입력해 주세요."></textarea>
+					</div>
+					<div class="ui_input_images">
+						<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="multiple" style="display:none" />
+						<label for="i_picture" class="btn_md_neutral w100p mgt10">사진첨부</label>
+						<ul class="attach">
+						</ul>
+						<p class="text_notice">첨부파일은 이미지 파일만 가능하며, 최대 10개까지 등록 하실 수 있습니다. (최대 파일 용량 3MB)</p>
+					</div>
+					<div class="input_wrap">
+						<!--<input type="text" name="customerEmailAddress" title="이메일  입력" placeholder="이메일 입력" email="email"
+							   th:value="${session.LOGIN_USER.member.emailAddress}">-->
+						<input type="text" name="customerEmailAddress" title="이메일  입력" placeholder="이메일 입력" email="email">
+					</div>
+					<div class="input_wrap">
+						<!--<input type="tel" value="" placeholder="휴대폰번호(선택)" name="customerPhoneNo1.phoneNo" mobile-number="mobile-number"
+							   th:value="${session.LOGIN_USER.member.phoneNo1.phoneNo}">-->
+						<input type="tel" value="" placeholder="휴대폰번호(선택)" id="phoneNo" name="customerPhoneNo1.phoneNo" mobile-number="mobile-number">
+					</div>
+					<!--<div class="check_wrap mgt10">
+						<input type="checkbox" id="sms_check" name="smsResponseNotifyYn"  value="Y" th:checked="${session.LOGIN_USER.member.phoneNo1.phoneNo} == null ? false : true">
+						<label for="sms_check">SMS 답변 알림 </label>
+					</div>-->
+					<div class="check_wrap mgt10">
+						<input type="checkbox" id="sms_check" name="smsResponseNotifyYn" value="Y">
+						<label for="sms_check">SMS 답변 알림 </label>
+					</div>
+					<div class="form_btns mgt20">
+						<button type="button" class="btn_lg_primary w100p" id="b_submit">등록</button>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script ap:src="@{/handlebars-templates/compiled/cs/layer-inquiry.js}"></script>
+	<script ap:src="@{/handlebars-templates/compiled/cs/inquiry-order-list.js}"></script>
+	<script th:inline="javascript">
+		var limit = 10, totalCount, c_offset;
+		var temp = "";
+		var $el;
+
+		$( '.ui_input_images' ).inputImages();
+
+		//문의 등록
+		$('#b_submit').off('click').on('click', function(e) {
+			var $form = $('form.validate');
+			if($('[name=foReceivedInquiryTypeSn]').val() == 'all') {
+				AP.modal.alert('문의 유형을 선택해주세요.');
+				return;
+			}
+
+			if($form.valid()) {
+				var formData = new FormData( $('form').get(0) );
+				$( '.ui_input_images' ).inputImages( 'extendFormData', formData );
+
+				AP.api.inquiry({}, formData ).done(function ( data ) {
+					if (data) {
+						AP.modal.alert("등록되었습니다.").addListener('modal-close', function(e) {
+						location.href="/my/page/myInquiryList"
+					});
+				}
+				}).fail(function ( e ) {
+					AP.modal.alert(e.responseJSON.errorData.message);
+				}).always(function () {
+					//성공, 실패
+				});
+			}
+		});
+
+		//sms 답변알림 체크
+		$('#phoneNo').on('blur', function(e){
+			if ($('#phoneNo').val() == null || $('#phoneNo').val() == "") {
+				$('#sms_check').prop('checked', false);
+			} else {
+				$('#sms_check').prop('checked', true);
+			}
+		});
+
+		//문의할 제품/주문 선택
+		$('#b_inqOrd').on('click', function(e){
+			var modal = AP.modal.open({
+				templateKey : 'cs.layer-inquiry'
+			});
+			getOrderPage(0, true);
+			$el = modal.getElement();
+			$('#b_more').hide();
+
+			//더보기 버튼 클릭
+			$('#b_more').off('click').on('click', function(e) {
+				if (c_offset + limit <= totalCount) {
+					getOrderPage(c_offset + limit, false);
+				}
+			});
+
+			//적용 버튼 클릭
+			$('#b_apply').off('click').on('click', function(e) {
+				var ordInfo = JSON.parse($('[name=order]:checked').val());
+				var str = "<p class='bullet_dot ellipsis'>" + ordInfo.ordName + "</p>" +
+							"<button class='ui_close' type='button' onclick='deleteOrd()'>" +
+							"<span class='sr_only'>선택상품 삭제</span></button>";
+
+				$('#ordHistNo').attr('value', ordInfo.ordHistNo);
+				$('.attached').html(str);
+
+				temp = ordInfo.ordSn;
+
+				modal.close();
+			});
+		});
+
+		function getOrderPage(offset, restart) {
+
+			$('.loading').show();
+			$('#b_more').hide();
+
+			if (restart == true) {
+				$('table').hide();
+				$('#more').empty();
+			}
+
+			c_offset = offset;
+
+			AP.api.getOrderPage({}, {
+				offset : offset,
+				limit : limit
+			}).done(function(data) {
+				if (data) {
+					totalCount = data.totalCount;
+
+					var count = (offset + limit) > totalCount ? totalCount : (offset + limit);
+					var htmlStr = AP.common.getTemplate('cs.inquiry-order-list', {
+						list : data.data,
+						totalCount : totalCount
+					});
+
+					$('#more').append(htmlStr);
+
+					if(totalCount > 0) {
+						if ($('[name=order]:checked').val() == null){
+							$('#o_' + temp).prop('checked', true);
+							$el.find( '.ui_table_striped' ).tableStriped();
+						}
+
+						  $("#b_more").html("더보기(<em> " + count + "</em> / " + totalCount + ")");
+
+						$('.table_striped').on('click', function(e){
+							$el.find( '.ui_table_striped' ).tableStriped();
+							$el.find( '.ui_table_striped' ).tableStriped('updated');
+							$('#b_apply').attr('disabled', false);
+						});
+
+						$('.loading').hide();
+						$('table').show();
+						$('#b_more').show();
+					} else {
+						$('.loading').hide();
+						$('table').show();
+						$('#b_more').hide();
+					}
+				}
+			}).fail(function(e) {
+				AP.modal.alert(e.responseJSON.errorData.message).addListener('modal-close', function(e) {
+					$('.layer_close').click();
+				});
+			}).always(function() {
+			});
+		}
+
+		function deleteOrd() {
+			$('.attached').empty();
+			$('#ordHistNo').attr('value', null);
+			temp = null;
+		}
+
+	</script>
+</th:block>
+
+</body>
+</html>

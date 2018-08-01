@@ -1,0 +1,114 @@
+<html ap:decorate="~{layout/default}">
+<head>
+    <title>[Mobile] Map Guide Page</title>
+</head>
+<body>
+
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <style>
+                h2 {font-weight:bold; padding:10px;}
+
+                .slide .ix-list-item > a {overflow:hidden; position:relative;}
+
+                .slide.zoomin .ix-list-item > a img{transform:scale(1);}
+                .slide.zoomin .ix-list-item.motion > a img{transform:scale(1.1); transition:linear 3.9s;}
+
+                .slide.zoomout .ix-list-item > a img{transform:scale(1.1);}
+                .slide.zoomout .ix-list-item.motion > a img{transform:scale(1); transition:linear 3.9s;}
+
+            </style>
+            <div class="page_title">
+                <h2 class="h_title page">Slide Banner</h2>
+                <p class="text">Slide 동작 예제</p>
+            </div>
+
+            <div class="ap_contents">
+                <h2>Slide (zoom in)</h2>
+                <div class="slide zoomin" data-ix-options="view-length:1; auto-play:true; delay:4000;">
+                    <div class="ix-list-viewport">
+                        <ul class="ix-list-items">
+                            <li class="ix-list-item">
+                                <a href="#none">
+                                    <img ap:src="@{/images/dummy/img_banner_01.jpg}" alt="">
+                                </a>
+                            </li>
+                            <li class="ix-list-item">
+                                <a href="#none">
+                                    <img ap:src="@{/images/dummy/img_banner_02.jpg}" alt="">
+                                </a>
+                            </li>
+                            <li class="ix-list-item">
+                                <a href="#none">
+                                    <img ap:src="@{/images/dummy/img_banner_03.jpg}" alt="">
+                                </a>
+                            </li>
+                            <li class="ix-list-item">
+                                <a href="#none">
+                                    <img ap:src="@{/images/dummy/img_banner_04.jpg}" alt="">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="ix-controller">
+                        <ul class="ix-thumbs">
+                            <li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+                        </ul>
+                    </div>
+                </div>
+                <h2>Slide (zoom out)</h2>
+                <div class="slide zoomout" data-ix-options="view-length:1; auto-play:true; delay:4000;">
+                    <div class="ix-list-viewport">
+                        <ul class="ix-list-items">
+                            <li class="ix-list-item">
+                                <a href="#none">
+                                    <img ap:src="@{/images/dummy/img_banner_01.jpg}" alt="">
+                                </a>
+                            </li>
+                            <li class="ix-list-item">
+                                <a href="#none">
+                                    <img ap:src="@{/images/dummy/img_banner_02.jpg}" alt="">
+                                </a>
+                            </li>
+                            <li class="ix-list-item">
+                                <a href="#none">
+                                    <img ap:src="@{/images/dummy/img_banner_03.jpg}" alt="">
+                                </a>
+                            </li>
+                            <li class="ix-list-item">
+                                <a href="#none">
+                                    <img ap:src="@{/images/dummy/img_banner_04.jpg}" alt="">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="ix-controller">
+                        <ul class="ix-thumbs">
+                            <li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+    <script>
+        $( '.slide' ).each( function () {
+            var $slide = $( this );
+
+            $slide.on( 'ixSlideMax:init ixSlideMax:change', function (e) {
+                $slide.find( '.ix-list-item' ).removeClass( 'motion' ).filter( '[aria-hidden="false"]' ).addClass( 'motion' );
+            }).ixSlideMax();
+
+            $( window ).on( 'resize', function (e) {
+                $slide.ixSlideMax( 'resize' );
+            });
+        });
+    </script>
+
+</th:block>
+</body>
+</html>

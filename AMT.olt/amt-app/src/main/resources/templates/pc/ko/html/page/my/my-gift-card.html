@@ -1,0 +1,279 @@
+<html ap:decorate="~{layout/layout-sub}">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page contents -->
+		<div class="ap_contents">
+
+			<!-- breadcrumbe -->
+			<th:block ap:replace="~{common/fragment/breadcrumb-only}"/>
+			<!-- // breadcrumbe -->
+
+			<!-- com_cont -->
+			<div class="ap_com_cont mypage">
+				<!-- aside_area -->
+				<th:block ap:replace="~{html/page/my/fragment/my-menu}"/>
+				<!-- aside_area -->
+
+				<!-- cont_area -->
+				<div class="cont_area my_gift_card">
+					<div class="sub_title">
+						<!-- page title -->
+						<th:block ap:replace="~{common/fragment/page-title}"/>
+						<!-- // page title -->
+					</div>
+					<div class="my_gift_status">
+						<dl>
+							<dt>보유 기프트카드</dt>
+							<dd><span>11</span>장</dd>
+						</dl>
+						<dl>
+							<dt>만료예정 기프트카드</dt>
+							<dd><span>11</span>장</dd>
+						</dl>
+						<dl>
+							<dt>사용가능 금액</dt>
+							<dd><span>50,000</span>원</dd>
+						</dl>
+					</div>
+					<div class="coupon_apply">
+						<dl>
+							<dt>Apmall 기프트카드 등록</dt>
+							<dd>
+								<div class="input_btn_wrap">
+									<div class="input_wrap bg_white">
+										<input type="text" placeholder="쿠폰 번호를 입력해주세요">
+									</div>
+									<button type="button" class="btn_lg">카드등록</button>
+								</div>
+							</dd>
+						</dl>
+					</div>
+
+					<div class="sort_btn_set">
+						<span><input type="radio" class="select_range_date" name="radio2" id="radio2_0" value="" checked=""><label for="radio2_0">전체</label></span>
+						<span><input type="radio" class="select_range_date" name="radio2" id="radio2_1" value=""><label for="radio2_1">사용가능</label></span>
+						<span><input type="radio" class="select_range_date" name="radio2" id="radio2_2" value=""><label for="radio2_2">사용완료</label></span>
+						<span><input type="radio" class="select_range_date" name="radio2" id="radio2_3" value=""><label for="radio2_3">기간만료</label></span>
+					</div>
+
+					<div class="date_search table_layout">
+						<div>조회 기간</div>
+						<div class="ui_multiple_date_picker">
+							<div class="date_btn_set">
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_0" value="all" checked=""><label for="radio5_0">전체</label></span>
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_1" value="1weeks"><label for="radio5_1">1주일</label></span>
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_2" value="1months"><label for="radio5_2">1개월</label></span>
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_3" value="3months"><label for="radio5_3">3개월</label></span>
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_4" value="6months"><label for="radio5_4">6개월</label></span>
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_5" value="1years"><label for="radio5_5">12개월</label></span>
+							</div>
+						</div>
+						<div><button class="btn_sm_form" type="button"><span class="ie_press">검색</span></button></div>
+					</div>
+
+					<div class="date_search2 table_layout">
+						<div>
+							<div class="input_date_group">
+								<div class="input_wrap" style="display:none;">
+									<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+									<input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+								</div>
+								<div class="date_info_area">
+									<span class="sr_only">시작일</span> <span class="start_date">2018.01.05</span> ~ <span class="sr_only">종료일</span> <span class="end_date">2018.01.12</span>까지의 내역
+								</div>
+							</div>
+						</div>
+						<div>
+							<div class="select_wrap xsm"><!-- 선택시 open 클래스  -->
+								<select name="" id="" tabindex="-1">
+									<option value="">전체내역</option>
+									<option value="02">선택 2</option>
+									<option value="03">선택 3</option>
+									<option value="04">선택 4</option>
+									<option value="05">선택 5</option>
+									<option value="06">선택 6</option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel bg_white">
+						<div class="board_list type02 gift_card">
+							<table>
+								<caption class="sr_only">기프트카드 적립/사용 목록</caption>
+								<colgroup>
+									<col width="100">
+									<col width="70">
+									<col width="168">
+									<col width="120">
+									<col width="120">
+									<col width="100">
+									<col width="100">
+									<col width="120">
+								</colgroup>
+								<thead>
+								<tr>
+									<th scope="col">발급일</th>
+									<th scope="col">카드번호</th>
+									<th scope="col">보낸사람</th>
+									<th scope="col">발행금액</th>
+									<th scope="col">사용금액</th>
+									<th scope="col">상태</th>
+									<th scope="col">잔액</th>
+									<th scope="col">유효기간</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr>
+									<td>0000.00.00</td>
+									<td>7246010001140958</td>
+									<td class="align_left">내용은 여기까지</td>
+									<td>(+) 999,999P</td>
+									<td>(-) 999,999P</td>
+									<td>사용가능</td>
+									<td>999,999원</td>
+									<td>0000.00.00 - 0000.00.00</td>
+								</tr>
+								<tr>
+									<td>0000.00.00</td>
+									<td>7246010001140958</td>
+									<td class="align_left">고양이는 너무 귀엽
+										어떡하지 귀엽당</td>
+									<td>(+) 999,999P</td>
+									<td>(-) 999,999P</td>
+									<td>사용가능</td>
+									<td>999,999원</td>
+									<td>0000.00.00 - 0000.00.00</td>
+								</tr>
+								<tr>
+									<td>0000.00.00</td>
+									<td>7246010001140958</td>
+									<td class="align_left">내용은 여기까지</td>
+									<td>(+) 999,999P</td>
+									<td>(-) 999,999P</td>
+									<td>사용가능</td>
+									<td>999,999원</td>
+									<td>0000.00.00 - 0000.00.00</td>
+								</tr>
+								<tr>
+									<td>0000.00.00</td>
+									<td>7246010001140958</td>
+									<td class="align_left">고양이는 너무 귀엽
+										어떡하지 귀엽당</td>
+									<td>(+) 999,999P</td>
+									<td>(-) 999,999P</td>
+									<td>사용가능</td>
+									<td>999,999원</td>
+									<td>0000.00.00 - 0000.00.00</td>
+								</tr>
+								<tr>
+									<td>0000.00.00</td>
+									<td>7246010001140958</td>
+									<td class="align_left">내용은 여기까지</td>
+									<td>(+) 999,999P</td>
+									<td>(-) 999,999P</td>
+									<td>사용가능</td>
+									<td>999,999원</td>
+									<td>0000.00.00 - 0000.00.00</td>
+								</tr>
+								<tr>
+									<td>0000.00.00</td>
+									<td>7246010001140958</td>
+									<td class="align_left">고양이는 너무 귀엽
+										어떡하지 귀엽당</td>
+									<td>(+) 999,999P</td>
+									<td>(-) 999,999P</td>
+									<td>사용가능</td>
+									<td>999,999원</td>
+									<td>0000.00.00 - 0000.00.00</td>
+								</tr>
+								<tr>
+									<td>0000.00.00</td>
+									<td>7246010001140958</td>
+									<td class="align_left">내용은 여기까지</td>
+									<td>(+) 999,999P</td>
+									<td>(-) 999,999P</td>
+									<td>사용가능</td>
+									<td>999,999원</td>
+									<td>0000.00.00 - 0000.00.00</td>
+								</tr>
+								<tr>
+									<td>0000.00.00</td>
+									<td>7246010001140958</td>
+									<td class="align_left">고양이는 너무 귀엽
+										어떡하지 귀엽당</td>
+									<td>(+) 999,999P</td>
+									<td>(-) 999,999P</td>
+									<td>사용가능</td>
+									<td>999,999원</td>
+									<td>0000.00.00 - 0000.00.00</td>
+								</tr>
+								<tr>
+									<td>0000.00.00</td>
+									<td>7246010001140958</td>
+									<td class="align_left">내용은 여기까지</td>
+									<td>(+) 999,999P</td>
+									<td>(-) 999,999P</td>
+									<td>사용가능</td>
+									<td>999,999원</td>
+									<td>0000.00.00 - 0000.00.00</td>
+								</tr>
+								<tr>
+									<td>0000.00.00</td>
+									<td>7246010001140958</td>
+									<td class="align_left">고양이는 너무 귀엽
+										어떡하지 귀엽당</td>
+									<td>(+) 999,999P</td>
+									<td>(-) 999,999P</td>
+									<td>사용가능</td>
+									<td>999,999원</td>
+									<td>0000.00.00 - 0000.00.00</td>
+								</tr>
+								<!--/*목록없을때
+								<tr>
+									<td colspan="8">
+										<div class="no_data">
+											<p>내역이 없습니다.</p>
+										</div>
+									</td>
+								</tr>
+								*/-->
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="pagination bg_gray">
+							<a href="#none" class="navi prev">&lt;<span class="sr_only">이전</span></a>
+							<span class="current">1</span>
+							<a href="#none">2</a>
+							<a href="#none">3</a>
+							<a href="#none">4</a>
+							<a href="#none">5</a>
+							<a href="#none">6</a>
+							<a href="#none">7</a>
+							<a href="#none">8</a>
+							<a href="#none">9</a>
+							<a href="#none">10</a>
+							<a href="#none" class="navi next">&gt;<span class="sr_only">다음</span></a>
+						</div>
+				</div>
+				<!-- // cont_area -->
+
+			</div>
+			<!-- // com_cont -->
+
+		</div>
+		<!-- // page contents -->
+	</div><!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script>
+			$( '.ui_input_images' ).inputImages();
+			$( '.recommended_item .slide' ).ixSlideMax();
+		</script>
+	</th:block>
+</body>
+</html>

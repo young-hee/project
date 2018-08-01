@@ -1,0 +1,16 @@
+{{#xif this.totalLength '>' 0 }}
+    <ul>
+        {{#each this.result }}
+            <li>
+                <a class="result" href="javascript:;" data-post-code="{{ this.zipNo }}" data-detail-address="{{ this.roadAddrPart2 }}" data-address="{{ this.roadAddrPart1 }}">
+                    <p>{{ this.roadAddr }}{{#if this.jibunAddr }}<br>{{ this.jibunAddr }}{{/if}}<br>{{ this.zipNo }}</p>
+                </a>
+            </li>
+        {{/each}}
+    </ul>
+{{else}}
+    <div class="panel notice">
+        <i class="ico"></i>
+        <p class="text">검색결과가 없습니다.</p>
+    </div>
+{{/xif}}

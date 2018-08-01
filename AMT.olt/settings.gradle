@@ -1,0 +1,11 @@
+rootProject.name = "AMT"
+
+include "amt-app"
+
+if (System.properties.useEmtIncludeBuild == 'true' && new File('../EMT.olt').exists()) {
+	includeBuild('../EMT.olt') {
+		dependencySubstitution {
+			substitute module('kr.ap:ap-comm') with project(':ap-comm')
+		}
+	}
+}

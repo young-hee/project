@@ -1,0 +1,129 @@
+<html ap:decorate="~{layout/only-contents}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="modal_dimmed"></div>
+	<div class="layer_popup" style="display: block;">
+		<div class="layer_wrap layer_lg" style="top:50px;">
+			<dl class="layer">
+				<dt class="layer_title brd">배송지 등록</dt>
+				<dd class="layer_cont">
+					<fieldset class="form shipping_entry">
+						<legend class="sr_only">배송지 입력 항목</legend>
+						<div class="ui_table">
+							<dl>
+								<dt><label for="location">배송지명</label></dt>
+								<dd>
+									<span class="input_wrap">
+										<input type="text" id="location" placeholder="6자이내 입력가능합니다.">
+									</span>
+									<span class="warning_msg">배송지명을 입력하세요.</span>
+								</dd>
+							</dl>
+							<dl>
+								<dt><label for="recipient">받는사람</label></dt>
+								<dd>
+									<span class="input_wrap">
+										<input type="text" id="recipient" placeholder="6자이내 입력가능합니다.">
+									</span>
+									<span class="warning_msg">수신인명을 입력해주세요.</span>
+								</dd>
+							</dl>
+							<dl>
+								<dt>연락처</dt>
+								<dd>
+									<span class="input_group ea_03">
+										<span class="select_wrap">
+											<select tabindex="-1" name="" id="" title="휴대전화 사업자 식별번호 선택">
+												<option value="">010</option>
+											</select>
+										</span>
+										<span class="gap">-</span>
+										<span class="input_wrap"><input type="text" title="휴대폰 가운데자리 입력"></span>
+										<span class="gap">-</span>
+										<span class="input_wrap"><input type="text" title="휴대폰 끝자리 입력"></span>
+									</span>
+									<span class="warning_msg">연락처를 입력해주세요.</span>
+								</dd>
+							</dl>
+							<dl>
+								<dt>추가연락처<br><small>(선택)</small></dt>
+								<dd>
+									<span class="input_group ea_03">
+										<span class="select_wrap">
+											<select tabindex="-1" name="" id="" title="휴대전화 사업자 식별번호 선택">
+												<option value="">010</option>
+											</select>
+										</span>
+										<span class="gap">-</span>
+										<span class="input_wrap"><input type="text" title="휴대폰 가운데자리 입력"></span>
+										<span class="gap">-</span>
+										<span class="input_wrap"><input type="text" title="휴대폰 끝자리 입력"></span>
+									</span>
+									<span class="warning_msg">추가연락처를 입력해주세요.</span>
+								</dd>
+							</dl>
+							<dl>
+								<dt class="vat pdt15">주소</dt>
+								<dd class="ui_find_addresses">
+									<div class="w50p input_btn_wrap">
+										<div class="input_wrap">
+											<input type="text" class="address_keyword" title="지역명 입력" placeholder="지역명">
+										</div>
+										<button type="button" class="btn_lg_gradient btn_address_find">찾기</button>
+									</div>
+									<div class="input_group w100p">
+										<span class="input_wrap w25p"><input type="text" class="post_code" title="우편번호 입력" placeholder="우편번호" readonly=""></span>
+										<span class="gap">&nbsp;</span>
+										<span class="input_wrap"><input type="text" class="address_first" title="기본주소 입력" placeholder="기본주소" readonly=""></span>
+									</div>
+									<div class="input_wrap w100p"><input type="text" class="address_last" title="상세주소 입력" placeholder="상세주소"></div>
+									<div class="check_wrap small">
+										<input type="checkbox" id="check1_1"><label for="check1_1">기본배송지 설정</label>
+										<span class="warning_msg">배송지를 입력해주세요.</span>
+									</div>
+								</dd>
+							</dl>
+							<dl>
+								<dt class="vat pdt10">주소</dt>
+								<dd class="ui_find_addresses">
+									<div class="input_group ea_03">
+										<span class="input_wrap"><input type="text" class="post_code" readonly=""></span>
+										<span class="gap">-</span>
+										<span class="input_wrap"><input type="text" class="post_code" readonly=""></span>
+										<span class="gap">&nbsp;</span>
+										<button type="button" class="btn_lg_gradient btn_address_find">찾기</button>
+									</div>
+									<div class="input_group w100p">
+										<span class="input_wrap"><input type="text" class="address_first" title="기본주소 입력" placeholder="기본주소" readonly=""></span>
+									</div>
+									<div class="input_wrap w100p"><input type="text" class="address_last" title="상세주소 입력" placeholder="상세주소를 입력해주세요."></div>
+									<div class="check_wrap small">
+										<input type="checkbox" id="check1_1"><label for="check1_1">기본배송지 설정</label>
+										<span class="warning_msg">배송지를 입력해주세요.</span>
+									</div>
+								</dd>
+							</dl>
+						</div>
+					</fieldset>
+					<div class="layer_btns">
+						<button class="btn_lg_neutral round btn_default_modal_confirm" type="button"><span class="ie_press">확인</span></button>
+					</div>
+				</dd>
+			</dl>
+			<button class="layer_close" type="button"><span class="sr_only">레이어 닫기</span></button>
+		</div>
+	</div>
+
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script>
+		$( '.ui_find_addresses' ).findAddresses();
+	</script>
+</th:block>
+
+</body>
+</html>

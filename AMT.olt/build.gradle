@@ -1,0 +1,142 @@
+import com.eriwen.gradle.js.tasks.MinifyJsTask
+
+buildscript {
+	ext {
+		buildEnv = System.properties['buildEnv']
+		springBootVersion = '1.5.9.RELEASE'
+		apNexus = 'http://172.28.6.29:8081/nexus/content/groups/public/'
+	}
+	repositories {
+		maven { url apNexus }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+		classpath "com.eriwen:gradle-js-plugin:2.14.1"
+	}
+}
+
+
+configure(subprojects) {
+
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'war'
+    apply plugin: "org.springframework.boot"
+
+	repositories {
+		maven { url apNexus }
+	}
+
+    group 'kr.ap'
+    version '1.0-SNAPSHOT'
+
+    dependencies {
+
+        // spring boot
+        compile("org.springframework.boot:spring-boot-starter:$springBootVersion")
+        compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
+        compile("org.springframework.boot:spring-boot-devtools")
+
+        // thymeleaf 3
+        compile("org.springframework.boot:spring-boot-starter-thymeleaf:$springBootVersion")
+        compile("org.thymeleaf:thymeleaf-spring4:3.0.9.RELEASE")
+        compile("org.thymeleaf:thymeleaf:3.0.9.RELEASE")
+        compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.2.2")
+        compile("com.github.mxab.thymeleaf.extras:thymeleaf-extras-data-attribute:2.0.1")
+
+        //Captcha
+		compile("kr.ap.ect:simplecaptcha:1.2.1.1")
+
+		// ecp-api client
+		compile("net.g1project.ecp:ecp-restapi-client-java:3.0.0-SNAPSHOT")
+
+		// ap-comm lib
+		compile("kr.ap:ap-comm:1.0-SNAPSHOT")
+
+		// Image resizing
+		compile("net.g1project.bluewave:wave-imagescaler:3.0.1-SNAPSHOT") {
+			exclude group: 'org.hibernate'
+			exclude group: 'org.hibernate.javax.persistence'
+			exclude group: 'org.springframework.data'
+			exclude module: 'querydsl-jpa'
+			exclude module: 'cglib'
+			exclude module: 'antlr'
+			exclude module: 'HikariCP'
+		}
+
+        // tomcat embedded
+        providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:$springBootVersion")
+
+        testCompile("junit:junit:4.12")
+        testCompile("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
+    }
+
+    eclipse.wtp {
+        component {
+            contextPath = '/'
+            deployName = description
+        }
+    }
+
+    bootRun {
+        addResources = true
+    }
+
+    apply plugin: 'combine-js-yaml'
+    apply plugin: "com.eriwen.gradle.js"
+
+    combineJsFiles.jsfiles.each { prefix, map ->
+        map.each { fileName, fileTree ->
+            task "minify-js-${prefix}-${fileName}"(type: MinifyJsTask, group: 'minifyJs') {
+                source = "${buildDir}/${prefix}/${fileName}-all.js"
+                dest = "${buildDir}/${prefix}/${fileName}-all-min.js"
+                closure { warningLevel = 'QUIET' }
+            }
+        }
+
+        task "copy-js-${prefix}"(type: Copy, group: 'build') {
+            from "${buildDir}/${prefix}"
+            def path = prefix.replace("-","/")
+            into "${buildDir}/resources/main/static/${path}/js"
+            include "*-min.js"
+        }
+    }
+
+    task minifyAllJs(group: 'minifyJs', dependsOn: combineAllJs) {
+        def matchingTasks = project.tasks.findAll { it.name.startsWith("minify-js-") }
+        dependsOn matchingTasks
+    }
+
+    task copyJsFiles(group: 'build') {
+        def matchingTasks = project.tasks.findAll { it.name.startsWith("copy-js-") }
+        dependsOn matchingTasks
+    }
+
+    minifyAllJs.finalizedBy copyJsFiles
+
+    war {
+        dependsOn minifyAllJs
+    }
+
+    task warToCodeDeploy(type: Copy, dependsOn: war, group: 'build') {
+        from "${buildDir}/libs"
+        into "${projectDir}/codedeploy/${buildEnv}"
+        include "*.war"
+    }
+
+	task htmlZip(type: Zip, group: 'build') {
+		archiveName = "html-amt.zip"
+		destinationDir = file("${projectDir}/codedeploy/html")
+
+		from ("${buildDir}/resources/main/static") {
+			into "static"
+		}
+		from ("${buildDir}/resources/main/templates/mo/ko/html") {
+			into "templates/mo/ko/html"
+		}
+		from ("${buildDir}/resources/main/templates/pc/ko/html") {
+			into "templates/pc/ko/html"
+		}
+	}
+
+}

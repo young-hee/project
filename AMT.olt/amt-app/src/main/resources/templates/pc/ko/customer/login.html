@@ -1,0 +1,535 @@
+<html ap:decorate="~{layout/layout-sub}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+
+	<div class="ap_contents bg_white">
+		<!--/* page title */-->
+		<!-- <th:block ap:replace="~{common/fragment/breadcrumb-only}"/> -->
+
+		<div class="ap_com_cont">
+			<div class="member_login">
+			<th:block ap:replace="~{common/fragment/page-title}"/>
+				<!--/* 탭 메뉴 */-->
+				<div class="ui_tab">
+					<div class="tab_menu equally login_tab_line">
+						<ul>
+							<li class="on">
+								<button type="button">회원</button>
+							</li>
+							<li>
+								<button type="button">휴대폰 로그인</button>
+							</li>
+							<li>
+								<button type="button">비회원(주문조회)</button>
+							</li>
+						</ul>
+					</div>
+					<form th:method="${method}" id="sub" th:action="${returnUrl}">
+						<th:block th:if="${pVal}" th:each="item : ${pVal}">
+							<th:block th:if="${pVal}" th:each="item : ${pVal}">
+								<input  type="hidden" th:name="${item.key}" th:value="${item.value}">
+							</th:block>
+						</th:block>
+					</form>
+					<div class="tab_contents">
+						<div class="tab_cont">
+							<h3 class="sr_only">회원</h3>
+							<form id="main">
+								<fieldset class="form">
+									<legend class="sr_only">로그인</legend>
+									<p class="txt_error top" style="display:none;" id="idpwd_valid">회원정보가 일치하지 않습니다.</p>
+									<div class="input_wrap">
+										<input type="text" title="아이디 입력" name="chcsNo" placeholder="아이디" required="required" data-msg-required="아이디를 입력해 주세요. 아이디 입력란으로 이동합니다.">
+										<a href="javascript:;" class="btn_id_del"><span class="sr_only">입력된 아이디 삭제</span></a>
+										<p style="display:none;" id="id_valid" class="txt_error">아이디를 입력해주세요</p>
+									</div>	
+									<div class="input_wrap">
+										<input type="password" title="비밀번호 입력" name="userPwdEc" placeholder="비밀번호" required="required" data-msg-required="비밀번호를 입력해 주세요. 비밀번호 입력란으로 이동합니다.">
+										<a href="javascript:;" class="btn_password"><span class="sr_only">입력된 비밀번호 확인</span></a>									
+										<p style="display:none;" id="pwd_valid" class="txt_error last">비밀번호를 입력해주세요</p>
+									</div>
+									<div class="form_btns">
+										<a href="javascript:;" id="login" class="btn_login">로그인</a>
+									</div>
+									<div class="box_one_line">
+										<span class="check_wrap chk_type2"><input type="checkbox" id="save_id"><label for="save_id">아이디 저장</label></span>									
+										<div class="member_menu">
+											<a href="/customer/signup">회원가입</a><a href="/customer/find/find-id">아이디 찾기</a><a href="/customer/find/find-pwd">비밀번호 찾기</a>
+										</div>
+									</div>
+								</fieldset>
+							</form>
+						</div>
+						<div class="tab_cont">
+							<h3 class="sr_only">휴대폰 로그인</h3>
+						<form id="mobile">
+								<fieldset class="form">
+									<legend class="sr_only">로그인</legend>
+									<div class="input_wrap">
+										<input type="text" title="이름 입력" name="custNm" placeholder="이름을 입력하세요" required="required"
+					 							data-msg-required="이름을 입력해 주세요. 이름 입력란으로 이동합니다." user-name="user-name"/>
+										<p style="display:none;" id="name_valid" class="txt_error">이름을 입력해 주세요</p>
+									</div>	
+	
+									<div class="input_group">
+										<div class="select_wrap w_20per">
+											<select name="phoneNumber1" required="required" title="휴대폰 사업자 식별번호 선택" data-msg-required="휴대전화 사업자 식별번호를 입력해주세요.">
+												<option value="010">010</option>
+												<option value="011">011</option>
+												<option value="016">016</option>
+												<option value="017">017</option>
+												<option value="018">018</option>
+												<option value="019">019</option>
+											</select>
+										</div>
+										<div class="gap"></div>
+										<div class="input_wrap"><input type="tel" name="phoneNumber2" required="required" title="휴대폰 번호 가운데자리 입력" maxlength="4" placeholder="0000" data-msg-required="휴대폰번호를 입력해 주세요."></div>
+										<div class="gap"></div>
+										<div class="input_wrap"><input type="tel" name="phoneNumber3" required="required" title="휴대폰 번호 끝자리 입력" maxlength="4" placeholder="0000" data-msg-required="휴대폰번호를 입력해 주세요."></div>
+									</div>
+									<p style="display:none;" id="phone_valid" class="txt_error last">휴대폰 번호를 입력해주세요</p>
+									<div class="form_btns">
+										<a href="javascript:;" class="btn_login" id="send-sms">인증번호 발송</a>
+									</div>
+									<div class="box_one_line">
+										<div class="member_menu">
+											<a href="/customer/signup">회원가입</a><a href="/customer/find/find-id">아이디 찾기</a><a href="/customer/find/find-pwd">비밀번호 찾기</a>
+										</div>
+									</div>
+								</fieldset>
+								
+								<fieldset class="form" style="display:none;" id="rsp-field">
+									<legend class="sr_only">휴대폰 로그인</legend>
+									<div class="input_wrap">
+										<input type="tel" name="smsNum" required="required" title="인증번호를 입력하세요." maxlength="8" placeholder="인증번호를 입력하세요." data-msg-required="인증번호를 입력해 주세요.">
+									</div>	
+	
+									<div class="tel_confirm_time">
+										<span>남은시간</span><span name="timer">3:00</span>
+									</div>
+									<div class="tel_resend_wrap">
+										<div class="txt_error" id="err_cert" style="display: none;">인증번호를 <span id="err_count">1</span>회 잘못 입력하였습니다.</div>
+										<div class="tel_confirm_num_resend">
+											<a href="javascript:;" class="" id="btn_re_send_sms" title="인증번호 재전송">인증번호 재전송</a>
+										</div>
+									</div>
+									<ul class="tel_confirm_num_txt">
+										<li>신규 고객님의 경우 인증후 회원가입이 됩니다.</li>
+										<li>본인인증후 ID 존재시 해당 ID로 자동 로그인되며,<br>본인인증 5회 실패시 당일 휴대폰 간편로그인이 제한됩니다.</li>
+									</ul>
+	
+									<div class="form_btns">
+										<a href="javascript:;" id="complete2" class="btn_login">인증하기</a>
+									</div>
+								</fieldset>
+							</form>
+						</div>
+						<div class="tab_cont">
+							<h3 class="sr_only">비회원(주문조회)</h3>
+							<fieldset class="form">
+								<legend class="sr_only">로그인</legend>
+								<p style="display:none;" id="ord_info_valid" class="txt_error top">회원정보가 일치하지 않습니다.</p>
+								<div class="input_wrap">
+									<input type="text" title="주문번호 입력" name="ordNo" placeholder="주문번호를 입력하세요">
+									<p style="display:none;" id="ord_no_valid" class="txt_error">주문번호를 입력하세요</p>
+								</div>
+								<div class="input_group">
+									<div>
+										<div class="select_wrap">
+										<select name="ordPhoneNumber1" required="required" title="휴대폰 사업자 식별번호 선택" data-msg-required="휴대전화 사업자 식별번호를 입력해주세요.">
+											<option value="010">010</option>
+											<option value="011">011</option>
+											<option value="016">016</option>
+											<option value="017">017</option>
+											<option value="018">018</option>
+											<option value="019">019</option>
+										</select>
+										</div>
+									</div>
+								<div class="gap"></div>
+								<div class="input_wrap"><input type="tel" name="ordPhoneNumber2" title="휴대폰 번호 가운데자리 입력" maxlength="4" placeholder="0000"></div>
+								<div class="gap"></div>
+								<div class="input_wrap"><input type="tel" name="ordPhoneNumber3" title="휴대폰 번호 끝자리 입력" maxlength="4" placeholder="000"></div>
+								</div>
+								<p style="display:none;" id="ord_phone_valid" class="txt_error last">휴대폰 번호를 입력해주세요</p>
+								<div class="form_btns">
+									<a href="javascript:;" onclick="nomember()" class="btn_login">로그인</a>
+								</div>
+								<p class="text">비회원 구매시, 포인트 적립이나 쿠폰할인 등의 혜택이 적용되지 않습니다. <br><a href="#none" class="link"><b>아직 회원이 아니세요?</b><I class="ico_arr"></I></a></p>
+							</fieldset>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+<script>
+$('#send-sms, #btn_re_send_sms').on('click', function() {
+    sendSms();
+    return false;
+});
+$('#complete2').on('click', function() {
+    if (!t.isRunning()) {
+        AP.modal.alert("입력시간 초과했습니다. 인증번호 재전송 버튼을 눌러 인증 절차를 다시 진행하십시오.");
+        return;
+    }
+    loginProcess2();
+    return false;
+});
+
+var def_Time = 3,
+    def_TimeCnt = 3,
+    t = new AP.common.timeCountDown(def_Time, function() {
+        $('.result_box p').hide();
+        $('#time-over').show();
+    }),
+    certTimeCnt = 0,
+    extTimeCnt = 0;
+
+
+var incsNo;
+
+function sendSms() {
+
+	$('#name_valid').hide();
+	$('#phone_valid').hide();
+	if(!$("[name=custNm]").val()) {
+		$('#name_valid').show();
+		$('[name=custNm]').focus();
+		return;
+	}
+	if(!$("[name=phoneNumber2]").val()) {
+		$('#phone_valid').show();
+		$('[name=phoneNumber2]').focus();
+		return;
+	}
+	if(!$("[name=phoneNumber3]").val()) {
+		$('#phone_valid').show();
+		$('[name=phoneNumber3]').focus();
+		return;
+	}
+    var $form = $('form#mobile');
+    $form.validate().settings.ignore = "[name=smsNum]";
+    if ($form.valid()) {
+        $('#send-sms').attr("disabled", "disabled");
+
+        AP.api.mobileLoginRequest({}, AP.common.getFormData($form)).done(function(data) {
+            //성공
+            if (data) {
+                incsNo = data.incsNo;
+                AP.modal.alert("인증번호가 전송되었습니다.");
+                $('#req-field').hide();
+                $('#rsp-field').show();
+                certTimeCnt = 2;
+                if (t.isRunning()) {
+                    t.stop();
+                }
+                t.start();
+
+            } else {
+                AP.modal.alert("[ajax.done]실패")
+            }
+        }).fail(function(xhr, textStatus, errorThrown) {
+
+            if (xhr.errorCode == 0) {
+                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+            } else if (xhr.errorCode == 'EAPI001') {
+                var contents = new Object();
+                contents.title = "인증실패";
+                contents.contents = data.message;
+                contents.confirmLabel = "확인";
+                AP.modal.info(contents).addListener('modal-close', function(e) {});
+            } else {
+                AP.modal.alert(xhr.errorMessage)
+            }
+        }).always(function() {
+            $("#send-sms").removeAttr("disabled");
+            //성공, 실패
+        });
+    }
+}
+
+function loginProcess2() {
+    var $form = $('form#mobile');
+    $form.validate().settings.ignore = "";
+    if ($form.valid()) {
+
+        $("#complete").attr("disabled", "disabled");
+        AP.api.mobileLogin({}, {
+            'incsNo': incsNo,
+            'smsNum': $('[name=smsNum]').val()
+
+        }, AP.common.getFormData($form)).done(function(data) {
+
+            if (data.sleep == 'Y') {
+                var contents = new Object();
+                contents.title = "알림";
+                contents.contents = data.message;
+                contents.confirmLabel = data.message;
+                AP.modal.info(contents).addListener('modal-close', function(e) {
+                    location.href = "/customer/signup";
+                });
+
+            } else if (data.old == 'Y') {
+                changeInfoModal();
+            } else if (data.changePw == 'Y') {
+                var contents = new Object();
+                contents.title = "알림";
+                contents.contents = data.message;
+                contents.cancelLabel = "다음에 변경";
+                contents.confirmLabel = "비밀번호 변경";
+
+                AP.modal.info(contents).addListener('modal-close', function(e) {
+                    if (e.closeType == 'close' || e.closeType == 'cancel') {
+                        location.href = returnUrl;
+                    } else if (e.closeType == 'confirm') {
+                        location.href = '/my/page/info/changeUserInfo';
+                    }
+                    console.log(e.closeType); //close, confirm, cancel
+                });
+            } else {
+                loginComplete();
+            }
+
+        }).fail(function(xhr, textStatus, errorThrown) {
+            if (xhr.errorCode == 0) {
+                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+            } else if (xhr.errorCode == 401) {
+                $('.result_box p').hide();
+                $('#err_cert').show();
+                $('#err_count').html(xhr.responseJSON.dailyFailureCount);
+            } else if (xhr.errorCode == 'ESAL062') {
+                AP.modal.alert("일일 인증실패 횟수를 초과했습니다.");
+            } else {
+                AP.modal.alert(xhr.errorMessage)
+            }
+        }).always(function() {
+            //성공, 실패
+            $("#complete").removeAttr("disabled");
+        });
+    }
+}
+
+
+$('input[type=tel]').keydown(function(event) {
+    if (event.keyCode) {
+        var code = event.keyCode;
+        if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+            return true;
+        } else {
+            return false;
+        }
+    } else if (e.which) {
+        var code = e.which;
+        if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+});
+$('input[type=tel]').keyup(function(event) {
+    event = event || window.event;
+    var keyID = (event.which) ? event.which : event.keyCode;
+    if (keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39)
+        return;
+    else
+        event.target.value = event.target.value.replace(/[^0-9]/g, "");
+});
+
+$('.btn_password').mousedown(function() {
+    $('[name=userPwdEc]').attr('type', 'text');
+
+});
+$('.btn_password').hover(function() {
+
+}, function() {
+    $('[name=userPwdEc]').attr('type', 'password');
+
+});
+$('.btn_password').mouseup(function() {
+    $('[name=userPwdEc]').attr('type', 'password');
+
+});
+
+$('.btn_id_del').click(function() {
+    $(this).parent().find('input').val(null);
+});
+if (AP.common.getCookie('is-user-id')) {
+    var $id = $('[name=chcsNo]');
+    if (AP.common.getCookie('user-id', null, 1) != 'on') {
+        $id.val(AP.common.getCookie('user-id', null, 1));
+        $id.parents().find('.placeholder').css('display', 'none');
+        $('#save_id').prop('checked', true);
+    }
+}
+$('#login').on('click', function() {
+    if ($(this).attr('disabled') == 'disabled') return;
+    loginProcess();
+    return false;
+});
+
+var returnUrl = '[[${returnUrl}]]';
+if (returnUrl == '') returnUrl = "/main";
+
+$('form [name=redirectUrl]').val(returnUrl);
+var t;
+
+function loginProcess() {
+	$('#idpwd_valid').hide();
+	$('#id_valid').hide();
+	$('#pwd_valid').hide();
+	if(!$("[name=chcsNo]").val()) {
+		$('#id_valid').show();
+		$('[name=chcsNo]').focus();
+		return;
+	}
+	if(!$("[name=userPwdEc]").val()) {
+		$('#pwd_valid').show();
+		$('[name=userPwdEc]').focus();
+		return;
+	}
+    var $form = $('form#main');
+    if ($form.valid()) {
+
+        $("#login").attr("disabled", "disabled");
+        $("#login").addClass("disabled");
+        AP.api.doLogin({}, AP.common.getFormData($form)).done(function(data) {
+
+            if (data.sleep == 'Y') {
+                var contents = new Object();
+                contents.title = "알림";
+                contents.contents = data.message;
+                contents.confirmLabel = data.message;
+                AP.modal.info(contents).addListener('modal-close', function(e) {
+                    location.href = "/customer/signup";
+                });
+
+            } else if (data.old == 'Y') {
+                changeInfoModal();
+            } else if (data.changePw == 'Y') {
+                var contents = new Object();
+                contents.title = "알림";
+                contents.contents = data.message;
+                contents.cancelLabel = "다음에 변경";
+                contents.confirmLabel = "비밀번호 변경";
+
+                AP.modal.info(contents).addListener('modal-close', function(e) {
+                    if (e.closeType == 'close' || e.closeType == 'cancel') {
+                        location.href = returnUrl;
+                    } else if (e.closeType == 'confirm') {
+                        changePassword();
+                    }
+                    console.log(e.closeType); //close, confirm, cancel
+                });
+            } else {
+                if ($('#save_id').prop("checked")) {
+                    AP.common.setCookie('user-id', '', 0);
+                    AP.common.setCookie('is-user-id', '', 0);
+                    AP.common.setCookie('user-id', $('[name=chcsNo]').val(), 2592000000);
+                    AP.common.setCookie('is-user-id', $('#save_id').val(), 2592000000);
+                } else {
+                    AP.common.setCookie('user-id', '', 0);
+                    AP.common.setCookie('is-user-id', '', 0);
+                }
+                loginComplete();
+
+            }
+
+        }).fail(function(xhr, textStatus, errorThrown) {
+            if (xhr.errorCode == 0) {
+                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+            } else if (xhr.errorCode == 'ESAL002') {
+            	$('#idpwd_valid').show();
+            } else if (xhr.errorCode == 'ESAL003') {
+                if (xhr.responseJSON.isLock == true) {
+
+                    var contents = new Object();
+                    contents.title = "알림";
+                    contents.contents = "비밀번호를 5회 잘못 입력하셨습니다.\n\n개인정보보호를 위해\n30분간 로그인이 불가능합니다.";
+                    contents.cancelLabel = "확인";
+                    AP.modal.info(contents);
+
+                } else {
+                    $.get("/customer/popup?pageId=5", function(data) {
+
+                        var contents = new Object();
+                        contents.contents = data;
+                        var modal = AP.modal.info(contents);
+                        var $modalEl = modal.getElement(); //jquery object
+                        if (!t.isRunning()) {
+                            t = new AP.common.timeCountDown(xhr.responseJSON.lockReleaseDate, function() {});
+                            t.start();
+                        }
+                        $modalEl.find(".btn_md_primary").click(function() {
+                            t.stop;
+                            modal.close();
+                        });
+                    });
+                }
+
+            } else {
+                AP.modal.alert(xhr.errorMessage)
+            }
+        }).always(function() {
+            //성공, 실패
+            $("#login").removeAttr("disabled");
+            $("#login").removeClass("disabled");
+        });
+    }
+}
+
+function loginComplete() {
+    if ($('#sub').attr('method') == 'POSTs')
+        $('#sub').submit();
+    else
+        location.href = $('#sub').attr('action').replace('?isRequiredLogin=true', '');
+
+}
+
+function nomember() {
+
+
+	$('#ord_no_valid').hide();
+	$('#ord_phone_valid').hide();
+	$('#ord_info_valid').hide();
+	if(!$("[name=ordNo]").val()) {
+		$('#ord_no_valid').show();
+		$('[name=ordNo]').focus();
+		return;
+	}
+	if(!$("[name=ordPhoneNumber2]").val()) {
+		$('#ord_phone_valid').show();
+		$('[name=ordPhoneNumber2]').focus();
+		return;
+	}
+	if(!$("[name=ordPhoneNumber3]").val()) {
+		$('#ord_phone_valid').show();
+		$('[name=ordPhoneNumber3]').focus();
+		return;
+	}
+	
+    AP.api.checkOrder({}, {
+    	ordNo: $('[name=ordNo]').val(),
+    	phoneNo: $('[name=ordPhoneNumber1]').val() + $('[name=ordPhoneNumber2]').val() + $('[name=ordPhoneNumber3]').val()
+    }).done(function(data) {
+		post_goto('/non/order/detail/' + $('[name=ordNo]').val() , {'phoneNo': $('[name=ordPhoneNumber1]').val() + $('[name=ordPhoneNumber2]').val() + $('[name=ordPhoneNumber3]').val()});
+    }).fail(function(xhr, textStatus, errorThrown) {
+    	$('#ord_info_valid').show();
+    }).always(function() {
+        //성공, 실패
+    });
+}
+
+</script>
+</th:block>
+
+</body>
+</html>

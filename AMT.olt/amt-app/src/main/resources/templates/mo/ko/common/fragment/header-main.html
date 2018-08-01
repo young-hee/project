@@ -1,0 +1,38 @@
+<!--/* 앱다운안내 */-->
+<div class="app_down" style="display:none">
+	<a href="#none"><img ap:src="@{/images/common/img_app_down.jpg}" alt="앱에서 쇼핑하면 추가 5% 할인 앱설치하기"></a>
+	<button type="button" class="btn_close" onclick="$('.app_down').slideUp();"><span class="sr_only">앱다운 안내 닫기</span></button>
+</div>
+<!--/* 메인 헤더 */-->
+<div class="header_common">
+	<div class="header_top">
+		<h1 class="h_logo"><a href="#none"><img ap:src="@{/images/common/h1_logo.png}" alt="APmall"></a></h1>
+		<button class="btn_menu"><i class="ico_menu_w"></i><span class="sr_only">전체 메뉴</span></button>
+		<div class="h_menu01">
+			<!--/* 챗 아이콘은 메인에서만 노출됨 */-->
+			<button class="btn_chat"><i class="ico_chat"></i><span class="sr_only">챗봇</span></button>
+			<a href="#none" class="btn_cart">
+				<i class="ico_cart"></i>
+				<span class="sr_only">장바구니</span>
+				<span class="num">99</span>
+			</a>
+		</div>
+	</div>
+	<!--/* 좌측 메뉴 카테고리 */-->
+	<th:block ap:replace="~{common/fragment/menu-category}"/>
+
+	<fieldset class="search_form">
+		<legend class="sr_only">검색</legend>
+		<div class="wrap">
+			<input type="text" title="검색어 입력" placeholder="1만원 이상 매일 매일 선착순 사은품">
+			<!-- <button type="button" class="btn_del"><i class="ico_close_s_w"></i><span class="sr_only">검색어 삭제</span></button> -->
+		</div>
+		<button class="btn_search" type="button"><i class="ico_search"></i><span class="sr_only">검색</span></button>
+	</fieldset>
+</div>
+
+<script>
+$(".btn_menu").click(function(){
+	$(".menu_category").addClass("open");
+});
+</script>

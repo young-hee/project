@@ -1,0 +1,41 @@
+<dl>
+	<dt><b class="title">{{condition (eq this.YN 'N') '미해결 상담' '답변 완료된 상담'}}<em>{{this.totalCount}}</em></b><button type="button"><i class="ico_navi"></i><span class="sr_only">더보기</span></button></dt>
+	{{#xif this.totalCount '>' 0}}
+		<dd>
+			<div class="ui_accordion inquiry_list">
+				{{#each this.list}}
+					<dl>
+						<dt>
+							<button type="button" onclick="getCont({{this.customerInquirySn}}, '{{../this.YN}}')">{{this.inquiryTitle}}</button>
+							<span class="clear">
+								<span>
+									<small>{{dateFormat this.receivedDt "YYYY.MM.DD"}}</small>
+									{{#if (eq ../this.YN 'N')}}
+										<small>결과알림 : <span class="color_black">{{condition (eq this.smsResponseNotifyYn 'Y') 'SMS 수신' 'SMS 수신거부'}}</span></small>
+									{{/if}}
+									{{#if (eq ../this.YN 'Y')}}
+										<button type="button" class="btn_gray_round">상담평가</button>
+									{{/if}}
+								</span>
+								{{#xif ../this.YN '==' 'N'}}
+									<span class="status unread"><i class="ico_check"></i> 미확인</span>
+								{{else}}
+									<span class="status"><i class="ico_check"></i> 답변완료</span>
+								{{/xif}}
+							</span>
+						</dt>
+						<dd id="cont_{{this.customerInquirySn}}">
+
+						</dd>
+					</dl>
+				{{/each}}
+			</div>
+		</dd>
+	{{else}}
+		<dd>
+			<div class="no_data" style="height:182px">
+				<b>문의하신 1:1 상담내역이<br>없습니다.</b>
+			</div>
+		</dd>
+	{{/xif}}
+</dl>

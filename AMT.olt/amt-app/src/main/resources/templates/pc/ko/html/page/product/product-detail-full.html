@@ -1,0 +1,501 @@
+<html ap:decorate="~{layout/layout-sub}">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page contents -->
+		<div class="ap_contents goods_detail">
+			<!-- page title -->
+			<th:block ap:replace="~{common/fragment/product-page-title}"/>
+			<!-- // page title -->
+			<div class="detail_head">
+				<!--/* 상품 상세 정보 영역 */-->
+				<div class="inner_wrap">
+					<!--/* 상품 이미지 */-->
+					<div class="product_visual">
+						<div class="slide" data-ix-options="view-length:1; loop:false;">
+							<div class="ix-list-viewport">
+								<ul class="ix-list-items">
+									<li class="ix-list-item">
+										<!--/* 세로(500)만 맞추는 동영상 : script 수정 하고 inline 으로 들어간 스타일 삭제 */-->
+										<div class="video_wrap">
+											<button type="button" class="thumbnail"><img alt="" ap:src="@{/images/dummy/img_vod_v.jpg}"></button>
+											<iframe class="youtube_video" width="100%" height="500" src="https://www.youtube.com/embed/4uLivcdjRlc?enablejsapi=1" frameborder="0" allowfullscreen="" data-vendor="youtube" data-ratio="false" data-mute="false"></iframe>
+										</div>
+									</li>
+									<li class="ix-list-item"><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""><img
+										ap:src="@{/images/product/img_award.png}" alt="{어워드명}" class="award"></li>
+									<li class="ix-list-item"><img ap:src="@{/images/dummy/img_item_02.jpg}" alt=""></li>
+									<li class="ix-list-item"><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></li>
+									<li class="ix-list-item"><img ap:src="@{/images/dummy/img_product_thumb_08.jpg}" alt=""></li>
+									<li class="ix-list-item"><img ap:src="@{/images/dummy/img_item_02.jpg}" alt=""></li>
+								</ul>
+							</div>
+						</div>
+						<div class="slide thumb" data-ix-options="view-length:3; move-length:1; loop:false;">	<!-- 섬네일 클릭하면 class="active" 추가되고 viewport에 해당 썸네일 큰 이미지가 뷰에 보여야 함 -->
+							<div class="ix-list-viewport">
+								<ul class="ix-list-items">
+									<li class="ix-list-item"><a href="#none"><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></a></li>
+									<li class="ix-list-item active"><a href="#none"><img ap:src="@{/images/dummy/img_product_thumb_08.jpg}" alt=""></a></li>
+									<li class="ix-list-item"><a href="#none"><img ap:src="@{/images/dummy/img_vod.jpg}" alt=""></a></li>
+									<li class="ix-list-item"><a href="#none"><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></a></li>
+									<li class="ix-list-item"><a href="#none"><img ap:src="@{/images/dummy/img_product_thumb_08.jpg}" alt=""></a></li>
+									<li class="ix-list-item"><a href="#none"><img ap:src="@{/images/dummy/img_item_02.jpg}" alt=""></a></li>
+								</ul>
+							</div>
+							<div class="ix-controller">
+								<div class="slide_direction">
+									<a class="ix-btn-prev" href="#"><span class="sr_only">이전</span></a>
+									<a class="ix-btn-next" href="#"><span class="sr_only">다음</span></a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--/* 상품 정보 */-->
+					<div class="product_info">
+						<!--/* 기프트 카드 */-->
+						<div class="ui_tooltip gift_card">
+							<button type="button" class="btn_tooltip"><img ap:src="@{/images/product/ico_gift.png}" class="ico" alt="기프트"><strong>기프트카드 최대  1,000원 증정 [~30일까지]</strong> <span>자세히 보기</span></button>
+							<div class="layer_tooltip">
+								<p class="txt">기간 : 3/6~12 결제완료시, 3월 16일 증정 (포인트결제 제외) 길어지면 여기까지 쭉쭉쭉쭉쭉쭉쭉쭉</p>
+							</div>
+						</div>
+						<!--/* 브랜드명 */-->
+						<div class="product_brand"><a href="#none">라네즈 <i class="ico_arr"></i></a></div>
+						<!--/* 상품명 */-->
+						<div class="product_name">[NEW] 스킨베일 베이스 30ml 제품명 두줄일 때는 이렇게 해주세요</div>
+						<!--/* 상품 설명 */-->
+						<div class="product_desc">완벽하게 피부톤을 보정하는 메이크업 베이스</div>
+						<!--/* tag */-->
+						<div class="product_tag">
+							<em>스페셜기프트</em>
+							<span>기프트카드</span>
+						</div>
+						<!--/* 평점/리뷰 */-->
+						<div class="product_grade">
+							<i class="mark_star_md star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></i>
+							<a href="#none" class="review"><span class="txt">리뷰 360</span></a>
+						</div>
+						<!--/* 가격 영역 */-->
+						<div class="product_price">
+							<div class="inner">
+								<span class="price">
+									<span class="num">999,000</span>원
+								</span>
+							</div>
+							<div class="util">
+								<button type="button"><i class="ico_good on"><span class="sr_only">좋아요</span></i> <b class="num">540</b></button>	<!-- 좋아요 class="on" -->
+								<button type="button"><i class="ico_share on"></i><span class="sr_only">공유하기</span></button>
+							</div>
+						</div>
+						<!--/* 가격 영역 */-->
+						<div class="product_price">
+							<div class="inner">
+								<span class="discount">최대 <span class="num"><em>30</em>%</span></span>
+								<span class="price">
+									<del>999,000원</del>
+									<span class="num">999,000</span>원
+								</span>
+								<b>VVIP 할인가</b>
+							</div>
+							<div class="util">
+								<button type="button"><i class="ico_good"><span class="sr_only">좋아요</span></i> <b class="num">540</b></button>
+								<button type="button"><i class="ico_share"></i><span class="sr_only">공유하기</span></button>
+							</div>
+						</div>
+						<!--/* 가격 영역 */-->
+						<div class="product_price">
+							<div class="inner">
+								<span class="price point">
+									<span class="num">37,000</span>P
+								</span>
+								<b>뷰티포인트로만 결제가능</b>
+							</div>
+							<div class="util">
+								<button type="button"><i class="ico_good"><span class="sr_only">좋아요</span></i> <b class="num">540</b></button>
+								<button type="button"><i class="ico_share"></i><span class="sr_only">공유하기</span></button>
+							</div>
+						</div>
+						<!--/* 포인트, 혜택, 공유 : full case  */-->
+						<div class="purchase_benefit">
+							<div class="ui_accordion">
+								<dl>
+									<dt><button type="button" class="title"><i class="ico_delivery"></i>무료배송</button></dt>
+									<dd>
+										<div>
+											<p>최종 결제금액이 10,000원 이상이면 무료로 배송됩니다.</p>
+										</div>
+									</dd>
+								</dl>
+								<dl>
+									<dt><button type="button" class="title"><i class="ico_delivery"></i>일반배송 <em>2,500원</em></button></dt>
+									<dd>
+										<div>
+											<p>최종 결제금액이 10,000원 이상이면 무료로 배송됩니다.</p>
+										</div>
+									</dd>
+								</dl>
+								<dl>
+									<dt><button type="button" class="title"><i class="ico_delivery"></i>무료배송 / <em>예약배송</em></button></dt>
+									<dd>
+										<div>
+											<p>최종 결제금액이 10,000원 이상이면 무료로 배송됩니다.</p>
+											<p>해당 상품은 <em>사전예약상품</em>으로 <em>01월 26일</em>부터 순차배송 예정입니다.</p>
+										</div>
+									</dd>
+								</dl>
+								<dl>
+									<dt><button type="button" class="title"><i class="ico_pay"></i>원페이 / 카드사 혜택정보</button></dt>
+									<dd>
+										<div class="card_benefit">
+											<ul>
+												<li><span>원페이 결제</span><em>추가 3% 할인</em></li>
+												<li><span>카드 무이자</span><em>최대 12개월 무이자</em></li>
+												<li><span>카드 추가혜택</span><em>신한, 국민 3%할인</em></li>
+											</ul>
+											<a href="#none" class="more">더보기 <i class="ico_navi_s next"></i></a>
+										</div>
+									</dd>
+								</dl>
+							</div>
+							<p class="title"><i class="ico_point"></i>뷰티포인트 380P 적립 예정</p>
+							<p class="title"><i class="ico_point"></i>뷰티포인트 미적립 상품</p>
+						</div>
+						<!--/* 스페셜 기프트 / 어워드 */-->
+						<div class="additional">
+							<!--/* 스펠셜 기프트 */-->
+							<dl class="special_gift">
+								<dt class="title"><i class="ico_gift"></i> 스페셜 기프트 <small>뷰티포인트 결제시 제외</small></dt>
+								<dd>
+									<div class="slide" data-ix-options="view-length:4; loop:false;">
+										<div class="ix-list-viewport">
+											<ul class="ix-list-items">
+												<li class="ix-list-item">
+													<img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt="">
+													<dl class="info">
+														<dt>헤라</dt>
+														<dd>화이트 프로그램 4종 1개</dd>
+													</dl>
+												</li>
+												<li class="ix-list-item"><img ap:src="@{/images/dummy/img_product_thumb_08.jpg}" alt="">
+													<dl class="info">
+														<dt>헤라</dt>
+														<dd>화이트 프로그램 4종 1개</dd>
+													</dl>
+												</li>
+												<li class="ix-list-item"><img ap:src="@{/images/dummy/img_item_02.jpg}" alt="">
+													<dl class="info">
+														<dt>헤라</dt>
+														<dd>화이트 프로그램 4종 1개</dd>
+													</dl>
+												</li>
+												<li class="ix-list-item"><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt="">
+													<dl class="info">
+														<dt>헤라</dt>
+														<dd>화이트 프로그램 4종 1개</dd>
+													</dl>
+												</li>
+												<li class="ix-list-item"><img ap:src="@{/images/dummy/img_product_thumb_08.jpg}" alt="">
+													<dl class="info">
+														<dt>헤라</dt>
+														<dd>화이트 프로그램 4종 1개</dd>
+													</dl>
+												</li>
+												<li class="ix-list-item"><img ap:src="@{/images/dummy/img_item_02.jpg}" alt="">
+													<dl class="info">
+														<dt>헤라</dt>
+														<dd>화이트 프로그램 4종 1개</dd>
+													</dl>
+												</li>
+											</ul>
+										</div>
+										<div class="ix-controller">
+											<div class="slide_direction">
+												<a class="ix-btn-prev" href="#"><span class="sr_only">이전</span></a>
+												<a class="ix-btn-next" href="#"><span class="sr_only">다음</span></a>
+											</div>
+										</div>
+									</div>
+								</dd>
+							</dl>
+							<!--/* 어워드 */-->
+							<dl class="awards_list">
+								<dt class="title"><i class="ico_award"></i> 어워드 수상내역</dt>
+								<dd>
+									<div class="slide" data-ix-options="view-length:6; loop:false;">
+										<div class="ix-list-viewport">
+											<ul class="ix-list-items">
+												<li class="ix-list-item">
+													<img ap:src="@{/images/product/img_award.png}" alt="{어워드명}" class="award">
+												</li>
+												<li class="ix-list-item">
+													<img ap:src="@{/images/product/img_award.png}" alt="{어워드명}" class="award">
+												</li>
+												<li class="ix-list-item">
+													<img ap:src="@{/images/product/img_award.png}" alt="{어워드명}" class="award">
+												</li>
+												<li class="ix-list-item">
+													<img ap:src="@{/images/product/img_award.png}" alt="{어워드명}" class="award">
+												</li>
+												<li class="ix-list-item">
+													<img ap:src="@{/images/product/img_award.png}" alt="{어워드명}" class="award">
+												</li>
+												<li class="ix-list-item">
+													<img ap:src="@{/images/product/img_award.png}" alt="{어워드명}" class="award">
+												</li>
+												<li class="ix-list-item">
+													<img ap:src="@{/images/product/img_award.png}" alt="{어워드명}" class="award">
+												</li>
+												<li class="ix-list-item">
+													<img ap:src="@{/images/product/img_award.png}" alt="{어워드명}" class="award">
+												</li>
+											</ul>
+										</div>
+										<div class="ix-controller">
+											<div class="slide_direction">
+												<a class="ix-btn-prev" href="#"><span class="sr_only">이전</span></a>
+												<a class="ix-btn-next" href="#"><span class="sr_only">다음</span></a>
+											</div>
+										</div>
+									</div>
+								</dd>
+							</dl>
+						</div>
+						<!--/* 옵션선택 */-->
+						<div class="ui_select option_select_list">
+							<input type="hidden" name="">
+							<button type="button">옵션을 선택해주세요</button>
+							<ul class="select_options">
+								<li class="select_option">
+									<code class="label_markup" style="display:none"><span>옵션선택</span><b>라이트퍼플 40호</b><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></code>
+									<a data-value="01">
+										<span class="thumb"><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></span>
+										<span class="option_info">
+											<span class="option_name ellipsis">라이트퍼플 40호라이트퍼플 40호라이트퍼플 40호라이트퍼플 40호라이트퍼플 40호</span>
+											<span class="price"><span><b class="num">30,000</b>원</span></span>
+										</span>
+									</a>
+								</li>
+								<li class="select_option">
+									<code class="label_markup" style="display:none"><span>옵션선택</span><b>라이트퍼플 40호</b><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></code>
+									<a data-value="02">
+										<span class="thumb"><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></span>
+										<span class="option_info">
+											<span class="option_name ellipsis">라이트퍼플 40호라이트퍼플 40호라이트퍼플 40호라이트퍼플 40호라이트퍼플 40호</span>
+											<span class="price"><b class="num discount">30%</b> <span><b class="num">30,000</b>원</span> <del>50,000원</del></span>
+										</span>
+									</a>
+								</li>
+								<li class="select_option">
+									<code class="label_markup" style="display:none"><span>옵션선택</span><b>라이트퍼플 40호</b><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></code>
+									<a data-value="03" data-disabled="true" class="disabled">
+										<span class="thumb"><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></span>
+										<span class="option_info">
+											<span class="option_name ellipsis">라이트퍼플 40호라이트퍼플 40호라이트퍼플 40호라이트퍼플 40호라이트퍼플 40호</span>
+											<span class="price">일시품절</span>
+										</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<!--/* 립 옵션 */-->
+						<div class="color_option">
+							<p class="color_name">색상을 선택해주세요.</p>
+							<ul class="color_list">
+								<li>
+									<a href="#none" title="11호 드리밍베이지">
+										<span style="background:#d6938a"></span>
+									</a>
+								</li>
+								<li>
+									<a href="#none" title="12호 모카베이지">
+										<span style="background:#ac675e"></span>
+									</a>
+								</li>
+								<li>
+									<a href="#none" title="13호 오렌지선셋">
+										<span style="background:#c63527"></span>
+									</a>
+								</li>
+								<li>
+									<a href="#none" title="14호 엔젤오렌지">
+										<span style="background:#de3831"></span>
+									</a>
+								</li>
+								<li>
+									<a href="#none" title="15호 다즐링코랄">
+										<span style="background:#d0103a"></span>
+									</a>
+								</li>
+								<li>
+									<a href="#none" title="16호 코랄블라썸">
+										<span><img alt="색상명" ap:src="@{/images/dummy/img_color_chip.jpg}"></span>
+									</a>
+								</li>
+								<li>
+									<a href="#none" title="17호 체리블라썸">
+										<span style="background:#bb133e"></span>
+									</a>
+								</li>	
+								<li>
+									<a href="#none" title="18호 클래식레드">
+										<span style="background:#981e32"></span>
+									</a>
+								</li>	
+								<li>
+									<a href="#none" title="19호 글램로즈">
+										<span style="background:#e39b6c"></span>
+									</a>
+								</li>
+								<li>
+									<a href="#none" title="20호 블러시핑크 (일시품절)">
+										<span style="background:#c16784"></span>
+									</a>
+								</li>
+								<li>
+									<a href="#none" title="21호 푸시아틴트">
+										<span style="background:#cf0072"></span>
+									</a>
+								</li>
+								<li>
+									<a href="#none" title="22호 마젠타핑크">
+										<span style="background:#f04d98"></span>
+									</a>
+								</li>	
+								<li>
+									<a href="#none" title="23호 바이올렛핑크">
+										<span style="background:#ac2973"></span>
+									</a>
+								</li>	
+								<li>
+									<a href="#none" title="24호 스프링코랄">
+										<span style="background:#fa6380"></span>
+									</a>
+								</li>
+								<li>
+									<a href="#none" title="25호 센슈얼로즈">
+										<div class="state"></div>
+										<span style="background:#c4262e"></span>
+									</a>
+								</li>
+								<li>
+									<a href="#none" title="26호 로즈브라운">
+										<span style="background:#9e3039"></span>
+									</a>
+								</li>
+								<li>
+									<a href="#none" title="27호 클라우드핑크 (일시품절)">
+										<span style="background:#c16784"></span>
+									</a>
+								</li>
+								<li>
+									<a href="#none" title="28호 핑크쉬머">
+										<span style="background:#a8475a"></span>
+									</a>
+								</li>
+								<li>
+									<a href="#none" title="29호 메탈릭로즈">
+										<span style="background:#912f46"></span>
+									</a>
+								</li>
+								<li>
+									<a href="#none" title="30호 오키드퍼플 (일시품절)">
+										<span style="background:#83334a"></span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<!--/* 선택된 옵션 */-->
+						<div class="selected_option">
+							<div class="option_name">라이트 퍼플 40호</div>
+							<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="false">
+								<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
+								<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
+								<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
+							</div>
+							<div class="price"><b class="num">37,000</b>원</div>
+							<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
+						</div>
+						<!--/*품절알림 */-->
+						<div class="soldout_alarm">
+							<p class="txt">선택하신 상품은 현재 품절입니다.<br>아모레퍼시픽몰 앱에서 입고알리미를 받으실 수 있습니다. </p>
+							<a href="#" class="btn_fix_gradient">앱다운받기</a>
+						</div>
+						<!--/* 선택된 옵션 : 품절 */-->
+						<div class="selected_option soldout">
+							<div class="option_name">라이트 퍼플 40호 [일시품절]</div>
+							<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="true">
+								<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
+								<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
+								<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
+							</div>
+							<div class="price"><b class="num">37,000</b>원</div>
+							<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
+						</div>
+						<!--/* 1+1  일 경우 */-->
+						<div class="product_notice">
+							<p class="txt">해당 상품은 <em class="color_warning">1+1</em> 상품입니다.<br>
+								구매수량을 2개 선택시, 1개 가격으로 혜택이 적용됩니다.</p>
+						</div>
+						<!--/* 선택 옵션 금액 */-->
+						<div class="product_money">
+							<span>총 1개</span> <em class="num"><b>999,000</b>원</em>
+						</div>
+						<!--/* 구매버튼 */-->
+						<div class="purchase_btns">
+							<a class="btn_xlg_bordered">장바구니</a>
+							<a class="btn_xlg_neutral">구매하기</a>
+						</div>
+						<!--/* 구매버튼 : 품절 */-->
+						<div class="purchase_btns">
+							<a class="btn_xlg_bordergray">장바구니</a>
+							<a class="btn_xlg_bggray">구매하기</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<!-- // page contents -->
+	</div><!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script>
+			$( '.youtube_video' ).video();
+			$( '.ui_spinner' ).spinner();
+			$( '.slide' ).ixSlideMax();
+			$( '.ui_select' ).designSelectBox();
+			
+			// 기프트카드 Toggle
+			$(".gift_card button").bind('click',function (){
+				$(this).toggleClass("on");
+				if ($(this).hasClass("on")) {
+					$(".layer_tooltip").show();
+					$(this).children("span").text("닫기");
+				} else{
+					$(".layer_tooltip").hide();
+					$(this).children("span").text("자세히보기");
+				}
+			});
+	
+			//립 칼라 선택
+			$(".color_list li a").bind('mouseenter',function (){
+				var name_filter = $(".color_name");
+				var chip_name = $(this).attr("title");
+				name_filter.text(chip_name);
+				/*if ($(this).parents("li").hasClass("soldPD")) {
+					name_filter.text(chip_name);
+					name_filter.addClass("soldPD");
+				} else{
+					name_filter.text(chip_name);
+					name_filter.removeClass("soldPD");
+				}*/
+			});
+			$(".color_list li a").bind('click',function (){
+				$(this).toggleClass("on");
+			});
+		</script>
+	</th:block>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<html ap:decorate="~{layout/only-contents}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+	<div class="layer_popup fullpage filter_layer">
+		<div class="layer_wrap">
+			<dl class="layer bg_gray fixed">
+				<dt class="layer_title">검색필터</dt>
+				<dd class="layer_cont">
+
+					<!-- 아코디언 영역 -->
+					<div class="srch_filter_wrap"><!-- default : 모두 펼쳐짐 -->
+						<div class="ui_accordion">
+							<!-- 브랜드 -->
+							<dl>
+								<dt class="on"><button type="button"><span>브랜드<i class="ico_navi"></i></span></button></dt>
+								<dd style="display:block">
+									<div class="srch_filter_list01">
+										<ul>
+											<li><a href="javascript:;" class="on">프리메라</a></li>
+											<li><a href="javascript:;">아모레퍼시픽</a></li>
+											<li><a href="javascript:;">헤라</a></li>
+											<li><a href="javascript:;">라네즈</a></li>
+											<li><a href="javascript:;">헤라</a></li>
+											<li><a href="javascript:;">라네즈</a></li>
+											<li><a href="javascript:;">헤라</a></li>
+										</ul>
+									</div>
+								</dd>
+							</dl>
+
+							<!-- 서비스 -->
+							<dl>
+								<dt class="on"><button type="button"><span>서비스<i class="ico_navi"></i></span></button></dt>
+								<dd style="display:block">
+									<div class="srch_filter_list01">
+										<ul>
+											<li><a href="javascript:;">당일배송</a></li>
+											<li><a href="javascript:;">선물포장</a></li>
+										</ul>
+									</div>
+								</dd>
+							</dl>
+
+							<!-- 서비스 -->
+							<dl>
+								<dt class="on"><button type="button"><span>상품특징<i class="ico_navi"></i></span></button></dt>
+								<dd style="display:block">
+									<div class="srch_filter_list01">
+										<ul>
+											<li><a href="javascript:;">호수있어요</a></li>
+											<li><a href="javascript:;">대용량있어요</a></li>
+											<li><a href="javascript:;">옴므</a></li>
+											<li><a href="javascript:;">Night 전용</a></li>
+											<li><a href="javascript:;">1+1</a></li>
+											<li><a href="javascript:;">스페셜기프트</a></li>
+										</ul>
+									</div>
+								</dd>
+							</dl>
+
+							<!-- 쇼핑찬스 -->
+							<dl>
+								<dt class="on"><button type="button"><span>쇼핑찬스<i class="ico_navi"></i></span></button></dt>
+								<dd style="display:block">
+									<div class="srch_filter_list01">
+										<ul class="chk_other">
+											<li><a href="javascript:;">투데이핫딜</a></li>
+											<li><a href="javascript:;">Sale</a></li>
+										</ul>
+									</div>
+								</dd>
+							</dl>
+
+							<!-- 기능성 -->
+							<dl>
+								<dt class="on"><button type="button"><span>기능성<i class="ico_navi"></i></span></button></dt>
+								<dd style="display:block">
+									<div class="srch_filter_list01">
+										<ul>
+											<li><a href="javascript:;">미백</a></li>
+											<li><a href="javascript:;">주름개선</a></li>
+											<li><a href="javascript:;">자외선차단</a></li>
+										</ul>
+									</div>
+								</dd>
+							</dl>
+
+							<!-- 색상 -->
+							<dl>
+								<dt class="on"><button type="button"><span>색상<i class="ico_navi"></i></span></button></dt>
+								<dd style="display:block">
+									<div class="srch_filter_list01">
+										<div class="color_ck_list">
+											<span style="background-color:#a50018" class="on"></span>
+											<span style="background-color:#ff0026"></span>
+											<span style="background-color:#f28c9b"></span>
+											<span style="background-color:#fe4c67"></span>
+											<span style="background-color:#ff6100"></span>
+											<span style="background-color:#f28cd8"></span>
+											<span><img src="/mo/ko/images/dummy/img_ck_col01.png" alt=""></span>
+											<span><img src="/mo/ko/images/dummy/img_ck_col01.png" alt=""></span>
+											<span style="background-color:#ff6100"></span>
+											<span style="background-color:#f28cd8"></span>
+											<span style="background-color:#ff6100"></span>
+											<span style="background-color:#f28cd8"></span>
+										</div>
+									</div>
+								</dd>
+							</dl>
+
+							<!-- 가격 -->
+							<dl>
+								<dt class="on"><button type="button"><span>가격<i class="ico_navi"></i></span></button></dt>
+								<dd style="display:block">
+									<div class="price_sel01">
+										<ul>
+											<li><a href="javascript:;">3만원미만</a></li>
+											<li><a href="javascript:;">3~5만원</a></li>
+											<li><a href="javascript:;">5~7만원</a></li>
+											<li><a href="javascript:;">7만원</a></li>
+										</ul>
+									</div>
+
+									<div class="price_input_area">
+										<span class="input_h48_gray"><input type="text" placeholder="최소금액" /></span><span class="p_bar">-</span><span class="input_h48_gray"><input type="text" placeholder="최대금액" /></span>
+									</div>
+
+								</dd>
+							</dl>
+
+
+						</div>
+						<!-- //아코디언 영역 -->
+
+						<script type="text/javascript">
+							/*  선택시 checked */
+							$(".color_ck_list span, .srch_filter_list01 li a").on('click', function(){
+								if($(this).hasClass('on')){
+									$(this).removeClass('on');
+									
+								}else{
+									$(this).addClass('on');
+								}
+							});
+
+							/*  가격 선택시  */
+							$(".price_sel01 ul li a").on('click', function(){
+								if($(this).hasClass('on')){
+									$(this).removeClass('on');
+									
+								}else{
+									$(this).addClass('on');
+									$(this).parent().siblings().children().removeClass('on');
+								}
+							});
+						</script>
+
+					</div>
+		
+					<ul class="btn_col2_area">
+						<li><a href="javascript:;" class="btn_h50_gy">초기화</a></li>
+						<li><a href="javascript:;" class="btn_h50_bk ">적용</a></li>
+					</ul>
+
+				</dd>
+			</dl>
+			<button class="layer_close" type="button"><i class="ico_close"></i><span class="sr_only">레이어 닫기</span></button>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+<script type="text/javascript">
+	$( '.ui_accordion' ).accordion();
+</script>
+	
+</th:block>
+
+</body>
+</html>

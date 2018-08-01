@@ -1,0 +1,28 @@
+{{#xif this.totalLength '>' 0 }}
+    <p class="text">검색결과 <strong><em>127</em></strong>개</p>
+    <br>
+    <ul class="address_list">
+        {{#each this.result }}
+            <li>
+                <a href="javascript:;" data-post-code="{{ this.zipNo }}" data-detail-address="{{ this.roadAddrPart2 }}" data-address="{{ this.roadAddrPart1 }}">
+                    <dl>
+                        <dt>지번명</dt>
+                        <dd>{{ this.roadAddr }}</dd>
+                    </dl>
+                    <dl>
+                        <dt>도로명</dt>
+                        <dd>{{ this.jibunAddr }} {{ this.zipNo }}</dd>
+                    </dl>
+                </a>
+            </li>
+        {{/each}}
+    </ul>
+    <div class="ui_paging pagination">
+
+    </div>
+{{else}}
+    <div class="panel notice">
+        <i class="ico"></i>
+        <p class="text font_lg">검색 결과가 없습니다.</p>
+    </div>
+{{/xif}}

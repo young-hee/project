@@ -1,0 +1,52 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+<head th:remove="tag">
+	<!--/* js : 공통 variable, api (모든페이지) */-->
+	<script type="text/javascript" th:inline="javascript">
+		window.AP = {
+			WEBVIEW: /*[[${#device.isMobileApp() ? #device.isiOS()? 'ios' : 'android' : ''}]]*/,
+			DEVICE: 'mo',
+			REGION: 'kr',
+			LANGUAGE: 'ko',
+			CURRENCY_SYMBOL: '원',
+			CURRENCY_CODE: 'KRW',
+			DATE_FORMAT: 'YYYY.MM.DD',
+			CURRENT_DATE: /*[[${currentTimeMillis}]]*/, //server date (milliseconds since 1970/01/01)
+			LOGIN_USER: /*[[${session.LOGIN_USER == null or session.LOGIN_USER.member == null ? false : true}]]*/,
+			DISPLAY_MENU_ID: /*[[${displayMenuId}]]*/
+		};
+	</script>
+
+	<!--/* i18n dictionary */-->
+	<!--/* <script type="text/javascript" src="dictionary.ko.js"> */-->
+
+	<!--/* youtube api */-->
+	<script type="text/javascript" src="https://www.youtube.com/iframe_api"></script>
+
+	<script>
+		(function () {
+			window.googleMapAPIReady = new $.Deferred();
+
+			//google map api load
+			window.onGoogleMapAPIReady = function () {
+				window.googleMapAPIReady.resolve();
+			};
+		})();
+	</script>
+	<!--/* google map api (TODO: key 변경 필요) */-->
+	<script src="//maps.googleapis.com/maps/api/js?callback=onGoogleMapAPIReady&region=KR&key=AIzaSyC6gTrV8Luc8_4EMN_J_I6izAmsj4DRjxQ"></script>
+
+	<script>
+		(function () {
+			window.onKakaoAPIReady = new $.Deferred();
+
+			//kakao api load
+			window.kakaoAsyncInit = function () {
+				Kakao.init("[[${@environment.getProperty('kakao.key')}]]");
+				window.onKakaoAPIReady.resolve();
+			}
+		})();
+	</script>
+	<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+
+</head>
+</html>

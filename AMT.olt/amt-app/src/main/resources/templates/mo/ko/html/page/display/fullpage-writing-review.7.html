@@ -1,0 +1,44 @@
+<html ap:decorate="~{layout/only-contents}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+	<div class="layer_popup fullpage review_write_form">
+		<div class="layer_wrap">
+			<dl class="layer fixed_top">
+				<dt class="layer_title">구매리뷰 입력</dt>
+				<dd class="layer_cont">
+					<div class="textarea">
+						<textarea name="" id="" cols="" rows="" maxlength="800" placeholder="리뷰는 최소 20자 이상 작성해주세요."></textarea>
+					</div>
+					<!--<p class="text_limit">0/500</p>-->
+					<p class="text_limit"><small><em>100</em>/500</small></p>
+					<div class="slide review_guide" data-ix-options="view-length:1; auto-play:true; axis:vertical;">
+						<div class="ix-list-viewport">
+							<ul class="ix-list-items">
+								<li class="ix-list-item"><span class="bubble">상품을 왜 구매하시게 되었나요?</span></li>
+								<li class="ix-list-item"><span class="bubble">본인의 피부타입은 어떠신가요?</span></li>
+								<li class="ix-list-item"><span class="bubble">피부 색에 잘 맞았나요?</span></li>
+								<li class="ix-list-item"><span class="bubble">지인에게 추천하실 건가요?</span></li>
+							</ul>
+						</div>
+					</div>
+				</dd>
+			</dl>
+			<button class="btn_back" type="button"><i class="ico_back"></i><span class="sr_only">뒤로가기</span></button>
+			<button class="btn_submit" type="button" disabled>완료</button>
+			<!--<button class="btn_submit" type="button">완료</button>-->
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script>
+		$( '.slide' ).ixOverlayList();
+	</script>
+</th:block>
+
+</body>
+</html>

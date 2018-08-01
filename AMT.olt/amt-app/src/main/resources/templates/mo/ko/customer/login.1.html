@@ -1,0 +1,193 @@
+<html ap:decorate="~{layout/layout-member-join}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents member_login">
+
+		<div class="ui_toggle_contents view_keyboard">
+			<button class="toggle_btn">PC 키보드 보기 <i class="ico_down"></i></button>
+			<div>
+				<img ap:src="@{/images/member/img_keyboard.png}" alt="pc 용 키보드 배열">
+			</div>
+		</div>
+		<form th:method="${method}" id="sub" th:action="${returnUrl}">
+			<th:block th:if="${pVal}" th:each="item : ${pVal}">
+				<th:block th:if="${pVal}" th:each="item : ${pVal}">
+					<input  type="hidden" th:name="${item.key}" th:value="${item.value}">
+				</th:block>
+			</th:block>
+		</form>
+
+		<form class="login" method="post" id="main" action="/loginRedirect">
+			<fieldset class="form">
+				<legend class="sr_only">로그인</legend>
+				<div class="input_wrap">
+					<input type="text" title="아이디 입력" name="chcsNo" placeholder="아이디" required="required" data-msg-required="아이디를 입력해 주세요.">
+				</div>
+				<div class="input_wrap">
+					<input type="password" title="비밀번호 입력" name="userPwdEc" placeholder="비밀번호" required="required" data-msg-required="비밀번호를 입력해 주세요.">
+				</div>
+				<div class="btn_login_wrap">
+					<a href="javascript:;" id="login" class="bg_purple">로그인</a>
+				</div>
+				
+				<div class="login_checkbox">
+					<span class="inbox">
+						<input type="checkbox" id="save_id" name="" class="lg_checkbox" value="" checked="checked"><label for="save_id">아이디 저장</label>
+					</span>
+					<span class="inbox">
+						<input type="checkbox" id="auto_login" name="" class="lg_checkbox" value="" checked="checked"><label for="auto_login">자동 로그인</label>
+					</span>
+				</div>
+	
+				<div class="btn_login_wrap mgt20">
+					<a href="javascript:;" onclick="location.replace('/loginSimple')" class="bg_white">휴대폰 간편로그인</a>
+				</div>
+	
+			</fieldset>
+		</form>
+
+		<hr class="div m20">
+
+		<div class="btn_login_wrap">
+			<a href="javascript:;" onclick="location.replace('/guestOrder')" class="bg_white_arrow"><span>비회원 로그인</span></a>
+		</div>
+	
+		<div class="member_menu">
+			<a href="/customer/signup">회원가입</a><a href="/customer/find/find-id">아이디찾기</a><a href="/customer/find/find-pwd">비밀번호찾기</a>
+		</div>
+
+	</div>	
+
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+<script>
+
+function back() {
+    location.href = "/main";
+}
+
+if (AP.common.getCookie('is-user-id')) {
+    var $id = $('[name=chcsNo]');
+    if (AP.common.getCookie('user-id', null, 1) != 'on') {
+        $id.val(AP.common.getCookie('user-id', null, 1));
+        $id.parents().find('.placeholder').css('display', 'none');
+        $('#save_id').prop('checked', true);
+    }
+}
+
+var t;
+
+function loginProcess() {
+    var $form = $('form#main');
+    if ($form.valid()) {
+        if (!$("[name=chcsNo]").val() || !$("[name=userPwdEc]").val()) {
+            return;
+        }
+
+        $("#login").attr("disabled", "disabled");
+        AP.api.doLogin({}, AP.common.getFormData($form)).done(function(data) {
+
+            if (data.sleep == 'Y') {
+                location.href = "/sleepUser";
+            } else if (data.old == 'Y') {
+                changeInfoModal();
+            } else if (data.changePw == 'Y') {
+                var contents = new Object();
+                contents.title = "알림";
+                contents.contents = data.message;
+                contents.cancelLabel = "다음에 변경";
+                contents.confirmLabel = "비밀번호 변경";
+
+                AP.modal.info(contents).addListener('modal-close', function(e) {
+                    loginComplete();
+                    console.log(e.closeType); //close, confirm, cancel
+                });
+            } else {
+
+                if ($('#save_id').prop("checked")) {
+                    AP.common.setCookie('user-id', '', 0);
+                    AP.common.setCookie('is-user-id', '', 0);
+
+                    AP.common.setCookie('user-id', $('[name=chcsNo]').val(), 2592000000);
+                    AP.common.setCookie('is-user-id', $('#save_id').val(), 2592000000);
+                } else {
+                    AP.common.setCookie('user-id', '', 1);
+                    AP.common.setCookie('is-user-id', '', 1);
+                }
+                loginComplete();
+                //location.href = returnUrl;
+
+            }
+
+        }).fail(function(xhr, textStatus, errorThrown) {
+            if (xhr.errorCode == 0) {
+                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+            } else if (xhr.errorCode == 'ESAL002') {
+                AP.modal.alert("아이디 또는 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+            } else if (xhr.errorCode == 'ESAL003') {
+
+                if (xhr.responseJSON.isLock == true) {
+
+                    var contents = new Object();
+                    contents.title = "알림";
+                    contents.contents = "비밀번호를 5회 잘못 입력하셨습니다.\n\n개인정보보호를 위해\n30분간 로그인이 불가능합니다.";
+                    contents.cancelLabel = "확인";
+                    AP.modal.info(contents);
+
+                } else {
+                    $.get("/customer/popup?pageId=5", function(data) {
+
+                        var contents = new Object();
+                        contents.contents = data;
+                        var modal = AP.modal.info(contents);
+                        var $modalEl = modal.getElement(); //jquery object
+                        if (!t.isRunning()) {
+                            t = new AP.common.timeCountDown(xhr.responseJSON.lockReleaseDate, function() {});
+                            t.start();
+                        }
+                        $modalEl.find(".btn_md_primary").click(function() {
+                            modal.close();
+                            t.stop;
+                        });
+                    });
+                }
+            } else {
+                AP.modal.alert(xhr.errorMessage)
+            }
+        }).always(function() {
+            //성공, 실패
+            $("#login").removeAttr("disabled");
+        });
+    }
+}
+
+
+function loginComplete() {
+
+    if (/Android/i.test(navigator.userAgent)) {
+        location.href = "webview://mobile?action=login";
+    	try {
+    		window.webview.mobile('login');
+    	} catch(e) {
+    	}
+    } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        location.href = "webview://mobile?action=login";
+    }
+    setTimeout(function() {
+        if ($('#sub').attr('method') == 'POST')
+            $('#sub').submit();
+        else
+            location.href = $('#sub').attr('action').replace('?isRequiredLogin=true', '');
+    }, 1);
+
+}
+
+</script>
+</th:block>
+
+</body>
+</html>

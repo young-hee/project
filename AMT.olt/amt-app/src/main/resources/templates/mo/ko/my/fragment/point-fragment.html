@@ -1,0 +1,31 @@
+<th:block layout:fragment="beauty-point-list">
+
+
+	<table class="data_table th_gray align_center mgt15" th:if="${not #lists.isEmpty(ptBrkd.ptTrBrkdInqVo)}">
+		<caption class="sr_only">뷰티포인트 적립 내역으로 일자 내용 적립/사용</caption>
+		<colgroup>
+			<col style="width:90px">
+			<col>
+			<col style="width:100px">
+		</colgroup>
+		<thead>
+		<tr>
+			<th scope="col">일자</th>
+			<th scope="col">내용</th>
+			<th scope="col">적립/사용</th>
+		</tr>
+		</thead>
+		<tbody>
+			<div ap:replace="~{my/fragment/beauty-point-body :: beauty-point-body}"></div>
+		</tbody>
+	</table>
+  		
+	<button type="button" onclick="more()" class="btn_lg_more w100p"><span>더보기</span><i class="ico_down"></i></button>
+	
+	<th:block th:if="${#lists.isEmpty(ptBrkd.ptTrBrkdInqVo)}">
+		<div class="pbody panel notice">
+			<i class="ico"></i>
+			<p class="text">선택하신 기간에 해당하는 내역이 없습니다.</p>
+		</div>
+	</th:block>
+</th:block>

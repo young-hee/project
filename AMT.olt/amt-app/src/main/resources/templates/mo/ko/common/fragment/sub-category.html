@@ -1,0 +1,20 @@
+<!-- 중/소카테고리 / 2depth -->
+<ul class="mid_category_list">
+	<li><a href="javascript:;" class="on">전체(1,234)</a></li>
+	<li><a href="javascript:;">메뉴명(1,234)</a></li>
+	<li><a href="javascript:;">메뉴명(1,234)</a></li>
+	<li><a href="javascript:;">메뉴명(1,234)</a></li>
+	<li><a href="javascript:;">메뉴명(1,234)</a></li>
+</ul>
+
+<script type="text/javascript">
+	$(".mid_category_list li > a").on('click', function(){
+		if($(this).hasClass('on')){
+			$(this).removeClass('on');
+			
+		}else{
+			$(this).addClass('on');
+			$(this).parent('li').siblings().children().removeClass("on");
+		}
+	});
+</script>

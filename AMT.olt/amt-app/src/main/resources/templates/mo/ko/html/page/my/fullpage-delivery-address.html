@@ -1,0 +1,93 @@
+<html ap:decorate="~{layout/only-contents}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+	<div class="layer_popup fullpage">
+		<div class="layer_wrap">
+			<dl class="layer bg_gray fixed_top">
+				<dt class="layer_title">배송지 등록</dt>
+				<dd class="layer_cont">
+					<div class="section pd_md">
+						<fieldset class="form address_form">
+							<legend class="sr_only">배송지 변경 정보 입력</legend>
+							<dl class="ui_table">
+								<dt>받는사람</dt>
+								<dd>
+									<div class="input_wrap"><input type="text" title="받는 사람 입력"></div>
+								</dd>
+							</dl>
+							<dl class="ui_table">
+								<dt>연락처</dt>
+								<dd>
+									<div class="input_group">
+										<div class="input_wrap"><input type="text" title="휴대전화번호 첫자리"></div>
+										<div class="gap"></div>
+										<div class="input_wrap"><input type="text" title="휴대전화번호 가운데자리"></div>
+										<div class="gap"></div>
+										<div class="input_wrap"><input type="text" title="휴대전화번호 끝자리"></div>
+									</div>
+								</dd>
+							</dl>
+							<dl class="ui_table">
+								<dt>추가연락처<span class="block font_md">(선택)</span></dt>
+								<dd>
+									<div class="input_group">
+										<div class="input_wrap"><input type="text" title="추가연락처 첫자리"></div>
+										<div class="gap"></div>
+										<div class="input_wrap"><input type="text" title="추가연락처 가운데자리"></div>
+										<div class="gap"></div>
+										<div class="input_wrap"><input type="text" title="추가연락처 끝자리"></div>
+									</div>
+								</dd>
+							</dl>
+							<dl class="ui_table">
+								<dt>배송지</dt>
+								<dd>
+									<div class="ui_find_addresses">
+										<div class="input_group">
+											<div class="input_wrap">
+												<input type="text" id="delivery_area" class="find_addresses_input" placeholder="주소지 또는 건물명">
+											</div>
+											<div class="btn">
+												<button type="button" class="btn_lg_neutral btn_find_addresses">찾기</button>
+											</div>
+										</div>
+										<!-- 지역 검색 결과 -->
+										<div class="address_list"></div>
+										<!-- //지역 검색 결과 -->
+										<div class="input_group">
+											<div class="input_wrap">
+												<input type="hidden" class="post_code" name="post_code">
+												<input type="hidden" class="address_first" name="address_first">
+												<input type="text" class="address_first" title="기본주소 입력" placeholder="주소" readonly="">
+											</div>
+										</div>
+										<div class="input_group">
+											<div class="input_wrap"><input type="text" class="address_last" title="상세주소 입력" placeholder="상세주소를 입력해주세요."></div>
+										</div>
+									</div>
+								</dd>
+							</dl>
+							<div class="check_wrap mgt25"><input type="checkbox" id="default"><label for="default">기본 배송지 설정</label></div>
+							<div class="form_btns mgt50">
+								<a href="#none" class="btn_lg_bordered">취소</a>
+								<a href="#none" class="btn_lg_neutral">등록</a>
+							</div>
+						</fieldset>
+					</div>
+				</dd>
+			</dl>
+			<button class="layer_close" type="button"><i class="ico_close"></i><span class="sr_only">레이어 닫기</span></button>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+</th:block>
+
+</body>
+</html>

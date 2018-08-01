@@ -1,0 +1,150 @@
+<html ap:decorate="~{layout/layout-sub}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents bg_white">
+
+		<!-- page title -->
+		<th:block ap:replace="~{common/fragment/breadcrumb-only}"/>
+		<!-- // page title -->
+
+		<!-- com_cont -->
+		<div class="ap_com_cont">
+			<!-- aside_area -->
+			<th:block ap:replace="~{cs/fragment/cs-info}"/>
+			<!-- aside_area -->
+
+			<!-- cont_area -->
+			<div class="cont_area">
+
+				<!--/* tab menu wrap */-->
+				<div class="ui_tab">
+					<div class="tab_menu w220">
+						<ul>
+							<li class="on"><a href="#none">공지사항</a></li>
+							<li><a href="#none">FAQ</a></li>
+						</ul>
+					</div>
+					<!--/* [S] 내용 */-->
+					<div class="tab_cont">
+						<h3 class="sr_only">공지사항</h3>
+						<div class="board_box">
+							<!--/* 검색 */-->
+							<div class="board_search">
+								<fieldset>
+									<legend class="sr_only">검색</legend>
+									<div class="select_wrap"><!--/* 선택시 open 클래스 */-->
+										<select name="" id="" tabindex="-1">
+											<option value="" selected="">전체</option>
+											<option value="02">공지</option>
+											<option value="03" disabled="">뉴스</option>
+											<option value="04">이벤트공지</option>
+											<option value="05">당첨자발표</option>
+										</select>
+									</div>
+									<div class="input_wrap">
+										<input type="text"title="검색어 입력">
+									</div>
+									<button type="button" class="btn_md_form"><span class="ie_press">검색</span></button>
+								</fieldset>
+							</div>
+							<!--/* board_list */-->
+							<div class="board_list">
+								<table>
+									<caption class="sr_only">공지사항</caption>
+									<colgroup>
+										<col width="80">
+										<col width="*">
+										<col width="80">
+										<col width="100">
+									</colgroup>
+									<thead>
+									<tr>
+										<th scope="col">번호</th>
+										<th scope="col">제목</th>
+										<th scope="col">조회수</th>
+										<th scope="col">등록일</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr>
+										<td>0</td>
+										<td class="align_left">
+											<a href="#none">
+												<span class="type">[공지]</span>
+												플러스 멤버십 추천인 서비스 종료
+											</a>
+										</td>
+										<td>0</td>
+										<td>0</td>
+									</tr>
+									<tr>
+										<td>687</td>
+										<td class="align_left">
+											<a href="#none">
+												<span class="type">[당첨자발표]</span>
+												미쟝센 만원의 행복 댓글 이벤트 당첨자 발표
+												<i class="ico_new">
+													<span class="sr_only">new</span>
+												</i>
+												<i class="ico_file">
+													<span class="sr_only">첨부파일</span>
+												</i>
+											</a>
+										</td>
+										<td>133</td>
+										<td>2018.05.14</td>
+									</tr>
+									<tr><!-- 검색 결과 없음 -->
+										<td colspan="4">해당하는 / 검색된 데이터가 없습니다.</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+							<!--/* pagination */-->
+							<div class="pagination bg_gray">
+								<a href="#none" class="navi prev">&lt;<span class="sr_only">이전</span></a>
+								<span class="current">1</span>
+								<a href="#none">2</a>
+								<a href="#none">3</a>
+								<a href="#none">4</a>
+								<a href="#none">5</a>
+								<a href="#none">6</a>
+								<a href="#none">7</a>
+								<a href="#none">8</a>
+								<a href="#none">9</a>
+								<a href="#none">10</a>
+								<a href="#none" class="navi next">&gt;<span class="sr_only">다음</span></a>
+							</div>
+						</div>
+					</div>
+					<!--/* [E] 내용 */-->
+				</div>
+
+			</div>
+			<!-- // cont_area -->
+
+		</div>
+		<!-- // com_cont -->
+
+	</div>
+	<!-- // page contents -->
+</div><!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script ap:src="@{/handlebars-templates/compiled/cs/layer-inquiry.js}"></script>
+	<script th:inline="javascript">
+		$('.btn_cs').off('click').on('click', function(e) {
+			AP.modal.open({
+				templateKey: 'cs.layer-inquiry'
+			});
+		});
+
+	</script>
+
+</th:block>
+</body>
+</html>

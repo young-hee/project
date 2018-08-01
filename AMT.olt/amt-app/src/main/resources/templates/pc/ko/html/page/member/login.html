@@ -1,0 +1,152 @@
+<html ap:decorate="~{layout/layout-sub}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+
+	<div class="ap_contents bg_white">
+		<!--/* page title */-->
+		<!-- <th:block ap:replace="~{common/fragment/breadcrumb-only}"/> -->
+
+		<div class="ap_com_cont">
+			<div class="member_login">
+			<th:block ap:replace="~{common/fragment/page-title}"/>
+				<!--/* 탭 메뉴 */-->
+				<div class="ui_tab">
+					<div class="tab_menu equally login_tab_line">
+						<ul>
+							<li class="on">
+								<button type="button">회원</button>
+							</li>
+							<li>
+								<button type="button">휴대폰 로그인</button>
+							</li>
+							<li>
+								<button type="button">비회원(주문조회)</button>
+							</li>
+						</ul>
+					</div>
+					<div class="tab_contents">
+						<div class="tab_cont">
+							<h3 class="sr_only">회원</h3>
+							<fieldset class="form">
+								<legend class="sr_only">로그인</legend>
+								<p class="txt_error top">회원정보가 일치하지 않습니다.</p>
+								<div class="input_wrap">
+									<input type="text" title="아이디 입력" placeholder="아이디를 입력하세요">
+									<a href="javascript:;" class="btn_id_del"><span class="sr_only">입력된 아이디 삭제</span></a>
+									<p class="txt_error">아이디를 입력해주세요</p>
+								</div>	
+								<div class="input_wrap">
+									<input type="password" title="비밀번호 입력" placeholder="비밀번호를 입력하세요">
+									<a href="javascript:;" class="btn_password"><span class="sr_only">입력된 비밀번호 확인</span></a>									
+									<p class="txt_error last">비밀번호를 입력해주세요</p>
+								</div>
+								<div class="form_btns">
+									<a href="#none" class="btn_login">로그인</a>
+								</div>
+								<div class="box_one_line">
+									<span class="check_wrap chk_type2"><input type="checkbox" id="check1_2" checked=""><label for="check1_2">아이디 저장</label></span>									
+									<div class="member_menu">
+										<a href="#none">회원가입</a><a href="#none">아이디찾기</a><a href="#none">비밀번호찾기</a>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+						<div class="tab_cont">
+							<h3 class="sr_only">휴대폰 로그인</h3>
+							<fieldset class="form">
+								<legend class="sr_only">로그인</legend>
+								<div class="input_wrap">
+									<input type="text" title="이름 입력" placeholder="이름을 입력하세요">
+									<p class="txt_error">이름을 입력해 주세요</p>
+								</div>	
+
+								<div class="input_group">
+									<div class="select_wrap w_20per">
+										<select name="" title="휴대폰 사업자 식별번호 선택">
+											<option value="">010</option>
+											<option value="">010</option>
+											<option value="">010</option>
+											<option value="">010</option>
+											<option value="">010</option>
+										</select>
+									</div>
+									<div class="gap"></div>
+									<div class="input_wrap"><input type="text" title="휴대폰 번호 입력" placeholder="휴대폰번호 입력 (”-”생략)"></div>
+								</div>
+								<p class="txt_error last">휴대폰 번호를 입력해주세요</p>
+<!-- 휴대폰 번호 세자리로 받을 시 사용
+								<div class="input_group">
+									<div>
+										<div class="select_wrap">
+											<select name="" title="휴대폰 사업자 식별번호 선택">
+												<option value="">010</option>
+												<option value="">010</option>
+												<option value="">010</option>
+												<option value="">010</option>
+												<option value="">010</option>
+											</select>
+										</div>
+									</div>
+									<div class="gap"></div>
+									<div class="input_wrap"><input type="text" title="휴대폰 번호 가운데자리 입력" placeholder="0000"></div>
+									<div class="gap"></div>
+									<div class="input_wrap"><input type="text" title="휴대폰 번호 끝자리 입력" placeholder="000"></div>
+								</div>
+								<p class="txt_error last">휴대폰 번호를 입력해주세요</p>
+ -->
+								<div class="form_btns">
+									<a href="#none" class="btn_login">인증번호 발송</a>
+								</div>
+								<div class="box_one_line">
+									<div class="member_menu">
+										<a href="#none">회원가입</a><a href="#none">아이디찾기</a><a href="#none">비밀번호찾기</a>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+						<div class="tab_cont">
+							<h3 class="sr_only">비회원(주문조회)</h3>
+							<fieldset class="form">
+								<legend class="sr_only">로그인</legend>
+								<p class="txt_error top">회원정보가 일치하지 않습니다.</p>
+								<div class="input_wrap">
+									<input type="text" title="주문번호 입력" placeholder="주문번호를 입력하세요">
+									<p class="txt_error">주문번호를 입력하세요</p>
+								</div>
+								<div class="input_group">
+									<div>
+										<div class="select_wrap">
+											<select name="" title="휴대폰 사업자 식별번호 선택">
+												<option value="">010</option>
+											</select>
+										</div>
+									</div>
+									<div class="gap"></div>
+									<div class="input_wrap"><input type="text" title="휴대폰 번호 가운데자리 입력" placeholder="0000"></div>
+									<div class="gap"></div>
+									<div class="input_wrap"><input type="text" title="휴대폰 번호 끝자리 입력" placeholder="000"></div>
+								</div>
+								<p class="txt_error last">휴대폰 번호를 입력해주세요</p>
+								<div class="form_btns">
+									<a href="#none" class="btn_login">로그인</a>
+								</div>
+								<p class="text">비회원 구매시, 포인트 적립이나 쿠폰할인 등의 혜택이 적용되지 않습니다. <br><a href="#none" class="link"><b>아직 회원이 아니세요?</b><I class="ico_arr"></I></a></p>
+							</fieldset>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+</th:block>
+
+</body>
+</html>
