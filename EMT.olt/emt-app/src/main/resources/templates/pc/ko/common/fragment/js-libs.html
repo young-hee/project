@@ -1,0 +1,9 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+<head th:if="${@environment.acceptsProfiles('default', 'local')}" th:remove="tag">
+    <th:block th:each="path : ${combineJs['libs']}"><script th:src="@{${path}}"></script>
+    </th:block>
+</head>
+<head th:unless="${@environment.acceptsProfiles('default', 'local')}" th:remove="tag">
+    <script ap:src="@{/js/libs-all-min.js}"></script>
+</head>
+</html>

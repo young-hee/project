@@ -1,0 +1,44 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script th:inline="javascript">
+		var orderStore = /*[[${ordStore}]]*/;
+		console.log("orderStore : " + orderStore);
+		opener.parent.opener.document.orderForm.storeHeadCd.value = orderStore.storeHeadCd;
+		opener.parent.opener.document.orderForm.storeShopCd.value = orderStore.storeShopCd;
+		opener.parent.opener.document.orderForm.storeNm.value = orderStore.storeNm;
+		opener.parent.opener.document.orderForm.storeShopNm.value = orderStore.storeShopNm;
+		opener.parent.opener.document.orderForm.storeTelno.value = orderStore.storeTelno;
+		opener.parent.opener.document.orderForm.storeZip.value = orderStore.storeZip;
+		opener.parent.opener.document.orderForm.storeAddr1.value = orderStore.storeAddr1;
+		opener.parent.opener.document.orderForm.storeAddr2.value = orderStore.storeAddr2;
+		opener.parent.opener.document.orderForm.storeCodeF.value = orderStore.storeCodeF;
+		opener.parent.opener.document.orderForm.storeDdZone.value = orderStore.storeDdZone;
+		opener.parent.opener.document.orderForm.storeDdBag.value = orderStore.storeDdBag;
+		opener.parent.opener.document.orderForm.storeEupmyeon.value = orderStore.storeEupmyeon;
+
+		opener.parent.opener.document.getElementById("storeShopNmDisp").innerHTML = orderStore.storeShopNm;
+		opener.parent.opener.document.getElementById("storeTelnoDisp").innerHTML = orderStore.storeTelno;
+
+		if (!window.opener.parent.closed) window.opener.parent.close();
+		if (!window.closed) window.close();
+
+		/*
+		"("+ phoneNumberFormat(orderStore.storeTelno) + ")"
+
+		function phoneNumberFormat(str) {
+			var rtn = "";
+			if (str == null) {
+				rtn = str;
+			} else {
+				rtn = str.replace(/^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?([0-9]{3,4})-?([0-9]{4})$/, "$1-$2-$3");
+			}
+			return rtn;
+		}*/
+	</script>
+</th:block>
+</body>
+
+</html>

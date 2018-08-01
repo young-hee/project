@@ -1,0 +1,49 @@
+{{#xif this.totalLength '>' 0 }}
+    {{#each this.result }}
+    		<div class="panel delivery">
+			<div class="delivery_wrap">
+				<h3 class="delivery_title">{{shipAddressName}}</h3>
+				<span class="check_wrap star"> 
+					<input name="rep" type="radio" id="{{shipAddressName}}" value="{{shipAddressSn}}" {{checkedIf repShipAddressYn}}> 
+					<label for="{{shipAddressName}}">기본 배송지</label>
+				</span>
+			</div>
+			<div class="delivery_info">
+				<div class="delivery_addr">
+					<span>{{addresseeAddress.address1}} {{addresseeAddress.address2}}</span>
+					<div class="ui_table">
+						<dl>
+							<dt>받는이</dt>
+							<dd>{{addresseeName.name1}}</dd>
+						</dl>
+						<dl>
+							<dt>휴대전화</dt>
+							<dd>{{phoneNo1.phoneNo}}</dd>
+						</dl>
+						<dl>
+							<dt>일반전화번호</dt>
+							<dd>{{phoneNo2.phoneNo}}</dd>
+						</dl>
+					</div>
+				</div>
+
+				<div class="delivery_btn_wrap">
+					<form action="/my/page/ship/updateAddress" method="post">
+
+						<input type="hidden" value="{{json this}}" id="data" name="data">
+										
+						<input type="hidden" value="{{shipAddressSn}}" id="sn" name="sn">
+
+						<button class="btn_md w50p edit" type="submit">수정하기</button>
+						<button class="btn_md w50p del" type="button" value="{{shipAddressSn}}">삭제하기</button>
+					</form>
+				</div>
+			</div>
+		</div>	
+    {{/each}}
+{{else}}
+	<div class="panel notice">
+		<i class="ico"></i>
+		<p class="text color_gray">등록된 배송지가 없습니다.</p>					
+	</div>
+{{/xif}}

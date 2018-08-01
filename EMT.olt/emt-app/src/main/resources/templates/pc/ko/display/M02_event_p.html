@@ -1,0 +1,74 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='events-overview'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents event_main event_progress">
+				<!--/* 상시 이벤트 메뉴 toggle */-->
+				<div class="ui_toggle_contents event_menu_wrap on">
+					<button class="toggle_btn open" onclick="$('.toggle_wrap').slideDown();">상시 이벤트 열기</button>
+					<div class="toggle_wrap">
+						<ul class="event_menu">
+							<li><a href="#none" th:href="@{/display/daily_check?displayMenuId=daily_check}" class="attendance">행운의 출첵</a></li>
+							<li><a href="#none" th:href="@{/display/pearl_roulette?displayMenuId=pearl_roulette}" class="roulette">진주알 룰렛</a></li>
+							<li><a href="#none" th:href="@{/display/sweet_letter?displayMenuId=sweet_letter}" class="sweet_letter">스윗레터 100% 당첨</a></li>
+							<li><a href="#none" th:href="@{/display/beauty_test?displayMenuId=beauty_test}" class="beauty_tester">뷰티테스터 신청
+								<th:block th:if="${dDays.ProdExperienceGrp > 0}">
+									<th:block th:if="${dDays.ProdExperienceGrp <= 3}">
+										<span class="d_day" th:text="D-+ ${dDays.ProdExperienceGrp == 0 ? 'Day' : dDays.ProdExperienceGrp}"></span>
+									</th:block>
+								</th:block>
+								</a>
+							</li>
+							<li><a href="#none" th:href="@{/display/free_sample?displayMenuId=free_sample}" class="free_sample">무료 샘플 신청
+								<th:block th:if="${dDays.SampleExperienceGrp > 0}">
+									<th:block th:if="${dDays.SampleExperienceGrp <= 3}">
+										<span class="d_day" th:text="D-+ ${dDays.SampleExperienceGrp == 0 ? 'Day' : dDays.SampleExperienceGrp}"></span>
+									</th:block>
+								</th:block>
+								</a>
+							</li>
+							<li><a href="#none" th:href="@{/display/play_makeup_class?displayMenuId=play_makeup_class}" class="makeup">PLAY 메이크업 클래스</a></li>
+						</ul>
+					</div>
+					<button class="toggle_btn close" onclick="$('.toggle_wrap').slideUp();">상시 이벤트 닫기</button>
+				</div>
+				<!-- tab menu wrap -->
+				<div class="ui_tab">
+					<!-- tab menu -->
+					<div class="tab_menu equally">
+						<ul>
+							<li class="on"><a href="#none">진행중인 이벤트</a></li>
+							<li><a href="#none" th:href="@{/display/event_over(displayMenuId=event_over)}">종료된 이벤트</a></li>
+							<li><a href="#none" th:href="@{/display/event_winner(displayMenuId=event_winner)}">당첨자 발표</a></li>
+						</ul>
+					</div>
+					<!-- tab content -->
+					<div class="tab_cont space">
+						<h3 class="sr_only">진행중인 이벤트</h3>
+
+						<ul class="event_list"></ul>
+
+						<div class="pagination"></div>
+
+						<div class="loading" style="display: block; min-height: 300px">
+							<span><img alt="" src="/pc/ko/images/common/loading.gif"></span>
+						</div>
+					</div>
+				</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script>
+				AP.eventProgress.load({ status: 'Progress' });
+			</script>
+        </th:block>
+</body>
+</html>

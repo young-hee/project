@@ -1,0 +1,1122 @@
+<html ap:decorate="~{layout/only-guide}">
+
+<head>
+	<title>ETUDE JS 가이드 (Mobile)</title>
+	<style>
+		/* reset */
+		*{margin:0; padding:0; border:0;}
+		html{width:100%; height:100%; font-size:12px; font-family:"맑은 고딕", Malgun Gothic, "나눔 고딕", NanumGothic, "돋움", Dotum; color:#767676; line-height:1;}
+		body{width:100%; height:100%; min-width:960px; background:#f9f9f9;}
+		header, main, footer, section{display:block;}
+		ul{list-style:none;}
+		table{border-collapse:collapse; border-spacing:0;}
+		a, a:hover{color:inherit; text-decoration:none; cursor:pointer}
+		.clear{}
+		.clear:after{content:''; display:block; clear:both;}
+		.clear>*{float:right; width:49%;}
+		.clear>*:first-child{float:left;}
+
+		/* 본문스타일 */
+		.guide-wrap{}
+		.guide-header{width:100%; height:90px;}
+		.guide-gt{position:fixed; top:0; left:0; right:0; z-index: 2; text-align:center;}
+		.guide-gt span{display:block; padding:1em; font-size:20px; color:#fff; background:#67c5c5;}
+		.guide-main{width:100%;padding-bottom:50px;}
+		.guide{width:100%;}
+		.guide>dt{position:fixed; left:20px; width:150px; padding-bottom:10px;}
+		.guide>dt:first-child{top:100px;}
+		.guide>dt a{position: relative; display:block; padding:15px 20px; border-radius:3px; background:#fff; text-transform:uppercase; font-size:14px; box-shadow:1px 1px 1px 1px #ddd;}
+		.guide>dt.selected a{background:#eaeaea; color:#111; text-shadow:1px 1px 1px #fff; font-weight:bold;}
+		.guide>dt.selected a:after{content:''; position:absolute; left:100%; top:50%; margin-top:-8px; height: 0;width: 0; border:8px solid transparent; border-left-color:#fff; border-left-color:#eaeaea;}
+
+		.guide>dd{padding:0 20px 0 170px;}
+		.guide>dd>div{margin-left:30px; margin-bottom:20px; padding:20px;  background:#fff;box-shadow:1px 1px 1px 1px #ddd; border-radius:3px;}
+		.guide .gt{margin:20px 0;}
+		.guide .gt:first-child{margin-top:0;}
+		.guide .gt.d1{margin-left:30px; padding:15px 20px; font-size:18px; font-weight:bold; color:#fff; background:#67c5c5;}
+		.guide .gt.d2{padding-bottom:0.5em; border-bottom:1px dashed #ccc; font-size:12px; font-weight:normal;}
+		.guide .gt.d2 strong{font-size:16px; padding-right:20px;}
+		.g-btn{position:relative; display:inline-block; padding:0.5em 2em 0.5em 1em; margin-top:5px; border:1px solid #ccc; border-radius:3px; text-transform:uppercase;}
+		.g-btn:after{content:''; position:absolute; top:50%; right:10px; display:block; width:9px; height:1px; background:#aaa; transform:rotate(0); transition:0.3s;}
+		.g-btn:before{content:''; position:absolute; top:50%; right:10px; display:block; width:9px; height:1px; background:#aaa; transform:rotate(-90deg); transition:0.3s;}
+		.g-btn.open{background:#ccc; color:#fff;}
+		.g-btn.open:after{transform:rotate(45deg); transition:0.3s; background:#fff;}
+		.g-btn.open:before{transform:rotate(-45deg); transition:0.3s; background:#fff;}
+		.html{padding:20px; border-radius:5px; border:1px solid #eaeaea;}
+		hr.div{display:block; width:100%; height:0; margin:20px 0; border-bottom:1px solid #eaeaea; }
+		.guide-row{display:table; width:100%; table-layout: fixed;}
+		.guide-col2{display:table-cell; width:49%;}
+		.guide-col2:first-child{padding-right:1%;}
+		.guide-col2 + .guide-col2{padding-left:1%;}
+		.guide-col3{display:table-cell; width:32%;}
+		.guide-col3 + .guide-col3{padding-left:1%;}
+		.guide-footer{position:fixed; bottom:0; left:0; width:100%; height:50px; line-height:50px; background:#f9f9f9; text-align:center;}
+
+		#toTop{display:none; position:fixed; left:20px; width:150px;}
+		#toTop a{display:block; padding:15px 20px; border-radius:3px; background:#929292; color:#fff; text-transform:uppercase; font-size:14px; box-shadow:1px 1px 1px 1px #ddd; text-align:center;}
+		#toTop a:after{content:''; position:absolute; left:50%; top:-16px; margin-left:-8px; height: 0;width: 0; border:8px solid transparent; border-bottom-color:#929292;}
+		/* code highlighter */
+		code[class*="language-"],
+		pre[class*="language-"] {color: black;
+			text-shadow: 0 1px #fff;
+			font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+			direction: ltr;
+			text-align: left;
+			white-space: pre;
+			word-spacing: normal;
+			word-break: normal;
+			word-wrap: normal;
+			line-height: 1.5;
+			-moz-tab-size: 4;
+			-o-tab-size: 4;
+			tab-size: 4;
+			-webkit-hyphens: none;
+			-moz-hyphens: none;
+			-ms-hyphens: none;
+			hyphens: none;
+			border-radius:5px;
+		}
+		pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+		code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {text-shadow: none;	background: #b3d4fc;}
+		pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+		code[class*="language-"]::selection, code[class*="language-"] ::selection {text-shadow: none; background: #b3d4fc;}
+
+		/* Code blocks */
+		pre[class*="language-"] {padding-left:2em; margin: .5em 0; overflow: auto;}
+		:not(pre) > code[class*="language-"],
+		pre[class*="language-"] {display:none; background: #f2f2f2;}
+		pre.language-css{background-color:#f0f4e7;}
+		pre.language-js{background-color:#e8f0f4;}
+		/* Inline code */
+		:not(pre) > code[class*="language-"] {padding: .1em; border-radius: .3em;}
+		.token.comment,
+		.token.prolog,
+		.token.doctype,
+		.token.cdata {color: slategray;}
+		.token.punctuation {color: #999;}
+		.namespace {opacity: .7;}
+		.token.property,
+		.token.tag,
+		.token.boolean,
+		.token.number,
+		.token.constant,
+		.token.symbol,
+		.token.deleted {color: #905;}
+		.token.selector,
+		.token.attr-name,
+		.token.string,
+		.token.char,
+		.token.builtin,
+		.token.inserted {color: #690;}
+		.token.operator,
+		.token.entity,
+		.token.url,
+		.language-css .token.string,
+		.style .token.string {color: #a67f59;}
+		.token.atrule,
+		.token.attr-value,
+		.token.keyword {color: #07a;}
+		.token.function {color: #DD4A68;}
+		.token.regex,
+		.token.important,
+		.token.variable {color: #e90;}
+		.token.important,
+		.token.bold {font-weight: bold;}
+		.token.italic {font-style: italic;}
+		.token.entity {cursor: help;}
+
+		.list ul {list-style:inside;}
+	</style>
+
+</head>
+
+<body ap:fragment="layout-guide-body">
+<div class="guide-wrap">
+	<header class="guide-header">
+		<h1 class="guide-gt"><span>ETUDE JS 가이드 (Mobile)</span></h1>
+	</header>
+	<main class="guide-main">
+		<dl class="guide">
+			<!-- 전체보기 -->
+			<dt class="selected btn-all"><a>전체보기</a></dt>
+			<dt><a>공통</a></dt>
+			<dd>
+				<h2 class="gt d1">공통</h2>
+				<div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * Global 상수 (페이지 상단에 공통 정의)
+							 * 모든 상수, 변수는 AP 하부로 정의된다.
+							 */
+							window.AP = {
+								REGION: 'kr',
+								LANGUAGE: 'ko',
+								CURRENCY_SYMBOL: '원',
+								DATE_FORMAT: 'YYYY.MM.DD',
+								CURRENT_DATE: 1513742926369, //server date (milliseconds since 1970/01/01)
+								LOGIN_USER: false //로그인 여부는 해당 상수를 직접체크하지 말고 아래 AP.login() method를 이용하자.
+							};
+						</code>
+					</pre>
+					<div class="list">
+						<ul>
+							<li>모든 js파일은 static/js/ 하부에 위치한다.</li>
+							<li>ui제어는 페이지 하단 ap:fragment="layout-endpoint" 위치 에서 제어</li>
+							<li>header, footer 는 js/contents/header/, js/contents/footer/ 에서 제어</li>
+							<li>모든 콘텐츠 제어 js는 js/contents/ 하부에 폴더를 생성</li>
+							<li>js/common/contents-exec.js 파일에서 기본 공통 plugin-type 적용</li>
+							<li>공통 메세지 정의 (js/common/message.js)</li>
+							<li>공통 url path 정의 (js/common/path.js)</li>
+							<li>Date 관련 library는 moment.js 사용 (<a href="http://momentjs.com" target="_blank">http://momentjs.com/ 참고</a>)</li>
+						</ul>
+					</div>
+				</div>
+
+				<div>
+					<h3 class="gt d2"><strong>페이지별 JS 관리</strong></h3>
+					<div>
+						<div class="list">
+							<ul>
+								<li>js 파일 관리는 combine-files/mo/{language}/js-files.yml 파일에서 이루어진다.</li>
+								<li>공통으로 사용되는 js파일들은 libs, common, contents 그룹이며, 공통으로 로드되고 있다.</li>
+								<li>각 페이지별 js를 추가로 로드하고 싶으면 아래의 파일에 그룹 property 를 추가하여 js 목록을 추가한다.</li>
+							</ul>
+						</div>
+						<pre>
+							<code class="json">
+								combine-js:
+								  libs:
+									- /js/libs/jquery-1.12.3.min.js
+									- /js/libs/underscore.min.js
+									.. 생략 ..
+
+								  common:
+									- /js/common/user-agent.js
+									- /js/common/common.js
+									.. 생략 ..
+
+								  contents:
+									- /handlebars-templates/compiled/contents/products-filter.js
+									- /js/contents/header/app.js
+									.. 생략 ..
+
+								  #page js 파일 목록
+								  page-property-name:
+									- /handlebars-templates/compiled/products-detail/compare-makeup.js
+									- /js/contents/products-detail/app.js
+									.. 생략 ..
+							</code>
+						</pre>
+						<div class="list">
+							<ul>
+								<li>페이지 상단 html태그에 th:with="_jsfile='{page-property-name}'" 속성을 추가하면 해당 js들을 페이지 하단에서 로드하게 된다.</li>
+							</ul>
+						</div>
+						<pre>
+							<code class="xml combine_files">
+								<!-- ap:decorate="" 속성은 해당 페이지의 layout을 지정한다. -->
+								<!-- th:with="_jsfile='{page-property-name}'" 속성을 추가하면 해당 js들을 페이지 하단에서 로드하게 된다. -->
+							</code>
+						</pre>
+					</div>
+				</div>
+
+				<div>
+					<h3 class="gt d2"><strong>Cookie</strong> js/common/common.js</h3>
+					<div>
+						<pre>
+							<code class="javascript">
+								/**
+								 * Cookie 적용
+								 * @param {String}    key
+								 * @param {*}         value
+								 * @param {Number}    expireMinutes     30 sec = 0.5, 값이 없으면 => Session Cookie
+								 * @param {String}    path
+								 * @param {String}    domain
+								 * @param {Boolean}   secure            SSL
+								 */
+								AP.common.setCookie( key, value, expireMinutes, path, domain, secure );
+
+								/**
+								 * Cookie 반환
+								 */
+								AP.common.getCookie( key );
+
+								/**
+								 * Cookie 삭제
+								 */
+								AP.common.setCookie( key, '', 0 );
+							</code>
+						</pre>
+					</div>
+				</div>
+
+				<div>
+					<h3 class="gt d2"><strong>LocalStorage</strong> js/common/common.js</h3>
+					<div>
+						<pre>
+							<code class="javascript">
+								//상세 사용법 common.js 참고
+
+								/**
+								 * LocalStorage 기본 적용
+								 */
+								AP.common.setLocalStorage( 'test', 'value' );
+
+								/**
+								 * LocalStorage 반환
+								 */
+								AP.common.getLocalStorage( 'test' );
+
+								/**
+								 * LocalStorage 삭제
+								 */
+								AP.common.clearLocalStorage( 'test' );
+							</code>
+						</pre>
+					</div>
+				</div>
+
+				<div>
+					<h3 class="gt d2"><strong>date</strong> js/common/common.js</h3>
+					<div>
+						<pre>
+							<code class="javascript">
+								//상세 사용법 common.js 참고
+
+								/**
+								 * 서버시간을 기준으로 현재의 client date 반환
+								 * @param	{String}	format	반환받을 포멧형식, moment.js 참고 (default: 2018-03-28T12:21:33+09:00)
+								 * @returns {String}
+								 */
+								AP.common.date( format );
+							</code>
+						</pre>
+					</div>
+				</div>
+			</dd>
+			<!-- //전체보기 -->
+
+			<!-- login -->
+			<dt><a>Login</a></dt>
+			<dd>
+				<h2 class="gt d1">Login</h2>
+				<div>
+					<h3 class="gt d2"><strong>Login 체크</strong> js/common/login.js</h3>
+					<h4>페이지 이동 없이 로그인 여부만 확인</h4>
+					<h4>로그인 상태가 아닐때는 내부적으로 메세지를 뿌려준다.</h4>
+					<h4>세션이 중간에 끊겼는지 까지는 체크하지 않는다.</h4>
+					<div>
+						<pre>
+							<code class="javascript">
+								/**
+								 * 로그인 체크
+								 * @param {Object}      options 	옵션을 추가할때 넣어준다.
+								 * 	- {String}	returnUrl	로그인후 리턴시킬 url, (default: 현재주소)
+								 * 	- {Boolean}	trigger		무조건 창을 띄울때 true를 설정
+								 * @returns {Promise}
+								 */
+								AP.login( options ).done( function (e) {
+									//로그인 되어있음.
+								}).fail( function () {
+									//로그인 되어있지 않은데 로그인 안내 모달 닫은 상태.
+								});
+
+								/**
+								 * 로그인 페이지로 바로 보내기
+								 * @param {Object}		options		옵션을 추가할때 넣어준다.
+								 * 	- {String}	returnUrl	로그인후 리턴시킬 url, (default: 현재주소)
+								 */
+								AP.login.go();
+							</code>
+						</pre>
+					</div>
+				</div>
+			</dd>
+			<!-- //login -->
+
+			<!-- 모달 -->
+			<dt><a>modal</a></dt>
+			<dd>
+				<h2 class="gt d1">모달 띄우기</h2>
+				<div>
+					<h3 class="gt d2"><strong>기본 modal base</strong> js/common/modal.js</h3>
+					<div>
+						<pre>
+							<code class="javascript">
+								/**
+								 * Layer 스타일 모달 열기 (모든 modal은 해당 method를 이용하여 생성 관리된다.)
+								 * @param {Object}	options 	옵션설정 (자세한 옵션은 파일참조)
+								 *  - {String}          templateKey         Handlebars template key, ex) 'folder-name.file-name'
+								 *  - {Object}          templateModel       template 에서 사용할 model object
+								 *  - {String}          sizeType            layer size type : "S", "M", "L" (default:M)
+								 *  - {String}          containerClass      추가로 들어가야 하는 CSS className 이 필요한경우 설정.
+								 * @returns {ModalCore}
+								 */
+								AP.modal.open({
+									templateKey: 'folder-name.file-name'
+								});
+
+								/**
+								 * 모달 기본 이벤트 전달 받기
+								 * @events
+								 * 	'modal-before-close'	모달이 닫히기 바로 이전에 전달 (모달객체가 삭제되기 이전)
+								 * 	'modal-close'		모달이 닫히고 난 이후에 전달
+								 * @returns {ModalCore}
+								 */
+								AP.modal.open( options ).addListener( 'modal-close', function (e) {
+									console.log( e.closeType );
+								});
+
+								/**
+								 * 동적으로 생성된 modal의 Node Element 접근하기
+								 * alert, confirm, info 모두 동일
+								 */
+								var modal = AP.modal.open( options );
+								var $modalEl = modal.getElement(); //jquery object
+
+								/**
+								 * 모달 닫기
+								 */
+								modal.close();
+
+								/**
+								 * 모달의 위치 재설정 (모달내부의 높이가 변경된 후에 모달의 세로 위치를 재설정해준다)
+								 */
+								modal.resetPosition();
+							</code>
+						</pre>
+					</div>
+
+					<h3 class="gt d2"><strong>Alert modal</strong></h3>
+					<div>
+						<pre>
+							<code class="javascript">
+								/**
+								 * Layer 스타일 alert 열기 (확인 버튼이 기본 적용된다.)
+								 * @param {String}	contents
+								 * @returns {ModalCore}
+								 */
+								AP.modal.alert( '내용' );
+
+								/**
+								 * 이벤트 전달 받기
+								 * @events	modal.open() 과 동일
+								 */
+								AP.modal.alert( '내용' ).addListener( 'modal-close', function (e) {
+									console.log( e.closeType ); //close, confirm
+								});
+							</code>
+						</pre>
+					</div>
+
+					<h3 class="gt d2"><strong>Confirm modal</strong></h3>
+					<div>
+						<pre>
+							<code class="javascript">
+								/**
+								 * Layer 스타일 confirm 열기 (확인, 취소 버튼이 기본 적용된다.)
+								 * @param {String}	contents
+								 * @param {Object}	options 	옵션설정 (자세한 옵션은 파일참조)
+								 * @returns {ModalCore}
+								 */
+								AP.modal.confirm( '내용' );
+
+								/**
+								 * 이벤트 전달 받기
+								 * @events	modal.open() 과 동일
+								 */
+								AP.modal.confirm( '내용' ).addListener( 'modal-close', function (e) {
+									console.log( e.closeType ); //close, confirm, cancel
+								});
+							</code>
+						</pre>
+					</div>
+
+					<h3 class="gt d2"><strong>Info modal</strong></h3>
+					<div>
+						<pre>
+							<code class="javascript">
+								/**
+								 * Layer 스타일 info 열기 (modal.open()과 비슷하나 title, 확인 취소 버튼 등의 옵션을 제공)
+								 * handlebars template을 간단히 연결할수 있다.
+								 * @param {Object}	options 	옵션설정 (자세한 옵션은 파일참조)
+								 *  - {String}        title             타이틀형식으로 입력할때 사용
+								 *  - {String}        contents          contents를 string이나 html로 설정할때 (text center 정렬)
+								 *  - {Object}        contents          contents를 handlebars template으로 표출할때 사용
+								 *     + {String}    templateKey     Handlebars template key, ex) 'folder-name.file-name'
+								 *     + {Object}    templateModel   template 에서 사용할 model object
+								 *  - {String}        confirmLabel      확인 버튼의 label (확인 기능의 버튼이 필요할때 해당 label설정)
+								 *  - {String}        cancelLabel       취소 버튼의 label (취소 기능의 버튼이 필요할때 해당 label설정)
+								 * @returns {ModalCore}
+								 */
+								AP.modal.info({
+									title: '타이틀',
+									contents: {
+										templateKey: 'folder-name.file-name',
+										templateModel: {list: []}
+									}
+								});
+
+								/**
+								 * 이벤트 전달 받기
+								 * @events	modal.open() 과 동일
+								 */
+								AP.modal.info( options ).addListener( 'modal-close', function (e) {
+									console.log( e.closeType ); //close, confirm, cancel
+								});
+							</code>
+						</pre>
+					</div>
+
+					<h3 class="gt d2"><strong>Full size modal</strong></h3>
+					<div>
+						<pre>
+							<code class="javascript">
+								/**
+								 * Full size modal 열기 (modal.info()와 유사)
+								 * @param {Object}	options 	옵션설정 (자세한 옵션은 파일참조)
+								 *  - {String}        title             타이틀형식으로 입력할때 사용
+								 *  - {String}        contents          contents를 string이나 html로 설정할때
+								 *  - {Object}        contents          contents를 handlebars template으로 표출할때 사용
+								 *     + {String}    templateKey     Handlebars template key, ex) 'folder-name.file-name'
+								 *     + {Object}    templateModel   template 에서 사용할 model object
+								 *  - {String}        confirmLabel      확인 버튼의 label (확인 기능의 버튼이 필요할때 해당 label설정)
+								 *  - {String}        cancelLabel       취소 버튼의 label (취소 기능의 버튼이 필요할때 해당 label설정)
+								 *	- {Boolean}		  historyBackClose	history back 버튼으로 닫기를 허용할지 여부 설정, default: true
+								 * @returns {ModalCore}
+								 */
+								AP.modal.full({
+									title: '타이틀',
+									contents: {
+										templateKey: 'folder-name.file-name',
+										templateModel: {list: []}
+									}
+								});
+
+								/**
+								 * 이벤트 전달 받기
+								 * @events	modal.open() 과 동일
+								 */
+								AP.modal.full( options ).addListener( 'modal-close', function (e) {
+									console.log( e.closeType ); //close, confirm, cancel
+								});
+							</code>
+						</pre>
+					</div>
+
+					<h3 class="gt d2"><strong>약관 모달</strong></h3>
+					<h4>약관을 ajax로 불러와 full 모달에 삽입한다.</h4>
+					<div>
+						<pre>
+							<code class="javascript">
+								/**
+								 * 약관 full 모달 열기
+								 * @param   {Object}    options
+								 *  - {String}	title             타이틀형식으로 입력할때 사용
+								 *  - {String}	displayCode       약관 고유 display code
+								 *  				ET001: [필수] 에뛰드하우스 이용약관
+								 * 					010: [필수] 뷰티포인트 서비스 이용약관
+								 * 					020: [필수] 개인정보 이용 및 수집에 대한 동의
+								 * 					030: [선택] 개인정보 이용 및 수집에 대한 동의
+								 * 					040: [선택] 개인정보 제3자 제공 동의
+								 * 					050: [선택] 개인정보 제3자 제공 동의(외부컨텐츠)
+								 * 					060: [선택] 국외이전동의
+								 * 					ET002: 위치정보 이용약관
+								 * @returns {ModalCore}
+								 */
+								AP.modal.agreeTerms({
+									title: '타이틀',
+									displayCode: 'ET002'
+								});
+
+								/**
+								 * 이벤트 전달 받기
+								 * @events	modal.open() 과 동일
+								 */
+								AP.modal.agreeTerms( options ).addListener( 'modal-close', function (e) {
+									console.log( e.closeType ); //close
+								});
+							</code>
+						</pre>
+					</div>
+
+					<h3 class="gt d2"><strong>Modal Markup</strong></h3>
+					<div>
+						<pre>
+							<code class="html">
+								<div class="layer_popup">
+									<div class="layer_dimmed"></div>
+									<div class="layer_wrap">
+										<dl class="layer">
+
+											<!-- AP.modal.open() 의 contents 영역 -->
+											<dt class="layer_title">레이어 제목</dt>
+											<dd class="layer_cont">
+
+												<!-- AP.modal.info(), AP.modal.full() 의 contents 영역 -->
+												<p class="align_center">레이어 내용이 들어갑니다.</p>
+												<!-- AP.modal.info() 의 confirmLabel, cancelLabel 옵션을 설정시 아래 "page_btns"는 넣지 않아도 된다. -->
+												<div class="page_btns">
+													<!-- "btn_default_modal_cancel" 를 넣으면 기본 modal의 취소 기능이 적용된다. (e.closeType = 'cancel') -->
+													<button class="btn_md_secondary btn_default_modal_cancel" type="button">취소</button>
+													<!-- "btn_default_modal_confirm" 를 넣으면 기본 modal의 확인 기능이 적용된다. (e.closeType = 'confirm') -->
+													<button class="btn_md_neutral btn_default_modal_confirm" type="button">확인</button>
+												</div>
+
+											</dd>
+											<!-- //AP.modal.open() 의 contents 영역 -->
+
+										</dl>
+										<button class="layer_close" type="button">레이어 닫기</button>
+									</div>
+								</div>
+							</code>
+						</pre>
+					</div>
+				</div>
+			</dd>
+			<!-- //모달 -->
+
+			<!-- api -->
+			<dt><a>Ajax API</a></dt>
+			<dd>
+				<h2 class="gt d1">Ajax API</h2>
+				<div>
+					<h3 class="gt d2"><strong>Ajax 설정</strong> js/common/api.js</h3>
+					<div>
+						<pre>
+							<code class="javascript">
+								/**
+								 * Api Setting
+								 * 		path        	{String}    api path
+								 *      cache       	{Boolean}   default: false
+								 *      method      	{String}    default: 'GET'  ('GET', 'POST')
+								 *      dataType    	{String}    default: 'json' ('xml', 'html', 'script', 'json', 'jsonp', 'text')
+								 *      crossDomain 	{Boolean}   default: false
+								 *      data        	{Object}    서버로 전송할 정적 데이타 (ajax의 data속성)
+								 *      contentType 	{String}
+								 *      memoryCached	{Boolean}   api로 한번 불러온 데이타를 메모리에 저장하여 이후 api 요청시 메모리에 있는 데이타를 반환
+								 *		processData		{Boolean}	data 지정한 개체를 쿼리 문자열로 변환할지 여부를 설정, 파일첨부시 false로 지정한다. default: true
+								 */
+								var Setting = {
+									/**
+									 * RESTFul 형식
+									 * @param {String}  key 	param 설명
+									 */
+									getList: { path:'/test/{key}/', method: 'POST' },
+
+									/**
+									 * 일반 ajax 형식
+									 * @param {String}  address     	주소 keyword
+									 * @param {Int}     currentPage     검색할 페이지
+									 */
+									getAddresses: { path:'//www.juso.go.kr/addrlink/addrLinkApiJsonp.do', method: 'POST', dataType: 'jsonp', crossDomain: true, data: {
+										confmKey: 'asldjflj09890jaskdf',
+										resultType: 'json'
+									}}
+								};
+							</code>
+						</pre>
+					</div>
+				</div>
+				<div>
+					<h3 class="gt d2"><strong>Ajax API 호출</strong></h3>
+					<div>
+						<pre>
+							<code class="javascript">
+								/**
+								 * API 호출
+								 * @param      {Object}    params
+								 * @param      {Object, SerializeString, FormData}    data        서버로 전송할 동적 데이타 (ajax의 data속성, 설정한 정적데이타와 병합하여 처리된다, FormData의 경우 병합되지 않고 덥어씌운다.)
+								 * @returns    {ajax}
+								 */
+								AP.api.getList({
+									key: 'value'
+								}, data ).done(function ( result ) {
+									//성공
+								}).fail(function ( xhr, textStatus, errorThrown ) {
+									//실패
+									console.log( xhr.errorCode, xhr.errorMessage );
+								}).always(function () {
+									//성공, 실패
+								});
+							</code>
+						</pre>
+					</div>
+				</div>
+				<div>
+					<h3 class="gt d2"><strong>위도, 경도로 주소 가져오기</strong></h3>
+					<div>
+						<pre>
+							<code class="javascript">
+								/**
+								 * 위도, 경도로 주소 가져오기 (Daum Map API Geocoder)
+								 * @param      {Number}    lat 	위도
+								 * @param      {Number}    lng 	경도
+								 * @returns    {Deferred}
+								 */
+								AP.api.coord2Address( lat, lng ).done(function ( data ) {
+									//성공
+									console.log( data );
+								}).fail(function ( e ) {
+									//실패
+								});
+							</code>
+						</pre>
+					</div>
+				</div>
+			</dd>
+			<!-- //api -->
+
+			<!-- validete -->
+			<dt><a>Validate</a></dt>
+			<dd>
+				<h2 class="gt d1">Validate</h2>
+				<div>
+					<h3 class="gt d2"><strong>Validate rules 설정</strong> js/common/validate.js</h3>
+					<div>
+						<pre>
+							<code class="javascript">
+								/**
+								 * Validate 속성 설정 (validate.js 에 설정)
+								 * valid 속성은 JS파일 참조
+								 * 주의 : 속성을 추가할때 인식이 안되는 단어들이 있으니 테스트 하면서 추가해야 한다.
+								 * 상세 사용법 참고 https://github.com/jquery-validation/jquery-validation
+								 */
+								$.validator.addMethod( 'length', function ( value, element, param ) {
+									return this.optional( element ) || String( value ).length == param;
+								}, '기본 에러 메세지' );
+							</code>
+						</pre>
+					</div>
+				</div>
+				<div>
+					<h3 class="gt d2"><strong>input의 validate 속성 설정</strong></h3>
+					<div>
+						<pre>
+							<code class="xml">
+								<!-- validate를 위해서는 form으로 감싸줘야 한다. -->
+								<form action="" class="validate">
+									<!-- name속성이 빠지면 정상적으로 체크되지 않는다, required:필수체크시, length, range -->
+									<!-- 기본 에러 메세지 이외의 별도의 에러 메세지 등록시 data-msg-{속성}="에러문구" 속성 추가 ex) data-msg-range="별도 에러문구" "{인덱스}" 는 변수가 binding 되는 부분 -->
+									<input type="text" name="test" required="required" length="5" range="1,5" data-msg-range="{0}보다 크고 {1}보다 작은 값을 입력해야 합니다.">
+									<!-- hide요소, type="hidden", class="ignore" 는 validate 제외 -->
+									<input type="hidden">
+									<input type="text" class="ignore">
+									<button type="submit" >Submit</button>
+								</form>
+							</code>
+						</pre>
+					</div>
+				</div>
+				<div>
+					<h3 class="gt d2"><strong>Validate 체크</strong></h3>
+					<div>
+						<pre>
+							<code class="javascript">
+								/**
+								 * Form validate 적용 (input type="submit")
+								 */
+								$( 'form.validate' ).validate({
+									//해당 form의 모든 input validation 통과시 전달
+									submitHandler: function ( form, e ) {
+
+										//submit
+										form.submit();
+									}
+								});
+
+								/**
+								 * 별도 버튼으로 Form validate 체크
+								 */
+								$( 'button' ).on( 'click', function (e) {
+									var $form = $( 'form.validate' );
+
+									if ( $form.valid() ) {
+										//$form.submit();
+									}
+								});
+
+								/**
+								 * form input요소 별도 체크
+								 */
+								$( 'button' ).on( 'click', function (e) {
+									var valid = $( 'form.validate input.my_name' ).valid();
+
+									if ( valid ) {
+										//
+									}
+								});
+
+								/**
+								 * validate 적용해지
+								 */
+								$( 'form.validate' ).destroy();
+							</code>
+						</pre>
+					</div>
+				</div>
+			</dd>
+			<!-- //validete -->
+
+			<!-- handlebars -->
+			<dt><a>Handlebars template</a></dt>
+			<dd>
+				<h2 class="gt d1">Handlebars template</h2>
+				<div>
+					<h3 class="gt d2"><strong>Handlebars template 기본 표현식</strong></h3>
+					<h4>Handlebars template 소스 파일은 static/handlebars-templates/hbs/*/ 하위의 *.hbs 파일로 위치</h4>
+					<h4>화면에서 실행되는 JS 파일은 static/handlebars-templates/compiled/*/ 하위의 *.js 파일로 자동 생성 된다.</h4>
+					<h4>live compile 세팅방법은 페이지 하단의 가이드 참고 <a href="#grunt_guide">(Guide)</a></h4>
+					<div>
+						<pre>
+							<code class="entry">
+								자세한 사용법 http://handlebarsjs.com 참조
+
+								<div>
+									<ul>
+										{{!-- Handlebars 주석 표기법 (소스보기 에서 노출되지 않는다) --}}
+
+										<!-- 기본 반복문 -->
+										{{#each this.list}}
+
+										<!-- 기본 비교문 -->
+											{{#if this.value}}
+										<!-- 변수 대입 -->
+												<li>{{ this.value }} {{ currency }}</li>
+											{{/if}}
+
+										<!-- 확장 비교문 (js/common/handlebars-helpers.js 에 정의되어 있다) -->
+											{{#xif this.value '==' 'test'}}
+												<li>{{ this.value }}</li>
+											{{else}}
+												<li>{{ this.value }} + 'test'</li>
+											{{/xif}}
+										{{/each}}
+									</ul>
+
+									<!-- include (templateKey, templateModel), 중괄호가 3개여야 한다. -->
+									{{{ include 'common.paging' this.pagingModel }}}
+
+									<!-- 가격적용, 국가별 표현식에 맞춰 적용된다. -->
+									<p>{{ currencyFormat this.price }}</p>
+
+									<!-- 다국어 기본적용 -->
+									<div>{{ i18n 'key' }}</div>
+									<!-- 다국어 value적용 key="전화번호는 {{tel}} 입니다." -->
+									<div>{{ i18n 'key' 'tel' this.telNumber }}</div>
+									<!-- 아래처럼 중괄호가 3개들어가는 표현식은 리턴받은 결과가 html로 적용한다. -->
+									<div>{{{ i18n 'key' 'tel' this.telNumber }}}</div>
+									<div class="{{ getModalSizeClassName this.sizeType }}">test</div>
+
+									<!-- 괄호를 사용하여 다른 helper들과 연계 처리할수 있다. -->
+									{{#xif (and this.data1 this.data2) '||' (typeof this.data1 'string') }}
+										<div>데이타1</div>
+									{{else}}
+										<div>데이타2</div>
+									{{/xif}}
+								</div>
+							</code>
+						</pre>
+					</div>
+					<div>
+						<h3 class="gt d2"><strong>Handlebars Helper 설정</strong> js/common/handlebars-helpers.js</h3>
+						<div>
+						<pre>
+							<code class="javascript">
+								/**
+								 * 기본 helper 유형
+								 */
+								Handlebars.registerHelper( 'myName', function ( val ) {
+									return 'my' + val;
+								});
+
+								/**
+								 * if else 처럼 조건에 따라 영역을 binding하여 분기처리하는 Block형 helper
+								 */
+								Handlebars.registerHelper( 'xif', function ( data, options ) {
+									if ( data ) {
+										return options.fn( this );
+									} else {
+										return options.inverse( this );
+									}
+								});
+							</code>
+						</pre>
+						</div>
+					</div>
+					<div>
+						<h3 class="gt d2"><strong>Handlebars template String 으로 반환 받기</strong></h3>
+						<div>
+						<pre>
+							<code class="javascript">
+								var templateModel = {
+									sizeType: 'L',
+									price: 2000,
+									list: [
+										{
+											value: 'test1'
+										}
+									],
+									data1: [],
+									data2: {},
+									pagingModel: {
+										currentPage: 1
+									}
+								};
+
+								/**
+								 * Handlebars template String 으로 반환
+								 * @param {String}	templateKey 	js/template/ 하위의 "폴더명.파일명"
+								 * @param {Object}	templateModel 	Handlebars template 파일에서 접근하는 모델
+								 */
+								var htmlStr = AP.common.getTemplate( 'folder-name.file-name', templateData );
+
+								//화면에 적용하는 방식은 아래와 같이 jquery의 .append(), .html() 등의 methods를 사용
+								$( target ).append( htmlStr );
+							</code>
+						</pre>
+						</div>
+					</div>
+					<div>
+						<h3 class="gt d2" id="grunt_guide"><strong>Grunt 설정 및 실행 (Handlebars template live compile)</strong></h3>
+						<h2>https://gruntjs.com 참고</h2>
+						<h2>repository 에서 Gruntfile.js, package.json 참조</h2>
+						<h2>cmd나 Terminal 에서 아래 방법으로 인스톨</h2>
+						<div>
+						<pre>
+							<code class="xml">
+								1. npm 설치 (node.js 가 설치되어 있어야 한다.)
+								Gruntfile.js 파일이 위치해 있는 폴더에 설치한다.
+								Terminal 에서 아래 명령어로 설치한다.
+								$ sudo npm install
+
+								package.json을 참조하여 자동으로 인스톨 되지만 일부 환경에서 인스톨이 안될경우
+								$ sudo npm install -g grunt-cli 을 실행하여 먼저 설치 후 인스톨을 다시 실행한다.
+								그래도 안된다면 package.json 의 devDependencies 하위의 항목들을 하나씩 모두 인스톨 해주면 된다.
+
+								2. 설치된 node_modules 폴더가 repository의 push 되지 않도록 .gitignore 파일에 등록해준다.
+
+								3. live compiler 실행
+								$ grunt
+
+								grunt를 실행시킨 이후에는 파일을 감시하여 파일이 변경될시 실시간으로 js 변환 생성된다.
+								js 로 변환된 파일은 해당 static/handlebars-templates/compiled/*/ 폴더에 생성된다.
+								화면에서 실행되는 파일은 *.hbs가 아닌 *.js 파일 이므로, commit할때 반듯이 해당 js파일도 add 및 commit 해줘야 한다.
+
+								# 1회성으로 compiler 를 실행하고 싶을때는 아래와 같이 실행
+								$ grunt handlebars-compile
+							</code>
+						</pre>
+						</div>
+					</div>
+				</div>
+			</dd>
+			<!-- //handlebars -->
+
+			<!-- router -->
+			<dt><a>Router</a></dt>
+			<dd>
+				<h2 class="gt d1">Router</h2>
+				<div>
+					<h3 class="gt d2"><strong>Router 설정</strong> js/common/router.js</h3>
+					<h4>hashchange 이벤트를 이용한 simple router</h4>
+					<h4>router listener 등록은 혼선을 방지하기 위하여 최대한 하나만 사용하길 권장</h4>
+					<div>
+						<pre>
+							<code class="javascript">
+								/**
+								 * Hash type:
+								 *  - :default      기본, hash가 없을때
+								 *  - hash          영문, 숫자
+								 *  - hash/:val     hash뒤에 value key를 지정,
+								 */
+
+								/**
+								 * listener 등록
+								 * @param {String}      hash
+								 * @param {Function}    listener
+								 * @returns {Router}
+								 */
+								AP.router.addListener( hash, function (e) {
+									//e.value = {key: value}, hash에 지정한 :key로 접근한다.
+									console.log( e.newHash, e.oldHash, e.value );
+								});
+
+								/**
+								 * listener 삭제
+								 * @param {String}      hash
+								 * @param {Function}    listener
+								 * @returns {Router}
+								 */
+								AP.router.removeListener( hash, listener );
+
+								 /**
+								  * 해당 hash 로 이동하거나 대체
+								  * @param {String}      hash
+								  * @param {Object}   options
+								  *  - {Boolean}   trigger   true 설정시 조건에 부합되는 이벤트를 발생시킨다.
+								  *	 - {Boolean}   replace   현재 hash를 대체한다.
+								  * @returns {Router}
+								  */
+								AP.router.navigate( hash, options );
+							</code>
+						</pre>
+					</div>
+				</div>
+			</dd>
+			<!-- //router -->
+
+			<!-- webview -->
+			<dt><a>Webview</a></dt>
+			<dd>
+				<h2 class="gt d1">Webview (Mobile Application)</h2>
+				<div>
+					<h3 class="gt d2"><strong>Webview method 접근</strong> js/common/webview.js</h3>
+					<h4>method를 실행해서 값을 반환 받지 않고 listener를 통해서만 받는다. </h4>
+					<h4>app에서는 요청한 methodName으로 dispatch 해준다.</h4>
+					<h4>listener 삭제는 <a href="http://ixband.com/docs/event/CustomEvents/" target="_blank">http://ixband.com/docs/event/CustomEvents/</a> 참고</h4>
+					<div>
+						<pre>
+							<code class="javascript">
+								/**
+								 * app 에서 web으로 이벤트 dispatch
+								 * @param {String}      methodName
+								 * @param {*}    		value
+								 * @param {String}		requestId	필요할때만 고유값을 설정한다, 설정하지 않으면 random (addListener 에서 e.requestId 로 전달 받는다.)
+								 * @returns {String}  requestId
+								 */
+								AP.webview.method( methodName, value, requestId );
+
+								/**
+								 * listener 등록 (app 에서 전달해 주는 이벤트 받기)
+								 * @param {String}      type 	methodName
+								 * @param {Function}    listener
+								 */
+								AP.webview.addListener( type, function (e) {
+									console.log( e.type, e.requestId, e.myName );
+								});
+
+								/**
+								 * app 에서 web으로 이벤트 dispatch
+								 *
+								 * @param {String}      type 	전달할 event type이나, 호출시 전달 받은 methodName
+								 * @param {String}    	data 	호출시 전달 받은 requestId를 extends 하여 dispatch 해준다. JSON String
+								 */
+								AP.webview.dispatch( type, '{"requestId": "필수", "myName": "철수"}');
+
+								/**
+								 * webview 여부 반환
+								 * @returns {Boolean}
+								 */
+								AP.webview.is();
+
+								/**
+								 * android webview 여부 반환
+								 * @returns {Boolean}
+								 */
+								AP.webview.isAndroid();
+
+								/**
+								 * ios webview 여부 반환
+								 * @returns {Boolean}
+								 */
+								AP.webview.isIos();
+							</code>
+						</pre>
+					</div>
+				</div>
+			</dd>
+			<!-- //webview -->
+		</dl>
+	</main>
+</div>
+
+<style>
+	/*pre {display:none;}*/
+	pre code {border-radius:5px; padding:0 1.5em !important;}
+</style>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>
+	$(function(){
+		$('a').click(function(){
+			if($(this).attr('href') == '#none'){
+				return false;
+			};
+		});
+		// guide tab
+		$('.guide').each(function(){
+			var $tab = $(this);
+			var $gm = $('>dt', $tab);
+			var $gc = $('>dd', $tab);
+			$gm.not('.btn-all').click(function(){
+				$gm.not($(this).addClass('selected')).removeClass('selected');
+				$(this).next('dd').show().siblings('dd').hide();
+			});
+			$gm.not($gm.eq(0)).each(function(){
+				var gmh = $(this).prevAll('dt').outerHeight();
+				var gmt = $(this).prevAll('dt').position().top;
+				var gmp = gmh+gmt;
+				$(this).css('top', gmp);
+			});
+			$('.btn-all').click(function(){
+				$gm.not($(this).addClass('selected')).removeClass('selected');
+				$gc.show();
+			});
+		});
+
+		$( 'code.xml, code.javascript, code.entry, code.html, code.json' ).each( function () {
+			var html = $( this ).html(),
+				lineMatch = html.match( /\n/g );
+
+			if ( $(this).hasClass('combine_files') ) {
+				html += '\n<html ap:decorate="~{layout/default}" th:with="_jsfile=\'page-property-name\'">\n   ';
+			}
+
+			if ( lineMatch ) {
+				var spaceMath = html.match( /^(\s|\t)+/ );
+
+				if ( spaceMath ) {
+					html = html.replace( new RegExp( spaceMath[0], 'mg' ), '\n' );
+				}
+			} else {
+				html = html.replace( /^\s+/, '' );
+			}
+
+			$( this ).text( html );
+		});
+
+		$( 'pre code' ).each( function (i, block) {
+			hljs.highlightBlock(block);
+		});
+
+		// to top
+		var scrollDiv = document.createElement('div');
+		$(scrollDiv).attr('id', 'toTop').html('<a href="#none">to top</a>').appendTo('main');
+		$(window).scroll(function(){
+			if ($(this).scrollTop() != 0) {
+				$('#toTop').fadeIn();
+				var h = $('.guide').find('dt:first-child').outerHeight();
+				var n = $('>dt', '.guide').length;
+				var hh = $('header').outerHeight();
+				var t = (h*n)+hh+20;
+				$('#toTop').css('top', t);
+
+			} else {
+				$('#toTop').fadeOut();
+
+			}
+		});
+		$('#toTop').click(function(){
+			$('body,html').animate({scrollTop: 0},	600);
+			return false;
+		});
+	});
+</script>
+
+
+</body>
+</html>

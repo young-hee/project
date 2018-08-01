@@ -1,0 +1,62 @@
+<table class="align_center benefit_table">
+	<caption class="sr_only">사용 가능한 쿠폰 정보</caption>
+	<colgroup>
+		<col style="width:163px;"> <!-- 컬럼 사이즈 -->
+		<col style="width:163px;">
+		<col>
+		<col style="width:127px;">
+		<col style="width:210px;">
+		<col style="width:163px;">
+	</colgroup>
+	<thead>
+	<tr>
+		<th scope="col">취득일</th>
+		<th scope="col">종류</th>
+		<th scope="col">쿠폰명</th>
+		<th scope="col">혜택</th>
+		{{#xif this.searchType '==' 'Avail' }}
+			<th scope="col">유효기간</th>
+		{{else}}
+			<th scope="col">사용/만료</th>
+		{{/xif}}
+		<th scope="col">사용제한</th>
+	</tr>
+	</thead>
+	<tbody>
+	{{#each this.list}}
+	<tr>
+		<td class="acquire">{{dateFormat this.issueDt "YYYY-MM-DD"}}</td>
+		<td class="coupon_type">{{{couponTypeSwitch this.availCoupon}}}</td>
+		<td class="coupon_name">{{this.availCoupon.couponName}}</td>
+		<td class="coupon_benefit_type">{{{couponTypeBenefitSwitch this.availCoupon}}}</td>
+		<td class="expiration_date">
+			{{#if this.useDt}}
+				<span class="flag_state">사용</span>{{dateFormat this.useDt "YYYY-MM-DD"}}
+			{{else if this.expDt}}
+				<span class="flag_state">만료</span>{{dateFormat this.expDt "YYYY-MM-DD"}}
+			{{else}}
+				{{dateFormat this.usePossibleStartDt "YYYY-MM-DD"}} ~ {{dateFormat this.finalExpExpectedDt "YYYY-MM-DD"}}
+			{{/if}}
+		</td>
+		{{#if this.availCoupon.foGuide}}
+			<td class="limit_of_usage">
+				<span class="ui_tooltip_tit">사용제한 보기</span>
+				<span class="">
+					<span class="ui_tooltip">
+						<button type="button" class="btn_tooltip">툴팁보기</button>
+						<span class="arr"></span>
+						<span class="layer_tooltip">
+							<pre>{{{this.availCoupon.foGuide}}}</pre>
+							<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
+						</span>
+					</span>
+				</span>
+			</td>
+		{{else}}
+			<td class="limit_of_usage">
+			</td>
+		{{/if}}
+	</tr>
+	{{/each}}
+	</tbody>
+</table>

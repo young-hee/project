@@ -1,0 +1,14 @@
+{{#each this.depositHistories}}
+	<li>
+		<div class="table_layout">
+			<div class="info">
+				<p class="date"><span>일자</span><span class="num">{{ dateFormat this.depositHistOccurDt "YYYY.MM.DD" }}</span></p>
+				<p class="order_num"><span>주문번호</span><a href="/my/page/order/detail/{{ this.ordNo }}">{{ this.ordNo }}</a></p>
+			</div>
+			<div class="price">
+				<p>{{{ depositTypeName this.depositHistTypeCode }}}</p>
+				<p><span class="num">{{{ depositSwitch this.deposit '원' }}}</span></p>
+			</div>
+		</div>
+	</li>
+{{/each}}

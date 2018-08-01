@@ -1,0 +1,37 @@
+<<html ap:decorate="~{layout/layout-member-join}">
+
+<body>
+
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="page_title_area">
+		<h1>아모레퍼시픽 통합 회원가입</h1>
+	</div>
+
+	<div class="ap_contents member_join">
+		<div class="failed">
+			<p class="text font_xl">회원님은 이미 아모레퍼시픽 통합<br>회원가입을 하셨습니다.</p>
+			<ul class="member_info">
+				<li><span>이름</span><b th:text="${custNm}">이보라</b></li>
+				<li><span>아이디</span><b th:text="${userId}">amorepacific</b></li>
+				<li><span>가입일</span><b th:text="${mbrJoinDt}">2017.01.01</b></li>
+			</ul>
+			<div class="page_btns mgt30">
+				<button class="btn_lg_primary" onclick="location.replace('/login')" type="button">로그인</button>
+			</div>
+			<div class="align_center mgt10">
+				<a href="/customer/find/find-id" class="btn_md_link"><em>아이디 찾기</em> <i class="ico_arr_p"></i></a>
+				<a href="/customer/find/find-pwd" class="btn_md_link"><em>비밀번호 찾기</em> <i class="ico_arr_p"></i></a>
+			</div>
+			<div class="text color_light_gray mgt10">아이디나 비밀번호가 기억나지 않으시면<br>아이디, 비밀번호 찾기를 이용해 주시기 바랍니다.</div>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+</th:block>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+ext {
+	buildEnv = System.properties['buildEnv']
+	apNexus = (System.properties.nexusUrl != null) ? System.properties.nexusUrl : 'http://172.28.6.29:8081/nexus/content/groups/public/'
+	//apNexus = 'http://172.28.6.29:8081/nexus/content/groups/public/'
+}
+
+repositories {
+	maven { url apNexus }
+}
+
+dependencies {
+    compile("org.yaml:snakeyaml:1.17")
+    compile("com.eriwen:gradle-js-plugin:2.14.1")
+}

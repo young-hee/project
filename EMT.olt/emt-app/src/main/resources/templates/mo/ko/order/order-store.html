@@ -1,0 +1,29 @@
+<html>
+<body>
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script th:inline="javascript">
+		var orderStore = /*[[${ordStore}]]*/;
+		console.log("orderStore : " + orderStore);
+		opener.parent.document.orderForm.storeHeadCd.value = orderStore.storeHeadCd;
+		opener.parent.document.orderForm.storeShopCd.value = orderStore.storeShopCd;
+		opener.parent.document.orderForm.storeNm.value = orderStore.storeNm;
+		opener.parent.document.orderForm.storeShopNm.value = orderStore.storeShopNm;
+		opener.parent.document.orderForm.storeTelno.value = orderStore.storeTelno;
+		opener.parent.document.orderForm.storeZip.value = orderStore.storeZip;
+		opener.parent.document.orderForm.storeAddr1.value = orderStore.storeAddr1;
+		opener.parent.document.orderForm.storeAddr2.value = orderStore.storeAddr2;
+		opener.parent.document.orderForm.storeCodeF.value = orderStore.storeCodeF;
+		opener.parent.document.orderForm.storeDdZone.value = orderStore.storeDdZone;
+		opener.parent.document.orderForm.storeDdBag.value = orderStore.storeDdBag;
+		opener.parent.document.orderForm.storeEupmyeon.value = orderStore.storeEupmyeon;
+
+		opener.parent.document.getElementById("storeShopNmDisp").innerHTML = orderStore.storeShopNm;
+		opener.parent.document.getElementById("storeTelnoDisp").innerHTML = orderStore.storeTelno;
+
+		if (!window.opener.parent.closed) window.opener.parent.close();
+		if (!window.closed) window.close();
+	</script>
+</th:block>
+</body>
+</html>

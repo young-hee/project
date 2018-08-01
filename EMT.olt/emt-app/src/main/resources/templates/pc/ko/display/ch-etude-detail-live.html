@@ -1,0 +1,163 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='ch-etude-detail'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents prd_list ch_etude">
+		<div class="etu_top_flag_wrap" th:if="${article.liveSettingsYn == 'Y'}">
+			<span th:if="${article.couponYn == 'Y'}">쿠폰지급</span>
+			<span class="pink live">LIVE</span>
+		</div>
+		<h2 class="h_title page title_top_01" th:text="${article.articleTitle}">제목</h2>
+		<div class="etu_top_sub_wrap">
+			<span class="etu_date_range" th:text="${#calendars.format(article.liveStartDt,'HH:mm')} + ' ~ ' + ${#calendars.format(article.liveEndDt,'HH:mm')}"
+				  th:if="${article.liveSettingsYn == 'Y'}">12:00 ~ 15:00</span>
+			<span class="etu_date_range" th:text="${#calendars.format(article.startDt,'yyyy.MM.dd')} + ' ~ ' + ${#calendars.format(article.endDt,'yyyy.MM.dd')}"
+				  th:unless="${article.liveSettingsYn == 'Y'}">12:00 ~ 15:00</span>
+			<span class="vline"></span>
+			<button type="button" class="btn_share" th:if="${article.shareUseYn == 'Y'}">SNS 공유하기</button>
+		</div>
+		<div class="ch_etude_top_wrap">
+			<div class="etude_left_wrap">
+				<div class="video_wrap" th:if="${article.articleVideoUrl != ''}">
+					<iframe class="youtube_video" src="" th:src="${article.articleVideoUrl} + '?enablejsapi=1'" width="890" height="501" frameborder="0" allowfullscreen="" data-vendor="youtube" data-ratio="true" data-mute="false"></iframe>
+				</div>
+				<div class="coupon_down_wrap" th:if="${article.liveSettingsYn == 'Y' && article.couponYn == 'Y'}">
+					<div class="coupon_layout_left">
+						<h3 class="h_title font_lg">쿠폰 다운로드 안내</h3>
+						<ul>
+							<li>혜택이 있는 영상을 모두 플레이 합니다. (넘겨보면 안돼요!)</li>
+							<li>영상을 모두 시청한 후 [쿠폰 다운로드] 버튼이활성화 되었을 때 클릭합니다.</li>
+							<li>발급 받은 쿠폰은 마이에뛰드에서 확인해 주세요.</li>
+						</ul>
+					</div>
+					<div class="coupon_layout_right">
+						<button type="button" class="btn_coupon_down" disabled>할인 쿠폰 다운로드</button>
+					</div>
+				</div>
+			</div>
+			<div class="etude_right_wrap comment_area">
+				<div class="scroll_area"><!--/* 20180419 : 댓글 스크롤 div 추가 */-->
+					<ul class="comment_list">
+					<!--/*
+                    <li>
+                        <dl>
+                            <dt>
+                                <b>cclicksu***</b>
+                                <small>2017.12.20</small>
+                                <span class="ico_new"><span class="sr_only">새글</span></span>
+                                <button class="btn_delete" type="button"><i class="ico_del"></i><span class="sr_only">댓글 삭제</span></button>
+                            </dt>
+                            <dd>
+                                <p class="text">배송빨라서 넘좋구요 인터넷으로 보고샀는데 발색안해봤지만 겉으로 봤을땐 그저 그랬는데 실제로도 이뻐보여요 크리스마스 분위기가 물씬 나는 네일이네요..
+                                    글리터는 커서 많이 뜨네요 오늘왔어요 생각보다 깨진게없어가다행 이네요 좋은거 샘플도같이챙겨주고좋네요 ^^ </p>
+                            </dd>
+                        </dl>
+                    </li>
+                    */-->
+				</ul>
+				</div>
+				<div class="write_input_wrap">
+					<p class="text_notice">저작권 등 다른 사람의 권리를 침해하거나
+						게시판 성격과 관련 없는 게시물은 임의로
+						삭제될 수 있습니다.</p>
+					<fieldset class="form">
+						<legend class="sr_only">댓글 입력폼</legend>
+						<div class="input_wrap">
+							<input class="comment_input" type="text" maxlength="200" placeholder="댓글을 남겨보세요.">
+							<button type="button" class="btn_comment_reg btn_md_form btn_save">등록</button>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+		</div>
+
+		<hr class="div mgt50">
+
+		<!--/* 방송중인 상품 */-->
+		<div class="ch_etude_bottom_wrap" th:if="${article.prodYn == 'Y'}">
+			<div class="item_list column4">
+				<!--/* 방송중인 상품 영역 */-->
+				<div class="loading" style="height:500px;">
+					<span>
+						<img ap:src="@{/images/common/loading.gif}" alt="">
+					</span>
+				</div>
+			</div>
+			<div class="pagination">
+				<!--/* paging 영역 */-->
+			</div>
+
+			<!--/* 주문레이어 */-->
+			<div class="order_layer" th:if="${article.prodYn == 'Y'}"> <!--/* script : 높이값 필요, fixed */-->
+				<div class="product_option_select scroll_area"><!--/* script : order_prd_list와 order_bottom 을 제외한 높이값 필요 */-->
+					<ul class="selected_list selected_option_area">
+						<!--/* selected options area */-->
+					</ul>
+				</div>
+				<div class="order_bottom">
+					<!--/* 뷰티포인트 전용상품 */-->
+					<!--/*
+					<div class="chk_beauty_wrap">
+						<span class="check_wrap"><input type="checkbox" id="buy_beauty_point2" class="buy_beauty_point" checked="checked"><label for="buy_beauty_point2">뷰티포인트로 구매하기</label></span>
+					</div>
+					*/-->
+					<div class="order_total_price">
+						<span style="display:none;">총<span class="total_count">0</span>개</span>
+						<em><strong class="num total_price">0</strong>원</em>
+					</div>
+
+					<!--/* 구매 버튼 세트 */-->
+					<div class="order_button_wrap full_type">
+						<button type="button" class="btn_lg_bordered takeout btn_takeout">테이크<br>아웃</button>
+						<button type="button" class="btn_lg_bordered purchase btn_buy_now">바로구매</button>
+						<button type="button" class="btn_lg_primary basket btn_basket">장바구니 담기</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="ch_etude_list typ2">
+
+			<h3 class="h_title sub">
+				‘Ch. 에뛰드’다른 영상이 궁금하다면!
+				<a class="btn_more" href="/display/etude_ch"><span>더보기</span><i class="ico_arr_m_r"></i></a>
+			</h3>
+			<ul>
+				<!--/*
+				<li>
+					<a href="#none" class="ch_etude_item">
+						<span class="img_ch_etude">
+							<img src="/pc/ko/images/dummy/prd_ch_etude_list_item.png" alt="">
+						</span>
+						<span class="info_box">
+							<span class="title_area">
+								<span class="ch_etude_item_title">유브이 더블 컷 산뜻 선 젤 SPF50+/PA++++</span>
+							</span>
+							<span class="ch_etude_date">2018.03.06</span>
+						</span>
+					</a>
+				</li>
+				*/-->
+			</ul>
+
+		</div>
+
+	</div>
+	<!-- // page contents -->
+</div><!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script th:inline="javascript">
+		(function () {
+			var article = /*[[${article}]]*/;
+
+			AP.chEtudeDetail.setDefaultData( article );
+		})();
+	</script>
+</th:block>
+</body>
+</html>

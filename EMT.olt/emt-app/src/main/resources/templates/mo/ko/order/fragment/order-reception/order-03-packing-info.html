@@ -1,0 +1,224 @@
+<!--포장/쇼핑백 추가신청-->
+<!--
+<th:block th:each="ordOtfEx : ${ordOtfExList}">
+<dl class="package" th:if="${#lists.size(ordOtfEx.possibleGiftPackingExList) > 0}">
+	<input type="hidden" name="coSn" th:value="${ordOtfEx.coSn}"/>
+	<dt>
+		<div class="title clear">
+			<b>포장/쇼핑백 추가신청</b>
+			<span class="thumbnail" id="boxBagCnt"></span>
+		</div>
+		<button type="button"><span class="sr_only">더보기</span></button>
+	</dt>
+	<dd class="panel" th:each="giftPackingEx : ${ordOtfEx.possibleGiftPackingExList}">
+		<input type="hidden" name="giftPackingSn" th:value="${giftPackingEx.giftPackingSn}"/>	&lt;!&ndash;선물포장일련번호&ndash;&gt;
+		<input type="hidden" name="giftPackingFee" th:value="${giftPackingEx.giftPackingFee}"/>	&lt;!&ndash;선물포장비&ndash;&gt;
+		<fieldset class="form">
+			<legend class="sr_only">포장/쇼핑백 추가신청 항목</legend>
+			&lt;!&ndash;포장박스 : 유료여부-Y / 무료조건여부-N &ndash;&gt;
+			<div class="clear" th:if="${giftPackingEx.payYn == 'Y' and giftPackingEx.freeConditionYn == 'N'}">
+				<div>
+					<span class="check_wrap">
+						&lt;!&ndash;수량선택가능여부&ndash;&gt;
+						<input th:if="${giftPackingEx.qtySelectPossibleYn == 'Y'}" type="checkbox" id="'boxFl_' + ${giftPackingEx.giftPackingSn}" name="boxFl" th:onclick="|boxFlserview(this,'${ordOtfEx.coSn}','${giftPackingEx.giftPackingSn}')|">
+						<input th:if="${giftPackingEx.qtySelectPossibleYn == 'N'}" type="checkbox" name="boxFl" disabled="true">
+						<label for="'boxFl_' + ${giftPackingEx.giftPackingSn}" th:text="${giftPackingEx.giftPackingName}">포장박스 추가</label>
+					</span>
+					<div class="ui_tooltip take_out">
+						<button type="button" class="btn_tooltip">툴팁보기</button>
+						<span class="arr"></span>
+						<div class="layer_tooltip">
+							<dl>
+								<dt>포장박스 추가</dt>
+								<dd>
+									<ul class="list_bullet_dot">
+										<li th:text="${giftPackingEx.foGuide}">포장박스 신청시 개당 1,000원이 추가 됩니다.</li>
+									</ul>
+									<button type="button" class="ui_close sm"><span class="sr_only">툴팁 닫기</span></button>
+								</dd>
+							</dl>
+						</div>
+					</div>
+					<span class="price"><strong class="eng" id="totBoxSum">0</strong> 원</span>
+				</div>
+				<div id="ui_spinner_qty">
+				&lt;!&ndash;<span class="ui_spinner small" data-min="0" data-max="3" data-step="1" data-disabled="false">
+					<button class="spinner_decrease" type="button" title="제품 수량 감소" id="operateDown" th:onclick="|boxQtyOperate('-')|"><img alt="제품 수량 감소" src="/mo/ko/images/common/ico_minus1.gif"></button>
+					<input class="spinner_input" type="text" title="선택품목갯수" id="boxCnt" name="boxCnt" value="0">
+					<button class="spinner_increase" type="button" title="제품 수량 증가" id="operateUp" th:onclick="|boxQtyOperate('+')|"><img alt="제품 수량 증가" src="/mo/ko/images/common/icon_plus1.gif"></button>
+				</span>&ndash;&gt;
+				</div>
+			</div>
+		</fieldset>
+
+		&lt;!&ndash;쇼핑백 : 유료여부-N / 수량선택가능여부-Y &ndash;&gt;
+		<div class="panel_cont no_padding" th:if="${giftPackingEx.payYn == 'N' and giftPackingEx.qtySelectPossibleYn == 'Y'}">
+			<input type="hidden" name="freeConditionAmt" th:value="${giftPackingEx.freeConditionAmt}"/>&lt;!&ndash;무료조건금액&ndash;&gt;
+			<span class="check_wrap">
+				<input type="checkbox" id="'bagFl_' + ${giftPackingEx.giftPackingSn}" name="bagFl" th:onclick="|bagFlserview(this,'${ordOtfEx.coSn}','${giftPackingEx.giftPackingSn}')|">
+				<label for="'bagFl_' + ${giftPackingEx.giftPackingSn}" th:text="${giftPackingEx.giftPackingName}">쇼핑백 추가<span class="color_light_gray">(3만원 이상 주문시 무료)</span></label>
+			</span>
+			<div class="ui_tooltip take_out">
+				<button type="button" class="btn_tooltip">툴팁보기</button>
+				<span class="arr"></span>
+				<div class="layer_tooltip">
+					<dl>
+						<dt>쇼핑백 추가</dt>
+						<dd>
+							<ul class="list_bullet_dot">
+								<li th:text="${giftPackingEx.foGuide}">3만원이상 주문시 무료로 선택할 수 있습니다.</li>
+							</ul>
+							<button type="button" class="ui_close sm"><span class="sr_only">툴팁 닫기</span></button>
+						</dd>
+					</dl>
+				</div>
+			</div>
+		</div>
+	</dd>
+
+	&lt;!&ndash;스크립트 정의&ndash;&gt;
+	<script ap:src="@{/handlebars-templates/compiled/order/gift-packing-qty-info.js}"></script> 	&lt;!&ndash;포장박스 수량제어&ndash;&gt;
+	<script th:inline="javascript">
+		$( document ).ready(function() {
+			bagInit();
+			// 수량 조절
+			$( '.ui_spinner' ).spinner();
+		});
+
+		var ordSn = /*[[${ordEx.ordSn}]]*/ '0';								// 주문번호
+		var finalPamtPcur = /*[[${ordEx.ordHistEx.finalPamtPcur}]]*/ '0';	// 최종결제금액
+
+		/* 쇼핑백 수량제어 */
+		function bagInit(){
+			var freeConditionAmt = $('[name=freeConditionAmt]').val();
+			if(parseInt(finalPamtPcur) > parseInt(freeConditionAmt)){
+				$('[name=bagFl]').attr('disabled', false);
+			}else{
+				$('[name=bagFl]').attr('disabled', true);
+			}
+			getGiftPackingQty();
+		}
+
+		/* 포장박스 수량제어 */
+		function getGiftPackingQty() {
+			var ordOtfExList = /*[[${ordOtfExList}]]*/ '0';					// 주문배송지시
+			var html = AP.common.getTemplate( 'order.gift-packing-qty-info', { list: ordOtfExList} );
+			$('#ui_spinner_qty').html(html);
+		}
+
+		/* 쇼핑백 체크 선택 시 */
+		function bagFlserview(obj, coSn, giftPackingSn){
+			var boxCnt = $('[name=boxCnt]').val();							// 포장박스추가 수량
+			if($(obj).is(":checked")) {
+				$('[name=bagFl]:checked').prop('checked', true);
+				boxBagQtyChange(ordSn, coSn, giftPackingSn, 1, boxCnt, 0, "bag");
+			}else{
+				$('[name=bagFl]:checked').prop('checked', false);
+				boxBagQtyChange(ordSn, coSn, giftPackingSn, 0, boxCnt, 0, "bag");
+			}
+		}
+
+		/* 포장박스 체크 선택 시 */
+		function boxFlserview(obj, coSn, giftPackingSn){
+			var giftPackingFee = $('[name=giftPackingFee]').val();			// 선물포장비
+			if($(obj).is(":checked")) {
+				$('[name=boxFl]:checked').prop('checked', true);
+				if($('[name=bagFl]').is(':checked')){
+					boxBagQtyChange(ordSn, coSn, giftPackingSn, 1, 1, giftPackingFee, "box");
+				}else{
+					boxBagQtyChange(ordSn, coSn, giftPackingSn, 0, 1, giftPackingFee, "box");
+				}
+			}else{
+				$('[name=boxFl]:checked').prop('checked', false);
+				if($('[name=bagFl]').is(':checked')){
+					boxBagQtyChange(ordSn, coSn, giftPackingSn, 1, 0, giftPackingFee, "box");
+				}else{
+					boxBagQtyChange(ordSn, coSn, giftPackingSn, 0, 0, giftPackingFee, "box");
+				}
+			}
+		}
+
+		/* 포장박스 체크유무 */
+		function boxQtyOperate(obj, operate) {
+			var giftPackingFee = $('[name=giftPackingFee]').val();			// 포장박스 기준가
+			var totBoxSum = $('[id=totBoxSum]').text();						// 포장박스 합산금액
+			var boxCnt = $('[name=boxCnt]').val();							// 포장박스추가 수량
+			var giftPackingSn = $(obj).closest('dd').find('[name=giftPackingSn]').val();
+			var coSn = $(obj).closest('dl').find('[name=coSn]').val();
+
+			if(operate == '+'){
+				boxCnt++;
+				var boxChecked = $('[name=boxFl]').is(":checked");
+				if(!boxChecked){
+					AP.modal.alert("포장박스 추가 체크박스를 체크해 주세요.");
+					$('#totBoxSum').text(0);
+					if($('[name=bagFl]').is(":checked")){
+						boxBagQtyChange(ordSn, coSn, giftPackingSn, 1, 0, totSum, "box")
+					}else{
+						boxBagQtyChange(ordSn, coSn, giftPackingSn, 0, 0, totSum,  "box")
+					}
+				}else{
+					var totSum = parseInt(totBoxSum) + parseInt(giftPackingFee);
+					$('#totBoxSum').text(totSum);
+					if($('[name=bagFl]').is(":checked")){
+						boxBagQtyChange(ordSn, coSn, giftPackingSn, 1, boxCnt, totSum, "box")
+					}else{
+						boxBagQtyChange(ordSn, coSn, giftPackingSn, 0, boxCnt, totSum,  "box")
+					}
+				}
+			}else{
+				boxCnt&#45;&#45;;
+				var bagChecked = $('[name=bagFl]').is(":checked");
+				var totSum = parseInt(totBoxSum) - parseInt(giftPackingFee);
+				$('#totBoxSum').text(totSum);
+				if(totSum == 0){
+					$('[name=boxFl]:checked').prop('checked', false);
+					if(!bagChecked){
+						$('#boxBagCnt').empty();
+					}else{
+						boxBagQtyChange(ordSn, coSn, giftPackingSn, 1, boxCnt, 0, "bag");
+					}
+				}else{
+					if($('[name=bagFl]').is(":checked")){
+						boxBagQtyChange(ordSn, coSn, giftPackingSn, 1, boxCnt, totSum, "box")
+					}else{
+						boxBagQtyChange(ordSn, coSn, giftPackingSn, 0, boxCnt, totSum, "box")
+					}
+				}
+			}
+		}
+
+		/* 포장박스, 쇼핑백 수량제어 */
+		function boxBagQtyChange(ordSn, coSn, giftPackingSn, bagCnt, boxCnt, totSum, changeFlag) {
+			AP.api.ordReceptChangeBag({}, {
+				ordSn: ordSn,
+				coSn : coSn,
+				giftPackingSn : giftPackingSn,
+				giftPackingQty : changeFlag == "bag" ? bagCnt : boxCnt
+			}).done(function (data) {
+				if (data.result == "success"){
+					$('#boxBagCnt').html("\포장 <span>" + boxCnt + "</span> / 쇼핑백 <span>" + bagCnt + "</span>");
+					if(changeFlag == "box"){
+						if(parseInt(boxCnt) > 0){
+							$('[name=boxCnt]').val(parseInt(boxCnt));
+							$('#totBoxSum').html(totSum);
+						}else{
+							$('[name=boxCnt]').val(parseInt(boxCnt));
+							$('#totBoxSum').text(0);
+						}
+					}
+					/*최종결제금액*/
+					$('#totalFinalPamtPcur').html(parseInt(data.param.finalPamtPcur));
+					/*포장재*/
+					$('#totalGiftPackingAmtBcur').html(parseInt(data.param.giftPackingAmtBcur));
+					/*결제예정금액*/
+					$('#orderPayment').html(parseInt(data.param.finalPamtPcur) + "원 결제하기");
+				}
+			}).fail(function (e) {
+				AP.modal.alert("[ajax.fail]실패");
+			}).always(function () {
+			});
+		}
+	</script>
+</dl>
+</th:block>-->

@@ -1,0 +1,38 @@
+{{#xif this.totalLength '>' 0 }}
+    {{#each this.list }}
+		<div class="panel store">
+			<div class="store_wrap">
+				<h3 class="store_title">{{ this.storeName }}
+				{{#xif this.invtEnoughType '==' 'No'}} <span class="in_stock not">[재고없음]</span> {{/xif}}
+				{{#xif this.invtEnoughType '==' 'Enough'}} <span class="in_stock">[재고있음]</span> {{/xif}}
+				{{#xif this.invtEnoughType '==' 'NotEnough'}} <span class="in_stock not">[재고부족]</span> {{/xif}}
+				{{!-- <a href="#" onclick="">{{ this.storeName }}</a> --}}
+				</h3>
+			</div>
+			<div class="store_info">
+				<p class="store_addr">
+					{{ this.address.address1 }}{{ this.address.address2 }}
+					<span class="store_phone">{{ phoneNumberFormat this.phoneNo1.phoneNo }}</span>
+				</p>
+				<div class="store_btn_wrap">
+					<button type="button" class="btn_md w50p map_call" id="b_storeMap" latitude="{{ this.latitude }}" longitude="{{ this.longitude }}">지도보기</button>
+					{{#xif this.regularStoreYn '==' 'Y'}}
+                        <button type="button" class="btn_md w50p del" value="{{ this.storeSn }}" id="b_storeDel">단골해제</button>
+                    {{else}}
+                        <button type="button" class="btn_md w50p del off" value="{{ this.storeSn }}" id="b_storeAdd">단골등록</button>
+                    {{/xif}}
+				</div>
+				<div class="store_map_wrap">
+					<div class="map_area"></div>
+					{{!-- <button class="btn_md_neutral w100p close_btn">닫기</button> --}}
+				</div>
+			</div>
+		</div>
+    {{/each}}
+{{else}}
+	<div class="panel notice">
+		<i class="ico"></i>
+		<p class="text color_gray">매장 검색 결과가 없습니다.</p>
+		<p class="text color_light_gray mgt10">입력하신 매장명 또는 지역명을 다시 확인해 주세요.<br>관련 문의는 고객센터 (1544-5418)로 연락주세요.</p>
+	</div>
+{{/xif}}

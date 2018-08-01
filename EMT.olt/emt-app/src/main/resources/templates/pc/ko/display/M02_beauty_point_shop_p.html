@@ -1,0 +1,73 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='product-list'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page title -->
+	<th:block ap:replace="~{common/fragment/contents-page-title}"/>
+	<!-- // page title -->
+	<!-- page contents -->
+	<div class="ap_contents prd_list">
+		<div class="point_status">
+			<div>
+				<p><span>Only BeautyPoint!</span></p>
+				<p>뷰티포인트로 구매 가능한 에뛰드의 인기상품</p>
+			</div>
+			<div th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+				<dl>
+					<dt th:text="${session.LOGIN_USER.member.name.name1} + ' 님의 뷰티포인트'"></dt>
+					<dd class="num"><strong th:text="${session.LOGIN_USER.member.remainBeautyPoint}">20,000</strong> P</dd>
+				</dl>
+				<a href="/my/page/info/beautyPoint">내역보기</a>
+			</div>
+			<div th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+				<a href="/login">로그인</a>
+			</div>
+		</div>
+		<p class="bullet_dot mgt20">뷰티포인트 전용제품은 뷰티포인트로만 구매 가능하며, 뷰티포인트 부분만 사용되지 않습니다.</p>
+		<br>
+
+		<!--/* item 목록 */-->
+		<div class="item_list column2">
+			<div class="panel notice etu_find_store_none no_result" style="display: none;">
+				<i class="ico"></i>
+				<p class="text font_lg"><span class="tit_1">상품이 존재하지 않습니다.</span></p>
+			</div>
+
+			<ul class="before_list"></ul>
+
+			<!--/* 20180418 : 상품 4개 이후 배너 영역(반복없음) */-->
+			<th:block th:if="${not #lists.isEmpty(cornersMap)}">
+				<div class="banner" style="display: none">
+					<th:block th:each="corner, inx : ${cornersMap.get('M02_beauty_point_shop_p.3')}">
+						<th:block th:each="contents : ${corner.contents}" th:if="${inx.index == 0}">
+							<th:block th:if="${contents.menuPageCornerContentsId == 'M02_beauty_point_shop_p.3.1'}">
+								<a href="#none" th:href="${contents.linkUrl}"><img th:src="${contents.imgUrl}" alt=""></a>
+							</th:block>
+						</th:block>
+					</th:block>
+				</div>
+			</th:block>
+
+			<ul class="after_list"></ul>
+
+			<div class="loading" style="display: block; min-height: 300px">
+				<span><img alt="" src="/pc/ko/images/common/loading.gif"></span>
+			</div>
+		</div>
+	</div>
+	<!-- // page contents -->
+</div><!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script th:inline="javascript">
+			AP.display.init({
+				api: 'pointExchangeableProdList',
+				key: { displayMenuId: AP.DISPLAY_MENU_ID },
+				param: { limit: 99999, pointType: 'MembershipPoint', pointExch: 'Only', prodSort: 'NewProd' }
+			});
+		</script>
+	</th:block>
+</body>
+</html>

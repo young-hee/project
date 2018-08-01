@@ -1,0 +1,25 @@
+{{!--
+    modal.alert(), modal.confirm() 에서 사용
+--}}
+<dt class="{{#if this.title}}layer_title{{else}}sr_only{{/if}}">{{{ this.title }}}</dt>
+
+{{#if this.contents}}
+    <dd class="layer_cont">
+        <p class="text {{ getModalTextAlignClassName this.textAlign }}">
+            {{!-- default contents area --}}
+            {{{ this.contents }}}
+        </p>
+    </dd>
+{{/if}}
+
+{{!-- default button area --}}
+{{#if (isSome this.btnConfirm this.btnCancel)}}
+    <dd class="layer_btns">
+        {{#if this.btnCancel}}
+            <button class="btn_md_secondary btn_default_modal_cancel" type="button">{{ this.cancelLabel }}</button>
+        {{/if}}
+        {{#if this.btnConfirm}}
+            <button class="btn_md_neutral btn_default_modal_confirm" type="button">{{ this.confirmLabel }}</button>
+        {{/if}}
+    </dd>
+{{/if}}

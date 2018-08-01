@@ -1,0 +1,300 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='my-writable-reivew'">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- mypage sitemap -->
+		<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+		<!-- //  mypage sitemap -->
+
+		<!-- page title -->
+		<th:block ap:replace="~{common/fragment/contents-page-title}"/>
+		<!-- // page title -->
+
+		<!-- page contents -->
+		<div class="ap_contents my_order">
+			<div class="order_status_process"></div>
+
+			<!-- tab menu wrap -->
+			<div class="ui_tab">
+				<!-- tab menu -->
+				<div th:if="${type} == 'online' or ${type} == 'store'" class="tab_menu equally">
+					<ul>
+						<li th:class="${type} == 'online' ? 'on' : ''"><button type="button" value="online">온라인 주문/배송</button></li>
+						<li th:class="${type} == 'store' ? 'on' : ''"><button type="button" value="store">매장 주문/배송</button></li>
+					</ul>
+				</div>
+				<!-- tab content -->
+				<div class="tab_cont space">
+					<h3 class="sr_only">온라인 주문/배송</h3>
+					<div class="ui_multiple_date_picker">
+						<div class="date_btn_set">
+							<span><input type="radio" class="select_range_date" name="radio5" id="radio5_1" value="1weeks"><label for="radio5_1">1주일</label></span>
+							<span><input type="radio" class="select_range_date" name="radio5" id="radio5_2" value="1months" checked=""><label for="radio5_2">1개월</label></span>
+							<span><input type="radio" class="select_range_date" name="radio5" id="radio5_3" value="3months"><label for="radio5_3">3개월</label></span>
+							<span><input type="radio" class="select_range_date" name="radio5" id="radio5_4" value="6months"><label for="radio5_4">6개월</label></span>
+							<span><input type="radio" class="select_range_date" name="radio5" id="radio5_5" value="1years"><label for="radio5_5">12개월</label></span>
+						</div>
+						<div class="input_date_group">
+							<div class="input_wrap" style="display:none;">
+								<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+								<input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+							</div>
+							<div class="date_info_area">
+								<span class="sr_only">시작일</span> <span class="start_date"></span> ~ <span class="sr_only">종료일</span> <span class="end_date"></span> 까지의 내역
+							</div>
+						</div>
+					</div>
+
+					<div class="loading">
+						<span>
+							<img ap:src="@{/images/common/loading.gif}" alt="">
+						</span>
+					</div>
+
+					<div class="my_order_list" style="display:none;">
+						<!--/* [S] 주문내역 있을때 */-->
+						<table>
+							<caption class="sr_only">온라인 주문/배송 목록</caption>
+							<colgroup>
+								<col style="width: 135px;">
+								<col style="width: 200px;">
+								<col style="">
+								<col style="width: 130px;">
+								<col style="width: 140px;">
+							</colgroup>
+							<thead>
+							<tr>
+								<th scope="col">주문일자</th>
+								<th scope="col">주문번호</th>
+								<th scope="col">주문대표상품</th>
+								<th th:if="${type} == 'cashReceipts'" scope="col">결제수단</th>
+								<th scope="col">결제금액</th>
+								<th scope="col">주문상태</th>
+								<th th:if="${type} == 'cashReceipts'" scope="col">발급상태</th>
+							</tr>
+
+							</thead>
+
+							<tbody id="order_list">
+
+							</tbody>
+						</table>
+						<div class="ui_paging pagination"></div>
+						<!--/* [E] 주문내역 있을때 */-->
+					</div>
+					<!--/* [S] 주문내역 없을때 */-->
+						<div class="panel notice" style="display:none;">
+							<i class="ico"></i>
+							<p class="text font_lg">선택하신 기간에 주문내역이 없습니다.</p>
+						</div>
+					<!--/* [E] 주문내역 없을때 */-->
+					<div class="page_btns">
+						<button class="btn_md_neutral" type="button" >2018년 7월 30일 이전 주문내역 보기 </button>
+					</div>
+
+					<div id="list-footer"> </div>
+				</div>
+			</div>
+		</div>
+		<!-- // page contents -->
+	</div><!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script ap:src="@{/handlebars-templates/compiled/my/order/orderList-footer.js}"></script>
+		<script ap:src="@{/handlebars-templates/compiled/my/order/orderList.js}"></script>
+		<script ap:src="@{/handlebars-templates/compiled/my/order/layer-cash-receipts.js}"></script>
+		<script ap:src="@{/handlebars-templates/compiled/my/order/ordSummary.js}"></script>
+		<script th:inline="javascript">
+
+			var limit = 10;
+			var c_type = /*[[${type}]]*/;
+			var c_offset = 0;
+			var c_RS_Date, c_RD_Date;
+
+			$( '.ui_tooltip' ).tooltip();
+			$( '.ui_multiple_date_picker' ).multipleDatePicker({
+				defaultRangeDate: '1months',
+				minDate: moment().subtract( 50, 'years' )
+			}).on( 'multiple-date-picker-change', function (e) {
+				c_RS_Date = e.date.startDate;
+				c_RD_Date = e.date.endDate;
+				getOrderList(c_type, 0, c_RS_Date, c_RD_Date);
+			});
+
+			$(document).ready(function() {
+
+				c_RS_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).startDate;
+				c_RD_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).endDate;
+
+				getOrderList(c_type, 0, c_RS_Date, c_RD_Date);
+				getFooter(c_type);
+			});
+
+			//tab 변경시
+			$( '.ui_tab' ).on( 'tabs-change', function (e) {
+				//var type = $('.tab_menu').find( 'ul > li' ).eq(e.index).find('button').val();
+				var type = $('.tab_menu').find( 'li.on > button' ).val();
+
+				getOrderList(type, 0, c_RS_Date, c_RD_Date);
+				getFooter(type);
+			});
+
+			//페이지 변경시
+			$( '.ui_paging' ).on( 'paging-change', function (e) {
+				getOrderList(c_type, e.offset, c_RS_Date, c_RD_Date);
+			});
+
+			function getOrderList(type, offset, RS_Date, RD_Date) {
+
+				$('.my_order_list').hide();
+				$('.panel.notice').hide();
+				$('.loading').show();
+
+				c_type = type;
+				c_offset = offset;
+				c_RS_Date = RS_Date;
+				c_RD_Date = RD_Date;
+
+				AP.api.getOrderShippingList({}, {
+					type : type,
+					offset : offset,
+					limit : limit,
+					RS_Date : RS_Date,
+					RD_Date : RD_Date
+				}).done(function(data) {
+					if (data) {
+						var d = data.data;
+						var list;
+
+						//summary
+						if(type == 'cashReceipts'){
+							$('.order_status_process').hide();
+						} else {
+							var summary = AP.common.getTemplate('my.order.ordSummary', {
+								summary : data.summary
+							});
+
+							$('.order_status_process').empty();
+							$('.order_status_process').append(summary);
+						}
+
+						if (type == 'store') {
+							list = d.storeOrdInfoList;
+						} else if (type == 'returnExchange') {
+							list = d.claimInfoList;
+						} else {
+							list = d.onlineOrdInfoList;
+						}
+
+						if(d.totalCount > 0) {
+							var htmlStr = AP.common.getTemplate('my.order.orderList', {
+								type : c_type,
+								list : list
+							});
+
+							$('#order_list').empty();
+							$('#order_list').append(htmlStr);
+							$('.my_order_list').show();
+							settingPageNav(d.totalCount);
+
+						} else {
+							$('.panel.notice').show();
+						}
+						$('.loading').hide();
+					}
+				}).fail(function(e) {
+					$('.loading').hide();
+					AP.modal.alert(e.responseJSON.errorData.message);
+				}).always(function() {
+				});
+			}
+
+			function settingPageNav(totalCount) {
+				$('.ui_paging').paging('clear');
+				$( '.ui_paging' ).paging({
+					offset : c_offset,
+					limit : limit,
+					totalCount : totalCount,
+					pagingLength : 5
+				});
+			}
+
+			function getFooter(type) {
+				if(type !== 'cashReceipts') {
+					var htmlStr = AP.common.getTemplate('my.order.orderList-footer', {
+						type : c_type
+					});
+
+					$('#list-footer').html(htmlStr);
+				}
+			}
+
+			//현금영수증 발급 신청
+			function reqCashReceipts(ordSn, data ) {
+
+				var info = /*[[${session.LOGIN_USER.member}]]*/;
+				var oCnt = data.onlineOrdProdInfo == null ? 0 : data.onlineOrdProdInfo.ordProdCnt;
+				var sCnt = data.storePickupOrdProdInfo == null ? 0 : data.storePickupOrdProdInfo.ordProdCnt;
+				var totalCnt = oCnt + sCnt;
+
+				var modal = AP.modal.info({
+					contents: {
+						templateKey: 'my.order.layer-cash-receipts',
+						templateModel: {
+							info : info,
+							amtPcur : data.cashReceiptIssueAmtPcur,
+							amtTax : data.cashReceiptIssueAmtPcur - data.cashReceiptIssueAmtItaxPcur,
+							amtItaxPcur : data.cashReceiptIssueAmtItaxPcur,
+							prodNameRlang : data.onlineOrdProdInfo.prodNameRlang,
+							totalCnt : totalCnt
+						}
+					}
+				});
+
+				$('.btn_lg_primary').off('click').on('click', function(e){
+					var $form = $('form.validate');
+
+					if($form.valid()) {
+						var formData = new FormData( $('form').get(0));
+						formData.append('ordSn', ordSn);
+						AP.api.reqCashReceiptIssue({
+						}, formData).done(function(data) {
+							AP.modal.alert("현금영수증 발급이 완료되었습니다.").addListener('modal-close', function(e) {
+								modal.close();
+							});
+						}).fail(function(e) {
+							AP.modal.alert(e.responseJSON.message);
+						}).always(function() {
+						});
+					}
+				});
+
+				$('.btn_lg_secondary').off('click').on('click', function(e){
+					modal.close();
+				});
+			}
+
+			//리뷰 작성하기
+			function writeReview(){
+				//TODO : 리뷰작성
+				AP.modal.alert('개발중입니다.');
+			}
+
+			//배송조회 버튼 클릭
+			function chkShippingStatus() {
+				//TODO : 배송조회
+				AP.modal.alert('개발중입니다.');
+			}
+
+			//수령확인 버튼 클릭
+			function chkShippingComplete() {
+				//TODO : 수령확인
+				AP.modal.alert('개발중입니다.');
+
+			}
+		</script>
+	</th:block>
+</body>
+</html>

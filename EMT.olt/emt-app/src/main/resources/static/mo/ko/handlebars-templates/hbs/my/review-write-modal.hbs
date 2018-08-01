@@ -1,0 +1,176 @@
+<div class="panel">
+	<form class="validate" action="">
+		<!-- tab menu wrap -->
+		<div class="ui_tab review_find_tab">
+			<!-- tab menu -->
+			<div class="tab_menu equally">
+				<ul>
+					<li class="on"><button type="button">전체쓰기</button></li>
+					<li><button type="button">상품선택 쓰기</button></li>
+				</ul>
+			</div>
+			<!-- tab contents wrap -->
+			<div class="tab_contents">
+				<!-- tab content -->
+				<div class="tab_cont">
+					<!--on 클래스 추가시 내용 열림-->
+					<div class="review_all_write on">
+						<div class="left_order_number">
+							<span>주문번호<a href="/my/page/order/detail/{{this.orderNo}}">{{ this.orderNo }}</a></span>
+						</div>
+						<div class="review_all_result">
+							<div class="ui_tooltip">
+								<button type="button" class="btn_tooltip">전체주문상품</button>
+								<span class="arr v2"></span><!--/* 20180504 : v2 클래스 추가 */-->
+								<div class="layer_tooltip">
+									<dl>
+										<dt>전체주문상품 <span>{{ this.products.length }}</span>개</dt>
+										<dd>
+											<ul class="list_bullet_dot">
+												{{#each this.products}}
+													{{#xif this.reviewWriteYn '==' 'Y'}}
+													<li class="on">
+													{{else}}
+													<li>
+													{{/xif}}
+														<span>{{ this.prodName }}</span>
+														<input type="hidden" name="ps" value="{{ this.prodSn }}">
+														{{#xif this.reviewWriteYn '==' 'Y'}}
+															<span class="review_purcahse_item_complete">작성완료</span>
+														{{/xif}}
+													</li>
+												{{/each}}
+											</ul>
+											<button type="button" class="ui_close sm"><span class="sr_only">툴팁 닫기</span></button>
+										</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="tab_cont">
+					<!--  data-not-label-change="label변경을 하지 않는다", 최종 가이드가 나오면 수정될수 있음 -->
+					<div class="ui_select" data-not-label-change="true">
+						<input type="hidden" name="">
+						<button type="button">상품 선택</button>
+						<ul class="select_options" >
+							{{#each this.products}}
+								{{#xif this.reviewWriteYn '==' 'N'}}
+									<li class="select_option">
+										<code class="label_markup" style="display:none">{{ this.prodName }}</code>
+										<a data-value="{{ this.prodSn }}" data-selected="true">
+											<img class="review_find_slt" src="{{ this.repProdImage }}" alt="">
+											<span class="option_title">{{ this.prodName }}</span>
+										</a>
+									</li>
+								{{/xif}}
+							{{/each}}
+						</ul>
+					</div>
+
+					<div class="review_wrap_02">
+						<img name="selected_prodImage" src="" alt="">
+						<span name="selected_prodName"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<hr class="div m30" />
+
+		<fieldset class="form align_center form_review_wrap_01">
+			<legend class="sr_only">평점 선택</legend>
+			<div class="ui_rating large">
+				<span class="heart">
+					<span><input type="radio" name="scope" id="rate3_1" value="1" required data-msg="평점을 선택해 주세요."><label for="rate3_1"><span class="sr_only"> 1점</span></label></span>
+					<span><input type="radio" name="scope" id="rate3_2" value="2"><label for="rate3_2"><span class="sr_only"> 2점</span></label></span>
+					<span><input type="radio" name="scope" id="rate3_3" value="3"><label for="rate3_3"><span class="sr_only"> 3점</span></label></span>
+					<span><input type="radio" name="scope" id="rate3_4" value="4"><label for="rate3_4"><span class="sr_only"> 4점</span></label></span>
+					<span><input type="radio" name="scope" id="rate3_5" value="5"><label for="rate3_5"><span class="sr_only"> 5점</span></label></span>
+				</span>
+			</div>
+			<p class="text font_lg">터치로 상품을 평가해 주세요!</p>
+		</fieldset>
+
+		<fieldset class="form form_review_wrap_02">
+			<legend class="sr_only">리뷰 작성</legend>
+			<div class="input_group">
+				<div class="label">
+					<label for="skintype">피부타입</label>
+				</div>
+				<div>
+					<select name="skinTone" id="skintype">
+						<option value="">피부타입을 선택해 주세요.</option>
+						{{#each this.skinTone.0.responses}}
+							<option value="{{ this.prodReviewEvalResponseSn }}">{{ this.responseBodyText }}</option>
+						{{/each}}
+					</select>
+				</div>
+			</div>
+			<div class="input_group">
+				<div class="label">
+					<label for="title">제목</label>
+				</div>
+				<div>
+					<input type="text" name="prodReviewTitle" id="title" minlength="1" maxlength="30" placeholder="최대 30자까지 입력 가능합니다." required data-msg="제목을 입력해 주세요." />
+				</div>
+			</div>
+
+			<p class="text_right"><small class="count">0/500</small></p>
+			<div class="textarea mgt0">
+				<textarea name="prodReviewBodyText" id="" cols="" rows="" minlength="1" maxlength="500" placeholder="구매 상품 후기 작성＇은 마이에뛰드>주문조회>구매후기 작성 버튼을  눌러 작성해 주세요. 진주알 100알(사진 없는 리뷰는 50알)이 적립됩니다. (2015.06.01 주문 건 부터 적용됩니다.) 단, 구매하지 않아도 리뷰 작성은 가능합니다." required data-msg="후기를 입력해 주세요."></textarea>
+			</div>
+
+			<div class="ui_input_images">
+				<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="multiple" style="display:none" />
+				<label for="i_picture" class="btn_md_neutral w100p mgt10">사진첨부</label>
+				<ul class="attach"></ul>
+				<p class="text_notice">첨부파일은 이미지 파일만 가능하며, 최대 10개까지 등록 하실 수 있습니다. (최대 파일 용량 10MB)</p>
+			</div>
+
+			<div class="panel gray">
+				<ul class="list_bullet_dot">
+					<li>타인의 글 도용 및 올바르지 않은 리뷰 작성의 경우, 게시판 성격과 관련   없는 게시물은 임의로 삭제될 수 있으며 적립된 진주알의 3배만큼 차감 될 수 있습니다. (동일 내용의 반복 등록, 무의미한 내용 입력, 광고 및 욕설, 비방의 글,  성인글, 출처를 안 밝힌 뉴스기사  등)</li>
+					<li>저작권 등 다른 사람의 권리를 침해하거나 게시판 성격과 관련 없는  게시물은 임의로 삭제될 수 있습니다. (반복 등록된 글, 무의미한 내용,  광고 및 욕설, 비방의 글, 성인글 등)</li>
+				</ul>
+			</div>
+			<!--/* 05-08 추가 */-->
+			<dl class="dl_cont">
+				<dt class="h_title cont"><strong>개인정보 수집 및 이용 동의 (필수)</strong></dt>
+				<dd>
+					<div class="panel gray">
+						<ul class="list_bullet_dot">
+							<li>수집 및 이용 항목 : 피부타입</li>
+							<li>수집 및 이용 목적 : 리뷰의 신뢰성 향상을 위해</li>
+							<li>이용·보유 및 이용 기간 : 회원탈퇴시까지</li>
+						</ul>
+						<ul class="list_bullet_dot mgt20">
+							<li>신청자는 개인정보 수집 및 이용 동의에 거부할 수
+								있습니다. 다만, 거부할 경우 리뷰 작성이 불가능
+								합니다.</li>
+						</ul>
+					</div>
+					<div class="check_wrap mgt20"><input type="checkbox" name="reviewAgreePersonal" id="review_agree_personal" required data-msg="개인정보 수집 및 이용 동의가 필요합니다."><label for="review_agree_personal">동의합니다.</label></div>
+				</dd>
+			</dl>
+
+			<input type="hidden" name="prodReviewTypeCode" value="Pur">
+			<input type="hidden" name="ordNo" value="{{ this.orderNo }}">
+			<input type="hidden" name="ordProdSn" value="">
+			<input type="hidden" name="prodSn" value="">
+			<input type="hidden" name="multiWriteYn" value="N">
+
+			{{!-- 피부톤 --}}
+			<input type="hidden" name="prodReviewEvalQuestionSn" value="{{ this.this.skinTone.0.prodReviewEvalQuestionSn }}">
+			<input type="hidden" name="arrSurvey" value="">
+			<input type="hidden" name="termsAgreeYn" value="Y">
+
+			<!--/* 05-08 추가 */-->
+			<div class="form_btns">
+				<button type="button" class="btn_md_secondary btn_default_modal_cancel">취소</button>
+				<button type="submit" class="btn_md_primary submit">등록</button>
+			</div>
+		</fieldset>
+	</form>
+</div>

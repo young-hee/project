@@ -1,0 +1,254 @@
+<!--배송정보입력-->
+<dl class="delivery" th:if="${apMember == null}">
+	<dt>
+		<div class="title"><b>배송정보 입력</b></div>
+		<button type="button"><span class="sr_only">더보기</span></button>
+	</dt>
+	<dd class="panel">
+		<!--주문고객정보-->
+		<div class="buyer">
+			<div class="clear">
+				<h3 class="h_title cont"><strong>주문고객 정보</strong></h3>
+			</div>
+			<legend class="sr_only">정보 입력 항목</legend>
+			<div class="address_basic mgt10">
+				<div class="input_group">
+					<div class="label">
+						<label for="user_name">이름</label>
+					</div>
+					<div>
+						<input type="text" id="user_name" name="purchaserName" placeholder="이름을 입력해 주세요." required="required" data-msg-required="이름을 입력해 주세요.">
+					</div>
+				</div>
+				<div class="input_group">
+					<div class="label">
+						<label for="user_phone">휴대폰 번호</label>
+					</div>
+					<div>
+						<input type="text" id="user_phone" name="purchaserPhoneNo" placeholder="‘-’없이 숫자만 입력" required="required" data-msg-required="휴대폰 번호를 입력해 주세요.">
+					</div>
+				</div>
+				<div class="input_group">
+					<div class="label">
+						<label for="user_email">이메일</label>
+					</div>
+					<div>
+						<input type="text" id="user_email" name="purchaserEmailAddress" placeholder="이메일 주소를 입력해 주세요" required="required" data-msg-required="구매하시는 분의 이메일 주소를 입력하세요.">
+					</div>
+				</div>
+				<p class="text_notice mgt10">주문관련 e-Mail과 SMS가 발송됩니다.</p>
+			</div>
+		</div>
+		<hr class="div m25">
+		<!--배송정보-->
+		<div class="address_wrap">
+			<h3 class="h_title cont"><strong>배송정보</strong></h3>
+			<fieldset class="form mgt20">
+				<legend class="sr_only">배송정보 입력항목</legend>
+				<div class="check_set clear">
+					<span class="check_wrap"><input type="radio" name="delivery" id="delivery1" value="01" th:onclick="|shipInfo('SHIP')|" checked><label for="delivery1">일반택배</label></span>
+					<span class="check_wrap"><input type="radio" name="delivery" id="delivery2" value="02" th:onclick="|shipInfo('STORE')|"><label for="delivery2">편의점 배송</label></span>
+				</div>
+
+				<!--일반택배 선택시-->
+				<div class="general" id="delivery1_layer">
+
+					<!--새로입력 선택시-->
+					<dl class="address_basic" id="address01_3_01_layer">
+						<dt>기본정보</dt>
+						<dd>
+							<div class="input_group">
+								<div class="label">
+									<label for="userName">이름</label>
+								</div>
+								<div>
+									<input type="text" id="userName" name="userName" placeholder="이름을 입력해 주세요." required="required" data-msg-required="받으시는 분의 이름을 입력하세요.">
+								</div>
+							</div>
+							<div class="input_group">
+								<div class="label">
+									<label for="userPhoneNo">휴대폰 번호</label>
+								</div>
+								<div>
+									<input type="text" id="userPhoneNo" name="userPhoneNo" placeholder="‘-’없이 숫자만 입력" required="required" data-msg-required="받으시는 분의 휴대폰 번호를 입력하세요.">
+								</div>
+							</div>
+						</dd>
+					</dl>
+					<dl>
+						<dt>주소</dt>
+						<dd>
+							<p class="text_notice pdb10">찾으시는 주소지 또는 건물명을 입력해 주세요.<br>(예 : 강남대로, 한강로2가, 한강대로 100)</p>
+							<div class="ui_find_addresses">
+								<div class="input_group">
+									<div>
+										<input type="text" id="delivery_area" class="find_addresses_input" placeholder="주소지 또는 건물명" required="required" data-msg-required="받으시는 분의 주소를 입력하세요.">
+									</div>
+									<div class="btn">
+										<button type="button" class="btn_find_addresses">찾기</button>
+									</div>
+								</div>
+								<!-- 지역 검색 결과 -->
+								<div class="address_list"></div>
+								<div class="input_group">
+									<div class="input_wrap">
+										<input type="hidden" class="post_code" name="userPostCode">
+										<!--<input type="hidden" class="address_first" name="address_first">-->
+										<input type="text" class="address_first" name="userAddress1" title="기본주소 입력" placeholder="주소" readonly="">
+									</div>
+								</div>
+								<div class="input_group">
+									<div class="input_wrap">
+										<input type="text" class="address_last" name="userAddress2" title="상세주소 입력" placeholder="상세주소를 입력해주세요." required="required" data-msg-required="받으시는 분의 주소를 입력하세요.">
+									</div>
+								</div>
+							</div>
+						</dd>
+					</dl>
+					<div class="input_group mgt20" th:if="${#lists.size(ordEx.shipMsgList) > 0}">
+						<div>
+							<select name="shipMsg" id="shipMsg" title="배송시 요청사항을 선택">
+								<option value="">배송시 요청사항을 선택해주세요.</option>
+								<option th:each="shipMsg : ${ordEx.shipMsgList}" th:value="${shipMsg}" th:text="${shipMsg}">직접 입력</option>
+								<!--<option value="부재 시 경비실에 맡겨주세요.">부재 시 경비실에 맡겨주세요.</option>
+								<option value="빠른 배송 부탁드립니다.">빠른 배송 부탁드립니다.</option>
+								<option value="부재 시 핸드폰으로 연락바랍니다.">부재 시 핸드폰으로 연락바랍니다.</option>
+								<option value="배송 전 연락 바랍니다.">배송 전 연락 바랍니다.</option>
+								<option value="직접 입력">직접 입력</option>-->
+							</select>
+						</div>
+					</div>
+					<!--직접입력 선택시 노출-->
+					<div class="input_group" id="inputDirect" style="display: none">
+						<div>
+							<input type="text" name="shipMsg2" maxlength="80" placeholder="80자 이내로 작성해 주세요." data-msg-required="배송 요청사항을 입력하세요." title="배송시 요청사항 직접 입력">
+						</div>
+					</div>
+				</div>
+
+				<!--편의점 배송 선택시-->
+				<div class="convenience_store" id="delivery2_layer" style="display: none">
+					<fieldset class="form">
+						<legend class="sr_only">편의점 배송 선택 및 받으실분 정보 입력항목</legend>
+						<div class="convenience_choise clear">
+							<span class="cu"><input type="radio" name="convenience" id="cu" value="cu" th:onclick="|storeSearch('CU','${storeMoUrl}')|"><label for="cu">CU 편의점 찾기</label></span>
+							<span class="gs"><input type="radio" name="convenience" id="gs" value="gs" th:onclick="|storeSearch('GS','${storeMoUrl}')|"><label for="gs">GS 편의점 찾기</label></span>
+						</div>
+						<div class="report_box">
+							<dl>
+								<dt>지점명</dt>
+								<dd id="storeShopNmDisp">CU 신용산점</dd>
+								<dt>연락처</dt>
+								<dd id="storeTelnoDisp">02-0000-0000</dd>
+							</dl>
+						</div>
+						<h3 class="h_title cont"><strong>받으실 분</strong></h3>
+						<div class="date_btn_set">
+							<span><input type="radio" name="address2" id="address2_1" value="01" th:onclick="|orderMemberChoice('MEMBER')|" checked=""><label for="address2_1">주문자와 동일</label></span>
+							<span><input type="radio" name="address2" id="address2_2" value="02" th:onclick="|orderMemberChoice('NEW')|"><label for="address2_2">새로 입력</label></span>
+						</div>
+						<!--주문자와 동일 선택시-->
+						<div class="report_box" id="address2_1_layer">
+							<dl>
+								<dt>이름</dt>
+								<dd id="orderNonmemberName">이상원</dd>
+								<dt>휴대폰번호</dt>
+								<dd id="orderNonmemberMobile">000-0000-0000</dd>
+							</dl>
+						</div>
+						<!--새로입력 선택시-->
+						<div class="address_basic" id="address2_2_01_layer" style="display: none">
+							<div class="input_group">
+								<div class="label">
+									<label for="storeRecipientName">이름</label>
+								</div>
+								<div>
+									<input type="text" id="storeRecipientName" name="storeRecipientName" placeholder="이름을 입력해 주세요." required="required" data-msg-required="받으시는 분의 이름을 입력하세요.">
+								</div>
+							</div>
+							<div class="input_group">
+								<div class="label">
+									<label for="storeRecipientPhoneNo">휴대폰 번호</label>
+								</div>
+								<div>
+									<input type="text" id="storeRecipientPhoneNo" name="storeRecipientPhoneNo" placeholder="‘-’없이 숫자만 입력" required="required" data-msg-required="받으시는 분의 휴대폰 번호를 입력하세요.">
+								</div>
+							</div>
+						</div>
+						<!--새로입력 선택시-->
+						<p class="text_notice mgt10" id="choice02_2_02_layer" style="display: none">배송 물품이 편의점 도착 시, 도착 안내 SMS가 발송됩니다.</p>
+					</fieldset>
+				</div>
+				<!--//편의점 배송 선택시-->
+			</fieldset>
+		</div>
+		<!--//배송정보-->
+	</dd>
+	<!--스크립트 정의-->
+	<script th:inline="javascript">
+
+		/* 배송정보 선택구분(일반택배/편의점배송) */
+		function shipInfo(shipType){
+			if(shipType == 'SHIP' ) {
+				$('#orderNonmemberName').empty();
+				$('#orderNonmemberMobile').empty();
+
+				$('#delivery1_layer').show();
+				$('#delivery2_layer').hide();
+			} else if(shipType == 'STORE' ) {
+				$('#orderNonmemberName').html($('[name=purchaserName]').val());
+				$('#orderNonmemberMobile').html($('[name=purchaserPhoneNo]').val());
+
+				$('#delivery1_layer').hide();
+				$('#delivery2_layer').show();
+			}
+		}
+
+		/* 추가정보입력 구분선택(주문자와동일/새로입력) */
+		function orderMemberChoice(choiceType){
+			if(choiceType == 'MEMBER' ) {
+				$('#orderNonmemberName').html($('[name=purchaserName]').val());
+				$('#orderNonmemberMobile').html($('[name=purchaserPhoneNo]').val());
+
+				$('#address2_1_layer').show();
+				$('#address2_2_01_layer').hide();
+				$('#address2_2_02_layer').hide();
+			} else if(choiceType == 'NEW' ) {
+				$('#orderNonmemberName').empty();
+				$('#orderNonmemberMobile').empty();
+
+				$('#address2_1_layer').hide();
+				$('#address2_2_01_layer').show();
+				$('#address2_2_02_layer').show();
+			}
+		}
+
+		/* 배송메세지 설정 */
+		$('#shipMsg').on('change', function() {
+			var selectedVal = $(this).val();
+			if(selectedVal == "직접 입력"){
+				$('#inputDirect').show();
+			}else{
+				$('#inputDirect').hide();
+			}
+		});
+
+		/* 테이크아웃 매장변경 레이어 */
+		$("#b_storeChange").on('click', function(e){
+			$("#storeChangeLayer").show();
+			getTakeoutStore(null, 0, false, 0, 0);
+		});
+
+		/* 편의점 찾기 */
+		function storeSearch(storeType, storeMoUrl){
+			var id = "etude";
+			if('GS' == storeType) {
+				window.open("http://www.cvsnet.co.kr/GIS/chzero/mobile/cvs_pickup.jsp?id=" + id + "&UID=" + storeMoUrl + "/order/orderStore", "storeMap", "width=1000,height=650,resizable=no,scrollbars=no");
+			} else if('CU' == storeType) {
+				window.open("http://www.cupost.co.kr/GIS/chzero/mobile/cvs_pickup.jsp?id=" + id + "&UID=" + storeMoUrl + "/order/orderStore", "storeMap", "width=1000,height=650,resizable=no,scrollbars=no");
+			}
+		}
+	</script>
+	<!--// 스크립트 정의-->
+</dl>
+<!--//배송정보입력-->

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:ap="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+ 	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<th:block ap:replace="~{common/fragment/js-libs}"/>
+<script type="text/javascript">
+	
+	$(document).ready(function(){
+		
+		var order_form = document.ini;		
+		order_form.action = "https://wpay.inicis.com/stdwpay/su/mypage";
+		order_form.submit();
+		
+	});
+</script>
+
+</head>
+
+<form id="payForm" name="ini" method="post" accept-charset="utf-8">	
+	<th:block th:each="pr, stat: *{payParam}">
+		<input type="hidden" th:name="${pr.key}" th:value="${pr.value}"/>
+	</th:block>
+ </form>
+</body>
+</html>

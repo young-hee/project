@@ -1,0 +1,547 @@
+<html ap:decorate="~{layout/layout-contents}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page contents -->
+           	<form id="extra-info" method="post" action="/my/api/changeMyInfo">
+            <div class="ap_contents mypage">
+               	<div class="panel">
+               		<h3 class="h_title page">회원정보 입력</h3>
+               		<ul class="list_bullet_dot">
+               			<li>고객님의 회원정보를 수정하실 수 있습니다. <br>회원정보를 변경하시고 반드시 하단에 있는 확인 버튼을 클릭해 주세요.</li>
+               		</ul>
+               		<hr class="div m30" />
+               		<h3 class="form_title"><span th:text="${session.LOGIN_USER.member.name.name1}">홍길동</span>님의 기본정보</h3>
+               		<fieldset class="form">
+               			<legend class="sr_only">정보 수정</legend>
+               			<div class="ui_table">
+               				<dl>
+               					<dt>아이디</dt>
+               					<dd th:text="${session.LOGIN_USER.member.memberId}">ETUDEHOUSE</dd>
+               				</dl>
+               			</div>
+               			<div class="input_group">
+               				<div class="label"><span class="ele">비밀번호</span></div>
+               				<div>
+               					<a href="#none" id="change-pwd" class="ele"><em>비밀번호 변경</em></a>
+               				</div>
+               			</div>
+               			<div class="input_group">
+               				<div class="label"><label for="phone">휴대전화</label></div>
+               				<div>
+               					<input type="text" name="phoneNumber1" th:value="${session.LOGIN_USER.member.phoneNo1.phoneNo}" required="required" data-msg-required="휴대폰번호를 입력해 주세요."
+             							mobile-number="mobile-number" data-msg-mobile-number="휴대폰 번호를 정확히 입력하세요.">
+               				</div>
+               			</div>
+               			<div class="ui_table">
+               				<dl>
+               					<dt>성별</dt>
+               					<dd th:text="${session.LOGIN_USER.member.genderCode == 'Male'? '남' : '여'}">남</dd>
+               				</dl>
+               				<dl>
+               					<dt>생년월일</dt>
+               					<dd>
+               						<span>
+	               						<span th:text="${session.LOGIN_USER.member.dobYear}"></span><span>년</span>
+	               						<span th:text="${session.LOGIN_USER.member.dobMonth}"></span><span>월</span>
+	               						<span th:text="${session.LOGIN_USER.member.dobDay}"></span><span>일</span>
+               						</span>
+               					</dd>
+               				</dl>
+               				<dl>
+               					<dt class="lh">뷰티포인트<br>카드 번호</dt>
+               					<dd><p class="text" th:text="${membershipMemberIdentifier}">5279110188256345<br>(발급일 : 20170597)</p></dd>
+               				</dl>
+               			</div>
+               		</fieldset>
+               		<h3 class="form_title">부가정보</h3>
+               		<fieldset class="form extra">
+               			<legend class="sr_only">부가 정보 수정</legend>
+               			<div class="dl policy_group">
+               				<dl>
+               					<dt th:text="${termsMap.get('030').termsName}">개인정보 수집 이용동의 (선택)</dt>
+               					<dd>
+               						<div class="policy" style="overflow-y: scroll;">
+               							<pre th:utext="${termsMap.get('030').termsBodyText}">약관내용</pre>
+               						</div>
+               						<div class="check_wrap pos_top"><input type="checkbox" name="policy[0].value" th:checked="${agreeMap.get('030')}" id="policy1" /><label for="policy1">동의(선택)</label></div>
+               						<input type="hidden" name="policy[0].name" value="030">
+               					</dd>
+               				</dl>
+               			</div>
+               			<div class="dl hide">
+	           				<dl>
+	           					<dt>주소</dt>
+	           					<dd class="ui_find_addresses">
+	           						<p class="text_notice">찾으시는 주소지 또는 건물명을 입력해 주세요.<br>(예 : 강남대로, 한강로2가, 한강대로 100)</p>
+	           						<br>
+		                            <div class="input_group">
+		                                <div>
+		                                    <input type="text" id="delivery_area" placeholder="주소지 또는 건물명" class="find_addresses_input">
+		                                </div>
+		                                <div class="btn">
+		                                    <button type="button" class="btn_find_addresses">찾기</button>
+		                                </div>
+		                            </div>
+		                            <!-- 지역 검색 결과 -->
+		                            <div class="address_list"></div>
+		                            <!-- //지역 검색 결과 -->
+
+		                            <div class="input_group">
+		                                <div>
+											<input type="hidden" class="post_code" name="post_code">
+											<input type="hidden" class="address_first" name="address_first">
+											<input th:value="${session.LOGIN_USER.member.address != null? (session.LOGIN_USER.member.address.zipCode) : ''}" type="hidden" class="post_code" name="homeZip" title="우편번호 입력" placeholder="우편번호" readonly>
+											<input type="text" th:value="${session.LOGIN_USER.member.address != null? (session.LOGIN_USER.member.address.address1) : ''}" name="homeBscsAddr" class="address_first" title="기본주소 입력" placeholder="주소" readonly="">
+										</div>
+		                            </div>
+		                            <div class="input_group">
+		                                <div><input type="text" th:value="${session.LOGIN_USER.member.address != null? (session.LOGIN_USER.member.address.address2) : ''}" name="homeDtlAddr" class="address_last" title="상세주소 입력" placeholder="상세주소를 입력해주세요."></div>
+		                            </div>                            
+		                        </dd>
+	           				</dl>
+	           				<dl>
+	           					<dt>연락처</dt>
+	           					<dd>
+	           						<div class="input_group">
+	           							<div><input type="text" placeholder="일반 전화번호 입력" th:value="${session.LOGIN_USER.member.phoneNo2 != null? session.LOGIN_USER.member.phoneNo2.phoneNo: ''}" name="phoneNumber2" ></div>
+	           						</div>
+	           						<div class="input_group">
+	           							<div><input type="text" placeholder="이메일 입력" th:value="${session.LOGIN_USER.member.emailAddress}" name="email"></div>
+	           						</div>
+	           					</dd>
+	           				</dl>
+							<th:block th:each="attr,iter1 : ${attrInfoList}" >
+								<dl>
+									<dt th:text="${attr.memberAttrName}">피부타입</dt>
+									<dd>
+										<div class="check_set fluid type">
+											<input type="hidden" th:name="${'attr[' + (iter1.count - 1) + '].memberAddAttrCode'}" th:value="${attr.memberAttrCode}">
+											<th:block th:each="item,iter2 : ${attr.memberAttrValList}">
+												<span class="check_wrap"><input th:type="${attr.multipleSelectPossibleYn == 'Y'? 'checkbox' :'radio'}" th:name="${'attr[' + (iter1.count - 1) + '].memberAddAttrValCode'}" th:value="${item.memberAttrValCode}" th:id="${'attr' + iter1.count + '-' + iter2.count}" th:checked="${addAttrMap.get(item.memberAttrValCode) != null}"><label th:for="${'attr' + iter1.count + '-' + iter2.count}" th:text="${item.memberAttrValName}">건성</label></span>
+												<span th:if="${attr.multipleSelectPossibleYn == 'N' && (iter2.count == iter2.size)}" class="check_wrap"><input th:type="${attr.multipleSelectPossibleYn == 'Y'? 'checkbox' :'radio'}" th:name="${'attr[' + (iter1.count - 1) + '].memberAddAttrValCode'}" value="NONE" th:id="${'attr' + iter1.count + '-' + (iter2.count + 1)}" th:checked="${addAttrMap.get(attr.memberAttrCode) == null}"><label th:for="${'attr' + iter1.count + '-' + (iter2.count + 1)}" text="무응답">무응답</label></span>
+											</th:block>
+										</div>
+									</dd>
+								</dl>
+							</th:block>
+           				</div>
+               		</fieldset>
+               	
+               	
+               		<h3 class="form_title auto-hide">광고성 정보 수신 동의</h3>
+               		<fieldset class="form auto-hide">
+               			<legend class="sr_only">정보수신 동의 선택</legend>
+               			<p class="bullet_dot">광고/이벤트/행사/프로모션에 대한 수신 동의 여부</p>
+	               		<div class="dl">
+	               			<dl>
+	               				<dt class="div">온라인 사이트(AP몰,에뛰드) 수신 동의</dt>
+	               				<dd>
+	               					<div class="table_layout">
+	               						<span><span class="check_wrap">
+	               							<input type="checkbox" id="agree2_1" name="receive[0].value" th:checked="${receiveMap.get('Email')}" />
+	               							
+	               						<label for="agree2_1">이메일</label><input type="hidden" name="receive[0].name" th:value="Email"></span></span>
+	               						<span><span class="check_wrap">
+	               							<input type="checkbox" id="agree2_2" name="receive[1].value" th:checked="${receiveMap.get('SMS')}" />
+	               							
+	               						<label for="agree2_2">문자</label><input type="hidden" name="receive[1].name" th:value="SMS"></span></span>
+	               						<span><span class="check_wrap">
+	               							<input type="checkbox" id="agree2_3" name="receive[2].value" th:checked="${receiveMap.get('DM')}" />
+	               							
+	               						<label for="agree2_3">DM</label><input type="hidden" name="receive[2].name" th:value="DM"></span></span>
+	               						<span><span class="check_wrap">
+	               							<input type="checkbox" id="agree2_4" name="receive[3].value" th:checked="${receiveMap.get('TM')}" />
+	               							
+	               						<label for="agree2_4">TM</label><input type="hidden" name="receive[3].name" th:value="TM"></span></span>
+	               					</div>
+	               					<br>
+	               					<p class="text_notice">뷰티포인트 사이트, 아모레퍼시픽의 모든 브랜드 사이트, 아모레퍼시픽몰, 아리따움몰에 관한 수신 동의 항목입니다.</p>
+	               				</dd>
+	               			</dl>
+	               			<dl>
+	               				<dt class="div">뷰티포인트 수신 동의</dt>
+	               				<dd>
+	               					<div class="table_layout">
+	               						<span><span class="check_wrap">
+	               							<input type="checkbox" id="ap_agree2_1" name="apReceive[0].value" th:checked="${apReceiveMap.get('Email')}" />
+	               							
+	               						<label for="ap_agree2_1">이메일</label><input type="hidden" name="apReceive[0].name" th:value="Email"></span></span>
+	               						<span><span class="check_wrap">
+	               							<input type="checkbox" id="ap_agree2_2" name="apReceive[1].value" th:checked="${apReceiveMap.get('SMS')}" />
+	               							
+	               						<label for="ap_agree2_2">문자</label><input type="hidden" name="apReceive[1].name" th:value="SMS"></span></span>
+	               						<span><span class="check_wrap">
+	               							<input type="checkbox" id="ap_agree2_3" name="apReceive[2].value" th:checked="${apReceiveMap.get('DM')}" />
+	               							
+	               						<label for="ap_agree2_3">DM</label><input type="hidden" name="apReceive[2].name" th:value="DM"></span></span>
+	               						<span><span class="check_wrap">
+	               							<input type="checkbox" id="ap_agree2_4" name="apReceive[3].value" th:checked="${apReceiveMap.get('TM')}" />
+	               							
+	               						<label for="ap_agree2_4">TM</label><input type="hidden" name="apReceive[3].name" th:value="TM"></span></span>
+	               					</div>
+	               					<br>
+	               					<p class="text_notice">아모레퍼시픽 통합 멤버십 혜택에 관한 수신 동의 항목입니다.</p>
+	               				</dd>
+	               			</dl>
+               			</div>
+               			<div class="panel gray">
+            				<ul class="list_bullet_dot">
+            					<li>문자수신/이메일/DM/TM을 수신하시면 흥미로운 각종 할인쿠폰 및 이벤트 소식을 빠르게 받아 보실 수 있습니다.</li>
+            					<li>단, 회원가입/비밀번호찾기/주문배송관련 이메일 혹은 문자는 수신동의와 관계없이 자동발송됩니다. <br>(단, 이메일은 등록 회원에 한해 적용)</li>
+            				</ul>
+            			</div>
+           			</fieldset>
+               		
+               		<h3 class="form_title">SNS 계정 연동관리</h3>
+               		<p class="bullet_dot">SNS(페이스북, 네이버, 카카오톡)계정을 에뛰드와 연동하시면 간편하게 로그인하실 수 있습니다.</p>
+               		<br>
+               		<div class="table_layout sns">
+               			<div>
+               			
+               				<button type="button" th:classappend="${snsMap.get('Naver') != null} ? invisible : visible"
+                  				th:onclick="'window.open(\'https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=xbLexjx52A_pQD0sZgIP&state=stateokgoodgogogo&redirect_uri=' + ${url} + '/navercallback\', \'naverloginpop\', \'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550\'); return false'"
+                 				id="naver_id_login"
+               			 		class="connect Naver">
+               			 		<i class="ico_naver"></i>
+               			 		<span>간편로그인</span>
+               				 </button>
+               				 
+               				<button type="button" th:classappend="${snsMap.get('Naver') == null} ? invisible : visible" onclick="unConnect('Naver')" class="disconnect Naver">
+               					<i class="ico_naver"></i>
+								<span th:if="${snsMap.get('Naver')}" th:utext="${#dates.format(snsMap.get('Naver'), 'yyyy-MM-dd') + '<br>연결해제'}">2017-12-28<br>연결해제 하기</span>
+								<span th:unless="${snsMap.get('Naver')}" th:utext="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') + '<br>연결해제'}">2017-12-28<br>연결해제 하기</span>
+               				</button>
+               				 
+               			</div>
+               			<span class="gap">&nbsp;</span>
+               			<div>
+               				<button type="button" th:classappend="${snsMap.get('Facebook') != null} ? invisible : visible" onclick="facebookLogin()" class="connect Facebook">
+               					<i class="ico_facebook"></i>
+               					<span>간편로그인</span>
+               				</button>
+               				<button type="button" th:classappend="${snsMap.get('Facebook') == null} ? invisible : visible" onclick="unConnect('Facebook')" class="disconnect Facebook">
+               					<i class="ico_facebook"></i>
+								<span th:if="${snsMap.get('Facebook')}" th:utext="${#dates.format(snsMap.get('Facebook'), 'yyyy-MM-dd') + '<br>연결해제'}">2017-12-28<br>연결해제 하기</span>
+								<span th:unless="${snsMap.get('Facebook')}" th:utext="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') + '<br>연결해제'}">2017-12-28<br>연결해제 하기</span>
+               				</button>
+               			</div>
+               			<span class="gap">&nbsp;</span>
+               			<div>
+               				<button type="button" th:classappend="${snsMap.get('Kakao') != null} ? invisible : visible" class="connect Kakao"
+               				th:onclick="'window.open(\'https://kauth.kakao.com/oauth/authorize?client_id=ce4dd4a15adfd391c88f730c049f12c4&response_type=code&redirect_uri=' + ${url} + '/kakaocallback\', \'naverloginpop\', \'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550\'); return false'">
+								<i class="ico_kakao"></i>
+               					<span>간편로그인</span>
+               				</button>
+               				<button type="button" th:classappend="${snsMap.get('Kakao') == null} ? invisible : visible" onclick="unConnect('Kakao')" class="disconnect Kakao">
+               					<i class="ico_kakao"></i>
+								<span th:if="${snsMap.get('Kakao')}" th:utext="${#dates.format(snsMap.get('Kakao'), 'yyyy-MM-dd') + '<br>연결해제'}">2017-12-28<br>연결해제 하기</span>
+								<span th:unless="${snsMap.get('Kakao')}" th:utext="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') + '<br>연결해제'}">2017-12-28<br>연결해제 하기</span>
+               				</button>
+               			</div>
+               		</div>
+               		
+               		<div class="form_btns">
+           				<button type="submit" id="submit" class="btn_lg_primary w100p">개인정보 수정</button>
+           			</div>
+               	</div>
+               	
+            </div>
+            </form>
+            <!-- // page contents -->
+            
+            <!-- 마이페이지 맵 01-24 위치변경 -->
+         	<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+         	<!-- // 마이페이지 맵 -->
+         	
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+		<style>
+		.invisible {
+	    	display: none;
+		}
+		</style>
+
+        	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+			<script>
+			
+			//주소찾기
+			$('.ui_find_addresses').findAddresses();
+
+			$('#policy1').on('click', function() {
+			    if ($(this).prop('checked')) {
+			        $('fieldset.extra .hide').slideDown();
+			        $('.auto-hide').slideDown();
+			    } else {
+			        $('fieldset.extra .hide').slideUp();
+			        $('.auto-hide').slideUp();
+			        $('fieldset.extra .hide input').val(null);
+			        $('fieldset.extra .hide input').prop('checked', false);
+			        $('fieldset.extra .hide .non-select').prop('checked', true);
+			        $('.auto-hide input').prop('checked', false);
+			    }
+			});
+
+
+			$("#submit").click(function() {
+			    if (!$("#extra-info").valid()) {
+			        return false;
+			    }
+			    return true;
+			});
+
+			function unConnect(sns) {
+
+			    var indexed_array = {};
+			    indexed_array['sns'] = sns;
+			    AP.api.snsDisconnect({}, indexed_array).done(function(data) {
+			        var visible = $(".sns ." + sns + ".visible");
+			        var invisible = $(".sns ." + sns + ".invisible");
+			        visible.addClass('invisible')
+			        visible.removeClass('visible')
+			        invisible.addClass('visible')
+			        invisible.removeClass('invisible')
+
+			        AP.modal.alert("연결이 해제되었습니다.");
+			    }).fail(function(xhr, textStatus, errorThrown) {
+			        AP.modal.alert(xhr.errorMessage);
+			    }).always(function() {
+			        //성공, 실패
+			    });
+			}
+			$('#change-pwd').click(function() {
+
+			    $.get("/my/page/info/changePwdForm", function(data) {
+			        /**
+			         * 동적으로 생성된 modal의 Node Element 접근하기
+			         * alert, confirm, info 모두 동일
+			         */
+
+			        var contents = new Object();
+			        contents.contents = data;
+			        var modal = AP.modal.info(contents);
+			        var $modalEl = modal.getElement(); //jquery object
+
+			        $(".layer_close").click(function() {
+			            modal.close();
+			        });
+			        $("#cancel-change-pwd").click(function() {
+			            modal.close();
+			        });
+
+			        $("#submit-change-pwd").click(function() {
+			            if ($("#pw-change-form").valid()) {
+			                if ($("#pass1").val() != $("#pass2").val()) {
+			                    AP.modal.alert("새 비밀번호가 일치하지 않습니다.");
+			                    return false;
+			                }
+
+			                AP.api.changePwd2({}, AP.common.getFormData($('#pw-change-form'))).done(function(data) {
+			                    AP.modal.alert("비밀번호가 변경되었습니다.").addListener('modal-close', function(e) {
+			                        modal.close();
+			                    });
+			                }).fail(function(xhr, textStatus, errorThrown) {
+			                    if (xhr.errorCode == 0) {
+			                        AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+			                    } else if (xhr.errorCode == 'EAPI001') {
+			                        AP.modal.alert("비밀번호가 잘못되었습니다. 다시한번 확인해주세요.");
+			                    } else {
+			                        AP.modal.alert(xhr.errorMessage)
+			                    }
+			                }).always(function() {
+			                    //성공, 실패
+			                });
+			            }
+			        });
+
+			    });
+
+			});
+
+			//이미 sns연결됨.
+			function isLinked() {
+			    AP.modal.alert("이미 연결된 계정입니다.");
+			}
+
+			function nbSuccess() {
+			    isLinked();
+			}
+
+			function doSnsLogin() {
+			    linkPopup();
+			}
+			//sns연결팝업 노출.
+			function linkPopup() {
+
+
+
+			    $.get("/my/page/info/snsLinkForm", function(data) {
+
+			        var contents = new Object();
+			        contents.contents = data
+
+			        var modal = AP.modal.info(contents);
+			        var $modalEl = modal.getElement(); //jquery object
+
+			        $("#sns-connect").click(function(e) {
+
+			            AP.api.existSnsConnect({}, {})
+			                .done(function(data) {
+			                    AP.modal.alert("SNS 계정이 연결되었습니다.").addListener('modal-close', function(e) {
+			                        modal.close();
+			                    });
+			                    var visible = $(".sns ." + data.snsName + ".visible");
+			                    var invisible = $(".sns ." + data.snsName + ".invisible");
+			                    visible.addClass('invisible');
+			                    visible.removeClass('visible');
+			                    invisible.addClass('visible');
+			                    invisible.removeClass('invisible');
+			                    invisible.find('span').html(formatDate() + '<br>연결해제');
+			                }).fail(function(xhr, textStatus, errorThrown) {
+			                    if (xhr.errorCode == 0) {
+			                        AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+			                    } else if (xhr.errorCode == 'EAPI001') {
+			                        AP.modal.alert("SNS연결에 실패했습니다.");
+			                    } else {
+			                        AP.modal.alert(xhr.errorMessage);
+			                    }
+			                }).always(function() {
+			                    //성공, 실패
+			                });
+
+			        });
+
+			    });
+			}
+
+			function formatDate() {
+			    var d = new Date(),
+			        month = '' + (d.getMonth() + 1),
+			        day = '' + d.getDate(),
+			        year = d.getFullYear();
+
+			    if (month.length < 2) month = '0' + month;
+			    if (day.length < 2) day = '0' + day;
+
+			    return [year, month, day].join('-');
+			}
+
+			//카카오으로 로그인
+			function snsKakao() {
+			    Kakao.Auth.login({
+			        persistRefreshToken: true,
+			        success: function(authObj) {
+
+			            var indexed_array = {};
+			            indexed_array['snsName'] = 'kakao';
+			            indexed_array['id'] = authObj.access_token;
+			            $.ajax({
+			                type: "POST",
+			                url: "/login/snsloginProcess",
+			                data: indexed_array,
+			                success: function(data) {
+			                    if (data.state == 'success') {
+			                        if (data.isLinked) {
+			                            isLinked();
+			                        } else {
+			                            linkPopup('kakao', authObj.access_token);
+			                        }
+			                    }
+			                    //성공
+			                },
+			                dataType: "json"
+			            });
+			        },
+			        fail: function(err) {
+			            console.log(JSON.stringify(err));
+			            alert(JSON.stringify(err));
+			        }
+			    });
+			}
+
+
+			//페이스북으로 로그인
+			window.fbAsyncInit = function() {
+			    FB.init({
+			        appId: '[[${@environment.getProperty('facebook.key')}]]',
+			        cookie: true,
+			        xfbml: true,
+			        version: 'v2.11'
+			    });
+
+			    FB.AppEvents.logPageView();
+
+			};
+
+
+
+
+			(function(d, s, id) {
+			    var js, fjs = d.getElementsByTagName(s)[0];
+			    if (d.getElementById(id)) {
+			        return;
+			    }
+			    js = d.createElement(s);
+			    js.id = id;
+			    js.src = "https://connect.facebook.net/en_US/sdk.js";
+			    fjs.parentNode.insertBefore(js, fjs);
+
+			}(document, 'script', 'facebook-jssdk'));
+
+			function facebookLogin() {
+
+			    FB.login(function(response) {
+			        //statusChangeCallback(response);   -- FB 로그인 취소시, 무한루프에 빠지게됨
+			        if (response.status === 'connected') {
+			            // 페이스북과 앱에 같이 로그인되어 있다.
+			            $("#accessToken").val(response.authResponse.accessToken);
+			            fncFBCallback(response.authResponse.accessToken);
+			        } else if (response.status === 'not_authorized') {
+			            // 페이스북에는 로그인 되어있으나, 앱에는 로그인 되어있지 않다.
+			            AP.modal.info('Facebook 계정 설정에서 해당 어플리케이션이 인가되지 않았습니다.\n다시 로그인 버튼을 클릭후, 어플리케이션 사용을 승인하여 주십시오.');
+			        } else {
+			            // 페이스북에 로그인이 되어있지 않아서, 앱에 로그인 되어있는지 불명확하다.
+			            AP.modal.info('Facebook 에 로그인되지 않았습니다.');
+			        }
+			    });
+			}
+
+			function fncFBCallback(token) {
+
+
+			    FB.api('/me', {
+			        fields: 'email, birthday, name'
+			    }, function(response) {
+			        var indexed_array = {};
+			        indexed_array['snsName'] = 'Facebook';
+			        indexed_array['id'] = response.id;
+			        indexed_array['accessToken'] = token;
+
+			        $.ajax({
+			            type: "POST",
+			            url: "/login/snsloginProcess",
+			            data: indexed_array,
+			            success: function(data) {
+			                if (data.state == 'success') {
+			                    if (data.isLinked) {
+			                        isLinked();
+			                    } else {
+			                        linkPopup();
+			                    }
+			                }
+			                //성공
+			            },
+			            dataType: "json"
+			        });
+			    });
+			}
+			
+			</script>
+
+        </th:block>
+</body>
+</html>

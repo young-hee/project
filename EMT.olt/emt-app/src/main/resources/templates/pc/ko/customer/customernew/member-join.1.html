@@ -1,0 +1,183 @@
+<html ap:decorate="~{layout/layout-member-join}">
+
+<body>
+
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="page_title_area">
+		<h1>아모레퍼시픽 통합 회원가입</h1>
+	</div>
+	<div class="ap_contents member_join">
+		<form class="policy_form">
+			<fieldset class="form">
+				<legend class="sr_only">회원가입 약관 전체 동의</legend>
+				<div class="check_wrap large">
+					<input type="checkbox" id="check_all">
+					<label for="check_all" class="color_primary">&nbsp;모든 약관 동의</label>
+				</div>
+				<p class="text">아래 모든 약관 (필수/선택 포함) 및 광고성 정보수신 동의 내용을 확인하고 전체 동의합니다. ※ 선택 항목에 대한 동의를 거부하더라도 회원가입에 영향을 미치지 않습니다.</p>
+			</fieldset>
+			<fieldset class="form mgt30">
+				<legend class="sr_only">아모레퍼시픽 통합 멤버십 뷰티포인트 회원약관 약관 동의</legend>
+				<h3 class="h_title d4"><b>아모레퍼시픽 통합 멤버십 뷰티포인트 회원약관</b></h3>
+				<ul class="agree_list font_md dl_cont">
+					<li><span class="check_wrap"><input type="checkbox" id="TMS001" th:required="${termsMap.get('010').agreeMandatoryYn == 'Y'}"><label for="TMS001" th:text="${termsMap.get('010').termsName}">[필수] 뷰티포인트 서비스 이용약관</label></span> <a href="#none" onclick="viewTerm('010')"><i class="ico_arr"></i><span class="sr_only">약관 자세히 보기</span></a></li>
+					<li><span class="check_wrap"><input type="checkbox" id="TMS002" th:required="${termsMap.get('020').agreeMandatoryYn == 'Y'}"><label for="TMS002" th:text="${termsMap.get('020').termsName}">[필수] 개인정보 이용 및 수집에 대한 동의</label></span> <a href="#none" onclick="viewTerm('020')"><i class="ico_arr"></i><span class="sr_only">약관 자세히 보기</span></a></li>
+					<li><span class="check_wrap"><input type="checkbox" id="TMS003" th:required="${termsMap.get('030').agreeMandatoryYn == 'Y'}"><label for="TMS003" th:text="${termsMap.get('030').termsName}">[선택] 개인정보 이용 및 수집에 대한 동의</label></span> <a href="#none" onclick="viewTerm('030')"><i class="ico_arr"></i><span class="sr_only">약관 자세히 보기</span></a></li>
+					<li><span class="check_wrap"><input type="checkbox" id="TMS004" th:required="${termsMap.get('040').agreeMandatoryYn == 'Y'}"><label for="TMS004" th:text="${termsMap.get('040').termsName}">[선택] 개인정보 제3자 제공 동의</label></span> <a href="#none" onclick="viewTerm('040')"><i class="ico_arr"></i><span class="sr_only">약관 자세히 보기</span></a></li>
+					<li><span class="check_wrap"><input type="checkbox" id="TMS005" th:required="${termsMap.get('050').agreeMandatoryYn == 'Y'}"><label for="TMS005" th:text="${termsMap.get('050').termsName}">[선택] 개인정보 제3자 제공 동의 <br><small>※ 외부 컨텐츠 마케팅 활용</small></label></span> <a href="#none" onclick="viewTerm('050')"><i class="ico_arr"></i><span class="sr_only">약관 자세히 보기</span></a></li>
+					<li><span class="check_wrap"><input type="checkbox" id="TMS006" th:required="${termsMap.get('060').agreeMandatoryYn == 'Y'}"><label for="TMS006" th:text="${termsMap.get('060').termsName}">[선택] 국외이전동의</label></span> <a href="#none" onclick="viewTerm('060')"><i class="ico_arr"></i><span class="sr_only">약관 자세히 보기</span></a></li>
+				</ul>
+			</fieldset>
+			<fieldset class="form mgt30">
+				<legend class="sr_only">광고성 정보 수신 동의</legend>
+				<h3 class="h_title d4"><b>광고성 정보 수신 동의</b> <small>쇼핑 혜택, 이벤트 소식을 받아보세요.</small></h3>
+				<ul class="agree_list dl_cont">
+					<li><span class="check_wrap"><input type="checkbox" id="TMS002_1"><label for="TMS002_1">[선택] 뷰티포인트 문자 수신 동의</label></span></li>
+					<li><span class="check_wrap"><input type="checkbox" id="TMS002_2"><label for="TMS002_2">[선택] 뷰티포인트 이메일 수신 동의</label></span></li>
+					<li><span class="check_wrap"><input type="checkbox" id="TMS002_3"><label for="TMS002_3">[선택] 온라인 사이트 문자 수신 동의</label></span></li>
+					<li><span class="check_wrap"><input type="checkbox" id="TMS002_4"><label for="TMS002_4">[선택] 온라인 사이트 이메일 수신 동의</label></span></li>
+				</ul>
+			</fieldset>
+		</form>
+
+		<form action="" class="validate">
+			<input type="hidden" name="TMS001" data-terms-no="010" data-bt-terms-no="010" th:required="${termsMap.get('010').agreeMandatoryYn == 'Y'}">
+			<input type="hidden" name="TMS002" data-terms-no="020" data-bt-terms-no="020" th:required="${termsMap.get('020').agreeMandatoryYn == 'Y'}">
+			<input type="hidden" name="TMS003" data-terms-no="030" data-bt-terms-no="030" th:required="${termsMap.get('030').agreeMandatoryYn == 'Y'}">
+			<input type="hidden" name="TMS004" data-terms-no="040" data-bt-terms-no="040" th:required="${termsMap.get('040').agreeMandatoryYn == 'Y'}">
+			<input type="hidden" name="TMS005" data-terms-no="050" data-bt-terms-no="050" th:required="${termsMap.get('050').agreeMandatoryYn == 'Y'}">
+			<input type="hidden" name="TMS006" data-terms-no="060" data-bt-terms-no="060" th:required="${termsMap.get('060').agreeMandatoryYn == 'Y'}">
+			<input type="hidden" name="TMS002_1" data-terms-no="OptionB_SMS" data-bt-terms-no="OptionB_SMS" th:required="${termsMap.get('060').agreeMandatoryYn == 'Y'}">
+			<input type="hidden" name="TMS002_2" data-terms-no="OptionB_Email" data-bt-terms-no="OptionB_Email" th:required="${termsMap.get('060').agreeMandatoryYn == 'Y'}">
+			<input type="hidden" name="TMS002_3" data-terms-no="OptionA_SMS" data-bt-terms-no="OptionA_SMS" th:required="${termsMap.get('060').agreeMandatoryYn == 'Y'}">
+			<input type="hidden" name="TMS002_4" data-terms-no="OptionA_Email" data-bt-terms-no="OptionA_Email" th:required="${termsMap.get('060').agreeMandatoryYn == 'Y'}">
+		</form>
+		<div class="dl_cont mgt30">
+			<h3 class="h_title d4"><b>개인정보 취급 위탁에 대한 안내</b></h3>
+			<p class="text color_light_gray">※ 아모레퍼시픽은 서비스 향상 및 원활한 전산 처리 등을 위하여 이용자의 개인정보 관리를 외부 전문업체에 위탁하고 있습니다. 아모레퍼시픽의 업무를 위탁받는 자 및 업무의 내용은 아모레퍼시픽 홈페이지 <a href="https://www.beautypoint.co.kr/footer/privacy/personal.html" target="_blank" title="아모레퍼시픽홈페이지 새창" class="color_black">https://www.beautypoint.co.kr/footer/privacy/personal.html</a> 에서 확인 하실 수 있습니다.</p>
+		</div>
+
+		<div class="page_btns">
+			<a href="#none" onclick="stepOne()" id="agreeBtn" class="btn_lg_secondary"><span>동의하고 진행</span><i class="ico_arr_w"></i></a>
+			<!-- 동의 체크 후 버튼
+			<a href="#none" class="btn_lg_primary"><span>동의하고 진행</span><i class="ico_arr_w"></i></a>
+			-->
+		</div>
+	</div>
+
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<style>
+	a.btn_lg_secondary.on {
+		color: #fff;
+		background: #782fff;
+	}
+	</style>
+	<script type="application/javascript">
+		//Checkbox
+
+		$('.policy_form input').on('change', function() {
+		    if ($(this).attr('id') == 'check_all') {
+		        $('.policy_form .dl_cont input').prop('checked', $(this).prop('checked'));
+		        $('.policy_form input').each(function() {
+		            $('input[name=' + this.id + ']').val("Y");
+		        });
+		        if ($(this).prop('checked')) {
+		            $('#agreeBtn').addClass("btn_lg_primary");
+		            $('#agreeBtn').removeClass("btn_lg_secondary");
+		            $('#agreeBtn').addClass("on");
+		        } else {
+		            $('#agreeBtn').addClass("btn_lg_secondary");
+		            $('#agreeBtn').removeClass("btn_lg_primary");
+		            $('#agreeBtn').removeClass("on");
+		        }
+		    } else {
+		        var isAll = true;
+		        var isRequiredAll = true;
+		        $('.policy_form .dl_cont input[required=required]').each(function() {
+		            if (!$(this).prop('checked')) {
+		                isRequiredAll = false;
+		            }
+		        });
+		        if (isRequiredAll) {
+		            $('#agreeBtn').addClass("btn_lg_primary");
+		            $('#agreeBtn').removeClass("btn_lg_secondary");
+		            $('#agreeBtn').addClass("on");
+		        } else {
+		            $('#agreeBtn').addClass("btn_lg_secondary");
+		            $('#agreeBtn').removeClass("btn_lg_primary");
+		            $('#agreeBtn').removeClass("on");
+		        }
+		        $('.policy_form .dl_cont input').each(function() {
+		            if (!$(this).prop('checked')) {
+		                isAll = false;
+		                $('input[name=' + this.id + ']').val("");
+		            } else {
+		                $('input[name=' + this.id + ']').val("Y");
+		            }
+		        });
+		        $('.policy_form #check_all').prop('checked', isAll);
+		    }
+		});
+		
+		function stepOne() {
+		    if ($('#agreeBtn.on').size() == 0) {
+		    	AP.modal.alert("필수 약관에 동의해주셔야 합니다.");
+		        return;
+		    }
+		
+		    var $form = $('form.validate');
+		    $form.validate().settings.ignore = "";
+		
+		    if ($form.valid()) {
+		
+		
+		        var termsChk = new Array();
+		        var optionChk = new Array();
+		        $('input[name^=TMS]').toArray().forEach(function(item, index) {
+		            //all Terms
+		
+		            if (item.dataset.btTermsNo.indexOf('Option') != -1) {
+		                //bt Terms
+		                optionChk.push(item.dataset.btTermsNo + ":" + (item.value ? "Y" : "N"));
+		            } else {
+		                termsChk.push(item.dataset.termsNo + ":" + (item.value ? "Y" : "N"));
+		            }
+		        });
+		
+		        //save in sessionstorage
+		        try {
+		            var obj = new JoinStepTwoObj("complete", termsChk, optionChk);
+		
+		            AP.common.setSessionStorage("JoinStepTwoObj", obj);
+		
+		        } catch (e) {
+		            console.log(e.message)
+		        }
+		
+		        window.location = "/customer/inputInfo";
+		
+		
+		    }
+		}
+		
+		function JoinStepTwoObj(stepTwo, termsChk, btTermsChk) {
+		    this.StepTwo = stepTwo;
+		    this.TermsChk = termsChk;
+		    this.BtTermsChk = btTermsChk;
+		}
+		function viewTerm(termCode) {
+			AP.modal.agreeTerms({
+				title: '회원약관',
+				displayCode: termCode
+			});
+		}
+		</script>
+</th:block>
+
+</body>
+</html>

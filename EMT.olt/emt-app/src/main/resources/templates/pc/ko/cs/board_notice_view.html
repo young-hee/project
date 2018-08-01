@@ -1,0 +1,42 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents cs board_notice">
+            
+            	<div class="panel">
+                    <div class="board_view2">
+                        <dl class="subj">
+                            <dt
+                            th:text="${notice.noticeTypeName}"></dt>
+                            <dd th:text="${notice.foNoticeTitle}"></dd>
+                            <dd class="date" 
+                            th:text="${#dates.format(notice.noticeStartDt, 'yyyy-MM-dd')}"></dd>
+                        </dl>
+                        <dl class="cont">
+                            <dt class="sr_only">내용</dt>
+                            <dd th:utext="${notice.foNoticeText}">
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="page_btns">
+                        <a href="#none" class="btn_md_neutral"
+                        th:href="@{/cs/notice}">목록</a>
+                    </div>
+                </div>
+               
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+        </th:block>
+</body>
+</html>

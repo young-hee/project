@@ -1,0 +1,33 @@
+<dt class="layer_title">옵션변경</dt>
+<dd class="layer_cont">
+	<div class="cart">
+		<fieldset class="form">
+			<legend class="sr_only">옵션변경</legend>
+			<div class="option_select">
+				<div class="ui_select" data-not-label-change="false">
+					<input type="hidden" name="vars">
+					<button type="button">옵션 선택</button>
+					<ul class="select_options">
+						{{#each list}}
+							{{#if (ne this.prodSn ../prodSn)}}
+								<li class="select_option">
+									<code class="label_markup" style="display:none">
+										<span class="slt_color_name">{{ prodName }}</span>
+									</code>
+									<a data-value="{{this.prodSn}}">
+										<span class="color_name">{{ prodName }}</span>
+									</a>
+								</li>
+							{{/if}}
+						{{/each}}
+					</ul>
+				</div>
+			</div>
+			<div class="form_btns">
+				<button class="btn_md_secondary" type="button" id="b_close">취소</button>
+				<button class="btn_md_neutral" type="button" id="b_save">확인</button>
+			</div>
+		</fieldset>
+	</div>
+</dd>
+<button class="layer_close" type="button">레이어 닫기</button>

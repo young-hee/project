@@ -1,0 +1,81 @@
+<html ap:decorate="~{layout/layout-contents}">
+<head>
+    <link rel="stylesheet" type="text/css" ap:href="@{/css/main.css}">
+</head>
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+			<div class="ap_contents">
+				<!-- /* 히스토리가 없을 경우 */  -->
+				<div class="panel notice" th:if="${#lists.isEmpty(shoppingHistoryList)}">
+					<i class="ico"></i>
+					<p class="text">쇼핑히스토리가 없습니다.<br>
+						에뛰드하우스 이곳 저곳을 둘러보세요~</p>
+				</div> 
+				<!-- /* 있을 경우 */ -->
+				<div class="history_delete" th:if="${not #lists.isEmpty(shoppingHistoryList)}">
+					<button type="button" class="btn_del_history" id="btn_del_history_all"><i class="ico_trash"></i> 전체삭제</button>
+				</div>
+				<div class="panel shopping_history" th:if="${not #lists.isEmpty(shoppingHistoryList)}">
+					<th:block th:each="shoppingHistory : ${shoppingHistoryList}">
+						<!-- /* 날짜 단위 */ -->
+						<div class="history_wrap">
+							<!-- /* 날짜 */ -->
+							<div class="clear history_header">
+								<span class="state">날짜</span>
+								<strong class="num" th:text="${shoppingHistory.date}">2018.03.15</strong>
+							</div>
+							<!-- /* 이력 */ -->
+							<ul class="history_list">
+								<th:block th:each="shoppingMark : ${shoppingHistory.shoppingHistoryList}">
+									<li th:if="${shoppingMark.shoppingMarkTgtCode == 'Prod'}">
+										<span class="thumb"><img th:src="${shoppingMark.prodImg}" alt=""></span>
+										<span class="title" th:text="${shoppingMark.onlineProdName}">플레이 네일 NEW 펄&amp;글리터 플레이 네일 NEW 펄&amp;글리터 플레이 네일 NEW 펄&amp;글리터</span>
+									</li>
+									<li th:if="${shoppingMark.shoppingMarkTgtCode == 'Plandisplay'}">
+										<span class="state">기획전</span>
+										<span class="title" th:text="${shoppingMark.planDisplayTitle}"></span>
+									</li>
+									<li th:if="${shoppingMark.shoppingMarkTgtCode == 'Article'}">
+										<span class="state">아티클</span>
+										<span class="title" th:text="${shoppingMark.articleTitle}"></span>
+									</li>
+									<li th:if="${shoppingMark.shoppingMarkTgtCode == 'Menu'}">
+										<span class="state">카테고리</span>
+										<span class="title" th:text="${shoppingMark.menuTitle}">아이</span>
+									</li>
+									<li th:if="${shoppingMark.shoppingMarkTgtCode == 'SearchWord'}">
+										<span class="state">검색</span>
+										<span class="title" th:text="${shoppingMark.searchWord}">#에코백</span>
+									</li>
+								</th:block>
+							</ul>
+						</div>
+					</th:block>
+				</div>
+			</div>
+        </div>
+
+    <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+    <th:block ap:fragment="layout-endpoint">
+
+		<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+		<script th:inline="javascript">
+		
+			$('#btn_del_history_all').off('click').on('click', function(e) {
+				
+				AP.modal.confirm( '쇼핑 히스토리가 전체 삭제됩니다. 그래도 삭제 하시겠습니까?' ).addListener( 'modal-close', function (e) {
+					if(e.closeType == 'confirm'){
+						AP.api.deleteShoppingHistory().done(function(data) {
+							location.href="/display/shopping_history?displayMenuId=shopping_history";
+						});
+					}
+				});
+			});
+
+		</script>
+
+    </th:block>
+
+</body>
+</html>

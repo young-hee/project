@@ -1,0 +1,88 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='color-factory'">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+    <div class="ap_contents brand">
+		<div class="color_factory">
+			<!-- tab menu wrap -->
+			<div class="ui_tab">
+				<!-- tab menu -->
+				<div class="tab_menu equally">
+					<ul>
+						<li><a href="#none">컬러 팩토리 안내</a></li>
+						<li class="on"><a href="#none">컬러 팩토리 예약</a></li>
+						<li><a href="#none">서비스 매장 보기</a></li>
+					</ul>
+				</div>
+				<!-- tab content -->
+				<div class="tab_cont no_padding">
+					<h3 class="sr_only">컬러 팩토리 예약</h3>
+
+					<img ap:src="@{/images/brand/img_factory_03.jpg}" alt="COLOR FACTORY 단 하나뿐인 컬러를 만들어 주는 컬러 팩토리">
+					<img ap:src="@{/images/brand/img_factory_06.jpg}" alt="">
+
+					<div class="panel">
+						<h3 class="h_title cont border"><strong>컬러 팩토리 서비스 종류</strong></h3>
+						<div class="factory_service">
+							<dl>
+								<dt>A. 마이 퍼스널 립스틱 (1 Color) / 30분</dt>
+								<dd>
+									<p>퍼스널 컬러 진단 + 립스틱 1개(글라스/매트)  + 립스틱 케이스 + 각인 포함</p>
+									<p class="price"><strong>25,000</strong><b>원</b></p>
+								</dd>
+							</dl>
+							<dl>
+								<dt>B. 마이 퍼스널 립스틱(2 Color) / 50분</dt>
+								<dd>
+									<p>퍼스널 컬러 진단 + 립스틱 2개(글라스/매트)  + 립스틱 케이스 + 각인 포함</p>
+									<p class="price"><strong>40,000</strong><b>원</b></p>
+								</dd>
+							</dl>
+							<dl>
+								<dt>C. 마이 퍼스널 립&페이스 / 50분</dt>
+								<dd>
+									<p>퍼스널 컬러 진단 + 립스틱 1개(글라스/매트)  + 립스틱 케이스 + 각인 + 스킨톤 진단 + 더블래스팅 파운데이션 정품 포함</p>
+									<p class="price"><strong>40,000</strong><b>원</b></p>
+								</dd>
+							</dl>
+						</div>
+
+						<h3 class="h_title cont border mgt25"><strong>서비스 매장</strong></h3>
+						<div class="factory_store_thumb clear">
+							<span>
+								<img ap:src="@{/images/brand/img_factory_04.jpg}" alt="">
+								<span>명동 FSS점</span>
+							</span>
+							<span>
+								<img ap:src="@{/images/brand/img_factory_05.jpg}" alt="">
+								<span>가로수길점</span>
+							</span>
+						</div>
+
+						<div class="page_btns">
+							<button class="btn_lg_bordered confirmation" type="button">예약확인</button>
+							<button class="btn_lg_primary" type="button">예약하기</button>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<script>
+		// 예약확인
+		$( 'button.confirmation' ).on( 'click', function (e) {
+			e.preventDefault();
+			AP.colorFactoryConfirmation.confirm();
+		})
+	</script>
+</th:block>
+
+</body>
+</html>

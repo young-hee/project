@@ -1,0 +1,67 @@
+{{#if this.totalCount}}
+	{{#each this.list}}
+		<dl>
+			<dt>
+				<a href="javascript:;" class="review_detail" data-prod-review-sn="{{ this.prodReviewSn }}">
+				<span class="clear">
+					<span class="ui_rating small">
+						<span class="heart">
+							{{#for 5}}
+								<span class="heart_wrap {{#xif ../scope '>' for-index}}on{{/xif}}"><span class="sr_only"> {{ calc for-index '+' 1 }}점</span></span>
+							{{/for}}
+						</span>
+
+						{{#xif this.topReviewYn '==' 'Y'}}
+							<strong class="review_best">BEST</strong>
+						{{/xif}}
+					</span>
+					<span class="summary">
+						<span>{{ this.memberId }}</span><span>{{ dateFormat this.prodReviewRegistDt }}</span>
+					</span>
+				</span>
+				<span class="title">
+					{{#if this.prodName}}
+						<small>{{ this.prodName }}</small>
+					{{/if}}
+					<b>{{ this.prodReviewTitle }}</b>
+
+					{{#xif this.prodReviewTypeCode '==' 'Pur'}}
+						<span class="badge">구매</span>
+					{{/xif}}
+				</span>
+				</a>
+			</dt>
+			<dd>
+				<p class="text">{{ ellipsis 40 this.prodReviewBodyText }}</p>
+			</dd>
+
+			{{#if this.imgList.length}}
+				<dd class="thumbnail">
+					{{#each this.imgList}}
+						{{#xif @index '<' 5}}
+							<span>
+								{{#xif @index '==' 4}}
+									<span>+ {{ calc ../imgList.length '-' 4}}</span>
+								{{else}}
+									<img src="{{ this.imageFileUrl }}" alt="">
+								{{/xif}}
+							</span>
+						{{/xif}}
+					{{/each}}
+				</dd>
+
+				{{!-- TODO: 상품 모델 확인 --}}
+				<dd class="item_shortcut">
+					<a href="{{ productDetailPath this.onlineProdSn }}" class="btn_more">
+						<span class="thumb"><img src="{{ this.onlineProdImages.0.imgUrl }}" alt=""></span> <span>{{ this.onlineProdName }} </span> <i class="ico_arr"></i>
+					</a>
+				</dd>
+			{{/if}}
+		</dl>
+	{{/each}}
+{{else}}
+	<div class="panel notice">
+		<i class="ico"></i>
+		<p class="text">리뷰 내역이 존재하지 않습니다.</p>
+	</div>
+{{/if}}

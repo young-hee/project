@@ -1,0 +1,19 @@
+{{#each this.regularEventRequesters}}
+<dl>
+	<dt>
+		<div>
+			<span>
+				<span class="user_id">{{ this.memberId }}</span>
+				<small>{{ dateFormat this.requestDt }}</small>
+				{{#xif this.recentRequestYn '==' 'Y'}}<span class="ico_new"><span class="sr_only">새글</span></span>{{/xif}}
+				<!--<a href="#none" class="btn_delete"><i class="ico_del"></i><span class="sr_only">신청글 삭제</span></a>-->
+			</span>
+			<span class="title">{{ this.requestTitle }}</span>
+		</div>
+		<button type="button"><span class="sr_only">내용보기</span></button>
+	</dt>
+	<dd>
+		<p class="text">{{ this.requestReason }}</p>
+	</dd>
+</dl>
+{{/each}}

@@ -1,0 +1,60 @@
+<table class="align_center">
+	<caption class="sr_only">작성 가능한 리뷰</caption>
+	<colgroup>
+		<col style="width:200px;"> <!-- 컬럼 사이즈 -->
+		<col style="width:200px;">
+		<col>
+		<col style="width:140px;"><!--/* 20180418 : 컬럼 사이즈 수정 */-->
+		<col style="width:200px;">
+	</colgroup>
+	<thead>
+	<tr>
+		<th scope="col">구매일자 (배송완료일)</th>
+		<th scope="col">주문번호</th>
+		<th scope="col">주문상품</th>
+		<th scope="col">작성 가능한 상품 수</th><!--/* 20180418 : 텍스트 수정 */-->
+		<th scope="col">리뷰</th>
+	</tr>
+	</thead>
+	<tbody>
+	{{#each this.list}}
+	<tr>
+		<td class="date">{{ this.orderCompleteDate }}</td>
+		<td class="order_number"><a href="/my/page/order/detail/{{this.ordNo}}">{{ this.ordNo }}</a></td>
+		<td class="subj">{{ this.orderProds.[0].prodName }}</td>
+		<td class="amount">
+			<span class="text_amount"><b>{{ this.writableProdCount }}</b>개</span>
+			<span class="ui_tooltip_absolute">
+				<span class="ui_tooltip">
+					<button type="button" class="btn_tooltip">툴팁보기</button>
+					<span class="arr"></span>
+					<span class="layer_tooltip">
+						<span class="title bdb_none">{{ this.orderProds.[0].prodName }}
+							{{#xif this.orderProds.length '>' 1 }} 외 {{ calc this.orderProds.length '-' 1 }}개 {{/xif}}
+						</span>
+						<ul>
+							{{#each this.orderProds}}
+							<li>
+								<span>{{this.prodName}}</span>
+								{{#xif this.reviewWriteYn '==' 'Y'}}
+									<b class="on">작성완료</b>
+								{{/xif}}
+							</li>
+							{{/each}}
+						</ul>
+						<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
+					</span>
+				</span>
+			</span>
+		</td>
+		<td class="review_info">
+			<span class="review_day">
+				<em>{{ this.writableDays }}</em>
+				<span>일 남음</span>
+			</span>
+			<button type="button" class="btn_md_sm_neutral" data-order-no="{{ this.ordNo }}">리뷰 쓰기</button>
+		</td>
+	</tr>
+	{{/each}}
+	</tbody>
+</table>

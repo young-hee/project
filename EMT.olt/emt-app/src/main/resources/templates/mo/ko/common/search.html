@@ -1,0 +1,222 @@
+<html ap:decorate="~{layout/layout-title-only}" th:with="_jsfile='search'">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<div class="ap_contents ap_search">
+			<div class="search_wrap">
+				<!-- 검색폼 -->
+				<fieldset class="search_form integrated_search">
+					<legend class="sr_only">검색</legend>
+					<input type="text" title="검색어 입력" id="searchWord" />
+					<button type="button" class="btn_search" id="searchBtn"></button>
+					<button class="input_del"><span class="sr_only">검색어 삭제</span></button> <!-- 02-28 추가 -->
+				</fieldset>
+				<!-- 컬러보기 버튼 -->
+				<button type="button" class="btn_color"><span class="sr_only">컬러보기</span></button>
+				<!-- 컬러레이어 -->
+				<div class="color_layer">
+					<div class="color_chip circle lg">
+						<a href="#none" data-color="핑크" 		style="background-color:#f06da1"><span class="sr_only">핑크</span></a>
+						<a href="#none" data-color="레드" 		style="background-color:#e9224e"><span class="sr_only">레드</span></a>
+						<a href="#none" data-color="오렌지"		style="background-color:#ff7a2d"><span class="sr_only">오렌지</span></a>
+						<a href="#none" data-color="보라" 		style="background-color:#b261e4"><span class="sr_only">보라</span></a>
+						<a href="#none" data-color="블랙/그레이" 	style="background-color:#1f1d20"><span class="sr_only">블랙/<br>그레이</span></a>
+						<a href="#none" data-color="브라운" 		style="background-color:#8e502f"><span class="sr_only">브라운</span></a>
+						<a href="#none" data-color="그린" 		style="background-color:#8fe48a"><span class="sr_only">그린</span></a>
+						<a href="#none" data-color="블루" 		style="background-color:#3a6abf"><span class="sr_only">블루</span></a>
+						<a href="#none" data-color="옐로우/베이지" 	style="background-color:#f9c361"><span class="sr_only">옐로우/<br>베이지</span></a>
+						<a href="#none" data-color="화이트/실버" 	style="background-color:#fff"><span class="sr_only">화이트/<br>실버</span></a>
+					</div>
+					<button class="ui_close" type="button"><span class="sr_only">컬러레이어 닫기</span></button>
+				</div>
+				<!-- 연관 검색어 -->
+				<div class="related_query">
+					<div>
+						<th:block th:each="searchWord : ${popularSearchWord}">
+							<a th:href="@{/common/search(searchWord=${searchWord})}" th:text="'#' + ${searchWord}">#립스틱 순위</a>
+						</th:block>
+					</div>
+				</div>
+			</div>
+			<!-- 검색결과 -->
+			<!-- tab menu wrap -->
+			<div class="ui_tab">
+				<!-- tab menu -->
+				<div class="tab_menu equally">
+					<ul>
+						<li class="prodsTab on"><button type="button">상품</button></li>
+						<li class="articleTab" style="display:none;"><button type="button">컨텐츠&amp;이벤트</button></li>
+						<li class="reviewTab" style="display:none;"><button type="button">리뷰</button></li>
+					</ul>
+				</div>
+				<!-- tab contents wrap -->
+				<div class="tab_contents">
+					<!-- tab content -->
+					<div class="tab_cont product">
+						<h3 class="sr_only">상품</h3>
+
+						<!--상품검색-->
+						<div class="sorting_group">
+							<span class="check_wrap btn evt"><input type="checkbox" id="evt1" value="icon_reco_event"><label for="evt1">행사상품</label></span>
+							<div>
+								<span class="select_wrap">
+									<select tabindex="-1" name="" id="" title="선택하세요">
+										<option value="Bestselling">판매순</option>
+										<option value="NewProd">신상품순</option>
+										<option value="HighestPrice">높은가격순</option>
+										<option value="LowestPrice">낮은가격순</option>
+										<option value="MostProdReview">상품평순</option>
+									</select>
+								</span>
+								<button type="button" class="btn filter">필터</button>
+								<button type="button" class="btn view"><span class="sr_only">상품보기변경</span></button><!-- 클릭시 클래스 변경 - 1단 보기 : type1 / 2단 보기 : type1 -->
+							</div>
+						</div>
+						<!--//상품검색-->
+
+						<!--상품리스트 2단-->
+						<div class="item_list type2" style="display: none">
+							<p class="total_count"><b>9,999</b>개의 상품</p>
+							<ul class="before_list">
+							</ul>
+							
+							<button type="button" class="btn_lg_more w100p">
+								<span>더보기 (<em>5</em>/35)</span>
+							</button>
+						</div>
+
+						<ul class="loading" id="prodLoading" style="min-height: 200px;">
+							<li></li>
+							<li></li>
+							<li></li>
+						</ul>
+						<!--//상품리스트 2단-->
+						
+					</div>
+					
+					<div class="tab_cont content">
+						<h3 class="sr_only">컨텐츠&amp;이벤트</h3>
+						<div class="panel">
+							<!--/* 20180521 : 에뛰드픽 삭제 */-->
+							<div class="search_ch_etude">
+								<h4 class="search_title">Ch.에뛰드</h4>
+								<ul class="video_list" id="articleList">
+									<!--/* Ch.에뛰드 리스트 */-->
+								</ul>
+								
+								<!--/* 컨텐츠 없음 영역 */-->
+								<div class="tab_cont noArticle" >
+									<h3 class="sr_only">컨텐츠</h3>
+									<div class="panel notice">
+										<i class="ico"></i>
+										<p class="text">"<em class="searchWordEm">립스터</em>"에 맞는 컨텐츠 검색결과가 없습니다.</p>
+									</div>
+								</div>
+								<!--/* 컨텐츠 없음 영역 */-->
+								
+								<a href="#none" class="btn_lg_more btn_video_more" style="display:none;">
+									<span>더보기 (<em>5</em>/35)</span> <i class="ico_arr_d"></i>
+								</a>
+							</div>
+							
+							<div class="search_event">
+								<h4 class="search_title">이벤트 &amp; 기획전</h4>
+								<ul class="event-list">
+									<!--/* 이벤트 리스트 */-->
+								</ul>
+								
+								<!--/* 이벤트 없음 영역 */-->
+								<div class="tab_cont noEvent" >
+									<h3 class="sr_only">이벤트</h3>
+									<div class="panel notice">
+										<i class="ico"></i>
+										<p class="text">"<em class="searchWordEm">립스터</em>"에 맞는 이벤트 검색결과가 없습니다.</p>
+									</div>
+								</div>
+								<!--/* 이벤트 없음 영역 */-->
+								
+								<a href="#none" class="btn_lg_more btn_event_more" style="display:none;">
+									<span>더보기 (<em>5</em>/35)</span> <i class="ico_arr_d"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+					
+					<!--/* 리뷰 대상영역 */-->
+					<div class="tab_cont review">
+						<h3 class="sr_only">리뷰</h3>
+						<div class="clear review_filter">
+							<span class="check_wrap"><input type="checkbox" id="review_filter_pur" /><label for="review_filter_pur">구매후기만 보기</label></span>
+							<span class="select_wrap">
+								<select name="prodReviewSort" title="선택하세요">
+									<option value="RecentRegistDt" selected>최근등록순</option>
+									<option value="HighestScope">높은별점순</option>
+									<option value="LowestScope">낮은별점순</option>
+								</select>
+							</span>
+						</div>
+
+						<div class="panel detail_review_rating">
+							<!--/* 리뷰 리스트영역 */-->
+							<div class="review_list">
+								<!--/* 리뷰리스트 */-->
+							</div>
+							
+							<!--/* 리뷰 없음 영역 */-->
+							<div class="tab_cont noReview" >
+								<h3 class="sr_only">리뷰</h3>
+								<div class="panel notice">
+									<i class="ico"></i>
+									<p class="text">"<em class="searchWordEm">립스터</em>"에 맞는 리뷰검색결과가 없습니다.</p>
+								</div>
+							</div>
+							<!--/* 리뷰 없음 영역 */-->
+							
+							<a href="#none" class="btn_lg_more btn_review_more" style="display:none;">
+								<span>더보기 (<em>0</em>/00)</span> <i class="ico_arr_d"></i>
+							</a>
+							<ul class="loading review_loading">
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+						</div>
+					</div>
+					
+					<!--/* 상품 없음 영역 */-->
+					<div class="tab_cont noProduct" >
+						<h3 class="sr_only">상품</h3>
+						<div class="panel notice">
+							<i class="ico"></i>
+							<p class="text">"<em class="searchWordEm">립스터</em>"에 맞는 상품검색결과가 없습니다.</p>
+						</div>
+					</div>
+					<!--/* 상품 없음 영역 */-->
+				</div>
+			</div>
+			<!-- /* 연관 상품 */ -->
+			<div class="recommend_items" style="display: none">
+				<h3 class="title"><em>립스틱</em> 연관 상품 추천</h3>
+				<div class="slide two_half" data-ix-options="view-length:3; move-length:2;" id="recommendItems">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<!-- /* 연관 상품 테스트 용 주석*/ -->
+	<th:block ap:fragment="layout-endpoint">
+
+		<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+		<script>
+			AP.DISPLAY_MENU_ID = 'eye';
+	
+			AP.search.load({
+				key: { displayMenuId: AP.DISPLAY_MENU_ID }
+			});
+		</script>
+	</th:block>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+{{#if this.totalCount}}
+	{{#each this.eventParticipants}}
+		<dl>
+			<dt>
+				<span class="user_id">{{ this.memberId }}</span>
+				<small>{{ dateFormat this.participatedDt }}</small>
+			</dt>
+			<dd>
+				<dl>
+					<dt>
+						<span class="title">{{ this.participantCommentTitle }}</span>
+					</dt>
+					<dd>
+						<p class="text">{{ ellipsis 200 this.participantComment }}</p>
+
+						{{#if this.eventCommentImgs.length}}
+							<div class="attach_photo">
+								{{#each this.eventCommentImgs}}
+									<span class="thumb"><img src="{{ this.commentImgUrl }}" alt=""></span>
+								{{/each}}
+							</div>
+						{{/if}}
+						<a class="btn_detail" href="javascript:;" data-event-participant-sn="{{ this.eventParticipantSn }}">+ 더보기</a>
+					</dd>
+				</dl>
+			</dd>
+		</dl>
+	{{/each}}
+
+	{{#xif this.totalCount '>' this.limit}}
+		<div class="pagination"></div>
+	{{/xif}}
+{{else}}
+	<div class="panel notice">
+		<i class="ico"></i>
+		<p class="text font_lg">등록된 댓글이 없습니다.</p>
+	</div>
+{{/if}}

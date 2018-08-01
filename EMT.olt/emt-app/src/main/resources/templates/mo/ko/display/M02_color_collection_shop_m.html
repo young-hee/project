@@ -1,0 +1,73 @@
+<html ap:decorate="~{layout/layout-category}" th:with="_jsfile='product-list'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents prd_list color_collection"> <!-- 02-21 클래스 수정 -->
+		<!-- 02-28 소카테고리 삭제 메뉴레이어로 통합
+		<th:block ap:replace="~{fragment/product/category}"/>
+		<!--//소카테고리-->
+
+		<!--슬라이드 배너-->
+		<th:block th:if="${not #lists.isEmpty(cornersMap)}">
+			<div class="slide prd_list_banner" data-ix-options="auto-play:true;view-length:1;">
+				<div class="ix-list-viewport">
+					<ul class="ix-list-items">
+						<th:block th:each="corner : ${cornersMap.get('M02_color_collection_shop_m.1')}">
+							<th:block th:each="contents : ${corner.contents}">
+								<th:block th:if="${contents.menuPageCornerContentsId == 'M02_color_collection_shop_m.1.1'}">
+									<li class="ix-list-item" th:style="'background-color:#' + ${contents.bgColor}">
+										<a href="#none" th:href="${contents.linkUrl}">
+											<img alt="" th:src="${contents.imgUrl}">
+										</a>
+									</li>
+								</th:block>
+							</th:block>
+						</th:block>
+					</ul>
+				</div>
+				<div class="ix-controller">
+					<ul class="ix-thumbs">
+						<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+					</ul>
+				</div>
+			</div>
+		</th:block>
+		<!--//슬라이드 배너-->
+
+		<!--상품리스트-->
+		<div class="item_list type3">
+			<div class="panel notice no_result" style="display: none;">
+				<i class="ico"></i>
+				<p class="text">상품이 존재하지 않습니다.</p>
+			</div>
+
+			<ul></ul>
+
+		</div>
+
+		<!--//상품리스트-->
+		<ul class="loading" style="display: none">
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	<!-- // page contents -->
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script>
+		AP.display.init({
+			key: { displayMenuId: AP.DISPLAY_MENU_ID }
+		});
+	</script>
+</th:block>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+{{#each this.list }}
+<div class="cart_item_box type2">
+	<div class="cart_name_wrap typ2">
+		<div class="cart_table_cell">
+			<span class="cart_item_name typ2">
+				{{!--
+				<span class="check_wrap">
+					<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{ promoSn }}" value="{{ promoSn }}" {{condition (eq selectYn 'Y') 'checked' ''}}>
+					<label for="takeoutChkBox{{ promoSn }}">체크</label>
+				</span>
+				--}}
+			{{ promoName }}
+			</span>
+		</div>
+		{{!--
+		<button type="button" class="btn_cart_item_del" onclick="removeCartOnlineProd({{ ../cartSn }},{{ promoSn }},'online')"><span class="sr_only">없애기</span></button>
+		--}}
+	</div>
+	<div class="cart_item_info">
+		<span></span>
+		<span class="cart_price"> <!--/* 20180726 : 금액/할인가 위치 변경 */-->
+			{{#xif  finalOnlineSalesAmountInfo.standardCurrency.amount '>' 0 }}
+				<span class="left_num">
+					<strong class="num">{{ numberFormat finalOnlineSalesAmountInfo.standardCurrency.amount }}</strong><span>원</span>
+				</span>
+			{{/xif}}
+			{{#xif productSaleAmountInfo.standardCurrency.amount '>' 0}}
+				<span class="right_num">
+					<del class="num">{{ numberFormat productSaleAmountInfo.standardCurrency.amount }}<span>원</span></del>
+				</span>
+			{{/xif}}
+		</span>
+	</div>
+
+	{{#each this.promoOnlineProdExList }}
+		{{#each cartProdExList }}
+			<div class="cart_item_scroll">
+				<div class="cart_item_info">
+					<input type="hidden" name="takeoutPrdSn" value="{{ prodEx.prodSn }}"/>
+					<input type="hidden" name="cartProdSn" value="{{ cartProdSn }}"/>
+					<input type="hidden" name="promoPrdInfo_{{ ../../promoSn }}" value="{{ cartProdSn }}"/>
+					<input type="hidden" name="takeoutPrdInfo_{{ ../onlineProdSn }}" value="{{ cartProdSn }}"/>
+					<input type="hidden" name="saleDisplayStatus_{{ prodEx.prodSn }}" value="{{ prodEx.saleDisplayStatus }}"/>
+
+					<div class="cart_option_name">
+						{{#xif prodEx.repProdImgEx '!=' null }} <img src="{{ prodEx.repProdImgEx.imgUrl }}" class="cart_option_name_thm" alt=""> {{/xif}}
+						{{#xif prodEx.repProdImgEx '==' null }}
+							{{#xif ../repOnlineProdImgEx '!=' null }}
+								<img src="{{ ../repOnlineProdImgEx.imgUrl }}" class="cart_option_name_thm" alt="">
+							{{/xif}}
+							{{#xif ../repOnlineProdImgEx '==' null }}
+								<img src="/images/cart/no_img.png" class="cart_option_name_thm"  alt="">
+							{{/xif}}
+						{{/xif}}
+						<span>{{ prodEx.prodName }}</span>
+					</div>
+					<span></span>
+					<span class="cart_price">
+						{{#if (eq prodEx.saleDisplayStatus 'OnSale') }}
+							{{#xif calculationResultYn '==' 'Y'}}
+								{{#xif calculationResultProduct.finalOnlineSalesAmountInfo '!=' null }}
+									<span class="left_num">
+										<strong class="num">{{numberFormat calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}</strong><span>원</span>
+									</span>
+								{{/xif}}
+								{{#xif calculationResultProduct.productSaleAmountInfo '!=' null }}
+									{{#xif calculationResultProduct.productSaleAmountInfo.standardCurrency.amount '!=' calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}
+										<span class="right_num">
+											<del class="num">{{numberFormat calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}<span>원</span></del>
+										</span>
+									{{/xif}}
+								{{/xif}}
+							{{/xif}}
+						{{/if}}
+						{{#if (and (eq calculationResultYn 'N')(ne prodEx.salePrice null) )}}
+							<span class="left_num">
+								<strong class="num">{{numberFormat (calc this.prodEx.salePrice '*' this.cartProdQty) }}</strong><span>원</span>
+							</span>
+						{{/if}}
+						{{#if (and (eq prodEx.saleDisplayStatus 'OutOfStock')(ne prodEx.prodTypeCode 'Presale')) }}
+							<span class="text_sold_out">[일시품절]</span>
+						{{/if}}
+						{{#if (and (eq prodEx.saleDisplayStatus 'Exhaustion')(eq prodEx.prodTypeCode 'Presale')) }}
+							<span class="text_sold_out">[예약판매수량소진]</span>
+						{{/if}}
+					</span>
+				</div>
+			</div>
+		{{/each}}
+	{{/each}}
+</div>
+{{/each}}

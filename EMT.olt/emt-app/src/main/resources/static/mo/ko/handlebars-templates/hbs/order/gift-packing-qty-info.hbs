@@ -1,0 +1,9 @@
+{{#each this.list}}
+	{{#each this.possibleGiftPackingExList}}
+		<span class="ui_spinner small" data-min="0" {{#xif this.qtySelectPossibleYn '==' 'Y'}} data-max="{{ this.maxSelectPossibleQty }}" {{/xif}} data-step="1" {{#xif this.qtySelectPossibleYn '==' 'Y'}} data-disabled="false" {{else}} data-disabled="true" {{/xif}}>
+			<button class="spinner_decrease" type="button" title="제품 수량 감소" onclick="boxQtyOperate(this,'-')"><img alt="제품 수량 감소" src="/mo/ko/images/common/ico_minus1.gif"></button>
+			<input class="spinner_input" type="text" title="선택품목갯수" id="boxCnt" name="boxCnt" value="0">
+			<button class="spinner_increase" type="button" title="제품 수량 증가" onclick="boxQtyOperate(this,'+')"><img alt="제품 수량 증가" src="/mo/ko/images/common/icon_plus1.gif"></button>
+		</span>
+	{{/each}}
+{{/each}}

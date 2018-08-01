@@ -1,0 +1,60 @@
+<html ap:decorate="~{layout/layout-title-only}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page contents -->
+            <div class="ap_contents member_info">
+                <div class="panel">
+                	<h2 class="h_title page">비밀번호 변경</h2>
+                	<p class="text font_md">신규 비밀번호를 입력해주세요.</p>
+                	<hr class="div m20" />
+                	<form>
+                    <fieldset class="form">
+                        <legend class="sr_only">비밀번호 변경 입력</legend>
+                        <div class="input_group">
+                            <div><input type="password" id="pass1" name="password" pass-word="pass-word" placeholder="신규 비밀번호 입력" title="신규 비밀번호 입력"  data-msg-required="신규 비밀번호를 입력해 주세요."/></div>
+                        </div>
+                        <div class="input_group">
+                            <div><input type="password" id="pass2" placeholder="신규 비밀번호 확인" title="신규 비밀번호 확인 입력"/></div>
+                        </div>
+                        <div class="form_btns">
+                            <a href="#none" id="submit" class="btn_lg_primary">완료</a>
+                        </div>
+                    </fieldset>
+                    </form>
+                </div>
+            </div>
+            <!-- // page contents -->
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script type="application/javascript">
+				$("#submit").click(function() {
+					if($("form").valid()) {
+						if($("#pass1").val() != $("#pass2").val()) {
+		        			AP.modal.alert( "신규비밀번호가 일치하지 않습니다." );
+		        			return false;
+						}
+						
+
+				          AP.api.changePwd({}, AP.common.getFormData($('form'))
+				          ).done(function ( data ) {
+							if(data.state == 'success')
+								AP.modal.alert( "비밀번호가 변경되었습니다." ).addListener( 'modal-close', function (e) {
+									location.href = "/main";
+								});
+				          }).fail(function ( e ) {
+				        		AP.modal.alert( "인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요." );
+				          }).always(function () {
+				            //성공, 실패
+				          });
+					}
+				});
+			</script>
+
+        </th:block>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="layer_popup" style="display: block;">
+		<div class="layer_wrap layer_lg" style="margin-top:-330px;">
+			<dl class="layer">
+				<dt class="layer_title">테이크아웃 매장 찾기</dt>
+				<dd class="layer_cont store">
+					<fieldset class="form">
+						<div class="panel gray store">
+							<div class="panel_cont">
+								<p class="text"><span class="color_point">찾고자 하는 매장명 또는 지역명을 입력하신 후 검색을 누르세요.</span> &nbsp;&nbsp;&nbsp;(예 : 명동1호점, 강남)</p>
+								<div class="input_group ea_02 mgt10">
+									<div>
+										<div class="select_wrap">
+											<select name="" title="지역 선택">
+												<option value="">지역선택</option>
+											</select>
+										</div>
+									</div>
+									<span class="gap"></span>
+									<div>
+										<div class="select_wrap">
+											<select name="" title="시/군/구 선택">
+												<option value="">시/군/구</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="input_wrap mgt10">
+									<input type="text" title="검색어 입력" placeholder="매장명을 검색하세요.">
+									<button type="button" class="btn_search"><span class="sr_only">검색</span></button>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+					<!--
+					<div class="clear">
+						<p class="text font_lg"><b>검색된 매장<em>127</em>개</b></p>
+						<div>
+							<span class="check_wrap"><input type="radio" name="store" id="store1"><label for="store1">거리순</label></span>
+							<span class="check_wrap"><input type="radio" name="store" id="store2"><label for="store2">단골매장</label></span>
+						</div>
+					</div>-->
+					<div class="panel notice store">
+						<i class="ico"></i>
+						<p class="text font_lg">매장명 또는 지역으로 검색하세요.</p>
+					</div>
+				</dd>
+			</dl>
+			<button class="layer_close" type="button">레이어 닫기</button>
+		</div>
+	</div>
+</div><!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script>
+		/*
+        var modal = AP.modal.info({
+            title: '테이크아웃 매장 찾기',
+			contents: {
+				templateKey: 'folder-name.file-name',
+				templateModel: {}
+			}
+        }).addListener( 'modal-before-close', function (){
+            console.log( e.closeType );//close, confirm, cancel
+            modal.getElement().find( '.ui_table_striped' ).tableStriped( 'clear' );     // tableStriped 적용해제
+            modal.getElement().find( 'input' ).placeholder( 'clear' );                  // placeholder 적용해제
+            modal.getElement().find( 'select' ).selectBox();							// selectBox 적용해제
+            modal.getElement().find( '.tr_map .map_area' ).mapApi( 'clear' );           // map api 적용해제
+        }).addListener( 'modal-close', function (e) {
+            console.log( e.closeType );//close, confirm, cancel
+        });
+        */
+		//
+
+		/* modal open 시점 예시 참조  */
+
+		// plugin 적용
+		$( '.ui_table_striped' ).tableStriped();
+		$( 'input[placeholder]' ).placeholder();
+		$( 'select' ).selectBox();
+
+		// map api
+		$( '.store_list .ui_table_striped tbody tr:not(.tr_map)' ).each(function ( index ) {
+			var $store = $( this ).not( '.js-apply' ),
+				$trMap = $store.next( '.tr_map' );
+
+			// 위치보기 버튼
+			$store.find( 'button' ).on( 'click', function () {
+				if ( $trMap.hasClass( 'on' )) {
+					$trMap.removeClass( 'on' );
+				} else {
+					$trMap.addClass( 'on' );
+					$trMap.find( '.map_area' ).mapApi( 'resize' );
+					$trMap.find( '.map_area' ).mapApi( 'setCenter', 37.52876373236224, 126.96846416770506 );
+				}
+			});
+
+			//닫기 버튼
+			$trMap.find( '.btn_map_close' ).on( 'click', function () {
+				$trMap.removeClass( 'on' );
+			});
+
+			//지도 가이드 참고
+			$trMap.find( '.map_area' ).mapApi({ratio: [320, 180]});
+			AP.common.mapApiReady.done(function () {
+				$trMap.find( '.map_area' ).mapApi( 'addMarker', 37.52876373236224, 126.96846416770506, 1 );
+			});
+
+			//중복적용 방지
+			$store.addClass( 'js-apply' );
+		});
+</script>
+
+</th:block>
+</body>
+</html>

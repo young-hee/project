@@ -1,0 +1,809 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='product-list'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents prd_list">
+				<!--/* 키비주얼 영역 */-->
+				<div class="prd_banner slide" data-ix-options="view-length:1;">
+					<div class="ix-list-viewport">
+						<ul class="ix-list-items">
+							<li class="ix-list-item">
+								<a href="#none">
+									<img alt="배너 내용" src="/pc/ko/images/dummy/img_banner_05.jpg">
+								</a>
+							</li>
+							<li class="ix-list-item">
+								<a href="#none">
+									<img alt="배너 내용" src="/pc/ko/images/dummy/img_banner_05.jpg">
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="ix-controller">
+						<ul class="ix-thumbs">
+							<li class="ix-thumb">
+								<button type="button" class="ix-btn"><!--ix-index-->번째 배너</button>
+							</li>
+						</ul>
+						<!--/* 20180425 : 배너 좌우버튼추가 */-->
+						<div class="slide_direction">
+							<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
+							<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
+							<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
+						</div>
+					</div>
+				</div>
+
+				<!--/* 20180425 : video 영역 삭제 */-->
+
+				<!--/* 20180521 : 상품 선택 영역 삭제
+				<div class="prd_category sorting mgt50">
+					<ul>
+						<li><input type="radio" name="cate" id="cate_1" value="cate_1" checked><label for="cate_1">전체</label></li>
+						<li><input type="radio" name="cate" id="cate_2" value="cate_2"><label for="cate_2">싱글섀도우</label></li>
+						<li><input type="radio" name="cate" id="cate_3" value="cate_3"><label for="cate_3">아이팔레트/클렌징</label></li>
+						<li><input type="radio" name="cate" id="cate_4" value="cate_4"><label for="cate_4">립스틱</label></li>
+						<li><input type="radio" name="cate" id="cate_5" value="cate_5"><label for="cate_5">블러셔</label></li>
+					</ul>
+				</div>
+				 */-->
+
+				<!--/* item 목록 */-->
+				<div class="item_list column2">
+
+					<ul>
+						<!--/* [S] 20180416 : 상품리시트 상품가 표기 정의 5case */-->
+						<li>
+							<div class="ranking large"><span>1</span></div>
+							<div class="item">
+								<div class="item_images">
+									<!-- 페이지 로딩 -->
+									<ul class="loading white" style="display:none">
+										<li></li>
+										<li></li>
+										<li></li>
+									</ul>
+									<!--/* 대표 이미지 */-->
+									<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650000956_IM_01.png" alt=""></a>
+									<!--/* 이미지 슬라이드 */-->
+									<div class="slide goods_slide" data-ix-options="view-length :1;">
+										<div class="ix-list-viewport">
+											<ul class="ix-list-items">
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650000956_IM_01.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001363_IM_01.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001142_IM_01.png" alt=""></a>
+												</li>
+											</ul>
+										</div>
+										<div class="ix-controller">
+											<ul class="ix-thumbs">
+												<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="info_box">
+									<!--/* flag */-->
+									<div class="flag_set">
+										<span class="new">신상품</span>
+										<span>MD추천</span>
+									</div>
+									<!--/* 상품명 */-->
+									<div class="title_area">
+										<P class="s_title">온라인 단독 구성 50%SALE</P>
+										<h3 class="h_title">유브이 더블 컷 산뜻 선 젤 SPF50+/PA++++</h3>
+									</div>
+									<!--/* 20180425 : color 옵션수정(단일 컬러칩일때) */-->
+									<div class="item_option type2">
+										<span class="img"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></span>
+										<span class="name">#32 눈부신 벚꽃 축제</span>
+									</div>
+									<!--/* 가격,장바구니 */-->
+									<div class="price_area">
+										<div>
+											<div class="price">
+												<strong>12,600<em>원</em></strong>
+											</div>
+										</div>
+										<div>
+											<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span class="bubble num">9,999</span></a>
+											<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="ranking large"><span>2</span></div>
+							<div class="item">
+								<div class="item_images">
+									<!-- 페이지 로딩 -->
+									<ul class="loading white" style="display:none">
+										<li></li>
+										<li></li>
+										<li></li>
+									</ul>
+									<!--/* 대표 이미지 */-->
+									<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001018_IM_01.png" alt=""></a>
+									<!--/* 이미지 슬라이드 */-->
+									<div class="slide goods_slide" data-ix-options="view-length :1;">
+										<div class="ix-list-viewport">
+											<ul class="ix-list-items">
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001018_IM_01.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001018_IM_02.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001018_IM_04.png" alt=""></a>
+												</li>
+											</ul>
+										</div>
+										<div class="ix-controller">
+											<ul class="ix-thumbs">
+												<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="info_box">
+									<!--/* flag */-->
+									<div class="flag_set">
+										<span>MD추천</span>
+										<span>온라인전용</span>
+									</div>
+									<!--/* 상품명 */-->
+									<div class="title_area">
+										<P class="s_title">온라인 단독 구성 50%SALE</P>
+										<h3 class="h_title">유브이 더블 컷 산뜻 선 젤 SPF50+/PA++++</h3>
+									</div>
+									<!--/* 20180425 : color 옵션수정(단일 컬러칩일때) */-->
+									<div class="item_option type2">
+										<span class="img"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></span>
+										<span class="name">#32 눈부신 벚꽃 축제</span>
+									</div>
+									<!--/* 가격,장바구니 */-->
+									<div class="price_area">
+										<div>
+											<div class="discount">
+												<strong class="to">50<em>%</em></strong>
+											</div>
+											<div class="price">
+												<del>12,600<em>원</em></del>
+												<strong>12,600<em>원</em></strong>
+											</div>
+										</div>
+										<div>
+											<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span
+												class="bubble num">9,999</span></a>
+											<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="ranking large"><span>3</span></div>
+							<div class="item">
+								<div class="item_images">
+									<!-- 페이지 로딩 -->
+									<ul class="loading white" style="display:none">
+										<li></li>
+										<li></li>
+										<li></li>
+									</ul>
+									<!--/* 대표 이미지 */-->
+									<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001142_IM_01.png" alt=""></a>
+									<!--/* 이미지 슬라이드 */-->
+									<div class="slide goods_slide" data-ix-options="view-length :1;">
+										<div class="ix-list-viewport">
+											<ul class="ix-list-items">
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001142_IM_01.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001142_IM_02.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001142_IM_03.png" alt=""></a>
+												</li>
+											</ul>
+										</div>
+										<div class="ix-controller">
+											<ul class="ix-thumbs">
+												<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="info_box">
+									<!--/* flag */-->
+									<div class="flag_set">
+										<span class="event">이벤트</span>
+										<span>온라인전용</span>
+									</div>
+									<!--/* 상품명 */-->
+									<div class="title_area">
+										<P class="s_title">온라인 단독 구성 50%SALE</P>
+										<h3 class="h_title">유브이 더블 컷 산뜻 선 젤 SPF50+/PA++++</h3>
+									</div>
+									<!--/* 20180425 : color 옵션수정(단일 컬러칩일때) */-->
+									<div class="item_option type2">
+										<span class="img"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></span>
+										<span class="name">#32 눈부신 벚꽃 축제</span>
+									</div>
+									<!--/* 가격,장바구니 */-->
+									<div class="price_area">
+										<div>
+											<div class="discount">
+												<strong class="to">50<em>%</em></strong>
+											</div>
+											<div class="price">
+												<strong>12,600<em>원</em></strong>
+											</div>
+										</div>
+										<div>
+											<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span
+												class="bubble num">9,999</span></a>
+											<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="ranking large"><span>4</span></div>
+							<div class="item">
+								<div class="item_images">
+									<!-- 페이지 로딩 -->
+									<ul class="loading white" style="display:none">
+										<li></li>
+										<li></li>
+										<li></li>
+									</ul>
+									<!--/* 대표 이미지 */-->
+									<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001363_IM_01.png" alt=""></a>
+									<!--/* 이미지 슬라이드 */-->
+									<div class="slide goods_slide" data-ix-options="view-length :1;">
+										<div class="ix-list-viewport">
+											<ul class="ix-list-items">
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001363_IM_01.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001363_IM_02.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001363_IM_03.png" alt=""></a>
+												</li>
+											</ul>
+										</div>
+										<div class="ix-controller">
+											<ul class="ix-thumbs">
+												<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="info_box">
+									<!--/* flag */-->
+									<div class="flag_set">
+										<span class="best">베스트</span>
+										<span class="event">이벤트</span>
+										<span>MD추천</span>
+									</div>
+									<!--/* 상품명 */-->
+									<div class="title_area">
+										<P class="s_title">온라인 단독 구성 50%SALE</P>
+										<h3 class="h_title">유브이 더블 컷 산뜻 선 젤 SPF50+/PA++++</h3>
+									</div>
+									<!--/* 20180425 : color 옵션수정(단일 컬러칩일때) */-->
+									<div class="item_option type2">
+										<span class="img"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></span>
+										<span class="name">#32 눈부신 벚꽃 축제</span>
+									</div>
+									<!--/* 가격,장바구니 */-->
+									<div class="price_area">
+										<div>
+											<div class="discount">
+												<strong class="to">~50<em>%</em></strong>
+											</div>
+											<div class="price">
+												<strong>12,600<em>원 ~</em></strong>
+											</div>
+										</div>
+										<div>
+											<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span
+												class="bubble num">9,999</span></a>
+											<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="ranking large"><span>5</span></div>
+							<div class="item">
+								<div class="item_images">
+									<!-- 페이지 로딩 -->
+									<ul class="loading white" style="display:none">
+										<li></li>
+										<li></li>
+										<li></li>
+									</ul>
+									<!--/* 대표 이미지 */-->
+									<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650010812_IM_01.png" alt=""></a>
+									<!--/* 이미지 슬라이드 */-->
+									<div class="slide goods_slide" data-ix-options="view-length :1;">
+										<div class="ix-list-viewport">
+											<ul class="ix-list-items">
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650010812_IM_01.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650010812_IM_02.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650010812_IM_03.png" alt=""></a>
+												</li>
+											</ul>
+										</div>
+										<div class="ix-controller">
+											<ul class="ix-thumbs">
+												<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="info_box">
+									<!--/* flag */-->
+									<div class="flag_set">
+										<span class="new">신상품</span>
+									</div>
+									<!--/* 상품명 */-->
+									<div class="title_area">
+										<P class="s_title">온라인 단독 구성 50%SALE</P>
+										<h3 class="h_title">유브이 더블 컷 산뜻 선 젤 SPF50+/PA++++</h3>
+									</div>
+									<!--/* 20180425 : color 옵션수정(단일 컬러칩일때) */-->
+									<div class="item_option type2">
+										<span class="img"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></span>
+										<span class="name">#32 눈부신 벚꽃 축제</span>
+									</div>
+									<!--/* 가격,장바구니 */-->
+									<div class="price_area">
+										<div>
+											<div class="price">
+												<strong>12,600<em>원 ~</em></strong>
+											</div>
+										</div>
+										<div>
+											<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span
+												class="bubble num">9,999</span></a>
+											<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<!--/* [E] 20180416 : 상품리시트 상품가 표기 정의 5case */-->
+						<li>
+							<div class="ranking large"><span>6</span></div>
+							<div class="item">
+								<div class="item_images">
+									<!-- 페이지 로딩 -->
+									<ul class="loading white" style="display:none">
+										<li></li>
+										<li></li>
+										<li></li>
+									</ul>
+									<!--/* 대표 이미지 */-->
+									<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650000956_IM_01.png" alt=""></a>
+									<!--/* 이미지 슬라이드 */-->
+									<div class="slide goods_slide" data-ix-options="view-length :1;">
+										<div class="ix-list-viewport">
+											<ul class="ix-list-items">
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650000956_IM_01.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src=""
+																							data-src="/pc/ko/images/dummy/650001363_IM_01.png"
+																							alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src=""
+																							data-src="/pc/ko/images/dummy/650001142_IM_01.png"
+																							alt=""></a>
+												</li>
+											</ul>
+										</div>
+										<div class="ix-controller">
+											<ul class="ix-thumbs">
+												<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="info_box">
+									<!--/* flag */-->
+									<div class="flag_set">
+										<span class="new">신상품</span>
+										<span>MD추천</span>
+									</div>
+									<!--/* 상품명 */-->
+									<div class="title_area">
+										<P class="s_title">온라인 단독 구성 50%SALE</P>
+										<h3 class="h_title">유브이 더블 컷 산뜻 선 젤 SPF50+/PA++++</h3>
+									</div>
+									<!--/* 20180425 : color 옵션수정(단일 컬러칩일때) */-->
+									<div class="item_option type2">
+										<span class="img"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></span>
+										<span class="name">#32 눈부신 벚꽃 축제</span>
+									</div>
+									<!--/* 가격,장바구니 */-->
+									<div class="price_area">
+										<div>
+											<div class="price">
+												<strong>12,600<em>원</em></strong>
+											</div>
+										</div>
+										<div>
+											<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span
+												class="bubble num">9,999</span></a>
+											<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="ranking large"><span>7</span></div>
+							<div class="item">
+								<div class="item_images">
+									<!-- 페이지 로딩 -->
+									<ul class="loading white" style="display:none">
+										<li></li>
+										<li></li>
+										<li></li>
+									</ul>
+									<!--/* 대표 이미지 */-->
+									<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src=""
+																					  data-src="/pc/ko/images/dummy/650001018_IM_01.png"
+																					  alt=""></a>
+									<!--/* 이미지 슬라이드 */-->
+									<div class="slide goods_slide" data-ix-options="view-length :1;">
+										<div class="ix-list-viewport">
+											<ul class="ix-list-items">
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src=""
+																							data-src="/pc/ko/images/dummy/650001018_IM_01.png"
+																							alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src=""
+																							data-src="/pc/ko/images/dummy/650001018_IM_02.png"
+																							alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src=""
+																							data-src="/pc/ko/images/dummy/650001018_IM_04.png"
+																							alt=""></a>
+												</li>
+											</ul>
+										</div>
+										<div class="ix-controller">
+											<ul class="ix-thumbs">
+												<li class="ix-thumb">
+													<button type="button" class="ix-btn"><!--ix-index-->번째 배너</button>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="info_box">
+									<!--/* flag */-->
+									<div class="flag_set">
+										<span>MD추천</span>
+										<span>온라인전용</span>
+									</div>
+									<!--/* 상품명 */-->
+									<div class="title_area">
+										<P class="s_title">온라인 단독 구성 50%SALE</P>
+										<h3 class="h_title">유브이 더블 컷 산뜻 선 젤 SPF50+/PA++++</h3>
+									</div>
+									<!--/* 20180425 : color 옵션수정(단일 컬러칩일때) */-->
+									<div class="item_option type2">
+										<span class="img"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></span>
+										<span class="name">#32 눈부신 벚꽃 축제</span>
+									</div>
+									<!--/* 가격,장바구니 */-->
+									<div class="price_area">
+										<div>
+											<div class="discount">
+												<strong class="to">50<em>%</em></strong>
+											</div>
+											<div class="price">
+												<del>12,600<em>원</em></del>
+												<strong>12,600<em>원</em></strong>
+											</div>
+										</div>
+										<div>
+											<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span
+												class="bubble num">9,999</span></a>
+											<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="ranking large"><span>8</span></div>
+							<div class="item">
+								<div class="item_images">
+									<!-- 페이지 로딩 -->
+									<ul class="loading white" style="display:none">
+										<li></li>
+										<li></li>
+										<li></li>
+									</ul>
+									<!--/* 대표 이미지 */-->
+									<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src=""
+																					  data-src="/pc/ko/images/dummy/650001142_IM_01.png"
+																					  alt=""></a>
+									<!--/* 이미지 슬라이드 */-->
+									<div class="slide goods_slide" data-ix-options="view-length :1;">
+										<div class="ix-list-viewport">
+											<ul class="ix-list-items">
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src=""
+																							data-src="/pc/ko/images/dummy/650001142_IM_01.png"
+																							alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src=""
+																							data-src="/pc/ko/images/dummy/650001142_IM_02.png"
+																							alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src=""
+																							data-src="/pc/ko/images/dummy/650001142_IM_03.png"
+																							alt=""></a>
+												</li>
+											</ul>
+										</div>
+										<div class="ix-controller">
+											<ul class="ix-thumbs">
+												<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="info_box">
+									<!--/* flag */-->
+									<div class="flag_set">
+										<span class="event">이벤트</span>
+										<span>온라인전용</span>
+									</div>
+									<!--/* 상품명 */-->
+									<div class="title_area">
+										<P class="s_title">온라인 단독 구성 50%SALE</P>
+										<h3 class="h_title">유브이 더블 컷 산뜻 선 젤 SPF50+/PA++++</h3>
+									</div>
+									<!--/* 20180425 : color 옵션수정(단일 컬러칩일때) */-->
+									<div class="item_option type2">
+										<span class="img"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></span>
+										<span class="name">#32 눈부신 벚꽃 축제</span>
+									</div>
+									<!--/* 가격,장바구니 */-->
+									<div class="price_area">
+										<div>
+											<div class="discount">
+												<strong class="to">50<em>%</em></strong>
+											</div>
+											<div class="price">
+												<strong>12,600<em>원</em></strong>
+											</div>
+										</div>
+										<div>
+											<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span
+												class="bubble num">9,999</span></a>
+											<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="ranking large"><span>9</span></div>
+							<div class="item">
+								<div class="item_images">
+									<!-- 페이지 로딩 -->
+									<ul class="loading white" style="display:none">
+										<li></li>
+										<li></li>
+										<li></li>
+									</ul>
+									<!--/* 대표 이미지 */-->
+									<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src=""
+																					  data-src="/pc/ko/images/dummy/650001363_IM_01.png"
+																					  alt=""></a>
+									<!--/* 이미지 슬라이드 */-->
+									<div class="slide goods_slide" data-ix-options="view-length :1;">
+										<div class="ix-list-viewport">
+											<ul class="ix-list-items">
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src=""
+																							data-src="/pc/ko/images/dummy/650001363_IM_01.png"
+																							alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src=""
+																							data-src="/pc/ko/images/dummy/650001363_IM_02.png"
+																							alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src=""
+																							data-src="/pc/ko/images/dummy/650001363_IM_03.png"
+																							alt=""></a>
+												</li>
+											</ul>
+										</div>
+										<div class="ix-controller">
+											<ul class="ix-thumbs">
+												<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="info_box">
+									<!--/* flag */-->
+									<div class="flag_set">
+										<span class="best">베스트</span>
+										<span class="event">이벤트</span>
+										<span>MD추천</span>
+									</div>
+									<!--/* 상품명 */-->
+									<div class="title_area">
+										<P class="s_title">온라인 단독 구성 50%SALE</P>
+										<h3 class="h_title">유브이 더블 컷 산뜻 선 젤 SPF50+/PA++++</h3>
+									</div>
+									<!--/* 20180425 : color 옵션수정(단일 컬러칩일때) */-->
+									<div class="item_option type2">
+										<span class="img"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></span>
+										<span class="name">#32 눈부신 벚꽃 축제</span>
+									</div>
+									<!--/* 가격,장바구니 */-->
+									<div class="price_area">
+										<div>
+											<div class="discount">
+												<strong class="to">~50<em>%</em></strong>
+											</div>
+											<div class="price">
+												<strong>12,600<em>원 ~</em></strong>
+											</div>
+										</div>
+										<div>
+											<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span
+												class="bubble num">9,999</span></a>
+											<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="ranking large"><span>10</span></div>
+							<div class="item">
+								<div class="item_images">
+									<!-- 페이지 로딩 -->
+									<ul class="loading white" style="display:none">
+										<li></li>
+										<li></li>
+										<li></li>
+									</ul>
+									<!--/* 대표 이미지 */-->
+									<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src=""
+																					  data-src="/pc/ko/images/dummy/650010812_IM_01.png"
+																					  alt=""></a>
+									<!--/* 이미지 슬라이드 */-->
+									<div class="slide goods_slide" data-ix-options="view-length :1;">
+										<div class="ix-list-viewport">
+											<ul class="ix-list-items">
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src=""
+																							data-src="/pc/ko/images/dummy/650010812_IM_01.png"
+																							alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src=""
+																							data-src="/pc/ko/images/dummy/650010812_IM_02.png"
+																							alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src=""
+																							data-src="/pc/ko/images/dummy/650010812_IM_03.png"
+																							alt=""></a>
+												</li>
+											</ul>
+										</div>
+										<div class="ix-controller">
+											<ul class="ix-thumbs">
+												<li class="ix-thumb">
+													<button type="button" class="ix-btn"><!--ix-index-->번째 배너</button>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="info_box">
+									<!--/* flag */-->
+									<div class="flag_set">
+										<span class="new">신상품</span>
+									</div>
+									<!--/* 상품명 */-->
+									<div class="title_area">
+										<P class="s_title">온라인 단독 구성 50%SALE</P>
+										<h3 class="h_title">유브이 더블 컷 산뜻 선 젤 SPF50+/PA++++</h3>
+									</div>
+									<!--/* 20180425 : color 옵션수정(단일 컬러칩일때) */-->
+									<div class="item_option type2">
+										<span class="img"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></span>
+										<span class="name">#32 눈부신 벚꽃 축제</span>
+									</div>
+									<!--/* 가격,장바구니 */-->
+									<div class="price_area">
+										<div>
+											<div class="price">
+												<strong>12,600<em>원 ~</em></strong>
+											</div>
+										</div>
+										<div>
+											<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span
+												class="bubble num">9,999</span></a>
+											<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+		<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+		<th:block ap:fragment="layout-endpoint">
+			<script>
+				// test
+				AP.DISPLAY_MENU_ID = 'color_collection_shop';
+				// test
+
+				// AP.display.init({
+				// 	key: { displayMenuId: AP.DISPLAY_MENU_ID }
+				// });
+			</script>
+		</th:block>
+</body>
+</html>

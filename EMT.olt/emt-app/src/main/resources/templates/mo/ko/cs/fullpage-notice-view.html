@@ -1,0 +1,33 @@
+<html ap:decorate="~{layout/layout-contents}">
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- 01-24 html 수정 -->
+		<div class="ap_contents customer_center">
+			<div class="panel board_view">
+				<h3 class="board_view_title">
+					<span class="title" th:text="${notice.foNoticeTitle}">개인 정보
+						처리방침 일부 변경을 하였으니 참고해 주시기 바랍니다.</span> <span class="clear"> <small
+						th:text="${notice.noticeTypeName}">브랜드 공지</small> <small
+						class="date"
+						th:text="${#dates.format(notice.noticeStartDt, 'yyyy-MM-dd')}">2018.01.01
+							│ 조회 290</small>
+					</span>
+				</h3>
+				<div class="board_view_cont">
+					<span th:utext="${notice.foNoticeText}"></span>
+				</div>
+				<div class="page_btns">
+					<a href="javascript:history.back()" class="btn_lg_primary">목록</a>
+					<!-- 01-29 버튼 클래스 수정 -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+
+	</th:block>
+</body>
+</html>

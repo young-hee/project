@@ -1,0 +1,108 @@
+<dl th:if="${memberSn > 0}">
+	<dt class="on">
+		<div class="title">
+			<span class="check_wrap">
+				<input type="checkbox" id="takeoutPrdCheck" name="takeoutPrdCheck" checked="checked">
+				<label for="takeoutPrdCheck"><b>테이크아웃 상품 (<strong id="takeoutPrdCnt">0</strong>개)</b></label>
+			</span>
+			<div class="ui_tooltip take_out">
+				<button type="button" class="btn_tooltip">툴팁보기</button>
+				<span class="arr"></span>
+				<div class="layer_tooltip">
+					<dl>
+						<dt>테이크아웃</dt>
+						<dd>
+							<ul class="list_bullet_dot">
+								<li>테이크아웃 매장 운영시간: 오전 11시 ~ 오후 9시</li>
+								<li>테이크아웃 서비스는 온라인 주문 후 매장을 직접 방문하여 수령하는 서비스입니다.</li>
+								<li>미수령시 주문은 자동 취소됩니다. <br>(결제완료 후 2일 후 자동취소)</li>
+								<li>테이크아웃 상품의 교환/반품은 수령매장에서만 가능합니다.</li>
+								<li>테이크아웃 주문은 매장에서 상품 준비가 완료되면 SMS를 발송하며 수신한 SMS 내 주문번호나 주문내역의 바코드를 수령매장에 제시하면 상품을 찾을 수 있습니다.</li>
+							</ul>
+							<button type="button" class="ui_close sm"><span class="sr_only">툴팁 닫기</span></button>
+						</dd>
+					</dl>
+				</div>
+			</div>
+		</div>
+		<button type="button"><span class="sr_only">더보기</span></button>
+	</dt>
+	<dd>
+		<div class="cont">
+			<div class="take_out_store">
+				<div class="take_out_top_wrap">
+					<div class="take_out_store_name" th:if="${storeSelect != null}">
+						<strong th:text="${storeSelect.storeName}">가로수길점</strong>
+						<span id="storeSelect" th:switch="${storeSelect.invtEnoughType}">
+							<span th:case="'No'">[재고없음]</span>
+							<span th:case="'Enough'">[재고있음]</span>
+							<span th:case="'NotEnougho'">[재고부족]</span>
+						</span>
+					</div>
+					<div class="take_out_store_name" th:if="${storeSelect == null}"><strong>선택매장없음</strong></div>
+					<button type="button" class="btn_take_store_change" id="b_storeChange">매장변경</button>
+					<!--<th:block ap:replace="~{cart/fragment/fullpage-takeout-store}"/>-->
+				</div>
+
+				<th:block th:if="${storeSelect != null}">
+				<button type="button" class="btn_seller_info on" id="b_openSeller"><span>판매자 정보 확인</span><i class="icon_arr"></i></button><!--판매자 정보 확인 토글제어 클래스 on-->
+				<div class="seller_info_wrap" >
+					<dl id="addStoreSelect">
+						<dt>상호</dt>
+						<dd th:text="${storeSelect.storeTypeName}">가로수길점</dd>
+						<dt>연락처</dt>
+						<dd th:text="${storeSelect.phoneNo2 != null ? #IntegUtil.telPhoneNumber(storeSelect.phoneNo2.phoneNo) : ''}">02-549-0610</dd>
+						<dt>사업장소재지</dt>
+						<dd th:text="${storeSelect.address != null ? storeSelect.address.address1 + storeSelect.address.address2 : ''}">서울 강남구 신사동541번지 1층</dd>
+						<dt>통신판매신고번호</dt>
+						<dd th:if="${storeSelect.brn != null or storeSelect.brn != ''}">
+							<a th:href="'http://www.ftc.go.kr/bizCommPop.do?wrkr_no=' + ${storeSelect.brn} + '&apv_perm_no='" target="_blank">사업자정보확인</a>
+						</dd>
+						<dt>e-mail</dt>
+						<dd th:if="${storeSelect.emailAddress != null or storeSelect.emailAddress != ''}">
+							<a th:href="'mailto:'+ ${storeSelect.emailAddress}"><span th:text="${storeSelect.emailAddress}">9702906ki@hanmail.net</span></a>
+						</dd>
+					</dl>
+				</div>
+				</th:block>
+
+				<th:block th:if="${storeRegularList != null and #lists.size(storeRegularList) > 0}">
+				<div class="take_out_bottom_wrap">
+					<div class="take_out_favorite">단골매장</div>
+					<div class="take_out_scroll">
+						<ul>
+							<li th:each="storeEx : ${storeRegularList}">
+								<a href="#" th:onclick="|fnChangeStore('${storeEx.storeSn}'); return false;|">
+									<th:block th:text="${storeEx.storeName}">압구정점</th:block>
+									<th:block th:switch="${storeEx.invtEnoughType}">
+										<span th:case="'No'">[재고없음]</span>
+										<span th:case="'Enough'">[재고있음]</span>
+										<span th:case="'NNotEnougho'">[재고부족]</span>
+									</th:block>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				</th:block>
+				<th:block th:if="${#lists.size(storeRegularList) == 0}">
+					<div class="take_out_bottom_wrap">
+						<div class="take_out_scroll empty">
+							<p class="text_notice">단골매장이 없습니다.</p>
+						</div>
+					</div>
+				</th:block>
+			</div>
+			<div id="allStoreProd">
+			</div>
+			<div class="panel notice" th:if="${ #lists.size(cartEx.cartStorePickupOnlineProdExList) == 0 &&
+												#lists.size(cartEx.cartStorePickupMembershipPointExchOnlineProdExList) == 0 &&
+												#lists.size(cartEx.cartStorePickupActivityPointExchOnlineProdExList) == 0  &&
+												#lists.size(cartEx.cartStorePickupMNPromoExList) == 0 &&
+												#lists.size(cartEx.cartStorePickupSameTimePurPromoExList) == 0 }">
+				<i class="ico"></i>
+				<p class="text color_gray">현재 테이크아웃 장바구니가 비어있습니다.</p>
+			</div>
+		</div>
+	</dd>
+</dl>

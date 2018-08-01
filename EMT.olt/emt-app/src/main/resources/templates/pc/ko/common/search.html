@@ -1,0 +1,293 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='search'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page contents -->
+            <div class="ap_contents search result">
+				<div class="panel gray search_title ">
+					<h2 class="h_title sub" th:text="'‘' + ${param.searchWord} +'’ ' + 검색결과"></h2>
+					<hr class="div m20">
+					<ul class="search_keyword">
+						<th:block th:each="searchWord : ${popularSearchWord}">
+							<li><a th:href="@{/common/search(searchWord=${searchWord})}" th:text="'#' + ${searchWord}">짐승용량 클렌징 워터</a></li>
+						</th:block>
+					</ul>
+				</div>
+
+				<div class="search_table filter_table">
+					<table class="align_left">
+						<caption class="sr_only">통합 검색</caption>
+						<colgroup>
+							<col style="width:200px">
+							<col>
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row">컬러</th>
+								<td>
+									<div class="color_chip circle group" data-group="color">
+										<span><input type="checkbox" id="pink" name="color"><label for="pink" style="background-color:#f06da1"><span>핑크</span></label></span>
+										<span><input type="checkbox" id="red" name="color"><label for="red" style="background-color:#e9224e"><span>레드</span></label></span>
+										<span><input type="checkbox" id="orange" name="color"><label for="orange" style="background-color:#ff7a2d"><span>오렌지</span></label></span>
+										<span><input type="checkbox" id="purple" name="color"><label for="purple" style="background-color:#b261e4"><span>보라</span></label></span>
+										<span><input type="checkbox" id="black" name="color"><label for="black" style="background-color:#1f1d20"><span>블렉/그레이</span></label></span>
+										<span><input type="checkbox" id="brown" name="color"><label for="brown" style="background-color:#8e502f"><span>브라운</span></label></span>
+										<span><input type="checkbox" id="green" name="color"><label for="green" style="background-color:#8fe48a"><span>그린</span></label></span>
+										<span><input type="checkbox" id="blue" name="color"><label for="blue" style="background-color:#3a6abf"><span>블루</span></label></span>
+										<span><input type="checkbox" id="yellow" name="color"><label for="yellow" style="background-color:#f9c361"><span>옐로우/베이지</span></label></span>
+										<span><input type="checkbox" id="white" name="color"><label for="white" style="background-color:#fff"><span>화이트/실버</span></label></span>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">피부톤</th>
+								<td>
+									<div class="filter_set group" data-group="skinTone">
+										<span><input type="checkbox" name="skintone" id="skintone1" /><label for="skintone1">웜톤</label></span>
+										<span><input type="checkbox" name="skintone" id="skintone2" /><label for="skintone2">쿨톤</label></span>
+										<span><input type="checkbox" name="skintone" id="skintone3" /><label for="skintone3">뉴트럴톤</label></span>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">계절</th>
+								<td>
+									<div class="filter_set group" data-group="season">
+										<span><input type="checkbox" name="season" id="season1" /><label for="season1">봄</label></span>
+										<span><input type="checkbox" name="season" id="season2" /><label for="season2">여름</label></span>
+										<span><input type="checkbox" name="season" id="season3" /><label for="season3">가을</label></span>
+										<span><input type="checkbox" name="season" id="season4" /><label for="season4">겨울</label></span>
+										<span><input type="checkbox" name="season" id="season5" /><label for="season5">봄/가을</label></span>
+										<span><input type="checkbox" name="season" id="season6" /><label for="season6">여름/겨울</label></span>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">피부고민</th>
+								<td>
+									<div class="filter_set group" data-group="skinTrouble">
+										<span><input type="checkbox" name="trouble" id="trouble1" /><label for="trouble1">수분</label></span>
+										<span><input type="checkbox" name="trouble" id="trouble2" /><label for="trouble2">보습</label></span>
+										<span><input type="checkbox" name="trouble" id="trouble3" /><label for="trouble3">미백</label></span>
+										<span><input type="checkbox" name="trouble" id="trouble4" /><label for="trouble4">탄력/영양</label></span>
+										<span><input type="checkbox" name="trouble" id="trouble5" /><label for="trouble5">트러블/진정</label></span>
+										<span><input type="checkbox" name="trouble" id="trouble6" /><label for="trouble6">모공/피지</label></span>
+										<span><input type="checkbox" name="trouble" id="trouble7" /><label for="trouble7">탄력</label></span>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">피부타입</th>
+								<td>
+									<div class="filter_set group" data-group="skinType">
+										<span><input type="checkbox" name="skintype" id="skintype1" /><label for="skintype1">건성</label></span>
+										<span><input type="checkbox" name="skintype" id="skintype2" /><label for="skintype2">지성</label></span>
+										<span><input type="checkbox" name="skintype" id="skintype3" /><label for="skintype3">민감성</label></span>
+										<span><input type="checkbox" name="skintype" id="skintype4" /><label for="skintype4">복합성</label></span>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">텍스쳐/종류</th>
+								<td>
+									<!-- 아이 -->
+									<div class="filter_set group" data-group="texture">
+										<span><input type="checkbox" name="texture" id="texture1" /><label for="texture1">매트</label></span>
+										<span><input type="checkbox" name="texture" id="texture2" /><label for="texture2">쉬머링</label></span>
+										<span><input type="checkbox" name="texture" id="texture3" /><label for="texture3">글리터</label></span>
+										<span><input type="checkbox" name="texture" id="texture4" /><label for="texture4">무펄</label></span>
+										<span><input type="checkbox" name="texture" id="texture5" /><label for="texture5">크림</label></span>
+										<span><input type="checkbox" name="texture" id="texture6" /><label for="texture6">리퀴드</label></span>
+										<span><input type="checkbox" name="texture" id="texture7" /><label for="texture7">파우더</label></span>
+										<span><input type="checkbox" name="texture" id="texture8" /><label for="texture8">컬링</label></span>
+										<span><input type="checkbox" name="texture" id="texture9" /><label for="texture9">롱래쉬</label></span>
+										<span><input type="checkbox" name="texture" id="texture10" /><label for="texture10">볼륨</label></span>
+										<span><input type="checkbox" name="texture" id="texture11" /><label for="texture11">팬슬</label></span>
+										<span><input type="checkbox" name="texture" id="texture12" /><label for="texture12">워터프루프</label></span>
+										<span><input type="checkbox" name="texture" id="texture13" /><label for="texture13">레귤러</label></span>
+										<span><input type="checkbox" name="texture" id="texture14" /><label for="texture14">붓펜</label></span>
+										<span><input type="checkbox" name="texture" id="texture15" /><label for="texture15">피그먼트</label></span>
+										<span><input type="checkbox" name="texture" id="texture16" /><label for="texture16">젤/리퀴드</label></span>
+										<span><input type="checkbox" name="texture" id="texture17" /><label for="texture17">글로시</label></span>
+										<span><input type="checkbox" name="texture" id="texture18" /><label for="texture18">풀커버</label></span>
+										<span><input type="checkbox" name="texture" id="texture19" /><label for="texture19">매트</label></span>
+										<span><input type="checkbox" name="texture" id="texture20" /><label for="texture20">내추럴</label></span>
+										<span><input type="checkbox" name="texture" id="texture21" /><label for="texture21">촉촉/윤기</label></span>
+										<span><input type="checkbox" name="texture" id="texture22" /><label for="texture22">펄</label></span>
+										<span><input type="checkbox" name="texture" id="texture23" /><label for="texture23">페인트</label></span>
+										<span><input type="checkbox" name="texture" id="texture24" /><label for="texture24">시럽</label></span>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="page_btns">
+						<button type="button" class="btn_lg_secondary reset">초기화</button>
+						<button type="button" class="btn_lg_neutral apply">필터 적용</button>
+					</div>
+				</div>
+
+				<div class="panel product">
+					<!--/* item sorting */-->
+					<div class="sorting_group brd_b clear">
+						<div>
+							<strong class="total_count">상품 (0개)</strong>
+							<span class="btn evt"><input type="checkbox" id="evt1" value="icon_pr_prod"><label for="evt1">행사상품보기</label></span>
+						</div>
+						
+						<div>
+							<span class="check_set">
+								<span class="btn sort"><input type="radio" name="sort_01" id="sort_01_1" value="Bestselling" checked=""><label for="sort_01_1">판매순</label></span>
+							<span class="btn sort"><input type="radio" name="sort_01" id="sort_01_2" value="NewProd"><label for="sort_01_2">신상품순</label></span>
+							<span class="btn sort"><input type="radio" name="sort_01" id="sort_01_3" value="HighestPrice"><label for="sort_01_3">높은가격순</label></span>
+							<span class="btn sort"><input type="radio" name="sort_01" id="sort_01_4" value="LowestPrice"><label for="sort_01_4">낮은가격순</label></span>
+							<span class="btn sort"><input type="radio" name="sort_01" id="sort_01_5" value="MostProdReview"><label for="sort_01_5">상품평순</label></span>
+							</span>
+								<!--<span class="check_set">-->
+								<!--<span class="btn view"><input type="radio" name="sort_02" id="sort_02_1" value="column2"><label for="sort_02_1"><span class="sr_only">2단 보기</span></label></span>-->
+								<!--<span class="btn view"><input type="radio" name="sort_02" id="sort_02_2" value="column4" checked><label for="sort_02_2"><span class="sr_only">4단 보기</span></label></span>-->
+							<!--</span>-->
+						</div>
+					</div>
+					
+					<div class="loading" style="margin-top:200px;" id="prodLoading">
+						<span>
+							<img ap:src="@{/images/common/loading.gif}" alt="">
+						</span>
+					</div>
+					
+					<!--/* item 목록 */-->
+					<div class="item_list column4">
+						<ul>
+							
+						</ul>
+						<div class="pagination" id="prodPagenation">
+							<a href="#none" class="navi first">처음</a>
+							<a href="#none" class="navi prev">이전</a>
+							<a href="#none" class="disabled">1</a>
+							<a href="#none" class="navi next">다음</a>
+							<a href="#none" class="navi last">끝</a>
+						</div>
+					</div>
+					
+					<!--/* 검색결과 없는 경유 */-->
+					<div class="panel notice noProduct" style="display: none">
+						<i class="ico"></i>
+						<p class="text font_lg align_center w100p"><b class="noProdSearchWord"></b>&nbsp;&nbsp;<span class="color_light_gray">검색어와 일치하는 내용이 없습니다.</span></p>
+					</div>
+					
+				</div>
+
+				<div class="panel">
+					<div class="search_tap articleWrap">
+						<strong id="articleCnt">컨텐츠(0)</strong>
+					</div>
+
+					<!--/* 20180521 : 에뛰드픽 삭제 */-->
+
+					<div class="result_list typ3 articleWrap">
+						<h3 class="h_title sub">Ch.에뛰드</h3>
+						<div class="slide" id="articleSlide" data-ix-options="view-length:1;">
+							<div class="ix-list-viewport">
+								<ul class="ix-list-items" id="articleList">
+								</ul>
+							</div>
+							<div class="ix-controller">
+								<ul class="ix-thumbs">
+									<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+								</ul>
+								<div class="slide_direction">
+									<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
+									<a class="ix-btn-prev prd_nav_left" href="#prev"><span class="sr_only">Prev</span></a>
+									<a class="ix-btn-next prd_nav_right" href="#next"><span class="sr_only">Next</span></a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="result_list typ3" id="eventWrap">
+						<div class="search_tap">
+							<strong id="eventCnt">이벤트(0)</strong>
+						</div>
+						<div class="slide" id="eventSlide" data-ix-options="view-length:1;">
+							<div class="ix-list-viewport">
+								<ul class="ix-list-items" id="eventList">
+								</ul>
+							</div>
+							<div class="ix-controller">
+								<ul class="ix-thumbs">
+									<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+								</ul>
+								<div class="slide_direction">
+									<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
+									<a class="ix-btn-prev prd_nav_left" href="#prev"><span class="sr_only">Prev</span></a>
+									<a class="ix-btn-next prd_nav_right" href="#next"><span class="sr_only">Next</span></a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="panel review" style="display:none;">
+					<div class="search_tap">
+						<strong>리뷰(<span class="review_total_count">4,206</span>)</strong>
+					</div>
+					<!--/* 리뷰필터 */-->
+					<div class="clear review_filter">
+						<div>
+							<span class="select_wrap">
+								<select name="prodReviewType" title="리뷰 타입필터 선택">
+									<option value="" selected>전체</option>
+									<option value="Pur">구매자 후기</option>
+									<option value="Prod">리뷰</option>
+								</select>
+							</span>
+							<span class="select_wrap">
+								<select name="prodReviewSort" title="리뷰 정렬필터 선택">
+									<option value="RecentRegistDt" selected>최근등록순</option>
+									<option value="HighestScope">높은별점순</option>
+									<option value="LowestScope">낮은별점순</option>
+								</select>
+							</span>
+							<span class="select_wrap">
+								<select name="scope" title="리뷰 별점필터 선택">
+									<option value="" selected>별점 전체</option>
+									<option value="5">별 5개</option>
+									<option value="4">별 4개</option>
+									<option value="3">별 3개</option>
+									<option value="2">별 2개</option>
+									<option value="1">별 1개</option>
+								</select>
+							</span>
+						</div>
+					</div>
+					<!--/* 상품평 목록 */-->
+					<div class="review_list">
+						<div class="loading" style="height:300px;">
+							<span>
+								<img ap:src="@{/images/common/loading.gif}" alt="">
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<!--/* 추천템 */-->
+				<div class="recommend_items">
+					<h3 class="h_title sub">‘립스틱’ 연관 상품 추천</h3>
+					<ul>
+					</ul>
+				</div>
+				
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script>
+				AP.search.load();
+			</script>
+        </th:block>
+</body>
+</html>

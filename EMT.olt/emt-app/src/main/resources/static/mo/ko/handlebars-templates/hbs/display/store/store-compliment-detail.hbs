@@ -1,0 +1,43 @@
+<div class="panel brand_review" data-store-eval-sn="{{ this.storeEvalSn }}">
+	<div class="review_list">
+		<dl>
+			<dt>
+				<span class="clear">
+					<span class="ui_rating small">
+						{{#xif this.topStoreEvalYn '==' 'Y'}}
+							<strong class="review_best">BEST</strong>
+						{{/xif}}
+					</span>
+					<span class="summary">
+						<span>{{ this.memberId }}</span><span>{{ dateFormat this.createdDt }}</span>
+					</span>
+				</span>
+				<span class="title mgt15">
+					<small>{{ this.storeName }}</small>
+					<b>{{ this.storeEvalTitle }}</b>
+				</span>
+				<span class="etc_select">
+					{{#each this.storeEvalReason}}
+						<span>{{ this }}</span>
+					{{/each}}
+				</span>
+			</dt>
+			<dd>
+				<div class="attached">
+					{{#each this.storeEvalImgUrlList}}
+						<img alt="" src="{{ this }}">
+					{{/each}}
+				</div>
+				<div class="text_wrap mgt10" id="storeEvalBodyText">
+					{{ this.storeEvalBodyText }}
+				</div>
+				{{#xif this.myStoreEvalYn '==' 'Y' }}
+					<div class="page_btns">
+						<button type="button" class="btn_lg_bordered modify">수정</button>
+						<button type="button" class="btn_lg_neutral delete">삭제</button>
+					</div>
+				{{/xif}}
+			</dd>
+		</dl>
+	</div>
+</div>

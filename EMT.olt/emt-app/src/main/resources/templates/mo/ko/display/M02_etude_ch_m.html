@@ -1,0 +1,45 @@
+<html ap:decorate="~{layout/layout-main}" th:with="_jsfile='ch-etude'">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+    <div class="ap_contents beautylife">
+        <div class="ch_etude">
+
+			<!--/* 04-19 new */-->
+			<div class="visual" th:if="${not #lists.isEmpty(article)}">
+				<a href="#none" th:href="'/display/etude_ch/detail?articleSn=' + ${article.articleSn}"><img th:src="${article.bannerImgM1}" alt=""></a>
+			</div>
+
+			<!-- 오늘의 추천 태그 -->
+			<div class="recommend_tag">
+				<div class="keywords check_set"></div>
+			</div>
+
+			<dl class="panel">
+				<dt class="h_title cont border"><i class="ico_tv"></i> CH.에뛰드</dt>
+				<dd>
+					<ul class="video_list">
+					</ul>
+
+					<button type="button" class="btn_lg_more w100p btn_more" style="display:none;">
+						<span>더보기 (<em>5</em>/35)</span>
+					</button>
+					<ul class="loading">
+						<li></li>
+						<li></li>
+						<li></li>
+					</ul>
+				</dd>
+			</dl>
+        </div>
+    </div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+</th:block>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!--/*
+	해당 지도 인쇄 페이지는 새창으로 띄우며 740*600
+	url?lat=37.52876373236224&lng=126.96846416770506 처럼 위도, 경도를 붙여서 호출해준다.
+*/-->
+
+<html ap:decorate="~{layout/only-contents}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents" style="width:740px">
+			<div class="map_area" style="height:500px"></div>
+			<div class="page_btns mgt20">
+				<button class="btn_md_primary btn_print" type="button">지도인쇄</button>
+			</div>
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script>
+				(function () {
+					var param = $B.utils.urlParam(),
+						$map = $( '.map_area' );
+
+					AP.common.mapApiReady.done( function () {
+						$map.mapApi().mapApi( 'addMarker', param.lat, param.lng ).mapApi( 'setCenter', param.lat, param.lng );
+					});
+
+					$( '.btn_print' ).on( 'click', function (e) {
+						$( this ).hide();
+						window.print();
+						$( this ).show();
+					});
+				})();
+			</script>
+        </th:block>
+</body>
+</html>

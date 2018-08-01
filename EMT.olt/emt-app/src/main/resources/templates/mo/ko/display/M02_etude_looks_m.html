@@ -1,0 +1,36 @@
+<html ap:decorate="~{layout/layout-main}">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents looks main">
+		<!--/* looks 동영상 */-->
+		<div class="video_wrap">
+			<iframe class="youtube_video" width="800" height="450" src="https://www.youtube.com/embed/Fz3Xo3UHA-4?rel=0&loop=1" frameborder="0" allowfullscreen="" data-vendor="youtube" data-ratio="true" data-mute="false"></iframe>
+		</div>
+        <!--/* looks 목록 */-->
+        <div class="panel looksbox">
+            <h2 class="h_title page">내게 맞는 Makeup Look</h2>
+            <ul class="looks_list">
+            	<th:block th:each="article : ${articleSearchResult.articleList}">
+            		<li>
+	                    <a href="#none" th:href="@{'/display/'+${displayMenuId}+'/detail'(displayMenuId=${displayMenuId},articleSn=${article.articleSn})}">
+	                        <img th:src="${article.bannerImgM1}" alt="" />
+	                        <span class="name" th:text="${article.articleTitle}"></span>
+	                    </a>
+	                </li>
+            	</th:block>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script th:inline="javascript">
+		(function () {
+			$( '.youtube_video' ).video();
+		})();
+	</script>
+</th:block>
+</body>
+</html>

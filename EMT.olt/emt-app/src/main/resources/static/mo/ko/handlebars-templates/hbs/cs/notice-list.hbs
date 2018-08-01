@@ -1,0 +1,19 @@
+{{#xif this.totalLength '>' 0 }}
+    <ul>
+        {{#each this.result }}
+        		<li class="{{important importantNoticeYn}}">
+        			<a href="/cs/noticeView/{{foNoticeSn}}"> 
+						<span class="title">{{foNoticeTitle}}</span>
+						<span>
+							{{#xif importantNoticeYn '===' 'Y'}}
+								<small>공지</small>
+							{{else}}
+								<small>{{noticeTypeName}}</small>
+							{{/xif}}
+							<small class="date">{{dateFormat noticeStartDt 'YYYY.MM.DD'}}</small>
+						</span>
+					</a>
+			</li>
+        {{/each}}
+    </ul>
+{{/xif}}

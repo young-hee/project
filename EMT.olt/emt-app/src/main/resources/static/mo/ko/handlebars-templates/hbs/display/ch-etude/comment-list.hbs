@@ -1,0 +1,33 @@
+{{#each this.articleCommentList}}
+	{{#xif this.displayYn '==' 'Y'}}
+		<li>
+			<dl>
+				<dt>
+					<b>{{ this.memberId }}</b>
+					<small>{{ dateFormat  this.createdDt }}</small>
+					{{#unless ../isLive}}
+						{{#if (isNewArticle this.createdDt)}}
+							<span class="ico_new"><span class="sr_only">새글</span></span>
+						{{/if}}
+					{{/unless}}
+					{{#xif this.myCommentYn '==' 'Y'}}
+						<button class="btn_delete" type="button" data-article-comment-sn="{{ this.articleCommentSn }}"><i class="ico_del"></i><span class="sr_only">댓글 삭제</span></button>
+					{{/xif}}
+				</dt>
+				<dd>
+					<p class="text">{{ this.articleCommentBodyText }}</p>
+				</dd>
+			</dl>
+		</li>
+	{{/xif}}
+{{/each}}
+
+{{#xif this.isScrollType '&&' (lt (calc this.offset '+' this.articleCommentList.length) this.totalCount)}}
+	<li class="inner_loading">
+		<ul class="loading">
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</li>
+{{/xif}}

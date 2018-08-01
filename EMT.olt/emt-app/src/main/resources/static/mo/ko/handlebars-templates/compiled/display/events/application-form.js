@@ -1,0 +1,8 @@
+this["AP"] = this["AP"] || {};
+this["AP"]["handlebars"] = this["AP"]["handlebars"] || {};
+this["AP"]["handlebars"]["display"] = this["AP"]["handlebars"]["display"] || {};
+this["AP"]["handlebars"]["display"]["events"] = this["AP"]["handlebars"]["display"]["events"] || {};
+
+this["AP"]["handlebars"]["display"]["events"]["application-form"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "<div class=\"panel\">\n	<form class=\"validate\">\n		<fieldset>\n			<legend class=\"sr_only\">신청 내용 입력</legend>\n			<div class=\"input_group\">\n				<div class=\"label\">\n					<label for=\"title\">제목</label>\n				</div>\n				<div>\n					<input type=\"text\" id=\"requestTitle\" name=\"requestTitle\" placeholder=\"최대 30자까지 입력 가능합니다.\" maxlength=\"30\" required=\"required\" data-msg-required=\"제목을 입력해 주세요.\">\n				</div>\n			</div>\n\n			<div class=\"input_group\">\n				<div>\n					<div>\n						<div class=\"textarea\" style=\"height:200px;\">\n							<textarea name=\"requestReason\" id=\"requestReason\" cols=\"\" rows=\"\" maxlength=\"500\" placeholder=\"500자 이내로 입력해 주세요.\" required=\"required\" data-msg-required=\"내용을 입력해 주세요.\"></textarea>\n						</div>\n						<p class=\"text_right\"><small>0/500</small></p>\n					</div>\n				</div>\n			</div>\n			<div class=\"form_btns\">\n				<button type=\"button\" class=\"btn_md_secondary cancel\">취소</button>\n				<button type=\"button\" class=\"btn_md_neutral apply\">작성완료</button>\n			</div>\n		</fieldset>\n	</form>\n	<br>\n	<p class=\"text_notice\">\n		저작권 등 다른 사람의 권리를 침해하거나 게시판\n		성격과 관련 없는 게시물은 임의로 삭제될 수 있습니다.\n	</p>\n</div>";
+},"useData":true});

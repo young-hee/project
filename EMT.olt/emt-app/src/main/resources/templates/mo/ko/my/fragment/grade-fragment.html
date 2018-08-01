@@ -1,0 +1,26 @@
+<th:block layout:fragment="grade-list">
+
+<ul class="pbody my_grade_list">
+	<li class="item-detail" th:each="item : ${#IntegUtil.subList(custGradeDetail.custGradeList, 5)}">
+		<dl>
+			<dt>
+				<small th:text="${#IntegUtil.dateformat(item.saleDt, 'yyyy.MM.dd')}">2018.01.01</small>
+				<span th:text="${item.storNm}">에뛰드 쇼핑몰</span> │
+				<span>주문번호 <a href="#none" th:text="${item.ordNo}"><em>2017012102010101</em></a></span><!--/*20180628 : a태그 추가*/-->
+			</dt>
+			<dd>
+				<ul class="list">
+					<li class="clear">
+						<span>결제금액 <th:block th:text="${#IntegUtil.toCommaNumber(item.grdAmt)}">1,000,000</th:block>원</span>
+						<em>등급산정금액 <b class="num">-</b>원</em>
+					</li>
+				</ul>
+			</dd>
+		</dl>
+	</li>
+</ul>
+
+<button id="more" onclick="more()" style="height:35px" class="pbody btn_lg_more w100p">
+	<span> 더보기 (<em>5</em>/<span id="total" th:text="${pageVo.totalRowCount}">35</span>)</span>
+</button>
+</th:block>

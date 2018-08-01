@@ -1,0 +1,158 @@
+<html ap:decorate="~{layout/layout-contents}">
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- 01-24 html 수정 -->
+		<div class="ap_contents customer_center"> <!-- 01-18 클래스 수정  -->
+			<div class="panel">
+				<!--  검색 -->
+				<fieldset class="search_form">
+					<legend class="sr_only">검색</legend>
+					<input type="text" title="검색어 입력" placeholder="검색" id="searchText"
+						name="searchText" onkeypress="return searchKeyPress(event);">
+					<button type="button" class="btn_search" id="search" name="search"></button>
+				</fieldset>
+			</div>
+			<div class="panel gray">
+				<div class="input_group">
+					<div>
+						<select id="faqSearch" title="검색분류 선택">
+							<option value="">전체</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="ui_accordion faq" id="faqPaging"></div>
+			<button type="button" class="btn_lg_more w100p" id="add" name="add">
+				더보기 (<em>0</em>/0)
+			</button>
+		</div>
+	</div>
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script ap:src="@{/handlebars-templates/compiled/cs/faq-list.js}"></script>
+		<script ap:src="@{/handlebars-templates/compiled/cs/faq-summary.js}"></script>
+		<script th:inline="javascript">
+			var currentOffset;
+			var currentType;
+			var currentKeyword;
+
+			var pageLimit = 10;
+
+			$(document).ready(function() {
+				var keyword = /*[[${keyword}]]*/;
+				if (keyword != null && keyword.length > 0) {
+					$('#searchText').val(keyword);
+				}
+				faqSummary();
+				getFaq(keyword, '', 0);
+			});
+
+			$('#search').on('click', function(e) {
+				var search = $('#searchText').val();
+				// alert(search);
+				if (search != null && search.length > 0)
+					getFaq(search, '', 0, 'true');
+			});
+
+			$('#add').on('click', function(e) {
+				// getFaq(currentType, ++currentPage);
+				getFaq(currentKeyword, currentType, (currentOffset + pageLimit));
+			});
+			
+			$("#faqSearch").change(function(){
+				getFaq('', $(this).val(), 0, 'true')
+			});
+			
+			function faqSummary() {
+				AP.api.csSummary({
+					type : 'faq'
+				}).done(function(data) {
+					if (data) {
+						var resultHtml = AP.common.getTemplate('cs.faq-summary', {
+					        totalLength: data.data.faqList.length,
+					        totalLengthLabel: $B.string.numberFormat( data.data.faqList.length ),
+					        result: data.data.faqList
+					    });
+
+						$('#faqSearch').append(resultHtml);
+					} else {
+						AP.modal.alert("조회에 실패 했습니다.");
+					}
+				}).fail(function(e) {
+					AP.modal.alert(e.responseJSON.Message);
+				}).always(function() {
+				});
+			}
+			
+			function searchKeyPress(e)
+			{
+			    // look for window.event in case event isn't passed in
+			    e = e || window.event;
+			    if (e.keyCode == 13)
+			    {
+			        document.getElementById('search').click();
+			        return false;
+			    }
+			    return true;
+			}
+			
+			function showFaq(faqData, resultHtml, isReplace) {
+				
+				if ('true' == isReplace) {
+					$('#faqPaging').empty();
+				}
+				if (faqData.totalCount === 0) {
+					$('#add').hide();
+				}
+				else {
+					$('#add').show();
+				}
+				var c = (faqData.offset + faqData.limit) > faqData.totalCount ? faqData.totalCount : (faqData.offset + faqData.limit);
+				$("#add").html("더보기 (<em> " + c + "</em> / " + faqData.totalCount + ")");
+				$('#faqPaging').append(resultHtml);
+				$('.ui_accordion').accordion('clear');
+				$('.ui_accordion').accordion();
+			}
+			
+			function getFaq(keyword, inquiryTypeSn, offset, isReplace) {
+
+				if (currentKeyword == keyword && currentType == inquiryTypeSn && 'true' == isReplace)
+					return;
+				
+				if (keyword == null || keyword == '') {
+					$('#searchText').val("");
+				}
+
+				currentKeyword = keyword;
+				currentType = inquiryTypeSn;
+				currentOffset = offset;
+				AP.api.csList({}, {
+					type : 'faq',
+					keyword : currentKeyword,
+					inquiryTypeSn : inquiryTypeSn,
+					offset : offset,
+					limit : pageLimit
+				}).done(function(data) {
+			    	//성공
+					if (data) {
+						// getPostFaq(data.data, isReplace);
+						var resultHtml = AP.common.getTemplate('cs.faq-list', {
+					        totalLength: data.data.faqList.length,
+					        totalLengthLabel: $B.string.numberFormat( data.data.faqList.length ),
+					        result: data.data.faqList
+					    });
+						showFaq(data.data, resultHtml, isReplace);
+					}
+				}).fail(function(e) {
+			    	//실패
+				    AP.modal.alert(e.responseJSON.errorData.message);
+				}).always(function() {
+				//성공, 실패
+				});
+			}
+		</script>
+	</th:block>
+</body>
+</html>

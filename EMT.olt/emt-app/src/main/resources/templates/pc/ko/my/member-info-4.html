@@ -1,0 +1,149 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- mypage sitemap -->
+            <th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+            <!-- //  mypage sitemap -->
+            
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            
+            <!-- page contents -->
+            <div class="ap_contents member_info">
+                <div class="panel membership_withdrawal">
+                    <div class="panel_cont">
+                        <h3 class="text_primary align_center">회원탈퇴 전,  포인트 및 유의사항을 꼭 확인하세요.</h3>
+                        <table class="data_table align_center thead_colored">
+                        	<caption class="sr_only">잔여 예치금 및 포인트 내역으로 잔여 뷰티포인트, 잔여 진주알, 잔여 예치금 잔여 쿠션포인트로 구성</caption>
+                        	<colgroup>
+                        		<col />
+                        		<col />
+                        		<col />
+                        		<col />
+                        	</colgroup>
+                        	<thead>
+                        		<tr>
+                        			<th scope="col">잔여 뷰티포인트</th>
+                        			<th scope="col">잔여 진주알</th>
+                        			<th scope="col">잔여 예치금</th>
+                        			<th scope="col">잔여 쿠션포인트</th>
+                        		</tr>
+                        	</thead>
+                        	<tbody>
+                        		<tr>
+                        			<td><em th:text="${#IntegUtil.toCommaNumber(point.rmnPt)}">2,000</em> P</td>
+                        			<td><em class="num" th:text="${#IntegUtil.toCommaNumber(session.LOGIN_USER.member.activityPoint)}">20</em> 알</td>
+                        			<td><em th:text="${#IntegUtil.toCommaNumber(session.LOGIN_USER.member.remainDeposit)}">9,999,999</em> 원</td>
+                        			<td><em class="num" th:text="${#IntegUtil.toCommaNumber(session.LOGIN_USER.member.remainBeautyPoint)}">9,999,999</em> P</td>
+                        		</tr>
+                        	</tbody>
+                        </table>
+                        <ul class="list_bullet_dot">
+                        	<li>온라인쇼핑몰에 완료처리되지 않은 주문이 남아있을 경우 탈퇴가 불가하므로 남아있는 주문내역이 없는지 확인 바랍니다.</li>
+                        	<li>보다 다양한 서비스를 받으시려면 정확한 정보를 항상 유지해 주셔야 합니다. </li>
+                        </ul>
+                        <div class="page_btns">
+                        	<button type="button" onclick="location.replace('/my/page/myDepositList')" class="btn_md_bordered">예치금 내역 확인</button>
+                        	<button type="button" class="btn_md_neutral" onclick="location.replace('/my/page/onlineOrderShipping')" >주문내역 확인</button>
+                        </div>
+                        <dl class="dl_cont">
+                            <dt class="h_title cont">탈퇴 시 잔여 뷰티포인트 및 진주알은 모두 삭제됩니다. </dt>
+                            <dd>
+                                <ul class="list_bullet_dot">
+                                    <li>회원을 탈퇴하시면, 아모레퍼시픽 뷰티포인트 통합회원의 모든 권리가 취소됨은 물론 에뛰드 회원(온/오프라인)으로서 혜택도 삭제됩니다.</li>
+                                    <li>탈퇴사유를 입력해 주시면, 더욱 좋은 서비스를 만드는데 좋은 자료로 활용됩니다. 그동안 에뛰드를 이용해 주셔서 감사합니다.</li>
+                                    <li>점점 더 발전하는 에뛰드가 되도록 노력하겠습니다.</li>
+                                </ul>
+								<br>
+                                <p class="text_notice"><em>주의 : 탈퇴 시 동일 아이디로 재가입 할 수 없습니다.</em></p>
+                            </dd>
+                        </dl>
+                        
+                        <fieldset class="form mgt50">
+                            <legend class="sr_only">탈퇴사유 입력</legend>
+                            <div class="panel gray bdr_top">
+	                            <div class="panel_cont">
+		                            <h4 class="form_title">탈퇴사유를 선택해 주세요.</h4>
+		                            <ul class="check_set col_03">
+			                            <li th:each="reason,iter : ${closedAcReason}">
+			                            	<span class="check_wrap">
+			                            		<input type="radio" name="code" th:id="'reason' + ${iter.index + 1}" th:value="${reason.reasonCode}" th:checked="${iter.index == 0}">
+			                            		<label th:for="'reason' + ${iter.index + 1}" th:text="${reason.reasonCodeName}">사유</label>
+			                            	</span>
+			                            </li>
+			                            <li>
+			                            	<span class="check_wrap">
+			                            		<input type="radio" name="code" value="" id="reason-ex">
+			                            		<label for="reason-ex">기타 사유</label>
+			                            	</span>
+			                            </li>
+		                            </ul>
+		                            <div class="textarea">
+		                            	<textarea style="height:90px;" name="desc" id="desc" cols="" disabled rows="2" placeholder="기타내용 띄어쓰기 포함 200자 내외" title="기타 내용 입력"></textarea>
+		                            	<span class="count"><em>0</em> / 200 자</span>
+		                            </div>
+		                        </div>
+                            </div>
+                           	<div class="align_center mgt30">
+	                        	<span class="check_wrap large"><input type="checkbox" id="agree" /><label for="agree">위 유의사항을 모두 확인하였으며 회원탈퇴에 동의합니다.</label></span>
+	                        </div>
+	                        <div class="form_btns">
+	                            <button type="button" onclick="location.replace('/my/page/info/myEtude')" class="btn_lg_secondary">취소</button>
+	                            <button type="button" id="leaveId" class="btn_lg_primary">탈퇴</button>
+	                        </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+			<script>
+			$("[name=code]:checked").attr('checked', null);
+			$("input[name=code]").change(function() {
+
+				var radioValue = $(this).val();
+
+				if (radioValue == "") {
+					$("#desc").attr("disabled", null);
+				} else {
+					$("#desc").val(null);
+					$("#desc").attr("disabled","disabled");
+				}
+
+			});
+			
+			$("#desc").on('change keyup paste', function() {
+				$('.count em').html($(this).val().length)
+				if($(this).val().length > 200) {
+					$(this).val($(this).val().substring(0, 200));
+				}
+			});
+			
+        	$("#leaveId").click(function() {
+        		if($("[name=code]:checked").length == 0) {
+	        		AP.modal.alert( "탈퇴사유를 체크 해주세요." );
+        			return;
+        		}
+        		if($("#reason-ex:checked").length != 0 && $("#desc").val() == '') {
+	        		AP.modal.alert( "탈퇴사유를 입력 해주세요." );
+        			return;
+        		}
+        		if($('#agree:checked').length == 0) {
+	        		AP.modal.alert( "탈퇴여부에 동의해 주세요." );
+        			return;
+        		}
+        		
+        		location.href = "/my/page/doLeaveId?code=" + $('input[name=code]:checked').val() + "&desc=" + encodeURI($("#desc").val());
+        	});
+			
+			</script>
+        </th:block>
+</body>
+</html>

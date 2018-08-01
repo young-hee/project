@@ -1,0 +1,54 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='free-sample'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents event_apply free_sample">
+		<div>
+			<img ap:src="@{/images/dummy/img_free_sample.jpg}" alt="">
+		</div>
+		<div class="panel">
+			<button class="btn_md_primary w100p apply" type="button">신청하기</button>
+			<br>
+			<ul class="list_bullet_dot mgt20">
+				<li>구매후기와 이미지 도용으로 인한 피해사례가 발생하고
+					있습니다. 올바르지 않은 타인의 작업물 사용을 삼가해
+					주시기 바라며, 적발 시 삭제 처리됩니다.</li>
+				<li>당첨자는 <em>이벤트&gt;당첨자 확인</em>에서 확인하실 수 있습니다.</li>
+			</ul>
+
+			<div class="ui_accordion list"></div>
+
+			<ul class="loading" style="display: block; min-height: 300px">
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
+			<button type="button" class="btn_lg_more w100p">
+				<span></span>
+			</button>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+
+	<script th:inline="javascript">
+		(function () {
+			var member = {};
+
+			[# th:if="${memberMap}"]
+			member.id = /*[[${memberMap.id}]]*/;
+			member.name = /*[[${memberMap.name}]]*/;
+			member.memberSn = /*[[${memberMap.memberSn}]]*/;
+			[/]
+
+			AP.freeSample.load({ memberInfo: member });
+		}());
+	</script>
+</th:block>
+
+</body>

@@ -1,0 +1,72 @@
+<!-- 맴버쉽포인트 : 뷰티포인트 교환 상품 -->
+<div class="cart_item_box_wrap type2 group" th:if="${storeMembershipPointOnlineProdEx.exchProdYn == 'Y'}">
+	<!--온라인상품-->
+	<div class="cart_item_box typ2">
+		<div class="top_tit_wrap">
+			<h3>뷰티 포인트 교환 상품</h3>
+			<div>
+				<span class="cart_price point">
+					<!--<span class="left_num">
+						<span>보유</span>
+						<strong class="num">12,600</strong><span>P</span>
+						<span>/</span>
+					</span>-->
+					<span class="right_num">
+						<strong class="num"
+								th:text="${cartEx.cartStorePickupExchMembershipPointSum} ?
+										 ${#numbers.formatDecimal(cartEx.cartStorePickupExchMembershipPointSum,0,'COMMA',0,'POINT')} : '0'">0</strong>
+						<span>P</span>
+					</span>
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<!--단위상품-->
+	<th:block th:if="${#lists.size(storeMembershipPointOnlineProdEx.cartProdExList) > 0}" th:each="cartProdEx : ${storeMembershipPointOnlineProdEx.cartProdExList}">
+	<div class="cart_item_box" th:if="${cartProdEx.integrationMembershipExchYn == 'Y'}"><!--통합맴버쉽여부(P)-->
+		<div class="cart_name_wrap">
+
+			<span class="check_wrap">
+				<input type="checkbox" name="takeoutChkBox" th:id="'takeoutChkBox' + ${storeMembershipPointOnlineProdExCnt.count}" th:value="${cartEx.cartSn} + ',' + ${cartProdEx.cartProdSn}" th:checked="${storeMembershipPointOnlineProdEx.selectYn == 'Y'}">
+				<label th:for="'takeoutChkBox' + ${storeMembershipPointOnlineProdExCnt.count}">체크</label>
+			</span>
+
+			<img th:if="${cartProdEx.prodEx.repProdImgEx != null}" th:src="${cartProdEx.prodEx.repProdImgEx.imgUrl}" class="cart_option_name_thm">
+			<img th:if="${cartProdEx.prodEx.repProdImgEx == null}" ap:src="@{/images/cart/no_img.png}" class="cart_option_name_thm">
+
+			<div class="cart_table_cell">
+				<span class="cart_item_name" th:text="${cartProdEx.prodEx.prodName}">디어 마이 블루밍 립스 톡 쉬폰</span>
+				<div class="cart_item_exclusive_wrap">
+					<span class="cart_item_exclusive"
+						  th:if="${#lists.size(cartProdEx.prodEx.prodFlagExList) != 0}"
+						  th:each="prodFlagEx : ${cartProdEx.prodEx.prodFlagExList}"
+						  th:text="${prodFlagEx.prodFlagName}">예약상품
+					</span>
+				</div>
+			</div>
+			<button type="button" class="btn_cart_item_del" th:onclick="|removeCartProd(this,'${cartEx.cartSn}','${cartProdEx.cartProdSn}')|"><span class="sr_only">없애기</span></button>
+		</div>
+		<div class="cart_item_info">
+			<input type="hidden" name="takeoutMembershipPrdSn" th:value="${cartProdEx.prodEx.prodSn}"/>
+			<input type="hidden" name="cartProdSn" th:value="${cartProdEx.cartProdSn}"/>
+			<input type="hidden" name="cartProdExList" th:value="${cartProdExList}"/>
+			<input type="hidden" th:name="'takeoutPrdInfo_' + ${storeMembershipPointOnlineProdEx.onlineProdSn}" th:value="${cartEx.cartSn} + ',' + ${cartProdEx.cartProdSn}"/>
+			<input type="hidden" th:name="'saleDisplayStatus_' + ${cartProdEx.prodEx.prodSn}" th:value="${cartProdEx.prodEx.saleDisplayStatus}"/>
+			<input type="hidden" th:name="'prodInvtExInfo_' + ${storePickupOnlineProdEx.onlineProdSn}" th:value="${cartProdEx.prodEx.prodSn} + ',' + ${cartProdEx.cartProdQty}"/>
+			<!--상품수량버튼 제어-->
+			<th:block ap:replace="~{cart/fragment/spinner-button-info}"/>
+			<!--// 상품수량버튼 제어-->
+			<span class="cart_price point">
+				<span class="right_num">
+					<strong class="num"
+							th:text="${storeMembershipPointOnlineProdEx.finalOnlineSalesAmountInfo.standardCurrency.amount} ?
+									 ${#numbers.formatDecimal(storeMembershipPointOnlineProdEx.finalOnlineSalesAmountInfo.standardCurrency.amount,0,'COMMA',0,'POINT')} : '0'">0</strong>
+					<span>P</span>
+				</span>
+			</span>
+		</div>
+	</div>
+	</th:block>
+
+</div>

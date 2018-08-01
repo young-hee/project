@@ -1,0 +1,37 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='product-list'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents prd_list">
+
+				<!--/* item 목록 */-->
+				<div class="item_list column2">
+
+					<ul></ul>
+
+				</div>
+
+				<div class="pagination"></div>
+
+				<div class="loading" style="display: block; min-height: 300px">
+					<span><img alt="" src="/pc/ko/images/common/loading.gif"></span>
+				</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+		<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+		<th:block ap:fragment="layout-endpoint">
+			<script>
+				AP.display.init({
+					key: { displayMenuId: AP.DISPLAY_MENU_ID }
+				});
+			</script>
+		</th:block>
+</body>
+</html>

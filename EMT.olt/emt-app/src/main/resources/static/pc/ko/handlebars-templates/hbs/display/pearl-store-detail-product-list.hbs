@@ -1,0 +1,70 @@
+{{!--
+	전시 : 구매버튼이 있는 상세 상품목록 (진주알스토어)
+	isActivityPoint: 단위를 "알"로 표시
+--}}
+<ul>
+	{{#xif this.prodListUnitCode '==' 'Prod' }}
+		<!-- ==================================== 단위상품일때 ==================================== -->
+
+		{{#each this.list}}
+			{{#each this.products}}
+				{{#xif ../selectedProdSn '==' this.prodSn}}
+
+					<li class="prod" data-online-prod-sn="{{ ../onlineProdSn }}">
+						<div class="item">
+							<div class="item_images">
+								{{!-- 대표 이미지 --}}
+								<img class="lazy_load" src="" data-src="{{ this.prodImages.[0].imgUrl }}" alt="">
+							</div>
+
+							<div class="info_box">
+								{{!-- /* 상품명 */ --}}
+								<div class="title_area">
+									<p class="s_title">
+										{{#xif this.saleDisplayStatus '==' 'WaitingSale' }}
+											<em class="tag">[곧 출시!]</em>
+										{{/xif}}
+										{{#xif (eq this.prodTypeCode 'Presale') '&&' (eq this.saleDisplayStatus 'OnSale')}}
+											<em class="tag">[예약판매중]</em>
+										{{/xif}}
+										<span> {{{ this.linePromoDesc }}} </span>
+									</p>
+									<h3 class="h_title">{{ ../onlineProdName }}{{#xif this.saleDisplayStatus '==' 'OutOfStock'}} [일시품절]{{/xif}}</h3>
+								</div>
+
+								{{#xif ../singleUnitProdYn '==' 'N'}}
+									<div class="item_option type2">
+										{{#xif this.colorchipTypeCode '==' 'RGB'}}
+											<span class="img" style="background-color:#{{ this.rgbVal }}">
+												<img alt="컬러명" src="{{ absolutePath '/images/common/transparent_40x40.png' }}">
+											</span>
+										{{/xif}}
+										{{#xif this.colorchipTypeCode '==' 'Img'}}
+											<span class="img">
+												<img alt="컬러명" src="{{ this.colorchipImg }}">
+											</span>
+										{{/xif}}
+										<span class="name">{{ this.prodName }}</span>
+									</div>
+								{{/xif}}
+
+								<div class="price_area">
+									<div>
+										<div class="price">
+											<strong>{{ numberFormat this.exchActivityPoint }}<em> 알</em></strong>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="option_select">
+								<button type="button" class="btn_order" data-online-prod-sn="{{ ../onlineProdSn }}" data-prod-sn="{{ ../prodSn }}" >담기</button>
+							</div>
+						</div>
+					</li>
+
+				{{/xif}}
+			{{/each}}
+		{{/each}}
+	{{/xif}}
+</ul>

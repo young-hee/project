@@ -1,0 +1,68 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents brand">
+				<div class="makeup_dream">
+					<!-- tab menu wrap -->
+					<div class="ui_tab">
+						<!-- tab menu -->
+						<div class="tab_menu equally">
+							<ul>
+								<li class="on"><a href="#none" th:href="@{/display/makeup_your_dream(displayMenuId=makeup_your_dream)}">메이크업유어드림</a></li>
+								<li><a href="#none" th:href="@{/display/makeup_your_dream_lecture(displayMenuId=makeup_your_dream_lecture)}">청춘강연</a></li>
+								<li><a href="#none" th:href="@{/display/makeup_your_dream_apply(displayMenuId=makeup_your_dream_apply)}">청춘강연 신청</a></li>
+							</ul>
+						</div>
+						<!-- tab content -->
+						<div class="tab_cont space">
+							<h3 class="sr_only">청춘강연</h3>
+							<div class="inner_contents">
+								<div class="img"><img ap:src="@{/images/brand/img_makeup_dream_01.jpg}" alt="Makeup your dream"></div>
+								<div class="title_wrap">
+									<p class="title">청춘들의 고민을 공감하고 더 나은 미래를  꿈꾸게 하는 에뛰드의 청춘 응원 캠페인</p>
+									<p class="s_title">에뛰드는 쇼팽이 작곡한 아름다운 연습곡에서 영감을 받아 만들어진 브랜드명처럼, 내일을 위한 연습곡을 연주하고 있는 청춘들의 고민을<br>
+										함께 나누고 더 나은 미래를 꿈꿀 수 있도록 도움을 주는 청춘 응원 캠페인입니다.
+									</p>
+								</div>
+
+								<div class="video_wrap">
+									<!-- 섬네일 용 이미지 -->
+									<button type="button" class="thumbnail"><img alt="" src="/pc/ko/images/brand/img_makeup_dream_02.jpg"></button>
+									<iframe class="youtube_video" width="1000" height="560" src="https://www.youtube.com/embed/ZxD14cjSDLQ?enablejsapi=1" frameborder="0" allowfullscreen="" data-vendor="youtube" data-ratio="true" data-mute="false"></iframe>
+								</div>
+
+								<!--/* 20180504 : 이미지 alt 내용 수정 */-->
+								<div class="img mgt60"><img ap:src="@{/images/brand/img_makeup_dream_03.jpg}" alt="청춘강연 자리수 매칭 기부금, 서울장학재단 Dream 장학금"></div>
+
+								<div class="title_wrap mgt60">
+									<p class="title">꿈을 향해 도전하는 청춘들을 위해 DREAM 장학금이 전달될 예정입니다.</p>
+									<p class="s_title">DREAM 장학금은 ‘디지털 캠페인’ 참여와 ‘청춘 강연’을 통해 모아진 기부금으로, 꿈을 향해 도전하는 문화예술 특기 대학생에게 전달될 예정입니다.</p>
+								</div>
+
+								<!--/* 20180504 : 버튼삭제
+								<div class="page_btns">
+									<button class="btn_lg_primary" type="button">디지털 캠페인 결과 확인</button>
+								</div>
+								 */-->
+							</div>
+						</div>
+					</div>
+				</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script>
+				$( '.youtube_video' ).video();
+			</script>
+        </th:block>
+</body>
+</html>

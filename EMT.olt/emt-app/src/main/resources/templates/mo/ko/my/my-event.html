@@ -1,0 +1,69 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='my-event'">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page contents -->
+		<div class="ap_contents mypage event">
+			<div class="panel">
+				<h2 class="h_title page">이벤트 참여 현황</h2>
+				<p class="text font_lg">참여하신 이벤트를 확인해 보세요.</p>
+				<hr class="div m30">
+				<div class="ui_multiple_date_picker">
+					<div class="date_btn_set">
+						<span><input type="radio" class="select_range_date" name="radio4" id="radio4_0" value="all"><label for="radio4_0">전체</label></span>
+						<span><input type="radio" class="select_range_date" name="radio4" id="radio4_1" value="1months"><label for="radio4_1">1개월</label></span>
+						<span><input type="radio" class="select_range_date" name="radio4" id="radio4_2" value="3months"><label for="radio4_2">3개월</label></span>
+						<span><input type="radio" class="select_range_date" name="radio4" id="radio4_3" value="6months"><label for="radio4_3">6개월</label></span>
+						<span><input type="radio" class="select_range_date" name="radio4" id="radio4_4" value="1years"><label for="radio4_4">1년</label></span>
+					</div>
+					<br>
+					<div class="input_date_group">
+						<div class="input_wrap" style="display:none;">
+							<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+							<input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+						</div>
+						<div class="date_info_area">
+							<span class="start_date"></span> ~ <span class="end_date"></span> 까지의 이벤트 참여 내역
+						</div>
+					</div>
+				</div>
+				<ul class="loading" style="min-height: 200px; display: none">
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				<ul class="event_list my_event"></ul>
+				<button class="btn_lg_more w100p" style="display: none"><span> 더보기 (<em>5</em>/35)</span></button>
+				<!-- 이벤트가 없을 경우 -->
+				<div class="panel notice result_none">
+					<i class="ico"></i>
+					<p class="text">선택하신 기간에 이벤트 참여 내역이 없습니다.</p>
+				</div>
+			</div>
+		</div>
+		<!-- // page contents -->
+
+		<!-- 마이페이지 맵  -->
+		<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+		<!-- // 마이페이지 맵 -->
+	</div>
+	<!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script th:inline="javascript">
+			(function () {
+				var param = {
+					offset: 0,
+					limit: 5,
+					startDate: $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).startDate,
+					endDate: $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).endDate
+				};
+
+				AP.myEventList._getList( param, true );
+			}());
+		</script>
+	</th:block>
+</body>
+</html>

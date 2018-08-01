@@ -1,0 +1,51 @@
+<div class="panel">
+    <fieldset class="form">
+        <legend class="sr_only">리뷰 검색 필터 선택</legend>
+        {{!-- 옵션이 1개 이상일때만 --}}
+        {{#xif this.model.products.properties.length '>' 1}}
+			<div class="input_group">
+				<div>
+					<select name="" id="" title="옵션 상품별 선택" data-group="products">
+						<option value="">옵션 상품별</option>
+						{{#each this.model.products.properties}}
+							<option value="{{ this.value }}" {{#if this.selected}}selected="selected"{{/if}}>{{ this.label }}</option>
+						{{/each}}
+					</select>
+				</div>
+			</div>
+        {{/xif}}
+
+        <div class="ui_accordion" data-open-type="single">
+            {{#each this.model}}
+                {{#xif @key '!=' 'products'}}
+                <dl>
+                    <dt {{#xif @key '==' 'prodReviewType'}}class="on"{{/xif}}>
+                        <span class="title">{{this.label}} <em></em></span>
+                        <button type="button"><span class="sr_only">더보기</span></button>
+                    </dt>
+                    <dd>
+                        <div class="cont panel gray">
+                            {{#each this.properties}}
+                            <div class="check_wrap">
+                                <input type="radio" name="{{ ../../uId }}_{{ @../key }}" id="{{ ../../uId }}_{{ @../key }}_{{ @key }}" value="{{ this.value }}" {{#if this.selected}}checked="checked"{{/if}} data-group="{{ @../key }}" data-label="{{ this.label }}" />
+                                <label for="{{ ../../uId }}_{{ @../key }}_{{ @key }}">
+                                    {{#if this.rating}}
+                                        {{#if (isNumberic this.rating)}}
+                                            <span class="rating_heart heart{{ this.rating }}">{{ this.label }}</span>
+                                        {{else}}
+                                            {{ this.label }}
+                                        {{/if}}
+                                    {{else}}
+                                        {{ this.label }}
+                                    {{/if}}
+                                </label>
+                            </div>
+                            {{/each}}
+                        </div>
+                    </dd>
+                </dl>
+                {{/xif}}
+            {{/each}}
+        </div>
+    </fieldset>
+</div>

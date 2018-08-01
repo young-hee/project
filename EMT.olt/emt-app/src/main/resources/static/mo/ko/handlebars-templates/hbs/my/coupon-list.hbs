@@ -1,0 +1,81 @@
+{{#xif this.searchType '==' 'Avail' }}
+	{{#each this.list}}
+		<div class="coupon">
+			<div class="table_layout">
+				{{#if this.dDay}}
+					<p class="d_day">D-{{this.dDay}}</p>
+				{{/if}}
+				<p class="channel">
+					{{{channelSwitch this.availCoupon.availCh}}}
+				</p>
+			</div>
+			<div class="table_layout">
+				{{{couponTypeBenefitSwitch this.availCoupon}}}
+				<div>
+					<p class="coupon_name">{{this.availCoupon.couponName}}</p>
+					<p class="condition">{{{conditionSwitch this.availCoupon}}}</p>
+				</div>
+			</div>
+			{{#if this.availCoupon.foGuide}}
+				<div class="table_layout">
+					<div class="ui_tooltip">
+						<button type="button" class="btn_tooltip">툴팁보기</button>
+						<span class="arr"></span>
+						<div class="layer_tooltip">
+							<dl>
+								<dt>쿠폰 안내</dt>
+								<dd>
+									<ul class="list_bullet_dot">
+										<pre>{{{this.availCoupon.foGuide}}}</pre>
+									</ul>
+									<button type="button" class="ui_close sm"><span class="sr_only">툴팁 닫기</span></button>
+								</dd>
+							</dl>
+						</div>
+					</div>
+				</div>
+			{{/if}}
+		</div>
+	{{/each}}
+{{else}}
+	{{#each this.list}}
+		<div class="coupon">
+			<div class="table_layout">
+				{{#if this.useDt}}
+					<p class="d_day">사용일 <span class="num">{{dateFormat this.useDt "YYYY-MM-DD"}}</span></p>
+				{{else if this.expDt}}
+					<p class="d_day">만료일 <span class="num">{{dateFormat this.expDt "YYYY-MM-DD"}}</span></p>
+				{{/if}}
+				<p class="channel">
+					{{{channelSwitch this.expCoupon.availCh}}}
+				</p>
+			</div>
+			<div class="table_layout">
+				{{{couponTypeBenefitSwitch this.expCoupon}}}
+				<div>
+					<p class="coupon_name">{{this.expCoupon.couponName}}</p>
+					<p class="condition">{{{conditionSwitch this.expCoupon}}}</p>
+				</div>
+			</div>
+			{{#if this.expCoupon.foGuide}}
+				<div class="table_layout">
+					<div class="ui_tooltip">
+						<button type="button" class="btn_tooltip">툴팁보기</button>
+						<span class="arr"></span>
+						<div class="layer_tooltip">
+							<dl>
+								<dt>쿠폰 안내</dt>
+								<dd>
+									<ul class="list_bullet_dot">
+										{{{this.expCoupon.foGuide}}}
+									</ul>
+									<button type="button" class="ui_close sm"><span class="sr_only">툴팁 닫기</span></button>
+								</dd>
+							</dl>
+						</div>
+					</div>
+				</div>
+			{{/if}}
+		</div>
+	{{/each}}
+{{/xif}}

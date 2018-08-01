@@ -1,0 +1,103 @@
+<div class="mypage_map">
+	<ul>
+		<li><span>나의 주문 관리</span> <!-- 메뉴 선택시 selected 클래스 -->
+			<ul><!--/* 20180418 : 메뉴변경 */-->
+				<li><a href="/my/page/onlineOrderShipping">주문/배송조회</a></li> <!-- 메뉴 선택시 selected 클래스 -->
+				<li><a href="/my/page/returnExchange">반품/교환</a></li>
+				<li><a href="/my/page/cashReceipts">현금영수증 발급</a></li>
+			</ul>
+		</li>
+		<li th:classappend="${menuId == 'myBenefit'}? 'selected' : null"><span>나의 혜택 관리</span>
+			<ul>
+				<li th:classappend="${subMenuId == 'myCoupon'}? 'selected' : null"><a href="/my/page/myCouponList">쿠폰 적립/사용</a></li>
+				<li th:classappend="${subMenuId == 'myLevel'}? 'selected' : null"><a href="/my/page/myLevelList">나의 예상 등급</a></li>
+			</ul>
+		</li>
+		<li th:classappend="${menuId == 'myPoint'}? 'selected' : null"><span>나의 포인트 관리</span>
+			<ul>
+				<li th:classappend="${subMenuId == 'beautyPoint'}? 'selected' : null"><a href="/my/page/info/beautyPoint">뷰티포인트</a></li>
+				<li th:classappend="${subMenuId == 'pearl'}? 'selected' : null"><a href="/my/page/pearl/present">진주알</a></li>
+				<li th:classappend="${subMenuId == 'cushion'}? 'selected' : null"><a href="/my/page/cushion">쿠션포인트</a></li>
+			</ul>
+		</li>
+		<li th:classappend="${menuId == 'myWallet'}? 'selected' : null"><span>나의 지갑 관리</span>
+			<ul><!--/* 20180418 : 메뉴변경 */-->
+				<li th:classappend="${subMenuId == 'myGiftCard'}? 'selected' : null"><a href="/my/page/myGiftCardList">기프트카드 관리</a></li>
+				<li th:classappend="${subMenuId == 'myDeposit'}? 'selected' : null"><a href="/my/page/myDepositList">예치금 관리</a></li>
+				<li><a href="#non" onclick="wpayClickEvent();">원터치 간편결제 카드관리</a></li>
+			</ul>
+		</li>
+		<li  th:classappend="${menuId == 'myActivity'}? 'selected' : null"><span>나의 활동 관리</span>
+			<ul>
+				<li th:classappend="${subMenuId == 'myEvent'}? 'selected' : null"><a href="/my/page/myEventList">이벤트 신청/당첨</a></li>
+				<li th:classappend="${subMenuId == 'myReview'}? 'selected' : null"><a href="/my/page/myReviewList">상품평 관리</a></li>
+				<li th:classappend="${subMenuId == 'myInquiry'}? 'selected' : null"><a href="/my/page/myInquiryList">나의 1:1 문의</a></li>
+			</ul>
+		</li>
+		<li th:classappend="${menuId == 'myInfo'}? 'selected' : null"><span>나의 정보 관리</span>
+			<ul><!--/* 20180521 : 수정 */-->
+				<li th:classappend="${subMenuId == 'changeUser'}? 'selected' : null"><a href="/my/page/info/changeUserInfo">회원정보</a></li>
+				<li th:classappend="${subMenuId == 'snsLink'}? 'selected' : null"><a href="/my/page/info/snsLink">SNS 계정 연동 관리</a></li>
+				<li><a href="/my/page/ship/address">배송지 관리</a></li>
+				<li><a href="/my/page/store/list">단골매장 관리</a></li>
+				<li th:classappend="${subMenuId == 'leaverId'}? 'selected' : null"><a href="/my/page/leaveId">회원 탈퇴</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<script th:inline="javascript">
+	function wpayClickEvent(){
+		
+		//원터치 간편결제 카드 회원여부 체크			
+		AP.api.getMemberWPayInfo({}, {
+						
+		}).done(function (data) {
+			if (data.result != "success"){
+				//간편결제 가입 안내 문구
+				openWpayNonMemberNoti();
+				
+			} else {
+				//간편결제 연동페이지 호출
+				callWpayMgmtPopup();
+			}
+		}).fail(function (e) {
+			AP.modal.alert("[ajax.fail]실패");
+		}).always(function () {
+		});
+		
+		
+	}
+	
+	function openWpayNonMemberNoti(){
+		
+		var contents = new Object();
+		contents.title = '원터치 간편결제 안내';
+		contents.contents = '원터치 간편결제 서비스는 회원전용입니다.<br>주문결제 시 [<strong>원터치 간편결제</strong>] 를 가입 후<br>카드를 등록해 주세요.';
+		AP.modal.info(contents);
+		return false;
+	}
+	
+	
+	function callWpayMgmtPopup() {
+		
+		var w = 850;
+		var h = 750;
+		
+		var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : window.screenX;
+	    var dualScreenTop = window.screenTop != undefined ? window.screenTop : window.screenY;
+		
+		var width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+	    var height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+	
+	    var left = ((width / 2) - (w / 2)) + dualScreenLeft;
+	    var top = ((height / 2) - (h / 2)) + dualScreenTop;
+	    
+	    var wpayMgmtPopup = window.open('/my/page/wpayMgmt','wpayMgmtPopup', 'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+		
+	}
+	
+	function wpayResultMsg(msg){
+		AP.modal.alert(msg);
+	}
+</script>

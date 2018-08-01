@@ -1,0 +1,287 @@
+<html ap:decorate="~{layout/layout-member-join}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="layer_popup fullpage">
+		<div class="layer_wrap">
+			<dl class="layer fixed_top bg_gray">
+				<dt class="layer_title">비회원 로그인</dt>
+				<dd class="layer_cont member_log">
+					<div class="ui_toggle_contents view_keyboard">
+						<button class="toggle_btn">PC 키보드 보기 <i class="ico_down"></i></button>
+						<div>
+							<img ap:src="@{/images/member/img_keyboard.png}" alt="pc 용 키보드 배열">
+						</div>
+					</div>
+					<fieldset class="form">
+						<legend class="sr_only">로그인</legend>
+						<div class="input_wrap">
+							<input type="text" title="주문번호 입력" name="ordNo" placeholder="주문번호를 입력하세요">
+						</div>
+						<div class="input_group">
+							<div class="select_wrap w30p">
+								<select name="phoneNumber1" required="required" title="휴대폰 사업자 식별번호 선택" data-msg-required="휴대전화 사업자 식별번호를 입력해주세요.">
+									<option value="010">010</option>
+									<option value="011">011</option>
+									<option value="016">016</option>
+									<option value="017">017</option>
+									<option value="018">018</option>
+									<option value="019">019</option>
+								</select>
+							</div>
+							<div class="gap"></div>
+							<div class="input_wrap"><input type="tel" title="휴대폰 번호 입력" name="phoneNumber2" maxlength="8" placeholder="휴대폰 번호 입력('-' 생략)" data-msg-required="휴대폰번호를 입력해 주세요."></div>
+						</div>
+						<div class="form_btns">
+							<a href="javascript:;" onclick="nomember()" class="btn_lg_login">로그인</a>
+						</div>
+						<p class="text">비회원 구매시, 포인트 적립이나 쿠폰할인 등의 혜택이 적용되지 않습니다. <a href="#none"><b>회원 로그인하기</b> <I class="ico_arr"></I></a></p>
+						<button class="btn_lg_bordered w100p" onclick="move('/loginSimple')" type="button">휴대폰 간편 로그인</button>
+					</fieldset>
+					<hr class="div m20">
+					<div class="sns_log">
+						<button class="btn_lg_bordered w100p" onclick="naverLogin()" type="button"><i class="ico_naver"></i><span>네이버로 로그인</span></button>
+						<button class="btn_lg_bordered w100p" onclick="facebookLogin()" type="button"><i class="ico_facebook"></i><span>페이스북으로 로그인</span></button>
+						<button class="btn_lg_bordered w100p" onclick="kakaoLogin()" type="button"><i class="ico_kakao"></i><span>카카오톡으로 로그인</span></button>
+						<button class="btn_lg_bordered w100p" onclick="move('/login')" type="button"><span>회원 로그인</span><i class="ico_navi next"></i></button>
+					</div>
+					<div class="member_menu">
+						<a href="/customer/signup">회원가입</a><a href="/customer/find/find-id">아이디찾기</a><a href="/customer/find/find-pwd">비밀번호찾기</a>
+					</div>
+				</dd>
+			</dl>
+			<button class="layer_close" onclick="back()" type="button"><i class="ico_close"></i><span class="sr_only">레이어 닫기</span></button>
+		</div>
+	</div>
+
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+<script>
+
+
+function back() {
+    location.href = "/main";
+}
+var returnUrl = '[[${returnUrl}]]';
+if (returnUrl == '') returnUrl = "/main";
+
+function move(url) {
+	var form = $('#sub');
+
+    var objs = document.createElement('input');
+    objs.setAttribute('type', 'hidden');
+    objs.setAttribute('name', 'isRequiredLogin');
+    objs.setAttribute('value', 'true');
+    form[0].appendChild(objs);
+    objs = document.createElement('input');
+    objs.setAttribute('type', 'hidden');
+    objs.setAttribute('name', 'returnUrl');
+    objs.setAttribute('value', form.attr('action'));
+    
+    form.attr('action', url);
+    
+    form.submit();
+}
+
+$('input[type=tel]').keydown(function (event) {
+    if (event.keyCode) {
+        var code = event.keyCode;
+        if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+            return true;
+        } else {
+            return false;
+        }
+    } else if (e.which) {
+        var code = e.which;
+        if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+});
+$('input[type=tel]').keyup(function (event) {
+	event = event || window.event;
+	var keyID = (event.which) ? event.which : event.keyCode;
+	if ( keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39 ) 
+		return;
+	else
+		event.target.value = event.target.value.replace(/[^0-9]/g, "");
+});
+
+//카카오으로 로그인
+function snsKakao() {
+  Kakao.Auth.login({
+      persistRefreshToken: true,
+      success: function(authObj) {
+          Kakao.Auth.setAccessToken(authObj.access_token);
+
+          Kakao.API.request({
+              url: '/v1/user/me',
+              success: function(res) {
+
+                  var indexed_array = {};
+                  indexed_array['snsName'] = 'Kakao';
+                  indexed_array['id'] = res.id;
+                  $.ajax({
+                      type: "POST",
+                      url: "/login/snsloginProcess",
+                      data: indexed_array,
+                      success: function(data) {
+                          if (data.state == 'success') {
+                              if (data.isLinked) {
+                                  window.location.href = returnUrl;
+                              } else {
+                                  location.href = "/login/snsLinkPage";
+                                  window.close();
+                              }
+                          }
+                          //성공
+                      },
+                      dataType: "json"
+                  });
+              },
+              fail: function(error) {
+                  alert(JSON.stringify(error));
+              }
+          });
+
+
+      },
+      fail: function(err) {
+          console.log(JSON.stringify(err));
+          alert(JSON.stringify(err));
+      }
+  });
+}
+
+//페이스북으로 로그인
+window.fbAsyncInit = function() {
+  FB.init({
+      appId: '[[${@environment.getProperty('facebook.key')}]]',
+      cookie: true,
+      xfbml: true,
+      version: 'v2.11'
+  });
+
+  FB.AppEvents.logPageView();
+
+};
+
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {
+      return;
+  }
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://connect.facebook.net/en_US/sdk.js";
+  fjs.parentNode.insertBefore(js, fjs);
+
+}(document, 'script', 'facebook-jssdk'));
+function naverLogin() {
+	window.open('https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=xbLexjx52A_pQD0sZgIP&state=[[${state}]]&redirect_uri=' + location.href.replace('guestOrder','navercallback'), 'naverloginpop', 'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550'); return false
+}
+function kakaoLogin() {
+	window.open('https://kauth.kakao.com/oauth/authorize?client_id=ce4dd4a15adfd391c88f730c049f12c4&response_type=code&redirect_uri=' + location.href.replace('guestOrder','') + 'kakaocallback', 'kakaologinpop', 'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550'); return false
+}
+
+function facebookLogin() {
+
+  FB.login(function(response) {
+      //statusChangeCallback(response);   -- FB 로그인 취소시, 무한루프에 빠지게됨
+      if (response.status === 'connected') {
+          // 페이스북과 앱에 같이 로그인되어 있다.
+          $("#accessToken").val(response.authResponse.accessToken);
+          fncFBCallback(response.authResponse.accessToken);
+      } else if (response.status === 'not_authorized') {
+          // 페이스북에는 로그인 되어있으나, 앱에는 로그인 되어있지 않다.
+          AP.modal.alert('Facebook 계정 설정에서 해당 어플리케이션이 인가되지 않았습니다.\n다시 로그인 버튼을 클릭후, 어플리케이션 사용을 승인하여 주십시오.');
+      }
+  });
+}
+
+function fncFBCallback(token) {
+  FB.api('/me', {
+      fields: 'email, birthday, name'
+  }, function(response) {
+
+      var indexed_array = {};
+      indexed_array['snsName'] = 'Facebook';
+      indexed_array['id'] = response.id;
+      indexed_array['accessToken'] = token;
+
+      $.ajax({
+          type: "POST",
+          url: "/login/snsloginProcess",
+          data: indexed_array,
+          success: function(data) {
+              if (data.isLinked) {
+              	nbSuccess(data);
+              } else {
+                  location.href = "/login/snsLinkPage";
+              }
+              //성공
+          },
+          dataType: "json"
+      });
+  });
+}
+
+var naver_id_login = new naver_id_login("[[${@environment.getProperty('naver.key')}]]", "[[${@environment.getProperty('naver.callback')}]]");
+
+function nbSuccess(data) {
+
+  if (data.sleep == 'Y') {
+  	location.href="/sleepUser";
+  } else if (data.old == 'Y') {
+      changeInfoModal();
+  } else if (data.changePw == 'Y') {
+      var contents = new Object();
+      contents.title = "[[#{common.alert}]]";
+      contents.contents = "고객님!<br>" +
+          "비밀번호를 2개월동안 변경하지 않으셨습니다.<br><br>" +
+          "개인정보보호를 위해<br>비밀번호를 변경해주세요.";
+      contents.cancelLabel = "다음에 변경";
+      contents.confirmLabel = "비밀번호 변경";
+
+      AP.modal.info(contents).addListener('modal-close', function(e) {
+          if (e.closeType == 'close' || e.closeType == 'cancel') {
+              location.href = returnUrl;
+          } else if (e.closeType == 'confirm') {
+              changePassword();
+          }
+          console.log(e.closeType); //close, confirm, cancel
+      });
+  } else {
+      location.href = returnUrl;
+  }
+}
+
+function doSnsLogin() {
+  window.location.href = "/login/snsLinkPage?returl=" + returnUrl;
+}
+
+
+function nomember() {
+
+    AP.api.checkOrder({}, {
+    	ordNo: $('[name=ordNo]').val(),
+    	phoneNo: $('[name=phoneNumber1]').val() + $('[name=phoneNumber2]').val()
+    }).done(function(data) {
+		post_goto('/non/order/detail/' + $('[name=ordNo]').val() , {'phoneNo': $('[name=phoneNumber1]').val() + $('[name=phoneNumber2]').val()});
+    }).fail(function(xhr, textStatus, errorThrown) {
+        AP.modal.alert(xhr.errorMessage)
+    }).always(function() {
+        //성공, 실패
+    });
+}
+</script>
+</th:block>
+
+</body>
+</html>

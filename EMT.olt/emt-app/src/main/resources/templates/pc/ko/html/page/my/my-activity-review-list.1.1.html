@@ -1,0 +1,50 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- mypage sitemap -->
+            <th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+            <!-- //  mypage sitemap -->
+
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+
+            <!-- page contents -->
+            <div class="ap_contents mypage activity review_list">
+				<!-- tab menu wrap -->
+				<div class="ui_tab">
+					<!-- tab menu -->
+					<div class="tab_menu equally">
+						<ul>
+							<li class="on"><a href="#none">작성 가능한 리뷰 <em>00</em>개</a></li>
+							<li><a href="#none">작성한 리뷰 <em>00</em>개</a></li>
+						</ul>
+					</div>
+					<!-- tab content -->
+					<div class="tab_cont">
+						<h3 class="sr_only">매장 찾기</h3>
+
+						<div class="panel activity_list">
+							<div class="panel notice activity_notice bdr_none">
+								<i class="ico"></i>
+								<p class="text font_lg">작성 가능한 구매 내역이 없습니다.</p>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+            <script>
+				$( '.ui_tooltip' ).tooltip();
+            </script>
+        </th:block>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='member'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page contents -->
+            <div class="ap_contents mypage">
+            	<div class="mobile_card">
+                    <div class="panel">
+                        <h3 class="h_title page"><strong>뷰티포인트</strong><br>모바일 카드 신청</h3>
+
+                        <p class="font_md lh2">
+                            뷰티포인트 모바일 카드는 휴대폰에 뷰티포인트 카드를 저장하여
+                            포인트를 적립하고 사용할 수 있는 편리한 서비스입니다.
+                        </p>
+
+                        <hr class="div m30">
+                        <fieldset class="form">
+                            <legend class="sr_only">발급 유형 선택</legend>
+                            <h3 class="h_title cont"><strong>모바일 카드 발급 선택</strong></h3>
+                            <div class="check_set">
+                                <div class="check_wrap"><input type="radio" name="radio" id="radio1"><label for="radio1">모바일 카드 신규 발급</label></div>
+                                <br>
+                                <div class="check_wrap"><input type="radio" name="radio" id="radio2" checked=""><label for="radio2">기존 모바일 카드 재발급</label></div>
+                            </div>
+                            <dl class="dl_cont mgt35">
+                                <dt class="h_title cont"><strong>현재 발급받은 뷰티 포인트 카드번호</strong></dt>
+                                <dd class="color_light_gray">0000-1111-3333-****</dd>
+                            </dl>
+                            <p class="bullet_dot">기존 카드번호로 모바일 카드가 발급됩니다.</p>
+                        </fieldset>
+
+                        <fieldset class="form mgt35">
+                            <legend class="sr_only">고객 정보 확인</legend>
+
+                            <h3 class="form_title">고객 정보 확인</h3>
+                            <p class="text color_light_gray">고객명과 휴대폰 정보를 확인해 주세요.</p>
+
+                            <div class="input_group">
+                                <div class="label">
+                                    <label for="name">고객명</label>
+                                </div>
+                                <div>
+                                    <input type="text" id="name" placeholder="홍길동">
+                                </div>
+                            </div>
+                            <div class="input_group">
+                                <div class="label">
+                                    <label for="phone">휴대폰번호</label>
+                                </div>
+                                <div>
+                                    <input type="text" id="phone" title="휴대전화 입력" placeholder="휴대폰 번호(ex.01012345678)"> <!-- 02-22 수정 value -> placeholder -->
+                                </div>
+                            </div>
+
+                            <div>
+                                <ul class="list_bullet_dot">
+                                    <li>휴대폰번호 수정은 <strong>마이에뛰드 > 개인정보수정</strong>에서 수정해 주세요.</li>
+                                    <li>일부 스마트폰에서는 MMS수신이 불가능하오니, 아모레퍼시픽 어플리케이션을 다운로드 하시어 이용하시기 바랍니다.</li>
+                                </ul>
+                            </div>
+                        </fieldset>
+
+                        <div class="page_btns">
+                            <button class="btn_lg_secondary" type="button">취소</button>
+                            <button class="btn_lg_primary" type="button">모바일 카드 신청</button>
+                        </div>
+                    </div>
+
+               	</div>
+            </div>
+            <!-- // page contents -->
+            <!-- 마이페이지 맵 -->
+            <th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+            <!-- // 마이페이지 맵 -->
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+			<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+			<script>
+				//multiple date picker적용
+				$( '.ui_multiple_date_picker' ).multipleDatePicker({
+					defaultRangeDate: '1months',
+					minDate: moment().subtract( 50, 'years' )
+				}).on( 'multiple-date-picker-change', function (e) {
+					console.log( e.type, e.date );
+				});
+			</script>
+
+        </th:block>
+</body>
+</html>

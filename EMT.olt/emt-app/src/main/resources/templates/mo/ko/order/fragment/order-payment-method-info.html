@@ -1,0 +1,60 @@
+<th:block th:each="payMethod : ${payMethodResult.payMethodExList}">
+	<th:block th:if="${apMember != null}">
+	<span th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'wpay'}" class="w_pay">
+		<input type="text" name="payMethodSn" th:value="${payMethod.payMethodSn}">
+		<input type="text" name="payServiceCode" th:value="${payMethod.payServiceCode}">
+		<input type="text" name="payMethodCode" th:value="${payMethod.payMethodCode}">
+		<input type="radio" name="payMethod" id="w_pay" value="WPAY" th:onclick="|setPayment(this,'WPAY','')|" title="원터치 간편결제"><label for="w_pay" th:text="${payMethod.payMethodName}">원터치 간편결제</label>
+	</span>
+	</th:block>
+	<span th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'credit-card'}" class="credit">
+		<input type="text" name="payMethodSn" th:value="${payMethod.payMethodSn}">
+		<input type="text" name="payServiceCode" th:value="${payMethod.payServiceCode}">
+		<input type="text" name="payMethodCode" th:value="${payMethod.payMethodCode}">
+		<input type="radio" name="payMethod" id="credit" value="wcard" th:onclick="|setPayment(this,'wcard','')|" title="신용카드"><label for="credit" th:text="${payMethod.payMethodName}">신용카드</label>
+	</span>
+	<span th:if="${payMethod.payServiceCode == 'naver-pg' and payMethod.payMethodCode == 'naverpay'}" class="n_pay">
+		<input type="text" name="payMethodSn" th:value="${payMethod.payMethodSn}">
+		<input type="text" name="payServiceCode" th:value="${payMethod.payServiceCode}">
+		<input type="text" name="payMethodCode" th:value="${payMethod.payMethodCode}">
+		<input type="radio" name="payMethod" id="n_pay" value="NAVERPAY" th:onclick="|setPayment(this,'NAVERPAY','')|" title="네이버 페이"><label for="n_pay" th:text="${payMethod.payMethodName}">네이버 페이</label>
+	</span>
+	<span th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'mobile-phone-pay'}" class="phone">
+		<input type="text" name="payMethodSn" th:value="${payMethod.payMethodSn}">
+		<input type="text" name="payServiceCode" th:value="${payMethod.payServiceCode}">
+		<input type="text" name="payMethodCode" th:value="${payMethod.payMethodCode}">
+		<input type="radio" name="payMethod" id="phone" value="mobile" th:onclick="|setPayment(this,'mobile','')|" title="휴대폰 결제"><label for="phone" th:text="${payMethod.payMethodName}">휴대폰 결제</label>
+	</span>
+	<span th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'payco'}" class="payco">
+		<input type="text" name="payMethodSn" th:value="${payMethod.payMethodSn}">
+		<input type="text" name="payServiceCode" th:value="${payMethod.payServiceCode}">
+		<input type="text" name="payMethodCode" th:value="${payMethod.payMethodCode}">
+		<input type="radio" name="payMethod" id="payco" value="wcard" th:onclick="|setPayment(this,'wcard','onlypayco')|" title="페이코"><label for="payco" th:text="${payMethod.payMethodName}">페이코</label>
+	</span>
+	<span th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'kakaopay'}" class="kakao_pay">
+		<input type="text" name="payMethodSn" th:value="${payMethod.payMethodSn}">
+		<input type="text" name="payServiceCode" th:value="${payMethod.payServiceCode}">
+		<input type="text" name="payMethodCode" th:value="${payMethod.payMethodCode}">
+		<input type="radio" name="payMethod" id="kakao_pay" value="wcard" th:onclick="|setPayment(this,'wcard','onlykakaopay')|" title="카카오 페이"><label for="kakao_pay" th:text="${payMethod.payMethodName}">카카오 페이</label>
+	</span>
+	<span th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'bank-ac-transfer'}" class="account_transfer">
+		<input type="text" name="payMethodSn" th:value="${payMethod.payMethodSn}">
+		<input type="text" name="payServiceCode" th:value="${payMethod.payServiceCode}">
+		<input type="text" name="payMethodCode" th:value="${payMethod.payMethodCode}">
+		<input type="radio" name="payMethod" id="account_transfer" value="bank" th:onclick="|setPayment(this,'bank','')|" title="실시간 계좌이체"><label for="account_transfer" th:text="${payMethod.payMethodName}">실시간 계좌이체</label>
+	</span>
+	<span th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'virtual-account'}" class="remit_bank">
+		<input type="text" name="payMethodSn" th:value="${payMethod.payMethodSn}">
+		<input type="text" name="payServiceCode" th:value="${payMethod.payServiceCode}">
+		<input type="text" name="payMethodCode" th:value="${payMethod.payMethodCode}">
+		<input type="radio" name="payMethod" id="remit_bank" value="vbank" th:onclick="|setPayment(this,'vbank','')|" title="무통장 입금"><label for="remit_bank" th:text="${payMethod.payMethodName}">무통장 입금</label>
+	</span>
+</th:block>
+<th:block th:if="${apMember == null}">
+	<span class="nonmemberUi">
+		<input type="text" name="payMethodSn">
+		<input type="text" name="payServiceCode">
+		<input type="text" name="payMethodCode">
+		<input type="radio" name="payMethod" id="nonmemberUi" disabled="disabled"><label for="nonmemberUi"></label>
+	</span>
+</th:block>

@@ -1,0 +1,152 @@
+<html ap:decorate="~{layout/layout-contents}">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page contents -->
+		<div class="ap_contents cs_main">
+			<div class="panel">
+				<div class="cs_menu">
+					<ul>
+						<li><a href="/cs/inquiry"><i class="ico"></i><span>1:1문의</span></a></li>
+						<li><a href="/my/page/myInquiryList"><i class="ico"></i><span>1:1문의 내역</span></a></li>
+						<li><a href="javascript:AP.footer.openArtistTalk();"><i class="ico"></i><span>ArtistTalk</span></a></li>
+						<li><a href="/cs/pinkMembership"><i class="ico"></i><span>맴버십 혜택</span></a></li>
+						<li><a href="/cs/takeOut"><i class="ico"></i><span>매장 특화</span></a></li>
+						<li><a href="#none" th:href="@{/display/store_location(displayMenuId=store_location)}"><i class="ico"></i><span>매장찾기</span></a></li>
+					</ul>
+				</div>
+				<hr class="div m25" />
+				<div class="contact">
+					<div class="table_layout align_center">
+						<div>
+							<a href="tel:1544-5418" class="phone num">고객상담</a>
+						</div>
+						<div>
+							<a href="tel:080-022-2285" class="phone num">제품 및 매장 문의</a>
+						</div>
+					</div>
+					<p class="text_center">
+						평일 09:00 ~ 18:00(점심시간 12:00 ~ 13:00)<br>토/일/공휴일 휴무
+					</p>
+				</div>
+			</div>
+
+			<div class="panel">
+				<div class="clear">
+					<h3 class="h_title cont eng">
+						<strong>FAQ TOP 5</strong>
+					</h3>
+					<button type="button" class="btn_more"
+						onclick="javascript:sendFaq('')">
+						<span>더보기</span><i class="ico_arr"></i>
+					</button>
+				</div>
+
+				<fieldset class="search_form">
+					<legend class="sr_only">검색</legend>
+					<input type="text" title="검색어 입력" placeholder="검색" id="searchText"
+						name="searchText" onkeypress="return searchKeyPress(event);">
+					<button type="button" class="btn_search" id="search" name="search"></button>
+				</fieldset>
+			</div>
+			<div class="ui_accordion faq" id="faqPaging">
+			</div>
+			<!-- 01-29 삭제
+                </div> -->
+			<!-- 01-23 삭제
+            	<div class="panel">
+            		<div class="table_layout align_center contact">
+                		<a href="#none">
+                			<b>멤버십 혜택 안내</b>
+                		</a>
+                		<a href="#none">
+                			<b>매장 특화 서비스 안내</b>
+                		</a>
+                	</div>
+            	</div> -->
+		</div>
+		<!-- // page contents -->
+		<!-- 공지사항 -->
+         <dl class="footer_notice" th:if="${not #lists.isEmpty(footerNotice)}">
+             <dt>공지</dt>
+             <dd>
+                 <div class="slide footer_slide" data-ix-options="view-length:1; auto-play:true; axis:vertical; touch-disable:true">
+                     <div class="ix-list-viewport">
+                         <ul class="ix-list-items">
+                             <th:block th:each="fnotice : ${footerNotice.foNoticeList}">
+                                 <li class="ix-list-item">
+                                     <a href="#none"
+                                     th:href="@{|/cs/noticeView/${fnotice.foNoticeSn}|}"
+                                     th:text="${fnotice.foNoticeTitle}">테이크아웃 적립 혜택 변경 안내</a>
+                                 </li>
+                             </th:block>
+                         </ul>
+                     </div>
+                 </div>
+                 <a href="/cs/notice" class="more"><span class="sr_only">공지사항 더보기</span></a>
+             </dd>
+         </dl>
+         <!-- // 공지사항 -->
+	</div>
+	<!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script ap:src="@{/handlebars-templates/compiled/cs/cc-faq-list.js}"></script>
+		<script th:inline="javascript">
+			$(document).ready(function() {
+				faq();
+			});
+			function sendFaq(keyword) {
+				location.href = "/cs/faq/" + keyword;
+			}
+
+			$('#search').on('click', function(e) {
+				var search = $('#searchText').val();
+				if (search != null && search.length > 0) {
+					sendFaq(search);
+				}
+			});
+
+			function searchKeyPress(e) {
+				// look for window.event in case event isn't passed in
+				e = e || window.event;
+				if (e.keyCode == 13) {
+					document.getElementById('search').click();
+					return false;
+				}
+				return true;
+			}
+
+			function faq() {
+				AP.api.csList({}, {
+					type : 'faq',
+					keyword : '',
+					inquiryTypeSn : '',
+					offset : 0,
+					limit : 5
+				}).done(function(data) {
+					if (data) {
+						// getPostFaq(data.data, isReplace);
+						var resultHtml = AP.common.getTemplate('cs.cc-faq-list', {
+							totalLength : data.data.faqList.length,
+							totalLengthLabel : $B.string.numberFormat(data.data.faqList.length),
+							result : data.data.faqList
+						});
+						$('#faqPaging').append(resultHtml);
+						$('.ui_accordion').accordion('clear');
+						$('.ui_accordion').accordion();
+					}
+					//성공
+				}).fail(function(e) {
+				    AP.modal.alert(e.responseJSON.errorData.message);
+				//실패
+				}).always(function() {
+				//성공, 실패
+				});
+			}
+		</script>
+	</th:block>
+</body>
+</html>

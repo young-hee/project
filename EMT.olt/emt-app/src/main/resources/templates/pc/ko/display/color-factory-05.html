@@ -1,0 +1,139 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents brand">
+				<div class="color_factory">
+					<!-- tab menu wrap -->
+					<div class="ui_tab">
+						<!-- tab menu -->
+						<div class="tab_menu equally">
+							<ul>
+								<li><a href="#none" th:href="@{/display/color_factory_info(displayMenuId=color_factory_info)}">컬러 팩토리 안내 (Color Factory)</a></li>
+								<li class="on"><a href="#none" th:href="@{/display/color_factory_reserve(displayMenuId=color_factory_reserve)}">컬러 팩토리 예약 (Reservation)</a></li>
+								<li><a href="#none" th:href="@{/display/color_factory_store(displayMenuId=color_factory_store)}">서비스 매장 보기 (Store)</a></li>
+							</ul>
+						</div>
+						<!-- tab content -->
+						<div class="tab_cont space">
+							<h3 class="sr_only">컬러 팩토리 예약 (Reservation)</h3>
+							<h4 class="h_title lare">컬러 팩토리 예약 확인</h4>
+							<p class="text">최근 1개월 간 예약된 서비스 목록입니다.</p>
+
+							<table class="reservation_list" th:if="${storeEventRequestersResult.totalCount} > 0">
+								<caption class="sr_only">컬러 팩토리 예약확인 목록</caption>
+								<colgroup>
+									<col style="">
+									<col style="">
+									<col style="">
+									<col style="width: 100px;">
+									<col style="">
+									<col style="width: 120px;">
+									<col style="width: 120px;">
+								</colgroup>
+								<thead>
+								<tr>
+									<th scope="col">예약 일시<br>(Reser-vation Date/Time)</th>
+									<th scope="col">예약 매장<br>(Reservation Store)</th>
+									<th scope="col">서비스 명<br>(Service)</th>
+									<th scope="col">신청자명<br>(Name)</th>
+									<th scope="col">휴대전화/이메일<br>(cell Phone/e-mail)</th>
+									<th scope="col">예약 번호<br>(Reservaion number)</th>
+									<th scope="col">예약취소<br>(Reservation cancel)</th>
+								</tr>
+								</thead>
+								<tbody>
+								<th:block th:each="reserveList : ${storeEventRequestersResult.storeEventRequesterExList}">
+									<tr>
+										<td><span th:text="${#calendars.format( reserveList.eventStartDt, 'yyyy-MM-dd(EEE)')}"></span><br>/<span th:text="${#calendars.format( reserveList.eventStartDt, 'HH:mm')}"></span></td>
+										<td th:text="${reserveList.storeName}"></td>
+										<td th:text="${reserveList.storeEventServiceName}"></td>
+										<td th:text="${reserveList.name.name1}"></td>
+										<td><span th:text="${reserveList.phoneNo1.phoneNo}"></span><br><span th:text="${reserveList.emailAddress}"></span></td>
+										<td th:text="${reserveList.reserveNo}"></td>
+										<td th:if="${reserveList.reserveCancelYn != 'Y'}"><button type="button" class="btn_sm_neutral btnCancleReserve" th:data-reserve-no="${reserveList.reserveNo}" th:if="${reserveList.cancelAvailYn == 'Y'}">예약 취소</button></td>
+										<td th:if="${reserveList.reserveCancelYn == 'Y'}">취소완료</td>
+									</tr>
+								</th:block>
+								</tbody>
+							</table>
+
+							<div class="ui_paging pagination" th:if="${storeEventRequestersResult.totalCount} > 0"></div>
+							
+							<div class="panel notice" th:if="${storeEventRequestersResult.totalCount} == 0">
+								<i class="ico"></i>
+								<p class="text font_lg">예약된 내역이 없습니다.</p>
+							</div>
+
+							<dl class="dl_cont notice mgt30 ">
+								<dt class="h_title cont"><i class="ico_notice"></i> 유의사항 </dt>
+								<dd>
+									<ul class="list_bullet_dot">
+										<li><b>서비스 이용 시 <em>예약번호</em>를 확인하고 있습니다. 매장 방문 시 제시해 주세요.</b></li>
+										<li>예약번호는 예약확인 페이지, 전송 받은 문자 및 이메일을 통해 확인 가능합니다. (Tip. 해외 거주 외국인의 경우 예약확인 페이지를 사진 찍어 보내주세요~)</li>
+										<li>예약 취소는 온라인에서 서비스 하루 전까지 가능하며, 예약 시간에서 10분 이상이 초과된 경우 다른 고객님의 서비스를 위하여 예약은 자동 취소됩니다.</li>
+										<li>앞 타임 고객님의 응대로 서비스 시작 시간이 약 10분 정도는 지연될 수 있음을 양해 부탁드립니다.</li>
+										<li>당사 사정으로 인한 서비스 이용 불가 시 유선 안내 드리겠습니다.</li>
+										<li>더욱 정확한 퍼스널 컬러 측정을 원하신다면 컬러 메이크업은 최소한으로 하고 오시는 것이 좋습니다.</li>
+										<li>문의전화 : 명동FSS점(플래그십스토어/3F) 02-3789-5463, 가로수길점(B1) 02-549-7202</li>
+										<li><b>Before providing our services, we will check <em>your reservation number</em>. Please present the number when visiting our shop.</b></li>
+										<li>Your reservation number can be checked via the reservation confirmation page and the e-mail we sent. (Tip. In case of International customers rediding overseas, please present a
+											screenshot of your reservation confirmation page!)</li>
+										<li>You can cancel your reservation online at least one day before your scheduled date. If you are late in availing of the service for more than 10 minutes, your reservation will be
+											canceled automatically in order to provide our service for other customers.</li>
+										<li>Please understand that the start time of the service may be delayed by about 10 minutes when there are prior concerns to be attended</li>
+										<li>If we cannot provide service due to the circumstances of our company, we will Inform you via telephone</li>
+										<li>For more accurate personal color measurement, please wear light color makeup, If possible</li>
+										<li>Reservation Inquiry : Myeongdong FSS store(flagship store) (3F) 02-3789-5463; Sinsa Carosugil store (B1) 02-549-7202</li>
+									</ul>
+								</dd>
+							</dl>
+						</div>
+					</div>
+				</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script>
+				// 예약 취소 - click
+				$( '.reservation_list tbody > tr button' ).on( 'click', function (e) {
+					e.preventDefault();
+					var reserveNo = $( this ).data( 'reserveNo' );
+					AP.modal.confirm( '예약을 취소 하시겠습니까?<br>Are you sure you want to cancel your reservation?' ).addListener( 'modal-close', function (e) {
+						if ( e.closeType == 'confirm' ) {
+							cancelReservation( reserveNo );
+						}
+					});
+				});
+	
+				// 예약 취소
+				function cancelReservation ( reserveNo ) {
+					console.log( reserveNo );
+					AP.api.cancelScheduleInfo({}, { reserveNo: reserveNo }).done(function ( result ) {
+						completeCancelReservation();
+					}).fail(function (e) {
+						console.log( 'error', e );
+						AP.modal.alert( '예약 취소를 실패했습니다.<br>Reservation canceled failed.' );
+					}).always(function () {});
+				}
+	
+				// 예약 취소 완료
+				function completeCancelReservation () {
+					AP.modal.alert( '정상적으로 예약이 취소되었습니다.<br>Reservation canceled successfully.' ).addListener( 'modal-close', function (e) {
+						if ( e.closeType == 'confirm' ) {
+							location.reload();
+						}
+					});
+				}
+			</script>
+        </th:block>
+</body>
+</html>

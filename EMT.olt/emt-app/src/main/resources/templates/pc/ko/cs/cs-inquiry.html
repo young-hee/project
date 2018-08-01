@@ -1,0 +1,318 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='cs'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents cs">
+                <div class="panel">
+                    <div class="page_btns_top align_right">
+                        <a href="/my/page/myInquiryList" class="btn_sm_neutral">1 : 1 문의내역보기</a>
+                    </div>
+                    <form class="validate">
+	                    <fieldset class="form">
+	                        <legend class="sr_only">질문 입력 항목</legend>
+	                        <div class="ui_table board_write">
+	                            <dl>
+	                                <dt>문의유형</dt>
+	                                <dd>
+	                                	<span class="select_wrap w300px">
+											<select name="foReceivedInquiryTypeSn" id="" tabindex="-1">
+												<option value="all"> 전체 </option>
+												<option th:each=" i : ${inquiryType}" th:value="${i.inquiryTypeSn}" th:text="${i.inquiryTypeName}"></option>
+											</select>
+										</span>
+	                                </dd>
+	                            </dl>
+	                            <dl>
+	                                <dt>주문상품</dt>
+	                                <dd>
+	                                    <div class="input_btn_wrap fixed">
+	                                        <span class="input_wrap"><input type="text" id="orderName" class="" readonly=""></span>
+	                                        <button class="btn_md_form" type="button" id="b_add">등록</button>
+	                                        <input type="hidden" name="ordHistNo" id="ordHistNo">
+	                                    </div>
+	                                </dd>
+	                            </dl>
+	                            <dl>
+	                                <dt>제목</dt>
+	                                <dd>
+	                                    <div class="input_wrap w100p"><input type="text" name="inquiryTitle" title="제목 입력" placeholder="제목을 입력해 주세요." required="required" data-msg="제목을 입력해 주세요." maxlength="200"></div>
+	                                </dd>
+	                            </dl>
+	                            <dl>
+	                                <dt>문의내용</dt>
+	                                <dd>
+	                                    <div class="textarea w100p">
+	                                        <textarea name="inquiryBodyText" id="cont" cols="" rows="" placeholder="문의할 내용을 입력해주세요." required="required"></textarea>
+	                                        <span class="count"><em id="contSize">0</em>/2000자</span>
+	                                    </div>
+	                                </dd>
+	                            </dl>
+	                            <dl>
+	                                <dt>파일첨부</dt>
+	                                <dd>
+	                                    <div class="attach_wrap ui_input_images">
+											<!--[if lte ie 9]>
+											<div class="input_btn_wrap">
+												<span class="input_wrap">
+													<input class="input_file_name ie9_lte" type="text" title="첨부 파일 선택" readonly value="">
+													<button class="input_del"><i class="ico_close_w"></i><span class="sr_only">첨부파일 삭제</span></button>
+												</span>
+												<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png">
+												<label for="i_picture" class="btn_md_form">파일 선택</label>
+											</div>
+											<ul class="list_bullet_dot mgt5">
+												<li>10MB미만의 jpg, gif, png의 이미지 파일</li>
+												<li>internet Explorer 9.0버전에서는 첨부파일 1개만 가능합니다.</li>
+											</ul>
+											<![endif]-->
+											<!--[if gt ie 9]><!-->
+											<ul class="attach">
+												<li class="input_file_btn_area">
+													<div class="attach_file">
+														<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="multiple">
+														<label for="i_picture">사진 첨부</label>
+													</div>
+												</li>
+											</ul>
+											<p class="text">이미지 파일만 가능 / 최대 10개 / 최대 파일 용량 10MB</p>
+											<!--<![endif]-->
+										</div>
+	                                </dd>
+	                            </dl>
+								<dl>
+									<dt>이메일</dt>
+									<dd>
+										<div class="input_group">
+											<span class="input_wrap w300px">
+												<input type="text" title="이메일  입력" name="customerEmailAddress" placeholder="이메일 입력" email="email"
+												 th:value="${session.LOGIN_USER.member.emailAddress}" required="required" data-msg-required="이메일을 입력해 주세요.">
+											</span>
+										</div>
+									</dd>
+								</dl>
+	                            <dl>
+	                                <dt>휴대폰 번호</dt>
+	                                <dd>
+	                                    <div class="input_group">
+	                                        <span class="input_wrap w300px">
+	                                        	<input type="text" title="휴대폰 번호 입력" id="phoneNo" name="customerPhoneNo1.phoneNo" mobile-number="mobile-number"
+	                                        	th:value="${session.LOGIN_USER.member.phoneNo1.phoneNo}">
+	                                        </span>
+	                                        <span class="gap"></span>
+	                                        <span class="check_wrap">
+	                                        	<input type="checkbox" id="sms_check" name="smsResponseNotifyYn" value="Y" th:checked="${session.LOGIN_USER.member.phoneNo1.phoneNo} == null? false : true"><label for="sms_check">SMS 답변알림</label>
+	                                        </span>
+	                                    </div>
+	                                </dd>
+	                            </dl>
+	                        </div>
+	                        <div class="form_btns">
+	                            <a href="#none" class="btn_lg_secondary"
+	                            th:href="@{/cs/customerCenter}">취소</a>
+	                            <button type="button" class="btn_lg_neutral">확인</button>
+	                        </div>
+	                    </fieldset>
+	            </form>
+                </div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+		<th:block ap:fragment="layout-endpoint">
+			<script ap:src="@{/handlebars-templates/compiled/cs/layer-inquiry.js}"></script>
+			<script th:inline="javascript">
+
+			var c_offset, c_RS_Date, c_RD_Date;
+			var limit = 10;
+			var temp = "";
+			var $modalEl;
+
+			//문의 등록
+			$('.btn_lg_neutral').on('click', function(e){
+				var $form = $('form.validate');
+				if($('[name=foReceivedInquiryTypeSn]').val() == 'all'){
+					AP.modal.alert('문의 유형을 선택해주세요.');
+					return;
+				}
+
+				if ($form.valid()) {
+					var formData = AP.common.getFormData($form);
+					$( '.ui_input_images' ).inputImages( 'extendFormData', formData );
+
+					$(this).attr('disabled', true);
+					AP.api.inquiry({}, formData ).done(function ( data ) {
+						if (data) {
+							if(data.registYn) {
+								AP.modal.alert("등록되었습니다.").addListener('modal-close', function(e) {
+									location.href="/my/page/myInquiryList";
+								});
+							} else {
+								AP.modal.alert("등록에 실패했습니다. 잠시후 다시 시도해 주시기 바랍니다.").addListener('modal-close', function(e) {
+									$('.btn_lg_neutral').attr('disabled', false);
+								});
+							}
+						}
+					}).fail(function ( e ) {
+						AP.modal.alert(e.responseJSON.errorData.message).addListener('modal-close', function(e) {
+							$('.btn_lg_neutral').attr('disabled', false);
+						});
+					});
+				}
+			});
+
+			//상품 등록
+			$('#b_add').off('click').on('click', function(e){
+				var modal = AP.modal.open({
+					templateKey : 'cs.layer-inquiry',
+					sizeType: 'L'
+				}).addListener( 'modal-before-close', function (e) {
+					$modalEl.find( '.ui_table_striped' ).tableStriped( 'clear' );
+				});
+
+				//검색 기간 변경
+				$( '.ui_multiple_date_picker' ).multipleDatePicker({
+					defaultRangeDate: '1weeks',
+					minDate: moment().subtract( 50, 'years' )
+				}).on( 'multiple-date-picker-change', function (e) {
+					goModalSearch(0, e.date.startDate, e.date.endDate);
+				});
+
+				c_RS_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).startDate;
+				c_RD_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).endDate;
+
+				goModalSearch(0, c_RS_Date, c_RD_Date);
+				$modalEl = modal.getElement();
+
+				//적용 버튼 클릭
+				$('#b_apply').off('click').on('click', function(e) {c
+					var ordInfo = JSON.parse($('[name=order]:checked').val());
+
+					$("#orderName").val(ordInfo.ordName);
+					$('#ordHistNo').val(ordInfo.ordHistNo);
+					temp = ordInfo.ordSn;
+
+					modal.close();
+				});
+
+				//검색버튼 클릭
+				$('#b_search').off('click').on('click', function(e) {
+					c_RS_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).startDate;
+					c_RD_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).endDate;
+					goModalSearch(0, c_RS_Date, c_RD_Date);
+				});
+
+				$( '.ui_paging' ).off('paging-change').on( 'paging-change', function (e) {
+					goModalSearch(e.offset, c_RS_Date, c_RD_Date);
+				});
+
+				$('#b_close').off('click').on('click', function(e) {
+					modal.close();
+				});
+
+			});
+
+			$( '.ui_input_images' ).inputImages();
+
+			function deleteOrd() {
+				$('.attached').html("");
+				$('#ordHistNo').attr('value', null);
+				temp = "";
+			}
+
+			function checkPhoneNo() {
+				if ($('#phoneNo').val() == null || $('#phoneNo').val() == "") {
+					$('#sms_check').prop('checked', false);
+				} else {
+					$('#sms_check').prop('checked', true);
+				}
+			}
+
+			function goModalSearch(offset, RS_Date, RD_Date) {
+				$('.loading').show();
+				$('table').hide();
+
+				c_offset = offset;
+				c_RS_Date = RS_Date;
+				c_RD_Date = RD_Date;
+
+				AP.api.getOrderPage({}, {
+					offset : offset,
+					RS_Date : RS_Date,
+					RD_Date : RD_Date,
+					limit : limit
+				}).done(function(data) {
+					if (data) {
+
+						var htmlStr = AP.common.getTemplate('cs.order-list', {
+							list : data.data
+						});
+
+						$('#i_body').html(htmlStr);
+						$('.loading').hide();
+						$('table').show();
+
+						$('.table_striped').on('click', function(e){
+							$modalEl.find('.ui_table_striped').tableStriped();
+							$modalEl.find('.ui_table_striped').tableStriped('updated');
+						});
+
+						if (data.totalCount > 0) {
+							$("#pageNav").show();
+							settingPageNav(data.totalCount);
+						} else {
+							$("#pageNav").hide();
+						}
+
+						if (temp != "") {
+							$('#o_' + temp).prop('checked', true);
+							$modalEl.find('.ui_table_striped').tableStriped();
+							$modalEl.find('.ui_table_striped').tableStriped('updated');
+						}
+					}
+				}).fail(function(e) {
+					AP.modal.alert(e.responseJSON.errorData.message).addListener('modal-close', function(e) {
+						$('#b_close').click();
+					});
+				}).always(function() {
+				});
+			}
+
+			function settingPageNav(totalCount) {
+				$('.ui_paging').paging('clear');
+
+				var options = new Object();
+				options.offset = c_offset;
+				options.limit = limit;
+				options.totalCount = totalCount;
+				options.pagingLength = 5;
+
+				$('.ui_paging').paging(options);
+			}
+
+			$('[name=inquiryBodyText]').on('keyup', function(e){
+				var cont = $(this).val();
+				var enterCount = AP.common.getEnterCount(cont);
+				var totalTextCount = cont.length + enterCount;
+
+				if(totalTextCount > 2000) {
+					$(this).val(cont.substring(0,(2000 - enterCount)));
+					AP.modal.alert('내용은 최대 2000자까지 입력 가능합니다.');
+				}
+
+				$("#contSize").text(totalTextCount);
+			});
+
+			$(function() {
+				$('#phoneNo').on('blur', checkPhoneNo);
+			});
+
+			</script>
+		</th:block>
+</body>
+</html>

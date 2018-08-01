@@ -1,0 +1,156 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='cs'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents cs overview">
+                <div class="panel clear">                    
+                    <div class="float_left">
+                        <h4 class="h_title cont list_title">공지 사항</h4>                                                
+                        <ul class="list notice">
+                            <li class="list_item none" th:if="${nomalNotice.totalCount == 0}">공지사항이 없습니다.</li>
+                            <th:block th:each="noNotice : ${nomalNotice.foNoticeList}">
+                            	<li class="list_item">
+                            		<span class="item_head"
+                            		th:text="${noNotice.noticeTypeName}"></span> 
+                            		<a class="item_link"
+                            		th:href="@{|/cs/noticeView/${noNotice.foNoticeSn}|}"
+                                   	th:text="${noNotice.foNoticeTitle}"></a>
+                            		<span class="item_date"
+                            		th:text="${#dates.format(noNotice.noticeStartDt, 'yyyy-MM-dd')}"></span>
+                            	</li>
+                            </th:block>
+                        </ul>
+                        <a href="#none" class="btn_more"
+                        th:href="@{/cs/notice}"><span>전체보기</span><i class="ico_arr_m_r"></i></a>
+                    </div>
+                    <div class="float_right">
+                    	<div class="quick_menu">
+                            <div class="clear">
+                            	 <a href="#none" th:href="@{/cs/inquiry}">
+	                                <dl>
+	                                    <dt><i class="ico"></i><b class="title">1:1 문의</b></dt>
+	                                    <dd>쉽고 간편하게 문의하세요</dd>
+	                                </dl>
+                                </a>
+								<a href="javascript:AP.footer.openArtistTalk();">
+									<dl>
+										<dt><i class="ico ico2"></i><b class="title">아티스트톡</b></dt> <!-- 03-09 메뉴 수정 -->
+										<dd>실시간 메이크업 상담</dd>
+									</dl>
+								</a>
+                            </div>
+                            <div class="clear">
+                                 <a th:href="@{/cs/pinkMembership}">
+	                                <dl>
+	                                    <dt><i class="ico ico3"></i><b class="title">멤버십 혜택</b></dt>
+	                                    <dd>다양한 혜택을 드립니다.</dd>
+	                                </dl>
+	                             </a>
+	                             <a th:href="@{/cs/takeOut}">
+	                                <dl>
+	                                    <dt><i class="ico ico4"></i><b class="title">매장특화</b></dt>
+	                                    <dd>차별화된 매장 서비스</dd>
+	                                </dl>
+	                             </a>
+                            </div>
+                            <dl class="contact">
+                                <dt>쇼핑몰 고객상담</dt>
+                                <dd><strong class="num">1544-5418</strong></dd>
+                                <dt>제품 및 매장 관련문의</dt>
+                                <dd><strong class="num">080-022-2285</strong></dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                
+            	<div class="panel faq_search">
+                    <fieldset class="form">
+                        <legend class="sr_only">FAQ 검색 질문 입력</legend>
+                        <div class="ui_table">
+                            <dl>
+                                <dt><strong class="eng">FAQ</strong> 검색</dt>
+                                <dd>
+                                    <div class="input_wrap">
+                                        <input type="text" id="keyword" placeholder="질문을 검색하세요."
+                                        th:onkeypress="|return searchKeyPress(event);|">
+                                        <button type="button" class="btn_search" id="search"><span class="sr_only">검색</span></button>
+                                        <button class="input_del"><i class="ico_close_w"></i><span class="sr_only">검색어 삭제</span></button>
+                                    </div>
+                                </dd>
+                            </dl>                            
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="panel faq_top_list">
+                    <h4 class="h_title cont list_title">FAQ Top 10</h4>     
+                    <!-- 하나의 영역이 열릴때 다른 영역은 닫히게 하고 싶을때 data-open-type="single" 를 넣어준다. -->
+                    
+                    <div id="faqtop10">
+	                    <div  class="ui_accordion" data-open-type="single"
+	                    th:if="${faqSrchRst.totalCount > 0}">
+	                    	<th:block th:each="faq : ${faqSrchRst.faqList}">
+	                    		<dl>
+		                            <dt>
+		                                <span class="accordion_head"><span th:text="${faq.inquiryTypeName}"></span></span>
+		                                <button type="button" th:text="${faq.inquiryText}"></button>
+		                            </dt>
+		                            <dd>
+		                            	<div class="cont">
+		                                	<p class="text" th:utext="${faq.responseBodyText}"></p>
+		                                </div>
+		                            </dd>
+		                        </dl>
+	                    	</th:block>
+	                    </div> 
+	                    
+	                    <div class="none_data on" th:if="${faqSrchRst.totalCount == 0}">
+	                        <div class="panel notice">
+	                            <i class="ico"></i>
+	                            <p class="text font_lg">검색결과가 없습니다.</p>
+	                        </div>
+	                    </div>
+                    </div>	                   
+               		<a href="#none" class="btn_more" th:href="@{/cs/faq}"><span>FAQ전체보기</span><i class="ico_arr_m_r"></i></a>
+	                
+                </div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+        	<script th:inline="javascript">
+        	
+	        	$('#search').on('click', function(e) {
+	        		goFAQSearch();
+				});
+	        	
+	        	function goFAQSearch(){
+	          	  
+	              var currentKeyword = $("#keyword").val();
+	              
+	              location.href = "/cs/faq/" + currentKeyword;
+	          	  
+	            }
+	        	
+	        	function searchKeyPress(e)
+				{
+				    // look for window.event in case event isn't passed in
+				    e = e || window.event;
+				    if (e.keyCode == 13)
+				    {
+				        document.getElementById('search').click();
+				        return false;
+				    }
+				    return true;
+				}
+	        	
+        	</script>
+        </th:block>
+</body>
+</html>

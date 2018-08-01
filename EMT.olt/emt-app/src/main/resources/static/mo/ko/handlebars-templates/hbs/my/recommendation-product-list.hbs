@@ -1,0 +1,42 @@
+{{!--
+	my recommendation product list
+--}}
+<div class="ix-list-viewport">
+<ul class="ix-list-items">
+	{{#each this.list}}
+		<li class="ix-list-item item">
+			{{#each this.products }}
+				{{#if @first}}
+					{{#if this.onlineProdImages}}
+						{{#each this.onlineProdImages}}
+							{{#if @first}}
+								<a href="{{ productDetailPath ../../onlineProdSn }}"><span class="thumb"><img src="" data-src="{{ this.imgUrl }}" alt="{{ ../onlineProdName }}"></span>
+							{{/if}}
+						{{/each}}
+					{{/if}}
+					{{#if this.prodImages}}
+						{{#each this.prodImages}}
+							{{#if @first}}
+								<a href="{{ productDetailPath ../../onlineProdSn ../prodSn }}"><span class="thumb"><img src="" data-src="{{ this.imgUrl }}" alt="{{ ../prodName }}"></span>
+							{{/if}}
+						{{/each}}
+					{{/if}}
+				{{/if}}
+			{{/each}}		
+			<span class="name">{{ this.onlineProdName }}</span>
+			</a>
+			
+			<div class="colors">
+				{{#each this.products}}
+					{{#xif this.colorchipTypeCode '==' 'RGB'}}			
+						<span class="chip" style="background-color: #{{ this.rgbVal }}"></span>
+					{{/xif}}
+					{{#xif this.colorchipTypeCode '==' 'Img'}}
+						<span class="chip"><img alt="" src="{{ this.colorchipImg }}"></span>
+					{{/xif}}
+				{{/each}}
+			</div>			
+		</li>
+	{{/each}}
+</ul>
+</div>

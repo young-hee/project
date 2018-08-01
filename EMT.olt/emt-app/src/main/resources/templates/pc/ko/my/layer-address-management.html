@@ -1,0 +1,295 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+    <!-- #ap_container -->
+    <div ap:fragment="layout-contents">
+        <div class="layer_popup" style="display: block;">
+            <div class="layer_dimmed"></div>
+            <div class="layer_wrap layer_lg" style="margin-top: -360px;">
+                <dl class="layer">
+                    <dt class="layer_title">배송지 추가/수정</dt>
+                    <dd class="layer_cont address_management">
+                        <div class="clear">
+                            <ul class="list_bullet_dot">
+                                <li>자주 사용하시는 배송지를 등록 및 관리하실 수 있습니다.</li>
+                                <li>배송지는 최대 10개까지 추가하실 수 있습니다</li>
+                            </ul>
+                            <p class="text">
+                                <br> <em><span class="mid_dot">•</span>
+                                    필수 입력 항목</em>
+                            </p>
+                        </div>
+                        <hr class="div m20" />
+                        <form id="infoForm" name="infoForm"
+                            method="post">
+                            <fieldset class="form">
+                                <input type="hidden" id="shipAddressSn"
+                                    name="shipAddressSn"
+                                    th:value="${address != null} ? ${address.shipAddressSn} : ''" />
+                                <div class="ui_table">
+                                    <dl>
+                                        <dt>
+                                            <label for="addr_title">배송지명
+                                                <em><span
+                                                    class="mid_dot">•</span><span
+                                                    class="sr_only">필수
+                                                        입력</span></em>
+                                            </label>
+                                        </dt>
+                                        <dd>
+                                            <div
+                                                class="input_wrap w100p">
+                                                <input type="text"
+                                                    id="shipAddressName"
+                                                    name="shipAddressName"
+                                                    th:value="${address != null} ? ${address.shipAddressName} : ''"
+                                                    required="required"
+                                                    placeholder="배송지명을 입력해 주세요" />
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>
+                                            <label for="addr_name">받는
+                                                사람 <em><span
+                                                    class="mid_dot">•</span><span
+                                                    class="sr_only">필수
+                                                        입력</span></em>
+                                            </label>
+                                        </dt>
+                                        <dd>
+                                            <div
+                                                class="input_wrap w100p">
+                                                <input type="text"
+                                                    id="addresseeName.name1"
+                                                    name="addresseeName.name1"
+                                                    th:value="${address != null} ? ${address.addresseeName.name1} : ''"
+                                                    required="required"
+                                                    placeholder="받는 분 성함을 입력해 주세요" />
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>
+                                            <label for="addr_phone">휴대전화
+                                                <em><span
+                                                    class="mid_dot">•</span><span
+                                                    class="sr_only">필수
+                                                        입력</span></em>
+                                            </label>
+                                        </dt>
+                                        <dd>
+                                            <div
+                                                class="input_wrap w100p">
+                                                <input type="number"
+                                                    title="휴대전화 입력"
+                                                    id="phoneNo1.phoneNo"
+                                                    name="phoneNo1.phoneNo"
+                                                    mobile-number="mobile-number"
+                                                    th:value="${address != null} ? ${address.phoneNo1.phoneNo} : ''"
+                                                    required="required"
+                                                    placeholder="‘-’제외 숫자 입력" />
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>
+                                            <label for="addr_phone">일반
+                                                전화번호</label>
+                                        </dt>
+                                        <dd>
+                                            <div
+                                                class="input_wrap w100p">
+                                                <input type="number"
+                                                    title="일반 전화번호 입력"
+                                                    id="phoneNo2.phoneNo"
+                                                    name="phoneNo2.phoneNo"
+                                                    th:value="${address != null} ? ${address.phoneNo2.phoneNo} : ''"
+                                                    placeholder="‘-’제외 숫자 입력" />
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>
+                                            <label for="addr_phone">주소
+                                                <em><span
+                                                    class="mid_dot">•</span><span
+                                                    class="sr_only">필수
+                                                        입력</span></em>
+                                            </label>
+                                        </dt>
+                                        <!-- <dd class="ui_find_addresses">
+                                            <div class="w100p input_btn_wrap">
+                                                <div class="input_wrap">
+                                                    <input type="text" class="address_keyword" title="지역명 입력" placeholder="지역명">
+                                                </div>
+                                                <button type="button" class="btn_md_form">찾기</button>
+                                            </div>
+                                            <div class="input_group w100p">
+                                                <span class="input_wrap w25p"><input type="text" class="post_code" title="우편번호 입력" placeholder="우편번호" readonly></span>
+                                                <span class="gap">&nbsp;</span>
+                                                <span class="input_wrap"><input type="text" class="address_first" title="기본주소 입력" placeholder="기본주소" readonly></span>
+                                            </div>
+                                            <div class="input_wrap w100p"><input type="text" class="address_last" title="상세주소 입력" placeholder="상세주소" /></div>
+                                        </dd> -->
+
+                                        <dd class="ui_find_addresses">
+
+                                            <div
+                                                class="w100p input_btn_wrap">
+                                                <div class="input_wrap">
+                                                    <input type="text"
+                                                        class="address_keyword"
+                                                        title="지역명 입력"
+                                                        placeholder="지역명">
+                                                </div>
+                                                <button type="button"
+                                                    class="btn_address_find">찾기</button>
+                                            </div>
+
+                                            <div
+                                                class="input_group w100p">
+                                                <span
+                                                    class="input_wrap w25p"><input
+                                                    type="text"
+                                                    class="post_code"
+                                                    title="우편번호 입력"
+                                                    placeholder="우편번호"
+                                                    id="addresseeAddress.zipCode"
+                                                    name="addresseeAddress.zipCode"
+                                                    th:value="${address != null} ? ${address.addresseeAddress.zipCode} : ''"
+                                                    readonly></span> <span
+                                                    class="gap">&nbsp;</span>
+                                                <span class="input_wrap"><input
+                                                    type="text"
+                                                    class="address_first"
+                                                    title="기본주소 입력"
+                                                    placeholder="기본주소"
+                                                    id="addresseeAddress.address1"
+                                                    name="addresseeAddress.address1"
+                                                    th:value="${address != null} ? ${address.addresseeAddress.address1} : ''"
+													required="required"
+                                                    readonly></span>
+                                            </div>
+                                            <div
+                                                class="input_wrap w100p">
+                                                <input type="text"
+                                                    class="address_last"
+                                                    title="상세주소 입력"
+                                                    placeholder="상세주소"
+                                                    id="addresseeAddress.address2"
+                                                    name="addresseeAddress.address2"
+                                                    th:value="${address != null} ? ${address.addresseeAddress.address2} : ''" />
+                                            </div>
+                                        </dd>
+
+                                    </dl>
+                                </div>
+                                <div class="check_set">
+                                    <span class="check_wrap"><input
+                                        type="checkbox" id="check1"><label
+                                        for="check1">회원기본정보의 주소를
+                                            이 정보로 업데이트</label></span>
+                                </div>
+                            </fieldset>
+                        </form>
+
+
+                        <div class="page_btns">
+                            <button type="button"
+                                class="btn_lg_secondary">취소</button>
+                            <button type="button" class="btn_lg_primary"
+                                onclick="sendForm()">등록</button>
+                        </div>
+                    </dd>
+                </dl>
+                <button class="layer_close" type="button">레이어
+                    닫기</button>
+            </div>
+        </div>
+    </div>
+    <!-- // #ap_container -->
+
+    <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+    <th:block ap:fragment="layout-endpoint">
+        <script>
+                                    //주소찾기
+                                    $('.ui_find_addresses').findAddresses();
+                                </script>
+
+        <script th:inline="javascript">
+                                    function sendForm() {
+
+                                        var $form = $('#infoForm');
+                                        if ($form.valid()) {
+                                            var formData = AP.common.getFormData($form);
+
+                                            if (formData.shipAddressSn != null && formData.shipAddressSn.length > 0) {
+                                                putAddress("updateAddress", formData);
+                                            } else {
+                                                putAddress("putAddress", formData);
+                                            }
+                                        }
+                                    }
+
+                                    function putAddress(path, str) {
+                                        AP.api.putAddress({
+                                            address : path
+                                        }, str).done(function(data) {
+                                            success(data, path == 'updateAddress' ? "배송지가 변경되었습니다." : "배송지 추가되었습니다.");
+                                            //성공
+                                        }).fail(function(e) {
+                                            AP.modal.alert("fail");
+                                            //실패
+                                        }).always(function() {
+                                        //성공, 실패
+                                        });
+                                    }
+
+                                    function success(data, msg) {
+                                        if (data != null && "" != data) {
+
+                                            var result = data.result;
+                                            if ("success" == result) {
+                                                AP.modal.alert(msg).addListener('modal-close', function(e) {
+                                                    // $(location).attr("href", "javascript:history.back()");
+                                                    $(location).attr("href", "/my/page/ship/address");
+                                                });
+                                            }
+                                            if ("fail" == result) {
+
+                                            }
+                                        }
+                                    }
+                                </script>
+
+        <!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+        <script>
+                                    /*
+                                    var modal = AP.modal.info({
+                                        title: '타이틀',
+                                        contents: 'html 내용 & template',
+                                        confirmLabel: '등록',
+                                        cancelLabel: '취소'
+                                    }).addListener( 'modal-before-close', function (){
+                                        console.log( e.closeType );//close, confirm, cancel
+                                        modal.getElement().find( '.ui_find_addresses' ).findAddresses( 'clear' );       // 주소찾기 적용해제
+                                        modal.getElement().find( 'input' ).placeholder( 'clear' );                      // placeholder 적용해제
+                                    }).addListener( 'modal-close', function (e) {
+                                        console.log( e.closeType );//close, confirm, cancel
+                                    });
+
+                                    // placeholder 적용
+                                    // modal.getElement().find( 'input[placeholder]' ).placeholder();
+
+                                    // 주소 찾기
+                                    modal.getElement().find( '.ui_find_addresses' ).findAddresses();
+                                    modal.getElement().find( '.ui_find_addresses' ).on( 'change-address', function (e) {
+                                        console.log( e.postCode, e.address, e.detailAddress );
+                                    });
+                                     */
+                                </script>
+
+    </th:block>
+</body>
+</html>

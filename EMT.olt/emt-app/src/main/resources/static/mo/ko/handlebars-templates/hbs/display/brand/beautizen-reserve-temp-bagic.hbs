@@ -1,0 +1,160 @@
+{{!--
+	뷰티즌 기본정보에서 이전에 저장한 부분을 loading
+--}}
+
+<div class="panel">
+	<h4 class="h_title page">지원서 작성</h4>
+	<p class="font_md">아래 내용을 입력해주세요.</p>
+	<hr class="div m30">
+	<fieldset class="form">
+		<legend class="sr_only">사진 입력</legend>
+		{{!-- 사진 첨부 --}}
+		<div class="attach_photo ui_input_images" data-single-input="true">
+			<div class="img attach">
+				<img scr="" data-src="{{this.images.fileUrl}}">
+			</div>
+			<label for="attach_photo"><span class="sr_only">사진 선택</span></label>
+			<input type="file" id="attach_photo" name="picture" multiple="multiple" accept="image/gif,image/jpeg,image/jpg,image/png" required="required" data-msg-required="사진을 등록하세요." >
+			<br>
+			<p class="text_center">사진을 등록하시려면 터치해주세요.<br>120X160 최적화</p>
+		</div>
+	</fieldset>
+</div>
+<div class="panel">
+	<fieldset class="form">
+		<legend class="sr_only">기본정보 입력</legend>
+		<h5 class="h_title cont"><strong>지원자 기본정보</strong>
+			<small>(필수입력)</small></h5>
+		<div class="ui_table">
+			<dl>
+				<dt>아이디</dt>
+				<dd th:text="{{this.memberId}}"></dd> {{!-- memberMap={phoneNo1=, phoneNo2=, gendDvCd=Male, cartSn=0, name=전지환, residno1=870609, id=pollak2@amore.net, cstmid=990000001, memberSn=157} --}}
+			</dl>
+		</div>
+		<div class="dl">
+			<dl>
+				<dt><label for="phoneCorp">휴대폰</label></dt>
+				<dd>
+					<div ap:replace="~{customer/fragment/member :: phoneCorp}"></div>
+			        <div ap:replace="~{customer/fragment/member :: cellNumWithBtn}"></div>
+			        <div ap:replace="~{customer/fragment/member :: smsNumWithBtn}"></div>
+					
+					<br> {{!-- 03-19 버튼 추가 --}}
+					<button type="button" class="btn_md_neutral w100p certification_btn">인증확인</button>
+				</dd>
+			</dl>
+			<dl>
+				<dt>생년월일</dt>
+				<dd>
+					<div class="input_group">
+						<div>
+							<input type="text" name="dob" id="dob" placeholder="yyyymmdd" psnDtbr="psnDtbr" fourteenOver ="fourteenOver" required="required" data-msg-required="생년월일을 입력해 주세요." value="{{this.dob}}">
+						</div>
+						<div class="btn">
+							<select name="genderCode" id="genderCode" title="성별 선택" required="required">
+								<option value="FeMale" {{#xif this.genderCode '==' 'FeMale'}} selected="selected" {{/xif}}>여자</option>
+								<option value="Male" {{#xif this.genderCode '==' 'Male'}} selected="selected" {{/xif}}>남자</option>
+							</select>
+						</div>
+					</div>
+				</dd>
+			</dl>
+			<dl>
+				<dt>홈페이지(블로그)</dt>
+				<dd>
+					<div class="input_group">
+						<div>
+							<input type="text" name="personalHomepageUrl" id="personalHomepageUrl" placeholder="http://" value="{{this.personalHomepageUrl}}">
+						</div>
+					</div>
+				</dd>
+			</dl>
+			<dl>
+				<dt>SNS 주소</dt>
+				<dd>
+					<div class="input_group">
+						<div>
+							<input type="text" name="snsUrl" id="snsUrl" placeholder="http://" required="required" data-msg-required="페이스북을 입력해주세요" value="{{this.snsUrl}}">
+						</div>
+						<div class="btn">
+							<button type="button" class="snsUrl">등록</button>
+						</div>
+					</div>
+				</dd>
+			</dl>
+			{{!--/* 20180504 : 거주지역으로 내용 변경 */--}}
+			<dl>
+				<dt><label for="location">거주지역</label></dt>
+				<dd class="ui_find_addresses">
+					<div class="input_group">
+						<div>
+							<select name="preLocal" id="preLocal" title="지역 선택" required="required" data-msg-required="거주지역을 선택해 주세요.">
+								<option value="강원도" {{#xif this.requesterAddress.address1 '==' '강원도'}} selected="selected" {{/xif}}>강원도</option>
+								<option value="경기도" {{#xif this.requesterAddress.address1 '==' '경기도'}} selected="selected" {{/xif}}>경기도</option>
+								<option value="경상남도" {{#xif this.requesterAddress.address1 '==' '경상남도'}} selected="selected" {{/xif}}>경상남도</option>
+								<option value="경상북도" {{#xif this.requesterAddress.address1 '==' '경상북도'}} selected="selected" {{/xif}}>경상북도</option>
+								<option value="광주광역시" {{#xif this.requesterAddress.address1 '==' '광주광역시'}} selected="selected" {{/xif}}>광주광역시</option>
+								<option value="대구광역시" {{#xif this.requesterAddress.address1 '==' '대구광역시'}} selected="selected" {{/xif}}>대구광역시</option>
+								<option value="대전광역시" {{#xif this.requesterAddress.address1 '==' '대전광역시'}} selected="selected" {{/xif}}>대전광역시</option>
+								<option value="부산광역시" {{#xif this.requesterAddress.address1 '==' '부산광역시'}} selected="selected" {{/xif}}>부산광역시</option>
+								<option value="서울특별시" {{#xif this.requesterAddress.address1 '==' '서울특별시'}} selected="selected" {{/xif}}>서울특별시</option>
+								<option value="세종특별자치시" {{#xif this.requesterAddress.address1 '==' '세종특별자치시'}} selected="selected" {{/xif}}>세종특별자치시</option>
+								<option value="울산광역시" {{#xif this.requesterAddress.address1 '==' '울산광역시'}} selected="selected" {{/xif}}>울산광역시</option>
+								<option value="인천광역시" {{#xif this.requesterAddress.address1 '==' '인천광역시'}} selected="selected" {{/xif}}>인천광역시</option>
+								<option value="전라남도" {{#xif this.requesterAddress.address1 '==' '전라남도'}} selected="selected" {{/xif}}>전라남도</option>
+								<option value="전라북도" {{#xif this.requesterAddress.address1 '==' '전라북도'}} selected="selected" {{/xif}}>전라북도</option>
+								<option value="제주특별자치도" {{#xif this.requesterAddress.address1 '==' '제주특별자치도'}} selected="selected" {{/xif}}>제주특별자치도</option>
+								<option value="충청남도" {{#xif this.requesterAddress.address1 '==' '충청남도'}} selected="selected" {{/xif}}>충청남도</option>
+								<option value="충청북도" {{#xif this.requesterAddress.address1 '==' '충청북도'}} selected="selected" {{/xif}}>충청북도</option>
+							</select>
+						</div>
+					</div>
+				</dd>
+			</dl>
+		</div>
+		<h5 class="h_title cont"><strong>학력사항</strong>
+			<small>(필수입력)</small></h5>
+		<div class="input_group">
+			<div>
+				<input type="text" name="school" id="school" hangul="hangul" placeholder="학교를 입력해 주세요." required="required" data-msg-required="학교를 입력해 주세요." value="{{this.school}}">
+			</div>
+			<div class="btn">
+				<select name="grade" id="grade" title="학년 선택" required="required" data-msg-required="학년을 선택하세요.">
+						<option value="1" {{#xif this.grade '==' '1'}} selected="selected" {{/xif}}>1 학년</option>
+						<option value="2" {{#xif this.grade '==' '2'}} selected="selected" {{/xif}}>2 학년</option>
+						<option value="3" {{#xif this.grade '==' '3'}} selected="selected" {{/xif}}>3 학년</option>
+						<option value="4" {{#xif this.grade '==' '4'}} selected="selected" {{/xif}}>4 학년</option>
+				</select>
+			</div>
+		</div>
+		<div class="input_group">
+			<div>
+				<input type="text" id="faculty" name="faculty" hangul="hangul" placeholder="학과/학부를 입력해 주세요." required="required" data-msg-required="학과/학부를 입력해 주세요." value="{{this.faculty}}">
+			</div>
+			<div class="btn">
+				<select name="completeTerm" title="이수학기 선택" required="required" data-msg-required="이수학기를 선택하세요." id="completeTerm">
+					<option value= "1" {{#xif this.completeTerm '==' '1'}} selected="selected" {{/xif}}> 1 학기 </option>
+					<option value= "2" {{#xif this.completeTerm '==' '2'}} selected="selected" {{/xif}}> 2 학기 </option>
+					<option value= "3" {{#xif this.completeTerm '==' '3'}} selected="selected" {{/xif}}> 3 학기 </option>
+					<option value= "4" {{#xif this.completeTerm '==' '4'}} selected="selected" {{/xif}}> 4 학기 </option>
+					<option value= "5" {{#xif this.completeTerm '==' '5'}} selected="selected" {{/xif}}> 5 학기 </option>
+					<option value= "6" {{#xif this.completeTerm '==' '6'}} selected="selected" {{/xif}}> 6 학기 </option>
+					<option value= "7" {{#xif this.completeTerm '==' '7'}} selected="selected" {{/xif}}> 7 학기 </option>
+					<option value= "8" {{#xif this.completeTerm '==' '8'}} selected="selected" {{/xif}}> 8 학기 </option>
+					<option value= "9" {{#xif this.completeTerm '==' '9'}} selected="selected" {{/xif}}> 9 학기 </option>
+					<option value= "10" {{#xif this.completeTerm '==' '10'}} selected="selected" {{/xif}}> 10 학기 </option>
+					 
+				</select>
+			</div>
+		</div>
+		<div class="input_group">
+			<div>
+				<input type="text" name="major" id="major" hangul="hangul" placeholder="전공을 입력해 주세요." required="required" data-msg-required="전공을 입력해 주세요." value="{{this.major}}">
+			</div>
+		</div>
+		<div class="form_btns">
+			<a href="#none" class="btn_lg_secondary temp">임시저장</a>
+			<a href="#none" class="btn_lg_neutral nextConfirm">다음</a>
+		</div>
+	</fieldset>
+	</div>

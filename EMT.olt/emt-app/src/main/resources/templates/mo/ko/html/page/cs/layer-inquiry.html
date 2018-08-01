@@ -1,0 +1,90 @@
+<html ap:decorate="~{layout/only-contents}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <div class="layer_popup" style="display: block;">
+                <div class="layer_dimmed"></div>
+                <div class="layer_wrap" style="top:40px">
+                    <dl class="layer">
+                        <dt class="layer_title">주문선택</dt> <!-- 02-01 수정 -->
+                        <dd class="layer_cont">
+                        	<div class="customer_center"> <!-- 01-24 클래스 위치 수정  -->
+								<!--/* [s]20180531 : 스크롤영역 추가 */-->
+								<div class="scroll_area">
+									<p class="text_center">상담을 원하는 주문 번호를 선택하세요.</p>
+									<br>
+									<!-- 02-01 주문선택 테이블 수정 -->
+									<table class="ui_table_striped data_table align_center">
+										<caption class="sr_only">상담을 위한 주문목록 선택 으로 주문번호/상품명, 주문상태로 구성</caption>
+										<colgroup>
+											<col>
+											<col>
+										</colgroup>
+										<thead>
+											<tr>
+												<th scope="col">주문번호/상품명</th>
+												<th scope="col">주문상태</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td colspan="2" style="height:200px;">
+													<p class="text">주문 내역이 없습니다.</p>
+												</td>
+											</tr>
+											<tr class="selected">
+												<td class="align_left"><span class="check_wrap label_only"><input type="radio" class="table_striped" name="check" id="check1" checked><label for="check1">주문번호 : 주문번호 : 20170111234567<br>프루프 10 방수펜슬 NEW 외 4</label></span></td>
+												<td>배송중</td>
+											</tr>
+											<tr>
+												<td class="align_left"><span class="check_wrap label_only"><input type="radio" class="table_striped" name="check" id="check2"><label for="check2">주문번호 : 주문번호 : 20170111234567<br>프루프 10 방수펜슬 NEW 외 4</label></span></td>
+												<td>배송중</td>
+											</tr>
+										</tbody>
+									</table>
+									<button type="button" class="btn_lg_more w100p">더보기 (<em>5</em>/35)</button>
+								</div>
+								<!--/* [e]20180531 : 스크롤영역 추가 */-->
+	                            <div class="page_btns">
+	                            	<button class="btn_md_neutral" type="button" disabled>적용</button>
+	                            	<!-- 활성화
+		                            	<button class="btn_md_neutral" type="button">적용</button>
+		                             -->
+		                        </div>
+	                        </div>
+                        </dd>
+                    </dl>
+                    <button class="layer_close" type="button">레이어 닫기</button>
+                </div>
+            </div>
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+            <!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+            <script>
+                /*
+				var modal = AP.modal.info({
+					title: '타이틀',
+					contents: {
+						templateKey: 'folder-name.file-name',
+						templateModel: {}
+					}
+				}).addListener( 'modal-before-close', function (e) {
+					//이벤트 삭제
+					modal.getElement().find( '.ui_table_striped' ).tableStriped( 'clear' );
+
+					console.log( e.closeType ); //confirm, cancel, close
+				});
+
+				//선택된 tr 칼라 넣기
+				modal.getElement().find( '.ui_table_striped' ).tableStriped();
+				*/
+            </script>
+
+        </th:block>
+</body>
+</html>

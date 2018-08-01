@@ -1,0 +1,301 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='main-home'">
+<head>
+	<link rel="stylesheet" type="text/css" ap:href="@{/css/main.css}">
+</head>
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+	<!-- page contents -->
+	<div class="ap_contents main_contents">
+		<div class="main_visual">
+			<th:block th:if="${not #lists.isEmpty(cornersMap)}">
+				<div class="slide" data-ix-options="view-length:1; auto-play:true;">
+					<div class="ix-list-viewport">
+						<ul class="ix-list-items">
+							<th:block th:each="corner : ${cornersMap.get('M02_main_p.1')}">
+								<th:block th:each="contents : ${corner.contents}">
+									<th:block th:if="${contents.menuPageCornerContentsId == 'M02_main_p.1.1'}">
+										<li class="ix-list-item" th:style="'background-color:#' + ${contents.bgColor}">
+											<a href="#none" th:href="${contents.linkUrl}">
+												<img alt="" th:src="${contents.imgUrl}">
+											</a>
+										</li>
+									</th:block>
+								</th:block>
+							</th:block>
+						</ul>
+					</div>
+					<div class="ix-controller round_box">
+						<div class="paging"><b class="current"></b> / <span class="total"></span></div>
+						<div class="slide_direction">
+							<a class="ix-btn-prev" href="#none"><span class="sr_only">Prev</span></a>
+							<a class="ix-btn-next" href="#none"><span class="sr_only">Next</span></a>
+						</div>
+					</div>
+				</div>
+			</th:block>
+		</div>
+		<div class="section new_item">
+			<h2 class="title">신상품</h2>
+			<div class="recommend_items">
+			
+				<!-- slide -->
+				<div class="slide" data-ix-options="view-length:1; loop:false; correct-endpoint:true;">
+						<ul class="loading">
+							<li></li>
+							<li></li>
+							<li></li>
+						</ul>
+					</div>
+				<!-- //slide  end -->
+			</div>
+			<a href="/display/new?displayMenuId=new" class="more" title="신상품">더보기</a>
+		</div>
+		<th:block th:if="${not #lists.isEmpty(cornersMap)}">
+			<div class="clear">
+				<th:block th:each="corner : ${cornersMap.get('M02_main_p.2')}">
+					<th:block th:each="contents : ${corner.contents}">
+						<th:block th:if="${contents.menuPageCornerContentsId == 'M02_main_p.2.1'}">
+							<div class="section recommend_tag" th:style="'background:url(\''+ ${contents.imgUrl} + '\')'">
+								<h2 class="title">오늘의 추천태그</h2>
+								<div class="tag">
+									<a href="#none">#러빙데이즈</a><a href="#none">#블라썸</a><a href="#none">#슈가</a><a
+									href="#none">#순정토너런칭세일</a><a href="#none">#보라색</a>
+								</div>
+								<a href="#none" class="go" th:href="${contents.linkUrl}" th:utext="${contents.text}">웨어 유어 모먼트 바디 미스트</a>
+							</div>
+						</th:block>
+					</th:block>
+				</th:block>
+				<div class="section">
+					<th:block th:each="corner : ${cornersMap.get('M02_main_p.3')}">
+						<th:block th:each="contents, stat : ${corner.contents}">
+							<th:block th:if="${stat.odd}">											
+								<a href="#none" th:href="${contents.linkUrl}"> 
+									<img  th:src="${contents.imgUrl}" alt="" >
+							</th:block>
+							<th:block th:if="${stat.even}">	
+									<span th:utext="${contents.text}"></span>
+								</a>
+							</th:block>
+						</th:block> <!-- end :  ${corner.contents}-->
+					</th:block> <!-- end :  ${cornersMap.get('M02_main_p.3')}-->
+				</div>
+			</div>
+		</th:block>
+		<div class="section etude_pick">
+			<h2 class="title">#에뛰드픽</h2>
+			<div class="slide" data-ix-options="view-length:5; loop:false;">
+				<div class="ix-list-viewport">
+					<ul class="ix-list-items">
+					</ul>
+					<div class="loading">
+						<span>
+							<img ap:src="@{/images/common/loading.gif}" alt="">
+						</span>
+					</div>
+				</div>
+				<div class="ix-controller">
+					<div class="slide_direction">
+						<a class="ix-btn-prev" href="#none"><span class="sr_only">Prev</span></a>
+						<a class="ix-btn-next" href="#none"><span class="sr_only">Next</span></a>
+					</div>
+				</div>
+			</div>
+			<a href="/display/etude_pick?displayMenuId=etude_pick" class="more" title="에뛰드픽">더보기</a>
+		</div>
+		<th:block th:if="${not #lists.isEmpty(cornersMap)}"> <!-- 중단 배너 이미지 1  -->
+			<div class="section banner">
+				<th:block th:each="corner : ${cornersMap.get('M02_main_p.4')}">
+					<th:block th:each="contents : ${corner.contents}">
+						<th:block th:if="${contents.menuPageCornerContentsId == 'M02_main_p.4.1'}">
+							<a href="#mpme" class="lazy_load_wrap">
+								<img src="" th:data-src="${contents.imgUrl}" alt="" class="lazy_load">
+							</a>
+						</th:block>
+					</th:block>
+				</th:block>
+			</div>
+		</th:block>
+		<div class="section ch_etude ">
+			<h2 class="title">Ch.에뛰드</h2>
+			<div class="clear">
+				<div class="video_wrap">
+					<!-- 섬네일 용 이미지 -->
+					<!-- <button type="button" class="thumbnail"><img alt="ch 에뛰드 보기" src="/pc/ko/images/dummy/img_main_chetude.jpg"></button>
+					<iframe class="youtube_video" width="800" height="450" src="https://www.youtube.com/embed/Imns2fclguM?enablejsapi=1" frameborder="0" allowfullscreen="" data-vendor="youtube" data-ratio="true" data-mute="false"></iframe> -->
+				</div>
+				<dl>
+					<dt class="font_xl"></dt>
+					<dd>
+						<ul>
+							<!-- <li><a href="#none">
+								<span class="img lazy_load_wrap"><img src="" data-src="/pc/ko/images/dummy/650001142_IM_01.png" alt="" class="lazy_load"></span>
+								<span>
+									<span class="title">반짝 눈물라이너 4호 태양빛 눈물 반짝 눈물라이너 4호 태양빛 눈물</span>
+									<span class="price">
+										<em><b>20</b>%</em>
+										<b>4,800</b>원
+									</span>
+								</span>
+							</a></li>
+							<li><a href="#none">
+								<span class="img lazy_load_wrap"><img src="" data-src="/pc/ko/images/dummy/650001142_IM_01.png" alt="" class="lazy_load"></span>
+								<span>
+									<span class="title">반짝 눈물라이너 4호 태양빛 눈물</span>
+									<span class="price">
+										<b>4,800</b>원
+									</span>
+								</span>
+							</a></li>
+							<li><a href="#none">
+								<span class="img lazy_load_wrap"><img src="" data-src="/pc/ko/images/dummy/650001142_IM_01.png" alt="" class="lazy_load"></span>
+								<span>
+									<span class="title">반짝 눈물라이너 4호 태양빛 눈물</span>
+									<span class="price">
+										<em><b>20</b>%</em>
+										<b>4,800</b>원
+									</span>
+								</span>
+							</a></li> -->
+						</ul><ul class="loading"></ul>
+					</dd>
+				</dl>
+			</div>
+			<a href="/display/etude_ch?displayMenuId=etude_ch" class="more" title="Ch.에뛰드">더보기</a>
+		</div>
+		<div class="section color_pick"> <!-- 올해의 컬러 MD추천  -->
+			<th:block th:if="${not #lists.isEmpty(cornersMap)}">
+				<th:block th:each="corner : ${cornersMap.get('M02_main_p.5')}">
+					<th:block th:each="contents : ${corner.contents}">
+						<th:block th:if="${contents.menuPageCornerContentsId == 'M02_main_p.5.1'}">
+							<h2 class="title" th:text="${contents.text}"></h2>
+						</th:block>
+					</th:block>
+				</th:block>
+			</th:block>
+			<div class="recommend_items"> <!-- 추천컬러 상품 목록  -->
+				
+			</div>
+		</div>
+		<div class="section best">
+			<h2 class="title">베스트</h2>
+			<div class="slide" data-ix-options="view-length:4; move-length:1;">
+				<div class="ix-list-viewport recommend_items">
+					<div class="loading" style="height:420px;">
+						<span>
+							<img ap:src="@{/images/common/loading.gif}" alt="">
+						</span>
+					</div>
+				</div>
+				<div class="ix-controller">
+					<div class="slide_direction">
+						<a class="ix-btn-prev" href="#none"><span class="sr_only">Prev</span></a>
+						<a class="ix-btn-next" href="#none"><span class="sr_only">Next</span></a>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="slide" data-ix-options="view-length:4; move-length:1;"> 모바일과 동일하게 랭킹 정보가 필요하면 수정해야함 2018-07-17 lyh 
+				<ul class="loading">
+							<li></li>
+							<li></li>
+							<li></li>
+				</ul>
+				<div class="ix-controller">
+					<div class="slide_direction">
+						<a class="ix-btn-prev" href="#none"><span class="sr_only">Prev</span></a>
+						<a class="ix-btn-next" href="#none"><span class="sr_only">Next</span></a>
+					</div>
+				</div>
+			</div> -->
+			<a href="/display/best?displayMenuId=best" class="more" title="베스트">더보기</a>
+		</div>
+		<div class="clear">
+			<div class="section hot_deal">
+				<h2 class="title">TODAY HOT DEAL</h2>
+				<div class="slide" data-ix-options="view-length:2;">
+					<div class="ix-list-viewport recommend_items">
+						<div class="loading" style="height:420px;">
+							<span>
+								<img ap:src="@{/images/common/loading.gif}" alt="">
+							</span>
+						</div>
+					</div>
+					<div class="ix-controller">
+						<div class="slide_direction">
+							<a class="ix-btn-prev" href="#none"><span class="sr_only">Prev</span></a>
+							<a class="ix-btn-next" href="#none"><span class="sr_only">Next</span></a>
+						</div>
+					</div>
+				</div>
+				<a href="/display/hotdeal?displayMenuId=hotdeal" class="more" title="핫딜">더보기</a>
+			</div>
+			<div class="section nine_looks">
+				<h2 class="title">FIND YOUR LOOK</h2>
+				<div class="slide" data-ix-options="view-length:1;">
+					<div class="ix-list-viewport">
+						<ul class="ix-list-items">
+							<li class="ix-list-item">
+								<a href="#none" class="lazy_load_wrap">
+									<img src="" data-src="/pc/ko/images/dummy/img_9looks.jpg" alt="" class="lazy_load">
+									<span class="cont">
+										<b class="eng">BLOSSOM</b>
+										<span class="tag">#소개팅룩</span>
+										<span class="tag">#러브지수UP</span>
+										<span class="tag">#로맨틱룩</span>
+										<span class="tag">#소녀감성</span>
+									</span>
+								</a>
+							</li>
+							<li class="ix-list-item">
+								<a href="#none" class="lazy_load_wrap">
+									<img src="" data-src="/pc/ko/images/dummy/img_9looks.jpg" alt="" class="lazy_load">
+									<span class="cont">
+										<b class="eng">BLOSSOM</b>
+										<span class="tag">#소개팅룩</span>
+										<span class="tag">#러브지수UP</span>
+										<span class="tag">#로맨틱룩</span>
+										<span class="tag">#소녀감성</span>
+									</span>
+								</a>
+							</li>
+							<li class="ix-list-item">
+								<a href="#none" class="lazy_load_wrap">
+									<img src="" data-src="/pc/ko/images/dummy/img_9looks.jpg" alt="" class="lazy_load">
+									<span class="cont">
+										<b class="eng">BLOSSOM</b>
+										<span class="tag">#소개팅룩</span>
+										<span class="tag">#러브지수UP</span>
+										<span class="tag">#로맨틱룩</span>
+										<span class="tag">#소녀감성</span>
+									</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="ix-controller round_box">
+						<div class="paging"><b class="current"></b> / <span class="total"></span></div>
+						<div class="slide_direction">
+							<a class="ix-btn-prev" href="#none"><span class="sr_only">Prev</span></a>
+							<a class="ix-btn-next" href="#none"><span class="sr_only">Next</span></a>
+						</div>
+					</div>
+				</div>
+				<a href="/display/etude_looks?displayMenuId=etude_looks" class="more" title="9looks">더보기</a>
+			</div>
+		</div>
+	</div>
+	<!-- // page contents -->
+</div><!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script th:inline="javascript">
+		var _colorData = /*[[${not #lists.isEmpty(cornersMap) ? cornersMap.get('M02_main_p.5') : ''}]]*/;
+		
+		AP.home.setData(_colorData); 
+	</script>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<table class="align_center">
+	<caption class="sr_only">예치금 적립,이체,사용내역</caption>
+	<colgroup>
+		<col style="width:13%;">
+		<col style="width:17%;">
+		<col>
+		<col style="width:13%;">
+		<col style="width:13%;">
+	</colgroup>
+	<thead>
+	<tr>
+		<th scope="col">날짜</th>
+		<th scope="col">주문번호</th>
+		<th scope="col">환불계좌</th>
+		<th scope="col">구분</th>
+		<th scope="col">금액</th>
+	</tr>
+	</thead>
+	<tbody>
+	{{#each this.depositHistories}}
+	<tr>
+		<td>{{ dateFormat this.depositHistOccurDt "YYYY.MM.DD" }}</td>
+		<td class="order_number"><a href="/my/page/order/detail/{{ this.ordNo }}">{{ this.ordNo }}</a></td>
+		<td>{{#if this.acHolderName.name1}}{{ this.acHolderName.name1 }}/{{ this.bankName }}/{{ this.bankAcNo }}{{/if}}</td>
+		<td>{{{ depositTypeName this.depositHistTypeCode }}}</td>
+		<td>{{{ depositSwitch this.deposit '원' }}}</td>
+	</tr>
+	{{/each}}
+	</tbody>
+</table>

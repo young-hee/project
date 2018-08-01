@@ -1,0 +1,19 @@
+{{#each this}}
+	<li class="ix-list-item">
+		<div class="clear">
+			<img src="{{ this.pixlee_cdn_photos.square_medium_url }}" alt="{{ decodeURIComponent this.alt_text }}">
+			<dl>
+				<dt>
+					{{#if this.platform_link}}
+						<a href="{{ this.platform_link }}" target="_blank">{{#if this.avatar_url}}@{{/if}}{{ this.user_name }}</a>
+					{{else}}
+						{{#if this.avatar_url}}<span class="thumb">@</span>{{/if}}{{ this.user_name }}
+					{{/if}}
+				</dt>
+				<dd>
+					<pre>{{ this.photo_title }}</pre>
+				</dd>
+			</dl>
+		</div>
+	</li>
+{{/each}}

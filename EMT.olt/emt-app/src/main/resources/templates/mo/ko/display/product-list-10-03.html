@@ -1,0 +1,85 @@
+<html ap:decorate="~{layout/layout-main}" th:with="_jsfile='product-list'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents prd_list hot_deal icon_type_sp_today">
+		<!-- 02-28 소카테고리 삭제 메뉴레이어로 통합
+		<th:block ap:replace="~{fragment/product/category}"/>
+		<!--//소카테고리-->
+
+		<!-- tab menu wrap -->
+		<div class="ui_tab today">
+			<!-- tab menu -->
+			<div class="tab_menu">
+				<ul>
+                    <li class="on"><a href="#none" th:href="@{/display/hotdeal(displayMenuId=hotdeal)}">투데이 핫딜</a></li>
+                    <li><a href="#none" th:href="@{/display/hotdeal_sp_price(displayMenuId=hotdeal_sp_price)}">한정판 특가</a></li>
+				</ul>
+			</div>
+			<!-- tab content -->
+			<div class="tab_cont">
+				<h3 class="sr_only">투데이 핫딜</h3>
+				<!--상품리스트-->
+				<div class="item_list type1">
+					<div class="panel notice no_result" style="display: none;">
+						<i class="ico"></i>
+						<p class="text">상품이 존재하지 않습니다.</p>
+					</div>
+
+					<ul></ul>
+
+				</div>
+				<!--//상품리스트-->
+
+				<ul class="loading" style="display: none">
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+			</div>
+		</div>
+
+		<!-- 180712 더보기 삭제
+		<button type="button" class="btn_lg_more w100p">
+			<span></span>
+		</button>
+		-->
+		<div class="panel">
+			<dl class="dl_cont bg_light_gray2">
+				<dt><b>유의사항</b></dt>
+				<dd>
+					<ul class="list_bullet_dot">
+						<li>해당 할인가는 에뛰드하우스 회원에만 적용됩니다.</li>
+						<li>종료시간전 모든 수량 판매 시, 조기종료될 수 있습니다.</li>
+						<li>당사 사정에 따라 마감전에도 사전고지 없이 변경/종료될 수 있습니다.</li>
+					</ul>
+				</dd>
+			</dl>
+		</div>
+	</div>
+	<!-- // page contents -->
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script>
+		AP.display.init({
+			key: { displayMenuId: AP.DISPLAY_MENU_ID },
+			api: 'flaggedItemList',
+			param: {
+				flags: 'icon_type_sp_today',
+				prodSort: 'NewProd',
+				prodListUnit: 'Prod',
+				limit: 99999
+			}
+		});
+	</script>
+</th:block>
+
+</body>
+</html>

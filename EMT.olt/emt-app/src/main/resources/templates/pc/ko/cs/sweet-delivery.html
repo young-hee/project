@@ -1,0 +1,83 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents cs">
+
+                <!-- tab menu wrap -->
+                <div class="ui_tab">
+                    <!-- tab menu -->
+                    <div class="tab_menu equally">
+                        <ul>
+                            <li><a href="#none" th:href="@{/cs/takeOut}">테이크아웃</a></li>
+                            <li class="on"><a href="#none" th:href="@{/cs/sweetDelivery}">스윗딜리버리</a></li>
+                            <li><a href="#none" th:href="@{/cs/returnService}">매장반품서비스</a></li>
+                        </ul>
+                    </div>
+                    <!-- tab content -->
+                    <div class="tab_cont store_specialized">
+                        <h3 class="sr_only">스윗딜리버리</h3>
+
+                        <div class="visual">
+                            <a th:href="@{/display/store_location(displayMenuId=store_location)}"><img ap:src="@{/images/cs/img_delivery.jpg}" alt="매장에서 주문하면 원하는 곳으로 배송되는 쉽고 편리한 맞춤라이프! 스윗딜리버리 서비스 매장 찾기" /></a>
+                        </div>
+
+                        <h4 class="h_title sub">스윗딜리버리 서비스 이렇게 이용하세요!</h4>
+                        <div class="process delivery">
+                            <dl>
+                                <dt class="h_title cont"><span class="sr_only">step 1</span>오프라인 매장에서 신청</dt>
+                                <dd>매장 상품 결제 시,<br>'스윗 딜리버리 서비스'를 요청하세요!</dd>
+                            </dl>
+                            <dl>
+                                <dt class="h_title cont"><span class="sr_only">step 2</span>재고 확인 및 주소 입력</dt>
+                                <dd>상품 재고를 확인한 뒤,<br>수령받으실 주소를 정확히 입력하세요!</dd>
+                            </dl>
+                            <dl>
+                                <dt class="h_title cont"><span class="sr_only">step 3</span>상품 결제</dt>
+                                <dd>- 1만원이상 구매시 무료배송<br>- 1만원미만 구매시 배송비 고객부담(1,300원)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="h_title cont"><span class="sr_only">step 4</span>상품 배송</dt>
+                                <dd>약 1~2일 내 원하시는 곳으로<br>상품이 배송됩니다.(영업일 기준)</dd>
+                            </dl>
+                        </div>
+
+                        <dl class="dl_cont">
+                            <dt class="h_title sub">주문상태 안내</dt>
+                            <dd>
+                                <ul class="list font_lg">
+                                    <li>결제완료: 상품 결제가 완료된 상태</li>
+                                    <li>배송준비중: 물류포장 단계</li>
+                                    <li>배송중: 택배로 배송중</li>
+                                    <li>배송완료: 상품 수령완료 상태</li>
+                                </ul>
+                            </dd>
+                        </dl>
+                        <dl class="dl_cont notice">
+                            <dt class="h_title cont"><i class="ico_notice"></i> 유의사항 </dt>
+                            <dd>
+                                <ul class="list_bullet_dot">
+                                    <li>스윗딜리버리 서비스 내역은 ‘마이에뛰드 > 주문내역＇에서 조회가능합니다.</li>
+                                    <li>매장에 내방하시어 주문 취소 및 반품/교환이 가능합니다. 단, 주문취소는 결제완료 단계에서만 가능합니다.</li>
+                                    <li>반품 시 배송받은 상품을 신청하신 매장에 직접 가져오셔야 환불이 가능합니다.</li>
+                                </ul>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+        </th:block>
+</body>
+</html>

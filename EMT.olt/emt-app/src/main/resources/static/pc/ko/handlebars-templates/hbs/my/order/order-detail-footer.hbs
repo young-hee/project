@@ -1,0 +1,92 @@
+{{#xif this.status '==' 'detail'}}
+	<div class="page_btns pdt40">
+		{{#xif (eq this.type 'online') '||' (eq this.type 'store')}}
+			<div class="page_btns pdt40">
+				{{#if (or (eq this.statusCode 'OrdReceivedWaiting') (eq this.statusCode 'OrdReceivedComplete'))}}
+					{{#if this.data.shippingOrdOnlineProdList}}
+						<button class="btn_lg_bordered" type="button" onclick="chgStatus('cancel')">온라인 쇼핑 취소</button>
+					{{/if}}
+					{{#if this.data.storePickupOrdOnlineProdList}}
+						<button class="btn_lg_bordered" type="button" onclick="chgStatus('cancel')">테이크아웃 쇼핑 취소</button>
+					{{/if}}
+				{{/if}}
+				{{#if (eq this.statusCode 'OrdHandlingComplete')}}
+					<button class="btn_lg_bordered" type="button" onclick="chgStatus('return')">반품신청</button>
+					<button class="btn_lg_bordered" type="button" onclick="chgStatus('exchange')">교환신청</button>
+				{{/if}}
+					<button class="btn_lg_neutral" type="button" onclick="javascript:location.href='/my/page/onlineOrderShipping'">목록으로</button>
+			</div>
+		{{else}}
+			{{#xif this.type '==' 'cashReceipts'}}
+				<div class="page_btns pdt40">
+					{{#if (eq this.data.goods.cashReceiptIssueYn 'N')}}
+						<button class="btn_lg_bordered" type="button" onclick="reqCashReceipts({{this.data.goods.ordSn}})">발급 신청</button>
+					{{/if}}
+					<button class="btn_lg_neutral" type="button" onclick="javascript:location.href='/my/page/cashReceipts'">목록으로</button>
+				</div>
+			{{else}}
+				<button class="btn_lg_neutral" type="button" onclick="javascript:location.href='/my/page/returnExchange'">목록으로</button>
+			{{/xif}}
+		{{/xif}}
+	</div>
+{{else}}
+	{{#if (eq this.type 'cancel')}}
+		<dl class="dl_cont">
+			<dt><b>주의사항</b></dt>
+			<dd>
+				<p class="bullet_dot">전체취소 및 부분취소를 하시게 되면, 주문 시 적용하셨던 쿠폰은 소멸되며, 재발행 되지 않습니다.</p>
+			</dd>
+		</dl>
+	{{/if}}
+	{{#if (eq this.type 'exchange')}}
+		{{#if (eq this.step 'two')}}
+			<dl class="dl_cont">
+				<dt><b>교환 안내</b></dt>
+				<dd>
+					<ul class="list_bullet_dot">
+						<li>교환 회수지에서는 택배기사님이 동일한 상품을 가지고 가서, 현장에서 바로 교환하여 드립니다.</li>
+						<li>현장에서 바로 교환하여 드리기 때문에 연락처는 정확하게 기입하여야 합니다.</li>
+						<li><b>교환 배송 비용에 대한 지불은 상담사가 직접 고객님께 연결하여 처리 합니다.</b></li>
+					</ul>
+				</dd>
+			</dl>
+		{{/if}}
+	{{/if}}
+	{{#if (eq this.type 'return')}}
+		{{#if (eq this.step 'one')}}
+			<dl class="dl_cont">
+				<dt><b>반품 안내</b></dt>
+				<dd>
+					<ul class="list_bullet_dot">
+						<li>전체 반품일 경우에는 제공받으신 사은품도 같이 반품하셔야 합니다.</li>
+						<li>반품할 상품에 같이 포함된 사은품이 있을 경우 본 상품과 같이 반품하셔야 합니다.</li>
+						<li>선불카드 결제 주문건은 전체반품을 하셔야 합니다. (부분반품 처리 불가)</li>
+					</ul>
+				</dd>
+			</dl>
+		{{/if}}
+		{{#if (eq this.step 'two')}}
+			<dl class="dl_cont">
+				<dt><b>주의사항</b></dt>
+				<dd>
+					<ul class="list_bullet_dot">
+						<li>전체반품 및 부분반품을 하시게 되면, 주문 시 적용하셨던 쿠폰은 소멸되며, 재발행 되지 않습니다.</li>
+					</ul>
+				</dd>
+			</dl>
+		{{/if}}
+	{{/if}}
+
+	{{#if (eq this.step 'one')}}
+		<div class="page_btns pdt40">
+			<button class="btn_lg_bordered" type="button" onclick="javascript:location.href='/my/page/onlineOrderShipping'">취소</button>
+			<button class="btn_lg_neutral" type="button" onclick="claimProdSelect()">다음</button>
+		</div>
+	{{/if}}
+	{{#if (eq this.step 'two')}}
+		<div class="page_btns pdt40">
+			<button class="btn_lg_bordered" type="button" onclick="javascript:location.href='/my/page/onlineOrderShipping'">취소</button>
+			<button class="btn_lg_neutral" type="button" onclick="reqClaimComplete({{json this.data}})">{{this.title}} 신청</button>
+		</div>
+	{{/if}}
+{{/xif}}

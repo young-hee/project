@@ -1,0 +1,269 @@
+<html ap:decorate="~{layout/only-contents}">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+	<div class="layer_popup fullpage roulette_layer">
+		<div class="layer_wrap">
+			<dl class="layer">
+				<dt class="layer_title">무료 샘플 신청하기</dt>
+				<dd class="layer_cont">
+					<div class="panel buyer">
+						<div class="clear">
+							<h3 class="h_title cont"><strong>주문고객 정보</strong></h3>
+							<button type="button">정보변경</button>
+						</div>
+						<br>
+						<div class="panel gray">
+							<div class="ui_table">
+								<dl>
+									<dt class="w30p">이름</dt>
+									<dd>홍길동</dd>
+								</dl>
+								<dl>
+									<dt class="w30p">휴대폰번호</dt>
+									<dd>010-0000-0000</dd>
+								</dl>
+								<dl>
+									<dt class="w30p">이메일</dt>
+									<dd>이메일을 등록해주세요. <em>(필수)</em></dd>
+								</dl>
+							</div>
+						</div>
+						<br>
+						<p class="text_notice">주문관련 e-Mail과 SMS가 발송됩니다.</p>
+						<hr class="div m30">
+						<h3 class="h_title cont"><strong>배송정보</strong></h3>
+						<fieldset class="form mgt20">
+							<legend class="sr_only">택배 선택</legend>
+							<div class="check_set">
+								<span class="check_wrap"><input type="radio" name="radio01" id="radio01_1" checked=""><label for="radio01_1">일반택배</label></span>
+								<span class="check_wrap"><input type="radio" name="radio01" id="radio01_2"><label for="radio01_2">편의점 배송</label></span>
+							</div>
+						</fieldset>
+						<!--/*일반택배 선택시*/-->
+						<fieldset class="form mgt20">
+							<legend class="sr_only">배송지 선택</legend>
+							<div class="date_btn_set">
+								<span><input type="radio" name="choice" id="choice01_1" checked=""><label for="choice01_1">최근배송지</label></span>
+								<span><input type="radio" name="choice" id="choice01_2"><label for="choice01_2">기본배송지</label></span>
+								<span><input type="radio" name="choice" id="choice01_3"><label for="choice01_3">새로입력</label></span>
+							</div>
+
+							<!--/*최근배송지, 기본배송지 선택시 */-->
+							<div class="panel gray mgt20">
+								<div class="ui_table">
+									<dl>
+										<dt class="w30p">이름</dt>
+										<dd>홍길동</dd>
+									</dl>
+									<dl>
+										<dt class="w30p">휴대폰번호</dt>
+										<dd>010-0000-0000</dd>
+									</dl>
+									<dl>
+										<dt class="w30p">주소</dt>
+										<dd>
+											<p class="text">(531575) 서울시 서울동 서울로 777 888 123</p>
+										</dd>
+									</dl>
+								</div>
+							</div>
+
+							<!--/*새로입력 선택시*/-->
+							<div style="display: none;">
+								<div class="input_group">
+									<div class="label">
+										<label for="sample">이름</label>
+									</div>
+									<div>
+										<input type="text" id="sample">
+									</div>
+								</div>
+								<div class="input_group">
+									<div class="label">
+										<label for="sample2">휴대폰번호</label>
+									</div>
+									<div>
+										<input type="text" id="sample2">
+									</div>
+								</div>
+								<dl class="dl mgt20">
+									<dt>주소</dt>
+									<dd>
+										<p class="text_notice pdb10">찾으시는 주소지 또는 건물명을 입력해 주세요.<br>(예 : 강남대로, 한강로2가, 한강대로 100)</p>
+										<div class="ui_find_addresses ＠find-addresses-apply">
+											<div class="input_group">
+												<div>
+													<input type="text" id="delivery_area" class="find_addresses_input" placeholder="주소지 또는 건물명">
+												</div>
+												<div class="btn">
+													<button type="button" class="btn_find_addresses">찾기</button>
+												</div>
+											</div>
+											<!--/* 지역 검색 결과 */-->
+											<div class="address_list"></div>
+											<div class="input_group">
+												<div class="input_wrap">
+													<input type="hidden" class="post_code" name="post_code">
+													<input type="hidden" class="address_first" name="address_first">
+													<input type="text" class="address_first" title="기본주소 입력" placeholder="주소" readonly="">
+												</div>
+											</div>
+											<div class="input_group">
+												<div class="input_wrap"><input type="text" class="address_last" title="상세주소 입력" placeholder="상세주소를 입력해주세요."></div>
+											</div>
+										</div>
+									</dd>
+								</dl>
+							</div>
+							<p><span class="check_wrap"><input type="checkbox" id="check02"><label for="check02">기본 배송지로 설정</label></span></p>
+
+							<div class="input_group">
+								<div>
+									<select class="request" name="" id="" title="배송시 요청사항을 선택">
+										<option value="">배송시 요청사항을 선택해주세요.</option>
+										<option value="">부재 시 경비실에 맡겨주세요.</option>
+										<option value="">빠른 배송 부탁드립니다.</option>
+										<option value="">부재 시 핸드폰으로 연락바랍니다.</option>
+										<option value="">배송 전 연락 바랍니다.</option>
+										<option value="">직접 입력</option>
+									</select>
+								</div>
+							</div>
+							<!--/*직접입력 선택시 노출*/-->
+							<div class="input_group">
+								<div>
+									<input type="text" maxlength="80" placeholder="80자 이내로 작성해 주세요." class="＠input-limits-apply">
+								</div>
+							</div>
+						</fieldset>
+						<!--/*편의점 배송 선택시*/-->
+						<fieldset class="form mgt20" style="display: none">
+							<legend class="sr_only">편의점 배송 정보 입력</legend>
+							<div class="convenience_store">
+								<fieldset class="form">
+									<legend class="sr_only">편의점 배송 선택 및 받으실분 정보 입력항목</legend>
+									<div class="convenience_choice clear">
+										<span class="cu"><input type="radio" name="convenience" id="cu"><label for="cu">CU 편의점 찾기</label></span>
+										<span class="gs"><input type="radio" name="convenience" id="gs"><label for="gs">GS 편의점 찾기</label></span>
+									</div>
+									<div class="panel gray mgt20">
+										<div class="ui_table">
+											<dl>
+												<dt class="w30p">지점명</dt>
+												<dd>CU 신용산점</dd>
+											</dl>
+											<dl>
+												<dt class="w30p">연락처</dt>
+												<dd>010-0000-0000</dd>
+											</dl>
+										</div>
+									</div>
+									<h3 class="h_title cont"><strong>받으실 분</strong></h3>
+									<div class="date_btn_set">
+										<span><input type="radio" name="choice02" id="choice02_1" checked=""><label for="choice02_1">주문자와 동일</label></span>
+										<span><input type="radio" name="choice02" id="choice02_2"><label for="choice02_2">새로 입력</label></span>
+									</div>
+									<!--/*주문자와 동일 선택시*/-->
+									<div class="panel gray mgt20">
+										<div class="ui_table">
+											<dl>
+												<dt class="w30p">이름</dt>
+												<dd>홍길동</dd>
+											</dl>
+											<dl>
+												<dt class="w30p">휴대폰번호</dt>
+												<dd>010-0000-0000</dd>
+											</dl>
+										</div>
+									</div>
+									<!--/*새로입력 선택시*/-->
+									<div class="address_basic">
+										<div class="input_group">
+											<div class="label">
+												<label for="name02">이름</label>
+											</div>
+											<div>
+												<input type="text" id="name02">
+											</div>
+										</div>
+										<div class="input_group">
+											<div class="label">
+												<label for="phone02">휴대폰번호</label>
+											</div>
+											<div>
+												<input type="text" id="phone02">
+											</div>
+										</div>
+									</div>
+									<!--/*새로입력 선택시*/-->
+									<p class="text_notice mgt10">배송 물품이 편의점 도착 시, 도착 안내 SMS가 발송됩니다.</p>
+								</fieldset>
+							</div>
+						</fieldset>
+						<hr class="div m30">
+						<!--/*샘플신청 내용입력*/-->
+						<fieldset class="form mgt25">
+							<legend class="sr_only">신청 내용 입력</legend>
+							<div class="input_group">
+								<div class="label">
+									<label for="title">제목</label>
+								</div>
+								<div>
+									<input type="text" id="title" placeholder="최대 30자까지 입력 가능합니다." maxlength="30">
+								</div>
+							</div>
+							<div class="input_group">
+								<div>
+									<div>
+										<div class="textarea">
+											<textarea name="" id="" cols="" rows="" maxlength="2000" placeholder="2000자 이내로 입력해 주세요."></textarea>
+										</div>
+										<p class="text_right"><small>0/20000</small></p>
+									</div>
+								</div>
+							</div>
+						</fieldset>
+
+						<div class="form_btns">
+							<button class="btn_md_secondary" type="button">취소</button>
+							<button class="btn_md_neutral" type="button">신청</button>
+						</div>
+					</div>
+				</dd>
+			</dl>
+			<button class="layer_close" type="button">레이어 닫기</button>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script>
+		/*
+        var modal = AP.modal.full({
+            title: '무료 샘플 신청하기',
+            contents: {
+                templateKey: 'folder-name.file-name',
+                templateModel: {}
+            },
+            containerClass: 'review'
+        }).addListener( 'modal-before-close', function (e) {
+            modal.getElement().find( '.ui_rating' ).rating( 'clear' );						// rating 적용 해제
+			modal.getElement().find( 'input[maxlength], textarea[maxlength]' ).inputLimits( 'clear' );		// inputLimits 적용 해제
+        }).addListener( 'modal-close', function (e) {
+            console.log( e.closeType );
+        });
+        */
+
+		/* 예시, modal open 시점 적용 */
+		$( 'input[maxlength], textarea[maxlength]' ).inputLimits();
+		$( '.ui_find_addresses' ).findAddresses();
+	</script>
+</th:block>
+
+</body>
+</html>

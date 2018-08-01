@@ -1,0 +1,48 @@
+{{!--
+ 	Ch.Etude, Event 등 리스트에서 바로 order layer 의 담는 스타일 에서 사용
+ --}}
+
+<div class="evt_goods">
+	<fieldset class="form">
+		<legend class="sr_only">상품옵션</legend>
+		<div class="scroll_area">{{!-- 리스트 수 최대 20개 이내에서 스크롤링 --}}
+
+			{{#each this.products}}
+				<div class="goods_box">{{!-- 상품명 선택시 class 'on' 추가 --}}
+					<button class="goods_select_name" data-prod-sn="{{ this.prodSn }}">
+						{{#xif this.colorchipTypeCode '==' 'RGB'}}
+							<span class="color_box" style="background-color:#{{ this.rgbVal }}"></span>
+						{{/xif}}
+						{{#xif this.colorchipTypeCode '==' 'Img'}}
+							<span class="color_box" ><img alt="" src="{{ this.colorchipImg }}"></span>
+						{{/xif}}
+
+						<span class="name">
+							{{ this.prodName }}
+							{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+								<span class="sold_out"> [일시품절]</span>
+							{{/xif}}
+						</span>
+
+						<span class="num">
+							{{#xif this.activityPointOnly '==' 'Y'}}
+								<strong>{{ numberFormat this.exchActivityPoint }}</strong><span>알</span>
+							{{else}}
+								<strong>{{ numberFormat this.prodPriceSummary.onlineSalePrice }}</strong>
+								<span>
+									{{!-- 뷰티포인트 전용상품 --}}
+									{{#xif (eq ../productCount 1) '&&' (eq this.membershipExchOnly 'Y')}}
+										P
+									{{else}}
+										원
+									{{/xif}}
+								</span>
+							{{/xif}}
+						</span>
+					</button>
+				</div>
+			{{/each}}
+
+		</div>
+	</fieldset>
+</div>

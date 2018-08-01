@@ -1,0 +1,149 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents member_join">
+                <div class="member_join_inner">
+                    <div class="ui_step">
+                        <ul>
+                            <li><i class="ico"></i>본인인증<span class="num">1</span></li>
+                            <li><i class="ico"></i><span class="num">2</span>약관동의</li>
+                            <li class="current"><i class="ico"></i><span class="num">3</span>정보입력<span class="sr_only">선택됨</span></li>
+                            <li><i class="ico"></i><span class="num">4</span>가입완료</li>
+                        </ul>
+                    </div>
+                    <div class="panel">                    
+                        <div class="panel_cont gray bdr_top">
+                            <h3 class="h_title sub">기본정보 (필수입력)</h3>
+                            <fieldset class="form">
+                                <legend class="sr_only">기본정보 입력</legend>
+                                <div class="ui_table type2">
+                                    <dl>
+                                        <dt>이름</dt>
+                                        <dd>
+                                            <p class="text font_lg">에뛰드</p>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt><label for="user_id">아이디</label></dt>
+                                        <dd>
+                                            <span class="input_wrap"><input type="text" id="user_id" placeholder="아이디 (4~12자, 영문)"></span>
+                                            <button class="btn_md_form" type="button">중복확인</button>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt><label for="user_pwd">비밀번호</label></dt>
+                                        <dd>
+                                            <span class="input_wrap"><input type="password" id="user_pwd" placeholder="6~16자, 영문, 숫자, 특수문자 조합"></span>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt><label for="user_pwd_confirm">비밀번호 확인</label></dt>
+                                        <dd>
+                                            <span class="input_wrap"><input type="password" id="user_pwd_confirm" placeholder="비밀번호 재입력"></span>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt><label for="birth">생년월일</label></dt>
+                                        <dd>
+                                            <span class="input_wrap"><input type="text" id="birth" placeholder="생년월일 8자리 입력(ex: 20000101)"></span>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt><label for="phone">휴대폰번호</label></dt>
+                                        <dd>
+                                            <span class="input_wrap"><input type="text" id="phone" placeholder="‘-’제외 숫자 입력"></span>
+                                            <!-- 
+                                            <div class="input_group ea_03">
+                                                <span class="select_wrap">
+                                                    <select name="" id="" title="휴대전화 사업자 식별번호 선택">
+                                                        <option value="">010</option>
+                                                    </select>
+                                                </span>
+                                                <span class="gap">-</span>
+                                                <span class="input_wrap"><input type="text" title="휴대폰 가운데자리 입력"></span>
+                                                <span class="gap">-</span>
+                                                <span class="input_wrap"><input type="text" title="휴대폰 끝자리 입력"></span>
+                                            </div>
+                                            <div class="check_wrap w100p"><input type="checkbox" id="sms"><label for="sms">SMS 수신에 동의합니다.</label></div>
+                                             -->
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>성별</dt>
+                                        <dd>
+                                            <span class="check_wrap"><input type="radio" name="gender" id="female" checked><label for="female">여자</label></span>
+                                            <span class="check_wrap"><input type="radio" name="gender" id="male"><label for="male">남자</label></span>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </fieldset>                       
+                        </div>
+
+                        <div class="panel_cont gray mgt_sm">                        
+                            <h3 class="h_title sub">선택정보</h3>
+                            <fieldset class="form">
+                                <legend class="sr_only">선택정보 입력</legend>
+                                 <div class="ui_table type2">
+                                    <dl>
+                                        <dt><label for="email">이메일</label></dt>
+                                        <dd>
+                                            <span class="input_wrap"><input type="text" id="email" placeholder="‘@’ 포함하여 이메일 입력"></span>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt class="line_height">마케팅 정보<br>수신 동의</dt>
+                                        <dd>
+                                            <dl class="dl_cont w100p">
+                                                <dt class="member_join_input_tit">온라인 사이트(에뛰드 하우스) 수신 동의</dt>
+                                                <dd class="check_set fluid">
+                                                    <span class="check_wrap"><input type="checkbox" id="check1_1" /><label for="check1_1">전체동의</label></span>
+                                                    <span class="check_wrap"><input type="checkbox" id="check1_2" /><label for="check1_2">이메일</label></span>
+                                                    <span class="check_wrap"><input type="checkbox" id="check1_3" /><label for="check1_3">문자</label></span>
+                                                    <span class="check_wrap"><input type="checkbox" id="check1_4" /><label for="check1_4">DM</label></span>
+                                                    <span class="check_wrap"><input type="checkbox" id="check1_5" /><label for="check1_5">TM</label></span>
+                                                </dd>
+                                            </dl>
+                                            <dl class="dl_cont w100p">
+                                                <dt class="member_join_input_tit">뷰티포인트 수신 동의</dt>
+                                                <dd class="check_set fluid">
+                                                    <span class="check_wrap"><input type="checkbox" id="check2_1" /><label for="check2_1">전체동의</label></span>
+                                                    <span class="check_wrap"><input type="checkbox" id="check2_2" /><label for="check2_2">이메일</label></span>
+                                                    <span class="check_wrap"><input type="checkbox" id="check2_3" /><label for="check2_3">문자</label></span>
+                                                    <span class="check_wrap"><input type="checkbox" id="check2_4" /><label for="check2_4">DM</label></span>
+                                                    <span class="check_wrap"><input type="checkbox" id="check2_5" /><label for="check2_5">TM</label></span>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+                                 </div>                                                          
+                            </fieldset>
+                        </div>
+
+                        <div class="panel_footer">
+                            <ul class="list_bullet_dot_gray">
+                                <li>문자 및 이메일 수신에 동의하시면 이벤트, 쿠폰 및 혜택, 신제품 등 다양한 정보를 제공받을 수 있습니다.<br>단, 회원가입/비밀번호찾기/주문배송은 수신동의와 관계없이 자동발송됩니다.</li>
+                            </ul>
+                            <div class="form_btns">
+                                <a href="#none" class="btn_lg_secondary">취소</a>
+                                <a href="#none" class="btn_lg_primary">등록</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+        </th:block>
+</body>
+</html>

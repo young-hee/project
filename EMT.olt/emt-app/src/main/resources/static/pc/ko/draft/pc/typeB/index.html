@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Concept B (PC)</title>
+    <style>
+        *{margin:0; padding:0;list-style:none;}
+		body{overflow-x:hidden;}
+        img{vertical-align: top;}
+        .wrapper{text-align:center;}
+
+		.header {position:relative;margin:0 -100%;}
+		.header .category {position:absolute;width:1200px;height:151px;top:0;left:50%;margin-left:-604px;z-index:1;}
+		.header .category .view {position:absolute;bottom:0;left:0;display:block;width:170px;height:50px;}
+		.header .category .category_menu {position:absolute;top:151px;left:-6px;display:none;}
+		.header .category .category_menu .close {position:absolute;bottom:2px;right:2px;display:block;width:40px;height:40px;}
+		.header .category .main {position:absolute;top:0;left:0;display:block;width:100px;height:100px;}
+		.header .live {position:absolute;top:100px;left:580px;display:block;width:120px;height:50px;}
+		.header .hot {position:absolute;top:100px;left:360px;display:block;width:70px;height:50px;}
+
+		.slide_wrap {position:relative;}
+		.slide {position:relative;}
+		.slide .ix-list-viewport {overflow:hidden;height:399px;}
+		.slide .ix-list-items {position:relative; left:0; top:0; width:100%; height:100%;}
+		.slide .ix-list-items .ix-list-item {float:left; width:100%;text-align:center;}
+		.slide .paging {position:absolute;bottom:-17px;left:50%;width:104px;height:35px;margin-left:-52px;background:#000;font-size:14px;font-family:Arial;color:#fff;line-height:35px;border-radius:100px;text-align:center;}
+		.slide .ix-controller {position:absolute;top:0;left:50%;bottom:0;width:1200px;margin-left:-610px;}
+		.slide .slide_direction {position:absolute;top:0;left:0;right:0;display:none;}
+		.slide .slide_direction .ix-btn-prev,
+		.slide .slide_direction .ix-btn-next {position:absolute;top:186px;display:block;width:22px;height:32px;}
+		.slide .slide_direction .ix-btn-prev {left:176px;}
+		.slide .slide_direction .ix-btn-next {right:236px;}
+		.slide .slide_direction .ix-btn-prev:before,
+		.slide .slide_direction .ix-btn-next:before {position:absolute;top:50%;left:50%;display:block;width:12px;height:22px;margin:-11px 0 0 -6px;content:'';}
+		.slide .slide_direction .ix-btn-prev:before {background:url('images/arrow_L.png') no-repeat left top;}
+		.slide .slide_direction .ix-btn-next:before {background:url('images/arrow_R.png') no-repeat left top;}
+		.slide:hover .slide_direction {display:block;}
+
+		.today {position:absolute;top:30px;right:0;width:230px;}
+		.today_slide {position:relative;width:230px;}
+		.today_slide .ix-list-viewport {overflow:hidden;}
+		.today_slide .ix-list-items {position:relative; left:0; top:0; width:100%; height:100%;}
+		.today_slide .ix-list-items .ix-list-item {float:left; width:100%;text-align:center;}
+		.today_slide .paging {position:absolute;bottom:-12px;left:50%;width:70px;height:25px;margin-left:-35px;background:#bcb7b0;font-size:12px;font-family:Arial;color:#fff;line-height:25px;border-radius:100px;text-align:center;}
+		.today_slide .slide_direction {position:absolute;top:0;left:0;right:0;display:none;;}
+		.today_slide .slide_direction .ix-btn-prev,
+		.today_slide .slide_direction .ix-btn-next {position:absolute;top:87px;display:block;width:22px;height:32px;}
+		.today_slide .slide_direction .ix-btn-prev {left:5px;}
+		.today_slide .slide_direction .ix-btn-next {right:5px;}
+		.today_slide .slide_direction .ix-btn-prev:before,
+		.today_slide .slide_direction .ix-btn-next:before {position:absolute;top:50%;left:50%;display:block;width:12px;height:22px;margin:-11px 0 0 -6px;content:'';}
+		.today_slide .slide_direction .ix-btn-prev:before {background:url('images/arrow_L02.png') no-repeat left top;}
+		.today_slide .slide_direction .ix-btn-next:before {background:url('images/arrow_R02.png') no-repeat left top;}
+		.today_slide:hover .slide_direction {display:block;}
+
+
+
+		.menu_wrap {position:absolute;top:0;left:50%;width:1200px;margin-left:-610px;}
+		.menu_wrap .menu {position:absolute;top:0;left:0;}
+
+		.contents {margin:0 -100%;}
+
+		.footer {margin:0 -100%;}
+    </style>
+
+    <script src="../../libs/jquery-1.12.3.min.js"></script>
+    <script src="../../libs/ixBand_1.1.min.js"></script>
+    <script src="../../libs/ixSnack_0.4.min.js"></script>
+
+</head>
+
+<body>
+   
+    <div class="wrapper">
+		<div class="header">
+			<img src="images/img_header.jpg" alt="">
+			<div class="category">
+				<a href="index.html" class="main"></a>
+				<a href="live.html" class="live"></a>
+				<a href="hot.html" class="hot"></a>
+				<a href="#" class="view"></a>
+				<div class="category_menu">
+					<img src="images/img_category.jpg" alt="" />
+					<a href="#" class="close"></a>
+				</div>
+			</div>
+		</div>
+		<div class="contents">
+			<div class="slide_wrap">
+				<div class="slide" data-ix-options="view-length:1; auto-play:true;">
+					<div class="ix-list-viewport">
+						<ul class="ix-list-items">
+							<li class="ix-list-item">
+								<img src="images/img_slide01.jpg" alt="" />
+							</li>
+							<li class="ix-list-item">
+								<img src="images/img_slide02.jpg" alt="" />
+							</li>
+						</ul>
+					</div>
+					<div class="ix-controller">
+						<div class="slide_direction">
+							<a class="ix-btn-prev" href="#"></a>
+							<a class="ix-btn-next" href="#"></a>
+						</div>
+						<div class="paging"><span class="current"></span>/<span class="total"></span></div>
+					</div>
+				</div>
+				<div class="menu_wrap">
+					<div class="menu">
+						<img src="images/img_menu.png" alt="" />
+					</div>
+					<div class="today">
+						<img src="images/today.jpg" alt="" />
+						<div class="today_slide" data-ix-options="view-length:1; auto-play:true;">
+							<div class="ix-list-viewport">
+								<ul class="ix-list-items">
+									<li class="ix-list-item">
+										<img src="images/img_main_hot01.jpg" alt="" />
+									</li>
+									<li class="ix-list-item">
+										<img src="images/img_main_hot02.jpg" alt="" />
+									</li>
+								</ul>
+							</div>
+							<div class="ix-controller">
+								<div class="slide_direction">
+									<a class="ix-btn-prev" href="#"></a>
+									<a class="ix-btn-next" href="#"></a>
+								</div>
+								<div class="paging"><span class="current"></span>/<span class="total"></span></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<img src="images/img_main.jpg" alt="">
+		</div>
+		<div class="footer">
+			<img src="images/img_footer.jpg" alt="" />
+		</div>
+    </div>
+
+    <script src="js/main.js"></script>
+	<script type="text/javascript">
+	$( function (){
+		$( '.category .view' ).on( 'click', function (e) {
+			e.preventDefault();
+
+			$( '.category_menu' ).show();
+		});
+		$( '.category_menu .close' ).on( 'click', function (e) {
+			e.preventDefault();
+
+			$( '.category_menu' ).hide();
+		});
+	});
+
+	/* $( '.slide' ).ixOverlayList();
+	$( '.slide' ).ixSlideMax(); */
+	$( '.slide' ).on( 'ixOverlayList:init ixOverlayList:change', function (e) {
+		var viewLength = $( this ).ixOptions( 'view-length' ),
+				currentPage = Math.ceil( e.currentIndex / viewLength ),
+				totalPage = Math.ceil( e.totalLength / viewLength );
+		
+		$( this ).find( '.paging > .current' ).text( currentPage + 1 );
+		$( this ).find( '.paging > .total' ).text( totalPage );
+	}).ixOverlayList();
+
+	//������ ����� ����ɶ����� ����� ����� ������ �ش�.
+	$( window ).on( 'resize', function(e) {
+		$( '.slide' ).ixOverlayList( 'resize' );
+	});
+	
+	$( '.today_slide' ).on( 'ixSlideMax:init ixSlideMax:change', function (e) {
+		var viewLength = $( this ).ixOptions( 'view-length' ),
+				currentPage = Math.ceil( e.currentIndex / viewLength ),
+				totalPage = Math.ceil( e.totalLength / viewLength );
+		
+		$( this ).find( '.paging > .current' ).text( currentPage + 1 );
+		$( this ).find( '.paging > .total' ).text( totalPage );
+	}).ixSlideMax();
+	</script>
+</body>
+</html>

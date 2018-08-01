@@ -1,0 +1,36 @@
+<nav class="swipe_menu">
+	<div class="fixed_area">
+		<!--/* 스크롤시  fixed 클래스 */-->
+		<div>
+			<ul>
+				<!-- app 전용  -->
+				<li th:if="${#device.isMobileApp()}">
+					<a href="#"	 th:href="@{'/display/membership?displayMenuId=membership'}" th:class="${displayMenuId == 'membership'} ? 'selected' : ''">멤버십</a>
+				</li>
+				<!--  : end app 전용  -->
+				<li>
+					<a href="#none" th:href="@{/main}" th:class="${#lists.isEmpty(displayMenuId)} ? 'selected' : ''">홈</a>
+				</li>
+				<th:block th:each="menu : ${gnbMap.get('main').submenus}" th:if="${not #lists.isEmpty(gnbMap.get('main'))}">
+					<li><a href="#"th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}"  
+							th:class="${displayMenuId == menu.displayMenuId} ? 'selected' : ''" th:data="${menu.displayMenuId}">GNBs</a>
+					</li>
+				</th:block>
+
+				<!--/* 임시메뉴
+				<li><a href="#">신상품</a></li>
+				<li><a href="#">베스트</a></li>
+				<li><a href="#">핫딜</a></li>
+				<li><a href="#">#에뛰드픽</a></li>
+				<li><a href="#">Ch.에뛰드</a></li>
+				<li><a href="#">뷰티라이프</a></li>
+				<li><a href="#">이벤트</a></li>
+				<li><a href="#">브랜드</a></li>
+				 */-->
+			</ul>
+		</div>
+		<button type="button" class="btn_search">
+			<span class="sr_only">검색</span>
+		</button>
+	</div>
+</nav>

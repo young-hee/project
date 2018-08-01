@@ -1,0 +1,18 @@
+{{!--
+	주간 베스트 목록
+--}}
+<div class="ix-list-viewport">
+	<ul class="ix-list-items">
+		{{#each this.flaggedProdRankChange}}
+			<li class="ix-list-item">
+				<a href="{{ productDetailPath this.onlineProdSn this.prodSn }}">
+					<strong class="num">{{ numberCipher this.rank 2 }}</strong> <span class="title">{{ this.prodName }}</span>
+
+					{{#xif this.rankChange '!=' 0}}
+						<span class="ranking {{#xif this.rankChange '>' 0}}up{{/xif}} {{#xif this.rankChange '<' 0}}down{{/xif}}">{{ this.rankChange }} <span class="sr_only">{{#xif this.rankChange '>' 0}}상승{{/xif}} {{#xif this.rankChange '<' 0}}하락{{/xif}}</span></span>
+					{{/xif}}
+				</a>
+			</li>
+		{{/each}}
+	</ul>
+</div>

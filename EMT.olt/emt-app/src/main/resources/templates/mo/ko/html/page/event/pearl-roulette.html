@@ -1,0 +1,70 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='pearl-roulette'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents event pearl_roulette">
+		<div class="roulette_wrap">
+			<img ap:src="@{/images/event/bg_roulette.jpg}" alt="">
+			<h2 class="sr_only">반짝반짝 진주알 룰렛 </h2>
+			<p class="sr_only">3번 바로바로 당첨되는 진주알 행운 룰렛으로 선불 받아가자!</p>
+			<div class="roulette">
+				<img ap:src="@{/images/event/dummy_roulette.png}" alt="" class="dummy">
+				<div class="circle">
+					<img ap:src="@{/images/event/circle_roulette.png}" alt="">
+				</div>
+				<img ap:src="@{/images/event/top_roulette.png}" alt="" class="top">
+				<button type="button" class="btn_start"><img ap:src="@{/images/event/btn_roulette.png}" alt="진주알 룰렛 start"></button>
+				<img ap:src="@{/images/event/char_roulette.png}" alt="" class="character">
+				<p class="sr_only">행운 당첨은 1회 참여사 진주알 20알이 차감됩니다. 하루 3회까지 응모 가능합니다.</p>
+			</div>
+		</div>
+		<div class="panel">
+			<h3 class="h_title cont"><strong>읽어보세요!</strong></h3>
+			<br>
+			<ul class="list_bullet_dot">
+				<li>진주알 룰렛은 1회 참여 시 진주알 20알이 차감됩니다.<br>(1일 최대 3회 응모 가능)</li>
+				<li>에뛰드 BEST 상품, 팬시제품, 할인쿠폰, 진주알 등 다양한 형태의 당첨 경품이 마련되어 있으며, 응모 즉시 확인 가능합니다.</li>
+			</ul>
+			<hr class="div m30">
+			<h3 class="h_title cont"><strong>당첨경품 예시</strong></h3>
+			<img ap:src="@{/images/event/img_prize.jpg}" alt="경품 예시로, 진주알, 립스틱, 오일, 크림, 아이섀도우, 할인쿠폰">
+			<ul class="list_bullet_dot">
+				<li>실물 경품 당첨 시 익일(영업일 기준) 택배 발송합니다.</li>
+				<li>배송이 필요한 경품의 경우 배송지를 입력 받사오니, 정확하게 입력해 주세요.<br>
+					(주소오류 반송 건은 재발송하지 않습니다.)</li>
+				<li>당첨된 할인쿠폰이나 진주알은 당첨 즉시 지급됩니다.<br>
+					(마이에뛰드에서 확인 가능합니다.)</li>
+			</ul>
+			<hr class="div m30">
+			<h3 class="h_title cont"><strong>그 밖의 다른 혜택</strong></h3>
+			<div class="event_menu">
+				<ul>
+					<li><a href="#none" class="sweet_letter">스윗레터<br>100% 당첨</a></li>
+					<li><a href="#none" class="beauty_tester">뷰티테스터<br>신청하기</a></li>
+					<li><a href="#none" class="attendance">매일매일<br>행운의 출첵</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script th:inline="javascript">
+		;(function () {
+			var member = {};
+			[# th:if="${memberMap}"]
+			member.id = /*[[${memberMap.id}]]*/;
+			member.name = /*[[${memberMap.name}]]*/;
+			member.memberSn = /*[[${memberMap.memberSn}]]*/;
+			[/]
+
+			AP.roulette.setMemberInfo( member );
+		}());
+	</script>
+</th:block>
+
+</body>
+</html>

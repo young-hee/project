@@ -1,0 +1,131 @@
+<html ap:decorate="~{layout/only-contents}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+			<div class="modal_dimmed"></div>
+        	<div class="layer_popup" style="display: block;">
+                <div class="layer_wrap layer_lg" style="top:50px;">
+                    <dl class="layer">
+                        <dt class="layer_title">배송지 정보 입력하기</dt>
+                        <dd class="layer_cont">
+							<div class="sample_apply order">
+								<div class="delivery_info">
+									<!--/* 당첨내역 */-->
+									<div class="title_area clear">
+										<h4 class="h_title sub">당첨내역</h4>
+									</div>
+									<div class="panel bordered gray mgt40">
+										<div class="panel_cont ui_table">
+											<dl>
+												<dt><b>당첨자</b></dt>
+												<dd>홍길동</dd>
+											</dl>
+											<dl>
+												<dt><b>사은품</b></dt>
+												<dd>쁘띠비쥬 베이비 버블 모이스춰 바디로션</dd>
+											</dl>
+										</div>
+									</div>
+									<br>
+									<!--/* 20180511 : 주문고객정보 삭제 및 배송정보 내용 변경 */-->
+									<fieldset class="form">
+										<legend class="sr_only">배송 정보 입력</legend>
+										<div class="title_area clear">
+											<h4 class="h_title sub">배송정보</h4>
+											<span class="check_wrap"><input type="checkbox" id="check01"><label for="check01">회원정보 불러오기</label></span>
+										</div>
+
+										<div class="ui_table">
+											<dl>
+												<dt><label for="user_name2"><b>이름</b></label></dt>
+												<dd>
+													<div class="input_wrap w100p"><input type="text" id="user_name2" placeholder="이름을 입력하세요."></div>
+												</dd>
+											</dl>
+											<dl>
+												<dt><label for="user_phone2"><b>휴대폰번호</b></label></dt>
+												<dd>
+													<div class="input_wrap w100p"><input type="text" id="user_phone2" placeholder="‘-’없이 숫자만 입력"></div>
+												</dd>
+											</dl>
+											<dl>
+												<dt><b>주소</b></dt>
+												<dd class="ui_find_addresses">
+													<div class="w100p input_btn_wrap">
+														<div class="input_wrap">
+															<input type="text" class="address_keyword" title="지역명 입력" placeholder="지역명">
+														</div>
+														<button type="button" class="btn_md_form btn_address_find">찾기</button>
+													</div>
+													<div class="input_group w100p">
+														<span class="input_wrap w25p"><input type="text" class="post_code" title="우편번호 입력" placeholder="우편번호" readonly=""></span>
+														<span class="gap">&nbsp;</span>
+														<span class="input_wrap"><input type="text" class="address_first" title="기본주소 입력" placeholder="기본주소" readonly=""></span>
+													</div>
+													<div class="input_wrap w100p"><input type="text" class="address_last" title="상세주소 입력" placeholder="상세주소"></div>
+													<p class="text_notice light w100p">찾으시는 주소지 또는 건물명을 입력해주세요. <br>(예:강남대로, 한강로2가, 한강대로 100)</p>
+												</dd>
+											</dl>
+										</div>
+
+										<!--/* 20180511 : 추가 */-->
+										<dl class="dl_cont mgt40">
+											<dt class="h_title font_lg">
+												<b>개인정보 수집 및 이용 동의 (필수)</b>
+												<span class="check_wrap float_right"><input type="checkbox" id="agree_personal"><label for="agree_personal">동의합니다.</label></span>
+											</dt>
+											<dd class="light mgt20">
+												<div class="panel bordered padding15">
+													<div class="panel_cont pd_sm">
+														<ul class="list_bullet_dot">
+															<li>수집 및 이용 항목 : 배송 정보</li>
+															<li>수집 및 이용 목적 : 경품 배송</li>
+															<li>이용·보유 및 이용 기간 : 발송후 3개월뒤 삭제</li>
+														</ul>
+													</div>
+												</div>
+												<!--/*20180530 : 문구수정*/-->
+												<ul class="text_notice mgt20">
+													<li>신청자는 개인정보 수집 및 이용 동의에 거부할 수 있습니다. 다만, 거부할 경우 경품 발송이 불가능 합니다.</li>
+												</ul>
+											</dd>
+										</dl>
+									</fieldset>
+
+									<div class="form_btns mgt40">
+										<!--/* 20180510 : 버튼명변경 */-->
+										<button class="btn_lg_secondary" type="button">다시작성</button>
+										<button class="btn_lg_neutral" type="button">등록</button>
+									</div>
+									<dl class="dl_cont notice mgt40">
+										<dt class="h_title cont"><i class="ico_notice"></i>사은품 배송 관련 </dt>
+										<dd>
+											<ul class="list_bullet_dot">
+												<li>배송이 필요한 시간은 주간 단위로 매주 0요일에 일괄 배송업체로 전달됩니다.</li>
+												<li>회원정보가 잘못되어 반품되거나 연락이 불가능할 경우 재배송이 되지 않으며, 신청 후 탈퇴한 경우 신청이 취소됩니다.</li>
+												<li>사은품 신청 후 주소 변경 긴급 문의 및 사은품 파손 교체 문의는 고객센터로 문의해 주시기 바랍니다.</li>
+											</ul>
+										</dd>
+									</dl>
+								</div>
+							</div>
+                        </dd>
+                    </dl>
+                    <button class="layer_close" type="button">레이어 닫기</button>
+                </div>
+            </div>
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+            <!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+            <script>
+				$( '.map_area' ).mapApi();
+				$( '.store_map .slide' ).ixSlideMax();
+            </script>
+
+        </th:block>
+</body>
+</html>

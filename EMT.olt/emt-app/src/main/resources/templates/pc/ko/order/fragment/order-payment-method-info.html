@@ -1,0 +1,55 @@
+<!-- 선택시 on 클래스 -->
+<!--<li>
+	<button type="button" class="one_touch on">원터치간편결제</button>
+</li>-->
+<li th:each="payMethod : ${payMethodResult.payMethodExList}">
+	<!--원터치 간편결제-->
+	<th:block th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'wpay'}">
+		<button type="button" class="one_touch" name="payMethod" id="w_pay" value="WPAY"
+				th:if="${apMember != null}"
+				th:onclick="|setPayment(this,'WPAY','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|"
+				th:text="${payMethod.payMethodName}">원터치간편결제</button>
+	</th:block>
+	<!--신용카드 결제-->
+	<th:block th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'credit-card'}">
+		<button type="button" class="credit_card" name="payMethod" id="credit" value="wcard"
+				th:onclick="|setPayment(this,'wcard','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|"
+				th:text="${payMethod.payMethodName}">신용카드 결제</button>
+	</th:block>
+	<!--휴대폰 결제-->
+	<th:block th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'mobile-phone-pay'}">
+		<button type="button" class="cellphone" name="payMethod" id="phone" value="mobile"
+				th:onclick="|setPayment(this,'mobile','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|"
+				th:text="${payMethod.payMethodName}">휴대폰 결제</button>
+	</th:block>
+	<!--네이버 페이-->
+	<th:block th:if="${payMethod.payServiceCode == 'naver-pg' and payMethod.payMethodCode == 'naverpay'}">
+		<button type="button" class="naver_pay" name="payMethod" id="n_pay" value="NAVERPAY"
+				th:onclick="|setPayment(this,'NAVERPAY','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|"
+				th:text="${payMethod.payMethodName}">네이버 페이</button>
+	</th:block>
+	<!--페이코-->
+	<th:block th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'payco'}">
+		<button type="button" class="payco" name="payMethod" id="payco" value="wcard"
+				th:onclick="|setPayment(this,'wcard','onlypayco','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|"
+				th:text="${payMethod.payMethodName}">페이코</button>
+	</th:block>
+	<!--카카오페이-->
+	<th:block th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'kakaopay'}">
+		<button type="button" class="cacao_pay" name="payMethod" id="kakao_pay" value="wcard"
+				th:onclick="|setPayment(this,'wcard','onlykakaopay','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|"
+				th:text="${payMethod.payMethodName}">카카오페이</button>
+	</th:block>
+	<!--실시간 계좌이체-->
+	<th:block th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'bank-ac-transfer'}">
+		<button type="button" class="account_transfer" name="payMethod" id="account_transfer" value="bank"
+				th:onclick="|setPayment(this,'bank','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|"
+				th:text="${payMethod.payMethodName}">실시간 계좌이체</button>
+	</th:block>
+	<!--무통장 입금-->
+	<th:block th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'virtual-account'}">
+		<button type="button" class="deposit" name="payMethod" id="remit_bank" value="vbank"
+				th:onclick="|setPayment(this,'vbank','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|"
+				th:text="${payMethod.payMethodName}">무통장 입금</button>
+	</th:block>
+</li>

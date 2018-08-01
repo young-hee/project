@@ -1,0 +1,89 @@
+<th:block layout:fragment="prodType">
+	<!-- 그룹상품 : 일반상품, 예약상품, 특가판매상품 -->
+	<div class="cart_item_box type2" id="prodList" th:if="${#lists.size(deliveryOnlineProdEx.cartProdExList) > 0}" th:with="cartProdExList=${deliveryOnlineProdEx.cartProdExList}">
+		<!--온라인상품-->
+		<div class="cart_name_wrap">
+			<span class="check_wrap">
+				<input type="checkbox" name="chkBox" th:id="'chkBox' + ${deliveryOnlineProdExCnt.count}" th:value="${cartEx.cartSn} + ',' + ${deliveryOnlineProdEx.onlineProdSn}" th:checked="${deliveryOnlineProdEx.selectYn == 'Y'}">
+				<label th:for="'chkBox' + ${deliveryOnlineProdExCnt.count}">체크</label>
+			</span>
+			<img th:if="${deliveryOnlineProdEx.repOnlineProdImgEx != null}" th:src="${deliveryOnlineProdEx.repOnlineProdImgEx.imgUrl}" class="thm_cart_item">
+			<img th:if="${deliveryOnlineProdEx.repOnlineProdImgEx == null}" ap:src="@{/images/cart/no_img.png}" class="thm_cart_item">
+			<div class="cart_table_cell">
+				<span class="cart_item_name" th:text="${deliveryOnlineProdEx.onlineProdName}">컬러풀 드로잉 디어 마이 블루밍 립스-톡 쉬폰</span>
+				<div class="cart_item_exclusive_wrap">
+					<span class="cart_item_exclusive"
+						  th:if="${not #lists.isEmpty(deliveryOnlineProdEx.onlineProdFlagExList)}"
+						  th:each="onlineProdFlagEx : ${deliveryOnlineProdEx.onlineProdFlagExList}"
+						  th:text="${onlineProdFlagEx.prodFlagName}">예약상품
+					</span>
+				</div>
+				<span class="cart_price">
+					<span class="left_num"
+						  th:if="${deliveryOnlineProdEx.productSaleAmountInfo != null
+						 		 and deliveryOnlineProdEx.productSaleAmountInfo.standardCurrency.amount != deliveryOnlineProdEx.finalOnlineSalesAmountInfo.standardCurrency.amount}">
+						<del class="num"th:text="${#IntegUtil.toCommaNumber(deliveryOnlineProdEx.productSaleAmountInfo.standardCurrency.amount)}"></del><span>원</span>
+					</span>
+					<span class="right_num">
+						<strong class="num"
+								th:if="${deliveryOnlineProdEx.finalOnlineSalesAmountInfo != null}"
+								th:text="${#IntegUtil.toCommaNumber(deliveryOnlineProdEx.finalOnlineSalesAmountInfo.standardCurrency.amount)}">
+						</strong>
+						<span>원</span>
+					</span>
+				</span>
+			</div>
+		</div>
+
+		<!--단위상품-->
+		<div class="cart_item_scroll" th:if="${#lists.size(cartProdExList) > 0}" th:each="cartProdEx, cartProdExCnt : ${cartProdExList}">
+			<div class="cart_item_info">
+				<!--위치변경 하지말것!-->
+				<input type="hidden" name="onlinePrdSn" th:value="${cartProdEx.prodEx.prodSn}"/>
+				<input type="hidden" name="cartProdSn" th:value="${cartProdEx.cartProdSn}"/>
+				<input type="hidden" name="cartProdExList" th:value="${cartProdExList}"/>
+				<input type="hidden" th:name="'prdInfo_' + ${deliveryOnlineProdEx.onlineProdSn}" th:value="${cartEx.cartSn} + ',' + ${cartProdEx.cartProdSn}"/>
+				<input type="hidden" th:name="'saleDisplayStatus_' + ${cartProdEx.prodEx.prodSn}" th:value="${cartProdEx.prodEx.saleDisplayStatus}"/>
+				<!--// 위치변경 하지말것!-->
+				<div class="cart_option_name">
+					<img th:if="${cartProdEx.prodEx.repProdImgEx != null}" th:src="${cartProdEx.prodEx.repProdImgEx.imgUrl}" class="cart_option_name_thm">
+					<img th:if="${cartProdEx.prodEx.repProdImgEx == null}" ap:src="@{/images/cart/no_img.png}" class="cart_option_name_thm">
+					<span th:text="${cartProdEx.prodEx.prodName}">RD319 상상하는 레드</span>
+				</div>
+				<!--상품수량버튼 제어-->
+				<th:block ap:replace="~{cart/fragment/spinner-button-info}"/>
+				<!--// 상품수량버튼 제어-->
+				<button type="button" class="btn_md btn_option_change" th:onclick="|fnUnitVariationProds('${cartEx.cartSn}','${cartProdEx.cartProdSn}','${cartProdEx.prodEx.prodSn}','${cartProdEx.cartProdQty}','${cartProdEx.storePickupYn}')|">옵션변경</button>
+				<span class="cart_price" th:if="${cartProdEx.prodEx.saleDisplayStatus == 'OnSale'}">
+					<span class="left_num">
+						<del class="num"
+							 th:if="${cartProdEx.calculationResultYn == 'Y'
+							 			and cartProdEx.calculationResultProduct.productSaleAmountInfo != null
+							 			and cartProdEx.calculationResultProduct.productSaleAmountInfo.standardCurrency.amount != cartProdEx.calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount}"
+							 th:text="${#IntegUtil.toCommaNumber(cartProdEx.calculationResultProduct.productSaleAmountInfo.standardCurrency.amount)}+'원'">
+						</del>
+						<!--<span>원</span>-->
+					</span>
+					<span class="right_num">
+						<strong class="num"
+								th:if="${cartProdEx.calculationResultYn == 'Y' and cartProdEx.calculationResultProduct.finalOnlineSalesAmountInfo != null}"
+								th:text="${#IntegUtil.toCommaNumber(cartProdEx.calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount)}+'원'">
+						</strong>
+						<strong class="num"
+								th:if="${cartProdEx.calculationResultYn == 'N' and cartProdEx.prodEx.salePrice != null}"
+								th:text="${#IntegUtil.toCommaNumber(cartProdEx.prodEx.salePrice * cartProdEx.cartProdQty)}+'원'">
+						</strong>
+						<!--<span>원</span>-->
+					</span>
+				</span>
+				<span class="cart_price" th:if="${cartProdEx.prodEx.saleDisplayStatus == 'OutOfStock' && cartProdEx.prodEx.prodTypeCode != 'Presale'}">
+					<span class="text_sold_out" >[일시품절]</span><!--일반상품,특가판매상품,특가증정상품/구매불가안내-->
+				</span>
+				<span class="cart_price" th:if="${cartProdEx.prodEx.saleDisplayStatus == 'Exhaustion' && cartProdEx.prodEx.prodTypeCode == 'Presale'}">
+					<span class="text_sold_out" >[예약판매수량소진]</span><!--예약판매상품/구매불가안내-->
+				</span>
+				<button type="button" class="btn_option_del" th:onclick="|removeCartProd(this,'${cartEx.cartSn}','${cartProdEx.cartProdSn}')|"><span class="sr_only">없애기</span></button>
+			</div>
+		</div>
+	</div>
+</th:block>

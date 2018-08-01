@@ -1,0 +1,11 @@
+{{#each this.storeExList}}
+	<tr>
+		<td>
+			<a href="#none" data-store-sn="{{ this.storeSn }}">{{ this.storeName }}</a>
+			{{#if (findInObject this.storeEventExList 'foStoreEventCode' 'Color Finder')}}
+				<span class="my_color_finder_flag">마이 컬러 파인더</span>
+			{{/if}}
+		</td>
+		<td class="align_left">{{ this.address.address1 }}, {{ this.address.address2 }}</td>
+	</tr>
+{{/each}}

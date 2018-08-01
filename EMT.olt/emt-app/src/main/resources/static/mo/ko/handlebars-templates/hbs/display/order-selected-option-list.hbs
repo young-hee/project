@@ -1,0 +1,72 @@
+{{!--
+	선택된 옵션 리스트
+	prodTypeCode, bulkIncludedProds, productCount, products, onlineProdGift
+--}}
+{{#each this.products}}
+	<div class="goods_box product_item" data-prod-sn="{{ this.prodSn }}">
+		<div class="goods_select_name {{#xif ../prodTypeCode '==' 'BulkFixedProd'}}set{{/xif}}">
+			{{!-- 세트상품 --}}
+			{{#xif ../prodTypeCode '==' 'BulkFixedProd'}}
+				<span class="set_name">{{ this.prodName }}</span>
+				{{#each ../bulkIncludedProds}}
+					<span class="set_goods">{{ this.prodName }} {{#unless @last}}+{{/unless}}</span>
+				{{/each}}
+			{{else}}
+				{{#xif this.colorchipTypeCode '==' 'RGB'}}
+					<span class="color_box" style="background-color:#{{ this.rgbVal }}"></span>
+				{{else}}
+					<img class="goods_select_thm" src="{{ this.colorchipImg }}" alt="">
+				{{/xif}}
+				{{!-- title --}}
+				{{ this.prodName }}
+				{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+					<span class="sold_out"> [일시품절] </span>
+				{{/xif}}
+			{{/xif}}
+
+			{{!-- 할인 경우 노출(온라인상품할인률 + 회원등급할인률 + 온라인회원할인률) --}}
+			{{#xif this.prodPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+				<span class="num color_light_pink">{{ calc this.prodPriceSummary.onlineSalePriceDiscountRate '+'
+														   this.prodPriceSummary.memberLevelDiscountRate '+'
+														   this.prodPriceSummary.onlineMemberDiscountRate }}% Off</span>
+			{{/xif}}
+
+			{{!-- 사은품 --}}
+			{{#xif (eq ../onlineProdGift.giftProdTargetYn 'Y') '&&' (eq this.prodGift.giftProdTargetYn 'Y')}}
+				{{#each ../onlineProdGift.giftProds}}
+					<span class="gifts">[사은품] {{ this.prodName }} {{ this.qty }}개</span>
+				{{/each}}
+			{{/xif}}
+		</div>
+
+		<div class="goods_select_option">
+			{{!-- 품절이면서 takeout 상품은 min=1, max=99 --}}
+			<span class="ui_spinner small" data-min="{{#xif (eq this.storePickupBtnEnable 'Y') '&&' (eq this.saleDisplayStatus 'OutOfStock')}}1{{else}}{{ this.minPurLimitQty }}{{/xif}}" {{#xif (eq this.storePickupBtnEnable 'Y') '&&' (eq this.saleDisplayStatus 'OutOfStock')}}data-max="99"{{else}}{{#xif this.maxPurLimitYn '==' 'Y'}}data-max="{{ this.maxPurLimitQty }}"{{/xif}}{{/xif}} data-step="1" data-disabled="false">
+				<button class="spinner_decrease" type="button" title="제품 수량 감소"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
+				<input class="spinner_input" type="text" title="선택품목갯수" value="{{ this.minPurLimitQty }}">
+				<button class="spinner_increase" type="button" title="제품 수량 증가"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>
+			</span>
+			<span class="num">
+				{{!-- 이중가표기 --}}
+				{{#xif prodPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+					<del class="item_before_total_price">{{ currencyFormat this.prodPriceSummary.beforeOnlineSalePrice }}</del>
+				{{/xif}}
+
+				{{#xif this.activityPointOnly '==' 'Y'}}
+					<strong class="item_total_price">{{ numberFormat this.exchActivityPoint }}</strong><span>알</span>
+				{{else}}
+					<strong class="item_total_price">{{ numberFormat this.prodPriceSummary.onlineSalePrice }}</strong>
+					<span>
+						{{!-- 뷰티포인트 전용상품 --}}
+						{{#xif (eq ../productCount 1) '&&' (eq this.membershipExchOnly 'Y')}}
+							P
+						{{else}}
+							원
+						{{/xif}}
+					</span>
+				{{/xif}}
+			</span>
+		</div>
+		<button type="button" class="btn_del" data-prod-sn="{{ this.prodSn }}"><span class="sr_only">삭제</span></button>
+	</div>
+{{/each}}

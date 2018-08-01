@@ -1,0 +1,194 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='beautizen_recruit'">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	
+	<div class="ap_contents brand beautizen_recruit_reserve">
+		<div class="beautizen">
+			<!-- tab menu wrap -->
+			<div class="ui_tab">
+				<!-- tab menu -->
+				<div class="tab_menu equally">
+					<ul>
+						<li><a href="#none">뷰티즌이란?</a></li>
+						<li class="on"><a href="#none">뷰티즌 모집</a></li>
+						<li><a href="#none">뷰티즌 프로필</a></li>
+					</ul>
+				</div>
+				<!-- tab content -->
+				<div class="tab_cont no_padding">
+					<h3 class="sr_only">뷰티즌 모집</h3>
+					<div class="panel">
+						<h4 class="h_title page">지원서 작성</h4>
+						<p class="font_md">아래 내용을 입력해주세요.</p>
+						<hr class="div m30">
+						<h5 class="form_title"><strong>자기소개</strong></h5>
+						<form class="validate" method="post" novalidate="novalidate">
+							<fieldset class="form">
+								<legend class="sr_only">자기소개 입력</legend>
+								<div class="dl">
+									<dl>
+										<dt>01.자기소개
+											<small>(필수입력)</small></dt>
+										<dd>
+											<div class="textarea"><textarea name="addQuestion1" id="addQuestion1" cols="" rows="" maxlength="500" placeholder="500자 이내로 입력해주세요." required="required" data-msg-required="자기소개를 입력해 주세요."></textarea></div>
+											<p class="text_right"><small>0/500</small></p>
+										</dd>
+									</dl>
+									<dl>
+										<dt>02. 뷰티즌 클럽 지원동기
+											<small>(필수입력)</small></dt>
+										<dd>
+											<div class="textarea"><textarea name="addQuestion2" id="addQuestion2" cols="" rows="" maxlength="500" placeholder="500자 이내로 입력해주세요." required="required" data-msg-required="뷰티즌 클럽 지원동기를 입력해 주세요."></textarea></div>
+											<p class="text_right"><small>0/500</small></p>
+										</dd>
+									</dl>
+									<dl>
+										<dt>03. 본인이 하고싶은 뷰티 컨텐츠 컨셉을 자유롭게 적어주세요.
+											<small>(필수입력)</small></dt>
+										<dd>
+											<div class="textarea"><textarea name="addQuestion3" id="addQuestion3" cols="" rows="" maxlength="500" placeholder="500자 이내로 입력해주세요." required="required" data-msg-required="본인이 하고 싶은 뷰티 컨텐츠 컨셉을 입력해 주세요."></textarea></div>
+											<p class="text_right"><small>0/500</small></p>
+										</dd>
+									</dl>
+									<dl>
+										<dt>04. 유투브 영상 url 지원 – 가산점 적용</dt>
+										<dd>
+											<div class="input_group">
+												<div><input type="text" title="유튜브 동영상 url 입력" name="addQuestion4" id="addQuestion4" placeholder="http://"></div>
+											</div>
+										</dd>
+									</dl>
+								</div>
+							</fieldset>
+							<h5 class="form_title"><strong>대외활동</strong>
+								<small>(선택입력)</small></h5>
+							<fieldset class="form relative">
+								<legend class="sr_only">대외활동 입력</legend>
+								<div class="activities_history">
+									<div class="input_group">
+										<div>
+											<select name="activityType" id="activityType" title="유형선택" >
+												<option value="">유형</option>
+												<option value="대학생프로그램">대학생프로그램</option>
+												<option value="공모전">공모전</option>
+												<option value="기타대외활동">기타대외활동</option>
+												<option value="학생회">학생회</option>
+												<option value="동아리">동아리</option>
+											</select>
+										</div>
+									</div>
+									<div class="input_group">
+										<div><input type="text" title="제목 입력" placeholder="제목 (최대 50자까지 입력 가능합니다.)" name="activityName" id="activityName"></div>
+									</div>
+									<div class="input_group">
+										<div><input type="text" title="제목 입력" placeholder="활동기간 yyyymmdd ~ yyyymmdd" name="activityDate" id="activityDate"></div>
+									</div>
+									<div class="input_group brand_txtarea_act">
+										<div>
+											<textarea name="activityBodyText" id="activityBodyText" cols="" rows="" maxlength="500" placeholder="활동내용을 입력해주세요."></textarea>
+										</div>
+									</div>
+									<p class="text_right unit"><small>0/500</small></p>
+								</div>
+
+								<!--/* [S] 20180430 : 약관동의 마크업 추가 */-->
+								<span class="check_wrap">
+									<input type="checkbox" id="check_all">
+										<label for="check_all">
+											<strong class="font_lg">전체 동의합니다.</strong>
+										</label>
+								</span>
+								<h5 th:text="${beautizenTerm1.termsName}">개인정보 수집/이용 동의(필수)</h5>
+								<th:block th:utext="${beautizenTerm1.termsBodyText}"></th:block>
+								<!-- <div class="brand_agree_panel">
+									/* 20180504 : 개인정보동의 문구 수정 */
+									<ul>
+										<li>- 수집 개인정보 항목 : 에뛰드 ID, 사진, 이름, 성별, 연락처(휴대전화번호), 생년월일, 홈페이지(블로그), SNS주소</li>
+										<li>- 수집 및 이용목적 : 뷰티즌 모집 지원자 확인 및 선정, 공지사항 전달</li>
+										<li>- 보유 및 이용기간 : 합격자 발표 후 1개월 (단, 합격자의 경우 활동 종료 시 까지)</li>
+									</ul>
+								</div> -->
+								<p class="text_notice">지원자는 개인정보 수집 및 이용동의에 거부할 수 있습니다. 다만, 거부할 경우 뷰티즌 지원이 불가능 합니다.</p>
+	
+								<span class="check_wrap">
+									<input type="checkbox" id="check_agree_1" name="check_agree_1" required="required" data-msg-required="개인정보 수집/이용 동의는 필수 입니다.">
+									<label for="check_agree_1">동의(필수)</label>
+								</span>
+								<h5 th:text="${beautizenTerm2.termsName}">민감정보 수집 및 이용동의(필수)</h5>
+								<th:block th:utext="${beautizenTerm2.termsBodyText}"></th:block>
+								<!-- <div class="brand_agree_panel ET010">
+									<ul>
+										<li>- 수집 개인정보 항목 : 학력사항</li>
+										<li>- 수집 및 이용목적 : 뷰티즌 선발 지원자 확인</li>
+										<li>- 보유 및 이용기간 : 합격자 발표 후 1개월 (단, 합격자의 경우 활동 종료 시 까지)</li>
+									</ul>
+								</div> -->
+								<p class="text_notice">지원자는 개인정보 수집 및 이용동의에 거부할 수 있습니다. 다만, 거부할 경우 뷰티즌 지원이 불가능 합니다.</p>
+	
+								<span class="check_wrap">
+									<input type="checkbox" id="check_agree_2" name="check_agree_2" required="required" data-msg-required="민감정보 수집 및 이용동의는 필수 입니다.">
+										<label for="check_agree_2">동의합니다.</label>
+								</span><!--/* 20180504 : 문구 수정 */-->
+								<h5 th:text="${beautizenTerm3.termsName}">개인정보 취급위탁에 대한 동의(필수)</h5>
+								<th:block th:utext="${beautizenTerm3.termsBodyText}"></th:block>
+								<!-- <div class="brand_agree_panel ET011">
+									<ul>
+										<li>- 개인정보를 취급위탁 받는자 : IBM(주)</li>
+										<li>- 취급위탁 받는 업무 : 개인정보의 전산처리 및 저장</li>
+									</ul>
+								</div> -->
+								<p class="text_notice">지원자는 개인정보 수집 및 이용동의에 거부할 수 있습니다. 다만, 거부할 경우 뷰티즌 지원이 불가능 합니다.</p>
+	
+								<span class="check_wrap">
+									<input type="checkbox" id="check_agree_3" name="check_agree_3" required="required" data-msg-required="개인정보 개인정보 취급위탁에 대한 동의는 필수 입니다.">
+									<label for="check_agree_3">동의합니다.</label>
+								</span><!--/* 20180504 : 문구 수정 */-->
+								
+								<!--/* [E] 20180430 : 약관동의 마크업 추가 */-->
+								<button type="button" class="btn_add">추가하기<i class="ico_more"></i></button>
+								<hr class="div m20">
+								<div class="clear">
+									<p class="text_notice">상기 내용이 사실임을 증명합니다.</p>
+									<button type="button"><i class="ico_refresh"></i>초기화</button>
+								</div>
+								<div class="form_btns">
+									<a href="#none" class="btn_lg_secondary nextTemp">임시저장</a>
+									<a href="#none" class="btn_lg_primary confirm">제출하기</a>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script th:inline="javascript">
+	
+		var memberMap = /*[[${memberMap}]]*/;	
+		var suppotersData = /*[[${suppoters}]]*/; 
+		
+		// 수량 조절
+		$( '.ui_spinner' ).spinner();
+
+		// 글자수 제한
+		$( 'textarea[maxlength]' ).inputLimits();
+		
+		/** 임시저장 data set ********************************************************************/
+		AP.beautizenRecruitReserve.setData( suppotersData ); 
+		/** 완료 ********************************************************************/
+		AP.beautizenRecruitReserve.addListener( 'reserve-complete', function (e) {
+			location.href="/display/beautizen_recruit?displayMenuId=beautizen_recruit";
+		});
+	</script>
+
+</th:block>
+
+</body>
+</html>

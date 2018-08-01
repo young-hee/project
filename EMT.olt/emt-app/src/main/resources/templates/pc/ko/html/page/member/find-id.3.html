@@ -1,0 +1,115 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            
+            <!-- page contents -->
+            <div class="ap_contents find_id_pwd">
+                <div class="panel gray">
+                	<div class="panel_cont certification">
+                        <h3 class="form_title">휴대폰 인증</h3>
+                        <fieldset class="form">
+                            <legend class="sr_only">휴대폰 인증 정보 입력</legend>
+                            <div class="ui_table">
+                                <dl>
+                                    <dt><label for="user_name">이름</label></dt>
+                                    <dd>
+                                        <span class="input_wrap"><input type="text" id="user_name"></span>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt>내국인 여부</dt>
+                                    <dd>
+                                        <span class="check_wrap"><input type="radio" name="country" id="local" checked><label for="local">내국인</label></span>
+                                        <span class="check_wrap"><input type="radio" name="country" id="foreign"><label for="foreign">외국인</label></span>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt><label for="number">생년월일</label></dt>
+                                    <dd>
+                                        <span class="input_wrap"><input type="text" id="number" placeholder="생년월일 8자리 입력(ex: 20000101)"></span>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt>성별</dt>
+                                    <dd>
+                                    	<span class="check_wrap"><input type="radio" name="gender" id="female" checked><label for="female">여자</label></span>
+                                        <span class="check_wrap"><input type="radio" name="gender" id="male"><label for="male">남자</label></span>
+                                    </dd>
+                                </dl>
+                                
+                                <dl>
+                                    <dt><label for="phone">휴대폰 번호</label></dt>
+                                    <dd>
+                                        <span class="input_group input_phone">
+                                            <span class="select_wrap">
+                                                <select name="" id="phone" title="통신사 선택">
+                                                    <option value="">통신사 선택</option>
+                                                </select>
+                                            </span>
+                                            <span class="gap"></span>
+                                            <span class="input_wrap"><input type="text" title="휴대폰 번호 입력" placeholder="‘-’제외 숫자 입력"></span>
+                                            
+                                        </span>
+                                        <button class="btn_md_form" type="button">인증번호</button>
+                                         <!-- 
+                                    	<button class="btn_md_secondary" type="button">재전송</button>
+                                    	 -->
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt><label for="number2">인증번호</label></dt>
+                                    <dd>
+                                        <div>
+                                            <div class="input_wrap"><input type="text" id="number2" placeholder="6자리 입력"><em class="count">3:00</em></div>
+                                            <br>
+                                            <ul class="list_bullet_dot">
+                                            	<li>3분 이내에 인증번호를 입력하셔야 합니다.</li>
+                                            	<li>입력 시간 초과 시 재전송 버튼을 눌러주세요.</li>
+                                            </ul>
+                                        </div>
+                                        <button class="btn_md_form" type="button">시간연장</button>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt><label for="number3">문자보안 인증</label></dt>
+                                    <dd>
+                                    	<!-- captcha 영역 01-23 수정 -->
+                                    	<div class="captcha clear">
+				                        	<div class="img"><!-- 캡차 이미지 --></div>
+				                       		<div class="btns">
+				                       			<button type="button">새로고침</button>
+				                       			<button type="button">음성듣기</button>
+				                       		</div>
+				                       		<div class="input_wrap w100p"><input type="text" id="number3" placeholder="자동입력 방지 문자"></div>
+			                       		</div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="panel_footer">
+                    <ul class="list_bullet_dot">
+                        <li>휴대폰을 이용한 본인인증 방법은 무료이며 한국모바일인증에서 제공 합니다.</li>
+                        <li>본인 확인 5회 실패 시 당일 휴대폰 인증이 제한합니다.</li>
+                    </ul>
+                    <div class="form_btns">
+                        <a href="#none" class="btn_lg_secondary">취소</a>
+                        <a href="#none" class="btn_lg_primary">확인</a>
+                    </div>
+                </div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+        </th:block>
+</body>
+</html>

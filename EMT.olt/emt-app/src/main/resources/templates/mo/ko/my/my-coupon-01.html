@@ -1,0 +1,111 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='my-coupon'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents mypage coupon">
+		<div class="panel pdb0 my_coupon">
+			<h2 class="h_title page">나의 쿠폰 관리</h2>
+			<fieldset class="form">
+				<legend class="sr_only">온라인 전용 쿠폰 입력</legend>
+				<div class="input_group">
+					<div>
+						<input type="text" placeholder="온라인 전용 쿠폰 번호 입력" name="couponIdentifier">
+					</div>
+					<div class="btn">
+						<button type="button" id="registerBtn">등록</button>
+					</div>
+				</div>
+				<p class="font_sm">발급 받으신 온라인 전용 쿠폰 번호를 등록해 주세요.</p>
+			</fieldset>
+
+			<!-- tab menu wrap -->
+			<div class="ui_tab">
+				<!-- tab menu -->
+				<div class="tab_menu equally">
+					<ul>
+						<li class="on"><a href="/my/page/myCouponList">사용 가능한 쿠폰 <em th:text="${availCnt}">00</em>개</a></li>
+						<li><a href="/my/page/myUsedCouponList">사용/만료 쿠폰 <em th:text="${expCnt}">00</em>개</a></li>
+					</ul>
+				</div>
+				<!-- tab content -->
+				<div class="tab_cont">
+					<h3 class="sr_only">사용 가능한 쿠폰</h3>
+					<!--/* 목록내용이 있을경우 */-->
+					<div class="coupon_list"></div>
+					<!-- 쿠폰이 없을 경우 -->
+					<div class="panel notice result_none">
+						<i class="ico"></i>
+						<p class="text">보유중인 쿠폰이 없습니다.<br>적용 가능 쿠폰 보기에서 다운로드 가능한 쿠폰을<br>확인하시고 다양한 혜택이 담긴 쿠폰을 다운로드<br>받으실 수 있습니다.</p>
+					</div>
+				</div>
+			</div>
+
+			<a href="/my/page/pearl/salesCushion" class="pearl_change"><img ap:src="@{/images/my/btn_pearl_change.jpg}" alt="보유 진주알로 쿠폰 교환하기" /></a><!--/* 20180418 : 링크 추가 */-->
+
+			<div class="ui_accordion space0 brdtop" data-open-type="single">
+				<dl>
+					<dt>
+						<span class="title">쿠폰 유의 사항</span>
+						<button type="button"><span class="sr_only">더보기</span></button>
+					</dt>
+					<dd>
+						<div class="cont gray">
+							<dl class="dl_cont">
+								<dt class="h_title"><b>유의 사항</b></dt>
+								<dd>
+									<ul class="list_bullet_dot">
+										<li>[쿠폰제외] 제품은 쿠폰 사용이 불가합니다.</li>
+										<li>쿠폰의 특이사항은 ‘자세히 보기＇를 클릭해 주세요.</li>
+										<li> 쿠폰 사용시 포인트를 적립 받을 수 없습니다.</li>
+										<li> 온라인쿠폰과 통합쿠폰 중 하나만 사용 가능합니다.</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl class="dl_cont mgt15">
+								<dt class="h_title"><b>온라인전용 쿠폰</b></dt>
+								<dd>
+									<ul class="list_bullet_dot">
+										<li>에뛰드하우스 쇼핑몰에서만 사용 가능한 쿠폰입니다. (매장 사용 불가)</li>
+										<li>장바구니/상품/증정 쿠폰 등이 해당합니다.</li>
+										<li>온라인전용 인증번호 쿠폰은 상단에 입력 후 결제 시 사용 가능합니다.</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl class="dl_cont mgt15">
+								<dt class="h_title"><b>통합쿠폰(온-오프 통합쿠폰)</b></dt>
+								<dd>
+									<ul class="list_bullet_dot">
+										<li>에뛰드하우스 쇼핑몰과 일반매장에서 사용 가능한 쿠폰입니다. (중복 사용불가)</li>
+										<li>통합쿠폰으로 발행된 인증번호 쿠폰은 결제 단계에서 등록 후 사용 가능합니다.  (선등록 불가)</li>
+									</ul>
+								</dd>
+							</dl>
+						</div>
+					</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+	<!-- // page contents -->
+
+	<!-- 마이페이지 맵 01-24 위치변경 -->
+	<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+	<!-- // 마이페이지 맵 -->
+
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<script th:inline="javascript">
+		(function () {
+			AP.myCouponList._getList( "Avail" );
+		}());
+	</script>
+
+</th:block>
+</body>
+</html>

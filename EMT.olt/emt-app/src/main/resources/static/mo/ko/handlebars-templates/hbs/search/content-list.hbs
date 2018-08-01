@@ -1,0 +1,17 @@
+{{#if this.totalCount}}
+	{{#each this.list}}
+		<li class="clear" data-article-sn="{{ this.articleSn }}">
+			<div>
+				<p class="text font_md">{{ ellipsis 40 this.articleTitle }}</p>
+				<br>
+				{{#xif couponYn '==' 'Y'}}
+				<span class="flag">쿠폰지급</span>
+				{{/xif}}
+			</div>
+			<div>
+				<img src="{{ this.bannerImgM }}" alt="">
+			</div>
+		</li>
+	{{/each}}
+{{else}}
+{{/if}}

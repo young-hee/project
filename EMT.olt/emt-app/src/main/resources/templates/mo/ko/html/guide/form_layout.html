@@ -1,0 +1,441 @@
+<html ap:decorate="~{layout/only-guide}">
+<head>
+	<title>ETUDE 스타일 가이드 (Mobile)</title>
+	<style>
+		/* reset */
+		*{margin:0; padding:0; border:0;}
+		html{width:100%; height:100%; font-size:12px; font-family:"맑은 고딕", Malgun Gothic, "나눔 고딕", NanumGothic, "돋움", Dotum; color:#767676; line-height:1;}
+		body{background:#f9f9f9;}
+		header, main, footer, section{display:block;}
+		ul{list-style:none;}
+		table{border-collapse:collapse; border-spacing:0;}
+		a, a:hover{color:inherit; text-decoration:none; cursor:pointer}
+		.clear{}
+		.clear:after{content:''; display:block; clear:both;}
+		.clear>*{float:right; width:49%;}
+		.clear>*:first-child{float:left;}
+
+		/* 본문스타일 */
+		.guide-wrap{}
+		.guide-header{width:100%; height:40px;}
+		.guide-gt{position:fixed; top:0; left:0; right:0; z-index: 2; text-align:center;}
+		.guide-gt span{display:block; height:40px; padding:10px; font-size:16px; color:#fff; background:#67c5c5;}
+		.guide-main{width:100%; max-width:720px; padding-bottom:50px;}
+		.guide{width:100%;}
+		.guide>dt a{position: relative; display:block; height:30px; padding:8px 10px; background:#fff; text-transform:uppercase; font-size:12px; border:1px solid #ccc; border-top-width:0;}
+		.guide>dt.selected a{background:#67c5c5; color:#fff; font-weight:bold; border-color:#67c5c5;}
+
+		@media screen and (min-width:421px){
+			.guide>dt{position:fixed; top:50px; left:10px; width:140px; z-index: 2; background:#fff;}
+			.guide>dt:first-child a{border-top-width:1px;}
+			.guide>dt.selected a:after{content:''; position:absolute; left:100%; top:50%; margin-top:-8px; height: 0;width: 0; border:8px solid transparent; border-left-color:#67c5c5;}
+			.guide-main{margin-left:150px;}
+			.guide>dd{padding:10px;}
+		}
+		@media screen and (max-width:420px){
+			.guide>dt{position:fixed; top:40px; width:33.3%; z-index: 2; background:#fff;}
+			.guide>dt:first-child a,
+			.guide>dt:nth-of-type(2) a,
+			.guide>dt:nth-of-type(3) a{border-top-width:1px;}
+			.guide>dt:nth-of-type(3n+1){left:0; padding:0 5px 0 10px;}
+			.guide>dt:nth-of-type(3n+2){left:33.3%;}
+			.guide>dt:nth-of-type(3n+3){right:0; padding:0 10px 0 5px;}
+			.guide>dt:nth-of-type(1),
+			.guide>dt:nth-of-type(2),
+			.guide>dt:nth-of-type(3){padding-top:10px;}
+			.guide>dt:nth-of-type(4),
+			.guide>dt:nth-of-type(5),
+			.guide>dt:nth-of-type(6){top:80px;}
+			.guide>dt:nth-of-type(7),
+			.guide>dt:nth-of-type(8),
+			.guide>dt:nth-of-type(9){top:110px;}
+			.guide>dt:nth-of-type(10),
+			.guide>dt:nth-of-type(11),
+			.guide>dt:nth-of-type(12){top:140px;}
+			.guide>dt:nth-of-type(13),
+			.guide>dt:nth-of-type(14),
+			.guide>dt:nth-of-type(15){top:170px; padding-bottom:10px;}
+			.guide>dd{padding:20px 10px 10px;}
+		}
+
+
+		.guide>dd>div{margin-bottom:10px; padding:10px;  background:#fff;box-shadow:1px 1px 1px 1px #ddd; border-radius:3px;}
+		.guide .gt{margin:20px 0;}
+		.guide .gt:first-child{margin-top:0;}
+		.guide .gt.d1{padding:10px; color:#fff; font-size:16px; font-weight:bold; background:#67c5c5;}
+		.guide .gt.d2{padding:0 10px 0.5em; border-bottom:1px dashed #ccc; font-size:12px; font-weight:normal;}
+		.guide .gt.d2 strong{font-size:16px; padding-right:20px;}
+		.g-btn{position:relative; display:inline-block; padding:0.5em 2em 0.5em 1em; margin-top:5px; border:1px solid #ccc; border-radius:3px; text-transform:uppercase;}
+		.g-btn:after{content:''; position:absolute; top:50%; right:10px; display:block; width:9px; height:1px; background:#aaa; transform:rotate(0); transition:0.3s;}
+		.g-btn:before{content:''; position:absolute; top:50%; right:10px; display:block; width:9px; height:1px; background:#aaa; transform:rotate(-90deg); transition:0.3s;}
+		.g-btn.open{background:#ccc; color:#fff;}
+		.g-btn.open:after{transform:rotate(45deg); transition:0.3s; background:#fff;}
+		.g-btn.open:before{transform:rotate(-45deg); transition:0.3s; background:#fff;}
+		.html{padding:20px; border-radius:5px; border:1px solid #eaeaea;}
+		hr.div{display:block; width:100%; height:0; margin:20px 0; border-bottom:1px solid #eaeaea; }
+		.guide-row{display:table; width:100%; table-layout: fixed;}
+		.guide-col2{display:table-cell; width:49%;}
+		.guide-col2:first-child{padding-right:1%;}
+		.guide-col2 + .guide-col2{padding-left:1%;}
+		.guide-col3{display:table-cell; width:32%;}
+		.guide-col3 + .guide-col3{padding-left:1%;}
+		.guide-footer{position:fixed; bottom:0; left:0; width:100%; height:50px; line-height:50px; background:#f9f9f9; text-align:center;}
+
+		#toTop{display:none; position:fixed; bottom:10px; right:10px;}
+		#toTop a{display:block; padding:10px; border-radius:3px; background:#929292; color:#fff; text-transform:uppercase; box-shadow:1px 1px 1px 1px #ddd; text-align:center;}
+		#toTop a:after{content:''; position:absolute; left:50%; top:-12px; margin-left:-6px; height: 0;width: 0; border:6px solid transparent; border-bottom-color:#929292;}
+		/* code highlighter */
+		code[class*="language-"],
+		pre[class*="language-"] {color: black;
+			text-shadow: 0 1px #fff;
+			font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+			direction: ltr;
+			text-align: left;
+			white-space: pre;
+			word-spacing: normal;
+			word-break: normal;
+			word-wrap: normal;
+			line-height: 1.5;
+			-moz-tab-size: 4;
+			-o-tab-size: 4;
+			tab-size: 4;
+			-webkit-hyphens: none;
+			-moz-hyphens: none;
+			-ms-hyphens: none;
+			hyphens: none;
+			border-radius:5px;
+		}
+		pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+		code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {text-shadow: none;	background: #b3d4fc;}
+		pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+		code[class*="language-"]::selection, code[class*="language-"] ::selection {text-shadow: none; background: #b3d4fc;}
+
+		/* Code blocks */
+		pre[class*="language-"] {padding-left:2em; margin: .5em 0; overflow: auto;}
+		:not(pre) > code[class*="language-"],
+		pre[class*="language-"] {display:none; background: #f2f2f2;}
+		pre.language-css{background-color:#f0f4e7;}
+		pre.language-js{background-color:#e8f0f4;}
+		/* Inline code */
+		:not(pre) > code[class*="language-"] {padding: .1em; border-radius: .3em;}
+		.token.comment,
+		.token.prolog,
+		.token.doctype,
+		.token.cdata {color: slategray;}
+		.token.punctuation {color: #999;}
+		.namespace {opacity: .7;}
+		.token.property,
+		.token.tag,
+		.token.boolean,
+		.token.number,
+		.token.constant,
+		.token.symbol,
+		.token.deleted {color: #905;}
+		.token.selector,
+		.token.attr-name,
+		.token.string,
+		.token.char,
+		.token.builtin,
+		.token.inserted {color: #690;}
+		.token.operator,
+		.token.entity,
+		.token.url,
+		.language-css .token.string,
+		.style .token.string {color: #a67f59;}
+		.token.atrule,
+		.token.attr-value,
+		.token.keyword {color: #07a;}
+		.token.function {color: #DD4A68;}
+		.token.regex,
+		.token.important,
+		.token.variable {color: #e90;}
+		.token.important,
+		.token.bold {font-weight: bold;}
+		.token.italic {font-style: italic;}
+		.token.entity {cursor: help;}
+	</style>
+
+</head>
+
+<body ap:fragment="layout-guide-body">
+
+<div class="guide-wrap">
+	<header class="guide-header">
+		<h1 class="guide-gt"><span>ETUDE 스타일 가이드 FORM layout Mobile</h1>
+	</header>
+	<main class="guide-main">
+		<dl class="guide">
+			<dt class="selected"><a>FORM</a></dt>
+			<dd>
+				<h2 class="gt d1">form 레이아웃 가이드</h2>
+				<div>
+					<div class="html">
+						<h3 class="form_title">기본정보 (필수입력)</h3>
+						<fieldset class="form">
+							<legend class="sr_only">기본정보 입력</legend>
+							<div class="ui_table">
+								<dl>
+									<dt>이름</dt>
+									<dd>에뛰드</dd>
+								</dl>
+								<div class="input_wrap"><input type="text" placeholder="아이디" title="아이디 입력" /></div>
+								<button class="btn_md_secon" type="button">중복확인</button>
+								<div class="input_wrap"><input type="text" placeholder="비밀번호" title="비밀번호 입력" /></div>
+								<div class="input_wrap"><input type="text" placeholder="비밀번호 확인" title="비밀번호 확인 입력" /></div>
+								<div class="input_wrap"><input type="number" placeholder="생년월일" title="생년월일 입력" /></div>
+								<div class="check_group">
+									<span class="check_wrap"><input type="radio" name="gender" id="male" checked><label for="male">남</label></span>
+									<span class="check_wrap"><input type="radio" name="gender" id="female"><label for="female">여</label></span>
+								</div>
+								<div class="input_wrap"><input type="number" placeholder="휴대폰 번호" title="휴대폰 번호 입력" /></div>
+								<div class="sms_wrap">
+									<span class="check_wrap"><input type="checkbox" id="sms"><label for="sms">SMS 수신에 동의합니다.</label></span>
+								</div>
+							</div>
+						</fieldset>
+						<h3 class="form_title">선택정보</h3>
+						<fieldset class="form">
+							<legend class="sr_only">선택정보 입력</legend>
+							<div class="check_group">
+								<div class="check_wrap"><input type="checkbox" id="check1"><label for="check1">온라인 사이트 문자 수신</label></div>
+								<div class="check_wrap"><input type="checkbox" id="check2"><label for="check2">온라인 사이트 이메일 수신</label></div>
+							</div>
+							<p class="bullet_dash">문자 및 이메일 수신에 동의하시면 이벤트, 쿠폰 및 혜택, 신제품 등 다양한 정보를 제공받을 수 있습니다.</p>
+						</fieldset>
+						<h3 class="form_title">외국인 등록번호 인증( Foreigner Certification )</h3>
+						<fieldset class="form">
+							<legend class="sr_only">외국인등록정보 입력</legend>
+							<div class="ui_table">
+								<div class="input_wrap">
+									<input type="text" placeholder="이름 (Name)" title="이름 입력" />
+								</div>
+								<div class="input_wrap">
+									<input type="text" placeholder="외국인 등록번호 (Certificate Number of Alien Registration" title="외국인 등록번호 입력" />
+								</div>
+								<div class="input_wrap">
+									<input type="number" placeholder="휴대폰 번호 (Mobile Phone Number)" title="휴대폰 번호 입력" />
+								</div>
+								<button type="button" class="btn_md_secon">인증 받기</button>
+								<div class="input_wrap">
+									<input type="number" id="number2" placeholder="6자리 입력" title="인증번호 6자리 입력">
+									<em class="count">3:00</em>
+								</div>
+								<button type="button" class="btn_md_secon">시간 연장</button>
+							</div>
+							<ul class="list_bullet_dash">
+								<li>내국인은 외국인 실명인증을 이용하실 수 없습니다.</li>
+								<li>입력하신 외국인등록번호는 에뛰드하우스에 별도 저장되지 않으며, 본인확인기관에서 직접 수집하여 외국인 실명인증 이외의 용도로 이용 또는 저장하지 않습니다.</li>
+							</ul>
+							<ul class="list_bullet_dash">
+								<li>Local residents cannot use foreigner certification.</li>
+								<li>Foreigner certification is directly collected by identification organization and not by Etude and do not use or save for any use except verification.</li>
+							</ul>
+							<div class="form_btns">
+								<a href="#none" class="btn_lg_prim">다음</a>
+							</div>
+						</fieldset>
+						<!-- .form_title + .form + .form_title + .form + .form_btns 순으로 작성 -->
+					</div>
+
+				</div>
+				<h2 class="gt d1">약관동의 가이드</h2>
+				<div>
+					<div class="html">
+						<div class="policy_form">
+							<fieldset class="form check_all">
+								<legend class="sr_only">전체약관동의 선택</legend>
+								<div class="check_wrap">
+									<input type="checkbox" id="check_all"><label for="check_all">회원 약관 전체 동의</label>
+								</div>
+							</fieldset>
+							<fieldset class="form">
+								<legend class="sr_only">아모레퍼시픽 통합 멤버십 뷰티포인트 회원약관동의 선택</legend>
+								<div class="agree_box">
+									<h3 class="h_title cont">통합멤버십 뷰티 포인트 회원 약관</h3>
+									<ul class="list">
+										<li><span class="check_wrap"><input type="checkbox" id="check1"><label for="check1">[필수] 뷰티포인트 서비스 이용약관</label></span><a href="#" class="btn_detail">상세보기</a></li>
+										<li><span class="check_wrap"><input type="checkbox" id="check2"><label for="check2">[필수] 개인정보 이용 및 수집에 대한 동의</label></span><a href="#" class="btn_detail">상세보기</a></li>
+										<li><span class="check_wrap"><input type="checkbox" id="check3"><label for="check3">[필수] 개인정보 제 3자 제공 동의</label></span><a href="#" class="btn_detail">상세보기</a></li>
+										<li><span class="check_wrap"><input type="checkbox" id="check4"><label for="check4">[필수] 외부 컨텐츠 마케팅활용을 위한 개인정보 제 3자 제공 동의</label></span><a href="#" class="btn_detail">상세보기</a></li>
+										<li><span class="check_wrap"><input type="checkbox" id="check5"><label for="check5">[선택] 국외 이전동의</label></span><a href="#" class="btn_detail">상세보기</a></li>
+									</ul>
+								</div>
+								<dl class="dl_cont">
+									<dt>개인정보 취급 위탁에 대한 안내</dt>
+									<dd>
+										<ul class="list_bullet_dash">
+											<li>아모레퍼시픽은 서비스 향상 및 원활한 전산 처리 등을 위하여 이용자의 개인정보 관리를 외부 전문업체에 위탁하고 있습니다.</li>
+											<li class="break-all">아모레퍼시픽의 업무를 위탁받는 자 및 업무의 내용은 아모레퍼시픽 홈페이지 https://www.beautypoint.co.kr/footer/privacy/personal.html 에서 확인 하실 수 있습니다.</li>
+										</ul>
+									</dd>
+								</dl>
+							</fieldset>
+							<fieldset class="form">
+								<legend class="sr_only">에뛰드하우스 회원약관 선택</legend>
+								<div class="agree_box">
+									<h3 class="h_title cont">에뛰드하우스 회원약관</h3>
+									<ul class="list">
+										<li><span class="check_wrap"><input type="checkbox" id="check7"><label for="check7">[필수] 에뛰드하우스 이용약관</label></span><a href="#" class="btn_detail">상세보기</a></li>
+										<li><span class="check_wrap"><input type="checkbox" id="check8"><label for="check8">[필수] 개인정보 이용 및 수집에 대한 동의</label></span><a href="#" class="btn_detail">상세보기</a></li>
+										<li><span class="check_wrap"><input type="checkbox" id="check9"><label for="check9">[선택] 개인정보 이용 및 수집에 대한 동의</label></span><a href="#" class="btn_detail">상세보기</a></li>
+									</ul>
+								</div>
+							</fieldset>
+							<p class="bullet_dash">선택 항목에 대한 동의를 거부하더라도 회원가입에 영향을 미치지 않습니다.</p>
+						</div>
+					</div>
+					<br>
+					<button class="btn_md_prim" type="button" onclick="$('#sample').show();">약관동의 레이어</button>
+					<div class="html">
+						<div class="layer_popup" id="sample">
+							<div class="layer_dimmed"></div>
+							<div class="layer_wrap" style="margin-top:-200px;">
+								<dl class="layer">
+									<dt class="layer_title">레이어용 약관동의</dt>
+									<dd class="layer_cont">
+										<div class="login">
+											<p class="h_title cont">비회원 구매 시, 회원 할인가는 적용되지 않습니다.</p>
+											<div class="policy_wrap">
+												<div class="policy">
+<pre style="display:block;">[ 비회원 구매를 위한 개인정보 수집 이용 동의 ]
+
+1.수집하는 개인정보의항목 : 성명, 주소, (휴대)전화번호, 이메일,결제정보(은행계좌정보등)
+2.개인정보 수집 및 이용목적 : 제품구매 및 배송, 결제 진행, 반품/환불 처리
+3.개인정보의 보유 및 이용기간 : 전자상거래소비자보호법에 따른 개인정보 보유 
+    *계약 또는 처약철회 등에 따른 기록 : 5년 
+    * 대금결제 및 재화 등의 공급에 관한 기록 : 5년 
+    * 소비자의 불만 또는 분쟁처리에 관한 기록 : 3년 
+    - 소비자기본법에 따른 A/S 처리기간에 따른 개인정보 보유 
+    - 제조물책임법에 따른 손해배상청구 기간에 따른 개인정보 보유
+4. 고객님은 위 개인정보의 수집, 이용에 대한 동의를 거부할 수 있습니다. 단, 거부 시 비회원구매 서비스를 이용하실 수 없습니다.</pre>
+												</div>
+											</div>
+										</div>
+									</dd>
+									<dd class="layer_btns">
+										<button class="btn_md_secon_bdr" type="button">미동의</button>
+										<button class="btn_md_prim" type="button">동의</button>
+									</dd>
+								</dl>
+								<button class="layer_close" type="button" onclick="$('#sample').hide();">레이어 닫기</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</dd>
+		</dl>
+	</main>
+</div>
+
+<style>
+	pre {display:none;}
+	pre code {border-radius:5px; padding:0 1.5em !important;}
+</style>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>
+	(function(){
+		$('a').click(function(){
+			if($(this).attr('href') == '#none'){
+				return false;
+			};
+		});
+		// guide tab
+		$('.guide').each(function(){
+			var $tab = $(this);
+			var $gm = $('>dt', $tab);
+			var $gc = $('>dd', $tab);
+			$gm.not('.btn-all').click(function(){
+				$gm.not($(this).addClass('selected')).removeClass('selected');
+				$(this).next('dd').show().siblings('dd').hide();
+				$('body,html').animate({scrollTop: 0},	600);
+			});
+			$gm.not($gm.eq(0)).each(function(){
+				var gmh = $(this).prevAll('dt').outerHeight();
+				var gmt = $(this).prevAll('dt').position().top;
+				var gmp = gmh+gmt;
+				$(this).css('top', gmp);
+			});
+			$('.btn-all').click(function(){
+				$gm.not($(this).addClass('selected')).removeClass('selected');
+				$gc.show();
+				$('body,html').animate({scrollTop: 0},	600);
+			});
+		});
+
+		$('.html').each(function() {
+			var $this = $(this);
+			var code = $this.html();
+			var $btn = $('<a class="g-btn">view html</a>');
+			$this.after('<code class="code-view xml"></code>');
+			var $view = $this.next($('.code-view'));
+			$view.text(code).wrap('<pre />');
+			$this.after($btn);
+		});
+
+		$( 'code.javascript' ).each(function () {
+			$( '<a class="g-btn">script</a>' ).insertBefore( $(this).parent() );
+		});
+
+		$('.g-btn').click(function(){
+			$(this).toggleClass('open');
+			$(this).next('pre').toggle();
+		});
+
+		$( 'code.xml, code.javascript' ).each( function () {
+			var html = $( this ).html(),
+				lineMatch = html.match( /\n/g );
+
+			if ( lineMatch ) {
+				var spaceMath = html.match( /^(\s|\t)+/ );
+
+				if ( spaceMath ) {
+					html = html.replace( new RegExp( spaceMath[0], 'mg' ), '\n' );
+				}
+			} else {
+				html = html.replace( /^\s+/, '' );
+			}
+
+			$( this ).html( html );
+		});
+
+		$( 'pre code' ).each( function (i, block) {
+			hljs.highlightBlock(block);
+		});
+
+		// to top
+		var scrollDiv = document.createElement('div');
+		$(scrollDiv).attr('id', 'toTop').html('<a href="#none">to top</a>').appendTo('main');
+		$(window).scroll(function(){
+			if ($(this).scrollTop() != 0) {
+				$('#toTop').fadeIn();
+				var h = $('.guide').find('dt:first-child').outerHeight();
+				var n = $('>dt', '.guide').length;
+				var hh = $('header').outerHeight();
+				var t = (h*n)+hh+20;
+				$('#toTop').css('top', t);
+
+			} else {
+				$('#toTop').fadeOut();
+
+			}
+		});
+		$('#toTop').click(function(){
+			$('body,html').animate({scrollTop: 0},	600);
+			return false;
+		});
+	})();
+</script>
+
+
+<!-- Demo -->
+<script>
+	//design select 적용
+	$( '.ui_select' ).designSelectBox();
+
+	//spinner 적용
+	$( '.ui_spinner' ).spinner();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents login">
+                <div class="panel">
+                    <div class="panel_cont">
+                        <fieldset class="form">
+                            <legend class="sr_only">로그인 정보 입력</legend>
+                            <div class="radio_set">
+                                <span class="check_wrap"><input type="radio" name="login" id="choice1"><label for="choice1">회원</label></span>
+                                <span class="check_wrap"><input type="radio" name="login" id="choice2" checked><label for="choice2">비회원(주문조회)</label></span>
+                            </div>
+                            <div class="login_area">
+                                <div class="input_wrap"><input type="text" title="주문자 이름 입력" placeholder="주문자 이름"></div>
+                                <div class="input_wrap"><input type="text" title="주문번호 입력" placeholder="주문번호"></div>
+                                <button type="button" class="btn_primary_login">주문조회</button>
+                            </div>
+                        </fieldset>
+                        <br>
+                        <p class="text">비회원으로 구매하신 경우에만 주문조회가 가능합니다.</p>
+                        <hr class="div m20">
+                        <dl class="dl_cont">
+                            <dt class="h_title cont">아직도 회원이 아니세요?</dt>
+                            <dd>
+                                <p class="text">아모레퍼시픽계열 모든 쇼핑몰을 하나의 아이디로 편리하게, <br>통합멤버십(뷰티포인트)적립 및 다양한 서비스와 혜택을 누리세요.</p>
+                                <a href="#none" class="btn_md_bordered vertical">회원가입 </a>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        	<!-- // page contents -->
+        	<!-- banner -->
+            <div class="banner_area">
+                <!-- slide -->
+                <div class="slide" data-ix-options="paging:true;">
+                    <div class="ix-list-viewport">
+                        <ul class="ix-list-items">
+                            <li class="ix-list-item">
+                                <a href="#none" style="background:#f0adb6;">
+                                    <img ap:src="@{/images/dummy/img_banner_01.jpg}" alt="배너 내용">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="ix-controller">
+                        <ul class="ix-thumbs">
+                            <li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+                        </ul>
+                    </div>
+                </div><!-- // slide -->
+            </div>
+            <!-- // banner -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+        </th:block>
+</body>
+</html>

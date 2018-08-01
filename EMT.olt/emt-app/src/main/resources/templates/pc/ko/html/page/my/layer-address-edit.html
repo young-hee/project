@@ -1,0 +1,100 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<div class="layer_popup" style="display: block;">
+                <div class="layer_wrap layer_lg" style="margin-top:-360px;">
+                    <dl class="layer">
+                        <dt class="layer_title">배송지 추가/수정</dt>
+                        <dd class="layer_cont address_management">
+                        	<div class="clear">
+	                           	<ul class="list_bullet_dot">
+	                            	<li>설정된 배송지 정보를 수정해 주시기 바랍니다.</li>
+	                            </ul>
+                            </div>
+                            <fieldset class="form mgt20">
+                            	<div class="ui_table">
+                            		<dl>
+                                        <dt><label for="name">이름</label></dt>
+                            			<dd>
+                            				<div class="input_wrap w100p"><input type="text" id="name" placeholder="" value="홍길동"/></div>
+                            			</dd>
+                            		</dl>
+                            		<dl>
+										<dt><label for="addr_phone">휴대전화</label></dt>
+                            			<dd>
+                            				<div class="input_wrap w100p"><input type="text" id="addr_phone"  placeholder="" value="010-000-1234"/></div>
+                            			</dd>
+                            		</dl>
+                            		<dl>
+										<dt><label for="addr_phone">주소</label></dt>
+                            			<dd class="ui_find_addresses">
+                                            <div class="w100p input_btn_wrap">
+                                                <div class="input_wrap">
+                                                    <input type="text" class="address_keyword" title="지역명 입력" placeholder="지역명">
+                                                </div>
+                                                <button type="button" class="btn_md_form">찾기</button>
+                                            </div>
+                                            <div class="input_group w100p">
+                                                <span class="input_wrap w25p"><input type="text" class="post_code" title="우편번호 입력" placeholder="우편번호" readonly></span>
+                                                <span class="gap">&nbsp;</span>
+                                                <span class="input_wrap"><input type="text" class="address_first" title="기본주소 입력" placeholder="기본주소" readonly></span>
+                                            </div>
+                                            <div class="input_wrap w100p"><input type="text" class="address_last" title="상세주소 입력" placeholder="상세주소" /></div>
+											<p class="text_notice">찾으시는 주소지 또는 건물명을 입력해 주세요.<br>(예 : 강남대로, 한강로2가, 한강대로 100)</p>
+                                        </dd>
+                            		</dl>
+									<dl>
+										<dt><label for="addr_phone">배송시<br>요청사항선택</label></dt>
+										<dd><!--/* 20180511 : 셀렉트에서 인풋으로 변경 */-->
+											<div class="input_wrap w100p"><input type="text" id=""  placeholder="" value="부재시 경비실에 맡겨주세요."/></div>
+										</dd>
+									</dl>
+                            	</div>
+                            </fieldset>
+
+                            <div class="page_btns">
+                            	<button type="button" class="btn_lg_secondary">취소</button>
+                            	<button type="button" class="btn_lg_neutral">등록</button>
+                            </div>
+                        </dd>
+                    </dl>
+                    <button class="layer_close" type="button">레이어 닫기</button>
+                </div>
+            </div>
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+            <!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+            <script>
+                /*
+                var modal = AP.modal.info({
+                    title: '타이틀',
+                    contents: 'html 내용 & template',
+                    confirmLabel: '등록',
+                    cancelLabel: '취소'
+                }).addListener( 'modal-before-close', function (){
+                    console.log( e.closeType );//close, confirm, cancel
+                    modal.getElement().find( '.ui_find_addresses' ).findAddresses( 'clear' );       // 주소찾기 적용해제
+                    modal.getElement().find( 'input' ).placeholder( 'clear' );                      // placeholder 적용해제
+                }).addListener( 'modal-close', function (e) {
+                    console.log( e.closeType );//close, confirm, cancel
+                });
+
+                // placeholder 적용
+                // modal.getElement().find( 'input[placeholder]' ).placeholder();
+
+                // 주소 찾기
+                modal.getElement().find( '.ui_find_addresses' ).findAddresses();
+                modal.getElement().find( '.ui_find_addresses' ).on( 'change-address', function (e) {
+                    console.log( e.postCode, e.address, e.detailAddress );
+                });
+                */
+            </script>
+
+        </th:block>
+</body>
+</html>

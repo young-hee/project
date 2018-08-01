@@ -1,0 +1,90 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='sweet-letter'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="validate ap_contents event detail sweet">
+
+		<!--/* 이벤트 컨텐츠 */-->
+		<form class="validate">
+			<div class="event_cont">
+				<h3 class="h_title cont align_center h_sweet_01"><strong>스윗레터 안의<br><em>응모 번호</em>를 입력해 주세요!</strong></h3>
+				<div class="sweet_event_input_wrap">
+					<input type="text" name="verifNo1" maxlength="4" required="required" data-msg-required="유효하지 않은 쿠폰입니다.">
+					<input type="text" name="verifNo2" maxlength="4" required="required" data-msg-required="유효하지 않은 쿠폰입니다.">
+					<input type="text" name="verifNo3" maxlength="4" required="required" data-msg-required="유효하지 않은 쿠폰입니다.">
+					<input type="text" name="verifNo4" maxlength="4" required="required" data-msg-required="유효하지 않은 쿠폰입니다.">
+				</div>
+				<p class="text_notice sweet_evnet_notice_01">응모번호 중복 사용이 불가합니다.</p>
+				<img ap:src="@{/images/event/bg_event_sweet_01.png}" alt="">
+				<div class="button_sweet_group_1">
+					<button class="btn_md_secondary reset" type="button">초기화</button>
+					<button class="btn_md_primary apply" type="button">응모하기</button>
+				</div>
+			</div>
+		</form>
+
+		<div class="panel">
+			<!--/* 스윗레터란? */-->
+			<div class="section">
+				<h3 class="h_title cont"><strong>스윗레터란?</strong></h3>
+				<ul class="list_bullet_dot mgt10"><!--/* 20180504 : mgt10 클래스 추가 */-->
+					<li>온라인 쇼핑몰에서 감사의 마음을 담아 택배박스에 동봉하여 보내드리는 편지입니다.</li>
+					<li>스윗레터 안에 있는 응모번호를 입력하시면 당첨내역을 확인하실 수 있습니다.</li>
+				</ul>
+			</div>
+
+			<!--/* 읽어보세요! */-->
+			<div class="section mgt15"><!--/* 20180504 : mgt15 클래스 추가 */-->
+				<h3 class="h_title cont"><strong>읽어보세요!</strong></h3>
+				<ul class="list_bullet_dot mgt10"><!--/* 20180504 : mgt10 클래스 추가 */-->
+					<li>에뛰드하우스 택배박스 안에 스윗레터가 동봉되어 있습니다.<br>스윗레터 안의 응모번호를 입력해 주세요.</li>
+					<li>에뛰드 BEST 상품, 할인쿠폰, 진주알 등 다양한 형태의 당첨 경품이 마련되어 있으며, 응모 즉시 확인 가능합니다.</li>
+				</ul>
+			</div>
+
+			<!--/* 당첨경품 예시 */-->
+			<div class="section mgt15"><!--/* 20180504 : mgt15 클래스 추가 */-->
+				<h3 class="h_title cont"><strong>당첨경품 예시</strong></h3>
+				<img ap:src="@{/images/event/img_prize.jpg}" alt="">
+				<ul class="list_bullet_dot">
+					<li>실물 경품 당첨 시 익일(영업일 기준) 택배 발송합니다.</li>
+					<li>배송이 필요한 경품의 경우 배송지를 입력 받사오니, 정확하게 입력해 주세요.<br>(주소오류 반송 건은 재발송하지 않습니다.)</li>
+					<li>당첨된 할인쿠폰이나 진주알은 당첨 즉시 지급됩니다.<br>(마이에뛰드에서 확인 가능합니다.)</li>
+				</ul>
+			</div>
+
+			<!--/* 그 밖의 다른 혜택 */-->
+			<div class="section event_menu mgt15"><!--/* 20180504 : mgt15 클래스 추가 */-->
+				<h3 class="h_title cont"><strong>그 밖의 다른 혜택</strong></h3>
+				<ul>
+					<li><a href="/display/pearl_roulette?displayMenuId=pearl_roulette" class="roulette">하루 세번<br>진주알룰렛</a></li>
+					<li><a href="/display/beauty_test?displayMenuId=beauty_test" class="beauty_tester">뷰티테스터<br>신청하기</a></li>
+					<li><a href="/display/daily_check?displayMenuId=daily_check" class="attendance">매일매일<br>행운의 출첵</a></li>
+				</ul>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script th:inline="javascript">
+		;(function () {
+			var member = {};
+			[# th:if="${memberMap}"]
+			member.id = /*[[${memberMap.id}]]*/;
+			member.name = /*[[${memberMap.name}]]*/;
+			member.memberSn = /*[[${memberMap.memberSn}]]*/;
+			[/]
+
+			AP.sweetLetter.setMemberInfo( member );
+		}());
+	</script>
+
+</th:block>
+
+</body>
+</html>

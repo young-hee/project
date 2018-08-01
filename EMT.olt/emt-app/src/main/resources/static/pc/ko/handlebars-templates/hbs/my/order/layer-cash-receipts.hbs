@@ -1,0 +1,86 @@
+<dl class="layer">
+	<dt class="layer_title">현금영수증 발급 신청</dt>
+	<dd class="layer_cont">
+		<p class="bullet_dot mgb30">정보를 기입하신 후 발행버튼을 선택해주세요.</p>
+		<div class="ui_table custom">
+			<dl>
+				<dt class="w20p">상품명</dt>
+				<dd>{{this.prodNameRlang}} {{checkCnt 'cnt' this.totalCnt}}</dd>
+			</dl>
+		</div>
+		<form class="validate">
+			<fieldset class="form lined bd_eb mgt30">
+				<legend class="sr_only">현금영수증 발급신청 정보입력</legend>
+				<div class="ui_table typ2"><!--/* 20180511 : typ2 클래스 추가 */-->
+					<dl>
+						<dt class="w25p pdl20"><strong>결제 금액</strong></dt>
+						<dd class="text_right pdr20"><strong>{{currencyFormat this.amtPcur}}</strong></dd>
+					</dl>
+					<dl>
+						<dt class="w25p pdl20">공급가액</dt>
+						<dd class="text_right pdr20">{{currencyFormat this.amtTax}}</dd>
+					</dl>
+					<dl>
+						<dt class="w25p pdl20">부가세</dt>
+						<dd class="text_right pdr20">{{currencyFormat this.amtItaxPcur}}</dd>
+					</dl>
+					<!--/*20180531 : 봉사료 항목 삭제
+					<dl>
+						<dt class="w25p pdl20">봉사료</dt>
+						<dd class="text_right pdr20">0원</dd>
+					</dl>
+					*/-->
+				</div>
+				<div class="ui_table in_bt0 bb0 bt0">
+					<dl>
+						<dt class="w20p">구매자명</dt>
+						<dd><p class="text font_lg">{{this.info.name.name1}}</p></dd>
+					</dl>
+					<dl>
+						<dt class="w20p"><label for="email">구매자 이메일</label></dt>
+						<dd>
+							<div class="input_wrap w100p"><input type="text" id="email" name="purchaserEmailAddress"
+							 placeholder="이메일 주소를 입력해 주세요" value="{{this.info.emailAddress}}" email="email"></div>
+						</dd>
+					</dl>
+					<dl>
+						<dt class="w20p"><label for="phone">구매자 휴대폰</label></dt>
+						<dd>
+							<div class="input_wrap w100p"><input type="text" id="phone" name="purchaserPhoneNo.phoneNo" placeholder="‘-’ 없이 숫자만 입력해 주세요."
+							value="{{this.info.phoneNo1.phoneNo}}" mobile-number="mobile-number"></div>
+						</dd>
+					</dl>
+					<dl class="typ2"><!--/* 20180511 : typ2 클래스 추가 */-->
+						<dt class="w20p">발행용도</dt>
+						<dd>
+							<div class="check_set">
+								<span class="check_wrap"><input type="radio" name="cashReceiptPurposeCode" id="radio1" value="Deduction" checked="checked"><label for="radio1">소득공제용</label></span>
+								<span class="check_wrap"><input type="radio" name="cashReceiptPurposeCode" id="radio2" value="ExpenseEvidence "><label for="radio2">지출증빙용</label></span>
+							</div>
+						</dd>
+					</dl>
+				</div>
+				<div class="one_typ">
+					<dl>
+						<dt>휴대폰 번호 또는 카드번호(사업자등록번호)</dt>
+						<dd><div class="input_wrap w100p"><input type="text" name="issueNum" title="‘-’ 없이 숫자만 입력해 주세요."
+						 placeholder="‘-’ 없이 숫자만 입력해 주세요." required="required" data-msg="휴대폰 번호 또는 카드번호를 정확히 입력해주세요." digits="digits"></div></dd>
+					</dl>
+				</div>
+
+				<div class="panel gray mgt30 pdl20 pdr20">
+					<p class="text"><strong>이메일과 휴대폰 번호 입력 받는 것은 고객님의 결제성공 내역을 알려드리기<br>위함이오니 반드시 기입 바랍니다.</strong></p><!--/* 20180511 : br 추가 */-->
+					<ul class="list_bullet_dot mgt20">
+						<li>소득공제용: 휴대폰 번호와 카드번호로 발급 가능</li>
+						<li>지출 증빙용: 사업자등록번호로 발급 가능</li>
+					</ul>
+				</div>
+
+				<div class="form_btns">
+					<a class="btn_lg_secondary">취소</a>
+					<a class="btn_lg_primary">발행</a>
+				</div>
+			</fieldset>
+		</form>
+	</dd>
+</dl>

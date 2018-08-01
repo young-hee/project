@@ -1,0 +1,16 @@
+{{#each this.depositHistories}}
+	<li>
+		<div class="table_layout">
+			<div class="info">
+				<p class="order_num2"><span>주문번호</span><a href="#">201703291064376</a></p>
+				<p class=""><span>예금주</span><span>{{ this.acHolderName.name1 }}</span></p>
+				<p class=""><span>은행/계좌</span><span>{{ this.bankName }}/{{ this.bankAcNo }}</span></p>
+				<p class="date"><span>일자</span><span class="num">{{dateFormat this.depositHistOccurDt "YYYY.MM.DD"}}</span></p>
+			</div>
+			<div class="price">
+				<p>{{{ depositTypeName this.depositHistTypeCode }}}</p>
+				<p><span class="num">( {{{ depositSwitch this.depositHistTypeCode }}} ) {{ currencyFormatDefault this.deposit '원' }}</p>
+			</div>
+		</div>
+	</li>
+{{/each}}

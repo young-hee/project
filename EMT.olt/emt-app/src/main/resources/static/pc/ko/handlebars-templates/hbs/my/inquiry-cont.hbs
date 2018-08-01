@@ -1,0 +1,25 @@
+<dd id="cont_{{this.customerInquirySn}}">
+    <div class="question">
+		<pre class="text">{{this.inquiryBodyText}}</pre>
+		{{#if (isExist this.inquiryFileList)}}
+	    	{{#each this.inquiryFileList}}
+			    <div class="attach">
+					<img src="{{this.fileUrl}}" alt="">
+				</div>
+			{{/each}}
+		{{/if}}
+	</div>
+	{{#if (isExist this.responseBodyText)}}
+	    <div class="answer">
+	    	<pre class="text">{{this.responseBodyText}}</pre>
+	    	{{#if (isExist this.responseFileList)}}
+				{{#each this.responseFileList}}
+					<div class="attach">
+						<img src="{{this.fileUrl}}" alt="">
+					</div>
+				{{/each}}
+			{{/if}}
+	    	<p class="date">2018.0.09</p>
+	    </div>
+    {{/if}}
+</dd>

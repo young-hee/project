@@ -1,0 +1,252 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- mypage sitemap -->
+		<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+		<!-- //  mypage sitemap -->
+
+		<!-- page title -->
+		<th:block ap:replace="~{common/fragment/contents-page-title}"/>
+		<!-- // page title -->
+
+		<!-- page contents -->
+		<div class="ap_contents my_order">
+			<div class="ui_multiple_date_picker">
+				<div class="date_btn_set">
+					<span><input type="radio" class="select_range_date" name="radio5" id="radio5_1" value="1weeks"><label for="radio5_1">1주일</label></span>
+					<span><input type="radio" class="select_range_date" name="radio5" id="radio5_2" value="1months" checked=""><label for="radio5_2">1개월</label></span>
+					<span><input type="radio" class="select_range_date" name="radio5" id="radio5_3" value="3months"><label for="radio5_3">3개월</label></span>
+					<span><input type="radio" class="select_range_date" name="radio5" id="radio5_4" value="6months"><label for="radio5_4">6개월</label></span>
+					<span><input type="radio" class="select_range_date" name="radio5" id="radio5_5" value="1years"><label for="radio5_5">12개월</label></span>
+				</div>
+				<div class="input_date_group">
+					<div class="input_wrap" style="display:none;">
+						<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+						<input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+					</div>
+					<div class="date_info_area">
+						<span class="sr_only">시작일</span> <span class="start_date"></span> ~ <span class="sr_only">종료일</span> <span class="end_date"></span> 까지의 내역
+					</div>
+				</div>
+			</div>
+			<div class="my_order_list">
+				<!--/* [S] 주문내역 있을때 */-->
+				<table>
+					<caption class="sr_only">온라인 주문/배송 목록</caption>
+					<colgroup>
+						<col style="width: 135px;">
+						<col style="width: 200px;">
+						<col style="">
+						<col style="width: 130px;">
+						<col style="width: 130px;">
+						<col style="width: 130px;">
+						<col style="width: 130px;">
+					</colgroup>
+					<thead>
+					<tr>
+						<th scope="col">주문일자</th>
+						<th scope="col">주문번호</th>
+						<th scope="col">주문대표상품</th>
+						<th scope="col">결제수단</th>
+						<th scope="col">결제금액</th>
+						<th scope="col">주문상태</th>
+						<th scope="col">발급상태</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td>2018-11-11</td>
+						<td><a href="#" class="order_number_link">2017012102010101</a></td>
+						<td class="align_left">
+							<div class="flag">
+								<span>온라인주문</span>
+							</div>
+							<a href="#">소녀 애교살 메이커</a>
+						</td>
+						<td>가상계좌</td>
+						<td>100,000 원</td>
+						<td class="status"><em>결제완료</em></td>
+						<td><button class="btn_sm_neutral" type="button">발급 신청</button></td>
+					</tr>
+					<tr>
+						<td>2018-11-11</td>
+						<td><a href="#" class="order_number_link">2017012102010101</a></td>
+						<td class="align_left">
+							<div class="flag">
+								<span>테이크아웃</span>
+							</div>
+							<a href="#">소녀 애교살 메이커</a>
+						</td>
+						<td>가상계좌</td>
+						<td>100,000 원</td>
+						<td class="status"><em>결제완료</em></td>
+						<td>발급완료</td>
+					</tr>
+					<tr>
+						<td>2018-11-11</td>
+						<td><a href="#" class="order_number_link">2017012102010101</a></td>
+						<td class="align_left">
+							<div class="flag">
+								<span>온라인주문</span>
+							</div>
+							<a href="#">소녀 애교살 메이커</a>
+						</td>
+						<td>가상계좌</td>
+						<td>100,000 원</td>
+						<td class="status"><em>배송완료</em></td>
+						<td>발급완료</td>
+					</tr>
+					<tr>
+						<td>2018-11-11</td>
+						<td><a href="#" class="order_number_link">2017012102010101</a></td>
+						<td class="align_left">
+							<div class="flag">
+								<span>온라인주문</span>
+							</div>
+							<a href="#">[기획구성] 테크닉 핏 파운데이션&컨투어 브러쉬 기획 세트 외 1건</a>
+						</td>
+						<td>가상계좌</td>
+						<td>100,000 원</td>
+						<td class="status"><em>배송완료</em></td>
+						<td>발급완료</td>
+					</tr>
+					<tr>
+						<td>2018-11-11</td>
+						<td><a href="#" class="order_number_link">2017012102010101</a></td>
+						<td class="align_left">
+							<div class="flag">
+								<span>테이크아웃</span>
+							</div>
+							<a href="#">소녀 애교살 메이커 외 2개 소녀 애교살 소녀 애교살 소녀 애교살 소녀 애교살  외 00건</a>
+						</td>
+						<td>가상계좌</td>
+						<td>100,000 원</td>
+						<td class="status"><em>배송완료</em></td>
+						<td>발급완료</td>
+					</tr>
+					<tr>
+						<td>2018-11-11</td>
+						<td><a href="#" class="order_number_link">2017012102010101</a></td>
+						<td class="align_left">
+							<div class="flag">
+								<span>온라인주문</span>
+							</div>
+							<a href="#">소녀 애교살 메이커 외 2개 소녀 애교살 소녀 애교살 소녀 애교살 소녀 애교살  외 00건</a>
+						</td>
+						<td>가상계좌</td>
+						<td>100,000 원</td>
+						<td class="status"><em>주문접수</em></td>
+						<td>-</td>
+					</tr>
+					<tr>
+						<td>2018-11-11</td>
+						<td><a href="#" class="order_number_link">2017012102010101</a></td>
+						<td class="align_left">
+							<div class="flag">
+								<span>테이크아웃</span>
+							</div>
+							<a href="#">소녀 애교살 메이커 외 2개 소녀 애교살 소녀 애교살 소녀 애교살 소녀 애교살  외 00건</a>
+						</td>
+						<td>가상계좌</td>
+						<td>100,000 원</td>
+						<td class="status"><em>주문접수</em></td>
+						<td>-</td>
+					</tr>
+					<tr>
+						<td>2018-11-11</td>
+						<td><a href="#" class="order_number_link">2017012102010101</a></td>
+						<td class="align_left">
+							<div class="flag">
+								<span>온라인주문</span>
+							</div>
+							<a href="#">소녀 애교살 메이커 외 2개 소녀 애교살 소녀 애교살 소녀 애교살 소녀 애교살  외 00건</a>
+						</td>
+						<td>가상계좌</td>
+						<td>100,000 원</td>
+						<td class="status"><em>주문접수</em></td>
+						<td>-</td>
+					</tr>
+					<tr>
+						<td>2018-11-11</td>
+						<td><a href="#" class="order_number_link">2017012102010101</a></td>
+						<td class="align_left">
+							<div class="flag">
+								<span>온라인주문</span>
+							</div>
+							<a href="#">소녀 애교살 메이커 외</a>
+						</td>
+						<td>가상계좌</td>
+						<td>100,000 원</td>
+						<td class="status"><em>주문접수</em></td>
+						<td>-</td>
+					</tr>
+					<tr>
+						<td rowspan="2">2018-11-11</td>
+						<td rowspan="2"><a href="#" class="order_number_link">2017012102010101</a></td>
+						<td class="align_left">
+							<div class="flag">
+								<span>온라인주문</span>
+							</div>
+							<a href="#">소녀 애교살 메이커 외 2개 소녀 애교살 소녀 애교살 소녀 애교살 소녀 애교살  외 00건</a>
+						</td>
+						<td>가상계좌</td>
+						<td>100,000 원</td>
+						<td class="status"><em>결제완료</em></td>
+						<td rowspan="2">발급완료</td>
+					</tr>
+					<tr>
+						<td class="align_left">
+							<div class="flag">
+								<span>테이크아웃</span>
+							</div>
+							<a href="#">소녀 애교살 메이커 외</a>
+						</td>
+						<td>가상계좌</td>
+						<td>100,000 원</td>
+						<td class="status"><em>상품준비중</em></td>
+					</tr>
+					</tbody>
+				</table>
+				<div class="pagination">
+					<a href="#none" class="navi first">처음</a>
+					<a href="#none" class="navi prev">이전</a>
+					<a href="#none" class="disabled">1</a>
+					<a href="#none">2</a>
+					<a href="#none">3</a>
+					<span class="current">4</span>
+					<a href="#none">5</a>
+					<a href="#none">6</a>
+					<a href="#none">7</a>
+					<a href="#none">8</a>
+					<a href="#none">9</a>
+					<a href="#none">10</a>
+					<a href="#none" class="navi next">다음</a>
+					<a href="#none" class="navi last">끝</a>
+				</div>
+				<!--/* [E] 주문내역 있을때 */-->
+
+				<!--/* [S] 주문내역 없을때 */-->
+				<div class="panel notice">
+					<i class="ico"></i>
+					<p class="text font_lg">선택하신 기간에 주문내역이 없습니다.</p>
+				</div>
+				<!--/* [E] 주문내역 없을때 */-->
+			</div>
+			<div class="page_btns">
+				<button class="btn_md_neutral" type="button">2018년 7월 30일 이전 발급내역 보기 </button><!--/* 20180517 : 문구 수정 */-->
+			</div>
+		</div>
+		<!-- // page contents -->
+	</div><!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script>
+			$( '.ui_tooltip' ).tooltip();
+			$( '.ui_multiple_date_picker' ).multipleDatePicker();
+		</script>
+	</th:block>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{{!--
+
+추천컬러 상품 목록
+
+--}}
+
+<ul>
+{{#each this}}
+
+	<li>
+		<div class="item">
+		
+		<div class="item_images" style="background-color:#{{this.products.rgbVal}}";>
+			{{!-- 대표 이미지  --}}
+				<a href="{{ productDetailPath this.onlineProdSn }}" class="lazy_load_wrap">
+					<img class="lazy_load" src="" data-src="{{ this.products.prodImages.0.imgUrl }}" alt="">
+				</a>
+		</div>
+		
+		<div class="info_box">
+			{{!-- 상품명  --}}
+			<div class="title_area">
+				<h3 class="h_title">{{ this.onlineProdName }}</h3>
+			</div>
+			{{!-- 옵션 이름 --}}
+			<div class="item_option">
+				<p class="option_name">{{ this.products.prodName }}</p>
+			</div>
+			{{!-- 가격,장바구니 --}}
+			<div class="price_area">
+				<div class="price">
+					<strong>{{ numberFormat this.products.prodPriceSummary.onlineSalePrice }}<em>원</em></strong>
+				</div>
+			</div>
+		</div>
+	</div>
+</li>
+
+{{/each}}
+</ul>

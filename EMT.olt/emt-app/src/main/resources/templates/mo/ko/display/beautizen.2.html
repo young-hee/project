@@ -1,0 +1,78 @@
+<html ap:decorate="~{layout/layout-contents}">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+    <div class="ap_contents brand">
+		<div class="beautizen">
+			<!-- tab menu wrap -->
+			<div class="ui_tab">
+				<!-- tab menu -->
+				<div class="tab_menu equally">
+					<ul>
+						<li><a href="#none" th:href="@{/display/beautizen(displayMenuId=beautizen)}">뷰티즌이란?</a></li>
+						<li class="on"><a href="#none" th:href="@{/display/beautizen_recruit(displayMenuId=beautizen_recruit)}">뷰티즌 모집</a></li>
+						<li><a href="#none" th:href="@{/display/beautizen_list(displayMenuId=beautizen_list)}">뷰티즌 프로필</a></li>
+					</ul>
+				</div>
+				<!-- tab content -->
+				<div class="tab_cont no_padding bg_white">
+					<h3 class="sr_only">뷰티즌 모집</h3>
+					<img ap:src="@{/images/brand/img_beautizen_01.jpg}" alt=""><!--이미지 변경-->
+					<div class="sr_only">Who`s Next Top Beauty Creator?
+						예비스타 뷰티 크리에이터를 모집합니다!
+						뷰티 크리에이터가 되어 나만의 영상을 제작하고 스스로의 아름다움을 만들어나갈 여러분을 모집합니다.
+					</div>
+					<h3>뷰티크리에이터 모집 요강</h3>
+					<img ap:src="@{/images/brand/img_beautizen_02.jpg}" alt="">
+					<div class="sr_only">
+						SEASON3 에뛰드 뷰티즌 클럽 3기 모집
+						모집기간 : 2017년 11월 1일 ~ 12월 15일
+						활동기간 : 교육 : 2018년 1월 3일 ~ 2월 20일
+						활동 : 2018년 3월 1일 ~ 10월 31일
+						혜택 내용 : 국내외 글로벌 채널 진출 기회
+						에뛰드의 다양한 제품 체험 기회 및 브랜드 행사 초대
+						글로벌 뷰티 탐방 기회
+						우수자 채널 홍보
+						뷰티 크리에이터 전문 교육과정
+						에뛰드 홈페이지 광고 모델 기회
+						DESIGN BY 뷰티즌 미닝
+					</div>
+					<div class="page_btns">
+						<a href="#none" class="btn_lg_secondary">지원서 수정</a>
+						<a href="#none" class="btn_lg_primary">지원서 작성</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script th:inline="javascript">	
+	
+		$('.btn_lg_primary').off('click').on('click', function(e) { 
+			
+			e.preventDefault();
+			
+			AP.login().done( function () {
+				location.href="/display/beautizen_update?displayMenuId=beautizen_update"; 
+			});
+		}); 
+		
+		$('.btn_lg_secondary').off('click').on('click', function(e) {
+				
+			e.preventDefault();
+				
+			AP.login().done( function () {
+		
+			location.href="/display/beautizen_regist?displayMenuId=beautizen_regist"; 
+			});
+		}); 
+		
+	</script>
+</th:block>
+
+</body>
+</html>

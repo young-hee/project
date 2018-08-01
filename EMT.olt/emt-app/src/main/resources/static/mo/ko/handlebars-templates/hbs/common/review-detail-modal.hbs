@@ -1,0 +1,50 @@
+<div class="panel detail_review_rating">
+	<div class="review_list">
+		<dl>
+			<dt>
+				<span class="title">
+					{{#if this.onlineProdName}}
+                    	<b>{{ this.onlineProdName }}</b>
+					{{/if}}
+					{{#if this.prodName}}
+                    	<small>{{ this.prodName }}</small>
+					{{/if}}
+
+					{{#xif this.prodReviewTypeCode '==' 'Pur'}}
+						<span class="badge">구매</span>
+					{{/xif}}
+                </span>
+				<span class="clear">
+                    <span class="ui_rating small">
+                         <span class="heart">
+							 {{#for 5}}
+								 <span class="heart_wrap {{#xif ../scope '>' for-index}}on{{/xif}}"><span class="sr_only"> {{ calc for-index '+' 1 }}점</span></span>
+							 {{/for}}
+						 </span>
+                         <span class="count num"></span>
+                     </span>
+                     <span class="summary">
+                        <span>{{ this.memberId }}</span><span>{{ dateFormat this.prodReviewRegistDt }}</span>
+                     </span>
+                </span>
+			</dt>
+			<dd>
+				<dl class="review_view">
+					<dt>{{ this.prodReviewTitle }}</dt>
+					<dd>
+						{{#if this.imgList.length}}
+							<div class="attached">
+								{{#each this.imgList}}
+									<img src="{{ this.imageFileUrl }}" alt="">
+								{{/each}}
+							</div>
+						{{/if}}
+						<div class="text_wrap">
+							<pre>{{ this.prodReviewBodyText }}</pre>
+						</div>
+					</dd>
+				</dl>
+			</dd>
+		</dl>
+	</div>
+</div>

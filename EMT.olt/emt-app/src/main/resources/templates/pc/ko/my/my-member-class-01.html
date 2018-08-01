@@ -1,0 +1,202 @@
+ <html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- mypage sitemap -->
+            <th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+            <!-- //  mypage sitemap -->
+
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+			<div id="progress" style="top: 0;margin-top: 1200px;left: 0;margin-left: calc(50% - 5px);position: absolute;z-index: 10;opacity: 1;display: none;">
+				   <div class="loading_full">
+						<span>
+							<img alt="" src="/pc/ko/images/common/loading.gif">
+						</span>
+				   </div>
+			 </div>
+
+            <!-- page contents -->
+            <div class="ap_contents mypage">
+            	<div class="member_class">
+            		<div class="member_cls table_layout">
+						<div class="left">
+							<dl class="class_member_info">
+								<dt>
+									<b>안녕하세요, <th:block th:text="${session.LOGIN_USER.member.name.name1}">홍길동</th:block> 님</b>
+									<span><th:block th:text="${session.LOGIN_USER.member.name.name1}">홍길동</th:block>님의 회원등급은 <strong><th:block th:text="${custCstmAmt.cstmlvlNm}">friends</th:block></strong> 입니다.</span>
+								</dt>
+								<dd>
+									<dl>
+										<dt>산정 총액</dt>
+										<dd><strong th:text="${#IntegUtil.toCommaNumber(custCstmAmt.totalAmt)}">12,345</strong>원</dd>
+									</dl>
+									<dl>
+										<dt>산정 기간</dt>
+										<dd><strong><span th:text="${#IntegUtil.dateformat(custCstmAmt.startDt, 'yyyy.MM.dd')}">2017.09.01</span> ~ <span th:text="${#IntegUtil.dateformat(custCstmAmt.endDt, 'yyyy.MM.dd')}">2018.02.28</span></strong></dd>
+									</dl>
+									<dl th:if="${custCstmAmt.blanceAmt != 0}">
+										<dt>다음 등급 (<th:block th:text="${cstmlvlNst}"></th:block>)까지</dt>
+										<dd><strong class="class_next_money" th:text="${'+' + #IntegUtil.toCommaNumber(custCstmAmt.blanceAmt)}">+30,000<span>원</span></strong></dd>
+									</dl>
+								</dd>
+							</dl>
+						</div>
+						<div class="right">
+							<ul>
+								<li th:classappend="${custCstmAmt.cstmlvlNm == 'Hello'}? 'on' : null"><!--ui_tooltip 이 펼처지면 li 태그에 on 추가 해주면 해당 툴팁 아이콘이 활성화로 변경됨-->
+									<span class="ui_tooltip">
+										<button type="button" class="btn_tooltip">툴팁보기</button>
+										<span class="arr"></span>
+										<span class="layer_tooltip">
+											<span class="title">HELLO</span>
+											<ul>
+												<li>프로모션 혜택</li>
+												<li>멤버십데이 할인</li>
+												<li>Cross 쿠폰</li>
+											</ul>
+											<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
+										</span>
+									</span>
+									<span class="member_class_name">HELLO</span>
+									<span class="sr_only">선택됨</span>
+								</li>
+								<li th:classappend="${custCstmAmt.cstmlvlNm == 'Friends'}? 'on' : null">
+									<span class="ui_tooltip">
+										<button type="button" class="btn_tooltip">툴팁보기</button>
+										<span class="arr"></span>
+										<span class="layer_tooltip">
+											<span class="title">FRIENDS</span>
+											<ul>
+												<li>프로모션 혜택</li>
+												<li>멤버십데이 할인(추가10%)</li>
+												<li>생일쿠폰(30%할인)</li>
+											</ul>
+											<dl>
+												<dt>- 승급혜택 1회 -</dt>
+												<dd>BOGO 쿠폰(메이크업)</dd>
+												<dd>BOGO 쿠폰(기초)</dd>
+											</dl>
+											<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
+										</span>
+									</span>
+									<span class="member_class_name">FRIENDS</span>
+								</li>
+								<li th:classappend="${custCstmAmt.cstmlvlNm == 'Pink Love'}? 'on' : null">
+									<span class="ui_tooltip">
+										<button type="button" class="btn_tooltip">툴팁보기</button>
+										<span class="arr"></span>
+										<span class="layer_tooltip">
+											<span class="title">PINK LOVE</span>
+											<ul>
+												<li>프로모션 혜택</li>
+												<li>멤버십데이 할인(추가10%)</li>
+												<li>생일쿠폰(30%할인)</li>
+											</ul>
+											<dl>
+												<dt>- 승급혜택 1회 -</dt>
+												<dd>BOGO 쿠폰(메이크업)</dd>
+												<dd>BOGO 쿠폰(기초)</dd>
+											</dl>
+											<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
+										</span>
+									</span>
+									<span class="member_class_name">PINK LOVE</span>
+								</li>
+							</ul>
+
+						</div>
+					</div>
+					<p class="bullet_dot mgb50">주문취소, 반품(일반매장구매 포함)건은 등급 산정 제외됩니다.</p>
+
+					<div class="class_member_detail_wrap mgb50">
+						<a href="/cs/pinkMembership" class="btn_md_neutral">핑크 멤버십 등급 별 혜택 자세히 보기</a>
+					</div>
+
+					<div class="ui_multiple_date_picker date_picker_class_member body">
+						<div class="date_pic_left">
+							<div class="date_btn_set">
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_0" value="all" checked=""><label for="radio5_0">전체</label></span>
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_1" value="1weeks"><label for="radio5_1">1주일</label></span>
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_2" value="1months"><label for="radio5_2">1개월</label></span>
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_3" value="3months"><label for="radio5_3">3개월</label></span>
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_4" value="6months"><label for="radio5_4">6개월</label></span>
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_5" value="1years"><label for="radio5_5">12개월</label></span>
+							</div>
+							<div class="input_date_group">
+								<div class="input_wrap" style="display:none;">
+									<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+									<input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+								</div>
+								<div class="date_info_area">
+									<span class="sr_only">시작일</span> <span class="start_date"></span> ~ <span class="sr_only">종료일</span> <span class="end_date"></span> <span class="date_text">까지의 사용 및 적립 내역</span>
+								</div>
+							</div>
+						</div>
+						<div class="date_pic_right">
+							<span>등급 산정 내역</span>
+							<div class="select_wrap w240px"><!-- 선택시 open 클래스 /* 20180705:등급산정내역 셀렉트박스 수정 / w240 클래스추가 */ -->
+								<select name="searchGbn" tabindex="-1">
+									<option value="ALL">전체</option>
+									<option value="OFF">온라인 구매</option>
+									<option value="ON">오프라인 구매</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					
+					<div ap:replace="~{my/fragment/grade-fragment :: grade-list}"></div>
+
+
+            	</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+				<script>
+					var date = null;
+					var searchGbn;
+					//multiple date picker적용
+					$( '.ui_multiple_date_picker' ).multipleDatePicker({
+						defaultRangeDate: 'all',
+						minDate: moment().subtract( 50, 'years' )
+					}).on( 'multiple-date-picker-change', function (e) {
+						console.log( e.type, e.date );
+						date = e.date;
+						more(1);
+					});
+					
+					
+					$('[name=searchGbn]').change(function() {
+						searchGbn = $(this).val();
+						more(1);
+					});
+
+					function more(page) {
+						if(page == 0 || page == null) return;
+				    	$('#progress').show();
+						if(date != null) {
+						    $.get("/my/page/myLevelListFragment?pageNumber=" + page + "&startDt="+date.startDate + "&endDt="+date.endDate + (searchGbn? ("&searchGbn=" + searchGbn) : ""), function(data) {
+						    	$(".pbody").remove();
+						    	$(".body").after(data);
+						    	$('#progress').hide();
+						    });
+						} else {
+						    $.get("/my/page/myLevelListFragment?pageNumber=" + page + (searchGbn? ("&searchGbn=" + searchGbn) : ""), function(data) {
+						    	$(".pbody").remove();
+						    	$(".body").after(data);
+						    	$('#progress').hide();
+						    });
+						}
+						
+					}
+					
+					
+				</script>
+        </th:block>
+</body>
+</html>

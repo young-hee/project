@@ -1,0 +1,40 @@
+<html ap:decorate="~{layout/layout-contents}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents event detail">
+		<!--/* 이벤트 제목 /공유  */-->
+		<div class="event_header">
+			<h2 class="h_title sub"><b th:text="${winnerDetail.foNoticeTitle}"></b></h2>
+			<div class="clear">
+				<span th:text="${winnerDetail.noticeTypeName}"></span> <!--/*  04-04 텍스트 수정 */-->
+				<small class="num float_left" th:text="${#dates.format(winnerDetail.noticeStartDt, 'yyyy-MM-dd')}"></small>
+			</div>
+		</div>
+		<!--/* 이벤트 컨텐츠 */-->
+		<div class="event_cont" >
+			<div class="wrap" th:utext="${winnerDetail.foNoticeText}">
+				<!-- <img ap:src="@{/images/dummy/img_event_detail_03.jpg}" alt=""> -->
+			</div>
+		</div>
+		<div class="page_btns">
+			<button class="btn_lg_primary" type="button">목록</button>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<script th:inline="javascript">
+			$('.btn_lg_primary').off('click').on('click', function(e) { 
+				e.preventDefault();
+				location.href="/display/event_winner?displayMenuId=event_winner"; 
+			}); 
+			
+	</script>
+</th:block>
+
+</body>
+</html>

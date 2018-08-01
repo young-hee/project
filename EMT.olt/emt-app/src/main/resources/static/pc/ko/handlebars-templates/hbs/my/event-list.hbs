@@ -1,0 +1,34 @@
+<table class="align_center">
+	<caption class="sr_only">이벤트 참여 현황</caption>
+	<colgroup>
+		<col style="width:160px;"> <!-- 컬럼 사이즈 -->
+		<col>
+		<col style="width:160px;">
+		<col style="width:160px;">
+	</colgroup>
+	<thead>
+	<tr>
+		<th scope="col">참여일</th>
+		<th scope="col">이벤트</th>
+		<th scope="col">기간</th>
+		<th scope="col">당첨자 발표일</th>
+		<th scope="col">발표 확인</th>
+	</tr>
+	</thead>
+	<tbody>
+	{{#each this.planDisplayDTOs}}
+	<tr>
+		<td class="date">{{dateFormat this.participatedDt "YYYY.MM.DD"}}</td>
+		{{#xif this.displayStatus '==' 'End'}}
+			<td class="subj"><span>{{this.planDisplayTitle}}</span></td>
+		{{else}}
+			<td class="subj"><span class="sbj_flag on">진행중</span><a href="#none"><span>{{this.planDisplaySn}} - {{this.planDisplayTitle}}</span></a></td>
+		{{/xif}}
+		<td class="date_range">{{dateFormat this.eventStartDt "YYYY.MM.DD"}}~{{dateFormat this.eventEndDt "YYYY.MM.DD"}}</td>
+		<td class="date">{{dateFormat this.winnerNoticeExpectedDt "YYYY.MM.DD"}}</td>
+		<td class="announcement">{{#if this.winnerFoNoticeSn}}<a href="#none">당첨자 발표 확인</a>{{else}}-{{/if}}</td>
+	</tr>
+	{{/each}}
+
+	</tbody>
+</table>

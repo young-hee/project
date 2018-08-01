@@ -1,0 +1,190 @@
+<html ap:decorate="~{layout/default}">
+<head>
+	<title>[Mobile] Video Guide Page</title>
+</head>
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+	<div class="page_title">
+		<h2 class="h_title page">Youtube API</h2>
+		<p class="text">Youtube API 사용 예제</p>
+	</div>
+	<div class="ap_contents">
+		<div class="panel rounded">
+			<div class="panel_cont">
+				<div class="html">
+					<div class="video_wrap">
+						<!-- url 뒤에 ?enablejsapi=1 는 필수 -->
+						<!-- data-ratio="true" 비디오를 width, height 속성의 맞춰 비율 자동 조절, default:true -->
+						<!-- data-mute="false" 기본 음소거 설정, default:false -->
+						<!-- data-playing-event="true" video-playing 이벤트를 받을지 설정, default:false -->
+						<iframe class="youtube_video" width="800" height="450" src="https://www.youtube.com/embed/4uLivcdjRlc?enablejsapi=1" frameborder="0" allowfullscreen data-vendor="youtube" data-ratio="true" data-mute="false" data-playing-event="false"></iframe>
+					</div>
+				</div>
+				<div class="html">
+					<div class="video_wrap">
+						<!-- 섬네일 용 이미지 -->
+						<button type="button" class="thumbnail"><img ap:src="@{/images/dummy/img_video.jpg}" alt=""></button>
+						<iframe class="youtube_video" width="800" height="450" src="https://www.youtube.com/embed/4uLivcdjRlc?enablejsapi=1" frameborder="0" allowfullscreen data-vendor="youtube" data-ratio="true" data-mute="false"></iframe>
+					</div>
+				</div>
+				<div class="test_btns">
+					<button type="button" class="btn_sm_primary play">Play</button>
+					<button type="button" class="btn_sm_secondary stop">Stop</button>
+					<button type="button" class="btn_sm_secondary mute">Mute</button>
+					<button type="button" class="btn_sm_secondary unmute">UnMute</button>
+				</div>
+				<pre>
+					<code class="javascript">
+						/**
+						 * youtube api 기본적용
+						 * js/common/plugin-type/video.js 참고
+						 * @returns {jQuery}
+						 */
+						$( '.youtube_video' ).video();
+
+						/**
+						 * video 재생
+						 */
+						$( '.youtube_video' ).video( 'play' );
+
+						/**
+						 * video 정지
+						 */
+						$( '.youtube_video' ).video( 'stop' );
+
+						/**
+						 * video 일시정지
+						 */
+						$( '.youtube_video' ).video( 'pause' );
+
+						/**
+						 * 음소거, 음소거해제
+						 * @param {Boolean}     state   음소거 설정 (false를 설정하면 unmute가 된다.)
+						 */
+						$( '.youtube_video' ).video( 'mute', state );
+
+						/**
+						 * 동영상 재생이 시작된 이후의 경과 시간을 초 단위로 반환
+						 */
+						$( '.youtube_video' ).video( 'getCurrentTime' );
+
+						/**
+						 * 동영상의 전채 재생 시간을 초 단위로 반환
+						 */
+						$( '.youtube_video' ).video( 'getDuration' );
+
+						/**
+						 * 재생중인지 상태 반환
+						 * @returns {Boolean}
+						 */
+						$( '.youtube_video' ).video( 'isPlaying' );
+
+						/**
+						 * 동영상이 준비되었는지 여부 반환
+						 * @returns {Boolean}
+						 */
+						$( '.youtube_video' ).video( 'isReady' );
+
+						/**
+						 * event
+						 */
+						$( '.youtube_video' ).on( 'video-ready video-play video-pause video-stop video-error video-playing', function (e) {
+							console.log( e.type, e.currentTime, e.duration, e.progress );
+						});
+
+						/**
+						 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+						 */
+						$( '.youtube_video' ).video( 'clear' );
+
+						/**
+						 * video api 가 준비되고 나서 적용
+						 */
+						AP.common.youtubeApiReady.done(function () {
+							$( '.youtube_video' ).video();
+						});
+					</code>
+				</pre>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<style>
+		pre {display:block;}
+		pre code {border-radius:5px; padding:0 1.5em !important;}
+	</style>
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+	<script>
+		(function(){
+			$('.html').each(function() {
+				var $this = $(this);
+				var code = $this.html();
+				var $btn = $('<h3 style="padding:10px 0;">Html</h3>');
+				$this.after('<code class="code-view xml"></code>');
+				var $view = $this.next($('.code-view'));
+				$view.text(code).wrap('<pre />');
+				$this.after($btn);
+			});
+
+			$( 'code.xml, code.javascript' ).each( function () {
+				var html = $( this ).html(),
+					lineMatch = html.match( /\n/g );
+
+				if ( lineMatch ) {
+					var spaceMath = html.match( /^(\s|\t)+/ );
+
+					if ( spaceMath ) {
+						html = html.replace( new RegExp( spaceMath[0], 'mg' ), '\n' );
+					}
+				} else {
+					html = html.replace( /^\s+/, '' );
+				}
+
+				$( this ).html( html );
+			});
+
+			$( 'pre code' ).each( function (i, block) {
+				hljs.highlightBlock(block);
+			});
+		})();
+	</script>
+
+	<!-- video test -->
+	<script>
+		//events
+		$( '.youtube_video' ).video().on( 'video-ready video-play video-stop video-pause video-playing', function (e) {
+			console.log( e.type, e.currentTime + '/' + e.duration, e.progress );
+
+			if ( e.type === 'video-playing' && Math.floor(e.currentTime) === 10 ) {
+				AP.modal.alert( '10초에 창띄우기 : ' + e.currentTime + '/' + e.duration );
+				//$( document ).fullScreen( false );
+				$( this ).video( 'pause' );
+			}
+		});
+
+		$( '.play' ).on( 'click', function (e) {
+			$( '.youtube_video' ).video( 'play' );
+		});
+
+		$( '.stop' ).on( 'click', function (e) {
+			$( '.youtube_video' ).video( 'stop' );
+		});
+
+		$( '.mute' ).on( 'click', function (e) {
+			$( '.youtube_video' ).video( 'mute', true );
+		});
+
+		$( '.unmute' ).on( 'click', function (e) {
+			$( '.youtube_video' ).video( 'mute', false );
+		});
+	</script>
+</th:block>
+
+</body>
+</html>

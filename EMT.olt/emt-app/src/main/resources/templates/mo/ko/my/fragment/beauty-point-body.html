@@ -1,0 +1,23 @@
+<th:block layout:fragment="beauty-point-body">
+	<div class="pbody bt_point_list" th:if="${not #lists.isEmpty(ptBrkd.ptTrBrkdInqVo)}">
+		<ul>
+			<li class="point-item" th:each="item : ${#IntegUtil.subList(ptBrkd.ptTrBrkdInqVo, 5)}">
+				<!-- 03-27  마크업 수정 -->
+				<div class="table_layout">
+					<div th:text="${item.chnNm}">에뛰드하우스</div>
+					<div th:if="${item.xtclCd == '001'}" th:utext="'(<em> + </em>) ' + ${#IntegUtil.toCommaNumber(item.aplyPt)}">( <em> + </em> ) 100,000</div>
+					<div th:if="${item.xtclCd == '002'}" th:utext="'( - ) ' + ${#IntegUtil.toCommaNumber(item.aplyPt)}">( - ) 100,000</div>
+				</div>
+				<div class="table_layout">
+					<div th:text="${item.xtclNm}">[에뛰드하우드 제품 구매]</div>
+				</div>
+				<div class="table_layout">
+					<div class="date" th:text="${#IntegUtil.dateformat(item.trApvlDt, 'yyyy.MM.dd')}">2018.01.24</div>
+					<div th:if="${item.extcSchdDt != ''}">소멸예정 : <span class="num" th:text="${#IntegUtil.dateformat(item.extcSchdDt, 'yyyy.MM.dd')}">2018.01.24</span></div>
+				</div>
+				<!-- // 03-27 마크업 수정 -->
+			</li>
+		</ul>
+	</div>
+	<button type="button" onclick="more()" class="btn_lg_more w100p pbody" th:utext="'(<em>' + ${curSize} + '</em>/' + ${#IntegUtil.toCommaNumber(ptBrkd.pageVo.totalRowCount)} + ')'">더보기 (<em>5</em>/35)</button>
+</th:block>

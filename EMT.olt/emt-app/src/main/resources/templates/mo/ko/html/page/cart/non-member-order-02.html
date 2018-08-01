@@ -1,0 +1,220 @@
+<html ap:decorate="~{layout/layout-item-only}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents cart non_order">
+
+		<div class="ui_accordion" data-open-type="single">
+			<!--배송정보입력-->
+			<dl class="delivery">
+				<dt class="on">
+					<div class="title"><b>배송정보 입력</b></div>
+					<button type="button"><span class="sr_only">더보기</span></button>
+				</dt>
+				<dd class="panel">
+					<!--주문고객정보-->
+					<div class="buyer">
+						<div class="clear">
+							<h3 class="h_title cont"><strong>주문고객 정보</strong></h3>
+						</div>
+						<fieldset class="form">
+							<legend class="sr_only">정보 입력 항목</legend>
+							<div class="address_basic mgt10">
+								<div class="input_group">
+									<div class="label">
+										<label for="input01_01">이름</label>
+									</div>
+									<div>
+										<input type="text" id="input01_01">
+									</div>
+								</div>
+								<div class="input_group">
+									<div class="label">
+										<label for="input01_02">휴대폰 번호</label>
+									</div>
+									<div>
+										<input type="text" id="input01_02">
+									</div>
+								</div>
+								<div class="input_group">
+									<div class="label">
+										<label for="input01_03">이메일</label>
+									</div>
+									<div>
+										<input type="text" id="input01_03">
+									</div>
+								</div>
+								<p class="text_notice mgt10">주문관련 e-Mail과 SMS가 발송됩니다.</p>
+							</div>
+						</fieldset>
+					</div>
+					<!--//주문고객정보-->
+					<hr class="div m25">
+					<!--배송정보-->
+					<div class="address_wrap">
+						<h3 class="h_title cont"><strong>배송정보</strong></h3>
+						<fieldset class="form mgt20">
+							<legend class="sr_only">배송정보 입력항목</legend>
+							<div class="check_set clear">
+								<span class="check_wrap"><input type="radio" name="radio01" id="radio01_1" checked=""><label for="radio01_1">일반택배</label></span>
+								<span class="check_wrap"><input type="radio" name="radio01" id="radio01_2"><label for="radio01_2">편의점 배송</label></span>
+							</div>
+							<!--일반택배 선택시-->
+							<div class="general">
+								<!--새로입력 선택시-->
+								<dl class="address_basic">
+									<dt>기본정보</dt>
+									<dd>
+										<div class="input_group">
+											<div class="label">
+												<label for="sample">이름</label>
+											</div>
+											<div>
+												<input type="text" id="sample">
+											</div>
+										</div>
+										<div class="input_group">
+											<div class="label">
+												<label for="sample2">휴대폰 번호</label>
+											</div>
+											<div>
+												<input type="text" id="sample2">
+											</div>
+										</div>
+									</dd>
+								</dl>
+								<dl>
+									<dt>주소</dt>
+									<dd>
+										<p class="text_notice pdb10">찾으시는 주소지 또는 건물명을 입력해 주세요.<br>(예 : 강남대로, 한강로2가, 한강대로 100)</p>
+										<div class="ui_find_addresses">
+											<div class="input_group">
+												<div>
+													<input type="text" id="delivery_area" class="find_addresses_input" placeholder="주소지 또는 건물명">
+												</div>
+												<div class="btn">
+													<button type="button" class="btn_find_addresses">찾기</button>
+												</div>
+											</div>
+											<!-- 지역 검색 결과 -->
+											<div class="address_list"></div>
+											<!-- //지역 검색 결과 -->
+
+											<div class="input_group">
+												<div class="input_wrap">
+													<input type="hidden" class="post_code" name="post_code">
+													<input type="hidden" class="address_first" name="address_first">
+													<input type="text" class="address_first" title="기본주소 입력" placeholder="주소" readonly="">
+												</div>
+											</div>
+											<div class="input_group">
+												<div class="input_wrap"><input type="text" class="address_last" title="상세주소 입력" placeholder="상세주소를 입력해주세요."></div>
+											</div>
+										</div>
+									</dd>
+								</dl>
+								<!--//새로입력 선택시-->
+								<div class="input_group mgt20">
+									<div>
+										<select name="" id="" title="배송시 요청사항을 선택">
+											<option value="">배송시 요청사항을 선택해주세요.</option>
+											<option value="">부재 시 경비실에 맡겨주세요.</option>
+											<option value="">빠른 배송 부탁드립니다.</option>
+											<option value="">부재 시 핸드폰으로 연락바랍니다.</option>
+											<option value="">배송 전 연락 바랍니다.</option>
+											<option value="">직접 입력</option>
+										</select>
+									</div>
+								</div>
+								<!--직접입력 선택시 노출
+								<div class="input_group">
+									<div>
+										<input type="text" maxlength="80" placeholder="80자 이내로 작성해 주세요.">
+									</div>
+								</div>
+								<!--//직접입력 선택시 노출-->
+							</div>
+							<!--//일반택배 선택시-->
+							<!--편의점 배송 선택시-->
+							<div class="convenience_store">
+								<fieldset class="form">
+									<legend class="sr_only">편의점 배송 선택 및 받으실분 정보 입력항목</legend>
+									<div class="convenience_choise clear">
+										<span class="cu"><input type="radio" name="convenience" id="cu"><label for="cu">CU 편의점 찾기</label></span>
+										<span class="gs"><input type="radio" name="convenience" id="gs"><label for="gs">GS 편의점 찾기</label></span>
+									</div>
+									<div class="report_box">
+										<dl>
+											<dt>지점명</dt>
+											<dd>CU 신용산점</dd>
+											<dt>연락처</dt>
+											<dd>02-0000-0000</dd>
+										</dl>
+									</div>
+									<h3 class="h_title cont"><strong>받으실 분</strong></h3>
+									<div class="date_btn_set">
+										<span><input type="radio" name="choice02" id="choice02_1" checked=""><label for="choice02_1">주문자와 동일</label></span>
+										<span><input type="radio" name="choice02" id="choice02_2"><label for="choice02_2">새로 입력</label></span>
+									</div>
+									<!--주문자와 동일 선택시-->
+									<div class="report_box">
+										<dl>
+											<dt>이름</dt>
+											<dd>이상원</dd>
+											<dt>휴대폰번호</dt>
+											<dd>000-0000-0000</dd>
+										</dl>
+									</div>
+									<!--//주문자와 동일 선택시-->
+									<!--새로입력 선택시-->
+									<div class="address_basic">
+										<div class="input_group">
+											<div class="label">
+												<label for="name02">이름</label>
+											</div>
+											<div>
+												<input type="text" id="name02">
+											</div>
+										</div>
+										<div class="input_group">
+											<div class="label">
+												<label for="phone02">휴대폰 번호</label>
+											</div>
+											<div>
+												<input type="text" id="phone02">
+											</div>
+										</div>
+									</div>
+									<!--새로입력 선택시-->
+									<p class="text_notice mgt10">배송 물품이 편의점 도착 시, 도착 안내 SMS가 발송됩니다.</p>
+								</fieldset>
+							</div>
+							<!--//편의점 배송 선택시-->
+						</fieldset>
+					</div>
+					<!--//배송정보-->
+				</dd>
+			</dl>
+			<!--//배송정보입력-->
+		</div>
+
+	</div>
+	<!-- // page contents -->
+
+
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script>
+		// 글자수 제한
+		$( 'input[maxlength]' ).inputLimits();
+	</script>
+
+</th:block>
+</body>
+</html>

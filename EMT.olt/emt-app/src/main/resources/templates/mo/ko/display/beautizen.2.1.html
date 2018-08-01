@@ -1,0 +1,214 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='beautizen_recruit'">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	
+	<div class="ap_contents brand beautizen_recruit_reserve">
+		<div class="beautizen">
+			<!-- tab menu wrap -->
+			<div class="ui_tab">
+				<!-- tab menu -->
+				<div class="tab_menu equally">
+					<ul>
+						<li><a href="#none">뷰티즌이란?</a></li>
+						<li class="on"><a href="#none">뷰티즌 모집</a></li>
+						<li><a href="#none">뷰티즌 프로필</a></li>
+					</ul>
+				</div>
+				<!-- tab content -->
+				<div class="tab_cont no_padding">
+					<h3 class="sr_only">뷰티즌 모집</h3>
+					<form class="validate" id="validate" name="validate" method="post" enctype="multipart/form-data" novalidate="novalidate">
+					<div class="panel">
+						<h4 class="h_title page">지원서 작성</h4>
+						<p class="font_md">아래 내용을 입력해주세요.</p>
+						<hr class="div m30">
+						<fieldset class="form">
+							<legend class="sr_only">사진 입력</legend>
+							<!-- 사진 첨부 -->
+							<div class="attach_photo ui_input_images" data-single-input="true">
+								<div class="img attach">
+									<!-- 이미지 등록 -->
+								</div>
+								<label for="attach_photo"><span class="sr_only">사진 선택</span></label>
+								<input type="file" id="attach_photo" name="picture" multiple="multiple" accept="image/gif,image/jpeg,image/jpg,image/png" required="required" data-msg-required="사진을 등록하세요.">
+								<br>
+								<p class="text_center">사진을 등록하시려면 터치해주세요.<br>120X160 최적화</p>
+							</div>
+						</fieldset>
+					</div>
+					<div class="panel">
+						<fieldset class="form">
+							<legend class="sr_only">기본정보 입력</legend>
+							<h5 class="h_title cont"><strong>지원자 기본정보</strong>
+								<small>(필수입력)</small></h5>
+							<div class="ui_table">
+								<dl>
+									<dt>아이디</dt>
+									<dd th:text="${memberMap.id}"></dd> <!-- memberMap={phoneNo1=, phoneNo2=, gendDvCd=Male, cartSn=0, name=전지환, residno1=870609, id=pollak2@amore.net, cstmid=990000001, memberSn=157}-->
+								</dl>
+							</div>
+							<div class="dl">
+								<dl>
+									<dt><label for="phoneCorp">휴대폰</label></dt>
+									<dd>
+										<div ap:replace="~{customer/fragment/member :: phoneCorp}"></div>
+								        <div ap:replace="~{customer/fragment/member :: cellNumWithBtn}"></div>
+								        <div ap:replace="~{customer/fragment/member :: smsNumWithBtn}"></div>
+										
+										<br> <!--/* 03-19 버튼 추가 */-->
+										<button type="button" class="btn_md_neutral w100p certification_btn">인증확인</button>
+									</dd>
+								</dl>
+								<dl>
+									<dt>생년월일</dt>
+									<dd>
+										<div class="input_group">
+											<div>
+												<input type="text" name="dob" id="dob" placeholder="yyyymmdd" psnDtbr="psnDtbr" fourteenOver ="fourteenOver" required="required" data-msg-required="생년월일을 입력해 주세요.">
+											</div>
+											<div class="btn">
+												<select name="genderCode" id="genderCode" title="성별 선택" required="required">
+													<option value="" >성별</option>
+													<option value="Female" >여자</option>
+													<option value="Male" >남자</option>
+												</select>
+											</div>
+										</div>
+									</dd>
+								</dl>
+								<dl>
+									<dt>홈페이지(블로그)</dt>
+									<dd>
+										<div class="input_group">
+											<div>
+												<input type="text" name="personalHomepageUrl" id="personalHomepageUrl" placeholder="http://" >
+											</div>
+										</div>
+									</dd>
+								</dl>
+								<dl>
+									<dt>SNS 주소</dt>
+									<dd>
+										<div class="input_group">
+											<div>
+												<input type="text" name="snsUrl" id="snsUrl" placeholder="http://" required="required" data-msg-required="페이스북을 입력해주세요" >
+											</div>
+											<div class="btn">
+												<button type="button" class="snsUrl">등록</button>
+											</div>
+										</div>
+									</dd>
+								</dl>
+								<!--/* 20180504 : 거주지역으로 내용 변경 */-->
+								<dl>
+									<dt><label for="location">거주지역</label></dt>
+									<dd class="ui_find_addresses">
+										<div class="input_group">
+											<div>
+												<select name="preLocal" id="preLocal" title="지역 선택" required="required" data-msg-required="거주지역을 선택해 주세요.">
+													<option value="">지역 선택</option>
+													<option value="강원도">강원도</option>
+													<option value="경기도">경기도</option>
+													<option value="경상남도">경상남도</option>
+													<option value="경상북도">경상북도</option>
+													<option value="광주광역시">광주광역시</option>
+													<option value="대구광역시">대구광역시</option>
+													<option value="대전광역시">대전광역시</option>
+													<option value="부산광역시">부산광역시</option>
+													<option value="서울특별시">서울특별시</option>
+													<option value="세종특별자치시">세종특별자치시</option>
+													<option value="울산광역시">울산광역시</option>
+													<option value="인천광역시">인천광역시</option>
+													<option value="전라남도">전라남도</option>
+													<option value="전라북도">전라북도</option>
+													<option value="제주특별자치도">제주특별자치도</option>
+													<option value="충청남도">충청남도</option>
+													<option value="충청북도">충청북도</option>
+												</select>
+											</div>
+										</div>
+									</dd>
+								</dl>
+								
+							</div>
+							<h5 class="h_title cont"><strong>학력사항</strong>
+								<small>(필수입력)</small></h5>
+							<div class="input_group">
+								<div>
+									<input type="text" name="school" id="school" placeholder="학교를 입력해 주세요." required="required" data-msg-required="학교를 입력해 주세요.">
+								</div>
+								<div class="btn" th:with="gradeList = ${ {'','1','2','3','4'} }">
+									<select name="grade" id="grade" title="학년 선택" required="required" data-msg-required="학년을 선택하세요.">
+										<option th:each="gradeTerm : ${gradeList}" th:value="${gradeTerm}" th:text="${gradeTerm}+ '학년'"></option>
+									</select>
+								</div>
+							</div>
+							<div class="input_group">
+								<div>
+									<input type="text" id="faculty" name="faculty" placeholder="학과/학부를 입력해 주세요." required="required" data-msg-required="학과/학부를 입력해 주세요.">
+								</div>
+								<div class="btn" th:with="completeList = ${ {'','1','2','3','4','5','6','7','8','9','10'} }">
+									<select name="completeTerm" title="이수학기 선택" required="required" data-msg-required="이수학기를 선택하세요." id="completeTerm">
+										<option th:each="termVal : ${completeList}" th:value="${termVal}" th:text="${termVal}+ '학기 이수'"></option> 
+									</select>
+								</div>
+							</div>
+							<div class="input_group">
+								<div>
+									<input type="text" name="major" id="major" placeholder="전공을 입력해 주세요." required="required" data-msg-required="전공을 입력해 주세요.">
+								</div>
+							</div>
+							<div class="form_btns">
+								<a href="#none" class="btn_lg_secondary temp">임시저장</a>
+								<a href="#none" class="btn_lg_neutral nextConfirm">다음</a>
+							</div>
+						</fieldset>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script th:inline="javascript">
+	
+		var memberMap = /*[[${memberMap}]]*/;		
+		var supportersData = /*[[${supportersInfo}]]*/;
+	
+	
+		//이미지 첨부 적용
+		$( '.ui_input_images' ).inputImages();
+		
+		$( '.form_btns > a' ).on( 'click', function (e) {
+			e.preventDefault();
+
+			var formData = new FormData( $('form').get(0) );
+
+			//formDate에 첨부된 이미지 병합
+			$( '.ui_input_images' ).inputImages( 'extendFormData', formData );
+
+			//formData를 ajax의 data에 넣어서 보내면 된다.
+		});
+		
+		/** 예약하기 data set ********************************************************************/
+		AP.beautizenRecruitReserve.setData( supportersData );
+
+		/** 예약 완료 확인 ************************************************************************/
+		AP.beautizenRecruitReserve.addListener( 'reserve-introduce', function (e) {
+			AP.login().done(function (e) {
+				location.href="/display/beautizen_introduce?displayMenuId=beautizen_introduce";
+			}); 
+		});
+		
+	</script>
+
+</th:block>
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='member'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page contents -->
+            <div class="ap_contents mypage">
+            	<div class="beauty_point">
+                    <div class="panel">
+                        <div class="title_wrap">
+                            <h3 class="h_title page">선물하기 완료</h3>
+                            <p class="font_md">선물을 완료했어요! 잔여 포인트를 확인하세요.</p>
+
+                            <div class="ui_step sm">
+                                <ul>
+                                    <li><i class="ico"></i>step 1</li>
+                                    <li><i class="ico"></i>step 2</li>
+                                    <li class="current"><i class="ico"></i>step 3<span class="sr_only">선택됨</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="my_bt_point">
+                            <dl>
+                                <dt>나의 보유 뷰티포인트</dt>
+								<dd><span class="num" th:text="${#IntegUtil.toCommaNumber(point.rmnPt)}">20,000</span>P</dd> <!-- 03-05 수정 -->
+                            </dl>
+                        </div>
+                        <hr class="div m30">
+
+                        <div class="bt_point_complete">
+                            <img ap:src="@{/images/my/point_send_complete.jpg}" alt="" />
+                        </div>
+                        <p class="text_center"><strong th:text="${session.PRESENT_NAME}">홍길동</strong>님께 뷰티포인트 <strong th:text="${#IntegUtil.toCommaNumber(session.PRESENT_POINT)}">9,999,999P</strong>를<br>선물하였습니다.</p>
+
+                        <div class="page_btns">
+                            <button class="btn_lg_primary" onclick="window.history.back()" type="button">확인</button>
+                        </div>
+                    </div>
+
+               	</div>
+            </div>
+            <!-- // page contents -->
+            <!-- 마이페이지 맵 -->
+            <th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+            <!-- // 마이페이지 맵 -->
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+			<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+			<script>
+			var step = AP.common.getSessionStorage("presentStep");
+			AP.common.setSessionStorage("presentStep", 0)
+			if(step != 6) {
+				window.history.back();
+			}
+			</script>
+
+        </th:block>
+</body>
+</html>

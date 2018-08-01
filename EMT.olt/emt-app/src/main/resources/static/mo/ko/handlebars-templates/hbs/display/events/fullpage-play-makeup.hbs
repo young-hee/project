@@ -1,0 +1,179 @@
+<form class="validate" action="">
+	<div class="layer_popup fullpage play_makeup_layer">
+		<div class="layer_wrap">
+			<dl class="layer">
+				<dt class="layer_title">PLAY 메이크업 클래스 신청하기</dt>
+				<dd class="layer_cont">
+					<div class="panel">
+						<fieldset class="form">
+							<legend class="sr_only">신청 내용 입력</legend>
+							<div class="ui_table">
+								<dl>
+									<dt>신청자</dt>
+									<dd>{{userInfo.name}}</dd>
+								</dl>
+							</div>
+							<div class="input_group">
+								<div class="label">
+									<label for="title">신청자 단체명</label>
+								</div>
+								<div>
+									<input type="text" name="requestGrpName" id="requestGrpName" placeholder="에뛰드 하우스" value="" required data-msg="신청자 단체명을 입력해 주세요.">
+								</div>
+							</div>
+							<dl class="dl">
+								<dt>희망일시</dt>
+								<dd style="position:relative;">
+									<div class="input_group input_date_group">
+										<div class="input_wrap">
+											<input type="text" class="ui_date_picker" name="preHopeDt" id="preHopeDt" placeholder="연도-월-일" title="날짜 선택" value="" readonly="" required data-msg="희망 일시를 입력해 주세요.">
+											<button type="button" class="ui_date_picker_btn btn_cal"><i class="ico_date"></i><span class="sr_only">날짜 선택</span></button>
+										</div>
+									</div>
+									<span class="input_group half_left">
+										<select name="preHopeTmHour" id="preHopeTmHour" title="">
+											{{#for 24}}
+												<option value="{{for-index}}">{{for-index}}시</option>
+											{{/for}}
+										</select>	
+									</span>
+									<span class="input_group half_right w50p">
+										<select name="preHopeTmMin" id="preHopeTmMin" title="">
+											<option value="00">00분</option>
+											<option value="10">10분</option>
+											<option value="20">20분</option>
+											<option value="30">30분</option>
+											<option value="40">40분</option>
+											<option value="50">50분</option>
+										</select>	
+									</span>
+								</dd>
+							</dl>
+							<div class="input_group">
+								<div class="label">
+									<label for="ppl">참석 인원수</label>
+								</div>
+								<div>
+									<input type="text" name="requestPersonnel" id="requestPersonnel" placeholder="0명" required data-msg="참석 인원 수를 입력해 주세요." range="15, 1000" data-msg-range="최소 {0}명 이상 신청 가능합니다.">
+								</div>
+							</div>
+							<p class="text_notice mgt5">최소 15명 이상 신청 가능</p>
+							<dl class="dl">
+								<dt>희망 테마</dt>
+								<dd>
+									<div class="input_group">
+										<div>
+											<select name="hopeThemeName" id="hopeThemeName"  title="테마 선택">
+												<option value="">면접/프로필</option>
+											</select>
+										</div>
+									</div>
+									<p class="text_notice mgt5">‘기타’ 항목을 선택하시는 분은 아래 질문/기타의견’입력란에 꼭 입력해 주세요.</p>
+								</dd>
+							</dl>
+							<div class="input_group">
+								<div class="label">
+									<label for="phone">휴대전화</label>
+								</div>
+								<div>
+									<input type="text"  name="cellPhoneNo" id="cellPhoneNo" placeholder="휴대폰번호" value="" required data-msg="휴대폰 번호를 입력해 주세요.">
+								</div>
+							</div>
+							<dl class="dl">
+								<dt>진행 장소</dt>
+								<dd>
+									<p class="text_notice">찾으시는 주소지 또는 건물명을 입력해 주세요.<br>
+										(예 : 강남대로, 한강로2가, 한강대로 100)</p>
+									<div class="ui_find_addresses mgt10">
+										<div class="input_group">
+											<div>
+												<input type="text" id="delivery_area" class="find_addresses_input" placeholder="주소지 또는 건물명">
+											</div>
+											<div class="btn">
+												<button type="button" class="btn_find_addresses">찾기</button>
+											</div>
+										</div>
+										<!-- 지역 검색 결과 -->
+										<div class="address_list"></div>
+										<!-- //지역 검색 결과 -->
+
+										<div class="input_group">
+											<div class="input_wrap">
+												<input type="hidden" class="post_code" name="zipCode" id="zipCode" title="우편번호 입력" placeholder="우편번호" readonly="">
+												<input type="hidden" class="address_first" name="address1">
+												<input type="text" class="address_first" name="address1" id="address1" class="address_first" title="기본주소 입력" placeholder="기본주소" readonly="" required data-msg="주소를 입력해 주세요.">
+											</div>
+										</div>
+										<div class="input_group">
+											<div class="input_wrap"><input type="text" name="address2" id="address2" class="address_last" title="상세주소 입력" placeholder="상세주소를 입력해주세요." required data-msg="나머지 주소를 입력해 주세요."></div>
+										</div>
+									</div>
+									<p class="bullet_dot mgt10">서울, 경기 지역 우선 선정합니다.</p><!--/* 20180511 : 문구 추가 */-->
+								</dd>
+							</dl>
+							<dl class="dl">
+								<dt>질문/기타의견</dt>
+								<dd>
+									<div class="input_group">
+										<div>
+											<div>
+												<div class="textarea">
+													<textarea name="addQuestion1" id="addQuestion1" cols="" rows="" maxlength="2000" placeholder="2000자 이내로 입력해 주세요."></textarea>
+												</div>
+												<p class="text_right"><small>0/2000</small></p>
+											</div>
+										</div>
+									</div>
+								</dd>
+							</dl>
+							<!--/* 20180511 : 추가 */-->
+							<dl class="dl mgt20">
+								<dt>개인정보 수집 및 이용 동의 (필수)</dt>
+								<dd>
+									<div class="panel bordered">
+										<ul class="list_bullet_dot">
+											<li>수집 및 이용 항목 : 작성자명, 핸드폰번호, 클래스진행장소</li>
+											<li>수집 및 이용 목적 : 메이크업클래스 대상자 확인 및 선정, 공지사항 전달</li>
+											<li>보유 및 이용 기간 : 서비스 희망일 익월1일 삭제 </li>
+										</ul>
+									</div>
+									<ul class="text_notice mgt10">
+										<li>신청자는 개인정보 수집 및 이용 동의에 거부할 수 있습니다. 다만, 거부할 경우 Play 메이크업 클래스 지원이 불가능 합니다</li>
+									</ul>
+									<div class="check_wrap mgt10">
+										<input type="checkbox" name="termsAgreeYn" id="termsAgreeYn"  required data-msg="개인정보 수집 및 이용 동의를 해야만 신청이 가능합니다.">
+										<label for="termsAgreeYn">동의합니다.</label>
+									</div>
+								</dd>
+							</dl>
+							<!--/* 20180511 : 추가 */-->
+							<div class="form_btns">
+								<button type="button" class="btn_md_secondary">취소</button>
+								<button type="button" class="btn_md_neutral">신청</button>
+							</div>
+						</fieldset>
+						<br>
+						<div class="panel gray">
+							<dl class="dl_cont">
+								<dt class="h_title cont">유의사항</dt>
+								<dd>
+									<ul class="list_bullet_dot">
+										<li>장소 제공이 되지 않으니 장소 섭외가 가능하신 분에
+											한해서만 신청이 가능합니다.</li>
+										<li>면접/프로필 메이크업 테마에 한해 고등학교
+											졸업반부터 신청이 가능합니다.</li>
+										<li>15명 미만의 경우 신청이 불가합니다.</li>
+										<li>담당자 확인 후 개별 통보해 드립니다.</li>
+									</ul>
+								</dd>
+							</dl>
+						</div>
+					</div>
+				</dd>
+			</dl>
+			<button class="layer_close" type="button">레이어 닫기</button>
+		</div>
+	</div>
+</div>
+
+</form>

@@ -1,0 +1,145 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='events-detail'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents event detail">
+		<!--/* 제목 영역 */-->
+		<div class="event_title_wrap">
+			<h3 class="h_title" th:text="${planDisplay.planDisplayTitle}">이벤트 제목</h3>
+			<div class="align_center">
+<!-- 				<span class="num" th:text="${#dates.format(planDisplay.event.startDt, 'yyyy.MM.dd')} + ' ~ ' + ${#dates.format(planDisplay.event.endDt, 'yyyy.MM.dd')}">2018.02.08 ~ 2018.02.28</span> -->
+				<button type="button" class="btn_share" th:if="${planDisplay.shareUseYn == 'Y'}">SNS 공유하기</button>
+			</div>
+		</div>
+
+		<!--/* 이벤트 대표이미지 */-->
+		<div class="event_image" th:utext="${planDisplay.detailHtml}">
+		</div>
+
+		<div class="page_btns">
+			<a href="/display/event?displayMenuId=event" class="btn_md_neutral">목록</a>
+		</div>
+
+		<!--/* 상품이 있을때만 */-->
+		<div class="event_product" th:if="${planDisplay.planDisplayTypeCode == 'General' ? planDisplay.prodGroupListYn == 'Y' : planDisplay.planDisplayTypeCode == 'SameTimePur'}">
+			<!--/*
+			<h4 class="h_title lare">아이즈+물감블러셔 16,900원! Or 아이즈+립스톡 17,900원!</h4>
+			<p class="text font_xxl">컬러풀 드로잉 판타스틱 컬러 아이즈와 립스톡 or 물감블러셔를 3개를 담아주세요~!</p>
+			*/-->
+
+			<div class="ui_tab">
+				<div class="tab_menu equally">
+					<ul th:if="${planDisplay.planDisplayTypeCode == 'SameTimePur'}">
+						<li th:each="promoGroup, iterStat : ${planDisplay.promoList}" th:class="${iterStat.index == 0 ? 'on' : ''}">
+							<button type="button" th:text="${promoGroup.promoName}">프로모션 그룹 타이틀</button>
+						</li>
+					</ul>
+
+					<ul th:if="${planDisplay.planDisplayTypeCode == 'General'}">
+						<li th:each="prodGroup, iterStat : ${planDisplay.prodGroupList}" th:class="${iterStat.index == 0 ? 'on' : ''}">
+							<button type="button" th:text="${prodGroup.prodGrpTitle}">그룹 타이틀</button>
+						</li>
+					</ul>
+				</div>
+
+				<!--/* 프로모션 상품 그룹핑 */-->
+				<div class="tab_contents" th:if="${planDisplay.planDisplayTypeCode == 'SameTimePur'}">
+					<div class="tab_cont" th:each="promoList : ${planDisplay.promoList}">
+						<h5 class="h_title lare" th:text="${promoGroup.promoName}">프로모션 그룹 타이틀</h5>
+						<div class="item_list column4">
+							<ul th:data-promo-sn="${promo.promoSn}">
+								<!--/* 상품 리스트 영역 */-->
+							</ul>
+						</div>
+						<div class="loading" style="height:400px;">
+							<span>
+								<img ap:src="@{/images/common/loading.gif}" alt="">
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<!--/* 일반 상품 그룹핑 */-->
+				<div class="tab_contents general_tab" th:if="${planDisplay.planDisplayTypeCode == 'General'}">
+					<div class="tab_cont" th:each="prodGroup : ${planDisplay.prodGroupList}">
+						<div class="item_list column4 generalProdListWrap">
+							<ul class="result" th:data-plan-display-prod-grp-sn="${prodGroup.planDisplayProdGrpSn}">
+								<!--/* 상품 리스트 영역 */-->
+							</ul>
+						</div>
+						
+						<!-- /* 상품 리스트 페이징 영역 */ -->
+						<div class="pagination"></div>
+						<!-- /* 상품 리스트 페이징 영역 */ -->
+						
+						<div class="loading" style="height:400px;">
+							<span>
+								<img ap:src="@{/images/common/loading.gif}" alt="">
+							</span>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+
+		</div>
+
+		<!--/* 댓글영역 */-->
+		<div class="comment_area" th:if="${planDisplay.eventIncludeYn == 'Y' && planDisplay.eventType == 'Button'}">
+			<div class="align_right mgt50">
+				<button class="btn_md_primary btn_participate" type="button">참여 하기</button>
+			</div>
+
+			<div class="review_list">
+				<!--/* 댓글 리스트 영역 */-->
+			</div>
+		</div>
+		
+		<!--/* 댓글 */-->
+		<div class="comment_area mgt40" th:if="${planDisplay.eventIncludeYn == 'Y' && planDisplay.eventType == 'Comment'}">
+			<fieldset class="form mgt5">
+				<legend class="sr_only">댓글 입력</legend>
+				<!--/* [S] 20180419 : 댓글입력 영역 마크업 수정 */-->
+				<div class="input_btn_wrap">
+					<div class="input_wrap">
+						<input class="comment_input" type="text" value="" placeholder="댓글을 남겨 보세요." max-byte="200">
+					</div>
+					<p class="text_right"><small><em class="current">0</em>/<span class="limits">200자</span></small></p>
+					<button class="btn_md_neutral btn_save">등록</button>
+				</div>
+				<p class="text_notice">저작권 등 다른 사람의 권리를 침해하거나 게시판 성격과 관련 없는 게시물은 임의로 삭제될 수 있습니다.</p>
+				<!--/* [E] 20180419 : 댓글입력 영역 마크업 수정 */-->
+			</fieldset>
+			<p class="text total_count">댓글 <span>0</span>개</p>
+			
+			<ul class="comment_list"></ul>
+			
+			<div class="pagination"></div>
+			
+			<div class="loading" style="height:400px;">
+				<span>
+					<img ap:src="@{/images/common/loading.gif}" alt="">
+				</span>
+			</div>
+			
+			
+		</div>
+
+	</div>
+	<!-- // page contents -->
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script th:inline="javascript">
+		(function () {
+			var planDisplay = /*[[${planDisplay}]]*/;
+
+			AP.eventsDetail.setDefaultData( planDisplay );
+		}());
+	</script>
+</th:block>
+</body>
+</html>

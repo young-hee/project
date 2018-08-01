@@ -1,0 +1,126 @@
+<html ap:decorate="~{layout/layout-title-only}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <div class="panel login">
+            	<h2 class="h_title page">계정 연결하기</h2>
+             	<ul class="list_bullet_dot">
+             		<li>아이디와 비밀번호로 회원 인증을 하시면, 자주 사용하시는 SNS/포털 계정과 아이디가 연결됩니다.</li>
+             		<li>기존에 사용하시던 아이디 정보 그대로 에뛰드 하우스에서 간편하게 로그인 하세요.</li>
+             	</ul>
+             	<hr class="div m20" />
+                <div class="ui_toggle_contents keyboard_view">
+                     <button type="button" class="toggle_btn view">한글자판 열기</button>
+                     <div class="keyboard_img">
+					<img ap:src="@{/images/member/bg_keyboard.png}" alt="">
+				</div>
+                 </div>
+                 <form>
+                 <fieldset class="form">
+                     <legend class="sr_only">로그인 정보 입력</legend>
+                     <div class="login_area">
+                         <div class="input_group">
+                         	<div ap:replace="~{customer/fragment/member :: id}"></div>
+                         </div>
+                         <div class="input_group">
+                         	<div ap:replace="~{customer/fragment/member :: password}"></div>
+                         </div>
+                         <button type="button" id="login" class="btn_lg_primary w100p">로그인</button>
+                         <div class="clear">
+                             <div class="check_wrap"><input type="checkbox" name="autoLogin" id="auto_login"><label for="auto_login">자동 로그인</label></div>
+                             <div>
+                                 <a href="/customer/find/find-id">아이디 찾기</a><a href="/customer/find/find-pwd">비밀번호 찾기</a>
+                             </div>
+                         </div>
+                     </div>
+                 </fieldset>
+                 </form>
+                 <dl class="dl_cont">
+                     <dt class="h_title cont"><strong>아직도 회원이 아니세요?</strong></dt>
+                     <dd>
+                         <p class="text">가입 한번으로 많은 혜택을 누리세요.</p>
+                         <div>
+                         	<a href="/customer/signup" class="btn_lg_bordered w100p">회원가입</a>
+                         </div>
+                     </dd>
+                 </dl>
+             </div>
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			  <script type="application/javascript">
+
+			  var getUrlParameter = function getUrlParameter(sParam) {
+				    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+				        sURLVariables = sPageURL.split('&'),
+				        sParameterName,
+				        i;
+
+				    for (i = 0; i < sURLVariables.length; i++) {
+				        sParameterName = sURLVariables[i].split('=');
+
+				        if (sParameterName[0] === sParam) {
+				            return sParameterName[1] === undefined ? true : sParameterName[1];
+				        }
+				    }
+				};
+
+				var returnUrl = getUrlParameter('returl');
+				if (returnUrl == null) returnUrl = "/main";
+				
+			  $('#login').on('click', function() {
+				    loginProcess();
+				});
+
+				function loginProcess() {
+				    var $form = $('form');
+				    if ($form.valid()) {
+
+				        AP.api.doLoginLink({}, AP.common.getFormData($form)).done(function(data) {
+
+			                if (data.sleep == 'Y') {
+				            	location.href="/sleepUser";
+
+			                } else if (data.old == 'Y') {
+			                    changeInfoModal();
+			                } else if (data.changePw == 'Y') {
+			                    var contents = new Object();
+			                    contents.title = "[[#{common.alert}]]";
+			                    contents.contents = data.message;
+			                    contents.cancelLabel = "다음에 변경";
+			                    contents.confirmLabel = "비밀번호 변경";
+
+			                    AP.modal.info(contents).addListener('modal-close', function(e) {
+			                        if (e.closeType == 'close' || e.closeType == 'cancel') {
+			                            location.href = returnUrl;
+			                        } else if (e.closeType == 'confirm') {
+			                            changePassword();
+			                        }
+			                        console.log(e.closeType); //close, confirm, cancel
+			                    });
+			                } else {
+			                    location.href = returnUrl;
+
+			                }
+
+				        }).fail(function(xhr, textStatus, errorThrown) {
+				            if (xhr.errorCode == 0) {
+				                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+				            } else if (xhr.errorCode == 'EAPI001') {
+				                AP.modal.alert("아이디 또는 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+				            } else {
+				                AP.modal.alert(xhr.errorMessage)
+				            }
+				        }).always(function() {
+				            //성공, 실패
+				        });
+				    }
+				}
+			  
+    		</script>
+        </th:block>
+</body>
+</html>

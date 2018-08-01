@@ -1,0 +1,92 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- mypage sitemap -->
+	<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+	<!-- //  mypage sitemap -->
+
+	<!-- page title -->
+	<th:block ap:replace="~{common/fragment/contents-page-title}"/>
+	<!-- // page title -->
+
+	<!-- page contents -->
+	<div class="ap_contents mypage cushion_point_list">
+		<div class="button_card_wrap align_center">
+			<button type="button" class="btn_md_bordered">카드 이용현황</button>
+			<button type="button" class="btn_md_primary">선불카드 등록하기</button>
+		</div>
+
+		<div class="user_card_total">
+			<div class="card_text">
+				<span>카드 이용현황</span>
+				<div class="select_wrap"><!-- 선택시 open 클래스  -->
+					<select name="" id="" tabindex="-1">
+						<option value="">1234 - 1234 - 1234 - 1234</option>
+						<option value="02" selected="">선택 2</option>
+						<option value="03" disabled="">선택 3</option>
+						<option value="04">선택 4</option>
+						<option value="05">선택 5</option>
+						<option value="06">선택 6</option>
+					</select>
+				</div>
+			</div>
+			<div class="card_won">
+				<span>현재 잔액</span>
+				<div><strong>100,000</strong> <span>원</span></div>
+			</div>
+		</div>
+
+		<div class="ui_multiple_date_picker date_picker_card">
+			<div class="date_pic_left">
+				<div class="date_btn_set">
+					<span><input type="radio" class="select_range_date" name="radio5" id="radio5_0" value="all" checked=""><label for="radio5_0">전체</label></span>
+					<span><input type="radio" class="select_range_date" name="radio5" id="radio5_1" value="1weeks"><label for="radio5_1">1주일</label></span>
+					<span><input type="radio" class="select_range_date" name="radio5" id="radio5_2" value="1months"><label for="radio5_2">1개월</label></span>
+					<span><input type="radio" class="select_range_date" name="radio5" id="radio5_3" value="3months"><label for="radio5_3">3개월</label></span>
+					<span><input type="radio" class="select_range_date" name="radio5" id="radio5_4" value="6months"><label for="radio5_4">6개월</label></span>
+					<span><input type="radio" class="select_range_date" name="radio5" id="radio5_5" value="1years"><label for="radio5_5">12개월</label></span>
+				</div>
+				<div class="input_date_group">
+					<div class="input_wrap" style="display:none;">
+						<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+						<input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+					</div>
+					<div class="date_info_area">
+						<span class="sr_only">시작일</span> <span class="start_date"></span> ~ <span class="sr_only">종료일</span> <span class="end_date"></span> <span class="date_text">까지의 사용 및 적립 내역</span>
+					</div>
+				</div>
+			</div>
+			<!--내역이 있을때만 보인다-->
+			<div class="date_pic_right">
+				<div><button type="button" class="on">온라인 쇼핑</button></div>
+				<div><button type="button">오프라인 매장</button></div>
+			</div>
+		</div>
+
+		<div class="panel notice">
+			<i class="ico"></i>
+			<p class="text font_lg">
+				<span>선택하신 기간에 해당하는 내역이 없습니다.</span>
+			</p>
+		</div>
+
+	</div>
+	<!-- // page contents -->
+</div><!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script>
+		//multiple date picker적용
+		$( '.ui_multiple_date_picker' ).multipleDatePicker({
+			defaultRangeDate: 'all',
+			minDate: moment().subtract( 50, 'years' )
+		}).on( 'multiple-date-picker-change', function (e) {
+			console.log( e.type, e.date );
+		});
+	</script>
+</th:block>
+</body>
+</html>

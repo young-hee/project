@@ -1,0 +1,27 @@
+{{#xif this.topReviewOnlyYn '==' 'Y'}}
+	<div class="ix-list-viewport">
+		<ul class="ix-list-items">
+			{{#each this.prodReviewList}}
+				<li class="ix-list-item">
+					{{{ include 'common.review-list-item' this }}}
+				</li>
+			{{/each}}
+		</ul>
+	</div>
+	<div class="ix-controller">
+		<ul class="ix-thumbs">
+			<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+		</ul>
+	</div>
+{{else}}
+	{{#if this.totalCount}}
+		{{#each this.prodReviewList}}
+			{{{ include 'common.review-list-item' this }}}
+		{{/each}}
+	{{else}}
+		<div class="panel notice">
+			<i class="ico"></i>
+			<p class="text">리뷰 내역이 존재하지 않습니다.</p>
+		</div>
+	{{/if}}
+{{/xif}}

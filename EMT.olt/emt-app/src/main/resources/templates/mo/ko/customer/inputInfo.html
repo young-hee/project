@@ -1,0 +1,282 @@
+<html ap:decorate="~{layout/layout-title-only}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+  <!-- page contents -->
+  <div class="ap_contents member_join">
+    <div class="panel">
+      <div class="title_wrap">
+        <h3 class="h_title page">정보입력</h3>
+        <p class="font_md">아래 정보를 입력해주세요.</p>
+        <div class="ui_step sm">
+          <ul>
+            <li><i class="ico"></i>본인인증</li>
+            <li><i class="ico"></i>약관동의</li>
+            <li class="current"><i class="ico"></i>정보입력<span class="sr_only">선택됨</span></li>
+            <li><i class="ico"></i>가입완료</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="div m30"/>
+      <h3 class="form_title"><strong>기본정보</strong>
+        <small>(필수입력)</small>
+      </h3>
+      <form class="validate">
+        <fieldset class="form">
+          <legend class="sr_only">기본정보 입력</legend>
+          <div class="ui_table">
+            <dl>
+              <dt>이름</dt>
+              <dd><span id="custNmView"></span></dd>
+            </dl>
+          </div>
+          <div class="input_group">
+            <div ap:replace="~{customer/fragment/member :: id_valid}"></div>
+            <div class="btn">
+              <button class="btn_md_form" type="button" id="checkMemberId">중복확인</button>
+            </div>
+          </div>
+          <div class="input_group">
+            <div ap:replace="~{customer/fragment/member :: pw_valid}"></div>
+          </div>
+          <div class="input_group">
+            <div ap:replace="~{customer/fragment/member :: pw_check}"></div>
+          </div>
+        </fieldset>
+        <h3 class="form_title"><strong>개인정보</strong>
+          <small>(필수입력)</small>
+        </h3>
+        <fieldset class="form">
+          <legend class="sr_only">개인정보 입력</legend>
+            <div ap:replace="~{customer/fragment/member :: psnDtbrLab}"></div>
+            <div ap:replace="~{customer/fragment/member :: cellNumLab}"></div>
+        </fieldset>
+        <h3 class="form_title"><strong>성별</strong></h3>
+        <fieldset class="form">
+          <legend class="sr_only">성별 선택</legend>
+          <div ap:replace="~{customer/fragment/member :: sxclCd}"></div>
+        </fieldset>
+        <h3 class="form_title"><strong>부가정보</strong>
+          <small>(선택정보)</small>
+        </h3>
+        <fieldset class="form">
+          <legend class="sr_only">부가정보 입력</legend>
+          <div class="input_group">
+            <div class="input_wrap"><input type="text" name="custEmid" placeholder="이메일" title="이메일 입력" email="email"/></div>
+          </div>
+          <br>
+          <dl>
+            <dt>온라인 사이트(AP몰,에뛰드) 수신 동의</dt>
+            <dd>
+              <br>
+              <div class="table_layout"><!-- 01-23 class 수정 html 수정 -->
+                <span><span class="check_wrap"><input type="checkbox" id="check1_1" name="Email"/><label
+                    for="check1_1">이메일</label></span></span>
+                <span><span class="check_wrap"><input type="checkbox" id="check1_2" name="SMS"/><label
+                    for="check1_2">문자</label></span></span>
+                <span><span class="check_wrap"><input type="checkbox" id="check1_3" name="DM"/><label
+                    for="check1_3">DM</label></span></span>
+                <span><span class="check_wrap"><input type="checkbox" id="check1_4" name="TM"/><label
+                    for="check1_4">TM</label></span></span>
+                <input type="hidden" id="olOptiYn" name="olOptiYn">
+              </div>
+            </dd>
+          </dl>
+          <br>
+          <dl>
+            <dt>뷰티포인트 수신동의</dt>
+            <dd>
+              <br>
+              <div class="table_layout"><!-- 01-23 class 수정 html 수정 -->
+                <span><span class="check_wrap"><input type="checkbox" id="check2_1" name="Email"/><label
+                    for="check2_1">이메일</label></span></span>
+                <span><span class="check_wrap"><input type="checkbox" id="check2_2" name="SMS"/><label
+                    for="check2_2">문자</label></span></span>
+                <span><span class="check_wrap"><input type="checkbox" id="check2_3" name="DM"/><label
+                    for="check2_3">DM</label></span></span>
+                <span><span class="check_wrap"><input type="checkbox" id="check2_4" name="TM"/><label
+                    for="check2_4">TM</label></span></span>
+                <input type="hidden" id="btOptiYn" name="btOptiYn">
+              </div>
+            </dd>
+          </dl>
+          <br><br>
+          <p class="bullet_dash">문자 및 이메일 수신에 동의하시면 이벤트, 쿠폰 및 혜택, 신제품 등 다양한 정보를 제공받을 수 있습니다.</p>
+
+          <input type="hidden" id="custNm" name="custNm">
+          <input type="hidden" id="frclCd" name="frclCd">
+          <input type="hidden" id="termsChk" name="termsChk">
+          <input type="hidden" id="btTermsChk" name="btTermsChk">
+        </fieldset>
+      </form>
+      <div class="form_btns">
+        <a href="javascript:;" class="btn_lg_primary" id="stepThree">다음</a>
+      </div>
+    </div>
+  </div>
+  <!-- // page contents -->
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+    <script type="application/javascript">
+
+    if (!AP || !AP.common) {
+        window.location = "/customer/signup";
+    }
+
+    var s1 = AP.common.getSessionStorage('JoinStepOneObj'),
+        s2 = AP.common.getSessionStorage('JoinStepTwoObj');
+    if (!(s1 || (s1 && s1.StepOne)))
+        window.location = "/customer/signup";
+    if (!(s2 || (s2 && s2.StepOne)))
+        window.location = "/customer/signup";
+
+    if (s1.CustNm) {
+        $('#custNmView').html(s1.CustNm);
+    } else {
+        AP.modal.alert("[System]error");
+        window.location = "/customer/signup";
+    }
+
+    var chkIdCnt = 0;
+
+    //통합ID회원
+    if (s1.ChcsNo) {
+        chkIdCnt = 1;
+        $('[name=chcsNo]').val(s1.ChcsNo);
+        $('[name=chcsNo]').prop("disabled", "disabled");
+        $('#checkMemberId').prop("disabled", "disabled");
+    } else {
+        $('[name=chcsNo]').attr("id_email", "id_email");
+    }
+
+    //"중복확인"버튼
+    $('#checkMemberId').on('click', function(e) {
+        var chcsNo = $('form.validate input[name=chcsNo]');
+
+        if (chcsNo.valid()) {
+            AP.api.checkId({}, {
+                memberId: chcsNo.val()
+            }).done(function(data) {
+                //성공
+                if (data) {
+
+                    var result = data.state;
+
+                    if ("success" == result) {
+                        chkIdCnt++;
+                        AP.modal.alert("등록 가능한 아이디 입니다.")
+                    } else {
+                        chkIdCnt = 0;
+                        AP.modal.alert("이미 사용중인 아이디 입니다.")
+                    }
+
+                } else {
+                    AP.modal.alert("[ajax.done]실패")
+                }
+            }).fail(function(xhr, textStatus, errorThrown) {
+
+                if (xhr.errorCode == 0) {
+                    AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+                } else {
+                    AP.modal.alert(xhr.errorMessage)
+                }
+            }).always(function() {
+                //성공, 실패
+            });
+        }
+
+    });
+
+    //"다음"버튼
+    $('#stepThree').on('click', function(e) {
+        stepThree();
+    });
+
+    function stepThree() {
+
+        //성별 구분
+        var sObj = $('input[name=gender]:checked');
+        if (sObj.length > 0) {
+            if ("female" == sObj.get(0).id) {
+                $('input[name=sxclCd]').val("F");
+            } else {
+                $('input[name=sxclCd]').val("M");
+            }
+        }
+
+        //수신동의
+        var o_optiChk = new Array();
+        $('input[id^=check1]').toArray().forEach(function(item, index) {
+            o_optiChk.push(item.name + ":" + (item.checked ? "Y" : "N"));
+        });
+
+        var b_optiChk = new Array();
+        $('input[id^=check2]').toArray().forEach(function(item, index) {
+            b_optiChk.push(item.name + ":" + (item.checked ? "Y" : "N"));
+        });
+
+        $('#olOptiYn').val(o_optiChk);
+        $('#btOptiYn').val(b_optiChk);
+
+        //전step 정보
+        $('#custNm').val(s1.CustNm);
+        $('#frclCd').val(s1.FrclCd);
+        $('#termsChk').val(s2.TermsChk);
+        $('#btTermsChk').val(s2.BtTermsChk);
+
+        var $form = $('form.validate');
+        if ($form.valid()) {
+
+            if ($('[name=userPwdEc]').val() == $('[name=chcsNo]').val()) {
+                AP.modal.alert("ID와 동일한 비밀번호를 사용할 수 없습니다.");
+                return;
+            }
+
+            if ($('[name=userPwdEc]').val() != $('[name=userPwdEcChk]').val()) {
+                AP.modal.alert("비밀번호가 일치하지 않습니다.");
+                return;
+            }
+
+            if (chkIdCnt < 1)
+                AP.modal.alert("아이디 중복확인을 해주세요.");
+            else {
+
+                var formData = AP.common.getFormData($form);
+                if (s1.ChcsNo) {
+                    formData['chcsNo'] = s1.ChcsNo;
+                }
+
+                AP.api.stepThree({}, formData).done(function(data) {
+                    //성공
+                    if (data) {
+                            AP.common.clearSessionStorage("JoinStepOneObj");
+                            AP.common.clearSessionStorage("JoinStepTwoObj");
+
+                            window.location = "/customer/joinComplete";
+                    } else {
+                        AP.modal.alert("[ajax.done]실패")
+                    }
+                }).fail(function(xhr, textStatus, errorThrown) {
+
+                    if (xhr.errorCode == 0) {
+                        AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+                    } else {
+                        AP.modal.alert(xhr.errorMessage)
+                    }
+                }).always(function() {
+                    //성공, 실패
+                });
+            }
+        }
+    }
+    
+    
+    </script>
+
+</th:block>
+</body>
+</html>

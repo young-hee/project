@@ -1,0 +1,35 @@
+{{!--
+	베스트
+--}}
+{{#if this.flaggedProdRankChange.length }}
+	<div class="ix-list-viewport">
+		<ul class="ix-list-items">
+			{{#each this.flaggedProdRankChange}}
+				<li class="ix-list-item">
+					<a href="{{ productDetailPath this.onlineProdSn this.prodSn }}">
+					{{#xif this.rankChang '>' 9}}
+						<span class="grade">{{ numberCipher this.rank 2 }}
+					{{else}}
+						<span class="grade">{{ numberCipher this.rank 1 }}
+					{{/xif}}
+						{{#xif this.rankChange '!=' 0}}
+							<span class="{{#xif this.rankChange '>' 0}}up{{/xif}} {{#xif this.rankChange '<' 0}}down{{/xif}}">{{ this.rankChange }}</span></span>
+						{{/xif}}
+						<span>
+							<span class="item_title">{{ this.prodName }}</span>
+							<span class="price"><b>{{ numberFormat this.prodPriceSummary.minOnlineSalePrice }}</b> 원</span>
+						</span>
+						<span class="img">
+							<img src="{{ this.prodImages.0.imgUrl }}" alt="">
+						</span>
+					</a>
+				</li>
+			{{/each}}
+		</ul>
+	</div>
+{{else}}
+	<div class="panel notice">
+		<i class="ico"></i>
+		<p class="text">베스트 상품이 존재하지 않습니다.</p>
+	</div>
+{{/if}}

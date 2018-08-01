@@ -1,0 +1,60 @@
+<th:block layout:fragment="cushion-point-body">
+	
+		<div class="pbody board_list2 tbl_cushion_list">
+			<table class="align_center">
+				<caption class="sr_only">진주알 적립 사용 목록으로 적용일, 주문번호, 상세사유내용 휴형 포인트로 구성</caption>
+				<colgroup>
+					<col style="width:160px"/>
+					<col style="width:194px"/>
+					<col />
+					<col />
+					<col />
+				</colgroup>
+				<thead>
+				<tr>
+					<th scope="col">적용일</th>
+					<th scope="col">사용처</th>
+					<th scope="col">주문번호</th>
+					<th scope="col">소멸일자</th>
+					<th scope="col">유형</th>
+					<th scope="col">포인트</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr th:each="item : ${#IntegUtil.subList(listVo, 10)}">
+					<td class="cushion_date_start" th:text="${#IntegUtil.dateformat(item.useDate, 'yyyy.MM.dd')}">2018.01.05</td>
+					<td class="cushion_use" th:text="${item.storNm}">에뛰드 쇼핑몰</td>
+					<td class="cushion_order_number"><a href="javascript:;" th:text="${item.ptrSn}">2017012102010101</a></td>
+					<td class="cushion_date_end" th:text="${#IntegUtil.dateformat(item.expireDt, 'yyyy.MM.dd')}">2019.02.05</td>
+					<th:block th:if="${item.accumptPoint > 0}">
+						<td class="cushion_type">적립</td>
+						<td class="cushion_point">( + ) <span th:text="${#IntegUtil.toCommaNumber(item.accumptPoint)}">500</span> P</td>
+					</th:block>
+					<th:block th:if="${item.rdmptPoint < 0}">
+						<td class="cushion_type">사용</td>
+						<td class="cushion_point">( - ) <span th:text="${#IntegUtil.toCommaNumber(item.rdmptPoint * -1)}">500</span> P</td>
+					</th:block>
+					<th:block th:if="${item.rdmptPoint > 0}">
+						<td class="cushion_type">사용취소</td>
+						<td class="cushion_point">( + ) <span th:text="${#IntegUtil.toCommaNumber(item.rdmptPoint)}">500</span> P</td>
+					</th:block>
+					<th:block th:if="${item.accumptPoint < 0}">
+						<td class="cushion_type">적립취소</td>
+						<td class="cushion_point">( - ) <span th:text="${#IntegUtil.toCommaNumber(item.accumptPoint * -1)}">500</span> P</td>
+					</th:block>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+				
+		
+		<div class="pbody pagination" th:with="pageVo=${#IntegUtil.initPageInfo(pageVo, 10)}">
+			<a href="javascript:;" onclick="more(1)" class="navi first" th:classappend="${pageVo.isFirstPage}? disabled : null" th:disabled="${pageVo.isFirstPage}? disabled : null">처음</a>
+			<a href="javascript:;" th:onclick="'more(' + ${pageVo.prePage} + ')'" class="navi prev" th:classappend="${!pageVo.hasPrePage}? disabled : null" th:disabled="${!pageVo.hasPrePage}? 'disabled' : null">이전</a>
+			<th:block th:each="page : ${pageVo.pageList}">
+				<a href="javascript:;" th:onclick="'more(' + ${page} + ')'" th:text="${page}" th:classappend="${pageVo.curPage == page}? 'current' : null">2</a>
+			</th:block>
+			<a href="javascript:;" th:onclick="'more(' + ${pageVo.nextPage} + ')'" class="navi next" th:classappend="${!pageVo.hasNextPage}? disabled : null" th:disabled="${!pageVo.hasNextPage}? 'disabled' : null">다음</a>
+			<a href="javascript:;" th:onclick="'more(' + ${pageVo.lastPage} + ')'" class="navi last" th:classappend="${pageVo.isLastPage}? disabled : null" th:disabled="${pageVo.isLastPage}? 'disabled' : null">끝</a>
+		</div>
+</th:block>

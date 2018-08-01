@@ -1,0 +1,32 @@
+<dl class="praise_layer">
+	<dt class="praise_header">
+		{{#xif this.topStoreEvalYn '==' 'Y'}}<span class="flag">BEST</span>{{/xif}}
+		<h3 class="h_title lare">{{ this.storeEvalTitle }}</h3>
+		<div class="layer_flag_praise">
+			{{#each this.storeEvalReason}}
+				<span>{{ this }}</span>
+			{{/each}}
+		</div>
+		<span class="posts_info">
+			<span class="store_name">{{ this.storeName }}</span>
+			<span class="posts_id">{{ this.memberId }}</span>
+			<span class="posts_date">{{ dateFormat this.createdDt }}</span>
+		</span>
+	</dt>
+	<dd class="praise_cont">
+		<div class="attach_img">
+			{{#each this.storeEvalImgUrlList}}
+				<img alt="" src="{{ this }}">
+			{{/each}}
+		</div>
+		<p class="text" id="storeEvalBodyText">
+			{{ this.storeEvalBodyText }}
+		</p>
+		{{#xif this.myStoreEvalYn '==' 'Y' }}
+			<div class="praise_button">
+				<button class="btn_lg_bordered modify" type="button">수정</button>
+				<button class="btn_lg_secondary delete" type="button">삭제</button>
+			</div>
+		{{/xif}}
+	</dd>
+</dl>

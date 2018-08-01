@@ -1,0 +1,17 @@
+{{#each this.list}}
+{{#xif (calc @index '%' 4) '==' 0}}
+<li class="ix-list-item">
+	<ul class="prd_in_img">
+{{/xif}}	
+		<li>
+			<a href="#none" style="background:#f0adb6;">
+				<img alt="{{ planDisplayLineDesc }}" src="{{ bannerImgP1 }}">
+				<p class="text">{{ planDisplayTitle }}</p>
+				<span class="ch_etude_date">{{ dateFormat eventStartDt }} - {{ dateFormat eventEndDt }}</span>
+			</a>
+		</li>
+{{#xif (calc @index '%' 4) '==' 3}}	
+	</ul>
+</li>
+{{/xif}}
+{{/each}}

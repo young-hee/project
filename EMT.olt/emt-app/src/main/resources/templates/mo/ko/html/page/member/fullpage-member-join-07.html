@@ -1,0 +1,32 @@
+<html ap:decorate="~{layout/only-contents}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <div class="layer_popup fullpage" id="sample" style="display: block;">
+                <div class="layer_wrap">
+                    <dl class="layer">
+                        <dt class="layer_title">[선택] 국외이전동의</dt>
+                        <dd class="layer_cont">
+                            <div class="panel terms_area">
+                            	<!--/* 약관영역 */-->
+                            </div>
+                        </dd>
+                    </dl>
+                    <button class="layer_close" type="button" onclick="window.close();">창닫기</button>
+                </div>
+            </div>
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+            <script>
+				AP.modal.agreeTerms({
+					title: '[선택] 국외이전동의',
+					displayCode: '060'
+				});
+            </script>
+        </th:block>
+</body>
+</html>

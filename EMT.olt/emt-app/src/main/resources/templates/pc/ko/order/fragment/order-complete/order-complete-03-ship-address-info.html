@@ -1,0 +1,33 @@
+<dl>
+	<dt class="on">
+		<span>배송정보</span>
+		<button type="button"><span class="sr_only">닫기</span></button>
+	</dt>
+
+	<dd>
+		<div class="cont">
+			<div class="panel bordered gray">
+				<div class="panel_cont ui_table" th:if="${#lists.size(ordShipAddressExList) > 0 }" th:each="ordShipAddressExInfo : ${ordShipAddressExList}">
+					<dl>
+						<dt><b>이름</b></dt>
+						<dd th:text="${ordShipAddressExInfo.recipientName.name1}">홍길동</dd>
+					</dl>
+					<dl>
+						<dt><b>주소</b></dt>
+						<dd th:text="'(' + ${ordShipAddressExInfo.recipientAddress.zipCode} + ') '+ ${ordShipAddressExInfo.recipientAddress.address1} + ${ordShipAddressExInfo.recipientAddress.address2}">(12345) 서울시 서울동 서울로 1234 1234</dd>
+					</dl>
+					<dl>
+						<dt><b>휴대폰번호</b></dt>
+						<dd th:text="${ordShipAddressExInfo.recipientPhoneNo1.phoneNo}">010-0000-0000</dd>
+					</dl>
+					<dl>
+						<dt><b>배송시 요청사항</b></dt>
+						<dd th:if="${#lists.size(ordShipAddressExInfo.ordOtfExList) > 0}"
+							th:each="ordOtfEx : ${ordShipAddressExInfo.ordOtfExList}" th:text="${ordOtfEx.shipMsg}">부재시 경비실에 맡겨주세요.
+						</dd>
+					</dl>
+				</div>
+			</div>
+		</div>
+	</dd>
+</dl>

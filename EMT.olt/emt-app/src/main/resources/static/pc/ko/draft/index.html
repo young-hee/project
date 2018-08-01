@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Etude 시안</title>
+    <style>
+        * {margin:0;padding:0;}
+		img {vertical-align:top;}
+		.wrap {position:relative;margin:0 auto;text-align:center;}
+		.wrap .inner_wrap{position:relative; width:990px; margin:0 auto;}
+		.wrap .mobile_v4 {position:relative;}
+		.wrap .mobile_v4 .type.A {left:140px;}
+		.wrap .mobile_v4 .type.C {left:435px;}
+		.wrap .mobile_v4 .type.A.test {top: 177px; left:721px; width:190px; height: 35px;}
+		.wrap .mobile_v4 .type.C.test {top: 277px; left:721px; width:190px; height: 35px;}
+		.wrap .mobile_v4 .type{top:143px;}
+		.wrap .mobile_v3{position:relative;background:#fafafa;}
+		.wrap .mobile_v3 .type.A {left:435px;}
+		.wrap .mobile_v3 .type{top:143px;}
+		.wrap .mobile_v2{position:relative;}
+		.wrap .mobile_v2 .type.A {left:176px;}
+		.wrap .mobile_v2 .type.B {right:168px;}
+		.wrap .mobile_v2 .type{top:143px;}
+		.wrap .mobile {position:relative;background:#fafafa;}
+		.wrap [class^="mobile"] .link{position:absolute;top:0;bottom:0;left:0; right:0;}
+		.wrap [class^="mobile"] .type {position:absolute;display:block;width:120px;height:213px;}
+		.wrap .mobile .type{top:194px;}
+		.wrap .mobile .type.A {left:30px;}
+		.wrap .mobile .type.A-2 {left:293px;}
+		.wrap .mobile .type.B {left:auto;right:313px}
+		.wrap .mobile .type.C {left:auto;right:50px;}
+		.wrap .pc {position:relative;}
+		.wrap .pc .link{position:absolute;top:0;bottom:0;left:0; right:0;}
+		.wrap .pc .type {position:absolute;top:207px;display:block;width:200px;height:140px;}
+		.wrap .pc .type.A {left:0;}
+		.wrap .pc .type.A-2 {left:263px;}
+		.wrap .pc .type.B {left:auto;right:263px}
+		.wrap .pc .type.C {left:auto;right:0;}
+		.footer {background:#000;text-align:center;}
+    </style>
+</head>
+
+<body>
+
+    <div class="wrapper">
+		<div class="wrap">
+			<img src="images/index01.jpg" alt="" />
+			<div class="mobile_v4">
+				<div class="inner_wrap">
+					<img src="./images/index06.jpg" alt="">
+					<div class="link">
+						<a href="mobile/typeA_v4/index.html" target="_blank" class="type A" data-mobile-href="mobile/typeA_v4/main.html"></a>
+						<a href="mobile/typeC_v4/index.html" target="_blank" class="type C" data-mobile-href="mobile/typeC_v4/main.html"></a>
+						<a href="mobile/typeA_v4/index_test.html" target="_blank" class="type A test" data-mobile-href="mobile/typeA_v4/main_test.html"></a>
+						<a href="mobile/typeC_v4/index_test.html" target="_blank" class="type C test" data-mobile-href="mobile/typeC_v4/main_test.html"></a>
+					</div>
+				</div>
+			</div>
+			<div class="mobile_v3">
+				<div class="inner_wrap">
+					<img src="./images/index05.jpg" alt="">
+					<div class="link">
+						<a href="mobile/typeA_v3/index.html" target="_blank" class="type A" data-mobile-href="mobile/typeA_v3/main.html"></a>
+					</div>
+				</div>
+			</div>
+			<div class="mobile_v2">
+				<div class="inner_wrap">
+					<img src="images/index04.jpg" alt="" />
+					<div class="link">
+						<a href="mobile/typeA_v2/index.html" target="_blank" class="type A" data-mobile-href="mobile/typeA_v2/main.html"></a>
+						<a href="mobile/typeB_v2/index.html" target="_blank" class="type B" data-mobile-href="mobile/typeB_v2/main.html"></a>
+					</div>
+				</div>
+			</div>
+			<div class="mobile">
+				<div class="inner_wrap">
+					<img src="images/index02.jpg" alt="" />
+					<div class="link">
+						<a href="mobile/typeA/index.html" target="_blank" class="type A" data-mobile-href="mobile/typeA/main.html"></a>
+						<a href="mobile/typeA-2/index.html" target="_blank" class="type A-2" data-mobile-href="mobile/typeA-2/main.html"></a>
+						<a href="mobile/typeB/index.html" target="_blank" class="type B" data-mobile-href="mobile/typeB/main.html"></a>
+						<a href="mobile/typeC/index.html" target="_blank" class="type C" data-mobile-href="mobile/typeC/main.html"></a>
+					</div>
+				</div>
+			</div>
+			<div class="pc">
+				<div class="inner_wrap">
+					<img src="images/index03.jpg" alt="" />
+					<div class="link">
+						<a href="pc/typeA/index.html" target="_blank" class="type A"></a>
+						<a href="pc/typeA-2/index.html" target="_blank" class="type A-2"></a>
+						<a href="pc/typeB/index.html" target="_blank" class="type B"></a>
+						<a href="pc/typeC/index.html" target="_blank" class="type C"></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="footer"></div>
+    </div>
+
+    <script src="libs/jquery-1.12.3.min.js"></script>
+    <script src="libs/ixBand_1.1.min.js"></script>
+    <script>
+        if ( $B.ua.SMART_PHONE ) {
+            $( 'a[data-mobile-href]' ).each( function (idx, el) {
+                $( el ).attr( 'href', $(el).data('mobile-href') );
+            });
+        }
+    </script>
+</body>
+</html>

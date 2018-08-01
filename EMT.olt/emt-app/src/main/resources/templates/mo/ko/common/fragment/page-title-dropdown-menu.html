@@ -1,0 +1,119 @@
+<div class="page_title_area">
+	<h2 class="page_title">
+		<span th:text="${gnbMap.get(displayMenuId).menuTitle}" th:if="${pageType == 'category'}" >컨텐츠 페이지 제목</span>
+		<span th:text="${gnbMap.get(groupId).menuTitle}" th:if="${pageType != 'category' and not #lists.isEmpty(groupId)}" >컨텐츠 페이지 제목</span>
+		<span th:text="${pageTitle}" th:if="${pageType != 'category' and #lists.isEmpty(groupId)}" >컨텐츠 페이지 제목</span>
+		<!--/* 2~3뎁스가 있을 경우 */-->
+		<button class="btn_menu" type="button" th:if="${not #lists.isEmpty(categoryType) or not #lists.isEmpty(groupId)}"><span class="sr_only">메뉴 더보기</span></button>
+		<!--/* 2~3뎁스가 있을 경우 */-->
+	</h2>
+	<!--/* 2~3depth가 있을 경우 메뉴 레이어 */-->
+	<div class="menu_layer" th:if="${not #lists.isEmpty(categoryType) or not #lists.isEmpty(groupId)}">
+		<div>
+			<!--/* depth2가 있을경우 : ico 클래스 추가 */-->
+			<ul class="depth1 category"
+			th:class="${pageType == 'category' ? 'depth1 category' : 'depth1'}"
+			th:if="${not #lists.isEmpty(displayMenuId) and not #lists.isEmpty(gnbMap)}">
+				<th:block th:each="cate : ${gnbMap.get(categoryType).submenus}" th:if="${not #lists.isEmpty(gnbMap.get(categoryType))}">
+					<li>
+						<a href="#none" th:href="@{'/display/category/'+ ${cate.displayMenuId}(categoryType=${categoryType}, groupId=${cate.displayMenuId})}"
+						   th:class="${(displayMenuId == cate.displayMenuId and not #lists.isEmpty(cate.submenus)) ? 'ico current' : (upperMenuId == cate.displayMenuId and not #lists.isEmpty(cate.submenus)) ? 'ico on current' : (displayMenuId == cate.displayMenuId) ?  'current' : (not #lists.isEmpty(cate.submenus)) ? 'ico' : ''}"
+						   th:text="${cate.menuTitle}"
+						   th:if="${pageType == 'category'}">아이</a>
+					   <a href="#none" th:href="@{'/display/'+ ${cate.displayMenuId}(displayMenuId=${cate.displayMenuId}, categoryType=${categoryType}, groupId=${cate.displayMenuId})}"
+					   th:class="${(groupId == cate.displayMenuId) ? 'current' : ''}"
+					   th:text="${cate.menuTitle}"
+					   th:unless="${pageType == 'category'}">아이</a>
+						<div class="depth2" th:if="${not #lists.isEmpty(cate.submenus) and pageType == 'category'}">
+							<ul>
+								<li>
+									<a href="#" th:href="@{'/display/category/'+ ${cate.displayMenuId}(categoryType=${categoryType})}" th:class="${displayMenuId == cate.displayMenuId ? 'on' : ''}">전체</a>
+								</li>
+								<th:block th:each="subcate : ${cate.submenus}">
+									<li>
+										<a href="#" th:href="@{'/display/category/'+ ${subcate.displayMenuId}(upperMenuId=${cate.displayMenuId}, categoryType=${categoryType})}"
+										   th:text="${subcate.menuTitle}" th:class="${displayMenuId == subcate.displayMenuId ? 'on' : ''}">싱글섀도우</a>
+									</li>
+								</th:block>
+							</ul>
+						</div>
+					</li>
+				</th:block>
+			</ul>
+
+			<!-- /* 유형별 메뉴 퍼블리싱 */ -->
+			<ul class="depth1" th:if="${#lists.isEmpty(displayMenuId) and not #lists.isEmpty(gnbMap)}">
+				<li><a href="#none" class="ico current">아이</a><!--/* 현재페이지와 일치하는 a태그의 current class 추가 */-->
+					<div class="depth2">
+						<ul>
+							<li><a href="#">전체</a></li>
+							<li><a href="#">싱글섀도우1</a></li>
+							<li><a href="#">아이섀도우</a></li>
+							<li><a href="#">마스카라</a></li>
+							<li><a href="#">아이라이너</a></li>
+							<li><a href="#">아이브로우</a></li>
+							<li><a href="#">아이프라이머</a></li>
+						</ul>
+					</div>
+				</li>
+				<li><a href="#none" class="ico">립</a>
+					<div class="depth2">
+						<ul>
+							<li><a href="#">전체</a></li>
+							<li><a href="#">싱글섀도우2</a></li>
+							<li><a href="#">아이섀도우</a></li>
+						</ul>
+					</div>
+				</li>
+				<li><a href="#none" class="ico">페이스</a>
+					<div class="depth2">
+						<ul>
+							<li><a href="#">전체</a></li>
+							<li><a href="#">싱글섀도우3</a></li>
+							<li><a href="#">아이섀도우</a></li>
+							<li><a href="#">마스카라</a></li>
+							<li><a href="#">아이라이너</a></li>
+						</ul>
+					</div>
+				</li>
+				<li><a href="#none" class="ico">네일</a>
+					<div class="depth2">
+						<ul>
+							<li><a href="#">전체</a></li>
+							<li><a href="#">싱글섀도우4</a></li>
+							<li><a href="#">아이섀도우</a></li>
+							<li><a href="#">마스카라</a></li>
+						</ul>
+					</div>
+				</li>
+				<li><a href="#none">스킨케어</a></li>
+				<li><a href="#none">팩/마스크</a></li>
+				<li><a href="#none">클렌징</a></li>
+				<li><a href="#none">바디헤어</a></li>
+				<li><a href="#none">향수</a></li>
+				<li><a href="#none" class="ico">화장소품</a>
+					<div class="depth2">
+						<ul>
+							<li><a href="#">전체</a></li>
+							<li><a href="#">싱글섀도우</a></li>
+							<li><a href="#">아이섀도우</a></li>
+							<li><a href="#">마스카라</a></li>
+							<li><a href="#">아이라이너</a></li>
+							<li><a href="#">아이브로우</a></li>
+							<li><a href="#">아이프라이머</a></li>
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<!--/* 2~3depth가 있을 경우 메뉴 레이어 */-->
+	<div class="util_menu">
+		<button type="button" class="btn search"><span class="sr_only">검색</span></button>
+		<!-- /* 장바구니가 노출될 경우 */ -->
+		<a href="/cart/cartList" class="btn cart"><span class="sr_only">장바구니</span><span class="count" style="display:none;"></span></a>
+		<!-- /* 장바구니가 노출될 경우 */ -->
+	</div>
+	<button class="btn_previous" type="button"></button>
+</div>

@@ -1,0 +1,67 @@
+<html ap:decorate="~{layout/layout-contents}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page contents -->
+            <div class="ap_contents mypage">
+                <div class="panel none_bdr">
+                    <div class="title_wrap">
+                        <h3 class="h_title page">나의 문의 내역</h3>
+                        <ul class="list_bullet_dot">
+                            <li>1:1 문의에 대한 답변을 확인하실 수 있습니다.</li>
+                            <li>궁금하신 내용이 있으시면 글을 등록해 주세요.</li>
+                        </ul>
+                        <br>
+                        <a href="#none" class="btn_md_primary w100p">1:1 상담 문의하기</a> <!-- 02-22 수정 -->
+                    </div>                    
+                </div>                 
+                <hr class="div white">
+               	<div class="panel">
+               		<div class="ui_multiple_date_picker">
+						<div class="date_btn_set">
+							<span><input type="radio" class="select_range_date" name="radio4" id="radio4_0" value="all"><label for="radio4_0">전체</label></span>
+							<span><input type="radio" class="select_range_date" name="radio4" id="radio4_1" value="1weeks" checked><label for="radio4_1">1주일</label></span>
+							<span><input type="radio" class="select_range_date" name="radio4" id="radio4_2" value="1months"><label for="radio4_2">1개월</label></span>
+							<span><input type="radio" class="select_range_date" name="radio4" id="radio4_3" value="3months"><label for="radio4_3">3개월</label></span>
+							<span><input type="radio" class="select_range_date" name="radio4" id="radio4_4" value="6months"><label for="radio4_4">6개월</label></span>
+							<span><input type="radio" class="select_range_date" name="radio4" id="radio4_5" value="1years"><label for="radio4_5">12개월</label></span>
+						</div>
+						<br>
+						<div class="input_date_group">
+							<div style="display:none;">
+								<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+								<input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+							</div>
+						</div>
+					</div>
+
+               		<!-- 질문이 없을 경우 -->
+               		<div class="panel notice">
+						<i class="ico"></i>
+						<p class="text">선택하신 기간에 문의하신 내역이 없습니다.</p>
+					</div>
+               	</div>
+            </div>
+            <!-- // page contents -->
+
+            <!-- 마이페이지 맵   -->
+           	<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+           	<!-- // 마이페이지 맵 -->
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script>
+				//multiple date picker적용
+				$( '.ui_multiple_date_picker' ).multipleDatePicker({
+					defaultRangeDate: '1months',
+					minDate: moment().subtract( 50, 'years' )
+				}).on( 'multiple-date-picker-change', function (e) {
+					console.log( e.type, e.date );
+				});
+			</script>
+        </th:block>
+</body>
+</html>

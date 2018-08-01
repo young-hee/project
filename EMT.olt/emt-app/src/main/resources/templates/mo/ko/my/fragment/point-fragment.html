@@ -1,0 +1,24 @@
+<th:block layout:fragment="beauty-point-list">
+	<th:block th:if="${not #lists.isEmpty(ptBrkd.ptTrBrkdInqVo)}">
+		<div class="pbody my_point_status table_layout" layout:fragment="beauty-point-sum">
+			<dl>
+				<dt>적립포인트</dt>
+				<dd th:text="'+' + ${#IntegUtil.sumAmountPt(ptBrkd.ptTrBrkdInqVo, 3)}">+270</dd>
+			</dl>
+			<dl>
+				<dt>사용포인트</dt>
+				<dd th:text="${#IntegUtil.sumAmountPt(ptBrkd.ptTrBrkdInqVo, 4)}">-30</dd>
+			</dl>
+		</div>
+		
+		
+   		<div ap:replace="~{my/fragment/beauty-point-body :: beauty-point-body}"></div>
+	</th:block>
+	
+	<th:block th:if="${#lists.isEmpty(ptBrkd.ptTrBrkdInqVo)}">
+		<div class="pbody panel notice">
+			<i class="ico"></i>
+			<p class="text">선택하신 기간에 해당하는 내역이 없습니다.</p>
+		</div>
+	</th:block>
+</th:block>

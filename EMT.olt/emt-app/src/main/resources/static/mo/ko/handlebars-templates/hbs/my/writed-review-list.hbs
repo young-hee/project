@@ -1,0 +1,48 @@
+{{#each this.prodReviewList}}
+	<div class="review_box" name="reviewSn_{{ this.prodReviewSn }}">
+		<div class="review_wrap_02">
+			<img src="{{ this.repProdImage }}" alt="">
+			{{#if this.prodName}}
+				<span>{{ this.prodName }}</span>
+			{{/if}}
+		</div>
+		<dl>
+			<dt>
+				<span class="clear">
+					<span class="ui_rating small">
+						<span class="heart">
+							{{#for 5}}
+								<span class="heart_wrap {{#xif ../scope '>' for-index}}on{{/xif}}"><span class="sr_only"> {{ calc for-index '+' 1 }}점</span></span>
+							{{/for}}
+						</span>
+						{{#xif this.topReviewYn '==' 'Y'}}
+							<strong class="review_best">BEST</strong>
+						{{/xif}}
+					</span>
+					<span class="summary">
+						<span>{{ this.memberId }}</span><span>{{ dateFormat this.prodReviewRegistDt }}</span>
+					</span>
+				</span>
+				<span class="title">
+					{{#xif this.prodReviewTypeCode '==' 'Pur'}}
+						<span class="badge">구매리뷰</span>
+					{{/xif}}
+					{{#xif this.prodReviewTypeCode '==' 'Prod'}}
+						<span class="badge">상품리뷰</span>
+					{{/xif}}
+					{{#xif this.prodReviewTypeCode '==' 'ExperienceGrp'}}
+						<span class="badge">체험단리뷰</span>
+					{{/xif}}
+					<b>{{ this.prodReviewTitle }}</b>
+				</span>
+			</dt>
+			<dd>
+				<p class="text">{{ ellipsis 40 this.prodReviewBodyText }}</p>
+			</dd>
+			<dd class="thumbnail">
+				<button type="button" class="button_review_more" data-prod-review-sn="{{ this.prodReviewSn }}">상세보기</button>
+				<button type="button" class="button_review_del" data-prod-review-sn="{{ this.prodReviewSn }}">삭제</button>
+			</dd>
+		</dl>
+	</div>
+{{/each}}

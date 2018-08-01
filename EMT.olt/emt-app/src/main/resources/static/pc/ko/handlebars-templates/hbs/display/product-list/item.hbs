@@ -1,0 +1,374 @@
+{{#each this.list}}
+	<li>
+		{{#xif this.displayMenuId '==' 'best' }}
+			<div class="ranking {{#xif this.ranking '==' 1 }}large{{/xif}}{{#xif this.ranking '==' 2 }}large{{/xif}}">
+				<span>{{ this.ranking }}</span>
+			</div>
+		{{/xif}}
+
+		{{#xif this.displayMenuId '==' 'color_collection_shop' }}
+			<div class="ranking">
+				<span>{{ this.ranking }}</span>
+			</div>
+		{{/xif}}
+
+		{{#xif this.displayMenuId '==' 'hotdeal' }}
+			<!-- // 핫딜 타이머 -->
+			<div class="item_state">
+				<div>
+					<span><i class="ico_hot"></i><span class="sr_only">핫딜</span></span>
+					<span class="ui_remain_timer">
+						<span class="hour complete">00</span>:<span class="minute complete">00</span>:<span class="second complete">00</span>
+					</span>
+				</div>
+			</div>
+			<!-- 핫딜 타이머 //-->
+
+			<!-- // 구매, 남은 수량 -->
+			<p class="sale_count"></p>
+			<!-- 구매, 남은 수량 //-->
+		{{/xif}}
+
+		<div class="item">
+
+			<!--// 상품 이미지 -->
+			<div class="item_images">
+				<ul class="loading white" style="display:none">
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+
+				{{#xif this.displayMenuId '==' 'color_collection_shop' }}
+
+					<!--// 컬러컬렉션 -->
+
+					<!-- view column2 -->
+					{{#each this.products }}
+						{{#xif ../selectedProdSn '==' this.prodSn }}
+							<a href="{{ productDetailPath this.onlineProdSn this.prodSn }}" class="lazy_load_wrap first_img">
+								<img class="lazy_load" src="" data-src="{{ this.prodImages.[0].imgUrl }}" alt="{{ this.prodName }}">
+							</a>
+						{{/xif}}
+					{{/each}}
+
+					<!-- 컬러컬렉션 //-->
+
+				{{else}}
+
+					<!--// 공용 ( 컬러컬렉션 제외 ) -->
+
+					<!-- view column2 -->
+					<div class="slide goods_slide" data-ix-options="view-length:1; default-index:{{ calc this.repImgNo '-' 1 }}">
+						{{#xif this.displayMenuId '==' 'hotdeal'}}
+							<!-- 핫딜 -->
+							{{#each this.products }}
+								{{#xif ../selectedProdSn '==' this.prodSn }}
+									{{{ include 'display.product-list.item-slide' this }}}
+								{{/xif}}
+							{{/each}}
+						{{else}}
+							<!-- 핫딜 제외 -->
+							{{{ include 'display.product-list.item-slide' this }}}
+						{{/xif}}
+					</div>
+
+					<!-- view type2 -->
+					{{#xif ../prodListUnitCode '==' 'Prod' }}
+						<a href="{{ productDetailPath this.onlineProdSn this.prodSn}}" class="lazy_load_wrap first_img">
+							<img class="lazy_load" src="" data-src="{{ this.prodImages.[0].imgUrl }}" alt="{{ this.onlineProdName }}">
+						</a>
+					{{else}}
+						<a href="{{ productDetailPath this.onlineProdSn }}" class="lazy_load_wrap first_img">
+							<img class="lazy_load" src="" data-src="{{ this.onlineProdImages.[0].imgUrl }}" alt="{{ this.onlineProdName }}">
+						</a>
+					{{/xif}}
+
+					<!-- 공용 ( 컬러컬렉션 제외 ) //-->
+				{{/xif}}
+
+				<!-- 일시품절일경우 -->
+				{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+					<div class="item_state out_of_stock">일시품절</div>
+				{{/xif}}
+			</div>
+			<!-- 상품 이미지 //-->
+			<div class="info_box">
+
+			<!--// 상품명 -->
+				{{#xif this.displayMenuId '!=' 'beauty_select_shop'}}
+				{{#xif this.displayMenuId '!=' 'hotdeal'}}
+
+					{{#xif this.flags.length '>' 0}}
+						<div class="flag_set">
+							{{#each this.flags}}
+								{{#xif this.prodFlagCode '==' 'icon_reco_new'}}
+									{{#xif ../displayMenuId '!=' 'new'}}
+										<span class="new">신상품</span>
+									{{/xif}}
+								{{/xif}}
+								{{#xif this.prodFlagCode '==' 'icon_reco_best_w'}}
+									{{#xif ../displayMenuId '!=' 'best'}}
+									{{#xif ../displayMenuId '!=' 'color_collection_shop'}}
+										<span class="best">베스트</span>
+									{{/xif}}
+									{{/xif}}
+								{{/xif}}
+								{{#xif this.prodFlagCode '==' 'icon_pr_prod'}}
+									<span class="event">이벤트</span>
+								{{/xif}}
+								{{#xif this.prodFlagCode '==' 'icon_reco_md'}}
+									<span class="md">MD추천</span>
+								{{/xif}}
+								{{#xif this.prodFlagCode '==' 'icon_reco_online'}}
+									{{#xif ../displayMenuId '!=' 'online_only'}}
+										<span class="online">온라인전용</span>
+									{{/xif}}
+								{{/xif}}
+							{{/each}}
+						</div>
+					{{/xif}}
+
+				{{/xif}}
+				{{/xif}}
+				<div class="title_area">
+					<p class="s_title">
+						{{#xif this.saleDisplayStatus '==' 'WaitingSale' }}
+							<em class="tag">[곧 출시!]</em>
+						{{/xif}}
+						{{#xif (eq this.prodTypeCode 'Presale') '&&' (eq this.saleDisplayStatus 'OnSale')}}
+							<em class="tag">[예약판매중]</em>
+						{{/xif}}
+						<span>{{{ this.linePromoDesc }}}</span>
+					</p>
+					<h3 class="h_title">{{ this.onlineProdName }}</h3>
+				</div>
+				<!-- 상품명 //-->
+
+				<!--// 옵션 -->
+				{{#xif this.displayMenuId '!=' 'color_collection_shop' }}
+				{{#xif this.displayMenuId '!=' 'beauty_point_shop' }}
+				{{#xif this.displayMenuId '!=' 'hotdeal' }}
+
+					<!--// 공용 ( 핫딜, 컬러컬렉션 제외 ) -->
+
+					<div class="item_option">
+						{{#xif this.productCount '>' 1 }}
+							{{#xif this.colorGroups.length '>' 0 }}
+								<p class="color_name">{{ this.colorGroups.length }} colors</p>
+							{{else}}
+								<p class="color_name">{{ this.productCount }} options</p>
+							{{/xif}}
+						{{/xif}}
+
+						{{#xif this.isSelectOption '==' false}}
+							<div class="option_name" style="display: none">
+								<span class="flag_name"><em class="flag_new"></em></span>
+							</div>
+
+							<div class="color_chips">
+								<p class="btn_more"><button type="button" class="btn_color_more"><span></span><span class="sr_only">컬러 더보기</span></button></p>
+
+								<!--/* 컬러칩 */-->
+								<div class="chips slide" data-ix-options="view-length:1;">
+									<div class="ix-list-viewport">
+										<ul class="ix-list-items">
+										</ul>
+									</div>
+									<div class="ix-controller">
+										<div class="slide_direction">
+											<a class="ix-btn-prev" href="#prev"><span class="sr_only">Prev</span></a>
+											<a class="ix-btn-next" href="#next"><span class="sr_only">Next</span></a>
+										</div>
+									</div>
+								</div>
+
+								<!--/* 컬러군 */-->
+								<div class="option_select">
+									<div class="color_group ui_select" data-not-label-change="false">
+										<input type="hidden" name="">
+										<button type="button"><span style="background-color:#e1e1e1" data-color="e1e1e1"></span><span>컬러군 선택</span></button>
+										<ul class="select_options">
+											<li class="select_option"><code class="label_markup" style="display:none">전체</code><a data-value="00"><span style="background-color:#999999" data-color="999999">ALL</span><span>전체</span></a></li>
+											{{#each this.colorGroups}}
+												<li class="select_option">
+													<code class="label_markup" style="display:none">{{ this.colorGroupName }}</code>
+													<a data-value="{{ this.colorGroupCode }}">
+														<span style="background-color:#{{ this.colorGroupCode }}" data-color="{{ this.colorGroupCode }}"></span>
+														<span>{{ this.colorGroupName }}</span>
+													</a>
+												</li>
+											{{/each}}
+										</ul>
+									</div>
+									<button class="btn_cart" type="button">담기</button>
+								</div>
+								<p class="option_close"><button type="button">닫기</button></p>
+							</div>
+						{{else}}
+							<div class="option_wrap">
+								<div class="select_wrap"><!-- 선택시 open 클래스  -->
+									<select name="options" tabindex="-1" title="상품 옵션 선택">
+										<option value="">옵션 선택</option>
+										{{#each this.products}}
+											<option value="{{ this.prodSn }}">{{ this.prodName }}</option>
+										{{/each}}
+									</select>
+								</div>
+							</div>
+						{{/xif}}
+					</div>
+
+					<!-- 공용 ( 핫딜, 컬러컬렉션 제외 ) //-->
+
+				{{/xif}}
+				{{/xif}}
+				{{/xif}}
+
+				{{#xif this.displayMenuId '==' 'beauty_point_shop' }}
+
+					<!-- 뷰티포인트샵 //-->
+
+					{{#xif this.singleUnitProdYn '==' 'N' }}
+						<div class="item_option type2">
+							{{#each this.products }}
+								{{#xif ../selectedProdSn '==' this.prodSn }}
+									{{#xif this.colorchipTypeCode '==' 'RGB'}}
+										<span class="img" style="background-color:#{{ this.rgbVal }}">
+											<img alt="컬러명" src="{{ absolutePath '/images/common/transparent_40x40.png' }}">
+										</span>
+									{{/xif}}
+									{{#xif this.colorchipTypeCode '==' 'Img'}}
+										<span class="img">
+											<img alt="컬러명" src="{{ this.colorchipImg }}">
+										</span>
+									{{/xif}}
+									<span class="name">{{ this.prodName }}</span>
+								{{/xif}}
+							{{/each}}
+						</div>
+					{{/xif}}
+
+				{{/xif}}
+
+				{{#xif this.displayMenuId '==' 'color_collection_shop' }}
+
+					<!--// 컬러컬렉션 -->
+
+					<div class="item_option type2">
+						{{#each this.products }}
+							{{#xif ../selectedProdSn '==' this.prodSn }}
+								{{#xif this.colorchipTypeCode '==' 'RGB'}}
+									<span class="img" style="background-color:#{{ this.rgbVal }}">
+										<img alt="컬러명" src="{{ absolutePath '/images/common/transparent_40x40.png' }}">
+									</span>
+								{{/xif}}
+								{{#xif this.colorchipTypeCode '==' 'Img'}}
+									<span class="img">
+										<img alt="컬러명" src="{{ this.colorchipImg }}">
+									</span>
+								{{/xif}}
+								<span class="name">{{ this.prodName }}</span>
+							{{/xif}}
+						{{/each}}
+					</div>
+
+					<!-- 컬러컬렉션 //-->
+
+				{{/xif}}
+
+				{{#xif this.displayMenuId '==' 'hotdeal' }}
+
+					<!-- 핫딜 -->
+
+					<div class="item_option type2">
+						{{#each this.products }}
+							{{#xif ../selectedProdSn '==' this.prodSn }}
+								{{#xif this.colorchipTypeCode '==' 'RGB'}}
+									<span class="img" style="background-color:#{{ this.rgbVal }}">
+										<img alt="컬러명" src="{{ absolutePath '/images/common/transparent_40x40.png' }}">
+									</span>
+								{{/xif}}
+								{{#xif this.colorchipTypeCode '==' 'Img'}}
+									<span class="img">
+										<img alt="컬러명" src="{{ this.colorchipImg }}">
+									</span>
+								{{/xif}}
+								<span class="name">{{ this.prodName }}</span>
+							{{/xif}}
+						{{/each}}
+					</div>
+
+					<!-- 핫딜 //-->
+
+				{{/xif}}
+				<!-- 옵션 //-->
+
+				<!--// 가격 -->
+				<div class="price_area">
+					<div>
+						{{#xif this.displayMenuId '==' 'beauty_point_shop' }}
+							<!--// 뷰티포인트샵 -->
+							<div class="price">
+								<strong>
+									{{ numberFormat this.products.[0].exchMembershipPoint }}<em>P</em>
+								</strong>
+							</div>
+							<!-- 뷰티포인트샵 //-->
+
+						{{else}}
+
+							{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+								<span class="discount">
+									{{#with (calc this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate '+' this.onlineProdPriceSummary.minMemberLevelDiscountRate '+' this.onlineProdPriceSummary.minOnlineMemberDiscountRate) as |minRate|}}
+										{{#with (calc ../onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.maxMemberLevelDiscountRate '+' ../onlineProdPriceSummary.maxOnlineMemberDiscountRate) as |maxRate|}}
+											{{#xif maxRate '!=' 0}}
+												<strong class="from">
+													{{#xif minRate '!=' maxRate}}
+														<em>~</em>
+													{{/xif}}
+												</strong>
+												<strong class="to">
+													{{ maxRate }}<em>%</em>
+												</strong>
+											{{/xif}}
+										{{/with}}
+									{{/with}}
+								</span>
+							{{/xif}}
+							<div class="price">
+								{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+									<del>{{ numberFormat this.onlineProdPriceSummary.minBeforeOnlineSalePrice }}<em>원</em></del>
+								{{/xif}}
+								<strong>
+									{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>원{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}}~{{/xif}}</em>
+								</strong>
+
+							</div>
+
+						{{/xif}}
+					</div>
+					<div>
+						{{#xif ../prodListUnitCode '==' 'Prod' }}
+							<a href="{{ productDetailPath this.onlineProdSn this.prodSn }}&review=true" class="btn_review"><span class="sr_only">구매후기</span>
+								{{#xif this.reviewCount '>' 0}}
+									<span class="bubble">{{ this.reviewCount }}</span>
+								{{/xif}}
+							</a>
+						{{else}}
+							<a href="{{ productDetailPath this.onlineProdSn }}&review=true" class="btn_review"><span class="sr_only">구매후기</span>
+								{{#xif this.reviewCount '>' 0}}
+									<span class="bubble">{{ this.reviewCount }}</span>
+								{{/xif}}
+							</a>
+						{{/xif}}
+						<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+					</div>
+				</div>
+				<!--가격 //-->
+
+			</div>
+
+		</div>
+	</li>
+{{/each}}

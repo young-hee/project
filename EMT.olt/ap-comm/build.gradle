@@ -1,0 +1,36 @@
+plugins {
+	id 'maven'
+}
+
+ext {
+	snapshotUrl = (System.properties.snapshotRepository != null) ? System.properties.snapshotRepository : 'http://172.28.6.29:8081/nexus/content/repositories/snapshots/'
+	releaseUrl = (System.properties.releaseRepository != null) ? System.properties.releaseRepository : 'http://172.28.6.29:8081/nexus/content/repositories/releases/'
+}
+
+dependencies {
+
+	compile("org.springframework.boot:spring-boot-autoconfigure:$springBootVersion")
+
+	compileOnly("javax.servlet:javax.servlet-api:3.1.0")
+	compileOnly("org.springframework.boot:spring-boot-starter-tomcat:$springBootVersion")
+}
+
+uploadArchives {
+	repositories.mavenDeployer {
+		repository(url: releaseUrl) {
+			authentication(userName: 'emtuser', password: 'emtuser')
+		}
+		snapshotRepository(url: snapshotUrl) {
+			authentication(userName: 'emtuser', password: 'emtuser')
+		}
+	}
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+	classifier = 'sources'
+	from sourceSets.main.allSource
+}
+
+artifacts {
+	archives sourcesJar
+}

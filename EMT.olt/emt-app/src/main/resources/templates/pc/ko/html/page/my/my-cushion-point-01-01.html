@@ -1,0 +1,96 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- mypage sitemap -->
+            <th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+            <!-- //  mypage sitemap -->
+
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+
+            <!-- page contents -->
+            <div class="ap_contents mypage cushion_point_list">
+				<div class="pearl_guide_view align_center">
+					<button type="button" class="btn_md_primary">쿠션 포인트 안내</button>
+				</div>
+
+				<div class="user_cushion_total">
+					<div class="cushion_text">홍길동 님의 현재 쿠션 포인트</div>
+					<div class="cushion_won"><strong>100,000</strong> <span>P</span></div><!--/*20180625 : 포인트 단위 원을 P로 수정*/-->
+				</div>
+
+				<div class="ui_multiple_date_picker date_picker_cushion">
+					<div class="date_pic_left">
+						<div class="date_btn_set">
+							<span><input type="radio" class="select_range_date" name="radio5" id="radio5_0" value="all" checked=""><label for="radio5_0">전체</label></span>
+							<span><input type="radio" class="select_range_date" name="radio5" id="radio5_1" value="1weeks"><label for="radio5_1">1주일</label></span>
+							<span><input type="radio" class="select_range_date" name="radio5" id="radio5_2" value="1months"><label for="radio5_2">1개월</label></span>
+							<span><input type="radio" class="select_range_date" name="radio5" id="radio5_3" value="3months"><label for="radio5_3">3개월</label></span>
+							<span><input type="radio" class="select_range_date" name="radio5" id="radio5_4" value="6months"><label for="radio5_4">6개월</label></span>
+							<span><input type="radio" class="select_range_date" name="radio5" id="radio5_5" value="1years"><label for="radio5_5">12개월</label></span>
+						</div>
+						<div class="input_date_group">
+							<div class="input_wrap" style="display:none;">
+								<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+								<input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+							</div>
+							<div class="date_info_area">
+								<span class="sr_only">시작일</span> <span class="start_date"></span> ~ <span class="sr_only">종료일</span> <span class="end_date"></span> <span class="date_text">까지의 사용 및 적립 내역</span>
+							</div>
+						</div>
+					</div>
+
+					<!--내역이 없을때 는 숨김처리-->
+					<!--<div class="date_pic_right">-->
+						<!--<div><span>적립 쿠션 포인트</span> <strong class="num">7,000</strong><span>P</span></div>-->
+						<!--<span class="vline"></span>-->
+						<!--<div><span>사용 쿠션 포인트</span> <strong class="num">8,000</strong><span>P</span></div>-->
+					<!--</div>-->
+				</div>
+
+				<div class="panel notice">
+					<i class="ico"></i>
+					<p class="text font_lg">
+						<span>선택하신 기간에 해당하는 내역이 없습니다.</span>
+					</p>
+				</div>
+
+				<div class="panel gray mgt40">
+					<div class="panel_cont">
+						<h3 class="h_title sub">쿠션포인트 유의사항</h3>
+						<br>
+						<ul class="list_bullet_dot">
+							<li>포인트 적립 : 쿠션 본품, 리필 결제금액의 30% 적립</li>
+							<li>포인트 사용 : 항시 100% 사용, 타 할인 및 쿠폰과 중복 적용 불가</li>
+							<li>이용 가능 매장 : 에뛰드하우스 매장 / 온라인쇼핑몰 (PC, 모바일)</li>
+							<li>이용 방법 : 매장 – 주문시 본인 확인 후 사용/적립 가능<br>온라인쇼핑몰 – 주문 결제시 쿠션포인트 사용/적립 가능</li>
+							<li>쿠션 포인트 제도는 에뛰드 뷰티포인트 통합회원에게만 서비스 됩니다. &nbsp;&nbsp;<a href="#none" class="cushion_bottom_link">[뷰티포인트 통합회원안내]</a></li>
+							<li>쿠션 포인트는 적립일로 부터 6개월 경과 시 소멸됩니다. (회원 탈퇴 시 소멸)</li>
+							<li>쿠션 포인트 사용 시 타 프로모션 및 쿠폰과 중복 사용할 수 없으며 분할 사용하실 수 없습니다.(보유 포인트 전액 사용)</li>
+							<li>쿠션 포인트 사용 시 뷰티포인트 적립 및 사용이 불가합니다.</li>
+							<li>쿠션 포인트는 최대 10만점까지 적립(보유) 가능합니다.</li>
+						</ul>
+					</div>
+				</div>
+
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+            <script>
+				//multiple date picker적용
+				$( '.ui_multiple_date_picker' ).multipleDatePicker({
+					defaultRangeDate: 'all',
+					minDate: moment().subtract( 50, 'years' )
+				}).on( 'multiple-date-picker-change', function (e) {
+					console.log( e.type, e.date );
+				});
+            </script>
+        </th:block>
+</body>
+</html>

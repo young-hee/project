@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="description" content="">
+		<meta name="keywords" content="">
+		<meta name="author" content="">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+		<title>CONCEPT A (Mobile)</title>
+
+		<script type="text/javascript" src="./libs/jquery.min.js"></script>
+		<link href="./css/etude.css" rel="stylesheet" type="text/css"></link>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="aside">
+				<div class="bg"></div>
+				<div class="menu">
+					<img src="images/menu.png">
+					<a class="close" href="#none"><img src="images/btn_aside_close.png"></a>
+				</div>
+			</div>
+			<div id="conatainer" class="sub1">
+				<a href="detail.html">
+					<div class="sub1_top"><img src="images/sub1_top.jpg"></div>
+					<div class="sub1_filter"><img src="images/sub1_fixed.jpg"></div>
+					<div class="sub1_bottom"><img src="images/sub1_bottom.jpg"></div>
+				</a>
+			</div>
+			<div id="bottom">
+				<a class="btn" href="#none"></a>
+				<a class="top" href="#none"></a>
+				<img src="images/bottom.png">
+			</div>
+		</div>
+
+		<script>
+			var $filter = $( '.sub1_filter' ),
+				$sub1Top = $( '.sub1_top' );
+			$( window ).on( 'scroll', function (e) {
+				var scrollY = $( window ).scrollTop(),
+					topPos;
+
+				// top
+				if ( scrollY > $sub1Top.height() ) {
+					$filter.addClass( 'fixed' );
+				} else {
+					$filter.removeClass( 'fixed' );
+				}
+				oldScollY = scrollY;
+			});
+		</script>
+
+		<script type="text/javascript" src="./js/etude.js"></script>
+	</body>
+</html>

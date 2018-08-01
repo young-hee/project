@@ -1,0 +1,82 @@
+<html ap:decorate="~{layout/only-contents}" th:with="_jsfile='search'">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+
+		<div class="layer_popup fullpage search_layer">
+			<div class="layer_wrap">
+				<dl class="layer">
+					<dt class="sr_only">통합검색</dt>
+					<dd class="layer_cont">
+						<div class="search_header">
+							<p class="text search_title">검색어를 입력하세요.</p>
+							<!-- 검색폼 -->
+							<fieldset class="search_form integrated_search">
+								<legend class="sr_only">검색</legend>
+								<input type="text" title="검색어 입력" placeholder="검색어를 입력하세요." />
+								<button class="input_del"><span class="sr_only">검색어 삭제</span></button>
+								<button type="button" class="btn_search"></button>
+							</fieldset>
+						</div>
+						<!-- 자동 완성 레이어 -->
+						<div class="automatic_completion">
+							<ul>
+								<li><a href="#none"><b>립스틱</b></a></li>
+								<li><a href="#none"><b>립스틱</b> 세트</a></li>
+								<li><a href="#none">스마트하게 레드 <b>립스틱</b> 바르기</a></li>
+							</ul>
+						</div>
+						<!-- // 자동 완성 레이어 -->
+						<div class="search_cont">
+							<a href="#none" class="search_title category">카테고리 검색</a>
+							<dl>
+								<dt class="search_title pop">인기 검색어</dt>
+								<dd class="keywords">
+									<a href="#none">미니투매치</a>
+									<a href="#none">럭키퍼피아이즈</a>
+									<a href="#none">퍼스널립스틱</a>
+									<a href="#none">콜라겐 스킨케어</a>
+									<a href="#none">울트라바이올렛</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt class="search_title color">컬러검색</dt>
+								<dd>
+									<div class="color_chip caption">
+										<a href="#none" style="background-color:#f06da1"><span>핑크</span></a>
+										<a href="#none" style="background-color:#e9224e"><span>레드</span></a>
+										<a href="#none" style="background-color:#ff7a2d"><span>오렌지</span></a>
+										<a href="#none" style="background-color:#b261e4"><span>보라</span></a>
+										<a href="#none" style="background-color:#1f1d20"><span>블렉/<br>그레이</span></a>
+										<a href="#none" style="background-color:#8e502f"><span>브라운</span></a>
+										<a href="#none" style="background-color:#8fe48a"><span>그린</span></a>
+										<a href="#none" style="background-color:#3a6abf"><span>블루</span></a>
+										<a href="#none" style="background-color:#f9c361"><span>옐로우/<br>베이지</span></a>
+										<a href="#none" style="background-color:#fff"><span>화이트/<br>실버</span></a>
+									</div>
+								</dd>
+							</dl>
+						</div>
+						<!-- 배너 영역 -->
+						<div class="banner">
+							<a href="#none"><img ap:src="@{/images/dummy/img_banner.jpg}" alt=""></a>
+						</div>
+					</dd>
+				</dl>
+				<button class="layer_close" type="button">레이어 닫기</button>
+			</div>
+		</div>
+	</div>
+
+    <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+    <th:block ap:fragment="layout-endpoint">
+
+		<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+		<script>
+			new AP.SearchLayer().open({});
+		</script>
+	</th:block>
+
+</body>
+</html>

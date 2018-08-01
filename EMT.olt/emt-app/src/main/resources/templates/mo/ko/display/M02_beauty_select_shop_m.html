@@ -1,0 +1,111 @@
+<html ap:decorate=~{layout/layout-category} th:with="_jsfile='product-list'">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents prd_list">
+		<!-- 02-28 소카테고리 삭제 메뉴레이어로 통합
+		<th:block ap:replace="~{fragment/product/category}"/>
+		<!--//소카테고리-->
+
+		<!--슬라이드 배너-->
+		<th:block th:if="${not #lists.isEmpty(cornersMap)}">
+			<div class="slide prd_list_banner" data-ix-options="auto-play:true;view-length:1;">
+				<div class="ix-list-viewport">
+					<ul class="ix-list-items">
+						<th:block th:each="corner : ${cornersMap.get('M02_beauty_select_shop_m.1')}">
+							<th:block th:each="contents : ${corner.contents}">
+								<th:block th:if="${contents.menuPageCornerContentsId == 'M02_beauty_select_shop_m.1.1'}">
+									<li class="ix-list-item" th:style="'background-color:#' + ${contents.bgColor}">
+										<a href="#none" th:href="${contents.linkUrl}">
+											<img alt="" th:src="${contents.imgUrl}">
+										</a>
+									</li>
+								</th:block>
+							</th:block>
+						</th:block>
+					</ul>
+				</div>
+				<div class="ix-controller">
+					<ul class="ix-thumbs">
+						<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+					</ul>
+				</div>
+			</div>
+		</th:block>
+		<!--//슬라이드 배너-->
+
+		<!-- video 영역 -->
+		<th:block th:if="${not #lists.isEmpty(cornersMap)}">
+			<div class="video_wrap">
+				<!-- 섬네일 용 이미지 -->
+				<th:block th:each="corner, inx : ${cornersMap.get('M02_beauty_select_shop_m.2')}">
+					<th:block th:each="contents : ${corner.contents}"  th:if="${inx.index == 0}">
+						<th:block th:if="${contents.menuPageCornerContentsId == 'M02_beauty_select_shop_m.2.1'}">
+							<button type="button" class="thumbnail" th:if="${contents.videoImgThumbnailUrl != '' and contents.videoImgThumbnailUrl != null}"><img th:src="${contents.videoImgThumbnailUrl}" alt=""></button>
+							<iframe class="youtube_video" width="800" height="450" th:src="${contents.videoUrl} + '?enablejsapi=1'" frameborder="0" allowfullscreen data-vendor="youtube" data-ratio="true" data-mute="false" th:if="${contents.videoUrl != '' and contents.videoUrl != null}"></iframe>
+						</th:block>
+					</th:block>
+				</th:block>
+			</div>
+		</th:block>
+
+		<!--상품리스트-->
+		<div class="item_list type1">
+			<div class="panel notice no_result" style="display: none;">
+				<i class="ico"></i>
+				<p class="text">상품이 존재하지 않습니다.</p>
+			</div>
+
+			<p class="total_count"><b></b>개의 상품</p>
+
+			<ul class="before_list"></ul>
+
+			<!-- 상품 6개 이후 배너 영역(반복없음) -->
+			<th:block th:if="${not #lists.isEmpty(cornersMap)}">
+				<div class="banner">
+					<th:block th:each="corner, inx : ${cornersMap.get('M02_beauty_select_shop_m.3')}">
+						<th:block th:each="contents : ${corner.contents}" th:if="${inx.index == 0}">
+							<th:block th:if="${contents.menuPageCornerContentsId == 'M02_beauty_select_shop_m.3.1'}">
+								<a href="#none" th:href="${contents.linkUrl}"><img th:src="${contents.imgUrl}" alt=""></a>
+							</th:block>
+						</th:block>
+					</th:block>
+				</div>
+			</th:block>
+			
+			<ul class="after_list"></ul>
+
+			<!-- 180712 더보기 삭제
+			<button type="button" class="btn_lg_more w100p">
+				<span></span>
+			</button>
+			-->
+		</div>
+
+		<ul class="loading" style="display: none">
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+
+		<!--//상품리스트-->
+	</div>
+	<!-- // page contents -->
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script>
+		AP.display.init({
+			key: { displayMenuId: AP.DISPLAY_MENU_ID },
+			param: { limit: 99999 }
+		});
+	</script>
+</th:block>
+
+</body>
+</html>

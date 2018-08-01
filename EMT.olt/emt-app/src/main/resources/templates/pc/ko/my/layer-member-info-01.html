@@ -1,0 +1,870 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        
+            <th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+            <!-- //  mypage sitemap -->
+            
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+        
+                <div class="modify_wrap modify_my_info">
+                    <dl>
+                        <dd class="modify_cont">
+							<h3 class="h_title sub mgt20">비밀번호 수정</h3>
+							<form class="pass-check">
+								<fieldset class="form">
+									<legend class="sr_only">비밀번호 입력항목</legend>
+									<div class="ui_table pw_check">
+										<dl>
+											<dt><label for="prev_pw">비밀번호 수정</label></dt>
+											<dd>
+												<div class="input_wrap w100p">
+													<input type="password" maxlength="16" id="ori-pass" name="oriPassword" placeholder="기존 비밀번호" required="required" data-msg-required="기존 비밀번호를 입력해 주세요.">
+												</div>
+												<p class="warning_msg">비밀번호를 입력하세요.</p>
+											</dd>
+										</dl>
+										<dl>
+											<dt><label for="new_pw">신규 비밀번호</label></dt>
+											<dd>
+												<div class="input_wrap w100p">
+													<input type="password" maxlength="16" id="pass1" name="password" pass-word="pass-word" required="required" placeholder="새 비밀번호 입력" title="새 비밀번호 입력"  data-msg-required="새 비밀번호를 입력해 주세요.">
+													<div class="rating_box">
+														<span class="rating"></span>
+													</div>
+												</div>
+												<p class="warning_msg">비밀번호를 입력하세요.</p>
+											</dd>
+										</dl>
+										<dl>
+											<dt><label for="new_pw2">신규 비밀번호 확인</label></dt>
+											<dd>
+												<div class="input_wrap w100p"><!-- 공통 : error 일 때 class="error" 추가 -->
+													<input type="password" maxlength="16" id="pass2" placeholder="비밀번호 확인">
+													<div class="help">
+														<span class="completion"><span class="sr_only">완료</span></span>
+													</div>
+												</div>
+												<p class="txt_error">비밀번호 확인을 입력하세요.</p>
+											</dd>
+										</dl>
+										<p class="text_notice">영문 대문자, 소문자, 숫자, 특수문자 중 최소 2가지 이상의 문자조합 6-16자로<br>입력해주세요.</p>
+									</div>
+									<div class="form_btns">
+										<button class="btn_md_primary" onclick="changePassword()" type="button">수정 완료</button>
+									</div>
+								</fieldset>
+							</form>
+							
+							<hr class="div m60">
+
+							<h3 class="h_title sub" id="private-title">개인정보 수정</h3>
+							<form class="private-info">
+								<fieldset class="form">
+									<legend class="sr_only">비밀번호 입력항목</legend>
+									<div class="align_right"><span class="required">필수 입력 항목입니다.</span></div>
+									<div class="ui_table">
+										<dl>
+											<dt><label for="user_name">이름</label></dt>
+											<dd>
+												<div class="input_wrap w100p">
+													<input type="text" th:value="${session.LOGIN_USER.member.name.name1}" title="이름" disabled="">
+												</div>
+											</dd>
+										</dl>
+										<dl>
+											<dt>생년월일</dt>
+											<dd class="birth">
+												<div>
+													<div class="input_group ea_03">
+														<span class="select_wrap">
+															<select name="" title="생년 선택">
+																<option value="" th:text="${session.LOGIN_USER.member.dobYear}">1999</option>
+															</select>
+														</span>
+														<span class="gap"></span>
+														<span class="select_wrap">
+															<select name="" title="월 선택">
+																<option value="" th:text="${session.LOGIN_USER.member.dobMonth}">03</option>
+															</select>
+														</span>
+														<span class="gap"></span>
+														<span class="select_wrap">
+															<select name="" title="일 선택">
+																<option value="" th:text="${session.LOGIN_USER.member.dobDay}">12</option>
+															</select>
+														</span>
+													</div>
+												</div>
+												<div class="check_set">
+													<span class="check_wrap"><input type="radio" name="birthType" value="S" id="solar" th:checked="${session.LOGIN_USER.member.solarLunarCode == 'Solar'}"><label for="solar">양력</label></span>
+													<span class="check_wrap"><input type="radio" name="birthType" value="L" id="lunar" th:checked="${session.LOGIN_USER.member.solarLunarCode == 'Lunar'}"><label for="lunar">음력</label></span>
+												</div>
+											</dd>
+										</dl>
+										<dl>
+											<dt><label for="user_phone">휴대전화<span class="required"><span class="sr_only">필수입력</span></span></label></dt>
+											<dd>
+												<div class="input_group phone">
+													<span class="select_wrap">
+														<select name="phoneNumber1" title="국번 선택">
+															<option th:text="${#IntegUtil.getAgencyNum(session.LOGIN_USER.member.phoneNo1)}" th:value="${#IntegUtil.getAgencyNum(session.LOGIN_USER.member.phoneNo1)}" selected>010</option>
+														</select>
+													</span>
+													<span class="gap"></span>
+													<span class="input_wrap"><input type="text" name="phoneNumber2" th:value="${#IntegUtil.getPhoneNumber(session.LOGIN_USER.member.phoneNo1)}" title="전화번호 입력" readonly=""></span>
+													<span class="gap"></span>
+													<button type="button" onclick="phoneNumChange()" class="btn_md_form">변경</button>
+												</div>
+											</dd>
+										</dl>
+										<dl>
+											<dt><label for="user_id">아이디</label></dt>
+											<dd>
+												<div class="input_wrap w100p">
+													<input type="text" th:value="${session.LOGIN_USER.member.memberId}" title="아이디" disabled="">
+												</div>
+											</dd>
+										</dl>
+										<dl>
+											<dt><label for="user_email">E-mail</label></dt>
+											<dd>
+												<div class="input_wrap w100p">
+													<input type="text" id="email" th:value="${session.LOGIN_USER.member.emailAddress}" email2="email2" name="email" title="이메일 주소 입력">
+												</div>
+											</dd>
+										</dl>
+										<dl>
+											<dt class="vat"><label for="new_pw2">주소</label></dt>
+											<dd class="ui_find_addresses">
+												<div class="w100p input_btn_wrap">
+													<div class="input_wrap">
+														<input type="text" class="address_keyword" title="주소지 또는 건물명 입력" placeholder="주소지 또는 건물명">
+													</div>
+													<button type="button" class="btn_md_form btn_address_find btn_find_addresses">검색</button>
+												</div>
+												<!--/* [S] 주소 검색 후 노출 */-->
+												<div class="address_result"></div>
+												<!--/* [E]주소 검색 후 노출 */-->
+												<input th:value="${session.LOGIN_USER.member.address != null? (session.LOGIN_USER.member.address.zipCode) : ''}" type="hidden" class="post_code" name="homeZip" title="우편번호 입력" readonly>
+												<div class="input_wrap w100p"><input type="text"name="homeBscsAddr" class="address_first" title="기본주소 입력" placeholder="기본주소" readonly=""></div>
+												<div class="input_group w100p">
+													<span class="input_wrap"><input type="text" th:value="${session.LOGIN_USER.member.address != null? (session.LOGIN_USER.member.address.address2) : ''}" name="homeDtlAddr" class="address_last" title="상세주소 입력" placeholder="상세주소를 입력해주세요."></span>
+												</div>
+											</dd>
+										</dl>
+									</div>
+									<div class="form_btns">
+										<button class="btn_md_primary" onclick="changePrivateInfo()" type="button">수정 완료</button>
+									</div>
+								</fieldset>
+							</form>
+							<hr class="div m60">
+
+							<h3 class="h_title sub">광고성 정보 수신 동의</h3>
+							<form class="option-info">
+								<fieldset class="form accept_ad">
+									<legend class="sr_only">광고성 정보 수신 동의 항목</legend>
+									<p class="title_bg">광고/이벤트/행사/프로모션에 대한 수신 동의 여부</p>
+									<div class="ui_table">
+										<dl>
+											<dt>뷰티포인트 수신 동의</dt>
+											<dd>
+												<div class="check_set check1">
+												
+													<span class="check_wrap">
+														<input type="checkbox" id="check_all1"><label for="check_all1">전체선택</label>
+													</span>
+				               						<span class="check_wrap">
+				               							<input type="checkbox" id="ap_agree2_1" name="apReceive[0].value" th:checked="${apReceiveMap.get('Email')}" />
+				               							
+				               						<label for="ap_agree2_1">이메일</label><input type="hidden" name="apReceive[0].name" th:value="Email"></span>
+				               						<span class="check_wrap">
+				               							<input type="checkbox" id="ap_agree2_2" name="apReceive[1].value" th:checked="${apReceiveMap.get('SMS')}" />
+				               							
+				               						<label for="ap_agree2_2">문자</label><input type="hidden" name="apReceive[1].name" th:value="SMS"></span>
+				               						<span class="check_wrap">
+				               							<input type="checkbox" id="ap_agree2_3" name="apReceive[2].value" th:checked="${apReceiveMap.get('DM')}" />
+				               							
+				               						<label for="ap_agree2_3">DM</label><input type="hidden" name="apReceive[2].name" th:value="DM"></span>
+				               						<span class="check_wrap">
+				               							<input type="checkbox" id="ap_agree2_4" name="apReceive[3].value" th:checked="${apReceiveMap.get('TM')}" />
+				               							
+				               						<label for="ap_agree2_4">TM</label><input type="hidden" name="apReceive[3].name" th:value="TM"></span>
+												</div>
+											</dd>
+										</dl>
+										<p class="txt_info"><strong>※ 아모레퍼시픽 통합 멤버십 혜택</strong>에 관한 수신 동의 항목입니다.</p>
+									</div>
+									<div class="ui_table">
+										<dl>
+											<dt>온라인 사이트 수신 동의</dt>
+											<dd>
+												<div class="check_set check2">
+													<span class="check_wrap">
+														<input type="checkbox" id="check_all2"><label for="check_all2">전체선택</label>
+													</span>
+				               						<span class="check_wrap">
+				               							<input type="checkbox" id="agree2_1" name="receive[0].value" th:checked="${receiveMap.get('Email')}" />
+				               							
+				               						<label for="agree2_1">이메일</label><input type="hidden" name="receive[0].name" th:value="Email"></span>
+				               						<span class="check_wrap">
+				               							<input type="checkbox" id="agree2_2" name="receive[1].value" th:checked="${receiveMap.get('SMS')}" />
+				               							
+				               						<label for="agree2_2">문자</label><input type="hidden" name="receive[1].name" th:value="SMS"></span>
+				               						<span class="check_wrap">
+				               							<input type="checkbox" id="agree2_3" name="receive[2].value" th:checked="${receiveMap.get('DM')}" />
+				               							
+				               						<label for="agree2_3">DM</label><input type="hidden" name="receive[2].name" th:value="DM"></span>
+				               						<span class="check_wrap">
+				               							<input type="checkbox" id="agree2_4" name="receive[3].value" th:checked="${receiveMap.get('TM')}" />
+				               							
+				               						<label for="agree2_4">TM</label><input type="hidden" name="receive[3].name" th:value="TM"></span>
+												</div>
+											</dd>
+										</dl>
+										<p class="txt_info"><strong>※ 뷰티포인트 사이트, 아모레퍼시픽의 모든 브랜드 사이트, 아모레퍼시픽몰, 아리따움몰</strong>에 관한 수신 동의 항목입니다</p>
+									</div>
+									<div class="ui_table">
+										<dl>
+											<dt>에뛰드 수신 동의</dt>
+											<dd>
+												<div class="check_set check3">
+													<span class="check_wrap">
+														<input type="checkbox" id="check_all3"><label for="check_all3">전체선택</label>
+													</span>
+				               						<span class="check_wrap">
+				               							<input type="checkbox" id="agree3_1" name="posReceive[0].value" th:checked="${ehPosReceiveMap.get('Email')}" />
+				               							
+				               						<label for="agree3_1">이메일</label><input type="hidden" name="posReceive[0].name" th:value="Email"></span>
+				               						<span class="check_wrap">
+				               							<input type="checkbox" id="agree3_2" name="posReceive[1].value" th:checked="${ehPosReceiveMap.get('SMS')}" />
+				               							
+				               						<label for="agree3_2">문자</label><input type="hidden" name="posReceive[1].name" th:value="SMS"></span>
+				               						<span class="check_wrap">
+				               							<input type="checkbox" id="agree3_3" name="posReceive[2].value" th:checked="${ehPosReceiveMap.get('DM')}" />
+				               							
+				               						<label for="agree3_3">DM</label><input type="hidden" name="posReceive[2].name" th:value="DM"></span>
+				               						<span class="check_wrap">
+				               							<input type="checkbox" id="agree3_4" name="posReceive[3].value" th:checked="${ehPosReceiveMap.get('TM')}" />
+				               							
+				               						<label for="agree3_4">TM</label><input type="hidden" name="posReceive[3].name" th:value="TM"></span>
+												</div>
+											</dd>
+										</dl>
+									</div>
+									<div class="ui_table">
+										<dl>
+											<dt>에뛰드 쇼핑몰 수신 동의</dt>
+											<dd>
+												<div class="check_set check4">
+													<span class="check_wrap">
+														<input type="checkbox" id="check_all4"><label for="check_all4">전체선택</label>
+													</span>
+				               						<span class="check_wrap">
+				               							<input type="checkbox" id="agree4_1" name="ehReceive[0].value" th:checked="${ehReceiveMap.get('Email')}" />
+				               							
+				               						<label for="agree4_1">이메일</label><input type="hidden" name="ehReceive[0].name" th:value="Email"></span>
+				               						<span class="check_wrap">
+				               							<input type="checkbox" id="agree4_2" name="ehReceive[1].value" th:checked="${ehReceiveMap.get('SMS')}" />
+				               							
+				               						<label for="agree4_2">문자</label><input type="hidden" name="ehReceive[1].name" th:value="SMS"></span>
+				               						<span class="check_wrap">
+				               							<input type="checkbox" id="agree4_3" name="ehReceive[2].value" th:checked="${ehReceiveMap.get('DM')}" />
+				               							
+				               						<label for="agree4_3">DM</label><input type="hidden" name="ehReceive[2].name" th:value="DM"></span>
+				               						<span class="check_wrap">
+				               							<input type="checkbox" id="agree4_4" name="ehReceive[3].value" th:checked="${ehReceiveMap.get('TM')}" />
+				               							
+				               						<label for="agree4_4">TM</label><input type="hidden" name="ehReceive[3].name" th:value="TM"></span>
+												</div>
+											</dd>
+										</dl>
+									</div>
+									<div class="form_btns">
+										<button class="btn_md_primary" onclick="changeOptionInfo()" type="button">수정 완료</button>
+									</div>
+								</fieldset>
+							</form>
+							<hr class="div m60">
+							<form class="terms--info">
+								<div class="policy_agree">
+									<h3 class="h_title sub mgt40" th:utext="${termsMap.get('030').termsName}">개인정보 이용 및 수집에 대한 동의(선택)</h3>
+									<div class="align_right">
+										<span class="check_wrap right"><input type="checkbox" id="agree1" name="policy[0].value" th:checked="${agreeMap.get('030')}"><label for="agree1">동의(선택)</label></span>
+									</div>
+									<input type="hidden" name="policy[0].name" value="030">
+									<div class="agree_box" th:utext="${termsMap.get('030').termsBodyText}">
+									</div>
+									
+									<h3 class="h_title sub mgt40" th:utext="${termsMap.get('040').termsName}">개인정보 제3자 제공 동의</h3>
+									<div class="align_right">
+										<span class="check_wrap right"><input type="checkbox" id="agree2" name="policy[1].value" th:checked="${agreeMap.get('040')}"><label for="agree2">동의(선택)</label></span>
+									</div>
+									<input type="hidden" name="policy[1].name" value="040">
+									<div class="agree_box" th:utext="${termsMap.get('040').termsBodyText}">
+									</div>
+									
+									<h3 class="h_title sub mgt40" th:utext="${termsMap.get('050').termsName}">개인정보 제3자 제공 동의(선택)</h3>
+									<div class="align_right">
+										<span class="check_wrap right"><input type="checkbox" id="agree3" name="policy[2].value" th:checked="${agreeMap.get('050')}"><label for="agree3">동의(선택)</label></span>
+									</div>
+									<input type="hidden" name="policy[2].name" value="050">
+									<div class="agree_box" th:utext="${termsMap.get('050').termsBodyText}">
+									</div>
+									
+									<h3 class="h_title sub mgt40" th:utext="${termsMap.get('060').termsName}">국외이전동의(선택)</h3>
+									<div class="align_right">
+										<span class="check_wrap right"><input type="checkbox" id="agree4" name="policy[3].value" th:checked="${agreeMap.get('060')}"><label for="agree4">동의(선택)</label></span>
+									</div>
+									<input type="hidden" name="policy[3].name" value="060">
+									<div class="agree_box" th:utext="${termsMap.get('060').termsBodyText}">
+									</div>
+	
+	
+									<div class="form_btns">
+										<button class="btn_md_primary" onclick="changeTermsInfo()" type="button">수정 완료</button>
+									</div>
+								</div>
+							</form>
+							<hr class="div m60">
+
+							<div class="panel withdrawal">
+								<h3 class="h_title sub">회원탈퇴</h3>
+								<p class="text">회원 탈퇴시 30일간 아모레퍼시픽 통합회원 회원가입이 제한됩니다.<br>
+									유의사항 안내를 확인하신 후 신중하게 진행해 주시기 바랍니다.
+								</p>
+								<div class="form_btns">
+									<button class="btn_md_bordered" onclick="location.href='/my/page/leaveId'" type="button">회원탈퇴 이동</button>
+								</div>
+							</div>
+
+                        </dd>
+                    </dl>
+                    <button class="layer_close" type="button">레이어 닫기</button>
+                </div>
+            </div>
+        </div><!-- // #ap_container -->
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+           
+			<style>
+			a#send[disabled=disabled] {
+	    		opacity: 0.3;
+	    		cursor: not-allowed;
+			}
+			</style>
+			<script>
+
+			$('.ui_find_addresses').findAddresses();
+			function checkSpecial(str) { 
+				var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+				if(special_pattern.test(str) == true) {
+					return true; 
+				} else { 
+					return false; 
+				}
+			}
+			$('#ori-pass').keyup( function() {
+				if($(this).val()) {
+					$(this).parent().parent().find('p').text('');
+				} else {
+					$(this).parent().parent().find('p').text('비밀번호를 입력하세요.');
+				}
+			});
+			$('#email').keyup( function() {
+				var email = $('#email');
+		    	var error = email.parent().find('div span');
+				if(email.valid()) {
+					if(email.val()) {
+						email.parent().parent().find('p').text('');
+						error.addClass('on');
+					} else {
+						email.parent().parent().find('p').text('이메일 주소를 입력하세요.');
+						error.removeClass('on');
+					}
+				} else {
+					error.removeClass('on');
+					if(email.val()) {
+						email.parent().parent().find('p').text('형식에 맞지 않는 메일주소 입니다.');
+					} else {
+						email.parent().parent().find('p').text('이메일 주소를 입력하세요.');
+					}
+				}
+			});
+			$('#pass1').keyup(function() {
+
+			    var userPwdEc = $('#pass1');
+				if($(this).val()) {
+					$(this).parent().parent().find('p').text('');
+				} else {
+					$(this).parent().parent().find('p').text('비밀번호를 입력하세요.');
+				}
+			    if(userPwdEc.valid()) {
+			    	var password = $(this).val();
+
+			    	var password = $(this).val();
+					var patt_cont = /(0123)|(1234)|(2345)|(3456)|(4567)|(5678)|(6789)|(7890)|(abcd)|(bcde)|(cdef)|(defg)(efgh)|(fghi)|(ghij)|(hijk)|(ijkl)|(jklm)|(klmn)|(lmno)|(mnop)|(nopq)|(opqr)|(pqrs)|(qrst)|(rstu)|(stuv)|(tuvw)|(uvwx)|(vwxy)|(wxyz)/;
+			    	var pattern1 = /(\w)\1\1\1/.test(password)
+					var pattern2 = patt_cont.test(password) || patt_cont.test(password.split("").reverse().join(""));
+			    	
+			    	var passwordArray = password.split('');
+			    	
+			    	var uniq = passwordArray.reduce(function(a,b) {
+			    		if(a.indexOf(b) < 0) a.push(b);
+			    		return a;
+			    	},[]); 
+			    	
+			    	var pattern3 = uniq.length < 4;
+			    	
+			    	var pattern4 = password.length < 10;
+
+					var regex1 = password.search(/[0-9]/g),
+						regex2 = password.search(/[a-z]/g),
+						regex3 = password.search(/[A-Z]/g),
+						regex4 = password.search(/[!"#$%&'()*+,-./:;<=>?@[＼\]^_`{|}~]/gi);
+
+					var i1 = regex1 >= 0 ? 1 : 0,
+						i2 = regex2 >= 0 ? 1 : 0,
+						i3 = regex3 >= 0 ? 1 : 0,
+						i4 = regex4 >= 0 ? 1 : 0;
+					var pattern5 =(i1+i2+i3+i4 < 3);
+					
+					var count = 0;
+					
+					if(pattern1 || pattern2) count++;
+					if(pattern3) count++;
+					if(pattern4 && pattern5) count++;
+					
+
+			    	var error = $(this).parent().find('div span');
+					if(count < 1) {
+				    	error.removeClass('notused');
+				    	error.addClass('safety');
+				    	error.removeClass('usually');
+				    	error.removeClass('threat');
+				    	error.text('안전');
+					} else if(count < 2) {
+				    	error.removeClass('notused');
+				    	error.removeClass('safety');
+				    	error.addClass('usually');
+				    	error.removeClass('threat');
+				    	error.text('보통');
+					} else {
+				    	error.removeClass('notused');
+				    	error.removeClass('safety');
+				    	error.removeClass('usually');
+				    	error.addClass('threat');
+				    	error.text('위험');
+					}
+			    } else {
+			    	var error = $(this).parent().find('div span');
+			    	error.addClass('notused');
+			    	error.removeClass('safety');
+			    	error.removeClass('usually');
+			    	error.removeClass('threat');
+			    	error.text('사용불가');
+			    	
+			    }
+			}
+			
+			    );
+			
+			
+			function reload() {
+				location.reload();
+			}
+
+			$('.check1 input').on('click', function() {
+			    if ($(this).attr('id') == 'check_all1') {
+			    	
+			    	$(this).parent().parent().find("input[type=checkbox]").prop('checked', $(this).prop('checked'));
+			    	
+			    } else {
+
+		    		var isAll = true;
+		    		
+			    	$(this).parent().parent().find("input[type=checkbox]").each(function() {
+			    		if($(this).attr('id') != 'check_all1') {
+			    			if(!$(this).prop('checked')) {
+			    				isAll = false;
+			    			}
+			    		}
+			    	});
+
+					$('#check_all1').prop('checked', isAll);
+			    }
+			});
+			$('.check2 input').on('click', function() {
+			    if ($(this).attr('id') == 'check_all2') {
+			    	
+			    	$(this).parent().parent().find("input[type=checkbox]").prop('checked', $(this).prop('checked'));
+			    	
+			    } else {
+
+		    		var isAll = true;
+		    		
+			    	$(this).parent().parent().find("input[type=checkbox]").each(function() {
+			    		if($(this).attr('id') != 'check_all2') {
+			    			if(!$(this).prop('checked')) {
+			    				isAll = false;
+			    			}
+			    		}
+			    	});
+
+					$('#check_all2').prop('checked', isAll);
+			    }
+			});
+			$('.check3 input').on('click', function() {
+			    if ($(this).attr('id') == 'check_all3') {
+			    	
+			    	$(this).parent().parent().find("input[type=checkbox]").prop('checked', $(this).prop('checked'));
+			    	
+			    } else {
+
+		    		var isAll = true;
+		    		
+			    	$(this).parent().parent().find("input[type=checkbox]").each(function() {
+			    		if($(this).attr('id') != 'check_all3') {
+			    			if(!$(this).prop('checked')) {
+			    				isAll = false;
+			    			}
+			    		}
+			    	});
+
+					$('#check_all3').prop('checked', isAll);
+			    }
+			});
+			$('.check4 input').on('click', function() {
+			    if ($(this).attr('id') == 'check_all4') {
+			    	
+			    	$(this).parent().parent().find("input[type=checkbox]").prop('checked', $(this).prop('checked'));
+			    	
+			    } else {
+
+		    		var isAll = true;
+		    		
+			    	$(this).parent().parent().find("input[type=checkbox]").each(function() {
+			    		if($(this).attr('id') != 'check_all4') {
+			    			if(!$(this).prop('checked')) {
+			    				isAll = false;
+			    			}
+			    		}
+			    	});
+
+					$('#check_all4').prop('checked', isAll);
+			    }
+			});
+			
+			$('#send').click(function() {
+				if(isPopup) {
+					pwd = $('[name=userPwdEc]').val();
+					$('#send').attr('disabled', 'disabled');
+		            AP.api.checkPassword({}, { userPwdEc : pwd }).done(function(data) {
+		            	$('[name=userPwdEc]').val('');
+		    			reload();
+		    			
+	                }).fail(function(xhr, textStatus, errorThrown) {
+	                	AP.modal.alert("비밀번호가 일치하지 않습니다");
+	    	            $("#send").removeAttr("disabled");
+	                }).always(function() {
+	                    //성공, 실패
+	                });
+				} else {
+		    	    $(this).attr("disabled", "disabled");
+					$('form').submit();
+				}
+			});
+
+			function changePassword() {
+
+				var $form = $('.pass-check');
+		        if (!$form.valid()) {
+		        	return;
+		        }
+	            if ($("#pass1").val() != $("#pass2").val()) {
+	                AP.modal.alert("새 비밀번호가 일치하지 않습니다.");
+	                return false;
+	            }
+
+	            AP.api.changePwd2({}, AP.common.getFormData($form)).done(function(data) {
+	                AP.modal.alert("비밀번호가 변경되었습니다.").addListener('modal-close', function(e) {
+						reload();
+	                });
+	            }).fail(function(xhr, textStatus, errorThrown) {
+	                if (xhr.errorCode == 0) {
+	                    AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	                } else if (xhr.errorCode == 'EAPI001') {
+	                    AP.modal.alert("비밀번호가 틀렸습니다. 확인 하신 후 다시 이용해 주세요.");
+	                } else {
+	                    AP.modal.alert(xhr.errorMessage)
+	                }
+	            }).always(function() {
+	                //성공, 실패
+	            });
+			}
+	        function phoneNumChange() {
+
+			    $.get("/my/page/info/changePhoneForm", function(data) {
+			        /**
+			         * 동적으로 생성된 modal의 Node Element 접근하기
+			         * alert, confirm, info 모두 동일
+			         */
+
+					var authVo = null;
+			        var contents = new Object();
+			        contents.contents = data;
+
+			        var t = new AP.common.timeCountDown(3, function() {
+			    		window.alert('3분 이내에 인증번호를 입력 하지 않으셨습니다. 인증번호 전화번호 입력란으로 이동합니다.');
+			    		$('#number').focus();
+			    	});
+
+			        var modal = AP.modal.info(contents);
+			        var $modalEl = modal.getElement(); //jquery object
+
+			        $modalEl.find('input[type=tel]').keydown(function(event) {
+			    	    if (event.keyCode) {
+			    	        var code = event.keyCode;
+			    	        if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+			    	            return true;
+			    	        } else {
+			    	            return false;
+			    	        }
+			    	    } else if (e.which) {
+			    	        var code = e.which;
+			    	        if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+			    	            return true;
+			    	        } else {
+			    	            return false;
+			    	        }
+			    	    }
+			    	});
+
+			        $modalEl.find('input[type=tel]').keyup(function(event) {
+			    	    event = event || window.event;
+			    	    var keyID = (event.which) ? event.which : event.keyCode;
+			    	    if (keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39)
+			    	        return;
+			    	    else
+			    	        event.target.value = event.target.value.replace(/[^0-9]/g, "");
+			    	});
+			        $modalEl.find('#cert').click(function() {
+						if(!$modalEl.find('form').valid()) return;
+			        	
+			        	var data = AP.common.getFormData($modalEl.find('form'));
+			        	
+
+			            AP.api.simpleCertifySend({}, data).done(function(data) {
+			            	authVo = data;
+	                        if (t.isRunning()) {
+	                            t.stop();
+	                        }
+	                        t.start();
+		                    AP.modal.alert("인증번호가 전송되었습니다.");
+		                    
+			            	
+			            }).fail(function(xhr, textStatus, errorThrown) {
+			                if (xhr.errorCode == 0) {
+			                    AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+			                } else {
+			                    AP.modal.alert(xhr.errorMessage);
+			                }
+			            }).always(function() {
+			                //성공, 실패
+			            });
+			        	
+			        });
+			        $modalEl.find('button.btn_md_primary').click(function() {
+			        	var data = AP.common.getFormData($modalEl.find('form'));
+			        	
+			        	if(authVo != null) {
+							if(!t.isRunning()) {
+							    AP.modal.alert("입력시간 초과했습니다. 인증번호 재전송 버튼을 눌러 인증 절차를 다시 진행하십시오.");
+								return;
+							}
+				            AP.api.simpleCertifyCheck({}, {
+				            	mobileVerifSn : authVo.mobileVerifSn,
+				            	mobileVerifKey : $('#number').val()
+				            	
+				            }).done(function(data) {
+					        	var data = AP.common.getFormData($modalEl.find('form'));
+				            	
+			                    AP.modal.alert("인증번호가 확인되었습니다.").addListener( 'modal-close', function (e) {
+						        	$('form.private-info [name=phoneNumber1] option').attr('value', data.phoneNumber1);
+						        	$('form.private-info [name=phoneNumber1] option').html(data.phoneNumber1);
+						        	$('form.private-info [name=phoneNumber2]').val(data.phoneNumber2);
+						        	modal.close();
+								});
+				            }).fail(function(xhr, textStatus, errorThrown) {
+				                if (xhr.errorCode == 0) {
+				                    AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+				                } else {
+				                    AP.modal.alert(xhr.errorMessage);
+				                }
+				            }).always(function() {
+				                //성공, 실패
+				            });
+			        	} else {
+		                    AP.modal.alert("인증버튼을 클랙 하세요.");
+			        	}
+			        	
+			        });
+			        
+			        
+			    });
+	        }
+
+	        
+	        function sendPrivateInfo(data) { 
+				AP.api.changePriveInfo({}, data).done(function(data) {
+					AP.modal.alert("개인정보가 수정 완료 되었습니다.").addListener( 'modal-close', function (e) {
+						reload();
+					});
+				}).fail(function(xhr, textStatus, errorThrown) {
+	                AP.modal.alert("회원정보 수정에 실패했습니다.");
+				}).always(function() {
+	                //성공, 실패
+	            });
+	        }
+	        
+	        function changePrivateInfo() {
+	        	var form = $('form.private-info');
+	        	if(!form.valid()) {
+	        		return;
+	        	}
+	        	var data1 = AP.common.getFormData(form);
+	        	
+	        	
+	        	if(data1.email || data1.homeBsceAddr || data1.homeDtlAddr) {
+
+		            AP.api.checkTerms({}, {
+		    			termsCode : '030'
+		    		}).done(function(data) {
+		    			sendPrivateInfo(data1);
+	                }).fail(function(xhr, textStatus, errorThrown) {
+
+	        		    $.get("/my/page/info/termForm", function(data) {
+	        		        /**
+	        		         * 동적으로 생성된 modal의 Node Element 접근하기
+	        		         * alert, confirm, info 모두 동일
+	        		         */
+
+	        		        var contents = new Object();
+	        		        contents.contents = data;
+	        		        var modal = AP.modal.info(contents);
+	        		        var $modalEl = modal.getElement(); //jquery object
+
+	        		        $modalEl.find('#terms-ok').click(function() {
+	        	    			sendPrivateInfo(data1);
+	        		        	modal.close();
+	        		        });
+	        		        $modalEl.find('#terms-cancel').click(function() {
+	        		        	modal.close();
+	        		        });
+	        		        
+	        		    });
+	                }).always(function() {
+	                    //성공, 실패
+	                });
+	        	} else {
+	    			sendPrivateInfo(data1);
+	        	}
+	        }
+	        
+	        function changeOptionInfo() {
+
+	        	var form = $('form.option-info');
+	        	
+				AP.api.changeOptionInfo({},AP.common.getFormData(form)).done(function(data) {
+					AP.modal.alert("개인정보가 수정 완료 되었습니다.").addListener( 'modal-close', function (e) {
+						reload();
+					});
+				}).fail(function(xhr, textStatus, errorThrown) {
+	                AP.modal.alert("회원정보 수정에 실패했습니다.");
+				}).always(function() {
+	                //성공, 실패
+	            });
+	        }
+	        function changeTermsInfo() {
+
+	        	var form = $('form.terms--info');
+	        	var data1 = AP.common.getFormData(form);
+	        	if(data1['policy[0].value'] != 'on') {
+
+		            AP.api.checkTerms({}, {
+		    			termsCode : '030'
+		    		}).done(function(data) {
+
+		                var contents = new Object();
+		                contents.title = "[[#{common.alert}]]";
+		                contents.contents = '개인정보 이용 및 수집 동의를 철회하면 저장된 이메일 주소 및 주소 정보가 삭제되어 이벤트 및 혜택 안내 정보를 수령할 수 없습니다<br>' +
+		                						'개인정보 이용 및 수집 동의를 철회하시겠습니까?';
+		                contents.cancelLabel = "취소";
+		                contents.confirmLabel = "확인";
+		
+		                AP.modal.info(contents).addListener('modal-close', function(e) {
+		                    if (e.closeType == 'confirm') {
+		                    	sendTermsInfo(data1);
+		                    }
+		                    console.log(e.closeType); //close, confirm, cancel
+		                });
+		    			
+	                }).fail(function(xhr, textStatus, errorThrown) {
+	                	sendTermsInfo(data1);
+	                }).always(function() {
+	                    //성공, 실패
+	                });
+	        	} else {
+
+		            AP.api.checkTerms({}, {
+		    			termsCode : '030'
+		    		}).done(function(data) {
+	                	sendTermsInfo(data1);
+	                }).fail(function(xhr, textStatus, errorThrown) {
+
+	                	sendTermsInfo(data1, '1');
+	                }).always(function() {
+	                    //성공, 실패
+	                });
+	        		
+	        	}
+	        }
+	        function sendTermsInfo(data, flag) { 
+				AP.api.changeTermsInfo({}, data).done(function(data) {
+						if(flag != '1') {
+							AP.modal.alert("개인정보가 수정 완료 되었습니다.").addListener( 'modal-close', function (e) {
+								reload();
+							});
+						}
+						else {
+			                var contents = new Object();
+			                contents.title = "[[#{common.alert}]]";
+			                contents.contents = '개인정보가 수정 완료되었습니다.<br>' +
+			                						'이메일 및 주소를 등록하시면 이벤트 및 혜택 안내 정보를 수령하실 수 있습니다.<br>' +
+			                						'등록하시겠습니까?';
+			                contents.cancelLabel = "취소";
+			                contents.confirmLabel = "확인";
+			
+			                AP.modal.info(contents).addListener('modal-close', function(e) {
+			                    if (e.closeType == 'confirm') {
+			                    	$('#private-title')[0].scrollIntoView();
+			                    } else {
+									reload();
+			                    }
+			                });
+						}
+				}).fail(function(xhr, textStatus, errorThrown) {
+	                AP.modal.alert("회원정보 수정에 실패했습니다.");
+				}).always(function() {
+	                //성공, 실패
+	            });
+	        }
+			</script>
+        </th:block>
+ </body>
+ </html>

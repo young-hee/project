@@ -1,0 +1,34 @@
+{{!--
+	베스트
+--}}
+<ul class="ix-list-items">
+	{{#each this.list}}
+		<li class="ix-list-item">
+			<div class="item">
+				<div class="item_images">
+					<!-- * 대표 이미지 */-->
+					<a href="{{ productDetailPath this.onlineProdSn }}" class="lazy_load_wrap">
+						<img class="lazy_load" src="" data-src="{{ this.onlineProdImages.0.imgUrl }}" alt="">
+					</a>
+				</div>
+				<div class="info_box">
+				{{#xif @index '>' 9}}
+					<span class="num">{{ numberCipher (calc @index '+' 1) 2 }}</span>
+				{{else}}
+					<span class="num">{{ numberCipher (calc @index '+' 1) 1 }}</span>
+				{{/xif}}
+					<!--/* 상품명 */-->
+					<div class="title_area">
+						<h3 class="h_title">{{ this.onlineProdName }}</h3>
+					</div>
+					<!--/* 가격,장바구니 */-->
+					<div class="price_area">
+						<div class="price">
+							<strong>{{ numberFormat this.onlineProdPriceSummary.minOnlineSalePrice }}<em>원</em></strong>
+						</div>
+					</div>
+				</div>
+			</div>
+		</li>
+	{{/each}}
+</ul>

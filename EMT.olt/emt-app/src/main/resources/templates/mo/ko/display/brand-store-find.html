@@ -1,0 +1,176 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='find-store'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents brand">
+		<!-- tab menu -->
+		<div class="tab_menu equally">
+			<ul>
+				<li class="on"><a href="#none" th:href="@{/display/store_location(displayMenuId=store_location)}">매장 찾기</a></li>
+				<li><a href="#none" th:href="@{/display/store_opening(displayMenuId=store_opening)}">매장 개설 문의</a></li>
+				<li><a href="#none" th:href="@{/display/store_review(displayMenuId=store_review)}">매장 칭찬</a></li>
+			</ul>
+		</div>
+
+		<!-- tab menu wrap -->
+		<!--/* 18/03/27 매장명/지역명 / 가까운 매장(위치 기반) 추가 */-->
+		<div class="ui_tab store_find_tab">
+			<!-- tab menu -->
+			<div class="tab_menu equally">
+				<ul>
+					<li class="on"><button type="button">매장명/지역명</button></li>
+					<li><button type="button">가까운 매장(위치 기반)</button></li>
+				</ul>
+			</div>
+			<!-- tab contents wrap -->
+			<div class="tab_contents">
+				<!-- tab content -->
+				<div class="tab_cont">
+					<h3 class="sr_only">매장찾기 매장명/지역명 탭</h3>
+					<div class="panel none_bdr no_padding">
+						<h3 class="sr_only">매장명/지역명</h3>
+						<fieldset class="form form_brand">
+							<legend class="sr_only">매장명/지역명 입력</legend>
+							<div class="input_wrap">
+								<input type="text" placeholder="매장명 또는 지역명" class="address_keyword">
+								<button type="button" class="btn_search address"><span class="sr_only">검색</span></button>
+								<button class="input_del"><i class="ico_close_w"></i><span class="sr_only">검색어 삭제</span></button>
+							</div>
+						</fieldset>
+					</div>
+					<p class="store_search_brand text typ2 font_sm">단골매장으로 등록하실 매장의 <span class="ico_heart typ2"></span> 를 선택해 주세요. <span class="l_right total_count" style="display:none;"><strong class="num"></strong>개</span></p>
+
+					<hr class="div mgt30">
+
+					<!--/* 하나의 영역이 열릴때 다른 영역은 닫히게 하고 싶을때 data-open-type="single" 를 넣어준다. */-->
+					<div class="ui_accordion ui_ac_typ1" data-open-type="single">
+						<dl>
+							<dt>
+								<span class="title ico_circle_01">마이 컬러 파인더 서비스는?</span><!--/* 20180417 : 아이콘 변경 */-->
+								<button type="button"><span class="sr_only">더보기</span></button>
+							</dt>
+							<dd>
+								<div class="cont">
+									<p class="text">
+									<ul class="list_bullet_dot">
+										<li>에뛰드하우스의  전국의 오프라인 매장에서 뷰티 아티스트가 고객님께 맞는 컬러를 찾아 제품을 추천해 드리는 서비스입니다.</li>
+										<li>매장 찾기에서 컬러파인더 매장이 표시된 매장을 방문하시면 서비스를 이용하실 수 있습니다.</li>
+									</ul>
+									</p>
+								</div>
+							</dd>
+						</dl>
+					</div>
+
+					<div class="panel no_padding mgt0 btn_favorite_store_panel">
+						<div class="favorite_store_sort_wrap" th:if="${session.LOGIN_USER == null or session.LOGIN_USER.member == null ? false : true}">
+							<button type="button" class="btn_favorite_store address">단골매장만 보기</button>
+						</div>
+						<div class="store_list_wrap">
+							<!--/*
+							<div class="panel store color_find_service">
+								<div class="store_wrap">
+									<h3 class="store_title">스타필드 코엑스점1</h3>
+								</div>
+								<div class="store_info">
+									<p class="store_addr">
+										서울 강남구 영동대로 513, 컨벤션센터B1층,0112호
+										<a href="tel:01000000000" class="store_phone">031-286-6206</a>
+									</p>
+									<div class="store_btn_wrap">
+										<button class="btn_md w50p map_call">지도보기</button><button class="btn_md w50p del off">단골등록</button>
+									</div>
+									<div class="store_map_wrap">
+										<div class="map_area"></div>
+									</div>
+								</div>
+							</div>
+							*/-->
+						</div>
+						<button type="button" class="btn_md w100p btn_more_store" style="display:none;">
+							<span>더보기 (<em>5</em>/35)</span>
+						</button>
+
+						<ul class="loading" style="display:none;">
+							<li></li>
+							<li></li>
+							<li></li>
+						</ul>
+					</div>
+				</div>
+				<div class="tab_cont">
+					<h3 class="sr_only">매장찾기 가까운 매장(위치 기반) 탭</h3>
+					<div class="panel none_bdr no_padding">
+						<h3 class="sr_only">가까운 매장(위치 기반)</h3>
+						<fieldset class="form form_brand">
+							<legend class="sr_only">가까운 매장 찾기</legend>
+							<div class="input_wrap">
+								<input type="text" class="location_keyword" placeholder="현재위치" readonly>
+								<button type="button" class="btn_search location"><span class="sr_only">검색</span></button>
+							</div>
+						</fieldset>
+					</div>
+					<p class="store_search_brand text typ2 font_sm">단골매장으로 등록하실 매장의 <span class="ico_heart typ2"></span> 를 선택해 주세요. <span class="l_right total_count" style="display:none;"><strong class="num"></strong>개</span></p>
+
+					<hr class="div mgt30">
+
+					<!--/* 하나의 영역이 열릴때 다른 영역은 닫히게 하고 싶을때 data-open-type="single" 를 넣어준다. */-->
+					<div class="ui_accordion ui_ac_typ1" data-open-type="single">
+						<dl>
+							<dt>
+								<span class="title ico_circle_01">마이 컬러 파인더 서비스는?</span><!--/* 20180417 : 아이콘 변경 */-->
+								<button type="button"><span class="sr_only">더보기</span></button>
+							</dt>
+							<dd>
+								<div class="cont">
+									<p class="text">
+									<ul class="list_bullet_dot">
+										<li>에뛰드하우스의  전국의 오프라인 매장에서 뷰티 아티스트가 고객님께 맞는 컬러를 찾아 제품을 추천해 드리는 서비스입니다.</li>
+										<li>매장 찾기에서 컬러파인더 매장이 표시된 매장을 방문하시면 서비스를 이용하실 수 있습니다.</li>
+									</ul>
+									</p>
+								</div>
+							</dd>
+						</dl>
+					</div>
+
+					<div class="panel no_padding mgt0 btn_favorite_store_panel">
+						<div class="favorite_store_sort_wrap" th:if="${session.LOGIN_USER == null or session.LOGIN_USER.member == null ? false : true}">
+							<button type="button" class="btn_favorite_store location">단골매장만 보기</button>
+						</div>
+						<div class="store_list_wrap">
+							<div class="panel notice">
+								<i class="ico"></i>
+								<p class="text color_gray">매장 검색 결과가 없습니다.</p>
+								<p class="text color_light_gray mgt10">입력하신 매장명 또는 지역명을 다시 확인해 주세요.<br>관련 문의는 고객센터 (1544-5418)로 연락주세요.</p>
+							</div>
+						</div>
+						<button type="button" class="btn_md w100p btn_more_store" style="display:none;">
+							<span>더보기 (<em>5</em>/35)</span>
+						</button>
+
+						<ul class="loading" style="display:none;">
+							<li></li>
+							<li></li>
+							<li></li>
+						</ul>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<!-- // page contents -->
+
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+</th:block>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<html ap:decorate="~{layout/only-contents}">
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+
+		<div class="layer_popup fullpage">
+			<div class="layer_wrap">
+				<dl class="layer">
+					<dt class="layer_title">공지사항</dt>
+					<dd class="layer_cont customer_center">
+						<!--  검색 -->
+						<fieldset class="search_form">
+							<legend class="sr_only">공지사항 검색</legend>
+							<div class="input_wrap">
+								<input type="text" placeholder="검색">
+								<button type="button" class="btn_search">
+									<span class="sr_only">검색</span>
+								</button>
+								<button class="input_del">
+									<span class="sr_only">검색어 삭제</span>
+								</button>
+							</div>
+						</fieldset>
+						<div class="panel gray">
+							<ul class="radio_btn_set">
+								<li><input type="radio" name="notice" id="notice1" th:onclick="|getNotice('3', '0', 'true')|" checked><label
+									for="notice1">전체</label></li>
+								<li><input type="radio" name="notice" id="notice2" th:onclick="|getNotice('0', '0', 'true')|" ><label
+									for="notice2">회원/멤버십</label></li>
+								<li><input type="radio" name="notice" id="notice3" th:onclick="|getNotice('1', '0', 'true')|"><label
+									for="notice3">상품</label></li>
+							</ul>
+						</div>
+						<div class="board_list notice" id="faqPaging"></div>
+						<button type="button" class="btn_lg_more w100p">
+							더보기 (<em>5</em>/35)
+						</button>
+
+					</dd>
+				</dl>
+				<button class="btn_previous" type="button">이전페이지</button>
+				<button class="layer_close" type="button">레이어 닫기</button>
+			</div>
+		</div>
+	</div>
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script th:inline="javascript">
+			$(document).ready(function() {
+				getNotice(3, 0);
+			});
+
+			var currentPage;
+			var currentType;
+
+			$('#add').on('click', function(e) {
+				getNotice(currentType, ++currentPage);
+			});
+
+			function setNotice(n) {
+				// var member = /*[[${member}]]*/;
+				alert(n);
+				// console.log(n);
+			}
+
+			function getPostNotice(faqData) {
+
+				$.ajax({
+					method : 'POST',
+					url : '/cs/faqDatePaging',
+					data : JSON.stringify(faqData),
+					contentType : 'application/json',
+					cache : false,
+					error : function(jqXHR, textStatus, errorThrown) {},
+					success : function(data) {
+						var c = (faqData.page + 1) * 10 > faqData.maxLength ? faqData.maxLength : (faqData.page + 1) * 10;
+						$("#add").html("더보기(<em> " + c + "</em> / " + faqData.maxLength + ")");
+						$('#faqPaging').append(data);
+						// $('.board_list').accordion('clear');
+						// $('.board_list').accordion();
+					}
+				}).done(function() {});
+			}
+
+			function getNotice(type, page, isReplace) {
+
+				if ('true' == isReplace) {
+					if (currentType == type)
+						return;
+					$('#faqPaging').empty();
+				}
+				currentType = type;
+				currentPage = page;
+				AP.api.noticeList({
+					type : type,
+					page : page
+				}).done(function(data) {
+					if (data && 'success' == data.result) {
+						getPostNotice(data.data);
+					}
+					//성공
+				}).fail(function(e) {
+				//실패
+				}).always(function() {
+				//성공, 실패
+				});
+			}
+		</script>
+	</th:block>
+</body>
+</html>

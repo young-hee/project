@@ -1,0 +1,49 @@
+<table class="align_center">
+	<caption class="sr_only">작성한 리뷰</caption>
+	<colgroup>
+		<col style="width:160px;"> <!-- 컬럼 사이즈 -->
+		<col style="width:300px">
+		<col style="width:300px">
+		<col style="width:160px;">
+		<col style="width:160px;">
+	</colgroup>
+	<thead>
+	<tr>
+		<th scope="col">등록일</th>
+		<th scope="col">상품</th>
+		<th scope="col">제목</th>
+		<th scope="col">유형</th>
+		<th scope="col">삭제</th>
+	</tr>
+	</thead>
+	<tbody>
+	{{#each this.prodReviewList}}
+	<tr name="reviewSn_{{ this.prodReviewSn }}">
+		<td class="date">{{ dateFormat this.prodReviewRegistDt }}</td>
+		<td class="product_name"><span>{{ this.prodName }}</span></td>
+		<td class="subj">
+			<span>
+				<a href="javascript:;" class="review_detail" data-prod-review-sn="{{ this.prodReviewSn }}">
+				{{#xif this.topReviewYn '==' 'Y'}}
+					<b>BEST</b>
+				{{/xif}}
+				{{ this.prodReviewTitle }}
+				</a>
+			</span>
+		</td>
+		<td class="review_type">
+			{{#xif this.prodReviewTypeCode '==' 'Pur'}}
+				구매리뷰
+			{{/xif}}
+			{{#xif this.prodReviewTypeCode '==' 'Prod'}}
+				상품리뷰
+			{{/xif}}
+			{{#xif this.prodReviewTypeCode '==' 'ExperienceGrp'}}
+				체험단리뷰
+			{{/xif}}
+		</td>
+		<td><button type="button" class="btn_md_form btn_product_review_del" data-prod-review-sn="{{ this.prodReviewSn }}">삭제하기</button></td>
+	</tr>
+	{{/each}}
+	</tbody>
+</table>

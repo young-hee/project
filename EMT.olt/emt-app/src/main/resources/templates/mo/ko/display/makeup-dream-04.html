@@ -1,0 +1,180 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='makeup-your-dream'">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+    <div class="ap_contents brand">
+		<div class="makeup_dream">
+			<!-- tab menu wrap -->
+			<div class="ui_tab">
+				<!-- tab menu -->
+				<div class="tab_menu equally">
+					<ul>
+						<li><a href="#none" th:href="@{/display/makeup_your_dream(displayMenuId=makeup_your_dream)}">메이크업유어드림</a></li>
+						<li><a href="#none" th:href="@{/display/makeup_your_dream_lecture(displayMenuId=makeup_your_dream_lecture)}">청춘강연</a></li>
+						<li class="on"><a href="#none" th:href="@{/display/makeup_your_dream_apply(displayMenuId=makeup_your_dream_apply)}">청춘강연 신청</a></li>
+					</ul>
+				</div>
+				<!-- tab content -->
+				<div class="tab_cont">
+					<h3 class="h_title page">청춘강연 신청하기</h3>
+					<p class="font_md">아래 정보를 정확하게 입력해주세요.</p>
+					<hr class="div m30">
+					<form class="validate">
+					<fieldset class="form">
+						<legend class="sr_only">청춘강연 신청항목</legend>
+						<dl class="dl_cont">
+							<dt><strong>신청자</strong></dt>
+							<dd>
+								<div class="input_group">
+									<div>
+										<input type="text" name="preName" user-name="user-name" required="required" data-msg-required="신청하실 분의 이름을 입력해 주세요." placeholder="이름을 입력해 주세요.">
+									</div>
+								</div>
+								<div class="input_group">
+									<div>
+										<input type="text" name="prePhnNo" mobile-number="mobile-number" placeholder="휴대폰번호 '-'없이 숫자만 입력"  required="required"  data-msg-required="휴대폰 번호를 입력해 주세요.">
+									</div>
+								</div>
+								<div class="input_group">
+									<div class="label w30p">
+										<label for="age" class="color_gray2" >연령대</label>
+									</div>
+									<div>
+										<select name="requesterAgeGrp" id="age" tabindex="-1" title="연령선택" required="required" data-msg-required="연령대를 선택해 주세요.">
+											<option value="" >선택하세요.</option>
+											<option value="15">15~19세</option>
+											<option value="20">20~24세</option>
+											<option value="25">25~29세</option>
+											<option value="30">30~34세</option>
+											<option value="35">35~39세</option>
+											<option value="40">40세이상</option>
+										</select>
+									</div>
+								</div>
+								<div class="input_group_etc">
+									<span class="w30p color_gray2">성별</span>
+									<span >
+								<span class="check_wrap"><input type="radio" name="requesterGender" id="gender_female" value="Female" required="required" data-msg-required="성별을 선택해 주세요."><label for="gender_female">여자</label></span>
+								<span class="check_wrap"><input type="radio" name="requesterGender" id="gender_male" value="Male" ><label for="gender_male">남자</label></span>
+							</span>
+								</div>
+							</dd>
+						</dl>
+						<dl class="dl_cont ac_yn" >
+							<dt><strong>동반인원 포함(1명)</strong></dt>
+							<dd>
+								<span class="check_wrap"><input type="radio" name="accompanyYn" id="ac_y" value="Y" required="required" data-msg-required="동반인원에 대해 선택해 주세요."><label for="ac_y">있음(1명)</label></span>
+								<span class="check_wrap"><input type="radio" name="accompanyYn" id="ac_n" value="N"><label for="ac_n">없음</label></span>
+							</dd>
+						</dl>
+						
+						<!--/* [S]  동반인원 있음 선택시 만 활성화됨 */-->
+						<dl class="dl_cont accompanyInfo" > 
+							<dt><label for="person"><strong>동반인원</strong></label></dt>
+							<dd>
+								<div class="input_group">
+									<div>
+										<input type="text" id="preCpnName" name="preCpnName" user-name="user-name" required="required" data-msg-required="동반인원의 이름을 입력해 주세요." placeholder="동반인원명을 입력해 주세요.">
+									</div>
+								</div>
+								<div class="input_group">
+									<div>
+										<input type="text" id="preCpnPhnNo" name="preCpnPhnNo" mobile-number="mobile-number" placeholder="휴대폰 번호 ‘-’없이 입력" required="required" data-msg-required="동반인원의 휴대폰번호를 입력해 주세요.">
+									</div>
+								</div>
+								<div class="input_group">
+									<div class="label w30p">
+										<label for="age2" class="color_gray2">연령대</label>
+									</div>
+									<div>
+										<select name="companionAgeGrp" id="age2" tabindex="-1" title="연령선택" required="" data-msg-required="연령대를 선택해 주세요." >
+											<option value="">선택하세요.</option>
+											<option value="15">15~19세</option>
+											<option value="20">20~24세</option>
+											<option value="25">25~29세</option>
+											<option value="30">30~34세</option>
+											<option value="35">35~39세</option>
+											<option value="40">40세이상</option>
+										</select>
+									</div>
+								</div>
+								<div class="input_group_etc">
+									<div class="w30p color_gray2">성별</div>
+									<div>
+										<span class="check_wrap"><input type="radio" name="companionGender" id="radio21" value="Female" required="" data-msg-required="성별을 선택해 주세요."><label for="radio21">여자</label></span>
+										<span class="check_wrap"><input type="radio" name="companionGender" id="radio22" value="Male"><label for="radio22">남자</label></span>
+									</div>
+								</div>
+								<p class="text_notice mgt10">당첨 시 안내문자가 발송됩니다</p>
+							</dd>
+						</dl>
+						
+						<!--/* [E]  동반인원 있음 선택시 만 활성화됨 */-->
+						<dl class="dl_cont">
+							<dt><label for="reason"><strong>신청이유</strong></label></dt>
+							<dd>
+								<div>
+									<div class="textarea">
+										<textarea name="requestReason" id="reason" cols="30" rows="3" placeholder="500자 이내로 입력해주세요." maxlength="500"  required="required" data-msg-required="신청이유는 필수 입력사항입니다."></textarea>
+									</div>
+									<p class="text_right"><small>0/500</small></p>
+								</div>
+							</dd>
+						</dl>
+						<hr class="div m30">
+						<dl class="dl_cont">
+							<dt>개인정보 수집 및 이용동의(필수)</dt>
+							<dd class="agree_box" th:if="${terms1}" th:utext="${terms1.termsBodyText}"></dd><!-- pre태그는 순수 텍스트일경우만 해당 -->
+							<dd class="mgt10">
+									<span class="check_wrap">
+										<input type="checkbox" id="agree01" name="agree01" required="required" data-msg-required="개인정보 수집 및 이용동의는 필수 사항 입니다."><label for="agree01">동의합니다.</label>
+									</span>
+							</dd>
+						</dl>
+						<dl class="dl_cont">
+							<dt>[필수] 개인정보 취급 위탁에 대한 동의</dt>
+							<dd class="agree_box" th:if="${terms2}" th:utext="${terms2.termsBodyText}"></dd>
+							<dd class="mgt10">
+									<span class="check_wrap">
+										<input type="checkbox" id="agree02" name="agree02" required="required" data-msg-required="개인정보 취급 위탁에 대한 동의는 필수 사항 입니다."><label for="agree02" >동의합니다.</label>
+									</span>
+							</dd>
+						</dl>
+						<dl class="dl_cont">
+							<dt>[필수] 사진 및 동영상 촬영 및 활용 동의</dt>
+							<dd class="agree_box" th:if="${terms3}" th:utext="${terms3.termsBodyText}"></dd>
+							<dd class="mgt10">
+									<span class="check_wrap">
+										<input type="checkbox" id="agree03" name="agree03" required="required" data-msg-required="사진 및 동영상 촬영 및 활용동의는 필수 사항 입니다."><label for="agree03" >동의합니다.</label>
+									</span>
+							</dd>
+						</dl>
+						<div class="form_btns">
+							<button type="button" class="btn_md_secondary cancel">취소</button>
+							<button type="button" class="btn_md_primary confirm">등록</button>
+						</div>
+					</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<script th:inline="javascript">
+	
+		$( 'input:text, textarea' ).inputLimits();
+	
+		AP.makeupYourDreamReserve.addListener( 'reserve-complete', function (e) {
+			location.href="/display/makeup_your_dream_apply?displayMenuId=makeup_your_dream_apply";
+		});
+	</script>
+	
+</th:block>
+
+</body>
+</html>

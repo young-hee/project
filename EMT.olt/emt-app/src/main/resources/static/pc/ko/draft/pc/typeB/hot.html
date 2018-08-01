@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>TypeB (PC)</title>
+    <style>
+        *{margin:0; padding:0;list-style:none;}
+		body{overflow-x:hidden;}
+        img{vertical-align: top;}
+        .wrapper{text-align:center;}
+
+		.header {position:relative;margin:0 -100%;}
+		.header .category {position:absolute;width:1200px;height:151px;top:0;left:50%;margin-left:-604px;z-index:1;}
+		.header .category .view {position:absolute;bottom:0;left:0;display:block;width:170px;height:50px;}
+		.header .category .menu {position:absolute;top:151px;display:none;}
+		.header .category .menu .close {position:absolute;bottom:2px;right:2px;display:block;width:40px;height:40px;}
+		.header .category .main {position:absolute;top:0;left:0;display:block;width:100px;height:100px;}
+		.header .live {position:absolute;top:100px;left:580px;display:block;width:120px;height:50px;}
+		.header .hot {position:absolute;top:100px;left:360px;display:block;width:70px;height:50px;}
+
+		.contents {margin:0 -100%;}
+
+		.hot_cont {position:absolute;width:1200px;top:0;left:50%;margin-left:-600px;}
+		.hot01,
+		.hot02,
+		.hot03 {position:absolute;left:0;right:0;}
+		.hot01 {top:530px;height:592px;}
+		.hot01 a {position:absolute;bottom:60px;left:500px;display:block;width:200px;height:50px;}
+		.hot02 {top:1120px;height:535px;}
+		.hot02 a {position:absolute;top:60px;right:68px;display:block;width:110px;height:30px;}
+		.hot03 {top:1657px;height:1081px;}
+		.hot03 a {position:absolute;bottom:100px;left:500px;display:block;width:200px;height:50px;}
+
+		.footer {margin:0 -100%;}
+    </style>
+
+    <script src="../../libs/jquery-1.12.3.min.js"></script>
+    <script src="../../libs/ixBand_1.1.min.js"></script>
+    <script src="../../libs/ixSnack_0.4.min.js"></script>
+
+</head>
+
+<body>
+   
+    <div class="wrapper">
+		<div class="header">
+			<img src="images/img_header03.jpg" alt="">
+			<div class="category">
+				<a href="index.html" class="main"></a>
+				<a href="live.html" class="live"></a>
+				<a href="hot.html" class="hot"></a>
+				<a href="#" class="view"></a>
+				<div class="menu">
+					<img src="images/img_category.jpg" alt="" />
+					<a href="#" class="close"></a>
+				</div>
+			</div>
+		</div>
+		<div class="contents">
+			<img src="images/img_hot01.jpg" alt="">
+			<div class="hot_cont">
+				<div class="hot01"><a href="hot01.html"></a></div>
+				<div class="hot02"><a href="hot02.html"></a></div>
+				<div class="hot03"><a href="hot03.html"></a></div>
+			</div>
+		</div>
+		<div class="footer">
+			<img src="images/img_footer.jpg" alt="" />
+		</div>
+    </div>
+
+    <script src="js/main.js"></script>
+	<script type="text/javascript">
+	$( function (){
+		$( '.category .view' ).on( 'click', function (e) {
+			e.preventDefault();
+
+			$( '.menu' ).show();
+		});
+		$( '.menu .close' ).on( 'click', function (e) {
+			e.preventDefault();
+
+			$( '.menu' ).hide();
+		});
+	});
+	</script>
+</body>
+</html>

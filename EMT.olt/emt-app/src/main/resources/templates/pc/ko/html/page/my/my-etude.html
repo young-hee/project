@@ -1,0 +1,240 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- mypage sitemap -->
+            <th:block ap:replace="~{my/fragment/mypage-sitemap}"/><!--/* 20180418 : 사이트맵 메뉴 추가 변경 삭제 */-->
+            <!-- //  mypage sitemap -->
+
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            
+            <!-- page contents -->
+			<div class="ap_contents my_etude">
+				<div class="clear welcome_wrap">
+					<div>
+						<!--/* welcome message */-->
+						<dl class="welcome pink_love"> <!-- 등급별 클래스 pink_love, friends, hello, guest  -->
+							<dt>
+								<span class="flag">[임직원]</span><!--/*20180628 : 임직원 플래그 추가*/-->
+								<i class="ico_grade"></i>안녕하세요, 홍길동 님
+							</dt>
+							<dd>
+								<p class="text font_xl">고객님의 회원등급은 <em>pink love</em> 입니다.</p>
+								<a href="#none" class="link">개인정보 수정</a>
+								<a href="#none" class="link">내 예상등급 확인</a>
+							</dd>
+						</dl>
+						<!--/* 보유 포인트, 적립금, 예치금 정보 */-->
+						<div class="my_wallet_info">
+							<div class="clear">
+								<dl class="coupon">
+									<dt>쿠폰</dt>
+									<dd><b class="num">10</b> 장</dd>
+								</dl>
+								<dl class="pearl">
+									<dt>진주알</dt>
+									<dd><b class="num">999,999</b> 알</dd>
+								</dl>
+							</div>
+							<div class="clear">
+								<dl class="cushion">
+									<dt>쿠션포인트</dt>
+									<dd><b class="num">999,999</b> p</dd>
+								</dl>
+								<dl class="giftcard">
+									<dt>기프트카드</dt><!--/* 20180418 : 예치금 -> 기프트카드 텍스트 변경 */-->
+									<dd><b class="num">999,999</b> 원</dd>
+								</dl>
+							</div>
+						</div>
+					</div>
+					<div>
+						<!--/* 뷰티포인트 정보 */-->
+						<dl class="beautypoint">
+							<dt>홍길동님의 뷰티포인트</dt>
+							<dd>
+								<p><span class="point"><b class="num">999,999</b>p</span></p>
+								<span class="mobile_card">
+									<a href="#none" class="link">뷰티포인트 모바일 카드 신청</a>
+								</span>
+							</dd>
+						</dl>
+						<!--/* 주문/배송 조회 */-->
+						<dl class="order_process">
+							<dt><b>주문/배송조회</b> <small>(최근 3개월 기준)</small></dt>
+							<dd>
+								<ul class="process">
+									<li><a href="#none"><em class="num">6</em><span>주문접수</span></a></li>
+									<li><a href="#none"><em class="num">2</em><span>결제완료</span></a></li>
+									<li><a href="#none" class="null"><em class="num">0</em><span>배송준비중</span></a></li>
+									<li><a href="#none"><em class="num">1</em><span>배송중</span></a></li>
+									<li><a href="#none" class="null"><em class="num">0</em><span>배송완료</span></a></li>
+								</ul>
+								<div class="_btns clear">
+									<a href="#none" class="btn_md_bordered">취소/반품/교환 (<strong class="num">0</strong>)</a>
+									<a href="#none" class="btn_md_bordered">미작성 구매후기 (<strong class="num">1</strong>)</a>
+								</div>
+								<a href="#" class="more" title="주문/배송조회">더보기</a>
+							</dd>
+						</dl>
+					</div>
+				</div>
+
+				<!--/* 20180502 : 마이 컬러파인더 변경 */-->
+				<div class="my_color_finder">
+					<h3 class="h_title sub"><strong>마이 컬러파인더</strong></h3>
+					<div class="tone_wrap spring">
+						<!--/* 웜톤-봄 : spring, 쿨톤-여름 : summer, 웜톤-가을 : fall, 쿨톤-겨울 : winter */-->
+						<div class="text">
+							<p class="eng">Warm Tone <strong>Spring</strong></p>
+							<p class="tone_text">홍길동 님의 피부톤은<br><b>웜톤 봄</b> 타입</p>
+						</div>
+						<div class="tone_color">
+							<p>비비드 오렌지, 옐로우, 그린또는 노란빛이 감도는 파스텔 피치핑크, 베이비핑크 계열</p>
+						</div>
+						<div class="my_skin table_layout">
+							<div>
+								<p>나의 피부색 - <b>크림색</b></p>
+								<div class="skin_color" style="background-color: #fbe2ba;"></div>
+							</div>
+							<div>
+								<p>톤 대표색</p>
+								<div class="my_tone table_layout">
+									<span class="tone" style="background-color: #f18910;"></span>
+									<span class="tone" style="background-color: #f8be99;"></span>
+									<span class="tone" style="background-color: #f9d3d2;"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!--/* 추천템 */-->
+					<div class="my_tone_recommend">
+						<h3 class="h_title sub">내 피부톤과 어울리는 추천 제품</h3>
+						<div class="slide" data-ix-options="view-length:5;">
+							<div class="ix-list-viewport">
+								<ul class="ix-list-items">
+									<li class="ix-list-item item">
+										<a href="#item">
+											<span class="thumb"><img ap:src="@{/images/dummy/650010812_IM_01.png}" alt="" /></span>
+											<span class="name">플레이 네일 NEW 펄 & 글리터 플레이 네일 NEW 펄 & 글리터</span>
+											<span class="colors">
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt="" /></span>
+												<span class="chip" style="background-color: #c74af5;"></span>
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img2.jpg}" alt="" /></span>
+												<span class="chip" style="background-color: #73cc00;"></span>
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img3.jpg}" alt="" /></span>
+											</span>
+										</a>
+									</li>
+									<li class="ix-list-item item">
+										<a href="#item">
+											<span class="thumb"><img ap:src="@{/images/dummy/650010812_IM_01.png}" alt="" /></span>
+											<span class="name">플레이 네일 NEW 펄 & 글리터</span>
+											<span class="colors">
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt="" /></span>
+												<span class="chip" style="background-color: #c74af5;"></span>
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img2.jpg}" alt="" /></span>
+												<span class="chip" style="background-color: #73cc00;"></span>
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img3.jpg}" alt="" /></span>
+											</span>
+										</a>
+									</li>
+									<li class="ix-list-item item">
+										<a href="#item">
+											<span class="thumb"><img ap:src="@{/images/dummy/650010812_IM_01.png}" alt="" /></span>
+											<span class="name">플레이 네일 NEW 펄 & 글리터</span>
+											<span class="colors">
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt="" /></span>
+												<span class="chip" style="background-color: #c74af5;"></span>
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img2.jpg}" alt="" /></span>
+												<span class="chip" style="background-color: #73cc00;"></span>
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img3.jpg}" alt="" /></span>
+											</span>
+										</a>
+									</li>
+									<li class="ix-list-item item">
+										<a href="#item">
+											<span class="thumb"><img ap:src="@{/images/dummy/650010812_IM_01.png}" alt="" /></span>
+											<span class="name">플레이 네일 NEW 펄 & 글리터</span>
+											<span class="colors">
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt="" /></span>
+												<span class="chip" style="background-color: #c74af5;"></span>
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img2.jpg}" alt="" /></span>
+												<span class="chip" style="background-color: #73cc00;"></span>
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img3.jpg}" alt="" /></span>
+											</span>
+										</a>
+									</li>
+									<li class="ix-list-item item">
+										<a href="#item">
+											<span class="thumb"><img ap:src="@{/images/dummy/650010812_IM_01.png}" alt="" /></span>
+											<span class="name">플레이 네일 NEW 펄 & 글리터</span>
+											<span class="colors">
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt="" /></span>
+												<span class="chip" style="background-color: #c74af5;"></span>
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img2.jpg}" alt="" /></span>
+												<span class="chip" style="background-color: #73cc00;"></span>
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img3.jpg}" alt="" /></span>
+											</span>
+										</a>
+									</li>
+									<li class="ix-list-item item">
+										<a href="#item">
+											<span class="thumb"><img ap:src="@{/images/dummy/650000956_IM_01.png}" alt="" /></span>
+											<span class="name">플레이 네일 NEW 펄 & 글리터</span>
+											<span class="colors">
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt="" /></span>
+												<span class="chip" style="background-color: #c74af5;"></span>
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img2.jpg}" alt="" /></span>
+												<span class="chip" style="background-color: #73cc00;"></span>
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img3.jpg}" alt="" /></span>
+											</span>
+										</a>
+									</li>
+									<li class="ix-list-item item">
+										<a href="#item">
+											<span class="thumb"><img ap:src="@{/images/dummy/650000956_IM_01.png}" alt="" /></span>
+											<span class="name">플레이 네일 NEW 펄 & 글리터</span>
+											<span class="colors">
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt="" /></span>
+												<span class="chip" style="background-color: #c74af5;"></span>
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img2.jpg}" alt="" /></span>
+												<span class="chip" style="background-color: #73cc00;"></span>
+												<span class="chip"><img ap:src="@{/images/dummy/color_chips_img3.jpg}" alt="" /></span>
+											</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+							<div class="ix-controller">
+								<div class="slide_direction">
+									<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
+									<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
+									<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="banner">
+						<a href="#"><img ap:src="@{/images/my/link_app.jpg}" alt="에뛰드 하우스 앱으로 더 많은 정보를 확인해 보세요~. 앱 설치하기" /></a>
+					</div>
+				</div>
+			</div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+			<script>
+				// slide
+				$( '.my_tone_recommend .slide' ).ixSlideMax();
+			</script>
+        </th:block>
+</body>
+</html>

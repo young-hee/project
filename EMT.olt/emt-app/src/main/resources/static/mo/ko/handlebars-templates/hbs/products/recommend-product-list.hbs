@@ -1,0 +1,27 @@
+{{!--
+	다른 고객들이 많이 찾은 상품 목록 (small slide)
+--}}
+<div class="ix-list-viewport">
+	<ul class="ix-list-items">
+		{{#each this.list}}
+			<li class="ix-list-item item">
+				<a href="{{ productDetailPath this.onlineProdSn }}">
+					<div class="thumb"><img src="{{ this.onlineProdImages.0.imgUrl }}" alt="" /></div>
+					<div class="item_info">
+						<div>
+							{{#if this.lineDesc}}
+								<p class="s_name">{{ this.lineDesc }}</p>
+							{{/if}}
+							<p class="prd_name">{{ this.onlineProdName }}</p>
+						</div>
+						<div class="price_area">
+							<span class="price">
+								{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>원</em>
+							</span>
+						</div>
+					</div>
+				</a>
+			</li>
+		{{/each}}
+	</ul>
+</div>

@@ -1,0 +1,183 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='store-compliment'">
+
+<body>
+
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents brand store_compliment_write">
+				<div class="find_store">
+					<!-- tab menu wrap -->
+					<div class="ui_tab">
+						<!-- tab menu -->
+						<div class="tab_menu equally">
+							<ul>
+								<li><a href="#none" th:href="@{/display/store_location(displayMenuId=store_location)}">매장 찾기</a></li>
+								<li><a href="#none" th:href="@{/display/store_opening(displayMenuId=store_opening)}">매장 개설 문의</a></li>
+								<li class="on"><a href="#none" th:href="@{/display/store_review(displayMenuId=store_review)}">매장 칭찬</a></li>
+							</ul>
+						</div>
+						<!-- tab content -->
+						<div class="tab_cont pd0">
+							<h3 class="sr_only">매장 칭찬</h3>
+
+							<p class="text_sub_info">고객님께 감동을 준 매장을 선택하여 칭찬 후기를 남겨주세요!</p>
+							<form class="validate" method="post" enctype="multipart/form-data" novalidate="novalidate">
+								<input type="hidden" name="displayYn" value="Y">
+								<fieldset class="form panel gray bdr_top frm_find_store">
+									<legend class="sr_only">칭찬 작성하기</legend>
+									<div class="panel_cont">
+										<div class="title_wrap">
+											<h4 class="form_title">칭찬 작성/수정하기</h4><!--/* 180413 : 문구수정 */-->
+										</div>
+										<div class="ui_table">
+											<dl>
+												<dt><label for="">아이디</label></dt>
+												<dd th:text="${memberMap != null ? memberMap.id : ''}"></dd>
+											</dl>
+											<dl>
+												<dt><label for="title">제목</label></dt>
+												<dd>
+													<div class="w70p input_wrap">
+														<input type="text" id="title" value="" th:value="${storeEvalEx != null ? storeEvalEx.storeEvalTitle : ''}" name="storeEvalTitle" maxlength="30" placeholder="최대 30자까지 입력 가능합니다." required="required" data-msg-required="제목을 입력해 주세요."/>
+													</div>
+												</dd>
+											</dl>
+											<dl>
+												<dt><label for="">매장 선택</label></dt>
+												<dd>
+													<!--// 칭찬작성 -->
+													<button type="button" class="btn_md_form find_store_button">매장 찾기</button>
+													<span style="display: none">선택 매장: </span>
+													<input type="text" name="storeName" class="storeNm" readonly="" required="required" data-msg-required="친절 매장을 선택해주세요." th:value="${storeEvalEx != null ? storeEvalEx.storeName : ''}">
+													<input type="hidden" name="storeSn" class="storeSn" value="" th:value="${storeEvalEx != null ? storeEvalEx.storeSn : ''}">
+													<!-- 칭찬작성 //-->
+
+													<!--// 칭찬수정 --
+													<span style="display: inline-block">선택 매장: </span>
+													<input type="text" name="storeName" class="storeNm" value="가로수길" readonly="" required="required" data-msg-required="친절 매장을 선택해주세요.">
+													<input type="hidden" name="storeSn" class="storeSn" value="33">
+													<!-- 칭찬수정 //-->
+												</dd>
+											</dl>
+											<dl>
+												<dt><label for="">선택 이유</label></dt>
+												<dd>
+													<p class="check_set_store_tit">친절 매장을 추천하게 된 이유를 선택해 주세요.</p>
+													<div class="check_set reason">
+														<div class="check_wrap"><input type="checkbox" name="reason" required="required" data-msg-required="친절 매장을 추천하게 된 이유를 선택해 주세요." value="스위티의 친절" id="opt2_1" th:checked="${storeEvalEx != null && (#strings.indexOf(storeEvalEx.storeEvalReason,'스위티의 친절') >= 0) ? 'true' : 'false'}"><label for="opt2_1">스위티의 친절</label></div>
+														<div class="check_wrap"><input type="checkbox" name="reason" required="required" data-msg-required="친절 매장을 추천하게 된 이유를 선택해 주세요." value="쾌적한 매장" id="opt2_2" th:checked="${storeEvalEx != null && (#strings.indexOf(storeEvalEx.storeEvalReason,'쾌적한 매장') >= 0) ? 'true' : 'false'}"><label for="opt2_2">쾌적한 매장</label></div>
+														<div class="check_wrap"><input type="checkbox" name="reason" required="required" data-msg-required="친절 매장을 추천하게 된 이유를 선택해 주세요." value="다양한 제품" id="opt2_3" th:checked="${storeEvalEx != null && (#strings.indexOf(storeEvalEx.storeEvalReason,'다양한 제품') >= 0) ? 'true' : 'false'}"><label for="opt2_3">다양한 제품</label></div>
+														<div class="check_wrap"><input type="checkbox" name="reason" required="required" data-msg-required="친절 매장을 추천하게 된 이유를 선택해 주세요." value="솔직하고 부담 없는 가격" id="opt2_4" th:checked="${storeEvalEx != null && (#strings.indexOf(storeEvalEx.storeEvalReason,'솔직하고 부담 없는 가격') >= 0) ? 'true' : 'false'}"><label for="opt2_4">솔직하고 부담 없는 가격</label></div>
+														<div class="check_wrap"><input type="checkbox" name="reason" required="required" data-msg-required="친절 매장을 추천하게 된 이유를 선택해 주세요." value="기타" id="opt2_5" th:checked="${storeEvalEx != null && (#strings.indexOf(storeEvalEx.storeEvalReason,'기타') >= 0) ? 'true' : 'false'}"><label for="opt2_5">기타</label></div>
+													</div>
+													<input type="hidden" name="storeEvalReason" value="" th:value="${storeEvalEx != null ? storeEvalEx.storeEvalReason : ''}">
+												</dd>
+											</dl>
+											<dl>
+												<dt><label for="">내용</label></dt>
+												<dd>
+													<!-- maxlength 속성을 기준으로 작동 -->
+													<div class="textarea_typ2_wrap">
+														<div class="textarea typ2">
+															<textarea cols="30" rows="3" name="storeEvalBodyText" placeholder="최대 1000자까지 입력 가능합니다." maxlength="1000" required="required" data-msg-required="내용을 입력해 주세요." th:text="${storeEvalEx != null ? storeEvalEx.storeEvalBodyText : ''}"></textarea>
+														</div>
+														<p class="text_right"><small><em class="current">0</em>/<span class="limits">500</span></small><span>자</span></p>
+													</div>
+												</dd>
+											</dl>
+											<dl>
+												<dt><label for="">사진 등록</label></dt>
+												<dd>
+													<!-- data-single-input 속성에 "true"를 넣으면 이미지가 하나만 첨부된다. -->
+													<div class="attach_wrap ui_input_images">
+														<!--[if lte ie 9]>
+														<div class="input_btn_wrap">
+															<span class="input_wrap">
+																<input class="input_file_name ie9_lte" type="text" title="첨부 파일 선택" readonly value="">
+																<button class="input_del"><i class="ico_close_w"></i><span class="sr_only">첨부파일 삭제</span></button>
+															</span>
+															<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png">
+															<label for="i_picture" class="btn_md_form">파일 선택</label>
+														</div>
+														<![endif]-->
+														<!--[if gt ie 9]><!-->
+														<ul class="attach">
+															<th:block  th:if="${storeEvalEx != null and (not #lists.isEmpty(storeEvalEx.storeEvalImgExList))}">
+																<th:block th:each="img : ${storeEvalEx.storeEvalImgExList}">
+																	<li th:data-img-sn="${img.storeEvalImgSn}">
+																		<img th:src="${img.storeEvalImgUrl}">
+																		<button type="button" class="btn_del">
+																			<span class="sr_only">첨부파일 삭제</span>
+																		</button>
+																	</li>
+																</th:block>
+															</th:block>
+
+															<li class="input_file_btn_area">
+																<div class="attach_file">
+																	<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="multiple">
+																	<label for="i_picture">사진 첨부</label>
+																</div>
+															</li>
+														</ul>
+														<p class="text">이미지 파일만 가능 / 최대 10개 / 최대 파일 용량 10MB</p>
+														<!--<![endif]-->
+													</div>
+												</dd>
+											</dl>
+										</div>
+									</div>
+								</fieldset>
+
+								<ul class="list_bullet_dot find_store_info_list_wrap">
+									<li>타인의 글 도용 및 올바르지 않은 리뷰 작성으로 인하여, 게시판 성격과 관련 없는 게시물은 임의로 삭제될 수 있습니다.<br>(동일 내용의 반복 등록, 무의미한 내용 입력, 광고 및 욕설, 비방의 글, 성인글, 출처를 안 밝힌 뉴스기사 등)</li>
+									<li>저작권 등 다른 사람의 권리를 침해하거나 명예를 훼손하는 게시물은 이용약관 및 관련 법률에 의해 제재를 받을 수 있습니다.</li>
+									<li>제품에 대한 문의 및 불편사항은 [고객센터 1:1 상담]으로 문의해 주세요.</li>
+									<li>커뮤니티에 작성된 글은 에뛰드의 입장과 다를 수 있습니다.</li>
+								</ul>
+
+								<div class="find_store_btns_wrap">
+									<button class="btn_lg_secondary" type="button" id="btnCancel">취소</button>
+									<!--// 칭찬작성 --><button class="btn_lg_primary" type="submit">칭찬 등록</button><!-- 칭찬작성 //-->
+									<!--// 칭찬수정 -- <button class="btn_lg_primary" type="submit">칭찬 수정</button><!-- 칭찬수정 //-->
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script th:inline="javascript">
+				(function () {
+					var member = {};
+
+					[# th:if="${memberMap}"]
+						member.id = /*[[${memberMap.id}]]*/;
+						member.name = /*[[${memberMap.name}]]*/;
+						member.memberSn = /*[[${memberMap.memberSn}]]*/;
+					[/]
+
+					AP.storeComplimentWrite.getMemberInfo( member.id, member.name, member.memberSn );
+
+					// 칭찬 등록
+					AP.storeComplimentWrite.addListener( 'submit-complete', function (e) {
+						location.href="/display/store_review?displayMenuId=store_review";
+					});
+				}());
+				
+				
+				$('#btnCancel').off('click').on('click', function(e) {
+					location.href="/display/store_review?displayMenuId=store_review";
+				});
+			</script>
+        </th:block>
+</body>
+</html>

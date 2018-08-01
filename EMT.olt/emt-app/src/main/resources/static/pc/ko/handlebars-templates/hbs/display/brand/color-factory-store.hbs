@@ -1,0 +1,42 @@
+{{#each this.storeExList}}
+<dl data-store-sn="{{ this.storeSn }}" data-lat="{{ this.latitude }}" data-lng="{{ this.longitude }}">
+	<dt><button type="button">{{ this.storeName }}</button></dt>
+	<dd style="display: block">
+		<div class="clear">
+			{{#xif this.storeImgUrlList.length '>' 0}}
+				<div class="slide" data-ix-options="view-length:1;">
+					<div class="ix-list-viewport">
+						<ul class="ix-list-items">
+							{{#each this.storeImgUrlList}}
+							<li class="ix-list-item">
+								<a href="#none">
+									<img alt="" src="{{ absolutePath this }}">
+								</a>
+							</li>
+							{{/each}}
+						</ul>
+					</div>
+					<div class="ix-controller round_box">
+						<div class="paging"><b class="current">1</b> / <span class="total"></span></div>
+						<div class="slide_direction">
+							<a class="ix-btn-prev" href="#none"><span class="sr_only">Prev</span></a>
+							<a class="ix-btn-next" href="#none"><span class="sr_only">Next</span></a>
+						</div>
+					</div>
+				</div>
+			{{/xif}}
+			<div class="map_area"></div>
+		</div>
+		<div class="info">
+			<dl>
+				<dt>{{ this.storeName }}</dt>
+				<dd>
+					<span class="color_gray">{{ this.address.address1 }}, {{ this.address.address2 }}</span>
+					<br>{{ phoneNumberFormat this.phoneNo1.phoneNo }}
+				</dd>
+			</dl>
+			<button class="btn_md_bordered print"><span class="ico_print"></span>지도인쇄</button>
+		</div>
+	</dd>
+</dl>
+{{/each}}

@@ -1,0 +1,240 @@
+<html ap:decorate="~{layout/only-contents}" th:with="_jsfile='search'">
+<!--<html ap:decorate="~{layout/only-contents}">-->
+<head>
+    <title>fullpage layer 스타일</title>
+</head>
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+
+		<div class="layer_popup fullpage search_filter"> <!-- 03-06 클래스 수정 -->
+			<div class="layer_wrap">
+				<dl class="layer">
+					<dt class="layer_title">검색필터</dt>
+					<dd class="layer_cont">
+						<div class="panel">
+							<div class="ui_accordion">
+								<dl>
+									<dt class="on">
+										<span class="title">컬러</span>
+										<button type="button"><span class="sr_only">더보기</span></button>
+									</dt>
+									<dd>
+										<div class="cont">
+											<!-- 03-06 html 수정 -->
+											<div class="color_chip circle">
+												<span><input type="checkbox" id="pink" name="color" checked=""><label for="pink" style="background-color:#f06da1"><span class="sr_only">핑크계열</span></label></span>
+												<span><input type="checkbox" id="red" name="color"><label for="red" style="background-color:#e9224e"><span class="sr_only">레드계열</span></label></span>
+												<span><input type="checkbox" id="orange" name="color"><label for="orange" style="background-color:#ff7a2d"><span class="sr_only">오렌지계열</span></label></span>
+												<span><input type="checkbox" id="purple" name="color"><label for="purple" style="background-color:#b261e4"><span class="sr_only">보라계열</span></label></span>
+												<span><input type="checkbox" id="black" name="color"><label for="black" style="background-color:#1f1d20"><span class="sr_only">블렉/그레이계열</span></label></span>
+											</div>
+											<div class="color_chip circle">
+												<span><input type="checkbox" id="brown" name="color"><label for="brown" style="background-color:#8e502f"><span class="sr_only">브라운계열</span></label></span>
+												<span><input type="checkbox" id="green" name="color"><label for="green" style="background-color:#8fe48a"><span class="sr_only">그린계열</span></label></span>
+												<span><input type="checkbox" id="blue" name="color"><label for="blue" style="background-color:#3a6abf"><span class="sr_only">블루계열</span></label></span>
+												<span><input type="checkbox" id="yellow" name="color"><label for="yellow" style="background-color:#f9c361"><span class="sr_only">옐로우/베이지계열</span></label></span>
+												<span><input type="checkbox" id="white" name="color"><label for="white" style="background-color:#fff"><span class="sr_only">화이트/실버계열</span></label></span>
+											</div>
+											<!-- // 03-06 html 수정 -->
+										</div>
+									</dd>
+								</dl>
+								<dl>
+									<dt>
+										<span class="title">피부톤</span>
+										<button type="button"><span class="sr_only">더보기</span></button>
+									</dt>
+									<dd>
+										<div class="cont">
+											<div class="filter_set">
+												<span><input type="checkbox" name="skintone" id="skintone1" /><label for="skintone1">웜톤</label></span>
+												<span><input type="checkbox" name="skintone" id="skintone2" /><label for="skintone2">쿨톤</label></span>
+												<span><input type="checkbox" name="skintone" id="skintone3" /><label for="skintone3">뉴트럴톤</label></span>
+											</div>
+										</div>
+									</dd>
+								</dl>
+								<dl>
+									<dt>
+										<span class="title">계절</span>
+										<button type="button"><span class="sr_only">더보기</span></button>
+									</dt>
+									<dd>
+										<div class="cont">
+											<div class="filter_set">
+												<span><input type="checkbox" name="season" id="season1" /><label for="season1">봄</label></span>
+												<span><input type="checkbox" name="season" id="season2" /><label for="season2">여름</label></span>
+												<span><input type="checkbox" name="season" id="season3" /><label for="season3">가을</label></span>
+												<span><input type="checkbox" name="season" id="season4" /><label for="season4">겨울</label></span>
+												<span><input type="checkbox" name="season" id="season5" /><label for="season5">봄/가을</label></span>
+												<span><input type="checkbox" name="season" id="season6" /><label for="season6">여름/겨울</label></span>
+											</div>
+										</div>
+									</dd>
+								</dl>
+								<dl>
+									<dt>
+										<span class="title">피부고민</span>
+										<button type="button"><span class="sr_only">더보기</span></button>
+									</dt>
+									<dd>
+										<div class="cont">
+											<div class="filter_set">
+												<span><input type="checkbox" name="trouble" id="trouble1" /><label for="trouble1">수분</label></span>
+												<span><input type="checkbox" name="trouble" id="trouble2" /><label for="trouble2">보습</label></span>
+												<span><input type="checkbox" name="trouble" id="trouble3" /><label for="trouble3">미백</label></span>
+												<span><input type="checkbox" name="trouble" id="trouble4" /><label for="trouble4">탄력/영양</label></span>
+												<span><input type="checkbox" name="trouble" id="trouble5" /><label for="trouble5">트러블/진정</label></span>
+												<span><input type="checkbox" name="trouble" id="trouble6" /><label for="trouble6">모공/피지</label></span>
+												<span><input type="checkbox" name="trouble" id="trouble7" /><label for="trouble7">탄력</label></span>
+											</div>
+										</div>
+									</dd>
+								</dl>
+								<dl>
+									<dt>
+										<span class="title">피부타입</span>
+										<button type="button"><span class="sr_only">더보기</span></button>
+									</dt>
+									<dd>
+										<div class="cont">
+											<div class="filter_set">
+												<span><input type="checkbox" name="skintype" id="skintype1" /><label for="skintype1">건성</label></span>
+												<span><input type="checkbox" name="skintype" id="skintype2" /><label for="skintype2">지성</label></span>
+												<span><input type="checkbox" name="skintype" id="skintype3" /><label for="skintype3">민감성</label></span>
+												<span><input type="checkbox" name="skintype" id="skintype4" /><label for="skintype4">복합성</label></span>
+											</div>
+										</div>
+									</dd>
+								</dl>
+								<dl>
+									<dt>
+										<span class="title">텍스쳐</span>
+										<button type="button"><span class="sr_only">더보기</span></button>
+									</dt>
+									<dd>
+										<div class="cont">
+											<!-- 아이 -->
+											<div class="filter_set">
+												<span><input type="checkbox" name="texture" id="texture1" /><label for="texture1">매트</label></span>
+												<span><input type="checkbox" name="texture" id="texture2" /><label for="texture2">쉬머링</label></span>
+												<span><input type="checkbox" name="texture" id="texture3" /><label for="texture3">글리터</label></span>
+												<span><input type="checkbox" name="texture" id="texture4" /><label for="texture4">무펄</label></span>
+												<span><input type="checkbox" name="texture" id="texture5" /><label for="texture5">크림</label></span>
+												<span><input type="checkbox" name="texture" id="texture6" /><label for="texture6">리퀴드</label></span>
+												<span><input type="checkbox" name="texture" id="texture7" /><label for="texture7">파우더</label></span>
+												<span><input type="checkbox" name="texture" id="texture8" /><label for="texture8">컬링</label></span>
+												<span><input type="checkbox" name="texture" id="texture9" /><label for="texture9">롱래쉬</label></span>
+												<span><input type="checkbox" name="texture" id="texture10" /><label for="texture10">볼륨</label></span>
+												<span><input type="checkbox" name="texture" id="texture11" /><label for="texture11">팬슬</label></span>
+												<span><input type="checkbox" name="texture" id="texture12" /><label for="texture12">워터프루프</label></span>
+												<span><input type="checkbox" name="texture" id="texture13" /><label for="texture13">레귤러</label></span>
+												<span><input type="checkbox" name="texture" id="texture14" /><label for="texture14">붓펜</label></span>
+												<span><input type="checkbox" name="texture" id="texture15" /><label for="texture15">피그먼트</label></span>
+												<span><input type="checkbox" name="texture" id="texture16" /><label for="texture16">젤/리퀴드</label></span>
+												<span><input type="checkbox" name="texture" id="texture17" /><label for="texture17">글로시</label></span>
+												<span><input type="checkbox" name="texture" id="texture18" /><label for="texture18">풀커버</label></span>
+												<span><input type="checkbox" name="texture" id="texture19" /><label for="texture19">매트</label></span>
+												<span><input type="checkbox" name="texture" id="texture20" /><label for="texture20">내추럴</label></span>
+												<span><input type="checkbox" name="texture" id="texture21" /><label for="texture21">촉촉/윤기</label></span>
+												<span><input type="checkbox" name="texture" id="texture22" /><label for="texture22">펄</label></span>
+												<span><input type="checkbox" name="texture" id="texture23" /><label for="texture23">페인트</label></span>
+												<span><input type="checkbox" name="texture" id="texture24" /><label for="texture24">시럽</label></span>
+											</div>
+										</div>
+									</dd>
+								</dl>
+							</div>
+							<div class="page_btns">
+								<button type="button" class="btn_md_secondary">초기화</button>
+								<button type="button" class="btn_md_primary">필터 적용</button>
+							</div>
+						</div>
+					</dd>
+				</dl>
+				<button class="layer_close" type="button">레이어 닫기</button>
+			</div>
+		</div>
+	</div>
+
+    <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+    <th:block ap:fragment="layout-endpoint">
+
+		<script>
+            //검색필터를 구성하는 데이타
+			var filterData = {
+				//옵션상품이 있을때만
+				color: {
+					label: '컬러',
+					properties: [
+						{label: '핑크계열', value: 'f06da1', selected: true},
+						{label: '레드계열', value: 'e9224e', selected: false},
+						{label: '오렌지계열', value: 'ff7a2d', selected: false},
+						{label: '보라계열', value: 'b261e4', selected: false},
+						{label: '블렉/그레이계열', value: '1f1d20', selected: false},
+						{label: '브라운계열', value: '8e502f', selected: false},
+						{label: '그린계열', value: '8fe48a', selected: false},
+						{label: '블루계열', value: '3a6abf', selected: false},
+						{label: '옐로우/베이지계열', value: 'f9c361', selected: false},
+						{label: '화이트/실버계열', value: 'ffffff', selected: false}
+					]
+				},
+				skinTone: {
+					label: '피부톤',
+					properties: [
+						{label: '웜톤', value: 'f1_p1', selected: true},
+						{label: '쿨톤', value: 'f1_p2', selected: false},
+						{label: '뉴트럴톤', value: 'f1_p3', selected: false}
+					]
+				},
+				season: {
+					label: '계절',
+					properties: [
+						{label: '봄', value: 'f2_p1', selected: true},
+						{label: '여름', value: 'f2_p2', selected: false},
+						{label: '가을', value: 'f2_p3', selected: false},
+						{label: '겨울', value: 'f2_p4', selected: false}
+					]
+				},
+				texture: {
+					label: '텍스쳐',
+					properties:	[
+						{label: '매트', value: 'f3_p1', selected: true},
+						{label: '쉬머링', value: 'f3_p2', selected: false},
+						{label: '글리터', value: 'f3_p3', selected: false},
+						{label: '무펄', value: 'f3_p4', selected: false}
+					]
+				},
+				skinTrouble: {
+					label: '피부고민',
+					properties:	[
+						{label: '수분', value: 'f4_p1', selected: true},
+						{label: '보습', value: 'f4_p2', selected: false},
+						{label: '미백', value: 'f4_p3', selected: false},
+						{label: '탄력/영양', value: 'f4_p4', selected: false}
+					]
+				},
+				skinType: {
+					label: '피부타입',
+					properties:	[
+						{label: '수분', value: 'f5_p1', selected: true},
+						{label: '보습', value: 'f5_p2', selected: false},
+						{label: '미백', value: 'f5_p3', selected: false},
+						{label: '탄력/영양', value: 'f5_p4', selected: false}
+					]
+				}
+			};
+
+			//검색필터 열기
+			// var productFilter = new AP.ProductsFilter().open( filterData );
+			// productFilter.addListener( 'change-filter', function (e) {
+			// 	console.log( e.type, e.filterData, e.selectedData );
+			// });
+
+		</script>
+
+    </th:block>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+{{#each this.list}}
+{{#xif (calc @index '%' 4) '==' 0}}
+<li class="ix-list-item">
+	<ul class="prd_in_img">
+{{/xif}}	
+		<li>
+			<a href="#none" style="background:#f0adb6;">
+				{{#xif this.videoOnlyYn '==' 'Y'}}
+				<img alt="{{lineDesc}}" src="{{this.videoImgDescM}}">
+				{{else}}
+				<img alt="{{lineDesc}}" src="{{this.bannerImgM1}}">
+				{{/xif}}
+				<p class="text">{{this.articleTitle}}</p>
+				<span class="ch_etude_date">{{dateFormat this.startDt}}</span>
+			</a>
+		</li>
+{{#xif (calc @index '%' 4) '==' 3}}
+	</ul>
+</li>
+{{/xif}}
+{{/each}}

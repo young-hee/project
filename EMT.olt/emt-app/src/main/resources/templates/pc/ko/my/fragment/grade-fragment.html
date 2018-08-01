@@ -1,0 +1,46 @@
+<th:block layout:fragment="grade-list">
+
+<div class="pbody board_list2 tbl_member_class">
+    <table class="align_center">
+        <caption class="sr_only">멤버십 등급 산정 목록으로 적용일, 주문번호, 대표 상품명, 매장명, 결제금액, 등급산정금액으로 구성</caption>
+        <colgroup>
+            <col style="width:160px" />
+            <col style="width:194px" />
+            <col />
+            <col />
+            <col />
+            <col />
+        </colgroup>
+        <thead>
+            <tr>
+                <th scope="col">적용일</th>
+                <th scope="col">주문번호</th>
+                <th scope="col">대표 상품명</th>
+                <th scope="col">매장명</th>
+                <th scope="col">결제금액</th>
+                <th scope="col">등급산정금액</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="item : ${#IntegUtil.subList(custGradeDetail.custGradeList, 10)}">
+                <td class="application_date" th:text="${#IntegUtil.dateformat(item.saleDt, 'yyyy.MM.dd')}">2018.01.05</td>
+                <td class="order_number"><a href="javascript:;" th:text="${item.ordNo}">2017012102010101</a>
+                </td>
+                <td class="product_name" th:text="${item.itemNm}">룩 앳 마이 아이즈 카페</td>
+                <td class="store_name" th:text="${item.storNm}">에뛰드 쇼핑몰</td>
+                <td class="payment"><span th:text="${#IntegUtil.toCommaNumber(item.grdAmt)}">7,000</span> 원</td>
+                <td class="class_money">-</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="pbody pagination" th:with="pageVo=${#IntegUtil.initPageInfo(pageVo, 10)}">
+	<a href="javascript:;" onclick="more(1)" class="navi first" th:classappend="${pageVo.isFirstPage}? disabled : null" th:disabled="${pageVo.isFirstPage}? disabled : null">처음</a>
+	<a href="javascript:;" th:onclick="'more(' + ${pageVo.prePage} + ')'" class="navi prev" th:classappend="${!pageVo.hasPrePage}? disabled : null" th:disabled="${!pageVo.hasPrePage}? 'disabled' : null">이전</a>
+	<th:block th:each="page : ${pageVo.pageList}">
+		<a href="javascript:;" th:onclick="'more(' + ${page} + ')'" th:text="${page}" th:classappend="${pageVo.curPage == page}? 'current' : null">2</a>
+	</th:block>
+	<a href="javascript:;" th:onclick="'more(' + ${pageVo.nextPage} + ')'" class="navi next" th:classappend="${!pageVo.hasNextPage}? disabled : null" th:disabled="${!pageVo.hasNextPage}? 'disabled' : null">다음</a>
+	<a href="javascript:;" th:onclick="'more(' + ${pageVo.lastPage} + ')'" class="navi last" th:classappend="${pageVo.isLastPage}? disabled : null" th:disabled="${pageVo.isLastPage}? 'disabled' : null">끝</a>
+</div>
+</th:block>

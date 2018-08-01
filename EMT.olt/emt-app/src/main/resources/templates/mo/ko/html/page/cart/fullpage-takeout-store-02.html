@@ -1,0 +1,95 @@
+<html ap:decorate="~{layout/only-contents}">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+	<div class="layer_popup fullpage takeout_store">
+		<div class="layer_wrap">
+			<dl class="layer">
+				<dt class="layer_title">테이크아웃 매장 변경</dt>
+				<dd class="layer_cont">
+					<div class="panel">
+						<h2 class="h_title page">테이크아웃 매장 변경</h2>
+						<p class="text font_md">상품을 전달받을 매장을 선택해주세요.</p>
+						<fieldset class="form">
+							<legend class="sr_only">테이크아웃 매장 검색</legend>
+							<div class="input_group">
+								<div>
+									<select name="" id="" title="지역 선택">
+										<option value="">지역선택</option>
+									</select>
+								</div>
+								<div class="div">
+									<select name="" id="" title="시/구/군 선택">
+										<option value="">시/구/군</option>
+									</select>
+								</div>
+							</div>
+							<div class="input_group">
+								<div>
+									<input type="text" placeholder="검색">
+									<button type="button" class="btn_search"><span class="sr_only">검색</span></button>
+									<button class="input_del"><i class="ico_close_w"></i><span class="sr_only">검색어 삭제</span></button>
+								</div>
+							</div>
+							<div class="store_count">
+								<div>검색된 매장 <em>0</em>개</div>
+								<div class="check_set">
+									<span class="check_wrap"><input type="radio" name="radio" id="radio1" checked=""><label for="radio1">거리 순</label></span>
+									<span class="check_wrap"><input type="radio" name="radio" id="radio2"><label for="radio2">단골매장</label></span>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+					<!--목록이 없을경우-->
+					<div class="store_list_wrap">
+						<div class="panel notice">
+							<i class="ico"></i>
+							<p class="text color_gray">매장명 또는 지역으로 검색하세요.</p>
+						</div>
+					</div>
+					<!--//목록이 없을경우-->
+				</dd>
+			</dl>
+			<button class="layer_close" type="button">레이어 닫기</button>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script>
+		$( '.store_list_wrap > .store:not(.js-apply)' ).each( function () {
+			var $store = $( this ),
+				$mapArea = $store.find( '.map_area' ),
+				$btnWrap = $store.find( '.store_btn_wrap' );
+
+			//지도보기 버튼
+			$btnWrap.find( '>.map_call' ).on( 'click', function (e) {
+				if ( $btnWrap.hasClass('on') ) {
+					$btnWrap.removeClass( 'on' );
+				} else {
+					//open
+					$btnWrap.addClass( 'on' );
+					$mapArea.mapApi( 'resize' );
+					$mapArea.mapApi( 'setCenter', 37.52876373236224, 126.96846416770506 );
+				}
+			});
+
+			//닫기 버튼
+			$store.find( '.close_btn' ).on( 'click', function (e) {
+				$btnWrap.removeClass( 'on' );
+			});
+
+			//지도 가이드 참고
+			$mapArea.mapApi({ratio: [320, 180]});
+			$mapArea.mapApi( 'addMarker', 37.52876373236224, 126.96846416770506, 1 );
+
+			//중복적용 방지
+			$store.addClass( 'js-apply' );
+		});
+	</script>
+</th:block>
+
+</body>
+</html>

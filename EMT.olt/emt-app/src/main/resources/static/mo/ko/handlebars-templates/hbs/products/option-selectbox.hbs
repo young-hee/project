@@ -1,0 +1,65 @@
+{{!--
+	옵션 selectbox
+	products, productCount
+--}}
+<div class="goods_box none_bdr option_selectbox_item {{ this.childItemClass }}">
+	<div class="ui_select static {{ this.colorGroupClass }}" {{#unless this.colorGroupClass}}data-not-label-change="true"{{/unless}}>
+		<input type="hidden" name="">
+		<button type="button">{{#if this.colorGroupClass}}컬러선택{{else}}옵션선택{{/if}}</button>
+		<ul class="select_options">
+			{{#each this.options}}
+				<li class="select_option">
+					{{!-- color group 형태 --}}
+					{{#if ../colorGroupClass}}
+						<code class="label_markup" style="display:none">{{ this.colorGroupName }}</code>
+						<a data-value="{{ this.colorGroupCode }}" data-selected="false">
+							<span class="color_box" style="background-color:#{{ this.colorGroupCode }}"></span>
+							<span class="option_title">{{ this.colorGroupName }}</span>
+						</a>
+					{{else}}
+						<code class="label_markup" style="display:none">{{ this.prodName }}</code>
+						<a data-value="{{ this.prodSn }}" data-selected="false">
+							{{#xif this.colorchipTypeCode '==' 'RGB'}}
+								<span class="color_box" style="background-color:#{{ this.rgbVal }}"></span>
+							{{/xif}}
+							{{#xif this.colorchipTypeCode '==' 'Img'}}
+								<img alt="" src="{{ this.colorchipImg }}">
+							{{/xif}}
+
+							<span class="option_title">
+								{{ this.prodName }}
+								{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+									<span class="sold_out"> [일시품절] </span>
+								{{/xif}}
+							</span>
+
+							{{#xif this.saleDisplayStatus '==' 'OnSale'}}
+								{{#xif (availablePrices this.availablePrices 'doublePriceDisplayYn') '==' 'Y'}}
+									{{!-- 할인시 차액 가격 --}}
+									{{#xif (availablePrices this.availablePrices 'minOnlineSalePriceDiff') '>' 0}}
+										<strong class="num">+{{ availablePrices this.availablePrices 'minOnlineSalePriceDiff' }}<span>원</span></strong>
+									{{/xif}}
+								{{else}}
+									{{#xif this.activityPointOnly '==' 'Y'}}
+										<strong class="num">{{ numberFormat this.exchActivityPoint }}<span>알</span></strong>
+									{{else}}
+										<strong class="num">{{ numberFormat (availablePrices this.availablePrices 'onlineSalePrice') }}
+											<span>
+												{{!-- 뷰티포인트 전용상품 --}}
+												{{#xif (eq ../productCount 1) '&&' (eq this.membershipExchOnly 'Y')}}
+													P
+												{{else}}
+													원
+												{{/xif}}
+											</span>
+										</strong>
+									{{/xif}}
+								{{/xif}}
+							{{/xif}}
+						</a>
+					{{/if}}
+				</li>
+			{{/each}}
+		</ul>
+	</div>
+</div>

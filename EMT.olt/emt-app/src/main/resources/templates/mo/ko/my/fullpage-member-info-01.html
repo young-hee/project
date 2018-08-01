@@ -1,0 +1,354 @@
+ <html ap:decorate="~{layout/only-member-info}">
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+
+            <div class="layer_popup fullpage">
+                <div class="layer_wrap">
+                    <dl class="layer">
+                        <dt class="layer_title">회원정보</dt>
+                        <dd class="layer_cont">
+							<div class="member_wrap">
+								<form class="pass-check">
+									<!--/* [S] 비밀번호 수정 */-->
+										<fieldset>
+											<legend class="sr_only">비밀번호 수정</legend>
+											<div id="bg" style="background: white;width: 100%;height: 100%;position: fixed;left: 0;top: 0;z-index: 10;"></div>
+											<div class="grid_area">
+												<strong class="tit_member">비밀번호 수정</strong>
+												<div class="grid">
+													<div class="boxing">
+														<div class="input_group">
+															<input type="password" maxlength="16" id="ori-pass" name="oriPassword" placeholder="기존 비밀번호" required="required" data-msg-required="기존 비밀번호를 입력해 주세요.">
+														</div>
+														<p class="txt_error">비밀번호를 입력하세요.</p>
+													</div>
+												</div>
+												<div class="grid">
+													<div class="boxing">
+														<div class="input_group">
+															<input type="password" maxlength="16" id="pass1" name="password" pass-word="pass-word" required="required" placeholder="새 비밀번호 입력" title="새 비밀번호 입력"  data-msg-required="새 비밀번호를 입력해 주세요.">
+															<div class="help">
+																<span class="notused">사용불가</span>
+															</div>
+														</div>
+														<p class="txt_error">비밀번호를 입력하세요.</p>
+													</div>
+												</div>
+												<div class="grid">
+													<div class="boxing">
+														<div class="input_group"><!-- 공통 : error 일 때 class="error" 추가 -->
+															<input type="password" maxlength="16" id="pass2" placeholder="비밀번호 확인">
+															<div class="help">
+																<span class="completion"><span class="sr_only">완료</span></span>
+															</div>
+														</div>
+														<p class="txt_error">비밀번호 확인을 입력하세요.</p>
+													</div>
+													<p class="txt_note">신규 비밀번호 (영문 대문자, 소문자, 숫자, 특수문자 중 최소 2가지 이상의 문자조합 6-16자로 입력해주세요)</p>
+												</div>
+												<div class="form_btns">
+													<button type="button" onclick="changePassword()" class="btn_primary_md">수정 완료</button>
+												</div>
+											</div>
+										</fieldset>
+									</form>
+									<!--/* [E] 비밀번호 수정 */-->
+
+									<!--/* [S] 개인정보 수정 */-->
+									<form class="private-info grid_area">
+										<fieldset>
+											<legend class="sr_only" id="private-title">개인정보 수정</legend>
+											<div class="grid_area">
+												<strong class="tit_member">개인정보 수정</strong>
+												<p class="mark_necessity">필수 항목</p>
+												<div class="grid">
+													<div class="boxing">
+														<div class="input_group disabled">
+															<input type="text" th:value="${session.LOGIN_USER.member.name.name1}" title="이름" disabled="">
+														</div>
+													</div>
+												</div>
+												<div class="grid">
+													<div class="boxing">
+														<div class="birth_set">
+															<div class="input_group">
+																<div>
+																	<select name="" title="생년 선택">
+																		<option value="" th:text="${session.LOGIN_USER.member.dobYear}">1999</option>
+																	</select>
+																</div>
+																<div>
+																	<select name="" title="월 선택">
+																		<option value="" th:text="${session.LOGIN_USER.member.dobMonth}">03</option>
+																	</select>
+																</div>
+																<div>
+																	<select name="" title="일 선택">
+																		<option value="" th:text="${session.LOGIN_USER.member.dobDay}">12</option>
+																	</select>
+																</div>
+															</div>
+															<div class="check_set clear">
+																<span class="check_wrap"><input type="radio" name="birthType" value="S" id="solar" th:checked="${session.LOGIN_USER.member.solarLunarCode == 'Solar'}"><label for="solar">양력</label></span>
+																<span class="check_wrap"><input type="radio" name="birthType" value="L" id="lunar" th:checked="${session.LOGIN_USER.member.solarLunarCode == 'Lunar'}"><label for="lunar">음력</label></span>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="grid">
+													<div class="boxing">
+														<div class="input_group">
+															<div>
+																<select name="phoneNumber1" title="국번 선택">
+																	<option th:text="${#IntegUtil.getAgencyNum(session.LOGIN_USER.member.phoneNo1)}" th:value="${#IntegUtil.getAgencyNum(session.LOGIN_USER.member.phoneNo1)}">010</option>
+																</select>
+															</div>
+															<div>
+																<input type="text" name="phoneNumber2" th:value="${#IntegUtil.getPhoneNumber(session.LOGIN_USER.member.phoneNo1)}" title="전화번호 입력" readonly="">
+															</div>
+															<div class="btn">
+																<button onclick="phoneNumChange()" type="button">변경</button>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="grid">
+													<div class="boxing">
+														<div class="input_group disabled">
+															<input type="text" th:value="${session.LOGIN_USER.member.memberId}" title="아이디" disabled="">
+														</div>
+													</div>
+												</div>
+												<p class="mark_necessity">선택 항목</p>
+												<div class="grid">
+													<div class="boxing">
+														<div class="input_group">
+															<input type="text" id="email" th:value="${session.LOGIN_USER.member.emailAddress}" email2="email2" name="email" title="이메일 주소 입력">
+															<div class="help">
+																<span class="rating completion on"><span class="sr_only">완료</span></span><!-- 공통 : 완료 시 class="on" 추가 -->
+															</div>
+														</div>
+														<p th:unless="${session.LOGIN_USER.member.emailAddress}" class="txt_error">이메일 주소를 입력하세요.</p>
+													</div>
+													<div class="boxing ui_find_addresses">
+														<div class="input_group">
+															<div>
+																<input type="text" id="delivery_area" class="find_addresses_input" title="주소" placeholder="주소지 또는 건물명">
+															</div>
+															<div class="btn">
+																<button type="button" class="btn_find_addresses">검색</button>
+															</div>
+														</div>
+			                            				<div class="address_list"></div>
+			                            				
+														<input th:value="${session.LOGIN_USER.member.address != null? (session.LOGIN_USER.member.address.zipCode) : ''}" type="hidden" class="post_code" name="homeZip" title="우편번호 입력" placeholder="우편번호" readonly>
+														<div class="input_group mgtm1">
+															<input type="text"name="homeBscsAddr" th:value="${session.LOGIN_USER.member.address != null? (session.LOGIN_USER.member.address.address1) : ''}" class="address_first" title="기본주소 입력" placeholder="기본주소" readonly="">
+														</div>
+														<div class="input_group">
+															<input type="text" th:value="${session.LOGIN_USER.member.address != null? (session.LOGIN_USER.member.address.address2) : ''}" name="homeDtlAddr" class="address_last" title="상세주소 입력" placeholder="상세주소를 입력해주세요.">
+														</div>
+													</div>
+												</div>
+												<div class="form_btns">
+													<button type="button" onclick="changePrivateInfo()" class="btn_primary_md">수정 완료</button>
+												</div>
+											</div>
+										</fieldset>
+									</form>
+									<!--/* [E] 개인정보 수정 */-->
+
+									<!--/* [S] 광고성 정보 수신 동의 */-->
+									
+									<form class="option-info grid_area">
+										<div class="grid_area">
+											<strong class="tit_member mgb40">광고성 정보 수신 동의</strong>
+											<div class="panel_box">
+												광고/이벤트/행사/프로모션에 대한 수신 동의 여부
+											</div>
+											<dl class="agree_marketing">
+												<dt>뷰티포인트 수신 동의</dt>
+												<dd>
+													<div class="check_set check1">
+														<span class="check_wrap">
+															<input type="checkbox" id="check_all1"><label for="check_all1">전체선택</label>
+														</span>
+					               						<span class="check_wrap">
+					               							<input type="checkbox" id="ap_agree2_1" name="apReceive[0].value" th:checked="${apReceiveMap.get('Email')}" />
+					               							
+					               						<label for="ap_agree2_1">이메일</label><input type="hidden" name="apReceive[0].name" th:value="Email"></span>
+					               						<span class="check_wrap">
+					               							<input type="checkbox" id="ap_agree2_2" name="apReceive[1].value" th:checked="${apReceiveMap.get('SMS')}" />
+					               							
+					               						<label for="ap_agree2_2">문자</label><input type="hidden" name="apReceive[1].name" th:value="SMS"></span>
+					               						<span class="check_wrap">
+					               							<input type="checkbox" id="ap_agree2_3" name="apReceive[2].value" th:checked="${apReceiveMap.get('DM')}" />
+					               							
+					               						<label for="ap_agree2_3">DM</label><input type="hidden" name="apReceive[2].name" th:value="DM"></span>
+					               						<span class="check_wrap">
+					               							<input type="checkbox" id="ap_agree2_4" name="apReceive[3].value" th:checked="${apReceiveMap.get('TM')}" />
+					               							
+					               						<label for="ap_agree2_4">TM</label><input type="hidden" name="apReceive[3].name" th:value="TM"></span>
+													</div>
+													<p class="txt_agree">※ <strong>아모레퍼시픽 통합 멤버십 혜택</strong>에 관한 수신 동의 항목입니다.</p>
+												</dd>
+												<dt>온라인 사이트 수신 동의</dt>
+												<dd>
+													<div class="check_set check2">
+														<span class="check_wrap">
+															<input type="checkbox" id="check_all2"><label for="check_all2">전체선택</label>
+														</span>
+					               						<span class="check_wrap">
+					               							<input type="checkbox" id="agree2_1" name="receive[0].value" th:checked="${receiveMap.get('Email')}" />
+					               							
+					               						<label for="agree2_1">이메일</label><input type="hidden" name="receive[0].name" th:value="Email"></span>
+					               						<span class="check_wrap">
+					               							<input type="checkbox" id="agree2_2" name="receive[1].value" th:checked="${receiveMap.get('SMS')}" />
+					               							
+					               						<label for="agree2_2">문자</label><input type="hidden" name="receive[1].name" th:value="SMS"></span>
+					               						<span class="check_wrap">
+					               							<input type="checkbox" id="agree2_3" name="receive[2].value" th:checked="${receiveMap.get('DM')}" />
+					               							
+					               						<label for="agree2_3">DM</label><input type="hidden" name="receive[2].name" th:value="DM"></span>
+					               						<span class="check_wrap">
+					               							<input type="checkbox" id="agree2_4" name="receive[3].value" th:checked="${receiveMap.get('TM')}" />
+					               							
+					               						<label for="agree2_4">TM</label><input type="hidden" name="receive[3].name" th:value="TM"></span>
+													</div>
+												</dd>
+												<dt>에뛰드 수신 동의</dt>
+												<dd>
+													<div class="check_set check3">
+														<span class="check_wrap">
+															<input type="checkbox" id="check_all3"><label for="check_all3">전체선택</label>
+														</span>
+					               						<span class="check_wrap">
+					               							<input type="checkbox" id="agree3_1" name="posReceive[0].value" th:checked="${ehPosReceiveMap.get('Email')}" />
+					               							
+					               						<label for="agree3_1">이메일</label><input type="hidden" name="posReceive[0].name" th:value="Email"></span>
+					               						<span class="check_wrap">
+					               							<input type="checkbox" id="agree3_2" name="posReceive[1].value" th:checked="${ehPosReceiveMap.get('SMS')}" />
+					               							
+					               						<label for="agree3_2">문자</label><input type="hidden" name="posReceive[1].name" th:value="SMS"></span>
+					               						<span class="check_wrap">
+					               							<input type="checkbox" id="agree3_3" name="posReceive[2].value" th:checked="${ehPosReceiveMap.get('DM')}" />
+					               							
+					               						<label for="agree3_3">DM</label><input type="hidden" name="posReceive[2].name" th:value="DM"></span>
+					               						<span class="check_wrap">
+					               							<input type="checkbox" id="agree3_4" name="posReceive[3].value" th:checked="${ehPosReceiveMap.get('TM')}" />
+					               							
+					               						<label for="agree3_4">TM</label><input type="hidden" name="posReceive[3].name" th:value="TM"></span>
+													</div>
+												</dd>
+												<dt>에뛰드 쇼핑몰 수신 동의</dt>
+												<dd>
+													<div class="check_set check4">
+														<span class="check_wrap">
+															<input type="checkbox" id="check_all4"><label for="check_all4">전체선택</label>
+														</span>
+					               						<span class="check_wrap">
+					               							<input type="checkbox" id="agree4_1" name="ehReceive[0].value" th:checked="${ehReceiveMap.get('Email')}" />
+					               							
+					               						<label for="agree4_1">이메일</label><input type="hidden" name="ehReceive[0].name" th:value="Email"></span>
+					               						<span class="check_wrap">
+					               							<input type="checkbox" id="agree4_2" name="ehReceive[1].value" th:checked="${ehReceiveMap.get('SMS')}" />
+					               							
+					               						<label for="agree4_2">문자</label><input type="hidden" name="ehReceive[1].name" th:value="SMS"></span>
+					               						<span class="check_wrap">
+					               							<input type="checkbox" id="agree4_3" name="ehReceive[2].value" th:checked="${ehReceiveMap.get('DM')}" />
+					               							
+					               						<label for="agree4_3">DM</label><input type="hidden" name="ehReceive[2].name" th:value="DM"></span>
+					               						<span class="check_wrap">
+					               							<input type="checkbox" id="agree4_4" name="ehReceive[3].value" th:checked="${ehReceiveMap.get('TM')}" />
+					               							
+					               						<label for="agree4_4">TM</label><input type="hidden" name="ehReceive[3].name" th:value="TM"></span>
+													</div>
+												</dd>
+											</dl>
+											<div class="form_btns">
+												<button type="button" onclick="changeOptionInfo()" class="btn_primary_md">수정 완료</button>
+											</div>
+										</div>
+									</form>
+									<!--/* [E] 광고성 정보 수신 동의 */-->
+
+									<!--/* [S] 개인정보 수집 */-->
+									<form class="terms--info grid_area">
+										<div class="grid_area">
+											<div class="agreement">
+												<div class="agree_member">
+													<strong class="tit_member" th:utext="${termsMap.get('030').termsName}">개인정보 이용 및 수집에 대한 동의(선택)</strong>
+													<span class="check_wrap"><input type="checkbox" id="agree1" name="policy[0].value" th:checked="${agreeMap.get('030')}"><label for="agree1">동의(선택)</label></span><!--/* 공통 : input id 값 변경 시 label for 값도 동일하게 변경해주세요 */-->
+													<div class="agree_box" th:utext="${termsMap.get('030').termsBodyText}">
+														<p>회사가 회원가입 시 수집하는 개인정보 항목과 그 수집·이용의 주된 목적은 아래와 같습니다.</p>
+														<p>* 뷰티포인트 통합멤버십 온라인 서비스</p>
+													</div>
+	               									<input type="hidden" name="policy[0].name" value="030">
+												</div>
+												<div class="agree_member">
+													<strong class="tit_member" th:utext="${termsMap.get('040').termsName}">개인정보 제3자 제공 동의</strong>
+													<span class="check_wrap"><input type="checkbox" id="agree2" name="policy[1].value" th:checked="${agreeMap.get('040')}"><label for="agree2">동의(선택)</label></span>
+													<div class="agree_box" th:utext="${termsMap.get('040').termsBodyText}">
+														선택약관 항목별 내용
+													</div>
+	               									<input type="hidden" name="policy[1].name" value="040">
+												</div>
+												<div class="agree_member">
+													<strong class="tit_member" th:utext="${termsMap.get('050').termsName}">개인정보 제3자 제공 동의(선택)<span>※ 외부 컨텐츠 마케팅 활용</span></strong>
+													<span class="check_wrap"><input type="checkbox" id="agree3" name="policy[2].value" th:checked="${agreeMap.get('050')}"><label for="agree3">동의(선택)</label></span>
+													<div class="agree_box" th:utext="${termsMap.get('050').termsBodyText}">
+														선택약관 항목별 내용
+													</div>
+	               									<input type="hidden" name="policy[2].name" value="050">
+												</div>
+												<div class="agree_member">
+													<strong class="tit_member" th:utext="${termsMap.get('060').termsName}">국외이전동의(선택)</strong>
+													<span class="check_wrap"><input type="checkbox" id="agree4" name="policy[3].value" th:checked="${agreeMap.get('060')}"><label for="agree4">동의(선택)</label></span>
+													<div class="agree_box" th:utext="${termsMap.get('060').termsBodyText}">
+														선택약관 항목별 내용
+													</div>
+	               									<input type="hidden" name="policy[3].name" value="060">
+												</div>
+												<div class="form_btns">
+													<button type="button" onclick="changeTermsInfo()" class="btn_primary_md">수정 완료</button>
+												</div>
+											</div>
+										</div>
+									</form>
+									<!--/* [E] 개인정보 수집 */-->
+
+									<!--/* [S] 회원탈퇴 */-->
+									<div class="grid_area">
+										<div class="member_leave">
+											<strong class="tit_member">회원탈퇴</strong>
+											<div class="msg">
+												회원 탈퇴시 30일간<br> 아모레퍼시픽 통합회원 회원가입이 제한됩니다.<br>
+												<p>유의사항 안내를 확인하신 후<br> 신중하게 진행해 주시기 바랍니다.
+											</div>
+											<div class="form_btns">
+												<button type="button" onclick="location.href='/my/page/leaveId'" class="btn_md_bordered">회원탈퇴 이동</button>
+											</div>
+										</div>
+									</div>
+									<!--/* [E] 회원탈퇴 */-->
+								</form>
+							</div>
+						</dd>
+                    </dl>
+                    <button class="layer_close" type="button">레이어 닫기</button>
+                </div>
+            </div>
+        </div>
+
+    <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+    <style>
+	    .address_list ul li a p {
+		    display: block;
+		    padding: 15px 0;
+		    border-bottom: 1px solid #e5e5e5;
+		    color: #999;
+		    line-height: 1.5;
+		    padding-left: 10px;
+		}
+    </style>
+

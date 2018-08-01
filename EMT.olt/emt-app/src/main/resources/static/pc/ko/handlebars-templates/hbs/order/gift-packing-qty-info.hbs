@@ -1,0 +1,58 @@
+<dd>
+	<div class="cont">
+		{{#each this.list}}
+			{{#each this.possibleGiftPackingExList}}
+				{{#if @first}}
+					<div>
+				{{else}}
+					<div class="mgt20">
+				{{/if}}
+					<input type="hidden" name="giftPackingSn" value="{{this.giftPackingSn}}"/>	<!-- 선물포장일련번호 -->
+					<input type="hidden" name="giftPackingFee" value="{{this.giftPackingFee}}"/>	<!-- 선물포장비 -->
+					<input type="hidden" name="freeConditionAmt" value="{{this.freeConditionAmt}}"/><!-- 무료조건금액 -->
+					<input type="hidden" name="finalPamtPcur" value="{{../../finalPamtPcur}}"/><!-- 최중결제금액 -->
+					<span class="check_wrap">
+						{{#xif ../../finalPamtPcur '>=' this.freeConditionAmt}}
+							<input type="checkbox" id="box_{{this.giftPackingSn}}" onclick="boxFlserview(this, {{../coSn}}, {{this.giftPackingSn}}, {{this.giftPackingFee}})" >
+						{{else}}
+							<input type="checkbox" disabled="disabled">
+						{{/xif}}
+
+						<label for="box_{{this.giftPackingSn}}">
+							{{this.giftPackingName}}
+							{{#xif this.payYn '==' 'Y'}}
+								<span id="box_{{this.giftPackingSn}}_sum"></span>
+							{{/xif}}
+							{{#if (and (eq this.payYn 'N')(eq this.freeConditionYn 'Y')(gt this.freeConditionAmt 0))}}
+								추가 ({{this.freeConditionAmt}}원이상 주문시 무료)
+							{{/if}}
+						</label>
+					</span>
+					<div class="ui_tooltip">
+						<button type="button" class="btn_tooltip">툴팁보기</button>
+						<span class="arr"></span>
+						<div class="layer_tooltip">
+							<dl>
+								<dt class="title">포장박스 추가</dt>
+								<dd>
+									<ul class="list_bullet_dot">
+										<li><pre>{{{this.foGuide}}}</pre></li>
+									</ul>
+								</dd>
+							</dl>
+							<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
+						</div>
+					</div>
+
+					{{#if (and (gte ../../finalPamtPcur this.freeConditionAmt)(eq this.qtySelectPossibleYn 'Y'))}}
+						<span class="ui_spinner small" data-min="0" data-max="{{ this.maxSelectPossibleQty }}" data-step="1" >
+							<button class="spinner_decrease" type="button" title="제품 수량 감소" data-flag="box_{{this.giftPackingSn}}" onclick="boxQtyOperate(this, {{../coSn}}, {{this.giftPackingSn}}, {{this.giftPackingFee}}, '{{this.giftPackingName}}', '-')"><img alt="제품 수량 감소" src="/mo/ko/images/common/ico_minus1.gif"></button>
+							<input class="spinner_input" type="text" title="선택품목갯수" id="box_{{this.giftPackingSn}}_cnt" value="0">
+							<button class="spinner_increase" type="button" title="제품 수량 증가" disabled data-flag="box_{{this.giftPackingSn}}" onclick="boxQtyOperate(this, {{../coSn}}, {{this.giftPackingSn}}, {{this.giftPackingFee}}, '{{this.giftPackingName}}', '+')"><img alt="제품 수량 증가" src="/mo/ko/images/common/icon_plus1.gif"></button>
+						</span>
+					{{/if}}
+				</div>
+			{{/each}}
+		{{/each}}
+	</div>
+</dd>

@@ -1,0 +1,78 @@
+*{margin:0; padding:0;}
+::-webkit-scrollbar { width: 0;}
+body{width:100%;}
+img{max-width:100%; vertical-align: top;}
+ul{list-style: none;}
+button{cursor: pointer}
+.wrapper{max-width:640px; margin:0 auto;}
+
+.header>a{position:absolute; top:0; width:60px; height:60px;}
+.header .home{left:50%;  margin-left:-30px;}
+.header .left_menu_btn{left:0;}
+
+.aside{
+    overflow:hidden; display:none; position:fixed; top:0; left:0; right:0; bottom:0;  z-index: 3;
+    background-color: rgba(0, 0, 0, 0);
+    -webkit-transition: background-color 0.4s ease;
+    -moz-transition: background-color 0.4s ease;
+    -o-transition: background-color 0.4s ease;
+    transition: background-color 0.4s ease;
+}
+.aside>div{overflow:auto; position:relative; top:0; left:-100%; width:100%; height:100%;}
+.aside a{position:fixed; top:0; right:0; display:block; width:47px;}
+
+.aside.open {
+    background-color: rgba(0, 0, 0, 0.5);
+    -webkit-transition: background-color 0.4s ease;
+    -moz-transition: background-color 0.4s ease;
+    -o-transition: background-color 0.4s ease;
+    transition: background-color 0.4s ease;
+}
+
+.fixed_menu{position:relative;}
+.fixed_menu.fixed{position:fixed; top:0; left:0; right:0; z-index: 2;}
+.fixed_menu.fixed + div{padding-top:49.08px;}
+.fixed_menu a{display:block; position:absolute; top:7px;  height:20px;}
+.fixed_menu .hot{right:110px; width:40px;}
+.fixed_menu .live{right:50px; width:50px;}
+.live_wrap .hot{left:96px; right:auto;}
+.hot_wrap .live{right:80px; width:50px;}
+.hot_wrap .contents{position:relative;}
+.hot_wrap .contents>a{position:absolute; top:0; width:23%; height:80px;}
+.hot_wrap .contents>a:nth-child(1){left:5%}
+.hot_wrap .contents>a:nth-child(2){left:39%}
+.hot_wrap .contents>a:nth-child(3){right:5%}
+.hot_wrap .contents>div{display:none;}
+
+/* slide */
+.slide {position:relative; width:100%;}
+/* viewport */
+.slide .ix-list-viewport {overflow:hidden;}
+/* 슬라이드 영역, Safari9, Samsung Browser ~4 버전에서 position을 넣지 않으면 randering bug가 발생할 수 있다. */
+.slide .ix-list-items {position:relative; left:0; top:0; width:100%; height:100%;}
+.slide .ix-list-items:after{content:''; display: block; clear:both;}
+.slide .ix-list-item{position:relative; float:left; width:100%; text-align:center;}
+.slide .ix-list-item>a{display:block;}
+/* 슬라이드 인디케이터, 방향 버튼 그룹 */
+.slide .ix-controller {width:100%; overflow:hidden; text-align:center;}
+.slide .ix-controller.disabled{visibility:hidden;}
+/* 슬라이드 인디케이터 */
+.slide .ix-thumbs {position:absolute; bottom:0; left:0; width:100%;}
+.slide .ix-thumb {display:inline-block; margin:0 3px 0 2px;}
+.slide .ix-btn{display:inline-block; width:10px; height:10px; border:1px solid #f3497d; text-indent:-9999px; border-radius:10px; background:transparent; opacity: .5}
+.slide .active .ix-btn{background:#f3497d; border-color:#f3497d; opacity:1;}
+/* 버튼 비활성화 */
+.slide [class*='direction'] [class*="ix-btn"].disabled {cursor:default;}
+.slide [class*='direction'] [class*="ix-btn"].disabled [class^="ico_"] {opacity:.2;}
+
+.slide .slide{position:absolute; bottom:40px; left:0; height:75px; padding-left:10px; box-sizing: border-box;}
+.slide .slide .ix-list-item{width:75px; height:75px; margin:0 5px;}
+.slide_direction button{position:absolute; top:0%; width:20px; height:100%; border:0; background:transparent; outline: 0;}
+.ix-btn-prev{left:0;}
+.ix-btn-next{right:0;}
+
+.floating_menu{position:fixed; bottom:-10%; left:0; right:0; z-index: 4; transition:0.3s}
+.floating_menu.open{bottom:0; transition:0.3s}
+.floating_menu>a{position:absolute; top:0; bottom:0; width:50px;}
+.floating_menu .home{left:5%; }
+.floating_menu .left_menu_btn{left:30%;}

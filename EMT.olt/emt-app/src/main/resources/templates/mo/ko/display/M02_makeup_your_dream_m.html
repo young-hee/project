@@ -1,0 +1,58 @@
+<html ap:decorate="~{layout/layout-contents}">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+    <div class="ap_contents brand">
+		<div class="makeup_dream">
+			<!-- tab menu wrap -->
+			<div class="ui_tab">
+				<!-- tab menu -->
+				<div class="tab_menu equally">
+					<ul>
+						<li class="on"><a href="#none" th:href="@{/display/makeup_your_dream(displayMenuId=makeup_your_dream)}">메이크업유어드림</a></li>
+						<li><a href="#none" th:href="@{/display/makeup_your_dream_lecture(displayMenuId=makeup_your_dream_lecture)}">청춘강연</a></li>
+						<li><a href="#none" th:href="@{/display/makeup_your_dream_apply(displayMenuId=makeup_your_dream_apply)}">청춘강연 신청</a></li>
+					</ul>
+				</div>
+				<!-- tab content -->
+				<div class="tab_cont no_padding">
+					<h3 class="sr_only">메이크업유어드림</h3>
+					<img ap:src="@{/images/brand/img_dream_01.jpg}" alt="Make Your Dream! 청춘들의 고민을 공감하고 더 나은 미래를 꿈구게 하는 에뛰드의 청춘 응원 캠페인"><!--이미지 수정-->
+					<div class="panel">
+						<p class="text mgb20">에뛰드는 쇼팽이 작곡한 아름다운 연습곡에서 영감을 받아 만들어진 브랜드명처럼, 내일을 위한 연습곡을 연주하고 있는 청춘들의 고민을 함께 나누고 더 나은 미래를 꿈꿀 수 있도록 도움을 주는 청춘 응원 캠페인입니다.</p>
+
+						<!-- video 영역 -->
+						<div class="video_wrap">
+							<!-- 섬네일 용 이미지 -->
+							<button type="button" class="thumbnail"><img ap:src="@{/images/brand/img_dream_06.jpg}" alt=""></button>
+							<iframe class="youtube_video" width="800" height="450" src="https://www.youtube.com/embed/ZxD14cjSDLQ?enablejsapi=1" frameborder="0" allowfullscreen data-vendor="youtube" data-ratio="true" data-mute="false"></iframe>
+						</div>
+
+						<p class="mgt30 mgb20"><img ap:src="@{/images/brand/img_dream_02.jpg}" alt="청춘강연 자리수 매칭 기부금, 서울장학재단 Dream 장학금"></p>
+
+						<!--/* 20180504 : 내용수정, 디지털 캠페인 결과확인 버튼 삭제 */-->
+						<p class="h_title font_md lh2 align_center"><strong>청춘강연에 참석해주시는 자리수마다 기부금을 매칭하여 청춘이 꿈을 이룰 수 있는 ‘DREAM 장학금’으로 지원될 예정입니다.</strong></p>
+						<!--/*<p class="text mgt10">DREAM 장학금은 ‘디지털 캠페인’ 참여와 ‘청춘 강연’을 통해 모아진 기부금으로, 꿈을 향해 도전하는 문화예술 특기 대학생에게 전달될 예정입니다.</p>
+						<div class="page_btns">
+							<button type="button" class="btn_lg_primary w65p">디지털 캠페인 결과 확인</button>
+						</div>
+						*/-->
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script>
+		$( '.youtube_video' ).video();
+	</script>
+</th:block>
+
+</body>
+</html>

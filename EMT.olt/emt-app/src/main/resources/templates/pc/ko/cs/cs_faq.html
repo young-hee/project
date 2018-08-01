@@ -1,0 +1,198 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents cs overview">
+            	<div class="panel faq_search">
+	            	<form id="searchForm" action="/cs/faq" method="post">
+	            		<input type="hidden" id="offset" name="offset" />
+	            		<input type="hidden" id="limit" name="limit" />
+	            		<input type="hidden" id="inquiryTypeSn" name="inquiryTypeSn" />
+	            		
+	                    <fieldset class="form">
+	                        <legend class="sr_only">FAQ 검색 질문 입력</legend>
+	                        <div class="ui_table">
+	                            <dl>
+	                                <dt><strong class="eng">FAQ</strong> 검색</dt>
+	                                <dd>
+	                                    <div class="input_wrap">
+	                                        <input type="text" id="keyword" name="keyword" placeholder="질문을 검색하세요." th:onkeypress="|return searchKeyPress(event);|" th:value="${keyword == null} ? '' : ${keyword}">
+	                                        <button type="button" id="btnSearch" class="btn_search" th:onclick="|goSearch('0', ${inquiryTypeSn == null} ? '' : '${inquiryTypeSn}');|"><span class="sr_only">검색</span></button>
+	                                        <button class="input_del"><i class="ico_close_w"></i><span class="sr_only">검색어 삭제</span></button>
+	                                    </div>
+	                                </dd>
+	                            </dl>                            
+	                        </div>
+	                        <!-- 삭제 
+	                        <dl class="recommend_keyword clear">
+	                            <dt class="title">인기 검색어</dt>
+	                            <dd class="keyowrd_text"><a href="#none">예치금</a></dd>
+	                            <dd class="keyowrd_text"><a href="#none">뷰티 포인트</a></dd>
+	                            <dd class="keyowrd_text"><a href="#none">구매사은품</a></dd>
+	                            <dd class="keyowrd_text"><a href="#none">반품</a></dd>
+	                            <dd class="keyowrd_text"><a href="#none">배송비</a></dd>
+	                            <dd class="keyowrd_text"><a href="#none">멤버십</a></dd>
+	                        </dl> 
+	                        -->                                               
+	                    </fieldset>
+	                </form>
+                </div>
+                <div class="panel faq_top_list">                   
+                    <ul class="cs_list_category clear">
+                        <li class="on" th:class="${inquiryTypeSn == null} ? 'on' : ''">
+                        	<a href="#none" class="category_item" th:href="|javascript:goSearch('0','')|">전체</a>
+                         </li>
+                         <th:block th:each="type : ${faqType.faqList}">
+                         	<li th:class="${inquiryTypeSn == type.inquiryTypeSn} ? 'on' : ''">
+                         		<a href="#none" class="category_item" 
+                         		th:href="|javascript:goSearch('0', '${type.inquiryTypeSn}')|"
+                         		th:text="${type.inquiryTypeName}"></a>
+                         	</li>
+                         </th:block>
+                         
+                        <!-- /*
+	                        <li><a href="#none" class="category_item">회원/멤버십</a></li>
+	                        <li><a href="#none" class="category_item">상품</a></li>
+	                        <li><a href="#none" class="category_item">쿠폰/포인트</a></li>
+	                        <li><a href="#none" class="category_item">주문/결제</a></li>
+	                        <li><a href="#none" class="category_item">배송</a></li>
+	                        <li><a href="#none" class="category_item">교환/반품/환불</a></li>
+	                        <li><a href="#none" class="category_item">이벤트</a></li>
+	                        <li><a href="#none" class="category_item">서류</a></li>
+	                        <li><a href="#none" class="category_item">기타</a></li>
+	                        <li><a href="#none" class="category_item">매장픽업</a></li>
+	                        <li><a href="#none" class="category_item">매장관련</a></li>
+                        */ -->                        
+                    </ul>   
+                    
+                    <!-- 검색결과가 있을때 class="on" 를 넣어준다.-->
+                    <p class="faq_search_result_total on"
+                    th:class="${faqSrchRst.totalCount == 0} ? 'faq_search_result_total' : 'faq_search_result_total on'" th:if="${keyword != null} and ${keyword != ''}">
+                    	‘<b th:text="${keyword}"></b>’ 에 대한 검색결과 총 <span class="num" th:text="${faqSrchRst.totalCount}"></span>개
+                   	</p>
+                   	<p class="faq_search_result_total on"
+                    th:class="${faqSrchRst.totalCount == 0} ? 'faq_search_result_total' : 'faq_search_result_total on'" th:if="${keyword == null} or ${keyword == ''}">
+                    	총 <span class="num" th:text="${faqSrchRst.totalCount}"></span>개
+                   	</p>
+                    
+                    <!-- 하나의 영역이 열릴때 다른 영역은 닫히게 하고 싶을때 data-open-type="single" 를 넣어준다. -->
+                    <div class="ui_accordion" data-open-type="single"
+                    th:if="${faqSrchRst.totalCount > 0}">
+                        
+                        <th:block th:each="faq : ${faqSrchRst.faqList}">
+                        	<dl>
+	                            <dt>
+	                                <span class="accordion_head"><span th:text="${faq.inquiryTypeName}"></span></span>
+	                                <button type="button" th:text="${faq.inquiryText}"></button>
+	                            </dt>
+	                            <dd>
+	                            	<div class="cont">
+	                                	<p class="text" th:utext="${faq.responseBodyText}"></p>
+	                                </div>
+	                            </dd>
+	                        </dl>
+                        </th:block>
+                    </div>
+                    
+                    <div class="ui_paging pagination" th:if="${faqSrchRst.totalCount > 0}"></div>
+                    
+                    <!-- 검색결과가 없을때 class="on" 를 넣어준다.-->
+                    <div class="none_data on" th:if="${faqSrchRst.totalCount == 0}">
+                        <div class="panel notice">
+                            <i class="ico"></i>
+                            <p class="text font_lg">검색결과가 없습니다.</p>
+                        </div>
+                    </div>	   
+                    
+                    <!-- /*
+                    <div class="pagination">
+						<a href="#none" class="navi first">처음</a>
+						<a href="#none" class="navi prev">이전</a>
+						<a href="#none">1</a>
+						<a href="#none">2</a>
+						<a href="#none">3</a>
+						<span class="current">4</span>
+						<a href="#none">5</a>
+						<a href="#none">6</a>
+						<a href="#none">7</a>
+						<a href="#none">8</a>
+						<a href="#none">9</a>
+						<a href="#none">10</a>
+						<a href="#none" class="navi next">다음</a>
+						<a href="#none" class="navi last">끝</a>
+					</div>
+					*/ -->
+										                    
+                </div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script th:inline="javascript">
+				/**
+				 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+				 */
+				$( '.ui_paging' ).paging( 'clear' );
+			
+				/**
+				 * paging 기본적용 (paging 동적으로 생성, 관리)
+				 * js/common/plugin-type/paging.js 참고
+				 * @param {Object} 	options
+				 *   - {Int}      currentPage 	현재페이지, default:1
+				 *   - {Int}      totalPage 	전체페이지, default:1
+				 *   - {Int}      pagingLength 	한화면에 보여지는 페이징 갯수, default:10
+				 * @returns {jQuery}
+				 */
+				 
+				 var cntPerPage = /*[[${cntPerPage}]]*/;
+				 var totalCount =  /*[[${faqSrchRst.totalCount}]]*/;
+
+				 var options = new Object();
+				 options.offset = /*[[${faqSrchRst.offset}]]*/;
+				 options.limit = 10;
+				 options.totalCount = totalCount;
+				 options.pagingLength = cntPerPage;
+				 
+				 
+				$( '.ui_paging' ).paging( options );
+	
+				/**
+				 * event
+				 */
+				$( '.ui_paging' ).on( 'paging-change', function (e) {
+					goSearch(e.offset, '');
+				});
+				
+	
+				function goSearch(offset, inquiryTypeSn){
+
+					$("#limit").val( options.limit);
+					$("#offset").val( offset);
+					$("#inquiryTypeSn").val( inquiryTypeSn);
+					
+					$("#searchForm").submit();
+					
+				}
+				
+				function searchKeyPress(e){
+				    // look for window.event in case event isn't passed in
+				    e = e || window.event;
+				    if (e.keyCode == 13)
+				    {
+				       $("#btnSearch").click();
+				        return false;
+				    }
+				    return true;
+				}
+			
+			</script>
+        </th:block>
+</body>
+</html>

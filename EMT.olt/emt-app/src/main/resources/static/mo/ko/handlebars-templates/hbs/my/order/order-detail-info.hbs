@@ -1,0 +1,61 @@
+<div class="title table_layout">
+	<div><b class="font_lg">주문정보</b></div>
+</div>
+<div class="cont">
+	<dl class="table_layout">
+		<dt>주문 번호</dt>
+		<dd><strong class="num">{{ordEx.ordNo}}</strong></dd>
+	</dl>
+	<dl class="table_layout">
+		<dt>주문 일시</dt>
+
+		<dd><span class="num color_gray2">{{dateFormat ordEx.ordReceivedDt "YYYY-MM-DD HH:MM:SS"}}</span></dd>
+	</dl>
+
+	{{#xif type '===' store}}
+		<dl class="table_layout">
+			<dt>구매 매장</dt>
+			<dd>{{ordEx.storeName}}</dd>
+			<dd class="align_right">
+				<button type="button" class="btn_sm_neutral type2">매장보기</button>
+			</dd>
+		</dl>
+		<button class="btn_md_primary w100p mgt20" type="button">구매 리뷰 작성하고 진주알 받기</button>
+	{{else}}
+		{{#xif onlineCnt ">" 0}}
+    		<dl class="table_layout">
+    			<dt>온라인 주문</dt>
+				{{#if (or (eq type 'return')(eq type 'exchange'))}}
+					<dd><em>{{ordStatusCheck type ordEx.ordDetailStatusCode}}</em></dd>
+				{{else}}
+					<dd><em>{{ordStatusCheck type ordEx.ordDetailStatusCode}}</em></dd>
+				{{/if}}
+
+    		</dl>
+    	{{/xif}}
+    	{{#xif storeCnt ">" 0}}
+        	<dl class="table_layout">
+        		<dt>테이크 아웃</dt>
+        		<dd><em>주문접수</em></dd>
+        		<dd class="align_right">
+        			<button type="button" class="btn_take_out"><img src="@{/images/my/btn_barcode.gif}" alt="테이크아웃바코드 보기"></button>
+        		</dd>
+        	</dl>
+    	{{/xif}}
+	{{/xif}}
+
+	{{#xif type '===' 'cashReceipts'}}
+		<dl class="table_layout">
+			<dt>발급 상태</dt>
+			<dd><span class="num color_gray2">{{condition (eq ordEx.cashReceiptIssueYn 'Y') '발급완료' '발급가능'}}</span></dd>
+		</dl>
+	{{/xif}}
+
+	{{#if (or (eq type 'return')(eq type 'exchange'))}}
+		<dl class="table_layout">
+			<dt>{{condition (eq type 'return') '반품' '교환'}} 처리 일</dt>
+
+			<dd><span class="num color_gray2">{{dateFormat ordEx.claimConfirmDt "YYYY-MM-DD"}}</span></dd>
+		</dl>
+	{{/if}}
+</div>

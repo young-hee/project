@@ -1,0 +1,143 @@
+<html ap:decorate="~{layout/layout-contents}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page contents -->
+            <div class="ap_contents mypage">
+				<div class="my_order">
+					<fieldset class="panel">
+						<th:block th:if="${type} == cashReceipts">
+							<th:block ap:replace="~{my/fragment/order-management-common :: header-cash-receipts}"/>
+						</th:block>
+						<th:block ap:replace="~{my/fragment/order-management-common :: multiple-date-picker}"/>
+						<th:block th:if="${type} == returnExchange">
+							<th:block ap:replace="~{my/fragment/order-management-common :: header-returnExchange}"/>
+						</th:block>
+					</fieldset>
+
+					<div class="order_list">
+						<div id="order_list">
+							<div class="panel">
+								<div class="table_layout">
+									<div>주문번호</div>
+									<div class="num"><a href="#none" class="order_number_link">201811118956360</a></div>
+									<div><button type="button" class="btn_sm_neutral type1" value="001">발급 신청</button></div>
+								</div>
+								<div class="table_layout">
+									<div><img ap:src="@{/images/dummy/101001217_IM_01.png}"></div>
+									<div>
+										<p class="flag online v2">온라인주문</p>
+										<p class="name"><a href="#">소녀 애교살 메이커</a></p>
+										<p class="font_md"><strong class="num">3</strong>개/<strong class="num">12,600</strong>원</p>
+										<p class="num"><small>2018-11-11</small></p>
+									</div>
+									<div>
+										<p><em>결제완료</em></p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<button type="button" class="btn_lg_more w100p">더보기 (<em>5</em>/35)</button>
+					</div>
+
+					<!--/* 안내문구*/-->
+					<div class="panel padding15">
+						<th:block ap:replace="~{my/fragment/order-management-common :: footer-order}"/>
+					</div>
+				</div>
+            </div>
+            <!-- // page contents -->
+            
+            <!-- 마이페이지 맵 01-24 위치변경 -->
+         	<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+         	<!-- // 마이페이지 맵 -->
+         	
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+			<script ap:src="@{/handlebars-templates/compiled/my/order/orderList.js}"></script>
+			<script th:inline="javascript">
+
+				var limit = 10;
+				var totalCount = 50;
+				var type = /*[[${type}]]*/;
+				var c_offset = 0;
+				var c_RS_Date, c_RD_Date;
+				var returnCode = "all";
+
+				//multiple date picker적용
+				$( '.ui_multiple_date_picker' ).multipleDatePicker({
+					defaultRangeDate: '1months',
+					minDate: moment().subtract( 50, 'years' )
+				}).on( 'multiple-date-picker-change', function (e) {
+					c_RS_Date = e.date.startDate;
+					c_RD_Date = e.date.endDate;
+
+					getList(0, c_RS_Date, c_RD_Date, true);
+				});
+
+				$(document).ready(function() {
+					c_RS_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).startDate;
+		    		c_RD_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).endDate;
+
+		    		getList(0, c_RS_Date, c_RD_Date, true);
+				});
+
+				//더보기 버튼 클릭시
+				$('.btn_lg_more').off('click').on('click', function(e) {
+					if((c_offset + limit) < totalCount) {
+						getList((c_offset + limit), c_RS_Date, c_RD_Date, false);
+					}
+				});
+
+				//교환, 환불 옵션 변경시
+				$('#returnCode').on('change', function(e){
+					returnCode = $(this).val();
+					getList(0, c_RS_Date, c_RD_Date, true);
+				});
+
+				function getList(offset, RS_Date, RD_Date, restart){
+
+					c_offset = offset;
+					c_RS_Date = RD_Date;
+					c_RD_Date = RD_Date;
+
+					console.log(type, offset, limit, returnCode);
+
+					AP.api.getOrderShippingList({}, {
+						type : type,
+						offset : offset,
+						limit : limit,
+						RS_Date : RS_Date,
+						RD_Date : RD_Date,
+						returnCode : returnCode
+					}).done(function(data) {
+						if (data) {
+							console.log('api 호출 성공', data.info);
+							var count = (offset + limit) > totalCount ? totalCount : (offset + limit);
+
+							if(restart == true){
+								$('#order_list').empty();
+							}
+
+							var htmlStr = AP.common.getTemplate('my.order.orderList', {
+								orderSn : 1
+							});
+
+							$('#order_list').append(htmlStr);
+							$('.btn_lg_more').html('더보기 (<em>'+ count +'</em>/'+ totalCount +')');
+						}
+					}).fail(function(e) {
+						AP.modal.alert(e.responseJSON.errorData.message);
+					}).always(function() {
+					});
+				}
+			</script>
+
+        </th:block>
+</body>
+</html>

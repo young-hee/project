@@ -1,0 +1,152 @@
+<html ap:decorate="~{layout/layout-contents}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page contents -->
+            <div class="ap_contents customer_center"> <!-- 01-18 클래스 수정  -->
+                <div class="ui_tab">
+					<!-- tab menu -->
+					<div ap:replace="~{cs/fragment/cs :: tab (state = 3)}"></div>
+					<!-- tab content -->
+					<div class="tab_cont membership_benefit pearl_point">
+						<div class="panel gray">
+							<div class="card">
+								<img ap:src="@{/images/cs/bg_card_04.png}" alt="">
+								<div>
+									<h3>진주알 포인트</h3>
+									<p class="text">에뛰드 홈페이지에서 다양한 활동을 하시고<br>진주알을 모아, 다양한 이벤트에 참여하시고<br>풍성한 혜택도 함께하세요.</p>
+									<div class="_btns" th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+										<a href="/login" class="btn_md_bordered">진주알 룰렛 바로가기</a>
+									</div>
+									<div class="_btns" th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+										<a href="/display/pearl_roulette?displayMenuId=pearl_roulette" class="btn_md_bordered">진주알 룰렛 바로가기</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="panel">
+							<h4 class="h_title sub"><b>진주알 모으기</b></h4>
+							<table class="data_table align_center tbody_colored"> <!-- 01-19 클래스 추가 -->
+								<caption class="sr_only">진주알 모으기 안내로 항목명, 기준, 진주알로 구성</caption>
+								<colgroup>
+									<col style="width:29%;" />
+									<col style="width:20%;" />
+									<col />
+								</colgroup>
+								<thead>
+									<tr>
+										<th scope="col">항목명</th>
+										<th scope="col">기준</th>
+										<th scope="col">진주알</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row">리뷰 &amp; 팁 작성<br>(사진 첨부 시)</th>
+										<td>주문 건당 1회</td>
+										<td>100알 적립 (마이에뛰드 > 주문 조회 화면) BEST 선정 시 1,000알 적립</td>
+									</tr>
+									<tr>
+										<th scope="row">리뷰 &amp; 팁 작성<br>(사진 미첨부 시)</th>
+										<td>주문 건당 1회</td>
+										<td>50알 적립(마이에뛰드 > 주문 조회 화면) BEST 선정 시 1,000알 적립</td>
+									</tr>
+									<tr>
+										<th scope="row" rowspan="3">행운의 출첵</th>
+										<td>1일</td>
+										<td>1알 적립</td>
+									</tr>
+									<tr>
+										<td>10일</td>
+										<td>200알 적립</td>
+									</tr>
+									<tr>
+										<td>30일</td>
+										<td>1,000알 적립</td>
+									</tr>
+									<tr>
+										<th scope="row">SNS 연동</th>
+										<td>최초 1회</td>
+										<td>500알 적립</td>
+									</tr>									
+								</tbody>
+							</table>
+							<h4 class="h_title sub"><b>진주알 사용하기</b></h4>
+							<table class="data_table align_center tbody_colored"> <!-- 01-19 클래스 추가 -->
+								<caption class="sr_only">진주알 사용하기 안내로 항목명, 기준, 진주알로 구성</caption>
+								<colgroup>
+									<col style="width:25%;" />
+									<col style="width:20%;" />
+									<col />
+								</colgroup>
+								<thead>
+									<tr>
+										<th scope="col">항목명</th>
+										<th scope="col">기준</th>
+										<th scope="col">진주알</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row">뷰티 테스터 신청</th>
+										<td>신청 시 1회</td>
+										<td>10알 차감</td>
+									</tr>
+									<tr>
+										<th scope="row">진주알 룰렛 배팅</th>
+										<td>1일 3회</td>
+										<td>1회 20알 차감<br>(진주알 룰렛 페이지 참고)</td>
+									</tr>
+									<tr>
+										<th scope="row">진주알 스토어</th>
+										<td>전액 교환</td>
+										<td>스토어 페이지 참고</td>
+									</tr>			
+									<tr>
+										<th scope="row">쿠폰 교환</th>
+										<td>전액 교환</td>
+										<td>쿠폰 교환 페이지 참고</td>
+									</tr>	
+									<tr>
+										<th scope="row">선물하기</th>
+										<td>월 최대 10회</td>
+										<td>1회 최대<br>10,000알</td>
+									</tr>																											
+									<tr>
+										<th scope="row">이벤트 참여</th>
+										<td colspan="3">각 이벤트 페이지 참고</td>
+									</tr>
+									</tbody>
+							</table>
+						
+							<div class="panel gray mgt20">
+								<dl class="dl_cont">
+									<dt class="h_title cont">유의사항</dt>
+									<dd>
+										<ul class="list_bullet_dia">
+											<li>등록된 게시물을 삭제하시면 해당글을 등록하여 적립된 진주알 만큼 1일 1회 차감되며 (적립횟수와 별개로 차감), 불량게시글 및 댓글 / 광고성 글 및 비방성 글 / 의도적 도배 글/ 동일내용 중복 글 / 신고된 글은 적립금의 3배 차감됩니다.</li>
+											<li>진주알 적립 및 사용은 뷰티포인트 통합회원에 한해서 서비스됩니다.</li>
+											<li>매장칭찬글 게시 시 지급되던 진주알이 2013년 10월 31일부로 종료됩니다.</li>
+											<li>기존적립기준 : 1일 1회/ 최대 월 10회, 건당 10일 (베스트 선정시 1,000알 적립)</li>
+											<li>수다방/소녀이야기작성/댓글작성/지식인질문/지식인답변은 2015년 5월 31일부로 종료됩니다.</li>
+											<li>구매후기 포토리뷰(일반리뷰) /지식인답변채택/ 신규 가입추천은 2016년 4월 20일부로 종료됩니다.</li>
+											<li>상기내용은 변경 될 수 있습니다.</li>
+										</ul>
+									</dd>
+								</dl>
+							</div>
+						</div>
+					</div>
+				</div>
+            </div>
+            <!-- // page contents -->
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+        </th:block>
+</body>
+</html>

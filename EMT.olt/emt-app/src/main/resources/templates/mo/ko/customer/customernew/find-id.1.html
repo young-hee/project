@@ -1,0 +1,348 @@
+<html ap:decorate="~{layout/layout-member-join}">
+
+<body>
+<!-- #ap_header -->
+<div ap:fragment="layout-title">
+	<th:block ap:replace="~{common/fragment/page-title-only}"/>
+</div>
+
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+	<div class="ap_contents find_id_pwd">
+		<h2 class="h_title d1">아이디 찾기</h2>
+		<p class="text">본인 인증으로 아이디를 찾으실 수 있습니다.</p>
+		<form class="validate">
+			<fieldset class="form">
+				<legend class="sr_only">본인인증 정보입력</legend>
+				<div ap:replace="~{customer/fragment/member :: custNm}"></div>
+				<div class="input_group">
+					<div ap:replace="~{customer/fragment/member :: psnDtbr}"></div>
+					<div class="gap"></div>
+					<div ap:replace="~{customer/fragment/member :: sxclCd}"></div>
+				</div>
+				<div ap:replace="~{customer/fragment/member :: captcha}"></div>
+				<div ap:replace="~{customer/fragment/member :: cellNumPhoneCorpWithBtn}"></div>
+				<input type="hidden" name="frclCd" value="K" required="required">
+				<ul class="list font_xs">
+					<li>본인 확인 5회 실패 시 당일 휴대폰 인증이 제한 됩니다.</li>
+					<li>[알림] 본인확인 차단된 경우: <a href="//www.kmcert.com/kmcis/mobile_v2/kmcisBlockSelfClear.jsp" class="link">차단해제하기</a></li>
+				</ul>
+				<div class="form_btns">
+					<a href="#none" id="send" class="btn_lg_primary"><i class="ico_check_w"></i><span>아이디 찾기</span></a>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<script type="application/javascript">
+
+	$('input[type=tel]').keydown(function (event) {
+	    if (event.keyCode) {
+	        var code = event.keyCode;
+	        if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+	            return true;
+	        } else {
+	            return false;
+	        }
+	    } else if (e.which) {
+	        var code = e.which;
+	        if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+	            return true;
+	        } else {
+	            return false;
+	        }
+	    }
+	});
+	$('input[type=tel]').keyup(function (event) {
+		event = event || window.event;
+		var keyID = (event.which) ? event.which : event.keyCode;
+		if ( keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39 ) 
+			return;
+		else
+			event.target.value = event.target.value.replace(/[^0-9]/g, "");
+	});
+
+	var t = new AP.common.timeCountDown(3, function() {
+		window.alert('3분 이내에 인증번호를 입력 하지 않으셨습니다. 인증번호 전화번호 입력란으로 이동합니다.');
+		$('form.validate [name=cellNum]').focus();
+	}),
+    certTimeCnt = 0,
+    extTimeCnt = 0;
+	var userData;
+
+	//"인증 받기"버튼
+	$('#certBtn').on('click', function(e) {
+	    $(this).attr("disabled", "disabled");
+	    phoneCertProcess();
+	});
+	
+	$('form.validate [name=cellNum]').keyup(function () {
+		if($(this).val().length > 9) {
+			$('#certBtn').show();
+		} else {
+			$('#certBtn').hide();
+		}
+	});
+
+	//"재인증"버튼
+	$('#reCertBtn').on('click', function(e) {
+	    $(this).attr("disabled", "disabled");
+	    extTimeCnt = 0;
+	    phoneCertProcess();
+	});
+	function post_goto(url, parm, target) {
+		  var f = document.createElement('form');
+
+		  var objs, value;
+		  for (var key in parm) {
+		    value = parm[key];
+		    objs = document.createElement('input');
+		    objs.setAttribute('type', 'hidden');
+		    objs.setAttribute('name', key);
+		    objs.setAttribute('value', value);
+		    f.appendChild(objs);
+		  }
+		        
+		  if (target)
+		    f.setAttribute('target', target);
+		  
+		  f.setAttribute('method', 'post');
+		  f.setAttribute('action', url);
+		  document.body.appendChild(f);
+		  f.submit();
+	}
+
+	$('#send').on('click', function(e) {
+
+	    var $form = $('form.validate');
+	    $form.validate().settings.ignore = "";
+	    if ($form.valid()) {
+			if(userData) {
+
+	        	post_goto('/customer/findId/complete', {'joinType':userData.joinType, 'userId':userData.chcsNo});
+	            
+			} else {
+	            AP.modal.alert("인증번호를 확인해주세요. 인증번호 입력란으로 이동합니다.");
+			}
+	    }
+	});
+
+
+	function phoneCertProcess() {
+	    var $form = $('form.validate');
+	    $form.validate().settings.ignore = "[name=smsNum], [name=captcha], [name=captchaKey]";
+	    if ($form.valid()) {
+
+	        AP.api.phoneCert({}, AP.common.getFormData($form)).done(function(data) {
+	            //성공
+	            if (data) {
+
+                    AP.modal.alert("인증번호가 전송되었습니다.").addListener('modal-close', function(e) {
+                        $('[name=smsNum]').focus();
+                    });
+                    $('#certBtn').hide();
+                    $('#reCertBtn').show();
+                    $('#sms-form').show();
+
+                    //3 minutes timer
+                    if (t.isRunning()) {
+                        t.stop();
+                    }
+                    t.start();
+
+                    certTimeCnt++;
+
+                    isGuestCert = false;
+
+	            }
+	        }).fail(function(xhr, textStatus, errorThrown) {
+	            if (xhr.errorCode == 0) {
+	                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	            } else if (xhr.errorCode == 'ICITSVBIZ127') {
+	            	var r = confirm(xhr.errorMessage);
+	            	if(r) {
+	            		guestCert();
+	            	}
+	            } else {
+	                AP.modal.alert(xhr.errorMessage)
+	            }
+	        }).always(function() {
+	            //성공, 실패
+	            $("#certBtn").removeAttr("disabled");
+	            $("#reCertBtn").removeAttr("disabled");
+	        });
+
+	    } else {
+	        $("#certBtn").removeAttr("disabled");
+	        $("#reCertBtn").removeAttr("disabled");
+	    }
+	    return false;
+	}
+
+
+
+	$('#complete').click(function() {
+	    if (certTimeCnt > 0) {
+
+	    	if(!isGuestCert)
+		        doExecute();
+	    	else
+	    		guestConfirm();
+	    } else {
+	        AP.modal.alert("인증 먼저 받으세요.");
+	    }
+	});
+	function doExecute() {
+	    var $form = $('form.validate');
+	    $form.validate().settings.ignore = "";
+	    if ($form.valid()) {
+
+	        if (!t.isRunning()) {
+	    	    AP.modal.alert("입력시간 초과했습니다. 인증번호 재전송 버튼을 눌러 인증 절차를 다시 진행하십시오.");
+	        } else {
+	            $('#complete').attr("disabled", "disabled");
+	            AP.api.stepOne({}, AP.common.getFormData($form)).done(function(data) {
+	                //성공
+                    userData = data;
+                    if (t.isRunning()) {
+                        t.stop();
+                    }
+                    AP.modal.alert("본인인증이 완료되었습니다.");
+	            }).fail(function(xhr, textStatus, errorThrown) {
+	                //실패
+
+	                if (xhr.errorCode == 0) {
+	                    AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	                } else if (xhr.errorCode == 'EAPI001') {
+	                    var contents = new Object();
+	                    contents.title = "인증실패";
+	                    contents.contents = data.message;
+	                    contents.confirmLabel = "확인";
+	                    AP.modal.info(contents).addListener('modal-close', function(e) {});
+	                } else {
+	                    AP.modal.alert(xhr.errorMessage)
+	                }
+	            }).always(function() {
+	                //성공, 실패
+	                $("#send").removeAttr("disabled");
+	            });
+
+	        }
+	    }
+	}
+
+	var isGuestCert = false;
+
+	function guestCert() {
+		
+	    var $form = $('form.validate');
+	    $form.validate().settings.ignore = "[name=chcsNo], [name=userPwdEc], [name=userPwdEcChk], [name=smsNum]";
+
+	    AP.api.guestCert({}, AP.common.getFormData($form)).done(function(data) {
+	        //성공
+	        if (data) {
+
+	            var status = data.status;
+
+	            if ("success" == status) {
+
+	                if ("Y" == data.r_result) {
+	                    AP.modal.alert("인증번호가 전송되었습니다.").addListener('modal-close', function(e) {
+	                        $('.sms-ipt').slideDown();
+	                    });;
+	                    $('#certBtn').hide();
+	                    $('#reCertBtn').show();
+	                    $('#sms-form').show();
+						
+	                    isGuestCert = true;
+	                    
+	                    //3 minutes timer
+	                    if (t.isRunning()) {
+	                        t.stop();
+	                    }
+	                    t.start();
+
+	                    certTimeCnt = 1;
+
+	                } else {
+	                    AP.modal.alert("[AP]인증실패");
+	                }
+
+	            } else {
+	                AP.modal.alert(data.message);
+	            }
+
+	        } else {
+	            AP.modal.alert("[ajax.done]실패")
+	        }
+	    }).fail(function(xhr) {
+
+	        if (xhr.errorCode == 0) {
+	            AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	        } else {
+	            AP.modal.alert(xhr.errorMessage)
+	        }
+	    }).always(function() {
+	        //성공, 실패
+	    });
+	}
+
+	function guestConfirm() {
+
+	    var $form = $('form.validate');
+	    $form.validate().settings.ignore = "[name=chcsNo], [name=userPwdEc], [name=userPwdEcChk]";
+
+	    if ($form.valid()) {
+
+	        if (!t.isRunning()) {
+	    	    AP.modal.alert("입력시간 초과했습니다. 인증번호 재전송 버튼을 눌러 인증 절차를 다시 진행하십시오.");
+	        } else {
+	            AP.api.guestConfirm({}, AP.common.getFormData($form)).done(function(data) {
+	                //성공
+	                if (data) {
+
+	                    joinType = data.joinType;
+	                    signupDate = data;
+
+	                    AP.modal.alert("본인인증이 완료되었습니다.");
+	                    certTimeCnt = 2;
+	                    if (t.isRunning()) {
+	                        t.stop();
+	                    }
+
+	                } else {
+	                    AP.modal.alert("[ajax.done]실패")
+	                }
+	            }).fail(function(xhr, textStatus, errorThrown) {
+
+	                if (xhr.errorCode == 0) {
+	                    AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	                } else if (xhr.errorCode == 'EAPI001') {
+	                    var contents = new Object();
+	                    contents.title = "인증실패";
+	                    contents.contents = data.message;
+	                    contents.confirmLabel = "확인";
+	                    AP.modal.info(contents).addListener('modal-close', function(e) {});
+	                } else {
+	                    AP.modal.alert(xhr.errorMessage)
+	                }
+	            }).always(function() {
+	                //성공, 실패
+	            });
+
+	        }
+
+	    }
+	}
+			
+		</script>
+</th:block>
+
+</body>
+</html>

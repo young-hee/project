@@ -1,0 +1,48 @@
+<html ap:decorate="~{layout/only-contents}">
+
+<head>
+<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+	<div id="naver_id_login"></div>
+	<script>
+	var naver_id_login = new naver_id_login("[[${@environment.getProperty('naver.key')}]]", window.location.href.substr(0, window.location.href.indexOf('#')));
+	// 접근 토큰 값 출력
+
+	if(naver_id_login.oauthParams.state != '[[${state}]]') {
+		window.alert('예기치 못한 오류가 발생하여 SNS 로그인이 실패했습니다.');
+        window.close();
+	}
+	naver_id_login.get_naver_userprofile("naverSignInCallback()");
+
+	function naverSignInCallback() {
+	    var indexed_array = {};
+	    indexed_array['snsName'] = 'Naver';
+	    indexed_array['id'] = naver_id_login.getProfileData('id');
+	    indexed_array['accessToken'] = naver_id_login.oauthParams.access_token;
+
+	    $.ajax({
+	        type: "POST",
+	        url: "/login/snsloginProcess",
+	        data: indexed_array,
+	        success: function(data) {
+                if (data.isLinked) {
+                    window.opener.nbSuccess(data);
+                    window.close();
+                } else {
+                    window.opener.doSnsLogin();
+                    window.close();
+                }
+	            //성공
+	        },
+	        dataType: "json"
+	    });
+	}
+	</script>
+</div>
+</body>
+</html>

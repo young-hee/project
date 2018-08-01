@@ -1,0 +1,39 @@
+<!--
+String type  = StringUtil.xssReplace(request.getParameter("type"));
+String storeHeadCd   = StringUtil.xssReplace(request.getParameter("ho_code"));    //편의점본부코드
+String storeShopCd    = StringUtil.xssReplace(request.getParameter("store_code"));   //편의점점포코드
+String storeNm     = StringUtil.xssReplace(request.getParameter("codePany"));       //편의점회사
+if("GS".equals(storeNm)) {
+storeNm = "GS25";
+}
+String storeShopNm     = StringUtil.xssReplace(request.getParameter("codeName"));   //편의점이름
+String storeTelno    = StringUtil.xssReplace(request.getParameter("codeTel"));    //편의점연락처
+String storeZip     = StringUtil.xssReplace(request.getParameter("post_no"));    //편의점우편번호
+String storeAddr1    = StringUtil.xssReplace(request.getParameter("store_address1"));  //편의점주소
+String storeAddr2    = StringUtil.xssReplace(request.getParameter("store_address2"));  //편의점주소
+String storeCodeF    = StringUtil.xssReplace(request.getParameter("code_f"));     //도착점코드
+String storeDdZone   = StringUtil.xssReplace(request.getParameter("dd_zone"));    //도착점바코드
+String storeDdBag    = StringUtil.xssReplace(request.getParameter("dd_bag"));    //동명코드
+String storeEupmyeon  = StringUtil.xssReplace(request.getParameter("eupmyeon"));   //도착동명
+-->
+
+<!--스크립트 정의-->
+<script th:inline="javascript">
+	opener.document.ordFrm.storeHeadCd.value = "02";
+	opener.document.ordFrm.storeShopCd.value = "22616";
+	opener.document.ordFrm.storeNm.value = "CU";
+	opener.document.ordFrm.storeShopNm.value = "CU용산한강로점";
+	opener.document.ordFrm.storeTelno.value = "027954163";
+	opener.document.ordFrm.storeZip.value = "04331";
+	opener.document.ordFrm.storeAddr1.value = "서울 용산구 한강로2가";
+	opener.document.ordFrm.storeAddr2.value = "2-11";
+	opener.document.ordFrm.storeCodeF.value = "1A60-1";
+	opener.document.ordFrm.storeDdZone.value = "1A60";
+	opener.document.ordFrm.storeDdBag.value = "1A6";
+	opener.document.ordFrm.storeEupmyeon.value = "후암동";
+	opener.document.getElementById("storeShopNmDisp").innerHTML = "CU용산한강로점";
+	opener.document.getElementById("storeTelnoDisp").innerHTML = " ("+phoneNumberFormat("027954163")+")";
+	opener.document.getElementById("cvsInfoDisp").style="display: block;border: 1px solid #cecece;padding: 10px;text-align: center;background: #f5f5f5;";
+	self.close();
+</script>
+<!--// 스크립트 정의-->

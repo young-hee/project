@@ -1,0 +1,71 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- mypage sitemap -->
+	<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+	<!-- //  mypage sitemap -->
+
+	<!-- page title -->
+	<th:block ap:replace="~{common/fragment/contents-page-title}"/>
+	<!-- // page title -->
+
+	<!-- page contents -->
+	<div class="ap_contents mypage activity review_list after">
+		<!-- tab menu wrap -->
+		<div class="ui_tab">
+			<!-- tab menu -->
+			<div class="tab_menu equally">
+				<ul>
+					<li><a href="#none">작성 가능한 리뷰 <em>00</em>개</a></li>
+					<li class="on"><a href="#none">작성한 리뷰 <em>00</em>개</a></li>
+				</ul>
+			</div>
+			<!-- tab content -->
+			<div class="tab_cont pd0">
+				<h3 class="sr_only">매장 찾기</h3>
+
+				<div class="panel activity_list">
+					<div class="clear activity_head">
+						<div class="float_left ui_multiple_date_picker">
+							<div class="date_btn_set">
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_all" value="all" checked=""><label for="radio5_all">전체</label></span>
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_1" value="1weeks"><label for="radio5_1">1주일</label></span>
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_2" value="1months"><label for="radio5_2">1개월</label></span>
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_3" value="3months"><label for="radio5_3">3개월</label></span>
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_4" value="6months"><label for="radio5_4">6개월</label></span>
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_5" value="1years"><label for="radio5_5">12개월</label></span>
+							</div>
+							<p class="mlp_date_picker_date"><b>2018.01.05 ~ 2018.01.12</b>까지의 이벤트 참여 현황</p>
+						</div>
+
+					</div>
+
+					<div class="panel notice activity_notice">
+						<i class="ico"></i>
+						<p class="text font_lg">작성한 구매 리뷰가 없습니다.</p>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+	<!-- // page contents -->
+</div><!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script>
+		//multiple date picker적용
+		$( '.ui_multiple_date_picker' ).multipleDatePicker({
+			defaultRangeDate: 'all',
+			minDate: moment().subtract( 50, 'years' )
+		}).on( 'multiple-date-picker-change', function (e) {
+			console.log( e.type, e.date );
+		});
+	</script>
+</th:block>
+</body>
+</html>

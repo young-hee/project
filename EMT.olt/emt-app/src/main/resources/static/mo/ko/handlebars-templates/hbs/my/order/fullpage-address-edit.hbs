@@ -1,0 +1,97 @@
+<dl class="layer">
+	<dt class="layer_title">배송정보 수정</dt>
+	<dd class="layer_cont">
+		<div class="panel">
+			<h2 class="h_title page">배송지 정보 수정</h2>
+			<ul class="list_bullet_dot type2">
+				<li>설정된 배송지 정보를 수정해 주시기 바랍니다.</li>
+			</ul>
+			<hr class="div m30" />
+			<h3 class="form_title">기본정보 <small>(필수입력)</small></h3>
+
+			<form class="validate" id="shipForm" name="shipForm">
+
+				<input type="hidden" name="shipAddressTypeCode" value="{{data.shipAddressTypeCode}}">
+				<fieldset class="form">
+					<legend class="sr_only">배송지 추가/수정</legend>
+					<div class="input_group">
+						<div class="label w30p">
+							<label for="">받는 사람</label>
+						</div>
+						<div>
+							<input type="text" name="recipientName.name1" placeholder="받는 분 성함을 입력해 주세요." value="{{data.recipientName.name1}}" required="required" user-fullname="user-fullname" data-msg="받는 분 성함을 입력해 주세요.">
+						</div>
+					</div>
+					<div class="input_group">
+						<div class="label w30p">
+							<label for="delivery_phone">휴대전화</label>
+						</div>
+						<div>
+							<input type="tel" name="recipientPhoneNo1.phoneNo" placeholder="- 없이 입력해 주세요." value="{{data.recipientPhoneNo1.phoneNo}}" required="required" mobile-number="mobile-number" data-msg="휴대폰 번호를 입력해 주세요">
+						</div>
+					</div>
+				</fieldset>
+				{{#xif data.shipAddressTypeCode "===" "ShipAddressInput"}}
+					<h3 class="form_title">주소지 입력 <small>(필수입력)</small></h3>
+
+					<fieldset class="form">
+						<legend class="sr_only">주소 입력</legend>
+						<p class="text_notice">찾으시는 주소지 또는 건물명을 입력해 주세요.<br>(예 : 강남대로, 한강로2가, 한강대로 100)</p>
+						<div class="ui_find_addresses">
+							<div class="input_group">
+								<div>
+									<input type="text" id="delivery_area" class="find_addresses_input" placeholder="주소지 또는 건물명" data-msg="주소를 입력해주세요">
+								</div>
+								<div class="btn">
+									<button type="button" class="btn_find_addresses">찾기</button>
+								</div>
+							</div>
+							<!-- 지역 검색 결과 -->
+							<div class="address_list"></div>
+							<!-- //지역 검색 결과 -->
+
+							<div class="input_group">
+								<div class="input_wrap">
+
+									<input type="hidden" class="post_code" name="recipientAddress.zipCode" id="recipientAddress.zipcode" value="{{data.recipientAddress.zipCode}}">
+									<input type="text" title="기본주소 입력" class="address_first" placeholder="주소" readonly="" value="{{data.recipientAddress.address1}}" required="required" data-msg="주소를 입력해주세요">
+									<input type="hidden" class="address_first" name="recipientAddress.address1" id="recipientAddress.address1" value="{{data.recipientAddress.address1}}">
+
+								</div>
+							</div>
+							<div class="input_group">
+								<div class="input_wrap"><input type="text" class="address_last" name="recipientAddress.address2" title="상세주소 입력" placeholder="상세주소를 입력해주세요." value="{{data.recipientAddress.address2}}" data-msg="상세주소를 입력해 주세요"></div>
+							</div>
+						</div>
+					</fieldset>
+				{{else}}
+					<input type="hidden" name="cStoreName" value="{{data.cStoreName}}">
+					<input type="hidden" name="cStorePhoneNo.phoneNo" value="{{data.cStorePhoneNo.phoneNo}}">
+					<input type="hidden" name="cStoreDockNo" value="{{data.cStoreDockNo}}">
+					<input type="hidden" name="cStoreCenterName" value="{{data.cStoreCenterName}}">
+					<input type="hidden" name="cStoreAddress.zipCode" value="{{data.cStoreAddress.zipCode}}">
+					<input type="hidden" name="cStoreAddress.address1" value="{{data.cStoreAddress.address1}}">
+					<input type="hidden" name="cStoreAddress.address2" value="{{data.cStoreAddress.address2}}">
+					<input type="hidden" name="cStoreArrivalAreaCode" value="{{data.cStoreArrivalAreaCode}}">
+					<input type="hidden" name="cStoreArrivalAreaBarcode" value="{{data.cStoreArrivalAreaBarcode}}">
+					<input type="hidden" name="cStoreDongNmCode" value="{{data.cStoreDongNmCode}}">
+					<input type="hidden" name="cStoreArrivalDongNm" value="{{data.cStoreArrivalDongNm}}">
+				{{/xif}}
+				<h3 class="form_title">배송 메세지 <small>(필수입력)</small></h3>
+				<fieldset class="form">
+					<legend class="sr_only">부가정보 입력</legend>
+					<div class="input_group default">
+						<div>
+							<input type="text" name="shipMsg" id="delivery_title" placeholder="배송지명을 입력해 주세요." value="{{data.shipMsg}}" required="required" data-msg="배송 메세지를 입력해주세요.">
+						</div>
+					</div>
+
+				</fieldset>
+			</form>
+			<div class="form_btns">
+				<a href="#none" class="btn_lg_secondary" id="editShipCancel">취소</a>
+				<a href="javascript:void(0);" onclick="editShipAddress();" class="btn_lg_neutral">등록</a>
+			</div>
+		</div>
+	</dd>
+</dl>

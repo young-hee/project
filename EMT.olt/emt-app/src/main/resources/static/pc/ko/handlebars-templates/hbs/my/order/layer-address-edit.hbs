@@ -1,0 +1,58 @@
+<dt class="layer_title">배송지 추가/수정</dt>
+<dd class="layer_cont address_management">
+	<div class="clear">
+		<ul class="list_bullet_dot">
+			<li>설정된 배송지 정보를 수정해 주시기 바랍니다.</li>
+		</ul>
+	</div>
+	<form id="f_shipAddressInfo" class="validate">
+		<fieldset class="form mgt20">
+			<div class="ui_table">
+				<dl>
+					<dt><label for="name">이름</label></dt>
+					<dd>
+						<div class="input_wrap w100p"><input type="text" name="recipientName.name1" value="{{this.info.recipientName.name1}}" user-name="user-name"/></div>
+					</dd>
+				</dl>
+				<dl>
+					<dt><label for="addr_phone">휴대전화</label></dt>
+					<dd>
+						<div class="input_wrap w100p"><input type="text" name="recipientPhoneNo1.phoneNo"  value="{{this.info.recipientPhoneNo1.phoneNo}}"/></div>
+					</dd>
+				</dl>
+				<input type="hidden" name="shipAddressTypeCode" value="{{this.code}}">
+				{{#if (eq this.code 'ShipAddressInput')}}
+					<dl>
+						<dt><label for="addr_phone">주소</label></dt>
+						<dd class="ui_find_addresses">
+							<div class="w100p input_btn_wrap">
+								<div class="input_wrap">
+									<input type="text" class="address_keyword" title="지역명 입력" placeholder="지역명">
+								</div>
+								<button type="button" class="btn_md_form btn_address_find">찾기</button>
+							</div>
+							<div class="input_group w100p">
+								<span class="input_wrap w25p"><input type="text" class="post_code" name="recipientAddress.zipCode" title="우편번호 입력" placeholder="우편번호" value="{{this.info.recipientAddress.zipCode}}" readonly></span>
+								<span class="gap">&nbsp;</span>
+								<span class="input_wrap"><input type="text" class="address_first" name="recipientAddress.address1" title="기본주소 입력" placeholder="기본주소" value="{{this.info.recipientAddress.address1}}" readonly></span>
+							</div>
+							<div class="input_wrap w100p"><input type="text" class="address_last" name="recipientAddress.address2" title="상세주소 입력" placeholder="상세주소" value="{{this.info.recipientAddress.address2}}"/></div>
+							<p class="text_notice">찾으시는 주소지 또는 건물명을 입력해 주세요.<br>(예 : 강남대로, 한강로2가, 한강대로 100)</p>
+						</dd>
+					</dl>
+				{{/if}}
+				<dl>
+					<dt><label for="addr_phone">배송시<br>요청사항선택</label></dt>
+					<dd><!--/* 20180511 : 셀렉트에서 인풋으로 변경 */-->
+						<div class="input_wrap w100p"><input type="text" name="shipMsg"  placeholder="" value="{{this.info.shipMsg}}"/></div>
+					</dd>
+				</dl>
+			</div>
+		</fieldset>
+	</form>
+
+	<div class="page_btns">
+		<button type="button" class="btn_lg_secondary" id="b_adrCancel">취소</button>
+		<button type="button" class="btn_lg_neutral" id="b_chgAddress">등록</button>
+	</div>
+</dd>

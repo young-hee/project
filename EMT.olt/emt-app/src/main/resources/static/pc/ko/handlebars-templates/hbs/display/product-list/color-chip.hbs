@@ -1,0 +1,23 @@
+{{#each this}}
+	<li class="ix-list-item">
+		<ul class="colors ">
+			{{#each this}}
+				{{#xif this.colorchipTypeCode '!=' 'No'}}
+					<li data-prod-sn="{{ this.prodSn }}" data-group="{{ join (pluck this.colorGroups 'colorGroupCode') ' ' }}">
+						{{#xif this.colorchipTypeCode '==' 'RGB'}}
+							<a href="#chip" style="background-color:#{{ this.rgbVal }}">
+								{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}<span class="sold_out"><span>품절</span></span>{{/xif}}
+							</a>
+						{{/xif}}
+						{{#xif this.colorchipTypeCode '==' 'Img'}}
+							<a href="#chip">
+								{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}<span class="sold_out"><span>품절</span></span>{{/xif}}
+								<img alt="컬러명" src="{{ this.colorchipImg }}">
+							</a>
+						{{/xif}}
+					</li>
+				{{/xif}}
+			{{/each}}
+		</ul>
+	</li>
+{{/each}}

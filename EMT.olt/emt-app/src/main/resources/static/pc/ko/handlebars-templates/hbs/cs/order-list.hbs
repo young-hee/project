@@ -1,0 +1,25 @@
+{{#xif this.list.length '>' 0}}
+	{{#each this.list}}
+		<tr>
+			<td>
+				<span class="check_wrap check_only">
+					<input type="radio" class="table_striped" name="order" id="o_{{this.ordSn}}" value="{{json this}}">
+					<label for="o_{{this.ordSn}}"><span class="sr_only">{주문번호}</span></label>
+				</span>
+			</td>
+			<td>{{this.ordHistNo}}</td>
+			<td><span id="ordName_{{this.ordSn}}">{{this.ordName}} {{checkCnt 'cnt' this.ordQty}}</span></td>
+			<td>{{currencyFormat this.finalOrdPrice}}</td>
+			<td>{{ordStatusCheck 'online' this.ordStatusCode}}</td>
+		</tr>
+	{{/each}}
+{{else}}
+	<tr>
+		<td colspan="5">
+			<div class="panel notice">
+				<i class="ico"></i>
+				<p class="text font_lg">검색결과가 없습니다.</p>
+			</div>
+		</td>
+	</tr>
+{{/xif}} 

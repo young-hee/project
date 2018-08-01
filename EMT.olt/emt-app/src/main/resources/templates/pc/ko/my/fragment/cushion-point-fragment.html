@@ -1,0 +1,20 @@
+<th:block layout:fragment="cushion-point-list">
+
+	<div th:if="${pageVo.totalRowCount != '0'}" class="pbody date_pic_right" style="margin-bottom: 32px;">
+		<div><span>적립 쿠션 포인트</span> <strong class="num" th:text="${#IntegUtil.toCommaNumber(savePoint)}">7,000</strong><span>P</span></div>
+		<span class="vline"></span>
+		<div><span>사용 쿠션 포인트</span> <strong class="num" th:text="${#IntegUtil.toCommaNumber(usingPoint)}">8,000</strong><span>P</span></div>
+	</div>
+	<th:block th:if="${pageVo.totalRowCount != '0'}">
+	    <div ap:replace="~{my/fragment/cushion-point-body :: cushion-point-body}"></div>
+	</th:block>
+    
+    
+	<div th:if="${pageVo.totalRowCount == '0'}" class="pbody panel notice">
+		<i class="ico"></i>
+		<p class="text font_lg">
+			<span>선택하신 기간에 해당하는 내역이 없습니다.</span>
+		</p>
+	</div>
+    
+</th:block>

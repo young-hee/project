@@ -1,0 +1,20 @@
+{{#xif totalLength '>' 0 }}
+    {{#each result }}
+            <tr>
+                <td><span class="check_wrap check_only">
+                    <input type="checkbox" name="layer" id="layer_{{storeSn}}" value="{{storeSn}}" storeName="{{storeName}}" class="table_striped" {{checkedIf regularStoreYn}}>
+                    <label for="layer_{{storeSn}}"><span class="sr_only" value="{{storeSn}}">{단골매장}선택</span></label></span></td>
+                <td>{{storeName}}<span type="rep" val="{{storeSn}}" class="{{repClass defaultStoreYn}}">{{repText defaultStoreYn}}</span></td>
+                <td>{{phoneNo1.phoneNo}}</td>
+                <td class="align_left">{{address.address1}}</td>
+                <td><button class="btn_sm_bordered" latitude="{{latitude}}" longitude="{{longitude}}">위치보기</button></td>
+            </tr>
+            <tr class="tr_map">
+                <td colspan="5" class="td_map"><div class="map_area"></div><button class="btn_map_close">닫기</button></td>
+            </tr>  
+        </tr>
+    {{/each}}
+{{else}}
+
+    
+{{/xif}}

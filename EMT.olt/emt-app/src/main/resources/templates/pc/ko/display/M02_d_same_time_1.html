@@ -1,0 +1,156 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='sametime-events-detail'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents event detail">
+		<!--/* 제목 영역 */-->
+		<div class="event_title_wrap">
+			<h3 class="h_title" th:text="${planDisplay.planDisplayTitle}">이벤트 제목</h3>
+			<div class="align_center">
+<!-- 				<span class="num" th:text="${#dates.format(planDisplay.event.startDt, 'yyyy.MM.dd')} + ' ~ ' + ${#dates.format(planDisplay.event.endDt, 'yyyy.MM.dd')}">2018.02.08 ~ 2018.02.28</span> -->
+				<button type="button" class="btn_share" th:if="${planDisplay.shareUseYn == 'Y'}">SNS 공유하기</button>
+			</div>
+		</div>
+
+		<!--/* 이벤트 대표이미지 */-->
+		<div class="event_image" th:utext="${planDisplay.detailHtml}">
+		</div>
+
+		<div class="page_btns">
+			<a href="/display/event?displayMenuId=event" class="btn_md_neutral">목록</a>
+		</div>
+
+		<!--/* 상품이 있을때만 */-->
+		<div class="event_product" th:if="${planDisplay.planDisplayTypeCode == 'General' ? planDisplay.prodGroupListYn == 'Y' : planDisplay.planDisplayTypeCode == 'SameTimePur'}">
+			<!--/*
+			<h4 class="h_title lare">아이즈+물감블러셔 16,900원! Or 아이즈+립스톡 17,900원!</h4>
+			<p class="text font_xxl">컬러풀 드로잉 판타스틱 컬러 아이즈와 립스톡 or 물감블러셔를 3개를 담아주세요~!</p>
+			*/-->
+
+			<div class="ui_tab">
+				<div class="tab_menu equally">
+					<ul th:if="${planDisplay.planDisplayTypeCode == 'SameTimePur'}">
+						<li th:each="promoGroup, iterStat : ${planDisplay.promoList}" th:class="${iterStat.index == 0 ? 'on' : ''}">
+							<button type="button" th:text="${promoGroup.promoName}">프로모션 그룹 타이틀</button>
+						</li>
+					</ul>
+
+					<ul th:if="${planDisplay.planDisplayTypeCode == 'General'}">
+						<li th:each="prodGroup, iterStat : ${planDisplay.prodGroupList}" th:class="${iterStat.index == 0 ? 'on' : ''}">
+							<button type="button" th:text="${prodGroup.prodGrpTitle}">그룹 타이틀</button>
+						</li>
+					</ul>
+				</div>
+
+				<!--/* 프로모션 상품 그룹핑 */-->
+				<div class="tab_contents" th:if="${planDisplay.planDisplayTypeCode == 'SameTimePur'}">
+					<div class="tab_cont" th:each="promo : ${planDisplay.promoList}" th:data-promo-sn="${promo.promoSn}">
+						<th:block th:each="promoGrpList : ${promo.promoGrpList}">
+							<h5 class="h_title lare" th:text="${promoGrpList.grpTitle}">프로모션 그룹 타이틀</h5>
+							<div class="item_list column4" th:data-promo-grp-sn="${promoGrpList.sameTimePurProdGrpSn}">
+								<ul>
+									<!--/* 상품 리스트 영역 */-->
+								</ul>
+							</div>
+							
+							<!-- /* 상품 리스트 페이징 영역 */ -->
+							<div class="pagination" style="display: none;"></div>
+							<!-- /* 상품 리스트 페이징 영역 */ -->
+							
+							<div class="loading" style="height:400px;">
+								<span>
+									<img ap:src="@{/images/common/loading.gif}" alt="">
+								</span>
+							</div>
+						</th:block>
+					</div>
+				</div>
+				
+				<div class="tab_contents">
+					<div class="tab_cont" th:each="promotion : ${planDisplay.promoList}">
+						<h5 class="h_title lare" th:text="${promotion.promoName}">프로모션 그룹 타이틀</h5>
+						<div class="item_list column4">
+							<ul th:data-promo-sn="${promotion.promoSn}">
+								<!--/* 상품 리스트 영역 */-->
+							</ul>
+						</div>
+						<div class="loading" style="height:400px;">
+							<span>
+								<img ap:src="@{/images/common/loading.gif}" alt="">
+							</span>
+						</div>
+					</div>
+				</div>
+				
+				<!--/* 일반 상품 그룹핑 */-->
+				<div class="tab_contents" th:if="${planDisplay.planDisplayTypeCode == 'General'}">
+					<div class="tab_cont" th:each="prodGroup : ${planDisplay.prodGroupList}">
+						<div class="item_list column4">
+							<ul th:data-plan-display-prod-grp-sn="${prodGroup.planDisplayProdGrpSn}">
+								<!--/* 상품 리스트 영역 */-->
+							</ul>
+						</div>
+						<div class="loading" style="height:400px;">
+							<span>
+								<img ap:src="@{/images/common/loading.gif}" alt="">
+							</span>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+
+			<!--/* 주문레이어 */-->
+			<div class="order_layer" style="top:91px;"> <!--/* script : 높이값 필요 */-->
+				<!--/* 이벤트 주문 & 합계 */-->
+				<div class="event_order_wrap" style="height:760px;"> <!--/* script : 높이값 필요 */-->
+					<!--/* 동시구매 기획전 */-->
+					
+					<!--/* 동시구매 기획전 */-->
+				</div>
+				
+				<!--/* 금액 및 버튼 */-->
+				<div class="order_bottom">
+					<div class="order_total_price">
+						<span class="total_count">총 0개</span>
+						<em><strong class="num total_price">0</strong>원</em>
+					</div>
+					<div class="order_button_wrap full_type">
+						<button class="btn_lg_bordered takeout btn_takeout" type="button">테이크<br>아웃</button>
+						<button class="btn_lg_primary btn_basket" type="button">장바구니 담기</button>
+					</div>
+				</div>
+				<!--/* 금액 및 버튼 */-->
+				
+			</div>
+		</div>
+
+		<!--/* 댓글영역 */-->
+		<div class="comment_area" th:if="${planDisplay.participantYn == 'Y' && planDisplay.eventType == 'Comment'}">
+			<div class="align_right mgt50">
+				<button class="btn_md_primary btn_participate" type="button">리뷰 작성</button>
+			</div>
+
+			<div class="review_list">
+				<!--/* 댓글 리스트 영역 */-->
+			</div>
+		</div>
+
+	</div>
+	<!-- // page contents -->
+</div><!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script th:inline="javascript">
+		(function () {
+			var planDisplay = /*[[${planDisplay}]]*/;
+
+			AP.sameTimeEventsDetail.setDefaultData( planDisplay );
+		}());
+	</script>
+</th:block>
+</body>
+</html>

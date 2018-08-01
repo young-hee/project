@@ -1,0 +1,26 @@
+<dl>
+	<dt class="on">
+		<span>결제수단</span>
+		<button type="button"><span class="sr_only">닫기</span></button>
+	</dt>
+	<dd>
+		<div class="cont payment">
+			<div class="panel bordered gray">
+				<div class="panel_cont ui_table">
+					<dl th:if="${#lists.size(ordEx.ordHistEx.ordPayExList) > 0}">
+						<th:block th:each="ordPayEx : ${ordEx.ordHistEx.ordPayExList}">
+							<dt><b th:text="${ordPayEx.payMethodCode == 'Deposit' ? '예치금결제' : ordPayEx.payMethodNameBlang + '결제'}">신용카드 결제</b></dt>
+							<dd>
+								<p class="text" th:text="${#IntegUtil.toCommaNumber(ordPayEx.payAmt)} + '원'">0 원</p>
+								<!--카드결제 완료 시 상태값 확인 후 데이터 매칭!!-->
+								<p class="text" th:if="${ordPayEx.payMethodCode == 'credit-card'}">
+									KB국민카드(22469*********) / 2개월
+								</p>
+							</dd>
+						</th:block>
+					</dl>
+				</div>
+			</div>
+		</div>
+	</dd>
+</dl>

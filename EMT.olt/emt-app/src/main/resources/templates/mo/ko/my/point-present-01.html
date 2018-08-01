@@ -1,0 +1,180 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='member'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page contents -->
+            <div class="ap_contents mypage">
+            	<div class="beauty_point">
+                    <div class="panel">
+                        <div class="title_wrap">
+                            <h3 class="h_title page">뷰티포인트 선물하기</h3>
+                            <p class="font_md">뷰티포인트로 마음을 전하세요.</p>
+                            <div class="ui_step sm">
+                                <ul>
+                                    <li class="current"><i class="ico"></i>step 1<span class="sr_only">선택됨</span></li>
+                                    <li><i class="ico"></i>step 2</li>
+                                    <li><i class="ico"></i>step 3</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="my_bt_point">
+                            <dl>
+                                <dt>나의 보유 뷰티포인트</dt>
+                                <dd><span class="num" th:text="${#IntegUtil.toCommaNumber(point.rmnPt)}">20,000</span>P</dd> <!-- 03-05 수정 -->
+                            </dl>
+                        </div>
+                        <hr class="div m30">
+                        <h4 class="form_title"><strong>선물 받으시는 분</strong></h4>
+                        <form>
+                        <fieldset class="form">
+                            <legend class="sr_only">선물 받으시는 분 정보 입력</legend>
+                            <div class="dl">
+                                <dl>
+                                    <dt>이름</dt>
+                                    <dd>
+                                        <div class="input_group">
+                                        	<div><input type="text" name="userNm" title="이름 입력" placeholder="이름을 입력해 주세요." required="required" data-msg-required="이름을 입력해 주세요."></div>
+                                        </div>
+                                    </dd>
+                                </dl>
+                                
+                            </div>
+                            <div class="table_layout">
+									<span class="check_wrap"><input type="radio" name="changeMethod" value="01" id="radio1" checked=""><label for="radio1">휴대폰 번호</label></span>
+									<span class="check_wrap"><input type="radio" name="changeMethod" value="02" id="radio2"><label for="radio2">회원 아이디</label></span>
+                                </div>
+                               <div class="input_group">
+                               		<div>
+								     	<input type="tel" placeholder="휴대폰 번호(ex.01012345678)" title="휴대폰 번호 입력" name="phone" required="required" data-msg-required="휴대폰 번호를 입력해 주세요."
+								             mobile-number="mobile-number" data-msg-mobile-number="휴대폰 번호를 정확히 입력하세요."/>
+						             	<input type="text" title="회원 아이디 입력" name="userId" required="required" data-msg-required="회원아이디를 입력해주세요." style="display:none;" placeholder="회원 아이디를 입력해 주세요.">
+                               		</div>
+                               </div>
+                        </fieldset>
+
+                        <h4 class="form_title"><strong>선물 할 뷰티포인트</strong></h4>
+                        <fieldset class="form">
+                            <legend class="sr_only">선물 할 뷰티포인트 입력</legend>
+                            <div class="input_point_group">
+                                <div class="input_group">
+                                	<div>
+	                                    <input type="number" name="giftPoint" number="number" id="giftPoint" title="뷰티포인트 입력" value="" required="required" data-msg-required="선물할 뷰티포인트를 입력해 주세요.">
+	                                    <em class="point">P</em>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul class="list_bullet_dot">
+                                <li>10P 단위로 선물 가능합니다.</li>
+                                <li>보유하고 계신 포인트보다 선물할 포인트가 더 많은 경우 선물할 수 없습니다.</li>
+                            </ul>
+                        </fieldset>
+                        </form>
+
+                        <div class="page_btns">
+                            <button class="btn_lg_secondary" onclick="window.history.back()" type="button">취소</button>
+                            <button class="btn_lg_neutral" id="send" type="button">다음</button>
+                        </div>
+                    </div>
+
+               	</div>
+            </div>
+            <!-- // page contents -->
+            <!-- 마이페이지 맵 -->
+            <th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+            <!-- // 마이페이지 맵 -->
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+			<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+			<script>
+				$("#giftPoint").change(function() {
+					var point = Number($(this).val());
+					if(point%10 != 0) {
+						$(this).val(point - (point%10));
+					}
+					if(point > [[${point.rmnPt}]]) {
+						$(this).val([[${point.rmnPt}]]);
+					}
+				});
+
+				$('[name="changeMethod"]').change(function() {
+
+					var value = $('[name="changeMethod"]:checked').val();
+					if(value == '01') {
+						$('[name="userId"]').hide();
+						$('[name="userId"]').val(null);
+						$('[name="phone"]').show();
+					} else {
+						$('[name="phone"]').hide();
+						$('[name="phone"]').val(null);
+						$('[name="userId"]').show();
+					}
+					
+				});
+				$('#send').click(function() {
+
+					var $form = $('form');
+					var value = $('[name="changeMethod"]:checked').val();
+					if(value == '01') {
+					    $form.validate().settings.ignore = "[name=userId]";
+					} else {
+					    $form.validate().settings.ignore = "[name=phone]";
+					}
+					
+			        if($form.valid()) {
+			        	if($('#giftPoint').val() == '0') {
+							AP.modal.alert("선물할 뷰티포인트를 입력해 주세요.");
+							$('#giftPoint').focus();
+							return;
+						}
+			      	  	$(this).attr("disabled", "disabled");
+		                AP.api.checkPresentMember({}, AP.common.getFormData($('form'))).done(function(data) {
+							AP.common.setSessionStorage("presentStep", 5);
+				        	location.replace('/my/page/info/giftPointCheck');
+		                }).fail(function(xhr, textStatus, errorThrown) {
+		    	            $(this).removeAttr("disabled");
+		                    if (xhr.errorCode == 0) {
+		                        AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+		                    } else if (xhr.errorCode == 'NO_MEMBER') {
+	
+		        			    $.get("/my/page/info/noMemberPopuop", function(data) {
+	        	    	            $('#send').removeAttr("disabled");
+		        			        /**
+		        			         * 동적으로 생성된 modal의 Node Element 접근하기
+		        			         * alert, confirm, info 모두 동일
+		        			         */
+	
+		        			        var contents = new Object();
+		        			        contents.contents = data;
+		        			        var modal = AP.modal.info(contents);
+		        			        var $modalEl = modal.getElement(); //jquery object
+	
+		        			        $(".layer_close, #close").click(function() {
+		        			            modal.close();
+		        			        });
+		        			        $("#ok").click(function() {
+		    							AP.common.setSessionStorage("presentStep", 3);
+		        			        	location.replace('/my/page/info/noMemberAuthorized');
+		        			        });
+		        			        
+		        			    });
+		                    	
+		                    } else {
+		                        AP.modal.alert(xhr.errorMessage)
+		                    }
+		                }).always(function() {
+		                    //성공, 실패
+		                });
+					}
+				});
+				
+
+			</script>
+
+        </th:block>
+</body>
+</html>

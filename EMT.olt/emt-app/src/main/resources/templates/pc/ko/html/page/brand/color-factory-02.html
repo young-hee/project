@@ -1,0 +1,87 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='color-factory'">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page title -->
+		<th:block ap:replace="~{common/fragment/contents-page-title}"/>
+		<!-- // page title -->
+		<!-- page contents -->
+		<div class="ap_contents brand">
+			<div class="color_factory">
+				<!-- tab menu wrap -->
+				<div class="ui_tab">
+					<!-- tab menu -->
+					<div class="tab_menu equally">
+						<ul>
+							<li><a href="#none">컬러 팩토리 안내 (Color Factory)</a></li>
+							<li class="on"><a href="#none">컬러 팩토리 예약 (Reservation)</a></li>
+							<li><a href="#none">서비스 매장 보기 (Store)</a></li>
+						</ul>
+					</div>
+					<!-- tab content -->
+					<div class="tab_cont space">
+						<h3 class="sr_only">컬러 팩토리 예약 (Reservation)</h3>
+						<div class="img"><img ap:src="@{/images/brand/img_color_factory_01.jpg}" alt="COLOR FACTORY 단 하나뿐인 컬러를 만들어 주는 컬러 팩토리"></div>
+						<div class="inner_contents">
+							<div class="factory_service">
+								<div class="service_info">
+									<h4 class="h_title">컬러 팩토리 서비스</h4>
+									<dl>
+										<dt class="clear">
+											<span>A.마이 퍼스널 립스틱(1 Color) / 30분</span>
+											<span>25,000원</span>
+										</dt>
+										<dd>퍼스널 컬러 진단 + 립스틱 1개(글라스/매트)<br>+ 립스틱 케이스 + 각인 포함</dd>
+									</dl>
+									<dl>
+										<dt class="clear">
+											<span>B.마이 퍼스널 립스틱(2 Color) / 50분</span>
+											<span>40,000원</span>
+										</dt>
+										<dd>퍼스널 컬러 진단 + 립스틱 1개(글라스/매트)<br>+ 립스틱 케이스 + 각인 포함</dd>
+									</dl>
+									<dl>
+										<dt class="clear">
+											<span>C.마이 퍼스널 립 & 페이스 / 50분</span>
+											<span>40,000원</span>
+										</dt>
+										<dd>퍼스널 컬러 진단 + 립스틱 1개(글라스/매트)  +<br>립스틱 케이스 + 각인 + 스킨톤 진단 + 더블래스팅<br>파운데이션 정품 포함</dd>
+									</dl>
+									<div class="page_btns">
+										<a href="#" class="btn_lg_bordered" id="btnCfmResv">예약확인</a>
+										<a href="/display/color_factory_reserve_regist?displayMenuId=color_factory_reserve_regist" class="btn_lg_primary">예약하기</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- // page contents -->
+	</div><!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script>
+			// 예약확인
+			$( 'a#btnCfmResv' ).on( 'click', function (e) {
+				e.preventDefault();
+
+				if( window.AP.LOGIN_USER ) {
+					location.href="/display/color_factory_reserve_confirm?displayMenuId=color_factory_reserve_confirm";
+				}else{
+					AP.colorFactoryConfirmation.confirm();
+				}
+			});
+
+			// 예약번호 입력 후 확인
+			AP.colorFactoryConfirmation.addListener( 'reservation-confirm', function (e) {
+				location.href = '/display/color_factory_reserve_confirm?displayMenuId=color_factory_reserve_confirm&reserveNo=' + e.reserveNo ;
+			});
+
+		</script>
+	</th:block>
+</body>
+</html>

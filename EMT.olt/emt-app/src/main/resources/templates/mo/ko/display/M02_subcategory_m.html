@@ -1,0 +1,70 @@
+<html ap:decorate=~{layout/layout-category} th:with="_jsfile='product-list'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents prd_list">
+		<!-- 02-28 소카테고리 삭제 메뉴레이어로 통합
+		<th:block ap:replace="~{fragment/product/category}"/>
+		<!--//소카테고리-->
+
+		<!--/* [S] 20180423 : 검색영역 순서 변경 */-->
+		<div class="sorting_group">
+			<span class="select_wrap">
+				<select tabindex="-1" name="" id="" title="선택하세요">
+					<option value="1" th:value="Bestselling">판매순</option>
+					<option value="2" th:value="NewProd">신상품순</option>
+					<option value="3" th:value="HighestPrice">높은가격순</option>
+					<option value="4" th:value="LowestPrice">낮은가격순</option>
+					<option value="5" th:value="MostProdReview">상품평순</option>
+				</select>
+			</span>
+			<span class="check_wrap btn evt"><input type="checkbox" id="evt1" name="flag" value="icon_pr_prod"><label for="evt1">행사상품</label></span>
+			<div>
+				<button type="button" class="btn filter">필터</button>
+				<button type="button" class="btn view"><span class="sr_only">상품보기변경</span></button><!-- 클릭시 클래스 변경 - 1단 보기 : type1 / 2단 보기 : type1 -->
+			</div>
+		</div>
+		<!--/* [E] 20180423 : 검색영역 순서 변경 */-->
+
+		<!--상품리스트-->
+		<div class="item_list type2">
+			<div class="panel notice no_result" style="display: none;">
+				<i class="ico"></i>
+				<p class="text">상품이 존재하지 않습니다.</p>
+			</div>
+
+			<p class="total_count"><b></b>개의 상품</p>
+
+			<ul></ul>
+
+			<button type="button" class="btn_lg_more w100p">
+				<span></span>
+			</button>
+		</div>
+		<!--//상품리스트-->
+
+		<ul class="loading" style="display: none">
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	<!-- // page contents -->
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script>
+		AP.display.init({
+			key: { displayMenuId: AP.DISPLAY_MENU_ID }
+		});
+	</script>
+</th:block>
+
+</body>
+</html>

@@ -1,0 +1,512 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page title -->
+	<th:block ap:replace="~{common/fragment/contents-page-title}"/>
+	<!-- // page title -->
+	<!-- page contents -->
+	<div class="ap_contents login">
+		<div class="panel">
+			<div class="panel_cont">
+				<fieldset class="form">
+					<form>
+					<legend class="sr_only">로그인 정보 입력</legend>
+					<div class="radio_set">
+						<span class="check_wrap"><input type="radio" name="login" id="choice1" checked><label for="choice1">회원</label></span>
+						<span class="check_wrap"><input type="radio" name="login" id="choice2"><label for="choice2">비회원(주문조회)</label></span>
+					</div>
+					<div class="login_area">
+						<div class="input_wrap" name="choice">
+							<input type="text" title="아이디 입력" name="chcsNo" placeholder="아이디" required="required"
+								   data-msg-required="아이디를 입력해 주세요.">
+						</div>
+						<div class="input_wrap" name="choice">
+							<input type="password" title="비밀번호 입력" name="userPwdEc" placeholder="비밀번호" required="required"
+								   data-msg-required="비밀번호를 입력해 주세요.">
+						</div>
+						<div class="clear" name="choice">
+							<div class="check_wrap"><input type="checkbox" id="save_id"><label for="save_id">아이디 저장</label></div>
+							<div><a href="/customer/find/find-id">아이디 찾기</a> │ <a href="customer/find/find-pwd">비밀번호 찾기</a></div>
+						</div>
+						<button type="button" class="btn_primary_login" id="login" name="choice">로그인</button>
+					</div>
+					<div class="login_area" >
+						<div class="input_wrap" style="display: none" name="choice"><input type="text" title="주문자 이름 입력" placeholder="주문자 이름"></div>
+						<div class="input_wrap" style="display: none" name="choice"><input type="text" title="주문번호 입력" placeholder="주문번호"></div>
+						<button type="button" class="btn_primary_login" style="display: none" name="choice">주문조회</button>
+					</div>
+					</form>
+				</fieldset>
+				<hr class="div m20">
+				<dl class="dl_cont">
+					<dt class="h_title cont">아직도 회원이 아니세요?</dt>
+					<dd>
+						<p class="text">아모레퍼시픽계열 모든 쇼핑몰을 하나의 아이디로 편리하게, <br>통합멤버십(뷰티포인트)적립 및 다양한 서비스와 혜택을 누리세요.</p>
+						<a href="/customer/signup" class="btn_md_bordered vertical">회원가입 </a>
+					</dd>
+				</dl>
+			</div>
+		</div>
+		<div class="panel gray">
+			<div class="panel_cont">
+				<p class="text font_lg">SNS계정으로 간편하게 로그인 하세요.</p>
+				<ul class="ui_sns_share sns">
+					<li><a href="javascript:;" class="share_btn naver_blog" data-sns-type="naver_blog"
+						   onclick="window.open(this.href, 'naverloginpop', 'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550'); return false"
+						   th:href="'https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=xbLexjx52A_pQD0sZgIP&state=stateokgoodgogogo&redirect_uri=' + ${url} + '/navercallback'"
+						   id="naver_id_login" target="_blank">naver blog</a></li>
+					<li><a href="javascript:;" class="share_btn facebook" data-sns-type="facebook" onclick="facebookLogin()">facebook</a></li>
+					<li><a href="#none" class="share_btn url" data-sns-type="url"
+						   onclick="window.open(this.href, 'naverloginpop', 'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550'); return false"
+						   th:href="'https://kauth.kakao.com/oauth/authorize?client_id=ce4dd4a15adfd391c88f730c049f12c4&response_type=code&redirect_uri=' + ${url} + '/kakaocallback'">kakao</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!-- // page contents -->
+	<!-- banner -->
+	<div class="banner_area">
+		<!-- slide -->
+		<div class="slide" data-ix-options="view-length:1;">
+			<div class="ix-list-viewport">
+				<ul class="ix-list-items">
+					<!--/* TODO: 배너 갯수 만큼 li 생성 */-->
+					<li class="ix-list-item">
+						<!--/* TODO: background color 배너 등록시 설정 필요 */-->
+						<a href="#none" style="background:#f0adb6;">
+							<img ap:src="@{/images/dummy/img_banner_01.jpg}" alt="배너 내용">
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="ix-controller">
+				<ul class="ix-thumbs">
+					<li class="ix-thumb">
+						<button type="button" class="ix-btn"><!--ix-index-->번째 배너</button>
+					</li>
+				</ul>
+			</div>
+		</div><!-- // slide -->
+	</div>
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+	<script type="application/javascript">
+
+	(function() {
+   			var $banner = $('.banner_area > .slide').ixSlideMax();
+
+   			$(window).on('resize', function(e) {
+       		$banner.ixSlideMax('resize');
+   		});
+	})();
+	if (AP.common.getCookie('is-user-id')) {
+	    var $id = $('[name=chcsNo]');
+	    $id.val(AP.common.getCookie('user-id', null, 1));
+	    $id.parents().find('.placeholder').css('display', 'none');
+	    $('#save_id').prop('checked', true);
+	}
+	
+	//회원/비회원 전환
+	$('[name=login]').on('click', function() {
+	    $('[name=choice]').toggle();
+	});
+	
+	$('#login').submit(function() {
+	    loginProcess();
+	    return false;
+	});
+	
+	$('#login').on('click', function() {
+	    loginProcess();
+	    return false;
+	});
+
+	var returnUrl = '[[${returnUrl}]]';
+	if (returnUrl == '') returnUrl = "/main";
+	
+	function loginProcess() {
+	    var $form = $('form');
+	    if ($form.valid()) {
+	
+	        $("#login").attr("disabled", "disabled");
+	        AP.api.doLogin({}, AP.common.getFormData($form)).done(function(data) {
+	            //성공
+                if (data.sleep == 'Y') {
+                    $("#login").removeAttr("disabled");
+                    var contents = new Object();
+                    contents.title = "[[#{common.alert}]]";
+                    contents.contents = data.message;
+                    contents.confirmLabel = "[[#{customer.login.regist}]]";
+                    AP.modal.info(contents).addListener('modal-close', function(e) {
+                        location.href = "/customer/signup";
+                    });
+
+                } else if (data.old == 'Y') {
+                    $("#login").removeAttr("disabled");
+                    changeInfoModal();
+                } else if (data.changePw == 'Y') {
+                    $("#login").removeAttr("disabled");
+                    var contents = new Object();
+                    contents.title = "[[#{common.alert}]]";
+                    contents.contents = "고객님!<br>" +
+                        "비밀번호를 2개월동안 변경하지 않으셨습니다.<br><br>" +
+                        "개인정보보호를 위해<br>비밀번호를 변경해주세요.";
+                    contents.cancelLabel = "다음에 변경";
+                    contents.confirmLabel = "비밀번호 변경";
+
+                    AP.modal.info(contents).addListener('modal-close', function(e) {
+                        if (e.closeType == 'close' || e.closeType == 'cancel') {
+                            location.href = returnUrl;
+                        } else if (e.closeType == 'confirm') {
+                            changePassword();
+                        }
+                        console.log(e.closeType); //close, confirm, cancel
+                    });
+                } else {
+                    if ($('#save_id').prop("checked")) {
+                        AP.common.setCookie('user-id', $('[name=chcsNo]').val(), 259200);
+                        AP.common.setCookie('is-user-id', $('#save_id').val(), 259200);
+                    } else {
+                        AP.common.setCookie('user-id', null, 1);
+                        AP.common.setCookie('is-user-id', null, 1);
+                    }
+                    location.href = returnUrl;
+
+                }
+	
+	        }).fail(function(xhr, textStatus, errorThrown) {
+	            $("#login").removeAttr("disabled");
+	            if (xhr.errorCode == 0) {
+	                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	            } else if (xhr.errorCode == 'EAPI001') {
+	                AP.modal.alert("아이디 또는 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+	            } else {
+	                AP.modal.alert(xhr.errorMessage)
+	            }
+	        }).always(function() {
+	            //성공, 실패
+	        });
+	    }
+	}
+	
+	function changePassword() {
+	
+	
+	    $.get("/my/page/info/changePwdForm", function(data) {
+	        /**
+	         * 동적으로 생성된 modal의 Node Element 접근하기
+	         * alert, confirm, info 모두 동일
+	         */
+	
+	        var contents = new Object();
+	        contents.contents = data;
+	        var modal = AP.modal.info(contents);
+	        var $modalEl = modal.getElement(); //jquery object
+	
+	        $(".layer_close").click(function() {
+	            location.href = returnUrl;
+	        });
+	        $("#cancel-change-pwd").click(function() {
+	            location.href = returnUrl;
+	        });
+	
+	        $("#submit-change-pwd").click(function() {
+	            if ($("#pw-change-form").valid()) {
+	                if ($("#pass1").val() != $("#pass2").val()) {
+	                    AP.modal.alert("새 비밀번호가 일치하지 않습니다.");
+	                    return false;
+	                }
+	
+	                AP.api.changePwd2({}, AP.common.getFormData($('#pw-change-form'))).done(function(data) {
+	                    AP.modal.alert("비밀번호가 변경되었습니다.").addListener('modal-close', function(e) {
+	                        location.href = returnUrl;
+	                    });
+	                }).fail(function(xhr, textStatus, errorThrown) {
+	                    if (xhr.errorCode == 0) {
+	                        AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	                    } else if (xhr.errorCode == 'EAPI001') {
+	                        AP.modal.alert("비밀번호가 잘못되었습니다. 다시한번 확인해주세요.");
+	                    } else {
+	                        AP.modal.alert(xhr.errorMessage)
+	                    }
+	                }).always(function() {
+	                    //성공, 실패
+	                });
+	            }
+	        });
+	
+	    });
+	}
+	
+	//전환가입 안내
+	function changeInfoModal() {
+	    var contents = new Object();
+	    contents.title = "고객님! 아모레퍼시픽<br>통합 멤버십으로 전환하세요!";
+	    contents.contents = "<p class=\"text_center\">아모레퍼시픽 통합멤버십 회원이 되시면,</p>\n" +
+	        "                            <br>\n" +
+	        "                            <ul class=\"list_bullet\">\n" +
+	        "                            \t<li><span>1)</span> 에뛰드하우스 및 자회사 등 아모레퍼시픽계열<br>모든 쇼핑몰 한 아이디로 간편하게 이용할 수 있습니다.</li>\n" +
+	        "                            \t<li><span>2)</span> 하나의 아이디로 편리하게, 통합멤버십(뷰티포인트) 적립 및 다양한 서비스와 혜택을 누리실 수 있습니다.</li>\n" +
+	        "                            </ul>";
+	    contents.cancelLabel = "취소";
+	    contents.confirmLabel = "[[#{customer.login.changeIntegrated}]]";
+	
+	    AP.modal.info(contents).addListener('modal-close', function(e) {
+	        if (e.closeType == 'close' || e.closeType == 'cancel') {} else if (e.closeType == 'confirm') {
+	            location.href = "/conversionSignup";
+	        }
+	    });
+	}
+	
+	//카카오으로 로그인
+	function snsKakao() {
+	    Kakao.Auth.login({
+	        persistRefreshToken: true,
+	        success: function(authObj) {
+	            Kakao.Auth.setAccessToken(authObj.access_token);
+	
+	            Kakao.API.request({
+	                url: '/v1/user/me',
+	                success: function(res) {
+	
+	                    var indexed_array = {};
+	                    indexed_array['snsName'] = 'Kakao';
+	                    indexed_array['id'] = res.id;
+	                    $.ajax({
+	                        type: "POST",
+	                        url: "/login/snsloginProcess",
+	                        data: indexed_array,
+	                        success: function(data) {
+	                            if (data.state == 'success') {
+	                                if (data.isLinked) {
+	                                    doSnsLogin();
+	                                } else {
+	                                    snsFail();
+	                                }
+	                            } else {
+	                                AP.modal.alert(data.message);
+	                            }
+	                            //성공
+	                        },
+	                        dataType: "json"
+	                    });
+	                },
+	                fail: function(error) {
+	                    alert(JSON.stringify(error));
+	                }
+	            });
+	
+	
+	        },
+	        fail: function(err) {
+	            console.log(JSON.stringify(err));
+	            alert(JSON.stringify(err));
+	        }
+	    });
+	}
+	
+	function doSnsLogin() {
+	
+	    $.get("/snsLinkLoginForm", function(data) {
+	
+	        var contents = new Object();
+	        contents.contents = data;
+	        var modal = AP.modal.info(contents);
+	        var $modalEl = modal.getElement(); //jquery object
+	
+	        $(".layer_close").click(function() {
+	            modal.close();
+	        });
+	
+	        $('#sns-login').click(function() {
+	            var $form = $modalEl.find('#form');
+	            if ($form.valid()) {
+	
+	                AP.api.doLoginLink({}, AP.common.getFormData($form)).done(function(data) {
+	                    //성공
+	                        var returnUrl = "/main"
+	                        if (data.returnUrl)
+	                            returnUrl = data.returnUrl;
+	
+	                        if (data.sleep) {
+	                            var contents = new Object();
+	                            contents.title = "[[#{common.alert}]]";
+	                            contents.contents = "[[#{customer.login.sleepMember('" + data.latestLoginDt + "')}]]";
+	                            contents.confirmLabel = "[[#{customer.login.regist}]]";
+	                            AP.modal.info(contents).addListener('modal-close', function(e) {
+	                                location.href = "/customer/signup";
+	                            });
+	
+	                        } else if (data.old) {
+	                            var contents = new Object();
+	                            contents.title = "[[#{customer.login.changeIntegratedTitle}]]";
+	                            contents.contents = "[[#{customer.login.changeIntegratedContent}]]";
+	                            contents.cancelLabel = "[[#{common.cancel}]]";
+	                            contents.confirmLabel = "[[#{customer.login.changeIntegrated}]]";
+	
+	                            AP.modal.info(contents).addListener('modal-close', function(e) {
+	                                if (e.closeType == 'close' || e.closeType == 'cancel') {} else if (e.closeType == 'confirm') {
+	                                    location.href = "/customer/signup";
+	                                }
+	                                console.log(e.closeType); //close, confirm, cancel
+	                            });
+	                        } else if (data.changePw) {
+	                            var contents = new Object();
+	                            contents.title = "[[#{common.alert}]]";
+	                            contents.contents = "[[#{customer.login.changePwdContant}]]";
+	                            contents.cancelLabel = "다음에 변경";
+	                            contents.confirmLabel = "비밀번호 변경";
+	
+	                            AP.modal.info(contents).addListener('modal-close', function(e) {
+	                                if (e.closeType == 'close' || e.closeType == 'cancel') {
+	                                    location.href = returnUrl;
+	                                } else if (e.closeType == 'confirm') {
+	                                    location.href = "/customer/signup";
+	                                }
+	                                console.log(e.closeType); //close, confirm, cancel
+	                            });
+	                        } else {
+	                            location.href = returnUrl;
+	
+	                        }
+	
+	                }).fail(function(xhr, textStatus, errorThrown) {
+	    	            $("#login").removeAttr("disabled");
+	    	            if (xhr.errorCode == 0) {
+	    	                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	    	            } else if (xhr.errorCode == 'EAPI001') {
+	    	                AP.modal.alert("아이디 또는 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+	    	            } else {
+	    	                AP.modal.alert(xhr.errorMessage)
+	    	            }
+	                }).always(function() {
+	                    //성공, 실패
+	                });
+	
+	            }
+	        });
+	
+	    });
+	}
+	
+	function snsFail() {
+	    AP.modal.alert('연결에 실패했습니다.');
+	}
+	
+	//페이스북으로 로그인
+	window.fbAsyncInit = function() {
+	    FB.init({
+	        appId: '[[${@environment.getProperty('facebook.key')}]]',
+	        cookie: true,
+	        xfbml: true,
+	        version: 'v2.11'
+	    });
+	
+	    FB.AppEvents.logPageView();
+	
+	};
+	
+	(function(d, s, id) {
+	    var js, fjs = d.getElementsByTagName(s)[0];
+	    if (d.getElementById(id)) {
+	        return;
+	    }
+	    js = d.createElement(s);
+	    js.id = id;
+	    js.src = "https://connect.facebook.net/en_US/sdk.js";
+	    fjs.parentNode.insertBefore(js, fjs);
+	
+	}(document, 'script', 'facebook-jssdk'));
+	
+	function facebookLogin() {
+	
+	    FB.login(function(response) {
+	        //statusChangeCallback(response);   -- FB 로그인 취소시, 무한루프에 빠지게됨
+	        if (response.status === 'connected') {
+	            // 페이스북과 앱에 같이 로그인되어 있다.
+	            $("#accessToken").val(response.authResponse.accessToken);
+	            fncFBCallback(response.authResponse.accessToken);
+	        } else if (response.status === 'not_authorized') {
+	            // 페이스북에는 로그인 되어있으나, 앱에는 로그인 되어있지 않다.
+	            AP.modal.alert('Facebook 계정 설정에서 해당 어플리케이션이 인가되지 않았습니다.\n다시 로그인 버튼을 클릭후, 어플리케이션 사용을 승인하여 주십시오.');
+	        } else {
+	            // 페이스북에 로그인이 되어있지 않아서, 앱에 로그인 되어있는지 불명확하다.
+	            AP.modal.alert('Facebook 에 로그인되지 않았습니다.');
+	        }
+	    });
+	}
+	
+	function fncFBCallback(token) {
+	    FB.api('/me', {
+	        fields: 'email, birthday, name'
+	    }, function(response) {
+	
+	        var indexed_array = {};
+	        indexed_array['snsName'] = 'Facebook';
+	        indexed_array['id'] = response.id;
+	        indexed_array['accessToken'] = token;
+	
+	        $.ajax({
+	            type: "POST",
+	            url: "/login/snsloginProcess",
+	            data: indexed_array,
+	            success: function(data) {
+                    if (data.isLinked) {
+                        nbSuccess(data);
+                    } else {
+                        doSnsLogin();
+                    }
+	                //성공
+	            },
+	            dataType: "json"
+	        });
+	    });
+	}
+	
+	var naver_id_login = new naver_id_login("[[${@environment.getProperty('naver.key')}]]", "[[${@environment.getProperty('naver.callback')}]]");
+	
+	function nbSuccess(data) {
+        if (data.sleep == 'Y') {
+            var contents = new Object();
+            contents.title = "[[#{common.alert}]]";
+            contents.contents = data.message;
+            contents.confirmLabel = "[[#{customer.login.regist}]]";
+            AP.modal.info(contents).addListener('modal-close', function(e) {
+                location.href = "/customer/signup";
+            });
+
+        } else if (data.old == 'Y') {
+            changeInfoModal();
+        } else if (data.changePw == 'Y') {
+            var contents = new Object();
+            contents.title = "[[#{common.alert}]]";
+            contents.contents = "고객님!<br>" +
+                "비밀번호를 2개월동안 변경하지 않으셨습니다.<br><br>" +
+                "개인정보보호를 위해<br>비밀번호를 변경해주세요.";
+            contents.cancelLabel = "다음에 변경";
+            contents.confirmLabel = "비밀번호 변경";
+
+            AP.modal.info(contents).addListener('modal-close', function(e) {
+                if (e.closeType == 'close' || e.closeType == 'cancel') {
+                    location.href = returnUrl;
+                } else if (e.closeType == 'confirm') {
+                    changePassword();
+                }
+                console.log(e.closeType); //close, confirm, cancel
+            });
+        } else {
+            location.href = returnUrl;
+        }
+	}
+		
+		
+	</script>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+<head th:remove="tag">
+    <!--/* js : 공통 variable, api (모든페이지) */-->
+    <script type="text/javascript" th:inline="javascript">
+    	window.AP = {
+    		WEBVIEW: /*[[${#device.isMobileApp() ? #device.isiOS()? 'ios' : 'android' : ''}]]*/,
+			DEVICE: 'mo',
+            REGION: 'kr',
+            LANGUAGE: 'ko',
+            CURRENCY_SYMBOL: '원',
+            CURRENCY_CODE: 'KRW',
+            DATE_FORMAT: 'YYYY.MM.DD',
+			CURRENT_DATE: /*[[${currentTimeMillis}]]*/, //server date (milliseconds since 1970/01/01)
+			LOGIN_USER: /*[[${session.LOGIN_USER == null or session.LOGIN_USER.member == null ? false : true}]]*/,
+			DISPLAY_MENU_ID: /*[[${displayMenuId}]]*/
+        };
+    </script>
+
+    <!--/* i18n dictionary */-->
+    <!--/* <script type="text/javascript" src="dictionary.ko.js"> */-->
+
+    <!--/* youtube api */-->
+    <script type="text/javascript" src="https://www.youtube.com/iframe_api"></script>
+
+    <script>
+        (function () {
+            window.googleMapAPIReady = new $.Deferred();
+
+            //google map api load
+            window.onGoogleMapAPIReady = function () {
+                window.googleMapAPIReady.resolve();
+            };
+        })();
+    </script>
+    <!--/* google map api (TODO: key 변경 필요(임시 reo -AIzaSyBFIQfpfzROL8dg-9DXW5LFm4weBVhsUCI)) */-->
+    <script src="//maps.googleapis.com/maps/api/js?callback=onGoogleMapAPIReady&region=KR&key=AIzaSyAUDjxay10WSmUM1UhKIEFZGn7mChQIESQ"></script>
+
+    <script>
+        (function () {
+            window.onKakaoAPIReady = new $.Deferred();
+
+            //kakao api load
+            window.kakaoAsyncInit = function () {
+ 				Kakao.init("[[${@environment.getProperty('kakao.key')}]]");
+                window.onKakaoAPIReady.resolve();
+            }
+        })();
+    </script>
+    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+
+	<!--/* artist talk : server  */-->
+	<th:block th:unless="${@environment.acceptsProfiles('default', 'local')}">
+		<script type="text/javascript" src="//webchat.amorepacific.com/prichat/etude/web/pub/prichat.common.js"></script>
+	</th:block>
+	<!--/* artist talk : local  */-->
+	<th:block th:if="${@environment.acceptsProfiles('default', 'local')}">
+		<script type="text/javascript" src="http://10.155.8.51:8405/prichat/etude/web/pub/prichat.common.js"></script>
+	</th:block>
+
+</head>
+</html>

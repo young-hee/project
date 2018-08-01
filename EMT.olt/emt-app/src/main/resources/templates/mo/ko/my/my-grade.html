@@ -1,0 +1,137 @@
+<html ap:decorate="~{layout/layout-contents}">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page contents -->
+		<div class="ap_contents mypage">
+			<div class="panel my_etude grade">
+				<div class="welcome friends"> <!-- 등급별 클래스 pink_love, friends, hello, guest  -->
+					<i class="ico_grade"></i>
+					<p class="text"><span><th:block th:text="${session.LOGIN_USER.member.name.name1}">홍길동</th:block></span>회원등급은 <em><th:block th:text="${custCstmAmt.cstmlvlNm}">friends</th:block></em> 입니다.</p>
+					<ul class="list font_sm">
+						<li><span>산정 총액</span> <th:block th:text="${#IntegUtil.toCommaNumber(custCstmAmt.totalAmt)}">0</th:block> 원</li>
+						<li><span>산정 기간</span> <th:block th:text="${#dates.format(custCstmAmt.startDt, 'yyyy-MM-dd')}"></th:block> ~ <th:block th:text="${#dates.format(custCstmAmt.endDt, 'yyyy-MM-dd')}"></th:block></li>
+					</ul>
+				</div>
+				<th:block th:if="${custCstmAmt.blanceAmt != 0}">
+					<p class="align_center next_grade"><em>다음 등급(<th:block th:text="${cstmlvlNst}"></th:block>)까지 <strong class="num" th:text="${#IntegUtil.toCommaNumber(custCstmAmt.blanceAmt)}">0</strong>원+</em></p>
+				</th:block>
+				<a href="/cs/pinkMembership" class="btn_md_bordered w100p">핑크 맴버십 등급별 혜택 자세히 보기</a>
+			</div>
+			<div class="panel">
+				<div class="ui_multiple_date_picker">
+					<div class="date_btn_set">
+						<span><input type="radio" class="select_range_date" name="radio4" id="radio4_0" value="all" checked=""><label for="radio4_0">전체기간</label></span>
+						<span><input type="radio" class="select_range_date" name="radio4" id="radio4_1" value="1months" checked=""><label for="radio4_1">1개월</label></span>
+						<span><input type="radio" class="select_range_date" name="radio4" id="radio4_2" value="3months"><label for="radio4_2">3개월</label></span>
+						<span><input type="radio" class="select_range_date" name="radio4" id="radio4_3" value="6months"><label for="radio4_3">6개월</label></span>
+						<span><input type="radio" class="select_range_date" name="radio4" id="radio4_4" value="1years"><label for="radio4_4">12개월</label></span>
+					</div>
+					<br>
+					<div class="input_date_group">
+						<div style="display:none;">
+							<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+							<input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+						</div>
+						<div class="date_info_area">
+							<span class="start_date"></span> ~ <span class="end_date"></span> 까지의 이벤트 참여 내역
+						</div>
+					</div>
+				</div>
+				<hr class="div m20">
+				<h3 class="h_title cont">등급산정내역</h3>
+				<br>
+				<div class="input_group entry-point">
+					<div>
+						<select name="searchGbn" tabindex="-1">
+							<option value="ALL">전체</option>
+							<option value="OFF">온라인 구매</option>
+							<option value="ON">오프라인 구매</option>
+						</select>
+					</div>
+				</div>
+				
+					<div ap:replace="~{my/fragment/grade-fragment :: grade-list}"></div>
+			</div>
+		</div>
+		<!-- // page contents -->
+
+		<!-- 마이페이지 맵  -->
+		<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+		<!-- // 마이페이지 맵 -->
+	</div>
+	<!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+
+		<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+		<script>
+		$('#more em').text($('.item-detail').size());
+		var progress = '<div id="m-loading"><ul class="loading"><li style="padding: 0px;border: 2px solid #f54a7e;"></li><li style="padding: 0px;border: 2px solid #f54a7e;"></li><li style="padding: 0px;border: 2px solid #f54a7e;"></li></ul></div>';
+		var date = null;
+		var pageNumber = 1;
+		var searchGbn;
+			//multiple date picker적용
+			$( '.ui_multiple_date_picker' ).multipleDatePicker({
+				defaultRangeDate: '1months',
+				minDate: moment().subtract( 50, 'years' )
+			}).on( 'multiple-date-picker-change', function (e) {
+				console.log( e.type, e.date );
+				date = e.date;
+				$(".entry-point:last").after(progress);
+		    	$(".pbody").remove();
+				$.get("/my/page/myLevelListFragment?startDt="+date.startDate + "&endDt="+date.endDate + (searchGbn? ("&searchGbn=" + searchGbn) : ""), function(data) {
+					$("#m-loading").remove();
+					$(".entry-point").after(data);
+					$('#more em').text($('.item-detail').size());
+					if($('#total').text() == '0') {
+						$('#total').text($('#more em').text());
+					}
+					
+				});
+			});
+			$('[name=searchGbn]').change(function() {
+				searchGbn = $(this).val();
+				$(".entry-point:last").after(progress);
+		    	$(".pbody").remove();
+				$.get("/my/page/myLevelListFragment?startDt="+date.startDate + "&endDt="+date.endDate + (searchGbn? ("&searchGbn=" + searchGbn) : ""), function(data) {
+					$("#m-loading").remove();
+					$(".entry-point").after(data);
+					$('#more em').text($('.item-detail').size());
+					if($('#total').text() == '0') {
+						$('#total').text($('#more em').text());
+					}
+				});
+			});
+
+			function more() {
+				pageNumber++;
+				$(".my_grade_list:last").after(progress);
+				if(date)
+					$.get("/my/page/myLevelListFragment?pageNumber=" + pageNumber + "&startDt="+date.startDate + "&endDt="+date.endDate + (searchGbn? ("&searchGbn=" + searchGbn) : ""), function(data) {
+						$("#m-loading").remove();
+						$("#more").remove();
+						$(".my_grade_list:last").after(data);
+						$('#more em').text($('.item-detail').size());
+						if($('#total').text() == '0') {
+							$('#total').text($('#more em').text());
+						}
+					});
+				else
+					$.get("/my/page/myLevelListFragment?pageNumber=" + pageNumber + (searchGbn? ("&searchGbn=" + searchGbn) : ""), function(data) {
+						$("#m-loading").remove();
+						$("#more").remove();
+						$(".my_grade_list:last").after(data);
+						$('#more em').text($('.item-detail').size());
+						if($('#total').text() == '0') {
+							$('#total').text($('#more em').text());
+						}
+					});
+					
+			}
+		</script>
+	</th:block>
+</body>
+</html>

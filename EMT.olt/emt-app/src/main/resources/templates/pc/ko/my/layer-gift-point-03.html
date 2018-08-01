@@ -1,0 +1,79 @@
+<html ap:decorate="~{layout/only-contents}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<div class="layer_popup" style="display: block;">
+                <div class="layer_wrap layer_lg">
+                    <dl class="layer">
+                        <dt class="layer_title">뷰티포인트 선물하기</dt>
+                        <dd class="layer_cont gift_point">
+							<div class="gift_my_btp">
+								<dl>
+	                                <dt><span th:text="${session.LOGIN_USER.member.name.name1}">홍길동</span> 님의 뷰티포인트</dt>
+	                                <dd><span th:text="${#IntegUtil.toCommaNumber(point.rmnPt)}">16,400</span> P</dd>
+								</dl>
+							</div>
+							<div class="ui_step step_sm">
+								<ul>
+									<li class="current"><i class="ico"></i><span class="num">1</span>정보 확인<span class="sr_only">선택됨</span></li>
+									<li><i class="ico"></i><span class="num">2</span>선물포인트 확인</li>
+									<li><i class="ico"></i><span class="num">3</span>선물하기 완료</li>
+								</ul>
+							</div>
+								<form class="step1">
+							<div class="send_btp clear">
+								<fieldset class="form">
+									<legend class="sr_only">선물 받으시는 분 정보 입력</legend>
+									<div class="panel_cont gray">
+										<h4 class="form_title">선물 받으시는 분</h4>
+
+										<div class="input_wrap"><input type="text" name="userNm" title="이름 입력" placeholder="이름을 입력해 주세요." required="required" data-msg-required="이름을 입력해 주세요. 이름 입력란으로 이동합니다."></div>
+										<div class="check_set">
+											<span class="check_wrap"><input type="radio" name="changeMethod" value="01" id="radio1" checked=""><label for="radio1">휴대폰 번호</label></span>
+											<span class="check_wrap"><input type="radio" name="changeMethod" value="02" id="radio2"><label for="radio2">회원 아이디</label></span>
+										</div>
+										<div class="input_wrap">
+											<input type="tel" placeholder="휴대폰 번호(ex.01012345678)" title="휴대폰 번호 입력" name="phone" required="required" data-msg-required="휴대폰번호를 입력해 주세요. 휴대폰번호 입력란으로 이동합니다."
+								             mobile-number="mobile-number" data-msg-mobile-number="휴대폰 번호를 정확히 입력하세요."/>
+											<input type="text" title="회원 아이디 입력" name="userId" required="required" data-msg-required="회원아이디를 입력해주세요. 아이디 입력란으로 이동합니다." style="display:none;" placeholder="아이디를 입력해 주세요.">
+										</div>
+									</div>
+								</fieldset>
+								<fieldset class="form">
+									<legend class="sr_only">선물할 뷰티포인트 입력</legend>
+									<div class="panel_cont gray">
+										<h4 class="form_title">선물할 뷰티포인트</h4>
+										<div class="input_point_group">
+											<div class="input_wrap">
+												<input type="number" name="giftPoint" number="number" id="giftPoint" title="뷰티포인트 입력" value="" required="required" data-msg-required="선물할 뷰티포인트를 입력해 주세요. 뷰티포인트 입력란으로 이동합니다.">
+												<em class="point">P</em>
+											</div>
+										</div>
+										<ul class="list_bullet_dot">
+											<li>10P 단위로 선물 가능합니다.</li>
+											<li>보유하고 계신 포인트보다 선물할<br>포인트가 더 많은 경우 선물할 수 없습니다.</li>
+										</ul>
+									</div>
+								</fieldset>
+							</div>
+								</form>
+                            <div class="page_btns mgt40">
+                            	<button class="btn_lg_secondary" onclick="closeModel()" type="button">취소</button>
+                            	<button class="btn_lg_neutral" id="send" type="button">다음</button>
+                            </div>
+                        </dd>
+                    </dl>
+                    <button class="layer_close" type="button">레이어 닫기</button>
+                </div>
+            </div>
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+            <!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+
+        </th:block>
+</body>
+</html>

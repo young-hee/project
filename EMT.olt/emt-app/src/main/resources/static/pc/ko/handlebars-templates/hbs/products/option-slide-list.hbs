@@ -1,0 +1,28 @@
+<div class="ix-list-viewport">
+	<ul class="ix-list-items">
+		{{#each this.prodImages}}
+			<li class="ix-list-item">
+			{{#xif this.videoYn '==' 'Y'}}
+				<div class="video_wrap">
+					{{!-- 섬네일 용 이미지 --}}
+					<button type="button" class="thumbnail"><img alt="" src="{{ this.imgUrl }}"></button>
+					<iframe class="youtube_video" width="100%" height="100%" src="{{ youtubePath this.videoUrl }}" frameborder="0" allowfullscreen="" data-vendor="youtube" data-ratio="false" data-mute="false"></iframe>
+				</div>
+			{{else}}
+				<img alt="" src="{{ this.imgUrl }}">
+			{{/xif}}
+			</li>
+		{{/each}}
+	</ul>
+</div>
+<div class="ix-controller">
+	<div class="slide_direction">
+		<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
+		<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
+	</div>
+</div>
+<div class="prd_thm_wrap preview_thumbs">
+	{{#each this.prodImages}}
+	<button type="button" class="prd_btn_thm {{#xif @index '==' 0}}on{{/xif}}"><img src="{{ this.imgUrl }}" alt=""></button>
+	{{/each}}
+</div>

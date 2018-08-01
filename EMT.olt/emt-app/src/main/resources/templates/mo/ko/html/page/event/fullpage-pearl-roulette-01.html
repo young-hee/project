@@ -1,0 +1,132 @@
+<html ap:decorate="~{layout/only-contents}">
+<body>
+<!--/* #ap_container */-->
+<div ap:fragment="layout-contents">
+
+	<div class="layer_popup fullpage roulette_layer">
+		<div class="layer_wrap">
+			<dl class="layer">
+				<dt class="layer_title">배송지 정보 입력하기</dt>
+				<dd class="layer_cont">
+					<div class="panel">
+						<h3 class="h_title cont"><strong>당첨내역</strong></h3>
+						<br>
+						<div class="panel gray">
+							<div class="ui_table">
+								<dl>
+									<dt class="w30p">당첨자</dt>
+									<dd>홍길동</dd>
+								</dl>
+								<dl>
+									<dt class="w30p">사은품</dt>
+									<dd>쁘띠비쥬 베이비 버블 모이스춰 바디로션</dd>
+								</dl>
+							</div>
+						</div>
+						<hr class="div m30">
+						<!--/* 20180511 : 주문고객정보 이하 내용 변경*/-->
+						<fieldset class="form">
+							<legend class="sr_only">배송정보 입력</legend>
+							<h3 class="h_title cont"><strong>배송 정보</strong></h3>
+							<div class="check_wrap mgt15"><input type="checkbox" id="check01"><label for="check01">회원정보 불러오기</label></div>
+							<div class="input_group mgt15">
+								<div class="label">
+									<label for="name">이름</label>
+								</div>
+								<div>
+									<input type="text" id="name" placeholder="이름을 입력하세요.">
+								</div>
+							</div>
+							<div class="input_group">
+								<div class="label">
+									<label for="phone">휴대폰 번호</label>
+								</div>
+								<div>
+									<input type="text" id="phone" placeholder="'-'없이 숫자만 입력">
+								</div>
+							</div>
+							<dl class="dl mgt20">
+								<dt>주소</dt>
+								<dd>
+									<p class="text_notice pdb10">찾으시는 주소지 또는 건물명을 입력해 주세요.<br>(예 : 강남대로, 한강로2가, 한강대로 100)</p>
+									<div class="ui_find_addresses ＠find-addresses-apply">
+										<div class="input_group">
+											<div>
+												<input type="text" id="delivery_area" class="find_addresses_input" placeholder="주소지 또는 건물명">
+											</div>
+											<div class="btn">
+												<button type="button" class="btn_find_addresses">찾기</button>
+											</div>
+										</div>
+										<!--/* 지역 검색 결과 */-->
+										<div class="address_list"></div>
+										<div class="input_group">
+											<div class="input_wrap">
+												<input type="hidden" class="post_code" name="post_code">
+												<input type="hidden" class="address_first" name="address_first">
+												<input type="text" class="address_first" title="기본주소 입력" placeholder="주소" readonly="">
+											</div>
+										</div>
+										<div class="input_group">
+											<div class="input_wrap"><input type="text" class="address_last" title="상세주소 입력" placeholder="상세주소를 입력해주세요."></div>
+										</div>
+									</div>
+								</dd>
+							</dl>
+							<dl class="dl mgt20">
+								<dt>개인정보 수집 및 이용 동의 (필수)</dt>
+								<dd>
+									<div class="panel bordered">
+										<ul class="list_bullet_dot">
+											<li>수집 및 이용 항목 : 배송 정보</li>
+											<li>수집 및 이용 목적 : 경품 배송</li>
+											<li>이용·보유 및 이용 기간 : 발송후 3개월뒤 삭제</li>
+										</ul>
+									</div>
+									<!--/*20180530 : 문구수정*/-->
+									<ul class="text_notice mgt10">
+										<li>신청자는 개인정보 수집 및 이용 동의에 거부할 수 있습니다. 다만, 거부할 경우 경품 발송이 불가능 합니다.</li>
+									</ul>
+									<div class="check_wrap mgt10"><input type="checkbox" id="agree_personal"><label
+										for="agree_personal">동의합니다.</label></div>
+								</dd>
+							</dl>
+							<div class="form_btns">
+								<button class="btn_md_secondary" type="button">다시작성</button>
+								<button class="btn_md_neutral" type="button">등록</button>
+							</div>
+						</fieldset>
+						<div class="panel gray mgt20">
+							<dl class="dl_cont">
+								<dt class="h_title cont">사은품 배송관련</dt>
+								<dd>
+									<ul class="list_bullet_dot">
+										<li>배송이 필요한 시간은 주간 단위로 매주 0요일에 일괄 배송업체로 전달됩니다.</li>
+										<li>회원정보가 잘못되어 반품되거나 연락이 불가능할
+											경우 재배송이 되지 않으며, 신청 후 탈퇴한 경우 신청이
+											취소됩니다.</li>
+										<li>사은품 신청 후 주소 변경 긴급 문의 및 사은품 파손
+											교체 문의는 고객센터로 문의해 주시기 바랍니다.</li>
+									</ul>
+								</dd>
+							</dl>
+						</div>
+					</div>
+				</dd>
+			</dl>
+			<button class="layer_close" type="button">레이어 닫기</button>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script>
+
+	</script>
+</th:block>
+
+</body>
+</html>

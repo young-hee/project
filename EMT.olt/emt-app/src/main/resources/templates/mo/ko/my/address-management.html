@@ -1,0 +1,244 @@
+<html ap:decorate="~{layout/layout-contents}">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page contents -->
+		<div class="ap_contents mypage">
+			<div class="panel none_bdr">
+				<h2 class="h_title page">배송지 등록/관리</h2>
+				<ul class="list_bullet_dot type2">
+					<li><em class="pink ico_star">자주 사용하시는 배송지</em>를 등록 및 관리하실 수
+						있습니다.</li>
+					<li>배송지는 최대 10개까지 추가하실 수 있습니다</li>
+				</ul>
+				<div class="page_btns">
+					<!--<a href="/my/page/ship/updateAddress" class="btn_lg_primary">추가하기</a>-->
+					<a href="javascript:void(0);" onclick="addShip()" class="btn_lg_primary">추가하기</a>
+				</div>
+			</div>
+			<div class="delivery_list_wrap" id="paging"></div>
+		</div>
+
+	</div>
+	<!-- // page contents -->
+
+	<!-- 마이페이지 맵   -->
+	<th:block ap:replace="~{my/fragment/mypage-sitemap}" />
+	<!-- // 마이페이지 맵 -->
+	</div>
+	<!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script ap:src="@{/handlebars-templates/compiled/my/ship-address-list.js}"></script>
+		<script th:inline="javascript">
+			$(document).ready(function() {
+				getShipAddress();
+			});
+
+			function setRep() {
+				$('input[type=radio][name=rep]').on('click', function() {
+
+					// repAddress('rep', $(this).val(), $(this));
+					var element = $(this);
+					// param("type : rep", "shipAddressSn : " + element.val());
+					// customApi(AP.api.repAddress, null, { type : 'rep', shipAddressSn : element.val() }, function(data) {
+					// 	//do something
+					// 	if (data && 'success' == data.result) {
+					// 		AP.modal.alert("기본 배송지가 변경되었습니다.").addListener('modal-close', function(e) {
+					// 			element.prop("checked", true);
+					// 		});
+					// 	}
+					// });
+					AP.api.repAddress({}, {
+						type : 'rep',
+						shipAddressSn : element.val()
+					}).done(function(data) {
+						if (data && 'success' == data.result) {
+							AP.modal.alert("기본 배송지로 선택되었습니다.").addListener('modal-close', function(e) {
+								element.prop("checked", true);
+							});
+						}
+						//성공
+					}).fail(function(e) {
+						AP.modal.alert(e.responseJSON.errorData.message);
+						//실패
+					}).always(function() {
+						//성공, 실패
+					});
+					return false;
+				});
+			}
+
+			function shipDel() {
+				$('.delivery_list_wrap > .delivery:not(.js-apply)').each(function() {
+
+					var $store = $(this);
+					var $btnWrap = $store.find('.delivery_btn_wrap');
+					
+					$btnWrap.find('>>.del').on('click', function(e) {
+						// repAddress('delete', $(this).val(), $(this));
+						var element = $(this);
+						AP.modal.confirm("삭제하시겠습니까?").addListener('modal-close', function(e) {
+							if ( e.closeType == 'confirm' ) {
+								AP.api.repAddress({}, {
+									type : 'delete',
+									shipAddressSn : element.val()
+								}).done(function(data) {
+									if (data && 'success' == data.result) {
+										AP.modal.alert("배송지가 삭제되었습니다.").addListener('modal-close', function(e) {
+											element.parent().parent().parent().parent().remove();
+										});
+									}
+									//성공
+								}).fail(function(e) {
+									AP.modal.alert(e.responseJSON.errorData.message);
+									//실패
+								}).always(function() {
+									//성공, 실패
+								});
+							}
+						});
+
+
+						// customApi(AP.api.repAddress, null, { type : 'delete', shipAddressSn : element.val() }, function(data) {
+						// 	//do something
+						// 	if (data && 'success' == data.result) {
+						// 		AP.modal.alert("배송지가 삭제되었습니다.").addListener('modal-close', function(e) {
+						// 			element.parent().parent().parent().parent().remove();
+						// 		});
+						// 	}
+						// });
+					});
+
+					//중복적용 방지
+					$store.addClass('js-apply');
+				});
+			}
+
+			function showPage(shipData) {
+				var resultHtml = AP.common.getTemplate('my.ship-address-list', {
+					totalLength : shipData.length,
+					totalLengthLabel : $B.string.numberFormat(shipData.length),
+					result : shipData
+				});
+
+				$('#paging').empty();
+				$('#paging').append(resultHtml);
+				setRep();
+				shipDel();
+			}
+
+			function getShipAddress() {
+				/* AP.api.shipAddress({}).done(function(data) {
+					if (data && 'success' == data.result) {
+						showPage(data.data);
+					}
+					//성공
+				}).fail(function(e) {
+				//실패
+				}).always(function() {
+				//성공, 실패
+				}); */
+				customApi(AP.api.shipAddress, null, null, function(data) {
+					//do something
+					if (data && 'success' == data.result) {
+						showPage(data.data);
+					}
+				});
+			}
+
+			function repAddress22(type, shipAddressSn, element) {
+
+				AP.api.repAddress({}, {
+					type : type,
+					shipAddressSn : shipAddressSn
+				}).done(function(data) {
+					if (data && 'success' == data.result) {
+						AP.modal.alert(type == 'rep' ? "기본 배송지가 변경되었습니다." : "배송지가 삭제되었습니다.").addListener('modal-close', function(e) {
+							if (type == 'rep') {
+								element.prop("checked", true);
+							} else {
+								element.parent().parent().parent().parent().remove();
+							}
+						});
+					}
+					//성공
+				}).fail(function(e) {
+					AP.modal.alert("fail");
+					//실패
+				}).always(function() {
+				//성공, 실패
+				});
+			}
+			
+			/* var param = (function(...args) {
+			    var privateVar = 'Jay';
+			    console.log(args);
+			    console.log(...args);
+			    
+			    return {
+			        prop : privateVar
+			    };
+			}()); */
+			
+			function param(...args) {
+			    console.log(args);
+			    console.log(...args);
+			    
+			    return args;
+			}
+			
+			function customApi(apiName, path, params, sc, fc) {
+				apiName(path, params
+				).done(function(data) {
+					if (sc != null && typeof sc == 'function') {
+						sc(data);
+					}
+					//성공
+				}).fail(function(e) {
+					if (fc != null && typeof fc == 'function') {
+						fc(data);
+					}
+					else {
+						AP.modal.alert( e.responseJSON.message );
+						// AP.modal.alert("fail");
+					}
+					//실패
+				}).always(function() {
+				//성공, 실패
+				});
+			}
+
+			function addShip() {
+				var cnt = $('.panel.delivery').length;
+				if (cnt >= 10) {
+					AP.modal.alert('배송지를 10개 이상 추가할 수 없습니다.');
+				}
+				else {
+					location.href="/my/page/ship/updateAddress";
+				}
+			}
+
+			/* function customApi(type, shipAddressSn, callback) {
+				AP.api.repAddress({}, {
+					type : type,
+					shipAddressSn : shipAddressSn
+				}).done(function(data) {
+					if (typeof callback == 'function') {
+						callback(data);
+					}
+					//성공
+				}).fail(function(e) {
+					AP.modal.alert("fail");
+					//실패
+				}).always(function() {
+				//성공, 실패
+				});
+			} */
+		</script>
+
+	</th:block>
+</body>
+</html>

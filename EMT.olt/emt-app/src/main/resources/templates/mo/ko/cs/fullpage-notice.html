@@ -1,0 +1,206 @@
+<html ap:decorate="~{layout/layout-contents}">
+<meta http-equiv="Pragma" content="cache">
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- 01-24 html 수정 -->
+		<div class="ap_contents customer_center">
+			<!--  검색 -->
+			<div class="panel">
+				<!--  검색 -->
+				<fieldset class="search_form">
+					<legend class="sr_only">검색</legend>
+					<input type="text" title="검색어 입력" placeholder="검색" id="searchText"
+						name="searchText" onkeypress="return searchKeyPress(event);">
+					<button type="button" class="btn_search" id="search" name="search"></button>
+				</fieldset>
+			</div>
+			<div class="panel gray">
+				<div class="input_group">
+					<div>
+						<select id="noticeSearch" title="검색분류 선택">
+							<option value="">전체</option>
+							<!-- <option th:each="type : ${noticeType.noticeTypeList}"
+								th:text="${type.noticeTypeName}"
+								th:value="${type.noticeTypeCode}">전체</option> -->
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="board_list notice" id="importNoticePaging">
+				<!-- <th:block th:if="${impotyNotice} != null"
+					th:each="n : ${impotyNotice.foNoticeList}">
+					<ul>
+						<li class="important">
+							<a href="javascript:;" th:href="@{|/cs/noticeView/${n.foNoticeSn}|}"> 
+								<span class="title" th:text="${n.foNoticeTitle}">에뛰드 개인정보처리방침 일부가 변경됩니다.</span> 
+								<span class="clear">
+									<small>공지</small> 
+									<small class="date" th:text="${#dates.format(n.noticeStartDt, 'yyyy-MM-dd')}"></small>
+								</span>
+							</a>
+						</li>
+					</ul>
+				</th:block> -->
+			</div>
+			<div class="board_list notice" id="noticePaging">
+			</div>
+			<button type="button" class="btn_lg_more w100p" id="add" name="add">
+				더보기 (<em>0</em>/0)
+			</button>
+		</div>
+	</div>
+	</div>
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script ap:src="@{/handlebars-templates/compiled/cs/notice-summary.js}"></script>
+		<script ap:src="@{/handlebars-templates/compiled/cs/notice-list.js}"></script>
+		<script th:inline="javascript">
+			var currentOffset;
+			var currentType;
+			var currentKeyword;
+
+			var pageLimit = 10;
+
+			$(document).ready(function() {
+				noticeSummary();
+				importNotice();
+				getNotice('', '', 0);
+			});
+			
+			$("#noticeSearch").change(function(){
+
+				getNotice('', $(this).val(), 0, 'true')
+			});
+			
+			$('#search').on('click', function(e) {
+				var search = $('#searchText').val();
+				// alert(search);
+				if (search != null && search.length > 0)
+					getNotice(search, '', 0, 'true');
+			});
+
+			$('#add').on('click', function(e) {
+				getNotice(currentKeyword, currentType, (currentOffset + pageLimit));
+			});
+			
+			function noticeSummary() {
+				AP.api.csSummary({ type : 'notice' }).done(function(data) {
+					if (data) {
+						// alert(JSON.stringify(data.data));
+						// getPostFaq(data.data, isReplace);
+						var resultHtml = AP.common.getTemplate('cs.notice-summary', {
+					        totalLength: data.data.noticeTypeList.length,
+					        totalLengthLabel: $B.string.numberFormat( data.data.noticeTypeList.length ),
+					        result: data.data.noticeTypeList
+					      });
+						// alert(resultHtml);
+						$('#noticeSearch').append(resultHtml);
+					} else {
+						AP.modal.alert("조회에 실패 했습니다.");
+					}
+				}).fail(function(e) {
+					AP.modal.alert(e.responseJSON.Message);
+				}).always(function() {
+				//성공, 실패
+				});
+			}
+			
+			function searchKeyPress(e)
+			{
+			    // look for window.event in case event isn't passed in
+			    e = e || window.event;
+			    if (e.keyCode == 13)
+			    {
+			        document.getElementById('search').click();
+			        return false;
+			    }
+			    return true;
+			}
+			
+			function showNotice(faqData, resultHtml, isReplace) {
+				
+				if ('true' == isReplace) {
+					$('#noticePaging').empty();
+				}
+				if (faqData.totalCount === 0) {
+					$('#add').hide();
+				}
+				else {
+					$('#add').show();
+				}
+				var c = (faqData.offset + faqData.limit) > faqData.totalCount ? faqData.totalCount : (faqData.offset + faqData.limit);
+				$("#add").html("더보기(<em> " + c + "</em> / " + faqData.totalCount + ")");
+				$('#noticePaging').append(resultHtml);
+			}
+
+			function getNotice(keyword, noticeTypeCode, offset, isReplace) {
+
+				if (currentKeyword == keyword && currentType == noticeTypeCode && 'true' == isReplace)
+					return;
+				
+				if (keyword == null || keyword == '') {
+					$('#searchText').val("");
+				}
+
+				currentKeyword = keyword;
+				currentType = noticeTypeCode;
+				currentOffset = offset;
+				AP.api.csList({}, {
+					type : 'notice',
+					keyword : currentKeyword,
+					offset : offset,
+					limit : pageLimit,
+					noticeTypeCode : noticeTypeCode,
+					importantNoticeYn : 'N'
+				}).done(function(data) {
+					if (data) {
+						// alert(JSON.stringify(data.data));
+						// getPostNotice(data.data, isReplace);
+						var resultHtml = AP.common.getTemplate('cs.notice-list', {
+					        totalLength: data.data.foNoticeList.length,
+					        totalLengthLabel: $B.string.numberFormat( data.data.foNoticeList.length ),
+					        result: data.data.foNoticeList
+					      });
+						showNotice(data.data, resultHtml, isReplace);
+					}
+					//성공
+				}).fail(function(e) {
+				    AP.modal.alert(e.responseJSON.errorData.message);
+				}).always(function() {
+				//성공, 실패
+				});
+			}
+			
+			function importNotice() {
+				AP.api.csList({}, {
+					type : 'notice',
+					keyword : '',
+					offset : 0,
+					limit : 5,
+					noticeTypeCode : '',
+					importantNoticeYn : 'Y'
+				}).done(function(data) {
+					if (data) {
+						// alert(JSON.stringify(data.data));
+						// getPostNotice(data.data, isReplace);
+						var resultHtml = AP.common.getTemplate('cs.notice-list', {
+					        totalLength: data.data.foNoticeList.length,
+					        totalLengthLabel: $B.string.numberFormat( data.data.foNoticeList.length ),
+					        result: data.data.foNoticeList
+					      });
+						$('#importNoticePaging').append(resultHtml);
+					}
+					//성공
+				}).fail(function(e) {
+				    AP.modal.alert(e.responseJSON.errorData.message);
+				}).always(function() {
+				//성공, 실패
+				});
+			}
+			
+		</script>
+	</th:block>
+</body>
+</html>

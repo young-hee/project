@@ -1,0 +1,100 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            
+            <!-- page contents -->
+            <div class="ap_contents find_id_pwd">
+                <div class="panel gray">
+                    <div class="method">
+                        <div>
+                            <h3 class="h_title sub">간편찾기</h3>
+                            <form>
+                            <fieldset class="form">
+                                <legend class="sr_only">간편찾기 정보 입력</legend>
+                                <div class="input_wrap"><input type="text" user-fullname="user-fullname" name="memberName" title="이름 입력" placeholder="이름" required="required" data-msg-required="이름을 입력해 주세요."></div>
+                                <div class="input_wrap"><input type="text" placeholder="생년월일 (ex.19980905)" title="생년월일 입력" name="athtDtbr" required="required" data-msg-required="생년월일을 입력하세요." psnDtbr="psnDtbr"></div>
+                                <div class="input_wrap"><input type="number" mobile-number="mobile-number" name="phoneNumber" title="휴대전화번호 입력" placeholder="‘-’제외한 휴대폰번호" required="required" data-msg-required="휴대전화번호를 입력해주세요."></div>
+                                <button type="button" id="find-id" class="btn_md_neutral">아이디 찾기</button>
+                            </fieldset>
+                            </form>
+                        </div>
+                        <div>
+                            <h3 class="h_title sub">본인인증으로 찾기</h3>
+                            <div class="btns">
+                                <button onclick="window.location.href='/customer/find/find-id-3'" type="button" class="ico hp">휴대폰 인증</button>
+                                <button type="button" class="ico ipin">아이핀(i-PIN) 인증</button>
+                                <button onclick="window.location.href='/customer/find/find-id-1'" type="button" class="ico foreigner">외국인 등록번호 인증</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel_footer">
+                    <ul class="list_bullet_dot">
+                        <li>입력하신 정보는 본인확인 용도 외에는 사용되거나 저장되지 않습니다.</li>
+                        <li>간편찾기: 기존 회원가입 시, 등록했던 정보로 간편하게 아이디를 찾으실 수 있습니다. (아이디 앞 3자리만 노출, 예: AMO*******)</li>
+                        <li>본인인증으로 찾기: 본인인증을 통해 아이디를 모두 확인 하실 수 있습니다.</li>
+                    </ul>
+                </div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script>
+			
+			
+			$("#radio2").click(function() {
+			    $("#radio1").prop("checked", true)
+			    window.location = '/customer/find/find-id-3';
+			});
+
+
+			$('#find-id').click(function() {
+			    var $form = $('form');
+
+			    if (!$form.valid()) {
+			        return false;
+			    }
+
+			    AP.api.findIdSimple({}, AP.common.getFormData($form)).done(function(data) {
+
+		            var contents = new Object();
+		            contents.title = "입력하신 정보와 일치하는 아이디를 알려드립니다.";
+		            contents.contents = data.message;
+		            contents.confirmLabel = "확인";
+		            AP.modal.info(contents).addListener('modal-close', function(e) {
+		                if (e.closeType == 'confirm')
+		                    location.href = "/login";
+		            });
+			    }).fail(function(xhr, textStatus, errorThrown) {
+
+			        if (xhr.errorCode == 0) {
+			            AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+			        } else if (xhr.errorCode == 'EAPI001') {
+			            var contents = new Object();
+			            contents.title = "[에뛰드] 아이디 찾기";
+			            contents.contents = '고객님께선 회원가입이 안 돼있어<br> 계정이 존재하지 않습니다.<br> 계정을 만드시려면 아래 버튼을 눌러 주세요.';
+			            contents.confirmLabel = "회원가입";
+			            AP.modal.info(contents).addListener('modal-close', function(e) {
+			                if (e.closeType == 'confirm')
+			                    location.href = "/customer/signup";
+			            });
+			        } else {
+			            AP.modal.alert(xhr.errorMessage)
+			        }
+			    }).always(function() {
+			        //성공, 실패
+			    });
+			    return false;
+			});
+			
+			  	</script>
+			</th:block>
+</body>
+</html>

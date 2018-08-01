@@ -1,0 +1,58 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='ch-etude'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents prd_list ch_etude">
+				<!--/* 키비주얼 영역 */-->
+				<th:block th:if="${not #lists.isEmpty(cornersMap)}">
+					<div class="prd_banner slide" data-ix-options="view-length:1;">
+						<div class="ix-list-viewport">
+							<ul class="ix-list-items">
+								<th:block th:each="corner : ${cornersMap.get('M02_etude_ch_p.1')}">
+									<th:block th:each="contents : ${corner.contents}">
+										<th:block th:if="${contents.menuPageCornerContentsId == 'M02_etude_ch_p.1.1'}">
+											<li class="ix-list-item" th:style="'background-color:#' + ${contents.bgColor}">
+												<a href="#none" th:href="${contents.linkUrl}">
+													<img alt="" th:src="${contents.imgUrl}">
+												</a>
+											</li>
+										</th:block>
+									</th:block>
+								</th:block>
+							</ul>
+						</div>
+						<div class="ix-controller">
+							<ul class="ix-thumbs">
+								<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+							</ul>
+						</div>
+					</div>
+				</th:block>
+				<!--/* ch.에뛰드 리스트 */-->
+				<div class="ch_etude_list">
+					<ul>
+					</ul>
+				</div>
+				<div class="loading">
+					<span>
+						<img ap:src="@{/images/common/loading.gif}" alt="">
+					</span>
+				</div>
+				<div class="pagination" style="display:none;">
+				</div>
+
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+        </th:block>
+</body>
+</html>

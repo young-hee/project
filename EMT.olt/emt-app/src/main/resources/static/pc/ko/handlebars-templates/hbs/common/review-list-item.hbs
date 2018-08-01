@@ -1,0 +1,61 @@
+{{!--
+	review-list 용 item
+--}}
+<dl class="review">
+	<dt>
+		<span class="ui_rating">
+			{{#for 5}}
+				<span class="{{#xif ../scope '>' for-index}}on{{/xif}}"></span>
+			{{/for}}
+			<span class="sr_only"> {{ this.scope }}점</span>
+		</span>
+
+		<span class="user_id">{{ this.memberId }}</span>
+		<small>{{ dateFormat this.prodReviewRegistDt }}</small>
+	</dt>
+	<dd>
+		<dl>
+			<dt>
+				{{#if this.prodName}}
+					<small class="opt">옵션: {{ this.prodName }}</small>
+				{{/if}}
+
+				{{#xif this.prodReviewTypeCode '==' 'Pur'}}
+					<span class="flag">구매자 후기</span>
+				{{/xif}}
+
+				<span class="title">{{ this.prodReviewTitle }}</span>
+			</dt>
+			<dd>
+				<p class="text reduce">{{{ ellipsis 118 this.prodReviewBodyText }}}</p>
+				<p class="text origin" style="display:none;">{{{ this.prodReviewBodyText }}}</p>
+				
+				{{#if this.imgList.length}}
+					<div class="attach_photo reduce">
+						{{#each this.imgList}}
+							{{#xif @index '<' 7}}
+								<span class="thumb">
+									<img src="{{ this.imageFileUrl }}" alt="" style="width:98px; height:98px;">
+								</span>
+							{{/xif}}
+						{{/each}}
+					</div>
+				{{/if}}
+				
+				{{#if this.imgList.length}}
+					<div class="attach_photo origin" style="display:none;">
+						{{#each this.imgList}}
+							<span class="thumb">
+								<img src="{{this.imageFileUrl}}"  alt="">
+							</span>
+						{{/each}}
+					</div>
+				{{/if}}
+				
+				{{#if this.isMoreView }}
+					<a href="javascript:;" class="review_detail off" data-prod-review-sn="{{ this.prodReviewSn }}">더보기 ∨</a>
+				{{/if}}
+			</dd>
+		</dl>
+	</dd>
+</dl>

@@ -1,0 +1,8 @@
+this["AP"] = this["AP"] || {};
+this["AP"]["handlebars"] = this["AP"]["handlebars"] || {};
+this["AP"]["handlebars"]["display"] = this["AP"]["handlebars"]["display"] || {};
+this["AP"]["handlebars"]["display"]["brand"] = this["AP"]["handlebars"]["display"]["brand"] || {};
+
+this["AP"]["handlebars"]["display"]["brand"]["beautizen-sns-modal"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "<div class=\"layer_popup\" style=\"display: block;\">\n    <div class=\"layer_dimmed\"></div>\n    <div class=\"layer_wrap\" style=\"top:10%;\">\n        <dl class=\"layer\">\n            <dt class=\"layer_title\">페이스북 등록 방법</dt>\n            <dd class=\"layer_cont\">\n				<ul class=\"list\">\n					<li><b class=\"block\">1. 페이스북 담벼락 올리기</b>\n						뷰티즌 이미지를 다운받아 나의 뷰티즌\n						지원을 알리는 담벼락을 알린다.\n					</li>\n					<li><b class=\"block\">2. 친구들에게 알리기</b>\n						나의 페이스북 친구들이 담벼락을 보고\n						좋아요를 누르거나 댓글을 달아주면 나의\n						페이스북 활동 지수는 UP!UP!\n					</li>\n					<li><b class=\"block\">3. 담벼락 주소 입력하기</b>\n						<div class=\"input_group mgt10\">\n							<div><input type=\"text\" title=\"담벼락 주소 입력\" placeholder=\"http://\" data-snsUrl=this.value></div>\n						</div>\n					</li>\n				</ul>\n				<div class=\"page_btns\">\n					<button class=\"btn_md_secondary\" type=\"button\">취소</button>\n					<button class=\"btn_md_neutral\" type=\"button\">확인</button>\n				</div>\n            </dd>\n        </dl>\n        <button class=\"layer_close\" type=\"button\">레이어 닫기</button>\n    </div>\n</div>";
+},"useData":true});

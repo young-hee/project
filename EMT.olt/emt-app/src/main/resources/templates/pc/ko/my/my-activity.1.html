@@ -1,0 +1,79 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='my-inquiry'">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- mypage sitemap -->
+		<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+		<!-- //  mypage sitemap -->
+
+		<!-- page title -->
+		<th:block ap:replace="~{common/fragment/contents-page-title}"/>
+		<!-- // page title -->
+
+		<!-- page contents -->
+		<div class="ap_contents mypage inquiry">
+			<div class="panel activity_list">
+				<div class="clear activity_head">
+					<div class="float_left ui_multiple_date_picker">
+						<p>&middot; 1:1 문의에 대한 답변을 확인하실 수 있습니다. 궁금하신 내용이 있으시면 글을 등록해 주세요.</p>
+						<div class="date_btn_set">
+							<span><input type="radio" class="select_range_date" name="radio5" id="radio5_all" value="all" checked=""><label for="radio5_all">전체</label></span>
+							<span><input type="radio" class="select_range_date" name="radio5" id="radio5_1" value="1weeks"><label for="radio5_1">1주일</label></span>
+							<span><input type="radio" class="select_range_date" name="radio5" id="radio5_2" value="1months"><label for="radio5_2">1개월</label></span>
+							<span><input type="radio" class="select_range_date" name="radio5" id="radio5_3" value="3months"><label for="radio5_3">3개월</label></span>
+							<span><input type="radio" class="select_range_date" name="radio5" id="radio5_4" value="6months"><label for="radio5_4">6개월</label></span>
+							<span><input type="radio" class="select_range_date" name="radio5" id="radio5_5" value="1years"><label for="radio5_5">12개월</label></span>
+						</div>
+						<br>
+						<div class="input_date_group">
+							<div class="input_wrap" style="display:none;">
+								<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+								<input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+							</div>
+							<div class="date_info_area">
+								<b><span class="start_date"></span> ~ <span class="end_date"></span></b> 까지의 1:1 문의
+							</div>
+						</div>
+					</div>
+					<div class="float_right">
+						<div class="check_set">
+							<span class="check_wrap"><input type="checkbox" id="no_answer"><label for="no_answer">미답변만 보기</label></span>
+						</div>
+						<a href="/cs/inquiry" class="btn_md_primary">1:1 상담 문의하기</a>
+					</div>
+				</div>
+				<div class="loading" style="min-height: 200px; display: none">
+					<span>
+						<img ap:src="@{/images/common/loading.gif}" alt="">
+					</span>
+				</div>
+				<div class="panel notice result_none">
+					<i class="ico"></i>
+					<p class="text font_lg">선택하신 기간에 1:1 상담내역이 없습니다.</p>
+				</div>
+				<!-- 하나의 영역이 열릴때 다른 영역은 닫히게 하고 싶을때 data-open-type="single" 를 넣어준다. -->
+				<div class="inquiry_list ui_accordion" data-open-type="single"></div>
+				<div class="pagination"></div>
+			</div>
+		</div>
+		<!-- // page contents -->
+	</div><!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script th:inline="javascript">
+			(function () {
+				var param = {
+					offset: 0,
+					limit: 5,
+					startDate: $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).startDate,
+					answerYn: ''	// 미답변만 보기 Y/N
+				};
+
+				AP.myInquiryList._getList( param, true );
+			}());
+		</script>
+	</th:block>
+</body>
+</html>

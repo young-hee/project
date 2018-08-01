@@ -1,0 +1,248 @@
+<html ap:decorate="~{layout/default}">
+<head>
+	<title>[PC] Map Guide Page</title>
+</head>
+<body>
+
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="page_title">
+		<h2 class="h_title page">Map API</h2>
+		<br>
+		<p class="text font_lg">Map API 사용 예제</p>
+	</div>
+	<div class="ap_contents">
+		<div class="panel rounded">
+			<div class="panel_cont">
+				<div class="html">
+					<div class="map_area"></div>
+				</div>
+				<br>
+				<div class="test_btns">
+					<button type="button" class="btn_sm_secondary add_marker">addMarker</button>
+					<button type="button" class="btn_sm_secondary remove_marker">removeMarker</button>
+					<button type="button" class="btn_sm_secondary get_center">getCenter</button>
+					<button type="button" class="btn_sm_secondary my_location">내위치</button>
+					<button type="button" class="btn_sm_secondary current_address">현재위치 주소가져오기</button>
+				</div>
+				<h3 style="padding-top:20px;">script</h3>
+				<pre>
+					<code class="javascript">
+						/**
+						 * map api 기본적용
+						 * http://apis.map.daum.net/web/guide/ 참고
+						 * js/common/plugin-type/map-api.js 참고
+						 * @param {Object}  options
+						 *   - {Array}      ratio       map api 비율 자동 조절, ex) [580, 400]
+						 *   - {Int}        zoom        기본 zoom level 설정, default:4
+						 *   - {Boolean}    controller  map controll ui 를 노출시킬지 여부 설정, default:true
+						 *   - {Boolean}    mouseWheel  mouseWheel로 줌을 조절할수 있게 할지 여부 설정, default:false
+						 * @returns {jQuery}
+						 */
+						$( '.map_area' ).mapApi( options );
+
+						/**
+						 * 해당 좌표로 마커생성
+						 * @param {Number}  lat         위도
+						 * @param {Number}  lng         경도
+						 * @param {String}  markerId    이벤트로 전달 받을 marker의 고유값
+						 * @param {Object}  option
+						 *  - {String}  content         infoWindow의 표시할 html string
+						 *  - {String}  markerImgPath   별도의 마커 이미지를 등록할때 설정, default:MARKER_IMG_PATH
+						 */
+						$( '.map_area' ).mapApi( 'addMarker', lat, lng, markerId, option );
+
+						/**
+						 * 지도의 마커 삭제
+						 * @param {String}  markerId    대상의 markerId (설정하지 않으면 모두 삭제)
+						 */
+						$( '.map_area' ).mapApi( 'removeMarker', markerId );
+
+						/**
+						 * 지도의 Infowindow 열기
+						 * @param {String}  markerId    대상의 markerId (설정하지 않으면 모두 열린다)
+						 */
+						$( '.map_area' ).mapApi( 'openInfoWindow', markerId );
+
+						/**
+						 * 지도의 Infowindow 닫기
+						 * @param {String}  markerId    대상의 markerId (설정하지 않으면 모두 닫힌다)
+						 */
+						$( '.map_area' ).mapApi( 'closeInfoWindow', markerId );
+
+						/**
+						 * 해당 좌표로 중심 이동
+						 * @param {Number}  lat     위도
+						 * @param {Number}  lng     경도
+						 */
+						$( '.map_area' ).mapApi( 'setCenter', lat, lng );
+
+						/**
+						 * 현재 중심 좌표 반환
+						 * @returns {Object}    {lat, lng}
+						 */
+						$( '.map_area' ).mapApi( 'getCenter' );
+
+						/**
+						 * zoom 설정
+						 * @param {Number}  level     zoom level
+						 */
+						$( '.map_area' ).mapApi( 'setZoom', level );
+
+						/**
+						 * 현재 zoom level 반환
+						 * @returns {Number}
+						 */
+						$( '.map_area' ).mapApi( 'getZoom' );
+
+						/**
+						 * 대상 노드의 사이즈가 변경시 호출해준다. (map 영역이 제대로 사이즈를 잡지 못할때도 실행해 준다.)
+						 */
+						$( '.map_area' ).mapApi( 'resize' );
+
+						/**
+						 * event
+						 */
+						$( '.map_area' ).on( 'map-api-marker-click', function (e) {
+							console.log( e.markerId );
+						});
+
+						/**
+						 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+						 */
+						$( '.map_area' ).mapApi( 'clear' );
+
+						/**
+						 * map api가 준비된 이후에 적용
+						 */
+						AP.common.mapApiReady.done( function () {
+							$( '.map_area' ).mapApi();
+						});
+					</code>
+				</pre>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<style>
+		pre {display:block;}
+		pre code {border-radius:5px; padding:0 1.5em !important;}
+	</style>
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+	<script>
+		(function(){
+			$('.html').each(function() {
+				var $this = $(this);
+				var code = $this.html();
+				var $btn = $('<h3 style="padding:10px 0;">Html</h3>');
+				$this.after('<code class="code-view xml"></code>');
+				var $view = $this.next($('.code-view'));
+				$view.text(code).wrap('<pre />');
+				$this.after($btn);
+			});
+
+			$( 'code.xml, code.javascript' ).each( function () {
+				var html = $( this ).html(),
+					lineMatch = html.match( /\n/g );
+
+				if ( lineMatch ) {
+					var spaceMath = html.match( /^(\s|\t)+/ );
+
+					if ( spaceMath ) {
+						html = html.replace( new RegExp( spaceMath[0], 'mg' ), '\n' );
+					}
+				} else {
+					html = html.replace( /^\s+/, '' );
+				}
+
+				$( this ).html( html );
+			});
+
+			$( 'pre code' ).each( function (i, block) {
+				hljs.highlightBlock(block);
+			});
+		})();
+	</script>
+
+
+	<!-- map test -->
+	<script>
+		$( '.map_area' ).each( function (idx, el) {
+			var $map = $( el ),
+				markerId = 0,
+				lat = 37.52876373236224,
+				lng = 126.96846416770506;
+
+			$map.mapApi();
+
+			$map.on( 'map-api-marker-click', function (e) {
+				console.log( e.type, e.markerId );
+			});
+
+			$( '.test_btns .add_marker' ).on( 'click', function (e) {
+				$map.mapApi( 'addMarker', lat, lng, markerId, {
+					content: 'test contents sadfsaf asfasf ㅁㄴㄹㄴㅇㄹㅁㄴㅇㄹ asdf ㅁㄴㅇㅁㄴㄹㅁㄹㅁㄴㄹ asfs as 끝' + markerId
+				});
+				$map.mapApi( 'setCenter', lat, lng );
+
+				markerId++;
+				lat += 0.01;
+				lng += 0.01;
+			});
+
+			$( '.test_btns .remove_marker' ).on( 'click', function (e) {
+				$map.mapApi( 'removeMarker', 0 );
+			});
+
+			$( '.test_btns .get_center' ).on( 'click', function (e) {
+				var center = $map.mapApi( 'getCenter' );
+				console.log( '-getCenter:', center );
+			});
+
+			$( '.test_btns .my_location' ).on( 'click', function (e) {
+				if ( navigator.geolocation ) {
+					//IE9,10 은 정확한 위치를 가져오지 못한다.
+					navigator.geolocation.getCurrentPosition( function ( pos ) {
+						$map.mapApi( 'addMarker', pos.coords.latitude, pos.coords.longitude, 0, {
+							content: '현재위치'
+						});
+						$map.mapApi( 'setCenter', pos.coords.latitude, pos.coords.longitude );
+					}, function ( error ) {
+						if ( error.code == 1 ) {
+							AP.modal.alert( 'Error(' + error.code + '):내 위치 확인을 "허용" 해주시기 바랍니다.' );
+						} else if ( error.code == 2 ) {
+							AP.modal.alert( 'Error(' + error.code + '):현재 위치를 확인할 수 없습니다.' );
+						} else {
+							AP.modal.alert( 'Error(' + error.code + '):' + error.message );
+						}
+					}, {
+						enableHighAccuracy: true,
+						maximumAge: 30000,
+						timeout: 27000
+					});
+				} else {
+					AP.modal.alert( '브라우저에서 현재위치를 지원하지 않습니다.' );
+				}
+			});
+
+			$( '.test_btns .current_address' ).on( 'click', function (e) {
+				var latLng = $map.mapApi( 'getCenter' );
+
+				AP.api.coord2Address( latLng.lat, latLng.lng )
+					.done( function ( data ){
+						console.log( '-coord2Address:',data );
+					})
+					.fail( function (){
+						console.log( '-coord2Address:error-' );
+					});
+			});
+		});
+	</script>
+</th:block>
+</body>
+</html>

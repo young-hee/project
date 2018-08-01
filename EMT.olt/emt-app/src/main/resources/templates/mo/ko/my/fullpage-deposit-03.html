@@ -1,0 +1,117 @@
+<html ap:decorate="~{layout/only-contents}">
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+
+            <div class="layer_popup fullpage">
+                <div class="layer_wrap">
+                    <dl class="layer">
+                        <dt class="layer_title">환불 계좌 등록/변경</dt>
+                        <dd class="layer_cont">
+                        	<div class="mypage">
+	                        	<div class="panel beauty_point_present">
+									<h2 class="h_title page">환불 계좌 등록/변경</h2>
+									<p class="text_left font_md">환불 받을 계좌를 입력해 주세요.</p>
+									<hr class="div m30">
+									<form>
+										<fieldset class="form">
+											<legend class="sr_only">환불 받을 계좌 정보 입력</legend>
+											<dl class="dl_cont">
+												<dt class="h_title"><b><label>예금주</label></b></dt>
+												<dd>
+													<div class="input_group">
+														<div>
+															<input type="text" name="acHolderName.name1" placeholder="예금주 입력">
+														</div>
+													</div>
+												</dd>
+											</dl>
+											<dl class="dl_cont">
+												<dt class="h_title"><b><label for="bankCode">은행/계좌</label></b></dt>
+												<dd>
+													<div class="input_group">
+														<div>
+															<select name="bankCode" id="bankCode" title="은행 선택">
+																<option value="">은행 선택</option>
+																<option value="039">경남은행</option>
+																<option value="034">광주은행</option>
+																<option value="004">국민은행</option>
+																<option value="003">기업은행</option>
+																<option value="011">농협</option>
+																<option value="031">대구은행</option>
+																<option value="032">부산은행</option>
+																<option value="007">수협</option>
+																<option value="088">신한(조흥)은행</option>
+																<option value="027">씨티은행</option>
+																<option value="005">외환은행</option>
+																<option value="020">우리은행</option>
+																<option value="071">우체국</option>
+																<option value="037">전북은행</option>
+																<option value="090">카카오뱅크</option>
+																<option value="089">케이뱅크</option>
+																<option value="081">하나은행</option>
+																<option value="023">한국스탠다드차타드은행</option>
+															</select>
+														</div>
+													</div>
+													<div class="input_group">
+														<div>
+															<input type="number" name="bankAcNo" placeholder="‘-’없이 계좌번호 입력" >
+														</div>
+													</div>
+												</dd>
+											</dl>
+										</fieldset>
+									</form>
+									<ul class="mgt20 list_bullet_dot">
+										<li>환불 계좌는 무통장 입금, 휴대폰 결제의 익월 취소 분에 대한 환불금액을 받을 수 있는 계좌입니다.</li>
+										<li>예치금을 입금시킬 수 있는 계좌입니다.</li>
+									</ul>
+		                        	<div class="page_btns">
+		                        		<button type="button" class="btn_lg_secondary" id="cancelBtn">취소</button>
+		                        		<button type="button" class="btn_lg_primary" id="saveBtn">저장</button>
+		                        	</div>
+	                        	</div>
+                        	</div>
+                        </dd>
+                    </dl>
+                    <button class="layer_close" type="button" id="closeBtn">레이어 닫기</button>
+                </div>
+            </div>
+        </div>
+
+    <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+    <th:block ap:fragment="layout-endpoint">
+		<script th:inline="javascript">
+			$('#cancelBtn').on('click', function() {
+				//console.log("취소");
+				location.href = "/my/page/myDepositManagementList";
+			});
+
+			$('#closeBtn').on('click', function() {
+				//console.log("닫기");
+				location.href = "/my/page/myDepositManagementList";
+			});
+
+			$('#saveBtn').on('click', function() {
+				//console.log("저장");
+
+				var $form = $('form');
+				AP.api.saveRefundAccounts({}, AP.common.getFormData($form)).done(function(data) {
+					//성공
+					console.log("성공");
+
+					location.href = "/my/page/myDepositManagementList";
+				}).fail(function(e) {
+					AP.modal.alert(e.responseJSON.errorData.message);
+					//실패
+				}).always(function() {
+					//성공, 실패
+				});
+
+			});
+		</script>
+    </th:block>
+
+</body>
+</html>

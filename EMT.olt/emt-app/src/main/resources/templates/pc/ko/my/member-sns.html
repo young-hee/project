@@ -1,0 +1,228 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- mypage sitemap -->
+	<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+	<!-- //  mypage sitemap -->
+
+	<!-- page title -->
+	<th:block ap:replace="~{common/fragment/contents-page-title}"/>
+	<!-- // page title -->
+
+	<!-- page contents -->
+	<div class="ap_contents">
+		<h3 class="h_title lare">SNS 계정 연동 관리</h3>
+		<p>SNS(페이스북, 네이버, 카카오톡)계정을 에뛰드와 연동하시면 간편하게 로그인하실 수 있습니다.</p>
+		<div class="sns_box clear">
+			<div th:if="${snsMap.get('Naver')}">
+				<img ap:src="@{/images/member/sns_naver.png}" alt="naver" />
+				<div class="info_box">
+					<p class="txt_info" th:utext="${#dates.format(snsMap.get('Naver'), 'yyyy-MM-dd') + ' 연결'}">2017-12-28 연결</p>
+					<a href="javascript:;" class="btn_md_neutral" onclick="unConnect('Naver')">연결 해제하기</a>
+				</div>
+			</div>
+			<div th:unless="${snsMap.get('Naver')}">
+				<img ap:src="@{/images/member/sns_naver.png}" alt="facebook" />
+				<div class="info_box">
+					<p class="txt_info">연결된 정보가 없습니다.</p>
+					<a href="javascript:;" class="btn_md_bordered"  onclick="naverLogin()"
+					>간편 로그인하기</a>
+				</div>
+			</div>
+			<div th:if="${snsMap.get('Facebook')}">
+				<img ap:src="@{/images/member/sns_facebook.png}" alt="naver" />
+				<div class="info_box">
+					<p class="txt_info" th:utext="${#dates.format(snsMap.get('Facebook'), 'yyyy-MM-dd') + ' 연결'}">2017-12-28 연결</p>
+					<a href="javascript:;" class="btn_md_neutral" onclick="unConnect('Facebook')">연결 해제하기</a>
+				</div>
+			</div>
+			<div th:unless="${snsMap.get('Facebook')}">
+				<img ap:src="@{/images/member/sns_facebook.png}" alt="facebook" />
+				<div class="info_box">
+					<p class="txt_info">연결된 정보가 없습니다.</p>
+					<a href="javascript:;" class="btn_md_bordered" onclick="facebookLogin()">간편 로그인하기</a>
+				</div>
+			</div>
+			<div th:if="${snsMap.get('Kakao')}">
+				<img ap:src="@{/images/member/sns_kakao.png}" alt="naver" />
+				<div class="info_box">
+					<p class="txt_info" th:utext="${#dates.format(snsMap.get('Kakao'), 'yyyy-MM-dd') + ' 연결'}">2017-12-28 연결</p>
+					<a href="javascript:;" class="btn_md_neutral"  onclick="unConnect('Kakao')">연결 해제하기</a>
+				</div>
+			</div>
+			<div th:unless="${snsMap.get('Kakao')}">
+				<img ap:src="@{/images/member/sns_kakao.png}" alt="kakaotalk" />
+				<div class="info_box">
+					<p class="txt_info">연결된 정보가 없습니다.</p>
+					<a href="javascript:;" class="btn_md_bordered"  onclick="kakaoLogin()">간편 로그인하기</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- // page contents -->
+
+</div><!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+			<script>
+
+			function unConnect(sns) {
+
+			    var indexed_array = {};
+			    indexed_array['sns'] = sns;
+			    AP.api.snsDisconnect({}, indexed_array).done(function(data) {
+			        AP.modal.alert("연결이 해제되었습니다.").addListener('modal-close', function(e) {
+                    	location.reload();
+                    });
+			    }).fail(function(xhr, textStatus, errorThrown) {
+			        AP.modal.alert(xhr.errorMessage);
+			    }).always(function() {
+			        //성공, 실패
+			    });
+			}
+			//이미 sns연결됨.
+			function isLinked() {
+			    AP.modal.alert("이미 연결된 계정입니다.");
+			}
+
+			function nbSuccess() {
+			    isLinked();
+			}
+
+			function doSnsLogin() {
+			    linkPopup();
+			}
+			//sns연결팝업 노출.
+			function linkPopup() {
+
+
+
+			    $.get("/my/page/info/snsLinkForm", function(data) {
+
+			        var contents = new Object();
+			        contents.contents = data
+
+			        var modal = AP.modal.info(contents);
+			        var $modalEl = modal.getElement(); //jquery object
+
+			        $("#sns-connect").click(function(e) {
+
+			            AP.api.existSnsConnect({}, {})
+			                .done(function(data) {
+			                    AP.modal.alert("SNS 계정이 연결되었습니다.").addListener('modal-close', function(e) {
+			                    	location.reload();
+			                    });
+			                }).fail(function(xhr, textStatus, errorThrown) {
+			                    if (xhr.errorCode == 0) {
+			                        AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+			                    } else if (xhr.errorCode == 'EAPI001') {
+			                        AP.modal.alert("SNS연결에 실패했습니다.");
+			                    } else {
+			                        AP.modal.alert(xhr.errorMessage);
+			                    }
+			                }).always(function() {
+			                    //성공, 실패
+			                });
+
+			        });
+
+			    });
+			}
+
+			function formatDate() {
+			    var d = new Date(),
+			        month = '' + (d.getMonth() + 1),
+			        day = '' + d.getDate(),
+			        year = d.getFullYear();
+
+			    if (month.length < 2) month = '0' + month;
+			    if (day.length < 2) day = '0' + day;
+
+			    return [year, month, day].join('-');
+			}
+			//페이스북으로 로그인
+			window.fbAsyncInit = function() {
+			    FB.init({
+			        appId: '[[${@environment.getProperty('facebook.key')}]]',
+			        cookie: true,
+			        xfbml: true,
+			        version: 'v2.11'
+			    });
+
+			    FB.AppEvents.logPageView();
+
+			};
+
+			(function(d, s, id) {
+			    var js, fjs = d.getElementsByTagName(s)[0];
+			    if (d.getElementById(id)) {
+			        return;
+			    }
+			    js = d.createElement(s);
+			    js.id = id;
+			    js.src = "https://connect.facebook.net/en_US/sdk.js";
+			    fjs.parentNode.insertBefore(js, fjs);
+
+			}(document, 'script', 'facebook-jssdk'));
+
+			function facebookLogin() {
+
+			    FB.login(function(response) {
+			        //statusChangeCallback(response);   -- FB 로그인 취소시, 무한루프에 빠지게됨
+			        if (response.status === 'connected') {
+			            // 페이스북과 앱에 같이 로그인되어 있다.
+			            $("#accessToken").val(response.authResponse.accessToken);
+			            fncFBCallback(response.authResponse.accessToken);
+			        } else if (response.status === 'not_authorized') {
+			            // 페이스북에는 로그인 되어있으나, 앱에는 로그인 되어있지 않다.
+			            AP.modal.info('Facebook 계정 설정에서 해당 어플리케이션이 인가되지 않았습니다.\n다시 로그인 버튼을 클릭후, 어플리케이션 사용을 승인하여 주십시오.');
+			        } else {
+			            // 페이스북에 로그인이 되어있지 않아서, 앱에 로그인 되어있는지 불명확하다.
+			            AP.modal.info('Facebook 에 로그인되지 않았습니다.');
+			        }
+			    });
+			}
+
+			function fncFBCallback(token) {
+
+
+			    FB.api('/me', {
+			        fields: 'email, birthday, name'
+			    }, function(response) {
+			        var indexed_array = {};
+			        indexed_array['snsName'] = 'Facebook';
+			        indexed_array['id'] = response.id;
+			        indexed_array['accessToken'] = token;
+
+			        $.ajax({
+			            type: "POST",
+			            url: "/login/snsloginProcess",
+			            data: indexed_array,
+			            success: function(data) {
+		                    if (data.isLinked) {
+		                        isLinked();
+		                    } else {
+		                        linkPopup();
+		                    }
+			                //성공
+			            },
+			            dataType: "json"
+			        });
+			    });
+			}
+			function naverLogin() {
+				window.open('https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=xbLexjx52A_pQD0sZgIP&state=[[${state}]]&redirect_uri=' + location.href.replace('/my/page/info/snsLink','navercallback'), 'naverloginpop', 'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550'); return false
+			}
+			function kakaoLogin() {
+				window.open('https://kauth.kakao.com/oauth/authorize?client_id=ce4dd4a15adfd391c88f730c049f12c4&response_type=code&redirect_uri=' + location.href.replace('/my/page/info/snsLink','') + 'kakaocallback', 'kakaologinpop', 'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550'); return false
+			}
+			
+			</script>
+</th:block>
+</body>
+</html>
+</html>

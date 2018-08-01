@@ -1,0 +1,38 @@
+<table data-date="{{ this.year }}-{{ this.month }}">
+    <caption class="sr_only">calendar date select table</caption>
+    <colgroup>
+        <col style="width:15%;" />
+        <col style="width:14%;" />
+        <col style="width:14%;" />
+        <col style="width:14%;" />
+        <col style="width:14%;" />
+        <col style="width:14%;" />
+        <col style="width:15%;" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col" class="sun">{{ this.days.[0] }}</th>
+            <th scope="col">{{ this.days.[1] }}</th>
+            <th scope="col">{{ this.days.[2] }}</th>
+            <th scope="col">{{ this.days.[3] }}</th>
+            <th scope="col">{{ this.days.[4] }}</th>
+            <th scope="col">{{ this.days.[5] }}</th>
+            <th scope="col" class="sat">{{ this.days.[6] }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each this.weeks}}
+            <tr>
+                {{#each this}}
+                    <td class="{{#if this.sunday}}sun{{/if}} {{#if this.saturday}}sat{{/if}} {{#if this.today}}today{{/if}} {{#if this.select}}selected{{/if}} {{#if this.disabled}}disabled{{/if}} {{#if this.other}}other{{/if}}">
+                        {{#if this}}
+                            <button type="button" class="date_button" data-date="{{ this.time }}" title="{{ this.time }}" {{#if this.disabled}}disabled="disabled"{{/if}}>
+                                <span>{{ this.date }}</span>{{#if this.today}}<span class="txt">Today</span>{{/if}}
+                            </button>
+                        {{/if}}
+                    </td>
+                {{/each}}
+            </tr>
+        {{/each}}
+    </tbody>
+</table>

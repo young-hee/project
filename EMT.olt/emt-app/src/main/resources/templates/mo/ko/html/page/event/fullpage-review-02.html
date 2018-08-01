@@ -1,0 +1,115 @@
+<html ap:decorate="~{layout/only-contents}">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+	<div class="layer_popup fullpage review">
+		<div class="layer_wrap">
+			<dl class="layer">
+				<dt class="layer_title">댓글 작성/수정하기</dt><!--/* 20180530 : 문구수정 */-->
+				<dd class="layer_cont">
+					<div class="panel">
+						<fieldset class="form">
+							<legend class="sr_only">댓글 작성</legend>
+							<div class="input_group">
+								<div class="label">
+									<label for="title">제목</label>
+								</div>
+								<div>
+									<input type="text" id="title" maxlength="30" placeholder="최대 30자까지 입력 가능합니다." />
+								</div>
+							</div>
+							<!--/* 03-28 수정 */-->
+							<div>
+								<div class="textarea">
+									<textarea name="" id="" cols="" rows="" maxlength="500" placeholder="내용을 입력해 주세요."></textarea>
+								</div>
+								<p class="text_right"><small class="count">0/500</small></p>
+							</div>
+
+							<div class="ui_input_images">
+								<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="multiple" style="display:none" />
+								<label for="i_picture" class="btn_md_neutral w100p mgt10">사진첨부</label>
+								<ul class="attach"></ul>
+								<p class="text_notice">첨부파일은 이미지 파일만 가능하며, 최대 10개까지 등록 하실 수 있습니다. (최대 파일 용량 10MB)</p>
+							</div>
+
+							<dl class="dl_cont">
+								<dt class="h_title cont"><b>개인정보 수집 및 이용 동의 (필수)</b></dt>
+								<dd>
+									<div class="panel bordered">
+										<ul class="list_bullet_dot">
+											<li>수집 및 이용 항목 : 사진</li>
+											<li>수집 및 이용 목적 : 댓글의 신뢰성 향상을 위해</li>
+											<li>이용·보유 및 이용 기간 : 회원탈퇴시까지</li>
+										</ul>
+									</div>
+									<ul class="text_notice mgt10">
+										<li>신청자는 개인정보 수집 및 이용 동의에 거부할 수
+											있습니다. 다만, 거부할 경우 리뷰 작성이 불가능
+											합니다.</li>
+									</ul>
+									<div class="check_wrap mgt10"><input type="checkbox" id="agree_personal"><label
+										for="agree_personal">동의합니다.</label></div>
+								</dd>
+							</dl>
+
+							<div class="panel gray">
+								<ul class="list_bullet_dot">
+									<li>타인의 글 도용 및 올바르지 않은 리뷰 작성의 경우, 게시판 성격과 관련   없는 게시물은 임의로 삭제될 수 있으며 적립된 진주알의 3배만큼 차감 될 수 있습니다. (동일 내용의 반복 등록, 무의미한 내용 입력, 광고 및 욕설, 비방의 글,  성인글, 출처를 안 밝힌 뉴스기사  등)</li>
+									<li>저작권 등 다른 사람의 권리를 침해하거나 게시판 성격과 관련 없는  게시물은 임의로 삭제될 수 있습니다. (반복 등록된 글, 무의미한 내용,  광고 및 욕설, 비방의 글, 성인글 등)</li>
+								</ul>
+							</div>
+							<div class="form_btns">
+								<button type="button" class="btn_md_secondary cancel">취소</button>
+								<button type="button" class="btn_md_primary submit">등록</button>
+							</div>
+						</fieldset>
+					</div>
+				</dd>
+			</dl>
+			<button class="layer_close" type="button">레이어 닫기</button>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script>
+		/*
+        var modal = AP.modal.full({
+            title: '리뷰 작성하기',
+            contents: {
+                templateKey: 'folder-name.file-name',
+                templateModel: {}
+            },
+            containerClass: 'review'
+        }).addListener( 'modal-before-close', function (e) {
+            modal.getElement().find( '.ui_rating' ).rating( 'clear' );						// rating 적용 해제
+			modal.getElement().find( 'input[maxlength], textarea[maxlength]' ).inputLimits( 'clear' );		// inputLimits 적용 해제
+			modal.getElement().find( '.ui_input_images' ).inputImages( 'clear' );
+        }).addListener( 'modal-close', function (e) {
+            console.log( e.closeType );
+        });
+        */
+
+		/* 예시, modal open 시점 적용 */
+		$( '.ui_rating' ).rating();
+		$( 'input[maxlength], textarea[maxlength]' ).inputLimits();
+		$( '.ui_input_images' ).inputImages();
+
+		$( '.submit' ).on( 'click', function (e) {
+			var formData = new FormData( $('form').get(0) );
+
+			//formDate에 첨부된 이미지 병합
+			$( '.ui_input_images' ).inputImages( 'extendFormData', formData );
+
+			//formData를 ajax의 data에 넣어서 보내면 된다.
+		});
+	</script>
+</th:block>
+
+</body>
+</html>

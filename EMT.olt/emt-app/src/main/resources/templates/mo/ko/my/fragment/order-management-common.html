@@ -1,0 +1,49 @@
+<th:block layout:fragment="multiple-date-picker">
+	<legend class="sr_only">기간 선택</legend>
+	<div class="ui_multiple_date_picker">
+		<div class="date_btn_set">
+			<span><input type="radio" class="select_range_date" name="radio4" id="radio4_0" value="all" checked=""><label for="radio4_0">전체</label></span>
+			<span><input type="radio" class="select_range_date" name="radio4" id="radio4_1" value="1months" checked=""><label for="radio4_1">1개월</label></span>
+			<span><input type="radio" class="select_range_date" name="radio4" id="radio4_2" value="3months"><label for="radio4_2">3개월</label></span>
+			<span><input type="radio" class="select_range_date" name="radio4" id="radio4_3" value="6months"><label for="radio4_3">6개월</label></span>
+			<span><input type="radio" class="select_range_date" name="radio4" id="radio4_4" value="1years"><label for="radio4_4">1년</label></span>
+		</div>
+		<br>
+		<div class="input_date_group">
+			<div style="display:none;">
+				<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+				<input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+			</div>
+			<div class="date_info_area v2">
+				<span class="start_date num"></span> ~ <span class="end_date num"></span> <span class="color_light_gray">까지의 내역</span>
+			</div>
+		</div>
+	</div>
+</th:block>
+
+<!-- list header-->
+<th:block layout:fragment="header-order">
+	<ul>
+		<li th:class="${type} == 'online' ? 'on' : ''"><button type="button" value="online">온라인 주문/배송</button></li>
+		<li th:class="${type} == 'store' ? 'on' : ''"><button type="button" value="store">매장 주문/배송</button></li>
+	</ul>
+</th:block>
+
+<th:block layout:fragment="header-cash-receipts">
+	<h2 class="h_title page">현금영수증 발급</h2>
+	<p class="text font_lg">홍길동님의 현금영수증 발급 상태를 확인해 보세요.</p>
+	<hr class="div m30">
+</th:block>
+
+<th:block layout:fragment="header-returnExchange">
+	<div class="input_group mgt15">
+		<div>
+			<select name="returnCode" id="returnCode">
+				<option value="">전체</option>
+				<option value="Exch">교환</option>
+				<option value="Rtn">반품</option>
+			</select>
+		</div>
+	</div>
+</th:block>
+<!-- //list header -->

@@ -1,0 +1,26 @@
+this["AP"] = this["AP"] || {};
+this["AP"]["handlebars"] = this["AP"]["handlebars"] || {};
+this["AP"]["handlebars"]["my"] = this["AP"]["handlebars"]["my"] || {};
+this["AP"]["handlebars"]["my"]["order"] = this["AP"]["handlebars"]["my"]["order"] || {};
+
+this["AP"]["handlebars"]["my"]["order"]["layer-cash-receipts"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
+
+  return "<dl class=\"layer\">\n	<dt class=\"layer_title\">현금영수증 발급 신청</dt>\n	<dd class=\"layer_cont\">\n		<p class=\"bullet_dot mgb30\">정보를 기입하신 후 발행버튼을 선택해주세요.</p>\n		<div class=\"ui_table custom\">\n			<dl>\n				<dt class=\"w20p\">상품명</dt>\n				<dd>"
+    + alias2(alias1((depth0 != null ? depth0.prodNameRlang : depth0), depth0))
+    + " "
+    + alias2((helpers.checkCnt || (depth0 && depth0.checkCnt) || alias4).call(alias3,"cnt",(depth0 != null ? depth0.totalCnt : depth0),{"name":"checkCnt","hash":{},"data":data}))
+    + "</dd>\n			</dl>\n		</div>\n		<form class=\"validate\">\n			<fieldset class=\"form lined bd_eb mgt30\">\n				<legend class=\"sr_only\">현금영수증 발급신청 정보입력</legend>\n				<div class=\"ui_table typ2\"><!--/* 20180511 : typ2 클래스 추가 */-->\n					<dl>\n						<dt class=\"w25p pdl20\"><strong>결제 금액</strong></dt>\n						<dd class=\"text_right pdr20\"><strong>"
+    + alias2((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias4).call(alias3,(depth0 != null ? depth0.amtPcur : depth0),{"name":"currencyFormat","hash":{},"data":data}))
+    + "</strong></dd>\n					</dl>\n					<dl>\n						<dt class=\"w25p pdl20\">공급가액</dt>\n						<dd class=\"text_right pdr20\">"
+    + alias2((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias4).call(alias3,(depth0 != null ? depth0.amtTax : depth0),{"name":"currencyFormat","hash":{},"data":data}))
+    + "</dd>\n					</dl>\n					<dl>\n						<dt class=\"w25p pdl20\">부가세</dt>\n						<dd class=\"text_right pdr20\">"
+    + alias2((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias4).call(alias3,(depth0 != null ? depth0.amtItaxPcur : depth0),{"name":"currencyFormat","hash":{},"data":data}))
+    + "</dd>\n					</dl>\n					<!--/*20180531 : 봉사료 항목 삭제\n					<dl>\n						<dt class=\"w25p pdl20\">봉사료</dt>\n						<dd class=\"text_right pdr20\">0원</dd>\n					</dl>\n					*/-->\n				</div>\n				<div class=\"ui_table in_bt0 bb0 bt0\">\n					<dl>\n						<dt class=\"w20p\">구매자명</dt>\n						<dd><p class=\"text font_lg\">"
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.info : depth0)) != null ? stack1.name : stack1)) != null ? stack1.name1 : stack1), depth0))
+    + "</p></dd>\n					</dl>\n					<dl>\n						<dt class=\"w20p\"><label for=\"email\">구매자 이메일</label></dt>\n						<dd>\n							<div class=\"input_wrap w100p\"><input type=\"text\" id=\"email\" name=\"purchaserEmailAddress\"\n							 placeholder=\"이메일 주소를 입력해 주세요\" value=\""
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.info : depth0)) != null ? stack1.emailAddress : stack1), depth0))
+    + "\" email=\"email\"></div>\n						</dd>\n					</dl>\n					<dl>\n						<dt class=\"w20p\"><label for=\"phone\">구매자 휴대폰</label></dt>\n						<dd>\n							<div class=\"input_wrap w100p\"><input type=\"text\" id=\"phone\" name=\"purchaserPhoneNo.phoneNo\" placeholder=\"‘-’ 없이 숫자만 입력해 주세요.\"\n							value=\""
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.info : depth0)) != null ? stack1.phoneNo1 : stack1)) != null ? stack1.phoneNo : stack1), depth0))
+    + "\" mobile-number=\"mobile-number\"></div>\n						</dd>\n					</dl>\n					<dl class=\"typ2\"><!--/* 20180511 : typ2 클래스 추가 */-->\n						<dt class=\"w20p\">발행용도</dt>\n						<dd>\n							<div class=\"check_set\">\n								<span class=\"check_wrap\"><input type=\"radio\" name=\"cashReceiptPurposeCode\" id=\"radio1\" value=\"Deduction\" checked=\"checked\"><label for=\"radio1\">소득공제용</label></span>\n								<span class=\"check_wrap\"><input type=\"radio\" name=\"cashReceiptPurposeCode\" id=\"radio2\" value=\"ExpenseEvidence \"><label for=\"radio2\">지출증빙용</label></span>\n							</div>\n						</dd>\n					</dl>\n				</div>\n				<div class=\"one_typ\">\n					<dl>\n						<dt>휴대폰 번호 또는 카드번호(사업자등록번호)</dt>\n						<dd><div class=\"input_wrap w100p\"><input type=\"text\" name=\"issueNum\" title=\"‘-’ 없이 숫자만 입력해 주세요.\"\n						 placeholder=\"‘-’ 없이 숫자만 입력해 주세요.\" required=\"required\" data-msg=\"휴대폰 번호 또는 카드번호를 정확히 입력해주세요.\" digits=\"digits\"></div></dd>\n					</dl>\n				</div>\n\n				<div class=\"panel gray mgt30 pdl20 pdr20\">\n					<p class=\"text\"><strong>이메일과 휴대폰 번호 입력 받는 것은 고객님의 결제성공 내역을 알려드리기<br>위함이오니 반드시 기입 바랍니다.</strong></p><!--/* 20180511 : br 추가 */-->\n					<ul class=\"list_bullet_dot mgt20\">\n						<li>소득공제용: 휴대폰 번호와 카드번호로 발급 가능</li>\n						<li>지출 증빙용: 사업자등록번호로 발급 가능</li>\n					</ul>\n				</div>\n\n				<div class=\"form_btns\">\n					<a class=\"btn_lg_secondary\">취소</a>\n					<a class=\"btn_lg_primary\">발행</a>\n				</div>\n			</fieldset>\n		</form>\n	</dd>\n</dl>";
+},"useData":true});

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+    <title>Concept B</title>
+    <link rel="stylesheet" href="css/css.css">
+
+    <script src="../../libs/jquery-1.12.3.min.js"></script>
+    <script src="../../libs/ixBand_1.1.min.js"></script>
+    <script src="../../libs/ixSnack_0.4.min.js"></script>
+
+</head>
+
+<body>
+   
+    <div class="wrapper">
+        <div class="header">
+            <img src="images/img_header_01.jpg" alt="">
+            <a href="main.html" class="home"></a>
+            <a href="javascript:;" class="left_menu_btn"></a>
+        </div>
+        <div class="menu_area">
+            <div class="fixed_menu"> <!-- 스크롤시 fixed 클래스 추가 -->
+                <img src="images/img_header_02.jpg" alt="">
+                <a href="live.html" class="live"></a>
+                <a href="hot.html" class="hot"></a>
+            </div>
+        </div>
+        <div class="aside">
+            <div>
+                <img src="images/img_aside.png" alt="">
+            </div>
+            <a href="#none"><img src="images/btn_aside_close.png" alt=""></a>
+        </div>
+        <div class="slide" data-ix-options="auto-play:true; paging:true; view-length:1;">
+            <div class="ix-list-viewport">
+                <ul class="ix-list-items">
+                    <li class="ix-list-item">
+                        <img src="images/img_banner_01.jpg" alt="배너 내용">
+                    </li>
+                    <li class="ix-list-item">
+                        <img src="images/img_banner_02.jpg" alt="배너 내용">
+                    </li>
+                </ul>
+            </div>
+            <div class="ix-controller">
+                <div class="paging"><span class="current"></span>/<span class="total"></span></div>
+            </div>
+        </div>
+        <div class="contents">
+            <div class="category">
+                <img src="images/img_category.jpg" alt="">
+                <div class="scroll_area">
+                    <img src="images/img_category_all.jpg" alt="">
+                </div>
+            </div>
+            <img src="images/img_cont_main.jpg" alt="">
+        </div>
+    </div>
+    <script src="js/main.js"></script>
+    <script type="text/javascript">
+	    $( '.slide' ).on( 'ixSlideMax:init ixSlideMax:change', function (e) {
+            var viewLength = $( this ).ixOptions( 'view-length' ),
+                currentPage = Math.ceil( e.currentIndex / viewLength ),
+                totalPage = Math.ceil( e.totalLength / viewLength );
+
+            $( this ).find( '.paging > .current' ).text( currentPage + 1 );
+            $( this ).find( '.paging > .total' ).text( totalPage );
+        }).ixSlideMax();
+
+        $( window ).on( 'load', function () {
+            $( '.scroll_area' ).each( function (idx, el) {
+                $B( el ).addEvent( 'mousewheel', function (e) {
+                    e.preventDefault();
+                    var scrollX = $( e.currentTarget ).scrollLeft();
+                    $( e.currentTarget ).scrollLeft( scrollX + (e.delta < 0? 20 : -20) );
+                });
+            });
+        });
+	</script>
+</body>
+</html>

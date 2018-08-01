@@ -1,0 +1,104 @@
+<html ap:decorate="~{layout/layout-item-only}" th:with="_jsfile='looks-detail'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents looks detail">
+		<!--/* looks 제목/공유  */-->
+		<div class="looks_header">
+			<h2 class="h_title sub"><b th:text="${article.articleTitle}"></b></h2>
+			<button class="btn_share" th:if="${article.shareUseYn == 'Y'}"><span class="sr_only">SNS 공유</span></button>
+		</div>
+		<!--/* looks 컨텐츠 */-->
+		<div class="looks_cont">
+			<th:block th:utext="${article.detailHtml}"></th:block>		
+		
+			<!--/* looks nav slide */-->
+			<div class="looks_nav">
+				<h3 class="h_title cont">내게 맞는 Makeup Look을 찾아봐!</h3>
+				<div class="slide two_half" data-ix-options="view-length:2; move-length:2; loop:false; correct-endpoint:true;">
+					<div class="ix-list-viewport">
+						<ul class="ix-list-items">
+							<th:block th:each="articles : ${articleSearchResult.articleList}">
+			            		<li class="ix-list-item" th:if="${articles.articleSn != article.articleSn}">
+				                    <a href="#none" th:href="@{'/display/'+${displayMenuId}+'/detail'(displayMenuId=${displayMenuId},articleSn=${articles.articleSn})}">
+				                        <img th:src="${articles.bannerImgM2}" alt="" />
+				                        <span class="name" th:text="${articles.articleTitle}"></span>
+				                    </a>
+				                </li>
+			            	</th:block>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<!--/* 상품목록 */-->
+			<div class="evt_goods" th:if="${article.prodYn == 'Y'}">
+				<div class="item_list type2">
+					<ul class="result">
+						<!--/* 상품목록 영역 */-->
+					</ul>
+					<button type="button" class="btn_lg_more w100p btn_more" style="display:none;">
+						<span>더보기 (<em>0</em>/00)</span>
+					</button>
+					<ul class="loading">
+						<li></li>
+						<li></li>
+						<li></li>
+					</ul>
+					<div class="panel notice no_result" style="display:none;">
+						<i class="ico"></i>
+						<p class="text">상품이 존재하지 않습니다.</p>
+					</div>
+				</div>
+			</div>
+
+			<!--/* 구매하기 전체 열릴때 class open 교체 기본 close select 선택시 class select 추가 선택한 select 요소 부모 클래스 goods_box 에 class on 추가 */-->
+			<div class="option_layer goods_detail_buy close" th:if="${article.prodYn == 'Y'}">
+				<!--/* 오픈전 구매 버튼 셋 */-->
+				<div class="purchase_btn_set">
+					<button type="button" class="btn_md_primary btn_open_order_layer">구매하기</button>
+				</div>
+
+				<!--/* 옵션만 열고 닫을때 class open 추가 */-->
+				<div class="option_wrap open">
+					<!--/* selected 된 options 표현 영역 */-->
+				</div>
+
+				<div class="buy_info_wrap">
+					<!--/* 뷰티포인트 전용상품 */-->
+					<!--/*
+                    <div class="beauty_point_chk">
+                        <span class="check_wrap"><input type="checkbox" name="buy_beauty_point" id="buy_beauty_point" checked="checked"><label for="buy_beauty_point">뷰티포인트로 구매하기</label></span>
+                    </div>
+                    */-->
+					<div class="buy_info">
+						<span class="opt_selected"><b class="num">0</b> 개 선택됨</span>
+						<span class="buy_result">합계 <b class="num total_price">0</b><b>원</b></span>
+					</div>
+					<!--/* 오픈후 구매 버튼 세트 */-->
+					<div class="buy_btn_wrap">
+						<button type="button" class="btn_md_bordered btn_takeout">테이크아웃</button>
+						<button type="button" class="btn_md_bordered btn_basket">장바구니 담기</button>
+						<button type="button" class="btn_md_primary btn_buy_now">바로구매</button>
+					</div>
+				</div>
+				<button type="button" class="btn_float_close"><span class="sr_only">구매닫기</span></button>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script th:inline="javascript">
+		(function () {
+			var article = /*[[${article}]]*/;
+
+			AP.looksDetail.setDefaultData( article );
+		})();
+	</script>
+</th:block>
+</body>
+</html>

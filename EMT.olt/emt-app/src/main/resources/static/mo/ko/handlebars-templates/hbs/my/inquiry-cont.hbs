@@ -1,0 +1,24 @@
+<div class="cont" id="cont_{{this.customerInquirySn}}">
+  <div class="question">
+    <pre class="text">{{this.inquiryBodyText}}</pre>
+    {{#if (isExist this.inquiryFileList)}}
+	<div class="attach">
+    	{{#each this.inquiryFileList}}
+			<img src="{{this.fileUrl}}" alt="">
+		{{/each}}
+	</div>
+	{{/if}}
+  </div>
+  {{#if (isExist this.responseBodyText)}}
+	  <div class="answer">
+	    <pre class="text">{{this.responseBodyText}}</pre>
+	    {{#if (isExist this.responseFileList)}}
+		<div class="attach">
+	    	{{#each this.responseFileList}}
+				<img src="{{this.fileUrl}}" alt="">
+			{{/each}}
+		</div>
+		{{/if}}
+	  </div>
+  {{/if}}
+</div>

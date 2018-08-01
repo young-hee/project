@@ -1,0 +1,138 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents cs">
+                <div class="panel">
+                    <div class="page_btns_top align_right">
+                        <a href="#none" class="btn_sm_neutral">1 : 1 문의내역보기</a>
+                    </div>
+                    <fieldset class="form">
+                        <legend class="sr_only">질문 입력 항목</legend>
+                        <div class="ui_table board_write">
+                            <dl>
+                                <dt>문의유형</dt>
+                                <dd>
+                                	<span class="select_wrap w300px">
+										<select name="" id="" tabindex="-1">
+											<option value="">문의유형 선택</option>
+											<option value="">선택 2</option>
+											<option value="">선택 3</option>
+											<option value="">선택 4</option>
+											<option value="">선택 5</option>
+											<option value="">선택 6</option>
+										</select>
+									</span>
+                                    <span class="select_wrap w300px">
+										<select name="" id="" tabindex="-1" disabled="">
+											<option value="">유형2</option>
+											<option value="">선택 2</option>
+											<option value="">선택 3</option>
+											<option value="">선택 4</option>
+											<option value="">선택 5</option>
+											<option value="">선택 6</option>
+										</select>
+									</span>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>주문상품</dt>
+                                <dd>
+                                    <div class="input_btn_wrap fixed">
+                                        <span class="input_wrap"><input type="text" class="" readonly=""></span>
+                                        <button class="btn_md_form" type="button">등록</button>
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>제목</dt>
+                                <dd>
+                                    <div class="input_wrap w100p"><input type="text" title="제목 입력" placeholder="제목을 입력해 주세요."></div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>문의내용</dt>
+                                <dd>
+                                    <div class="textarea w100p">
+                                        <textarea name="" id="" cols="" rows="" placeholder="문의할 내용을 입력해주세요." maxlength="2000"></textarea>
+                                    </div>
+									<!--/* 03-20 수정 */-->
+									<p class="text_right w100p"><small><em>0</em>/2000자</small></p>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>파일첨부</dt>
+                                <dd>
+									<div class="attach_wrap ui_input_images">
+										<!--[if lte ie 9]>
+										<div class="input_btn_wrap">
+											<span class="input_wrap">
+												<input class="input_file_name ie9_lte" type="text" title="첨부 파일 선택" readonly value="">
+												<button class="input_del"><i class="ico_close_w"></i><span class="sr_only">첨부파일 삭제</span></button>
+											</span>
+											<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png">
+											<label for="i_picture" class="btn_md_form">파일 선택</label>
+										</div>
+										<ul class="list_bullet_dot mgt5">
+											<li>10MB미만의 jpg, gif, png의 이미지 파일</li>
+											<li>internet Explorer 9.0버전에서는 첨부파일 1개만 가능합니다.</li>
+										</ul>
+										<![endif]-->
+										<!--[if gt ie 9]><!-->
+										<ul class="attach">
+											<li class="input_file_btn_area">
+												<div class="attach_file">
+													<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="multiple">
+													<label for="i_picture">사진 첨부</label>
+												</div>
+											</li>
+										</ul>
+										<p class="text">이미지 파일만 가능 / 최대 10개 / 최대 파일 용량 10MB</p>
+										<!--<![endif]-->
+									</div>
+                                </dd>
+                            </dl>
+							<!--/* [S] 20180621 : 이메일 항목 추가*/-->
+							<dl>
+								<dt>이메일</dt>
+								<dd>
+									<div class="input_group">
+										<span class="input_wrap w300px"><input type="text" title="이메일 입력"></span>
+									</div>
+								</dd>
+							</dl>
+							<!--/* [E] 20180621 : 이메일 항목 추가*/-->
+							<dl>
+                                <dt>휴대폰 번호</dt>
+                                <dd>
+                                    <div class="input_group">
+                                        <span class="input_wrap w300px"><input type="text" title="휴대폰 번호 입력"></span>
+                                        <span class="gap"></span>
+                                        <span class="check_wrap"><input type="checkbox" id="sms"><label for="sms">SMS 답변알림</label></span>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="form_btns">
+                            <a href="#none" class="btn_lg_secondary">취소</a>
+                            <a href="#none" class="btn_lg_neutral">확인</a>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script>
+				$( '.ui_input_images' ).inputImages();
+			</script>
+        </th:block>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{{#xif this.topReviewOnlyYn '==' 'Y'}}
+	<ul class="ix-list-items">
+		{{#each this.prodReviewList}}
+			<li class="ix-list-item">
+				{{{ include 'common.review-list-item' this }}}
+			</li>
+		{{/each}}
+	</ul>
+{{else}}
+	{{#if this.totalCount}}
+		{{#each this.prodReviewList}}
+			{{{ include 'common.review-list-item' this }}}
+		{{/each}}
+	{{else}}
+		<div class="panel notice">
+			<i class="ico"></i>
+			<p class="text font_lg">리뷰 내역이 존재하지 않습니다.</p>
+		</div>
+	{{/if}}
+
+	{{#xif this.totalCount '>' (calc this.limit)}}
+		<div class="pagination">
+		</div>
+	{{/xif}}
+{{/xif}}

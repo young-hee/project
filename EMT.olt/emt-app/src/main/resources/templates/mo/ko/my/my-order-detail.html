@@ -1,0 +1,650 @@
+<html ap:decorate="~{layout/layout-contents}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents mypage">
+		<div class="my_order detail">
+			<div class="panel_box order" id="orderDetailInfo">
+			</div>
+
+			<div class="panel padding15 mgb15" id="allCheck">
+				<fieldset class="form">
+					<legend class="sr_only">전체선택</legend>
+					<span class="check_wrap" id="checkMain"><input type="checkbox" onclick="allCheck(this);" id="allCheckbox"><label for="allCheckbox">
+						<b class="font_lg">전체 선택</b> <span class="color_gray" id="checkSub"></span></label>
+				</fieldset>
+			</div>
+
+			<!-- 하나의 영역이 열릴때 다른 영역은 닫히게 하고 싶을때 data-open-type="single" 를 넣어준다. -->
+			<div class="ui_accordion">
+				<dl class="online">
+				</dl>
+				<dl class="takeout">
+				</dl>
+				<dl class="freebies">
+				</dl>
+			</div>
+
+			<!--/* 결제정보 */-->
+			<div class="panel_box payment">
+
+			</div>
+
+			<!--/* 배송정보 */-->
+			<div class="panel_box delivery" style="display: none">
+
+			</div>
+
+			<!--/* 상세 버튼 */-->
+			<div id="bottomBtns">
+
+			</div>
+		</div>
+	</div>
+	<!-- // page contents -->
+
+	<!-- 마이페이지 맵 01-24 위치변경 -->
+	<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+	<!-- // 마이페이지 맵 -->
+
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script>
+		//multiple date picker적용
+		$( '.ui_multiple_date_picker' ).multipleDatePicker({
+			defaultRangeDate: '1months',
+			minDate: moment().subtract( 50, 'years' )
+		}).on( 'multiple-date-picker-change', function (e) {
+			console.log( e.type, e.date );
+		});
+	</script>
+
+	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-info.js}"></script>
+	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-goods.js}"></script>
+	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-payment.js}"></script>
+	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-ship-address.js}"></script>
+	<script ap:src="@{/handlebars-templates/compiled/my/order/fullpage-address-edit.js}"></script>
+	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-bottom.js}"></script>
+	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-change-var.js}"></script>
+	<script ap:src="@{/handlebars-templates/compiled/my/order/fullpage-cash-receipts.js}"></script>
+	<script>
+		//주소찾기
+
+	</script>
+
+	<script th:inline="javascript">
+
+		var step = 1;
+		var cancelState = 'all';
+		var ordInfo = /*[[${ord}]]*/;
+		var type = /*[[${type}]]*/;
+		var reason = /*[[${reason}]]*/;
+		var claimYn = /*[[${claimYn}]]*/;
+		var status = /*[[${status}]]*/;
+
+
+		var customOrd = null;
+
+		var checkProds = [];
+
+		$(document).ready(function() {
+			refreshOrdDetail(ordInfo);
+		});
+
+		function refreshOrdDetail(ord) {
+
+			customOrd = ord;
+
+			checkType(type);
+
+			// console.log(ord.shippingOrdOnlineProdList);
+			console.log(ord.goods);
+			// console.log(ord.goods.ordPayCompareList);
+			// console.log(ord.ordAmt);
+
+
+
+			setOrdInfo();
+			setOnlineTake();
+			setOrdShipAddress();
+			setOrdPayment();
+
+			checkboxStepType();
+		}
+
+		function setOrdInfo() {
+			var onlineCnt = 0;
+			var storeCnt = 0;
+			if (customOrd.shippingOrdOnlineProdList) {
+				onlineCnt = customOrd.shippingOrdOnlineProdList.length;
+			}
+
+			if (customOrd.storePickupOrdOnlineProdList) {
+				storeCnt = customOrd.storePickupOrdOnlineProdList.length;
+			}
+
+			var orderDetailInfo = AP.common.getTemplate('my.order.order-detail-info', {
+				ordEx : customOrd.goods,
+				onlineCnt : onlineCnt,
+				storeCnt : storeCnt,
+				type : type
+			});
+
+			$('#orderDetailInfo').empty();
+			$('#orderDetailInfo').append(orderDetailInfo);
+		}
+
+		/* 상품영역 */
+		function setOnlineTake() {
+			if (customOrd.shippingOrdOnlineProdList && customOrd.shippingOrdOnlineProdList.length > 0) {
+				var orderDetailGoods = AP.common.getTemplate('my.order.order-detail-goods', {
+					cnt : customOrd.shippingOrdOnlineProdList.length,
+					list : customOrd.shippingOrdOnlineProdList,
+					state : 'on',
+					reason : reason,
+					type : type,
+					step : step,
+					claimYn : claimYn,
+					status : status
+				});
+
+				$('.online').empty();
+				$('.online').append(orderDetailGoods);
+			}
+
+			if (customOrd.storePickupOrdOnlineProdList && customOrd.storePickupOrdOnlineProdList.length > 0) {
+				var storDetailGoods = AP.common.getTemplate('my.order.order-detail-goods', {
+					cnt : customOrd.storePickupOrdOnlineProdList.length,
+					list : customOrd.storePickupOrdOnlineProdList,
+					state : 'take',
+					reason : reason,
+					type : type,
+					step : step,
+					claimYn : claimYn
+				});
+
+				$('.takeout').empty();
+				$('.takeout').append(storDetailGoods);
+			}
+		}
+
+		function setOrdShipAddress() {
+			if (status === 'request' && step === 1) {
+				$('.panel_box.delivery').hide();
+			}
+			else if (status === 'request' && type === 'cancel') {
+				$('.panel_box.delivery').hide();
+			}
+			else {
+				if (customOrd.ordChangeShipAddress) {
+					var html = AP.common.getTemplate('my.order.order-detail-ship-address', {
+						data : customOrd.ordChangeShipAddress,
+						status : status,
+						step : step,
+						type : type
+					});
+
+					$('.panel_box.delivery').show();
+					$('.panel_box.delivery').empty();
+					$('.panel_box.delivery').append(html);
+				}
+			}
+
+		}
+
+		function setOrdPayment() {
+			if (customOrd.goods) {
+				var html = AP.common.getTemplate('my.order.order-detail-payment', {
+					data : customOrd.goods.ordHistEx,
+					step : step,
+					type : type,
+					compareList : customOrd.goods.ordPayCompareList,
+					pr : customOrd.paymentResult
+				});
+
+				$('.panel_box.payment').empty();
+				$('.panel_box.payment').append(html);
+
+				$( '.ui_tooltip' ).tooltip();
+			}
+		}
+
+		function checkboxStepType() {
+
+			if ('detail' == status) {
+				$('.check_wrap.check_only').hide();
+				$('#allCheck').hide();
+				// $('.form.sel').hide();
+			}
+			else {
+				if (step == 1) {
+					$('.check_wrap.check_only').show();
+					$('#allCheck').show();
+					$('#checkSub').text(" " + getTypeName() + '하실 상품을 선택해 주세요.');
+
+					// $('.form.sel').show();
+				}
+				else {
+					$('.check_wrap.check_only').hide();
+					// $('#allCheck').hide();
+					// $('label[for=all]').html('취소해 주세요.');
+					$('#checkMain').html(' ' + getTypeName());
+					// $('input[id=all]').hide();
+					// $('.form.sel').hide();
+				}
+			}
+		}
+
+		/* 타입 체크 및 하단 버튼 처리*/
+		function checkType(type) {
+			var orderDetailInfo = AP.common.getTemplate('my.order.order-detail-bottom', {
+				type : type,
+				status : status,
+				ordDetailStatusCode : customOrd.goods.ordDetailStatusCode,
+				cashReceiptIssueYn : customOrd.goods.cashReceiptIssueYn,
+				step : step
+			});
+
+			$('#bottomBtns').empty();
+			$('#bottomBtns').append(orderDetailInfo);
+		}
+
+		function paymentDetail(state) {
+			$('#openDiv').attr('class', state);
+		}
+
+		function changeShipAddress() {
+			var modal = AP.modal.full({
+					contents: {
+						templateKey: 'my.order.fullpage-address-edit',
+						templateModel: {
+							data: customOrd.ordChangeShipAddress
+						}
+					}
+			});
+
+			$('.ui_find_addresses').findAddresses();
+
+			$("#editShipCancel").on('click', function() {
+				modal.close();
+			});
+
+			// modal.addListener( 'modal-before-close', function (e) {
+			// 	$btn.off( 'click' );
+			// });
+		}
+
+		function allCheck(cb) {
+			// $("#all").checked();
+			// $('input:checkbox').prop('checked', cb.checked);
+			checkboxControl(cancelState, cb.checked);
+		}
+
+		function checkboxControl(type, check) {
+			var ss = type === 'all' ? '' : "[state=" + type + "]";
+			// $("input[name=goods]" + ss  + ":checkbox").prop('checked', check);
+			$("input:checkbox").prop('checked', check);
+		}
+
+		function selectOnlineProd(cb) {
+			$("input[onlineProdCode=" + cb.value + "]:checkbox").prop('checked', cb.checked);
+
+			allChecked();
+		}
+
+		function selectProd(cb) {
+			var allObj = $("input[id=" + $(cb).attr("onlineProdCode") + "]");
+			var objName = $(cb).attr("onlineProdCode");
+
+			if($(cb).prop("checked"))
+			{
+				// $("fieldset[id=" + $(cb).attr("ordHistProdNo") + "]").show();
+				var checkBoxLength = $("input[onlineProdCode="+ objName +"]").length;
+				var checkedLength = $("input[onlineProdCode="+ objName +"]:checked").length;
+
+				if( checkBoxLength == checkedLength ) {
+					allObj.prop("checked", true);
+				} else {
+					allObj.prop("checked", false);
+				}
+			}
+			else
+			{
+				// $("fieldset[id=" + $(cb).attr("ordHistProdNo") + "]").hide();
+				allObj.prop("checked", false);
+			}
+
+			allChecked();
+		}
+
+		function allChecked() {
+			// var isChecked = $("input:checkbox[name=goods]").is(":checked");
+			var length = $("input[name=goods]").length
+			var checked = $("input[name=goods]:checked").length ;
+			$("#allCheckbox").prop('checked', length === checked);
+		}
+
+		function getTypeName() {
+
+			if (step ===  1) {
+				switch (type) {
+					case 'return' :
+						return '반품';
+					case  'cancel' :
+						return '취소';
+					case 'exchange' :
+						return '교환';
+				}
+			}
+			else {
+				switch (type) {
+					case 'return' :
+						return '반품사유를 작성해 주세요.';
+					case  'cancel' :
+						return '선택한 취소 상품';
+					case 'exchange' :
+						return '교환사유를 작성해 주세요.';
+				}
+			}
+		}
+
+		function selectClaimType(claimType, cancelState) {
+
+			AP.api.getClaimReasonList({}, {
+				claimTypeCode : claimType
+			}).done(function(data) {
+
+				if (data.data) {
+
+					type = claimType;
+					status = 'request';
+					reason = data.data;
+					setOnlineTake();
+					checkType(claimType);
+
+					if (cancelState === 'on') {
+						// $('.online').hide();
+						$('.takeout').empty();
+					}
+					else if (cancelState === 'take') {
+						$('.online').empty();
+						// $('.takeout').hide();
+					}
+
+					checkboxControl('all', claimType === 'cancel');
+					checkboxStepType();
+					$('.check_wrap.check_only').show();
+					setOrdShipAddress();
+					// $('#allCheck').show();
+					// $('.form.sel').show();
+
+				}
+			}).fail(function(e) {
+				AP.modal.alert(e.errorCode);
+				//실패
+			}).always(function() {
+				//성공, 실패
+			});
+
+
+		}
+
+		function actionNext(actionState) {
+
+			if (step === 1) {
+				ordSelect();
+				// ordRequest();
+			}
+			else if (step === 2) {
+				ordRequest();
+			}
+		}
+
+		function ordSelect() {
+			var ss = cancelState === 'all' ? '' : "[state=" + cancelState + "]";
+
+			// $('.order_prd_panel').each(function () {
+			// 	var ch = $(this).find('input[name=goods]');
+			// 	if (ch.prop('checked')) {
+			//
+			// 	}
+			// });
+
+			var isEmpty = false;
+
+			$("input[prod=prod]:checkbox").each(function() {
+
+
+				if ($(this).prop('checked')) {
+					var test = $(this).attr('val');
+
+					var checkValue = JSON.parse(test);
+					var rs = $('#rs_' + $(this).attr('ordHistProdNo')).val();
+					var rst = $('#rst_' + $(this).attr('ordHistProdNo')).val();
+					if ("" == rst || null == rst) {
+						isEmpty = true;
+					}
+
+
+					checkValue.receivedClaimReasonSn = rs;
+					checkValue.foReceivedClaimReason = rst;
+					// alert(rs + " " + rst)
+					// checkValue.onlineProdCode
+					// for (var i = 0; i < reason.claimReasonExList.length; i++) {
+					// 	checkValue.claimReasonSn = reason.claimReasonExList[i].claimReasonSn;
+					// 	checkValue.customerFaultYn = reason.claimReasonExList[i].customerFaultYn;
+					// 	break;
+					// }
+
+					checkProds.push(checkValue);
+				}
+			});
+
+
+			if (checkProds.length == 0) {
+				AP.modal.alert(type == 'return' ? '반품하실 상품을 선택해 주세요.' : '교환하실 상품을 선택해 주세요.');
+				return;
+			}
+
+			if (isEmpty) {
+				AP.modal.alert(type == 'return' ? '반품사유를 입력해 주세요.' : '교환사유를 입력해 주세요.');
+				return;
+			}
+
+			if (customOrd.goods.ordDetailStatusCode === 'OrdReceivedWaiting') {
+				var prodLength = $("input[prod=prod]").length;
+				// alert(checkProds.length + " " + prodLength);
+				if (checkProds.length != prodLength) {
+					AP.modal.alert('주문접수대기 상태에서는 전체취소만 가능합니다.');
+					return;
+				}
+			}
+
+			console.log(checkProds.length);
+
+			AP.api.ordSelect({
+				ordSn : customOrd.goods.ordSn,
+				type : type
+			}, JSON.stringify(checkProds)).done(function(data) {
+
+				step = 2;
+				refreshOrdDetail(data.data);
+				$('html, body').scrollTop(0);
+
+			}).fail(function(e) {
+				AP.modal.alert(e.errorCode);
+				//실패
+			}).always(function() {
+				//성공, 실패
+			});
+
+		}
+
+		function ordRequest() {
+
+			var cd = new Object();
+			cd.ordHistProdList = checkProds;
+			cd.ordChangeShipAddress = customOrd.ordChangeShipAddress;
+			AP.api.reqOrdClaim({
+				ordSn : customOrd.goods.ordSn,
+				type : type
+			// }, JSON.stringify(customOrd.shippingOrdOnlineProdList)).done(function(data) {
+			}, JSON.stringify(cd)).done(function(data) {
+				AP.modal.alert(type == 'return' ? '반품신청이 정상적으로 접수 되었습니다.' : '교환신청이 정상적으로 접수 되었습니다.').addListener('modal-close', function (e) {
+					history.back();
+				});
+
+			}).fail(function(e) {
+				AP.modal.alert(e.errorCode);
+			}).always(function() {
+			});
+		}
+
+		function editShipAddress() {
+
+			var $form = $('#shipForm');
+			if ($form.valid()) {
+				var formData = AP.common.getFormData($form);
+				// alert(formData);
+
+				AP.api.ordChangeShipAddress({
+					ordSn : customOrd.goods.ordSn
+				}, formData).done(function(data) {
+					customOrd.ordChangeShipAddress = data.data;
+					var html = AP.common.getTemplate('my.order.order-detail-ship-address', {
+						data : customOrd.ordChangeShipAddress
+					});
+
+					$('.panel_box.delivery').empty();
+					$('.panel_box.delivery').append(html);
+					//성공
+				}).fail(function(e) {
+					AP.modal.alert(e.errorCode);
+					//실패
+				}).always(function() {
+					//성공, 실패
+				});
+			}
+		}
+
+		function changeVar(ordHistProdSn, ordHistProdNo, prodSn) {
+			console.log(prodSn);
+			AP.api.onlineProdUnitVariationProds({
+				ordHistProdSn : ordHistProdSn
+			}).done(function(data) {
+				console.log(data.data);
+				var modal = AP.modal.open({
+					templateKey: 'my.order.order-detail-change-var',
+					templateModel: { list : data.data, ordHistProdSn : ordHistProdSn, prodSn : prodSn }
+				});
+				// design select 적용
+				$( '.ui_select' ).designSelectBox();
+				$('#b_save').off('click').on('click', function (e) {
+					var prodSnVal = $('[name=prodSn]').val();
+					// alert(prodSnVal);
+					// ordChangeVar(prodSnVal, ordHistProdNo);
+					AP.api.ordChangProds({
+						ordSn : customOrd.goods.ordSn
+					}, {
+						changeProdSn : prodSnVal,
+						ordHistProdNo : ordHistProdNo
+					}).done(function(data) {
+						modal.close();
+						AP.modal.alert("상품이 변경되었습니다..").addListener('modal-close', function (e) {
+							refreshOrdDetail(data.data);
+						});
+						//성공
+					}).fail(function(e) {
+						AP.modal.alert(e.errorCode);
+						//실패
+					}).always(function() {
+						//성공, 실패
+					});
+
+				});
+				$('#b_close').off('click').on('click', function (e) {
+					modal.close();
+				});
+				// if (data) {
+				// 	var html = AP.common.getTemplate('my.order.order-detail-change-var', {
+				// 		list : data.data
+				// 	});
+				// }
+				// AP.modal.info({
+				// 	// title: '로그인',
+				// 	contents: html,
+				// 	confirmLabel: '확인',
+				// 	// cancelLabel: '취소'
+				// }).addListener( 'modal-before-close', function (e) {
+				// 	if ( e.closeType === 'confirm' ) {
+				// 		var ss = $('#changeVar').attr('prodSn');
+				// 		alert(ss);
+				// 		// AP.login.go();
+				// 	} else {
+				// 		// defer.reject();
+				// 	}
+				// });
+				//성공
+			}).fail(function(e) {
+				AP.modal.alert(e.errorCode);
+				//실패
+			}).always(function() {
+				//성공, 실패
+			});
+		}
+
+		function ordChangeVar(prodSn, ordHistProdNo) {
+			AP.api.ordChangProds({
+				ordSn : customOrd.goods.ordSn,
+				prodSn : prodSn,
+				ordHistProdNo : ordHistProdNo
+			}).done(function(data) {
+				step = 2;
+				refreshOrdDetail(data.data);
+				//성공
+			}).fail(function(e) {
+				AP.modal.alert(e.errorCode);
+				//실패
+			}).always(function() {
+				//성공, 실패
+			});
+		}
+
+		function receiptIssue() {
+
+			var memberInfo = /*[[${session.LOGIN_USER.member}]]*/;
+			console.log(memberInfo);
+
+			AP.modal.full({
+				contents: {
+					templateKey: 'my.order.fullpage-cash-receipts',
+					templateModel: {
+						member : memberInfo,
+						data : customOrd.goods,
+						repGoods :  customOrd.repGoods,
+						prodCnt : customOrd.shippingOrdOnlineProdList.length + customOrd.storePickupOrdOnlineProdList.length
+					}
+				}
+			}).addListener( 'modal-before-close', function (e) {
+				console.log( e.closeType );
+			}).addListener( 'modal-close', function (e) {
+				console.log( e.closeType );
+			});
+		}
+
+		function onBack() {
+			history.back();
+		}
+
+	</script>
+
+</th:block>
+</body>
+</html>

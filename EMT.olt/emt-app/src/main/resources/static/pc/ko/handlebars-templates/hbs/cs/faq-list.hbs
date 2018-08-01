@@ -1,0 +1,24 @@
+{{#xif this.list.length '>' 0}}
+	<div  class="ui_accordion" data-open-type="single">
+	{{#each this.list}}
+		<dl>
+	        <dt>
+	            <span class="accordion_head"><span>{{this.inquiryTypeName}}</span></span>
+	            <button type="button">{{this.inquiryText}}</button>
+	        </dt>
+	        <dd>
+	        	<div class="cont">
+	            	<p class="text">{{this.answerText}}</p>
+	            </div>
+	        </dd>
+	    </dl>
+	{{/each}}
+	</div> 
+{{else}}
+    <div class="none_data on">
+	    <div class="panel notice">
+	        <i class="ico"></i>
+	        <p class="text font_lg">검색결과가 없습니다.</p>
+	    </div>
+	</div>
+{{/xif}}

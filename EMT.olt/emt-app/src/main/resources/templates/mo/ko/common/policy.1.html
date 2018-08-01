@@ -1,0 +1,47 @@
+<html ap:decorate="~{layout/layout-title-only}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page contents -->
+            <div class="ap_contents common_policy">
+            	<!-- tab menu wrap -->
+				<div class="ui_tab">
+					<!-- tab menu -->
+					<div class="tab_menu equally">
+						<ul>
+							<li class="on"><button type="button" th:text="${etudeTerms.termsName}">에뛰드 이용약관</button></li>
+							<li><button type="button" th:text="${positionTerms.termsName}">위치기반 서비스 이용약관</button></li>
+						</ul>
+					</div>
+					<!-- tab contents wrap -->
+					<div class="tab_contents">
+						<!-- tab content -->
+						<div class="tab_cont no_padding">
+							<h3 class="sr_only">에뛰드 이용약관</h3>
+							<!-- 약관 위치 -->
+							<div class="panel">
+								<div th:if="${etudeTerms}" th:utext="${etudeTerms.termsBodyText}"></div><!-- pre태그는 순수 텍스트일경우만 해당 -->
+							</div>
+						</div>
+						<div class="tab_cont no_padding">
+							<h3 class="sr_only">위치기반 서비스 이용약관</h3>
+							<!-- 약관 위치 -->
+							<div class="panel">
+								<div th:if="${positionTerms}" th:utext="${positionTerms.termsBodyText}"></div><!-- pre태그는 순수 텍스트일경우만 해당 -->
+							</div>
+						</div>
+					</div>
+				</div>
+									
+            </div>
+            <!-- // page contents -->
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+        </th:block>
+</body>
+</html>

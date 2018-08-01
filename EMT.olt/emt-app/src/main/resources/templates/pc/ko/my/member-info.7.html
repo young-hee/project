@@ -1,0 +1,57 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- mypage sitemap -->
+            <th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+            <!-- //  mypage sitemap -->
+            
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            
+            <!-- page contents -->
+            <form method="post" action="/my/page/info/optionTermsAgrees">
+	           	<input type="hidden" name="policy[0].name" value="040">
+	           	<input type="hidden" name="policy[1].name" value="050">
+	           	<input type="hidden" name="policy[2].name" value="060">
+	            <div class="ap_contents member_info">
+	            	<ul class="list_bullet_dot">
+	            		<li>회원가입 시 선택하신 선택약관에 대해 변경하실 수 있습니다.</li>
+	            		<li>동의를 거부하셔도 서비스 이용에는 제한을 받지 않습니다.</li>
+	            	</ul>
+	            	<div class="policy_group mgt30">
+	            		<dl class="dl_cont">
+	            			<dt class="clear"><b class="h_title sub" th:text="${termsMap.get('040').termsName}">개인정보 제3자 제공 동의(선택)</b><span class="check_wrap"><input type="checkbox" name="policy[0].value" id="agree1" th:checked="${agreeMap.get('040')}"><label for="agree1">동의(선택)</label></span></dt>
+	            			<dd class="policy_wrap">
+	            				<div th:utext="${termsMap.get('040').termsBodyText}">약관 내용이 들어갑니다.</div>
+	            			</dd>
+	            		</dl>
+	            		<dl class="dl_cont">
+	            			<dt class="clear"><b class="h_title sub" th:text="${termsMap.get('040').termsName}">개인정보 제3자 제공 동의 (외부 컨텐츠 마케팅 활용)</b><span class="check_wrap"><input type="checkbox" name="policy[1].value" id="agree2" th:checked="${agreeMap.get('040')}"><label for="agree2">동의(선택)</label></span></dt>
+	            			<dd class="policy_wrap">
+	            				<div th:utext="${termsMap.get('050').termsBodyText}">약관 내용이 들어갑니다.</div>
+	            			</dd>
+	            		</dl>
+	            		<dl class="dl_cont">
+	            			<dt class="clear"><b class="h_title sub" th:text="${termsMap.get('040').termsName}">국외이전동의(선택)</b><span class="check_wrap"><input type="checkbox" name="policy[2].value" id="agree3"><label for="agree3" th:checked="${agreeMap.get('040')}">동의(선택)</label></span></dt>
+	            			<dd class="policy_wrap">
+	            				<div th:utext="${termsMap.get('060').termsBodyText}">약관 내용이 들어갑니다.</div>
+	            			</dd>
+	            		</dl>
+	            	</div>
+	                <div class="page_btns">
+					    <button type="submit" class="btn_lg_primary">저장</button>
+					</div>
+	            </div>
+            </form>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+        </th:block>
+</body>
+</html>

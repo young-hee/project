@@ -1,0 +1,75 @@
+
+<dt class="layer_title">주문상품 선택</dt>
+<dd class="layer_cont">
+ <div class="ui_multiple_date_picker">
+	 <div class="date_btn_set">
+		 <span><input type="radio" class="select_range_date" name="radio4" id="radio4_1" value="1weeks" checked><label for="radio4_1">1주일</label></span>
+		 <span><input type="radio" class="select_range_date" name="radio4" id="radio4_2" value="1months"><label for="radio4_2">1개월</label></span>
+		 <span><input type="radio" class="select_range_date" name="radio4" id="radio4_3" value="3months"><label for="radio4_3">3개월</label></span>
+		 <span><input type="radio" class="select_range_date" name="radio4" id="radio4_4" value="6months"><label for="radio4_4">6개월</label></span>
+		 <span><input type="radio" class="select_range_date" name="radio4" id="radio4_5" value="1years"><label for="radio4_5">12개월</label></span>
+	 </div>
+	 <br>
+	 <div class="input_date_group input_group ea_03">
+		 <div class="input_wrap w35p">
+			 <input type="text" name="startDt" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="" readonly>
+			 <button type="button" class="ui_date_picker_btn btn_cal"><i class="ico_date"></i><span class="sr_only">날짜 선택</span></button>
+		 </div>
+		 <span class="gap date">~</span>
+		 <div class="input_wrap w35p">
+			 <input type="text" name="endDt" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="" readonly>
+			 <button type="button" class="ui_date_picker_btn btn_cal"><i class="ico_date"></i><span class="sr_only">날짜 선택</span></button>
+		 </div>
+		 <span class="gap"></span>
+		 <div>
+			 <button class="btn_md_primary" type="button" id="b_search">검색</button>
+		 </div>
+	 </div>
+ </div>
+ <br>
+ <div>
+	<ul class="loading white">
+		<li></li>
+		<li></li>
+		<li></li>
+	</ul>
+	 <table class="ui_table_striped data_table thead_colored align_center">
+		 <caption class="sr_only">주문상품 목록</caption>
+		 <colgroup>
+			 <col style="width:50px;">
+			 <col style="width:170px;">
+			 <col>
+			 <col style="width:110px;">
+			 <col style="width:100px;">
+		 </colgroup>
+		 <thead>
+		 <tr>
+			 <th scope="col"></th>
+			 <th scope="col">주문번호</th>
+			 <th scope="col">상품명</th>
+			 <th scope="col">결제금액</th>
+			 <th scope="col">주문상태</th>
+		 </tr>
+		 </thead>
+		 <tbody id="i_body">
+			<!--start : 검색결과 없을때 -->
+			<tr>
+				<td colspan="5">
+					<div class="panel notice">
+						<i class="ico"></i>
+						<p class="text font_lg">검색결과가 없습니다.</p>
+					</div>
+				</td>
+			</tr>
+			<!-- end : 검색결과 없을때-->
+		 </tbody>
+	 </table>
+	 <br>
+	 <div id="pageNav" class="ui_paging pagination" style="display:none;"></div>
+	 <button class="layer_close" type="button">레이어 닫기</button>
+ </div>
+ <div class="page_btns">
+  <button class="btn_lg_secondary" type="button" id="b_close">닫기</button>
+  <button class="btn_lg_neutral" type="button" id="b_apply">확인</button>
+ </div>
+</dd>

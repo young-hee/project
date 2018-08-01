@@ -1,0 +1,428 @@
+<html ap:decorate="~{layout/layout-category}" th:with="_jsfile='product-list'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents prd_list color_collection"> <!-- 02-21 클래스 수정 -->
+		<!-- 02-28 소카테고리 삭제 메뉴레이어로 통합
+		<th:block ap:replace="~{fragment/product/category}"/>
+		<!--//소카테고리-->
+
+		<!--슬라이드 배너-->
+		<div class="slide prd_list_banner" data-ix-options="auto-play:true;view-length:1;">
+			<div class="ix-list-viewport">
+				<ul class="ix-list-items">
+					<li class="ix-list-item">
+						<a href="#none">
+							<img alt="" ap:src="@{/images/dummy/prd_list_banner_06.jpg}">
+						</a>
+					</li>
+					<li class="ix-list-item">
+						<a href="#none">
+							<img alt="" ap:src="@{/images/dummy/prd_list_banner_01.jpg}">
+						</a>
+					</li>
+					<li class="ix-list-item">
+						<a href="#none">
+							<img alt="" ap:src="@{/images/dummy/prd_list_banner_02.jpg}">
+						</a>
+					</li>
+					<li class="ix-list-item">
+						<a href="#none">
+							<img alt="" ap:src="@{/images/dummy/prd_list_banner_03.jpg}">
+						</a>
+					</li>
+					<li class="ix-list-item">
+						<a href="#none">
+							<img alt="" ap:src="@{/images/dummy/prd_list_banner_04.jpg}">
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="ix-controller">
+				<ul class="ix-thumbs">
+					<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+				</ul>
+			</div>
+		</div>
+		<!--//슬라이드 배너-->
+
+		<!--/* 20180423 : video 영역 삭제
+		<div class="video_wrap">
+			<button type="button" class="thumbnail"><img ap:src="@{/images/dummy/img_video.jpg}" alt=""></button>
+			<iframe class="youtube_video" width="800" height="450" src="https://www.youtube.com/embed/4uLivcdjRlc?enablejsapi=1" frameborder="0" allowfullscreen data-vendor="youtube" data-ratio="true" data-mute="false"></iframe>
+		</div>
+ 		*/-->
+
+		<!--/* 20180521 : 상품 선택 영역 삭제
+		<div class="item_sorting">
+			<div class="check_set">
+				<span><input type="radio" name="radio1" id="radio1_0" value="category0" checked><label for="radio1_0">전체</label></span>
+				<span><input type="radio" name="radio1" id="radio1_1" value="category1"><label for="radio1_1">싱글섀도우</label></span>
+				<span><input type="radio" name="radio1" id="radio1_2" value="category2"><label for="radio1_2">아이팔레트</label></span>
+				<span><input type="radio" name="radio1" id="radio1_3" value="category3"><label for="radio1_3">립스틱</label></span>
+				<span><input type="radio" name="radio1" id="radio1_4" value="category4"><label for="radio1_4">블러셔</label></span>
+			</div>
+		</div>
+		*/-->
+
+		<!--상품리스트-->
+		<div class="item_list type3">
+			<ul class="before_list">
+				<li>
+					<div class="ranking"><span>1</span></div>
+					<div class="item">
+						<!-- 상품 이미지/상태 영역-->
+						<div class="item_images">
+							<!-- 페이지 로딩 -->
+							<ul class="loading white" style="display:none">
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+							<!--/* 대표 이미지 */-->
+							<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/101001217_IM_01.png" alt=""></a>
+						</div>
+						<div class="item_info list">
+							<p class="prd_name">체리 블라썸 디어 마이 립스톡 케이스</p>
+							<div class="color">
+								<span class="thumb"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt=""></span>
+								<span class="text">#32 눈부신 벚꽃 축제</span>
+							</div>
+						</div>
+						<div class="price_area">
+							<span class="price"><span>12,600<em>원</em></span></span>
+							<span class="btns">
+									<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span
+										class="bubble">9,999</span></a>
+									<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+								</span>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="ranking"><span>2</span></div>
+					<div class="item">
+						<!-- 상품 이미지/상태 영역-->
+						<div class="item_images">
+							<!-- 페이지 로딩 -->
+							<ul class="loading white" style="display:none">
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+							<!--/* 대표 이미지 */-->
+							<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src=""
+																			  data-src="/mo/ko/images/dummy/101001217_IM_01.png"
+																			  alt=""></a>
+						</div>
+						<div class="item_info list">
+							<p class="prd_name">체리 블라썸 디어 마이 립스톡 케이스</p>
+							<div class="color">
+								<span class="thumb"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt=""></span>
+								<span class="text">#32 눈부신 벚꽃 축제</span>
+							</div>
+						</div>
+						<div class="price_area">
+							<span class="price"><span>12,600<em>원</em></span></span>
+							<span class="btns">
+									<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span
+										class="bubble">9,999</span></a>
+									<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+								</span>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="ranking"><span>3</span></div>
+					<div class="item">
+						<!-- 상품 이미지/상태 영역-->
+						<div class="item_images">
+							<!-- 페이지 로딩 -->
+							<ul class="loading white" style="display:none">
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+							<!--/* 대표 이미지 */-->
+							<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src=""
+																			  data-src="/mo/ko/images/dummy/101001217_IM_01.png"
+																			  alt=""></a>
+						</div>
+						<div class="item_info list">
+							<p class="prd_name">체리 블라썸 디어 마이 립스톡 케이스</p>
+							<div class="color">
+								<span class="thumb"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt=""></span>
+								<span class="text">#32 눈부신 벚꽃 축제</span>
+							</div>
+						</div>
+						<div class="price_area">
+							<span class="price"><span>12,600<em>원</em></span></span>
+							<span class="btns">
+								<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span
+									class="bubble">9,999</span></a>
+								<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+							</span>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="ranking"><span>4</span></div>
+					<div class="item">
+						<!-- 상품 이미지/상태 영역-->
+						<div class="item_images">
+							<!-- 페이지 로딩 -->
+							<ul class="loading white" style="display:none">
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+							<!--/* 대표 이미지 */-->
+							<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/101001217_IM_01.png" alt=""></a>
+						</div>
+						<div class="item_info list">
+							<p class="prd_name">체리 블라썸 디어 마이 립스톡 케이스</p>
+							<div class="color">
+								<span class="thumb"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt=""></span>
+								<span class="text">#32 눈부신 벚꽃 축제</span>
+							</div>
+						</div>
+						<div class="price_area">
+							<span class="price"><span>12,600<em>원</em></span></span>
+							<span class="btns">
+								<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span
+									class="bubble">9,999</span></a>
+								<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+							</span>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="ranking"><span>5</span></div>
+					<div class="item">
+						<!-- 상품 이미지/상태 영역-->
+						<div class="item_images">
+							<!-- 페이지 로딩 -->
+							<ul class="loading white" style="display:none">
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+							<!--/* 대표 이미지 */-->
+							<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src=""
+																			  data-src="/mo/ko/images/dummy/101001217_IM_01.png"
+																			  alt=""></a>
+						</div>
+						<div class="item_info list">
+							<p class="prd_name">체리 블라썸 디어 마이 립스톡 케이스</p>
+							<div class="color">
+								<span class="thumb"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt=""></span>
+								<span class="text">#32 눈부신 벚꽃 축제</span>
+							</div>
+						</div>
+						<div class="price_area">
+							<span class="price"><span>12,600<em>원</em></span></span>
+							<span class="btns">
+								<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span
+									class="bubble">9,999</span></a>
+								<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+							</span>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="ranking"><span>6</span></div>
+					<div class="item">
+						<!-- 상품 이미지/상태 영역-->
+						<div class="item_images">
+							<!-- 페이지 로딩 -->
+							<ul class="loading white" style="display:none">
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+							<!--/* 대표 이미지 */-->
+							<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src=""
+																			  data-src="/mo/ko/images/dummy/101001217_IM_01.png"
+																			  alt=""></a>
+						</div>
+						<div class="item_info list">
+							<p class="prd_name">체리 블라썸 디어 마이 립스톡 케이스</p>
+							<div class="color">
+								<span class="thumb"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt=""></span>
+								<span class="text">#32 눈부신 벚꽃 축제</span>
+							</div>
+							<div class="price_area">
+								<span class="price"><span>12,600<em>원</em></span></span>
+								<span class="btns">
+									<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span
+										class="bubble">9,999</span></a>
+									<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="ranking"><span>7</span></div>
+					<div class="item">
+						<!-- 상품 이미지/상태 영역-->
+						<div class="item_images">
+							<!-- 페이지 로딩 -->
+							<ul class="loading white" style="display:none">
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+							<!--/* 대표 이미지 */-->
+							<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src=""
+																			  data-src="/mo/ko/images/dummy/101001217_IM_01.png"
+																			  alt=""></a>
+						</div>
+						<div class="item_info list">
+							<p class="prd_name">체리 블라썸 디어 마이 립스톡 케이스</p>
+							<div class="color">
+								<span class="thumb"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt=""></span>
+								<span class="text">#32 눈부신 벚꽃 축제</span>
+							</div>
+							<div class="price_area">
+								<span class="price"><span>12,600<em>원</em></span></span>
+								<span class="btns">
+									<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span
+										class="bubble">9,999</span></a>
+									<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="ranking"><span>8</span></div>
+					<div class="item">
+						<!-- 상품 이미지/상태 영역-->
+						<div class="item_images">
+							<!-- 페이지 로딩 -->
+							<ul class="loading white" style="display:none">
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+							<!--/* 대표 이미지 */-->
+							<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src=""
+																			  data-src="/mo/ko/images/dummy/101001217_IM_01.png"
+																			  alt=""></a>
+						</div>
+						<div class="item_info list">
+							<p class="prd_name">체리 블라썸 디어 마이 립스톡 케이스</p>
+							<div class="color">
+								<span class="thumb"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt=""></span>
+								<span class="text">#32 눈부신 벚꽃 축제</span>
+							</div>
+							<div class="price_area">
+								<span class="price"><span>12,600<em>원</em></span></span>
+								<span class="btns">
+									<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span
+										class="bubble">9,999</span></a>
+									<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="ranking"><span>9</span></div>
+					<div class="item">
+						<!-- 상품 이미지/상태 영역-->
+						<div class="item_images">
+							<!-- 페이지 로딩 -->
+							<ul class="loading white" style="display:none">
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+							<!--/* 대표 이미지 */-->
+							<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src=""
+																			  data-src="/mo/ko/images/dummy/101001217_IM_01.png"
+																			  alt=""></a>
+						</div>
+						<div class="item_info list">
+							<p class="prd_name">체리 블라썸 디어 마이 립스톡 케이스</p>
+							<div class="color">
+								<span class="thumb"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt=""></span>
+								<span class="text">#32 눈부신 벚꽃 축제</span>
+							</div>
+							<div class="price_area">
+								<span class="price"><span>12,600<em>원</em></span></span>
+								<span class="btns">
+									<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span
+										class="bubble">9,999</span></a>
+									<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="ranking"><span>10</span></div>
+					<div class="item">
+						<!-- 상품 이미지/상태 영역-->
+						<div class="item_images">
+							<!-- 페이지 로딩 -->
+							<ul class="loading white" style="display:none">
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+							<!--/* 대표 이미지 */-->
+							<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src=""
+																			  data-src="/mo/ko/images/dummy/101001217_IM_01.png"
+																			  alt=""></a>
+						</div>
+						<div class="item_info list">
+							<p class="prd_name">체리 블라썸 디어 마이 립스톡 케이스</p>
+							<div class="color">
+								<span class="thumb"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt=""></span>
+								<span class="text">#32 눈부신 벚꽃 축제</span>
+							</div>
+							<div class="price_area">
+								<span class="price"><span>12,600<em>원</em></span></span>
+								<span class="btns">
+									<a href="#" class="btn_review"><span class="sr_only">구매후기</span><span
+										class="bubble">9,999</span></a>
+									<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<!--//상품리스트-->
+		<ul class="loading" style="display: none">
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	<!-- // page contents -->
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script>
+		// test
+		AP.DISPLAY_MENU_ID = 'color_collection_shop';
+		// test
+
+		// AP.display.init({
+		// 	key: { displayMenuId: AP.DISPLAY_MENU_ID }
+		// });
+	</script>
+</th:block>
+
+</body>
+</html>

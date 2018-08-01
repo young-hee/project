@@ -1,0 +1,43 @@
+{{#each this.storeEvalExList}}
+<dl>
+	<dt>
+		<a href="#none" data-store-eval-sn="{{ this.storeEvalSn }}">
+			<span class="clear">
+				<span class="ui_rating small">
+					{{#xif this.topStoreEvalYn '==' 'Y'}}
+						<strong class="review_best">BEST</strong>
+					{{/xif}}
+				</span>
+				<span class="summary">
+					<span>{{ this.memberId }}</span>
+					<span>{{ dateFormat this.createdDt }}</span>
+				</span>
+			</span>
+			<span class="etc_select">
+				{{#each this.storeEvalReason}}
+				<span>{{ this }}</span>
+				{{/each}}
+			</span>
+			<span class="title mgt15">
+				<small>{{ this.storeName }}</small>
+				<b>{{ this.storeEvalTitle }}</b>
+			</span>
+		</a>
+	</dt>
+	<dd>
+		<p class="text" id="bodyText{{ this.storeEvalSn }}">{{ this.storeEvalBodyText }}</p>
+	</dd>
+	{{#xif this.storeEvalImgUrlList.length '>' 0}}
+	<dd class="thumbnail">
+		{{#each this.storeEvalImgUrlList}}
+			{{#xif @index '<' ../imageViewLength }}
+				<span><img alt="" src="{{ this }}"></span>
+			{{/xif}}
+		{{/each}}
+		{{#xif this.storeEvalImgMore '>' 0}}
+			<span><span>+ {{ this.storeEvalImgMore }}</span></span>
+		{{/xif}}
+	</dd>
+	{{/xif}}
+</dl>
+{{/each}}

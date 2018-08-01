@@ -1,0 +1,55 @@
+{{#each this.list}}
+<li class="ix-list-item">
+	<div class="item">
+		<div class="item_images">
+			<!--/* 대표 이미지 */-->
+			<a href="{{ productDetailPath this.onlineProdSn }}" class="lazy_load_wrap first_img">
+				<img class="lazy_load" src="" data-src="{{ absolutePath this.onlineProdImages.[0].imgUrl }}" alt="">
+			</a>
+		</div>
+		<div class="info_box">
+			<!--/* flag */-->
+			<div class="flag_set">
+				{{#each this.flags}}
+					{{#xif this.prodFlagCode '==' 'icon_reco_new'}}		<span class="new">신상품</span>			{{/xif}}
+					{{#xif this.prodFlagCode '==' 'icon_reco_best_w'}}		<span class="best">베스트</span>		{{/xif}}
+					{{#xif this.prodFlagCode '==' 'icon_pr_prod'}}		<span class="event">이벤트</span>		{{/xif}}
+					{{#xif this.prodFlagCode '==' 'icon_reco_md'}}		<span class="md">MD추천</span>			{{/xif}}
+					{{#xif this.prodFlagCode '==' 'icon_reco_online'}}	<span class="online">온라인전용</span>	{{/xif}}
+				{{/each}}
+			</div>
+			<!--/* 상품명 */-->
+			<div class="title_area">
+				<h3 class="h_title">{{ this.onlineProdName }}</h3>
+			</div>
+			<!--/* color 옵션 */-->
+			<!-- 상품 옵션 영역 7개 이상 -->
+			{{#if this.productCount }}
+				{{#xif this.productCount '>' 1 }}
+					<div class="item_option">
+						<p class="color_name">{{ this.productCount }} colors</p>
+					</div>
+				{{/xif}}
+			{{/if}}
+
+			<!--/* 가격,장바구니 */-->
+			<div class="price_area">
+				{{#with (calc this.onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' this.onlineProdPriceSummary.maxMemberLevelDiscountRate '+' this.onlineProdPriceSummary.maxOnlineMemberDiscountRate) as |maxRate|}}
+					{{#xif maxRate '!=' 0}}
+					<div class="discount">
+						<strong class="to">
+							{{ maxRate }}<em>%</em>
+						</strong>
+					</div>
+					{{/xif}}
+					<div class="price">
+						<strong>
+							{{ numberFormat ../onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>원</em>
+						</strong>
+					</div>
+				{{/with}}
+			</div>
+		</div>
+	</div>
+</li>
+{{/each}}

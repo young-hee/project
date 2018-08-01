@@ -1,0 +1,26 @@
+{{!--
+	전시 : 구매버튼이 있는 상세 사은품목록 (진주알스토어)
+--}}
+{{#each this.list}}
+	<li class="gift" data-prod-sn="{{ this.prodSn }}">
+		<div class="item">
+			<div class="item_images">
+				<!-- /* 대표 이미지 */ -->
+				<img class="lazy_load" src="" data-src="{{ this.prodImages.[0].imgUrl }}" alt="">
+			</div>
+			<div class="item_info_freebie list">
+				<div class="prd_name">
+					<div>
+						<p class="name">&lt;사은품&gt; {{ this.prodName }}</p>
+					</div>
+				</div>
+			</div>
+			<div class="price_area">
+				<span class="price">
+					<span>{{ numberFormat this.exchActivityPoint}}<em> 알</em></span>
+				</span>
+			</div>
+		</div>
+		<button class="btn_order" type="button" data-prod-sn="{{ this.prodSn }}">담기</button>
+	</li>
+{{/each}}

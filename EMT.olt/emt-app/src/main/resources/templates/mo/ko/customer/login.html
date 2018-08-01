@@ -1,0 +1,333 @@
+<html ap:decorate="~{layout/layout-title-only}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+  <div class="panel login">
+    <h2 class="h_title page">로그인</h2>
+    <p class="text font_md">로그인 후 더 다양한 서비스를 이용해보세요.</p>
+    <hr class="div m30"/>
+    <div class="ui_toggle_contents keyboard_view">
+      <button type="button" class="toggle_btn view">한글자판 열기</button>
+      <div class="keyboard_img">
+        <img ap:src="@{/images/member/bg_keyboard.png}" alt="">
+      </div>
+    </div>
+    <fieldset class="form">
+      <form>
+        <legend class="sr_only">로그인 정보 입력</legend>
+        <div class="login_area">
+          <div class="input_group">
+            <div ap:replace="~{customer/fragment/member :: id}"></div>
+          </div>
+          <div class="input_group">
+            <div ap:replace="~{customer/fragment/member :: password}"></div>
+          </div>
+          <button type="submit" id="login" class="btn_lg_primary w100p">로그인</button>
+          <div class="clear">
+            <div class="check_wrap"><input type="checkbox" id="auto_login"><label for="auto_login">자동 로그인</label></div>
+            <div>
+              <a href="/customer/find/find-id">아이디 찾기</a><a href="/customer/find/find-pwd">비밀번호 찾기</a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </fieldset>
+    <dl class="dl_cont sns">
+      <dt class="h_title cont"><strong>간편로그인</strong></dt>
+      <dd>
+        <br>
+        <ul>
+          <li><a target="_blank"
+                 onclick="window.open(this.href, 'naverloginpop', 'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550'); return false"
+                 th:href="'https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=xbLexjx52A_pQD0sZgIP&state=stateokgoodgogogo&redirect_uri=' + ${url} + '/navercallback'"
+                 id="naver_id_login">네이버</a></li>
+          <li><a href="javascript:;" onclick="facebookLogin()">페이스북</a></li>
+          <li><a
+              onclick="window.open(this.href, 'naverloginpop', 'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550'); return false"
+              th:href="'https://kauth.kakao.com/oauth/authorize?client_id=ce4dd4a15adfd391c88f730c049f12c4&response_type=code&redirect_uri=' + ${url} + '/kakaocallback'">카카오톡</a>
+          </li>
+        </ul>
+      </dd>
+    </dl>
+    <dl class="dl_cont">
+      <dt class="h_title cont"><strong>아직도 회원이 아니세요?</strong></dt>
+      <dd>
+        <p class="text">가입 한번으로 많은 혜택을 누리세요.</p>
+        <div>
+          <a href="/customer/signup" class="btn_lg_bordered w100p">회원가입</a>
+          <a href="/guestOrder" class="btn_lg_bordered w100p">비회원 주문조회</a>
+        </div>
+      </dd>
+    </dl>
+  </div>
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+  <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+  <script type="application/javascript">
+
+
+	$('#login').on('click', function() {
+	    loginProcess();
+	    return false;
+	});
+
+	var returnUrl = '[[${returnUrl}]]';
+	if (returnUrl == '') returnUrl = "/main";
+
+	function loginProcess() {
+	    var $form = $('form');
+	    if ($form.valid()) {
+	        if (!$("[name=chcsNo]").val() || !$("[name=userPwdEc]").val()) {
+	            return;
+	        }
+
+	        $("#login").attr("disabled", "disabled");
+	        AP.api.doLogin({}, AP.common.getFormData($form)).done(function(data) {
+
+                if (data.sleep == 'Y') {
+                    var contents = new Object();
+                    contents.title = "[[#{common.alert}]]";
+                    contents.contents = data.message;
+                    contents.confirmLabel = data.message;
+                    AP.modal.info(contents).addListener('modal-close', function(e) {
+                        location.href = "/customer/signup";
+                    });
+
+                } else if (data.old == 'Y') {
+                    changeInfoModal();
+                } else if (data.changePw == 'Y') {
+                    var contents = new Object();
+                    contents.title = "[[#{common.alert}]]";
+                    contents.contents = data.message;
+                    contents.cancelLabel = "다음에 변경";
+                    contents.confirmLabel = "비밀번호 변경";
+
+                    AP.modal.info(contents).addListener('modal-close', function(e) {
+                        if (e.closeType == 'close' || e.closeType == 'cancel') {
+                            location.href = returnUrl;
+                        } else if (e.closeType == 'confirm') {
+	                    	location.href = '/my/page/info/changeUserInfo';
+                        }
+                        console.log(e.closeType); //close, confirm, cancel
+                    });
+                } else {
+                    location.href = returnUrl;
+
+                }
+
+	        }).fail(function(xhr, textStatus, errorThrown) {
+	            if (xhr.errorCode == 0) {
+	                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	            } else if (xhr.errorCode == 'EAPI001') {
+	                AP.modal.alert("아이디 또는 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+	            } else if (xhr.errorCode == 'ESAL003') {
+
+	                $.get("/customer/popup?pageId=3&userId1=5" , function(data) {
+
+	                    var contents = new Object();
+	                    contents.contents = data;
+	                    var modal = AP.modal.info(contents);
+	                    var $modalEl = modal.getElement(); //jquery object
+
+	                    $modalEl.find(".btn_md_primary").click(function() {
+	                    	modal.close();
+	                    });
+	                });
+	                AP.modal.alert("비밀번호 입력 오류로, 회원이 잠겨 있습니다.");
+	            } else {
+	                AP.modal.alert(xhr.errorMessage)
+	            }
+	        }).always(function() {
+	            //성공, 실패
+	            $("#login").removeAttr("disabled");
+	        });
+	    }
+	}
+
+	//전환가입 안내
+	function changeInfoModal() {
+	    var contents = new Object();
+	    contents.title = "고객님! 아모레퍼시픽<br>통합 멤버십으로 전환하세요!";
+	    contents.contents = "<p class=\"text_center\">아모레퍼시픽 통합멤버십 회원이 되시면,</p>\n" +
+	        "                            <br>\n" +
+	        "                            <ul class=\"list_bullet\">\n" +
+	        "                            \t<li><span>1)</span> 에뛰드하우스 및 자회사 등 아모레퍼시픽계열<br>모든 쇼핑몰 한 아이디로 간편하게 이용할 수 있습니다.</li>\n" +
+	        "                            \t<li><span>2)</span> 하나의 아이디로 편리하게, 통합멤버십(뷰티포인트) 적립 및 다양한 서비스와 혜택을 누리실 수 있습니다.</li>\n" +
+	        "                            </ul>";
+	    contents.cancelLabel = "취소";
+	    contents.confirmLabel = "[[#{customer.login.changeIntegrated}]]";
+
+	    AP.modal.info(contents).addListener('modal-close', function(e) {
+	        if (e.closeType == 'close' || e.closeType == 'cancel') {} else if (e.closeType == 'confirm') {
+	            location.href = "/conversionSignup";
+	        }
+	    });
+	}
+
+	//카카오으로 로그인
+	function snsKakao() {
+	    Kakao.Auth.login({
+	        persistRefreshToken: true,
+	        success: function(authObj) {
+	            Kakao.Auth.setAccessToken(authObj.access_token);
+
+	            Kakao.API.request({
+	                url: '/v1/user/me',
+	                success: function(res) {
+
+	                    var indexed_array = {};
+	                    indexed_array['snsName'] = 'Kakao';
+	                    indexed_array['id'] = res.id;
+	                    $.ajax({
+	                        type: "POST",
+	                        url: "/login/snsloginProcess",
+	                        data: indexed_array,
+	                        success: function(data) {
+	                            if (data.state == 'success') {
+	                                if (data.isLinked) {
+	                                    window.location.href = returnUrl;
+	                                } else {
+	                                    location.href = "/login/snsLinkPage";
+	                                    window.close();
+	                                }
+	                            }
+	                            //성공
+	                        },
+	                        dataType: "json"
+	                    });
+	                },
+	                fail: function(error) {
+	                    alert(JSON.stringify(error));
+	                }
+	            });
+
+
+	        },
+	        fail: function(err) {
+	            console.log(JSON.stringify(err));
+	            alert(JSON.stringify(err));
+	        }
+	    });
+	}
+
+	//페이스북으로 로그인
+	window.fbAsyncInit = function() {
+	    FB.init({
+	        appId: '[[${@environment.getProperty('facebook.key')}]]',
+	        cookie: true,
+	        xfbml: true,
+	        version: 'v2.11'
+	    });
+
+	    FB.AppEvents.logPageView();
+
+	};
+
+	(function(d, s, id) {
+	    var js, fjs = d.getElementsByTagName(s)[0];
+	    if (d.getElementById(id)) {
+	        return;
+	    }
+	    js = d.createElement(s);
+	    js.id = id;
+	    js.src = "https://connect.facebook.net/en_US/sdk.js";
+	    fjs.parentNode.insertBefore(js, fjs);
+
+	}(document, 'script', 'facebook-jssdk'));
+
+	function facebookLogin() {
+
+	    FB.login(function(response) {
+	        //statusChangeCallback(response);   -- FB 로그인 취소시, 무한루프에 빠지게됨
+	        if (response.status === 'connected') {
+	            // 페이스북과 앱에 같이 로그인되어 있다.
+	            $("#accessToken").val(response.authResponse.accessToken);
+	            fncFBCallback(response.authResponse.accessToken);
+	        } else if (response.status === 'not_authorized') {
+	            // 페이스북에는 로그인 되어있으나, 앱에는 로그인 되어있지 않다.
+	            AP.modal.alert('Facebook 계정 설정에서 해당 어플리케이션이 인가되지 않았습니다.\n다시 로그인 버튼을 클릭후, 어플리케이션 사용을 승인하여 주십시오.');
+	        } else {
+	            // 페이스북에 로그인이 되어있지 않아서, 앱에 로그인 되어있는지 불명확하다.
+	            AP.modal.alert('Facebook 에 로그인되지 않았습니다.');
+	        }
+	    });
+	}
+
+	function fncFBCallback(token) {
+	    FB.api('/me', {
+	        fields: 'email, birthday, name'
+	    }, function(response) {
+
+	        var indexed_array = {};
+	        indexed_array['snsName'] = 'Facebook';
+	        indexed_array['id'] = response.id;
+	        indexed_array['accessToken'] = token;
+
+	        $.ajax({
+	            type: "POST",
+	            url: "/login/snsloginProcess",
+	            data: indexed_array,
+	            success: function(data) {
+                    if (data.isLinked) {
+                    	nbSuccess(data);
+                    } else {
+                        location.href = "/login/snsLinkPage";
+                    }
+	                //성공
+	            },
+	            dataType: "json"
+	        });
+	    });
+	}
+
+	var naver_id_login = new naver_id_login("[[${@environment.getProperty('naver.key')}]]", "[[${@environment.getProperty('naver.callback')}]]");
+
+	function nbSuccess(data) {
+
+        if (data.sleep == 'Y') {
+            var contents = new Object();
+            contents.title = "[[#{common.alert}]]";
+            contents.contents = data.message;
+            contents.confirmLabel = "[[#{customer.login.regist}]]";
+            AP.modal.info(contents).addListener('modal-close', function(e) {
+                location.href = "/customer/signup";
+            });
+
+        } else if (data.old == 'Y') {
+            changeInfoModal();
+        } else if (data.changePw == 'Y') {
+            var contents = new Object();
+            contents.title = "[[#{common.alert}]]";
+            contents.contents = "고객님!<br>" +
+                "비밀번호를 2개월동안 변경하지 않으셨습니다.<br><br>" +
+                "개인정보보호를 위해<br>비밀번호를 변경해주세요.";
+            contents.cancelLabel = "다음에 변경";
+            contents.confirmLabel = "비밀번호 변경";
+
+            AP.modal.info(contents).addListener('modal-close', function(e) {
+                if (e.closeType == 'close' || e.closeType == 'cancel') {
+                    location.href = returnUrl;
+                } else if (e.closeType == 'confirm') {
+                    changePassword();
+                }
+                console.log(e.closeType); //close, confirm, cancel
+            });
+        } else {
+            location.href = returnUrl;
+        }
+	}
+
+	function doSnsLogin() {
+	    window.location.href = "/login/snsLinkPage?returl=" + returnUrl;
+	}
+		
+		
+		
+	</script>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            
+            <!-- page contents -->
+            <div class="ap_contents find_id_pwd">
+                <div class="panel gray">
+                	<div class="panel_cont certification">
+                        <h3 class="form_title">휴대폰 인증</h3>
+                        <form class="validate">
+                        <fieldset class="form">
+                            <legend class="sr_only">휴대폰 인증 정보 입력</legend>
+                            <div class="ui_table">
+								<div ap:replace="~{customer/fragment/member :: custNm}"></div>
+								<div ap:replace="~{customer/fragment/member :: frclCd}"></div>
+								<div ap:replace="~{customer/fragment/member :: psnDtbr}"></div>
+								<div ap:replace="~{customer/fragment/member :: sxclCd}"></div>
+								<div ap:replace="~{customer/fragment/member :: cellNumPhoneCorpWithBtn}"></div>
+								<div ap:replace="~{customer/fragment/member :: smsNumWithBtn}"></div>
+								<div ap:replace="~{customer/fragment/member :: captcha}"></div>
+                            </div>
+                        </fieldset>
+                        </form>
+                    </div>
+                </div>
+                <div class="panel_footer">
+                    <ul class="list_bullet_dot">
+                        <li>휴대폰을 이용한 본인인증 방법은 무료이며 한국모바일인증에서 제공 합니다.</li>
+                        <li>본인 확인 5회 실패 시 당일 휴대폰 인증이 제한합니다.</li>
+                    </ul>
+                    <div class="form_btns">
+                        <a href="#none" onclick="window.history.back()" class="btn_lg_secondary">취소</a>
+                        <a href="#none" id="send" class="btn_lg_primary">확인</a>
+                    </div>
+                </div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+			<script type="application/javascript">
+			
+			var t = new AP.common.timeCountDown(3),
+		    certTimeCnt = 0,
+		    extTimeCnt = 0;
+
+		//"인증 받기"버튼
+		$('#certBtn').on('click', function(e) {
+		    $(this).attr("disabled", "disabled");
+		    phoneCertProcess();
+		});
+
+		//"재인증"버튼
+		$('#reCertBtn').on('click', function(e) {
+		    $(this).attr("disabled", "disabled");
+		    extTimeCnt = 0;
+		    phoneCertProcess();
+		});
+
+		//"시간 연장"버튼
+		$('#extTimeBtn').on('click', function(e) {
+		    if (certTimeCnt == 0) {
+		        AP.modal.alert("인증 먼저 받으세요.");
+		    } else {
+		        if (extTimeCnt < def_TimeCnt) {
+		            if (!t.isRunning()) {
+		                AP.modal.alert("입력시간 초과했습니다. 재인증하세요.");
+		            } else {
+		                //3 minutes timer
+		                if (t.isRunning()) {
+		                    t.stop();
+		                }
+		                t.start();
+		                extTimeCnt++;
+		            }
+		        } else {
+		            AP.modal.alert("시간연장은 3회만 가능합니다.");
+		        }
+
+		    }
+		});
+
+		function phoneCertProcess() {
+		    var $form = $('form.validate');
+			$form.validate().settings.ignore = "";
+			var cObj = $('input[name=country]:checked'),
+			    sObj = $('input[name=gender]:checked');
+			if (cObj.length > 0) {
+			    if ("local" == cObj.get(0).id) {
+			        $('input[name=frclCd]').val("K");
+			    } else {
+			        $('input[name=frclCd]').val("F");
+			    }
+			}
+			if (sObj.length > 0) {
+			    if ("female" == sObj.get(0).id) {
+			        $('input[name=sxclCd]').val("F");
+			    } else {
+			        $('input[name=sxclCd]').val("M");
+			    }
+			}
+		    $form.validate().settings.ignore = "[name=smsNum], [name=captcha], [name=captchaKey]";
+		    if ($form.valid()) {
+
+		        AP.api.custSelfOnline({}, AP.common.getFormData($form)).done(function(data) {
+		            //성공
+		            if (data) {
+
+	                    AP.modal.alert("인증번호가 전송되었습니다.").addListener('modal-close', function(e) {
+	                        $('[name=smsNum]').focus();
+	                    });
+	                    $('#certBtn').hide();
+	                    $('#reCertBtn').show();
+
+	                    //3 minutes timer
+	                    if (t.isRunning()) {
+	                        t.stop();
+	                    }
+	                    t.start();
+
+	                    certTimeCnt++;
+
+		            }
+		        }).fail(function(xhr, textStatus, errorThrown) {
+		            if (xhr.errorCode == 0) {
+		                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+		            } else if (xhr.errorCode == 'EAPI001') {
+		                var contents = new Object();
+		                contents.title = "인증실패";
+		                contents.contents = "인증요청에 실패하였습니다. 입력 정보를 다시 한 번 확인해주세요.";
+		                contents.confirmLabel = "확인";
+		                AP.modal.info(contents).addListener('modal-close', function(e) {});
+		            } else {
+		                AP.modal.alert(xhr.errorMessage)
+		            }
+		        }).always(function() {
+		            //성공, 실패
+		            $("#certBtn").removeAttr("disabled");
+		            $("#reCertBtn").removeAttr("disabled");
+		        });
+
+		    } else {
+		        $("#certBtn").removeAttr("disabled");
+		        $("#reCertBtn").removeAttr("disabled");
+		    }
+		    return false;
+		}
+
+
+
+		$('#send').click(function() {
+		    if (certTimeCnt > 0) {
+		        doExecute();
+		    } else {
+		        AP.modal.alert("인증 먼저 받으세요.");
+		    }
+		});
+
+		function doExecute() {
+			var $form = $('form.validate');
+			$form.validate().settings.ignore = "";
+			var cObj = $('input[name=country]:checked'),
+			    sObj = $('input[name=gender]:checked');
+			if (cObj.length > 0) {
+			    if ("local" == cObj.get(0).id) {
+			        $('input[name=frclCd]').val("K");
+			    } else {
+			        $('input[name=frclCd]').val("F");
+			    }
+			}
+			if (sObj.length > 0) {
+			    if ("female" == sObj.get(0).id) {
+			        $('input[name=sxclCd]').val("F");
+			    } else {
+			        $('input[name=sxclCd]').val("M");
+			    }
+			}
+		    $form.validate().settings.ignore = "";
+		    if ($form.valid()) {
+
+		        if (!t.isRunning()) {
+		            AP.modal.alert("입력시간 초과했습니다. 재인증하세요.");
+		        } else {
+		            $('#send').attr("disabled", "disabled");
+		            AP.api.authorizationPhoneNumber({}, AP.common.getFormData($form)).done(function(data) {
+		                //성공
+		                if (data.id == null) {
+		                    var contents = new Object();
+		                    contents.title = "알림";
+		                    contents.contents = '고객님께선 회원가입이 안 돼있어<br> 계정이 존재하지 않습니다.<br> 계정을 만드시려면 아래 버튼을 눌러 주세요.';
+		                    contents.confirmLabel = "회원가입";
+		                    AP.modal.info(contents).addListener('modal-close', function(e) {
+		                        if (e.closeType == 'confirm')
+		                            location.href = "/customer/signup";
+		                    });
+		                } else {
+		                    AP.modal.alert("본인인증이 완료되었습니다.").addListener('modal-close', function(e) {
+
+		                        var contents = new Object();
+		                        contents.title = "아이디 확인";
+		                        contents.contents = data.message;
+		                        contents.confirmLabel = "확인";
+		                        AP.modal.info(contents).addListener('modal-close', function(e) {
+		                            if (e.closeType == 'confirm')
+		                                location.href = "/login";
+		                        });
+		                    });
+
+		                }
+
+		            }).fail(function(xhr, textStatus, errorThrown) {
+		                //실패
+
+		                if (xhr.errorCode == 0) {
+		                    AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+		                } else if (xhr.errorCode == 'EAPI001') {
+		                    var contents = new Object();
+		                    contents.title = "인증실패";
+		                    contents.contents = data.message;
+		                    contents.confirmLabel = "확인";
+		                    AP.modal.info(contents).addListener('modal-close', function(e) {});
+		                } else if (xhr.errorCode == 'nonRegist') {
+		                    var contents = new Object();
+		                    contents.title = "알림";
+		                    contents.contents = '고객님께선 회원가입이 안 돼있어<br> 계정이 존재하지 않습니다.<br> 계정을 만드시려면 아래 버튼을 눌러 주세요.';
+		                    contents.confirmLabel = "회원가입";
+		                    AP.modal.info(contents).addListener('modal-close', function(e) {
+		                        if (e.closeType == 'close' || e.closeType == 'cancel') {
+		                            location.href = "/main";
+		                        } else {
+		                            location.href = "/customer/signup";
+		                        }
+		                    });
+		                } else {
+		                    AP.modal.alert(xhr.errorMessage)
+		                }
+		            }).always(function() {
+		                //성공, 실패
+		                $("#send").removeAttr("disabled");
+		            });
+
+		        }
+		    }
+		}
+			</script>
+        </th:block>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+<head th:remove="tag">
+	<script th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}">
+		if (pageInfo === undefined) {
+		    var pageInfo = {};
+		    pageInfo.WARNING_TIME = 60000 * 19;
+		}
+		$(function() {
+		
+		    $(document).ready(function() {
+		        pageInfo.warning = setTimeout(warningEndOfSession, pageInfo.WARNING_TIME);
+		    })
+		
+		    function warningEndOfSession() {
+		        var warningTime = new Date();
+		
+		
+		        var r = confirm("- 개인정보 보호를 위하여, 로그인 후 20분 동안 서비스 이용이 없을경우 자동으로 로그아웃 처리됩니다.\n" + "- 로그인 시간을 연장하시려면, '확인' 버튼을 클릭하세요.\n" + "- '취소' 버튼을 클릭하면, 로그아웃됩니다.");
+		        if (r == true) {
+		            var clickTime = new Date();
+		            if (clickTime.getTime() - warningTime.getTime() > 60000) {
+		                endOfSession();
+		                return false;
+		            }
+		            if (pageInfo.warning != undefined) {
+		                clearTimeout(pageInfo.warning);
+		            }
+		            pageInfo.warning = setTimeout(warningEndOfSession, pageInfo.WARNING_TIME);
+		        } else {
+		            logout(true);
+		        }
+		    }
+		
+		    function endOfSession() {
+		        alert("- 로그인 세션이 이미 종료되어, 자동으로 로그아웃 되었습니다.\n" +
+		            "- 서비스를 다시 이용하시려면, '로그인' 해주시길 바랍니다.");
+		        logout(true);
+		    }
+		
+		    $(document).keyup(function(evt) {
+		        if (pageInfo.warning != undefined) {
+		            clearTimeout(pageInfo.warning);
+		        }
+		        pageInfo.warning = setTimeout(warningEndOfSession, pageInfo.WARNING_TIME);
+		    });
+		});
+		
+		function logout(flag) {
+		
+		    $.get("/api/logout", function(data) {
+		        if (flag)
+		            location.reload();
+		    });
+		}
+	         
+	         
+	
+	     /* $.get("/customer/popup?pageId=7" , function(data) {
+	
+	              var contents = new Object();
+	              contents.contents = data;
+	              var modal = AP.modal.info(contents);
+	              modal.addListener('modal-close', function(e) {
+	              	logout(true);
+	        });
+	              var $modalEl = modal.getElement(); //jquery object
+	
+	              $modalEl.find(".btn_md_primary").click(function() {
+	                  var clickTime = new Date();
+	                  if (clickTime.getTime() - warningTime.getTime() > 60000) {
+	                      endOfSession();
+	                      return false;
+	                  }
+	                  if (pageInfo.warning != undefined) {
+	                      clearTimeout(pageInfo.warning);
+	                      clearTimeout(logoutJob);
+	                  }
+	                  pageInfo.warning = setTimeout(warningEndOfSession, pageInfo.WARNING_TIME);
+	              });
+	
+	              $modalEl.find(".btn_md_bordered").click(function() {
+	              	logout(true);
+	              });
+	          });
+	     
+	     */
+	</script>
+	<script>
+
+		function post_goto(url, parm, target) {
+			  var f = document.createElement('form');
+	
+			  var objs, value;
+			  for (var key in parm) {
+			    value = parm[key];
+			    objs = document.createElement('input');
+			    objs.setAttribute('type', 'hidden');
+			    objs.setAttribute('name', key);
+			    objs.setAttribute('value', value);
+			    f.appendChild(objs);
+			  }
+			        
+			  if (target)
+			    f.setAttribute('target', target);
+			  
+			  f.setAttribute('method', 'post');
+			  f.setAttribute('action', url);
+			  document.body.appendChild(f);
+			  f.submit();
+		}
+		function login() {
+        	post_goto('/login', {'returl':location.href.replace(location.origin, '')});
+		}
+		function logout() {
+	    	location.href="/doLogout";
+		}
+	</script>
+</head>
+</html>

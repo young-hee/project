@@ -1,0 +1,74 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page title -->
+	<th:block ap:replace="~{common/fragment/contents-page-title}"/>
+	<!-- // page title -->
+	<!-- page contents -->
+	<div class="ap_contents looks main">
+		<!--/* looks 동영상 */-->
+		<div class="visual">
+			<div class="section">
+				<div class="video_wrap">
+					<!--/* 섬네일 용 이미지 */-->
+					<button type="button" class="thumbnail"><img ap:src="@{/images/beautylife/img_looks.jpg}" alt=""></button>
+					<iframe class="youtube_video" width="1000" height="560" src="https://www.youtube.com/embed/4uLivcdjRlc?enablejsapi=1" frameborder="0" allowfullscreen="" data-vendor="youtube" data-ratio="true" data-mute="false"></iframe>
+				</div>
+			</div>
+		</div>
+		<!--/* looks 목록 */-->
+		<div class="section">
+			<h3 class="h_title sub bot_line">내게 맞는 Makeup Look을 찾아봐!</h3>
+			<ul class="looks_list">
+				<li>
+					<a href="#none">
+						<img ap:src="@{/images/beautylife/img_looks_01.png}" alt="">
+						<span class="name">ROMANTIC CHERRY<br>BLOOSOM</span>
+					</a>
+				</li>
+				<li>
+					<a href="#none">
+						<img ap:src="@{/images/beautylife/img_looks_02.png}" alt="">
+						<span class="name">LIVELY<br>PEACH CRUSH</span>
+					</a>
+				</li>
+				<li>
+					<a href="#none">
+						<img ap:src="@{/images/beautylife/img_looks_03.png}" alt="">
+						<span class="name">TWINKLING<br>GLITTER HOLIC</span>
+					</a>
+				</li>
+				<li>
+					<a href="#none">
+						<img ap:src="@{/images/beautylife/img_looks_04.png}" alt="">
+						<span class="name">CHICK<br>ONTOUR DRAWING</span>
+					</a>
+				</li>
+				<li>
+					<a href="#none">
+						<img ap:src="@{/images/beautylife/img_looks_05.png}" alt="">
+						<span class="name">RED KISS</span>
+					</a>
+				</li>
+				<li>
+					<a href="#none">
+						<img ap:src="@{/images/beautylife/img_looks_06.png}" alt="">
+						<span class="name">JOYFUL SCANDAL</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<!-- // page contents -->
+</div><!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script>
+		$( '.youtube_video' ).video();
+	</script>
+</th:block>
+</body>
+</html>

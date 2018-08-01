@@ -1,0 +1,27 @@
+<div class="ix-list-viewport">
+	<ul class="ix-list-items">
+		{{#if this.onlineProdImages}}
+			{{#each this.onlineProdImages}}
+				<li class="ix-list-item">
+					<a href="{{ productDetailPath ../onlineProdSn }}" class="lazy_load_wrap">
+						<img class="lazy_load" src="" data-src="{{ this.imgUrl }}" alt="{{ ../prodName }}">
+					</a>
+				</li>
+			{{/each}}
+		{{/if}}
+		{{#if this.prodImages}}
+			{{#each this.prodImages}}
+				<li class="ix-list-item">
+					<a href="{{ productDetailPath ../onlineProdSn ../prodSn }}" class="lazy_load_wrap">
+						<img class="lazy_load" src="" data-src="{{ this.imgUrl }}" alt="{{ ../prodName }}">
+					</a>
+				</li>
+			{{/each}}
+		{{/if}}
+	</ul>
+</div>
+<div class="ix-controller">
+	<ul class="ix-thumbs">
+		<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+	</ul>
+</div>

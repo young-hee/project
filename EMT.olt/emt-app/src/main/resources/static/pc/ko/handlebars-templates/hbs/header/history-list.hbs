@@ -1,0 +1,92 @@
+<dt>쇼핑 히스토리{{#if this.totalCount}}({{ this.totalCount}}){{/if}}</dt>
+<dd>
+	{{#if this.totalCount}}
+		<div class="slide " data-ix-options="view-length:5; loop:false; datum-point:-40px;">
+			<div class="ix-list-viewport">
+				<ul class="ix-list-items">
+					{{#each this.shoppingHistoryList}}
+						{{#each this.shoppingHistoryList}}
+							{{!-- this.shoppingMarkTgtCode = Prod, Article, Plandisplay, Menu, SearchWord --}}
+							<li class="ix-list-item">
+								{{!-- TODO: onlineProdSn 들어오는지 확인 --}}
+								{{#xif this.shoppingMarkTgtCode '==' 'Prod'}}
+									<a href="{{ productDetailPath this.onlineProdSn this.prodSn }}">
+										{{#xif @index '==' 0}}
+											<strong class="num">{{ ../date }}</strong>
+										{{/xif}}
+										<div class="item_wrap">
+											<span class="img"><img src="{{ this.prodImg }}" alt=""></span>
+											<span class="title">{{ this.prodName }}</span>
+										</div>
+									</a>
+								{{/xif}}
+
+								{{#xif this.shoppingMarkTgtCode '==' 'Article'}}
+									<a href="/display/{{ this.displayMenuId }}/detail?articleSn={{ this.articleSn }}">
+										{{#xif @index '==' 0}}
+											<strong class="num">{{ ../date }}</strong>
+										{{/xif}}
+										<div class="item_wrap">
+											<span class="title">{{ this.articleTitle }}</span>
+										</div>
+									</a>
+								{{/xif}}
+
+								{{#xif this.shoppingMarkTgtCode '==' 'Plandisplay'}}
+									{{!-- TODO: 기획전시 경로확인 --}}
+									<a href="#none">
+										{{#xif @index '==' 0}}
+											<strong class="num">{{ ../date }}</strong>
+										{{/xif}}
+										<dl>
+											<dt>이벤트</dt>
+											<dd>{{ this.planDisplayTitle }}</dd>
+										</dl>
+									</a>
+								{{/xif}}
+
+								{{#xif this.shoppingMarkTgtCode '==' 'Menu'}}
+									{{!-- TODO: 카테고리 경로확인 (?upperMenuId=eye&categoryType=prod_types) --}}
+									<a href="/display/category/{{ this.displayMenuId }}?upperMenuId=eye&categoryType=prod_types">
+										{{#xif @index '==' 0}}
+											<strong class="num">{{ ../date }}</strong>
+										{{/xif}}
+										<dl>
+											<dt>카테고리</dt>
+											<dd>{{ this.menuTitle }}</dd>
+										</dl>
+									</a>
+								{{/xif}}
+
+								{{#xif this.shoppingMarkTgtCode '==' 'SearchWord'}}
+									<a href="/common/search?searchWord={{ this.searchWord }}">
+										{{#xif @index '==' 0}}
+											<strong class="num">{{ ../date }}</strong>
+										{{/xif}}
+										<dl>
+											<dt>검색</dt>
+											<dd>#{{ this.searchWord }}</dd>
+										</dl>
+									</a>
+								{{/xif}}
+
+							</li>
+						{{/each}}
+					{{/each}}
+				</ul>
+			</div>
+			<div class="ix-controller">
+				<div class="slide_direction">
+					<a class="ix-btn-prev" href="javascript:;"><span class="sr_only">Prev</span></a>
+					<a class="ix-btn-next" href="javascript:;"><span class="sr_only">Next</span></a>
+				</div>
+			</div>
+		</div>
+	{{else}}
+		{{!-- 히스토리 없을때 --}}
+		<div class="panel notice">
+			<i class="ico"></i>
+			<p class="text font_lg">쇼핑히스토리가 없습니다.<br>에뛰드하우스 이곳 저곳을 둘러보세요~</p>
+		</div>
+	{{/if}}
+</dd>

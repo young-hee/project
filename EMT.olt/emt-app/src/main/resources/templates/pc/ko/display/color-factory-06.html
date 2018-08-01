@@ -1,0 +1,42 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='color-factory'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents brand">
+				<div class="color_factory color_finder">
+					<!-- tab menu wrap -->
+					<div class="ui_tab">
+						<!-- tab menu -->
+						<div class="tab_menu equally">
+							<ul>
+								<li><a href="#none" th:href="@{/display/color_factory_info(displayMenuId=color_factory_info)}">컬러 팩토리 안내 (Color Factory)</a></li>
+								<li><a href="#none" th:href="@{/display/color_factory_reserve(displayMenuId=color_factory_reserve)}">컬러 팩토리 예약 (Reservation)</a></li>
+								<li class="on"><a href="#none" th:href="@{/display/color_factory_store(displayMenuId=color_factory_store)}">서비스 매장 보기 (Store)</a></li>
+							</ul>
+						</div>
+						<!-- tab content -->
+						<div class="tab_cont space">
+							<h3 class="sr_only">서비스 매장 보기 (Store)</h3>
+							<h4 class="h_title lare">서비스 매장 찾아오시는 길</h4>
+
+							<div class="ui_accordion store_map" data-open-type="single"></div>
+						</div>
+					</div>
+				</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script>
+				new AP.ColorFactoryStore( $('.color_finder') ).load();
+			</script>
+        </th:block>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!-- 교환활동포인트 : 진주알 상품 -->
+<div class="cart_item_box_wrap type2 group" th:if="${activityPointOnlineProdEx.exchProdYn == 'Y'}">
+	<!--온라인상품-->
+	<div class="cart_item_box typ2">
+		<div class="top_tit_wrap">
+			<h3>진주알 교환 상품</h3>
+			<div>
+				<span class="cart_price point">
+					<!--<span class="left_num">
+						<span>보유</span>
+						<strong class="num">12,600</strong><span>알</span>
+						<span>/</span>
+					</span>-->
+					<span class="right_num">
+						<strong class="num"
+								th:text="${cartEx.cartDeliveryExchActivityPointSum} ?
+										 ${#IntegUtil.toCommaNumber(cartEx.cartDeliveryExchActivityPointSum)} : '0'">0</strong>
+						<span>알</span>
+					</span>
+				</span>
+			</div>
+		</div>
+	</div>
+	<!--단위상품-->
+	<th:block th:if="${#lists.size(activityPointOnlineProdEx.cartProdExList) > 0}" th:each="cartProdEx : ${activityPointOnlineProdEx.cartProdExList}">
+		<div class="cart_item_box" th:if="${cartProdEx.activityPointExchYn == 'Y'}">
+			<div class="cart_name_wrap">
+				<span class="check_wrap">
+					<input type="checkbox" name="chkBox" th:id="'chkBox' + ${activityPointOnlineProdExCnt.count}" th:value="${cartEx.cartSn} + ',' + ${cartProdEx.cartProdSn}" th:checked="${activityPointOnlineProdEx.selectYn == 'Y'}">
+					<label th:for="'chkBox' + ${activityPointOnlineProdExCnt.count}">체크</label>
+				</span>
+				<img th:if="${cartProdEx.prodEx.repProdImgEx != null}" th:src="${cartProdEx.prodEx.repProdImgEx.imgUrl}" class="cart_option_name_thm">
+				<img th:if="${cartProdEx.prodEx.repProdImgEx == null}" ap:src="@{/images/cart/no_img.png}" class="cart_option_name_thm">
+				<div class="cart_table_cell">
+					<span class="cart_item_name" th:text="${cartProdEx.prodEx.prodName}">디어 마이 블루밍 립스 톡 쉬폰</span>
+					<div class="cart_item_exclusive_wrap">
+					<span class="cart_item_exclusive"
+						  th:if="${#lists.size(cartProdEx.prodEx.prodFlagExList) != 0}"
+						  th:each="prodFlagEx : ${cartProdEx.prodEx.prodFlagExList}"
+						  th:text="${prodFlagEx.prodFlagName}">예약상품
+					</span>
+					</div>
+				</div>
+				<button type="button" class="btn_cart_item_del" th:onclick="|removeCartProd(this,'${cartEx.cartSn}','${cartProdEx.cartProdSn}')|"><span class="sr_only">없애기</span></button>
+			</div>
+			<div class="cart_item_info">
+				<input type="hidden" name="onlineActivityPrdSn" th:value="${cartProdEx.prodEx.prodSn}"/>
+				<input type="hidden" name="cartProdSn" th:value="${cartProdEx.cartProdSn}"/>
+				<input type="hidden" name="cartProdExList" th:value="${cartProdExList}"/>
+				<input type="hidden" th:name="'prdInfo_' + ${activityPointOnlineProdEx.onlineProdSn}" th:value="${cartEx.cartSn} + ',' + ${cartProdEx.cartProdSn}"/>
+				<input type="hidden" th:name="'saleDisplayStatus_' + ${cartProdEx.prodEx.prodSn}" th:value="${cartProdEx.prodEx.saleDisplayStatus}"/>
+				<!--상품수량버튼 제어-->
+				<th:block ap:replace="~{cart/fragment/spinner-button-info}"/>
+				<!--// 상품수량버튼 제어-->
+				<span class="cart_price point">
+					<span class="right_num">
+						<strong class="num"
+								th:text="${activityPointOnlineProdEx.finalOnlineSalesAmountInfo.standardCurrency.amount} ?
+										 ${#IntegUtil.toCommaNumber(activityPointOnlineProdEx.finalOnlineSalesAmountInfo.standardCurrency.amount)} : '0알'">0</strong>
+						<span>알</span>
+					</span>
+				</span>
+			</div>
+		</div>
+	</th:block>
+
+</div>

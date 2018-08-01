@@ -1,0 +1,11 @@
+{{#each this}}
+	<li>
+		{{#xif this.colorchipTypeCode '==' 'RGB'}}
+			<span class="color_type" {{#xif this.colorchipTypeCode '==' 'RGB'}}style="background-color:#{{ this.rgbVal }}"{{/xif}}>
+				<img alt="{{ this.prodName }}" src="{{ absolutePath '/images/common/transparent_40x40.png' }}">
+			</span>
+		{{else}}
+			<img alt="{{ this.prodName }}" src="{{ this.colorchipImg }}">
+		{{/xif}}
+	</li>
+{{/each}}

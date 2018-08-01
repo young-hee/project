@@ -1,0 +1,13 @@
+{{#each this}}
+	<li class="ix-list-item">
+		{{#xif this.videoYn '==' 'Y'}}
+			<div class="video_wrap">
+				{{!-- 섬네일 용 이미지 --}}
+				<button type="button" class="thumbnail"><img alt="" src="{{ this.imgUrl }}"></button>
+				<iframe class="youtube_video" width="100%" height="100%" src="{{ youtubePath this.videoUrl }}" frameborder="0" allowfullscreen="" data-vendor="youtube" data-ratio="false" data-mute="false"></iframe>
+			</div>
+		{{else}}
+			<img alt="" src="{{ this.imgUrl }}">
+		{{/xif}}
+	</li>
+{{/each}}

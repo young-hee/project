@@ -1,0 +1,128 @@
+<html ap:decorate="~{layout/only-contents}">
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+
+            <div class="layer_popup fullpage review_filter"> <!-- 02-23 클래스 변경 -->
+                <div class="layer_wrap">
+                    <dl class="layer">
+                        <dt class="layer_title">필터</dt>
+                        <dd class="layer_cont">
+                        	<div class="panel"> <!-- 02-23 클래스 삭제 -->
+                            	<fieldset class="form">
+                            		<legend class="sr_only">리뷰 검색 필터 선택</legend>
+									<!-- 02-23 review_filter div 삭제 -->
+									<div class="input_group">
+										<div>
+											<select name="" id="" title="옵션 상품별 선택">
+												<option value="">옵션 상품별</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="ui_accordion" data-open-type="single">
+										<dl>
+											<dt class="on">
+												<span class="title">종류 <em>전체</em></span>
+												<button type="button"><span class="sr_only">더보기</span></button>
+											</dt>
+											<dd>
+												<div class="cont panel gray">
+													<div class="check_wrap"><input type="radio" name="opt1" id="opt1_1" checked /><label for="opt1_1">전체</label></div>
+													<div class="check_wrap"><input type="radio" name="opt1" id="opt1_2" /><label for="opt1_2">구매자 후기</label></div>
+													<div class="check_wrap"><input type="radio" name="opt1" id="opt1_3" /><label for="opt1_3">리뷰</label></div>
+												</div>
+											</dd>
+										</dl>
+										<dl>
+											<dt>
+												<span class="title">정렬 <em>최근등록순</em></span>
+												<button type="button"><span class="sr_only">더보기</span></button>
+											</dt>
+											<dd>
+												<div class="cont panel gray">
+													<div class="check_wrap"><input type="radio" name="opt2" id="opt2_1" checked /><label for="opt2_1">최근등록순</label></div>
+													<div class="check_wrap"><input type="radio" name="opt2" id="opt2_2" /><label for="opt2_2">높은별점순</label></div>
+													<div class="check_wrap"><input type="radio" name="opt2" id="opt2_3" /><label for="opt2_3">낮은별점순</label></div>
+												</div>
+											</dd>
+										</dl>
+										<dl>
+											<dt>
+												<span class="title">별점 <em>별점전체</em></span>
+												<button type="button"><span class="sr_only">더보기</span></button>
+											</dt>
+											<dd>
+												<div class="cont panel gray">
+													<div class="check_wrap"><input type="radio" name="opt3" id="opt3_1" checked /><label for="opt3_1">별점전체</label></div>
+													<div class="check_wrap"><input type="radio" name="opt3" id="opt3_2" /><label for="opt3_2"><span class="rating_heart heart5">별점 5</span></label></div>
+													<div class="check_wrap"><input type="radio" name="opt3" id="opt3_3" /><label for="opt3_3"><span class="rating_heart heart4">별점 4</span></label></div>
+													<div class="check_wrap"><input type="radio" name="opt3" id="opt3_4" /><label for="opt3_4"><span class="rating_heart heart3">별점 3</span></label></div>
+													<div class="check_wrap"><input type="radio" name="opt3" id="opt3_5" /><label for="opt3_5"><span class="rating_heart heart2">별점 2</span></label></div>
+													<div class="check_wrap"><input type="radio" name="opt3" id="opt3_6" /><label for="opt3_6"><span class="rating_heart heart1">별점 1</span></label></div>
+												</div>
+											</dd>
+										</dl>
+									</div>
+                            	</fieldset>
+                            </div>
+                        </dd>
+                    </dl>
+                    <button class="layer_close" type="button">레이어 닫기</button>
+                </div>
+            </div>
+        </div>
+
+    <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+    <th:block ap:fragment="layout-endpoint">
+		<script>
+            //리뷰필터를 구성하는 데이타
+            var filterData = {
+                //옵션상품이 있을때만
+                options: {
+                    label: '',
+                    properties: [
+                        {label: 'test option1', value: 'o1', selected: true},
+                        {label: 'test option2', value: 'o2', selected: false}
+                    ]
+                },
+                types: {
+                    label: '종류',
+                    properties: [
+                        {label: '전체', value: 'f1_p1', selected: true},
+                        {label: '구매자 후기', value: 'f1_p2', selected: false},
+                        {label: '리뷰', value: 'f1_p3', selected: false}
+                    ]
+                },
+                sorting: {
+                    label: '정렬',
+                    properties: [
+                        {label: '최근등록순', value: 'f2_p1', selected: true},
+                        {label: '높은별점순', value: 'f2_p2', selected: false},
+                        {label: '낮은별점순', value: 'f2_p3', selected: false}
+                    ]
+                },
+                rating: {
+                    label: '별점',
+                    properties:	[
+                        {label: '별점전체', value: 'all', rating: 'all', selected: true},
+                        {label: '별 5개', value: 5, rating: 5, selected: false},
+                        {label: '별 4개', value: 4, rating: 4, selected: false},
+                        {label: '별 3개', value: 3, rating: 3, selected: false},
+                        {label: '별 2개', value: 2, rating: 2, selected: false},
+                        {label: '별 1개', value: 1, rating: 1, selected: false}
+                    ]
+                }
+            };
+
+            //리뷰필터 열기
+			/*
+            AP.productDetail.openReviewFilter( filterData ).addListener( 'change-filter', function (e) {
+                console.log( e.filterData, e.selectedData );
+            });
+            */
+		</script>
+    </th:block>
+
+</body>
+</html>

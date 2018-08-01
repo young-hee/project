@@ -1,0 +1,43 @@
+<html ap:decorate="~{layout/layout-member-join}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+	<div class="layer_popup fullpage">
+		<div class="layer_wrap">
+			<dl class="layer">
+				<dt class="sr_only">회원가입 완료</dt>
+				<dd class="layer_cont">
+					<div class="member_join complete">
+						<span class="icon"></span>
+						<p class="text message"><b>가입이<br>완료되었습니다.</b></p>
+						<hr class="div m20">
+						<dl>
+							<dt class="h_title d3"><b><span th:text="${custNm}">이보라</span>님의 뷰티포인트</b></dt>
+							<dd>
+								<br>
+								<p><b class="num" th:text="${remainPoint} + 'P'">60P</b></p>
+								<br>
+								<p class="text color_light_gray font_md">아모레퍼시픽의 모든사이트에서<br>사용 가능합니다.</p>
+							</dd>
+						</dl>
+						<hr class="div mgt20">
+						<div class="page_btns">
+							<button class="btn_lg_primary" onclick="location.replace('/main')" type="button">홈으로 이동</button>
+						</div>
+					</div>
+				</dd>
+			</dl>
+			<button class="layer_close" type="button"><i class="ico_close"></i><span class="sr_only">레이어 닫기</span></button>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+</th:block>
+
+</body>
+</html>

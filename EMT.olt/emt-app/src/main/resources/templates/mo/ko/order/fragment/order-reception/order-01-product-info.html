@@ -1,0 +1,80 @@
+<!--주문상품확인-->
+<dl class="order_item_check">
+	<dt>
+		<span class="title"><b>주문상품 확인 (<strong id="totalOrdOnlineProdCnt">0</strong>개)</b></span>
+		<button type="button"><span class="sr_only">더보기</span></button>
+	</dt>
+	<dd>
+		<!--온라인쇼핑상품-->
+		<th:block th:if="${#lists.size(shippingOrdOnlineProdList) > 0}">
+		<p class="item_count">온라인 쇼핑 상품(<span id="shipOrdOnlineProdCnt">0</span>개)</p>
+		<div class="cart_item_box_wrap">
+			<div class="cart_item_box" th:each="ordOnlineProd : ${shippingOrdOnlineProdList}">
+				<div class="cart_name_wrap">
+					<!--결제 히든값-->
+					<input type="hidden" name="onlinePordSn" th:value="${ordOnlineProd.onlineProdCode}"/>
+					<input type="hidden" name="prodName" th:value="${ordOnlineProd.onlineProdName}"/>
+					<input type="hidden" name="prodQty" th:value="${ordOnlineProd.ordQtySum}"/>
+					<!--//결제 히든값-->
+					<input type="hidden" id="ordHistProdCnt" name="ordHistProdCnt" th:value="${#lists.size(ordOnlineProd.ordHistProdList)}"/>
+					<img th:if="${ordOnlineProd.onlineProdImgUrl != null}" th:src="${ordOnlineProd.onlineProdImgUrl}" class="thm_cart_item">
+					<img th:if="${ordOnlineProd.onlineProdImgUrl == null}" ap:src="@{/images/cart/no_img.png}" class="thm_cart_item">
+					<div class="cart_table_cell" >
+						<!--온라인상품-->
+						<div class="cart_item_name"><span th:text="${ordOnlineProd.onlineProdName}">디어 마이 블루밍 립스 톡 쉬폰</span></div>
+						<div class="price">
+							<strong class="eng" th:text="${#IntegUtil.toCommaNumber(ordOnlineProd.finalOnlineSaleAmtPcurSum)}">0</strong><em>원</em>
+							<span class="quantity" th:if="${ordOnlineProd.ordHistProdTypeCode == 'Ord'}" th:text="${ordOnlineProd.ordQtySum > 0 ? ordOnlineProd.ordQtySum + '개' : '0개'}">0개</span>
+							<span class="quantity" th:if="${ordOnlineProd.ordHistProdTypeCode == 'BulkDc'}" th:text="${ordOnlineProd.ordQtySum > 0 ? ordOnlineProd.ordQtySum + 'set' : '0set'}">0set</span>
+							<span class="coupon">적립제외, 쿠폰제외</span>
+						</div>
+						<!--//온라인상품-->
+						<!--단위상품-->
+						<p class="cart_item_opt">
+							상품 : <span th:each="ordHistProd, iterStat : ${ordOnlineProd.ordHistProdList}"
+								  th:text="!${iterStat.last} ? ${ordHistProd.ordProdEx.prodNameBlang} + ' (' + ${ordHistProd.ordQty} + ')개' + ' / ' : ${ordHistProd.ordProdEx.prodNameBlang} + ' (' + ${ordHistProd.ordQty} + ')개'">
+							</span>
+						</p>
+						<!--//단위상품-->
+					</div>
+				</div>
+			</div>
+		</div>
+		</th:block>
+
+		<!--테이크아웃쇼핑상품-->
+		<th:block th:if="${#lists.size(storePickupOrdOnlineProdList) > 0 and memberSn > 0}">
+		<p class="item_count">테이크아웃 상품 (<span id="storeOrdOnlineProdCnt">0</span>개)</p>
+		<div class="cart_item_box_wrap">
+			<div class="cart_item_box" th:each="storeOrdOnlineProd : ${storePickupOrdOnlineProdList}" >
+				<div class="cart_name_wrap">
+					<!--결제 히든값-->
+					<input type="hidden" name="onlinePordSn" th:value="${storeOrdOnlineProd.onlineProdCode}"/>
+					<input type="hidden" name="prodName" th:value="${storeOrdOnlineProd.onlineProdName}"/>
+					<input type="hidden" name="prodQty" th:value="${storeOrdOnlineProd.ordQtySum}"/>
+					<!--//결제 히든값-->
+					<input type="hidden" id="storeOrdHistProdCnt" name="storeOrdHistProdCnt" th:value="${#lists.size(storeOrdOnlineProd.ordHistProdList)}"/>
+					<img th:if="${storeOrdOnlineProd.onlineProdImgUrl != null}" th:src="${storeOrdOnlineProd.onlineProdImgUrl}" class="thm_cart_item">
+					<img th:if="${storeOrdOnlineProd.onlineProdImgUrl == null}" ap:src="@{/images/cart/no_img.png}" class="thm_cart_item">
+					<div class="cart_table_cell" >
+						<div class="cart_item_name"><span th:text="${storeOrdOnlineProd.onlineProdName}">디어 마이 블루밍 립스 톡 쉬폰</span></div>
+						<div class="price">
+							<strong class="eng" th:text="${#IntegUtil.toCommaNumber(storeOrdOnlineProd.finalOnlineSaleAmtPcurSum)}">0</strong><em>원</em>
+							<span class="quantity" th:if="${storeOrdOnlineProd.ordHistProdTypeCode == 'Ord'}" th:text="${storeOrdOnlineProd.ordQtySum > 0 ? storeOrdOnlineProd.ordQtySum + '개' : '0개'}">0개</span>
+							<span class="quantity" th:if="${storeOrdOnlineProd.ordHistProdTypeCode == 'BulkDc'}" th:text="${storeOrdOnlineProd.ordQtySum > 0 ? storeOrdOnlineProd.ordQtySum + 'set' : '0set'}">0set</span>
+							<span class="coupon">적립제외, 쿠폰제외</span>
+						</div>
+						<p class="cart_item_opt">
+							상품 : <span th:each="ordHistProd, iterStat : ${storeOrdOnlineProd.ordHistProdList}"
+									   th:text="!${iterStat.last} ? ${ordHistProd.ordProdEx.prodNameBlang} + ' (' + ${ordHistProd.ordQty} + ')개' + ' / ' : ${ordHistProd.ordProdEx.prodNameBlang} + ' (' + ${ordHistProd.ordQty} + ')개'">
+							</span>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		</th:block>
+		<!--//테이크아웃쇼핑상품-->
+	</dd>
+</dl>
+<!--//주문상품확인-->

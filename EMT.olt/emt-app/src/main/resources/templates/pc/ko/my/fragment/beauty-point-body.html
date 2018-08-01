@@ -1,0 +1,49 @@
+<th:block layout:fragment="beauty-point-body">
+	
+		<div class="pbody  board_list2">
+			<table class="align_center">
+       			<caption class="sr_only">뷰티포인트 목록으로 날짜, 매장, 내용, 유형, 포인트, 소멸예정일로 구성</caption>
+       			<colgroup>
+       				<col />
+       				<col />
+       				<col />
+       				<col />
+       				<col />
+       				<col />
+       			</colgroup>
+       			<thead>
+       				<tr>
+       					<th scope="col">날짜</th>
+       					<th scope="col">매장</th>
+       					<th scope="col">내용</th>
+       					<th scope="col">유형</th>
+       					<th scope="col">포인트</th>
+       					<th scope="col">소멸예정일</th>
+       				</tr>
+       			</thead>
+       			<tbody>
+       				<tr th:each="item : ${#IntegUtil.subList(ptBrkd.ptTrBrkdInqVo, 10)}">
+						<td th:text="${#IntegUtil.dateformat(item.trApvlDt, 'yyyy.MM.dd')}">2018.01.05</td>
+						<td th:text="${item.prtnNm}">APP(뷰티포인트 선물하기)</td>
+						<td th:text="${item.xttpNm}">포인트 선물 적립</td>
+						<td th:text="${item.xtclNm}">적립</td>
+						<td th:if="${item.xtclCd == '001'}" th:utext="'(<em> + </em>) ' + ${#IntegUtil.toCommaNumber(item.aplyPt)}">( <em> + </em> ) 100,000</td>
+						<td th:if="${item.xtclCd == '002'}" th:utext="'( - ) ' + ${#IntegUtil.toCommaNumber(item.aplyPt)}">( - ) 100,000</td>
+						<td th:if="${item.extcSchdDt != ''}" th:text="${#IntegUtil.dateformat(item.extcSchdDt, 'yyyy.MM.dd')}">2018.10.31</td>
+						<td th:if="${item.extcSchdDt == '' && item.xtclCd == '002'}">-</td>
+						<td th:if="${item.extcSchdDt == '' && item.xtclCd == '001'}"></td>
+       				</tr>
+       			</tbody>
+       		</table>
+		</div>
+		
+		<div class="pbody pagination" th:with="pageVo=${#IntegUtil.initPageInfo(ptBrkd.pageVo, 10)}">
+			<a href="javascript:;" onclick="more(1)" class="navi first" th:classappend="${pageVo.isFirstPage}? disabled : null" th:disabled="${pageVo.isFirstPage}? disabled : null">처음</a>
+			<a href="javascript:;" th:onclick="'more(' + ${pageVo.prePage} + ')'" class="navi prev" th:classappend="${!pageVo.hasPrePage}? disabled : null" th:disabled="${!pageVo.hasPrePage}? 'disabled' : null">이전</a>
+			<th:block th:each="page : ${pageVo.pageList}">
+				<a href="javascript:;" th:onclick="'more(' + ${page} + ')'" th:text="${page}" th:classappend="${pageVo.curPage == page}? 'current' : null">2</a>
+			</th:block>
+			<a href="javascript:;" th:onclick="'more(' + ${pageVo.nextPage} + ')'" class="navi next" th:classappend="${!pageVo.hasNextPage}? disabled : null" th:disabled="${!pageVo.hasNextPage}? 'disabled' : null">다음</a>
+			<a href="javascript:;" th:onclick="'more(' + ${pageVo.lastPage} + ')'" class="navi last" th:classappend="${pageVo.isLastPage}? disabled : null" th:disabled="${pageVo.isLastPage}? 'disabled' : null">끝</a>
+		</div>
+</th:block>

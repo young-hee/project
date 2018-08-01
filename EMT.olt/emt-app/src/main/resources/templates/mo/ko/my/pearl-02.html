@@ -1,0 +1,179 @@
+<html ap:decorate="~{layout/layout-contents}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page contents -->
+            <div class="ap_contents mypage">
+               	<div class="panel pdb0">
+               		<div class="my_point_score pearl">
+						<dl>
+							<dt>홍길동님의 현재 진주알</dt>
+							<dd><strong class="num" id="cur-point">20,000</strong> <span>알</span></dd>
+						</dl>
+						<hr class="div m25">
+						<div class="align_center">
+							<p class="font_md"><b>진주알은 에뛰드 온라인 활동포인트입니다.</b></p>
+							<p class="text">리뷰, 출첵 등 온라인 활동으로 적립되며<br>이벤트 응모 시 사용할 수 있습니다.</p>
+						</div>
+						<!--/* [S] 20180418 : 버튼추가 */-->
+						<div class="page_btns">
+							<a href="/my/page/pearl/salesCushion" class="btn_md_primary">진주알로 쿠폰교환</a>
+							<a href="/cs/pearlPoint" class="btn_md_bordered">진주알 가이드 보기</a>
+						</div>
+						<!--/* [E] 20180418 : 버튼추가 */-->
+					</div>
+
+					<!-- tab menu wrap -->
+					<div class="ui_tab">
+						<!-- tab menu -->
+						<div class="tab_menu equally">
+							<ul>
+								<li><a href="javascript:;" onclick="location.replace('/my/page/pearl/present')">선물하기</a></li>
+								<li class="on"><a href="javascript:;">선물받기</a></li>
+							</ul>
+						</div>
+						<!-- tab content -->
+						<div class="tab_cont">
+							<h3 class="sr_only">선물받기</h3>
+							<div th:if="${not #lists.isEmpty(pointGiftList)}" class="gifts_received bt_point_list">
+								<ul>
+									<th:block th:each="item : ${pointGiftList}">
+										<li th:id="'gift' + ${item.activityPointHistSn}" class="gifts-item">
+											<div class="table_layout">
+												<div th:if="${#IntegUtil.isDayCount(item.pointHistOccurDt, 4)}">
+													<p class="h_title"><strong><em th:text="${#IntegUtil.dayCountUtil(item.pointHistOccurDt, 7)}">D - 1</em></strong> <span th:text="${item.memberName.name1}">홍길동</span>님의 진주알</p><!--/* 20180418 : D-day 표기 추가 / 3일 이하로 남은 날짜에는 태그 em추가 */-->
+													<p class="color_light_gray">[<span th:text="${#IntegUtil.toCommaNumber(point)}">1,000</span>알 선물 도착]</p>
+												</div>
+												<div th:unless="${#IntegUtil.isDayCount(item.pointHistOccurDt, 4)}">
+													<p class="h_title"><strong th:text="${#IntegUtil.dayCountUtil(item.pointHistOccurDt, 7)}">D - 7</strong> <span th:text="${item.memberName.name1}">홍길동</span>님의 진주알</p>
+													<p class="color_light_gray">[<span th:text="${#IntegUtil.toCommaNumber(point)}">1,000</span>알 선물 도착]</p>
+												</div>
+												<div><button type="button" onclick="'receive(' + item.activityPointHistSn + ')'">받기</button></div>
+											</div>
+										</li>
+									</th:block>
+								</ul>
+							</div>
+							
+							<div th:if="${#lists.isEmpty(pointGiftList)}" style="padding: 10px 0 !important;" class="panel notice">
+								<i class="ico"></i>
+								<p class="text">도착한 진주알 선물이 없습니다.</p>
+							</div>
+							<div th:unless="${#lists.isEmpty(pointGiftList)}" style="padding: 10px 0 !important; display:none;" class="empty-item panel notice">
+								<i class="ico"></i>
+								<p class="text">도착한 진주알 선물이 없습니다.</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="my_point_list">
+						<div class="ui_multiple_date_picker">
+							<div class="date_btn_set">
+								<span><input type="radio" class="select_range_date" name="radio4" id="radio4_0" value="all" checked=""><label for="radio4_0">전체</label></span>
+								<span><input type="radio" class="select_range_date" name="radio4" id="radio4_1" value="1months" checked=""><label for="radio4_1">1개월</label></span>
+								<span><input type="radio" class="select_range_date" name="radio4" id="radio4_2" value="3months"><label for="radio4_2">3개월</label></span>
+								<span><input type="radio" class="select_range_date" name="radio4" id="radio4_3" value="6months"><label for="radio4_3">6개월</label></span>
+								<span><input type="radio" class="select_range_date" name="radio4" id="radio4_4" value="1years"><label for="radio4_4">1년</label></span>
+							</div>
+							<br>
+							<div class="input_date_group">
+								<div style="display:none;">
+									<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+									<input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+								</div>
+								<div class="date_info_area">
+									<span class="start_date"></span> ~ <span class="end_date"></span> <span class="color_light_gray">까지의 사용 및 적립 내역</span>
+								</div>
+							</div>
+						</div>
+						<br class="entry-point">
+						<div ap:replace="~{my/fragment/pearl-fragment :: pearl-list}"></div>
+					</div>
+               	</div>
+            </div>
+            <!-- // page contents -->
+            
+            <!-- 마이페이지 맵 01-24 위치변경 -->
+         	<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+         	<!-- // 마이페이지 맵 -->
+         	
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+			<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+			<script>
+				var progress = '<div id="m-loading"><ul class="loading"><li></li><li></li><li></li></ul></div>';
+				var date = null;
+				var pageNumber = 1;
+				//multiple date picker적용
+				$( '.ui_multiple_date_picker' ).multipleDatePicker({
+					defaultRangeDate: '1months',
+					minDate: moment().subtract( 50, 'years' )
+				}).on( 'multiple-date-picker-change', function (e) {
+					console.log( e.type, e.date );
+					pageNumber = 1;
+					date = e.date;
+			    	$(".pbody").remove();
+					$(".entry-point:last").after(progress);
+					$.get("/my/page/info/pearlAppendList?pageNumber=" + pageNumber + "&startDt="+date.startDate + "&endDt="+date.endDate, function(data) {
+						$(".entry-point").after(data);
+						$('.btn_lg_more em').text($('.point-item').size());
+					});
+				});
+				
+				function more() {
+					pageNumber++;
+					$(".pearl-table:last").after(progress);
+					if(date)
+						$.get("/my/page/info/pearlAppendListTable?pageNumber=" + pageNumber + "&startDt="+date.startDate + "&endDt="+date.endDate, function(data) {
+							$("#m-loading").remove();
+							$("button.btn_lg_more").remove();
+							$(".pearl-table:last").after(data);
+							$('.btn_lg_more em').text($('.point-item').size());
+						});
+					else
+						$.get("/my/page/info/pearlAppendListTable?pageNumber=" + pageNumber, function(data) {
+							$("#m-loading").remove();
+							$("button.btn_lg_more").remove();
+							$(".pearl-table:last").after(data);
+							$('.btn_lg_more em').text($('.point-item').size());
+						});
+						
+				}
+				function receive(hitsSn) {
+
+
+			        var indexed_array = {};
+			        indexed_array['activityPointHistSn'] = hitsSn;
+					
+		            AP.api.receivePearl({}, indexed_array)
+		                .done(function(data) {
+		                    AP.modal.alert("포인트를 선물받았습니다.").addListener('modal-close', function(e) {
+		                    	location.reload();
+			                	$('gift' + hitsSn).parent().remove();
+			                	if($('.gifts-item').size() == 0) {
+			                		$('.gifts_received').remove();
+			                		$('.empty-item').css('display','block');
+			                	}
+		                    });
+		                }).fail(function(xhr, textStatus, errorThrown) {
+		                    if (xhr.errorCode == 0) {
+		                        AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+		                    } else if (xhr.errorCode == 'EAPI001') {
+		                        AP.modal.alert("선물 받기에 실패했습니다.");
+		                    } else {
+		                        AP.modal.alert(xhr.errorMessage);
+		                    }
+		                }).always(function() {
+		                    //성공, 실패
+		                });
+				}
+			</script>
+
+        </th:block>
+</body>
+</html>

@@ -1,0 +1,69 @@
+{{!--
+	review-list 용 item
+--}}
+<dl>
+	<dt>
+		<a href="javascript:;" data-prod-review-sn="{{ this.prodReviewSn }}">
+			<span class="clear">
+				<span class="ui_rating small">
+					<span class="heart">
+						{{#for 5}}
+							<span class="heart_wrap {{#xif ../scope '>' for-index}}on{{/xif}}"><span class="sr_only"> {{ calc for-index '+' 1 }}점</span></span>
+						{{/for}}
+					</span>
+
+					{{#xif this.topReviewYn '==' 'Y'}}
+						<strong class="review_best">BEST</strong>
+					{{/xif}}
+				</span>
+				<span class="summary">
+					<span>{{ this.memberId }}</span><span>{{ dateFormat this.prodReviewRegistDt }}</span>
+				</span>
+			</span>
+			<span class="title">
+				{{#if this.prodName}}
+					<small>{{ this.prodName }}</small>
+				{{/if}}
+				<b>{{ this.prodReviewTitle }}</b>
+
+				{{#xif this.prodReviewTypeCode '==' 'Pur'}}
+					<span class="badge">구매</span>
+				{{/xif}}
+			</span>
+		</a>
+	</dt>
+	<dd>
+		<p class="text reduce">{{ ellipsis 58 this.prodReviewBodyText }}</p>
+		<p class="text origin" style="display:none;">{{ this.prodReviewBodyText }}</p>
+	</dd>
+
+	{{#if this.imgList.length}}
+		<dd class="thumbnail reduce">
+			{{#each this.imgList}}
+				{{#xif @index '<' 5}}
+					<span>
+						{{#xif @index '==' 4}}
+							<span>+ {{ calc ../imgList.length '-' 4}}</span>
+						{{else}}
+							<img src="{{ this.imageFileUrl }}" alt="">
+						{{/xif}}
+					</span>
+				{{/xif}}
+			{{/each}}
+		</dd>
+	{{/if}}
+	
+	{{#if this.imgList.length}}
+		<dd class="origin" style="display:none;">
+			{{#each this.imgList}}
+				<span>
+					<img src="{{ this.imageFileUrl }}" alt="">
+				</span>
+			{{/each}}
+		</dd>
+	{{/if}}
+	
+	{{#if this.isMoreView }}
+		<a href="javascript:;" class="review_detail off" data-prod-review-sn="{{ this.prodReviewSn }}">더보기 ∨</a>
+	{{/if}}
+</dl>

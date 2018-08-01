@@ -1,0 +1,38 @@
+version: 0.0
+os: linux
+files:
+  - source: /emt-app-1.0-SNAPSHOT.war
+    destination: /data/was/emtinstance/webapps
+permissions:
+  - object: /data/was/emtinstance/webapps
+    pattern: "**"
+    owner: tomcat
+    group: tomcat
+    mode: 644
+    type:
+      - file
+  - object: /data/was/emtinstance/webapps
+    owner: tomcat
+    group: tomcat
+    mode: 755
+    type:
+      - directory
+
+hooks:
+
+  AfterInstall:
+    - location: install.sh
+      runas: root  
+
+  ApplicationStop:
+    - location: stopApp.sh
+      runas: root
+
+  ApplicationStart:
+    - location: startApp.sh
+      timeout: 60
+      runas: root
+
+#  BeforeAllowTraffic:
+#    - location: sleep.sh
+#      runas: root

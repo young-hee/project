@@ -1,0 +1,100 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='sweet-letter'">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page title -->
+		<th:block ap:replace="~{common/fragment/contents-page-title}"/>
+		<!-- // page title -->
+		<!-- page contents -->
+		<div class="ap_contents event sweet">
+			<form class="validate">
+				<fieldset class="sweet_letter form">
+					<legend class="sr_only">응모번호 입력</legend>
+					<div class="sr_only">
+						<p>SWEET LETTER</p>
+						<p>100% 당첨 에뛰드 스윗레터! 지금 바로 응모하세요!</p>
+					</div>
+					<div>
+						<h3 class="h_title">스윗레터 안의<br><em>응모 번호</em>를 입력해 주세요!</h3>
+						<div class="input_area sweet_event_input_wrap">
+							<span class="input_wrap"><input type="text" name="verifNo1" maxlength="4" required="required" data-msg-required="유효하지 않은 쿠폰입니다."></span>
+							<span class="input_wrap"><input type="text" name="verifNo2" maxlength="4" required="required" data-msg-required="유효하지 않은 쿠폰입니다."></span>
+							<span class="input_wrap"><input type="text" name="verifNo3" maxlength="4" required="required" data-msg-required="유효하지 않은 쿠폰입니다."></span>
+							<span class="input_wrap"><input type="text" name="verifNo4" maxlength="4" required="required" data-msg-required="유효하지 않은 쿠폰입니다."></span>
+						</div>
+						<p class="text_notice">응모번호 중복 사용이 불가합니다.</p>
+						<div class="form_btns">
+							<button class="btn_lg_secondary reset" type="button">초기화</button>
+							<button class="btn_lg_primary apply" type="button">신청하기</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+			<div class="event_benefit_info">
+				<dl>
+					<dt>스윗레터란?</dt>
+					<dd>
+						<ul class="list_bullet_dot">
+							<li>온라인 쇼핑몰에서 감사의 마음을 담아 택배박스에 동봉하여 보내드리는 편지입니다.</li>
+							<li>스윗레터 안에 있는 응모번호를 입력하시면 당첨내역을 확인하실 수 있습니다.</li>
+						</ul>
+					</dd>
+				</dl>
+
+				<dl>
+					<dt>읽어보세요!</dt>
+					<dd>
+						<ul class="list_bullet_dot">
+							<li>에뛰드하우스 택배박스 안에 스윗레터가 동봉되어 있습니다.</li>
+							<li>스윗레터 안의 응모번호를 입력해 주세요.</li>
+							<li>에뛰드 BEST 상품, 할인쿠폰, 진주알 등 다양한 형태의 당첨 경품이 마련되어 있으며, 응모 즉시 확인 가능합니다. (경품은 매월 변경됩니다.)</li>
+						</ul>
+					</dd>
+				</dl>
+
+				<dl class="box">
+					<dt>당첨경품 예시</dt>
+					<dd class="align_center"><img ap:src="@{/images/event/img_sweet_letter_02.jpg}" alt="경품 예시 이미지"></dd>
+					<dd>
+						<ul class="list_bullet_dot">
+							<li>실물 경품 당첨 시 익일(영업일 기준) 택배 발송합니다.</li>
+							<li>배송이 필요한 경품의 경우 배송지를 입력 받사오니, 정확하게 입력해 주세요.(주소 오류 반송 건은 재발송하지 않습니다.)</li>
+							<li>당첨된 할인쿠폰이나 진주알은 당첨 즉시 지급됩니다. (마이 에뛰드에서 확인 가능합니다.)</li>
+						</ul>
+					</dd>
+				</dl>
+
+				<dl class="other_benefit">
+					<dt>그 밖의 다른 혜택</dt>
+					<dd>
+						<ul>
+							<li><a href="/display/pearl_roulette?displayMenuId=pearl_roulette" class="roulette">하루 세번 진주알 룰렛</a></li>
+							<li><a href="/display/beauty_test?displayMenuId=beauty_test" class="beauty_tester">뷰티테스터 신청하기</a></li>
+							<li><a href="/display/daily_check?displayMenuId=daily_check" class="attendance">매일매일 행운의 출첵</a></li>
+						</ul>
+					</dd>
+				</dl>
+			</div>
+		</div>
+		<!-- // page contents -->
+	</div><!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+		<script th:inline="javascript">
+			;(function () {
+				var member = {};
+				[# th:if="${memberMap}"]
+				member.id = /*[[${memberMap.id}]]*/;
+				member.name = /*[[${memberMap.name}]]*/;
+				member.memberSn = /*[[${memberMap.memberSn}]]*/;
+				[/]
+
+				AP.sweetLetter.setMemberInfo( member );
+			}());
+		</script>
+	</th:block>
+</body>
+</html>

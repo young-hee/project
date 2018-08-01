@@ -1,0 +1,56 @@
+<html ap:decorate="~{layout/layout-contents}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page contents -->
+            <div class="ap_contents mypage"> <!-- 01-23 클래스 변경 -->
+                <div class="panel none_bdr">
+                    <h2 class="h_title page">단골 매장</h2>
+                    <p class="font_md">매장 등록은 최대 10개까지 추가 가능해요~</p>
+                    <div class="page_btns">               	
+                        <a href="#none" class="btn_lg_primary">추가하기</a>
+                    </div>               		
+                </div>
+               	
+                <div class="panel store">
+                    <div class="page_btns store">
+                        <a href="#none" class="btn_md_bordered">테이크 아웃 서비스 알아보기 </a>
+                    </div>
+                    
+                   
+                    <div class="service_wrap">
+                        <h4 class="h_title cont"><b>서비스 운영시간</b><b class="time">오전 11시 ~ 오후 9시</b></h4>
+                        <ul class="list_bullet_dot">
+                            <li>매장에서 상품 준비가 완료되면 고객님께 SMS가 발송됩니다.(운영시간 내 수령 가능)</li>
+                            <li>매장의 재고 보유 현황에 따라 선택한 상품의 판매 상태가 달라질 수 있습니다.</li>
+                            <li>SMS발송 전 매장을 방문하시면, 상품 준비에 시간이 소요될 수 있습니다.</li>
+                            <li>매장 별로 휴무일이 다를 수 있습니다.</li>
+                        </ul>    
+                    </div>
+                                        
+                                                                                            		               			                                 		
+                </div>                 	              	                              	
+            </div>
+            <!-- // page contents -->
+            <!-- 마이페이지 맵 -->
+            <th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+            <!-- // 마이페이지 맵 -->
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+        	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+			<script>
+				//주소찾기
+                $( '.ui_find_addresses' ).findAddresses();
+             
+                //지도
+                $( '.map_area' ).mapApi();
+			</script>
+
+        </th:block>
+</body>
+</html>

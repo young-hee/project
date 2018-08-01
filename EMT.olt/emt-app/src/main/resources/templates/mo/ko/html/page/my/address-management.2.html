@@ -1,0 +1,117 @@
+<html ap:decorate="~{layout/layout-contents}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page contents -->
+            <div class="ap_contents mypage manage">
+                <div class="panel">
+                    <h2 class="h_title page">배송지 추가/수정</h2>
+                    <ul class="list_bullet_dot type2">
+                        <li>자주 사용하시는 배송지를 등록 및 관리하실 수 있습니다.</li>
+                        <li>배송지는 최대 10개까지 추가하실 수 있습니다.</li>
+                    </ul>            		
+               		<hr class="div m30" />
+               		<h3 class="form_title">기본정보 <small>(필수입력)</small></h3>
+               		                 
+                    <fieldset class="form">
+                        <legend class="sr_only">배송지 추가/수정</legend>     
+                        <div class="input_group">
+                            <div class="label">
+                                <label for="delivery_title">배송지명</label>
+                            </div>
+                            <div>
+                                <input type="text" id="delivery_title" placeholder="배송지명을 입력해 주세요.">
+                            </div>                           
+                        </div>
+                        <div class="input_group">
+                            <div class="label">
+                                <label for="delivery_name">받는 사람</label>
+                            </div>
+                            <div>
+                                <input type="text" id="delivery_name" placeholder="받는 분 성함을 입력해 주세요.">
+                            </div>                           
+                        </div>
+                        <div class="input_group">
+                            <div class="label">
+                                <label for="delivery_phone">휴대전화</label>
+                            </div>
+                            <div>
+                                <input type="tel" id="delivery_phone" placeholder="- 없이 입력해 주세요.">
+                            </div>                           
+                        </div>
+                    </fieldset>
+                    <h3 class="form_title">주소지 입력 <small>(필수입력)</small></h3>
+					
+                    <fieldset class="form">
+                    	<legend class="sr_only">주소 입력</legend>
+                    	<p class="text_notice">찾으시는 주소지 또는 건물명을 입력해 주세요.<br>(예 : 강남대로, 한강로2가, 한강대로 100)</p>
+                        <div class="ui_find_addresses">
+							<div class="input_group">
+								<div>
+									<input type="text" id="delivery_area" class="find_addresses_input" placeholder="주소지 또는 건물명">
+								</div>
+								<div class="btn">
+									<button type="button" class="btn_find_addresses">찾기</button>
+								</div>
+							</div>
+							<!-- 지역 검색 결과 -->
+							<div class="address_list"></div>
+							<!-- //지역 검색 결과 -->
+						
+							<div class="input_group">
+								<div class="input_wrap">
+									<input type="hidden" class="post_code" name="post_code">
+									<input type="hidden" class="address_first" name="address_first">
+									<input type="text" class="address_first" title="기본주소 입력" placeholder="주소" readonly="">
+								</div>
+							</div>
+							<div class="input_group">
+								<div class="input_wrap"><input type="text" class="address_last" title="상세주소 입력" placeholder="상세주소를 입력해주세요."></div>
+							</div>
+						</div>
+					</fieldset>
+					<h3 class="form_title">부가정보</h3>
+					<fieldset class="form">
+                        <legend class="sr_only">부가정보 입력</legend>
+                        <div class="input_group default">
+                            <div class="label">
+                                <label for="delivery_tel">일반전화</label>
+                            </div>
+                            <div>
+                                <input type="tel" id="delivery_tel" placeholder="- 없이 입력해 주세요.">
+                            </div>                           
+                        </div>
+                        
+                        <div class="check_group">
+                            <div class="check_wrap"><input type="checkbox" id="check1"><label for="check1">회원기본정보의 주소를 이 정보로 업데이트</label></div><!--/*20180626 : 체크박스 비활성화로 변경*/-->
+                        </div>                     
+                    </fieldset>
+
+                    <div class="form_btns">
+                        <a href="#none" class="btn_lg_secondary">취소</a>
+                        <a href="#none" class="btn_lg_neutral">등록</a>
+                    </div>
+                </div>
+               	
+            </div>
+            <!-- // page contents -->
+            
+            <!-- 마이페이지 맵   -->
+           	<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+           	<!-- // 마이페이지 맵 -->
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+            <!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+            <script>
+                //주소찾기
+                $( '.ui_find_addresses' ).findAddresses();
+            </script>
+
+        </th:block>
+</body>
+</html>

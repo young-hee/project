@@ -1,0 +1,53 @@
+<html ap:decorate="~{layout/layout-contents}">
+<head>
+    <link rel="stylesheet" type="text/css" ap:href="@{/css/main.css}">
+</head>
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+			<div class="ap_contents">
+				<div class="panel notice" th:if="${#lists.isEmpty(foPushResult) or #lists.isEmpty(foPushResult.foPushList)}">
+					<i class="ico"></i>
+					<p class="text">새로운 알림이 없습니다.<br>다양한 알림을 한꺼번에 모아서 확인할 수 있습니다.</p>
+				</div> 
+
+				<!-- /* 있을 경우 */ -->
+				<div class="panel notification" th:if="${not #lists.isEmpty(foPushResult) and not #lists.isEmpty(foPushResult.foPushList)}">
+					<ul>
+						<th:block th:each="foPush : ${foPushResult.foPushList}">
+							<li th:if="${#lists.isEmpty(foPush.pushImgUrl)}">
+								<th:block th:if=${#strings.isEmpty(foPush.foNoticeTypeName)}>	
+									<span class="state" >공지</span> <!-- * 공지타입이 없으면  */ -->
+								</th:block>
+								<th:block th:if="${not #strings.isEmpty(foPush.foNoticeTypeName)}">	
+									<span class="state" th:text="${foPush.foNoticeTypeName}"></span> 
+								</th:block>
+								<a href="#none" class="cont" th:href="${foPush.linkUrl}" th:utext="${foPush.pushMsg}"></a>
+							</li>
+							<li th:if="${not #lists.isEmpty(foPush.pushImgUrl)}"><!-- /* 이미지가 있을 경우 */ -->
+								<th:block th:if=${#strings.isEmpty(foPush.foNoticeTypeName)}>	
+									<span class="state" >공지</span> <!-- * 공지타입이 없으면  */ -->
+								</th:block>
+								<th:block th:if="${not #strings.isEmpty(foPush.foNoticeTypeName)}">	
+									<span class="state" th:text="${foPush.foNoticeTypeName}"></span> 
+								</th:block>								
+								<a href="#none" class="cont" th:href="${foPush.linkUrl}"><span th:utext="${foPush.pushMsg}"></span>
+									<img th:src="${foPush.pushImgUrl}" alt="">
+								</a>
+							</li>
+						</th:block>
+					</ul>
+				</div>
+			</div>
+        </div>
+
+    <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+    <th:block ap:fragment="layout-endpoint">
+		<script>
+			//notification 페이지 확인 체크
+			AP.common.setLocalStorage( 'notificationDate', AP.common.date() );
+		</script>
+    </th:block>
+
+</body>
+</html>

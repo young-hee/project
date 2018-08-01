@@ -1,0 +1,56 @@
+<div class="table_layout">
+	<dl class="date">
+		<dt>주문일시</dt>
+		<dd>{{dateFormat this.ordInfo.ordReceivedDt "YYYY-MM-DD HH:MM:SS"}}</dd>
+	</dl>
+	<dl class="order_num">
+		<dt>주문번호</dt>
+		<dd>{{this.ordInfo.ordNo}}</dd>
+	</dl>
+	{{#if this.ordInfo.claimCompleteDt}}
+		<dl>
+			<dt>교환 처리일</dt>
+			<dd>{{dateFormat this.ordInfo.claimCompleteDt "YYYY-MM-DD HH:MM:SS"}}</dd>
+		</dl>
+	{{/if}}
+	{{#if (eq this.type 'cashReceipts')}}
+		<dl>
+			<dt>발급상태</dt>
+			{{#xif this.ordInfo.cashReceiptIssueYn '==' 'Y'}}
+				<dd><em>발급완료</em></dd>
+			{{else}}
+				<dd><<button class="btn_sm_neutral" type="button" onclick="reqCashReceipts({{this.ordInfo.ordSn}})">발급신청</button></dd>
+			{{/xif}}
+		</dl>
+	{{/if}}
+</div>
+<div class="table_layout">
+	{{#xif this.type '==' 'store'}}
+		<dl>
+			<dt>주문상태</dt>
+			<dd><em>{{ordStatusCheck 'store' ordInfo.ordDetailStatusCode}}</em></dd>
+		</dl>
+		<dl>
+			<dt>구매매장</dt>
+			<dd><em>명동2호점</em> <span class="flag">스윗딜리버리</span> <button class="btn_sm_neutral" type="button">매장 보기</button></dd>
+		</dl>
+	{{else}}
+		{{#if (gt this.onlineCnt 0)}}
+			<dl>
+				<dt>온라인주문</dt>
+				{{#xif ordInfo.ordDetailStatusCode '!=' null}}
+					<dd><em>{{ordStatusCheck 'online' ordInfo.ordDetailStatusCode}}</em></dd>
+				{{else}}
+					<dd><em>{{this.title}} {{ordStatusCheck 'returnExchange' ordInfo.claimProgressStatusCode}}</em></dd>
+				{{/xif}}
+			</dl>
+		{{/if}}
+		{{#if (gt this.storeCnt 0)}}
+			<dl>
+				<dt>테이크아웃</dt>
+				<dd><em>{{ordStatus 'online' ordInfo.ordDetailStatusCode}}</em></dd>
+				<button class="btn_sm_neutral" type="button">매장 보기</button></dd>
+			</dl>
+		{{/if}}
+	{{/xif}}
+</div>

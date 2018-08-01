@@ -1,0 +1,30 @@
+{{#each this}}
+<tr>
+	<th scope="row" data-group="{{ this.addAttrCode }}">{{ this.addAttrName }}</th>
+	{{#xif this.addAttrCode '==' 'colorgroup'}}
+	<td>
+		<div class="color_chip circle group" data-group="{{ this.addAttrCode }}">
+			{{#each this.addAttrVals}}
+				<span>
+					<input type="checkbox" id="{{ this.addAttrValCode }}" name="{{ ../addAttrCode }}" value="{{ this.addAttrValCode }}" {{#if this.selected}}checked{{/if}}>
+					<label for="{{ this.addAttrValCode }}" style="background-color:#{{ this.addAttrValCode }}">
+						<span>{{ this.addAttrValName }}</span>
+					</label>
+				</span>
+			{{/each}}
+		</div>
+	</td>
+	{{else}}
+	<td>
+		<div class="filter_set group" data-group="{{ this.addAttrCode }}">
+			{{#each this.addAttrVals}}
+				<span>
+					<input type="checkbox" id="{{ this.addAttrValCode }}" name="{{ ../addAttrCode }}" value="{{ this.addAttrValCode }}" {{#if this.selected}}checked{{/if}}>
+					<label for="{{ this.addAttrValCode }}">{{ this.addAttrValName }}</label>
+				</span>
+			{{/each}}
+		</div>
+	</td>
+	{{/xif}}
+</tr>
+{{/each}}

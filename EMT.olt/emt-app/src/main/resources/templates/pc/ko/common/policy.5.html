@@ -1,0 +1,49 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents common_policy">
+
+				<div class="board_list2">
+					<table class="align_center">
+						<caption class="sr_only">전자공고 다운로드 리스트</caption>
+						<colgroup>
+							<col style="width:10%;"> <!-- 컬럼 사이즈 -->
+							<col>
+							<col style="width:20%;">
+						</colgroup>
+						<thead>
+						<tr>
+							<th scope="col">번호</th>
+							<th scope="col">제목</th>
+							<th scope="col">다운로드</th>
+						</tr>
+						</thead>
+						<tbody>
+						<th:block th:each="irList ,index : ${irListResult.irList}" >
+							<tr>
+								<td><span th:text="${irListResult.totalCount - index.index}"></span></td>
+								<td><span th:text="${irList.irTitle}"></span></td>
+								<td class="file_down"><a class="pdf_down" th:href="${irList.fileUrl}" download>PDF Download</a></td>   <!--${irList.fileUrl}  -->
+							</tr>
+						</th:block>
+						
+						</tbody>
+					</table>
+				</div>
+
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+        </th:block>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!--/* 주문상품 확인 */-->
+<dl>
+	<dt>
+		<span>주문상품 확인 (<em id="totalOrdOnlineProdCnt">00</em>개)</span>
+		<button type="button"><span class="sr_only">닫기</span></button>
+	</dt>
+	<dd>
+		<div class="cont">
+			<th:block th:if="${#lists.size(shippingOrdOnlineProdList) > 0}">
+				<h4 class="h_title sub">온라인 쇼핑상품 (<em id="shipOrdOnlineProdCnt">00</em>개)</h4>
+				<!--/* 단품타입/플래그/뷰티포인트(단일상품) */-->
+				<!--<div class="item_wrap">
+                    <div class="item_info">
+                        &lt;!&ndash;/* 상품 선택 */&ndash;&gt;
+                        <div class="item_thumb">
+                            <img ap:src="@{/images/dummy/650000956_IM_01.png}" alt="">
+                        </div>
+                        &lt;!&ndash;/* 상품/플래그/옵션명 */&ndash;&gt;
+                        <div class="item_name">
+                            <span class="title">애니 쿠편 올데이 퍼펙트 리필 SPF50+/PA+++</span>
+                            <span class="flag">뷰티포인트 전용</span>
+                        </div>
+                        &lt;!&ndash;/* 상품 수량 */&ndash;&gt;
+                        <div class="count">
+                            <p class="text_center">1개</p>
+                        </div>
+                        &lt;!&ndash;/* 포인트 및 가격 */&ndash;&gt;
+                        <div class="price">
+                            <span class="strong"><b>12,000</b>P</span>
+                        </div>
+                        &lt;!&ndash;/* 비고 */&ndash;&gt;
+                        <div class="btns">
+                            적립제외/쿠폰제외
+                        </div>
+                    </div>
+                </div>-->
+				<!--/* 옵션타입(그룹상품) */-->
+				<div class="item_wrap">
+					<div class="item_info" th:each="ordOnlineProd : ${shippingOrdOnlineProdList}">
+						<!--결제 히든값-->
+						<input type="hidden" name="onlinePordSn" th:value="${ordOnlineProd.onlineProdCode}"/>
+						<input type="hidden" name="prodName" th:value="${ordOnlineProd.onlineProdName}"/>
+						<input type="hidden" name="prodQty" th:value="${ordOnlineProd.ordQtySum}"/>
+						<!--//결제 히든값-->
+						<input type="hidden" id="ordHistProdCnt" name="ordHistProdCnt" th:value="${#lists.size(ordOnlineProd.ordHistProdList)}"/>
+						<!--/* 상품 선택 */-->
+						<div class="item_thumb">
+							<img th:if="${ordOnlineProd.onlineProdImgUrl != null}" th:src="${ordOnlineProd.onlineProdImgUrl}" class="thm_cart_item">
+							<img th:if="${ordOnlineProd.onlineProdImgUrl == null}" ap:src="@{/images/cart/no_img.png}" class="thm_cart_item">
+						</div>
+						<!--/* 상품/플래그/옵션명 */-->
+						<div class="item_name">
+							<span class="title" th:text="${ordOnlineProd.onlineProdName}">애니 쿠편 올데이 퍼펙트 리필 SPF50+/PA+++</span>
+							<p class="opt"
+							   th:each="ordHistProd, iterStat : ${ordOnlineProd.ordHistProdList}"
+							   th:text="!${iterStat.last} ? '옵션 : ' + ${ordHistProd.ordProdEx.prodNameBlang} + ' (' + ${ordHistProd.ordQty} + ')개' + ' / ' : '옵션 : ' + ${ordHistProd.ordProdEx.prodNameBlang} + ' (' + ${ordHistProd.ordQty} + ')개'">
+							</p>
+						</div>
+						<!--/* 상품 수량 */-->
+						<div class="count">
+							<p class="text_center" th:if="${ordOnlineProd.ordHistProdTypeCode == 'Ord'}" th:text="${ordOnlineProd.ordQtySum > 0 ? ordOnlineProd.ordQtySum + '개' : '0개'}">0개</p>
+							<p class="text_center" th:if="${ordOnlineProd.ordHistProdTypeCode == 'BulkDc'}" th:text="${ordOnlineProd.ordQtySum > 0 ? ordOnlineProd.ordQtySum + 'set' : '0set'}">0set</p>
+						</div>
+						<!--/* 포인트 및 가격 */-->
+						<div class="price">
+							<span class="strong"><b th:text="${#IntegUtil.toCommaNumber(ordOnlineProd.finalOnlineSaleAmtPcurSum)}">0</b>원</span>
+						</div>
+						<!--/* 비고 */-->
+						<div class="btns">
+							적립제외, 쿠폰제외
+						</div>
+					</div>
+				</div>
+				<!--/* 프로모션 플래그 */-->
+				<!--<div class="promotion">
+                    <div class="clear promotion_header">
+                        <strong>[EVENT] 섀도우 week 싱글 섀도우 1+1</strong> &lt;!&ndash;/* 이벤트명 */&ndash;&gt;
+                        <span><em>1+1</em>혜택 적용</span>
+                    </div>
+                    <div class="item_wrap">
+                        <div class="item_info">
+                            &lt;!&ndash;/* 상품 선택 */&ndash;&gt;
+                            <div class="item_thumb">
+                                <img ap:src="@{/images/dummy/650000956_IM_01.png}" alt="">
+                            </div>
+                            &lt;!&ndash;/* 상품/플래그/옵션명 */&ndash;&gt;
+                            <div class="item_name">
+                                <span class="title">애니 쿠편 올데이 퍼펙트 리필 SPF50+/PA+++</span>
+                                <span class="flag">1+1</span>
+                            </div>
+                            &lt;!&ndash;/* 상품 수량 */&ndash;&gt;
+                            <div class="count">
+                                <p class="text_center">1개</p>
+                            </div>
+                            &lt;!&ndash;/* 포인트 및 가격 */&ndash;&gt;
+                            <div class="price">
+                                <span class="strong"><b>12,000</b>원</span>
+                            </div>
+                            &lt;!&ndash;/* 비고 */&ndash;&gt;
+                            <div class="btns">
+                                적립제외/쿠폰제외
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item_wrap plus">
+                        <div class="item_info">
+                            &lt;!&ndash;/* 상품 선택 */&ndash;&gt;
+                            <div class="item_thumb">
+                                <img ap:src="@{/images/dummy/650000956_IM_01.png}" alt="">
+                            </div>
+                            &lt;!&ndash;/* 상품/플래그/옵션명 */&ndash;&gt;
+                            <div class="item_name">
+                                <span class="title">애니 쿠편 올데이 퍼펙트 리필 SPF50+/PA+++</span>
+                            </div>
+                            &lt;!&ndash;/* 상품 수량 */&ndash;&gt;
+                            <div class="count">
+                                <p class="text_center">1개</p>
+                            </div>
+                            &lt;!&ndash;/* 포인트 및 가격 */&ndash;&gt;
+                            <div class="price">
+                                <span class="strong"><b>12,000</b>원</span>
+                            </div>
+                            &lt;!&ndash;/* 비고 */&ndash;&gt;
+                            <div class="btns">
+                                적립제외/쿠폰제외
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+			</th:block>
+			<th:block th:if="${#lists.size(storePickupOrdOnlineProdList) > 0 and memberSn > 0}">
+				<h4 class="h_title sub">테이크아웃 상품 (<em id="storeOrdOnlineProdCnt">00</em>개)</h4>
+				<!--/* 옵션타입 */-->
+				<div class="item_wrap">
+					<div class="item_info" th:each="storeOrdOnlineProd : ${storePickupOrdOnlineProdList}">
+						<!--결제 히든값-->
+						<input type="hidden" name="onlinePordSn" th:value="${storeOrdOnlineProd.onlineProdCode}"/>
+						<input type="hidden" name="prodName" th:value="${storeOrdOnlineProd.onlineProdName}"/>
+						<input type="hidden" name="prodQty" th:value="${storeOrdOnlineProd.ordQtySum}"/>
+						<!--//결제 히든값-->
+						<input type="hidden" id="storeOrdHistProdCnt" name="storeOrdHistProdCnt" th:value="${#lists.size(storeOrdOnlineProd.ordHistProdList)}"/>
+						<!--/* 상품 선택 */-->
+						<div class="item_thumb">
+							<img th:if="${storeOrdOnlineProd.onlineProdImgUrl != null}" th:src="${storeOrdOnlineProd.onlineProdImgUrl}" class="thm_cart_item">
+							<img th:if="${storeOrdOnlineProd.onlineProdImgUrl == null}" ap:src="@{/images/cart/no_img.png}" class="thm_cart_item">
+						</div>
+						<!--/* 상품/플래그/옵션명 */-->
+						<div class="item_name">
+							<span class="title" th:text="${storeOrdOnlineProd.onlineProdName}">애니 쿠편 올데이 퍼펙트 리필 SPF50+/PA+++</span>
+							<p class="opt"
+							   th:each="storeOrdHistProd, iterStat : ${storeOrdOnlineProd.ordHistProdList}"
+							   th:text="!${iterStat.last} ? '옵션 : ' + ${storeOrdHistProd.ordProdEx.prodNameBlang} + ' (' + ${storeOrdHistProd.ordQty} + ')개' + ' / ' : '옵션 : ' + ${storeOrdHistProd.ordProdEx.prodNameBlang} + ' (' + ${storeOrdHistProd.ordQty} + ')개'">
+							</p>
+						</div>
+						<!--/* 상품 수량 */-->
+						<div class="count">
+							<p class="text_center" th:if="${storeOrdOnlineProd.ordHistProdTypeCode == 'Ord'}" th:text="${storeOrdOnlineProd.ordQtySum > 0 ? storeOrdOnlineProd.ordQtySum + '개' : '0개'}">0개</p>
+							<p class="text_center" th:if="${storeOrdOnlineProd.ordHistProdTypeCode == 'BulkDc'}" th:text="${storeOrdOnlineProd.ordQtySum > 0 ? storeOrdOnlineProd.ordQtySum + 'set' : '0set'}">0set</p>
+						</div>
+						<!--/* 포인트 및 가격 */-->
+						<div class="price">
+							<span class="strong"><b th:text="${#IntegUtil.toCommaNumber(storeOrdOnlineProd.finalOnlineSaleAmtPcurSum)}">0</b>원</span>
+						</div>
+						<!--/* 비고 */-->
+						<div class="btns">
+							적립제외, 쿠폰제외
+						</div>
+					</div>
+				</div>
+				<!--/* 프로모션 플래그 */-->
+				<!--<div class="item_wrap">
+                    <div class="item_info">
+                        &lt;!&ndash;/* 상품 섬네일 */&ndash;&gt;
+                        <div class="item_thumb">
+                            <img ap:src="@{/images/dummy/650000956_IM_01.png}" alt="">
+                        </div>
+                        &lt;!&ndash;/* 상품/플래그/옵션명 */&ndash;&gt;
+                        <div class="item_name">
+                            <span class="title">애니 쿠편 올데이 퍼펙트 리필 SPF50+/PA+++</span>
+                            <span class="flag">2+1</span>
+                        </div>
+                        &lt;!&ndash;/* 상품 수량 */&ndash;&gt;
+                        <div class="count">
+                            <p class="text_center">3개</p>
+                        </div>
+                        &lt;!&ndash;/* 포인트 및 가격 */&ndash;&gt;
+                        <div class="price">
+                            <span class="strong"><b>12,000</b>원</span>
+                        </div>
+                        &lt;!&ndash;/* 비고 */&ndash;&gt;
+                        <div class="btns">
+                            적립제외/쿠폰제외
+                        </div>
+                    </div>
+                </div>-->
+			</th:block>
+		</div>
+	</dd>
+</dl>

@@ -1,0 +1,20 @@
+{{#xif totalLength '>' 0 }}
+    {{#each result }}
+        <tr type="{{shipAddressSn}}">
+            <td><span class="check_wrap check_only">
+                <input type="checkbox" name="check" id="{{shipAddressSn}}" value="{{shipAddressSn}}" class="table_striped">
+                <label for="{{shipAddressSn}}"><span class="sr_only">{베송지명}선택</span></label></span></td>
+            <td type="name">{{shipAddressName}}
+                <span type="rep" val="{{shipAddressSn}}" class="{{repClass repShipAddressYn}}">{{repText repShipAddressYn}}</span>
+            </td>
+            <td>{{addresseeName.name1}}</td>
+            <td class="align_left">{{addresseeAddress.address1}} {{addresseeAddress.address2}}</td>
+            <td>{{phoneNo1.phoneNo}}<br>{{phoneNo2.phoneNo}}</td>
+            <td>
+           	<button class="btn_sm_bordered" onclick="showUpdateLayer({{json this}}, {{shipAddressSn}})">수정하기</button>
+            <td>
+        </tr>
+    {{/each}}
+{{else}}
+    
+{{/xif}}

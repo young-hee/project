@@ -1,0 +1,64 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='beauty-tester'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents event_apply beauty_tester">
+	
+		<div class="event_image" th:utext="${regularEvent.detailHtmlM}"></div>
+		
+		<div class="panel">
+			<div class="panel gray">
+				<ul class="list_bullet_dot">
+					<li>이미지 도용으로 인한 피해사례가 발생하고 있습니다. </li>
+					<li>올바르지 않은 타인의 작업물 사용을 삼가해 주시기
+						바라며, 적발 시 삭제 처리합니다.</li>
+				</ul>
+			</div>
+			<br>
+			<a href="#none" class="btn_md_bordered w100p viewProdDetail" th:data-online-prod-sn="${regularEvent.awards[0].onlineProdSn}">제품 상세 보기</a>
+		</div>
+		<div class="panel">
+			<button class="btn_md_primary w100p apply" type="button">신청하기</button>
+			<br>
+			<ul class="list_bullet_dot mgt20">
+				<li>뷰티테스터 참여하시면 <em>진주알 10알</em>이 차감됩니다.</li>
+				<li>당첨자는 <em>이벤트&gt;당첨자 확인</em>에서 확인하실 수 있습니다.</li>
+			</ul>
+
+			<div class="ui_accordion list"></div>
+
+			<ul class="loading" style="display: block; min-height: 300px">
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
+			<button type="button" class="btn_lg_more w100p">
+				<span></span>
+			</button>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script th:inline="javascript">
+		(function () {
+			var member = {};
+
+			[# th:if="${memberMap}"]
+			member.id = /*[[${memberMap.id}]]*/;
+			member.name = /*[[${memberMap.name}]]*/;
+			member.memberSn = /*[[${memberMap.memberSn}]]*/;
+			[/]
+
+			AP.beautyTester.load({ memberInfo: member });
+		}());
+	</script>
+
+</th:block>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+<html ap:decorate="~{layout/layout-main}" th:with="_jsfile='product-list'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents prd_list weekly_best"> <!-- 02-21 클래스 수정 -->
+		<!-- 02-28 소카테고리 삭제 메뉴레이어로 통합
+		<th:block ap:replace="~{fragment/product/category}"/>
+		<!--//소카테고리-->
+
+		<div class="banner_area best">
+			<p> 에뛰드하우스에서</p>
+			<p><strong>가장 사랑받는 TOP 20</strong></p>
+		</div>
+
+		<!--상품리스트-->
+		<div class="item_list type1">
+			<div class="panel notice no_result" style="display: none;">
+				<i class="ico"></i>
+				<p class="text">상품이 존재하지 않습니다.</p>
+			</div>
+
+			<ul></ul>
+		</div>
+
+		<div class="item_list type2">
+			<ul></ul>
+		</div>
+		<!--//상품리스트-->
+
+		<ul class="loading" style="display: none">
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	<!-- // page contents -->
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script>
+		AP.display.init({
+			key: { displayMenuId: AP.DISPLAY_MENU_ID },
+			param: { limit: 20 }
+		});
+	</script>
+</th:block>
+
+</body>
+</html>

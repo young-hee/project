@@ -1,0 +1,50 @@
+{{!--
+	전시 : 구매버튼이 있는 상세 상품목록 (진주알스토어)
+--}}
+{{#each this.list}}
+	{{#each this.products}}
+		{{#xif ../selectedProdSn '==' this.prodSn}}
+
+			<li class="prod" data-online-prod-sn="{{ ../onlineProdSn }}">
+				<div class="item">
+					<div class="item_images">
+						<!-- /* 대표 이미지 */ -->
+						<img class="lazy_load" src="" data-src="{{ this.prodImages.[0].imgUrl }}" alt="">
+
+						{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+							<div class="item_state out_of_stock">일시품절</div>
+						{{/xif}}
+					</div>
+					{{!--/* flags */--}}
+					<div class="item_info list">
+						{{!-- /* 상품명 */ --}}
+						<div class="prd_name">
+							<div>
+								<p class="s_name">
+									{{#xif this.saleDisplayStatus '==' 'WaitingSale' }}
+										<em class="tag">[곧 출시!]</em>
+									{{/xif}}
+									{{#xif (eq this.prodTypeCode 'Presale') '&&' (eq this.saleDisplayStatus 'OnSale')}}
+										<em class="tag">[예약판매중]</em>
+									{{/xif}}
+									<span> {{{ this.linePromoDesc }}} </span>
+								</p>
+								<p class="name">{{ ../onlineProdName }}</p>
+							</div>
+
+							{{#xif ../singleUnitProdYn '==' 'N'}}
+								<p class="color_name">{{ this.prodName }}</p>
+							{{/xif}}
+						</div>
+					</div>
+					<div class="price_area">
+						<div class="price">
+							<span>{{ numberFormat this.exchActivityPoint }}<em> 알</em></span>
+						</div>
+					</div>
+				</div>
+				<button class="btn_order" type="button" data-online-prod-sn="{{ ../onlineProdSn }}" data-prod-sn="{{ ../prodSn }}">담기</button>
+			</li>
+		{{/xif}}
+	{{/each}}
+{{/each}}

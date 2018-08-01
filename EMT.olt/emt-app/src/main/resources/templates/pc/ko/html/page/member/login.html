@@ -1,0 +1,94 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents login">
+                <div class="panel">
+                    <div class="panel_cont">
+                        <fieldset class="form">
+                            <legend class="sr_only">로그인 정보 입력</legend>
+                            <div class="radio_set">
+                                <span class="check_wrap"><input type="radio" name="login" id="choice1" checked><label for="choice1">회원</label></span>
+                                <span class="check_wrap"><input type="radio" name="login" id="choice2"><label for="choice2">비회원(주문조회)</label></span>
+                            </div>
+                            <div class="login_area">
+                                <div class="input_wrap"><input type="text" title="아이디 입력" placeholder="아이디"></div>
+                                <div class="input_wrap"><input type="password" title="비밀번호 입력" placeholder="비밀번호"></div>
+                                <div class="clear">
+                                    <div class="check_wrap"><input type="checkbox" id="save_id"><label for="save_id">아이디 저장</label></div>
+                                    <div>
+                                        <a href="#none">아이디 찾기</a> │ <a href="#none">비밀번호 찾기</a>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn_primary_login">로그인</button>
+                            </div>
+                        </fieldset>
+                        <hr class="div m20">
+                        <dl class="dl_cont">
+                            <dt class="h_title cont">아직도 회원이 아니세요?</dt>
+                            <dd>
+                                <p class="text">아모레퍼시픽계열 모든 쇼핑몰을 하나의 아이디로 편리하게, <br>통합멤버십(뷰티포인트)적립 및 다양한 서비스와 혜택을 누리세요.</p>
+                                <a href="#none" class="btn_md_bordered vertical">회원가입 </a>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="panel gray">
+                    <div class="panel_cont">
+                        <p class="text font_lg">SNS계정으로 간편하게 로그인 하세요.</p>
+                        <ul class="ui_sns_share sns">
+                            <li><a href="#none" class="share_btn facebook" data-sns-type="facebook">facebook</a></li>
+                            <li><a href="#none" class="share_btn naver_blog" data-sns-type="naver_blog">naver blog</a></li>
+                            <li><a href="#none" class="share_btn url" data-sns-type="url">copy url</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        	<!-- // page contents -->
+        	<!-- banner -->
+            <div class="banner_area">
+                <!-- slide -->
+                <div class="slide" data-ix-options="view-length:1;">
+                    <div class="ix-list-viewport">
+                        <ul class="ix-list-items">
+                            <!--/* TODO: 배너 갯수 만큼 li 생성 */-->
+                            <li class="ix-list-item">
+                                <!--/* TODO: background color 배너 등록시 설정 필요 */-->
+                                <a href="#none" style="background:#f0adb6;">
+                                    <img ap:src="@{/images/dummy/img_banner_01.jpg}" alt="배너 내용">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="ix-controller">
+                        <ul class="ix-thumbs">
+                            <li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+                        </ul>
+                    </div>
+                </div><!-- // slide -->
+            </div>
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+            <!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+            <script>
+                //하단 베너 제어
+                (function () {
+                    var $banner = $( '.banner_area > .slide' ).ixSlideMax();
+
+                    $( window ).on( 'resize', function (e) {
+                        $banner.ixSlideMax( 'resize' );
+                    });
+                })();
+            </script>
+
+        </th:block>
+</body>
+</html>

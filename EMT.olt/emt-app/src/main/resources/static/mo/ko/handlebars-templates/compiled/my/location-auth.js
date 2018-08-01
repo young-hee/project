@@ -1,0 +1,7 @@
+this["AP"] = this["AP"] || {};
+this["AP"]["handlebars"] = this["AP"]["handlebars"] || {};
+this["AP"]["handlebars"]["my"] = this["AP"]["handlebars"]["my"] || {};
+
+this["AP"]["handlebars"]["my"]["location-auth"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "<dl class=\"layer\">\n	<dt class=\"layer_title\">위치기반 서비스 이용 동의</dt>\n	<dd class=\"layer_cont\">\n		<div class=\"mypage\">\n			<fieldset class=\"form\">\n			<legend class=\"sr_only\">위치기반 서비스 이용 동의</legend>\n			<p class=\"text text_center location\">에뛰드 하우스 서비스의 위치정보 수집 및 이용에 관한 약관에 동의합니다.</p>\n			<div class=\"page_btns\">\n				<a href=\"/cs/takeOut\" class=\"btn_md_bordered w100p\">약관 자세히 보기</a>\n			</div>\n			<ul class=\"list_bullet_dot\">\n				<li>위치 기반 서비스 이용약관에 동의하시면 내 위치 주변에 가까운 매장을 찾아 보실 수 있습니다.</li>\n				<li>동의하지 않으실 경우 서비스를 제공 받으실 수없습니다.</li>		                            	\n			</ul>\n			<div class=\"form_btns\">\n		 		<button class=\"btn_md_secondary\" type=\"button\" id=\"cancel\">동의하지 않음</button>\n		  		<button class=\"btn_md_neutral\" type=\"button\" id=\"ok\">동의</button>\n			</div>\n	   	 	</fieldset>\n		</div>\n 	</dd>\n</dl>\n<button class=\"layer_close\" type=\"button\">레이어 닫기</button>\n";
+},"useData":true});

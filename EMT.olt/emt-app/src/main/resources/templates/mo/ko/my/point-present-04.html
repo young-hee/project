@@ -1,0 +1,87 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='member'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page contents -->
+            <div class="ap_contents mypage">
+            	<div class="beauty_point">
+                    <div class="panel">
+                        <div class="title_wrap">
+                            <h3 class="h_title page">비회원 고객</h3>
+                            <p class="font_md">뷰티포인트 회원이 아닙니다.</p>
+                            <div class="ui_step sm">
+                                <ul>
+                                    <li class="current"><i class="ico"></i>step 1<span class="sr_only">선택됨</span></li>
+                                    <li><i class="ico"></i>step 2</li>
+                                    <li><i class="ico"></i>step 3</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="my_bt_point">
+                            <dl>
+                                <dt>나의 보유 뷰티포인트</dt>
+								<dd><span class="num" th:text="${#IntegUtil.toCommaNumber(point.rmnPt)}">20,000</span>P</dd> <!-- 03-05 수정 -->
+                            </dl>
+                        </div>
+                        <hr class="div m30">
+
+                        <h4 class="h_title cont"><strong>선물 받는 분</strong></h4>
+                        <div class="bt_point_recipient">
+                            <p class="name"><i class="ico"></i><strong th:text="${session.PRESENT_NAME}">홍길동</strong> 님</p>
+                            <p class="num"><i class="ico"></i><span th:text="${#IntegUtil.hyphenPhoneNumber(session.PRESENT_PHONE_NO)}">010-8234-5678</span></p>
+                        </div>
+                        <ul class="list_bullet_dot">
+                            <li>선물받으신 분은 뷰티포인트 회원이 아닙니다.</li>
+                            <li>뷰티포인트 회원이 아닌 분께 선물할 경우 선물하는 분의 휴대폰 번호로 선물 안내 문자가 발송됩니다.</li>
+                            <li>포인트를 선물 받으신 분은 14일 이내에 회원 가입 후 포인트 수락/거절 을 할 수 있으며, 14일이 경과될 경우 자동으로 선물하신 회원님께 환급 됩니다.</li>
+                            <li>잘못 입력된 정보로 선물된 포인트는 반환 불가하오니 입력하신 정보가  정확한지 꼭 확인해주세요.</li>
+                        </ul>
+
+                        <div class="page_btns">
+                            <button class="btn_lg_secondary" onclick="window.history.back()" type="button">취소</button>
+                            <button class="btn_lg_neutral" onclick="present()" type="button">다음</button>
+                        </div>
+                    </div>
+               	</div>
+            </div>
+            <!-- // page contents -->
+            <!-- 마이페이지 맵 -->
+            <th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+            <!-- // 마이페이지 맵 -->
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+			<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+			<script>
+			var step = AP.common.getSessionStorage("presentStep");
+			AP.common.setSessionStorage("presentStep", 0)
+			if(step != 4) {
+				window.history.back();
+			}
+			function doPresent() {
+
+                AP.api.presentPoint({}, {}).done(function(data) {
+					AP.common.setSessionStorage("presentStep", 6);
+		        	location.replace('/my/page/info/presentComplete');
+                }).fail(function(xhr, textStatus, errorThrown) {
+    	            $(this).removeAttr("disabled");
+                    if (xhr.errorCode == 0) {
+                        AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+                    } else if (xhr.errorCode == 'ERROR') {
+                        AP.modal.alert("포인트를 선물할 수 없습니다.");
+                    } else {
+                        AP.modal.alert(xhr.errorMessage)
+                    }
+                }).always(function() {
+                    //성공, 실패
+                });
+			}
+			</script>
+
+        </th:block>
+</body>
+</html>

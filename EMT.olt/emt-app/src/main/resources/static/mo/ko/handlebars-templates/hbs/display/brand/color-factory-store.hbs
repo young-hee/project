@@ -1,0 +1,46 @@
+{{#each this.storeExList}}
+<dl data-store-sn="{{ this.storeSn }}" data-lat="{{ this.latitude }}" data-lng="{{ this.longitude }}">
+	<dt>
+		<span class="title">{{ this.storeName }}</span>
+		<button type="button" class="btn">
+			<span class="sr_only"></span>
+		</button>
+	</dt>
+	<dd style="display: block">
+		<div class="cont">
+			<div class="color_finder_store">
+				<div class="map_area"></div>
+			</div>
+
+			{{#xif this.storeImgUrlList.length '>' 0}}
+				<div class="slide mgt10" data-ix-options="view-length:1;">
+					<div class="ix-list-viewport">
+						<ul class="ix-list-items">
+							{{#each this.storeImgUrlList}}
+								<li class="ix-list-item">
+									<a href="#none">
+										<img alt="" src="{{ absolutePath this }}">
+									</a>
+								</li>
+							{{/each}}
+						</ul>
+					</div>
+					<div class="ix-controller">
+						<ul class="ix-thumbs">
+							<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+						</ul>
+					</div>
+				</div>
+			{{/xif}}
+
+			<div class="store_info">
+				<h3 class="store_title">{{ this.storeName }}</h3>
+				<p class="store_addr">
+					<span class="store_addr_txt">{{ this.address.address1 }}, {{ this.address.address2 }}</span>
+					<a href="tel:{{ this.phoneNo1.phoneNo }}"><span class="store_phone">{{ phoneNumberFormat this.phoneNo1.phoneNo }}</span></a>
+				</p>
+			</div>
+		</div>
+	</dd>
+</dl>
+{{/each}}

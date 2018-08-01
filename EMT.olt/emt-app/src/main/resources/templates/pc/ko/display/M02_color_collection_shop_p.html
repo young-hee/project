@@ -1,0 +1,71 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='product-list'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents prd_list">
+				<!--/* 키비주얼 영역 */-->
+				<th:block th:if="${not #lists.isEmpty(cornersMap)}">
+					<div class="prd_banner slide" data-ix-options="view-length:1;">
+						<div class="ix-list-viewport">
+							<ul class="ix-list-items">
+								<th:block th:each="corner : ${cornersMap.get('M02_color_collection_shop_p.1')}">
+									<th:block th:each="contents : ${corner.contents}">
+										<th:block th:if="${contents.menuPageCornerContentsId == 'M02_color_collection_shop_p.1.1'}">
+											<li class="ix-list-item" th:style="'background-color:#' + ${contents.bgColor}">
+												<a href="#none" th:href="${contents.linkUrl}">
+													<img alt="" th:src="${contents.imgUrl}">
+												</a>
+											</li>
+										</th:block>
+									</th:block>
+								</th:block>
+							</ul>
+						</div>
+						<div class="ix-controller">
+							<ul class="ix-thumbs">
+								<li class="ix-thumb">
+									<button type="button" class="ix-btn"><!--ix-index-->번째 배너</button>
+								</li>
+							</ul>
+							<!--/* 20180425 : 배너 좌우버튼추가 */-->
+							<div class="slide_direction">
+								<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
+								<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
+								<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
+							</div>
+						</div>
+					</div>
+				</th:block>
+
+				<!--/* item 목록 */-->
+				<div class="item_list column2">
+					<div class="panel notice etu_find_store_none no_result" style="display: none;">
+						<i class="ico"></i>
+						<p class="text font_lg"><span class="tit_1">상품이 존재하지 않습니다.</span></p>
+					</div>
+
+					<ul></ul>
+
+					<div class="loading" style="display: block; min-height: 300px">
+						<span><img alt="" src="/pc/ko/images/common/loading.gif"></span>
+					</div>
+				</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+		<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+		<th:block ap:fragment="layout-endpoint">
+			<script>
+				AP.display.init({
+					key: { displayMenuId: AP.DISPLAY_MENU_ID }
+				});
+			</script>
+		</th:block>
+</body>
+</html>

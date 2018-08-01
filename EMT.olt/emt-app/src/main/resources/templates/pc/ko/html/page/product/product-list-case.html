@@ -1,0 +1,761 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='product-list'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents prd_list">
+
+				<!--/* item 목록 */-->
+				<div class="item_list column2" style="display: block">
+					<ul class="before_list">
+						<!--/* [S] 20180416 : 상품리시트 상품가 표기 정의 5case */-->
+						<li>
+							<div class="item">
+								<div class="item_images">
+									<!-- 페이지 로딩 -->
+									<ul class="loading white" style="display:none">
+										<li></li>
+										<li></li>
+										<li></li>
+									</ul>
+									<!--/* 대표 이미지 */-->
+									<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650000956_IM_01.png" alt=""></a>
+									<!--/* 이미지 슬라이드 */-->
+									<div class="slide goods_slide" data-ix-options="view-length :1;">
+										<div class="ix-list-viewport">
+											<ul class="ix-list-items">
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650000956_IM_01.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001363_IM_01.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001142_IM_01.png" alt=""></a>
+												</li>
+											</ul>
+										</div>
+										<div class="ix-controller">
+											<ul class="ix-thumbs">
+												<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="info_box">
+									<!--/* flag */-->
+									<div class="flag_set">
+										<span class="new">신상품</span>
+										<span>MD추천</span>
+									</div>
+									<!--/* 상품명 */-->
+									<div class="title_area">
+										<P class="s_title">온라인 단독 구성 50%SALE</P>
+										<h3 class="h_title">유브이 더블 컷 산뜻 선 젤 SPF50+/PA++++</h3>
+									</div>
+									<!--/* color 옵션 */-->
+									<!-- 상품 옵션 영역 7개 이상 -->
+									<div class="item_option">
+										<p class="color_name">10 colors</p>
+										<div class="option_name">
+											<span><em>NEW</em> PP511 계탔다</span>
+										</div>
+										<div class="color_chips">
+											<p class="btn_more"><button type="button" class="btn_color_more"><span>+ 85</span><span class="sr_only">컬러 더보기</span></button></p>
+											<div class="chips slide" data-ix-options="view-length:1;">
+												<!-- "ix-list-viewport" 는 직계 자식요소여야 한다. touch area -->
+												<div class="ix-list-viewport">
+													<!-- "ix-list-items" 는 "ix-list-viewport"의 직계 자식요소여야 한다. -->
+													<!--
+													<ul class="ix-list-items">
+														<li class="ix-list-item">
+															<ul class="colors">
+																<li data-group="f06da1"><a href="#chip"><span class="sold_out"><span>품절</span></span><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip" class="check"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+															</ul>
+														</li>
+														<li class="ix-list-item">
+															<ul class="colors">
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+															</ul>
+														</li>
+													</ul>
+													-->
+												</div>
+												<!-- "ix-controller" 는 직계 자식요소여야 한다. 필요없을시 삭제해도 무방하다. -->
+												<div class="ix-controller">
+													<div class="slide_direction">
+														<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
+														<a class="ix-btn-prev" href="#prev"><span class="sr_only">Prev</span></a>
+														<a class="ix-btn-next" href="#next"><span class="sr_only">Next</span></a>
+													</div>
+												</div>
+											</div>
+
+											<!--/* 컬러군 */-->
+											<div class="color_group ui_select" data-not-label-change="false">
+												<input type="hidden" name="">
+												<button type="button"><span style="background-color:#e1e1e1" data-color="e1e1e1"></span><span>컬러군 선택</span></button>
+												<ul class="select_options">
+													<!-- data-selected="true" 속성을 a 태그에 설정하면 해당 옵션이 기본 선택된다. -->
+													<!-- data-disabled="true" 속성을 a 태그에 설정하면 해당 옵션을 선택할수 없다. -->
+													<!-- data-value="value" 선택시 value로 리턴되는 값 -->
+													<li class="select_option"><code class="label_markup" style="display:none">전체</code><a data-value="00"><span style="background-color:#999999" data-color="999999">ALL</span><span>전체</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">핑크</code><a data-value="01"><span style="background-color:#f06da1" data-color="f06da1"></span><span>핑크</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">레드</code><a data-value="02"><span style="background-color:#e9224e" data-color="e9224e"></span><span>레드</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">오렌지</code><a data-value="03"><span style="background-color:#ff7a2d" data-color="ff7a2d"></span><span>오렌지</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">퍼블</code><a data-value="04"><span style="background-color:#b261e4" data-color="b261e4"></span><span>퍼블</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">블렉/그레이</code><a data-value="05"><span style="background-color:#1f1d20" data-color="1f1d20"></span><span>블렉/그레이</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">브라운</code><a data-value="06"><span style="background-color:#8e502f" data-color="8e502f"></span><span>브라운</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">그린</code><a data-value="07"><span style="background-color:#8fe48a" data-color="8fe48a"></span><span>그린</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">블루</code><a data-value="08"><span style="background-color:#3a6abf" data-color="3a6abf"></span><span>블루</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">옐로우/베이지</code><a data-value="09"><span style="background-color:#f9c361" data-color="f9c361"></span><span>옐로우/베이지</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">화이트</code><a data-value="10"><span style="background-color:#ffffff" data-color="ffffff"></span><span>화이트</span></a></li>
+												</ul>
+											</div>
+											<p class="option_close"><button type="button">닫기</button></p>
+										</div>
+									</div>
+
+									<!--/* 가격,장바구니 */-->
+									<div class="price_area">
+										<div class="price">
+											<strong>12,600<em>원</em></strong>
+										</div>
+										<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="item">
+								<div class="item_images">
+									<!-- 페이지 로딩 -->
+									<ul class="loading white" style="display:none">
+										<li></li>
+										<li></li>
+										<li></li>
+									</ul>
+									<!--/* 대표 이미지 */-->
+									<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001018_IM_01.png" alt=""></a>
+									<!--/* 이미지 슬라이드 */-->
+									<div class="slide goods_slide" data-ix-options="view-length :1;">
+										<div class="ix-list-viewport">
+											<ul class="ix-list-items">
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001018_IM_01.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001018_IM_02.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001018_IM_04.png" alt=""></a>
+												</li>
+											</ul>
+										</div>
+										<div class="ix-controller">
+											<ul class="ix-thumbs">
+												<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="info_box">
+									<!--/* flag */-->
+									<div class="flag_set">
+										<span>MD추천</span>
+										<span>온라인전용</span>
+									</div>
+									<!--/* 상품명 */-->
+									<div class="title_area">
+										<P class="s_title">온라인 단독 구성 50%SALE</P>
+										<h3 class="h_title">유브이 더블 컷 산뜻 선 젤 SPF50+/PA++++</h3>
+									</div>
+									<!--/* color 옵션 */-->
+									<!-- 상품 옵션 영역 7개 이상 -->
+									<div class="item_option">
+										<p class="color_name">10 colors</p>
+										<div class="option_name">
+											<span><em>NEW</em> PP511 계탔다</span>
+										</div>
+										<div class="color_chips">
+											<p class="btn_more"><button type="button" class="btn_color_more"><span>+ 85</span><span class="sr_only">컬러 더보기</span></button></p>
+											<div class="chips slide" data-ix-options="view-length:1;">
+												<!-- "ix-list-viewport" 는 직계 자식요소여야 한다. touch area -->
+												<div class="ix-list-viewport">
+													<!-- "ix-list-items" 는 "ix-list-viewport"의 직계 자식요소여야 한다. -->
+													<!--<ul class="ix-list-items">
+														<li class="ix-list-item">
+															<ul class="colors">
+																<li data-group="f06da1">
+																	<a href="#chip">
+																		<span class="sold_out"><span>품절</span></span>
+																		<img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}">
+																	</a>
+																</li>
+																<li data-group="f06da1"><a href="#chip" class="check"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+															</ul>
+														</li>
+														<li class="ix-list-item">
+															<ul class="colors">
+																<li data-group="f06da1">
+																	<a href="#chip">
+																		<span class="sold_out"><span>품절</span></span>
+																		<img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}">
+																	</a>
+																</li>
+																<li data-group="f06da1"><a href="#chip" class="check"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+															</ul>
+														</li>
+													</ul>-->
+												</div>
+												<!-- "ix-controller" 는 직계 자식요소여야 한다. 필요없을시 삭제해도 무방하다. -->
+												<div class="ix-controller">
+													<div class="slide_direction">
+														<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
+														<a class="ix-btn-prev" href="#prev"><span class="sr_only">Prev</span></a>
+														<a class="ix-btn-next" href="#next"><span class="sr_only">Next</span></a>
+													</div>
+												</div>
+											</div>
+											<!--/* 컬러군 */-->
+											<div class="color_group ui_select" data-not-label-change="false">
+												<input type="hidden" name="">
+												<button type="button"><span style="background-color:#e1e1e1" data-color="e1e1e1"></span><span>컬러군 선택</span></button>
+												<ul class="select_options">
+													<!-- data-selected="true" 속성을 a 태그에 설정하면 해당 옵션이 기본 선택된다. -->
+													<!-- data-disabled="true" 속성을 a 태그에 설정하면 해당 옵션을 선택할수 없다. -->
+													<!-- data-value="value" 선택시 value로 리턴되는 값 -->
+													<li class="select_option"><code class="label_markup" style="display:none">전체</code><a data-value="00"><span style="background-color:#999999" data-color="999999">ALL</span><span>전체</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">핑크</code><a data-value="01"><span style="background-color:#f06da1" data-color="f06da1"></span><span>핑크</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">레드</code><a data-value="02"><span style="background-color:#e9224e" data-color="e9224e"></span><span>레드</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">오렌지</code><a data-value="03"><span style="background-color:#ff7a2d" data-color="ff7a2d"></span><span>오렌지</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">퍼블</code><a data-value="04"><span style="background-color:#b261e4" data-color="b261e4"></span><span>퍼블</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">블렉/그레이</code><a data-value="05"><span style="background-color:#1f1d20" data-color="1f1d20"></span><span>블렉/그레이</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">브라운</code><a data-value="06"><span style="background-color:#8e502f" data-color="8e502f"></span><span>브라운</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">그린</code><a data-value="07"><span style="background-color:#8fe48a" data-color="8fe48a"></span><span>그린</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">블루</code><a data-value="08"><span style="background-color:#3a6abf" data-color="3a6abf"></span><span>블루</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">옐로우/베이지</code><a data-value="09"><span style="background-color:#f9c361" data-color="f9c361"></span><span>옐로우/베이지</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">화이트</code><a data-value="10"><span style="background-color:#ffffff" data-color="ffffff"></span><span>화이트</span></a></li>
+												</ul>
+											</div>
+											<p class="option_close"><button type="button">닫기</button></p>
+										</div>
+
+									</div>
+
+									<!--/* 가격,장바구니 */-->
+									<div class="price_area">
+										<div class="discount">
+											<strong class="to">50<em>%</em></strong>
+										</div>
+										<div class="price">
+											<del>12,600<em>원</em></del>
+											<strong>12,600<em>원</em></strong>
+										</div>
+										<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="item">
+								<div class="item_images">
+									<!-- 페이지 로딩 -->
+									<ul class="loading white" style="display:none">
+										<li></li>
+										<li></li>
+										<li></li>
+									</ul>
+									<!--/* 대표 이미지 */-->
+									<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001142_IM_01.png" alt=""></a>
+									<!--/* 이미지 슬라이드 */-->
+									<div class="slide goods_slide" data-ix-options="view-length :1;">
+										<div class="ix-list-viewport">
+											<ul class="ix-list-items">
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001142_IM_01.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001142_IM_02.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001142_IM_03.png" alt=""></a>
+												</li>
+											</ul>
+										</div>
+										<div class="ix-controller">
+											<ul class="ix-thumbs">
+												<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="info_box">
+									<!--/* flag */-->
+									<div class="flag_set">
+										<span class="event">이벤트</span>
+										<span>온라인전용</span>
+									</div>
+									<!--/* 상품명 */-->
+									<div class="title_area">
+										<P class="s_title">온라인 단독 구성 50%SALE</P>
+										<h3 class="h_title">유브이 더블 컷 산뜻 선 젤 SPF50+/PA++++</h3>
+									</div>
+									<!--/* color 옵션 */-->
+									<!-- 상품 옵션 영역 7개 이상 -->
+									<div class="item_option">
+										<p class="color_name">10 colors</p>
+										<div class="option_name">
+											<span><em>NEW</em> PP511 계탔다</span>
+										</div>
+										<div class="color_chips">
+											<p class="btn_more"><button type="button" class="btn_color_more"><span>+ 85</span><span class="sr_only">컬러 더보기</span></button></p>
+											<div class="chips slide" data-ix-options="view-length:1;">
+												<!-- "ix-list-viewport" 는 직계 자식요소여야 한다. touch area -->
+												<div class="ix-list-viewport">
+													<!-- "ix-list-items" 는 "ix-list-viewport"의 직계 자식요소여야 한다. -->
+													<!--<ul class="ix-list-items">
+														<li class="ix-list-item">
+															<ul class="colors">
+																<li data-group="f06da1">
+																	<a href="#chip">
+																		<span class="sold_out"><span>품절</span></span>
+																		<img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}">
+																	</a>
+																</li>
+																<li data-group="f06da1"><a href="#chip" class="check"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+															</ul>
+														</li>
+														<li class="ix-list-item">
+															<ul class="colors">
+																<li data-group="f06da1">
+																	<a href="#chip">
+																		<span class="sold_out"><span>품절</span></span>
+																		<img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}">
+																	</a>
+																</li>
+																<li data-group="f06da1"><a href="#chip" class="check"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+															</ul>
+														</li>
+													</ul>-->
+												</div>
+												<!-- "ix-controller" 는 직계 자식요소여야 한다. 필요없을시 삭제해도 무방하다. -->
+												<div class="ix-controller">
+													<div class="slide_direction">
+														<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
+														<a class="ix-btn-prev" href="#prev"><span class="sr_only">Prev</span></a>
+														<a class="ix-btn-next" href="#next"><span class="sr_only">Next</span></a>
+													</div>
+												</div>
+											</div>
+
+											<!--/* 컬러군 */-->
+											<div class="color_group ui_select" data-not-label-change="false">
+												<input type="hidden" name="">
+												<button type="button"><span style="background-color:#e1e1e1" data-color="e1e1e1"></span><span>컬러군 선택</span></button>
+												<ul class="select_options">
+													<!-- data-selected="true" 속성을 a 태그에 설정하면 해당 옵션이 기본 선택된다. -->
+													<!-- data-disabled="true" 속성을 a 태그에 설정하면 해당 옵션을 선택할수 없다. -->
+													<!-- data-value="value" 선택시 value로 리턴되는 값 -->
+													<li class="select_option"><code class="label_markup" style="display:none">전체</code><a data-value="00"><span style="background-color:#999999" data-color="999999">ALL</span><span>전체</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">핑크</code><a data-value="01"><span style="background-color:#f06da1" data-color="f06da1"></span><span>핑크</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">레드</code><a data-value="02"><span style="background-color:#e9224e" data-color="e9224e"></span><span>레드</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">오렌지</code><a data-value="03"><span style="background-color:#ff7a2d" data-color="ff7a2d"></span><span>오렌지</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">퍼블</code><a data-value="04"><span style="background-color:#b261e4" data-color="b261e4"></span><span>퍼블</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">블렉/그레이</code><a data-value="05"><span style="background-color:#1f1d20" data-color="1f1d20"></span><span>블렉/그레이</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">브라운</code><a data-value="06"><span style="background-color:#8e502f" data-color="8e502f"></span><span>브라운</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">그린</code><a data-value="07"><span style="background-color:#8fe48a" data-color="8fe48a"></span><span>그린</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">블루</code><a data-value="08"><span style="background-color:#3a6abf" data-color="3a6abf"></span><span>블루</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">옐로우/베이지</code><a data-value="09"><span style="background-color:#f9c361" data-color="f9c361"></span><span>옐로우/베이지</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">화이트</code><a data-value="10"><span style="background-color:#ffffff" data-color="ffffff"></span><span>화이트</span></a></li>
+												</ul>
+											</div>
+											<p class="option_close"><button type="button">닫기</button></p>
+										</div>
+									</div>
+
+									<!--/* 가격,장바구니 */-->
+									<div class="price_area">
+										<div class="discount">
+											<strong class="to">50<em>%</em></strong>
+										</div>
+										<div class="price">
+											<strong>12,600<em>원</em></strong>
+										</div>
+										<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="item">
+								<div class="item_images">
+									<!-- 페이지 로딩 -->
+									<ul class="loading white" style="display:none">
+										<li></li>
+										<li></li>
+										<li></li>
+									</ul>
+									<!--/* 대표 이미지 */-->
+									<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001363_IM_01.png" alt=""></a>
+									<!--/* 이미지 슬라이드 */-->
+									<div class="slide goods_slide" data-ix-options="view-length :1;">
+										<div class="ix-list-viewport">
+											<ul class="ix-list-items">
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001363_IM_01.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001363_IM_02.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650001363_IM_03.png" alt=""></a>
+												</li>
+											</ul>
+										</div>
+										<div class="ix-controller">
+											<ul class="ix-thumbs">
+												<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="info_box">
+									<!--/* flag */-->
+									<div class="flag_set">
+										<span class="best">베스트</span>
+										<span class="event">이벤트</span>
+										<span>MD추천</span>
+									</div>
+									<!--/* 상품명 */-->
+									<div class="title_area">
+										<P class="s_title">온라인 단독 구성 50%SALE</P>
+										<h3 class="h_title">유브이 더블 컷 산뜻 선 젤 SPF50+/PA++++</h3>
+									</div>
+									<!--/* color 옵션 */-->
+									<!-- 상품 옵션 영역 7개 이상 -->
+									<div class="item_option">
+										<p class="color_name">10 colors</p>
+										<div class="option_name">
+											<span><em>NEW</em> PP511 계탔다</span>
+										</div>
+										<div class="color_chips">
+											<p class="btn_more"><button type="button" class="btn_color_more"><span>+ 85</span><span class="sr_only">컬러 더보기</span></button></p>
+											<div class="chips slide" data-ix-options="view-length:1;">
+												<!-- "ix-list-viewport" 는 직계 자식요소여야 한다. touch area -->
+												<div class="ix-list-viewport">
+													<!-- "ix-list-items" 는 "ix-list-viewport"의 직계 자식요소여야 한다. -->
+													<!--<ul class="ix-list-items">
+														<li class="ix-list-item">
+															<ul class="colors">
+																<li data-group="f06da1">
+																	<a href="#chip">
+																		<span class="sold_out"><span>품절</span></span>
+																		<img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}">
+																	</a>
+																</li>
+																<li data-group="f06da1"><a href="#chip" class="check"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+															</ul>
+														</li>
+														<li class="ix-list-item">
+															<ul class="colors">
+																<li data-group="f06da1">
+																	<a href="#chip">
+																		<span class="sold_out"><span>품절</span></span>
+																		<img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}">
+																	</a>
+																</li>
+																<li data-group="f06da1"><a href="#chip" class="check"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+															</ul>
+														</li>
+													</ul>-->
+												</div>
+												<!-- "ix-controller" 는 직계 자식요소여야 한다. 필요없을시 삭제해도 무방하다. -->
+												<div class="ix-controller">
+													<div class="slide_direction">
+														<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
+														<a class="ix-btn-prev" href="#prev"><span class="sr_only">Prev</span></a>
+														<a class="ix-btn-next" href="#next"><span class="sr_only">Next</span></a>
+													</div>
+												</div>
+											</div>
+											<!--/* 컬러군 */-->
+											<div class="color_group ui_select" data-not-label-change="false">
+												<input type="hidden" name="">
+												<button type="button"><span style="background-color:#e1e1e1" data-color="e1e1e1"></span><span>컬러군 선택</span></button>
+												<ul class="select_options">
+													<!-- data-selected="true" 속성을 a 태그에 설정하면 해당 옵션이 기본 선택된다. -->
+													<!-- data-disabled="true" 속성을 a 태그에 설정하면 해당 옵션을 선택할수 없다. -->
+													<!-- data-value="value" 선택시 value로 리턴되는 값 -->
+													<li class="select_option"><code class="label_markup" style="display:none">전체</code><a data-value="00"><span style="background-color:#999999" data-color="999999">ALL</span><span>전체</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">핑크</code><a data-value="01"><span style="background-color:#f06da1" data-color="f06da1"></span><span>핑크</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">레드</code><a data-value="02"><span style="background-color:#e9224e" data-color="e9224e"></span><span>레드</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">오렌지</code><a data-value="03"><span style="background-color:#ff7a2d" data-color="ff7a2d"></span><span>오렌지</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">퍼블</code><a data-value="04"><span style="background-color:#b261e4" data-color="b261e4"></span><span>퍼블</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">블렉/그레이</code><a data-value="05"><span style="background-color:#1f1d20" data-color="1f1d20"></span><span>블렉/그레이</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">브라운</code><a data-value="06"><span style="background-color:#8e502f" data-color="8e502f"></span><span>브라운</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">그린</code><a data-value="07"><span style="background-color:#8fe48a" data-color="8fe48a"></span><span>그린</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">블루</code><a data-value="08"><span style="background-color:#3a6abf" data-color="3a6abf"></span><span>블루</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">옐로우/베이지</code><a data-value="09"><span style="background-color:#f9c361" data-color="f9c361"></span><span>옐로우/베이지</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">화이트</code><a data-value="10"><span style="background-color:#ffffff" data-color="ffffff"></span><span>화이트</span></a></li>
+												</ul>
+											</div>
+											<p class="option_close"><button type="button">닫기</button></p>
+										</div>
+
+									</div>
+
+									<!--/* 가격,장바구니 */-->
+									<div class="price_area">
+										<div class="discount">
+											<strong class="to">~50<em>%</em></strong>
+										</div>
+										<div class="price">
+											<strong>12,600<em>원 ~</em></strong>
+										</div>
+										<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="item">
+								<div class="item_images">
+									<!-- 페이지 로딩 -->
+									<ul class="loading white" style="display:none">
+										<li></li>
+										<li></li>
+										<li></li>
+									</ul>
+									<!--/* 대표 이미지 */-->
+									<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650010812_IM_01.png" alt=""></a>
+									<!--/* 이미지 슬라이드 */-->
+									<div class="slide goods_slide" data-ix-options="view-length :1;">
+										<div class="ix-list-viewport">
+											<ul class="ix-list-items">
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650010812_IM_01.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650010812_IM_02.png" alt=""></a>
+												</li>
+												<li class="ix-list-item">
+													<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/pc/ko/images/dummy/650010812_IM_03.png" alt=""></a>
+												</li>
+											</ul>
+										</div>
+										<div class="ix-controller">
+											<ul class="ix-thumbs">
+												<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="info_box">
+									<!--/* flag */-->
+									<div class="flag_set">
+										<span class="new">신상품</span>
+									</div>
+									<!--/* 상품명 */-->
+									<div class="title_area">
+										<P class="s_title">온라인 단독 구성 50%SALE</P>
+										<h3 class="h_title">유브이 더블 컷 산뜻 선 젤 SPF50+/PA++++</h3>
+									</div>
+									<!--/* color 옵션 */-->
+									<!-- 상품 옵션 영역 7개 이상 -->
+									<div class="item_option">
+										<p class="color_name">10 colors</p>
+										<div class="option_name">
+											<span><em>NEW</em> PP511 계탔다</span>
+										</div>
+										<div class="color_chips">
+											<p class="btn_more"><button type="button" class="btn_color_more"><span>+ 85</span><span class="sr_only">컬러 더보기</span></button></p>
+											<div class="chips slide" data-ix-options="view-length:1;">
+												<!-- "ix-list-viewport" 는 직계 자식요소여야 한다. touch area -->
+												<div class="ix-list-viewport">
+													<!-- "ix-list-items" 는 "ix-list-viewport"의 직계 자식요소여야 한다. -->
+													<!--<ul class="ix-list-items">
+														<li class="ix-list-item">
+															<ul class="colors">
+																<li data-group="f06da1">
+																	<a href="#chip">
+																		<span class="sold_out"><span>품절</span></span>
+																		<img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}">
+																	</a>
+																</li>
+																<li data-group="f06da1"><a href="#chip" class="check"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+															</ul>
+														</li>
+														<li class="ix-list-item">
+															<ul class="colors">
+																<li data-group="f06da1">
+																	<a href="#chip">
+																		<span class="sold_out"><span>품절</span></span>
+																		<img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}">
+																	</a>
+																</li>
+																<li data-group="f06da1"><a href="#chip" class="check"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="e9224e"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img1.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img2.jpg}"></a></li>
+																<li data-group="f06da1"><a href="#chip"><img alt="컬러명" ap:src="@{/images/dummy/color_chips_img3.jpg}"></a></li>
+															</ul>
+														</li>
+													</ul>-->
+												</div>
+												<!-- "ix-controller" 는 직계 자식요소여야 한다. 필요없을시 삭제해도 무방하다. -->
+												<div class="ix-controller">
+													<div class="slide_direction">
+														<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
+														<a class="ix-btn-prev" href="#prev"><span class="sr_only">Prev</span></a>
+														<a class="ix-btn-next" href="#next"><span class="sr_only">Next</span></a>
+													</div>
+												</div>
+											</div>
+
+											<!--/* 컬러군 */-->
+											<div class="color_group ui_select" data-not-label-change="false">
+												<input type="hidden" name="">
+												<button type="button"><span style="background-color:#e1e1e1" data-color="e1e1e1"></span><span>컬러군 선택</span></button>
+												<ul class="select_options">
+													<!-- data-selected="true" 속성을 a 태그에 설정하면 해당 옵션이 기본 선택된다. -->
+													<!-- data-disabled="true" 속성을 a 태그에 설정하면 해당 옵션을 선택할수 없다. -->
+													<!-- data-value="value" 선택시 value로 리턴되는 값 -->
+													<li class="select_option"><code class="label_markup" style="display:none">전체</code><a data-value="00"><span style="background-color:#999999" data-color="999999">ALL</span><span>전체</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">핑크</code><a data-value="01"><span style="background-color:#f06da1" data-color="f06da1"></span><span>핑크</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">레드</code><a data-value="02"><span style="background-color:#e9224e" data-color="e9224e"></span><span>레드</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">오렌지</code><a data-value="03"><span style="background-color:#ff7a2d" data-color="ff7a2d"></span><span>오렌지</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">퍼블</code><a data-value="04"><span style="background-color:#b261e4" data-color="b261e4"></span><span>퍼블</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">블렉/그레이</code><a data-value="05"><span style="background-color:#1f1d20" data-color="1f1d20"></span><span>블렉/그레이</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">브라운</code><a data-value="06"><span style="background-color:#8e502f" data-color="8e502f"></span><span>브라운</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">그린</code><a data-value="07"><span style="background-color:#8fe48a" data-color="8fe48a"></span><span>그린</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">블루</code><a data-value="08"><span style="background-color:#3a6abf" data-color="3a6abf"></span><span>블루</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">옐로우/베이지</code><a data-value="09"><span style="background-color:#f9c361" data-color="f9c361"></span><span>옐로우/베이지</span></a></li>
+													<li class="select_option"><code class="label_markup" style="display:none">화이트</code><a data-value="10"><span style="background-color:#ffffff" data-color="ffffff"></span><span>화이트</span></a></li>
+												</ul>
+											</div>
+											<p class="option_close"><button type="button">닫기</button></p>
+										</div>
+									</div>
+
+									<!--/* 가격,장바구니 */-->
+									<div class="price_area">
+										<div class="price">
+											<strong>12,600<em>원 ~</em></strong>
+										</div>
+										<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+									</div>
+								</div>
+							</div>
+						</li>
+						<!--/* [E] 20180416 : 상품리시트 상품가 표기 정의 5case */-->
+					</ul>
+				</div>
+
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script>
+				AP.display.init({ test: 'test' });
+			</script>
+        </th:block>
+</body>
+</html>

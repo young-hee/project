@@ -1,0 +1,137 @@
+<h3 class="h_title sub pdt40">{{condition (eq this.step 'two') '환불정보' '결제정보'}}</h3>
+<div class="payment_info table_layout">
+	<div class="left_cont table_layout">
+		<dl class="order_amount">
+			<dt>
+				<p>{{condition (eq this.step 'two') '환불' ''}} 주문금액</p>
+				<p class="price"><strong class="num">{{currencyFormat this.data.prodOrdAmtSumPcur}}</strong><b></b></p>
+			</dt>
+			<dd>
+				<ul>
+					<li class="clear"><span>온라인주문 {{condition (eq this.step 'two') '취소' ''}}</span><span>{{currencyFormat this.data.finalOnlineSaleAmtSumPcur}}</span></li>
+					<li class="clear"><span>테이크아웃 {{condition (eq this.step 'two') '취소' ''}}</span><span>0원</span></li>
+					<li class="clear"><span>구매 특가 상품 {{condition (eq this.step 'two') '취소' ''}}</span><span>0원</span></li>
+					<li class="clear"><span>포장/쇼핑백 추가 {{condition (eq this.step 'two') '취소' ''}}</span><span>0원</span></li>
+					<li class="clear"><span>배송비 {{condition (eq this.step 'two') '환불' ''}}</span><span>{{currencyFormat this.data.shipFeeSumPcur}}</span></li>
+				</ul>
+			</dd>
+		</dl>
+		<dl class="discount_amount">
+			<dt>
+				<p>{{condition (eq this.step 'two') '환불' ''}} 할인/포인트</p>
+				<p class="price"><strong class="num">{{condition (eq this.step 'two') (currencyFormat this.data.ordUnitDcAmtSumPcur) (currencyFormat this.data.ordUnitDcAmtSumPcur)}}</strong><b></b></p>
+			</dt>
+			<dd>
+				<ul>
+					<li class="clear"><span>쿠폰할인 {{condition (eq this.step 'two') '취소' ''}}</span><span>{{currencyFormat this.data.couponDcAmtPcur}}</span></li>
+					<li class="clear"><span>뷰티포인트 {{condition (eq this.step 'two') '환불' ''}}</span><span>0P</span></li>
+					<li class="clear"><span>쿠션포인트 {{condition (eq this.step 'two') '환불' ''}}</span><span>0P</span></li>
+					<li class="clear"><span>진주알 교환</span><span>0알</span></li>
+				</ul>
+			</dd>
+		</dl>
+		<dl class="payment_amount">
+			<dt>
+				<p>{{condition (eq this.step 'two') '총 환불 금액' '결제 금액'}}</p>
+				<p class="price"><strong class="num">{{currencyFormat this.data.finalPamtPcur}}</strong><b></b></p>
+			</dt>
+			<dd>
+				{{#each this.data.ordPayExList}}
+					{{#if (eq this.payMethodCode 'Deposit')}}
+						<ul>
+							<li class="clear"><b>예치금/상품권</b><b>{{currencyFormat this.payAmt}}</b></li>
+							<li class="clear"><span>예치금</span><span>{{currencyFormat this.payAmt}}</span></li>
+						</ul>
+						<hr class="div m20 dotted">
+					{{/if}}
+					{{#if (ne this.payMethodCode 'Deposit')}}
+						<ul>
+							<li class="clear"><b>{{this.payMethodCode}} {{this.payMethodNameBlang}}</b><b>{{currencyFormat this.payAmt}}</b></li>
+						</ul>
+					{{/if}}
+				{{/each}}
+			</dd>
+		</dl>
+		</div>
+		<div class="gap20"></div>
+		<div class="right_cont">
+		<dl>
+			<dt>
+				<b>적립혜택</b>
+				<span class="ui_tooltip">
+					<button type="button" class="btn_tooltip">툴팁보기</button>
+					<span class="arr"></span>
+					<span class="layer_tooltip">
+						<dl>
+							<dt class="title">뷰티포인트 적립 안내</dt>
+							<dd>
+								<ul class="list_bullet_dot">
+									<li>아모레퍼시픽 뷰티포인트 통합회원은 에뛰드 회원등급에 관계없이 결제금액(할인 후)의 <strong>기본 2%+우대 최대 3%</strong>가 추가 적립됩니다.</li>
+									<li>뷰티포인트 적립 기준금액은 [최종결제금액-뷰티포인트 적립 제외 상품 금액-포장 서비스-배송비]로 계산된 금액입니다.</li>
+									<li>일부 구매 상품 중 뷰티포인트 <strong>적립 제외 상품</strong> 구매 시 뷰티포인트가 적립되지 않습니다. </li>
+								</ul>
+							</dd>
+						</dl>
+						<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
+					</span>
+				</span>
+			</dt>
+			<dd>
+				<hr class="div m20 dotted">
+				<ul>
+					{{#each this.data.ordSavingPointList}}
+						<li class="clear"><span>{{this.pointName}} 적립</span><span>{{this.totalSavingPoint}}P</span></li>
+					{{/each}}
+				</ul>
+			</dd>
+		</dl>
+	</div>
+</div>
+
+{{#if (eq this.viewYN.addPay 'Y')}}
+	{{#each this.info.ordPayCompareList}}
+		{{#if (eq this.addedPayYn 'Y')}}
+			{{#if (eq this.type 'cancel')}}
+				<h3 class="h_title sub mgb20">배송비 추가 결제 <small>취소 후 최종 결제금액이 10,000원 미만인 경우 배송비 결제가 필요합니다.</small></h3>
+			{{/if}}
+			{{#if (eq this.type 'return')}}
+				<h3 class="h_title sub mgb20">반품 배송비 결제 <small>고객 변심에 의한 반품은 반품 배송비 결제가 필요합니다.</small></h3>
+			{{/if}}
+			<div class="refund_delivery">
+				<dl>
+					<dt><b>추가 배송비</b></dt>
+					<dd>2,500원</dd>
+				</dl>
+				<dl>
+					<dt><b>결제수단</b></dt>
+					<dd>
+						<fieldset class="form">
+							<legend class="sr_only">결제수단 선택</legend>
+							<span class="check_wrap"><input type="radio" name="radio" id="radio1"><label for="radio1">신용카드</label></span>
+							<span class="check_wrap"><input type="radio" name="radio" id="radio2"><label for="radio2">휴대폰 결제</label></span>
+							<button class="btn_md_primary" type="button">배송비 결제</button>
+							{{#if (eq this.type 'return')}}
+								<span class="check_wrap"><input type="checkbox" id="check1"><label for="check1">무료 반품 서비스 <em>(Pink Love 회원 월 1회)</em></label></span>
+							{{/if}}
+						</fieldset>
+					</dd>
+				</dl>
+			</div>
+		{{/if}}
+	{{/each}}
+{{/if}}
+{{#if (eq this.viewYN.addPayResult 'Y')}}
+	{{#each this.info.ordPayCompareList}}
+		<h3 class="h_title sub mgb20">반품 배송비 결제</h3>
+		<div class="refund_delivery">
+			<dl>
+				<dt><b>추가 배송비</b></dt>
+				<dd>2,500원</dd>
+			</dl>
+			<dl>
+				<dt><b>결제정보</b></dt>
+				<dd>KB국민카드(123456******1234) / 일시불 / 2018-09-12  18:02:34</dd>
+			</dl>
+		</div>
+	{{/each}}
+{{/if}}

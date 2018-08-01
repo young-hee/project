@@ -1,0 +1,146 @@
+<!--/*
+	이벤트 콘텐츠 : 공통
+	page title + html contents + products + comment
+*/-->
+<div class="ap_contents event detail">
+	<!--/* 이벤트 제목 /공유  */-->
+	<div class="event_header">
+		<h2 class="h_title sub"><b th:text="${planDisplay.planDisplayTitle}">이벤트 제목</b></h2>
+		<div class="clear">
+			<small class="num" th:text="${#dates.format(planDisplay.startDt, 'yyyy.MM.dd')} + ' ~ ' + ${#dates.format(planDisplay.endDt, 'yyyy.MM.dd')}">2018.01.24 ~ 2018.01.27</small>
+			<button class="btn_share" th:if="${planDisplay.shareUseYn == 'Y'}"><span class="sr_only">SNS 공유</span></button>
+		</div>
+	</div>
+
+	<!--/* 이벤트 컨텐츠 */-->
+	<div class="event_cont">
+		<div class="event_image" th:utext="${planDisplay.detailHtml}">
+		</div>
+
+		<!--/* 상품이 있을때만 */-->
+		<div class="evt_goods" th:if="${planDisplay.planDisplayTypeCode == 'General' ? planDisplay.prodGroupListYn == 'Y' : planDisplay.planDisplayTypeCode == 'SameTimePur'}">
+
+			<!--/* tab menu wrap (3개 이상 나오지 않는다고 함) */-->
+			<div class="ui_tab">
+				<!--/* tab menu */-->
+				<div class="tab_menu equally">
+					<ul th:if="${planDisplay.planDisplayTypeCode == 'SameTimePur'}">
+						<li th:each="promoGroup, iterStat : ${planDisplay.promoList}" th:class="${iterStat.index == 0 ? 'on' : ''}">
+							<button type="button" th:text="${promoGroup.promoName}">프로모션 그룹 타이틀</button>
+						</li>
+					</ul>
+
+					<ul th:if="${planDisplay.planDisplayTypeCode == 'General'}">
+						<li th:each="prodGroup, iterStat : ${planDisplay.prodGroupList}" th:class="${iterStat.index == 0 ? 'on' : ''}">
+							<button type="button" th:text="${prodGroup.prodGrpTitle}">그룹 타이틀</button>
+						</li>
+					</ul>
+				</div>
+				<!--/* tab contents wrap  */-->
+				<!--/* 프로모션 상품 그룹핑 */-->
+				<div class="tab_contents" th:if="${planDisplay.planDisplayTypeCode == 'SameTimePur'}">
+					<!--/* tab content */-->
+					<div class="tab_cont pd0" th:each="promo : ${planDisplay.promoList}" th:data-promo-sn="${promo.promoSn}">
+						<h3 class="sr_only" th:text="${promo.promoName}">프로모션 그룹 타이틀</h3>
+						<th:block th:each="promoGrpList : ${promo.promoGrpList}">
+							<h4 class="h_title cont"><strong th:text="${promoGrpList.grpTitle}">프로모션명</strong></h4>
+							<div class="item_list type2" th:data-promo-grp-sn="${promoGrpList.sameTimePurProdGrpSn}">
+								<ul class="result">
+									<!--/* 상품 리스트 영역 */-->
+								</ul>
+							</div>
+							<ul class="loading" style="height:150px;">
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+							<div class="moreBtnWrap">
+								<button type="button" class="btn_lg_more w100p btn_more" style="display: none">
+									<span></span>
+								</button>
+							</div>
+						</th:block>
+					</div>
+				</div>
+
+				<!--/* 일반 상품 그룹핑 */-->
+				<div class="tab_contents" th:if="${planDisplay.planDisplayTypeCode == 'General'}">
+					<!--/* tab content */-->
+					<div class="tab_cont pd0" th:each="prodGroup : ${planDisplay.prodGroupList}">
+						<h3 class="sr_only" th:text="${prodGroup.prodGrpTitle}">그룹 타이틀</h3>
+
+						<div class="item_list type2 generalProdListWrap">
+							<ul class="result" th:data-plan-display-prod-grp-sn="${prodGroup.planDisplayProdGrpSn}">
+								<!--/* 상품 리스트 영역 */-->
+							</ul>
+						</div>
+						<ul class="loading" style="height:150px;">
+							<li></li>
+							<li></li>
+							<li></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<!--/* option layer */-->
+			<div class="option_layer close" th:if="${planDisplay.planDisplayTypeCode == 'SameTimePur'}">
+					<!--/* selected 된 options 표현 영역 */-->
+				<div class="purchase_btn_set">
+					<button class="btn_md_primary" type="button">구매하기</button>
+				</div>
+
+				<div class="option_wrap scroll_area">
+					<!--/* 이벤트 묶음 : 플러스 아이콘 들어갈때 ico_set 추가 */-->
+				</div>
+
+				<div class="buy_info_wrap" id="sameTimeBuyInfo">
+					<div class="buy_info">
+						<span class="opt_selected"><b class="num">01</b> 개 선택됨</span>
+						<span class="buy_result">합계 <b class="num">12,600</b><b>원</b></span>
+					</div>
+					<div class="buy_btn_wrap">
+						<button type="button" class="btn_md_bordered btn_basket">테이크아웃</button>
+						<button type="button" class="btn_md_bordered btn_buy">장바구니 담기</button>
+					</div>
+				</div>
+				<button type="button" class="btn_float_close"><span class="sr_only">구매닫기</span></button>
+
+			</div>
+		</div>
+
+		<!--/* 댓글 */-->
+		<div class="panel detail_review_rating comment_area" th:if="${planDisplay.eventIncludeYn == 'Y' && planDisplay.eventType == 'Button'}">
+			<button type="button" th:if="${planDisplay.eventType == 'Button'}" class="btn_md_primary w100p btn_participate">참여하기</button>
+			<div class="review_list">
+				<!--/* 댓글 리스트 영역 */-->
+			</div>
+		</div>
+		
+		<!--/* 댓글영역 04-05 수정 */-->
+		<div class="panel comment_area simpleComment" th:if="${planDisplay.eventIncludeYn == 'Y' && planDisplay.eventType == 'Comment'}">
+			<input type="hidden" id="memberId" th:value="${session.LOGIN_USER.member.memberId}" />
+			<p class="text total_count" style="display:none;">댓글 <span>0</span>개</p>
+			<fieldset class="form mgt5">
+				<legend class="sr_only">댓글 입력</legend>
+				<div class="textarea">
+					<textarea class="comment_input" name="" maxlength="200" title="댓글 입력" cols="" rows="" placeholder="댓글을 남겨보세요."></textarea>
+				</div>
+				<p class="text_right mgt5"><small>0/200자</small></p>
+				<button class="btn_md_neutral w100p btn_save">등록</button>
+				<p class="text_notice">저작권 등 다른 사람의 권리를 침해하거나 게시판
+					성격과 관련 없는 게시물은 임의로 삭제될 수 있습니다.
+				</p>
+			</fieldset>
+			<ul class="comment_list"></ul>
+			<button type="button" class="btn_lg_more w100p btn_more">
+			</button>
+			<ul class="loading" style="display:none;">
+				<li></li>
+				<li></li>
+				<li></li>simple-comment-list
+			</ul>
+		</div>
+
+	</div>
+</div>

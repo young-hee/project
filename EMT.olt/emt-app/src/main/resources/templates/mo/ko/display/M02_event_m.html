@@ -1,0 +1,71 @@
+<html ap:decorate="~{layout/layout-main}" th:with="_jsfile='events-overview'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents event event_progress">
+		<div class="event_menu ui_accordion">
+			<dl>
+				<dt>
+					<strong>당첨자 발표 및 다른 이벤트</strong>
+					<button type="button"><span class="sr_only">더보기</span></button>
+				</dt>
+				<dd>
+					<div class="cont">
+						<ul>
+							<li><a href="#none" class="attendance" th:href="@{/display/daily_check(displayMenuId=daily_check)}">행운의<br>출첵</a></li>
+							<li><a href="#none" class="roulette" th:href="@{/display/pearl_roulette(displayMenuId=pearl_roulette)}">진주알<br>룰렛</a></li>
+							<li><a href="#none" class="sweet_letter" th:href="@{/display/sweet_letter(displayMenuId=sweet_letter)}">스윗레터<br>100% 당첨</a></li>
+							<li><a href="#none" class="beauty_tester" th:href="@{/display/beauty_test(displayMenuId=beauty_test)}">뷰티테스터<br>신청
+								<th:block th:if="${dDays.ProdExperienceGrp > 0}">
+									<th:block th:if="${dDays.ProdExperienceGrp < 4 }">
+										<span class="d_day" th:text="D-+ ${dDays.ProdExperienceGrp eq '0'? 'Day' : dDays.ProdExperienceGrp}"></span>
+									</th:block>
+								</th:block>
+								</a>
+							</li>
+							<li><a href="#none" class="free_sample" th:href="@{/display/free_sample(displayMenuId=free_sample)}">무료 샘플<br>신청
+								<th:block th:if="${dDays.SampleExperienceGrp > 0}">
+									<th:block th:if="${dDays.SampleExperienceGrp < 4}">
+										<span class="d_day" th:text="D-+ ${dDays.SampleExperienceGrp eq '0'? 'Day' : dDays.SampleExperienceGrp}"></span>
+									</th:block>	
+								</th:block>								
+								</a>
+							</li>
+							<li><a href="#none" class="makeup" th:href="@{/display/play_makeup_class(displayMenuId=play_makeup_class)}">PLAY 메이크업<br>클래스</a></li>
+						</ul>
+						<a href="/display/event_winner?displayMenuId=event_winner" class="btn_md_neutral w100p">이벤트 당첨자 발표</a>
+					</div>
+				</dd>
+			</dl>
+		</div>
+		<div class="event_list">
+
+			<ul class="list"></ul>
+
+		</div>
+		<div>
+			<button type="button" class="btn_lg_more w100p" style="display: none">
+				<span></span>
+			</button>
+		</div>
+		<ul class="loading" style="display: none">
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script>
+		AP.eventProgress.load({ status: 'Progress' });
+	</script>
+
+</th:block>
+
+</body>
+</html>

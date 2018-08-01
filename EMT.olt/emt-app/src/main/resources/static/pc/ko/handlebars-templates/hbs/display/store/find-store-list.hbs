@@ -1,0 +1,29 @@
+{{#if this.storeExList.length}}
+	{{#each this.storeExList}}
+		<div class="store_item">
+			{{#if (findInObject this.storeEventExList 'foStoreEventCode' 'Color Finder')}}
+			<span class="ico_favolite_flag_store"></span>
+			{{/if}}
+			<h3 class="store_title">{{ this.storeName }}</h3>
+			<div class="store_info">
+				<p class="store_addr">
+					{{ this.address.address1 }}{{#if this.address.address2}}, {{ this.address.address2 }}{{/if}}
+					<span class="store_phone">{{ phoneNumberFormat this.phoneNo1.phoneNo }}</span>
+				</p>
+
+				<div class="store_btn_wrap">
+					<button class="btn_md favorite btn_favorite {{#xif this.regularStoreYn '==' 'Y'}}on{{/xif}}" data-store-sn="{{ this.storeSn }}" data-store-name="{{ this.storeName }}">{{#xif this.regularStoreYn '==' 'Y'}}단골해제{{else}}단골등록{{/xif}}</button>
+					<button class="btn_md map_print" data-lat="{{ this.latitude }}" data-lng="{{ this.longitude }}">지도인쇄</button>
+					<button class="btn_md map_call" data-lat="{{ this.latitude }}" data-lng="{{ this.longitude }}" data-marker-id="{{ @index }}">지도보기</button>
+				</div>
+			</div>
+		</div>
+	{{/each}}
+{{else}}
+	<div class="panel notice">
+		<i class="ico"></i>
+		<p class="color_dark_gray font_lg"></p>
+		<p class="text color_gray">매장 검색 결과가 없습니다.</p>
+		<p class="text color_light_gray mgt10">입력하신 매장명 또는 지역명을 다시 확인해 주세요.<br>관련 문의는 고객센터 (1544-5418)로 연락주세요.</p>
+	</div>
+{{/if}}

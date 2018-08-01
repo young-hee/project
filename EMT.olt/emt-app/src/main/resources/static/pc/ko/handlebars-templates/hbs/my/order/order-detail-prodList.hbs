@@ -1,0 +1,118 @@
+<dt><button type="button">온라인 주문 상품 (<em>{{this.cnt}}</em>개)</button></dt>
+<dd>
+	{{#each this.list}}
+		<div class="panel_box">
+			<!-- 상품 N개 + 상품별 옵션(N개) 주문형
+			<div class="title">
+				<div>
+					<strong>[2월의 얼리버드] 피치팜 얼리버드 PINK LOVE</strong>
+				</div>
+				<div class="align_right">
+					<p><strong class="num">100,000</strong>원</p>
+				</div>
+			</div> -->
+			{{#if (eq this.ordHistProdTypeCode 'Ord')}}
+				<div class="product">
+					{{#if (eq ../viewYN.checkBox 'Y')}}
+						<div class="check_wrap check_only">
+							<input type="checkbox" id="oProd_{{this.onlineProdSn}}" name="onlineProd" value="{{json this}}" data-oProdSn="{{this.onlineProdSn}}">
+							<label for="oProd_{{this.onlineProdSn}}">
+								<span class="sr_only">선택</span>
+							</label>
+						</div>
+					{{/if}}
+					<div class="thumb"><img src="{{this.onlineProdImgUrl}}" alt=""></div>
+					<div class="info">
+						<div class="align_left">
+							<p class="name">{{this.onlineProdName}}</p>
+						</div>
+						<div class="align_right">
+							{{#if (eq this.ordHistProdStatusCode 'ProdCancel')}}
+								<p><em>취소완료</em></p>
+							{{/if}}
+							<p><strong class="num">{{currencyFormat this.finalOnlineSaleAmtPcurSum}}</strong></p>
+						</div>
+					</div>
+				</div>
+				{{#each this.ordHistProdList}}
+					<div class="prd_option">
+						<div class="set">
+							{{#if (eq ../../viewYN.checkBox 'Y')}}
+								<div class="check_wrap check_only">
+									<input type="checkbox" id="prod_{{this.ordProdEx.prodSn}}" name="prod_{{../this.onlineProdSn}}" value="{{json this}}" data-oProdSn="{{../this.onlineProdSn}}">
+									<label for="prod_{{this.ordProdEx.prodSn}}">
+										<span class="sr_only">선택</span>
+									</label>
+								</div>
+							{{/if}}
+							<div class="thumb"><span style="background-color: #c1373e;"><img src="" alt=""></span></div>
+							<div class="info">
+								<p class="name">{{this.ordProdEx.prodNameBlang}}</p>
+							</div>
+							<div class="align_right">
+								<span>{{condition (eq ../../step 'two') this.claimReceivedQty this.ordQty}}개 / {{currencyFormat this.finalOnlineSaleAmtPcur}}</span>
+								{{#if (ne this.ordHistProdStatusCode 'ProdCancel')}}
+									{{#if (or (eq ../../this.statusCode 'PartialCancel') (eq ../../this.statusCode 'OrdReceivedComplete'))}}
+										<button class="btn_sm_neutral" type="button" onclick="changeOption({{this.ordHistProdSn}}, '{{this.ordHistProdNo}}', {{this.ordProdEx.prodSn}})">옵션변경</button>
+									{{/if}}
+								{{/if}}
+							</div>
+						</div>
+					</div>
+					{{#if (eq ../../viewYN.selectReason 'Y')}}
+						<div class="reason" id="reason_{{this.ordHistProdSn}}">
+							<div class="input_group">
+								<div class="ui_select w20p" data-not-label-change="false">
+									<input type="hidden">
+									<button type="button">{{../../title}}사유 선택</button>
+									<ul class="select_options">
+										{{#each ../../reason.claimReasonExList}}
+											<li class="select_option">
+												<code class="label_markup" style="display:none">
+													<span class="slt_color_name">{{ this.reasonName }}</span>
+												</code>
+												<a data-value="{{this.claimReasonSn}}">
+													<span class="color_name">{{ this.reasonName }}</span>
+												</a>
+											</li>
+										{{/each}}
+									</ul>
+								</div>
+								<span class="gap">&nbsp;</span>
+								<div class="input_wrap">
+									<input type="text" placeholder="사유를 입력해주세요" maxlength="100">
+								</div>
+							</div>
+						</div>
+					{{/if}}
+					{{#if (eq ../../viewYN.selectReasonResult 'Y')}}
+						<div class="reason gray">
+							<dl>
+								<dt>{{../../title}} 사유</dt>
+								<dd>{{this.receivedClaimReasonName}}</dd>
+							</dl>
+							<dl>
+								<dt>{{../../title}} 내용</dt>
+								<dd>{{this.foReceivedClaimReason}}</dd>
+							</dl>
+						</div>
+					{{/if}}
+				{{/each}}
+			{{/if}}
+			{{#if (eq this.ordHistProdTypeCode 'ProdUnitAward')}}
+				<div class="freebies">
+					<div class="thumb"><img ap:src="@{/images/dummy/650001018_IM_01.png}" alt=""></div>
+					<div class="info">
+						<div class="align_left">
+							<p class="name">중력타파 거미줄 리프팅 마스크</p>
+							<p class="flag">증정사은품</p>
+						</div>
+						<div class="align_right">
+							<p><strong class="num">10</strong>개<span class="gap">/</span><strong class="num">0</strong>원</p>
+						</div>
+					</div>
+				</div>
+			{{/if}}
+		</div>
+	{{/each}}
+</dd>

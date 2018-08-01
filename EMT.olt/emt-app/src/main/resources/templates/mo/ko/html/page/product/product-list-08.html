@@ -1,0 +1,805 @@
+<html ap:decorate=~{layout/layout-category} th:with="_jsfile='product-list'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents prd_list">
+
+		<!--/* 20180423 : 포인트 노출 영역 수정 */-->
+		<div class="point_status">
+			<div class="bg">
+				<h3 class="h_title eng"><strong>Only BeautyPoint!~</strong></h3>
+				<p class="text">뷰티포인트로 구매 가능한 에뛰드의 인기상품</p>
+				<div class="table_layout">
+					<div>
+						<dl>
+							<dt>홍길동님의 뷰티포인트</dt>
+							<dd><strong>999,999</strong>P</dd>
+						</dl>
+					</div>
+					<div>
+						<a href="#detail">내역보기 <i class="ico_arr"></i></a>
+						<!--/* 로그인 전
+						<a href="#detail">로그인 <i class="ico_arr"></i></a>
+						*/-->
+					</div>
+				</div>
+			</div>
+			<p class="align_center">뷰티포인트 전용제품은 뷰티포인트로만 구매 가능하며,<br>부분만 사용되지 않습니다.</p>
+		</div>
+
+		<!--상품리스트-->
+		<div class="item_list type2">
+			<!--/* 20180423 : 삭제 <p class="total_count"><b>9,999</b>개의 상품</p> */-->
+			<ul class="before_list">
+				<li>
+					<div class="item">
+						<!-- 상품 이미지/상태 영역-->
+						<div class="item_images">
+							<!-- 페이지 로딩 -->
+							<ul class="loading white" style="display:none">
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+							<!-- /* 대표 이미지 */ -->
+							<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/101001217_IM_01.png" alt=""></a>
+							<!-- /* 이미지 슬라이드 */ -->
+							<div class="slide goods_slide" data-ix-options="view-length :1;">
+								<div class="ix-list-viewport">
+									<ul class="ix-list-items">
+										<li class="ix-list-item">
+											<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/101001217_IM_01.png" alt=""></a>
+										</li>
+										<li class="ix-list-item">
+											<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/101001217_IM_02.png" alt=""></a>
+										</li>
+										<li class="ix-list-item">
+											<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/101001217_IM_03.png" alt=""></a>
+										</li>
+									</ul>
+								</div>
+								<div class="ix-controller">
+									<ul class="ix-thumbs">
+										<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="item_info list">
+							<div class="flag_set">
+								<span class="best">베스트</span>
+								<span class="event">이벤트</span>
+								<span>MD추천</span>
+								<span>온라인전용</span>
+								<span class="sale_count">731 구매</span>
+							</div>
+							<div class="prd_name">
+								<div>
+									<p class="s_name"><em class="tag">[예약판매중]</em> <span>50%SALE(3.15~18)</span></p>
+									<p class="name">유니버스 글리터</p>
+								</div>
+								<p class="color_name">85 colors</p>
+							</div>
+						</div>
+						<!-- 상품 옵션 영역 6개 이상 -->
+						<div class="item_option">
+							<div class="color_chips more"> <!-- 6개이상인 경우  more 클래스 -->
+								<div>
+									<ul>
+										<li data-group="f06da1">
+											<a href="#chip">
+												<span class="sold_out"><span>품절</span></span>
+												<img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg">
+											</a>
+										</li>
+										<li data-group="f06da1"><a href="#chip" class="check"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img2.jpg"></a></li>
+										<li data-group="e9224e"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img3.jpg"></a></li>
+										<li data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg"></a></li>
+										<li data-group="e9224e"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img2.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img3.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img2.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img3.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg"></a></li>
+
+										<li class="btn_more"><button type="button" class="btn_color_more"><img alt="컬러칩 더보기" src="/mo/ko/images/product/btn_color_more.gif"><span>+ 85</span></button></li>
+									</ul>
+								</div>
+								<!-- 0326 : 버튼삭제 - more 버튼 클릭시 바로 color_group 노출
+								<div class="option_btns">
+									<button type="button" class="btn_md_bordered select_color_group">COLOR 선택</button>
+								</div>-->
+
+								<div class="color_group">
+									<div class="scroll_area">
+										<button type="button" class="all" data-color="all">ALL</button>
+										<button type="button" style="background-color:#f06da1" data-color="f06da1"><span class="sr_only">핑크</span></button>
+										<button type="button" style="background-color:#e9224e" data-color="e9224e"><span class="sr_only">레드</span></button>
+										<button type="button" style="background-color:#ff7a2d" data-color="ff7a2d"><span class="sr_only">오렌지</span></button>
+										<button type="button" style="background-color:#b261e4" data-color="b261e4"><span class="sr_only">보라</span></button>
+										<button type="button" style="background-color:#1f1d20" data-color="1f1d20"><span class="sr_only">블렉/그레이</span></button>
+										<button type="button" style="background-color:#8e502f" data-color="8e502f"><span class="sr_only">브라운</span></button>
+										<button type="button" style="background-color:#8fe48a" data-color="8fe48a"><span class="sr_only">그린</span></button>
+										<button type="button" style="background-color:#3a6abf" data-color="3a6abf"><span class="sr_only">블루</span></button>
+										<button type="button" style="background-color:#f9c361" data-color="f9c361"><span class="sr_only">옐로우/베이지</span></button>
+										<button type="button" style="background-color:#ffffff" data-color="ffffff">화이트/<br>실버</button>
+									</div>
+								</div>
+
+								<p class="option_close"><button type="button">닫기</button></p>
+							</div>
+							<div class="option_name">
+								<span><em>NEW</em> PP511 계탔다!</span>
+							</div>
+						</div>
+						<div class="price_area">
+									<span class="discount">
+										<span class="to">30<em>%</em></span>
+									</span>
+							<span class="price">
+										<span>12,600<em>원</em></span>
+										<del>12,600<em>원</em></del>
+									</span>
+							<span class="btns">
+										<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+									</span>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="item">
+						<!-- 상품 이미지/상태 영역-->
+						<div class="item_images">
+							<!-- /* 대표 이미지 */ -->
+							<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/20171026171319795.png" alt=""></a>
+							<!-- /* 이미지 슬라이드 */ -->
+							<div class="slide goods_slide" data-ix-options="view-length :1;">
+								<div class="ix-list-viewport">
+									<ul class="ix-list-items">
+										<li class="ix-list-item">
+											<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/20171026171319795.png" alt=""></a>
+										</li>
+										<li class="ix-list-item">
+											<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/20171123132501252.jpg" alt=""></a>
+										</li>
+										<li class="ix-list-item">
+											<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/20171123132501252.jpg" alt=""></a>
+										</li>
+									</ul>
+								</div>
+								<div class="ix-controller">
+									<ul class="ix-thumbs">
+										<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+									</ul>
+								</div>
+							</div>
+
+							<div class="item_util">
+								<a href="#none" class="btn_review"><span class="sr_only">구매후기</span><span class="bubble">9,999</span></a>
+							</div>
+							<!-- 일시품절일경우 -->
+							<div class="item_state out_of_stock">
+								일시품절
+							</div>
+						</div>
+						<div class="item_info list">
+							<div class="flag_set">
+								<span class="new">신제품</span>
+								<span class="best">베스트</span>
+								<span class="event">이벤트</span>
+								<span>MD추천</span>
+								<span>온라인전용</span>
+								<span class="sale_count">731 구매</span>
+							</div>
+							<div class="prd_name">
+								<div>
+									<p class="s_name"><em class="tag">[곧 출시!]</em> <span>50%SALE(3.15~18)</span></p>
+									<p class="name">유니버스 디어 마이 매트&글라스 틴팅 립스_톡</p>
+								</div>
+								<!--<p class="color_name">85 colors</p>-->
+							</div>
+						</div>
+						<!-- 상품 옵션 영역 6개 이상 -->
+						<div class="item_option">
+							<div class="color_chips more"> <!-- 6개이상인 경우  more 클래스 -->
+								<div>
+									<ul>
+										<li data-group="f06da1">
+											<a href="#chip">
+												<span class="sold_out"><span>품절</span></span>
+												<img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg">
+											</a>
+										</li>
+										<li data-group="f06da1"><a href="#chip" class="check"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img2.jpg"></a></li>
+										<li data-group="e9224e"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img3.jpg"></a></li>
+										<li data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg"></a></li>
+										<li data-group="e9224e"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img2.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img3.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img2.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img3.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg"></a></li>
+
+										<li class="btn_more"><button type="button" class="btn_color_more"><img alt="컬러칩 더보기" src="/mo/ko/images/product/btn_color_more.gif"><span>+ 85</span></button></li>
+									</ul>
+								</div>
+								<div class="color_group">
+									<div class="scroll_area">
+										<button type="button" class="all" data-color="all">ALL</button>
+										<button type="button" style="background-color:#f06da1" data-color="f06da1"><span class="sr_only">핑크</span></button>
+										<button type="button" style="background-color:#e9224e" data-color="e9224e"><span class="sr_only">레드</span></button>
+										<button type="button" style="background-color:#ff7a2d" data-color="ff7a2d"><span class="sr_only">오렌지</span></button>
+										<button type="button" style="background-color:#b261e4" data-color="b261e4"><span class="sr_only">보라</span></button>
+										<button type="button" style="background-color:#1f1d20" data-color="1f1d20"><span class="sr_only">블렉/그레이</span></button>
+										<button type="button" style="background-color:#8e502f" data-color="8e502f"><span class="sr_only">브라운</span></button>
+										<button type="button" style="background-color:#8fe48a" data-color="8fe48a"><span class="sr_only">그린</span></button>
+										<button type="button" style="background-color:#3a6abf" data-color="3a6abf"><span class="sr_only">블루</span></button>
+										<button type="button" style="background-color:#f9c361" data-color="f9c361"><span class="sr_only">옐로우/베이지</span></button>
+										<button type="button" style="background-color:#ffffff" data-color="ffffff">화이트/<br>실버</button>
+									</div>
+								</div>
+								<p class="option_close"><button type="button">닫기</button></p>
+							</div>
+							<div class="option_name">
+								<span><em>NEW</em> PP511 계탔다!</span>
+							</div>
+						</div>
+						<div class="price_area">
+							<!-- 할인율 없으면 삭제<span class="discount">-->
+							<!--<span class="from">30<em>%~</em></span>-->
+							<!--<span class="to">30<em>%</em></span>-->
+							<!--</span>-->
+							<span class="price">
+								<span>12,600<em>원</em></span>
+							</span>
+							<span class="btns">
+								<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+							</span>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="item">
+						<!-- 상품 이미지/상태 영역-->
+						<div class="item_images">
+							<!-- /* 대표 이미지 */ -->
+							<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/20171026160555673.png" alt=""></a>
+							<!-- /* 이미지 슬라이드 */ -->
+							<div class="slide goods_slide" data-ix-options="view-length :1;">
+								<div class="ix-list-viewport">
+									<ul class="ix-list-items">
+										<li class="ix-list-item">
+											<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/20171026160555673.png" alt=""></a>
+										</li>
+										<li class="ix-list-item">
+											<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/20171123133243140.png" alt=""></a>
+										</li>
+										<li class="ix-list-item">
+											<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/20171123133243140.png" alt=""></a>
+										</li>
+									</ul>
+								</div>
+								<div class="ix-controller">
+									<ul class="ix-thumbs">
+										<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+									</ul>
+								</div>
+							</div>
+							<div class="item_util">
+								<a href="#none" class="btn_review"><span class="sr_only">구매후기</span><span class="bubble">9,999</span></a>
+							</div>
+							<!-- 일시품절일경우
+							<div class="item_state out_of_stock">
+								일시품절
+							</div>  -->
+						</div>
+						<div class="item_info list">
+							<div class="flag_set">
+								<span class="event">이벤트</span>
+								<span>MD추천</span>
+								<span>온라인전용</span>
+								<span class="sale_count">731 구매</span>
+							</div>
+							<div class="prd_name">
+								<div>
+									<p class="s_name"><em class="tag">[예약판매중]</em> <span></span></p>
+									<p class="name">룩 앳 마이 아이즈 펄섀도우 베이스</p>
+								</div>
+								<p class="color_name">11호 마젠타 레드</p>
+							</div>
+						</div>
+						<!-- 상품 옵션 영역 6개 이상 -->
+						<div class="item_option">
+							<div class="color_chips more"> <!-- 6개이상인 경우  more 클래스 -->
+								<div>
+									<ul>
+										<li data-group="f06da1">
+											<a href="#chip">
+												<span class="sold_out"><span>품절</span></span>
+												<img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg">
+											</a>
+										</li>
+										<li data-group="f06da1"><a href="#chip" class="check"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img2.jpg"></a></li>
+										<li data-group="e9224e"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img3.jpg"></a></li>
+										<li data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg"></a></li>
+										<li data-group="e9224e"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img2.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img3.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img2.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img3.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg"></a></li>
+
+										<li class="btn_more"><button type="button" class="btn_color_more"><img alt="컬러칩 더보기" src="/mo/ko/images/product/btn_color_more.gif"><span>+ 85</span></button></li>
+									</ul>
+								</div>
+								<div class="color_group">
+									<div class="scroll_area">
+										<button type="button" class="all" data-color="all">ALL</button>
+										<button type="button" style="background-color:#f06da1" data-color="f06da1"><span class="sr_only">핑크</span></button>
+										<button type="button" style="background-color:#e9224e" data-color="e9224e"><span class="sr_only">레드</span></button>
+										<button type="button" style="background-color:#ff7a2d" data-color="ff7a2d"><span class="sr_only">오렌지</span></button>
+										<button type="button" style="background-color:#b261e4" data-color="b261e4"><span class="sr_only">보라</span></button>
+										<button type="button" style="background-color:#1f1d20" data-color="1f1d20"><span class="sr_only">블렉/그레이</span></button>
+										<button type="button" style="background-color:#8e502f" data-color="8e502f"><span class="sr_only">브라운</span></button>
+										<button type="button" style="background-color:#8fe48a" data-color="8fe48a"><span class="sr_only">그린</span></button>
+										<button type="button" style="background-color:#3a6abf" data-color="3a6abf"><span class="sr_only">블루</span></button>
+										<button type="button" style="background-color:#f9c361" data-color="f9c361"><span class="sr_only">옐로우/베이지</span></button>
+										<button type="button" style="background-color:#ffffff" data-color="ffffff">화이트/<br>실버</button>
+									</div>
+								</div>
+								<p class="option_close"><button type="button">닫기</button></p>
+							</div>
+							<div class="option_name">
+								<span><em>NEW</em> PP511 계탔다!</span>
+							</div>
+						</div>
+						<div class="price_area">
+								<span class="discount">
+									<span class="to">30<em>%</em></span>
+								</span>
+							<span class="price">
+									<span>12,600<em>원~</em></span>
+								</span>
+							<span class="btns">
+									<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+								</span>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="item">
+						<!-- 상품 이미지/상태 영역-->
+						<div class="item_images">
+							<!-- /* 대표 이미지 */ -->
+							<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/101001217_IM_01.png" alt=""></a>
+							<!-- /* 이미지 슬라이드 */ -->
+							<div class="slide goods_slide" data-ix-options="view-length :1;">
+								<div class="ix-list-viewport">
+									<ul class="ix-list-items">
+										<li class="ix-list-item">
+											<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/101001217_IM_01.png" alt=""></a>
+										</li>
+										<li class="ix-list-item">
+											<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/101001217_IM_02.png" alt=""></a>
+										</li>
+										<li class="ix-list-item">
+											<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/101001217_IM_03.png" alt=""></a>
+										</li>
+									</ul>
+								</div>
+								<div class="ix-controller">
+									<ul class="ix-thumbs">
+										<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="item_info list">
+							<div class="flag_set">
+								<span class="best">베스트</span>
+								<span class="event">이벤트</span>
+								<span>MD추천</span>
+								<span>온라인전용</span>
+								<span class="sale_count">731 구매</span>
+							</div>
+							<div class="prd_name">
+								<div>
+									<p class="s_name"><em class="tag"></em> <span>50%SALE(3.15~18)</span></p>
+									<p class="name">유니버스 글리터</p>
+								</div>
+								<p class="color_name">85 colors</p>
+							</div>
+						</div>
+						<!-- 상품 옵션 영역 6개 이상 -->
+						<div class="item_option">
+							<div class="color_chips more"> <!-- 6개이상인 경우  more 클래스 -->
+								<div>
+									<ul>
+										<li data-group="f06da1">
+											<a href="#chip">
+												<span class="sold_out"><span>품절</span></span>
+												<img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg">
+											</a>
+										</li>
+										<li data-group="f06da1"><a href="#chip" class="check"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img2.jpg"></a></li>
+										<li data-group="e9224e"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img3.jpg"></a></li>
+										<li data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg"></a></li>
+										<li data-group="e9224e"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img2.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img3.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img2.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img3.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg"></a></li>
+
+										<li class="btn_more"><button type="button" class="btn_color_more"><img alt="컬러칩 더보기" src="/mo/ko/images/product/btn_color_more.gif"><span>+ 85</span></button></li>
+									</ul>
+								</div>
+								<div class="color_group">
+									<div class="scroll_area">
+										<button type="button" class="all" data-color="all">ALL</button>
+										<button type="button" style="background-color:#f06da1" data-color="f06da1"><span class="sr_only">핑크</span></button>
+										<button type="button" style="background-color:#e9224e" data-color="e9224e"><span class="sr_only">레드</span></button>
+										<button type="button" style="background-color:#ff7a2d" data-color="ff7a2d"><span class="sr_only">오렌지</span></button>
+										<button type="button" style="background-color:#b261e4" data-color="b261e4"><span class="sr_only">보라</span></button>
+										<button type="button" style="background-color:#1f1d20" data-color="1f1d20"><span class="sr_only">블렉/그레이</span></button>
+										<button type="button" style="background-color:#8e502f" data-color="8e502f"><span class="sr_only">브라운</span></button>
+										<button type="button" style="background-color:#8fe48a" data-color="8fe48a"><span class="sr_only">그린</span></button>
+										<button type="button" style="background-color:#3a6abf" data-color="3a6abf"><span class="sr_only">블루</span></button>
+										<button type="button" style="background-color:#f9c361" data-color="f9c361"><span class="sr_only">옐로우/베이지</span></button>
+										<button type="button" style="background-color:#ffffff" data-color="ffffff">화이트/<br>실버</button>
+									</div>
+								</div>
+								<p class="option_close"><button type="button">닫기</button></p>
+							</div>
+							<div class="option_name">
+								<span><em>NEW</em> PP511 계탔다!</span>
+							</div>
+						</div>
+						<div class="price_area">
+							<!-- 할인율 없으면 삭제<span class="discount">-->
+							<!--<span class="from">30<em>%~</em></span>-->
+							<!--<span class="to">30<em>%</em></span>-->
+							<!--</span>-->
+							<span class="price">
+									<span>12,600<em>원~</em></span>
+								</span>
+							<span class="btns">
+									<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+								</span>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="item">
+						<!-- 상품 이미지/상태 영역-->
+						<div class="item_images">
+							<!-- /* 대표 이미지 */ -->
+							<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/20171026171319795.png" alt=""></a>
+							<!-- /* 이미지 슬라이드 */ -->
+							<div class="slide goods_slide" data-ix-options="view-length :1;">
+								<div class="ix-list-viewport">
+									<ul class="ix-list-items">
+										<li class="ix-list-item">
+											<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/20171026171319795.png" alt=""></a>
+										</li>
+										<li class="ix-list-item">
+											<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/20171123132501252.jpg" alt=""></a>
+										</li>
+										<li class="ix-list-item">
+											<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/20171123132501252.jpg" alt=""></a>
+										</li>
+									</ul>
+								</div>
+								<div class="ix-controller">
+									<ul class="ix-thumbs">
+										<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+									</ul>
+								</div>
+							</div>
+
+							<div class="item_util">
+								<a href="#none" class="btn_review"><span class="sr_only">구매후기</span><span class="bubble">9,999</span></a>
+							</div>
+							<!-- 일시품절일경우 -->
+							<div class="item_state out_of_stock">
+								일시품절
+							</div>
+						</div>
+						<div class="item_info list">
+							<div class="flag_set">
+								<span class="new">신제품</span>
+								<span class="best">베스트</span>
+								<span class="event">이벤트</span>
+								<span>MD추천</span>
+								<span>온라인전용</span>
+								<span class="sale_count">731 구매</span>
+							</div>
+							<div class="prd_name">
+								<div>
+									<p class="s_name"><em class="tag"></em> <span>50%SALE(3.15~18)</span></p>
+									<p class="name">유니버스 디어 마이 매트&글라스 틴팅 립스_톡</p>
+								</div>
+								<!--<p class="color_name">85 colors</p>-->
+							</div>
+						</div>
+						<!-- 상품 옵션 영역 6개 이상 -->
+						<div class="item_option">
+							<div class="color_chips more"> <!-- 6개이상인 경우  more 클래스 -->
+								<div>
+									<ul>
+										<li data-group="f06da1">
+											<a href="#chip">
+												<span class="sold_out"><span>품절</span></span>
+												<img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg">
+											</a>
+										</li>
+										<li data-group="f06da1"><a href="#chip" class="check"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img2.jpg"></a></li>
+										<li data-group="e9224e"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img3.jpg"></a></li>
+										<li data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg"></a></li>
+										<li data-group="e9224e"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img2.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img3.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img2.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img3.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg"></a></li>
+
+										<li class="btn_more"><button type="button" class="btn_color_more"><img alt="컬러칩 더보기" src="/mo/ko/images/product/btn_color_more.gif"><span>+ 85</span></button></li>
+									</ul>
+								</div>
+								<div class="color_group">
+									<div class="scroll_area">
+										<button type="button" class="all" data-color="all">ALL</button>
+										<button type="button" style="background-color:#f06da1" data-color="f06da1"><span class="sr_only">핑크</span></button>
+										<button type="button" style="background-color:#e9224e" data-color="e9224e"><span class="sr_only">레드</span></button>
+										<button type="button" style="background-color:#ff7a2d" data-color="ff7a2d"><span class="sr_only">오렌지</span></button>
+										<button type="button" style="background-color:#b261e4" data-color="b261e4"><span class="sr_only">보라</span></button>
+										<button type="button" style="background-color:#1f1d20" data-color="1f1d20"><span class="sr_only">블렉/그레이</span></button>
+										<button type="button" style="background-color:#8e502f" data-color="8e502f"><span class="sr_only">브라운</span></button>
+										<button type="button" style="background-color:#8fe48a" data-color="8fe48a"><span class="sr_only">그린</span></button>
+										<button type="button" style="background-color:#3a6abf" data-color="3a6abf"><span class="sr_only">블루</span></button>
+										<button type="button" style="background-color:#f9c361" data-color="f9c361"><span class="sr_only">옐로우/베이지</span></button>
+										<button type="button" style="background-color:#ffffff" data-color="ffffff">화이트/<br>실버</button>
+									</div>
+								</div>
+								<p class="option_close"><button type="button">닫기</button></p>
+							</div>
+							<div class="option_name">
+								<span><em>NEW</em> PP511 계탔다!</span>
+							</div>
+						</div>
+						<div class="price_area">
+								<span class="discount">
+									<span class="from">30<em>%~</em></span>
+									<span class="to">30<em>%</em></span>
+								</span>
+							<span class="price">
+									<span>12,600<em>원~</em></span>
+								</span>
+							<span class="btns">
+									<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+								</span>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="item">
+						<!-- 상품 이미지/상태 영역-->
+						<div class="item_images">
+							<!-- /* 대표 이미지 */ -->
+							<a href="#" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/20171026160555673.png" alt=""></a>
+							<!-- /* 이미지 슬라이드 */ -->
+							<div class="slide goods_slide" data-ix-options="view-length :1;">
+								<div class="ix-list-viewport">
+									<ul class="ix-list-items">
+										<li class="ix-list-item">
+											<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/20171026160555673.png" alt=""></a>
+										</li>
+										<li class="ix-list-item">
+											<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/20171123133243140.png" alt=""></a>
+										</li>
+										<li class="ix-list-item">
+											<a href="#" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="/mo/ko/images/dummy/20171123133243140.png" alt=""></a>
+										</li>
+									</ul>
+								</div>
+								<div class="ix-controller">
+									<ul class="ix-thumbs">
+										<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+									</ul>
+								</div>
+							</div>
+							<div class="item_util">
+								<a href="#none" class="btn_review"><span class="sr_only">구매후기</span><span class="bubble">9,999</span></a>
+							</div>
+							<!-- 일시품절일경우
+							<div class="item_state out_of_stock">
+								일시품절
+							</div>  -->
+						</div>
+						<div class="item_info list">
+							<div class="flag_set">
+								<span class="event">이벤트</span>
+								<span>MD추천</span>
+								<span>온라인전용</span>
+								<span class="sale_count">731 구매</span>
+							</div>
+							<div class="prd_name">
+								<div>
+									<p class="s_name"><em class="tag"></em> <span>50%SALE(3.15~18)</span></p>
+									<p class="name">룩 앳 마이 아이즈 펄섀도우 베이스</p>
+								</div>
+								<p class="color_name">85 colors</p>
+							</div>
+						</div>
+						<!-- 상품 옵션 영역 6개 이상 -->
+						<div class="item_option">
+							<div class="color_chips more"> <!-- 6개이상인 경우  more 클래스 -->
+								<div>
+									<ul>
+										<li data-group="f06da1">
+											<a href="#chip">
+												<span class="sold_out"><span>품절</span></span>
+												<img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg">
+											</a>
+										</li>
+										<li data-group="f06da1"><a href="#chip" class="check"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img2.jpg"></a></li>
+										<li data-group="e9224e"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img3.jpg"></a></li>
+										<li data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg"></a></li>
+										<li data-group="e9224e"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img2.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img3.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img2.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img3.jpg"></a></li>
+										<li style="display:none;" data-group="f06da1"><a href="#chip"><img alt="컬러명" src="/mo/ko/images/dummy/color_chips_img1.jpg"></a></li>
+
+										<li class="btn_more"><button type="button" class="btn_color_more"><img alt="컬러칩 더보기" src="/mo/ko/images/product/btn_color_more.gif"><span>+ 85</span></button></li>
+									</ul>
+								</div>
+								<div class="color_group">
+									<div class="scroll_area">
+										<button type="button" class="all" data-color="all">ALL</button>
+										<button type="button" style="background-color:#f06da1" data-color="f06da1"><span class="sr_only">핑크</span></button>
+										<button type="button" style="background-color:#e9224e" data-color="e9224e"><span class="sr_only">레드</span></button>
+										<button type="button" style="background-color:#ff7a2d" data-color="ff7a2d"><span class="sr_only">오렌지</span></button>
+										<button type="button" style="background-color:#b261e4" data-color="b261e4"><span class="sr_only">보라</span></button>
+										<button type="button" style="background-color:#1f1d20" data-color="1f1d20"><span class="sr_only">블렉/그레이</span></button>
+										<button type="button" style="background-color:#8e502f" data-color="8e502f"><span class="sr_only">브라운</span></button>
+										<button type="button" style="background-color:#8fe48a" data-color="8fe48a"><span class="sr_only">그린</span></button>
+										<button type="button" style="background-color:#3a6abf" data-color="3a6abf"><span class="sr_only">블루</span></button>
+										<button type="button" style="background-color:#f9c361" data-color="f9c361"><span class="sr_only">옐로우/베이지</span></button>
+										<button type="button" style="background-color:#ffffff" data-color="ffffff">화이트/<br>실버</button>
+									</div>
+								</div>
+								<p class="option_close"><button type="button">닫기</button></p>
+							</div>
+							<div class="option_name">
+								<span><em>NEW</em> PP511 계탔다!</span>
+							</div>
+						</div>
+						<div class="price_area">
+								<span class="discount">
+									<span class="from">30<em>%~</em></span>
+									<span class="to">30<em>%</em></span>
+								</span>
+							<span class="price">
+									<span>12,600<em>원~</em></span>
+								</span>
+							<span class="btns">
+									<button type="button" class="btn_cart"><span class="sr_only">장바구니 담기</span></button>
+								</span>
+						</div>
+					</div>
+				</li>
+			</ul>
+			<!--/* 20180423 : 배너 삭제 */-->
+			<button type="button" class="btn_lg_more w100p">
+				<span>더보기 (<em>5</em>/35)</span>
+			</button>
+		</div>
+		<!--//상품리스트-->
+
+		<ul class="loading" style="display: none">
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+
+		<!--인기상품-->
+		<div class="recommend_items mgt50">
+			<h3 class="title">지금 이순간 인기상품</h3>
+			<div class="slide two_half" data-ix-options="view-length:3; move-length:2;">
+				<div class="ix-list-viewport">
+					<ul class="ix-list-items">
+						<li class="ix-list-item item">
+							<a href="#item">
+								<div class="thumb"><img ap:src="@{/images/dummy/20180309161931356.png}" alt="" /></div>
+								<div class="item_info">
+									<div>
+										<p class="s_name">[곧 출시!]</p>
+										<p class="prd_name">플레이 네일 NEW</p>
+									</div>
+									<div class="price_area">
+										<span class="discount">30<em>%</em></span>
+										<span class="price">3,500<em>원</em></span>
+									</div>
+								</div>
+							</a>
+						</li>
+						<li class="ix-list-item item">
+							<a href="#item">
+								<div class="thumb"><img ap:src="@{/images/dummy/650001366_IM_01.png}" alt="" /></div>
+								<div class="item_info">
+									<div>
+										<p class="s_name">[곧 출시!]</p>
+										<p class="prd_name">컬러풀 드로잉 소프트 핸드 워시</p>
+									</div>
+									<div class="price_area">
+										<span class="discount">30<em>%</em></span>
+										<span class="price">3,500<em>원</em></span>
+									</div>
+								</div>
+							</a>
+						</li>
+						<li class="ix-list-item item">
+							<a href="#item">
+								<div class="thumb"><img ap:src="@{/images/dummy/650000767_IM_01.png}" alt="" /></div>
+								<div class="item_info">
+									<div>
+										<p class="s_name">[곧 출시!]</p>
+										<p class="prd_name">보들 원형 화장솜</p>
+									</div>
+									<div class="price_area">
+										<span class="price">3,500<em>원</em></span>
+									</div>
+								</div>
+							</a>
+						</li>
+						<li class="ix-list-item item">
+							<a href="#item">
+								<div class="thumb"><img ap:src="@{/images/dummy/650000767_IM_01.png}" alt="" /></div>
+								<div class="item_info">
+									<div>
+										<p class="s_name">[곧 출시!]</p>
+										<p class="prd_name">보들 원형 화장솜</p>
+									</div>
+									<div class="price_area">
+										<span class="price">3,500<em>원</em></span>
+									</div>
+								</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!--//인기상품-->
+	</div>
+	<!-- // page contents -->
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script>
+		// test
+		AP.DISPLAY_MENU_ID = 'beauty_point_shop';
+		// test
+
+		/*
+		AP.display.init({
+			key: { displayMenuId: AP.DISPLAY_MENU_ID },
+			flagged: {
+				flags: 'icon_reco_hot,icon_membership1',
+				limit: 10
+			}
+		});
+		*/
+	</script>
+</th:block>
+
+</body>
+</html>

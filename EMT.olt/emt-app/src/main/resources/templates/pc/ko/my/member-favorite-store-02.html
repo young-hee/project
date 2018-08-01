@@ -1,0 +1,593 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- mypage sitemap -->
+	<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+	<!-- //  mypage sitemap -->
+
+	<!-- page title -->
+	<th:block ap:replace="~{common/fragment/contents-page-title}"/>
+	<!-- // page title -->
+
+	<!-- page contents -->
+	<div class="ap_contents mypage">
+		<div class="store_list">
+			<div class="clear">
+				<div>
+					<p class="text font_lg">
+						<b><em id="storeCnt">0</em><em>개의 단골 매장</em>이 등록되어 있습니다.</b>
+					</p>
+
+					<p class="text bullet_dot">단골 매장은 최대 10개까지
+						추가하실 수 있습니다.</p>
+				</div>
+				<!-- <button class="btn_md_primary addr_add" onclick="window.location.href='/my/page/store/add'">단골 매장 추가하기</button> -->
+				<button class="btn_md_primary addr_add"
+						onclick="layerOpen()">단골 매장 추가하기
+				</button>
+			</div>
+
+			<div class="panel notice store" id="empty">
+				<i class="ico"></i>
+				<p class="text font_lg">등록된 단골 매장이 없습니다.</p>
+			</div>
+
+			<table id="storeTable" name="storeTable"
+				   class="ui_table_striped data_table thead_colored align_center mgt20">
+				<caption class="sr_only">단골 목록으로 선택, 매장,
+					전화번호, 주소, 매장위치로 구성
+				</caption>
+				<colgroup>
+					<col/>
+					<col/>
+					<col/>
+					<col/>
+					<col/>
+				</colgroup>
+				<thead>
+				<tr>
+					<th scope="col">선택</th>
+					<th scope="col">매장</th>
+					<th scope="col">전화번호</th>
+					<th scope="col">주소</th>
+					<th scope="col">매장위치</th>
+				</tr>
+				</thead>
+				<tbody id="paging">
+				<!-- <tr>
+                        <td><span class="check_wrap check_only"><input type="checkbox" id="store1" class="table_striped"><label for="store1"><span class="sr_only">{단골매장}선택</span></label></span></td>
+                        <td>HDC신라면세점<span class="store_default">기본</span></td>
+                        <td>02-554-3494</td>
+                        <td class="align_left">서울 강서구 하늘길 251,(공항동, 화물청사)</td>
+                        <td><button class="btn_sm_bordered">위치보기</button></td>
+                    </tr>
+                    맵볼때 class tr_map 에 on class 추가
+                    <tr class="tr_map">
+                        <td colspan="5" class="td_map"><div class="map_area"></div><button class="btn_map_close">닫기</button></td>
+                    </tr>
+                    <tr>
+                        <td><span class="check_wrap check_only"><input type="checkbox" id="store2" class="table_striped"><label for="store2"><span class="sr_only">{단골매장}선택</span></label></span></td>
+                        <td>강남지하점</td>
+                        <td>02-554-3494</td>
+                        <td class="align_left">서울 강남구 역삼동821-1 강남역지하상가 A17-A19</td>
+                        <td><button class="btn_sm_bordered">위치보기</button></td>
+                    </tr>
+                    <tr class="tr_map">
+                        <td colspan="5" class="td_map"><div class="map_area"></div><button class="btn_map_close">닫기</button></td>
+                    </tr> -->
+				</tbody>
+			</table>
+
+			<div class="align_left mgt20">
+				<button class="btn_md_secondary"
+						onclick="delFavorite()">선택 매장 삭제하기
+				</button>
+				<button class="btn_md_neutral"
+						onclick="repFavorite()">기본 매장으로 선택하기
+				</button>
+			</div>
+
+			<div class="panel gray mgt50 store">
+				<div class="panel_cont">
+					<div class="left_wrap">
+						<img src="/pc/ko/images/dummy/icon_box.png"
+							 alt="">
+						<button class="btn_lg_bordered" onclick="location.href='/cs/takeOut'">테이크
+							아웃 서비스 알아보기
+						</button>
+					</div>
+					<h3 class="h_title sub">
+						서비스 운영시간 &nbsp;<span class="color_pink">오전
+                                11시 ~ 오후 9시</span>
+					</h3>
+					<ul class="list_bullet_dot">
+						<li>매장에서 <span class="color_point">상품
+                                    준비가 완료되면 고객님께 SMS가</span> 발송됩니다. (운영시간 내 수령
+							가능)
+						</li>
+						<li>매장의 <span class="color_point">재고
+                                    보유 현황에 따라 선택한 상품의 판매 상태</span>가 달라질 수 있습니다.
+						</li>
+						<li><span class="color_point">SMS발송
+                                    전 매장을 방문</span>하시면, <span
+							class="color_point">상품 준비에 시간이 소요</span>될
+							수 있습니다.
+						</li>
+						<li><span class="color_point">매장
+                                    별로 휴무일</span>이 다를 수 있습니다.
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- // page contents -->
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script ap:src="@{/handlebars-templates/compiled/my/favorite-store-list.js}"></script>
+	<script ap:src="@{/handlebars-templates/compiled/my/layer-favorite-store-add.js}"></script>
+	<script ap:src="@{/handlebars-templates/compiled/my/favorite-store-add-list.js}"></script>
+	<script th:inline="javascript">
+		$(document).ready(function () {
+			getFavoriteStore();
+		});
+
+		function layerOpen() {
+
+			if ($('.storeRow').length >= 10) {
+				AP.modal.alert('단골매장은 최대 10개 까지만 추가가 가능합니다.');
+				return;
+			}
+
+			var modal = AP.modal.open({
+				templateKey: 'my.layer-favorite-store-add',
+				sizeType: "L"
+			}).addListener( 'modal-close', function (e) {
+				// console.log( e.closeType ); //confirm, cancel, close
+				// alert(e.closeType);
+				if ('close' === e.closeType) {
+					getFavoriteStore();
+				}
+			});
+			var $modalEl = modal.getElement();
+
+			$('#addSearch').on('click', function (e) {
+				var search = $('#addSearchText').val();
+				// alert(search);
+				if (search != null && search.length > 0) {
+					ret = false;
+					getAddFavoriteStore(search, 0)
+				}
+				else {
+					AP.modal.alert('매장명 또는 지역명을 입력해 주세요.');
+				}
+			});
+		}
+
+		function getFavoriteStore() {
+			AP.api.favoriteStore({}, {
+				regularStoreSearchYn : "Y"
+			}).done(function (data) {
+				if (data) {
+					showPage(data.data);
+				}
+				//성공
+			}).fail(function (e) {
+				//실패
+			}).always(function () {
+				//성공, 실패
+			});
+		}
+
+		function showPage(data) {
+
+			if (data.totalCount > 0) {
+				$('#empty').hide();
+				$('#storeTable').show();
+			} else {
+				$('#empty').show();
+				$('#storeTable').hide();
+			}
+
+			var resultHtml = AP.common.getTemplate('my.favorite-store-list', {
+				totalLength: data.totalCount,
+				totalLengthLabel: $B.string.numberFormat(data.totalCount),
+				result: data.storeExList
+			});
+			$('#storeCnt').text(data.regularStoreTotalCount);
+			$('#paging').empty();
+			$('#paging').append(resultHtml);
+
+			$('.ui_table_striped').tableStriped('clear');
+			$('.ui_table_striped').tableStriped();
+
+			actionStore();
+		}
+
+		function delFavorite() {
+			var box = document.querySelectorAll('input[type=checkbox][name=main]:checked');
+			var boxChecked = Array.prototype.map.call(box, function (c, i) {
+				return c.value;
+			});
+
+			var elememts = Array.prototype.map.call(box, function (c, i) {
+				return c;
+			});
+
+			if (boxChecked != null && boxChecked.length > 0) {
+
+				var msg = boxChecked.length <= 1 ? "매장을 삭제하시겠습니까?" : boxChecked.length + "개의 매장을 삭제하시겠습니까?";
+
+				AP.modal.confirm(msg).addListener('modal-close', function(e) {
+					if ( e.closeType == 'confirm' ) {
+						if (!checkRep(elememts)) {
+							deleteStore(boxChecked, elememts);
+						} else {
+							AP.modal.alert("단골 매장은 삭제할수 없습니다.");
+						}
+					}
+				});
+			}
+		}
+
+		function repFavorite() {
+			var box = document.querySelectorAll('input[type=checkbox][name=main]:checked');
+			var boxChecked = Array.prototype.map.call(box, function (c, i) {
+				return c.value;
+			});
+
+			var elememts = Array.prototype.map.call(box, function (c, i) {
+				return c;
+			});
+
+			if (boxChecked != null && boxChecked.length > 0) {
+				var split = String(boxChecked).split(",");
+				if (split != null && split.length == 1) {
+					repAddress(boxChecked, elememts);
+				} else {
+					AP.modal.alert("기본매장은 1개만 선택해주세요.");
+				}
+			}
+		}
+
+		function deleteStore(val, elements) {
+			AP.api.delFavoriteStore({}, {
+				storeSn: String(val),
+			}).done(function (data) {
+				if (data && 'success' === data.data) {
+					AP.modal.alert("매장이 삭제되었습니다.").addListener('modal-close', function (e) {
+						Array.prototype.map.call(elements, function (c, i) {
+							// rowRemover(c.value);
+							getFavoriteStore();
+						});
+					});
+
+				}
+				//성공
+			}).fail(function (e) {
+				AP.modal.alert(e.responseJSON.errorData.message);;
+				//실패
+			}).always(function () {
+				//성공, 실패
+			});
+		}
+
+		function repAddress(val, element) {
+			AP.api.repFavoriteStore({}, {
+				storeSn: Number(val)
+			}).done(function (data) {
+				if (data && data.data.result) {
+					AP.modal.alert("기본 매장이 변경되었습니다.").addListener('modal-close', function (e) {
+						// $('#storeTable span[type=rep][class=store_default]').each(function () {
+						// 	$(this).removeClass("store_default");
+						// 	$(this).html("");
+						// });
+						// rowChange(val);
+						getFavoriteStore();
+					});
+				}
+				//성공
+			}).fail(function (e) {
+				//실패
+				AP.modal.alert(e.responseJSON.errorData.message);
+			}).always(function () {
+				//성공, 실패
+			});
+		}
+
+		function checkRep(elements) {
+
+			var retVal;
+			$('#storeTable span[type=rep][class=address_default]').each(function () {
+				retVal = $(this).attr("val");
+			});
+			var ret = false;
+			Array.prototype.map.call(elements, function (c, i) {
+				if (retVal === c.value) {
+					ret = true;
+				}
+			});
+			return ret;
+		}
+
+		function rowRemover(type) {
+			$('#storeTable tr[type=' + type + ']').remove();
+		}
+
+		function rowChange(val) {
+			$('#storeTable span[type=rep][val=' + val + ']').addClass("store_default");
+			$('#storeTable span[type=rep][val=' + val + ']').html("기본");
+			$(this).html("");
+		}
+
+		function actionStore() {
+			$('.ui_table_striped').tableStriped();
+
+			// map api
+			$('.store_list .ui_table_striped tbody tr:not(.tr_map)').each(function (index) {
+				var $store = $(this).not('.js-apply'), $trMap = $store.next('.tr_map');
+
+				// 위치보기 버튼
+				$store.find('button').on('click', function () {
+
+					if ($trMap.hasClass('on')) {
+						$trMap.removeClass('on');
+					} else {
+						$trMap.addClass('on');
+						$trMap.find('.map_area').mapApi('resize');
+						$trMap.find('.map_area').mapApi('setCenter', $(this).attr("latitude"), $(this).attr("longitude"));
+						$trMap.find('.map_area').mapApi('addMarker', $(this).attr("latitude"), $(this).attr("longitude"), 1);
+					}
+				});
+
+				//닫기 버튼
+				$trMap.find('.btn_map_close').on('click', function () {
+					$trMap.removeClass('on');
+				});
+
+				//지도 가이드 참고
+				$trMap.find('.map_area').mapApi({
+					ratio: [320, 180
+					]
+				});
+				/* AP.common.mapApiReady.done(function () {
+                    if (location != null) {
+                        alert("123");
+                        $trMap.find( '.map_area' ).mapApi( 'addMarker', location.latitude, location.longitude, 1 );
+                    }
+                }); */
+
+				//중복적용 방지
+				$store.addClass('js-apply');
+			});
+		}
+
+		var ret = false;
+		var pageLimit = 10;
+		var currentKeyword;
+
+
+		function getAddFavoriteStore(keyword, offset) {
+			currentKeyword = keyword;
+			AP.api.favoriteStore({}, {
+				keyword: keyword,
+				offSet: offset,
+				limit: pageLimit,
+				regularStoreSearchYn : "N"
+			}).done(function (data) {
+				if (data) {
+					showAddPage(data.data, keyword);
+					if (!ret) {
+						ret = true;
+						showAddPaging(data.data.totalCount);
+					}
+				}
+				//성공
+			}).fail(function (e) {
+				//실패
+				AP.modal.alert(e.responseJSON.errorData.message);
+			}).always(function () {
+				//성공, 실패
+			});
+		}
+
+		function showAddPage(data, keyword) {
+
+			var resultHtml = AP.common.getTemplate('my.favorite-store-add-list', {
+				totalLength: data.totalCount,
+				totalLengthLabel: $B.string.numberFormat(data.totalCount),
+				result: data.storeExList
+			});
+			$('#addPaging').empty();
+			if (data.totalCount > 0) {
+				$('#addPagination').show();
+				$('#addNone').hide();
+				$('#addPaging').append(resultHtml);
+				$('.ui_table_striped').tableStriped('clear');
+				$('.ui_table_striped').tableStriped();
+				actionAddStore();
+				setDel();
+			}
+			else {
+				$('#searchText').text(keyword);
+				$('#addPagination').hide();
+				$('#addNone').show();
+			}
+			// actionCheckbox();
+		}
+
+		function setDel() {
+			$('input[type=checkbox][name=layer]').on('click', function () {
+				var element = $(this);
+				if (element.prop('checked')) {
+					addFavoriteStore(element.val(), element, element.attr('storeName'));
+				}
+				else {
+					delFavoriteStore(element.val(), element, element.attr('storeName'));
+				}
+			// 	AP.api.addFavoriteStore({}, {
+			// 		storeSn: element.val(),
+			// 		favorite: element.prop('checked') ? "N" : "Y"
+			// 	}).done(function (data) {
+			// 		if (data && 'success' == data.result) {
+			// 			AP.modal.alert(element.prop('checked') ? "해제 되었습니다." : "등록 되었습니다.").addListener('modal-close', function (e) {
+			// 				if (element.prop('checked')) {
+			// 					element.prop("checked", false);
+			// 				} else {
+			// 					element.prop("checked", true);
+			// 				}
+			// 				$('.ui_table_striped').tableStriped('clear');
+			// 				$('.ui_table_striped').tableStriped();
+			// 			});
+			// 		}
+			// 		//성공
+			// 	}).fail(function (e) {
+			// 		AP.modal.alert("fail");
+			// 		//실패
+			// 	}).always(function () {
+			// 		//성공, 실패
+			// 	});
+			  	return false;
+			});
+		}
+
+		function addFavoriteStore(storeSn, element, name) {
+			AP.api.addFavoriteStore({}, {
+				storeSn : storeSn
+			}).done(function(data) {
+				if (data && data.data.result) {
+					AP.modal.alert(name + "이 단골 매장으로 설정 되었습니다.").addListener('modal-close', function(e) {
+						element.prop("checked", true);
+						$('.ui_table_striped').tableStriped('clear');
+						$('.ui_table_striped').tableStriped();
+					});
+				}
+				//성공
+			}).fail(function(e) {
+				AP.modal.alert(e.responseJSON.errorData.message);
+				//실패
+			}).always(function() {
+				//성공, 실패
+			});
+		}
+
+		function delFavoriteStore(storeSn, element, name) {
+			AP.api.delFavoriteStore({}, {
+				storeSn : storeSn
+			}).done(function(data) {
+				if (data && 'success' === data.data) {
+					AP.modal.alert(name + "이 단골 매장에서 해제 되었습니다.").addListener('modal-close', function(e) {
+						element.prop("checked", false);
+						$('.ui_table_striped').tableStriped('clear');
+						$('.ui_table_striped').tableStriped();
+					});
+				}
+				//성공
+			}).fail(function(e) {
+				AP.modal.alert(e.responseJSON.errorData.message);
+				//실패
+			}).always(function() {
+				//성공, 실패
+			});
+		}
+
+		function showAddPaging(totalCount) {
+			$('#count').text(totalCount);
+			$('.ui_paging').paging('clear');
+
+			var totalPage = Math.ceil(totalCount / pageLimit);
+
+			// $('.ui_paging').paging({
+			// 	currentPage: 1,
+			// 	totalPage: totalPage,
+			// 	pagingLength : pageLimit
+			// }).on('paging-change', function (e) {
+			// 	getAddFavoriteStore(currentKeyword, ((e.page - 1) * pageLimit));
+			// 	// getFavoriteStore();
+			// });
+
+			$('.ui_paging').paging({
+				offset : 0,
+				limit : 10,
+				totalCount: totalCount,
+				pagingLength : pageLimit
+			}).on('paging-change', function (e) {
+				// getAddFavoriteStore(currentKeyword, ((e.page - 1) * pageLimit));
+				getAddFavoriteStore(currentKeyword, e.offset);
+				// getFavoriteStore();
+			});
+		}
+
+		function addSearchKeyPress(e) {
+			// look for window.event in case event isn't passed in
+			e = e || window.event;
+			if (e.keyCode == 13) {
+				document.getElementById('addSearch').click();
+				return false;
+			}
+			return true;
+		}
+
+		function actionAddStore() {
+
+			// map api
+			$('.store_list .ui_table_striped tbody tr:not(.tr_map)').each(function (index) {
+				var $store = $(this).not('.js-apply'), $trMap = $store.next('.tr_map'), $btnWrap = $store.find('.table_striped');
+
+				// 위치보기 버튼
+				$store.find('button').on('click', function () {
+
+					if ($trMap.hasClass('on')) {
+						$trMap.removeClass('on');
+					} else {
+						$trMap.addClass('on');
+						$trMap.find('.map_area').mapApi('resize');
+						$trMap.find('.map_area').mapApi('setCenter', $(this).attr("latitude"), $(this).attr("longitude"));
+						$trMap.find('.map_area').mapApi('addMarker', $(this).attr("latitude"), $(this).attr("longitude"), 1);
+					}
+				});
+
+				// $btnWrap.find('>.del').on('click', function(e) {
+				// $btnWrap.on('click', function(e) {
+				// 	// alert($(this).attr('sn'));
+				// 	// alert($(this).val());
+				// 	// alert($(this).prop('checked'));
+				// 	if ($(this).prop('checked')) {
+				// 		addFavoriteStore($(this).val(), $(this));
+				// 	}
+				// 	else {
+				// 		delFavoriteStore($(this).val(), $(this));
+				// 	}
+				// });
+
+				//닫기 버튼
+				$trMap.find('.btn_map_close').on('click', function () {
+					$trMap.removeClass('on');
+				});
+
+				//지도 가이드 참고
+				$trMap.find('.map_area').mapApi({
+					ratio: [320, 180
+					]
+				});
+				/* AP.common.mapApiReady.done(function () {
+                    if (location != null) {
+                        alert("123");
+                        $trMap.find( '.map_area' ).mapApi( 'addMarker', location.latitude, location.longitude, 1 );
+                    }
+                }); */
+
+				//중복적용 방지
+				$store.addClass('js-apply');
+			});
+		}
+	</script>
+
+</th:block>
+</body>
+</html>

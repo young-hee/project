@@ -1,0 +1,39 @@
+<div class="panel">
+	<div class="ui_accordion">
+		{{#each this.model}}
+			<dl>
+				<dt class="{{#xif this.addAttrCode '==' 'colorgroup'}}on{{/xif}}">
+					<span class="title">{{ this.addAttrName }}</span>
+					<button type="button"><span class="sr_only">더보기</span></button>
+				</dt>
+				<dd>
+					<div class="cont">
+						{{#xif this.addAttrCode '==' 'colorgroup'}}
+							{{#each this.addAttrVals}}
+								{{#xif (calc @index '%' 5) '==' 0}}
+								<div class="color_chip circle">
+								{{/xif}}
+									<span>
+										<input type="checkbox" id="{{ this.addAttrValCode }}" {{#if this.selected}}checked{{/if}} value="{{ this.addAttrValCode }}" data-group="{{ ../addAttrCode }}" data-label="{{ this.addAttrValName }}"><label for="{{ this.addAttrValCode }}" style="background-color:#{{ this.addAttrValCode }}"><span class="sr_only">{{ this.addAttrValName }}</span></label>
+									</span>
+								{{#xif (calc @index '%' 5) '==' 4}}
+								</div>
+								{{/xif}}
+							{{/each}}
+						{{else}}
+							<div class="filter_set">
+								{{#each this.addAttrVals}}
+									<span><input type="checkbox" id="{{ this.addAttrValCode }}" {{#if this.selected}}checked{{/if}} value="{{ this.addAttrValCode }}" data-group="{{ ../addAttrCode }}" data-label="{{ this.addAttrValName }}"><label for="{{ this.addAttrValCode }}">{{ this.addAttrValName }}</label></span>
+								{{/each}}
+							</div>
+						{{/xif}}
+					</div>
+				</dd>
+			</dl>
+		{{/each}}
+	</div>
+	<div class="page_btns">
+		<button type="button" class="btn_md_secondary btn_reset">초기화</button>
+		<button type="button" class="btn_md_primary btn_confirm">필터 적용</button>
+	</div>
+</div>

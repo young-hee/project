@@ -1,0 +1,136 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='find-store'">
+
+<body>
+
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents brand">
+				<div class="find_store">
+					<!-- tab menu wrap -->
+					<div class="ui_tab">
+						<!-- tab menu -->
+						<div class="tab_menu equally">
+							<ul>
+								<li class="on"><a href="#none" th:href="@{/display/store_location(displayMenuId=store_location)}">매장 찾기</a></li>
+								<li><a href="#none" th:href="@{/display/store_opening(displayMenuId=store_opening)}">매장 개설 문의</a></li>
+								<li><a href="#none" th:href="@{/display/store_review(displayMenuId=store_review)}">매장 칭찬</a></li>
+							</ul>
+						</div>
+						<!-- tab content -->
+						<div class="tab_cont pd0 store_find_area">
+							<h3 class="sr_only">매장 찾기</h3>
+
+							<fieldset class="form">
+								<legend class="sr_only">매장명 또는 지역명 입력</legend>
+								<label for="store_keyword" class="txt_search_tit_01">매장명 또는 지역명</label>
+								<div class="input_wrap">
+									<input id="store_keyword" class="keyword" type="text" placeholder="찾고자 하는 매장명 또는 지역명을 입력하신 후 검색을 누르세요. (ex. 강남)">
+									<button type="button" class="btn_search"><span class="sr_only">검색</span></button>
+									<button class="input_del"><i class="ico_close_w"></i><span class="sr_only">검색어 삭제</span></button>
+								</div>
+							</fieldset>
+
+							<div class="map_store_list_wrap">
+								<div class="map_left_wrap">
+									<div class="map_store_dim"></div>
+									<div class="layer_wrap" style="top:20%;">
+										<dl class="layer">
+											<dt class="layer_title">에뛰드 하우스 매장 찾기</dt>
+											<dd class="layer_cont etu_find_store_layer">
+												<p class="text align_center">
+													지금 바로 가까운 매장의 위치를 찾아 방문해 보세요!
+												</p>
+												<div>
+													<p class="text align_center">신규 오픈 매장</p>
+													<button type="button" data-keyword="경기_수원역점">경기_수원역점</button>
+													<button type="button" data-keyword="경기_시흥배곧점">경기_시흥배곧점</button>
+													<button type="button" data-keyword="부산_해운대점">부산_해운대점</button>
+												</div>
+											</dd>
+										</dl>
+										<button class="layer_close" type="button">레이어 닫기</button>
+									</div>
+									<div class="map_area"></div>
+								</div>
+								<div class="store_right_wrap">
+									<div class="store_right_top">
+										<span class="total_count">검색결과<em class="num">0</em>개</span>
+										<button type="button" class="favorite_store_sort_button" th:if="${session.LOGIN_USER == null or session.LOGIN_USER.member == null ? false : true}"><span class="ico_check_3"></span><span>단골매장만 보기</span></button>
+										<div>
+											마이 컬러 파인더 서비스
+											<div class="ui_tooltip">
+												<button type="button" class="btn_tooltip">툴팁보기</button>
+												<span class="arr"></span>
+												<div class="layer_tooltip">
+													<h4>마이 컬러 파인더 서비스는?</h4>
+													<p>
+														에뛰드하우스의 전국의 매장에서 뷰티아티스트가 고객님께 맞는
+														컬러를 찾아 제품을 추천해 드리는 서비스입니다. 매장 찾기에서
+														마이 컬러 파인더 매장이 표시된 매장을 방문하시면 서비스를
+														이용하실 수 있습니다.
+													</p>
+													<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="store_items">
+										<!--/*
+										<div class="store_item">
+											<span class="ico_favolite_flag_store"></span>
+											<h3 class="store_title">명동 FSS점(플래그십스토어)</h3>
+											<div class="store_info">
+												<p class="store_addr">
+													서울 중구 명동 1가 64-2
+													<span class="store_phone">02-3789-5463</span>
+												</p>
+
+												<div class="store_btn_wrap">
+													<button class="btn_md favorite on">단골해제</button>
+													<button class="btn_md map_print">지도인쇄</button>
+													<button class="btn_md map_call">지도보기</button>
+												</div>
+											</div>
+										</div>
+										*/-->
+										<div class="loading" style="margin-top:200px;">
+											<span>
+												<img ap:src="@{/images/common/loading.gif}" alt="">
+											</span>
+										</div>
+									</div>
+									<div class="pagination">
+										<!--/*
+										<a href="#none" class="navi first">처음</a>
+										<a href="#none" class="navi prev">이전</a>
+										<a href="#none" class="disabled">1</a>
+										<a href="#none">2</a>
+										<a href="#none">3</a>
+										<span class="current">4</span>
+										<a href="#none">5</a>
+										<a href="#none" class="navi next">다음</a>
+										<a href="#none" class="navi last">끝</a>
+										*/-->
+									</div>
+								</div>
+							</div>
+
+
+						</div>
+					</div>
+				</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+        </th:block>
+</body>
+</html>

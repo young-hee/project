@@ -1,0 +1,22 @@
+{{#each this.planDisplayList}}
+<li>
+	{{#xif this.planDisplayTypeCode '==' 'Link'}}
+	<a href="{{this.linkNoticeUrl}}" {{#xif this.newWindowYn '==' 'Y'}}target="_blank"{{/xif}} >
+	{{else}}
+	<a href="/display/event_detail?planDisplaySn={{ this.planDisplaySn }}">
+	{{/xif}}
+		<img alt="" src="{{ absolutePath this.bannerImgP1 }}">
+		<dl class="sr_only">
+			<dt>
+				{{ this.planDisplayTitle }}
+			</dt>
+			<dd>{{ dateFormat this.eventStartDt }}~{{ dateFormat this.eventEndDt }}</dd>
+		</dl>
+		{{#xif this.closedRestDays '>' '0' }}
+			{{#xif this.closedRestDays '<' '4'}}
+				<span class="d_day">D-{{ this.closedRestDays }}</span>
+			{{/xif}}
+		{{/xif}}
+	</a>
+</li>
+{{/each}}

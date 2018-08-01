@@ -1,0 +1,260 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='store-inquiry'">
+
+<body>
+
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents brand store_inquiry">
+				<div class="find_store">
+					<!-- tab menu wrap -->
+					<div class="ui_tab">
+						<!-- tab menu -->
+						<div class="tab_menu equally">
+							<ul>
+								<li><a href="#none" th:href="@{/display/store_location(displayMenuId=store_location)}">매장 찾기</a></li>
+								<li class="on"><a href="#none" th:href="@{/display/store_opening(displayMenuId=store_opening)}">매장 개설 문의</a></li>
+								<li><a href="#none" th:href="@{/display/store_review(displayMenuId=store_review)}">매장 칭찬</a></li>
+							</ul>
+						</div>
+						<!-- tab content -->
+						<div class="tab_cont pd0">
+							<h3 class="sr_only">매장 개설 문의</h3>
+							<img src="/pc/ko/images/dummy/etu_store_open_banner_dummy.png" alt="">
+
+							<div class="list_wrap find_store_open_wrap">
+								<dl>
+									<dt>개설 조건</dt>
+									<dd>
+										<dl>
+											<dt>가맹비</dt>
+											<dd>1000만원</dd>
+										</dl>
+										<dl>
+											<dt>마진율</dt>
+											<dd>기본45%</dd>
+										</dl>
+										<dl>
+											<dt>초도상품</dt>
+											<dd>3,000만원~4,500만원</dd>
+										</dl>
+										<dl>
+											<dt>반품</dt>
+											<dd>100% 반품가능</dd>
+										</dl>
+									</dd>
+								</dl>
+								<dl>
+									<dt>가능 지역</dt>
+									<dd>
+										<ul class="list_bullet_dot">
+											<li>전국 주요 핵심상권</li>
+											<li>대학가 상권</li>
+											<li>대형역사 및 집합몰</li>
+											<li>컨셉에 맞는 적정 상권 - 협의 가능</li>
+											<li>지방 중심 상권</li>
+										</ul>
+									</dd>
+								</dl>
+								<dl>
+									<dt>매장 조건</dt>
+									<dd>
+										<dl>
+											<dt>전면</dt>
+											<dd>4m 이상</dd>
+										</dl>
+										<dl>
+											<dt>평수</dt>
+											<dd>15평 이상(단, 상권규모<br>및 위치에 따라 고려)</dd>
+										</dl>
+									</dd>
+								</dl>
+								<dl>
+									<dt>개설 문의</dt>
+									<dd>
+										에뛰드하우스 매장 입지로써 적당한<br>
+										물건을 소유하신 분께서 연락주시면<br>
+										성심성의껏 상담해 드리겠습니다.
+									</dd>
+								</dl>
+							</div>
+
+							<p class="text_sub_info">원활한 가맹점 개설 상담 진행을 위해 기타 문의사항에 상담 시 도움이 되는 자세한 정보들을 남겨주세요.</p>
+							<form class="validate">
+							<fieldset class="form panel gray bdr_top frm_find_store">
+								<legend class="sr_only">국내 개설 문의</legend>
+								<div class="panel_cont">
+									<div class="title_wrap">
+										<h4 class="form_title">국내 개설 문의</h4>
+									</div>
+									<div class="ui_table">
+										<dl>
+											<dt><label for="name">이름</label></dt>
+											<dd><div class="w70p input_wrap">
+												<input type="text" id="name" name="preName" placeholder="이름을 입력해 주세요." required="required" data-msg-required="이름을 입력해 주세요.">
+											</div></dd>
+
+										</dl>
+										<dl>
+											<dt><label for="email">이메일</label></dt>
+											<dd>
+												<div class="w70p input_wrap">
+													<input type="text" id="email" name="email" placeholder="이메일을 입력해 주세요." email2="email2" required="required" data-msg-required="이메일을 입력해 주세요.">
+												</div>
+												<span class="check_wrap">
+													<input type="checkbox" id="email_push" name="responseEmailNotifyYn">
+													<label for="email_push">답변을 이메일로 알림 받기</label>
+												</span>
+											</dd>
+										</dl>
+										<dl>
+											<dt><label for="phone">핸드폰 번호</label></dt>
+											<dd>
+												<div class="w70p input_wrap">
+													<input type="text" id="phone" name="prePhoneNo" placeholder="휴대폰 번호 ‘-’ 없이 입력" mobile-number="mobile-number" data-msg-mobile-number="휴대폰 번호를 정확히 입력하세요." required="required" data-msg-required="핸드폰번호를 입력해 주세요.">
+												</div>
+											</dd>
+										</dl>
+										<dl>
+											<dt><label for="store_open">개설 희망 지역</label></dt>
+											<dd>
+												<div class="w70p input_wrap">
+													<input type="text" id="store_open" name="openDesiredArea" placeholder="개설희망지역을 입력해 주세요." required="required" data-msg-required="개설희망지역을 입력해 주세요.">
+												</div>
+											</dd>
+										</dl>
+										<dl>
+											<dt><label for="radio1">점포 유무</label></dt>
+											<dd>
+												<div class="check_set">
+													<span class="check_wrap"><input type="radio" name="storePossessionYn" value="N" id="radio1" checked><label for="radio1">없음</label></span>
+													<span class="check_wrap"><input type="radio" name="storePossessionYn" value="Y" id="radio2"><label for="radio2">있음</label></span>
+												</div>
+											</dd>
+										</dl>
+										<dl>
+											<dt><label for="store_money">투자 가능 금액</label></dt>
+											<dd>
+												<div class="w70p input_wrap input_store_money">
+													<input type="text" id="store_money" name="investmentPossibleAmt" placeholder="투자가능금액을 입력해 주세요." number="number" required="required" data-msg-required="투자 가능 금액을 입력해 주세요.">
+													<span class="absolute_txt">천원</span>
+												</div>
+											</dd>
+										</dl>
+										<dl>
+											<dt><label for="etc_inquiry">기타 문의 사항</label></dt>
+											<dd>
+												<div class="textarea_typ2_wrap">
+													<div class="textarea">
+														<textarea name="etcInquiry" id="etc_inquiry" cols="30" rows="5" placeholder="매장 개설 관련 기타 문의사항을 입력해주세요." maxlength="1000"></textarea>
+													</div>
+													<p class="text_right"><small><em class="current">0</em>/<span class="limits">1000</span></small></p>
+												</div>
+											</dd>
+										</dl>
+										<dl>
+											<dt>개인정보 수집/이용</dt><!--/* 20180504 : label 태그 삭제 */-->
+											<dd>
+												<div class="store_clause_wrap">
+													<ul class="list_bullet_dot">
+														<li>수집 개인정보 항목 : 작성자명, 이메일주소, 핸드폰번호</li>
+														<li>개인정보의 수집 및 이용목적 : 원활한 의사소통 경로확보</li>
+														<li>개인정보의 이용기간 : 접수 후 3개월 (단, 관계 법령에 따라 필요한 경우 해당 법률에서 정한 기간까지)</li>
+														<li>작성자는 아래 동의를 거부할 수 있고, 만일 동의를 거부할 경우 원활한 접수가 곤란하게 될 수 있습니다.</li>
+														<li>그밖의 사항은 개인정보처리방침을 준수합니다.</li>
+													</ul>
+												</div>
+												<span class="check_wrap">
+													<input type="checkbox" id="store_clause_chk" name="store_clause_chk" required="required" data-msg-required="개인정보 수집 이용에 동의해 주세요.<br>Please consent for collecting and using personal information.">
+													<label for="store_clause_chk">개인정보 수집 및 이용에 동의합니다.</label>
+												</span>
+											</dd>
+										</dl>
+
+										<!--/* 20180504 : 취급위탁 추가 */-->
+										<dl>
+											<dt>개인정보 취급위탁에<br>대한 동의(필수)</dt>
+											<dd>
+												<div class="store_clause_wrap">
+													<ul class="list_bullet_dot">
+														<li>개인정보를 취급위탁 받는자 : IBM(주)</li>
+														<li>취급위탁 받는 업무 : 개인정보의 전산처리 및 저장</li>
+													</ul>
+												</div>
+												<span class="check_wrap">
+													<input type="checkbox" id="store_clause_chk2" name="store_clause_chk2" required="required" data-msg-required="개인정보 취급 위탁에 대한 동의해 주세요.<br>Please consent for consignment of personal information.">
+													<label for="store_clause_chk2">동의합니다.</label>
+												</span>
+											</dd>
+										</dl>
+										<input type="hidden" id="termsAgreeYn" name="termsAgreeYn">
+									</div>
+								</div>
+							</fieldset>
+							</form>
+							<div class="find_store_btns_wrap">
+								<button class="btn_lg_secondary cancel" type="button">취소</button>
+								<button class="btn_lg_primary submit" type="button">보내기</button>
+							</div>
+
+							<!--/* [S] 20180419 : 수정 */-->
+							<div class="find_store_bottom_wrap">
+								<div class="find_store_bottom_left">
+									<h3 class="h_title sub">국내매장 개설 담당</h3>
+									<div>
+										<div>
+											<b class="font_lg">과장 김수원</b>
+											<ul class="list_bullet_dot">
+												<li>TEL 02) 6040-1662  H.P 010-7191-2999</li>
+												<li>E-MAIL swkim@etude.co.kr</li>
+											</ul>
+										</div>
+										<div>
+											<b class="font_lg">과장 윤석재</b>
+											<ul class="list_bullet_dot">
+												<li>TEL 02)6040-1666  H.P 010-8846-1741</li>
+												<li>E-MAIL jayyun@etude.co.kr</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="find_store_bottom_right">
+									<h3 class="h_title sub">해외매장 개설 담당</h3>
+									<p>해외는 가맹사업이 아닌 직영점(에뛰드 소유) 개설을 원칙으로 함으로 개인적인<br>매장개설은 불가합니다. 다른 문의가 있으시면 이메일로 상담 바랍니다.</p>
+									<p><b class="font_lg">해외지역 이호준 / Hojun Lee</b> <span class="bullet_dot">E-MAIL inter3670@etude.co.kr</span></p>
+									<p>중국은 법인이 직영으로 운영하고 있기 때문에 가맹 문의는 접수하지 않습니다.</p>
+								</div>
+							</div>
+							<!--/* [E] 20180419 : 수정 */-->
+
+						</div>
+					</div>
+				</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script>
+				$( 'input:text, textarea' ).inputLimits();
+				AP.storeInquiry.addListener( 'complete-submit', function (e) {
+					// 문의 완료
+					console.log( e.data );
+
+					var txt = '';
+					txt += '온라인 가맹 문의가 정상 등록되었습니다.<br>';
+					txt += '이메일 혹은 휴대폰으로 답변 드리겠습니다.<br>';
+					txt += '에뛰드 하우스에 관심을 가져 주셔서 감사합니다.';
+
+					AP.modal.alert( txt ).addListener( 'modal-close', function (e) {
+						location.href = "/display/store_location?displayMenuId=store_location";
+					}.bind( this ));
+				});
+			</script>
+        </th:block>
+</body>
+</html>

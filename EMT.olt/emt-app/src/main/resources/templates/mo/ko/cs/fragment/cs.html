@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<div class="tab_menu" layout:fragment="tab">
+	<ul>
+		<li th:class="${state} == 0 ? 'on' : ''"><a
+			href="/cs/pinkMembership">핑크멤버십</a></li>
+		<li th:class="${state} == 1 ? 'on' : ''"><a
+			href="/cs/beautyPoint">뷰티포인트</a></li>
+		<li th:class="${state} == 2 ? 'on' : ''"><a
+			href="/cs/cushionPoint">쿠션포인트</a></li>
+		<li th:class="${state} == 3 ? 'on' : ''"><a href="/cs/pearlPoint">진주알포인트</a></li>
+		<li th:class="${state} == 4 ? 'on' : ''"><a
+			href="/cs/emptyBottle">공병수거 캠페인</a></li>
+	</ul>
+</div>
+
+
+<tbody th:fragment="order">
+	<th:block th:each="order : ${order.lang}">
+		<tr>
+			<td><span class="check_wrap check_only"><input
+					type="checkbox" class="table_striped" id="check1"><label
+					for="check1"><span class="sr_only">{주문번호}</span></label></span></td>
+			<td th:text="${order.orderNo}">12345</td>
+			<td th:text="${order.orderProductName}">제품명</td>
+			<td th:text="${order.orderState}">배송중</td>
+		</tr>
+	</th:block>
+</tbody>
+
+<th:block th:if="${faqs} != null" th:each="f : ${faqs.faqList}"
+	th:fragment="bestFaq">
+	<dl>
+		<dt>
+			<span class="title"><em class="eng">Q</em><span
+				th:text="${f.inquiryText}"></span></span>
+			<button type="button">
+				<span class="sr_only">더보기</span>
+			</button>
+		</dt>
+		<dd>
+			<div class="cont">
+				<em class="eng ">A</em>
+				<p class="text" th:text="${f.answerText}"></p>
+			</div>
+		</dd>
+	</dl>
+</th:block>
+
+<th:block th:if="${faqs} != null" th:each="f : ${faqs.faqList}"
+	th:fragment="faqs">
+	<dl>
+		<dt>
+			<small th:text="${f.inquiryTypeName}">이벤트</small> <span class="title"
+				th:text="${f.inquiryText}"></span>
+			<button type="button">
+				<span class="sr_only">더보기</span>
+			</button>
+		</dt>
+		</dt>
+		<dd>
+			<div class="cont">
+				<em class="eng ">A</em>
+				<p class="text" th:utext="${f.answerText}"></p>
+			</div>
+		</dd>
+	</dl>
+</th:block>
+
+<th:block th:if="${notices} != null"
+	th:each="n : ${notices.foNoticeList}" th:fragment="notices">
+	<ul>
+		<li><a href="javascript:;" th:href="@{|/cs/noticeView?sn=${n.foNoticeSn}|}"> <small
+				th:text="${n.noticeTypeName}">공지</small> <span class="text"
+				th:text="${n.foNoticeTitle}">에뛰드 개인정보처리방침 일부가 변경됩니다.</span> <small
+				class="date"
+				th:text="${#dates.format(n.noticeStartDt, 'yyyy-MM-dd')}"></small>
+		</a></li>
+	</ul>
+</th:block>
+</html>

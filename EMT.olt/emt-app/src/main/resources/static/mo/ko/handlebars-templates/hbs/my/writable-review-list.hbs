@@ -1,0 +1,28 @@
+{{#each this.list}}
+	<div class="order_box" name="ordNo_{{ this.ordNo }}">
+		<div class="top_review_wrap">
+			<dl>
+				<dt>주문번호</dt>
+				<dd><a href="/my/page/order/detail/{{this.ordNo}}">{{ this.ordNo }}</a></dd>
+			</dl>
+			<dl>
+				<dt>작성가능일</dt>
+				<dd><strong>{{ this.writableDays }}</strong>일 남음</dd>
+			</dl>
+			<button type="button" class="btn_write_review" data-order-no="{{ this.ordNo }}">리뷰 쓰기</button>
+		</div>
+		<ul class="list_bullet_dot"><!--펼침시에 클래스 on 추가-->
+			<!--작성완료 보임시에는 상위 li 에 클래스 on 추가-->
+			{{#each this.orderProds}}
+				{{#xif this.reviewWriteYn '==' 'Y'}}
+					<li class="on">
+				{{else}}
+					<li>
+				{{/xif}}
+						<span>{{ this.prodName }}</span><span class="review_purcahse_item_complete">작성완료</span>
+					</li>
+			{{/each}}
+		</ul>
+		<button type="button" class="btn_order_more"><span class="sr_only">더보기</span></button>
+	</div>
+{{/each}}

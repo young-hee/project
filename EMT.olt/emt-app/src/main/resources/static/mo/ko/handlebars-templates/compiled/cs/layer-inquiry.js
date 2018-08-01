@@ -1,0 +1,7 @@
+this["AP"] = this["AP"] || {};
+this["AP"]["handlebars"] = this["AP"]["handlebars"] || {};
+this["AP"]["handlebars"]["cs"] = this["AP"]["handlebars"]["cs"] || {};
+
+this["AP"]["handlebars"]["cs"]["layer-inquiry"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "<dt class=\"layer_title\">주문선택</dt> <!-- 02-01 수정 -->\n<dd class=\"layer_cont\">\n	<div class=\"customer_center\"> <!-- 01-24 클래스 위치 수정  -->\n		<!--/* [s]20180531 : 스크롤영역 추가 */-->\n        <div class=\"scroll_area\">\n			<p class=\"text_center\">상담을 원하는 주문 번호를 선택하세요.</p>\n			<br>\n			<!-- 02-01 주문선택 테이블 수정 -->\n			<table class=\"ui_table_striped data_table align_center\">\n			<caption class=\"sr_only\">상담을 위한 주문목록 선택 으로 주문번호/상품명, 주문상태로 구성</caption>\n			<colgroup>\n				<col>\n				<col>\n			</colgroup>\n			<thead>\n				<tr>\n					<th scope=\"col\">주문번호/상품명</th>\n					<th scope=\"col\">주문상태</th>\n				</tr>\n			</thead>\n			<tbody id=\"more\">\n\n			</tbody>\n			</table>\n			<button type=\"button\" class=\"btn_lg_more w100p\" id=\"b_more\">더보기 <em></em><span></span></button>\n			<ul class=\"loading white\">\n				<li></li>\n				<li></li>\n				<li></li>\n			</ul>\n		</div>\n		<!--/* [e]20180531 : 스크롤영역 추가 */-->\n		<div class=\"page_btns\">\n			<button class=\"btn_md_neutral\" type=\"button\" id=\"b_apply\" disabled>적용</button>\n		</div>\n	</div>\n</dd>";
+},"useData":true});

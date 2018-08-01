@@ -1,0 +1,77 @@
+<html ap:decorate="~{layout/layout-contents}">
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+			<!-- 01-24 html 수정 -->
+			<div class="ap_contents customer_center">
+				<div class="panel">
+					<fieldset class="form inquiry">
+						<legend class="sr_only">문의 정보 입력</legend>
+						<div class="input_group">
+							<div>
+								<select name="" id="" title="문의 유형 선택">
+									<option value="">매장픽업</option>
+								</select>
+							</div>
+						</div>
+						
+						<button type="button" class="btn_lg_neutral w100p mgt10">문의할 주문/제품 선택</button> <!-- 01-29 버튼 클래스 수정 -->
+						
+						<div class="attached mgt10">
+							<p class="bullet_dot ellipsis">프루프 10 방수펜슬 NEW 외 4개  </p>
+							<button class="ui_close" type="button"><span class="sr_only">선택상품 삭제</span></button>
+						</div>
+						<div class="input_group">
+							<div>
+								<input type="text" value="" placeholder="제목">
+							</div>
+						</div>
+						<div class="input_group">
+							<div>
+								<textarea name="" id="" cols="" rows="" placeholder="내용"></textarea>
+							</div>
+						</div>
+
+						<div class="ui_input_images">
+							<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="multiple" style="display:none" />
+							<label for="i_picture" class="btn_md_neutral w100p mgt10">사진첨부</label>
+							<ul class="attach"></ul>
+							<p class="text_notice">첨부파일은 이미지 파일만 가능하며, 최대 10개까지 등록 하실 수 있습니다. (최대 파일 용량 10MB)</p>
+						</div>
+
+						<div class="input_group">
+							<div><input type="text" title="이메일  입력" placeholder="이메일 입력"></div>
+						</div>
+						<div class="input_group">
+							<div><input type="tel" value="" placeholder="휴대폰번호(선택)"></div>
+						</div>
+						<div class="check_wrap mgt10"><input type="checkbox" id="sms_check"><label for="sms_check">SMS 답변 알림 </label></div>
+						<div class="form_btns">
+							<button type="button" class="btn_lg_primary w100p">등록</button>
+						</div>
+	          		</fieldset>
+				</div>
+			</div>
+        </div>
+
+    <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+    <th:block ap:fragment="layout-endpoint">
+
+		<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+		<script>
+			$( '.ui_input_images' ).inputImages();
+
+			$( '.submit' ).on( 'click', function (e) {
+				var formData = new FormData( $('form').get(0) );
+
+				//formDate에 첨부된 이미지 병합
+				$( '.ui_input_images' ).inputImages( 'extendFormData', formData );
+
+				//formData를 ajax의 data에 넣어서 보내면 된다.
+			});
+		</script>
+
+    </th:block>
+
+</body>
+</html>

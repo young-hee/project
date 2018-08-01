@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:ap="http://www.ultraq.net.nz/thymeleaf/layout">
+<head></head>
+<body>
+
+<th:block th:each="pr, stat: *{payParam}">
+		<input type="hidden" th:id="${pr.key}" th:value="${pr.value}"/>
+	</th:block>		
+
+<script src="https://nsp.pay.naver.com/sdk/js/naverpay.min.js"></script>
+<script>
+	
+	var clientId = document.getElementById("clientId").value;
+	var mode = document.getElementById("mode").value;
+	var merchantPayKey = document.getElementById("merchantPayKey").value;
+	var productName = document.getElementById("productName").value;
+	var productCount = document.getElementById("productCount").value;
+	var totalPayAmount = document.getElementById("totalPayAmount").value;
+	var taxScopeAmount = document.getElementById("taxScopeAmount").value;
+	var taxExScopeAmount = document.getElementById("taxExScopeAmount").value;
+	var returnUrl = document.getElementById("returnUrl").value;
+	
+	 var oPay = Naver.Pay.create({
+          "mode" : mode, // development or production
+          "clientId": clientId, // clientId
+          "openType": "page"
+        
+    });
+
+     oPay.open({
+          "merchantPayKey": merchantPayKey,
+          "productName": productName,
+          "productCount" : productCount,
+          "totalPayAmount": totalPayAmount,
+          "taxScopeAmount": taxScopeAmount,
+          "taxExScopeAmount": taxExScopeAmount,
+          "returnUrl": returnUrl
+      
+         /*  "productItems" : productItems */
+        }); 
+
+</script>
+	
+
+</body>
+</html>

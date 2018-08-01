@@ -1,0 +1,22 @@
+{{#if this.articleList.length}}
+	{{#each this.articleList}}
+		<li>
+			<a href="{{ articleDetailPath this.articleSn }}" class="ch_etude_item">
+				<span class="img_ch_etude">
+					<img src="{{ absolutePath this.bannerImgP1 }}" alt="">
+				</span>
+				<span class="info_box">
+					<span class="title_area">
+						<span class="ch_etude_item_title">{{ this.articleTitle }}</span>
+					</span>
+					<span class="ch_etude_date">{{ dateFormat this.startDt }}</span>
+				</span>
+			</a>
+		</li>
+	{{/each}}
+{{else}}
+	<div class="panel notice">
+		<i class="ico"></i>
+		<p class="text color_gray">결과가 없습니다.</p>
+	</div>
+{{/if}}

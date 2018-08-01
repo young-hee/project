@@ -1,0 +1,72 @@
+{{!--
+	전시 : 구매버튼이 있는 상세 상품목록 (Looks, 진주알스토어)
+--}}
+<ul>
+	{{#each this.list}}
+		<li class="online_prod" data-online-prod-sn="{{ this.onlineProdSn }}">
+			<div class="item">
+				<div class="item_images">
+					<!-- /* 대표 이미지 */ -->
+					<a href="{{ productDetailPath this.onlineProdSn }}" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="{{ this.onlineProdImages.0.imgUrl }}" alt=""></a>
+	
+					{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+						<div class="item_state out_of_stock">일시품절</div>
+					{{/xif}}
+				</div>
+	
+				<div class="item_info list">
+					{{#if this.flags.length}}
+						<div class="flag_set">
+							{{#each this.flags}}
+								{{#xif this.prodFlagCode '==' 'icon_reco_new'}}
+									<span class="new">신상품</span>
+								{{/xif}}
+								{{#xif this.prodFlagCode '==' 'icon_reco_best_w'}}
+									<span class="best">베스트</span>
+								{{/xif}}
+								{{#xif this.prodFlagCode '==' 'icon_pr_prod'}}
+									<span class="event">이벤트</span>
+								{{/xif}}
+								{{#xif this.prodFlagCode '==' 'icon_reco_md'}}
+									<span>MD추천</span>
+								{{/xif}}
+								{{#xif this.prodFlagCode '==' 'icon_reco_online'}}
+									<span>온라인전용</span>
+								{{/xif}}
+							{{/each}}
+						</div>
+					{{/if}}
+					<div class="prd_name">
+						<div>
+							{{#if this.lineDesc}}
+								<p class="s_name"><em class="tag">{{{ this.lineDesc }}}</em></p>
+							{{/if}}
+							{{#xif this.singleUnitProdYn '==' 'N'}}
+							<p class="name">{{ this.onlineProdName }}</p>
+							{{else}}
+							<p class="name">{{ this.productsStp.0.prodName }}</p>
+							{{/xif}}
+						</div>
+						{{!--<p class="color_name">85 colors</p>--}}
+					</div>
+				</div>
+				<div class="price_area">
+					{{#xif this.onlineProdPriceSummaryStp.doublePriceDisplayYnStp '==' 'Y'}}
+						<div class="discount">
+							<div class="discount">
+								<strong class="to">{{#xif this.onlineProdPriceSummaryStp.maxDiscountRateStp '!=' this.onlineProdPriceSummaryStp.minDiscountRateStp}}~{{/xif}}{{ this.onlineProdPriceSummaryStp.maxDiscountRateStp }}<em>%</em></strong>
+							</div>
+						</div>
+					{{/xif}}
+					<div class="price">
+						{{#xif this.onlineProdPriceSummaryStp.doublePriceDisplayYnStp '==' 'Y'}}
+							<del>{{ numberFormat this.onlineProdPriceSummaryStp.minOnlineSalePriceStp }}<em>{{ condition ../isActivityPoint '알' '원' }}</em></del>
+						{{/xif}}
+						<strong>{{ numberFormat this.onlineProdPriceSummaryStp.minFinalOnlinePriceStp }}<em>{{ condition ../isActivityPoint '알' '원' }}{{#xif this.onlineProdPriceSummaryStp.minOnlineSalePriceStp '!=' this.onlineProdPriceSummaryStp.maxOnlineSalePriceStp}} ~{{/xif}}</em></strong>
+					</div>
+				</div>
+			</div>
+			<button class="btn_order" type="button" data-online-prod-sn="{{ this.onlineProdSn }}">담기</button>
+		</li>
+	{{/each}}
+</ul>

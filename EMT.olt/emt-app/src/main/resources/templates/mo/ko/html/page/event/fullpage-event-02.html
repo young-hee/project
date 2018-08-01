@@ -1,0 +1,79 @@
+<html ap:decorate="~{layout/only-contents}">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+	<div class="layer_popup fullpage">
+		<div class="layer_wrap">
+			<dl class="layer">
+				<dt class="layer_title">뷰티테스터 신청하기</dt>
+				<dd class="layer_cont">
+					<div class="panel">
+						<fieldset class="form">
+							<legend class="sr_only">신청 내용 입력</legend>
+							<div class="input_group">
+								<div class="label">
+									<label for="title">제목</label>
+								</div>
+								<div>
+									<input type="text" id="title" placeholder="최대 30자까지 입력 가능합니다." maxlength="30">
+								</div>
+							</div>
+							<!--/* 04-04 수정 */-->
+							<div class="input_group">
+								<div>
+									<div>
+										<div class="textarea" style="height:200px;">
+											<textarea name="" id="" cols="" rows="" maxlength="500" placeholder="500자 이내로 입력해 주세요."></textarea>
+										</div>
+										<p class="text_right"><small>0/500</small></p>
+									</div>
+								</div>
+							</div>
+							<div class="form_btns">
+								<!--/* 04-04 버튼 추가 */-->
+								<button type="button" class="btn_md_secondary">취소</button>
+								<button type="button" class="btn_md_neutral">작성완료</button>
+							</div>
+						</fieldset>
+						<br>
+						<p class="text_notice">
+							저작권 등 다른 사람의 권리를 침해하거나 게시판
+							성격과 관련 없는 게시물은 임의로 삭제될 수 있습니다.
+						</p>
+					</div>
+				</dd>
+			</dl>
+			<button class="layer_close" type="button">레이어 닫기</button>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script>
+		/*
+        var modal = AP.modal.full({
+            title: '뷰티테스터 신청하기',
+            contents: {
+                templateKey: 'folder-name.file-name',
+                templateModel: {}
+            }
+        }).addListener( 'modal-before-close', function (e) {
+			console.log( e.closeType );
+			modal.getElement().find( 'input[maxlength], textarea[maxlength]' ).inputLimits( 'clear' );		// inputLimits 적용 해제
+
+        }).addListener( 'modal-close', function (e) {
+            console.log( e.closeType );
+        });
+        */
+
+		/* 예시, modal open 시점 적용 */
+		$( 'input[maxlength], textarea[maxlength]' ).inputLimits();
+	</script>
+</th:block>
+
+</body>
+</html>

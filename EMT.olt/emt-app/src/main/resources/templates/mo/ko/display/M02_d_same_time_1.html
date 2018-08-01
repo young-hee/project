@@ -1,0 +1,25 @@
+<!--/*
+	이벤트 (상품이 포함되는 타입)
+*/-->
+
+<html ap:decorate="~{layout/layout-item-only}" th:with="_jsfile='sametime-events-detail'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<th:block ap:replace="~{display/fragment/event-contents}"/>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script th:inline="javascript">
+		(function () {
+			var planDisplay = /*[[${planDisplay}]]*/;
+
+			AP.eventsDetail.setDefaultData( planDisplay );
+		}());
+	</script>
+</th:block>
+
+</body>
+</html>

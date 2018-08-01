@@ -1,0 +1,19 @@
+<th:block layout:fragment="beauty-point-list">
+
+    <div th:if="${ptBrkd.pageVo.totalRowCount != '0'}" class="pbody ui_multiple_date_picker">
+		<div class="pbody point_status" style="margin-bottom: 32px;">
+			<span class="text">적립포인트</span><span class="num" th:text="${#IntegUtil.sumAmountPt(ptBrkd.ptTrBrkdInqVo, 3)} + ' P' "><em>20,000 P</em></span>
+			<class="text ">사용 포인트</span><span class="num " th:text="${#IntegUtil.sumAmountPt(ptBrkd.ptTrBrkdInqVo, 4)} + ' P'">8,000 P</span>
+		</div>
+	</div>
+	<th:block th:if="${ptBrkd.pageVo.totalRowCount != '0'}">
+	    <div ap:replace="~{my/fragment/beauty-point-body :: beauty-point-body}"></div>
+	</th:block>
+    
+	<div th:if="${ptBrkd.pageVo.totalRowCount == '0'}" class="pbody panel notice">
+		<i class="ico"></i>
+		<p class="text font_lg">
+			<span>선택하신 기간에 해당하는 내역이 없습니다.</span>
+		</p>
+	</div>
+</th:block>

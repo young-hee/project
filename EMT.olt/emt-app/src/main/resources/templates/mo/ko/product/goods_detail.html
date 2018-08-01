@@ -1,0 +1,608 @@
+<html ap:decorate="~{layout/layout-item-only}" th:with="_jsfile='products'">
+<head>
+	<title>상품 상세</title>
+</head>
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents goods_detail">
+		<div class="item preview_area">
+			<!--/* 상품명 */-->
+			<h2 class="item_name">
+				<small>
+					<span style="color:#f54a7e" th:utext="${prd.linePromoDesc}"></span>
+					<span th:utext="${prd.lineDesc}"></span>
+				</small>
+				<span th:text="${prd.onlineProdName}"></span>
+			</h2>
+			<!--/* flags */-->
+			<div class="flag_set"
+				 th:with="defaultFlags=${prd.selectedProdSn == null or #lists.size(#collections.where(prd.products, {prodSn: prd.selectedProdSn})) < 1 ? prd.flags : #collections.where(prd.products, {prodSn: prd.selectedProdSn})[0].flags }">
+				<th:block th:each="flag : ${defaultFlags}">
+					<span class="new" th:if="${flag.prodFlagCode == 'icon_reco_new'}">신상품</span>
+					<span class="best" th:if="${flag.prodFlagCode == 'icon_reco_best_w'}">베스트</span>
+					<span class="event" th:if="${flag.prodFlagCode == 'icon_pr_prod'}">이벤트</span>
+					<span class="md" th:if="${flag.prodFlagCode == 'icon_reco_md'}">MD추천</span>
+					<span class="online" th:if="${flag.prodFlagCode == 'icon_reco_online'}">온라인전용</span>
+				</th:block>
+			</div>
+			<!--/* 상품 이미지/상태 영역 */-->
+			<div class="item_images">
+				<!--/* 상품 이미지 */-->
+				<div class="slide goods_slide" data-ix-options="view-length:1; viewport-ratio:50 50;"
+					 th:with="defaultProdImages=${prd.selectedProdSn == null or #lists.size(#collections.where(prd.products, {prodSn: prd.selectedProdSn})) < 1 ? prd.onlineProdImages : #collections.where(prd.products, {prodSn: prd.selectedProdSn})[0].prodImages }">
+					<div class="ix-list-viewport">
+						<ul class="ix-list-items">
+							<th:block th:each="onlineImg : ${defaultProdImages}">
+								<li class="ix-list-item">
+									<img th:src="${onlineImg.imgUrl}" alt="" data-width="480" data-height="480">
+								</li>
+							</th:block>
+						</ul>
+					</div>
+					<div class="ix-controller">
+						<ul class="ix-thumbs">
+							<li class="ix-thumb">
+								<button type="button" class="ix-btn"><!--ix-index-->번째 배너</button>
+							</li>
+						</ul>
+						<div class="slide_direction">
+							<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
+							<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
+						</div>
+					</div>
+				</div>
+
+				<!--/* 최초 로딩시 높이 잡아주기 */-->
+				<script>
+					$('.goods_slide .ix-list-viewport').ixRatioSize({
+						ratio: '50 50'
+					});
+				</script>
+				<div class="item_util">
+					<a href="#none" class="btn_review"><span class="sr_only">구매후기</span><span class="bubble"
+																							  th:text="${#numbers.formatInteger( summary.totalCount, 0, 'COMMA')}"
+																							  th:if="${not #lists.isEmpty(summary.totalCount)}">9,999</span></a>
+					<!--/* <a href="#none" class="btn_review"><span class="sr_only">구매후기</span><span class="bubble">9,999</span></a>*/-->
+					<button class="btn_share"><span class="sr_only">SNS 공유</span></button>
+				</div>
+
+				<!--/* 상품 상태 */-->
+				<div class="item_state" th:class="${prd.saleDisplayStatus == 'OutOfStock' ? 'item_state out_of_stock' : 'item_state' }" th:if="${prd.prodTypeCode == 'Prod'}">
+					<th:block th:if="${prd.saleDisplayStatus == 'OutOfStock'}">일시품절</th:block>
+					<span th:if="${prd.saleDisplayStatus == 'WaitingSale'}"><span>곧 출시!</span>[[${#dates.format(prd.saleStartDt, 'yyyy년 MM월 dd일')}]]</span>
+				</div>
+				
+					<!--/* 예약판매 */-->
+				<div class="item_state" th:if="${prd.prodTypeCode == 'Presale'}">
+					<span th:if="${prd.saleDisplayStatus == 'OnSale'}"><span>예약판매 중</span>[[${#dates.format(prd.shipAgreementDt, 'M/d(E)')}]]부터 순차적 배송</span>
+					<span class="off" th:if="${prd.saleDisplayStatus == 'EndSale'}"><span>예약판매 종료</span>[[${#dates.format(prd.shipAgreementDt, 'M/d(E)')}]]부터 순차적 배송</span>
+					<span class="off" th:if="${prd.saleDisplayStatus == 'Exhaustion'}"><span>예약판매 수량 소진</span>[[${#dates.format(prd.shipAgreementDt, 'M/d(E)')}]]부터 순차적 배송</span>
+				</div>
+
+				<div class="item_state" th:if="${prd.prodTypeCode == 'SpPriceSale'}">
+					<!--/* 핫딜 */-->
+					<span class="hot_deal">
+							<span><i class="ico_hot"></i><span class="sr_only">핫딜</span></span>
+							<span class="ui_remain_timer">
+								<span class="hour"></span>:<span class="minute"></span>:<span class="second"></span>
+							</span>
+						</span>
+				</div>
+
+			</div>
+
+
+			<div class="item_option">
+				<!--/* 상품 옵션 영역 5개 이하 */-->
+				<!-- div class="color_chips" th:if="${#lists.size(prd.colorGroups) > 1 and prd.productCount > 1 and prd.productCount <= 5}"> <!-- 확인 필요   -->
+				<div class="color_chips" th:if="${prd.productCount == 1}"> <!-- 확인 필요   -->
+					<div>
+						<ul>
+							<th:block th:each="option : ${prd.products}">
+								<li th:if="${option.colorchipTypeCode == 'RGB'}">
+									<a href="#chip" th:style="'background-color:#' + ${option.rgbVal}"
+									   th:name="colorchips" th:data-prod-sn="${option.prodSn}"
+									   th:class="${prd.selectedProdSn == option.prodSn? 'check' : ''}">
+										<span class="sold_out"
+											  th:if="${option.saleDisplayStatus} == 'OutOfStock'"><span>품절</span></span>
+										<img alt="" ap:src="@{/images/product/color_chips_img_blank.png}">
+									</a>
+								</li>
+								<li th:if="${option.colorchipTypeCode == 'Img'}">
+									<a href="#chip" name="colorchips" th:data-prod-sn="${option.prodSn}"
+									   th:class="${prd.selectedProdSn == option.prodSn? 'check' : ''}">
+										<span class="sold_out"
+											  th:if="${option.saleDisplayStatus} == 'OutOfStock'"><span>품절</span></span>
+										<img alt="" th:src="${option.colorchipImg}">
+									</a>
+								</li>
+							</th:block>
+						</ul>
+					</div>
+				</div>
+
+				<!--/* 상품 옵션 영역 6개 이상 */-->
+				<div class="color_chips more" th:if="${prd.productCount > 1}"> <!--/* 6개이상인 경우  more 클래스 */-->
+					<div>
+						<ul>
+							<th:block th:each="option, iterStat : ${prd.products}">
+								<li th:data-group="${#strings.listJoin( #collections.pluck(option.colorGroups, 'colorGroupCode'), ' ')}"
+									th:if="${option.colorchipTypeCode == 'RGB'}"
+									th:style="${iterStat.index > 4 ? 'display:none' : ''}">
+									<a href="#chip" th:style="'background-color:#' + ${option.rgbVal}" name="colorchips"
+									   th:data-prod-sn="${option.prodSn}"
+									   th:class="${prd.selectedProdSn == option.prodSn? 'check' : ''}">
+										<span class="sold_out" th:if="${option.saleDisplayStatus} == 'OutOfStock'"><span>품절</span></span>
+										<img alt="" ap:src="@{/images/product/color_chips_img_blank.png}">
+									</a>
+								</li>
+								<li th:data-group="${#strings.listJoin( #collections.pluck(option.colorGroups, 'colorGroupCode'), ' ')}"
+									th:if="${option.colorchipTypeCode == 'Img'}"
+									th:style="${iterStat.index > 4 ? 'display:none' : ''}">
+									<a href="#chip" name="colorchips" th:data-prod-sn="${option.prodSn}"
+									   th:class="${prd.selectedProdSn == option.prodSn? 'check' : ''}">
+										<span class="sold_out" th:if="${option.saleDisplayStatus} == 'OutOfStock'"><span>품절</span></span>
+										<img alt="" th:src="${option.colorchipImg}">
+									</a>
+								</li>
+							</th:block>
+							<li class="btn_more" th:if="${#lists.size(prd.colorGroups) > 5}">
+								<button type="button" class="btn_color_more">
+									<img alt="컬러칩 더보기" src="/mo/ko/images/product/btn_color_more.gif">
+									<p class="c_num">
+										<span th:text="'+' + ${prd.productCount - 5}">+ 85</span>
+										<br>
+										<img alt="컬러칩 더보기" class="arr" src="/mo/ko/images/product/ico_color_more.gif"> <!-- 화살표아이콘 -->
+									</p>
+								</button>
+							</li>
+							<li class="btn_more" th:if="${#lists.size(prd.colorGroups) > 0 && #lists.size(prd.colorGroups) < 5}">
+								<button type="button" class="btn_color_more">
+									<img alt="" src="/mo/ko/images/product/btn_color_more.gif">
+									<p class="c_num">
+										<img alt="컬러칩 더보기" class="arr" src="/mo/ko/images/product/ico_color_more.gif"> <!-- 화살표아이콘만 나오는 경우 -->
+									</p>
+								</button>
+							</li>
+						</ul>
+					</div>
+					<div class="option_btns">
+						<button type="button" class="btn_md_bordered compare_makeup">MAKE UP 비교</button>
+						<button type="button" class="btn_md_bordered select_color_group">COLOR 선택</button>
+					</div>
+
+
+					<div class="color_group">
+						<div class="scroll_area">
+							<button type="button" class="all" data-color="all">ALL</button>
+							<th:block th:each="colorGroup : ${prd.colorGroups}">
+								<button type="button" th:style="'background-color:#' + ${colorGroup.colorGroupCode}"
+										th:data-color="${colorGroup.colorGroupCode}"><span class="sr_only"
+																						   th:text="${colorGroup.colorGroupName}"></span>
+								</button>
+							</th:block>
+						</div>
+					</div>
+
+					<p class="option_close">
+						<button type="button">닫기</button>
+					</p>
+				</div>
+
+				<th:block
+					th:with="defaultOption=${prd.selectedProdSn == null or #lists.size(#collections.where(prd.products, {prodSn: prd.selectedProdSn})) < 1 ? null : #collections.where(prd.products, {prodSn: prd.selectedProdSn})[0] }">
+					<div class="option_name" th:style="'display:' + ${defaultOption == null ? 'none' : 'block'}">
+							<span>
+								<em th:if="${defaultOption != null and #lists.size(#collections.where(defaultOption.flags, {prodFlagCode: 'icon_reco_new'})) > 0}">NEW</em> <span
+								th:text="${defaultOption == null ? '' : defaultOption.prodName}">옵션명</span>
+							</span>
+					</div>
+				</th:block>
+			</div>
+
+			<!--/* 상품 가격/적립/상태 정보 영역 */-->
+			<!--/* 뷰티포인트 전용상품은 단위가 "P" */-->
+			<div class="item_price_info" th:with="currencySign=${prd.productCount == 1 and prd.products[0].membershipExchOnly == 'Y' ? 'P' : '원'}">
+				<!--/* 판매가 표시 */-->
+				<th:block th:each="availablePrice : ${prd.availablePrices}">
+					<div class="price_area" th:if="${availablePrice.currencyCode == 'KRW'}">
+						<div>
+							<span class="discount" th:if="${availablePrice.doublePriceDisplayYn == 'Y'}"
+								  th:with="disMinRate=${availablePrice.minOnlineSalePriceDiscountRate + availablePrice.minMemberLevelDiscountRate + availablePrice.minOnlineMemberDiscountRate},disMaxRate=${availablePrice.maxOnlineSalePriceDiscountRate + availablePrice.maxMemberLevelDiscountRate + availablePrice.maxOnlineMemberDiscountRate}">
+								<span class="from" th:if="${disMinRate != disMaxRate}">~ </span>
+								<span class="to"><strong th:text="${disMaxRate}"></strong>%</span>
+							</span>
+							
+							<!-- /* 뷰티 포인트 */ -->
+							<span class="price" th:if="${currencySign == 'P'}"> 
+								<strong th:text="${#numbers.formatInteger( prd.products[0].exchMembershipPoint, 0, 'COMMA')}">0</strong> [[${currencySign}]] 
+							</span>
+							
+							<span class="price" th:if="${currencySign != 'P'}">
+								<del th:if="${availablePrice.doublePriceDisplayYn == 'Y'}" th:text="${#numbers.formatInteger(availablePrice.minBeforeOnlineSalePrice, 0, 'COMMA')} + ${currencySign}">0원</del>
+								<strong th:text="${#numbers.formatInteger( availablePrice.minOnlineMemberDiscountPrice, 0, 'COMMA')}">0</strong>[[${currencySign}]] 
+								<span th:if="${availablePrice.minOnlineMemberDiscountPrice != availablePrice.maxOnlineMemberDiscountPrice}">~</span> 
+								<span class="text" th:if="${availablePrice.onlineMemberDiscountYn == 'Y'}">(회원할인가)</span>
+							</span>
+							
+							<button type="button" class="btn_artist_talk">
+								<img ap:src="@{/images/product/btn_artist_talk.png}" alt="">
+							</button>
+						</div>
+					</div>
+
+					<!--/* 즉시할인 */-->
+					<div th:if="${availablePrice.immedDiscountYn == 'Y'}">
+						<div class="info">
+							주문시 <span th:text="${availablePrice.maxImmedDiscountRate} + '%'"></span> 추가 할인 쿠폰 적용
+						</div>
+					</div>
+				</th:block>
+
+				<div th:if="${prd.points != null and #lists.size(prd.points) > 0}">
+					<th:block th:each="point : ${prd.points}">
+						<dl class="info" th:if="${point.membershipServiceCode == 'BP'}">
+							<dt>뷰티포인트</dt>
+							<dd>2% ~ 5% 적립</dd>
+						</dl>
+						<dl class="info cushion" th:if="${point.membershipServiceCode == 'CP'}">
+							<dt>쿠션포인트
+								<span class="ui_tooltip">
+										<button type="button" class="btn_tooltip">툴팁보기</button>
+										<span class="arr"></span>
+										<div class="layer_tooltip">
+											<dl>
+												<dt>쿠션포인트</dt>
+												<dd>
+													<ul class="list_bullet_dot font_sm">
+														<li>쿠션 상품의 최종결제가의 30%가 적립됩니다.<br>(상품 할인액과 포인트 사용액은 적립 불가)</li>
+														<li>온라인 쿠션포인트는 배송완료(수취확인) 시 적립됩니다.</li>
+														<li>쿠션포인트는 에뛰드 뷰티포인트 통합회원에게 서비스됩니다.</li>
+														<li>대상 : 페이스&gt;쿠션 카테고리 상품</li>
+													</ul>
+													<button type="button" class="ui_close sm"><span class="sr_only">툴팁 닫기</span></button>
+												</dd>
+											</dl>
+										</div>
+									</span>
+							</dt>
+							<dd>30% 적립</dd>
+						</dl>
+					</th:block>
+				</div>
+				<dl class="info state">
+					<dt>상태</dt>
+					<dd th:if="${prd.saleDisplayStatus == 'OnSale'}">판매중</dd>
+					<dd th:if="${prd.saleDisplayStatus == 'OutOfStock'}">품절</dd>
+					<dd th:if="${#lists.size(#collections.where(prd.products, {saleDisplayStatus: 'OutOfStock'})) > 0}">
+						<button type="button" class="btn_bordered btn_restock_notify_me">언제들어와?</button>
+					</dd>
+					<dd th:if="${prd.saleDisplayStatus == 'Exhaustion'}">조기소진</dd>
+					<dd th:if="${prd.saleDisplayStatus == 'WaitingSale'}">곧출시</dd>
+					<dd th:if="${prd.saleDisplayStatus == 'Suspend'}">판매일시중지</dd>
+					<dd th:if="${prd.saleDisplayStatus == 'EndSale'}">판매종료</dd>
+				</dl>
+				<dl class="info delivery">
+					<dt>배송비</dt>
+					<dd>10,000원 이상 주문시 무료배송</dd>
+				</dl>
+			</div>
+		</div>
+
+		<!--/* 연관 이벤트 */-->
+		<div class="panel banner">
+			<!--/* 슬라이드 배너 */-->
+			<div class="slide goods_detail_banner" data-ix-options="view-length:1;">
+				<div class="ix-list-viewport">
+					<ul class="ix-list-items" th:unless="${relateEventList.planDisplayList == null}">
+						<th:block th:each="relateEvent : ${relateEventList.planDisplayList}">
+							<li class="ix-list-item">
+								<a href="#none"
+								   th:href="@{/display/event_detail(planDisplaySn=${relateEvent.planDisplaySn})}">
+									<img th:src="${relateEvent.bannerImgM1}" alt="">
+								</a>
+							</li>
+						</th:block>
+					</ul>
+				</div>
+				<div class="ix-controller">
+					<ul class="ix-thumbs">
+						<li class="ix-thumb">
+							<button type="button" class="ix-btn"><!--ix-index-->번째 배너</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!--/* //슬라이드 배너 */-->
+		</div>
+		<!--/* 연관 컨텐츠 */-->
+		<div class="panel banner" th:if="${#lists.size(relateArticle.articleList) > 0}"
+			 th:with="articleM=${relateArticle.articleList[0]}">
+			<a href="#none" th:if="${articleM.articleCateId == 'chEtude'}"
+			   th:href="@{/display/etude_ch/detail(articleSn=${articleM.articleSn})}">
+				<img th:src="${articleM.bannerImgM1}" alt="">
+				<img th:src="${articleM.bannerImgM2}" alt="">
+			</a>
+			<a href="#none" th:if="${articleM.articleCateId == 'Looks'}"
+			   th:href="@{/display/etude_looks/detail(articleSn=${articleM.articleSn})}">
+				<img th:src="${articleM.bannerImgM1}" alt="">
+				<img th:src="${articleM.bannerImgM2}" alt="">
+			</a>
+		</div>
+
+		<div class="panel no_padding">
+			<!--/* tab menu wrap */-->
+			<div class="ui_tab product_detail_tab_area">
+				<!--/* tab menu */-->
+				<div class="tab_menu equally">
+					<ul>
+						<li class="on">
+							<button type="button">상품상세</button>
+						</li>
+						<li>
+							<button type="button"
+									th:text="${'리뷰/후기 (' + #numbers.formatInteger( summary.totalCount, 0, 'COMMA') + ')'}"
+									th:if="${not #lists.isEmpty(summary.totalCount)}">리뷰/후기 (1,000)
+							</button>
+							<button type="button" th:if="${#lists.isEmpty(summary.totalCount)}">리뷰/후기</button>
+						</li>
+						<!--/* <li><button type="button">리뷰/후기 (1,000)</button></li> */-->
+					</ul>
+				</div>
+				<!--/* tab contents wrap */-->
+				<div class="tab_contents">
+					<!--/* tab content */-->
+					<div class="tab_cont product_detail_area">
+						<h3 class="sr_only">상품상세</h3>
+						<div class="more_wrap" th:utext="${prd.detailDesc}">
+							<!--/* 상세정보 영역 */-->
+						</div>
+						<!--/* 상세정보 더보기 버튼 클릭시 more_wrap.on class 추가 */-->
+						<button type="button" class="btn_lg w100p btn_goods_more"><span>상세정보 더보기</span></button>
+					</div>
+					<div class="tab_cont review_area">
+						<h3 class="sr_only">리뷰/후기</h3>
+						<!--/* 상품 상세에만 사용 */-->
+						<div class="panel detail_review_rating">
+							<button class="btn_md_bordered w100p btn_write_review" type="button">상품리뷰 작성</button>
+							<div class="ui_accordion @accordion-apply" data-open-type="single">
+								<dl>
+									<dt>
+											<span class="title">
+												<span>전체상품평</span>
+												<span class="ui_rating type1">
+													<span class="heart">
+														<span class="heart_wrap on"
+															  th:class="${summary.scopeAvg >= 1 ? 'heart_wrap on' : 'heart_wrap'}"><span
+															class="sr_only"> 1점</span></span>
+														<span class="heart_wrap on"
+															  th:class="${summary.scopeAvg >= 2 ? 'heart_wrap on' : 'heart_wrap'}"><span
+															class="sr_only"> 2점</span></span>
+														<span class="heart_wrap on"
+															  th:class="${summary.scopeAvg >= 3 ? 'heart_wrap on' : 'heart_wrap'}"><span
+															class="sr_only"> 3점</span></span>
+														<span class="heart_wrap on"
+															  th:class="${summary.scopeAvg >= 4 ? 'heart_wrap on' : 'heart_wrap'}"><span
+															class="sr_only"> 4점</span></span>
+														<span class="heart_wrap "
+															  th:class="${summary.scopeAvg >= 5 ? 'heart_wrap on' : 'heart_wrap'}"><span
+															class="sr_only"> 5점</span></span>
+													</span>
+													<span class="count num"
+														  th:text="'(' + ${#numbers.formatInteger( summary.totalCount, 0, 'COMMA')} + ')'"></span>
+												</span>
+											</span>
+										<button type="button" th:if="${summary.totalCount > 0}"><span class="sr_only">더보기</span>
+										</button>
+									</dt>
+									<dd aria-hidden="false" style="display: block;">
+										<div class="cont">
+											<th:block th:each="countPerScopes : ${summary.countPerScopes}">
+												<div class="rating_wrap"
+													 th:with="rate=(${countPerScopes.count}/${summary.totalCount}*100)"
+													 th:if="${summary.totalCount > 0}">
+														<span class="ui_rating small">
+														<span class="heart">
+														<span class="heart_wrap on"
+															  th:class="${countPerScopes.scope >= 1 ? 'heart_wrap on' : 'heart_wrap'}"><span
+															class="sr_only"> 1점</span></span>
+														<span class="heart_wrap on"
+															  th:class="${countPerScopes.scope >= 2 ? 'heart_wrap on' : 'heart_wrap'}"><span
+															class="sr_only"> 2점</span></span>
+														<span class="heart_wrap on"
+															  th:class="${countPerScopes.scope >= 3 ? 'heart_wrap on' : 'heart_wrap'}"><span
+															class="sr_only"> 3점</span></span>
+														<span class="heart_wrap on"
+															  th:class="${countPerScopes.scope >= 4 ? 'heart_wrap on' : 'heart_wrap'}"><span
+															class="sr_only"> 4점</span></span>
+														<span class="heart_wrap on"
+															  th:class="${countPerScopes.scope >= 5 ? 'heart_wrap on' : 'heart_wrap'}"><span
+															class="sr_only"> 5점</span></span>
+														</span>
+														<span class="count num"
+															  th:text="'(' + ${#numbers.formatInteger( countPerScopes.count, 0, 'COMMA')} + ')'"></span>
+														</span>
+													<span class="rating_progress">
+														<span class="rating_progress_result"
+															  th:style="'width:' + ${#numbers.formatInteger(rate, 0, 'COMMA')} + '%'"></span>
+														</span>
+													<span class="total num"
+														  th:text="${#numbers.formatInteger(rate, 0, 'COMMA')} + '%'"></span>
+												</div>
+											</th:block>
+										</div>
+									</dd>
+								</dl>
+							</div>
+						</div>
+
+						<div class="panel detail_review_rating">
+							<!--/* 상품 상세에만 사용 */-->
+							<div class="rating_filter">
+								<div class="selected_filters">
+									<span>최근등록순</span>
+									<span>별점전체</span>
+								</div>
+								<a href="#none" class="btn_more btn_filters"><span>필터</span><i class="ico_arr"></i></a>
+							</div>
+
+							<div class="review_list">
+								<div class="slide best_review" data-ix-options="view-length:1; loop:false;">
+									<!--/* 베스트 리뷰 영역 */-->
+									<ul class="loading" style="height:200px;">
+										<li></li>
+										<li></li>
+										<li></li>
+									</ul>
+								</div>
+								<div class="etc_review" style="display:none;">
+									
+									<div class="reviewWrap">
+									
+									</div>
+								
+									<button type="button" class="btn_lg_more w100p">
+										<span></span>
+									</button>
+									<!--/* 일반 리뷰 영역 */-->
+									<ul class="loading" style="height:200px;">
+										<li></li>
+										<li></li>
+										<li></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel none_pd goods_detail_cont_info">
+			<button class="btn_md w100p align_left btn_detail_info_notice" type="button">전성분/상세정보제공고시 보기</button>
+			<button class="btn_md w100p align_left btn_shipping_returns" type="button">배송/교환/반품 안내</button>
+		</div>
+
+		<div class="panel none_pd">
+			<!--/* 추천템 */-->
+			<div class="recommend_items">
+				<h3 class="title">다른 고객들이 많이 찾은 상품</h3>
+				<div class="slide two_half"
+					 data-ix-options="view-length:2; move-length:2; loop:false; correct-endpoint:true;">
+					<!--/* 많이 찾은 상품 영역 */-->
+					<ul class="loading">
+						<li></li>
+						<li></li>
+						<li></li>
+					</ul>
+				</div>
+			</div>
+			<!--/* //추천템 */-->
+		</div>
+
+	</div>
+
+	<!--/* 구매하기 전체 열릴때 class open 교체 기본 close select 선택시 class select 추가 선택한 select 요소 부모 클래스 goods_box 에 class on 추가 */-->
+	<!--/* 뷰티포인트 전용상품은 단위가 "P" */-->
+	<div class="option_layer goods_detail_buy close" th:with="currencySign=${prd.productCount == 1 and prd.products[0].membershipExchOnly == 'Y' ? 'P' : '원'}">
+		<!--/* 오픈전 구매 버튼 셋 */-->
+		<div class="purchase_btn_set">
+			<button type="button" class="btn_md_bordered btn_open_order_layer"
+					th:if="${#lists.size(#collections.where(prd.products, {storePickupBtnEnable: 'Y'})) > 0}">테이크아웃
+			</button>
+			
+			<button type="button" class="btn_md_primary btn_restock_notify_me"
+					th:if="${prd.saleDisplayStatus == 'OutOfStock'}">언제들어와?
+			</button>
+
+			<th:block th:if="${prd.prodTypeCode != 'Presale' and prd.saleDisplayStatus == 'OnSale'}">
+				<th:block th:if="${prd.saleDisplayStatus != 'Waiting'}">
+					<button type="button" class="btn_md_primary btn_open_order_layer">구매하기</button>
+				</th:block>
+			</th:block>
+			
+			<!--/* 곧출시 */-->
+			<th:block th:if="${prd.saleDisplayStatus == 'WaitingSale'}">
+				<span class="btn_md_disabled">
+					<span>
+						<strong	th:text="${#dates.format(prd.saleStartDt, 'yyyy년 MM월 dd일')} + ' 출시'">0000년 00월 00일 출시</strong>
+						조금만 기다려 주세요.
+					</span>
+				</span>
+			</th:block>
+			
+			<!--/* 예약구매 */-->
+			<th:block th:if="${prd.prodTypeCode == 'Presale'}">
+				<button type="button" class="btn_md_primary btn_pre_purchase" th:if="${prd.saleDisplayStatus == 'OnSale'}">예약구매하기</button>
+				<span class="btn_md_disabled" th:if="${prd.saleDisplayStatus == 'EndSale'}"><span><strong>예약 판매 종료!</strong>다음을 기약해 주세요~</span></span>
+				<span class="btn_md_disabled" th:if="${prd.saleDisplayStatus == 'Exhaustion'}"><span><strong>예약 판매 수량 모두 소진!</strong>다음을 기약해 주세요~</span></span>
+			</th:block>
+			
+			<!--/* 묶음 상품(온라인) */-->
+			<th:block th:if="${prd.prodTypeCode == 'BulkFixedProd'}">
+				<span class="btn_md_disabled" th:if="${prd.saleDisplayStatus == 'EndSale'}"><span><strong>판매 종료!</strong>다음을 기약해 주세요~</span></span>
+				<span class="btn_md_disabled" th:if="${prd.saleDisplayStatus == 'Exhaustion'}"><span><strong>판매 수량 모두 소진!</strong>다음을 기약해 주세요~</span></span>
+			</th:block>
+		</div>
+
+		<!--/* 옵션만 열고 닫을때 class open 추가 */-->
+		<div class="option_wrap open">
+			<!--/* selected 된 options 표현 영역 */-->
+		</div>
+
+		<div class="buy_info_wrap">
+			<!--/* 뷰티포인트 1개는 뷰티포인트 전용상품 */-->
+			<div class="beauty_point_chk"
+				 th:if="${prd.productCount > 1 and #lists.size(#collections.where(prd.products, {membershipExchBtnEnable: 'Y'})) > 0}">
+				<span class="check_wrap"><input type="checkbox" name="buy_beauty_point" id="buy_beauty_point"><label
+					for="buy_beauty_point">뷰티포인트로 구매하기</label></span>
+			</div>
+			
+			<div class="buy_info">
+				<span class="opt_selected"><b class="num">0</b> 개 선택됨</span>
+				<span class="buy_result">합계 <b class="num total_price">0</b><b>[[${currencySign}]]</b></span>
+			</div>
+			
+			<!--/* 오픈후 구매 버튼 세트 */-->
+			<div class="buy_btn_wrap">
+				<button type="button" class="btn_md_bordered btn_takeout"
+						th:if="${#lists.size(#collections.where(prd.products, {storePickupBtnEnable: 'Y'})) > 0}">테이크아웃
+				</button>
+				<th:block th:if="${prd.prodTypeCode != 'Presale' and prd.saleDisplayStatus == 'OnSale'}">
+					<th:block th:if="${prd.saleDisplayStatus != 'Waiting' }">
+						<th:block th:if="${prd.cartBtnEnable != 'N' }">
+							<button type="button" class="btn_md_bordered btn_basket">장바구니 담기</button>
+						</th:block>
+						<button type="button" class="btn_md_primary btn_buy_now">바로구매</button>
+					</th:block>
+				</th:block>
+			</div>
+		</div>
+		<button type="button" class="btn_float_close"><span class="sr_only">구매닫기</span></button>
+	</div>
+
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script type="text/javascript" th:inline="javascript">
+		(function () {
+			var model = /*[[${prd}]]*/,
+				memberMap = {
+					id: /*[[${memberMap.id}]]*/,
+					name: /*[[${memberMap.name}]]*/,
+					cstmid: /*[[${memberMap.cstmid}]]*/,
+					residno1: /*[[${memberMap.residno1}]]*/,
+					gendDvCd: /*[[${memberMap.gendDvCd}]]*/,
+					phoneNo1: /*[[${memberMap.phoneNo1}]]*/
+				};
+
+			AP.productDetail.setDefaultData(model, memberMap);
+		})();
+	</script>
+</th:block>
+
+</body>
+</html>

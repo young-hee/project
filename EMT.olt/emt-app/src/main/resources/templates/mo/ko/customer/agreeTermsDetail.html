@@ -1,0 +1,28 @@
+<html ap:decorate="~{layout/only-contents}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+    <div class="layer_popup fullpage" th:id="${displayCode}" style="display: block;">
+        <div class="layer_wrap">
+            <dl class="layer">
+                <dt class="layer_title" th:text="${terms.termsName}">에뛰드하우스 이용약관</dt>
+                <dd class="layer_cont">
+                    <div class="panel terms_area">
+                        <!--/* 약관영역 */-->
+                        <pre th:if="${terms}" th:utext="${terms.termsBodyText}"></pre>
+                    </div>
+                </dd>
+            </dl>
+            <button class="layer_close" type="button" onclick="window.history.back();">창닫기</button>
+        </div>
+    </div>
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+</th:block>
+</body>
+</html>

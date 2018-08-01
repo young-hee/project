@@ -1,0 +1,32 @@
+{{!--
+    modal.info() 에서 사용
+--}}
+<dt class="{{#if this.title}}layer_title{{else}}sr_only{{/if}}">{{{ this.title }}}</dt>
+
+{{#if this.contents}}
+    <dd class="layer_cont">
+        {{!-- default contents area --}}
+        {{#xif (type this.contents 'Object') '&&' (type this.contents.templateKey 'String') }}
+            {{{ include this.contents.templateKey this.contents.templateModel }}}
+        {{else}}
+            {{#if (type this.contents 'String')}}
+                <p class="text_center">{{{ this.contents }}}</p>
+            {{else}}
+                {{!-- Html --}}
+                {{{ this.contents }}}
+            {{/if}}
+        {{/xif}}
+
+        {{!-- default button area --}}
+        {{#if (isSome this.btnConfirm this.btnCancel)}}
+            <div class="page_btns">
+                {{#if this.btnCancel}}
+                    <button class="btn_md_secondary btn_default_modal_cancel" type="button">{{ this.cancelLabel }}</button>
+                {{/if}}
+                {{#if this.btnConfirm}}
+                    <button class="btn_md_neutral btn_default_modal_confirm" type="button">{{ this.confirmLabel }}</button>
+                {{/if}}
+            </div>
+        {{/if}}
+    </dd>
+{{/if}}

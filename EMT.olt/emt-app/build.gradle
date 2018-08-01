@@ -1,0 +1,94 @@
+import com.eriwen.gradle.js.tasks.MinifyJsTask
+
+apply plugin: 'war'
+apply plugin: "org.springframework.boot"
+
+dependencies {
+
+	compile project(':ap-comm')
+
+	// spring boot
+	compile("org.springframework.boot:spring-boot-starter:$springBootVersion")
+	compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
+	compile("org.springframework.boot:spring-boot-starter-thymeleaf:$springBootVersion")
+	compile("org.springframework.boot:spring-boot-devtools")
+
+	// tomcat embedded
+	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:$springBootVersion")
+
+}
+
+eclipse.wtp {
+	component {
+		contextPath = '/'
+		deployName = description
+	}
+}
+
+bootRun {
+	addResources = true
+	if (System.properties.hotswapAgent == 'true') {
+		jvmArgs = ["-XXaltjvm=dcevm", "-javaagent:${System.properties.hotswapAgentPath}"]
+	}
+}
+
+apply plugin: 'combine-js-yaml'
+apply plugin: "com.eriwen.gradle.js"
+
+combineJsFiles.jsfiles.each { prefix, map ->
+	map.each { fileName, fileTree ->
+		task "minify-js-${prefix}-${fileName}"(type: MinifyJsTask, group: 'minifyJs') {
+			source = "${buildDir}/${prefix}/${fileName}-all.js"
+			dest = "${buildDir}/${prefix}/${fileName}-all-min.js"
+			closure {
+				warningLevel = 'QUIET'
+				compilerOptions.languageIn = 'ECMASCRIPT6'
+				compilerOptions.languageOut = 'ECMASCRIPT5'
+			}
+		}
+	}
+
+	task "copy-js-${prefix}"(type: Copy, group: 'build') {
+		from "${buildDir}/${prefix}"
+		def path = prefix.replace("-","/")
+		into "${buildDir}/resources/main/static/${path}/js"
+		include "*-min.js"
+	}
+}
+
+task minifyAllJs(group: 'minifyJs', dependsOn: combineAllJs) {
+	def matchingTasks = project.tasks.findAll { it.name.startsWith("minify-js-") }
+	dependsOn matchingTasks
+}
+
+task copyJsFiles(group: 'build') {
+	def matchingTasks = project.tasks.findAll { it.name.startsWith("copy-js-") }
+	dependsOn matchingTasks
+}
+
+minifyAllJs.finalizedBy copyJsFiles
+
+war {
+	dependsOn minifyAllJs
+}
+
+task warToCodeDeploy(type: Copy, dependsOn: war, group: 'build') {
+	from "${buildDir}/libs"
+	into "${projectDir}/codedeploy/${buildEnv}"
+	include "*.war"
+}
+
+task htmlZip(type: Zip, group: 'build') {
+	archiveName = "html-emt.zip"
+	destinationDir = file("${projectDir}/codedeploy/html")
+
+	from ("${buildDir}/resources/main/static") {
+		into "static"
+	}
+	from ("${buildDir}/resources/main/templates/mo/ko/html") {
+		into "templates/mo/ko/html"
+	}
+	from ("${buildDir}/resources/main/templates/pc/ko/html") {
+		into "templates/pc/ko/html"
+	}
+}

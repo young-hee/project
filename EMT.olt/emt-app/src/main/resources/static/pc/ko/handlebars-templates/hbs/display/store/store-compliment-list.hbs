@@ -1,0 +1,33 @@
+{{#each this.storeEvalExList}}
+<dl class="review">
+	<dt>
+		<span class="user_id">{{ this.memberId }}</span>
+		<small>{{ dateFormat this.createdDt }}</small>
+	</dt>
+	<dd>
+		<dl>
+			<dt>
+				<small class="opt">{{ this.storeName }}</small>
+				{{#xif this.topStoreEvalYn '==' 'Y'}}<span class="flag">BEST</span>{{/xif}}
+				<span class="title">{{ this.storeEvalTitle }}</span>
+				<span class="flag2">
+					{{#each this.storeEvalReason}}
+						<span>{{ this }}</span>
+					{{/each}}
+				</span>
+			</dt>
+			<dd>
+				<p class="text" id="bodyText{{ this.storeEvalSn }}">{{ this.storeEvalBodyText }}</p>
+				<div class="attach_photo">
+					{{#each this.storeEvalImgUrlList}}
+						{{#xif @index '<' ../imageViewLength}}
+							<span class="thumb"><img alt="" src="{{ this }}"></span>
+						{{/xif}}
+					{{/each}}
+				</div>
+				<a href="#none" data-store-eval-sn="{{ this.storeEvalSn }}">+ 더보기</a>
+			</dd>
+		</dl>
+	</dd>
+</dl>
+{{/each}}

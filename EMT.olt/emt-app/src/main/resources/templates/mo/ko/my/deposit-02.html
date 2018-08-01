@@ -1,0 +1,126 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='my-deposit-management'">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page contents -->
+		<div class="ap_contents mypage deposit-management">
+			<div class="panel pdb0">
+				<div class="my_point_score deposit">
+					<dl>
+						<dt><th:block th:text="${session.LOGIN_USER.member.name.name1}">홍길동</th:block>님의 보유 예치금</dt>
+						<dd><strong class="num" id="savedDeposit"></strong><span>원</span></dd>
+					</dl>
+					<hr class="div m25">
+					<div class="align_center">
+						<p class="text">예치금은 환불 받으실 금액을 모아 현금과 동일하게<br>
+							사용하실 수 있도록 보관해 드리는 서비스입니다.<br>
+							고객님이 원하시면 예치금은 현금으로<br>
+							출금 받으실 수 있으며 주문 시에도 사용 가능합니다.<br>
+						</p>
+					</div>
+				</div>
+
+				<!-- tab menu wrap -->
+				<div class="ui_tab">
+					<!-- tab menu -->
+					<div class="tab_menu equally">
+						<ul>
+							<li><a href="/my/page/myDepositList">예치금 내역</a></li>
+							<li class="on"><a href="/my/page/myDepositManagementList">출금신청/계좌관리</a></li>
+						</ul>
+					</div>
+					<!-- tab content -->
+					<div class="tab_cont">
+						<h3 class="sr_only">예치금 내역</h3>
+						<fieldset class="form withdrawal">
+							<legend class="sr_only">출금신청 항목</legend>
+							<div class="panel rounded">
+								<ul>
+									<li><span>예금주</span><span th:if="${DepositRefundAccount.acHolderName != null}" th:text="${DepositRefundAccount.acHolderName.name1}">홍길동</span></li>
+									<li><span>은행/계좌</span><span th:if="${DepositRefundAccount.bankName != null and DepositRefundAccount.bankAcNo != null}" th:text="${DepositRefundAccount.bankName} + ' ' + ${DepositRefundAccount.bankAcNo}">국민은행 1234 - 567 - 89 - 1234</span></li>
+									<li>
+										<label for="price">출금가능금액</label>
+										<span>
+											<span class="input_group">
+												<span>
+													<input type="number" id="price" placeholder="0" th:disabled="${DepositRefundAccount.bankAcNo == null}">
+												</span>
+											</span>
+											<span class="color_light_gray">/ <strong class="num">0</strong>원</span>
+										</span>
+									</li>
+								</ul>
+							</div>
+							<div class="form_btns">
+								<button class="btn_md_bordered" type="button" id="transferReq">출금 신청</button>
+								<button class="btn_md_primary" type="button" id="registerAc">계좌 등록/변경</button>
+							</div>
+							<p class="text_notice">출금 신청은 보유 예치금 내에서 <b>1일 1회 최대 30만원</b>까지 가능합니다.</p>
+						</fieldset>
+						<ul class="loading" style="min-height: 200px; display: none">
+							<li></li>
+							<li></li>
+							<li></li>
+						</ul>
+						<div class="my_point_list deposit">
+							<div class="ui_multiple_date_picker">
+								<div class="date_btn_set">
+									<span><input type="radio" class="select_range_date" name="radio4" id="radio4_0" value="all" checked=""><label for="radio4_0">전체</label></span>
+									<span><input type="radio" class="select_range_date" name="radio4" id="radio4_1" value="1months" checked=""><label for="radio4_1">1개월</label></span>
+									<span><input type="radio" class="select_range_date" name="radio4" id="radio4_2" value="3months"><label for="radio4_2">3개월</label></span>
+									<span><input type="radio" class="select_range_date" name="radio4" id="radio4_3" value="6months"><label for="radio4_3">6개월</label></span>
+									<span><input type="radio" class="select_range_date" name="radio4" id="radio4_4" value="1years"><label for="radio4_4">1년</label></span>
+								</div>
+								<br>
+								<div class="input_date_group">
+									<div style="display:none;">
+										<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+										<input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+									</div>
+									<div class="date_info_area">
+										<span class="start_date"></span> ~ <span class="end_date"></span> <span class="color_light_gray">까지의 내역</span>
+									</div>
+								</div>
+							</div>
+							<br>
+							<ul class="deposit_list"></ul>
+							<button type="button" class="btn_lg_more w100p">더보기 (<em>5</em>/35)</button>
+							<!--/* Start : 목록내용이 있을경우 */-->
+							<div class="panel notice result_none">
+								<i class="ico"></i>
+								<p class="text">선택하신 기간에 해당하는 예치금 내역이 없습니다.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- // page contents -->
+
+		<!-- 마이페이지 맵 01-24 위치변경 -->
+		<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+		<!-- // 마이페이지 맵 -->
+	</div>
+	<!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script th:inline="javascript">
+			var acYn = /*[[${DepositRefundAccount.bankAcNo}]]*/;
+
+			(function () {
+				var param = {
+					offset: 0,
+					limit: 5,
+					startDate: $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).startDate,
+					endDate: $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).endDate,
+					depositHistTypeCode: 'Transfer' //출금
+				};
+
+				AP.myDepositManagementList._getList( param, true, acYn ? 'Y' : 'N' );
+			}());
+		</script>
+	</th:block>
+</body>
+</html>

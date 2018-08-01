@@ -1,0 +1,179 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents brand">
+				<div class="makeup_dream">
+					<!-- tab menu wrap -->
+					<div class="ui_tab">
+						<!-- tab menu -->
+						<div class="tab_menu equally">
+							<ul>
+								<li><a href="#none">메이크업유어드림</a></li>
+								<li><a href="#none">청춘강연</a></li>
+								<li class="on"><a href="#none">청춘강연 신청</a></li>
+							</ul>
+						</div>
+						<!-- tab content -->
+						<div class="tab_cont space">
+							<h3 class="h_title lare">청춘강연 신청하기</h3>
+							<p class="text">아래 정보를 정확하게 입력해주세요.</p>
+							<fieldset class="form panel gray bdr_top">
+								<legend class="sr_only">신청정보 입력</legend>
+								<div class="panel_cont">
+									<div class="title_wrap">
+										<h4 class="form_title">신청하기</h4>
+										<span class="required">필수 입력 항목</span>
+									</div>
+									<div class="ui_table">
+										<dl>
+											<dt><label for="name">신청자명</label><span class="required"><span class="sr_only">필수입력</span></span></dt>
+											<dd><div class="w70p input_wrap"><input type="text" id="name" value="" placeholder="이름을 입력해 주세요." /></div></dd>
+										</dl>
+										<dl>
+											<dt><label for="phone">휴대폰 번호</label><span class="required"><span class="sr_only">필수입력</span></span></dt>
+											<dd>
+												<div class="w70p input_wrap"><input type="text" id="phone" value="" placeholder="‘-’없이 숫자만 입력" /></div>
+											</dd>
+										</dl>
+										<dl>
+											<dt><label for="ageCd2">연령대</label><span class="required"><span class="sr_only">필수입력</span></span></dt>
+											<dd>
+												<div class="w70p select_wrap"><!-- 선택시 open 클래스  -->
+													<select name="ageCd" id="ageCd2" tabindex="-1" title="연령선택">
+														<option value="">선택하세요.</option>
+														<option value="15">15~19세</option>
+														<option value="20">20~24세</option>
+														<option value="25">25~29세</option>
+														<option value="30">30~34세</option>
+														<option value="35">35~39세</option>
+														<option value="40">40세이상</option>
+													</select>
+												</div>
+											</dd>
+										</dl>
+										<dl>
+											<dt>성별<span class="required"><span class="sr_only">필수입력</span></span></dt>
+											<dd>
+												<div class="check_set"> <!--/* 05-08 태그 추가 */-->
+													<span class="check_wrap"><input type="radio" name="gender" id="gender_f"><label for="gender_f">여자</label></span>
+													<span class="check_wrap"><input type="radio" name="gender" id="gender_m"><label for="gender_m">남자</label></span>
+												</div>
+											</dd>
+										</dl>
+										<dl>
+											<dt>동반인원<span class="required"><span class="sr_only">필수입력</span></span></dt>
+											<dd>
+												<div class="check_set">
+													<span class="check_wrap"><input type="radio" name="person" id="person_1"><label for="person_1">있음(1명)</label></span>
+													<span class="check_wrap"><input type="radio" name="person" id="person_0"><label for="person_0">없음</label></span>
+												</div>
+											</dd>
+										</dl>
+										<!--/* [S] 20180504 : 동반인원 있음 선택시 노출 */-->
+										<dl>
+											<dt><label for="person_info">동반인원 정보</label><span class="required"><span class="sr_only">필수입력</span></span></dt>
+											<dd class="etc">
+												<div class="input_wrap">
+													<input type="text" id="person_info" placeholder="동반인원명을 입력해 주세요.">
+												</div>
+												<div class="input_wrap mgt10">
+													<input type="text" placeholder="휴대폰 번호 ‘-’없이 입력">
+												</div>
+												<div class="w70p select_wrap mgt10"><!-- 선택시 open 클래스  -->
+													<select name="ageCd" tabindex="-1" title="연령선택">
+														<option value="">연령대를 선택하세요.</option>
+														<option value="15">15~19세</option>
+														<option value="20">20~24세</option>
+														<option value="25">25~29세</option>
+														<option value="30">30~34세</option>
+														<option value="35">35~39세</option>
+														<option value="40">40세이상</option>
+													</select>
+												</div>
+												<div class="check_set mgt10">
+													<span class="check_wrap"><input type="radio" name="gender2" id="gender_f2"><label for="gender_f2">여자</label></span>
+													<span class="check_wrap"><input type="radio" name="gender2" id="gender_m2"><label for="gender_m2">남자</label></span>
+												</div>
+											</dd>
+										</dl>
+										<!--/* [E] 20180504 :  동반인원 있음 선택시 노출 */-->
+										<dl>
+											<dt><label for="text">신청이유</label><span class="required"><span class="sr_only">필수입력</span></span></dt>
+											<dd>
+												<div class="w70p">
+													<div class="textarea w100p">
+														<textarea name="" id="text" cols="30" rows="3" placeholder="500자 이내로 입력해주세요." maxlength="500"></textarea>
+													</div>
+													<p class="text_right"><small><em class="current">0</em>/<span class="limits">500</span></small></p>
+												</div>
+											</dd>
+										</dl>
+									</div>
+								</div>
+							</fieldset>
+							<fieldset class="form panel gray bdr_top">
+								<legend class="sr_only">약관 이용 동의</legend>
+								<div class="panel_cont">
+									<div class="clear">
+										<p class="font_lg color_dark_gray">개인정보 수집 이용 동의(필수)</p>
+										<div class="agree_wrap">
+											<span class="check_wrap"><input type="checkbox" id="agree_check1"><label for="agree_check1">동의합니다.</label></span>
+										</div>
+									</div>
+									<div class="policy_wrap">
+										<div class="policy" tabindex="0">
+											가. 개인정보 수집 &middot; 이용 목적<br>
+											MAKE UP YOUR DREAM 청춘강연 관람신청을 위한 개인정보를 수집 이용합니다.<br>
+											나. 개인정보 수집 &middot; 이용 항목<br>
+											(필수) 이름, 휴대폰 번호, 이메일<br>
+											다. 개인정보 보유 &middot; 이용기간<br>
+											수집된 이용자의 개인정보는 원칙적으로 수집목적을 달성하면 지체 없이 파기 합니다.<br>
+											단, 다음의 정보는 아래의 사유로 명시한 기간 동안 보유 및 이용합니다.<br>
+											보유 항목: 이름, 휴대폰 번호, 이메일<br>
+											보유 기간: 6개월<br>
+											라. 동의거부권 및 동의 거부에 따른 불이익<br>
+											* 신청자는 위 사항에 대한 개인정보 수집 이용에 대하여 거부할 수 있는 권리가 있습니다. 단, 이에 대한 동의를 거부할 경우에 MAKE UP YOUR DREAM 청춘강연 관람신청이 불가능합니다.
+										</div>
+									</div>
+
+									<div class="clear mgt30">
+										<p class="font_lg color_dark_gray">개인정보 취급 위탁에 대한 동의 (필수)</p>
+										<div class="agree_wrap">
+											<span class="check_wrap"><input type="checkbox" id="agree_check2"><label for="agree_check2">동의합니다.</label></span>
+										</div>
+									</div>
+									<div class="policy_wrap">
+										<div class="policy" tabindex="0">
+											MAKE UP YOUR DREAM 청춘강연에서는 사진 및 영상 촬영이 진행됩니다. 사진 및 동영상에는 관객의 얼굴을 포함한 신체의 일부가 촬영될 수 있으며, 사진 및 동영상은 에뛰드 홈페이지 게재, 에뛰드/아모레퍼시픽 CSR NSN 업로드에만 전송됩니다.<br><br>
+											* 신청자는 해당 사진 촬영 및 동영상 활용에 대해 거부할 수 있는 권리가 있습니다. 단, 사진 및 동영상 촬영 및 활용에 대한 동의를 하지 않으실  경우에는 프로그램 특성상 관람신청이 어렵습니다.
+
+										</div>
+									</div>
+								</div>
+							</fieldset>
+
+							<div class="page_btns">
+								<button class="btn_lg_secondary" type="button">취소</button>
+								<button class="btn_lg_primary" type="button">신청</button>
+							</div>
+						</div>
+					</div>
+				</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script>
+				$( 'input:text, textarea' ).inputLimits();
+			</script>
+        </th:block>
+</body>
+</html>

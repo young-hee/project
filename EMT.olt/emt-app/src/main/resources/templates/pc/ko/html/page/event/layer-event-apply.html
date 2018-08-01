@@ -1,0 +1,56 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<div class="layer_popup" style="display: block;">
+                <div class="layer_wrap layer_lg" style="margin-top:-260px;">
+                    <dl class="layer">
+                        <dt class="layer_title">신청하기</dt>
+                        <dd class="layer_cont">
+							<fieldset class="form event_apply">
+								<legend class="sr_only">신청 입력항목</legend>
+								<div class="ui_table">
+									<dl>
+										<dt><label for="subject">제목</label></dt>
+										<dd><div class="w100p input_wrap"><input type="text" id="subject" placeholder="최대 30자까지 입력 가능합니다." value=""></div></dd>
+									</dl>
+									<dl>
+										<dt class="vtop pdt10"><label for="requestReason">내용</label></dt>
+										<dd>
+											<div class="w100p">
+												<div class="textarea">
+													<textarea name="requestReason" id="requestReason" cols="30" rows="9" placeholder="500자 이내로 입력해주세요." maxlength="500" required="required" data-msg-required="내용을 입력해 주세요."></textarea>
+												</div>
+												<p class="text_right"><small><em class="current">0</em>/<span class="limits">500</span></small></p>
+												<div class="clear">
+													<p class="text_notice">저작권 등 다른 사람의 권리를 침해하거나 게시판 성격과 관련 없는<br>게시물은 임의로 삭제될 수 있습니다.</p>
+												</div>
+											</div>
+										</dd>
+									</dl>
+								</div>
+								<div class="form_btns mgt20">
+									<button class="btn_lg_secondary" type="button">취소</button>
+									<button class="btn_lg_neutral" type="button">작성완료</button>
+								</div>
+							</fieldset>
+                        </dd>
+                    </dl>
+                    <button class="layer_close" type="button">레이어 닫기</button>
+                </div>
+            </div>
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+            <!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+            <script>
+
+				$( 'textarea' ).inputLimits();
+            </script>
+
+        </th:block>
+</body>
+</html>

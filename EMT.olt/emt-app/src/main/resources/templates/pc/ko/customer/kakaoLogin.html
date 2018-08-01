@@ -1,0 +1,41 @@
+<html ap:decorate="~{layout/only-contents}">
+
+<head>
+<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+	<div id="naver_id_login"></div>
+	<script>
+
+   		var indexed_array = {};
+	    indexed_array['snsName'] = 'Kakao';
+	    indexed_array['id'] = '[[${id}]]';
+	    indexed_array['accessToken'] = '[[${token}]]';
+
+	    $.ajax({
+	    	  type: "POST",
+	    	  url: "/login/snsloginProcess",
+	    	  data: indexed_array,
+	    	  success: function ( data ) {
+    	    	  if(data.isLinked) {
+    	              window.opener.nbSuccess(data);
+    	              window.close();
+    	    	  } else {
+    	              window.opener.doSnsLogin();
+    	              window.close();
+    	    	  }
+	    	      //성공
+	    	    },
+	    	  dataType: "json"
+	    	});
+	
+    
+
+	</script>
+</div>
+</body>
+</html>

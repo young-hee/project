@@ -1,0 +1,19 @@
+{{#each this.inquiryList}}
+	<dl class={{condition (eq this.inquiryHandlingStatusCode 'Complete') 'completion' ''}} completion>
+		<dt>
+			<span class="state">
+				<span class="{{condition (eq this.inquiryHandlingStatusCode 'Complete') 's1 on' 's1'}}">{{condition (eq this.inquiryHandlingStatusCode 'Complete') '답변완료' '답변대기'}}</span>
+				<span class="{{condition (eq this.smsResponseNotifyYn 'Y') 's2 on' 's2'}}">SMS 수신동의</span>
+			</span>
+			<span class="title">{{this.inquiryTitle}}</span>
+			<span class="clear">
+				<span>{{this.inquiryTypeName}}</span>
+				<span>{{dateFormat this.receivedDt "YYYY.MM.DD"}}</span>
+			</span>
+			<button type="button" data-inquirySn="{{this.customerInquirySn}}"></button>
+		</dt>
+		<dd>
+			<div id="cont_{{this.customerInquirySn}}" class="cont"></div>
+		</dd>
+	</dl>
+{{/each}}

@@ -1,0 +1,251 @@
+<html ap:decorate="~{layout/layout-contents}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page contents -->
+            <div class="ap_contents mypage">
+				<div class="my_order">
+					<!-- tab menu wrap -->
+					<div class="ui_tab">
+						<!-- tab menu -->
+						<div class="tab_menu equally">
+							<th:block th:if="${type == 'store' or type == 'online'}">
+								<th:block ap:replace="~{my/fragment/order-management-common :: header-order (type = ${type})}"/>
+							</th:block>
+						</div>
+						<!-- tab content -->
+						<div class="tab_cont pd0">
+							<h3 class="sr_only">온라인 주문/배송</h3>
+							<fieldset class="panel">
+								<th:block th:if="${type} == cashReceipts">
+									<th:block ap:replace="~{my/fragment/order-management-common :: header-cash-receipts}"/>
+								</th:block>
+								<th:block ap:replace="~{my/fragment/order-management-common :: multiple-date-picker}"/>
+								<th:block th:if="${type} == returnExchange">
+									<th:block ap:replace="~{my/fragment/order-management-common :: header-returnExchange}"/>
+								</th:block>
+							</fieldset>
+							<!--/* 주문내역 */-->
+							<div class="order_list">
+								<div id="order_list">
+								</div>
+								<ul class="loading" style="min-height: 200px;">
+									<li></li>
+									<li></li>
+									<li></li>
+								</ul>
+								<button type="button" class="btn_lg_more w100p">더보기 (<em>5</em>/35)</button>
+							</div>
+
+							<!--/* 안내문구*/-->
+							<div class="panel padding15">
+
+							</div>
+						</div>
+					</div>
+				</div>
+            </div>
+            <!-- // page contents -->
+            
+            <!-- 마이페이지 맵 01-24 위치변경 -->
+         	<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+         	<!-- // 마이페이지 맵 -->
+         	
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+			<script ap:src="@{/handlebars-templates/compiled/my/order/orderList.js}"></script>
+			<script ap:src="@{/handlebars-templates/compiled/my/order/fullpage-cash-receipts.js}"></script>
+			<script ap:src="@{/handlebars-templates/compiled/my/order/orderList-footer.js}"></script>
+			<script th:inline="javascript">
+
+				var loaded = false;
+
+				var limit = 10;
+				var totalCount = 50;
+				var c_type = /*[[${type}]]*/;
+				var c_offset = 0;
+				var c_RS_Date, c_RD_Date;
+				var returnCode = "";
+
+				var resultData;
+
+				$( '.ui_tab' ).tabs();
+
+				//multiple date picker적용
+				$( '.ui_multiple_date_picker' ).multipleDatePicker({
+					defaultRangeDate: '1months',
+					minDate: moment().subtract( 50, 'years' )
+				}).on( 'multiple-date-picker-change', function (e) {
+					c_RS_Date = e.date.startDate;
+					c_RD_Date = e.date.endDate;
+
+					getOrderList(c_type, c_RS_Date, c_RD_Date, 0, true);
+				});
+
+				$(document).ready(function() {
+
+					c_RS_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).startDate;
+		    		c_RD_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).endDate;
+
+		    		// if(c_type == 'order'){
+		    		// 	c_type = 'online';
+		    		// }
+
+					getOrderList(c_type, c_RS_Date, c_RD_Date, 0, true);
+					getFooter(c_type);
+				});
+
+				//tab 변경시
+				$( '.ui_tab' ).on( 'tabs-change', function (e) {
+					var type = $('.tab_menu').find( 'ul > li' ).eq(e.index).find('button').val();
+					getOrderList(type, c_RS_Date, c_RD_Date, 0, true);
+					getFooter(type);
+				});
+
+				//더보기 버튼 클릭시
+				$('.btn_lg_more').off('click').on('click', function(e){
+					if((c_offset + limit) < totalCount) {
+						getOrderList(c_type, c_RS_Date, c_RD_Date, (c_offset + limit), false);
+					}
+				});
+
+				//교환, 환불 옵션 변경시
+				$('#returnCode').on('change', function(e){
+					returnCode = $(this).val();
+					getOrderList(c_type, c_RS_Date, c_RD_Date, 0, true);
+				});
+
+				function getOrderList(type, RS_Date, RD_Date, offset, restart) {
+
+					c_type = type;
+					c_RS_Date = RS_Date;
+					c_RD_Date = RD_Date;
+					c_offset = offset;
+
+					if(restart == true){
+						$('#order_list').empty();
+						$('.btn_lg_more').hide();
+					}
+
+					$('.loading').show();
+
+					AP.api.getOrderShippingList({}, {
+						type : type,
+						offset : offset,
+						limit : limit,
+						RS_Date : RS_Date,
+						RD_Date : RD_Date,
+						returnCode : returnCode
+					}).done(function(data) {
+						if (data.data) {
+							resultData  = data.data;
+							console.log(data.data);
+							$('.loading').hide();
+
+							if(resultData.totalCount > 0) {
+								totalCount = resultData.totalCount;
+								if (data.type === 'returnExchange') {
+									list = resultData.claimInfoList;
+								}
+								else if (data.type === 'store') {
+									list = resultData.storeOrdInfoList;
+								}
+								else {
+									list = resultData.onlineOrdInfoList;
+								}
+
+								var count = (offset + limit) > resultData.totalCount ? resultData.totalCount : (offset + limit);
+
+								var htmlStr = AP.common.getTemplate('my.order.orderList', {
+									list : list,
+									type : data.type
+								});
+
+								$('#order_list').append(htmlStr);
+								$('.btn_lg_more').html('더보기 (<em>'+ count +'</em>/'+ resultData.totalCount +')');
+								$('.btn_lg_more').show();
+							} else {
+								var htmlStr = '<div class="panel notice">'
+											+ '		<i class="ico"></i>'
+										    + '		<p class="text">선택하신 기간에<br>주문내역이 없습니다.</p>'
+										    + '</div>';
+								$('#order_list').html(htmlStr);
+								$('.btn_lg_more').hide();
+							}
+						}
+					}).fail(function(e) {
+						AP.modal.alert(e.errorCode);
+					}).always(function() {
+					});
+				}
+
+				function getFooter(type) {
+					var footer = AP.common.getTemplate('my.order.orderList-footer', {
+						type : type
+					});
+					$('.padding15').html(footer);
+				}
+
+				function receiptIssue(data) {
+
+					AP.modal.full({
+						contents: {
+							templateKey: 'my.order.fullpage-cash-receipts',
+							// templateModel: { data : data }
+							templateModel: {
+								data : data,
+								repGoods :  data.onlineOrdProdInfo.prodNameRlang,
+								prodCnt : data.onlineOrdProdInfo.ordProdCnt
+							}
+						}
+					}).addListener( 'modal-before-close', function (e) {
+						console.log( e.closeType );
+					}).addListener( 'modal-close', function (e) {
+						console.log( e.closeType );
+					});
+				}
+
+				function sendForm(ordSn) {
+
+					var $form = $('form.validate');
+
+					if ($form.valid()) {
+						var formData = new FormData( $('form').get(0));
+						formData.append("ordSn", ordSn);
+						AP.api.cashReceiptIssueRequest({}, formData).done(function(data) {
+							//성공
+							alert("success");
+						}).fail(function(e) {
+							AP.modal.alert(e.responseJSON.errorData.message);
+							//실패formData
+						}).always(function() {
+							//성공, 실패
+						});
+					}
+				}
+
+				function showDetailView(type, ordSn) {
+					$(location).attr("href", "/my/page/order/" + type + "/" + ordSn);
+				}
+
+				function showClaimDetailView(type, ordHistNo) {
+					var cusType = null;
+					if ('Rtn' === type) {
+						cusType = 'return'
+					}
+					else if ('Exch' === type) {
+						cusType = 'exchange';
+					}
+
+					$(location).attr("href", "/my/page/claim/" + cusType + "/" + ordHistNo);
+				}
+
+			</script>
+        </th:block>
+</body>
+</html>

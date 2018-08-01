@@ -1,0 +1,237 @@
+<div class="title table_layout">
+
+	<div><b class="font_lg">{{condition (eq step 2) '환불정보' '결제정보'}}</b></div>
+</div>
+<div class="cont" id="openDiv"><!--/* 상세버튼 클릭시 open 클래스 추가*/-->
+	<dl class="table_layout">
+		<dt><strong>{{condition (eq step 2) '환불 ' ''}}주문금액</strong></dt>
+		<dd class="align_right"><strong class="num">{{currencyFormatDefault pr.ordPayment ''}}</strong>원</dd>
+	</dl>
+	<ul class="s_cont">
+		<li class="table_layout point">
+			<span>온라인주문</span>
+			<span>{{currencyFormatDefault pr.onlineShipProd '원'}}</span>
+		</li>
+		<li class="table_layout">
+			<span>테이크아웃</span>
+			<span>0원</span>
+		</li>
+		<li class="table_layout">
+			<span>구매 특가 상품</span>
+			<span>{{currencyFormatDefault pr.spPriceAwardProd '원'}}</span>
+		</li>
+		<li class="table_layout">
+			<span>포장/쇼핑백 추가</span>
+			<span>{{currencyFormatDefault pr.spUnitPacking '원'}}</span>
+		</li>
+		<li class="table_layout">
+			<span>배송비</span>
+			<span>{{currencyFormatDefault pr.shipFee '원'}}</span>
+		</li>
+	</ul>
+	<dl class="table_layout">
+		<dt><strong>{{condition (eq step 2) '환불 ' ''}}할인/포인트</strong></dt>
+		<dd class="align_right"><strong class="num">{{currencyFormatDefault pr.salePoint ''}}</strong>원</dd>
+	</dl>
+
+	<ul class="s_cont">
+		<li class="table_layout">
+			<span>쿠폰할인</span>
+			<span>{{currencyFormatDefault data.couponDcAmtPcur 'P'}}</span>
+		</li>
+		<li class="table_layout">
+			<span>뷰티포인트</span>
+			<span>{{currencyFormatDefault pr.membershipPoint '알'}}</span>
+		</li>
+		<li class="table_layout">
+			<span>쿠션포인트</span>
+			<span>0P</span>
+		</li>
+		<li class="table_layout">
+			<span>진주알 교환</span>
+			<span>{{currencyFormatDefault pr.activityPoint '알'}}</span>
+		</li>
+		<li class="table_layout">
+			<span>OK캐쉬백</span>
+			<span>0P</span>
+		</li>
+		<li class="table_layout">
+			<span>두툼포인트M</span>
+			<span>0P</span>
+		</li>
+	</ul>
+
+	<dl class="table_layout pdt10">
+		<dt><strong>{{condition (eq step 2) '총 환불 금액' '결제 금액'}}</strong></dt>
+		<dd class="align_right"><em>{{currencyFormatDefault pr.totalPayment ''}}</em>원</dd>
+	</dl>
+	<div class="panel gray">
+		<!--/* 원터치 간편결제 */-->
+		{{#each data.ordPayExList}}
+			<dl class="table_layout">
+				<dt><b>{{payMethodNameBlang}}</b></dt>
+				<dd class="align_right">{{currencyFormatDefault payAmt '원'}}</dd>
+			</dl>
+		{{/each}}
+
+		<!--/*
+		<dl class="table_layout">
+			<dt><b>예치금/상품권/선불카드</b></dt>
+			<dd class="align_right">20,000원</dd>
+		</dl>
+		<dl class="table_layout">
+			<dt>예치금</dt>
+			<dd class="align_right">20,000원</dd>
+		</dl>
+		<hr class="div dotted">
+		<dl class="table_layout">
+			<dt><b>원터치 간편결제</b></dt>
+			<dd class="align_right">900,000원</dd>
+		</dl>
+		<dl class="table_layout">
+			<dt>결제정보</dt>
+			<dd class="align_right w70p">KB국민카드(123456******1234)<br>
+				일시불<br>
+				2018-09-12  18:02:34</dd>
+		</dl>
+
+		*/-->
+	</div>
+
+	<button class="btn_md_bordered w100p btn_up" type="button" onclick="paymentDetail('cont open')">상세보기 <i class="ico_arr_up"></i></button>
+	<button class="btn_md_bordered w100p btn_down" type="button" onclick="paymentDetail('cont')">접기 <i class="ico_arr_down"></i></button>
+
+
+	<!--/* 적립포인트 */-->
+	<dl class="table_layout point">
+		<dt><strong>적립 포인트</strong></dt>
+		<dd class="align_left">
+			<div class="ui_tooltip">
+				<button type="button" class="btn_tooltip type2">툴팁보기</button>
+				<span class="arr"></span>
+				<div class="layer_tooltip">
+					<dl>
+						<dt>뷰티포인트 적립 안내</dt>
+						<dd>
+							<ul class="list_bullet_dot">
+								<li>아모레퍼시픽 뷰티포인트 통합회원은 에뛰드 회원등급에 관계없이 결제금액(할인 후)의 <strong>기본 2%+우대 최대 3%</strong>가 추가 적립됩니다.</li>
+								<li>뷰티포인트 적립 기준금액은 [최종결제금액-뷰티포인트 적립 제외상품금액-포장서비스-배송비]로 계산된 금액입니다.</li>
+								<li>일부 구매 상품 중 뷰티포인트 <strong>적립 제외 상품</strong> 구매 시 뷰티 포인트가 적립되지 않습니다. </li>
+							</ul>
+							<button type="button" class="ui_close sm"><span class="sr_only">툴팁 닫기</span></button>
+						</dd>
+					</dl>
+				</div>
+			</div>
+		</dd>
+	</dl>
+	<!--/* 적립포인트 상세 */-->
+	<ul class="s_cont point">
+		<li class="table_layout">
+			<span>온라인주문 포인트</span>
+			<span class="num">0</span>
+		</li>
+		<li class="table_layout">
+			<span>테이크아웃 포인트</span>
+			<span class="num">0</span>
+		</li>
+		<li class="table_layout">
+			<span>쿠션 포인트</span>
+			<span class="num">0/span>
+		</li>
+		<li class="table_layout">
+			<span>핑크멤버십 포인트</span>
+			<span class="num">0</span>
+		</li>
+		<li class="table_layout">
+			<span>뷰티포인트</span>
+			<span class="num">0</span>
+		</li>
+	</ul>
+
+
+	{{#if (and (or (eq type 'return')(eq type 'cancel'))(eq step 2))}}
+
+		<dl class="refund">
+    		<dt><strong>환불 수단</strong></dt>
+    		<dd>
+    			<!--/* 예치금 환불 */-->
+    			<div class="panel gray">
+    				{{#each compareList}}
+    					{{#xif addedPayYn '===' 'N'}}
+    						<dl class="table_layout">
+								<dt><b>{{payMethodNameBlang}}</b></dt>
+								<dd class="align_right">{{currencyFormatDefault (calc beforePayAmt '-' afterPayAmt) '원'}}</dd>
+							</dl>
+    					{{/xif}}
+    				{{/each}}
+    			</div>
+    		</dd>
+    		{{#xif step '===' 2}}
+    			{{#each compareList}}
+    				{{#xif addedPayYn '===' 'Y'}}
+    					<dt><strong>배송비 추가 결제</strong></dt>
+						<dd>
+							<div class="panel gray">
+								<p class="lh">취소 후 <em>최종 결제금액이 10,000원 미만인 경우 배송비 결제</em>가 필요합니다.</p>
+								<hr class="div dotted">
+								<dl class="table_layout">
+									<dt><b>추가배송비</b></dt>
+									<dd class="align_right"><strong class="num">2,500</strong>원</dd>
+								</dl>
+								<hr class="div dotted">
+								<!--/* [S]추가배송비 결제 전 */-->
+								<dl class="table_layout">
+									<dt class="w20p"><b>결제수단</b></dt>
+									<dd class="align_right">
+										<fieldset class="form">
+											<legend class="sr_only">결제수단 선택</legend>
+											<div class="check_set">
+												<span class="check_wrap"><input type="radio" name="radio" id="radio1" checked=""><label for="radio1">신용카드</label></span>
+												<span class="check_wrap"><input type="radio" name="radio" id="radio2"><label for="radio2">휴대폰 결제</label></span>
+											</div>
+										</fieldset>
+									</dd>
+								</dl>
+								<button class="btn_md_primary w100p mgt20" type="button">배송비 결제</button>
+								<!--/* [E]추가배송비 결제 전 */-->
+
+								<!--/* [S]추가배송비 결제 후 : 신용카드결제
+								<dl class="table_layout">
+									<dt class="w20p"><b>결제정보</b></dt>
+									<dd class="align_right">
+										KB국민카드(123456******1234)<br>
+										일시불<br>
+										2018-09-12  18:02:34
+									</dd>
+								</dl>
+								*/-->
+								<!--/* [S]추가배송비 결제 후 : 휴대폰 결제
+								<dl class="table_layout">
+									<dt class="w20p"><b>결제정보</b></dt>
+									<dd class="align_right">
+										010-1234-5678<br>
+										2018-09-12  18:02:34
+									</dd>
+								</dl>
+								 */-->
+								<!--/* [S]추가배송비 결제 후 : Pink Love 무료 반품 서비스
+								<dl class="table_layout">
+									<dt class="w20p"><b>결제정보</b></dt>
+									<dd class="align_right"><em>Pink Love</em> 무료 반품 서비스 이용</dd>
+								</dl>
+								*/-->
+							</div>
+						</dd>
+    				{{/xif}}
+    			{{/each}}
+				<!--/* [E]추가배송비 발생 시에만 노출 */-->
+    		{{/xif}}
+    		<!--/* [S]추가배송비 발생 시에만 노출 */-->
+
+    	</dl>
+
+	{{/if}}
+
+
+</div>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+
+	<div layout:fragment="custNm" th:remove="tag">
+		<div class="input_wrap">
+			<input type="text" placeholder="이름" title="이름 입력" id="custNm" name="custNm" required="required"
+				 data-msg-required="이름을 입력해 주세요. 이름 입력란으로 이동합니다." user-name="user-name"/>
+	  </div>
+	</div>
+
+  <div layout:fragment="frgrRegNum" th:remove="tag">
+      <input type="tel" placeholder="외국인 등록번호" title="외국인 등록번호 입력" name="frgrRegNum" required="required" data-msg-required="외국인등록번호를 입력해 주세요."
+             reg-number="reg-number"/>
+  </div>
+
+  <div layout:fragment="cellNum" th:remove="tag">
+    <div class="input_group">
+      <input type="tel" pattern="[0-9]*" placeholder="휴대폰 번호 ‘-’없이 입력" title="휴대폰 번호 입력" name="cellNum" required="required" data-msg-required="휴대폰번호를 입력해 주세요. 휴대폰번호 입력란으로 이동합니다."
+             mobile-number="mobile-number" data-msg-mobile-number="올바른 휴대전화 번호를 입력하세요. 휴대전화 번호 입력란으로 이동합니다." maxlength="11"/>
+    </div>
+  </div>
+
+  <div layout:fragment="cellNumLab" th:remove="tag">
+    <div class="input_group">
+      <div class="label"><label for="cellNum">휴대폰번호</label></div>
+      <div>
+        <input type="tel" pattern="[0-9]*" placeholder="휴대폰 번호 ‘-’없이 입력" title="휴대폰 번호 입력" id="cellNum" name="cellNum" required="required" data-msg-required="휴대폰번호를 입력해 주세요. 휴대폰번호 입력란으로 이동합니다."
+             mobile-number="mobile-number" data-msg-mobile-number="휴대폰 번호를 정확히 입력하세요." maxlength="11"/>
+      </div>
+    </div>
+  </div>
+
+  <div layout:fragment="cellNumWithBtn" th:remove="tag">
+    <div class="input_group">
+      <input type="tel" pattern="[0-9]*" placeholder="휴대폰 번호 ‘-’없이 입력" title="휴대폰 번호 입력" name="cellNum" required="required" data-msg-required="휴대폰번호를 입력해 주세요. 휴대폰번호 입력란으로 이동합니다."
+             mobile-number="mobile-number" data-msg-mobile-number="휴대폰 번호를 정확히 입력하세요." maxlength="11"/>
+      <div class="btn">
+        <button type="button" id="certBtn">인증 요청</button>
+        <button type="button" id="reCertBtn" style="display: none">재인증</button>
+      </div>
+    </div>
+  </div>
+  
+	<div layout:fragment="cellNumPhoneCorpWithBtn" th:remove="tag">
+	
+		<div class="input_group">
+			<div class="select_wrap">
+	              	<select title="통신사 선택" id="phoneCorp" name="phoneCorp" required="required" data-msg-required="통신사를 선택하세요.">
+					<option value="">통신사 선택</option>
+					<option value="SKT">SKT</option>
+					<option value="KTF">KT</option>
+					<option value="LGT">LG U+</option>
+					<option value="SKM">SKT 알뜰폰</option>
+					<option value="KTM">KT 알뜰폰</option>
+					<option value="LGM">LG U+ 알뜰폰</option>
+				</select>
+			</div>
+			<span class="gap"></span>
+			<div class="input_wrap w60p">
+				<input type="tel" pattern="[0-9]*" placeholder="휴대폰 번호 ‘-’없이 입력" title="휴대폰 번호 입력" name="cellNum" required="required" data-msg-required="휴대폰번호를 입력해 주세요. 휴대폰번호 입력란으로 이동합니다."
+					   mobile-number="mobile-number" data-msg-mobile-number="휴대폰 번호를 정확히 입력하세요." maxlength="11"/>
+				<button type="button" id="certBtn" class="btn_sm_certification" style="display: none">인증</button>
+       			<button class="btn_sm_certification" type="button" id="reCertBtn" style="display: none">재전송</button>
+			</div>
+	    </div>
+	          
+		<div class="input_wrap" id="sms-form" style="display: none">
+			<input type="tel" pattern="[0-9]*" placeholder="인증번호" title="인증번호 6자리 입력" name="smsNum" required="required" data-msg-required="인증번호를 입력해 주세요. 인증번호 입력란으로 이동합니다." maxlength="6">
+			<span class="count" name="timer">00:00</span>
+			<button type="button" id="complete" class="btn_sm_certification">확인</button>
+		</div>
+	</div>
+
+  <div layout:fragment="smsNum" th:remove="tag">
+    <div class="input_group">
+      <input type="tel" pattern="[0-9]*" placeholder="인증번호" title="인증번호 6자리 입력" name="smsNum" required="required" data-msg-required="인증번호를 입력해 주세요. 인증번호 입력란으로 이동합니다." maxlength="6">
+      <div style="width: 1px"><em class="unit">3:00</em></div>
+    </div>
+  </div>
+
+  <div layout:fragment="smsNumWithBtn" th:remove="tag">
+    <div class="input_group">
+      <input type="tel" pattern="[0-9]*" placeholder="인증번호" title="인증번호 6자리 입력" name="smsNum" required="required" data-msg-required="인증번호를 입력해 주세요. 인증번호 입력란으로 이동합니다." maxlength="6">
+      <div style="width: 1px"><em class="unit" name="timer">3:00</em></div>
+      <div class="btn">
+        <button type="button" id="extTimeBtn">시간 연장</button>
+      </div>
+    </div>
+  </div>
+
+  <div layout:fragment="frclCd" th:remove="tag">
+    <div class="check_group">
+      <span class="check_wrap"><input type="radio" name="country" id="local" checked><label for="local">내국인</label></span>
+      <span class="check_wrap"><input type="radio" name="country" id="foreign"><label for="foreign">외국인</label></span>
+      <input type="hidden" name="frclCd" required="required" data-msg-required="내/외국인 구분을 선텍해 수제요.">
+    </div>
+  </div>
+
+  <div layout:fragment="frclCdSel" th:remove="tag">
+    <div class="btn">
+      <select id="frclCd" name="frclCd" title="내/외국인 선택" required="required" data-msg-required="내/외국인 구분을 선텍해 수제요.">
+        <option value="K">내국인</option>
+        <option value="F">외국인</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- 생년월일 -->
+	<div layout:fragment="psnDtbr" th:remove="tag">
+		<div class="input_wrap w60p">
+			<input type="tel" pattern="[0-9]*" placeholder="생년월일 (ex.19980905)" title="생년월일 입력" id="athtDtbr" name="athtDtbr"
+				   required="required" data-msg-required="생년월일을 입력하세요. 생년월일 입력란으로 이동합니다." psnDtbr="psnDtbr" maxlength="8">
+		</div>
+	</div>
+
+  <div layout:fragment="psnDtbrLab" th:remove="tag">
+    <div class="input_group">
+      <div class="label"><label for="athtDtbr">생년월일</label></div>
+      <div>
+        <input type="tel" pattern="[0-9]*" placeholder="생년월일 (ex.19980905)" title="생년월일 입력" id="athtDtbr" name="athtDtbr" required="required" data-msg-required="생년월일을 입력하세요. 생년월일 입력란으로 이동합니다."
+               psnDtbr="psnDtbr" maxlength="8">
+      </div>
+    </div>
+  </div>
+
+  <!-- 법정생년월일 -->
+  <div layout:fragment="athtDtbr" th:remove="tag">
+      <input type="tel" pattern="[0-9]*" placeholder="생년월일 (ex.980905)" title="생년월일 입력" name="athtDtbr" required="required" data-msg-required="생년월일을 입력하세요. 생년월일 입력란으로 이동합니다."
+             athtDtbr="athtDtbr" maxlength="6">
+  </div>
+
+	<div layout:fragment="sxclCd" th:remove="tag">
+		<div>
+			<div class="check_btn_set">
+				<div><input type="radio" name="sxclCd" value="F" id="female" checked><label for="female">여자</label></div>
+				<div><input type="radio" name="sxclCd" value="M" id="male"><label for="male">남자</label></div>
+			</div>
+		</div>
+	</div>
+
+  <div layout:fragment="sxclCdSel" th:remove="tag">
+    <div class="btn">
+      <select id="sxclCd" name="sxclCd" title="성별 선택" required="required" data-msg-required="성별을 선택하세요.">
+        <option value="F">여자</option>
+        <option value="M">남자</option>
+      </select>
+    </div>
+  </div>
+
+  <div layout:fragment="phoneCorp" th:remove="tag">
+    <div class="input_group">
+      <select title="통신사 선택" id="phoneCorp" name="phoneCorp" required="required" data-msg-required="통신사를 선택하세요.">
+        <option value="">통신사 선택</option>
+        <option value="SKT">SKT</option>
+        <option value="KTF">KT</option>
+        <option value="LGT">LG U+</option>
+        <option value="SKM">SKT 알뜰폰</option>
+        <option value="KTM">KT 알뜰폰</option>
+        <option value="LGM">LG U+ 알뜰폰</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- 회원가입 사용 -->
+  <div layout:fragment="id_valid" th:remove="tag">
+    <div class="label"><label for="chcsNo">아이디</label></div>
+    <input type="text" title="아이디 입력" id="chcsNo" name="chcsNo" placeholder="아이디"  id_n="id_n" id_l="id_l" data-msg-required="아이디를 입력해 주세요.">
+  </div>
+
+  <div layout:fragment="pw_valid" th:remove="tag">
+    <div class="label"><label for="userPwdEc">비밀번호</label></div>
+    <input type="password" title="비밀번호 입력" id="userPwdEc" name="userPwdEc" placeholder="비밀번호 (6~16자, 영문, 숫자, 특수문자 조합)" required="required" data-msg-required="비밀번호를 입력해 주세요. 비밀번호 입력란으로 이동합니다."
+             pass-word="pass-word" maxlength="16">
+  </div>
+
+  <div layout:fragment="pw_check" th:remove="tag">
+    <div class="label"><label for="userPwdEcChk">비밀번호</label></div>
+    <input type="password" title="비밀번호 확인 입력" id="userPwdEcChk" name="userPwdEcChk" placeholder="비밀번호 확인" required="required" data-msg-required="비밀번호를 다시 입력해 주세요. 비밀번호 확인 입력란으로 이동합니다." maxlength="16"/>
+  </div>
+  <!-- 회원가입 사용 -->
+
+  <!-- 로그인 사용 -->
+  <div layout:fragment="id" th:remove="tag">
+      <div class="input_wrap">
+          <input type="text" title="아이디 입력" name="chcsNo" placeholder="아이디" required="required" data-msg-required="아이디를 입력해 주세요. 아이디 입력란으로 이동합니다.">
+      </div>
+  </div>
+
+  <div layout:fragment="password" th:remove="tag">
+      <div class="input_wrap">
+          <input type="password" title="비밀번호 입력" name="userPwdEc" placeholder="비밀번호" required="required" data-msg-required="비밀번호를 입력해 주세요. 비밀번호 입력란으로 이동합니다." maxlength="16">
+      </div>
+  </div>
+
+  <div layout:fragment="email" th:remove="tag">
+      <div class="input_wrap">
+          <input type="text" title="이메일 입력" name="email" placeholder="이메일" required="required" email="email" data-msg-required="이메일주소를 입력해 주세요. 이메일주소 입력란으로 이동합니다.">
+      </div>
+  </div>
+  <!-- 로그인 사용 -->
+
+	<div layout:fragment="captcha" th:remove="tag">
+	
+		<div class="captcha clear">
+			<!-- captcha 영역 -->
+			<div class="img"><img id="captchaimg" th:src="'/captcha/getCaptchaImage?keyword=' + ${captchaKey}" width="100%" height="100%" alt="캡차이미지"></div>
+			<div class="btns">
+				<button type="button" onclick="reCaptcha()">새로고침</button>
+				<button type="button" onclick="playCaptcha()">음성듣기</button>
+			</div>
+		</div>
+		<div class="input_wrap">
+			<input type="hidden" name="captchaKey" th:value="${captchaKey}" required="required">
+			<input type="text" id="captcha" name="captcha" tabindex="9" placeholder="자동입력 방지문자" class="int"
+				   required="required" data-msg-required="자동입력 방지문자를 입력해 주세요. 자동입력 방지문자 입력란으로 이동합니다." maxlength="5">
+		</div>
+	
+		<script type="application/javascript">
+			var captchar = '[[${captchaKey}]]';
+			
+			function reCaptcha() {
+				
+				AP.api.getNewCaptchaKey({}
+				).done(function (data) {
+					if (data.state == 'success') {
+						captchar = data.captchaKey;
+						$("#captchaimg").attr("src", '/captcha/getCaptchaImage?keyword=' + data.captchaKey);
+						$('[name=captchaKey]').val(data.captchaKey);
+					}
+					//성공
+				}).fail(function (e) {
+					AP.modal.alert(e.responseJSON.message);
+				}).always(function () {
+					//성공, 실패
+				});
+			}
+			
+			function playCaptcha() {
+				
+				var audio = new Audio('/captcha/getCaptchaAudio?keyword=' + captchar);
+				audio.play();
+			}
+			
+			/*
+	        *캡차 검증을 위한  function. 파라미터 타입 boolean
+	        *
+	        */
+			function checkCaptcha(callback) {
+				
+				var indexed_array = {};
+				indexed_array['key'] = captchar;
+				indexed_array['value'] = $("#captcha").val();
+				
+				AP.api.checkKeyAndValue({}
+					, indexed_array
+				).done(function (data) {
+					if (data.state == 'success') {
+						callback(data.result);
+					}
+					//성공
+				}).fail(function (e) {
+					AP.modal.alert(e.responseJSON.message);
+				}).always(function () {
+					//성공, 실패
+				});
+			}
+		</script>
+	</div>
+
+  <div layout:fragment="" th:remove="tag"></div>
+
+</html>

@@ -1,0 +1,62 @@
+<html ap:decorate="~{layout/layout-main}" th:with="_jsfile='etude-pick'">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents looks main">
+		<!--/* looks 동영상 */-->
+		<div class="video_wrap">
+			<iframe class="youtube_video" width="800" height="450" src="https://www.youtube.com/embed/Fz3Xo3UHA-4?rel=0&loop=1" frameborder="0" allowfullscreen="" data-vendor="youtube" data-ratio="true" data-mute="false"></iframe>
+		</div>
+        <!--/* looks 목록 */-->
+        <div class="panel looksbox">
+            <h2 class="h_title page">내게 맞는 Makeup Look</h2>
+            <ul class="looks_list">
+                <li>
+                    <a href="#none">
+                        <img ap:src="@{/images/beautylife/img_looks_01.png}" alt="" />
+                        <span class="name">ROMANTIC CHERRY<br>BLOOSOM</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#none">
+                        <img ap:src="@{/images/beautylife/img_looks_02.png}" alt="" />
+                        <span class="name">LIVELY<br>PEACH CRUSH</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#none">
+                        <img ap:src="@{/images/beautylife/img_looks_03.png}" alt="" />
+                        <span class="name">TWINKLING<br>GLITTER HOLIC</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#none">
+                        <img ap:src="@{/images/beautylife/img_looks_04.png}" alt="" />
+                        <span class="name">CHICK<br>ONTOUR DRAWING</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#none">
+                        <img ap:src="@{/images/beautylife/img_looks_05.png}" alt="" />
+                        <span class="name">RED KISS</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#none">
+                        <img ap:src="@{/images/beautylife/img_looks_06.png}" alt="" />
+                        <span class="name">JOYFUL SCANDAL</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+    <script>
+        $( '.youtube_video' ).video();
+    </script>
+</th:block>
+</body>
+</html>

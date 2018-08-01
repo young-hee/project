@@ -1,0 +1,21 @@
+<!--/* sub page title area breadcrumb type*/-->
+<th:block ap:fragment="contents-page-title">
+	<div class="page_title_area">
+		<!-- breadcrumb 미노출 페이지는 감춤 -->
+	    <div class="breadcrumb" th:if="${breadCrumbs}">
+		<th:block th:each="breadCrumb : ${breadCrumbs}">
+			<span th:text="${breadCrumb.title}">HOME</span>
+		</th:block>
+	    </div>
+	    <!-- // breadcrumb 미노출 페이지는 감춤 -->
+	    <div class="page_title">
+	    	<th:block th:if="${not #lists.isEmpty(pageType)}">
+	        	<h2 class="h_title page" th:text="${gnbMap.get(upperMenuId).menuTitle}">페이지 제목</h2>
+	        </th:block>
+	        <th:block th:if="${#lists.isEmpty(pageType)}">
+	        	<h2 class="h_title page" th:text="${pageTitle} ? ${pageTitle} : '페이지 제목'">페이지 제목</h2>
+	        </th:block>
+	        <p class="text font_lg" th:text="${pageDesc}">page description 이 들어갑니다. 없으면 노출 안됨</p>
+	    </div>
+    </div>
+</th:block>

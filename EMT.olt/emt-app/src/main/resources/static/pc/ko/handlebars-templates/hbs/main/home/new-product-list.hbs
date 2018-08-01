@@ -1,0 +1,67 @@
+{{!--
+	신상품
+--}}
+<div class="recommend_items ix-list-viewport">
+	<ul class="ix-list-items">
+		{{#each this.list}}
+			<li class="ix-list-item">
+				<div class="item">
+					<div class="item_images">
+						{{!-- 대표 이미지 --}}
+						<a href="{{ productDetailPath this.onlineProdSn }}" class="lazy_load_wrap first_img">
+							<span class="lazy_load_wrap"><img class="lazy_load" src="" data-src="{{ this.onlineProdImages.0.imgUrl }}" alt=""></span>
+						</a>
+					</div>
+					<div class="info_box list">
+						{{#if this.flags.length}}
+						{{!-- flag --}}
+						<div class="flag_set">
+							{{#each this.flags}}
+								{{#xif this.prodFlagCode '==' 'icon_reco_new'}}
+								<span class="new">신상품</span>
+								{{/xif}}
+								{{#xif this.prodFlagCode '==' 'icon_reco_best_w'}}
+									<span class="best">베스트</span>
+								{{/xif}}
+								{{#xif this.prodFlagCode '==' 'icon_pr_prod'}}
+									<span class="event">이벤트</span>
+								{{/xif}}
+								{{#xif this.prodFlagCode '==' 'icon_reco_md'}}
+									<span>MD추천</span>
+								{{/xif}}
+								{{#xif this.prodFlagCode '==' 'icon_reco_online'}}
+									<span>온라인전용</span>
+								{{/xif}}	
+							{{/each}}								
+						</div>
+						{{/if}}
+						{{!-- 상품명 --}}
+						<div class="title_area">
+							<h3 class="h_title">{{ this.onlineProdName }}</h3>
+						</div>
+						
+						<div class="item_option">
+							{{#xif this.productCount  '>' 1}}
+								<p class="color_name">{{this.productCount}} colors</p>
+							{{/xif}}
+						</div>
+						{{!-- 가격,장바구니 --}}
+						{{!-- 20180502 : 마크업수정--}}
+						<div class="price_area">
+							<div>
+								{{#xif this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate '!=' 0}}
+								<div class="discount">
+									<strong class="to">{{ numberFormat this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate }}<em>%</em></strong>
+								</div>
+								{{/xif}}
+								<div class="price">
+									<strong>{{ numberFormat this.onlineProdPriceSummary.minOnlineSalePrice }}<em>원</em></strong>
+								</div>
+							</div>
+						 </div>
+				    </div>
+				</div>
+			</li>
+		{{/each}}
+	</ul>
+</div>

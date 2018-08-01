@@ -1,0 +1,64 @@
+<div class="makeup_list">
+	<ul class="list_bullet_dot">
+		<li>컬러만 비교하는 화면입니다.</li>
+		<li>화면을 닫으시면 비교하신 정보는 없어집니다.</li>
+	</ul>
+</div>
+
+<div class="panel notice">
+	<i class="ico"></i>
+	<p class="text">아래에서 비교하실<br>착색 컬러를 선택해주세요.</p>
+</div>
+
+<div class="panel no_padding preview_area" style="display:none;">
+	<div class="compare_items">
+		<ul>
+			{{!-- compare-makeup-list.hbs --}}
+		</ul>
+	</div>
+</div>
+
+<div class="option_floating color_compare open">
+	<button type="button" class="btn_float_close"><span class="sr_only">닫기</span></button>
+	<div class="color_area">
+
+		<div class="select_colors">
+			<ul>
+				{{!-- compare-makeup-selected-list.hbs --}}
+			</ul>
+		</div>
+
+		<div class="color_chips">
+			<div class="slide" data-ix-options="view-length:1; loop:false;">
+				<div class="ix-list-viewport">
+					<ul class="ix-list-items">
+						{{#each this.products}}
+							{{#xif (calc @index '%' 12) '==' 0}}
+							<li class="ix-list-item">
+								<ul>
+							{{/xif}}
+									<li>
+										<a href="javascript:;" data-prod-sn="{{ this.prodSn }}" {{#xif this.colorchipTypeCode '==' 'RGB'}}style="background-color:#{{ this.rgbVal }}"{{/xif}}>{{!-- class="check" --}}
+											{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+												<span class="sold_out"><span>품절</span></span>
+											{{/xif}}
+
+											<img alt="{{ this.prodName }}" src="{{#xif this.colorchipTypeCode '==' 'RGB'}}{{ absolutePath '/images/product/color_chips_img_blank.png' }}{{else}}{{ absolutePath this.colorchipImg }}{{/xif}}">
+										</a>
+									</li>
+							{{#xif (calc @index '%' 12) '==' 11}}
+								</ul>
+							</li>
+							{{/xif}}
+						{{/each}}
+					</ul>
+				</div>
+				<div class="ix-controller">
+					<ul class="ix-thumbs">
+						<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index--> page</button></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

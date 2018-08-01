@@ -1,0 +1,544 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='color-factory'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents brand">
+				<div class="color_factory">
+					<!-- tab menu wrap -->
+					<div class="ui_tab">
+						<!-- tab menu -->
+						<div class="tab_menu equally">
+							<ul>
+								<li><a href="#none" th:href="@{/display/color_factory_info(displayMenuId=color_factory_info)}">컬러 팩토리 안내 (Color Factory)</a></li>
+								<li class="on"><a href="#none" th:href="@{/display/color_factory_reserve(displayMenuId=color_factory_reserve)}">컬러 팩토리 예약 (Reservation)</a></li>
+								<li><a href="#none" th:href="@{/display/color_factory_store(displayMenuId=color_factory_store)}">서비스 매장 보기 (Store)</a></li>
+							</ul>
+						</div>
+						<!-- tab content -->
+						<div class="tab_cont space">
+							<h3 class="sr_only">컬러 팩토리 예약 (Reservation)</h3>
+							<h4 class="h_title lare">컬러 팩토리 예약하기</h4>
+							<p class="text">아래의 정보를 입력해주세요.</p>
+							<form class="validate">
+								<fieldset class="form panel gray bdr_top">
+									<legend class="sr_only">예약정보 입력</legend>
+									<div class="panel_cont">
+										<div class="title_wrap">
+											<h4 class="form_title">예약정보</h4>
+											<span class="required">필수입력(Required)</span>
+										</div>
+										<div class="ui_table">
+											<dl>
+												<dt><label for="storeEventServiceSn">서비스</label><span class="required"><span class="sr_only">필수입력(Required)</span></span></dt>
+												<dd>
+													<div class="w70p select_wrap">
+														<select name="storeEventServiceSn" id="storeEventServiceSn" tabindex="-1" title="서비스 선택" required="required" data-msg-required="서비스를 선택해 주세요.<br>Please select a service.">
+															<option value="">서비스를 선택해주세요.</option>
+															<th:block th:each="serviceList : ${storeEventScheduleInfo.storeEventSvcExList}">
+																<option value="" th:value="${serviceList.storeEventServiceSn}" th:text="${serviceList.storeEventServiceName}"></option>
+															</th:block>
+														</select>
+													</div>
+												</dd>
+											</dl>
+											<dl>
+												<dt><label for="storeSn">예약 매장(Reservation Store)</label><span class="required"><span class="sr_only">필수입력(Required)</span></span></dt>
+												<dd>
+													<div class="w70p">
+														<div class="select_wrap">
+															<select name="storeSn" id="storeSn" tabindex="-1" title="매장 선택" required="required" data-msg-required="예약 매장을 선택해 주세요.<br>Please select a reservation store.">
+																<option value="">매장을 선택해 주세요.</option>
+																<th:block th:each="storeList : ${storeEventScheduleInfo.simpleStoreList}">
+																	<option value="" th:value="${storeList.storeSn}" th:text="${storeList.storeName}"></option>
+																</th:block>
+															</select>
+														</div>
+													</div>
+													<button class="btn_md_form store" type="button">매장보기</button>
+												</dd>
+											</dl>
+											<dl>
+												<dt><label for="reserveDate">예약 일자(Reservation Date)</label><span class="required"><span class="sr_only">필수입력(Required)</span></span></dt>
+												<dd>
+													<div class="w70p input_group input_date_group">
+														<div class="input_wrap">
+															<input type="text" id="reserveDate" name="reserveDate" class="ui_date_picker" placeholder="날짜 선택" title="날짜 선택" value="" readonly="" required="required" data-msg-required="예약 일자를 선택해 주세요.<br>Please select a reservation date." disabled>
+															<button type="button" class="ui_date_picker_btn btn_cal"><i class="ico_date"></i><span class="sr_only">날짜 선택</span></button>
+														</div>
+													</div>
+												</dd>
+											</dl>
+											<dl>
+												<dt><label for="rsvTime">예약 시간(Reservation Time)</label><span class="required"><span class="sr_only">필수입력(Required)</span></span></dt>
+												<dd>
+													<div class="w70p select_wrap">
+														<select name="storeEventDetailScheduleSn" id="rsvTime" tabindex="-1" title="시간 선택" required="required" data-msg-required="예약 시간을 선택해 주세요.<br>Please select a reservation time.">
+															<option value="">예약시간을 선택해 주세요.</option>
+													</select>
+													</div>
+												</dd>
+											</dl>
+											<dl>
+												<dt><label for="preName">신청자명(Name)</label><span class="required"><span class="sr_only">필수입력(Required)</span></span></dt>
+												<dd><div class="w70p input_wrap">
+													<input type="text" apply-name="apply-name" id="preName" name="preName" placeholder="이름을 입력해 주세요." required="required" data-msg-required="신청자명을 입력해 주세요.<br>Please enter your name.">
+												</div></dd>
+											</dl>
+
+											<dl>
+												<dt><label for="phoneCorp">휴대폰 번호</label><span class="required"><span class="sr_only">필수입력(Required)</span></span></dt>
+												<dd>
+													<span class="w70p input_group input_phone">
+														<span class="select_wrap">
+															<select name="phoneCorp" id="phoneCorp" title="통신사 선택" required="required" data-msg-required="통신사를 선택해 주세요.<br>Please select a your carrier.">
+																<option value="">통신사 선택</option>
+																<option value="SKT">SKT</option>
+																<option value="KTF">KT</option>
+																<option value="LGT">LG U+</option>
+																<option value="SKM">SKT 알뜰폰</option>
+																<option value="KTM">KT 알뜰폰</option>
+																<option value="LGM">LG U+ 알뜰폰</option>
+															</select>
+														</span>
+														<span class="gap"></span>
+														<span class="input_wrap">
+															<input type="text" name="prePhoneNo" title="휴대폰 번호 입력" maxlength="11" placeholder="‘-’제외 숫자 입력" required="required" mobile-number="mobile-number" data-msg-required="휴대폰번호를 입력해 주세요.<br>Please enter your phone number." data-msg="유효하지 않은 휴대폰 번호 입니다.">
+														</span>
+													</span>
+													<button class="btn_md_form certBtn" id="certBtn" type="button">인증 받기</button>
+													<button class="btn_md_form reCertBtn" id="reCertBtn" type="button" style="display: none">재전송</button>
+												</dd>
+											</dl>
+
+											<dl>
+												<dt><label for="smsNum">인증 번호</label><span class="required"><span class="sr_only">필수입력(Required)</span></span></dt>
+												<dd>
+													<div>
+														<div class="input_wrap">
+															<input type="text" name="smsNum" id="smsNum" placeholder="6자리 입력" title="인증번호 6자리 입력" maxlength="6" required="required" data-msg-required="인증번호를 입력해 주세요.<br>Please enter your verification code." data-msg="유효하지 않은 인증번호 입니다.">
+															<em class="count" name="timer">3:00</em>
+														</div>
+														<br>
+														<button class="btn_md_form w100p mgb10 confirm" id="" type="button" disabled>인증 확인</button>
+														<ul class="list_bullet_dot">
+															<li>3분 이내에 인증번호를 입력하셔야 합니다.</li>
+															<li>입력 시간 초과 시 재전송 버튼을 눌러주세요.</li>
+														</ul>
+													</div>
+													<!--<button class="btn_md_form" id="extTimeBtn" type="button">시간연장</button>-->
+												</dd>
+												<input type="text" name="verifyCertification" required="required" data-msg-required="휴대폰 인증을 해주세요.">
+											</dl>
+											<dl>
+												<dt><label for="email">이메일(e-mail)</label></dt>
+												<dd><div class="w70p input_wrap">
+													<input type="text" id="email" name="emailAddress" value="" placeholder="이메일 주소를 입력해 주세요." email="email" data-msg="이메일 주소를 정확히 입력해 주세요." />
+												</div></dd>
+											</dl>
+											<dl>
+												<dt>퍼스널 컬러 측정 유무<br>(personal color<br>measurement)<span class="required"><span class="sr_only">필수입력(Required)</span></span></dt>
+												<dd>
+													<div class="check_set">
+														<div class="check_wrap">
+															<input type="radio" name="eventExper" id="personal_color_1" value="personal_color_1" required="required" data-msg-required="퍼스널컬러 경험 여부를 체크해 주세요.<br>Have you gotten your personal color checked before?.">
+															<label for="personal_color_1">컬러팩토리 유 경험(Color factory experience) </label>
+														</div>
+														<div class="check_wrap">
+															<input type="radio" name="eventExper" id="personal_color_2" value="personal_color_2">
+															<label for="personal_color_2">타사 서비스 경험(Experience of competitors’ services)</label>
+														</div>
+														<div class="check_wrap">
+															<input type="radio" name="eventExper" id="personal_color_3" value="personal_color_3">
+															<label for="personal_color_3">셀프측정(자가진단 체크리스트)(Self-measurement (self-diagnosis checklist)</label>
+														</div>
+														<div class="check_wrap">
+															<input type="radio" name="eventExper" id="personal_color_4" checked="" value="personal_color_4">
+															<label for="personal_color_4">경험 없음(No experience)</label>
+														</div>
+													</div>
+												</dd>
+											</dl>
+											<dl>
+												<input type="hidden" name="alienYn" value="Y">
+												<dt><label for="nationality">국적(Nationality)</label><span class="required"><span class="sr_only">필수입력(Required)</span></span></dt>
+												<dd>
+													<div class="w70p select_wrap">
+														<select name="nationality" class="nationality" id="nationality" tabindex="-1" title="국적선택" required="required" data-msg-required="국적을 선택해 주세요.<br>Please select a your nationality.">
+															<option value="">선택하세요</option>
+															<option value="AF">Afghanistan</option>
+															<option value="AL">Albania</option>
+															<option value="DZ">Algeria</option>
+															<option value="AS">American Samoa</option>
+															<option value="AD">Andorra</option>
+															<option value="AO">Angola</option>
+															<option value="AI">Anguilla</option>
+															<option value="AQ">Antarctica</option>
+															<option value="AG">Antigua and Barbuda</option>
+															<option value="AR">Argentina</option>
+															<option value="AM">Armenia</option>
+															<option value="AW">Aruba</option>
+															<option value="AU">Australia</option>
+															<option value="AT">Austria</option>
+															<option value="AZ">Azerbaijan</option>
+															<option value="BS">Bahamas</option>
+															<option value="BH">Bahrain</option>
+															<option value="BD">Bangladesh</option>
+															<option value="BB">Barbados</option>
+															<option value="BY">Belarus</option>
+															<option value="BE">Belgium</option>
+															<option value="BZ">Belize</option>
+															<option value="BJ">Benin</option>
+															<option value="BM">Bermuda</option>
+															<option value="BT">Bhutan</option>
+															<option value="BO">Bolivia</option>
+															<option value="BA">Bosnia and Herzegovina</option>
+															<option value="BW">Botswana</option>
+															<option value="BR">Brazil</option>
+															<option value="IO">British Indian Ocean Territory</option>
+															<option value="VG">British Virgin Islands</option>
+															<option value="BN">Brunei</option>
+															<option value="BG">Bulgaria</option>
+															<option value="BF">Burkina Faso</option>
+															<option value="MM">Myanmar</option>
+															<option value="BI">Burundi</option>
+															<option value="KH">Cambodia</option>
+															<option value="CM">Cameroon</option>
+															<option value="CA">Canada</option>
+															<option value="CV">Cape Verde</option>
+															<option value="KY">Cayman Islands</option>
+															<option value="CF">Central African Republic</option>
+															<option value="TD">Chad</option>
+															<option value="CL">Chile</option>
+															<option value="CN">China</option>
+															<option value="CX">Christmas Island</option>
+															<option value="CC">Cocos Islands</option>
+															<option value="CO">Colombia</option>
+															<option value="KM">Comoros</option>
+															<option value="CG">Republic of the Congo</option>
+															<option value="CD">Democratic Republic of the Congo</option>
+															<option value="CK">Cook Islands</option>
+															<option value="CR">Costa Rica</option>
+															<option value="HR">Croatia</option>
+															<option value="CU">Cuba</option>
+															<option value="CW">Curacao</option>
+															<option value="CY">Cyprus</option>
+															<option value="CZ">Czech Republic</option>
+															<option value="DK">Denmark</option>
+															<option value="DJ">Djibouti</option>
+															<option value="DM">Dominica</option>
+															<option value="DO">Dominican Republic</option>
+															<option value="TL">East Timor</option>
+															<option value="EC">Ecuador</option>
+															<option value="EG">Egypt</option>
+															<option value="SV">El Salvador</option>
+															<option value="GQ">Equatorial Guinea</option>
+															<option value="ER">Eritrea</option>
+															<option value="EE">Estonia</option>
+															<option value="ET">Ethiopia</option>
+															<option value="FK">Falkland Islands</option>
+															<option value="FO">Faroe Islands</option>
+															<option value="FJ">Fiji</option>
+															<option value="FI">Finland</option>
+															<option value="FR">France</option>
+															<option value="PF">French Polynesia</option>
+															<option value="GA">Gabon</option>
+															<option value="GM">Gambia</option>
+															<option value="GE">Georgia</option>
+															<option value="DE">Germany</option>
+															<option value="GH">Ghana</option>
+															<option value="GI">Gibraltar</option>
+															<option value="GR">Greece</option>
+															<option value="GL">Greenland</option>
+															<option value="GD">Grenada</option>
+															<option value="GU">Guam</option>
+															<option value="GT">Guatemala</option>
+															<option value="GG">Guernsey</option>
+															<option value="GN">Guinea</option>
+															<option value="GW">Guinea-Bissau</option>
+															<option value="GY">Guyana</option>
+															<option value="HT">Haiti</option>
+															<option value="HN">Honduras</option>
+															<option value="HK">Hong Kong</option>
+															<option value="HU">Hungary</option>
+															<option value="IS">Iceland</option>
+															<option value="IN">India</option>
+															<option value="ID">Indonesia</option>
+															<option value="IR">Iran</option>
+															<option value="IQ">Iraq</option>
+															<option value="IE">Ireland</option>
+															<option value="IM">Isle of Man</option>
+															<option value="IL">Israel</option>
+															<option value="IT">Italy</option>
+															<option value="CI">Ivory Coast</option>
+															<option value="JM">Jamaica</option>
+															<option value="JP">Japan</option>
+															<option value="JE">Jersey</option>
+															<option value="JO">Jordan</option>
+															<option value="KZ">Kazakhstan</option>
+															<option value="KE">Kenya</option>
+															<option value="KI">Kiribati</option>
+															<option value="XK">Kosovo</option>
+															<option value="KW">Kuwait</option>
+															<option value="KG">Kyrgyzstan</option>
+															<option value="LA">Laos</option>
+															<option value="LV">Latvia</option>
+															<option value="LB">Lebanon</option>
+															<option value="LS">Lesotho</option>
+															<option value="LR">Liberia</option>
+															<option value="LY">Libya</option>
+															<option value="LI">Liechtenstein</option>
+															<option value="LT">Lithuania</option>
+															<option value="LU">Luxembourg</option>
+															<option value="MO">Macau</option>
+															<option value="MK">Macedonia</option>
+															<option value="MG">Madagascar</option>
+															<option value="MW">Malawi</option>
+															<option value="MY">Malaysia</option>
+															<option value="MV">Maldives</option>
+															<option value="ML">Mali</option>
+															<option value="MT">Malta</option>
+															<option value="MH">Marshall Islands</option>
+															<option value="MR">Mauritania</option>
+															<option value="MU">Mauritius</option>
+															<option value="YT">Mayotte</option>
+															<option value="MX">Mexico</option>
+															<option value="FM">Micronesia</option>
+															<option value="MD">Moldova</option>
+															<option value="MC">Monaco</option>
+															<option value="MN">Mongolia</option>
+															<option value="ME">Montenegro</option>
+															<option value="MS">Montserrat</option>
+															<option value="MA">Morocco</option>
+															<option value="MZ">Mozambique</option>
+															<option value="NA">Namibia</option>
+															<option value="NR">Nauru</option>
+															<option value="NP">Nepal</option>
+															<option value="NL">Netherlands</option>
+															<option value="AN">Netherlands Antilles</option>
+															<option value="NC">New Caledonia</option>
+															<option value="NZ">New Zealand</option>
+															<option value="NI">Nicaragua</option>
+															<option value="NE">Niger</option>
+															<option value="NG">Nigeria</option>
+															<option value="NU">Niue</option>
+															<option value="MP">Northern Mariana Islands</option>
+															<option value="KP">North Korea</option>
+															<option value="NO">Norway</option>
+															<option value="OM">Oman</option>
+															<option value="PK">Pakistan</option>
+															<option value="PW">Palau</option>
+															<option value="PS">Palestine</option>
+															<option value="PA">Panama</option>
+															<option value="PG">Papua New Guinea</option>
+															<option value="PY">Paraguay</option>
+															<option value="PE">Peru</option>
+															<option value="PH">Philippines</option>
+															<option value="PN">Pitcairn</option>
+															<option value="PL">Poland</option>
+															<option value="PT">Portugal</option>
+															<option value="PR">Puerto Rico</option>
+															<option value="QA">Qatar</option>
+															<option value="RE">Reunion</option>
+															<option value="RO">Romania</option>
+															<option value="RU">Russia</option>
+															<option value="RW">Rwanda</option>
+															<option value="BL">Saint Barthelemy</option>
+															<option value="WS">Samoa</option>
+															<option value="SM">San Marino</option>
+															<option value="ST">Sao Tome and Principe</option>
+															<option value="SA">Saudi Arabia</option>
+															<option value="SN">Senegal</option>
+															<option value="RS">Serbia</option>
+															<option value="SC">Seychelles</option>
+															<option value="SL">Sierra Leone</option>
+															<option value="SG">Singapore</option>
+															<option value="SX">Sint Maarten</option>
+															<option value="SK">Slovakia</option>
+															<option value="SI">Slovenia</option>
+															<option value="SB">Solomon Islands</option>
+															<option value="SO">Somalia</option>
+															<option value="ZA">South Africa</option>
+															<option value="KR" selected="selected">South Korea</option>
+															<option value="SS">South Sudan</option>
+															<option value="ES">Spain</option>
+															<option value="LK">Sri Lanka</option>
+															<option value="SH">Saint Helena</option>
+															<option value="KN">Saint Kitts and Nevis</option>
+															<option value="LC">Saint Lucia</option>
+															<option value="MF">Saint Martin</option>
+															<option value="PM">Saint Pierre and Miquelon</option>
+															<option value="VC">Saint Vincent and the Grenadines</option>
+															<option value="SD">Sudan</option>
+															<option value="SR">Suriname</option>
+															<option value="SJ">Svalbard and Jan Mayen</option>
+															<option value="SZ">Swaziland</option>
+															<option value="SE">Sweden</option>
+															<option value="CH">Switzerland</option>
+															<option value="SY">Syria</option>
+															<option value="TW">Taiwan</option>
+															<option value="TJ">Tajikistan</option>
+															<option value="TZ">Tanzania</option>
+															<option value="TH">Thailand</option>
+															<option value="TG">Togo</option>
+															<option value="TK">Tokelau</option>
+															<option value="TO">Tonga</option>
+															<option value="TT">Trinidad and Tobago</option>
+															<option value="TN">Tunisia</option>
+															<option value="TR">Turkey</option>
+															<option value="TM">Turkmenistan</option>
+															<option value="TC">Turks and Caicos Islands</option>
+															<option value="TV">Tuvalu</option>
+															<option value="AE">United Arab Emirates</option>
+															<option value="UG">Uganda</option>
+															<option value="GB">United Kingdom</option>
+															<option value="UA">Ukraine</option>
+															<option value="UY">Uruguay</option>
+															<option value="US">United States</option>
+															<option value="UZ">Uzbekistan</option>
+															<option value="VU">Vanuatu</option>
+															<option value="VA">Vatican</option>
+															<option value="VE">Venezuela</option>
+															<option value="VN">Vietnam</option>
+															<option value="VI">U.S. Virgin Islands</option>
+															<option value="WF">Wallis and Futuna</option>
+															<option value="EH">Western Sahara</option>
+															<option value="YE">Yemen</option>
+															<option value="ZM">Zambia</option>
+															<option value="ZW">Zimbabwe</option>
+														</select>
+													</div>
+												</dd>
+											</dl>
+											<dl>
+												<dt><label for="ageGrp">연령대(Age)</label><span class="required"><span class="sr_only">필수입력(Required)</span></span></dt>
+												<dd>
+													<div class="w70p select_wrap">
+														<select name="ageGrp" id="ageGrp" tabindex="-1" title="연령선택" required="required" data-msg-required="연령대를 선택해 주세요.<br>Please select a your age group.">
+															<option value="">선택하세요.</option>
+															<option value="15">15~19세</option>
+															<option value="20">20~24세</option>
+															<option value="25">25~29세</option>
+															<option value="30">30~34세</option>
+															<option value="35">35~39세</option>
+															<option value="40">40세이상</option>
+														</select>
+													</div>
+												</dd>
+											</dl>
+										</div>
+									</div>
+								</fieldset>
+								<fieldset class="form panel gray bdr_top">
+									<legend class="sr_only">예약 규정 동의</legend>
+									<div class="panel_cont">
+										<div class="title_wrap">
+											<h4 class="form_title">예약 규정 동의</h4>
+										</div>
+										<p class="font_lg mgt30">예약시간 10분 초과 시 다른 고객님의 서비스를 위하여 예약이 취소됩니다.</p>
+										<div class="ui_table">
+											<dl>
+												<dt>예약 규정에 동의하십니까?<span class="required"><span class="sr_only">필수입력(Required)</span></span></dt>
+												<dd>
+													<div class="check_set cancel_rule">
+														<span class="check_wrap">
+															<input type="radio" name="agree_yes" id="agree_yes" required="required" data-msg-required="예약 취소 규정에 동의해야 예약이 가능합니다.">
+															<label for="agree_yes">예</label>
+														</span>
+														<span class="check_wrap">
+															<input type="radio" name="agree_no" id="agree_no" checked>
+															<label for="agree_no">아니오</label>
+														</span>
+													</div>
+
+													<ul class="list_bullet_dot mgt20">
+														<li>예약 취소는 온라인에서 서비스 하루 전까지 가능합니다.</li>
+														<li>예약 완료 시 예약번호가 문자와 이메일로 전송됩니다. 휴대전화와 이메일을 정확하게 기입해 주십시오. 단, 해외 로밍폰의 경우 문자는 발송이 되지 않습니다.</li>
+														<li>퍼스널 컬러 측정 유무, 국적, 연령대 등의 정보는 정확한 퍼스널 컬러 측정을 위해 활용됩니다.</li>
+														<li>문의전화 : 명동FSS점(플래그십스토어/3F) 02-3789-5463, 가로수길점(B1) 02-549-72-2</li>
+														<li>Please provide us your mobile phone number and e-mail address accurately. In the case of overseas roaming phone, however, we do not send a message.</li>
+														<li>Information related to personal color measurement, nationality, and age will be used for accurate personal color measurement</li>
+														<li>If you are late in availing yourself of the service for more than 15 minutes, it will be canceled automatically in order to provide our service for other customers. You may cancel your reservation online at least one day before your scheduled date.</li>
+														<li>Reservation Inquiry: Myeongdong FSS store (flagship store) (3F) 02-3789-5463; Sinsa Garosugil store (B1) 02-549-7202</li>
+													</ul>
+												</dd>
+											</dl>
+										</div>
+									</div>
+								</fieldset>
+								<fieldset class="form panel gray bdr_top">
+									<legend class="sr_only">약관 이용 동의</legend>
+									<div class="panel_cont">
+										<div class="title_wrap">
+											<h4 class="form_title">약관 이용 동의</h4>
+											<div class="agree_wrap">
+												<span class="check_wrap">
+													<input type="checkbox" id="all_check" name="termsAgreeYn" value="N" required="required" data-msg-required="약관 이용에 동의해야 예약이 가능합니다.">
+													<label for="all_check">전체 동의합니다. I agree with all the conditions.</label>
+												</span>
+											</div>
+										</div>
+										<div class="clear mgt30">
+											<p class="font_lg color_dark_gray">개인정보 수집 이용 동의(필수) Consent for Collecting and Using Personal Information(Required)</p>
+											<div class="agree_wrap">
+												<span class="check_wrap">
+													<input type="checkbox" name="agree1" id="agree1" class="agree" required="required" data-msg-required="개인정보 수집 이용에 동의해 주세요.<br>Please consent for collecting and using personal information.">
+													<label for="agree1">동의합니다. Yes, I agree</label>
+												</span>
+											</div>
+										</div>
+										<div class="policy_wrap">
+											<div class="policy" tabindex="-1" th:if="${terms1}" th:utext="${terms1.termsBodyText}"></div>
+										</div>
+
+										<div class="clear mgt50">
+											<p class="font_lg color_dark_gray">개인정보 취급 위탁에 대한 동의 (필수) Consent for Consignment of Personal Information (Required)</p>
+											<div class="agree_wrap">
+												<span class="check_wrap">
+													<input type="checkbox" name="agree2" id="agree2" class="agree" required="required" data-msg-required="개인정보 취급 위탁에 대한 동의해 주세요.<br>Please consent for consignment of personal information.">
+													<label for="agree2">동의합니다. Yes, I agree</label>
+												</span>
+											</div>
+										</div>
+										<div class="policy_wrap">
+											<div class="policy" tabindex="-1" th:if="${terms2}" th:utext="${terms2.termsBodyText}"></div>
+										</div>
+									</div>
+								</fieldset>
+
+								<div class="page_btns">
+									<button class="btn_lg_secondary cancel" type="button">취소</button>
+									<button class="btn_lg_primary submit" type="button">확인</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script th:inline="javascript">
+				$('.cancel').off('click').on('click', function(e) {
+					location.href = "/display/color_factory_reserve?displayMenuId=color_factory_reserve";
+				});
+
+				var _reserveData = /*[[${storeSnMap}]]*/;
+
+				/** 예약하기 data set ********************************************************************/
+				AP.colorFactoryReserve.setData( _reserveData );
+
+				/** 예약 하기 완료 ************************************************************************/
+				AP.colorFactoryReserve.addListener( 'reserve-complete', function (e) {
+					location.href="/display/color_factory_reserve_complete?reserveNo=" + e.reserveNo;
+				});
+			</script>
+        </th:block>
+</body>
+</html>

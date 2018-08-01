@@ -1,0 +1,85 @@
+<th:block th:each="ordOtfEx : ${ordOtfExList}">
+	<dl id="box" th:if="${#lists.size(ordOtfEx.possibleGiftPackingExList) > 0}">
+		<dt>
+			<span>포장/쇼핑백 추가신청</span>
+			<button type="button"><span class="sr_only">닫기</span></button>
+		</dt>
+
+		<script th:inline="javascript">
+			$( document ).ready(function() {
+				boxInit();
+				$( '.ui_spinner' ).spinner();
+				$( '.ui_tooltip' ).tooltip();
+
+				$('.spinner_increase').attr('disabled', true);
+			});
+
+			//포장/쇼핑백 화면 그리기
+			function boxInit() {
+				var ordOtfExList = /*[[${ordOtfExList}]]*/ '0';	// 주문배송지시
+				var finalPamtPcur = /*[[${ordEx.ordHistEx.finalPamtPcur}]]*/ '0'; // 최종결제금액
+				if (ordOtfExList.length > 0) {
+					var html = AP.common.getTemplate( 'order.gift-packing-qty-info', {
+						list: ordOtfExList
+						, finalPamtPcur: finalPamtPcur
+					});
+					$('#box').append(html);
+				} else {
+					$('#box').remove();
+				}
+			}
+
+			/* 포장/쇼핑백 체크시 */
+			function boxFlserview(obj, coSn, giftPackingSn, giftPackingFee){
+				var id = obj.id;
+				if(obj.checked == true) {
+					$('[data-flag=' + id + ']').prop('disabled', false);
+				}else{
+					$('[data-flag=' + id + ']').prop('disabled', true);
+					$('#' + id + '_cnt').val(0);
+					$('#' + id + '_sum').text(' 추가 0원');
+
+				}
+			}
+
+			/* 포장/쇼핑백 수량변경 */
+			function boxQtyOperate(obj, coSn, giftPackingSn, giftPackingFee, giftPackingName, operator) {
+				var id = obj.dataset.flag;
+				if ($('#' + id).prop('checked') == false) {
+					AP.modal.alert(giftPackingName + "추가 체크박스를 체크해 주세요.");
+				} else {
+					var totSum = 0,
+						cnt = 0;
+					if ("+" == operator) {
+						cnt = (parseInt($('#' + id + '_cnt').val()) + 1);
+						totSum = cnt * parseInt(giftPackingFee);
+					} else {
+						cnt = (parseInt($('#' + id + '_cnt').val()) - 1);
+						totSum = cnt * parseInt(giftPackingFee);
+					}
+					$('#' + id + '_sum').text(' 추가 ' + totSum + '원');
+					boxBagQtyChange(coSn, giftPackingSn, cnt);
+				}
+
+			}
+
+			/* 포장/쇼핑백 금액 계산 */
+			var ordSn = /*[[${ordEx.ordSn}]]*/ '0';
+			function boxBagQtyChange(coSn, giftPackingSn, cnt) {
+				AP.api.ordReceptChangeBag({}, {
+					ordSn: ordSn,
+					coSn : coSn,
+					giftPackingSn : giftPackingSn,
+					giftPackingQty : cnt
+				}).done(function (data) {
+					if (data.param != null){
+
+					}
+				}).fail(function (e) {
+					AP.modal.alert("[ajax.fail]실패");
+				}).always(function () {
+				});
+			}
+		</script>
+	</dl>
+</th:block>

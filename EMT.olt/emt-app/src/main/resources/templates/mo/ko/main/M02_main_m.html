@@ -1,0 +1,246 @@
+<html ap:decorate="~{layout/layout-main}" th:with="_jsfile='main-home'">
+<head>
+    <link rel="stylesheet" type="text/css" ap:href="@{/css/main.css}">
+</head>
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <div class="ap_contents main_contents">
+            	<!-- 마케팅 베너 -->
+				<div class="section main_visual">
+					<h2 class="sr_only">배너</h2>
+					<th:block th:if="${not #lists.isEmpty(cornersMap)}">
+						<div class="slide main_slide" data-ix-options="auto-play:true; paging:true; view-length:1;">
+							<div class="ix-list-viewport">
+								<ul class="ix-list-items">
+									<th:block th:each="corner : ${cornersMap.get('M02_main_m.1')}">
+										<th:block th:each="contents : ${corner.contents}">
+											<th:block th:if="${contents.menuPageCornerContentsId == 'M02_main_m.1.1'}">
+												<li class="ix-list-item" th:style="'background-color:#' + ${contents.bgColor}">
+													<a href="#none" th:href="${contents.linkUrl}">
+														<img th:src="${contents.imgUrl}" alt="">
+											</th:block>
+											<th:block th:if="${contents.menuPageCornerContentsId == 'M02_main_m.1.2'}">
+												<strong class="title" th:utext="${contents.text}"></strong>
+											</th:block>
+											<th:block th:if="${contents.menuPageCornerContentsId == 'M02_main_m.1.3'}">
+												<p class="text" th:utext="${contents.text}"></p>
+											</th:block>
+										</th:block>
+											</a>
+										</li>
+									</th:block>
+								</ul>
+							</div>
+							<div class="ix-controller">
+								<div class="paging" style="display:none;"><span class="current"></span> / <span class="total"></span></div>
+							</div>
+						</div>
+					</th:block>
+					<!--/* 최초 로딩시 높이 잡아주기 */-->
+					<script>
+						$( '.main_visual .slide .ix-list-viewport' ).ixRatioSize({
+							ratio: '360 360'
+						});
+					</script>
+				</div>
+            	<!-- 신제품 -->
+            	<div class="section new_item">
+					<h2 class="title">신상품</h2>
+            		<!-- slide-->
+            		<div class="slide" data-ix-options="view-length:1; loop:false; correct-endpoint:true;">
+						<ul class="loading">
+							<li></li>
+							<li></li>
+							<li></li>
+						</ul>
+					</div>
+					<a href="/display/new?displayMenuId=new" class="more">더보기</a>
+            	</div>
+				<!-- 오늘의 추천 태그 -->
+				<div class="section recommend_tag">
+					<h2 class="title">오늘의 추천태그</h2>
+					<div class="keywords">
+						<a href="#none">#미니투매치</a>
+						<a href="#none">#드로잉</a>
+						<a href="#none">#슈가</a>
+						<a href="#none">#순정토너런칭세일</a>
+						<a href="#none">#보라색</a>
+					</div>
+				</div>
+				<!-- 에뛰드픽 -->
+				<div class="section etude_pick">
+					<h2 class="title">에뛰드 픽</h2>
+					<!-- slide -->
+					<div class="slide two_half" data-ix-options="view-length:2; move-length:2; loop:false; correct-endpoint:true;">
+						<div class="ix-list-viewport">
+							<ul class="ix-list-items">
+							</ul>
+							<ul class="loading">
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+						</div>
+					</div>
+					<a href="/display/etude_pick?displayMenuId=etude_pick" class="more">더보기</a>
+				</div>
+            	<!-- 핫딜 -->
+            	<div class="section hot_deal">
+					<h2 class="title">TODAY HOT DEAL</h2>
+					 <!-- 핫딜 목록 -->
+					<div class="slide" data-ix-options="view-length:1; loop:false">
+						<ul class="loading">
+							<li></li>
+							<li></li>
+							<li></li>
+						</ul>
+					</div>
+					<a href="/display/hotdeal?displayMenuId=hotdeal" class="more">더보기</a>
+            	</div>
+				<!-- 베스트 -->
+				<div class="section best_item">
+					<h2 class="title">베스트</h2>
+					<div class="slide" data-ix-options="view-length:3; duration:900; auto-play:true; axis:vertical; touch-disable:true">
+						<ul class="loading">
+							<li></li>
+							<li></li>
+							<li></li>
+						</ul>
+					</div>
+					<a href="/display/best?displayMenuId=best" class="more">더보기</a>
+				</div>
+            	<!-- MD 추천 올해의 컬러-->
+            	<div class="section recommend_item">
+            		<th:block th:if="${not #lists.isEmpty(cornersMap)}">
+	            		<th:block th:each="corner : ${cornersMap.get('M02_main_m.2')}">
+							<th:block th:each="contents : ${corner.contents}">
+								
+								<th:block th:if="${contents.menuPageCornerContentsId == 'M02_main_m.2.1'}">
+									<h2 class="title" th:text="${contents.text}"></h2>
+								</th:block>
+
+								<th:block th:if="${contents.menuPageCornerContentsId == 'M02_main_m.2.2'}">
+									<!-- slide -->
+										<div class="slide two_half" data-ix-options="view-length:2; move-length:1; loop:false">
+								            <div class="ix-list-viewport">
+								                <ul class="ix-list-items">
+								                	<th:block th:each="prodList ,iterStat : ${contents.prodList}" th:class="${iterStat.index}? 'index'">
+								                    <li class="ix-list-item">
+								                        <a href="#none" th:href="@{/product/detail(onlineProdSn=${prodList.onlineProdSn})}">
+															<span class="lazy_load_wrap" th:style="'background-color:#e2bfe3;'">
+																<img src="" th:data-src="${prodList.onlineProdImages[0].imgUrl}" class="lazy_load">
+															</span>
+								                        	<span class="item_title" th:text="${prodList.onlineProdName}"></span> 
+								                        	<span class="price" th:style="'font-weight: bold;'" th:text="${#numbers.formatInteger(prodList.onlineProdPriceSummary.minOnlineSalePrice, 0, 'COMMA')}"><span th:text="원"></span></span>
+								                       	 </a>
+								                  	  </li>
+								                  	  </th:block>
+								                	</ul>
+								           		 </div>
+											</div>
+										<!-- : end slide  -->
+									</th:block>
+								</th:block>
+							</th:block>
+						</th:block>
+	         	   </div>
+				<!-- ch.에뛰드 -->
+				<div class="section ch_etude">
+					<h2 class="title">Ch.에뛰드</h2>
+					<div class="video_wrap">
+					</div>
+					<h3 class="sub_title"></h3>
+					
+					<dl>
+						<dt></dt>
+					<dd>
+						<ul class="table_layout">
+						</ul>
+						<ul class="loading"></ul>
+					</dd>					
+				</dl>
+					<a href="/display/etude_ch?displayMenuId=etude_ch" class="more">더보기</a>
+				</div>
+            	<!-- 이벤트, 기획전 중단배너 이미지+ 텍스트 + 텍스트 -->
+           		<th:block th:if="${not #lists.isEmpty(cornersMap)}">
+	            	<div class="banner gradient">
+	            		<th:block th:each="corner, inx : ${cornersMap.get('M02_main_m.3')}">
+							<th:block th:each="contents : ${corner.contents}" th:if="${inx.index == 0}">
+								<th:block th:if="${contents.menuPageCornerContentsId == 'M02_main_m.3.1'}">
+										<a href="#none" th:href="${contents.linkUrl}">
+											<span class="lazy_load_wrap"><img src="" th:data-src="${contents.imgUrl}" alt="" class="lazy_load"></span>
+								</th:block>
+								<th:block th:if="${contents.menuPageCornerContentsId == 'M02_main_m.3.2'}">
+									<strong class="title" th:utext="${contents.text}"></strong>
+								</th:block>
+								<th:block th:if="${contents.menuPageCornerContentsId == 'M02_main_m.3.3'}">
+									<p class="text" th:utext="${contents.text}"></p>
+								</th:block>
+							</th:block>
+								</a>
+						</th:block>
+	            	</div>
+				</th:block>
+            	
+            	<!-- 9 looks -->
+            	<div class="section nine_looks">
+					<h2 class="title">FIND YOUR LOOKS</h2>
+					<div class="slide" data-ix-options="view-length:1; move-length:1;">
+						<ul class="loading">
+							<li></li>
+							<li></li>
+							<li></li>
+						</ul>
+					</div>
+					<a href="/display/etude_looks?displayMenuId=etude_looks" class="more">더보기</a>
+            	</div>
+				
+				<!--  banner -->
+				<th:block th:if="${not #lists.isEmpty(cornersMap)}">
+					<div class="banner">
+						<th:block th:each="corner, inx : ${cornersMap.get('M02_main_m.4')}">
+							<th:block th:each="contents : ${corner.contents}" th:if="${inx.index == 0}">
+								<th:block th:if="${contents.menuPageCornerContentsId == 'M02_main_m.4.1'}">
+										<a href="#none" th:href="${contents.linkUrl}"><img th:src="${contents.imgUrl}" alt=""></a>
+								</th:block>
+							</th:block>
+						</th:block>
+					</div>
+				</th:block>
+				                
+                <!-- 공지사항 -->
+                <dl class="footer_notice" th:if="${not #lists.isEmpty(footerNotice)}">
+                    <dt>공지</dt>
+                    <dd>
+                        <div class="slide footer_slide" data-ix-options="view-length:1; auto-play:true; axis:vertical; touch-disable:true">
+                            <div class="ix-list-viewport">
+                                <ul class="ix-list-items">
+                                    <th:block th:each="fnotice : ${footerNotice.foNoticeList}">
+                                        <li class="ix-list-item">
+                                            <a href="#none" 
+                                            th:href="@{|/cs/noticeView/${fnotice.foNoticeSn}|}"
+                                            th:text="${fnotice.foNoticeTitle}">테이크아웃 적립 혜택 변경 안내</a>
+                                        </li>
+                                    </th:block>
+                                </ul>
+                            </div>
+                        </div>
+                        <a href="/cs/notice" class="more"><span class="sr_only">공지사항 더보기</span></a>
+                    </dd>
+                </dl>
+                <!-- // 공지사항 -->
+            </div>
+        </div>
+
+    <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+    <th:block ap:fragment="layout-endpoint">
+
+		<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+		<script th:inline="javascript">
+		
+		</script>
+ 
+	</th:block>
+	</body>
+</html>

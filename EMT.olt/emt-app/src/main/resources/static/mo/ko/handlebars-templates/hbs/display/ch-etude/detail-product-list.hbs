@@ -1,0 +1,82 @@
+{{!--
+	전시 : 구매버튼이 있는 상세 상품목록 (Ch.Etude)
+--}}
+<div class="ix-list-viewport">
+	<ul class="ix-list-items">
+		{{#xif this.prodListUnitCode '==' 'OnlineProd' }}
+			{{#each this.list}}
+				<li class="ix-list-item item" data-online-prod-sn="{{ this.onlineProdSn }}">
+					<a href="{{ productDetailPath this.onlineProdSn }}">
+						<div class="thumb"><img src="{{ this.onlineProdImages.0.imgUrl }}" alt="" /></div>
+						<div class="item_info">
+							<div>
+								{{#if this.lineDesc}}
+									<p class="s_name">{{ this.lineDesc }}</p>
+								{{/if}}
+								<p class="prd_name">{{ this.onlineProdName }}</p>
+							</div>
+							<div class="price_area">
+								{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+									<div class="discount">
+										{{#with (calc this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate '+' this.onlineProdPriceSummary.minMemberLevelDiscountRate '+' this.onlineProdPriceSummary.minOnlineMemberDiscountRate) as |disMinRate|}}
+											{{#with (calc ../onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.maxMemberLevelDiscountRate '+' ../onlineProdPriceSummary.maxOnlineMemberDiscountRate) as |disMaxRate|}}
+												{{#xif disMinRate '!=' disMaxRate}}<span class="from">~</span>{{/xif}}<span class="to">{{ disMaxRate }}<em>%</em></span>
+											{{/with}}
+										{{/with}}
+									</div>
+								{{/xif}}
+								<div class="price">
+									{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+										<del>{{ numberFormat this.onlineProdPriceSummary.minBeforeOnlineSalePrice }}<em>{{ condition ../isActivityPoint '알' '원' }}</em></del>
+									{{/xif}}
+									<span>{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>{{ condition ../isActivityPoint '알' '원' }}{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}} ~{{/xif}}</em></span>
+								</div>
+							</div>
+						</div>
+					</a>
+					<button class="btn_order" type="button" data-online-prod-sn="{{ this.onlineProdSn }}">담기</button>
+				</li>
+			{{/each}}
+		{{/xif}}
+		
+		<!-- ==================================== 단위상품일때 ==================================== -->
+		{{#xif this.prodListUnitCode '==' 'Prod' }}	
+			{{#each this.list}}
+				{{#each this.products}}
+					<li class="ix-list-item item" data-online-prod-sn="{{ ../onlineProdSn }}">
+						<a href="{{ productDetailPath ../onlineProdSn ../prodSn}}">
+							<div class="thumb"><img src="{{ ../onlineProdImages.0.imgUrl }}" alt="" /></div>
+							<div class="item_info">
+								<div>
+									{{#if ../lineDesc}}
+										<p class="s_name">{{ ../lineDesc }}</p>
+									{{/if}}
+									<p class="prd_name">{{ this.prodName }}</p>
+								</div>
+								<div class="price_area">
+									{{#xif ../onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+										<div class="discount">
+											{{#with (calc ../onlineProdPriceSummary.minOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.minMemberLevelDiscountRate '+' ../onlineProdPriceSummary.minOnlineMemberDiscountRate) as |disMinRate|}}
+												{{#with (calc ../onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.maxMemberLevelDiscountRate '+' ../onlineProdPriceSummary.maxOnlineMemberDiscountRate) as |disMaxRate|}}
+													{{#xif disMinRate '!=' disMaxRate}}<span class="from">~</span>{{/xif}}<span class="to">{{ disMaxRate }}<em>%</em></span>
+												{{/with}}
+											{{/with}}
+										</div>
+									{{/xif}}
+									<div class="price">
+										{{#xif ../onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+											<del>{{ numberFormat ../onlineProdPriceSummary.minBeforeOnlineSalePrice }}<em>{{ condition ../isActivityPoint '알' '원' }}</em></del>
+										{{/xif}}
+										<span>{{ numberFormat ../onlineProdPriceSummary.minOnlineSalePrice }}<em>{{ condition ../isActivityPoint '알' '원' }}</em></span>
+									</div>
+								</div>
+							</div>
+						</a>
+						<button class="btn_order" type="button" data-online-prod-sn="{{ ../onlineProdSn }}" data-prod-sn="{{ ../prodSn }}">담기</button>
+					</li>
+				{{/each}}
+			{{/each}}
+		{{/xif}}
+		
+	</ul>
+</div>

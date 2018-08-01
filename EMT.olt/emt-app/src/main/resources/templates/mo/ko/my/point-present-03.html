@@ -1,0 +1,246 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='member'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page contents -->
+            <div class="ap_contents mypage">
+            	<div class="beauty_point">
+                    <div class="panel">
+                        <div class="title_wrap">
+                            <h3 class="h_title page">비회원 인증</h3>
+                            <p class="font_md">번호 인증 후 안내문자가 발송됩니다.</p>
+                            <div class="ui_step sm">
+                                <ul>
+                                    <li class="current"><i class="ico"></i>step 1<span class="sr_only">선택됨</span></li>
+                                    <li><i class="ico"></i>step 2</li>
+                                    <li><i class="ico"></i>step 3</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="my_bt_point">
+                            <dl>
+                                <dt>나의 보유 뷰티포인트</dt>
+								<dd><span class="num" th:text="${#IntegUtil.toCommaNumber(point.rmnPt)}">20,000</span>P</dd> <!-- 03-05 수정 -->
+                            </dl>
+                        </div>
+                        <hr class="div m30">
+
+                        <h4 class="h_title cont"><strong>비회원 선물하기 인증</strong></h4>
+                        <ul class="list mgt10">
+                            <li>아모레퍼시픽 뷰티포인트는 발신번호 사전등록제를 준수하여 회원이  아닌 고객님께 포인트를 선물하실 경우 인증된 발신 번호로만 포인트   선물 안내 LMS 발송 서비스를 지원합니다.</li>
+                            <li>포인트 선물하기 서비스 이용을 위해 회원 정보에 등록된 휴대폰 번호를   인증해 주세요.  (한번 사전 등록된 발신번호는 변경하거나 타인의 계정에서 인증되기     전까지 추가 인증 없이 사용 가능하십니다.)</li>
+                        </ul>
+                        <br>
+                        <p class="text_notice">발신번호 사전 등록제란?</p>
+                        <div class="panel gray">
+                            <p class="text">
+                                휴대폰 문자메시지를 이용한 전자금융 사기 방지를 위해 사전에 등록된 전화번호만 인터넷 문자발송 서비스를 이용할 수 있도록 허용된 제도입니다.<br>(*전기통신사업법 제84조 2, 거짓으로 표시된 전화번호로 인한 이용자의 피해 예방 등에 관한 고시 / 2015.10.16)
+                            </p>
+                        </div>
+
+                        <h4 class="form_title mgt35"><strong>인증하기</strong></h4>
+                        <form>
+                        <fieldset class="form">
+                            <legend class="sr_only">선물하기 휴대폰 인증</legend>
+                            <div class="dl">
+                                <dl>
+                                    <dt>휴대폰 번호</dt>
+                                    <dd>
+                                        <div class="input_btn_wrap">
+                                            <div class="input_group">
+                                                <div>
+                                                    <input type="tel" th:value="${session.PRESENT_PHONE_NO}" title="휴대폰 번호">
+                                                </div>
+                                                <div class="btn">
+                                                    <button type="button" id="certBtn">인증 요청</button>
+        											<button type="button" id="reCertBtn" style="display: none">재전송</button>
+                                                    <!-- 재전송 버튼
+                                                    <button type="button">재전송</button>
+                                                    -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="text"><small>[인증번호 발송] 버튼을 선택하시면 고객님의 휴대폰으로 인증 문자가 전송됩니다.</small></p>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt>SMS 인증번호</dt>
+                                    <dd>
+                                        <div class="input_group">
+                                            <div>
+                                                <input type="tel" id="number2" placeholder="인증번호" name="smsNum" title="인증번호 6자리 입력">
+                                                <em class="unit">3:00</em>
+                                            </div>
+                                            <div class="btn">
+                                                <button type="button" id="extTimeBtn">시간 연장</button>
+                                            </div>
+                                        </div>
+
+                                    </dd>
+                                </dl>
+                            </div>
+                        </fieldset>
+						</form>
+
+                        <div class="page_btns">
+                            <button class="btn_lg_secondary" onclick="window.history.back()" type="button">취소</button>
+                            <button class="btn_lg_neutral" id="send" type="button">다음</button>
+                        </div>
+                    </div>
+
+               	</div>
+            </div>
+            <!-- // page contents -->
+            <!-- 마이페이지 맵 -->
+            <th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+            <!-- // 마이페이지 맵 -->
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+			<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+			<script>
+
+				var step = AP.common.getSessionStorage("presentStep");
+				AP.common.setSessionStorage("presentStep", 0)
+				if(step != 3) {
+					window.history.back();
+				}
+				var t = new AP.common.timeCountDown(3),
+				    certTimeCnt = 0,
+				    extTimeCnt = 0;
+	
+				//"인증 받기"버튼
+				$('#certBtn').on('click', function(e) {
+				    $(this).attr("disabled", "disabled");
+				    phoneCertProcess();
+				});
+				//"재인증"버튼
+				$('#reCertBtn').on('click', function(e) {
+				    $(this).attr("disabled", "disabled");
+				    extTimeCnt = 0;
+				    phoneCertProcess();
+				});
+				//"시간 연장"버튼
+				$('#extTimeBtn').on('click', function(e) {
+				    if (certTimeCnt == 0) {
+				        AP.modal.alert("인증 먼저 받으세요.");
+				    } else {
+				        if (extTimeCnt < 3) {
+				            //TODO:서버쪽 시간연장 로직 추가 확인
+				            if (!t.isRunning()) {
+				                AP.modal.alert("입력시간 초과했습니다. 재인증하세요.");
+				            } else {
+				                //3 minutes timer
+				                if (t.isRunning()) {
+				                    t.stop();
+				                }
+				                t.start();
+				                extTimeCnt++;
+				            }
+				        } else {
+				            AP.modal.alert("시간연장은 3회만 가능합니다.");
+				        }
+
+				    }
+				});
+
+				function phoneCertProcess() {
+				    var $form = $('form');
+				    $form.validate().settings.ignore = "[name=smsNum]";
+				    if ($form.valid()) {
+
+				        AP.api.findPwdPhone({}, AP.common.getFormData($form)).done(function(data) {
+				            //성공
+				            if (data) {
+
+				                var result = data.state;
+
+			                    AP.modal.alert("인증번호가 전송되었습니다.");
+			                    $('#certBtn').hide();
+			                    $('#reCertBtn').show();
+
+			                    //3 minutes timer
+			                    if (t.isRunning()) {
+			                        t.stop();
+			                    }
+			                    t.start();
+
+			                    certTimeCnt++;
+
+				            }
+				        }).fail(function(xhr, textStatus, errorThrown) {
+				            if (xhr.errorCode == 0) {
+				                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+				            } else if (xhr.errorCode == 'EAPI001') {
+				                var contents = new Object();
+				                contents.title = "인증실패";
+				                contents.contents = "이름 또는 전화번호가 존재하지 않습니다.";
+				                contents.confirmLabel = "확인";
+				                AP.modal.info(contents).addListener('modal-close', function(e) {});
+				            } else {
+				                AP.modal.alert(xhr.errorMessage)
+				            }
+				        }).always(function() {
+				            //성공, 실패
+				            $("#certBtn").removeAttr("disabled");
+				            $("#reCertBtn").removeAttr("disabled");
+				        });
+
+				    } else {
+				        $("#certBtn").removeAttr("disabled");
+				        $("#reCertBtn").removeAttr("disabled");
+				    }
+				    return false;
+				}
+				$('#send').click(function() {
+				    if (certTimeCnt > 0) {
+				        doExecute();
+				    } else {
+				        AP.modal.alert("인증 먼저 받으세요.");
+				    }
+				});
+
+				function doExecute() {
+				    var $form = $('form');
+				    $form.validate().settings.ignore = "";
+
+				    if ($form.valid()) {
+
+				        if (!t.isRunning()) {
+				            AP.modal.alert("입력시간 초과했습니다. 재인증하세요.");
+				        } else {
+				            $('#send').attr("disabled", "disabled");
+				            AP.api.checkAuthNum({}, AP.common.getFormData($form)).done(function(data) {
+		                        AP.modal.alert("인증이 완료되었습니다.").addListener('modal-close', function(e) {
+	    							AP.common.setSessionStorage("presentStep", 5);
+		                            location.href = "/my/page/info/noMemberPresent";
+		                        });
+
+				            }).fail(function(xhr, textStatus, errorThrown) {
+
+				                if (xhr.errorCode == 0) {
+				                    AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+				                } else if (xhr.errorCode == 'EAPI001') {
+				                    AP.modal.alert("인증이 실패했습니다.");
+				                } else {
+				                    AP.modal.alert(xhr.errorMessage)
+				                }
+				                //실패
+				            }).always(function() {
+				                //성공, 실패
+				                $("#send").removeAttr("disabled");
+				            });
+
+				        }
+				    }
+				}
+
+			</script>
+
+        </th:block>
+</body>
+</html>

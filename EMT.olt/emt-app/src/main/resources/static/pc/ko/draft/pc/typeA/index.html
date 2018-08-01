@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Concept A (PC)</title>
+    <style>
+        *{margin:0; padding:0;}
+		body {overflow-x:hidden;}
+        img{vertical-align: top;}
+        .wrapper{}
+		.wrap{max-width:1200px;margin:0 auto;}
+
+		.header {position:relative;}
+		.header .history {position:absolute;top:20px;right:0;display:block;width:55px;height:55px;}
+		.header .history_menu {position:absolute;top:89px;display:none;}
+		.header .history_menu .close {position:absolute;top:10px;right:0;display:block;width:72px;height:25px;}
+		.header .beauty {position:absolute;top:90px;left:474px;display:block;width:100px;height:45px;}
+		.header .main {position:absolute;top:0;left:0;display:block;width:100px;height:89px;}
+
+		.footer {margin:0 -100%;text-align:center;}
+    </style>
+
+    <script src="../../libs/jquery-1.12.3.min.js"></script>
+    <script src="../../libs/ixBand_1.1.min.js"></script>
+    <script src="../../libs/ixSnack_0.4.min.js"></script>
+
+</head>
+
+<body>
+   
+    <div class="wrapper">
+		<div class="wrap">
+			<div class="header">
+				<img src="images/img_header.jpg" alt="">
+				<a href="#" class="history"></a>
+				<a href="index.html" class="main"></a>
+				<a href="beauty.html" class="beauty"></a>
+				<div class="history_menu">
+					<img src="images/img_header_history.jpg" alt="" />
+					<a href="#" class="close"></a>
+				</div>
+			</div>
+			<div class="contents">
+				<img src="images/img_main.jpg" alt="">
+			</div>
+		</div>
+		<div class="footer">
+			<img src="images/img_footer.jpg" alt="" />
+		</div>
+    </div>
+
+    <script src="js/main.js"></script>
+	<script type="text/javascript">
+	$( function (){
+		$( '.header .history' ).on( 'click', function (e) {
+			e.preventDefault();
+
+			$( '.history_menu' ).show();
+		});
+		$( '.history_menu .close' ).on( 'click', function (e) {
+			e.preventDefault();
+
+			$( '.history_menu' ).hide();
+		});
+	});
+	</script>
+</body>
+</html>

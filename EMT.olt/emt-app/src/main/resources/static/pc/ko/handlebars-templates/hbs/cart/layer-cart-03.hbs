@@ -1,0 +1,57 @@
+<dl class="layer">
+	<dt class="layer_title">옵션변경</dt>
+	<dd class="layer_cont">
+		<div>
+			<div class="option_select">
+				<div class="ui_select" data-not-label-change="false">
+					<input type="hidden" name="prodSn">
+					<button type="button">옵션을 선택하세요.</button>
+					<ul class="select_options">
+						{{#each list}}
+						<li class="select_option">
+							<code class="label_markup" style="display:none">
+								<span class="slt_color_name">{{ prodName }}</span>
+							</code>
+							{{#switch saleDisplayStatus}}
+								{{#case "OnSale"	 break=true}}
+									<a data-value="{{ prodSn }}">
+										<span class="color_chip">
+											<img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}">
+										</span>
+										<span class="color_name">{{ prodName }}</span>
+										<span class="price"><strong class="num">{{numberFormat salePrice }}</strong>원</span>
+									</a>
+
+								{{/case}}
+								{{#case "Exhaustion" break=true}}
+									<a data-value="{{ prodSn }}" data-disabled="true">
+										<span class="color_chip">
+											<img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}">
+										</span>
+										<span class="color_name">{{ prodName }}</span>
+										<span class="sold_out">[조기소진]</span>
+									</a>
+								{{/case}}
+								{{#case "OutOfStock" break=true}}
+									<a data-value="{{ prodSn }}" data-disabled="true">
+										<span class="color_chip">
+											<img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}">
+										</span>
+										<span class="color_name">{{ prodName }}</span>
+										<span class="sold_out">[일시품절]</span>
+									</a>
+								{{/case}}
+							{{/switch}}
+						</li>
+						{{/each}}
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="page_btns">
+			<button class="btn_lg_secondary" type="button" id="b_close">취소</button>
+			<button class="btn_lg_neutral" type="button" id="b_save">확인</button>
+		</div>
+	</dd>
+</dl>
+<button class="layer_close" type="button">레이어 닫기</button>

@@ -1,0 +1,40 @@
+{{#if (and (eq status 'request')(eq step 1))}}
+
+{{else}}
+	<div class="title table_layout">
+
+		{{#if (or (eq type 'return')(eq type 'exchange'))}}
+			<div><b class="font_lg">{{condition (eq type 'return') '반품 회수지 정보' '교환 회수지 정보'}}</b></div>
+		{{else}}
+			<div><b class="font_lg">배송정보</b></div>
+		{{/if}}
+
+		<div class="align_right"><button type="button" class="btn_sm_bordered" onclick="changeShipAddress()">배송정보 수정</button></div>
+	</div>
+	<div class="panel padding15">
+		<div class="panel gray">
+			<dl class="table_layout">
+				<dt>이름</dt>
+				<dd>{{data.recipientName.name1}}</dd>
+			</dl>
+			<dl class="table_layout">
+				<dt>휴대폰 번호</dt>
+				<dd>{{data.recipientPhoneNo1.phoneNo}}</dd>
+			</dl>
+			<dl class="table_layout">
+				<dt>주소</dt>
+				{{#xif data.shipAddressTypeCode "===" "ShipAddressInput"}}
+					<dd>{{data.recipientAddress.address1}}</dd>
+				{{else}}
+					<dd>편의점명 : {{data.cStoreName}}<br>
+						연락처 : {{data.cStorePhoneNo.phoneNo}}</dd>
+				{{/xif}}
+			</dl>
+			<dl class="table_layout">
+				<dt>배송 메세지</dt>
+				<dd>{{data.shipMsg}}</dd>
+			</dl>
+		</div>
+	</div>
+
+{{/if}}

@@ -1,0 +1,291 @@
+<div class="inner_wrap">
+	<ul class="header_menu">
+
+		<!--/* 로그인 전*/-->
+		<li th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}"><a href="javascript:;" onclick="login()" class="log">로그인</a></li>
+		<li th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}"><a href="/customer/signup" class="join">회원가입</a></li>
+		<!--/* 로그인 후*/-->
+		<li th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}"><a href="javascript:;" onclick="logout()" class="logout">로그아웃</a></li>
+		<li th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}"><a href="/my/page/info/myEtude" class="mypage">마이페이지</a></li>
+
+		<li><a href="/my/page/onlineOrderShipping" class="order">주문/배송조회<span class="num" style="display:none;"></span></a></li>
+		<li><a href="/cart/cartList" class="cart">장바구니<span class="num" style="display:none;"></span></a></li>
+		<li><a href="#none" class="history">히스토리</a></li>
+	</ul>
+	<h1 class="logo"><a href="/main"><img ap:src="@{/images/common/img_logo.png}" alt="ETUDEHOUSE"></a></h1>
+</div>
+<!--/* 쇼핑 히스토리 : show, hide */-->
+<div class="shopping_history_wrap">
+	<div class="inner_wrap">
+		<dl class="shopping_history">
+			<dt>쇼핑 히스토리</dt>
+			<dd>
+				<!--/*
+				<div class="slide " data-ix-options="view-length:5; loop:false; datum-point:-40px;">
+					<div class="ix-list-viewport">
+						<ul class="ix-list-items">
+							<li class="ix-list-item">
+								<a href="#none">
+									<strong class="num">2018.01.01</strong>
+									<div class="item_wrap">
+										<span class="img"><img ap:src="@{/images/dummy/650001142_IM_01.png}" alt=""></span>
+										<span class="title">컬러풀 드로잉 컬러 아이즈 마젠타 패키지</span>
+									</div>
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="ix-controller">
+						<div class="slide_direction">
+							<a class="ix-btn-prev" href="#none"><span class="sr_only">Prev</span></a>
+							<a class="ix-btn-next" href="#none"><span class="sr_only">Next</span></a>
+						</div>
+					</div>
+				</div>
+
+				<div class="panel notice">
+					<i class="ico"></i>
+					<p class="text font_lg">쇼핑히스토리가 없습니다.<br>에뛰드하우스 이곳 저곳을 둘러보세요~</p>
+				</div>
+				*/-->
+				<!--/* 로딩 */-->
+				<div class="loading" style="height:120px;" th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}">
+					<span>
+						<img alt="" src="/pc/ko/images/common/loading.gif">
+					</span>
+				</div>
+				<!--/* 로그아웃시 */-->
+				<div class="panel notice" th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+					<i class="ico"></i>
+					<p class="text font_lg">쇼핑히스토리는 로그인 후<br>확인하실 수 있습니다.</p>
+				</div>
+			</dd>
+		</dl>
+		<div class="clear mgt10">
+			<button type="button" class="btn_delete" style="display:none;">전체삭제</button>
+			<button type="button" class="btn_close">닫기</button>
+		</div>
+	</div>
+</div>
+<!--/* gnb */-->
+<div class="gnb_area"> <!--/* 스크롤시 fixed 영역 */-->
+	<div class="inner_wrap">
+		<button type="button" class="btn_category">카테고리</button>
+		<ul class="gnb">
+			<li th:each="menuId : ${gnbMap.get('main').submenus}"><a href="#" th:href="@{'/display/' + ${menuId.displayMenuId}(displayMenuId=${menuId.displayMenuId})}"
+			                                                th:text="${menuId.menuTitle}" th:class="${displayMenuId == menuId.displayMenuId} ? 'on' : ''"></a></li>
+			<!--/* 임시메뉴
+			<li><a href="#none" class="on">신상품</a></li>
+			<li><a href="#none">베스트</a></li>
+			<li><a href="#none">핫딜</a></li>
+			<li><a href="#none">#에뛰드픽</a></li>
+			<li><a href="#none">Ch.에뛰드</a></li>
+			<li><a href="#none">뷰티라이프</a></li>
+			<li><a href="#none">이벤트</a></li>
+			<li><a href="#none">브랜드</a></li>
+			*/-->
+		</ul>
+		<dl class="weekly_best">
+			<dt>주간베스트</dt>
+			<dd>
+				<div class="slide" data-ix-options="view-length:1; auto-play:true; axis:vertical;">
+					<!--/*
+					<div class="ix-list-viewport">
+						<ul class="ix-list-items">
+							<li class="ix-list-item">
+								<a href="#none"><strong class="num">01</strong> <span class="title">매트 시크 립라커 레드벨벳 러브 키트</span> <span class="ranking up">3 <span class="sr_only">상승</span></span></a>
+							</li>
+							<li class="ix-list-item">
+								<a href="#none"><strong class="num">02</strong> <span class="title">매트 시크 립라커</span> <span class="ranking down">2 <span class="sr_only">하락</span></span></a>
+							</li>
+							<li class="ix-list-item">
+								<a href="#none"><strong class="num">03</strong> <span class="title">룩 앳 마이 아이즈 NEW</span></a>
+							</li>
+						</ul>
+					</div>
+					*/-->
+				</div>
+			</dd>
+		</dl>
+		<!--/* 검색 */-->
+		<fieldset class="search_form">
+			<legend class="sr_only">통합검색</legend>
+			<div class="wrap">
+				<input type="text" title="검색어 입력" placeholder="컬러풀 드로잉 컬렉션" th:value="${param.searchWord}">
+				<button class="btn_search"><span class="sr_only">검색</span></button>
+				<button class="input_del"><i class="ico_close_w"></i><span class="sr_only">검색어 삭제</span></button>
+			</div>
+			<!--/* 자동완성 : show, hide */-->
+			<div class="auto_complete">
+				<ul class="list">
+					<!--
+					<li><a href="#none">[뷰티팁] <em>컬러풀 드로잉 컬렉션</em> 바르기전 입술상태 최상으로 만들기 최상으로 만들기</a></li>
+					<li><a href="#none">[상품] 바르기전 입술상태 <em>컬러풀 드로잉 컬렉션</em> 최상으로 만들기</a></li>
+					<li><a href="#none">[뷰티팁]바르기전 <em>컬러풀 </em> 입술상태 최상으로 만들기</a></li>
+					<li><a href="#none">[상품]바르기전 입술상태 최상으로 만들기 <em>드로잉</em></a></li>
+					<li><a href="#none">[뷰티팁]<em>드로잉</em> 바르기전 입술상태 최상으로 만들기</a></li>
+					<li><a href="#none"><em>컬렉션</em> 바르기전 입술상태 최상으로 만들기</a></li>
+					<li><a href="#none">[뷰티팁]<em>드로잉 컬렉션</em> 바르기전 입술상태 최상으로 만들기</a></li>
+					<li><a href="#none">[상품]바르기전 입술상태 <em>드로잉</em>  최상으로 만들기</a></li>
+					<li><a href="#none">[상품]바르기전 <em>컬렉션</em> 입술상태 최상으로 만들기</a></li>
+					<li><a href="#none">바르기전 입술상태 최상으로 만들기 <em>드로잉 컬렉션</em></a></li>
+					-->
+				</ul>
+			</div>
+			<!--/* 통합검색 : show, hide */-->
+			<div class="unified_search">
+				<dl class="popular">
+					<dt>인기검색어</dt>
+					<dd>
+						<ul class="list col_02">
+							<th:block th:each="searchWord : ${popularSearchWord}">
+								<li><a th:href="@{/common/search(searchWord=${searchWord})}" th:text="'#' + ${searchWord}">짐승용량 클렌징 워터</a></li>
+							</th:block>
+						</ul>
+					</dd>
+				</dl>
+				<dl>
+					<dt>컬러검색</dt>
+					<dd>
+						<div class="color_chip rounded">
+							<span><input type="checkbox" id="header_pink" name="color"><label for="header_pink" style="background-color:#f06da1"><span class="sr_only">핑크계열</span></label></span>
+							<span><input type="checkbox" id="header_red" name="color"><label for="header_red" style="background-color:#e9224e"><span class="sr_only">레드계열</span></label></span>
+							<span><input type="checkbox" id="header_orange" name="color"><label for="header_orange" style="background-color:#ff7a2d"><span class="sr_only">오렌지계열</span></label></span>
+							<span><input type="checkbox" id="header_purple" name="color"><label for="header_purple" style="background-color:#b261e4"><span class="sr_only">보라계열</span></label></span>
+							<span><input type="checkbox" id="header_black" name="color"><label for="header_black" style="background-color:#1f1d20"><span class="sr_only">블렉/그레이계열</span></label></span>
+							<span><input type="checkbox" id="header_brown" name="color"><label for="header_brown" style="background-color:#8e502f"><span class="sr_only">브라운계열</span></label></span>
+							<span><input type="checkbox" id="header_green" name="color"><label for="header_green" style="background-color:#8fe48a"><span class="sr_only">그린계열</span></label></span>
+							<span><input type="checkbox" id="header_blue" name="color"><label for="header_blue" style="background-color:#3a6abf"><span class="sr_only">블루계열</span></label></span>
+							<span><input type="checkbox" id="header_yellow" name="color"><label for="header_yellow" style="background-color:#f9c361"><span class="sr_only">옐로우/베이지계열</span></label></span>
+							<span><input type="checkbox" id="header_white" name="color"><label for="header_white" style="background-color:#fff"><span class="sr_only">화이트/실버계열</span></label></span>
+						</div>
+					</dd>
+				</dl>
+				<div class="banner">
+					<a href="#none"><img ap:src="@{/images/dummy/img_search_banner.jpg}" alt="배너 내용"></a>
+				</div>
+			</div>
+		</fieldset>
+	</div>
+	<!--/* 카테고리 레이어 : show, hide */-->
+	<div class="category_wrap">
+		<div class="inner_wrap">
+			<h2 class="sr_only">전체메뉴</h2>
+			<dl class="focus_target" tabindex="0">
+				<dt th:class="${categoryType == 'prod_types' or #lists.isEmpty(pageType) ? 'on' : ''}"><button type="button">유형별</button></dt>
+				<dd>
+					<ul class="sub" th:if="${not #lists.isEmpty(gnbMap.get('prod_types'))}">
+						<th:block th:each="cate, inx : ${gnbMap.get('prod_types').submenus}">
+							<li><a href="#none" 
+							th:class="${displayMenuId == cate.displayMenuId or upperMenuId == cate.displayMenuId ? 'on' : #lists.isEmpty(pageType) and inx.index == 0 ? 'on' : ''}"
+							th:href="@{'/display/category/'+ ${cate.displayMenuId}(upperMenuId=${cate.displayMenuId}, categoryType=prod_types)}" 
+							th:text="${cate.menuTitle}"></a>
+								<ul th:if="${not #lists.isEmpty(cate.submenus)}">
+									<th:block th:each="subCate : ${cate.submenus}" th:if="${not #lists.isEmpty(gnbMap.get('prod_types'))}">
+										<li><a href="#none" th:class="${displayMenuId == subCate.displayMenuId ? 'on' : ''}"
+										       th:href="@{'/display/category/'+ ${subCate.displayMenuId}(upperMenuId=${cate.displayMenuId}, categoryType=prod_types)}"
+										       th:text="${subCate.menuTitle}"></a></li>
+									</th:block>
+								</ul>
+							</li>
+						</th:block>
+						<!--/*
+						<li><a href="#none">아이</a>
+							 하위메뉴 있는 경우 
+							<ul>
+								<li><a href="#none">하위메뉴1</a></li>
+								<li><a href="#none">하위메뉴2</a></li>
+								<li><a href="#none">하위메뉴3</a></li>
+								<li><a href="#none">하위메뉴4</a></li>
+								<li><a href="#none">하위메뉴5</a></li>
+							</ul>
+						</li>
+						<li><a href="#none">립</a></li>
+						<li><a href="#none">페이스</a></li>
+						<li><a href="#none">네일</a></li>
+						<li><a href="#none" class="on">스킨케어</a>
+							<ul>
+								<li><a href="#none">스킨</a></li>
+								<li><a href="#none">로션</a></li>
+								<li><a href="#none">에센스</a></li>
+								<li><a href="#none">크림</a></li>
+								<li><a href="#none">아이케어</a></li>
+								<li><a href="#none">미스트</a></li>
+								<li><a href="#none">선케어</a></li>
+								<li><a href="#none">스페셜케어</a></li>
+								<li><a href="#none">세트</a></li>
+								<li><a href="#none">남성</a></li>
+							</ul>
+						</li>
+						<li><a href="#none">팩/마스크</a></li>
+						<li><a href="#none">클렌징</a></li>
+						<li><a href="#none">바디/헤어</a></li>
+						<li><a href="#none">향수</a></li>
+						<li><a href="#none">화장소품</a></li>
+						*/-->
+					</ul>
+					<!--/* 유형별 : banner */-->
+					<div class="banner M02_prod_types_p_1" style="display:none;">
+						<!--/* <a href="#none"><img ap:src="@{/images/dummy/img_category_banner_01.jpg}" alt="배너내용"></a> */-->
+					</div>
+				</dd>
+				<dt th:class="${categoryType == 'prod_lines' ? 'on' : ''}"><button type="button">라인별</button></dt>
+				<dd>
+					<ul class="sub">
+						<th:block th:each="cate : ${gnbMap.get('prod_lines').submenus}">
+							<li><a href="#none" 
+							th:class="${displayMenuId == cate.displayMenuId or upperMenuId == cate.displayMenuId ? 'on' : ''}"
+							th:href="@{'/display/category/'+ ${cate.displayMenuId}(upperMenuId=${cate.displayMenuId}, categoryType=prod_lines)}" 
+							th:text="${cate.menuTitle}"></a></li>
+						</th:block>
+						<!--/*
+						<li><a href="#none" class="on">순정</a></li>
+						<li><a href="#none">컬러풀 드로잉</a></li>
+						<li><a href="#none">몬스터 클렌징</a></li>
+						<li><a href="#none">수분가득 콜라겐</a></li>
+						<li><a href="#none">미니 투 매치</a></li>
+						*/-->
+					</ul>
+					<!--/* 라인별 : right banner */-->
+					<div class="banner M02_prod_lines_p_1" style="display:none;">
+						<!--/* <a href="#none"><img ap:src="@{/images/dummy/img_category_banner_02.jpg}" alt="배너내용"></a> */-->
+					</div>
+					<!--/* 라인별 : left banner */-->
+					<div class="banner M02_prod_lines_p_2" style="display:none;"> <!--/* 관리자 등록 bg color */-->
+						<!--/* <a href="#none"><img ap:src="@{/images/dummy/img_category_banner_04.jpg}" alt="배너내용"></a> */-->
+					</div>
+				</dd>
+				<dt th:class="${categoryType == 'prod_thema' ? 'on' : ''}"><button type="button">테마샵</button></dt>
+				<dd>
+					<ul class="sub">
+						<th:block th:each="cate : ${gnbMap.get('prod_thema').submenus}">
+							<li><a href="#none" 
+							th:class="${displayMenuId == cate.displayMenuId or upperMenuId == cate.displayMenuId ? 'on' : ''}"
+							th:href="@{'/display/category/'+ ${cate.displayMenuId}(upperMenuId=${cate.displayMenuId}, categoryType=prod_thema)}" 
+							th:text="${cate.menuTitle}"></a>
+							</li>
+						</th:block>
+						
+						<!--/*
+						<li><a href="#none" class="on">온라인 전용</a></li>
+						<li><a href="#none">아울렛샵</a></li>
+						<li><a href="#none">뷰티셀렉샵</a></li>
+						<li><a href="#none">뷰티포인트샵</a></li>
+						<li><a href="#none">진주알스토어</a></li>
+						<li><a href="#none">컬러컬렉션</a></li>
+						*/-->
+					</ul>
+					<!--/* 테마샵 : right banner */-->
+					<div class="banner M02_prod_thema_p_1" style="display:none;">
+						<!--/* <a href="#none"><img ap:src="@{/images/dummy/img_category_banner_02.jpg}" alt="배너내용"></a> */-->
+					</div>
+					<!--/* 테마샵 : left banner */-->
+					<div class="banner M02_prod_thema_p_2" style="display:none;"> <!--/* 관리자 등록 bg color */-->
+						<!--/* <a href="#none"><img ap:src="@{/images/dummy/img_category_banner_04.jpg}" alt="배너내용"></a> */-->
+					</div>
+				</dd>
+			</dl>
+			<button type="button" class="btn_close">닫기</button>
+		</div>
+	</div>
+</div>

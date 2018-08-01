@@ -1,0 +1,83 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page title -->
+            <div class="page_title">
+                <h2 class="h_title page">회원탈퇴</h2>
+                <p class="text">더욱 더 좋은 서비스와 혜택으로 보답하겠습니다.</p>
+            </div>
+            <!-- page contents -->
+            <div class="ap_contents member_info">
+                <div class="panel rounded">
+                    <div class="panel_cont membership_withdrawal">
+                        <h3 class="form_title none_line">회원탈퇴 전, 포인트 및 유의사항을 꼭 확인하세요.</h3>
+                        <div class="point_summary">
+                            <em class="str">포인트 현황</em>
+                            <dl>
+                                <dt>뷰티 포인트</dt>
+                                <dd>2,000P</dd>
+                            </dl>
+                            <dl>
+                                <dt>진주알</dt>
+                                <dd>200알</dd>
+                            </dl>
+                            <dl>
+                                <dt>쿠션포인트</dt>
+                                <dd>0P</dd>
+                            </dl>
+                        </div>
+                        <dl class="dl_cont">
+                            <dt>[ 회원탈퇴 시 유의사항 ]</dt>
+                            <dd>
+                                <ul class="list_bullet_dash">
+                                    <li>탈퇴 시 보유하고 계신 쿠폰과 모든 포인트는 즉시 자동 소멸됩니다.</li>
+                                    <li>진행 중인 전자상거래 이용내역(배송/교환/반품 중인 상태)에 있거나 이용하신 서비스가 완료되지 않은 경우 탈퇴할 수 없습니다.</li>
+                                    <li>회원탈퇴하셔도 바로 재가입 가능합니다만 동일 아이디는 사용할 수 없습니다.</li>
+                                </ul>
+                            </dd>
+                        </dl>
+                        <dl class="dl_cont">
+                            <dt>[ 회원정보 보존 안내 ]</dt>
+                            <dd>
+                                <ul class="list_bullet_dash">
+                                    <li>회원탈퇴와 함께 고객님이 회원가입 시 입력하신 모든 개인정보는 바로 삭제 됩니다.</li>
+                                    <li>온라인 회원탈퇴 후에도 오프라인 가입정보가 있을 경우, 포인트는 소멸되지 않습니다.</li>
+                                </ul>
+                            </dd>
+                        </dl>
+                        <fieldset class="form">
+                            <legend class="sr_only">탈퇴사유 입력</legend>
+                            <h4 class="form_title">탈퇴사유를 선택해 주세요.<span class="normal">(복수선택 가능)</span></h4>
+                            <ul class="check_set col_02">
+                                <li><span class="check_wrap"><input type="checkbox" id="check1"><label for="check1">재가입을 위해</label></span></li>
+                                <li><span class="check_wrap"><input type="checkbox" id="check2"><label for="check2">교환/환불/고객대응 불만족</label></span></li>
+                                <li><span class="check_wrap"><input type="checkbox" id="check3"><label for="check3">다른 사이트보다 가격이 비싸다.</label></span></li>
+                                <li><span class="check_wrap"><input type="checkbox" id="check4"><label for="check4">혜택/쿠폰/포인트 등 회원특혜가 적다.</label></span></li>
+                                <li><span class="check_wrap"><input type="checkbox" id="check5"><label for="check5">원하는 상품이 없다.</label></span></li>
+                                <li><span class="check_wrap"><input type="checkbox" id="check6"><label for="check6">사이트 불만족(속도, UI, 에러 등)</label></span></li>
+                                <li><span class="check_wrap"><input type="checkbox" id="check7"><label for="check7">기타</label></span></li>
+                            </ul>
+                            <div class="textarea"><textarea name="" id="" cols="" rows="2" placeholder="기타내용 띄어쓰기 포함 200자 내외" title="기타 내용 입력"></textarea></div>
+                            <div class="form_btns">
+                                <button type="button" class="btn_lg_prim" onclick="confirm()">변경</button>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+            <!-- // page contents -->
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+          <script>
+          	function confirm(){
+          	  window.location='/secessionComplete';
+          	}
+          </script>
+        </th:block>
+</body>
+</html>

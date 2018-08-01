@@ -1,0 +1,376 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='my-etude'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents my_etude" id="ap_container">
+		<!--/* [S] 20180418 : 뷰티포인트 위치 및 마크업 변경 */-->
+		<div class="my_wallet_info">
+			<dl class="beautypoint clear">
+				<p><strong>뷰티포인트</strong> <span class="point" style="cursor: pointer;" onclick="location.href='/my/page/info/beautyPoint'"><b th:text="${#IntegUtil.toCommaNumber(point.rmnPt)}">999,999</b>P</span></p>
+				<div>
+					<button th:unless="${#strings.isEmpty(session.LOGIN_USER.user_incsCardNoEc)}" type="button" onclick="pointCardBarcode()" class="btn_mobile_card"><img ap:src="@{/images/my/btn_barcode.png}" alt="뷰티포인트 멤버십카드 보기"></button>
+					<!--카드 신청 전-->
+					<a th:if="${#strings.isEmpty(session.LOGIN_USER.user_incsCardNoEc)}" href="/my/page/info/btpMobileCard" class="btn_card_apply">모바일 카드 신청</a>
+				</div>
+			</dl>
+		</div>
+		<!--/* [E] 20180418 : 뷰티포인트 위치 및 마크업 변경 */-->
+
+		<!-- welcome message -->
+		<div class="welcome friends"> <!-- 등급별 클래스 pink_love, friends, hello, guest  -->
+			<i class="ico_grade"></i>
+			<p class="text">
+   		        <th:block th:if="${session.LOGIN_USER.member.employeeYn eq 'Y'}">
+   		       	 <span class="flag">[임직원]</span><!--/*20180628 : 임직원 플래그 추가*/-->
+   		        </th:block>
+				<span class="greeting">안녕하세요. <span th:text="${session.LOGIN_USER.member.name.name1}">홍길동</span></span>님 회원등급은 <em th:text="${session.LOGIN_USER.member.memberLevelName}">friends</em> 입니다.</p>
+			<a href="/my/page/myLevelList" class="link">내 예상등급 확인 <i class="ico_arr"></i></a>
+			<a href="/my/page/info/changeUserInfo" class="btn_sm_round">정보 수정</a>
+		</div>
+		<!-- 보유 포인트, 적립금, 예치금 정보 -->
+		<div class="my_wallet_info">
+			<div class="table_layout">
+				<dl class="coupon" style="cursor: pointer;" onclick="location.href='/my/page/myCouponList'">
+					<dt>쿠폰</dt>
+					<dd><b class="num" th:text="${session.LOGIN_USER.member.keepingCouponQty}">10</b> 장</dd>
+				</dl>
+				<dl class="pearl" style="cursor: pointer;" onclick="location.href='/my/page/pearl/present'">
+					<dt>진주알</dt>
+					<dd><b class="num" th:text="${#IntegUtil.toCommaNumber(session.LOGIN_USER.member.activityPoint)}">999,999</b> 알</dd>
+				</dl>
+			</div>
+			<div class="table_layout">
+				<dl class="cushion" style="cursor: pointer;" onclick="location.href='/my/page/cushion'">
+					<dt>쿠션포인트</dt>
+					<dd><b class="num" th:text="${#IntegUtil.toCommaNumber(cushin.totRemainPt)}">0</b> p</dd>
+				</dl>
+				<dl class="deposit" style="cursor: pointer;" onclick="location.href='/my/page/myDepositList'">
+					<dt>예치금</dt><!--/* 20180418 : 문구수정 */-->
+					<dd><b class="num" th:text="${#IntegUtil.toCommaNumber(session.LOGIN_USER.member.remainDeposit)}">999,999</b> 원</dd>
+				</dl>
+			</div>
+		</div>
+		<!-- 주문/배송 조회 -->
+		<div class="order_process">
+			<dl>
+				<dt>
+					<b>주문/배송조회</b> <small>(최근 3개월 기준)</small>
+					<a href="/my/page/onlineOrderShipping" class="btn link"><span class="sr_only">바로가기</span></a><!--0326 : 이동버튼 추가-->
+				</dt>
+				<dd>
+					<ul class="table_layout">
+						<li><a href="/my/page/onlineOrderShipping"><em class="num" th:text="${ordReceptCnt}">6</em><span>주문접수</span></a></li>
+						<li><a href="/my/page/onlineOrderShipping"><em class="num" th:text="${payCompleteCnt}">2</em><span>결제완료</span></a></li>
+						<li><a href="/my/page/onlineOrderShipping" class="null"><em class="num" th:text="${preparingCnt}">0</em><span>배송준비중</span></a></li>
+						<li><a href="/my/page/onlineOrderShipping"><em class="num" th:text="${shippingCnt}">1</em><span>배송중</span></a></li>
+						<li><a href="/my/page/onlineOrderShipping" class="null"><em class="num" th:text="${shipCompleteCnt}">0</em><span>배송완료</span></a></li>
+					</ul>
+				</dd>
+				<dd>
+					<div class="table_layout">
+						<a href="/my/page/returnExchange" class="null">취소/반품/교환 (<strong class="num">0</strong>)</a>
+						<a href="/my/page/myReviewList">미작성 구매후기 (<strong class="num" th:text="${reviewCnt}">1</strong>)</a>
+					</div>
+				</dd>
+			</dl>
+		</div>
+		<!--/* 20180502 : 장바구니 상품 삭제 / 마이 컬러파인터 신규 추가 */-->
+		<div class="my_color_finder">
+			<h3 class="h_title cont"><strong>마이 컬러파인더</strong></h3>
+			<!--/* [S]20180515 : 마크업 수정 */-->
+			<div class="tone_wrap">
+				<img ap:src="@{/images/my/tone_spring.jpg}" alt="">
+				<div class="text">
+					<p class="eng">Warm Tone <strong>Spring</strong></p>
+					<p class="tone_text">홍길동 님의<br>피부톤은<br><b>웜톤 봄</b> 타입</p>
+				</div>
+				<div>
+					<div class="my_skin table_layout">
+						<div>
+							<p>나의 피부색 - <b>크림색</b></p>
+							<div class="skin_color" style="background-color: #fbe2ba;"></div>
+						</div>
+						<div>
+							<p>톤 대표색</p>
+							<div class="my_tone table_layout">
+								<span class="tone" style="background-color: #f18910;"></span>
+								<span class="tone" style="background-color: #f8be99;"></span>
+								<span class="tone" style="background-color: #f9d3d2;"></span>
+							</div>
+						</div>
+					</div>
+					<div class="tone_color">
+						<p>비비드 오렌지, 옐로우, 그린또는 노란빛이 감도는 파스텔 피치핑크, 베이비핑크 계열</p>
+					</div>
+				</div>
+			</div>
+			<!--/* [E]20180515 : 마크업 수정 */-->
+			<div class="my_tone_recommend">
+				<h4 class="h_title"><b>내 피부톤과 어울리는 추천 제품</b></h4>
+				<!--/*20180531 : 슬라이드 상품노출 영역 수정*/-->
+				<div class="slide two_half" data-ix-options="view-length:3; move-length:2;">
+					<div class="ix-list-viewport">
+						<ul class="ix-list-items">
+							<li class="ix-list-item item">
+								<a href="#item">
+									<span class="thumb"><img ap:src="@{/images/dummy/20180309161931356.png}" alt="" /></span>
+									<span class="name">플레이 네일 NEW 펄 & 글리터</span>
+								</a>
+								<div class="colors">
+									<a href="#"><span class="chip"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt="" /></span></a>
+									<a href="#"><span class="chip" style="background-color: #c74af5;"><img alt="" ap:src="@{/images/product/color_chips_img_blank.png}"></span></a>
+									<a href="#"><span class="chip"><img ap:src="@{/images/dummy/color_chips_img2.jpg}" alt="" /></span></a>
+									<a href="#"><span class="chip" style="background-color: #73cc00;"><img alt="" ap:src="@{/images/product/color_chips_img_blank.png}"></span></a>
+									<a haref="#"><span class="chip"><img ap:src="@{/images/dummy/color_chips_img3.jpg}" alt="" /></span></a>
+								</div>
+							</li>
+							<li class="ix-list-item item">
+								<a href="#item">
+									<span class="thumb"><img ap:src="@{/images/dummy/20180309161931356.png}" alt="" /></span>
+									<span class="name">플레이 네일 NEW</span>
+								</a>
+								<div class="colors">
+									<a href="#"><span class="chip"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt="" /></span></a>
+									<a href="#"><span class="chip" style="background-color: #c74af5;"><img alt="" ap:src="@{/images/product/color_chips_img_blank.png}"></span></a>
+									<a href="#"><span class="chip"><img ap:src="@{/images/dummy/color_chips_img2.jpg}" alt="" /></span></a>
+									<a href="#"><span class="chip" style="background-color: #73cc00;"><img alt="" ap:src="@{/images/product/color_chips_img_blank.png}"></span></a>
+									<a haref="#"><span class="chip"><img ap:src="@{/images/dummy/color_chips_img3.jpg}" alt="" /></span></a>
+								</div>
+							</li>
+							<li class="ix-list-item item">
+								<a href="#item">
+									<span class="thumb"><img ap:src="@{/images/dummy/20180309161931356.png}" alt="" /></span>
+									<span class="name">플레이 네일 NEW</span>
+								</a>
+								<div class="colors">
+									<a href="#"><span class="chip"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt="" /></span></a>
+									<a href="#"><span class="chip" style="background-color: #c74af5;"><img alt="" ap:src="@{/images/product/color_chips_img_blank.png}"></span></a>
+									<a href="#"><span class="chip"><img ap:src="@{/images/dummy/color_chips_img2.jpg}" alt="" /></span></a>
+									<a href="#"><span class="chip" style="background-color: #73cc00;"><img alt="" ap:src="@{/images/product/color_chips_img_blank.png}"></span></a>
+									<a haref="#"><span class="chip"><img ap:src="@{/images/dummy/color_chips_img3.jpg}" alt="" /></span></a>
+								</div>
+							</li>
+							<li class="ix-list-item item">
+								<a href="#item">
+									<span class="thumb"><img ap:src="@{/images/dummy/20180309161931356.png}" alt="" /></span>
+									<span class="name">플레이 네일 NEW</span>
+								</a>
+								<div class="colors">
+									<a href="#"><span class="chip"><img ap:src="@{/images/dummy/color_chips_img1.jpg}" alt="" /></span></a>
+									<a href="#"><span class="chip" style="background-color: #c74af5;"></span></a>
+									<a href="#"><span class="chip"><img ap:src="@{/images/dummy/color_chips_img2.jpg}" alt="" /></span></a>
+									<a href="#"><span class="chip" style="background-color: #73cc00;"></span></a>
+									<a haref="#"><span class="chip"><img ap:src="@{/images/dummy/color_chips_img3.jpg}" alt="" /></span></a>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="banner">
+				<a href="javascript:setApp();"><img ap:src="@{/images/my/link_app.jpg}" alt="에뛰드 하우스 앱으로 더 많은 정보를 확인해 보세요~. 앱 설치하기" /></a>
+			</div>
+			<!--/* 피부측정 데이터가 있는 경우
+            <div class="panel notice">
+                <i class="ico"></i>
+                <p class="text mgb20">
+                    피부 측정 데이터가 없습니다.<br>
+                    <span class="color_gray2">가까운 에뛰드 하우스 매장에서 무료로<br>
+                    피부톤 측정을 받으세요~</span>
+                </p>
+                <a href="#" class="btn_md_neutral w90p">가까운 매장 찾기</a>
+            </div>
+             */-->
+		</div>
+
+		<!-- 마이 에뛰드 메뉴 -->
+		<div class="ui_accordion my_etude_menu">
+			<dl>
+				<dt class="on">
+					<span class="title">나의 주문관리</span>
+					<button type="button"><span class="sr_only">더보기</span></button>
+				</dt>
+				<dd>
+					<div class="cont">
+						<ul>
+							<li><a href="/my/page/onlineOrderShipping">주문/배송조회</a></li>
+							<li><a href="/my/page/returnExchange">반품/교환</a></li><!--/* 20180418 : 문구수정 */-->
+							<li><a href="/my/page/storeOrderShipping">매장 주문조회</a></li>
+							<li><a href="/my/page/cashReceipts">현금영수증 발급</a></li><!--/* 20180418 : 문구수정 */-->
+						</ul>
+					</div>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="on">
+					<span class="title">나의 혜택관리</span>
+					<button type="button"><span class="sr_only">더보기</span></button>
+				</dt>
+				<dd>
+					<div class="cont">
+						<ul>
+							<li><a href="/my/page/myCouponList">나의 쿠폰</a></li>
+							<li><a href="/my/page/myLevelList">나의 회원 등급</a></li>
+							<li class="w100p"><a href="/display/daily_check?displayMenuId=daily_check">행운의 출첵</a></li>
+						</ul>
+					</div>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="on">
+					<span class="title">나의 포인트 관리</span>
+					<button type="button"><span class="sr_only">더보기</span></button>
+				</dt>
+				<dd>
+					<div class="cont">
+						<ul>
+							<li><a href="/my/page/info/beautyPoint">뷰티포인트</a></li>
+							<li><a href="/my/page/pearl/present">진주알</a></li>
+							<li class="w100p"><a href="/my/page/cushion">쿠션포인트</a></li>
+						</ul>
+					</div>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="on">
+					<span class="title">나의 지갑 관리</span>
+					<button type="button"><span class="sr_only">더보기</span></button>
+				</dt>
+				<dd>
+					<div class="cont">
+						<ul>
+							<li><a href="/my/page/myGiftCardList">기프트카드 관리</a></li><!--/* 20180418 : 문구수정 */-->
+							<li><a href="/my/page/myDepositList">예치금 관리</a></li><!--/* 20180418 : 문구수정 */-->
+							<li class="w100p"><a href="#none" onclick="wpayClickEvent();">원터치 간편결제 카드 관리</a></li>
+						</ul>
+					</div>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="on">
+					<span class="title">나의 활동 관리</span>
+					<button type="button"><span class="sr_only">더보기</span></button>
+				</dt>
+				<dd>
+					<div class="cont">
+						<ul>
+							<li><a href="/my/page/myEventList">이벤트 참여 현황</a></li>
+							<li><a href="/my/page/myReviewList">나의 구매 후기</a></li>
+							<li class="w100p"><a href="/my/page/myInquiryList">나의 1:1 문의</a></li>
+						</ul>
+					</div>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="on">
+					<span class="title">나의 정보 관리</span>
+					<button type="button"><span class="sr_only">더보기</span></button>
+				</dt>
+				<dd>
+					<div class="cont">
+						<ul>
+							<li><a href="/my/page/info/changeUserInfo">개인정보 수정</a></li>
+							<li><a href="/my/page/info/snsLink">SNS 계정 연동 관리</a></li>
+							<li><a href="/my/page/ship/address">배송지 관리</a></li>
+							<li><a href="/my/page/store/list">단골매장 관리</a></li>
+						</ul>
+						<p class="align_right"><a href="/my/page/leaveId" class="btn_sm_round">회원탈퇴</a></p>
+					</div>
+				</dd>
+			</dl>
+		</div>
+	</div>
+	<!-- // page contents -->
+
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script th:inline="javascript">
+		// slide
+		$( '.my_tone_recommend .slide' ).ixSlideMax();
+		
+
+		function pointCardBarcode() {
+			$.get("/my/page/info/beutyPointCard", function(data) {
+				$('#send').removeAttr("disabled");
+				/**
+				 * 동적으로 생성된 modal의 Node Element 접근하기
+				 * alert, confirm, info 모두 동일
+				 */
+
+				var contents = new Object();
+				contents.contents = data;
+				var modal = AP.modal.info(contents);
+				var $modalEl = modal.getElement(); //jquery object
+
+				$(".layer_close, #close").click(function() {
+					modal.close();
+				});
+				
+			});
+		}
+		
+		/*****원터치 간편결제 스크립트 *********/
+		
+		function wpayClickEvent(){
+			
+			//원터치 간편결제 카드 회원여부 체크			
+			AP.api.getMemberWPayInfo({}, {
+							
+			}).done(function (data) {
+				if (data.result != "success"){
+					//간편결제 가입 안내 문구
+					openWpayNonMemberNoti();
+					
+				} else {
+					//간편결제 연동페이지 호출
+					callWpayMgmtPopup();
+				}
+			}).fail(function (e) {
+				AP.modal.alert("[ajax.fail]실패");
+			}).always(function () {
+			});
+			
+			
+		}
+		
+		function openWpayNonMemberNoti(){
+			
+			var contents = new Object();
+			contents.title = '원터치 간편결제 안내';
+			contents.contents = '원터치 간편결제 서비스는 회원전용입니다.<br>주문결제 시 [<strong>원터치 간편결제</strong>] 를 가입 후<br>카드를 등록해 주세요.';
+			AP.modal.info(contents);
+			return false;
+		}
+		
+		
+		function callWpayMgmtPopup() {
+			// 새 Popup창으로 연결
+			window.open('/my/page/wpayMgmt','wpayMgmtPopup');
+		}
+		
+		function wpayResultMsg(msg){
+			AP.modal.alert(msg);
+		}
+		
+		function setApp(){
+			if($B.ua.ANDROID){
+				window.open("market://details?id=com.etudehouse");
+			}else{
+				window.open("https://itunes.apple.com/kr/app/id538275329");
+			}
+			//if (/Android/i.test(navigator.userAgent)) {
+			//	location.href="market://details?id=com.etudehouse";
+			//} else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+		    //    location.href = "https://itunes.apple.com/kr/app/id538275329";
+		    //}
+		}
+		
+	</script>
+</th:block>
+</body>
+</html>

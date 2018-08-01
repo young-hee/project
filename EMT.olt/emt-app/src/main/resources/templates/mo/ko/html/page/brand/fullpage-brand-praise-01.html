@@ -1,0 +1,119 @@
+<html ap:decorate="~{layout/only-contents}">
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+
+            <div class="layer_popup fullpage review">
+                <div class="layer_wrap">
+                    <dl class="layer">
+                        <dt class="layer_title">칭찬 작성/수정하기</dt><!--/* 180413 : 문구수정 */-->
+                        <dd class="layer_cont">
+                        	<div class="panel brand_praise">
+								<h2 class="h_title page">칭찬 작성/수정하기</h2><!--/* 180417 : 문구수정 */-->
+								<p class="text font_md">고객님께 감동을 준 매장을 선택하여 칭찬 후기를 남겨주세요!</p>
+								<hr class="div m30">
+								<fieldset class="form">
+									<legend class="sr_only">칭찬 작성</legend>
+									<h4 class="h_title cont mgt0"><strong>홍길동님의 기본 정보</strong></h4>
+									<div class="view_group">
+										<span>아이디</span>
+										<span>a99545</span>
+									</div>
+									<h4 class="h_title cont mgt30"><strong>매장 선택</strong></h4>
+									<div class="store_finder_wrap"><!--0411 수정-->
+										<button type="button">매장찾기</button>
+										<span>선택매장 : 강남지하점</span>
+									</div>
+
+									<h4 class="h_title sub color_gray font_df">매장을 추천하게 된 이유를 선택해주세요.</h4>
+									<div>
+										<div class="check_wrap"><input type="checkbox" name="opt2" id="opt2_1" checked=""><label for="opt2_1">스위티의 친절</label></div>
+										<div class="check_wrap"><input type="checkbox" name="opt2" id="opt2_2"><label for="opt2_2">쾌적한 매장</label></div>
+										<div class="check_wrap"><input type="checkbox" name="opt2" id="opt2_3"><label for="opt2_3">다양한 제품</label></div>
+										<div class="check_wrap"><input type="checkbox" name="opt2" id="opt2_4"><label for="opt2_4">솔직하고 부담 없는 가격</label></div>
+										<div class="check_wrap"><input type="checkbox" name="opt2" id="opt2_5"><label for="opt2_5">기타</label></div>
+									</div>
+
+									<div class="input_group">
+										<div class="label sr_only">
+											<label for="title">제목</label>
+										</div>
+										<div>
+											<input type="text" id="title" maxlength="30" placeholder="제목 (최대 30자까지 입력 가능합니다.)" />
+										</div>
+									</div>
+									<div class="input_group">
+										<div class="textarea textarea_brand">
+											<textarea name="" id="" maxlength="1000" cols="" rows="" placeholder="내용 (최대 1000자까지 입력 가능합니다.)"></textarea>
+										</div>
+										<p class="text_right"><small class="count">0/1000</small></p>
+									</div>
+
+									<div class="ui_input_images">
+										<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="multiple" style="display:none" />
+										<label for="i_picture" class="btn_md_neutral w100p mgt10">사진첨부</label>
+										<ul class="attach"></ul>
+										<p class="text_notice">첨부파일은 이미지 파일만 가능하며, 최대 10개까지 등록 하실 수 있습니다. (최대 파일 용량 10MB)</p>
+									</div>
+
+									<div class="panel gray">
+										<ul class="list_bullet_dot">
+											<li>타인의 글 도용 및 올바르지 않은 리뷰 작성으로 인하여, 게시판 성격과 관련 없는 게시물은 임의로 삭제될 수 있습니다. (동일 내용의 반복 등록, 무의미한 내용 입력,광고 및 욕설, 비방의 글, 성인글, 출처를 안 밝힌 뉴스기사 등)</li>
+											<li>또한 예치금이 남아 있을 경우 탈퇴할 수 없으니 잔액이 남아 있는 지 확인 바랍니다.</li>
+											<li>저작권 등 다른 사람의 권리를 침해하거나 명예를 훼손 하는 게시물은 이용약관 및 관련 법률에 의해 제재를 받을 수 있습니다.</li>
+											<li>제품에 대한 문의 및 불편사항은 <b class="color_gray">[고객센터 1:1 상담]</b> 으로 문의해 주세요. </li>
+										</ul>
+									</div>
+									<div class="form_btns">
+										<button type="button" class="btn_md_secondary">취소</button>
+										<button type="button" class="btn_md_primary">등록</button>
+									</div>
+								</fieldset>
+							</div>
+                        </dd>
+                    </dl>
+                    <button class="layer_close" type="button">레이어 닫기</button>
+                </div>
+            </div>
+        </div>
+
+    <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+    <th:block ap:fragment="layout-endpoint">
+
+		<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+		<script>
+			/*
+			var modal = AP.modal.full({
+				title: '칭찬 작성하기',
+				contents: {
+					templateKey: 'folder-name.file-name',
+					templateModel: {}
+				},
+				containerClass: 'review'
+			}).addListener( 'modal-before-close', function (e) {
+				console.log( e.closeType );
+				modal.getElement().find( 'input[maxlength], textarea[maxlength]' ).inputLimits( 'clear' );		// inputLimits 적용해제
+				modal.getElement().find( '.ui_input_images' ).inputImages( 'clear' );
+			}).addListener( 'modal-close', function (e) {
+				console.log( e.closeType );
+			});
+
+			*/
+
+			// inputLimits
+			$( 'input[maxlength], textarea[maxlength]' ).inputLimits();
+			$( '.ui_input_images' ).inputImages();
+
+			$( '.submit' ).on( 'click', function (e) {
+				var formData = new FormData( $('form').get(0) );
+
+				//formDate에 첨부된 이미지 병합
+				$( '.ui_input_images' ).inputImages( 'extendFormData', formData );
+
+				//formData를 ajax의 data에 넣어서 보내면 된다.
+			});
+		</script>
+    </th:block>
+
+</body>
+</html>

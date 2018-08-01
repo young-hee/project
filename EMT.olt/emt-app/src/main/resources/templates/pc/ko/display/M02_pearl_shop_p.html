@@ -1,0 +1,93 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='pearl-store-detail'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page title -->
+	<th:block ap:replace="~{common/fragment/contents-page-title}"/>
+	<!-- // page title -->
+	<!-- page contents -->
+	<div class="ap_contents prd_list">
+		<!--/* 20180425 : 키비주얼 영역 삭제 */-->
+		<!--/* 20180425 : 추천템 삭제 */-->
+		<!--/* 20180425 : video 영역 삭제 */-->
+
+		<!--/* 20180425 : my point 수정 */-->
+		<div class="point_status pearl">
+			<div>
+				<p><span>나만의 진주알 꿀 혜택!</span></p>
+				<p>진주알로 원하는 상품을 교환하세요.</p>
+			</div>
+			<div th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+				<dl>
+					<dt th:text="${session.LOGIN_USER.member.name.name1} + ' 님의 진주알'"></dt>
+					<dd class="num"><strong th:text="${session.LOGIN_USER.member.activityPoint}">20,000</strong> 알</dd>
+				</dl>
+				<a href="/my/page/pearl/present">내역보기</a>
+			</div>
+			<div th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+				<p>나의 진주알이<br>궁금하다면?</p>
+				<a href="/login">로그인</a>
+			</div>
+		</div>
+		<p class="bullet_dot mgt20">진주알 스토어의 상품만 진주알로 교환 가능하며, 진주알 부분 교환은 되지 않습니다.</p>
+		<br>
+
+		<!--/* 상품목록 */-->
+		<div class="pearl_list clear">
+			<div class="container">
+				<div class="product item_list column4">
+				</div>
+
+				<div class="gift item_list column4">
+				</div>
+			</div>
+			<div class="panel notice etu_find_store_none no_result" style="display: none;">
+				<i class="ico"></i>
+				<p class="text font_lg"><span class="tit_1">상품이 존재하지 않습니다.</span></p>
+			</div>
+
+			<!--/* 상품 영역 */-->
+			<div class="loading" style="height:500px;">
+				<span>
+					<img ap:src="@{/images/common/loading.gif}" alt="">
+				</span>
+			</div>
+
+			<!--/* 주문레이어 */-->
+			<div class="order_layer" style="display: none;"> <!--/* script : 높이값 필요, fixed */-->
+				<div class="product_option_select scroll_area"><!--/* script : order_prd_list와 order_bottom 을 제외한 높이값 필요 */-->
+					<ul class="selected_list selected_option_area">
+						<!--/* selected options area */-->
+					</ul>
+				</div>
+				<div class="order_bottom">
+					<!--/* 뷰티포인트 전용상품 */-->
+					<div class="order_total_price">
+						<span style="display:none;">총<span class="total_count">0</span>개</span>
+						<em><strong class="num total_price">0</strong>알</em>
+					</div>
+
+					<!--/* 구매 버튼 세트 */-->
+					<div class="order_button_wrap full_type">
+						<button type="button" class="btn_lg_bordered takeout btn_takeout">테이크<br>아웃</button>
+						<button type="button" class="btn_lg_bordered purchase btn_buy_now">바로구매</button>
+						<button type="button" class="btn_lg_primary basket btn_basket">장바구니 담기</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+	<!-- // page contents -->
+</div><!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script>
+		$( '.ui_select' ).designSelectBox();
+	</script>
+</th:block>
+</body>
+</html>

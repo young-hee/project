@@ -1,0 +1,44 @@
+<dl class="review_layer">
+	<dt class="review_header">
+		{{#if this.onlineProdName}}
+			<span class="item_name">{{ this.onlineProdName }}</span>
+		{{/if}}
+		{{#if this.prodName}}
+			<small class="opt">옵션: {{ this.prodName }}</small>
+		{{/if}}
+
+		{{!-- TODO: 구매자 후기 - 디자인 확인 --}}
+		{{#xif this.prodReviewTypeCode '==' 'Pur'}}
+			<span class="flag">구매자 후기</span>
+		{{/xif}}
+
+		<span class="clear">
+				<span class="ui_rating">
+					 <span class="heart">
+						 {{#for 5}}
+							 <span class="heart_wrap {{#xif ../scope '>' for-index}}on{{/xif}}"><span class="sr_only"> {{ calc for-index '+' 1 }}점</span></span>
+						 {{/for}}
+					 </span>
+				 </span>
+				<span class="writer">
+					<span>{{ this.memberId }}</span>
+					<small class="date">{{ dateFormat this.prodReviewRegistDt }}</small>
+				</span>
+			</span>
+	</dt>
+	<dd class="review_cont">
+		<h3 class="h_title lare">{{ this.prodReviewTitle }}</h3>
+
+		{{#if this.imgList.length}}
+			<div class="attach_img">
+				{{#each this.imgList}}
+					<img src="{{ this.imageFileUrl }}" alt="">
+				{{/each}}
+			</div>
+		{{/if}}
+
+		<div class="cont">
+			<pre>{{ this.prodReviewBodyText }}</pre>
+		</div>
+	</dd>
+</dl>

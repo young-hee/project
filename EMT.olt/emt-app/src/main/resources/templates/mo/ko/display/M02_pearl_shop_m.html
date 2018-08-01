@@ -1,0 +1,97 @@
+<html ap:decorate="~{layout/layout-category}" th:with="_jsfile='pearl-store-detail'">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents prd_list">
+	
+		<!--/* 20180423 : 포인트 노출 영역 수정 */-->
+		<div class="point_status pearl">
+			<div class="bg">
+				<h3 class="h_title eng"><strong>나만의 진주알 꿀 혜택!</strong></h3>
+				<p class="text">진주알로 원하는 상품을 교환하세요.</p>
+				<div class="table_layout">
+					<div th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+						<dl>
+							<dt th:text="${session.LOGIN_USER.member.name.name1} + ' 님의 진주알'"></dt>
+							<dd><strong th:text="${session.LOGIN_USER.member.activityPoint}">9,999</strong>알</dd>
+						</dl>
+					</div>
+					<div th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+						<a href="/my/page/pearl/present">내역보기 <i class="ico_arr"></i></a>
+					</div>
+					<!--/* 로그인전*/-->
+					<div th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+						<p>나의 진주알이<br>
+							궁금하다면?</p>
+					</div>
+					<div th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+						<a href="/login">로그인 <i class="ico_arr"></i></a>
+					</div>
+				</div>
+			</div>
+			<p class="align_center lh2" style="display: none;">진주알 스토어에서만 진주알로 교환가능하며,<br>부분 교환은 되지 않습니다.</p>
+		</div>
+
+		<!--/* 상품 */-->
+		<div class="product item_list type2 pdb0">
+			<ul class="result product"></ul>
+		</div>
+
+		<div class="pdb30 mgb40">
+			<div class="gift item_list type2">
+				<ul class="result gift"></ul>
+			</div>
+		</div>
+
+		<div class="panel notice no_result" style="display:none;">
+			<i class="ico"></i>
+			<p class="text">상품이 존재하지 않습니다.</p>
+		</div>
+
+		<ul class="loading" style="padding-bottom:200px;">
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+
+		<!--/* 구매하기 전체 열릴때 class open 교체 기본 close select 선택시 class select 추가 선택한 select 요소 부모 클래스 goods_box 에 class on 추가 */-->
+		<div class="option_layer goods_detail_buy close">
+			<!--/* 오픈전 구매 버튼 셋 */-->
+			<div class="purchase_btn_set">
+				<button type="button" class="btn_md_primary btn_open_order_layer">구매하기</button>
+			</div>
+
+			<!--/* 옵션만 열고 닫을때 class open 추가 */-->
+			<div class="option_wrap open">
+				<!--/* selected 된 options 표현 영역 */-->
+			</div>
+
+			<div class="buy_info_wrap">
+				<div class="buy_info">
+					<span class="opt_selected"><b class="num">0</b> 개 선택됨</span>
+					<span class="buy_result">합계 <b class="num total_price">0</b><b>알</b></span>
+				</div>
+				<!--/* 오픈후 구매 버튼 세트 */-->
+				<div class="buy_btn_wrap">
+					<button type="button" class="btn_md_bordered btn_takeout">테이크아웃</button>
+					<button type="button" class="btn_md_bordered btn_basket">장바구니 담기</button>
+					<button type="button" class="btn_md_primary btn_buy_now">바로구매</button>
+				</div>
+			</div>
+			<button type="button" class="btn_float_close"><span class="sr_only">구매닫기</span></button>
+		</div>
+
+	</div>
+	<!-- // page contents -->
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+<script>
+</script>
+</th:block>
+
+</body>
+</html>

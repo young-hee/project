@@ -1,0 +1,237 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	
+	<!-- page title -->
+	<th:block ap:replace="~{common/fragment/contents-page-title}"/>
+	<!-- // page title -->
+	<!-- page contents -->
+	<div class="ap_contents member_join">
+		<div class="member_join_inner">
+			<div class="ui_step">
+				<ul>
+					<li><i class="ico"></i>본인인증<span class="num">1</span></li>
+					<li class="current"><i class="ico"></i><span class="num">2</span>약관동의<span
+						class="sr_only">선택됨</span></li>
+					<li><i class="ico"></i><span class="num">3</span>정보입력</li>
+					<li><i class="ico"></i><span class="num">4</span>가입완료</li>
+				</ul>
+			</div>
+			<div class="panel">
+				<div class="panel_cont policy_form gray bdr_top">
+					<dl class="dl_cont type2">
+						<dt><h3 class="h_title sub">서비스 이용약관 및 정보 활용 동의</h3></dt>
+						<dd>
+							<ul class="list_bullet_dot">
+								<li>아래 모든 약관 (필수/선택 포함)내용을 확인하고 전체 동의합니다.</li>
+								<li>선택 항목에 대한 동의를 거부하더라도 회원가입에 영향을 미치지 않습니다.</li>
+							</ul>
+						</dd>
+					</dl>
+					<fieldset class="form type2">
+						<legend class="sr_only">약관동의 선택</legend>
+						<div>
+							<span class="check_wrap large"><input type="checkbox" id="check_all"><label for="check_all">회원약관 전체 동의</label></span>
+						</div>
+						<hr class="div m20">
+						<dl class="dl_cont">
+							<dt class="h_title cont">에뛰드하우스 필수 약관</dt>
+							<dd>
+								<span class="check_wrap"><input type="checkbox" id="TMS001"><label for="TMS001" th:text="${termsMap.get('ET001').termsName}"></label></span>
+								<button type="button" class="btn_bordered btn_view" name="detailView" data-display-code="ET001">상세보기</button>
+							</dd>
+						</dl>
+						<dl class="dl_cont" th:if="${termsType != null && termsType != 'etudeTermsOnly'}">
+							<dt class="h_title cont">통합회원 약관</dt>
+							<dd>
+								<ul class="list">
+									<li><span class="check_wrap"><input type="checkbox" id="TMS002"><label for="TMS002" th:text="${termsMap.get('010').termsName}"></label></span>
+										<button type="button" class="btn_bordered btn_view" name="detailView" data-display-code="010">상세보기</button>
+									</li>
+									<li><span class="check_wrap"><input type="checkbox" id="TMS003"><label for="TMS003" th:text="${termsMap.get('020').termsName}"></label></span>
+										<button type="button" class="btn_bordered btn_view" name="detailView" data-display-code="020">상세보기</button>
+									</li>
+									<li><span class="check_wrap"><input type="checkbox" id="TMS004"><label for="TMS004" th:text="${termsMap.get('030').termsName}"></label></span>
+										<button type="button" class="btn_bordered btn_view" name="detailView" data-display-code="030">상세보기</button>
+									</li>
+									<li><span class="check_wrap"><input type="checkbox" id="TMS005"><label for="TMS005" th:text="${termsMap.get('040').termsName}"></label></span>
+										<button type="button" class="btn_bordered btn_view" name="detailView" data-display-code="040">상세보기</button>
+									</li>
+									<li><span class="check_wrap"><input type="checkbox" id="TMS006"><label for="TMS006" th:text="${termsMap.get('050').termsName}"></label></span>
+										<button type="button" class="btn_bordered btn_view" name="detailView" data-display-code="050">상세보기</button>
+									</li>
+									<li><span class="check_wrap"><input type="checkbox" id="TMS007"><label for="TMS007" th:text="${termsMap.get('060').termsName}"></label></span>
+										<button type="button" class="btn_bordered btn_view" name="detailView" data-display-code="060">상세보기</button>
+									</li>
+								</ul>
+							</dd>
+						</dl>
+					</fieldset>
+					
+					<form action="" class="validate">
+						<input type="hidden" name="TMS001" data-terms-no="ET001" th:required="${termsMap.get('ET001').agreeMandatoryYn == 'Y'}">
+						<div th:if="${termsType != null && termsType != 'etudeTermsOnly'}">
+							<input type="hidden" name="TMS002" data-terms-no="010" data-bt-terms-no="010" th:required="${termsMap.get('010').agreeMandatoryYn == 'Y'}">
+							<input type="hidden" name="TMS003" data-terms-no="020" data-bt-terms-no="020" th:required="${termsMap.get('020').agreeMandatoryYn == 'Y'}">
+							<input type="hidden" name="TMS004" data-terms-no="030" data-bt-terms-no="030" th:required="${termsMap.get('030').agreeMandatoryYn == 'Y'}">
+							<input type="hidden" name="TMS005" data-terms-no="040" data-bt-terms-no="040" th:required="${termsMap.get('040').agreeMandatoryYn == 'Y'}">
+							<input type="hidden" name="TMS006" data-terms-no="050" data-bt-terms-no="050" th:required="${termsMap.get('050').agreeMandatoryYn == 'Y'}">
+							<input type="hidden" name="TMS007" data-terms-no="060" data-bt-terms-no="060" th:required="${termsMap.get('060').agreeMandatoryYn == 'Y'}">
+						</div>
+					</form>
+				</div>
+				<div class="panel_footer">
+					<dl class="dl_cont">
+						<dt><h3 class="h_title cont policy">개인정보 취급 위탁에 대한 안내</h3></dt>
+						<dd>
+							<p class="text">아모레퍼시픽은 서비스 향상 및 원활한 전산 처리 등을 위하여 이용자의 개인정보 관리를 외부전문업체에 위탁하고 있습니다.<br>아모레퍼시픽의
+								업무를 위탁받는 자 및 업무의 내용은 아모레퍼시픽
+								홈페이지https://www.beautypoint.co.kr/footer/privacy/personal.html에서<br>확인 하실 수 있습니다.</p>
+						</dd>
+					</dl>
+					<div class="form_btns">
+						<a href="/customer/signup" class="btn_lg_secondary">취소</a>
+						<a href="javascript:;" class="btn_lg_primary" id="stepTwo">등록</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- // page contents -->
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script type="application/javascript">
+		
+
+	if (!AP || !AP.common) {
+	    window.location = "/customer/signup";
+	}
+
+	var s1 = AP.common.getSessionStorage('JoinStepOneObj');
+	if (!(s1 || (s1 && s1.StepOne)))
+	    window.location = "/customer/signup";
+
+	//Checkbox
+	$('.policy_form input').on('change', function() {
+	    if ($(this).attr('id') == 'check_all') {
+	        $(this).closest('.form').find('.dl_cont .check_wrap input').prop('checked', $(this).prop('checked'));
+	        $('.policy_form .dl_cont input').each(function() {
+	            $('input[name=' + this.id + ']').val("Y");
+	        });
+	    } else {
+	        var isAll = true;
+	        $('.policy_form .dl_cont input').each(function() {
+	            if (!$(this).prop('checked')) {
+	                isAll = false;
+	                $('input[name=' + this.id + ']').val("");
+	            } else {
+	                $('input[name=' + this.id + ']').val("Y");
+	            }
+	        });
+	        $('.policy_form #check_all').prop('checked', isAll);
+	    }
+	});
+
+	//"상세보기"버튼
+	$('[name=detailView]').on('click', function(e) {
+
+	    AP.api.getAgreeTerms({}, {
+	        displayCode: this.dataset.displayCode
+	    }).done(function(data) {
+	        //성공
+	        if (data) {
+	            var terms = data.terms;
+	            if (terms) {
+	                AP.modal.info({
+	                    title: terms.termsName,
+	                    contents: '<pre>' + terms.termsBodyText + '</pre>',
+	                    sizeType: "L"
+	                });
+
+	            }
+	        } else {
+	            AP.modal.alert("[ajax.done]실패")
+	        }
+
+	    }).fail(function(e) {
+	        //실패
+	        AP.modal.alert("[ajax.fail]실패")
+	    }).always(function() {
+	        //성공, 실패
+	    });
+	});
+
+	//"다음"버튼
+	$('#stepTwo').on('click', function(e) {
+	    stepTwo();
+	});
+
+	function stepTwo() {
+	    var $form = $('form.validate');
+	    $form.validate().settings.ignore = "";
+
+	    if ($form.valid()) {
+
+	        AP.api.stepTwo({}, AP.common.getFormData($form)).done(function(data) {
+	            //성공
+	            if (data) {
+
+                    var termsChk = new Array();
+                    var btTermsChk = new Array();
+                    $('input[name^=TMS]').toArray().forEach(function(item, index) {
+                        //all Terms
+                        termsChk.push(item.dataset.termsNo + ":" + (item.value ? "Y" : "N"));
+
+                        if (item.dataset.btTermsNo) {
+                            //bt Terms
+                            btTermsChk.push(item.dataset.btTermsNo + ":" + (item.value ? "Y" : "N"));
+                        }
+                    });
+
+                    //save in sessionstorage
+                    try {
+                        var obj = new JoinStepTwoObj("complete", termsChk, btTermsChk);
+
+                        AP.common.setSessionStorage("JoinStepTwoObj", obj);
+
+                    } catch (e) {
+                        console.log(e.message)
+                    }
+
+                    window.location = "/customer/inputInfo";
+
+
+	            } else {
+	                AP.modal.alert("[ajax.done]실패");
+	            }
+	        }).fail(function(xhr, textStatus, errorThrown) {
+
+                if (xhr.errorCode == 0) {
+                    AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+                } else {
+                    AP.modal.alert(xhr.errorMessage)
+                }
+	        }).always(function() {
+	            //성공, 실패
+	        });
+	    }
+	}
+
+	//sessionStorage
+	function JoinStepTwoObj(stepTwo, termsChk, btTermsChk) {
+	    this.StepTwo = stepTwo;
+	    this.TermsChk = termsChk;
+	    this.BtTermsChk = btTermsChk;
+	}
+	
+	
+	
+	</script>
+</th:block>
+</body>
+</html>

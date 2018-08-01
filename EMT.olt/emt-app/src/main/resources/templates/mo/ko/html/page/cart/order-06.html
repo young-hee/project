@@ -1,0 +1,134 @@
+<html ap:decorate="~{layout/layout-item-only}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents cart order">
+
+		<div class="ui_accordion" data-open-type="single">
+			<!--결제수단 선택-->
+			<dl class="payment">
+				<dt class="on">
+					<div class="title"><b>결제수단 선택</b></div>
+					<button type="button"><span class="sr_only">더보기</span></button>
+				</dt>
+				<dd class="panel">
+
+					<div class="main_payment">
+						<ul>
+							<li>
+								<div class="clear">
+									<div>
+										<span class="title">모바일 상품권</span>
+									</div>
+									<div>
+										<span class="price"><strong class="eng">10,000</strong> 원</span>
+										<button type="button" class="btn_sm_neutral_round">등록/사용</button>
+									</div>
+								</div>
+							</li>
+							<!-- /* 20180719: 선불카드 삭제 */
+							<li>
+								<div class="clear">
+									<div>
+										<span class="title">선불카드</span>
+									</div>
+									<div>
+										<span class="price"><strong class="eng">10,000</strong> 원</span>
+										<button type="button" class="btn_sm_neutral_round">등록/사용</button>
+									</div>
+								</div>
+							</li>
+							 -->
+							<li>
+								<div class="clear">
+									<div>
+										<label for="price" class="title">예치금</label>
+									</div>
+									<div>
+										<span class="price">
+											<span class="input_group">
+												<span>
+													<input type="text" id="price" placeholder="0">
+												</span>
+											</span> /
+											<strong class="eng">10,000</strong> 원
+										</span>
+										<button type="button" class="btn_sm_neutral_round">모두사용</button>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+
+					<!--0326 : 삭제<h3 class="h_title cont mgt25"><strong>최종 결제 수단 선택</strong></h3>-->
+					<fieldset class="form">
+						<legend class="sr_only">최종 결제 수단 선택</legend>
+						<div class="payment_choise">
+							<!--0326:감싸는 div 삭제-->
+							<span class="w_pay"><input type="radio" name="choice" id="w_pay"><label for="w_pay">원터치 간편결제</label></span>
+							<span class="credit"><input type="radio" name="choice" id="credit"><label for="credit">신용카드</label></span>
+							<span class="n_pay"><input type="radio" name="choice" id="n_pay"><label for="n_pay">네이버 페이</label></span>
+							<span class="phone"><input type="radio" name="choice" id="phone"><label for="phone">휴대폰 결제</label></span>
+							<span class="payco"><input type="radio" name="choice" id="payco"><label for="payco">페이코</label></span>
+							<span class="kakao_pay"><input type="radio" name="choice" id="kakao_pay"><label for="kakao_pay">카카오 페이</label></span>
+							<span class="account_transfer"><input type="radio" name="choice" id="account_transfer"><label for="account_transfer">실시간 계좌이체</label></span>
+							<span class="remit_bank"><input type="radio" name="choice" id="remit_bank"><label for="remit_bank">무통장 입금</label></span>
+							<!--//0326:감싸는 div 삭제-->
+						</div>
+						<!--신용카드 선택시-->
+						<div class="input_group">
+							<div>
+								<select name="" id="" title="신용카드사 선택">
+									<option value="">신용카드사 선택</option>
+								</select>
+							</div>
+						</div>
+						<!--//신용카드 선택시-->
+
+						<!--무통장 입금 선택시-->
+						<dl>
+							<dt class="mgb10">현금영수증 발급신청</dt>
+							<dd>
+								<div class="date_btn_set mgb10">
+									<span><input type="radio" name="choice06" id="choice06_1" checked=""><label for="choice06_1">신청안함</label></span>
+									<span><input type="radio" name="choice06" id="choice06_2"><label for="choice06_2">개인 소득공제용</label></span>
+									<span><input type="radio" name="choice06" id="choice06_3"><label for="choice06_3">사업자 증빙용</label></span>
+								</div>
+								<!--신청안함 선택시 input 태그 노출 안함 -->
+								<div class="input_group">
+									<div><input type="text" placeholder="휴대폰번호 혹은 카드번호 숫자만 입력"></div>
+									<!--
+                                        사업자 증빙용 선택시 placeholder 텍스트 변경
+                                        <div><input type="text" placeholder="사업자등록번호 숫자만입력"></div>
+                                    -->
+								</div>
+								<!--//신청안함 선택시 input 태그 노출 안함-->
+							</dd>
+						</dl>
+						<!--//무통장 입금 선택시-->
+
+
+						<div class="check_wrap"><input type="checkbox" id="check1"><label for="check1">선택한 결제 수단을 다음에도 사용</label></div>
+
+					</fieldset>
+
+				</dd>
+			</dl>
+			<!--결제수단 선택-->
+		</div>
+
+	</div>
+	<!-- // page contents -->
+
+
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+</th:block>
+</body>
+</html>

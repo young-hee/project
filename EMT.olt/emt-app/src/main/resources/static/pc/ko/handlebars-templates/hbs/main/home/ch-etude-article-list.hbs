@@ -1,0 +1,26 @@
+{{!--
+	ch.Etude 관련 상품 목록 
+--}}
+
+{{#each this.list}}
+<li>
+	<a href="{{productDetailPath this.onlineProdSn}}">
+		<span class="img lazy_load_wrap"><img src="{{this.onlineProdImages.0.imgUrl}}" data-src="{{this.onlineProdImages.0.imgUrl}}" alt="" class="lazy_load">
+		</span>
+		<span>
+			<span class="title">{{this.onlineProdName}}</span>
+			<span class="price">
+			{{#xif this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate '!=' 0}}
+				<em><b>  {{this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate}}</b>%</em>
+			{{/xif}}
+				<b>{{ numberFormat this.onlineProdPriceSummary.minOnlineSalePrice}}</b>원
+			</span>
+		</span>
+	</a>
+</li>	
+{{/each}}
+
+
+
+
+

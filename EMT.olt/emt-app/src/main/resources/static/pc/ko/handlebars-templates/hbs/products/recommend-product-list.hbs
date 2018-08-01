@@ -1,0 +1,67 @@
+{{!--
+	다른 고객들이 많이 찾은 상품 목록
+--}}
+{{#each this.list}}
+<li>
+	<div class="item">
+		<div class="item_images">
+			{{!-- 대표 이미지 --}}
+			<a href="{{ productDetailPath this.onlineProdSn }}" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="{{ this.onlineProdImages.0.imgUrl }}" alt=""></a>
+		</div>
+		<div class="info_box">
+			{{!--/* flags */--}}
+			{{#if this.flags.length}}
+				<div class="flag_set">
+					{{#each this.flags}}
+						{{#xif this.prodFlagCode '==' 'icon_reco_new'}}
+							<span class="new">신상품</span>
+						{{/xif}}
+						{{#xif this.prodFlagCode '==' 'icon_reco_best_w'}}
+							<span class="best">베스트</span>
+						{{/xif}}
+						{{#xif this.prodFlagCode '==' 'icon_pr_prod'}}
+							<span class="event">이벤트</span>
+						{{/xif}}
+						{{#xif this.prodFlagCode '==' 'icon_reco_md'}}
+							<span>MD추천</span>
+						{{/xif}}
+						{{#xif this.prodFlagCode '==' 'icon_reco_online'}}
+							<span>온라인전용</span>
+						{{/xif}}
+					{{/each}}
+				</div>
+			{{/if}}
+			{{!-- /* 상품명 */ --}}
+			<div class="title_area">
+				<h3 class="h_title">{{ this.onlineProdName }}{{#xif this.saleDisplayStatus '==' 'OutOfStock'}} [일시품절]{{/xif}}</h3>
+			</div>
+			{{!--/* color 옵션 */--}}
+			{{!--
+            <div class="item_option">
+                <p class="color_name">10 colors</p>
+            </div>
+            --}}
+			{{!--/* 가격 */--}}
+			<div class="price_area">
+				<div>
+					{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+						<div class="discount">
+							{{#with (calc this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate '+' this.onlineProdPriceSummary.minMemberLevelDiscountRate '+' this.onlineProdPriceSummary.minOnlineMemberDiscountRate) as |disMinRate|}}
+								{{#with (calc ../onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.maxMemberLevelDiscountRate '+' ../onlineProdPriceSummary.maxOnlineMemberDiscountRate) as |disMaxRate|}}
+									<strong class="to">{{#xif disMinRate '!=' disMaxRate}}~{{/xif}}{{ disMaxRate }}<em>%</em></strong>
+								{{/with}}
+							{{/with}}
+						</div>
+					{{/xif}}
+					<div class="price">
+						{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+							<del>{{ this.onlineProdPriceSummary.minBeforeOnlineSalePrice }}<em>{{ condition ../isActivityPoint '알' '원' }}</em></del>
+						{{/xif}}
+						<strong>{{ this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>{{ condition ../isActivityPoint '알' '원' }}{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}} ~{{/xif}}</em></strong>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</li>
+{{/each}}

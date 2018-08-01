@@ -1,0 +1,76 @@
+{{!--
+	옵션 selectbox
+	viewThumbnail, options, prodTypeCode, bulkIncludedProds, productCount
+--}}
+<div class="ui_select product_option_select" data-not-label-change="true">
+	<input type="hidden" name="">
+	<button type="button">옵션선택</button>
+	<ul class="select_options">
+		{{#each this.options}}
+			<li class="select_option">
+				<code class="label_markup" style="display:none">{{ this.prodName }}</code>
+				<a data-value="{{ this.prodSn }}" data-selected="false">
+					<div class="option_info">
+						{{#if ../viewThumbnail}}
+							{{#xif this.colorchipTypeCode '==' 'RGB'}}
+								<div class="thumb" style="background-color: #{{ this.rgbVal }}"></div>
+							{{/xif}}
+							{{#xif this.colorchipTypeCode '==' 'Img'}}
+								<div class="thumb"><img alt="" src="{{ this.colorchipImg }}"></div>
+							{{/xif}}
+						{{/if}}
+
+						<div class="option_name">
+							{{ this.prodName }}
+
+							{{!-- 세트상품 --}}
+							{{#xif ../prodTypeCode '==' 'BulkFixedProd'}}
+								{{#each ../bulkIncludedProds}}
+									<em class="set_option">{{ this.prodName }} {{#unless @last}}+{{/unless}}</em>
+								{{/each}}
+							{{/xif}}
+
+							{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+								<span class="sold_out"> [일시품절] </span>
+							{{/xif}}
+
+							{{!-- 할인 경우 노출(온라인상품할인률 + 회원등급할인률 + 온라인회원할인률) --}}
+							{{#xif (availablePrices this.availablePrices 'doublePriceDisplayYn') '==' 'Y'}}
+								<em class="num">{{ calc (availablePrices this.availablePrices 'onlineSalePriceDiscountRate') '+'
+																		   (availablePrices this.availablePrices 'memberLevelDiscountRate') '+'
+																		   (availablePrices this.availablePrices 'onlineMemberDiscountRate') }}% Off</em>
+							{{/xif}}
+
+							<!-- TODO: 사은품 처리 -->
+							<!--<em class="additional">[사은품] 전용 케이스 1개</em>-->
+						</div>
+
+						<div class="price">
+							{{#xif this.saleDisplayStatus '==' 'OnSale'}}
+								{{#xif (availablePrices this.availablePrices 'doublePriceDisplayYn') '==' 'Y'}}
+									{{!-- 할인시 차액 가격 --}}
+									{{#xif (availablePrices this.availablePrices 'minOnlineSalePriceDiff') '>' 0}}
+										<strong class="num">+{{ availablePrices this.availablePrices 'minOnlineSalePriceDiff' }}<span>원</span></strong>
+									{{/xif}}
+								{{else}}
+									{{#xif this.activityPointOnly '==' 'Y'}}
+										<strong class="num">{{ numberFormat this.exchActivityPoint }}</strong>알
+									{{else}}
+										<strong class="num">{{ numberFormat (availablePrices this.availablePrices 'onlineSalePrice') }}</strong>
+										{{!-- 뷰티포인트 전용상품 --}}
+										{{#xif (eq ../productCount 1) '&&' (eq this.membershipExchOnly 'Y')}}
+											P
+										{{else}}
+											원
+										{{/xif}}
+									{{/xif}}
+								{{/xif}}
+							{{/xif}}
+						</div>
+
+					</div>
+				</a>
+			</li>
+		{{/each}}
+	</ul>
+</div>

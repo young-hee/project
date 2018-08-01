@@ -1,0 +1,64 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='free-sample'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents event free_sample">
+				<div class="event_cont">
+					<img ap:src="@{/images/event/img_sample.jpg}" alt="이달의 샘플">
+					<div class="sr_only">
+						<p>이달의 샘플</p>
+						<p>모공압박 핑크 테이프 팩</p>
+						<p>얇은 핑크 포일 막이 타이트하게 밀착되어 탄력있는 피부로 가꾸어주는 필 오프 팩 입니다.</p>
+						<p>기간 : 3-23~4.23, 발표:2018.05.04, 당첨자수 : 60명, 구성품:모공압박 핑크 테이프 팩 10ml 2개</p>
+					</div>
+					<div class="page_btns">
+						<button class="btn_lg_primary apply" type="button">신청하기</button>
+					</div>
+				</div>
+				<div class="event_noti">
+					<ul class="list_bullet_dot font_lg">
+						<li>당첨자는 <em>이벤트>당첨자 확인</em>에서 확인하실 수 있습니다.</li>
+						<li>구매후기와 이미지 도용으로 인한 피해사례가 발생하고 있습니다. 올바르지 않은 타인의 작업물 사용을 삼가해 주시기 바라며, 적발 시 삭제 처리됩니다.</li>
+					</ul>
+				</div>
+
+				<!--댓글-->
+				<div class="reply ui_accordion"></div>
+
+				<!-- 페이지 로딩 -->
+				<ul class="loading white" style="display: block; min-height: 300px">
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				<div class="pagination"></div>
+			</div>
+			<!-- // page contents -->
+		</div><!-- // #ap_container -->
+
+		<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+		<th:block ap:fragment="layout-endpoint">
+
+			<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+			<script th:inline="javascript">
+				(function () {
+					var member = {};
+
+					[# th:if="${memberMap}"]
+					member.id = /*[[${memberMap.id}]]*/;
+					member.name = /*[[${memberMap.name}]]*/;
+					member.memberSn = /*[[${memberMap.memberSn}]]*/;
+					[/]
+
+					AP.freeSample.load({ memberInfo: member });
+				}());
+			</script>
+
+		</th:block>
+</body>
+</html>

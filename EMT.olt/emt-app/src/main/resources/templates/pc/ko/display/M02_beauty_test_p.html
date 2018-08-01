@@ -1,0 +1,63 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='beauty-tester'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents event beauty_tester">
+				<!--/* 뷰티테스터 대표이미지 */-->
+           	 	<div class="event_image" th:utext="${regularEvent.detailHtmlP}"></div>
+           	 	
+				<div class="event_noti">
+					<ul class="list_bullet_dot font_lg">
+						<li>이미지 도용으로 인한 피해사례가 발생하고 있습니다. </li>
+						<li>올바르지 않은 타인의 작업물 사용을 삼가해 주시기 바라며, 적발 시 삭제 처리합니다.</li>
+						<li>뷰티테스터 참여하시면 <em>진주알 10알</em>이 차감됩니다.</li>
+						<li>당첨자는 <em>이벤트>당첨자 확인</em>에서 확인하실 수 있습니다.</li>
+					</ul>
+				</div>
+				
+				<!--/* 20180712:버튼위치 변경 및 pdb50 클래스 추가 */-->
+				<div class="page_btns pdb50">
+					<button class="btn_lg_bordered viewProdDetail" type="button" th:data-online-prod-sn="${regularEvent.awards[0].onlineProdSn}">제품 상세 보기</button>
+					<button class="btn_lg_primary apply" type="button">신청하기</button>
+				</div>				
+
+				<!--댓글-->
+				<div class="reply ui_accordion">
+				</div>
+				<!-- 페이지 로딩 -->
+				<ul class="loading white" style="display: block; min-height: 300px">
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				<div class="pagination"></div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+			<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+			<script th:inline="javascript">
+				(function () {
+					var member = {};
+
+					[# th:if="${memberMap}"]
+					member.id = /*[[${memberMap.id}]]*/;
+					member.name = /*[[${memberMap.name}]]*/;
+					member.memberSn = /*[[${memberMap.memberSn}]]*/;
+					[/]
+
+					AP.beautyTester.load({ memberInfo: member });
+				}());
+			</script>
+
+		</th:block>
+</body>
+</html>

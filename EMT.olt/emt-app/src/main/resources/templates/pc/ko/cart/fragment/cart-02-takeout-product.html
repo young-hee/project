@@ -1,0 +1,26 @@
+<dl th:if="${memberSn > 0}">
+	<dt class="on">
+		<span class="check_wrap">
+			<input type="checkbox" id="takeoutPrdCheck" name="takeoutPrdCheck" checked="checked">
+			<label for="takeoutPrdCheck">테이크아웃 상품 (<em id="takeoutPrdCnt">0</em>개)</label>
+		</span>
+		<button type="button"><span class="sr_only">닫기</span></button>
+	</dt>
+	<dd>
+		<div class="cont">
+			<!--/* 테이크아웃 매장 정보 */-->
+			<div class="takeout_info" id="storeSelectInfo">
+			</div>
+			<div id="allStoreProd">
+			</div>
+			<div class="panel notice" th:if="${ #lists.size(cartEx.cartStorePickupOnlineProdExList) == 0 &&
+												#lists.size(cartEx.cartStorePickupMembershipPointExchOnlineProdExList) == 0 &&
+												#lists.size(cartEx.cartStorePickupActivityPointExchOnlineProdExList) == 0  &&
+												#lists.size(cartEx.cartStorePickupMNPromoExList) == 0 &&
+												#lists.size(cartEx.cartStorePickupSameTimePurPromoExList) == 0 }">
+				<i class="ico"></i>
+				<p class="text color_gray">현재 테이크아웃 장바구니가 비어있습니다.</p>
+			</div>
+		</div>
+	</dd>
+</dl>

@@ -1,0 +1,60 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='events-overview'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents event event_winner">
+				<!--/* search */-->
+				<fieldset class="form mgb10">
+					<legend class="sr_only">검색어 입력</legend>
+					<div class="input_wrap w30p float_right">
+						<input type="text" placeholder="검색">
+						<button type="button" class="btn_search"><span class="sr_only">검색</span></button>
+						<button class="input_del"><i class="ico_close_w"></i><span class="sr_only">검색어 삭제</span></button>
+					</div>
+				</fieldset>
+				<!--/* list */-->
+				<div class="board_list2">
+					<table class="align_center">
+						<caption class="sr_only">표 제목</caption>
+						<colgroup>
+							<col style="width:10%;"> <!-- 컬럼 사이즈 -->
+							<col style="width:10%;">
+							<col>
+							<col style="width:10%;">
+						</colgroup>
+						<thead class="sr_only">
+						<tr>
+							<th scope="col">번호</th>
+							<th scope="col">분류</th>
+							<th scope="col">제목</th>
+							<th scope="col">날짜</th>
+						</tr>
+						</thead>
+
+						<tbody></tbody>
+					</table>
+				</div>
+
+				<div class="pagination"></div>
+
+				<div class="loading" style="display: block; min-height: 300px">
+					<span><img alt="" src="/pc/ko/images/common/loading.gif"></span>
+				</div>
+
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script>
+				AP.eventWinner.load({ status: 'winner' });
+			</script>
+        </th:block>
+</body>
+</html>

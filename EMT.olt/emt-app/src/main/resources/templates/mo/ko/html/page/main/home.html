@@ -1,0 +1,472 @@
+<html ap:decorate="~{layout/layout-main}" th:with="_jsfile='main-home'">
+<head>
+    <link rel="stylesheet" type="text/css" ap:href="@{/css/main.css}">
+</head>
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <div class="ap_contents main_contents">
+            	<!-- 마케팅 베너 -->
+				<div class="section main_visual">
+					<h2 class="sr_only">배너</h2>
+					<div class="slide main_slide" data-ix-options="auto-play:false; paging:true; view-length:1;">
+						<div class="ix-list-viewport">
+							<ul class="ix-list-items">
+								<li class="ix-list-item">
+									<a href="#none">
+										<img ap:src="@{/images/dummy/img_main_02.jpg}" alt="">
+										<strong class="title">COLORFUL<br>DRAWING</strong>
+										<p class="text">맑고 생생한 컬러가 수채화처럼 컬러풀하게<br>물들어가는</p>
+									</a>
+								</li>
+								<li class="ix-list-item">
+									<a href="#none">
+										<img ap:src="@{/images/dummy/img_main_10.jpg}" alt="">
+										<strong class="title">COLORFUL<br>DRAWING</strong>
+										<p class="text">맑고 생생한 컬러가 수채화처럼 컬러풀하게<br>물들어가는</p>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="ix-controller">
+							<!--/* 03-27 수정 */-->
+							<div class="paging" style="display:none;"><span class="current"></span> / <span class="total"></span></div>
+						</div>
+					</div>
+					<!--/* 최초 로딩시 높이 잡아주기 */-->
+					<script>
+						$( '.main_visual .slide .ix-list-viewport' ).ixRatioSize({
+							ratio: '360 360'
+						});
+					</script>
+				</div>
+            	<!-- 신제품 -->
+            	<div class="section new_item">
+					<h2 class="title">신상품</h2>
+            		<!-- slide-->
+            		<div class="slide" data-ix-options="view-length:2; move-length:1;">
+			            <div class="ix-list-viewport">
+			                <ul class="ix-list-items">
+			                    <li class="ix-list-item">
+			                        <a href="#none">
+			                        	<span class="lazy_load_wrap"><img src="" data-src="/mo/ko/images/dummy/20180226200530243.png" alt="" class="lazy_load"></span>
+			                        	<span class="item_title">컬러풀 드로잉 판타스틱 컬러아이즈 마젠타 드로잉</span>
+			                        	<span class="price"><b>19,000</b> 원</span>
+			                        </a>
+			                    </li>
+			                    <li class="ix-list-item">
+			                        <a href="#none">
+										<span class="lazy_load_wrap"><img src="" data-src="/mo/ko/images/dummy/20180306142611179.png" alt="" class="lazy_load"></span>
+			                        	<span class="item_title">진주알 맑은 에센스 비비밤...</span>
+			                        	<span class="price"><b>19,000</b> 원</span>
+			                        </a>
+			                    </li>
+			                    <li class="ix-list-item">
+			                        <a href="#none">
+										<span class="lazy_load_wrap"><img src="" data-src="/mo/ko/images/dummy/20180308172353734.png" alt="" class="lazy_load"></span>
+			                        	<span class="item_title">유니버스 멀티 팔레트</span>
+			                        	<span class="price"><b>19,000</b> 원</span>
+			                        </a>
+			                    </li>
+			                    <li class="ix-list-item">
+			                        <a href="#none">
+										<span class="lazy_load_wrap"><img src="" data-src="/mo/ko/images/dummy/20180309161056842.png" alt="" class="lazy_load"></span>
+			                        	<span class="item_title">유니버스 멀티 팔레트</span>
+			                        	<span class="price"><b>19,000</b> 원</span>
+			                        </a>
+			                    </li>
+			                </ul>
+			            </div>
+					</div>
+					<a href="#none" class="more">더보기</a>
+            	</div>
+				<!-- 오늘의 추천 태그 -->
+				<div class="section recommend_tag">
+					<h2 class="title">오늘의 추천태그</h2>
+					<div class="keywords">
+						<a href="#none">#미니투매치</a>
+						<a href="#none">#드로잉</a>
+						<a href="#none">#슈가</a>
+						<a href="#none">#순정토너런칭세일</a>
+						<a href="#none">#보라색</a>
+					</div>
+				</div>
+				<!-- 에뛰드픽 -->
+				<div class="section etude_pick">
+					<h2 class="title">에뛰드 픽</h2>
+					<!-- slide -->
+					<div class="slide two_half" data-ix-options="view-length:2; move-length:2; loop:false; correct-endpoint:true;">
+						<div class="ix-list-viewport">
+							<ul class="ix-list-items">
+								<!--/*
+								<li class="ix-list-item">
+									<a href="#none">
+										<span class="lazy_load_wrap"><img src="" data-src="/mo/ko/images/dummy/img_pick.jpg" alt="" class="lazy_load"></span>
+										<span class="user_id">@alsdk1124</span>
+									</a>
+								</li>
+								*/-->
+							</ul>
+							<ul class="loading">
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+						</div>
+					</div>
+					<a href="#none" class="more">더보기</a>
+				</div>
+            	<!-- 핫딜 -->
+            	<div class="section hot_deal">
+					<h2 class="title">TODAY HOT DEAL</h2>
+					 <!-- 핫딜 목록 -->
+					<div class="slide" data-ix-options="view-length:2; move-length:1;">
+						<div class="ix-list-viewport">
+							<ul class="ix-list-items">
+								<li class="ix-list-item">
+									<div class="ui_remain_timer">
+										<span class="hour"></span>:<span class="minute"></span>:<span class="second"></span>
+									</div>
+									<a href="#none">
+										<span class="lazy_load_wrap"><img src="" data-src="/mo/ko/images/dummy/101001217_IM_01.png" alt="" class="lazy_load"></span>
+										<div class="info">
+											<em class="discount"><b>30</b>%</em>
+											<span class="title">지니 멀티 오일</span>
+											<span class="price">
+												<b>6,500</b>원
+												<del>9,500</del>
+											</span>
+										</div>
+									</a>
+									<a href="#none" class="btn_review"><span class="sr_only">구매후기</span><span class="bubble">9,999</span></a>
+								</li>
+								<li class="ix-list-item">
+									<div class="ui_remain_timer">
+										<span class="hour"></span>:<span class="minute"></span>:<span class="second"></span>
+									</div>
+									<a href="#none">
+										<span class="lazy_load_wrap"><img src="" data-src="/mo/ko/images/dummy/101001131_IM_01.png" alt="" class="lazy_load"></span>
+										<div class="info">
+											<em class="discount"><b>30</b>%</em>
+											<span class="title">지니 멀티 오일</span>
+											<span class="price">
+												<b>6,500</b>원
+												<del>9,500</del>
+											</span>
+										</div>
+									</a>
+									<a href="#none" class="btn_review"><span class="sr_only">구매후기</span><span class="bubble">9,999</span></a>
+								</li>
+								<li class="ix-list-item">
+									<div class="ui_remain_timer">
+										<span class="hour"></span>:<span class="minute"></span>:<span class="second"></span>
+									</div>
+									<a href="#none">
+										<span class="lazy_load_wrap"><img src="" data-src="/mo/ko/images/dummy/img_item_480.png" alt="" class="lazy_load"></span>
+										<div class="info">
+											<em class="discount"><b>30</b>%</em>
+											<span class="title">미니 투 매치 틴 세트 드라이 플라워</span>
+											<span class="price">
+												<b>6,500</b>원
+												<del>9,500</del>
+											</span>
+										</div>
+									</a>
+									<a href="#none" class="btn_review"><span class="sr_only">구매후기</span><span class="bubble">9,999</span></a>
+								</li>
+							 </ul>
+						 </div>
+					</div>
+					<a href="#none" class="more">더보기</a>
+            	</div>
+				<!-- 베스트 -->
+				<div class="section best_item">
+					<h2 class="title">베스트</h2>
+					<div class="slide" data-ix-options="view-length:3; duration:900; auto-play:true; axis:vertical; touch-disable:true">
+						<div class="ix-list-viewport">
+							<ul class="ix-list-items">
+								<li class="ix-list-item">
+									<a href="#none">
+										<span class="grade">01 <span class="up">3</span></span>
+										<span>
+											<span class="item_title">컬러풀 드로잉 판타스틱 컬러아이즈 마젠타 드로잉</span>
+											<span class="price"><b>9,500</b> 원</span>
+										</span>
+										<span class="img">
+											<img ap:src="@{/images/dummy/20180226104012385.png}" alt="">
+										</span>
+									</a>
+								</li>
+								 <li class="ix-list-item">
+									 <a href="#none">
+										 <span class="grade">02 <span class="down">1</span></span>
+										 <span>
+											 <span class="item_title">디어 마이 블루밍 립스 톡 쉬폰</span>
+											 <span class="price"><b>9,500</b> 원</span>
+										 </span>
+										 <span class="img">
+											<img ap:src="@{/images/dummy/20180309171004923.png}" alt="">
+										</span>
+									 </a>
+								 </li>
+								 <li class="ix-list-item">
+									 <a href="#none">
+										 <span class="grade">03 <span class="up">1</span></span>
+										 <span>
+											<span class="item_title">닥터마스카라 픽서 포 퍼펙트 아이래쉬</span>
+											<span class="price"><b>9,500</b> 원</span>
+										</span>
+										 <span class="img">
+											 <img ap:src="@{/images/dummy/102002124_IM_01.png}" alt="">
+										 </span>
+									 </a>
+								 </li>
+								 <li class="ix-list-item">
+									 <a href="#none">
+										 <span class="grade">04 <span class="up">3</span></span>
+										 <span>
+											 <span class="item_title">디어 마이 블루밍 립스 톡 쉬폰</span>
+											 <span class="price"><b>9,500</b> 원</span>
+										 </span>
+										 <span class="img">
+											<img ap:src="@{/images/dummy/101001320_IM_01.png}" alt="">
+										</span>
+									 </a>
+								 </li>
+								 <li class="ix-list-item">
+									 <a href="#none">
+										 <span class="grade">05 <span class="down">1</span></span>
+										 <span>
+											<span class="item_title">닥터마스카라 픽서 포 퍼펙트 아이래쉬</span>
+											<span class="price"><b>9,500</b> 원</span>
+										</span>
+										 <span class="img">
+											<img ap:src="@{/images/dummy/20180226104012385.png}" alt="">
+										</span>
+									 </a>
+								 </li>
+								 <li class="ix-list-item">
+									 <a href="#none">
+										 <span class="grade">06 <span class="up">1</span></span>
+										 <span>
+											 <span class="item_title">디어 마이 블루밍 립스 톡 쉬폰</span>
+											 <span class="price"><b>9,500</b> 원</span>
+										 </span>
+										 <span class="img">
+											<img ap:src="@{/images/dummy/20171026171319795.png}" alt="">
+										</span>
+									 </a>
+								 </li>
+								 <li class="ix-list-item">
+									 <a href="#none">
+										 <span class="grade">07 <span class="up">1</span></span>
+										 <span>
+											 <span class="item_title">디어 마이 블루밍 립스 톡 쉬폰</span>
+											 <span class="price"><b>9,500</b> 원</span>
+										 </span>
+										 <span class="img">
+											<img ap:src="@{/images/dummy/20171026160555673.png}" alt="">
+										</span>
+									 </a>
+								 </li>
+								<li class="ix-list-item">
+									<a href="#none">
+										<span class="grade">08 <span class="down">1</span></span>
+										<span>
+											 <span class="item_title">디어 마이 블루밍 립스 톡 쉬폰</span>
+											 <span class="price"><b>9,500</b> 원</span>
+										</span>
+										<span class="img">
+											<img ap:src="@{/images/dummy/101001217_IM_01.png}" alt="">
+										</span>
+									</a>
+								</li>
+								<li class="ix-list-item">
+									<a href="#none">
+										<span class="grade">09 <span class="up">1</span></span>
+										<span>
+											 <span class="item_title">디어 마이 블루밍 립스 톡 쉬폰</span>
+											 <span class="price"><b>9,500</b> 원</span>
+										</span>
+										<span class="img">
+											<img ap:src="@{/images/dummy/101001131_IM_01.png}" alt="">
+										</span>
+									</a>
+								</li>
+							 </ul>
+						</div>
+					</div>
+					<a href="#none" class="more">더보기</a>
+				</div>
+            	<!-- MD 추천 -->
+            	<div class="section recommend_item">
+					<h2 class="title">올해의 바이올렛 컬러</h2>
+					<!-- slide -->
+            		<div class="slide two_half" data-ix-options="view-length:3; move-length:2;">
+			            <div class="ix-list-viewport">
+			                <ul class="ix-list-items">
+			                    <li class="ix-list-item">
+			                        <a href="#none">
+										<span class="lazy_load_wrap" style="background-color:#e2bfe3;"><img src="" data-src="/mo/ko/images/dummy/img_item_480.png" alt="" class="lazy_load"></span>
+			                        	<span class="item_title">유니버스 멀티 팔레트</span>
+			                        	<span class="price"><b>19,000</b> 원</span>
+			                        </a>
+			                    </li>
+			                    <li class="ix-list-item">
+			                        <a href="#none">
+										<span class="lazy_load_wrap" style="background-color:#c6b7f4;"><img src="" data-src="/mo/ko/images/dummy/102002124_IM_01.png" alt="" class="lazy_load"></span>
+			                        	<span class="item_title">진주알 맑은 에센스 비비밤...</span>
+			                        	<span class="price"><b>19,000</b> 원</span>
+			                        </a>
+			                    </li>
+			                    <li class="ix-list-item">
+			                        <a href="#none">
+										<span class="lazy_load_wrap" style="background-color:#957ee0;"><img src="" data-src="/mo/ko/images/dummy/101001217_IM_01.png" alt="" class="lazy_load"></span>
+			                        	<span class="item_title">유니버스 멀티 팔레트</span>
+			                        	<span class="price"><b>19 ,000</b> 원</span>
+			                        </a>
+			                    </li>
+			                    <li class="ix-list-item">
+			                        <a href="#none">
+										<span class="lazy_load_wrap" style="background-color:#6a50bd;"><img src="" data-src="/mo/ko/images/dummy/20171026171319795.png" alt="" class="lazy_load"></span>
+			                        	<span class="item_title">유니버스 멀티 팔레트</span>
+			                        	<span class="price"><b>19,000</b> 원</span>
+			                        </a>
+			                    </li>
+			                </ul>
+			            </div>
+					</div>
+					<!--/* 18.05.30 제거 <a href="#none" class="more">더보기</a> */-->
+            	</div>
+				<!-- ch.에뛰드 -->
+				<div class="section ch_etude">
+					<h2 class="title">Ch.에뛰드</h2>
+					<div class="video_wrap">
+						<!--/* 섬네일 용 이미지 */-->
+						<button type="button" class="thumbnail"><img alt="" src="/mo/ko/images/dummy/img_dummy_channel.jpg"></button>
+						<!--/* src속성값의 ?enablejsapi=1 는 필수 */-->
+						<iframe class="youtube_video" width="800" height="450" src="https://www.youtube.com/embed/4uLivcdjRlc?enablejsapi=1" frameborder="0" allowfullscreen="" data-vendor="youtube" data-ratio="true" data-mute="false"></iframe>
+					</div>
+					<h3 class="sub_title"></h3>
+					
+					<dl>
+						<dt>[라이브쇼] 레드카펫 여배우 메이크업</dt>
+						<dd>
+							<ul class="table_layout">
+								<li>
+									<a href="#none">
+										<span class="lazy_load_wrap"><img src="" data-src="/mo/ko/images/dummy/img_item_480.png" alt="" class="lazy_load"></span>
+										<span class="item_title">플레이 컬러<br>아이즈 와인파티</span>
+										<span class="price"><b class="num">22,000</b> 원</span>
+									</a>
+								</li>
+								<li>
+									<a href="#none">
+										<span class="lazy_load_wrap"><img src="" data-src="/mo/ko/images/dummy/20180309171004923.png" alt="" class="lazy_load"></span>
+										<span class="item_title">플레이 컬러<br>아이즈 와인파티</span>
+										<span class="price"><b class="num">22,000</b> 원</span>
+									</a>
+								</li>
+								<li>
+									<a href="#none">
+										<span class="lazy_load_wrap"><img src="" data-src="/mo/ko/images/dummy/img_item_480.png" alt="" class="lazy_load"></span>
+										<span class="item_title">플레이 컬러<br>아이즈 와인파티</span>
+										<span class="price"><b class="num">22,000</b> 원</span>
+									</a>
+								</li>
+							</ul>
+						</dd>
+					</dl>
+					<a href="#none" class="more">더보기</a>
+				</div>
+            	<!-- 이벤트, 기획전 -->
+            	<div class="banner gradient"> <!--/* 0523 클래스 추가 */-->
+					<a href="#none">
+						<span class="lazy_load_wrap"><img src="" data-src="/mo/ko/images/dummy/img_main_10.jpg" alt="" class="lazy_load"></span>
+						<strong class="title">HAVE FUN<br>TOGETHER</strong>
+						<p class="text">기분까지 산뜻하게 만들어주는 상큼한<br>시트러스 향</p>
+					</a>
+            	</div>
+            	
+            	<!-- 9 looks -->
+            	<div class="section nine_looks">
+					<h2 class="title">FIND YOUR LOOKS</h2>
+					<div class="slide" data-ix-options="view-length:2; move-length:1;">
+						<div class="ix-list-viewport">
+							<ul class="ix-list-items">
+								<li class="ix-list-item">
+									<a href="#none">
+										<span class="lazy_load_wrap"><img src="" data-src="/mo/ko/images/dummy/img_9looks_01.jpg" alt="" class="lazy_load"></span>
+										<span class="item_title">BLOSSOM</span>
+										<span class="tag">#소개팅룩 #소녀감성 #러브지수UP</span>
+									</a>
+								</li>
+								<li class="ix-list-item">
+									<a href="#none">
+										<span class="lazy_load_wrap"><img src="" data-src="/mo/ko/images/dummy/img_9looks_02.jpg" alt="" class="lazy_load"></span>
+										<span class="item_title">BLOSSOM</span>
+										<span class="tag" style="color:#feb300;">#소개팅룩 #소녀감성 #러브지수UP</span>
+									</a>
+								</li>
+								<li class="ix-list-item">
+									<a href="#none">
+										<span class="lazy_load_wrap"><img src="" data-src="/mo/ko/images/dummy/img_9looks_03.jpg" alt="" class="lazy_load"></span>
+										<span class="item_title">BLOSSOM</span>
+										<span class="tag" style="color:#66caa4;">#소개팅룩 #소녀감성 #러브지수UP</span>
+									</a>
+								</li>
+								<li class="ix-list-item">
+									<a href="#none">
+										<span class="lazy_load_wrap"><img src="" data-src="/mo/ko/images/dummy/img_9looks_01.jpg" alt="" class="lazy_load"></span>
+										<span class="item_title">BLOSSOM</span>
+										<span class="tag">#소개팅룩 #소녀감성 #러브지수UP</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<a href="#none" class="more">더보기</a>
+            	</div>
+				
+				<!--  banner -->
+				<div class="banner">
+					<a href="#none"><img ap:src="@{/images/dummy/img_main_12.jpg}" alt=""></a>
+				</div>
+            </div>
+			<!-- 공지사항 : 메인, 고객센터만 노출 -->
+			<dl class="footer_notice">
+				<dt>공지</dt>
+				<dd>
+					<div class="slide footer_slide" data-ix-options="view-length:1; auto-play:true; axis:vertical;">
+						<div class="ix-list-viewport">
+							<ul class="ix-list-items">
+								<li class="ix-list-item">
+									<a href="#none">테이크아웃 적립 혜택 변경 안내</a>
+								</li>
+								<li class="ix-list-item">
+									<a href="#none">온라인 핑크 하트 서비스 종료 안내</a>
+								</li>
+								<li class="ix-list-item">
+									<a href="#none">[공지] 위치기반 서비스 이용약관 변경 안내</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<a href="#none" class="more"><span class="sr_only">공지사항 더보기</span></a>
+				</dd>
+			</dl>
+			<!-- // 공지사항 -->
+        </div>
+
+    <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+    <th:block ap:fragment="layout-endpoint">
+
+		<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+		<script>
+
+		</script>
+
+    </th:block>
+
+</body>
+</html>

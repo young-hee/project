@@ -1,0 +1,242 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        
+        	<!-- mypage sitemap -->
+            <th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+            <!-- //  mypage sitemap -->
+			<div id="progress" style="top: 0;margin-top: 1400px;left: 0;margin-left: calc(50% - 5px);position: absolute;z-index: 10;opacity: 1;display: none;">
+				   <div class="loading_full">
+						<span>
+							<img alt="" src="/pc/ko/images/common/loading.gif">
+						</span>
+				   </div>
+			 </div>
+
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+
+            <!-- page contents -->
+            <div class="ap_contents mypage pearl_gift_list">
+				<div class="pearl_guide_view align_center">
+					<button type="button" onclick="pearlCushion()" class="btn_md_primary">진주알로 쿠폰교환</button><!--/* 20180418 : 버튼추가 */-->
+					<button type="button" onclick="location.href='/cs/pearlPoint'" class="btn_md_bordered">진주알 가이드 보기</button>
+				</div>
+
+				<div class="user_pearl_total">
+					<div class="pearl_text"><span th:text="${session.LOGIN_USER.member.name.name1}">홍길동</span> 님의 현재 진주알</div>
+					<div class="pearl_agg"><strong th:text="${#IntegUtil.toCommaNumber(activityPointInfo.availActivityPoint)}">100,000</strong> <span>알</span></div>
+				</div>
+
+				<!-- tab menu wrap -->
+				<div class="ui_tab">
+					<!-- tab menu -->
+					<div class="tab_menu equally">
+						<ul>
+							<li class="on"><a href="#none">선물하기</a></li>
+							<li><a href="#none" onclick="location.replace('/my/page/pearl/receive')">선물받기</a></li>
+						</ul>
+					</div>
+					<!-- tab content -->
+					<div class="tab_cont pearl_gift_tab">
+						<h3 class="sr_only">선물하기</h3>
+						<form>
+							<fieldset class="form">
+								<legend class="sr_only">선물하기 정보 입력</legend>
+								<div class="pearl_gift_form">
+									<div>
+										<dl>
+											<dt><label for="">보낼 진주알</label></dt>
+											<dd><span class="input_wrap"><input type="number" name="point" number="number" id="giftPoint" title="진주알 입력" value="" placeholder="1,000알 ~ 10,000알까지 " required="required" data-msg-required="선물할 진주알 포인트를 입력해 주세요."></span></dd>
+										</dl>
+									</div>
+									<div>
+										<dl>
+											<dt><label for="">받으시는 분 성함</label></dt>
+											<dd><span class="input_wrap"><input type="text" name="memberName" placeholder="이름" title="이름(Name) 입력"  required="required" data-msg-required="이름을 입력해 주세요." user-name="user-name"/></span></dd>
+										</dl>
+										<dl>
+											<dt><label for="">휴대폰번호</label></dt>
+											<dd><span class="input_wrap"><input type="number" mobile-number="mobile-number" name="phoneNumber" title="휴대전화번호 입력" placeholder="‘-’제외한 휴대폰번호" required="required" data-msg-required="휴대전화번호를 입력해주세요."></span></dd>
+										</dl>
+									</div>
+								</div>
+								<div class="pearl_gift_form_btn align_center">
+									<button type="button" onclick="present()" class="btn_md_neutral">선물하기</button>
+								</div>
+							</fieldset>
+						</form>
+
+						<div class="ui_multiple_date_picker date_picker_gift entry-point">
+							<div class="date_pic_left">
+								<div class="date_btn_set">
+									<span><input type="radio" class="select_range_date" name="radio5" id="radio5_0" value="all" checked=""><label for="radio5_0">전체</label></span>
+									<span><input type="radio" class="select_range_date" name="radio5" id="radio5_1" value="1weeks"><label for="radio5_1">1주일</label></span>
+									<span><input type="radio" class="select_range_date" name="radio5" id="radio5_2" value="1months"><label for="radio5_2">1개월</label></span>
+									<span><input type="radio" class="select_range_date" name="radio5" id="radio5_3" value="3months"><label for="radio5_3">3개월</label></span>
+									<span><input type="radio" class="select_range_date" name="radio5" id="radio5_4" value="6months"><label for="radio5_4">6개월</label></span>
+									<span><input type="radio" class="select_range_date" name="radio5" id="radio5_5" value="1years"><label for="radio5_5">12개월</label></span>
+								</div>
+								<div class="input_date_group">
+									<div class="input_wrap" style="display:none;">
+										<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+										<input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+									</div>
+									<div class="date_info_area">
+										<span class="sr_only">시작일</span> <span class="start_date"></span> ~ <span class="sr_only">종료일</span> <span class="end_date"></span> <span class="date_text">까지의 사용 및 적립 내역</span>
+									</div>
+								</div>
+							</div>
+						</div>
+							
+						<div ap:replace="~{my/fragment/pearl-fragment :: pearl-list}"></div>
+					</div>
+				</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+            <script>
+				//multiple date picker적용
+				var progress = '<div id="m-loading"><ul class="loading"><li></li><li></li><li></li></ul></div>';
+				var date = null;
+				$( '.ui_multiple_date_picker' ).multipleDatePicker({
+					defaultRangeDate: 'all',
+					minDate: moment().subtract( 50, 'years' )
+				}).on( 'multiple-date-picker-change', function (e) {
+					console.log( e.type, e.date );
+					date = e.date;
+					more(1);
+				});
+				
+
+				function more(pageNumber) {
+					if(pageNumber == 0 || pageNumber == null) return;
+			    	$('#progress').show();
+					if(date)
+						$.get("/my/page/info/pearlAppendList?pageNumber=" + pageNumber + "&startDt="+date.startDate + "&endDt="+date.endDate, function(data) {
+					    	$(".pbody").remove();
+							$(".entry-point").after(data);
+					    	$('#progress').hide();
+						});
+					else
+						$.get("/my/page/info/pearlAppendList?pageNumber=" + pageNumber, function(data) {
+					    	$(".pbody").remove();
+							$(".entry-point").after(data);
+					    	$('#progress').hide();
+						});
+						
+				}
+				function present() {
+
+					var point = Number($("#giftPoint").val());
+					if(point < 999) {
+						AP.modal.alert("보낼 진주알은 최소 1000알 이상 입력해야 합니다.").addListener('modal-close', function(e) {
+							$("#giftPoint").focus();
+	                    });
+						return;
+					} else if(point > 10000) {
+						AP.modal.alert("보낼 진주알은 최대 10000알 초과할 수 없습니다.").addListener('modal-close', function(e) {
+							$("#giftPoint").focus();
+	                    });
+						return;
+					}
+					
+					if($('form').valid()) {
+
+			            AP.api.giftPearl({}, AP.common.getFormData($('form')))
+			                .done(function(data) {
+			                    AP.modal.alert("포인트를 선물하였습니다.").addListener('modal-close', function(e) {
+			                    	location.reload();
+			                    });
+			                }).fail(function(xhr, textStatus, errorThrown) {
+			                	if (xhr.errorCode == 0) {
+			                        AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+			                    } else if (xhr.errorCode == 'EAPI002') {
+			                        AP.modal.alert("입력하신 이름과 휴대폰 정보의 회원을 찾을 수 없습니다.");
+			                    } else if (xhr.errorCode == 'ESAL007') {
+			                        AP.modal.alert("보유하신 진주알이 부족하여 선물하기를 할 수 없습니다.");
+			                    } else if (xhr.errorCode == 'EAPI001') {
+			                        AP.modal.alert("선물 주기에 실패했습니다.");
+			                    } else {
+			                        AP.modal.alert(xhr.errorMessage);
+			                    }
+			                }).always(function() {
+			                    //성공, 실패
+			                });
+					}
+				}
+				
+				function pearlCushion() {
+
+    			    $.get('/my/page/pearl/salesCushion', function(data) {
+    			        var contents = new Object();
+    			        contents.contents = data;
+    			        var modal = AP.modal.info(contents);
+    			        var $modalEl = modal.getElement(); //jquery object
+    			        $(".layer_close").click(function() {
+    			            modal.close();
+    			        });
+    			        
+
+    					var $tabBtn = $modalEl.find( '.ui_tab .tab_menu button' ),
+    						$tabLi = $modalEl.find( '.ui_tab .tab_menu li' ),
+    						$tabs = $modalEl.find( '.tab_cont' );
+    					
+    					var flag = 0;
+    					
+    					
+   						$($tabBtn[0]).click(function() {
+  							$tabs.css('display','none');
+   							$tabLi.removeClass('on');
+   							$($tabLi[0]).addClass('on')
+   							$($tabs[0]).css('display','block');
+   						});
+   						$($tabBtn[1]).click(function() {
+  							$tabs.css('display','none');
+   							$tabLi.removeClass('on');
+   							$($tabLi[1]).addClass('on')
+   							$($tabs[1]).css('display','block');
+   						});
+
+    					if($('#no-list1').parent().find('.coupon').size() == 0) {
+    						$('#no-list1').show();
+    					}
+    					if($('#no-list2').parent().find('.coupon').size() == 0) {
+    						$('#no-list2').show();
+    					}
+    			        
+    			    });
+				}
+
+				function exchange(couponNo) {
+
+			        AP.api.pearlExchange({}, {couponSn : couponNo})
+			            .done(function(data) {
+			                AP.modal.alert("쿠폰 교환이 완료되었습니다.\n\n교환하신 쿠폰은 ‘마이 에뛰드 > 나의 혜택 관리 > 나의 쿠폰’ 에서 확인하실 수 있습니다.\n\n지금 확인하시겠습니까?").addListener('modal-close', function(e) {
+			                      if (e.closeType == 'confirm') {
+					                	location.href='/my/page/myCouponList';
+			                      }
+			                });
+			            }).fail(function(xhr, textStatus, errorThrown) {
+			            	if (xhr.errorCode == 0) {
+			                    AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+			                } else if (xhr.errorCode == 'EAPI002') {
+			                    AP.modal.alert("입력하신 이름과 휴대폰 정보의 회원을 찾을 수 없습니다.");
+			                } else {
+			                    AP.modal.alert(xhr.errorMessage);
+			                }
+			            }).always(function() {
+			                //성공, 실패
+			            });
+				}
+				
+            </script>
+        </th:block>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+    <title>Concept C</title>
+    <link rel="stylesheet" href="css/css.css">
+
+    <script src="../../libs/jquery-1.12.3.min.js"></script>
+    <script src="../../libs/ixBand_1.1.min.js"></script>
+    <script src="../../libs/ixSnack_0.4.min.js"></script>
+
+</head>
+
+<body>
+   
+    <div class="wrapper">
+        <div class="header">
+            <a href="main.html" class="home"></a>
+            <a href="javascript:;" class="left_menu_btn"></a>
+            <img src="images/img_header_01.jpg" alt="">
+        </div>
+        <div class="menu_area">
+            <div class="fixed_menu"> <!-- 스크롤시 fixed 클래스 추가 -->
+                <img src="images/img_header_02.jpg" alt="">
+                <a href="hot.html" class="hot"></a>
+                <a href="live.html" class="live"></a>
+            </div>
+        </div>
+        <div class="aside">
+            <div>
+                <img src="images/img_aside.jpg" alt="">
+            </div>
+        </div>
+        <div class="contents">
+            <div class="slide main_slide" data-ix-options="view-length:1;">
+                <div class="ix-list-viewport">
+                    <ul class="ix-list-items">
+                        <li class="ix-list-item">
+                            <img src="images/img_banner_01.jpg" alt="배너 내용">
+                            <div class="slide sub_slide" data-ix-options="view-length:4; move-length:3;">
+                                <div class="ix-list-viewport">
+                                    <ul class="ix-list-items">
+                                        <li class="ix-list-item"><img src="images/img_banner_01_01.png" alt="배너 내용"></li>
+                                        <li class="ix-list-item"><img src="images/img_banner_01_02.png" alt="배너 내용"></li>
+                                        <li class="ix-list-item"><img src="images/img_banner_01_03.png" alt="배너 내용"></li>
+                                        <li class="ix-list-item"><img src="images/img_banner_01_04.png" alt="배너 내용"></li>
+                                        <li class="ix-list-item"><img src="images/img_banner_01_05.png" alt="배너 내용"></li>
+                                        <li class="ix-list-item"><img src="images/img_banner_01_06.png" alt="배너 내용"></li>
+                                        <li class="ix-list-item"><img src="images/img_banner_01_07.png" alt="배너 내용"></li>
+                                        <li class="ix-list-item"><img src="images/img_banner_01_08.png" alt="배너 내용"></li>
+                                    </ul>
+                                </div>
+                                <div class="ix-controller">
+                                    <div class="slide_direction">
+                                        <button type="button" class="ix-btn-prev"></button>
+                                        <button type="button" class="ix-btn-next"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="ix-list-item">
+                            <img src="images/img_banner_02.jpg" alt="배너 내용">
+                            <div class="slide sub_slide" data-ix-options="view-length:4; move-length:3;">
+                                <div class="ix-list-viewport">
+                                    <ul class="ix-list-items">
+                                        <li class="ix-list-item"><img src="images/img_banner_02_01.png" alt="배너 내용"></li>
+                                        <li class="ix-list-item"><img src="images/img_banner_02_02.png" alt="배너 내용"></li>
+                                        <li class="ix-list-item"><img src="images/img_banner_02_03.png" alt="배너 내용"></li>
+                                        <li class="ix-list-item"><img src="images/img_banner_02_04.png" alt="배너 내용"></li>
+                                        <li class="ix-list-item"><img src="images/img_banner_02_05.png" alt="배너 내용"></li>
+                                        <li class="ix-list-item"><img src="images/img_banner_02_06.png" alt="배너 내용"></li>
+                                        <li class="ix-list-item"><img src="images/img_banner_02_07.png" alt="배너 내용"></li>
+                                    </ul>
+                                </div>
+                                <div class="ix-controller">
+                                    <div class="slide_direction">
+                                        <button type="button" class="ix-btn-prev"></button>
+                                        <button type="button" class="ix-btn-next"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="ix-controller">
+                    <ul class="ix-thumbs">
+                        <li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+                    </ul>
+                </div>
+            </div>
+            <img src="images/img_cont_main.jpg" alt="">
+        </div>
+        <div class="floating_menu open">
+            <a href="main.html" class="home"></a>
+            <a href="javascript:;" class="left_menu_btn"></a>
+            <img src="images/img_floating_menu.jpg" alt="">
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script type="text/javascript">
+	    $( '.main_slide' ).ixSlideMax();
+	    $( '.sub_slide' ).ixSlideMax().on( 'ixSlideMax:change', function (e) {
+            var idx = $( e.currentTarget ).closest( '.ix-list-item' ).data( 'origin-idx' );
+            $( '.main_slide > .ix-list-viewport > .ix-list-items > .ix-list-item[data-origin-idx="' + idx + '"] .sub_slide' ).ixSlideMax( 'changeIndex', e.currentIndex );
+        });
+
+        /**
+         * 하단 quick
+         */
+        ;(function () {
+            var _$floating = $( '.floating_menu' ),
+                    _$top = $( '.btn_top' ),
+                    _oldScollY = $( window ).scrollTop();
+
+            _$top.on( 'click', function (e) {
+                $( 'body,html' ).animate({
+                    scrollTop: 0
+                });
+            });
+
+            $( window ).on( 'scroll', function (e) {
+                var scrollY = $( window ).scrollTop();
+
+                if ( _oldScollY > scrollY ) {
+                    _$floating.addClass( 'open' );
+                    _$top.addClass( 'on' );
+                } else {
+                    _$floating.removeClass( 'open' );
+                    _$top.removeClass( 'on' );
+                }
+
+                _oldScollY = scrollY;
+            });
+
+        })();
+	</script>
+</body>
+</html>

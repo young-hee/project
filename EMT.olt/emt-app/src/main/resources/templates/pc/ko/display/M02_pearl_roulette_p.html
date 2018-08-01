@@ -1,0 +1,79 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='pearl-roulette'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents event pearl_roulette">
+				<div class="pear_roulette">
+					<div class="sr_only">
+						<p>하루 3번 반짝반짝</p>
+						<p>진주알룰렛</p>
+						<p>3번 바로바로 당첨되는 진주알 행운 룰렛으로 선물받아가자!</p>
+					</div>
+					<img class="top" ap:src="@{/images/event/top_roulette.png}" alt="">
+					<div class="circle">
+						<img ap:src="@{/images/event/circle_roulette.png}" alt="">
+					</div>
+					<button type="button" class="btn_start"><span class="sr_only">시작</span></button>
+					<p class="text">행운 당첨은 1회 참여 시 <em>진주알 20알</em>이 차감됩니다.<br><em>하루에 3회</em>까지 응모 가능합니다.</p>
+				</div>
+				<div class="event_benefit_info">
+					<dl>
+						<dt>읽어보세요!</dt>
+						<dd>
+							<ul class="list_bullet_dot">
+								<li>진주알 룰렛은 1회 참여 시 진주알 20알이 차감됩니다. <em>(1일 최대 3회 응모 가능)</em></li>
+								<li>에뛰드 BEST 상품, 팬시제품, 할인쿠폰, 진주알 등 다양한 형태의 당첨 경품이 마련되어 있으며, 응모 즉시 확인 가능합니다.</li>
+							</ul>
+						</dd>
+					</dl>
+
+					<dl class="box">
+						<dt>당첨경품 예시</dt>
+						<dd class="align_center"><img ap:src="@{/images/event/img_sweet_letter_02.jpg}" alt="경품 예시 이미지"></dd>
+						<dd>
+							<ul class="list_bullet_dot">
+								<li>실물 경품 당첨 시 익일(영업일 기준) 택배 발송합니다.</li>
+								<li>배송이 필요한 경품의 경우 배송지를 입력 받사오니, 정확하게 입력해 주세요.(주소 오류 반송 건은 재발송하지 않습니다.)</li>
+								<li>당첨된 할인쿠폰이나 진주알은 당첨 즉시 지급됩니다. (마이 에뛰드에서 확인 가능합니다.)</li>
+							</ul>
+						</dd>
+					</dl>
+
+					<dl class="other_benefit">
+						<dt>그 밖의 다른 혜택</dt>
+						<dd>
+							<ul>
+								<li><a href="/display/sweet_letter?displayMenuId=sweet_letter" class="letter">스윗레터 100% 당첨</a></li>
+								<li><a href="/display/beauty_test?displayMenuId=beauty_test" class="beauty_tester">뷰티테스터 신청하기</a></li>
+								<li><a href="/display/daily_check?displayMenuId=daily_check" class="attendance">매일매일 행운의 출첵</a></li>
+							</ul>
+						</dd>
+					</dl>
+				</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+		<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+		<th:block ap:fragment="layout-endpoint">
+			<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+			<script th:inline="javascript">
+				;(function () {
+					var member = {};
+					[# th:if="${memberMap}"]
+					member.id = /*[[${memberMap.id}]]*/;
+					member.name = /*[[${memberMap.name}]]*/;
+					member.memberSn = /*[[${memberMap.memberSn}]]*/;
+					[/]
+
+					AP.roulette.setMemberInfo( member );
+				}());
+			</script>
+		</th:block>
+</body>
+</html>

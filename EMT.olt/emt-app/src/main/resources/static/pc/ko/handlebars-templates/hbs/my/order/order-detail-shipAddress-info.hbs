@@ -1,0 +1,40 @@
+{{#if (and (eq this.claimYn 'Y') (ne this.type 'cancel'))}}
+	<h3 class="h_title sub mgt80 mgb20">상품 교환 회수 방법</h3>
+	<div class="panel gray bordered">
+		<div class="panel_cont">
+			<p class="font_lg">에뛰드하우스 전용 택배사 이용</p>
+		</div>
+	</div>
+{{/if}}
+
+<div class="clear mgt80 mgb20">
+	<h3 class="h_title sub">
+		{{#xif (eq this.type 'return') '||' (eq this.type 'exchange')}}
+			{{this.title}} 회수지 정보
+		{{else}}
+			배송지 정보
+		{{/xif}}
+	</h3>
+	{{#xif this.status '==' 'detail'}}
+		{{#if (or (eq this.statusCode 'OrdReceivedWaiting') (eq this.statusCode 'OrdReceivedComplete'))}}
+			<button class="btn_sm_bordered" type="button" onclick="ediShipAddress('{{this.data.shipAddressTypeCode}}')">배송 정보 수정</button>
+		{{/if}}
+	{{else}}
+		<button class="btn_sm_bordered" type="button" onclick="editShipAddress('{{this.data.shipAddressTypeCode}}')">배송 정보 수정</button>
+	{{/xif}}
+</div>
+<div class="panel gray bordered">
+	<div class="panel_cont">
+		<ul class="my_delivery_info">
+			<li><b>이름</b><span>{{this.data.recipientName.name1}}</span></li>
+			<li><b>휴대폰번호</b><span>{{phoneNumberFormat this.data.recipientPhoneNo1.phoneNo}}</span></li>
+			{{#if (eq this.data.shipAddressTypeCode 'ShipAddressInput')}}
+				<li><b>주소</b><span>({{this.data.recipientAddress.zipCode}}) {{this.data.recipientAddress.address1}} {{this.data.recipientAddress.address2}}</span></li>
+			{{/if}}
+			{{#if (eq this.data.shipAddressTypeCode 'CStoreSelect')}}
+				<li><b>주소</b><span>편의점명 : {{this.data.cStoreName}} / 연락처 : {{phoneNumberFormat this.data.cStorePhoneNo.phoneNo}}</span></li>
+			{{/if}}
+			<li><b>배송 메세지</b><span>{{this.data.shipMsg}}</span></li>
+		</ul>
+	</div>
+</div>

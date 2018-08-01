@@ -1,0 +1,73 @@
+<html ap:decorate=~{layout/layout-category} th:with="_jsfile='product-list'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents prd_list">
+
+		<!--/* 20180423 : 포인트 노출 영역 수정 */-->
+		<div class="point_status">
+			<div class="bg">
+				<h3 class="h_title eng"><strong>Only BeautyPoint!~</strong></h3>
+				<p class="text">뷰티포인트로 구매 가능한 에뛰드의 인기상품</p>
+				<div class="table_layout">
+					<div th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+						<dl>
+							<dt th:text="${session.LOGIN_USER.member.name.name1} + ' 님의 뷰티포인트'"></dt>
+							<dd><strong th:text="${session.LOGIN_USER.member.remainBeautyPoint}">999,999</strong>P</dd>
+						</dl>
+					</div>
+					<div th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+						<a href="/my/page/info/beautyPoint">내역보기 <i class="ico_arr"></i></a>
+					</div>
+					<div th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+						<a href="/login">로그인 <i class="ico_arr"></i></a>
+					</div>
+				</div>
+			</div>
+			<p class="align_center">뷰티포인트 전용제품은 뷰티포인트로만 구매 가능하며,<br>부분만 사용되지 않습니다.</p>
+		</div>
+
+		<!--상품리스트-->
+		<div class="item_list type2">
+			<div class="panel notice no_result" style="display: none;">
+				<i class="ico"></i>
+				<p class="text">상품이 존재하지 않습니다.</p>
+			</div>
+
+			<ul></ul>
+
+			<!-- 180712 더보기 삭제
+			<button type="button" class="btn_lg_more w100p">
+				<span></span>
+			</button>
+			-->
+		</div>
+		<!--//상품리스트-->
+
+		<ul class="loading" style="display: none">
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	<!-- // page contents -->
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script>
+		AP.display.init({
+			api: 'pointExchangeableProdList',
+			key: { displayMenuId: AP.DISPLAY_MENU_ID },
+			param: { limit: 99999, pointType: 'MembershipPoint', pointExch: 'Only', prodSort: 'NewProd' }
+		});
+	</script>
+</th:block>
+
+</body>
+</html>

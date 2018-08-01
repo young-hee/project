@@ -1,0 +1,44 @@
+<table data-date="{{ this.year }}-{{ this.month }}">
+	<caption class="sr_only">calendar date table</caption>
+	<colgroup>
+		<col style="width:15%;" />
+		<col style="width:14%;" />
+		<col style="width:14%;" />
+		<col style="width:14%;" />
+		<col style="width:14%;" />
+		<col style="width:14%;" />
+		<col style="width:15%;" />
+	</colgroup>
+	<thead>
+	<tr>
+		<th scope="col" class="sun"><span>{{ this.days.[0] }}</span></th>
+		<th scope="col"><span>{{ this.days.[1] }}</span></th>
+		<th scope="col"><span>{{ this.days.[2] }}</span></th>
+		<th scope="col"><span>{{ this.days.[3] }}</span></th>
+		<th scope="col"><span>{{ this.days.[4] }}</span></th>
+		<th scope="col"><span>{{ this.days.[5] }}</span></th>
+		<th scope="col" class="sat"><span>{{ this.days.[6] }}</span></th>
+	</tr>
+	</thead>
+	<tbody>
+	{{#each this.weeks}}
+		<tr>
+			{{#each this}}
+				<td class="{{#if this.sunday}}sun{{/if}} {{#if this.saturday}}sat{{/if}} {{#if this.today}}today{{/if}} {{#if this.select}}selected{{/if}} {{#if this.disabled}}disabled{{/if}} {{#if this.other}}other{{/if}} {{ this.time }} {{#if this.attendanced10}}day10{{/if}} {{#if this.attendanced30}}day30{{/if}}">
+					<span class="date">{{ this.date }}</span>
+					{{#if this.attendanced}}
+						<span class="mark">
+							{{!-- 10일 개근, 30일 개근 --}}
+							{{#xif this.attendanced10 '||' this.attendanced30}}
+								<span class="sr_only">30일개근</span>
+							{{else}}
+								출첵
+							{{/xif}}
+						</span>
+					{{/if}}
+				</td>
+			{{/each}}
+		</tr>
+	{{/each}}
+	</tbody>
+</table>

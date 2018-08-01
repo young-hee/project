@@ -1,0 +1,32 @@
+<div class="panel">
+	<dl class="goods_detail_cont">
+		<dt>상품명</dt>
+		<dd>{{ this.selectedData.prodName }}</dd>
+
+		{{#each this.selectedData.disclosures}}
+			<dt>{{ this.disclosureItemName }}</dt>
+
+			{{!-- 전성분 --}}
+			{{#xif @index '==' 7}}
+				<dd class="all_ingredients">
+					{{#xif ../productCount '>' 1}}
+						<div class="select_wrap">
+							<select name="ingredients">
+								{{#each ../products}}
+									<option value="{{ this.prodSn }}" {{#xif this.prodSn '==' ../../selectedData/prodSn}}selected{{/xif}}>{{ this.prodName }}</option>
+								{{/each}}
+							</select>
+						</div>
+						<div class="result">
+							{{ ../selectedData.disclosures.7.prodDisclosureInfo }}
+						</div>
+					{{else}}
+						{{ ../selectedData.disclosures.7.prodDisclosureInfo }}
+					{{/xif}}
+				</dd>
+			{{else}}
+				<dd>{{ this.prodDisclosureInfo }}</dd>
+			{{/xif}}
+		{{/each}}
+	</dl>
+</div>

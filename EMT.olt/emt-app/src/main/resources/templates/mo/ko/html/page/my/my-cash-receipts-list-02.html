@@ -1,0 +1,71 @@
+<html ap:decorate="~{layout/layout-contents}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents mypage">
+		<div class="my_order">
+			<fieldset class="panel">
+				<h2 class="h_title page">현금영수증 발급</h2>
+				<p class="text font_lg">홍길동님의 현금영수증 발급 상태를 확인해 보세요.</p>
+				<hr class="div m30">
+				<legend class="sr_only">기간 선택</legend>
+				<div class="ui_multiple_date_picker">
+					<div class="date_btn_set">
+						<span><input type="radio" class="select_range_date" name="radio4" id="radio4_0" value="all" checked=""><label for="radio4_0">전체</label></span>
+						<span><input type="radio" class="select_range_date" name="radio4" id="radio4_1" value="1months" checked=""><label for="radio4_1">1개월</label></span>
+						<span><input type="radio" class="select_range_date" name="radio4" id="radio4_2" value="3months"><label for="radio4_2">3개월</label></span>
+						<span><input type="radio" class="select_range_date" name="radio4" id="radio4_3" value="6months"><label for="radio4_3">6개월</label></span>
+						<span><input type="radio" class="select_range_date" name="radio4" id="radio4_4" value="1years"><label for="radio4_4">1년</label></span>
+					</div>
+					<br>
+					<div class="input_date_group">
+						<div style="display:none;">
+							<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+							<input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+						</div>
+						<div class="date_info_area v2">
+							<span class="start_date num"></span> ~ <span class="end_date num"></span> <span class="color_light_gray">까지의 내역</span>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+
+			<div class="panel notice">
+				<i class="ico"></i>
+				<p class="text">선택하신 기간에 발급내역이 없습니다.</p>
+			</div>
+
+			<!--/* 안내문구*/-->
+			<div class="panel padding15">
+				<button type="button" class="btn_md_bordered w100p">2018년 7월 30일 이전 발급내역 보기 </button>
+			</div>
+		</div>
+	</div>
+	<!-- // page contents -->
+
+	<!-- 마이페이지 맵 01-24 위치변경 -->
+	<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+	<!-- // 마이페이지 맵 -->
+
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script>
+		//multiple date picker적용
+		$( '.ui_multiple_date_picker' ).multipleDatePicker({
+			defaultRangeDate: '1months',
+			minDate: moment().subtract( 50, 'years' )
+		}).on( 'multiple-date-picker-change', function (e) {
+			console.log( e.type, e.date );
+		});
+	</script>
+
+</th:block>
+</body>
+</html>

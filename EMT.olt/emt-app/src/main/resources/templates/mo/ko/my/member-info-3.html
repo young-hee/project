@@ -1,0 +1,140 @@
+<html ap:decorate="~{layout/layout-contents}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <!-- page contents -->
+            <div class="ap_contents mypage"> <!-- 01-23 클래스 변경 -->
+            	<div class="panel">
+                    <div class="title_wrap">
+                        <h3 class="h_title page">회원탈퇴</h3>
+                        <p class="text font_md">회원탈퇴 전, 포인트 및 유의사항을 꼭 확인해주세요.</p>
+                    </div>        
+                	<hr class="div m30" /> <!-- 02-21 수정 -->
+                	<h3 class="h_title cont">포인트 현황</h3>
+                    <div class="point_summary">
+                        <dl>
+                            <dt>잔여 뷰티포인트</dt><!--20180125 문구 수정-->
+                            <dd th:text="${session.LOGIN_USER.member.remainBeautyPoint} + 'P'">2,000P</dd>
+                        </dl>
+                        <dl>
+                            <dt>잔여 진주알</dt><!--20180125 문구 수정-->
+                            <dd th:text="${session.LOGIN_USER.member.activityPoint} + '알'">200알</dd>
+                        </dl>
+                        <!--start : 20180125 항목 추가-->
+                        <dl>
+                            <dt>잔여 예치금</dt>
+                            <dd th:text="${session.LOGIN_USER.member.remainDeposit} + 'P'">0P</dd>
+                        </dl>
+                        <!--end : 20180125 항목 추가-->
+                        <dl>
+                            <dt>잔여 쿠션포인트</dt><!--20180125 문구 수정-->
+                            <dd th:text="${session.LOGIN_USER.member.remainCushionPoint} + 'P'">0P</dd>
+                        </dl>
+                    </div>
+                    
+                    <div class="panel gray">
+                    	<ul class="list_bullet_dot">
+                    		<li>온라인쇼핑몰에 완료처리되지 않은 주문이 남아있을 경우 탈퇴가 불가하므로 남아있는 주문내역이 없는지 확인 바랍니다.</li>
+                    		<li>또한 예치금이 남아 있을 경우 탈퇴할 수 없으니 잔액이 남아 있는 지 확인 바랍니다.</li>
+                    	</ul>
+                    </div>
+                    
+                    <div class="page_btns">
+                    	<button type="button" onclick="location.replace('/my/page/myDepositList')" class="btn_lg_bordered">예치금 내역 확인</button>
+                    	<button type="button" class="btn_lg_neutral" onclick="location.replace('/my/page/onlineOrderShipping')">주문 내역 확인</button>
+                    </div>
+                    
+                    <dl class="dl_cont">
+                    	<dt class="h_title cont"><b>탈퇴시 잔여 뷰티포인트 및 진주알은 모두 <em>삭제</em>됩니다.</b></dt><!--20180125 수정-->
+                    	<dd>
+                    		<ul class="list_bullet_dot">
+                    			<li>회원을 탈퇴하시면, 아모레퍼시픽 뷰티포인트 통합회원의 모든 권리가 취소됨은 물론 에뛰드 회원(온/오프라인)으로서 혜택도 삭제됩니다.</li>
+                    			<li>탈퇴사유를 입력해 주시면, 더욱 좋은 서비스를 만드는데 좋은 자료로 활용됩니다. 그동안 에뛰드를 이용해 주셔서 감사합니다.</li>
+                    		</ul>
+                    		<br>
+                    		<div class="text_warning">주의 : 탈퇴 시 동일 아이디로 재가입 할 수 없습니다.</div>
+                    	</dd>
+                    </dl>
+                </div>
+                <div class="panel">
+                	<fieldset class="form">
+                        <legend class="sr_only">탈퇴사유 입력</legend>
+                        <h4 class="form_title">탈퇴사유를 선택해 주세요.</h4>
+                        <ul class="list">
+                            <li th:each="reason,iter : ${closedAcReason}">
+                            	<span class="check_wrap">
+                            		<input type="radio" name="code" th:id="'reason' + ${iter.index + 1}" th:value="${reason.reasonCode}" th:checked="${iter.index == 0}">
+                            		<label th:for="'reason' + ${iter.index + 1}" th:text="${reason.reasonCodeName}">사유</label>
+                            	</span>
+                            </li>
+                            <li>
+                            	<span class="check_wrap">
+                            		<input type="radio" name="code" value="" id="reason-ex">
+                            		<label for="reason-ex">기타 사유</label>
+                            	</span>
+                            </li><!--20180125 문구수정-->
+                        </ul>
+                        <div class="textarea"><textarea name="desc" id="desc" cols="" disabled rows="2" placeholder="기타내용 띄어쓰기 포함 200자 내외" title="기타 내용 입력"></textarea></div>
+                        <div class="check_wrap"><input type="checkbox" id="checkall" /><label for="checkall">위 유의사항을 모두 확인하였고 회원탈퇴에 동의합니다.</label></div>
+                        <div class="form_btns">
+                            <button type="button" onclick="location.replace('/my/page/info/myEtude')" class="btn_lg_secondary">취소</button>
+                            <button type="button" id="leaveId" class="btn_lg_primary">탈퇴</button>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <!-- // page contents -->
+            
+            <!-- 마이페이지 맵 01-24 위치변경 -->
+          	<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+          	<!-- // 마이페이지 맵 -->
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+        
+			<script>
+			$("[name=code]:checked").attr('checked', null);
+			$("input[name=code]").change(function() {
+
+				var radioValue = $(this).val();
+
+				if (radioValue == "") {
+					$("#desc").attr("disabled", null);
+				} else {
+					$("#desc").val(null);
+					$("#desc").attr("disabled","disabled");
+				}
+
+			});
+
+			$("#desc").on('change keyup paste', function() {
+				$('.count em').html($(this).val().length)
+				if($(this).val().length > 200) {
+					$(this).val($(this).val().substring(0, 200));
+				}
+			});
+			
+        	$("#leaveId").click(function() {
+        		if($("[name=code]:checked").length == 0) {
+	        		AP.modal.alert( "탈퇴사유를 체크 해주세요." );
+        			return;
+        		}
+        		if($("#reason-ex:checked").length != 0 && $("#desc").val() == '') {
+	        		AP.modal.alert( "탈퇴사유를 입력 해주세요." );
+        			return;
+        		}
+        		if($('#checkall:checked').length == 0) {
+	        		AP.modal.alert( "탈퇴여부에 동의해 주세요." );
+        			return;
+        		}
+        		
+        		location.href = "/my/page/doLeaveId?code=" + $('input[name=code]:checked').val() + "&desc=" + encodeURI($("#desc").val());
+        	});
+			
+			</script>
+        </th:block>
+</body>
+</html>

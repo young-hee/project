@@ -1,0 +1,176 @@
+<html ap:decorate="~{layout/layout-item-only}" th:with="_jsfile='ch-etude-detail'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents beautylife">
+		<div class="ch_etude detail">
+
+			<!--/* 타이틀 */-->
+			<div class="title_wrap">
+				<!--/* 20180418 : 방송기간일 경우:  ‘LIVE‘ Flag 노출, -방송기간이 아닌경우: Flag 노출 없음, -쿠폰지급방송일 경우: ‘쿠폰지급’ 노출 */-->
+				<div class="flag" th:if="${article.liveSettingsYn == 'Y'}">
+					<span class="coupon" th:if="${article.couponYn == 'Y'}">쿠폰 지급</span>
+					<span class="live">LIVE</span>
+				</div>
+				<h3 class="h_title" th:text="${article.articleTitle}">제목</h3>
+				<p class="date" 
+				th:text="${#calendars.format(article.liveStartDt,'HH:mm')} + ' ~ ' + ${#calendars.format(article.liveEndDt,'HH:mm')}"
+				th:if="${article.liveSettingsYn == 'Y'}">13:00 ~ 15:00</p>
+				<p class="date" 
+				th:text="${#calendars.format(article.startDt,'yyyy.MM.dd')} + ' ~ ' + ${#calendars.format(article.endDt,'yyyy.MM.dd')}"
+				th:unless="${article.liveSettingsYn == 'Y'}">13:00 ~ 15:00</p>
+				<button class="btn_share" th:if="${article.shareUseYn == 'Y'}"><span class="sr_only">SNS 공유</span></button> <!-- 0326 추가 -->
+			</div>
+
+			<!--/* video */-->
+			<div class="video_wrap" th:if="${article.articleVideoUrl != ''}">
+				<!-- 섬네일 용 이미지 -->
+				<button type="button" class="thumbnail" th:if="${article.videoImgDescM}"><img alt="" src="" th:src="${article.videoImgDescM}"><span class="live" th:if="${article.liveSettingsYn == 'Y'}">LiVE</span></button>
+				<iframe class="youtube_video" src="" th:src="${article.articleVideoUrl} + '?enablejsapi=1'" width="800" height="450" frameborder="0" allowfullscreen="" data-vendor="youtube" data-ratio="true" data-mute="false"></iframe>
+			</div>
+
+			<!--/* 쿠폰 다운로드 안내 */-->
+			<div class="panel coupon_down" th:if="${article.liveSettingsYn == 'Y' && article.couponYn == 'Y'}">
+				<dl>
+					<dt class="h_title cont"><b>쿠폰 다운로드 안내</b></dt>
+					<dd>
+						혜택이 있는 영상을 모두 플레이 합니다.<br>
+						(넘겨보면 안돼요!)<br>
+						영상을 모두 시청한 후 [쿠폰 다운로드] 버튼이<br>
+						활성화 되었을 때 클릭합니다.<br>
+						발급 받은 쿠폰은 마이에뛰드에서 확인해 주세요.
+					</dd>
+					<dd class="coupon_download_area">
+						<!--/* 할인 쿠폰 다운로드 */-->
+						<button type="button" class="btn_coupon_download" disabled>할인 쿠폰 다운로드</button>
+					</dd>
+				</dl>
+			</div>
+
+			<!--/* 방송중인 상품 */-->
+			<div class="panel recommend_items" th:if="${article.prodYn == 'Y'}">
+				<h3 class="h_title cont"><i class="ico_tv"></i><span th:text="${article.relatedProdTitle}">방송중인 상품</span></h3>
+				<div class="slide two_half" data-ix-options="view-length:2; move-length:2; loop:false; correct-endpoint:true">
+					<!--/* 방송중인 상품 영역 */-->
+					<ul class="loading">
+						<li></li>
+						<li></li>
+						<li></li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="banner" th:if="${article.planDisplayYn == 'Y'}">
+				<div class="slide" data-ix-options="view-length:1;">
+					<div class="ix-list-viewport">
+						<ul class="ix-list-items">
+							<th:block th:each="disp : ${planDisplayResult.planDisplayList}" th:if="${not #lists.isEmpty(planDisplayResult.planDisplayList)}">
+								<li class="ix-list-item"><a href="#none"><img alt="" th:src="${disp.bannerImgM1}"><img alt="" th:src="${disp.bannerImgM2}"></a></li>
+							</th:block>
+						</ul>
+					</div>
+					<div class="ix-controller">
+						<ul class="ix-thumbs">
+							<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel">
+				<a class="btn_md_bordered w100p" id="btn_otherVideo" href="/display/etude_ch">'채널 에뛰드' <span>다른 영상이 궁금하다면!</span></a>
+			</div>
+
+			<div class="panel comment_area" th:if="${article.commentYn == 'Y'}">
+				<fieldset class="form mgt5">
+					<legend class="sr_only">댓글 입력</legend>
+					<div class="textarea">
+						<textarea class="comment_input" name="" maxlength="200" title="댓글 입력" cols="" rows="" placeholder="댓글을 남겨보세요."></textarea>
+					</div>
+					<p class="text_right mgt5"><small>0/200자</small></p>
+					<button class="btn_md_neutral w100p btn_save">등록</button>
+					<p class="text_notice">저작권 등 다른 사람의 권리를 침해하거나 게시판
+						성격과 관련 없는 게시물은 임의로 삭제될 수 있습니다.
+					</p>
+				</fieldset>
+				<!--/* live class는 live일때만 넣어줌 */-->
+				<ul class="comment_list" th:classappend="${article.liveSettingsYn == 'Y' ? 'live' : ''}">
+					<!--/*
+					<li>
+						<dl>
+							<dt>
+								<b>cclicksu***</b>
+								<small>2017.12.20</small>
+								<span class="ico_new"><span class="sr_only">새글</span></span>
+								<button class="btn_delete" type="button"><i class="ico_del"></i><span class="sr_only">댓글 삭제</span></button>
+							</dt>
+							<dd>
+								<p class="text">펄 터치감도 예쁘고 건조한 실내공기에서 입술이 시원합니다 디자인도 앙증맞고 귀염귀염^^* </p>
+							</dd>
+						</dl>
+					</li>
+					*/-->
+				</ul>
+				<button type="button" class="btn_lg_more w100p btn_more" style="display:none;">
+					<!--/*
+					<span>더보기 (<em>5</em>/35)</span>
+					*/-->
+				</button>
+				<ul class="loading" style="display:none;">
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+			</div>
+
+			<!--/* 구매하기 전체 열릴때 class open 교체 기본 close select 선택시 class select 추가 선택한 select 요소 부모 클래스 goods_box 에 class on 추가 */-->
+			<div class="option_layer goods_detail_buy close" th:if="${article.prodYn == 'Y'}">
+				<!--/* 오픈전 구매 버튼 셋 */-->
+				<div class="purchase_btn_set">
+					<button type="button" class="btn_md_primary btn_open_order_layer">구매하기</button>
+				</div>
+
+				<!--/* 옵션만 열고 닫을때 class open 추가 */-->
+				<div class="option_wrap open">
+					<!--/* selected 된 options 표현 영역 */-->
+				</div>
+
+				<div class="buy_info_wrap">
+					<!--/* 뷰티포인트 전용상품 */-->
+					<!--/*
+					<div class="beauty_point_chk">
+						<span class="check_wrap"><input type="checkbox" name="buy_beauty_point" id="buy_beauty_point" checked="checked"><label for="buy_beauty_point">뷰티포인트로 구매하기</label></span>
+					</div>
+					*/-->
+					<div class="buy_info">
+						<span class="opt_selected"><b class="num">0</b> 개 선택됨</span>
+						<span class="buy_result">합계 <b class="num total_price">0</b><b>원</b></span>
+					</div>
+					<!--/* 오픈후 구매 버튼 세트 */-->
+					<div class="buy_btn_wrap">
+						<button type="button" class="btn_md_bordered btn_takeout">테이크아웃</button>
+						<button type="button" class="btn_md_bordered btn_basket">장바구니 담기</button>
+						<button type="button" class="btn_md_primary btn_buy_now">바로구매</button>
+					</div>
+				</div>
+				<button type="button" class="btn_float_close"><span class="sr_only">구매닫기</span></button>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script th:inline="javascript">
+		(function () {
+			var article = /*[[${article}]]*/;
+
+			AP.chEtudeDetail.setDefaultData( article );
+		})();
+	</script>
+</th:block>
+
+</body>
+</html>

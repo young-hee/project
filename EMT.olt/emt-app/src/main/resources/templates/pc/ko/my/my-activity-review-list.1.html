@@ -1,0 +1,62 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='my-writable-reivew'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- mypage sitemap -->
+            <th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+            <!-- //  mypage sitemap -->
+
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+
+            <!-- page contents -->
+            <div class="ap_contents mypage activity review_list writable_review">
+				<!-- tab menu wrap -->
+				<div class="ui_tab">
+					<!-- tab menu -->
+					<div class="tab_menu equally">
+						<ul>
+							<li class="on"><a href="/my/page/myReviewList">작성 가능한 리뷰 <em id="rCnt" th:text="${reviewCnt}">00</em>개</a></li>
+							<li><a href="/my/page/myWritedReviewList">작성한 리뷰 <em id="wCnt" th:text="${writedCnt}">00</em>개</a></li>
+						</ul>
+					</div>
+					<!-- tab content -->
+					<div class="tab_cont">
+						<h3 class="sr_only">매장 찾기</h3>
+
+						<div class="panel activity_list">
+							<div class="clear activity_head">
+								<p class="bullet_dot">구매 리뷰를 작성하시면 <b>진주알 100알(사진 없는 후기는 50알)</b>이 적립됩니다.</p>
+							</div>
+
+							<div class="panel notice activity_notice bdr_none result_none">
+								<i class="ico"></i>
+								<p class="text font_lg">작성 가능한 구매 내역이 없습니다.</p>
+							</div>
+
+							<div class="writable_review_list board_list2"></div>
+							<div class="pagination"></div>
+						</div>
+					</div>
+				</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script th:inline="javascript">
+				(function () {
+					var param = {
+						offset: 0,
+						limit: 5
+					};
+
+					AP.myWritableReviewList._getList( param );
+				}());
+			</script>
+        </th:block>
+</body>
+</html>

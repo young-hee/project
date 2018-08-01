@@ -1,0 +1,63 @@
+<th:block layout:fragment="pearl-list">
+	<!--/* Start : 목록내용이 있을경우 */-->
+	<div th:if="${activityPointInfo.totalCount != 0}" class="pbody ui_multiple_date_picker date_picker_gift entry-point">
+		<!--내역이 있을때만 보인다-->
+		<div class="date_pic_right">
+			<div><span>적립진주알</span> <strong class="num" th:text="${#IntegUtil.toCommaNumber(activityPointInfo.savingPoint)}">7,000</strong><span>알</span></div>
+			<span class="vline"></span>
+			<div><span>사용 진주알</span> <strong class="num" th:text="${#IntegUtil.toCommaNumber(activityPointInfo.usePoint)}">8,000</strong><span>알</span></div>
+		</div>
+	</div>
+
+	<div th:if="${not #lists.isEmpty(activityPointInfo.histories)}" class="pbody board_list2 tbl_member_class">
+		<table class="align_center">
+			<caption class="sr_only">진주알 적립 사용 목록으로 적용일, 주문번호, 상세사유내용 휴형 포인트로 구성</caption>
+			<colgroup>
+				<col style="width:160px"/>
+				<col style="width:194px"/>
+				<col />
+				<col />
+				<col />
+			</colgroup>
+			<thead>
+			<tr>
+				<th scope="col">적용일</th>
+				<th scope="col">주문번호</th>
+				<th scope="col">상세사유내용</th>
+				<th scope="col">유형</th>
+				<th scope="col">포인트</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="item : ${activityPointInfo.histories}">
+				<td class="pearl_date" th:text="${#dates.format(item.pointHistOccurDt, 'yyyy.MM.dd')}">2018.01.05</td>
+				<td class="pearl_order_number"><a href="javascript:;" th:text="${item.ordNo}">2017012102010101</a></td>
+				<td class="pearl_detail" th:text="${#IntegUtil.codeMan(0, item.pointHistOccurTypeCode)}">SNS연동 진주알</td>
+				<td class="pearl_type" th:if="${item.pointHistTypeCode == 'Saving'}">적립</td>
+				<td class="pearl_type" th:if="${item.pointHistTypeCode == 'SavingCancel'}">적립취소</td>
+				<td class="pearl_type" th:if="${item.pointHistTypeCode == 'Use'}">사용</td>
+				<td class="pearl_type" th:if="${item.pointHistTypeCode == 'UseCancel'}">사용취소</td>
+				<td class="pearl_type" th:if="${item.pointHistTypeCode == 'Dec'}">차감</td>
+				<td class="pearl_type" th:if="${item.pointHistTypeCode == 'Exp'}">소멸</td>
+				<td class="pearl_point" th:unless="${item.pointHistTypeCode == 'Saving' || item.pointHistTypeCode == 'UseCancel'}">( <em>-</em> ) <span th:text="${#IntegUtil.toCommaNumber(item.point * -1)}">500</span> 알</td>
+				<td class="pearl_point" th:if="${item.pointHistTypeCode == 'Saving' || item.pointHistTypeCode == 'UseCancel'}">( <span>+</span> ) <span th:text="${#IntegUtil.toCommaNumber(item.point)}">500</span> 알</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="pbody pagination" th:with="pageVo=${#IntegUtil.initPageInfo(activityPointInfo, 10)}">
+		<a href="javascript:;" onclick="more(1)" class="navi first" th:classappend="${pageVo.isFirstPage}? disabled : null" th:disabled="${pageVo.isFirstPage}? disabled : null">처음</a>
+		<a href="javascript:;" th:onclick="'more(' + ${pageVo.prePage} + ')'" class="navi prev" th:classappend="${!pageVo.hasPrePage}? disabled : null" th:disabled="${!pageVo.hasPrePage}? 'disabled' : null">이전</a>
+		<th:block th:each="page : ${pageVo.pageList}">
+			<a href="javascript:;" th:onclick="'more(' + ${page} + ')'" th:text="${page}" th:classappend="${pageVo.curPage == page}? 'current' : null">2</a>
+		</th:block>
+		<a href="javascript:;" th:onclick="'more(' + ${pageVo.nextPage} + ')'" class="navi next" th:classappend="${!pageVo.hasNextPage}? disabled : null" th:disabled="${!pageVo.hasNextPage}? 'disabled' : null">다음</a>
+		<a href="javascript:;" th:onclick="'more(' + ${pageVo.lastPage} + ')'" class="navi last" th:classappend="${pageVo.isLastPage}? disabled : null" th:disabled="${pageVo.isLastPage}? 'disabled' : null">끝</a>
+	</div>
+	
+	<div th:unless="${activityPointInfo.totalCount != 0}" class="pbody panel notice">
+		<i class="ico"></i>
+		<p class="text">선택하신 기간에 해당하는 내역이 없습니다.</p>
+	</div>
+</th:block>

@@ -1,0 +1,59 @@
+{{#if this.totalCount}}
+	{{#each this.list}}
+		<dl class="review">
+			<dt>
+				<span class="ui_rating">
+					{{#for 5}}
+						<span class="{{#xif ../scope '>' for-index}}on{{/xif}}"></span>
+					{{/for}}
+					<span class="sr_only"> {{ this.scope }}점</span>
+				</span>
+
+				<span class="user_id">{{ this.memberId }}</span>
+				<small>{{ dateFormat this.prodReviewRegistDt }}</small>
+			</dt>
+			<dd>
+				<dl>
+					<dt>
+						{{#if this.prodName}}
+							<small class="opt">옵션: {{ this.prodName }}</small>
+						{{/if}}
+
+						{{#xif this.prodReviewTypeCode '==' 'Pur'}}
+							<span class="flag">구매자 후기</span>
+						{{/xif}}
+
+						<span class="title">{{ this.prodReviewTitle }}</span>
+					</dt>
+					<dd>
+						<p class="text">{{ ellipsis 140 this.prodReviewBodyText }}</p>
+
+						{{#if this.imgList.length}}
+							<div class="attach_photo">
+								{{#each this.imgList}}
+									{{#xif @index '<' 7}}
+										<span class="thumb">
+											<img src="{{ this.imageFileUrl }}" alt="">
+										</span>
+									{{/xif}}
+								{{/each}}
+							</div>
+						{{/if}}
+
+						<a href="javascript:;" class="review_detail" data-prod-review-sn="{{ this.prodReviewSn }}">+ 더보기</a>
+					</dd>
+				</dl>
+			</dd>
+		</dl>
+	{{/each}}
+{{else}}
+	<div class="panel notice">
+		<i class="ico"></i>
+		<p class="text font_lg">리뷰 내역이 존재하지 않습니다.</p>
+	</div>
+{{/if}}
+
+{{#xif this.totalCount '>' (calc this.limit)}}
+	<div class="pagination">
+	</div>
+{{/xif}}

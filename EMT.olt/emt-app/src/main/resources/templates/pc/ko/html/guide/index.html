@@ -1,0 +1,2707 @@
+<html ap:decorate="~{layout/only-guide}">
+
+<head>
+	<title>ETUDE 스타일 가이드 (PC)</title>
+	<style>
+		/* reset */
+		*{margin:0; padding:0; border:0;}
+		html{width:100%; height:100%; font-size:12px; font-family:"맑은 고딕", Malgun Gothic, "나눔 고딕", NanumGothic, "돋움", Dotum; color:#767676; line-height:1;}
+		body{width:100%; height:100%; min-width:960px; background:#f9f9f9;}
+		header, main, footer, section{display:block;}
+		ul{list-style:none;}
+		table{border-collapse:collapse; border-spacing:0;}
+		a, a:hover{color:inherit; text-decoration:none; cursor:pointer}
+		.clear{}
+		.clear:after{content:''; display:block; clear:both;}
+		.clear>*{float:right; width:49%;}
+		.clear>*:first-child{float:left;}
+
+		/* 본문스타일 */
+		.guide-wrap{}
+		.guide-header{width:100%; height:90px;}
+		.guide-gt{position:fixed; top:0; left:0; right:0; z-index: 2; text-align:center;}
+		.guide-gt span{display:block; padding:1em; font-size:20px; color:#fff; background:#f54a7e;}
+		.guide-main{width:100%;padding-bottom:50px;}
+		.guide{width:100%;}
+		.guide>dt{position:fixed; left:20px; width:150px;}
+		.guide>dt:first-child{top:90px;}
+		.guide>dt a{position: relative; display:block; padding:10px 20px; border-radius:2px; background:#fff; text-transform:uppercase; font-size:14px; border:1px solid #ccc; border-top-width:0;}
+		.guide>dt:first-child a{border-top-width:1px;}
+		.guide>dt.selected a{background:#f54a7e; color:#111; color:#fff; font-weight:bold; border-color:#f54a7e;}
+		.guide>dt.selected a:after{content:''; position:absolute; left:100%; top:50%; margin-top:-8px; height: 0;width: 0; border:8px solid transparent; border-left-color:#f54a7e;}
+
+		.guide>dd{padding:0 20px 0 170px;}
+		.guide>dd>div{margin-left:30px; margin-bottom:20px; padding:20px;  background:#fff;box-shadow:1px 1px 1px 1px #ddd; border-radius:3px;}
+		.guide .gt{margin:20px 0;}
+		.guide .gt:first-child{margin-top:0;}
+		.guide .gt.d1{margin-left:30px; padding:15px 20px; color:#fff; font-size:18px; font-weight:bold; background:#f54a7e;}
+		.guide .gt.d2{padding-bottom:0.5em; border-bottom:1px dashed #ccc; font-size:12px; font-weight:normal;}
+		.guide .gt.d2 strong{font-size:16px; padding-right:20px;}
+		.g-btn{position:relative; display:inline-block; padding:0.5em 2em 0.5em 1em; margin:5px 0; border:1px solid #ccc; border-radius:3px; text-transform:uppercase;}
+		.g-btn:after{content:''; position:absolute; top:50%; right:10px; display:block; width:9px; height:1px; background:#aaa; transform:rotate(0); transition:0.3s;}
+		.g-btn:before{content:''; position:absolute; top:50%; right:10px; display:block; width:9px; height:1px; background:#aaa; transform:rotate(-90deg); transition:0.3s;}
+		.g-btn.open{background:#ccc; color:#fff;}
+		.g-btn.open:after{transform:rotate(45deg); transition:0.3s; background:#fff;}
+		.g-btn.open:before{transform:rotate(-45deg); transition:0.3s; background:#fff;}
+		.btn-copy{position:absolute; top:-25px; right:0; display:inline-block; padding:0 0.5em; border:1px solid #ccc; border-radius:3px; text-transform:uppercase;}
+		.btn-copy:hover{}
+		.btn-copy:after{content:'\2639'; display:inline-block; padding-left:10px; vertical-align:top;}
+		.btn-copy:focus:after,
+		.btn-copy:hover:after{content:'\263A';}
+		.g-btn + pre{margin-top:5px;}
+		.html{padding:20px; border-radius:5px; border:1px solid #eaeaea;}
+		hr.div{display:block; width:100%; height:0; margin:20px 0; border-bottom:1px solid #eaeaea; }
+		.guide-row{display:table; width:100%; table-layout: fixed;}
+		.guide-col2{display:table-cell; width:49%;}
+		.guide-col2:first-child{padding-right:1%;}
+		.guide-col2 + .guide-col2{padding-left:1%;}
+		.guide-col3{display:table-cell; width:32%;}
+		.guide-col3 + .guide-col3{padding-left:1%;}
+		.guide-footer{position:fixed; bottom:0; left:0; width:100%; height:50px; line-height:50px; background:#f9f9f9; text-align:center;}
+
+		#toTop{display:none; position:fixed; left:20px; width:150px;}
+		#toTop a{display:block; padding:10px 20px; border-radius:2px; background:#929292; color:#fff; text-transform:uppercase; font-size:14px; text-align:center;}
+		#toTop a:after{content:''; position:absolute; left:50%; top:-16px; margin-left:-8px; height: 0;width: 0; border:8px solid transparent; border-bottom-color:#929292;}
+		/* code highlighter */
+		code[class*="language-"],
+		pre[class*="language-"] {color: black;
+			text-shadow: 0 1px #fff;
+			font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+			direction: ltr;
+			text-align: left;
+			white-space: pre;
+			word-spacing: normal;
+			word-break: normal;
+			word-wrap: normal;
+			line-height: 1.5;
+			-moz-tab-size: 4;
+			-o-tab-size: 4;
+			tab-size: 4;
+			-webkit-hyphens: none;
+			-moz-hyphens: none;
+			-ms-hyphens: none;
+			hyphens: none;
+			border-radius:5px;
+		}
+		pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+		code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {text-shadow: none;	background: #b3d4fc;}
+		pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+		code[class*="language-"]::selection, code[class*="language-"] ::selection {text-shadow: none; background: #b3d4fc;}
+
+		/* Code blocks */
+		pre[class*="language-"] {padding-left:2em; margin: .5em 0; overflow: auto;}
+		:not(pre) > code[class*="language-"],
+		pre[class*="language-"] {display:none; background: #f2f2f2;}
+		pre.language-css{background-color:#f0f4e7;}
+		pre.language-js{background-color:#e8f0f4;}
+		/* Inline code */
+		:not(pre) > code[class*="language-"] {padding: .1em; border-radius: .3em;}
+		.token.comment,
+		.token.prolog,
+		.token.doctype,
+		.token.cdata {color: slategray;}
+		.token.punctuation {color: #999;}
+		.namespace {opacity: .7;}
+		.token.property,
+		.token.tag,
+		.token.boolean,
+		.token.number,
+		.token.constant,
+		.token.symbol,
+		.token.deleted {color: #905;}
+		.token.selector,
+		.token.attr-name,
+		.token.string,
+		.token.char,
+		.token.builtin,
+		.token.inserted {color: #690;}
+		.token.operator,
+		.token.entity,
+		.token.url,
+		.language-css .token.string,
+		.style .token.string {color: #a67f59;}
+		.token.atrule,
+		.token.attr-value,
+		.token.keyword {color: #07a;}
+		.token.function {color: #DD4A68;}
+		.token.regex,
+		.token.important,
+		.token.variable {color: #e90;}
+		.token.important,
+		.token.bold {font-weight: bold;}
+		.token.italic {font-style: italic;}
+		.token.entity {cursor: help;}
+	</style>
+
+</head>
+
+<body ap:fragment="layout-guide-body">
+<div class="guide-wrap">
+	<header class="guide-header">
+		<h1 class="guide-gt"><span>ETUDE 스타일 가이드 (PC)</span></h1>
+	</header>
+	<main class="guide-main">
+		<dl class="guide">
+			<dt class="selected btn-all"><a>전체보기</a></dt>
+			<dt><a>제목, TEXT</a></dt>
+			<dd>
+				<h2 class="gt d1">제목, TEXT</h2>
+				<div>
+					<h3 class="gt d2"><strong>제목 스타일</strong> hx 제목 태그.. </h3>
+					<div>
+						<div class="html">
+							<h2 class="h_title page">Page Title - 페이지 타이틀</h2>
+							<h3 class="h_title lare">Large Title 01 - 대 타이틀</h3>
+							<h3 class="h_title sub">Middle Title - 중 타이틀</h3>
+							<h4 class="h_title cont">Small Title - 소 타이틀</h4>
+						</div>
+					</div>
+					<h3 class="gt d2"><strong>텍스트</strong></h3>
+					<div class="guide-row">
+						<div class="guide-col2">
+							<div class="html">
+								<p class="text"><span class="font_xs">font_xs 11px -안전한 회원 가입을 위해 </span><br>
+									<span class="font_sm">font_sm 12px -안전한 회원 가입을 위해</span><br>
+									<span class="font_sl">font_sl 14px -안전한 회원 가입을 위해</span><br>
+									<span class="font_lg">font_lg 16px -안전한 회원 가입을 위해</span><br>
+									<span class="font_xl">font_xl 18px -안전한 회원 가입을 위해.</span><br>
+									안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다.
+									안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다.</p>
+								<p class="text_primary">본고딕 Noto Sans CJK KR Light 28px 설명 및 중요정보</p>
+							</div>
+						</div>
+						<div class="guide-col2">
+							<div class="html">
+								<p class="text"><small>안전한 회원 가입을 위해 <b>회원가입</b>시 <em>본인인증</em> 과정을 거치도록 하고 있습니다.</small></p>
+							</div>
+						</div>
+
+					</div>
+					<h3 class="gt d2"><strong>리스트/블릿/정의목록</strong></h3>
+					<div class="guide-row">
+						<div class="guide-col3">
+							<div class="html">
+								<ul class="list">
+									<li>블릿 없는 목록 리스트 1</li>
+									<li>블릿 없는 목록 리스트 2</li>
+									<li>블릿 없는 목록 리스트 3</li>
+									<li>블릿 없는 목록 리스트 4</li>
+									<li>블릿 없는 목록 리스트 5</li>
+								</ul>
+							</div>
+						</div>
+						<div class="guide-col3">
+							<div class="html">
+								<ul class="list_bullet_dot">
+									<li>dot 블릿 목록 리스트 1</li>
+									<li>dot 블릿 목록 리스트 2</li>
+									<li>dot 블릿 목록 리스트 3</li>
+									<li>dot 블릿 목록 리스트 4</li>
+									<li>dot 블릿 목록 리스트 5</li>
+								</ul>
+							</div>
+						</div>
+						<div class="guide-col3">
+							<div class="html">
+								<ul class="list_bullet_dash">
+									<li>dash 블릿 목록 리스트 1</li>
+									<li>dash 블릿 목록 리스트 2</li>
+									<li>dash 블릿 목록 리스트 3</li>
+									<li>dash 블릿 목록 리스트 4</li>
+									<li>dash 블릿 목록 리스트 5</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="html">
+						<dl class="dl_cont">
+							<dt class="h_title cont">회원정보 보존 안내 </dt>
+							<dd>
+								<ul class="list_bullet_dash">
+									<li>회원탈퇴와 함께 고객님이 회원가입 시 입력하신 모든 개인정보는 바로 삭제 됩니다.</li>
+									<li>온라인 회원탈퇴 후에도 오프라인 가입정보가 있을 경우, 포인트는 소멸되지 않습니다.</li>
+								</ul>
+							</dd>
+						</dl>
+						<dl class="dl_cont notice">
+							<dt class="h_title cont"><i class="ico_notice"></i> 유의사항 </dt>
+							<dd>
+								<ul class="list_bullet_dash">
+									<li>탈퇴 시 보유하고 계신 쿠폰과 모든 포인트는 즉시 자동 소멸됩니다.</li>
+									<li>진행 중인 전자상거래 이용내역(배송/교환/반품 중인 상태)에 있거나 이용하신 서비스가 완료되지 않은 경우 탈퇴할 수 없습니다.</li>
+									<li>회원탈퇴하셔도 바로 재가입 가능합니다만 동일 아이디는 사용할 수 없습니다.</li>
+								</ul>
+							</dd>
+						</dl>
+					</div>
+					<h3 class="gt d2"><strong>따옴표</strong></h3>
+					<div class="html">
+						<p class="text_quotes"><b>뷰티 포인트에 대해 좀더 알고 싶으신가요?</b></p>
+					</div>
+
+					<h3 class="gt d2"><strong>한줄 텍스트</strong></h3>
+					<div class="html">
+						<p class="bullet">뷰티 포인트에 대해 좀더 알고 싶으신가요?</p><br>
+						<p class="bullet_dot">뷰티 포인트에 대해 좀더 알고 싶으신가요?</p><br>
+						<p class="bullet_dash">뷰티 포인트에 대해 좀더 알고 싶으신가요?</p>
+					</div>
+				</div>
+			</dd>
+			<dt><a>BUTTON</a></dt>
+			<dd>
+				<h2 class="gt d1">버튼 스타일</h2>
+				<div>
+					<h3 class="gt d2"><strong>common</strong> button, a 태그</h3>
+					<div class="html">
+						<button class="btn_md_primary" type="button">PRIMARY</button>
+						<button class="btn_md_secondary" type="button">SECONDARY</button>
+						<button class="btn_md_form" type="button">FORM</button>
+						<button class="btn_md_neutral" type="button">NEUTRAL</button>
+						<button class="btn_md_bordered" type="button">BORDERED</button>
+						<button class="btn_md_sm_neutral" type="button">최소</button>
+					</div>
+					<div class="html">
+						<a href="#none" class="btn_md_primary">구매하기</a>
+						<a href="#none" class="btn_md_secondary">취소(부정)</a>
+						<a href="#none" class="btn_md_form">검색</a>
+						<a href="#none" class="btn_md_neutral">확인</a>
+						<a href="#none" class="btn_md_bordered">회원가입</a>
+						<a href="#none" class="btn_md_sm_neutral">최소</a>
+					</div>
+					<div class="html">
+						<button class="btn_md_primary" type="button" disabled>PRIMARY</button>
+						<button class="btn_md_secondary" type="button" disabled>SECONDARY</button>
+						<button class="btn_md_form" type="button" disabled>FORM</button>
+						<button class="btn_md_neutral" type="button" disabled>NEUTRAL</button>
+						<button class="btn_md_bordered" type="button" disabled>BORDERED</button>
+						<button class="btn_md_sm_bordered" type="button" disabled>최소</button>
+					</div>
+					<div class="html">
+						<a href="#none" class="btn_md_primary disabled">구매하기</a>
+						<a href="#none" class="btn_md_secondary disabled">취소(부정)</a>
+						<a href="#none" class="btn_md_form disabled">검색</a>
+						<a href="#none" class="btn_md_neutral disabled">확인</a>
+						<a href="#none" class="btn_md_bordered disabled">회원가입</a>
+						<a href="#none" class="btn_md_sm_bordered disabled">최소</a>
+					</div>
+					<div class="html">
+						<button class="btn_lg_primary" type="button">PRIMARY</button>
+						<button class="btn_lg_secondary" type="button">SECONDARY</button>
+						<button class="btn_lg_form" type="button">FORM</button>
+						<button class="btn_lg_neutral" type="button">NEUTRAL</button>
+						<button class="btn_lg_bordered" type="button">BORDERED</button>
+						<button class="btn_lg_big_bordered" type="button">뷰티 포인트 자세히 보기</button>
+					</div>
+					<div class="html">
+						<a href="#none" class="btn_lg_primary">구매하기</a>
+						<a href="#none" class="btn_lg_secondary">취소(부정)</a>
+						<a href="#none" class="btn_lg_form">검색</a>
+						<a href="#none" class="btn_lg_neutral">확인</a>
+						<a href="#none" class="btn_lg_bordered">회원가입</a>
+						<a href="#none" class="btn_lg_big_bordered">뷰티 포인트 자세히 보기</a>
+					</div>
+					<div class="html">
+						<button class="btn_sm_neutral" type="button">default</button>
+						<button class="btn_sm_bordered" type="button">secondary</button>
+						<button class="btn_sm_tm_bordered" type="button">최소</button>
+					</div>
+					<div class="html">
+						<a href="#none" class="btn_sm_neutral">DEFAULT</a>
+						<a href="#none" class="btn_sm_bordered">SECONDARY</a>
+						<a href="#none" class="btn_sm_tm_bordered">최소</a>
+					</div>
+					<h3 class="gt d2"><strong>btn set</strong></h3>
+					<div class="html">
+						<div class="page_btns">
+							<button class="btn_md_secondary" type="button">SECONDARY</button>
+							<button class="btn_md_primary" type="button">PRIMARY</button>
+						</div>
+					</div>
+					<h3 class="gt d2"><strong>etc</strong> button, a 태그</h3>
+					<div class="guide-row">
+						<div class="guide-col2">
+							<div class="html">
+								<a href="#none" class="btn_more"><span>MORE</span><i class="ico_arr_m_r"></i></a>
+							</div>
+						</div>
+						<div class="guide-col2">
+							<div class="html">
+								<button type="button" class="btn_more"><span>MORE</span><i class="ico_arr_m_r"></i></button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</dd>
+			<dt><a>Icon/Badge</a></dt>
+			<dd>
+				<h2 class="gt d1">icon/badge</h2>
+				<div>
+					<h3 class="gt d2"><strong>작은 아이콘</strong></h3>
+					<h3 class="gt d2"><strong>큰 아이콘</strong></h3>
+					<h3 class="gt d2"><strong>badge</strong></h3>
+				</div>
+			</dd>
+			<dt><a>FORM</a></dt>
+			<dd>
+				<h2 class="gt d1">form 요소</h2>
+				<div>
+					<h3 class="gt d2"><strong>select</strong> default</h3>
+					<div class="html">
+						<div class="select_wrap"><!-- 선택시 open 클래스  -->
+							<select name="" id="" tabindex="-1">
+								<option value="">선택 1</option>
+								<option value="02" selected>선택 2</option>
+								<option value="03" disabled>선택 3</option>
+								<option value="04">선택 4</option>
+								<option value="05">선택 5</option>
+								<option value="06">선택 6</option>
+							</select>
+						</div>
+					</div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * 기본적용 (기본 select 와 동작 방식은 유사하다.)
+							 * js/common/plugin-type/selectbox.js 참고
+							 * @returns {jQuery}
+							 */
+							$( 'select' ).selectBox();
+
+							/**
+							 * 이벤트
+							 */
+							$( 'select' ).on( 'change', function (e) {
+								console.log( e.value );
+							});
+
+							/**
+							 * select value 변경 (변경된 상태를 화면에 적용하기 위해서는 아래의 updated method를 실행해 줘야 한다.)
+							 */
+							$( 'select' ).val( value );
+
+							/**
+							 * select option 변경상태 적용
+							 */
+							$( 'select' ).selectBox( 'updated' );
+
+							/**
+							 * select change event 강제 발생
+							 */
+							$( 'select' ).triggerHandler({
+								type: 'change',
+								value: value
+							});
+
+							/**
+							 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+							 */
+							$( 'select' ).selectBox( 'clear' );
+						</code>
+					</pre>
+					<br>
+					<div>
+						<h3 class="gt d2">disabled, inline, error</h3>
+						<div class="html">
+							<span class="select_wrap">
+								<select name="" id="" tabindex="-1" disabled>
+									<option value="">disabled</option>
+									<option value="">선택 2</option>
+									<option value="">선택 3</option>
+									<option value="">선택 4</option>
+									<option value="">선택 5</option>
+									<option value="">선택 6</option>
+								</select>
+							</span>
+							<div class="select_wrap inline">
+								<select name="" id="" tabindex="-1">
+									<option value="">선택 1</option>
+									<option value="">선택 2</option>
+									<option value="">선택 3</option>
+									<option value="">선택 4</option>
+									<option value="">선택 5</option>
+									<option value="">선택 6</option>
+								</select>
+							</div>
+							<span class="select_wrap error">
+								<select name="" id="" tabindex="-1">
+									<option value="">선택 1</option>
+									<option value="">선택선택선택 2</option>
+									<option value="">선택 3</option>
+									<option value="">선택 4</option>
+									<option value="">선택 5</option>
+									<option value="">선택 6</option>
+								</select>
+							</span>
+						</div>
+					</div>
+					<br>
+					<h3 class="gt d2">Design option select static</h3>
+					<div class="html">
+						<!-- data-not-label-change="true" label변경을 하지 않는다 -->
+						<div class="ui_select static">
+							<input type="hidden" name="">
+							<button type="button">기본 Label</button>
+							<ul class="select_options">
+								<!-- data-selected="true" 속성을 a 태그에 설정하면 해당 옵션이 기본 선택된다. -->
+								<!-- data-disabled="true" 속성을 a 태그에 설정하면 해당 옵션을 선택할수 없다. -->
+								<!-- data-value="value" 선택시 value로 리턴되는 값 -->
+								<!-- code.label_markup 내부의 markeup이 선택된 이후에 label로 노출된다. -->
+								<li class="select_option"><code class="label_markup" style="display:none">선택 1</code><a data-value="01"><img ap:src="@{/images/dummy/img005.jpg}" alt="">선택 1</a></li>
+								<li class="select_option"><code class="label_markup" style="display:none">선택 2</code><a data-value="02"><img ap:src="@{/images/dummy/img006.jpg}" alt="">선택 2</a></li>
+								<li class="select_option"><code class="label_markup" style="display:none">선택 3</code><a data-value="03" data-disabled="true"><img ap:src="@{/images/dummy/img005.jpg}" alt="">선택 3</a></li>
+								<li class="select_option"><code class="label_markup" style="display:none">선택 4</code><a data-value="04"><img ap:src="@{/images/dummy/img006.jpg}" alt="">선택 4</a></li>
+								<li class="select_option"><code class="label_markup" style="display:none">선택 5</code><a data-value="05"><img ap:src="@{/images/dummy/img005.jpg}" alt="">선택 5</a></li>
+								<li class="select_option"><code class="label_markup" style="display:none">선택 6</code><a data-value="06"><img ap:src="@{/images/dummy/img006.jpg}" alt="">선택 6</a></li>
+							</ul>
+						</div>
+					</div>
+					<h3 class="gt d2">Design option select (label이 변경되지 않는 type)</h3>
+					<div class="html">
+						<!-- data-not-label-change="true" label변경을 하지 않는다 -->
+						<div class="ui_select" data-not-label-change="true">
+							<input type="hidden" name="">
+							<button type="button">기본 Label</button>
+							<ul class="select_options">
+								<!-- data-selected="true" 속성을 a 태그에 설정하면 해당 옵션이 기본 선택된다. -->
+								<!-- data-disabled="true" 속성을 a 태그에 설정하면 해당 옵션을 선택할수 없다. -->
+								<!-- data-value="value" 선택시 value로 리턴되는 값 -->
+								<!-- code.label_markup 내부의 markeup이 선택된 이후에 label로 노출된다. -->
+								<li class="select_option"><code class="label_markup" style="display:none">선택 1</code><a data-value="01"><img ap:src="@{/images/dummy/img005.jpg}" alt="">선택 1</a></li>
+								<li class="select_option"><code class="label_markup" style="display:none">선택 2</code><a data-value="02" data-selected="true"><img ap:src="@{/images/dummy/img006.jpg}" alt="">선택 2</a></li>
+								<li class="select_option"><code class="label_markup" style="display:none">선택 3</code><a data-value="03" data-disabled="true"><img ap:src="@{/images/dummy/img005.jpg}" alt="">선택 3</a></li>
+								<li class="select_option"><code class="label_markup" style="display:none">선택 4</code><a data-value="04"><img ap:src="@{/images/dummy/img006.jpg}" alt="">선택 4</a></li>
+								<li class="select_option"><code class="label_markup" style="display:none">선택 5</code><a data-value="05"><img ap:src="@{/images/dummy/img005.jpg}" alt="">선택 5</a></li>
+								<li class="select_option"><code class="label_markup" style="display:none">선택 6</code><a data-value="06"><img ap:src="@{/images/dummy/img006.jpg}" alt="">선택 6</a></li>
+							</ul>
+						</div>
+					</div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * designSelect 기본적용
+							 * js/common/plugin-type/design-selectbox.js 참고
+							 * @returns {jQuery}
+							 */
+							$( '.ui_select' ).designSelectBox();
+
+							/**
+							 * 이벤트
+							 */
+							$( '.ui_select' ).on( 'design-selectbox-selected design-selectbox-change', function (e) {
+								if ( e.type === 'design-selectbox-selected' ) {
+									//선택한 option의 변경여부와 상관없이 사용자가 선택하면 발생
+									console.log( e.value, e.changed );
+								} else {
+									console.log( e.value );
+								}
+							});
+
+							/**
+							 * select value 변경 (변경된 상태를 화면에 적용하기 위해서는 아래의 updated method를 실행해 줘야 한다.)
+							 */
+							$( '.ui_select' ).designSelectBox( 'setValue', value );
+
+							/**
+							 * 현재 value 반환
+							 */
+							var value = $( '.ui_select' ).designSelectBox( 'getValue' );
+
+							/**
+							 * select option 변경상태 적용
+							 */
+							$( '.ui_select' ).designSelectBox( 'updated' );
+
+							/**
+							 * select change event 강제 발생
+							 */
+							$( '.ui_select' ).triggerHandler({
+								type: 'design-selectbox-change',
+								value: value
+							});
+
+							/**
+							 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+							 */
+							$( '.ui_select' ).designSelectBox( 'clear' );
+						</code>
+					</pre>
+					<h3 class="gt d2"><strong>input</strong></h3>
+					<div>
+						<div class="html">
+							<div class="input_wrap">
+								<input type="text" placeholder="placeholder">
+							</div>
+						</div>
+						<pre>
+							<code class="javascript">
+								/**
+								 * placeholder 기본적용
+								 * js/common/plugin-type/placeholder.js 참고
+								 * @returns {jQuery}
+								 */
+								$( 'input[placeholder], textarea[placeholder]' ).placeholder();
+
+								/**
+								 * 동적으로 value를 변경한 이후에는 반듯이 호출해줘야 한다.
+								 */
+								$( 'input, textarea' ).placeholder( 'updated' );
+
+								/**
+								 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+								 */
+								$( 'input, textarea' ).placeholder( 'clear' );
+							</code>
+						</pre>
+						<br>
+						<h4>inline, disabled</h4>
+						<br>
+						<div class="html">
+							<span class="input_wrap w20p">
+								<input type="text" value="input text">
+							</span>
+							<span class="input_wrap w30p">
+								<input type="text" value="disabled" disabled>
+							</span>
+							<span class="input_wrap w40p error">
+								<input type="text" placeholder="error">
+							</span>
+
+						</div>
+						<div class="html">
+							<div class="input_wrap">
+								<input type="text" placeholder="검색">
+								<button type="button" class="btn_search"><span class="sr_only">검색</span></button>
+								<button class="input_del"><i class="ico_close_w"></i><span class="sr_only">검색어 삭제</span></button>
+							</div>
+						</div>
+					</div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * inputText 기본적용 (input 의 검색어 삭제 아이콘 처리)
+							 * button.input_del 이 있는 있는 대상에만 적용된다.
+							 * js/common/plugin-type/input-text.js 참고
+							 * @returns {jQuery}
+							 */
+							$( 'input:text' ).inputText();
+
+							/**
+							 * 변경된 상태 적용
+							 */
+							$( 'input:text' ).inputText( 'updated' );
+
+							/**
+							 * event
+							 */
+							$( 'input:text' ).on( 'input-text-empty', function (e) {
+								//input이 비워진 시점
+							});
+
+							/**
+							 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+							 */
+							$( 'input:text' ).inputText( 'clear' );
+						</code>
+					</pre>
+					<h3 class="gt d2"><strong>input file</strong></h3>
+					<div class="html">
+						<div class="input_btn_wrap">	
+							<span class="input_wrap">
+								<input class="input_file_name" type="text" title="첨부 파일 선택" readonly value="">
+								<button class="input_del"><i class="ico_close_w"></i><span class="sr_only">첨부파일 삭제</span></button> <!-- 첨부파일 첨부 후 삭제 버튼 -->
+							</span>
+							<!-- label 과 input file 의 id 값은 항상 일치 시켜야한다 -->
+							<!-- accept속성에 설정한 파일들만 첨부가능 -->
+							<input type="file" id="input_file" accept="image/gif,image/jpeg,image/png,image/jpg">
+							<label for="input_file" class="btn_md_form">파일 선택</label>
+						</div>
+					</div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * inputFile 기본적용
+							 * js/common/plugin-type/input-file.js 참고
+							 * @returns {jQuery}
+							 */
+							$( 'input:file' ).inputFile();
+							/**
+
+							 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+							 */
+							$( 'input:file' ).inputFile( 'clear' );
+						</code>
+					</pre>
+
+					<h3 class="gt d2"><strong>input images</strong> 여러개의 이미지 첨부</h3>
+					<div class="html">
+						<!-- data-single-input 속성에 "true"를 넣으면 이미지가 하나만 첨부된다. -->
+						<div class="attach_wrap ui_input_images">
+							<!--[if lte ie 9]>
+							<div class="input_btn_wrap">
+								<span class="input_wrap">
+									<input class="input_file_name ie9_lte" type="text" title="첨부 파일 선택" readonly value="">
+									<button class="input_del"><i class="ico_close_w"></i><span class="sr_only">첨부파일 삭제</span></button>
+								</span>
+								<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png">
+								<label for="i_picture" class="btn_md_form">파일 선택</label>
+							</div>
+							<ul class="list_bullet_dot mgt5">
+								<li>10MB미만의 jpg, gif, png의 이미지 파일</li>
+								<li>internet Explorer 9.0버전에서는 첨부파일 1개만 가능합니다.</li>
+							</ul>
+							<![endif]-->
+							<!--[if gt ie 9]><!-->
+							<ul class="attach">
+								<!--/*
+								<li>
+									<img alt="" src="/pc/ko/images/dummy/img_attach.jpg">
+									<button type="button" class="btn_del"><span class="sr_only">첨부파일 삭제</span></button>
+								</li>
+								*/-->
+								<li class="input_file_btn_area">
+									<div class="attach_file">
+										<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="multiple">
+										<label for="i_picture">사진 첨부</label>
+									</div>
+								</li>
+							</ul>
+							<p class="text">이미지 파일만 가능 / 최대 10개 / 최대 파일 용량 10MB</p>
+							<!--<![endif]-->
+						</div>
+					</div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * inputImages 기본적용
+							 * js/common/plugin-type/input-images.js 참고
+							 * @returns {jQuery}
+							 */
+							$( '.ui_input_images' ).inputImages();
+
+							/**
+							 * FormData 에 선택된 이미지 파일 리스트를 병합
+							 * @param {FormData}	formData
+							 * @returns {jQuery}
+							 */
+							$( '.ui_input_images' ).inputImages( 'extendFormData', formData );
+
+							/**
+							 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+							 */
+							$( '.ui_input_images' ).inputImages( 'clear' );
+
+
+							//적용예시
+							$( '.submit' ).on( 'click', function (e) {
+								//IE10~
+								if ( window.FormData ) {
+									var formData = new FormData( $('form').get(0) );
+
+									//formDate에 첨부된 이미지 병합
+									$( '.ui_input_images' ).inputImages( 'extendFormData', formData );
+									//formData를 ajax의 data에 넣어서 보내면 된다.
+								} else {
+									//IE9에서는 이미지 첨부가 input:file 한개로 처리 되기 때문에 일반적인 ajax file form 전송 방식
+								}
+							});
+						</code>
+					</pre>
+
+					<h3 class="gt d2"><strong>textarea</strong></h3>
+					<div class="guide-row">
+						<div class="guide-col2">
+							<div class="html">
+								<div class="textarea">
+									<textarea name="" id="" cols="30" rows="5">내용을 입력해주세요.</textarea>
+								</div>
+							</div>
+						</div>
+						<div class="guide-col2">
+							<div class="html">
+								<div class="textarea">
+									<textarea name="" id="" cols="30" rows="5" disabled>내용을 입력해주세요.</textarea>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="html">
+						<div class="textarea error">
+							<textarea name="" id="" cols="30" rows="5">내용을 입력해주세요.</textarea>
+						</div>
+					</div>
+
+					<h3 class="gt d2"><strong>Input limits (글자수 입력제한)</strong></h3>
+					<div class="html">
+						<!-- max-byte 속성을 기준으로 작동 -->
+						<div class="input_wrap">
+							<input type="text" value="" placeholder="20byte 이내로 입력해주세요." max-byte="20">
+						</div>
+
+						<!-- maxlength 속성을 기준으로 작동 -->
+						<div>
+							<div class="textarea">
+								<textarea name="" id="" cols="30" rows="3" placeholder="500자 이내로 입력해주세요." maxlength="500"></textarea>
+							</div>
+							<p class="text_right"><small><em class="current">0</em>/<span class="limits">500</span></small></p>
+						</div>
+					</div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * inputLimits 기본적용
+							 * js/common/plugin-type/input-limits.js 참고
+							 * @returns {jQuery}
+							 */
+							$( 'input:text, textarea' ).inputLimits();
+
+							/**
+							 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+							 */
+							$( 'input:text, textarea' ).inputLimits( 'clear' );
+						</code>
+					</pre>
+
+					<h3 class="gt d2"><strong>radio, checkbox</strong></h3>
+					<div class="guide-row">
+						<div class="guide-col2">
+							<div class="html">
+								<div class="check_set">
+									<span class="check_wrap"><input type="radio" name="radio" id="radio1"><label for="radio1">normal</label></span>
+									<span class="check_wrap"><input type="radio" name="radio" id="radio2" checked><label for="radio2">checked</label></span>
+									<span class="check_wrap"><input type="radio" name="radio" id="radio3" disabled><label for="radio3">disabled</label></span>
+									<span class="check_wrap"><input type="radio" name="radio1" id="radio4" checked disabled><label for="radio4">checked disabled</label></span>
+								</div>
+							</div>
+						</div>
+						<div class="guide-col2">
+							<div class="html">
+								<div class="check_set">
+									<span class="check_wrap"><input type="checkbox" id="check1"><label for="check1">normal</label></span>
+									<span class="check_wrap"><input type="checkbox" id="check2" checked><label for="check2">checked</label></span>
+									<span class="check_wrap"><input type="checkbox" id="check3" disabled><label for="check3">disabled</label></span>
+									<span class="check_wrap"><input type="checkbox" id="check4" checked disabled><label for="check4">checked disabled</label></span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="guide-row">
+						<div class="guide-col2">
+							<div class="html">
+								<div class="check_set">
+									<span class="check_wrap large"><input type="radio" name="radio2" id="radio2_1"><label for="radio2_1">normal</label></span>
+									<span class="check_wrap large"><input type="radio" name="radio2" id="radio2_2" checked><label for="radio2_2">checked</label></span>
+									<span class="check_wrap large"><input type="radio" name="radio2" id="radio2_3" disabled><label for="radio2_3">disabled</label></span>
+									<span class="check_wrap large"><input type="radio" name="radio5" id="radio5" checked disabled><label for="radio5">checked disabled</label></span>
+								</div>
+							</div>
+						</div>
+						<div class="guide-col2">
+							<div class="html">
+								<div class="check_set">
+									<span class="check_wrap large"><input type="checkbox" id="check2_1"><label for="check2_1">normal</label></span>
+									<span class="check_wrap large"><input type="checkbox" id="check2_2" checked><label for="check2_2">checked</label></span>
+									<span class="check_wrap large"><input type="checkbox" id="check2_3" disabled><label for="check2_3">disabled</label></span>
+									<span class="check_wrap large"><input type="checkbox" id="check2_4" checked disabled><label for="check2_4">checked disabled</label></span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<h3 class="gt d2"><strong>Spinner</strong></h3>
+					<div class="guide-row">
+						<div class="guide-col3">
+							<h4>default</h4>
+							<br>
+							<div class="html">
+								<!-- data-min="최소수치" data-max="최대수치" data-step="한번에 증가되는 수치" data-disabled="비활성화" -->
+								<span class="ui_spinner" data-min="1" data-max="20" data-step="2" data-disabled="false">
+									<button class="spinner_decrease" type="button" title="제품 수량 감소"><img ap:src="@{/images/common/ico_minus1.gif}" alt="제품 수량 감소"></button>
+									<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
+									<button class="spinner_increase" type="button" title="제품 수량 증가"><img ap:src="@{/images/common/icon_plus1.gif}" alt="제품 수량 증가"></button>
+								</span>
+							</div>
+							<pre>
+								<code class="javascript">
+									/**
+									 * spinner 기본적용
+									 * js/common/plugin-type/spinner.js 참고
+									 * @returns {jQuery}
+									 */
+									$( '.ui_spinner' ).spinner();
+
+									/**
+									 * value 설정 (min, max 값에 영향을 받는다.)
+									 */
+									$( '.ui_spinner' ).spinner( 'setValue', value );
+
+									/**
+									 * value 반환
+									 */
+									$( '.ui_spinner' ).spinner( 'getValue' );
+
+									/**
+									 * 활성화
+									 */
+									$( '.ui_spinner' ).spinner( 'enable' );
+
+									/**
+									 * 비활성화
+									 */
+									$( '.ui_spinner' ).spinner( 'disable' );
+
+									/**
+									 * event
+									 */
+									$( '.ui_spinner' ).on( 'spinner-change', function (e) {
+										console.log( e.value );
+									});
+
+									/**
+									 * event 강제 발생
+									 */
+									$( '.ui_spinner' ).triggerHandler({
+										type: 'spinner-change',
+										value: value
+									});
+
+									/**
+									 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+									 */
+									$( '.ui_spinner' ).spinner( 'clear' );
+								</code>
+							</pre>
+						</div>
+						<div class="guide-col3">
+							<h4>small</h4>
+							<br>
+							<div class="html">
+								<!-- data-min="최소수치" data-max="최대수치" data-step="한번에 증가되는 수치" data-disabled="비활성화" -->
+								<span class="ui_spinner small" data-min="1" data-max="20" data-step="1" data-disabled="false">
+									<button class="spinner_decrease" type="button" title="제품 수량 감소"><img ap:src="@{/images/common/ico_minus1.gif}" alt="제품 수량 감소"></button>
+									<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
+									<button class="spinner_increase" type="button" title="제품 수량 증가"><img ap:src="@{/images/common/icon_plus1.gif}" alt="제품 수량 증가"></button>
+								</span>
+							</div>
+						</div>
+						<div class="guide-col3">
+							<h4>disabled</h4>
+							<br>
+							<div class="html">
+								<!-- data-min="최소수치" data-max="최대수치" data-step="한번에 증가되는 수치" data-disabled="비활성화" -->
+								<span class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="true">
+									<button class="spinner_decrease" type="button" title="제품 수량 감소"><img ap:src="@{/images/common/ico_minus1.gif}" alt="제품 수량 감소"></button>
+									<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
+									<button class="spinner_increase" type="button" title="제품 수량 증가"><img ap:src="@{/images/common/icon_plus1.gif}" alt="제품 수량 증가"></button>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="guide-row">
+						<div class="guide-col3">
+							<h4>default</h4>
+							<br>
+							<div class="html">
+								<!-- data-min="최소수치" data-max="최대수치" data-step="한번에 증가되는 수치" data-disabled="비활성화" -->
+								<span class="ui_spinner typ2" data-min="1" data-max="20" data-step="2" data-disabled="false">
+									<button class="spinner_decrease" type="button" title="제품 수량 감소"><img ap:src="@{/images/common/ico_minus2.gif}" alt="제품 수량 감소"></button>
+									<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
+									<button class="spinner_increase" type="button" title="제품 수량 증가"><img ap:src="@{/images/common/icon_plus2.gif}" alt="제품 수량 증가"></button>
+								</span>
+							</div>
+							<pre>
+								<code class="javascript">
+									/**
+									 * spinner 기본적용
+									 * js/common/plugin-type/spinner.js 참고
+									 * @returns {jQuery}
+									 */
+									$( '.ui_spinner' ).spinner();
+
+									/**
+									 * value 설정 (min, max 값에 영향을 받는다.)
+									 */
+									$( '.ui_spinner' ).spinner( 'setValue', value );
+
+									/**
+									 * value 반환
+									 */
+									$( '.ui_spinner' ).spinner( 'getValue' );
+
+									/**
+									 * 활성화
+									 */
+									$( '.ui_spinner' ).spinner( 'enable' );
+
+									/**
+									 * 비활성화
+									 */
+									$( '.ui_spinner' ).spinner( 'disable' );
+
+									/**
+									 * event
+									 */
+									$( '.ui_spinner' ).on( 'spinner-change', function (e) {
+										console.log( e.value );
+									});
+
+									/**
+									 * event 강제 발생
+									 */
+									$( '.ui_spinner' ).triggerHandler({
+										type: 'spinner-change',
+										value: value
+									});
+
+									/**
+									 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+									 */
+									$( '.ui_spinner' ).spinner( 'clear' );
+								</code>
+							</pre>
+						</div>
+
+					</div>
+					<h3 class="gt d2"><strong>input set</strong></h3>
+					<div class="guide-row">
+						<div class="guide-col2">
+							<h4>전화번호</h4>
+							<br>
+							<div class="html">
+								<div class="input_group ea_03">
+									<span class="input_wrap"><input type="text" title="휴대폰 앞자리 입력"></span>
+									<span class="gap bul">-</span>
+									<span class="input_wrap"><input type="text" title="휴대폰 가운데자리 입력"></span>
+									<span class="gap bul">-</span>
+									<span class="input_wrap"><input type="text" title="휴대폰 끝자리 입력"></span>
+								</div>
+							</div>
+							<div class="html">
+								<div class="input_group ea_03">
+									<span class="select_wrap">
+										<select tabindex="-1" name="" id="" title="휴대전화 사업자 식별번호 선택">
+											<option value="">010</option>
+										</select>
+									</span>
+									<span class="gap bul">-</span>
+									<span class="input_wrap"><input type="text" title="휴대폰 가운데자리 입력"></span>
+									<span class="gap bul">-</span>
+									<span class="input_wrap"><input type="text" title="휴대폰 끝자리 입력"></span>
+								</div>
+							</div>
+						</div>
+						<div class="guide-col2">
+							<h4>이메일</h4>
+							<br>
+							<div class="html">
+								<div class="input_group ea_03">
+									<span class="input_wrap"><input type="text" title="이메일 아이디 입력"></span>
+									<span class="gap bul">@</span>
+									<span class="input_wrap"><input type="text" title="이메일 도메인 직접 입력"></span>
+									<span class="gap">&nbsp;</span>
+									<span class="select_wrap">
+										<select tabindex="-1" name="" id="" title="이메일 도메인 선택">
+											<option value="">직접 입력</option>
+										</select>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="html">
+						<div class="input_group ea_03">
+							<span class="select_wrap">
+								<select tabindex="-1" name="" id="" title="선택하세요">
+									<option value="">선택하세요</option>
+								</select>
+							</span>
+							<span class="gap">&nbsp;</span>
+							<span class="select_wrap">
+								<select tabindex="-1" name="" id="" title="선택하세요">
+									<option value="">선택하세요</option>
+								</select>
+							</span>
+							<span class="gap">&nbsp;</span>
+							<span>
+								<button class="btn_md_form" type="button">검색</button>
+							</span>
+						</div>
+					</div>
+					<div class="html">
+						<dl>
+							<dt>주소</dt>
+							<dd class="ui_find_addresses">
+								<div class="w100p input_btn_wrap">
+									<div class="input_wrap">
+										<input type="text" class="address_keyword" title="지역명 입력" placeholder="지역명">
+									</div>
+									<button type="button" class="btn_md_form btn_address_find">찾기</button>
+								</div>
+								<div class="input_group w100p">
+									<span class="input_wrap w25p"><input type="text" class="post_code" title="우편번호 입력" placeholder="우편번호" readonly></span>
+									<span class="gap">&nbsp;</span>
+									<span class="input_wrap"><input type="text" class="address_first" title="기본주소 입력" placeholder="기본주소" readonly></span>
+								</div>
+								<div class="input_wrap w100p"><input type="text" class="address_last" title="상세주소 입력" placeholder="상세주소" /></div>
+							</dd>
+						</dl>
+					</div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * 주소찾기 기본적용
+							 * js/common/plugin-type/find-addresses.js 참고
+							 * @returns {jQuery}
+							 */
+							$( '.ui_find_addresses' ).findAddresses();
+
+							/**
+							 * event
+							 */
+							$( '.ui_find_addresses' ).on( 'change-address', function (e) {
+								console.log( e.postCode, e.address, e.detailAddress );
+							});
+
+							/**
+							 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+							 */
+							$( '.ui_find_addresses' ).findAddresses( 'clear' );
+						</code>
+					</pre>
+					<h3 class="gt d2"><strong>Date picker</strong></h3>
+					<div class="html">
+						<div class="input_group input_date_group">
+							<div class="input_wrap">
+								<input type="text" class="ui_date_picker" placeholder="날짜 선택" title="날짜 선택" value="" readonly>
+								<button type="button" class="ui_date_picker_btn btn_cal"><i class="ico_date"></i><span class="sr_only">날짜 선택</span></button>
+							</div>
+						</div>
+					</div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * DataPicker 기본적용
+							 * js/common/plugin-type/date-picker.js 참고
+							 * @param {Object} 	options
+							 *   - {String}      minDate           default:today, ex)'2017-11-10'
+							 *   - {String}      maxDate           default:today + 12년
+							 *   - {String}      defaultDate       default:today
+							 *   - {String}      dateFormat        default: AP.DATE_FORMAT
+							 *   - {Boolean}     disableSunday
+							 *   - {Boolean}     disableSaturday
+							 *	 - {Array}		 enabledDates	   선택 가능날짜들 설정, ex) ['2018-01-01', '2018-02-01']
+							 * @returns {jQuery}
+							 */
+							$( '.ui_date_picker' ).datePicker( options );
+
+							/**
+							 * 옵션변경
+							 * @param {Object} 	options
+							 */
+							$( '.ui_date_picker' ).datePicker( 'setOption', options );
+
+							/**
+							 * 날짜 설정
+							 * @param {String}      date    변경할 날짜, ex) 2017-00-00
+							 */
+							$( '.ui_date_picker' ).datePicker( 'setDate', date );
+
+							/**
+							 * 현재날짜 반환
+							 * @param   {String}    format  리턴받을 date format설정, 설정하지 않으면 기본값
+							 * @returns {String}
+							 */
+							$( '.ui_date_picker' ).datePicker( 'getDate', format );
+
+							/**
+							 * event
+							 */
+							$( '.ui_date_picker' ).on( 'date-picker-change', function (e) {
+								console.log( e.date );
+							});
+
+							/**
+							 * event 강제 발생
+							 */
+							$( '.ui_date_picker' ).triggerHandler({
+								type: 'date-picker-change',
+								date: date
+							});
+
+							/**
+							 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+							 */
+							$( '.ui_date_picker' ).datePicker( 'clear' );
+						</code>
+					</pre>
+					<h3 class="gt d2"><strong>Multiple Date picker</strong></h3>
+					<div class="html">
+						<div class="ui_multiple_date_picker input_group input_date_group">
+							<div class="input_wrap">
+								<input type="text" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="" readonly>
+								<button type="button" class="ui_date_picker_btn btn_cal"><i class="ico_date"></i><span class="sr_only">날짜 선택</span></button>
+							</div>
+							<span class="gap bul">~</span>
+							<div class="input_wrap">
+								<input type="text" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="" readonly>
+								<button type="button" class="ui_date_picker_btn btn_cal"><i class="ico_date"></i><span class="sr_only">날짜 선택</span></button>
+							</div>
+						</div>
+					</div>
+					<div class="html">
+						<div class="ui_multiple_date_picker">
+							<div class="date_btn_set">
+								<span><input type="radio" class="select_range_date" name="radio4" id="radio4_1" value="1weeks" checked><label for="radio4_1">1주일</label></span>
+								<span><input type="radio" class="select_range_date" name="radio4" id="radio4_2" value="1months"><label for="radio4_2">1개월</label></span>
+								<span><input type="radio" class="select_range_date" name="radio4" id="radio4_3" value="3months"><label for="radio4_3">3개월</label></span>
+								<span><input type="radio" class="select_range_date" name="radio4" id="radio4_4" value="6months"><label for="radio4_4">6개월</label></span>
+								<span><input type="radio" class="select_range_date" name="radio4" id="radio4_5" value="1years"><label for="radio4_5">12개월</label></span>
+							</div>
+							<br>
+							<div class="input_date_group input_group ea_03">
+								<div class="input_wrap w35p">
+									<input type="text" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="" readonly>
+									<button type="button" class="ui_date_picker_btn btn_cal"><i class="ico_date"></i><span class="sr_only">날짜 선택</span></button>
+								</div>
+								<span class="gap bul">~</span>
+								<div class="input_wrap w35p">
+									<input type="text" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="" readonly>
+									<button type="button" class="ui_date_picker_btn btn_cal"><i class="ico_date"></i><span class="sr_only">날짜 선택</span></button>
+								</div>
+								<span class="gap"></span>
+								<div>
+									<button class="btn_md_primary" type="button">검색</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="html">
+						<div class="ui_multiple_date_picker">
+							<div class="date_btn_set">
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_1" value="1weeks" checked><label for="radio5_1">1주일</label></span>
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_2" value="1months"><label for="radio5_2">1개월</label></span>
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_3" value="3months"><label for="radio5_3">3개월</label></span>
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_4" value="6months"><label for="radio5_4">6개월</label></span>
+								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_5" value="1years"><label for="radio5_5">12개월</label></span>
+							</div>
+							<br>
+							<div class="input_date_group">
+								<div class="input_wrap" style="display:none;">
+									<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+									<input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+								</div>
+								<div class="date_info_area">
+									시작일 <span class="start_date"></span>, 종료일 <span class="end_date"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * MultipleDatePicker 기본적용
+							 * js/common/plugin-type/multiple-date-picker.js 참고
+							 * @param {Object} 	options
+							 *   - {String}      minDate           default:today - 12년
+							 *   - {String}      maxDate           default:today, ex)'2017-11-10'
+							 *   - {String}      defaultRangeDate  기본 기간 설정 시작+종료 기간, ex) '1weeks', '1months', '1years'
+							 * @returns {jQuery}
+							 */
+							$( '.ui_multiple_date_picker' ).multipleDatePicker( options );
+
+							/**
+							 * 현재날짜 반환
+							 * @param   {String}    format  리턴받을 date format설정, 설정하지 않으면 기본값
+							 * @returns {String}
+							 */
+							$( '.ui_multiple_date_picker' ).multipleDatePicker( 'getDate', format );
+
+							/**
+							 * event
+							 */
+							$( '.ui_multiple_date_picker' ).on( 'multiple-date-picker-change', function (e) {
+								console.log( e.type, e.date );
+							});
+
+							/**
+							 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+							 */
+							$( '.ui_multiple_date_picker' ).multipleDatePicker( 'clear' );
+						</code>
+					</pre>
+					<h3 class="gt d2"><strong>Slider</strong> <small>http://ixsnack.com/ixSlider 참고</small></h3>
+					<div class="html">
+						<div class="ui_slider" data-ix-options="min:1000; max:20000; value:10000; gap:1000; number-format:true;">
+							<!-- Touch Event 가 발생하는 영역 -->
+							<div class="ix-slider-bar">
+								<div class="ix-progress"></div>
+								<button type="button" class="ix-icon"></button>
+							</div>
+							<div class="ix-inputs">
+								<input type="text" class="ix-input" size="10">
+							</div>
+						</div>
+					</div>
+					<h3 class="gt d2"><strong>Range Slider</strong> <small>http://ixsnack.com/ixRangeSlider 참고</small></h3>
+					<div class="html">
+						<div class="ui_range_slider" data-ix-options="min:1000; max:10000; values:3000 8000; gap:1000; number-format:true;">
+							<!-- Touch Event 가 발생하는 영역 -->
+							<div class="ix-slider-bar">
+								<div class="ix-progress"></div>
+								<button class="ix-min-icon"></button>
+								<button class="ix-max-icon"></button>
+							</div>
+							<div class="ix-inputs">
+								<input type="text" class="ix-min-input" size="10"><input type="text" class="ix-max-input" size="10">
+							</div>
+						</div>
+					</div>
+				</div>
+				<h2 class="gt d1">form 레이아웃 가이드</h2>
+				<div>
+					<a href="form_layout.html">form layout 가이드</a>
+				</div>
+			</dd>
+			<dt><a>table/layout</a></dt>
+			<dd>
+				<h2 class="gt d1">table</h2>
+				<div>
+					<h3 class="gt d2"><strong>data table</strong></h3>
+					<div class="html">
+						<table class="data_table thead_colored align_center"><!-- 테이블 전체 중앙정렬 --><!-- 테이블 컬러 -->
+							<caption class="sr_only">표 제목</caption>
+							<colgroup>
+								<col>
+								<col>
+								<col>
+							</colgroup>
+							<thead>
+							<tr>
+								<th scope="col">제목 1</th>
+								<th scope="col">제목 2</th>
+								<th scope="col">제목 3</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr>
+								<td>100알 적립(마이에뛰드>주문조회 화면)<br>베스트 선정시 1,000알 적립</td>
+								<td>내용</td>
+								<td>내용</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="html">
+						<table class="data_table align_center"><!-- 테이블 전체 중앙정렬 -->
+							<caption class="sr_only">표 제목</caption>
+							<colgroup>
+								<col>
+								<col>
+								<col>
+							</colgroup>
+							<thead>
+							<tr>
+								<th scope="col">제목 1</th>
+								<th scope="col">제목 2</th>
+								<th scope="col">제목 3</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr>
+								<td>내용</td>
+								<td>내용</td>
+								<td>내용</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="html">
+						<table class="data_table">
+							<caption class="sr_only">표 제목</caption>
+							<colgroup>
+								<col style="width:20%;">
+								<col>
+							</colgroup>
+							<tbody>
+							<tr>
+								<th scope="row">가로 제목</th>
+								<td>내용</td>
+							</tr>
+							<tr>
+								<th scope="row">가로 제목</th>
+								<td class="align_center">내용</td> <!-- 셀 중앙정렬 -->
+							</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="html">
+						<table class="ui_table_striped data_table align_center">
+							<caption class="sr_only">상담을 위한 주문목록 선택 삭제로 선택, 주문번호, 제품명, 주문상태로 구성</caption>
+							<colgroup>
+								<col style="width:50px;">
+								<col>
+								<col>
+								<col>
+							</colgroup>
+							<thead>
+							<tr>
+								<th scope="col">
+									<span class="check_wrap check_only"><input type="checkbox" class="checked_all" id="checkall"><label for="checkall"><span class="sr_only">전체선택</span></label></span>
+								</th>
+								<th scope="col">주문번호</th>
+								<th scope="col">제품명</th>
+								<th scope="col">주문상태</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr>
+								<td><span class="check_wrap check_only"><input type="checkbox" class="table_striped" id="check_sample1" checked><label for="check_sample1"><span class="sr_only">{주문번호}</span></label></span></td>
+								<td>12345</td>
+								<td>제품명</td>
+								<td>배송중</td>
+							</tr>
+							<tr>
+								<td><span class="check_wrap check_only"><input type="checkbox" class="table_striped" id="check_sample2"><label for="check_sample2"><span class="sr_only">{주문번호}</span></label></span></td>
+								<td>12345</td>
+								<td>제품명</td>
+								<td>배송중</td>
+							</tr>
+							</tbody>
+						</table>
+						<br>
+						<table class="ui_table_striped data_table align_center">
+							<caption class="sr_only">상담을 위한 주문목록 선택 삭제로 선택, 주문번호, 제품명, 주문상태로 구성</caption>
+							<colgroup>
+								<col style="width:50px;">
+								<col>
+								<col>
+								<col>
+							</colgroup>
+							<thead>
+							<tr>
+								<th scope="col">선택</th>
+								<th scope="col">주문번호</th>
+								<th scope="col">제품명</th>
+								<th scope="col">주문상태</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr>
+								<td><span class="check_wrap check_only"><input type="radio" class="table_striped" name="radio_sample" id="radio_sample1" checked><label for="radio_sample1"><span class="sr_only">{주문번호}</span></label></span></td>
+								<td>12345</td>
+								<td>제품명</td>
+								<td>배송중</td>
+							</tr>
+							<tr>
+								<td><span class="check_wrap check_only"><input type="radio" class="table_striped" name="radio_sample"  id="radio_sample2"><label for="radio_sample2"><span class="sr_only">{주문번호}</span></label></span></td>
+								<td>12345</td>
+								<td>제품명</td>
+								<td>배송중</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * table striped 기본적용
+							 * Table input.table_striped checkbox, radio 를 선택시 tr의 선택 칼라를 넣어주는 기능
+							 * js/common/plugin-type/table-striped.js 참고
+							 * @returns {jQuery}
+							 */
+							$( '.ui_table_striped' ).tableStriped();
+
+							/**
+							 * table 내부의 tr이 추가되거나 삭제시 호출
+							 */
+							$( '.ui_table_striped' ).tableStriped( 'updated' );
+
+							/**
+							 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+							 */
+							$( '.ui_table_striped' ).tableStriped( 'clear' );
+						</code>
+					</pre>
+					<h3 class="gt d2"><strong>table layout</strong></h3>
+					<div class="html">
+						<div class="table_layout">
+							<div>셀</div>
+							<div>셀</div>
+							<div>셀</div>
+						</div>
+					</div>
+					<div class="html">
+						<div class="ui_table">
+							<dl>
+								<dt>제목1</dt>
+								<dd>내용1</dd>
+							</dl>
+							<dl>
+								<dt>제목2</dt>
+								<dd>내용2</dd>
+								<dt>제목2</dt>
+								<dd>내용2</dd>
+							</dl>
+							<dl>
+								<dt>제목3</dt>
+								<dd>내용3</dd>
+							</dl>
+						</div>
+					</div>
+				</div>
+			</dd>
+			<dt><a>board</a></dt>
+			<dd>
+				<h2 class="gt d1">board</h2>
+				<div>
+					<h3 class="gt d2"><strong>List</strong></h3>
+					<div class="html">
+						<div class="board_list">
+							<table>
+								<caption class="sr_only">표 제목</caption>
+								<colgroup>
+									<col>
+									<col style="width:70%;"> <!-- 컬럼 사이즈 -->
+									<col>
+								</colgroup>
+								<thead>
+								<tr>
+									<th scope="col">제목 1</th>
+									<th scope="col">제목 2</th>
+									<th scope="col">제목 3</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr>
+									<td class="align_center">중앙정렬</td>
+									<td>내용 2</td>
+									<td>내용 3</td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+					<h3 class="gt d2"><strong>List2</strong></h3>
+					<div class="html">
+						<div class="board_list2">
+							<table class="align_center">
+								<caption class="sr_only">표 제목</caption>
+								<colgroup>
+									<col style="width:10%;"> <!-- 컬럼 사이즈 -->
+									<col style="width:10%;">
+									<col>
+									<col style="width:10%;">
+								</colgroup>
+								<thead class="sr_only">
+								<tr>
+									<th scope="col">번호</th>
+									<th scope="col">분류</th>
+									<th scope="col">제목</th>
+									<th scope="col">날짜</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr class="notice">
+									<td class="num">111</td>
+									<td class="cate">공지</td>
+									<td class="subj align_left"><a haref="#">에뛰드하우스 홈페이지 개편에 따른 서비스 점검 안내</a></td>
+									<td class="date">2018.03.20</td>
+								</tr>
+								<tr class="notice">
+									<td class="num align_center">111</td>
+									<td class="cate">공지</td>
+									<td class="subj align_left"><a href="#">2018년도 뷰티 포인트 멤버십 혜택변경 안내</a></td>
+									<td class="date">2018.03.20</td>
+								</tr>
+								<tr>
+									<td class="num align_center">111</td>
+									<td class="cate">브랜드</td>
+									<td class="subj align_left"><a href="#">11월 24일, 27일 상담 시간 조정 안내</a></td>
+									<td class="date">2018.03.20</td>
+								</tr>
+								<tr>
+									<td class="num align_center">111</td>
+									<td class="cate">쇼핑몰</td>
+									<td class="subj align_left"><a href="#">카카오페이 서비스 중단 안내</a></td>
+									<td class="date">2018.03.20</td>
+								</tr>
+								<tr>
+									<td class="num align_center">111</td>
+									<td class="cate">브랜드</td>
+									<td class="subj align_left"><a href="#">[수정] 에뛰드 서비스 변경/종료 안내</a></td>
+									<td class="date">2018.03.20</td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<h3 class="gt d2"><strong>View</strong></h3>
+					<div class="html">
+						<div class="board_view">
+							<dl>
+								<dt>등록일</dt>
+								<dd>2017-01-11</dd>
+							</dl>
+							<dl>
+								<dt>처리상태</dt>
+								<dd><span class="state">미답변</span> <span class="state done">답변</span></dd>
+							</dl>
+							<dl>
+								<dt>제목</dt>
+								<dd>안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다.</dd>
+							</dl>
+							<dl>
+								<dt>질문</dt>
+								<dd>안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다. 안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다. 안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다.</dd>
+							</dl>
+							<dl>
+								<dt>내용</dt>
+								<dd>안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다. 안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다. 안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다.</dd>
+							</dl>
+						</div>
+					</div>
+
+					<h3 class="gt d2"><strong>View2</strong></h3>
+					<div class="html">
+						<div class="board_view2">
+							<dl class="subj">
+								<dt>공지</dt>
+								<dd>2018년도 뷰티 포인트 멤버십 혜택변경 안내</dd>
+								<dd class="date">2018-02-01</dd>
+							</dl>
+							<dl class="cont">
+								<dt class="sr_only">내용</dt>
+								<dd>
+									안녕하세요. 에뛰드 하우스입니다.<br><br>
+
+									'18년도 아모레퍼시픽 뷰티 포인트 멤버십 혜택 변경에 관한 사항을 아래와 같이 안내 드리오니 이용에 참고하시기 바랍니다.<br><br>
+
+									'18년도 부터는 뷰티 포인트 멤버십 등급과 관계없이 구매적립률이 전년 구매(수금)금액과 관계없이 2%로 일원화 됩니다.<br><br>
+
+									다만, 17년 상반기(17년 6월 30일 기준) 내 60만원 이상 또는 120만원 이상 구매 고객께는 기존과 동일한 적립률로 18년도에 한해 유지 할 예정입니다.<br><br>
+
+									또한 통합 ABC(VIP) 고객에게 제공되던 뷰티 포인트 혜택은 새로운 혜택으로 대체 될 예정이오니 계속해서 많은 관심과 성원 부탁드립니다.<br><br>
+
+									<b>※ 18년도 아모레퍼시픽 통합 ABC(VIP) 선정기준 추가 안내</b><br><br>
+
+									앞으로도 고객님께 더 나은 서비스와 혜택을 드리기 위해 최선을 다하겠습니다.<br><br>
+
+									감사합니다.
+
+								</dd>
+							</dl>
+						</div>
+					</div>
+
+					<h3 class="gt d2"><strong>Write</strong></h3>
+					<div class="html">
+						<fieldset class="form">
+							<legend class="sr_only">질문 입력 항목</legend>
+							<div class="ui_table board_write">
+								<dl>
+									<dt>문의유형</dt>
+									<dd>
+										<div class="input_group">
+										<span class="select_wrap w300px">
+											<select name="" id="" tabindex="-1">
+												<option value="">문의유형 선택</option>
+												<option value="">선택 2</option>
+												<option value="">선택 3</option>
+												<option value="">선택 4</option>
+												<option value="">선택 5</option>
+												<option value="">선택 6</option>
+											</select>
+										</span>
+											<span class="gap"></span>
+											<span class="select_wrap w300px">
+												<select name="" id="" tabindex="-1" disabled="">
+													<option value="">유형2</option>
+													<option value="">선택 2</option>
+													<option value="">선택 3</option>
+													<option value="">선택 4</option>
+													<option value="">선택 5</option>
+													<option value="">선택 6</option>
+												</select>
+											</span>
+										</div>
+									</dd>
+								</dl>
+								<dl>
+									<dt>주문상품</dt>
+									<dd>
+										<div class="input_btn_wrap fixed">
+											<span class="input_wrap"><input type="text" class="" readonly=""></span>
+											<button class="btn_md_form" type="button">등록</button>
+										</div>
+									</dd>
+								</dl>
+								<dl>
+									<dt>제목</dt>
+									<dd>
+										<div class="input_wrap w100p"><input type="text" title="제목 입력" placeholder="제목을 입력해 주세요."></div>
+									</dd>
+								</dl>
+								<dl>
+									<dt>문의내용</dt>
+									<dd>
+										<div class="textarea w100p">
+											<textarea name="" id="" cols="30" rows="5">문의할 내용을 입력해주세요.</textarea>
+										</div>
+									</dd>
+								</dl>
+								<dl>
+									<dt>파일첨부</dt>
+									<dd>
+										<div class="input_btn_wrap w100p file">
+                                            <span class="input_wrap">
+                                                <input class="input_file_name" type="text" title="첨부 파일 선택" readonly="" value="">
+                                                <button class="input_del"><i class="ico_close_w"></i><span class="sr_only">첨부파일 삭제</span></button> <!-- 첨부파일 첨부 후 삭제 버튼 -->
+                                            </span>
+											<!-- label 과 input file 의 id 값은 항상 일치 시켜야한다 -->
+											<input type="file" id="input_file2">
+											<label for="input_file2" class="btn_md_form">파일 선택</label>
+											<span class="text">10MB미만의 jpg, gif, png의 이미지 파일 최대 10개까지 등록가능</span>
+										</div>
+
+										<ul class="attach">
+											<li>
+												<img ap:src="@{/images/dummy/img_attach.jpg}" alt="">
+												<button type="button" class="btn_del"><span class="sr_only">첨부파일 삭제</span></button>
+											</li>
+											<li>
+												<img ap:src="@{/images/dummy/img_attach.jpg}" alt="">
+												<button type="button" class="btn_del"><span class="sr_only">첨부파일 삭제</span></button>
+											</li>
+											<li>
+												<img ap:src="@{/images/dummy/img_attach.jpg}" alt="">
+												<button type="button" class="btn_del"><span class="sr_only">첨부파일 삭제</span></button>
+											</li>
+											<li>
+												<img ap:src="@{/images/dummy/img_attach.jpg}" alt="">
+												<button type="button" class="btn_del"><span class="sr_only">첨부파일 삭제</span></button>
+											</li>
+											<li>
+												<img ap:src="@{/images/dummy/img_attach.jpg}" alt="">
+												<button type="button" class="btn_del"><span class="sr_only">첨부파일 삭제</span></button>
+											</li>
+											<li>
+												<img ap:src="@{/images/dummy/img_attach.jpg}" alt="">
+												<button type="button" class="btn_del"><span class="sr_only">첨부파일 삭제</span></button>
+											</li>
+											<li>
+												<img ap:src="@{/images/dummy/img_attach.jpg}" alt="">
+												<button type="button" class="btn_del"><span class="sr_only">첨부파일 삭제</span></button>
+											</li>
+											<li>
+												<img ap:src="@{/images/dummy/img_attach.jpg}" alt="">
+												<button type="button" class="btn_del"><span class="sr_only">첨부파일 삭제</span></button>
+											</li>
+											<li>
+												<img ap:src="@{/images/dummy/img_attach.jpg}" alt="">
+												<button type="button" class="btn_del"><span class="sr_only">첨부파일 삭제</span></button>
+											</li>
+											<li>
+												<img ap:src="@{/images/dummy/img_attach.jpg}" alt="">
+												<button type="button" class="btn_del"><span class="sr_only">첨부파일 삭제</span></button>
+											</li>
+										</ul>
+									</dd>
+								</dl>
+								<dl>
+									<dt>휴대폰 번호</dt>
+									<dd>
+										<div class="input_group">
+											<span class="input_wrap w300px"><input type="text" title="휴대폰 번호 입력"></span>
+											<span class="gap"></span>
+											<span class="check_wrap"><input type="checkbox" id="sms"><label for="sms">SMS 답변알림</label></span>
+										</div>
+									</dd>
+								</dl>
+							</div>
+						</fieldset>
+					</div>
+
+					<h3 class="gt d2"><strong>Pagination</strong></h3>
+					<div class="html">
+						<div class="pagination">
+							<a href="#none" class="navi first">처음</a>
+							<a href="#none" class="navi prev">이전</a>
+							<a href="#none" class="disabled">1</a>
+							<a href="#none">2</a>
+							<a href="#none">3</a>
+							<span class="current">4</span>
+							<a href="#none">5</a>
+							<a href="#none">6</a>
+							<a href="#none">7</a>
+							<a href="#none">8</a>
+							<a href="#none">9</a>
+							<a href="#none">10</a>
+							<a href="#none" class="navi next">다음</a>
+							<a href="#none" class="navi last">끝</a>
+						</div>
+					</div>
+					<h3 class="gt d2"><strong>Pagination (JS 동적 생성, 관리)</strong></h3>
+					<div class="html">
+						<div class="ui_paging pagination"></div>
+					</div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * paging 기본적용 (paging 동적으로 생성, 관리)
+							 * js/common/plugin-type/paging.js 참고
+							 * @param {Object} 	options
+							 *   - {Int}      offset 		리스트 시작 index, default:0
+							 *   - {Int}      limit 		한 화면에 보여지는 갯수
+							 *   - {Int}      totalCount 	전체리스트 갯수
+							 *   - {Int}      pagingLength 	한화면에 보여지는 페이징 갯수, default:10
+							 *   - {jQuery}   focusTarget 	페이징 클릭후 화면에서 이동할 타켓
+							 * @returns {jQuery}
+							 */
+							$( '.ui_paging' ).paging( options );
+
+							/**
+							 * event
+							 */
+							$( '.ui_paging' ).on( 'paging-change', function (e) {
+								console.log( e.offset );
+							});
+
+							/**
+							 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+							 */
+							$( '.ui_paging' ).paging( 'clear' );
+						</code>
+					</pre>
+					<div class="html">
+						<div class="btn_list_more">
+							<button type="button">
+								<span> 더보기 (<em>5</em>/35)</span> <i class="ico_arr_d"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</dd>
+			<dt><a>tab/accordion</a></dt>
+			<dd>
+				<h2 class="gt d1">tab/accordion</h2>
+				<div>
+					<h3 class="gt d2"><strong>tab menu</strong>비링크형</h3>
+					<div class="html">
+						<!-- tab menu wrap -->
+						<div class="ui_tab">
+							<!-- tab menu -->
+							<div class="tab_menu">
+								<ul>
+									<li class="on"><button type="button">메뉴1</button></li>
+									<li><button type="button">메뉴2</button></li>
+									<li><button type="button">메뉴3</button></li>
+								</ul>
+							</div>
+							<!-- tab contents wrap -->
+							<div class="tab_contents">
+								<!-- tab content -->
+								<div class="tab_cont">
+									<h3 class="sr_only">숨김제목</h3>
+									내용 1
+								</div>
+								<div class="tab_cont">
+									<h3 class="sr_only">숨김제목</h3>
+									내용 2
+								</div>
+								<div class="tab_cont">
+									<h3 class="sr_only">숨김제목</h3>
+									내용 3
+								</div>
+							</div>
+						</div>
+					</div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * tabs 기본적용
+							 * js/common/plugin-type/tabs.js 참고
+							 * @returns {jQuery}
+							 */
+							$( '.ui_tab' ).tabs();
+
+							/**
+							 * tab 변경
+							 * @param {Int} 	index 	변경할 탭의 index
+							 */
+							$( '.ui_tab' ).tabs( 'change', index );
+
+							/**
+							 * tab 비활성화
+							 * @param {Int} 	index 	탭의 index, 설정하지 않으면 모든 탭에 적용
+							 */
+							$( '.ui_tab' ).tabs( 'disable', index );
+
+							/**
+							 * tab 활성화
+							 * @param {Int} 	index 	탭의 index, 설정하지 않으면 모든 탭에 적용
+							 */
+							$( '.ui_tab' ).tabs( 'enable', index );
+
+							/**
+							 * event
+							 */
+							$( '.ui_tab' ).on( 'tabs-change', function (e) {
+								console.log( e.index );
+							});
+
+							/**
+							 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+							 */
+							$( '.ui_tab' ).tabs( 'clear' );
+						</code>
+					</pre>
+					<div class="html">
+						<!-- tab menu wrap -->
+						<div class="ui_tab">
+							<!-- tab menu -->
+							<div class="tab_menu equally">
+								<ul>
+									<li class="on"><button type="button">메뉴1</button></li>
+									<li><button type="button">메뉴2</button></li>
+									<li><button type="button">메뉴3</button></li>
+								</ul>
+							</div>
+							<!-- tab contents wrap -->
+							<div class="tab_contents">
+								<!-- tab content -->
+								<div class="tab_cont">
+									<h3 class="sr_only">숨김제목</h3>
+									내용 1
+								</div>
+								<div class="tab_cont">
+									<h3 class="sr_only">숨김제목</h3>
+									내용 2
+								</div>
+								<div class="tab_cont">
+									<h3 class="sr_only">숨김제목</h3>
+									내용 3
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="html">
+						<!-- tab menu wrap -->
+						<div class="ui_tab">
+							<!-- tab menu -->
+							<div class="tab_menu bg equally">
+								<ul>
+									<li class="on"><button type="button">메뉴1</button></li>
+									<li><button type="button">메뉴2</button></li>
+									<li><button type="button">메뉴3</button></li>
+								</ul>
+							</div>
+							<!-- tab contents wrap -->
+							<div class="tab_contents">
+								<!-- tab content -->
+								<div class="tab_cont">
+									<h3 class="sr_only">숨김제목</h3>
+									내용 1
+								</div>
+								<div class="tab_cont">
+									<h3 class="sr_only">숨김제목</h3>
+									내용 2
+								</div>
+								<div class="tab_cont">
+									<h3 class="sr_only">숨김제목</h3>
+									내용 3
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="html">
+						<!-- tab menu wrap -->
+						<div class="ui_tab">
+							<!-- tab menu -->
+							<div class="tab_menu box equally">
+								<ul>
+									<li class="on"><button type="button">메뉴1</button></li>
+									<li><button type="button">메뉴2</button></li>
+									<li><button type="button">메뉴3</button></li>
+								</ul>
+							</div>
+							<!-- tab contents wrap -->
+							<div class="tab_contents">
+								<!-- tab content -->
+								<div class="tab_cont">
+									<h3 class="sr_only">숨김제목</h3>
+									내용 1
+								</div>
+								<div class="tab_cont">
+									<h3 class="sr_only">숨김제목</h3>
+									내용 2
+								</div>
+								<div class="tab_cont">
+									<h3 class="sr_only">숨김제목</h3>
+									내용 3
+								</div>
+							</div>
+						</div>
+					</div>
+					<h3 class="gt d2"><strong>tab menu</strong>링크형</h3>
+					<div class="html">
+						<!-- tab menu wrap -->
+						<div class="ui_tab">
+							<!-- tab menu -->
+							<div class="tab_menu">
+								<ul>
+									<li class="on"><a href="#none">메뉴1</a></li>
+									<li><a href="#none">메뉴2</a></li>
+									<li><a href="#none">메뉴3</a></li>
+								</ul>
+							</div>
+							<!-- tab content -->
+							<div class="tab_cont">
+								<h3 class="sr_only">숨김제목</h3>
+								링크형 탭메뉴 내용
+							</div>
+						</div>
+					</div>
+					<h3 class="gt d2"><strong>accordion</strong></h3>
+					<div class="html">
+						<!-- 하나의 영역이 열릴때 다른 영역은 닫히게 하고 싶을때 data-open-type="single" 를 넣어준다. -->
+						<div class="ui_accordion" data-open-type="single">
+							<dl>
+								<dt class="on"><button type="button">제목1</button></dt>
+								<dd>
+									<p class="text">안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다. 안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다. 안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다.</p>
+								</dd>
+							</dl>
+							<dl>
+								<dt><button type="button">제목2</button></dt>
+								<dd>내용</dd>
+							</dl>
+							<dl>
+								<dt><button type="button">제목3</button></dt>
+								<dd>내용</dd>
+							</dl>
+						</div>
+					</div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * accordion 기본적용
+							 * js/common/plugin-type/accordion.js 참고
+							 * @returns {jQuery}
+							 */
+							$( '.ui_accordion' ).accordion();
+
+							/**
+							 * event (accordion-open, accordion-before-open)
+							 */
+							$( '.ui_accordion' ).on( 'accordion-open', function (e) {
+								console.log( e.index );
+							});
+
+							/**
+							 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+							 */
+							$( '.ui_accordion' ).accordion( 'clear' );
+						</code>
+					</pre>
+					<h3 class="gt d2"><strong>Toggle contents</strong></h3>
+					<div class="html">
+						<!-- open시 해당 영역에 class="on" 이 들어간다. -->
+						<div class="ui_toggle_contents">
+							<button class="toggle_btn">콘텐츠 열기</button>
+						</div>
+					</div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * toggle-contents 기본적용 (디자인과 상관없이 open시 대상 영역의 class="on" 이 들어간다.)
+							 * js/common/plugin-type/toggle-contents.js 참고
+							 * @returns {jQuery}
+							 */
+							$( '.ui_toggle_contents' ).toggleContents();
+
+							/**
+							 * event
+							 */
+							$( '.ui_toggle_contents' ).on( 'toggle-contents-show toggle-contents-hide', function (e) {
+								console.log( e.type );
+							});
+
+							/**
+							 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+							 */
+							$( '.ui_toggle_contents' ).toggleContents( 'clear' );
+						</code>
+					</pre>
+				</div>
+			</dd>
+			<dt><a>Slide</a></dt>
+			<dd>
+				<h2 class="gt d1">Slide</h2>
+				<div>
+					<h3 class="gt d2"><strong>pager 형</strong><small>http://ixsnack.com/ixSlideMax 참고</small></h3>
+					<div class="html">
+						<div class="slide" data-ix-options="view-length:1;">
+							<div class="ix-list-viewport">
+								<ul class="ix-list-items">
+									<li class="ix-list-item">
+										<a href="#none" style="background:#f0adb6;">
+											<img ap:src="@{/images/dummy/img_banner_01.jpg}" alt="배너 내용">
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="#none" style="background:#f0adb6;">
+											<img ap:src="@{/images/dummy/img_banner_01.jpg}" alt="배너 내용">
+										</a>
+									</li>
+								</ul>
+							</div>
+							<div class="ix-controller">
+								<ul class="ix-thumbs">
+									<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<h3 class="gt d2"><strong>navi 형</strong><small>http://ixsnack.com/ixSlideMax 참고</small></h3>
+				</div>
+			</dd>
+			<dt><a>layer popup</a></dt>
+			<dd>
+				<h2 class="gt d1">layer popup</h2>
+				<div>
+					<h3 class="gt d2"><strong>Modal (레이어 팝업)</strong></h3>
+					<button class="btn_md_primary" type="button" onclick="$('#sample').show();">레이어 팝업 기본</button>
+					<div class="html">
+						<div class="layer_popup" id="sample">
+							<div class="layer_dimmed"></div>
+							<div class="layer_wrap">
+								<dl class="layer">
+									<!-- AP.modal.open() 의 contents 영역 -->
+
+									<dt class="layer_title">레이어 제목</dt>
+									<dd class="layer_cont">
+										<!-- AP.modal.info() 의 contents 영역 -->
+										<p class="text_center">레이어 내용이 들어갑니다. 내용이 길게... 레이어 내용이 들어갑니다. 내용이 길게.. 레이어 내용이 들어갑니다. 내용이 길게.. 레이어 내용이 들어갑니다. 내용이 길게..</p>
+										<div class="layer_btns">
+											<!-- "btn_default_modal_cancel" 를 넣으면 기본 modal의 취소 기능이 적용된다. (e.closeType = 'cancel') -->
+											<button class="btn_lg_secondary btn_default_modal_cancel" type="button">취소</button>
+											<!-- "btn_default_modal_confirm" 를 넣으면 기본 modal의 확인 기능이 적용된다. (e.closeType = 'confirm') -->
+											<button class="btn_lg_neutral btn_default_modal_confirm" type="button">확인</button>
+										</div>
+									</dd>
+									<!-- //AP.modal.open() 의 contents 영역 -->
+								</dl>
+								<button class="layer_close" type="button" onclick="$('#sample').hide();">레이어 닫기</button>
+							</div>
+						</div>
+					</div>
+					<br>
+					<button class="btn_md_primary" type="button" onclick="$('#sample2').show();">레이어 팝업 large w680</button>
+					<div class="html">
+						<div class="layer_popup" id="sample2">
+							<div class="layer_dimmed"></div>
+							<div class="layer_wrap layer_lg">
+								<dl class="layer">
+									<!-- AP.modal.open() 의 contents 영역 -->
+
+									<dt class="layer_title">레이어 제목</dt>
+									<dd class="layer_cont">
+										<!-- AP.modal.info() 의 contents 영역 -->
+										<p class="text_center">레이어 내용이 들어갑니다. 내용이 길게... 레이어 내용이 들어갑니다. 내용이 길게.. 레이어 내용이 들어갑니다. 내용이 길게.. 레이어 내용이 들어갑니다. 내용이 길게..</p>
+										<div class="layer_btns">
+											<!-- "btn_default_modal_cancel" 를 넣으면 기본 modal의 취소 기능이 적용된다. (e.closeType = 'cancel') -->
+											<button class="btn_lg_secondary btn_default_modal_cancel" type="button">취소</button>
+											<!-- "btn_default_modal_confirm" 를 넣으면 기본 modal의 확인 기능이 적용된다. (e.closeType = 'confirm') -->
+											<button class="btn_lg_neutral btn_default_modal_confirm" type="button">확인</button>
+										</div>
+									</dd>
+									<!-- //AP.modal.open() 의 contents 영역 -->
+								</dl>
+								<button class="layer_close" type="button" onclick="$('#sample2').hide();">레이어 닫기</button>
+							</div>
+						</div>
+					</div>
+					<br>
+					<button class="btn_md_primary" type="button" onclick="$('#sample3').show();">레이어 팝업 제목없음</button>
+					<div class="html">
+						<div class="layer_popup" id="sample3">
+							<div class="layer_dimmed"></div>
+							<div class="layer_wrap">
+								<dl class="layer">
+									<!-- AP.modal.open() 의 contents 영역 -->
+
+									<dt class="sr_only">레이어 제목</dt>
+									<dd class="layer_cont">
+										<!-- AP.modal.info() 의 contents 영역 -->
+										<p class="text_center">레이어 내용이 들어갑니다. 내용이 길게... 레이어 내용이 들어갑니다. 내용이 길게.. 레이어 내용이 들어갑니다. 내용이 길게.. 레이어 내용이 들어갑니다. 내용이 길게..</p>
+										<div class="layer_btns">
+											<!-- "btn_default_modal_cancel" 를 넣으면 기본 modal의 취소 기능이 적용된다. (e.closeType = 'cancel') -->
+											<button class="btn_lg_secondary btn_default_modal_cancel" type="button">취소</button>
+											<!-- "btn_default_modal_confirm" 를 넣으면 기본 modal의 확인 기능이 적용된다. (e.closeType = 'confirm') -->
+											<button class="btn_lg_neutral btn_default_modal_confirm" type="button">확인</button>
+										</div>
+									</dd>
+									<!-- //AP.modal.open() 의 contents 영역 -->
+								</dl>
+								<button class="layer_close" type="button" onclick="$('#sample3').hide();">레이어 닫기</button>
+							</div>
+						</div>
+					</div>
+					<br>
+					<button class="btn_md_primary" type="button" onclick="$('#sample4').show();">레이어 팝업 버튼 없음</button>
+					<div class="html">
+						<div class="layer_popup" id="sample4">
+							<div class="layer_dimmed"></div>
+							<div class="layer_wrap">
+								<dl class="layer">
+									<!-- AP.modal.open() 의 contents 영역 -->
+
+									<dt class="layer_title">레이어 제목</dt>
+									<dd class="layer_cont">
+										<!-- AP.modal.info() 의 contents 영역 -->
+										<p class="text_center">레이어 내용이 들어갑니다. 내용이 길게... 레이어 내용이 들어갑니다. 내용이 길게.. 레이어 내용이 들어갑니다. 내용이 길게.. 레이어 내용이 들어갑니다. 내용이 길게..</p>
+									</dd>
+									<!-- //AP.modal.open() 의 contents 영역 -->
+								</dl>
+								<button class="layer_close" type="button" onclick="$('#sample4').hide();">레이어 닫기</button>
+							</div>
+						</div>
+					</div>
+					<h3 class="gt d2"><strong>tooltip</strong></h3>
+					<div class="html">
+						width는 임의지정
+						<div class="ui_tooltip">
+							<button type="button" class="btn_tooltip">툴팁보기</button>
+							<span class="arr"></span>
+							<div class="layer_tooltip" style="width: 300px;">
+								<dl>
+									<dt class="title">판매자 정보 확인</dt>
+									<dd class="font_lg">
+										<dl class="table_layout">
+											<dt class="w30p"><b>상호</b></dt>
+											<dd>로데오점</dd>
+										</dl>
+										<br>
+										<dl class="table_layout">
+											<dt class="w30p"><b>연락처</b></dt>
+											<dd>02-0000-0000</dd>
+										</dl>
+										<br>
+										<dl class="table_layout">
+											<dt class="w30p"><b>사업장 소재지</b></dt>
+											<dd>서울 강남구 신사동 660-2, 101</dd>
+										</dl>
+										<br>
+										<dl class="table_layout">
+											<dt class="w30p"><b>통신판매신고번호</b></dt>
+											<dd><a href="#none" title="새창" target="_blank" class="link">사업자
+												정보 확인 &gt;</a></dd>
+										</dl>
+										<br>
+										<dl class="table_layout">
+											<dt class="w30p"><b>e-mail</b></dt>
+											<dd>honggildong@etudehouse.com</dd>
+										</dl>
+									</dd>
+								</dl>
+								<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
+							</div>
+						</div>
+					</div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * Tooltip 기본적용
+							 * js/common/plugin-type/tooltip.js 참고
+							 * @returns {jQuery}
+							 */
+							$( '.ui_tooltip' ).tooltip();
+
+							/**
+							 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+							 */
+							$( '.ui_tooltip' ).tooltip( 'clear' );
+						</code>
+					</pre>
+				</div>
+			</dd>
+			<dt><a>etc</a></dt>
+			<dd>
+				<h2 class="gt d1">contents style</h2>
+				<div>
+					<h3 class="gt d2"><strong>panel</strong></h3>
+					<div class="guide-row">
+						<div class="guide-col3">
+							<div class="html" style="background:#eaeaea;">
+								<div class="panel align_center"><!-- 전체 중앙정렬 -->
+									<div class="panel_cont">
+										<h3 class="h_title sub">기본 흰색 배경 헤더 없음</h3>
+										<br>
+										<p class="text_center">에뛰드하우스, 아모레퍼시픽몰 및 자회사 전 브랜드를 통합한 회원가입으로 모든 브랜드에서 이용가능합니다. 하나의 아이디로 편리하게, 통합멤버십(뷰티포인트)적립 및 다양한 서비스와 혜택을 누리실 수 있습니다.</p>
+										<br>
+										<div class="btns">
+											<button class="btn_md_prim" type="button">통합회원 가입하기</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="guide-col3">
+							<div class="html" style="background:#eaeaea;">
+								<div class="panel rounded">
+									<div class="panel_header align_center"><!-- 부분 중앙정렬 -->
+										<h3 class="h_title sub">흰색배경 라운드 헤더형</h3>
+									</div>
+									<div class="panel_cont">
+										<p class="text_center">에뛰드하우스, 아모레퍼시픽몰 및 자회사 전 브랜드를 통합한 회원가입으로 모든 브랜드에서 이용가능합니다. 하나의 아이디로 편리하게, 통합멤버십(뷰티포인트)적립 및 다양한 서비스와 혜택을 누리실 수 있습니다.</p>
+										<br>
+										<div class="btns">
+											<button class="btn_md_prim" type="button">통합회원 가입하기</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="guide-col3">
+							<div class="html">
+								<div class="panel rounded bordered">
+									<div class="panel_header align_center"><!-- 부분 중앙정렬 -->
+										<h3 class="h_title sub">흰색배경 라운드 보더있음 헤더형</h3>
+									</div>
+									<div class="panel_cont">
+										<p class="text_center">에뛰드하우스, 아모레퍼시픽몰 및 자회사 전 브랜드를 통합한 회원가입으로 모든 브랜드에서 이용가능합니다. 하나의 아이디로 편리하게, 통합멤버십(뷰티포인트)적립 및 다양한 서비스와 혜택을 누리실 수 있습니다.</p>
+										<br>
+										<div class="btns align_center">
+											<button class="btn_md_prim" type="button">통합회원 가입하기</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="guide-row">
+						<div class="guide-col3">
+							<div class="html">
+								<div class="panel gray align_center"> <!-- 전체 중앙정렬 -->
+									<div class="panel_cont">
+										<h3 class="h_title sub">기본 회색배경 헤더 없음</h3>
+										<br>
+										<p class="text_center">에뛰드하우스, 아모레퍼시픽몰 및 자회사 전 브랜드를 통합한 회원가입으로 모든 브랜드에서 이용가능합니다. 하나의 아이디로 편리하게, 통합멤버십(뷰티포인트)적립 및 다양한 서비스와 혜택을 누리실 수 있습니다.</p>
+										<br>
+										<div class="btns">
+											<button class="btn_md_prim" type="button">통합회원 가입하기</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="guide-col3">
+							<div class="html">
+								<div class="panel gray rounded">
+									<div class="panel_header align_center"><!-- 부분 중앙정렬 -->
+										<h3 class="h_title sub">회색배경 라운드 헤더형</h3>
+									</div>
+									<div class="panel_cont">
+										<p class="text_center">에뛰드하우스, 아모레퍼시픽몰 및 자회사 전 브랜드를 통합한 회원가입으로 모든 브랜드에서 이용가능합니다. 하나의 아이디로 편리하게, 통합멤버십(뷰티포인트)적립 및 다양한 서비스와 혜택을 누리실 수 있습니다.</p>
+										<br>
+										<div class="btns align_center">
+											<button class="btn_md_prim" type="button">통합회원 가입하기</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="guide-col3">
+							<div class="html">
+								<div class="panel gray rounded bordered">
+									<div class="panel_header align_center"><!-- 부분 중앙정렬 -->
+										<h3 class="h_title sub">회색배경 라운드 보더있음 헤더형</h3>
+									</div>
+									<div class="panel_cont">
+										<p class="text_center">에뛰드하우스, 아모레퍼시픽몰 및 자회사 전 브랜드를 통합한 회원가입으로 모든 브랜드에서 이용가능합니다. 하나의 아이디로 편리하게, 통합멤버십(뷰티포인트)적립 및 다양한 서비스와 혜택을 누리실 수 있습니다.</p>
+										<br>
+										<div class="btns">
+											<button class="btn_md_prim" type="button">통합회원 가입하기</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<h3 class="gt d2"><strong>step</strong></h3>
+					<div class="html">
+						<div class="ui_step">
+							<ul>
+								<li><i class="ico"></i>step 1<span class="num">1</span></li>
+								<li><i class="ico"></i><span class="num">2</span>step 2</li>
+								<li><i class="ico"></i><span class="num">3</span>step 3</li>
+								<li class="current"><i class="ico"></i><span class="num">4</span>step 4<span class="sr_only">selected</span></li>
+							</ul>
+						</div>
+					</div>
+					<h3 class="gt d2"><strong>평가 등급</strong></h3>
+					<div class="html">
+						<span class="ui_rating small">
+							<span class="heart">
+								<span><input type="radio" name="rate1" id="rate1_1" value="1.0"><label for="rate1_1"><span class="sr_only"> 1점</span></label></span>
+								<span><input type="radio" name="rate1" id="rate1_2" value="2.0"><label for="rate1_2"><span class="sr_only"> 2점</span></label></span>
+								<span><input type="radio" name="rate1" id="rate1_3" value="3.0"><label for="rate1_3"><span class="sr_only"> 3점</span></label></span>
+								<span><input type="radio" name="rate1" id="rate1_4" value="4.0" checked><label for="rate1_4"><span class="sr_only"> 4점</span></label></span>
+								<span><input type="radio" name="rate1" id="rate1_5" value="5.0"><label for="rate1_5"><span class="sr_only"> 5점</span></label></span>
+							</span>
+							<span class="count">1,312</span>
+						</span>
+					</div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * Rating 기본적용
+							 * js/common/plugin-type/rating.js 참고
+							 * @returns {jQuery}
+							 */
+							$( '.ui_rating' ).rating();
+
+							/**
+							 * event
+							 */
+							$( '.ui_rating' ).on( 'rating-change', function (e) {
+								console.log( e.value );
+							});
+
+							/**
+							 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+							 */
+							$( '.ui_rating' ).rating( 'clear' );
+						</code>
+					</pre>
+					<div class="html">
+						<span class="ui_rating"> <!-- 기본사이즈 -->
+							<span class="heart">
+								<span><input type="radio" name="rate2" id="rate2_1" value="1.0"><label for="rate2_1"><span class="sr_only"> 1점</span></label></span>
+								<span><input type="radio" name="rate2" id="rate2_2" value="2.0"><label for="rate2_2"><span class="sr_only"> 2점</span></label></span>
+								<span><input type="radio" name="rate2" id="rate2_3" value="3.0"><label for="rate2_3"><span class="sr_only"> 3점</span></label></span>
+								<span><input type="radio" name="rate2" id="rate2_4" value="4.0" checked><label for="rate2_4"><span class="sr_only"> 4점</span></label></span>
+								<span><input type="radio" name="rate2" id="rate2_5" value="5.0"><label for="rate2_5"><span class="sr_only"> 5점</span></label></span>
+							</span>
+							<b class="score">3.0</b>
+							<span class="count">(1,312)</span>
+						</span>
+					</div>
+					<div class="html">
+						<span class="ui_rating large">
+							<span class="heart">
+								<span><input type="radio" name="rate3" id="rate3_1" value="1.0"><label for="rate3_1"><span class="sr_only"> 1점</span></label></span>
+								<span><input type="radio" name="rate3" id="rate3_2" value="2.0"><label for="rate3_2"><span class="sr_only"> 2점</span></label></span>
+								<span><input type="radio" name="rate3" id="rate3_3" value="3.0"><label for="rate3_3"><span class="sr_only"> 3점</span></label></span>
+								<span><input type="radio" name="rate3" id="rate3_4" value="4.0" checked><label for="rate3_4"><span class="sr_only"> 4점</span></label></span>
+								<span><input type="radio" name="rate3" id="rate3_5" value="5.0"><label for="rate3_5"><span class="sr_only"> 5점</span></label></span>
+							</span>
+							<b class="score">4.0</b>
+							<span class="count">(1,312)</span>
+						</span>
+					</div>
+					<h3 class="gt d2"><strong>Remain timer (Dday timer)</strong></h3>
+					<div class="html">
+						<span class="ui_remain_timer">
+							<span class="day"></span>일<span class="hour"></span>시<span class="minute"></span>분<span class="second"></span>초
+						</span>
+					</div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * Remain timer 기본적용
+							 * js/common/plugin-type/remain-timer.js 참고
+							 * @param {Object} 	options
+							 * 	- {Number}	startTime 	시작시간, milliseconds since 1970/01/01
+							 * 	- {Number}	finishTime 	완료시간, milliseconds since 1970/01/01
+							 * @returns {jQuery}
+							 */
+							$( '.ui_remain_timer' ).remainTimer( options );
+
+							/**
+							 * 일시정지
+							 */
+							$( '.ui_remain_timer' ).remainTimer( 'pause' );
+
+							/**
+							 * 시작 (일시정지 상태 시간에서 부터 시작)
+							 */
+							$( '.ui_remain_timer' ).remainTimer( 'start' );
+
+							/**
+							 * 완료 여부 반환
+							 * @returns {Boolean}
+							 */
+							$( '.ui_remain_timer' ).remainTimer( 'isComplete' );
+
+							/**
+							 * event
+							 */
+							$( '.ui_remain_timer' ).on( 'remain-timer-complete', function (e) {
+								//완료시점
+							});
+
+							/**
+							 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+							 */
+							$( '.ui_remain_timer' ).remainTimer( 'clear' );
+						</code>
+					</pre>
+
+					<h3 class="gt d2"><strong>BondingRect</strong></h3>
+					<div>
+						대상 Element가 화면에 노출되는 시점을 이벤트로 받을수 있다.<br>
+						화면에서 hide된 상태에서는 이벤트가 발생하지 않는다.<br>
+						window load, resize 시에 포지션을 자동으로 업데이트 한다.<br>
+					</div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * js/common/plugin-type/bonding-rect.js 참고
+							 * @returns {jQuery}
+							 */
+							$( '.target' ).bondingRect();
+
+							/**
+							 * event
+							 */
+							$( '.target' ).on( 'bonding-rect-activate bonding-rect-deactivate bonding-rect-between', function (e) {
+								console.log( e.type, e.progress );
+							});
+
+							/**
+							 * 조건에 맞는지 체크하여 이벤트 발생
+							 */
+							$( '.target' ).bondingRect( 'updated' );
+
+							/**
+							 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+							 */
+							$( '.target' ).bondingRect( 'clear' );
+						</code>
+					</pre>
+
+					<h3 class="gt d2"><strong>sns share</strong></h3>
+					<div class="html">
+						<button class="btn_share"><span class="sr_only">SNS 공유</span></button>
+					</div>
+					<pre>
+						<code class="javascript">
+							/**
+							 * sns share 기본적용
+							 * js/common/plugin-type/sns-share.js 참고
+							 * @returns {jQuery}
+							 */
+							$( '.btn_share' ).snsShare();
+
+							/**
+							 * event
+							 */
+							$( '.btn_share' ).on( 'sns-share-call', function (e) {
+								console.log( e.snsType );
+							});
+
+							/**
+							 * plugin 적용해제 (clear 하기전에는 새롭게 적용되지 않는다.)
+							 */
+							$( '.btn_share' ).snsShare( 'clear' );
+						</code>
+					</pre>
+					<h3 class="gt d2"><strong>notice</strong></h3>
+					<div class="html">
+						<div class="panel notice">
+							<i class="ico"></i>
+							<p class="text font_lg">검색하신 기간 내에<br>주문내역이 존재하지 않습니다.</p>
+						</div>
+					</div>
+				</div>
+			</dd>
+			<dt><a href="js.html" target="_blank">script</a></dt>
+			<dt><a href="map.html" target="_blank">map api</a></dt>
+			<dt><a href="video.html" target="_blank">video api</a></dt>
+		</dl>
+	</main>
+</div>
+
+<style>
+	pre {position:relative; display:none;}
+	pre code {border-radius:5px; padding:0 1.5em !important;}
+</style>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>
+	(function(){
+		$('a').click(function(){
+			if($(this).attr('href') == '#none'){
+				return false;
+			};
+		});
+		// guide tab
+		$('.guide').each(function(){
+			var $tab = $(this);
+			var $gm = $('>dt', $tab);
+			var $gc = $('>dd', $tab);
+			$gm.not('.btn-all').click(function(){
+				$gm.not($(this).addClass('selected')).removeClass('selected');
+				$(this).next('dd').show().siblings('dd').hide();
+				$('body,html').animate({scrollTop: 0},	600);
+			});
+			$gm.not($gm.eq(0)).each(function(){
+				var gmh = $(this).prevAll('dt').outerHeight();
+				var gmt = $(this).prevAll('dt').position().top;
+				var gmp = gmh+gmt;
+				$(this).css('top', gmp);
+			});
+			$('.btn-all').click(function(){
+				$gm.not($(this).addClass('selected')).removeClass('selected');
+				$gc.show();
+				$('body,html').animate({scrollTop: 0},	600);
+			});
+		});
+
+		$('.html').each(function() {
+			var $this = $(this);
+			var code = $this.html();
+			var $btn = $('<a class="g-btn">view html</a>');
+			$this.after('<code class="code-view xml"></code>');
+			var $view = $this.next($('.code-view'));
+			$view.text(code).wrap('<pre />');
+			$this.after($btn);
+		});
+
+		$( 'code.javascript' ).each(function () {
+			$( '<a class="g-btn">script</a>' ).insertBefore( $(this).parent() );
+		});
+
+		$('.g-btn').click(function(){
+			$(this).toggleClass('open');
+			$(this).next('pre').toggle();
+		});
+
+		$( 'code.xml, code.javascript' ).each( function () {
+			var html = $( this ).html(),
+				lineMatch = html.match( /\n/g );
+
+			if ( lineMatch ) {
+				var spaceMath = html.match( /^(\s|\t)+/ );
+
+				if ( spaceMath ) {
+					html = html.replace( new RegExp( spaceMath[0], 'mg' ), '\n' );
+				}
+			} else {
+				html = html.replace( /^\s+/, '' );
+			}
+
+			$( this ).html( html );
+
+			if ( $(this).hasClass('xml') ) {
+				var $copyBtn = $( '<a href="#none" class="btn-copy">COPY</a>' );
+
+				$( this ).parent().append( $copyBtn );
+				$copyBtn.on( 'click', function (e) {
+					var $input = $( '<textarea style="position:absolute">' + html + '</textarea>' );
+					$( 'body' ).append( $input );
+					$input.select();
+					document.execCommand( 'Copy' );
+					$input.remove();
+					$copyBtn.addClass( 'complete' ).text( 'copy complete!' );
+					setTimeout(function () {
+						$copyBtn.removeClass( 'complete' ).text( 'copy' );
+					}, 1000);
+				});
+			}
+		});
+
+		$( 'pre code' ).each( function (i, block) {
+			hljs.highlightBlock(block);
+		});
+
+		// to top
+		var scrollDiv = document.createElement('div');
+		$(scrollDiv).attr('id', 'toTop').html('<a href="#none">to top</a>').appendTo('main');
+		$(window).scroll(function(){
+			if ($(this).scrollTop() != 0) {
+				$('#toTop').fadeIn();
+				var h = $('.guide').find('dt:first-child').outerHeight();
+				var n = $('>dt', '.guide').length;
+				var hh = $('header').outerHeight();
+				var t = (h*n)+hh+20;
+				$('#toTop').css('top', t);
+
+			} else {
+				$('#toTop').fadeOut();
+
+			}
+		});
+		$('#toTop').click(function(){
+			$('body,html').animate({scrollTop: 0},	600);
+			return false;
+		});
+	})();
+</script>
+
+<!--/* js : 공통 실행 (모든페이지) */-->
+<script src="/pc/ko/js/common/contents-exec.js"></script>
+
+<!-- Demo -->
+<script>
+	//design select 적용
+	$( '.ui_select' ).designSelectBox();
+
+	//spinner 적용
+	$( '.ui_spinner' ).spinner();
+
+	//multiple date picker적용
+	$( '.ui_multiple_date_picker' ).multipleDatePicker({
+		defaultRangeDate: '1months',
+		minDate: moment().subtract( 50, 'years' )
+	}).on( 'multiple-date-picker-change', function (e) {
+		console.log( e.type, e.date );
+	});
+
+	//paging적용
+	$( '.ui_paging' ).paging({
+		offset: 0,
+		limit: 5,
+		totalCount: 124
+	}).on( 'paging-change', function (e) {
+		console.log( e.type, e.offset );
+	});
+
+	//input file
+	$( 'input:file' ).inputFile();
+
+	//rating
+	$( '.ui_rating' ).rating().on( 'rating-change', function (e) {
+		console.log( e.type, e.value );
+	});
+
+	//remain timer
+	$( '.ui_remain_timer' ).remainTimer({
+		//TODO: startTime, finishTime 설정 (server time 기준)
+		startTime: moment(),
+		finishTime: moment().add( 1, 'minute' )
+	}).on( 'remain-timer-complete', function (e) {
+		console.log( e.type, '-완료-' );
+	});
+
+	//slider
+	$( '.ui_slider' ).ixSlider();
+
+	//range slider
+	$( '.ui_range_slider' ).ixRangeSlider();
+
+	//주소찾기
+	$( '.ui_find_addresses' ).findAddresses();
+
+	//table striped
+	$( '.ui_table_striped' ).tableStriped();
+
+	//inputLimits
+	$( 'input:text, textarea' ).inputLimits();
+
+	//inputImages
+	$( '.ui_input_images' ).inputImages();
+</script>
+
+</body>
+</html>

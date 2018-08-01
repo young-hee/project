@@ -1,0 +1,190 @@
+<html ap:decorate="~{layout/default}">
+<head>
+	<title>lazy load</title>
+
+	<style>
+		.lazy_load_wrap {overflow:hidden; position:relative; padding-top:29.4%; background:#fff url(/mo/ko/images/error/logo_etude.png) no-repeat 50% 50%; background-size:100%;}
+		img.lazy_load {position:absolute; top:0; left:0; opacity:0;}
+		img.lazy_load.loaded {
+			opacity:1;
+			-webkit-transition: opacity 0.4s ease;
+			-moz-transition: opacity 0.4s ease;
+			-o-transition: opacity 0.4s ease;
+			transition: opacity 0.4s ease;
+		}
+	</style>
+</head>
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="page_title">
+		<h2 class="h_title page">Lazy load</h2>
+		<p class="text">Lazy load 사용 예제 (화면의 노출되는 시점에 이미지 로드)</p>
+	</div>
+
+	<div>
+		<h2 class="gt d1">Html</h2>
+		<pre>
+					<code class="xml">
+						<!-- 이미지가 로드되기전에 이미지 높이를 구할수 있도록 css style로 높이를 설정해주길 권장 -->
+						<div class="lazy_load_wrap">
+							<!-- 적용하고 싶은 대상의 class="lazy_load", data-src="" 속성 필수 -->
+							<img src="" class="lazy_load" alt="" data:src="@{/images/error/img_error_01.png}">
+						</div>
+					</code>
+				</pre>
+		<h2 class="gt d1">Javascript</h2>
+		<pre>
+			<code class="javascript">
+				/**
+				 * 대상 이미지 등록 (scroll 이벤트에 반응하여 image load가 반영된다.)
+				 * 이미 등록된 대상은 추가해도 중복 등록되지 않는다.
+				 * js/common/lazy-load.js 참고
+				 * @param {String}	selector	CSS Selector, ex) 'img.lazy_load'
+				 */
+				AP.lazyLoad.add( selector );
+
+				/**
+				 * 이미지 상태 계산하여 반영
+				 * hide 되어있는 이미지는 load시키지 않기 때문에 해당 이미지가 show되는 시점에 호출해 주면 조건에 맞춰 load처리 된다.
+				 */
+				AP.lazyLoad.updated();
+
+				/**
+				 * 등록되어진 대상의 상태와 상관없이 무조건 이미지를 로드한다.
+				 * @param {String}	selector	CSS Selector, ex) 'img.lazy_load'
+				 */
+				AP.lazyLoad.load( selector );
+			</code>
+		</pre>
+	</div>
+
+	<div class="ap_contents">
+		<div class="image_lazy_load">
+			<div class="lazy_load_wrap">
+				<!--/* 적용하고 싶은 대상의 class="lazy_load", data-src="" 속성 필수 */-->
+				<img src="" class="lazy_load" alt="" data:src="@{/images/error/img_error_01.png}">
+			</div>
+			<br>
+			<div class="lazy_load_wrap">
+				<img src="" class="lazy_load" alt="" data:src="@{/images/error/img_error_01.png}">
+			</div>
+			<br>
+			<h2 style="padding:20px 0 0 0;"><strong>Tab Menu의 적용</strong></h2>
+			<div style="padding:10px 10px 20px 10px;">- tabs.js 에는 AP.lazyLoad.updated() 가 적용되어 있다.</div>
+			<div class="ui_tab" style="border:gray solid 2px;">
+				<!-- tab menu -->
+				<div class="tab_menu">
+					<ul>
+						<li class="on"><button type="button">Tab 메뉴1</button></li>
+						<li><button type="button">Tab 메뉴2</button></li>
+					</ul>
+				</div>
+				<!-- tab contents wrap -->
+				<div class="tab_contents">
+					<!-- tab content -->
+					<div class="tab_cont">
+						<h3 class="sr_only">숨김제목</h3>
+						Tab 내용 1
+						<div class="lazy_load_wrap">
+							<img src="" class="lazy_load" alt="" data:src="@{/images/error/img_error_01.png}">
+						</div>
+					</div>
+					<div class="tab_cont">
+						<h3 class="sr_only">숨김제목</h3>
+						Tab 내용 2
+						<div class="lazy_load_wrap">
+							<img src="" class="lazy_load" alt="" data:src="@{/images/error/img_error_01.png}">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<br>
+			<div class="lazy_load_wrap">
+				<img src="" class="lazy_load" alt="" data:src="@{/images/error/img_error_01.png}">
+			</div>
+			<br>
+			<div class="lazy_load_wrap">
+				<img src="" class="lazy_load" alt="" data:src="@{/images/error/img_error_01.png}">
+			</div>
+			<br>
+			<div class="lazy_load_wrap">
+				<img src="" class="lazy_load" alt="" data:src="@{/images/error/img_error_01.png}">
+			</div>
+			<br>
+			<div class="lazy_load_wrap">
+				<img src="" class="lazy_load" alt="" data:src="@{/images/error/img_error_01.png}">
+			</div>
+			<br>
+			<div class="lazy_load_wrap">
+				<img src="" class="lazy_load" alt="" data:src="@{/images/error/img_error_01.png}">
+			</div>
+			<br>
+			<div class="lazy_load_wrap">
+				<img src="" class="lazy_load" alt="" data:src="@{/images/error/img_error_01.png}">
+			</div>
+			<br>
+			<div class="lazy_load_wrap">
+				<img src="" class="lazy_load" alt="" data:src="@{/images/error/img_error_01.png}">
+			</div>
+			<br>
+			<div class="lazy_load_wrap">
+				<img src="" class="lazy_load" alt="" data:src="@{/images/error/img_error_01.png}">
+			</div>
+			<br>
+			<div class="lazy_load_wrap">
+				<img src="" class="lazy_load" alt="" data:src="@{/images/error/img_error_01.png}">
+			</div>
+			<br>
+			<div class="lazy_load_wrap">
+				<img src="" class="lazy_load" alt="" data:src="@{/images/error/img_error_01.png}">
+			</div>
+			<br>
+			<div class="lazy_load_wrap">
+				<img src="" class="lazy_load" alt="" data:src="@{/images/error/img_error_01.png}">
+			</div>
+			<br>
+		</div>
+	</div>
+
+	<style>
+		pre {display:block;}
+		pre code {border-radius:5px; padding:0 1.5em !important;}
+	</style>
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+	<script>
+		(function(){
+			$( 'code.xml, code.javascript' ).each( function () {
+				var html = $( this ).html(),
+					lineMatch = html.match( /\n/g );
+
+				if ( lineMatch ) {
+					var spaceMath = html.match( /^(\s|\t)+/ );
+
+					if ( spaceMath ) {
+						html = html.replace( new RegExp( spaceMath[0], 'mg' ), '\n' );
+					}
+				} else {
+					html = html.replace( /^\s+/, '' );
+				}
+
+				$( this ).text( html );
+			});
+
+			$( 'pre code' ).each( function (i, block) {
+				hljs.highlightBlock(block);
+			});
+		})();
+	</script>
+
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+</th:block>
+
+</body>
+</html>

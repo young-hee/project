@@ -1,0 +1,31 @@
+{{#each this.planDisplayDTOs}}
+	<li>
+		{{#xif this.displayStatus '==' 'End'}}
+			<dl class="complete">
+		{{else}}
+			<dl>
+		{{/xif}}
+			<dt>
+				<span class="clear">
+				{{#xif this.displayStatus '==' 'End'}}
+					<span class="flag">종료</span>
+				{{else}}
+					<span class="flag">진행중</span>
+				{{/xif}}
+					{{#if this.winnerFoNoticeSn}}<a href="#none">당첨자 발표 확인</a>{{/if}}
+				</span>
+				{{#xif this.displayStatus '==' 'End'}}
+					<b>{{this.planDisplaySn}} - {{this.planDisplayTitle}}</b>
+				{{else}}
+					<a href="#none"><b>{{this.planDisplaySn}} - {{this.planDisplayTitle}}</b></a>
+				{{/xif}}
+			</dt>
+			<dd>
+				<ul class="list font_sm">
+					<li>참여일:{{dateFormat this.participatedDt "YYYY.MM.DD"}} │ 당첨자 발표일:{{dateFormat this.winnerNoticeExpectedDt "YYYY.MM.DD"}}</li>
+					<li>이벤트 기간:{{dateFormat this.eventStartDt "YYYY.MM.DD"}} ~ {{dateFormat this.eventEndDt "YYYY.MM.DD"}}</li>
+				</ul>
+			</dd>
+		</dl>
+	</li>
+{{/each}}

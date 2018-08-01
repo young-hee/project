@@ -1,0 +1,68 @@
+/*[-
+ * main layout
+ * -]*/
+
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:ap="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<title th:text="${pageTitle}">[Etude]layout:main</title>
+
+	<th:block ap:replace="~{common/fragment/meta}" />
+
+    <!--/* css : common (모든페이지) */-->
+    <link rel="stylesheet" type="text/css" ap:href="@{/css/default.css}">
+    <!--/* js : libs (모든페이지) */-->
+    <th:block ap:replace="~{common/fragment/js-libs}"/>
+    <!--/* js : 공통 variable, api (모든페이지) */-->
+    <th:block ap:replace="~{common/fragment/variable-api-common}" />
+</head>
+<body>
+    <!--/* skip navigation */-->
+    <div id="accessibility"><a href="#ap_container">본문 바로가기</a></div>
+    
+    <!--/* .wrapper */-->
+    <div class="ap_wrapper">
+        <!--/* header1 */-->
+        <div id="header" class="ap_header" ap:fragment="layout-header">
+			<!-- header common -->
+        	<th:block ap:replace="~{common/fragment/header-common}"/>
+        	
+        	<!--  swipe menu  -->
+			<th:block ap:replace="~{common/fragment/swipe-menu}"/>
+		</div>
+
+        <!--/* #ap_container */-->
+        <div id="ap_container" class="ap_container" ap:fragment="layout-contents">
+
+        </div>
+        
+        <!-- floating menu -->
+        <th:block ap:replace="~{common/fragment/floating-menu}"/>
+
+        <!--/* footer */-->
+        <div id="footer" class="ap_footer" ap:fragment="layout-footer">
+			<th:block ap:replace="~{common/fragment/footer}"/>
+        </div>
+
+    </div>
+
+	<!--/* js : common (모든페이지) */-->
+	<th:block ap:replace="~{common/fragment/js-common}"/>
+	
+	<!--/* js : auto-logout (자동로그아웃) */-->
+	<th:block ap:replace="~{common/fragment/auto-logout}"/>
+
+    <!--/* js : 공통 실행 (모든페이지) */-->
+    <th:block ap:replace="~{common/fragment/js-contents}"/>
+
+    <!--/* 하단 js file 을 include */-->
+    <th:block ap:replace="~{common/fragment/custom-jsfiles}"></th:block>
+
+    <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+    <th:block ap:fragment="layout-endpoint"></th:block>
+
+</body>
+</html>

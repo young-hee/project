@@ -1,0 +1,45 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<div class="layer_popup" style="display: block;">
+                <div class="layer_wrap" style="margin-top:-260px;">
+                    <dl class="layer">
+                        <dt class="layer_title">파일 찾기</dt>
+                        <dd class="layer_cont">
+							<div class="input_btn_wrap">
+								<span class="input_wrap">
+									<input class="input_file_name" type="text" title="첨부 파일 선택" readonly="" value="">
+									<button class="input_del"><i class="ico_close_w"></i><span class="sr_only">첨부파일 삭제</span></button> <!-- 첨부파일 첨부 후 삭제 버튼 -->
+								</span>
+								<!-- label 과 input file 의 id 값은 항상 일치 시켜야한다 -->
+								<!-- accept속성에 설정한 파일들만 첨부가능 -->
+								<input type="file" id="input_file" accept="image/gif,image/jpeg,image/png,image/jpg">
+								<label for="input_file" class="btn_md_form">파일 선택</label>
+							</div>
+							<ul class="list_bullet_dot_gray mgt10">
+								<li>이미지 파일만 등록 가능합니다.</li>
+							</ul>
+							<div class="page_btns">
+								<button class="btn_lg_neutral" type="button">확인</button>
+							</div>
+                        </dd>
+                    </dl>
+                    <button class="layer_close" type="button">레이어 닫기</button>
+                </div>
+            </div>
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+            <!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+            <script>
+				$( '.map_area' ).mapApi();
+				$( '.store_map .slide' ).ixSlideMax();
+            </script>
+
+        </th:block>
+</body>
+</html>

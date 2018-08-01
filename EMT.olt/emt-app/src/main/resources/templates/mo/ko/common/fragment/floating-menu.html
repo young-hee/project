@@ -1,0 +1,361 @@
+<!-- /* 카테고리 영역 */ -->
+<aside id="aside_menu" class="aside_menu"> <!-- /*열렸을 경우 open*/ -->
+	<div class="dimmed"></div>
+	<div class="wrap">
+		<!-- /* aside header */ -->
+		<div class="table_layout aside_header">
+			<!-- /* 로그인 전 */-->
+			<span class="w65p" th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}"><i class="ico my"></i>로그인이 필요합니다.</span>
+			<!-- /* 로그인 후 */-->
+			<span class="w65p" th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}"><a href="/my/page/info/myEtude"><i class="ico my"></i>마이에뛰드</a></span>
+
+			<span>
+				<!-- /* 20180420 : 아이콘변경
+				<a href="#none"><i class="ico store"></i><span class="sr_only">단골매장</span></a>
+				<a href="#none" th:href="@{/display/notification(displayMenuId=notification)}"><i class="ico notice"></i><span class="sr_only">알림</span><span class="noti" style="display:none;">있음</span></a>
+				 */-->
+				<!--/* 20180420 : 로그인 후 노출
+				<button><i class="ico logout"></i><span class="sr_only">로그아웃</span></button>
+				 */-->
+				<a href="#none" th:href="@{/display/shopping_history(displayMenuId=shopping_history)}"><i class="ico history"></i><span class="sr_only">쇼핑히스토리</span></a>
+			</span>
+		</div>
+		<!-- /*  welcome 영역 */ -->
+		<div class="welcome_area">
+			<!-- /* 로그인 전 */ -->
+			<div class="before" th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+				<p class="text font_lg"><b>안녕하세요, 고객님</b></p>
+				<p class="text">로그인 하시면, 쿠폰, 혜택 등을 빠르게<br>확인하실 수 있습니다.</p>
+				<div class="_btns">
+					<a href="/customer/signup" class="btn_md_bordered">회원가입</a><a href="javascript:;" onclick="login()" class="btn_md_bordered emp">로그인</a>
+				</div>
+				<div>
+					<a href="#none" class="link" th:href="@{/cs/pinkMembership}">회원혜택보기 <i class="ico_arr"></i></a>
+				</div>
+			</div>
+			<!-- /* 로그인 후 */ -->
+			<div class="after" th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+				<p class="text"><b th:text="${session.LOGIN_USER.member.name.name1}">홍길동</b>님은 <em class="friends" th:text="${session.LOGIN_USER.member.memberLevelName}">friends</em>입니다.</p>
+				<div class="clear"><a href="#none">주문배송(<b>6</b>)</a><a href="#none">나의쿠폰(<b th:text="${session.LOGIN_USER.member.keepingCouponQty}">0</b>)</a></div>
+				<div class="bar_code">
+					<img ap:src="@{/images/dummy/img_barcode.png}" alt="">
+					<p class="text">2917-1009-2345-1234</p>
+				</div>
+			</div>
+			
+		</div>
+		<!-- /*유형별/라인별 tab*/ -->
+		<div class="ui_tab">
+			<!-- /* tab menu */ -->
+			<div class="tab_menu equally">
+				<ul>
+					<li class="on"><button type="button">유형별</button></li>
+					<li><button type="button">라인별</button></li>
+				</ul>
+			</div>
+			<!-- /* tab contents wrap */ -->
+			<div class="tab_contents">
+				<!-- /* tab content */ -->
+				<div class="tab_cont">
+					<h3 class="sr_only">유형별</h3>
+					<ul class="item_type"  th:if="${#lists.isEmpty(pageConnType) and not #lists.isEmpty(gnbMap)}">
+						<th:block th:if="${gnbMap.get('prod_types')}">
+							<th:block th:each="typeCate : ${gnbMap.get('prod_types').submenus}">							
+								<li>
+									<a href="#none" th:href="@{'/display/category/'+${typeCate.displayMenuId}(categoryType=prod_types)}">
+										<i class="ico"></i><span th:text="${typeCate.menuTitle}"></span>
+									</a>
+								</li>
+							</th:block>
+						</th:block>
+					</ul>
+					<!-- /* 유형별 메뉴 퍼블리싱 */ -->
+					<ul class="item_type" th:if="${not #lists.isEmpty(pageConnType)}">
+						<li><a href="#none"><i class="ico"></i>아이</a></li>
+						<li><a href="#none"><i class="ico"></i>립</a></li>
+						<li><a href="#none"><i class="ico"></i>페이스</a></li>
+						<li><a href="#none"><i class="ico"></i>네일</a></li>
+						<li><a href="#none"><i class="ico"></i>스킨케어</a></li>
+						<li><a href="#none"><i class="ico"></i>팩/마스크</a></li>
+						<li><a href="#none"><i class="ico"></i>클렌징</a></li>
+						<li><a href="#none"><i class="ico"></i>바디/헤어</a></li>
+						<li><a href="#none"><i class="ico"></i>향수</a></li>
+						<li><a href="#none"><i class="ico"></i>화장소품</a></li>
+					</ul>
+				</div>
+				
+				<div class="tab_cont">
+					<h3 class="sr_only">라인별</h3>
+					<ul class="etc_menu" th:if="${#lists.isEmpty(pageConnType) and not #lists.isEmpty(gnbMap) and not #lists.isEmpty(gnbMap.get('prod_lines'))}">
+						<th:block th:each="cate : ${gnbMap.get('prod_lines').submenus}" th:if="${not #lists.isEmpty(gnbMap.get('prod_lines'))}">
+							<li><a href="#none" th:href="@{'/display/category/'+ ${cate.displayMenuId}(categoryType=prod_lines)}" th:text="${cate.menuTitle}"></a></li>
+						</th:block>
+					</ul>
+					
+					<!-- /* 라인별 메뉴 퍼블리싱 */ -->
+					<ul class="etc_menu" th:if="${not #lists.isEmpty(pageConnType)}">
+						<li><a href="#none">순정</a></li>
+						<li><a href="#none">컬러풀 드로잉</a></li>
+						<li><a href="#none">몬스터 클렌징</a></li>
+						<li><a href="#none">수분 가득 콜라겐</a></li>
+						<li><a href="#none">미니 투 매치</a></li>
+						<li></li>
+					</ul>
+					
+				</div>
+			</div>
+		</div>
+		<!-- /* 테마샵 메뉴 */ -->
+		<div class="slide theme_shop" data-ix-options="view-length:2; move-length:2; loop:false; correct-endpoint:true;">
+			<div class="ix-list-viewport">
+				<ul class="ix-list-items" th:if="${#lists.isEmpty(pageConnType) and not #lists.isEmpty(gnbMap)}">
+					<th:block th:each="cate, iterStat : ${gnbMap.get('prod_thema').submenus}" th:if="${not #lists.isEmpty(gnbMap.get('prod_thema'))}">
+						<li class="ix-list-item" th:if="${not #lists.isEmpty(gnbMap.get('prod_thema'))}">
+							<a href="#none" th:href="@{'/display/category/'+ ${cate.displayMenuId}(categoryType=prod_thema)}">
+								<span class="num" th:text="${iterStat.count < 10 ? '0' + iterStat.count : iterStat.count} + '.'"></span>
+								<span class="title" th:text="${cate.menuTitle}"></span>
+							</a>
+						</li>
+					</th:block>
+					
+					<!-- /*
+					<li class="ix-list-item" th:if="${not #lists.isEmpty(gnbMap.get('online_only'))}">
+						<a href="#none" th:href="@{/display/online_only(displayMenuId=online_only)}">
+							<span class="num">01.</span>
+							<span class="title" th:text="${gnbMap.get('online_only').menuTitle}">온라인<br>전용</span>
+						</a>
+					</li>
+					<li class="ix-list-item" th:if="${not #lists.isEmpty(gnbMap.get('outlet_shop'))}">
+						<a href="#none" th:href="@{/display/outlet_shop(displayMenuId=outlet_shop)}">
+							<span class="num">02.</span>
+							<span class="title" th:text="${gnbMap.get('outlet_shop').menuTitle}">아울렛<br>샵</span>
+						</a>
+					</li>
+					<li class="ix-list-item" th:if="${not #lists.isEmpty(gnbMap.get('beauty_select_shop'))}">
+						<a href="#none" th:href="@{/display/beauty_select_shop(displayMenuId=beauty_select_shop)}">
+							<span class="num">03.</span>
+							<span class="title" th:text="${gnbMap.get('beauty_select_shop').menuTitle}">뷰티<br>셀렉샵</span>
+						</a>
+					</li>
+					<li class="ix-list-item" th:if="${not #lists.isEmpty(gnbMap.get('beauty_point_shop'))}">
+						<a href="#none" th:href="@{/display/beauty_point_shop(displayMenuId=beauty_point_shop)}">
+							<span class="num">04.</span>
+							<span class="title" th:text="${gnbMap.get('beauty_point_shop').menuTitle}">뷰티<br>포인트샵</span>
+						</a>
+					</li>
+					<li class="ix-list-item" th:if="${not #lists.isEmpty(gnbMap.get('pearl_shop'))}">
+						<a href="#none" th:href="@{/display/pearl_shop(displayMenuId=pearl_shop)}">
+							<span class="num">05.</span>
+							<span class="title" th:text="${gnbMap.get('pearl_shop').menuTitle}">진주알<br>스토어</span>
+						</a>
+					</li>
+					 */ -->
+				</ul>
+				
+				<!-- /* 테마샵 메뉴 퍼블리싱 */ -->
+				<ul class="ix-list-items" th:if="${not #lists.isEmpty(pageConnType)}">
+					<li class="ix-list-item">
+						<a href="#none">
+							<span class="num">01.</span>
+							<span class="title">온라인<br>전용</span>
+						</a>
+					</li>
+					<li class="ix-list-item">
+						<a href="#none">
+							<span class="num">02.</span>
+							<span class="title">아울렛<br>샵</span>
+						</a>
+					</li>
+					<li class="ix-list-item">
+						<a href="#none">
+							<span class="num">03.</span>
+							<span class="title">뷰티<br>셀렉샵</span>
+						</a>
+					</li>
+					<li class="ix-list-item">
+						<a href="#none">
+							<span class="num">04.</span>
+							<span class="title">뷰티<br>포인트샵</span>
+						</a>
+					</li>
+					<li class="ix-list-item">
+						<a href="#none">
+							<span class="num">05.</span>
+							<span class="title">진주알<br>스토어</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- /* 기타 바로가기 메뉴 */--><!--/* 20180420 : 명칭명변경, 메뉴삭제, 순서 변경 */-->
+		<ul class="etc_menu" th:if="${#lists.isEmpty(pageConnType) and not #lists.isEmpty(gnbMap)}">
+			<li th:if="${not #lists.isEmpty(gnbMap.get('new'))}"><a href="#none" th:href="@{/display/new(displayMenuId=new)}" th:text="${gnbMap.get('new').menuTitle}">신상품</a></li>
+			<li th:if="${not #lists.isEmpty(gnbMap.get('best'))}"><a href="#none" th:href="@{/display/best(displayMenuId=best)}" th:text="${gnbMap.get('best').menuTitle}">베스트</a></li>
+			<li th:if="${not #lists.isEmpty(gnbMap.get('etude_pick'))}"><a href="#none" th:href="@{/display/etude_pick(displayMenuId=etude_pick)}" th:text="${gnbMap.get('etude_pick').menuTitle}">#에뛰드픽</a></li>
+			<li th:if="${not #lists.isEmpty(gnbMap.get('etude_ch'))}"><a href="#none"
+																		 th:href="@{/display/etude_ch(displayMenuId=etude_ch)}"
+																		 th:text="${gnbMap.get('etude_ch').menuTitle}">채널에뛰드</a>
+			</li><!--/* 20180420 : 명칭변경 */-->
+			<li th:if="${not #lists.isEmpty(gnbMap.get('event'))}"><a href="#none" th:href="@{/display/event(displayMenuId=event)}" th:text="${gnbMap.get('event').menuTitle}">이벤트</a></li>
+			<li th:if="${not #lists.isEmpty(gnbMap.get('hotdeal'))}"><a href="#none" th:href="@{/display/l_hotdeal_today(displayMenuId=hotdeal)}" th:text="${gnbMap.get('hotdeal').menuTitle}">핫딜</a></li>
+			<!--/* 20180420 : 메뉴삭제(브랜드, 매장안내)
+			<li th:if="${not #lists.isEmpty(gnbMap.get('brand'))}"><a href="#none" th:href="@{/display/brand(displayMenuId=brand)}" th:text="${gnbMap.get('brand').menuTitle}">브랜드</a></li>
+			<li th:if="${not #lists.isEmpty(gnbMap.get('l_store_location'))}"><a href="#none" th:href="@{/display/store_location(displayMenuId=store_location)}" th:text="${gnbMap.get('l_store_location').menuTitle}">매장안내</a></li>
+			*/-->
+			<li th:if="${not #lists.isEmpty(gnbMap.get('beauty_test'))}"><a href="#none"
+																			th:href="@{/display/beauty_test(displayMenuId=beauty_test)}"
+																			th:text="${gnbMap.get('beauty_test').menuTitle}">뷰티테스트</a>
+			</li>
+			<li th:if="${not #lists.isEmpty(gnbMap.get('sweet_letter'))}"><a href="#none"
+																			 th:href="@{/display/sweet_letter(displayMenuId=sweet_letter)}"
+																			 th:text="${gnbMap.get('sweet_letter').menuTitle}">스윗레터
+				100%당첨</a></li>
+			<li th:if="${not #lists.isEmpty(gnbMap.get('daily_check'))}"><a href="#none" th:href="@{/display/daily_check(displayMenuId=daily_check)}" th:text="${gnbMap.get('daily_check').menuTitle}">행운의 출첵</a></li>
+			<li th:if="${not #lists.isEmpty(gnbMap.get('pearl_roulette'))}"><a href="#none" th:href="@{/display/pearl_roulette(displayMenuId=pearl_roulette)}" th:text="${gnbMap.get('pearl_roulette').menuTitle}">진주알 룰렛</a></li>
+		</ul>
+		
+		<!-- /* 기타 바로가기 메뉴 퍼플리싱*/-->
+		<!--/* 20180420 : 명칭명변경, 메뉴삭제, 순서 변경 */-->
+		<ul class="etc_menu" th:if="${not #lists.isEmpty(pageConnType)}">
+			<li><a href="#none">신상품</a></li>
+			<li><a href="#none">베스트</a></li>
+			<li><a href="#none">#에뛰드픽</a></li>
+			<li><a href="#none">채널에뛰드</a></li>
+			<li><a href="#none">이벤트</a></li>
+			<li><a href="#none">핫딜</a></li>
+			<!--/* 20180420 : 메뉴삭제
+			<li><a href="#none">브랜드</a></li>
+			<li><a href="#none">매장안내</a></li>
+			*/-->
+			<li><a href="#none">뷰티테스트</a></li>
+			<li><a href="#none">스윗레터 100%당첨</a></li>
+			<li><a href="#none">행운의 출첵</a></li>
+			<li><a href="#none">진주알 룰렛</a></li>
+		</ul>
+		<!-- /* 로그아웃 버튼
+		<div>
+			<a href="/doLogout" class="btn_logout" th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">로그아웃</a>
+		</div>
+		*/ -->
+		<!--/* app 전용 */-->
+		<ul class="etc_menu app" th:if="${#device.isMobileApp()}">
+			<li><a href="#none"><i class="ico brand"></i>브랜드 <small>에뛰드하우스를<br>알고 싶으세요?</small></a></li>
+			<li><a href="#none"><i class="ico store"></i>매장안내 <small>전국 오프라인<br>매장을 찾아보세요.</small></a></li>
+			<li><a href="javascript:AP.webview.method('callColorPicking');"><i class="ico color_picking"></i>컬러피킹 <small>예뻐서 저장한 컬러가<br>궁금해?</small></a></li>
+			<li><a href="#none"><i class="ico color_finder"></i>컬러파인더 <small>단 하나뿐인 나만의<br>컬러를 만들어보세요.</small></a></li>
+		</ul>
+		<!-- /* aside footer */ -->
+		<div class="table_layout aside_footer">
+
+			<span><a href="/cs/customerCenter" class="btn_md_neutral">고객센터</a></span>
+			<span th:unless="${#device.isMobileApp()}"><a href="/cs/pinkMembership" class="btn_md_primary">맴버십</a></span>
+			<!--/* app 전용 */-->
+			<span th:if="${#device.isMobileApp()}"><a href="javascript:AP.webview.method('callSetting', { isLogin: AP.LOGIN_USER });" class="btn_md_secondary">설정</a></span>
+
+		</div>
+	</div>
+	<button type="button" class="btn_close"><span class="sr_only">메뉴 닫기</span></button>
+</aside>
+
+<!-- /* floating menu 영역 */ -->
+<nav class="floating_menu" th:unless="${#device.isMobileApp()}">
+	<ul>
+		<li><a href="#none" class="aside_menu_btn categ"><span>카테고리</span></a></li>
+		<li><a href="/my/page/info/myEtude" class="my"><span>마이에뛰드</span></a></li>
+		<li><a href="/main" class="home"><span>홈으로</span></a></li>
+		<li><a href="#none" th:href="@{/display/shopping_history(displayMenuId=shopping_history)}" class="history"><span>히스토리</span></a></li>
+		<li><a href="#none" th:href="@{/display/notification(displayMenuId=notification)}" class="alarm"><span>알림</span><span class="noti" style="display:none;">있음</span></a></li>
+	</ul>
+	<button type="button" class="btn_top hide"><span class="sr_only">상단으로 이동</span></button>
+	<button type="button" class="btn_talk"><span class="sr_only">아티스트톡</span></button>
+</nav>
+<!-- /* APP 전용 floating menu 영역 */ -->
+<nav class="floating_menu" th:if="${#device.isMobileApp()}">
+	<ul>
+		<li><a href="#none" class="aside_menu_btn categ"><span>카테고리</span></a></li>
+		<li><a href="/main" class="home"><span>홈으로</span></a></li>
+		<li><a href="#none" class="membership"><span>멤버십</span></a>
+			<!--/* 로그인전 */-->
+			<div class="membership_layer" style="display:none;" th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+				<dl>
+					<dt class="layer_header">멤버십</dt>
+					<dd class="layer_cont">
+						<div class="panel notice">
+							<i class="ico"></i>
+							<p class="text font_lg">로그인 하시고<br>나의 뷰티포인트를 확인하세요.</p>
+						</div>
+					</dd>
+				</dl>
+				<div class="div"><img ap:src="@{/images/common/div_membership_layer.png}" alt=""></div>
+				<div class="layer_bottom">
+					<a href="#none" class="link">핑크멤버십의 다양한 혜택이 궁금하다면? <i class="ico_arr_m_r"></i></a>
+				</div>
+			</div>
+			<!--/* 로그인후 */-->
+			<div class="membership_layer" style="display:none;" th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+				<dl>
+					<dt class="layer_header">홍길동님의 멤버십</dt>
+					<dd class="layer_cont">
+						<dl class="beautypoint">
+							<dt>뷰티포인트</dt>
+							<dd>
+								<div class="clear">
+									<span class="point"><strong class="num">123,123</strong>p</span>
+									<a href="#none" class="link"><span>포인트 확인</span><i class="ico_arr_m_r"></i></a>
+								</div>
+								<div class="barcode">
+									<img ap:src="@{/images/dummy/img_dummy_barcode.gif}" alt="">
+									<p class="text">1234-1234-1234-1234</p>
+								</div>
+							</dd>
+						</dl>
+						<dl class="member_grade friends"> <!--/* 등급별 클래스 pink_love friends hello */-->
+							<dt><a href="#none">나의 등급은 <b><em>FRIENDS</em></b> 입니다. <i class="ico_arr_m_r"></i></a></dt>
+							<dd class="coupons">
+								<span>신제품 선구매(매월)</span>
+								<span>생일쿠폰(30% 할인)</span>
+								<span>상시할인 15%</span>
+								<span>멤버십데이 할인(추가 10%)</span>
+								<!--<span class="no_coupon">쿠폰이 없습니다.</span>-->
+							</dd>
+						</dl>
+					</dd>
+				</dl>
+				<div class="div"><img ap:src="@{/images/common/div_membership_layer.png}" alt=""></div>
+				<div class="layer_bottom">
+					<p class="text">다음등급(<span class="color_block">PINK LOVE</span>) 까지 <b><em class="num">3,000</em></b>원 +</p>
+				</div>
+			</div>
+		</li>
+		<li><a href="/my/page/info/myEtude" class="my"><span>마이에뛰드</span></a></li>
+		<li><a href="#none" th:href="@{/display/notification(displayMenuId=notification)}" class="alarm"><span>알림</span><span class="noti" style="display:none;">있음</span></a></li>
+	</ul>
+	<button type="button" class="btn_top hide"><span class="sr_only">상단으로 이동</span></button>
+	<button type="button" class="btn_talk"><span class="sr_only">아티스트톡</span></button>
+</nav>
+<!--/* app 멤버십 레이어 오픈시 */-->
+<div class="layer_dimmed app_layer_dimmed" style="display: none;"></div>
+
+<script  th:inline="javascript">
+	/*<![CDATA[*/
+	//Artist talk
+	$(function () {
+		var banner = {
+				img: '/images/dummy/img_banner_talk.jpg',
+				url: '/'
+			},
+			parms = '';
+
+		[# th:if="${memberMap}"]
+			parms += ( 'CNTR_CD' + '=' + '1004' );
+			parms += ( '&CSTMID' + '=' + /*[[${memberMap.id}]]*/ );
+			parms += ( '&CHCSTMID' + '=' + /*[[${memberMap.name}]]*/ );
+			parms += ( '&CSTMNM' + '=' + /*[[${memberMap.cstmid}]]*/ );
+			parms += ( '&RESIDNO1' + '=' + /*[[${memberMap.residno1}]]*/ );
+			parms += ( '&GEND_DV_CD' + '=' + /*[[${memberMap.gendDvCd}]]*/ );
+		[/]
+
+		AP.footer.setArtistTalk( parms, banner );
+	});
+	/*]]>*/
+</script>

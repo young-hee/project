@@ -1,0 +1,25 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{/common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents common_policy">
+				<div class="tab_cont no_padding">
+					<div class="panel">
+						<pre th:if="${etudeTerms}" th:utext="${etudeTerms.termsBodyText}"></pre><!-- pre태그는 순수 텍스트일경우만 해당 -->
+					</div>
+				</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+        </th:block>
+</body>
+</html>

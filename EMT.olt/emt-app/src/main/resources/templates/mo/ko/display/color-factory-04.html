@@ -1,0 +1,40 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='color-factory'">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+    <div class="ap_contents brand">
+		<div class="color_factory color_finder">
+			<!-- tab menu wrap -->
+			<div class="ui_tab">
+				<!-- tab menu -->
+				<div class="tab_menu equally">
+					<ul>
+						<li><a href="#none" th:href="@{/display/color_factory_info(displayMenuId=color_factory_info)}">컬러 팩토리 안내</a></li>
+						<li><a href="#none" th:href="@{/display/color_factory_reserve(displayMenuId=color_factory_reserve)}">컬러 팩토리 예약</a></li>
+						<li class="on"><a href="#none" th:href="@{/display/color_factory_store(displayMenuId=color_factory_store)}">서비스 매장 보기</a></li>
+					</ul>
+				</div>
+				<!-- tab content -->
+				<div class="tab_cont no_padding">
+					<h3 class="sr_only">서비스 매장 보기</h3>
+					<img ap:src="@{/images/brand/img_factory_03.jpg}" alt="COLOR FACTORY 단 하나뿐인 컬러를 만들어 주는 컬러 팩토리">
+
+					<div class="ui_accordion acd_color_finder" data-open-type="single"></div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<script>
+		new AP.ColorFactoryStore().load();
+	</script>
+</th:block>
+
+</body>
+</html>

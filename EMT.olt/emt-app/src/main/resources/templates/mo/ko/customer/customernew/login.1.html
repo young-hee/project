@@ -1,0 +1,467 @@
+<html ap:decorate="~{layout/layout-member-join}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="layer_popup fullpage">
+		<div class="layer_wrap">
+			<dl class="layer fixed_top bg_gray">
+				<dt class="layer_title">로그인</dt>
+				<dd class="layer_cont member_log">
+					<div class="ui_toggle_contents view_keyboard">
+						<button class="toggle_btn">PC 키보드 보기 <i class="ico_down"></i></button>
+						<div>
+							<img ap:src="@{/images/member/img_keyboard.png}" alt="pc 용 키보드 배열">
+						</div>
+					</div>
+					
+				<form th:method="${method}" id="sub" th:action="${returnUrl}">
+					<th:block th:if="${pVal}" th:each="item : ${pVal}">
+						<th:block th:if="${pVal}" th:each="item : ${pVal}">
+							<input  type="hidden" th:name="${item.key}" th:value="${item.value}">
+						</th:block>
+					</th:block>
+				</form>
+					<form class="login" method="post" id="main" action="/loginRedirect">
+						<input type="hidden" name="redirectUrl">
+						<fieldset class="form">
+							<legend class="sr_only">로그인</legend>
+	            				<div ap:replace="~{customer/fragment/member :: id}"></div>
+							<div class="input_wrap">
+	           					<div ap:replace="~{customer/fragment/member :: password}"></div>
+							</div>
+							<div class="form_btns">
+								<a href="javascript:;" id="login" class="btn_lg_login">로그인</a>
+							</div>
+							<div>
+								<span class="check_wrap"><input type="checkbox" id="save_id"><label for="save_id">아이디 저장</label></span>
+								<span class="check_wrap"><input type="checkbox" id="auto_login" name="autoLogin"><label for="auto_login">자동 로그인</label></span>
+							</div>
+							<button class="btn_lg_bordered w100p" onclick="location.replace('/loginSimple')" type="button">휴대폰 간편 로그인</button>
+						</fieldset>
+					</form>
+					<hr class="div m20">
+					<div class="sns_log">
+						<button class="btn_lg_bordered w100p" onclick="naverLogin()" type="button"><i class="ico_naver"></i><span>네이버로 로그인</span></button>
+						<button class="btn_lg_bordered w100p" onclick="facebookLogin()" type="button"><i class="ico_facebook"></i><span>페이스북으로 로그인</span></button>
+						<button class="btn_lg_bordered w100p" onclick="kakaoLogin()" type="button"><i class="ico_kakao"></i><span>카카오톡으로 로그인</span></button>
+						<button class="btn_lg_bordered w100p" onclick="location.replace('/guestOrder')" type="button"><span>비회원 로그인</span></button>
+					</div>
+					<div class="member_menu">
+						<a href="/customer/signup">회원가입</a><a href="/customer/find/find-id">아이디찾기</a><a href="/customer/find/find-pwd">비밀번호찾기</a>
+					</div>
+				</dd>
+			</dl>
+			<button class="layer_close" onclick="back()" type="button"><i class="ico_close"></i><span class="sr_only">레이어 닫기</span></button>
+		</div>
+	</div>
+
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+<script>$('#login').on('click', function() {
+    loginProcess();
+    return false;
+});
+
+function back() {
+    location.href = "/main";
+}
+
+if (AP.common.getCookie('is-user-id')) {
+    var $id = $('[name=chcsNo]');
+    if (AP.common.getCookie('user-id', null, 1) != 'on') {
+        $id.val(AP.common.getCookie('user-id', null, 1));
+        $id.parents().find('.placeholder').css('display', 'none');
+        $('#save_id').prop('checked', true);
+    }
+}
+
+var t;
+
+function loginProcess() {
+    var $form = $('form#main');
+    if ($form.valid()) {
+        if (!$("[name=chcsNo]").val() || !$("[name=userPwdEc]").val()) {
+            return;
+        }
+
+        $("#login").attr("disabled", "disabled");
+        AP.api.doLogin({}, AP.common.getFormData($form)).done(function(data) {
+
+            if (data.sleep == 'Y') {
+                location.href = "/sleepUser";
+            } else if (data.old == 'Y') {
+                changeInfoModal();
+            } else if (data.changePw == 'Y') {
+                var contents = new Object();
+                contents.title = "[[#{common.alert}]]";
+                contents.contents = data.message;
+                contents.cancelLabel = "다음에 변경";
+                contents.confirmLabel = "비밀번호 변경";
+
+                AP.modal.info(contents).addListener('modal-close', function(e) {
+                    loginComplete();
+                    console.log(e.closeType); //close, confirm, cancel
+                });
+            } else {
+
+                if ($('#save_id').prop("checked")) {
+                    AP.common.setCookie('user-id', '', 0);
+                    AP.common.setCookie('is-user-id', '', 0);
+
+                    AP.common.setCookie('user-id', $('[name=chcsNo]').val(), 2592000000);
+                    AP.common.setCookie('is-user-id', $('#save_id').val(), 2592000000);
+                } else {
+                    AP.common.setCookie('user-id', '', 1);
+                    AP.common.setCookie('is-user-id', '', 1);
+                }
+                loginComplete();
+                //location.href = returnUrl;
+
+            }
+
+        }).fail(function(xhr, textStatus, errorThrown) {
+            if (xhr.errorCode == 0) {
+                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+            } else if (xhr.errorCode == 'ESAL002') {
+                AP.modal.alert("아이디 또는 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+            } else if (xhr.errorCode == 'ESAL003') {
+
+                if (xhr.responseJSON.isLock == true) {
+
+                    var contents = new Object();
+                    contents.title = "알림";
+                    contents.contents = "비밀번호를 5회 잘못 입력하셨습니다.\n\n개인정보보호를 위해\n30분간 로그인이 불가능합니다.";
+                    contents.cancelLabel = "확인";
+                    AP.modal.info(contents);
+
+                } else {
+                    $.get("/customer/popup?pageId=5", function(data) {
+
+                        var contents = new Object();
+                        contents.contents = data;
+                        var modal = AP.modal.info(contents);
+                        var $modalEl = modal.getElement(); //jquery object
+                        if (!t.isRunning()) {
+                            t = new AP.common.timeCountDown(xhr.responseJSON.lockReleaseDate, function() {});
+                            t.start();
+                        }
+                        $modalEl.find(".btn_md_primary").click(function() {
+                            modal.close();
+                            t.stop;
+                        });
+                    });
+                }
+            } else if (xhr.errorCode == 'EXTRA') {
+
+                if (xhr.responseJSON.cs == 1) {
+
+                    $.get("/customer/popup?pageId=8", function(data) {
+
+                        var contents = new Object();
+                        contents.contents = data;
+                        var modal = AP.modal.full(contents);
+                        var $modalEl = modal.getElement(); //jquery object
+                        $modalEl.find('.term').click(function() {
+                            AP.modal.agreeTerms({
+                                title: '에뛰드 사이트 이용 약관',
+                                displayCode: 'ET001'
+                            })
+                        });
+
+                        $modalEl.find('[name=ET001]').on('click', function() {
+                        	if($(this).prop('checked')) {
+                        		$('.btn_lg_secondary').addClass('btn_lg_primary').removeClass('btn_lg_secondary');
+                        	} else {
+                        		$('.btn_lg_primary').addClass('btn_lg_secondary').removeClass('btn_lg_primary');
+                        	}
+                        });
+                        $modalEl.find('input').on('click', function() {
+                            if ($(this).attr('id') == 'choice0') {
+
+                                $modalEl.find("input[type=checkbox]").prop('checked', $(this).prop('checked'));
+
+	                        	if($(this).prop('checked')) {
+	                        		$('.btn_lg_secondary').addClass('btn_lg_primary').removeClass('btn_lg_secondary');
+	                        	} else {
+	                        		$('.btn_lg_primary').addClass('btn_lg_secondary').removeClass('btn_lg_primary');
+	                        	}
+	                        	
+                            } else {
+
+                                var isAll = true;
+
+                                $modalEl.find("input[type=checkbox]").each(function() {
+                                    if ($(this).attr('id') != 'choice0') {
+                                        if (!$(this).prop('checked')) {
+                                            isAll = false;
+                                        }
+                                    }
+                                });
+
+                                $('#choice0').prop('checked', isAll);
+                            }
+                        });
+                        $modalEl.find(".btn_lg_secondary").click(function() {
+
+                            if (!$modalEl.find('[name=ET001]').prop('checked')) {
+                                AP.modal.alert("필수 약관에 동의해주셔야 합니다.");
+                                return;
+                            }
+
+                            AP.api.simpleJoin({}, {
+                                terms: $modalEl.find('[name=ET001]').prop('checked'),
+                                sms: $modalEl.find('[name=SMS]').prop('checked'),
+                                email: $modalEl.find('[name=Email]').prop('checked')
+                            }).done(function(data) {
+                                window.location = "/customer/joinComplete";
+                            }).fail(function(xhr, textStatus, errorThrown) {
+                                AP.modal.alert("예상치 못한 오류가 발생하여 회원가입에 실패했습니다. 관리자에게 문의해 주세요.");
+                            }).always(function() {
+                                //성공, 실패
+                            });
+                        });
+                    });
+                } else if (xhr.responseJSON.cs == 2) {
+
+                    $.get("/customer/popup?pageId=4&userId1=" + xhr.responseJSON.userId, function(data) {
+
+                        var contents = new Object();
+                        contents.contents = data;
+                        var modal = AP.modal.info(contents);
+                        var $modalEl = modal.getElement(); //jquery object
+
+                        $modalEl.find(".btn_md_primary").click(function() {
+                            modal.close();
+
+                        });
+                    });
+                } else if (xhr.responseJSON.cs == 3) {
+
+                    $.get("/customer/popup?pageId=2", function(data) {
+
+                        var contents = new Object();
+                        contents.contents = data;
+                        var modal = AP.modal.info(contents);
+                        var $modalEl = modal.getElement(); //jquery object
+
+                        $modalEl.find(".btn_md_primary").click(function() {
+                            location.href = "/customer/signup?oldId=" + xhr.responseJSON.userId;
+
+                        });
+                    });
+                }
+
+            } else {
+                AP.modal.alert(xhr.errorMessage)
+            }
+        }).always(function() {
+            //성공, 실패
+            $("#login").removeAttr("disabled");
+        });
+    }
+}
+
+//전환가입 안내
+function changeInfoModal() {
+    var contents = new Object();
+    contents.title = "고객님! 아모레퍼시픽<br>통합 멤버십으로 전환하세요!";
+    contents.contents = "<p class=\"text_center\">아모레퍼시픽 통합멤버십 회원이 되시면,</p>\n" +
+        "                            <br>\n" +
+        "                            <ul class=\"list_bullet\">\n" +
+        "                            \t<li><span>1)</span> 에뛰드하우스 및 자회사 등 아모레퍼시픽계열<br>모든 쇼핑몰 한 아이디로 간편하게 이용할 수 있습니다.</li>\n" +
+        "                            \t<li><span>2)</span> 하나의 아이디로 편리하게, 통합멤버십(뷰티포인트) 적립 및 다양한 서비스와 혜택을 누리실 수 있습니다.</li>\n" +
+        "                            </ul>";
+    contents.cancelLabel = "취소";
+    contents.confirmLabel = "[[#{customer.login.changeIntegrated}]]";
+
+    AP.modal.info(contents).addListener('modal-close', function(e) {
+        if (e.closeType == 'close' || e.closeType == 'cancel') {} else if (e.closeType == 'confirm') {
+            location.href = "/conversionSignup";
+        }
+    });
+}
+
+//카카오으로 로그인
+function snsKakao() {
+    Kakao.Auth.login({
+        persistRefreshToken: true,
+        success: function(authObj) {
+            Kakao.Auth.setAccessToken(authObj.access_token);
+
+            Kakao.API.request({
+                url: '/v1/user/me',
+                success: function(res) {
+
+                    var indexed_array = {};
+                    indexed_array['snsName'] = 'Kakao';
+                    indexed_array['id'] = res.id;
+                    $.ajax({
+                        type: "POST",
+                        url: "/login/snsloginProcess",
+                        data: indexed_array,
+                        success: function(data) {
+                            if (data.state == 'success') {
+                                if (data.isLinked) {
+                                    window.location.href = returnUrl;
+                                } else {
+                                    location.href = "/login/snsLinkPage";
+                                    window.close();
+                                }
+                            }
+                            //성공
+                        },
+                        dataType: "json"
+                    });
+                },
+                fail: function(error) {
+                    alert(JSON.stringify(error));
+                }
+            });
+
+
+        },
+        fail: function(err) {
+            console.log(JSON.stringify(err));
+            alert(JSON.stringify(err));
+        }
+    });
+}
+
+//페이스북으로 로그인
+window.fbAsyncInit = function() {
+    FB.init({
+        appId: '[[${@environment.getProperty('facebook.key')}]]',
+        cookie: true,
+        xfbml: true,
+        version: 'v2.11'
+    });
+
+    FB.AppEvents.logPageView();
+
+};
+
+(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {
+        return;
+    }
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+
+}(document, 'script', 'facebook-jssdk'));
+
+function naverLogin() {
+    window.open('https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=xbLexjx52A_pQD0sZgIP&state=[[${state}]]&redirect_uri=' + location.href.replace('login', 'navercallback'), 'naverloginpop', 'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550');
+    return false
+}
+
+function kakaoLogin() {
+    window.open('https://kauth.kakao.com/oauth/authorize?client_id=ce4dd4a15adfd391c88f730c049f12c4&response_type=code&redirect_uri=' + location.href.replace('login', '') + 'kakaocallback', 'kakaologinpop', 'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550');
+    return false
+}
+
+function facebookLogin() {
+
+    FB.login(function(response) {
+        //statusChangeCallback(response);   -- FB 로그인 취소시, 무한루프에 빠지게됨
+        if (response.status === 'connected') {
+            // 페이스북과 앱에 같이 로그인되어 있다.
+            $("#accessToken").val(response.authResponse.accessToken);
+            fncFBCallback(response.authResponse.accessToken);
+        } else if (response.status === 'not_authorized') {
+            // 페이스북에는 로그인 되어있으나, 앱에는 로그인 되어있지 않다.
+            AP.modal.alert('Facebook 계정 설정에서 해당 어플리케이션이 인가되지 않았습니다.\n다시 로그인 버튼을 클릭후, 어플리케이션 사용을 승인하여 주십시오.');
+        }
+    });
+}
+
+function fncFBCallback(token) {
+    FB.api('/me', {
+        fields: 'email, birthday, name'
+    }, function(response) {
+
+        var indexed_array = {};
+        indexed_array['snsName'] = 'Facebook';
+        indexed_array['id'] = response.id;
+        indexed_array['accessToken'] = token;
+
+        $.ajax({
+            type: "POST",
+            url: "/login/snsloginProcess",
+            data: indexed_array,
+            success: function(data) {
+                if (data.isLinked) {
+                    nbSuccess(data);
+                } else {
+                    location.href = "/login/snsLinkPage";
+                }
+                //성공
+            },
+            dataType: "json"
+        });
+    });
+}
+
+var naver_id_login = new naver_id_login("[[${@environment.getProperty('naver.key')}]]", "[[${@environment.getProperty('naver.callback')}]]");
+
+function nbSuccess(data) {
+
+    if (data.sleep == 'Y') {
+        location.href = "/sleepUser";
+    } else if (data.old == 'Y') {
+        changeInfoModal();
+    } else if (data.changePw == 'Y') {
+        var contents = new Object();
+        contents.title = "[[#{common.alert}]]";
+        contents.contents = "고객님!<br>" +
+            "비밀번호를 2개월동안 변경하지 않으셨습니다.<br><br>" +
+            "개인정보보호를 위해<br>비밀번호를 변경해주세요.";
+        contents.cancelLabel = "다음에 변경";
+        contents.confirmLabel = "비밀번호 변경";
+
+        AP.modal.info(contents).addListener('modal-close', function(e) {
+            if (e.closeType == 'close' || e.closeType == 'cancel') {
+                location.href = returnUrl;
+            } else if (e.closeType == 'confirm') {
+                changePassword();
+            }
+            console.log(e.closeType); //close, confirm, cancel
+        });
+    } else {
+        loginComplete();
+    }
+}
+
+function doSnsLogin() {
+    window.location.href = "/login/snsLinkPage?returl=" + returnUrl;
+}
+
+function loginComplete() {
+
+    if (/Android/i.test(navigator.userAgent)) {
+    	try {
+    		window.webview.mobile('login');
+    	} catch(e) {
+    	}
+    } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        window.location = "webview://mobile?action=login";
+    }
+    setTimeout(function() {
+        if ($('#sub').attr('method') == 'POST')
+            $('#sub').submit();
+        else
+            location.href = $('#sub').attr('action').replace('?isRequiredLogin=true', '');
+    }, 1);
+
+}
+</script>
+</th:block>
+
+</body>
+</html>

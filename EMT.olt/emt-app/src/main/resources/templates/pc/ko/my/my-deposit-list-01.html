@@ -1,0 +1,122 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='my-deposit'">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- mypage sitemap -->
+		<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+		<!-- //  mypage sitemap -->
+
+		<!-- page title -->
+		<th:block ap:replace="~{common/fragment/contents-page-title}"/>
+		<!-- // page title -->
+
+		<!-- page contents -->
+		<div class="ap_contents mypage activity review_list deposit">
+			<div class="my_deposit_info">
+				<div class="inbox"><p class="txt_tit"><th:block th:text="${session.LOGIN_USER.member.name.name1}">홍길동</th:block>님의 보유 예치금</p></div>
+				<div class="inbox"><p class="txt_num" id="savedDeposit"><span class="txt_won">원</span></p></div>
+			</div>
+
+			<!-- tab menu wrap -->
+			<div class="ui_tab">
+				<!-- tab menu -->
+				<div class="tab_menu equally">
+					<ul>
+						<li class="on"><a href="/my/page/myDepositList">예치금 내역</a></li>
+						<li><a href="/my/page/myDepositManagementList">출금신청/계좌관리</a></li>
+					</ul>
+				</div>
+				<!-- tab content -->
+				<div class="tab_cont">
+					<h3 class="sr_only">출금신청 및 계좌관리 내역</h3>
+					<div class="panel activity_list mgt10">
+						<div class="clear activity_head">
+							<div class="ui_multiple_date_picker float_left">
+								<div class="date_btn_set mgt0">
+									<span><input type="radio" class="select_range_date" name="radio5" id="radio5_all" value="all" checked=""><label for="radio5_all">전체</label></span>
+									<span><input type="radio" class="select_range_date" name="radio5" id="radio5_1" value="1weeks"><label for="radio5_1">1주일</label></span>
+									<span><input type="radio" class="select_range_date" name="radio5" id="radio5_2" value="1months"><label for="radio5_2">1개월</label></span>
+									<span><input type="radio" class="select_range_date" name="radio5" id="radio5_3" value="3months"><label for="radio5_3">3개월</label></span>
+									<span><input type="radio" class="select_range_date" name="radio5" id="radio5_4" value="6months"><label for="radio5_4">6개월</label></span>
+									<span><input type="radio" class="select_range_date" name="radio5" id="radio5_5" value="1years"><label for="radio5_5">12개월</label></span>
+								</div>
+								<div class="mlp_date_picker_date">
+									<div class="input_date_group">
+										<div class="input_wrap" style="display:none;">
+											<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+											<input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+										</div>
+										<div class="date_info_area">
+											<b><span class="start_date">2018.01.05</span></b> ~ <b><span class="end_date">2018.02.05</span></b> 까지의 예치금 내역
+										</div>
+									</div>
+								</div>
+							</div>
+							<div>
+								<div class="select_wrap activity"><!--/* 20180418 : activity 클래스 추가*/-->
+									<select id="depositHistTypeCode" title="예치금 상태값 선택">
+										<option value="">전체</option>
+										<option value="Saving">예치금 적립</option>
+										<option value="Transfer">예치금 출금</option><!--/* 20180418 : 문구수정 */-->
+										<option value="Pay">예치금 사용</option>
+										<option value="PayCancel">예치금 사용취소</option>
+										<option value="ManualSaving">수동적립</option>
+										<option value="ManualDec">수동차감</option>
+									</select>
+									<input type="hidden" name="depositHistTypeCode" value="" />
+								</div>
+							</div>
+						</div>
+
+						<div class="loading" style="min-height: 200px; display: none">
+						<span>
+							<img ap:src="@{/images/common/loading.gif}" alt="">
+						</span>
+						</div>
+
+						<div class="deposit_list board_list2"></div>
+						<div class="pagination"></div>
+
+						<div class="panel notice activity_notice bdr_none result_none">
+							<i class="ico"></i>
+							<p class="text font_lg">선택하신 기간에 해당하는 예치금 내역이 없습니다.</p>
+						</div>
+					</div>
+				</div>
+
+				<dl class="dl_cont notice">
+					<dt class="h_title cont pd0">유의사항</dt>
+					<dd>
+						<ul class="list_bullet_dot">
+							<li><b>밤 23:00 ~ 01:00 까지 약 2시간 가량은 은행 거래가 제한</b> 되므로 이 시간을 피해서 예치금을 출금하시기 바랍니다.</li>
+							<li>예치금은 환불 받을 계좌나 카드가 등록이 안된 경우 환불 금액을 보관하는 서비스입니다.</li>
+							<li>원하시면 언제든지 예치금을 본인 계좌로 출금하실 수 있으며, 주문 시 일부 혹은 전체 금액을 현금처럼 사용하실 수 있습니다.</li>
+							<li>회원탈퇴 시 예치금이 남아있으면 탈퇴하실 수 없습니다.</li>
+						</ul>
+					</dd>
+				</dl>
+			</div>
+		</div>
+		<!-- // page contents -->
+
+	</div><!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script th:inline="javascript">
+			(function () {
+				var param = {
+					offset: 0,
+					limit: 5,
+					startDate: $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).startDate,
+					endDate: $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).endDate,
+					depositHistTypeCode: ''
+				};
+
+				AP.myDepositList._getList( param, true );
+			}());
+		</script>
+	</th:block>
+</body>
+</html>

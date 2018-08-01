@@ -1,0 +1,117 @@
+<html ap:decorate="~{layout/layout-title-only}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+            <div class="ap_contents find_id_pwd">
+                <div class="panel">
+                	<h2 class="h_title page">이메일로 찾기</h2>
+                	<p class="text font_md">등록한 이메일로 비밀번호를 찾습니다.</p>
+                	<hr class="div m20" />
+                	<form>
+                    <fieldset class="form">
+                        <legend class="sr_only">개인정보 입력</legend>
+                        <div class="ui_table">
+                        	<dl>
+                        		<dt>아이디</dt>
+                        		<dd id="memberId">ETUDEHOUSE</dd>
+                        	</dl>
+                        </div>
+                        <div class="input_group">
+                        	<div ap:replace="~{customer/fragment/member :: custNm}"></div>
+                        </div>
+                        <div class="input_group">
+							<div>
+								<input type="text" title="이메일 입력" name="email" placeholder="이메일" required="required" email="email" data-msg-required="이메일주소를 입력해 주세요.">
+							</div>
+							<div class="btn">
+								<button type="button" id="sendEmail" class="btn_md_form">인증 받기</button>
+							</div>
+						</div>
+						<div class="input_group">
+							<div>
+								<input type="text" placeholder="인증번호" title="인증번호 6자리 입력" name="smsNum" required="required" data-msg-required="인증번호를 입력해 주세요.">
+							</div>
+						</div>
+                        <div class="form_btns">
+                            <a href="#none" id="checkNum" class="btn_lg_primary">다음</a>
+                        </div>
+                    </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script type="application/javascript">
+			
+			if (!AP.common.getSessionStorage("findId")) {
+			    location.replace("/customer/find/find-pwd");
+			}
+			var isSendMsg = false;
+			$('#memberId').text(AP.common.getSessionStorage("findId"));
+			$('#sendEmail').click(
+			    function() {
+			        var $form = $('form');
+			        $form.validate().settings.ignore = "[name=authNum]";
+			        if ($form.valid()) {
+			            $('#sendEmail').attr("disabled", "disabled");
+
+			            AP.api.findPwdEmail({}, AP.common.getFormData($('form'))).done(function(data) {
+		                    AP.modal.alert("인증번호가 이메일로 전송되었습니다.");
+		                    isSendMsg = true;
+			            }).fail(function(xhr, textStatus, errorThrown) {
+			                if (xhr.errorCode == 0) {
+			                    AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+			                } else if (xhr.errorCode == 'EAPI001') {
+			                    AP.modal.alert("회원정보를 찾을 수 없습니다.<br>이메일 주소를 확인해 주세요.");
+			                } else {
+			                    AP.modal.alert(xhr.errorMessage)
+			                }
+			            }).always(function() {
+			                //성공, 실패
+			                $("#checkNum").removeAttr("disabled");
+			            });
+			        }
+			    }
+			);
+
+			$('#checkNum').click(function() {
+			    var $form = $('form');
+			    $form.validate().settings.ignore = "";
+
+			    if ($form.valid()) {
+			        if (!isSendMsg) {
+			            AP.modal.alert("인증 받기 단계를 먼저 진행해주세요.");
+			            return;
+			        }
+			        $("#checkNum").attr("disabled", "disabled");
+
+			        AP.api.checkAuthNum({}, AP.common.getFormData($form)).done(function(data) {
+
+		                AP.modal.alert("본인인증이 완료되었습니다.").addListener('modal-close', function(e) {
+		                    location.href = "/customer/changePwd";
+		                });
+			                
+			        }).fail(function(xhr, textStatus, errorThrown) {
+			            if (xhr.errorCode == 0) {
+			                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+			            } else if (xhr.errorCode == 'EAPI001') {
+			                AP.modal.alert("본인인증에 실패하였습니다.");
+			            } else {
+			                AP.modal.alert(xhr.errorMessage)
+			            }
+			        }).always(function() {
+			            //성공, 실패
+			            $("#checkNum").removeAttr("disabled");
+			        });
+			    }
+
+			});
+				
+			</script>
+        </th:block>
+</body>
+</html>

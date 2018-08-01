@@ -1,0 +1,15 @@
+<th:block layout:fragment="cushion-point-body">
+		<ul th:if="${pageVo.totalRowCount != '0'}" class="pbody cushion-table" >
+			<li class="cushion-item" th:each="item : ${#IntegUtil.subList(listVo, 5)}">
+				<div class="table_layout">
+					<div>
+						<p class="date" th:text="${#IntegUtil.dateformat(item.useDate, 'yyyy.MM.dd')}">2018.01.24</p>
+						<p class="h_title" th:text="${item.storNm}">SNS연동 진주알</p>
+						<p class="order_num">주문번호 <a href="#" th:text="${item.ptrSn}">2017012102010101</a></p>
+					</div>
+					<div th:if="${item.accumptPoint != 0}">( <em>+</em> ) <span th:text="${#IntegUtil.toCommaNumber(item.accumptPoint)}">500</span></div>
+					<div th:if="${item.rdmptPoint != 0}">( - ) <span th:text="${#IntegUtil.toCommaNumber(item.rdmptPoint)}">500</span></div>
+				</div>
+			</li>
+		</ul>
+</th:block>

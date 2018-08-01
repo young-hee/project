@@ -1,0 +1,139 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='events-attendance'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents event">
+				<div class="attendance">
+					<div><img ap:src="@{/images/event/img_attendance_01.jpg}" alt="매일매일 만나요! 행운의 출첵!! 매일매일 출석체크하고! 진주알도 받자! 쉽고 풍부해진 출석체크 보상제도!"></div>
+					<div class="calendar">
+						<div class="current_day">
+							<strong class="eng">TODAY</strong><span th:text="${#dates.format(currentTimeMillis, 'yyyy년 MM월 dd일')}">0000년 00월 00일</span>
+						</div>
+						<div class="month_select">
+							<button type="button" class="btn prev" disabled="disabled"><span class="sr_only">지난달 보기</span></button>
+							<span class="current_month"></span>
+							<button type="button" class="btn next" disabled="disabled"><span class="sr_only">다음달 보기</span></button>
+						</div>
+
+						<div class="calendar_area">
+							<!--/*
+							<table>
+								<caption class="sr_only">출석체크 달력</caption>
+								<colgroup>
+									<col style="width:15%;">
+									<col style="width:14%;">
+									<col style="width:14%;">
+									<col style="width:14%;">
+									<col style="width:14%;">
+									<col style="width:14%;">
+									<col style="width:15%;">
+								</colgroup>
+								<thead>
+								<tr>
+									<th scope="col" class="sun"><span>SUN</span></th>
+									<th scope="col"><span>MON</span></th>
+									<th scope="col"><span>TUE</span></th>
+									<th scope="col"><span>WED</span></th>
+									<th scope="col"><span>THU</span></th>
+									<th scope="col"><span>FRI</span></th>
+									<th scope="col" class="sat"><span>SAT</span></th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr>
+									<td class="disabled sun day10"><span class="date">25</span><span class="mark"><span class="sr_only">10일개근</span></span></td>
+									<td class="disabled check"><span class="date">26</span><span class="mark">출첵</span></td>
+									<td class="disabled check"><span class="date">27</span><span class="mark">출첵</span></td>
+									<td class="disabled check"><span class="date">28</span><span class="mark">출첵</span></td>
+									<td class="check"><span class="date">1</span><span class="mark">출첵</span></td>
+									<td class="check"><span class="date">2</span><span class="mark">출첵</span></td>
+									<td class="sat check"><span class="date">3</span><span class="mark">출첵</span></td>
+								</tr>
+								<tr>
+									<td class="sun check"><span class="date">4</span><span class="mark">출첵</span></td>
+									<td class="check"><span class="date">5</span><span class="mark">출첵</span></td>
+									<td class="check"><span class="date">6</span><span class="mark">출첵</span></td>
+									<td class="check"><span class="date">7</span><span class="mark">출첵</span></td>
+									<td class="check"><span class="date">8</span><span class="mark">출첵</span></td>
+									<td class="check"><span class="date">9</span><span class="mark">출첵</span></td>
+									<td class="sat check"><span class="date">10</span><span class="mark">출첵</span></td>
+								</tr>
+								<tr>
+									<td class="sun check"><span class="date">11</span><span class="mark">출첵</span></td>
+									<td class="check"><span class="date">12</span><span class="mark">출첵</span></td>
+									<td class="check"><span class="date">13</span><span class="mark">출첵</span></td>
+									<td class="check"><span class="date">14</span><span class="mark">출첵</span></td>
+									<td class="check"><span class="date">15</span><span class="mark">출첵</span></td>
+									<td class="check"><span class="date">16</span><span class="mark">출첵</span></td>
+									<td class="sat day30"><span class="date">17</span><span class="mark"><span class="sr_only">30일개근</span></span></td>
+								</tr>
+								<tr>
+									<td class="sun"><span class="date">18</span></td>
+									<td><span class="date">19</span></td>
+									<td><span class="date">20</span></td>
+									<td><span class="date">21</span></td>
+									<td><span class="date">22</span></td>
+									<td><span class="date">23</span></td>
+									<td class="sat"><span class="date">24</span></td>
+								</tr>
+								<tr>
+									<td class="sun"><span class="date">25</span></td>
+									<td><span class="date">26</span></td>
+									<td><span class="date">27</span></td>
+									<td><span class="date">28</span></td>
+									<td class="today"><span class="date">29</span></td>
+									<td><span class="date">30</span></td>
+									<td class="sat"><span class="date">31</span></td>
+								</tr>
+								<tr>
+									<td class="sun disabled"><span class="date">1</span></td>
+									<td class="disabled"><span class="date">2</span></td>
+									<td class="disabled"><span class="date">3</span></td>
+									<td class="disabled"><span class="date">4</span></td>
+									<td class="disabled"><span class="date">5</span></td>
+									<td class="disabled"><span class="date">6</span></td>
+									<td class="disabled sat"><span class="date">7</span></td>
+								</tr>
+								</tbody>
+							</table>
+							*/-->
+						</div>
+						<ul class="loading white" th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}">
+							<li></li>
+							<li></li>
+							<li></li>
+						</ul>
+						<div class="legal">
+							<span class="day10"><span>10일개근</span></span><span class="day30"><span>30일개근</span></span>
+						</div>
+						<div class="page_btns mgt0">
+							<button class="btn_attendance_check" type="button"><span class="ico_stamp"></span>출석체크하기</button>
+						</div>
+					</div>
+					<div class="panel mgt30">
+						<dl class="dl_cont">
+							<dt class="h_title sub">알아두기</dt>
+							<dd>
+								<ul class="list_bullet_dot font_lg">
+									<li>진주알은 1일 1알 적립됩니다.</li>
+									<li>10일 연속 개근을 하시면 <em>진주알 200알</em>, 30일 연속 개근은 <em>1,000알</em>이 지급됩니다.</li>
+								</ul>
+							</dd>
+						</dl>
+					</div>
+				</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+
+        </th:block>
+</body>
+</html>

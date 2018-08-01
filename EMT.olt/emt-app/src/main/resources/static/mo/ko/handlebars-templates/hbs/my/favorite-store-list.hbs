@@ -1,0 +1,45 @@
+{{#xif totalLength '>' 0 }}
+    {{#each result }}
+    
+    		<div class="panel store">
+			<div class="store_wrap">
+				<h3 class="store_title">{{storeName}}</h3>
+				    <span class="check_wrap star">
+                        <input type="radio"  name="rep" id="{{storeName}}" value="{{storeSn}}" {{checkedIf defaultStoreYn}}>
+                        <label for="{{storeName}}">기본매장</label>
+                    </span>
+			</div>
+			<div class="store_info">
+				<p class="store_addr">{{address.address1}}	
+					<a href="tel:{{phoneNo1.phoneNo}}" class="store_phone">{{phoneNo1.phoneNo}}</a><!--/*20180622 : 전화연결 수정*/-->
+
+				</p>
+			<!-- open시 해당 영역에 class="on" 이 들어간다. -->
+				<div class="store_btn_wrap">
+					<button class="btn_md w50p map_call" latitude="{{latitude}}" longitude="{{longitude}}">지도보기</button>
+					<button class="btn_md w50p del" value="{{storeSn}}" name="{{storeName}}">단골해제</button>
+				</div>
+
+				<div class="store_map_wrap">
+					<div class="map_area"></div>
+				</div>
+			</div>
+		</div>
+    
+    {{/each}}
+{{else}}
+	<div class="panel store">
+    		<div class="page_btns store">
+        		<a href="/cs/takeOut" class="btn_md_bordered">테이크 아웃 서비스 알아보기 </a>
+        	</div>
+        	<div class="service_wrap">
+        		<h4 class="h_title cont"><b>서비스 운영시간</b><b class="time">오전 11시 ~ 오후 9시</b></h4>
+        		<ul class="list_bullet_dot">
+            		<li>매장에서 상품 준비가 완료되면 고객님께 SMS가 발송됩니다.(운영시간 내 수령 가능)</li>
+                	<li>매장의 재고 보유 현황에 따라 선택한 상품의 판매 상태가 달라질 수 있습니다.</li>
+             	<li>SMS발송 전 매장을 방문하시면, 상품 준비에 시간이 소요될 수 있습니다.</li>
+               	<li>매장 별로 휴무일이 다를 수 있습니다.</li>
+              	</ul>    
+       	</div>                                                                                          		               			                                 		
+    </div>
+{{/xif}}

@@ -1,0 +1,84 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='product-list'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+            <!-- page contents -->
+            <div class="ap_contents prd_list">
+				<div class="prd_category">
+					<ul>
+						<li><a href="#" th:class="${displayMenuId == upperMenuId ? 'on' : ''}"
+						th:href="@{'/display/category/'+ ${upperMenuId}(upperMenuId=${upperMenuId}, categoryType=${categoryType})}">전체</a></li>
+						<th:block th:each="subCate : ${gnbMap.get(upperMenuId).submenus}">
+							<li><a href="#none" th:class="${displayMenuId == subCate.displayMenuId ? 'on' : ''}"
+							       th:href="@{'/display/category/'+ ${subCate.displayMenuId}(upperMenuId=${upperMenuId}, categoryType=${categoryType})}"
+							       th:text="${subCate.menuTitle}"></a></li>
+						</th:block>
+					</ul>
+				</div>
+
+				<!--/* item sorting */-->
+				<div class="sorting_group clear">
+					<div>
+						<strong class="total_count"></strong>
+						<span class="btn evt"><input type="checkbox" id="evt1" value="icon_pr_prod"><label for="evt1">행사상품보기</label></span>
+					</div>
+					<div>
+						<span class="check_set">
+							<span class="btn sort"><input type="radio" name="sort_01" id="sort_01_1" value="Bestselling" checked=""><label for="sort_01_1">판매순</label></span>
+							<span class="btn sort"><input type="radio" name="sort_01" id="sort_01_2" value="NewProd"><label for="sort_01_2">신상품순</label></span>
+							<span class="btn sort"><input type="radio" name="sort_01" id="sort_01_3" value="HighestPrice"><label for="sort_01_3">높은가격순</label></span>
+							<span class="btn sort"><input type="radio" name="sort_01" id="sort_01_4" value="LowestPrice"><label for="sort_01_4">낮은가격순</label></span>
+							<span class="btn sort"><input type="radio" name="sort_01" id="sort_01_5" value="MostProdReview"><label for="sort_01_5">상품평순</label></span>
+						</span>
+						<button type="button" class="btn filter">스마트 필터</button>
+					</div>
+
+					<!--/* 필터 : 버튼 클릭시 open class 추가 */-->
+					<div class="search_table">
+						<table class="align_left">
+							<caption class="sr_only">제품검색에 대한 필터 항목(컬러,피부톤, 피부고민,텍스쳐/종류,계절,피부타입)</caption>
+							<colgroup>
+								<col style="width:200px"><col>
+							</colgroup>
+							<tbody></tbody>
+						</table>
+						<div class="page_btns">
+							<button type="button" class="btn_lg_secondary reset">초기화</button>
+							<button type="button" class="btn_lg_neutral apply">필터 적용</button>
+						</div>
+					</div>
+				</div>
+
+				<!--/* item 목록 */-->
+				<div class="item_list column2">
+					<div class="panel notice etu_find_store_none no_result" style="display: none;">
+						<i class="ico"></i>
+						<p class="text font_lg"><span class="tit_1">상품이 존재하지 않습니다.</span></p>
+					</div>
+
+					<ul></ul>
+
+					<div class="pagination"></div>
+
+					<div class="loading" style="display: block; min-height: 300px">
+						<span><img alt="" src="/pc/ko/images/common/loading.gif"></span>
+					</div>
+				</div>
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+			<script>
+				AP.display.init({
+					key: { displayMenuId: AP.DISPLAY_MENU_ID }
+				});
+			</script>
+        </th:block>
+</body>
+</html>

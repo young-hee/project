@@ -1,0 +1,24 @@
+{{#xif this.couponList.length '>' 0}}
+	<span class="layer_etu_coupon_tit_01">다운로드 가능 쿠폰 총 <em>{{ this.couponList.length }}</em>개</span>
+	<ul class="down_load_list">
+		{{#each this.couponList}}
+			<li>
+				<span>{{ this.couponName }}</span>
+				{{#xif this.useAbleYn '==' 'Y'}}
+					<button class="btn_coupon btn_coupon_download" type="button" data-coupon-sn="{{ this.couponSn }}">쿠폰다운</button>
+				{{else}}
+					<button class="btn_coupon complete btn_coupon_download" type="button" disabled>다운완료</button>
+				{{/xif}}
+			</li>
+		{{/each}}
+	</ul>
+	<button type="button" class="btn_md_primary all_coupon_down btn_coupon_all_download">전체 쿠폰 받기</button>
+{{else}}
+	<div class="panel notice">
+		<i class="ico"></i>
+		<p class="text">쿠폰이 존재하지 않습니다.</p>
+	</div>
+	<div class="page_btns">
+		<button class="btn_md_neutral btn_default_modal_confirm" type="button">확인</button>
+	</div>
+{{/xif}}

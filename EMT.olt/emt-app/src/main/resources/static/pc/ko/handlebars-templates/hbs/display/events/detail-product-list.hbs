@@ -1,0 +1,117 @@
+{{!--
+	전시 : 구매버튼이 있는 상세 상품목록 (Ch.Etude, Looks, 진주알스토어)
+	isActivityPoint: 단위를 "알"로 표시
+--}}
+<ul>
+	{{#each this.list}}
+		<li class="online_prod" data-online-prod-sn="{{ this.onlineProdSn }}">
+			<div class="item">
+				<div class="item_images">
+					{{!-- 대표 이미지 --}}
+					<a href="{{ productDetailPath this.onlineProdSn }}" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="{{ this.onlineProdImages.0.imgUrl }}" alt=""></a>
+				</div>
+				<div class="info_box">
+					{{!--/* flags */--}}
+					{{#if this.flags.length}}
+						<div class="flag_set">
+							{{#each this.flags}}
+								{{#xif this.prodFlagCode '==' 'icon_reco_new'}}
+									<span class="new">신상품</span>
+								{{/xif}}
+								{{#xif this.prodFlagCode '==' 'icon_reco_best_w'}}
+									<span class="best">베스트</span>
+								{{/xif}}
+								{{#xif this.prodFlagCode '==' 'icon_pr_prod'}}
+									<span class="event">이벤트</span>
+								{{/xif}}
+								{{#xif this.prodFlagCode '==' 'icon_reco_md'}}
+									<span>MD추천</span>
+								{{/xif}}
+								{{#xif this.prodFlagCode '==' 'icon_reco_online'}}
+									<span>온라인전용</span>
+								{{/xif}}
+							{{/each}}
+						</div>
+					{{/if}}
+					{{!-- /* 상품명 */ --}}
+					<div class="title_area">
+						{{#xif this.singleUnitProdYn '==' 'N'}}
+						<h3 class="h_title">{{ this.onlineProdName }}{{#xif this.saleDisplayStatus '==' 'OutOfStock'}} [일시품절]{{/xif}}</h3>
+						{{else}}
+						<h3 class="h_title">{{ this.productsStp.0.prodName }}{{#xif this.saleDisplayStatus '==' 'OutOfStock'}} [일시품절]{{/xif}}</h3>
+						{{/xif}}
+					</div>
+					{{!--/* color 옵션 */--}}
+					{{!--
+					<div class="item_option">
+						<p class="color_name">10 colors</p>
+					</div>
+					--}}
+					{{!--/* 가격 */--}}
+					<div class="price_area">
+						<div>
+							{{#xif this.onlineProdPriceSummaryStp.doublePriceDisplayYnStp '==' 'Y'}}
+								<div class="discount">
+									<strong class="to">{{#xif this.onlineProdPriceSummaryStp.maxDiscountRateStp '!=' this.onlineProdPriceSummaryStp.minDiscountRateStp}}~{{/xif}}{{ this.onlineProdPriceSummaryStp.maxDiscountRateStp }}<em>%</em></strong>
+								</div>
+							{{/xif}}
+							<div class="price">
+								{{#xif this.onlineProdPriceSummaryStp.doublePriceDisplayYnStp '==' 'Y'}}
+									<del>{{ numberFormat this.onlineProdPriceSummaryStp.minOnlineSalePriceStp }}<em>{{ condition ../isActivityPoint '알' '원' }}</em></del>
+								{{/xif}}
+								<strong>{{ numberFormat this.onlineProdPriceSummaryStp.minFinalOnlinePriceStp }}<em>{{ condition ../isActivityPoint '알' '원' }}{{#xif this.onlineProdPriceSummaryStp.minOnlineSalePriceStp '!=' this.onlineProdPriceSummaryStp.maxOnlineSalePriceStp}} ~{{/xif}}</em></strong>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="option_select">
+					{{!--/* 옵션선택 */--}}
+					{{#xif this.singleUnitProdYn '==' 'N'}}
+						<div class="ui_select" data-not-label-change="false" >
+							<input type="hidden" name="">
+							<button type="button">옵션 선택</button>
+							<ul class="select_options">
+								{{#each this.productsStp}}
+									<li class="select_option">
+										<code class="label_markup" style="display:none">
+											<span class="slt_color_name">{{ this.prodName }}</span>
+										</code>
+										<a data-value="{{ this.prodSn }}">
+											{{#xif this.colorchipTypeCode '==' 'RGB'}}
+												<span class="color_chip" style="background-color: #{{ this.rgbVal }}"></span>
+											{{/xif}}
+											{{#xif this.colorchipTypeCode '==' 'Img'}}
+												<span class="color_chip">
+													<img alt="" src="{{ this.colorchipImg }}">
+												</span>
+											{{/xif}}
+
+											<span class="color_name">{{ this.prodName }}{{#xif this.saleDisplayStatus '==' 'OutOfStock'}} [일시품절]{{/xif}}</span>
+											<span class="price">
+												{{#xif this.activityPointOnly '==' 'Y'}}
+													<strong class="num">{{ numberFormat this.exchActivityPoint }}</strong>알
+												{{else}}
+													<strong class="num">{{ numberFormat this.prodPriceSummaryStp.finalOnlinePriceStp }}</strong>
+													{{!-- 뷰티포인트 전용상품 --}}
+													{{#xif (eq ../productCount 1) '&&' (eq this.membershipExchOnly 'Y')}}
+														P
+													{{else}}
+														원
+													{{/xif}}
+												{{/xif}}
+											</span>
+										</a>
+									</li>
+								{{/each}}
+							</ul>
+						</div>
+					{{/xif}}
+
+					<button type="button" class="btn_order" data-online-prod-sn="{{ this.onlineProdSn }}">담기</button>
+				</div>
+			</div>
+		</li>
+	{{/each}}
+</ul>

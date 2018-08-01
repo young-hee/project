@@ -1,0 +1,61 @@
+*{margin:0; padding:0;}
+        ::-webkit-scrollbar { width: 0; height:0;}
+        img{max-width:100%; vertical-align: top;}
+        ul{list-style: none;}
+        body{width:100%;}
+        .wrapper{max-width:640px; margin:0 auto;}
+        
+        .header{width:100%;}
+        .header .left_menu_btn{position:absolute; top:0; left:0; width:50px; height:50px;}
+        .header .home{position:absolute; top:0; left:50%; width:50px; height:50px; margin-left:-25px;}
+
+        .fixed_menu{position:relative;}
+        .fixed_menu.fixed{position:fixed; top:0; left:0; right:0; z-index: 2;}
+        .fixed_menu.fixed + div{padding-top:49.08px;}
+        .fixed_menu a{display:block; position:absolute; top:10px; height:20px;}
+        .fixed_menu .hot{left:120px; width:30px}
+        .fixed_menu .live{right:30px; width:80px}
+        .aside{
+            overflow:hidden; display:none; position:fixed; top:0; left:0; right:0; bottom:0;  z-index: 3;
+            background-color: rgba(0, 0, 0, 0);
+            -webkit-transition: background-color 0.4s ease;
+            -moz-transition: background-color 0.4s ease;
+            -o-transition: background-color 0.4s ease;
+            transition: background-color 0.4s ease;
+        }
+        .aside>div{overflow:auto; position:relative; top:0; left:-100%; width:100%; height:100%;}
+        .aside a{position:fixed; top:0; right:0; display:block; width:47px;}
+
+        .aside.open {
+            background-color: rgba(0, 0, 0, 0.5);
+            -webkit-transition: background-color 0.4s ease;
+            -moz-transition: background-color 0.4s ease;
+            -o-transition: background-color 0.4s ease;
+            transition: background-color 0.4s ease;
+        }
+        
+        .contents{position:relative;}
+        .contents>a:not(.btn_live){position:absolute; top:88px; width:29%; height:30px;}
+        .btn_hot_01{left:15px;}
+        .btn_hot_02{left:35%;}
+        .btn_hot_03{right:15px;}
+        .btn_live{position:absolute; top:0; left:0; right:0; bottom:0;}
+        .category{position:relative; padding-top:15px; background:#eee; width:100%;}
+        .category>img:first-child{position:absolute; top:15px; left:0; width:61px;}
+        .category img{display:block; height:62px; max-width:inherit;}
+        .category>div{width:100%; overflow:auto;}
+
+        /* slide */
+        .slide {position:relative; width:100%; z-index: 1;}
+        /* viewport */
+        .slide .ix-list-viewport {overflow:hidden;}
+        /* 슬라이드 영역, Safari9, Samsung Browser ~4 버전에서 position을 넣지 않으면 randering bug가 발생할 수 있다. */
+        .slide .ix-list-items {position:relative; left:0; top:0; width:100%; height:100%;}
+        .slide .ix-list-items:after{content:''; display: block; clear:both;}
+        .slide .ix-list-item{float:left; width:100%; text-align:center;}
+        .slide .ix-list-item>a{display:block;}
+        /* 슬라이드 인디케이터, 방향 버튼 그룹 */
+        .slide .ix-controller {width:100%; overflow:hidden; text-align:center;}
+        .slide .ix-controller.disabled{visibility:hidden;}
+        /* 슬라이드 인디케이터 */
+        .slide .paging{position:absolute; bottom:-10px; left:50%; height:20px; width:50px; margin-left:-25px; background:#000; border-radius: 10px;  line-height: 20px; color:#fff; font-size:11px; text-align: center;}

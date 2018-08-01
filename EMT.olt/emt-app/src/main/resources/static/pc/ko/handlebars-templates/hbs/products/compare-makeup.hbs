@@ -1,0 +1,37 @@
+<ul class="list_bullet_dot light">
+	<li>착색 컬러만 비교하는 화면입니다.</li>
+	<li>화면을 닫으시면 비교하신 정보는 없어집니다.</li>
+</ul>
+<div class="compare_colors">
+	<!--/* 컬러칩 목록 */-->
+	<ul class="color_chip_list">
+		{{#each this.products}}
+			<li data-prod-sn="{{ this.prodSn }}">
+				<a href="javascript:;" {{#xif this.colorchipTypeCode '==' 'RGB'}}style="background-color:#{{ this.rgbVal }}"{{/xif}}>
+					{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+						<span class="sold_out"><span>품절</span></span>
+					{{/xif}}
+
+					<img src="{{#xif this.colorchipTypeCode '==' 'RGB'}}{{ absolutePath '/images/common/transparent_40x40.png' }}{{else}}{{ absolutePath this.colorchipImg }}{{/xif}}" alt="{{ this.prodName }}">
+				</a>
+			</li>
+		{{/each}}
+	</ul>
+	<!--/* 선택된 컬러 */-->
+	<div class="selected_colors">
+		<span>선택</span>
+		<ul>
+			{{!-- compare-makeup-selected-list.hbs --}}
+		</ul>
+	</div>
+	<!--/* 메이크업 비교 목록 */-->
+	<ul class="compare_result">
+		{{!-- compare-makeup-list.hbs --}}
+		<li class="no_result">
+			<div>
+				<i class="ico"></i>
+				<p class="text_primary">비교하실 착색 컬러를<br>선택해 주세요.</p>
+			</div>
+		</li>
+	</ul>
+</div>
