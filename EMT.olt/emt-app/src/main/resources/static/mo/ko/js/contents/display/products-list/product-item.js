@@ -15,21 +15,20 @@
 			this._data = data;
 			this._prodSn = null;
 
+			this._$target.addClass( 'item-apply' );
 			for ( var i = 1; i <= 3; ++i ) {
 				if ( this._$target.closest( '.item_list' ).hasClass( 'type' + i )) {
 					this._viewType = 'type' + i;
 				}
 			}
-			
-			this._$target.addClass( 'item-apply' );
 
 			this._setEvent();
-			this._setRepImage();
 			this._setColorChip();
 			this._toggleItemView( this._viewType );
 			this._setRemainTimer();
 			this._setOrderQty();
 			this._setSelectOption();
+			this._setRepImage();
 		},
 
 		/** =============== Public Methods ================ */
@@ -77,11 +76,14 @@
 
 		// 대표이미지 설정
 		_setRepImage: function () {
-			if( this._data.prodListUnitCode == 'OnlineProd' ) {
-				var repImg = this._data.onlineProdImages[this._data.repImgNo];
-				if ( repImg ) {
-					this._$target.find( '.first_img img' ).attr( 'src', repImg.imgUrl );
-				}
+			var repImg = '';
+			if ( this._data.prodListUnitCode == 'OnlineProd' ) {
+				repImg = this._data.onlineProdImages[this._data.repImgNo - 1];
+			} else {
+				repImg = this._data.products[0].prodImages[this._data.products[0].repImgNo - 1];
+			}
+			if ( repImg ) {
+				this._$target.find( '.first_img img' ).attr( 'src', repImg.imgUrl );
 			}
 		},
 

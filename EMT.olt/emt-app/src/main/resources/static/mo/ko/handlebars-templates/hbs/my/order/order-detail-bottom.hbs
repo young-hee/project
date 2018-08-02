@@ -16,11 +16,13 @@
 						<button class="btn_md_bordered" type="button">수령확인</button>
 					</div>
 				{{else}}
-					<div class="page_btns mgt0">
-						<button class="btn_md_bordered" type="button" onclick="selectClaimType('cancel', 'on')">온라인 쇼핑 취소</button>
-						<button class="btn_md_bordered" type="button" onclick="selectClaimType('cancel', 'take')">테이크 아웃 취소</button>
-					</div>
-					<button class="btn_md_bordered w100p mgt10" type="button" onclick="selectClaimType('cancel', 'all')">전체 취소</button>
+					{{#xif ordDetailStatusCode '!==' "ProdPreparing"}}
+						<div class="page_btns mgt0">
+							<button class="btn_md_bordered" type="button" onclick="selectClaimType('cancel', 'on')">온라인 쇼핑 취소</button>
+							<button class="btn_md_bordered" type="button" onclick="selectClaimType('cancel', 'take')">테이크 아웃 취소</button>
+						</div>
+						<button class="btn_md_bordered w100p mgt10" type="button" onclick="selectClaimType('cancel', 'all')">전체 취소</button>
+					{{/xif}}
 				{{/xif}}
 			{{/xif}}
 

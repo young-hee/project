@@ -106,7 +106,7 @@
 
 			<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
 			<script>
-				var progress = '<div id="m-loading"><ul class="loading"><li></li><li></li><li></li></ul></div>';
+			var progress = '<div id="m-loading"><ul class="loading"><li style="padding: 0px;border: 2px solid #f54a7e;"></li><li style="padding: 0px;border: 2px solid #f54a7e;"></li><li style="padding: 0px;border: 2px solid #f54a7e;"></li></ul></div>';
 				var date = null;
 				var pageNumber = 1;
 				//multiple date picker적용
@@ -116,33 +116,51 @@
 				}).on( 'multiple-date-picker-change', function (e) {
 					console.log( e.type, e.date );
 					pageNumber = 1;
-					date = e.date;
 			    	$(".pbody").remove();
 					$(".entry-point:last").after(progress);
-					$.get("/my/page/info/pearlAppendList?pageNumber=" + pageNumber + "&startDt="+date.startDate + "&endDt="+date.endDate, function(data) {
+					date = e.date;
+					AP.api.pearlList({}, {
+						pageNumber:pageNumber,
+						startDt:date.startDate,
+						endDt:date.endDate
+					}).done(function(data) {
+						$("#m-loading").remove();
 						$(".entry-point").after(data);
 						$('.btn_lg_more em').text($('.point-item').size());
-					});
+						
+	                }).fail(function(xhr, textStatus, errorThrown) {
+	                	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+						$("#m-loading").remove();
+	                }).always(function() {
+	                    //성공, 실패
+	                });
 				});
-				
+
 				function more() {
 					pageNumber++;
 					$(".pearl-table:last").after(progress);
-					if(date)
-						$.get("/my/page/info/pearlAppendListTable?pageNumber=" + pageNumber + "&startDt="+date.startDate + "&endDt="+date.endDate, function(data) {
-							$("#m-loading").remove();
-							$("button.btn_lg_more").remove();
-							$(".pearl-table:last").after(data);
-							$('.btn_lg_more em').text($('.point-item').size());
-						});
-					else
-						$.get("/my/page/info/pearlAppendListTable?pageNumber=" + pageNumber, function(data) {
-							$("#m-loading").remove();
-							$("button.btn_lg_more").remove();
-							$(".pearl-table:last").after(data);
-							$('.btn_lg_more em').text($('.point-item').size());
-						});
+			    	var startDtVal = null;
+			    	var endDtVal = null;
+			    	if(date != null) {
+			    		startDtVal = date.startDate;
+			    		endDtVal = date.endDate;
+			    	}
+					AP.api.pearlListTable({}, {
+							pageNumber:pageNumber,
+							startDt:startDtVal,
+							endDt:endDtVal
+					}).done(function(data) {
+
+						$("#m-loading").remove();
+						$(".pearl-table:last").after(data);
+						$('.btn_lg_more em').text($('.point-item').size());
 						
+	                }).fail(function(xhr, textStatus, errorThrown) {
+	                	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+						$("#m-loading").remove();
+	                }).always(function() {
+	                    //성공, 실패
+	                });
 				}
 				function receive(hitsSn) {
 

@@ -4,6 +4,16 @@
 ;(function ( $ ) {
     'use strict';
 
+	/**
+	 * 주문상세 포인트 반환
+	 * @returns {Integer}
+	 */
+	Handlebars.registerHelper('getSavingPoint', function (map, key) {
+
+		var value = map[key];
+		return value != null ? value : 0;
+	});
+
     /**
    	 * 주문 관리 title 변환
    	 * @param {String}  type
@@ -755,7 +765,7 @@
 		var path = '/product/detail';
 		if ( !/[^0-9]/.test(onlineProdSn) ) path += '?onlineProdSn=' + onlineProdSn;
 		if ( !/[^0-9]/.test(prodSn) ) path += ( /\?/.test(path) ? '&' : '?' ) + 'prodSn=' + prodSn;
-		if ( detailInfoUse ) path += ( /\?/.test(path) ? '&' : '?' ) + 'onlyProd=Y';
+		if ( detailInfoUse ) path += ( /\?/.test(path) ? '&' : '?' ) + 'onlyProd=N';
 		return path;
 	});
 
@@ -1025,6 +1035,38 @@
 				break;
 		}
 		return html;
+	});
+
+	/**
+	 * 결제금액 0보다 크면 true
+	 * {{checkAmtMapPrice ordAmtMap 'OnlineShipProd'}}
+	 */
+	Handlebars.registerHelper('checkAmtMapPrice', function (map, key) {
+		var price = 0;
+		if (map != null && key != null) {
+			Object.keys( map ).map(function( prop ) {
+				if (prop == key) {
+					price = Number(map[ prop ]);
+				}
+			});
+		}
+		return price > 0;
+	});
+
+	/**
+	 * Formatting된 결제금액 Map Helper
+	 * {{getAmtMapPrice ordAmtMap 'OnlineShipProd' '원'}}
+	 */
+	Handlebars.registerHelper('getAmtMapPrice', function (map, key, str) {
+		var price = null;
+		if (map != null && key != null) {
+			Object.keys( map ).map(function( prop ) {
+				if (prop == key) {
+					price = $B.string.numberFormat( Number(map[ prop ]) );
+				}
+			});
+		}
+		return price + str;
 	});
 
 })( jQuery );

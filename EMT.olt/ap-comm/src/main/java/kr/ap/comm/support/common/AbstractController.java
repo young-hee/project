@@ -317,8 +317,8 @@ public class AbstractController {
 	protected String getFullUri() {
 		return getRequest().getScheme() + "://" +   // "http" + "://
 			getRequest().getServerName() + // "localhost"
-			(!ObjectUtils.isEmpty(getRequest().getServerPort()) ? ":" +
-				getRequest().getServerPort() : "") + // ":" + "8080"
+			(getRequest().getServerName().equals("localhost")?(!ObjectUtils.isEmpty(getRequest().getServerPort()) ? ":" +
+    				getRequest().getServerPort() : ""):"") + // ":" + "8080"
 			getRequest().getRequestURI() + // "/display/etude_ch/detail"
 			(getRequest().getQueryString() != null ? "?" +
 				getRequest().getQueryString() : ""); // "?" + "article=11";

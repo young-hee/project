@@ -1,5 +1,9 @@
 <dt class="">
-	<span class="title">{{orderCheckState state}} 쇼핑 상품 (<em>{{cnt}}</em>개)</span>
+	{{#xif step '===' 2}}
+		<span class="title">{{orderCheckState state}} 쇼핑 {{typeName}} 상품 (<em>{{cnt}}</em>개)</span>
+	{{else}}
+		<span class="title">{{orderCheckState state}} 쇼핑 상품 (<em>{{cnt}}</em>개)</span>
+	{{/xif}}
 	<button type="button"><span class="sr_only">더보기</span></button>
 </dt>
 {{#each list}}

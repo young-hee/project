@@ -6,6 +6,7 @@ public class SnsEntity {
 	private String title;
 	private String description;
 	private String image;
+	private String hashtag;
 
 	public String getUrl() {
 		return url;
@@ -37,5 +38,13 @@ public class SnsEntity {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public String getHashtag() {
+		return hashtag;
+	}
+
+	public void setHashtag(String hashtag) {
+		this.hashtag = hashtag;
 	}
 }

@@ -20,8 +20,6 @@
 		//페이지를 구성한는 기본 데이타 설정
 		setDefaultData: function ( model, memberMap ) {
 			
-			console.log( 'setDefaultData' );
-			
 			this._defaultModel = model;
 			AP.previewArea.setDefaultData( this._defaultModel, memberMap );
 

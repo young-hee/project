@@ -23,6 +23,7 @@
 						list: ordOtfExList
 						, finalPamtPcur: finalPamtPcur
 					});
+					$('#box').html('');
 					$('#box').append(html);
 				} else {
 					$('#box').remove();
@@ -72,8 +73,20 @@
 					giftPackingSn : giftPackingSn,
 					giftPackingQty : cnt
 				}).done(function (data) {
-					if (data.param != null){
+					if (data.ordHistEx != null){
 
+						/**
+						 * 총결제금액
+						 * @type {*|String}
+						 */
+						var html = AP.common.getTemplate( 'order.final-price-amt-pcur', {
+							ordHistEx : data.ordHistEx,
+							ordAmtMap : data.ordAmtMap,
+							apMember : data.apMember
+						});
+						$('#amtPcur').html(html);
+						$('#amtPriceTab > button').trigger("click");
+						//$('html, body').animate({scrollTop: $("#amtPcur").offset().top-50}, 1000);
 					}
 				}).fail(function (e) {
 					AP.modal.alert("[ajax.fail]실패");

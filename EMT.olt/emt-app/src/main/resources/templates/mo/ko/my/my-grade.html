@@ -96,39 +96,55 @@
 				searchGbn = $(this).val();
 				$(".entry-point:last").after(progress);
 		    	$(".pbody").remove();
-				$.get("/my/page/myLevelListFragment?startDt="+date.startDate + "&endDt="+date.endDate + (searchGbn? ("&searchGbn=" + searchGbn) : ""), function(data) {
-					$("#m-loading").remove();
+
+				AP.api.pearlList({}, {
+						pageNumber:1,
+						startDt:startDtVal,
+						endDt:endDtVal
+				}).done(function(data) {
+					
 					$(".entry-point").after(data);
 					$('#more em').text($('.item-detail').size());
 					if($('#total').text() == '0') {
 						$('#total').text($('#more em').text());
 					}
-				});
+					
+                }).fail(function(xhr, textStatus, errorThrown) {
+                	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+                }).always(function() {
+                    //성공, 실패
+					$("#m-loading").remove();
+                });
 			});
 
 			function more() {
 				pageNumber++;
 				$(".my_grade_list:last").after(progress);
-				if(date)
-					$.get("/my/page/myLevelListFragment?pageNumber=" + pageNumber + "&startDt="+date.startDate + "&endDt="+date.endDate + (searchGbn? ("&searchGbn=" + searchGbn) : ""), function(data) {
-						$("#m-loading").remove();
-						$("#more").remove();
-						$(".my_grade_list:last").after(data);
-						$('#more em').text($('.item-detail').size());
-						if($('#total').text() == '0') {
-							$('#total').text($('#more em').text());
-						}
-					});
-				else
-					$.get("/my/page/myLevelListFragment?pageNumber=" + pageNumber + (searchGbn? ("&searchGbn=" + searchGbn) : ""), function(data) {
-						$("#m-loading").remove();
-						$("#more").remove();
-						$(".my_grade_list:last").after(data);
-						$('#more em').text($('.item-detail').size());
-						if($('#total').text() == '0') {
-							$('#total').text($('#more em').text());
-						}
-					});
+		    	var startDtVal = null;
+		    	var endDtVal = null;
+		    	if(date != null) {
+		    		startDtVal = date.startDate;
+		    		endDtVal = date.endDate;
+		    	}
+				AP.api.myLevelListFragment({}, {
+						pageNumber:page,
+						startDt:startDtVal,
+						endDt:endDtVal
+				}).done(function(data) {
+
+					$("#more").remove();
+					$(".my_grade_list:last").after(data);
+					$('#more em').text($('.item-detail').size());
+					if($('#total').text() == '0') {
+						$('#total').text($('#more em').text());
+					}
+					
+                }).fail(function(xhr, textStatus, errorThrown) {
+                	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+                }).always(function() {
+                    //성공, 실패
+					$("#m-loading").remove();
+                });
 					
 			}
 		</script>

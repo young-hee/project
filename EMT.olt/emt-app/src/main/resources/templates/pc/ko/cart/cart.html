@@ -120,6 +120,9 @@
 	/* spinner 적용 */
 	//$( '.ui_spinner' ).spinner();
 
+	/* 회원일련 번호*/
+	var memberSn = /*[[${memberSn}]]*/;
+
 	/* 카트 정보 */
 	var cartEx = /*[[${cartEx}]]*/;
 
@@ -181,6 +184,20 @@
 			});
 			$('#allOnlineProd').append(onlineHtml);
 		}
+		if (cartEx.cartDeliveryMNPromoExList.length > 0) {
+			var onlineHtml = AP.common.getTemplate('cart.online.mn-promo-list', {
+				cartSn : cartEx.cartSn,
+				list : cartEx.cartDeliveryMNPromoExList
+			});
+			$('#allOnlineProd').append(onlineHtml);
+		}
+		if (cartEx.cartDeliverySameTimePurPromoExList.length > 0) {
+			var onlineHtml = AP.common.getTemplate('cart.online.same-time-promo-list', {
+				cartSn : cartEx.cartSn,
+				list : cartEx.cartDeliverySameTimePurPromoExList
+			});
+			$('#allOnlineProd').append(onlineHtml);
+		}
 		if (cartEx.cartDeliveryMembershipPointExchOnlineProdExList.length > 0) {
 			var onlineHtml = AP.common.getTemplate('cart.online.membership-point-prod', {
 				cartSn : cartEx.cartSn,
@@ -200,20 +217,7 @@
 			console.log("bpMembershipEx" + bpMembershipEx.membershipPoints);
 			$('#allOnlineProd').append(onlineHtml);
 		}
-		if (cartEx.cartDeliveryMNPromoExList.length > 0) {
-			var onlineHtml = AP.common.getTemplate('cart.online.mn-promo-list', {
-				cartSn : cartEx.cartSn,
-				list : cartEx.cartDeliveryMNPromoExList
-			});
-			$('#allOnlineProd').append(onlineHtml);
-		}
-		if (cartEx.cartDeliverySameTimePurPromoExList.length > 0) {
-			var onlineHtml = AP.common.getTemplate('cart.online.same-time-promo-list', {
-				cartSn : cartEx.cartSn,
-				list : cartEx.cartDeliverySameTimePurPromoExList
-			});
-			$('#allOnlineProd').append(onlineHtml);
-		}
+
 		$('[name=chkBox]').on('click', function(e) {
 			$('[name="onlinePrdCheck"]').prop('checked', $( '[name=chkBox]' ).length == $( '[name=chkBox]:checked' ).length);
 			calculateSelectCartProds();
@@ -228,6 +232,20 @@
 			var storeHtml = AP.common.getTemplate('cart.takeout.prod', {
 				cartSn : cartEx.cartSn,
 				list : cartEx.cartStorePickupOnlineProdExList
+			});
+			$('#allStoreProd').append(storeHtml);
+		}
+		if (cartEx.cartStorePickupMNPromoExList.length > 0) {
+			var storeHtml = AP.common.getTemplate('cart.takeout.mn-promo-list', {
+				cartSn : cartEx.cartSn,
+				list : cartEx.cartStorePickupMNPromoExList
+			});
+			$('#allStoreProd').append(storeHtml);
+		}
+		if (cartEx.cartStorePickupSameTimePurPromoExList.length > 0) {
+			var storeHtml = AP.common.getTemplate('cart.takeout.same-time-promo-list', {
+				cartSn : cartEx.cartSn,
+				list : cartEx.cartStorePickupSameTimePurPromoExList
 			});
 			$('#allStoreProd').append(storeHtml);
 		}
@@ -246,20 +264,6 @@
 				bpMembershipEx : bpMembershipEx,
 				pointSum : cartEx.cartStorePickupExchActivityPointSum,
 				list : cartEx.cartStorePickupActivityPointExchOnlineProdExList
-			});
-			$('#allStoreProd').append(storeHtml);
-		}
-		if (cartEx.cartStorePickupMNPromoExList.length > 0) {
-			var storeHtml = AP.common.getTemplate('cart.takeout.mn-promo-list', {
-				cartSn : cartEx.cartSn,
-				list : cartEx.cartStorePickupMNPromoExList
-			});
-			$('#allStoreProd').append(storeHtml);
-		}
-		if (cartEx.cartStorePickupSameTimePurPromoExList.length > 0) {
-			var storeHtml = AP.common.getTemplate('cart.takeout.same-time-promo-list', {
-				cartSn : cartEx.cartSn,
-				list : cartEx.cartStorePickupSameTimePurPromoExList
 			});
 			$('#allStoreProd').append(storeHtml);
 		}
@@ -323,9 +327,14 @@
 		$("#takeoutPrdCnt").html(takeoutTotalCnt);
 
 		/* 온라인 총 수량 */
-		$("#calOnlinePrdCnt").html(onlineTotalCnt);
+		$("#calOnlinePrdCnt").html(onlineCnt);
 		/* 테이크아웃 총 수량 */
-		$("#calTakeoutPrdCnt").html(takeoutTotalCnt);
+		$("#calTakeoutPrdCnt").html(takeoutCnt);
+		/* 맴버쉽포인트 총 수량 */
+		$("#calMemberPrdCnt").html(onlineMembershipCnt + takeoutMembershipCnt);
+		/* 활동포인트 총 수량 */
+		$("#calActivityPrdCnt").html(onlineActivityCnt + takeoutActivityCnt);
+		//뷰티포인트 상품 수량 및 금액 표기할것
 
 		/* 총주문 갯수 */
 		$("#totalPrdCnt").html(onlineChkCnt + takeoutChkCnt);
@@ -342,12 +351,13 @@
 	var currentKeyword;
 
 	/* 테이크아웃 매장레이어 */
+	var takeoutModal;
 	function fnLayerOpenStore() {
 		/*if ($('.storeRow').length >= 10) {
 			AP.modal.alert('단골매장은 최대 10개 까지만 추가가 가능합니다.');
 			return;
 		}*/
-		var modal = AP.modal.open({
+		takeoutModal = AP.modal.open({
 			templateKey: 'cart.layer-cart-02',
 			sizeType: "L"
 		}).addListener( 'modal-close', function (e) {
@@ -355,7 +365,7 @@
 				getFavoriteStore();
 			}
 		});
-		var $modalEl = modal.getElement();
+		var $modalEl = takeoutModal.getElement();
 		$('#addSearch').on('click', function (e) {
 			var search = $('#addSearchText').val();
 			if (search != null && search.length > 0) {
@@ -682,7 +692,7 @@
 
 	/* 매장선택 변경 */
 	function fnChangeStore(storeSn) {
-
+		takeoutModal.close();
 		AP.api.changeStore({}, {
 			cartSn : cartSn,
 			storeSn : storeSn
@@ -721,7 +731,7 @@
 		}
 
 		// 선택매장 정보 확인
-		if(storeSelect == null){
+		/*if(storeSelect == null){
 			AP.modal.alert("선택된 매장정보가 존재하지 않습니다.");
 			return false;
 		}
@@ -734,7 +744,7 @@
 				AP.modal.alert("테이크아웃 선택하신 매장에 재고가 부족합니다.\n다른 테이크아웃 매장을 변경해주세요.");
 				return false;
 			}
-		}
+		}*/
 
 		// 3. 상품 분기별 할당
 		if(chkCnt > 0 && takeoutChkCnt > 0){
@@ -767,14 +777,12 @@
 			});
 			$("input[name=takeoutChkBox]:checked").each(function() {
 				var rowChkVal = $(this).val();
-				var rowChkArr = rowChkVal.split(',');
-				$('.item_wrap').find("[name='takeoutPrdInfo_" + rowChkArr[1] + "']").each(function(){
+				$('.item_wrap').find("[name='takeoutPrdInfo_" + rowChkVal + "']").each(function(){
 					var takeProdSn = $(this).closest('div').find('[name=takeoutPrdSn]').val();
 					var rowSaleDisplayStatus = $('.item_wrap').find("[name='saleDisplayStatus_" + takeProdSn + "']").val();
 					if(rowSaleDisplayStatus == 'OnSale'){
 						var prdInfoVal = $(this).val();
-						var prdInfoArr = prdInfoVal.split(',');
-						takeoutCdArr.push(prdInfoArr[1]);
+						takeoutCdArr.push(prdInfoVal);
 						$("[name='takeoutProdSnArr']").attr("value",takeoutCdArr);
 					}
 				});

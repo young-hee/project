@@ -4,12 +4,18 @@
 		<div class="panel">
 			<div class="table_layout">
 				<div>주문번호</div>
-				<div class="num"><a href="#none" class="order_number_link">{{ordNo}}</a></div>
+				<div class="num"><a href="javascript:;" onclick="showClaimDetailView('{{claimTypeCode}}', '{{ordHistNo}}')" class="order_number_link">{{ordNo}}</a></div>
 				<div><button type="button" class="btn_sm_neutral type2" onclick="showClaimDetailView('{{claimTypeCode}}', '{{ordHistNo}}')">상세 보기</button></div>
 			</div>
 			{{#if claimProdInfo}}
 				<div class="table_layout">
-					<div><img src="{{claimProdInfo.imageUrl}}"></div>
+					<div>
+						{{#xif claimProdInfo.imageUrl '!=' null}}
+							<img src="{{claimProdInfo.imageUrl}}">
+						{{else}}
+							<img src={{absolutePath '/images/cart/no_img.png'}}>
+						{{/xif}}
+					</div>
 					<div>
 						<p class="flag online v2">온라인주문</p>
 						<p class="name"><a href="javascript:;" onclick="showClaimDetailView('{{claimTypeCode}}', '{{ordHistNo}}')">{{claimProdInfo.prodNameRlang}}</a></p>
@@ -35,7 +41,13 @@
 			</div>
 			{{#if ordProdInfo}}
 				<div class="table_layout">
-					<div><img src="{{ordProdInfo.imageUrl}}"></div>
+					<div>
+						{{#xif ordProdInfo.imageUrl '!=' null}}
+							<img src="{{ordProdInfo.imageUrl}}">
+						{{else}}
+							<img src={{absolutePath '/images/cart/no_img.png'}}>
+						{{/xif}}
+					</div>
 					<div>
 						<p class="flag online v2">온라인주문</p>
 						<p class="name"><a href="javascript:;" onclick="showDetailView('{{../type}}', {{ordNo}})">{{ordProdInfo.prodNameRlang}}</a></p>
@@ -67,7 +79,13 @@
 			</div>
 				{{#if onlineOrdProdInfo}}
 					<div class="table_layout">
-						<div><img src="{{this.onlineOrdProdInfo.imageUrl}}"></div>
+						<div>
+							{{#xif onlineOrdProdInfo.imageUrl '!=' null}}
+								<img src="{{onlineOrdProdInfo.imageUrl}}">
+							{{else}}
+								<img src={{absolutePath '/images/cart/no_img.png'}}>
+							{{/xif}}
+						</div>
 						<div>
 							<p class="flag">온라인주문</p>
 							<p class="name" id="prodName">

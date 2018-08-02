@@ -89,32 +89,50 @@
 				}).on( 'multiple-date-picker-change', function (e) {
 					console.log( e.type, e.date );
 					date = e.date;
-					date = e.date;
 			    	$('#progress').show();
-				    $.get("/my/page/cushion/cushionPointFragment?startDt="+e.date.startDate + "&endDt="+e.date.endDate, function(data) {
-				    	date = e.date;
+					AP.api.cushionPointFragment({}, {
+						pageNumber:1,
+						startDt:date.startDate,
+						endDt:date.endDate
+					}).done(function(data) {
+
 				    	$(".pbody").remove();
 				    	$(".body").after(data);
+						
+	                }).fail(function(xhr, textStatus, errorThrown) {
+	                	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
 				    	$('#progress').hide();
-				    });
+	                }).always(function() {
+				    	$('#progress').hide();
+	                    //성공, 실패
+	                });
 				});
 
 				function more(page) {
 					if(page == 0 || page == null) return;
 			    	$('#progress').show();
-					if(date != null) {
-					    $.get("/my/page/cushion/cushionPointBodyFragment?pageNumber=" + page + "&startDt="+date.startDate + "&endDt="+date.endDate, function(data) {
-					    	$('.pagination').remove();
-					    	$(".board_list2").replaceWith(data);
-					    	$('#progress').hide();
-					    });
-					} else {
-					    $.get("/my/page/cushion/cushionPointBodyFragment?pageNumber=" + page, function(data) {
-					    	$('.pagination').remove();
-					    	$(".board_list2").replaceWith(data);
-					    	$('#progress').hide();
-					    });
-					}
+			    	var startDtVal = null;
+			    	var endDtVal = null;
+			    	if(date != null) {
+			    		startDtVal = date.startDate;
+			    		endDtVal = date.endDate;
+			    	}
+					AP.api.cushionPointBodyFragment({}, {
+							pageNumber:page,
+							startDt:startDtVal,
+							endDt:endDtVal
+					}).done(function(data) {
+
+				    	$('.pagination').remove();
+				    	$(".board_list2").replaceWith(data);
+				    	$('#progress').hide();
+						
+	                }).fail(function(xhr, textStatus, errorThrown) {
+	                	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+				    	$('#progress').hide();
+	                }).always(function() {
+	                    //성공, 실패
+	                });
 					
 				}
             </script>

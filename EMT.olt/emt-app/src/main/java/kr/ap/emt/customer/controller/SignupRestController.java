@@ -1216,8 +1216,13 @@ public class SignupRestController extends AbstractController {
 								
 								@Override
 								public void run() {
-									Map<String, String> webDBResult = webDBApiService.createWebDBUser(webDBSignupVo);
-									logger.info("createWebDBUser:{},{}", webDBResult.get("RESULT"), webDBResult.get("CODE"));
+									try {
+										logger.info("CreateWebDBData : " + mapper.writeValueAsString(webDBSignupVo));
+										Map<String, String> webDBResult = webDBApiService.createWebDBUser(webDBSignupVo);
+										logger.info("createWebDBUser:{},{}", webDBResult.get("RESULT"), webDBResult.get("CODE"));
+									} catch(Exception e) {
+										logger.error("createWebDBUser:" + e.getMessage(), e);
+									}
 								}
 							}).start();
 						}
@@ -1285,8 +1290,13 @@ public class SignupRestController extends AbstractController {
 								
 								@Override
 								public void run() {
-									Map<String, String> webDBResult = webDBApiService.createWebDBUser(webDBSignupVo);
-									logger.info("createWebDBUser:{},{}", webDBResult.get("RESULT"), webDBResult.get("CODE"));
+									try {
+										logger.info("CreateWebDBData : " + mapper.writeValueAsString(webDBSignupVo));
+										Map<String, String> webDBResult = webDBApiService.createWebDBUser(webDBSignupVo);
+										logger.info("createWebDBUser:{},{}", webDBResult.get("RESULT"), webDBResult.get("CODE"));
+									} catch(Exception e) {
+										logger.error("createWebDBUser:" + e.getMessage(), e);
+									}
 								}
 							}).start();
 							
@@ -1304,7 +1314,8 @@ public class SignupRestController extends AbstractController {
 					CicueaCuPtAccmTcVo ptVo = amoreAPIService.getptinq(cicueaCuPtAccmTcVo);
 					
 					ApMemberForPost memberForPost = new ApMemberForPost();
-
+					memberForPost.setSolarLunarCode("Solar");
+					
 					memberForPost.setMemberId(chcsNo);
 					memberForPost.setMemberPassword(userPwdEc);
 					memberForPost.setIncsNo(cicuemCuInfCoOutVo.getIncsNo());

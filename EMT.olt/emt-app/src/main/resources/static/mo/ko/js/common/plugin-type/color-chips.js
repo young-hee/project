@@ -46,7 +46,7 @@
             _$colorGroupScrollArea = _$colorGroupArea.find( '.scroll_area' ),
             _$colorChips = _$colorChipArea.find( '> li:not(.btn_more)' ),
 			_$optionBtnArea = _$target.find( '.option_btns' ),
-            _$moreBtn = _$target.find( '.btn_color_more' ),
+            _$moreBtn = _$target.find( '.color_more' ),
             _$closeBtn = _$target.find( '.option_close > button' ),
             _$colorGroupBtn = _$optionBtnArea.find( '.select_color_group' );
 

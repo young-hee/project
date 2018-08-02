@@ -1,47 +1,47 @@
 <div class="title table_layout">
-
-	<div><b class="font_lg">{{condition (eq step 2) '환불정보' '결제정보'}}</b></div>
+	<div><b class="font_lg">{{condition (eq claim true) '환불정보' '결제정보'}}</b></div>
 </div>
 <div class="cont" id="openDiv"><!--/* 상세버튼 클릭시 open 클래스 추가*/-->
 	<dl class="table_layout">
-		<dt><strong>{{condition (eq step 2) '환불 ' ''}}주문금액</strong></dt>
-		<dd class="align_right"><strong class="num">{{currencyFormatDefault pr.ordPayment ''}}</strong>원</dd>
+		<dt><strong>{{condition (eq claim true) '환불 ' ''}}주문금액</strong></dt>
+		<dd class="align_right"><strong class="num">{{currencyFormatDefault ordAmt.ordPayment ''}}</strong>원</dd>
 	</dl>
 	<ul class="s_cont">
 		<li class="table_layout point">
 			<span>온라인주문</span>
-			<span>{{currencyFormatDefault pr.onlineShipProd '원'}}</span>
+			<span>{{currencyFormatDefault ordAmt.onlineShipProd '원'}}</span>
 		</li>
 		<li class="table_layout">
 			<span>테이크아웃</span>
-			<span>0원</span>
+			<span>{{currencyFormatDefault ordAmt.storeShipProd '원'}}</span>
 		</li>
 		<li class="table_layout">
 			<span>구매 특가 상품</span>
-			<span>{{currencyFormatDefault pr.spPriceAwardProd '원'}}</span>
+			<span>{{currencyFormatDefault ordAmt.spPriceAwardProd '원'}}</span>
 		</li>
 		<li class="table_layout">
 			<span>포장/쇼핑백 추가</span>
-			<span>{{currencyFormatDefault pr.spUnitPacking '원'}}</span>
+			<span>{{currencyFormatDefault ordAmt.spUnitPacking '원'}}</span>
 		</li>
 		<li class="table_layout">
 			<span>배송비</span>
-			<span>{{currencyFormatDefault pr.shipFee '원'}}</span>
+			<span>{{currencyFormatDefault ordAmt.shipFee '원'}}</span>
 		</li>
 	</ul>
+
 	<dl class="table_layout">
-		<dt><strong>{{condition (eq step 2) '환불 ' ''}}할인/포인트</strong></dt>
-		<dd class="align_right"><strong class="num">{{currencyFormatDefault pr.salePoint ''}}</strong>원</dd>
+		<dt><strong>{{condition (eq claim true) '환불 ' ''}}할인/포인트</strong></dt>
+		<dd class="align_right"><strong class="num">{{currencyFormatDefault ordAmt.salePoint ''}}</strong>원</dd>
 	</dl>
 
 	<ul class="s_cont">
 		<li class="table_layout">
 			<span>쿠폰할인</span>
-			<span>{{currencyFormatDefault data.couponDcAmtPcur 'P'}}</span>
+			<span>{{currencyFormatDefault ordAmt.couponPoint 'P'}}</span>
 		</li>
 		<li class="table_layout">
 			<span>뷰티포인트</span>
-			<span>{{currencyFormatDefault pr.membershipPoint '알'}}</span>
+			<span>{{currencyFormatDefault ordAmt.membershipPoint '알'}}</span>
 		</li>
 		<li class="table_layout">
 			<span>쿠션포인트</span>
@@ -49,7 +49,7 @@
 		</li>
 		<li class="table_layout">
 			<span>진주알 교환</span>
-			<span>{{currencyFormatDefault pr.activityPoint '알'}}</span>
+			<span>{{currencyFormatDefault ordAmt.activityPoint '알'}}</span>
 		</li>
 		<li class="table_layout">
 			<span>OK캐쉬백</span>
@@ -62,17 +62,25 @@
 	</ul>
 
 	<dl class="table_layout pdt10">
-		<dt><strong>{{condition (eq step 2) '총 환불 금액' '결제 금액'}}</strong></dt>
-		<dd class="align_right"><em>{{currencyFormatDefault pr.totalPayment ''}}</em>원</dd>
+		<dt><strong>{{condition (eq claim true) '총 환불 금액' '결제 금액'}}</strong></dt>
+		<dd class="align_right"><em>{{currencyFormatDefault ordAmt.totalPayment ''}}</em>원</dd>
 	</dl>
 	<div class="panel gray">
-		<!--/* 원터치 간편결제 */-->
-		{{#each data.ordPayExList}}
+		<dl class="table_layout">
+			<dt>예치금</dt>
+			<dd class="align_right">{{currencyFormatDefault ordPayResult.deposit '원'}}</dd>
+		</dl>
+		<hr class="div dotted">
+
+		{{#each ordPayResult.pgList}}
 			<dl class="table_layout">
-				<dt><b>{{payMethodNameBlang}}</b></dt>
-				<dd class="align_right">{{currencyFormatDefault payAmt '원'}}</dd>
+				<dt>{{pgName}}</dt>
+				<dd class="align_right w70p">{{currencyFormatDefault pgPayAmt '원'}}</dd>
 			</dl>
 		{{/each}}
+
+
+
 
 		<!--/*
 		<dl class="table_layout">
@@ -129,28 +137,28 @@
 	<ul class="s_cont point">
 		<li class="table_layout">
 			<span>온라인주문 포인트</span>
-			<span class="num">0</span>
+			<span class="num">{{getSavingPoint point 'OnlinePoint'}}P</span>
 		</li>
 		<li class="table_layout">
 			<span>테이크아웃 포인트</span>
-			<span class="num">0</span>
+			<span class="num">0P</span>
 		</li>
 		<li class="table_layout">
 			<span>쿠션 포인트</span>
-			<span class="num">0/span>
+			<span class="num">0P</span>
 		</li>
 		<li class="table_layout">
 			<span>핑크멤버십 포인트</span>
-			<span class="num">0</span>
+			<span class="num">0P</span>
 		</li>
 		<li class="table_layout">
 			<span>뷰티포인트</span>
-			<span class="num">0</span>
+			<span class="num">{{getSavingPoint point 'MembershipPoint'}}P</span>
 		</li>
 	</ul>
 
 
-	{{#if (and (or (eq type 'return')(eq type 'cancel'))(eq step 2))}}
+	{{#if (or (and (or (eq type 'return')(eq type 'cancel'))(eq step 2))(eq claimYn 'Y'))}}
 
 		<dl class="refund">
     		<dt><strong>환불 수단</strong></dt>

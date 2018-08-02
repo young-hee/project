@@ -10,6 +10,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class RequestData {
 
@@ -66,9 +67,17 @@ public class RequestData {
 				https.setRequestProperty("Charset", "utf-8");
 				https.setRequestProperty("Content-Type", "application/json");
 				https.setRequestProperty("Content-Length", postData.getLength() + "");
+
+				// SLT 헤더추가
+//				https.setRequestProperty("x-dsp-uuid", UUID.randomUUID().toString());
+//				https.setRequestProperty("x-dsp-screenid", "");
+//				https.setRequestProperty("x-dsp-userid", "");
+//				https.setRequestProperty("x-dsp-langcd", "ko");
+//				https.setRequestProperty("x-dsp-serviceURL", "");
+
 				OutputStream out_stream = https.getOutputStream();
 				postData.write(out_stream);
-				System.err.println("[AMORE_API]REQUEST BODY=" + postData.toString());
+				logger.debug("[AMORE_API]REQUEST BODY={}", postData.toString());
 				out_stream.flush();
 				out_stream.close();
 			}
@@ -89,7 +98,7 @@ public class RequestData {
 			}
 			https.connect();
 			this.status = https.getResponseCode();
-			System.err.println("[AMORE_API]RESPONSE CODE=" + https.getResponseCode());
+			logger.debug("[AMORE_API]RESPONSE CODE={}", https.getResponseCode());
 			InputStream is = https.getInputStream();
 			InputStreamReader isr = new InputStreamReader(is, "UTF-8");
 			read = new BufferedReader(isr);
@@ -101,7 +110,7 @@ public class RequestData {
 				sb.append(line);
 			}
 			resultStr = sb.toString();
-			System.err.println("[AMORE_API]RESPONSE BODY=" + resultStr);
+			logger.debug("[AMORE_API]RESPONSE BODY={}", resultStr);
 
 			read.close();
 
@@ -131,8 +140,8 @@ public class RequestData {
 	public String doPost(String method, String value) {
 		//postData.addData("asd", "application/octet-stream", data);
 
-		System.err.println("[AMORE_API]REQUEST START");
-		System.err.println("[AMORE_API]METHOD=" + method);
+		logger.debug("[AMORE_API]REQUEST START");
+		logger.debug("[AMORE_API]METHOD={}", method);
 		postData.setValue(value);
 		String str = requestStart(method, "POST");
 		return str;

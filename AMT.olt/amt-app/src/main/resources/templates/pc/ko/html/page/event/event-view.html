@@ -8,7 +8,7 @@
 		<div class="ap_com_cont overview">
 			<!--/* [S] 이벤트 상세 */-->
 			<div class="overview_detail">
-				<!--/* 제목 */-->
+				<!--/* 제목
 				<div class="tit_area">
 					<div class="inner_wrap">
 						<div class="lside">
@@ -37,7 +37,7 @@
 								<li class="like_sm">
 									<button>
 										<span class="ie_press">
-											<i class="ico_like_sm"><!-- active : on -->
+											<i class="ico_like_sm on">
 												<span class="sr_only">좋아요</span>
 											</i>
 										</span>
@@ -48,6 +48,7 @@
 						</div>
 					</div>
 				</div>
+				
 				<div class="tit_area">
 					<div class="inner_wrap">
 						<div class="lside">
@@ -58,9 +59,29 @@
 						</div>
 					</div>
 				</div>
+				*/-->
 				<!--/* visual */-->
 				<div class="visual_area line">
-					<img ap:src="@{/images/dummy/img_event.jpg}" alt="">
+					<div class="event_img" style="background-image:url(/pc/ko/images/dummy/img_event_bg.jpg);">
+						<img ap:src="@{/images/dummy/img_event.jpg}" alt="">
+					</div>
+					<!-- 동영상일때 [S] -->
+					<div class="visual_area" style="background-color:#e9edf0;">
+						<div class="event_movie">
+							<p class="mv_tit">동영상 한줄 텍스트</p>
+							<div class="movie_area">
+								<iframe width="690" height="388" src="https://www.youtube.com/embed/2Y33CX_MHwo" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+								<a href="javascript:;" class="mv_cover"><img ap:src="@{/images/dummy/img_event_cover.jpg}" alt="동영상 커버"></a>
+							</div>
+						</div>
+					</div>
+					<!-- 동영상일때 [E] -->
+					<div class="event_img" style="background-color:#e9edf0;">
+						<img ap:src="@{/images/dummy/img_event1.jpg}" alt="">
+					</div>
+					<div class="event_img" style="background-color:#f5f5f5; background-image:url(/pc/ko/images/dummy/img_event2_bg.jpg);">
+						<img ap:src="@{/images/dummy/img_event2.jpg}" alt="">
+					</div>
 				</div>
 				<!--/* 상세 */-->
 				<div class="inner_wrap section_wrap">
@@ -784,6 +805,17 @@
 	<script>
 		$( 'input:text, textarea' ).inputLimits();
 		$( 'input:file' ).inputFile();
+		
+		 /* Youtube 자동재생 스크립트 */
+		$(document).ready(function(){
+			$('.mv_cover').bind('click', function() {
+				var $ytb_iframe = $(this).prev("iframe");
+				var $ytb_src = $(this).prev("iframe").attr("src");
+				$ytb_iframe.attr("src",$ytb_src + "?wmode=transparent&showinfo=0;&autoplay=1&enablejsapi=1");
+			  	$(this).hide();
+		 	});
+		});
+	
 	</script>
 </th:block>
 

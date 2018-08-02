@@ -9,15 +9,17 @@ this["AP"]["handlebars"]["cart"]["fullpage-takeout-store"] = Handlebars.template
 },"2":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
 
-  return "		<div class=\"panel store\">\n			<div class=\"store_wrap\">\n				<h3 class=\"store_title\">"
+  return "		<div class=\"panel store\">\n			<div class=\"store_wrap\">\n				<h3 class=\"store_title\">\n					<a href=\"#\" onclick=\"fnChangeStore("
+    + alias2(alias1((depth0 != null ? depth0.storeSn : depth0), depth0))
+    + "); return false;\">\n						"
     + alias2(alias1((depth0 != null ? depth0.storeName : depth0), depth0))
-    + "\n				"
+    + "\n						"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.invtEnoughType : depth0),"==","No",{"name":"xif","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\n				"
+    + "\n						"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.invtEnoughType : depth0),"==","Enough",{"name":"xif","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\n				"
+    + "\n						"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.invtEnoughType : depth0),"==","NotEnough",{"name":"xif","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\n				</h3>\n			</div>\n			<div class=\"store_info\">\n				<p class=\"store_addr\">\n					"
+    + "\n					</a>\n				</h3>\n			</div>\n			<div class=\"store_info\">\n				<p class=\"store_addr\">\n					"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.address : depth0)) != null ? stack1.address1 : stack1), depth0))
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.address : depth0)) != null ? stack1.address2 : stack1), depth0))
     + "\n					<span class=\"store_phone\">"
@@ -36,13 +38,21 @@ this["AP"]["handlebars"]["cart"]["fullpage-takeout-store"] = Handlebars.template
 },"7":function(container,depth0,helpers,partials,data) {
     return " <span class=\"in_stock not\">[재고부족]</span> ";
 },"9":function(container,depth0,helpers,partials,data) {
-    return "                        <button type=\"button\" class=\"btn_md w50p del\" value=\""
-    + container.escapeExpression(container.lambda((depth0 != null ? depth0.storeSn : depth0), depth0))
-    + "\" id=\"b_storeDel\">단골해제</button>\n";
+    var alias1=container.lambda, alias2=container.escapeExpression;
+
+  return "                        <button type=\"button\" class=\"btn_md w50p del\" value=\""
+    + alias2(alias1((depth0 != null ? depth0.storeSn : depth0), depth0))
+    + "\" storeName=\""
+    + alias2(alias1((depth0 != null ? depth0.storeName : depth0), depth0))
+    + "\"  id=\"b_storeDel\">단골해제</button>\n";
 },"11":function(container,depth0,helpers,partials,data) {
-    return "                        <button type=\"button\" class=\"btn_md w50p del off\" value=\""
-    + container.escapeExpression(container.lambda((depth0 != null ? depth0.storeSn : depth0), depth0))
-    + "\" id=\"b_storeAdd\">단골등록</button>\n";
+    var alias1=container.lambda, alias2=container.escapeExpression;
+
+  return "                        <button type=\"button\" class=\"btn_md w50p del off\" value=\""
+    + alias2(alias1((depth0 != null ? depth0.storeSn : depth0), depth0))
+    + "\" storeName=\""
+    + alias2(alias1((depth0 != null ? depth0.storeName : depth0), depth0))
+    + "\"  id=\"b_storeAdd\">단골등록</button>\n";
 },"13":function(container,depth0,helpers,partials,data) {
     return "	<div class=\"panel notice\">\n		<i class=\"ico\"></i>\n		<p class=\"text color_gray\">매장 검색 결과가 없습니다.</p>\n		<p class=\"text color_light_gray mgt10\">입력하신 매장명 또는 지역명을 다시 확인해 주세요.<br>관련 문의는 고객센터 (1544-5418)로 연락주세요.</p>\n	</div>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {

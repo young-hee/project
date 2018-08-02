@@ -4,7 +4,9 @@ this["AP"]["handlebars"]["my"] = this["AP"]["handlebars"]["my"] || {};
 this["AP"]["handlebars"]["my"]["order"] = this["AP"]["handlebars"]["my"]["order"] || {};
 
 this["AP"]["handlebars"]["my"]["order"]["order-detail-shipAddress-info"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
-    return "	<h3 class=\"h_title sub mgt80 mgb20\">상품 교환 회수 방법</h3>\n	<div class=\"panel gray bordered\">\n		<div class=\"panel_cont\">\n			<p class=\"font_lg\">에뛰드하우스 전용 택배사 이용</p>\n		</div>\n	</div>\n";
+    return "	<h3 class=\"h_title sub mgt80 mgb20\">상품 "
+    + container.escapeExpression(container.lambda((depth0 != null ? depth0.title : depth0), depth0))
+    + " 회수 방법</h3>\n	<div class=\"panel gray bordered\">\n		<div class=\"panel_cont\">\n			<p class=\"font_lg\">에뛰드하우스 전용 택배사 이용</p>\n		</div>\n	</div>\n";
 },"3":function(container,depth0,helpers,partials,data) {
     return "			"
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.title : depth0), depth0))
@@ -18,7 +20,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-shipAddress-info"] = Handl
 },"8":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "			<button class=\"btn_sm_bordered\" type=\"button\" onclick=\"ediShipAddress('"
+  return "			<button class=\"btn_sm_bordered\" type=\"button\" onclick=\"editShipAddress('"
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.shipAddressTypeCode : stack1), depth0))
     + "')\">배송 정보 수정</button>\n";
 },"10":function(container,depth0,helpers,partials,data) {
@@ -48,7 +50,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-shipAddress-info"] = Handl
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.lambda, alias4=container.escapeExpression;
 
-  return ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.claimYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,(depth0 != null ? depth0.type : depth0),"cancel",{"name":"ne","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+  return ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.isExist || (depth0 && depth0.isExist) || alias2).call(alias1,(depth0 != null ? depth0.claimDate : depth0),{"name":"isExist","hash":{},"data":data}),(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,(depth0 != null ? depth0.type : depth0),"cancel",{"name":"ne","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n<div class=\"clear mgt80 mgb20\">\n	<h3 class=\"h_title sub\">\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.type : depth0),"return",{"name":"eq","hash":{},"data":data}),"||",(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.type : depth0),"exchange",{"name":"eq","hash":{},"data":data}),{"name":"xif","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(5, data, 0),"data":data})) != null ? stack1 : "")
     + "	</h3>\n"

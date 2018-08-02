@@ -11,13 +11,15 @@ this["AP"]["handlebars"]["my"]["inquiry-cont"] = Handlebars.template({"1":functi
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.fileUrl : depth0), depth0))
     + "\" alt=\"\">\n				</div>\n";
 },"4":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
+    var stack1, alias1=container.escapeExpression, alias2=depth0 != null ? depth0 : (container.nullContext || {}), alias3=helpers.helperMissing;
 
   return "	    <div class=\"answer\">\n	    	<pre class=\"text\">"
-    + container.escapeExpression(container.lambda((depth0 != null ? depth0.responseBodyText : depth0), depth0))
+    + alias1(container.lambda((depth0 != null ? depth0.responseBodyText : depth0), depth0))
     + "</pre>\n"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.isExist || (depth0 && depth0.isExist) || helpers.helperMissing).call(alias1,(depth0 != null ? depth0.responseFileList : depth0),{"name":"isExist","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "	    	<p class=\"date\">2018.0.09</p>\n	    </div>\n";
+    + ((stack1 = helpers["if"].call(alias2,(helpers.isExist || (depth0 && depth0.isExist) || alias3).call(alias2,(depth0 != null ? depth0.responseFileList : depth0),{"name":"isExist","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "	    	<p class=\"date\">"
+    + alias1((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias3).call(alias2,(depth0 != null ? depth0.writeDt : depth0),"yyy-MM-dd",{"name":"dateFormat","hash":{},"data":data}))
+    + "</p>\n	    </div>\n";
 },"5":function(container,depth0,helpers,partials,data) {
     var stack1;
 

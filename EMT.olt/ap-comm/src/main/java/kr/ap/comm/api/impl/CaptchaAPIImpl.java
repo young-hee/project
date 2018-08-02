@@ -44,7 +44,7 @@ public class CaptchaAPIImpl implements CaptchaAPI {
         headers.add("Content-Type", "application/x-www-form-urlencoded");
 
         try {
-	        logger.info("KAKAO-INIT");
+	        logger.info("KAKAO-INIT RETURN URL : {}", returnUrl);
 	        
 	        MultiValueMap<String, String> params = new LinkedMultiValueMap<>(headers);
 	

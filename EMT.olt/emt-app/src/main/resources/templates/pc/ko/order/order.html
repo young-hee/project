@@ -89,6 +89,7 @@
 	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use.js}"></script> 		<!--사용가능한 쿠폰목록 Layer-->
 	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use-avail.js}"></script> 		<!--사용가능한 쿠폰목록 -->
 	<script ap:src="@{/handlebars-templates/compiled/order/coupon-use-list.js}"></script> 		<!--선택된 쿠폰목록 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/final-price-amt-pcur.js}"></script> 		<!-- 최종 결제금액 영역 -->
 
 	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
 	<script language="javascript" type="text/javascript" src="https://stdpay.inicis.com/stdjs/INIStdPay.js" charset="UTF-8"></script>	
@@ -136,7 +137,7 @@
 			}
 
 			var $form = $( 'form.order-validate' );
-			$form.validate().settings.ignore = "";
+			//$form.validate().settings.ignore = "";
 
 			if ( $form.valid() ) {
 
@@ -374,6 +375,24 @@
 				modal.close();
 				location.replace('/cart/cartList');
 			});
+		}
+
+		//결제금액 화면 그리기
+		function amtPcurInit() {
+			var ordHistEx = /*[[${ordEx.ordHistEx}]]*/ '0', // 최종결제금액
+				ordAmtMap = /*[[${ordAmtMap}]]*/ null,
+				apMember = /*[[${apMember}]]*/ null;
+
+			/**
+			 * 총결제금액
+			 * @type {*|String}
+			 */
+			var html = AP.common.getTemplate( 'order.final-price-amt-pcur', {
+				ordHistEx : ordHistEx,
+				ordAmtMap : ordAmtMap,
+				apMember : apMember
+			});
+			$('#amtPcur').html(html);
 		}
 	</script>
 </th:block>

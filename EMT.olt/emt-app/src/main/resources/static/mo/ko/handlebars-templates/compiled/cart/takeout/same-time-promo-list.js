@@ -60,6 +60,12 @@ this["AP"]["handlebars"]["cart"]["takeout"]["same-time-promo-list"] = Handlebars
     + ((stack1 = helpers["if"].call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depth0 != null ? depth0.calculationResultYn : depth0),"N",{"name":"eq","hash":{},"data":data}),(helpers.ne || (depth0 && depth0.ne) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.salePrice : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(22, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OutOfStock",{"name":"eq","hash":{},"data":data}),(helpers.ne || (depth0 && depth0.ne) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodTypeCode : stack1),"Presale",{"name":"ne","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(24, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"Exhaustion",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodTypeCode : stack1),"Presale",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(26, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"WaitingSale",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(28, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"EndSale",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(30, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"SuspendSale",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(32, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"WaitingDisplay",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(34, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"EndDisplay",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(36, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"PermanentEnd",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(38, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "					</span>\n				</div>\n			</div>\n";
 },"8":function(container,depth0,helpers,partials,data) {
     var stack1;
@@ -115,6 +121,18 @@ this["AP"]["handlebars"]["cart"]["takeout"]["same-time-promo-list"] = Handlebars
     return "							<span class=\"text_sold_out\">[일시품절]</span>\n";
 },"26":function(container,depth0,helpers,partials,data) {
     return "							<span class=\"text_sold_out\">[예약판매수량소진]</span>\n";
+},"28":function(container,depth0,helpers,partials,data) {
+    return "							<span class=\"text_sold_out\">[판매대기]</span>\n";
+},"30":function(container,depth0,helpers,partials,data) {
+    return "							<span class=\"text_sold_out\">[판매종료]</span>\n";
+},"32":function(container,depth0,helpers,partials,data) {
+    return "							<span class=\"text_sold_out\">[판매일시중지]</span>\n";
+},"34":function(container,depth0,helpers,partials,data) {
+    return "							<span class=\"text_sold_out\">[전시대기]</span>\n";
+},"36":function(container,depth0,helpers,partials,data) {
+    return "							<span class=\"text_sold_out\">[전시종료]</span>\n";
+},"38":function(container,depth0,helpers,partials,data) {
+    return "							<span class=\"text_sold_out\">[영구종료]</span>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 

@@ -5,6 +5,16 @@
     'use strict';
 
 	/**
+	 * 주문상세 포인트 반환
+	 * @returns {Integer}
+	 */
+	Handlebars.registerHelper('getSavingPoint', function (map, key) {
+
+		var value = map[key];
+		return value != null ? value : 0;
+	});
+
+	/**
 	 * 상품 상세 (온라인, 테이크)
 	 * @returns {String}
 	 */
@@ -105,7 +115,7 @@
 					return '전체취소';
 			}
 		}
-		else if (type === 'return' || type === 'exchange') {
+		else if (type === 'return' || type === 'exchange' || type == 'returnExchange') {
 			switch (condition) {
 				case 'RtnReceivedComplete' :
 					return '회수접수완료';
@@ -777,7 +787,7 @@
 		var path = '/product/detail';
 		if ( !/[^0-9]/.test(onlineProdSn) ) path += '?onlineProdSn=' + onlineProdSn;
 		if ( !/[^0-9]/.test(prodSn) ) path += ( /\?/.test(path) ? '&' : '?' ) + 'prodSn=' + prodSn;
-		if ( detailInfoUse ) path += ( /\?/.test(path) ? '&' : '?' ) + 'onlyProd=Y'; 
+		if ( detailInfoUse ) path += ( /\?/.test(path) ? '&' : '?' ) + 'onlyProd=N';
 		return path;
 	});
 

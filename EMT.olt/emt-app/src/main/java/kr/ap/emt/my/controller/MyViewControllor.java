@@ -143,6 +143,10 @@ public class MyViewControllor extends AbstractController {
 			{
 				try {
 					CustCushinPoint cushin = posService.getCustCushinPoint(onOffNum);
+					if(cushin == null) {
+						cushin = new CustCushinPoint();
+						cushin.setTotRemainPt(memberSession.getMember().getRemainCushionPoint());
+					}
 					model.addAttribute("cushin", cushin);
 				} catch(Exception e) {
 					CustCushinPoint cushin = new CustCushinPoint();
@@ -347,6 +351,8 @@ public class MyViewControllor extends AbstractController {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
+			System.out.println(data);
 
 			model.addAttribute("address", mapper.readValue(data, ShipAddressInfo.class));
 		} catch (Exception e) {

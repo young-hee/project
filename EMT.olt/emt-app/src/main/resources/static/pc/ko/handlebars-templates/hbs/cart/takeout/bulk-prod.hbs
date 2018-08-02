@@ -11,7 +11,7 @@
 			<!--/* 상품 선택 */-->
 			<div class="item_thumb">
 				<div class="check_wrap">
-					<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{ ../onlineProdSn }}" value="{{ ../onlineProdSn }}" {{condition (eq ../selectYn 'Y') 'checked' ''}}>
+					<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{prodEx.prodSn}}" value="{{../onlineProdSn}}" {{#if (ne ../saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (eq ../selectYn 'Y') 'checked' ''}}>
 					<label for="takeoutChkBox{{ ../onlineProdSn }}">
 						{{#if ../repOnlineProdImgEx}}
 							<img src="{{ ../repOnlineProdImgEx.imgUrl }}" class="thm_cart_item">
@@ -54,7 +54,6 @@
 					{{/xif}}
 				{{/xif}}
 			</div>
-
 			<!--/* 포인트 및 가격 */-->
 			<div class="price">
 				{{#xif prodEx.saleDisplayStatus '==' 'OnSale'}}
@@ -74,8 +73,25 @@
 				{{#if (and (eq prodEx.saleDisplayStatus 'Exhaustion')(eq prodEx.prodTypeCode 'Presale'))}}
 					<em>[예약판매수량소진]</em>
 				{{/if}}
+				{{#if (eq prodEx.saleDisplayStatus 'WaitingSale') }}
+					<em>[판매대기]</em>
+				{{/if}}
+				{{#if (eq prodEx.saleDisplayStatus 'EndSale') }}
+					<em>[판매종료]</em>
+				{{/if}}
+				{{#if (eq prodEx.saleDisplayStatus 'SuspendSale') }}
+					<em>[판매일시중지]</em>
+				{{/if}}
+				{{#if (eq prodEx.saleDisplayStatus 'WaitingDisplay') }}
+					<em>[전시대기]</em>
+				{{/if}}
+				{{#if (eq prodEx.saleDisplayStatus 'EndDisplay') }}
+					<em>[전시종료]</em>
+				{{/if}}
+				{{#if (eq prodEx.saleDisplayStatus 'PermanentEnd') }}
+					<em>[영구종료]</em>
+				{{/if}}
 			</div>
-
 			<div class="btns">
 				<button type="button" class="btn_sm_bordered" onclick="removeCartProd('{{ ../../cartSn}}', '{{ cartProdSn }}')"><span class="sr_only">옵션 삭제</span></button>
 			</div>

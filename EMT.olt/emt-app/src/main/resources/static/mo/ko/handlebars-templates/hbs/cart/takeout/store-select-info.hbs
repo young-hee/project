@@ -1,0 +1,79 @@
+<div class="take_out_store">
+	<div class="take_out_top_wrap">
+		{{#if (ne storeSelect null) }}
+			<div class="take_out_store_name">
+				<strong>{{ storeSelect.storeName }}</strong>
+				<span>
+					{{#switch storeSelect.invtEnoughType }}
+						{{#case "No"}} <span>[재고없음]</span> {{/case}}
+						{{#case "Enough"}} <span>[재고있음]</span> {{/case}}
+						{{#case "NotEnougho"}} <span>[재고부족]</span> {{/case}}
+					{{/switch}}
+				</span>
+			</div>
+		{{/if}}
+		{{#if (eq storeSelect null) }}
+			<div class="take_out_store_name"><strong>선택매장없음</strong></div>
+		{{/if}}
+		<button type="button" class="btn_take_store_change" onclick="fnLayerOpenStore()">매장변경</button>
+	</div>
+
+	{{#if (ne storeSelect null) }}
+		<button type="button" class="btn_seller_info on" id="b_openSeller"><span>판매자 정보 확인</span><i class="icon_arr"></i></button><!--판매자 정보 확인 토글제어 클래스 on-->
+		<div class="seller_info_wrap" >
+			<dl>
+				<dt>상호</dt>
+				<dd>{{ storeSelect.storeTypeName }}</dd>
+				{{#if (ne storeSelect.phoneNo2 null) }}
+				<dt>연락처</dt>
+				<dd>{{ storeSelect.phoneNo2.phoneNo }}</dd>
+				{{/if}}
+				{{#if (ne storeSelect.address null) }}
+				<dt>사업장소재지</dt>
+				<dd>{{ storeSelect.address.address1 }} {{ storeSelect.address.address2 }}</dd>
+				{{/if}}
+				{{#if (ne storeSelect.brn null) }}
+				<dt>통신판매신고번호</dt>
+				<dd>
+					<a th:href="http://www.ftc.go.kr/bizCommPop.do?wrkr_no={{ storeSelect.brn }}&apv_perm_no=" target="_blank">사업자정보확인</a>
+				</dd>
+				{{/if}}
+				{{#if (ne storeSelect.emailAddress null) }}
+				<dt>e-mail</dt>
+				<dd>
+					<a th:href="mailto:{{ storeSelect.emailAddress }}"><span>{{ storeSelect.emailAddress }}</span></a>
+				</dd>
+				{{/if}}
+			</dl>
+		</div>
+	{{/if}}
+
+	{{#xif storeRegularList.length '>' 0 }}
+		<div class="take_out_bottom_wrap">
+			<div class="take_out_favorite">단골매장</div>
+			<div class="take_out_scroll">
+				<ul>
+					{{#each storeRegularList}}
+						<a href="#" onclick="fnChangeStore({{ storeSn }}); return false;">
+							<li>
+								{{ storeName }}
+								{{#switch invtEnoughType }}
+									{{#case "No"}} <span>[재고없음]</span> {{/case}}
+									{{#case "Enough"}} <span>[재고있음]</span> {{/case}}
+									{{#case "NotEnougho"}} <span>[재고부족]</span> {{/case}}
+								{{/switch}}
+							</li>
+						</a>
+					{{/each}}
+				</ul>
+			</div>
+		</div>
+	{{/xif}}
+	{{#xif storeRegularList.length '==' 0 }}
+		<div class="take_out_bottom_wrap">
+			<div class="take_out_scroll empty">
+				<p class="text_notice">단골매장이 없습니다.</p>
+			</div>
+		</div>
+	{{/xif}}
+</div>

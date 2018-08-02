@@ -181,8 +181,7 @@
 
 				getOrdInfo();
 				getFooter();
-				getProdList('online');
-				getProdList('store');
+				getProdList();
 				getPayInfo('N');
 				getAddressInfo();
 			}
@@ -207,6 +206,7 @@
 					status : status,
 					type : type,
 					statusCode : statusCode,
+					ordStatusCode : ordInfo.ordStatusCode,
 					step : step,
 					data : ord,
 					title : title
@@ -216,7 +216,7 @@
 				$('#d_footer').append(footer);
 			}
 
-			function getProdList(option) {
+			function getProdList() {
 				//온라인 주문 상품
 				if (ord.shippingOrdOnlineProdList.length > 0) {
 					var onlineProds = AP.common.getTemplate('my.order.order-detail-prodList', {
@@ -225,6 +225,7 @@
 						reason : reason,
 						statusCode : statusCode,
 						title : title,
+						status : status,
 						step : step,
 						viewYN : viewYN
 					});
@@ -232,38 +233,55 @@
 					$('.online').empty();
 					$('.online').append(onlineProds);
 				}
+
+				if (ord.storePickupOrdOnlineProdList.length > 0) {
+					var takeoutProds = AP.common.getTemplate('my.order.order-detail-prodList', {
+						cnt : ord.storePickupOrdOnlineProdList.length,
+						list : ord.storePickupOrdOnlineProdList,
+						reason : reason,
+						statusCediShipAddressode : statusCode,
+						title : title,
+						step : step,
+						viewYN : viewYN
+					});
+
+					$('.takeout').empty();
+					$('.takeout').append(takeoutProds);
+				}
 			}
 
 			function getPayInfo() {
 				//결제정보
+				$('#payInfo').empty();
 				if (viewYN.payInfo == 'Y') {
 					var payInfo = AP.common.getTemplate('my.order.order-detail-payInfo', {
 						info : ordInfo,
-						data : ordInfo.ordHistEx,
+						payInfo : ord.ordPayResult,
+						ordSavingPoint : ord.ordSavingPoint,
+						data : ord.ordAmt,
 						type : type,
 						step : step,
 						viewYN : viewYN
 					});
 
-					$('#payInfo').empty();
 					$('#payInfo').append(payInfo);
 				}
 			}
 
 			function getAddressInfo(claimYn) {
 				//배송정보
+				$('#shipAddressInfo').empty();
 				if (viewYN.addressInfo == 'Y') {
 					var html = AP.common.getTemplate('my.order.order-detail-shipAddress-info', {
-						data : ord.ordChangeShipAddress,
+						data : claimAddressInfo,
 						payInfo : ord.ordPayExList,
 						status : status,
 						type : type,
-						claimYn : claimYn,
+						claimDate : ordInfo.claimCompleteDt,
 						title : title,
 						statusCode : statusCode
 					});
 
-					$('#shipAddressInfo').empty();
 					$('#shipAddressInfo').append(html);
 				}
 			}
@@ -305,7 +323,7 @@
 				} else if(!chkReasonYn) {
 					return;
 				} else if (statusCode == 'OrdReceivedWaiting' && ordCancelAllYn == 'N') {
-					AP.modal.alert("주문접수대기 상태에서는 전체 " + title + "만 가능합니다." );
+					AP.modal.alert("죄송합니다. 주문접수대기 상태에서는 부분취소가 되지 않으므로, 해당 주문을 전체 취소하신 후 원하는 상품을 다시 결재해 주셔야 합니다.");
 					return;
 				} else {
 					AP.api.reqOrdClaimSelect({
@@ -314,7 +332,6 @@
 					}, JSON.stringify(selectProds)).done(function(data) {
 						ord = data.data;
 						ordInfo = ord.goods;
-						//ord.shippingOrdOnlineProdList = selectProds;
 						step = 'two';
 						init();
 

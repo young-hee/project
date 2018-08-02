@@ -11,7 +11,7 @@
 			<hr class="div m25">
 			<div class="my_point_score cushion">
 				<dl>
-					<dt>홍길동님의 현재 진주알</dt>
+					<dt><th:block th:text="${session.LOGIN_USER.member.name.name1}">홍길동</th:block>님의 현재 진주알</dt>
 					<dd><strong class="num" th:text="${#IntegUtil.toCommaNumber(activityPointInfo.availActivityPoint)}">9,990,000</strong> <span>알</span></dd>
 				</dl>
 			</div>
@@ -32,6 +32,9 @@
 					<div class="coupon_list pearlbf">
 						<th:block th:each="item : ${list}">
 							<div class="coupon" th:if="${item.shipFeeFreeCoupon != null && item.shipFeeFreeCoupon.freeShipBenefitTgtCode != null}">
+								<div class="table_layout">
+									<p class="d_day">D-<th:block th:text="${#IntegUtil.countDate(item.issueEndDt.time)}">7</th:block></p>
+								</div>
 								<div class="table_layout">
 									<div class="benefit type1">
 										<p>배송비</p>

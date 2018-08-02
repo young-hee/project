@@ -21,6 +21,10 @@ import java.util.List;
 public class IntegratedAPIUtils {
 
 	SimpleDateFormat sFormat = new SimpleDateFormat("yyyyMMdd");
+	public String countDate(Date date) {
+		return toString((date.getTime() - System.currentTimeMillis()) / 1000 / 3600 / 24);
+	}
+	
 	public String btCardNumber(MemberSession member) {
 		if(member == null || member.getUser_incsCardNoEc() == null || member.getUser_incsCardNoEc().isEmpty()
 				 || member.getUser_incsCardNoEc().length() != 16) {

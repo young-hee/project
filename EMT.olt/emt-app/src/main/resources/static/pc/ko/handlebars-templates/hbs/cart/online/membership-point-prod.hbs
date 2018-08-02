@@ -14,7 +14,7 @@
 		{{#each cartProdExList}}
 			<div class="item_wrap">
 				<div class="item_info">
-					<input type="hidden" name="onlinePrdSn" value="{{ prodEx.prodSn }}"/>
+					<input type="hidden" name="onlineMembershipPrdSn" value="{{ prodEx.prodSn }}"/>
 					<input type="hidden" name="cartProdSn" value="{{ cartProdSn }}"/>
 					<input type="hidden" name="prdInfo_{{ ../onlineProdSn }}" value="{{ cartProdSn }}"/>
 					<input type="hidden" name="saleDisplayStatus_{{ prodEx.prodSn }}" value="{{ prodEx.saleDisplayStatus }}"/>
@@ -22,7 +22,7 @@
 					<!--/* 상품 선택 */-->
 					<div class="item_thumb">
 						<div class="check_wrap">
-							<input type="checkbox" name="chkBox" id="chkBox{{prodEx.prodSn}}" value="{{../onlineProdSn}}" {{condition (eq ../selectYn 'Y') 'checked' ''}}>
+							<input type="checkbox" name="chkBox" id="chkBox{{prodEx.prodSn}}" value="{{../onlineProdSn}}" {{#if (ne ../saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (eq ../selectYn 'Y') 'checked' ''}}>
 							<label for="chkBox{{prodEx.prodSn}}">
 								{{#xif prodEx.repProdImgEx '!=' null }} <img src="{{ prodEx.repProdImgEx.imgUrl }}" alt=""> {{/xif}}
 								{{#xif prodEx.repProdImgEx '==' null }}

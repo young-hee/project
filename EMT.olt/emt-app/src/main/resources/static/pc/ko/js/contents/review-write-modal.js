@@ -63,8 +63,7 @@
 				validator.destroy();
 			}.bind(this));
 
-			//
-			$modal.find( '.ui_rating' ).rating();
+			$modal.find( '.ui_rating' ).rating().find( '.heart span:last' ).trigger( 'click' );
 			$modal.find( 'textarea, input:text' ).inputLimits();
 			$modal.find( '.ui_input_images' ).inputImages();
 			$modal.find( 'select' ).selectBox();

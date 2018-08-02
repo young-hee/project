@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>[%d] [%5level] [%21thread] [%logger{25}.%M:%line] %msg%n</pattern>
+		</encoder>
+	</appender>
+
+
+	<springProfile name="dev, dstg, prd">
+
+		<springProperty name="LOG_DIR" source="ecp.logging.dir" defaultValue="/data/was/emtinstance/logs" />
+
+		<appender name="FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<file>${LOG_DIR}/emt.log</file>
+			<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+				<!-- rollover daily -->
+				<fileNamePattern>${LOG_DIR}/emt-%d{yyyyMMdd}.%i.log</fileNamePattern>
+				<!-- each file should be at most 50MB, keep 60 days worth of history, but at most 20GB -->
+				<maxFileSize>100MB</maxFileSize>
+				<maxHistory>60</maxHistory>
+				<totalSizeCap>20GB</totalSizeCap>
+			</rollingPolicy>
+			<encoder>
+				<pattern>[%d] [%5level] [%21thread] [%logger{25}.%M:%line] %msg%n</pattern>
+			</encoder>
+		</appender>
+	</springProfile>
+
+	<logger name="org.springframework" level="INFO" />
+	<logger name="kr.ap" level="DEBUG" />
+	<logger name="feign" level="DEBUG" />
+
+	<springProfile name="local, default">
+		<root level="OFF">
+			<appender-ref ref="STDOUT" />
+		</root>
+	</springProfile>
+
+	<springProfile name="dev, dstg, prd">
+		<root level="OFF">
+			<appender-ref ref="FILE_APPENDER" />
+		</root>
+	</springProfile>
+
+</configuration>

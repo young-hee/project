@@ -247,7 +247,7 @@ this["AP"]["handlebars"]["my"]["order"]["orderList"] = Handlebars.template({"1":
     + "\">\n					"
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.claimProdInfo : depth0)) != null ? stack1.prodNameRlang : stack1), depth0))
     + " "
-    + alias3((helpers.checkCnt || (depth0 && depth0.checkCnt) || alias2).call(alias1,"cnt",((stack1 = (depth0 != null ? depth0.claimProdInfo : depth0)) != null ? stack1.totalClaimQty : stack1),{"name":"checkCnt","hash":{},"data":data}))
+    + alias3((helpers.checkCnt || (depth0 && depth0.checkCnt) || alias2).call(alias1,"cnt",((stack1 = (depth0 != null ? depth0.claimProdInfo : depth0)) != null ? stack1.totalProdCnt : stack1),{"name":"checkCnt","hash":{},"data":data}))
     + "\n				</a>\n			</td>\n			<td>"
     + alias3((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordProdInfo : depth0)) != null ? stack1.finalOnlineSaleAmtPcur : stack1),{"name":"currencyFormat","hash":{},"data":data}))
     + "</td>\n			<td class=\"status\">\n				<p><em>"
@@ -280,7 +280,7 @@ this["AP"]["handlebars"]["my"]["order"]["orderList"] = Handlebars.template({"1":
     + "\">\n					"
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.claimProdInfo : depth0)) != null ? stack1.prodNameRlang : stack1), depth0))
     + " "
-    + alias3((helpers.checkCnt || (depth0 && depth0.checkCnt) || alias2).call(alias1,"cnt",((stack1 = (depth0 != null ? depth0.claimProdInfo : depth0)) != null ? stack1.totalClaimQty : stack1),{"name":"checkCnt","hash":{},"data":data}))
+    + alias3((helpers.checkCnt || (depth0 && depth0.checkCnt) || alias2).call(alias1,"cnt",((stack1 = (depth0 != null ? depth0.claimProdInfo : depth0)) != null ? stack1.totalProdCnt : stack1),{"name":"checkCnt","hash":{},"data":data}))
     + "\n				</a>\n			</td>\n			<td>"
     + alias3((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.claimProdInfo : depth0)) != null ? stack1.finalOnlineSaleAmtPcur : stack1),{"name":"currencyFormat","hash":{},"data":data}))
     + "</td>\n			<td class=\"status\">\n				<p><em>"

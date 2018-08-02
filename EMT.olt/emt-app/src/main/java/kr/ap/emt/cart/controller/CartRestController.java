@@ -91,7 +91,7 @@ public class CartRestController extends AbstractController{
 				if (br.isResult()) {
 
 					CartEx ce = cartApi.getCart(cartSn);
-					result.put("data", makeCartEx(ce));
+					result.put("data", makeCartEx2(ce));
 				}
 			}
 
@@ -101,6 +101,38 @@ public class CartRestController extends AbstractController{
 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
 		}
 		return ResponseEntity.ok(result);
+	}
+
+	private CartEx makeCartEx2(CartEx cartEx) {
+
+		/* 온라인쇼핑 상품 */
+		{
+			// 장바구니-배송-온라인상품목록
+			for (CartOnlineProdEx cartOnlineProdEx : cartEx.getCartDeliveryOnlineProdExList()) {
+				for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
+					if (!"OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus())
+						|| "N".equals(cartProdEx.getCalculationResultYn())) {
+						cartOnlineProdEx.setSaleDisplayStatus("NotSelect");
+						break;
+					}
+				}
+			}
+		}
+
+		/* 테이크 아웃 상품 */
+		{
+			// 장바구니매장픽업-온라인상품목록
+			for (CartOnlineProdEx cartOnlineProdEx : cartEx.getCartStorePickupOnlineProdExList()) {
+				for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
+					if (!"OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus())
+						|| "N".equals(cartProdEx.getCalculationResultYn())) {
+						cartOnlineProdEx.setSaleDisplayStatus("NotSelect");
+						break;
+					}
+				}
+			}
+		}
+		return cartEx;
 	}
 
 	private CartEx makeCartEx(CartEx cartEx) {
@@ -356,7 +388,7 @@ public class CartRestController extends AbstractController{
 				BooleanResult br = cartApi.removeCartProd(cartSn, cartProdSn);
 				if (br.isResult()) {
 					CartEx ce = cartApi.getCart(cartSn);
-					result.put("data", makeCartEx(ce));
+					result.put("data", makeCartEx2(ce));
 				}
 			}
 		} catch (Exception e) {
@@ -384,7 +416,7 @@ public class CartRestController extends AbstractController{
 						BooleanResult br = cartApi.removeCartProd(cartSn, Long.parseLong(prdCdArr[i]));
 						if (br.isResult()) {
 							CartEx ce = cartApi.getCart(cartSn);
-							result.put("data", makeCartEx(ce));
+							result.put("data", makeCartEx2(ce));
 						}
 					}
 				}
@@ -395,7 +427,7 @@ public class CartRestController extends AbstractController{
 						BooleanResult br = cartApi.removeCartProd(cartSn, Long.parseLong(takeoutCdArr[i]));
 						if (br.isResult()) {
 							CartEx ce = cartApi.getCart(cartSn);
-							result.put("data", makeCartEx(ce));
+							result.put("data", makeCartEx2(ce));
 						}
 					}
 				}
@@ -438,7 +470,7 @@ public class CartRestController extends AbstractController{
 				}
 			}
 			CartEx ce = cartApi.getCartBySelectCartProds(cartSn, cartProdSnList);
-			result.put("data", makeCartEx(ce));
+			result.put("data", makeCartEx2(ce));
 		} catch (Exception e) {
 			result.put("errorData", e);
 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
@@ -576,7 +608,7 @@ public class CartRestController extends AbstractController{
 					List<ProdInvtEx> prodInvtExList = new ArrayList<>();
 
 					CartEx cartEx = cartApi.getCart(cartSn);
-					makeCartEx(cartEx);
+					makeCartEx2(cartEx);
 
 					// 장바구니매장픽업-온라인상품목록
 					if(!CollectionUtils.isEmpty(cartEx.getCartStorePickupOnlineProdExList())){

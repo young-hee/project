@@ -101,7 +101,7 @@ public class CartViewController extends AbstractController{
 
 		if(cartSn != null){
 			CartEx cartEx = cartApi.getCart(cartSn);
-			makeCartEx(cartEx);
+			makeCartEx2(cartEx);
 			memberSession.setCartSn(cartEx.getCartSn());
 			if(memberSession.getMember_sn() > 0L){
 				model.addAttribute("memberSn", memberSession.getMember_sn());
@@ -111,6 +111,38 @@ public class CartViewController extends AbstractController{
 			return cartEx;
 		}
 		return null;
+	}
+
+	private CartEx makeCartEx2(CartEx cartEx) {
+
+		/* 온라인쇼핑 상품 */
+		{
+			// 장바구니-배송-온라인상품목록
+			for (CartOnlineProdEx cartOnlineProdEx : cartEx.getCartDeliveryOnlineProdExList()) {
+				for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
+					if (!"OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus())
+						|| "N".equals(cartProdEx.getCalculationResultYn())) {
+						cartOnlineProdEx.setSaleDisplayStatus("NotSelect");
+						break;
+					}
+				}
+			}
+		}
+
+		/* 테이크 아웃 상품 */
+		{
+			// 장바구니매장픽업-온라인상품목록
+			for (CartOnlineProdEx cartOnlineProdEx : cartEx.getCartStorePickupOnlineProdExList()) {
+				for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
+					if (!"OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus())
+						|| "N".equals(cartProdEx.getCalculationResultYn())) {
+						cartOnlineProdEx.setSaleDisplayStatus("NotSelect");
+						break;
+					}
+				}
+			}
+		}
+		return cartEx;
 	}
 
 	/**

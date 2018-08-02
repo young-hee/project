@@ -32,7 +32,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/order")
-public class OrderRestController extends AbstractController{
+public class OrderRestController extends OrderBaseController {
 	/** logger setting.. */
 	final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -316,6 +316,10 @@ public class OrderRestController extends AbstractController{
 
 	/**
 	 * 쿠폰정보 적용 및 변경
+	 *
+	 * @param ordSn
+	 * @param memberKeepingCouponSnArr
+	 * @param searchText
 	 * @return
 	 */
 	@PostMapping("/ordReceptChangeCoupon")
@@ -324,26 +328,30 @@ public class OrderRestController extends AbstractController{
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		try {
 			OrdReceptChange body = new OrdReceptChange();
-			List<Long> memberCouponSnList = new ArrayList<Long>();;
-			List<String> inputCouponIdList = new ArrayList<String>();;
-			if(memberKeepingCouponSnArr.length > 0 || StringUtils.isNotBlank(searchText)){
-				/* 보유쿠폰 */
-				if(memberKeepingCouponSnArr.length > 0){
-					for(int i=0; i < memberKeepingCouponSnArr.length; i++){
-						if(memberKeepingCouponSnArr[i] != null){
-							memberCouponSnList.add(Long.valueOf(memberKeepingCouponSnArr[i]));
-						}
+			List<Long> memberCouponSnList = new ArrayList<Long>();
+			List<String> inputCouponIdList = new ArrayList<String>();
+			/* 보유쿠폰 */
+			if (memberKeepingCouponSnArr == null) {
+				//전부 삭제시 'null'로 처리함
+				body.setMemberCouponSnList(null);
+			} else if(memberKeepingCouponSnArr.length > 0){
+				for(int i=0; i < memberKeepingCouponSnArr.length; i++){
+					if(memberKeepingCouponSnArr[i] != null){
+						memberCouponSnList.add(Long.valueOf(memberKeepingCouponSnArr[i]));
 					}
-					body.setMemberCouponSnList(memberCouponSnList);
 				}
-				/* 입력쿠폰 */
-				if(StringUtils.isNotBlank(searchText)){
-					inputCouponIdList.add(searchText);
-					body.setInputCouponIdList(inputCouponIdList);
-				}
-				OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
-				result.put("param", ordRc.getApplyCouponExList());
+				body.setMemberCouponSnList(memberCouponSnList);
 			}
+			/* 입력쿠폰 */
+			if(StringUtils.isNotBlank(searchText)){
+				inputCouponIdList.add(searchText);
+				body.setInputCouponIdList(inputCouponIdList);
+			}
+			OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
+			result.put("applyCouponExList", ordRc.getApplyCouponExList());
+			result.put("ordHistEx", ordRc.getOrdHistEx());
+			result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
+			result.put("apMember", apApi.getMemberInfo(getMemberSn()));
 		} catch (Exception e) {
 			result.put("errorData", e);
 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
@@ -375,7 +383,9 @@ public class OrderRestController extends AbstractController{
 				otfGiftPackingList.add(otfGiftPackingSelect);
 				body.setOtfGiftPackingSelectList(otfGiftPackingList);
 				OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
-				result.put("param", ordRc.getOrdHistEx());
+				result.put("ordHistEx", ordRc.getOrdHistEx());
+				result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
+				result.put("apMember", apApi.getMemberInfo(getMemberSn()));
 			}
 		} catch (Exception e) {
 			result.put("errorData", e);
@@ -383,6 +393,42 @@ public class OrderRestController extends AbstractController{
 		}
 		return ResponseEntity.ok(result);
 	}
+
+	/**
+	 * 뷰티/쿠션포인트사용
+	 *
+	 * @param ordSn
+	 * @param membershipSn
+	 * @param useMembershipPoint
+	 * @return
+	 */
+	@PostMapping("/ordReceptChangePoint")
+	@ResponseBody
+	public ResponseEntity<?> ordReceptChangePoint(Long ordSn, Long membershipSn, int useMembershipPoint){
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		try {
+			OrdReceptChange body = new OrdReceptChange();
+			List<MembershipPointSelect> membershipPointSelectsList = new ArrayList<MembershipPointSelect>();
+			MembershipPointSelect membershipPointSelect = new MembershipPointSelect();
+			if(ordSn != null && membershipSn != null && useMembershipPoint > 0){
+
+				membershipPointSelect.setMembershipSn(membershipSn);
+				membershipPointSelect.setUseMembershipPoint(useMembershipPoint);
+				membershipPointSelectsList.add(membershipPointSelect);
+				body.setMembershipPointSelectList(membershipPointSelectsList);
+
+				OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
+				result.put("ordHistEx", ordRc.getOrdHistEx());
+				result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
+				result.put("apMember", apApi.getMemberInfo(getMemberSn()));
+			}
+		} catch (Exception e) {
+			result.put("errorData", e);
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+		return ResponseEntity.ok(result);
+	}
+
 
 	/**
 	 * 회원정보변경

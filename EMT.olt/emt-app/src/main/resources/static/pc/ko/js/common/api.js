@@ -186,6 +186,9 @@
 		//값 검증.
 		checkKeyAndValue: { path: '/captcha/checkKeyAndValue', method: 'POST' },
 		
+		//리턴 URL임시저장.
+		saveUrl: { path: '/saveUrl', method: 'POST' },
+		
 		/**
 		* 단골 매장 **********************************************************
 		*/
@@ -279,6 +282,22 @@
 		
 		//비회원 인증.
 		noMemberCheckSms: { path: '/my/point/api/noMemberCheckSms', method: 'POST'},
+
+		//진주알 리스트.
+		pearlList: { path: '/my/page/info/pearlAppendList', method: 'GET', dataType: 'html'},
+		pearlListTable: { path: '/my/page/info/pearlAppendListTable', method: 'GET', dataType: 'html'},
+		
+		//뷰티포인트 리스트.
+		beautyPointListFragment: { path: '/my/page/info/beautyPointListFragment', method: 'GET', dataType: 'html'},
+		beautyPointListBodyFragment: { path: '/my/page/info/beautyPointListBodyFragment', method: 'GET', dataType: 'html'},
+		
+		//예상등급 리스트.
+		myLevelListFragment: { path: '/my/page/myLevelListFragment', method: 'GET', dataType: 'html'},
+
+		//쿠션포인트 리스트.
+		cushionPointFragment: { path: '/my/page/cushion/cushionPointFragment', method: 'GET', dataType: 'html'},
+		cushionPointBodyFragment: { path: '/my/page/cushion/cushionPointBodyFragment', method: 'GET', dataType: 'html'},
+          
 
 		//이벤트 참여 현황
 		eventList: { path:'/my/api/getEventList', method: 'GET'},
@@ -765,6 +784,9 @@
 
 		// 포장박스, 쇼핑백 수량 변경
 		ordReceptChangeBag: { path: '/order/ordReceptChangeBag', method: 'POST'},
+
+		// 포인트 사용
+		ordReceptChangePoint: { path: '/order/ordReceptChangePoint', method: 'POST'},
 		
 		// PC 이니시스 결제 데이터 조회
 		inipayReq: { path: '/payment/inipayReq', method: 'POST'},

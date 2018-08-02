@@ -797,9 +797,10 @@ public class MyRestController extends AbstractController {
 	@ResponseBody
 	public ResponseEntity<?> putAddress(@Valid PostAndPutShipAddressInfo ship, String updateYn) {
 
-		System.out.println("putAddress: " + updateYn);
-
 		HashMap<String, Object> result = new HashMap<String, Object>();
+		if ("Y".equalsIgnoreCase(updateYn)) {
+			putMemberAddress(ship.getAddresseeAddress());
+		}
 		try {
 			ShipAddressInfo add = apApi.postShipAddress(getMemberSn(), ship);
 			result.put("result", "success");

@@ -26,6 +26,9 @@
 									<div class="coupon_list">
 										<th:block th:each="item : ${list}">
 											<div class="coupon" th:if="${item.prodDcCoupon != null && item.prodDcCoupon.dcMethodCode != null}"><!--/* 20180420 : 공통 수정 class 변경 */-->
+												<div class="table_layout">
+													<p class="d_day">D-<th:block th:text="${#IntegUtil.countDate(item.issueEndDt.time)}">7</th:block></p>
+												</div>
 												<div class="table_layout"><!--/* 20180420 : 공통 수정 div추가 */-->
 													<div class="item_cont">
 														<p class="discountprice" th:if="${item.prodDcCoupon.dcMethodCode == 'FlatPrice'}"><span th:text="${#IntegUtil.toCommaNumber(item.prodDcCoupon.flatPrice)}">100</span>원 균일가</p>
@@ -41,6 +44,9 @@
 												</div>
 											</div>
 											<div class="coupon" th:if="${item.cartDcCoupon != null && item.cartDcCoupon.dcMethodCode != null}">
+												<div class="table_layout">
+													<p class="d_day">D-<th:block th:text="${#IntegUtil.countDate(item.issueEndDt.time)}">7</th:block></p>
+												</div>
 												<div class="table_layout">
 													<div class="item_cont">
 														<p class="discountprice" th:if="${item.cartDcCoupon.dcMethodCode == 'FlatPrice'}"><span th:text="${#IntegUtil.toCommaNumber(item.cartDcCoupon.flatPrice)}">100</span>원 균일가</p>
@@ -58,6 +64,9 @@
 											</div>
 											<div class="coupon" th:if="${item.mplusnCoupon != null && item.mplusnCoupon.couponMPlusNTypeCode != null}">
 												<div class="table_layout">
+													<p class="d_day">D-<th:block th:text="${#IntegUtil.countDate(item.issueEndDt.time)}">7</th:block></p>
+												</div>
+												<div class="table_layout">
 													<div class="item_cont">
 														<p class="discountprice"><span th:text="${item.mplusnCoupon.baseOrdQty}">N</span>+<span th:text="${item.mplusnCoupon.freeAwardQty}">M</span>증정</p>
 														<p class="condition" th:if="${item.mplusnCoupon.couponMPlusNTypeCode == 'Same'}">동일상품 <span th:text="${item.mplusnCoupon.baseOrdQty}">N</span>개 구매시 <span th:text="${item.mplusnCoupon.freeAwardQty}">M</span>개 추가 증정</p>
@@ -71,6 +80,9 @@
 											</div>
 											<div class="coupon" th:if="${item.cartAwardCoupon != null && item.cartAwardCoupon.sectionTypeCode != null}">
 												<div class="table_layout">
+													<p class="d_day">D-<th:block th:text="${#IntegUtil.countDate(item.issueEndDt.time)}">7</th:block></p>
+												</div>
+												<div class="table_layout">
 													<div class="item_cont">
 														<p class="discountprice">사은품 증정</p>
 														<p class="condition" th:if="${item.cartAwardCoupon.sectionTypeCode == 'Amt'}"><span th:text="${#IntegUtil.toCommaNumber(item.cartAwardCoupon.fromOrdAmt)}">100</span>원 이상 구매 시</p>
@@ -83,6 +95,9 @@
 												</div>
 											</div>
 											<div class="coupon" th:if="${item.buyOneGetCoupon != null && item.buyOneGetCoupon.buy1getDcRate != null}">
+												<div class="table_layout">
+													<p class="d_day">D-<th:block th:text="${#IntegUtil.countDate(item.issueEndDt.time)}">7</th:block></p>
+												</div>
 												<div class="table_layout">
 													<div class="item_cont">
 														<p class="discountprice">Buy1</p>
@@ -116,6 +131,9 @@
 									<div class="coupon_list">
 										<th:block th:each="item : ${list}">
 											<div class="coupon" th:if="${item.shipFeeFreeCoupon != null && item.shipFeeFreeCoupon.freeShipBenefitTgtCode != null}">
+												<div class="table_layout">
+													<p class="d_day">D-<th:block th:text="${#IntegUtil.countDate(item.issueEndDt.time)}">7</th:block></p>
+												</div>
 												<div class="table_layout">
 													<div class="item_cont">
 														<p class="deliveryfree">배송비<br><span>무료</span></p>

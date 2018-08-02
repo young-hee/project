@@ -19,11 +19,11 @@
 
 			this._setPlugin();
 			this._setEvent();
-			this._setRepImage();
 			this._setSlide();
 			this._setRemainTimer();
 			this._setOrderQty();
 			this._setSelectOption();
+			this._setRepImage();
 
 			if ( !data.linePromoDesc && !data.lineDesc ) {
 				this._$target.find( '.s_title' ).remove();
@@ -84,11 +84,14 @@
 
 		// 대표이미지 설정
 		_setRepImage: function () {
-			if( this._data.prodListUnitCode == 'OnlineProd' ) {
-				var repImg = this._data.onlineProdImages[this._data.repImgNo];
-				if ( repImg ) {
-					this._$target.find( '.first_img img' ).attr( 'src', repImg.imgUrl );
-				}
+			var repImg = '';
+			if ( this._data.prodListUnitCode == 'OnlineProd' ) {
+				repImg = this._data.onlineProdImages[this._data.repImgNo - 1];
+			} else {
+				repImg = this._data.products[0].prodImages[this._data.products[0].repImgNo - 1];
+			}
+			if ( repImg ) {
+				this._$target.find( '.first_img img' ).attr( 'src', repImg.imgUrl );
 			}
 		},
 

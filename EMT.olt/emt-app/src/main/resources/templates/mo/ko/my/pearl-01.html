@@ -132,29 +132,46 @@
 			    	$(".pbody").remove();
 					$(".entry-point:last").after(progress);
 					date = e.date;
-					$.get("/my/page/info/pearlAppendList?pageNumber=" + pageNumber + "&startDt="+date.startDate + "&endDt="+date.endDate, function(data) {
-						$("#m-loading").remove();
+					AP.api.pearlList({}, {
+							pageNumber:pageNumber,
+							startDt:date.startDate,
+							endDt:date.endDate
+					}).done(function(data) {
 						$(".entry-point").after(data);
 						$('.btn_lg_more em').text($('.point-item').size());
-					});
+						
+	                }).fail(function(xhr, textStatus, errorThrown) {
+	                	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	                }).always(function() {
+	                    //성공, 실패
+						$("#m-loading").remove();
+	                });
 				});
 
 				function more() {
 					pageNumber++;
 					$(".pearl-table:last").after(progress);
-					if(date)
-						$.get("/my/page/info/pearlAppendListTable?pageNumber=" + pageNumber + "&startDt="+date.startDate + "&endDt="+date.endDate, function(data) {
-							$("#m-loading").remove();
-							$(".pearl-table:last").after(data);
-							$('.btn_lg_more em').text($('.point-item').size());
-						});
-					else
-						$.get("/my/page/info/pearlAppendListTable?pageNumber=" + pageNumber, function(data) {
-							$("#m-loading").remove();
-							$(".pearl-table:last").after(data);
-							$('.btn_lg_more em').text($('.point-item').size());
-						});
+			    	var startDtVal = null;
+			    	var endDtVal = null;
+			    	if(date != null) {
+			    		startDtVal = date.startDate;
+			    		endDtVal = date.endDate;
+			    	}
+					AP.api.pearlListTable({}, {
+							pageNumber:pageNumber,
+							startDt:startDtVal,
+							endDt:endDtVal
+					}).done(function(data) {
+
+						$(".pearl-table:last").after(data);
+						$('.btn_lg_more em').text($('.point-item').size());
 						
+	                }).fail(function(xhr, textStatus, errorThrown) {
+	                	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	                }).always(function() {
+						$("#m-loading").remove();
+	                    //성공, 실패
+	                });
 				}
 				function present() {
 

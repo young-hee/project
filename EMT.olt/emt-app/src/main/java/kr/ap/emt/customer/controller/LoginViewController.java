@@ -10,7 +10,7 @@ import kr.ap.comm.support.constants.SessionKey;
 import kr.ap.comm.util.CookieUtils;
 import kr.ap.comm.util.G1SecureRandom;
 import kr.ap.emt.customer.vo.ParamValue;
-import kr.ap.emt.order.vo.MyOrdInfoDTO;
+import kr.ap.emt.my.vo.MyOrdInfoDTO;
 import net.g1project.ecp.api.model.ap.ap.ApLogoutInfo;
 import net.g1project.ecp.api.model.order.order.OrdEx;
 
@@ -90,7 +90,9 @@ public class LoginViewController extends AbstractController {
 	@GetMapping("/kakaocallback")
 	public String kakaocallback(Model model, HttpServletRequest request, String code) {
 		logger.info("KAKAOSTART");
-		Map<String, String> result = captchaAPI.getKakaoToken(code, request.getRequestURL().toString(), appId, secret);
+		String returl = (String) WebUtils.getSessionAttribute(request, SessionKey.RETURL);
+		WebUtils.setSessionAttribute(request, SessionKey.RETURL, null);
+		Map<String, String> result = captchaAPI.getKakaoToken(code, returl, appId, secret);
 		model.addAttribute("id", result.get("id"));
 		model.addAttribute("token", result.get("token"));
     	return "/customer/kakaoLogin";

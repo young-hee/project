@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -160,7 +161,7 @@ public class MyPointViewController extends AbstractController {
 	@FragmentPage
 	public String beautyPointListBodyFragment(Model model, String pageNumber, String startDt, String endDt) {
 		
-		if(startDt != null && endDt != null && !startDt.equals("undefined") && !endDt.equals("undefined")) {
+		if(startDt != null && endDt != null && !startDt.isEmpty() && !endDt.isEmpty()) {
 			endDt = endDt.replace("-", "");
 			startDt = startDt.replace("-", "");
 		} else if(isMobileDevice()) {
@@ -501,7 +502,7 @@ public class MyPointViewController extends AbstractController {
 		SimpleDateFormat dateformat = (SimpleDateFormat) DATE_FORMAT.clone();
 		if(isMobileDevice()) {
 			ActivityPointHists activityPoint = null;
-			if(startDt != null && endDt != null) {
+			if(startDt != null && endDt != null && !startDt.isEmpty() && !endDt.isEmpty()) {
 				Calendar c = Calendar.getInstance();
 				Date d = dateformat.parse(endDt);
 				c.setTime(d);
@@ -524,7 +525,7 @@ public class MyPointViewController extends AbstractController {
 		if(isPcDevice()) {
 			List<ActivityPointGift> pointGiftList = pointApi.getActivityPointGift(getMemberSn(), "S", "Y", 0, 100);
 			model.addAttribute("pointGiftList", pointGiftList);
-			if(startDt != null && endDt != null) {
+			if(startDt != null && endDt != null && !startDt.isEmpty() && !endDt.isEmpty()) {
 				Calendar c = Calendar.getInstance();
 				Date d = dateformat.parse(endDt);
 				c.setTime(d);
@@ -556,7 +557,7 @@ public class MyPointViewController extends AbstractController {
 		if(isMobileDevice()) {
 
 			ActivityPointHists activityPoint = null;
-			if(startDt != null && endDt != null) {
+			if(startDt != null && endDt != null && !startDt.isEmpty() && !endDt.isEmpty()) {
 				Calendar c = Calendar.getInstance();
 				Date d = dateformat.parse(endDt);
 				c.setTime(d);
@@ -579,7 +580,7 @@ public class MyPointViewController extends AbstractController {
 		if(isPcDevice()) {
 			List<ActivityPointGift> pointGiftList = pointApi.getActivityPointGift(getMemberSn(), "S", "Y", 0, 100);
 			model.addAttribute("pointGiftList", pointGiftList);
-			if(startDt != null && endDt != null) {
+			if(startDt != null && endDt != null && !startDt.isEmpty() && !endDt.isEmpty()) {
 				Calendar c = Calendar.getInstance();
 				Date d = dateformat.parse(endDt);
 				c.setTime(d);
@@ -672,6 +673,7 @@ public class MyPointViewController extends AbstractController {
 	public String cushion(Model model) {
 		Calendar c = Calendar.getInstance();
 		String onOffNum = getMemberSession().getUser_incsNo();
+		onOffNum = "200002784";
 		try {
 			CustCushinPoint cushin = posService.getCustCushinPoint(getMemberSession().getUser_incsNo());
 			model.addAttribute("cushin", cushin);
@@ -715,9 +717,10 @@ public class MyPointViewController extends AbstractController {
 		Calendar c = Calendar.getInstance();
 		SimpleDateFormat format = (SimpleDateFormat) DATE_FORMAT.clone();
 		String onOffNum = getMemberSession().getUser_incsNo();
+		onOffNum = "200002784";
 		
 		if(isMobileDevice()) {
-			if(startDt == null || endDt == null) {
+			if(startDt == null || endDt == null || startDt.isEmpty() || endDt.isEmpty()) {
 				c.add(Calendar.MONTH, -1);
 				CustCushinUseList listVo = posService.getCustCushinUseDetailList(onOffNum, c.getTime(), new Date(), 1, 10000);
 				if(!"FAIL".equals(listVo.getRsltCd()))
@@ -747,7 +750,7 @@ public class MyPointViewController extends AbstractController {
 			return "my/fragment/cushion-point-fragment";
 		}
 		if(isPcDevice()) {
-			if(startDt == null || endDt == null) {
+			if(startDt == null || endDt == null || startDt.isEmpty() || endDt.isEmpty()) {
 				c.add(Calendar.YEAR, -20);
 				CustCushinUseList listVo = posService.getCustCushinUseDetailList(onOffNum, c.getTime(), new Date(), 1, 10000);
 				if(!"FAIL".equals(listVo.getRsltCd()))
@@ -785,9 +788,10 @@ public class MyPointViewController extends AbstractController {
 		Calendar c = Calendar.getInstance();
 		SimpleDateFormat format = (SimpleDateFormat) DATE_FORMAT.clone();
 		String onOffNum = getMemberSession().getUser_incsNo();
+		onOffNum = "200002784";
 		
 		if(isMobileDevice()) {
-			if(startDt == null || endDt == null) {
+			if(startDt == null || endDt == null || startDt.isEmpty() || endDt.isEmpty()) {
 				c.add(Calendar.MONTH, -1);
 				CustCushinUseList listVo = posService.getCustCushinUseDetailList(onOffNum, c.getTime(), new Date(), (pageNumber - 1) * M_PAGE_SIZE + 1, pageNumber * M_PAGE_SIZE);
 				calculSum(model, listVo, 1);
@@ -804,7 +808,7 @@ public class MyPointViewController extends AbstractController {
 			return "my/fragment/cushion-point-body";
 		}
 		if(isPcDevice()) {
-			if(startDt == null || endDt == null) {
+			if(startDt == null || endDt == null || startDt.isEmpty() || endDt.isEmpty()) {
 				c.add(Calendar.YEAR, -20);
 				CustCushinUseList listVo = posService.getCustCushinUseDetailList(onOffNum, c.getTime(), new Date(), (pageNumber - 1) * P_PAGE_SIZE + 1, pageNumber * P_PAGE_SIZE);
 				model.addAttribute("listVo", listVo.getCushinList());

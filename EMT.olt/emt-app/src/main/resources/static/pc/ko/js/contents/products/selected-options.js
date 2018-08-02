@@ -181,7 +181,7 @@
 			} else if( product.membershipExchOnly === 'Y' ) { //뷰티 포인트
 				return product.exchMembershipPoint;
 			} else {
-				return AP.common.availablePrices( product.availablePrices, 'onlineSalePrice' );
+				return AP.common.availablePrices( product.availablePrices, 'finalOnlinePrice' );
 			}
 		},
 

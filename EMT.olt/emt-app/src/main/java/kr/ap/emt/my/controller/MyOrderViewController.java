@@ -1,19 +1,12 @@
 package kr.ap.emt.my.controller;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.ap.comm.config.interceptor.PageTitle;
-import kr.ap.emt.order.vo.MyOrdInfoDTO;
-import kr.ap.emt.order.vo.OrdOnlineProdFoDTO;
+import kr.ap.emt.my.vo.MyOrdInfoDTO;
 import kr.ap.comm.support.common.AbstractController;
 import net.g1project.ecp.api.model.order.order.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 나의 주문 관리
@@ -39,8 +32,6 @@ public class MyOrderViewController extends AbstractController {
 
 		return myOrderManage(model, "online");
 	}
-
-
 
 	@GetMapping("/order/online/{ordNo}")
 	@PageTitle(title = "온라인 주문상세")

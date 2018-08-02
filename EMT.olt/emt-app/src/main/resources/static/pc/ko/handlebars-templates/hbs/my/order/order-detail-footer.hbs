@@ -2,12 +2,14 @@
 	<div class="page_btns pdt40">
 		{{#xif (eq this.type 'online') '||' (eq this.type 'store')}}
 			<div class="page_btns pdt40">
-				{{#if (or (eq this.statusCode 'OrdReceivedWaiting') (eq this.statusCode 'OrdReceivedComplete'))}}
-					{{#if this.data.shippingOrdOnlineProdList}}
-						<button class="btn_lg_bordered" type="button" onclick="chgStatus('cancel')">온라인 쇼핑 취소</button>
-					{{/if}}
-					{{#if this.data.storePickupOrdOnlineProdList}}
-						<button class="btn_lg_bordered" type="button" onclick="chgStatus('cancel')">테이크아웃 쇼핑 취소</button>
+				{{#if (or (eq this.ordStatusCode 'OrdReceivedWaiting') (eq this.ordStatusCode 'OrdReceivedComplete'))}}
+					{{#if (ne this.ordStatusCode 'OrdAllCancel')}}
+						{{#if this.data.shippingOrdOnlineProdList}}
+							<button class="btn_lg_bordered" type="button" onclick="chgStatus('cancel')">온라인 쇼핑 취소</button>
+						{{/if}}
+						{{#if this.data.storePickupOrdOnlineProdList}}
+							<button class="btn_lg_bordered" type="button" onclick="chgStatus('cancel')">테이크아웃 쇼핑 취소</button>
+						{{/if}}
 					{{/if}}
 				{{/if}}
 				{{#if (eq this.statusCode 'OrdHandlingComplete')}}

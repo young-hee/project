@@ -11,7 +11,7 @@
 			<hr class="div m25">
 			<div class="my_point_score cushion">
 				<dl>
-					<dt>홍길동님의 현재 진주알</dt>
+					<dt><th:block th:text="${session.LOGIN_USER.member.name.name1}">홍길동</th:block>님의 현재 진주알</dt>
 					<dd><strong class="num" th:text="${#IntegUtil.toCommaNumber(activityPointInfo.availActivityPoint)}">9,990,000</strong> <span>알</span></dd>
 				</dl>
 			</div>
@@ -33,6 +33,9 @@
 
 							<th:block th:each="item : ${list}">
 								<div class="coupon" th:if="${item.prodDcCoupon != null && item.prodDcCoupon.dcMethodCode != null}"><!--/* 20180420 : 공통 수정 class 변경 */-->
+									<div class="table_layout">
+										<p class="d_day">D-<th:block th:text="${#IntegUtil.countDate(item.issueEndDt.time)}">7</th:block></p>
+									</div>
 									<div class="table_layout"><!--/* 20180420 : 공통 수정 div추가 */-->
 										<div class="benefit type3">
 											<p class="discountprice" th:if="${item.prodDcCoupon.dcMethodCode == 'FlatPrice'}"><span th:text="${#IntegUtil.toCommaNumber(item.prodDcCoupon.flatPrice)}">100</span>원 균일가</p>
@@ -49,6 +52,9 @@
 								</div>
 								<div class="coupon" th:if="${item.cartDcCoupon != null && item.cartDcCoupon.dcMethodCode != null}">
 									<div class="table_layout">
+										<p class="d_day">D-<th:block th:text="${#IntegUtil.countDate(item.issueEndDt.time)}">7</th:block></p>
+									</div>
+									<div class="table_layout">
 										<div class="benefit type3">
 											<p class="discountprice" th:if="${item.cartDcCoupon.dcMethodCode == 'FlatPrice'}"><span th:text="${#IntegUtil.toCommaNumber(item.cartDcCoupon.flatPrice)}">100</span>원 균일가</p>
 											<p class="discountprice" th:if="${item.cartDcCoupon.dcMethodCode == 'FixedAmt'}"><span th:text="${#IntegUtil.toCommaNumber(item.cartDcCoupon.dcAmt)}">100</span>원 할인</p>
@@ -64,6 +70,9 @@
 								</div>
 								<div class="coupon" th:if="${item.mplusnCoupon != null && item.mplusnCoupon.couponMPlusNTypeCode != null}">
 									<div class="table_layout">
+										<p class="d_day">D-<th:block th:text="${#IntegUtil.countDate(item.issueEndDt.time)}">7</th:block></p>
+									</div>
+									<div class="table_layout">
 										<div class="benefit type3">
 											<p class="discountprice"><span th:text="${item.mplusnCoupon.baseOrdQty}">N</span>+<span th:text="${item.mplusnCoupon.freeAwardQty}">M</span>증정</p>
 											<p class="condition" th:if="${item.mplusnCoupon.couponMPlusNTypeCode == 'Same'}">동일상품 <span th:text="${item.mplusnCoupon.baseOrdQty}">N</span>개 구매시 <span th:text="${item.mplusnCoupon.freeAwardQty}">M</span>개 추가 증정</p>
@@ -77,6 +86,9 @@
 								</div>
 								<div class="coupon" th:if="${item.cartAwardCoupon != null && item.cartAwardCoupon.sectionTypeCode != null}">
 									<div class="table_layout">
+										<p class="d_day">D-<th:block th:text="${#IntegUtil.countDate(item.issueEndDt.time)}">7</th:block></p>
+									</div>
+									<div class="table_layout">
 										<div class="benefit type3">
 											<p class="discountprice">사은품 증정</p>
 											<p class="condition" th:if="${item.cartAwardCoupon.sectionTypeCode == 'Amt'}"><span th:text="${#IntegUtil.toCommaNumber(item.cartAwardCoupon.fromOrdAmt)}">100</span>원 이상 구매 시</p>
@@ -89,6 +101,9 @@
 									</div>
 								</div>
 								<div class="coupon" th:if="${item.buyOneGetCoupon != null && item.buyOneGetCoupon.buy1getDcRate != null}">
+									<div class="table_layout">
+										<p class="d_day">D-<th:block th:text="${#IntegUtil.countDate(item.issueEndDt.time)}">7</th:block></p>
+									</div>
 									<div class="table_layout">
 										<div class="benefit type3">
 											<p class="discountprice">Buy1</p>

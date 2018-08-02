@@ -122,6 +122,7 @@ public class MyBenefitViewController extends AbstractController {
 	public String myReviewList(Model model) {
 
 		String onOffNum = getMemberSession().getMember().getPosMemberIdentifier();
+		onOffNum = "17217245";
 		//회원등급정보
 		CustCstmAmt custCstmAmt = null;
 		try {
@@ -227,6 +228,7 @@ public class MyBenefitViewController extends AbstractController {
 	@FragmentPage
 	public String myReviewList(Model model, Integer pageNumber, String startDt, String endDt, String searchGbn) throws ParseException {
 		String onOffNum = getMemberSession().getMember().getPosMemberIdentifier();
+		onOffNum = "17217245";
 		if(pageNumber == null) pageNumber = 1;
 		
 		if(searchGbn == null) searchGbn = "ALL";

@@ -5,6 +5,7 @@
 	{{#xif singleProdYn '==' 'Y'}}
 
 		{{#each cartProdExList}}
+
 		<div class="item_info">
 			<input type="hidden" name="takeoutPrdSn" value="{{prodEx.prodSn}}"/>
 			<input type="hidden" name="cartProdSn" value="{{cartProdSn}}"/>
@@ -13,7 +14,7 @@
 			<!--/* 상품 선택 */-->
 			<div class="item_thumb">
 				<div class="check_wrap">
-					<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{prodEx.prodSn}}" value="{{../onlineProdSn}}" {{condition (eq ../selectYn 'Y') 'checked' ''}}>
+					<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{prodEx.prodSn}}" value="{{../onlineProdSn}}" {{#if (ne ../saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (eq ../selectYn 'Y') 'checked' ''}}>
 					<label for="takeoutChkBox{{prodEx.prodSn}}">
 						{{!-- 이미지 순위선정 : 1.단위상품 > 2.온라인상품 > noImage --}}
 						{{#xif prodEx.repProdImgEx '!=' null }} <img src="{{ prodEx.repProdImgEx.imgUrl }}" alt=""> {{/xif}}
@@ -75,31 +76,54 @@
 
 			<!--/* 포인트 및 가격 */-->
 			<div class="price">
-				{{#if (eq prodEx.saleDisplayStatus 'OnSale') }}
-					{{#if (and (eq calculationResultYn 'Y')(ne calculationResultProduct.finalOnlineSalesAmountInfo null) ) }}
-						<span class="strong"><b>{{numberFormat calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}</b>원</span>
-					{{/if}}
-					{{#if (and (eq calculationResultYn 'N')(ne prodEx.salePrice null) ) }}
-						<span class="strong"><b>{{ calc prodEx.salePrice '*' cartProdQty }}</b>원</span>
-					{{/if}}
-					{{#if (and (eq calculationResultYn 'Y')(ne calculationResultProduct.productSaleAmountInfo null)
-							(ne calculationResultProduct.productSaleAmountInfo.standardCurrency.amount calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount) ) }}
-						<del><b>{{numberFormat calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}</b>원</del>
-					{{/if}}
-				{{/if}}
+				{{#xif prodEx.saleDisplayStatus '==' 'OnSale' }}
+					{{#xif this.calculationResultYn '==' 'Y'}}
+						{{#xif this.calculationResultProduct.finalOnlineSalesAmountInfo '!=' null }}
+							<span class="strong"><b>{{numberFormat this.calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}</b>원</span>
+						{{/xif}}
+						{{#xif this.calculationResultProduct.productSaleAmountInfo '!=' null }}
+							{{#xif this.calculationResultProduct.productSaleAmountInfo.standardCurrency.amount '!=' this.calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}
+								<del><b>{{numberFormat this.calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}</b>원</del>
+							{{/xif}}
+						{{/xif}}
+					{{/xif}}
+					{{#xif this.calculationResultYn '==' 'N'}}
+						{{#xif this.prodEx.salePrice '!=' null }}
+							<span class="strong"><b>{{numberFormat (calc this.prodEx.salePrice '*' this.cartProdQty) }}</b>원</span>
+						{{/xif}}
+					{{/xif}}
+				{{/xif}}
 				{{#if (and (eq prodEx.saleDisplayStatus 'OutOfStock')(ne prodEx.prodTypeCode 'Presale'))}}
 					<em>[일시품절]</em>
 				{{/if}}
 				{{#if (and (eq prodEx.saleDisplayStatus 'Exhaustion')(eq prodEx.prodTypeCode 'Presale'))}}
 					<em>[예약판매수량소진]</em>
 				{{/if}}
+				{{#if (eq prodEx.saleDisplayStatus 'WaitingSale') }}
+					<em>[판매대기]</em>
+				{{/if}}
+				{{#if (eq prodEx.saleDisplayStatus 'EndSale') }}
+					<em>[판매종료]</em>
+				{{/if}}
+				{{#if (eq prodEx.saleDisplayStatus 'SuspendSale') }}
+					<em>[판매일시중지]</em>
+				{{/if}}
+				{{#if (eq prodEx.saleDisplayStatus 'WaitingDisplay') }}
+					<em>[전시대기]</em>
+				{{/if}}
+				{{#if (eq prodEx.saleDisplayStatus 'EndDisplay') }}
+					<em>[전시종료]</em>
+				{{/if}}
+				{{#if (eq prodEx.saleDisplayStatus 'PermanentEnd') }}
+					<em>[영구종료]</em>
+				{{/if}}
 			</div>
-
 			<!--/* 구매/삭제 버튼 */-->
 			<div class="btns">
 				<button type="button" class="btn_sm_bordered" onclick="removeCartProd('{{ ../../cartSn }}', '{{cartProdSn}}')">삭제</button>
 			</div>
 		</div>
+
 		{{#xif cartProdAwardList.length '>' 0 }}
 			<ul class="freebies">
 				{{#each cartProdAwardList}}
@@ -116,7 +140,6 @@
 			</ul>
 		{{/xif}}
 		{{/each}}
-
 	{{/xif}}
 
 	<!--/* 그룹상품 */-->
@@ -126,7 +149,7 @@
 			<!--/* 상품 선택 */-->
 			<div class="item_thumb">
 				<div class="check_wrap">
-					<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{ onlineProdSn }}" value="{{ onlineProdSn }}" {{condition (eq selectYn 'Y') 'checked' ''}}>
+					<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{ onlineProdSn }}" value="{{ onlineProdSn }}" {{#if (ne saleDisplayStatus 'OnSale') }}disabled{{/if}} {{condition (eq selectYn 'Y') 'checked' ''}}>
 					<label for="takeoutChkBox{{ onlineProdSn }}">
 						{{#if repOnlineProdImgEx}}
 							<img src="{{ repOnlineProdImgEx.imgUrl }}" alt="">
@@ -230,10 +253,28 @@
 						{{#if (and (eq prodEx.saleDisplayStatus 'Exhaustion')(eq prodEx.prodTypeCode 'Presale'))}}
 							<em>[예약판매수량소진]</em>
 						{{/if}}
+						{{#if (eq prodEx.saleDisplayStatus 'WaitingSale') }}
+							<em>[판매대기]</em>
+						{{/if}}
+						{{#if (eq prodEx.saleDisplayStatus 'EndSale') }}
+							<em>[판매종료]</em>
+						{{/if}}
+						{{#if (eq prodEx.saleDisplayStatus 'SuspendSale') }}
+							<em>[판매일시중지]</em>
+						{{/if}}
+						{{#if (eq prodEx.saleDisplayStatus 'WaitingDisplay') }}
+							<em>[전시대기]</em>
+						{{/if}}
+						{{#if (eq prodEx.saleDisplayStatus 'EndDisplay') }}
+							<em>[전시종료]</em>
+						{{/if}}
+						{{#if (eq prodEx.saleDisplayStatus 'PermanentEnd') }}
+							<em>[영구종료]</em>
+						{{/if}}
 						<button type="button" class="btn_sm_neutral" onclick="fnUnitVariationProds('{{ ../../cartSn}}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}','{{ cartProdQty }}','{{ storePickupYn }}')">옵션변경</button>
 					</div>
 					<div class="delete">
-						<button type="button" class="btn_delete" onclick="removeCartProd('{{ ../../cartSn}}', '{{ cartProdSn }}')"><span class="sr_only">옵션 삭제</span></button>
+						<button type="button" class="btn_delete" onclick="removeCartProd('{{ ../../cartSn}}', '{{ cartProdSn }}')"><span class="sr_only">삭제</span></button>
 					</div>
 				</li>
 			</ul>
@@ -253,7 +294,6 @@
 				</ul>
 			{{/xif}}
 		{{/each}}
-
 	{{/xif}}
 </div>
 {{/each}}

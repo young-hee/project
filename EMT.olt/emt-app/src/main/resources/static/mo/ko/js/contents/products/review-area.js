@@ -59,7 +59,7 @@
 
 			this._etcList = new AP.ReviewList( this._$target.find('.etc_review'), {
 				onlineProdSn: this._defaultModel.onlineProdSn,
-				limit: 5
+				limit: 8
 			});
 
 			//리뷰필터 열기

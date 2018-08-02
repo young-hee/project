@@ -1,5 +1,7 @@
-package kr.ap.emt.order.vo;
+package kr.ap.emt.my.vo;
 
+import kr.ap.emt.order.controller.OrderBaseController;
+import kr.ap.emt.order.vo.OrdOnlineProdFoDTO;
 import net.g1project.ecp.api.model.order.order.*;
 
 import java.lang.reflect.Field;
@@ -42,14 +44,36 @@ public class MyOrdInfoDTO {
 	private String repGoods;
 
 	// 금액
-	private OrdPaymentResultDTO paymentResult;
+	private MyOrdAmt ordAmt;
 
-	public OrdPaymentResultDTO getPaymentResult() {
-		return paymentResult;
+	// 결제금액
+	private MyOrdPayResult ordPayResult;
+
+	// 주문적립 포인트
+	private Map<String, Integer> ordSavingPoint;
+
+	public Map<String, Integer> getOrdSavingPoint() {
+		return ordSavingPoint;
 	}
 
-	public void setPaymentResult(OrdPaymentResultDTO paymentResult) {
-		this.paymentResult = paymentResult;
+	public void setOrdSavingPoint(Map<String, Integer> ordSavingPoint) {
+		this.ordSavingPoint = ordSavingPoint;
+	}
+
+	public MyOrdPayResult getOrdPayResult() {
+		return ordPayResult;
+	}
+
+	public void setOrdPayResult(MyOrdPayResult ordPayResult) {
+		this.ordPayResult = ordPayResult;
+	}
+
+	public void setOrdAmt(MyOrdAmt ordAmt) {
+		this.ordAmt = ordAmt;
+	}
+
+	public MyOrdAmt getOrdAmt() {
+		return ordAmt;
 	}
 
 	public String getRepGoods() {
@@ -131,6 +155,8 @@ public class MyOrdInfoDTO {
 		state = null;
 		this.goods = ordEx;
 
+		makeOrdSavingPoint(ordEx.getOrdHistEx().getOrdSavingPointList());
+		makeOrdPayResult(ordEx.getOrdHistEx().getOrdPayExList());
 		makeOrdAmt(ordEx.getOrdHistEx().getOrdHistAmtExList());
 		setMembership(ordEx.getOrdMembershipExList());
 		makeGoods(ordEx.getOrdShipAddressExList());
@@ -141,7 +167,9 @@ public class MyOrdInfoDTO {
 		this.state = state;
 		this.goods = ordEx;
 
-		makeOrdAmt(ordEx.getOrdHistEx().getOrdHistAmtExList());
+		makeOrdSavingPoint(ordEx.getOrdHistEx().getOrdSavingPointList());
+		makeOrdPayResult(ordEx.getOrdHistEx().getOrdPayExList());
+		makeOrdAmt(ordEx.getOrdHistAmtCompareList());
 		setMembership(ordEx.getOrdMembershipExList());
 		makeGoods(ordEx.getOrdShipAddressExList());
 	}
@@ -154,6 +182,8 @@ public class MyOrdInfoDTO {
 		OrdOnlineProdFoDTO dto = new OrdOnlineProdFoDTO();
 		dto.setOrdHistProdList(c.getOrdHistEx().getOrdHistProdExList());
 
+		makeOrdSavingPoint(c.getOrdHistEx().getOrdSavingPointList());
+		makeOrdPayResult(c.getOrdHistEx().getOrdPayExList());
 		makeOrdAmt(c.getOrdHistAmtCompareList());
 		setMembership(c.getOrdMembershipExList());
 		makeGoods(c.getOrdShipAddressExList());
@@ -277,9 +307,23 @@ public class MyOrdInfoDTO {
 		/* 4.주문정보 세팅 */
 	}
 
+	private void makeOrdPayResult(List<OrdPayEx> ordPay) {
+		ordPayResult = new MyOrdPayResult(ordPay);
+	}
+
 	private void makeOrdAmt(List payment) {
 
-		paymentResult = new OrdPaymentResultDTO(payment);
+		ordAmt = new MyOrdAmt(payment);
+	}
+
+	private void makeOrdSavingPoint(List<OrdSavingPoint> point) {
+
+		ordSavingPoint = new HashMap<>();
+		if (point != null && point.size() > 0) {
+			for (OrdSavingPoint p : point) {
+				ordSavingPoint.put(p.getPointTypeCode(), p.getTotalSavingPoint());
+			}
+		}
 	}
 
 	/* 온라인상품 목록 세팅*/

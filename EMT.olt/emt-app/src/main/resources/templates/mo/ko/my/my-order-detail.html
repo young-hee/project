@@ -28,8 +28,18 @@
 			</div>
 
 			<!--/* 결제정보 */-->
-			<div class="panel_box payment">
+			<div class="panel_box payment" style="display: none">
 
+			</div>
+
+			<!--/*상품회수 방법*/-->
+			<div class="panel_box" id="rePanelBox" style="display: none">
+				<div class="title table_layout">
+					<div><b class="font_lg" id="rePanelBoxText"></b></div>
+				</div>
+				<div class="panel padding15">
+					<p>에뛰드하우스 전용 택배사 이용</p>
+				</div>
 			</div>
 
 			<!--/* 배송정보 */-->
@@ -114,9 +124,21 @@
 			setOrdInfo();
 			setOnlineTake();
 			setOrdShipAddress();
+			setREPanelBox();
 			setOrdPayment();
 
 			checkboxStepType();
+
+
+		}
+
+		function setREPanelBox() {
+			if (claimYn === 'Y' && (type === 'return' || type === 'exchange')) {
+				if (null !== customOrd.goods.claimRequestDt) {
+					$('#rePanelBox').show();
+					$('#rePanelBoxText').text((type === 'return') ? '상품 반품 회수 방법' : '상품 교환 회수 방법');
+				}
+			}
 		}
 
 		function setOrdInfo() {
@@ -152,7 +174,9 @@
 					type : type,
 					step : step,
 					claimYn : claimYn,
-					status : status
+					status : status,
+					typeName : getTypeName(1)
+
 				});
 
 				$('.online').empty();
@@ -167,7 +191,9 @@
 					reason : reason,
 					type : type,
 					step : step,
-					claimYn : claimYn
+					claimYn : claimYn,
+					status : status,
+					typeName : getTypeName(1)
 				});
 
 				$('.takeout').empty();
@@ -200,19 +226,30 @@
 		}
 
 		function setOrdPayment() {
-			if (customOrd.goods) {
-				var html = AP.common.getTemplate('my.order.order-detail-payment', {
-					data : customOrd.goods.ordHistEx,
-					step : step,
-					type : type,
-					compareList : customOrd.goods.ordPayCompareList,
-					pr : customOrd.paymentResult
-				});
+			if (type === 'exchange') {
+				$('.panel_box.payment').hide();
+			}
+			else {
+				console.log(customOrd.ordSavingPoint);
+				if (customOrd.goods) {
+					var html = AP.common.getTemplate('my.order.order-detail-payment', {
+						data : customOrd.goods.ordHistEx,
+						step : step,
+						type : type,
+						compareList : customOrd.goods.ordPayCompareList,
+						ordAmt : customOrd.ordAmt,
+						claimYn : claimYn,
+						claim : (claimYn === 'Y') || (step == 2),
+						ordPayResult : customOrd.ordPayResult,
+						point : customOrd.ordSavingPoint
+					});
 
-				$('.panel_box.payment').empty();
-				$('.panel_box.payment').append(html);
+					$('.panel_box.payment').show();
+					$('.panel_box.payment').empty();
+					$('.panel_box.payment').append(html);
 
-				$( '.ui_tooltip' ).tooltip();
+					$( '.ui_tooltip' ).tooltip();
+				}
 			}
 		}
 
@@ -227,7 +264,7 @@
 				if (step == 1) {
 					$('.check_wrap.check_only').show();
 					$('#allCheck').show();
-					$('#checkSub').text(" " + getTypeName() + '하실 상품을 선택해 주세요.');
+					$('#checkSub').text(" " + getTypeName(step) + '하실 상품을 선택해 주세요.');
 
 					// $('.form.sel').show();
 				}
@@ -235,7 +272,7 @@
 					$('.check_wrap.check_only').hide();
 					// $('#allCheck').hide();
 					// $('label[for=all]').html('취소해 주세요.');
-					$('#checkMain').html(' ' + getTypeName());
+					$('#checkMain').html(' ' + getTypeName(step));
 					// $('input[id=all]').hide();
 					// $('.form.sel').hide();
 				}
@@ -331,9 +368,9 @@
 			$("#allCheckbox").prop('checked', length === checked);
 		}
 
-		function getTypeName() {
+		function getTypeName(currentStep) {
 
-			if (step ===  1) {
+			if (currentStep ===  1) {
 				switch (type) {
 					case 'return' :
 						return '반품';
@@ -341,6 +378,9 @@
 						return '취소';
 					case 'exchange' :
 						return '교환';
+
+					default :
+						return '';
 				}
 			}
 			else {
@@ -382,6 +422,9 @@
 					checkboxStepType();
 					$('.check_wrap.check_only').show();
 					setOrdShipAddress();
+					if (type !== 'cancel') {
+						$('.panel_box.payment').hide();
+					}
 					// $('#allCheck').show();
 					// $('.form.sel').show();
 

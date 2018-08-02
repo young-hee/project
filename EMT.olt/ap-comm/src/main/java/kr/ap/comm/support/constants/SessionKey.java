@@ -21,6 +21,8 @@ public class SessionKey {
     public static final String SMS_NUM = "SMS_NUM";
     
     public static final String OLD_ID = "OLD_ID";
+    
+    public static final String RETURL = "RETURL";
 
     /**
      * Sns

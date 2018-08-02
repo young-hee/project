@@ -107,31 +107,49 @@
 						console.log( e.type, e.date );
 						date = e.date;
 				    	$('#progress').show();
-					    $.get("/my/page/info/beautyPointListFragment?startDt="+e.date.startDate + "&endDt="+e.date.endDate, function(data) {
-					    	date = e.date;
+
+						AP.api.beautyPointListFragment({}, {
+								pageNumber:1,
+								startDt:e.date.startDate,
+								endDt:e.date.endDate
+						}).done(function(data) {
+
 					    	$(".pbody").remove();
 					    	$(".body").after(data);
+							
+		                }).fail(function(xhr, textStatus, errorThrown) {
+		                	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+		                }).always(function() {
 					    	$('#progress').hide();
-					    });
+		                    //성공, 실패
+		                });
 					});
 					
 					function more(page) {
 						if(page == 0 || page == null) return;
 				    	$('#progress').show();
-						if(date != null) {
-						    $.get("/my/page/info/beautyPointListBodyFragment?pageNumber=" + page + "&startDt="+date.startDate + "&endDt="+date.endDate, function(data) {
-						    	$('.pagination').remove();
-						    	$('#progress').hide();
-						    	$(".board_list2").replaceWith(data);
-						    });
-						} else {
-						    $.get("/my/page/info/beautyPointListBodyFragment?pageNumber=" + page, function(data) {
-						    	$('.pagination').remove();
-						    	$('#progress').hide();
-						    	$(".board_list2").replaceWith(data);
-						    });
-						}
-						
+
+				    	var startDtVal = null;
+				    	var endDtVal = null;
+				    	if(date != null) {
+				    		startDtVal = date.startDate;
+				    		endDtVal = date.endDate;
+				    	}
+						AP.api.beautyPointListBodyFragment({}, {
+								pageNumber:page,
+								startDt:startDtVal,
+								endDt:endDtVal
+						}).done(function(data) {
+
+					    	$('.pagination').remove();
+					    	$(".board_list2").replaceWith(data);
+							
+		                }).fail(function(xhr, textStatus, errorThrown) {
+		                	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+		                }).always(function() {
+					    	$('#progress').hide();
+		                    //성공, 실패
+		                });
 					}
 					var g_modal;
 					function present() {

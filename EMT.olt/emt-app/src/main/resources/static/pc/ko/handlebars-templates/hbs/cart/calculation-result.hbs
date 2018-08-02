@@ -1,5 +1,4 @@
 <div class="table_layout summary">
-	{{#xif cartEx.calculationResult.prodSaleTotalAmountInfo.standardCurrency.amount '>' 0}}
 	<dl>
 		<dt>총주문금액</dt>
 		<dd>
@@ -8,9 +7,6 @@
 			</span>
 		</dd>
 	</dl>
-	{{/xif}}
-
-	{{#xif cartEx.calculationResult.shipFeeSumInfo.standardCurrency.amount '>' 0 }}
 	<dl class="plus">
 		<dt>배송비</dt>
 		<dd>
@@ -19,9 +15,6 @@
 			</span>
 		</dd>
 	</dl>
-	{{/xif}}
-
-	{{#xif cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount '>' 0}}
 	<dl class="minus">
 		<dt>총 할인금액</dt>
 		<dd>
@@ -30,9 +23,6 @@
 			</span>
 		</dd>
 	</dl>
-	{{/xif}}
-
-	{{#xif cartEx.calculationResult.paidAmountInfo.standardCurrency.amount '>' 0}}
 	<dl class="equal">
 		<dt>결제 예정 금액</dt>
 		<dd>
@@ -41,10 +31,8 @@
 			</span>
 		</dd>
 	</dl>
-	{{/xif}}
 	<span><button type="button" name="calculationDetail" class="btn_details" onclick="$(this).toggleClass('on'); $('#details1').slideToggle();"><span class="sr_only">상세보가</span></button></span>
 </div>
-
 
 <!--/* 결제 금액 상세 내역 toggle 영역 */-->
 <div class="details" id="details1">
@@ -96,26 +84,39 @@
 		</dl>
 		{{/xif}}
 
-
 		{{#if (or (gt cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount 0)(gt cartEx.calculationResult.exchIPointSum 0)(gt cartEx.calculationResult.exchAPointSum 0) ) }}
 		<dl>
 			<dt><b>총 할인</b></dt>
-			{{#if (gt cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount 0) }}
 			<dd>
 				<span class="price">
-					<strong>{{numberFormat cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount }}</strong><b>원</b>
-				</span>
-			</dd>
-			{{/if}}
+				 	<!--/*  총 할인 기준 */-->
+					{{#if (and (gt cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount 0)(eq cartEx.calculationResult.exchIPointSum 0)(eq cartEx.calculationResult.exchAPointSum 0) ) }}
+						<strong>{{numberFormat cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount }}</strong><b>원</b>
+					{{/if}}
+					{{#if (and (gt cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount 0)(gt cartEx.calculationResult.exchIPointSum 0)(eq cartEx.calculationResult.exchAPointSum 0) ) }}
+						<strong>{{numberFormat (calc cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount '+' cartEx.calculationResult.exchIPointSum ) }}</strong><b>원</b>
+					{{/if}}
+					{{#if (and (gt cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount 0)(gt cartEx.calculationResult.exchIPointSum 0)(gt cartEx.calculationResult.exchAPointSum 0) ) }}
+						<strong>{{numberFormat (calc cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount '+' cartEx.calculationResult.exchIPointSum '+' cartEx.calculationResult.exchAPointSum ) }}</strong><b>원</b>
+					{{/if}}
 
-			{{#if (or (gt cartEx.calculationResult.exchIPointSum 0) (gt cartEx.calculationResult.exchAPointSum 0)) }}
-			<dd>
-				<span class="price">
-					<strong>{{numberFormat (calc cartEx.calculationResult.exchIPointSum '+' cartEx.calculationResult.exchAPointSum) }}</strong>
-					<b>{{condition (gt cartEx.calculationResult.exchAPointSum 0)'알' 'P'}}</b>
+					<!--/*  뷰티포인트 기준 */-->
+					{{#if (and (eq cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount 0)(gt cartEx.calculationResult.exchIPointSum 0)(eq cartEx.calculationResult.exchAPointSum 0) ) }}
+						<strong>{{numberFormat cartEx.calculationResult.exchIPointSum }}</strong><b>원</b>
+					{{/if}}
+					{{#if (and (eq cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount 0)(gt cartEx.calculationResult.exchIPointSum 0)(gt cartEx.calculationResult.exchAPointSum 0) ) }}
+						<strong>{{numberFormat (calc cartEx.calculationResult.exchIPointSum '+' cartEx.calculationResult.exchAPointSum ) }}</strong><b>원</b>
+					{{/if}}
+
+					<!--/*  진주알 기준 */-->
+					{{#if (and (eq cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount 0)(eq cartEx.calculationResult.exchIPointSum 0)(gt cartEx.calculationResult.exchAPointSum 0) ) }}
+						<strong>{{numberFormat cartEx.calculationResult.exchAPointSum }}</strong><b>원</b>
+					{{/if}}
+					{{#if (and (eq cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount 0)(gt cartEx.calculationResult.exchIPointSum 0)(gt cartEx.calculationResult.exchAPointSum 0) ) }}
+						<strong>{{numberFormat (calc cartEx.calculationResult.exchIPointSum '+' cartEx.calculationResult.exchAPointSum ) }}</strong><b>원</b>
+					{{/if}}
 				</span>
 			</dd>
-			{{/if}}
 			<dd>
 				{{#xif cartEx.calculationResult.dsicountAmountInfoByOnlineProdDc.standardCurrency.amount '>' 0 }}
 				<dl>

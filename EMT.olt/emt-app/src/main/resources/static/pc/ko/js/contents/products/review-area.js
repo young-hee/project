@@ -43,7 +43,7 @@
 
 			this._etcList = new AP.ReviewList( this._$target.find('.review_list'), {
 				onlineProdSn: this._defaultModel.onlineProdSn,
-				limit: 5
+				limit: 8
 			}).addListener( 'review-draw', function (e) {
 				this.dispatch( 'change-height' );
 			}.bind(this));

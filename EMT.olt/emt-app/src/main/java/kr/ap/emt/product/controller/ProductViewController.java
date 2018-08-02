@@ -21,6 +21,7 @@ import java.util.List;
 import org.apache.commons.lang3.EnumUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -55,6 +56,32 @@ public class ProductViewController extends AbstractController {
     	ProdReviewSummaryInfo summary;
     	PlanDisplayEventListResult relateEventList;
     
+    	//sns
+    	String snsImage = null;
+    	String snsTitle = null;
+    	String snsDesc = null;
+    	
+    	//sns 이미지(default)
+    	if(!StringUtils.isEmpty(onlineProdInfo.getOnlineProdImages())) {
+    		snsImage = onlineProdInfo.getOnlineProdImages().get(0).getImgUrl();
+        }else {
+        	if(!StringUtils.isEmpty(onlineProdInfo.getProducts().get(0).getProdImages())) {
+        		snsImage = onlineProdInfo.getProducts().get(0).getProdImages().get(0).getImgUrl();
+        	}
+        }
+    	//sns title(default)
+    	if(!StringUtils.isEmpty(onlineProdInfo.getOnlineProdName())) {
+    		snsTitle = onlineProdInfo.getOnlineProdName();
+    	}else {
+    		snsTitle = onlineProdInfo.getProducts().get(0).getProdName();
+    	}
+    	//sns description(default)
+    	if(!StringUtils.isEmpty(onlineProdInfo.getLineDesc())) {
+    		snsDesc = onlineProdInfo.getLineDesc();
+    	}else {
+    		snsDesc = onlineProdInfo.getProducts().get(0).getLineDesc();
+    	}
+    	
     	try {
     		requestReview.setProdReviewType("All"); //All(전체), Pur(구매후기), Prod(상품리뷰), ExperienceGrp(체험단)
     		requestReview.setProdReviewUnit("OnlineProd"); //OnlineProd(온라인상품단위) - UnitProd(단위상품단위, 단위상품일련번호 필수) - StyleCode(스타일코드단위, 스타일코드 필수)
@@ -73,9 +100,22 @@ public class ProductViewController extends AbstractController {
 
         SnsEntity snsEntity = new SnsEntity();
         snsEntity.setUrl(getFullUri());
-        snsEntity.setImage(onlineProdInfo.getSnsImg());
-        snsEntity.setTitle(onlineProdInfo.getSnsInterfaceTitle());
-        snsEntity.setDescription(onlineProdInfo.getSnsInterfaceDesc());
+        if(StringUtils.isEmpty(onlineProdInfo.getSnsImg())) {
+        	snsEntity.setImage(snsImage);
+        }else {
+        	snsEntity.setImage(onlineProdInfo.getSnsImg());
+        }
+        if(StringUtils.isEmpty(onlineProdInfo.getSnsInterfaceTitle())) {
+        	snsEntity.setTitle(snsTitle);
+        }else {
+        	snsEntity.setTitle(onlineProdInfo.getSnsInterfaceTitle());
+        }
+        if(StringUtils.isEmpty(onlineProdInfo.getSnsInterfaceDesc())) {
+        	snsEntity.setDescription(snsDesc);
+        }else {
+        	snsEntity.setDescription(onlineProdInfo.getSnsInterfaceDesc());
+        }
+        snsEntity.setHashtag(onlineProdInfo.getHashTag());
 		model.addAttribute("sns", snsEntity);
 
 		SeoEntity seoEntity = new SeoEntity();

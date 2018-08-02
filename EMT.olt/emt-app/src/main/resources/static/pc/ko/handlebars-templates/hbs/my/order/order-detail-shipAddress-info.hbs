@@ -1,5 +1,5 @@
-{{#if (and (eq this.claimYn 'Y') (ne this.type 'cancel'))}}
-	<h3 class="h_title sub mgt80 mgb20">상품 교환 회수 방법</h3>
+{{#if (and (isExist claimDate) (ne this.type 'cancel'))}}
+	<h3 class="h_title sub mgt80 mgb20">상품 {{this.title}} 회수 방법</h3>
 	<div class="panel gray bordered">
 		<div class="panel_cont">
 			<p class="font_lg">에뛰드하우스 전용 택배사 이용</p>
@@ -17,7 +17,7 @@
 	</h3>
 	{{#xif this.status '==' 'detail'}}
 		{{#if (or (eq this.statusCode 'OrdReceivedWaiting') (eq this.statusCode 'OrdReceivedComplete'))}}
-			<button class="btn_sm_bordered" type="button" onclick="ediShipAddress('{{this.data.shipAddressTypeCode}}')">배송 정보 수정</button>
+			<button class="btn_sm_bordered" type="button" onclick="editShipAddress('{{this.data.shipAddressTypeCode}}')">배송 정보 수정</button>
 		{{/if}}
 	{{else}}
 		<button class="btn_sm_bordered" type="button" onclick="editShipAddress('{{this.data.shipAddressTypeCode}}')">배송 정보 수정</button>

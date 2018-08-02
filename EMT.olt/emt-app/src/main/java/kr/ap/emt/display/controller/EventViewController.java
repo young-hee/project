@@ -14,10 +14,13 @@ import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import kr.ap.comm.config.interceptor.PageTitle;
 import kr.ap.comm.support.common.AbstractController;
+import kr.ap.comm.support.common.SeoEntity;
+import kr.ap.comm.support.common.SnsEntity;
 import kr.ap.comm.support.constants.APConstant;
 import net.g1project.ecp.api.model.sales.display.PageInfo;
 import net.g1project.ecp.api.model.sales.guide.FoNotice;
@@ -151,7 +154,36 @@ public class EventViewController extends AbstractController {
 				}
 			}
 		}
+		SnsEntity snsEntity = new SnsEntity();
+        snsEntity.setUrl(getFullUri());
+        if(StringUtils.isEmpty(planDisplay.getSnsIfImg())) {
+        	if (isMobileDevice()) {
+        		snsEntity.setImage(planDisplay.getBannerImgM1());
+        	}else {
+        		snsEntity.setImage(planDisplay.getBannerImgP1());
+        	}
+        }else {
+        	snsEntity.setImage(planDisplay.getSnsIfImg());
+        }      
+        if(StringUtils.isEmpty(planDisplay.getSnsIfTitle())) {
+        	snsEntity.setTitle(planDisplay.getPlanDisplayTitle());
+        }else {
+        	snsEntity.setTitle(planDisplay.getSnsIfTitle());
+        }
+        if(StringUtils.isEmpty(planDisplay.getSnsIfDesc())) {
+        	snsEntity.setDescription(planDisplay.getPlanDisplayTitle());
+        }else {
+        	snsEntity.setDescription(planDisplay.getSnsIfDesc());
+        }
+        snsEntity.setHashtag(planDisplay.getSnsHashTag());
+		model.addAttribute("sns", snsEntity);
 
+		SeoEntity seoEntity = new SeoEntity();
+		seoEntity.setTitle(planDisplay.getSeoTitle());
+		seoEntity.setDescription(planDisplay.getSeoDesc());
+		seoEntity.setKeyword(planDisplay.getSeoSearchKeyword());
+		model.addAttribute("seo", seoEntity);
+		
 		return "display/" + planDisplay.getDetailPageId();
 
 	}

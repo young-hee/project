@@ -215,10 +215,21 @@
 			    });
 			}
 			function naverLogin() {
-				window.open('https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=xbLexjx52A_pQD0sZgIP&state=[[${state}]]&redirect_uri=' + location.href.replace('/my/page/info/snsLink','navercallback'), 'naverloginpop', 'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550'); return false
+				window.open('https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=xbLexjx52A_pQD0sZgIP&state=[[${state}]]&redirect_uri=' + location.href.replace('my/page/info/snsLink','navercallback').split('#')[0], 'naverloginpop', 'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550'); return false
 			}
 			function kakaoLogin() {
-				window.open('https://kauth.kakao.com/oauth/authorize?client_id=ce4dd4a15adfd391c88f730c049f12c4&response_type=code&redirect_uri=' + location.href.replace('/my/page/info/snsLink','') + 'kakaocallback', 'kakaologinpop', 'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550'); return false
+				var returl = location.href.replace('my/page/info/snsLink', '').split('#')[0] + 'kakaocallback';
+				AP.api.saveUrl({}, {
+					url:returl
+				}).done(function(data) {
+					window.open('https://kauth.kakao.com/oauth/authorize?client_id=[[${@environment.getProperty('kakao.restkey')}]]&response_type=code&redirect_uri=' + returl, 'kakaologinpop', 'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550');
+			    }).fail(function(xhr, textStatus, errorThrown) {
+					AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+			    }).always(function() {
+			        $("#send-sms").removeAttr("disabled");
+			        //성공, 실패
+			    });
+				return false
 			}
 			
 			</script>

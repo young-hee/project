@@ -64,7 +64,7 @@ public class EcpApiClientConfiguration {
                 .decoder(new JacksonDecoder(objectMapper()))
                 .decode404()
                 .errorDecoder(new EcpErrorDecoder())
-                .logger(new Logger.ErrorLogger())
+                .logger(new Logger.JavaLogger())
                 .logLevel(getLogLevel())
                 .requestInterceptor(new EMTPRequestInterceptor(apiKey))
                 .target(target);
@@ -78,7 +78,7 @@ public class EcpApiClientConfiguration {
         .decoder(new JacksonDecoder(objectMapper()))
         .decode404()
         .errorDecoder(new EcpErrorDecoder())
-        .logger(new Logger.ErrorLogger())
+        .logger(new Logger.JavaLogger())
         .logLevel(getLogLevel())
         .requestInterceptor(new EMTPRequestInterceptor(apiKey))
         .target(target);

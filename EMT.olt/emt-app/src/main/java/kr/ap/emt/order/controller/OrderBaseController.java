@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.g1project.ecp.api.model.order.order.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -23,16 +24,8 @@ import kr.ap.comm.member.vo.OrdCartInfo;
 import kr.ap.comm.support.common.AbstractViewController;
 import kr.ap.emt.order.vo.OrdOnlineProdFoDTO;
 import kr.ap.emt.order.vo.OrdOnlinePromoFoDTO;
+import kr.ap.emt.order.vo.OrderConst;
 import net.g1project.ecp.api.model.ap.ap.ShipAddressInfo;
-import net.g1project.ecp.api.model.order.order.OrdEx;
-import net.g1project.ecp.api.model.order.order.OrdHistProdEx;
-import net.g1project.ecp.api.model.order.order.OrdOtfEx;
-import net.g1project.ecp.api.model.order.order.OrdProdEx;
-import net.g1project.ecp.api.model.order.order.OrdRecept;
-import net.g1project.ecp.api.model.order.order.OrdShipAddressEx;
-import net.g1project.ecp.api.model.order.order.OrdShipAddressListResult;
-import net.g1project.ecp.api.model.order.order.PayMethodListResult;
-import net.g1project.ecp.api.model.order.order.PayResult;
 
 @Controller
 @RequestMapping("/order")
@@ -171,14 +164,89 @@ public class OrderBaseController extends AbstractViewController {
 			model.addAttribute("apMember", apApi.getMemberInfo(getMemberSn()));		// 회원정보
 			model.addAttribute("memberSn", getMemberSn());							// 회원일련번호
 		}else{
-			List<OrdShipAddressEx> ordShipAddressExList = ordEx.getOrdShipAddressExList();
 			PayMethodListResult payMethodList = orderApi.getPayMethodList(PARAM_KEY_NONMEMBER);
-			model.addAttribute("ordShipAddressExList", ordShipAddressExList.size() > 0 ? ordShipAddressExList : 0);	// 주문배송지목록
 			model.addAttribute("payMethodResult", payMethodList); // 결제수단목록
 		}
+
+		model.addAttribute("ordAmtMap", makeOrdAmtList(ordEx, isMember()));
 	}
 
-    private OrdOnlineProdFoDTO getMPlusNPromoOnlineProd(OrdHistProdEx ordHistProdEx, Map<Long, OrdOnlinePromoFoDTO> ordOnlinePromoFoMap) {
+	//주문서 금액 계산
+	protected Map<String, BigDecimal> makeOrdAmtList(OrdEx ordEx, boolean member) {
+		Map<String, BigDecimal> ordAmtMap =new HashMap<String, BigDecimal>();
+
+		if (ordEx != null && ordEx.getOrdHistEx() != null && ordEx.getOrdHistEx().getOrdHistAmtExList() != null) {
+			BigDecimal totalOrdPriceSum = new BigDecimal(0);
+			BigDecimal totalOrdDcPriceSum = new BigDecimal(0);
+			BigDecimal membershipExchAmt = new BigDecimal(0);
+			for (OrdHistAmtEx o : ordEx.getOrdHistEx().getOrdHistAmtExList()) {
+				ordAmtMap.put(o.getOrdHistAmtTypeCode(), o.getAmtPcur());
+
+				//총주문금액 = StorePickupProd + OnlineShipProd + MembershipExch + BP + ActivityPointExch
+				if ("StorePickupProd".equals(o.getOrdHistAmtTypeCode())
+					|| "OnlineShipProd".equals(o.getOrdHistAmtTypeCode())
+					|| "MembershipExch".equals(o.getOrdHistAmtTypeCode())
+					|| "ActivityPointExch".equals(o.getOrdHistAmtTypeCode())) {
+					totalOrdPriceSum = totalOrdPriceSum.add(o.getAmtPcur()) ;
+				}
+
+				//총할인 = OnlineProdPromoDc + OnlineMemberPromoDc + MemberDcBenefit + ImmedDcCouponPromo
+				//		+ MPlusNPromoDc + SameTimePurPromoDc + OrdUnitPromoDc + *BeautyPointExchUse*
+				//		+ *CushionPointUse* + ActivityPointExch + ProdUnitCouponDc + MPlusNCouponDc
+				//		+ Buy1GetCouponDc + OrdUnitCouponDc
+				if ("OnlineProdPromoDc".equals(o.getOrdHistAmtTypeCode())
+					|| "OnlineMemberPromoDc".equals(o.getOrdHistAmtTypeCode())
+					|| "MemberDcBenefit".equals(o.getOrdHistAmtTypeCode())
+					|| "ImmedDcCouponPromo".equals(o.getOrdHistAmtTypeCode())
+					|| "MPlusNPromoDc".equals(o.getOrdHistAmtTypeCode())
+					|| "SameTimePurPromoDc".equals(o.getOrdHistAmtTypeCode())
+					|| "OrdUnitPromoDc".equals(o.getOrdHistAmtTypeCode())
+					|| "ActivityPointExch".equals(o.getOrdHistAmtTypeCode())
+					|| "ProdUnitCouponDc".equals(o.getOrdHistAmtTypeCode())
+					|| "MPlusNCouponDc".equals(o.getOrdHistAmtTypeCode())
+					|| "Buy1GetCouponDc".equals(o.getOrdHistAmtTypeCode())
+					|| "OrdUnitCouponDc".equals(o.getOrdHistAmtTypeCode())) {
+					totalOrdDcPriceSum = totalOrdDcPriceSum.add(o.getAmtPcur()) ;
+				}
+
+				if ("MembershipExch".equals(o.getOrdHistAmtTypeCode())) {
+					membershipExchAmt = o.getAmtPcur();
+				}
+			}
+			//배송비 =  ordEx.getOrdHistEx().getShipFeeSumPcur();
+			ordAmtMap.put("ShipFee", ordEx.getOrdHistEx().getShipFeeSumPcur());
+
+			//통합멤버십(뷰티포인트)교환사용
+			// BeautyPointExchUse =  MembershipExch + BP -> ordEx.getOrdHistEx().getOrdHistMembershipExList().get(0).getMembershipUseAmtSumPcur();
+			//쿠션포인트사용
+			// CushionPointUse = CP -> ordEx.getOrdHistEx().getOrdHistMembershipExList().get(0).getMembershipUseAmtSumPcur();
+			for (OrdHistMembershipEx m : ordEx.getOrdHistEx().getOrdHistMembershipExList()) {
+				if ("BP".equals(m.getMembershipServiceCode())) {
+					ordAmtMap.put("BeautyPointExchUse", membershipExchAmt.add(m.getMembershipUseAmtSumPcur()));
+					totalOrdDcPriceSum = totalOrdDcPriceSum.add(membershipExchAmt.add(m.getMembershipUseAmtSumPcur()));
+				} else {
+					ordAmtMap.put("BeautyPointExchUse", new BigDecimal(0));
+				}
+
+				if ("CP".equals(m.getMembershipServiceCode())) {
+					ordAmtMap.put("CushionPointUse", m.getMembershipUseAmtSumPcur());
+					totalOrdDcPriceSum = totalOrdDcPriceSum.add(m.getMembershipUseAmtSumPcur());
+				} else {
+					ordAmtMap.put("CushionPointUse", new BigDecimal(0));
+				}
+			}
+
+			ordAmtMap.put("totalOrdPriceSum", totalOrdPriceSum);
+			ordAmtMap.put("totalOrdDcPriceSum", totalOrdDcPriceSum);
+
+			//정립예정포인트(뷰티포인트)
+			ordAmtMap.put("totalOrdPointSaveSum", new BigDecimal(0));
+		}
+
+		return ordAmtMap;
+	}
+
+	private OrdOnlineProdFoDTO getMPlusNPromoOnlineProd(OrdHistProdEx ordHistProdEx, Map<Long, OrdOnlinePromoFoDTO> ordOnlinePromoFoMap) {
         OrdOnlinePromoFoDTO ordOnlinePromoFo = ordOnlinePromoFoMap.get(ordHistProdEx.getMPlusNOrdPromoSn());
         if(ordOnlinePromoFo == null) {
             ordOnlinePromoFo = new OrdOnlinePromoFoDTO();
@@ -956,6 +1024,158 @@ public class OrderBaseController extends AbstractViewController {
         
         setMemberSession(memberSession);
    }
-	
+
+    protected Map<String, OrdHistAmtCompare> makeOrdAmtMap(OrdHistEx ordHist, OrdHistEx prevOrdHist, List<OrdHistAmtCompare> ordHistAmtCompareList) {
+        Map<String, OrdHistAmtCompare> ordAmtMap = new HashMap<>();
+        
+        if(ordHistAmtCompareList != null) {
+            // 환불주문금액
+            OrdHistAmtCompare ohacTotalOrdAmt = createOrdHistAmtCompare(OrderConst.OAT_TotalOrdAmt);
+            
+            // 온라인주문취소
+            OrdHistAmtCompare ohacOnlineShipAmt = null;
+            // 테이크아웃취소
+            OrdHistAmtCompare ohacStorePickupAmt = null;
+            // 구매특가취소
+            OrdHistAmtCompare ohacSpPriceAmt = null;
+            // 포장/쇼핑백취소
+            OrdHistAmtCompare ohacGiftPackingAmt = null;
+            // 배송비환불
+            OrdHistAmtCompare ohacShipFee = createOrdHistAmtCompare(OrderConst.OAT_ShipFee);
+    
+            // 환불할인/포인트
+            OrdHistAmtCompare ohacTotalDcAmt = createOrdHistAmtCompare(OrderConst.OAT_TotalDcAmt);
+            // 쿠폰할인취소
+            OrdHistAmtCompare ohacCouponDcAmt = createOrdHistAmtCompare(OrderConst.OAT_CouponDc);
+            // 뷰티포인트환불
+            OrdHistAmtCompare ohacBPointDcAmt = createOrdHistAmtCompare(OrderConst.OAT_BPointDc);
+            // 진주알환불
+            OrdHistAmtCompare ohacAPointDcAmt = createOrdHistAmtCompare(OrderConst.OAT_APointDc);
+            // 두툼포인트M환불
+            OrdHistAmtCompare ohacDPointDcAmt = null;
+    
+            for(OrdHistAmtCompare ordHistAmtCompare : ordHistAmtCompareList) {
+                switch(ordHistAmtCompare.getOrdHistAmtTypeCode()) {
+                    case OrderConst.OAT_OnlineShipProd:
+                        ohacOnlineShipAmt = ordHistAmtCompare;
+                        break;
+                    case OrderConst.OAT_StorePickupProd:
+                        ohacStorePickupAmt = ordHistAmtCompare;
+                        break;
+                    case OrderConst.OAT_SpPriceAwardProd:
+                        ohacSpPriceAmt = ordHistAmtCompare;
+                        break;
+                    case OrderConst.OAT_ShipUnitPacking:
+                        ohacGiftPackingAmt = ordHistAmtCompare;
+                        break;
+                    case OrderConst.OAT_DefaultShipFeeDc:
+                    case OrderConst.OAT_AddShipFee:
+                        ohacShipFee = addOrdHistAmtCompare(ohacShipFee, ordHistAmtCompare);
+                        break;
+                    case OrderConst.OAT_ProdUnitCouponDc:
+                    case OrderConst.OAT_MPlusNCouponDc:
+                    case OrderConst.OAT_Buy1GetCouponDc:
+                    case OrderConst.OAT_OrdUnitCouponDc:
+                        ohacCouponDcAmt = addOrdHistAmtCompare(ohacCouponDcAmt, ordHistAmtCompare);
+                        break;
+                    case OrderConst.OAT_MembershipExch:
+                        ohacBPointDcAmt = addOrdHistAmtCompare(ohacBPointDcAmt, ordHistAmtCompare);
+                        break;
+                    case OrderConst.OAT_ActivityPointExch:
+                        ohacAPointDcAmt = addOrdHistAmtCompare(ohacAPointDcAmt, ordHistAmtCompare);
+                        break;
+                }
+            }
+            
+            // TODO 쿠션포인트 
+            
+            // 환불주문금액
+            ohacTotalOrdAmt = addOrdHistAmtCompare(ohacTotalOrdAmt, ohacOnlineShipAmt);
+            ohacTotalOrdAmt = addOrdHistAmtCompare(ohacTotalOrdAmt, ohacStorePickupAmt);
+            ohacTotalOrdAmt = addOrdHistAmtCompare(ohacTotalOrdAmt, ohacSpPriceAmt);
+            ohacTotalOrdAmt = addOrdHistAmtCompare(ohacTotalOrdAmt, ohacGiftPackingAmt);
+            ohacTotalOrdAmt = addOrdHistAmtCompare(ohacTotalOrdAmt, ohacShipFee);
+            
+            // 환불할인/포인트
+            ohacTotalDcAmt = addOrdHistAmtCompare(ohacTotalDcAmt, ohacCouponDcAmt);
+            ohacTotalDcAmt = addOrdHistAmtCompare(ohacTotalDcAmt, ohacBPointDcAmt);
+            ohacTotalDcAmt = addOrdHistAmtCompare(ohacTotalDcAmt, ohacAPointDcAmt);
+            ohacTotalDcAmt = addOrdHistAmtCompare(ohacTotalDcAmt, ohacDPointDcAmt);
+            
+            ordAmtMap.put(OrderConst.OAT_TotalOrdAmt, ohacTotalOrdAmt);
+            ordAmtMap.put(OrderConst.OAT_OnlineShipProd, ohacOnlineShipAmt);
+            ordAmtMap.put(OrderConst.OAT_StorePickupProd, ohacStorePickupAmt);
+            ordAmtMap.put(OrderConst.OAT_SpPriceAwardProd, ohacSpPriceAmt);
+            ordAmtMap.put(OrderConst.OAT_ShipUnitPacking, ohacGiftPackingAmt);
+            ordAmtMap.put(OrderConst.OAT_ShipFee, ohacShipFee);
+            
+            ordAmtMap.put(OrderConst.OAT_TotalDcAmt, ohacTotalDcAmt);
+            ordAmtMap.put(OrderConst.OAT_CouponDc, ohacCouponDcAmt);
+            ordAmtMap.put(OrderConst.OAT_BPointDc, ohacBPointDcAmt);
+            ordAmtMap.put(OrderConst.OAT_APointDc, ohacAPointDcAmt);
+            
+        }
+        
+        
+        return ordAmtMap;
+    }
+    
+    protected OrdHistAmtCompare addOrdHistAmtCompare(OrdHistAmtCompare ordHistAmtCompare, OrdHistAmtCompare augend) {
+        if(augend != null) {
+            if(ordHistAmtCompare == null) {
+                ordHistAmtCompare = createOrdHistAmtCompare(augend.getOrdHistAmtTypeCode());
+            }
+    
+            ordHistAmtCompare.setRefundAmtPcur(ordHistAmtCompare.getRefundAmtPcur().add(augend.getRefundAmtPcur()));
+            ordHistAmtCompare.setRefundItaxPcur(ordHistAmtCompare.getRefundItaxPcur().add(augend.getRefundItaxPcur()));
+            ordHistAmtCompare.setRefundEtaxPcur(ordHistAmtCompare.getRefundEtaxPcur().add(augend.getRefundEtaxPcur()));
+            ordHistAmtCompare.setAfterAmtPcur(ordHistAmtCompare.getAfterAmtPcur().add(augend.getAfterAmtPcur()));
+            ordHistAmtCompare.setAfterItaxPcur(ordHistAmtCompare.getAfterItaxPcur().add(augend.getAfterItaxPcur()));
+            ordHistAmtCompare.setAfterEtaxPcur(ordHistAmtCompare.getAfterEtaxPcur().add(augend.getAfterEtaxPcur()));
+            ordHistAmtCompare.setRefundAmtPcur(ordHistAmtCompare.getRefundAmtPcur().add(augend.getRefundAmtPcur()));
+            ordHistAmtCompare.setRefundItaxPcur(ordHistAmtCompare.getRefundItaxPcur().add(augend.getRefundItaxPcur()));
+            ordHistAmtCompare.setRefundEtaxPcur(ordHistAmtCompare.getRefundEtaxPcur().add(augend.getRefundEtaxPcur()));
+        }
+        
+        return ordHistAmtCompare;
+    }
+    
+    protected OrdHistAmtCompare subtractOrdHistAmtCompare(OrdHistAmtCompare ordHistAmtCompare, OrdHistAmtCompare subtrahend) {
+        if(subtrahend != null) {
+            if(ordHistAmtCompare == null) {
+                ordHistAmtCompare = createOrdHistAmtCompare(subtrahend.getOrdHistAmtTypeCode());
+            }
+
+            ordHistAmtCompare.setRefundAmtPcur(ordHistAmtCompare.getRefundAmtPcur().subtract(subtrahend.getRefundAmtPcur()));
+            ordHistAmtCompare.setRefundItaxPcur(ordHistAmtCompare.getRefundItaxPcur().subtract(subtrahend.getRefundItaxPcur()));
+            ordHistAmtCompare.setRefundEtaxPcur(ordHistAmtCompare.getRefundEtaxPcur().subtract(subtrahend.getRefundEtaxPcur()));
+            ordHistAmtCompare.setAfterAmtPcur(ordHistAmtCompare.getAfterAmtPcur().subtract(subtrahend.getAfterAmtPcur()));
+            ordHistAmtCompare.setAfterItaxPcur(ordHistAmtCompare.getAfterItaxPcur().subtract(subtrahend.getAfterItaxPcur()));
+            ordHistAmtCompare.setAfterEtaxPcur(ordHistAmtCompare.getAfterEtaxPcur().subtract(subtrahend.getAfterEtaxPcur()));
+            ordHistAmtCompare.setRefundAmtPcur(ordHistAmtCompare.getRefundAmtPcur().subtract(subtrahend.getRefundAmtPcur()));
+            ordHistAmtCompare.setRefundItaxPcur(ordHistAmtCompare.getRefundItaxPcur().subtract(subtrahend.getRefundItaxPcur()));
+            ordHistAmtCompare.setRefundEtaxPcur(ordHistAmtCompare.getRefundEtaxPcur().subtract(subtrahend.getRefundEtaxPcur()));
+        }
+        
+        return ordHistAmtCompare;
+    }
+    
+    protected OrdHistAmtCompare createOrdHistAmtCompare(String ordHistAmtTypeCode) {
+        OrdHistAmtCompare ordHistAmtCompare = new OrdHistAmtCompare();
+        
+        ordHistAmtCompare.setOrdHistAmtTypeCode(ordHistAmtTypeCode);
+        ordHistAmtCompare.setRefundAmtPcur(BigDecimal.ZERO);
+        ordHistAmtCompare.setRefundItaxPcur(BigDecimal.ZERO);
+        ordHistAmtCompare.setRefundEtaxPcur(BigDecimal.ZERO);
+        ordHistAmtCompare.setAfterAmtPcur(BigDecimal.ZERO);
+        ordHistAmtCompare.setAfterItaxPcur(BigDecimal.ZERO);
+        ordHistAmtCompare.setAfterEtaxPcur(BigDecimal.ZERO);
+        ordHistAmtCompare.setRefundAmtPcur(BigDecimal.ZERO);
+        ordHistAmtCompare.setRefundItaxPcur(BigDecimal.ZERO);
+        ordHistAmtCompare.setRefundEtaxPcur(BigDecimal.ZERO);
+        
+        return ordHistAmtCompare;
+    }
+    
 
 }

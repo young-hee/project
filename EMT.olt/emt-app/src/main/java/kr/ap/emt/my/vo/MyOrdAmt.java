@@ -1,4 +1,4 @@
-package kr.ap.emt.order.vo;
+package kr.ap.emt.my.vo;
 
 import net.g1project.ecp.api.model.order.order.OrdHistAmtCompare;
 import net.g1project.ecp.api.model.order.order.OrdHistAmtEx;
@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class OrdPaymentResultDTO {
+public class MyOrdAmt {
 
 	// 주문 금액
 	private BigDecimal ordPayment = BigDecimal.ZERO;
@@ -36,6 +36,7 @@ public class OrdPaymentResultDTO {
 
 
 	// 쿠폰할인
+	private BigDecimal couponPoint = BigDecimal.ZERO;
 
 	// 뷰티포인트
 	private BigDecimal membershipPoint;
@@ -45,7 +46,7 @@ public class OrdPaymentResultDTO {
 
 	private Map<String, BigDecimal> ordAmt;
 
-	public OrdPaymentResultDTO(List compare) {
+	public MyOrdAmt(List compare) {
 
 		ordAmt = new HashMap();
 
@@ -54,6 +55,8 @@ public class OrdPaymentResultDTO {
 				if (obj instanceof OrdHistAmtCompare) {
 					OrdHistAmtCompare o = (OrdHistAmtCompare) obj;
 					ordAmt.put(o.getOrdHistAmtTypeCode(), (o.getBeforeAmtPcur().subtract(o.getAfterAmtPcur())));
+//					ordAmt.put(o.getOrdHistAmtTypeCode(), (o.getRefundAmtPcur()));
+
 				}
 				else if (obj instanceof OrdHistAmtEx) {
 					OrdHistAmtEx o = (OrdHistAmtEx) obj;
@@ -71,8 +74,13 @@ public class OrdPaymentResultDTO {
 		storeShipProd = getOrDefault("StorePickupProd", "payment");
 		spPriceAwardProd = getOrDefault("SpPriceAwardProd", "payment");
 		spUnitPacking = getOrDefault("ShipUnitPacking", "payment").add(getOrDefault("ProdUnitPacking", "payment"));
-		shipFee = getOrDefault("DefaultShipFee", "payment");
+		shipFee = getOrDefault("DefaultShipFee", "payment").add(getOrDefault("AddShipFee", "payment"));
 
+
+		couponPoint = addBigDecimal(couponPoint, getOrDefault("ProdUnitCouponDc", "point"));
+		couponPoint = addBigDecimal(couponPoint, getOrDefault("MPlusNCouponDc", "point"));
+		couponPoint = addBigDecimal(couponPoint, getOrDefault("Buy1GetCouponDc", "point"));
+		couponPoint = addBigDecimal(couponPoint, getOrDefault("OrdUnitCouponDc", "point"));
 		membershipPoint = getOrDefault("MembershipExch", "point");
 		activityPoint = getOrDefault("ActivityPointExch", "point");
 
@@ -82,13 +90,17 @@ public class OrdPaymentResultDTO {
 	private BigDecimal getOrDefault(String key, String addType) {
 		BigDecimal bd = ordAmt.getOrDefault(key, BigDecimal.ZERO);
 		if ("payment".equals(addType)) {
-			ordPayment = ordPayment.add(bd);
+			ordPayment = addBigDecimal(ordPayment, bd);
 		}
 		else if("point".equals(addType)) {
-			salePoint = salePoint.add(bd);
+			salePoint = addBigDecimal(salePoint, bd);
 		}
 
 		return bd;
+	}
+
+	private BigDecimal addBigDecimal(BigDecimal sum, BigDecimal bd) {
+		return sum.add(bd);
 	}
 
 	public Map<String, BigDecimal> getOrdAmt() {
@@ -179,4 +191,7 @@ public class OrdPaymentResultDTO {
 		this.activityPoint = activityPoint;
 	}
 
+	public BigDecimal getCouponPoint() { return couponPoint; }
+
+	public void setCouponPoint(BigDecimal couponPoint) { this.couponPoint = couponPoint; }
 }

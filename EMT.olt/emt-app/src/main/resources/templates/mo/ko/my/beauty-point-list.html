@@ -5,7 +5,7 @@
 		<div ap:fragment="layout-contents">
 			<!-- page contents -->
 			<div class="ap_contents mypage"> <!-- 01-23 클래스 변경 -->
-				<div class="panel beauty_point">
+				<div class="panel beauty_point entry-point">
 					<div class="beauty_point_summary">
 						<dl>
 							<dt><span th:text="${session.LOGIN_USER.member.name.name1}">홍길동</span>님의 뷰티포인트</dt>
@@ -147,23 +147,49 @@
 				}).on( 'multiple-date-picker-change', function (e) {
 					console.log( e.type, e.date );
 					date = e.date;
-					$('.entry-point:last').after(progress);
+					$('.br').after(progress);
 					$(".pbody").remove();
-					$.get("/my/page/info/beautyPointListFragment?startDt="+e.date.startDate + "&endDt="+e.date.endDate, function(data) {
-						$("#m-loading").remove();
+
+					AP.api.beautyPointListFragment({}, {
+							pageNumber:1,
+							startDt:e.date.startDate,
+							endDt:e.date.endDate
+					}).done(function(data) {
+
 						$(".br").after(data);
 						pageNumber = 1;
-					});
+						
+	                }).fail(function(xhr, textStatus, errorThrown) {
+	                	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	                }).always(function() {
+						$("#m-loading").remove();
+	                    //성공, 실패
+	                });
 				});
 				function more() {
 					pageNumber++;
 					$('.bt_point_list:last').after(progress);
-					$.get("/my/page/info/beautyPointListBodyFragment?pageNumber=" + pageNumber + "&startDt="+date.startDate + "&endDt="+date.endDate, function(data) {
+			    	var startDtVal = null;
+			    	var endDtVal = null;
+			    	if(date != null) {
+			    		startDtVal = date.startDate;
+			    		endDtVal = date.endDate;
+			    	}
+					AP.api.beautyPointListBodyFragment({}, {
+							pageNumber:pageNumber,
+							startDt:startDtVal,
+							endDt:endDtVal
+					}).done(function(data) {
+
+				    	$('.pagination').remove();
+				    	$(".board_list2").replaceWith(data);
+						
+	                }).fail(function(xhr, textStatus, errorThrown) {
+	                	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	                }).always(function() {
 						$("#m-loading").remove();
-						$('.btn_lg_more').remove();
-						$(".bt_point_list:last").after(data);
-						$('.btn_lg_more em').text($('.point-item').size());
-					});
+	                    //성공, 실패
+	                });
 				}
 				function openGuide1() {
 

@@ -39,7 +39,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-info"] = Handlebars.templa
 
   return "		<dl class=\"table_layout\">\n			<dt>"
     + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.type : depth0),"return",{"name":"eq","hash":{},"data":data}),"반품","교환",{"name":"condition","hash":{},"data":data}))
-    + " 처리 일</dt>\n\n			<dd><span class=\"num color_gray2\">"
+    + " 처리일</dt>\n\n			<dd><span class=\"num color_gray2\">"
     + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordEx : depth0)) != null ? stack1.claimConfirmDt : stack1),"YYYY-MM-DD",{"name":"dateFormat","hash":{},"data":data}))
     + "</span></dd>\n		</dl>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {

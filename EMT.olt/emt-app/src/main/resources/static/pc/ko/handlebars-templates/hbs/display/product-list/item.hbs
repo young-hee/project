@@ -59,7 +59,11 @@
 					<!--// 공용 ( 컬러컬렉션 제외 ) -->
 
 					<!-- view column2 -->
-					<div class="slide goods_slide" data-ix-options="view-length:1; default-index:{{ calc this.repImgNo '-' 1 }}">
+					{{#xif this.prodListUnitCode '==' 'OnlineProd' }}
+						<div class="slide goods_slide" data-ix-options="view-length:1; default-index:{{ calc this.repImgNo '-' 1 }}">
+					{{else}}
+						<div class="slide goods_slide" data-ix-options="view-length:1; default-index:{{ calc this.products.[0].repImgNo '-' 1 }}">
+					{{/xif}}
 						{{#xif this.displayMenuId '==' 'hotdeal'}}
 							<!-- 핫딜 -->
 							{{#each this.products }}

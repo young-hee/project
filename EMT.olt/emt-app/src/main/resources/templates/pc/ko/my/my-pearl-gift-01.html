@@ -118,19 +118,27 @@
 				function more(pageNumber) {
 					if(pageNumber == 0 || pageNumber == null) return;
 			    	$('#progress').show();
-					if(date)
-						$.get("/my/page/info/pearlAppendList?pageNumber=" + pageNumber + "&startDt="+date.startDate + "&endDt="+date.endDate, function(data) {
-					    	$(".pbody").remove();
-							$(".entry-point").after(data);
-					    	$('#progress').hide();
-						});
-					else
-						$.get("/my/page/info/pearlAppendList?pageNumber=" + pageNumber, function(data) {
-					    	$(".pbody").remove();
-							$(".entry-point").after(data);
-					    	$('#progress').hide();
-						});
+			    	var startDtVal = null;
+			    	var endDtVal = null;
+			    	if(date != null) {
+			    		startDtVal = date.startDate;
+			    		endDtVal = date.endDate;
+			    	}
+					AP.api.pearlList({}, {
+							pageNumber:pageNumber,
+							startDt:startDtVal,
+							endDt:endDtVal
+					}).done(function(data) {
+
+				    	$(".pbody").remove();
+						$(".entry-point").after(data);
 						
+	                }).fail(function(xhr, textStatus, errorThrown) {
+	                	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	                }).always(function() {
+				    	$('#progress').hide();
+	                    //성공, 실패
+	                });
 				}
 				function present() {
 

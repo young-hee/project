@@ -9,6 +9,7 @@ import kr.ap.comm.support.breadcrumb.BreadCrumbPostProcessor;
 import kr.ap.emt.api.pos.POSAPIServiceUtils;
 import kr.ap.emt.api.pos.POSApiService;
 
+import kr.ap.emt.config.filter.EmtCharacterEncodingFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -75,6 +77,14 @@ public class EmtAppConfiguration extends WebMvcConfigurerAdapter {
     @Bean
 	public AccessTokenHandlerInterceptor accessTokenHandlerInterceptor() {
     	return new AccessTokenHandlerInterceptor();
+	}
+
+	@Bean
+	public CharacterEncodingFilter characterEncodingFilter() {
+		CharacterEncodingFilter filter = new EmtCharacterEncodingFilter();
+		filter.setEncoding("utf-8");
+		filter.setForceEncoding(true);
+    	return filter;
 	}
 
     @Override

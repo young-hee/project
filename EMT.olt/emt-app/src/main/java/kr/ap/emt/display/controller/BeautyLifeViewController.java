@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import kr.ap.comm.config.interceptor.PageTitle;
@@ -159,9 +160,26 @@ public class BeautyLifeViewController extends AbstractController {
 
 		SnsEntity snsEntity = new SnsEntity();
         snsEntity.setUrl(getFullUri());
-        snsEntity.setImage(article.getSnsIfImg());
-        snsEntity.setTitle(article.getSnsIfTitle());
-        snsEntity.setDescription(article.getSnsIfDesc());
+        if(StringUtils.isEmpty(article.getSnsIfImg())) {
+        	if (isMobileDevice()) {
+        		snsEntity.setImage(article.getBannerImgM1());
+        	}else {
+        		snsEntity.setImage(article.getBannerImgP1());
+        	}
+        }else {
+        	snsEntity.setImage(article.getSnsIfImg());
+        }      
+        if(StringUtils.isEmpty(article.getSnsIfTitle())) {
+        	snsEntity.setTitle(article.getArticleTitle());
+        }else {
+        	snsEntity.setTitle(article.getSnsIfTitle());
+        }
+        if(StringUtils.isEmpty(article.getSnsIfDesc())) {
+        	snsEntity.setDescription(article.getArticleTitle());
+        }else {
+        	snsEntity.setDescription(article.getSnsIfDesc());
+        }
+        snsEntity.setHashtag(article.getSnsHashTag());
 		model.addAttribute("sns", snsEntity);
 
 		SeoEntity seoEntity = new SeoEntity();
@@ -238,9 +256,26 @@ public class BeautyLifeViewController extends AbstractController {
 		
 		SnsEntity snsEntity = new SnsEntity();
         snsEntity.setUrl(getFullUri());
-        snsEntity.setImage(article.getSnsIfImg());
-        snsEntity.setTitle(article.getSnsIfTitle());
-        snsEntity.setDescription(article.getSnsIfDesc());
+        if(StringUtils.isEmpty(article.getSnsIfImg())) {
+        	if (isMobileDevice()) {
+        		snsEntity.setImage(article.getBannerImgM1());
+        	}else {
+        		snsEntity.setImage(article.getBannerImgP1());
+        	}
+        }else {
+        	snsEntity.setImage(article.getSnsIfImg());
+        }      
+        if(StringUtils.isEmpty(article.getSnsIfTitle())) {
+        	snsEntity.setTitle(article.getArticleTitle());
+        }else {
+        	snsEntity.setTitle(article.getSnsIfTitle());
+        }
+        if(StringUtils.isEmpty(article.getSnsIfDesc())) {
+        	snsEntity.setDescription(article.getArticleTitle());
+        }else {
+        	snsEntity.setDescription(article.getSnsIfDesc());
+        }
+        snsEntity.setHashtag(article.getSnsHashTag());
 		model.addAttribute("sns", snsEntity);
 
 		SeoEntity seoEntity = new SeoEntity();

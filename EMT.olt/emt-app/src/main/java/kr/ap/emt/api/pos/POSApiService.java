@@ -68,4 +68,14 @@ public interface POSApiService {
 	@SuccessCode(rsltCd = "SUCC")
 	CustCushinPoint getCustCushinPoint(@Param("cstmId") String cstmId);
 	
+	/**
+	 * 쿠션포인트조회
+	 * @param ucstmId
+	 * @return
+	 * @throws ApiException
+	 */
+	@RequestLine(value = "epl/getgiftcarduseinfo/v1.00")
+	@SuccessCode(rsltCd = "SUCC")
+	GiftCardUseInfo getGiftCardUseInfo(@Param("cstmId") String cstmId);
+	
 }

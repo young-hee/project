@@ -414,6 +414,12 @@ public class LoginRestController extends AbstractController {
 		return error(result, HttpStatus.NOT_FOUND, "NOTFOUND", "해당 정보로 주문을 조회하지 못했습니다.");
     }
 
+    @PostMapping("/saveUrl")
+    public ResponseEntity<?> saveUrl(String url, HttpServletRequest request) {
+		WebUtils.setSessionAttribute(request, SessionKey.RETURL, url);
+		return ResponseEntity.ok("{}");
+    }
+    
     /**
      * 앱 통신
      *
