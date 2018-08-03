@@ -26,15 +26,11 @@
 			}.bind( this ));
 
 			this._$target.find( '.apply' ).on( 'click', function () {
-				AP.login().done( function () {
-					this._$target.find( 'form.validate' ).submit();
-
-				}.bind( this ));
+				this._$target.find( 'form.validate' ).submit();
 			}.bind( this ));
 
 			this._$target.find( 'input' ).on( 'click', function () {
 				AP.login().done( function () {
-
 				}.bind( this ));
 			}.bind( this ));
 			

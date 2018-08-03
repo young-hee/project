@@ -13,6 +13,94 @@
 		var value = map[key];
 		return value != null ? value : 0;
 	});
+	
+	/**
+  	  * 판매 상태 이미지
+  	  * @param {String}  saleDisplayStatus : OnSale(판매중) - OutOfStock(품절) - Exhaustion(조기소진) - WaitingSale(판매대기) - SuspendSale(판매일시중지) - EndSale(판매종료)
+  	  * @param {String}  prodTypeCode
+  	  * @returns {String}
+  	  */
+	 Handlebars.registerHelper( 'stockImg', function ( saleDisplayStatus, prodTypeCode ) {
+		 var stockImg = '';
+		 var txt = Handlebars.helpers.stockTxt( saleDisplayStatus, prodTypeCode );
+		 if( txt.length > 0 ){
+			 txt = txt.replace('[', "").replace(']', '');
+		 }
+		 
+		 switch(saleDisplayStatus){
+		 case 'OnSale':			//판매중
+			 stockImg = '';
+			 break;
+		 case 'OutOfStock':		//품절
+		 case 'Exhaustion':		//조기소진
+		 case 'WaitingSale':	//판매대기	
+		 case 'SuspendSale':	//판매일시중지
+		 case 'EndSale':		//판매종료
+			 stockImg = '<div class="item_state out_of_stock">'+ txt +'</div>';
+			 break;
+		 }
+		 
+		 return stockImg;
+	 });
+	 
+	 /**
+  	  * 판매 상태 문구
+  	  * @param {String}  saleDisplayStatus : OnSale(판매중) - OutOfStock(품절) - Exhaustion(조기소진) - WaitingSale(판매대기) - SuspendSale(판매일시중지) - EndSale(판매종료)
+  	  * @param {String}  prodTypeCode
+  	  * @returns {String}
+  	  */
+	 Handlebars.registerHelper( 'stockTxt', function ( saleDisplayStatus, prodTypeCode ) {
+		 var stockTxt = '';
+		 
+		 switch(saleDisplayStatus){
+		 case 'OnSale':			//판매중
+			 stockTxt = '';
+			 if( prodTypeCode == 'Presale' ) stockTxt = '[예약판매중]';
+			 break;
+		 case 'OutOfStock':		//품절
+			 stockTxt = '[일시품절]';
+			 break;
+		 case 'Exhaustion':		//조기소진
+			 stockTxt = '[조기소진]';
+			 break;
+		 case 'WaitingSale':	//판매대기	
+			 stockTxt = '[판매대기]';
+			 break;
+		 case 'SuspendSale':	//판매일시중지
+			 stockTxt = '[판매중지]';
+			 break;
+		 case 'EndSale':		//판매종료
+			 stockTxt = '[판매종료]';
+			 break;
+		 }
+		 
+		 return stockTxt;
+	 });
+	 
+	 /**
+  	  * 판매 버튼 활성화
+  	  * @param {String}  saleDisplayStatus : OnSale(판매중) - OutOfStock(품절) - Exhaustion(조기소진) - WaitingSale(판매대기) - SuspendSale(판매일시중지) - EndSale(판매종료)
+  	  * @param {String}  prodTypeCode
+  	  * @returns {String}
+  	  */
+	 Handlebars.registerHelper( 'stockBtn', function ( saleDisplayStatus, prodTypeCode ) {
+		 var stockBtn = '';
+		 
+		 switch(saleDisplayStatus){
+		 case 'OnSale':			//판매중
+			 stockBtn = '';
+			 break;
+		 case 'OutOfStock':		//품절
+		 case 'Exhaustion':		//조기소진
+		 case 'WaitingSale':	//판매대기	
+		 case 'SuspendSale':	//판매일시중지
+		 case 'EndSale':		//판매종료
+			 stockBtn = 'style="display:none;"';
+			 break;
+		 }
+		 
+		 return stockBtn;
+	 });
 
 	/**
 	 * 상품 상세 (온라인, 테이크)
@@ -874,18 +962,21 @@
 						//정률
 						html = '<div class="benefit type2">\n' +
 							'\t\t\t\t\t\t\t\t\t<p>' + value.prodDcCoupon.dcRate * 100 + '<em>%</em></p>\n' +
+							'\t\t\t\t\t\t\t\t\t<span class="sub">할인</span>   \n' +
 							'\t\t\t\t\t\t\t\t</div>';
 						break;
 					case 'FixedAmt' :
 						//정액
 						html = '<div class="benefit type3">\n' +
 							'\t\t\t\t\t\t\t\t\t<p>' + value.prodDcCoupon.dcAmt + '<em>원</em></p>\n' +
+							'\t\t\t\t\t\t\t\t\t<span class="sub">할인</span>   \n' +
 							'\t\t\t\t\t\t\t\t</div>';
 						break;
 					case 'FlatPrice' :
 						//균일가
 						html = '<div class="benefit type3">\n' +
 							'\t\t\t\t\t\t\t\t\t<p>' + value.prodDcCoupon.flatPrice + '<em>원</em></p>\n' +
+							'\t\t\t\t\t\t\t\t\t<span class="sub">균일가</span>   \n' +
 							'\t\t\t\t\t\t\t\t</div>';
 						break;
 					default :
@@ -899,18 +990,21 @@
 						//정률
 						html = '<div class="benefit type2">\n' +
 							'\t\t\t\t\t\t\t\t\t<p>' + value.cartDcCoupon.dcRate * 100 + '<em>%</em></p>\n' +
+							'\t\t\t\t\t\t\t\t\t<span class="sub">할인</span>   \n' +
 							'\t\t\t\t\t\t\t\t</div>';
 						break;
 					case 'FixedAmt' :
 						//정액
 						html = '<div class="benefit type3">\n' +
 							'\t\t\t\t\t\t\t\t\t<p>' + value.cartDcCoupon.dcAmt + '<em>원</em></p>\n' +
+							'\t\t\t\t\t\t\t\t\t<span class="sub">할인</span>   \n' +
 							'\t\t\t\t\t\t\t\t</div>';
 						break;
 					case 'FlatPrice' :
 						//균일가
 						html = '<div class="benefit type3">\n' +
 							'\t\t\t\t\t\t\t\t\t<p>' + value.cartDcCoupon.flatPrice + '<em>원</em></p>\n' +
+							'\t\t\t\t\t\t\t\t\t<span class="sub">균일가</span>   \n' +
 							'\t\t\t\t\t\t\t\t</div>';
 						break;
 					default :
@@ -920,7 +1014,7 @@
 			case 'MPlusN' :
 				//M+N쿠폰
 				html = '<div class="benefit type4">\n' +
-					'\t\t\t\t\t\t\t\t\t<p>N<em><span class="sr_only">+</span></em>N</p>\n' +
+					'\t\t\t\t\t\t\t\t\t<p>' + value.mplusnCoupon.baseOrdQty + '<em><span class="sr_only">+</span></em>' + value.mplusnCoupon.freeAwardQty + '</p>\n' +
 					'\t\t\t\t\t\t\t\t</div>';
 				break;
 			case 'Buy1Get' :
@@ -967,27 +1061,27 @@
 		switch (value.couponBenefitTypeCode) {
 			case 'ProdDc' :
 				//상품할인쿠폰
+				html = '상품쿠폰';
 				break;
 			case 'CartDc' :
 				//장바구니할인쿠폰 - 정액/정률
-				if (value.cartDcCoupon.fromOrdAmt) {
-					html = value.cartDcCoupon.fromOrdAmt+'원 이상 구매 시';
-				}
+				html = '장바구니쿠폰';
 				break;
 			case 'MPlusN' :
 				//M+N쿠폰
+				html = 'M + N';
 				break;
 			case 'Buy1Get' :
 				//Buy1Get쿠폰 - 100%  50%
+				html = 'Buy1 Get1 쿠폰';
 				break;
 			case 'CartAward' :
 				//장바구니증정쿠폰 - 사은품 증정
-				if (value.cartAwardCoupon.fromOrdAmt) {
-					html = value.cartAwardCoupon.fromOrdAmt+'원 이상 구매 시';
-				}
+				html = '사은품증정쿠폰';
 				break;
 			case 'ShipFeeFree' :
 				//배송비무료쿠폰
+				html = '배송비무료쿠폰';
 				break;
 			default :
 				break;

@@ -16,7 +16,9 @@
 			var $section = this._$target.find( '.my_tone_recommend' );
 			if ( !$section.length ) return;
 
-			AP.api.getRecommendWithSkinTone( {type: 'CS'}, null, false
+			var skinton = $section.data('skinton-measure-code');
+			console.log($section.data('skinton-measure-code'));
+			AP.api.getRecommendWithSkinTone( {type: skinton}, null, false
 			).done( function ( result ) {
 				var legacyModelCodes;
 				console.log(result.CHEEK);

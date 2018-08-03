@@ -1,6 +1,7 @@
 <dt id="amtPriceTab">
 	<span>최종 결제금액</span>
 	<span class="total_price"><em>{{currencyFormatDefault ordHistEx.finalPamtPcur '원'}}</em></span>
+	<input type="hidden" name="finalPamtPcurPrice" value="{{ordHistEx.finalPamtPcur}}"/>
 	<button type="button"><span class="sr_only">닫기</span></button>
 </dt>
 <dd>
@@ -13,27 +14,27 @@
 					<dd>
 						{{#if (checkAmtMapPrice ordAmtMap 'OnlineShipProd')}}
 							<dl>
-								<dt>온라인 상품(<em>{{../shippingOrdOnlineProdList.length}}</em>개)</dt>
+								<dt>온라인 상품(<em>{{getCntMap ordCntMap 'onlineShipProdCnt'}}</em>개)</dt>
 								<dd>{{getAmtMapPrice ordAmtMap 'OnlineShipProd' '원'}}</dd>
 							</dl>
 						{{/if}}
 						{{#if apMember}}
 							{{#if (checkAmtMapPrice ordAmtMap 'MembershipExch')}}
 								<dl>
-									<dt>뷰티포인트 상품(<em>{{../shippingOrdOnlineProdList.length}}</em>개)</dt>
+									<dt>뷰티포인트 상품(<em>{{getCntMap ordCntMap 'membershipExchCnt'}}</em>개)</dt>
 									<dd>{{getAmtMapPrice ordAmtMap 'MembershipExch' '원'}}</dd>
 								</dl>
 							{{/if}}
 							{{#if (checkAmtMapPrice ordAmtMap 'ActivityPointExch')}}
 								<dl>
-									<dt>진주알 상품(<em>{{../shippingOrdOnlineProdList.length}}</em>개)</dt>
+									<dt>진주알 상품(<em>{{getCntMap ordCntMap 'activityPointExchCnt'}}</em>개)</dt>
 									<dd>{{getAmtMapPrice ordAmtMap 'ActivityPointExch' '원'}}</dd>
 								</dl>
 							{{/if}}
 						{{/if}}
 						{{#if (checkAmtMapPrice ordAmtMap 'StorePickupProd')}}
 							<dl>
-								<dt>테이크아웃 상품(<em>{{../shippingOrdOnlineProdList.length}}</em>개)</dt>
+								<dt>테이크아웃 상품(<em>{{getCntMap ordCntMap 'storePickupProdCnt'}}</em>개)</dt>
 								<dd>{{getAmtMapPrice ordAmtMap 'StorePickupProd' '원'}}</dd>
 							</dl>
 						{{/if}}

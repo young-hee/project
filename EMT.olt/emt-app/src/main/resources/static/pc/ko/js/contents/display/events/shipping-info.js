@@ -104,9 +104,7 @@
 				if ( $( e.target ).attr( 'class' ).indexOf( 'reset' ) > -1 ) {
 					this._reset();
 				} else if ( $( e.target ).attr( 'class' ).indexOf( 'regist' ) > -1 ) {
-					AP.login().done( function () {
-						this._$modal.find( 'form.validate' ).submit();
-					}.bind( this ));
+					this._$modal.find( 'form.validate' ).submit();
 				}
 			}.bind( this ));
 

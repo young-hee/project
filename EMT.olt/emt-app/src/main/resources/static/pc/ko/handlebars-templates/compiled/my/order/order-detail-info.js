@@ -24,37 +24,31 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-info"] = Handlebars.templa
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.ordInfo : depth0)) != null ? stack1.ordSn : stack1), depth0))
     + ")\">발급신청</button></dd>\n";
 },"8":function(container,depth0,helpers,partials,data) {
-    var stack1;
-
-  return "		<dl>\n			<dt>주문상태</dt>\n			<dd><em>"
-    + container.escapeExpression((helpers.ordStatusCheck || (depth0 && depth0.ordStatusCheck) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"store",((stack1 = (depth0 != null ? depth0.ordInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),{"name":"ordStatusCheck","hash":{},"data":data}))
-    + "</em></dd>\n		</dl>\n		<dl>\n			<dt>구매매장</dt>\n			<dd><em>명동2호점</em> <span class=\"flag\">스윗딜리버리</span> <button class=\"btn_sm_neutral\" type=\"button\">매장 보기</button></dd>\n		</dl>\n";
-},"10":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || alias2).call(alias1,(depth0 != null ? depth0.onlineCnt : depth0),0,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || alias2).call(alias1,(depth0 != null ? depth0.storeCnt : depth0),0,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(16, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+  return "		<dl>\n			<dt>주문상태</dt>\n			<dd>\n				<em>"
+    + container.escapeExpression((helpers.ordStatusCheck || (depth0 && depth0.ordStatusCheck) || alias2).call(alias1,"store",((stack1 = (depth0 != null ? depth0.ordInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),{"name":"ordStatusCheck","hash":{},"data":data}))
+    + "</em>\n"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),"Shipping",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),"OrdHandlingComplete",{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "			</dd>\n		</dl>\n		<dl>\n			<dt>구매매장</dt>\n			<dd><em>명동2호점</em> <span class=\"flag\">스윗딜리버리</span> <button class=\"btn_sm_neutral\" type=\"button\" onclick=\"viewStoreMap()\">매장 보기</button></dd>\n		</dl>\n";
+},"9":function(container,depth0,helpers,partials,data) {
+    return "					<a href=\"#\" class=\"order_number_link\">105712354700</a>\n";
 },"11":function(container,depth0,helpers,partials,data) {
-    var stack1;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return "			<dl>\n				<dt>온라인주문</dt>\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.ordInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),"!=",null,{"name":"xif","hash":{},"fn":container.program(12, data, 0),"inverse":container.program(14, data, 0),"data":data})) != null ? stack1 : "")
-    + "			</dl>\n";
+  return ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || alias2).call(alias1,(depth0 != null ? depth0.onlineCnt : depth0),0,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || alias2).call(alias1,(depth0 != null ? depth0.storeCnt : depth0),0,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(15, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"12":function(container,depth0,helpers,partials,data) {
-    var stack1;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return "					<dd><em>"
-    + container.escapeExpression((helpers.ordStatusCheck || (depth0 && depth0.ordStatusCheck) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"online",((stack1 = (depth0 != null ? depth0.ordInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),{"name":"ordStatusCheck","hash":{},"data":data}))
-    + "</em></dd>\n";
-},"14":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=container.escapeExpression;
-
-  return "					<dd><em>"
-    + alias1(container.lambda((depth0 != null ? depth0.title : depth0), depth0))
-    + " "
-    + alias1((helpers.ordStatusCheck || (depth0 && depth0.ordStatusCheck) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"returnExchange",((stack1 = (depth0 != null ? depth0.ordInfo : depth0)) != null ? stack1.claimProgressStatusCode : stack1),{"name":"ordStatusCheck","hash":{},"data":data}))
-    + "</em></dd>\n";
-},"16":function(container,depth0,helpers,partials,data) {
+  return "			<dl>\n				<dt>온라인주문</dt>\n				<dd>\n					<em>"
+    + container.escapeExpression((helpers.ordStatusCheck || (depth0 && depth0.ordStatusCheck) || alias2).call(alias1,"online",((stack1 = (depth0 != null ? depth0.ordInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),{"name":"ordStatusCheck","hash":{},"data":data}))
+    + "</em>\n"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),"Shipping",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),"OrdHandlingComplete",{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(13, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "				</dd>\n			</dl>\n";
+},"13":function(container,depth0,helpers,partials,data) {
+    return "						<a href=\"#\" class=\"order_number_link\">105712354700</a>\n";
+},"15":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "			<dl>\n				<dt>테이크아웃</dt>\n				<dd><em>"
@@ -71,6 +65,6 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-info"] = Handlebars.templa
     + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.ordInfo : depth0)) != null ? stack1.claimCompleteDt : stack1),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.type : depth0),"cashReceipts",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "</div>\n<div class=\"table_layout\">\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.type : depth0),"==","store",{"name":"xif","hash":{},"fn":container.program(8, data, 0),"inverse":container.program(10, data, 0),"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.type : depth0),"==","store",{"name":"xif","hash":{},"fn":container.program(8, data, 0),"inverse":container.program(11, data, 0),"data":data})) != null ? stack1 : "")
     + "</div>";
 },"useData":true});

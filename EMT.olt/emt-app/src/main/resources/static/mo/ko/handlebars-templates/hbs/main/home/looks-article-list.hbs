@@ -1,18 +1,13 @@
-{{!--
-	Looks 
---}}
 <div class="ix-list-viewport">
 	<ul class="ix-list-items">
-		{{#each this.articleList}}
+		{{#each this.contentsSets}}
 			<li class="ix-list-item">
-				<a href="{{ articleDetailPath this.articleSn }}">
-					<span class="lazy_load_wrap"><img src="" data-src="{{ this.bannerImgM1 }}" alt="" class="lazy_load"></span>
-					<span class="item_title">{{ this.articleTitle }}</span>
-					<span class="tag">{{ toTagshape this.snsHashTag }}</span>
+				<a href="{{ this.contents.[0].linkUrl }}">
+					<span class="lazy_load_wrap"><img src="" data-src="{{ this.contents.[0].imgUrl }}" alt="" class="lazy_load"></span>
+					<span class="item_title">{{ this.contents.[1].text }}</span>
+					<span class="tag">{{ this.snsHashTag }}</span>
 				</a>
 			</li>
 		{{/each}}
 	</ul>
 </div>
-
-

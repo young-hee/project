@@ -41,6 +41,7 @@ import net.g1project.ecp.api.model.ap.ap.SNS;
 import net.g1project.ecp.api.model.ap.ap.ShipAddressInfo;
 import net.g1project.ecp.api.model.ap.ap.SignupReceiveAgree;
 import net.g1project.ecp.api.model.ap.ap.SignupTermsAgree;
+import net.g1project.ecp.api.model.ap.ap.StoreSkinTonMeasureInfo;
 import net.g1project.ecp.api.model.order.order.OrdSummaryInfo;
 import net.g1project.ecp.api.model.sales.member.CloseMember;
 import net.g1project.ecp.api.model.sales.member.ClosedAcInfo;
@@ -145,17 +146,28 @@ public class MyViewControllor extends AbstractController {
 					CustCushinPoint cushin = posService.getCustCushinPoint(onOffNum);
 					if(cushin == null) {
 						cushin = new CustCushinPoint();
-						cushin.setTotRemainPt(memberSession.getMember().getRemainCushionPoint());
+						if(memberSession.getMember().getRemainCushionPoint() == null) {
+							cushin.setTotRemainPt(0);
+						} else {
+							cushin.setTotRemainPt(memberSession.getMember().getRemainCushionPoint());
+						}
 					}
 					model.addAttribute("cushin", cushin);
 				} catch(Exception e) {
 					CustCushinPoint cushin = new CustCushinPoint();
-					cushin.setTotRemainPt(memberSession.getMember().getRemainCushionPoint());
+					if(memberSession.getMember().getRemainCushionPoint() == null) {
+						cushin.setTotRemainPt(0);
+					} else {
+						cushin.setTotRemainPt(memberSession.getMember().getRemainCushionPoint());
+					}
 					model.addAttribute("cushin", cushin);
 				}
 			}
 			
-			
+			//피부톤
+			StoreSkinTonMeasureInfo skinTon = apApi.getSkinToneMeasures(getMemberSn());
+			model.addAttribute("skinTon", skinTon);
+
 		} catch (Exception e) {
 			model.addAttribute("errorData", e);
 		}

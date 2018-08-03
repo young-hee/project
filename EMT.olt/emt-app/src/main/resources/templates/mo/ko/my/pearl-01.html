@@ -176,7 +176,7 @@
 				function present() {
 
 					var point = Number($("#giftPoint").val());
-					if(point < 999) {
+					if(point <= 999) {
 						AP.modal.alert("보낼 진주알은 최소 1000알 이상 입력해야 합니다.").addListener('modal-close', function(e) {
 							$("#giftPoint").focus();
 	                    });
@@ -204,7 +204,9 @@
 			                        AP.modal.alert("보유하신 진주알이 부족하여 선물하기를 할 수 없습니다.");
 			                    } else if (xhr.errorCode == 'EAPI001') {
 			                        AP.modal.alert("선물 주기에 실패했습니다.");
-			                    } else {
+			                    } else if (xhr.errorCode == 'EAPI003'){
+				                    AP.modal.alert("교환 진주알 포인트가 부족합니다.");
+				                } else{
 			                        AP.modal.alert(xhr.errorMessage);
 			                    }
 			                }).always(function() {

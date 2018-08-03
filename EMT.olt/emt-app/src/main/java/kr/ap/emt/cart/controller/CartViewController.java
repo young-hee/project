@@ -113,6 +113,9 @@ public class CartViewController extends AbstractController{
 		return null;
 	}
 
+	/**
+	 * 쇼핑상품 정의
+	 */
 	private CartEx makeCartEx2(CartEx cartEx) {
 
 		/* 온라인쇼핑 상품 */

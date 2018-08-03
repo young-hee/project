@@ -256,12 +256,29 @@
 			</a>
 		</div>
 
-		<!-- 유투브 동영상 -->
-		<div class="section video_wrap">
-			<!--/* 섬네일 용 이미지 버튼 안들어갈때는 삭제 */-->
-			<!--<button type="button" class="thumbnail"><img ap:src="@{/images/dummy/img_video.jpg}" alt=""></button>-->
-			<iframe class="youtube_video" width="750" height="420" src="https://www.youtube.com/embed/L-iMRjjWZL8?wmode=transparent&showinfo=0;&autoplay=0&enablejsapi=1" frameborder="0" allowfullscreen data-vendor="youtube" data-ratio="true" data-mute="false"></iframe>
+		<!-- 동영상 영역 -->
+		<div class="section y_video_wrap">
+			<div class="video_wrap">
+				<iframe class="youtube_video" width="750" height="420" src="https://www.youtube.com/embed/L-iMRjjWZL8?wmode=transparent&showinfo=0;&autoplay=0&enablejsapi=1" frameborder="0" allowfullscreen data-vendor="youtube" data-ratio="true" data-mute="false"></iframe>
+			</div>
+			
+			<!-- 썸네일 -->
+			<div class="video_thumb_area">
+				<a href="javascript:;">
+					<img src="/mo/ko/images/dummy/img_youtube_thumb01.jpg" alt=""  class="thumb_img" />
+					<img src="/mo/ko/images/common/btn_video_play.png" alt=""  class="btn_video_thumb" />
+				</a>
+			</div>
+
 		</div>
+		<script type="text/javascript">
+				/* Youtube 자동재생 스크립트 */
+				$('.video_thumb_area').bind('click', function() {
+					var $ytb_iframe = $(this).prev().find("iframe");
+					  $(this).hide();
+					  $ytb_iframe.show();
+				 });	
+		</script>
 
 		<div class="cate_prd_wrap01">
 		

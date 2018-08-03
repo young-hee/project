@@ -30,13 +30,17 @@
 			<!--/* 상품 이미지/상태 영역 */-->
 			<div class="item_images">
 				<!--/* 상품 이미지 */-->
-				<div class="slide goods_slide" data-ix-options="view-length:1; viewport-ratio:50 50;"
-					 th:with="defaultProdImages=${prd.selectedProdSn == null or #lists.size(#collections.where(prd.products, {prodSn: prd.selectedProdSn})) < 1 ? prd.onlineProdImages : #collections.where(prd.products, {prodSn: prd.selectedProdSn})[0].prodImages }">
+				<div class="slide goods_slide" data-ix-options="view-length:1; viewport-ratio:50 50;" th:with="defaultProdImages=${prd.selectedProdSn == null or #lists.size(#collections.where(prd.products, {prodSn: prd.selectedProdSn})) < 1 ? prd.onlineProdImages : #collections.where(prd.products, {prodSn: prd.selectedProdSn})[0].prodImages }">
 					<div class="ix-list-viewport">
 						<ul class="ix-list-items">
 							<th:block th:each="onlineImg : ${defaultProdImages}">
 								<li class="ix-list-item">
+								<th:block th:if="${onlineImg.videoYn eq 'N'}">
 									<img th:src="${onlineImg.imgUrl}" alt="" data-width="480" data-height="480">
+								</th:block>
+								<th:block th:if="${onlineImg.videoYn eq 'Y'}">
+								
+								</th:block>
 								</li>
 							</th:block>
 						</ul>
@@ -209,10 +213,22 @@
 				<th:block th:each="availablePrice : ${prd.availablePrices}">
 					<div class="price_area" th:if="${availablePrice.currencyCode == 'KRW'}">
 						<div>
-							<span class="discount" th:if="${availablePrice.doublePriceDisplayYn == 'Y'}"
-								  th:with="disMinRate=${availablePrice.minOnlineSalePriceDiscountRate + availablePrice.minMemberLevelDiscountRate + availablePrice.minOnlineMemberDiscountRate},disMaxRate=${availablePrice.maxOnlineSalePriceDiscountRate + availablePrice.maxMemberLevelDiscountRate + availablePrice.maxOnlineMemberDiscountRate}">
+							<!-- /* 이중가 표기 및 할인률 표기 */ -->
+							<span class="discount" 
+								th:if="${availablePrice.doublePriceDisplayYn == 'Y'}"
+								th:with="disMinRate=${availablePrice.minOnlineSalePriceDiscountRate + availablePrice.minMemberLevelDiscountRate + availablePrice.minOnlineMemberDiscountRate},disMaxRate=${availablePrice.maxOnlineSalePriceDiscountRate + availablePrice.maxMemberLevelDiscountRate + availablePrice.maxOnlineMemberDiscountRate}">
 								<span class="from" th:if="${disMinRate != disMaxRate}">~ </span>
-								<span class="to"><strong th:text="${disMaxRate}"></strong>%</span>
+								<span class="to">
+									<strong th:text="${disMaxRate}"></strong>%
+								</span>
+							</span>
+							
+							<!-- /* 이중가 표기하지 않고 회원 할인만 있을 경우 처리 */ -->
+							<span class="discount" th:if="${availablePrice.doublePriceDisplayYn == 'N' && availablePrice.onlineMemberDiscountYn == 'Y'}">
+								<span class="from" th:if="${availablePrice.minOnlineMemberDiscountRate != availablePrice.maxOnlineMemberDiscountRate}">~</span>
+								<span class="to">
+									<strong th:text="${availablePrice.minOnlineMemberDiscountRate}"></strong>%
+								</span>
 							</span>
 							
 							<!-- /* 뷰티 포인트 */ -->
@@ -509,7 +525,7 @@
 	<div class="option_layer goods_detail_buy close" th:with="currencySign=${prd.productCount == 1 and prd.products[0].membershipExchOnly == 'Y' ? 'P' : '원'}">
 		<!--/* 오픈전 구매 버튼 셋 */-->
 		<div class="purchase_btn_set">
-			<button type="button" class="btn_md_bordered btn_open_order_layer"
+			<button type="button" class="btn_md_bordered btn_open_order_layer btn_takeout"
 					th:if="${#lists.size(#collections.where(prd.products, {storePickupBtnEnable: 'Y'})) > 0}">테이크아웃
 			</button>
 			

@@ -9,7 +9,7 @@
 					<button type="button">옵션 선택</button>
 					<ul class="select_options">
 						{{#each list}}
-							{{#if (ne this.prodSn ../prodSn)}}
+							{{#if (and (ne this.prodSn ../prodSn) (eq this.saleDisplayStatus 'OnSale'))}}
 								<li class="select_option">
 									<code class="label_markup" style="display:none">
 										<span class="slt_color_name">{{ prodName }}</span>

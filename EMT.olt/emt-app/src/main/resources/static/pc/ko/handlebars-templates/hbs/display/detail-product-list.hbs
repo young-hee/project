@@ -10,10 +10,7 @@
 					<div class="item_images">
 						{{!-- 대표 이미지 --}}
 						<a href="{{ productDetailPath this.onlineProdSn }}" class="lazy_load_wrap first_img"><img class="lazy_load" src="" data-src="{{ this.onlineProdImages.0.imgUrl }}" alt=""></a>
-					
-						{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
-							<div class="item_state out_of_stock">일시품절</div>
-						{{/xif}}
+						{{{stockImg this.saleDisplayStatus this.prodTypeCode }}}
 					</div>
 					<div class="info_box">
 						{{!--/* flags */--}}
@@ -40,7 +37,7 @@
 						{{/if}}
 						{{!-- /* 상품명 */ --}}
 						<div class="title_area">
-							<h3 class="h_title">{{ this.onlineProdName }}{{#xif this.saleDisplayStatus '==' 'OutOfStock'}} [일시품절]{{/xif}}</h3>
+							{{stockTxt this.saleDisplayStatus this.prodTypeCode}}<h3 class="h_title">{{ this.onlineProdName }}</h3>
 						</div>
 						{{!--/* color 옵션 */--}}
 						{{!--
@@ -114,7 +111,7 @@
 							</div>
 						{{/xif}}
 	
-						<button type="button" class="btn_order" data-online-prod-sn="{{ this.onlineProdSn }}">담기</button>
+						<button type="button" class="btn_order" data-online-prod-sn="{{ this.onlineProdSn }}" {{{stockBtn this.saleDisplayStatus this.prodTypeCode}}} >담기</button>
 					</div>
 				</div>
 			</li>
@@ -134,6 +131,7 @@
 							<div class="item_images">
 								{{!-- 대표 이미지 --}}
 								<img class="lazy_load" src="" data-src="{{ this.prodImages.[0].imgUrl }}" alt="">
+								{{{stockImg this.saleDisplayStatus this.prodTypeCode }}}
 							</div>
 
 							<div class="info_box">
@@ -162,7 +160,7 @@
 
 								{{!-- /* 상품명 */ --}}
 								<div class="title_area">
-									<h3 class="h_title">{{ this.prodName }}{{#xif this.saleDisplayStatus '==' 'OutOfStock'}} [일시품절]{{/xif}}</h3>
+									{{stockTxt this.saleDisplayStatus this.prodTypeCode}}<h3 class="h_title">{{ this.prodName }}</h3>
 								</div>
 
 								<div class="price_area">
@@ -196,7 +194,7 @@
 							</div>
 
 							<div class="option_select">
-								<button type="button" class="btn_order" data-online-prod-sn="{{ ../onlineProdSn }}" data-prod-sn="{{ ../prodSn }}" >담기</button>
+								<button type="button" class="btn_order" data-online-prod-sn="{{ ../onlineProdSn }}" data-prod-sn="{{ ../prodSn }}" {{{stockBtn this.saleDisplayStatus this.prodTypeCode}}} >담기</button>
 							</div>
 						</div>
 					</li>

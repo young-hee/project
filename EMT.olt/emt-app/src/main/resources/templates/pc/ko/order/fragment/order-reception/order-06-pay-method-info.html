@@ -20,8 +20,9 @@
 						<dt><b>예치금</b></dt>
 						<dd>
 							<span class="input_wrap" id="depositPriceCheck" style="display: none">
-								<input type="text" id="depositPrice" name="depositPrice" value="0" placeholder="0" title="사용할 예치금 입력">
-							</span> / <span id="totDepositPrice" th:text="${#IntegUtil.toCommaNumber(ordEx.depositAvailAmt)}">0</span>원
+								<input type="number" id="depositPrice" name="depositPrice" value="" title="사용할 예치금 입력">
+							</span>
+							/ <span id="totDepositPrice" th:text="${#IntegUtil.toCommaNumber(session.LOGIN_USER.member.remainDeposit)}">0</span>원
 							<button type="button" class="btn_sm_neutral" id="b_deposit" style="display: none">모두 사용</button>
 						</dd>
 					</dl>
@@ -34,7 +35,7 @@
 			<!--/* 최종 결제 수단 선택*/-->
 			<ul class="table_layout payment_method mgt40">
 				<!--결제수단 목록-->
-				<th:block ap:replace="~{order/fragment/order-payment-method-info}"/>
+				<th:block ap:replace="~{order/fragment/order-reception-payment/order-payment-method-info}"/>
 			</ul>
 			<div class="check_wrap mgt20"><input type="checkbox" id="nextPayUseYn" name="nextPayUseYn"><label for="nextPayUseYn">선택한 결제 수단을 다음에도 사용</label></div>
 
@@ -83,7 +84,7 @@
 			</fieldset>
 
 			<!--결제수단 별 유의사항-->
-			<th:block ap:replace="~{order/fragment/order-payment-notice-info}"/>
+			<th:block ap:replace="~{order/fragment/order-reception-payment/order-payment-notice-info}"/>
 		</div>
 	</dd>
 	<!--스크립트 정의-->
@@ -143,12 +144,11 @@
 
 		/* 예치금 모두사용하기 */
 		$("#b_deposit").on('click', function(e){
-			var depositAvailAmt =  $('[name="depositAvailAmt"]').val();			// 예치금 사용가능한 금액
-			var finalPamtPcur = /*[[${ordEx.ordHistEx.finalPamtPcur}]]*/ '0';	// 최종결제금액
+			var depositAvailAmt =  $('[name="depositAvailAmt"]').val();		// 예치금 사용가능한 금액
+			var finalPamtPcur = $('[name="finalPamtPcurPrice"]').val();		// 최종결제금액
 			if(depositAvailAmt > 0){
 				// 예치금 > 결제금액
 				if(depositAvailAmt > finalPamtPcur){
-					AP.modal.alert("예치금 사용금액이 최종결제금액보다 많습니다.");
 					$('[name="depositPrice"]').val(finalPamtPcur);
 				}else if(depositAvailAmt <= finalPamtPcur){
 					$('[name="depositPrice"]').val(depositAvailAmt);
@@ -164,8 +164,8 @@
 		});
 
 		$('[name="depositPrice"]').on('blur', function(e){
-			var totDepositPrice = $(this).val();								// 입력한 사용가능금액
-			var finalPamtPcur = /*[[${ordEx.ordHistEx.finalPamtPcur}]]*/ '0';	// 최종결제금액
+			var totDepositPrice = $(this).val();					// 입력한 사용가능금액
+			var finalPamtPcur = $('[name="finalPamtPcurPrice"]').val();	// 최종결제금액
 			if(totDepositPrice > 0){
 				// 예치금 > 결제금액
 				if(totDepositPrice > finalPamtPcur){

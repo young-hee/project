@@ -85,13 +85,13 @@
 				</div>
 
 				<!--/* 20180502 : 마이 컬러파인더 변경 */-->
-				<div class="my_color_finder">
+				<div class="my_color_finder" th:if="${skinTon != null && skinTon.skinToneMeasureYN == 'Y'}">
 					<h3 class="h_title sub"><strong>마이 컬러파인더</strong></h3>
 					<div class="tone_wrap spring">
 						<!--/* 웜톤-봄 : spring, 쿨톤-여름 : summer, 웜톤-가을 : fall, 쿨톤-겨울 : winter */-->
 						<div class="text">
-							<p class="eng">Warm Tone <strong>Spring</strong></p>
-							<p class="tone_text">홍길동 님의 피부톤은<br><b>웜톤 봄</b> 타입</p>
+							<p class="eng" th:text="${skinTon.skinToneMeasureName}">Warm Tone <strong>Spring</strong></p>
+							<p class="tone_text">홍길동 님의 피부톤은<br><b th:text="${skinTon.skinToneMeasureName}">웜톤 봄</b> 타입</p>
 						</div>
 						<div class="tone_color">
 							<p>비비드 오렌지, 옐로우, 그린또는 노란빛이 감도는 파스텔 피치핑크, 베이비핑크 계열</p>
@@ -113,7 +113,7 @@
 					</div>
 
 					<!--/* 추천템 */-->
-					<div class="my_tone_recommend">
+					<div class="my_tone_recommend" th:data-skinton-measure-code="${skinTon.skinToneMeasureCode}">
 						<h3 class="h_title sub">내 피부톤과 어울리는 추천 제품</h3>
 						<div class="slide" data-ix-options="view-length:5;">
 							<div class="ix-list-viewport">
@@ -222,7 +222,7 @@
 					</div>
 
 					<div class="banner">
-						<a href="#"><img ap:src="@{/images/my/link_app.jpg}" alt="에뛰드 하우스 앱으로 더 많은 정보를 확인해 보세요~. 앱 설치하기" /></a>
+						<a href="#"><img ap:src="@{/images/my/link_app.png}" alt="에뛰드 하우스 앱으로 더 많은 정보를 확인해 보세요~. 앱 설치하기" /></a>
 					</div>
 				</div>
 			</div>

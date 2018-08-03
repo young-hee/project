@@ -8,15 +8,17 @@ this["AP"]["handlebars"]["display"]["product-list"]["item-slide"] = Handlebars.t
 
   return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.onlineProdImages : depth0),{"name":"each","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"2":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var alias1=container.escapeExpression, alias2=container.lambda;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression, alias4=container.lambda;
 
   return "				<li class=\"ix-list-item\">\n					<a href=\""
-    + alias1((helpers.productDetailPath || (depth0 && depth0.productDetailPath) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depths[1] != null ? depths[1].onlineProdSn : depths[1]),{"name":"productDetailPath","hash":{},"data":data}))
+    + alias3((helpers.productDetailPath || (depth0 && depth0.productDetailPath) || alias2).call(alias1,(depths[1] != null ? depths[1].onlineProdSn : depths[1]),{"name":"productDetailPath","hash":{},"data":data}))
     + "\" class=\"lazy_load_wrap\">\n						<img class=\"lazy_load\" src=\"\" data-src=\""
-    + alias1(alias2((depth0 != null ? depth0.imgUrl : depth0), depth0))
+    + alias3(alias4((depth0 != null ? depth0.imgUrl : depth0), depth0))
     + "\" alt=\""
-    + alias1(alias2((depths[1] != null ? depths[1].onlineProdName : depths[1]), depth0))
-    + "\">\n					</a>\n				</li>\n";
+    + alias3(alias4((depths[1] != null ? depths[1].onlineProdName : depths[1]), depth0))
+    + "\">\n						"
+    + ((stack1 = (helpers.stockImg || (depth0 && depth0.stockImg) || alias2).call(alias1,(depths[1] != null ? depths[1].saleDisplayStatus : depths[1]),(depths[1] != null ? depths[1].prodTypeCode : depths[1]),{"name":"stockImg","hash":{},"data":data})) != null ? stack1 : "")
+    + "\n					</a>\n				</li>\n";
 },"4":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 

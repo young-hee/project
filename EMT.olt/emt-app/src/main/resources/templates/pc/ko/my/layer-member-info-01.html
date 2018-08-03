@@ -151,7 +151,7 @@
 												<div class="address_result"></div>
 												<!--/* [E]주소 검색 후 노출 */-->
 												<input th:value="${session.LOGIN_USER.member.address != null? (session.LOGIN_USER.member.address.zipCode) : ''}" type="hidden" class="post_code" name="homeZip" title="우편번호 입력" readonly>
-												<div class="input_wrap w100p"><input type="text"name="homeBscsAddr" class="address_first" title="기본주소 입력" placeholder="기본주소" readonly=""></div>
+												<div class="input_wrap w100p"><input type="text"name="homeBscsAddr" th:value="${session.LOGIN_USER.member.address != null? (session.LOGIN_USER.member.address.address1) : ''}" class="address_first" title="기본주소 입력" placeholder="기본주소" readonly=""></div>
 												<div class="input_group w100p">
 													<span class="input_wrap"><input type="text" th:value="${session.LOGIN_USER.member.address != null? (session.LOGIN_USER.member.address.address2) : ''}" name="homeDtlAddr" class="address_last" title="상세주소 입력" placeholder="상세주소를 입력해주세요."></span>
 												</div>

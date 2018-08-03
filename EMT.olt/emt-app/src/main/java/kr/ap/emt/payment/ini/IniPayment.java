@@ -6,44 +6,30 @@
  */
 package kr.ap.emt.payment.ini;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.StringUtils;
-
 import com.inicis.inipay.INIpay;
 import com.inicis.std.util.HttpUtil;
 import com.inicis.std.util.ParseUtil;
 import com.inicis.std.util.SignatureUtil;
-
 import kr.ap.emt.payment.vo.PayDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
- * @author Administrator@g1project.net
- * @since {version}
- *
+ * @author aki
  */
 public class IniPayment {
+
+	private static Logger logger = LoggerFactory.getLogger(IniPayment.class);
 	
     //INIPAY 
     //paymethod
@@ -247,8 +233,8 @@ public class IniPayment {
            //#############################
            // 인증결과 파라미터 일괄 수신
            //#############################
-           System.out.println(">>> INIpay Start ...<<<");
-           System.out.println(">>> 인증결과 파라미터 일괄 수신 <<<");
+           logger.debug(">>> INIpay Start ...<<<");
+           logger.debug(">>> 인증결과 파라미터 일괄 수신 <<<");
            
            request.setCharacterEncoding("UTF-8");
            Map<String,String> paramMap = new Hashtable<String,String>();
@@ -259,14 +245,14 @@ public class IniPayment {
                temp = (String) elems.nextElement();
                paramMap.put(temp, request.getParameter(temp));
            }
-           System.out.println(">>> paramMap : " + paramMap.toString());
-           System.out.println(">>> 인증코드 : " + paramMap.get("resultCode"));
+           logger.debug(">>> paramMap : {}", paramMap.toString());
+           logger.debug(">>> 인증코드 : {}", paramMap.get("resultCode"));
            
            //#####################
            // 인증이 성공일 경우만
            //#####################
            if("0000".equals(paramMap.get("resultCode"))){
-               System.out.println(">>> 인증성공/승인요청 <<<");
+               logger.debug(">>> 인증성공/승인요청 <<<");
                
                //############################################
                // 1.전문 필드 값 설정(***가맹점 개발수정***)
@@ -308,27 +294,27 @@ public class IniPayment {
                authMap.put("format"        ,format);          // default=XML
                //authMap.put("price"        ,price);            // 가격위변조체크기능 (선택사용)
          
-               System.out.println(">>> 승인요청 API 요청 <<<");
+               logger.debug(">>> 승인요청 API 요청 <<<");
 
                HttpUtil httpUtil = new HttpUtil();
                try{
                    //#####################
                    // 4.API 통신 시작
                    //#####################
-                   System.out.println(">>> API 통신 시작 <<<");
+                   logger.debug(">>> API 통신 시작 <<<");
                    String authResultString = "";
                    authResultString = httpUtil.processHTTP(authMap, authUrl);
                    
                    //############################################################
                    //5.API 통신결과 처리(***가맹점 개발수정***)
                    //############################################################
-                   System.out.println(">>> 승인 API 결과 <<<");
+                   logger.debug(">>> 승인 API 결과 <<<");
                    String test = authResultString.replace(",", "&").replace(":", "=").replace("\"", "").replace(" ","").replace("\n", "").replace("}", "").replace("{", "");
                    //out.println("<pre>"+authResultString.replaceAll("<", "&lt;").replaceAll(">", "&gt;")+"</pre>");
                    
                    Map<String, String> resultMap = new HashMap<String, String>();
                    resultMap = ParseUtil.parseStringToMap(test); //문자열을 MAP형식으로 파싱
-                   System.out.println(">>> 전체데이터 확인 : " + resultMap);
+                   logger.debug(">>> 전체데이터 확인 : {}", resultMap);
                    
                    /*************************  결제보안 강화 2016-05-18 START ****************************/
                    Map<String , String> secureMap = new HashMap<String, String>();
@@ -347,30 +333,30 @@ public class IniPayment {
                         [중요!] 승인내용에 이상이 없음을 확인한 뒤 가맹점 DB에 해당건이 정상처리 되었음을 반영함
                                                      처리중 에러 발생시 망취소를 한다.
                       ******************************************************************************/
-                       System.out.println("**************** 거래성공(거래내역 정보) ****************");
-                       System.out.println(">>> 거래성공 결과코드  : " + resultMap.get("resultCode"));
-                       System.out.println(">>> 거래성공 결과내용 : " + resultMap.get("resultMsg"));
-                       System.out.println(">>> 거래 번호 : " + resultMap.get("tid"));
-                       System.out.println(">>> 결제방법(지불수단) : " + resultMap.get("payMethod"));
-                       System.out.println(">>> 결제완료금액 : " + resultMap.get("TotPrice"));
-                       System.out.println(">>> 주문 번호 : " + resultMap.get("MOID"));
-                       System.out.println(">>> 승인날짜 : " + resultMap.get("applDate"));
-                       System.out.println(">>> 승인시간 : " + resultMap.get("applTime"));
-                       System.out.println("***********************************************");
+                       logger.debug("**************** 거래성공(거래내역 정보) ****************");
+                       logger.debug(">>> 거래성공 결과코드  : {}", resultMap.get("resultCode"));
+                       logger.debug(">>> 거래성공 결과내용 : {}", resultMap.get("resultMsg"));
+                       logger.debug(">>> 거래 번호 : {}", resultMap.get("tid"));
+                       logger.debug(">>> 결제방법(지불수단) : {}", resultMap.get("payMethod"));
+                       logger.debug(">>> 결제완료금액 : {}", resultMap.get("TotPrice"));
+                       logger.debug(">>> 주문 번호 : {}", resultMap.get("MOID"));
+                       logger.debug(">>> 승인날짜 : {}", resultMap.get("applDate"));
+                       logger.debug(">>> 승인시간 : {}", resultMap.get("applTime"));
+                       logger.debug("***********************************************");
                        
                        map.putAll(resultMap);
                        
                    } else {
-                       System.out.println("**************** 거래실패(결과정보) ****************");
-                       System.out.println(">>> 거래실패 결과코드  : " + resultMap.get("resultCode"));
-                       System.out.println(">>> 거래실패 결과내용 : " + resultMap.get("resultMsg"));
-                       System.out.println(">>> 거래 번호 : " + resultMap.get("tid"));
-                       System.out.println(">>> 결제방법(지불수단) : " + resultMap.get("payMethod"));
-                       System.out.println(">>> 결제완료금액 : " + resultMap.get("TotPrice"));
-                       System.out.println(">>> 주문 번호 : " + resultMap.get("MOID"));
-                       System.out.println(">>> 승인날짜 : " + resultMap.get("applDate"));
-                       System.out.println(">>> 승인시간 : " + resultMap.get("applTime"));
-                       System.out.println("********************************************");
+                       logger.debug("**************** 거래실패(결과정보) ****************");
+                       logger.debug(">>> 거래실패 결과코드  : {}", resultMap.get("resultCode"));
+                       logger.debug(">>> 거래실패 결과내용 : {}", resultMap.get("resultMsg"));
+                       logger.debug(">>> 거래 번호 : {}", resultMap.get("tid"));
+                       logger.debug(">>> 결제방법(지불수단) : {}", resultMap.get("payMethod"));
+                       logger.debug(">>> 결제완료금액 : {}", resultMap.get("TotPrice"));
+                       logger.debug(">>> 주문 번호 : {}", resultMap.get("MOID"));
+                       logger.debug(">>> 승인날짜 : {}", resultMap.get("applDate"));
+                       logger.debug(">>> 승인시간 : {}", resultMap.get("applTime"));
+                       logger.debug("********************************************");
                        
                        map.put("resultCode", resultMap.get("resultCode"));
                        map.put("resultMsg", resultMap.get("resultMsg"));
@@ -384,9 +370,9 @@ public class IniPayment {
                        //결제보안키가 다른 경우
                        if (!secureSignature.equals(resultMap.get("authSignature"))) {
                            //결과정보
-                           System.out.println("****** 결제보안키가 다른경우 ******");
-                           System.out.println(">>> 결과내용 : 데이터 위변조 체크 실패");
-                           System.out.println("*************************");
+                           logger.debug("****** 결제보안키가 다른경우 ******");
+                           logger.debug(">>> 결과내용 : 데이터 위변조 체크 실패");
+                           logger.debug("*************************");
                            map.put("authSignatureMsg", "데이터 위변조 체크 실패");
                            //망취소
                            if ("0000".equals(resultMap.get("resultCode"))) {
@@ -404,31 +390,30 @@ public class IniPayment {
                    // 실패시 처리(***가맹점 개발수정***)
                    //####################################
                    //---- db 저장 실패시 등 예외처리----//
-                   System.out.println(ex);
+                   logger.error(ex.getMessage(), ex);
                    //#####################
                    // 망취소 API
                    //#####################
                    String netcancelResultString = httpUtil.processHTTP(authMap, netCancel);    // 망취소 요청 API url(고정, 임의 세팅 금지)
-                   System.out.println("## 망취소 API 결과 ##");
+                   logger.debug("## 망취소 API 결과 ##");
                    // 취소 결과 확인
-                   System.out.println("<p>"+netcancelResultString.replaceAll("<", "&lt;").replaceAll(">", "&gt;")+"</p>");
+                   logger.debug("<p>"+netcancelResultString.replaceAll("<", "&lt;").replaceAll(">", "&gt;")+"</p>");
                }
                
            }else{
                //#############
                // 인증 실패시
                //#############
-               System.out.println("<br/>");
-               System.out.println("####인증실패####");
-               System.out.println("<p>"+paramMap.get("resultCode")+"</p>");
-               System.out.println("<p>"+paramMap.toString()+"</p>");
+               logger.error("####인증실패####");
+               logger.error("<p>"+paramMap.get("resultCode")+"</p>");
+               logger.error("<p>"+paramMap.toString()+"</p>");
                map.put("resultCode", paramMap.get("resultCode"));
                map.put("resultMsg", paramMap.get("resultMsg"));
                
            }
 
        }catch(Exception e){
-           System.out.println(e);
+           logger.error(e.getMessage(), e);
        }
 
         return map;
@@ -441,8 +426,8 @@ public class IniPayment {
             //#############################
             // 인증결과 파라미터 일괄 수신
             //#############################
-            System.out.println(">>> INIpay Start ...<<<");
-            System.out.println(">>> 인증결과 파라미터 일괄 수신 <<<");
+            logger.debug(">>> INIpay Start ...<<<");
+            logger.debug(">>> 인증결과 파라미터 일괄 수신 <<<");
             
             request.setCharacterEncoding("UTF-8");
             Map<String,String> paramMap = new Hashtable<String,String>();
@@ -453,8 +438,8 @@ public class IniPayment {
                 temp = (String) elems.nextElement();
                 paramMap.put(temp, request.getParameter(temp));
             }
-            System.out.println(">>> paramMap : " + paramMap.toString());
-            System.out.println(">>> 인증상태 : " + paramMap.get("P_STATUS"));	//성공시 00, 그외 실패
+            logger.debug(">>> paramMap : {}", paramMap.toString());
+            logger.debug(">>> 인증상태 : {}", paramMap.get("P_STATUS"));	//성공시 00, 그외 실패
             
             //모바일 인증결과 parameter 정의
             //P_STATUS 인증상태 성공시 00, 그외 실패
@@ -469,23 +454,23 @@ public class IniPayment {
             // 인증이 성공일 경우만
             //#####################
             if("00".equals(paramMap.get("P_STATUS")) && !StringUtils.isEmpty(paramMap.get("P_TID"))){
-                System.out.println(">>> 인증성공/승인요청 <<<");
+                logger.debug(">>> 인증성공/승인요청 <<<");
                 
                 String authUrl = paramMap.get("P_REQ_URL");	//요청 url
                 String data = makeMobileConfirmParam(paramMap.get("P_TID"), pMid);
                 authUrl = authUrl + data;
                 
-                System.out.println("P_TID=" + paramMap.get("P_TID"));
-                System.out.println("P_MID=" + pMid);
-                System.out.println("authUrl=" + authUrl);
+                logger.debug("P_TID={}", paramMap.get("P_TID"));
+                logger.debug("P_MID={}", pMid);
+                logger.debug("authUrl={}", authUrl);
                 
-                System.out.println("sendData=" + data);
+                logger.debug("sendData={}", data);
                 
                 //#####################
                 // 승인 요청
                 //#####################
                 
-                System.out.println(">>> 승인요청  <<<");
+                logger.debug(">>> 승인요청  <<<");
                 
                 HttpURLConnection conn = null;
         		InputStream inStream = null;
@@ -493,32 +478,6 @@ public class IniPayment {
                 
                 try {
         			String url = authUrl;     
-        			TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
-
-                        @Override
-                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-
-                            return null;
-                        }
-
-
-                        @Override
-                        public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {
-
-                        }
-
-
-                        @Override
-                        public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) {
-
-                        }
-                    }};
-
-                    // Activate the new trust manager
-        			SSLContext sc = SSLContext.getInstance("SSL");
-                    sc.init(null, trustAllCerts, new java.security.SecureRandom());
-                    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-
                     conn = (HttpsURLConnection)  new URL(url).openConnection();
 
                     conn.setDoInput(true); 
@@ -560,12 +519,12 @@ public class IniPayment {
                         bReader.close();
                         inStream.close();
                         
-                        System.out.println(">> 승인 결과 데이터 확인 : " + resultMap);
+                        logger.debug(">> 승인 결과 데이터 확인 : {}", resultMap);
                         
                         resultMap.put("resultCode", resultMap.get("P_STATUS"));
                         if("00".equals(resultMap.get("P_STATUS"))){	//승인 성공
                         	
-                        	System.out.println(">>> 승인성공 결과 데이터 확인 : " + resultMap);
+                        	logger.debug(">>> 승인성공 결과 데이터 확인 : {}", resultMap);
         				}
                        
                     } else {
@@ -573,22 +532,19 @@ public class IniPayment {
                     	
                     }
                 } catch (SocketTimeoutException ste) {
-                	ste.printStackTrace();
-                	System.out.println("test socketTimeOut");
+                	logger.error(ste.getMessage(), ste);
                 	resultMap.put("resultCode", "99");
                 	resultMap.put("P_RMESG1", "socketTimeOut");
                 	
                 	
                 } catch (IOException ie) {
-                	ie.printStackTrace();
-                	System.out.println("test ioException");
+                	logger.error(ie.getMessage(), ie);
                 	resultMap.put("resultCode", "99");
                 	resultMap.put("P_RMESG1", "ioException");
                 	
                 	
                 } catch (Exception e) {
-                	e.printStackTrace();
-                	System.out.println("test Exception");
+                	logger.error(e.getMessage(), e);
                 	resultMap.put("resultCode", "99");
                 	resultMap.put("P_RMESG1", "Exception");
                 	
@@ -602,7 +558,7 @@ public class IniPayment {
                             inStream.close();
                         }
                     } catch (IOException ie) {
-                        ie.printStackTrace();
+                        logger.error(ie.getMessage(), ie);
                     }
                     if (conn != null) {
                         conn.disconnect();
@@ -615,16 +571,15 @@ public class IniPayment {
                 //#############
                 // 인증 실패시
                 //#############
-                System.out.println("<br/>");
-                System.out.println("####승인실패####");
+                logger.error("####승인실패####");
                 resultMap.put("resultCode", paramMap.get("P_STATUS"));
                 resultMap.put("P_RMESG1", paramMap.get("P_RMESG1"));
-                System.out.println("<p>"+resultMap.get("resultCode")+"</p>");
-                System.out.println("<p>"+paramMap.toString()+"</p>");
+				logger.error("<p>"+resultMap.get("resultCode")+"</p>");
+				logger.error("<p>"+paramMap.toString()+"</p>");
             }
 
         }catch(Exception e){
-            System.out.println(e);
+			logger.error(e.getMessage(), e);
             resultMap.put("P_RMESG1", "test message 승인 실패");
         }
 
@@ -669,7 +624,7 @@ public class IniPayment {
         // (현금영수증 발급 취소시에만 리턴됨)
     	
     	if(inipay.GetResult("ResultCode").equals("00")) {
-    		System.out.println(inipay.GetResult("ResultMsg"));
+    		logger.debug(inipay.GetResult("ResultMsg"));
     	} 
     	
     	Map<String,String> result = new HashMap<String,String>();

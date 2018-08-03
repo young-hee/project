@@ -88,6 +88,7 @@
 	<script ap:src="@{/handlebars-templates/compiled/order/gift-packing-qty-info.js}"></script>					<!-- 쇼핑백 -->
 	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use.js}"></script> 		<!--사용가능한 쿠폰목록 Layer-->
 	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use-avail.js}"></script> 		<!--사용가능한 쿠폰목록 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use-download.js}"></script> 		<!--다운로드 쿠폰목록 -->
 	<script ap:src="@{/handlebars-templates/compiled/order/coupon-use-list.js}"></script> 		<!--선택된 쿠폰목록 -->
 	<script ap:src="@{/handlebars-templates/compiled/order/final-price-amt-pcur.js}"></script> 		<!-- 최종 결제금액 영역 -->
 
@@ -381,6 +382,7 @@
 		function amtPcurInit() {
 			var ordHistEx = /*[[${ordEx.ordHistEx}]]*/ '0', // 최종결제금액
 				ordAmtMap = /*[[${ordAmtMap}]]*/ null,
+				ordCntMap = /*[[${ordCntMap}]]*/ null,
 				apMember = /*[[${apMember}]]*/ null;
 
 			/**
@@ -390,6 +392,7 @@
 			var html = AP.common.getTemplate( 'order.final-price-amt-pcur', {
 				ordHistEx : ordHistEx,
 				ordAmtMap : ordAmtMap,
+				ordCntMap : ordCntMap,
 				apMember : apMember
 			});
 			$('#amtPcur').html(html);

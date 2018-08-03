@@ -32,7 +32,7 @@
 					<!--/* 상품 선택 */-->
 					<div class="item_thumb">
 						<div class="check_wrap">
-							<input type="checkbox" name="chkBox" id="chkBox{{prodEx.prodSn}}" value="{{../onlineProdSn}}" {{#if (ne ../saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (eq ../selectYn 'Y') 'checked' ''}}>
+							<input type="checkbox" name="chkBox" id="chkBox{{prodEx.prodSn}}" pointExch="membership" point="{{ exchPoint }}" value="{{../onlineProdSn}}" {{#if (ne ../saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq ../selectYn 'Y') ) 'checked' ''}}>
 							<label for="chkBox{{prodEx.prodSn}}">
 								{{!-- 이미지 순위선정 : 1.단위상품 > 2.온라인상품 > noImage --}}
 								{{#xif prodEx.repProdImgEx '!=' null }} <img src="{{ prodEx.repProdImgEx.imgUrl }}" alt=""> {{/xif}}
@@ -44,7 +44,7 @@
 										<img src="/images/cart/no_img.png" alt="">
 									{{/xif}}
 								{{/xif}}
-								<span class="sr_only">상품명</span>
+								<span class="sr_only">{{ ../onlineProdName }}</span>
 							</label>
 						</div>
 					</div>
@@ -99,10 +99,10 @@
 							<em>[판매일시중지]</em>
 						{{/if}}
 						{{#if (eq prodEx.saleDisplayStatus 'WaitingDisplay') }}
-							<em>[전시대기]</em>
+							<em>[판매대기]</em>
 						{{/if}}
 						{{#if (eq prodEx.saleDisplayStatus 'EndDisplay') }}
-							<em>[전시종료]</em>
+							<em>[판매종료]</em>
 						{{/if}}
 						{{#if (eq prodEx.saleDisplayStatus 'PermanentEnd') }}
 							<em>[영구종료]</em>

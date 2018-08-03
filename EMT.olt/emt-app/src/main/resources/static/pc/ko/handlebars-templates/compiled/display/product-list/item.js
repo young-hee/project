@@ -4,7 +4,7 @@ this["AP"]["handlebars"]["display"] = this["AP"]["handlebars"]["display"] || {};
 this["AP"]["handlebars"]["display"]["product-list"] = this["AP"]["handlebars"]["display"]["product-list"] || {};
 
 this["AP"]["handlebars"]["display"]["product-list"]["item"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.lambda;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression, alias4=container.lambda;
 
   return "	<li>\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.displayMenuId : depth0),"==","best",{"name":"xif","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"blockParams":blockParams})) != null ? stack1 : "")
@@ -21,10 +21,12 @@ this["AP"]["handlebars"]["display"]["product-list"]["item"] = Handlebars.templat
     + "				<div class=\"title_area\">\n					<p class=\"s_title\">\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.saleDisplayStatus : depth0),"==","WaitingSale",{"name":"xif","hash":{},"fn":container.program(48, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"blockParams":blockParams})) != null ? stack1 : "")
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.prodTypeCode : depth0),"Presale",{"name":"eq","hash":{},"data":data,"blockParams":blockParams}),"&&",(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.saleDisplayStatus : depth0),"OnSale",{"name":"eq","hash":{},"data":data,"blockParams":blockParams}),{"name":"xif","hash":{},"fn":container.program(50, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"blockParams":blockParams})) != null ? stack1 : "")
-    + "						<span>"
-    + ((stack1 = alias3((depth0 != null ? depth0.linePromoDesc : depth0), depth0)) != null ? stack1 : "")
+    + "						<em class=\"tag\">"
+    + alias3((helpers.stockTxt || (depth0 && depth0.stockTxt) || alias2).call(alias1,(depth0 != null ? depth0.saleDisplayStatus : depth0),(depth0 != null ? depth0.prodTypeCode : depth0),{"name":"stockTxt","hash":{},"data":data,"blockParams":blockParams}))
+    + "</em>\n						<span>"
+    + ((stack1 = alias4((depth0 != null ? depth0.linePromoDesc : depth0), depth0)) != null ? stack1 : "")
     + "</span>\n					</p>\n					<h3 class=\"h_title\">"
-    + container.escapeExpression(alias3((depth0 != null ? depth0.onlineProdName : depth0), depth0))
+    + alias3(alias4((depth0 != null ? depth0.onlineProdName : depth0), depth0))
     + "</h3>\n				</div>\n				<!-- 상품명 //-->\n\n				<!--// 옵션 -->\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.displayMenuId : depth0),"!=","color_collection_shop",{"name":"xif","hash":{},"fn":container.program(52, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"blockParams":blockParams})) != null ? stack1 : "")
     + "\n"
@@ -66,15 +68,17 @@ this["AP"]["handlebars"]["display"]["product-list"]["item"] = Handlebars.templat
 
   return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depths[1] != null ? depths[1].selectedProdSn : depths[1]),"==",(depth0 != null ? depth0.prodSn : depth0),{"name":"xif","hash":{},"fn":container.program(11, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"11":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=container.escapeExpression, alias2=container.lambda;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression, alias4=container.lambda;
 
   return "							<a href=\""
-    + alias1((helpers.productDetailPath || (depth0 && depth0.productDetailPath) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.onlineProdSn : depth0),(depth0 != null ? depth0.prodSn : depth0),{"name":"productDetailPath","hash":{},"data":data}))
+    + alias3((helpers.productDetailPath || (depth0 && depth0.productDetailPath) || alias2).call(alias1,(depth0 != null ? depth0.onlineProdSn : depth0),(depth0 != null ? depth0.prodSn : depth0),{"name":"productDetailPath","hash":{},"data":data}))
     + "\" class=\"lazy_load_wrap first_img\">\n								<img class=\"lazy_load\" src=\"\" data-src=\""
-    + alias1(alias2(((stack1 = ((stack1 = (depth0 != null ? depth0.prodImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
+    + alias3(alias4(((stack1 = ((stack1 = (depth0 != null ? depth0.prodImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
     + "\" alt=\""
-    + alias1(alias2((depth0 != null ? depth0.prodName : depth0), depth0))
-    + "\">\n							</a>\n";
+    + alias3(alias4((depth0 != null ? depth0.prodName : depth0), depth0))
+    + "\">\n								"
+    + ((stack1 = (helpers.stockImg || (depth0 && depth0.stockImg) || alias2).call(alias1,(depth0 != null ? depth0.saleDisplayStatus : depth0),(depth0 != null ? depth0.prodTypeCode : depth0),{"name":"stockImg","hash":{},"data":data})) != null ? stack1 : "")
+    + "\n							</a>\n";
 },"13":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
@@ -116,25 +120,29 @@ this["AP"]["handlebars"]["display"]["product-list"]["item"] = Handlebars.templat
     + ((stack1 = (helpers.include || (depth0 && depth0.include) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"display.product-list.item-slide",depth0,{"name":"include","hash":{},"data":data})) != null ? stack1 : "")
     + "\n";
 },"24":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=container.escapeExpression, alias2=container.lambda;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression, alias4=container.lambda;
 
   return "						<a href=\""
-    + alias1((helpers.productDetailPath || (depth0 && depth0.productDetailPath) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.onlineProdSn : depth0),(depth0 != null ? depth0.prodSn : depth0),{"name":"productDetailPath","hash":{},"data":data}))
+    + alias3((helpers.productDetailPath || (depth0 && depth0.productDetailPath) || alias2).call(alias1,(depth0 != null ? depth0.onlineProdSn : depth0),(depth0 != null ? depth0.prodSn : depth0),{"name":"productDetailPath","hash":{},"data":data}))
     + "\" class=\"lazy_load_wrap first_img\">\n							<img class=\"lazy_load\" src=\"\" data-src=\""
-    + alias1(alias2(((stack1 = ((stack1 = (depth0 != null ? depth0.prodImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
+    + alias3(alias4(((stack1 = ((stack1 = (depth0 != null ? depth0.prodImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
     + "\" alt=\""
-    + alias1(alias2((depth0 != null ? depth0.onlineProdName : depth0), depth0))
-    + "\">\n						</a>\n";
+    + alias3(alias4((depth0 != null ? depth0.onlineProdName : depth0), depth0))
+    + "\">\n							"
+    + ((stack1 = (helpers.stockImg || (depth0 && depth0.stockImg) || alias2).call(alias1,(depth0 != null ? depth0.saleDisplayStatus : depth0),(depth0 != null ? depth0.prodTypeCode : depth0),{"name":"stockImg","hash":{},"data":data})) != null ? stack1 : "")
+    + "\n						</a>\n";
 },"26":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=container.escapeExpression, alias2=container.lambda;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression, alias4=container.lambda;
 
   return "						<a href=\""
-    + alias1((helpers.productDetailPath || (depth0 && depth0.productDetailPath) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.onlineProdSn : depth0),{"name":"productDetailPath","hash":{},"data":data}))
+    + alias3((helpers.productDetailPath || (depth0 && depth0.productDetailPath) || alias2).call(alias1,(depth0 != null ? depth0.onlineProdSn : depth0),{"name":"productDetailPath","hash":{},"data":data}))
     + "\" class=\"lazy_load_wrap first_img\">\n							<img class=\"lazy_load\" src=\"\" data-src=\""
-    + alias1(alias2(((stack1 = ((stack1 = (depth0 != null ? depth0.onlineProdImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
+    + alias3(alias4(((stack1 = ((stack1 = (depth0 != null ? depth0.onlineProdImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
     + "\" alt=\""
-    + alias1(alias2((depth0 != null ? depth0.onlineProdName : depth0), depth0))
-    + "\">\n						</a>\n";
+    + alias3(alias4((depth0 != null ? depth0.onlineProdName : depth0), depth0))
+    + "\">\n							"
+    + ((stack1 = (helpers.stockImg || (depth0 && depth0.stockImg) || alias2).call(alias1,(depth0 != null ? depth0.saleDisplayStatus : depth0),(depth0 != null ? depth0.prodTypeCode : depth0),{"name":"stockImg","hash":{},"data":data})) != null ? stack1 : "")
+    + "\n						</a>\n";
 },"28":function(container,depth0,helpers,partials,data) {
     return "					<div class=\"item_state out_of_stock\">일시품절</div>\n";
 },"30":function(container,depth0,helpers,partials,data,blockParams,depths) {

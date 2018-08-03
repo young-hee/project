@@ -18,12 +18,21 @@
 				   </div>
 			 </div>
 
+	        <style>
+		        .class_member_info.Hello:before {
+		            background-position-y: -78px;
+		        }
+		        .class_member_info.Friends:before {
+		    		background-position-y: -156px;
+				}
+	        
+	        </style>
             <!-- page contents -->
             <div class="ap_contents mypage">
             	<div class="member_class">
             		<div class="member_cls table_layout">
 						<div class="left">
-							<dl class="class_member_info">
+							<dl class="class_member_info" th:classappend="${custCstmAmt.cstmlvlNm}">
 								<dt>
 									<b>안녕하세요, <th:block th:text="${session.LOGIN_USER.member.name.name1}">홍길동</th:block> 님</b>
 									<span><th:block th:text="${session.LOGIN_USER.member.name.name1}">홍길동</th:block>님의 회원등급은 <strong><th:block th:text="${custCstmAmt.cstmlvlNm}">friends</th:block></strong> 입니다.</span>

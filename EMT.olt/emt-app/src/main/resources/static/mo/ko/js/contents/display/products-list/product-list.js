@@ -141,9 +141,6 @@
 				prodListData.list[i].prodListUnitCode =  prodListData.prodListUnitCode;
 				prodListData.list[i].ranking = i + 1;
 				prodListData.list[i].displayMenuId = this._key.displayMenuId;
-
-				prodListData.list[i].repImgNo = 2;
-
 				for ( var j = 0; j < prodListData.list[i].products.length; ++j ) {
 					prodListData.list[i].products[j].onlineProdSn = prodListData.list[i].onlineProdSn;
 				}

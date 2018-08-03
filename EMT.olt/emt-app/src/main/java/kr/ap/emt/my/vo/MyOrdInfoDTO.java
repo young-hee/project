@@ -312,7 +312,6 @@ public class MyOrdInfoDTO {
 	}
 
 	private void makeOrdAmt(List payment) {
-
 		ordAmt = new MyOrdAmt(payment);
 	}
 

@@ -72,8 +72,9 @@
 						AP.modal.alert("온라인 전용 쿠폰 등록했습니다.");
 						location.href = "/my/page/myCouponList";
 					}).fail(function(e) {
-						AP.modal.alert(e.responseJSON.errorData.message);
 						//실패
+						//AP.modal.alert(e.responseJSON.errorData.message);
+						AP.modal.alert("쿠폰등록 실패했습니다. 쿠폰번호 확인하세요.");
 					}).always(function() {
 						//성공, 실패
 					});

@@ -158,9 +158,11 @@
 					}
 				});
 
+				var setReasonSn = reason == null ? 0 : reason.claimReasonExList[0].claimReasonSn;
+
 				$( '.ui_select' ).designSelectBox( 'clear' );
 				$( '.ui_select' ).designSelectBox();
-				$( '.ui_select' ).designSelectBox('setValue', 71);
+				$( '.ui_select' ).designSelectBox('setValue', setReasonSn);
 				$( '.ui_tooltip' ).tooltip();
 				$( '.ui_accordion' ).accordion('open', 0);
 
@@ -218,6 +220,10 @@
 
 			function getProdList() {
 				//온라인 주문 상품
+
+				$('.online').empty();
+				$('.takeout').empty();
+
 				if (ord.shippingOrdOnlineProdList.length > 0) {
 					var onlineProds = AP.common.getTemplate('my.order.order-detail-prodList', {
 						cnt : ord.shippingOrdOnlineProdList.length,
@@ -227,25 +233,27 @@
 						title : title,
 						status : status,
 						step : step,
-						viewYN : viewYN
+						viewYN : viewYN,
+						takeOutYn : 'N'
 					});
 
-					$('.online').empty();
 					$('.online').append(onlineProds);
 				}
 
+				//테이크아웃 주문 상품
 				if (ord.storePickupOrdOnlineProdList.length > 0) {
 					var takeoutProds = AP.common.getTemplate('my.order.order-detail-prodList', {
 						cnt : ord.storePickupOrdOnlineProdList.length,
 						list : ord.storePickupOrdOnlineProdList,
 						reason : reason,
-						statusCediShipAddressode : statusCode,
+						statusCode : statusCode,
 						title : title,
+						status : status,
 						step : step,
-						viewYN : viewYN
+						viewYN : viewYN,
+						takeOutYn : 'Y'
 					});
 
-					$('.takeout').empty();
 					$('.takeout').append(takeoutProds);
 				}
 			}
@@ -472,6 +480,8 @@
 
 			//상세에서 클레임 신청버튼 클릭
 			function chgStatus(type) {
+				$('#review').hide();
+
 				this.type = type;
 				this.status = 'request';
 				this.step ='one';
@@ -548,6 +558,10 @@
 				} else if (type == 'exchange') {
 					title = '교환';
 				}
+			}
+
+			function viewStoreMap() {
+				AP.modal.alert('개발중입니다.');
 			}
 
 		</script>

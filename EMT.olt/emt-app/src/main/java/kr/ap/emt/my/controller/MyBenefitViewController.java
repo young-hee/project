@@ -237,7 +237,7 @@ public class MyBenefitViewController extends AbstractController {
 		
 		try {
 			
-			if(startDt != null && endDt != null && !startDt.equals("undefined") && !endDt.equals("undefined")) {
+			if(startDt != null && endDt != null && !startDt.isEmpty() && !endDt.isEmpty()) {
 				SimpleDateFormat format = (SimpleDateFormat) DATE_FORMAT.clone();
 				if(isMobileDevice()) {
 	

@@ -3,6 +3,7 @@ package kr.ap.emt.my.controller;
 import kr.ap.comm.api.vo.*;
 import kr.ap.comm.config.interceptor.FragmentPage;
 import kr.ap.comm.config.interceptor.PageTitle;
+import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
 import kr.ap.emt.api.pos.POSApiService;
@@ -673,13 +674,19 @@ public class MyPointViewController extends AbstractController {
 	public String cushion(Model model) {
 		Calendar c = Calendar.getInstance();
 		String onOffNum = getMemberSession().getUser_incsNo();
+		MemberSession memberSession = getMemberSession();
 		onOffNum = "200002784";
 		try {
-			CustCushinPoint cushin = posService.getCustCushinPoint(getMemberSession().getUser_incsNo());
+			CustCushinPoint cushin = posService.getCustCushinPoint(onOffNum);
 			model.addAttribute("cushin", cushin);
 		} catch(Exception e) {
 			CustCushinPoint cushin = new CustCushinPoint();
-			cushin.setTotRemainPt(getMemberSession().getMember().getRemainCushionPoint());
+
+			if(memberSession.getMember().getRemainCushionPoint() == null) {
+				cushin.setTotRemainPt(0);
+			} else {
+				cushin.setTotRemainPt(memberSession.getMember().getRemainCushionPoint());
+			}
 			model.addAttribute("cushin", cushin);
 		}
 		

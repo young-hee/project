@@ -78,4 +78,14 @@ public interface POSApiService {
 	@SuccessCode(rsltCd = "SUCC")
 	GiftCardUseInfo getGiftCardUseInfo(@Param("cstmId") String cstmId);
 	
+	/**
+	 * 측색정보조회.
+	 * @param ucstmId
+	 * @return
+	 * @throws ApiException
+	 */
+	@RequestLine(value = "epl/getskintoneposinfo/v1.00")
+	@SuccessCode(rsltCd = "SUCC")
+	GiftCardUseInfo getSkinTonePosInfo(@Param("cstmId") String cstmId);
+	
 }

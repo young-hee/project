@@ -1,5 +1,14 @@
-<dt><button type="button">온라인 주문 상품 (<em>{{this.cnt}}</em>개)</button></dt>
+<dt><button type="button">{{condition (eq this.takeOutYn 'N') '온라인 주문' '테이크아웃'}} 상품 (<em>{{this.cnt}}</em>개)</button></dt>
 <dd>
+	{{#if (eq takeOutYn 'Y')}}
+		<div class="store_info">
+			<dl>
+				<dt>방문매장</dt>
+				<dd><b>명동2호점</b> <span>(02-0000-0000)</span></dd>
+				<dd><button class="btn_md_form" type="button" onclick="viewStoreMap()">매장 보기</button></dd>
+			</dl>
+		</div>
+	{{/if}}
 	{{#each this.list}}
 		<div class="panel_box">
 			<!-- 상품 N개 + 상품별 옵션(N개) 주문형
@@ -121,4 +130,12 @@
 			{{/if}}
 		</div>
 	{{/each}}
+	{{#if (eq this.takeOutYn 'Y')}}
+		<ul class="list_bullet_dot">
+			<li>테이크아웃 서비스는 온라인 주문 후 매장을 직접 방문하여 수령하는 서비스입니다.</li>
+			<li>미수령시 주문은 자동 취소됩니다. (결제완료 후 2일 후 자동취소)</li>
+			<li>테이크아웃 상품의 교환/반품은 수령매장에서만 가능합니다</li>
+			<li>테이크아웃 주문은 매장에서 상품 준비가 완료되면 SMS를 발송하며 수신한 SMS 내 주문번호나 주문내역의 바코드를 수령매장에 제시하면 상품을 찾을 수 있습니다.</li>
+		</ul>
+	{{/if}}
 </dd>

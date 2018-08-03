@@ -726,6 +726,9 @@
 		// 단골매장 등록
 		addTakeoutStore: { path: '/cart/addTakeoutStore', method: 'POST'},
 
+		// 단골매장 등록
+		delTakeoutStore : { path: '/cart/delTakeoutStore', method: 'POST'},
+
 		// 매장지역 정보
 		storeAddressDivs: { path: '/cart/storeAddressDivs', method: 'GET'},
 
@@ -760,6 +763,12 @@
 
 		// 사용가능 쿠폰 목록
 		getCouponList: { path: '/order/getCouponList', method: 'GET'},
+
+		// 다운로드 쿠폰 목록
+		getDownloadCouponList: { path: '/order/getDownloadCouponList', method: 'GET'},
+
+		// 쿠폰 다운로드
+		orderDownloadCoupon: { path: '/order/downloadCoupon', method: 'POST'},
 
 		// 기본배송지 수정
 		orderAddAddress: { path: '/order/orderAddAddress', method: 'POST' },

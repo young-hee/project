@@ -61,16 +61,26 @@
 
 			function unConnect(sns) {
 
-			    var indexed_array = {};
-			    indexed_array['sns'] = sns;
-			    AP.api.snsDisconnect({}, indexed_array).done(function(data) {
-			        AP.modal.alert("연결이 해제되었습니다.").addListener('modal-close', function(e) {
-                    	location.reload();
-                    });
-			    }).fail(function(xhr, textStatus, errorThrown) {
-			        AP.modal.alert(xhr.errorMessage);
-			    }).always(function() {
-			        //성공, 실패
+			    var contents = new Object();
+			    contents.title = "알림";
+			    contents.contents = "해제하시겠습니까?";
+			    contents.cancelLabel = "취소";
+			    contents.confirmLabel = "확인";
+
+			    AP.modal.info(contents).addListener('modal-close', function(e) {
+			        if (e.closeType == 'close' || e.closeType == 'cancel') {} else if (e.closeType == 'confirm') {
+					    var indexed_array = {};
+					    indexed_array['sns'] = sns;
+					    AP.api.snsDisconnect({}, indexed_array).done(function(data) {
+					        AP.modal.alert("해제가 정상적으로 처리 되었습니다.").addListener('modal-close', function(e) {
+		                    	location.reload();
+		                    });
+					    }).fail(function(xhr, textStatus, errorThrown) {
+					        AP.modal.alert(xhr.errorMessage);
+					    }).always(function() {
+					        //성공, 실패
+					    });
+			        }
 			    });
 			}
 			//이미 sns연결됨.

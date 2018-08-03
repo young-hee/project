@@ -25,7 +25,7 @@
 			this._setSelectOption();
 			this._setRepImage();
 
-			if ( !data.linePromoDesc && !data.lineDesc ) {
+			if ( !data.linePromoDesc && !data.lineDesc && this._$target.find( '.s_title em' ).text().length == 0) {
 				this._$target.find( '.s_title' ).remove();
 			}
 		},
@@ -126,14 +126,15 @@
 		},
 
 		_addCart: function ( type ) {
+			var curObj = _.findWhere(this._data.products, {prodSn : this._prodSn});
 			var cartProdExPostList = [{
 				prodSn: this._prodSn,
 				cartProdQty: 1,
 				storePickupYn: 'N',
-				integrationMembershipExchYn: 'N',
-				activityPointExchYn: 'N'
+				integrationMembershipExchYn: curObj.membershipExchOnly,
+				activityPointExchYn: curObj.activityPointOnly
 			}];
-
+			
 			//장바구니 저장 api
 			AP.api.addCartProd( null, JSON.stringify({cartProdExPostList: cartProdExPostList })).done( function ( result ) {
 				AP.header.resetCartCount();

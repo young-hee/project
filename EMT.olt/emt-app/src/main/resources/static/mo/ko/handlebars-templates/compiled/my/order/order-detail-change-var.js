@@ -8,7 +8,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-change-var"] = Handlebars.
 
   return "							<li class=\"select_option\">\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depths[1] != null ? depths[1].prodSn : depths[1]),"==",(depth0 != null ? depth0.prodSn : depth0),{"name":"xif","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.program(4, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
-    + "\n                        </li>\n";
+    + "                        </li>\n";
 },"2":function(container,depth0,helpers,partials,data) {
     return "\n";
 },"4":function(container,depth0,helpers,partials,data) {
@@ -20,11 +20,9 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-change-var"] = Handlebars.
     + ((stack1 = (helpers["switch"] || (depth0 && depth0["switch"]) || alias2).call(alias1,(depth0 != null ? depth0.saleDisplayStatus : depth0),{"name":"switch","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n";
 },"5":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
+    var stack1;
 
-  return ((stack1 = (helpers["case"] || (depth0 && depth0["case"]) || alias2).call(alias1,"OnSale",{"name":"case","hash":{"break":true},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = (helpers["case"] || (depth0 && depth0["case"]) || alias2).call(alias1,"Exhaustion",{"name":"case","hash":{"break":true},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = (helpers["case"] || (depth0 && depth0["case"]) || alias2).call(alias1,"OutOfStock",{"name":"case","hash":{"break":true},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+  return ((stack1 = (helpers["case"] || (depth0 && depth0["case"]) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"OnSale",{"name":"case","hash":{"break":true},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"6":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
@@ -33,22 +31,6 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-change-var"] = Handlebars.
     + "\">\n												<span class=\"option_title\">"
     + alias4(((helper = (helper = helpers.prodName || (depth0 != null ? depth0.prodName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"prodName","hash":{},"data":data}) : helper)))
     + "</span>\n											</a>\n";
-},"8":function(container,depth0,helpers,partials,data) {
-    var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
-
-  return "											<a data-value=\""
-    + alias4(((helper = (helper = helpers.prodSn || (depth0 != null ? depth0.prodSn : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"prodSn","hash":{},"data":data}) : helper)))
-    + "\" data-disabled=\"true\">\n												<span class=\"option_title\">"
-    + alias4(((helper = (helper = helpers.prodName || (depth0 != null ? depth0.prodName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"prodName","hash":{},"data":data}) : helper)))
-    + "</span>\n												<span class=\"sold_out\">[조기소진]</span>\n											</a>\n";
-},"10":function(container,depth0,helpers,partials,data) {
-    var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
-
-  return "											<a data-value=\""
-    + alias4(((helper = (helper = helpers.prodSn || (depth0 != null ? depth0.prodSn : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"prodSn","hash":{},"data":data}) : helper)))
-    + "\" data-disabled=\"true\">\n												<span class=\"option_title\">"
-    + alias4(((helper = (helper = helpers.prodName || (depth0 != null ? depth0.prodName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"prodName","hash":{},"data":data}) : helper)))
-    + "</span>\n												<span class=\"sold_out\">[일시품절]</span>\n											</a>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 

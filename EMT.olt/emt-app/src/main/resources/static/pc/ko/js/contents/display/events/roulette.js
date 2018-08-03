@@ -38,7 +38,7 @@
 
 				result = result['awards'];
 
-				this._alert( 'start' ).addListener( 'modal-close', function () {
+				this._alert( 'start' ).addListener( 'modal-close', function (e) {
 					if ( e.closeType === 'confirm' ) {
 						this._winValue = ( result.eventWinStatus === 'Win' ) ? 1 : 0;
 						this._rotate( this._arrAngle[this._winValue], result );

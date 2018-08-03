@@ -85,7 +85,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-payInfo"] = Handlebars.tem
     + "</h3>\n<div class=\"payment_info table_layout\">\n	<div class=\"left_cont table_layout\">\n		<dl class=\"order_amount\">\n			<dt>\n				<p>"
     + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.step : depth0),"two",{"name":"eq","hash":{},"data":data}),"환불","",{"name":"condition","hash":{},"data":data}))
     + " 주문금액</p>\n				<p class=\"price\"><strong class=\"num\">"
-    + alias3((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.ordAmt : stack1)) != null ? stack1.FinalOrd : stack1),{"name":"currencyFormat","hash":{},"data":data}))
+    + alias3((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.ordPayment : stack1),{"name":"currencyFormat","hash":{},"data":data}))
     + "</strong><b></b></p>\n			</dt>\n			<dd>\n				<ul>\n					<li class=\"clear\"><span>온라인주문 "
     + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.step : depth0),"two",{"name":"eq","hash":{},"data":data}),"취소","",{"name":"condition","hash":{},"data":data}))
     + "</span><span>"
@@ -105,8 +105,14 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-payInfo"] = Handlebars.tem
     + "</span></li>\n					<li class=\"clear\"><span>배송비 "
     + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.step : depth0),"two",{"name":"eq","hash":{},"data":data}),"환불","",{"name":"condition","hash":{},"data":data}))
     + "</span><span>"
-    + alias3((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.ordAmt : stack1)) != null ? stack1.DefaultShipFee : stack1),{"name":"currencyFormat","hash":{},"data":data}))
-    + "</span></li>\n				</ul>\n			</dd>\n		</dl>\n		<dl class=\"discount_amount\">\n			<dt>\n				<p>"
+    + alias3((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.shipFee : stack1),{"name":"currencyFormat","hash":{},"data":data}))
+    + "</span></li>\n					<li class=\"clear\"><span>뷰티포인트 "
+    + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.step : depth0),"two",{"name":"eq","hash":{},"data":data}),"환불","",{"name":"condition","hash":{},"data":data}))
+    + "</span><span>"
+    + alias3(alias4(((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.membershipPoint : stack1), depth0))
+    + "P</span></li>\n					<li class=\"clear\"><span>진주알 교환</span><span>"
+    + alias3(alias4(((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.activityPoint : stack1), depth0))
+    + "알</span></li>\n				</ul>\n			</dd>\n		</dl>\n		<dl class=\"discount_amount\">\n			<dt>\n				<p>"
     + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.step : depth0),"two",{"name":"eq","hash":{},"data":data}),"환불","",{"name":"condition","hash":{},"data":data}))
     + " 할인/포인트</p>\n				<p class=\"price\"><strong class=\"num\">"
     + alias3((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.salePoint : stack1),{"name":"currencyFormat","hash":{},"data":data}))
@@ -122,10 +128,12 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-payInfo"] = Handlebars.tem
     + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.step : depth0),"two",{"name":"eq","hash":{},"data":data}),"환불","",{"name":"condition","hash":{},"data":data}))
     + "</span><span>0P</span></li>\n					<li class=\"clear\"><span>진주알 교환</span><span>"
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.activityPoint : stack1), depth0))
-    + "알</span></li>\n				</ul>\n			</dd>\n		</dl>\n		<dl class=\"payment_amount\">\n			<dt>\n				<p>"
+    + "알</span></li>\n					<li class=\"clear\"><span>OK캐쉬백</span><span>0P</span></li>\n					<li class=\"clear\"><span>두툼포인트M</span><span>0P</span></li>\n					<li class=\"clear\"><span>기타 할인</span><span>"
+    + alias3(alias4(((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.etcPoint : stack1), depth0))
+    + "P</span></li>\n				</ul>\n			</dd>\n		</dl>\n		<dl class=\"payment_amount\">\n			<dt>\n				<p>"
     + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.step : depth0),"two",{"name":"eq","hash":{},"data":data}),"총 환불 금액","결제 금액",{"name":"condition","hash":{},"data":data}))
     + "</p>\n				<p class=\"price\"><strong class=\"num\">"
-    + alias3((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.ordAmt : stack1)) != null ? stack1.FinalOrd : stack1),{"name":"currencyFormat","hash":{},"data":data}))
+    + alias3((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.totalPayment : stack1),{"name":"currencyFormat","hash":{},"data":data}))
     + "</strong><b></b></p>\n			</dt>\n			<dd>\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.step : depth0),"one",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.step : depth0),"two",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -134,7 +142,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-payInfo"] = Handlebars.tem
     + "P</span></li>\n					<li class=\"clear\"><span>테이크아웃 포인트 적립</span><span>"
     + alias3((helpers.getSavingPoint || (depth0 && depth0.getSavingPoint) || alias2).call(alias1,(depth0 != null ? depth0.ordSavingPoint : depth0),"",{"name":"getSavingPoint","hash":{},"data":data}))
     + "P</span></li>\n					<li class=\"clear\"><span>쿠션 포인트 적립</span><span>"
-    + alias3((helpers.getSavingPoint || (depth0 && depth0.getSavingPoint) || alias2).call(alias1,(depth0 != null ? depth0.ordSavingPoint : depth0),"ActivityPoint",{"name":"getSavingPoint","hash":{},"data":data}))
+    + alias3((helpers.getSavingPoint || (depth0 && depth0.getSavingPoint) || alias2).call(alias1,(depth0 != null ? depth0.ordSavingPoint : depth0),"",{"name":"getSavingPoint","hash":{},"data":data}))
     + "P</span></li>\n					<li class=\"clear\"><span>핑크멤버십 포인트 적립</span><span>"
     + alias3((helpers.getSavingPoint || (depth0 && depth0.getSavingPoint) || alias2).call(alias1,(depth0 != null ? depth0.ordSavingPoint : depth0),"",{"name":"getSavingPoint","hash":{},"data":data}))
     + "P</span></li>\n					<li class=\"clear\"><span>뷰티포인트 적립</span><span>"

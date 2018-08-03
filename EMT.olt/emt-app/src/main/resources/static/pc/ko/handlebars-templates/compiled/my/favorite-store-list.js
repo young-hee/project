@@ -31,6 +31,8 @@ this["AP"]["handlebars"]["my"]["favorite-store-list"] = Handlebars.template({"1"
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.phoneNo1 : depth0)) != null ? stack1.phoneNo : stack1), depth0))
     + "</td>\n                <td class=\"align_left\">"
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.address : depth0)) != null ? stack1.address1 : stack1), depth0))
+    + " "
+    + alias4(alias5(((stack1 = (depth0 != null ? depth0.address : depth0)) != null ? stack1.address2 : stack1), depth0))
     + "</td>\n                <td><button class=\"btn_sm_bordered\" latitude=\""
     + alias4(((helper = (helper = helpers.latitude || (depth0 != null ? depth0.latitude : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"latitude","hash":{},"data":data}) : helper)))
     + "\" longitude=\""

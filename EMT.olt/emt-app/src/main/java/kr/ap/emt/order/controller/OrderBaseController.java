@@ -66,6 +66,8 @@ public class OrderBaseController extends AbstractViewController {
 		BigDecimal finalOnlineSaleAmtPcurSum = new BigDecimal(0);
 
 		List<OrdOnlineProdFoDTO> shippingOrdOnlineProdList = new ArrayList<OrdOnlineProdFoDTO>();
+		List<OrdOnlineProdFoDTO> shippingOrdOnlineBeautyPointProdList = new ArrayList<OrdOnlineProdFoDTO>();
+		List<OrdOnlineProdFoDTO> shippingOrdOnlineActivityPointProdList = new ArrayList<OrdOnlineProdFoDTO>();
 		List<OrdOnlineProdFoDTO> storePickupOrdOnlineProdList = new ArrayList<OrdOnlineProdFoDTO>();
 		List<OrdOtfEx> ordOtfExList = new ArrayList<OrdOtfEx>();
 		Map<String, OrdOnlineProdFoDTO> ordOnlineProdFoMap = new HashMap<String, OrdOnlineProdFoDTO>();
@@ -75,7 +77,7 @@ public class OrderBaseController extends AbstractViewController {
         Map<String, OrdOnlinePromoFoDTO> shippingSameTimePurPromoMap = new HashMap<>(); // key : 동시구매프로모션일련번호 + 동시구매묶음번호
         Map<Long, OrdOnlinePromoFoDTO> storePickupMNPromoMap = new HashMap<>();
         Map<String, OrdOnlinePromoFoDTO> storePickupSameTimePurPromoMap = new HashMap<>(); // key : 동시구매프로모션일련번호 + 동시구매묶음번호
-		
+
 		List<OrdShipAddressEx> ordShipAddressList = ordEx.getOrdShipAddressExList();
 		for (OrdShipAddressEx ordShipAddressEx : ordShipAddressList) {
 			for (OrdOtfEx ordOtfEx : ordShipAddressEx.getOrdOtfExList()) {
@@ -107,7 +109,8 @@ public class OrderBaseController extends AbstractViewController {
                             ordOnlineProdFo = getSameTimePurPromoOnlineProd(ordHistProdEx, shippingSameTimePurPromoMap);
                         }
                     }
-                    else {
+					//온라인상품
+					else {
                         ordOnlineProdFo = ordOnlineProdFoMap.get(key);
                         if(ordOnlineProdFo == null) {
                             ordOnlineProdFo = makeOrdOnlineProdFo(ordHistProdEx);
@@ -115,7 +118,17 @@ public class OrderBaseController extends AbstractViewController {
                             if (storePickup) {
                                 storePickupOrdOnlineProdList.add(ordOnlineProdFo);
                             } else {
-                                shippingOrdOnlineProdList.add(ordOnlineProdFo);
+								//뷰티포인트상품
+								if ("Y".equals(ordHistProdEx.getIntegrationMembershipExchYn())) {
+									shippingOrdOnlineBeautyPointProdList.add(ordOnlineProdFo);
+								}
+								//활동포인트상품
+								else if ("Y".equals(ordHistProdEx.getActivityPointExchYn())) {
+									shippingOrdOnlineActivityPointProdList.add(ordOnlineProdFo);
+								}
+								else{
+									shippingOrdOnlineProdList.add(ordOnlineProdFo);
+								}
                             }
                         }
                     }
@@ -125,7 +138,7 @@ public class OrderBaseController extends AbstractViewController {
                     } else {
                         shipOrdOnlineProdCnt++;
                     }
-					
+
                     totalOrdOnlineProdCnt++;
                     
 					ordQtySum += ordHistProdEx.getOrdQty();
@@ -135,14 +148,16 @@ public class OrderBaseController extends AbstractViewController {
 				}
 			}
 		}
-		model.addAttribute("ordEx", ordEx);												                                    // 주문번호 확장
-		model.addAttribute("shippingOrdOnlineProdList", shippingOrdOnlineProdList);		                                    // 온라인쇼핑일반상품 목록
-        model.addAttribute("shippingMNPromoList", new ArrayList<>(shippingMNPromoMap.values()));                            // 온라인쇼핑M+N프로모션 목록
-        model.addAttribute("shippingSameTimePurPromoList", new ArrayList<>(shippingSameTimePurPromoMap.values()));          // 온라인쇼핑동시구매프로모션 목록
-		model.addAttribute("storePickupOrdOnlineProdList", storePickupOrdOnlineProdList);	                                // 테이크아웃일반상품 목록
-        model.addAttribute("storePickupMNPromoList", new ArrayList<>(storePickupMNPromoMap.values()));                      // 온라인쇼핑M+N프로모션 목록
-        model.addAttribute("storePickupSameTimePurPromoList", new ArrayList<>(storePickupSameTimePurPromoMap.values()));    // 온라인쇼핑동시구매프로모션 목록
-		model.addAttribute("ordOtfExList", ordOtfExList);									                                // 주문배송지시목록
+		model.addAttribute("ordEx", ordEx);												                                    	// 주문번호 확장
+		model.addAttribute("shippingOrdOnlineProdList", shippingOrdOnlineProdList);		  										// 온라인쇼핑일반상품 목록
+		model.addAttribute("shippingOrdOnlineBeautyPointProdList", shippingOrdOnlineBeautyPointProdList);		            	// 온라인쇼핑 뷰티포인트 교환 상품 목록
+		model.addAttribute("shippingOrdOnlineActivityPointProdList", shippingOrdOnlineActivityPointProdList);		        	// 온라인쇼핑 진주알 교환 상품 목록
+        model.addAttribute("shippingMNPromoList", new ArrayList<>(shippingMNPromoMap.values()));                           	// 온라인쇼핑M+N프로모션 목록
+        model.addAttribute("shippingSameTimePurPromoList", new ArrayList<>(shippingSameTimePurPromoMap.values()));         	// 온라인쇼핑동시구매프로모션 목록
+		model.addAttribute("storePickupOrdOnlineProdList", storePickupOrdOnlineProdList);	                                 	// 테이크아웃일반상품 목록
+        model.addAttribute("storePickupMNPromoList", new ArrayList<>(storePickupMNPromoMap.values()));                      	// 온라인쇼핑M+N프로모션 목록
+        model.addAttribute("storePickupSameTimePurPromoList", new ArrayList<>(storePickupSameTimePurPromoMap.values()));    	// 온라인쇼핑동시구매프로모션 목록
+		model.addAttribute("ordOtfExList", ordOtfExList);									                                	// 주문배송지시목록
 
 		model.addAttribute("totalOrdOnlineProdCnt", totalOrdOnlineProdCnt);
 		model.addAttribute("shipOrdOnlineProdCnt", shipOrdOnlineProdCnt);
@@ -168,14 +183,26 @@ public class OrderBaseController extends AbstractViewController {
 			model.addAttribute("payMethodResult", payMethodList); // 결제수단목록
 		}
 
+		/*****************************************************************
+		 * 주문금액 계산
+		 *****************************************************************/
 		model.addAttribute("ordAmtMap", makeOrdAmtList(ordEx, isMember()));
+
+		/*****************************************************************
+		 * 주문수량 계산
+		 *****************************************************************/
+		model.addAttribute("ordCntMap", makeOrdCntList(ordEx));
+
 	}
 
-	//주문서 금액 계산
+	/*****************************************************************
+	 * 주문금액 계산
+	 *****************************************************************/
 	protected Map<String, BigDecimal> makeOrdAmtList(OrdEx ordEx, boolean member) {
-		Map<String, BigDecimal> ordAmtMap =new HashMap<String, BigDecimal>();
+		Map<String, BigDecimal> ordAmtMap = new HashMap<String, BigDecimal>();
 
 		if (ordEx != null && ordEx.getOrdHistEx() != null && ordEx.getOrdHistEx().getOrdHistAmtExList() != null) {
+
 			BigDecimal totalOrdPriceSum = new BigDecimal(0);
 			BigDecimal totalOrdDcPriceSum = new BigDecimal(0);
 			BigDecimal membershipExchAmt = new BigDecimal(0);
@@ -246,6 +273,55 @@ public class OrderBaseController extends AbstractViewController {
 		return ordAmtMap;
 	}
 
+	/*****************************************************************
+	 * 주문수량 계산
+	 *****************************************************************/
+	protected Map<String, Integer> makeOrdCntList(OrdEx ordEx) {
+		Map<String, Integer> ordCntMap = new HashMap<String, Integer>();
+
+		if (ordEx != null && ordEx.getOrdHistEx() != null && ordEx.getOrdHistEx().getOrdHistAmtExList() != null) {
+
+			Integer onlineShipProdCnt = 0;
+			Integer membershipExchCnt = 0;
+			Integer activityPointExchCnt = 0;
+			Integer storePickupProdCnt = 0;
+
+			List<OrdShipAddressEx> ordShipAddressList = ordEx.getOrdShipAddressExList();
+			for (OrdShipAddressEx ordShipAddressEx : ordShipAddressList) {
+				for (OrdOtfEx ordOtfEx : ordShipAddressEx.getOrdOtfExList()) {
+					for (OrdHistProdEx ordHistProdEx : ordOtfEx.getOrdHistProdExList()) {
+						boolean storePickup = ordShipAddressEx.getStoreSn() != null;
+
+
+						if (storePickup) {
+							storePickupProdCnt++;
+						} else {
+
+							if ("Y".equals(ordHistProdEx.getIntegrationMembershipExchYn())) {
+								//BP
+								membershipExchCnt++;
+							} else if ("Y".equals(ordHistProdEx.getActivityPointExchYn())) {
+								//AP
+								activityPointExchCnt++;
+							} else {
+								onlineShipProdCnt++;
+							}
+						}
+					}
+				}
+			}
+
+			ordCntMap.put("onlineShipProdCnt", onlineShipProdCnt);
+			ordCntMap.put("membershipExchCnt", membershipExchCnt);
+			ordCntMap.put("activityPointExchCnt", activityPointExchCnt);
+			ordCntMap.put("storePickupProdCnt", storePickupProdCnt);
+		}
+
+		return ordCntMap;
+	}
+
+
+
 	private OrdOnlineProdFoDTO getMPlusNPromoOnlineProd(OrdHistProdEx ordHistProdEx, Map<Long, OrdOnlinePromoFoDTO> ordOnlinePromoFoMap) {
         OrdOnlinePromoFoDTO ordOnlinePromoFo = ordOnlinePromoFoMap.get(ordHistProdEx.getMPlusNOrdPromoSn());
         if(ordOnlinePromoFo == null) {
@@ -261,6 +337,22 @@ public class OrderBaseController extends AbstractViewController {
         return getOrdOnlineProdFo(ordHistProdEx, ordOnlinePromoFo);
     }
 
+	private OrdOnlineProdFoDTO getSameTimePurPromoOnlineProd(OrdHistProdEx ordHistProdEx, Map<String, OrdOnlinePromoFoDTO> ordOnlinePromoFoMap) {
+		String key = ordHistProdEx.getSameTimePurPromoSn() + "_" + ordHistProdEx.getSameTimePurProdBulkNo();
+		OrdOnlinePromoFoDTO ordOnlinePromoFo = ordOnlinePromoFoMap.get(key);
+		if(ordOnlinePromoFo == null) {
+			ordOnlinePromoFo = new OrdOnlinePromoFoDTO();
+			ordOnlinePromoFo.setPromoSn(ordHistProdEx.getSameTimePurPromoSn());
+			ordOnlinePromoFo.setPromoName(ordHistProdEx.getSameTimePurOrdPromoNameRlang());
+			ordOnlinePromoFo.setOrdOnlineProdFoMap(new HashMap<>());
+			ordOnlinePromoFo.setOrdOnlineProdFoList(new ArrayList<>());
+
+			ordOnlinePromoFoMap.put(key, ordOnlinePromoFo);
+		}
+
+		return getOrdOnlineProdFo(ordHistProdEx, ordOnlinePromoFo);
+	}
+
     private OrdOnlineProdFoDTO getOrdOnlineProdFo(OrdHistProdEx ordHistProdEx,  OrdOnlinePromoFoDTO ordOnlinePromoFo) {
         Map<String, OrdOnlineProdFoDTO> ordOnlineProdFoMap = ordOnlinePromoFo.getOrdOnlineProdFoMap();
         OrdOnlineProdFoDTO ordOnlineProdFo = ordOnlineProdFoMap.get(ordHistProdEx.getOrdProdEx().getOnlineProdCode());
@@ -270,22 +362,6 @@ public class OrderBaseController extends AbstractViewController {
             ordOnlinePromoFo.getOrdOnlineProdFoList().add(ordOnlineProdFo);
         }
         return ordOnlineProdFo;
-    }
-    
-    private OrdOnlineProdFoDTO getSameTimePurPromoOnlineProd(OrdHistProdEx ordHistProdEx, Map<String, OrdOnlinePromoFoDTO> ordOnlinePromoFoMap) {
-        String key = ordHistProdEx.getSameTimePurPromoSn() + "_" + ordHistProdEx.getSameTimePurProdBulkNo();
-        OrdOnlinePromoFoDTO ordOnlinePromoFo = ordOnlinePromoFoMap.get(key);
-        if(ordOnlinePromoFo == null) {
-            ordOnlinePromoFo = new OrdOnlinePromoFoDTO();
-            ordOnlinePromoFo.setPromoSn(ordHistProdEx.getSameTimePurPromoSn());
-            ordOnlinePromoFo.setPromoName(ordHistProdEx.getSameTimePurOrdPromoNameRlang());
-            ordOnlinePromoFo.setOrdOnlineProdFoMap(new HashMap<>());
-            ordOnlinePromoFo.setOrdOnlineProdFoList(new ArrayList<>());
-            
-            ordOnlinePromoFoMap.put(key, ordOnlinePromoFo);
-        }
-        
-        return getOrdOnlineProdFo(ordHistProdEx, ordOnlinePromoFo);
     }
     
 	/**

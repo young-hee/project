@@ -48,6 +48,7 @@
 						{{#xif ../selectedProdSn '==' this.prodSn }}
 							<a href="{{ productDetailPath this.onlineProdSn this.prodSn }}" class="lazy_load_wrap first_img">
 								<img class="lazy_load" src="" data-src="{{ this.prodImages.[0].imgUrl }}" alt="{{ this.prodName }}">
+								{{{stockImg this.saleDisplayStatus this.prodTypeCode }}}
 							</a>
 						{{/xif}}
 					{{/each}}
@@ -81,10 +82,12 @@
 					{{#xif ../prodListUnitCode '==' 'Prod' }}
 						<a href="{{ productDetailPath this.onlineProdSn this.prodSn}}" class="lazy_load_wrap first_img">
 							<img class="lazy_load" src="" data-src="{{ this.prodImages.[0].imgUrl }}" alt="{{ this.onlineProdName }}">
+							{{{stockImg this.saleDisplayStatus this.prodTypeCode }}}
 						</a>
 					{{else}}
 						<a href="{{ productDetailPath this.onlineProdSn }}" class="lazy_load_wrap first_img">
 							<img class="lazy_load" src="" data-src="{{ this.onlineProdImages.[0].imgUrl }}" alt="{{ this.onlineProdName }}">
+							{{{stockImg this.saleDisplayStatus this.prodTypeCode }}}
 						</a>
 					{{/xif}}
 
@@ -143,6 +146,7 @@
 						{{#xif (eq this.prodTypeCode 'Presale') '&&' (eq this.saleDisplayStatus 'OnSale')}}
 							<em class="tag">[예약판매중]</em>
 						{{/xif}}
+						<em class="tag">{{stockTxt this.saleDisplayStatus this.prodTypeCode}}</em>
 						<span>{{{ this.linePromoDesc }}}</span>
 					</p>
 					<h3 class="h_title">{{ this.onlineProdName }}</h3>

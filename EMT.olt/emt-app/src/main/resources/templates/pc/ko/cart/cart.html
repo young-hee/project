@@ -115,6 +115,7 @@
 
 	<script th:inline="javascript">
 	$( document ).ready(function() {
+		$( '.ui_spinner' ).spinner();
 	});
 
 	/* spinner 적용 */
@@ -134,6 +135,9 @@
 
 	/* 단골매장매장 정보 */
 	var storeRegularList = /*[[${storeRegularList}]]*/;
+
+	/* 지역시군구 정보 */
+	var addressDivInfoList = /*[[${addressDivInfoList}]]*/;
 
 	/* 장바구니 번호 */
 	var cartSn = cartEx.cartSn;
@@ -210,11 +214,10 @@
 		if (cartEx.cartDeliveryActivityPointExchOnlineProdExList.length > 0) {
 			var onlineHtml = AP.common.getTemplate('cart.online.activity-point-prod', {
 				cartSn : cartEx.cartSn,
-				bpMembershipEx : bpMembershipEx,
+				activityPoints : cartEx.cartMemberEx.activityPoints,
 				pointSum : cartEx.cartDeliveryExchActivityPointSum,
 				list : cartEx.cartDeliveryActivityPointExchOnlineProdExList
 			});
-			console.log("bpMembershipEx" + bpMembershipEx.membershipPoints);
 			$('#allOnlineProd').append(onlineHtml);
 		}
 
@@ -261,7 +264,7 @@
 		if (cartEx.cartStorePickupActivityPointExchOnlineProdExList.length > 0) {
 			var storeHtml = AP.common.getTemplate('cart.takeout.activity-point-prod', {
 				cartSn : cartEx.cartSn,
-				bpMembershipEx : bpMembershipEx,
+				activityPoints : cartEx.cartMemberEx.activityPoints,
 				pointSum : cartEx.cartStorePickupExchActivityPointSum,
 				list : cartEx.cartStorePickupActivityPointExchOnlineProdExList
 			});
@@ -296,7 +299,8 @@
 		$('#calculationResult').empty();
 		if (cartEx.calculationResult != null) {
 			var calculationHtml = AP.common.getTemplate('cart.calculation-result', {
-				cartEx : cartEx
+				cartEx : cartEx,
+				memberSn : memberSn
 			});
 			$('#calculationResult').append(calculationHtml);
 		}
@@ -334,180 +338,208 @@
 		$("#calMemberPrdCnt").html(onlineMembershipCnt + takeoutMembershipCnt);
 		/* 활동포인트 총 수량 */
 		$("#calActivityPrdCnt").html(onlineActivityCnt + takeoutActivityCnt);
-		//뷰티포인트 상품 수량 및 금액 표기할것
 
 		/* 총주문 갯수 */
 		$("#totalPrdCnt").html(onlineChkCnt + takeoutChkCnt);
 	}
 
-	// 테이크아웃 매장변경 레이어
-	/*$("#b_storeChange").on('click', function(e){
-		$("#storeChangeLayer").show();
-		getTakeoutStore(null, 0, false, 0, 0);
-	});*/
-
-	var ret = false;
 	var pageLimit = 10;
 	var currentKeyword;
+	var currentOffset = 0;
 
 	/* 테이크아웃 매장레이어 */
 	var takeoutModal;
 	function fnLayerOpenStore() {
-		/*if ($('.storeRow').length >= 10) {
-			AP.modal.alert('단골매장은 최대 10개 까지만 추가가 가능합니다.');
-			return;
-		}*/
 		takeoutModal = AP.modal.open({
 			templateKey: 'cart.layer-cart-02',
-			sizeType: "L"
-		}).addListener( 'modal-close', function (e) {
-			if ('close' === e.closeType) {
-				getFavoriteStore();
-			}
+			sizeType: "L",
+			templateModel: { addressDivInfoList : addressDivInfoList }
 		});
-		var $modalEl = takeoutModal.getElement();
-		$('#addSearch').on('click', function (e) {
-			var search = $('#addSearchText').val();
-			if (search != null && search.length > 0) {
-				ret = false;
-				getAddTakeoutStore(search, 0)
-			}
-			else {
+		$('#addStore').empty();
+		var emptyHtml = "\<i class=\"ico\"></i><p class=\"text font_lg\">매장명 또는 지역으로 검색하세요.</p>";
+		$('#addStore').append(emptyHtml);
+
+		var $modalEl = takeoutModal.getElement(); //jquery object
+
+		/* 매장검색 */
+		$modalEl.find("#search").click(function() {
+			var addressDiv = $('#addressDiv').val();
+			var addressDetailDivs = $('#addressDetailDivs').val();
+			var search = $('#searchText').val();
+			$('#addStore').empty();
+			if (search != "") {
+
+				getTakeoutStore(search, 0, null, null);
+			}else if (search == "" && addressDiv == "" && addressDetailDivs == "") {
+				getTakeoutStore(search, 0, null, null);
+			}else if(addressDiv != "" && addressDetailDivs != "") {
+				getTakeoutStore(addressDiv + ' ' + addressDetailDivs, 0, null, null);
+			}else{
 				AP.modal.alert('매장명 또는 지역명을 선택해 주세요.');
 			}
 		});
-		$('#addSearchText').keydown(function(e){
+
+		/* 매장검색 엔터키 */
+		$modalEl.find("#searchText").keydown(function(e) {
 			if(e.keyCode == 13){
 				var addressDiv = $('#addressDiv').val();
 				var addressDetailDivs = $('#addressDetailDivs').val();
-				var search = $('#addSearchText').val();
-				if(addressDiv != "" && addressDetailDivs != "") {
-					ret = false;
-					getAddTakeoutStore(addressDiv + ' ' + addressDetailDivs, 0);
+				var search = $('#searchText').val();
+				$('#addStore').empty();
+				if (search != "") {
+					getTakeoutStore(search, 0, null, null);
+				}else if (search == "" && addressDiv == "" && addressDetailDivs == "") {
+					getTakeoutStore(search, 0, null, null);
+				}else if(addressDiv != "" && addressDetailDivs != "") {
+					getTakeoutStore(addressDiv + ' ' + addressDetailDivs, 0, null, null);
 				}else{
-					ret = false;
-					getAddTakeoutStore(search, 0);
+					AP.modal.alert('매장명 또는 지역명을 선택해 주세요.');
 				}
 			}
 		});
-		/*$modalEl.find( '[name=searchStore]' ).on( 'click', function (e) {
-			var agree = $(this).val();
-			console.log("agree : " + agree);
-			if(agree == "02"){
-				getAddFavoriteStore(search, 0);
-			}else{
 
-			}
-		});*/
-	}
+		/* 더보기 */
+		$('#b_page').on('click', function(e) {
+			getTakeoutStore(currentKeyword, (currentOffset + pageLimit), null, null);
+		});
 
-	/* 지역선택 검색*/
-	function getAddressDetailDivs(){
-		var addressDiv = $('#addressDiv').val();
-		if(addressDiv != '' ){
-			AP.api.storeAddressDivs({}, {
-				addressDiv : addressDiv
-			}).done(function(data) {
-				if (data.result == 'success') {
-					$('[name=addressDetailDivs]').empty();
-					if(data.param.length > 0){
-						/*if(addressDiv != '서울특별시') {
-                            $('[name=addressDetailDivs]').append('<option value="">전체</option>');
-                        }*/
-						for(var i=0; i < data.param.length; i++) {
-							$('[name=addressDetailDivs]').append("<option value='" + data.param[i] + "'>" + data.param[i] + "</option>");
-						};
-					}
+		/* 지역선택 변경 */
+		$('[name=addressDiv]').change(function(){
+			$('[name=addressDetailDivs] option').each(function(index){
+				if(index > 0){
+					$(this).remove();
 				}
-			}).fail(function(e) {
-				AP.modal.alert("실패!");
-			}).always(function() {
 			});
-		}else{
-			$('[name=addressDetailDivs]').empty();
-			$('[name=addressDetailDivs]').append('<option value="">시/구/군</option>');
+			getaddressDetailDivs();
+		});
+
+		/* 지역선택 검색*/
+		function getaddressDetailDivs(){
+			var addressDiv = $('#addressDiv').val();
+			console.log("addressDiv : " + addressDiv);
+			if(addressDiv != '' ){
+				AP.api.storeAddressDivs({}, {
+					addressDiv : addressDiv
+				}).done(function(data) {
+					if (data.result == 'success') {
+
+						$('[name=addressDetailDivs]').empty();
+						if(data.param.length > 0){
+							/*if(addressDiv != '서울특별시') {
+                                $('[name=addressDetailDivs]').append('<option value="">전체</option>');
+                            }*/
+							for(var i=0; i < data.param.length; i++) {
+								$('[name=addressDetailDivs]').append("<option value='" + data.param[i] + "'>" + data.param[i] + "</option>");
+							};
+						}
+					}
+				}).fail(function(e) {
+					AP.modal.alert("실패!");
+				}).always(function() {
+				});
+			}else{
+				$('[name=addressDetailDivs]').empty();
+				$('[name=addressDetailDivs]').append('<option value="">시/구/군</option>');
+			}
 		}
+
+		$modalEl.find( '.ui_table_striped' ).tableStriped( 'clear' );   // tableStriped 적용해제
+		$modalEl.find( 'input' ).placeholder( 'clear' );                // placeholder 적용해제
+		$modalEl.find( 'select' ).selectBox();							// selectBox 적용해제
+		$modalEl.find( '.tr_map .map_area' ).mapApi( 'clear' );         // map api 적용해제
+
+		// plugin 적용
+		$( '.ui_table_striped' ).tableStriped();
+		$( 'input[placeholder]' ).placeholder();
+		$( 'select' ).selectBox();
 	}
 
-	/* 매장조회 */
-	function getFavoriteStore() {
+	/* 주소입력 매장 검색 */
+	function getTakeoutStore(keyword, offset, latitude, longitude) {
+		currentKeyword = keyword;
 		AP.api.takeoutStore({}, {
-			regularStoreSearchYn : "Y"
+			keyword: keyword,
+			offSet: offset,
+			limit: pageLimit,
+			regularStoreSearchYn : "N",
+			latitude : latitude,
+			longitude : longitude
 		}).done(function (data) {
 			if (data) {
-				showPage(data.param);
+				$("#addStore").empty();
+				showAddPage(data.param, keyword);
 			}
 			//성공
 		}).fail(function (e) {
 			//실패
+			AP.modal.alert(e.responseJSON.errorData.message);
 		}).always(function () {
 			//성공, 실패
 		});
 	}
 
-	/* 매장목록 */
-	function showPage(data) {
+	/* 단골매장 검색 */
+	function getFavoriteStore(keyword, offset, latitude, longitude) {
+		currentKeyword = keyword;
+		AP.api.takeoutStore({}, {
+			keyword: keyword,
+			offSet: offset,
+			limit: pageLimit,
+			regularStoreSearchYn : "Y",
+			latitude : latitude,
+			longitude : longitude
+		}).done(function (data) {
+			if (data) {
+				showAddPage(data.param, keyword);
+				/*if (!ret) {
+					ret = true;
+					showAddPaging(data.param.totalCount);
+				}*/
+			}
+			//성공
+		}).fail(function (e) {
+			//실패
+			AP.modal.alert(e.responseJSON.errorData.message);
+		}).always(function () {
+			//성공, 실패
+		});
+	}
+
+	/* 주소입력 매장목록 */
+	function showAddPage(data, keyword) {
 		var resultHtml = AP.common.getTemplate('cart.layer-cart-02-list', {
 			totalLength: data.totalCount,
-			totalLengthLabel: $B.string.numberFormat(data.totalCount),
-			list: data.storeExList
+			list : data.storeExList
 		});
-		$('#storeCnt').text(data.regularStoreTotalCount);
-		$('#paging').empty();
-		$('#paging').append(resultHtml);
 
-		$('.ui_table_striped').tableStriped('clear');
-		$('.ui_table_striped').tableStriped();
+		/* 매장구분 이벤트*/
+		/*resultHtml.getElement.find("#radio2").click(function() {
+			getFavoriteStore(null, 0, null, null);
+		});*/
 
-		actionStore();
+		$('#searchCnt').html(data.totalCount);
+		if (data.totalCount > 0) {
+			$('#searchText').text(keyword);
+			$('#addStore').append(resultHtml);
+			actionAddStore();
+			setDel();
+			showAddPaging(data.totalCount);
+		}
+		else {
+			$('#searchText').text(keyword);
+			var emptyHtml = "\<i class=\"ico\"></i><p class=\"text font_lg\">매장명 또는 지역으로 검색하세요.</p>";
+			$('#addStore').append(emptyHtml);
+		}
 	}
 
-	/* 위치보기 */
-	function actionStore() {
-		$('.ui_table_striped').tableStriped();
-		// map api
-		$('.store_list .ui_table_striped tbody tr:not(.tr_map)').each(function (index) {
-			var $store = $(this).not('.js-apply'), $trMap = $store.next('.tr_map');
-			// 위치보기 버튼
-			$store.find('.btn_sm_bordered').on('click', function () {
-				if ($trMap.hasClass('on')) {
-					$trMap.removeClass('on');
-				} else {
-					$trMap.addClass('on');
-					$trMap.find('.map_area').mapApi('resize');
-					$trMap.find('.map_area').mapApi('setCenter', $(this).attr("latitude"), $(this).attr("longitude"));
-					$trMap.find('.map_area').mapApi('addMarker', $(this).attr("latitude"), $(this).attr("longitude"), 1);
-				}
-			});
-			//닫기 버튼
-			$trMap.find('.btn_map_close').on('click', function () {
-				$trMap.removeClass('on');
-			});
-			//지도 가이드 참고
-			$trMap.find('.map_area').mapApi({
-				ratio: [320, 180
-				]
-			});
-			/* AP.common.mapApiReady.done(function () {
-                if (location != null) {
-                    alert("123");
-                    $trMap.find( '.map_area' ).mapApi( 'addMarker', location.latitude, location.longitude, 1 );
-                }
-            }); */
-			//중복적용 방지
-			$store.addClass('js-apply');
-		});
-	}
-
-	/* 단골매장 등록,해제 분기 */
 	function setDel() {
 		$('input[type=checkbox][name=layer]').on('click', function () {
 			var element = $(this);
 			if (element.prop('checked')) {
-				addFavoriteStore(element.val(), element, element.attr('storeName'));
+				addTakeoutStore(element.val(), element, element.attr('storeName'));
 			}
 			else {
-				delFavoriteStore(element.val(), element, element.attr('storeName'));
+				delTakeoutStore(element.val(), element, element.attr('storeName'));
 			}
 			return false;
 		});
@@ -515,7 +547,7 @@
 
 	/* 페이징 표기*/
 	function showAddPaging(totalCount) {
-		$('#count').text(totalCount);
+		$('#searchCnt').text(totalCount);
 		$('.ui_paging').paging('clear');
 
 		var totalPage = Math.ceil(totalCount / pageLimit);
@@ -532,8 +564,8 @@
 		});
 	}
 
-	/* 단골매장 등록 */
-	function addFavoriteStore(storeSn, element, name) {
+	/* 단골매장 등록11 */
+	function addTakeoutStore(storeSn, element, name) {
 		AP.api.addTakeoutStore({}, {
 			storeSn : storeSn
 		}).done(function(data) {
@@ -553,8 +585,8 @@
 		});
 	}
 
-	/* 단골매장 취소 */
-	function delFavoriteStore(storeSn, element, name) {
+	/* 단골매장 취소11 */
+	function delTakeoutStore(storeSn, element, name) {
 		AP.api.delTakeoutStore({}, {
 			storeSn : storeSn
 		}).done(function(data) {
@@ -574,114 +606,46 @@
 		});
 	}
 
-	/* 주소입력 매장 검색 */
-	function getAddTakeoutStore(keyword, offset) {
-		currentKeyword = keyword;
-		AP.api.takeoutStore({}, {
-			keyword: keyword,
-			offSet: offset,
-			limit: pageLimit,
-			regularStoreSearchYn : "N"
-		}).done(function (data) {
-			if (data) {
-				showAddPage(data.param, keyword);
-				if (!ret) {
-					ret = true;
-					showAddPaging(data.param.totalCount);
-				}
-			}
-			//성공
-		}).fail(function (e) {
-			//실패
-			AP.modal.alert(e.responseJSON.errorData.message);
-		}).always(function () {
-			//성공, 실패
-		});
-	}
-
-	// 매장검색여부
-	function getAddFavoriteStore(keyword, offset) {
-		currentKeyword = keyword;
-		AP.api.takeoutStore({}, {
-			keyword: keyword,
-			offSet: offset,
-			limit: pageLimit,
-			regularStoreSearchYn : "Y"
-		}).done(function (data) {
-			if (data) {
-				showAddPage(data.param, keyword);
-				if (!ret) {
-					ret = true;
-					showAddPaging(data.param.totalCount);
-				}
-			}
-			//성공
-		}).fail(function (e) {
-			//실패
-			AP.modal.alert(e.responseJSON.errorData.message);
-		}).always(function () {
-			//성공, 실패
-		});
-	}
-
-	/* 주소입력 매장목록 */
-	function showAddPage(data, keyword) {
-		var resultHtml = AP.common.getTemplate('cart.layer-cart-02-list', {
-			totalLength: data.totalCount,
-			totalLengthLabel: $B.string.numberFormat(data.totalCount),
-			list: data.storeExList
-		});
-		$('#addPaging').empty();
-		if (data.totalCount > 0) {
-			$('#addPagination').show();
-			$('#addNone').hide();
-			$('#addPaging').append(resultHtml);
-			$('.ui_table_striped').tableStriped('clear');
-			$('.ui_table_striped').tableStriped();
-			actionAddStore();
-			setDel();
-		}
-		else {
-			$('#searchText').text(keyword);
-			$('#addPagination').hide();
-			$('#addNone').show();
-		}
-		// actionCheckbox();
-	}
-
 	/* 주소입력 위치보기 */
 	function actionAddStore() {
 		// map api
-		$('.store_list .ui_table_striped tbody tr:not(.tr_map)').each(function (index) {
-			var $store = $(this).not('.js-apply'), $trMap = $store.next('.tr_map'), $btnWrap = $store.find('.table_striped');
+		/*$( '.store_list .ui_table_striped tbody tr:not(.tr_map)' ).each(function ( index ) {*/
+		$( '.ui_table_striped tbody tr:not(.tr_map)' ).each(function ( index ) {
+			var $store = $( this ).not( '.js-apply' ),
+				$trMap = $store.next( '.tr_map' );
+
 			// 위치보기 버튼
-			$store.find('.btn_sm_bordered').on('click', function () {
-				if ($trMap.hasClass('on')) {
-					$trMap.removeClass('on');
+			$store.find( '#b_storeMap' ).on( 'click', function () {
+				console.log("11111");
+				if ( $trMap.hasClass( 'on' )) {
+					console.log("22222");
+					$trMap.removeClass( 'on' );
 				} else {
-					$trMap.addClass('on');
+					console.log("333333");
+					$trMap.addClass( 'on' );
+					console.log("444444");
 					$trMap.find('.map_area').mapApi('resize');
+					console.log("555555");
 					$trMap.find('.map_area').mapApi('setCenter', $(this).attr("latitude"), $(this).attr("longitude"));
+					console.log("666666");
 					$trMap.find('.map_area').mapApi('addMarker', $(this).attr("latitude"), $(this).attr("longitude"), 1);
+					console.log("77777");
 				}
 			});
+
 			//닫기 버튼
-			$trMap.find('.btn_map_close').on('click', function () {
-				$trMap.removeClass('on');
+			$trMap.find( '.btn_map_close' ).on( 'click', function () {
+				$trMap.removeClass( 'on' );
 			});
+
 			//지도 가이드 참고
-			$trMap.find('.map_area').mapApi({
-				ratio: [320, 180
-				]
+			$trMap.find( '.map_area' ).mapApi({ratio: [320, 180]});
+			AP.common.mapApiReady.done(function () {
+				$trMap.find( '.map_area' ).mapApi( 'addMarker', 37.52876373236224, 126.96846416770506, 1 );
 			});
-			/* AP.common.mapApiReady.done(function () {
-                if (location != null) {
-                    alert("123");
-                    $trMap.find( '.map_area' ).mapApi( 'addMarker', location.latitude, location.longitude, 1 );
-                }
-            }); */
+
 			//중복적용 방지
-			$store.addClass('js-apply');
+			$store.addClass( 'js-apply' );
 		});
 	}
 
@@ -701,7 +665,6 @@
 				storeSelect = data.storeSelect;
 				storeRegularList = data.storeRegularList;
 				setStoreSelect();
-				AP.modal.close();
 			}
 		}).fail(function (e) {
 			AP.modal.alert("fail");
@@ -713,6 +676,10 @@
 
 	/* 주문결제하기 */
 	function fnCheckOrder() {
+		// 맴버쉽,활동포인트 체크
+		if(fncheckExchPoint() == false){
+			return false;
+		}
 
 		var chkCnt 			= $("[name=chkBox]:checked").length;			// 온라인상품 선택갯수
 		var takeoutChkCnt	= $("[name=takeoutChkBox]:checked").length;		// 테이크아웃상품 선택갯수
@@ -727,26 +694,9 @@
 		// 테이크아웃 체크상품과 선택매장 확인
 		if(takeoutChkCnt > 0 && storeSelect == null){
 			AP.modal.alert('테이크아웃 매장을 선택해주세요.');
-			return;
-		}
-
-		// 선택매장 정보 확인
-		/*if(storeSelect == null){
-			AP.modal.alert("선택된 매장정보가 존재하지 않습니다.");
 			return false;
 		}
-		else{
-			if(storeSelect.invtEnoughType == "No"){
-				AP.modal.alert("테이크아웃 선택하신 매장에 재고가 없습니다.\n다른 테이크아웃 매장을 변경해주세요.");
-				return false;
-			}
-			else if(storeSelect.invtEnoughType == "NotEnougho"){
-				AP.modal.alert("테이크아웃 선택하신 매장에 재고가 부족합니다.\n다른 테이크아웃 매장을 변경해주세요.");
-				return false;
-			}
-		}*/
 
-		// 3. 상품 분기별 할당
 		if(chkCnt > 0 && takeoutChkCnt > 0){
 			fnOrderReception(chkCnt, takeoutChkCnt);
 		}
@@ -756,6 +706,8 @@
 		else if(takeoutChkCnt > 0){
 			fnOrderProdReception(0, takeoutChkCnt);
 		}
+
+		return true;
 	}
 
 	/* 주문결제하기(온라인상품 and 테이크아웃상품) */
@@ -940,6 +892,11 @@
 
 	/* 선택상품재계산 */
 	function calculateSelectCartProds() {
+		// 맴버쉽,활동포인트 체크
+		if(fncheckExchPoint() == false){
+			return;
+		}
+
 		var chkCnt = $("[name=chkBox]:checked").length;					// 온라인상품 선택갯수
 		var takeoutChkCnt = $("[name=takeoutChkBox]:checked").length;	// 테이크아웃상품 선택갯수
 		var prdCdArr = [];
@@ -986,6 +943,31 @@
 		}).always(function () {
 
 		});
+	}
+
+	/* 맴버쉽,활동 포인트 체크 */
+	function fncheckExchPoint() {
+		var activitySum = 0;
+		var membershipSum = 0;
+		$("input[name=chkBox]:checked").each(function () {
+			var pointExch = $( this).attr('pointExch');
+			var point = $(this).attr('point');
+			if (pointExch == "activity") {
+				activitySum += Number(point);
+			}
+			if (pointExch == "membership") {
+				membershipSum += Number(point);
+			}
+		});
+		if (membershipSum > bpMembershipEx.membershipPoints) {
+			AP.modal.alert('교환 뷰티포인트가 보유 포인트보다 큽니다.');
+			return false;
+		}
+		if (activitySum > cartEx.cartMemberEx.activityPoints) {
+			AP.modal.alert('교환 진주알이 보유 알보다 큽니다.');
+			return false;
+		}
+		return true;
 	}
 
 	/* 단일삭제(단위상품기준) */
@@ -1059,11 +1041,13 @@
 	}
 
 	/* 주문수량 수정 */
-	function prodQtyOperate(num, cartSn, cartProdSn, prodSn, storePickupYn, operate) {
+	function prodQtyOperate(num, cartSn, cartProdSn, prodSn,
+							integrationMembershipExchYn, activityPointExchYn, storePickupYn, storeSn, operate) {
 		var ordQty = parseInt($(num).closest("div").find("input[name=cartProdQty]").val());
 		if(operate == '+'){
 			ordQty++;
-		}else if(operate == '-'){
+		}
+		else if(operate == '-'){
 			ordQty--;
 		}
 		AP.api.modifyCartProd({}, {
@@ -1071,7 +1055,45 @@
 			cartProdSn : cartProdSn,
 			prodSn : prodSn,
 			cartProdQty: ordQty,
-			storePickupYn : storePickupYn
+			integrationMembershipExchYn : integrationMembershipExchYn == "" ? null : integrationMembershipExchYn,
+			activityPointExchYn : activityPointExchYn == "" ? null : activityPointExchYn,
+			storePickupYn : storePickupYn == "" ? null : storePickupYn,
+			storeSn : storeSn == "" ? null : storeSn
+		}).done(function (data) {
+			if (data.data) {
+				cartEx = data.data;
+				setOnlineProd();
+				setStoreProd();
+				setCalculationResult();
+				setProdCnt();
+			}
+		}).fail(function (e) {
+			AP.modal.alert("fail");
+		}).always(function () {
+		});
+	}
+
+	/* 묶음상품 주문수량 수정 */
+	function bulkProdQtyOperate(num, cartSn, cartProdSn, prodSn, storePickupYn, storeSn,
+								cartBulkIncludedProdSn, bulkDcIncludedProdGrpSn, includedProdSn, includedProdQty, operate) {
+		var ordQty = parseInt($(num).closest("div").find("input[name=cartProdQty]").val());
+		if(operate == '+'){
+			ordQty++;
+		}
+		else if(operate == '-'){
+			ordQty--;
+		}
+		AP.api.modifyCartProd({}, {
+			cartSn : cartSn,
+			cartProdSn : cartProdSn,
+			prodSn : prodSn,
+			cartProdQty: ordQty,
+			storePickupYn : storePickupYn == "" ? null : storePickupYn,
+			storeSn : storeSn == "" ? null : storeSn,
+			cartBulkIncludedProdSn : cartBulkIncludedProdSn,
+			bulkDcIncludedProdGrpSn : bulkDcIncludedProdGrpSn,
+			includedProdSn : includedProdSn,
+			includedProdQty : includedProdQty
 		}).done(function (data) {
 			if (data.data) {
 				cartEx = data.data;

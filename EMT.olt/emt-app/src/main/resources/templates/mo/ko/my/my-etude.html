@@ -77,14 +77,14 @@
 			</dl>
 		</div>
 		<!--/* 20180502 : 장바구니 상품 삭제 / 마이 컬러파인터 신규 추가 */-->
-		<div class="my_color_finder">
+		<div class="my_color_finder" th:if="${skinTon != null && skinTon.skinToneMeasureYN == 'Y'}">
 			<h3 class="h_title cont"><strong>마이 컬러파인더</strong></h3>
 			<!--/* [S]20180515 : 마크업 수정 */-->
 			<div class="tone_wrap">
 				<img ap:src="@{/images/my/tone_spring.jpg}" alt="">
 				<div class="text">
-					<p class="eng">Warm Tone <strong>Spring</strong></p>
-					<p class="tone_text">홍길동 님의<br>피부톤은<br><b>웜톤 봄</b> 타입</p>
+					<p class="eng" th:text="${skinTon.skinToneMeasureName}">Warm Tone <strong>Spring</strong></p>
+					<p class="tone_text">홍길동 님의<br>피부톤은<br><b th:text="${skinTon.skinToneMeasureName}">웜톤 봄</b> 타입</p>
 				</div>
 				<div>
 					<div class="my_skin table_layout">
@@ -107,7 +107,7 @@
 				</div>
 			</div>
 			<!--/* [E]20180515 : 마크업 수정 */-->
-			<div class="my_tone_recommend">
+			<div class="my_tone_recommend" th:data-skinton-measure-code="${skinTon.skinToneMeasureCode}">
 				<h4 class="h_title"><b>내 피부톤과 어울리는 추천 제품</b></h4>
 				<!--/*20180531 : 슬라이드 상품노출 영역 수정*/-->
 				<div class="slide two_half" data-ix-options="view-length:3; move-length:2;">
@@ -169,9 +169,10 @@
 					</div>
 				</div>
 			</div>
-			<div class="banner">
+			<!-- /* 20180802:삭제 */ -->
+ 			<!--<div class="banner"> 
 				<a href="javascript:setApp();"><img ap:src="@{/images/my/link_app.jpg}" alt="에뛰드 하우스 앱으로 더 많은 정보를 확인해 보세요~. 앱 설치하기" /></a>
-			</div>
+			</div> -->
 			<!--/* 피부측정 데이터가 있는 경우
             <div class="panel notice">
                 <i class="ico"></i>

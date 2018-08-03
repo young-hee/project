@@ -82,9 +82,9 @@
 
 							<div class="input_group">
 								<div class="input_wrap">
-									<input type="hidden" class="post_code"
+									<input type="hidden" class="post_code" th:value="${address != null} ? ${address.addresseeAddress.zipCode} : ''"
 										id="addresseeAddress.zipCode" name="addresseeAddress.zipCode">
-									<input type="hidden" class="address_first" id="addresseeAddress.address1" name="addresseeAddress.address1"> 
+									<input type="hidden" class="address_first" id="addresseeAddress.address1" name="addresseeAddress.address1" th:value="${address != null} ? ${address.addresseeAddress.address1} : ''">
 									
 									<input type="text" data-msg-required="주소를 입력해주세요."
 										class="address_first" title="기본주소 입력" placeholder="주소"

@@ -18,7 +18,7 @@ this["AP"]["handlebars"]["my"]["inquiry-cont"] = Handlebars.template({"1":functi
     + "</pre>\n"
     + ((stack1 = helpers["if"].call(alias2,(helpers.isExist || (depth0 && depth0.isExist) || alias3).call(alias2,(depth0 != null ? depth0.responseFileList : depth0),{"name":"isExist","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "	    	<p class=\"date\">"
-    + alias1((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias3).call(alias2,(depth0 != null ? depth0.writeDt : depth0),"yyy-MM-dd",{"name":"dateFormat","hash":{},"data":data}))
+    + alias1((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias3).call(alias2,(depth0 != null ? depth0.writeDt : depth0),"YYYY.MM.DD",{"name":"dateFormat","hash":{},"data":data}))
     + "</p>\n	    </div>\n";
 },"5":function(container,depth0,helpers,partials,data) {
     var stack1;

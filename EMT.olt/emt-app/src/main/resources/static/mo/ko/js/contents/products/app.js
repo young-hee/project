@@ -10,13 +10,12 @@
 			this._$target = $( '#ap_container' );
 
 			this._defaultModel = {};
-
 			this._setSlide();
 			this._setHeaderFixed();
 		},
 
 		/** =============== Public Methods =============== */
-
+		
 		//페이지를 구성한는 기본 데이타 설정
 		setDefaultData: function ( model, memberMap ) {
 			
@@ -34,6 +33,7 @@
 			this._setArtistTalk( memberMap );
 			this._setRecommendList();
 			this._setTabs();
+			this._setVideoPlugin();
 		},
 
 		/** =============== Private Methods =============== */
@@ -86,7 +86,58 @@
 				$( e.currentTarget ).remove();
 			}.bind(this));
 		},
-
+		
+		//video plugin setting 
+		_setVideoPlugin: function() {
+			 
+			var imageArray = ''; 
+			var data = ''; 
+			data = Object(data);
+			
+			imageArray = this._defaultModel.onlineProdImages;			
+			
+			if(imageArray.length === 0 ){
+				return; 
+			}
+			
+			$.each(imageArray , function(index, imageInfo) {
+				console.log(imageInfo); 
+				if(imageInfo.videoYn === 'Y') {
+					data = imageInfo;
+				}
+			});
+							
+			if(data.imgUrl === '' || data.videoUrl === ''){
+				return; 
+			}
+				
+			var html = ''; 
+			html = AP.common.getTemplate( 'products.thumbnail-video-info', data );
+		 
+			var ixItemList = '';
+				ixItemList = this._$target.find( '.ix-list-item' );
+			var videoIndex = '';
+				videoIndex = String((Number(data.imgNo)-1));
+			
+			var originUrl = '';
+				originUrl = $(this).find(origin).selector; 
+			
+			AP.common.youtubeApiReady.done(function () {
+			 
+				$.each(ixItemList, function(index, object){
+					 
+					if(object.attributes['data-origin-idx'].value === String(videoIndex)){
+				 
+						$(this).append(html);
+						$(this).find('.youtube_video' ).video(); // 초기화 
+					}
+					
+				});
+		
+			});
+			
+			
+		},
 		//slide 적용
 		_setSlide: function () {
 			this._$target.find( '.slide.goods_detail_banner' ).ixSlideMax();

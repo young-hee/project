@@ -95,10 +95,19 @@
 						</dd>
 					</dl>
 					<dl>
-						<!--배송시 요청사항 선택-->
-						<th:block ap:replace="~{order/fragment/order-ship-message-info}"/>
+						<dt><b>배송시 요청사항 선택</b></dt>
+						<dd>
+							<div class="select_wrap w100p">
+								<select name="selectShipMsg" title="배송시 요청사항을 선택" tabindex="-1">
+									<option value="">배송시 요청사항을 선택해주세요.</option>
+									<option th:each="shipMsg : ${ordEx.shipMsgList}" th:value="${shipMsg}" th:text="${shipMsg}">직접 입력</option>
+								</select>
+							</div>
+							<div class="input_wrap w100p">
+								<input type="text" name="shipMsg" maxlength="80" placeholder="80자 이내로 작성해주세요.">
+							</div>
+						</dd>
 					</dl>
-					<!--<span class="check_wrap basic"><input type="checkbox" id="checkAddress"><label for="checkAddress">기본배송지로 설정</label></span>-->
 				</div>
 				</fieldset>
 			</div>
@@ -209,20 +218,15 @@
 			}
 		}
 
-		/* 배송메세지 설정 */
-		$('#shipMsg').on('change', function() {
+		$('[name=selectShipMsg]').on('change', function(e){
 			var selectedVal = $(this).val();
-			if(selectedVal == "직접 입력"){
-				$('#inputDirect').show();
+			//console.log("selectedVal : " + selectedVal);
+			$('[name=shipMsg]').focus();
+			if(!selectedVal){
+				$('[name=shipMsg]').val("");
 			}else{
-				$('#inputDirect').hide();
+				$('[name=shipMsg]').val(selectedVal);
 			}
-		});
-
-		/* 테이크아웃 매장변경 레이어 */
-		$("#b_storeChange").on('click', function(e){
-			$("#storeChangeLayer").show();
-			getTakeoutStore(null, 0, false, 0, 0);
 		});
 
 		/* 편의점 찾기 */

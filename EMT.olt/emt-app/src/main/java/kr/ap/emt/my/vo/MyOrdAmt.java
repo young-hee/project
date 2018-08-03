@@ -44,6 +44,10 @@ public class MyOrdAmt {
 	// 진주알
 	private BigDecimal activityPoint;
 
+	// 기타 포인트
+	private BigDecimal etcPoint = BigDecimal.ZERO;
+
+
 	private Map<String, BigDecimal> ordAmt;
 
 	public MyOrdAmt(List compare) {
@@ -54,8 +58,8 @@ public class MyOrdAmt {
 			for (Object obj : compare) {
 				if (obj instanceof OrdHistAmtCompare) {
 					OrdHistAmtCompare o = (OrdHistAmtCompare) obj;
-					ordAmt.put(o.getOrdHistAmtTypeCode(), (o.getBeforeAmtPcur().subtract(o.getAfterAmtPcur())));
-//					ordAmt.put(o.getOrdHistAmtTypeCode(), (o.getRefundAmtPcur()));
+					// ordAmt.put(o.getOrdHistAmtTypeCode(), (o.getBeforeAmtPcur().subtract(o.getAfterAmtPcur())));
+					ordAmt.put(o.getOrdHistAmtTypeCode(), (o.getRefundAmtPcur()));
 
 				}
 				else if (obj instanceof OrdHistAmtEx) {
@@ -75,6 +79,8 @@ public class MyOrdAmt {
 		spPriceAwardProd = getOrDefault("SpPriceAwardProd", "payment");
 		spUnitPacking = getOrDefault("ShipUnitPacking", "payment").add(getOrDefault("ProdUnitPacking", "payment"));
 		shipFee = getOrDefault("DefaultShipFee", "payment").add(getOrDefault("AddShipFee", "payment"));
+		getOrDefault("MembershipExch", "payment");
+		getOrDefault("ActivityPointExch", "payment");
 
 
 		couponPoint = addBigDecimal(couponPoint, getOrDefault("ProdUnitCouponDc", "point"));
@@ -83,6 +89,18 @@ public class MyOrdAmt {
 		couponPoint = addBigDecimal(couponPoint, getOrDefault("OrdUnitCouponDc", "point"));
 		membershipPoint = getOrDefault("MembershipExch", "point");
 		activityPoint = getOrDefault("ActivityPointExch", "point");
+
+		etcPoint = addBigDecimal(etcPoint, getOrDefault("OnlineProdPromoDc", "point"));
+		etcPoint = addBigDecimal(etcPoint, getOrDefault("OnlineMemberPromoDc", "point"));
+		etcPoint = addBigDecimal(etcPoint, getOrDefault("ImmedDcCouponPromo", "point"));
+		etcPoint = addBigDecimal(etcPoint, getOrDefault("OrdUnitPromoDc", "point"));
+		etcPoint = addBigDecimal(etcPoint, getOrDefault("MPlusNPromoDc", "point"));
+		etcPoint = addBigDecimal(etcPoint, getOrDefault("DefaultShipFeePromoDc", "point"));
+		etcPoint = addBigDecimal(etcPoint, getOrDefault("DefaultShipFeeCouponDc", "point"));
+		etcPoint = addBigDecimal(etcPoint, getOrDefault("DefaultShipFeeDc", "point"));
+		etcPoint = addBigDecimal(etcPoint, getOrDefault("DefaultExchShipFeeDc", "point"));
+		etcPoint = addBigDecimal(etcPoint, getOrDefault("ShipFeePromoDc", "point"));
+		etcPoint = addBigDecimal(etcPoint, getOrDefault("PayMethodDc", "point"));
 
 		totalPayment = ordPayment.subtract(salePoint);
 	}
@@ -194,4 +212,12 @@ public class MyOrdAmt {
 	public BigDecimal getCouponPoint() { return couponPoint; }
 
 	public void setCouponPoint(BigDecimal couponPoint) { this.couponPoint = couponPoint; }
+
+	public BigDecimal getEtcPoint() {
+		return etcPoint;
+	}
+
+	public void setEtcPoint(BigDecimal etcPoint) {
+		this.etcPoint = etcPoint;
+	}
 }

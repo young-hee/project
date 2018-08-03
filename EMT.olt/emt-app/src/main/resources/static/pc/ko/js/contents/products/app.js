@@ -24,6 +24,7 @@
 			this._setTabs();
 			this._setIngredients();
 			this._setRecommendList();
+			
 
 			//핫딜 시간 설정
 			if ( this._defaultModel.prodTypeCode === 'SpPriceSale' ) {
@@ -193,6 +194,58 @@
 
 			$slide.html( html );
 			this._setPreviewSlide();
+		},
+		
+		//video plugin setting 
+		_setVideoPlugin: function() {
+			 
+			var imageArray = ''; 
+			var data = ''; 
+			data = Object(data);
+			
+			imageArray = this._defaultModel.onlineProdImages;			
+			
+			if(imageArray.length === 0 ){
+				return; 
+			}
+			
+			$.each(imageArray , function(index, imageInfo) {
+				 
+				if(imageInfo.videoYn === 'Y') {
+					data = imageInfo;
+				}
+			});
+							
+			if(data.imgUrl === '' || data.videoUrl === ''){
+				return; 
+			}
+				
+			var html = ''; 
+			html = AP.common.getTemplate( 'products.thumbnail-video-info', data );
+		 
+			var ixItemList = '';
+				ixItemList = this._$target.find( '.ix-list-item' );
+			var videoIndex = '';
+				videoIndex = String((Number(data.imgNo)-1));
+			
+			var originUrl = '';
+				originUrl = $(this).find(origin).selector; 
+			
+			AP.common.youtubeApiReady.done(function () {
+			 
+				$.each(ixItemList, function(index, object){
+					 
+					if(object.attributes['data-origin-idx'].value === String(videoIndex)){
+				 
+						$(this).append(html);
+						$(this).find('.youtube_video' ).video(); // 초기화 
+					}
+					
+				});
+		
+			});
+			
+			
 		},
 
 		//상단 제품 슬라이드 적용

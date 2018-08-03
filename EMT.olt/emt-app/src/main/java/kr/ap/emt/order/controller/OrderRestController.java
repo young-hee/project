@@ -9,6 +9,7 @@ package kr.ap.emt.order.controller;
 import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.emt.order.vo.OrdReceptChangeDTO;
+import net.g1project.ecp.api.model.BooleanResult;
 import net.g1project.ecp.api.model.EmbeddableAddress;
 import net.g1project.ecp.api.model.EmbeddableName;
 import net.g1project.ecp.api.model.EmbeddableTel;
@@ -16,6 +17,7 @@ import net.g1project.ecp.api.model.ap.ap.MemberForUpdate;
 import net.g1project.ecp.api.model.ap.ap.PostAndPutShipAddressInfo;
 import net.g1project.ecp.api.model.ap.ap.ShipAddressInfo;
 import net.g1project.ecp.api.model.order.order.*;
+import net.g1project.ecp.api.model.sales.coupon.DownloadCoupons;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +66,7 @@ public class OrderRestController extends OrderBaseController {
 	/**
 	 * 사용가능 쿠폰목록
 	 *
+	 * @param ordSn
 	 * @return
 	 */
 	@GetMapping("/getCouponList")
@@ -77,6 +80,49 @@ public class OrderRestController extends OrderBaseController {
 				result.put("availCouponExList", availCoupon.getAvailCouponExList()); // 사용가능 쿠폰목록
 				result.put("result", "success");
 			}
+		} catch (Exception e) {
+			result.put("errorData", e);
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+		return ResponseEntity.ok(result);
+	}
+
+	/**
+	 * 다운로드 쿠폰목록
+	 *
+	 * @return
+	 */
+	@GetMapping("/getDownloadCouponList")
+	@ResponseBody
+	public ResponseEntity<?> getDownloadCouponList() {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		try {
+			List<DownloadCoupons> downloadCoupons = couponApi.getDownloadCoupons("All", "N", getMemberSn(), null, null);
+			result.put("downloadCouponCnt", downloadCoupons.size());	// 다운로드 쿠폰수
+			result.put("downloadCouponList", downloadCoupons); 		// 다운로드 쿠폰목록
+			result.put("result", "success");
+
+		} catch (Exception e) {
+			result.put("errorData", e);
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+		return ResponseEntity.ok(result);
+	}
+
+	/**
+	 * 쿠폰 다운로드
+	 *
+	 * @return
+	 */
+	@PostMapping("/downloadCoupon")
+	@ResponseBody
+	public ResponseEntity<?> downloadCoupon(Long couponSn) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		try {
+
+			BooleanResult booleanResult = couponApi.registDownloadCoupon(couponSn, getMemberSn());
+			result.put("downloadResult", booleanResult.isResult());
+
 		} catch (Exception e) {
 			result.put("errorData", e);
 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
@@ -351,6 +397,7 @@ public class OrderRestController extends OrderBaseController {
 			result.put("applyCouponExList", ordRc.getApplyCouponExList());
 			result.put("ordHistEx", ordRc.getOrdHistEx());
 			result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
+			result.put("ordCntMap", makeOrdCntList(ordRc));
 			result.put("apMember", apApi.getMemberInfo(getMemberSn()));
 		} catch (Exception e) {
 			result.put("errorData", e);
@@ -385,6 +432,7 @@ public class OrderRestController extends OrderBaseController {
 				OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
 				result.put("ordHistEx", ordRc.getOrdHistEx());
 				result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
+				result.put("ordCntMap", makeOrdCntList(ordRc));
 				result.put("apMember", apApi.getMemberInfo(getMemberSn()));
 			}
 		} catch (Exception e) {
@@ -420,6 +468,7 @@ public class OrderRestController extends OrderBaseController {
 				OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
 				result.put("ordHistEx", ordRc.getOrdHistEx());
 				result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
+				result.put("ordCntMap", makeOrdCntList(ordRc));
 				result.put("apMember", apApi.getMemberInfo(getMemberSn()));
 			}
 		} catch (Exception e) {

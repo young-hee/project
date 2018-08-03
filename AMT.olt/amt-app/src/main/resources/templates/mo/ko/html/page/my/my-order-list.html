@@ -23,18 +23,28 @@
 					</div>
 				</div>
 				<div class="sort">
-					<button type="button"><i class="ico_sort"></i> <span>주문일자순</span></button>
-					<!--<button type="button"><i class="ico_sort"></i> <span>업데이트순</span></button>-->
+					<!-- select -->
+					<span class="select_type01_new">
+						<select name="type01">
+							<option value="align01">판매순</option>
+							<option value="align02">신상품순</option>
+							<option value="align03">평점순</option>
+							<option value="align04">높은 가격순</option>
+							<option value="align05">낮은 가격순</option>
+						</select>
+					</span>
+					<!-- // select -->
 				</div>
-				<div class="filter">
-					<button type="button" class="on"><span>필터</span></button> <!--/* 선택된 필터가 있을 경우 on 클래스 */-->
+				<div class="serach_wrap">
+					<a href="#1" class="btn_search">검색</a>
+					<a href="#1" class="btn_close">닫기</a>
+					<fieldset class="search_form" style="">
+						<legend class="sr_only">주문서 검색</legend>
+						<input type="text" placeholder="주문한 상품을 검색해 보세요">
+						<button type="button"><i class="ico_search_p"></i><span class="sr_only">검색</span></button>
+					</fieldset>
 				</div>
 			</div>
-			<fieldset class="search_form" style="display:none;">zz
-				<legend class="sr_only">주문서 검색</legend>
-				<input type="text" placeholder="주문한 상품을 검색해 보세요">
-				<button type="button"><i class="ico_search_p"></i><span class="sr_only">검색</span></button>
-			</fieldset>
 		</div>
 		<!--/* 주문내역 목록 : 주문접수 */-->
 		<div class="section">
@@ -210,6 +220,19 @@
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
 	<script>
+		
+		$(".serach_wrap .btn_search").click(function(){
+			$(this).hide();
+			$(this).siblings(".btn_close").show();
+			$(this).siblings(".search_form").show();
+		});
+
+		$(".serach_wrap .btn_close").click(function(){
+			$(this).hide();
+			$(this).siblings(".btn_search").show();
+			$(this).siblings(".search_form").hide();
+		});
+
 	</script>
 </th:block>
 

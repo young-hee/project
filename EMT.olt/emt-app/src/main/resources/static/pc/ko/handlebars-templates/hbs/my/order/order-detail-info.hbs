@@ -28,21 +28,27 @@
 	{{#xif this.type '==' 'store'}}
 		<dl>
 			<dt>주문상태</dt>
-			<dd><em>{{ordStatusCheck 'store' ordInfo.ordDetailStatusCode}}</em></dd>
+			<dd>
+				<em>{{ordStatusCheck 'store' ordInfo.ordDetailStatusCode}}</em>
+				{{#if (or (eq ordInfo.ordDetailStatusCode 'Shipping') (eq ordInfo.ordDetailStatusCode 'OrdHandlingComplete'))}}
+					<a href="#" class="order_number_link">105712354700</a>
+				{{/if}}
+			</dd>
 		</dl>
 		<dl>
 			<dt>구매매장</dt>
-			<dd><em>명동2호점</em> <span class="flag">스윗딜리버리</span> <button class="btn_sm_neutral" type="button">매장 보기</button></dd>
+			<dd><em>명동2호점</em> <span class="flag">스윗딜리버리</span> <button class="btn_sm_neutral" type="button" onclick="viewStoreMap()">매장 보기</button></dd>
 		</dl>
 	{{else}}
 		{{#if (gt this.onlineCnt 0)}}
 			<dl>
 				<dt>온라인주문</dt>
-				{{#xif ordInfo.ordDetailStatusCode '!=' null}}
-					<dd><em>{{ordStatusCheck 'online' ordInfo.ordDetailStatusCode}}</em></dd>
-				{{else}}
-					<dd><em>{{this.title}} {{ordStatusCheck 'returnExchange' ordInfo.claimProgressStatusCode}}</em></dd>
-				{{/xif}}
+				<dd>
+					<em>{{ordStatusCheck 'online' ordInfo.ordDetailStatusCode}}</em>
+					{{#if (or (eq ordInfo.ordDetailStatusCode 'Shipping') (eq ordInfo.ordDetailStatusCode 'OrdHandlingComplete'))}}
+						<a href="#" class="order_number_link">105712354700</a>
+					{{/if}}
+				</dd>
 			</dl>
 		{{/if}}
 		{{#if (gt this.storeCnt 0)}}

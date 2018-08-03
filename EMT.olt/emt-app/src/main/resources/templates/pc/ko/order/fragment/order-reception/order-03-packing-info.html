@@ -82,11 +82,18 @@
 						var html = AP.common.getTemplate( 'order.final-price-amt-pcur', {
 							ordHistEx : data.ordHistEx,
 							ordAmtMap : data.ordAmtMap,
+							ordCntMap : data.ordCntMap,
 							apMember : data.apMember
 						});
 						$('#amtPcur').html(html);
 						$('#amtPriceTab > button').trigger("click");
 						//$('html, body').animate({scrollTop: $("#amtPcur").offset().top-50}, 1000);
+
+						if ($('[name="depositPrice"]').val() != "" || $('[name="beauty_point"]').val() != "") {
+							AP.modal.alert('표장/쇼핑백 수정인한 포인트 및 예치금 초기화 됩니다..');
+							$('[name="depositPrice"]').val('');
+							$('[name="beauty_point"]').val('');
+						}
 					}
 				}).fail(function (e) {
 					AP.modal.alert("[ajax.fail]실패");

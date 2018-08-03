@@ -874,7 +874,7 @@ public class MyRestController extends AbstractController {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		try {
 			StoreResult sr = storeApi.getStores(getMemberSn(), regularStoreSearchYn, storeEventCode, keyword, addressDiv, addressDetailDiv, latitude != null ? BigDecimal.valueOf(latitude) : null,
-				longitude != null ? BigDecimal.valueOf(longitude) : null, radius != null ? BigDecimal.valueOf(radius) : null, offSet, limit, sortBy);
+				longitude != null ? BigDecimal.valueOf(longitude) : null, radius != null ? BigDecimal.valueOf(radius) : BigDecimal.valueOf(5), offSet, limit, sortBy);
 			result.put("data", sr);
 		} catch (ApiException ae) {
 			if ("EOFS001".equals(ae.getErrorCode()))

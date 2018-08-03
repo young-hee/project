@@ -143,7 +143,7 @@
 				function present() {
 
 					var point = Number($("#giftPoint").val());
-					if(point < 999) {
+					if(point <= 999) {
 						AP.modal.alert("보낼 진주알은 최소 1000알 이상 입력해야 합니다.").addListener('modal-close', function(e) {
 							$("#giftPoint").focus();
 	                    });
@@ -234,11 +234,11 @@
 			            }).fail(function(xhr, textStatus, errorThrown) {
 			            	if (xhr.errorCode == 0) {
 			                    AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
-			                } else if (xhr.errorCode == 'EAPI002') {
-			                    AP.modal.alert("입력하신 이름과 휴대폰 정보의 회원을 찾을 수 없습니다.");
+			                } else if (xhr.errorCode == 'EAPI003') {
+			                    AP.modal.alert("보유하신 진주알이 부족하여 쿠폰 교환을 할 수 없습니다.");
 			                } else {
-			                    AP.modal.alert(xhr.errorMessage);
-			                }
+			                	AP.modal.alert(xhr.errorMessage);
+			                } 
 			            }).always(function() {
 			                //성공, 실패
 			            });

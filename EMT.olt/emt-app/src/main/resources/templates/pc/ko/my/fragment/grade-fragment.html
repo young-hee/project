@@ -1,6 +1,6 @@
 <th:block layout:fragment="grade-list">
 
-<div class="pbody board_list2 tbl_member_class">
+<div class="pbody board_list2 tbl_member_class" th:if="${pageVo.totalRowCount != '0'}">
     <table class="align_center">
         <caption class="sr_only">멤버십 등급 산정 목록으로 적용일, 주문번호, 대표 상품명, 매장명, 결제금액, 등급산정금액으로 구성</caption>
         <colgroup>
@@ -34,7 +34,7 @@
         </tbody>
     </table>
 </div>
-<div class="pbody pagination" th:with="pageVo=${#IntegUtil.initPageInfo(pageVo, 10)}">
+<div class="pbody pagination" th:with="pageVo=${#IntegUtil.initPageInfo(pageVo, 10)}" th:if="${pageVo.totalRowCount != '0'}">
 	<a href="javascript:;" onclick="more(1)" class="navi first" th:classappend="${pageVo.isFirstPage}? disabled : null" th:disabled="${pageVo.isFirstPage}? disabled : null">처음</a>
 	<a href="javascript:;" th:onclick="'more(' + ${pageVo.prePage} + ')'" class="navi prev" th:classappend="${!pageVo.hasPrePage}? disabled : null" th:disabled="${!pageVo.hasPrePage}? 'disabled' : null">이전</a>
 	<th:block th:each="page : ${pageVo.pageList}">
@@ -42,5 +42,13 @@
 	</th:block>
 	<a href="javascript:;" th:onclick="'more(' + ${pageVo.nextPage} + ')'" class="navi next" th:classappend="${!pageVo.hasNextPage}? disabled : null" th:disabled="${!pageVo.hasNextPage}? 'disabled' : null">다음</a>
 	<a href="javascript:;" th:onclick="'more(' + ${pageVo.lastPage} + ')'" class="navi last" th:classappend="${pageVo.isLastPage}? disabled : null" th:disabled="${pageVo.isLastPage}? 'disabled' : null">끝</a>
+</div>
+
+
+<div class="panel notice" th:if="${pageVo.totalRowCount == '0'}">
+	<i class="ico"></i>
+	<p class="text font_lg">
+		<span>선택하신 기간에 해당하는 내역이 없습니다.</span>
+	</p>
 </div>
 </th:block>

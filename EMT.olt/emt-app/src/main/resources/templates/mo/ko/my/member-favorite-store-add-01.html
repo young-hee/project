@@ -115,6 +115,7 @@
 			   var currentKeyword;
 			   var currentOffset;
 			   var favoriteCount = 0;
+			   var currentLocation = null;
 
 				$(document).ready(function() {
 					// getFavoriteStore();
@@ -157,14 +158,14 @@
 			   };
 
 			   function success(pos) {
-				   var crd = pos.coords;
+				   currentLocation = pos.coords;
 
 				   console.log('Your current position is:');
-				   console.log('Latitude : ' + crd.latitude);
-				   console.log('Longitude: ' + crd.longitude);
-				   console.log('More or less ' + crd.accuracy + ' meters.');
-				   getFavoriteStore("", 0, true, crd.latitude, crd.longitude);
-				   AP.api.coord2Address( crd.latitude, crd.longitude ).done(function ( data ) {
+				   console.log('Latitude : ' + currentLocation.latitude);
+				   console.log('Longitude: ' + currentLocation.longitude);
+				   console.log('More or less ' + currentLocation.accuracy + ' meters.');
+				   getFavoriteStore("", 0, true);
+				   AP.api.coord2Address( currentLocation.latitude, currentLocation.longitude ).done(function ( data ) {
 					   //성공
 					   $('#currentLocation').attr('value', data.formatted_address.replace('대한민국 ', ''));
 				   }).fail(function ( e ) {
@@ -195,6 +196,7 @@
 			   };
 				
 				$('#search').on('click', function(e) {
+					currentLocation = null;
                     var search = $('#searchText').val();
                     // alert(search);
                     if (search != null && search.length > 0) {
@@ -211,7 +213,13 @@
 	                getFavoriteStore(currentKeyword, (currentOffset + pageLimit), false);
 	            });
 				
-				function getFavoriteStore(keyword, offset, isReplace, latitude, longitude) {
+				function getFavoriteStore(keyword, offset, isReplace) {
+					var latitude = null;
+					var longitude = null;
+					if (currentLocation != null) {
+						latitude = currentLocation.latitude;
+						longitude = currentLocation.longitude;
+					}
 				    currentKeyword = keyword;
 				    currentOffset = offset;
                     AP.api.favoriteStore({}, {

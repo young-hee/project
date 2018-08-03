@@ -114,7 +114,7 @@
 
 			checkType(type);
 
-			// console.log(ord.shippingOrdOnlineProdList);
+			console.log(ord.shippingOrdOnlineProdList);
 			console.log(ord.goods);
 			// console.log(ord.goods.ordPayCompareList);
 			// console.log(ord.ordAmt);
@@ -281,12 +281,23 @@
 
 		/* 타입 체크 및 하단 버튼 처리*/
 		function checkType(type) {
+			var onlineCnt = 0;
+			var storeCnt = 0;
+			if (customOrd.shippingOrdOnlineProdList) {
+				onlineCnt = customOrd.shippingOrdOnlineProdList.length;
+			}
+
+			if (customOrd.storePickupOrdOnlineProdList) {
+				storeCnt = customOrd.storePickupOrdOnlineProdList.length;
+			}
 			var orderDetailInfo = AP.common.getTemplate('my.order.order-detail-bottom', {
 				type : type,
 				status : status,
 				ordDetailStatusCode : customOrd.goods.ordDetailStatusCode,
 				cashReceiptIssueYn : customOrd.goods.cashReceiptIssueYn,
-				step : step
+				step : step,
+				onlineCnt : onlineCnt,
+				storeCnt : storeCnt
 			});
 
 			$('#bottomBtns').empty();

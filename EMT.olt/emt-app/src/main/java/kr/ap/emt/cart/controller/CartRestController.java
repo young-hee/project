@@ -78,18 +78,38 @@ public class CartRestController extends AbstractController{
 											Long cartProdSn,
 											Long prodSn,
 											Long cartProdQty,
-											String storePickupYn) {
+											String integrationMembershipExchYn,
+											String activityPointExchYn,
+											String storePickupYn,
+											Long StoreSn,
+											Long cartBulkIncludedProdSn,
+											Long bulkDcIncludedProdGrpSn,
+											Long includedProdSn,
+											Integer	includedProdQty
+											){
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		try {
 			CartProdExPut cartProdExPut = new CartProdExPut();
 			cartProdExPut.setCartProdSn(cartProdSn);
 			cartProdExPut.setProdSn(prodSn);
 			cartProdExPut.setCartProdQty(cartProdQty);
+			cartProdExPut.setIntegrationMembershipExchYn(integrationMembershipExchYn);
+			cartProdExPut.setActivityPointExchYn(activityPointExchYn);
 			cartProdExPut.setStorePickupYn(storePickupYn);
+			cartProdExPut.setStoreSn(StoreSn);
+
+			List<CartBulkIncludedProdExPut> cartBulkIncludedProdExList = new ArrayList<>();
+			CartBulkIncludedProdExPut cartBulkIncludedProdExPut = new CartBulkIncludedProdExPut();
+			cartBulkIncludedProdExPut.setCartBulkIncludedProdSn(cartBulkIncludedProdSn);
+			cartBulkIncludedProdExPut.setBulkDcIncludedProdGrpSn(bulkDcIncludedProdGrpSn);
+			cartBulkIncludedProdExPut.setIncludedProdSn(includedProdSn);
+			cartBulkIncludedProdExPut.setIncludedProdQty(includedProdQty);
+			cartBulkIncludedProdExList.add(cartBulkIncludedProdExPut);
+			cartProdExPut.setCartBulkIncludedProdExList(cartBulkIncludedProdExList);
+
 			if(Long.valueOf(cartSn) != null || cartProdExPut != null){
 				BooleanResult br = cartApi.modifyCartProd(cartSn, cartProdExPut);
 				if (br.isResult()) {
-
 					CartEx ce = cartApi.getCart(cartSn);
 					result.put("data", makeCartEx2(ce));
 				}
@@ -491,19 +511,56 @@ public class CartRestController extends AbstractController{
 
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		try {
-			StoresInvtSearchInfo var1 = new StoresInvtSearchInfo();
-			var1.setMemberSn(getMemberSn());
-			var1.setRegularStoreSearchYn(regularStoreSearchYn);
-			var1.setKeyword(keyword);
-			var1.setLatitude(latitude != null ? BigDecimal.valueOf(latitude) : null);
-			var1.setLongitude(longitude != null ? BigDecimal.valueOf(longitude) : null);
-			var1.setRadius(radius != null ? BigDecimal.valueOf(radius) : null);
-			var1.setLimit(limit);
-			var1.setOffset(offSet);
-			var1.setSortBy(sortBy);
-			StoreResult storeResult = storeApi.getStoresInvt(var1);
-			result.put("param", storeResult);
-			result.put("result", "success");
+			MemberSession memberSession = getMemberSession();
+
+			CartProdEx storePickupCartProdEx = null;
+			List<ProdInvtEx> prodInvtExList = new ArrayList<>();
+
+			CartEx cartEx = cartApi.getCart(memberSession.getCartSn());
+			makeCartEx2(cartEx);
+
+			// 장바구니매장픽업-온라인상품목록
+			if(!CollectionUtils.isEmpty(cartEx.getCartStorePickupOnlineProdExList())){
+				prodInvtExList.addAll(getProdInvtExList(cartEx.getCartStorePickupOnlineProdExList()));
+				storePickupCartProdEx = cartEx.getCartStorePickupOnlineProdExList().get(0).getCartProdExList().get(0);
+			}
+			// 장바구니-매장픽업-멤버십포인트교환-온라인상품목록
+			if(!CollectionUtils.isEmpty(cartEx.getCartStorePickupMembershipPointExchOnlineProdExList())){
+				prodInvtExList.addAll(getProdInvtExList(cartEx.getCartStorePickupMembershipPointExchOnlineProdExList()));
+				storePickupCartProdEx = cartEx.getCartStorePickupMembershipPointExchOnlineProdExList().get(0).getCartProdExList().get(0);
+			}
+			// 장바구니-매장픽업-활동포인트교환-온라인상품목록
+			if(!CollectionUtils.isEmpty(cartEx.getCartStorePickupActivityPointExchOnlineProdExList())){
+				prodInvtExList.addAll(getProdInvtExList(cartEx.getCartStorePickupActivityPointExchOnlineProdExList()));
+				storePickupCartProdEx = cartEx.getCartStorePickupActivityPointExchOnlineProdExList().get(0).getCartProdExList().get(0);
+			}
+			// 장바구니-매장픽업-M+N-온라인상품목록
+			if(!CollectionUtils.isEmpty(cartEx.getCartStorePickupMNPromoExList())){
+				prodInvtExList.addAll(getPromoProdInvtExList(cartEx.getCartStorePickupMNPromoExList()));
+				storePickupCartProdEx = cartEx.getCartStorePickupMNPromoExList().get(0).getPromoOnlineProdExList().get(0).getCartProdExList().get(0);
+			}
+			// 장바구니-매장픽업-동시구매-온라인상품목록
+			if(!CollectionUtils.isEmpty(cartEx.getCartStorePickupSameTimePurPromoExList())){
+				prodInvtExList.addAll(getPromoProdInvtExList(cartEx.getCartStorePickupSameTimePurPromoExList()));
+				storePickupCartProdEx = cartEx.getCartStorePickupSameTimePurPromoExList().get(0).getPromoOnlineProdExList().get(0).getCartProdExList().get(0);
+			}
+
+			if(storePickupCartProdEx != null){
+				StoresInvtSearchInfo var1 = new StoresInvtSearchInfo();
+				var1.setMemberSn(getMemberSn());
+				var1.setRegularStoreSearchYn(regularStoreSearchYn);
+				var1.setKeyword(keyword);
+				var1.setLatitude(latitude != null ? BigDecimal.valueOf(latitude) : null);
+				var1.setLongitude(longitude != null ? BigDecimal.valueOf(longitude) : null);
+				var1.setRadius(radius != null ? BigDecimal.valueOf(radius) : null);
+				var1.setLimit(limit);
+				var1.setOffset(offSet);
+				var1.setSortBy(sortBy);
+				var1.setProdInvtExList(prodInvtExList);
+				StoreResult storeResult = storeApi.getStoresInvt(var1);
+				result.put("param", storeResult);
+				result.put("result", "success");
+			}
 		} catch (ApiException e) {
 			if ("EOFS001".equals(e.getErrorCode()))
 				return error(result, HttpStatus.SERVICE_UNAVAILABLE, e.getErrorCode(), "단골 매장은 최대 10개 까지만 추가가 가능합니다.");

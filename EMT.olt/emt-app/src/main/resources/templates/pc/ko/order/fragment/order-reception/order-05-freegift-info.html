@@ -1,8 +1,9 @@
 <!--/* 사은품 확인 */-->
+<th:block th:if="${apMember}">
 <dl>
 	<dt>
 		<span>보너스 혜택</span>
-		<button type="button"><span class="sr_only">닫기</span></button>
+		<button type="button" id="temp"><span class="sr_only">닫기</span></button>
 	</dt>
 	<dd>
 		<div class="cont freebies">
@@ -156,4 +157,11 @@
 			</ul>
 		</div>
 	</dd>
+
+	<script th:inline="javascript">
+		$('#temp').off('click').on('click', function() {
+			AP.modal.alert("주문단위증정 프로모션 준비중입니다...")
+		});
+	</script>
 </dl>
+</th:block>

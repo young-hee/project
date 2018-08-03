@@ -124,9 +124,7 @@
 				{{/xif}}
 
 				<!--/* 일시품절일경우 */-->
-				{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
-					<div class="item_state out_of_stock">일시품절</div>
-				{{/xif}}
+				{{{stockImg this.saleDisplayStatus this.prodTypeCode }}}
 
 				<!--// 구매, 남은수량(핫딜) -->
 				{{#xif this.displayMenuId '==' 'hotdeal' }}
@@ -143,7 +141,7 @@
 
 					<!--// 공용 ( 컬러컬렉션 제외 )-->
 					<div class="prd_name">
-						<p class="s_name">{{{this.linePromoDesc}}}</p>
+						<p class="s_name">{{stockTxt this.saleDisplayStatus this.prodTypeCode}}{{{this.linePromoDesc}}}</p>
 						<div>
 							{{#xif this.saleDisplayStatus '==' 'WaitingSale' }}
 								<em class="tag">[곧 출시!]</em>

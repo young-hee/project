@@ -225,30 +225,35 @@
 				this._$target.find('.youtube_video').video('clear');
 			}.bind( this ));
 		},
-		
-	
+
 		//Find your looks
 		_setFindYourLooks: function () {
 			var $section = this._$target.find( '.nine_looks' );
 			if ( !$section.length ) return;
 			
-			AP.DISPLAY_MENU_ID = 'etude_looks'; 
-			
-			AP.api.articles( null, {
-				articleCateId: 'Looks',
-				offset: 0,
-				limit: 6			
-			}).done( function ( result ) {
-				 
-				
-				var html = AP.common.getTemplate( 'main.home.looks-article-list', result.articleSearchResult);
+			AP.DISPLAY_MENU_ID = 'etude_looks';
 
-			$section.find( '.slide' ).html( html );	
-			$section.find( '.slide' ).ixSlideMax();
-			
-			AP.lazyLoad.add( $section.find('img.lazy_load'));
-			
-			}.bind(this));
+			AP.api.getCornerInfo({}, {}).done(function ( result ) {
+				result = result.corners[0];
+
+				for ( var i = 0; i < result.contentsSets.length; ++i ) {
+					var snsTag = '';
+					for ( var j = 0; j < result.contentsSets[i].contents.length; ++j ) {
+						if( j > 1 ) {
+							snsTag += '#' + result.contentsSets[i].contents[j].text + ' ';
+						}
+					}
+					result.contentsSets[i].snsHashTag = snsTag;
+				}
+
+				var html = AP.common.getTemplate( 'main.home.looks-article-list', result );
+				$section.find( '.slide' ).html( html ).ixSlideMax({
+					loop: ( result['rotationCycleAvailYn'] == 'Y' ) ? true : false
+				});
+
+				AP.lazyLoad.add( $section.find( 'img.lazy_load' ));
+
+			}.bind( this ));
 		},
 
 		//에뛰드픽

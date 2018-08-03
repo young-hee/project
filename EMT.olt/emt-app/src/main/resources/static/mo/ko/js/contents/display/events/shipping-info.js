@@ -91,15 +91,13 @@
 				addressValue += ( addressLast ) ? addressLast + ',' : '';
 				if ( addressValue.substr( addressValue.length - 1, 1 ) === ',' ) {
 					addressValue = addressValue.substr( 0, addressValue.length - 1 );
-				}
+				}9
 				this._$modal.find( 'input[name=address]' ).val( addressValue );
 
 				if ( $( e.target ).attr( 'class' ).indexOf( 'reset' ) > -1 ) {
 					this._reset();
 				} else if ( $( e.target ).attr( 'class' ).indexOf( 'regist' ) > -1 ) {
-					AP.login().done( function () {
-						this._$modal.find( 'form.validate' ).submit();
-					}.bind( this ));
+					this._$modal.find( 'form.validate' ).submit();
 				}
 			}.bind( this ));
 

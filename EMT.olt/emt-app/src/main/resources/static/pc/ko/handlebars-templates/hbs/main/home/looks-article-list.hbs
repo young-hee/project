@@ -1,28 +1,16 @@
-{{!--
-	Looks 
---}}
-<div class="ix-list-viewport">
-	<ul class="ix-list-items">
-		{{#each this.articleList}}
-			<li class="ix-list-item">
-				<a href="{{ articleDetailPath this.articleSn }}" class="lazy_load_wrap">
-					<img src="" data-src="{{ this.bannerImgP1 }}" alt="" class="lazy_load">
-					<span class="cont">
-						<b class="eng">{{ this.articleTitle }}</b>
-						<span class="tag"></span>
-					</span>
-				</a>
-			</li>
-		{{/each}}
-	</ul>
-</div>
-<div class="ix-controller round_box">
-	<div class="paging"><b class="current"></b> / <span class="total"></span></div>
-	<div class="slide_direction">
-		<a class="ix-btn-prev" href="#none"><span class="sr_only">Prev</span></a>
-		<a class="ix-btn-next" href="#none"><span class="sr_only">Next</span></a>
-	</div>
-</div>
-
-
-
+<ul class="ix-list-items">
+	{{#each this.contentsSets}}
+		<li class="ix-list-item">
+			<a href="{{ this.contents.[0].linkUrl }}" class="lazy_load_wrap">
+				<img src="" data-src="{{ this.contents.[0].imgUrl }}" alt="" class="lazy_load">
+				<span class="cont">
+					<b class="eng">{{ this.contents.[1].text }}</b>
+					{{#if this.contents.[2]}}<span class="tag">{{ toTagshape this.contents.[2].text }}</span>{{/if}}
+					{{#if this.contents.[3]}}<span class="tag">{{ toTagshape this.contents.[3].text }}</span>{{/if}}
+					{{#if this.contents.[4]}}<span class="tag">{{ toTagshape this.contents.[4].text }}</span>{{/if}}
+					{{#if this.contents.[5]}}<span class="tag">{{ toTagshape this.contents.[5].text }}</span>{{/if}}
+				</span>
+			</a>
+		</li>
+	{{/each}}
+</ul>

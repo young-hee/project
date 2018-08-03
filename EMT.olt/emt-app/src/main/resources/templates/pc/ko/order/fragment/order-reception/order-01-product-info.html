@@ -12,21 +12,27 @@
 			<!--/* 옵션타입(그룹상품) */-->
             <th:block th:if="${#lists.size(shippingOrdOnlineProdList) > 0}">
 	            <div class="item_wrap" th:each="ordOnlineProd : ${shippingOrdOnlineProdList}">
-                    <th:block ap:replace="~{order/fragment/order-ordonlineprod-info}"/>
+                    <th:block ap:replace="~{order/fragment/order-reception-product/order-ordonlineprod-info}"/>
     			</div>
             </th:block>
             <!--/* M+N프로모션 */-->
             <th:block th:if="${#lists.size(shippingMNPromoList) > 0}">
-                <div class="item_wrap" th:each="mPlusNPromo : ${shippingMNPromoList}">
-                    <th:block ap:replace="~{order/fragment/order-mnpromo-info}"/>
-                </div>
+                <th:block th:each="mPlusNPromo : ${shippingMNPromoList}">
+                    <th:block ap:replace="~{order/fragment/order-reception-product/order-mnpromo-info}"/>
+                </th:block>
             </th:block>
             <!--/* 동시구매프로모션 */-->
             <th:block th:if="${#lists.size(shippingSameTimePurPromoList) > 0}">
-                <div class="item_wrap" th:each="sameTimePromo : ${shippingSameTimePurPromoList}">
-                    <th:block ap:replace="~{order/fragment/order-sametimepromo-info}"/>
-                </div>
+                <th:block th:each="sameTimePromo : ${shippingSameTimePurPromoList}">
+                    <th:block ap:replace="~{order/fragment/order-reception-product/order-sametimepromo-info}"/>
+                </th:block>
             </th:block>
+			<!--/* 뷰티포인트 */-->
+			<th:block th:if="${#lists.size(shippingOrdOnlineBeautyPointProdList) > 0}">
+				<div class="item_wrap" th:each="ordOnlineProd : ${shippingOrdOnlineBeautyPointProdList}">
+					<th:block ap:replace="~{order/fragment/order-reception-product/order-ordonlineprod-info}"/>
+				</div>
+			</th:block>
 		</th:block>
 
 		<th:block th:if="${#lists.size(storePickupOrdOnlineProdList) > 0 and memberSn > 0}">

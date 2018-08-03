@@ -260,6 +260,33 @@
 			
 			AP.DISPLAY_MENU_ID = 'Looks';
 
+			AP.api.getCornerInfo({}, {}).done(function ( result ) {
+				result = result.corners[0];
+
+				console.log( result );
+				var html = AP.common.getTemplate( 'main.home.looks-article-list', result );
+				$section.find( '.slide .ix-list-viewport' ).html( html );
+
+				var $slide = $section.find( '.slide' ),
+					viewLength = $slide.ixOptions( 'view-length' );
+
+				$slide.find( '.paging .total' ).text( result.contentsSets.length );
+				$slide.find( '.round_box' ).show();
+				$slide.ixSlideMax({ loop: ( result['rotationCycleAvailYn'] == 'Y' ) ? true : false });
+				$slide.on( 'ixSlideMax:change', function (e) {
+					var currentPage = Math.ceil( e.currentIndex / viewLength ),
+						totalPage = Math.ceil( e.totalLength / viewLength );
+
+					$slide.find( '.paging' ).show();
+					$slide.find( '.paging .current' ).text( currentPage + 1 );
+					$slide.find( '.paging .total' ).text( totalPage );
+				});
+
+				AP.lazyLoad.add( $section.find( 'img.lazy_load' ));
+
+			}.bind( this ));
+
+			/*
 			AP.api.articles( null, { // article num 
 				articleCateId: 'Looks',
 				offset: 0,
@@ -299,7 +326,7 @@
 				AP.lazyLoad.add( $section.find('img.lazy_load') );
 
 			}.bind(this)); 
-
+			*/
 		},
 
 		//에뛰드픽

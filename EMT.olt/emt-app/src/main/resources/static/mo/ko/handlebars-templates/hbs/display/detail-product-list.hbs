@@ -7,10 +7,7 @@
 			<div class="item_images">
 				<!-- /* 대표 이미지 */ -->
 				<a href="{{ productDetailPath this.onlineProdSn }}" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="{{ this.onlineProdImages.0.imgUrl }}" alt=""></a>
-
-				{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
-					<div class="item_state out_of_stock">일시품절</div>
-				{{/xif}}
+				{{{stockImg this.saleDisplayStatus this.prodTypeCode }}}
 			</div>
 
 			<div class="item_info list">
@@ -37,6 +34,7 @@
 				{{/if}}
 				<div class="prd_name">
 					<div>
+						<p class="s_name"><em class="tag">{{stockTxt this.saleDisplayStatus this.prodTypeCode}}</em></p>
 						{{#if this.lineDesc}}
 							<p class="s_name"><em class="tag">{{ this.lineDesc }}</em></p>
 						{{/if}}
@@ -63,7 +61,7 @@
 				</div>
 			</div>
 		</div>
-		<button class="btn_order" type="button" data-online-prod-sn="{{ this.onlineProdSn }}">담기</button>
+		<button class="btn_order" type="button" data-online-prod-sn="{{ this.onlineProdSn }}" {{{stockBtn this.saleDisplayStatus this.prodTypeCode}}} >담기</button>
 	</li>
 {{/each}}
 
