@@ -24,7 +24,7 @@
 			<div class="cart_item_box">
 				<div class="cart_name_wrap">
 					<span class="check_wrap">
-						<input type="checkbox" name="chkBox" id="chkBox{{prodEx.prodSn}}" pointExch="membership" point="{{ exchPoint }}" value="{{../onlineProdSn}}" {{#if (ne ../saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq ../selectYn 'Y') ) 'checked' ''}}>
+						<input type="checkbox" name="chkBox" id="chkBox{{prodEx.prodSn}}" value="{{../onlineProdSn}}" {{#if (ne ../saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq ../selectYn 'Y') ) 'checked' ''}}>
 						<label for="chkBox{{prodEx.prodSn}}">체크</label>
 					</span>
 					{{#xif prodEx.repProdImgEx '!=' null }} <img src="{{ prodEx.repProdImgEx.imgUrl }}" class="thm_cart_item" alt=""> {{/xif}}
@@ -68,10 +68,10 @@
 								<strong class="num">{{numberFormat (calc this.prodEx.salePrice '*' this.cartProdQty) }}</strong><span>원</span>
 							</span>
 						{{/if}}
-                        {{#if (and (eq prodEx.saleDisplayStatus 'OutOfStock')(ne prodEx.prodTypeCode 'Presale')) }}
+                        {{#if (eq prodEx.saleDisplayStatus 'OutOfStock') }}
 							<span class="text_sold_out">[일시품절]</span>
 						{{/if}}
-						{{#if (and (eq prodEx.saleDisplayStatus 'Exhaustion')(eq prodEx.prodTypeCode 'Presale')) }}
+						{{#if (eq prodEx.saleDisplayStatus 'Exhaustion') }}
 							<span class="text_sold_out">[예약판매수량소진]</span>
 						{{/if}}
 						{{#if (eq prodEx.saleDisplayStatus 'WaitingSale') }}
@@ -95,16 +95,16 @@
         			</span>
         		</div>
         		{{#xif cartProdAwardList.length '>' 0 }}
-        			<div class="cart_free_gift">
-        				{{#each cartProdAwardList}}
-        					{{#if (ne awardProdEx.repProdImgEx null) }}<span class="thm"><img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/></span>{{/if}}
-        					<span class="info">
-        						<span>사은품 : {{ awardProdEx.prodName }}</span>
-        						<span>기간 : {{dateFormat awardStartDt "YYYY.MM.DD"}} ~ {{dateFormat awardEndDt "YYYY.MM.DD"}}</span>
-        					</span>
-        				{{/each}}
-        			</div>
-        		{{/xif}}
+					{{#each cartProdAwardList}}
+						<div class="cart_free_gift">
+							{{#if (ne awardProdEx.repProdImgEx null) }}<span class="thm"><img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/></span>{{/if}}
+							<span class="info">
+								<span>사은품 : {{ awardProdEx.prodName }}</span>
+								<span>기간 : {{dateFormat awardStartDt "YYYY.MM.DD"}} ~ {{dateFormat awardEndDt "YYYY.MM.DD"}}</span>
+							</span>
+						</div>
+					{{/each}}
+				{{/xif}}
         	</div>
 		{{/each}}
 	{{/each}}

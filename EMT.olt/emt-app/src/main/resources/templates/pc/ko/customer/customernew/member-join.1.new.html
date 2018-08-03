@@ -113,6 +113,7 @@ $(".btn_lg_secondary").click(function() {
         return;
 	}
 
+	$(".btn_lg_secondary").attr("disabled", "disabled");
 	termsVal = $('[name=ET001]').prop('checked');
 	smsVal = $('[name=SMS]').prop('checked');
 	emailVal = $('[name=Email]').prop('checked');
@@ -135,8 +136,10 @@ function doComplete() {
         	post_goto('/customer/joinComplete', {'remainPoint':data.remainPoint, 'custNm':data.custNm});
         } else {
             AP.modal.alert("[ajax.done]실패");
+        	$(".btn_lg_secondary").removeAttr("disabled");
         }
     }).fail(function(xhr, textStatus, errorThrown) {
+    	$(".btn_lg_secondary").removeAttr("disabled");
 
         if (xhr.errorCode == 0) {
             AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");

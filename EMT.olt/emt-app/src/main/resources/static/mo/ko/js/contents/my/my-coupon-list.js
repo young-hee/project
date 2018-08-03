@@ -19,6 +19,9 @@
 
 			this._api = AP.api.couponList( {}, {searchType : searchType}).done(function ( result ) {
 
+				$('#availCnt').html(result.MemberKeepingCoupons.availCnt);
+				$('#expCnt').html(result.MemberKeepingCoupons.expCnt);
+
 				if ( result == null
 					|| result.MemberKeepingCoupons == null
 					|| (searchType == 'Avail') && result.MemberKeepingCoupons.availCnt == 0

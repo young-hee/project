@@ -82,7 +82,7 @@
 			 stockTxt = '[조기소진]';
 			 break;
 		 case 'WaitingSale':	//판매대기	
-			 stockTxt = '[곧 출시]';
+			 stockTxt = '[곧 출시!]';
 			 break;
 		 case 'SuspendSale':	//판매일시중지
 			 stockTxt = '[판매중지]';

@@ -56,8 +56,6 @@
 		phoneCert: { path: '/customer/phoneCert', method: 'POST' },
 		//외국인인증(휴대폰인증)
 		phoneCertForeign: { path: '/customer/phoneCertForeign', method: 'POST' },
-		//외국인인증(등록번호)
-		foreignCert: { path: '/customer/foreignCert', method: 'POST' },
 		//타인명의인증(휴대폰인증)
 		guestCert: { path: '/customer/guestCert', method: 'POST' },
 		//타인명의인증 확인(휴대폰인증)
@@ -70,9 +68,6 @@
 		getAgreeTerms: { path: '/customer/getAgreeTerms', method: 'GET' },
 		//정보입력
 		stepThree: { path: '/customer/stepThree', method: 'POST' },
-
-		//통합회원의 간단 약관동의 가입.
-		simpleJoin: { path: '/customer/simpleJoin', method: 'POST' },
 
 		//로그인
 		doLogin: { path: '/doLogin', method: 'POST' },
@@ -182,6 +177,9 @@
 		checkPresentMember: { path: '/my/point/api/checkPresentMember', method: 'POST'},
 		//포인트 선물!
 		presentPoint: { path: '/my/point/api/presentPoint', method: 'POST'},
+		//뷰티포인트 리스트.
+		beautyPointListFragment: { path: '/my/page/info/beautyPointListFragment', method: 'GET', dataType: 'html'},
+		beautyPointListBodyFragment: { path: '/my/page/info/beautyPointListBodyFragment', method: 'GET', dataType: 'html'},
 		
 		//간단 점유인증 전송
 		simpleCertifySend: { path: '/my/api/simpleCertifySend', method: 'POST'},

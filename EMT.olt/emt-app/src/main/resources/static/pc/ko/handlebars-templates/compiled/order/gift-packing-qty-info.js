@@ -73,7 +73,7 @@ this["AP"]["handlebars"]["order"]["gift-packing-qty-info"] = Handlebars.template
     + alias2(alias1((depth0 != null ? depth0.giftPackingFee : depth0), depth0))
     + ", '"
     + alias2(alias1((depth0 != null ? depth0.giftPackingName : depth0), depth0))
-    + "', '-')\"><img alt=\"제품 수량 감소\" src=\"/mo/ko/images/common/ico_minus1.gif\"></button>\n							<input class=\"spinner_input\" type=\"text\" title=\"선택품목갯수\" id=\"box_"
+    + "', '-')\"><img alt=\"제품 수량 감소\" src=\"/pc/ko/images/common/ico_minus1.gif\"></button>\n							<input class=\"spinner_input\" type=\"text\" title=\"선택품목갯수\" id=\"box_"
     + alias2(alias1((depth0 != null ? depth0.giftPackingSn : depth0), depth0))
     + "_cnt\" value=\"0\">\n							<button class=\"spinner_increase\" type=\"button\" title=\"제품 수량 증가\" disabled data-flag=\"box_"
     + alias2(alias1((depth0 != null ? depth0.giftPackingSn : depth0), depth0))
@@ -85,7 +85,7 @@ this["AP"]["handlebars"]["order"]["gift-packing-qty-info"] = Handlebars.template
     + alias2(alias1((depth0 != null ? depth0.giftPackingFee : depth0), depth0))
     + ", '"
     + alias2(alias1((depth0 != null ? depth0.giftPackingName : depth0), depth0))
-    + "', '+')\"><img alt=\"제품 수량 증가\" src=\"/mo/ko/images/common/icon_plus1.gif\"></button>\n						</span>\n";
+    + "', '+')\"><img alt=\"제품 수량 증가\" src=\"/pc/ko/images/common/icon_plus1.gif\"></button>\n						</span>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 

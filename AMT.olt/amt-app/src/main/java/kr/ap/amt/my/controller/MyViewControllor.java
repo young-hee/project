@@ -1,6 +1,7 @@
 package kr.ap.amt.my.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,11 +39,13 @@ import net.g1project.ecp.api.model.ap.ap.SNS;
 import net.g1project.ecp.api.model.ap.ap.ShipAddressInfo;
 import net.g1project.ecp.api.model.ap.ap.SignupReceiveAgree;
 import net.g1project.ecp.api.model.ap.ap.SignupTermsAgree;
+import net.g1project.ecp.api.model.order.order.OnlineOrdListResult;
 import net.g1project.ecp.api.model.order.order.OrdSummaryInfo;
 import net.g1project.ecp.api.model.sales.member.CloseMember;
 import net.g1project.ecp.api.model.sales.member.ClosedAcInfo;
 import net.g1project.ecp.api.model.sales.member.ClosedAcReason;
 import net.g1project.ecp.api.model.sales.member.MemberAddAttrs;
+import net.g1project.ecp.api.model.sales.product.ProdReviewWritableOrderInfo;
 import net.g1project.ecp.api.model.sales.terms.MemberTermsAgree;
 import net.g1project.ecp.api.model.sales.terms.Terms;
 
@@ -61,7 +64,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  *
- * 마이 에뛰드
+ * 마이 파우치
  *
  * 나의 정보 관리
  *
@@ -79,19 +82,21 @@ public class MyViewControllor extends AbstractController {
 
 
 	/**
-	 * 마이 에뛰드
+	 * 마이 파우치
 	 *
 	 * @param model
 	 * @return
 	 */
-	@GetMapping("/info/myEtude")
-	@PageTitle(title = "마이 에뛰드")
+	@GetMapping("/info/myPouch")
+	@PageTitle(title = "마이 파우치")
 	public String myEtude(Model model) {
-
 		//주문/배송 조회
 		Date endDate = new Date();
 		Date startDate = DateUtils.addMonths(endDate, -3);
-
+		
+		MemberSession memberSession = getMemberSession();
+		memberSession.setMember(apApi.getMemberInfo(memberSession.getMember_sn()));
+		
 		try {
 			OrdSummaryInfo ordSummary = orderApi.getOrdSummary(getMemberSn(), startDate, endDate);
 
@@ -118,31 +123,54 @@ public class MyViewControllor extends AbstractController {
 
 			//교환건수
 			model.addAttribute("exchangeCnt", ordSummary.getExchangeCnt());
+			
+			//미작성 구매후기.
+			ProdReviewWritableOrderInfo productReviewWritableOrders = productApi.getProductReviewWritableOrders(getMemberSn(), null, 0, 10);
+			model.addAttribute("reviewCnt", productReviewWritableOrders.getTotalCount());
 
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.MONTH, -1);
+
+			OnlineOrdListResult data = orderApi.getOnlineOrdList(getMemberSn(), c.getTime(), new Date(), 1, 5);
+			model.addAttribute("orderList", data);
+			
+			{//포인트 조회
+				CicueaCuPtAccmTcVo vo = new CicueaCuPtAccmTcVo();
+				vo.setIncsNo(getMemberSession().getUser_incsNo());
+				vo = amoreAPIService.getptinq(vo);
+				model.addAttribute("point", vo);
+			}
+			
+			
 		} catch (Exception e) {
 			model.addAttribute("errorData", e);
 		}
+
 		
-		/**
-		 * Mobile
-		 */
-		if(isMobileDevice()) {
-			return "my/my-pouch";
-		}
-
-		/**
-		 * PC
-		 */
-		if(isPcDevice()) {//TODO
-			MemberSession memberSession = getMemberSession();
-			memberSession.setMember(apApi.getMemberInfo(memberSession.getMember_sn()));
-			return "my/my-etude";
-		}
-
-		return null;
+		return "my/my-pouch";
 	}
 
 
+	/**
+	 * 맴버십 혜택 팝업.
+	 *
+	 * @return
+	 */
+	@GetMapping("/deliveryDesc")
+	@FragmentPage
+	public String deliveryDesc() {
+		return "my/layer-my-pouch-01";
+	}
+	/**
+	 * .
+	 *
+	 * @return
+	 */
+	@GetMapping("/membershipBenefits")
+	@FragmentPage
+	public String membershipBenefits() {
+		return "my/layer-my-pouch-03";
+	}
 
 	/**********************************************************************************************
 	 *  1. 개인정보 수정

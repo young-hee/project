@@ -101,7 +101,7 @@
 			}
 			
 			$.each(imageArray , function(index, imageInfo) {
-				console.log(imageInfo); 
+ 
 				if(imageInfo.videoYn === 'Y') {
 					data = imageInfo;
 				}
@@ -118,9 +118,6 @@
 				ixItemList = this._$target.find( '.ix-list-item' );
 			var videoIndex = '';
 				videoIndex = String((Number(data.imgNo)-1));
-			
-			var originUrl = '';
-				originUrl = $(this).find(origin).selector; 
 			
 			AP.common.youtubeApiReady.done(function () {
 			 

@@ -95,6 +95,7 @@
 .layer_popup .my_pouch .membership:before{left:0; margin-top: -20px;}
 
 /* 좋아요 */
+.ap_good .tab_menu ul>li>button {padding:0}
 .ap_good .btn_toggle .count{display:block; margin:5px 0 0;}
 .ap_good .timeline>dl{position:relative; margin-top: 9px; padding: 10px 16px; background: #fff;}
 .ap_good .timeline>dl:before{content:''; position:absolute; top:15px; left:35px; bottom:0; width: 2px; background: #efefef;}
@@ -102,26 +103,29 @@
 .ap_good .timeline dt>*{display:inline-block; vertical-align: middle;}
 .ap_good .timeline dt>*:first-child{width: 40px; height: 40px; margin-right: 7px; border-radius: 50%; background: #d1d1d1; color:#fff !important; text-align: center; line-height: 40px; font-size: 11px;}
 .ap_good .timeline dt>em:first-child{background: #782fff;}
-.ap_good .timeline dt .date{font-size: 19px;}
+.ap_good .timeline dt .date{font-size: 19px; color:#000}
 	.timeline .timeline_list{padding-left: 35px;}
 		.timeline_list li{position:relative; width: 100%; display: table; padding:15px 35px 15px 90px;}
 		.timeline_list li:before{content:''; position:absolute; top:27px; left:-20px; width: 9px; height: 9px; border-radius:50%; background: #d1d1d1;}
-		.timeline_list .today dd li:before{background: #782fff;}
+		.today dd li:before{background-color: #782fff;}
 		.timeline_list li + li {border-top: 1px solid #ebebeb;}
-		.timeline_list .info{display:table-cell; height: 80px; vertical-align: middle; line-height: 1.3;}
-		.timeline_list .info .time{display:block; color:#888888;}
+		.timeline_list .info{display:table-cell; height: 80px; vertical-align: middle; line-height: 1.3; font-size: 16px;}
+		.timeline_list .info .time{display:block; color:#888888; font-size: 15px;}
 		.timeline_list .thumb{position:absolute; top:15px; left:0; display:inline-block; overflow: hidden; width: 80px; height: 80px; border-radius: 50%;}
 		.timeline_list .event .thumb>img{position:absolute; top:0; right:0; width: auto; height:100%}
-		.timeline_list .ui_close{position:absolute; top:15px; right:15px; width: 20px; height: 20px; opacity:.3; padding-top: 0;}
+		.timeline_list .ui_close{position:absolute; top:15px; right:0; width: 20px; height: 20px; opacity:.3; padding-top: 0;}
 
-.ap_good .no_data{padding: 80px 0; text-align: center; color:#999;}
-.ap_good .no_data .copy{margin: 10px 0; padding: 0 20px;font-size: 24px; text-align: center; color:#000;}
+.ap_good .product_list_new .product_new {position: relative;}
+.ap_good .product_list_new .product_new .btn_add_cart {width: 40px; height: 40px; position: absolute; left: 100px; top: 100px; background-color: transparent}
+
+.ap_good .no_data{margin-top:9px;padding: 100px 0 130px; text-align: center; color:#999; background-color:#fff}
+.ap_good .no_data .copy{margin: 10px 0; padding: 0 20px;font-size: 24px; text-align: center; color:#000; line-height: 30px}
 .ap_good .no_data .copy>*>*{vertical-align: top;}
 .ap_good .no_data .copy>*:first-child{position:relative; display:inline-block; max-width:100%; padding-right:150px;}
 .ap_good .no_data .copy .name{display:inline-block; max-width: 100%;}
 .ap_good .no_data .copy .etc{position:absolute; top:0; right:0;}
-.ap_good .no_data .copy .etc{position:absolute; top:0; right:0;}
 .ap_good .no_data .ico_heart{width: 51px; height: 44px; background-position: -105px -45px;}
+.ap_good .no_data .copy+.text {line-height: 19px; color:#888}
 
 /* 나의 리뷰 */
 .my_page .review_writable{margin-top: 9px;}
@@ -165,7 +169,7 @@
 .my_order_summary dl + dl,
 .my_order_detail .order_info dl + dl{border-top: 1px solid #f2f2f2;}
 .layer_popup .ap_order{padding-bottom: 0;}
-/* 주문 상세 */
+/* 주문 상세 mypage_order.css 에서 수정 후 삭제
 .my_order_summary{margin: -20px 0;}
 .my_order_summary>dl:after{content:''; display: block; clear: both;}
 .my_order_summary>dl>*{height: 48px;}
@@ -188,7 +192,7 @@
 .my_order_detail .page_btns{padding: 9px;}
 .my_order_detail .page_btns.col_03>*{width:calc((100% - 10px) / 3 ); min-width: inherit;}
 .my_order_detail .page_btns + .page_btns{padding-top: 0;}
-
+ */
 /* 주문취소 */
 .order_cancel .payment_info .title{padding-bottom: 25px; color:#999; font-size: 15px;}
 .order_cancel .payment_info dd{font-size: 17px;}
@@ -451,25 +455,46 @@
 .account_registration  p.text + .text {margin-top: 5px}
 .account_registration .form_btns{margin-top: 85px;}
 
+.inquiry .section {padding:16px}
+.inquiry .section .no_data {background-color: transparent; margin:0}
+.inquiry .section:first-child [class^="btn_"] {width: 114px; display: inline-block;}
+.inquiry .section:first-child {padding:0 0 30px 0; text-align: center;}
+.inquiry .section:first-child .list{padding-bottom: 10px}
+.inquiry .section .list li {font-size: 13px; line-height: 21px; margin-top: 5px; text-align: left;}
 .my_inquiry{border:1px solid #d9d9d9; border-top:0;}
 .my_inquiry>dl>dt{background: #ebebeb; border-top:1px solid #d9d9d9;}
+.my_inquiry>dl>dt .title em {color:#782fff}
 .my_inquiry>dl>dd{margin-top: 0 !important; border-top:1px solid #d9d9d9;}
+.my_inquiry>dl>dd .answer p.text {font-size: 14px; line-height: 19px;}
 .inquiry_list>dl{padding: 18px 21px 0;}
 .inquiry_list>dl+dl{border-top:1px solid #d9d9d9;}
 .inquiry_list>dl>dt{padding: 0 0 18px;}
 .inquiry_list>dl>dt>button{position:static; width: 100%; margin-bottom: 8px; font-size: 16px; line-height: 21px; text-align: left;}
 .inquiry_list>dl>dt .clear{position:relative; display:block;}
-.inquiry_list>dl>dt small{display:block;}
-.inquiry_list>dl>dt small + button{margin-top:10px;}
+.inquiry_list>dl>dt small{display:block; font-size: 12px; color:#999}
+.inquiry_list>dl>dt small + small{font-size: 10px}
+.inquiry_list>dl>dt small + button{margin-top:10px; }
 .inquiry_list>dl>dt .status{position:absolute; bottom:0; right:0;}
-.inquiry_list>dl>dt .status.unread{opacity:.5;}
+.inquiry_list>dl>dt .status.unread{opacity:.3;font-weight: bold;}
 .inquiry_list>dl>dt .status i{margin-top: -3px;}
 .inquiry_list>dl>dd{padding-bottom: 18px; border-top:1px solid #f3f3f3;}
 .inquiry_list dd>dl{padding-top: 15px; color:#999}
 .inquiry_list .question>dt,
-.inquiry_list .answer>dt{width: 55px; height: 22px; margin-bottom: 10px; border:1px solid #333; border-radius:22px; text-align: center; font-size: 10px; line-height: 22px; letter-spacing: -1px; color:#333}
+.inquiry_list .answer>dt{width: 55px; height: 22px; margin-bottom: 10px; border:1px solid #333; border-radius:22px; text-align: center; font-size: 10px; line-height: 20px; letter-spacing: -1px; color:#333}
 .inquiry_list .attached>img{margin-bottom: 8px;}
-.evaluation .check_list{padding: 13px 0; text-align: center;}
-.evaluation .check_list span.check_wrap + span.check_wrap{margin-left:5%;}
-/*.evaluation .textarea{height:77px;}*/
+.inquiry_list .question p.text {font-size: 14px; line-height: 19px;}
+
+.evaluation .rdo_wrap{padding: 13px 0; text-align: center;}
+.evaluation .rdo_wrap>span {width:50%;margin-right: 0; /*padding-left: 10px;*/ box-sizing: border-box;}
+
 .evaluation textarea{border-radius:5px;}
+
+/*메시지 보관함*/
+.ap_message .section {padding:0 16px;}
+.ap_message .msg_list li{padding:21px 0; border-top}
+
+.ap_message .no_data.message {position: relative; padding:220px 0 160px 0;background-color: #fff; margin: 0}
+.ap_message p.noty {padding: 20px 29px; font-size: 13px; color:#999; letter-spacing: -1px; line-height: 19px}
+.ap_message p.noty span {color:#333}
+.ap_message .no_data.message p {font-size:16px; color:#bbb; text-align: center;}
+.ap_message .no_data.message p:before {content:''; position:absolute; top:160px; left:50%; margin-left: -28px;width: 57px; height: 50px; background:url(/mo/ko/images/my/no_message.png) no-repeat center top; -webkit-background-size: 57px 50px;background-size: 57px 50px;}

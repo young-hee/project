@@ -675,7 +675,6 @@ public class MyPointViewController extends AbstractController {
 		Calendar c = Calendar.getInstance();
 		String onOffNum = getMemberSession().getUser_incsNo();
 		MemberSession memberSession = getMemberSession();
-		onOffNum = "200002784";
 		try {
 			CustCushinPoint cushin = posService.getCustCushinPoint(onOffNum);
 			model.addAttribute("cushin", cushin);
@@ -724,7 +723,6 @@ public class MyPointViewController extends AbstractController {
 		Calendar c = Calendar.getInstance();
 		SimpleDateFormat format = (SimpleDateFormat) DATE_FORMAT.clone();
 		String onOffNum = getMemberSession().getUser_incsNo();
-		onOffNum = "200002784";
 		
 		if(isMobileDevice()) {
 			if(startDt == null || endDt == null || startDt.isEmpty() || endDt.isEmpty()) {
@@ -795,7 +793,6 @@ public class MyPointViewController extends AbstractController {
 		Calendar c = Calendar.getInstance();
 		SimpleDateFormat format = (SimpleDateFormat) DATE_FORMAT.clone();
 		String onOffNum = getMemberSession().getUser_incsNo();
-		onOffNum = "200002784";
 		
 		if(isMobileDevice()) {
 			if(startDt == null || endDt == null || startDt.isEmpty() || endDt.isEmpty()) {

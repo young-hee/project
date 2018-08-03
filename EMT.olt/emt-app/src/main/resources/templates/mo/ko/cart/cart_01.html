@@ -979,27 +979,39 @@
 
 	/* 맴버쉽,활동 포인트 체크 */
 	function fncheckExchPoint() {
-		var activitySum = 0;
-		var membershipSum = 0;
-		$("input[name=chkBox]:checked").each(function () {
-			var pointExch = $( this).attr('pointExch');
-			var point = $(this).attr('point');
-			if (pointExch == "activity") {
-				activitySum += Number(point);
+		if(memberSn > 0){
+
+			var membershipPoints = 0;
+			var activitySum = 0;
+			var membershipSum = 0;
+
+			$('[name=chkBox]:checked').each(function () {
+				if ($(this).attr('pointExch') != undefined && $(this).attr('pointExch') == "activity") {
+					activitySum += Number($(this).attr('point'));
+				}
+				if ($(this).attr('pointExch') != undefined && $(this).attr('pointExch') == "membership") {
+					membershipSum += Number($(this).attr('point'));
+				}
+			});
+
+			if (activitySum > cartEx.cartMemberEx.activityPoints) {
+				AP.modal.alert('교환 진주알이 보유 알보다 큽니다.');
+				$('[name="chkBox"]').attr('checked', false);
+				return false;
 			}
-			if (pointExch == "membership") {
-				membershipSum += Number(point);
+
+			if(bpMembershipEx != null){
+				membershipPoints = bpMembershipEx.membershipPoints;
+			}else{
+				membershipPoints = 0;
 			}
-		});
-		if (membershipSum > bpMembershipEx.membershipPoints) {
-			AP.modal.alert('교환 뷰티포인트가 보유 포인트보다 큽니다.');
-			return false;
+			if (membershipSum > membershipPoints) {
+				AP.modal.alert('교환 뷰티포인트가 보유 포인트보다 큽니다.');
+				$('[name="chkBox"]').attr('checked', false);
+				return false;
+			}
+			return true;
 		}
-		if (activitySum > cartEx.cartMemberEx.activityPoints) {
-			AP.modal.alert('교환 진주알이 보유 알보다 큽니다.');
-			return false;
-		}
-		return true;
 	}
 	
 	/* 단일삭제(단위상품기준) */

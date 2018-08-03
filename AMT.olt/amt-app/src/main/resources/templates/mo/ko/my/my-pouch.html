@@ -3,85 +3,81 @@
 <!-- #ap_container -->
 <div ap:fragment="layout-contents">
 
-	<div class="ap_contents my_pouch">
+	<div class="ap_contents my_pouch title_two_depth">
 		<div class="section">
-			<div class="membership welcome"><!--/* 등급별 클래스 welcome, vip, vvip, vip_plus, vvip_plus */-->
-				<h2 class="h_title d3">
-					<b><span th:text="${session.LOGIN_USER.member.name.name1}">홍길동</span>님은 <em th:text="${session.LOGIN_USER.member.memberLevelName}">WELCOME</em> 고객입니다</b>
-				</h2>
-				<!--/* 일반 회원일때 */-->
-				<div class="grade_standard">
-					<p class="text"><a href="#none">2017년 10월 기준 <i class="ico_arr2"></i></a></p>
-					<p class="text">VIP 되기 위한 구매금액 1,000,000원</p>
+			<div class="membership vvip_plus"><!--/* 등급별 클래스 welcome, vip, vvip, vip_plus, vvip_plus */-->
+				<h2 class="welcome_text"> <th:block th:text="${session.LOGIN_USER.member.name.name1}">홍길동</th:block>님은 <em th:text="${session.LOGIN_USER.member.memberLevelName}">WELCOME</em> 고객입니다</h2>
+				<!--/* 회원 등급별 텍스트 */-->
+				<div class="font_sm">
+					<p class="text">2017년 10월 13일 기준<br><th:block>VIP</th:block> 등급까지 <b>1,000,000원</b> 남았습니다</p>
+					<!--<p class="text">2017년 10월 기준<br>VVIP 등급유지를 위해 <b>1,000,000원</b> 남았습니다.</p>-->
+					<!--<p class="text">멤버십 기간 <b>2019년 4월 12일</b>까지<br>기간 연장으로 더 좋은 혜택을 이어가세요</p>-->
 				</div>
-				<!--/* 플러스 멤버십일때
-				<div class="plus_membership">
-					<p class="text"><a href="#none">플러스 멤버십 2018년 12월 31일까지 <i class="ico_arr2"></i></a></p>
-					<p class="text"><a href="#none">플러스 멤버십 갱신을 위해 남은 일수 362일</a></p> */-->
-					<!--/* 플러스 멤버십 기간만료전
-					<p class="text"><a href="#none"><em>멤버십 기간 연장으로 특별한 혜택을 이어가세요</em></a></p>
-				</div>
-				*/-->
+				<button type="button" class="btn_gray_round">등급혜택</button>
 			</div>
 		</div>
-		<!--/* 플러스 멤버십 미가입일때 가입 배너 노출 */-->
+		<!--/* P 포인트*/-->
+		<div class="section pd_md">
+			<dl class="my_p_point">
+				<dt class="h_title"><span>P포인트</span></dt>
+				<dd>
+					<ul class="ui_table">
+						<li><i class="ico_p1"></i><small>잔여</small><span class="num"><th:block th:text="${#IntegUtil.toCommaNumber(point.rmnPt)}">110,000</th:block>P</span></li>
+						<li><i class="ico_p2"></i><small>사용</small><span class="num"><th:block th:text="${#IntegUtil.toCommaNumber(point.accmUsgPt)}">110,000</th:block>P</span></li>
+						<li><i class="ico_p3"></i><small>총 지급</small><span class="num"><th:block th:text="${#IntegUtil.toCommaNumber(point.accmAcmlPt)}">110,000</th:block>P</span></li>
+					</ul>
+				</dd>
+			</dl>
+		</div>
+		<!--/* 플러스 멤버십, onepay 미가입일때 가입 배너 노출 (둘다가입한경우 영역 삭제 section 자체를 삭제)*/-->
 		<div class="section banner">
-			<a href="#none"><img ap:src="@{/images/my/img_banner_membership.jpg}" alt=""></a>
+			<a href="#none"><img ap:src="@{/images/my/img_banner_membership.jpg}" alt="가입 즉시 기프트카드를 드리는 플러스 멤버쉽"></a>
+			<a href="#none"><img ap:src="@{/images/my/img_banner_onepay.jpg}" alt="결제는 간편하게, 할인은 3% 받는 원페이"></a>
 		</div>
 		<div class="section">
-			<ul class="link_list my">
-				<li><a href="#none"><span>나의 뷰티포인트 <small>ABC 골드</small></span><b class="num" th:text="${#IntegUtil.toCommaNumber(session.LOGIN_USER.member.remainBeautyPoint)} + 'P'">11,000P</b></a></li>
-				<li><a href="#none"><span>나의 쿠폰</span><b class="num" th:text="${session.LOGIN_USER.member.keepingCouponQty} + '개'">23개</b></a></li>
-				<li><a href="#none"><span>나의 기프트카드</span><b class="num" th:text="${#IntegUtil.toCommaNumber(session.LOGIN_USER.member.remainDeposit)} + '원'">70,000원</b></a></li>
-				<li><a href="#none"><span>나의 리뷰(2)</span><span>구매리뷰 작성하고 뷰티포인트 받자</span></a></li>
+			<ul class="link_list">
+				<li><a href="/my/page/info/beautyPoint"><span>뷰티포인트 <small>일반회원</small></span><b class="num"><th:block th:text="${#IntegUtil.toCommaNumber(point.rmnPt)}">11,000</th:block>P</b></a></li>
+				<li><a href="/my/page/myCouponList"><span>쿠폰</span><b class="num"><th:block th:text="${session.LOGIN_USER.member.keepingCouponQty}">23</th:block>개</b></a></li>
+				<li><a href="/my/page/myGiftCardList"><span>기프트카드</span><b class="num">70,000원</b></a></li>
+				<li><a href="/my/page/myReviewList"><span>구매 리뷰(<th:block th:text="${reviewCnt}">2</th:block>)</span><small>구매리뷰 작성하고 뷰티포인트 받자</small></a></li>
 			</ul>
 		</div>
-		<div class="section">
+		<div class="section pd_md">
 			<dl class="my_order">
-				<dt class="h_title d3">최근 한달간 나의 주문</dt>
+				<dt class="h_title"><span>최근 한달간 나의 주문</span></dt>
 				<dd>
+					<button type="button" class="btn_gray_round">배송안내</button>
 					<ul class="ui_table process">
-						<li><a href="#none"><b class="num"><em th:text="${ordReceptCnt}">0</em></b><span>주문접수</span></a></li>
-						<li><a href="#none"><b class="num"><em th:text="${payCompleteCnt}">1</em></b><span>주문완료</span></a></li>
-						<li><a href="#none"><b class="num"><em th:text="${preparingCnt}">2</em></b><span>상품준비</span></a></li>
-						<li><a href="#none"><b class="num"><em th:text="${shippingCnt}">3</em></b><span>배송중</span></a></li>
-						<li><a href="#none"><b class="num"><em th:text="${shipCompleteCnt}">4</em></b><span>배송완료</span></a></li>
+						<li><a href="/my/page/onlineOrderShipping"><em class="num" th:text="${ordReceptCnt}">0</em><span>주문접수</span></a></li>
+						<li><a href="/my/page/onlineOrderShipping"><em class="num" th:text="${payCompleteCnt}">1</em><span>주문완료</span></a></li>
+						<li><a href="/my/page/onlineOrderShipping"><em class="num" th:text="${preparingCnt}">2</em><span>상품준비</span></a></li>
+						<li><a href="/my/page/onlineOrderShipping"><em class="num" th:text="${shippingCnt}">3</em><span>배송중</span></a></li>
+						<li><a href="/my/page/onlineOrderShipping"><em class="num" th:text="${shipCompleteCnt}">4</em><span>배송완료</span></a></li>
 					</ul>
-					<button type="button" class="more"><span>배송안내</span> <i class="ico_notice"></i></button>
 				</dd>
 			</dl>
 		</div>
 		<div class="section">
-			<ul class="link_list menu">
-				<li class="open"><a href="#none"><i class="ico_order"></i><span>주문/배송조회(취소/반품)</span></a> <!--/* 진행중인 주문이 있는 경우 클릭시 li에 open 클래스 */-->
+			<ul class="link_list icon">
+				<li class="open"><a href="/my/page/onlineOrderShipping"><i class="ico_order"></i><span>주문/배송조회</span></a> <!--/* 진행중인 주문이 있는 경우 클릭시 li에 open 클래스 */-->
 					<!--/* 진행중인 주문이 있는 경우 */-->
-					<ul class="order_list" style="display: block;">
-						<li>
-							<a href="#none">
-								<p class="order_num">주문번호 <span class="num">123412341234</span></p>
-								<p class="order_status clear"><span class="ellipsis">라네즈 워터드롭 틴트 외 2개</span><span>상품포장중</span></p>
-								<p class="price"><span class="num">60,000</span>원</p>
+					<ul class="order_list" style="display: block;" th:if="${not #lists.isEmpty(orderList.onlineOrdInfoList)}">
+						<li th:each="item : ${orderList.onlineOrdInfoList}">
+							<a th:href="'/my/page/order/detail/' + ${item.ordNo}">
+								<p class="order_num">주문번호 <span class="num" th:text="${item.ordNo}">123412341234</span></p>
+								<p class="order_status clear"><span class="ellipsis" th:text="${item.onlineOrdProdInfo.prodNameRlang}">라네즈 워터드롭 틴트 외 2개</span><span>상품포장중</span></p>
+								<p class="price"><span class="num" th:text="${#IntegUtil.toCommaNumber(item.onlineOrdProdInfo.prodSalePricePcur)}">60,000</span>원</p>
 							</a>
 						</li>
-						<li><a href="#none">
-							<p class="order_num">주문번호 <span class="num">123412341234</span></p>
-							<p class="order_status clear"><span class="ellipsis">프리메라 [리미티드] 베이비 선 쿠션 SPF32 PA++ 15g 외 2개</span><span>상품인계중</span></p>
-							<p class="price"><span class="num">60,000</span>원</p>
-						</a></li>
-						<li><a href="#none">
-							<p class="order_num">주문번호 <span class="num">123412341234</span></p>
-							<p class="order_status clear"><span class="ellipsis">라네즈 워터드롭 틴트 외 2개</span><span>상품이동중</span></p>
-							<p class="price"><span class="num">60,000</span>원</p>
-						</a></li>
 					</ul>
 				</li>
-				<li><a href="#none"><i class="ico_addr2"></i><span>배송지관리</span></a></li>
-				<li><a href="#none"><i class="ico_counsel"></i><span>1:1 상담</span></a></li>
-				<li><a href="#none"><i class="ico_good"></i><span>좋아요</span></a></li>
-				<li><a href="#none"><i class="ico_community"></i><span>커뮤니티활동</span></a></li>
-				<li><a href="#none"><i class="ico_regular"></i><span>정기배송조회</span></a></li>
+				<li><a href="/my/page/ship/address"><i class="ico_addr2"></i><span>배송지관리</span></a></li>
 				<li><a href="#none"><i class="ico_card"></i><span>ONE Pay 카드관리</span></a></li>
-				<li><a href="#none"><i class="ico_member"></i><span>회원정보수정</span></a></li>
+				<li><a href="/my/page/myDepositList"><i class="ico_coin"></i><span>예치금/계좌관리</span></a></li>
+				<li><a href="#none"><i class="ico_alram"></i><span>메시지 보관함</span></a></li>
+				<li><a href="#none"><i class="ico_good"></i><span>좋아요</span></a></li>
+				<li><a href="/my/page/myInquiryList"><i class="ico_counsel"></i><span>1:1 상담</span></a></li>
+				<li><a href="/my/page/info/changeUserInfo"><i class="ico_member"></i><span>회원정보수정</span></a></li>
 			</ul>
 		</div>
 	</div>
@@ -90,6 +86,12 @@
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
 	<script>
+	//베너 랜덤노출
+	if($('.my_pouch').find('.section').hasClass('banner')){
+		var img_length = $('.banner a').length;
+		var idx = Math.floor(Math.random()*img_length);
+	  $('.banner a').eq(idx).show();
+	}
 	</script>
 </th:block>
 

@@ -26,7 +26,7 @@
 						<fieldset class="form" id="req-field">
 							<legend class="sr_only">로그인</legend>
 							<div class="input_wrap">
-								<input type="text" title="이름 입력" name="custNm" placeholder="이름을 입력하세요">
+								<input type="text" title="이름 입력" required="required" name="custNm" placeholder="이름을 입력하세요"data-msg-required="이름을 입력해 주세요. 이름 입력란으로 이동합니다." user-name="user-name">
 							</div>
 							<div class="input_group">
 								<div class="select_wrap w30p">
@@ -118,6 +118,9 @@
     font-size: 14px;
     color: #888;
 }
+a[disabled=disabled] {
+    opacity: 0.3;
+}
 </style>
 <script>
 
@@ -125,10 +128,12 @@ function back() {
     location.href = "/main";
 }
 $('#send-sms, #btn_re_send_sms').on('click', function() {
+    if ($(this).attr('disabled') == 'disabled') return;
     sendSms();
     return false;
 });
 $('#complete').on('click', function() {
+    if ($(this).attr('disabled') == 'disabled') return;
 	if (!t.isRunning()) {
 	    AP.modal.alert("입력시간 초과했습니다. 인증번호 재전송 버튼을 눌러 인증 절차를 다시 진행하십시오.");
 	    return;
@@ -153,7 +158,7 @@ $('form [name=redirectUrl]').val(returnUrl);
 
 var incsNo;
 function sendSms() {
-	var $form = $('form');
+	var $form = $('form.login');
     $form.validate().settings.ignore = "[name=smsNum]";
     if($form.valid()) {
     	$('#send-sms').attr("disabled", "disabled");
@@ -172,9 +177,11 @@ function sendSms() {
                 t.start();
 
             } else {
+                $("#send-sms").removeAttr("disabled");
                 AP.modal.alert("[ajax.done]실패")
             }
         }).fail(function(xhr, textStatus, errorThrown) {
+            $("#send-sms").removeAttr("disabled");
 
             if (xhr.errorCode == 0) {
                 AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
@@ -184,11 +191,12 @@ function sendSms() {
                 contents.contents = data.message;
                 contents.confirmLabel = "확인";
                 AP.modal.info(contents).addListener('modal-close', function(e) {});
+            } else if(xhr.errorCode == 'ESAL001') {
+                AP.modal.alert("존재하지 않는 회원입니다.");
             } else {
                 AP.modal.alert(xhr.errorMessage)
             }
         }).always(function() {
-            $("#send-sms").removeAttr("disabled");
             //성공, 실패
         });
     }
@@ -207,6 +215,7 @@ function loginProcess() {
         }, AP.common.getFormData($form)).done(function(data) {
 
             if (data.sleep == 'Y') {
+                $("#complete").removeAttr("disabled");
                 var contents = new Object();
                 contents.title = "알림";
                 contents.contents = data.message;
@@ -215,8 +224,6 @@ function loginProcess() {
                     location.href = "/customer/signup";
                 });
 
-            } else if (data.old == 'Y') {
-                changeInfoModal();
             } else if (data.changePw == 'Y') {
                 var contents = new Object();
                 contents.title = "알림";
@@ -237,6 +244,7 @@ function loginProcess() {
             }
 
         }).fail(function(xhr, textStatus, errorThrown) {
+            $("#complete").removeAttr("disabled");
             if (xhr.errorCode == 0) {
                 AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
             } else if (xhr.errorCode == 401) {
@@ -350,7 +358,6 @@ function loginProcess() {
             }
         }).always(function() {
             //성공, 실패
-            $("#complete").removeAttr("disabled");
         });
     }
 }

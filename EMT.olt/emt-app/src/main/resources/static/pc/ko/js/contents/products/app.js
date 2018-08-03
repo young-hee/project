@@ -24,7 +24,6 @@
 			this._setTabs();
 			this._setIngredients();
 			this._setRecommendList();
-			
 
 			//핫딜 시간 설정
 			if ( this._defaultModel.prodTypeCode === 'SpPriceSale' ) {
@@ -33,6 +32,8 @@
 					finishTime: this._defaultModel.saleEndDt
 				});
 			}
+			
+			this._setVideoPlugin(); 
 		},
 
 		/** =============== Private Methods =============== */
@@ -227,9 +228,6 @@
 				ixItemList = this._$target.find( '.ix-list-item' );
 			var videoIndex = '';
 				videoIndex = String((Number(data.imgNo)-1));
-			
-			var originUrl = '';
-				originUrl = $(this).find(origin).selector; 
 			
 			AP.common.youtubeApiReady.done(function () {
 			 

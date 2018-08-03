@@ -137,9 +137,11 @@ function sendSms() {
                 t.start();
 
             } else {
+                $("#send-sms").removeAttr("disabled");
                 AP.modal.alert("[ajax.done]실패")
             }
         }).fail(function(xhr, textStatus, errorThrown) {
+            $("#send-sms").removeAttr("disabled");
 
             if (xhr.errorCode == 0) {
                 AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
@@ -153,7 +155,6 @@ function sendSms() {
                 AP.modal.alert(xhr.errorMessage)
             }
         }).always(function() {
-            $("#send-sms").removeAttr("disabled");
             //성공, 실패
         });
     }
@@ -172,6 +173,7 @@ function loginProcess() {
         }, AP.common.getFormData($form)).done(function(data) {
 
             if (data.sleep == 'Y') {
+                $("#complete").removeAttr("disabled");
                 var contents = new Object();
                 contents.title = "알림";
                 contents.contents = data.message;
@@ -180,8 +182,6 @@ function loginProcess() {
                     location.href = "/customer/signup";
                 });
 
-            } else if (data.old == 'Y') {
-                changeInfoModal();
             } else if (data.changePw == 'Y') {
                 var contents = new Object();
                 contents.title = "알림";
@@ -202,6 +202,7 @@ function loginProcess() {
             }
 
         }).fail(function(xhr, textStatus, errorThrown) {
+            $("#complete").removeAttr("disabled");
             if (xhr.errorCode == 0) {
                 AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
             } else if (xhr.errorCode == 401) {
@@ -215,7 +216,6 @@ function loginProcess() {
             }
         }).always(function() {
             //성공, 실패
-            $("#complete").removeAttr("disabled");
         });
     }
 }

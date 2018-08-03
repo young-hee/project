@@ -262,8 +262,7 @@
 
 			AP.api.getCornerInfo({}, {}).done(function ( result ) {
 				result = result.corners[0];
-
-				console.log( result );
+				
 				var html = AP.common.getTemplate( 'main.home.looks-article-list', result );
 				$section.find( '.slide .ix-list-viewport' ).html( html );
 

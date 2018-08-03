@@ -90,7 +90,9 @@
 									</span>
 								</dt>
 								<dd class="point">
-									<span class="input_wrap bpoint"><input type="number" title="사용할 포인트 입력" th:id="${ordMembershipEx.membershipSn}" name="beauty_point" value="" th:max="${ordMembershipEx.membershipAvailPoint}"></span><b>P</b>
+									<span class="input_wrap bpoint">
+										<input type="number" title="사용할 포인트 입력" id="beauty_point" th:data-membershipSn="${ordMembershipEx.membershipSn}" name="beauty_point" value="" th:max="${ordMembershipEx.membershipAvailPoint}">
+									</span><b>P</b>
 									/ <span>사용가능 <th:block th:text="${#IntegUtil.toCommaNumber(ordMembershipEx.membershipAvailPoint)}"></th:block> P</span>
 									/ <span>보유 <th:block th:text="${#IntegUtil.toCommaNumber(ordMembershipEx.membershipKeepingPoint)}"></th:block> P</span>
 								</dd>
@@ -99,7 +101,7 @@
 							<th:block th:if="${ordMembershipEx.membershipServiceCode == 'CP'}">
 								<dt>
 									<span class="check_wrap">
-										<input type="checkbox" id="cushion_point">
+										<input type="checkbox" id="cushion_point" name="cushion_point">
 										<label for="cushion_point" th:text="${ordMembershipEx.membershipName}">쿠션포인트</label>
 									</span>
 								</dt>
@@ -164,7 +166,7 @@
 
 		//뷰티포인트
 		$('[name=beauty_point]').on('blur', function() {
-			var membershipSn = this.id,
+			var membershipSn = this.dataset.membershipsn,
 				useMembershipPoint = parseInt(this.value);
 			if (useMembershipPoint != null && useMembershipPoint >= 0 && useMembershipPoint < parseInt(this.max)) {
 				$('#pointLoading').show();
@@ -199,6 +201,7 @@
 					$('#pointLoading').hide();
 				});
 			} else {
+				$('[name=beauty_point]').val('');
 				AP.modal.alert("사용가능한 뷰티포인트는 " + this.max + "입니다.");
 			}
 
@@ -267,9 +270,15 @@
 						//성공
 						AP.modal.alert("온라인 전용 쿠폰 등록했습니다.");
 						getAvailCouponList('reClick');
-					}).fail(function(e) {
-						AP.modal.alert(e.responseJSON.errorData);
+					}).fail(function(xhr) {
 						//실패
+						if (xhr.errorCode == 0) {
+							AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+						} else if (xhr.errorCode == 'EAPI003') {
+							AP.modal.alert("쿠폰등록 실패했습니다, 쿠폰번호 확인하세요.");
+						} else {
+							AP.modal.alert(xhr.errorMessage);
+						}
 					}).always(function() {
 						//성공, 실패
 					});
@@ -347,7 +356,7 @@
 					});
 				}
 			}).fail(function(e) {
-				AP.modal.alert(e.responseJSON.errorData);
+				AP.modal.alert(e.responseJSON.errorData.message);
 			}).always(function() {
 			});
 		}
@@ -360,7 +369,8 @@
 			}
 			AP.api.ordReceptChangeCoupon({}, {
 				ordSn : ordSn,
-				memberKeepingCouponSnArr: memberKeepingCouponSnArr
+				memberKeepingCouponSnArr: memberKeepingCouponSnArr,
+				membershipSn : $('[name=beauty_point]').data().membershipsn
 			}).done(function (data) {
 				$('#couponLoading').hide();
 				if (data != null && data.applyCouponExList != "" && data.applyCouponExList.length > 0) {
@@ -422,6 +432,7 @@
 				AP.modal.alert("fail");
 			}).always(function () {
 				$('#couponLoading').hide();
+				jQuery.ajaxSettings.traditional = true;
 			});
 		}
 
@@ -454,15 +465,15 @@
 							} else {
 								AP.modal.alert("다운로드 실패했습니다.");
 							}
-						}.bind(this))
-						.fail( function ( xhr ) {
+						}.bind(this)
+						).fail( function ( xhr ) {
 							AP.modal.alert( xhr.errorMessage );
 						}.bind(this));
 
 					});
 				}
 			}).fail(function(e) {
-				AP.modal.alert(e.responseJSON.errorData);
+				AP.modal.alert(e.responseJSON.errorData.message);
 			}).always(function() {
 			});
 		}

@@ -66,6 +66,11 @@
 <th:block ap:fragment="layout-endpoint">
 <script>
 
+$('#login').on('click', function() {
+    loginProcess();
+    return false;
+});
+
 function back() {
     location.href = "/main";
 }
@@ -92,9 +97,8 @@ function loginProcess() {
         AP.api.doLogin({}, AP.common.getFormData($form)).done(function(data) {
 
             if (data.sleep == 'Y') {
+                $("#login").removeAttr("disabled");
                 location.href = "/sleepUser";
-            } else if (data.old == 'Y') {
-                changeInfoModal();
             } else if (data.changePw == 'Y') {
                 var contents = new Object();
                 contents.title = "알림";
@@ -124,6 +128,7 @@ function loginProcess() {
             }
 
         }).fail(function(xhr, textStatus, errorThrown) {
+            $("#login").removeAttr("disabled");
             if (xhr.errorCode == 0) {
                 AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
             } else if (xhr.errorCode == 'ESAL002') {
@@ -160,7 +165,6 @@ function loginProcess() {
             }
         }).always(function() {
             //성공, 실패
-            $("#login").removeAttr("disabled");
         });
     }
 }

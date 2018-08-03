@@ -14,31 +14,33 @@
 							<img ap:src="@{/images/member/img_keyboard.png}" alt="pc 용 키보드 배열">
 						</div>
 					</div>
-					<fieldset class="form">
-						<legend class="sr_only">로그인</legend>
-						<div class="input_wrap">
-							<input type="text" title="주문번호 입력" name="ordNo" placeholder="주문번호를 입력하세요">
-						</div>
-						<div class="input_group">
-							<div class="select_wrap w30p">
-								<select name="phoneNumber1" required="required" title="휴대폰 사업자 식별번호 선택" data-msg-required="휴대전화 사업자 식별번호를 입력해주세요.">
-									<option value="010">010</option>
-									<option value="011">011</option>
-									<option value="016">016</option>
-									<option value="017">017</option>
-									<option value="018">018</option>
-									<option value="019">019</option>
-								</select>
+					<form>
+						<fieldset class="form">
+							<legend class="sr_only">로그인</legend>
+							<div class="input_wrap">
+								<input type="text" title="주문번호 입력" required="required" name="ordNo" placeholder="주문번호를 입력하세요" data-msg-required="주문번호를 입력해 주세요.">
 							</div>
-							<div class="gap"></div>
-							<div class="input_wrap"><input type="tel" title="휴대폰 번호 입력" name="phoneNumber2" maxlength="8" placeholder="휴대폰 번호 입력('-' 생략)" data-msg-required="휴대폰번호를 입력해 주세요."></div>
-						</div>
-						<div class="form_btns">
-							<a href="javascript:;" onclick="nomember()" class="btn_lg_login">로그인</a>
-						</div>
-						<p class="text">비회원 구매시, 포인트 적립이나 쿠폰할인 등의 혜택이 적용되지 않습니다. <a href="#none"><b>회원 로그인하기</b> <I class="ico_arr"></I></a></p>
-						<button class="btn_lg_bordered w100p" onclick="move('/loginSimple')" type="button">휴대폰 간편 로그인</button>
-					</fieldset>
+							<div class="input_group">
+								<div class="select_wrap w30p">
+									<select name="phoneNumber1" required="required" title="휴대폰 사업자 식별번호 선택" data-msg-required="휴대전화 사업자 식별번호를 입력해주세요.">
+										<option value="010">010</option>
+										<option value="011">011</option>
+										<option value="016">016</option>
+										<option value="017">017</option>
+										<option value="018">018</option>
+										<option value="019">019</option>
+									</select>
+								</div>
+								<div class="gap"></div>
+								<div class="input_wrap"><input type="tel" title="휴대폰 번호 입력" name="phoneNumber2" required="required" maxlength="8" placeholder="휴대폰 번호 입력('-' 생략)" data-msg-required="휴대폰번호를 입력해 주세요."></div>
+							</div>
+							<div class="form_btns">
+								<a href="javascript:;" onclick="nomember()" class="btn_lg_login">로그인</a>
+							</div>
+							<p class="text">비회원 구매시, 포인트 적립이나 쿠폰할인 등의 혜택이 적용되지 않습니다. <a href="#none"><b>회원 로그인하기</b> <I class="ico_arr"></I></a></p>
+							<button class="btn_lg_bordered w100p" onclick="move('/loginSimple')" type="button">휴대폰 간편 로그인</button>
+						</fieldset>
+					</form>
 					<hr class="div m20">
 					<div class="sns_log">
 						<button class="btn_lg_bordered w100p" onclick="naverLogin()" type="button"><i class="ico_naver"></i><span>네이버로 로그인</span></button>
@@ -279,7 +281,7 @@ function doSnsLogin() {
 
 
 function nomember() {
-
+	if(!$('form').valid()) return;
     AP.api.checkOrder({}, {
     	ordNo: $('[name=ordNo]').val(),
     	phoneNo: $('[name=phoneNumber1]').val() + $('[name=phoneNumber2]').val()

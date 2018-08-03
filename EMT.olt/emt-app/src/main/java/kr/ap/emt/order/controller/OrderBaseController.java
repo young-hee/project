@@ -1,16 +1,12 @@
 package kr.ap.emt.order.controller;
 
-import java.math.BigDecimal;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
+import kr.ap.comm.member.vo.MemberSession;
+import kr.ap.comm.member.vo.OrdCartInfo;
+import kr.ap.comm.support.common.AbstractViewController;
+import kr.ap.emt.order.vo.OrdOnlineProdFoDTO;
+import kr.ap.emt.order.vo.OrdOnlinePromoFoDTO;
+import kr.ap.emt.order.vo.OrderConst;
+import net.g1project.ecp.api.model.ap.ap.ShipAddressInfo;
 import net.g1project.ecp.api.model.order.order.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,13 +15,11 @@ import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import kr.ap.comm.member.vo.MemberSession;
-import kr.ap.comm.member.vo.OrdCartInfo;
-import kr.ap.comm.support.common.AbstractViewController;
-import kr.ap.emt.order.vo.OrdOnlineProdFoDTO;
-import kr.ap.emt.order.vo.OrdOnlinePromoFoDTO;
-import kr.ap.emt.order.vo.OrderConst;
-import net.g1project.ecp.api.model.ap.ap.ShipAddressInfo;
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("/order")
@@ -420,6 +414,7 @@ public class OrderBaseController extends AbstractViewController {
 		if(!ObjectUtils.isEmpty(cartProdSnList) && cartProdSnList.size() > 0) {
 			ordRecept.setCartProdSnList(cartProdSnList);
 		}
+
 		return orderApi.ordRecept(cartSn, ordRecept);
 	}
 

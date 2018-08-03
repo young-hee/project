@@ -269,6 +269,7 @@ function loginProcess2() {
         }, AP.common.getFormData($form)).done(function(data) {
 
             if (data.sleep == 'Y') {
+                $("#complete").removeAttr("disabled");
                 var contents = new Object();
                 contents.title = "알림";
                 contents.contents = data.message;
@@ -299,6 +300,7 @@ function loginProcess2() {
             }
 
         }).fail(function(xhr, textStatus, errorThrown) {
+            $("#complete").removeAttr("disabled");
             if (xhr.errorCode == 0) {
                 AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
             } else if (xhr.errorCode == 401) {
@@ -312,7 +314,6 @@ function loginProcess2() {
             }
         }).always(function() {
             //성공, 실패
-            $("#complete").removeAttr("disabled");
         });
     }
 }
@@ -404,6 +405,7 @@ function loginProcess() {
         AP.api.doLogin({}, AP.common.getFormData($form)).done(function(data) {
 
             if (data.sleep == 'Y') {
+                $("#login").removeClass("disabled");
                 var contents = new Object();
                 contents.title = "알림";
                 contents.contents = data.message;
@@ -412,8 +414,6 @@ function loginProcess() {
                     location.href = "/customer/signup";
                 });
 
-            } else if (data.old == 'Y') {
-                changeInfoModal();
             } else if (data.changePw == 'Y') {
                 var contents = new Object();
                 contents.title = "알림";
@@ -444,6 +444,7 @@ function loginProcess() {
             }
 
         }).fail(function(xhr, textStatus, errorThrown) {
+            $("#login").removeClass("disabled");
             if (xhr.errorCode == 0) {
                 AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
             } else if (xhr.errorCode == 'ESAL002') {
@@ -480,13 +481,12 @@ function loginProcess() {
             }
         }).always(function() {
             //성공, 실패
-            $("#login").removeAttr("disabled");
-            $("#login").removeClass("disabled");
         });
     }
 }
 
 function loginComplete() {
+    $('#login').attr("disabled", "disabled");
     if ($('#sub').attr('method') == 'POSTs')
         $('#sub').submit();
     else

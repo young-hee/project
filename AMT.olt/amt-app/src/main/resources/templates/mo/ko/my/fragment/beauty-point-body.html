@@ -3,8 +3,8 @@
 		<tr th:each="item : ${#IntegUtil.subList(ptBrkd.ptTrBrkdInqVo, 10)}" class="table-data">
 			<td th:text="${#IntegUtil.dateformat(item.trApvlDt, 'yyyy.MM.dd')}">2018.09.10</td>
 			<td><p class="ellipsis" th:text="${item.xtclNm}">공병수거참여</p></td>
-			<td th:if="${item.xtclCd == '001'}" th:utext="'(+) ' + ${#IntegUtil.toCommaNumber(item.aplyPt)}">(+) 100,000</td>
-			<td th:if="${item.xtclCd == '002'}" th:utext="'(-) ' + ${#IntegUtil.toCommaNumber(item.aplyPt)}">(-) 100,000</td>
+			<td th:if="${item.tlmcCd == '10'}" th:utext="'(+) ' + ${#IntegUtil.toCommaNumber(item.aplyPt)}">(+) 100,000</td>
+			<td th:if="${item.tlmcCd == '20'}" th:utext="'(-) ' + ${#IntegUtil.toCommaNumber(item.aplyPt)}">(-) 100,000</td>
 		</tr>
 
 </th:block>

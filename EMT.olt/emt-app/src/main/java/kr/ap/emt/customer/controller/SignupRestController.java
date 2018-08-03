@@ -1208,6 +1208,7 @@ public class SignupRestController extends AbstractController {
 					
 					ApMemberForPost memberForPost = new ApMemberForPost();
 					memberForPost.setSolarLunarCode("Solar");
+					memberForPost.setMembershipCardNo(cicuemCuInfCoOutVo.getIncsCardNoEc());
 					
 					memberForPost.setMemberId(chcsNo);
 					memberForPost.setMemberPassword(userPwdEc);

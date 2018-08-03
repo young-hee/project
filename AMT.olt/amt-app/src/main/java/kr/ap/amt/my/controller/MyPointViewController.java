@@ -50,10 +50,8 @@ public class MyPointViewController extends AbstractController {
 	@PageTitle(title = "뷰티 포인트내역", menuId = "myPoint", subMenuId = "beautyPoint")
 	public String beautyPoint(Model model) {
 
-		String userIncsNo = "200002542";
 		MemberSession memberSession = getMemberSession();
-		memberSession.setUser_incsNo(userIncsNo);
-		setMemberSession(memberSession);
+		String userIncsNo = memberSession.getUser_incsNo();
 		{//포인트 조회
 			CicueaCuPtAccmTcVo vo = new CicueaCuPtAccmTcVo();
 			vo.setIncsNo(userIncsNo);
@@ -87,7 +85,7 @@ public class MyPointViewController extends AbstractController {
 				Date endDt = c.getTime();
 				c.add(Calendar.MONTH, -1);
 				Date startDt = c.getTime();
-				PtTrBrkdInqOutCbcVo ptBrkd = getBtPintList("1", DateFormatUtils.format(startDt, "yyyyMMdd"), DateFormatUtils.format(endDt, "yyyyMMdd"), false, null);
+				PtTrBrkdInqOutCbcVo ptBrkd = getBtPintList("1", DateFormatUtils.format(startDt, "yyyyMMdd"), DateFormatUtils.format(endDt, "yyyyMMdd"), true, null);
 				model.addAttribute("ptBrkd", ptBrkd);
 				model.addAttribute("curSize", (Integer.parseInt(ptBrkd.getPageVo().getTotalRowCount()) > M_PAGE_SIZE)? M_PAGE_SIZE : ptBrkd.getPageVo().getTotalRowCount());
 			}
@@ -126,12 +124,32 @@ public class MyPointViewController extends AbstractController {
 	 */
 	@GetMapping("/info/beautyPointListFragment")
 	@FragmentPage
-	public String beautyPointListFragment(Model model, String tlmcCd, String startDt, String endDt) {
+	public String beautyPointListFragment(Model model, String tlmcCd, String startDt, String endDt, String date) {
 		PtTrBrkdInqOutCbcVo ptBrkd = null;
 		if(startDt != null && endDt != null)
 			ptBrkd = getBtPintList("1", startDt.replace("-", ""), endDt.replace("-", ""), false, tlmcCd);
-		else
-			ptBrkd = getBtPintList("1", null, null, false, tlmcCd);
+		else {
+			if(isPcDevice())
+				ptBrkd = getBtPintList("1", null, null, false, tlmcCd);
+			if(isMobileDevice()) {
+
+				Calendar c = Calendar.getInstance();
+				if(date == null || "ALL".equals(date)) {
+					c.set(Calendar.YEAR, 1968);
+				} else if("2WEEK".equals(date)) {
+					c.add(Calendar.WEEK_OF_MONTH, -2);
+				} else if("1MONTH".equals(date)) {
+					c.add(Calendar.MONTH, -1);
+				} else if("3MONTH".equals(date)) {
+					c.add(Calendar.MONTH, -3);
+				} else if("6MONTH".equals(date)) {
+					c.add(Calendar.MONTH, -6);
+				} else if("1YEAR".equals(date)) {
+					c.add(Calendar.YEAR, -1);
+				}
+				ptBrkd = getBtPintList("1", DateFormatUtils.format(c.getTime(), "yyyyMMdd"), DateFormatUtils.format(new Date(), "yyyyMMdd"), true, tlmcCd);
+			}
+		}
 			
 		
 		if(isMobileDevice()) {
@@ -155,18 +173,29 @@ public class MyPointViewController extends AbstractController {
 	 */
 	@GetMapping("/info/beautyPointListBodyFragment")
 	@FragmentPage
-	public String beautyPointListBodyFragment(Model model, String tlmcCd, String pageNumber, String startDt, String endDt) {
+	public String beautyPointListBodyFragment(Model model, String tlmcCd, String pageNumber, String startDt, String endDt, String date) {
 		
-		if(startDt != null && endDt != null && !startDt.equals("undefined") && !endDt.equals("undefined")) {
+		if(startDt != null && endDt != null && !startDt.isEmpty() && !endDt.isEmpty()) {
 			endDt = endDt.replace("-", "");
 			startDt = startDt.replace("-", "");
 		} else if(isMobileDevice()) {
+
 			Calendar c = Calendar.getInstance();
-			Date end = c.getTime();
-			endDt = DateFormatUtils.format(end, "yyyyMMdd");
-			c.add(Calendar.MONTH, -1);
-			Date start = c.getTime();
-			startDt = DateFormatUtils.format(start, "yyyyMMdd");
+			if(date == null || "ALL".equals(date)) {
+				c.set(Calendar.YEAR, 1968);
+			} else if("2WEEK".equals(date)) {
+				c.add(Calendar.WEEK_OF_MONTH, -2);
+			} else if("1MONTH".equals(date)) {
+				c.add(Calendar.MONTH, -1);
+			} else if("3MONTH".equals(date)) {
+				c.add(Calendar.MONTH, -3);
+			} else if("6MONTH".equals(date)) {
+				c.add(Calendar.MONTH, -6);
+			} else if("1YEAR".equals(date)) {
+				c.add(Calendar.YEAR, -1);
+			}
+			endDt = DateFormatUtils.format(new Date(), "yyyyMMdd");
+			startDt = DateFormatUtils.format(c.getTime(), "yyyyMMdd");
 		}
 		
 		PtTrBrkdInqOutCbcVo ptBrkd = getBtPintList(pageNumber, startDt, endDt, true, tlmcCd);
@@ -192,49 +221,6 @@ public class MyPointViewController extends AbstractController {
 		ptTrBrkdInqInCbcVo.setEndTrApvlDt(toDt);
 		ptTrBrkdInqInCbcVo.setTlmcCd(tlmcCd);
 		boolean b = false;
-		if(b && (fromDt != null || toDt != null)) {//TODO 날짜가 들어갈 때 날짜가 역순으로 와서 임시처리로직 추가.
-			if(pageSizeEmabled) { 
-				int t = getTotalSize();
-				int s = isMobileDevice()? M_PAGE_SIZE:P_PAGE_SIZE;
-				int n = Integer.parseInt(pageNumber);
-				int r = t%s;
-				int x = (t/s) + (r != 0? 1: 0) - (n - 1);
-
-			
-				if(x <= 0) {
-					PtTrBrkdInqOutCbcVo ptBrkd = getBtPintListReal(fromDt, toDt, n, s);
-					return ptBrkd;
-				}
-				
-				if(r == 0) {
-					PtTrBrkdInqOutCbcVo ptBrkd = getBtPintListReal(fromDt, toDt, x, s);
-					ptBrkd.getPageVo().setPageNumber(pageNumber);
-					ptBrkd = reverse(ptBrkd);
-					return ptBrkd;
-				}
-	
-				PtTrBrkdInqOutCbcVo ptBrkd = getBtPintListReal(fromDt, toDt, x, s);
-				if(x != 1) {
-					PtTrBrkdInqOutCbcVo ptBrkd2 = getBtPintListReal(fromDt, toDt, x - 1, s);
-					ptBrkd2.getPtTrBrkdInqVo().addAll(ptBrkd.getPtTrBrkdInqVo());
-					ptBrkd = ptBrkd2;
-					ptBrkd.setPtTrBrkdInqVo(ptBrkd.getPtTrBrkdInqVo().subList(r, (r + s)));
-				} else {
-					ptBrkd.setPtTrBrkdInqVo(ptBrkd.getPtTrBrkdInqVo().subList(0, r));
-				}
-	
-				ptBrkd.getPageVo().setPageNumber(pageNumber);
-				ptBrkd = reverse(ptBrkd);
-				return ptBrkd;
-			
-
-			} else {
-				PtTrBrkdInqOutCbcVo ptBrkd = getBtPintListReal(fromDt, toDt, 1, 10000);
-				ptBrkd = reverse(ptBrkd);
-				return ptBrkd;
-				
-			}
-		}
 		
 		try {
 			PageVo pageVo = new PageVo();
@@ -257,58 +243,17 @@ public class MyPointViewController extends AbstractController {
 		PtTrBrkdInqOutCbcVo ptBrkd = amoreAPIService.getpttrbrkdinq(ptTrBrkdInqInCbcVo);
 		return ptBrkd;
 	}
-	//TODO 날짜가 들어갈 때 날짜가 역순으로 와서 임시처리로직 추가.
-	private PtTrBrkdInqOutCbcVo reverse(PtTrBrkdInqOutCbcVo ptBrkd) {
-		List<PtTrBrkdInqVo> list = ptBrkd.getPtTrBrkdInqVo();
-		Collections.reverse(list);
-		return ptBrkd;
-	}
-	//TODO 날짜가 들어갈 때 날짜가 역순으로 와서 임시처리로직 추가.
-	private PtTrBrkdInqOutCbcVo getBtPintListReal(String fromDt, String toDt,
-			int x, int s) {
-		PtTrBrkdInqInCbcVo ptTrBrkdInqInCbcVo = new PtTrBrkdInqInCbcVo();
-		ptTrBrkdInqInCbcVo.setIncsNo(getMemberSession().getUser_incsNo());
-		ptTrBrkdInqInCbcVo.setBgnTrApvlDt(fromDt);
-		ptTrBrkdInqInCbcVo.setEndTrApvlDt(toDt);
-
-		try {
-			PageVo pageVo = new PageVo();
-			pageVo.setPageNumber(x + "");
-			pageVo.setPageSize(s + "");
-			
-			ptTrBrkdInqInCbcVo.setPageVo(pageVo);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-		PtTrBrkdInqOutCbcVo ptBrkd = amoreAPIService.getpttrbrkdinq(ptTrBrkdInqInCbcVo);
-		return ptBrkd;
-	}
-	//TODO 날짜가 들어갈 때 날짜가 역순으로 와서 임시처리로직 추가.
-	private int getTotalSize() {
-		PtTrBrkdInqInCbcVo ptTrBrkdInqInCbcVo = new PtTrBrkdInqInCbcVo();
-		ptTrBrkdInqInCbcVo.setIncsNo(getMemberSession().getUser_incsNo());
-
-		try {
-			PageVo pageVo = new PageVo();
-			pageVo.setPageNumber("1");
-			pageVo.setPageSize("1");
-			
-			ptTrBrkdInqInCbcVo.setPageVo(pageVo);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-		PtTrBrkdInqOutCbcVo ptBrkd = amoreAPIService.getpttrbrkdinq(ptTrBrkdInqInCbcVo);
-		return Integer.parseInt(ptBrkd.getPageVo().getTotalRowCount());
-	}
 	/**
 	 * 뷰티포인트 유의사항 팝업.
 	 */
-	@GetMapping("/info/beutyPointGuide1")
+	@GetMapping("/beautyPoint/termForm")
 	@FragmentPage
 	public String beutyPointGuide() {
-		return "my/fullpage-beautypoint-info";
+		if(isMobileDevice())
+			return "my/fullpage-beautypoint-info";
+		if(isPcDevice())
+			return "my/layer-my-beauty-point";
+		return null;
 	}
 	
 	/**

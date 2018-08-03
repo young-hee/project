@@ -141,14 +141,11 @@
 
 					<!--// 공용 ( 컬러컬렉션 제외 )-->
 					<div class="prd_name">
-						<p class="s_name">{{stockTxt this.saleDisplayStatus this.prodTypeCode}}{{{this.linePromoDesc}}}</p>
+						<p class="s_name">
+							<em class="tag">{{stockTxt this.saleDisplayStatus this.prodTypeCode}}</em>
+							{{{this.linePromoDesc}}}
+						</p>
 						<div>
-							{{#xif this.saleDisplayStatus '==' 'WaitingSale' }}
-								<em class="tag">[곧 출시!]</em>
-							{{/xif}}
-							{{#xif (eq this.prodTypeCode 'Presale') '&&' (eq this.saleDisplayStatus 'OnSale')}}
-								<em class="tag">[예약판매중]</em>
-							{{/xif}}
 							<em class="name">{{ this.onlineProdName }}</em>
 						</div>
 

@@ -47,14 +47,11 @@
 						<dt><label for="cardCo">신용카드사 선택</label></dt>
 						<dd>
 							<div class="select_wrap w100p">
-								<select name="cardCo"
-										id="cardCo"
-										title="신용카드사 선택"
-										required="required"
-										data-msg-required="신용카드사를 선택해주세요."
-										th:each="payMethod : ${payMethodResult.payMethodExList}" th:if="${payMethod.creditcardCoMgmtYn == 'Y'}">
+								<select name="cardCo" id="cardCo" title="신용카드사 선택" required="required" data-msg-required="신용카드사를 선택해주세요.">
 									<option value="">신용카드사 선택</option>
-									<option th:each="option : ${payMethod.creditcardCoExList}" th:id="${option.creditcardCoSn}" th:value="${option.creditcardCoCode}" th:text="${option.creditCardName}"></option>
+									<th:block th:each="payMethod : ${payMethodResult.payMethodExList}" th:if="${payMethod.creditcardCoMgmtYn == 'Y'}">
+										<option th:each="option : ${payMethod.creditcardCoExList}" th:id="${option.creditcardCoSn}" th:value="${option.creditcardCoCode}" th:text="${option.creditCardName}"></option>
+									</th:block>
 								</select>
 							</div>
 						</dd>
@@ -197,7 +194,11 @@
 
 		/* 결제수단 선택에 따른 UI */
 		function setPayment(obj, payMethod, goPayMethod, payMethodSn, payServiceCode, payMethodCode) {
+			$('[name=payMethod]').removeClass('on');
+
 			if(payMethod == 'WPAY' && goPayMethod == ''){ // 원터치 간편결제
+				$('#w_pay').addClass('on');
+
 				isWpayMember(obj, payMethod, goPayMethod, payMethodSn, payServiceCode, payMethodCode);	//wpay 회원가입 여부 체크
 				/* var payMethod = $('[name="payMethod"]').val();
 				if(payMethod == null || payMethod == '') {
@@ -232,6 +233,8 @@
 				$('input[name=payMethodCode]').attr("value", payMethodCode);*/
 			}
 			else if(payMethod == 'wcard' && goPayMethod == ''){ // 신용카드
+				$('#credit').addClass('on');
+
 				$("#choose_payment_01").show();
 				$("#choose_payment_02").hide();
 				$('input[name=goPayMethod]').val('');
@@ -250,6 +253,8 @@
 				$('input[name=payMethodCode]').attr("value", payMethodCode);
 			}
 			else if(payMethod == 'wcard' && goPayMethod == 'onlypayco'){ // 신용카드(페이코결제)
+				$('#payco').addClass('on');
+
 				$("#choose_payment_01").hide();
 				$("#choose_payment_02").hide();
 				$('input[name=goPayMethod]').attr('value',goPayMethod);
@@ -269,6 +274,8 @@
 				$('input[name=payMethodCode]').attr("value", payMethodCode);
 			}
 			else if(payMethod == 'wcard' && goPayMethod == 'onlykakaopay'){ // 신용카드(카카오페이)
+				$('#kakao_pay').addClass('on');
+
 				$("#choose_payment_01").hide();
 				$("#choose_payment_02").hide();
 				$('input[name=goPayMethod]').attr('value',goPayMethod);
@@ -292,6 +299,8 @@
 				$('input[name=payMethodCode]').attr("value", payMethodCode);
 			}
 			else if(payMethod == 'NAVERPAY' && goPayMethod == ''){ // 네이버 페이
+				$('#n_pay').addClass('on');
+
 				$("#choose_payment_01").hide();
 				$("#choose_payment_02").hide();
 				$('input[name=goPayMethod]').val('');
@@ -315,6 +324,8 @@
 				$('input[name=payMethodCode]').attr("value", payMethodCode);
 			}
 			else if(payMethod == 'mobile' && goPayMethod == ''){ // 모바일결제(휴대폰 결제)
+				$('#phone').addClass('on');
+
 				$("#choose_payment_01").hide();
 				$("#choose_payment_02").hide();
 				$('input[name=goPayMethod]').val('');
@@ -338,6 +349,8 @@
 				$('input[name=payMethodCode]').attr("value", payMethodCode);
 			}
 			else if(payMethod == 'bank' && goPayMethod == ''){ // 실시간 계좌이체
+				$('#account_transfer').addClass('on');
+
 				//AP.modal.alert("준비중입니다.");
 				/*var payMethod = $('[name="payMethod"]').val();
 				if(payMethod == null || payMethod == '') {
@@ -359,6 +372,8 @@
 				$('input[name=payMethodCode]').attr("value", payMethodCode);
 			}
 			else if(payMethod == 'vbank' && goPayMethod == ''){ // 가상계좌(무통장 입금)
+				$('#remit_bank').addClass('on');
+
 				//AP.modal.alert("준비중입니다.");
 				/*var payMethod = $('[name="payMethod"]').val();
 				if(payMethod == null || payMethod == '') {

@@ -1,15 +1,23 @@
 package kr.ap.comm.api;
 
+import kr.ap.comm.member.vo.MemberSession;
+import kr.ap.comm.support.constants.SessionKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.util.WebUtils;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class RequestData {
@@ -69,11 +77,7 @@ public class RequestData {
 				https.setRequestProperty("Content-Length", postData.getLength() + "");
 
 				// SLT 헤더추가
-//				https.setRequestProperty("x-dsp-uuid", UUID.randomUUID().toString());
-//				https.setRequestProperty("x-dsp-screenid", "");
-//				https.setRequestProperty("x-dsp-userid", "");
-//				https.setRequestProperty("x-dsp-langcd", "ko");
-//				https.setRequestProperty("x-dsp-serviceURL", "");
+				addSLTCommonHeaders(https);
 
 				OutputStream out_stream = https.getOutputStream();
 				postData.write(out_stream);
@@ -85,7 +89,7 @@ public class RequestData {
 			BufferedReader read = null;
 			InputStream error = https.getErrorStream();
 			if (error != null) {
-				InputStreamReader isr = new InputStreamReader(error, "UTF-8");
+				InputStreamReader isr = new InputStreamReader(error, StandardCharsets.UTF_8);
 				read = new BufferedReader(isr);
 
 				StringBuilder sb = new StringBuilder();
@@ -100,7 +104,7 @@ public class RequestData {
 			this.status = https.getResponseCode();
 			logger.debug("[AMORE_API]RESPONSE CODE={}", https.getResponseCode());
 			InputStream is = https.getInputStream();
-			InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+			InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
 			read = new BufferedReader(isr);
 
 			StringBuilder sb = new StringBuilder();
@@ -124,6 +128,36 @@ public class RequestData {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * SLT 표준화 정의서에 정의되어 있는 Header 영역 내용 추가
+	 */
+	private void addSLTCommonHeaders(HttpsURLConnection https) {
+		https.setRequestProperty("x-dsp-uuid", UUID.randomUUID().toString());
+		Optional<String> userId = getUserId();
+		if (userId.isPresent()) {
+			https.setRequestProperty("x-dsp-userid", userId.get());
+		}
+		// FIXME: screenid 값을 가져올수 있는 방안 필요
+		https.setRequestProperty("x-dsp-screenid", "screenid");
+		https.setRequestProperty("x-dsp-langcd", "ko");
+		String serviceUrl = getServiceUrl();
+		https.setRequestProperty("x-dsp-serviceURL", serviceUrl);
+	}
+
+	private Optional<String> getUserId() {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		MemberSession memberSession = (MemberSession) WebUtils.getSessionAttribute(request, SessionKey.LOGIN_USER);
+		if (memberSession != null) {
+			return Optional.ofNullable(memberSession.getMember().getMemberId());
+		}
+		return Optional.empty();
+	}
+
+	private String getServiceUrl() {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		return request.getRequestURI();
 	}
 
 	/**

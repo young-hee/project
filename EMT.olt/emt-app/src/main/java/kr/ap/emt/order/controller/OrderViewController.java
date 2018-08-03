@@ -5,6 +5,7 @@ import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.member.vo.OrdCartInfo;
 import kr.ap.comm.support.constants.PathConstants;
 import kr.ap.emt.order.vo.OrdStoreDTO;
+import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.order.order.NotifyAccountDeposit;
 import net.g1project.ecp.api.model.order.order.OrdEx;
 import net.g1project.ecp.api.model.order.order.OrdReceptComplete;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,18 +60,37 @@ public class OrderViewController extends OrderBaseController {
 			String onlineProdSnArr = request.getParameter("onlineProdSnArr") == null ? "" : request.getParameter("onlineProdSnArr");
 			String takeoutProdSnArr = request.getParameter("takeoutProdSnArr") == null ? "" : request.getParameter("takeoutProdSnArr");
 			List<Long> cartProdSnList = getCartProdSnList(onlineProdSnArr, takeoutProdSnArr);
-			ordEx = createOrder(Long.valueOf(cartSn), cartProdSnList);
-			
-			/* 주문한 장바구니 상품 목록 세션에 저장 */
-			memberSession.addOrdCartInfo(ordEx.getOrdSn(), new OrdCartInfo(Long.valueOf(cartSn), cartProdSnList));
+
+			try {
+				ordEx = createOrder(Long.valueOf(cartSn), cartProdSnList);
+
+				/* 주문한 장바구니 상품 목록 세션에 저장 */
+				memberSession.addOrdCartInfo(ordEx.getOrdSn(), new OrdCartInfo(Long.valueOf(cartSn), cartProdSnList));
+
+				/* 주문 상품목록 생성 */
+				makeOrdProdSet(ordEx, model);
+				model.addAttribute("result", true);
+			} catch (ApiException e) {
+				model.addAttribute("result", false);
+				model.addAttribute("errorCode", e.getErrorCode());
+				model.addAttribute("errorMessage", e.getMessage());
+			}
+
 		}else{
-			ordEx = createOrder(memberSession.getCartSn(), null);
-            /* 주문한 장바구니 상품 목록 세션에 저장 */
-            memberSession.addOrdCartInfo(ordEx.getOrdSn(), new OrdCartInfo(memberSession.getCartSn(), null));
+
+			try {
+				ordEx = createOrder(memberSession.getCartSn(), null);/* 주문한 장바구니 상품 목록 세션에 저장 */
+				memberSession.addOrdCartInfo(ordEx.getOrdSn(), new OrdCartInfo(memberSession.getCartSn(), null));
+
+				/* 주문 상품목록 생성 */
+				makeOrdProdSet(ordEx, model);
+				model.addAttribute("result", true);
+			} catch (ApiException e) {
+				model.addAttribute("result", false);
+				model.addAttribute("errorCode", e.getErrorCode());
+				model.addAttribute("errorMessage", e.getMessage());
+			}
 		}
-		
-		/* 주문 상품목록 생성 */
-		makeOrdProdSet(ordEx, model);
 
 		// MOBILE
 		if (isMobileDevice()) {

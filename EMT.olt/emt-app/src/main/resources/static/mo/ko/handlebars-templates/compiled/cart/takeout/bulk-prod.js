@@ -14,8 +14,6 @@ this["AP"]["handlebars"]["cart"]["takeout"]["bulk-prod"] = Handlebars.template({
 
   return "		<div class=\"cart_name_wrap\">\n			<span class=\"check_wrap\">\n				<input type=\"checkbox\" name=\"takeoutChkBox\" id=\"takeoutChkBox"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
-    + "\" pointExch=\"membership\" point=\""
-    + alias2(((helper = (helper = helpers.exchPoint || (depth0 != null ? depth0.exchPoint : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"exchPoint","hash":{},"data":data}) : helper)))
     + "\" value=\""
     + alias2(alias1((depths[1] != null ? depths[1].onlineProdSn : depths[1]), depth0))
     + "\" "
@@ -44,14 +42,14 @@ this["AP"]["handlebars"]["cart"]["takeout"]["bulk-prod"] = Handlebars.template({
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
     + "\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1), depth0))
-    + "\"/>\n\n"
-    + ((stack1 = helpers["if"].call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"Exhaustion",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OutOfStock",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(9, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"===","OnSale",{"name":"xif","hash":{},"fn":container.program(11, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\n			<span class=\"cart_price\"> <!--/* 20180726 : 금액/할인가 위치 변경 */-->\n"
+    + "\"/>\n			<!--/* 품절/조기소진일경우 버튼제어 X */-->\n"
+    + ((stack1 = helpers["if"].call(alias3,(helpers.ne || (depth0 && depth0.ne) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OnSale",{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(9, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "			<!--/* 최대구매제한여부가 'Y'일 경우 최대구매수량 존재 */-->\n"
+    + ((stack1 = helpers["if"].call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OnSale",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(11, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "			<span class=\"cart_price\"> <!--/* 20180726 : 금액/할인가 위치 변경 */-->\n"
     + ((stack1 = helpers["if"].call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OnSale",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(16, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OutOfStock",{"name":"eq","hash":{},"data":data}),(helpers.ne || (depth0 && depth0.ne) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodTypeCode : stack1),"Presale",{"name":"ne","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(21, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\n"
-    + ((stack1 = helpers["if"].call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"Exhaustion",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodTypeCode : stack1),"Presale",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(23, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OutOfStock",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(21, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"Exhaustion",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(23, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"WaitingSale",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(25, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"EndSale",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(27, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"SuspendSale",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(29, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -82,9 +80,9 @@ this["AP"]["handlebars"]["cart"]["takeout"]["bulk-prod"] = Handlebars.template({
     + alias3((helpers.absolutePath || (depth0 && depth0.absolutePath) || alias2).call(alias1,"/images/common/icon_plus1.gif",{"name":"absolutePath","hash":{},"data":data}))
     + "\"></button>\n				</span>\n";
 },"11":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
 
-  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitYn : stack1),"===","Y",{"name":"xif","hash":{},"fn":container.program(12, data, 0, blockParams, depths),"inverse":container.program(14, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "");
+  return ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || helpers.helperMissing).call(alias1,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitYn : stack1),"Y",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(12, data, 0, blockParams, depths),"inverse":container.program(14, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "");
 },"12":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
 
@@ -92,25 +90,39 @@ this["AP"]["handlebars"]["cart"]["takeout"]["bulk-prod"] = Handlebars.template({
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.minPurLimitQty : stack1), depth0))
     + "\" data-max=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitQty : stack1), depth0))
-    + "\" class=\"ui_spinner small\" data-step=\"1\" data-disabled=\"false\">\n						<button class=\"spinner_decrease\" type=\"button\" title=\"제품 수량 감소\" onclick=\"bulkProdQtyOperate(this, "
+    + "\" class=\"ui_spinner small\" data-step=\"1\" data-disabled=\"false\">\n						<button class=\"spinner_decrease\" type=\"button\" title=\"제품 수량 감소\" onclick=\"prodQtyOperate(this, "
     + alias2(alias1((depths[2] != null ? depths[2].cartSn : depths[2]), depth0))
     + ", "
     + alias2(alias1((depth0 != null ? depth0.cartProdSn : depth0), depth0))
     + ", "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
     + ", '"
+    + alias2(alias1((depth0 != null ? depth0.integrationMembershipExchYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.activityPointExchYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.storePickupYn : depth0), depth0))
+    + "', '"
     + alias2(alias1((depth0 != null ? depth0.storeSn : depth0), depth0))
     + "', '-')\"><img alt=\"제품 수량 감소\" src=\""
     + alias2((helpers.absolutePath || (depth0 && depth0.absolutePath) || alias4).call(alias3,"/images/common/ico_minus1.gif",{"name":"absolutePath","hash":{},"data":data}))
     + "\"></button>\n						<input class=\"spinner_input\" type=\"text\" name=\"cartProdQty\" value=\""
     + alias2(alias1((depth0 != null ? depth0.cartProdQty : depth0), depth0))
-    + "\">\n						<button class=\"spinner_increase\" type=\"button\" title=\"제품 수량 증가\" onclick=\"bulkProdQtyOperate(this, "
+    + "\">\n						<button class=\"spinner_increase\" type=\"button\" title=\"제품 수량 증가\" "
+    + ((stack1 = helpers["if"].call(alias3,(helpers.gt || (depth0 && depth0.gt) || alias4).call(alias3,(depth0 != null ? depth0.cartProdQty : depth0),((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.bulkDcProdPossibleQty : stack1),{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(3, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + " onclick=\"prodQtyOperate(this, "
     + alias2(alias1((depths[2] != null ? depths[2].cartSn : depths[2]), depth0))
     + ", "
     + alias2(alias1((depth0 != null ? depth0.cartProdSn : depth0), depth0))
     + ", "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
     + ", '"
+    + alias2(alias1((depth0 != null ? depth0.integrationMembershipExchYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.activityPointExchYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.storePickupYn : depth0), depth0))
+    + "', '"
     + alias2(alias1((depth0 != null ? depth0.storeSn : depth0), depth0))
     + "', '+')\"><img alt=\"제품 수량 증가\" src=\""
     + alias2((helpers.absolutePath || (depth0 && depth0.absolutePath) || alias4).call(alias3,"/images/common/icon_plus1.gif",{"name":"absolutePath","hash":{},"data":data}))
@@ -118,27 +130,41 @@ this["AP"]["handlebars"]["cart"]["takeout"]["bulk-prod"] = Handlebars.template({
 },"14":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
 
-  return "					<span data-min=\""
+  return "					<!--/* 최대구매제한여부가 'N'일경우 최대구매수량은 존재하지 않음 */-->\n					<span data-min=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.minPurLimitQty : stack1), depth0))
-    + "\" class=\"ui_spinner small\" data-step=\"1\" data-disabled=\"false\">\n						<button class=\"spinner_decrease\" type=\"button\" title=\"제품 수량 감소\" onclick=\"bulkProdQtyOperate(this, "
+    + "\" class=\"ui_spinner small\" data-step=\"1\" data-disabled=\"false\">\n						<button class=\"spinner_decrease\" type=\"button\" title=\"제품 수량 감소\" onclick=\"prodQtyOperate(this, "
     + alias2(alias1((depths[2] != null ? depths[2].cartSn : depths[2]), depth0))
     + ", "
     + alias2(alias1((depth0 != null ? depth0.cartProdSn : depth0), depth0))
     + ", "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
     + ", '"
+    + alias2(alias1((depth0 != null ? depth0.integrationMembershipExchYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.activityPointExchYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.storePickupYn : depth0), depth0))
+    + "', '"
     + alias2(alias1((depth0 != null ? depth0.storeSn : depth0), depth0))
     + "', '-')\"><img alt=\"제품 수량 감소\" src=\""
     + alias2((helpers.absolutePath || (depth0 && depth0.absolutePath) || alias4).call(alias3,"/images/common/ico_minus1.gif",{"name":"absolutePath","hash":{},"data":data}))
     + "\"></button>\n						<input class=\"spinner_input\" type=\"text\" name=\"cartProdQty\" value=\""
     + alias2(alias1((depth0 != null ? depth0.cartProdQty : depth0), depth0))
-    + "\">\n						<button class=\"spinner_increase\" type=\"button\" title=\"제품 수량 증가\" onclick=\"bulkProdQtyOperate(this, "
+    + "\">\n						<button class=\"spinner_increase\" type=\"button\" title=\"제품 수량 증가\" "
+    + ((stack1 = helpers["if"].call(alias3,(helpers.gt || (depth0 && depth0.gt) || alias4).call(alias3,(depth0 != null ? depth0.cartProdQty : depth0),((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.bulkDcProdPossibleQty : stack1),{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(3, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + " onclick=\"prodQtyOperate(this, "
     + alias2(alias1((depths[2] != null ? depths[2].cartSn : depths[2]), depth0))
     + ", "
     + alias2(alias1((depth0 != null ? depth0.cartProdSn : depth0), depth0))
     + ", "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
     + ", '"
+    + alias2(alias1((depth0 != null ? depth0.integrationMembershipExchYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.activityPointExchYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.storePickupYn : depth0), depth0))
+    + "', '"
     + alias2(alias1((depth0 != null ? depth0.storeSn : depth0), depth0))
     + "', '+')\"><img alt=\"제품 수량 증가\" src=\""
     + alias2((helpers.absolutePath || (depth0 && depth0.absolutePath) || alias4).call(alias3,"/images/common/icon_plus1.gif",{"name":"absolutePath","hash":{},"data":data}))
@@ -189,13 +215,11 @@ this["AP"]["handlebars"]["cart"]["takeout"]["bulk-prod"] = Handlebars.template({
 },"36":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "			<div class=\"cart_free_gift\">\n"
-    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.cartProdAwardList : depth0),{"name":"each","hash":{},"fn":container.program(37, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "			</div>\n";
+  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.cartProdAwardList : depth0),{"name":"each","hash":{},"fn":container.program(37, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"37":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
-  return "					"
+  return "				<div class=\"cart_free_gift\">\n					"
     + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.awardProdEx : depth0)) != null ? stack1.repProdImgEx : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(38, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n					<span class=\"info\">\n						<span>사은품 : "
     + alias3(container.lambda(((stack1 = (depth0 != null ? depth0.awardProdEx : depth0)) != null ? stack1.prodName : stack1), depth0))
@@ -203,7 +227,7 @@ this["AP"]["handlebars"]["cart"]["takeout"]["bulk-prod"] = Handlebars.template({
     + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,(depth0 != null ? depth0.awardStartDt : depth0),"YYYY.MM.DD",{"name":"dateFormat","hash":{},"data":data}))
     + " ~ "
     + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,(depth0 != null ? depth0.awardEndDt : depth0),"YYYY.MM.DD",{"name":"dateFormat","hash":{},"data":data}))
-    + "</span>\n					</span>\n";
+    + "</span>\n					</span>\n				</div>\n";
 },"38":function(container,depth0,helpers,partials,data) {
     var stack1;
 

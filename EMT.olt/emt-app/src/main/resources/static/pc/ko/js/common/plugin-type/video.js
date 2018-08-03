@@ -149,9 +149,11 @@
 		/* ==================== Protected Methods ==================== */
 
 		function initialize () {
+			_isDestroy = true;
 			$( window ).on( 'load resize', resizeHandler );
-
+		
 			if ( window.YT && typeof YT.Player === 'function' ) {
+				
 				setVideo();
 				_this.resize();
 			} else {
@@ -232,6 +234,9 @@
 				if ( _timer ) _timer.reset();
 
 				if ( e.data === -1 || e.data === YT.PlayerState.ENDED ) {
+					if(e.data === YT.PlayerState.ENDED){
+                		_$thumb.show();
+                	}
 					dispatch( 'stop' );
 				} else if ( e.data === YT.PlayerState.PAUSED ) {
 					dispatch( 'pause' );

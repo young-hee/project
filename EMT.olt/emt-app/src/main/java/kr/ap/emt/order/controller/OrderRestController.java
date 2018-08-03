@@ -365,12 +365,13 @@ public class OrderRestController extends OrderBaseController {
 	 *
 	 * @param ordSn
 	 * @param memberKeepingCouponSnArr
-	 * @param searchText
+	 * @param couponIdentifier
+	 * @param membershipSn
 	 * @return
 	 */
 	@PostMapping("/ordReceptChangeCoupon")
 	@ResponseBody
-	public ResponseEntity<?> ordReceptChangeCoupon(Long ordSn, String[] memberKeepingCouponSnArr, String searchText){
+	public ResponseEntity<?> ordReceptChangeCoupon(Long ordSn, String[] memberKeepingCouponSnArr, Long membershipSn){
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		try {
 			OrdReceptChange body = new OrdReceptChange();
@@ -388,11 +389,15 @@ public class OrderRestController extends OrderBaseController {
 				}
 				body.setMemberCouponSnList(memberCouponSnList);
 			}
-			/* 입력쿠폰 */
-			if(StringUtils.isNotBlank(searchText)){
-				inputCouponIdList.add(searchText);
-				body.setInputCouponIdList(inputCouponIdList);
-			}
+
+			//쿠폰수정하면 포인트도 초기화.
+			List<MembershipPointSelect> membershipPointSelectsList = new ArrayList<MembershipPointSelect>();
+			MembershipPointSelect membershipPointSelect = new MembershipPointSelect();
+			membershipPointSelect.setMembershipSn(membershipSn);
+			membershipPointSelect.setUseMembershipPoint(0);
+			membershipPointSelectsList.add(membershipPointSelect);
+			body.setMembershipPointSelectList(membershipPointSelectsList);
+
 			OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
 			result.put("applyCouponExList", ordRc.getApplyCouponExList());
 			result.put("ordHistEx", ordRc.getOrdHistEx());

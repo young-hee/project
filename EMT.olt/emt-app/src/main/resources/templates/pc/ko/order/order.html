@@ -9,81 +9,90 @@
 	</div>
 	<!-- // page title -->
 	<!-- page contents -->
-	<div class="ap_contents order">
-		<!--/* 결제 step */-->
-		<!--공통 진행사항-->
-		<th:block ap:replace="~{cart/fragment/current :: tab (state = 2)}"/>
-		<!--/* 장바구니 목록 */-->
-		<form class="order-validate" id="order-recept-info" name="orderForm" method="post">
-			<!--결제 모듈연동 정보-->
-			<input type="hidden" name="oid" th:value="${ordEx.ordNo}"/>
-			<input type="hidden" name="price" th:value="${#IntegUtil.toCommaNumber(ordEx.ordHistEx.finalPamtPcur)}"/>
-			<input type="hidden" name="buyerName"/>
-			<input type="hidden" name="mobile"/>
-			<input type="hidden" name="email"/>
-			<input type="hidden" name="goPayMethod"/>
-			<input type="hidden" name="payMethod"/>
-			<input type="hidden" name="payMethodSn"/>
-			<input type="hidden" name="payServiceCode"/>
-			<input type="hidden" name="payMethodCode"/>
-			<!--주문자 배송정보-->
-			<th:block th:if="${memberSn > 0}">
-				<input type="hidden" name="userId" th:value="${apMember.memberId}"/><!--W페이적용-->
-				<input type="hidden" name="purchaserName" th:value="${apMember.name.name1}"/>
-				<input type="hidden" name="purchaserPhoneNo" th:value="${#IntegUtil.hyphenPhoneNumber(apMember.phoneNo1.phoneNo)}"/>
-			</th:block>
+	<th:block th:if="${result}">
+		<div class="ap_contents order">
+			<!--/* 결제 step */-->
+			<!--공통 진행사항-->
+			<th:block ap:replace="~{cart/fragment/current :: tab (state = 2)}"/>
+			<!--/* 장바구니 목록 */-->
+			<form class="order-validate" id="order-recept-info" name="orderForm" method="post">
+				<!--결제 모듈연동 정보-->
+				<input type="hidden" name="oid" th:value="${ordEx.ordNo}"/>
+				<input type="hidden" name="price" th:value="${#IntegUtil.toCommaNumber(ordEx.ordHistEx.finalPamtPcur)}"/>
+				<input type="hidden" name="buyerName"/>
+				<input type="hidden" name="mobile"/>
+				<input type="hidden" name="email"/>
+				<input type="hidden" name="goPayMethod"/>
+				<input type="hidden" name="payMethod"/>
+				<input type="hidden" name="payMethodSn"/>
+				<input type="hidden" name="payServiceCode"/>
+				<input type="hidden" name="payMethodCode"/>
+				<!--주문자 배송정보-->
+				<th:block th:if="${memberSn > 0}">
+					<input type="hidden" name="userId" th:value="${apMember.memberId}"/><!--W페이적용-->
+					<input type="hidden" name="purchaserName" th:value="${apMember.name.name1}"/>
+					<input type="hidden" name="purchaserPhoneNo" th:value="${#IntegUtil.hyphenPhoneNumber(apMember.phoneNo1.phoneNo)}"/>
+				</th:block>
 
-			<!--수취인 배송정보-->
-			<input type="hidden" name="addressType"/>
-			<input type="hidden" name="recipientName"/>
-			<input type="hidden" name="recipientPhoneNo"/>
-			<input type="hidden" name="recipientEmailAddress"/>
-			<input type="hidden" name="recipientZipCode"/>
-			<input type="hidden" name="recipientAddress1"/>
-			<input type="hidden" name="recipientAddress2"/>
-			<!--편의점택배 배송정보-->
-			<input type="hidden" name="storeHeadCd"/>
-			<input type="hidden" name="storeShopCd"/>
-			<input type="hidden" name="storeNm"/>
-			<input type="hidden" name="storeShopNm"/>
-			<input type="hidden" name="storeTelno"/>
-			<input type="hidden" name="storeZip"/>
-			<input type="hidden" name="storeAddr1"/>
-			<input type="hidden" name="storeAddr2"/>
-			<input type="hidden" name="storeCodeF"/>
-			<input type="hidden" name="storeDdZone"/>
-			<input type="hidden" name="storeDdBag"/>
-			<input type="hidden" name="storeEupmyeon"/>
+				<!--수취인 배송정보-->
+				<input type="hidden" name="addressType"/>
+				<input type="hidden" name="recipientName"/>
+				<input type="hidden" name="recipientPhoneNo"/>
+				<input type="hidden" name="recipientEmailAddress"/>
+				<input type="hidden" name="recipientZipCode"/>
+				<input type="hidden" name="recipientAddress1"/>
+				<input type="hidden" name="recipientAddress2"/>
+				<!--편의점택배 배송정보-->
+				<input type="hidden" name="storeHeadCd"/>
+				<input type="hidden" name="storeShopCd"/>
+				<input type="hidden" name="storeNm"/>
+				<input type="hidden" name="storeShopNm"/>
+				<input type="hidden" name="storeTelno"/>
+				<input type="hidden" name="storeZip"/>
+				<input type="hidden" name="storeAddr1"/>
+				<input type="hidden" name="storeAddr2"/>
+				<input type="hidden" name="storeCodeF"/>
+				<input type="hidden" name="storeDdZone"/>
+				<input type="hidden" name="storeDdBag"/>
+				<input type="hidden" name="storeEupmyeon"/>
 
-			<div class="ui_accordion cart_list">
-				<!--주문상품확인-->
-				<th:block ap:replace="~{order/fragment/order-reception/order-01-product-info}"/>
-				<!--배송정보입력-->
-				<th:block ap:replace="~{order/fragment/order-reception/order-02-ship-address-info}"/>			<!--회원-->
-				<th:block ap:replace="~{order/fragment/order-reception/order-02-ship-address-nonmember-info}"/> <!--비 회원-->
-				<!--포장/쇼핑백 추가신청-->
-				<th:block ap:replace="~{order/fragment/order-reception/order-03-packing-info}"/>
-				<!--쿠폰/포인트 혜택사용-->
-				<th:block ap:replace="~{order/fragment/order-reception/order-04-coupon-benefit-info}"/>
-				<!--사은품 확인-->
-				<th:block ap:replace="~{order/fragment/order-reception/order-05-freegift-info}"/>
-				<!--결제수단 선택-->
-				<th:block ap:replace="~{order/fragment/order-reception/order-06-pay-method-info}"/>
-				<!--최종 결제금액-->
-				<th:block ap:replace="~{order/fragment/order-reception/order-07-final-pay-amount-info}"/>
+				<div class="ui_accordion cart_list">
+					<!--주문상품확인-->
+					<th:block ap:replace="~{order/fragment/order-reception/order-01-product-info}"/>
+					<!--배송정보입력-->
+					<th:block ap:replace="~{order/fragment/order-reception/order-02-ship-address-info}"/>			<!--회원-->
+					<th:block ap:replace="~{order/fragment/order-reception/order-02-ship-address-nonmember-info}"/> <!--비 회원-->
+					<!--포장/쇼핑백 추가신청-->
+					<th:block ap:replace="~{order/fragment/order-reception/order-03-packing-info}"/>
+					<!--쿠폰/포인트 혜택사용-->
+					<th:block ap:replace="~{order/fragment/order-reception/order-04-coupon-benefit-info}"/>
+					<!--사은품 확인-->
+					<th:block ap:replace="~{order/fragment/order-reception/order-05-freegift-info}"/>
+					<!--결제수단 선택-->
+					<th:block ap:replace="~{order/fragment/order-reception/order-06-pay-method-info}"/>
+					<!--최종 결제금액-->
+					<th:block ap:replace="~{order/fragment/order-reception/order-07-final-pay-amount-info}"/>
+				</div>
+			</form>
+			<p class="text_center mgt50">
+				<span class="check_wrap"><input type="checkbox" id="orderAgree"><label for="orderAgree"><span class="font_xl">주문정보 및 결제 대행 서비스 이용약관에 모두 동의합니다.</span></label></span>
+			</p>
+			<div class="page_btns">
+				<button type="button" class="btn_lg_primary" id="orderPayment" th:text="${#IntegUtil.toCommaNumber(ordEx.ordHistEx.finalPamtPcur)} + '원 결제하기'">0 원 결제하기</button>
 			</div>
-		</form>
-		<p class="text_center mgt50">
-			<span class="check_wrap"><input type="checkbox" id="orderAgree"><label for="orderAgree"><span class="font_xl">주문정보 및 결제 대행 서비스 이용약관에 모두 동의합니다.</span></label></span>
-		</p>
-		<div class="page_btns">
-			<button type="button" class="btn_lg_primary" id="orderPayment" th:text="${#IntegUtil.toCommaNumber(ordEx.ordHistEx.finalPamtPcur)} + '원 결제하기'">0 원 결제하기</button>
 		</div>
-	</div>
+	</th:block>
+
+	<th:block th:if="${!result}">
+		<div class="page_title">
+			<h1 class="h_title page">주문서 오류: <span th:text="${errorMessage}"></span></h1>
+		</div>
+
+	</th:block>
 	<!-- // page contents -->
 </div><!-- // #ap_container -->
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
-<th:block ap:fragment="layout-endpoint">
+<th:block th:if="${result}" ap:fragment="layout-endpoint">
 	<script ap:src="@{/handlebars-templates/compiled/order/layer-login-02.js}"></script>					<!-- 비회원 개인정보 수집동의 -->
 	<script ap:src="@{/handlebars-templates/compiled/order/gift-packing-qty-info.js}"></script>					<!-- 쇼핑백 -->
 	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use.js}"></script> 		<!--사용가능한 쿠폰목록 Layer-->
@@ -93,7 +102,7 @@
 	<script ap:src="@{/handlebars-templates/compiled/order/final-price-amt-pcur.js}"></script> 		<!-- 최종 결제금액 영역 -->
 
 	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
-	<script language="javascript" type="text/javascript" src="https://stdpay.inicis.com/stdjs/INIStdPay.js" charset="UTF-8"></script>	
+	<script language="javascript" type="text/javascript" src="https://stdpay.inicis.com/stdjs/INIStdPay.js" charset="UTF-8"></script>
 	<script th:inline="javascript">
 		$( document ).ready(function() {
 			var memberSn		 = /*[[${memberSn}]]*/ '0'; // 회원일련번호
@@ -108,7 +117,6 @@
 			// 글자수 제한
 			$( 'input[maxlength]' ).inputLimits();
 		});
-
 
 		var payPopup;
 		$("#orderPayment").on('click', function() {
@@ -257,9 +265,9 @@
 
 			//모두 새창으로 연결 (이니시스 결제의 경우 현재페이지에서 호출)
 			if('NAVERPAY' == selectedPaymethod || 'WPAY' == selectedPaymethod) {
-				payPopup = window.open('about:blank','payPopup',"width=850 height=750 menubar=no status=no");	
+				payPopup = window.open('about:blank','payPopup',"width=850 height=750 menubar=no status=no");
 			}
-			
+
 			var $form = $("form[name='orderForm']");
 			var actionUrl;
 			//네이버 결제
@@ -293,7 +301,7 @@
 					$hidden.prop("value", $_prodQty.val());
 					$form.append($hidden);
 				});
-				
+
 				$form.attr("method", "post");
 				$form.attr("action", actionUrl);
 				$form.attr("target", 'payPopup');
@@ -301,7 +309,7 @@
 			}
 			//원터치 간편결제
 			else if('WPAY' == selectedPaymethod) {
-				
+
 				actionUrl = "/payment/wpay";
 				$form.attr("method", "post");
 				$form.attr("action", actionUrl);
@@ -310,38 +318,38 @@
 			}
 			//기타 이니시스
 			else {
-				
+
 				$("form[name='inipayForm']").remove();
-				
+
 				AP.api.inipayReq({}, AP.common.getFormData($form)).done(function(data) {
-                 	
+
 					var iniParamMap = new Map();
 					iniParamMap = data;
-					
+
 					var $iniform = $("<form />");
-					
-					$.map(iniParamMap, function(value, key) {	
+
+					$.map(iniParamMap, function(value, key) {
 						$hidden = $("<input />");
 						$hidden.prop("type", "hidden");
 						$hidden.prop("name", key);
 						$hidden.prop("value", value);
 						$iniform.append($hidden);
-						
+
 					});
-					
+
 					$iniform.attr("method", "post");
 					$iniform.attr("name", "inipayForm");
 					$(document.body).append($iniform);
-					
+
 					INIStdPay.pay($iniform);
 
-                }).fail(function(xhr, textStatus, errorThrown) {
-    	           //TODO
-                }).always(function() {
-                    //성공, 실패
-                });
+				}).fail(function(xhr, textStatus, errorThrown) {
+					//TODO
+				}).always(function() {
+					//성공, 실패
+				});
 			}
-			
+
 		}
 
 		/* 결제실패 혹은 중간에 결제 종료시 메세지 출력 */

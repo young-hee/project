@@ -8,7 +8,7 @@
 				<colgroup>
 					<col width="110">
 					<col width="80">
-					<col width="">
+					<col width="*">
 					<col width="130">
 					<col width="130">
 					<col width="120">
@@ -28,18 +28,21 @@
 					<td th:text="${#IntegUtil.dateformat(item.trApvlDt, 'yyyy.MM.dd')}">2018.01.05</td>
 					<td th:text="${item.xtclNm}">적립</td>
 					<td th:text="${item.xttpNm}" class="align_left">포인트 선물 적립</td>
-					<td th:utext="'(<em> + </em>) ' + ${#IntegUtil.toCommaNumber(item.acmlAplyPt)}">( <em> + </em> ) 100,000</td>
-					<td th:utext="'( - ) ' + ${#IntegUtil.toCommaNumber(item.usgAplyPt)}">( - ) 100,000</td>
+					<td th:if="${item.tlmcCd == '10'}">( <em> + </em> ) <th:block th:text="${#IntegUtil.toCommaNumber(item.aplyPt)}">100,000</th:block>P</td>
+					<td th:if="${item.tlmcCd == '10'}">( - ) 0P</td>
+					<td th:if="${item.tlmcCd == '20'}">( + ) 0P</td>
+					<td th:if="${item.tlmcCd == '20'}">( - ) <th:block th:text="${#IntegUtil.toCommaNumber(item.aplyPt)}">100,000</th:block>P</td>
 					<td th:if="${item.extcSchdDt != ''}" th:text="${#IntegUtil.dateformat(item.extcSchdDt, 'yyyy.MM.dd')}">2018.10.31</td>
        			</tr>
 
-				<tr th:if="${#lists.isEmpty(ptBrkd.ptTrBrkdInqVo)}">
-					<td colspan="6">
+				<tr>
+					<td colspan="6" th:if="${ptBrkd.pageVo.totalRowCount == '0'}">
 						<div class="no_data">
 							<p>내역이 없습니다.</p>
 						</div>
 					</td>
 				</tr>
+				
 				</tbody>
 			</table>
 		</div>

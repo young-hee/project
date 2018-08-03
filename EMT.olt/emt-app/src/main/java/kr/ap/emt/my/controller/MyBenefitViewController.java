@@ -54,9 +54,9 @@ public class MyBenefitViewController extends AbstractController {
 	public String myCouponList(Model model) {
 
 		//종료된쿠폰최대조회기간 90일
-		MemberKeepingCouponCount memberKeepingCouponsCount = couponApi.getMemberKeepingCouponsCount(getMemberSn(), 90L);
-		model.addAttribute("availCnt", memberKeepingCouponsCount.getAvailCnt());
-		model.addAttribute("expCnt", memberKeepingCouponsCount.getExpCnt());
+//		MemberKeepingCouponCount memberKeepingCouponsCount = couponApi.getMemberKeepingCouponsCount(getMemberSn(), 90L);
+//		model.addAttribute("availCnt", memberKeepingCouponsCount.getAvailCnt());
+//		model.addAttribute("expCnt", memberKeepingCouponsCount.getExpCnt());
 
 		/**
 		 * Mobile
@@ -122,7 +122,6 @@ public class MyBenefitViewController extends AbstractController {
 	public String myReviewList(Model model) {
 
 		String onOffNum = getMemberSession().getMember().getPosMemberIdentifier();
-		onOffNum = "17217245";
 		//회원등급정보
 		CustCstmAmt custCstmAmt = null;
 		try {
@@ -228,7 +227,6 @@ public class MyBenefitViewController extends AbstractController {
 	@FragmentPage
 	public String myReviewList(Model model, Integer pageNumber, String startDt, String endDt, String searchGbn) throws ParseException {
 		String onOffNum = getMemberSession().getMember().getPosMemberIdentifier();
-		onOffNum = "17217245";
 		if(pageNumber == null) pageNumber = 1;
 		
 		if(searchGbn == null) searchGbn = "ALL";

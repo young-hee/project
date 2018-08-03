@@ -9,6 +9,13 @@
 			<!-- pbreadcrumbe -->
 			<th:block ap:replace="~{common/fragment/breadcrumb-only}"/>
 			<!-- // pbreadcrumbe -->
+			<div id="progress" style="top: 0;margin-top: 800px;left: 0;margin-left: calc(50% + 130px);position: absolute;z-index: 10;opacity: 1;display: none;">
+				   <div class="loading_full">
+						<span>
+							<span style="color: red;font-weight: 900;">LOADING...</span>
+						</span>
+				   </div>
+			 </div>
 
 			<!-- com_cont -->
 			<div class="ap_com_cont mypage">
@@ -26,8 +33,8 @@
 					<div class="panel table_layout">
 						<div><em th:text="${#IntegUtil.toCommaNumber(point.rmnPt)}">123,456P</em> <span>사용가능합니다.</span></div>
 						<div class="align_right">
-							<a href="#" class="btn_lg_gradient">만료예정 뷰티포인트</a>
-							<button type="button" class="btn_lg_gradient">뷰티포인트 정책안내</button>
+							<a href="//www.beautypoint.co.kr/content/beautypoint/ko-kr/my-beautypoint/point.html" class="btn_lg_gradient">만료예정 뷰티포인트</a>
+							<button type="button" onclick="viewTerms()" class="btn_lg_gradient">뷰티포인트 정책안내</button>
 						</div>
 					</div>
 
@@ -68,6 +75,11 @@
 
 	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
 	<th:block ap:fragment="layout-endpoint">
+		<style>
+			.top-zero {
+				top: 0 !important;
+			}
+		</style>
 		<script>
 
 		var date = null;
@@ -78,47 +90,100 @@
 			}).on( 'multiple-date-picker-change', function (e) {
 				console.log( e.type, e.date );
 				date = e.date;
-			    $.get("/my/page/info/beautyPointListFragment?startDt="+e.date.startDate + "&endDt="+e.date.endDate + "&tlmcCd="+$('select[name=tlmcCd]').val(), function(data) {
+		    	$('#progress').show();
+		    	
+				AP.api.beautyPointListFragment({}, {
+						pageNumber:1,
+						startDt:e.date.startDate,
+						endDt:e.date.endDate,
+						tlmcCd:$('select[name=tlmcCd]').val()
+				}).done(function(data) {
+
 			    	date = e.date;
 			    	$(".pbody").remove();
 			    	$(".body").after(data);
 			    	$('#date2').html($('#date1').html());
-			    });
+			    	
+                }).fail(function(xhr, textStatus, errorThrown) {
+                	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+                }).always(function() {
+			    	$('#progress').hide();
+                    //성공, 실패
+                });
 			});
 			
 			
 		$('select[name=tlmcCd]').change(function() {
 
-			if(date == null) {
-			    $.get("/my/page/info/beautyPointListFragment?pageNumber=1&tlmcCd="+$('select[name=tlmcCd]').val(), function(data) {
-			    	$(".pbody").remove();
-			    	$(".body").after(data);
-			    	$('#date2').html($('#date1').html());
-			    });
-			} else {
-				$.get("/my/page/info/beautyPointListFragment?startDt="+date.startDate + "&endDt="+date.endDate + "&tlmcCd="+$('select[name=tlmcCd]').val(), function(data) {
-			    	$(".pbody").remove();
-			    	$(".body").after(data);
-			    	$('#date2').html($('#date1').html());
-			    });
-			}
+	    	$('#progress').show();
+	    	var startDtVal = null;
+	    	var endDtVal = null;
+	    	if(date != null) {
+	    		startDtVal = date.startDate;
+	    		endDtVal = date.endDate;
+	    	}
+			AP.api.beautyPointListFragment({}, {
+					pageNumber:1,
+					startDt:startDtVal,
+					endDt:endDtVal,
+					tlmcCd:$('select[name=tlmcCd]').val()
+			}).done(function(data) {
+
+		    	$(".pbody").remove();
+		    	$(".body").after(data);
+		    	$('#date2').html($('#date1').html());
+				
+            }).fail(function(xhr, textStatus, errorThrown) {
+            	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+            }).always(function() {
+		    	$('#progress').hide();
+                //성공, 실패
+            });
 		});
 		function more(page) {
 			if(page == 0 || page == null) return;
-			if(date != null) {
-			    $.get("/my/page/info/beautyPointListBodyFragment?pageNumber=" + page + "&startDt="+date.startDate + "&endDt="+date.endDate + "&tlmcCd="+$('select[name=tlmcCd]').val(), function(data) {
-			    	$('.pagination').remove();
-			    	$(".board_list2").replaceWith(data);
-			    	$('#date2').html($('#date1').html());
-			    });
-			} else {
-			    $.get("/my/page/info/beautyPointListBodyFragment?pageNumber=" + page + "&tlmcCd="+$('select[name=tlmcCd]').val(), function(data) {
-			    	$('.pagination').remove();
-			    	$(".board_list2").replaceWith(data);
-			    	$('#date2').html($('#date1').html());
-			    });
-			}
+	    	var startDtVal = null;
+	    	var endDtVal = null;
+	    	if(date != null) {
+	    		startDtVal = date.startDate;
+	    		endDtVal = date.endDate;
+	    	}
+			AP.api.beautyPointListBodyFragment({}, {
+					pageNumber:page,
+					startDt:startDtVal,
+					endDt:endDtVal,
+					tlmcCd:$('select[name=tlmcCd]').val()
+			}).done(function(data) {
+
+		    	$('.pagination').remove();
+		    	$(".board_list2").replaceWith(data);
+				
+            }).fail(function(xhr, textStatus, errorThrown) {
+            	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+            }).always(function() {
+		    	$('#progress').hide();
+                //성공, 실패
+            });
 			
+		}
+		function viewTerms() {
+
+		    $.get("/my/page/beautyPoint/termForm", function(data) {
+		        /**
+		         * 동적으로 생성된 modal의 Node Element 접근하기
+		         * alert, confirm, info 모두 동일
+		         */
+
+		        var contents = new Object();
+		        contents.contents = data;
+		        var modal = AP.modal.info(contents);
+		        var $modalEl = modal.getElement(); //jquery object
+
+		        $modalEl.find('.btn_fix_neutral').click(function() {
+		        	modal.close();
+		        });
+		        
+		    });
 		}
 		</script>
 	</th:block>

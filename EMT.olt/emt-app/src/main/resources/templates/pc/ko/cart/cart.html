@@ -142,6 +142,8 @@
 	/* 장바구니 번호 */
 	var cartSn = cartEx.cartSn;
 
+	var xhr;
+
 	/* 온라인 체크시 */
 	$('#onlinePrdCheck').on('click', function(e) {
 		if($(this).is(":checked")){
@@ -947,27 +949,39 @@
 
 	/* 맴버쉽,활동 포인트 체크 */
 	function fncheckExchPoint() {
-		var activitySum = 0;
-		var membershipSum = 0;
-		$("input[name=chkBox]:checked").each(function () {
-			var pointExch = $( this).attr('pointExch');
-			var point = $(this).attr('point');
-			if (pointExch == "activity") {
-				activitySum += Number(point);
+		if(memberSn > 0){
+
+			var membershipPoints = 0;
+			var activitySum = 0;
+			var membershipSum = 0;
+
+			$('[name=chkBox]:checked').each(function () {
+				if ($(this).attr('pointExch') != undefined && $(this).attr('pointExch') == "activity") {
+					activitySum += Number($(this).attr('point'));
+				}
+				if ($(this).attr('pointExch') != undefined && $(this).attr('pointExch') == "membership") {
+					membershipSum += Number($(this).attr('point'));
+				}
+			});
+
+			if (activitySum > cartEx.cartMemberEx.activityPoints) {
+				AP.modal.alert('교환 진주알이 보유 알보다 큽니다.');
+				$('[name="chkBox"]').attr('checked', false);
+				return false;
 			}
-			if (pointExch == "membership") {
-				membershipSum += Number(point);
+
+			if(bpMembershipEx != null){
+				membershipPoints = bpMembershipEx.membershipPoints;
+			}else{
+				membershipPoints = 0;
 			}
-		});
-		if (membershipSum > bpMembershipEx.membershipPoints) {
-			AP.modal.alert('교환 뷰티포인트가 보유 포인트보다 큽니다.');
-			return false;
+			if (membershipSum > membershipPoints) {
+				AP.modal.alert('교환 뷰티포인트가 보유 포인트보다 큽니다.');
+				$('[name="chkBox"]').attr('checked', false);
+				return false;
+			}
+			return true;
 		}
-		if (activitySum > cartEx.cartMemberEx.activityPoints) {
-			AP.modal.alert('교환 진주알이 보유 알보다 큽니다.');
-			return false;
-		}
-		return true;
 	}
 
 	/* 단일삭제(단위상품기준) */
@@ -1041,8 +1055,10 @@
 	}
 
 	/* 주문수량 수정 */
+
 	function prodQtyOperate(num, cartSn, cartProdSn, prodSn,
 							integrationMembershipExchYn, activityPointExchYn, storePickupYn, storeSn, operate) {
+
 		var ordQty = parseInt($(num).closest("div").find("input[name=cartProdQty]").val());
 		if(operate == '+'){
 			ordQty++;
@@ -1050,6 +1066,38 @@
 		else if(operate == '-'){
 			ordQty--;
 		}
+
+		/*if (xhr != null){
+			console.log("들어온다");
+			xhr.abort();
+		}
+
+		var indexed_array = {};
+		indexed_array['cartSn'] = cartSn;
+		indexed_array['cartProdSn'] = cartProdSn;
+		indexed_array['prodSn'] = prodSn;
+		indexed_array['cartProdQty'] = ordQty;
+		indexed_array['integrationMembershipExchYn'] = integrationMembershipExchYn == "" ? null : integrationMembershipExchYn;
+		indexed_array['activityPointExchYn'] = activityPointExchYn == "" ? null : activityPointExchYn;
+		indexed_array['storePickupYn'] = storePickupYn == "" ? null : storePickupYn;
+		indexed_array['storeSn'] = storeSn == "" ? null : storeSn;
+
+		xhr = $.ajax({
+			type: "PUT",
+			url: "/cart/modifyCartProd",
+			data: indexed_array,
+			error : function(xhr, textStatus, errorThrown) {},
+			success: function(data){
+				if (data.data) {
+					cartEx = data.data;
+					setOnlineProd();
+					setStoreProd();
+					setCalculationResult();
+					setProdCnt();
+				}
+			}
+		});*/
+
 		AP.api.modifyCartProd({}, {
 			cartSn : cartSn,
 			cartProdSn : cartProdSn,
@@ -1071,6 +1119,13 @@
 			AP.modal.alert("fail");
 		}).always(function () {
 		});
+
+		/*
+		xhr.abort();
+		if (xhr != null){
+			xhr.abort();
+			xhr = null;
+		}*/
 	}
 
 	/* 묶음상품 주문수량 수정 */

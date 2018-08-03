@@ -26,9 +26,17 @@
 	{{#each this.list}}
 	<tr>
 		<td class="acquire">{{dateFormat this.issueDt "YYYY-MM-DD"}}</td>
-		<td class="coupon_type">{{{couponTypeSwitch this.availCoupon}}}</td>
+		{{#xif this.searchType '==' 'Avail' }}
+			<td class="coupon_type">{{{couponTypeSwitch this.availCoupon}}}</td>
+		{{else}}
+			<td class="coupon_type">{{{couponTypeSwitch this.expCoupon}}}</td>
+		{{/xif}}
 		<td class="coupon_name">{{this.availCoupon.couponName}}</td>
-		<td class="coupon_benefit_type">{{{couponTypeBenefitSwitch this.availCoupon}}}</td>
+		{{#xif this.searchType '==' 'Avail' }}
+			<td class="coupon_benefit_type">{{{couponTypeBenefitSwitch this.availCoupon}}}</td>
+		{{else}}
+			<td class="coupon_benefit_type">{{{couponTypeBenefitSwitch this.expCoupon}}}</td>
+		{{/xif}}
 		<td class="expiration_date">
 			{{#if this.useDt}}
 				<span class="flag_state">사용</span>{{dateFormat this.useDt "YYYY-MM-DD"}}

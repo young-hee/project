@@ -30,9 +30,8 @@ this["AP"]["handlebars"]["display"]["pearl-store-detail-product-list"] = Handleb
     + ((stack1 = alias1((depth0 != null ? depth0.linePromoDesc : depth0), depth0)) != null ? stack1 : "")
     + " </span>\n									</p>\n									<h3 class=\"h_title\">"
     + alias2(alias1((depths[1] != null ? depths[1].onlineProdName : depths[1]), depth0))
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.saleDisplayStatus : depth0),"==","OutOfStock",{"name":"xif","hash":{},"fn":container.program(5, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "</h3>\n								</div>\n\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depths[1] != null ? depths[1].singleUnitProdYn : depths[1]),"==","N",{"name":"xif","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depths[1] != null ? depths[1].singleUnitProdYn : depths[1]),"==","N",{"name":"xif","hash":{},"fn":container.program(5, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n								<div class=\"price_area\">\n									<div>\n										<div class=\"price\">\n											<strong>"
     + alias2((helpers.numberFormat || (depth0 && depth0.numberFormat) || alias4).call(alias3,(depth0 != null ? depth0.exchActivityPoint : depth0),{"name":"numberFormat","hash":{},"data":data}))
     + "<em> 알</em></strong>\n										</div>\n									</div>\n								</div>\n							</div>\n\n							<div class=\"option_select\">\n								<button type=\"button\" class=\"btn_order\" data-online-prod-sn=\""
@@ -43,17 +42,15 @@ this["AP"]["handlebars"]["display"]["pearl-store-detail-product-list"] = Handleb
     + ((stack1 = (helpers.stockBtn || (depth0 && depth0.stockBtn) || alias4).call(alias3,(depth0 != null ? depth0.saleDisplayStatus : depth0),(depth0 != null ? depth0.prodTypeCode : depth0),{"name":"stockBtn","hash":{},"data":data})) != null ? stack1 : "")
     + " >담기</button>\n							</div>\n						</div>\n					</li>\n\n";
 },"5":function(container,depth0,helpers,partials,data) {
-    return " [일시품절]";
-},"7":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
   return "									<div class=\"item_option type2\">\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.colorchipTypeCode : depth0),"==","RGB",{"name":"xif","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.colorchipTypeCode : depth0),"==","Img",{"name":"xif","hash":{},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.colorchipTypeCode : depth0),"==","RGB",{"name":"xif","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.colorchipTypeCode : depth0),"==","Img",{"name":"xif","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "										<span class=\"name\">"
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.prodName : depth0), depth0))
     + "</span>\n									</div>\n";
-},"8":function(container,depth0,helpers,partials,data) {
+},"6":function(container,depth0,helpers,partials,data) {
     var alias1=container.escapeExpression;
 
   return "											<span class=\"img\" style=\"background-color:#"
@@ -61,7 +58,7 @@ this["AP"]["handlebars"]["display"]["pearl-store-detail-product-list"] = Handleb
     + "\">\n												<img alt=\"컬러명\" src=\""
     + alias1((helpers.absolutePath || (depth0 && depth0.absolutePath) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"/images/common/transparent_40x40.png",{"name":"absolutePath","hash":{},"data":data}))
     + "\">\n											</span>\n";
-},"10":function(container,depth0,helpers,partials,data) {
+},"8":function(container,depth0,helpers,partials,data) {
     return "											<span class=\"img\">\n												<img alt=\"컬러명\" src=\""
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.colorchipImg : depth0), depth0))
     + "\">\n											</span>\n";

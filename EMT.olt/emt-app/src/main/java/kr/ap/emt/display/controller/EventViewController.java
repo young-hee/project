@@ -360,10 +360,13 @@ public class EventViewController extends AbstractController {
         	//pageName = "/display/M02_free_sample_p"; 
         }
         
+        RegularEvent regularEvent = regulareventApi.regularEventSummary(APConstant.SAMPLE_EXPERIENCE_GRP);
+        
         PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
         
         model.addAttribute("displayMenuId", displayMenuId);
-     
+        model.addAttribute("regularEvent", regularEvent);
+        
         return "display/" + pageInfo.getMenuPageFileId();
 
     }

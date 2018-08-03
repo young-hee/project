@@ -11,30 +11,54 @@ this["AP"]["handlebars"]["my"]["coupon-list"] = Handlebars.template({"1":functio
 
   return "	<tr>\n		<td class=\"acquire\">"
     + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,(depth0 != null ? depth0.issueDt : depth0),"YYYY-MM-DD",{"name":"dateFormat","hash":{},"data":data}))
-    + "</td>\n		<td class=\"coupon_type\">"
-    + ((stack1 = (helpers.couponTypeSwitch || (depth0 && depth0.couponTypeSwitch) || alias2).call(alias1,(depth0 != null ? depth0.availCoupon : depth0),{"name":"couponTypeSwitch","hash":{},"data":data})) != null ? stack1 : "")
-    + "</td>\n		<td class=\"coupon_name\">"
+    + "</td>\n"
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.searchType : depth0),"==","Avail",{"name":"xif","hash":{},"fn":container.program(6, data, 0),"inverse":container.program(8, data, 0),"data":data})) != null ? stack1 : "")
+    + "		<td class=\"coupon_name\">"
     + alias3(container.lambda(((stack1 = (depth0 != null ? depth0.availCoupon : depth0)) != null ? stack1.couponName : stack1), depth0))
-    + "</td>\n		<td class=\"coupon_benefit_type\">"
-    + ((stack1 = (helpers.couponTypeBenefitSwitch || (depth0 && depth0.couponTypeBenefitSwitch) || alias2).call(alias1,(depth0 != null ? depth0.availCoupon : depth0),{"name":"couponTypeBenefitSwitch","hash":{},"data":data})) != null ? stack1 : "")
-    + "</td>\n		<td class=\"expiration_date\">\n"
-    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.useDt : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.program(8, data, 0),"data":data})) != null ? stack1 : "")
+    + "</td>\n"
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.searchType : depth0),"==","Avail",{"name":"xif","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(12, data, 0),"data":data})) != null ? stack1 : "")
+    + "		<td class=\"expiration_date\">\n"
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.useDt : depth0),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.program(16, data, 0),"data":data})) != null ? stack1 : "")
     + "		</td>\n"
-    + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.availCoupon : depth0)) != null ? stack1.foGuide : stack1),{"name":"if","hash":{},"fn":container.program(13, data, 0),"inverse":container.program(15, data, 0),"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.availCoupon : depth0)) != null ? stack1.foGuide : stack1),{"name":"if","hash":{},"fn":container.program(21, data, 0),"inverse":container.program(23, data, 0),"data":data})) != null ? stack1 : "")
     + "	</tr>\n";
 },"6":function(container,depth0,helpers,partials,data) {
-    return "				<span class=\"flag_state\">사용</span>"
-    + container.escapeExpression((helpers.dateFormat || (depth0 && depth0.dateFormat) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.useDt : depth0),"YYYY-MM-DD",{"name":"dateFormat","hash":{},"data":data}))
-    + "\n";
+    var stack1;
+
+  return "			<td class=\"coupon_type\">"
+    + ((stack1 = (helpers.couponTypeSwitch || (depth0 && depth0.couponTypeSwitch) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.availCoupon : depth0),{"name":"couponTypeSwitch","hash":{},"data":data})) != null ? stack1 : "")
+    + "</td>\n";
 },"8":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return ((stack1 = helpers["if"].call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.expDt : depth0),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.program(11, data, 0),"data":data})) != null ? stack1 : "");
-},"9":function(container,depth0,helpers,partials,data) {
+  return "			<td class=\"coupon_type\">"
+    + ((stack1 = (helpers.couponTypeSwitch || (depth0 && depth0.couponTypeSwitch) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.expCoupon : depth0),{"name":"couponTypeSwitch","hash":{},"data":data})) != null ? stack1 : "")
+    + "</td>\n";
+},"10":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return "			<td class=\"coupon_benefit_type\">"
+    + ((stack1 = (helpers.couponTypeBenefitSwitch || (depth0 && depth0.couponTypeBenefitSwitch) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.availCoupon : depth0),{"name":"couponTypeBenefitSwitch","hash":{},"data":data})) != null ? stack1 : "")
+    + "</td>\n";
+},"12":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return "			<td class=\"coupon_benefit_type\">"
+    + ((stack1 = (helpers.couponTypeBenefitSwitch || (depth0 && depth0.couponTypeBenefitSwitch) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.expCoupon : depth0),{"name":"couponTypeBenefitSwitch","hash":{},"data":data})) != null ? stack1 : "")
+    + "</td>\n";
+},"14":function(container,depth0,helpers,partials,data) {
+    return "				<span class=\"flag_state\">사용</span>"
+    + container.escapeExpression((helpers.dateFormat || (depth0 && depth0.dateFormat) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.useDt : depth0),"YYYY-MM-DD",{"name":"dateFormat","hash":{},"data":data}))
+    + "\n";
+},"16":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return ((stack1 = helpers["if"].call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.expDt : depth0),{"name":"if","hash":{},"fn":container.program(17, data, 0),"inverse":container.program(19, data, 0),"data":data})) != null ? stack1 : "");
+},"17":function(container,depth0,helpers,partials,data) {
     return "				<span class=\"flag_state\">만료</span>"
     + container.escapeExpression((helpers.dateFormat || (depth0 && depth0.dateFormat) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.expDt : depth0),"YYYY-MM-DD",{"name":"dateFormat","hash":{},"data":data}))
     + "\n";
-},"11":function(container,depth0,helpers,partials,data) {
+},"19":function(container,depth0,helpers,partials,data) {
     var alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
   return "				"
@@ -42,13 +66,13 @@ this["AP"]["handlebars"]["my"]["coupon-list"] = Handlebars.template({"1":functio
     + " ~ "
     + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,(depth0 != null ? depth0.finalExpExpectedDt : depth0),"YYYY-MM-DD",{"name":"dateFormat","hash":{},"data":data}))
     + "\n			";
-},"13":function(container,depth0,helpers,partials,data) {
+},"21":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "			<td class=\"limit_of_usage\">\n				<span class=\"ui_tooltip_tit\">사용제한 보기</span>\n				<span class=\"\">\n					<span class=\"ui_tooltip\">\n						<button type=\"button\" class=\"btn_tooltip\">툴팁보기</button>\n						<span class=\"arr\"></span>\n						<span class=\"layer_tooltip\">\n							<pre>"
     + ((stack1 = container.lambda(((stack1 = (depth0 != null ? depth0.availCoupon : depth0)) != null ? stack1.foGuide : stack1), depth0)) != null ? stack1 : "")
     + "</pre>\n							<button type=\"button\" class=\"ui_close\"><span class=\"sr_only\">툴팁 닫기</span></button>\n						</span>\n					</span>\n				</span>\n			</td>\n";
-},"15":function(container,depth0,helpers,partials,data) {
+},"23":function(container,depth0,helpers,partials,data) {
     return "			<td class=\"limit_of_usage\">\n			</td>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});

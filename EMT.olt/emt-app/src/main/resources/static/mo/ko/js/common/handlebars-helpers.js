@@ -33,7 +33,7 @@
 			 break;
 		 case 'OutOfStock':		//품절
 		 case 'Exhaustion':		//조기소진
-		 case 'WaitingSale':	//판매대기	
+		 //case 'WaitingSale':	//판매대기	
 		 case 'SuspendSale':	//판매일시중지
 		 case 'EndSale':		//판매종료
 			 stockImg = '<div class="item_state out_of_stock">'+ txt +'</div>';
@@ -64,7 +64,7 @@
 			 stockTxt = '[조기소진]';
 			 break;
 		 case 'WaitingSale':	//판매대기	
-			 stockTxt = '[판매대기]';
+			 stockTxt = '[곧 출시!]';
 			 break;
 		 case 'SuspendSale':	//판매일시중지
 			 stockTxt = '[판매중지]';

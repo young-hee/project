@@ -78,13 +78,13 @@
 		_setRepImage: function () {
 			var repImg = '';
 			if ( this._data.prodListUnitCode == 'OnlineProd' ) {
+				if ( this._data.repImgNo == 1 )				return;
 				repImg = this._data.onlineProdImages[this._data.repImgNo - 1];
 			} else {
+				if ( this._data.products[0].repImgNo == 1 )	return;
 				repImg = this._data.products[0].prodImages[this._data.products[0].repImgNo - 1];
 			}
-			if ( repImg ) {
-				this._$target.find( '.first_img img' ).attr( 'src', repImg.imgUrl );
-			}
+			this._$target.find( '.first_img img' ).data( 'src', repImg.imgUrl );
 		},
 
 		_setColorChip: function () {

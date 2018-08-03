@@ -96,7 +96,6 @@ public class MyViewControllor extends AbstractController {
 	@PageTitle(title = "마이 에뛰드")
 	public String myEtude(Model model) {
 
-		String onOffNum = getMemberSession().getMember().getPosMemberIdentifier();
 		//주문/배송 조회
 		Date endDate = new Date();
 		Date startDate = DateUtils.addMonths(endDate, -3);
@@ -143,7 +142,7 @@ public class MyViewControllor extends AbstractController {
 			}
 			{
 				try {
-					CustCushinPoint cushin = posService.getCustCushinPoint(onOffNum);
+					CustCushinPoint cushin = posService.getCustCushinPoint(getMemberSession().getUser_incsNo());
 					if(cushin == null) {
 						cushin = new CustCushinPoint();
 						if(memberSession.getMember().getRemainCushionPoint() == null) {

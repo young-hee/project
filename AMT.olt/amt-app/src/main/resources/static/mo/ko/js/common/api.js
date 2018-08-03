@@ -146,6 +146,9 @@
 		checkPresentMember: { path: '/my/point/api/checkPresentMember', method: 'POST'},
 		//포인트 선물!
 		presentPoint: { path: '/my/point/api/presentPoint', method: 'POST'},
+		//뷰티포인트 리스트.
+		beautyPointListFragment: { path: '/my/page/info/beautyPointListFragment', method: 'GET', dataType: 'html'},
+		beautyPointListBodyFragment: { path: '/my/page/info/beautyPointListBodyFragment', method: 'GET', dataType: 'html'},
 		
 		//간단 점유인증 전송
 		simpleCertifySend: { path: '/my/api/simpleCertifySend', method: 'POST'},
