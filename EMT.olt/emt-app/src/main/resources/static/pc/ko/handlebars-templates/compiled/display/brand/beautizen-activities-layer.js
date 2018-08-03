@@ -6,7 +6,9 @@ this["AP"]["handlebars"]["display"]["brand"] = this["AP"]["handlebars"]["display
 this["AP"]["handlebars"]["display"]["brand"]["beautizen-activities-layer"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "\n<h4 class=\"h_title sub\"></h4>\n<div class=\"ui_table\" id=\"activity_"
+  return "\n<h4 class=\"h_title sub h_"
+    + alias2(alias1((depth0 != null ? depth0.layerCnt : depth0), depth0))
+    + "\"></h4>\n<div class=\"ui_table\" id=\"activity_"
     + alias2(alias1((depth0 != null ? depth0.layerCnt : depth0), depth0))
     + "\" name=\""
     + alias2(alias1((depth0 != null ? depth0.layerCnt : depth0), depth0))

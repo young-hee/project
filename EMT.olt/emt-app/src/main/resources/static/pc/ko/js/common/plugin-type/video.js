@@ -214,7 +214,8 @@
 
 			dispatch( 'ready' );
 		}
-
+		
+		
 		function onPlayerStateChange (e) {
 			//재생중=1 버퍼링중=3
 			if ( e.data === YT.PlayerState.PLAYING || e.data === YT.PlayerState.BUFFERING ) {
@@ -234,7 +235,9 @@
 				if ( _timer ) _timer.reset();
 
 				if ( e.data === -1 || e.data === YT.PlayerState.ENDED ) {
+				
 					if(e.data === YT.PlayerState.ENDED){
+                		_video.stopVideo();
                 		_$thumb.show();
                 	}
 					dispatch( 'stop' );

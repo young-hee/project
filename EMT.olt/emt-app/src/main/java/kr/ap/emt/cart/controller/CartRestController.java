@@ -6,30 +6,52 @@
  */
 package kr.ap.emt.cart.controller;
 
-import kr.ap.comm.member.vo.MemberSession;
-import kr.ap.comm.support.common.AbstractController;
-import net.g1project.ecp.api.exception.ApiException;
-import net.g1project.ecp.api.model.BooleanResult;
-import net.g1project.ecp.api.model.offlinestore.store.*;
-import net.g1project.ecp.api.model.sales.cart.*;
-import org.apache.commons.lang.ArrayUtils;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
-import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.*;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import kr.ap.comm.member.vo.MemberSession;
+import net.g1project.ecp.api.exception.ApiException;
+import net.g1project.ecp.api.model.BooleanResult;
+import net.g1project.ecp.api.model.offlinestore.store.AddressDivInfo;
+import net.g1project.ecp.api.model.offlinestore.store.ProdInvtEx;
+import net.g1project.ecp.api.model.offlinestore.store.RegularStoreForPost;
+import net.g1project.ecp.api.model.offlinestore.store.RegularStorePostResult;
+import net.g1project.ecp.api.model.offlinestore.store.StoreResult;
+import net.g1project.ecp.api.model.offlinestore.store.StoresInvtSearchInfo;
+import net.g1project.ecp.api.model.sales.cart.CartBulkIncludedProdExPost;
+import net.g1project.ecp.api.model.sales.cart.CartBulkIncludedProdExPut;
+import net.g1project.ecp.api.model.sales.cart.CartEx;
+import net.g1project.ecp.api.model.sales.cart.CartOnlineProdEx;
+import net.g1project.ecp.api.model.sales.cart.CartProdCountInfo;
+import net.g1project.ecp.api.model.sales.cart.CartProdEx;
+import net.g1project.ecp.api.model.sales.cart.CartProdExPost;
+import net.g1project.ecp.api.model.sales.cart.CartProdExPut;
+import net.g1project.ecp.api.model.sales.cart.CartPromoEx;
+import net.g1project.ecp.api.model.sales.cart.CartSnResult;
+import net.g1project.ecp.api.model.sales.cart.ProdEx;
+import net.g1project.ecp.api.model.sales.cart.SameTimePurCartProd;
+import net.g1project.ecp.api.model.sales.cart.SameTimePurCartProdSet;
+
 @Controller
 @RequestMapping("/cart")
-public class CartRestController extends AbstractController{
+public class CartRestController extends CartBaseController{
 
 	/**
 	 * 베리에이션 목록
@@ -85,7 +107,8 @@ public class CartRestController extends AbstractController{
 											Long cartBulkIncludedProdSn,
 											Long bulkDcIncludedProdGrpSn,
 											Long includedProdSn,
-											Integer	includedProdQty
+											Integer	includedProdQty,
+											String modifyType
 											){
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -489,6 +512,7 @@ public class CartRestController extends AbstractController{
 					}
 				}
 			}
+			//CartEx ce = calculationBySelect(cartSn, cartProdSnList);
 			CartEx ce = cartApi.getCartBySelectCartProds(cartSn, cartProdSnList);
 			result.put("data", makeCartEx2(ce));
 		} catch (Exception e) {
@@ -1055,4 +1079,6 @@ public class CartRestController extends AbstractController{
 		}
 		return false;
 	}
+	
+	
 }

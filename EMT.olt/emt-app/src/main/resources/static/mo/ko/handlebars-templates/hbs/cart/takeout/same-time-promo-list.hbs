@@ -24,7 +24,7 @@
 			<div class="cart_item_box">
 				<div class="cart_name_wrap">
 					<span class="check_wrap">
-						<input type="takeoutChkBox" name="takeoutChkBox" id="chkBox{{prodEx.prodSn}}" value="{{../onlineProdSn}}" {{#if (ne ../saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq ../selectYn 'Y') ) 'checked' ''}}>
+						<input type="hidden" name="takeoutChkBox" id="takeoutChkBox{{prodEx.prodSn}}" value="{{../onlineProdSn}}" {{#if (ne ../saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq ../selectYn 'Y') ) 'checked' ''}}>
 						<label for="takeoutChkBox{{prodEx.prodSn}}">체크</label>
 					</span>
 					{{#xif prodEx.repProdImgEx '!=' null }} <img src="{{ prodEx.repProdImgEx.imgUrl }}" class="thm_cart_item" alt=""> {{/xif}}

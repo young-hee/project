@@ -1,6 +1,7 @@
 package kr.ap.comm.member.vo;
 
 import net.g1project.ecp.api.model.ap.ap.ApMember;
+import net.g1project.ecp.api.model.sales.cart.CartEx;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -39,6 +40,8 @@ public class MemberSession implements Serializable {
 	private Long cartSn = 0L;
 
 	private String cartProdSnList;
+
+	private CartEx cartEx;
 
 	/**
 	 * 주문번호
@@ -272,5 +275,19 @@ public class MemberSession implements Serializable {
 	public void setAutoLoginToken(String autoLoginToken) {
 		this.autoLoginToken = autoLoginToken;
 	}
+
+    /**
+     * @return the cartEx
+     */
+    public CartEx getCartEx() {
+        return cartEx;
+    }
+
+    /**
+     * @param cartEx the cartEx to set
+     */
+    public void setCartEx(CartEx cartEx) {
+        this.cartEx = cartEx;
+    }
 
 }

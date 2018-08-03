@@ -4,16 +4,16 @@ this["AP"]["handlebars"]["display"] = this["AP"]["handlebars"]["display"] || {};
 this["AP"]["handlebars"]["display"]["product-list"] = this["AP"]["handlebars"]["display"]["product-list"] || {};
 
 this["AP"]["handlebars"]["display"]["product-list"]["flagged-item"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression, alias4=container.lambda;
 
   return "<li class=\"ix-list-item\">\n	<div class=\"item\">\n		<div class=\"item_images\">\n			<!--/* 대표 이미지 */-->\n			<a href=\""
     + alias3((helpers.productDetailPath || (depth0 && depth0.productDetailPath) || alias2).call(alias1,(depth0 != null ? depth0.onlineProdSn : depth0),{"name":"productDetailPath","hash":{},"data":data,"blockParams":blockParams}))
     + "\" class=\"lazy_load_wrap first_img\">\n				<img class=\"lazy_load\" src=\"\" data-src=\""
-    + alias3((helpers.absolutePath || (depth0 && depth0.absolutePath) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.onlineProdImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1),{"name":"absolutePath","hash":{},"data":data,"blockParams":blockParams}))
+    + alias3(alias4(((stack1 = ((stack1 = (depth0 != null ? depth0.prodImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
     + "\" alt=\"\">\n			</a>\n		</div>\n		<div class=\"info_box\">\n			<!--/* flag */-->\n			<div class=\"flag_set\">\n"
     + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.flags : depth0),{"name":"each","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"blockParams":blockParams})) != null ? stack1 : "")
     + "			</div>\n			<!--/* 상품명 */-->\n			<div class=\"title_area\">\n				<h3 class=\"h_title\">"
-    + alias3(container.lambda((depth0 != null ? depth0.onlineProdName : depth0), depth0))
+    + alias3(alias4((depth0 != null ? depth0.onlineProdName : depth0), depth0))
     + "</h3>\n			</div>\n			<!--/* color 옵션 */-->\n			<!-- 상품 옵션 영역 7개 이상 -->\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.productCount : depth0),{"name":"if","hash":{},"fn":container.program(13, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"blockParams":blockParams})) != null ? stack1 : "")
     + "\n			<!--/* 가격,장바구니 */-->\n			<div class=\"price_area\">\n"

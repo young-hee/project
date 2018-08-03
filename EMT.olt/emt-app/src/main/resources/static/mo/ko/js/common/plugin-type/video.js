@@ -235,9 +235,10 @@
                 if ( e.data === -1 || e.data === YT.PlayerState.ENDED ) {
                 	
                 	if(e.data === YT.PlayerState.ENDED){
+                		_video.stopVideo();
                 		_$thumb.show();
                 	}
-                		dispatch( 'stop' );
+                	dispatch( 'stop' );
                 } else if ( e.data === YT.PlayerState.PAUSED ) {
                     dispatch( 'pause' );
                 }

@@ -404,7 +404,7 @@ this["AP"]["handlebars"]["cart"]["takeout"]["mn-promo-list"] = Handlebars.templa
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
     + "\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1), depth0))
-    + "\"/>\n\n						<div class=\"item_info\">\n							<!--/* 상품 선택 */-->\n							<div class=\"item_thumb\">\n								<div class=\"check_wrap\">\n									<input type=\"checkbox\" name=\"takeoutChkBox\" id=\"takeoutChkBox"
+    + "\"/>\n						<div class=\"item_info\">\n							<!--/* 상품 선택 */-->\n							<div class=\"item_thumb\">\n								<div class=\"check_wrap\">\n									<input type=\"checkbox\" name=\"takeoutChkBox\" id=\"takeoutChkBox"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
     + "\" value=\""
     + alias2(alias1((depths[1] != null ? depths[1].onlineProdSn : depths[1]), depth0))

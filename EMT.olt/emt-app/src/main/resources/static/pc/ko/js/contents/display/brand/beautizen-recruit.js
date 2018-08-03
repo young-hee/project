@@ -13,7 +13,7 @@
 		initialize: function () {
 			this._$target = $( '#ap_container .beautizen-recruit' );
 			this._data = null;
-			this._$deleteBtn = this._$target.find( 'div.activities_history .btn_delete' );
+			//this._$deleteBtn = this._$target.find( '.activities_history .btn_delete');
 			
 			this._load();
 			this._setEvent();
@@ -21,6 +21,8 @@
 			
 			this._setMobileVerification();
 			this._mobileVerifSn = '';
+			
+			
 		},
 		
 		/** =============== Public Methods ================ */
@@ -33,8 +35,6 @@
 			if(AP.DISPLAY_MENU_ID === 'beautizen_update' ){
 				
 				if(this._data === null){ //한번도 저장한 적이 없다면
-					
-					
 					
 				}else {
 				
@@ -166,14 +166,22 @@
 					AP.modal.alert( '대외 활동 추가 작성은 10개까지만 가능합니다.');
 				}else {
 					this._addActivities();
+					
 				}
 				
 			}.bind( this ));
 			// 대외활동 삭제 
-			this._$target.find('.btn_delete' ).on( 'click', function (e) {
+			
+			/*this._$deleteBtn.on('click' , function (e) {
 				
-				alert('d'); 
+				console.log(e); 
+			}.bind( this ));*/
+			
+			this._$target.find('.activities_history button' ).on( 'click', function (e) {
+
+				console.log('삭제버튼 찾기'); 
 			}.bind( this ));
+			
 			// 임시 저장  validate noCheck
 			this._$target.find( '.form_btns .temp' ).on( 'click', function (e) {  
 				  
@@ -271,8 +279,7 @@
 			    $(selectBoxs[0]).selectBox('updated'); 
 			    
 			    this._$target.find('div[name='+count+'] textarea,input:text').placeholder( 'updated' ); // 변경된 내용 업데이트
-			    
-			    
+			    			    
 				$(activity).find('select[name=activityType]').val('');
 				$(activity).find('select[name=activityType]').selectBox('updated');
 				
@@ -285,6 +292,15 @@
 				
 				$(activity).find('textarea , input:text').placeholder('updated');  // 기본 폼 업데이트 
 				$(activity).find('textarea , input:text').placeholder('');
+				
+				this._$target.find('div#activity_'+count+' .btn_delete').off('click');
+				
+				this._$target.find('div#activity_'+count+' .btn_delete').on('click',function(e){
+					 
+					this._$target.find('.activities_history div#activity_'+count).remove();
+					
+					this._$target.find('.activities_history .h_'+count).remove();
+				}.bind(this));
 				
 		},	
 		

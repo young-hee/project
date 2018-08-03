@@ -566,7 +566,7 @@
 		});
 	}
 
-	/* 단골매장 등록11 */
+	/* 단골매장 등록 */
 	function addTakeoutStore(storeSn, element, name) {
 		AP.api.addTakeoutStore({}, {
 			storeSn : storeSn
@@ -587,7 +587,7 @@
 		});
 	}
 
-	/* 단골매장 취소11 */
+	/* 단골매장 취소 */
 	function delTakeoutStore(storeSn, element, name) {
 		AP.api.delTakeoutStore({}, {
 			storeSn : storeSn
@@ -808,7 +808,8 @@
 							cartProdSn : cartProdSn,
 							prodSn : prodSnVal,
 							cartProdQty : cartProdQty,
-							storePickupYn : storePickupYn
+							storePickupYn : storePickupYn,
+							modifyType : 'O' // option type setting..
 						}).done(function (data) {
 							if (data.data) {
 								cartEx = data.data;
@@ -846,24 +847,46 @@
 			return false;
 		}
 		AP.modal.confirm( '선택한 상품을 장바구니에서 삭제하시겠습니까? ' ).addListener( 'modal-close', function (e) {
-			//console.log( e.closeType ); //close, confirm, cancel
 			if(e.closeType == 'confirm'){
 				var prdCdArr = [];
 				var takeoutCdArr = [];
+				var prdInfoVal ;
+
+				/*if(chkCnt > 0 ){
+					$("input[name=chkBox]:checked").each(function() {
+						var rowPromoSn = $(this).attr('promoSn');
+						console.log(rowPromoSn);
+						if(rowPromoSn != undefined || rowPromoSn != null){
+							$('.item_wrap').find("[name='promoInfo_" + rowPromoSn + "']").each(function(){
+								prdInfoVal = $(this).val();
+								prdCdArr.push(prdInfoVal);
+							});
+						}
+						else{
+							var rowChkVal = $(this).val();
+							$('.item_wrap').find("[name='prdInfo_" + rowChkVal + "']").each(function(){
+								prdInfoVal = $(this).val();
+								prdCdArr.push(prdInfoVal);
+							});
+						}
+					});
+				}*/
+
 				if(chkCnt > 0 ){
 					$("input[name=chkBox]:checked").each(function() {
 						var rowChkVal = $(this).val();
 						$('.item_wrap').find("[name='prdInfo_" + rowChkVal + "']").each(function(){
-							var prdInfoVal = $(this).val();
+							prdInfoVal = $(this).val();
 							prdCdArr.push(prdInfoVal);
 						});
 					});
 				}
+
 				if(takeoutChkCnt > 0 ) {
 					$("input[name=takeoutChkBox]:checked").each(function () {
 						var rowChkVal = $(this).val();
 						$('.item_wrap').find("[name='takeoutPrdInfo_" + rowChkVal + "']").each(function () {
-							var prdInfoVal = $(this).val();
+							prdInfoVal = $(this).val();
 							takeoutCdArr.push(prdInfoVal);
 						});
 					});
@@ -886,7 +909,6 @@
 				}).fail(function (e) {
 					AP.modal.alert("fail");
 				}).always(function () {
-
 				});
 			}
 		});
@@ -984,6 +1006,50 @@
 		}
 	}
 
+	/* 단일삭제(동시구매상품) */
+	function sameTimeRemoveCartProd(cartSn, promoSn, method) {
+		AP.modal.confirm( '선택한 상품을 장바구니에서 삭제하시겠습니까? ' ).addListener( 'modal-close', function (e) {
+			if(e.closeType == 'confirm'){
+				var prdCdArr = [];
+				var takeoutCdArr = [];
+				var rowCartProdSn ;
+
+				if(method == 'online') {
+					$('.item_wrap').find("[name='promoInfo_" + promoSn + "']").each(function () {
+						rowCartProdSn = $(this).val();
+						prdCdArr.push(rowCartProdSn);
+					})
+				}
+				if(method == 'takeout') {
+					$('.item_wrap').find("[name='takeoutPromoInfo_" + promoSn + "']").each(function () {
+						rowCartProdSn = $(this).val();
+						takeoutCdArr.push(rowCartProdSn);
+					})
+				}
+				jQuery.ajaxSettings.traditional = true;
+				AP.api.removeSelectCartProd({}, {
+					cartSn : cartSn,
+					prdCdArr: prdCdArr,
+					takeoutCdArr: takeoutCdArr
+				}).done(function (data) {
+					if (data.data) {
+						AP.modal.alert("해당상품이 삭제되었습니다.").addListener( 'modal-close', function (e) {
+							cartEx = data.data;
+							setOnlineProd();
+							setStoreProd();
+							setCalculationResult();
+							setProdCnt();
+						});
+					}
+				}).fail(function (e) {
+					AP.modal.alert("fail");
+				}).always(function () {
+					// 성공, 실패
+				});
+			}
+		});
+	}
+
 	/* 단일삭제(단위상품기준) */
 	function removeCartProd(cartSn, cartProdSn) {
 		AP.modal.confirm( '선택한 상품을 장바구니에서 삭제하시겠습니까? ' ).addListener( 'modal-close', function (e) {
@@ -1067,8 +1133,7 @@
 			ordQty--;
 		}
 
-		/*if (xhr != null){
-			console.log("들어온다");
+		if (xhr != null){
 			xhr.abort();
 		}
 
@@ -1077,10 +1142,11 @@
 		indexed_array['cartProdSn'] = cartProdSn;
 		indexed_array['prodSn'] = prodSn;
 		indexed_array['cartProdQty'] = ordQty;
-		indexed_array['integrationMembershipExchYn'] = integrationMembershipExchYn == "" ? null : integrationMembershipExchYn;
-		indexed_array['activityPointExchYn'] = activityPointExchYn == "" ? null : activityPointExchYn;
-		indexed_array['storePickupYn'] = storePickupYn == "" ? null : storePickupYn;
-		indexed_array['storeSn'] = storeSn == "" ? null : storeSn;
+		indexed_array['storePickupYn'] = storePickupYn;
+		indexed_array['storeSn'] = storeSn;
+		indexed_array['integrationMembershipExchYn'] = integrationMembershipExchYn;
+		indexed_array['activityPointExchYn'] = activityPointExchYn;
+		indexed_array['modifyType'] = "Q";
 
 		xhr = $.ajax({
 			type: "PUT",
@@ -1096,41 +1162,13 @@
 					setProdCnt();
 				}
 			}
-		});*/
-
-		AP.api.modifyCartProd({}, {
-			cartSn : cartSn,
-			cartProdSn : cartProdSn,
-			prodSn : prodSn,
-			cartProdQty: ordQty,
-			integrationMembershipExchYn : integrationMembershipExchYn == "" ? null : integrationMembershipExchYn,
-			activityPointExchYn : activityPointExchYn == "" ? null : activityPointExchYn,
-			storePickupYn : storePickupYn == "" ? null : storePickupYn,
-			storeSn : storeSn == "" ? null : storeSn
-		}).done(function (data) {
-			if (data.data) {
-				cartEx = data.data;
-				setOnlineProd();
-				setStoreProd();
-				setCalculationResult();
-				setProdCnt();
-			}
-		}).fail(function (e) {
-			AP.modal.alert("fail");
-		}).always(function () {
 		});
-
-		/*
-		xhr.abort();
-		if (xhr != null){
-			xhr.abort();
-			xhr = null;
-		}*/
 	}
 
 	/* 묶음상품 주문수량 수정 */
 	function bulkProdQtyOperate(num, cartSn, cartProdSn, prodSn, storePickupYn, storeSn,
 								cartBulkIncludedProdSn, bulkDcIncludedProdGrpSn, includedProdSn, includedProdQty, operate) {
+
 		var ordQty = parseInt($(num).closest("div").find("input[name=cartProdQty]").val());
 		if(operate == '+'){
 			ordQty++;
@@ -1138,28 +1176,36 @@
 		else if(operate == '-'){
 			ordQty--;
 		}
-		AP.api.modifyCartProd({}, {
-			cartSn : cartSn,
-			cartProdSn : cartProdSn,
-			prodSn : prodSn,
-			cartProdQty: ordQty,
-			storePickupYn : storePickupYn == "" ? null : storePickupYn,
-			storeSn : storeSn == "" ? null : storeSn,
-			cartBulkIncludedProdSn : cartBulkIncludedProdSn,
-			bulkDcIncludedProdGrpSn : bulkDcIncludedProdGrpSn,
-			includedProdSn : includedProdSn,
-			includedProdQty : includedProdQty
-		}).done(function (data) {
-			if (data.data) {
-				cartEx = data.data;
-				setOnlineProd();
-				setStoreProd();
-				setCalculationResult();
-				setProdCnt();
+		if (xhr != null){
+			xhr.abort();
+		}
+		var indexed_array = {};
+		indexed_array['cartSn'] = cartSn;
+		indexed_array['cartProdSn'] = cartProdSn;
+		indexed_array['prodSn'] = prodSn;
+		indexed_array['cartProdQty'] = ordQty;
+		indexed_array['storePickupYn'] = storePickupYn;
+		indexed_array['storeSn'] = storeSn;
+		indexed_array['cartBulkIncludedProdSn'] = cartBulkIncludedProdSn;
+		indexed_array['bulkDcIncludedProdGrpSn'] = bulkDcIncludedProdGrpSn;
+		indexed_array['includedProdSn'] = includedProdSn;
+		indexed_array['includedProdQty'] = includedProdQty;
+		indexed_array['modifyType'] = "Q";
+
+		xhr = $.ajax({
+			type: "PUT",
+			url: "/cart/modifyCartProd",
+			data: indexed_array,
+			error : function(xhr, textStatus, errorThrown) {},
+			success: function(data){
+				if (data.data) {
+					cartEx = data.data;
+					setOnlineProd();
+					setStoreProd();
+					setCalculationResult();
+					setProdCnt();
+				}
 			}
-		}).fail(function (e) {
-			AP.modal.alert("fail");
-		}).always(function () {
 		});
 	}
 	</script>

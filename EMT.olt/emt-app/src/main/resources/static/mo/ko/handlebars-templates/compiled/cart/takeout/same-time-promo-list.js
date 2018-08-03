@@ -33,7 +33,7 @@ this["AP"]["handlebars"]["cart"]["takeout"]["same-time-promo-list"] = Handlebars
 },"7":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, helper, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing, alias5="function";
 
-  return "			<div class=\"cart_item_box\">\n				<div class=\"cart_name_wrap\">\n					<span class=\"check_wrap\">\n						<input type=\"takeoutChkBox\" name=\"takeoutChkBox\" id=\"chkBox"
+  return "			<div class=\"cart_item_box\">\n				<div class=\"cart_name_wrap\">\n					<span class=\"check_wrap\">\n						<input type=\"hidden\" name=\"takeoutChkBox\" id=\"takeoutChkBox"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
     + "\" value=\""
     + alias2(alias1((depths[1] != null ? depths[1].onlineProdSn : depths[1]), depth0))

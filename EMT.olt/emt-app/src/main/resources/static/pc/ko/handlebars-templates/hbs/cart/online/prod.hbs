@@ -27,6 +27,7 @@
 					</label>
 				</div>
 			</div>
+
 			<div class="item_name">
 				<a href="#none" class="title" onclick="fnProdDetail({{ ../onlineProdSn }})">{{ ../onlineProdName }}</a>
 				{{#xif ../onlineProdFlagExList.length '>' 0}}
@@ -155,7 +156,7 @@
 			<!--/* 상품 선택 */-->
 			<div class="item_thumb">
 				<div class="check_wrap">
-					<input type="checkbox" name="chkBox" id="chkBox{{prodEx.prodSn}}" value="{{ onlineProdSn}}" {{#if (ne saleDisplayStatus 'OnSale') }}disabled{{/if}} {{condition (and (eq saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}>
+					<input type="checkbox" name="chkBox" id="chkBox{{ onlineProdSn }}" value="{{ onlineProdSn}}" {{#if (ne saleDisplayStatus 'OnSale') }}disabled{{/if}} {{condition (and (eq saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}>
 					<label for="chkBox{{ onlineProdSn }}">
 						{{#if repOnlineProdImgEx}}
 							<img src="{{ repOnlineProdImgEx.imgUrl }}" alt="">
@@ -190,7 +191,6 @@
 					<del><b>{{numberFormat productSaleAmountInfo.standardCurrency.amount }}</b>원</del>
 				{{/if}}
 			</div>
-
 			<!--/* 구매/삭제 버튼 */-->
 			<div class="btns">
 				<button type="button" class="btn_sm_bordered" onclick="removeCartOnlineProd('{{../cartSn}}', '{{ onlineProdSn }}', 'online')">삭제</button>

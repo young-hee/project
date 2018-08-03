@@ -34,6 +34,7 @@ import net.g1project.ecp.api.model.BooleanResult;
 import net.g1project.ecp.api.model.EmbeddableName;
 import net.g1project.ecp.api.model.EmbeddableTel;
 import net.g1project.ecp.api.model.UploadingFile;
+import net.g1project.ecp.api.model.ap.bbs.RequesterHist;
 import net.g1project.ecp.api.model.ap.bbs.StoreOpenInquiry;
 import net.g1project.ecp.api.model.ap.bbs.SupportersRequester;
 import net.g1project.ecp.api.model.ap.bbs.SupportersRequesterInfo;
@@ -584,7 +585,7 @@ public class BrandRestController extends AbstractController {
 	 */
    @RequestMapping(value ="/requestBeautizen")
    @ResponseBody
-   public ResponseEntity<?> requestBeautizen(@Valid SupportersRequester supportersRequester, MultipartFile[] picture, HttpServletRequest req) {
+   public ResponseEntity<?> requestBeautizen(SupportersRequester supportersRequester, MultipartFile[] picture, HttpServletRequest req) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
 		try {
@@ -616,17 +617,15 @@ public class BrandRestController extends AbstractController {
             supportersRequester.setMemberSn(getMemberSession().getMember_sn()); //회원번호
 
             // 대외활동은 PC기준 10개
-            /*List<RequesterHist> requstHistList = new ArrayList<RequesterHist>();
+            List<RequesterHist> requstHistList = new ArrayList<RequesterHist>();
             
-            RequesterHist requestHist = new RequesterHist(); */
-            
-            //String activityBodyText = [req.getParameterValues("activityType")]; 
-            
-            /*String activityType[] = req.getParameterValues("activityType");
-            String activityBodyText[] = req.getParameterValues("activityBodyText");
-            String activityName[] = req.getParameterValues("activityName");
-            String activityStartDate[] = req.getParameterValues("activityStartDate");
-            String activityEndDate[] = req.getParameterValues("activityEndDate");
+            RequesterHist requestHist = new RequesterHist();
+             
+            String[] activityType = req.getParameterValues("activityType");
+            String[] activityBodyText = req.getParameterValues("activityBodyText");
+            String[] activityName = req.getParameterValues("activityName");
+            String[] activityStartDate = req.getParameterValues("activityStartDate");
+            String[] activityEndDate = req.getParameterValues("activityEndDate");
             SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
            
             for(int index =0; index < 10; index++) {
@@ -638,9 +637,9 @@ public class BrandRestController extends AbstractController {
                 requestHist.setActivityEndDate(sf.parse(activityEndDate[index]));//activityEndDate);
             	
                 requstHistList.add(index, requestHist);
-            }*/
+            }
             
-           // supportersRequester.setSupportersRequesterHist(requstHistList); 
+            supportersRequester.setSupportersRequesterHist(requstHistList); 
             if(!("Temp").equals(supportersRequester.getRequestStatus())){
 	            if(req.getParameter("check_all")!= null || 
 	            		(req.getParameter("check_agree_1").equals("on") && req.getParameter("check_agree_2").equals("on") 

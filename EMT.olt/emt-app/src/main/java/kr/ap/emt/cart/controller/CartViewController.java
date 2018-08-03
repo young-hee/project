@@ -6,27 +6,30 @@
  */
 package kr.ap.emt.cart.controller;
 
-import kr.ap.comm.config.interceptor.PageTitle;
-import kr.ap.comm.member.vo.MemberSession;
-import kr.ap.comm.support.common.AbstractController;
-import net.g1project.ecp.api.model.offlinestore.store.ProdInvtEx;
-import net.g1project.ecp.api.model.offlinestore.store.StoreResult;
-import net.g1project.ecp.api.model.offlinestore.store.StoresInvtSearchInfo;
-import net.g1project.ecp.api.model.sales.cart.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import kr.ap.comm.config.interceptor.PageTitle;
+import kr.ap.comm.member.vo.MemberSession;
+import net.g1project.ecp.api.model.offlinestore.store.ProdInvtEx;
+import net.g1project.ecp.api.model.offlinestore.store.StoreResult;
+import net.g1project.ecp.api.model.offlinestore.store.StoresInvtSearchInfo;
+import net.g1project.ecp.api.model.sales.cart.CartEx;
+import net.g1project.ecp.api.model.sales.cart.CartMemberMembershipEx;
+import net.g1project.ecp.api.model.sales.cart.CartOnlineProdEx;
+import net.g1project.ecp.api.model.sales.cart.CartProdEx;
+import net.g1project.ecp.api.model.sales.cart.CartPromoEx;
+import net.g1project.ecp.api.model.sales.cart.CartSnResult;
 
 @Controller
 @RequestMapping("/cart")
-public class CartViewController extends AbstractController{
+public class CartViewController extends CartBaseController{
 
 	CartEx cartEx; // 카트정보
 
@@ -43,6 +46,10 @@ public class CartViewController extends AbstractController{
 		/* 카트정보 세팅*/
 		cartEx = setCart(memberSession, model);
 		memberSession.setCartProdSnList(null);
+		
+		// 재계산을 위하여 최종 cartEx를 넣어 놓음
+		memberSession.setCartEx(cartEx);
+		
 		setMemberSession(memberSession);
 
 		// Mobile
@@ -90,7 +97,7 @@ public class CartViewController extends AbstractController{
 			/* 테이크아웃 매장정보 */
 			makeSelectStore(cartEx, model, memberSession.getMember_sn());
 		}
-		return null;
+		return cartEx;
 	}
 
 
@@ -130,6 +137,18 @@ public class CartViewController extends AbstractController{
 					}
 				}
 			}
+
+			// 장바구니-배송-동시구매상품목록
+			/*for (CartPromoEx cartPromoEx : cartEx.getCartDeliverySameTimePurPromoExList()) {
+				for (CartOnlineProdEx cartOnlineProdEx : cartPromoEx.getPromoOnlineProdExList()) {
+					for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
+						if (!"OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus())){
+							cartOnlineProdEx.setSaleDisplayStatus("NotSelect");
+							break;
+						}
+					}
+				}
+			}*/
 		}
 
 		/* 테이크 아웃 상품 */
