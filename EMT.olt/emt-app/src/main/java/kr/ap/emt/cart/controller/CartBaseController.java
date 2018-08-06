@@ -229,29 +229,36 @@ public class CartBaseController extends AbstractController{
             cartEx = cartApi.getCart(cartSn);
         }
         else {
-            // 장바구니-배송-온라인상품목록
-            setChangeQtyCartOnlineProdExList(cartEx.getCartDeliveryOnlineProdExList(), cartProdSn, cartProdQty);
-            // 장바구니-배송-멤버십포인트교환-온라인상품목록
-            setChangeQtyCartOnlineProdExList(cartEx.getCartDeliveryMembershipPointExchOnlineProdExList(), cartProdSn, cartProdQty);
-            // 장바구니-배송-활동포인트교환-온라인상품목록
-            setChangeQtyCartOnlineProdExList(cartEx.getCartDeliveryActivityPointExchOnlineProdExList(), cartProdSn, cartProdQty);
-            // 장바구니-배송-M+N프로모션목록-온라인상품목록
-            setChangeQtyCartPromoOnlineProdExList(cartEx.getCartDeliveryMNPromoExList(), cartProdSn, cartProdQty);
-            // 장바구니-배송-동시구매프로모션목록-온라인상품목록
-            setChangeQtyCartPromoOnlineProdExList(cartEx.getCartDeliverySameTimePurPromoExList(), cartProdSn, cartProdQty);
+            try {
+                // 장바구니-배송-온라인상품목록
+                setChangeQtyCartOnlineProdExList(cartEx.getCartDeliveryOnlineProdExList(), cartProdSn, cartProdQty);
+                // 장바구니-배송-멤버십포인트교환-온라인상품목록
+                setChangeQtyCartOnlineProdExList(cartEx.getCartDeliveryMembershipPointExchOnlineProdExList(), cartProdSn, cartProdQty);
+                // 장바구니-배송-활동포인트교환-온라인상품목록
+                setChangeQtyCartOnlineProdExList(cartEx.getCartDeliveryActivityPointExchOnlineProdExList(), cartProdSn, cartProdQty);
+                // 장바구니-배송-M+N프로모션목록-온라인상품목록
+                setChangeQtyCartPromoOnlineProdExList(cartEx.getCartDeliveryMNPromoExList(), cartProdSn, cartProdQty);
+                // 장바구니-배송-동시구매프로모션목록-온라인상품목록
+                setChangeQtyCartPromoOnlineProdExList(cartEx.getCartDeliverySameTimePurPromoExList(), cartProdSn, cartProdQty);
+    
+                // 장바구니-매장픽업-온라인상품목록
+                setChangeQtyCartOnlineProdExList(cartEx.getCartStorePickupOnlineProdExList(), cartProdSn, cartProdQty);
+                // 장바구니-매장픽업-멤버십포인트교환-온라인상품목록
+                setChangeQtyCartOnlineProdExList(cartEx.getCartStorePickupMembershipPointExchOnlineProdExList(), cartProdSn, cartProdQty);
+                // 장바구니-매장픽업-활동포인트교환-온라인상품목록
+                setChangeQtyCartOnlineProdExList(cartEx.getCartStorePickupActivityPointExchOnlineProdExList(), cartProdSn, cartProdQty);
+                // 장바구니-매장픽업-M+N프로모션목록-온라인상품목록
+                setChangeQtyCartPromoOnlineProdExList(cartEx.getCartStorePickupMNPromoExList(), cartProdSn, cartProdQty);
+                // 장바구니-매장픽업-동시구매프로모션목록-온라인상품목록
+                setChangeQtyCartPromoOnlineProdExList(cartEx.getCartStorePickupSameTimePurPromoExList(), cartProdSn, cartProdQty);
+    
+                cartEx = calculationCartEx(cartEx);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
 
-            // 장바구니-매장픽업-온라인상품목록
-            setChangeQtyCartOnlineProdExList(cartEx.getCartStorePickupOnlineProdExList(), cartProdSn, cartProdQty);
-            // 장바구니-매장픽업-멤버십포인트교환-온라인상품목록
-            setChangeQtyCartOnlineProdExList(cartEx.getCartStorePickupMembershipPointExchOnlineProdExList(), cartProdSn, cartProdQty);
-            // 장바구니-매장픽업-활동포인트교환-온라인상품목록
-            setChangeQtyCartOnlineProdExList(cartEx.getCartStorePickupActivityPointExchOnlineProdExList(), cartProdSn, cartProdQty);
-            // 장바구니-매장픽업-M+N프로모션목록-온라인상품목록
-            setChangeQtyCartPromoOnlineProdExList(cartEx.getCartStorePickupMNPromoExList(), cartProdSn, cartProdQty);
-            // 장바구니-매장픽업-동시구매프로모션목록-온라인상품목록
-            setChangeQtyCartPromoOnlineProdExList(cartEx.getCartStorePickupSameTimePurPromoExList(), cartProdSn, cartProdQty);
-
-            cartEx = calculationCartEx(cartEx);
+                cartEx = cartApi.getCart(cartSn);
+            }
         }
 
         
@@ -288,7 +295,6 @@ public class CartBaseController extends AbstractController{
     }
     
     private CartEx calculationCartEx(CartEx cartEx) {
-        
         /* M+N프로모션 기준수량/증정수량계산 */
         if(cartEx.getCartDeliveryMNPromoExList() != null) {
             for(CartPromoEx cartPromoEx : cartEx.getCartDeliveryMNPromoExList()) {
@@ -515,7 +521,7 @@ public class CartBaseController extends AbstractController{
             BigDecimal finalOnlineSaleAmount = BigDecimal.ZERO;
             for(CartOnlineProdEx cartOnlineProdEx : cartPromoEx.getPromoOnlineProdExList()) {
                 productSaleAmount = productSaleAmount.add(cartOnlineProdEx.getProductSaleAmountInfo().getStandardCurrency().getAmount());
-                finalOnlineSaleAmount = productSaleAmount.add(cartOnlineProdEx.getFinalOnlineSalesAmountInfo().getStandardCurrency().getAmount());
+                finalOnlineSaleAmount = finalOnlineSaleAmount.add(cartOnlineProdEx.getFinalOnlineSalesAmountInfo().getStandardCurrency().getAmount());
             }
             cartPromoEx.getProductSaleAmountInfo().getStandardCurrency().setAmount(productSaleAmount);
             cartPromoEx.getFinalOnlineSalesAmountInfo().getStandardCurrency().setAmount(finalOnlineSaleAmount);
@@ -553,7 +559,7 @@ public class CartBaseController extends AbstractController{
                     if(cartProdEx.getCalculationResultProduct() != null) {
                         CalculationResultProduct resultProduct = cartProdEx.getCalculationResultProduct();
                         
-                        int realQty = cartProdEx.getCartProdQty().intValue() - (cartProdEx.getMMPromoAwardQty() != null ? cartProdEx.getMMPromoAwardQty().intValue() : 0);
+                        int realQty = cartProdEx.getCartProdQty().intValue() - getIntValue(cartProdEx.getmNPromoAwardQty());
                         // 상품판매금액
                         setCalculationCurrencyInfo(resultProduct.getProductSaleAmountInfo(), resultProduct.getProductSalePriceInfo(), cartProdEx.getCartProdQty().intValue());
                         // 최종온라인판매금액
@@ -580,11 +586,11 @@ public class CartBaseController extends AbstractController{
                         }
                         
                         productSaleAmount = productSaleAmount.add(resultProduct.getProductSaleAmountInfo().getStandardCurrency().getAmount());
-                        finalOnlineSaleAmount = productSaleAmount.add(resultProduct.getFinalOnlineSalesAmountInfo().getStandardCurrency().getAmount());
+                        finalOnlineSaleAmount = finalOnlineSaleAmount.add(resultProduct.getFinalOnlineSalesAmountInfo().getStandardCurrency().getAmount());
                     }
                     
                     if(CartConst.Y.equals(cartProdEx.getExchYn())) {
-                        exchPoints = exchPoints + cartProdEx.getExchPoint().intValue();
+                        exchPoints = exchPoints + (cartProdEx.getExchPoint() != null ? cartProdEx.getExchPoint().intValue() : 0);
                     }
                 }
             }
@@ -613,8 +619,8 @@ public class CartBaseController extends AbstractController{
                             baseOrdQty = Math.floorDiv(cartProdQty, (cartPromoEx.getBaseOrdQty() + cartPromoEx.getFreeAwardQty())) * cartPromoEx.getBaseOrdQty();
                         }
                         
-                        cartProdEx.setMMPromoAwardQty(awardQty.longValue());
-                        cartProdEx.setMNPromoBaseQty(baseOrdQty.longValue());
+                        cartProdEx.setmNPromoAwardQty(awardQty.longValue());
+                        cartProdEx.setmNPromoBaseQty(baseOrdQty.longValue());
                         
                         setSameMNPromoApplyResultCode(cartProdEx, cartPromoEx);
                         
@@ -685,6 +691,8 @@ public class CartBaseController extends AbstractController{
         for(CartOnlineProdEx cartOnlineProdEx : cartOnlineProdExList) {
             if(cartOnlineProdEx.getCartProdExList() != null) {
                 for(CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
+                    cartProdEx.setmNPromoAwardQty(0L);
+                    cartProdEx.setmNPromoBaseQty(0L);
                     if(cartProdEx.getCalculationResultProduct() != null) {
                         cartProdExList.add(cartProdEx);
                         totalCartProdQty += cartProdEx.getCartProdQty().intValue();
@@ -721,16 +729,16 @@ public class CartBaseController extends AbstractController{
                 if(cartProdEx.getCartProdQty() > 0
                         && remainFreeAwardQty > 0) {
                     if(remainFreeAwardQty > cartProdEx.getCartProdQty()) {
-                        cartProdEx.setMMPromoAwardQty(cartProdEx.getCartProdQty());
+                        cartProdEx.setmNPromoAwardQty(cartProdEx.getCartProdQty());
                         remainFreeAwardQty = remainFreeAwardQty - cartProdEx.getCartProdQty().intValue();
                     }
                     else {
-                        cartProdEx.setMMPromoAwardQty(remainFreeAwardQty.longValue());
+                        cartProdEx.setmNPromoAwardQty(remainFreeAwardQty.longValue());
                         remainFreeAwardQty = 0;
                     }
                     
                     CalculationResultProduct resultProduct = cartProdEx.getCalculationResultProduct();
-                    setCalculationCurrencyInfo(resultProduct.getQtyDiscountAmountInfoByMNPromotion(), resultProduct.getFinalOnlineSalesPriceInfo(), cartProdEx.getMMPromoAwardQty().intValue());
+                    setCalculationCurrencyInfo(resultProduct.getQtyDiscountAmountInfoByMNPromotion(), resultProduct.getFinalOnlineSalesPriceInfo(), getIntValue(cartProdEx.getmNPromoAwardQty()));
                 }
     
                 if(remainFreeAwardQty == 0) {
@@ -743,15 +751,15 @@ public class CartBaseController extends AbstractController{
         {
             Integer remainBaseOrdQty = baseOrdQty;
             for(CartProdEx cartProdEx : cartProdExList) {
-                Integer targetEnableQty = cartProdEx.getCartProdQty().intValue() - cartProdEx.getMMPromoAwardQty().intValue();
+                Integer targetEnableQty = cartProdEx.getCartProdQty().intValue() - getIntValue(cartProdEx.getmNPromoAwardQty());
                 if(targetEnableQty > 0
                         && remainBaseOrdQty > 0) {
                     if(remainBaseOrdQty > targetEnableQty) {
-                        cartProdEx.setMNPromoBaseQty(targetEnableQty.longValue());
+                        cartProdEx.setmNPromoBaseQty(targetEnableQty.longValue());
                         remainBaseOrdQty = remainBaseOrdQty - targetEnableQty;
                     }
                     else {
-                        cartProdEx.setMNPromoBaseQty(remainBaseOrdQty.longValue());
+                        cartProdEx.setmNPromoBaseQty(remainBaseOrdQty.longValue());
                         remainBaseOrdQty = 0;
                     }
                 }
@@ -775,8 +783,8 @@ public class CartBaseController extends AbstractController{
         // 주문수량
         long q = cartProdEx.getCartProdQty();
         
-        long applyBaseOrdQty = cartProdEx.getMNPromoBaseQty();
-        long applyFreeAwardQty = cartProdEx.getMMPromoAwardQty();
+        long applyBaseOrdQty = getValidValue(cartProdEx.getmNPromoBaseQty());
+        long applyFreeAwardQty = getValidValue(cartProdEx.getmNPromoAwardQty());
         
         // M+N적용수량
         long x = applyBaseOrdQty + applyFreeAwardQty;
@@ -807,8 +815,8 @@ public class CartBaseController extends AbstractController{
         for(CartOnlineProdEx cartOnlineProdEx : cartOnlineProdExList) {
             for(CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
                 totalCartProdQty += cartProdEx.getCartProdQty();
-                totalBaseQty += cartProdEx.getMNPromoBaseQty();
-                totalAwardQty += cartProdEx.getMMPromoAwardQty();
+                totalBaseQty += getIntValue(cartProdEx.getmNPromoBaseQty());
+                totalAwardQty += getIntValue(cartProdEx.getmNPromoAwardQty());
             }
         }
         
@@ -839,6 +847,14 @@ public class CartBaseController extends AbstractController{
             cartPromoEx.setRecommandBaseOrdQty((long) rq / mn * m);
             cartPromoEx.setRecommandFreeAwardQty((long) rq / mn * n);
         }
+    }
+    
+    private Long getValidValue(Long value) {
+        return value != null ? value : 0L;
+    }
+
+    private int getIntValue(Long value) {
+        return value != null ? value.intValue() : 0;
     }
     
 }

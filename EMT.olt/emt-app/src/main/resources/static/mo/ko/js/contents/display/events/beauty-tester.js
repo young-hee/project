@@ -68,8 +68,10 @@
 					}.bind( this )).fail(function ( e ) {
 						if ( e.errorCode == 'ESAL034' ) {
 							AP.modal.alert( '본 이벤트는 종료되었습니다.' );
+						} else if( e.errorCode === 'ESAL053'){
+							AP.modal.alert( '참여 진주알 개수가 부족합니다.' );
 						} else {
-							AP.modal.alert( e.errorMessage );
+							AP.modal.alert(e.errorMessage);
 						}
 					}.bind( this ));
 				}.bind( this ));

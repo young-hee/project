@@ -618,20 +618,13 @@
 
 			// 위치보기 버튼
 			$store.find( '#b_storeMap' ).on( 'click', function () {
-				console.log("11111");
 				if ( $trMap.hasClass( 'on' )) {
-					console.log("22222");
 					$trMap.removeClass( 'on' );
 				} else {
-					console.log("333333");
 					$trMap.addClass( 'on' );
-					console.log("444444");
 					$trMap.find('.map_area').mapApi('resize');
-					console.log("555555");
 					$trMap.find('.map_area').mapApi('setCenter', $(this).attr("latitude"), $(this).attr("longitude"));
-					console.log("666666");
 					$trMap.find('.map_area').mapApi('addMarker', $(this).attr("latitude"), $(this).attr("longitude"), 1);
-					console.log("77777");
 				}
 			});
 

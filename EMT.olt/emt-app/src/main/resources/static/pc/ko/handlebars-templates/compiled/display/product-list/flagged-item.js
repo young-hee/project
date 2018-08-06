@@ -9,8 +9,10 @@ this["AP"]["handlebars"]["display"]["product-list"]["flagged-item"] = Handlebars
   return "<li class=\"ix-list-item\">\n	<div class=\"item\">\n		<div class=\"item_images\">\n			<!--/* 대표 이미지 */-->\n			<a href=\""
     + alias3((helpers.productDetailPath || (depth0 && depth0.productDetailPath) || alias2).call(alias1,(depth0 != null ? depth0.onlineProdSn : depth0),{"name":"productDetailPath","hash":{},"data":data,"blockParams":blockParams}))
     + "\" class=\"lazy_load_wrap first_img\">\n				<img class=\"lazy_load\" src=\"\" data-src=\""
-    + alias3(alias4(((stack1 = ((stack1 = (depth0 != null ? depth0.prodImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
-    + "\" alt=\"\">\n			</a>\n		</div>\n		<div class=\"info_box\">\n			<!--/* flag */-->\n			<div class=\"flag_set\">\n"
+    + alias3((helpers.replaceImagePath || (depth0 && depth0.replaceImagePath) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.onlineProdImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1),208,208,{"name":"replaceImagePath","hash":{},"data":data,"blockParams":blockParams}))
+    + "\" alt=\""
+    + alias3(alias4((depth0 != null ? depth0.onlineProdName : depth0), depth0))
+    + "\">\n			</a>\n		</div>\n		<div class=\"info_box\">\n			<!--/* flag */-->\n			<div class=\"flag_set\">\n"
     + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.flags : depth0),{"name":"each","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"blockParams":blockParams})) != null ? stack1 : "")
     + "			</div>\n			<!--/* 상품명 */-->\n			<div class=\"title_area\">\n				<h3 class=\"h_title\">"
     + alias3(alias4((depth0 != null ? depth0.onlineProdName : depth0), depth0))
@@ -36,7 +38,7 @@ this["AP"]["handlebars"]["display"]["product-list"]["flagged-item"] = Handlebars
 },"3":function(container,depth0,helpers,partials,data) {
     return "		<span class=\"new\">신상품</span>			";
 },"5":function(container,depth0,helpers,partials,data) {
-    return "		<span class=\"best\">베스트</span>		";
+    return "	<span class=\"best\">베스트</span>		";
 },"7":function(container,depth0,helpers,partials,data) {
     return "		<span class=\"event\">이벤트</span>		";
 },"9":function(container,depth0,helpers,partials,data) {

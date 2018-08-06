@@ -299,18 +299,7 @@ public class EventViewController extends AbstractController {
 	@RequestMapping("/beauty_test")
     @PageTitle(title = "뷰티테스터 신청 안내")
     public String beauty_test(Model model, String displayMenuId) {
-		
-        //Mobile
-        if (isMobileDevice()) {
-    		
-    		
-        }
-
-        //PC
-        if (isPcDevice()) {
-        	
-        }
-        
+		 
         RegularEvent regularEvent = regulareventApi.regularEventSummary(APConstant.PROD_EXPERIENCE_GRP);
         
         PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);

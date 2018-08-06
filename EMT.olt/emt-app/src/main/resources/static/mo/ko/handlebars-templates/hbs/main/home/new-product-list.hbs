@@ -6,10 +6,16 @@
 		{{#each this.list}}
 			<li class="ix-list-item">
 				<a href="{{ productDetailPath this.onlineProdSn }}">
-					<span class="lazy_load_wrap"><img src="" data-src="{{ this.onlineProdImages.0.imgUrl }}" alt="" class="lazy_load"></span>
+					<span class="lazy_load_wrap">
+						{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+						<div class="item_state out_of_stock">일시품절</div>
+						{{/xif}}
+						<img src="" data-src="{{ this.onlineProdImages.0.imgUrl }}" alt="" class="lazy_load">
+					</span>
 					<span class="item_title">{{ this.onlineProdName }}</span>
 					<span class="price"><b>{{ numberFormat this.onlineProdPriceSummary.minOnlineSalePrice }}</b> 원</span>
 				</a>
+				<span class="item_state out_of_stock">일시품절</span>
 			</li>
 		{{/each}}
 	</ul>

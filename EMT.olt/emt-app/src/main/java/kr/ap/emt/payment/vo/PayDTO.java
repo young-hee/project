@@ -30,6 +30,7 @@ public class PayDTO {
     private String pMid;//mid
     private String signKey;//signKey
     private String siteDomain;//사이트도메인
+    private Integer depositWatingHours;
     
     // INICIS 다이렉트 추가 param 
     private String goPayMethod;
@@ -129,6 +130,13 @@ public class PayDTO {
 	}
 	public void setSiteDomain(String siteDomain) {
 		this.siteDomain = siteDomain;
+	}
+	
+	public Integer getDepositWatingHours() {
+		return depositWatingHours;
+	}
+	public void setDepositWatingHours(Integer depositWatingHours) {
+		this.depositWatingHours = depositWatingHours;
 	}
 	public String getTid() {
 		return tid;

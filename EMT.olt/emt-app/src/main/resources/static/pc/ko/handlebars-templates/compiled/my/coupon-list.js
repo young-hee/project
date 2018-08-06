@@ -77,7 +77,7 @@ this["AP"]["handlebars"]["my"]["coupon-list"] = Handlebars.template({"1":functio
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
 
-  return "<table class=\"align_center benefit_table\">\n	<caption class=\"sr_only\">사용 가능한 쿠폰 정보</caption>\n	<colgroup>\n		<col style=\"width:163px;\"> <!-- 컬럼 사이즈 -->\n		<col style=\"width:163px;\">\n		<col>\n		<col style=\"width:127px;\">\n		<col style=\"width:210px;\">\n		<col style=\"width:163px;\">\n	</colgroup>\n	<thead>\n	<tr>\n		<th scope=\"col\">취득일</th>\n		<th scope=\"col\">종류</th>\n		<th scope=\"col\">쿠폰명</th>\n		<th scope=\"col\">혜택</th>\n"
+  return "<table class=\"align_center coupon_table\">\n	<caption class=\"sr_only\">사용 가능한 쿠폰 정보</caption>\n	<colgroup>\n		<col style=\"width:163px;\"> <!-- 컬럼 사이즈 -->\n		<col style=\"width:163px;\">\n		<col>\n		<col style=\"width:127px;\">\n		<col style=\"width:210px;\">\n		<col style=\"width:163px;\">\n	</colgroup>\n	<thead>\n	<tr>\n		<th scope=\"col\">취득일</th>\n		<th scope=\"col\">종류</th>\n		<th scope=\"col\">쿠폰명</th>\n		<th scope=\"col\">혜택</th>\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(alias1,(depth0 != null ? depth0.searchType : depth0),"==","Avail",{"name":"xif","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
     + "		<th scope=\"col\">사용제한</th>\n	</tr>\n	</thead>\n	<tbody>\n"
     + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.list : depth0),{"name":"each","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")

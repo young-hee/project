@@ -47,7 +47,7 @@
 					{{#each this.products }}
 						{{#xif ../selectedProdSn '==' this.prodSn }}
 							<a href="{{ productDetailPath this.onlineProdSn this.prodSn }}" class="lazy_load_wrap first_img">
-								<img class="lazy_load" src="" data-src="{{ this.prodImages.[0].imgUrl }}" alt="{{ this.prodName }}">
+								<img class="lazy_load" src="" data-src="{{ replaceImagePath this.prodImages.[0].imgUrl 270 270 }}" alt="{{ this.prodName }}">
 								{{{stockImg this.saleDisplayStatus this.prodTypeCode }}}
 							</a>
 						{{/xif}}
@@ -81,12 +81,12 @@
 					<!-- view type2 -->
 					{{#xif ../prodListUnitCode '==' 'Prod' }}
 						<a href="{{ productDetailPath this.onlineProdSn this.prodSn}}" class="lazy_load_wrap first_img">
-							<img class="lazy_load" src="" data-src="{{ this.prodImages.[0].imgUrl }}" alt="{{ this.onlineProdName }}">
+							<img class="lazy_load" src="" data-src="{{ replaceImagePath this.prodImages.[0].imgUrl 270 270}}" alt="{{ this.onlineProdName }}">
 							{{{stockImg this.saleDisplayStatus this.prodTypeCode }}}
 						</a>
 					{{else}}
 						<a href="{{ productDetailPath this.onlineProdSn }}" class="lazy_load_wrap first_img">
-							<img class="lazy_load" src="" data-src="{{ this.onlineProdImages.[0].imgUrl }}" alt="{{ this.onlineProdName }}">
+							<img class="lazy_load" src="" data-src="{{ replaceImagePath this.onlineProdImages.[0].imgUrl 270 270 }}" alt="{{ this.onlineProdName }}">
 							{{{stockImg this.saleDisplayStatus this.prodTypeCode }}}
 						</a>
 					{{/xif}}

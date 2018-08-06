@@ -10,8 +10,8 @@ this["AP"]["handlebars"]["display"]["events"]["general-detail-product-list"] = H
     + alias2(alias1((depth0 != null ? depth0.onlineProdSn : depth0), depth0))
     + "\">\n		<div class=\"item\">\n			<div class=\"item_images\">\n				<!-- /* 대표 이미지 */ -->\n				<a href=\""
     + alias2((helpers.productDetailPath || (depth0 && depth0.productDetailPath) || alias4).call(alias3,(depth0 != null ? depth0.onlineProdSn : depth0),{"name":"productDetailPath","hash":{},"data":data}))
-    + "\" class=\"lazy_load_wrap\"><img class=\"lazy_load\" src=\"\" data-src=\""
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.onlineProdImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
+    + "\" class=\"lazy_load_wrap\">\n					<img class=\"lazy_load\" data-src=\""
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.prodImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
     + "\" alt=\"\"></a>\n\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.saleDisplayStatus : depth0),"==","OutOfStock",{"name":"xif","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "			</div>\n\n			<div class=\"item_info list\">\n"

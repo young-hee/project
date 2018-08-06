@@ -13,14 +13,24 @@
 						{{#if this.onlineProdImages}}
 							{{#each this.onlineProdImages}}
 								{{#if @first}}
-									<a href="{{ productDetailPath ../../onlineProdSn }}" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="{{ this.imgUrl }}" alt="{{ ../onlineProdName }}"></a>
+									<a href="{{ productDetailPath ../../onlineProdSn }}" class="lazy_load_wrap">
+										{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+											<div class="item_state out_of_stock">일시품절</div>
+										{{/xif}}
+										<img class="lazy_load" src="" data-src="{{ this.imgUrl }}" alt="{{ ../onlineProdName }}">
+									</a>
 								{{/if}}
 							{{/each}}
 						{{/if}}
 						{{#if this.prodImages}}
 							{{#each this.prodImages}}
 								{{#if @first}}
-									<a href="{{ productDetailPath ../../onlineProdSn ../prodSn }}" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="{{ this.imgUrl }}" alt="{{ ../prodName }}"></a>
+									<a href="{{ productDetailPath ../../onlineProdSn ../prodSn }}" class="lazy_load_wrap">
+										{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+											<div class="item_state out_of_stock">일시품절</div>
+										{{/xif}}
+										<img class="lazy_load" src="" data-src="{{ this.imgUrl }}" alt="{{ ../prodName }}">
+									</a>
 								{{/if}}
 							{{/each}}
 						{{/if}}

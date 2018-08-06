@@ -9,7 +9,12 @@
 					<div class="item_images">
 						{{!-- 대표 이미지 --}}
 						<a href="{{ productDetailPath this.onlineProdSn }}" class="lazy_load_wrap first_img">
-							<span class="lazy_load_wrap"><img class="lazy_load" src="" data-src="{{ this.onlineProdImages.0.imgUrl }}" alt=""></span>
+							<span class="lazy_load_wrap">
+								{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+									<div class="item_state out_of_stock">일시품절</div>
+								{{/xif}}
+								<img class="lazy_load" src="" data-src="{{ this.onlineProdImages.0.imgUrl }}" alt="">
+							</span>
 						</a>
 					</div>
 					<div class="info_box list">

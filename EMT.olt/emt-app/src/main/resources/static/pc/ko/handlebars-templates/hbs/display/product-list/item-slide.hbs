@@ -4,7 +4,7 @@
 			{{#each this.onlineProdImages}}
 				<li class="ix-list-item">
 					<a href="{{ productDetailPath ../onlineProdSn }}" class="lazy_load_wrap">
-						<img class="lazy_load" src="" data-src="{{ this.imgUrl }}" alt="{{ ../onlineProdName }}">
+						<img class="lazy_load" src="" data-src="{{ replaceImagePath this.imgUrl 270 270 }}" alt="{{ ../onlineProdName }}">
 						{{{stockImg ../saleDisplayStatus ../prodTypeCode }}}
 					</a>
 				</li>
@@ -18,7 +18,7 @@
 					{{else}}
 					<a href="{{ productDetailPath ../onlineProdSn ../prodSn }}" class="lazy_load_wrap">
 					{{/xif}}
-						<img class="lazy_load" src="" data-src="{{ this.imgUrl }}" alt="{{ ../prodName }}">
+						<img class="lazy_load" src="" data-src="{{ replaceImagePath this.imgUrl 270 270 }}" alt="{{ ../prodName }}">
 					</a>
 				</li>
 			{{/each}}

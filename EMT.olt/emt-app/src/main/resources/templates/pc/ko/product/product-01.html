@@ -324,18 +324,18 @@
 									<th:block th:if="${prd.saleDisplayStatus != 'WaitingSale'}">
 										<span><button class="btn_lg_bordered emp btn_buy_now"
 												type="button">바로구매</button></span>
-										<th:block th:if="${prd.cartBtnEnable != 'N'}">		
-											<span><button class="btn_lg_primary btn_basket"
-													type="button">장바구니 담기</button></span>
-												</th:block>
+										<span th:if="${prd.cartBtnEnable != 'N'}">
+											<button class="btn_lg_primary btn_basket" type="button">장바구니 담기</button>
+										</span>
 									</th:block>
 								</th:block>
 
 								<th:block th:if="${prd.saleDisplayStatus == 'WaitingSale'}">
-									<span> <span class="btn_lg_bordered"> <em
-											th:text="${#dates.format(prd.saleStartDt, 'yyyy년 MM월 dd일')} + ' 출시'">2018년
-												12월 31일 출시</em> <span>조금만 기다려 주세요.</span>
-									</span>
+									<span> 
+										<span class="btn_lg_bordered"> 
+											<em th:text="${#dates.format(prd.saleStartDt, 'yyyy년 MM월 dd일')} + ' 출시'">2018년 12월 31일 출시</em> 
+											<span>조금만 기다려 주세요.</span>
+										</span>
 									</span>
 								</th:block>
 
@@ -438,30 +438,14 @@
 											<td th:text="${prd.onlineProdName}"></td>
 										</tr>
 
-										<th:block
-											th:each="disclosure, iterStat : ${prd.products[0].disclosures}">
-											<tr th:if="${iterStat.index != 7}">
-												<th scope="row" th:text="${disclosure.disclosureItemName}"></th>
-												<td th:text="${disclosure.prodDisclosureInfo}"></td>
-											</tr>
-											<!--/* 전성분 */-->
-											<tr class="all_ingredients" th:if="${iterStat.index == 7}">
-												<th scope="row"><span
-													th:text="${disclosure.disclosureItemName}"></span>
-													<div class="select_wrap" th:if="${prd.productCount > 1}">
-														<select name="ingredients" title="전성분 보기 옵션 선택">
-															<option th:value="${option.prodSn}"
-																th:each="option : ${prd.products}"
-																th:text="${option.prodName}"></option>
-														</select>
-													</div></th>
-												<td>
-													<div class="ingredients7_result"
-														th:text="${prd.products[0].disclosures[7].prodDisclosureInfo}"></div>
-												</td>
-											</tr>
+										<th:block th:each="unitProduct, iter : ${prd.products}">
+											<th:block th:each="disclosure : ${unitProduct.disclosures}">
+												<tr class="disclosure" data:prodSn="${unitProduct.prodSn}" th:style="${iter.index != 0} ? 'display:none'">
+													<th scope="row" th:text="${disclosure.disclosureItemName}"></th>
+													<td th:text="${disclosure.prodDisclosureInfo}"></td>
+												</tr>
+											</th:block>
 										</th:block>
-
 									</tbody>
 								</table>
 							</div>
@@ -633,8 +617,7 @@
 									<th:block th:if="${prd.saleDisplayStatus != 'WaitingSale'}">
 										<button type="button"
 											class="btn_lg_bordered purchase btn_buy_now">바로구매</button>
-										<button type="button" class="btn_lg_primary basket btn_basket">장바구니
-											담기</button>
+										<button type="button" th:if="${prd.cartBtnEnable != 'N'}" class="btn_lg_primary basket btn_basket">장바구니 담기</button>
 									</th:block>
 								</th:block>
 

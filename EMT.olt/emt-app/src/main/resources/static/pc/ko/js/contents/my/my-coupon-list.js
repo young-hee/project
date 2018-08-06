@@ -9,7 +9,7 @@
 		initialize: function () {
 			this._$target = $( '#ap_container .ap_contents.mypage.coupon' );
 
-			this.searchType = 'AvailCoupon';
+			this.searchType = 'Avail';
 
 			if ( this._$target.length > 0 ) this._setEvent();
 		},
@@ -22,8 +22,20 @@
 
 			this._api = AP.api.couponList( {}, {searchType : searchType}).done(function ( result ) {
 
-				$('#availCnt').html(result.MemberKeepingCoupons.availCnt);
-				$('#expCnt').html(result.MemberKeepingCoupons.expCnt);
+				if ( searchType == 'Avail') {
+					this._api = AP.api.couponList( {}, {searchType : 'Exp'}).done(function ( result ) {
+						if (result != null && result.MemberKeepingCoupons != null) {
+							$('#expCnt').html(result.MemberKeepingCoupons.expCnt);
+						}
+					});
+				}
+				if ( searchType == 'Exp') {
+					this._api = AP.api.couponList( {}, {searchType : 'Avail'}).done(function ( result ) {
+						if (result != null && result.MemberKeepingCoupons != null) {
+							$('#availCnt').html(result.MemberKeepingCoupons.expCnt);
+						}
+					});
+				}
 
 				if ( result == null
 					|| result.MemberKeepingCoupons == null
@@ -39,13 +51,20 @@
 
 					var html ='';
 
+					//사용가능
 					if ( searchType == 'Avail' && result.availCnt > 0 ) {
+						$('#availCnt').html(result.availCnt);
+
 						html = AP.common.getTemplate( 'my.coupon-list', {
 							searchType: searchType,
 							list: result.availCoupons
 						});
 					}
+
+					//사용/완료
 					if ( searchType == 'Exp' && result.expCnt > 0 ) {
+						$('#expCnt').html(result.expCnt);
+
 						result.expCoupons.useDt = result.useDt;
 						html = AP.common.getTemplate( 'my.coupon-list', {
 							searchType: searchType,
@@ -77,8 +96,11 @@
 						couponIdentifier: coupon
 					}).done(function (data) {
 						//성공
-						AP.modal.alert("온라인 전용 쿠폰 등록했습니다.");
-						location.href = "/my/page/myCouponList";
+						AP.modal.alert('온라인 전용 쿠폰 등록했습니다.'
+						).addListener( 'modal-close', function (e) {
+							//console.log( e.closeType );//confirm, cancel, close
+							location.href = "/my/page/myCouponList";
+						});
 					}).fail(function(e) {
 						//실패
 						//AP.modal.alert(e.responseJSON.errorData.message);

@@ -149,7 +149,7 @@ public class RequestData {
 	private Optional<String> getUserId() {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		MemberSession memberSession = (MemberSession) WebUtils.getSessionAttribute(request, SessionKey.LOGIN_USER);
-		if (memberSession != null) {
+		if (memberSession != null && memberSession.getMember() != null) {
 			return Optional.ofNullable(memberSession.getMember().getMemberId());
 		}
 		return Optional.empty();

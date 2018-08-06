@@ -4,7 +4,7 @@
 		<div class="item_images">
 			<!--/* 대표 이미지 */-->
 			<a href="{{ productDetailPath this.onlineProdSn }}" class="lazy_load_wrap first_img">
-				<img class="lazy_load" src="" data-src="{{this.prodImages.0.imgUrl }}" alt="">
+				<img class="lazy_load" src="" data-src="{{ replaceImagePath this.onlineProdImages.[0].imgUrl 208 208 }}" alt="{{ this.onlineProdName }}">
 			</a>
 		</div>
 		<div class="info_box">
@@ -12,7 +12,7 @@
 			<div class="flag_set">
 				{{#each this.flags}}
 					{{#xif this.prodFlagCode '==' 'icon_reco_new'}}		<span class="new">신상품</span>			{{/xif}}
-					{{#xif this.prodFlagCode '==' 'icon_reco_best_w'}}		<span class="best">베스트</span>		{{/xif}}
+					{{#xif this.prodFlagCode '==' 'icon_reco_best_w'}}	<span class="best">베스트</span>		{{/xif}}
 					{{#xif this.prodFlagCode '==' 'icon_pr_prod'}}		<span class="event">이벤트</span>		{{/xif}}
 					{{#xif this.prodFlagCode '==' 'icon_reco_md'}}		<span class="md">MD추천</span>			{{/xif}}
 					{{#xif this.prodFlagCode '==' 'icon_reco_online'}}	<span class="online">온라인전용</span>	{{/xif}}

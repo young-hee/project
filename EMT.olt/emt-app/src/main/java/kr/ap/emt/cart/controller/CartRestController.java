@@ -133,7 +133,13 @@ public class CartRestController extends CartBaseController{
 			if(Long.valueOf(cartSn) != null || cartProdExPut != null){
 				BooleanResult br = cartApi.modifyCartProd(cartSn, cartProdExPut);
 				if (br.isResult()) {
-					CartEx ce = cartApi.getCart(cartSn);
+					CartEx ce = null;
+                    if("Q".equals(modifyType)) {
+                        ce = calculationByChangeQty(cartSn, cartProdSn, cartProdQty);
+                    }
+                    else {
+                        ce = cartApi.getCart(cartSn);
+                    }					
 					result.put("data", makeCartEx2(ce));
 				}
 			}
@@ -512,8 +518,8 @@ public class CartRestController extends CartBaseController{
 					}
 				}
 			}
-			//CartEx ce = calculationBySelect(cartSn, cartProdSnList);
-			CartEx ce = cartApi.getCartBySelectCartProds(cartSn, cartProdSnList);
+			CartEx ce = calculationBySelect(cartSn, cartProdSnList);
+			//CartEx ce = cartApi.getCartBySelectCartProds(cartSn, cartProdSnList);
 			result.put("data", makeCartEx2(ce));
 		} catch (Exception e) {
 			result.put("errorData", e);

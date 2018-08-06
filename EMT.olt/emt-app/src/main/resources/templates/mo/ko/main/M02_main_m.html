@@ -129,6 +129,9 @@
 								                    <li class="ix-list-item">
 								                        <a href="#none" th:href="@{/product/detail(onlineProdSn=${prodList.onlineProdSn})}">
 															<span class="lazy_load_wrap" th:style="'background-color:#e2bfe3;'">
+																<th:block th:if="${prodList.saleDisplayStatus eq 'OutOfStock'}">
+																	<div class="item_state out_of_stock">일시품절</div>
+																</th:block>
 																<img src="" th:data-src="${prodList.onlineProdImages[0].imgUrl}" class="lazy_load">
 															</span>
 								                        	<span class="item_title" th:text="${prodList.onlineProdName}"></span> 

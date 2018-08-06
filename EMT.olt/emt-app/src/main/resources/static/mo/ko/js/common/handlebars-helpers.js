@@ -918,173 +918,184 @@
 
 	Handlebars.registerHelper("channelSwitch", function(value) {
 		var html = '';
-		switch (value) {
-			case 'all' :
-				//App, 모바일웹, PC
-				html = '<span class="app">APP 전용</span>\n' +
-					'\t\t\t\t\t\t\t\t\t<span class="mobile"><span class="sr_only">모바일</span>전용</span>\n' +
-					'\t\t\t\t\t\t\t\t\t<span class="pc"><span class="sr_only">PC 웹</span>전용</span>';
-				break
-			case 'onlyMW' :
-				//모바일웹 전용
-				html = '<span class="mobile"><span class="sr_only">모바일웹</span>전용</span>';
-				break;
-			case 'onlyMA' :
-				//App 전용
-				html = '<span class="app">APP 전용</span>';
-				break;
-			case 'exceptMW' :
-				//App, PC
-				html = '<span class="app">APP 전용</span>\n' +
-					'\t\t\t\t\t\t\t\t\t<span class="pc">PC</span>';
-				break;
-			case 'exceptMA' :
-				//모바일웹, PC
-				html = '<span class="mobile"><span class="sr_only">모바일</span>전용</span>\n' +
-					'\t\t\t\t\t\t\t\t\t<span class="pc"><span class="sr_only">PC 웹</span>전용</span>';
-				break;
-			case 'exceptPC' :
-				//App, 모바일웹
-				html = '<span class="app">APP 전용</span>\n' +
-					'\t\t\t\t\t\t\t\t\t<span class="mobile"><span class="sr_only">모바일</span>전용</span>';
-				break;
+
+		if (value != null && value.couponBenefitTypeCode != null) {
+			switch (value) {
+				case 'all' :
+					//App, 모바일웹, PC
+					html = '<span class="app">APP 전용</span>\n' +
+						'\t\t\t\t\t\t\t\t\t<span class="mobile"><span class="sr_only">모바일</span>전용</span>\n' +
+						'\t\t\t\t\t\t\t\t\t<span class="pc"><span class="sr_only">PC 웹</span>전용</span>';
+					break
+				case 'onlyMW' :
+					//모바일웹 전용
+					html = '<span class="mobile"><span class="sr_only">모바일웹</span>전용</span>';
+					break;
+				case 'onlyMA' :
+					//App 전용
+					html = '<span class="app">APP 전용</span>';
+					break;
+				case 'exceptMW' :
+					//App, PC
+					html = '<span class="app">APP 전용</span>\n' +
+						'\t\t\t\t\t\t\t\t\t<span class="pc">PC</span>';
+					break;
+				case 'exceptMA' :
+					//모바일웹, PC
+					html = '<span class="mobile"><span class="sr_only">모바일</span>전용</span>\n' +
+						'\t\t\t\t\t\t\t\t\t<span class="pc"><span class="sr_only">PC 웹</span>전용</span>';
+					break;
+				case 'exceptPC' :
+					//App, 모바일웹
+					html = '<span class="app">APP 전용</span>\n' +
+						'\t\t\t\t\t\t\t\t\t<span class="mobile"><span class="sr_only">모바일</span>전용</span>';
+					break;
+			}
+
+
 		}
 		return html;
 	});
 
 	Handlebars.registerHelper("couponTypeBenefitSwitch", function(value) {
 		var html = '';
-		switch (value.couponBenefitTypeCode) {
-			case 'ProdDc' :
-				//상품할인쿠폰
-				switch (value.prodDcCoupon.dcMethodCode) {
-					case 'FixedRate' :
-						//정률
-						html = '<div class="benefit type2">\n' +
-							'\t\t\t\t\t\t\t\t\t<p>' + value.prodDcCoupon.dcRate * 100 + '<em>%</em></p>\n' +
-							'\t\t\t\t\t\t\t\t\t<span class="sub">할인</span>   \n' +
-							'\t\t\t\t\t\t\t\t</div>';
-						break;
-					case 'FixedAmt' :
-						//정액
-						html = '<div class="benefit type3">\n' +
-							'\t\t\t\t\t\t\t\t\t<p>' + value.prodDcCoupon.dcAmt + '<em>원</em></p>\n' +
-							'\t\t\t\t\t\t\t\t\t<span class="sub">할인</span>   \n' +
-							'\t\t\t\t\t\t\t\t</div>';
-						break;
-					case 'FlatPrice' :
-						//균일가
-						html = '<div class="benefit type3">\n' +
-							'\t\t\t\t\t\t\t\t\t<p>' + value.prodDcCoupon.flatPrice + '<em>원</em></p>\n' +
-							'\t\t\t\t\t\t\t\t\t<span class="sub">균일가</span>   \n' +
-							'\t\t\t\t\t\t\t\t</div>';
-						break;
-					default :
-						break;
-				}
-				break
-			case 'CartDc' :
-				//장바구니할인쿠폰
-				switch (value.cartDcCoupon.dcMethodCode) {
-					case 'FixedRate' :
-						//정률
-						html = '<div class="benefit type2">\n' +
-							'\t\t\t\t\t\t\t\t\t<p>' + value.cartDcCoupon.dcRate * 100 + '<em>%</em></p>\n' +
-							'\t\t\t\t\t\t\t\t\t<span class="sub">할인</span>   \n' +
-							'\t\t\t\t\t\t\t\t</div>';
-						break;
-					case 'FixedAmt' :
-						//정액
-						html = '<div class="benefit type3">\n' +
-							'\t\t\t\t\t\t\t\t\t<p>' + value.cartDcCoupon.dcAmt + '<em>원</em></p>\n' +
-							'\t\t\t\t\t\t\t\t\t<span class="sub">할인</span>   \n' +
-							'\t\t\t\t\t\t\t\t</div>';
-						break;
-					case 'FlatPrice' :
-						//균일가
-						html = '<div class="benefit type3">\n' +
-							'\t\t\t\t\t\t\t\t\t<p>' + value.cartDcCoupon.flatPrice + '<em>원</em></p>\n' +
-							'\t\t\t\t\t\t\t\t\t<span class="sub">균일가</span>   \n' +
-							'\t\t\t\t\t\t\t\t</div>';
-						break;
-					default :
-						break;
-				}
-				break;
-			case 'MPlusN' :
-				//M+N쿠폰
-				html = '<div class="benefit type4">\n' +
-					'\t\t\t\t\t\t\t\t\t<p>' + value.mplusnCoupon.baseOrdQty + '<em><span class="sr_only">+</span></em>' + value.mplusnCoupon.freeAwardQty + '</p>\n' +
-					'\t\t\t\t\t\t\t\t</div>';
-				break;
-			case 'Buy1Get' :
-				//Buy1Get쿠폰 - 100%  50%
-				switch (value.buyOneGetCoupon.buy1getDcRate) {
-					case 1 :
-						html = '<div class="benefit type1">\n' +
-							'\t\t\t\t\t\t\t\t\t<p>하나</p>\n' +
-							'\t\t\t\t\t\t\t\t\t<p>더</p>\n' +
-							'\t\t\t\t\t\t\t\t</div>';
-						break;
-					case 0.5 :
-						html = '<div class="benefit type1">\n' +
-							'\t\t\t\t\t\t\t\t\t<p>하나</p>\n' +
-							'\t\t\t\t\t\t\t\t\t<p>반값</p>\n' +
-							'\t\t\t\t\t\t\t\t</div>';
-						break;
-					default :
-						break
-				}
-				break;
-			case 'CartAward' :
-				//장바구니증정쿠폰 - 사은품 증정
-				html = '<div class="benefit type1">\n' +
-					'\t\t\t\t\t\t\t\t\t<p>사은품</p>\n' +
-					'\t\t\t\t\t\t\t\t\t<p>증정</p>\n' +
-					'\t\t\t\t\t\t\t\t</div>';
-				break;
-			case 'ShipFeeFree' :
-				//배송비무료쿠폰
-				html = '<div class="benefit type1">\n' +
-					'\t\t\t\t\t\t\t\t\t<p>배송비</p>\n' +
-					'\t\t\t\t\t\t\t\t\t<p>무료</p>\n' +
-					'\t\t\t\t\t\t\t\t</div>';
-				break;
-			default :
-				break;
+
+		if (value != null && value.couponBenefitTypeCode != null) {
+			switch (value.couponBenefitTypeCode) {
+				case 'ProdDc' :
+					//상품할인쿠폰
+					switch (value.prodDcCoupon.dcMethodCode) {
+						case 'FixedRate' :
+							//정률
+							html = '<div class="benefit type2">\n' +
+								'\t\t\t\t\t\t\t\t\t<p>' + value.prodDcCoupon.dcRate * 100 + '<em>%</em></p>\n' +
+								'\t\t\t\t\t\t\t\t\t<span class="sub">할인</span>   \n' +
+								'\t\t\t\t\t\t\t\t</div>';
+							break;
+						case 'FixedAmt' :
+							//정액
+							html = '<div class="benefit type3">\n' +
+								'\t\t\t\t\t\t\t\t\t<p>' + value.prodDcCoupon.dcAmt + '<em>원</em></p>\n' +
+								'\t\t\t\t\t\t\t\t\t<span class="sub">할인</span>   \n' +
+								'\t\t\t\t\t\t\t\t</div>';
+							break;
+						case 'FlatPrice' :
+							//균일가
+							html = '<div class="benefit type3">\n' +
+								'\t\t\t\t\t\t\t\t\t<p>' + value.prodDcCoupon.flatPrice + '<em>원</em></p>\n' +
+								'\t\t\t\t\t\t\t\t\t<span class="sub">균일가</span>   \n' +
+								'\t\t\t\t\t\t\t\t</div>';
+							break;
+						default :
+							break;
+					}
+					break;
+				case 'CartDc' :
+					//장바구니할인쿠폰
+					switch (value.cartDcCoupon.dcMethodCode) {
+						case 'FixedRate' :
+							//정률
+							html = '<div class="benefit type2">\n' +
+								'\t\t\t\t\t\t\t\t\t<p>' + value.cartDcCoupon.dcRate * 100 + '<em>%</em></p>\n' +
+								'\t\t\t\t\t\t\t\t\t<span class="sub">할인</span>   \n' +
+								'\t\t\t\t\t\t\t\t</div>';
+							break;
+						case 'FixedAmt' :
+							//정액
+							html = '<div class="benefit type3">\n' +
+								'\t\t\t\t\t\t\t\t\t<p>' + value.cartDcCoupon.dcAmt + '<em>원</em></p>\n' +
+								'\t\t\t\t\t\t\t\t\t<span class="sub">할인</span>   \n' +
+								'\t\t\t\t\t\t\t\t</div>';
+							break;
+						case 'FlatPrice' :
+							//균일가
+							html = '<div class="benefit type3">\n' +
+								'\t\t\t\t\t\t\t\t\t<p>' + value.cartDcCoupon.flatPrice + '<em>원</em></p>\n' +
+								'\t\t\t\t\t\t\t\t\t<span class="sub">균일가</span>   \n' +
+								'\t\t\t\t\t\t\t\t</div>';
+							break;
+						default :
+							break;
+					}
+					break;
+				case 'MPlusN' :
+					//M+N쿠폰
+					html = '<div class="benefit type4">\n' +
+						'\t\t\t\t\t\t\t\t\t<p>' + value.mplusnCoupon.baseOrdQty + '<em><span class="sr_only">+</span></em>' + value.mplusnCoupon.freeAwardQty + '</p>\n' +
+						'\t\t\t\t\t\t\t\t</div>';
+					break;
+				case 'Buy1Get' :
+					//Buy1Get쿠폰 - 100%  50%
+					switch (value.buyOneGetCoupon.buy1getDcRate) {
+						case 1 :
+							html = '<div class="benefit type1">\n' +
+								'\t\t\t\t\t\t\t\t\t<p>하나</p>\n' +
+								'\t\t\t\t\t\t\t\t\t<p>더</p>\n' +
+								'\t\t\t\t\t\t\t\t</div>';
+							break;
+						case 0.5 :
+							html = '<div class="benefit type1">\n' +
+								'\t\t\t\t\t\t\t\t\t<p>하나</p>\n' +
+								'\t\t\t\t\t\t\t\t\t<p>반값</p>\n' +
+								'\t\t\t\t\t\t\t\t</div>';
+							break;
+						default :
+							break;
+					}
+					break;
+				case 'CartAward' :
+					//장바구니증정쿠폰 - 사은품 증정
+					html = '<div class="benefit type1">\n' +
+						'\t\t\t\t\t\t\t\t\t<p>사은품</p>\n' +
+						'\t\t\t\t\t\t\t\t\t<p>증정</p>\n' +
+						'\t\t\t\t\t\t\t\t</div>';
+					break;
+				case 'ShipFeeFree' :
+					//배송비무료쿠폰
+					html = '<div class="benefit type1">\n' +
+						'\t\t\t\t\t\t\t\t\t<p>배송비</p>\n' +
+						'\t\t\t\t\t\t\t\t\t<p>무료</p>\n' +
+						'\t\t\t\t\t\t\t\t</div>';
+					break;
+				default :
+					break;
+			}
 		}
 		return html;
 	});
 
 	Handlebars.registerHelper("conditionSwitch", function(value) {
 		var html = '';
-		switch (value.couponBenefitTypeCode) {
-			case 'ProdDc' :
-				//상품할인쿠폰
-				html = '상품쿠폰';
-				break;
-			case 'CartDc' :
-				//장바구니할인쿠폰 - 정액/정률
-				html = '장바구니쿠폰';
-				break;
-			case 'MPlusN' :
-				//M+N쿠폰
-				html = 'M + N';
-				break;
-			case 'Buy1Get' :
-				//Buy1Get쿠폰 - 100%  50%
-				html = 'Buy1 Get1 쿠폰';
-				break;
-			case 'CartAward' :
-				//장바구니증정쿠폰 - 사은품 증정
-				html = '사은품증정쿠폰';
-				break;
-			case 'ShipFeeFree' :
-				//배송비무료쿠폰
-				html = '배송비무료쿠폰';
-				break;
-			default :
-				break;
+
+		if (value != null && value.couponBenefitTypeCode != null) {
+			switch (value.couponBenefitTypeCode) {
+				case 'ProdDc' :
+					//상품할인쿠폰
+					html = '상품쿠폰';
+					break;
+				case 'CartDc' :
+					//장바구니할인쿠폰 - 정액/정률
+					html = '장바구니쿠폰';
+					break;
+				case 'MPlusN' :
+					//M+N쿠폰
+					html = 'M + N';
+					break;
+				case 'Buy1Get' :
+					//Buy1Get쿠폰 - 100%  50%
+					html = 'Buy1 Get1 쿠폰';
+					break;
+				case 'CartAward' :
+					//장바구니증정쿠폰 - 사은품 증정
+					html = '사은품증정쿠폰';
+					break;
+				case 'ShipFeeFree' :
+					//배송비무료쿠폰
+					html = '배송비무료쿠폰';
+					break;
+				default :
+					break;
+			}
 		}
 		return html;
 	});
@@ -1104,32 +1115,35 @@
 
 	Handlebars.registerHelper("depositTypeName", function(value) {
 		var html = '';
-		switch (value) {
-			case 'Saving' :
-				//적립:Saving
-				html = '예치금 적립';
-				break;
-			case 'Transfer' :
-				//출금:Transfer
-				html = '예치금 출금';
-				break;
-			case 'Pay' :
-				//사용:Pay
-				html = '예치금 사용';
-				break;
-			case 'PayCancel' :
-				//취소:PayCancel
-				html = '예치금 취소';
-				break;
-			case 'ManualSaving' :
-				html = '수동적립';
-				break;
-			case 'ManualDec' :
-				html = '수동차감';
-				break;
-			default :
-				html = '';
-				break;
+
+		if (value != null) {
+			switch (value) {
+				case 'Saving' :
+					//적립:Saving
+					html = '예치금 적립';
+					break;
+				case 'Transfer' :
+					//출금:Transfer
+					html = '예치금 출금';
+					break;
+				case 'Pay' :
+					//사용:Pay
+					html = '예치금 사용';
+					break;
+				case 'PayCancel' :
+					//취소:PayCancel
+					html = '예치금 취소';
+					break;
+				case 'ManualSaving' :
+					html = '수동적립';
+					break;
+				case 'ManualDec' :
+					html = '수동차감';
+					break;
+				default :
+					html = '';
+					break;
+			}
 		}
 		return html;
 	});

@@ -11,6 +11,7 @@ import net.g1project.bluewave.imagescaler.vo.ResizedImageVO;
 import net.g1project.ecp.api.client.ap.ApApi;
 import net.g1project.ecp.api.client.ap.BbsApi;
 import net.g1project.ecp.api.client.ap.VerifApi;
+import net.g1project.ecp.api.client.basis.MallApi;
 import net.g1project.ecp.api.client.offlinestore.StoreApi;
 import net.g1project.ecp.api.client.order.OrderApi;
 import net.g1project.ecp.api.client.sales.*;
@@ -130,6 +131,9 @@ public class AbstractController {
 	
 	@Autowired
 	protected VerifApi verifApi;
+	
+	@Autowired
+	protected MallApi mallApi;
 
     /**
      * Get Error Messages

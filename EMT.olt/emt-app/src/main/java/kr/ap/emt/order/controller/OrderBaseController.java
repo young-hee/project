@@ -678,9 +678,9 @@ public class OrderBaseController extends AbstractViewController {
 
 					/* 부분취소 가능여부(부분취소가능 : 1,부분취소불가능 : 0) */
 					if ("1".equals(partialCancelAvailYn)) {
-						payResult.setPartialCancelAvailYn("Y");
+						payResult.setPartialCancelAvailYn(CODE_Y);
 					} else {
-						payResult.setPartialCancelAvailYn("N");
+						payResult.setPartialCancelAvailYn(CODE_N);
 					}
 					payResult.setCreditcardPayTypeCode(null);
 
@@ -702,7 +702,7 @@ public class OrderBaseController extends AbstractViewController {
 					 */
 					String mobilePhoneNo = request.getParameter("P_HPP_NUM");
 					payResult.setMobilePhoneNo(mobilePhoneNo);
-					payResult.setPartialCancelAvailYn("Y");     // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
+					payResult.setPartialCancelAvailYn(CODE_Y);     // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 					break;
 
 				case PAY_METHOD_CODE_BANK_AC_TRANSFER:
@@ -725,32 +725,7 @@ public class OrderBaseController extends AbstractViewController {
 					 * P_CSHR_DT : 발행시간
 					 * P_CSHR_AUTH_NO : 발행번호(가상계좌의 경우, 입금 완료 시, 생성되어 모바일 내 채번시에는 전달되지 않습니다.)
 					 */
-					String bankPCshrCode = request.getParameter("P_CSHR_CODE");
-					if (bankPCshrCode == "220000" || "220000".equals(bankPCshrCode)) { /* 처리상태 : "220000" 이외 오류 */
-						String cashReceiptIssueIdentifier = request.getParameter("P_CSHR_TYPE"); // 용도구분
-						String cashReceiptTradeNo = request.getParameter("P_CSHR_AUTH_NO"); // 발행번호(가상계좌의 경우,입금 완료 시, 생성되어 모바일 내 채번시에는 전달되지 않습니다.)
-						payResult.setCashReceiptIssuePossibleYn("Y"); //현금영수증발급가능여부
-						payResult.setCashReceiptIssueYn("Y"); //현금영수증발급여부
-						if (cashReceiptIssueIdentifier == "0" || "0".equals(cashReceiptIssueIdentifier)) {
-							payResult.setCashReceiptIssueIdentifier("0"); //현금영수증발급식별자  (0:소득공제용-개인)
-						} else {
-							payResult.setCashReceiptIssueIdentifier("1"); //현금영수증발급식별자(1:지출증빙용-사업자)
-						}
-						payResult.setCashReceiptTradeNo(cashReceiptTradeNo); //현금영수증거래번호
-
-					} else { /* 처리상태 : 오류 */
-						payResult.setCashReceiptIssuePossibleYn("N"); //현금영수증발급가능여부
-						payResult.setCashReceiptIssueYn("N"); //현금영수증발급여부
-						payResult.setCashReceiptIssueIdentifier(null); //현금영수증발급식별자(0:소득공제용/1:지출증빙용)
-						payResult.setCashReceiptTradeNo(null); //현금영수증거래번호
-					}
-
-					payResult.setBankCode(null); //은행코드
-					payResult.setBankName(null); //은행명
-					payResult.setCashReceiptPurposeCode(null); //현금영수증용도코드
-					payResult.setCashReceiptApprovalNo(null); //현금영수증승인번호
-					payResult.setCashReceiptUrl(null); //현금영수증URL
-					payResult.setPartialCancelAvailYn("Y"); //TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
+					payResult.setPartialCancelAvailYn(CODE_Y);     // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 					break;
 
 				case PAY_METHOD_CODE_VIRTUAL_ACCOUNT:
@@ -764,72 +739,30 @@ public class OrderBaseController extends AbstractViewController {
 					 */
 					String virtualBankAcBankName = request.getParameter("P_FN_NM");
 					String virtualDepositBankAcNo = request.getParameter("P_VACT_NUM");
+
 					String virtualBankAcDeadlineDt = request.getParameter("P_VACT_DATE");
+					String virtualBankAcDeadlineTime = request.getParameter("P_VACT_TIME");
+					date = formatOutput.parse(virtualBankAcDeadlineDt + virtualBankAcDeadlineTime + "+0900");
+
 					String virtualBankAcAcHolder = request.getParameter("P_VACT_NAME");
 					String virtualBankAcBankCode = request.getParameter("P_VACT_BANK_CODE");
-
-					virtualBankAcDeadlineDt = virtualBankAcDeadlineDt.substring(0, 4) + '-' + virtualBankAcDeadlineDt.substring(4, 6) + '-' + virtualBankAcDeadlineDt.substring(6, 8);
-					SimpleDateFormat virtualBankFormatInput = new SimpleDateFormat("yyyy-MM-dd");
-					SimpleDateFormat virtualBankFormatOutput = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-					Date vbDate;
-					vbDate = virtualBankFormatInput.parse(virtualBankAcDeadlineDt, new ParsePosition(0));
-					String virtualBankDateString = virtualBankFormatOutput.format(vbDate);
-					vbDate = virtualBankFormatOutput.parse(virtualBankDateString, new ParsePosition(0));
 
 					payResult.setVirtualBankAcBankCode(virtualBankAcBankCode);      // 가상계좌은행코드
 					payResult.setVirtualBankAcBankName(virtualBankAcBankName);      // 가상계좌은행명
 					payResult.setVirtualDepositBankAcNo(virtualDepositBankAcNo);    // 가상입금계좌번호(입금할 계좌번호)
 					payResult.setVirtualBankAcAcHolder(virtualBankAcAcHolder);      // 가상계좌예금주
-					payResult.setVirtualBankAcDeadlineDt(vbDate);                   // 가상계좌기한일시(
-					payResult.setVirtualBankAcDepositDt(vbDate);                    // 가상계좌입금일시
+					payResult.setVirtualBankAcDeadlineDt(date);                     // 가상계좌기한일시
+					payResult.setVirtualBankAcDepositDt(date);                      // 가상계좌입금일시
 					payResult.setVirtualBankAcClosedSmsYn(null);                    // 가상계좌마감SMS여부
-
-					/**
-					 * 현금영수증 발행
-					 * P_CSHR_CODE : 처리상태(220000 : 정상, 그 외 : 오류)
-					 * P_CSHR_MSG : 처리메시지
-					 * P_VACT_TIME : 입금마감시간(hhmmss)
-					 * P_VACT_NAME : 계좌주명
-					 * P_VACT_BANK_CODE : 은행코드
-					 * P_CSHR_AMT : 현금영수증(총금액 = 공급가액+세금+봉사료)
-					 * P_CSHR_SUP_AMT : 공급가액
-					 * P_CSHR_TAX : 세금
-					 * P_CSHR_SRVC_AMT : 봉사료
-					 * P_CSHR_TYPE : 용도구분(0:소득공제용, 1:지출증빙용)
-					 * P_CSHR_DT : 발행시간
-					 * P_CSHR_AUTH_NO : 발행번호(가상계좌의 경우, 입금 완료 시, 생성되어 모바일 내 채번시에는 전달되지 않습니다.)
-					 */
-					String virtualPCshrCode = request.getParameter("P_CSHR_CODE");
-					if (virtualPCshrCode == "220000" || "220000".equals(virtualPCshrCode)) {              // 처리상태 : "220000" 이외 오류
-						String cashReceiptIssueIdentifier = request.getParameter("P_CSHR_TYPE");    // 용도구분
-						String cashReceiptTradeNo = request.getParameter("P_CSHR_AUTH_NO");     // 발행번호(가상계좌의 경우,입금 완료 시, 생성되어 모바일 내 채번시에는 전달되지 않습니다.)
-						payResult.setCashReceiptIssuePossibleYn("Y");                                   // 현금영수증발급가능여부
-						payResult.setCashReceiptIssueYn("Y");                                           // 현금영수증발급여부
-						if (cashReceiptIssueIdentifier == "0" || "0".equals(cashReceiptIssueIdentifier)) {
-							payResult.setCashReceiptIssueIdentifier("0");                               // 현금영수증발급식별자   (0:소득공제용-개인)
-						} else {
-							payResult.setCashReceiptIssueIdentifier("1");                               // 현금영수증발급식별자(1:지출증빙용-사업자)
-						}
-						payResult.setCashReceiptTradeNo(cashReceiptTradeNo);                            // 현금영수증거래번호
-
-					} else { /* 처리상태 : 오류 */
-						payResult.setCashReceiptIssuePossibleYn("N");   // 현금영수증발급가능여부
-						payResult.setCashReceiptIssueYn("N");           // 현금영수증발급여부
-						payResult.setCashReceiptIssueIdentifier(null);  // 현금영수증발급식별자(0:소득공제용/1:지출증빙용)
-						payResult.setCashReceiptTradeNo(null);          // 현금영수증거래번호
-					}
-					payResult.setCashReceiptPurposeCode(null);          // 현금영수증용도코드
-					payResult.setCashReceiptApprovalNo(null);           // 현금영수증승인번호
-					payResult.setCashReceiptUrl(null);                  // 현금영수증URL
-					payResult.setPartialCancelAvailYn("Y");             // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
+					payResult.setPartialCancelAvailYn(CODE_Y);  // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 					break;
 
 				case PAY_METHOD_CODE_PAYCO:// 페이코
-					payResult.setPartialCancelAvailYn("Y");             // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
+					payResult.setPartialCancelAvailYn(CODE_Y);  // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 					break;
 
 				case PAY_METHOD_CODE_KAKAOPAY:// 카카오페이
-					payResult.setPartialCancelAvailYn("Y"); //TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
+					payResult.setPartialCancelAvailYn(CODE_Y); //TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 					break;
 			}
 
@@ -919,9 +852,9 @@ public class OrderBaseController extends AbstractViewController {
 					payResult.setCardIssueBankCode(cardIssueBankCode);
 					payResult.setCardNo(cardNo);
 					if("1".equals(partialCancelAvailYn)){
-						payResult.setPartialCancelAvailYn("Y");
+						payResult.setPartialCancelAvailYn(CODE_Y);
 					}else{
-						payResult.setPartialCancelAvailYn("N");
+						payResult.setPartialCancelAvailYn(CODE_N);
 					}
 					payResult.setCreditcardPayTypeCode(null);
 
@@ -942,7 +875,7 @@ public class OrderBaseController extends AbstractViewController {
 					 */
 					String mobilePhoneNo = request.getParameter("HPP_Num");
 					payResult.setMobilePhoneNo(mobilePhoneNo);
-					payResult.setPartialCancelAvailYn("Y");     // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
+					payResult.setPartialCancelAvailYn(CODE_Y);     // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 					break;
 
 				case PAY_METHOD_CODE_BANK_AC_TRANSFER: // 실시간계좌이체
@@ -953,41 +886,9 @@ public class OrderBaseController extends AbstractViewController {
 					 * CSHR_Type(P_CSHR_TYPE) : 현금영수증구분(0 = 소득공제 / 1 = 지출증빙)
 					 * ACCT_Name : 계좌주명
 					 */
-					String bankCode = request.getParameter("ACCT_BankCode");                        // 은행코드
+					String bankCode = request.getParameter("ACCT_BankCode");                    // 은행코드
 					String bankPCshrCode = request.getParameter("CSHR_ResultCode");             // 현금영수증 발행 정상여부
-
-					/* 현금영수증 발행 정상여부가 정상이면(220000) */
-					if(bankPCshrCode == "220000" || "220000".equals(bankPCshrCode)){                    // 처리상태 : "220000" 이외 오류
-						String cashReceiptIssueIdentifier = request.getParameter("CSHR_Type");  // 현금영수증구분(0 = 소득공제 / 1 = 지출증빙)
-						// TODO : PC버전 발행번호 확인할것!
-						String cashReceiptTradeNo = request.getParameter("P_CSHR_AUTH_NO");     // 발행번호(가상계좌의 경우,입금 완료 시, 생성되어 모바일 내 채번시에는 전달되지 않습니다.)
-
-						/* 현금영수증 구분 */
-						if(cashReceiptIssueIdentifier == "0" || "0".equals(cashReceiptIssueIdentifier)){
-							payResult.setCashReceiptIssueIdentifier("0");       // 현금영수증발급식별자   (0:소득공제용-개인)
-						}
-						else{
-							payResult.setCashReceiptIssueIdentifier("1");       // 현금영수증발급식별자(1:지출증빙용-사업자)
-						}
-						payResult.setCashReceiptTradeNo(cashReceiptTradeNo);    // 현금영수증거래번호
-
-						payResult.setCashReceiptIssuePossibleYn("Y");                                   // 현금영수증발급가능여부
-						payResult.setCashReceiptIssueYn("Y");                                           // 현금영수증발급여부
-
-						/* 현금영수증 발행 실패 */
-					}else{
-						payResult.setCashReceiptIssueIdentifier(null);  // 현금영수증발급식별자(0:소득공제용/1:지출증빙용)
-						payResult.setCashReceiptTradeNo(null);          // 현금영수증거래번호
-						payResult.setCashReceiptIssuePossibleYn("N");   // 현금영수증발급가능여부
-						payResult.setCashReceiptIssueYn("N");           // 현금영수증발급여부
-
-					}
-					payResult.setBankCode(bankCode);            // 은행코드
-					payResult.setBankName(null);                // 은행명
-					payResult.setCashReceiptPurposeCode(null);  // 현금영수증용도코드
-					payResult.setCashReceiptApprovalNo(null);   // 현금영수증승인번호
-					payResult.setCashReceiptUrl(null);          // 현금영수증URL
-					payResult.setPartialCancelAvailYn("Y");     // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
+					payResult.setPartialCancelAvailYn(CODE_Y);     // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 					break;
 
 				case PAY_METHOD_CODE_VIRTUAL_ACCOUNT: // 가상계좌
@@ -1005,58 +906,27 @@ public class OrderBaseController extends AbstractViewController {
 					String virtualBankAcBankName = request.getParameter("vactBankName");
 					String virtualDepositBankAcNo = request.getParameter("VACT_Num");
 					String virtualBankAcAcHolder = request.getParameter("VACT_Name");
-					String virtualBankAcDeadlineDt = request.getParameter("VACT_Date");
 
-					virtualBankAcDeadlineDt =  virtualBankAcDeadlineDt.substring(0, 4) + '-' + virtualBankAcDeadlineDt.substring(4, 6) + '-' + virtualBankAcDeadlineDt.substring(6, 8);
-					SimpleDateFormat virtualBankFormatInput = new SimpleDateFormat("yyyy-MM-dd");
-					SimpleDateFormat virtualBankFormatOutput = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-					Date vbDate;
-					vbDate = virtualBankFormatInput.parse(virtualBankAcDeadlineDt, new ParsePosition(0));
-					String virtualBankDateString = virtualBankFormatOutput.format(vbDate);
-					vbDate = virtualBankFormatOutput.parse(virtualBankDateString, new ParsePosition(0));
+					String virtualBankAcDeadlineDt = request.getParameter("VACT_Date");
+					String virtualBankAcDeadlineTime = request.getParameter("VACT_Time");
+					date = formatOutput.parse(virtualBankAcDeadlineDt + virtualBankAcDeadlineTime + "+0900");
 
 					payResult.setVirtualBankAcBankCode(virtualBankAcBankCode);      // 가상계좌은행코드
 					payResult.setVirtualBankAcBankName(virtualBankAcBankName);      // 가상계좌은행명
 					payResult.setVirtualDepositBankAcNo(virtualDepositBankAcNo);    // 가상입금계좌번호(입금할 계좌번호)
 					payResult.setVirtualBankAcAcHolder(virtualBankAcAcHolder);      // 가상계좌예금주
-					payResult.setVirtualBankAcDeadlineDt(vbDate);                   // 가상계좌기한일시
-					payResult.setVirtualBankAcDepositDt(vbDate);                    // 가상계좌입금일시
+					payResult.setVirtualBankAcDeadlineDt(date);                     // 가상계좌기한일시
+					payResult.setVirtualBankAcDepositDt(date);                      // 가상계좌입금일시
 					payResult.setVirtualBankAcClosedSmsYn(null);                    // 가상계좌마감SMS여부
-
-					/* 현금영수증 구분 */
-					String virtualPCshrCode = request.getParameter("P_CSHR_CODE");
-					if(virtualPCshrCode == "220000" || "220000".equals(virtualPCshrCode)){              // 처리상태 : "220000" 이외 오류
-						String cashReceiptIssueIdentifier = request.getParameter("P_CSHR_TYPE");    // 용도구분
-						String cashReceiptTradeNo = request.getParameter("P_CSHR_AUTH_NO");     // 발행번호(가상계좌의 경우,입금 완료 시, 생성되어 모바일 내 채번시에는 전달되지 않습니다.)
-						payResult.setCashReceiptIssuePossibleYn("Y");                                   // 현금영수증발급가능여부
-						payResult.setCashReceiptIssueYn("Y");                                           // 현금영수증발급여부
-						if(cashReceiptIssueIdentifier == "0" || "0".equals(cashReceiptIssueIdentifier)){
-							payResult.setCashReceiptIssueIdentifier("0");                               // 현금영수증발급식별자   (0:소득공제용-개인)
-						}
-						else{
-							payResult.setCashReceiptIssueIdentifier("1");                               // 현금영수증발급식별자(1:지출증빙용-사업자)
-						}
-						payResult.setCashReceiptTradeNo(cashReceiptTradeNo);                            // 현금영수증거래번호
-
-					}
-					else{ /* 처리상태 : 오류 */
-						payResult.setCashReceiptIssueIdentifier(null);  // 현금영수증발급식별자(0:소득공제용/1:지출증빙용)
-						payResult.setCashReceiptTradeNo(null);          // 현금영수증거래번호
-						payResult.setCashReceiptIssuePossibleYn("N");   // 현금영수증발급가능여부
-						payResult.setCashReceiptIssueYn("N");           // 현금영수증발급여부
-					}
-					payResult.setCashReceiptPurposeCode(null);          // 현금영수증용도코드
-					payResult.setCashReceiptApprovalNo(null);           // 현금영수증승인번호
-					payResult.setCashReceiptUrl(null);                  // 현금영수증URL
-					payResult.setPartialCancelAvailYn("Y");             // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
+					payResult.setPartialCancelAvailYn(CODE_Y);             // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 					break;
 
 				case PAY_METHOD_CODE_PAYCO:// 페이코
-					payResult.setPartialCancelAvailYn("Y"); //TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
+					payResult.setPartialCancelAvailYn(CODE_Y); //TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 					break;
 
 				case PAY_METHOD_CODE_KAKAOPAY:// 카카오페이
-					payResult.setPartialCancelAvailYn("Y"); //TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
+					payResult.setPartialCancelAvailYn(CODE_Y); //TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 					break;
 			}
 

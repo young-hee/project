@@ -22,6 +22,7 @@ import kr.ap.emt.payment.config.NaverPgProperties;
 import kr.ap.emt.payment.ini.IniPayment;
 import kr.ap.emt.payment.vo.PayDTO;
 import net.g1project.ecp.api.model.ap.ap.ApMemberWPayInfo;
+import net.g1project.ecp.api.model.basis.mall.MallSalesPolicy;
 
 /**
  * @author aki@g1project.net
@@ -73,7 +74,8 @@ public class PaymentRestController extends AbstractController {
  	    	} else {
  	    		
  	    		if(VBANK.equals(payDTO.getPayMethod())) {
- 	    			//TODO : 정책정보에서 입금대기시간 정보 가져와서 입금기한 셋팅 해야함.
+ 	    			MallSalesPolicy mallSalePolicy = mallApi.getMallPolicies();
+ 	    			payDTO.setDepositWatingHours(mallSalePolicy.getDepositWatingHours());
  	    			
  	    		}
  	    		payDTO.setpMid(inicisPgProperties.getIniMid());

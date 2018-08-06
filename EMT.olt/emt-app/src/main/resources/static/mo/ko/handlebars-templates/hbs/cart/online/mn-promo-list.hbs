@@ -83,17 +83,17 @@
 						{{!-- 최대구매제한여부가 'Y'일 경우 최대구매수량 존재 --}}
 						{{#xif (eq this.prodEx.saleDisplayStatus 'OnSale') '&&' (eq this.prodEx.maxPurLimitYn 'Y')}}
 							<span data-min="{{ this.prodEx.minPurLimitQty }}" data-max="{{ this.prodEx.maxPurLimitQty }}" class="ui_spinner small" data-step="1" data-disabled="false">
-								<button class="spinner_decrease" type="button" title="제품 수량 감소" onclick="prodQtyOperate(this, {{ ../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '-')"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
+								<button class="spinner_decrease" type="button" title="제품 수량 감소" onclick="prodQtyOperate(this, {{ ../../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '-')"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
 								<input class="spinner_input" type="text" name="cartProdQty" value="{{ this.cartProdQty }}">
-								<button class="spinner_increase" type="button" title="제품 수량 증가" onclick="prodQtyOperate(this, {{ ../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '+')"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>
+								<button class="spinner_increase" type="button" title="제품 수량 증가" onclick="prodQtyOperate(this, {{ ../../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '+')"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>
 							</span>
 						{{/xif}}
 						{{!-- 최대구매제한여부가 'N'일경우 최대구매수량은 존재하지 않음 --}}
 						{{#xif (eq this.prodEx.saleDisplayStatus 'OnSale') '&&' (eq this.prodEx.maxPurLimitYn 'N')}}
 							<span data-min="{{ this.prodEx.minPurLimitQty }}" class="ui_spinner small" data-step="1" data-disabled="false">
-								<button class="spinner_decrease" type="button" title="제품 수량 감소" onclick="prodQtyOperate(this, {{ ../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '-')"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
+								<button class="spinner_decrease" type="button" title="제품 수량 감소" onclick="prodQtyOperate(this, {{ ../../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '-')"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
 								<input class="spinner_input" type="text" name="cartProdQty" value="{{ this.cartProdQty }}">
-								<button class="spinner_increase" type="button" title="제품 수량 증가" onclick="prodQtyOperate(this, {{ ../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '+')"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>
+								<button class="spinner_increase" type="button" title="제품 수량 증가" onclick="prodQtyOperate(this, {{ ../../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '+')"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>
 							</span>
 						{{/xif}}
 
@@ -238,16 +238,16 @@
 					{{#if (eq prodEx.saleDisplayStatus 'OnSale') }}
 						{{#if (eq prodEx.maxPurLimitYn 'Y') }}
 							<span data-min="{{ this.prodEx.minPurLimitQty }}" data-max="{{ this.prodEx.maxPurLimitQty }}" class="ui_spinner small" data-step="1" data-disabled="false">
-								<button class="spinner_decrease" type="button" title="제품 수량 감소" onclick="prodQtyOperate(this, {{ ../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '-')"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
+								<button class="spinner_decrease" type="button" title="제품 수량 감소" onclick="prodQtyOperate(this, {{ ../../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '-')"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
 								<input class="spinner_input" type="text" name="cartProdQty" value="{{ this.cartProdQty }}">
-								<button class="spinner_increase" type="button" title="제품 수량 증가" onclick="prodQtyOperate(this, {{ ../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '+')"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>
+								<button class="spinner_increase" type="button" title="제품 수량 증가" onclick="prodQtyOperate(this, {{ ../../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '+')"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>
 							</span>
 						{{else}}
 							<!--/* 최대구매제한여부가 'N'일경우 최대구매수량은 존재하지 않음 */-->
 							<span data-min="{{ this.prodEx.minPurLimitQty }}" class="ui_spinner small" data-step="1" data-disabled="false">
-								<button class="spinner_decrease" type="button" title="제품 수량 감소" onclick="prodQtyOperate(this, {{ ../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '-')"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
+								<button class="spinner_decrease" type="button" title="제품 수량 감소" onclick="prodQtyOperate(this, {{ ../../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '-')"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
 								<input class="spinner_input" type="text" name="cartProdQty" value="{{ this.cartProdQty }}">
-								<button class="spinner_increase" type="button" title="제품 수량 증가" onclick="prodQtyOperate(this, {{ ../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '+')"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>
+								<button class="spinner_increase" type="button" title="제품 수량 증가" onclick="prodQtyOperate(this, {{ ../../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '+')"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>
 							</span>
 						{{/if}}
 					{{/if}}
@@ -304,7 +304,7 @@
 				{{/each}}
 			{{/each}}
 			{{#xif this.promoApplyResultCode '!=' 'All'}}
-				<p class="text_notice mgt10">{{calc this.baseOrdQty '+' this.freeAwardQty}}개 담으면 {{ this.freeAwardQty }}개 무료증정</p> {{!--2개 담으면 1개 무료증정--}}
+				<p class="text_notice mgt10">{{calc recommandBaseOrdQty '+' recommandFreeAwardQty }}개 담으면 {{ recommandFreeAwardQty }}개 무료증정</p> {{!--2개 담으면 1개 무료증정--}}
 			{{/xif}}
 		</div>
 	{{/xif}}

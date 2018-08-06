@@ -10,7 +10,9 @@ this["AP"]["handlebars"]["main"]["home"]["recommend-items"] = Handlebars.templat
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.products : depth0)) != null ? stack1.rgbVal : stack1), depth0))
     + "\";>\n				<a href=\""
     + alias2((helpers.productDetailPath || (depth0 && depth0.productDetailPath) || alias4).call(alias3,(depth0 != null ? depth0.onlineProdSn : depth0),{"name":"productDetailPath","hash":{},"data":data}))
-    + "\" class=\"lazy_load_wrap\">\n					<img class=\"lazy_load\" src=\"\" data-src=\""
+    + "\" class=\"lazy_load_wrap\">\n"
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.saleDisplayStatus : depth0),"==","OutOfStock",{"name":"xif","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "					<img class=\"lazy_load\" src=\"\" data-src=\""
     + alias2(alias1(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.products : depth0)) != null ? stack1.prodImages : stack1)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
     + "\" alt=\"\">\n				</a>\n		</div>\n		\n		<div class=\"info_box\">\n			<div class=\"title_area\">\n				<h3 class=\"h_title\">"
     + alias2(alias1((depth0 != null ? depth0.onlineProdName : depth0), depth0))
@@ -19,6 +21,8 @@ this["AP"]["handlebars"]["main"]["home"]["recommend-items"] = Handlebars.templat
     + "</p>\n			</div>\n			<div class=\"price_area\">\n				<div class=\"price\">\n					<strong>"
     + alias2((helpers.numberFormat || (depth0 && depth0.numberFormat) || alias4).call(alias3,((stack1 = ((stack1 = (depth0 != null ? depth0.products : depth0)) != null ? stack1.prodPriceSummary : stack1)) != null ? stack1.onlineSalePrice : stack1),{"name":"numberFormat","hash":{},"data":data}))
     + "<em>원</em></strong>\n				</div>\n			</div>\n		</div>\n	</div>\n</li>\n\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "						<div class=\"item_state out_of_stock\">일시품절</div>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 

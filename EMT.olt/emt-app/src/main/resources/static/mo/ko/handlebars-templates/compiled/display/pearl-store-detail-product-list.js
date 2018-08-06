@@ -16,7 +16,7 @@ this["AP"]["handlebars"]["display"]["pearl-store-detail-product-list"] = Handleb
   return "\n			<li class=\"prod\" data-online-prod-sn=\""
     + alias2(alias1((depths[1] != null ? depths[1].onlineProdSn : depths[1]), depth0))
     + "\">\n				<div class=\"item\">\n					<div class=\"item_images\">\n						<!-- /* 대표 이미지 */ -->\n						<img class=\"lazy_load\" src=\"\" data-src=\""
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.prodImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
+    + alias2((helpers.replaceImagePath || (depth0 && depth0.replaceImagePath) || alias4).call(alias3,((stack1 = ((stack1 = (depth0 != null ? depth0.prodImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1),280,280,{"name":"replaceImagePath","hash":{},"data":data}))
     + "\" alt=\"\">\n\n						"
     + ((stack1 = (helpers.stockImg || (depth0 && depth0.stockImg) || alias4).call(alias3,(depth0 != null ? depth0.saleDisplayStatus : depth0),(depth0 != null ? depth0.prodTypeCode : depth0),{"name":"stockImg","hash":{},"data":data})) != null ? stack1 : "")
     + "\n					</div>\n					<div class=\"item_info list\">\n						<div class=\"prd_name\">\n							<div>\n								<p class=\"s_name\">\n									<em class=\"tag\">"

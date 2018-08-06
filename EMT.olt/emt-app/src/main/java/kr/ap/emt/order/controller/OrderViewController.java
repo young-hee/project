@@ -211,9 +211,8 @@ public class OrderViewController extends OrderBaseController {
 		logger.info(">>> resultMap : " + resultMap.toString());
 
 		/* 입금결과 통보 결과정보 */
-		String typeMsg = request.getParameter("type_msg");     // 거래구분
+		String typeMsg = request.getParameter("type_msg");     	 // 거래구분
 		if("0200".equals(typeMsg)) { // 정상
-
 			String noVacct = request.getParameter("no_vacct");    // 가상계좌번호
 			String noTid = request.getParameter("no_tid");        // 거래번호
 			String noOid = request.getParameter("no_oid");        // 주문번호
@@ -229,19 +228,10 @@ public class OrderViewController extends OrderBaseController {
 
 					NotifyAccountDeposit nad = new NotifyAccountDeposit();
 					nad.setVirtualBankAcDepositDt(date);
-
-					orderApi.notifyAccountDeposit(noTid, noOid, nad);
-				}
-			}
-
-			// 실시간 계좌이체
-			if (noVacct == null) {
-				if (StringUtils.isNotBlank(noTid) && StringUtils.isNotBlank(noOid)) {
-					orderApi.notifyAccountDeposit(noTid, noOid, null);
+					orderApi.notifyAccountDeposit(noOid, noTid, nad);
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -262,23 +252,29 @@ public class OrderViewController extends OrderBaseController {
 		}
 		logger.info(">>> resultMap : " + resultMap.toString());
 
-		/* 세션 회원정보 */
-		MemberSession memberSession = getMemberSession();
-		String memberUser = memberSession.getMember_sn() > 0L ? PARAM_KEY_MEMBER : PARAM_KEY_NONMEMBER;
-		String payMethodCode = memberSession.getPayMethodCode();
+		/* 입금결과 통보 결과정보 */
+		String pgTradeNo = request.getParameter("P_STATUS");     // 거래상태
+		if("02".equals(pgTradeNo)) {									// 가상계좌 입금 통보 시
+			String pType = request.getParameter("P_TYPE");       // 지불수단
+			String pTid = request.getParameter("P_TID");         // 거래번호
+			String ordNo = request.getParameter("P_NOTI");       // 주문번호
 
-			//TODO : 네크워크 사정에 따라 중복전송될 수 있음. 중복수신여부 체크루틴 개발 필요(api) => 결과정보가 처리 됐냐 않됐냐의 여부만 체크할것!(아래쪽)
-			//TODO : 입금결과통보 정보 저장(api) : 성공실패 전부 DB에 적재할건지 여부확인!
-			String pStatus = request.getParameter("P_STATUS");
-			if(pStatus == "00" || "00".equals(pStatus)){ /* 거래상태 : "00" 이외 실패 */
-				//TODO : 입금결과통보 정보 성공시(api)
-			}
-			else{
-				//TODO : 입금결과통보 정보 실패시(api)
-			}
-		//TODO : 현금영수증 신청 여부 조회(입력한 우리(현금영수증정보 : 핸드폰번호(개인),사업자번호(법인) 택1)정보에서 정보가 있으면 api) = > 요청 파라미터 추후 전달예정(aki)
-		//TODO : 현금영수증 신청 결과 성공일때 결과정보 저장(api)
+			// 가상계좌
+			if ("VBANK".equals(pType)) {
+				//가상계좌입금일시
+				SimpleDateFormat formatOutput = new SimpleDateFormat("yyyyMMddHHmmssZ");
+				String pAuthDt = request.getParameter("P_AUTH_DT"); // 승인일자
+				Date date = formatOutput.parse(pAuthDt + "+0900");
 
+				NotifyAccountDeposit nad = new NotifyAccountDeposit();
+				nad.setVirtualBankAcDepositDt(date);
+				orderApi.notifyAccountDeposit(ordNo, pTid, nad);
+			}
+			// 실시간 계좌이체
+			if ("BANK".equals(pType)) {
+				orderApi.notifyAccountDeposit(ordNo, pTid, null);
+			}
+		}
 	}
 
 	/**

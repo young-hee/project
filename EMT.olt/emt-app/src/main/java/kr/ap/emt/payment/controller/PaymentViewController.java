@@ -16,14 +16,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.support.common.AbstractController;
@@ -31,14 +28,13 @@ import kr.ap.emt.payment.config.InicisPgProperties;
 import kr.ap.emt.payment.config.NaverPgProperties;
 import kr.ap.emt.payment.ini.IniPayment;
 import kr.ap.emt.payment.naver.NaverPayment;
-import kr.ap.emt.payment.vo.PayCancelDTO;
 import kr.ap.emt.payment.vo.PayDTO;
 import kr.ap.emt.payment.vo.PayProd;
 import kr.ap.emt.payment.vo.ProductItem;
 import kr.ap.emt.payment.wpay.iniWPayment;
 import net.g1project.ecp.api.model.ap.ap.ApMemberWPayInfo;
 import net.g1project.ecp.api.model.ap.ap.ApMemberWPaySaveInfo;
-import net.g1project.ecp.api.model.order.order.OrdSummaryInfo;
+import net.g1project.ecp.api.model.basis.mall.MallSalesPolicy;
 
 /**
  * @author aki@g1project.net
@@ -104,8 +100,16 @@ public class PaymentViewController extends AbstractController {
     	} else {
     		payDTO.setpMid(inicisPgProperties.getIniMid());
     		payDTO.setSignKey(inicisPgProperties.getIniDrctSignKey());
-    	}	
+    	}
+    	
     	payDTO.setSiteDomain(inicisPgProperties.getMoIniSiteDomain());
+    	
+    	//가상계좌
+    	if(VBANK.equals(payDTO.getPayMethod())) {
+    		MallSalesPolicy mallSalePolicy = mallApi.getMallPolicies();
+    		payDTO.setDepositWatingHours(mallSalePolicy.getDepositWatingHours());
+    		
+    	}
     	
     	//모바일 인증요청 param 셋팅
     	HashMap<String, Object> paramMap = IniPayment.makeRequestParamMobile(payDTO);
@@ -124,6 +128,16 @@ public class PaymentViewController extends AbstractController {
     	return "payment/iniComplete";
      
     }
+    
+   /* private String getEuckrStr(String str) {
+		try {
+			String euckr = new String(str.getBytes("iso-8859-1"), "euc-kr");
+			return euckr;
+		} catch (UnsupportedEncodingException e) {
+			logger.error(e.getMessage(), e);
+			return str;
+		}
+	}*/
     
     @PostMapping("/iniPayDrctReturn")//인증결과 리턴 - 카카오페이, 페이코결제
     public String iniPayDrctReturn(Model model, HttpServletRequest request) throws Exception {
@@ -173,7 +187,14 @@ public class PaymentViewController extends AbstractController {
     	 paramMap.put("totalPayAmount", payDTO.getPrice().replace(",", ""));	//**컴마 제외 
     	 paramMap.put("taxScopeAmount", payDTO.getPrice().replace(",", ""));	//확인필요
     	 paramMap.put("taxExScopeAmount", 0);	//확인필요
-    	 paramMap.put("returnUrl", inicisPgProperties.getIniSiteDomain() + "/payment/naverPayReturn"); //TODO: PC/MO 분기처리 return Url
+    	 if(isPcDevice()) {
+    		 paramMap.put("returnUrl", inicisPgProperties.getIniSiteDomain() + "/payment/naverPayReturn"); 
+     		
+     	} else {
+     		paramMap.put("returnUrl", inicisPgProperties.getMoIniSiteDomain() + "/payment/naverPayReturn"); 
+     		
+     	}
+    	 
     	 
     	     	 
     	 List<PayProd> prods = payDTO.getProds();
@@ -226,7 +247,7 @@ public class PaymentViewController extends AbstractController {
         	resultMap.put("naverPartnerId", naverPgProperties.getNaverPartnerId());
         	resultMap.put("apiDomain", naverPgProperties.getApiDomain());
         	resultMap.put("confirmUrl", naverPgProperties.getConfirmUrl());	//승인 처리 url
-        	//resultMap.put("cancelUrl", naverPgProperties.getCancelUrl());	//취소 처리 url
+        	resultMap.put("cancelUrl", naverPgProperties.getCancelUrl());	//취소 처리 url
         
         	
         	//인증결과확인
