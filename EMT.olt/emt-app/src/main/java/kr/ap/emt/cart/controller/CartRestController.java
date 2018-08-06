@@ -66,7 +66,7 @@ public class CartRestController extends CartBaseController{
 			if(Long.valueOf(cartProdSn) != null){
 				List<ProdEx> prodExList = new ArrayList<>();
 				List<ProdEx> apiProdExList = cartApi.getOnlineProdUnitVariationProds(cartProdSn);
-				if(apiProdExList != null){
+				if(apiProdExList.size() > 0 ){
 					for(ProdEx pe : apiProdExList){
 						if( "OnSale".equals(pe.getSaleDisplayStatus()) ||
 							"Exhaustion".equals(pe.getSaleDisplayStatus()) ||
@@ -458,15 +458,16 @@ public class CartRestController extends CartBaseController{
 												  String[] prdCdArr,
 											  	  String[] takeoutCdArr) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
+		List<Long> removeCartProdSnList = new ArrayList<>();
 		try {
 			if(!ArrayUtils.isEmpty(prdCdArr)){
 				for(int i=0; i< prdCdArr.length; i++){
 					if(prdCdArr[i] != null) {
 						BooleanResult br = cartApi.removeCartProd(cartSn, Long.parseLong(prdCdArr[i]));
-						if (br.isResult()) {
-							CartEx ce = cartApi.getCart(cartSn);
-							result.put("data", makeCartEx2(ce));
+						if(br.isResult()){
+							removeCartProdSnList.add(Long.parseLong(prdCdArr[i]));
 						}
+
 					}
 				}
 			}
@@ -474,15 +475,20 @@ public class CartRestController extends CartBaseController{
 				for(int i=0; i< takeoutCdArr.length; i++){
 					if(takeoutCdArr[i] != null) {
 						BooleanResult br = cartApi.removeCartProd(cartSn, Long.parseLong(takeoutCdArr[i]));
-						if (br.isResult()) {
-							CartEx ce = cartApi.getCart(cartSn);
-							result.put("data", makeCartEx2(ce));
+						if(br.isResult()){
+							removeCartProdSnList.add(Long.parseLong(prdCdArr[i]));
 						}
 					}
 				}
 			}
-			/*result.put("message", getMessage("inf.cm.delete2","해당상품"));
-			result.put("result", "success");*/
+			//CartEx ce = calculationByRemove(cartSn, removeCartProdSnList);
+			CartEx ce = cartApi.getCart(cartSn);
+			result.put("data", makeCartEx2(ce));
+
+			/*
+			result.put("message", getMessage("inf.cm.delete2","해당상품"));
+			result.put("result", "success");
+			*/
 		} catch (Exception e) {
 			result.put("errorData", e);
 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);

@@ -17,7 +17,8 @@
 			this._setBest();
             this._setChEtude();
             this._setFindYourLooks();
-            this._data = null; 
+            this._data = null;
+            this._popUpload();
         },
 
         /** =============== Public Methods =============== */
@@ -364,7 +365,23 @@
 					AP.lazyLoad.add( '.etude_pick .lazy_load' );
 				}
 			}.bind(this));
+		},
+		
+		// 화면에 진입시 팝업 유무를 확인해서 팝업을 띄운다. 
+		_popUpload: function () {
+		
+			AP.api.mainPopups().done( function ( result ) {
+			
+				$.each(result.popupList, function(index, popupInfo){
+					
+					AP.modal.info({
+						title: popupInfo.popupTitle,
+						contents: popupInfo.popupBodyText
+					});
+				});
+			}.bind(this));
 		}
+		
     });
 
     AP.home = new Home();

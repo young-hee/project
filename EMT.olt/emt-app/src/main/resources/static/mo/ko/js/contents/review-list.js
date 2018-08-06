@@ -90,6 +90,26 @@
 				} else {
 					$more.hide();
 				}
+				
+				//html 태그 삭제
+				var strlength = 58;
+				for ( var i = 0; i < data.prodReviewList.length; i++ ) {
+					var bodyText = data.prodReviewList[i].prodReviewBodyText;
+					var bodyTextReduce = data.prodReviewList[i].prodReviewBodyText;
+					//var bodyTextReduce = $('#bodyTextReduce'+prodReviewSn).text();
+					var prodReviewSn = data.prodReviewList[i].prodReviewSn;
+
+					bodyTextReduce = bodyTextReduce.replace(/<br\/>/ig, "\n");
+					bodyTextReduce = bodyTextReduce.replace(/<\/br\/>/ig, "\n");
+					bodyTextReduce = bodyTextReduce.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "");
+
+					if(bodyTextReduce.length > strlength){
+						bodyTextReduce = bodyTextReduce.substr(0, strlength-2) + '...';
+					}
+					document.getElementById('bodyTextReduce'+prodReviewSn).innerHTML = bodyTextReduce;
+					document.getElementById('bodyTextOrigin'+prodReviewSn).innerHTML = bodyText;
+					
+				}
 			} else {
 				
 			}

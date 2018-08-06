@@ -53,22 +53,21 @@
 							templateKey: 'products.all-ingredients-modal',
 							templateModel : {
 								selectedData: data,
-								productCount: this._defaultModel.productCount,
+								onlineProd: this._defaultModel,
 								products: this._defaultModel.products
 							}
 						}
 					}),
 					$modal = modal.getElement();
-
+				
 				modal.addListener( 'modal-before-close', function (e) {
 					$modal.find( 'select' ).off();
 				});
 
 				$modal.find( 'select' ).on( 'change', function (e) {
-					var prodSn = parseFloat( $(e.currentTarget).val() ),
-						selectData = _.where( this._defaultModel.products, {prodSn: prodSn} )[0];
-
-					$modal.find( '.result' ).html( selectData.disclosures[7].prodDisclosureInfo );
+					var $target = $(e.currentTarget).parents('.panel'); 
+					$target.find('.disclosure').hide()
+					$target.find('[data-prodSn='+$(e.currentTarget).val()+']').show();
 				}.bind(this));
 			}.bind(this));
 

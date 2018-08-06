@@ -875,7 +875,7 @@
 			}
 		}
 
-		return 'https://www.youtube.com/embed/' + youtubeId + '?enablejsapi=1';
+		return 'https://www.youtube.com/embed/' + youtubeId + '?enablejsapi=1&autoplay=0&rel=0&showsearch=0&loop=0';
 	});
 
 

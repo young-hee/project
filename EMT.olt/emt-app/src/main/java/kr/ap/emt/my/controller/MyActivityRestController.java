@@ -46,7 +46,7 @@ public class MyActivityRestController extends AbstractController {
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
 		try {
-			PlanDisplayEventDTOListResult planDisplayEventDTOListResult = plandisplayApi.planDisplayEventParticipats(null,null,null, "Deadline", offset, limit);
+			PlanDisplayEventDTOListResult planDisplayEventDTOListResult = plandisplayApi.planDisplayEventParticipats(null, startDate, endDate, "Deadline", offset, limit);
 			result.put("EventSearchResult", planDisplayEventDTOListResult);
 		} catch(Exception e) {
 			result.put("errorData", e);

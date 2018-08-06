@@ -2,18 +2,22 @@
 	전시 : 일반 기획 전시 상품 목록
 --}}
 {{#each this.list}}
-	<li class="online_prod" data-online-prod-sn="{{ this.onlineProdSn }}">
+	<li class="online_prod" data-online-prod-sn="{{ this.onlineProdSn }}" >
 		<div class="item">
 			<div class="item_images">
 				<!-- /* 대표 이미지 */ -->
 				<a href="{{ productDetailPath this.onlineProdSn }}" class="lazy_load_wrap">
-					<img class="lazy_load" data-src="{{ this.prodImages.0.imgUrl }}" alt=""></a>
-
+				{{#xif ../prodListUnitCode '==' 'OnlineProd'}}
+					<img class="lazy_load" src="" data-src="{{ this.onlineProdImages.0.imgUrl }}" alt="">
+				{{/xif}}
+				{{#xif ../prodListUnitCode '==' 'Prod'}}
+					<img class="lazy_load" src="" data-src="{{ this.prodImages.0.imgUrl }}" alt="">
+				{{/xif}}
+				</a>
 				{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
 					<div class="item_state out_of_stock">일시품절</div>
 				{{/xif}}
 			</div>
-
 			<div class="item_info list">
 				{{#if this.flags.length}}
 					<div class="flag_set">
@@ -42,6 +46,7 @@
 							<p class="s_name"><em class="tag">{{{ this.lineDesc }}}</em></p>
 						{{/if}}
 						<p class="name">{{ this.onlineProdName }}</p>
+					
 					</div>
 					{{!--<p class="color_name">85 colors</p>--}}
 				</div>

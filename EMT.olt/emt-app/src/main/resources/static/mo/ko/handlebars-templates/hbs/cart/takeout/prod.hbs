@@ -58,9 +58,9 @@
 							<input class="spinner_input" type="text" name="cartProdQty" value="{{ this.cartProdQty }}">
 							<button class="spinner_increase" type="button" title="제품 수량 증가"
 							{{#if (and (eq prodEx.prodTypeCode 'Prod')(gt cartProdQty prodEx.salePossibleQty) ) }}disabled{{/if}}
-							{{#if (and (eq prodEx.prodTypeCode 'Presale')(gt cartProdQty prodEx.salePossibleQty) ) }}disabled{{/if}}
-							{{#if (and (eq prodEx.prodTypeCode 'SpPriceSale')(gt cartProdQty prodEx.salePossibleQty) ) }}disabled{{/if}}
-							{{#if (and (eq prodEx.prodTypeCode 'SpPriceAward')(gt cartProdQty prodEx.salePossibleQty) ) }}disabled{{/if}}
+							{{#if (and (eq prodEx.prodTypeCode 'Presale')(gt cartProdQty prodEx.presalePossibleQty) ) }}disabled{{/if}}
+							{{#if (and (eq prodEx.prodTypeCode 'SpPriceSale')(gt cartProdQty prodEx.spPriceSalePossibleQty) ) }}disabled{{/if}}
+							{{#if (and (eq prodEx.prodTypeCode 'SpPriceAward')(gt cartProdQty prodEx.spPriceSalePossibleQty) ) }}disabled{{/if}}
 							onclick="prodQtyOperate(this, {{ ../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '+')"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>
 						</span>
 					{{else}}
@@ -70,9 +70,9 @@
 							<input class="spinner_input" type="text" name="cartProdQty" value="{{ this.cartProdQty }}">
 							<button class="spinner_increase" type="button" title="제품 수량 증가"
 							{{#if (and (eq prodEx.prodTypeCode 'Prod')(gt cartProdQty prodEx.salePossibleQty) ) }}disabled{{/if}}
-							{{#if (and (eq prodEx.prodTypeCode 'Presale')(gt cartProdQty prodEx.salePossibleQty) ) }}disabled{{/if}}
-							{{#if (and (eq prodEx.prodTypeCode 'SpPriceSale')(gt cartProdQty prodEx.salePossibleQty) ) }}disabled{{/if}}
-							{{#if (and (eq prodEx.prodTypeCode 'SpPriceAward')(gt cartProdQty prodEx.salePossibleQty) ) }}disabled{{/if}}
+							{{#if (and (eq prodEx.prodTypeCode 'Presale')(gt cartProdQty prodEx.presalePossibleQty) ) }}disabled{{/if}}
+							{{#if (and (eq prodEx.prodTypeCode 'SpPriceSale')(gt cartProdQty prodEx.spPriceSalePossibleQty) ) }}disabled{{/if}}
+							{{#if (and (eq prodEx.prodTypeCode 'SpPriceAward')(gt cartProdQty prodEx.spPriceSalePossibleQty) ) }}disabled{{/if}}
 							onclick="prodQtyOperate(this, {{ ../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '+')"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>
 						</span>
 					{{/if}}
@@ -131,7 +131,11 @@
 			{{#xif cartProdAwardList.length '>' 0 }}
 				{{#each cartProdAwardList}}
 					<div class="cart_free_gift">
-						{{#if (ne awardProdEx.repProdImgEx null) }}<span class="thm"><img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/></span>{{/if}}
+						{{#if (ne awardProdEx.repProdImgEx null) }}
+							<span class="thm"><img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/></span>
+						{{else}}
+							<span class="thm"><img src="{{ absolutePath '/images/cart/no_img.png.gif' }}" alt=""/></span>
+						{{/if}}
 						<span class="info">
 							<span>사은품 : {{ awardProdEx.prodName }}</span>
 							<span>기간 : {{dateFormat awardStartDt "YYYY.MM.DD"}} ~ {{dateFormat awardEndDt "YYYY.MM.DD"}}</span>
@@ -174,6 +178,7 @@
 				{{/xif}}
 			</div>
 		</div>
+
 		<div class="cart_item_info nospinner">
 			<span class="cart_price">
 				{{#if (and (ne finalOnlineSalesAmountInfo null)(gt finalOnlineSalesAmountInfo.standardCurrency.amount 0) ) }}
@@ -222,10 +227,10 @@
 								<button class="spinner_decrease" type="button" title="제품 수량 감소" onclick="prodQtyOperate(this, {{ ../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '-')"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
 								<input class="spinner_input" type="text" name="cartProdQty" value="{{ this.cartProdQty }}">
 								<button class="spinner_increase" type="button" title="제품 수량 증가"
-								{{#if (and (eq prodEx.prodTypeCode 'Prod')(gt cartProdQty prodEx.salePossibleQty) ) }}disabled{{/if}}
-								{{#if (and (eq prodEx.prodTypeCode 'Presale')(gt cartProdQty prodEx.salePossibleQty) ) }}disabled{{/if}}
-								{{#if (and (eq prodEx.prodTypeCode 'SpPriceSale')(gt cartProdQty prodEx.salePossibleQty) ) }}disabled{{/if}}
-								{{#if (and (eq prodEx.prodTypeCode 'SpPriceAward')(gt cartProdQty prodEx.salePossibleQty) ) }}disabled{{/if}}
+									{{#if (and (eq prodEx.prodTypeCode 'Prod')(gt cartProdQty prodEx.salePossibleQty) ) }}disabled{{/if}}
+									{{#if (and (eq prodEx.prodTypeCode 'Presale')(gt cartProdQty prodEx.presalePossibleQty) ) }}disabled{{/if}}
+									{{#if (and (eq prodEx.prodTypeCode 'SpPriceSale')(gt cartProdQty prodEx.spPriceSalePossibleQty) ) }}disabled{{/if}}
+									{{#if (and (eq prodEx.prodTypeCode 'SpPriceAward')(gt cartProdQty prodEx.spPriceSalePossibleQty) ) }}disabled{{/if}}
 								onclick="prodQtyOperate(this, {{ ../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '+')"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>
 							</span>
 						{{else}}
@@ -234,10 +239,10 @@
 								<button class="spinner_decrease" type="button" title="제품 수량 감소" onclick="prodQtyOperate(this, {{ ../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '-')"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
 								<input class="spinner_input" type="text" name="cartProdQty" value="{{ this.cartProdQty }}">
 								<button class="spinner_increase" type="button" title="제품 수량 증가"
-								{{#if (and (eq prodEx.prodTypeCode 'Prod')(gt cartProdQty prodEx.salePossibleQty) ) }}disabled{{/if}}
-								{{#if (and (eq prodEx.prodTypeCode 'Presale')(gt cartProdQty prodEx.salePossibleQty) ) }}disabled{{/if}}
-								{{#if (and (eq prodEx.prodTypeCode 'SpPriceSale')(gt cartProdQty prodEx.salePossibleQty) ) }}disabled{{/if}}
-								{{#if (and (eq prodEx.prodTypeCode 'SpPriceAward')(gt cartProdQty prodEx.salePossibleQty) ) }}disabled{{/if}}
+									{{#if (and (eq prodEx.prodTypeCode 'Prod')(gt cartProdQty prodEx.salePossibleQty) ) }}disabled{{/if}}
+									{{#if (and (eq prodEx.prodTypeCode 'Presale')(gt cartProdQty prodEx.presalePossibleQty) ) }}disabled{{/if}}
+									{{#if (and (eq prodEx.prodTypeCode 'SpPriceSale')(gt cartProdQty prodEx.spPriceSalePossibleQty) ) }}disabled{{/if}}
+									{{#if (and (eq prodEx.prodTypeCode 'SpPriceAward')(gt cartProdQty prodEx.spPriceSalePossibleQty) ) }}disabled{{/if}}
 								onclick="prodQtyOperate(this, {{ ../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '+')"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>
 							</span>
 						{{/if}}
@@ -286,7 +291,11 @@
 				{{#xif cartProdAwardList.length '>' 0 }}
 					{{#each cartProdAwardList}}
 						<div class="cart_free_gift">
-							{{#if (ne awardProdEx.repProdImgEx null) }}<span class="thm"><img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/></span>{{/if}}
+							{{#if (ne awardProdEx.repProdImgEx null) }}
+								<span class="thm"><img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/></span>
+							{{else}}
+								<span class="thm"><img src="{{ absolutePath '/images/cart/no_img.png.gif' }}" alt=""/></span>
+							{{/if}}
 							<span class="info">
 								<span>사은품 : {{ awardProdEx.prodName }}</span>
 								<span>기간 : {{dateFormat awardStartDt "YYYY.MM.DD"}} ~ {{dateFormat awardEndDt "YYYY.MM.DD"}}</span>

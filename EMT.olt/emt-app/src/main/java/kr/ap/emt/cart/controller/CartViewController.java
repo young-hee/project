@@ -108,6 +108,10 @@ public class CartViewController extends CartBaseController{
 
 		if(cartSn != null){
 			CartEx cartEx = cartApi.getCart(cartSn);
+			
+			/* 보유포인트로 선택여부 재계산 */
+			calculationExchPoint(cartEx);
+			
 			makeCartEx2(cartEx);
 			memberSession.setCartSn(cartEx.getCartSn());
 			if(memberSession.getMember_sn() > 0L){

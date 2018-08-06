@@ -1090,6 +1090,13 @@
 		getRecommendWithSkinTone: { path: '//etude.aramhuvis.com/api/getData.do?type={type}', crossDomain: true },
 		
 		/**
+		 * 홈화면 진입시 등록한 팝업 노출
+		 * 
+		 */
+		mainPopups : { path: '/display/mainPopups' , method : 'GET'},
+		
+		
+		/**
 		 * dummy test *************************************************************
 		 */
 		// test

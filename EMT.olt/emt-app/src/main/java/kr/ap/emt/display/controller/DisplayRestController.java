@@ -32,6 +32,7 @@ import net.g1project.ecp.api.model.sales.display.OnlineProdList;
 import net.g1project.ecp.api.model.sales.display.OnlineProdListStp;
 import net.g1project.ecp.api.model.sales.display.ProductSummaryList;
 import net.g1project.ecp.api.model.sales.keywordPopup.KeywordLinkInfo;
+import net.g1project.ecp.api.model.sales.keywordPopup.PopupInfo;
 import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkByDateSearchResult;
 import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkDeleteResult;
 
@@ -695,5 +696,29 @@ public class DisplayRestController extends AbstractController {
 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
 		}
 	}
+	
+	/**
+	 * 홈화면 진입시 등록한 팝업 노출
+	 * @return
+	 */
+	@RequestMapping({"/mainPopups", "/mainPopups/preview"})
+	@ResponseBody
+	public ResponseEntity<?> mainPopups() {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+			
+			List<PopupInfo> popupList = keywordPopupApi.getPopups();
+			
+			result.put("popupList", popupList);
+			
+			return ResponseEntity.ok(result);
+		} catch (Exception e) {
+			result.put("errorData", e);
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+	
+	}
+	
     
 }

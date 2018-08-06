@@ -23,12 +23,8 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 
 import com.inicis.inipay.INIpay;
@@ -483,12 +479,6 @@ public class IniPayment {
                 String data = makeMobileConfirmParam(paramMap.get("P_TID"), pMid);
                 authUrl = authUrl + data;
                 
-                System.out.println("P_TID=" + paramMap.get("P_TID"));
-                System.out.println("P_MID=" + pMid);
-                System.out.println("authUrl=" + authUrl);
-                
-                System.out.println("sendData=" + data);
-                
                 //#####################
                 // 승인 요청
                 //#####################
@@ -501,31 +491,6 @@ public class IniPayment {
                 
                 try {
         			String url = authUrl;     
-        			TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
-
-                        @Override
-                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-
-                            return null;
-                        }
-
-
-                        @Override
-                        public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {
-
-                        }
-
-
-                        @Override
-                        public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) {
-
-                        }
-                    }};
-
-                    // Activate the new trust manager
-        			SSLContext sc = SSLContext.getInstance("SSL");
-                    sc.init(null, trustAllCerts, new java.security.SecureRandom());
-                    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 
                     conn = (HttpsURLConnection)  new URL(url).openConnection();
 

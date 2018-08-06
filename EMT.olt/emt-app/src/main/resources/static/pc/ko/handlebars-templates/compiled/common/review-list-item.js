@@ -61,9 +61,13 @@ this["AP"]["handlebars"]["common"]["review-list-item"] = Handlebars.template({"1
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.prodReviewTypeCode : depth0),"==","Pur",{"name":"xif","hash":{},"fn":container.program(6, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n				<span class=\"title\">"
     + alias4(alias3((depth0 != null ? depth0.prodReviewTitle : depth0), depth0))
-    + "</span>\n			</dt>\n			<dd>\n				<div class=\"text reduce\">"
-    + ((stack1 = (helpers.ellipsis || (depth0 && depth0.ellipsis) || alias2).call(alias1,118,(depth0 != null ? depth0.prodReviewBodyText : depth0),{"name":"ellipsis","hash":{},"data":data})) != null ? stack1 : "")
-    + "</div>\n				<div class=\"text origin\" style=\"display:none;\">"
+    + "</span>\n			</dt>\n			<dd>\n				<div class=\"text reduce\" id=\"bodyTextReduce"
+    + ((stack1 = alias3((depth0 != null ? depth0.prodReviewSn : depth0), depth0)) != null ? stack1 : "")
+    + "\">"
+    + ((stack1 = alias3((depth0 != null ? depth0.prodReviewBodyText : depth0), depth0)) != null ? stack1 : "")
+    + "</div>\n				<div class=\"text origin\" style=\"display:none;\" id=\"bodyTextOrigin"
+    + ((stack1 = alias3((depth0 != null ? depth0.prodReviewSn : depth0), depth0)) != null ? stack1 : "")
+    + "\">"
     + ((stack1 = alias3((depth0 != null ? depth0.prodReviewBodyText : depth0), depth0)) != null ? stack1 : "")
     + "</div>\n				\n"
     + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.imgList : depth0)) != null ? stack1.length : stack1),{"name":"if","hash":{},"fn":container.program(8, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")

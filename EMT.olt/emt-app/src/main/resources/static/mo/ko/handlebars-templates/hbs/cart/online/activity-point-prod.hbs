@@ -109,7 +109,11 @@
 			{{#xif cartProdAwardList.length '>' 0 }}
 				{{#each cartProdAwardList}}
 					<div class="cart_free_gift">
-						{{#if (ne awardProdEx.repProdImgEx null) }}<span class="thm"><img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/></span>{{/if}}
+						{{#if (ne awardProdEx.repProdImgEx null) }}
+							<span class="thm"><img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/></span>
+						{{else}}
+							<span class="thm"><img src="{{ absolutePath '/images/cart/no_img.png.gif' }}" alt=""/></span>
+						{{/if}}
 						<span class="info">
 							<span>사은품 : {{ awardProdEx.prodName }}</span>
 							<span>기간 : {{dateFormat awardStartDt "YYYY.MM.DD"}} ~ {{dateFormat awardEndDt "YYYY.MM.DD"}}</span>

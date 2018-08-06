@@ -1,32 +1,22 @@
 <div class="panel">
 	<dl class="goods_detail_cont">
 		<dt>상품명</dt>
-		<dd>{{ this.selectedData.prodName }}</dd>
+		<dd>
+			{{ this.onlineProd.onlineProdName }}
+			<div class="select_wrap">
+				<select name="" id="">
+					{{#each this.onlineProd.products}}
+						<option value="{{ this.prodSn }}" {{#xif ../selectedData.prodSn '==' this.prodSn }}selected="selected"{{/xif}} >{{ this.prodName }}</option>
+					{{/each}}
+				</select>
+			</div>
+		</dd>
 
-		{{#each this.selectedData.disclosures}}
-			<dt>{{ this.disclosureItemName }}</dt>
-
-			{{!-- 전성분 --}}
-			{{#xif @index '==' 7}}
-				<dd class="all_ingredients">
-					{{#xif ../productCount '>' 1}}
-						<div class="select_wrap">
-							<select name="ingredients">
-								{{#each ../products}}
-									<option value="{{ this.prodSn }}" {{#xif this.prodSn '==' ../../selectedData/prodSn}}selected{{/xif}}>{{ this.prodName }}</option>
-								{{/each}}
-							</select>
-						</div>
-						<div class="result">
-							{{ ../selectedData.disclosures.7.prodDisclosureInfo }}
-						</div>
-					{{else}}
-						{{ ../selectedData.disclosures.7.prodDisclosureInfo }}
-					{{/xif}}
-				</dd>
-			{{else}}
-				<dd>{{ this.prodDisclosureInfo }}</dd>
-			{{/xif}}
+		{{#each this.products}}
+			{{#each this.disclosures}}
+				<dt class="disclosure" data-prodSn="{{../prodSn}}" {{#xif ../../selectedData.prodSn '!=' ../prodSn }}style="display:none;"{{/xif}} >{{ this.disclosureItemName }}</dt>
+				<dd class="disclosure" data-prodSn="{{../prodSn}}" {{#xif ../../selectedData.prodSn '!=' ../prodSn }}style="display:none;"{{/xif}} >{{ this.prodDisclosureInfo }}</dd>
+			{{/each}}
 		{{/each}}
 	</dl>
 </div>

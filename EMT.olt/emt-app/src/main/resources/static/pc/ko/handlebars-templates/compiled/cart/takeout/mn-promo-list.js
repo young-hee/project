@@ -9,7 +9,7 @@ this["AP"]["handlebars"]["cart"]["takeout"]["mn-promo-list"] = Handlebars.templa
   return "\n	<!--/* 동종상품 */-->\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.promoMPlusNTypeCode : depth0),"==","Same",{"name":"xif","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n	<!--/* 이종상품 */-->\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.promoMPlusNTypeCode : depth0),"==","Different",{"name":"xif","hash":{},"fn":container.program(68, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.promoMPlusNTypeCode : depth0),"==","Different",{"name":"xif","hash":{},"fn":container.program(74, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"2":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
@@ -128,7 +128,8 @@ this["AP"]["handlebars"]["cart"]["takeout"]["mn-promo-list"] = Handlebars.templa
     + alias2(alias1((depth0 != null ? depth0.cartProdSn : depth0), depth0))
     + ")\">삭제</button>\n							</div>\n						</div>\n"
     + ((stack1 = helpers["if"].call(alias3,(helpers.ne || (depth0 && depth0.ne) || alias4).call(alias3,(depth0 != null ? depth0.promoApplyResultCode : depth0),"All",{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(66, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "					</div>\n";
+    + "					</div>\n"
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.cartProdAwardList : depth0)) != null ? stack1.length : stack1),">",0,{"name":"xif","hash":{},"fn":container.program(68, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"16":function(container,depth0,helpers,partials,data) {
     return "disabled";
 },"18":function(container,depth0,helpers,partials,data) {
@@ -329,23 +330,51 @@ this["AP"]["handlebars"]["cart"]["takeout"]["mn-promo-list"] = Handlebars.templa
     + "개 담으면 "
     + alias3(((helper = (helper = helpers.recommandFreeAwardQty || (depth0 != null ? depth0.recommandFreeAwardQty : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"recommandFreeAwardQty","hash":{},"data":data}) : helper)))
     + "개 무료증정</p> \n";
-},"68":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"68":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return "						<ul class=\"freebies\">\n"
+    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.cartProdAwardList : depth0),{"name":"each","hash":{},"fn":container.program(69, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "						</ul>\n";
+},"69":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
+
+  return "								<li>\n									<span class=\"option_name\">\n"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.awardProdEx : depth0)) != null ? stack1.repProdImgEx : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(70, data, 0),"inverse":container.program(72, data, 0),"data":data})) != null ? stack1 : "")
+    + "										사은품 : "
+    + alias3(container.lambda(((stack1 = (depth0 != null ? depth0.awardProdEx : depth0)) != null ? stack1.prodName : stack1), depth0))
+    + "\n									</span>\n									<span class=\"term\">\n										기간 : "
+    + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,(depth0 != null ? depth0.awardStartDt : depth0),"YYYY.MM.DD",{"name":"dateFormat","hash":{},"data":data}))
+    + " ~ "
+    + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,(depth0 != null ? depth0.awardEndDt : depth0),"YYYY.MM.DD",{"name":"dateFormat","hash":{},"data":data}))
+    + "\n									</span>\n								</li>\n";
+},"70":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return "											<img src=\""
+    + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.awardProdEx : depth0)) != null ? stack1.repProdImgEx : stack1)) != null ? stack1.imgUrl : stack1), depth0))
+    + "\" alt=\"\"/>\n";
+},"72":function(container,depth0,helpers,partials,data) {
+    return "											<img src=\""
+    + container.escapeExpression((helpers.absolutePath || (depth0 && depth0.absolutePath) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"/images/cart/no_img.png.gif",{"name":"absolutePath","hash":{},"data":data}))
+    + "\" alt=\"\"/>\n";
+},"74":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
   return "		<div class=\"promotion\">\n			<div class=\"promotion_header\">\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.promoApplyResultCode : depth0),"==","All",{"name":"xif","hash":{},"fn":container.program(69, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.promoApplyResultCode : depth0),"==","Partial",{"name":"xif","hash":{},"fn":container.program(71, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.promoApplyResultCode : depth0),"==","None",{"name":"xif","hash":{},"fn":container.program(73, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.promoApplyResultCode : depth0),"==","All",{"name":"xif","hash":{},"fn":container.program(75, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.promoApplyResultCode : depth0),"==","Partial",{"name":"xif","hash":{},"fn":container.program(77, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.promoApplyResultCode : depth0),"==","None",{"name":"xif","hash":{},"fn":container.program(79, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "				<a href=\"#none\"><strong>"
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.promoName : depth0), depth0))
     + "</strong></a>\n				<div class=\"price\">\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.finalOnlineSalesAmountInfo : depth0),"!=",null,{"name":"xif","hash":{},"fn":container.program(75, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.productSaleAmountInfo : depth0),"!=",null,{"name":"xif","hash":{},"fn":container.program(77, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.finalOnlineSalesAmountInfo : depth0),"!=",null,{"name":"xif","hash":{},"fn":container.program(81, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.productSaleAmountInfo : depth0),"!=",null,{"name":"xif","hash":{},"fn":container.program(83, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "				</div>\n			</div>\n\n"
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.promoOnlineProdExList : depth0),{"name":"each","hash":{},"fn":container.program(80, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.promoOnlineProdExList : depth0),{"name":"each","hash":{},"fn":container.program(86, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "		</div>\n"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,(depth0 != null ? depth0.promoApplyResultCode : depth0),"All",{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(83, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
-},"69":function(container,depth0,helpers,partials,data) {
+    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,(depth0 != null ? depth0.promoApplyResultCode : depth0),"All",{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(89, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"75":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
   return "					<span class=\"benefit ty2\"><em>"
@@ -353,7 +382,7 @@ this["AP"]["handlebars"]["cart"]["takeout"]["mn-promo-list"] = Handlebars.templa
     + " + "
     + alias2(alias1((depth0 != null ? depth0.freeAwardQty : depth0), depth0))
     + " 혜택 적용</em></span>\n";
-},"71":function(container,depth0,helpers,partials,data) {
+},"77":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
   return "					<span class=\"benefit ty2\"><em>"
@@ -361,7 +390,7 @@ this["AP"]["handlebars"]["cart"]["takeout"]["mn-promo-list"] = Handlebars.templa
     + " + "
     + alias2(alias1((depth0 != null ? depth0.freeAwardQty : depth0), depth0))
     + " 혜택 부분적용</em></span>\n";
-},"73":function(container,depth0,helpers,partials,data) {
+},"79":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
   return "					<span class=\"benefit ty2\"><em>"
@@ -369,27 +398,27 @@ this["AP"]["handlebars"]["cart"]["takeout"]["mn-promo-list"] = Handlebars.templa
     + " + "
     + alias2(alias1((depth0 != null ? depth0.freeAwardQty : depth0), depth0))
     + " 미적용</em></span>\n";
-},"75":function(container,depth0,helpers,partials,data) {
+},"81":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "						<span class=\"strong\"><b>"
     + container.escapeExpression((helpers.numberFormat || (depth0 && depth0.numberFormat) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = ((stack1 = (depth0 != null ? depth0.finalOnlineSalesAmountInfo : depth0)) != null ? stack1.standardCurrency : stack1)) != null ? stack1.amount : stack1),{"name":"numberFormat","hash":{},"data":data}))
     + "</b>원</span>\n";
-},"77":function(container,depth0,helpers,partials,data) {
+},"83":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = ((stack1 = (depth0 != null ? depth0.productSaleAmountInfo : depth0)) != null ? stack1.standardCurrency : stack1)) != null ? stack1.amount : stack1),"!=",((stack1 = ((stack1 = (depth0 != null ? depth0.finalOnlineSalesAmountInfo : depth0)) != null ? stack1.standardCurrency : stack1)) != null ? stack1.amount : stack1),{"name":"xif","hash":{},"fn":container.program(78, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
-},"78":function(container,depth0,helpers,partials,data) {
+  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = ((stack1 = (depth0 != null ? depth0.productSaleAmountInfo : depth0)) != null ? stack1.standardCurrency : stack1)) != null ? stack1.amount : stack1),"!=",((stack1 = ((stack1 = (depth0 != null ? depth0.finalOnlineSalesAmountInfo : depth0)) != null ? stack1.standardCurrency : stack1)) != null ? stack1.amount : stack1),{"name":"xif","hash":{},"fn":container.program(84, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"84":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "							<del><b>"
     + container.escapeExpression((helpers.numberFormat || (depth0 && depth0.numberFormat) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = ((stack1 = (depth0 != null ? depth0.productSaleAmountInfo : depth0)) != null ? stack1.standardCurrency : stack1)) != null ? stack1.amount : stack1),{"name":"numberFormat","hash":{},"data":data}))
     + "</b>원</del>\n";
-},"80":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"86":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
-  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.cartProdExList : depth0),{"name":"each","hash":{},"fn":container.program(81, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
-},"81":function(container,depth0,helpers,partials,data,blockParams,depths) {
+  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.cartProdExList : depth0),{"name":"each","hash":{},"fn":container.program(87, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"87":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
 
   return "					<div class=\"item_wrap\">\n						<input type=\"hidden\" name=\"takeoutPrdSn\" value=\""
@@ -445,8 +474,9 @@ this["AP"]["handlebars"]["cart"]["takeout"]["mn-promo-list"] = Handlebars.templa
     + alias2(alias1((depths[3] != null ? depths[3].cartSn : depths[3]), depth0))
     + ","
     + alias2(alias1((depth0 != null ? depth0.cartProdSn : depth0), depth0))
-    + ")\">삭제</button>\n							</div>\n						</div>\n					</div>\n";
-},"83":function(container,depth0,helpers,partials,data) {
+    + ")\">삭제</button>\n							</div>\n						</div>\n					</div>\n"
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.cartProdAwardList : depth0)) != null ? stack1.length : stack1),">",0,{"name":"xif","hash":{},"fn":container.program(68, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"89":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
   return "			<p class=\"text_notice\">"

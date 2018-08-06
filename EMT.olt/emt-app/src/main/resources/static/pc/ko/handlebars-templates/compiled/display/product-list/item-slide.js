@@ -47,5 +47,5 @@ this["AP"]["handlebars"]["display"]["product-list"]["item-slide"] = Handlebars.t
   return "<div class=\"ix-list-viewport\">\n	<ul class=\"ix-list-items\">\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.onlineProdImages : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.prodImages : depth0),{"name":"if","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "	</ul>\n</div>\n<div class=\"ix-controller\">\n	<ul class=\"ix-thumbs\">\n		<li class=\"ix-thumb\"><button type=\"button\" class=\"ix-btn\"><!--ix-index-->번째 배너</button></li>\n	</ul>\n</div>";
+    + "	</ul>\n</div>\n<div class=\"ix-controller\">\n	<ul class=\"ix-thumbs\">\n		<li class=\"ix-thumb\"><button type=\"button\" class=\"ix-btn\"><!--ix-index-->번째 배너</button></li>\n	</ul>\n</div>\n";
 },"useData":true,"useDepths":true});

@@ -435,7 +435,14 @@
 									<tbody>
 										<tr>
 											<th scope="row">제품명</th>
-											<td th:text="${prd.onlineProdName}"></td>
+											<td>
+												[[${prd.onlineProdName}]]
+							                    <div class="select_wrap mgt10">  
+													<select name="ingredients" title="전성분 보기 옵션 선택" > 
+														<option th:each="unitProd : ${prd.products}" th:value="${unitProd.prodSn}" th:text="${unitProd.prodName}" ></option> 
+													</select> 
+												</div>  
+											</td>
 										</tr>
 
 										<th:block th:each="unitProduct, iter : ${prd.products}">

@@ -117,7 +117,11 @@
 				{{#each cartProdAwardList}}
 					<li>
 						<span class="option_name">
-							{{#if (ne awardProdEx.repProdImgEx null) }} <img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/> {{/if}}
+							{{#if (ne awardProdEx.repProdImgEx null) }}
+								<img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/>
+							{{else}}
+								<img src="{{ absolutePath '/images/cart/no_img.png.gif' }}" alt=""/>
+							{{/if}}
 							사은품 : {{ awardProdEx.prodName }}
 						</span>
 						<span class="term">

@@ -76,6 +76,29 @@
 			} else {
 				this._$target.html( html );
 			}
+			
+			//html 태그 삭제
+			var strlength = 118;			
+			for ( var i = 0; i < data.prodReviewList.length; ++i ) {
+				var bodyText = data.prodReviewList[i].prodReviewBodyText;
+				var bodyTextReduce = data.prodReviewList[i].prodReviewBodyText;
+
+				if(bodyTextReduce.length > strlength){
+					bodyTextReduce = bodyTextReduce.substr(0, strlength-2) + '...';
+				}
+				var prodReviewSn = data.prodReviewList[i].prodReviewSn;
+				if(this._params.topReviewOnlyYn === 'Y'){
+					$('.best_review .review' ).find('#bodyTextReduce'+prodReviewSn).attr('id', 'bestBodyTextReduce'+prodReviewSn);
+					$('.best_review .review' ).find('#bodyTextOrigin'+prodReviewSn).attr('id', 'bestBodyTextOrigin'+prodReviewSn);
+					document.getElementById('bestBodyTextReduce'+prodReviewSn).innerHTML = bodyTextReduce;
+					document.getElementById('bestBodyTextOrigin'+prodReviewSn).innerHTML = bodyText;
+
+				}else{
+					document.getElementById('bodyTextReduce'+prodReviewSn).innerHTML = bodyTextReduce;
+					document.getElementById('bodyTextOrigin'+prodReviewSn).innerHTML = bodyText;
+				}
+				
+			}
 
 			this._$target.find( '.pagination' ).paging({
 				offset: data.offset,
@@ -83,6 +106,7 @@
 				totalCount: data.totalCount
 			}).on( 'paging-change', function (e) {
 				this._getData( e.offset );
+				$( window ).scrollTop( $('.review_filter').offset().top );
 			}.bind(this));
 
 			//상세보기

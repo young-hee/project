@@ -29,6 +29,7 @@ import net.g1project.ecp.api.model.sales.cart.CalculationResultOtf;
 import net.g1project.ecp.api.model.sales.cart.CalculationResultProduct;
 import net.g1project.ecp.api.model.sales.cart.CalculationResultProductMembership;
 import net.g1project.ecp.api.model.sales.cart.CartEx;
+import net.g1project.ecp.api.model.sales.cart.CartMemberMembershipEx;
 import net.g1project.ecp.api.model.sales.cart.CartOnlineProdEx;
 import net.g1project.ecp.api.model.sales.cart.CartProdAward;
 import net.g1project.ecp.api.model.sales.cart.CartProdEx;
@@ -91,7 +92,7 @@ public class CartBaseController extends AbstractController{
             }
             catch(Exception e) {
                 e.printStackTrace();
-                
+
                 cartEx = cartApi.getCartBySelectCartProds(cartSn, selectedCartProdSnStr);
             }
         }
@@ -142,35 +143,43 @@ public class CartBaseController extends AbstractController{
 
         /* 재계산을 위한 최종 cartEx */
         CartEx cartEx = memberSession.getCartEx();
-        
+
+
         if(cartEx == null
                 || !cartSn.equals(cartEx.getCartSn())) {
-            cartEx = null;
+            cartEx = cartApi.getCart(cartSn);
         }
         else {
-            // 장바구니-배송-온라인상품목록
-            setRemoveCartOnlineProdExList(cartEx.getCartDeliveryOnlineProdExList(), removeCartProdSnList);
-            // 장바구니-배송-멤버십포인트교환-온라인상품목록
-            setRemoveCartOnlineProdExList(cartEx.getCartDeliveryMembershipPointExchOnlineProdExList(), removeCartProdSnList);
-            // 장바구니-배송-활동포인트교환-온라인상품목록
-            setRemoveCartOnlineProdExList(cartEx.getCartDeliveryActivityPointExchOnlineProdExList(), removeCartProdSnList);
-            // 장바구니-배송-M+N프로모션목록-온라인상품목록
-            setRemoveCartPromoOnlineProdExList(cartEx.getCartDeliveryMNPromoExList(), removeCartProdSnList);
-            // 장바구니-배송-동시구매프로모션목록-온라인상품목록
-            setRemoveCartPromoOnlineProdExList(cartEx.getCartDeliverySameTimePurPromoExList(), removeCartProdSnList);
+        	try {
+				// 장바구니-배송-온라인상품목록
+				setRemoveCartOnlineProdExList(cartEx.getCartDeliveryOnlineProdExList(), removeCartProdSnList);
+				// 장바구니-배송-멤버십포인트교환-온라인상품목록
+				setRemoveCartOnlineProdExList(cartEx.getCartDeliveryMembershipPointExchOnlineProdExList(), removeCartProdSnList);
+				// 장바구니-배송-활동포인트교환-온라인상품목록
+				setRemoveCartOnlineProdExList(cartEx.getCartDeliveryActivityPointExchOnlineProdExList(), removeCartProdSnList);
+				// 장바구니-배송-M+N프로모션목록-온라인상품목록
+				setRemoveCartPromoOnlineProdExList(cartEx.getCartDeliveryMNPromoExList(), removeCartProdSnList);
+				// 장바구니-배송-동시구매프로모션목록-온라인상품목록
+				setRemoveCartPromoOnlineProdExList(cartEx.getCartDeliverySameTimePurPromoExList(), removeCartProdSnList);
 
-            // 장바구니-매장픽업-온라인상품목록
-            setRemoveCartOnlineProdExList(cartEx.getCartStorePickupOnlineProdExList(), removeCartProdSnList);
-            // 장바구니-매장픽업-멤버십포인트교환-온라인상품목록
-            setRemoveCartOnlineProdExList(cartEx.getCartStorePickupMembershipPointExchOnlineProdExList(), removeCartProdSnList);
-            // 장바구니-매장픽업-활동포인트교환-온라인상품목록
-            setRemoveCartOnlineProdExList(cartEx.getCartStorePickupActivityPointExchOnlineProdExList(), removeCartProdSnList);
-            // 장바구니-매장픽업-M+N프로모션목록-온라인상품목록
-            setRemoveCartPromoOnlineProdExList(cartEx.getCartStorePickupMNPromoExList(), removeCartProdSnList);
-            // 장바구니-매장픽업-동시구매프로모션목록-온라인상품목록
-            setRemoveCartPromoOnlineProdExList(cartEx.getCartStorePickupSameTimePurPromoExList(), removeCartProdSnList);
-            
-            cartEx = calculationCartEx(cartEx);
+				// 장바구니-매장픽업-온라인상품목록
+				setRemoveCartOnlineProdExList(cartEx.getCartStorePickupOnlineProdExList(), removeCartProdSnList);
+				// 장바구니-매장픽업-멤버십포인트교환-온라인상품목록
+				setRemoveCartOnlineProdExList(cartEx.getCartStorePickupMembershipPointExchOnlineProdExList(), removeCartProdSnList);
+				// 장바구니-매장픽업-활동포인트교환-온라인상품목록
+				setRemoveCartOnlineProdExList(cartEx.getCartStorePickupActivityPointExchOnlineProdExList(), removeCartProdSnList);
+				// 장바구니-매장픽업-M+N프로모션목록-온라인상품목록
+				setRemoveCartPromoOnlineProdExList(cartEx.getCartStorePickupMNPromoExList(), removeCartProdSnList);
+				// 장바구니-매장픽업-동시구매프로모션목록-온라인상품목록
+				setRemoveCartPromoOnlineProdExList(cartEx.getCartStorePickupSameTimePurPromoExList(), removeCartProdSnList);
+
+				cartEx = calculationCartEx(cartEx);
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+				cartEx = cartApi.getCart(cartSn);
+			}
+
         }
 
         memberSession.setCartEx(cartEx);
@@ -198,20 +207,21 @@ public class CartBaseController extends AbstractController{
         if(cartOnlineProdExList != null) {
             List<CartOnlineProdEx> newCartOnlineProdExList = new ArrayList<>();
             for(CartOnlineProdEx cartOnlineProdEx : cartOnlineProdExList) {
-                boolean remove = false;
                 if(cartOnlineProdEx.getCartProdExList() != null) {
+					List<CartProdEx> newCartProdExList = new ArrayList<>();
                     for(CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-                        if(removeCartProdSnList.contains(cartProdEx.getCartProdSn())) {
-                            remove = true;
-                            break;
+                        if(!removeCartProdSnList.contains(cartProdEx.getCartProdSn())) {
+                        	newCartProdExList.add(cartProdEx);
                         }
                     }
-                }
-                
-                if(!remove) {
-                    newCartOnlineProdExList.add(cartOnlineProdEx);
+					if(newCartProdExList.size() > 0) {
+						cartOnlineProdEx.setCartProdExList(newCartProdExList);
+						newCartOnlineProdExList.add(cartOnlineProdEx);
+					}
                 }
             }
+			cartOnlineProdExList.clear();
+			cartOnlineProdExList.addAll(newCartOnlineProdExList);
         }
     }
     
@@ -256,7 +266,6 @@ public class CartBaseController extends AbstractController{
             }
             catch (Exception e) {
                 e.printStackTrace();
-
                 cartEx = cartApi.getCart(cartSn);
             }
         }
@@ -285,6 +294,12 @@ public class CartBaseController extends AbstractController{
                 if(cartOnlineProdEx.getCartProdExList() != null) {
                     for(CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
                         if(cartProdSn.equals(cartProdEx.getCartProdSn())) {
+                            // 교환상품
+                            if(CartConst.Y.equals(cartProdEx.getExchYn())) {
+                                Integer unitPoint = getIntValue(cartProdEx.getExchPoint()) / getIntValue(cartProdEx.getCartProdQty());
+                                cartProdEx.setExchPoint(unitPoint * cartProdQty);
+                            }
+                            
                             cartProdEx.setCartProdQty(cartProdQty);
                             break;
                         }
@@ -294,7 +309,7 @@ public class CartBaseController extends AbstractController{
         }
     }
     
-    private CartEx calculationCartEx(CartEx cartEx) {
+    protected CartEx calculationCartEx(CartEx cartEx) {
         /* M+N프로모션 기준수량/증정수량계산 */
         if(cartEx.getCartDeliveryMNPromoExList() != null) {
             for(CartPromoEx cartPromoEx : cartEx.getCartDeliveryMNPromoExList()) {
@@ -393,16 +408,10 @@ public class CartBaseController extends AbstractController{
             }
         }
         
+        
         /* 계산결과수정 : 금액들의 합 */
         // 교환통합포인트(뷰티포인트) 합
-        Integer exchIPointSum = getSelecteExchPointSum(cartEx.getCartDeliveryMembershipPointExchOnlineProdExList())
-                                + getSelecteExchPointSum(cartEx.getCartStorePickupMembershipPointExchOnlineProdExList());
-        // 교환활동포인트(뷰티포인트) 합
-        Integer exchAPointSum = getSelecteExchPointSum(cartEx.getCartDeliveryActivityPointExchOnlineProdExList())
-                                + getSelecteExchPointSum(cartEx.getCartStorePickupActivityPointExchOnlineProdExList());
-        
-        calculationResult.setExchIPointSum(exchIPointSum);
-        calculationResult.setExchAPointSum(exchAPointSum);
+        calculationExchPoint(cartEx);
 
         // 초도배송비합계
         calculationResult.setDefaultShipFeeSumInfo(setCalculationCurrencyInfo(calculationResult.getDefaultShipFeeSumInfo(), totalShipFee));
@@ -496,18 +505,70 @@ public class CartBaseController extends AbstractController{
         return cartEx;
     }
 
-    private Integer getSelecteExchPointSum(List<CartOnlineProdEx> cartOnlineProdExList) {
-        Integer exchPointSum = 0;
+    protected void calculationExchPoint(CartEx cartEx) {
+        CalculationResult calculationResult = cartEx.getCalculationResult();
         
-        if(cartOnlineProdExList != null) {
-            for(CartOnlineProdEx cartOnlineProdEx : cartOnlineProdExList) {
-                if(CartConst.Y.equals(cartOnlineProdEx.getSelectYn())) {
-                    exchPointSum = exchPointSum + cartOnlineProdEx.getExchPoints();
+        calculationResult.setExchIPointSum(0);
+        calculationResult.setExchAPointSum(0);
+        cartEx.setCartDeliveryExchActivityPointSum(0);
+        cartEx.setCartDeliveryExchMembershipPointSum(0);
+    
+        addExchPointSum(cartEx.getCartDeliveryMembershipPointExchOnlineProdExList(), cartEx, false);
+        addExchPointSum(cartEx.getCartStorePickupMembershipPointExchOnlineProdExList(), cartEx, false);
+        addExchPointSum(cartEx.getCartDeliveryActivityPointExchOnlineProdExList(), cartEx, true);
+        addExchPointSum(cartEx.getCartStorePickupActivityPointExchOnlineProdExList(), cartEx, true);
+    }
+
+    private void addExchPointSum(List<CartOnlineProdEx> cartOnlineProdExList, CartEx cartEx, boolean aPoint) {
+        CalculationResult calculationResult = cartEx.getCalculationResult();
+        
+        if(cartEx.getCartMemberEx() == null) {
+            return;
+        }
+        
+        Integer keepingPoints = 0;
+        
+        if(aPoint) {
+            keepingPoints = cartEx.getCartMemberEx().getActivityPoints();
+        }
+        else if(cartEx.getCartMemberEx().getMemberMembershipExList() != null) {
+            for(CartMemberMembershipEx memberMembershipEx : cartEx.getCartMemberEx().getMemberMembershipExList()) {
+                if(CartConst.BP_SERVICE_CODE.equals(memberMembershipEx.getMembershipServiceCode())) {
+                    if(memberMembershipEx.getMembershipPoints() != null) {
+                        keepingPoints = memberMembershipEx.getMembershipPoints();
+                    }
                 }
             }
         }
         
-        return exchPointSum;
+        Integer exchPointSum = 0;
+        Integer selectExchPointSum = 0;
+        
+        Integer remainPoints = keepingPoints;
+        if(cartOnlineProdExList != null) {
+            for(CartOnlineProdEx cartOnlineProdEx : cartOnlineProdExList) {
+                if(CartConst.Y.equals(cartOnlineProdEx.getSelectYn())) {
+                    if(remainPoints >= cartOnlineProdEx.getExchPoints()) {
+                        selectExchPointSum += cartOnlineProdEx.getExchPoints();
+                        remainPoints -= cartOnlineProdEx.getExchPoints();
+                    }
+                    else {
+                        cartOnlineProdEx.setSelectYn(CartConst.N);
+                    }
+                }
+                
+                exchPointSum += cartOnlineProdEx.getExchPoints();
+            }
+        }
+        
+        if(aPoint) {
+            cartEx.setCartDeliveryExchActivityPointSum(cartEx.getCartDeliveryExchActivityPointSum() + exchPointSum);
+            calculationResult.setExchAPointSum(calculationResult.getExchAPointSum() + selectExchPointSum);
+        }
+        else {
+            cartEx.setCartDeliveryExchMembershipPointSum(cartEx.getCartDeliveryExchMembershipPointSum() + exchPointSum);
+            calculationResult.setExchIPointSum(calculationResult.getExchIPointSum() + selectExchPointSum);
+        }
     }
     
     private void calculationCartPromoOnlineProdExList(List<CartPromoEx> cartPromoExList, Map<Long, CartProdEx> allCartProdExMap, Map<Long, CartOnlineProdEx> allCartOnlineProdExMap) {
@@ -551,7 +612,7 @@ public class CartBaseController extends AbstractController{
                     if(cartProdEx.getCartProdAwardList() != null) {
                         for(CartProdAward cartProdAward : cartProdEx.getCartProdAwardList()) {
                             // TODO 단위수량 * 장자구니수량
-                            // cartProdAward.setAwardQty(awardQty);
+                            cartProdAward.setAwardQty(cartProdAward.getAwardUnitQty() * getIntValue(cartProdEx.getCartProdQty()));
                         }
                     }
                     
@@ -564,26 +625,6 @@ public class CartBaseController extends AbstractController{
                         setCalculationCurrencyInfo(resultProduct.getProductSaleAmountInfo(), resultProduct.getProductSalePriceInfo(), cartProdEx.getCartProdQty().intValue());
                         // 최종온라인판매금액
                         setCalculationCurrencyInfo(resultProduct.getFinalOnlineSalesAmountInfo(), resultProduct.getFinalOnlineSalesPriceInfo(), realQty);
-                        
-                        
-
-                        // TODO 교환상품에 대한 처리를 어떻게 하나
-                        Map<String, Object> requestProductMembershipMap = resultProduct.getRequestProduct().getRequestProductMembershipMap();
-                        Map<String, Object> resultProductMembershipMap = resultProduct.getResultProductMembershipMap();
-                        if(requestProductMembershipMap != null
-                                && resultProductMembershipMap != null) {
-                            for(Map.Entry<String, Object> entry : requestProductMembershipMap.entrySet()) {
-                                CalculationRequestProductMembership requestProductMembership = (CalculationRequestProductMembership) (entry.getValue());
-                                if(CartConst.Y.equals(requestProductMembership.getMembershipSavingTgtYn())
-                                        && requestProductMembership.getMembershipSavingRate() != null) {
-                                    
-                                    CalculationResultProductMembership resultProductMembership = (CalculationResultProductMembership) resultProductMembershipMap.get(entry.getKey());
-                                    if(resultProductMembership != null) {
-                                        resultProductMembership.setMembershipSavingQtyPoint(resultProduct.getFinalOnlineSalesAmountInfo().getStandardCurrency().getAmount().multiply(requestProductMembership.getMembershipSavingRate()).longValue());
-                                    }
-                                }
-                            }
-                        }
                         
                         productSaleAmount = productSaleAmount.add(resultProduct.getProductSaleAmountInfo().getStandardCurrency().getAmount());
                         finalOnlineSaleAmount = finalOnlineSaleAmount.add(resultProduct.getFinalOnlineSalesAmountInfo().getStandardCurrency().getAmount());

@@ -1238,7 +1238,15 @@
 		 * @param {String}	type	피부톤 타입 (봄웜: WS, 여름쿨: CS, 가을웜: WF, 겨울쿨: CW, 봄여름 뉴트럴: NSS, 가을겨울 뉴트럴: NFW)
 		 */
 		getRecommendWithSkinTone: { path: '//etude.aramhuvis.com/api/getData.do?type={type}', crossDomain: true },
-						
+			
+		
+		/**
+		 * 홈화면 진입시 등록한 팝업 노출
+		 * 
+		 */
+		mainPopups : { path: '/display/mainPopups' , method : 'GET'},
+		
+		
 	    /**
 	     * dummy test *************************************************************
 	     */

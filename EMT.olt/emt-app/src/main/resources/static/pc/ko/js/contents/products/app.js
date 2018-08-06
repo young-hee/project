@@ -73,6 +73,24 @@
 					new AP.RestockNotify().open( this._defaultModel, memberMap );
 				}.bind(this));
 			}.bind(this));
+			
+			//고시정보 상품 수정
+			this._$target.find( 'select[name=ingredients]' ).on( 'change', function (e) {
+				this._$target.find('.disclosure').hide();
+				this._$target.find('[data-prodSn='+$(e.currentTarget).val()+']').show();
+			}.bind(this));
+			
+			//best review 더보기된 상태로 height 고정되는 현상 수정
+			this._$target.find( '.best_review' ).find('.ix-btn-next, .ix-btn-prev').on( 'click', function(e) {
+				//alert(this._$target.find( '.review_detail' ).hasClass('on'));
+				//this.dispatch( 'review-draw' );
+				if( this._$target.find( '.review_detail' ).hasClass('on') ){
+					this._$target.find( '.review_detail' ).siblings('.reduce').show();
+					this._$target.find( '.review_detail' ).siblings('.origin').slideUp('slow');
+					this._$target.find( '.review_detail' ).text('더보기 ∨').toggleClass('on off');
+				}
+
+			}.bind(this));
 		},
 
 		//header fixed 설정

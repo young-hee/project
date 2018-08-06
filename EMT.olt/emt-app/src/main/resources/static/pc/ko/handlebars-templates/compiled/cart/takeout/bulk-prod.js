@@ -228,9 +228,9 @@ this["AP"]["handlebars"]["cart"]["takeout"]["bulk-prod"] = Handlebars.template({
 },"41":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
-  return "					<li>\n						<span class=\"option_name\">\n							"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.awardProdEx : depth0)) != null ? stack1.repProdImgEx : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(42, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\n							사은품 : "
+  return "					<li>\n						<span class=\"option_name\">\n"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.awardProdEx : depth0)) != null ? stack1.repProdImgEx : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(42, data, 0),"inverse":container.program(44, data, 0),"data":data})) != null ? stack1 : "")
+    + "							사은품 : "
     + alias3(container.lambda(((stack1 = (depth0 != null ? depth0.awardProdEx : depth0)) != null ? stack1.prodName : stack1), depth0))
     + "\n						</span>\n						<span class=\"term\">\n							기간 : "
     + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,(depth0 != null ? depth0.awardStartDt : depth0),"YYYY.MM.DD",{"name":"dateFormat","hash":{},"data":data}))
@@ -240,9 +240,13 @@ this["AP"]["handlebars"]["cart"]["takeout"]["bulk-prod"] = Handlebars.template({
 },"42":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return " <img src=\""
+  return "								<img src=\""
     + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.awardProdEx : depth0)) != null ? stack1.repProdImgEx : stack1)) != null ? stack1.imgUrl : stack1), depth0))
-    + "\" alt=\"\"/> ";
+    + "\" alt=\"\"/>\n";
+},"44":function(container,depth0,helpers,partials,data) {
+    return "								<img src=\""
+    + container.escapeExpression((helpers.absolutePath || (depth0 && depth0.absolutePath) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"/images/cart/no_img.png.gif",{"name":"absolutePath","hash":{},"data":data}))
+    + "\" alt=\"\"/>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 

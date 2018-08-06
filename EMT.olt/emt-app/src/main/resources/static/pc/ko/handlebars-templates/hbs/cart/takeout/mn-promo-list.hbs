@@ -151,6 +151,25 @@
 							<p class="text_notice">{{calc recommandBaseOrdQty '+' recommandFreeAwardQty}}개 담으면 {{ recommandFreeAwardQty }}개 무료증정</p> {{!--2개 담으면 1개 무료증정--}}
 						{{/if}}
 					</div>
+					{{#xif cartProdAwardList.length '>' 0 }}
+						<ul class="freebies">
+							{{#each cartProdAwardList}}
+								<li>
+									<span class="option_name">
+										{{#if (ne awardProdEx.repProdImgEx null) }}
+											<img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/>
+										{{else}}
+											<img src="{{ absolutePath '/images/cart/no_img.png.gif' }}" alt=""/>
+										{{/if}}
+										사은품 : {{ awardProdEx.prodName }}
+									</span>
+									<span class="term">
+										기간 : {{dateFormat awardStartDt "YYYY.MM.DD"}} ~ {{dateFormat awardEndDt "YYYY.MM.DD"}}
+									</span>
+								</li>
+							{{/each}}
+						</ul>
+					{{/xif}}
 				{{/each}}
 			</div>
 		{{/each}}
@@ -299,6 +318,25 @@
 							</div>
 						</div>
 					</div>
+					{{#xif cartProdAwardList.length '>' 0 }}
+						<ul class="freebies">
+							{{#each cartProdAwardList}}
+								<li>
+									<span class="option_name">
+										{{#if (ne awardProdEx.repProdImgEx null) }}
+											<img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/>
+										{{else}}
+											<img src="{{ absolutePath '/images/cart/no_img.png.gif' }}" alt=""/>
+										{{/if}}
+										사은품 : {{ awardProdEx.prodName }}
+									</span>
+									<span class="term">
+										기간 : {{dateFormat awardStartDt "YYYY.MM.DD"}} ~ {{dateFormat awardEndDt "YYYY.MM.DD"}}
+									</span>
+								</li>
+							{{/each}}
+						</ul>
+					{{/xif}}
 				{{/each}}
 			{{/each}}
 		</div>

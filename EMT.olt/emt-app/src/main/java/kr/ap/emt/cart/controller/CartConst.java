@@ -1,6 +1,9 @@
 package kr.ap.emt.cart.controller;
 
 public class CartConst {
+    // 뷰티포인트멤버십서비스코드
+    public final static String BP_SERVICE_CODE = "BP";
+    
     // M+N유형코드
     public final static String MPLUSNTYPE_SAME = "Same";
     public final static String MPLUSNTYPE_DIFF = "Different";

@@ -219,9 +219,9 @@ this["AP"]["handlebars"]["cart"]["takeout"]["bulk-prod"] = Handlebars.template({
 },"37":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
-  return "				<div class=\"cart_free_gift\">\n					"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.awardProdEx : depth0)) != null ? stack1.repProdImgEx : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(38, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\n					<span class=\"info\">\n						<span>사은품 : "
+  return "				<div class=\"cart_free_gift\">\n"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.awardProdEx : depth0)) != null ? stack1.repProdImgEx : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(38, data, 0),"inverse":container.program(40, data, 0),"data":data})) != null ? stack1 : "")
+    + "					<span class=\"info\">\n						<span>사은품 : "
     + alias3(container.lambda(((stack1 = (depth0 != null ? depth0.awardProdEx : depth0)) != null ? stack1.prodName : stack1), depth0))
     + "</span>\n						<span>기간 : "
     + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,(depth0 != null ? depth0.awardStartDt : depth0),"YYYY.MM.DD",{"name":"dateFormat","hash":{},"data":data}))
@@ -231,9 +231,13 @@ this["AP"]["handlebars"]["cart"]["takeout"]["bulk-prod"] = Handlebars.template({
 },"38":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "<span class=\"thm\"><img src=\""
+  return "						<span class=\"thm\"><img src=\""
     + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.awardProdEx : depth0)) != null ? stack1.repProdImgEx : stack1)) != null ? stack1.imgUrl : stack1), depth0))
-    + "\" alt=\"\"/></span>";
+    + "\" alt=\"\"/></span>\n";
+},"40":function(container,depth0,helpers,partials,data) {
+    return "						<span class=\"thm\"><img src=\""
+    + container.escapeExpression((helpers.absolutePath || (depth0 && depth0.absolutePath) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"/images/cart/no_img.png.gif",{"name":"absolutePath","hash":{},"data":data}))
+    + "\" alt=\"\"/></span>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 

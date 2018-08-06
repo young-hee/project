@@ -11,7 +11,7 @@ this["AP"]["handlebars"]["display"]["products-list"]["flagged-item"] = Handlebar
     + "\">\n		<div class=\"thumb\">\n			<div class=\"flag_set\">\n"
     + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.flags : depth0),{"name":"each","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"blockParams":blockParams})) != null ? stack1 : "")
     + "			</div>\n			<img class=\"lazy_load\" src=\"\" data-src=\""
-    + alias3((helpers.replaceImagePath || (depth0 && depth0.replaceImagePath) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.onlineProdImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1),230,230,{"name":"replaceImagePath","hash":{},"data":data,"blockParams":blockParams}))
+    + alias3(alias4(((stack1 = ((stack1 = (depth0 != null ? depth0.onlineProdImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
     + "\" alt=\""
     + alias3(alias4((depth0 != null ? depth0.onlineProdName : depth0), depth0))
     + "\">\n		</div>\n		<div class=\"item_info\">\n			<div>\n				<p class=\"name\">"

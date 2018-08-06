@@ -6,20 +6,20 @@
 		<div class="ui_tab">
 			<div class="tab_menu equally">
 				<ul>
-					<li><button type="button">등급별혜택</button></li>
+					<li class="on"><button type="button">등급별혜택</button></li>
 					<li><button type="button">VIP라운지</button></li>
-					<li class="on"><button type="button">출석체크</button></li>
+					<li><button type="button">출석체크</button></li>
 				</ul>
 			</div>
 			
 			<!-- 탭 컨텐츠 -->
 			<div class="tab_contents">
-				
 				<!-- 로그인 전 -->
 				<div class="section coup_log_before">
 					<p class="text"><em>로그인</em>하고 고객등급과 혜택을 확인하세요</p>
 					<div class="btn_log_before01"><a href="javascript:;" class="btn_h50_pp round">로그인</a></div>
 				</div>
+
 				<!-- 등급별 혜택 -->
 				<div class="tab_cont">
 					<!-- 쿠폰 리스트 --> 
@@ -172,7 +172,6 @@
 						</ul>
 					</div>
 					
-					<!-- Apmall 고객 등급별 혜택 : 내용 확정 후 하드코딩으로 변경 예정 -->
 					<div class="section">
 						<div class="grade_benefit">
 							<h4 class="sr_only"><b>Apmall 고객 등급별 혜택</b></h4>
@@ -182,6 +181,7 @@
 						</div>
 						<a href="#none"><img ap:src="@{/images/common/ban_new_benefit_04.jpg}" alt="즉시할인 카드혜택 보러가기"></a>
 					</div>
+					
 				</div>
 				
 				<!-- VIP라운지 -->
@@ -242,29 +242,30 @@
 				<div class="tab_cont">
 					<ul class="attendance_benefit">
 						<li>
-							<a href="javascript:; ">
-								<span class="a_tit"><em>BENEFIT 01</em>뷰티포인트 증정 <i class="ico_arr"></i></span>
-								<p class="text color_light_gray">매일 출석할때마다 <span class="color_black">뷰티포인트 5P</span>를 드려요</p>
+							<a href="javascript:;">
+								<span class="a_tit"><em>BENEFIT 01</em><strong>뷰티포인트 증정</strong> <i class="ico_arr"></i></span>
+								<p class="text">매일 출석할때마다 <span>뷰티포인트 5P</span>를 드려요</p>
 							</a>
 						</li>
 						<li>
-							<a href="javascript:; ">
-								<span class="a_tit"><em>BENEFIT 01</em>뷰티포인트 증정 <i class="ico_arr"></i></span>
-								<p class="text color_light_gray">매일 출석할때마다 <span class="color_black">뷰티포인트 5P</span>를 드려요</p>
+							<a href="javascript:;">
+								<span class="a_tit"><em>BENEFIT 02</em><strong>개근고객 혜택</strong> <i class="ico_arr"></i></span>
+								<p class="text">출석률에 따라 뷰티포인트 <span>최대 2000P 추가</span>로 드려요</p>
 							</a>
 						</li>
 						<li>
-							<a href="javascript:; ">
-								<span class="a_tit"><em>BENEFIT 01</em>뷰티포인트 증정 <i class="ico_arr"></i></span>
-								<p class="text color_light_gray">매일 출석할때마다 <span class="color_black">뷰티포인트 5P</span>를 드려요</p>
+							<a href="javascript:;">
+								<span class="a_tit"><em>BENEFIT 03</em><strong>브랜드 할인쿠폰</strong> <i class="ico_arr"></i></span>
+								<p class="text">Today 브랜드쿠폰 뽑고 <span>3,000원 할인쿠폰 </span>받으세요</p>
 							</a>
 						</li>
 					</ul>
 
 					<div class="attendance_calendar">
+						<!-- 이달의 출석률 -->
 						<div class="month_select">
 							<button type="button" class="btn prev"><span class="sr_only">지난달 보기</span></button>
-							<span class="current_month">06월</span>
+							<span class="current_month">08월</span>
 							<button type="button" class="btn next" disabled="disabled"><span class="sr_only">다음달 보기</span></button>
 						</div>
 						<div class="attendance_graph">
@@ -275,9 +276,12 @@
 							</div>
 							<div class="percent">
 								<span class="tl">이달의 출석률</span>
-								<em id="user_rate">3</em>%
+								<em>98</em>%
 							</div>
 						</div>
+						<!-- // 이달의 출석률 -->
+						
+						<!-- 달력 -->
 						<div class="calendar_area">
                             <table>
                                 <caption class="sr_only">출석체크 달력</caption>
@@ -306,90 +310,97 @@
                                     <td></td>
 									<td></td>
 									<td></td>
-									<td></td>
-                                    <td><span class="date">1</span></td>
-                                    <td><span class="date">2</span></td>
-                                    <td><span class="date">3</span></td>
+									<td class="checked"><span class="date">1</span><span class="btn_brand_coupon"><img src="/mo/ko/images/dummy/img_cal_brand01.png" alt="" /></span></td>
+                                    <td class="checked"><span class="date">2</span><span class="btn_brand_coupon"><img src="/mo/ko/images/dummy/img_cal_brand01.png" alt="" /></span></td>
+                                    <td class="checked"><span class="date">3</span></td>
+                                    <td class="checked"><span class="date">4</span></td>
                                 </tr>
                                 <tr>
-                                    <td><span class="date">4</span></td>
                                     <td><span class="date">5</span></td>
-                                    <td><span class="date">6</span></td>
+                                    <td class="today"><span class="date">6</span></td>
                                     <td><span class="date">7</span></td>
                                     <td><span class="date">8</span></td>
                                     <td><span class="date">9</span></td>
-									<td><span class="date">10</span></td>
+                                    <td><span class="date">10</span></td>
+									<td><span class="date">11</span></td>
                                 </tr>
                                 <tr>
-                                    <td><span class="date">11</span></td>
                                     <td><span class="date">12</span></td>
                                     <td><span class="date">13</span></td>
                                     <td><span class="date">14</span></td>
                                     <td><span class="date">15</span></td>
                                     <td><span class="date">16</span></td>
                                     <td><span class="date">17</span></td>
+                                    <td><span class="date">18</span></td>
                                 </tr>
                                 <tr>
-                                    <td><span class="date">18</span></td>
                                     <td><span class="date">19</span></td>
                                     <td><span class="date">20</span></td>
                                     <td><span class="date">21</span></td>
                                     <td><span class="date">22</span></td>
                                     <td><span class="date">23</span></td>
                                     <td><span class="date">24</span></td>
+                                    <td><span class="date">25</span></td>
                                 </tr>
                                 <tr>
-                                    <td><span class="date">25</span></td>
-                                    <td class="today"><span class="date">26</span></td>
+                                    <td><span class="date">26</span></td>
                                     <td><span class="date">27</span></td>
                                     <td><span class="date">28</span></td>
                                     <td><span class="date">29</span></td>
                                     <td><span class="date">30</span></td>
                                     <td><span class="date">31</span></td>
+                                    <td></td>
                                 </tr>
                                 </tbody>
                             </table>
-							<div class="loading_layer">
+							<div class="loading_layer" style="display:none">
 								<img alt="로딩중" src="/mo/ko/images/common/loading.gif">
 							</div>
 						</div>
-						<div class="align_center"><a href="#none" class="btn_attendance"><img ap:src="@{/images/display/btn_attendance.png}" alt="출석체크"></a></div>
+						<!-- // 달력 -->
+
+						<div class="btn_attendance"><a href="javascript:;"><img ap:src="@{/images/display/btn_attendance.png}" alt="출석체크"></a></div>
+
 					</div>
+					
+					<!-- 브랜드 쿠폰 뽑기 -->
 					<div class="section today_brand_coupon">
-						<h4 class="h_title">Apmall 출석체크하고 <span><em>Today 브랜드쿠폰</em> 뽑자</span></h4>
+						<h4 class="tit">Apmall 출석체크하고 <span><em>Today 브랜드쿠폰</em> 뽑자</span></h4>
 						<div class="brand_coupon_list">
 							<ul class="scrollable_x">
 								<li><a href="#none" class="btn_brand_coupon" onclick="$(this).parent('li').toggleClass('on')"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/dummy/img_brand_trans_02.png}"></span></a></li>
-								<li><a href="#none" class="btn_brand_coupon"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/dummy/img_brand_trans_01.png}"></span></a></li>
-								<li><a href="#none" class="btn_brand_coupon"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/common/blank.png}"></span></a></li>
-								<li><a href="#none" class="btn_brand_coupon"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/common/blank.png}"></span></a></li>
-								<li><a href="#none" class="btn_brand_coupon"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/common/blank.png}"></span></a></li>
-								<li><a href="#none" class="btn_brand_coupon"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/common/blank.png}"></span></a></li>
-								<li><a href="#none" class="btn_brand_coupon"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/common/blank.png}"></span></a></li>
+								<li><a href="#none" class="btn_brand_coupon" onclick="$(this).parent('li').toggleClass('on')"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/dummy/img_brand_trans_01.png}"></span></a></li>
+								<li><a href="#none" class="btn_brand_coupon" onclick="$(this).parent('li').toggleClass('on')"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/dummy/img_brand_trans_01.png}"></span></a></li>
+								<li><a href="#none" class="btn_brand_coupon" onclick="$(this).parent('li').toggleClass('on')"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/dummy/img_brand_trans_01.png}"></span></a></li>
+								<li><a href="#none" class="btn_brand_coupon" onclick="$(this).parent('li').toggleClass('on')"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/dummy/img_brand_trans_01.png}"></span></a></li>
+								<li><a href="#none" class="btn_brand_coupon" onclick="$(this).parent('li').toggleClass('on')"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/dummy/img_brand_trans_01.png}"></span></a></li>
+								<li><a href="#none" class="btn_brand_coupon" onclick="$(this).parent('li').toggleClass('on')"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/common/blank.png}"></span></a></li>
 							</ul>
 						</div>
 					</div>
-					<div class="section">
+					<!-- // 브랜드 쿠폰 뽑기 -->
+					
+					<!-- 이벤트 배너 -->
+					<div class="bnn_area01">
 						<a href="#none"><img ap:src="@{/images/display/img_banner_benefit_03.jpg}" alt="Today 브랜드쿠폰 혜택 사용하세요 보러가기"></a>
 						<a href="#none"><img ap:src="@{/images/display/img_banner_benefit_04.jpg}" alt="Apmall의 풍성한 이벤트 보러가기"></a>
 					</div>
-					<div class="section pd_md mgt0">
-						<dl class="dl_cont">
-							<dt class="align_center"><i class="ico_notice"></i> <b class="font_lg">꼭 확인하세요</b></dt>
-							<dd>
-								<ul class="list_bullet_dot font_xxs color_light_gray">
-									<li>본 이벤트는 아모레퍼시픽 통합 고객 계정으로 로그인 시 참여 가능합니다.</li>
-									<li>출석률에 따른 뷰티포인트 추가 지급은 다음달 2일에 일괄 지급 됩니다.· 행운의 선물은 중복신청이 불가능 합니다. (무료배송 당첨 시, 행운상 및
-										달인상 신청 불가 / 행운상 당첨 시 달인상 신청 불가)</li>
-									<li>달인상의 본품 증정의 경우 매달 내용이 변경되며 다음달 10~15일 사이에
-										해당 회원님께 개별 연락드립니다.</li>
-									<li>본 이벤트는 당사 사정에 의해 사전 고지 없이 변경 및 종료될 수 있습니다.</li>
-									<li>부적절한 방법 (ID도용, 불법 프로그램 등)을 통해 이벤트 응모, 당첨 시
-										당첨은 취소되며 법적이 처벌을 받을 수 있습니다.</li>
-								</ul>
-							</dd>
-						</dl>
+					
+					<!-- notice -->
+					<div class="attendance_notice">
+						<div class="notice_area01">
+							<p class="noti_tit01"><i class="ico_notice"></i> 꼭 확인하세요</p>
+							<ul class="bullet_list01">
+								<li>본 이벤트는 아모레퍼시픽 통합 고객 계정으로 로그인 시 참여 가능합니다.</li>
+								<li>출석률에 따른 뷰티포인트 추가 지급은 다음달 2일에 일괄 지급 됩니다.</li>
+								<li>행운의 선물은 중복신청이 불가능 합니다. (무료배송 당첨 시, 행운상 및  달인상 신청 불가 / 행운상 당첨 시 달인상 신청 불가)</li>
+								<li>달인상의 본품 증정의 경우 매달 내용이 변경되며 다음달 10~15일 사이에 해당 회원님께 개별 연락드립니다.</li>
+								<li>본 이벤트는 당사 사정에 의해 사전 고지 없이 변경 및 종료될 수 있습니다.</li>
+								<li>부적절한 방법 (ID도용, 불법 프로그램 등)을 통해 이벤트 응모, 당첨 시 당첨은 취소되며 법적이 처벌을 받을 수 있습니다.</li>
+							</ul>
+						</div>
 					</div>
+					<!-- // notice -->
 				</div>
 
 			</div>
