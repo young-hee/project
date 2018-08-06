@@ -30,7 +30,7 @@ public class BreadCrumbPostProcessor implements BeanPostProcessor {
 
         ReflectionUtils.doWithMethods(bean.getClass(), new ReflectionUtils.MethodCallback() {
             @Override
-            public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
+            public void doWith(Method method) throws IllegalArgumentException {
                 BreadCrumb breadCrumb = AnnotationUtils.findAnnotation(method, BreadCrumb.class);
                 if (breadCrumb == null) {
                     return;

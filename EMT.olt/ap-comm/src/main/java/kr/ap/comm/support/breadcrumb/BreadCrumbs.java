@@ -63,9 +63,14 @@ public class BreadCrumbs {
      * @param screenId
      */
     public static List<BreadCrumb> getBreadCrumbs(String screenId) {
-        List<BreadCrumb> breadCrumbs = createBreadCrumbs();
-        String[] depth = screenId.split("\\.");
-        StringBuilder upperId = new StringBuilder("EH");
+
+    	String[] depth = screenId.split("\\.");
+		if (depth.length < 1) {
+			return Collections.emptyList();
+		}
+
+		List<BreadCrumb> breadCrumbs = createBreadCrumbs(depth[0]);
+        StringBuilder upperId = new StringBuilder(depth[0]);
         for (int i = 1; i < depth.length; i++) {
             upperId.append(".").append(depth[i]);
             BreadCrumb breadCrumb = getBreadCrumb(upperId.toString());
@@ -76,17 +81,21 @@ public class BreadCrumbs {
         return breadCrumbs;
     }
 
-    private static List<BreadCrumb> createBreadCrumbs() {
+    private static List<BreadCrumb> createBreadCrumbs(String rootId) {
         List<BreadCrumb> breadCrumbs = new ArrayList<>();
-        breadCrumbs.add(new BreadCrumb("EH","HOME", "/"));
+        addRoot(breadCrumbs, rootId);
         return breadCrumbs;
     }
+
+    private static void addRoot(List<BreadCrumb> breadCrumbs, String rootId) {
+		breadCrumbs.add(new BreadCrumb(rootId,"HOME", "/"));
+	}
 
     private static BreadCrumb getBreadCrumb(String screenId) {
         return breadCrumbMap.get(screenId);
     }
 
-    private static Map<String, BreadCrumb> breadCrumbMap = new ConcurrentHashMap<>();
+    private final static Map<String, BreadCrumb> breadCrumbMap = new ConcurrentHashMap<>();
 
     public static void add(String id, String title, String uri) {
         if (logger.isDebugEnabled()) {

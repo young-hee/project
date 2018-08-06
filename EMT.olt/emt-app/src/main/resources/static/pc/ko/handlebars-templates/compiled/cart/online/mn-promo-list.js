@@ -203,13 +203,13 @@ this["AP"]["handlebars"]["cart"]["online"]["mn-promo-list"] = Handlebars.templat
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.minPurLimitQty : stack1), depth0))
     + "\" data-max=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitQty : stack1), depth0))
-    + "\" class=\"ui_spinner\" data-step=\"1\" data-disabled=\"false\">\n											<button class=\"spinner_decrease\" type=\"button\" title=\"제품 수량 감소\" onclick=\"prodQtyOperate(this, "
-    + alias2(alias1((depths[2] != null ? depths[2].cartSn : depths[2]), depth0))
-    + ", "
+    + "\" class=\"ui_spinner\" data-step=\"1\" data-disabled=\"false\">\n											<button class=\"spinner_decrease\" type=\"button\" title=\"제품 수량 감소\" onclick=\"prodQtyOperate(this, '"
+    + alias2(alias1((depths[3] != null ? depths[3].cartSn : depths[3]), depth0))
+    + "', '"
     + alias2(alias1((depth0 != null ? depth0.cartProdSn : depth0), depth0))
-    + ", "
+    + "', '"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
-    + ", '"
+    + "', '"
     + alias2(alias1((depth0 != null ? depth0.integrationMembershipExchYn : depth0), depth0))
     + "', '"
     + alias2(alias1((depth0 != null ? depth0.activityPointExchYn : depth0), depth0))
@@ -221,13 +221,13 @@ this["AP"]["handlebars"]["cart"]["online"]["mn-promo-list"] = Handlebars.templat
     + alias2((helpers.absolutePath || (depth0 && depth0.absolutePath) || alias4).call(alias3,"/images/common/ico_minus1.gif",{"name":"absolutePath","hash":{},"data":data}))
     + "\"></button>\n											<input class=\"spinner_input\" type=\"text\" name=\"cartProdQty\" value=\""
     + alias2(alias1((depth0 != null ? depth0.cartProdQty : depth0), depth0))
-    + "\">\n											<button class=\"spinner_increase\" type=\"button\" title=\"제품 수량 증가\" onclick=\"prodQtyOperate(this, "
-    + alias2(alias1((depths[2] != null ? depths[2].cartSn : depths[2]), depth0))
-    + ", "
+    + "\">\n											<button class=\"spinner_increase\" type=\"button\" title=\"제품 수량 증가\" onclick=\"prodQtyOperate(this, '"
+    + alias2(alias1((depths[3] != null ? depths[3].cartSn : depths[3]), depth0))
+    + "', '"
     + alias2(alias1((depth0 != null ? depth0.cartProdSn : depth0), depth0))
-    + ", "
+    + "', '"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
-    + ", '"
+    + "', '"
     + alias2(alias1((depth0 != null ? depth0.integrationMembershipExchYn : depth0), depth0))
     + "', '"
     + alias2(alias1((depth0 != null ? depth0.activityPointExchYn : depth0), depth0))
@@ -243,13 +243,13 @@ this["AP"]["handlebars"]["cart"]["online"]["mn-promo-list"] = Handlebars.templat
 
   return "										<!--/* 최대구매제한여부가 'N'일경우 최대구매수량은 존재하지 않음 */-->\n										<span data-min=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.minPurLimitQty : stack1), depth0))
-    + "\" class=\"ui_spinner\" data-step=\"1\" data-disabled=\"false\">\n											<button class=\"spinner_decrease\" type=\"button\" title=\"제품 수량 감소\" onclick=\"prodQtyOperate(this, "
-    + alias2(alias1((depths[2] != null ? depths[2].cartSn : depths[2]), depth0))
-    + ", "
+    + "\" class=\"ui_spinner\" data-step=\"1\" data-disabled=\"false\">\n											<button class=\"spinner_decrease\" type=\"button\" title=\"제품 수량 감소\" onclick=\"prodQtyOperate(this, '"
+    + alias2(alias1((depths[3] != null ? depths[3].cartSn : depths[3]), depth0))
+    + "', '"
     + alias2(alias1((depth0 != null ? depth0.cartProdSn : depth0), depth0))
-    + ", "
+    + "', '"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
-    + ", '"
+    + "', '"
     + alias2(alias1((depth0 != null ? depth0.integrationMembershipExchYn : depth0), depth0))
     + "', '"
     + alias2(alias1((depth0 != null ? depth0.activityPointExchYn : depth0), depth0))
@@ -261,13 +261,13 @@ this["AP"]["handlebars"]["cart"]["online"]["mn-promo-list"] = Handlebars.templat
     + alias2((helpers.absolutePath || (depth0 && depth0.absolutePath) || alias4).call(alias3,"/images/common/ico_minus1.gif",{"name":"absolutePath","hash":{},"data":data}))
     + "\"></button>\n											<input class=\"spinner_input\" type=\"text\" name=\"cartProdQty\" value=\""
     + alias2(alias1((depth0 != null ? depth0.cartProdQty : depth0), depth0))
-    + "\">\n											<button class=\"spinner_increase\" type=\"button\" title=\"제품 수량 증가\" onclick=\"prodQtyOperate(this, "
-    + alias2(alias1((depths[2] != null ? depths[2].cartSn : depths[2]), depth0))
-    + ", "
+    + "\">\n											<button class=\"spinner_increase\" type=\"button\" title=\"제품 수량 증가\" onclick=\"prodQtyOperate(this, '"
+    + alias2(alias1((depths[3] != null ? depths[3].cartSn : depths[3]), depth0))
+    + "', '"
     + alias2(alias1((depth0 != null ? depth0.cartProdSn : depth0), depth0))
-    + ", "
+    + "', '"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
-    + ", '"
+    + "', '"
     + alias2(alias1((depth0 != null ? depth0.integrationMembershipExchYn : depth0), depth0))
     + "', '"
     + alias2(alias1((depth0 != null ? depth0.activityPointExchYn : depth0), depth0))
@@ -344,7 +344,7 @@ this["AP"]["handlebars"]["cart"]["online"]["mn-promo-list"] = Handlebars.templat
     + "				</div>\n			</div>\n\n"
     + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.promoOnlineProdExList : depth0),{"name":"each","hash":{},"fn":container.program(80, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "		</div>\n"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,(depth0 != null ? depth0.promoApplyResultCode : depth0),"All",{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(83, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,(depth0 != null ? depth0.promoApplyResultCode : depth0),"All",{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(87, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"69":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
@@ -430,7 +430,7 @@ this["AP"]["handlebars"]["cart"]["online"]["mn-promo-list"] = Handlebars.templat
     + "							</div>\n\n							<!--/* 상품 수량 */-->\n							<div class=\"count\">\n								<!--/* 품절/조기소진일경우 버튼제어 X */-->\n"
     + ((stack1 = helpers["if"].call(alias3,(helpers.ne || (depth0 && depth0.ne) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OnSale",{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(38, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "								<!--/* 최대구매제한여부가 'Y'일 경우 최대구매수량 존재 */-->\n"
-    + ((stack1 = helpers["if"].call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OnSale",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(40, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OnSale",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(82, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "							</div>\n\n							<!--/* 포인트 및 가격 */-->\n							<div class=\"price\">\n"
     + ((stack1 = helpers["if"].call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depth0 != null ? depth0.calculationResultYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(45, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depth0 != null ? depth0.calculationResultYn : depth0),"N",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(51, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -447,13 +447,99 @@ this["AP"]["handlebars"]["cart"]["online"]["mn-promo-list"] = Handlebars.templat
     + ","
     + alias2(alias1((depth0 != null ? depth0.cartProdSn : depth0), depth0))
     + ")\">삭제</button>\n							</div>\n						</div>\n					</div>\n";
-},"83":function(container,depth0,helpers,partials,data) {
+},"82":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
+
+  return ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || helpers.helperMissing).call(alias1,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitYn : stack1),"Y",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(83, data, 0, blockParams, depths),"inverse":container.program(85, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "");
+},"83":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
+
+  return "										<span data-min=\""
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.minPurLimitQty : stack1), depth0))
+    + "\" data-max=\""
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitQty : stack1), depth0))
+    + "\" class=\"ui_spinner\" data-step=\"1\" data-disabled=\"false\">\n											<button class=\"spinner_decrease\" type=\"button\" title=\"제품 수량 감소\" onclick=\"prodQtyOperate(this, "
+    + alias2(alias1((depths[3] != null ? depths[3].cartSn : depths[3]), depth0))
+    + ", "
+    + alias2(alias1((depth0 != null ? depth0.cartProdSn : depth0), depth0))
+    + ", "
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
+    + ", '"
+    + alias2(alias1((depth0 != null ? depth0.integrationMembershipExchYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.activityPointExchYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.storePickupYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.storeSn : depth0), depth0))
+    + "', '-')\"><img alt=\"제품 수량 감소\" src=\""
+    + alias2((helpers.absolutePath || (depth0 && depth0.absolutePath) || alias4).call(alias3,"/images/common/ico_minus1.gif",{"name":"absolutePath","hash":{},"data":data}))
+    + "\"></button>\n											<input class=\"spinner_input\" type=\"text\" name=\"cartProdQty\" value=\""
+    + alias2(alias1((depth0 != null ? depth0.cartProdQty : depth0), depth0))
+    + "\">\n											<button class=\"spinner_increase\" type=\"button\" title=\"제품 수량 증가\" onclick=\"prodQtyOperate(this, "
+    + alias2(alias1((depths[3] != null ? depths[3].cartSn : depths[3]), depth0))
+    + ", "
+    + alias2(alias1((depth0 != null ? depth0.cartProdSn : depth0), depth0))
+    + ", "
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
+    + ", '"
+    + alias2(alias1((depth0 != null ? depth0.integrationMembershipExchYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.activityPointExchYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.storePickupYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.storeSn : depth0), depth0))
+    + "', '+')\"><img alt=\"제품 수량 증가\" src=\""
+    + alias2((helpers.absolutePath || (depth0 && depth0.absolutePath) || alias4).call(alias3,"/images/common/icon_plus1.gif",{"name":"absolutePath","hash":{},"data":data}))
+    + "\"></button>\n										</span>\n";
+},"85":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
+
+  return "										<!--/* 최대구매제한여부가 'N'일경우 최대구매수량은 존재하지 않음 */-->\n										<span data-min=\""
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.minPurLimitQty : stack1), depth0))
+    + "\" class=\"ui_spinner\" data-step=\"1\" data-disabled=\"false\">\n											<button class=\"spinner_decrease\" type=\"button\" title=\"제품 수량 감소\" onclick=\"prodQtyOperate(this, "
+    + alias2(alias1((depths[3] != null ? depths[3].cartSn : depths[3]), depth0))
+    + ", "
+    + alias2(alias1((depth0 != null ? depth0.cartProdSn : depth0), depth0))
+    + ", "
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
+    + ", '"
+    + alias2(alias1((depth0 != null ? depth0.integrationMembershipExchYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.activityPointExchYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.storePickupYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.storeSn : depth0), depth0))
+    + "', '-')\"><img alt=\"제품 수량 감소\" src=\""
+    + alias2((helpers.absolutePath || (depth0 && depth0.absolutePath) || alias4).call(alias3,"/images/common/ico_minus1.gif",{"name":"absolutePath","hash":{},"data":data}))
+    + "\"></button>\n											<input class=\"spinner_input\" type=\"text\" name=\"cartProdQty\" value=\""
+    + alias2(alias1((depth0 != null ? depth0.cartProdQty : depth0), depth0))
+    + "\">\n											<button class=\"spinner_increase\" type=\"button\" title=\"제품 수량 증가\" onclick=\"prodQtyOperate(this, "
+    + alias2(alias1((depths[3] != null ? depths[3].cartSn : depths[3]), depth0))
+    + ", "
+    + alias2(alias1((depth0 != null ? depth0.cartProdSn : depth0), depth0))
+    + ", "
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
+    + ", '"
+    + alias2(alias1((depth0 != null ? depth0.integrationMembershipExchYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.activityPointExchYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.storePickupYn : depth0), depth0))
+    + "', '"
+    + alias2(alias1((depth0 != null ? depth0.storeSn : depth0), depth0))
+    + "', '+')\"><img alt=\"제품 수량 증가\" src=\""
+    + alias2((helpers.absolutePath || (depth0 && depth0.absolutePath) || alias4).call(alias3,"/images/common/icon_plus1.gif",{"name":"absolutePath","hash":{},"data":data}))
+    + "\"></button>\n										</span>\n";
+},"87":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
   return "			<p class=\"text_notice\">"
-    + alias3((helpers.calc || (depth0 && depth0.calc) || alias2).call(alias1,(depth0 != null ? depth0.baseOrdQty : depth0),"+",(depth0 != null ? depth0.freeAwardQty : depth0),{"name":"calc","hash":{},"data":data}))
+    + alias3((helpers.calc || (depth0 && depth0.calc) || alias2).call(alias1,(depth0 != null ? depth0.recommandBaseOrdQty : depth0),"+",(depth0 != null ? depth0.recommandFreeAwardQty : depth0),{"name":"calc","hash":{},"data":data}))
     + "개 담으면 "
-    + alias3(((helper = (helper = helpers.freeAwardQty || (depth0 != null ? depth0.freeAwardQty : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"freeAwardQty","hash":{},"data":data}) : helper)))
+    + alias3(((helper = (helper = helpers.recommandFreeAwardQty || (depth0 != null ? depth0.recommandFreeAwardQty : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"recommandFreeAwardQty","hash":{},"data":data}) : helper)))
     + "개 무료증정</p> \n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;

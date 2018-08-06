@@ -86,7 +86,7 @@ public class OrderBaseController extends AbstractViewController {
 					
 					OrdOnlineProdFoDTO ordOnlineProdFo = null;
 					// M+N상품
-					if(ordHistProdEx.getMPlusNOrdPromoSn() != null) {
+					if(ordHistProdEx.getmPlusNOrdPromoSn() != null) {
                         if (storePickup) {
                             ordOnlineProdFo = getMPlusNPromoOnlineProd(ordHistProdEx, storePickupMNPromoMap);
                         }
@@ -317,15 +317,15 @@ public class OrderBaseController extends AbstractViewController {
 
 
 	private OrdOnlineProdFoDTO getMPlusNPromoOnlineProd(OrdHistProdEx ordHistProdEx, Map<Long, OrdOnlinePromoFoDTO> ordOnlinePromoFoMap) {
-        OrdOnlinePromoFoDTO ordOnlinePromoFo = ordOnlinePromoFoMap.get(ordHistProdEx.getMPlusNOrdPromoSn());
+        OrdOnlinePromoFoDTO ordOnlinePromoFo = ordOnlinePromoFoMap.get(ordHistProdEx.getmPlusNOrdPromoSn());
         if(ordOnlinePromoFo == null) {
             ordOnlinePromoFo = new OrdOnlinePromoFoDTO();
-            ordOnlinePromoFo.setPromoSn(ordHistProdEx.getMPlusNOrdPromoSn());
-            ordOnlinePromoFo.setPromoName(ordHistProdEx.getMPlusNOrdPromoNameRlang());
+            ordOnlinePromoFo.setPromoSn(ordHistProdEx.getmPlusNOrdPromoSn());
+            ordOnlinePromoFo.setPromoName(ordHistProdEx.getmPlusNOrdPromoNameRlang());
             ordOnlinePromoFo.setOrdOnlineProdFoMap(new HashMap<>());
             ordOnlinePromoFo.setOrdOnlineProdFoList(new ArrayList<>());
             
-            ordOnlinePromoFoMap.put(ordHistProdEx.getMPlusNOrdPromoSn(), ordOnlinePromoFo);
+            ordOnlinePromoFoMap.put(ordHistProdEx.getmPlusNOrdPromoSn(), ordOnlinePromoFo);
         }
         
         return getOrdOnlineProdFo(ordHistProdEx, ordOnlinePromoFo);

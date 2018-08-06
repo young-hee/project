@@ -21,7 +21,9 @@ this["AP"]["handlebars"]["my"]["favorite-store-add-list"] = Handlebars.template(
     + alias4(((helper = (helper = helpers.storeName || (depth0 != null ? depth0.storeName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"storeName","hash":{},"data":data}) : helper)))
     + "\">기본매장</label>\n				</span> -->\n			</div>\n			<div class=\"store_info\">\n				<p class=\"store_addr\">"
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.address : depth0)) != null ? stack1.address1 : stack1), depth0))
-    + "	\n					<a href=\"tel:"
+    + " "
+    + alias4(alias5(((stack1 = (depth0 != null ? depth0.address : depth0)) != null ? stack1.address2 : stack1), depth0))
+    + "\n					<a href=\"tel:"
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.phoneNo1 : depth0)) != null ? stack1.phoneNo : stack1), depth0))
     + "\" class=\"store_phone\">"
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.phoneNo1 : depth0)) != null ? stack1.phoneNo : stack1), depth0))

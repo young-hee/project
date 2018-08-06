@@ -204,7 +204,7 @@ this["AP"]["handlebars"]["cart"]["takeout"]["mn-promo-list"] = Handlebars.templa
     + "\" data-max=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitQty : stack1), depth0))
     + "\" class=\"ui_spinner\" data-step=\"1\" data-disabled=\"false\">\n											<button class=\"spinner_decrease\" type=\"button\" title=\"제품 수량 감소\" onclick=\"prodQtyOperate(this, "
-    + alias2(alias1((depths[2] != null ? depths[2].cartSn : depths[2]), depth0))
+    + alias2(alias1((depths[3] != null ? depths[3].cartSn : depths[3]), depth0))
     + ", "
     + alias2(alias1((depth0 != null ? depth0.cartProdSn : depth0), depth0))
     + ", "
@@ -222,7 +222,7 @@ this["AP"]["handlebars"]["cart"]["takeout"]["mn-promo-list"] = Handlebars.templa
     + "\"></button>\n											<input class=\"spinner_input\" type=\"text\" name=\"cartProdQty\" value=\""
     + alias2(alias1((depth0 != null ? depth0.cartProdQty : depth0), depth0))
     + "\">\n											<button class=\"spinner_increase\" type=\"button\" title=\"제품 수량 증가\" onclick=\"prodQtyOperate(this, "
-    + alias2(alias1((depths[2] != null ? depths[2].cartSn : depths[2]), depth0))
+    + alias2(alias1((depths[3] != null ? depths[3].cartSn : depths[3]), depth0))
     + ", "
     + alias2(alias1((depth0 != null ? depth0.cartProdSn : depth0), depth0))
     + ", "
@@ -244,7 +244,7 @@ this["AP"]["handlebars"]["cart"]["takeout"]["mn-promo-list"] = Handlebars.templa
   return "										<!--/* 최대구매제한여부가 'N'일경우 최대구매수량은 존재하지 않음 */-->\n										<span data-min=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.minPurLimitQty : stack1), depth0))
     + "\" class=\"ui_spinner\" data-step=\"1\" data-disabled=\"false\">\n											<button class=\"spinner_decrease\" type=\"button\" title=\"제품 수량 감소\" onclick=\"prodQtyOperate(this, "
-    + alias2(alias1((depths[2] != null ? depths[2].cartSn : depths[2]), depth0))
+    + alias2(alias1((depths[3] != null ? depths[3].cartSn : depths[3]), depth0))
     + ", "
     + alias2(alias1((depth0 != null ? depth0.cartProdSn : depth0), depth0))
     + ", "
@@ -262,7 +262,7 @@ this["AP"]["handlebars"]["cart"]["takeout"]["mn-promo-list"] = Handlebars.templa
     + "\"></button>\n											<input class=\"spinner_input\" type=\"text\" name=\"cartProdQty\" value=\""
     + alias2(alias1((depth0 != null ? depth0.cartProdQty : depth0), depth0))
     + "\">\n											<button class=\"spinner_increase\" type=\"button\" title=\"제품 수량 증가\" onclick=\"prodQtyOperate(this, "
-    + alias2(alias1((depths[2] != null ? depths[2].cartSn : depths[2]), depth0))
+    + alias2(alias1((depths[3] != null ? depths[3].cartSn : depths[3]), depth0))
     + ", "
     + alias2(alias1((depth0 != null ? depth0.cartProdSn : depth0), depth0))
     + ", "
@@ -332,7 +332,7 @@ this["AP"]["handlebars"]["cart"]["takeout"]["mn-promo-list"] = Handlebars.templa
 },"68":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return "\n		<div class=\"promotion\">\n			<div class=\"promotion_header\">\n"
+  return "		<div class=\"promotion\">\n			<div class=\"promotion_header\">\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.promoApplyResultCode : depth0),"==","All",{"name":"xif","hash":{},"fn":container.program(69, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.promoApplyResultCode : depth0),"==","Partial",{"name":"xif","hash":{},"fn":container.program(71, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.promoApplyResultCode : depth0),"==","None",{"name":"xif","hash":{},"fn":container.program(73, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -450,9 +450,9 @@ this["AP"]["handlebars"]["cart"]["takeout"]["mn-promo-list"] = Handlebars.templa
     var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
   return "			<p class=\"text_notice\">"
-    + alias3((helpers.calc || (depth0 && depth0.calc) || alias2).call(alias1,(depth0 != null ? depth0.baseOrdQty : depth0),"+",(depth0 != null ? depth0.freeAwardQty : depth0),{"name":"calc","hash":{},"data":data}))
+    + alias3((helpers.calc || (depth0 && depth0.calc) || alias2).call(alias1,(depth0 != null ? depth0.recommandBaseOrdQty : depth0),"+",(depth0 != null ? depth0.recommandFreeAwardQty : depth0),{"name":"calc","hash":{},"data":data}))
     + "개 담으면 "
-    + alias3(((helper = (helper = helpers.freeAwardQty || (depth0 != null ? depth0.freeAwardQty : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"freeAwardQty","hash":{},"data":data}) : helper)))
+    + alias3(((helper = (helper = helpers.recommandFreeAwardQty || (depth0 != null ? depth0.recommandFreeAwardQty : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"recommandFreeAwardQty","hash":{},"data":data}) : helper)))
     + "개 무료증정</p> \n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;

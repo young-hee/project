@@ -19,11 +19,11 @@
 
 			this._setPlugin();
 			this._setEvent();
+			this._setRepImage();
 			this._setSlide();
 			this._setRemainTimer();
 			this._setOrderQty();
 			this._setSelectOption();
-			this._setRepImage();
 
 			if ( !data.linePromoDesc && !data.lineDesc && this._$target.find( '.s_title em' ).text().length == 0) {
 				this._$target.find( '.s_title' ).remove();
@@ -92,7 +92,7 @@
 				if ( this._data.products[0].repImgNo == 1 )	return;
 				repImg = this._data.products[0].prodImages[this._data.products[0].repImgNo - 1];
 			}
-			this._$target.find( '.first_img img' ).data( 'src', repImg.imgUrl );
+			this._$target.find( '.first_img img' ).attr( 'data-src', repImg.imgUrl );
 		},
 
 		_setSlide: function ( data ) {

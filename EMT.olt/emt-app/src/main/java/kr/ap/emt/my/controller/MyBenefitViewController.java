@@ -186,12 +186,15 @@ public class MyBenefitViewController extends AbstractController {
 				cstmlvlNst = "Hello";
 				break;
 			case "HELLO" :
+				custCstmAmt.setCstmlvlNm("Hello");
 				cstmlvlNst = "Friends";
 				break;
 			case "FRIENDS" :
+				custCstmAmt.setCstmlvlNm("Friends");
 				cstmlvlNst = "Pink Love";
 				break;
 			case "PINK LOVE" :
+				custCstmAmt.setCstmlvlNm("Pink Love");
 				cstmlvlNst = null;
 				break;
 			default:

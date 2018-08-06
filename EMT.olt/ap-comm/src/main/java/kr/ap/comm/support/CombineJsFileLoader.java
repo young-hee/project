@@ -19,7 +19,7 @@ public class CombineJsFileLoader {
     private Map<String, List<String>> jsfiles;
 
     public Map<String, List<String>> getJsFiles() {
-        String channelPath = null;
+        String channelPath;
         if (APRequestContext.isMobileDevice() || APRequestContext.isMobileApp()) {
             channelPath = "/mo/ko";
         } else {
@@ -51,12 +51,14 @@ public class CombineJsFileLoader {
     }
 
     private Map<String, List<String>> load(Resource resource, String channelPath) {
-        logger.debug("Loading js-files.yml...");
+    	if (logger.isDebugEnabled()) {
+			logger.debug("Loading js-files.yml...");
+		}
         try (InputStream is = resource.getInputStream()) {
             Yaml yaml = new Yaml();
-            Map<String, Object> y = (Map<String, Object>) yaml.load(is);
+            Map<String, Object> y = yaml.load(is);
             String js = yaml.dump(y.get("combine-js"));
-            return addChannelAndLangCode((Map<String, List<String>>) yaml.load(js), channelPath);
+            return addChannelAndLangCode(yaml.load(js), channelPath);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return new LinkedHashMap<>();
@@ -64,9 +66,8 @@ public class CombineJsFileLoader {
     }
 
     private Map<String, List<String>> addChannelAndLangCode(Map<String, List<String>> jsmap, final String channelPath) {
-        Map<String, List<String>> map = jsmap.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(), e -> {
-            return e.getValue().stream().map(v -> channelPath + v).collect(Collectors.toList());
-        }));
+        Map<String, List<String>> map = jsmap.entrySet().stream().collect(Collectors.toMap(e -> e.getKey()
+			, e -> e.getValue().stream().map(v -> channelPath + v).collect(Collectors.toList())));
         return map;
     }
 }

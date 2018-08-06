@@ -358,18 +358,18 @@ public class MyOrdInfoDTO {
 		ordChangeShipAddress.setRecipientPhoneNo2(ord.getRecipientPhoneNo2());
 		ordChangeShipAddress.setRecipientEmailAddress(ord.getRecipientEmailAddress());
 		ordChangeShipAddress.setRecipientAddress(ord.getRecipientAddress());
-		ordChangeShipAddress.setCStoreCenterCode(ord.getCStoreCenterCode());
-		ordChangeShipAddress.setCStoreStoreCode(ord.getCStoreStoreCode());
-		ordChangeShipAddress.setCStoreCompany(ord.getCStoreCompany());
-		ordChangeShipAddress.setCStoreName(ord.getCStoreName());
-		ordChangeShipAddress.setCStorePhoneNo(ord.getCStorePhoneNo());
-		ordChangeShipAddress.setCStoreDockNo(ord.getCStoreDockNo());
-		ordChangeShipAddress.setCStoreCenterName(ord.getCStoreCenterName());
-		ordChangeShipAddress.setCStoreAddress(ord.getCStoreAddress());
-		ordChangeShipAddress.setCStoreArrivalAreaCode(ord.getCStoreArrivalAreaCode());
-		ordChangeShipAddress.setCStoreArrivalAreaBarcode(ord.getCStoreArrivalAreaBarcode());
-		ordChangeShipAddress.setCStoreDongNmCode(ord.getCStoreDongNmCode());
-		ordChangeShipAddress.setCStoreArrivalDongNm(ord.getCStoreArrivalDongNm());
+		ordChangeShipAddress.setcStoreCenterCode(ord.getcStoreCenterCode());
+		ordChangeShipAddress.setcStoreStoreCode(ord.getcStoreStoreCode());
+		ordChangeShipAddress.setcStoreCompany(ord.getcStoreCompany());
+		ordChangeShipAddress.setcStoreName(ord.getcStoreName());
+		ordChangeShipAddress.setcStorePhoneNo(ord.getcStorePhoneNo());
+		ordChangeShipAddress.setcStoreDockNo(ord.getcStoreDockNo());
+		ordChangeShipAddress.setcStoreCenterName(ord.getcStoreCenterName());
+		ordChangeShipAddress.setcStoreAddress(ord.getcStoreAddress());
+		ordChangeShipAddress.setcStoreArrivalAreaCode(ord.getcStoreArrivalAreaCode());
+		ordChangeShipAddress.setcStoreArrivalAreaBarcode(ord.getcStoreArrivalAreaBarcode());
+		ordChangeShipAddress.setcStoreDongNmCode(ord.getcStoreDongNmCode());
+		ordChangeShipAddress.setcStoreArrivalDongNm(ord.getcStoreArrivalDongNm());
 	}
 
 	public static void setFields(Object from, Object to) {

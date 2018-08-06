@@ -23,12 +23,12 @@
 			}
 
 			this._setEvent();
+			this._setRepImage();
 			this._setColorChip();
 			this._toggleItemView( this._viewType );
 			this._setRemainTimer();
 			this._setOrderQty();
 			this._setSelectOption();
-			this._setRepImage();
 		},
 
 		/** =============== Public Methods ================ */
@@ -78,13 +78,17 @@
 		_setRepImage: function () {
 			var repImg = '';
 			if ( this._data.prodListUnitCode == 'OnlineProd' ) {
-				if ( this._data.repImgNo == 1 )				return;
+				if ( this._data.repImgNo == 1 ) {
+					return;
+				}
 				repImg = this._data.onlineProdImages[this._data.repImgNo - 1];
 			} else {
-				if ( this._data.products[0].repImgNo == 1 )	return;
+				if ( this._data.products[0].repImgNo == 1 ) {
+					return;
+				}
 				repImg = this._data.products[0].prodImages[this._data.products[0].repImgNo - 1];
 			}
-			this._$target.find( '.first_img img' ).data( 'src', repImg.imgUrl );
+			this._$target.find( '.first_img img' ).attr( 'data-src', repImg.imgUrl );
 		},
 
 		_setColorChip: function () {
