@@ -1,0 +1,176 @@
+<dd>
+	<div class="cont freebies">
+		{{#each this.list}}
+			{{#xif this.promoSn '==' 292}}
+				<div class="title_area">
+					<h4 class="h_title sub">첫 구매 사은품</h4>
+				</div>
+				<ul class="freebies_list">
+					{{#xif this.ordUnitAwardExPointList.length '>' 0}}
+						{{#each this.ordUnitAwardExPointList}}
+							<li>
+								<span class="check_wrap">
+									<input type="radio" name="freebies1" id="{{this.ordUnitAwardSn}}" data-methodCode="{{this.freeGiftAwardMethodCode}}">
+									<label for="{{this.ordUnitAwardSn}}"><span class="img"><img ap:src="@{/images/cart/ico_beautypoint.png}" alt=""></span>
+										<span class="title">{{pointTypeSwitch this.pointTypeCode}} {{this.savingPoint}}P</span>
+									</label>
+								</span>
+							</li>
+						{{/each}}
+					{{/xif}}
+					{{#xif this.ordUnitAwardExCouponList.length '>' 0}}
+						{{#each this.ordUnitAwardExCouponList}}
+							<li>
+								<span class="check_wrap">
+									<input type="radio" name="freebies0" id="{{this.ordUnitAwardSn}}" data-couponSn="{{this.couponSn}}">
+									<label for="{{this.ordUnitAwardSn}}"><span class="img"><img ap:src="@{/images/cart/ico_beautypoint.png}" alt=""></span>
+										<span class="title">{{this.couponName}} {{this.couponTypeCode}}</span>
+									</label>
+								</span>
+							</li>
+						{{/each}}
+					{{/xif}}
+					{{#xif this.ordUnitAwardExProdList.length '>' 0}}
+						{{#each this.ordUnitAwardExProdList}}
+							<li>
+								<span class="check_wrap">
+									<input type="radio" name="freebies0" id="{{this.ordUnitAwardSn}}" data-prodSn="{{this.ordProdEx.prodSn}}">
+									<label for="{{this.ordUnitAwardSn}}"><span class="img"><img ap:src="{{this.ordProdEx.onlineProdImgUrl}}" alt=""></span>
+										<span class="title">{{this.ordProdEx.prodNameBlang}} {{currencyFormatDefault this.ordProdEx.prodSalePrice '원'}}</span>
+									</label>
+								</span>
+							</li>
+						{{/each}}
+					{{/xif}}
+					{{#xif this.ordUnitAwardExSpPriceList.length '>' 0}}
+						{{#each this.ordUnitAwardExSpPriceList}}
+							<li>
+								<span class="check_wrap">
+									<input type="radio" name="freebies0" id="{{this.ordUnitAwardSn}}" data-prodSn="{{this.ordProdEx.prodSn}}">
+									<label for="{{this.ordUnitAwardSn}}"><span class="img"><img ap:src="{{this.ordProdEx.onlineProdImgUrl}}" alt=""></span>
+										<span class="title">{{this.ordProdEx.prodNameBlang}} {{currencyFormatDefault this.ordProdEx.prodSalePrice '원'}}</span>
+									</label>
+								</span>
+							</li>
+						{{/each}}
+					{{/xif}}
+				</ul>
+			{{else}}
+				<div class="relative title_area">
+					<h4 class="h_title sub">구매특가 or 사은품</h4>
+					<div class="date_btn_set">
+						<span><input type="radio" name="freebies" id="freebies1" checked="checked"><label for="freebies1">구매특가</label></span>
+						<span><input type="radio" name="freebies" id="freebies2"><label for="freebies2">사은품</label></span>
+					</div>
+				</div>
+				<!--/* 구매특가 */-->
+				<ul class="freebies_list freebies1">
+					<li>
+						<span class="check_wrap"><input type="radio" name="freebies1" id="freebies1_1">
+							<label for="freebies1_1"><span class="img"><img alt="" src="/pc/ko/images/dummy/650000956_IM_01.png"></span>
+								<span class="title">트로피컬 파인애플 샤워 볼</span>
+								<span class="price">
+									<del>5,000원</del>
+									<span class="strong"><b>3,500</b>원</span>
+								</span>
+							</label>
+						</span>
+					</li>
+					<li>
+						<span class="check_wrap"><input type="radio" name="freebies1" id="freebies1_2">
+							<label for="freebies1_2"><span class="img"><img alt="" src="/pc/ko/images/dummy/650000956_IM_01.png"></span>
+								<span class="title">트로피컬 파인애플 샤워 볼</span>
+								<span class="price">
+									<del>5,000원</del>
+									<span class="strong"><b>3,500</b>원</span>
+								</span>
+							</label>
+						</span>
+					</li>
+					<li>
+						<span class="check_wrap"><input type="radio" name="freebies1" id="freebies1_3">
+							<label for="freebies1_3"><span class="img"><img alt="" src="/pc/ko/images/dummy/650000956_IM_01.png"></span>
+								<span class="title">트로피컬 파인애플 샤워 볼</span>
+								<span class="price">
+									<del>5,000원</del>
+									<span class="strong"><b>3,500</b>원</span>
+								</span>
+							</label>
+						</span>
+					</li>
+					<li>
+						<span class="check_wrap"><input type="radio" name="freebies1" id="freebies1_4">
+							<label for="freebies1_4"><span class="img"><img alt="" src="/pc/ko/images/dummy/650000956_IM_01.png"></span>
+								<span class="title">트로피컬 파인애플 샤워 볼</span>
+								<span class="price">
+									<del>5,000원</del>
+									<span class="strong"><b>3,500</b>원</span>
+								</span>
+							</label>
+						</span>
+					</li>
+					<li>
+						<span class="check_wrap"><input type="radio" name="freebies1" id="freebies1_5">
+							<label for="freebies1_5"><span class="img"><img alt="" src="/pc/ko/images/dummy/650000956_IM_01.png"></span>
+								<span class="title">트로피컬 파인애플 샤워 볼</span>
+								<span class="price">
+									<del>5,000원</del>
+									<span class="strong"><b>3,500</b>원</span>
+								</span>
+							</label>
+						</span>
+					</li>
+					<li>
+						<span class="check_wrap"><input type="radio" name="freebies1" id="freebies1_6">
+							<label for="freebies1_6"><span class="img"><img alt="" src="/pc/ko/images/dummy/650000956_IM_01.png"></span>
+								<span class="title">트로피컬 파인애플 샤워 볼</span>
+								<span class="price">
+									<del>5,000원</del>
+									<span class="strong"><b>3,500</b>원</span>
+								</span>
+							</label>
+						</span>
+					</li>
+				</ul>
+				<ul class="freebies_list freebies2" style="display:none">
+					<li>
+						<span class="check_wrap"><input type="radio" name="freebies2" id="freebies2_1">
+							<label for="freebies2_1"><span class="img"><img alt="" src="/pc/ko/images/dummy/650000956_IM_01.png"></span>
+								<span class="title">트로피컬 파인애플 샤워 볼</span>
+								<span class="price">
+									<del>5,000원</del>
+									<span class="strong"><b>3,500</b>원</span>
+								</span>
+							</label>
+						</span>
+					</li>
+					<li>
+						<span class="check_wrap"><input type="radio" name="freebies2" id="freebies2_2">
+							<label for="freebies2_2"><span class="img"><img alt="" src="/pc/ko/images/dummy/650000956_IM_01.png"></span>
+								<span class="title">트로피컬 파인애플 샤워 볼</span>
+								<span class="price">
+									<del>5,000원</del>
+									<span class="strong"><b>3,500</b>원</span>
+								</span>
+							</label>
+						</span>
+					</li>
+					<li>
+						<span class="check_wrap"><input type="radio" name="freebies2" id="freebies2_3">
+							<label for="freebies2_3"><span class="img"><img alt="" src="/pc/ko/images/dummy/650000956_IM_01.png"></span>
+								<span class="title">트로피컬 파인애플 샤워 볼</span>
+								<span class="price">
+									<del>5,000원</del>
+									<span class="strong"><b>3,500</b>원</span>
+								</span>
+							</label>
+						</span>
+					</li>
+				</ul>
+				<div class="order_btns"> <!-- 디폴트 히든값 / 라디오버튼 선택 시 버튼 활성화 -->
+					<button type="button" class="btn_lg_neutral">선택 취소</button>
+				</div>
+			{{/xif}}
+		{{/each}}
+	</div>
+</dd>

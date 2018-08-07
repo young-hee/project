@@ -170,18 +170,7 @@
 				}
 				
 			}.bind( this ));
-			// 대외활동 삭제 
-			
-			/*this._$deleteBtn.on('click' , function (e) {
-				
-				console.log(e); 
-			}.bind( this ));*/
-			
-			this._$target.find('.activities_history button' ).on( 'click', function (e) {
-
-				console.log('삭제버튼 찾기'); 
-			}.bind( this ));
-			
+						
 			// 임시 저장  validate noCheck
 			this._$target.find( '.form_btns .temp' ).on( 'click', function (e) {  
 				  
@@ -192,7 +181,7 @@
 			// 최종 제출하기 validate Check
 			this._$target.find( '.form_btns .complete' ).on( 'click', function (e) {
 				
-				this._$target.find( 'input[name=verifyCertification]' ).val( 'Y' );
+				this._$target.find( 'input[name=verifyCertification]' ).val( 'Y' ); // 휴대폰 본인인증이 완성되면 삭제후 체크확인
 				
 				this._$target.find( 'form.validate' ).submit(); 
 				
@@ -242,45 +231,54 @@
 		_addActivities :function(){
 			
 			var count = this._$target.find('.activities_history .ui_table').length; // 추가한 갯수 layer 갯수 일단 1부터 시작 작성 폼
-			 
-			var activity = this._$target.find('.activities_history .ui_table#activity_0')[0]; 
+			
+			var activity = this._$target.find('.activities_history .ui_table#activity_0')[0];  // 입력폼 레이어 
 			
 			var activityData = {'layerCnt' : count,
 								'activityType': $(activity).find('select[name=activityType]').val(),
-							  'activityName' :$(activity).find('input[name=activityName]').val() ,
-							  'activityStartDate' : $(activity).find('input[name=activityStartDate]').val(),
-							  'activityEndDate': $(activity).find('input[name=activityEndDate]').val() ,
-							  'activityBodyText': $(activity).find('textarea[name=activityBodyText]').val()}; 
+								'activityName' :$(activity).find('input[name=activityName]').val() ,
+								'activityStartDate' : $(activity).find('input[name=activityStartDate]').val(),
+								'activityEndDate': $(activity).find('input[name=activityEndDate]').val() ,
+								'activityBodyText': $(activity).find('textarea[name=activityBodyText]').val()}; 
 			
 			var activitiesData = JSON.parse(JSON.stringify(activityData)) ;
 			
-			var html = AP.common.getTemplate( 'display.brand.beautizen-activities-layer', activitiesData);
-
+			var html = ''; 
+				html = AP.common.getTemplate( 'display.brand.beautizen-activities-layer', activitiesData);
 			
-			this._$target.find('div.activities_history').append(html);
-			
+			if(count > 1 ) { // 1개 이상은 입력폼 바로 위에 올라올 수 있도록
+				this._$target.find('div.activities_history .ui_table#activity_0').after(html);
+			}else {
+				this._$target.find('div.activities_history').append(html);
+			}
 			var selectBoxs = this._$target.find('div#activity_'+count+' select');
+			
 			var	activity01 = ['대학생 프로그램','공모전','기타대외활동','학생회','동아리'];// 대외활동 유형 
-			   
+			
+			var selectsIds = {"activity01" : activity01};
 			    $.each(selectBoxs, function( id, select){ 
 					
 			    	$(this).selectBox('clear');
 					$(this).selectBox(); 
-					$.each( eval(select.id) , function(index, value){
+					console.log(selectBoxs[select.id]); 
+					
+					$.each( selectsIds[select.id] , function(index, value){
 							 
 						$(select).append($('<option>',{value:value, id: index , text:value}));
 						
 					});
+					
 					$(this).selectBox('updated'); 
 				});
-			    
+			    console.log(activitiesData.activityType); 
 			    $(selectBoxs[0]).val(activitiesData.activityType);
 			    
 			    $(selectBoxs[0]).selectBox('updated'); 
 			    
 			    this._$target.find('div[name='+count+'] textarea,input:text').placeholder( 'updated' ); // 변경된 내용 업데이트
 			    			    
-				$(activity).find('select[name=activityType]').val('');
+			    //************************* 추가폼 초기화 *********************************** 
+				$(activity).find('select[name=activityType]').val(''); 
 				$(activity).find('select[name=activityType]').selectBox('updated');
 				
 				$(activity).find('input[name=activityName]').val('');
@@ -293,6 +291,7 @@
 				$(activity).find('textarea , input:text').placeholder('updated');  // 기본 폼 업데이트 
 				$(activity).find('textarea , input:text').placeholder('');
 				
+				//************************ 삭제 버튼 설정 
 				this._$target.find('div#activity_'+count+' .btn_delete').off('click');
 				
 				this._$target.find('div#activity_'+count+' .btn_delete').on('click',function(e){
@@ -365,18 +364,15 @@
 		
 		// 수정화면 로딩( 이전에 입력한 데이터가 있는 경우 
 		_loading_modify :function(supporters){
-			//this._$target.find( 'textarea, input:text' ).placeholder('clear');
-			this._$target.find('div.clear').empty(); 
-			var html = AP.common.getTemplate( 'display.brand.beautizen-modify', supporters);
-			
-			this._$target.find('div.clear').html(html); 
-			this._$target.find( 'textarea, input:text' ).placeholder();
-			
-			
+
+			this._$target.find( 'fieldset.form div.clear' ).empty(); 
+			var html = '';
+				html = AP.common.getTemplate( 'display.brand.beautizen-modify', supporters);
+			// 이미지 확인
+			this._$target.find( 'fieldset.form div.clear' ).html(html);
 			this._$target.find( 'textarea, input:text' ).inputLimits( 'upadted' ).placeholder( 'updated' );
 			
-			this._setEvent();
-			this._load();
+			this._load(); // selectBox 옵션 리스트 자동 셋팅
 			//this._setMobileVerification();
 			this._setPlugins();
 			//placeholder 초기화
@@ -384,7 +380,7 @@
 			//preLocal, academic04, academic05, academic01
 			var selectBoxs = this._$target.find('select'); 
 			
-			$.each(selectBoxs, function( id, select){ //4번 select 구역
+			$.each(selectBoxs, function( id, select){ // 4번 select 구역
 
 				$.each(supporters, function(id, value){
  
@@ -393,6 +389,7 @@
 								$(select).selectBox('updated');	
 							}
 							if(id === 'requesterAddress'){
+								console.log(id +" : "+ this.address1 ); 
 								$(select).val(this.address1); 
 								
 							} 
@@ -405,29 +402,48 @@
 					} );
 					
 			});
+			
+			
+			this._$target.find('.btn_add').off('click');
+			
+			this._$target.find( '.btn_add' ).on( 'click', function (e) {
+							
+			var count = this._$target.find('.activities_history .ui_table').length
+			 
+			if(count > 9 ){ // pc기준 10개까지 레이어 추가 작성 
+					AP.modal.alert( '대외 활동 추가 작성은 10개까지만 가능합니다.');
+				}else {
+					this._addActivities();
+					
+				}
+				
+			}.bind( this ));
 		
 		},
 	
 		// 셀렉트박스 셋팅
 		_load : function(){
-
+			
+			var selectBoxs = this._$target.find('select'); 
+		
 			var phoneCorp = ['SKT','KT','LG U+','SKT 알뜰폰','KT 알뜰폰','LG U+ 알뜰폰']; // 통신사  
 			var preLocal = ['강원도', '경기도', '경상남도', '경상북도', '광주광역시', '대구광역시', '대전광역시', '부산광역시', '서울특별시', '세종특별자치시', '울산광역시', 
 				'인천광역시', '전라남도', '전라북도', '제주특별자치도', '충청남도', '충청북도']; // 지역
 			var academic04 = ['1','2','3','4']; // 학년
 			var	academic05 = ['1','2','3','4','5','6','7','8','9','10'];// 이수 학기
 			var	activity01 = ['대학생 프로그램','공모전','기타대외활동','학생회','동아리'];// 대외활동 유형 
-			
-			var selectBoxs = this._$target.find('select'); 
 		
+			var selectsIds = {"phoneCorp" : phoneCorp, "preLocal" : preLocal , "academic04" : academic04, "academic05": academic05 , "activity01": activity01};
+			
 			$.each(selectBoxs , function(index , object){
 				
 				$(this).selectBox('clear');
 				$(this).selectBox(); 
-				$.each( eval(object.id) , function(index, value){
-						 
-					$(object).append($('<option>',{value:value, id: index , text:value}));
+				
+				$.each(selectsIds[object.id] , function(index, value){
 					
+					$(object).append($('<option>',{value:value, id: index , text:value}));
+					 
 				});
 
 				$(this).selectBox('updated'); 

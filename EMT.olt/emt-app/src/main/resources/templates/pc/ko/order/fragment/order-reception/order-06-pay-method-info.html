@@ -161,8 +161,8 @@
 		});
 
 		$('[name="depositPrice"]').on('blur', function(e){
-			var totDepositPrice = $(this).val();					// 입력한 사용가능금액
-			var finalPamtPcur = $('[name="finalPamtPcurPrice"]').val();	// 최종결제금액
+			var totDepositPrice = parseInt($(this).val());							// 입력한 사용가능금액
+			var finalPamtPcur = parseInt($('[name="finalPamtPcurPrice"]').val());	// 최종결제금액
 			if(totDepositPrice > 0){
 				// 예치금 > 결제금액
 				if(totDepositPrice > finalPamtPcur){
@@ -171,6 +171,9 @@
 				}else if(totDepositPrice <= finalPamtPcur){
 					$(this).val(totDepositPrice);
 				}
+			} else {
+				AP.modal.alert("금액 정확히 입력해주세요.");
+				$(this).val('');
 			}
 			var payMethod = $('[name="payMethod"]').val();
 			if(payMethod == null || payMethod == '') {
@@ -180,7 +183,7 @@
 
 		// 예치금 사용 화면제어
 		function depositPriceInit() {
-			var depositAvailAmt =  $('[name="depositAvailAmt"]').val();
+			var depositAvailAmt =  parseInt($('[name="depositAvailAmt"]').val());
 			if(depositAvailAmt > 0){
 				// input, button show!
 				$('[id="depositPriceCheck"]').show();

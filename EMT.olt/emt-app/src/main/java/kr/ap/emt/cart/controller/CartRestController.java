@@ -8,6 +8,7 @@ package kr.ap.emt.cart.controller;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -436,7 +437,8 @@ public class CartRestController extends CartBaseController{
 			if(Long.valueOf(cartSn) != null || Long.valueOf(cartProdSn) != null){
 				BooleanResult br = cartApi.removeCartProd(cartSn, cartProdSn);
 				if (br.isResult()) {
-					CartEx ce = cartApi.getCart(cartSn);
+				    CartEx ce = calculationByRemove(cartSn, Arrays.asList(cartProdSn));
+					// CartEx ce = cartApi.getCart(cartSn);
 					result.put("data", makeCartEx2(ce));
 				}
 			}
@@ -481,8 +483,8 @@ public class CartRestController extends CartBaseController{
 					}
 				}
 			}
-			//CartEx ce = calculationByRemove(cartSn, removeCartProdSnList);
-			CartEx ce = cartApi.getCart(cartSn);
+			CartEx ce = calculationByRemove(cartSn, removeCartProdSnList);
+			// CartEx ce = cartApi.getCart(cartSn);
 			result.put("data", makeCartEx2(ce));
 
 			/*

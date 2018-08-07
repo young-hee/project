@@ -1184,4 +1184,26 @@
 		return cnt;
 	});
 
+	Handlebars.registerHelper("pointTypeSwitch", function(value) {
+		var html = '';
+
+		if (value != null) {
+			switch (value) {
+				case 'OnlinePoint' :
+					html = '포인트';
+					break;
+				case 'ActivityPoint' :
+					html = '쿠션포인트';
+					break;
+				case 'MembershipPoint' :
+					html = '뷰티포인트';
+					break;
+				default :
+					html = '';
+					break;
+			}
+		}
+		return html;
+	});
+
 })( jQuery );

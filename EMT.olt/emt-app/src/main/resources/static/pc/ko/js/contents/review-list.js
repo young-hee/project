@@ -82,20 +82,25 @@
 			for ( var i = 0; i < data.prodReviewList.length; ++i ) {
 				var bodyText = data.prodReviewList[i].prodReviewBodyText;
 				var bodyTextReduce = data.prodReviewList[i].prodReviewBodyText;
+				var prodReviewSn = data.prodReviewList[i].prodReviewSn;
 
+				bodyTextReduce = bodyTextReduce.replace(/<br\/>/ig, "\n");
+				bodyTextReduce = bodyTextReduce.replace(/<\/br>/ig, "\n");
+				bodyTextReduce = bodyTextReduce.replace(/<br>/ig, "\n");
+				bodyTextReduce = bodyTextReduce.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "");
+				bodyText = bodyTextReduce;
 				if(bodyTextReduce.length > strlength){
 					bodyTextReduce = bodyTextReduce.substr(0, strlength-2) + '...';
 				}
-				var prodReviewSn = data.prodReviewList[i].prodReviewSn;
 				if(this._params.topReviewOnlyYn === 'Y'){
 					$('.best_review .review' ).find('#bodyTextReduce'+prodReviewSn).attr('id', 'bestBodyTextReduce'+prodReviewSn);
 					$('.best_review .review' ).find('#bodyTextOrigin'+prodReviewSn).attr('id', 'bestBodyTextOrigin'+prodReviewSn);
 					document.getElementById('bestBodyTextReduce'+prodReviewSn).innerHTML = bodyTextReduce;
-					document.getElementById('bestBodyTextOrigin'+prodReviewSn).innerHTML = bodyText;
+					document.getElementById('bestBodyTextOrigin'+prodReviewSn).innerHTML = '<pre>' + bodyText + '</pre>';
 
 				}else{
 					document.getElementById('bodyTextReduce'+prodReviewSn).innerHTML = bodyTextReduce;
-					document.getElementById('bodyTextOrigin'+prodReviewSn).innerHTML = bodyText;
+					document.getElementById('bodyTextOrigin'+prodReviewSn).innerHTML = '<pre>' + bodyText + '</pre>';
 				}
 				
 			}

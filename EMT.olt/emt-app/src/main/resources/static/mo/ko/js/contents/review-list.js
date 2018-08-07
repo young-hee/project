@@ -100,14 +100,15 @@
 					var prodReviewSn = data.prodReviewList[i].prodReviewSn;
 
 					bodyTextReduce = bodyTextReduce.replace(/<br\/>/ig, "\n");
-					bodyTextReduce = bodyTextReduce.replace(/<\/br\/>/ig, "\n");
+					bodyTextReduce = bodyTextReduce.replace(/<\/br>/ig, "\n");
+					bodyTextReduce = bodyTextReduce.replace(/<br>/ig, "\n");
 					bodyTextReduce = bodyTextReduce.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "");
-
+					bodyText = bodyTextReduce;
 					if(bodyTextReduce.length > strlength){
 						bodyTextReduce = bodyTextReduce.substr(0, strlength-2) + '...';
 					}
 					document.getElementById('bodyTextReduce'+prodReviewSn).innerHTML = bodyTextReduce;
-					document.getElementById('bodyTextOrigin'+prodReviewSn).innerHTML = bodyText;
+					document.getElementById('bodyTextOrigin'+prodReviewSn).innerHTML = '<pre>' + bodyText + '</pre>';
 					
 				}
 			} else {

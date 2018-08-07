@@ -152,6 +152,7 @@ public class OrderBaseController extends AbstractViewController {
         model.addAttribute("storePickupMNPromoList", new ArrayList<>(storePickupMNPromoMap.values()));                      	// 온라인쇼핑M+N프로모션 목록
         model.addAttribute("storePickupSameTimePurPromoList", new ArrayList<>(storePickupSameTimePurPromoMap.values()));    	// 온라인쇼핑동시구매프로모션 목록
 		model.addAttribute("ordOtfExList", ordOtfExList);									                                	// 주문배송지시목록
+		model.addAttribute("ordUnitAwardOrdPromoExList", ordEx.getOrdHistEx().getOrdUnitAwardOrdPromoExList());									                                	// 주문배송지시목록
 
 		model.addAttribute("totalOrdOnlineProdCnt", totalOrdOnlineProdCnt);
 		model.addAttribute("shipOrdOnlineProdCnt", shipOrdOnlineProdCnt);

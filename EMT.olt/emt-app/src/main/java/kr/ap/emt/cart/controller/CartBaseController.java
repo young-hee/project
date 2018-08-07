@@ -189,40 +189,48 @@ public class CartBaseController extends AbstractController{
     }
 
     private void setRemoveCartPromoOnlineProdExList(List<CartPromoEx> cartPromoExList, List<Long> removeCartProdSnList) {
-        if(cartPromoExList == null) {
+        if(CollectionUtils.isEmpty(cartPromoExList)
+                || CollectionUtils.isEmpty(removeCartProdSnList)) {
             return;
         }
         
+        List<CartPromoEx> newCartPromoExList = new ArrayList<>();
         for(CartPromoEx cartPromoEx : cartPromoExList) {
             setRemoveCartOnlineProdExList(cartPromoEx.getPromoOnlineProdExList(), removeCartProdSnList);
+            
+            if(!CollectionUtils.isEmpty(cartPromoEx.getPromoOnlineProdExList())) {
+                newCartPromoExList.add(cartPromoEx);
+            }
         }
+        
+        cartPromoExList.clear();
+        cartPromoExList.addAll(newCartPromoExList);
     }
     
     private void setRemoveCartOnlineProdExList(List<CartOnlineProdEx> cartOnlineProdExList, List<Long> removeCartProdSnList) {
-        if(CollectionUtils.isEmpty(removeCartProdSnList)) {
+        if(CollectionUtils.isEmpty(cartOnlineProdExList)
+                || CollectionUtils.isEmpty(removeCartProdSnList)) {
             return;
         }
         
         // 상품삭제
-        if(cartOnlineProdExList != null) {
-            List<CartOnlineProdEx> newCartOnlineProdExList = new ArrayList<>();
-            for(CartOnlineProdEx cartOnlineProdEx : cartOnlineProdExList) {
-                if(cartOnlineProdEx.getCartProdExList() != null) {
-					List<CartProdEx> newCartProdExList = new ArrayList<>();
-                    for(CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-                        if(!removeCartProdSnList.contains(cartProdEx.getCartProdSn())) {
-                        	newCartProdExList.add(cartProdEx);
-                        }
+        List<CartOnlineProdEx> newCartOnlineProdExList = new ArrayList<>();
+        for(CartOnlineProdEx cartOnlineProdEx : cartOnlineProdExList) {
+            List<CartProdEx> newCartProdExList = new ArrayList<>();
+            if(cartOnlineProdEx.getCartProdExList() != null) {
+                for(CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
+                    if(!removeCartProdSnList.contains(cartProdEx.getCartProdSn())) {
+                    	newCartProdExList.add(cartProdEx);
                     }
-					if(newCartProdExList.size() > 0) {
-						cartOnlineProdEx.setCartProdExList(newCartProdExList);
-						newCartOnlineProdExList.add(cartOnlineProdEx);
-					}
                 }
             }
-			cartOnlineProdExList.clear();
-			cartOnlineProdExList.addAll(newCartOnlineProdExList);
+            if(newCartProdExList.size() > 0) {
+                cartOnlineProdEx.setCartProdExList(newCartProdExList);
+                newCartOnlineProdExList.add(cartOnlineProdEx);
+            }
         }
+		cartOnlineProdExList.clear();
+		cartOnlineProdExList.addAll(newCartOnlineProdExList);
     }
     
     protected CartEx calculationByChangeQty(Long cartSn,
@@ -508,15 +516,17 @@ public class CartBaseController extends AbstractController{
     protected void calculationExchPoint(CartEx cartEx) {
         CalculationResult calculationResult = cartEx.getCalculationResult();
         
-        calculationResult.setExchIPointSum(0);
-        calculationResult.setExchAPointSum(0);
-        cartEx.setCartDeliveryExchActivityPointSum(0);
-        cartEx.setCartDeliveryExchMembershipPointSum(0);
-    
-        addExchPointSum(cartEx.getCartDeliveryMembershipPointExchOnlineProdExList(), cartEx, false);
-        addExchPointSum(cartEx.getCartStorePickupMembershipPointExchOnlineProdExList(), cartEx, false);
-        addExchPointSum(cartEx.getCartDeliveryActivityPointExchOnlineProdExList(), cartEx, true);
-        addExchPointSum(cartEx.getCartStorePickupActivityPointExchOnlineProdExList(), cartEx, true);
+        if(calculationResult != null) {
+            calculationResult.setExchIPointSum(0);
+            calculationResult.setExchAPointSum(0);
+            cartEx.setCartDeliveryExchActivityPointSum(0);
+            cartEx.setCartDeliveryExchMembershipPointSum(0);
+        
+            addExchPointSum(cartEx.getCartDeliveryMembershipPointExchOnlineProdExList(), cartEx, false);
+            addExchPointSum(cartEx.getCartStorePickupMembershipPointExchOnlineProdExList(), cartEx, false);
+            addExchPointSum(cartEx.getCartDeliveryActivityPointExchOnlineProdExList(), cartEx, true);
+            addExchPointSum(cartEx.getCartStorePickupActivityPointExchOnlineProdExList(), cartEx, true);
+        }
     }
 
     private void addExchPointSum(List<CartOnlineProdEx> cartOnlineProdExList, CartEx cartEx, boolean aPoint) {

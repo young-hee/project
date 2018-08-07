@@ -100,6 +100,8 @@
 
         // bottom floating menu
         _setFloatingMenu: function () {
+        	return;			// floating menu 상시 고정
+
 			if ( this._$target.siblings( '.ap_container' ).find( '.option_layer' ).length > 0 ) return;	// 구매하기 버튼 있을때 예외처리
 
             var $floatingMenu = this._$target.siblings( '.floating_menu' ),

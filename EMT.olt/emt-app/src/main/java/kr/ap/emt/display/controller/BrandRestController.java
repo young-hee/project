@@ -628,7 +628,7 @@ public class BrandRestController extends AbstractController {
             String[] activityEndDate = req.getParameterValues("activityEndDate");
             SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
            
-            for(int index =0; index < 10; index++) {
+            for(int index = 0; index < activityType.length; index++) {
             	            	
             	requestHist.setActivityType(activityType[index]);//activityType);
                 requestHist.setActivityBodyText(activityBodyText[index]);//activityBodyText);
