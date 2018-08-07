@@ -764,10 +764,9 @@ public class CartBaseController extends AbstractController{
 
         });
 
-//        TODO zenith
-//        if(LowestPrice) {
-//            Collections.reverse(cartProdExList);
-//        }
+        if(CartConst.MN_AWARD_BASE_LOWEST_PRICE.equals(cartPromoEx.getFreeAwardBaseCode())) {
+            Collections.reverse(cartProdExList);
+        }
         
         // M+N 으로 혜택 수량을 구한다. 전체 수량 중에 (M+N) 세트만큼이 프로모션혜택상품수량이다.
         Integer freeAwardQty = Math.floorDiv(totalCartProdQty, (cartPromoEx.getBaseOrdQty() + cartPromoEx.getFreeAwardQty())) * cartPromoEx.getFreeAwardQty();

@@ -58,16 +58,18 @@
 					<a href="/display/new?displayMenuId=new" class="more">더보기</a>
             	</div>
 				<!-- 오늘의 추천 태그 -->
-				<div class="section recommend_tag">
-					<h2 class="title">오늘의 추천태그</h2>
-					<div class="keywords">
-						<a href="#none">#미니투매치</a>
-						<a href="#none">#드로잉</a>
-						<a href="#none">#슈가</a>
-						<a href="#none">#순정토너런칭세일</a>
-						<a href="#none">#보라색</a>
+				<th:block th:if="${not #lists.isEmpty(cornersMap)}">
+					<div class="section recommend_tag">
+						<h2 class="title">오늘의 추천태그</h2>
+						<div class="keywords">
+							<th:block th:each="corner : ${cornersMap.get('M02_main_m.6')}">
+								<th:block th:each="contents : ${corner.contents}">
+									<a href="#none" th:href="${contents.linkUrl}" th:utext="|#${contents.text}|">웨어 유어 모먼트 바디 미스트</a>
+								</th:block>
+							</th:block>
+						</div>
 					</div>
-				</div>
+				</th:block>
 				<!-- 에뛰드픽 -->
 				<div class="section etude_pick">
 					<h2 class="title">에뛰드 픽</h2>

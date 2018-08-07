@@ -45,7 +45,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-goods"] = Handlebars.templ
     + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].step : depths[1]),2,{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].claimYn : depths[1]),"Y",{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.program(9, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "							<strong class=\"num font_md\">"
     + alias4((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,(depth0 != null ? depth0.finalOnlineSaleAmtPcurSum : depth0),{"name":"currencyFormat","hash":{},"data":data}))
-    + "</strong></p>\n						</div>\n					</div>\n"
+    + "</strong></p>\n						</div>\n					</div>\n\n"
     + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.ordHistProdList : depth0),{"name":"each","hash":{},"fn":container.program(11, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "				</div>\n";
 },"7":function(container,depth0,helpers,partials,data) {

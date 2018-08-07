@@ -4,31 +4,31 @@
 	<!--/* 동종상품 */-->
 	{{#xif this.promoMPlusNTypeCode '==' 'Same'}}
 
-		{{#each this.promoOnlineProdExList }}
 		<div class="promotion">
 			<div class="promotion_header">
-				{{#xif ../promoApplyResultCode '==' 'All'}}
-					<span class="benefit ty2"><em>{{ ../baseOrdQty }} + {{ ../freeAwardQty }} 혜택 적용</em></span>
+				{{#xif promoApplyResultCode '==' 'All'}}
+					<span class="benefit ty2"><em>{{ baseOrdQty }} + {{ freeAwardQty }} 혜택 적용</em></span>
 				{{/xif}}
-				{{#xif ../promoApplyResultCode '==' 'Partial'}}
-					<span class="benefit ty2"><em>{{ ../baseOrdQty }} + {{ ../freeAwardQty }} 혜택 부분적용</em></span>
+				{{#xif promoApplyResultCode '==' 'Partial'}}
+					<span class="benefit ty2"><em>{{ baseOrdQty }} + {{ freeAwardQty }} 혜택 부분적용</em></span>
 				{{/xif}}
-				{{#xif ../promoApplyResultCode '==' 'None'}}
-					<span class="benefit ty2"><em>{{ ../baseOrdQty }} + {{ ../freeAwardQty }} 미적용</em></span>
+				{{#xif promoApplyResultCode '==' 'None'}}
+					<span class="benefit ty2"><em>{{ baseOrdQty }} + {{ freeAwardQty }} 미적용</em></span>
 				{{/xif}}
-				<a href="#none"><strong>{{ ../promoName }}</strong></a>
+				<a href="#none"><strong>{{ promoName }}</strong></a>
 				<div class="price">
-					{{#xif ../finalOnlineSalesAmountInfo '!=' null }}
-						<span class="strong"><b>{{numberFormat ../finalOnlineSalesAmountInfo.standardCurrency.amount }}</b>원</span>
+					{{#xif finalOnlineSalesAmountInfo '!=' null }}
+						<span class="strong"><b>{{numberFormat finalOnlineSalesAmountInfo.standardCurrency.amount }}</b>원</span>
 					{{/xif}}
-					{{#xif ../productSaleAmountInfo '!=' null }}
-						{{#xif ../productSaleAmountInfo.standardCurrency.amount '!=' ../finalOnlineSalesAmountInfo.standardCurrency.amount }}
-							<del><b>{{numberFormat ../productSaleAmountInfo.standardCurrency.amount }}</b>원</del>
+					{{#xif productSaleAmountInfo '!=' null }}
+						{{#xif productSaleAmountInfo.standardCurrency.amount '!=' finalOnlineSalesAmountInfo.standardCurrency.amount }}
+							<del><b>{{numberFormat productSaleAmountInfo.standardCurrency.amount }}</b>원</del>
 						{{/xif}}
 					{{/xif}}
 				</div>
 			</div>
 
+			{{#each this.promoOnlineProdExList }}
 				{{#each this.cartProdExList }}
 					<div class="item_wrap">
 						<input type="hidden" name="onlinePrdSn" value="{{ this.prodEx.prodSn }}"/>
@@ -169,8 +169,8 @@
 						</ul>
 					{{/xif}}
 				{{/each}}
-			</div>
-		{{/each}}
+			{{/each}}
+		</div>
 	{{/xif}}
 
 	<!--/* 이종상품 */-->
@@ -201,7 +201,6 @@
 			</div>
 
 			{{#each this.promoOnlineProdExList }}
-
 				{{#each this.cartProdExList }}
 					<div class="item_wrap">
 						<input type="hidden" name="onlinePrdSn" value="{{ this.prodEx.prodSn }}"/>

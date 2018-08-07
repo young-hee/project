@@ -40,6 +40,7 @@
 						AP.modal.alert( AP.message.NONE_SELECTED_OPTION );
 					}
 				} else {
+					
 					this._orderLayer.setOnlineProd( onlineProdSn, parseFloat(prodSn) );
 				}
 			}.bind(this));

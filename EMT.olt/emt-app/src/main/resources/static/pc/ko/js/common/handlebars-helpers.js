@@ -15,21 +15,18 @@
 	});
 
     /**
-   	 * 주문 관리 title 변환
-   	 * @param {String}  type
-   	 * @returns {String}
-   	 */
-	 Handlebars.registerHelper( 'checkTitle', function ( type ) {
-	 	switch (type) {
-	 		case 'cancel' :
-	 			return '취소'
-			case 'return' :
-				return '반품'
-			case 'exchange' :
-				return '교환'
-	 	}
+	 * 주문 수량 체크
+	 * @param {Int}  ordQty, cancelQty
+	 * @returns {Int}
+	 */
+	 Handlebars.registerHelper( 'checkQty', function ( ordQty, cancelQty ) {
+		var qty = ordQty - cancelQty;
 
-	 	return false;
+		if(qty > 0) {
+			return qty;
+		} else {
+			return cancelQty;
+		}
 	 });
 	 
 	 /**
@@ -147,6 +144,8 @@
 					return '주문접수완료';
 				case 'OrdAllCancel' :
 					return '취소완료';
+				case 'ProdCancel' :
+					return '취소완료';
 				case 'PartialCancel' :
 					return '부분취소';
 				case 'ProdPreparing' :
@@ -154,6 +153,8 @@
 				case 'Shipping' :
 					return '배송중';
 				case 'OrdHandlingComplete' :
+					return '배송완료';
+				case 'ShipComplete' :
 					return '배송완료';
 			}
 		} else if (type === 'store') {

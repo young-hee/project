@@ -49,13 +49,34 @@
 						{{/xif}}
 					</div>
 					<div>
-						<p class="flag online v2">온라인주문</p>
-						<p class="name"><a href="javascript:;" onclick="showDetailView('{{../type}}', {{ordNo}})">{{ordProdInfo.prodNameRlang}}</a></p>
-						<p class="font_md"><strong class="num">{{claimProdInfo.claimQty}}</strong>개/<strong class="num">{{currencyFormat ordProdInfo.finalOnlineSaleAmtPcur 0}}</strong></p>
+						<p class="flag online v2">스윗딜리버리</p>
+						<p class="name">
+							<a href="javascript:;" onclick="showDetailView('{{../type}}', {{ordNo}})">
+							{{this.ordProdInfo.prodNameRlang}} {{ordCntCheck ordProdInfo.ordProdCnt}}</a>
+						</p>
+						<p class="font_md"><strong class="num">{{currencyFormat ordProdInfo.totalOrdAmt 0}}</strong></p>
 						<p class="num"><small>{{dateFormat ordReceivedDt "YYYY-MM-DD"}}</small></p>
 					</div>
 					<div>
-						<p><em>{{ordStatusCheck onlineOrdProdInfo.ordHistProdStatusCode}}</em></p>
+						<p><em>{{ordStatusCheck ../type ordProdInfo.ordHistProdStatusCode}}</em></p>
+						{{#if (or (eq ../type "online")(eq ../type "store"))}}
+							{{#ordSwitch ordProdInfo.ordHistProdStatusCode}}
+								{{#ordCase 'a'}}
+									<button type="button" class="btn_sm_bordered" onclick="showDetailView('cancel', {{this.ordNo}})">주문취소</button>
+								{{/ordCase}}
+								{{#ordCase 'b'}}
+									<button type="button" class="btn_sm_bordered" onclick="javascript:location.href='/my/page/orderCancel/first?orderSn={{this.orderSn}}'">배송조회</button>
+									<button type="button" class="btn_sm_neutral">수령확인</button>
+								{{/ordCase}}
+								{{#ordCase 'c'}}
+									<button type="button" class="btn_sm_bordered" onclick="showDetailView('exchange', {{ordNo}})">교환신청</button>
+									<button type="button" class="btn_sm_neutral" onclick="showDetailView('return', {{ordNo}})">반품신청</button>
+								{{/ordCase}}
+							{{/ordSwitch}}
+						{{/if}}
+						{{#xif ../type "===" "cashReceipts"}}
+						{{else}}
+						{{/xif}}
 					</div>
 				</div>
 			{{/if}}

@@ -53,7 +53,7 @@
 
 		_draw: function ( data, isMore ) {
 			$.each(data.prodReviewList, function(idx, obj){
-				if( obj.imgList.length > 0 || (obj.prodReviewBodyText != null && obj.prodReviewBodyText.length > 118) ){
+				if( obj.imgList.length > 0 || (obj.prodReviewBodyText != null && obj.prodReviewBodyText.length > 58) ){
 					obj.isMoreView = true;
 				}
 			});

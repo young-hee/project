@@ -2,36 +2,38 @@
 {{#each this.list }}
 	<!--/* 동종상품 */-->
 	{{#xif this.promoMPlusNTypeCode '==' 'Same'}}
-		{{#each this.promoOnlineProdExList }}
-			<div class="cart_item_box">
-				<div class="top_tit_wrap">
-					<div>
-						{{#xif ../promoApplyResultCode '==' 'All'}}
-							<p class="mgb10"><em>{{ ../baseOrdQty }} + {{ ../freeAwardQty }} 혜택 적용</em></p>
-						{{/xif}}
-						{{#xif ../promoApplyResultCode '==' 'Partial'}}
-							<p class="mgb10 typ2"><em>{{ ../baseOrdQty }} + {{ ../freeAwardQty }} 혜택 부분적용</em></p>
-						{{/xif}}
-						{{#xif ../promoApplyResultCode '==' 'None'}}
-							<p class="mgb10 typ3"><em>{{ ../baseOrdQty }} + {{ ../freeAwardQty }} 미적용</em></p>
-						{{/xif}}
-					</div>
-					<h3>{{ ../promoName }}</h3>
-					<span class="cart_price">
-						{{#xif ../finalOnlineSalesAmountInfo '!=' null }}
-							<span class="left_num">
-								<strong class="num">{{numberFormat ../finalOnlineSalesAmountInfo.standardCurrency.amount }}</strong><span>원</span>
+
+		<div class="cart_item_box">
+			<div class="top_tit_wrap">
+				<div>
+					{{#xif this.promoApplyResultCode '==' 'All'}}
+						<p class="mgb10"><em>{{ this.baseOrdQty }} + {{ this.freeAwardQty }} 혜택 적용</em></span>
+					{{/xif}}
+					{{#xif this.promoApplyResultCode '==' 'Partial'}}
+						<p class="mgb10 typ2"><em>{{ this.baseOrdQty }} + {{ this.freeAwardQty }} 혜택 부분적용</em></span>
+					{{/xif}}
+					{{#xif this.promoApplyResultCode '==' 'None'}}
+						<p class="mgb10 typ3"><em>{{ this.baseOrdQty }} + {{ this.freeAwardQty }} 미적용</em></span>
+					{{/xif}}
+				</div>
+				<h3>{{ this.promoName }}</h3>
+				<span class="cart_price">
+					{{#xif this.finalOnlineSalesAmountInfo '!=' null }}
+						<span class="left_num">
+							<strong class="num">{{numberFormat this.finalOnlineSalesAmountInfo.standardCurrency.amount }}</strong><span>원</span>
+						</span>
+					{{/xif}}
+					{{#xif this.productSaleAmountInfo.standardCurrency.amount '>' 0 }}
+						{{#xif this.productSaleAmountInfo.standardCurrency.amount '!=' this.finalOnlineSalesAmountInfo.standardCurrency.amount }}
+							<span class="right_num">
+								<del class="num">{{numberFormat this.productSaleAmountInfo.standardCurrency.amount }}<span>원</span></del>
 							</span>
 						{{/xif}}
-						{{#xif ../productSaleAmountInfo.standardCurrency.amount '!=' null }}
-							{{#xif ../productSaleAmountInfo.standardCurrency.amount '!=' ../finalOnlineSalesAmountInfo.standardCurrency.amount }}
-								<span class="right_num">
-									<del class="num">{{numberFormat ../productSaleAmountInfo.standardCurrency.amount }}<span>원</span></del>
-								</span>
-							{{/xif}}
-						{{/xif}}
-					</span>
-				</div>
+					{{/xif}}
+				</span>
+			</div>
+
+			{{#each this.promoOnlineProdExList }}
 				{{#each this.cartProdExList }}
 					<div class="cart_name_wrap">
 						<span class="check_wrap">
@@ -164,12 +166,13 @@
 						{{/each}}
 					{{/xif}}
 				{{/each}}
-			</div>
-		{{/each}}
+			{{/each}}
+		</div>
 	{{/xif}}
 
 	<!--/* 이종상품 */-->
 	{{#xif this.promoMPlusNTypeCode '==' 'Different'}}
+
 		<div class="cart_item_box">
 			<div class="top_tit_wrap">
 				<div>

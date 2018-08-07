@@ -71,9 +71,7 @@
 			
 			//사은품
 			if ( onlineProduct == undefined ){
-				var giftProd = $.each(this._giftModel.list, function(idx, obj){
-					return _.findWhere(obj, {prodSn : prodSn})
-				});
+				var giftProd = _.findWhere( this._giftModel.list, {prodSn : prodSn} );
 				onlineProduct = {
 						prodTypeCode: '',
 						bulkIncludedProds: '',
@@ -81,8 +79,8 @@
 						products: [giftProd],
 						onlineProdGift: [giftProd]
 				}
-				giftProd[0].prodName = '<사은품> ' + giftProd[0].prodName;
-				this._selectedOptions.add( onlineProduct, giftProd[0] );
+				giftProd.prodName = '<사은품> ' + giftProd.prodName;
+				this._selectedOptions.add( onlineProduct, giftProd );
 			}
 		},
 

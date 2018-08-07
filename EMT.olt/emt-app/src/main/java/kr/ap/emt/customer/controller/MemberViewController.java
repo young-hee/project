@@ -4,13 +4,19 @@ import kr.ap.comm.api.CaptchaAPI;
 import kr.ap.comm.api.vo.CicuemCuInfTotTcVo;
 import kr.ap.comm.config.interceptor.PageTitle;
 import kr.ap.comm.support.common.AbstractController;
+import kr.ap.comm.support.constants.SessionKey;
 import kr.ap.comm.util.G1SecureRandom;
+import net.g1project.ecp.api.model.EmbeddableTel;
+import net.g1project.ecp.api.model.ap.ap.ApIssueTemporaryPassword;
+import net.g1project.ecp.api.model.ap.ap.CheckResult;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.util.WebUtils;
 
 @Controller
 @RequestMapping("/customer")
@@ -23,6 +29,7 @@ public class MemberViewController extends AbstractController {
 	@PageTitle(title = "비밀번호 변경")
 	public String changePwd(Model model) {
 		model.addAttribute("captchaKey", G1SecureRandom.getRandomText(5));
+		WebUtils.setSessionAttribute(getRequest(), "TEMP_PW_CHANGE", null);
 		return "customer/customernew/find-pwd.1";
 	}
 	@PostMapping("/findPwd/complete")
@@ -35,6 +42,7 @@ public class MemberViewController extends AbstractController {
 		if("02".equals(joinType)) {
 			return "/customer/customernew/find-id.4";
 		}
+
 		
 		CicuemCuInfTotTcVo cicuemCuInfTotTcVo = new CicuemCuInfTotTcVo();
 		cicuemCuInfTotTcVo.setIncsNo(incsNo);
@@ -46,9 +54,31 @@ public class MemberViewController extends AbstractController {
 		sb.append("-");
 		sb.append(cicuemCuInfTotTcVo.getCellTlsn());
 		sb.replace(sb.length() - 2, sb.length(), "**");
+
+		ApIssueTemporaryPassword issueTemporaryPassword = new ApIssueTemporaryPassword();
+		issueTemporaryPassword.setIncsNo(Long.parseLong(incsNo));
+		EmbeddableTel phoneNo = new EmbeddableTel();
+		phoneNo.setPhoneNo(cicuemCuInfTotTcVo.getCellTidn() + cicuemCuInfTotTcVo.getCellTexn() + cicuemCuInfTotTcVo.getCellTlsn());
+		issueTemporaryPassword.setPhoneNo(phoneNo);
 		
-		model.addAttribute("incsNo", incsNo);
+		
+		
 		model.addAttribute("phone", sb.toString());
+		try {
+
+			WebUtils.setSessionAttribute(getRequest(), "TEMP_PW_CHANGE", issueTemporaryPassword);
+			CheckResult result = apApi.requestIssueTemporaryPassword(issueTemporaryPassword);
+			if(result.isResult()) {
+				model.addAttribute("incsNo", incsNo);
+			} else {
+				model.addAttribute("error", "비밀번호 전송에 실패했습니다. 아래 재발급 버튼을 눌러 다시 시도해주세요.");
+			}
+			
+		} catch(Exception e) {
+
+			model.addAttribute("error", "비밀번호 전송에 실패했습니다. 아래 재발급 버튼을 눌러 다시 시도해주세요.");
+		}
+		
 		
 		return "customer/customernew/find-pwd.2";
 	}

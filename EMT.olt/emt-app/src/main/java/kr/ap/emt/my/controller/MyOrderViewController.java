@@ -1,12 +1,17 @@
 package kr.ap.emt.my.controller;
 
 import kr.ap.comm.config.interceptor.PageTitle;
+import kr.ap.emt.my.vo.MyOrdDTO;
 import kr.ap.emt.my.vo.MyOrdInfoDTO;
 import kr.ap.comm.support.common.AbstractController;
 import net.g1project.ecp.api.model.order.order.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 나의 주문 관리
@@ -154,7 +159,7 @@ public class MyOrderViewController extends AbstractController {
 				type = "store";
 			}
 
-			model.addAttribute("ord", new MyOrdInfoDTO(ordEx));
+			model.addAttribute("ord", new MyOrdDTO(ordEx));
 			model.addAttribute("type", type);
 			model.addAttribute("claimYn", "N");
 			model.addAttribute("status", "detail");
@@ -181,7 +186,7 @@ public class MyOrderViewController extends AbstractController {
 				type = "store";
 			}
 
-			model.addAttribute("ord", new MyOrdInfoDTO(ordEx));
+			model.addAttribute("ord", new MyOrdDTO(ordEx));
 			model.addAttribute("type", type);
 			model.addAttribute("claimYn", "N");
 			model.addAttribute("status", "detail");
@@ -217,26 +222,58 @@ public class MyOrderViewController extends AbstractController {
 		return null;
 	}
 
-	private MyOrdInfoDTO getOrdInfoDTO(String ordNo) {
+	protected static final String PARAM_KEY_MEMBER = "Member";			// 회원
+	protected static final String PARAM_KEY_NONMEMBER = "NonMember";	// 비회원
 
-		return new MyOrdInfoDTO(orderApi.getOrdByOrdNo(ordNo));
+	private MyOrdDTO getOrdInfoDTO(String ordNo) {
+
+
+
+//		return new MyOrdDTO(orderApi.getOrdByOrdNo(ordNo));
+
+//		List<Long> sn = new ArrayList<>();
+//		sn.add(2235L);
+//		sn.add(2239L);
+//		sn.add(2238L);
+//		sn.add(2237L);
+//		sn.add(2236L);
+//
+//		OrdRecept ordRecept = new OrdRecept();
+//		ordRecept.setOrdReceivedChCode(getDisplayChannel());
+////		if(isMember()) {
+//			ordRecept.setMemberSn(getMemberSn());
+//			ordRecept.setPurchaserTypeCode(PARAM_KEY_MEMBER);
+////		}else{
+////			ordRecept.setNonmemberOrdTermsAgreeYn("Y");
+////			ordRecept.setPurchaserTypeCode(PARAM_KEY_NONMEMBER);
+////		}
+//		if(!ObjectUtils.isEmpty(sn) && sn.size() > 0) {
+//			ordRecept.setCartProdSnList(sn);
+//		}
+
+
+
+		return new MyOrdDTO(orderApi.getOrdByOrdNo(ordNo));
+
+//		return new MyOrdDTO(orderApi.ordRecept(794L, ordRecept));
 	}
+
 
 	public String orderDetail(Model model, String state, String type, String ordNo, String ordHistNo) {
 		switch (state) {
 			case "detail" :
 				if ("cancel".equals(type)) {
-					model.addAttribute("ord", new MyOrdInfoDTO(orderApi.getClaimOrdHist(ordHistNo), "cancel"));
+					model.addAttribute("ord", new MyOrdDTO(orderApi.getClaimOrdHist(ordHistNo), "cancel"));
 					model.addAttribute("type", type);
 					model.addAttribute("claimYn", "Y");
 					break;
 				} else if ("Exch".equals(type)) {
-					model.addAttribute("ord", new MyOrdInfoDTO(orderApi.getClaimOrdHist(ordHistNo), "exchange"));
+					model.addAttribute("ord", new MyOrdDTO(orderApi.getClaimOrdHist(ordHistNo), "exchange"));
 					model.addAttribute("type", "exchange");
 					model.addAttribute("claimYn", "Y");
 					break;
 				} else if ("Rtn".equals(type)) {
-					model.addAttribute("ord", new MyOrdInfoDTO(orderApi.getClaimOrdHist(ordHistNo), "return"));
+					model.addAttribute("ord", new MyOrdDTO(orderApi.getClaimOrdHist(ordHistNo), "return"));
 					model.addAttribute("type", "return");
 					model.addAttribute("claimYn", "Y");
 					break;
@@ -246,6 +283,7 @@ public class MyOrderViewController extends AbstractController {
 					model.addAttribute("claimYn", "N");
 					break;
 				}
+
 
 			case "request" :
 				if ("cancel".equals(type)) {

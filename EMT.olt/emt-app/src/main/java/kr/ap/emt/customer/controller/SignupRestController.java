@@ -242,10 +242,10 @@ public class SignupRestController extends AbstractController {
 						if("KISQ9207".equals(cicuemCuInfTotTcVoRslt.getR_rsltCd())) {
 							return error(result, HttpStatus.SERVICE_UNAVAILABLE, "KISQ9207", "SMS 인증번호 발송 실패하였습니다. : 일 5회 인증 실패.");
 						}
+						return error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "인증실패했습니다.");
 						
 					} else {
-						//실패
-						return error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "인증실패했습니다. 다시 인증하세요.");
+						return error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "인증실패했습니다.");
 					}
 				}
 
@@ -337,8 +337,21 @@ public class SignupRestController extends AbstractController {
 					setMemberSession(memberSession);
 
 				} else {
-					//실패
-					return error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "인증실패했습니다. 다시 인증하세요.");
+					if(!ObjectUtils.isEmpty(cicuemCuInfTotTcVoRslt)) {
+						if("KISQ9207".equals(cicuemCuInfTotTcVoRslt.getR_rsltCd())) {
+							return error(result, HttpStatus.SERVICE_UNAVAILABLE, "KISQ9207", "SMS 인증번호 발송 실패하였습니다. : 일 5회 인증 실패.");
+						}
+						
+						if("KISH0003".equals(cicuemCuInfTotTcVoRslt.getR_rsltCd())) {
+							return error(result, HttpStatus.SERVICE_UNAVAILABLE, "KISH0003", "휴대폰 번호 또는 통신사 불일치입니다. 입력하신 정보를 확인해 주세요.");
+						}
+						return error(result, HttpStatus.SERVICE_UNAVAILABLE, "ICITSVBIZ127", "휴대폰 명의자와 입력하신 정보가 일치 하지 않습니다.\n"
+								+ "타인 명의로 회원가입을 원하시면 '확인' 버튼을,"
+								+ "다시 입력하시려면 '취소' 버튼을 선택해 주세요.");
+					} else {
+						//실패
+						return error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "인증실패했습니다. 다시 인증하세요.");
+					}
 				}
 
 			} catch (ApiException e) {

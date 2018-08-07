@@ -28,6 +28,9 @@ public class OrdOnlineProdFoDTO {
 	private String claimReason;				 	 // 클레임사유
     private List<OrdHistProdEx> ordHistProdList; // 주문이력상품목록(단위)
 	private Integer cancelQtySum;                // 취소수량
+	private List<OrdHistProdEx> prodList; // 주문이력상품목록(단위)
+	private List<OrdHistProdEx> freeGiftList; // 주문이력상품목록(단위)
+	private List<OrdHistProdEx> preSale; // 주문이력상품목록(단위)
 
 	public void addOrdHistProdEx(OrdHistProdEx ordHistProdEx) {
         setFinalOnlineSaleAmtPcurSum(getFinalOnlineSaleAmtPcurSum().add(ordHistProdEx.getFinalOnlineSaleAmtPcur()));
@@ -194,5 +197,29 @@ public class OrdOnlineProdFoDTO {
 
 	public void setOrdHistProdStatusCode(String ordHistProdStatusCode) {
 		this.ordHistProdStatusCode = ordHistProdStatusCode;
+	}
+
+	public List<OrdHistProdEx> getProdList() {
+		return prodList;
+	}
+
+	public void setProdList(List<OrdHistProdEx> prodList) {
+		this.prodList = prodList;
+	}
+
+	public List<OrdHistProdEx> getFreeGiftList() {
+		return freeGiftList;
+	}
+
+	public void setFreeGiftList(List<OrdHistProdEx> freeGiftList) {
+		this.freeGiftList = freeGiftList;
+	}
+
+	public List<OrdHistProdEx> getPreSale() {
+		return preSale;
+	}
+
+	public void setPreSale(List<OrdHistProdEx> preSale) {
+		this.preSale = preSale;
 	}
 }

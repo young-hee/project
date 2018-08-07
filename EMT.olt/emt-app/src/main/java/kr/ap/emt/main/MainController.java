@@ -44,7 +44,7 @@ public class MainController extends AbstractController {
 		
 			//Mobile
 	        if (isMobileDevice()) {
-				cornerIds = "M02_main_m.1,M02_main_m.2,M02_main_m.3,M02_main_m.4";
+				cornerIds = "M02_main_m.1,M02_main_m.2,M02_main_m.3,M02_main_m.4,M02_main_m.6";
 	        }
 	
 	        //PC
