@@ -149,11 +149,16 @@
 			// colorGroups - isSelectOption
 			for ( var i = 0; i < prodListData.list.length; ++i ) {
 				var isSelectOption = true;
+				var colorCnt = 0;
 				for ( var j = 0; j < prodListData.list[i].products.length; ++j ) {
 					if ( prodListData.list[i].products[j]['colorchipTypeCode'] != 'No' ) {
 						isSelectOption = false;
 					}
+					if( prodListData.list[i].products[j].colorGroups.length > 0 ){
+						colorCnt++;
+					}
 				}
+				prodListData.list[i].colorCnt = colorCnt;
 				prodListData.list[i].isSelectOption = isSelectOption;
 			}
 			

@@ -51,7 +51,6 @@
 
 			// 장바구니 담기
 			this._$target.find( '.btn_cart' ).on( 'click', function () {
-				
 				if(this._$target.find('.item_images div').hasClass('item_state out_of_stock')){
 					AP.modal.alert( AP.message.CART_OUT_OF_STOCK_PRODUCT );
 					return;
@@ -134,6 +133,11 @@
 				integrationMembershipExchYn: curObj.membershipExchOnly,
 				activityPointExchYn: curObj.activityPointOnly
 			}];
+			
+			//묶음 상품일 경우
+			if( this._data.prodTypeCode == 'BulkFixedProd' ){
+				cartProdExPostList[0].cartBulkIncludedProdExList = [];
+			}
 			
 			//장바구니 저장 api
 			AP.api.addCartProd( null, JSON.stringify({cartProdExPostList: cartProdExPostList })).done( function ( result ) {

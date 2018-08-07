@@ -6,10 +6,10 @@
  */
 package kr.ap.emt.cs.controller;
 
-import kr.ap.emt.cs.vo.OrderDTO;
-import kr.ap.emt.cs.vo.RequestCS;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.validator.CSFormValidator;
+import kr.ap.emt.cs.vo.OrderDTO;
+import kr.ap.emt.cs.vo.RequestCS;
 import net.g1project.ecp.api.model.UploadingFile;
 import net.g1project.ecp.api.model.order.order.OrdEx;
 import net.g1project.ecp.api.model.order.order.OrdListResult;
@@ -84,7 +84,7 @@ public class CSRestController extends AbstractController {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
 		try {
-			OrdListResult ordListResult = orderApi.getOrdList(getMemberSn(), null, RS_Date, null, offset, limit);
+			OrdListResult ordListResult = orderApi.getOrdList(getMemberSn(), null, RS_Date, getEndDate(RD_Date), offset, limit);
 			List<OrderDTO> ordList = new ArrayList<OrderDTO>();
 			int totalCount = ordListResult.getTotalCount();
 
@@ -243,4 +243,15 @@ public class CSRestController extends AbstractController {
 
         return ResponseEntity.ok(result);
     }
+
+	/**
+	 * 날짜 시간을 23:59:59 로 세팅
+	 *
+	 * @param date
+	 * @return date - yyyy-MM-ddT23:59:59
+	 *
+	 */
+	private Date getEndDate(Date date) {
+		return new Date(date.getTime() + (24*60*60*1000) - 1);
+	}
 }

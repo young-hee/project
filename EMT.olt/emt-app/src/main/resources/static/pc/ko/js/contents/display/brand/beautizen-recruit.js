@@ -47,7 +47,9 @@
 		
 		/** =============== Private Methods =============== */
 		_setPlugins: function () {
-			this._$target.find( '.ui_input_images' ).inputImages();
+			this._$target.find( '.ui_input_images' ).inputImages(); // 이미지
+			this._$target.find( 'textarea, input:text' ).inputLimits();
+			this._$target.find( 'textarea, input:text' ).placeholder();
 		},
 		
 		//휴대폰 인증 
@@ -63,7 +65,7 @@
 			this._$target.find( '#certBtn' ).on( 'click', function (e) {
 				
 				if ( $phoneSelect.valid() && $phoneNo.valid() ) {
-					AP.mobileVerification.request( $phoneNo.val());
+					AP.mobileVerification.request( $phoneSelect.val(), $phoneNo.val());
 					$( e.target ).hide();
 					$( e.target ).siblings( '#reCertBtn' ).show();
 					timer.start();
@@ -82,7 +84,7 @@
 			this._$target.find( '#reCertBtn' ).on( 'click', function (e) {
 			
 				if ( $phoneSelect.valid() && $phoneNo.valid() ) {
-					AP.mobileVerification.request( $phoneNo.val());
+					AP.mobileVerification.reRequest( this._mobileVerifSn );
 					$( e.target ).siblings( '#reCertBtn' ).show();
 					timer.stop();
 					timer.start();
@@ -112,7 +114,7 @@
 
 			// 인증 확인
 			this._$target.find( '.certification_btn' ).on( 'click', function (e) {
-				 console.log(this._mobileVerifSn); 
+				  
 				if ( $snsNum.valid() ) {
 					
 					AP.mobileVerification.confirm( this._mobileVerifSn, $snsNum.val() );
@@ -126,9 +128,24 @@
 			}.bind( this ));
 
 			AP.mobileVerification.addListener( 'confirm-verify-no', function (e) {
-				if ( e.data.result == true ) {
+				
+				if ( e.data.result ) {
+					AP.modal.alert( '인증 되었습니다.' );
+					timer.stop();
+					
 					this._$target.find( 'input[name=verifyCertification]' ).val( 'Y' );
-					AP.modal.alert( $snsNum.data( '인증 되었습니다.' ));
+					
+					this._$target.find( 'input[name=prePhoneNo]').prop('readOnly', true);
+					this._$target.find( 'input[name=smsNum]').prop('readOnly', true);					
+					
+					this._$target.find( '.count[name=timer]' ).remove();
+					this._$target.find( '.certification_btn' ).text('인증 되었습니다.');
+					this._$target.find( '.certification_btn' ).prop('disabled', true); 
+					this._$target.find( '.btn #reCertBtn ,#certBtn' ).hide();
+					
+					this._$target.find( '.certification_btn' ).prop('disabled', true); 
+					
+					
 				} else {
 					AP.modal.alert( e.data.errorMessage );
 				}
@@ -143,10 +160,12 @@
 				this._$target.find( 'form.validate' )[0].reset(); 
 				this._$target.find( 'textarea, input:text' ).inputLimits( 'upadted' ).placeholder( 'updated' );
 				var selectBoxs = this._$target.find('select'); 
+				
 				$.each(selectBoxs, function( id, select){ 
 					$(select).val(''); 
 					$(select).selectBox('updated');	
 				});
+				
 				this._$target.find( '.ui_input_images' ).inputImages('clear'); 
 				this._$target.find( '.ui_input_images' ).inputImages(); 
 				validator.destroy();
@@ -256,11 +275,11 @@
 			var	activity01 = ['대학생 프로그램','공모전','기타대외활동','학생회','동아리'];// 대외활동 유형 
 			
 			var selectsIds = {"activity01" : activity01};
+			
 			    $.each(selectBoxs, function( id, select){ 
 					
 			    	$(this).selectBox('clear');
 					$(this).selectBox(); 
-					console.log(selectBoxs[select.id]); 
 					
 					$.each( selectsIds[select.id] , function(index, value){
 							 
@@ -270,7 +289,7 @@
 					
 					$(this).selectBox('updated'); 
 				});
-			    console.log(activitiesData.activityType); 
+			    
 			    $(selectBoxs[0]).val(activitiesData.activityType);
 			    
 			    $(selectBoxs[0]).selectBox('updated'); 
@@ -289,7 +308,7 @@
 				$(activity).find('textarea[name=activityBodyText]').val('');
 				
 				$(activity).find('textarea , input:text').placeholder('updated');  // 기본 폼 업데이트 
-				$(activity).find('textarea , input:text').placeholder('');
+				
 				
 				//************************ 삭제 버튼 설정 
 				this._$target.find('div#activity_'+count+' .btn_delete').off('click');
@@ -297,10 +316,10 @@
 				this._$target.find('div#activity_'+count+' .btn_delete').on('click',function(e){
 					 
 					this._$target.find('.activities_history div#activity_'+count).remove();
-					
+						
 					this._$target.find('.activities_history .h_'+count).remove();
-				}.bind(this));
-				
+					
+				}.bind(this)); 
 		},	
 		
 		_submit : function(paramData, btEvent){
@@ -365,60 +384,97 @@
 		// 수정화면 로딩( 이전에 입력한 데이터가 있는 경우 
 		_loading_modify :function(supporters){
 
+			var memberId = ''; 
+			
+			AP.api.getLoginMemberInfo().done(function(result){
+				memberId = result.id;  
+			}); 
+			
 			this._$target.find( 'fieldset.form div.clear' ).empty(); 
-			var html = '';
-				html = AP.common.getTemplate( 'display.brand.beautizen-modify', supporters);
-			// 이미지 확인
-			this._$target.find( 'fieldset.form div.clear' ).html(html);
-			this._$target.find( 'textarea, input:text' ).inputLimits( 'upadted' ).placeholder( 'updated' );
 			
-			this._load(); // selectBox 옵션 리스트 자동 셋팅
-			//this._setMobileVerification();
-			this._setPlugins();
-			//placeholder 초기화
+			var supportersInfo = ''; 
 			
-			//preLocal, academic04, academic05, academic01
-			var selectBoxs = this._$target.find('select'); 
+			var html = '';	
+			var selectBoxs = ''; 
 			
-			$.each(selectBoxs, function( id, select){ // 4번 select 구역
-
-				$.each(supporters, function(id, value){
- 
-							if(select.name === id) {
-								$(select).val(value); 
-								$(select).selectBox('updated');	
-							}
-							if(id === 'requesterAddress'){
-								console.log(id +" : "+ this.address1 ); 
-								$(select).val(this.address1); 
-								
-							} 
-							if(id === 'requesterPhoneNo'){
-								$(select).val(this.address1); 
-							
-							}
-							
-							$(select).selectBox('updated');
-					} );
-					
-			});
-			
-			
-			this._$target.find('.btn_add').off('click');
-			
-			this._$target.find( '.btn_add' ).on( 'click', function (e) {
-							
-			var count = this._$target.find('.activities_history .ui_table').length
-			 
-			if(count > 9 ){ // pc기준 10개까지 레이어 추가 작성 
-					AP.modal.alert( '대외 활동 추가 작성은 10개까지만 가능합니다.');
-				}else {
-					this._addActivities();
-					
-				}
+			AP.api.supportersRequsterinfo().done(function(result){
+				  
+				result.suppoters.memberId = memberId; 
+				supportersInfo = result.suppoters; 
+				html = AP.common.getTemplate( 'display.brand.beautizen-modify', supportersInfo);
+				this._$target.find( 'fieldset.form div.clear' ).html(html);
 				
-			}.bind( this ));
-		
+				this._load(); 
+				this._setPlugins();
+				
+				this._$target.find( 'textarea, input:text' ).inputLimits( 'upadted' ).placeholder( 'updated' );
+				//preLocal, academic04, academic05, academic01
+				
+				selectBoxs = this._$target.find('select');
+				 
+				$.each(selectBoxs, function( id, select){ // 4번 select 구역
+
+					$.each(supporters, function(id, value){
+	 
+								if(select.name === id) {
+									$(select).val(value); 
+									$(select).selectBox('updated');	
+								}
+								if(id === 'requesterAddress'){
+									$(select).val(this.address1); 
+									
+								} 
+								if(id === 'requesterPhoneNo'){
+									$(select).val(this.address1); 
+								
+								}
+								
+								$(select).selectBox('updated');
+						} );
+						
+				});
+				
+				/*********************** 대외활동 Layer 추가버튼 *******************************/ 
+				this._$target.find('.btn_add').off('click');
+				
+				this._$target.find( '.btn_add' ).on( 'click', function (e) {
+								
+				var count = this._$target.find('.activities_history .ui_table').length
+				 
+				if(count > 9 ){ // pc기준 10개까지 레이어 추가 작성 
+						AP.modal.alert( '대외 활동 추가 작성은 10개까지만 가능합니다.');
+					}else {
+						this._addActivities();
+						
+					}
+					
+				}.bind( this ));
+				
+				/*********************** 초기화 버튼 *******************************/ 
+				
+				this._$target.find('button.type').off('click');
+				
+				this._$target.find('button.type').on('click', function (e){
+					 
+					this._$target.find( 'form.validate' ).reset(); // form 에 작성된 데이터 reset  
+					this._$target.find( 'textarea, input:text' ).inputLimits( 'upadted' ).placeholder( 'updated' ); 
+
+					var selectBoxs = this._$target.find('select'); 
+					
+					$.each(selectBoxs, function( id, select){ 
+						$(select).val(''); 
+						$(select).selectBox('updated');	
+					});
+					
+					this._$target.find( '.ui_input_images' ).inputImages('clear'); 
+					this._$target.find( '.ui_input_images' ).inputImages();
+					
+					$(this._$target.find( 'form.validate' )).validate().destroy();  
+					
+				}.bind(this));
+				
+			}.bind(this)); // end : supportersRequsterinfo
+			
 		},
 	
 		// 셀렉트박스 셋팅

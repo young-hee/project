@@ -234,6 +234,7 @@ $('#certComBtn').on('click', function(e) {
     }
 });
 $('#send').on('click', function(e) {
+    if ($(this).attr('disabled') == 'disabled') return;
     var $form = $('form.validate');
     $form.validate().settings.ignore = "";
     if ($form.valid()) {
@@ -548,27 +549,35 @@ function complete() {
 	
 	                    $modalEl.find(".btn_md_primary").click(function() {
 	                    	var userId = $modalEl.find("[name=id_choice]:checked").val();
-	                        AP.api.checkId({}, {
-	                            memberId: userId
-	                        }).done(function(data) {
-	                            //성공
-	                            if (data) {
-	
-	                                var result = data.state;
-	
-	                                if ("success" == result) {
-	                                	$('form.validate input[name=chcsNo]').val(userId);
-	                                	doComplete();
-	                                } else {
-	                                    AP.modal.alert("사용 불가능한 아이디입니다.");
-	                                }
-	
-	                            }
-	                        }).fail(function(e) {
-	                            //실패
-	                        }).always(function() {
-	                            //성공, 실패
-	                        });
+	                        if ($(this).attr('disabled') == 'disabled') return;
+	                    	if(userId == 'null') {
+                                AP.modal.alert("사용 불가능한 아이디입니다.");
+	                    	} else {
+		                    	$('.btn_md_primary').attr("disabled", "disabled");
+		                        AP.api.checkId({}, {
+		                            memberId: userId
+		                        }).done(function(data) {
+		                            //성공
+		                            if (data) {
+		
+		                                var result = data.state;
+		
+		                                if ("success" == result) {
+		                                	$('form.validate input[name=chcsNo]').val(userId);
+		                                	doComplete();
+		                                } else {
+				                            $(".btn_md_primary").removeAttr("disabled");
+		                                    AP.modal.alert("사용 불가능한 아이디입니다.");
+		                                }
+		
+		                            }
+		                        }).fail(function(e) {
+		                            $(".btn_md_primary").removeAttr("disabled");
+		                            //실패
+		                        }).always(function() {
+		                            //성공, 실패
+		                        });
+	                    	}
 	                    	
 	                    });
 	                });
@@ -641,6 +650,7 @@ function doComplete() {
     formData['phoneCorp'] = authData['phoneCorp'];
     
     $.ajaxSettings.traditional = true;
+    if (!$form.valid()) return;
     AP.api.stepThree({}, formData).done(function(data) {
         //성공
         if (data) {
@@ -649,9 +659,13 @@ function doComplete() {
             AP.common.clearSessionStorage("JoinStepTwoObj");
         	post_goto('/customer/joinComplete', {'remainPoint':data.remainPoint, 'custNm':data.custNm});
         } else {
+            $("#send").removeAttr("disabled");
+            $(".btn_md_primary").removeAttr("disabled");
             AP.modal.alert("[ajax.done]실패");
         }
     }).fail(function(xhr, textStatus, errorThrown) {
+        $("#send").removeAttr("disabled");
+        $(".btn_md_primary").removeAttr("disabled");
 
         if (xhr.errorCode == 0) {
             AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
@@ -659,7 +673,6 @@ function doComplete() {
             AP.modal.alert(xhr.errorMessage);
         }
     }).always(function() {
-        $("#send").removeAttr("disabled");
         //성공, 실패
     });
 }

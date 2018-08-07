@@ -205,6 +205,7 @@
 		// article 상품 목록 그리기
 		_articleProdList : function(articleSn){
 			
+			var $section = this._$target.find( '.ch_etude' );
 			AP.api.articleRelated(null, { // article 연관상품 목록
 				 
 				articleSn: articleSn, //아티클일련번호
@@ -213,12 +214,13 @@
 				
 			}).done( function ( result ) {  
 				this._$target.find( '.ch_etude .loading' ).remove();
-				
-				var html = AP.common.getTemplate( 'main.home.ch-etude-article-list', result.onlineProdList);
+				console.log(result.onlineProdList); 
+				var html = '';
+					html = AP.common.getTemplate( 'main.home.ch-etude-article-list', result.onlineProdList);
 			
 				this._$target.find('.ch_etude .table_layout' ).html( html );
 				
-				AP.lazyLoad.add('.ch_etude .table_layout img.lazy_load');
+				AP.lazyLoad.add( $section.find( 'img.lazy_load' ));
 				
 			}.bind(this)).fail(function ( xhr ) {
 				console.log( xhr.errorMessage );
@@ -301,10 +303,12 @@
 				
 				$.each(result.popupList, function(index, popupInfo){
 					
-					AP.modal.info({
+					var modal = AP.modal.info({
 						title: popupInfo.popupTitle,
 						contents: popupInfo.popupBodyText
 					});
+					
+					modal.resetPosition();
 				});
 			}.bind(this));
 		}

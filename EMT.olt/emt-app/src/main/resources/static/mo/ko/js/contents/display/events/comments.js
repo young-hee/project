@@ -21,7 +21,7 @@
 			this._title = title;
 
 			this._setEvents();
-			this._getListDate( 0 );
+			//this._getListDate( 0 );
 		},
 
 		/** =============== Public Methods =============== */
@@ -32,13 +32,21 @@
 		_setEvents: function () {
 			this._writeModal = new AP.CommentWriteModal( this._planDisplaySn, this._title )
 				.addListener( 'success', function (e) {
-					this._getListDate( 0 );
+					//this._getListDate( 0 );
 				}.bind(this));
-
+			/*
 			//댓글 등록
 			this._$participateBtn.on( 'click', function (e) {
 				AP.login().done( function () {
 					this._writeModal.open();
+				}.bind(this));
+			}.bind(this));
+			*/
+			
+			//참여하기
+			this._$participateBtn.on( 'click', function (e) {
+				AP.login().done( function () {
+					this._writeModal.participation();
 				}.bind(this));
 			}.bind(this));
 		},

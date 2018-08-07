@@ -27,6 +27,49 @@
 		modify: function ( data ) {
 			this._openModal( data );
 		},
+		
+		//단순 참여
+		participation : function(){
+			var defer = new $.Deferred();
+
+			AP.api.planDisplaySimpleParticipated( null, {
+				 planDisplaySn : this._planDisplaySn
+				,participantComment: '참여'
+				,termsAgreeYn : "true"
+			}).done(function ( result ) {
+				var data = result.planDisplayAwards;
+					
+				//댓글 저장 후 '즉시당첨' 의 '당첨' 되었을 경우
+				if( data.eventWinStatus == 'Win' ){
+					var awards = data.awards;
+					var prodObj = _.where(awards, {awardTgtCode : "Prod"});
+					data.awards = prodObj;
+						
+					//경품이 상품일 경우 배송지 입력 폼을 띄움
+					if( prodObj.length > 0 ){
+						data.member = this._member;
+						AP.winningPop.open( this._eventTitle, data );
+					}else{
+						defer.resolve();
+					}
+					this.dispatch( 'success' );
+				} else {
+					defer.resolve();
+					this.dispatch( 'success' );
+				}
+			}.bind(this))
+			.fail(function ( xhr ) {
+				if ( xhr.errorCode === 'EAPI004' ) {
+					AP.login({trigger: true});
+				} else if ( AP.message[xhr.errorCode] != undefined ) {
+					AP.modal.alert( AP.message[xhr.errorCode] );
+				} else {
+					AP.modal.alert( xhr.errorMessage );
+				}
+			}.bind(this));
+
+			return defer.promise();
+		},
 
 
 		/** =============== Private Methods =============== */

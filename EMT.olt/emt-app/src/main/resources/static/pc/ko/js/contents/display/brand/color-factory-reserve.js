@@ -75,7 +75,7 @@
 
 			// 인증번호 받기
 			AP.mobileVerification.addListener( 'request-verify-no', function (e) {
-				this._mobileVerifSn = e.data.mobileVerifSn;
+				this._mobileVerifSn = e.data.mobileVerifSn.mobileVerifSn;
 				this._$target.find( '.confirm' ).prop( 'disabled', false );
 			}.bind( this ));
 
@@ -96,9 +96,10 @@
 
 			// 인증 확인
 			AP.mobileVerification.addListener( 'confirm-verify-no', function (e) {
-				if ( e.data.result == true ) {
+				if ( e.data.result ) {
 					this._$target.find( 'input[name=verifyCertification]' ).val( 'Y' );
-					AP.modal.alert( $snsNum.data( '인증 되었습니다.' ));
+					this._$target.find( '.confirm' ).prop( 'disabled', true );
+					AP.modal.alert( '인증 되었습니다.' );
 				} else {
 					AP.modal.alert( e.data.errorMessage );
 				}

@@ -1,32 +1,43 @@
 package kr.ap.emt.order.controller;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import kr.ap.comm.config.interceptor.PageTitle;
 import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.member.vo.OrdCartInfo;
 import kr.ap.comm.support.constants.PathConstants;
 import kr.ap.emt.order.vo.OrdStoreDTO;
+import kr.ap.emt.payment.config.InicisPgProperties;
 import net.g1project.ecp.api.exception.ApiException;
+import net.g1project.ecp.api.model.BooleanResult;
 import net.g1project.ecp.api.model.order.order.NotifyAccountDeposit;
 import net.g1project.ecp.api.model.order.order.OrdEx;
 import net.g1project.ecp.api.model.order.order.OrdReceptComplete;
 import net.g1project.ecp.api.model.order.order.PayResult;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 @Controller
 @RequestMapping("/order")
@@ -37,6 +48,9 @@ public class OrderViewController extends OrderBaseController {
 
 	@Value("${store.url.pc.base-url}")
 	private String storePcUrl;
+	
+	@Autowired
+    private InicisPgProperties inicisPgProperties;	//이니시스 property
 
 	/** logger  */
 	final Logger logger = LoggerFactory.getLogger(getClass());
@@ -198,19 +212,17 @@ public class OrderViewController extends OrderBaseController {
 	 * 대상 : 무통장입금
 	 */
 	@PostMapping("/iniPayNotiPC")
-	public void iniPayNotiPC(Model model, HttpServletRequest request) throws Exception {
-
-		Map<String,String> resultMap = new Hashtable<String,String>();
-		Enumeration elems = request.getParameterNames();
-		String temp = "";
-
-		while(elems.hasMoreElements()){
-			temp = (String) elems.nextElement();
-			resultMap.put(temp, request.getParameter(temp));
-		}
-		logger.info(">>> resultMap : " + resultMap.toString());
+	public void iniPayNotiPC(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		/* 입금결과 통보 결과정보 */
+		BooleanResult result = new BooleanResult();
+		result.setResult(false);
+		PrintWriter out = response.getWriter();
+		
+		//PC 입금결과 통보 로그 남기기
+		//String file_path = inicisPgProperties.getIniPayhome() + "/log";
+		//writePcNotiLog(file_path, request);
+		
 		String typeMsg = request.getParameter("type_msg");     	 // 거래구분
 		if("0200".equals(typeMsg)) { // 정상
 			String noVacct = request.getParameter("no_vacct");    // 가상계좌번호
@@ -228,9 +240,15 @@ public class OrderViewController extends OrderBaseController {
 
 					NotifyAccountDeposit nad = new NotifyAccountDeposit();
 					nad.setVirtualBankAcDepositDt(date);
-					orderApi.notifyAccountDeposit(noOid, noTid, nad);
+					result = orderApi.notifyAccountDeposit(noOid, noTid, nad);
 				}
 			}
+		}
+		
+		if(result != null && result.isResult()) {			
+			out.print("OK");			
+		} else {
+			out.print("FAIL");
 		}
 	}
 
@@ -240,41 +258,74 @@ public class OrderViewController extends OrderBaseController {
 	 * 입금결과 통보 url Async
 	 */
 	@PostMapping("/iniPayNoti")
-	public void iniPayNoti(Model model, HttpServletRequest request) throws Exception {
+	public void iniPayNoti(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		Map<String,String> resultMap = new Hashtable<String,String>();
-		Enumeration elems = request.getParameterNames();
-		String temp = "";
-
-		while(elems.hasMoreElements()){
-			temp = (String) elems.nextElement();
-			resultMap.put(temp, request.getParameter(temp));
-		}
-		logger.info(">>> resultMap : " + resultMap.toString());
-
+		BooleanResult result = new BooleanResult();
+		result.setResult(false);
+		
+		PrintWriter out = response.getWriter();
+		
 		/* 입금결과 통보 결과정보 */
-		String pgTradeNo = request.getParameter("P_STATUS");     // 거래상태
-		if("02".equals(pgTradeNo)) {									// 가상계좌 입금 통보 시
+		// 이니시스 NOTI 서버에서 받은 Value
+		//  P_TID	거래번호
+		//  P_MID	상점아이디
+		//  P_AUTH_DT	승인일자
+		//  P_STATUS	거래상태 (00:성공, 01:실패), *가상계좌 입금통보시 02
+		//  P_TYPE	지불수단
+		//  P_OID	상점주문번호
+		//  P_FN_CD1	금융사코드1
+		//  P_FN_CD2	금융사코드2
+		//  P_FN_NM	금융사명 (은행명, 카드사명, 이통사명)
+		//  P_AMT	거래금액
+		//  P_UNAME	결제고객성명
+		//  P_RMESG1	결과코드
+		//  P_RMESG2	결과메시지
+		//  P_NOTI	노티메시지(상점에서 올린 메시지)
+		//  P_AUTH_NO	승인번호
+		try {
+			String pgTradeNo = request.getParameter("P_STATUS");     // 거래상태
 			String pType = request.getParameter("P_TYPE");       // 지불수단
 			String pTid = request.getParameter("P_TID");         // 거래번호
-			String ordNo = request.getParameter("P_NOTI");       // 주문번호
-
-			// 가상계좌
-			if ("VBANK".equals(pType)) {
-				//가상계좌입금일시
-				SimpleDateFormat formatOutput = new SimpleDateFormat("yyyyMMddHHmmssZ");
-				String pAuthDt = request.getParameter("P_AUTH_DT"); // 승인일자
-				Date date = formatOutput.parse(pAuthDt + "+0900");
-
-				NotifyAccountDeposit nad = new NotifyAccountDeposit();
-				nad.setVirtualBankAcDepositDt(date);
-				orderApi.notifyAccountDeposit(ordNo, pTid, nad);
+			String ordNo = request.getParameter("P_OID");       // 상점 주문번호
+			
+			//로그파일에 로그 남기기
+			//String file_path = inicisPgProperties.getIniPayhome() + "/log";
+			//writeMobileNotiLog(file_path, request);
+			
+			if("02".equals(pgTradeNo)) {	// 가상계좌 입금 통보 시
+	
+				// 가상계좌
+				if ("VBANK".equals(pType)) {
+					//가상계좌입금일시
+					SimpleDateFormat formatOutput = new SimpleDateFormat("yyyyMMddHHmmssZ");
+					String pAuthDt = request.getParameter("P_AUTH_DT"); // 승인일자
+					Date date = formatOutput.parse(pAuthDt + "+0900");
+	
+					NotifyAccountDeposit nad = new NotifyAccountDeposit();
+					nad.setVirtualBankAcDepositDt(date);
+					result = orderApi.notifyAccountDeposit(ordNo, pTid, nad);
+				}
+				
+			} else {
+				
+				if("00".equals(pgTradeNo)) { //성공
+					// 실시간 계좌이체
+					if ("BANK".equals(pType)) {
+						result = orderApi.notifyAccountDeposit(ordNo, pTid, null);
+					}
+				} 
+				
 			}
-			// 실시간 계좌이체
-			if ("BANK".equals(pType)) {
-				orderApi.notifyAccountDeposit(ordNo, pTid, null);
-			}
+		}catch (Exception e) {
+			out.print("FAIL");
 		}
+		
+		if(result != null && result.isResult()) {			
+			out.print("OK");			
+		} else {
+			out.print("FAIL");
+		}
+		
 	}
 
 	/**
@@ -340,5 +391,106 @@ public class OrderViewController extends OrderBaseController {
 			return str;
 		}
 	}
+
+    private void writeMobileNotiLog(String file_path, HttpServletRequest request) throws Exception {
+
+        File file = new File(file_path);
+        file.createNewFile();
+
+        FileWriter file2 = new FileWriter(file_path+"/noti_input_"+getDate()+".log", true);
+
+
+        file2.write("\n************************************************\n");
+        file2.write("PageCall time : " 	+ getTime());
+        file2.write("\n P_TID : " 	+ request.getParameter("P_TID"));
+		file2.write("\n P_MID : " 	+ request.getParameter("P_MID"));
+		file2.write("\n P_AUTH_DT : " 	+ request.getParameter("P_AUTH_DT"));
+		file2.write("\n P_STATUS : " 	+ request.getParameter("P_STATUS"));
+		file2.write("\n P_TYPE : " 	+ request.getParameter("P_TYPE"));
+		file2.write("\n P_OID : " 	+ request.getParameter("P_OID"));
+		file2.write("\n P_FN_CD1 : " 	+ request.getParameter("P_FN_CD1"));
+		file2.write("\n P_FN_CD2 : " 	+ request.getParameter("P_FN_CD2"));
+		file2.write("\n P_FN_NM : " 	+ request.getParameter("P_FN_NM"));
+		file2.write("\n P_AMT : " 	+ request.getParameter("P_AMT"));
+		file2.write("\n P_UNAME : " 	+ request.getParameter("P_UNAME"));
+		file2.write("\n P_RMESG1 : " 	+ request.getParameter("P_RMESG1"));
+		file2.write("\n P_RMESG2 : " 	+ request.getParameter("P_RMESG2"));
+		file2.write("\n P_NOTI : " 	+ request.getParameter("P_NOTI"));	
+		file2.write("\n P_AUTH_NO : " +	 request.getParameter("P_AUTH_NO"));	        
+        file2.write("\n************************************************\n");
+
+        file2.close();
+
+    }
+    
+    private void writePcNotiLog(String file_path,HttpServletRequest request) throws Exception {
+
+        File file = new File(file_path);
+        file.createNewFile();
+
+        FileWriter file2 = new FileWriter(file_path+"/vacctinput_"+getDate()+".log", true);
+
+
+        file2.write("\n************************************************\n");
+        file2.write("PageCall time : " + getTime());
+        file2.write("\nID_MERCHANT : " + request.getParameter("id_merchant"));
+        file2.write("\nNO_TID : " + request.getParameter("no_tid"));
+        file2.write("\nNO_OID : " + request.getParameter("no_oid"));
+        file2.write("\nNO_VACCT : " + request.getParameter("no_vacct"));
+        file2.write("\nAMT_INPUT : " + request.getParameter("amt_input"));
+        file2.write("\nNM_INPUTBANK : " + request.getParameter("nm_inputbank"));
+        file2.write("\nNM_INPUT : " + request.getParameter("nm_input"));
+        file2.write("\n************************************************\n");
+
+        file2.close();
+
+    }
+    
+    private String getDate() {
+    	Calendar calendar = Calendar.getInstance();
+    	
+    	StringBuffer times = new StringBuffer();
+        times.append(Integer.toString(calendar.get(Calendar.YEAR)));
+		if((calendar.get(Calendar.MONTH)+1)<10)
+        { 
+            times.append("0"); 
+        }
+		times.append(Integer.toString(calendar.get(Calendar.MONTH)+1));
+		if((calendar.get(Calendar.DATE))<10) 
+        {
+            times.append("0");	
+        } 
+		times.append(Integer.toString(calendar.get(Calendar.DATE)));
+    	
+    	return times.toString();
+    }
+    
+    private String getTime() {
+    	Calendar calendar = Calendar.getInstance();
+    	
+    	StringBuffer times = new StringBuffer();
+
+    	times.append("[");
+    	if((calendar.get(Calendar.HOUR_OF_DAY))<10) 
+        { 
+            times.append("0"); 
+        } 
+ 		times.append(Integer.toString(calendar.get(Calendar.HOUR_OF_DAY)));
+ 		times.append(":");
+ 		if((calendar.get(Calendar.MINUTE))<10) 
+        { 
+            times.append("0"); 
+        }
+ 		times.append(Integer.toString(calendar.get(Calendar.MINUTE)));
+ 		times.append(":");
+ 		if((calendar.get(Calendar.SECOND))<10) 
+        { 
+            times.append("0"); 
+        }
+ 		times.append(Integer.toString(calendar.get(Calendar.SECOND)));
+ 		times.append("]");
+ 		
+ 		return times.toString();
+    }
 
 }

@@ -109,6 +109,8 @@
 					AP.login({trigger: true});
 				} else if( AP.message[xhr.errorCode] != undefined ){
 					AP.modal.alert( AP.message[xhr.errorCode] );
+				} else {
+					AP.modal.alert( xhr.errorMessage );
 				}
 			}.bind(this));
 		},

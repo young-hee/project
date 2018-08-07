@@ -41,7 +41,10 @@ import net.g1project.ecp.api.model.ap.bbs.SupportersRequesterInfo;
 import net.g1project.ecp.api.model.ap.bbs.YouthLectureRequest;
 import net.g1project.ecp.api.model.ap.bbs.YouthLectureReturn;
 import net.g1project.ecp.api.model.ap.verif.ApMobileVerificationRequestInfo;
+import net.g1project.ecp.api.model.ap.verif.ApMobileVerificationResendRequestInfo;
 import net.g1project.ecp.api.model.ap.verif.ApMobileVerificationResult;
+import net.g1project.ecp.api.model.ap.verif.ApMobileVerificationVerifyRequestInfo;
+import net.g1project.ecp.api.model.ap.verif.ApMobileVerificationVerifyResult;
 import net.g1project.ecp.api.model.offlinestore.store.StoreEvalEx;
 import net.g1project.ecp.api.model.offlinestore.store.StoreEvalPost;
 import net.g1project.ecp.api.model.offlinestore.store.StoreEvalPut;
@@ -320,37 +323,7 @@ public class BrandRestController extends AbstractController {
     }
 	
 	/**
-	 * 컬러팩토리 예약 - 휴대폰인증
-	 * @param 
-	 * @return
-	*//* 
-	@RequestMapping("/apMobileVerificationResult")
-    @ResponseBody
-    public ResponseEntity<?> apMobileVerificationResult(RequestBrand requestBrand) {
-		HashMap<String, Object> result = new HashMap<String, Object>();
-	
-		try {
-			
-			verifApi
-			
-			
-			ApMobileVerificationRequestInfo mobileVerificationRequestInfo = new ApMobileVerificationRequestInfo();
-			EmbeddableTel et = new EmbeddableTel(); 
-			et.setPhoneNo(requestBrand.getPhoneNo());
-			
-			ApMobileVerificationResult apMobileVerificationResult = verifApi.requestMobileVerification(mobileVerificationRequestInfo);
-            result.put("apMobileVerificationResult", apMobileVerificationResult);
-	        
-	        return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-		}
-    }
-    */
-	
-	/**
-	 * 휴대폰 인증 
+	 * 휴대폰 인증  _ 모바일 점유인증
 	 * @param requestBrand
 	 * @return
 	 */
@@ -359,10 +332,11 @@ public class BrandRestController extends AbstractController {
     public ResponseEntity<?> requestMobileVerification(HttpServletRequest req) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
-		
 		try {
+			
 			ApMobileVerificationRequestInfo mobileVerificationRequestInfo = new ApMobileVerificationRequestInfo(); 
 			EmbeddableTel embedPhonNo = new EmbeddableTel(); 
+			
 			embedPhonNo.setPhoneNo(req.getParameter("phoneNo"));
 			
 			mobileVerificationRequestInfo.setPhoneNo(embedPhonNo);
@@ -379,7 +353,53 @@ public class BrandRestController extends AbstractController {
 
     }
 	
+	/**
+	 * 휴대폰 인증  _ 모바일 점유인증 재전송
+	 * @param requestBrand
+	 * @return
+	 */
+	@RequestMapping("/resendMobileVerificationKey")
+    @ResponseBody
+    public ResponseEntity<?> resendMobileVerificationKey(ApMobileVerificationResendRequestInfo mobileVerificationResendRequestInfo) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+			
+			ApMobileVerificationResult apMobileVerificationResult = verifApi.resendMobileVerificationKey(mobileVerificationResendRequestInfo); 
+            
+			result.put("mobileVerifSn", apMobileVerificationResult);
+	        
+	        return ResponseEntity.ok(result);
+		} catch (Exception e) {
+			result.put("errorData", e);
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+
+    }
 	
+	/**
+	 * 휴대폰 인증  _ 모바일 점유인증키 검증
+	 * @param requestBrand
+	 * @return
+	 */
+	@RequestMapping("/verifyMobileVerificationKey")
+    @ResponseBody
+    public ResponseEntity<?> verifyMobileVerificationKey(ApMobileVerificationVerifyRequestInfo mobileVerificationResendRequestInfo) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+			
+			ApMobileVerificationVerifyResult apMobileVerificationVerifyResult = verifApi.verifyMobileVerificationKey(mobileVerificationResendRequestInfo); 
+            
+			result.put("result", apMobileVerificationVerifyResult);
+	        
+	        return ResponseEntity.ok(result);
+		} catch (Exception e) {
+			result.put("errorData", e);
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+
+    }
 	
 	
 	/**

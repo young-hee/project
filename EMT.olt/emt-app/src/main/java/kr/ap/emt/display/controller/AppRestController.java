@@ -122,8 +122,8 @@ public class AppRestController extends AbstractController {
         
         try {
         	//TODO 빌드 오류로 임시 수정합니다 By pollak
-        	ExecuteResult executeResult = applicationsApi.updateAppAgree(requestAppinfo.getToken(), null);  	
-            result.put("executeResult", executeResult);
+        	//ExecuteResult executeResult = applicationsApi.updateAppAgree(requestAppinfo.getToken(), null);  	
+            //result.put("executeResult", executeResult);
             
             return ResponseEntity.ok(result);
         } catch (Exception e) {

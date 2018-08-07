@@ -374,7 +374,7 @@
         csList: { path:'/cs/csList', method: 'POST'},
 
         // 1:1 문의 등록
-        inquiry: { path:'/cs/doInquiry', method: 'POST'},
+        inquiry: { path:'/cs/doInquiry', method: 'POST', contentType:false, processData: false},
 
         // 1:1 문의 주문/제품 선택 목록
         getOrderPage : { path: '/cs/getOrderPage', method : 'GET'},
@@ -916,15 +916,30 @@
 			}
 		},
 		
-		/** 컬러팩토리 예약 - 휴대폰인증 ******************************************
+		/** 휴대폰인증( 점유인증) ******************************************
 		 * @param : { "phoneNo": {"countryNo": "", "phoneNo": "01012345678"} }
 		 * @return : hashMap {apMobileVerificationResult}
 		 */
-		apMobileVerificationResult: { path:'/display/apMobileVerificationResult', method: 'POST', contentType:false, processData: false, data: {
-			phoneNo : {
-				countryNo : "",
-				phoneNo : ""
-			}
+		requestMobileVerification : { path:'/display/requestMobileVerification', method: 'POST', data: {
+			countryNo : null,
+			phoneNo : null
+		}},
+		
+		/** 휴대폰인증( 재전송 점유인증) ******************************************
+		 * @param : { "mobileVerifSn":''}
+		 * @return : hashMap {apMobileVerificationResult}
+		 */
+		resendMobileVerificationKey : { path:'/display/resendMobileVerificationKey', method: 'POST', data: {
+			mobileVerifSn : null
+		}},
+		
+		/** 휴대폰인증( 점유 키 검증) ******************************************
+		 * @param : { "mobileVerifSn": '', "mobileVerifKey": ''}
+		 * @return : hashMap {apMobileVerificationResult}
+		 */
+		verifyMobileVerificationKey : { path:'/display/verifyMobileVerificationKey', method: 'POST' , data: {
+			mobileVerifSn : null,
+			mobileVerifKey : null
 		}},
 		
 		//예약서비스등록

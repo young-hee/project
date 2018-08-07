@@ -5,10 +5,26 @@
 {{#each this.list}}
 <li>
 	<a href="{{productDetailPath this.onlineProdSn}}">
-		<span class="img lazy_load_wrap"><img src="{{this.onlineProdImages.0.imgUrl}}" data-src="{{this.onlineProdImages.0.imgUrl}}" alt="" class="lazy_load">
+		<span class="img lazy_load_wrap">
+			{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+				<div class="item_state out_of_stock">일시품절</div>
+			{{/xif}}
+			
+			{{#xif ../prodListUnitCode '==' 'OnlineProd'}}
+				<img src="" data-src="{{this.onlineProdImages.0.imgUrl}}" alt="" class="lazy_load">
+			{{/xif}}
+			{{#xif ../prodListUnitCode '==' 'Prod'}}
+				<img src="" data-src="{{this.prodImages.0.imgUrl}}" alt="" class="lazy_load">
+			{{/xif}}
+			
 		</span>
 		<span>
 			<span class="title">{{this.onlineProdName}}</span>
+			{{#xif ../prodListUnitCode '==' 'Prod'}}
+				<p class="option_name">{{this.products.0.prodName}}</p>
+			{{/xif}}
+			
+			
 			<span class="price">
 			{{#xif this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate '!=' 0}}
 				<em><b>  {{this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate}}</b>%</em>

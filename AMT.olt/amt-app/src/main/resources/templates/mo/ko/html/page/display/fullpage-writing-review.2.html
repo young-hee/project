@@ -1,40 +1,41 @@
 <html ap:decorate="~{layout/only-contents}">
 
 <body>
-<!-- #ap_container -->
-<div ap:fragment="layout-contents">
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
 
-	<div class="layer_popup fullpage">
-		<div class="layer_wrap">
-			<dl class="layer bg_gray fixed_top">
-				<dt class="layer_title">구매리뷰 작성</dt>
-				<dd class="layer_cont">
-					<div class="section review_write step1">
-						<div class="thumb"><img ap:src="@{/images/dummy/img_item_05.jpg}" alt=""></div>
-						<dl>
-							<dt>
-								<span class="product_name">헤라 블랙쿠션 SPF34 PA++</span>
-								<span class="option_name">21호 바닐라</span>
-							</dt>
-							<dd class="review_summary">
-								<p class="review_copy">별점을 선택해주세요</p>
-								<div class="ui_rating xlarge">
-									<span><input type="radio" name="rate3" id="rate3_1" value="1.0"><label for="rate3_1"><span class="sr_only"> 1점</span></label></span>
-									<span><input type="radio" name="rate3" id="rate3_2" value="2.0"><label for="rate3_2"><span class="sr_only"> 2점</span></label></span>
-									<span><input type="radio" name="rate3" id="rate3_3" value="3.0"><label for="rate3_3"><span class="sr_only"> 3점</span></label></span>
-									<span><input type="radio" name="rate3" id="rate3_4" value="4.0" checked><label for="rate3_4"><span class="sr_only"> 4점</span></label></span>
-									<span><input type="radio" name="rate3" id="rate3_5" value="5.0"><label for="rate3_5"><span class="sr_only"> 5점</span></label></span>
-								</div>
-							</dd>
-						</dl>
-						<p class="text notice">구매리뷰 작성시, 자동 구매확정이 됩니다.<br>구매확정이 완료된 상품은 교환, 반품이 불가합니다.</p>
-					</div>
-				</dd>
-			</dl>
-			<button class="layer_close" type="button"><i class="ico_close"></i><span class="sr_only">레이어 닫기</span></button>
+		<div class="layer_popup fullpage">
+			<div class="layer_wrap">
+				<dl class="layer bg_gray fixed_top">
+					<dt class="layer_title">구매리뷰 작성</dt>
+					<dd class="layer_cont">
+						<div class="section review_write step1">
+							<div class="thumb"><img ap:src="@{/images/dummy/img_item_05.jpg}" alt=""></div>
+							<dl>
+								<dt>
+									<span class="product_name">헤라 블랙쿠션 SPF34 PA++</span>
+									<span class="option_name">21호 바닐라</span>
+								</dt>
+								<dd class="review_summary">
+									<!-- <p class="review_copy">별점을 선택해주세요</p> -->
+									<p class="review_copy">별점을 선택해주세요</p>
+									<span class="rating">
+										<span class="mark_star_xl star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span> <!--평점에따라 클래스변경(star0~star5)-->
+									</span>
+								</dd>
+							</dl>
+							<p class="text notice">구매리뷰 작성시, 자동 구매확정이 됩니다.<br>구매확정이 완료된 상품은 교환, 반품이 불가합니다.</p>
+							<div class="align_center">
+								<button type="button" class="btn_skip"><span>별점을 선택해주세요</span> <span class="ico_navi next"></span></button>
+								<!-- <button type="button" class="btn_next"><em>다음 단계로 진행</em> <span class="ico_navi_p"></span></button> -->
+							</div>
+						</div>
+					</dd>
+				</dl>
+				<button class="layer_close" type="button"><i class="ico_close"></i><span class="sr_only">레이어 닫기</span></button>
+			</div>
 		</div>
 	</div>
-</div>
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">

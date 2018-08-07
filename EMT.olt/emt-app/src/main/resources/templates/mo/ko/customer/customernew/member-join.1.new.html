@@ -109,12 +109,13 @@ $('input').on('click', function() {
 });
 
 $(".btn_lg_secondary").click(function() {
+    if ($(this).attr('disabled') == 'disabled') return;
 	if(!$('[name=ET001]').prop('checked')) {
         AP.modal.alert("필수 약관에 동의해주셔야 합니다.");
         return;
 	}
 
-	$(".btn_lg_secondary").attr("disabled", "disabled");
+	$(".btn_lg_primary").attr("disabled", "disabled");
 	termsVal = $('[name=ET001]').prop('checked');
 	smsVal = $('[name=SMS]').prop('checked');
 	emailVal = $('[name=Email]').prop('checked');
@@ -136,11 +137,11 @@ function doComplete() {
             AP.common.clearSessionStorage("JoinStepThreeObj");
         	post_goto('/customer/joinComplete', {'remainPoint':data.remainPoint, 'custNm':data.custNm});
         } else {
-        	$(".btn_lg_secondary").removeAttr("disabled");
+        	$(".btn_lg_primary").removeAttr("disabled");
             AP.modal.alert("[ajax.done]실패");
         }
     }).fail(function(xhr, textStatus, errorThrown) {
-    	$(".btn_lg_secondary").removeAttr("disabled");
+    	$(".btn_lg_primary").removeAttr("disabled");
 
         if (xhr.errorCode == 0) {
             AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");

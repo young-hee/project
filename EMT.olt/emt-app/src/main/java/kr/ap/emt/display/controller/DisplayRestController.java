@@ -20,10 +20,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import feign.Param;
-import kr.ap.emt.display.vo.RequestDisplay;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
+import kr.ap.emt.display.vo.RequestDisplay;
 import net.g1project.ecp.api.model.BooleanResult;
 import net.g1project.ecp.api.model.sales.display.Corner;
 import net.g1project.ecp.api.model.sales.display.CornerContentsSet;
@@ -619,7 +618,7 @@ public class DisplayRestController extends AbstractController {
     	}
     	
 		try {
-        	List <KeywordLinkInfo> keywordLinkList = keywordPopupApi.getKeywordLink( memberOnlyYn);
+        	List <KeywordLinkInfo> keywordLinkList = keywordPopupApi.getKeywordLink( memberOnlyYn, getMemberSn());
             result.put("keywordLinkList", keywordLinkList);
 	        
 	        return ResponseEntity.ok(result);

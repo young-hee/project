@@ -245,8 +245,9 @@
 			}).done( function ( result ) {  
 				this._$target.find( '.ch_etude .loading' ).remove();
 				
-				var html = AP.common.getTemplate( 'main.home.ch-etude-article-list', result.onlineProdList);
-			
+				var html = '';
+					html = AP.common.getTemplate( 'main.home.ch-etude-article-list', result.onlineProdList);
+					
 				this._$target.find('.ch_etude .clear dd ul' ).html( html );
 				
 				AP.lazyLoad.add('.ch_etude img.lazy_load');
@@ -374,10 +375,13 @@
 			
 				$.each(result.popupList, function(index, popupInfo){
 					
-					AP.modal.info({
+					var modal = AP.modal.info({
 						title: popupInfo.popupTitle,
-						contents: popupInfo.popupBodyText
+						contents: popupInfo.popupBodyText,
+						containerClass: 'agree_terms'
 					});
+					
+					modal.resetPosition();
 				});
 			}.bind(this));
 		}

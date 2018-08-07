@@ -27,9 +27,10 @@
 
 		/** =============== Public Methods ================ */
 		request: function ( phoneCorp, phoneNo ) {
-			AP.api.simpleCertifySend({}, {
-				countryNo: '',
-				phoneNo: phoneNo
+			AP.api.requestMobileVerification({}, {
+					countryNo: phoneCorp,
+					phoneNo: phoneNo
+				
 			}).done(function ( result ) {
 				this.dispatch( 'request-verify-no', { data: result });
 			}.bind( this )).fail(function ( error ) {
@@ -38,7 +39,7 @@
 		},
 
 		reRequest: function ( verifSn ) {
-			AP.api.simpleCertifyResend({}, {
+			AP.api.resendMobileVerificationKey({}, {
 				mobileVerifSn: verifSn
 			}).done(function ( result ) {
 				this.dispatch( 're-request-verify-no', { data: result });
@@ -48,7 +49,7 @@
 		},
 
 		confirm: function ( verifSn, verifKey ) {
-			AP.api.simpleCertifyCheck({}, {
+			AP.api.verifyMobileVerificationKey({}, {
 				mobileVerifSn: verifSn,
 				mobileVerifKey: verifKey
 			}).done(function ( result ) {
