@@ -15,14 +15,14 @@ this["AP"]["handlebars"]["cart"]["online"]["activity-point-prod"] = Handlebars.t
     + "\"/>\n				<input type=\"hidden\" name=\"cartProdSn\" value=\""
     + alias2(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
     + "\"/>\n				<input type=\"hidden\" name=\"prdInfo_"
-    + alias2(alias1((depths[1] != null ? depths[1].onlineProdSn : depths[1]), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
     + "\" value=\""
     + alias2(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
     + "\"/>\n				<input type=\"hidden\" name=\"saleDisplayStatus_"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
     + "\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1), depth0))
-    + "\"/>\n\n				<div class=\"item_info\">\n					<!--/* 상품 선택 */-->\n					<div class=\"item_thumb\">\n						<div class=\"check_wrap\">\n"
+    + "\"/>\n				<div class=\"item_info\">\n					<!--/* 상품 선택 */-->\n					<div class=\"item_thumb\">\n						<div class=\"check_wrap\">\n"
     + ((stack1 = helpers["if"].call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depths[1] != null ? depths[1].onlineProdSn : depths[1]),null,{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodTypeCode : stack1),"FreeGift",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(3, data, 0, blockParams, depths),"inverse":container.program(6, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "							<label for=\"chkBox"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
@@ -60,34 +60,38 @@ this["AP"]["handlebars"]["cart"]["online"]["activity-point-prod"] = Handlebars.t
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.cartProdAwardList : depth0)) != null ? stack1.length : stack1),">",0,{"name":"xif","hash":{},"fn":container.program(54, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "			</div>\n";
 },"3":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, helper, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
+    var stack1, helper, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing, alias5="function";
 
-  return "							<input type=\"checkbox\" name=\"chkBox\" id=\"chkBox"
+  return "								<input type=\"checkbox\" name=\"chkBox\" id=\"chkBox"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
     + "\" pointExch=\"activity\" point=\""
-    + alias2(((helper = (helper = helpers.exchPoint || (depth0 != null ? depth0.exchPoint : depth0)) != null ? helper : alias4),(typeof helper === "function" ? helper.call(alias3,{"name":"exchPoint","hash":{},"data":data}) : helper)))
+    + alias2(((helper = (helper = helpers.exchPoint || (depth0 != null ? depth0.exchPoint : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"exchPoint","hash":{},"data":data}) : helper)))
     + "\" value=\""
-    + alias2(alias1((depths[1] != null ? depths[1].onlineProdSn : depths[1]), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
+    + "\" exchCheckYn=\""
+    + alias2(((helper = (helper = helpers.selectYn || (depth0 != null ? depth0.selectYn : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"selectYn","hash":{},"data":data}) : helper)))
     + "\" "
     + ((stack1 = helpers["if"].call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.ne || (depth0 && depth0.ne) || alias4).call(alias3,(depths[1] != null ? depths[1].saleDisplayStatus : depths[1]),"OnSale",{"name":"ne","hash":{},"data":data}),(helpers.ne || (depth0 && depth0.ne) || alias4).call(alias3,(depths[1] != null ? depths[1].saleDisplayStatus : depths[1]),null,{"name":"ne","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "  "
-    + alias2((helpers.condition || (depth0 && depth0.condition) || alias4).call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depths[1] != null ? depths[1].saleDisplayStatus : depths[1]),"OnSale",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depths[1] != null ? depths[1].selectYn : depths[1]),"Y",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),"checked","",{"name":"condition","hash":{},"data":data}))
+    + alias2((helpers.condition || (depth0 && depth0.condition) || alias4).call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depths[1] != null ? depths[1].saleDisplayStatus : depths[1]),"OnSale",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depth0 != null ? depth0.selectYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),"checked","",{"name":"condition","hash":{},"data":data}))
     + ">\n";
 },"4":function(container,depth0,helpers,partials,data) {
     return "disabled";
 },"6":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, helper, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
+    var stack1, helper, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing, alias5="function";
 
-  return "							<input type=\"checkbox\" name=\"chkBox\" id=\"chkBox"
+  return "								<input type=\"checkbox\" name=\"chkBox\" id=\"chkBox"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
     + "\" pointExch=\"activity\" point=\""
-    + alias2(((helper = (helper = helpers.exchPoint || (depth0 != null ? depth0.exchPoint : depth0)) != null ? helper : alias4),(typeof helper === "function" ? helper.call(alias3,{"name":"exchPoint","hash":{},"data":data}) : helper)))
+    + alias2(((helper = (helper = helpers.exchPoint || (depth0 != null ? depth0.exchPoint : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"exchPoint","hash":{},"data":data}) : helper)))
     + "\" value=\""
-    + alias2(alias1((depths[1] != null ? depths[1].onlineProdSn : depths[1]), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
+    + "\" exchCheckYn=\""
+    + alias2(((helper = (helper = helpers.selectYn || (depth0 != null ? depth0.selectYn : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"selectYn","hash":{},"data":data}) : helper)))
     + "\" "
     + ((stack1 = helpers["if"].call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.ne || (depth0 && depth0.ne) || alias4).call(alias3,(depths[1] != null ? depths[1].saleDisplayStatus : depths[1]),"OnSale",{"name":"ne","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "  "
-    + alias2((helpers.condition || (depth0 && depth0.condition) || alias4).call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depths[1] != null ? depths[1].saleDisplayStatus : depths[1]),"OnSale",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depths[1] != null ? depths[1].selectYn : depths[1]),"Y",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),"checked","",{"name":"condition","hash":{},"data":data}))
+    + alias2((helpers.condition || (depth0 && depth0.condition) || alias4).call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depths[1] != null ? depths[1].saleDisplayStatus : depths[1]),"OnSale",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depth0 != null ? depth0.selectYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),"checked","",{"name":"condition","hash":{},"data":data}))
     + ">\n";
 },"8":function(container,depth0,helpers,partials,data) {
     var stack1;

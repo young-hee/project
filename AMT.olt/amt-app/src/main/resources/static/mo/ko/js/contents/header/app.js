@@ -9,11 +9,11 @@
     var Header = $B.Class.extend({
         initialize: function () {
             this._$target = $( '#header' );
-            this._$commonArea = this._$target.find( '.header_common' );
-            this._$titleArea = this._$target.find( '.page_title_area' );
+            this._$titleArea = this._$target.find( '.page_title_new' );
 
+            this._setEvent();
+			this._setFixed();
             this._setTitleArea();
-            this._setToggleMenuFixed();
         },
 
         /** =============== Public Methods =============== */
@@ -25,82 +25,48 @@
 
         /** =============== Private Methods =============== */
 
-		//depth1, depth2 카테고리
-        _setTitleArea: function () {
-            var $menuToggleBtn = this._$titleArea.find( '.page_title > .btn_menu' ),
-                $menuLayer = this._$titleArea.find( '.menu_layer' ),
-				$currentDepth1 = $menuLayer.find( '.depth1 .current' ),
-				isDepth1Open = $currentDepth1.hasClass( 'on' );
+        _setEvent: function () {
+			this._$target.find( '.btn_menu' ).on( 'click', function () {
+				AP.menuCategory.open();
+			}.bind( this ));
+		},
 
-            //layer toggle
-            $menuToggleBtn.on( 'click', function (e) {
-                $menuToggleBtn.toggleClass( 'on' );
-                $menuLayer.toggle();
-
-                if ( $menuToggleBtn.hasClass('on') ) {
-                	if ( isDepth1Open ) {
-						$currentDepth1.parent().css( 'padding-bottom', $currentDepth1.siblings('.depth2').innerHeight() + 'px' );
-					}
+		_setFixed: function () {
+			$( window ).on( 'scroll', toggleFixed );
+			var toggleFixed = function () {
+				var st = $( window ).scrollTop();
+				if ( st > 0 ) {
+					this._$target.find( '.header_top' ).addClass( 'fixed' );
 				} else {
-					$menuLayer.find( '.depth1 > li' ).css( 'padding-bottom', '' ).find( 'a.ico.on' ).removeClass( 'on' );
+					this._$target.find( '.header_top' ).removeClass( 'fixed' );
 				}
-            });
+			}.bind( this );
+			toggleFixed();
+		},
 
-            //depth1
-			$menuLayer.find( '.depth1 > li > a.ico' ).on( 'click', function (e) {
-				e.preventDefault();
-				var $btn = $( e.currentTarget ),
-					$li = $btn.parent( 'li' );
-
-				if ( $btn.hasClass('on') ) {
-					$btn.removeClass( 'on' );
-					$li.css( 'padding-bottom', '' );
+		_setTitleArea: function () {
+			var isOpen = false;
+			if ( this._$titleArea.length == 0 ) return;
+			this._$titleArea.find( '.btn_toggle' ).on( 'click', function (e) {
+				if ( !isOpen ) {
+					isOpen = true;
+					$( e.currentTarget ).addClass( 'on' );
+					this._$target.find( '.cate_dimmed' ).show();
+					this._$target.find( '.menu_layer' ).show();
 				} else {
-					$li.siblings().css( 'padding-bottom', '' ).find( 'a.ico.on' ).removeClass( 'on' );
-					$btn.addClass( 'on' );
-					$li.css( 'padding-bottom', $btn.siblings('.depth2').innerHeight() + 'px' );
+					isOpen = false;
+					$( e.currentTarget ).removeClass( 'on' );
+					this._$target.find( '.cate_dimmed' ).hide();
+					this._$target.find( '.menu_layer' ).hide();
 				}
+			}.bind( this ));
+
+			if ( this._$target.find( '.menu_layer' ).length == 0 ) return;
+			this._$target.find( '.menu_layer ul a' ).on( 'click', function (e) {
+				$( this ).closest( 'ul' ).find( 'a' ).removeClass( 'on' );
+				$( this ).addClass( 'on' );
 			});
-
-            //back btn
-            this._$titleArea.find( '.btn_previous' ).on( 'click', function (e) {
-                history.back();
-            });
-        },
-
-		//main swipe menu
-        _setToggleMenuFixed: function () {
-        	var $scrollArea = this._$target.find( '.swipe_menu .fixed_area > div' );
-
-        	if ( $scrollArea.length ) {
-				var containerW = $scrollArea.width(),
-					scrollX = $scrollArea.scrollLeft(),
-					$menus = $scrollArea.find( 'li' ),
-					menuLength = $menus.length,
-					point = {x: 0, width: 0};
-
-				for ( var i = 0; i < menuLength; ++i ) {
-					var $menu = $menus.eq( i );
-
-					if ( i > 0 ) point.x = point.x + point.width;
-					point.width = $menu.width();
-					if ( $menu.find('.selected').length ) break;
-				}
-
-				if ( scrollX > point.x || (point.x + point.width - scrollX) > containerW ) {
-					//선택된 메뉴 위치로 scroll
-					$scrollArea.scrollLeft( point.x - (containerW / 2) + (point.width / 2) );
-				}
-			}
-
-            $( window ).on( 'scroll', function (e) {
-                if ( $(e.currentTarget).scrollTop() > this._$commonArea.outerHeight() ) {
-                    this._$target.find( '.fixed_area' ).addClass( 'fixed' );
-                } else {
-                    this._$target.find( '.fixed_area' ).removeClass( 'fixed' );
-                }
-            }.bind(this));
-        }
+		}
     });
 
     AP.header = new Header();

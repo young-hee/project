@@ -3,8 +3,8 @@
 	{{#each cartProdExList}}
 		<div class="cart_name_wrap">
 			<span class="check_wrap">
-				<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{prodEx.prodSn}}" value="{{../onlineProdSn}}" {{#if (ne ../saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq ../selectYn 'Y') ) 'checked' ''}}>
-				<label for="takeoutChkBox{{ ../onlineProdSn }}">체크</label>
+				<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{ prodEx.prodSn }}" value="{{ prodEx.prodSn }}" {{#if (ne ../saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}>
+				<label for="takeoutChkBox{{ prodEx.prodSn }}">체크</label>
 			</span>
 			{{#if ../repOnlineProdImgEx}}
 				<img src="{{ ../repOnlineProdImgEx.imgUrl }}" class="thm_cart_item">
@@ -16,12 +16,11 @@
 			</div>
 			<button type="button" class="btn_cart_item_del" onclick="removeCartProd('{{ ../../cartSn}}', '{{ cartProdSn }}')"><span class="sr_only">없애기</span></button>
 		</div>
-
 		<div class="cart_item_info">
 			<input type="hidden" name="takeoutPrdSn" value="{{prodEx.prodSn}}"/>
 			<input type="hidden" name="cartProdSn" value="{{cartProdSn}}"/>
-			<input type="hidden" name="takeoutPrdInfo_{{../onlineProdSn}}" value="{{cartProdSn}}"/>
-			<input type="hidden" name="saleDisplayStatus_{{prodEx.prodSn}}" value="{{prodEx.saleDisplayStatus}}"/>
+			<input type="hidden" name="takeoutPrdInfo_{{ prodEx.prodSn }}" value="{{cartProdSn}}"/>
+			<input type="hidden" name="saleDisplayStatus_{{ prodEx.prodSn }}" value="{{prodEx.saleDisplayStatus}}"/>
 			<!--/* 품절/조기소진일경우 버튼제어 X */-->
 			{{#if (ne prodEx.saleDisplayStatus 'OnSale') }}
 				<span class="ui_spinner small" data-disabled="true">
@@ -102,7 +101,7 @@
 					{{#if (ne awardProdEx.repProdImgEx null) }}
 						<span class="thm"><img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/></span>
 					{{else}}
-						<span class="thm"><img src="{{ absolutePath '/images/cart/no_img.png.gif' }}" alt=""/></span>
+						<span class="thm"><img src="{{ absolutePath '/images/cart/no_img.png' }}" alt=""/></span>
 					{{/if}}
 					<span class="info">
 						<span>사은품 : {{ awardProdEx.prodName }}</span>

@@ -19,21 +19,6 @@
 
 			this._api = AP.api.couponList( {}, {searchType : searchType}).done(function ( result ) {
 
-				if ( searchType == 'Avail') {
-					this._api = AP.api.couponList( {}, {searchType : 'Exp'}).done(function ( result ) {
-						if (result != null && result.MemberKeepingCoupons != null) {
-							$('#expCnt').html(result.MemberKeepingCoupons.expCnt);
-						}
-					});
-				}
-				if ( searchType == 'Exp') {
-					this._api = AP.api.couponList( {}, {searchType : 'Avail'}).done(function ( result ) {
-						if (result != null && result.MemberKeepingCoupons != null) {
-							$('#availCnt').html(result.MemberKeepingCoupons.expCnt);
-						}
-					});
-				}
-
 				if ( result == null
 					|| result.MemberKeepingCoupons == null
 					|| (searchType == 'Avail') && result.MemberKeepingCoupons.availCnt == 0

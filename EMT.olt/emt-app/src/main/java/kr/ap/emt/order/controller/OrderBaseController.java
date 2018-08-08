@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,8 +54,6 @@ public class OrderBaseController extends AbstractViewController {
 	 */
 	protected void makeOrdProdSet(OrdEx ordEx, Model model){
 		/* 주문정보 */
-		Integer ordQtySum = 0;
-		Integer totalOrdOnlineProdCnt = 0;
 		Integer shipOrdOnlineProdCnt = 0;
 		Integer storeOrdOnlineProdCnt = 0;
 		BigDecimal finalOnlineSaleAmtPcurSum = new BigDecimal(0);
@@ -89,18 +88,22 @@ public class OrderBaseController extends AbstractViewController {
 					if(ordHistProdEx.getmPlusNOrdPromoSn() != null) {
                         if (storePickup) {
                             ordOnlineProdFo = getMPlusNPromoOnlineProd(ordHistProdEx, storePickupMNPromoMap);
+							storeOrdOnlineProdCnt++;
                         }
                         else {
                             ordOnlineProdFo = getMPlusNPromoOnlineProd(ordHistProdEx, shippingMNPromoMap);
+							shipOrdOnlineProdCnt++;
                         }
 					}
                     // 동시구매상품
 					else if(ordHistProdEx.getSameTimePurPromoSn() != null) {
                         if (storePickup) {
                             ordOnlineProdFo = getSameTimePurPromoOnlineProd(ordHistProdEx, storePickupSameTimePurPromoMap);
+							storeOrdOnlineProdCnt++;
                         }
                         else {
                             ordOnlineProdFo = getSameTimePurPromoOnlineProd(ordHistProdEx, shippingSameTimePurPromoMap);
+							shipOrdOnlineProdCnt++;
                         }
                     }
 					//온라인상품
@@ -111,31 +114,41 @@ public class OrderBaseController extends AbstractViewController {
                             ordOnlineProdFoMap.put(key, ordOnlineProdFo);
                             if (storePickup) {
                                 storePickupOrdOnlineProdList.add(ordOnlineProdFo);
+								storeOrdOnlineProdCnt++;
                             } else {
 								//뷰티포인트상품
 								if ("Y".equals(ordHistProdEx.getIntegrationMembershipExchYn())) {
 									shippingOrdOnlineBeautyPointProdList.add(ordOnlineProdFo);
+									shipOrdOnlineProdCnt++;
 								}
 								//활동포인트상품
 								else if ("Y".equals(ordHistProdEx.getActivityPointExchYn())) {
 									shippingOrdOnlineActivityPointProdList.add(ordOnlineProdFo);
+									shipOrdOnlineProdCnt++;
 								}
 								else{
-									shippingOrdOnlineProdList.add(ordOnlineProdFo);
+									if (!StringUtils.isEmpty(ordOnlineProdFo.getOrdHistProdTypeCode())
+										&& ("Ord".equals(ordOnlineProdFo.getOrdHistProdTypeCode())
+											|| "BulkDc".equals(ordOnlineProdFo.getOrdHistProdTypeCode())
+											|| "SameTimePur".equals(ordOnlineProdFo.getOrdHistProdTypeCode()))) {
+										shippingOrdOnlineProdList.add(ordOnlineProdFo);
+										shipOrdOnlineProdCnt++;
+									}
+
+									//사은품
+									//TODO: 사은품 다지인에 따리 수정이 필요함.
+									List<OrdHistProdEx> ordHistProdList = ordOnlineProdFo.getOrdHistProdList();
+									for (OrdHistProdEx o : ordHistProdList) {
+										//상품사은품
+										List<OrdHistProdAwardEx> ordHistProdAwardExList = o.getOrdHistProdAwardExList();
+										//상품프로모션사은품
+										List<OrdHistProdPromoAwardEx> ordHistProdPromoAwardExList = o.getOrdHistProdPromoAwardExList();
+									}
 								}
                             }
                         }
                     }
-
-                    if (storePickup) {
-                        storeOrdOnlineProdCnt++;
-                    } else {
-                        shipOrdOnlineProdCnt++;
-                    }
-
-                    totalOrdOnlineProdCnt++;
                     
-					ordQtySum += ordHistProdEx.getOrdQty();
 					finalOnlineSaleAmtPcurSum = finalOnlineSaleAmtPcurSum.add(ordHistProdEx.getFinalOnlineSaleAmtPcur());
 					
 					ordOnlineProdFo.addOrdHistProdEx(ordHistProdEx);
@@ -154,7 +167,7 @@ public class OrderBaseController extends AbstractViewController {
 		model.addAttribute("ordOtfExList", ordOtfExList);									                                	// 주문배송지시목록
 		model.addAttribute("ordUnitAwardOrdPromoExList", ordEx.getOrdHistEx().getOrdUnitAwardOrdPromoExList());									                                	// 주문배송지시목록
 
-		model.addAttribute("totalOrdOnlineProdCnt", totalOrdOnlineProdCnt);
+		model.addAttribute("totalOrdOnlineProdCnt", shipOrdOnlineProdCnt + storeOrdOnlineProdCnt);
 		model.addAttribute("shipOrdOnlineProdCnt", shipOrdOnlineProdCnt);
 		model.addAttribute("storeOrdOnlineProdCnt", storeOrdOnlineProdCnt);
 

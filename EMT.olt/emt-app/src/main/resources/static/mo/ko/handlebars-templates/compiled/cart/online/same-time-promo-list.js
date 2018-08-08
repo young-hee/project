@@ -36,11 +36,11 @@ this["AP"]["handlebars"]["cart"]["online"]["same-time-promo-list"] = Handlebars.
   return "			<div class=\"cart_item_box\">\n				<div class=\"cart_name_wrap\">\n					<span class=\"check_wrap\">\n						<input type=\"hidden\" name=\"chkBox\" id=\"chkBox"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
     + "\" value=\""
-    + alias2(alias1((depths[1] != null ? depths[1].onlineProdSn : depths[1]), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
     + "\" "
     + ((stack1 = helpers["if"].call(alias3,(helpers.ne || (depth0 && depth0.ne) || alias4).call(alias3,(depths[1] != null ? depths[1].saleDisplayStatus : depths[1]),"OnSale",{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(8, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "  "
-    + alias2((helpers.condition || (depth0 && depth0.condition) || alias4).call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depths[1] != null ? depths[1].saleDisplayStatus : depths[1]),"OnSale",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depths[1] != null ? depths[1].selectYn : depths[1]),"Y",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),"checked","",{"name":"condition","hash":{},"data":data}))
+    + alias2((helpers.condition || (depth0 && depth0.condition) || alias4).call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depths[1] != null ? depths[1].saleDisplayStatus : depths[1]),"OnSale",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depth0 != null ? depth0.selectYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),"checked","",{"name":"condition","hash":{},"data":data}))
     + ">\n						<label for=\"chkBox"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
     + "\">체크</label>\n					</span>\n					"
@@ -58,7 +58,7 @@ this["AP"]["handlebars"]["cart"]["online"]["same-time-promo-list"] = Handlebars.
     + "\"/>\n        			<input type=\"hidden\" name=\"cartProdSn\" value=\""
     + alias2(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
     + "\"/>\n        			<input type=\"hidden\" name=\"prdInfo_"
-    + alias2(alias1((depths[1] != null ? depths[1].onlineProdSn : depths[1]), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
     + "\" value=\""
     + alias2(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
     + "\"/>\n        			<input type=\"hidden\" name=\"saleDisplayStatus_"
@@ -100,7 +100,7 @@ this["AP"]["handlebars"]["cart"]["online"]["same-time-promo-list"] = Handlebars.
     + "\" class=\"thm_cart_item\" alt=\"\">\n";
 },"15":function(container,depth0,helpers,partials,data) {
     return "							<img src=\""
-    + container.escapeExpression((helpers.absolutePath || (depth0 && depth0.absolutePath) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"/images/cart/no_img.png.gif",{"name":"absolutePath","hash":{},"data":data}))
+    + container.escapeExpression((helpers.absolutePath || (depth0 && depth0.absolutePath) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"/images/cart/no_img.png",{"name":"absolutePath","hash":{},"data":data}))
     + "\" class=\"thm_cart_item\" alt=\"\">\n";
 },"17":function(container,depth0,helpers,partials,data,blockParams,depths) {
     return " "
@@ -179,7 +179,7 @@ this["AP"]["handlebars"]["cart"]["online"]["same-time-promo-list"] = Handlebars.
     + "\" alt=\"\"/></span>\n";
 },"46":function(container,depth0,helpers,partials,data) {
     return "								<span class=\"thm\"><img src=\""
-    + container.escapeExpression((helpers.absolutePath || (depth0 && depth0.absolutePath) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"/images/cart/no_img.png.gif",{"name":"absolutePath","hash":{},"data":data}))
+    + container.escapeExpression((helpers.absolutePath || (depth0 && depth0.absolutePath) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"/images/cart/no_img.png",{"name":"absolutePath","hash":{},"data":data}))
     + "\" alt=\"\"/></span>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;

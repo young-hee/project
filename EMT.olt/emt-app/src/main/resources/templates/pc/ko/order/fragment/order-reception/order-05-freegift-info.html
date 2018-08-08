@@ -3,16 +3,12 @@
 <dl id="ordUnit" th:if="${#lists.size(ordUnitAwardOrdPromoExList) > 0}">
 	<dt>
 		<span>보너스 혜택</span>
-		<button type="button" id="temp"><span class="sr_only">닫기</span></button>
+		<button type="button"><span class="sr_only">닫기</span></button>
 	</dt>
 
 	<script th:inline="javascript">
 		$( document ).ready(function() {
 			ordUnitInit();
-
-			$('#temp').off('click').on('click', function() {
-				AP.modal.alert("주문단위증정 프로모션 준비중입니다...")
-			});
 
 			//tab click event
 			$('[name=freebies]').off('click').on('click', function() {

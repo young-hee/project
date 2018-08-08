@@ -81,6 +81,7 @@
 
 			// 재전송 인증번호 받기
 			AP.mobileVerification.addListener( 're-request-verify-no', function (e) {
+				this._$target.find( '.confirm' ).prop( 'disabled', false );
 				this._mobileVerifSn = e.data.mobileVerifSn;
 				timer.stop();
 				timer.start();
@@ -182,8 +183,9 @@
 							var formData = new FormData( form );
 							AP.api.postStoreEventRequester( {}, formData ).done(function ( result ) {
 								this.dispatch( 'reserve-complete', { reserveNo: result['storeEventRequesterResult'].reserveNo } );
+
 							}.bind( this )).fail(function (e) {
-								console.log( 'error', e );
+								AP.modal.alert( AP.message.API_SAVE_ERROR );
 							}.bind( this )).always(function () {});
 						}
 					}.bind( this ));

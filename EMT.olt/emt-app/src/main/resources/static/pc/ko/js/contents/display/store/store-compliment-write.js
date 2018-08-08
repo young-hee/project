@@ -70,7 +70,11 @@
 			// 등록
 			this._$target.find( 'form.validate' ).validate({
 				submitHandler: function ( form ) {
-					AP.modal.alert( '등록하시겠습니까?' ).addListener( 'modal-close', function (e) {
+					var message = '등록하시겠습니까?';
+					if(this._$target.find('input[name="storeEvalSn"]').val() != ''){
+						message = '수정하시겠습니까?';
+					}
+					AP.modal.alert( message ).addListener( 'modal-close', function (e) {
 						if ( e.closeType == 'confirm' ) {
 							var formData = new FormData( form );
 							this._$target.find( '.ui_input_images' ).inputImages( 'extendFormData', formData );
@@ -84,17 +88,31 @@
 
 		_submit: function ( formData ) {
 			AP.login().done( function () {
-				this._api = AP.api.registStoreEval( {}, formData ).done(function () {
-					this.dispatch( 'submit-complete' );
-				}.bind( this )).fail(function ( xhr ) {
-					console.log( 'error' );
-					if ( xhr.errorCode === 'EAPI004' ) {
-						//존재하지 않는 회원
-						AP.login({
-							trigger: true
-						});
-					}
-				}.bind( this )).always(function () {}.bind( this ));
+				if(this._$target.find('input[name="storeEvalSn"]').val() == ''){
+					this._api = AP.api.registStoreEval( {}, formData ).done(function () {
+						this.dispatch( 'submit-complete' );
+					}.bind( this )).fail(function ( xhr ) {
+						console.log( 'error' );
+						if ( xhr.errorCode === 'EAPI004' ) {
+							//존재하지 않는 회원
+							AP.login({
+								trigger: true
+							});
+						}
+					}.bind( this )).always(function () {}.bind( this ));
+				}else{
+					this._api = AP.api.updateStoreEval( {}, formData ).done(function () {
+						this.dispatch( 'submit-complete' );
+					}.bind( this )).fail(function ( xhr ) {
+						console.log( 'error' );
+						if ( xhr.errorCode === 'EAPI004' ) {
+							//존재하지 않는 회원
+							AP.login({
+								trigger: true
+							});
+						}
+					}.bind( this )).always(function () {}.bind( this ));
+				}
 			}.bind( this ));
 		}
 	});

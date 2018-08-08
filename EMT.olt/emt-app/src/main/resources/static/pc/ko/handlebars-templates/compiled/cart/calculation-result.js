@@ -77,15 +77,15 @@ this["AP"]["handlebars"]["cart"]["calculation-result"] = Handlebars.template({"1
 },"19":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "					<dl>\n						<dt>뷰티포인트 상품(<em id=\"calMemberPrdCnt\">0</em>개)</dt>\n						<dd>"
+  return "					<dl>\n						<dt>뷰티포인트교환 상품(<em id=\"calMemberPrdCnt\">0</em>개)</dt>\n						<dd>"
     + container.escapeExpression((helpers.numberFormat || (depth0 && depth0.numberFormat) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = ((stack1 = (depth0 != null ? depth0.cartEx : depth0)) != null ? stack1.calculationResult : stack1)) != null ? stack1.exchIPointSum : stack1),{"name":"numberFormat","hash":{},"data":data}))
-    + "P</dd>\n					</dl>\n";
+    + "원</dd>\n					</dl>\n";
 },"21":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "					<dl>\n						<dt>진주알상품 상품(<em id=\"calActivityPrdCnt\">0</em>개)</dt>\n						<dd>"
+  return "					<dl>\n						<dt>진주알교환 상품(<em id=\"calActivityPrdCnt\">0</em>개)</dt>\n						<dd>"
     + container.escapeExpression((helpers.numberFormat || (depth0 && depth0.numberFormat) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = ((stack1 = (depth0 != null ? depth0.cartEx : depth0)) != null ? stack1.calculationResult : stack1)) != null ? stack1.exchAPointSum : stack1),{"name":"numberFormat","hash":{},"data":data}))
-    + "알</dd>\n					</dl>\n";
+    + "원</dd>\n					</dl>\n";
 },"23":function(container,depth0,helpers,partials,data) {
     var stack1;
 

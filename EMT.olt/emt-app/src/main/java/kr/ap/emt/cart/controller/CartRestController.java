@@ -61,7 +61,7 @@ public class CartRestController extends CartBaseController{
 	 */
 	@GetMapping("/getLayerPage")
 	@ResponseBody
-	public ResponseEntity<?> getLayerPage(Long cartProdSn) {
+	public ResponseEntity<?> getLayerPage(Long cartProdSn, Long prodSn) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		try {
 			if(Long.valueOf(cartProdSn) != null){
@@ -69,7 +69,8 @@ public class CartRestController extends CartBaseController{
 				List<ProdEx> apiProdExList = cartApi.getOnlineProdUnitVariationProds(cartProdSn);
 				if(apiProdExList.size() > 0 ){
 					for(ProdEx pe : apiProdExList){
-						if( "OnSale".equals(pe.getSaleDisplayStatus()) ||
+						if(!prodSn.equals(pe.getProdSn()) &&
+							"OnSale".equals(pe.getSaleDisplayStatus()) ||
 							"Exhaustion".equals(pe.getSaleDisplayStatus()) ||
 							"OutOfStock".equals(pe.getSaleDisplayStatus()) ){
 							prodExList.add(pe);

@@ -211,12 +211,10 @@ this["AP"]["handlebars"]["display"]["product-list"]["item"] = Handlebars.templat
 },"51":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.colorGroups : depth0)) != null ? stack1.length : stack1),">",0,{"name":"xif","hash":{},"fn":container.program(52, data, 0),"inverse":container.program(54, data, 0),"data":data})) != null ? stack1 : "");
+  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.colorCnt : depth0),">",0,{"name":"xif","hash":{},"fn":container.program(52, data, 0),"inverse":container.program(54, data, 0),"data":data})) != null ? stack1 : "");
 },"52":function(container,depth0,helpers,partials,data) {
-    var stack1;
-
-  return "								<p class=\"color_name\">"
-    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.colorGroups : depth0)) != null ? stack1.length : stack1), depth0))
+    return "								<p class=\"color_name\">"
+    + container.escapeExpression(container.lambda((depth0 != null ? depth0.colorCnt : depth0), depth0))
     + " colors</p>\n";
 },"54":function(container,depth0,helpers,partials,data) {
     return "								<p class=\"color_name\">"

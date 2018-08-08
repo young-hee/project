@@ -3,12 +3,12 @@
 	<div class="item">
 		<div class="item_images">
 			<!--/* 대표 이미지 */-->
-			<a href="{{ productDetailPath this.onlineProdSn }}" class="lazy_load_wrap first_img">
+				<a href="{{ productDetailPath this.onlineProdSn }}" class="lazy_load_wrap first_img">
 				{{#xif ../prodListUnitCode '==' 'OnlineProd'}}
 					<img class="lazy_load" src="" data-src="{{ this.onlineProdImages.0.imgUrl}}" alt="{{ this.onlineProdName }}">
 				{{/xif}}
 				{{#xif ../prodListUnitCode '==' 'Prod'}}
-					<img class="lazy_load" data-src="{{ this.prodImages.0.imgUrl}}" alt="{{ this.onlineProdName }}></a>
+					<img class="lazy_load" data-src="{{ this.prodImages.0.imgUrl}}" alt="{{ this.products.0.prodName}}">
 				{{/xif}}
 			</a>
 		</div>
@@ -26,17 +26,23 @@
 			<!--/* 상품명 */-->
 			<div class="title_area">
 				<h3 class="h_title">{{ this.onlineProdName }}</h3>
+				{{#xif ../prodListUnitCode '==' 'Prod'}}
+				<div class="item_option">
+					<p class="color_name">{{ this.products.0.prodName }}</p>
+				</div>
+			{{/xif}}
 			</div>
 			<!--/* color 옵션 */-->
 			<!-- 상품 옵션 영역 7개 이상 -->
-			{{#if this.productCount }}
-				{{#xif this.productCount '>' 1 }}
-					<div class="item_option">
-						<p class="color_name">{{ this.productCount }} colors</p>
-					</div>
-				{{/xif}}
-			{{/if}}
-
+			{{#xif ../prodListUnitCode '==' 'OnlineProd'}}
+				{{#if this.productCount }}
+					{{#xif this.productCount '>' 1 }}
+						<div class="item_option">
+							<p class="color_name">{{ this.productCount }} colors</p>
+						</div>
+					{{/xif}}
+				{{/if}}
+			{{/xif}}
 			<!--/* 가격,장바구니 */-->
 			<div class="price_area">
 				{{#with (calc this.onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' this.onlineProdPriceSummary.maxMemberLevelDiscountRate '+' this.onlineProdPriceSummary.maxOnlineMemberDiscountRate) as |maxRate|}}

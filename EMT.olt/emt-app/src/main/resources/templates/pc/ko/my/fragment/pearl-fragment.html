@@ -1,6 +1,6 @@
 <th:block layout:fragment="pearl-list">
 	<!--/* Start : 목록내용이 있을경우 */-->
-	<div th:if="${activityPointInfo.totalCount != 0}" class="pbody ui_multiple_date_picker date_picker_gift entry-point" style="right: 0; position: absolute; width: 100%; top: 342px; border: none;">
+	<div th:if="${activityPointInfo.totalCount != 0}" class="pbody ui_multiple_date_picker date_picker_gift entry-point">
 		<!--내역이 있을때만 보인다-->
 		<div class="date_pic_right">
 			<div><span>적립진주알</span> <strong class="num" th:text="${#IntegUtil.toCommaNumber(activityPointInfo.savingPoint)}">7,000</strong><span>알</span></div>
@@ -46,7 +46,7 @@
 		</table>
 	</div>
 	
-	<div class="pbody pagination" th:if="${not #lists.isEmpty(activityPointInfo.histories)}" th:with="pageVo=${#IntegUtil.initPageInfo(activityPointInfo, 10)}">
+	<div class="pbody pagination" th:with="pageVo=${#IntegUtil.initPageInfo(activityPointInfo, 10)}">
 		<a href="javascript:;" onclick="more(1)" class="navi first" th:classappend="${pageVo.isFirstPage}? disabled : null" th:disabled="${pageVo.isFirstPage}? disabled : null">처음</a>
 		<a href="javascript:;" th:onclick="'more(' + ${pageVo.prePage} + ')'" class="navi prev" th:classappend="${!pageVo.hasPrePage}? disabled : null" th:disabled="${!pageVo.hasPrePage}? 'disabled' : null">이전</a>
 		<th:block th:each="page : ${pageVo.pageList}">

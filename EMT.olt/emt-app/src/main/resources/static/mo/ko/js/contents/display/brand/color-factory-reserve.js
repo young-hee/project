@@ -80,6 +80,7 @@
 
 			// 재전송 인증번호 받기
 			AP.mobileVerification.addListener( 're-request-verify-no', function (e) {
+				this._$target.find( '.certification_btn' ).prop( 'disabled', false );
 				this._mobileVerifSn = e.data.mobileVerifSn;
 				timer.stop();
 				timer.start();
@@ -181,7 +182,7 @@
 								this._openReserveComplete( result );
 
 							}.bind( this )).fail(function (e) {
-								console.log( 'error', e );
+								AP.modal.alert( AP.message.API_SAVE_ERROR );
 							}.bind( this )).always(function () {});
 						}
 					}.bind( this ));

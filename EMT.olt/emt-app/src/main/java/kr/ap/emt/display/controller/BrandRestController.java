@@ -647,19 +647,21 @@ public class BrandRestController extends AbstractController {
             String[] activityStartDate = req.getParameterValues("activityStartDate");
             String[] activityEndDate = req.getParameterValues("activityEndDate");
             SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
-           
-            for(int index = 0; index < activityType.length; index++) {
-            	            	
-            	requestHist.setActivityType(activityType[index]);//activityType);
-                requestHist.setActivityBodyText(activityBodyText[index]);//activityBodyText);
-                requestHist.setActivityName(activityName[index]);//activityName);
-                requestHist.setActivityStartDate(sf.parse(activityStartDate[index]));//activityStartDate);
-                requestHist.setActivityEndDate(sf.parse(activityEndDate[index]));//activityEndDate);
-            	
-                requstHistList.add(index, requestHist);
-            }
+
+            if(activityType.length > 0) {
+		        for(int index = 0; index < activityType.length; index++) {
+		            	            	
+		        	requestHist.setActivityType(activityType[index]);//activityType);
+		            requestHist.setActivityBodyText(activityBodyText[index]);//activityBodyText);
+		            requestHist.setActivityName(activityName[index]);//activityName);
+		            requestHist.setActivityStartDate(sf.parse(activityStartDate[index]));//activityStartDate);
+		            requestHist.setActivityEndDate(sf.parse(activityEndDate[index]));//activityEndDate);
+		        	
+		            requstHistList.add(index, requestHist);
+		        }
+		        supportersRequester.setSupportersRequesterHist(requstHistList); 
+	        }
             
-            supportersRequester.setSupportersRequesterHist(requstHistList); 
             if(!("Temp").equals(supportersRequester.getRequestStatus())){
 	            if(req.getParameter("check_all")!= null || 
 	            		(req.getParameter("check_agree_1").equals("on") && req.getParameter("check_agree_2").equals("on") 

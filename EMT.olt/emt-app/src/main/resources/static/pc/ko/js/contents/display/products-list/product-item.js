@@ -136,7 +136,14 @@
 			
 			//묶음 상품일 경우
 			if( this._data.prodTypeCode == 'BulkFixedProd' ){
-				cartProdExPostList[0].cartBulkIncludedProdExList = [];
+				cartProdExPostList[0].cartBulkIncludedProdExList = []; 
+				$.each(this._data.bulkIncludedProds, function(idx, obj){
+					cartProdExPostList[0].cartBulkIncludedProdExList.push({
+						 bulkDcIncludedProdGrpSn : obj.bulkDcIncludedProdGrpSn
+						,includedProdSn : obj.prodSn
+						,includedProdQty : obj.includedProdQty
+					});
+				});
 			}
 			
 			//장바구니 저장 api

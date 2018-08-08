@@ -3,9 +3,9 @@ this["AP"]["handlebars"] = this["AP"]["handlebars"] || {};
 this["AP"]["handlebars"]["order"] = this["AP"]["handlebars"]["order"] || {};
 
 this["AP"]["handlebars"]["order"]["order-unit-award-info"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
-    var stack1;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.promoSn : depth0),"==",292,{"name":"xif","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(14, data, 0),"data":data})) != null ? stack1 : "");
+  return ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.memberOnlyYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.tgtMemberCode : depth0),"FirstPur",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(14, data, 0),"data":data})) != null ? stack1 : "");
 },"2":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 

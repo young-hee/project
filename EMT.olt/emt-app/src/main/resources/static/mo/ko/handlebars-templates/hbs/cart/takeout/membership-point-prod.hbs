@@ -22,11 +22,11 @@
 			<div class="cart_name_wrap">
 				<span class="check_wrap">
 					{{#if (and (eq ../onlineProdSn null) (eq prodEx.prodTypeCode 'FreeGift') ) }}
-						<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{prodEx.prodSn}}" pointExch="membership" point="{{ exchPoint }}" value="{{../onlineProdSn}}" {{#if (and (ne ../saleDisplayStatus 'OnSale')(ne ../saleDisplayStatus null) ) }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq ../selectYn 'Y') ) 'checked' ''}}>
+						<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{ prodEx.prodSn }}" pointExch="membership" point="{{ exchPoint }}" value="{{ prodEx.prodSn }}" {{#if (and (ne ../saleDisplayStatus 'OnSale')(ne ../saleDisplayStatus null) ) }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}>
 					{{else}}
-						<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{prodEx.prodSn}}" pointExch="membership" point="{{ exchPoint }}" value="{{../onlineProdSn}}" {{#if (and (ne ../saleDisplayStatus 'OnSale')) }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq ../selectYn 'Y') ) 'checked' ''}}>
+						<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{ prodEx.prodSn }}" pointExch="membership" point="{{ exchPoint }}" value="{{ prodEx.prodSn }}" {{#if (and (ne ../saleDisplayStatus 'OnSale')) }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}>
 					{{/if}}
-					<label for="takeoutChkBox{{prodEx.prodSn}}">체크</label>
+					<label for="takeoutChkBox{{ prodEx.prodSn }}">체크</label>
 				</span>
 				{{#xif prodEx.repProdImgEx '!=' null }} <img src="{{ prodEx.repProdImgEx.imgUrl }}" class="thm_cart_item" alt=""> {{/xif}}
 				{{#xif prodEx.repProdImgEx '==' null }}
@@ -34,7 +34,7 @@
 						<img src="{{ ../repOnlineProdImgEx.imgUrl }}" class="thm_cart_item" alt="">
 					{{/xif}}
 					{{#xif ../repOnlineProdImgEx '==' null }}
-						<img src="{{ absolutePath '/images/cart/no_img.png.gif' }}" class="thm_cart_item" alt="">
+						<img src="{{ absolutePath '/images/cart/no_img.png' }}" class="thm_cart_item" alt="">
 					{{/xif}}
 				{{/xif}}
 				<div class="cart_table_cell">
@@ -45,7 +45,7 @@
 			<div class="cart_item_info">
 				<input type="hidden" name="takeoutMembershipPrdSn" value="{{ prodEx.prodSn }}"/>
 				<input type="hidden" name="cartProdSn" value="{{ cartProdSn }}"/>
-				<input type="hidden" name="takeoutPrdInfo_{{ ../onlineProdSn }}" value="{{ cartProdSn }}"/>
+				<input type="hidden" name="takeoutPrdInfo_{{ prodEx.prodSn }}" value="{{ cartProdSn }}"/>
 				<input type="hidden" name="saleDisplayStatus_{{ prodEx.prodSn }}" value="{{ prodEx.saleDisplayStatus }}"/>
 				<!--/* 품절/조기소진일경우 버튼제어 X */-->
 				{{#if (ne prodEx.saleDisplayStatus 'OnSale') }}
@@ -112,7 +112,7 @@
 						{{#if (ne awardProdEx.repProdImgEx null) }}
 							<span class="thm"><img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/></span>
 						{{else}}
-							<span class="thm"><img src="{{ absolutePath '/images/cart/no_img.png.gif' }}" alt=""/></span>
+							<span class="thm"><img src="{{ absolutePath '/images/cart/no_img.png' }}" alt=""/></span>
 						{{/if}}
 						<span class="info">
 							<span>사은품 : {{ awardProdEx.prodName }}</span>

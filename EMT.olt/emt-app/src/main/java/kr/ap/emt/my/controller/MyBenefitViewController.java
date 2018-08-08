@@ -54,9 +54,9 @@ public class MyBenefitViewController extends AbstractController {
 	public String myCouponList(Model model) {
 
 		//종료된쿠폰최대조회기간 90일
-//		MemberKeepingCouponCount memberKeepingCouponsCount = couponApi.getMemberKeepingCouponsCount(getMemberSn(), 90L);
-//		model.addAttribute("availCnt", memberKeepingCouponsCount.getAvailCnt());
-//		model.addAttribute("expCnt", memberKeepingCouponsCount.getExpCnt());
+		MemberKeepingCouponCount memberKeepingCouponsCount = couponApi.getMemberKeepingCouponsCount(getMemberSn(), 90L);
+		model.addAttribute("availCnt", memberKeepingCouponsCount.getAvailCnt());
+		model.addAttribute("expCnt", memberKeepingCouponsCount.getExpCnt());
 
 		/**
 		 * Mobile

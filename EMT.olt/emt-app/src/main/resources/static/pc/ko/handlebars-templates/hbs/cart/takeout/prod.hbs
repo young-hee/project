@@ -9,13 +9,13 @@
 		<div class="item_info">
 			<input type="hidden" name="takeoutPrdSn" value="{{prodEx.prodSn}}"/>
 			<input type="hidden" name="cartProdSn" value="{{cartProdSn}}"/>
-			<input type="hidden" name="takeoutPrdInfo_{{../onlineProdSn}}" value="{{cartProdSn}}"/>
-			<input type="hidden" name="saleDisplayStatus_{{prodEx.prodSn}}" value="{{prodEx.saleDisplayStatus}}"/>
+			<input type="hidden" name="takeoutPrdInfo_{{ prodEx.prodSn }}" value="{{cartProdSn}}"/>
+			<input type="hidden" name="saleDisplayStatus_{{ prodEx.prodSn }}" value="{{prodEx.saleDisplayStatus}}"/>
 			<!--/* 상품 선택 */-->
 			<div class="item_thumb">
 				<div class="check_wrap">
-					<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{prodEx.prodSn}}" value="{{../onlineProdSn}}" {{#if (ne ../saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq ../selectYn 'Y') ) 'checked' ''}}>
-					<label for="takeoutChkBox{{prodEx.prodSn}}">
+					<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{ prodEx.prodSn }}" value="{{ prodEx.prodSn }}" {{#if (ne ../saleDisplaySatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}>
+					<label for="takeoutChkBox{{ prodEx.prodSn }}">
 						{{!-- 이미지 순위선정 : 1.단위상품 > 2.온라인상품 > noImage --}}
 						{{#xif prodEx.repProdImgEx '!=' null }} <img src="{{ prodEx.repProdImgEx.imgUrl }}" alt=""> {{/xif}}
 						{{#xif prodEx.repProdImgEx '==' null }}
@@ -86,27 +86,27 @@
 
 			<!--/* 포인트 및 가격 */-->
 			<div class="price">
-				{{#xif prodEx.saleDisplayStatus '==' 'OnSale' }}
-					{{#xif this.calculationResultYn '==' 'Y'}}
-						{{#xif this.calculationResultProduct.finalOnlineSalesAmountInfo '!=' null }}
-							<span class="strong"><b>{{numberFormat this.calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}</b>원</span>
-						{{/xif}}
-						{{#xif this.calculationResultProduct.productSaleAmountInfo '!=' null }}
-							{{#xif this.calculationResultProduct.productSaleAmountInfo.standardCurrency.amount '!=' this.calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}
+				{{#if (eq prodEx.saleDisplayStatus 'OnSale')}}
+					{{#if (eq calculationResultYn 'Y') }}
+						{{#if (ne calculationResultProduct.finalOnlineSalesAmountInfo null) }}
+							<span class="strong"><b>{{numberFormat calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}</b>원</span>
+						{{/if}}
+						{{#if (ne calculationResultProduct.productSaleAmountInfo null) }}
+							{{#if (ne calculationResultProduct.productSaleAmountInfo.standardCurrency.amount this.calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount) }}
 								<del><b>{{numberFormat this.calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}</b>원</del>
-							{{/xif}}
-						{{/xif}}
-					{{/xif}}
-					{{#xif this.calculationResultYn '==' 'N'}}
-						{{#xif this.prodEx.salePrice '!=' null }}
+							{{/if}}
+						{{/if}}
+					{{/if}}
+					{{#if (eq calculationResultYn 'N') }}
+						{{#if (ne prodEx.salePrice null) }}
 							<span class="strong"><b>{{numberFormat (calc this.prodEx.salePrice '*' this.cartProdQty) }}</b>원</span>
-						{{/xif}}
-					{{/xif}}
-				{{/xif}}
-				{{#if (and (eq prodEx.saleDisplayStatus 'OutOfStock')(ne prodEx.prodTypeCode 'Presale'))}}
+						{{/if}}
+					{{/if}}
+				{{/if}}
+				{{#if (eq prodEx.saleDisplayStatus 'OutOfStock') }}
 					<em>[일시품절]</em>
 				{{/if}}
-				{{#if (and (eq prodEx.saleDisplayStatus 'Exhaustion')(eq prodEx.prodTypeCode 'Presale'))}}
+				{{#if (eq prodEx.saleDisplayStatus 'Exhaustion') }}
 					<em>[예약판매수량소진]</em>
 				{{/if}}
 				{{#if (eq prodEx.saleDisplayStatus 'WaitingSale') }}
@@ -158,6 +158,7 @@
 
 	<!--/* 그룹상품 */-->
 	{{#xif singleProdYn '==' 'N'}}
+
 		<div class="item_info">
 			<!--/* 상품 선택 */-->
 			<div class="item_thumb">
@@ -270,10 +271,10 @@
 								<span>{{numberFormat (calc prodEx.salePrice '*' cartProdEx.cartProdQty) }}원</span>
 							{{/if}}
 						{{/if}}
-						{{#if (and (eq prodEx.saleDisplayStatus 'OutOfStock')(ne prodEx.prodTypeCode 'Presale'))}}
+						{{#if (eq prodEx.saleDisplayStatus 'OutOfStock') }}
 							<em>[일시품절]</em>
 						{{/if}}
-						{{#if (and (eq prodEx.saleDisplayStatus 'Exhaustion')(eq prodEx.prodTypeCode 'Presale'))}}
+						{{#if (eq prodEx.saleDisplayStatus 'Exhaustion') }}
 							<em>[예약판매수량소진]</em>
 						{{/if}}
 						{{#if (eq prodEx.saleDisplayStatus 'WaitingSale') }}

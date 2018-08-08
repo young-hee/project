@@ -11,18 +11,18 @@
 			<div class="item_wrap">
 				<input type="hidden" name="takeoutMembershipPrdSn" value="{{ prodEx.prodSn }}"/>
 				<input type="hidden" name="cartProdSn" value="{{ cartProdSn }}"/>
-				<input type="hidden" name="takeoutPrdInfo_{{ ../onlineProdSn }}" value="{{ cartProdSn }}"/>
+				<input type="hidden" name="takeoutPrdInfo_{{ prodEx.prodSn }}" value="{{ cartProdSn }}"/>
 				<input type="hidden" name="saleDisplayStatus_{{ prodEx.prodSn }}" value="{{ prodEx.saleDisplayStatus }}"/>
 				<div class="item_info">
 					<!--/* 상품 선택 */-->
 					<div class="item_thumb">
 						<div class="check_wrap">
 							{{#if (and (eq ../onlineProdSn null) (eq prodEx.prodTypeCode 'FreeGift') ) }}
-								<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{prodEx.prodSn}}" pointExch="membership" point="{{ exchPoint }}" value="{{../onlineProdSn}}" {{#if (and (ne ../saleDisplayStatus 'OnSale')(ne ../saleDisplayStatus null) ) }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq ../selectYn 'Y') ) 'checked' ''}}>
+								<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{ prodEx.prodSn }}" pointExch="membership" point="{{ exchPoint }}" value="{{ prodEx.prodSn }}" {{#if (and (ne ../saleDisplayStatus 'OnSale')(ne ../saleDisplayStatus null) ) }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}>
 							{{else}}
-								<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{prodEx.prodSn}}" pointExch="membership" point="{{ exchPoint }}" value="{{../onlineProdSn}}" {{#if (and (ne ../saleDisplayStatus 'OnSale')) }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq ../selectYn 'Y') ) 'checked' ''}}>
+								<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{ prodEx.prodSn }}" pointExch="membership" point="{{ exchPoint }}" value="{{ prodEx.prodSn }}" {{#if (and (ne ../saleDisplayStatus 'OnSale')) }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}>
 							{{/if}}
-							<label for="takeoutChkBox{{prodEx.prodSn}}">
+							<label for="takeoutChkBox{{ prodEx.prodSn }}">
 								{{#xif prodEx.repProdImgEx '!=' null }} <img src="{{ prodEx.repProdImgEx.imgUrl }}" alt=""> {{/xif}}
 								{{#xif prodEx.repProdImgEx '==' null }}
 									{{#xif ../repOnlineProdImgEx '!=' null }}

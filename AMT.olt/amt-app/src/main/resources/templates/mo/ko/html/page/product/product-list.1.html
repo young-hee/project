@@ -30,21 +30,10 @@
 					<!-- 상품 정렬 선택 버튼 -->
 						<a href="javascript:;" class="btn_align">상품 정렬 선택</a><!--  default : 리스트형 /  갤러리형 보기 : "gallery" 클래스 추가 -->
 
-						<a href="javascript:;" class="btn_filter on">필터</a><!-- 필터 선택시 "on" 클래스 추가 -->
+						<a href="javascript:;" class="btn_filter">필터</a><!-- 필터 선택시 "on" 클래스 추가 -->
 				</div>
 
 			</div>
-
-			<script type="text/javascript">
-			 // 스크롤 시 탭 상단에 fixed
-				$(window).scroll(function() {
-					if(window.pageYOffset >= $(".cate_prd_wrap01").offset().top) {
-						$(".sort_filter_wrap").addClass("fixed");
-					} else {
-						$(".sort_filter_wrap").removeClass("fixed");
-					}
-				});
-			</script>
 			
 			<!-- // 필터링 영역 -->
 
@@ -512,35 +501,22 @@
 				</li>
 			</ul>
 			<!-- // 상품리스트 보기 : 리스트 or 갤러리 -->
-
-			<script type="text/javascript">
-				/* 상품리스트 보기 : 리스트 or 갤러리, 버튼 */
-				$(".btn_align").on('click', function(){
-					if($(".cate_prd_wrap01 .product_list_new, .cate_prd_wrap01 .btn_align").hasClass('gallery')){
-						$(".cate_prd_wrap01 .product_list_new, .cate_prd_wrap01 .btn_align").removeClass('gallery');
-						
-					}else{
-						$(".cate_prd_wrap01 .product_list_new, .cate_prd_wrap01 .btn_align").addClass('gallery');
-					}
-				});
-			</script>
 		</div>
 
-		<div class="loading" style="height:50px;"> <!-- 로딩이 들어가야 하는 영역 높이값 inline으로..-->
+		<div class="loading" style="height:200px;"> <!-- 로딩이 들어가야 하는 영역 높이값 inline으로..-->
 			<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
 		</div>
 		<!--/* 상품목록 없을때 */-->
-		<div class="section no_product">
+		<div class="section no_product" style="display: none">
 			<p class="text_center">더 좋은 상품을 준비중입니다.</p>
 		</div>
 	</div>
-
 </div>
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
-	<script>
-		$('.slide').ixSlideMax();
+	<script type="text/javascript">
+
 	</script>
 </th:block>
 

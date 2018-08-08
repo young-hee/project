@@ -232,6 +232,18 @@
 					activityPointExchYn: activityPointExchYn
 				});
 			});
+			
+			//묶음 상품일 경우
+			if( this._defaultModel.prodTypeCode == 'BulkFixedProd' ){
+				cartProdExPostList[0].cartBulkIncludedProdExList = []; 
+				$.each(this._defaultModel.bulkIncludedProds, function(idx, obj){
+					cartProdExPostList[0].cartBulkIncludedProdExList.push({
+						 bulkDcIncludedProdGrpSn : obj.grpSn
+						,includedProdSn : obj.prodSn
+						,includedProdQty : obj.includedProdQty
+					});
+				});
+			}
 
 			if ( products.length ) {
 				AP.api.buyNowCartProd( null, JSON.stringify({cartProdExPostList: cartProdExPostList})).done( function ( result ) {
@@ -264,6 +276,18 @@
 					activityPointExchYn: activityPointExchYn
 				});
 			});
+			
+			//묶음 상품일 경우
+			if( this._defaultModel.prodTypeCode == 'BulkFixedProd' ){
+				cartProdExPostList[0].cartBulkIncludedProdExList = []; 
+				$.each(this._defaultModel.bulkIncludedProds, function(idx, obj){
+					cartProdExPostList[0].cartBulkIncludedProdExList.push({
+						 bulkDcIncludedProdGrpSn : obj.grpSn
+						,includedProdSn : obj.prodSn
+						,includedProdQty : obj.includedProdQty
+					});
+				});
+			}
 			
 			if ( products.length ) {
 				//장바구니 저장 api

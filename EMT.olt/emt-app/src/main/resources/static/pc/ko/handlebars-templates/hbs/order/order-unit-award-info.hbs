@@ -1,7 +1,7 @@
 <dd>
 	<div class="cont freebies">
 		{{#each this.list}}
-			{{#xif this.promoSn '==' 292}}
+			{{#if (and (eq this.memberOnlyYn 'Y')(eq this.tgtMemberCode 'FirstPur'))}}
 				<div class="title_area">
 					<h4 class="h_title sub">첫 구매 사은품</h4>
 				</div>
@@ -170,7 +170,7 @@
 				<div class="order_btns"> <!-- 디폴트 히든값 / 라디오버튼 선택 시 버튼 활성화 -->
 					<button type="button" class="btn_lg_neutral">선택 취소</button>
 				</div>
-			{{/xif}}
+			{{/if}}
 		{{/each}}
 	</div>
 </dd>
