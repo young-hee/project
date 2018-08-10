@@ -14,7 +14,7 @@
 					<div th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
 						<dl>
 							<dt th:text="${session.LOGIN_USER.member.name.name1} + ' 님의 진주알'"></dt>
-							<dd><strong th:text="${session.LOGIN_USER.member.activityPoint}">9,999</strong>알</dd>
+							<dd><strong th:text="${#IntegUtil.toCommaNumber(pealPoint.availActivityPoint)}">9,999</strong>알</dd>
 						</dl>
 					</div>
 					<div th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">

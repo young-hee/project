@@ -101,9 +101,9 @@
 
 /* 쿠폰,혜택 */
 .coupon_overview .ui_tab>.tab_contents, .coupon_overview .ui_tab .tab_cont {margin-top:0;} /* 쿠폰존 */
-.login_area {min-height:187px; padding:35px 0 42px; background:#fff; text-align:center; border-bottom:1px solid #d1d1d6;}
+.login_area {min-height:112px; padding:35px 0 42px; background:#fff; text-align:center; border-bottom:1px solid #d1d1d6;}
 .login_area p {margin-bottom:24px; color:#000; font-size:20px;}
-.login_area a {width:332px; height:63px; font-size:30px; border-radius:3px;}
+.login_area a.btn_login {width:332px; height:63px; font-size:30px; border-radius:3px; color:#fff; background:#7a31ff; line-height:63px; font-weight:300;}
 .grade_area {padding:62px 0 53px; background:#fff; border-bottom:1px solid #d1d1d6;}
 .grade_area .inner_wrap {padding:0 22px;}
 .grade_area .member_grade {min-height:72px; padding:19px 0 0 88px; color:#000; font-size:32px;}
@@ -119,12 +119,14 @@
 .level_05 {background:url(/pc/ko/images/coupon/grade_05.png) no-repeat 0 0;}
 .level_05 strong {color:#ffc000;}
 
-.coupon_state {margin-top:-4px; padding-bottom:7px; color:#000; font-size:38px;}
-.coupon_state a {color:#782fff; font-size:24px;}
+.coupon_state {overflow:hidden; font-size:38px;}
+.coupon_state .btn_mychk {margin-top:17px; color:#782fff; font-size:24px; padding:0 20px 0 0; position:relative;}
+.coupon_state .btn_mychk:after{content:''; width:10px; height:18px; margin-top:-9px; background:url(/pc/ko/images/common/arrow_coupon.png) 0 0 no-repeat; position:absolute; top:50%; right:0; display:inline-block;}
 .couponzone {margin-top:40px;}
-.couponzone .section_boxing {margin-top:20px;}
+.couponzone .section_boxing {margin-top:30px;}
+.couponzone .section_boxing + .section_boxing {margin-top:0;}
 .couponzone .section_boxing:first-child {margin-top:4px;}
-.couponzone .page_title, .couponzone .title_area {position:relative; padding:12px 0 10px;}
+.couponzone .page_title, .couponzone .title_area {position:relative; padding:20px 0;}
 .couponzone .page_title .h_title, .couponzone .title_area .h_title {color:#000;}
 .couponzone .page_title .tooltip_box, .couponzone .title_area .tooltip_box {position:absolute; top:16px; right:0;}
 
@@ -151,6 +153,16 @@
 .coupon_table tr:first-child tbody th, .coupon_table tr:first-child tbody td {border-top:none;}
 .coupon_table .spe {padding:0; background:#782fff;}
 .coupon_overview .banner_couponzone {background:#f7f8f9; border-top:1px solid #d1d1d6; border-bottom:1px solid #d1d1d6; text-align:center;}
+.coupon_table + .benefit_more {overflow:hidden; margin-top:30px; text-align:right;}
+
+.coupon_overview .tab_menu_wrap {width:100%; height:59px; background:#333; border-bottom:1px solid #999; position:relative;}
+.coupon_overview .tab_menu_wrap .tab_menu {width:1200px; margin:0 auto; padding:20px 10px 19px;}
+.coupon_overview .tab_menu_wrap .tab_menu > ul > li > a {font-size:17px; color:#bfbfbf;}
+.coupon_overview .tab_menu_wrap .tab_menu > ul > li.on > a {color:#fff;}
+.coupon_overview .tab_contents {}
+.coupon_overview .tab_cont {}
+.coupon_overview .tab_cont + .tab_cont {}
+
 
 /* VIP 라운지 */
 .viplounge {}
@@ -171,13 +183,13 @@
 .banner_lounge>.boxing {margin-top:1px; background:#000;}
 .banner_lounge .msg {color:#c2c2c2; font-size:30px;}
 .banner_lounge .msg>strong {color:#fff; font-weight:normal;}
-.banner_lounge .type1 {min-height:119px; padding:44px 0; background:#782fff;}
+.banner_lounge .type1 {min-height:35px; padding:40px 0 41px; background:#782fff;}
 .banner_lounge .type2 {background:#1c1430;}
 .banner_lounge .type3 {background:#000;}
 
 /* 출석체크 */
 .banner_checkzon {}
-.banner_checkzon li {text-align:center;}
+.banner_checkzon li {text-align:center; background:#e8ecef;}
 .banner_checkzon li:nth-child(even) {background:#fff;}
 
 .checkzone .overview_notice {margin-top:50px;}
@@ -194,11 +206,12 @@
 .attendance_calendar .attendance_graph {height:110px; padding:0 30px;}
 .attendance_calendar .attendance_graph .graph {position:relative; top:45px; margin-right:220px; padding:0;}
 .attendance_calendar .attendance_graph .graph .bar {width:100%; height:11px; border-radius:6px; box-shadow:inset 0 1px 3px rgba(217,217,217,.8); background-color:#fff;}
-.attendance_calendar .attendance_graph .current {position:absolute; top:0; left:0; width:50%; height:11px; border-radius:6px 0 0 5px; background-color:#7052ce; box-shadow:inset 0 1px 3px rgba(95,70,175,1);}
+.attendance_calendar .attendance_graph .current {position:absolute; top:0; left:0; width:50%; height:11px; border-radius:6px 0 0 5px; background-color:#782fff; box-shadow:inset 0 1px 3px rgba(95,70,175,1);}
 .attendance_calendar .attendance_graph .percent {margin-top:-4px; padding-top:16px; font-size:18px; color:#782fff; text-align:right; font-weight:bold;}
 .attendance_calendar .attendance_graph .percent .tl {color:#888;}
 .attendance_calendar .attendance_graph .percent em {font-size:38px;}
 .attendance_calendar .calendar_area {position:relative;}
+.attendance_calendar .calendar_area + .page_btns {margin-top:40px;}
 .attendance_calendar table {width:100%; border-bottom:1px solid #e5e7e8;}
 .attendance_calendar th {height:70px; padding-left:45px; color:#5d5d5d; font-weight:700; font-size:26px; text-align:left;}
 .attendance_calendar td {height:142px; padding:6px 4px; border-bottom:1px solid #e5e7e8; border-left:1px solid #e5e7e8; vertical-align:top; background:#fff; text-align:center;}
@@ -206,7 +219,7 @@
 .attendance_calendar .sun {color:#ed0606;}
 .attendance_calendar .sat {color:#0a1087;}
 .attendance_calendar .today{background: #e5e7e8;}
-.attendance_calendar .date {display:block; width:50px; height:50px; color:#555; font-size:28px; line-height:54px; border-radius:50%; text-align:center; letter-spacing:-1px;}
+.attendance_calendar .date {display:block; width:50px; height:50px; color:#555; font-size:28px; line-height:50px; border-radius:50%; text-align:center;}
 .msie .attendance_calendar .date {line-height:49px;}
 .attendance_calendar .checked .date {background:#782fff; color:#fff;}
 .attendance_calendar .brand {display:block; margin-top:7px;}
@@ -229,7 +242,7 @@
 .today_brand_coupon {margin-bottom:40px; color:#000; font-size:16px; font-weight:700;} /* layer : today쿠폰 */
 .coupon_items.today {}
 .coupon_items.today>* {color:#222;}
-.coupon_items.today .item {position:relative; padding:30px 0 0 30px;}
+.coupon_items.today .item {position:relative; padding:30px 0 0 30px; box-sizing:border-box;}
 .coupon_items.today .item .thumb, .coupon_items.today .item .thumb>img {width:110px; height:110px;}
 .coupon_items.today .item .info .brand_name {font-size:16px;}
 .coupon_items.today .item .info .name {margin:8px 0;}
@@ -237,11 +250,11 @@
 .coupon_items.today .info .price del {margin-left:3px; color:#888;}
 .coupon_items.today .state {color:#333; font-size:13px; font-weight:700;}
 .coupon_items.today .state .num {font-size:17px;}
-.coupon_items.today .more {position:relative; margin-left:10px; padding-right:11px; color:#782fff;}
+.coupon_items.today .more {position:relative; margin-left:10px; padding-right:11px; color:#782fff; border:0;}
 .coupon_items.today .more:after {content:''; clear:both; display:block; position:absolute; top:50%; right:0; width:5px; height:10px; margin-top:-6px; background:url(/pc/ko/images/common/bg_more.png) no-repeat 0 0;}
 .coupon_items.today .mark_sale {position:absolute; top:0; left:0; width:55px; height:55px; color:#fff; font-size:20px; line-height:60px; background:#333; border-radius:50%; text-align:center;}
 
-.today_coupon {width:274px; height:144px; margin:0 auto; padding:28px 30px 0 46px; background:url(/pc/ko/images/coupon/bg_today_coupon.png) no-repeat 0 0;}
+.today_coupon {width:198px; height:144px; margin:0 auto; padding:28px 30px 0 46px; background:url(/pc/ko/images/coupon/bg_today_coupon.png) no-repeat 0 0;}
 .today_coupon>* {color:#000;}
 .today_coupon .name {font-size:18px;}
 .today_coupon .price {margin-top:1px; font-size:20px;}
@@ -274,14 +287,14 @@
 
 /* 플러스멤버십 */
 .membership_overview .page_title {padding:53px 0 28px;}
-.membership_overview .page_title .h_title {color:#333; font-size:42px;}
+.membership_overview .page_title .h_title {color:#333; font-size:42px; font-weight:normal;}
 
-.visual_membership {height:592px; margin-top:10px; background:#782fff url(/pc/ko/images/membership/bg_visual_plus.jpg) no-repeat 50% 0;}
+.visual_membership {height:568px; margin-top:10px; background:#782fff url(/pc/ko/images/membership/bg_visual_plus.jpg) no-repeat 50% 0;}
 .visual_membership>div {position:relative; height:592px;}
 .visual_membership .txt_visual_membership {display:inline-block; margin:120px 0 0 55px;}
 
 .membership_overview {}
-.membership_overview .page_title, .membership_overview .title_area {padding:22px 20px; color:#222;}
+.membership_overview .page_title, .membership_overview .title_area {padding:46px 20px 23px; color:#222;}
 .membership_overview .overview_notice {margin:27px 20px;}
 .membership_area {margin-top:27px;}
 
@@ -294,7 +307,7 @@
 .membership_slide .slide [class*='_direction'] .ix-btn-next {right:-40px; background-position:-34px -304px;}
 .membership_slide .slide .slide_direction a:hover{opacity:.5;}
 
-.member_up_box {margin-bottom:10px; padding:0 15px 35px; background:#fff; border-bottom:1px solid #c2c1c2;}
+.member_up_box {margin-bottom:10px; padding:0 15px 35px; background:#fff;}
 .membership_level {width:100%; padding:100px 0 53px 0; color:#000; font-size:20px; font-weight:700; text-align:center; background:#fff;}
 .membership_level>span {position:relative; display:inline-block; text-align:left;}
 .membership_level .box {position:relative; width:112px; padding-top:123px; color:#a7a7a7; font-size:12px; text-align:center;}
@@ -313,7 +326,7 @@
 .membership_policy .policy_area .box {margin:20px;}
 .membership_policy .list_policy li {}
 .membership_policy .list_policy>li + li {margin-top:25px;}
-.membership_policy .list_policy>li>strong {color:#782fff;}
+.membership_policy .list_policy>li>strong {color:#2656b3;}
 .membership_policy .list_policy>li>ul {margin:10px 0 0 25px;}
 .membership_policy .list_policy>li>ul>li {margin-left:-20px; padding-left:20px; text-indent:-14px;}
 

@@ -46,7 +46,11 @@
 							<p class="s_name"><em class="tag">{{{ this.lineDesc }}}</em></p>
 						{{/if}}
 						<p class="name">{{ this.onlineProdName }}</p>
-					
+							{{#xif ../prodListUnitCode '==' 'Prod'}} 
+								{{#xif this.productCount '>' 1}}
+									<p class="color_name">{{ this.products.0.prodName }}</p>
+								{{/xif}}
+							{{/xif}}
 					</div>
 					{{!--<p class="color_name">85 colors</p>--}}
 				</div>

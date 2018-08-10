@@ -76,16 +76,23 @@
 					this._$target.find( '.review_list' ).show();
 					this._$target.find( '.result_none' ).hide();
 				}
-
+				
+				//console.log(result);
 				var html = AP.common.getTemplate( 'display.store.store-compliment-list', result );
+							
 				this._$target.find( '.review_list' ).html( html );
-
+				
 				//html 태그 삭제
+
 				for ( var i = 0; i < result.storeEvalExList.length; ++i ) {
-					var bodyText = result.storeEvalExList[i].storeEvalBodyText;
+					
 					var storeSn = result.storeEvalExList[i].storeEvalSn;
-					document.getElementById('bodyText'+storeSn).innerHTML = bodyText;
+					var bodyText = result.storeEvalExList[i].storeEvalBodyText;
+					
+					document.getElementById('bodyText'+storeSn).innerHTML = '<pre>'+AP.common.removeHtmlTag(bodyText)+'</pre>'; 
+					
 				}
+			
 			}.bind( this )).fail(function (e) {
 				console.log( 'error' );
 			}).always(function (e) {});

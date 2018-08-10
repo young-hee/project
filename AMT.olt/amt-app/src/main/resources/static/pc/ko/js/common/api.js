@@ -181,6 +181,14 @@
 		beautyPointListFragment: { path: '/my/page/info/beautyPointListFragment', method: 'GET', dataType: 'html'},
 		beautyPointListBodyFragment: { path: '/my/page/info/beautyPointListBodyFragment', method: 'GET', dataType: 'html'},
 		
+		//예치금 리스트.
+		depositHitoryListFragment: { path: '/my/page/info/depositHitoryListFragment', method: 'GET', dataType: 'html'},
+		depositHitoryListBodyFragment: { path: '/my/page/info/depositHitoryListFragment', method: 'GET', dataType: 'html'},
+		// 예치금 출금
+		transferDeposit: { path:'/my/api/transferDeposit', method: 'POST'},
+		// 계좌정보 저장
+		saveRefundAccounts: { path:'/my/api/saveRefundAccounts', method: 'PUT'},
+		
 		//간단 점유인증 전송
 		simpleCertifySend: { path: '/my/api/simpleCertifySend', method: 'POST'},
 		
@@ -207,6 +215,9 @@
 
 		// 1:1 문의 내용
 		inquiryCont: { path:'/my/api/getInquiryCont', method: 'GET'},
+
+		// 쿠폰 등록
+		registerCoupon: { path:'/my/api/registerCoupon', method: 'POST'},
 
 		/**
 		 * 매장찾기 *************************************************************

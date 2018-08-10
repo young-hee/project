@@ -127,10 +127,10 @@ public class LoginRestController extends AbstractController {
 			}
 			respMap.put("sleep", resultInfo.getDormantAcConvertYn());
 			if("Y".equals(resultInfo.getDormantAcConvertYn())) {
-				setMemberSession(null);
-			} else {
-				setMemberSession(memberSession);
+				respMap.put("userId", apMember.getMemberId().substring(0, apMember.getMemberId().length() - 2) + "**");
+				memberSession.setMember(null);
 			}
+			setMemberSession(memberSession);
 			respMap.put("old", false);//FIXME 구회원 여부.
 			respMap.put("changePw", resultInfo.getPasswordLongtimeUnchangedYn());
 			if("Y".equals(resultInfo.getPasswordLongtimeUnchangedYn())) {
@@ -249,7 +249,8 @@ public class LoginRestController extends AbstractController {
 			
 			result.put("sleep", resultInfo.getDormantAcConvertYn());
 			if("Y".equals(resultInfo.getDormantAcConvertYn())) {
-				result.put("message", getMessage("customer.login.sleepMember", DateFormatUtils.format(resultInfo.getMemberSignupDt(), "yyyy년MM월")));
+				result.put("userId", apMember.getMemberId().substring(0, apMember.getMemberId().length() - 2) + "**");
+				memberSession.setMember(null);
 			} else {
 				setMemberSession(memberSession);
 			}
@@ -378,7 +379,8 @@ public class LoginRestController extends AbstractController {
 			
 			respMap.put("sleep", resultInfo.getDormantAcConvertYn());
 			if("Y".equals(resultInfo.getDormantAcConvertYn())) {
-				setMemberSession(null);
+				respMap.put("userId", apMember.getMemberId().substring(0, apMember.getMemberId().length() - 2) + "**");
+				memberSession.setMember(null);
 			} else {
 				setMemberSession(memberSession);
 			}
@@ -418,6 +420,20 @@ public class LoginRestController extends AbstractController {
     public ResponseEntity<?> saveUrl(String url, HttpServletRequest request) {
 		WebUtils.setSessionAttribute(request, SessionKey.RETURL, url);
 		return ResponseEntity.ok("{}");
+    }
+    /**
+     * 앱 통신
+     *
+     */
+    @PostMapping("/customer/unlockUser")
+    public ResponseEntity<?> unlockUser() {
+    	try {
+    		apApi.recoveryToNormalMember(getMemberSn());
+        	return ResponseEntity.ok("{}");
+    		
+    	} catch(ApiException e) {
+    		return error(e);
+    	}
     }
     
     /**

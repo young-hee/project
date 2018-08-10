@@ -527,7 +527,21 @@
 				path = split.join( '.' );
 			}
 			return path;
-		}
+		},
+		
+		/** html tag remove ===**/
+		removeHtmlTag : function(strHtml){
+			strHtml = strHtml.replace(/<title.*?([ㄱ-힣]*).title>/ig, '');
+			strHtml = strHtml.replace(/<meta.*?>/ig, '');
+			strHtml = strHtml.replace(/<html>/ig, '');
+			strHtml = strHtml.replace(/<head>/ig, '');
+			strHtml = strHtml.replace(/<\/html>/ig, '');
+			strHtml = strHtml.replace(/<\/head>/ig, '');
+			//strHtml = strHtml.replace(/<br\/>/ig, '\n\r ');
+			//strHtml = strHtml.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, '');
+		 
+			return $.trim(strHtml); 
+		}		
 	};
 
 	AP.common = AP.common || Common;

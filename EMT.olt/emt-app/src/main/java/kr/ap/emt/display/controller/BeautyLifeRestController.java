@@ -75,21 +75,6 @@ public class BeautyLifeRestController extends AbstractController {
         	Article article = articleApi.getArticle(requestBeautyLife.getArticleSn(), previewKey);
             result.put("article", article);
             
-          //아티클 히스토리 저장
-      		if(0L != getMemberSn()) {
-      			ShoppingMarkPost body = new ShoppingMarkPost();
-      			body.setShoppingMarkTgtCode("Article");
-      			body.setArticleSn(article.getArticleSn());      			
-      			body.setDisplayMenuSetId(APConstant.EH_DISPLAY_MENU_SET_ID);
-      			
-      			try{
-      				shoppingmarkApi.addShoppingHistories(getMemberSn(), body);
-      			}catch(Exception e) {
-      				e.printStackTrace();
-      			}
-      		}
-            
-            
             return ResponseEntity.ok(result);
         } catch (Exception e) {
         	result.put("errorData", e);

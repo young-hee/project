@@ -12,6 +12,8 @@ import kr.ap.comm.support.constants.APConstant;
 import kr.ap.comm.support.constants.SessionKey;
 import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.ap.ap.ApFindMemberIdResult;
+import net.g1project.ecp.api.model.ap.ap.ApIssueTemporaryPassword;
+import net.g1project.ecp.api.model.ap.ap.CheckResult;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,25 +40,27 @@ public class MemberRestController extends AbstractController {
 
 	@Autowired
 	CaptchaAPI captchaAPI;
-	
+
 	@PostMapping("/find/findPwd/changePwd")
 	@ResponseBody
-	public ResponseEntity<?> changePwdPost(String password) {
-		/**
-		 * Mobile
-		 */
-		if(isMobileDevice()) {
-			return changePwdPostM(password);
-		}
+	public ResponseEntity<?> changePwdPost() {
 
-		/**
-		 * PC
-		 */
-		if(isPcDevice()) {//TODO 비밀번호 변경.
-			return null;
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			
+			ApIssueTemporaryPassword issueTemporaryPassword = (ApIssueTemporaryPassword) WebUtils.getSessionAttribute(getRequest(), "TEMP_PW_CHANGE");
+	
+			CheckResult result2 = apApi.requestIssueTemporaryPassword(issueTemporaryPassword);
+			if(result2.isResult()) {
+				WebUtils.setSessionAttribute(getRequest(), "TEMP_PW_CHANGE", issueTemporaryPassword);
+			} else {
+				return error(result, HttpStatus.SERVICE_UNAVAILABLE ,"ERROR", "비밀번호 전송에 실패했습니다. 아래 재발급 버튼을 눌러 다시 시도해주세요.");
+			}
+		} catch (Exception e2) {
+			return error(result, HttpStatus.SERVICE_UNAVAILABLE ,"ERROR", "비밀번호 전송에 실패했습니다. 아래 재발급 버튼을 눌러 다시 시도해주세요.");
 		}
-		
 		return null;
+		
 	}
 
 	/**
@@ -139,33 +143,6 @@ public class MemberRestController extends AbstractController {
 
 	
 	//=======================모바일 기능 구현 Method
-
-	private ResponseEntity<?> changePwdPostM(String password) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		MemberSession memberSession = getMemberSession();
-
-		Long check = (Long) WebUtils.getSessionAttribute(getRequest(), SessionKey.TEMP_PW_CNG);
-		if(check == null || check != memberSession.getMember_sn()) {
-			return error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "패스워드 변경에 실패했습니다..");
-		}
-		WebUtils.setSessionAttribute(getRequest(), SessionKey.TEMP_PW_CNG, null);
-		CicuemCuInfTotTcVo vo = new CicuemCuInfTotTcVo();
-		vo.setIncsNo(memberSession.getUser_incsNo());
-		List<CicuedCuChCsTcVo> cicuedCuChCsTcVo = new ArrayList<CicuedCuChCsTcVo>();
-		CicuedCuChCsTcVo csTcVo = new CicuedCuChCsTcVo();
-		csTcVo.setChCd(APConstant.AP_CH_CD);
-		csTcVo.setChcsNo(memberSession.getMember().getMemberId());
-		csTcVo.setUserPwdEc(password);
-		csTcVo.setPrtnNm("에뛰드");
-		cicuedCuChCsTcVo.add(csTcVo);
-		vo.setCicuedCuChCsTcVo(cicuedCuChCsTcVo);
-		CicuemCuInfCoOutVo resultVo = amoreAPIService.updatecicuemcuinfrfull(vo);
-		if(APConstant.RESULT_OK.equals(resultVo.getRsltCd())) {
-			return ResponseEntity.ok(result);
-		} else {
-			return error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "잘못된 패스워드 입니다.");
-		}
-	}
 
 	private ResponseEntity<?> checkIdM(String memberId) {
 		Map<String, Object> respMap = new HashMap<String, Object>();

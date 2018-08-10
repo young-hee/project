@@ -21,12 +21,12 @@
 				</p>
 			</dd>
 		</dl>
-		<div class="btn_lg_bordered w100p mgt30">
+		<div th:text="${phone}" class="btn_lg_bordered w100p mgt30">
 			010 - 0000 - 00**
 		</div>
 		<p class="text mgt30">고객님의 개인정보 보호를 위해 번호 일부를 별표(*)로 표시 하였습니다.</p>
 		<div class="page_btns mgt30">
-			<button type="button" class="btn_lg_primary w100p"><span>임시 비밀번호 재발급</span><i class="ico_arr_w"></i></button>
+			<button type="button" onclick="send()" class="btn_lg_primary w100p"><span>임시 비밀번호 재발급</span><i class="ico_arr_w"></i></button>
 		</div>
 	</div>
 
@@ -35,6 +35,35 @@
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
 
+<script>
+	var error = '[[${error}]]';
+	if(error) {
+        AP.modal.alert(error);
+	}
+	
+	function send() {
+
+        AP.api.changePwd({},{}).done(function(data) {
+            //성공
+            if (data) {
+
+                AP.modal.alert("임시 비밀번호가 전송되었습니다.");
+
+            }
+        }).fail(function(xhr, textStatus, errorThrown) {
+            if (xhr.errorCode == 0) {
+                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+            } else {
+                AP.modal.alert(xhr.errorMessage)
+            }
+        }).always(function() {
+            //성공, 실패
+            $("#certBtn").removeAttr("disabled");
+            $("#reCertBtn").removeAttr("disabled");
+        });
+	}
+
+</script>
 </th:block>
 
 </body>

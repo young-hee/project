@@ -222,7 +222,7 @@
 	$.validator.addMethod( 'id_l', function ( value, element, param  ){
 		var eng = /[a-zA-Z]+/.test( value ),
 		  length = value.length;
-		return this.optional( element ) || eng && ( length >= 6 && length <= 12 );
+		return this.optional( element ) || eng && ( length >= 4 && length <= 12 );
 	}, '올바른 아이디를 입력 하세요. 아이디 입력란으로 이동합니다.');
 
 	/**

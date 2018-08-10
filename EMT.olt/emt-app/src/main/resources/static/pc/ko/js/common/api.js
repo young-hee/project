@@ -167,6 +167,9 @@
 		findIdForeigner: { path: '/customer/find/findId/foreigner', method: 'POST' },
 		//아이디 중복확인.
 		checkId: { path: '/customer/checkId', method: 'POST' },
+		
+		//휴면계정 해제.
+		recoveryUser: { path: '/customer/recoveryUser', method: 'POST' },
 
 		//비밀번호 찾기
 		//email
@@ -796,6 +799,9 @@
 
 		// 포인트 사용
 		ordReceptChangePoint: { path: '/order/ordReceptChangePoint', method: 'POST'},
+
+		//주문단위 사은품
+		ordReceptChangeOrdUnit: { path: '/order/ordReceptChangeOrdUnit', method: 'POST'},
 		
 		// PC 이니시스 결제 데이터 조회
 		inipayReq: { path: '/payment/inipayReq', method: 'POST'},

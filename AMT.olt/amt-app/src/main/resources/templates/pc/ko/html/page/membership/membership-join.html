@@ -8,7 +8,7 @@
 		<div class="ap_com_cont overview">
 			<!--/* [S] 플러스멤버십 가입하기 */-->
 			<div class="membership_overview">
-				<div class="inner_wrap">
+				<div class="inner_wrap ">
 					<!--/* page title */-->
 					<th:block ap:replace="~{common/fragment/page-title}"/>
 					<!--/* AP plus 멤버십 서비스 이용약관 */-->
@@ -127,12 +127,10 @@
 											<dl>
 												<dt><label for="usernumber">휴대전화</label></dt>
 												<dd>
-													<div class="input_group ea_03">
-														<span class="input_wrap" style="width:75px"><input type="text" id="usernumber" maxlength="4" title="휴대폰 앞자리 입력"></span>
-														<span class="gap">-</span>
-														<span class="input_wrap" style="width:75px"><input type="text" maxlength="4" title="휴대폰 가운데자리 입력"></span>
-														<span class="gap">-</span>
-														<span class="input_wrap" style="width:75px"><input type="text" maxlength="4" title="휴대폰 끝자리 입력"></span>
+													<div class="input_group tell_area">
+														<span class="input_wrap" style="width:170px"><input type="text" id="usernumber" maxlength="4" title="휴대폰 앞자리 입력"></span>
+														<span class="input_wrap" style="width:170px"><input type="text" maxlength="4" title="휴대폰 가운데자리 입력"></span>
+														<span class="input_wrap" style="width:170px"><input type="text" maxlength="4" title="휴대폰 끝자리 입력"></span>
 													</div>
 													<p class="text">고객님의 휴대폰 번호가 맞는지 확인해주세요</p>
 												</dd>
@@ -140,8 +138,8 @@
 											<dl>
 												<dt><label for="userid">추천코드</label></dt>
 												<dd>
-													<div class="input_wrap w100p">
-														<input type="text" id="userid" title="추천코드 입력">
+													<div class="input_wrap">
+														<input type="text" style="width:531px;" id="userid" title="추천코드 입력">
 													</div>
 													<p class="text">추천인 ID 입력 시 기프트카드 3,000원 적립</p>
 												</dd>
@@ -163,7 +161,7 @@
 												<dt><label for="userPoint">뷰티포인트</label></dt>
 												<dd>
 													<div class="input_group_point">
-														<button type="button" class="btn_lg_gradient"><span class="ie_press">모두사용</span></button>
+														<button type="button" class="btn_fix_gradient"><span class="ie_press">모두사용</span></button>
 														<span class="text">최소 1,000P 이상 결제해야 하며 100P단위로 사용할 수 있습니다</span>
 													</div>
 													<div class="point_sell">
@@ -183,526 +181,373 @@
 							</div>
 							<!--/* 결제방법선택 */-->
 							<div class="panel">
-								<div class="inner">
-									<div class="title_area">
-										<h3 class="h_title d3">결제방법선택</h3>
-									</div>
-									<div class="ui_accordion payment_box" data-open-type="single">
-										<dl>
-											<dt>
-												<button type="button">
-													<span class="ie_press">신용카드 결제</span>
-												</button>
-											</dt>
-											<dd>
-												<!--/* 신용카드 결제 */-->
-												<div class="credit_list">
-													<ul>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_01">
-																<label for="credit_pay_01">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_hyundai.png}" alt=""></span>
-																	</span>
-																	<b class="name">현대카드</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_02">
-																<label for="credit_pay_02">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_kb.png}" alt=""></span>
-																	</span>
-																	<b class="name">KB국민카드</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_03">
-																<label for="credit_pay_03">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_bc.png}" alt=""></span>
-																	</span>
-																	<b class="name">비씨카드</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_04">
-																<label for="credit_pay_04">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_samsung.png}" alt=""></span>
-																	</span>
-																	<b class="name">삼성카드</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_05">
-																<label for="credit_pay_05">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_lotte.png}" alt=""></span>
-																	</span>
-																	<b class="name">롯데카드</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_06">
-																<label for="credit_pay_06">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_woori.png}" alt=""></span>
-																	</span>
-																	<b class="name">우리카드<br>(구.평화VISA)</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_07">
-																<label for="credit_pay_07">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_hana.png}" alt=""></span>
-																	</span>
-																	<b class="name">하나카드</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_08">
-																<label for="credit_pay_08">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_shinhan.png}" alt=""></span>
-																	</span>
-																	<b class="name">신한카드<br>(구.LG카드 포함)</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_09">
-																<label for="credit_pay_09">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_nh.png}" alt=""></span>
-																	</span>
-																	<b class="name">NH농협카드</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_10">
-																<label for="credit_pay_10">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_citi.png}" alt=""></span>
-																	</span>
-																	<b class="name">씨티카드</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_11">
-																<label for="credit_pay_11">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_keb.png}" alt=""></span>
-																	</span>
-																	<b class="name">외환카드</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_12">
-																<label for="credit_pay_12">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_kakao.png}" alt=""></span>
-																	</span>
-																	<b class="name">카카오뱅크</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_13">
-																<label for="credit_pay_13">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_jb.png}" alt=""></span>
-																	</span>
-																	<b class="name">전북카드</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_14">
-																<label for="credit_pay_14">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_sh.png}" alt=""></span>
-																	</span>
-																	<b class="name">수협카드</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_15">
-																<label for="credit_pay_15">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_jeju.png}" alt=""></span>
-																	</span>
-																	<b class="name">제주카드</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_16">
-																<label for="credit_pay_16">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_sbi.png}" alt=""></span>
-																	</span>
-																	<b class="name">저축은행체크</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_17">
-																<label for="credit_pay_17">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_cu.png}" alt=""></span>
-																	</span>
-																	<b class="name">신협체크</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_18">
-																<label for="credit_pay_18">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_kdb.png}" alt=""></span>
-																	</span>
-																	<b class="name">KDB산업체크</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_19">
-																<label for="credit_pay_19">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_kj.png}" alt=""></span>
-																	</span>
-																	<b class="name">광주카드</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_20">
-																<label for="credit_pay_20">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_epost.png}" alt=""></span>
-																	</span>
-																	<b class="name">우체국체크</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_21">
-																<label for="credit_pay_21">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_mg.png}" alt=""></span>
-																	</span>
-																	<b class="name">MG새마을금고체크</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_22">
-																<label for="credit_pay_22">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_lotte.png}" alt=""></span>
-																	</span>
-																	<b class="name">아모레퍼시픽<br>롯데체크카드</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_23">
-																<label for="credit_pay_23">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_lotte.png}" alt=""></span>
-																	</span>
-																	<b class="name">아모레퍼시픽<br>롯데카드</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_24">
-																<label for="credit_pay_24">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_shinhan.png}" alt=""></span>
-																	</span>
-																	<b class="name">아모레퍼시픽<br>롯데카드</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_25">
-																<label for="credit_pay_25">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_samsung.png}" alt=""></span>
-																	</span>
-																	<b class="name">아모레퍼시픽<br>삼성카드</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="credit_pay" id="credit_pay_26">
-																<label for="credit_pay_26">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/credit_kb.png}" alt=""></span>
-																	</span>
-																	<b class="name">아모레퍼시픽<br>KB카드</b>
-																</label>
-															</span>
-															</div>
-														</li>
-													</ul>
-												</div>
-											</dd>
-										</dl>
-										<dl>
-											<dt>
-												<button type="button">
-													<span class="ie_press">다른결제 수단</span>
-												</button>
-											</dt>
-											<dd>
-												<!--/* 다른결제 수단 */-->
-												<div class="credit_list">
-													<ul>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="other_pay" id="pay_01">
-																<label for="pay_01">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/pay_naver.png}" alt=""></span>
-																	</span>
-																	<b class="name">네이버페이</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="other_pay" id="pay_02">
-																<label for="pay_02">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/pay_payco.png}" alt=""></span>
-																	</span>
-																	<b class="name">페이코</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="other_pay" id="pay_03">
-																<label for="pay_03">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/pay_paynow.png}" alt=""></span>
-																	</span>
-																	<b class="name">페이나우</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="other_pay" id="pay_04">
-																<label for="pay_04">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/pay_bank_01.png}" alt=""></span>
-																	</span>
-																	<b class="name">무통장입금<br>(가상계좌)</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="other_pay" id="pay_05">
-																<label for="pay_05">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/pay_bank_02.png}" alt=""></span>
-																	</span>
-																	<b class="name">계좌이체</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="other_pay" id="pay_06">
-																<label for="pay_06">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/pay_mpp.png}" alt=""></span>
-																	</span>
-																	<b class="name">휴대폰결제</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="other_pay" id="pay_07">
-																<label for="pay_07">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/pay_gcc.png}" alt=""></span>
-																	</span>
-																	<b class="name">Global Credit<br>Card</b>
-																</label>
-															</span>
-															</div>
-														</li>
-														<li>
-															<div class="credit_box">
-															<span class="check_wrap box">
-																<input type="radio" name="other_pay" id="pay_08">
-																<label for="pay_08">
-																	<span class="card_info table_layout">
-																		<span><img ap:src="@{/images/order/pay_paypal.png}" alt=""></span>
-																	</span>
-																	<b class="name">PayPal</b>
-																</label>
-															</span>
-															</div>
-														</li>
-													</ul>
-												</div>
-											</dd>
-										</dl>
-									</div>
-								</div>
+								<!-- 결제수단 -->
+								<div class=" cart_list">
+									<dl>
+										<dt>
+											<strong class="tit">결제 수단 선택</strong>
+											<button type="button"><span class="sr_only">열기</span></button>
+										</dt>
+										<dd class="single">
+											<div class="ui_accordion payway" data-open-type="single"> 
+												<!-- 원페이 -->
+												<dl>
+													<dt class="onepay on">
+														<button type="button">
+															<span class="ie_press"><img ap:src="@{/images/order/txt_onepay.png}" alt="ONE pay"> <em>간편한 원클릭 결제</em>
+														</button>
+														<span class="check_wrap">
+															<input type="checkbox" id="check4_1"><label for="check4_1">선택한 결제 수단을 다음에도 사용</label>
+														</span>
+													</dt>
+												</dl>
+												<!-- // 원페이 -->
+												
+												<!-- 신용카드 결제 -->
+												<dl class="line">
+													<dt>
+														<button type="button">
+															신용카드 결제
+														</button>
+														<span class="check_wrap">
+															<input type="checkbox" id="check4_2"><label for="check4_2">선택한 결제 수단을 다음에도 사용</label>
+														</span>
+													</dt>
+													<dd>
+														<ul class="credit_list">
+															<li>
+																<a href="#none" class="on">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_hyundai.png}" alt=""></span>
+																	<span class="name">현대카드</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_kb.png}" alt=""></span>
+																	<span class="name">KB국민카드</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_bc.png}" alt=""></span>
+																	<span class="name">비씨카드</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_samsung.png}" alt=""></span>
+																	<span class="name">삼성카드</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_lotte.png}" alt=""></span>
+																	<span class="name">롯데카드</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_woori.png}" alt=""></span>
+																	<span class="name">우리카드<br>(구.평화VISA)</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_hana.png}" alt=""></span>
+																	<span class="name">하나카드</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_shinhan.png}" alt=""></span>
+																	<span class="name">신한카드<br>(구.LG카드 포함)</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_nh.png}" alt=""></span>
+																	<span class="name">NH농협카드</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_citi.png}" alt=""></span>
+																	<span class="name">씨티카드</span>
+																</a>	
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_keb.png}" alt=""></span>
+																	<span class="name">외환카드</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_kakao.png}" alt=""></span>
+																	<span class="name">카카오뱅크</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_epost.png}" alt=""></span>
+																	<span class="name">우체국체크</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_kj.png}" alt=""></span>
+																	<span class="name">광주카드</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_jb.png}" alt=""></span>
+																	<span class="name">전북카드</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_sh.png}" alt=""></span>
+																	<span class="name">수협카드</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_jeju.png}" alt=""></span>
+																	<span class="name">제주카드</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_sbi.png}" alt=""></span>
+																	<span class="name">저축은행체크</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_cu.png}" alt=""></span>
+																	<span class="name">신협체크</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_kdb.png}" alt=""></span>
+																	<span class="name">KDB산업체크</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_mg.png}" alt=""></span>
+																	<span class="name">MG새마을금고<br>체크</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_lotte.png}" alt=""></span>
+																	<span class="name">아모레퍼시픽<br>롯데체크카드</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_lotte.png}" alt=""></span>
+																	<span class="name">아모레퍼시픽<br>롯데카드</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_shinhan.png}" alt=""></span>
+																	<span class="name">아모레퍼시픽<br>신한카드</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_samsung.png}" alt=""></span>
+																	<span class="name">아모레퍼시픽<br>삼성카드</span>
+																</a>
+															</li>
+															<li>
+																<a href="#none">
+																	<span class="thumb"><img ap:src="@{/images/order/credit_kb.png}" alt=""></span>
+																	<span class="name">아모레퍼시픽<br>KB카드</span>
+																</a>
+															</li>
+														</ul>
+													</dd>
+												</dl>
+												<!-- // 신용카드 결제 -->
+												
+												<!-- 다른결제 수단 -->
+												<dl class="line">
+													<dt>
+														<button type="button">
+															다른결제 수단
+														</button>
+														<span class="check_wrap">
+															<input type="checkbox" id="check4_3"><label for="check4_3">선택한 결제 수단을 다음에도 사용</label>
+														</span>
+													</dt>
+													<dd>
+													
+														<div class="credit_list ">
+															<ul>
+																<li>
+																	<a href="#none" class="on">
+																		<span class="thumb"><img ap:src="@{/images/order/pay_naver.png}" alt=""></span>
+																		<span class="name">네이버페이</span>
+																	</a>
+																</li>
+																<li>
+																	<a href="#none">
+																		<span class="thumb"><img ap:src="@{/images/order/pay_payco.png}" alt=""></span>
+																		<span class="name">페이코</span>
+																	</a>
+																</li>
+																<li>
+																	<a href="#none">
+																		<span class="thumb"><img ap:src="@{/images/order/pay_paynow.png}" alt=""></span>
+																		<span class="name">페이나우</span>
+																	</a>
+																</li>
+																<li class="bankbook">
+																	<a href="#none">
+																		<span class="thumb"><img ap:src="@{/images/order/pay_bank_01.png}" alt=""></span>
+																		<span class="name">무통장입금<br>(가상계좌)</span>
+																	</a>
+																</li>
+																<li class="realtime">
+																	<a href="#none">
+																		<span class="thumb"><img ap:src="@{/images/order/pay_bank_02.png}" alt=""></span>
+																		<span class="name">실시간<br>계좌이체</span>
+																	</a>
+																</li>
+																<li class="phone">
+																	<a href="#none">
+																		<span class="thumb"><img ap:src="@{/images/order/pay_mpp.png}" alt=""></span>
+																		<span class="name">휴대폰결제</span>
+																	</a>
+																</li>
+																<li>
+																	<a href="#none">
+																		<span class="thumb"><img ap:src="@{/images/order/pay_gcc.png}" alt=""></span>
+																		<span class="name">Global Credit<br>Card</span>
+																	</a>
+																</li>
+																<li>
+																	<a href="#none">
+																		<span class="thumb"><img ap:src="@{/images/order/pay_paypal.png}" alt=""></span>
+																		<span class="name">PayPal</span>
+																	</a>
+																</li>
+																<li>
+																	<a href="#none">
+																		<span class="thumb"><img ap:src="@{/images/order/pay_minus.png}" alt=""></span>
+																		<span class="name">급여차감</span>
+																	</a>
+																</li>
+															</ul>
+														</div>
+														
+														<!-- 무통장 입금-->
+														<div class="receive cont_bankbook">
+															<ul class="ui_list txt">
+																<li>
+																	<span class="stit">입금기한</span>
+																	<div class="name">2018년 06월 15일</div>
+																</li>
+																<li>
+																	<span class="stit"><label for="input4_1">입금은행</label></span>
+																	<div class="bank">
+																		<span class="select_wrap">
+																			<select tabindex="-1" name="" id="input4_1" title="입금은행을 선택하세요">
+																				<option value="">입금은행을 선택하세요</option>
+																			</select>
+																		</span>
+																	</div>
+																</li>
+																<li>
+																	<span class="stit">에스크로<br>결제 여부</span>
+																	<div class="radio">
+																		<span class="check_wrap rdo_type2"><input type="radio" name="radio2" id="radio2_1" checked="checked"><label for="radio2_1">네</label></span>
+																		<span class="check_wrap rdo_type2"><input type="radio" name="radio2" id="radio2_2"><label for="radio2_2">아니오</label></span>
+																	</div>
+																</li>
+																<li>
+																	<span class="stit top">현금영수증</span>
+																	<div class="radio">
+																		<span class="check_wrap rdo_type2"><input type="radio" name="radio3" id="radio3_1" checked="checked"><label for="radio3_1">네</label></span>
+																		<span class="check_wrap rdo_type2"><input type="radio" name="radio3" id="radio3_2"><label for="radio3_2">아니오</label></span>
+																		<span class="check_wrap rdo_type2"><input type="radio" name="radio3" id="radio3_3"><label for="radio3_3">미신청</label></span>
+																		<div class="space">
+																			<span class="input_wrap"><input type="text" name="" id="" placeholder="휴대전화 또는 사업자등록번호"></span>
+																		</div>
+																		<div class="space">
+																			<span class="check_wrap"><input type="checkbox" id="input5_1"><label for="input5_1">현재 현금영수증 정보를 저장합니다.</label></span>
+																		</div>
+																	</div>
+																</li>
+															</ul>
+														</div>
+														<!-- // 무통장 입금 -->
+														
+														<!-- 실시간 계좌이체 -->
+														<div class="receive cont_realtime">
+															<ul class="ui_list">
+																<li>
+																	<span class="stit">에스크로<br>결제 여부</span>
+																	<div class="radio">
+																		<span class="check_wrap rdo_type2"><input type="radio" name="radio4" id="radio4_1" checked="checked"><label for="radio4_1">네</label></span>
+																		<span class="check_wrap rdo_type2"><input type="radio" name="radio4" id="radio4_2"><label for="radio4_2">아니오</label></span>
+																	</div>
+																</li>
+															</ul>
+														</div>
+														<!-- // 실시간 계좌이체 -->
+														
+														<!-- 휴대폰 결제-->
+														<div class="receive cont_phone">
+															<p class="txt_tel">휴대폰 결제취소는 결제한 해당월 말일까지 가능합니다.<br ><em>ex) 7월 29일 결제 시, 7월 31일까지 취소 가능</em></p>
+														</div>
+														<!-- // 휴대폰 결제 -->
+											
+													</dd>
+												</dl>
+												<!-- // 다른결제 수단 -->
+												
+											</div>
+										</dd>
+									</dl>
+								</div>	
+								<!-- // 다른결제 수단 -->
 							</div>
 						</div>
 						<!--/* rside_area : 최종 결제 금액 */-->
 						<div class="rside_area">
-							<div class="boxing">
-								<div class="title_area line">
-									<h4 class="h_title d3">최종 결제 금액</h4>
+							
+							<div class="pay_list">
+								<dl>
+									<dt>최종 결제 금액</dt>
+									<dd class="result">
+										<div class="tit"><strong>멤버십가입 금액</strong><span class="price">100,000원</span></div>
+										<div class="tit"><strong>뷰티포인트 사용금액</strong><span class="price">-0원</span></div>
+									</dd>
+									<dd class="total">
+										<div class="set"><strong>총 결제 예정 금액</strong><span class="price">113,500<span class="small">원</span></span></div>
+									</dd>
+								</dl>
+								
+								
+								<div class="buy_agree">
+									<span class="check_wrap"><input type="checkbox" id="check_fin"><label for="check_fin">구매조건 및 결제진행 동의</label></span>
+									<p class="txt">
+										주문할 상품의 상품명과 상품가격, 배송정보를 명확히<br>
+										확인하였으며 구매진행에 동의하시겠습니까?<br>
+										(전자상거래법 제 8조 2항)<br>
+										<em>ONE pay로 결제시 일시불만 가능합니다.</em>
+									</p>
 								</div>
-								<div class="order_totalbox">
-									<table>
-										<caption class="sr_only">최종 결제 금액</caption>
-										<colgroup>
-											<col width="50%" />
-											<col />
-										</colgroup>
-										<tfoot>
-										<tr>
-											<th scope="row">총 결제 예정 금액</th>
-											<td><p class="total"><em>50,000</em>원</p></td>
-										</tr>
-										</tfoot>
-										<tbody>
-										<tr>
-											<th scope="row">멤버십가입 금액</th>
-											<td>50,000원</td>
-										</tr>
-
-										<tr>
-											<th scope="row">뷰티포인트 사용금액</th>
-											<td>-0원</td>
-										</tr>
-										</tbody>
-									</table>
+								<div class="btn_area">
+									<a href="#none" class="btn_xlg_primary">결제하기</a>
 								</div>
-							</div>
-							<div class="cart_total_agree">
-								<span class="check_wrap small"><input type="checkbox" id="cart_total_agree"><label for="cart_total_agree">구매조건 및 결제진행 동의</label></span>
-								<ul class="list_bullet_dot mgt15">
-									<li>주문 상품의 상품명과 상품가격, 배송정보를 명확히 확인하였으며 구매진행에 동의하시겠습니까? (전자상거래법 제 8조 2항)</li>
-								</ul>
-							</div>
-							<div class="cart_total_order">
-								<a href="#none" class="btn_lg_primary">결제하기</a>
 							</div>
 						</div>
 					</div>

@@ -307,7 +307,11 @@ public class OrderRestController extends OrderBaseController {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		try {
 			if(ordRcDTO != null){
-				OrdReceptChange body = new OrdReceptChange();
+				MemberSession memberSession = getMemberSession();
+				OrdReceptChange body = memberSession.getOrdReceptChange();
+				if (body == null) {
+					body = new OrdReceptChange();
+				}
 
 				/** 주문자 정보 */
 				EmbeddableName en = new EmbeddableName();
@@ -347,9 +351,34 @@ public class OrderRestController extends OrderBaseController {
 
 				body.setShipMsg(ordRcDTO.getShipMsg());							// 배송메세지
 
-				//TODO : 편의점 저장하는 DTO 없다...
+				/** 편의점 택백 */
+				if (StringUtils.isNotEmpty(ordRcDTO.getcStoreName()) && StringUtils.isNotEmpty(ordRcDTO.getcStorePhoneNo())) {
+					body.setcStoreName(ordRcDTO.getcStoreName());
+					EmbeddableTel cet = new EmbeddableTel();
+					cet.setPhoneNo(ordRcDTO.getcStorePhoneNo());
+					body.setcStorePhoneNo(cet);
+					body.setcStoreHqCode(ordRcDTO.getcStoreHqCode());
+					body.setcStoreCenterCode(ordRcDTO.getcStoreCenterCode());
+					body.setcStoreCenterName(ordRcDTO.getcStoreCenterName());
+					body.setcStoreStoreCode(ordRcDTO.getcStoreStoreCode());
+					body.setcStoreCompany(ordRcDTO.getcStoreCompany());
+					body.setcStoreDockNo(ordRcDTO.getcStoreDockNo());
+					EmbeddableAddress cea = new EmbeddableAddress();
+					cea.setAddress1(ordRcDTO.getcStoreAddressAddress1());
+					cea.setAddress2(ordRcDTO.getcStoreAddressAddress2());
+					cea.setZipCode(ordRcDTO.getcStoreAddressZipCode());
+					body.setcStoreAddress(cea);
+					body.setcStoreArrivalAreaCode(ordRcDTO.getcStoreArrivalAreaCode());
+					body.setcStoreArrivalAreaBarcode(ordRcDTO.getcStoreArrivalAreaBarcode());
+					body.setcStoreDongNmCode(ordRcDTO.getcStoreDongNmCode());
+					body.setcStoreArrivalDongNm(ordRcDTO.getcStoreArrivalDongNm());
+				}
 
 				orderApi.ordReceptChange(ordRcDTO.getOrdSn(), body);
+
+				memberSession.setOrdReceptChange(body);
+				setMemberSession(memberSession);
+
 				result.put("result", "success");
 			}
 		} catch (Exception e) {
@@ -365,7 +394,6 @@ public class OrderRestController extends OrderBaseController {
 	 *
 	 * @param ordSn
 	 * @param memberKeepingCouponSnArr
-	 * @param couponIdentifier
 	 * @param membershipSn
 	 * @return
 	 */
@@ -374,36 +402,43 @@ public class OrderRestController extends OrderBaseController {
 	public ResponseEntity<?> ordReceptChangeCoupon(Long ordSn, String[] memberKeepingCouponSnArr, Long membershipSn){
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		try {
-			OrdReceptChange body = new OrdReceptChange();
-			List<Long> memberCouponSnList = new ArrayList<Long>();
-			List<String> inputCouponIdList = new ArrayList<String>();
-			/* 보유쿠폰 */
-			if (memberKeepingCouponSnArr == null) {
-				//전부 삭제시 'null'로 처리함
-				body.setMemberCouponSnList(null);
-			} else if(memberKeepingCouponSnArr.length > 0){
-				for(int i=0; i < memberKeepingCouponSnArr.length; i++){
-					if(memberKeepingCouponSnArr[i] != null){
-						memberCouponSnList.add(Long.valueOf(memberKeepingCouponSnArr[i]));
-					}
-				}
-				body.setMemberCouponSnList(memberCouponSnList);
+			MemberSession memberSession = getMemberSession();
+			OrdReceptChange body = memberSession.getOrdReceptChange();
+			if (body == null) {
+				body = new OrdReceptChange();
 			}
 
-			//쿠폰수정하면 포인트도 초기화.
-			List<MembershipPointSelect> membershipPointSelectsList = new ArrayList<MembershipPointSelect>();
-			MembershipPointSelect membershipPointSelect = new MembershipPointSelect();
-			membershipPointSelect.setMembershipSn(membershipSn);
-			membershipPointSelect.setUseMembershipPoint(0);
-			membershipPointSelectsList.add(membershipPointSelect);
-			body.setMembershipPointSelectList(membershipPointSelectsList);
+			List<Long> memberCouponSnList = new ArrayList<Long>();
+			List<String> inputCouponIdList = new ArrayList<String>();
 
-			OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
-			result.put("applyCouponExList", ordRc.getApplyCouponExList());
-			result.put("ordHistEx", ordRc.getOrdHistEx());
-			result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
-			result.put("ordCntMap", makeOrdCntList(ordRc));
-			result.put("apMember", apApi.getMemberInfo(getMemberSn()));
+			if (ordSn != null) {
+				/* 보유쿠폰 */
+				if (memberKeepingCouponSnArr == null) {
+					//전부 삭제시 'null'로 처리함
+					body.setMemberCouponSnList(null);
+				} else if(memberKeepingCouponSnArr.length > 0){
+					for(int i=0; i < memberKeepingCouponSnArr.length; i++){
+						if(memberKeepingCouponSnArr[i] != null){
+							memberCouponSnList.add(Long.valueOf(memberKeepingCouponSnArr[i]));
+						}
+					}
+					body.setMemberCouponSnList(memberCouponSnList);
+				}
+
+				initPoint(membershipSn, body);
+
+				OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
+
+				memberSession.setOrdReceptChange(body);
+				setMemberSession(memberSession);
+
+				result.put("applyCouponExList", ordRc.getApplyCouponExList());
+				result.put("ordHistEx", ordRc.getOrdHistEx());
+				result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
+				result.put("ordCntMap", makeOrdCntList(ordRc));
+				result.put("apMember", apApi.getMemberInfo(getMemberSn()));
+
+			}
 		} catch (Exception e) {
 			result.put("errorData", e);
 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
@@ -422,19 +457,37 @@ public class OrderRestController extends OrderBaseController {
 	 */
 	@PostMapping("/ordReceptChangeBag")
 	@ResponseBody
-	public ResponseEntity<?> ordReceptChangeBag(Long ordSn, Long coSn, Long giftPackingSn, Integer giftPackingQty){
+	public ResponseEntity<?> ordReceptChangeBag(Long ordSn, Long coSn, Long giftPackingSn, Integer giftPackingQty, Long membershipSn){
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		try {
-			OrdReceptChange body = new OrdReceptChange();
+			MemberSession memberSession = getMemberSession();
+			OrdReceptChange body = memberSession.getOrdReceptChange();
+			if (body == null) {
+				body = new OrdReceptChange();
+			}
+
 			List<OtfGiftPackingSelect> otfGiftPackingList = new ArrayList<OtfGiftPackingSelect>();
 			OtfGiftPackingSelect otfGiftPackingSelect = new OtfGiftPackingSelect();
-			if(ordSn != null && giftPackingSn != null && giftPackingQty != null){
-				otfGiftPackingSelect.setCoSn(coSn);						// 업체일련번호
-				otfGiftPackingSelect.setGiftPackingSn(giftPackingSn);	// 선물포장일련번호
-				otfGiftPackingSelect.setGiftPackingQty(giftPackingQty);	// 선물포장수량
-				otfGiftPackingList.add(otfGiftPackingSelect);
-				body.setOtfGiftPackingSelectList(otfGiftPackingList);
+
+			if(ordSn != null){
+
+				if (giftPackingSn != null && giftPackingQty != null) {
+					otfGiftPackingSelect.setCoSn(coSn);                        // 업체일련번호
+					otfGiftPackingSelect.setGiftPackingSn(giftPackingSn);    // 선물포장일련번호
+					otfGiftPackingSelect.setGiftPackingQty(giftPackingQty);    // 선물포장수량
+					otfGiftPackingList.add(otfGiftPackingSelect);
+					body.setOtfGiftPackingSelectList(otfGiftPackingList);
+				} else {
+					body.setOtfGiftPackingSelectList(null);
+				}
+
+				initPoint(membershipSn, body);
+
 				OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
+
+				memberSession.setOrdReceptChange(body);
+				setMemberSession(memberSession);
+
 				result.put("ordHistEx", ordRc.getOrdHistEx());
 				result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
 				result.put("ordCntMap", makeOrdCntList(ordRc));
@@ -460,17 +513,30 @@ public class OrderRestController extends OrderBaseController {
 	public ResponseEntity<?> ordReceptChangePoint(Long ordSn, Long membershipSn, int useMembershipPoint){
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		try {
-			OrdReceptChange body = new OrdReceptChange();
+			MemberSession memberSession = getMemberSession();
+			OrdReceptChange body = memberSession.getOrdReceptChange();
+			if (body == null) {
+				body = new OrdReceptChange();
+			}
+
 			List<MembershipPointSelect> membershipPointSelectsList = new ArrayList<MembershipPointSelect>();
 			MembershipPointSelect membershipPointSelect = new MembershipPointSelect();
-			if(ordSn != null && membershipSn != null && useMembershipPoint > 0){
+			if(ordSn != null){
 
-				membershipPointSelect.setMembershipSn(membershipSn);
-				membershipPointSelect.setUseMembershipPoint(useMembershipPoint);
-				membershipPointSelectsList.add(membershipPointSelect);
-				body.setMembershipPointSelectList(membershipPointSelectsList);
+				if (membershipSn != null) {
+					membershipPointSelect.setMembershipSn(membershipSn);
+					membershipPointSelect.setUseMembershipPoint(useMembershipPoint);
+					membershipPointSelectsList.add(membershipPointSelect);
+					body.setMembershipPointSelectList(membershipPointSelectsList);
+				} else {
+					body.setMembershipPointSelectList(null);
+				}
 
 				OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
+
+				memberSession.setOrdReceptChange(body);
+				setMemberSession(memberSession);
+
 				result.put("ordHistEx", ordRc.getOrdHistEx());
 				result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
 				result.put("ordCntMap", makeOrdCntList(ordRc));
@@ -483,6 +549,59 @@ public class OrderRestController extends OrderBaseController {
 		return ResponseEntity.ok(result);
 	}
 
+	/**
+	 * 주문단위 사은품
+	 *
+	 * @param ordSn
+	 * @param ordUnitAwardSnArr
+	 * @param awardSelectQtyArr
+	 * @param membershipSn
+	 * @return
+	 */
+	@PostMapping("/ordReceptChangeOrdUnit")
+	@ResponseBody
+	public ResponseEntity<?> ordReceptChangeOrdUnit(Long ordSn, Long[] ordUnitAwardSnArr, Integer[] awardSelectQtyArr, Long membershipSn){
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		try {
+			MemberSession memberSession = getMemberSession();
+			OrdReceptChange body = memberSession.getOrdReceptChange();
+			if (body == null) {
+				body = new OrdReceptChange();
+			}
+
+			List<OrdUnitAwardSelect> ordUnitAwardSelectList = new ArrayList<OrdUnitAwardSelect>();
+			if(ordSn != null){
+
+				if (ordUnitAwardSnArr != null && ordUnitAwardSnArr.length > 0) {
+					int index = 0;
+					for (Long ordUnitAwardSn : ordUnitAwardSnArr) {
+						OrdUnitAwardSelect ordUnitAwardSelect = new OrdUnitAwardSelect();
+						ordUnitAwardSelect.setOrdUnitAwardSn(ordUnitAwardSn);
+						ordUnitAwardSelect.setAwardSelectQty(awardSelectQtyArr[index++]);
+						ordUnitAwardSelectList.add(ordUnitAwardSelect);
+					}
+
+					body.setOrdUnitAwardSelectList(ordUnitAwardSelectList);
+				} else {
+					body.setOrdUnitAwardSelectList(null);
+				}
+
+				OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
+
+				memberSession.setOrdReceptChange(body);
+				setMemberSession(memberSession);
+
+				result.put("ordHistEx", ordRc.getOrdHistEx());
+				result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
+				result.put("ordCntMap", makeOrdCntList(ordRc));
+				result.put("apMember", apApi.getMemberInfo(getMemberSn()));
+			}
+		} catch (Exception e) {
+			result.put("errorData", e);
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+		return ResponseEntity.ok(result);
+	}
 
 	/**
 	 * 회원정보변경
@@ -513,5 +632,17 @@ public class OrderRestController extends OrderBaseController {
 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
 		}
 		return ResponseEntity.ok(result);
+	}
+
+	private void initPoint(Long membershipSn, OrdReceptChange body) {
+		if (membershipSn != null) {
+			//쿠폰수정하면 포인트도 초기화.
+			List<MembershipPointSelect> membershipPointSelectsList = new ArrayList<MembershipPointSelect>();
+			MembershipPointSelect membershipPointSelect = new MembershipPointSelect();
+			membershipPointSelect.setMembershipSn(membershipSn);
+			membershipPointSelect.setUseMembershipPoint(0);
+			membershipPointSelectsList.add(membershipPointSelect);
+			body.setMembershipPointSelectList(membershipPointSelectsList);
+		}
 	}
 }

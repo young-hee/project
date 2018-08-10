@@ -79,6 +79,7 @@
 			</p>
 			<div class="page_btns">
 				<button type="button" class="btn_lg_primary" id="orderPayment" th:text="${#IntegUtil.toCommaNumber(ordEx.ordHistEx.finalPamtPcur)} + '원 결제하기'">0 원 결제하기</button>
+				<input type="hidden" name="finalPamtPcur" value="${ordEx.ordHistEx.finalPamtPcur}">
 			</div>
 		</div>
 	</th:block>
@@ -86,6 +87,11 @@
 	<th:block th:if="${!result}">
 		<div class="page_title">
 			<h1 class="h_title page">주문서 오류: <span th:text="${errorMessage}"></span></h1>
+			<br>
+			<tr th:each="error : ${errorAdditional}">
+				<td th:text="${error.key}">key</td>
+				<td th:text="${error.value}">value</td>
+			</tr>
 		</div>
 
 	</th:block>
@@ -100,7 +106,7 @@
 	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use-download.js}"></script> 		<!--다운로드 쿠폰목록 -->
 	<script ap:src="@{/handlebars-templates/compiled/order/coupon-use-list.js}"></script> 		<!--선택된 쿠폰목록 -->
 	<script ap:src="@{/handlebars-templates/compiled/order/final-price-amt-pcur.js}"></script> 		<!-- 최종 결제금액 영역 -->
-	<script ap:src="@{/handlebars-templates/compiled/order/order-unit-award-info.js}"></script> 		<!-- 최종 결제금액 영역 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/order-unit-award-info.js}"></script> 		<!-- 주문단위증정 -->
 
 	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
 	<script language="javascript" type="text/javascript" src="https://stdpay.inicis.com/stdjs/INIStdPay.js" charset="UTF-8"></script>
@@ -178,8 +184,8 @@
 
 			var memberSn		 = /*[[${memberSn}]]*/ '0'; // 회원키
 			var ordSn			= /*[[${ordEx.ordSn}]]*/ '0';													// 주문번호
-			var finalPamtPcur	= /*[[${ordEx.ordHistEx.finalPamtPcur}]]*/ '0';									// 최종결제금액
-			var depositPrice	= $("[name=depositPrice]").val() == '' || $("[name=depositPrice]").val() == undefined ? 0 : $("[name=depositPrice]").val();	// 예치금
+			var finalPamtPcur	= $("[name=finalPamtPcur]").val() == '' || $("[name=finalPamtPcur]").val() == undefined ? 0 : $("[name=finalPamtPcur]").val();	// 최종결제금액
+			var depositPrice	= $("[name=depositPrice]").val() == '' || $("[name=depositPrice]").val() == undefined ? 0 : $("[name=depositPrice]").val();		// 예치금
 			var pgPrice 		= memberSn > 0 ? finalPamtPcur - parseInt(depositPrice) : finalPamtPcur;		// 최종결제금액 - 예치금사용금액
 
 			// PG사 결제정보 세팅
@@ -207,6 +213,7 @@
 			}
 
 			// 결제 레이어 호출전 체크 로직 api 호출 후 연결
+			$('#paymentLoading').show();
 			AP.api.ordReceptPayAmt({}, {
 				ordSn: ordSn,
 				payMethodSn : payMethodSn,
@@ -217,11 +224,14 @@
 				payMethodCode : payMethodCode,
 				payServiceCode : payServiceCode
 			}).done(function (data) {
-				if (data.result == "success"){
+				if (data.result == "success") {
 					ordReceptChange(ordSn, pgPrice);
+				} else {
+					$('#paymentLoading').hide();
 				}
 			}).fail(function (e) {
-				AP.modal.alert("[ajax.fail]실패");
+				AP.modal.alert(e.responseJSON.errorData.message);
+				$('#paymentLoading').hide();
 			}).always(function () {
 			});
 
@@ -255,6 +265,7 @@
 				}
 			}).always(function() {
 				//성공, 실패
+				$('#paymentLoading').hide();
 			});
 		}
 
@@ -270,6 +281,15 @@
 			}
 
 			var $form = $("form[name='orderForm']");
+			
+			//상품명 대표 상품명 한개로 셋팅
+			var $_productName = $(".item_info").find("input:hidden[name='prodName']").first();
+			$hidden = $("<input />");
+			$hidden.prop("type", "hidden");
+			$hidden.prop("name", "repProdName");
+			$hidden.prop("value", $_productName.val());
+			$form.append($hidden);
+			
 			var actionUrl;
 			//네이버 결제
 			if('NAVERPAY' == selectedPaymethod) {
@@ -308,6 +328,7 @@
 				$form.attr("target", 'payPopup');
 				$form.submit();
 			}
+			
 			//원터치 간편결제
 			else if('WPAY' == selectedPaymethod) {
 
@@ -387,7 +408,7 @@
 			});
 		}
 
-		//결제금액 화면 그리기
+		//결제금액 영역 그리기
 		function amtPcurInit() {
 			var ordHistEx = /*[[${ordEx.ordHistEx}]]*/ '0', // 최종결제금액
 				ordAmtMap = /*[[${ordAmtMap}]]*/ null,
@@ -405,6 +426,8 @@
 				apMember : apMember
 			});
 			$('#amtPcur').html(html);
+			$("[name=finalPamtPcur]").val(ordHistEx.finalPamtPcur);
+			$("#orderPayment").html($B.string.numberFormat(ordHistEx.finalPamtPcur)+'원 결제하기');
 		}
 	</script>
 </th:block>

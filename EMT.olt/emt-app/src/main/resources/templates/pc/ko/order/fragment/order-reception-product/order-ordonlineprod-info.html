@@ -7,17 +7,18 @@
 					<input type="hidden" id="ordHistProdCnt" name="ordHistProdCnt" th:value="${#lists.size(ordOnlineProd.ordHistProdList)}"/>
 					<!--/* 상품 선택 */-->
 					<div class="item_thumb">
-						<img th:if="${ordOnlineProd.onlineProdImgUrl != null}" th:src="${ordOnlineProd.onlineProdImgUrl}" class="thm_cart_item">
-						<img th:if="${ordOnlineProd.onlineProdImgUrl == null}" ap:src="@{/images/cart/no_img.png}" class="thm_cart_item">
+						<img class="lazy_load thm_cart_item" th:src="${ordOnlineProd.onlineProdImgUrl}">
 					</div>
 					<!--/* 상품/플래그/옵션명 */-->
 					<div class="item_name">
 						<span class="title" th:text="${ordOnlineProd.onlineProdName}">애니 쿠편 올데이 퍼펙트 리필 SPF50+/PA+++</span>
-						<p class="opt">옵션 :
-							<th:block th:each="ordHistProd, iterStat : ${ordOnlineProd.ordHistProdList}"
-									  th:text="!${iterStat.last} ? ${ordHistProd.ordProdEx.prodNameBlang} + ' (' + ${ordHistProd.ordQty} + ')개' + ' / ' : ${ordHistProd.ordProdEx.prodNameBlang} + ' (' + ${ordHistProd.ordQty} + ')개'"
+						<th:block th:if="${ordOnlineProd.singleProdYn != 'Y'}">
+							<p class="opt">옵션 :
+								<th:block th:each="ordHistProd, iterStat : ${ordOnlineProd.ordHistProdList}"
+										  th:text="!${iterStat.last} ? ${ordHistProd.ordProdEx.prodNameBlang} + ' (' + ${ordHistProd.ordQty} + ')개' + ' / ' : ${ordHistProd.ordProdEx.prodNameBlang} + ' (' + ${ordHistProd.ordQty} + ')개'"
 								></th:block>
-						</p>
+							</p>
+						</th:block>
 					</div>
 					<!--/* 상품 수량 */-->
 					<div class="count">

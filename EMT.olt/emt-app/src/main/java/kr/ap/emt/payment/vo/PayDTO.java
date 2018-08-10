@@ -22,6 +22,7 @@ public class PayDTO {
 	private String oid;	//주문번호
 	private String price;	//최종가격
 	private String buyerName;	//주문자 성명
+	private String repProdName;	//대표상품명
 	private String prodName;	//상품명
     private String mobile;//휴대전화번호
     private String email;//이메일
@@ -94,6 +95,13 @@ public class PayDTO {
 	}
 	public void setBuyerName(String buyerName) {
 		this.buyerName = buyerName;
+	}
+	
+	public String getRepProdName() {
+		return repProdName;
+	}
+	public void setRepProdName(String repProdName) {
+		this.repProdName = repProdName;
 	}
 	public String getProdName() {
 		return prodName;

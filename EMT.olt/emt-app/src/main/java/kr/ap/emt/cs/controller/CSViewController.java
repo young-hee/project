@@ -209,7 +209,7 @@ public class CSViewController extends AbstractController {
             FoNoticeResult nomalNotice = guideApi.getFoNotices("", null, 0, 5, "N", EVENT_YN);
 
             //FAQ 목록 조회
-            FaqSearchResult faqSR = guideApi.getFaqs("", null, 0, 10);
+            FaqSearchResult faqSR = guideApi.getFaqs("", null, null, 0, 10);
 
             model.addAttribute("nomalNotice", nomalNotice);
             model.addAttribute("faqSrchRst", faqSR);
@@ -247,10 +247,10 @@ public class CSViewController extends AbstractController {
             if( offset == null) offset = 0;
 
             //FAQ Summary 조회
-            FaqSummary faqSummary = guideApi.getFaqSummary();
+            FaqSummary faqSummary = guideApi.getFaqSummary(null);
 
             //FAQ 목록 조회
-            FaqSearchResult faqSR = guideApi.getFaqs(searchKeyword, inquiryTypeSn, offset, limit);
+            FaqSearchResult faqSR = guideApi.getFaqs(searchKeyword, inquiryTypeSn, null,  offset, limit);
 
             model.addAttribute("keyword", searchKeyword);
             model.addAttribute("faqType", faqSummary);

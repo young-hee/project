@@ -58,7 +58,7 @@
 						cnt = (parseInt($('#' + id + '_cnt').val()) - 1);
 						totSum = cnt * parseInt(giftPackingFee);
 					}
-					$('#' + id + '_sum').text(' 추가 ' + totSum + '원');
+					$('#' + id + '_sum').text(' 추가 ' + $B.string.numberFormat(totSum) + '원');
 					boxBagQtyChange(coSn, giftPackingSn, cnt);
 				}
 
@@ -71,7 +71,8 @@
 					ordSn: ordSn,
 					coSn : coSn,
 					giftPackingSn : giftPackingSn,
-					giftPackingQty : cnt
+					giftPackingQty : cnt,
+					membershipSn : $('[name=beauty_point]').data().membershipsn
 				}).done(function (data) {
 					if (data.ordHistEx != null){
 
@@ -86,6 +87,9 @@
 							apMember : data.apMember
 						});
 						$('#amtPcur').html(html);
+						$("[name=finalPamtPcur]").val(data.ordHistEx.finalPamtPcur);
+						$("#orderPayment").html($B.string.numberFormat(data.ordHistEx.finalPamtPcur)+'원 결제하기');
+
 						$('#amtPriceTab > button').trigger("click");
 						//$('html, body').animate({scrollTop: $("#amtPcur").offset().top-50}, 1000);
 

@@ -89,7 +89,7 @@
 					}).fail(function(e) {
 						//실패
 						//AP.modal.alert(e.responseJSON.errorData.message);
-						AP.modal.alert("쿠폰등록 실폐했습니다. 쿠폰번호 확인하세요.");
+						AP.modal.alert("쿠폰등록 실패했습니다. 쿠폰번호 확인하세요.");
 					}).always(function() {
 						//성공, 실패
 					});

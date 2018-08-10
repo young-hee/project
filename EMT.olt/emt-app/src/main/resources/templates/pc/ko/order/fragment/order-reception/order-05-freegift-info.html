@@ -9,21 +9,13 @@
 	<script th:inline="javascript">
 		$( document ).ready(function() {
 			ordUnitInit();
-
-			//tab click event
-			$('[name=freebies]').off('click').on('click', function() {
-				if ($(this).prop('checked')) {
-					$('[class^=freebies]').hide();
-					$('.'+this.id).show();
-				}
-			});
 		});
 
 		function ordUnitInit() {
 			var ordUnitAwardOrdPromoExList = /*[[${ordUnitAwardOrdPromoExList}]]*/ null; //주문사은품 목록
 
 			if (ordUnitAwardOrdPromoExList.length > 0) {
-				var html = AP.common.getTemplate( 'order.order-unit-award-info', {
+				var html = AP.common.getTemplate('order.order-unit-award-info', {
 					list: ordUnitAwardOrdPromoExList
 				});
 				$('#ordUnit dd').remove();
@@ -31,6 +23,104 @@
 			} else {
 				$('#ordUnit').remove();
 			}
+
+			//첫구매 영역
+			$('[name^=firstPur_]').off('click').on('click', function () {
+				if ($(this).prop('checked')) {
+					if ($(this).data('methodCode') == 'Select') {
+						var type = $(this).data('type');
+						$('[name=firstPur_' + $(this).data('promosn') + ']').each(function (item) {
+							if (type != $(this).data('type')) {
+								$(this).attr("checked", false);
+							}
+						});
+					}
+					changeOrdUnit();
+				}
+			});
+
+			//주문단위 증정 Tab
+			$('[name=freebies]').off('click').on('click', function () {
+				if ($(this).prop('checked')) {
+					$('[class^=freebies]').hide();
+					$('.' + this.id).show();
+				}
+			});
+
+			//주문단위 증정 영역
+			$('[name^=ordUnitAward_]').off('click').on('click', function () {
+				if ($(this).prop('checked')) {
+					if ($(this).data('methodCode') == 'Select') {
+						var type = $(this).data('type');
+						$('[name=ordUnitAward_' + $(this).data('promosn') + ']').each(function (item) {
+							if (type != $(this).data('type')) {
+								$(this).attr("checked", false);
+							}
+						});
+					}
+					changeOrdUnit();
+				}
+			});
+
+			//선택취소
+			$('#cancelBtn').off('click').on('click', function () {
+				$('[name^=ordUnitAward_]').each(function (item) {
+					$(this).attr("checked", false);
+				});
+				changeOrdUnit();
+			});
+		}
+
+		function changeOrdUnit() {
+			var ordUnitAwardSnArr = [],
+				awardSelectQtyArr = [];
+
+			$('[name^=ordUnitAward_]:checked').each(function () {
+				ordUnitAwardSnArr.push(this.id);
+				awardSelectQtyArr.push(this.dataset.qty);
+			});
+
+			if (ordUnitAwardSnArr != null && ordUnitAwardSnArr.length > 0) {
+				jQuery.ajaxSettings.traditional = true;
+			}
+
+			AP.api.ordReceptChangeOrdUnit({}, {
+				ordSn : ordSn,
+				ordUnitAwardSnArr : ordUnitAwardSnArr,
+				awardSelectQtyArr : awardSelectQtyArr,
+				membershipSn : $('[name=beauty_point]').data().membershipsn
+			}).done(function(data){
+				if (data.ordHistEx != null){
+
+					/**
+					 * 총결제금액
+					 * @type {*|String}
+					 */
+					var html = AP.common.getTemplate( 'order.final-price-amt-pcur', {
+						ordHistEx : data.ordHistEx,
+						ordAmtMap : data.ordAmtMap,
+						ordCntMap : data.ordCntMap,
+						apMember : data.apMember
+					});
+					$('#amtPcur').html(html);
+					$("[name=finalPamtPcur]").val(data.ordHistEx.finalPamtPcur);
+					$("#orderPayment").html($B.string.numberFormat(data.ordHistEx.finalPamtPcur)+'원 결제하기');
+
+					$('#amtPriceTab > button').trigger("click");
+					//$('html, body').animate({scrollTop: $("#amtPcur").offset().top-50}, 1000);
+
+					if ($('[name="depositPrice"]').val() != "" || $('[name="beauty_point"]').val() != "") {
+						AP.modal.alert('표장/쇼핑백 수정인한 포인트 및 예치금 초기화 됩니다..');
+						$('[name="depositPrice"]').val('');
+						$('[name="beauty_point"]').val('');
+					}
+				}
+			}).fail(function (e) {
+				AP.modal.alert("fail");
+			}).always(function () {
+				$('#couponLoading').hide();
+				jQuery.ajaxSettings.traditional = true;
+			});
 		}
 	</script>
 </dl>

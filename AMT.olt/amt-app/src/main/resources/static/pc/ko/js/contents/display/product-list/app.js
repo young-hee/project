@@ -9,7 +9,7 @@
 	var Display = $B.Class.extend({
 		initialize: function () {
 			console.log( 'display' );
-		},
+		}
 
 		/** =============== Public Methods =============== */
 

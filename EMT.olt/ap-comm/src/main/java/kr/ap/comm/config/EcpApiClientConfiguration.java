@@ -17,6 +17,7 @@ import net.g1project.ecp.api.client.ap.ApApi;
 import net.g1project.ecp.api.client.ap.BbsApi;
 import net.g1project.ecp.api.client.ap.VerifApi;
 import net.g1project.ecp.api.client.basis.MallApi;
+import net.g1project.ecp.api.client.linker.LinkerApi;
 import net.g1project.ecp.api.client.offlinestore.StoreApi;
 import net.g1project.ecp.api.client.sales.DepositsApi;
 import net.g1project.ecp.api.client.order.OrderApi;
@@ -243,6 +244,9 @@ public class EcpApiClientConfiguration {
 
 	@Bean
 	public VerifApi verifApi() {	return createApi(VerifApi.class); }
+
+	@Bean
+	public LinkerApi linkerApi()	{	 return createApi(LinkerApi.class);	}
 
     @Bean
     public MessageSource messageSource() {

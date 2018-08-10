@@ -77,10 +77,10 @@ public class CSViewController extends AbstractController {
 			if( offset == null) offset = 0;
 
 			//FAQ Summary 조회
-			FaqSummary faqSummary = guideApi.getFaqSummary();
+			FaqSummary faqSummary = guideApi.getFaqSummary(null);
 
 			//FAQ 목록 조회
-			FaqSearchResult faqSR = guideApi.getFaqs(searchKeyword, inquiryTypeSn, offset, limit);
+			FaqSearchResult faqSR = guideApi.getFaqs(searchKeyword, inquiryTypeSn, null, offset, limit);
 
 			model.addAttribute("keyword", searchKeyword);
 			model.addAttribute("faqType", faqSummary);

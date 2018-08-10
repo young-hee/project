@@ -34,10 +34,7 @@
 
 			AP.api.participated({}, {
 				regularEventType: 'Roulette'
-			}).done(function ( result ) {
-
-				result = result['awards'];
-
+			}).done(function ( result ) {;
 				this._alert( 'start' ).addListener( 'modal-close', function (e) {
 					if ( e.closeType === 'confirm' ) {
 						this._winValue = ( result.eventWinStatus === 'Win' ) ? 1 : 0;

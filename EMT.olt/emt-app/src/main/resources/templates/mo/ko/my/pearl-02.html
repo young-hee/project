@@ -39,17 +39,17 @@
 							<div th:if="${not #lists.isEmpty(pointGiftList)}" class="gifts_received bt_point_list">
 								<ul>
 									<th:block th:each="item : ${pointGiftList}">
-										<li th:id="'gift' + ${item.activityPointHistSn}" class="gifts-item">
+										<li th:id="'gift' + ${item.activityPointGiftHistSn}" class="gifts-item">
 											<div class="table_layout">
-												<div th:if="${#IntegUtil.isDayCount(item.pointHistOccurDt, 4)}">
-													<p class="h_title"><strong><em th:text="${#IntegUtil.dayCountUtil(item.pointHistOccurDt, 7)}">D - 1</em></strong> <span th:text="${item.memberName.name1}">홍길동</span>님의 진주알</p><!--/* 20180418 : D-day 표기 추가 / 3일 이하로 남은 날짜에는 태그 em추가 */-->
-													<p class="color_light_gray">[<span th:text="${#IntegUtil.toCommaNumber(point)}">1,000</span>알 선물 도착]</p>
+												<div th:if="${(#IntegUtil.countDate(item.sendGiftDt) + 7) <= 3}">
+													<p class="h_title"><strong><em>D - <th:block th:text="${#IntegUtil.countDate(item.sendGiftDt) + 7}">1</th:block></em></strong> <span th:text="${item.sendGiftMemberName.name1}">홍길동</span>님의 진주알</p><!--/* 20180418 : D-day 표기 추가 / 3일 이하로 남은 날짜에는 태그 em추가 */-->
+													<p class="color_light_gray">[<span th:text="${#IntegUtil.toCommaNumber(item.giftPoint)}">1,000</span>알 선물 도착]</p>
 												</div>
-												<div th:unless="${#IntegUtil.isDayCount(item.pointHistOccurDt, 4)}">
-													<p class="h_title"><strong th:text="${#IntegUtil.dayCountUtil(item.pointHistOccurDt, 7)}">D - 7</strong> <span th:text="${item.memberName.name1}">홍길동</span>님의 진주알</p>
-													<p class="color_light_gray">[<span th:text="${#IntegUtil.toCommaNumber(point)}">1,000</span>알 선물 도착]</p>
+												<div th:unless="${(#IntegUtil.countDate(item.sendGiftDt) + 7) <= 3}">
+													<p class="h_title"><strong>D - <th:block th:text="${#IntegUtil.countDate(item.sendGiftDt) + 7}">1</th:block></strong> <span th:text="${item.sendGiftMemberName.name1}">홍길동</span>님의 진주알</p>
+													<p class="color_light_gray">[<span th:text="${#IntegUtil.toCommaNumber(item.giftPoint)}">1,000</span>알 선물 도착]</p>
 												</div>
-												<div><button type="button" onclick="'receive(' + item.activityPointHistSn + ')'">받기</button></div>
+												<div><button type="button" th:onclick="'receive(' + ${item.activityPointGiftHistSn} + ')'">받기</button></div>
 											</div>
 										</li>
 									</th:block>

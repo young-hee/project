@@ -2,41 +2,57 @@
 <body>
 <!-- #ap_container -->
 <div ap:fragment="layout-contents">
-	<div class="layer_popup layer_attendance" style="display: block;">
+
+	<button type="button" onclick="$(this).next('.layer_popup').show();" class="btn_md_primary w100p">출석체크 완료 팝업</button>
+	<div class="layer_popup layer_attendance">
 		<div class="layer_dimmed"></div>
-		<div class="layer_wrap" style="top:100px">
+		<div class="layer_wrap">
 			<dl class="layer">
 				<dt class="layer_title">출석체크 완료</dt>
+
 				<dd class="layer_cont">
 					<p class="text">고객님 환영해요<br>즐겁고 행복한 쇼핑되세요</p>
-					<ul class="product_list mgt35">
+					<ul class="product_list">
 						<li class="product ui_table">
 							<div class="product_visual">
 								<img ap:src="@{/images/dummy/img_item_04.jpg}" alt="">
 								<span class="discount">50%</span>
 							</div>
 							<div class="product_info">
-								<b class="brand">06월 15일 TODAY 핫딜</b>
-								<div class="product_name">스킨베일 커버 파운데이션 EX SPF25 PA++ 30ml</div>
-								<div class="product_area"><b>34,000</b>원</div>
-								<div>27개 남음 <a href="#none" class="link"><em>더보기</em></a></div>
+								<strong class="brand">06월 15일 TODAY 핫딜</strong>
+								<div class="product_name">스킨베일 커버 파운데이션 EX SPF25 PA++ 30ml스킨베일 커버 파운데이션 EX SPF25 PA++ 30ml</div>
+								<div class="product_area"><span class="price"><strong>34,000</strong>원</span><span class="dis_price"><del>20,300</del>원</span></div>
+								<div><strong>27</strong>개 남음<a href="#none" class="link"><em>더보기</em></a></div>
 							</div>
 						</li>
 					</ul>
 				</dd>
+
 				<dd class="layer_btns">
 					<button class="btn_default_modal_confirm" type="button">브랜드쿠폰 뽑기</button>
-					<button class="btn_default_modal_confirm" type="button">확인</button>
+					<button class="btn_default_modal_confirm close" type="button">닫기</button>
 				</dd>
+
 			</dl>
-			<button class="layer_close" type="button"><i class="ico_close_l_w"></i><span class="sr_only">레이어 닫기</span></button>
 		</div>
 	</div>
+
 </div>
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
+<script type="text/javascript">
+/*팝업열기*/
+$('.layer_btns .close').click(function(){
+		$('.layer_popup').hide();
+});
 
+/*팝업위치*/
+$('.btn_md_primary').click(function(){
+	var layerH = $(this).next('.layer_popup').find('.layer_wrap').outerHeight() / 2;
+	$(this).next('.layer_popup').find('.layer_wrap').css('margin-top',-layerH);
+});
+</script>
 </th:block>
 
 </body>

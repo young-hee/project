@@ -12,18 +12,19 @@
 					<fieldset class="search_form">
 						<legend class="sr_only">검색</legend>
 						<div class="wrap">
-							<input type="text" title="검색어 입력" placeholder="상품명을 입력해주세요">
-							<button type="button" class="btn_del" style="display: block;"><i class="ico_close_s_w"></i><span class="sr_only">검색어 삭제</span></button>
+							<input type="text" title="검색어 입력" placeholder="검색어를 입력해주세요">
+							<!-- <button type="button" class="btn_del" style="display: block;"><i class="ico_close_s_w"></i><span class="sr_only">검색어 삭제</span></button> -->
 							<button class="btn_search" type="button"><i class="ico_search"></i><span class="sr_only">검색</span></button>
 						</div>
 						<!--/* 자동완성 */-->
 						<div class="auto_complete">
-							<dl class="brand_info">
-								<dt>추천 브랜드 설화수</dt>
-								<dd>
-									<a href="#none"><img alt="" src="/mo/ko/images/dummy/img_brand_01.png" class="brand"><b>설화수 브랜드관 가기</b> <i class="ico_arr"></i></a>
-								</dd>
-							</dl>
+							<div class="brand_info">
+								<a href="#none">
+									<div class="brand"><img alt="" src="/mo/ko/images/dummy/img_brand_01.png" ></div>
+									<span class="title">추천 브랜드</span>
+									<span class="brand_go">설화수 브랜드관</span>
+								</a>
+							</div>
 							<ul class="keyword_list">
 								<li>
 									<a href="#none"><em>설화수</em> 세럼 드롭 틴트</a>
@@ -37,7 +38,7 @@
 								<li>
 									<a href="#none">라네즈 세럼 드롭 틴트 라네즈 세럼 드롭 틴트 라네즈 세럼 드롭 틴트 라네즈 세럼 드롭 틴트</a>
 								</li>
-								<li>
+								<li class="no_data">
 									<span>일치하는 검색어가 없습니다.</span>
 								</li>
 							</ul>
@@ -73,12 +74,14 @@
 											<button type="button"><i class="ico_close_s"></i><span class="sr_only">검색어 삭제</span></button>
 										</li>
 									</ul>
-									<div class="bottom"><button type="button">전체삭제</button></div>
-									<!--/* 검색어가 없을 경우
-									<div class="no_keyword">
-										<span>궁금한 상품을 검색해주세요.</span>
+									<div class="bottom">
+										<button type="button">자동저장 끄기</button>
+										<button type="button">전체삭제</button>
 									</div>
-									*/-->
+									<!--/* 검색어가 없을 경우*/-->
+									<!-- <div class="no_keyword">
+										<span>궁금한 상품을 검색해주세요.</span>
+									</div> -->
 								</div>
 							</div>
 							<div class="tab_cont">
@@ -181,6 +184,11 @@
 					</div>
 				</dd>
 			</dl>
+			<!--/* 컬러큐레이션 : 립 카테고리 이하에서만 노출 */-->
+			<div class="color_curation">
+				<a href="javascript:;" class="btn"><span class="sr_only">컬러 큐레이션</span></a>
+				<span class="bubble">전지현이 바른 립 컬러가 궁금하세요?</span>
+			</div>
 			<button class="layer_close" type="button"><i class="ico_close_l_w"></i><span class="sr_only">레이어 닫기</span></button>
 		</div>
 	</div>
@@ -190,6 +198,16 @@
 <th:block ap:fragment="layout-endpoint">
 	<script>
 		$('.slide').ixSlideMax();
+
+	//	$(".bubble").fadeOut(4000);
+
+		// var contH = $('.auto_complete').outerHeight() + $('.search_form').outerHeight();
+		// var winH = $(window).outerHeight();
+		// if(winH > contH){
+		// 	 $('.auto_complete').css('bottom','0');
+		// }else {
+		// 	$('.auto_complete').css('bottom','inherit');
+		// }
 	</script>
 </th:block>
 

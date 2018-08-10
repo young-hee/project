@@ -2,17 +2,20 @@ package kr.ap.comm.api;
 
 import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.support.constants.SessionKey;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.WebUtils;
 
-import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -27,13 +30,9 @@ public class RequestData {
 	private String url;
 	private String requestType = "POST";
 	private static byte[] data;
-//	private static String SERVER_URL="http://localhost:3030/sub/";
 
 	PostData postData = new PostData();
 	private int status;
-
-
-
 
 	public int getStatus() {
 		return status;
@@ -59,91 +58,73 @@ public class RequestData {
 
 	public String request() {
 
-		HttpsURLConnection https = null;
-		String resultStr = "";
-
 		try {
-			URL serverUrl = new URL(url);
-			https = (HttpsURLConnection) serverUrl.openConnection();
-			HttpURLConnection.setFollowRedirects(false);
-			https.setConnectTimeout(60000);
-			https.setReadTimeout(60000);
-			https.setRequestMethod(requestType);
-			if ("POST".equals(requestType)) {
-				https.setDoInput(true);
-				https.setDoOutput(true);
-				https.setRequestProperty("Charset", "utf-8");
-				https.setRequestProperty("Content-Type", "application/json");
-				https.setRequestProperty("Content-Length", postData.getLength() + "");
+			RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(60000)
+				.setConnectTimeout(60000).setConnectionRequestTimeout(60000)
+				.build();
 
-				// SLT 헤더추가
-				addSLTCommonHeaders(https);
+			CloseableHttpClient httpClient = HttpClientBuilder.create()
+				.disableRedirectHandling()
+				.setDefaultRequestConfig(requestConfig)
+				.build();
 
-				OutputStream out_stream = https.getOutputStream();
-				postData.write(out_stream);
+			// AMORE API 는 모두 POST 요청
+			HttpPost post = new HttpPost(url);
+			addSLTCommonHeaders(post);
+			post.setEntity(new StringEntity(postData.toString()));
+			if (logger.isDebugEnabled()) {
 				logger.debug("[AMORE_API]REQUEST BODY={}", postData.toString());
-				out_stream.flush();
-				out_stream.close();
 			}
 
-			BufferedReader read = null;
-			InputStream error = https.getErrorStream();
-			if (error != null) {
-				InputStreamReader isr = new InputStreamReader(error, StandardCharsets.UTF_8);
-				read = new BufferedReader(isr);
-
-				StringBuilder sb = new StringBuilder();
-
-				String line = null;
-				while ((line = read.readLine()) != null) {
-					sb.append(line);
-				}
-				resultStr = sb.toString();
+			// API Call
+			HttpResponse response = httpClient.execute(post);
+			int statusCode = response.getStatusLine().getStatusCode();
+			if (logger.isDebugEnabled()) {
+				logger.debug("[AMORE_API]RESPONSE CODE={}", statusCode);
 			}
-			https.connect();
-			this.status = https.getResponseCode();
-			logger.debug("[AMORE_API]RESPONSE CODE={}", https.getResponseCode());
-			InputStream is = https.getInputStream();
-			InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
-			read = new BufferedReader(isr);
+
+			BufferedReader br = new BufferedReader(
+				new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
 
 			StringBuilder sb = new StringBuilder();
-
 			String line = null;
-			while ((line = read.readLine()) != null) {
+			while ((line = br.readLine()) != null) {
 				sb.append(line);
 			}
-			resultStr = sb.toString();
-			logger.debug("[AMORE_API]RESPONSE BODY={}", resultStr);
 
-			read.close();
-
-			return resultStr;
-
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		} finally {
-			if (https != null) {
-				https.disconnect();
+			if (logger.isDebugEnabled()) {
+				logger.debug("[AMORE_API]RESPONSE BODY={}", sb.toString());
 			}
+
+			// clean up
+			br.close();
+			httpClient.close();
+
+			return sb.toString();
+
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
 		}
+
 		return null;
 	}
 
 	/**
 	 * SLT 표준화 정의서에 정의되어 있는 Header 영역 내용 추가
 	 */
-	private void addSLTCommonHeaders(HttpsURLConnection https) {
-		https.setRequestProperty("x-dsp-uuid", UUID.randomUUID().toString());
+	private void addSLTCommonHeaders(HttpPost post) {
+		post.setHeader("Content-Type", "application/json; charset=UTF-8");
+
+		post.setHeader("x-dsp-uuid", UUID.randomUUID().toString());
 		Optional<String> userId = getUserId();
 		if (userId.isPresent()) {
-			https.setRequestProperty("x-dsp-userid", userId.get());
+			post.setHeader("x-dsp-userid", userId.get());
 		}
 		// FIXME: screenid 값을 가져올수 있는 방안 필요
-		https.setRequestProperty("x-dsp-screenid", "screenid");
-		https.setRequestProperty("x-dsp-langcd", "ko");
+		post.setHeader("x-dsp-screenid", "screenid");
+		post.setHeader("x-dsp-langcd", "ko");
 		String serviceUrl = getServiceUrl();
-		https.setRequestProperty("x-dsp-serviceURL", serviceUrl);
+		post.setHeader("x-dsp-serviceURL", serviceUrl);
 	}
 
 	private Optional<String> getUserId() {

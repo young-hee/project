@@ -1,7 +1,7 @@
 <div class="clear">
 	<p class="text font_lg"><b>검색된 매장<em id="searchCnt">0</em>개</b></p>
 	<div>
-		<span class="check_wrap"><input type="radio" name="searchGubun" id="radio2" value="2"/><label for="radio2">단골매장</label></span>
+		<span class="check_wrap"><input type="radio" name="radioCheck" id="radioCheck" value="01"/><label for="radioCheck">단골매장</label></span>
 	</div>
 </div>
 <table class="ui_table_striped data_table thead_colored align_center mgt20">
@@ -23,22 +23,35 @@
 	</tr>
 	</thead>
 	<tbody>
-	{{#xif this.totalLength '>' 0 }}
-		{{#each this.list }}
-		<tr class="storeRow">
-			<td>
-				<span class="check_wrap check_only">
-					<input type="checkbox" name="layer" id="layer_{{ this.storeSn }}" value="{{ this.storeSn }}" storeName="{{ this.storeName }}" class="table_striped" {{checkedIf this.regularStoreYn}}/>
-					<label for="layer_{{ this.storeSn }}"><span class="sr_only" value="{{ this.storeSn }}">{단골매장}선택</span></label>
-				</span>
-			</td>
-			<td><a href="#" onclick="fnChangeStore({{ this.storeSn }}); return false;">{{ this.storeName }} {{#xif this.defaultStoreYn '==' 'Y'}}<span class="store_default">기본</span>{{/xif}}</a></td>
-			<td>{{ this.phoneNo1.phoneNo }}</td>
-			<td class="align_left">{{ this.address.address1 }}</td>
-			<td><button type="button" class="btn_sm_bordered" latitude="{{ this.latitude }}" longitude="{{ this.longitude }}">위치보기</button></td>
-		</tr>
-		{{/each}}
-	{{/xif}}
+		{{#if (gt totalLength 0) }}
+			{{#each list }}
+				<tr class="storeRow">
+					<td>
+						<span class="check_wrap check_only">
+							<input type="checkbox" name="layer" id="layer_{{ storeSn }}" value="{{ storeSn }}" storeName="{{ storeName }}" class="table_striped" {{checkedIf regularStoreYn}}/>
+							<label for="layer_{{ storeSn }}"><span class="sr_only" value="{{ storeSn }}">{단골매장}선택</span></label>
+						</span>
+					</td>
+					<td>
+						<a href="#" onclick="fnChangeStore('{{ storeSn }}'); return false;">
+							{{ storeName }}
+							{{#if (eq defaultStoreYn 'Y') }}
+								<span class="store_default">기본</span>
+							{{/if}}
+							{{#if (eq invtEnoughType 'No') }} <em>[재고없음]</em> {{/if}}
+							{{#if (eq invtEnoughType 'Enough') }} <em class="color_light_blue">[재고있음]</em> {{/if}}
+							{{#if (eq invtEnoughType 'NotEnough') }} <em>[재고부족]</em> {{/if}}
+						</a>
+					</td>
+					<td>{{ phoneNo1.phoneNo }}</td>
+					<td class="align_left">{{ address.address1 }}</td>
+					<td><button type="button" class="btn_sm_bordered" latitude="{{ latitude }}" longitude="{{ longitude }}">위치보기</button></td>
+				</tr>
+				<tr class="tr_map">
+					<td colspan="5" class="td_map"><div class="map_area"></div><button class="btn_map_close">닫기</button></td>
+				</tr>
+			{{/each}}
+		{{/if}}
 	</tbody>
 </table>
 {{!-- <div class="pagination"> --}}

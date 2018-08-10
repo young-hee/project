@@ -500,15 +500,16 @@
 					<!-- // 상품 리스트 -->
 				</li>
 			</ul>
-			<!-- // 상품리스트 보기 : 리스트 or 갤러리 -->
-		</div>
 
-		<div class="loading" style="height:200px;"> <!-- 로딩이 들어가야 하는 영역 높이값 inline으로..-->
-			<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
-		</div>
-		<!--/* 상품목록 없을때 */-->
-		<div class="section no_product" style="display: none">
-			<p class="text_center">더 좋은 상품을 준비중입니다.</p>
+			<!-- 로딩이 들어가야 하는 영역 높이값 inline으로..-->
+			<div class="loading" data-loading-first="300" data-loading-more="90" style="display: none">
+				<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+			</div>
+
+			<!--/* 상품목록 없을때 */-->
+			<div class="section no_product" style="display: none">
+				<p class="text_center">더 좋은 상품을 준비중입니다.</p>
+			</div>
 		</div>
 	</div>
 </div>
@@ -517,6 +518,78 @@
 <th:block ap:fragment="layout-endpoint">
 	<script type="text/javascript">
 
+		var _filterData = {
+			addAttrs: [
+				{
+					addAttrsName: '브랜드',
+					addAttrVals: [
+						{ addAttrValCode: 'brand00', addAttrValName: '프리메라' },
+						{ addAttrValCode: 'brand01', addAttrValName: '아모레퍼시픽' },
+						{ addAttrValCode: 'brand02', addAttrValName: '헤라' },
+						{ addAttrValCode: 'brand03', addAttrValName: '라네즈' }
+					]
+				},
+				{
+					addAttrsName: '서비스',
+					addAttrVals: [
+						{ addAttrValCode: 'service00', addAttrValName: '당일배송' },
+						{ addAttrValCode: 'service01', addAttrValName: '선물포장' }
+					]
+				},
+				{
+					addAttrsName: '상품특징',
+					addAttrVals: [
+						{ addAttrValCode: 'feature00', addAttrValName: '호수있어요' },
+						{ addAttrValCode: 'feature01', addAttrValName: '대용량있어요' },
+						{ addAttrValCode: 'feature02', addAttrValName: '옴므' },
+						{ addAttrValCode: 'feature03', addAttrValName: 'Night 전용' },
+						{ addAttrValCode: 'feature04', addAttrValName: '1+1' },
+						{ addAttrValCode: 'feature05', addAttrValName: '스페셜기프트' }
+					]
+				},
+				{
+					addAttrsName: '쇼핑찬스',
+					addAttrVals: [
+						{ addAttrValCode: 'chance00', addAttrValName: '투데이핫딜' },
+						{ addAttrValCode: 'chance01', addAttrValName: 'Sale' }
+					]
+				},
+				{
+					addAttrsName: '기능성',
+					addAttrVals: [
+						{ addAttrValCode: 'functional00', addAttrValName: '미백' },
+						{ addAttrValCode: 'functional01', addAttrValName: '주름개선' },
+						{ addAttrValCode: 'functional02', addAttrValName: '자외선차단' }
+					]
+				},
+				{
+					addAttrsName: '색상',
+					addAttrVals: [
+						{ addAttrValCode: '#a50018', addAttrValName: '#a50018' },
+						{ addAttrValCode: '#ff0026', addAttrValName: '#ff0026' },
+						{ addAttrValCode: '#f28c9b', addAttrValName: '#f28c9b' },
+						{ addAttrValCode: '#fe4c67', addAttrValName: '#fe4c67' },
+						{ addAttrValCode: '#ff6100', addAttrValName: '#ff6100' },
+						{ addAttrValCode: '#f28cd8', addAttrValName: '#f28cd8' },
+						{ addAttrValCode: '#ff6100', addAttrValName: '#ff6100' },
+						{ addAttrValCode: '#f28cd8', addAttrValName: '#f28cd8' },
+						{ addAttrValCode: '#ff6100', addAttrValName: '#ff6100' },
+						{ addAttrValCode: '#f28cd8', addAttrValName: '#f28cd8' }
+					]
+				},
+				{
+					addAttrsName: '가격',
+					addAttrVals: [
+						{ addAttrValCode: 'functional00', min: '0',		 max: '30,000', addAttrValName: '3만원미만' },
+						{ addAttrValCode: 'functional01', min: '30,000', max: '50,000', addAttrValName: '3~5만원' },
+						{ addAttrValCode: 'functional02', min: '50,000', max: '70,000', addAttrValName: '5~7만원' },
+						{ addAttrValCode: 'functional03', min: '70,000', max: '', 		addAttrValName: '7만원' }
+					]
+				}
+			]
+		};
+
+		AP.display.init({});
 	</script>
 </th:block>
 

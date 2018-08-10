@@ -405,7 +405,6 @@ function loginProcess() {
         AP.api.doLogin({}, AP.common.getFormData($form)).done(function(data) {
 
             if (data.sleep == 'Y') {
-                $("#login").removeClass("disabled");
                 var contents = new Object();
                 contents.title = "알림";
                 contents.contents = data.message;
@@ -444,6 +443,7 @@ function loginProcess() {
             }
 
         }).fail(function(xhr, textStatus, errorThrown) {
+            $("#login").removeAttr("disabled");
             $("#login").removeClass("disabled");
             if (xhr.errorCode == 0) {
                 AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");

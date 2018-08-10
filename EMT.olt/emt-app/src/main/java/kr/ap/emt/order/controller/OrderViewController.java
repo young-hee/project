@@ -1,20 +1,14 @@
 package kr.ap.emt.order.controller;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import kr.ap.comm.config.interceptor.PageTitle;
+import kr.ap.comm.member.vo.MemberSession;
+import kr.ap.comm.member.vo.OrdCartInfo;
+import kr.ap.comm.support.constants.PathConstants;
+import kr.ap.emt.order.vo.OrdStoreDTO;
+import kr.ap.emt.payment.config.InicisPgProperties;
+import net.g1project.ecp.api.exception.ApiException;
+import net.g1project.ecp.api.model.BooleanResult;
+import net.g1project.ecp.api.model.order.order.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,18 +20,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import kr.ap.comm.config.interceptor.PageTitle;
-import kr.ap.comm.member.vo.MemberSession;
-import kr.ap.comm.member.vo.OrdCartInfo;
-import kr.ap.comm.support.constants.PathConstants;
-import kr.ap.emt.order.vo.OrdStoreDTO;
-import kr.ap.emt.payment.config.InicisPgProperties;
-import net.g1project.ecp.api.exception.ApiException;
-import net.g1project.ecp.api.model.BooleanResult;
-import net.g1project.ecp.api.model.order.order.NotifyAccountDeposit;
-import net.g1project.ecp.api.model.order.order.OrdEx;
-import net.g1project.ecp.api.model.order.order.OrdReceptComplete;
-import net.g1project.ecp.api.model.order.order.PayResult;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/order")
@@ -65,8 +56,15 @@ public class OrderViewController extends OrderBaseController {
 		/* 회원구분 */
 		MemberSession memberSession = getMemberSession();
 
-	    OrdEx ordEx = new OrdEx();
-		
+		/* 주문 변경 정보 저장*/
+		OrdReceptChange ordReceptChange = memberSession.getOrdReceptChange();
+		if (ordReceptChange == null) {
+			ordReceptChange = new OrdReceptChange();
+			memberSession.setOrdReceptChange(ordReceptChange);
+		}
+
+		OrdEx ordEx = new OrdEx();
+
 		/* 주문진입 경로(cart:장바구니, null:바로구매) */
 		String orderFlag = request.getParameter("orderFlag");
 		if("cart".equals(orderFlag)){
@@ -88,6 +86,8 @@ public class OrderViewController extends OrderBaseController {
 				model.addAttribute("result", false);
 				model.addAttribute("errorCode", e.getErrorCode());
 				model.addAttribute("errorMessage", e.getMessage());
+				model.addAttribute("errorAdditional", e.getAdditional());
+				//return "redirect:"+request.getHeader("referer");
 			}
 
 		}else{
@@ -103,6 +103,8 @@ public class OrderViewController extends OrderBaseController {
 				model.addAttribute("result", false);
 				model.addAttribute("errorCode", e.getErrorCode());
 				model.addAttribute("errorMessage", e.getMessage());
+				model.addAttribute("errorAdditional", e.getAdditional());
+				//return "redirect:"+request.getHeader("referer");
 			}
 		}
 
@@ -212,7 +214,7 @@ public class OrderViewController extends OrderBaseController {
 	 * 대상 : 무통장입금
 	 */
 	@PostMapping("/iniPayNotiPC")
-	public void iniPayNotiPC(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String iniPayNotiPC(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		/* 입금결과 통보 결과정보 */
 		BooleanResult result = new BooleanResult();
@@ -220,8 +222,8 @@ public class OrderViewController extends OrderBaseController {
 		PrintWriter out = response.getWriter();
 		
 		//PC 입금결과 통보 로그 남기기
-		//String file_path = inicisPgProperties.getIniPayhome() + "/log";
-		//writePcNotiLog(file_path, request);
+		String file_path = inicisPgProperties.getIniPayhome() + "/log";
+		writePcNotiLog(file_path, request);
 		
 		String typeMsg = request.getParameter("type_msg");     	 // 거래구분
 		if("0200".equals(typeMsg)) { // 정상
@@ -246,9 +248,9 @@ public class OrderViewController extends OrderBaseController {
 		}
 		
 		if(result != null && result.isResult()) {			
-			out.print("OK");			
+			return "payment/vacctSuccess";		
 		} else {
-			out.print("FAIL");
+			return "payment/vacctFail";
 		}
 	}
 
@@ -258,7 +260,7 @@ public class OrderViewController extends OrderBaseController {
 	 * 입금결과 통보 url Async
 	 */
 	@PostMapping("/iniPayNoti")
-	public void iniPayNoti(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String iniPayNoti(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		BooleanResult result = new BooleanResult();
 		result.setResult(false);
@@ -289,8 +291,8 @@ public class OrderViewController extends OrderBaseController {
 			String ordNo = request.getParameter("P_OID");       // 상점 주문번호
 			
 			//로그파일에 로그 남기기
-			//String file_path = inicisPgProperties.getIniPayhome() + "/log";
-			//writeMobileNotiLog(file_path, request);
+			String file_path = inicisPgProperties.getIniPayhome() + "/log";
+			writeMobileNotiLog(file_path, request);
 			
 			if("02".equals(pgTradeNo)) {	// 가상계좌 입금 통보 시
 	
@@ -313,19 +315,20 @@ public class OrderViewController extends OrderBaseController {
 					if ("BANK".equals(pType)) {
 						result = orderApi.notifyAccountDeposit(ordNo, pTid, null);
 					}
-				} 
-				
+				}
 			}
+			
+			if(result != null && result.isResult()) {			
+				return "payment/vacctSuccess";			
+			} else {
+				return "payment/vacctFail";
+			}
+			
 		}catch (Exception e) {
-			out.print("FAIL");
+			logger.error(e.getMessage(), e);
+			return "payment/vacctFail";
+			
 		}
-		
-		if(result != null && result.isResult()) {			
-			out.print("OK");			
-		} else {
-			out.print("FAIL");
-		}
-		
 	}
 
 	/**

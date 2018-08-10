@@ -198,7 +198,7 @@ public class BeautyLifeViewController extends AbstractController {
   			body.setShoppingMarkTgtCode("Article");
   			body.setArticleSn(article.getArticleSn());      			
   			body.setDisplayMenuSetId(APConstant.EH_DISPLAY_MENU_SET_ID);
-  			
+  			body.setDisplayMenuId(displayMenuId);
   			try{
   				shoppingmarkApi.addShoppingHistories(getMemberSn(), body);
   			}catch(Exception e) {
@@ -294,7 +294,7 @@ public class BeautyLifeViewController extends AbstractController {
   			body.setShoppingMarkTgtCode("Article");
   			body.setArticleSn(article.getArticleSn());      			
   			body.setDisplayMenuSetId(APConstant.EH_DISPLAY_MENU_SET_ID);
-  			
+  			body.setDisplayMenuId(displayMenuId);
   			try{
   				shoppingmarkApi.addShoppingHistories(getMemberSn(), body);
   			}catch(Exception e) {

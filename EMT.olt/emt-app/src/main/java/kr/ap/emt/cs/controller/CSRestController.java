@@ -118,7 +118,7 @@ public class CSRestController extends AbstractController {
             HashMap<String, Object> result = new HashMap<String, Object>();
             try {
                 if ("faq".equalsIgnoreCase(request.getType())) {
-                    FaqSearchResult d = guideApi.getFaqs(request.getKeyword(), request.getInquiryTypeSn(),
+                    FaqSearchResult d = guideApi.getFaqs(request.getKeyword(), request.getInquiryTypeSn(), null,
                             request.getOffset(), request.getLimit());
                     if (d != null) {
                         result.put("data", d);
@@ -146,7 +146,7 @@ public class CSRestController extends AbstractController {
             HashMap<String, Object> result = new HashMap<String, Object>();
             try {
                 if ("faq".equalsIgnoreCase(request.getType())) {
-                    FaqSearchResult d = guideApi.getFaqs(request.getKeyword(), request.getInquiryTypeSn(),
+                    FaqSearchResult d = guideApi.getFaqs(request.getKeyword(), request.getInquiryTypeSn(), null,
                             request.getOffset(), request.getLimit());
                     if (d != null) {
                         result.put("data", d);
@@ -209,7 +209,7 @@ public class CSRestController extends AbstractController {
             HashMap<String, Object> result = new HashMap<String, Object>();
 
             try {
-                FaqSearchResult d = guideApi.getFaqs(request.getKeyword(), request.getInquiryTypeSn(), request.getOffset(),
+                FaqSearchResult d = guideApi.getFaqs(request.getKeyword(), request.getInquiryTypeSn(), null, request.getOffset(),
                         request.getLimit());
 
                 if (d != null) {
@@ -232,7 +232,7 @@ public class CSRestController extends AbstractController {
         HashMap<String, Object> result = new HashMap<String, Object>();
         try {
             if ("faq".equals(type)) {
-                result.put("data", guideApi.getFaqSummary());
+                result.put("data", guideApi.getFaqSummary(null));
             } else {
                 result.put("data", guideApi.getFoNoticeSummary(CSViewController.EVENT_YN));
             }
@@ -252,6 +252,9 @@ public class CSRestController extends AbstractController {
 	 *
 	 */
 	private Date getEndDate(Date date) {
-		return new Date(date.getTime() + (24*60*60*1000) - 1);
+		if(date != null) {
+			return new Date(date.getTime() + (24*60*60*1000) - 1);
+		}
+		return null;
 	}
 }

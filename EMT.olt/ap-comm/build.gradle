@@ -3,13 +3,14 @@ plugins {
 }
 
 ext {
-	snapshotUrl = (System.properties.snapshotRepository != null) ? System.properties.snapshotRepository : 'http://172.28.6.29:8081/nexus/content/repositories/snapshots/'
-	releaseUrl = (System.properties.releaseRepository != null) ? System.properties.releaseRepository : 'http://172.28.6.29:8081/nexus/content/repositories/releases/'
+	snapshotUrl = 'http://172.28.0.240:8081/nexus/content/repositories/snapshots/'
+	releaseUrl = 'http://172.28.0.240:8081/nexus/content/repositories/releases/'
 }
 
 dependencies {
 
 	compile("org.springframework.boot:spring-boot-autoconfigure:$springBootVersion")
+	compile("org.apache.httpcomponents:httpclient:4.5.3")
 
 	compileOnly("javax.servlet:javax.servlet-api:3.1.0")
 	compileOnly("org.springframework.boot:spring-boot-starter-tomcat:$springBootVersion")

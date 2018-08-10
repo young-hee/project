@@ -8,7 +8,9 @@ package kr.ap.emt.common.controller;
 
 import kr.ap.comm.config.interceptor.PageTitle;
 import kr.ap.comm.support.common.AbstractController;
+import kr.ap.comm.support.constants.APConstant;
 import net.g1project.ecp.api.model.ap.bbs.IrList;
+import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkPost;
 import net.g1project.ecp.api.model.sales.terms.Terms;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -125,7 +127,6 @@ public class CommonViewController extends AbstractController {
     @PageTitle(title = "전자공고")
     public String enotice(Model model, String displayMenuId) {
     	
-    	
     	IrList irListResult = bbsApi.getIrs(0, 10);  // default 페이징처리가 없음 
     	
     	model.addAttribute("displayMenuId", displayMenuId);
@@ -137,6 +138,19 @@ public class CommonViewController extends AbstractController {
     @RequestMapping("/search")
     @PageTitle(title = "검색")
     public String search(Model model, String searchWord) {
+    	
+    	if(0L != getMemberSn()) {
+  			ShoppingMarkPost body = new ShoppingMarkPost();
+  			body.setShoppingMarkTgtCode("SearchWord");
+  			body.setDisplayMenuSetId(APConstant.EH_DISPLAY_MENU_SET_ID);
+  			body.setSearchWord(searchWord);
+  			try{
+  				shoppingmarkApi.addShoppingHistories(getMemberSn(), body);
+  			}catch(Exception e) {
+  				e.printStackTrace();
+  			}
+  		}
+    	
         return "common/search";
     }
 

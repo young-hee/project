@@ -53,13 +53,27 @@ public class OrdReceptChangeDTO {
 	/*배송메세지(직접입력)*/
 	private String shipMsg2;
 
-	/*편의점택배 수취인 이름*/
-	private String storeRecipientName;
-	/*편의점택배 휴대폰번호*/
-	private String storeRecipientPhoneNo;
-
 	/* 선물포장금액기준통화*/
 	private BigDecimal giftPackingAmtBcur;
+
+	/*편의점택배*/
+	private String cStoreName;
+	private String cStorePhoneNo;
+	private String cStoreHqCode;
+	private String cStoreCenterCode;
+	private String cStoreStoreCode;
+	private String cStoreCompany;
+	private String cStoreDockNo;
+	private String cStoreCenterName;
+	private String cStoreAddressZipCode;
+	private String cStoreAddressAddress1;
+	private String cStoreAddressAddress2;
+	private String cStoreArrivalAreaCode;
+	private String cStoreArrivalAreaBarcode;
+	private String cStoreDongNmCode;
+	private String cStoreArrivalDongNm;
+	private String cStoreRecipientName;
+	private String cStoreRecipientPhoneNo;
 
 	public Long getOrdSn() {
 		return ordSn;
@@ -203,24 +217,145 @@ public class OrdReceptChangeDTO {
 		this.shipMsg2 = shipMsg2;
 	}
 
-	public String getStoreRecipientName() {
-		return storeRecipientName;
-	}
-
-	public void setStoreRecipientName(String storeRecipientName) {
-		this.storeRecipientName = storeRecipientName;
-	}
-
-	public String getStoreRecipientPhoneNo() {
-		return storeRecipientPhoneNo;
-	}
-
-	public void setStoreRecipientPhoneNo(String storeRecipientPhoneNo) { this.storeRecipientPhoneNo = storeRecipientPhoneNo; }
-
-	public BigDecimal getGiftPackingAmtBcur() {
+		public BigDecimal getGiftPackingAmtBcur() {
 		return giftPackingAmtBcur;
 	}
 
 	public void setGiftPackingAmtBcur(BigDecimal giftPackingAmtBcur) { this.giftPackingAmtBcur = giftPackingAmtBcur; }
 
+	public String getcStoreName() {
+		return cStoreName;
+	}
+
+	public void setcStoreName(String cStoreName) {
+		this.cStoreName = cStoreName;
+	}
+
+	public String getcStorePhoneNo() {
+		return cStorePhoneNo;
+	}
+
+	public void setcStorePhoneNo(String cStorePhoneNo) {
+		this.cStorePhoneNo = cStorePhoneNo;
+	}
+
+	public String getcStoreHqCode() {
+		return cStoreHqCode;
+	}
+
+	public void setcStoreHqCode(String cStoreHqCode) {
+		this.cStoreHqCode = cStoreHqCode;
+	}
+
+	public String getcStoreCenterCode() {
+		return cStoreCenterCode;
+	}
+
+	public void setcStoreCenterCode(String cStoreCenterCode) {
+		this.cStoreCenterCode = cStoreCenterCode;
+	}
+
+	public String getcStoreStoreCode() {
+		return cStoreStoreCode;
+	}
+
+	public void setcStoreStoreCode(String cStoreStoreCode) {
+		this.cStoreStoreCode = cStoreStoreCode;
+	}
+
+	public String getcStoreCompany() {
+		return cStoreCompany;
+	}
+
+	public void setcStoreCompany(String cStoreCompany) {
+		this.cStoreCompany = cStoreCompany;
+	}
+
+	public String getcStoreDockNo() {
+		return cStoreDockNo;
+	}
+
+	public void setcStoreDockNo(String cStoreDockNo) {
+		this.cStoreDockNo = cStoreDockNo;
+	}
+
+	public String getcStoreCenterName() {
+		return cStoreCenterName;
+	}
+
+	public void setcStoreCenterName(String cStoreCenterName) {
+		this.cStoreCenterName = cStoreCenterName;
+	}
+
+	public String getcStoreAddressZipCode() {
+		return cStoreAddressZipCode;
+	}
+
+	public void setcStoreAddressZipCode(String cStoreAddressZipCode) {
+		this.cStoreAddressZipCode = cStoreAddressZipCode;
+	}
+
+	public String getcStoreAddressAddress1() {
+		return cStoreAddressAddress1;
+	}
+
+	public void setcStoreAddressAddress1(String cStoreAddressAddress1) {
+		this.cStoreAddressAddress1 = cStoreAddressAddress1;
+	}
+
+	public String getcStoreAddressAddress2() {
+		return cStoreAddressAddress2;
+	}
+
+	public void setcStoreAddressAddress2(String cStoreAddressAddress2) {
+		this.cStoreAddressAddress2 = cStoreAddressAddress2;
+	}
+
+	public String getcStoreArrivalAreaCode() {
+		return cStoreArrivalAreaCode;
+	}
+
+	public void setcStoreArrivalAreaCode(String cStoreArrivalAreaCode) {
+		this.cStoreArrivalAreaCode = cStoreArrivalAreaCode;
+	}
+
+	public String getcStoreArrivalAreaBarcode() {
+		return cStoreArrivalAreaBarcode;
+	}
+
+	public void setcStoreArrivalAreaBarcode(String cStoreArrivalAreaBarcode) {
+		this.cStoreArrivalAreaBarcode = cStoreArrivalAreaBarcode;
+	}
+
+	public String getcStoreDongNmCode() {
+		return cStoreDongNmCode;
+	}
+
+	public void setcStoreDongNmCode(String cStoreDongNmCode) {
+		this.cStoreDongNmCode = cStoreDongNmCode;
+	}
+
+	public String getcStoreArrivalDongNm() {
+		return cStoreArrivalDongNm;
+	}
+
+	public void setcStoreArrivalDongNm(String cStoreArrivalDongNm) {
+		this.cStoreArrivalDongNm = cStoreArrivalDongNm;
+	}
+
+	public String getcStoreRecipientName() {
+		return cStoreRecipientName;
+	}
+
+	public void setcStoreRecipientName(String cStoreRecipientName) {
+		this.cStoreRecipientName = cStoreRecipientName;
+	}
+
+	public String getcStoreRecipientPhoneNo() {
+		return cStoreRecipientPhoneNo;
+	}
+
+	public void setcStoreRecipientPhoneNo(String cStoreRecipientPhoneNo) {
+		this.cStoreRecipientPhoneNo = cStoreRecipientPhoneNo;
+	}
 }

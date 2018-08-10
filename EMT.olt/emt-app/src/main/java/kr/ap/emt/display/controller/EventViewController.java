@@ -142,10 +142,11 @@ public class EventViewController extends AbstractController {
 		if(0L != getMemberSn()) {
 			ShoppingMarkPost body = new ShoppingMarkPost();
 			body.setShoppingMarkTgtCode("Plandisplay");
-
+			
 				if(planDisplaySn != null) {
 					body.setPlanDisplaySn(planDisplaySn);
 					body.setDisplayMenuSetId(APConstant.EH_DISPLAY_MENU_SET_ID);
+					body.setDisplayMenuId("event");
 
 				try{
 					shoppingmarkApi.addShoppingHistories(getMemberSn(), body);

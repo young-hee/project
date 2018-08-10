@@ -27,8 +27,7 @@
 						<td th:text="${item.prtnNm}">APP(뷰티포인트 선물하기)</td>
 						<td th:text="${item.xttpNm}">포인트 선물 적립</td>
 						<td th:text="${item.xtclNm}">적립</td>
-						<td th:if="${item.tlmcCd == '10'}" th:utext="'(<em> + </em>) ' + ${#IntegUtil.toCommaNumber(item.aplyPt)}">( <em> + </em> ) 100,000</td>
-						<td th:if="${item.tlmcCd == '20'}" th:utext="'( - ) ' + ${#IntegUtil.toCommaNumber(item.aplyPt)}">( - ) 100,000</td>
+						<td th:utext="${#IntegUtil.currencyConverter(item.aplyPt)}">( - ) 100,000</td>
 						<td th:if="${item.extcSchdDt != ''}" th:text="${#IntegUtil.dateformat(item.extcSchdDt, 'yyyy.MM.dd')}">2018.10.31</td>
 						<td th:if="${item.extcSchdDt == '' && item.tlmcCd == '10'}">-</td>
 						<td th:if="${item.extcSchdDt == '' && item.tlmcCd == '20'}"></td>

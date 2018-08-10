@@ -12,6 +12,7 @@ import net.g1project.ecp.api.client.ap.ApApi;
 import net.g1project.ecp.api.client.ap.BbsApi;
 import net.g1project.ecp.api.client.ap.VerifApi;
 import net.g1project.ecp.api.client.basis.MallApi;
+import net.g1project.ecp.api.client.linker.LinkerApi;
 import net.g1project.ecp.api.client.offlinestore.StoreApi;
 import net.g1project.ecp.api.client.order.OrderApi;
 import net.g1project.ecp.api.client.sales.*;
@@ -134,6 +135,9 @@ public class AbstractController {
 	
 	@Autowired
 	protected MallApi mallApi;
+
+	@Autowired
+	protected LinkerApi linkerApi;
 
     /**
      * Get Error Messages
@@ -428,15 +432,14 @@ public class AbstractController {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
-
+			logger.error("UploadingFile {}", e.getMessage(), e);
 		} finally {
 
-			if (file.exists()) {
+			if (file != null && file.exists()) {
 				file.delete();
 			}
 
-			if (resizedFile.exists()){
+			if (resizedFile != null && resizedFile.exists()){
 				resizedFile.delete();
 			}
 		}

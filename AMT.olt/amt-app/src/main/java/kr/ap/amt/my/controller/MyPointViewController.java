@@ -425,7 +425,7 @@ public class MyPointViewController extends AbstractController {
 			return "my/pearl-01";
 		}
 		if(isPcDevice()) {
-			List<ActivityPointGift> pointGiftList = pointApi.getActivityPointGift(getMemberSn(), "S", "Y", 0, 100);
+			List<ActivityPointGift> pointGiftList = pointApi.getActivityPointGift(getMemberSn(), 0, 100);
 			model.addAttribute("pointGiftList", pointGiftList);
 			getPearlList(model, null, null, 0, P_PAGE_SIZE);
 			return "my/my-pearl-gift-01";
@@ -452,7 +452,7 @@ public class MyPointViewController extends AbstractController {
 			return "my/fragment/pearl-fragment";
 		}
 		if(isPcDevice()) {
-			List<ActivityPointGift> pointGiftList = pointApi.getActivityPointGift(getMemberSn(), "S", "Y", 0, 100);
+			List<ActivityPointGift> pointGiftList = pointApi.getActivityPointGift(getMemberSn(), 0, 100);
 			model.addAttribute("pointGiftList", pointGiftList);
 			getPearlList(model, dateformat.parse(startDt), dateformat.parse(endDt), (P_PAGE_SIZE * (pageNumber - 1)), P_PAGE_SIZE * pageNumber);
 			return "my/fragment/pearl-fragment";
@@ -465,13 +465,13 @@ public class MyPointViewController extends AbstractController {
 	public String pearlReceive(Model model, Long orderSn) {
 		if(isMobileDevice()) {
 
-			List<ActivityPointGift> pointGiftList = pointApi.getActivityPointGift(getMemberSn(), "S", "Y", 0, 100);
+			List<ActivityPointGift> pointGiftList = pointApi.getActivityPointGift(getMemberSn(), 0, 100);
 			model.addAttribute("pointGiftList", pointGiftList);
 			getPearlListM(model);
 			return "my/pearl-02";
 		}
 		if(isPcDevice()) {
-			List<ActivityPointGift> pointGiftList = pointApi.getActivityPointGift(getMemberSn(), "S", "Y", 0, 100);
+			List<ActivityPointGift> pointGiftList = pointApi.getActivityPointGift(getMemberSn(), 0, 100);
 			model.addAttribute("pointGiftList", pointGiftList);
 			getPearlList(model, null, null, 0, P_PAGE_SIZE);
 			return "my/my-pearl-gift-02";

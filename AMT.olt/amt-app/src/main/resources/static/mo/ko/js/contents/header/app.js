@@ -20,7 +20,7 @@
 
 		//header의 높이 반환
 		getHeight: function () {
-			return this._$target.height();
+			return this._$target.find( '.header_top' ).height();
 		},
 
         /** =============== Private Methods =============== */
@@ -32,16 +32,14 @@
 		},
 
 		_setFixed: function () {
-			$( window ).on( 'scroll', toggleFixed );
-			var toggleFixed = function () {
+			$( window ).on( 'scroll', function () {
 				var st = $( window ).scrollTop();
 				if ( st > 0 ) {
 					this._$target.find( '.header_top' ).addClass( 'fixed' );
 				} else {
 					this._$target.find( '.header_top' ).removeClass( 'fixed' );
 				}
-			}.bind( this );
-			toggleFixed();
+			}.bind( this ));
 		},
 
 		_setTitleArea: function () {

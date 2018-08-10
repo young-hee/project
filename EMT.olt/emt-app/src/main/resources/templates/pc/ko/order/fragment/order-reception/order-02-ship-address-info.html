@@ -242,6 +242,21 @@
 							<dt><b>연락처</b></dt>
 							<dd id="storeTelnoDisp"></dd>
 						</dl>
+						<input type="hidden" id="cStoreName" name="cStoreName">
+						<input type="hidden" id="cStorePhoneNo" name="cStorePhoneNo">
+						<input type="hidden" id="cStoreHqCode" name="cStoreHqCode">
+						<input type="hidden" id="cStoreCenterCode" name="cStoreCenterCode">
+						<input type="hidden" id="cStoreCenterName" name="cStoreCenterName">
+						<input type="hidden" id="cStoreStoreCode" name="cStoreStoreCode">
+						<input type="hidden" id="cStoreCompany" name="cStoreCompany">
+						<input type="hidden" id="cStoreDockNo" name="cStoreDockNo">
+						<input type="hidden" id="cStoreAddressZipCode" name="cStoreAddressZipCode">
+						<input type="hidden" id="cStoreAddressAddress1" name="cStoreAddressAddress1">
+						<input type="hidden" id="cStoreAddressAddress2" name="cStoreAddressAddress2">
+						<input type="hidden" id="cStoreArrivalAreaCode" name="cStoreArrivalAreaCode">
+						<input type="hidden" id="cStoreArrivalAreaBarcode" name="cStoreArrivalAreaBarcode">
+						<input type="hidden" id="cStoreDongNmCode" name="cStoreDongNmCode">
+						<input type="hidden" id="cStoreArrivalDongNm" name="cStoreArrivalDongNm">
 					</div>
 				</div>
 				<!--/* 받으실분 정보 */-->
@@ -259,10 +274,13 @@
 							<dl>
 								<dt><b>이름</b></dt>
 								<dd th:text="${apMember.name.name1}">홍길동</dd>
+								<input type="hidden" id="name01" name="cStoreRecipientName" th:value="${apMember.name.name1}">
 							</dl>
 							<dl>
 								<dt><b>연락처</b></dt>
 								<dd th:text="${#IntegUtil.hyphenPhoneNumber(apMember.phoneNo1.phoneNo)}">010-0000-0000</dd>
+								<input type="hidden" id="phone01" name="cStoreRecipientPhoneNo" th:value="${apMember.phoneNo1.phoneNo}">
+
 							</dl>
 						</div>
 					</div>
@@ -275,13 +293,13 @@
 						<dl>
 							<dt><label for="name02"><b>이름</b></label></dt>
 							<dd>
-								<div class="input_wrap w100p"><input type="text" id="name02" name="storeRecipientName" placeholder="이름을 입력해 주세요." required="required" data-msg-required="받으시는 분의 이름을 입력하세요."></div>
+								<div class="input_wrap w100p"><input type="text" id="name02" name="name02" placeholder="이름을 입력해 주세요." required="required" data-msg-required="받으시는 분의 이름을 입력하세요."></div>
 							</dd>
 						</dl>
 						<dl>
 							<dt><label for="phone02"><b>휴대폰번호</b></label></dt>
 							<dd>
-								<div class="input_wrap w100p"><input type="text" id="phone02" name="storeRecipientPhoneNo" placeholder="‘-’없이 숫자만 입력" required="required" data-msg-required="받으시는 분의 휴대폰 번호를 입력하세요."></div>
+								<div class="input_wrap w100p"><input type="text" id="phone02" name="phone02" placeholder="‘-’없이 숫자만 입력" required="required" data-msg-required="받으시는 분의 휴대폰 번호를 입력하세요."></div>
 								<p class="text_notice light w100p" id="address2_2_02_layer" style="display: none">배송 물품이 편의점 도착 시, 도착 안내 SMS가 발송됩니다.</p>
 							</dd>
 						</dl>
@@ -457,6 +475,14 @@
 				$('#address2_2_01_layer').show();
 				$('#address2_2_02_layer').show();
 			}
+
+			$('#name02').blur(function(){
+				$('#name01').val($('#name02').val());
+			});
+
+			$('#phone02').blur(function(){
+				$('#phone01').val($('#phone02').val());
+			});
 		}
 
 		/* 배송메세지 설정 */

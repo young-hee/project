@@ -237,6 +237,15 @@
 			//모두 새창으로 연결 (기확자 확인)
 			payPopup = window.open('about:blank','payPopup');
 			var $form = $("form[name='orderForm']");
+			
+			//상품명 대표 상품명 한개로 셋팅
+			var $_productName = $(".cart_name_wrap").find("input:hidden[name='prodName']").first();
+			$hidden = $("<input />");
+			$hidden.prop("type", "hidden");
+			$hidden.prop("name", "repProdName");
+			$hidden.prop("value", $_productName.val());
+			$form.append($hidden);
+			
 			var actionUrl;
 
 			//네이버 결제

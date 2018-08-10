@@ -276,15 +276,7 @@
 	        }, AP.common.getFormData($form)).done(function(data) {
 
 	            if (data.sleep == 'Y') {
-		            $("#complete").removeAttr("disabled");
-	                var contents = new Object();
-	                contents.title = "알림";
-	                contents.contents = data.message;
-	                contents.confirmLabel = data.message;
-	                AP.modal.info(contents).addListener('modal-close', function(e) {
-	                    location.href = "/customer/signup";
-	                });
-
+	    			post_goto('/sleepUser' , {'userId': data.userId});
 	            } else if (data.changePw == 'Y') {
 	                var contents = new Object();
 	                contents.title = "알림";
@@ -503,16 +495,7 @@
 	        AP.api.doLogin({}, AP.common.getFormData($form)).done(function(data) {
 
 	            if (data.sleep == 'Y') {
-		            $("#login").removeAttr("disabled");
-		            $("#login").removeClass("disabled");
-	                var contents = new Object();
-	                contents.title = "알림";
-	                contents.contents = data.message;
-	                contents.confirmLabel = data.message;
-	                AP.modal.info(contents).addListener('modal-close', function(e) {
-	                    location.href = "/customer/signup";
-	                });
-
+	    			post_goto('/sleepUser' , {'userId': data.userId});
 	            } else if (data.changePw == 'Y') {
 	                var contents = new Object();
 	                contents.title = "알림";
@@ -897,7 +880,7 @@
 	function nbSuccess(data) {
 
 	    if (data.sleep == 'Y') {
-	        location.href = "/sleepUser";
+			post_goto('/sleepUser' , {'userId': data.userId});
 
 	    } else if (data.old == 'Y') {
 
@@ -947,7 +930,7 @@
 	                        returnUrl = data.returnUrl;
 
 	                    if (data.sleep == 'Y') {
-	                        location.href = "/sleepUser";
+	            			post_goto('/sleepUser' , {'userId': data.userId});
 
 	                    } else if (data.old == 'Y') {
 	                        var contents = new Object();

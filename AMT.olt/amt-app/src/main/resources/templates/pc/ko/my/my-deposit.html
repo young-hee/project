@@ -1,0 +1,396 @@
+<html ap:decorate="~{layout/layout-sub}">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page contents -->
+		<div class="ap_contents">
+
+			<!-- breadcrumbe -->
+			<th:block ap:replace="~{common/fragment/breadcrumb-only}"/>
+			<!-- // breadcrumbe -->
+
+			<!-- com_cont -->
+			<div class="ap_com_cont mypage">
+				<!-- aside_area -->
+				<th:block ap:replace="~{html/page/my/fragment/my-menu}"/>
+				<!-- aside_area -->
+
+				<!-- cont_area -->
+				<div class="cont_area my_deposit">
+					<div class="sub_title">
+						<!-- page title -->
+						<th:block ap:replace="~{common/fragment/page-title}"/>
+						<!-- // page title -->
+					</div>
+					<div class="panel bg_white">
+						<p><span><th:block th:text="${session.LOGIN_USER.member.name.name1}">홍길동</th:block>님의 보유 예치금</span> <em th:text="${#IntegUtil.toCommaNumber(depositHostory.depositBalance)}">123,456<sapn class="won">원</sapn></em></p>
+						<p>예치금은 환불 받으실 금액을 모아 현금과 동일하게 사용하실 수 있도록 보관해 드리는 서비스입니다.<br>
+							고객님이 원하시면 예치금은 현금으로 출금 받으실 수 있으며 주문 시에도 사용 가능합니다.</p>
+					</div>
+
+					<!-- tab menu wrap -->
+					<div class="ui_tab">
+						<!-- tab menu -->
+						<div class="tab_menu brd equally">
+							<ul>
+								<li class="on"><button type="button"><span>예치금 내역</span></button></li>
+								<li><button type="button"><span>출금신청/계좌관리</span></button></li>
+							</ul>
+						</div>
+						<!-- tab contents wrap -->
+						<div class="tab_contents">
+							<!-- tab content -->
+							<div class="tab_cont">
+								<h3 class="sr_only">예치금 내역</h3>
+								<div class="date_search table_layout">
+									<div>조회 기간</div>
+									<div class="ui_multiple_date_picker">
+										<div class="date_btn_set">
+											<span><input type="radio" class="select_range_date" name="radio5" id="radio5_0" value="all" checked=""><label for="radio5_0">전체</label></span>
+											<span><input type="radio" class="select_range_date" name="radio5" id="radio5_1" value="1weeks"><label for="radio5_1">1주일</label></span>
+											<span><input type="radio" class="select_range_date" name="radio5" id="radio5_2" value="1months"><label for="radio5_2">1개월</label></span>
+											<span><input type="radio" class="select_range_date" name="radio5" id="radio5_3" value="3months"><label for="radio5_3">3개월</label></span>
+											<span><input type="radio" class="select_range_date" name="radio5" id="radio5_4" value="6months"><label for="radio5_4">6개월</label></span>
+											<span><input type="radio" class="select_range_date" name="radio5" id="radio5_5" value="1years"><label for="radio5_5">12개월</label></span>
+										</div>
+								        <div class="input_date_group" style="display:none;">
+								            <div class="input_wrap" style="display:none;">
+								                <input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+								                <input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+								            </div>
+								            <div class="date_info_area" id="date1">
+								                <span class="sr_only">시작일</span> <span class="start_date"></span> ~ <span class="sr_only">종료일</span> <span class="end_date"></span> <span class="date_text">까지의 사용 및 적립 내역</span>
+								            </div>
+							            </div>
+									</div>
+									<div><button class="btn_sm_form" type="button"><span class="ie_press">검색</span></button></div>
+								</div>
+								<div class="date_search2 table_layout body1">
+									<div>
+										<div class="input_date_group">
+											<div class="input_wrap" style="display:none;">
+												<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+												<input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+											</div>
+											<div class="date_info_area" id="date2">
+												<span class="sr_only">시작일</span> <span class="start_date">2018.01.05</span> ~ <span class="sr_only">종료일</span> <span class="end_date">2018.01.12</span>까지의 내역
+											</div>
+										</div>
+									</div>
+									<div>
+										<div class="select_wrap xsm"><!-- 선택시 open 클래스  -->
+											<select name="depositType" id="" tabindex="0">
+												<option value="">전체내역</option>
+												<option value="Saving">예치금 적립</option>
+												<option value="Transfer">예치금 출금</option>
+												<option value="Pay">예치금 사용</option>
+												<option value="PayCancel">예치금 사용취소</option>
+												<option value="ManualSaving">수동적립</option>
+												<option value="ManualDec">수동차감</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								
+            					<div ap:replace="~{my/fragment/deposit-history-fragment:: deposit-history-list}"></div>
+            					
+							</div>
+							<div class="tab_cont">
+								<h3 class="sr_only">출금신청/계좌관리</h3>
+								<form>
+									<fieldset class="form deposit_reserve">
+										<legend class="sr_only">예치금적립 항목</legend>
+										<div class="panel bg_white table_layout"> <!-- 등록된 계좌가 없을시 클래스 'disable' 추가 -->
+											<dl>
+												<dt><th:block th:text="${depositRefundAccount.acHolderName.name1}">홍길동</th:block>님의 계좌</dt>
+												<dd th:if="${depositRefundAccount.bankAcNo}"><th:block th:text="${depositRefundAccount.bankName}">국민은행</th:block> <th:block th:text="${depositRefundAccount.bankAcNo}">032-90204-154418</th:block></dd>
+												<dd th:unless="${depositRefundAccount.bankAcNo}">등록된 환불계좌가 없습니다.</dd>
+											</dl>
+											<div>
+												<div>
+													<span class="input_wrap">
+														<input type="number" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" placeholder="0" required="required" name="amount" data-msg-required="출금할 금액을 입력해 주세요." th:attr="disabled=${depositRefundAccount.bankAcNo == null? 'disabled' : null}" /> <!-- 등록된 계좌가 없을시 'disabled' 추가 -->
+													</span>
+													<span class="pdl20 font_lg">/ 
+													<th:text th:if="${depositHostory.depositBalance <= 300000}" th:text="${#IntegUtil.toCommaNumber(depositHostory.depositBalance)}">100,000</th:text>
+													<th:text th:unless="${depositHostory.depositBalance <= 300000}">300,000</th:text>
+													원</span>
+												</div>
+												<p>출금 신청은 보유 예치금 내에서 1일 1회 최대 30만원까지 가능합니다.</p>
+											</div>
+											<div>
+												<button class="btn_sm_bordered" onclick="regist()" type="button"><span class="ie_press">계좌 등록/변경</span></button>
+												<button class="btn_sm_form" th:attr="disabled=${depositRefundAccount.bankAcNo == null? 'disabled' : null}" onclick="doWithdraw()" id="withdraw" type="button"><span class="ie_press">출금신청</span></button>
+											</div>
+										</div>
+									</fieldset>
+								</form>
+								<div class="date_search table_layout">
+									<div>조회 기간</div>
+									<div class="ui_multiple_date_picker">
+										<div class="date_btn_set">
+											<span><input type="radio" class="select_range_date" name="radio5" id="radio5_0" value="all" checked=""><label for="radio5_0">전체</label></span>
+											<span><input type="radio" class="select_range_date" name="radio5" id="radio5_1" value="1weeks"><label for="radio5_1">1주일</label></span>
+											<span><input type="radio" class="select_range_date" name="radio5" id="radio5_2" value="1months"><label for="radio5_2">1개월</label></span>
+											<span><input type="radio" class="select_range_date" name="radio5" id="radio5_3" value="3months"><label for="radio5_3">3개월</label></span>
+											<span><input type="radio" class="select_range_date" name="radio5" id="radio5_4" value="6months"><label for="radio5_4">6개월</label></span>
+											<span><input type="radio" class="select_range_date" name="radio5" id="radio5_5" value="1years"><label for="radio5_5">12개월</label></span>
+										</div>
+									</div>
+									<div><button class="btn_sm_form" type="button"><span class="ie_press">검색</span></button></div>
+								</div>
+								<div class="date_search2 table_layout">
+									<div>
+										<div class="input_date_group">
+											<div class="input_wrap" style="display:none;">
+												<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
+												<input type="hidden" class="ui_date_picker end_date" placeholder="날짜 선택" title="날짜 선택" value="">
+											</div>
+											<div class="date_info_area">
+												<span class="sr_only">시작일</span> <span class="start_date">2018.01.05</span> ~ <span class="sr_only">종료일</span> <span class="end_date">2018.01.12</span>까지의 내역
+											</div>
+										</div>
+									</div>
+									<div>
+										<div class="select_wrap xsm"><!-- 선택시 open 클래스  -->
+											<select name="" id="" tabindex="-1">
+												<option value="">전체내역</option>
+												<option value="02">선택 2</option>
+												<option value="03">선택 3</option>
+												<option value="04">선택 4</option>
+												<option value="05">선택 5</option>
+												<option value="06">선택 6</option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div class="panel bg_white">
+									<div class="board_list type02">
+										<table>
+											<caption class="sr_only">예치금 목록</caption>
+											<colgroup>
+												<col width="130">
+												<col width="130">
+												<col width="">
+												<col width="130">
+												<col width="130">
+											</colgroup>
+											<thead>
+											<tr>
+												<th scope="col">날짜</th>
+												<th scope="col">주문번호</th>
+												<th scope="col">환불계좌</th>
+												<th scope="col">구분</th>
+												<th scope="col">결제금액</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr>
+												<td colspan="5">
+													<div class="no_data">
+														<p>선택하신 기간에 해당하는 내역이 없습니다.</p>
+													</div>
+												</td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<div class="pagination bg_gray">
+									<a href="#none" class="navi prev">&lt;<span class="sr_only">이전</span></a>
+									<span class="current">1</span>
+									<a href="#none">2</a>
+									<a href="#none">3</a>
+									<a href="#none">4</a>
+									<a href="#none">5</a>
+									<a href="#none">6</a>
+									<a href="#none">7</a>
+									<a href="#none">8</a>
+									<a href="#none">9</a>
+									<a href="#none">10</a>
+									<a href="#none" class="navi next">&gt;<span class="sr_only">다음</span></a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<ul class="list_bullet_dot mgt50">
+						<li>밤 23:00 ~ 01:00 까지 약 2시간 가량은 은행 거래가 제한 되므로 이 시간을 피해서 예치금을 출금하시기 바랍니다.</li>
+						<li>예치금은 환불 받을 계좌나 카드가 등록이 안된 경우 환불 금액을 보관하는 서비스입니다.</li>
+						<li>원하시면 언제든지 예치금을 본인 계좌로 출금하실 수 있으며, 주문 시 일부 혹은 전체 금액을 현금처럼 사용하실 수 있습니다.</li>
+						<li>회원탈퇴 시 예치금이 남아있으면 탈퇴하실 수 없습니다.</li>
+					</ul>
+				</div>
+				<!-- // cont_area -->
+
+			</div>
+			<!-- // com_cont -->
+
+		</div>
+		<!-- // page contents -->
+	</div><!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<style>
+			.top-zero {
+				top: 0 !important;
+			}
+		</style>
+		<script>
+			$( '.ui_input_images' ).inputImages();
+			$( '.recommended_item .slide' ).ixSlideMax();
+
+			var date = null;
+				//multiple date picker적용
+				$( '.ui_multiple_date_picker' ).multipleDatePicker({
+					defaultRangeDate: 'all',
+					minDate: moment().subtract( 50, 'years' )
+				}).on( 'multiple-date-picker-change', function (e) {
+					console.log( e.type, e.date );
+					date = e.date;
+			    	$('#progress').show();
+			    	
+					AP.api.depositHitoryListFragment({}, {
+							pageNumber:1,
+							startDt:e.date.startDate,
+							endDt:e.date.endDate,
+							depositType:$('select[name=depositType]').val()
+					}).done(function(data) {
+
+				    	date = e.date;
+				    	$(".pbody").remove();
+				    	$(".body1").after(data);
+				    	$('#date2').html($('#date1').html());
+				    	
+	                }).fail(function(xhr, textStatus, errorThrown) {
+	                	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	                }).always(function() {
+				    	$('#progress').hide();
+	                    //성공, 실패
+	                });
+				});
+				
+				
+			$('select[name=depositType]').change(function() {
+
+		    	$('#progress').show();
+		    	var startDtVal = null;
+		    	var endDtVal = null;
+		    	if(date != null) {
+		    		startDtVal = date.startDate;
+		    		endDtVal = date.endDate;
+		    	}
+				AP.api.depositHitoryListFragment({}, {
+						pageNumber:1,
+						startDt:startDtVal,
+						endDt:endDtVal,
+						depositType:$('select[name=depositType]').val()
+				}).done(function(data) {
+
+			    	$(".pbody").remove();
+			    	$(".body1").after(data);
+					
+	            }).fail(function(xhr, textStatus, errorThrown) {
+	            	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	            }).always(function() {
+			    	$('#progress').hide();
+	                //성공, 실패
+	            });
+			});
+			function more(page) {
+				if(page == 0 || page == null) return;
+		    	var startDtVal = null;
+		    	var endDtVal = null;
+		    	if(date != null) {
+		    		startDtVal = date.startDate;
+		    		endDtVal = date.endDate;
+		    	}
+				AP.api.depositHitoryListFragment({}, {
+						pageNumber:page,
+						startDt:startDtVal,
+						endDt:endDtVal,
+						depositType:$('select[name=depositType]').val()
+				}).done(function(data) {
+
+			    	$(".pbody").remove();
+			    	$(".body1").after(data);
+					
+	            }).fail(function(xhr, textStatus, errorThrown) {
+	            	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	            }).always(function() {
+			    	$('#progress').hide();
+	                //성공, 실패
+	            });
+				
+			}
+
+			function regist() {
+
+			    $.get("/my/page/info/depositRegistFragment", function(data) {
+			        /**
+			         * 동적으로 생성된 modal의 Node Element 접근하기
+			         * alert, confirm, info 모두 동일
+			         */
+
+			        var contents = new Object();
+			        contents.contents = data;
+			        var modal = AP.modal.info(contents);
+			        var $modalEl = modal.getElement(); //jquery object
+
+			        $modalEl.find('#saveBankNo').click(function() {
+			        	var $form = $('#registForm');
+			        	if(!$form.valid()) return;
+			        	AP.api.saveRefundAccounts({}, AP.common.getFormData($form)).done(function(data) {
+			            	AP.modal.alert("환불계좌가 정상적으로 등록되었습니다.").addListener( 'modal-close', function (e) {
+								location.reload(true);
+							});
+							
+			            }).fail(function(xhr, textStatus, errorThrown) {
+			            	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+			            }).always(function() {
+			                //성공, 실패
+			            });
+			        });
+			        
+			        
+			    });
+			}
+			function doWithdraw() {
+				if(!$('[name=amount]').valid()) {
+	            	AP.modal.alert("출금할 금액을 입력해 주세요").addListener( 'modal-close', function (e) {
+	            		$('[name=amount]').focus();
+					});
+					return;
+				}
+				if(Number($('[name=amount]').valid()) <= 0) {
+	            	AP.modal.alert("출금할 금액을 입력해 주세요").addListener( 'modal-close', function (e) {
+	            		$('[name=amount]').focus();
+					});
+					return;
+				}
+				$('#withdraw').attr("disabled", "disabled");
+	        	AP.api.transferDeposit({}, {
+	        		amountOfTransfer:$('[name=amount]').val()
+	        	}).done(function(data) {
+	            	AP.modal.alert("정상적으로 출금되었습니다.").addListener( 'modal-close', function (e) {
+	            		location.reload();
+					});
+					
+	            }).fail(function(xhr, textStatus, errorThrown) {
+	            	if (xhr.errorCode == 'ESAL042') {
+	    		    	AP.modal.alert("현재 잔액보다 큰 금액을 입력하셨습니다. [[${#IntegUtil.toCommaNumber(depositHostory.depositBalance)}]]원 이하로 입력해 주세요.");
+	            	} else {
+	            		$('#withdraw').removeAttr("disabled");
+	    		    	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	            	}
+	            }).always(function() {
+	                //성공, 실패
+	            });
+			}
+		</script>
+	</th:block>
+</body>
+</html>

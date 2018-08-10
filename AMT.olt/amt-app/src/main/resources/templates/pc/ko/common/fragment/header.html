@@ -1,5 +1,5 @@
 <div class="inner_wrap">
-	<h1><a href="#none"><img ap:src="@{/images/common/h1_logo.png}" alt="APmall"></a></h1>
+	<h1><a href="/main"><img ap:src="@{/images/common/h1_logo.png}" alt="APmall"></a></h1>
 	<!--/* 검색폼 */-->
 	<fieldset class="search_form">
 		<legend class="sr_only">검색</legend>
@@ -199,22 +199,22 @@
 	</fieldset>
 
 	<div class="log_area">
-		<!--/* 로그인 전
-		<a href="#none" class="btn_login">안녕하세요<br><span>로그인</span>이 필요합니다.</a>
-		 */-->
+		<!--/* 로그인 전 */-->
+		<a th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}" href="#none" class="btn_login">안녕하세요<br><span>로그인</span>이 필요합니다.</a>
+		
 		<!--/* 로그인 후 */--> 
-		<a href="#none" class="btn_login">홍길동님은<br><span>WELCOME</span>입니다.</a>
+		<a th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}" href="#none" class="btn_login">홍길동님은<br><span>WELCOME</span>입니다.</a>
 		
 		<div>
-			<!--/* 로그인 전
-			<ul>
+			<!--/* 로그인 전 */-->
+			<ul th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
 				<li><a href="#none">뷰티포인트</a></li>
 				<li><a href="#none">나의 쿠폰</a></li>
 				<li><a href="#none">기프트 카드</a></li>
-			</ul> */-->
+			</ul>
 			
 			<!--/* 로그인 후 */-->
-			<ul>
+			<ul th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}">
 				<li><a href="#none">뷰티포인트</a> <em>3,000 P</em></li>
 				<li><a href="#none">나의 쿠폰</a> <em>1장</em></li>
 				<li><a href="#none">기프트 카드</a> <em>1,000원</em></li>
@@ -223,27 +223,27 @@
 			<ul>
 				<li><a href="#none">마이파우치</a></li>
 				<li><a href="#none">플러스 멤버십</a></li>
-				<li><a href="#none">나의 커뮤니티 활동</a></li>
+				<li th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}"><a href="#none">나의 커뮤니티 활동</a></li>
 				<!-- 로그인후 활성화표시 -->
-				<li><a href="#none" class="new">나의 커뮤니티 활동</a></li>
+				<li th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}"><a href="#none" class="new">나의 커뮤니티 활동</a></li>
 				<li><a href="#none">배송지 관리</a></li>
 				<li><a href="#none">AP몰 정기배송</a></li>
 				<li><a href="#none">ONE pay</a></li>
 				<li><a href="#none">고객센터</a></li>
 			</ul>
-			<!--/* 로그인 전
-			<a href="#none" class="btn_join"><span>간편한 회원가입</span> <i class="ico_arr_s"></i></a>
-			 */-->
+			<!--/* 로그인 전 */-->
+			<a th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}" href="#none" class="btn_join"><span>간편한 회원가입</span> <i class="ico_arr_s"></i></a>
+			
 			<!--/* 로그인 후 */-->
-			<a href="#none" class="btn_logout"><span>로그아웃</span></a>
+			<a th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}" href="#none" class="btn_logout"><span>로그아웃</span></a>
 			
 		</div>
 	</div>
 
 	<!--/* 장바구니 메뉴 */-->
 	<ul class="header_menu">
-		<li><a href="#none"><i class="ico_cart"></i><span class="sr_only">장바구니</span><span class="num">9</span></a></li>
-		<li><a href="#none"><i class="ico_delivery"></i><span class="sr_only">주문/배송조회</span></a></li>
+		<li><a href="/cart/cartList"><i class="ico_cart"></i><span class="sr_only">장바구니</span><span class="num" style="display:none;">9</span></a></li>
+		<li><a href="/my/page/onlineOrderShipping"><i class="ico_delivery"></i><span class="sr_only">주문/배송조회</span></a></li>
 		<li><a href="#none"><i class="ico_good"></i><span class="sr_only">좋아요</span></a></li>
 	</ul>
 </div>
@@ -254,7 +254,12 @@
 			<span>전체 메뉴</span>
 		</a>
 		<ul class="gnb">
-			<li><a href="#none">이슈</a></li><!--  class="on" -->
+			<!--/* 임시메뉴
+			<li th:each="menuId : ${gnbMap.get('main').submenus}">
+				<a href="#" th:href="@{'/display/' + ${menuId.displayMenuId}(displayMenuId=${menuId.displayMenuId})}" th:text="${menuId.menuTitle}" th:class="${displayMenuId == menuId.displayMenuId} ? 'on' : ''"></a>
+			</li>
+			*/-->
+			<li><a href="#none" class="on">이슈</a></li>
 			<li><a href="#none">매거진</a></li>
 			<li><a href="#none">랭킹</a></li>
 			<li><a href="#none">리뷰</a></li>
@@ -263,6 +268,7 @@
 			<li><a href="#none">쿠폰/혜택</a></li>
 			<li><a href="#none">플러스멤버십</a></li>
 			<li><a href="#none">ONE pay</a></li>
+			
 		</ul>
 	</div>
 </div>

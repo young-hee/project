@@ -1,0 +1,88 @@
+<html ap:decorate="~{layout/only-contents}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="modal_dimmed"></div>
+	<div class="layer_popup" style="display: block;">
+		<div class="layer_wrap mypage top-zero" style="top:50px;">
+			<dl class="layer">
+				<dt class="layer_title brd">환불 계좌 등록/변경</dt>
+				<dd class="layer_cont">
+					<form id="registForm">
+						<fieldset class="form">
+							<legend class="sr_only">환불 계좌 등록/변경 항목</legend>
+							<p class="font_lg mgb20"><strong>환불 받을 계좌를 입력해 주세요.</strong></p>
+							<div class="ui_table">
+								<dl>
+									<dt>예금주</dt>
+									<dd>
+										<div class="input_wrap w100p">
+											<input type="text" required="reuqired" name="acHolderName.name1" placeholder="예금주 입력" data-msg-required="예금주를 입력해 주세요.">
+										</div>
+									</dd>
+								</dl>
+								<dl>
+									<dt>은행</dt>
+									<dd>
+										<div class="select_wrap w100p"><!-- 선택시 open 클래스  -->
+											<select name="bankCode" required="reuqired" id="bankCode" tabindex="-1" class="＠selectbox-apply" placeholder="예금주 입력" data-msg-required="예금은행을 입력해 주세요.">
+											    <option value="" data-option-id="0">은행 선택</option>
+											    <option value="039" data-option-id="1">경남은행</option>
+											    <option value="034" data-option-id="2">광주은행</option>
+											    <option value="004" data-option-id="3">국민은행</option>
+											    <option value="003" data-option-id="4">기업은행</option>
+											    <option value="011" data-option-id="5">농협</option>
+											    <option value="031" data-option-id="6">대구은행</option>
+											    <option value="032" data-option-id="7">부산은행</option>
+											    <option value="007" data-option-id="8">수협</option>
+											    <option value="088" data-option-id="9">신한(조흥)은행</option>
+											    <option value="027" data-option-id="10">씨티은행</option>
+											    <option value="005" data-option-id="11">외환은행</option>
+											    <option value="020" data-option-id="12">우리은행</option>
+											    <option value="071" data-option-id="13">우체국</option>
+											    <option value="037" data-option-id="14">전북은행</option>
+											    <option value="090" data-option-id="15">카카오뱅크</option>
+											    <option value="089" data-option-id="16">케이뱅크</option>
+											    <option value="081" data-option-id="17">하나은행</option>
+											    <option value="023" data-option-id="18">한국스탠다드차타드은행</option>
+											</select>
+										</div>
+									</dd>
+								</dl>
+								<dl>
+									<dt>계좌</dt>
+									<dd>
+										<div class="input_wrap w100p">
+											<input type="number" title="계좌번호 입력" required="reuqired" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="bankAcNo" placeholder="‘-’없이 계좌번호 입력" data-msg-required="이체 계좌번호를 입력해 주세요.">
+										</div>
+									</dd>
+								</dl>
+							</div>
+						</fieldset>
+					</form>
+					<div class="layer_btns">
+						<button class="btn_lg_bordered round btn_default_modal_cancel" id="cancelRegist" type="button"><span class="ie_press">취소</span></button>
+						<a class="btn_lg_neutral round" id="saveBankNo" type="button"><span class="ie_press">저장</span></a>
+					</div>
+				</dd>
+				<dd class="dl_cont notice">
+					<ul class="list_bullet_dot font_sm color_light_gray">
+						<li>환불 계좌는 무통장 입금, 휴대폰 결제의 익월 취소 분에 대한 환불금액을 받을 수 있는 계좌입니다.</li>
+						<li>예치금을 입금시킬 수 있는 계좌입니다.</li>
+					</ul>
+				</dd>
+			</dl>
+			<button class="layer_close" type="button"><span class="sr_only">레이어 닫기</span></button>
+		</div>
+	</div>
+
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+</th:block>
+
+</body>
+</html>

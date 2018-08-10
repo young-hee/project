@@ -11,25 +11,25 @@
 			<div class="item_wrap">
 				<input type="hidden" name="takeoutActivityPrdSn" value="{{ prodEx.prodSn }}"/>
 				<input type="hidden" name="cartProdSn" value="{{ cartProdSn }}"/>
-				<input type="hidden" name="takeoutPrdInfo_{{ prodEx.prodSn }}" value="{{ cartProdSn }}"/>
-				<input type="hidden" name="saleDisplayStatus_{{ prodEx.prodSn }}" value="{{ prodEx.saleDisplayStatus }}"/>
+				<input type="hidden" name="takeoutPrdInfo_{{ cartProdSn }}" value="{{ cartProdSn }}"/>
+				<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{ prodEx.saleDisplayStatus }}"/>
 				<div class="item_info">
 					<!--/* 상품 선택 */-->
 					<div class="item_thumb">
 						<div class="check_wrap">
 							{{#if (and (eq ../onlineProdSn null) (eq prodEx.prodTypeCode 'FreeGift') ) }}
-								<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{ prodEx.prodSn }}" pointExch="activity" point="{{ exchPoint }}" value="{{ prodEx.prodSn }}" exchCheckYn="{{ selectYn }}" {{#if (and (ne ../saleDisplayStatus 'OnSale')(ne ../saleDisplayStatus null) ) }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}>
+								<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{ cartProdSn }}" pointExch="activity" point="{{ exchPoint }}" value="{{ cartProdSn }}" exchCheckYn="{{ selectYn }}" {{#if (and (ne prodEx.saleDisplayStatus 'OnSale')(ne prodEx.saleDisplayStatus null) ) }}disabled{{/if}}  {{condition (and (eq prodEx.saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}>
 							{{else}}
-								<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{ prodEx.prodSn }}" pointExch="activity" point="{{ exchPoint }}" value="{{ prodEx.prodSn}}" exchCheckYn="{{ selectYn }}" {{#if (and (ne ../saleDisplayStatus 'OnSale')) }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}>
+								<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{ cartProdSn }}" pointExch="activity" point="{{ exchPoint }}" value="{{ cartProdSn }}" exchCheckYn="{{ selectYn }}" {{#if (and (ne prodEx.saleDisplayStatus 'OnSale')) }}disabled{{/if}}  {{condition (and (eq prodEx.saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}>
 							{{/if}}
-							<label for="takeoutChkBox{{ prodEx.prodSn }}">
+							<label for="takeoutChkBox{{ cartProdSn }}">
 								{{#xif prodEx.repProdImgEx '!=' null }} <img src="{{ prodEx.repProdImgEx.imgUrl }}" alt=""> {{/xif}}
 								{{#xif prodEx.repProdImgEx '==' null }}
 									{{#xif ../repOnlineProdImgEx '!=' null }}
 										<img src="{{ ../repOnlineProdImgEx.imgUrl }}" alt="">
 									{{/xif}}
 									{{#xif ../repOnlineProdImgEx '==' null }}
-										<img src="{{ absolutePath '/images/cart/no_img.png.gif' }}" alt="">
+										<img src="{{ absolutePath '/images/cart/no_img.png' }}" alt="">
 									{{/xif}}
 								{{/xif}}
 								<span class="sr_only">{{#if (ne ../onlineProdName null) }} {{ ../onlineProdName }} {{else}} {{ prodEx.prodName }} {{/if}}</span>
@@ -37,7 +37,6 @@
 						</div>
 					</div>
 					<div class="item_name">
-						<a href="#none" class="title" onclick="fnProdDetail({{ prodEx.prodSn }})">{{#if (ne ../onlineProdName null) }} {{ ../onlineProdName }} {{else}} {{ prodEx.prodName }} {{/if}}</a>
 						{{#xif onlineProdFlagExList.length '>' 0}}
 							{{#each onlineProdFlagExList}}
 								{{#switch prodFlagCode}}
@@ -49,34 +48,20 @@
 								{{/switch}}
 							{{/each}}
 						{{/xif}}
+						<a href="#none" class="title">{{#if (ne ../onlineProdName null) }} {{ ../onlineProdName }} {{else}} {{ prodEx.prodName }} {{/if}}</a>
 					</div>
 					<!--/* 상품 수량 */-->
 					<div class="count">
-						<!--/* 품절/조기소진일경우 버튼제어 X */-->
-						{{#if (ne prodEx.saleDisplayStatus 'OnSale') }}
-							<span class="ui_spinner" data-disabled="true">
-								<button class="spinner_decrease" type="button" title="제품 수량 감소"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
-								<input class="spinner_input" type="text" name="cartProdQty" value="{{ this.cartProdQty }}">
-								<button class="spinner_increase" type="button" title="제품 수량 증가"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>
-							</span>
-						{{/if}}
-						<!--/* 최대구매제한여부가 'Y'일 경우 최대구매수량 존재 */-->
-						{{#if (eq prodEx.saleDisplayStatus 'OnSale') }}
-							{{#if (eq prodEx.maxPurLimitYn 'Y') }}
-								<span data-min="{{ this.prodEx.minPurLimitQty }}" data-max="{{ this.prodEx.maxPurLimitQty }}" class="ui_spinner" data-step="1" data-disabled="false">
-									<button class="spinner_decrease" type="button" title="제품 수량 감소" onclick="prodQtyOperate(this, {{ ../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '-')"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
-									<input class="spinner_input" type="text" name="cartProdQty" value="{{ this.cartProdQty }}">
-									<button class="spinner_increase" type="button" title="제품 수량 증가" onclick="prodQtyOperate(this, {{ ../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '+')"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>
-								</span>
-							{{else}}
-								<!--/* 최대구매제한여부가 'N'일경우 최대구매수량은 존재하지 않음 */-->
-								<span data-min="{{ this.prodEx.minPurLimitQty }}" class="ui_spinner" data-step="1" data-disabled="false">
-									<button class="spinner_decrease" type="button" title="제품 수량 감소" onclick="prodQtyOperate(this, {{ ../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '-')"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
-									<input class="spinner_input" type="text" name="cartProdQty" value="{{ this.cartProdQty }}">
-									<button class="spinner_increase" type="button" title="제품 수량 증가" onclick="prodQtyOperate(this, {{ ../../cartSn }}, {{ this.cartProdSn }}, {{ this.prodEx.prodSn }}, '{{ this.integrationMembershipExchYn }}', '{{ this.activityPointExchYn }}', '{{ this.storePickupYn }}', '{{ this.storeSn }}', '+')"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>
-								</span>
-							{{/if}}
-						{{/if}}
+						<span class="ui_spinner" data-step="1"
+							{{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} data-min="{{ prodEx.minPurLimitQty }}" {{else}} data-min="1" {{/if}}
+							{{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} data-max="{{ prodEx.maxPurLimitQty }}" {{else}} {{/if}}
+							{{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}}>
+							<button class="spinner_decrease" type="button" title="제품 수량 감소" onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '{{ activityPointExchYn }}', '{{ storePickupYn }}', '{{ storeSn }}', '-')"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
+							<input class="spinner_input" type="text" name="cartProdQty" value="{{ cartProdQty }}">
+							<button class="spinner_increase" type="button" title="제품 수량 증가"
+							{{#if (and (eq prodEx.prodTypeCode 'Prod')(gt cartProdQty prodEx.salePossibleQty) ) }} disabled {{else}} {{/if}}
+							onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '{{ activityPointExchYn }}', '{{ storePickupYn }}', '{{ storeSn }}', '+')"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>
+						</span>
 					</div>
 					<!--/* 포인트 및 가격 */-->
 					<div class="price">
@@ -123,7 +108,7 @@
 									{{#if (ne awardProdEx.repProdImgEx null) }}
 										<img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/>
 									{{else}}
-										<img src="{{ absolutePath '/images/cart/no_img.png.gif' }}" alt=""/>
+										<img src="{{ absolutePath '/images/cart/no_img.png' }}" alt=""/>
 									{{/if}}
 									사은품 : {{ awardProdEx.prodName }}
 								</span>

@@ -6,6 +6,7 @@ import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
 import net.g1project.ecp.api.model.sales.display.DisplayMenu;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -26,14 +27,17 @@ import java.util.concurrent.ConcurrentHashMap;
  *     모든요청에대해 수행해야할 내용을 추가 한다.
  * </p>
  */
-@ControllerAdvice("kr.ap.emt")
+@ControllerAdvice({"kr.ap.emt", "kr.ap.amt"})
 public class ControllerSupport extends AbstractController {
 
 	private List<DisplayMenu> gnb;
 	private ConcurrentHashMap<String, DisplayMenu> gnbMap;
 	private long lastModified;
 	private List<String> popularSearches;
-	
+
+	@Value("${platform.frontend.mall-id}")
+	private String mallId;
+
 	/**
 	 * GNB 와 SubGNB Menu 데이터
 	 * @param model
@@ -78,8 +82,12 @@ public class ControllerSupport extends AbstractController {
 	private synchronized void setGndMap() {
 		
 		if (ObjectUtils.isEmpty(gnb) || isExpired()) {
-			
-			gnb = displayApi.getAllMenus(APConstant.EH_DISPLAY_MENU_SET_ID); //GNB메뉴 조회
+
+			if ("M01".equals(mallId)) {
+				gnb = displayApi.getAllMenus(APConstant.AP_DISPLAY_MENU_SET_ID); //AP GNB메뉴 조회
+			} else {
+				gnb = displayApi.getAllMenus(APConstant.EH_DISPLAY_MENU_SET_ID); //EH GNB메뉴 조회
+			}
 			gnbMap = getGNBMap(gnb); //GNB 조회
 			
 			lastModified = System.currentTimeMillis();

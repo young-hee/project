@@ -46,10 +46,10 @@
 						<div th:if="${not #lists.isEmpty(pointGiftList)}" class="receive_gift"><!--/* 20180418 : D day 마크업 추가 */-->
 							<ul>
 								<th:blick th:each="item : ${pointGiftList}">
-									<li class="gifts-item" th:id="'gift' + ${item.activityPointHistSn}">
-										<span class="flag_d_day"><strong th:text="${#IntegUtil.dayCountUtil(item.pointHistOccurDt, 7)}">D - 1</strong></span>
-										<span><span th:text="${item.memberName.name1}">홍길동</span>님의 진주알 <span th:text="${#IntegUtil.toCommaNumber(point)}">1,000</span>알 선물 도착</span>
-										<button type="button" onclick="'receive(' + item.activityPointHistSn + ')'" class="btn_md_sm_neutral">받기</button>
+									<li class="gifts-item" th:id="'gift' + ${item.activityPointGiftHistSn}">
+										<span class="flag_d_day"><strong>D - <th:block th:text="${#IntegUtil.countDate(item.sendGiftDt) + 7}">1</th:block></strong></span>
+										<span><span th:text="${item.sendGiftMemberName.name1}">홍길동</span>님의 진주알 <span th:text="${#IntegUtil.toCommaNumber(item.giftPoint)}">1,000</span>알 선물 도착</span>
+										<button type="button" th:onclick="'receive(' + ${item.activityPointGiftHistSn} + ')'" class="btn_md_sm_neutral">받기</button>
 									</li>
 								</th:blick>
 							</ul>

@@ -21,8 +21,47 @@ import java.util.List;
 public class IntegratedAPIUtils {
 
 	SimpleDateFormat sFormat = new SimpleDateFormat("yyyyMMdd");
-	public String countDate(Date date) {
-		return toString((date.getTime() - System.currentTimeMillis()) / 1000 / 3600 / 24);
+	public int countDate(Date date) {
+		return toInt((date.getTime() - System.currentTimeMillis()) / 1000 / 3600 / 24);
+	}
+	
+	public String currencyTypeConverter(String value) {
+
+		if (value != null) {
+			switch (value) {
+				case "Saving" :
+					//적립:Saving
+					return "예치금 적립";
+				case "Transfer" :
+					//출금:Transfer
+					return "예치금 출금";
+				case "Pay" :
+					//사용:Pay
+					return "예치금 사용";
+				case "PayCancel" :
+					//취소:PayCancel
+					return "예치금 취소";
+				case "ManualSaving" :
+					return "수동적립";
+				case "ManualDec" :
+					return "수동차감";
+				default :
+					return "";
+			}
+		}
+		return "";
+	}
+	
+	public String currencyConverter(Number price) {
+		StringBuffer sb = new StringBuffer();
+		if(toInt(price) >= 0) {
+			sb.append("(<em>+</em>) ");
+		} else {
+			sb.append("(-) ");
+		}
+		sb.append(toCommaNumber(Math.abs(toInt(price))));
+		
+		return sb.toString();
 	}
 	
 	public String btCardNumber(MemberSession member) {
@@ -173,9 +212,9 @@ public class IntegratedAPIUtils {
 	public String sumAmountPt(List<PtTrBrkdInqVo> ptTrBrkdInqList, int flag) {
 		int count = 0;
 		for (PtTrBrkdInqVo ptTrBrkdInqVo : ptTrBrkdInqList) {
-			if(flag == 3 &&ptTrBrkdInqVo.getXtclCd().equals("001")) {
+			if(flag == 3 &&ptTrBrkdInqVo.getTlmcCd().equals("10")) {
 				count += toInt(ptTrBrkdInqVo.getAplyPt());
-			} else if(flag == 4 &&ptTrBrkdInqVo.getXtclCd().equals("002")) {
+			} else if(flag == 4 &&ptTrBrkdInqVo.getTlmcCd().equals("20")) {
 				count += toInt(ptTrBrkdInqVo.getAplyPt());
 			}
 				

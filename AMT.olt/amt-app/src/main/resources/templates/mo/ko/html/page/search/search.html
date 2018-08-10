@@ -1,229 +1,503 @@
 <html ap:decorate="~{layout/layout-search}">
 <body>
-        <!-- #ap_container -->
-        <div ap:fragment="layout-contents">
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
 
-            <div class="ap_contents ap_search">
-				<!--/* 연관검색어 */-->
-				<!--/* sort filter 스크롤시 fixed */-->
-				<div class="sort_filter"><!-- 스크롤시 fixed -->
-					<div class="ui_table">
-						<div>총 <b class="num">150</b>개의 상품</div>
-						<div class="sort"><button type="button" onclick="$('.sort').toggleClass('open');"><i class="ico_sort"></i> <span>판매순</span></button>
+<div class="ap_contents ap_search">
+	<div class="ap_contents ap_product">
+
+		<!-- 상품 영역 -->
+		<div class="cate_prd_wrap01">
+
+			<!-- 필터링 영역 -->
+			<div class="sort_filter_wrap">
+				<div class="sort_filter_top">
+					<span class="tot_result_num">총 <em class="f_prd_num">1,056</em> 개의 상품</span>
+
+					<!-- select -->
+					<span class="select_type01_new">
+						<select name="type01">
+							<option value="align01">판매순</option>
+							<option value="align02">신상품순</option>
+							<option value="align03">평점순</option>
+							<option value="align04">높은 가격순</option>
+							<option value="align05">낮은 가격순</option>
+						</select>
+					</span>
+					<!-- // select -->
+
+					<!-- 상품 정렬 선택 버튼 -->
+						<a href="javascript:;" class="btn_align">상품 정렬 선택</a><!--  default : 리스트형 /  갤러리형 보기 : "gallery" 클래스 추가 -->
+
+						<a href="javascript:;" class="btn_filter on">필터</a><!-- 필터 선택시 "on" 클래스 추가 -->
+				</div>
+
+				<div class="filter_sel_area">
+					<div class="brand_sel"><span class="brand_sel"><em>스페셜기프트</em><a href="javascript:;">닫기</a></span></div>
+					<div class="brand_sel"><span><em>프리메라</em><a href="javascript:;">닫기</a></span></div>
+					<div class="brand_sel"><span><em>에뛰드 하우스</em><a href="javascript:;">닫기</a></span></div>
+					<div class="brand_sel"><span><em>스페셜기프트</em><a href="javascript:;">닫기</a></span></div>
+					<div class="brand_sel"><span><em>프리메라</em><a href="javascript:;">닫기</a></span></div>
+					<div class="brand_sel"><span><em>에뛰드 하우스</em><a href="javascript:;">닫기</a></span></div>
+				</div>
+
+			</div>
+
+			<script type="text/javascript">
+			 // 스크롤 시 탭 상단에 fixed
+				$(window).scroll(function() {
+					if(window.pageYOffset >= $(".cate_prd_wrap01").offset().top) {
+						$(".sort_filter_wrap").addClass("fixed");
+					} else {
+						$(".sort_filter_wrap").removeClass("fixed");
+					}
+				});
+			</script>
+
+			<!-- // 필터링 영역 -->
+
+			<!-- 상품리스트 보기 : 리스트 or 갤러리 (5개노출) -->
+			<ul class="product_list_new">
+				<li>
+					<!-- 상품 리스트 -->
+					<div class="product_new">
+						<a href="javascript:;">
+							<!--  상품이미지  -->
+							<span class="product_visual_new">
+								<span class="lazy_load_wrap loaded">
+									<img src="/mo/ko/images/dummy/img_item_01.jpg" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="" class="lazy_load loaded">
+								</span>
+							</span>
+
+							<!-- 상품 정보 -->
+							<span class="product_info_new">
+								<strong class="prd_brand">마몽드</strong>
+								<span class="prd_name">세라마이드 인텐스 크림</span>
+								<span class="price_wrap">
+									<strong class="discount">30%</strong>
+									<strong class="price">20,300<em>원</em></strong>
+									<del>29,000원</del>
+								</span>
+
+								<!-- 평점 리뷰 -->
+								<span class="product_rating">
+									<span class="mark_star_sm star5"><span class="sr_only">구매 평점 별 5개 중 5개</span></span>
+									<span class="prd_review">리뷰 828</span>
+								</span>
+
+								<!-- 태그 -->
+								<span class="tags">
+									<em class="badge special">스페셜기프트</em>
+									<em class="badge gift">기프트카드</em>
+								</span>
+
+							</span>
+							<button type="button" class="btn_toggle" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+						</a>
+					</div>
+					<!-- // 상품 리스트 -->
+				</li>
+				<li>
+					<!-- 상품 리스트 -->
+					<div class="product_new">
+						<a href="javascript:;">
+							<!--  상품이미지  -->
+							<span class="product_visual_new">
+								<span class="lazy_load_wrap loaded">
+									<img src="/mo/ko/images/dummy/img_item_02.jpg" data-src="/mo/ko/images/dummy/img_item_02.jpg" alt="" class="lazy_load loaded">
+								</span>
+							</span>
+
+							<!-- 상품 정보 -->
+							<span class="product_info_new">
+								<strong class="prd_brand">라네즈</strong>
+								<span class="prd_name">스킨베일 커버 파운데이션 EX SPF25 PA++ 30ml</span>
+								<span class="price_wrap">
+									<strong class="discount">1+1</strong>
+									<strong class="price">34,000<em>원</em></strong>
+								</span>
+
+								<!-- 평점 리뷰 -->
+								<span class="product_rating">
+									<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
+									<span class="prd_review">리뷰 1,035</span>
+								</span>
+
+								<!-- 태그 -->
+								<span class="tags">
+									<em class="badge special">스페셜기프트</em>
+								</span>
+
+							</span>
+							<button type="button" class="btn_toggle" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s on"></i><span class="sr_only">좋아요</span></button>
+						</a>
+					</div>
+					<!-- // 상품 리스트 -->
+				</li>
+				<li>
+					<!-- 상품 리스트 -->
+					<div class="product_new">
+						<a href="javascript:;">
+							<!--  상품이미지  -->
+							<span class="product_visual_new">
+								<span class="lazy_load_wrap loaded">
+									<img src="/mo/ko/images/dummy/img_item_03.jpg" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load loaded">
+								</span>
+							</span>
+
+							<!-- 상품 정보 -->
+							<span class="product_info_new">
+								<strong class="prd_brand">리리코스 마린에너지</strong>
+								<span class="prd_name">인텐시브 오일 20ml</span>
+								<span class="price_wrap">
+									<strong class="price">20,300<em>원</em></strong>
+								</span>
+
+								<!-- 평점 리뷰 -->
+								<span class="product_rating">
+									<span class="mark_star_sm star5"><span class="sr_only">구매 평점 별 5개 중 5개</span></span>
+									<span class="prd_review">리뷰 828</span>
+								</span>
+
+							</span>
+							<button type="button" class="btn_toggle" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+						</a>
+					</div>
+					<!-- // 상품 리스트 -->
+				</li>
+				<li>
+					<!-- 상품 리스트 -->
+					<div class="product_new">
+						<a href="javascript:;">
+							<!--  상품이미지  -->
+							<span class="product_visual_new">
+								<span class="lazy_load_wrap">
+									<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
+								</span>
+							</span>
+
+							<!-- 상품 정보 -->
+							<span class="product_info_new">
+								<strong class="prd_brand">마몽드</strong>
+								<span class="prd_name">세라마이드 로션 세라마이드 로션 세라마이드로션 텍스트 두줄</span>
+								<span class="price_wrap">
+									<strong class="price">34,000<em>원</em></strong>
+								</span>
+
+								<!-- 평점 리뷰 -->
+								<span class="product_rating">
+									<span class="mark_star_sm star2"><span class="sr_only">구매 평점 별 5개 중 2개</span></span>
+									<span class="prd_review">리뷰 1,035</span>
+								</span>
+
+							</span>
+							<button type="button" class="btn_toggle" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+						</a>
+					</div>
+					<!-- // 상품 리스트 -->
+				</li>
+				<li>
+					<!-- 상품 리스트 -->
+					<div class="product_new">
+						<a href="javascript:;">
+							<!--  상품이미지  -->
+							<span class="product_visual_new">
+								<span class="lazy_load_wrap">
+									<img src="" data-src="/mo/ko/images/dummy/img_item_05.jpg" alt="" class="lazy_load">
+								</span>
+							</span>
+
+							<!-- 상품 정보 -->
+							<span class="product_info_new">
+								<strong class="prd_brand">헤라</strong>
+								<span class="prd_name">루즈홀릭 크림</span>
+								<span class="price_wrap">
+									<strong class="price">34,000<em>원</em></strong>
+								</span>
+
+								<!-- 평점 리뷰 -->
+								<span class="product_rating">
+									<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
+									<span class="prd_review">리뷰 1,035</span>
+								</span>
+
+								<!--  컬러 칩 선택 -->
+								<span class="prd_color">
+									<span style="background:#9c282a"><span class="sr_only">옵션명</span></span>
+									<span style="background:#d6181c"><span class="sr_only">옵션명</span></span>
+									<span style="background:#9c2846"><span class="sr_only">옵션명</span></span>
+									<span style="background:#cb3d3f"><span class="sr_only">옵션명</span></span>
+									<span style="background:#ef5052"><span class="sr_only">옵션명</span></span>
+									<span style="background:#9c282a"><span class="sr_only">옵션명</span></span>
+									<span style="background:#d6181c"><span class="sr_only">옵션명</span></span>
+									<span style="background:#9c2846"><span class="sr_only">옵션명</span></span>
+									<span style="background:#cb3d3f"><span class="sr_only">옵션명</span></span>
+									<span style="background:#ef5052"><span class="sr_only">옵션명</span></span>
+									<span class="more"></span>
+								</span>
+
+								<!-- 태그 -->
+								<span class="tags">
+									<em class="badge special">스페셜기프트</em>
+								</span>
+
+							</span>
+							<button type="button" class="btn_toggle" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+						</a>
+					</div>
+					<!-- // 상품 리스트 -->
+				</li>
+			</ul>
+			<!-- // 상품리스트 보기 : 리스트 or 갤러리 -->
+
+			<!--브랜드 : 배너타입-->
+			<div class="section brand_new01">
+				<dl class="brand_info">
+					<dt>
+						<a href="#none"><img alt="" src="/mo/ko/images/dummy/img_brand_04.png" class="brand"><span>라네즈</span> <i class="ico_arr"></i></a>
+						<!-- 좋아요 -->
+						<button type="button" class="btn_toggle" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+					</dt>
+					<dd>
+						<!-- 브랜드 배너 슬라이드 -->
+						<div class="slide" data-ix-options="auto-play:false; paging:true; view-length:1;">
+							<div class="ix-list-viewport">
+								<ul class="ix-list-items">
+									<li class="ix-list-item">
+										<a href="javascript:;">
+											<img alt="배너 내용" ap:src="@{/images/dummy/img_banner_new01.jpg}">
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="javascript:;">
+											<img alt="배너 내용" ap:src="@{/images/dummy/img_banner_02.jpg}">
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="javascript:;">
+											<img alt="배너 내용" ap:src="@{/images/dummy/img_banner_01.jpg}">
+										</a>
+									</li>
+									<li class="ix-list-item">
+										<a href="javascript:;">
+											<img alt="배너 내용" ap:src="@{/images/dummy/img_banner_02.jpg}">
+										</a>
+									</li>
+								</ul>
+							</div>
+							<div class="ix-controller overlay">
+								<div class="paging"><span class="current"></span> / <span class="total"></span></div>
+							</div>
+						</div>
+						<div class="tags scrollable_x">
+							<a href="javascript:;">#루즈홀릭</a>
+							<a href="javascript:;">#에이지어웨이</a>
+							<a href="javascript:;">#서울리스타</a>
+							<a href="javascript:;">#크리스마스</a>
+							<a href="javascript:;">#에이지어웨이</a>
+							<a href="javascript:;">#서울리스타</a>
+						</div>
+					</dd>
+				</dl>
+			</div>
+			<!--  브랜드 상품 슬라이드 카드 타입 -->
+			<div class="section brand_new01">
+				<dl class="brand_info">
+					<dt>
+						<a href="#none"><img alt="" src="/mo/ko/images/dummy/img_brand_02.png" class="brand"><span>설화수</span> <i class="ico_arr"></i></a>
+						<!-- 좋아요 -->
+						<button type="button" class="btn_toggle" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+					</dt>
+					<dd>
+						<!-- 브랜드 배너 -->
+						<div class="display_brand_list01">
 							<ul>
-								<li><button type="button" class="on">판매순</button></li> <!--/* 선택되어있는 상태 */-->
-								<li><button type="button">신상품순</button></li>
-								<li><button type="button">평점순</button></li>
-								<li><button type="button">가격이 높은 순</button></li>
-								<li><button type="button">가격이 낮은순</button></li>
+								<li><a href="javascript:;"><img alt="배너 내용" ap:src="@{/images/dummy/img_item_04.jpg}"></a></li>
+								<li><a href="javascript:;"><img alt="배너 내용" ap:src="@{/images/dummy/img_item_05.jpg}"></a></li>
+								<li><a href="javascript:;"><img alt="배너 내용" ap:src="@{/images/dummy/img_item_01.jpg}"></a></li>
+								<li><a href="javascript:;"><img alt="배너 내용" ap:src="@{/images/dummy/img_item_02.jpg}"></a></li>
 							</ul>
 						</div>
-						<div class="view">
-							<!--/* col2 class toggle 텍스트 1단보기 2단 보기 */-->
-							<button type="button" onclick="$(this).find('i').toggleClass('col2')"><i class="ico_view"></i><span class="sr_only">1단 보기</span></button>
-						</div>
-						<div class="filter">
-							<button type="button" class="on"><span>필터</span></button> <!--/* 선택된 필터가 있을 경우 on 클래스 */-->
-						</div>
-					</div>
-					<!--/* 적용된 필터 */-->
-					<div class="tag_group scrollable_x" style="display: block;">
-						<span class="tag">스페셜기프트 <button class="ui_close" type="button"><span class="sr_only">필터 삭제</span></button></span>
-						<span class="tag">프리메라 <button class="ui_close" type="button"><span class="sr_only">필터 삭제</span></button></span>
-						<span class="tag">에뛰드 하우스 <button class="ui_close" type="button"><span class="sr_only">필터 삭제</span></button></span>
-						<span class="tag">에뛰드 하우스 <button class="ui_close" type="button"><span class="sr_only">필터 삭제</span></button></span>
-					</div>
-				</div>
-				<!--/* 검색 결과 */-->
-				<ul class="product_list">
-					<!--/* 상품 1개 */-->
-					<li class="product">
-						<!--/* 비주얼 영역 */-->
-						<a href="#none">
-							<div class="product_visual">
-								<!--/* 정사각 썸네일 타입 */-->
-								<div class="lazy_load_wrap">
-									<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
-								</div>
-								<!--/* 일시품절 */-->
-								<span class="out_of_stock"><span class="badge">일시품절</span></span>
-							</div>
-							<div class="product_info">
-								<!--/* 브랜드 */-->
-								<p class="brand"><b>마몽드</b></p>
-								<!--/* 상품명 */-->
-								<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-								<!--/* 가격정보 */-->
-								<div class="price_area">
-									<em class="discount num">28%</em>
-									<b class="price">
-										<span class="num">32,000</span>원
-									</b>
-									<del><span class="num">45,000</span>원</del>
-								</div>
-								<!--/* 평점 리뷰 */-->
-								<div class="product_rating">
-									<span class="rating">
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s"></i>
-										<span class="sr_only">4점</span>
-									</span>
-									<span>리뷰 <span class="num">360</span></span>
-								</div>
-								<!--/* 태그 */-->
-								<div class="tags">
-									<span class="badge special">스페셜기프트</span>
-									<span class="badge gift">기프트카드</span>
-								</div>
-								<button type="button" class="btn_toggle"  onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
-							</div>
-						</a>
-					</li>
-					<li class="product">
-						<!--/* 비주얼 영역 */-->
-						<a href="#none">
-							<div class="product_visual">
-								<!--/* 정사각 썸네일 타입 */-->
-								<div class="lazy_load_wrap">
-									<img src="" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="" class="lazy_load">
-								</div>
-							</div>
-							<div class="product_info">
-								<!--/* 브랜드 */-->
-								<p class="brand"><b>라네즈</b></p>
-								<!--/* 상품명 */-->
-								<p class="product_name">스킨베일 커버 파운데이션 EX SPF25 PA++ 30ml</p>
-								<!--/* 가격정보 */-->
-								<div class="price_area">
-									<em class="num">1+1</em>
-									<b class="price">
-										<span class="num">32,000</span>원
-									</b>
-								</div>
-								<!--/* 평점 리뷰 */-->
-								<div class="product_rating">
-									<span class="rating">
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s"></i>
-										<span class="sr_only">4점</span>
-									</span>
-									<span>리뷰 <span class="num">360</span></span>
-								</div>
-								<!--/* 태그 */-->
-								<div class="tags">
-									<span class="badge special">스페셜기프트</span>
-								</div>
-								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
-							</div>
-						</a>
 
-					</li>
-					<li class="product">
-						<!--/* 비주얼 영역 */-->
-						<a href="#none">
-							<div class="product_visual">
-								<!--/* 정사각 썸네일 타입 */-->
-								<div class="lazy_load_wrap">
-									<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
-								</div>
-							</div>
-							<div class="product_info">
-								<!--/* 브랜드 */-->
-								<p class="brand"><b>리리코스 마린에너지</b></p>
-								<!--/* 상품명 */-->
-								<p class="product_name">인텐시브 오일 20ml</p>
-								<!--/* 가격정보 */-->
-								<div class="price_area">
-									<b class="price"><span class="num">32,000</span>원</b>
-								</div>
-								<!--/* 평점 리뷰 */-->
-								<div class="product_rating">
-									<span class="rating">
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s"></i>
-										<span class="sr_only">4점</span>
-									</span>
-									<span>리뷰 <span class="num">360</span></span>
-								</div>
-								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
-							</div>
+						<div class="tags scrollable_x">
+							<a href="javascript:;">#루즈홀릭</a>
+							<a href="javascript:;">#에이지어웨이</a>
+							<a href="javascript:;">#서울리스타</a>
+							<a href="javascript:;">#루즈홀릭</a>
+							<a href="javascript:;">#에이지어웨이</a>
+							<a href="javascript:;">#서울리스타</a>
+						</div>
+					</dd>
+				</dl>
+			</div>
+
+			<!-- 상품리스트 보기 : 리스트 or 갤러리 (5개 이어서 노출) -->
+			<ul class="product_list_new">
+				<li>
+					<!-- 상품 리스트 -->
+					<div class="product_new">
+						<a href="javascript:;">
+							<!--  상품이미지  -->
+							<span class="product_visual_new">
+								<span class="lazy_load_wrap loaded">
+									<img src="/mo/ko/images/dummy/img_item_01.jpg" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="" class="lazy_load loaded">
+								</span>
+							</span>
+
+							<!-- 상품 정보 -->
+							<span class="product_info_new">
+								<strong class="prd_brand">마몽드</strong>
+								<span class="prd_name">세라마이드 인텐스 크림</span>
+								<span class="price_wrap">
+									<strong class="discount">30%</strong>
+									<strong class="price">20,300<em>원</em></strong>
+									<del>29,000원</del>
+								</span>
+
+								<!-- 평점 리뷰 -->
+								<span class="product_rating">
+									<span class="mark_star_sm star5"><span class="sr_only">구매 평점 별 5개 중 5개</span></span>
+									<span class="prd_review">리뷰 828</span>
+								</span>
+
+								<!-- 태그 -->
+								<span class="tags">
+									<em class="badge special">스페셜기프트</em>
+									<em class="badge gift">기프트카드</em>
+								</span>
+
+							</span>
+							<button type="button" class="btn_toggle" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
 						</a>
-					</li>
-					<li class="product">
-						<!--/* 비주얼 영역 */-->
-						<a href="#none">
-							<div class="product_visual">
-								<!--/* 정사각 썸네일 타입 */-->
-								<div class="lazy_load_wrap">
-									<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
-								</div>
-							</div>
-							<div class="product_info">
-								<!--/* 브랜드 */-->
-								<p class="brand"><b>리리코스 마린에너지</b></p>
-								<!--/* 상품명 */-->
-								<p class="product_name">인텐시브 오일 20ml 인텐시브 오일 20ml 인텐시브 오일 20ml 인텐시브 오일 20ml</p>
-								<!--/* 가격정보 */-->
-								<div class="price_area">
-									<b class="price"><span class="num">32,000</span>원</b>
-								</div>
-								<!--/* 평점 리뷰 */-->
-								<div class="product_rating">
-									<span class="rating">
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s"></i>
-										<span class="sr_only">4점</span>
-									</span>
-									<span>리뷰 <span class="num">360</span></span>
-								</div>
-								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
-							</div>
+					</div>
+					<!-- // 상품 리스트 -->
+				</li>
+				<li>
+					<!-- 상품 리스트 -->
+					<div class="product_new">
+						<a href="javascript:;">
+							<!--  상품이미지  -->
+							<span class="product_visual_new">
+								<span class="lazy_load_wrap loaded">
+									<img src="/mo/ko/images/dummy/img_item_02.jpg" data-src="/mo/ko/images/dummy/img_item_02.jpg" alt="" class="lazy_load loaded">
+								</span>
+							</span>
+
+							<!-- 상품 정보 -->
+							<span class="product_info_new">
+								<strong class="prd_brand">라네즈</strong>
+								<span class="prd_name">스킨베일 커버 파운데이션 EX SPF25 PA++ 30ml</span>
+								<span class="price_wrap">
+									<strong class="discount">1+1</strong>
+									<strong class="price">34,000<em>원</em></strong>
+								</span>
+
+								<!-- 평점 리뷰 -->
+								<span class="product_rating">
+									<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
+									<span class="prd_review">리뷰 1,035</span>
+								</span>
+
+								<!-- 태그 -->
+								<span class="tags">
+									<em class="badge special">스페셜기프트</em>
+								</span>
+
+							</span>
+							<button type="button" class="btn_toggle" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s on"></i><span class="sr_only">좋아요</span></button>
 						</a>
-					</li>
-					<li class="product">
-						<!--/* 비주얼 영역 */-->
-						<a href="#none">
-							<div class="product_visual">
-								<!--/* 정사각 썸네일 타입 */-->
-								<div class="lazy_load_wrap">
+					</div>
+					<!-- // 상품 리스트 -->
+				</li>
+				<li>
+					<!-- 상품 리스트 -->
+					<div class="product_new">
+						<a href="javascript:;">
+							<!--  상품이미지  -->
+							<span class="product_visual_new">
+								<span class="lazy_load_wrap loaded">
+									<img src="/mo/ko/images/dummy/img_item_03.jpg" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load loaded">
+								</span>
+							</span>
+
+							<!-- 상품 정보 -->
+							<span class="product_info_new">
+								<strong class="prd_brand">리리코스 마린에너지</strong>
+								<span class="prd_name">인텐시브 오일 20ml</span>
+								<span class="price_wrap">
+									<strong class="price">20,300<em>원</em></strong>
+								</span>
+
+								<!-- 평점 리뷰 -->
+								<span class="product_rating">
+									<span class="mark_star_sm star5"><span class="sr_only">구매 평점 별 5개 중 5개</span></span>
+									<span class="prd_review">리뷰 828</span>
+								</span>
+
+							</span>
+							<button type="button" class="btn_toggle" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+						</a>
+					</div>
+					<!-- // 상품 리스트 -->
+				</li>
+				<li>
+					<!-- 상품 리스트 -->
+					<div class="product_new">
+						<a href="javascript:;">
+							<!--  상품이미지  -->
+							<span class="product_visual_new">
+								<span class="lazy_load_wrap">
 									<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
-								</div>
-							</div>
-							<div class="product_info">
-								<!--/* 브랜드 */-->
-								<p class="brand"><b>헤라</b></p>
-								<!--/* 상품명 */-->
-								<p class="product_name">루즈홀릭 크림</p>
-								<!--/* 가격정보 */-->
-								<div class="price_area">
-									<b class="price"><span class="num">32,000</span>원</b>
-								</div>
-								<!--/* 평점 리뷰 */-->
-								<div class="product_rating">
-									<span class="rating">
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s"></i>
-										<span class="sr_only">4점</span>
-									</span>
-									<span>리뷰 <span class="num">360</span></span>
-								</div>
-								<!--/* 컬러칩 */-->
-								<div class="product_color">
+								</span>
+							</span>
+
+							<!-- 상품 정보 -->
+							<span class="product_info_new">
+								<strong class="prd_brand">마몽드</strong>
+								<span class="prd_name">세라마이드 로션 세라마이드 로션 세라마이드로션 텍스트 두줄</span>
+								<span class="price_wrap">
+									<strong class="price">34,000<em>원</em></strong>
+								</span>
+
+								<!-- 평점 리뷰 -->
+								<span class="product_rating">
+									<span class="mark_star_sm star2"><span class="sr_only">구매 평점 별 5개 중 2개</span></span>
+									<span class="prd_review">리뷰 1,035</span>
+								</span>
+
+							</span>
+							<button type="button" class="btn_toggle" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+						</a>
+					</div>
+					<!-- // 상품 리스트 -->
+				</li>
+				<li>
+					<!-- 상품 리스트 -->
+					<div class="product_new">
+						<a href="javascript:;">
+							<!--  상품이미지  -->
+							<span class="product_visual_new">
+								<span class="lazy_load_wrap">
+									<img src="" data-src="/mo/ko/images/dummy/img_item_05.jpg" alt="" class="lazy_load">
+								</span>
+							</span>
+
+							<!-- 상품 정보 -->
+							<span class="product_info_new">
+								<strong class="prd_brand">헤라</strong>
+								<span class="prd_name">루즈홀릭 크림</span>
+								<span class="price_wrap">
+									<strong class="price">34,000<em>원</em></strong>
+								</span>
+
+								<!-- 평점 리뷰 -->
+								<span class="product_rating">
+									<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
+									<span class="prd_review">리뷰 1,035</span>
+								</span>
+
+								<!--  컬러 칩 선택 -->
+								<span class="prd_color">
 									<span style="background:#9c282a"><span class="sr_only">옵션명</span></span>
 									<span style="background:#d6181c"><span class="sr_only">옵션명</span></span>
 									<span style="background:#9c2846"><span class="sr_only">옵션명</span></span>
@@ -235,283 +509,51 @@
 									<span style="background:#cb3d3f"><span class="sr_only">옵션명</span></span>
 									<span style="background:#ef5052"><span class="sr_only">옵션명</span></span>
 									<span class="more"></span>
-								</div>
-								<!--/* 태그 */-->
-								<div class="tags">
-									<span class="badge gift">기프트카드</span>
-								</div>
-								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
-							</div>
-						</a>
-					</li>
-				</ul>
-				<!--/* 브랜드관 */-->
-				<div class="section">
-					<dl class="brand_info">
-						<dt><a href="#none"><img alt="" src="/mo/ko/images/dummy/img_brand_01.png" class="brand"><span>헤라 브랜드관</span> <i class="ico_arr"></i></a></dt>
-						<dd>
-							<div class="tags scrollable_x">
-								<a href="#none">#루즈홀릭</a>
-								<a href="#none">#에이지어웨이</a>
-								<a href="#none">#서울리스타</a>
-								<a href="#none">#루즈홀릭</a>
-								<a href="#none">#에이지어웨이</a>
-								<a href="#none">#서울리스타</a>
-							</div>
-							<!--/* 브랜드 슬라이드 */-->
-							<div class="slide" data-ix-options="view-length:1;">
-								<div class="ix-list-viewport">
-									<ul class="ix-list-items">
-										<li class="ix-list-item">
-											<a href="#none">
-												<img alt="배너 내용" ap:src="@{/images/dummy/img_banner_01.jpg}">
-											</a>
-										</li>
-										<li class="ix-list-item">
-											<a href="#none">
-												<img alt="배너 내용" ap:src="@{/images/dummy/img_banner_02.jpg}">
-											</a>
-										</li>
-										<li class="ix-list-item">
-											<a href="#none">
-												<img alt="배너 내용" ap:src="@{/images/dummy/img_banner_01.jpg}">
-											</a>
-										</li>
-										<li class="ix-list-item">
-											<a href="#none">
-												<img alt="배너 내용" ap:src="@{/images/dummy/img_banner_02.jpg}">
-											</a>
-										</li>
-									</ul>
-								</div>
-								<div class="ix-controller overlay">
-									<div class="paging"><span class="current">1</span> / <span class="total">4</span></div>
-								</div>
-							</div>
-							<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
-						</dd>
-					</dl>
-				</div>
-				<ul class="product_list">
-					<!--/* 상품 1개 */-->
-					<li class="product">
-						<!--/* 비주얼 영역 */-->
-						<a href="#none">
-							<div class="product_visual">
-								<!--/* 정사각 썸네일 타입 */-->
-								<div class="lazy_load_wrap">
-									<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
-								</div>
-								<!--/* 일시품절 */-->
-								<span class="out_of_stock"><span class="badge">일시품절</span></span>
-							</div>
-							<div class="product_info">
-								<!--/* 브랜드 */-->
-								<p class="brand"><b>마몽드</b></p>
-								<!--/* 상품명 */-->
-								<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-								<!--/* 가격정보 */-->
-								<div class="price_area">
-									<em class="discount num">28%</em>
-									<b class="price">
-										<span class="num">32,000</span>원
-									</b>
-									<del><span class="num">45,000</span>원</del>
-								</div>
-								<!--/* 평점 리뷰 */-->
-								<div class="product_rating">
-									<span class="rating">
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s"></i>
-										<span class="sr_only">4점</span>
-									</span>
-									<span>리뷰 <span class="num">360</span></span>
-								</div>
-								<!--/* 태그 */-->
-								<div class="tags">
-									<span class="badge special">스페셜기프트</span>
-									<span class="badge gift">기프트카드</span>
-								</div>
-								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
-							</div>
-						</a>
-					</li>
-					<li class="product">
-						<!--/* 비주얼 영역 */-->
-						<a href="#none">
-							<div class="product_visual">
-								<!--/* 정사각 썸네일 타입 */-->
-								<div class="lazy_load_wrap">
-									<img src="" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="" class="lazy_load">
-								</div>
-							</div>
-							<div class="product_info">
-								<!--/* 브랜드 */-->
-								<p class="brand"><b>라네즈</b></p>
-								<!--/* 상품명 */-->
-								<p class="product_name">스킨베일 커버 파운데이션 EX SPF25 PA++ 30ml</p>
-								<!--/* 가격정보 */-->
-								<div class="price_area">
-									<em class="num">1+1</em>
-									<b class="price">
-										<span class="num">32,000</span>원
-									</b>
-								</div>
-								<!--/* 평점 리뷰 */-->
-								<div class="product_rating">
-									<span class="rating">
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s"></i>
-										<span class="sr_only">4점</span>
-									</span>
-									<span>리뷰 <span class="num">360</span></span>
-								</div>
-								<!--/* 태그 */-->
-								<div class="tags">
-									<span class="badge special">스페셜기프트</span>
-								</div>
-								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
-							</div>
-						</a>
+								</span>
 
-					</li>
-					<li class="product">
-						<!--/* 비주얼 영역 */-->
-						<a href="#none">
-							<div class="product_visual">
-								<!--/* 정사각 썸네일 타입 */-->
-								<div class="lazy_load_wrap">
-									<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
-								</div>
-							</div>
-							<div class="product_info">
-								<!--/* 브랜드 */-->
-								<p class="brand"><b>리리코스 마린에너지</b></p>
-								<!--/* 상품명 */-->
-								<p class="product_name">인텐시브 오일 20ml</p>
-								<!--/* 가격정보 */-->
-								<div class="price_area">
-									<b class="price"><span class="num">32,000</span>원</b>
-								</div>
-								<!--/* 평점 리뷰 */-->
-								<div class="product_rating">
-									<span class="rating">
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s"></i>
-										<span class="sr_only">4점</span>
-									</span>
-									<span>리뷰 <span class="num">360</span></span>
-								</div>
-								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
-							</div>
-						</a>
-					</li>
-					<li class="product">
-						<!--/* 비주얼 영역 */-->
-						<a href="#none">
-							<div class="product_visual">
-								<!--/* 정사각 썸네일 타입 */-->
-								<div class="lazy_load_wrap">
-									<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
-								</div>
-							</div>
-							<div class="product_info">
-								<!--/* 브랜드 */-->
-								<p class="brand"><b>리리코스 마린에너지</b></p>
-								<!--/* 상품명 */-->
-								<p class="product_name">인텐시브 오일 20ml 인텐시브 오일 20ml 인텐시브 오일 20ml 인텐시브 오일 20ml</p>
-								<!--/* 가격정보 */-->
-								<div class="price_area">
-									<b class="price"><span class="num">32,000</span>원</b>
-								</div>
-								<!--/* 평점 리뷰 */-->
-								<div class="product_rating">
-									<span class="rating">
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s"></i>
-										<span class="sr_only">4점</span>
-									</span>
-									<span>리뷰 <span class="num">360</span></span>
-								</div>
-								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
-							</div>
-						</a>
-					</li>
-					<li class="product">
-						<!--/* 비주얼 영역 */-->
-						<a href="#none">
-							<div class="product_visual">
-								<!--/* 정사각 썸네일 타입 */-->
-								<div class="lazy_load_wrap">
-									<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
-								</div>
-							</div>
-							<div class="product_info">
-								<!--/* 브랜드 */-->
-								<p class="brand"><b>헤라</b></p>
-								<!--/* 상품명 */-->
-								<p class="product_name">루즈홀릭 크림</p>
-								<!--/* 가격정보 */-->
-								<div class="price_area">
-									<b class="price"><span class="num">32,000</span>원</b>
-								</div>
-								<!--/* 평점 리뷰 */-->
-								<div class="product_rating">
-									<span class="rating">
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s on"></i>
-										<i class="ico_star_s"></i>
-										<span class="sr_only">4점</span>
-									</span>
-									<span>리뷰 <span class="num">360</span></span>
-								</div>
-								<!--/* 컬러칩 */-->
-								<div class="product_color">
-									<span style="background:#9c282a"><span class="sr_only">옵션명</span></span>
-									<span style="background:#d6181c"><span class="sr_only">옵션명</span></span>
-									<span style="background:#9c2846"><span class="sr_only">옵션명</span></span>
-									<span style="background:#cb3d3f"><span class="sr_only">옵션명</span></span>
-									<span style="background:#ef5052"><span class="sr_only">옵션명</span></span>
-									<span style="background:#9c282a"><span class="sr_only">옵션명</span></span>
-									<span style="background:#d6181c"><span class="sr_only">옵션명</span></span>
-									<span style="background:#9c2846"><span class="sr_only">옵션명</span></span>
-									<span style="background:#cb3d3f"><span class="sr_only">옵션명</span></span>
-									<span style="background:#ef5052"><span class="sr_only">옵션명</span></span>
-									<span class="more"></span>
-								</div>
-								<!--/* 태그 */-->
-								<div class="tags">
-									<span class="badge gift">기프트카드</span>
-								</div>
-								<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
-							</div>
-						</a>
-					</li>
-				</ul>
-            </div>
-            
-        </div>
+								<!-- 태그 -->
+								<span class="tags">
+									<em class="badge special">스페셜기프트</em>
+								</span>
 
-    <!--/* 하단 js등을 실행하는 마지막 영역 */-->
-    <th:block ap:fragment="layout-endpoint">
-		<script>
-			$('.slide').ixSlideMax();
-		</script>
-    </th:block>
+							</span>
+							<button type="button" class="btn_toggle" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+						</a>
+					</div>
+					<!-- // 상품 리스트 -->
+				</li>
+			</ul>
+			<!-- // 상품리스트 보기 : 리스트 or 갤러리 -->
+
+			<script type="text/javascript">
+				/* 상품리스트 보기 : 리스트 or 갤러리, 버튼 */
+				$(".btn_align").on('click', function(){
+					if($(".cate_prd_wrap01 .product_list_new, .cate_prd_wrap01 .btn_align").hasClass('gallery')){
+						$(".cate_prd_wrap01 .product_list_new, .cate_prd_wrap01 .btn_align").removeClass('gallery');
+
+					}else{
+						$(".cate_prd_wrap01 .product_list_new, .cate_prd_wrap01 .btn_align").addClass('gallery');
+					}
+				});
+			</script>
+		</div>
+
+		<div class="loading" style="height:50px;"> <!-- 로딩이 들어가야 하는 영역 높이값 inline으로..-->
+			<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+		</div>
+		<!--/* 상품목록 없을때 */-->
+		<div class="section no_product">
+			<p class="text_center">더 좋은 상품을 준비중입니다.</p>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+<script>
+$('.slide').ixSlideMax();
+</script>
+</th:block>
 
 </body>
 </html>

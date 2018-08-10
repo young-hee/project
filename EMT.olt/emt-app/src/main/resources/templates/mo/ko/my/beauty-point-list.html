@@ -134,7 +134,11 @@
 
 		<!--/* 하단 js등을 실행하는 마지막 영역 */-->
 		<th:block ap:fragment="layout-endpoint">
-
+			<style>
+			.bt_point_list {
+			    border-top: none;
+			}
+			</style>
 			<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
 			<script>
 			var date = new Object();
@@ -181,8 +185,10 @@
 							endDt:endDtVal
 					}).done(function(data) {
 
-				    	$('.pagination').remove();
-				    	$(".board_list2").replaceWith(data);
+						$("#m-loading").remove();
+						$('.btn_lg_more').remove();
+						$(".bt_point_list:last").after(data);
+						$('.btn_lg_more em').text($('.point-item').size());
 						
 	                }).fail(function(xhr, textStatus, errorThrown) {
 	                	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");

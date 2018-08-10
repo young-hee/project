@@ -1,0 +1,496 @@
+<html ap:decorate="~{layout/layout-sub}">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page contents -->
+		<div class="ap_contents">
+
+			<!-- breadcrumbe -->
+			<th:block ap:replace="~{common/fragment/breadcrumb-only}"/>
+			<!-- // breadcrumb -->
+
+			<!-- com_cont -->
+			<div class="ap_com_cont mypage">
+				<!-- aside_area -->
+				<th:block ap:replace="~{html/page/my/fragment/my-menu}"/>
+				<!-- aside_area -->
+
+				<!-- cont_area -->
+				<div class="cont_area">
+					<div class="sub_title">
+						<!-- page title -->
+						<th:block ap:replace="~{common/fragment/page-title}"/>
+						<!-- // page title -->
+					</div>
+					<div class="my_coupon_status">
+						<dl>
+							<dt>보유 쿠폰</dt>
+							<dd><span th:text="${availCnt}">11</span>장</dd>
+						</dl>
+						<dl>
+							<dt>만료예정 쿠폰</dt>
+							<dd><span th:text="${immCnt}">11</span>장</dd>
+						</dl>
+						<dl>
+							<dt>다운로드 가능 쿠폰</dt>
+							<dd><span th:text="${expCnt}">21</span>장</dd>
+						</dl>
+					</div>
+					<div class="coupon_apply">
+						<dl>
+							<dt>Apmall 쿠폰 등록</dt>
+							<dd>
+								<div class="input_btn_wrap">
+									<div class="input_wrap bg_white">
+										<input type="text" name="couponIdentifier" required="required" placeholder="쿠폰 번호를 입력해주세요">
+									</div>
+									<button type="button" class="btn_sign" id="registerBtn">쿠폰등록</button>
+								</div>
+							</dd>
+						</dl>
+					</div>
+
+					<div class="ui_tab coupon_tab">
+						<!-- tab menu -->
+						<div class="tab_menu brd equally">
+							<ul>
+								<li class="on"><button type="button"><span>사용가능 쿠폰 <em th:text="${availCnt}">20</em></span></button></li>
+								<li><button type="button"><span>7일 이내 만료예정 쿠폰 <em th:text="${immCnt}">2</em></span></button></li>
+								<li><button type="button"><span>사용/만료된 쿠폰 <em th:text="${expCnt}">2</em></span></button></li>
+							</ul>
+						</div>
+						<!-- tab contents wrap -->
+						<div class="tab_contents">
+							<!-- tab content -->
+							<div class="tab_cont">
+								<h3 class="sr_only">사용가능쿠폰</h3>
+								<ul class="coupon_list">
+									<li th:each="item : ${availCoupons}">
+										<div class="coupon_box" th:if="${item.availCoupon.couponBenefitTypeCode == 'ProdDc'}">
+											<div>
+												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="cp_name" th:if="${item.availCoupon.prodDcCoupon.dcMethodCode == 'FlatPrice'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.flatPrice)}">3,000</span><span class="won">원</span></p>
+													<p>균일가</p>
+												</div>
+												<div class="cp_name" th:if="${item.availCoupon.prodDcCoupon.dcMethodCode == 'FixedRate'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.dcRate * 100)}">3,000</span><span class="won">%</span></p>
+													<p>할인</p>
+												</div>
+												<div class="cp_name" th:if="${item.availCoupon.prodDcCoupon.dcMethodCode == 'FixedAmt'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.dcAmt)}">3,000</span><span class="won">원</span></p>
+													<p>할인</p>
+												</div>
+											</div>
+											<div>
+												<div class="type app">APP coupon</div>
+												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
+												<p class="condition" th:if="${item.availCoupon.prodDcCoupon.minPurProdPriceAssignYn == 'Y'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.minPurProdPrice)}">30,000</th:block>원 이상 구매 시</p>
+												<div class="page_btns">
+													<a href="javascript:;">상품 안내</a>
+													<a href="javascript:;">쿠폰 안내</a>
+												</div>
+											</div>
+										</div>
+										<div class="coupon_box" th:if="${item.availCoupon.couponBenefitTypeCode == 'CartDc'}">
+											<div>
+												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="cp_name" th:if="${item.availCoupon.cartDcCoupon.dcMethodCode == 'FlatPrice'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.flatPrice)}">3,000</span><span class="won">원</span></p>
+													<p>균일가</p>
+												</div>
+												<div class="cp_name" th:if="${item.availCoupon.cartDcCoupon.dcMethodCode == 'FixedRate'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.dcRate * 100)}">3,000</span><span class="won">%</span></p>
+													<p>할인</p>
+												</div>
+												<div class="cp_name" th:if="${item.availCoupon.cartDcCoupon.dcMethodCode == 'FixedAmt'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.dcAmt)}">3,000</span><span class="won">원</span></p>
+													<p>할인</p>
+												</div>
+											</div>
+											<div>
+												<div class="type app">APP coupon</div>
+												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
+												<p class="condition" th:if="${item.availCoupon.cartDcCoupon.sectionTypeCode == 'Amt'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.fromOrdAmt)}">30,000</th:block>원 이상 구매 시</p>
+												<p class="condition" th:if="${item.availCoupon.cartDcCoupon.sectionTypeCode == 'Qty'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.fromOrdQty)}">10</th:block>개 이상 구매 시</p>
+												<div class="page_btns">
+													<a href="javascript:;">쿠폰 안내</a>
+												</div>
+											</div>
+										</div>
+										<div class="coupon_box" th:if="${item.availCoupon.couponBenefitTypeCode == 'MPlusN'}">
+											<div>
+												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="cp_name" >
+													<p><span class="num"><th:block th:text="${item.availCoupon.mplusnCoupon.baseOrdQty}"><span class="won">N</th:block>+<th:block th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">N</th:block></span></span></p>
+												</div>
+											</div>
+											<div>
+												<div class="type app">APP coupon</div>
+												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
+												<p class="condition" th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Same'}">동일상품 <span th:text="${item.availCoupon.mplusnCoupon.baseOrdQty}">N</span>개 구매시 <span th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">M</span>개 추가 증정</p>
+												<p class="condition" th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Different'}">이종상품 <span th:text="${item.availCoupon.mplusnCoupon.baseOrdQty}">N</span>개 구매시 <span th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">M</span>개 추가 증정</p>
+												<div class="page_btns">
+													<a href="javascript:;" th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Different'}">상품 안내</a>
+													<a href="javascript:;">쿠폰 안내</a>
+												</div>
+											</div>
+										</div>
+										<div class="coupon_box" th:if="${item.availCoupon.couponBenefitTypeCode == 'CartAward'}">
+											<div>
+												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="cp_name" >
+													<p><span class="num"><span class="won">사은품 증정</span></span></p>
+												</div>
+											</div>
+											<div>
+												<div class="type app">APP coupon</div>
+												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
+												<p class="condition" th:if="${item.availCoupon.cartAwardCoupon.sectionTypeCode == 'Qty'}"><span th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartAwardCoupon.fromOrdQty)}">100</span>개 이상 구매 시</p>
+												<p class="condition" th:if="${item.availCoupon.cartAwardCoupon.sectionTypeCode == 'Amt'}"><span th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartAwardCoupon.fromOrdAmt)}">100</span>원 이상 구매 시</p>
+												<div class="page_btns">
+													<a href="javascript:;">상품 안내</a>
+													<a href="javascript:;">쿠폰 안내</a>
+												</div>
+											</div>
+										</div>
+										<div class="coupon_box" th:if="${item.availCoupon.couponBenefitTypeCode == 'Buy1Get'}">
+											<div>
+												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="cp_name" >
+													<p><span class="num"><span class="won">Buy1Get</span></span></p>
+												</div>
+											</div>
+											<div>
+												<div class="type app">APP coupon</div>
+												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
+												<div class="page_btns">
+													<a href="javascript:;">상품 안내</a>
+													<a href="javascript:;">쿠폰 안내</a>
+												</div>
+											</div>
+										</div>
+										<div class="coupon_box" th:if="${item.availCoupon.couponBenefitTypeCode == 'ShipFeeFree'}">
+											<div>
+												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="cp_name" >
+													<p><span class="num"><span class="won">무료배송</span></span></p>
+												</div>
+											</div>
+											<div>
+												<div class="type app">APP coupon</div>
+												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
+												<div class="page_btns">
+													<a href="javascript:;">쿠폰 안내</a>
+												</div>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<div class="tab_cont">
+								<h3 class="sr_only">7일 이내 소멸 쿠폰</h3>
+								<ul class="coupon_list">
+									<li th:each="item : ${immCoupons}">
+										<div class="coupon_box" th:if="${item.availCoupon.couponBenefitTypeCode == 'ProdDc'}">
+											<div>
+												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="cp_name" th:if="${item.availCoupon.prodDcCoupon.dcMethodCode == 'FlatPrice'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.flatPrice)}">3,000</span><span class="won">원</span></p>
+													<p>균일가</p>
+												</div>
+												<div class="cp_name" th:if="${item.availCoupon.prodDcCoupon.dcMethodCode == 'FixedRate'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.dcRate * 100)}">3,000</span><span class="won">%</span></p>
+													<p>할인</p>
+												</div>
+												<div class="cp_name" th:if="${item.availCoupon.prodDcCoupon.dcMethodCode == 'FixedAmt'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.dcAmt)}">3,000</span><span class="won">원</span></p>
+													<p>할인</p>
+												</div>
+											</div>
+											<div>
+												<div class="type app">APP coupon</div>
+												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
+												<p class="condition" th:if="${item.availCoupon.prodDcCoupon.minPurProdPriceAssignYn == 'Y'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.minPurProdPrice)}">30,000</th:block>원 이상 구매 시</p>
+												<div class="page_btns">
+													<a href="javascript:;">상품 안내</a>
+													<a href="javascript:;">쿠폰 안내</a>
+												</div>
+											</div>
+										</div>
+										<div class="coupon_box" th:if="${item.availCoupon.couponBenefitTypeCode == 'CartDc'}">
+											<div>
+												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="cp_name" th:if="${item.availCoupon.cartDcCoupon.dcMethodCode == 'FlatPrice'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.flatPrice)}">3,000</span><span class="won">원</span></p>
+													<p>균일가</p>
+												</div>
+												<div class="cp_name" th:if="${item.availCoupon.cartDcCoupon.dcMethodCode == 'FixedRate'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.dcRate * 100)}">3,000</span><span class="won">%</span></p>
+													<p>할인</p>
+												</div>
+												<div class="cp_name" th:if="${item.availCoupon.cartDcCoupon.dcMethodCode == 'FixedAmt'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.dcAmt)}">3,000</span><span class="won">원</span></p>
+													<p>할인</p>
+												</div>
+											</div>
+											<div>
+												<div class="type app">APP coupon</div>
+												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
+												<p class="condition" th:if="${item.availCoupon.cartDcCoupon.sectionTypeCode == 'Amt'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.fromOrdAmt)}">30,000</th:block>원 이상 구매 시</p>
+												<p class="condition" th:if="${item.availCoupon.cartDcCoupon.sectionTypeCode == 'Qty'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.fromOrdQty)}">10</th:block>개 이상 구매 시</p>
+												<div class="page_btns">
+													<a href="javascript:;">쿠폰 안내</a>
+												</div>
+											</div>
+										</div>
+										<div class="coupon_box" th:if="${item.availCoupon.couponBenefitTypeCode == 'MPlusN'}">
+											<div>
+												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="cp_name" >
+													<p><span class="num"><th:block th:text="${item.availCoupon.mplusnCoupon.baseOrdQty}"><span class="won">N</th:block>+<th:block th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">N</th:block></span></span></p>
+												</div>
+											</div>
+											<div>
+												<div class="type app">APP coupon</div>
+												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
+												<p class="condition" th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Same'}">동일상품 <span th:text="${item.availCoupon.mplusnCoupon.baseOrdQty}">N</span>개 구매시 <span th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">M</span>개 추가 증정</p>
+												<p class="condition" th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Different'}">이종상품 <span th:text="${item.availCoupon.mplusnCoupon.baseOrdQty}">N</span>개 구매시 <span th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">M</span>개 추가 증정</p>
+												<div class="page_btns">
+													<a href="javascript:;" th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Different'}">상품 안내</a>
+													<a href="javascript:;">쿠폰 안내</a>
+												</div>
+											</div>
+										</div>
+										<div class="coupon_box" th:if="${item.availCoupon.couponBenefitTypeCode == 'CartAward'}">
+											<div>
+												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="cp_name" >
+													<p><span class="num"><span class="won">사은품 증정</span></span></p>
+												</div>
+											</div>
+											<div>
+												<div class="type app">APP coupon</div>
+												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
+												<p class="condition" th:if="${item.availCoupon.cartAwardCoupon.sectionTypeCode == 'Qty'}"><span th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartAwardCoupon.fromOrdQty)}">100</span>개 이상 구매 시</p>
+												<p class="condition" th:if="${item.availCoupon.cartAwardCoupon.sectionTypeCode == 'Amt'}"><span th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartAwardCoupon.fromOrdAmt)}">100</span>원 이상 구매 시</p>
+												<div class="page_btns">
+													<a href="javascript:;">상품 안내</a>
+													<a href="javascript:;">쿠폰 안내</a>
+												</div>
+											</div>
+										</div>
+										<div class="coupon_box" th:if="${item.availCoupon.couponBenefitTypeCode == 'Buy1Get'}">
+											<div>
+												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="cp_name" >
+													<p><span class="num"><span class="won">Buy1Get</span></span></p>
+												</div>
+											</div>
+											<div>
+												<div class="type app">APP coupon</div>
+												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
+												<div class="page_btns">
+													<a href="javascript:;">상품 안내</a>
+													<a href="javascript:;">쿠폰 안내</a>
+												</div>
+											</div>
+										</div>
+										<div class="coupon_box" th:if="${item.availCoupon.couponBenefitTypeCode == 'ShipFeeFree'}">
+											<div>
+												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="cp_name" >
+													<p><span class="num"><span class="won">무료배송</span></span></p>
+												</div>
+											</div>
+											<div>
+												<div class="type app">APP coupon</div>
+												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
+												<div class="page_btns">
+													<a href="javascript:;">상품 안내</a>
+													<a href="javascript:;">쿠폰 안내</a>
+												</div>
+											</div>
+										</div>
+									</li>
+							</div>
+							<div class="tab_cont">
+								<h3 class="sr_only">사용/만료된 쿠폰</h3>
+								<ul class="coupon_list">
+									<li th:each="item : ${expCoupons}">
+										<div class="coupon_box" th:if="${item.expCoupon.couponBenefitTypeCode == 'CartDc'}">
+											<div>
+												<div class="date" th:if="${item.expCoupon.expDt}"><strong>만료일</strong> <span class="num" th:text="${#dates.format(item.expCoupon.expDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
+												<div class="date" th:if="${item.expCoupon.useDt}"><strong>사용일</strong> <span class="num" th:text="${#dates.format(item.expCoupon.useDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
+												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="cp_name" th:if="${item.expCoupon.cartDcCoupon.dcMethodCode == 'FlatPrice'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.flatPrice)}">3,000</span><span class="won">원</span></p>
+													<p>균일가</p>
+												</div>
+												<div class="cp_name" th:if="${item.expCoupon.cartDcCoupon.dcMethodCode == 'FixedRate'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.dcRate * 100)}">3,000</span><span class="won">%</span></p>
+													<p>할인</p>
+												</div>
+												<div class="cp_name" th:if="${item.expCoupon.cartDcCoupon.dcMethodCode == 'FixedAmt'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.dcAmt)}">3,000</span><span class="won">원</span></p>
+													<p>할인</p>
+												</div>
+											</div>
+											<div>
+												<div class="type app">APP coupon</div>
+												<p class="cp_desc ellipsis line2" th:text="${item.expCoupon.couponName}">베리떼</p>
+												<p class="condition" th:if="${item.expCoupon.cartDcCoupon.sectionTypeCode == 'Amt'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.fromOrdAmt)}">30,000</th:block>원 이상 구매 시</p>
+												<p class="condition" th:if="${item.expCoupon.cartDcCoupon.sectionTypeCode == 'Qty'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.fromOrdQty)}">10</th:block>개 이상 구매 시</p>
+												<div class="page_btns">
+													<a href="javascript:;">쿠폰 안내</a>
+												</div>
+											</div>
+										</div>
+										<div class="coupon_box" th:if="${item.expCoupon.couponBenefitTypeCode == 'CartDc'}">
+											<div>
+												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="cp_name" th:if="${item.expCoupon.cartDcCoupon.dcMethodCode == 'FlatPrice'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.flatPrice)}">3,000</span><span class="won">원</span></p>
+													<p>균일가</p>
+												</div>
+												<div class="cp_name" th:if="${item.expCoupon.cartDcCoupon.dcMethodCode == 'FixedRate'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.dcRate * 100)}">3,000</span><span class="won">%</span></p>
+													<p>할인</p>
+												</div>
+												<div class="cp_name" th:if="${item.expCoupon.cartDcCoupon.dcMethodCode == 'FixedAmt'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.dcAmt)}">3,000</span><span class="won">원</span></p>
+													<p>할인</p>
+												</div>
+											</div>
+											<div>
+												<div class="type app">APP coupon</div>
+												<p class="cp_desc ellipsis line2" th:text="${item.expCoupon.couponName}">베리떼</p>
+												<p class="condition" th:if="${item.expCoupon.cartDcCoupon.sectionTypeCode == 'Amt'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.fromOrdAmt)}">30,000</th:block>원 이상 구매 시</p>
+												<p class="condition" th:if="${item.expCoupon.cartDcCoupon.sectionTypeCode == 'Qty'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.fromOrdQty)}">10</th:block>개 이상 구매 시</p>
+												<div class="page_btns">
+													<a href="javascript:;">쿠폰 안내</a>
+												</div>
+											</div>
+										</div>
+										<div class="coupon_box" th:if="${item.expCoupon.couponBenefitTypeCode == 'MPlusN'}">
+											<div>
+												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="cp_name" >
+													<p><span class="num"><th:block th:text="${item.expCoupon.mplusnCoupon.baseOrdQty}"><span class="won">N</th:block>+<th:block th:text="${item.expCoupon.mplusnCoupon.freeAwardQty}">N</th:block></span></span></p>
+												</div>
+											</div>
+											<div>
+												<div class="type app">APP coupon</div>
+												<p class="cp_desc ellipsis line2" th:text="${item.expCoupon.couponName}">베리떼</p>
+												<p class="condition" th:if="${item.expCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Same'}">동일상품 <span th:text="${item.expCoupon.mplusnCoupon.baseOrdQty}">N</span>개 구매시 <span th:text="${item.expCoupon.mplusnCoupon.freeAwardQty}">M</span>개 추가 증정</p>
+												<p class="condition" th:if="${item.expCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Different'}">이종상품 <span th:text="${item.expCoupon.mplusnCoupon.baseOrdQty}">N</span>개 구매시 <span th:text="${item.expCoupon.mplusnCoupon.freeAwardQty}">M</span>개 추가 증정</p>
+												<div class="page_btns">
+													<a href="javascript:;" th:if="${item.expCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Different'}">상품 안내</a>
+													<a href="javascript:;">쿠폰 안내</a>
+												</div>
+											</div>
+										</div>
+										<div class="coupon_box" th:if="${item.expCoupon.couponBenefitTypeCode == 'CartAward'}">
+											<div>
+												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="cp_name" >
+													<p><span class="num"><span class="won">사은품 증정</span></span></p>
+												</div>
+											</div>
+											<div>
+												<div class="type app">APP coupon</div>
+												<p class="cp_desc ellipsis line2" th:text="${item.expCoupon.couponName}">베리떼</p>
+												<p class="condition" th:if="${item.expCoupon.cartAwardCoupon.sectionTypeCode == 'Qty'}"><span th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartAwardCoupon.fromOrdQty)}">100</span>개 이상 구매 시</p>
+												<p class="condition" th:if="${item.expCoupon.cartAwardCoupon.sectionTypeCode == 'Amt'}"><span th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartAwardCoupon.fromOrdAmt)}">100</span>원 이상 구매 시</p>
+												<div class="page_btns">
+													<a href="javascript:;">상품 안내</a>
+													<a href="javascript:;">쿠폰 안내</a>
+												</div>
+											</div>
+										</div>
+										<div class="coupon_box" th:if="${item.expCoupon.couponBenefitTypeCode == 'Buy1Get'}">
+											<div>
+												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="cp_name" >
+													<p><span class="num"><span class="won">Buy1Get</span></span></p>
+												</div>
+											</div>
+											<div>
+												<div class="type app">APP coupon</div>
+												<p class="cp_desc ellipsis line2" th:text="${item.expCoupon.couponName}">베리떼</p>
+												<div class="page_btns">
+													<a href="javascript:;">상품 안내</a>
+													<a href="javascript:;">쿠폰 안내</a>
+												</div>
+											</div>
+										</div>
+										<div class="coupon_box" th:if="${item.expCoupon.couponBenefitTypeCode == 'ShipFeeFree'}">
+											<div>
+												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="cp_name" >
+													<p><span class="num"><span class="won">무료배송</span></span></p>
+												</div>
+											</div>
+											<div>
+												<div class="type app">APP coupon</div>
+												<p class="cp_desc ellipsis line2" th:text="${item.expCoupon.couponName}">베리떼</p>
+												<div class="page_btns">
+													<a href="javascript:;">상품 안내</a>
+													<a href="javascript:;">쿠폰 안내</a>
+												</div>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- // cont_area -->
+
+			</div>
+			<!-- // com_cont -->
+
+		</div>
+		<!-- // page contents -->
+	</div><!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script>
+			$( '.ui_input_images' ).inputImages();
+			$( '.recommended_item .slide' ).ixSlideMax();
+			$('#registerBtn').on( 'click', function (e) {
+
+				var coupon = $('[name=couponIdentifier]').val();
+				if (coupon) {
+					AP.api.registerCoupon({}, {
+						couponIdentifier: coupon
+					}).done(function (data) {
+						//성공
+						AP.modal.alert('등록이 완료되었습니다.'
+						).addListener( 'modal-close', function (e) {
+							//console.log( e.closeType );//confirm, cancel, close
+							location.href = "/my/page/myCouponList";
+						});
+					}).fail(function(e) {
+						//실패
+						//AP.modal.alert(e.responseJSON.errorData.message);
+						AP.modal.alert("유효한 쿠폰번호가 아니에요. 쿠폰번호를 다시 확인해주세요.").addListener( 'modal-close', function (e) {
+							$('[name=couponIdentifier]').focus();
+						});
+					}).always(function() {
+						//성공, 실패
+					});
+				} else {
+					AP.modal.alert("쿠폰 번호를 입력해주세요.").addListener( 'modal-close', function (e) {
+						$('[name=couponIdentifier]').focus();
+					});
+				}
+
+			});
+		</script>
+	</th:block>
+</body>
+</html>

@@ -56,8 +56,8 @@ this["AP"]["handlebars"]["order"]["gift-packing-qty-info"] = Handlebars.template
     + "_sum\"></span>\n";
 },"13":function(container,depth0,helpers,partials,data) {
     return "								추가 ("
-    + container.escapeExpression(container.lambda((depth0 != null ? depth0.freeConditionAmt : depth0), depth0))
-    + "원이상 주문시 무료)\n";
+    + container.escapeExpression((helpers.currencyFormatDefault || (depth0 && depth0.currencyFormatDefault) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.freeConditionAmt : depth0),"원",{"name":"currencyFormatDefault","hash":{},"data":data}))
+    + "이상 주문시 무료)\n";
 },"15":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 

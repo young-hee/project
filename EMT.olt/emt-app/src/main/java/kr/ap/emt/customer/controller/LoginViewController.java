@@ -81,9 +81,9 @@ public class LoginViewController extends AbstractController {
 		model.addAttribute("state", state);
 		return "customer/navercallback";
 	}
-	@GetMapping("/sleepUser")
-	public String sleepUser(Model model) {
-		
+	@PostMapping("/sleepUser")
+	public String sleepUser(Model model, String userId) {
+		model.addAttribute("userId", userId);
 		return "customer/customernew/member-join.4.4";
 	}
 	

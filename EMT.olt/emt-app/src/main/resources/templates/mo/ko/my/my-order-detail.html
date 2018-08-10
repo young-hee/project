@@ -115,7 +115,7 @@
 			checkType(type);
 
 			console.log(ord.shippingOrdOnlineProdList);
-			console.log(ord.goods);
+			console.log(ord);
 			// console.log(ord.goods.ordPayCompareList);
 			// console.log(ord.ordAmt);
 
@@ -169,6 +169,9 @@
 				var orderDetailGoods = AP.common.getTemplate('my.order.order-detail-goods', {
 					cnt : customOrd.shippingOrdOnlineProdList.length,
 					list : customOrd.shippingOrdOnlineProdList,
+					mnList : customOrd.shippingMNPromoProdList,
+					bList : customOrd.shippingOrdOnlineBeautyPointProdList,
+					aList : customOrd.shippingOrdOnlineActivityPointProdList,
 					state : 'on',
 					reason : reason,
 					type : type,
@@ -611,7 +614,7 @@
 						ordHistProdNo : ordHistProdNo
 					}).done(function(data) {
 						modal.close();
-						AP.modal.alert("상품이 변경되었습니다..").addListener('modal-close', function (e) {
+						AP.modal.alert("선택하신 옵션으로 주문이 변경되었습니다.").addListener('modal-close', function (e) {
 							refreshOrdDetail(data.data);
 						});
 						//성공

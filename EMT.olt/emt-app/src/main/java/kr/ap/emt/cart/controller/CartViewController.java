@@ -141,18 +141,6 @@ public class CartViewController extends CartBaseController{
 					}
 				}
 			}
-
-			// 장바구니-배송-동시구매상품목록
-			/*for (CartPromoEx cartPromoEx : cartEx.getCartDeliverySameTimePurPromoExList()) {
-				for (CartOnlineProdEx cartOnlineProdEx : cartPromoEx.getPromoOnlineProdExList()) {
-					for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-						if (!"OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus())){
-							cartOnlineProdEx.setSaleDisplayStatus("NotSelect");
-							break;
-						}
-					}
-				}
-			}*/
 		}
 
 		/* 테이크 아웃 상품 */
@@ -167,254 +155,6 @@ public class CartViewController extends CartBaseController{
 					}
 				}
 			}
-		}
-		return cartEx;
-	}
-
-	/**
-	 * 쇼핑상품 정의
-	 */
-	private CartEx makeCartEx(CartEx cartEx) {
-
-		/* 온라인쇼핑 상품 */
-		{
-			// 장바구니-배송-온라인상품목록
-			List<CartOnlineProdEx> cartDeliveryOnlineProdExList = new ArrayList<CartOnlineProdEx>();
-			for (CartOnlineProdEx cartOnlineProdEx : cartEx.getCartDeliveryOnlineProdExList()) {
-				List<CartProdEx> CartProdExList = new ArrayList<CartProdEx>();
-				for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-					if ("OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-						"Exhaustion".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-						"OutOfStock".equals(cartProdEx.getProdEx().getSaleDisplayStatus())) {
-						// 판매중, 품절, 조기소진 데이터만 가져온다.
-						CartProdExList.add(cartProdEx);
-					}
-				}
-				if (CartProdExList.size() > 0) {
-					cartOnlineProdEx.setCartProdExList(CartProdExList);
-					cartDeliveryOnlineProdExList.add(cartOnlineProdEx);
-				}
-			}
-			cartEx.setCartDeliveryOnlineProdExList(cartDeliveryOnlineProdExList);
-
-			// 장바구니-배송-멤버십포인트교환-온라인상품목록
-			List<CartOnlineProdEx> cartDeliveryMembershipPointExchOnlineProdExList = new ArrayList<CartOnlineProdEx>();
-			for (CartOnlineProdEx cartOnlineProdEx : cartEx.getCartDeliveryMembershipPointExchOnlineProdExList()) {
-				List<CartProdEx> CartProdExList = new ArrayList<CartProdEx>();
-				for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-					if ("OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-						"Exhaustion".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-						"OutOfStock".equals(cartProdEx.getProdEx().getSaleDisplayStatus())) {
-						// 판매중, 품절, 조기소진 데이터만 가져온다.
-						CartProdExList.add(cartProdEx);
-					}
-				}
-				if (CartProdExList.size() > 0) {
-					cartOnlineProdEx.setCartProdExList(CartProdExList);
-					cartDeliveryMembershipPointExchOnlineProdExList.add(cartOnlineProdEx);
-				}
-			}
-			cartEx.setCartDeliveryMembershipPointExchOnlineProdExList(cartDeliveryMembershipPointExchOnlineProdExList);
-
-			// 장바구니-배송-활동포인트교환-온라인상품목록
-			List<CartOnlineProdEx> cartDeliveryActivityPointExchOnlineProdExList = new ArrayList<CartOnlineProdEx>();
-			for (CartOnlineProdEx cartOnlineProdEx : cartEx.getCartDeliveryActivityPointExchOnlineProdExList()) {
-				List<CartProdEx> CartProdExList = new ArrayList<CartProdEx>();
-				for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-					if(cartOnlineProdEx.getOnlineProdCode() != null){
-						if ("OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-							"Exhaustion".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-							"OutOfStock".equals(cartProdEx.getProdEx().getSaleDisplayStatus())) {
-							// 판매중, 품절, 조기소진 데이터만 가져온다.
-							CartProdExList.add(cartProdEx);
-						}
-					}
-					else{
-						CartProdExList.add(cartProdEx);
-					}
-				}
-				if (CartProdExList.size() > 0) {
-					cartOnlineProdEx.setCartProdExList(CartProdExList);
-					cartDeliveryActivityPointExchOnlineProdExList.add(cartOnlineProdEx);
-				}
-			}
-			cartEx.setCartDeliveryActivityPointExchOnlineProdExList(cartDeliveryActivityPointExchOnlineProdExList);
-
-			// 장바구니-MN프로모션-온라인상품목록
-			List<CartPromoEx> cartDeliveryMNPromoExList = new ArrayList<CartPromoEx>();
-			for (CartPromoEx cartPromoEx : cartEx.getCartDeliveryMNPromoExList()) {
-				List<CartOnlineProdEx> promoOnlineProdExList = new ArrayList<CartOnlineProdEx>();
-				for (CartOnlineProdEx cartOnlineProdEx : cartPromoEx.getPromoOnlineProdExList()) {
-					List<CartProdEx> CartProdExList = new ArrayList<CartProdEx>();
-					for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-						if ("OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-							"Exhaustion".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-							"OutOfStock".equals(cartProdEx.getProdEx().getSaleDisplayStatus())) {
-							// 판매중, 품절, 조기소진 데이터만 가져온다.
-							CartProdExList.add(cartProdEx);
-						}
-					}
-					if (CartProdExList.size() > 0) {
-						cartOnlineProdEx.setCartProdExList(CartProdExList);
-						promoOnlineProdExList.add(cartOnlineProdEx);
-					}
-				}
-				if (promoOnlineProdExList.size() > 0) {
-					cartPromoEx.setPromoOnlineProdExList(promoOnlineProdExList);
-					cartDeliveryMNPromoExList.add(cartPromoEx);
-				}
-			}
-			cartEx.setCartDeliveryMNPromoExList(cartDeliveryMNPromoExList);
-
-			// 장바구니-동시구매-온라인상품목록
-			List<CartPromoEx> cartDeliverySameTimePurPromoExList = new ArrayList<CartPromoEx>();
-			for (CartPromoEx cartPromoEx : cartEx.getCartDeliverySameTimePurPromoExList()) {
-				List<CartOnlineProdEx> promoOnlineProdExList = new ArrayList<CartOnlineProdEx>();
-				for (CartOnlineProdEx cartOnlineProdEx : cartPromoEx.getPromoOnlineProdExList()) {
-					List<CartProdEx> CartProdExList = new ArrayList<CartProdEx>();
-					for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-						if ("OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-							"Exhaustion".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-							"OutOfStock".equals(cartProdEx.getProdEx().getSaleDisplayStatus())) {
-							// 판매중, 품절, 조기소진 데이터만 가져온다.
-							CartProdExList.add(cartProdEx);
-						}
-					}
-					if (CartProdExList.size() > 0) {
-						cartOnlineProdEx.setCartProdExList(CartProdExList);
-						promoOnlineProdExList.add(cartOnlineProdEx);
-					}
-				}
-				if (promoOnlineProdExList.size() > 0) {
-					cartPromoEx.setPromoOnlineProdExList(promoOnlineProdExList);
-					cartDeliverySameTimePurPromoExList.add(cartPromoEx);
-				}
-			}
-			cartEx.setCartDeliverySameTimePurPromoExList(cartDeliverySameTimePurPromoExList);
-		}
-
-		/* 테이크 아웃 상품 */
-		{
-			// 장바구니매장픽업-온라인상품목록
-			List<CartOnlineProdEx> cartStorePickupOnlineProdExList = new ArrayList<CartOnlineProdEx>();
-			for (CartOnlineProdEx cartOnlineProdEx : cartEx.getCartStorePickupOnlineProdExList()) {
-				List<CartProdEx> CartProdExList = new ArrayList<CartProdEx>();
-				for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-					// 판매중, 품절, 조기소진 데이터만 가져온다.
-					if ("OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-						"Exhaustion".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-						"OutOfStock".equals(cartProdEx.getProdEx().getSaleDisplayStatus())) {
-						// 매장픽업여부가 'Y'
-						if("Y".equals(cartProdEx.getStorePickupYn())){
-							CartProdExList.add(cartProdEx);
-						}
-					}
-				}
-				if (CartProdExList.size() > 0) {
-					cartOnlineProdEx.setCartProdExList(CartProdExList);
-					cartStorePickupOnlineProdExList.add(cartOnlineProdEx);
-				}
-			}
-			cartEx.setCartStorePickupOnlineProdExList(cartStorePickupOnlineProdExList);
-
-			// 장바구니-매장픽업-멤버십포인트교환-온라인상품목록
-			List<CartOnlineProdEx> cartStorePickupMembershipPointExchOnlineProdExList = new ArrayList<CartOnlineProdEx>();
-			for (CartOnlineProdEx cartOnlineProdEx : cartEx.getCartStorePickupMembershipPointExchOnlineProdExList()) {
-				List<CartProdEx> CartProdExList = new ArrayList<CartProdEx>();
-				for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-					// 판매중, 품절, 조기소진 데이터만 가져온다.
-					if ("OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-						"Exhaustion".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-						"OutOfStock".equals(cartProdEx.getProdEx().getSaleDisplayStatus())) {
-						// 매장픽업여부가 'Y'
-						if("Y".equals(cartProdEx.getStorePickupYn())){
-							CartProdExList.add(cartProdEx);
-						}
-					}
-				}
-				if (CartProdExList.size() > 0) {
-					cartOnlineProdEx.setCartProdExList(CartProdExList);
-					cartStorePickupMembershipPointExchOnlineProdExList.add(cartOnlineProdEx);
-				}
-			}
-			cartEx.setCartStorePickupMembershipPointExchOnlineProdExList(cartStorePickupMembershipPointExchOnlineProdExList);
-
-			// 장바구니-매장픽업-활동포인트교환-온라인상품목록
-			List<CartOnlineProdEx> cartStorePickupActivityPointExchOnlineProdExList = new ArrayList<CartOnlineProdEx>();
-			for (CartOnlineProdEx cartOnlineProdEx : cartEx.getCartStorePickupActivityPointExchOnlineProdExList()) {
-				List<CartProdEx> CartProdExList = new ArrayList<CartProdEx>();
-				for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-					if(cartOnlineProdEx.getOnlineProdCode() != null){
-						if ("OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-							"Exhaustion".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-							"OutOfStock".equals(cartProdEx.getProdEx().getSaleDisplayStatus())) {
-							// 판매중, 품절, 조기소진 데이터만 가져온다.
-							CartProdExList.add(cartProdEx);
-						}
-					}
-					else{
-						CartProdExList.add(cartProdEx);
-					}
-				}
-				if (CartProdExList.size() > 0) {
-					cartOnlineProdEx.setCartProdExList(CartProdExList);
-					cartStorePickupActivityPointExchOnlineProdExList.add(cartOnlineProdEx);
-				}
-			}
-			cartEx.setCartStorePickupActivityPointExchOnlineProdExList(cartStorePickupActivityPointExchOnlineProdExList);
-
-			// 장바구니-매장픽업-MN프로모션-온라인상품목록
-			List<CartPromoEx> cartStorePickupMNPromoExList = new ArrayList<CartPromoEx>();
-			for (CartPromoEx cartPromoEx : cartEx.getCartStorePickupMNPromoExList()) {
-				List<CartOnlineProdEx> promoOnlineProdExList = new ArrayList<CartOnlineProdEx>();
-				for (CartOnlineProdEx cartOnlineProdEx : cartPromoEx.getPromoOnlineProdExList()) {
-					List<CartProdEx> CartProdExList = new ArrayList<CartProdEx>();
-					for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-						if ("OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-							"Exhaustion".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-							"OutOfStock".equals(cartProdEx.getProdEx().getSaleDisplayStatus())) {
-							// 판매중, 품절, 조기소진 데이터만 가져온다.
-							CartProdExList.add(cartProdEx);
-						}
-					}
-					if (CartProdExList.size() > 0) {
-						cartOnlineProdEx.setCartProdExList(CartProdExList);
-						promoOnlineProdExList.add(cartOnlineProdEx);
-					}
-				}
-				if (promoOnlineProdExList.size() > 0) {
-					cartPromoEx.setPromoOnlineProdExList(promoOnlineProdExList);
-					cartStorePickupMNPromoExList.add(cartPromoEx);
-				}
-			}
-			cartEx.setCartStorePickupMNPromoExList(cartStorePickupMNPromoExList);
-
-			// 장바구니-매장픽업-동시구매-온라인상품목록
-			List<CartPromoEx> cartStorePickupSameTimePurPromoExList = new ArrayList<CartPromoEx>();
-			for (CartPromoEx cartPromoEx : cartEx.getCartStorePickupSameTimePurPromoExList()) {
-				List<CartOnlineProdEx> promoOnlineProdExList = new ArrayList<CartOnlineProdEx>();
-				for (CartOnlineProdEx cartOnlineProdEx : cartPromoEx.getPromoOnlineProdExList()) {
-					List<CartProdEx> CartProdExList = new ArrayList<CartProdEx>();
-					for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-						if ("OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-							"Exhaustion".equals(cartProdEx.getProdEx().getSaleDisplayStatus()) ||
-							"OutOfStock".equals(cartProdEx.getProdEx().getSaleDisplayStatus())) {
-							// 판매중, 품절, 조기소진 데이터만 가져온다.
-							CartProdExList.add(cartProdEx);
-						}
-					}
-					if (CartProdExList.size() > 0) {
-						cartOnlineProdEx.setCartProdExList(CartProdExList);
-						promoOnlineProdExList.add(cartOnlineProdEx);
-					}
-				}
-				if (promoOnlineProdExList.size() > 0) {
-					cartPromoEx.setPromoOnlineProdExList(promoOnlineProdExList);
-					cartStorePickupSameTimePurPromoExList.add(cartPromoEx);
-				}
-			}
-			cartEx.setCartStorePickupSameTimePurPromoExList(cartStorePickupSameTimePurPromoExList);
-
 		}
 		return cartEx;
 	}
@@ -456,25 +196,54 @@ public class CartViewController extends CartBaseController{
 
 		if(storePickupCartProdEx != null){
 			// 단골매장
-			StoresInvtSearchInfo var1 = new StoresInvtSearchInfo();
-			var1.setMemberSn(memberSn);
-			var1.setRegularStoreSearchYn("Y"); // 단골매장검색여부
-			var1.setOffset(0);
-			var1.setLimit(10);
-			var1.setSortBy("StoreName");
-			var1.setProdInvtExList(prodInvtExList);
-			StoreResult storeResult = storeApi.getStoresInvt(var1);
-			model.addAttribute("storeRegularList", storeResult.getStoreExList());				// 단골매장목록
+			try{
+				StoresInvtSearchInfo var1 = new StoresInvtSearchInfo();
+				var1.setMemberSn(memberSn);
+				var1.setRegularStoreSearchYn("Y"); // 단골매장검색여부
+				var1.setOffset(0);
+				var1.setLimit(10);
+				var1.setSortBy("StoreName");
+				var1.setProdInvtExList(prodInvtExList);
+				StoreResult storeResult = storeApi.getStoresInvt(var1);
+				model.addAttribute("storeRegularList", storeResult.getStoreExList());				// 단골매장목록
+			}
+			catch (Exception e){
+				e.printStackTrace();
+
+				StoresInvtSearchInfo var1 = new StoresInvtSearchInfo();
+				var1.setMemberSn(memberSn);
+				var1.setRegularStoreSearchYn("Y"); // 단골매장검색여부
+				var1.setOffset(0);
+				var1.setLimit(10);
+				var1.setSortBy("StoreName");
+				//var1.setProdInvtExList(prodInvtExList); // 재고 제외하고 목록보여주기
+				StoreResult storeResult = storeApi.getStoresInvt(var1);
+				model.addAttribute("storeRegularList", storeResult.getStoreExList());				// 단골매장목록
+			}
 
 			// 선택매장
 			if(storePickupCartProdEx.getStoreSn() != null){
-				StoresInvtSearchInfo var2 = new StoresInvtSearchInfo();
-				var2.setMemberSn(memberSn);
-				var2.setStoreSn(storePickupCartProdEx.getStoreSn());
-				var2.setProdInvtExList(prodInvtExList);
-				StoreResult storeResult2 = storeApi.getStoresInvt(var2);
-				if(storeResult2 != null && !CollectionUtils.isEmpty(storeResult2.getStoreExList())){
-					model.addAttribute("storeSelect", storeResult2.getStoreExList().get(0)); // 선택매장
+				try{
+					StoresInvtSearchInfo var2 = new StoresInvtSearchInfo();
+					var2.setMemberSn(memberSn);
+					var2.setStoreSn(storePickupCartProdEx.getStoreSn());
+					var2.setProdInvtExList(prodInvtExList);
+					StoreResult storeResult2 = storeApi.getStoresInvt(var2);
+					if(storeResult2 != null && !CollectionUtils.isEmpty(storeResult2.getStoreExList())){
+						model.addAttribute("storeSelect", storeResult2.getStoreExList().get(0)); // 선택매장
+					}
+				}
+				catch (Exception e){
+					e.printStackTrace();
+
+					StoresInvtSearchInfo var2 = new StoresInvtSearchInfo();
+					var2.setMemberSn(memberSn);
+					var2.setStoreSn(storePickupCartProdEx.getStoreSn());
+					//var2.setProdInvtExList(prodInvtExList); // 재고 제외하고 목록보여주기
+					StoreResult storeResult2 = storeApi.getStoresInvt(var2);
+					if(storeResult2 != null && !CollectionUtils.isEmpty(storeResult2.getStoreExList())){
+						model.addAttribute("storeSelect", storeResult2.getStoreExList().get(0)); // 선택매장
+					}
 				}
 			}
 		}

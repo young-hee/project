@@ -100,8 +100,7 @@ function loginProcess() {
         AP.api.doLogin({}, AP.common.getFormData($form)).done(function(data) {
 
             if (data.sleep == 'Y') {
-                $("#login").removeAttr("disabled");
-                location.href = "/sleepUser";
+    			post_goto('/sleepUser' , {'userId': data.userId});
             } else if (data.changePw == 'Y') {
                 var contents = new Object();
                 contents.title = "[[#{common.alert}]]";
@@ -428,7 +427,7 @@ function fncFBCallback(token) {
 function nbSuccess(data) {
 
     if (data.sleep == 'Y') {
-        location.href = "/sleepUser";
+		post_goto('/sleepUser' , {'userId': data.userId});
     } else if (data.old == 'Y') {
         changeInfoModal();
     } else if (data.changePw == 'Y') {

@@ -79,7 +79,8 @@
 					for ( var i = 0; i < result['storeEvalExList'].length; ++i ) {
 						var bodyText = result['storeEvalExList'][i].storeEvalBodyText;
 						var storeSn = result['storeEvalExList'][i].storeEvalSn;
-						document.getElementById('bodyText'+storeSn).innerHTML = bodyText;
+				
+						document.getElementById('bodyText'+storeSn).innerHTML = '<pre>'+AP.common.removeHtmlTag(bodyText)+'</pre>'; 
 					}
 				}.bind( this )).fail(function (e) {
 					console.log( 'error' );

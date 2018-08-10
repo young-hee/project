@@ -8,7 +8,6 @@ package kr.ap.emt.cart.controller;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -23,11 +22,9 @@ import kr.ap.comm.support.common.AbstractController;
 import net.g1project.ecp.api.model.sales.cart.CalculationCurrencyInfo;
 import net.g1project.ecp.api.model.sales.cart.CalculationCurrencyValue;
 import net.g1project.ecp.api.model.sales.cart.CalculationRequestOtf;
-import net.g1project.ecp.api.model.sales.cart.CalculationRequestProductMembership;
 import net.g1project.ecp.api.model.sales.cart.CalculationResult;
 import net.g1project.ecp.api.model.sales.cart.CalculationResultOtf;
 import net.g1project.ecp.api.model.sales.cart.CalculationResultProduct;
-import net.g1project.ecp.api.model.sales.cart.CalculationResultProductMembership;
 import net.g1project.ecp.api.model.sales.cart.CartEx;
 import net.g1project.ecp.api.model.sales.cart.CartMemberMembershipEx;
 import net.g1project.ecp.api.model.sales.cart.CartOnlineProdEx;
@@ -397,7 +394,7 @@ public class CartBaseController extends AbstractController{
                                 && cartOnlineProdEx != null
                                 && CartConst.Y.equals(cartOnlineProdEx.getSelectYn())
                                 && cartProdEx.getCalculationResultProduct() != null) {
-                            onlineSalesTotalAmount = onlineSalesTotalAmount.add(cartProdEx.getCalculationResultProduct().getFinalOnlineSalesAmountInfo().getStandardCurrency().getAmount());
+                            onlineSalesTotalAmount = onlineSalesTotalAmount.add(getStandardAmount(cartProdEx.getCalculationResultProduct().getFinalOnlineSalesAmountInfo()));
                         }
                     }
                 }
@@ -474,33 +471,33 @@ public class CartBaseController extends AbstractController{
                     
                     CalculationResultProduct resultProduct = cartProdEx.getCalculationResultProduct();
                     if(CartConst.Y.equals(cartProdEx.getStorePickupYn())) {
-                        storePickupProdSaleTotalAmount = storePickupProdSaleTotalAmount.add(resultProduct.getProductSaleAmountInfo().getStandardCurrency().getAmount());
+                        storePickupProdSaleTotalAmount = storePickupProdSaleTotalAmount.add(getStandardAmount(resultProduct.getProductSaleAmountInfo()));
                     }
                     else {
-                        onlineShipProdSaleTotalAmount = onlineShipProdSaleTotalAmount.add(resultProduct.getProductSaleAmountInfo().getStandardCurrency().getAmount());
+                        onlineShipProdSaleTotalAmount = onlineShipProdSaleTotalAmount.add(getStandardAmount(resultProduct.getProductSaleAmountInfo()));
                     }
                     
-                    prodSaleTotalAmount = prodSaleTotalAmount.add(resultProduct.getProductSaleAmountInfo().getStandardCurrency().getAmount());
+                    prodSaleTotalAmount = prodSaleTotalAmount.add(getStandardAmount(resultProduct.getProductSaleAmountInfo()));
                     
                     // 온라인상품할인
-                    dsicountAmountByOnlineProdDc = dsicountAmountByOnlineProdDc.add(resultProduct.getQtyDiscountAmountInfoByOnlineProductDiscount().getStandardCurrency().getAmount());
+                    dsicountAmountByOnlineProdDc = dsicountAmountByOnlineProdDc.add(getStandardAmount(resultProduct.getQtyDiscountAmountInfoByOnlineProductDiscount()));
                     // 회원등급할인
-                    dsicountAmountByMemberLevel = dsicountAmountByMemberLevel.add(resultProduct.getQtyDiscountAmountInfoByMemberLevel().getStandardCurrency().getAmount());
+                    dsicountAmountByMemberLevel = dsicountAmountByMemberLevel.add(getStandardAmount(resultProduct.getQtyDiscountAmountInfoByMemberLevel()));
                     // 온라인회원할인
-                    dsicountAmountByOnlineMemberDc = dsicountAmountByOnlineMemberDc.add(resultProduct.getQtyDiscountAmountInfoByOnlineMemberDiscount().getStandardCurrency().getAmount());
+                    dsicountAmountByOnlineMemberDc = dsicountAmountByOnlineMemberDc.add(getStandardAmount(resultProduct.getQtyDiscountAmountInfoByOnlineMemberDiscount()));
                     // 즉시할인쿠폰
-                    dsicountAmountByinstantCouponDc = dsicountAmountByinstantCouponDc.add(resultProduct.getQtyDiscountAmountInfoByInstantDiscountCoupon().getStandardCurrency().getAmount());
+                    dsicountAmountByinstantCouponDc = dsicountAmountByinstantCouponDc.add(getStandardAmount(resultProduct.getQtyDiscountAmountInfoByInstantDiscountCoupon()));
                     // 동시구매할인
-                    //BigDecimal discountAmountBySameTimePurDc = BigDecimal.ZERO;
+                    discountAmountBySameTimePurDc = discountAmountBySameTimePurDc.add(getStandardAmount(resultProduct.getQtyDiscountAmountInfoBySameTimePurDiscount()));
                     // M+N프로모션할인
-                    discountAmountByMNPromotion = discountAmountByMNPromotion.add(resultProduct.getQtyDiscountAmountInfoByMNPromotion().getStandardCurrency().getAmount());
+                    discountAmountByMNPromotion = discountAmountByMNPromotion.add(getStandardAmount(resultProduct.getQtyDiscountAmountInfoByMNPromotion()));
 
                     
-                    finalOnlineSalesTotalAmount = finalOnlineSalesTotalAmount.add(resultProduct.getFinalOnlineSalesAmountInfo().getStandardCurrency().getAmount());
+                    finalOnlineSalesTotalAmount = finalOnlineSalesTotalAmount.add(getStandardAmount(resultProduct.getFinalOnlineSalesAmountInfo()));
                     
                     totalProdUnitDiscountAmount = totalProdUnitDiscountAmount
-                                                    .add(resultProduct.getProductSaleAmountInfo().getStandardCurrency().getAmount())
-                                                    .subtract(resultProduct.getFinalOnlineSalesAmountInfo().getStandardCurrency().getAmount());
+                                                    .add(getStandardAmount(resultProduct.getProductSaleAmountInfo()))
+                                                    .subtract(getStandardAmount(resultProduct.getFinalOnlineSalesAmountInfo()));
                     
                                                     
                 }
@@ -513,17 +510,17 @@ public class CartBaseController extends AbstractController{
             // 상품판매금액합계
             calculationResult.setProdSaleTotalAmountInfo(setCalculationCurrencyInfo(calculationResult.getProdSaleTotalAmountInfo(), prodSaleTotalAmount));
             // 온라인상품할인
-            calculationResult.getDsicountAmountInfoByOnlineProdDc().getStandardCurrency().setAmount(dsicountAmountByOnlineProdDc);
+            calculationResult.setDsicountAmountInfoByOnlineProdDc(setCalculationCurrencyInfo(calculationResult.getDsicountAmountInfoByOnlineProdDc(), dsicountAmountByOnlineProdDc));
             // 회원등급할인
-            calculationResult.getDsicountAmountInfoByMemberLevel().getStandardCurrency().setAmount(dsicountAmountByMemberLevel);
+            calculationResult.setDsicountAmountInfoByMemberLevel(setCalculationCurrencyInfo(calculationResult.getDsicountAmountInfoByMemberLevel(), dsicountAmountByMemberLevel));
             // 온라인회원할인
-            calculationResult.getDsicountAmountInfoByOnlineMemberDc().getStandardCurrency().setAmount(dsicountAmountByOnlineMemberDc);
+            calculationResult.setDsicountAmountInfoByOnlineMemberDc(setCalculationCurrencyInfo(calculationResult.getDsicountAmountInfoByOnlineMemberDc(), dsicountAmountByOnlineMemberDc));
             // 즉시할인쿠폰
-            calculationResult.getDsicountAmountInfoByinstantCouponDc().getStandardCurrency().setAmount(dsicountAmountByinstantCouponDc);
+            calculationResult.setDsicountAmountInfoByinstantCouponDc(setCalculationCurrencyInfo(calculationResult.getDsicountAmountInfoByinstantCouponDc(), dsicountAmountByinstantCouponDc));
             // 동시구매할인
-            // calculationResult.getDiscountAmountInfoBySameTimePurDc().getStandardCurrency().setAmount(discountAmountBySameTimePurDc);
+            calculationResult.setDiscountAmountInfoBySameTimePurDc(setCalculationCurrencyInfo(calculationResult.getDiscountAmountInfoBySameTimePurDc(), discountAmountBySameTimePurDc));
             // M+N프로모션할인
-            calculationResult.getDiscountAmountInfoByMNPromotion().getStandardCurrency().setAmount(discountAmountByMNPromotion);
+            calculationResult.setDiscountAmountInfoByMNPromotion(setCalculationCurrencyInfo(calculationResult.getDiscountAmountInfoByMNPromotion(), discountAmountByMNPromotion));
             // 상품할인금액총합
             calculationResult.setTotalProdUnitDiscountAmountInfo(setCalculationCurrencyInfo(calculationResult.getTotalProdUnitDiscountAmountInfo(), totalProdUnitDiscountAmount));
             // 최종온라인판매금액합계
@@ -629,8 +626,8 @@ public class CartBaseController extends AbstractController{
             BigDecimal productSaleAmount = BigDecimal.ZERO;
             BigDecimal finalOnlineSaleAmount = BigDecimal.ZERO;
             for(CartOnlineProdEx cartOnlineProdEx : cartPromoEx.getPromoOnlineProdExList()) {
-                productSaleAmount = productSaleAmount.add(cartOnlineProdEx.getProductSaleAmountInfo().getStandardCurrency().getAmount());
-                finalOnlineSaleAmount = finalOnlineSaleAmount.add(cartOnlineProdEx.getFinalOnlineSalesAmountInfo().getStandardCurrency().getAmount());
+                productSaleAmount = productSaleAmount.add(getStandardAmount(cartOnlineProdEx.getProductSaleAmountInfo()));
+                finalOnlineSaleAmount = finalOnlineSaleAmount.add(getStandardAmount(cartOnlineProdEx.getFinalOnlineSalesAmountInfo()));
             }
             cartPromoEx.getProductSaleAmountInfo().getStandardCurrency().setAmount(productSaleAmount);
             cartPromoEx.getFinalOnlineSalesAmountInfo().getStandardCurrency().setAmount(finalOnlineSaleAmount);
@@ -671,11 +668,26 @@ public class CartBaseController extends AbstractController{
                         int realQty = cartProdEx.getCartProdQty().intValue() - getIntValue(cartProdEx.getmNPromoAwardQty());
                         // 상품판매금액
                         setCalculationCurrencyInfo(resultProduct.getProductSaleAmountInfo(), resultProduct.getProductSalePriceInfo(), cartProdEx.getCartProdQty().intValue());
+                        // 온라인판매금액
+                        setCalculationCurrencyInfo(resultProduct.getOnlineSalesAmountInfo(), resultProduct.getOnlineSalesPriceInfo(), realQty);
                         // 최종온라인판매금액
                         setCalculationCurrencyInfo(resultProduct.getFinalOnlineSalesAmountInfo(), resultProduct.getFinalOnlineSalesPriceInfo(), realQty);
+                        // 상품주문금액
+                        setCalculationCurrencyInfo(resultProduct.getProductOrderAmountInfo(), resultProduct.getFinalOnlineSalesAmountInfo(), 1);
                         
-                        productSaleAmount = productSaleAmount.add(resultProduct.getProductSaleAmountInfo().getStandardCurrency().getAmount());
-                        finalOnlineSaleAmount = finalOnlineSaleAmount.add(resultProduct.getFinalOnlineSalesAmountInfo().getStandardCurrency().getAmount());
+                        // 회원등급상품수량할인금액
+                        setCalculationCurrencyInfo(resultProduct.getQtyDiscountAmountInfoByMemberLevel(), resultProduct.getUnitDiscountAmountInfoByMemberLevel(), realQty);
+                        // 온라인상품수량할인금액
+                        setCalculationCurrencyInfo(resultProduct.getQtyDiscountAmountInfoByOnlineProductDiscount(), resultProduct.getUnitDiscountAmountInfoByOnlineProductDiscount(), realQty);
+                        // 온라인회원상품수량할인금액
+                        setCalculationCurrencyInfo(resultProduct.getQtyDiscountAmountInfoByOnlineMemberDiscount(), resultProduct.getUnitDiscountAmountInfoByOnlineMemberDiscount(), realQty);
+                        // 즉시할인쿠폰수량할인금액
+                        setCalculationCurrencyInfo(resultProduct.getQtyDiscountAmountInfoByInstantDiscountCoupon(), resultProduct.getUnitDiscountAmountInfoByInstantDiscountCoupon(), realQty);
+                        // 동시구매프로모션수량할인금액
+                        setCalculationCurrencyInfo(resultProduct.getQtyDiscountAmountInfoBySameTimePurDiscount(), resultProduct.getUnitDiscountAmountInfoBySameTimePurDiscount(), realQty);
+                        
+                        productSaleAmount = productSaleAmount.add(getStandardAmount(resultProduct.getProductSaleAmountInfo()));
+                        finalOnlineSaleAmount = finalOnlineSaleAmount.add(getStandardAmount(resultProduct.getFinalOnlineSalesAmountInfo()));
                     }
                     
                     if(CartConst.Y.equals(cartProdEx.getExchYn())) {
@@ -732,6 +744,16 @@ public class CartBaseController extends AbstractController{
         return currencyInfo;
     }
 
+    private BigDecimal getStandardAmount(CalculationCurrencyInfo currencyInfo) {
+        if(currencyInfo == null
+                || currencyInfo.getStandardCurrency() == null
+                || currencyInfo.getStandardCurrency().getAmount() == null) {
+            return BigDecimal.ZERO;
+        }
+        
+        return currencyInfo.getStandardCurrency().getAmount();
+    }
+    
     private CalculationCurrencyInfo setCalculationCurrencyInfo(CalculationCurrencyInfo currencyInfo, CalculationCurrencyInfo source, int multiply) {
         if(currencyInfo == null
                 || currencyInfo.getStandardCurrency() == null
@@ -782,7 +804,8 @@ public class CartBaseController extends AbstractController{
                 for(CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
                     cartProdEx.setmNPromoAwardQty(0L);
                     cartProdEx.setmNPromoBaseQty(0L);
-                    if(cartProdEx.getCalculationResultProduct() != null) {
+                    if(cartProdEx.getCalculationResultProduct() != null
+                            && CartConst.Y.equals(cartProdEx.getSelectYn())) {
                         cartProdExList.add(cartProdEx);
                         totalCartProdQty += cartProdEx.getCartProdQty().intValue();
                     }
@@ -795,8 +818,8 @@ public class CartBaseController extends AbstractController{
 
             @Override
             public int compare(CartProdEx o1, CartProdEx o2) {
-                BigDecimal c1 = o1.getCalculationResultProduct().getFinalOnlineSalesPriceInfo().getStandardCurrency().getAmount();
-                BigDecimal c2 = o2.getCalculationResultProduct().getFinalOnlineSalesPriceInfo().getStandardCurrency().getAmount();
+                BigDecimal c1 = getStandardAmount(o1.getCalculationResultProduct().getFinalOnlineSalesPriceInfo());
+                BigDecimal c2 = getStandardAmount(o2.getCalculationResultProduct().getFinalOnlineSalesPriceInfo());
                 return c2.compareTo(c1);
             }
 
@@ -828,9 +851,10 @@ public class CartBaseController extends AbstractController{
                     CalculationResultProduct resultProduct = cartProdEx.getCalculationResultProduct();
                     setCalculationCurrencyInfo(resultProduct.getQtyDiscountAmountInfoByMNPromotion(), resultProduct.getFinalOnlineSalesPriceInfo(), getIntValue(cartProdEx.getmNPromoAwardQty()));
                 }
-    
-                if(remainFreeAwardQty == 0) {
-                    break;
+                else {
+                    cartProdEx.setmNPromoAwardQty(0L);
+                    CalculationResultProduct resultProduct = cartProdEx.getCalculationResultProduct();
+                    setCalculationCurrencyInfo(resultProduct.getQtyDiscountAmountInfoByMNPromotion(), BigDecimal.ZERO);
                 }
             }
         }        
@@ -851,9 +875,8 @@ public class CartBaseController extends AbstractController{
                         remainBaseOrdQty = 0;
                     }
                 }
-    
-                if(remainBaseOrdQty == 0) {
-                    break;
+                else {
+                    cartProdEx.setmNPromoBaseQty(0L);                    
                 }
             }
         }        
@@ -902,9 +925,11 @@ public class CartBaseController extends AbstractController{
         int totalAwardQty = 0;
         for(CartOnlineProdEx cartOnlineProdEx : cartOnlineProdExList) {
             for(CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-                totalCartProdQty += cartProdEx.getCartProdQty();
-                totalBaseQty += getIntValue(cartProdEx.getmNPromoBaseQty());
-                totalAwardQty += getIntValue(cartProdEx.getmNPromoAwardQty());
+                if(CartConst.Y.equals(cartProdEx.getSelectYn())) {
+                    totalCartProdQty += cartProdEx.getCartProdQty();
+                    totalBaseQty += getIntValue(cartProdEx.getmNPromoBaseQty());
+                    totalAwardQty += getIntValue(cartProdEx.getmNPromoAwardQty());
+                }
             }
         }
         

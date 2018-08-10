@@ -168,7 +168,10 @@
 		$('[name=beauty_point]').on('blur', function() {
 			var membershipSn = this.dataset.membershipsn,
 				useMembershipPoint = parseInt(this.value);
-			if (useMembershipPoint != null && useMembershipPoint >= 0 && useMembershipPoint < parseInt(this.max)) {
+
+			if (useMembershipPoint == null)  useMembershipPoint = 0;
+
+			if (useMembershipPoint >= 0 && useMembershipPoint < parseInt(this.max)) {
 				$('#pointLoading').show();
 				AP.api.ordReceptChangePoint({}, {
 					ordSn : ordSn,
@@ -190,6 +193,9 @@
 						});
 					}
 					$('#amtPcur').html(html);
+					$("[name=finalPamtPcur]").val(data.ordHistEx.finalPamtPcur);
+					$("#orderPayment").html($B.string.numberFormat(data.ordHistEx.finalPamtPcur)+'원 결제하기');
+
 					$('#amtPriceTab > button').trigger("click");
 					$('html, body').animate({scrollTop: $("#amtPcur").offset().top-50}, 1000);
 
@@ -364,7 +370,7 @@
 		//주문서 화면 선택된 쿠폰 영역 그리기
 		function drawCouponList(memberKeepingCouponSnArr){
 			$('#couponLoading').show();
-			if (memberKeepingCouponSnArr.length > 0) {
+			if (memberKeepingCouponSnArr != null && memberKeepingCouponSnArr.length > 0) {
 				jQuery.ajaxSettings.traditional = true;
 			}
 			AP.api.ordReceptChangeCoupon({}, {
@@ -413,6 +419,9 @@
 							apMember : data.apMember
 						});
 						$('#amtPcur').html(html);
+						$("[name=finalPamtPcur]").val(data.ordHistEx.finalPamtPcur);
+						$("#orderPayment").html($B.string.numberFormat(data.ordHistEx.finalPamtPcur)+'원 결제하기');
+
 						$('#amtPriceTab > button').trigger("click");
 						//$('html, body').animate({scrollTop: $("#amtPcur").offset().top-50}, 1000);
 

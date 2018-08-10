@@ -15,19 +15,21 @@
 					</div>
 				</div>
 				<!--/* 상세 */-->
-				<div class="ui_tab wide">
+				<div class="tab_menu_wrap">
 					<div class="tab_menu black">
 						<ul>
-							<li class="on"><button type="button"><span>쿠폰존</span></button></li><!--/* 로그인 전 */-->
-							<!-- li><button type="button"><span>등급별혜택</span></button></li --><!--/* 로그인 후 */-->
-							<li><button type="button"><span>VIP라운지</span></button></li>
-							<li><button type="button"><span>출석체크</span></button></li>
+							<li class="on"><a href="javascript:tab_menu(0);"><span>쿠폰존</span></a></li><!--/* 로그인 전 */-->
+							<!-- li><a href="javascript:tab_menu(0);"><span>등급별혜택</span></a></li --><!--/* 로그인 후 */-->
+							<li><a href="javascript:tab_menu(1);"><span>VIP라운지</span></a></li>
+							<li><a href="javascript:tab_menu(2);"><span>출석체크</span></a></li>
 						</ul>
 					</div>
+				</div>
+				<div>
 					<div class="login_area"><!--/* 로그인 전 */-->
 						<div class="inner_wrap">
 							<p><em>로그인</em>하고 고객등급과 혜택을 확인하세요.</p>
-							<a href="#none" class="btn_lg_primary">로그인</a>
+							<a href="#none" class="btn_login">로그인</a>
 						</div>
 					</div>
 					<div class="grade_area"><!--/* 로그인 후 */-->
@@ -42,7 +44,7 @@
 					<!--/* 쿠폰,VIP라운지,출석체크 */-->
 					<div class="tab_contents">
 						<!--/* 쿠폰존 */-->
-						<div class="tab_cont">
+						<div class="tab_cont tab_cont00">
 							<div class="couponzone">
 								<h3 class="sr_only">쿠폰존</h3>
 								<div class="inner_wrap">
@@ -50,7 +52,7 @@
 										<div class="coupon_state"><!--/* 로그인 후 */-->
 											<p>이달 <em>00</em>장의 쿠폰을 받으셨습니다.</p>
 											<p>이달 <em>03</em>장의 다 쿠폰을 받으셨습니다.</p>
-											<a href="#none">마이파우치에서 확인하기</a>
+											<a class="btn_mychk" href="#none">마이파우치에서 확인하기</a>
 										</div>
 										<div class="section_boxing">
 											<div class="title_area">
@@ -261,7 +263,7 @@
 											</tr>
 											</tbody>
 										</table>
-										<div class="mgt30 align_right">
+										<div class="benefit_more">
 											<button type="button"><span class="ie_press"><img ap:src="@{/images/coupon/btn_benefitview.png}" alt="등급별 혜택 자세히보기"></span></button>
 										</div>
 									</div>
@@ -272,7 +274,7 @@
 							</div>
 						</div>
 						<!--/* VIP라운지 */-->
-						<div class="tab_cont">
+						<div class="tab_cont tab_cont01">
 							<div class="viplounge">
 								<h3 class="sr_only">VIP라운지</h3>
 								<div class="lounge_info">
@@ -353,7 +355,7 @@
 							</div>
 						</div>
 						<!--/* 출석체크 */-->
-						<div class="tab_cont">
+						<div class="tab_cont tab_cont02">
 							<div class="checkzone">
 								<h3 class="sr_only">출석체크</h3>
 								<ul class="banner_checkzon">
@@ -550,6 +552,19 @@
 	<script>
 		$( '.ui_tooltip' ).tooltip();
 		$('.slide').ixSlideMax();
+
+		function tab_menu(num){
+		var f =$('.tab_menu li').find('a');
+		for (var i = 0; i < f.length; i++){
+			if(i==num){
+				f.eq(i).parent().addClass('on');
+				$('.tab_cont0'+i).show();
+				}else{
+					f.eq(i).parent().removeClass('on');
+					$('.tab_cont0'+i).hide();
+				}
+			}	
+		}
 	</script>
 </th:block>
 </body>

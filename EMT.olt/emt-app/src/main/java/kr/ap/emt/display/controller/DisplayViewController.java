@@ -28,6 +28,7 @@ import net.g1project.ecp.api.model.sales.display.Corner;
 import net.g1project.ecp.api.model.sales.display.CornerContentsSet;
 import net.g1project.ecp.api.model.sales.display.PageInfo;
 import net.g1project.ecp.api.model.sales.guide.FoPushResult;
+import net.g1project.ecp.api.model.sales.point.ActivityPointHists;
 import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkByDateSearchResult;
 import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkPost;
 
@@ -92,7 +93,10 @@ public class DisplayViewController extends AbstractController {
 		model.addAttribute("categoryType", categoryType);
 		model.addAttribute("pageType", "category");
 		model.addAttribute("displayCateSn", pageInfo.getDisplayCateSns());
-
+		// 진주알갯수 확인
+		ActivityPointHists activityPoint = pointApi.getActivityPointHists(getMemberSn(), null, null, 0, 1);
+		model.addAttribute("pealPoint", activityPoint); 
+		 
 		// 쇼핑히스토리 추가
 		
 		if(0L != getMemberSn()) {

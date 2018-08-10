@@ -266,6 +266,7 @@ $('#certComBtn').on('click', function(e) {
     }
 });
 $('#send').on('click', function(e) {
+    if ($(this).attr('disabled') == 'disabled') return;
     var $form = $('form.validate');
     $form.validate().settings.ignore = "";
     if ($form.valid()) {

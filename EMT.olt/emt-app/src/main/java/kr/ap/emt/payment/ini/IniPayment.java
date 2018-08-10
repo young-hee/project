@@ -62,7 +62,7 @@ public class IniPayment {
 	   	map.put("P_UNAME", payDTO.getBuyerName());	//고객성명 Char(30)*
 	   	map.put("P_MNAME", "에뛰드");//TODO : 몰정보//가맹점이름 Char(30)
 	   	/*map.put("pNoti", payDTO.getPrice());*/	//기타주문번호 Char(800)
-	   	map.put("P_GOODS", payDTO.getProdName());	//상품명 (char(80)*
+	   	map.put("P_GOODS", payDTO.getRepProdName());	//상품명 (char(80)*
 	   	map.put("P_MOBILE", payDTO.getMobile());	//구매자 휴대폰번호 Char(15) 000-0000-0000
 	   	map.put("P_EMAIL", payDTO.getEmail());	//구매자 이메일 Char(30) abc@abc.com
 	   	//TODO map.put("pTax", null);//부가세
@@ -163,7 +163,7 @@ public class IniPayment {
        map.put("version", "1.0");
        map.put("mid", payDTO.getpMid());
        map.put("oid", oid);
-       map.put("goodname", payDTO.getProdName());
+       map.put("goodname", payDTO.getRepProdName());
        map.put("price", price);
        map.put("currency", currency);
        map.put("buyername", payDTO.getBuyerName());

@@ -1,6 +1,7 @@
 package kr.ap.comm.member.vo;
 
 import net.g1project.ecp.api.model.ap.ap.ApMember;
+import net.g1project.ecp.api.model.order.order.OrdReceptChange;
 import net.g1project.ecp.api.model.sales.cart.CartEx;
 
 import java.io.Serializable;
@@ -89,6 +90,11 @@ public class MemberSession implements Serializable {
      * 주문접수중인 장바구니 상품일련번호목록
      */
     private Map<Long, OrdCartInfo> ordCartInfoMap;
+
+	/**
+	 * 주문 변경 정보 저장
+	 */
+	private OrdReceptChange ordReceptChange;
     
     /**
      * @return the ordCartInfoMap
@@ -290,4 +296,11 @@ public class MemberSession implements Serializable {
         this.cartEx = cartEx;
     }
 
+	public OrdReceptChange getOrdReceptChange() {
+		return ordReceptChange;
+	}
+
+	public void setOrdReceptChange(OrdReceptChange ordReceptChange) {
+		this.ordReceptChange = ordReceptChange;
+	}
 }

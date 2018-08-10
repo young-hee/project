@@ -110,7 +110,7 @@ public class EventRestController extends AbstractController {
 		
 		try {
 			
-			RegularEventRequesters requesters = regulareventApi.regularEventRequesters(requestEvent.getRegularEventType(), requestEvent.getRegularEventSn(), requestEvent.getOffset(), requestEvent.getLimit()); 
+			RegularEventRequesters requesters = regulareventApi.regularEventRequesters(requestEvent.getRegularEventType(), requestEvent.getRegularEventSn(), requestEvent.getOffset(), requestEvent.getLimit(), null);
             result.put("requesters", requesters);
 	        
 	        return ResponseEntity.ok(result);

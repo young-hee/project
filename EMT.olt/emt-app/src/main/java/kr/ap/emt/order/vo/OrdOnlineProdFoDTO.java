@@ -31,6 +31,7 @@ public class OrdOnlineProdFoDTO {
 	private List<OrdHistProdEx> prodList; // 주문이력상품목록(단위)
 	private List<OrdHistProdEx> freeGiftList; // 주문이력상품목록(단위)
 	private List<OrdHistProdEx> preSale; // 주문이력상품목록(단위)
+	private String singleProdYn; //단일 단위상품 여부
 
 	public void addOrdHistProdEx(OrdHistProdEx ordHistProdEx) {
         setFinalOnlineSaleAmtPcurSum(getFinalOnlineSaleAmtPcurSum().add(ordHistProdEx.getFinalOnlineSaleAmtPcur()));
@@ -221,5 +222,13 @@ public class OrdOnlineProdFoDTO {
 
 	public void setPreSale(List<OrdHistProdEx> preSale) {
 		this.preSale = preSale;
+	}
+
+	public String getSingleProdYn() {
+		return singleProdYn;
+	}
+
+	public void setSingleProdYn(String singleProdYn) {
+		this.singleProdYn = singleProdYn;
 	}
 }

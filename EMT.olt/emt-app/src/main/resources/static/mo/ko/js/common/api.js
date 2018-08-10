@@ -191,6 +191,9 @@
 		findIdForeigner: { path: '/customer/find/findId/foreigner', method: 'POST' },
 		//아이디 중복확인.
 		checkId: { path: '/customer/checkId', method: 'POST' },
+		
+		//휴면계정 해제.
+		recoveryUser: { path: '/customer/recoveryUser', method: 'POST' },
 
 		//비밀번호 찾기
 		//email

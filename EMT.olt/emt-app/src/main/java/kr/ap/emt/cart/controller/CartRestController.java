@@ -595,7 +595,7 @@ public class CartRestController extends CartBaseController{
 				var1.setLimit(limit);
 				var1.setOffset(offSet);
 				var1.setSortBy(sortBy);
-				var1.setProdInvtExList(prodInvtExList);
+				//var1.setProdInvtExList(prodInvtExList);
 				StoreResult storeResult = storeApi.getStoresInvt(var1);
 				result.put("param", storeResult);
 				result.put("result", "success");
@@ -672,13 +672,13 @@ public class CartRestController extends CartBaseController{
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		try {
 			if(!StringUtils.isEmpty(addressDiv)){
-				List<String> addressDetail = new ArrayList<String>();
+				List<String> addressDetailList = new ArrayList<String>();
 				for(AddressDivInfo adi : storeApi.getStoreAddressDivs(addressDiv)){
 					for(String addressData : adi.getAddressDetailDivs()){
-						addressDetail.add(addressData);
+						addressDetailList.add(addressData);
 					}
 				}
-				result.put("param", addressDetail);
+				result.put("param", addressDetailList);
 				result.put("result", "success");
 			}
 		} catch (Exception e) {

@@ -283,7 +283,7 @@
 
 .benefit_coup_area {overflow:hidden; width:330px; margin:0 auto; padding-bottom:18px}
 .coup_detail {position:relative; float:left; width:223px; height:131px;  padding:17px 0 0 37px; background:url("/mo/ko/images/common/bg_coup_benefit01.png") no-repeat 0 0; background-size:223px 131px}
-.coup_detail .coup_name {color:#000; font-size:15px}
+.coup_detail .coup_name {overflow:hidden; padding-right:20px; color:#000; font-size:15px; text-overflow:ellipsis; white-space:nowrap}
 .coup_detail .dis_price {color:#000; font-size:50px; line-height:67px}
 .coup_detail .dis_price em {font-size:15px}
 .coup_detail .coup_benefit_txt01 {position:absolute; bottom:18px; color:#777; font-size:13px}
@@ -316,6 +316,7 @@
 .vip_lounge .btn_vip_apply a {display:inline-block; width:165px; height:45px}
 
 .notice_area01 {padding:0 20px 10px 20px}
+.coupon_benefit .notice_area01 {background:#fff}
 .notice_area01 .noti_tit01 {color:#000; font-size:16px; font-weight:bold; text-align:center}
 .notice_area01 .noti_tit01 .ico_notice {width:15px; height:15px}
 .bullet_list01 {margin-top:20px}
@@ -380,23 +381,23 @@
 .brand_coupon_list .btn_brand_coupon>img{position:relative; z-index: 1;}
 .brand_coupon_list .brand_coupon>img{position:absolute; top:50%; left:50%; transform:translate(-50%, -50%)}
 .brand_coupon_list .brand_coupon{
-	position:absolute;left:0;top:0; width: 100%; height: 100%; z-index:-1; margin: 0; border:1px solid #f2f2f2; border-radius: 5px;
+	position:absolute;left:0;top:0; width: 100%; height: 100%; z-index:-1; margin: 0;  border-radius: 5px;
 	-webkit-box-shadow: 2px 0 5px rgba(0,0,0,0.2);
 	box-shadow: 2px 0 5px rgba(0,0,0,0.2);
-	-webkit-backface-visibility:hidden;
+-webkit-backface-visibility:hidden;
 	-moz-backface-visibility:hidden;
 	-o-backface-visibility:hidden;
 	-ms-backface-visibility:hidden;
 	backface-visibility:hidden;
-	-webkit-transition: 1.0s;
+	-webkit-transition: 1.5s;
 	-webkit-transform-style: preserve-3d;
-	-moz-transition: 1.0s;
+	-moz-transition: 1.5s;
 	-moz-transform-style: preserve-3d;
-	-o-transition: 1.0s;
+	-o-transition: 1.5s;
 	-o-transform-style: preserve-3d;
-	-ms-transition: 1.0s;
+	-ms-transition: 1.5s;
 	-ms-transform-style: preserve-3d;
-	transition:1.0s;
+	transition:1.5s;
 	transform-style:preserve-3d}
 .brand_coupon_list .brand_coupon{ -webkit-transform: rotateY(0);
 	-webkit-transform: rotateY(0);
@@ -405,7 +406,7 @@
 	-ms-transform: rotateY(0);
 	transform: rotateY(0);
 	transform: rotateY(0)}
-.brand_coupon_list .on .brand_coupon{ z-index:1; -webkit-transform: rotateY(360deg);
+.brand_coupon_list .on .brand_coupon{ z-index:1; -webkit-transform: rotateY(360deg); border:1px solid #f2f2f2;
 	-webkit-transform: rotateY(360deg);
 	-moz-transform: rotateY(360deg);
 	-o-transform: rotateY(360deg);
@@ -417,15 +418,15 @@
 	-o-backface-visibility:hidden;
 	-ms-backface-visibility:hidden;
 	backface-visibility:hidden;
-	-webkit-transition: 1.0s;
+	-webkit-transition: 1.5s;
 	-webkit-transform-style: preserve-3d;
-	-moz-transition: 1.0s;
+	-moz-transition: 1.5s;
 	-moz-transform-style: preserve-3d;
-	-o-transition: 1.0s;
+	-o-transition: 1.5s;
 	-o-transform-style: preserve-3d;
-	-ms-transition: 1.0s;
+	-ms-transition: 1.5s;
 	-ms-transform-style: preserve-3d;
-	transition:1.0s;
+	transition:1.5s;
 	transform-style:preserve-3d}
 .brand_coupon_list .btn_brand_coupon>img{ -webkit-transform: rotateY(0deg);
 	-webkit-transform: rotateY(0deg);
@@ -481,13 +482,36 @@
 .rounge_benefit01 .tit {color:#000; font-size:16px}
 .rounge_benefit01 .txt {margin-top:9px; color:#999; font-size:14px}
 
-.layer_attendance .product_visual{width: 80px !important;}
+/* 레이어팝업*/
+.layer_popup.layer_attendance .layer_cont {padding-bottom: 10px}
+.layer_popup.layer_attendance .layer_cont .text {font-size: 15px; color:#000; line-height: 20px}
+.layer_popup.layer_attendance .layer_cont .product_list .product:first-child {margin-top: 0}
+.layer_popup.layer_attendance .layer_cont .product_list .product .product_visual {width: 90px}
+.layer_popup.layer_attendance .layer_cont .product_list .product .product_info {padding:0 0 0 8px}
+.layer_popup.layer_attendance .layer_cont .product_list .product .product_info .product_name {line-height: 18px; margin-top: 5px}
+.layer_popup.layer_attendance .layer_cont .product_list .product .product_info .product_area {margin-top: 7px;}
+.layer_popup.layer_attendance .coupon_list > li {padding:20px 0; border-top:1px solid #f3f3f3}
+.layer_popup.layer_attendance .coupon_list li:first-child {border-top: 0; padding-top: 0}
+.layer_popup.layer_attendance .coupon_list .title {padding-bottom:20px; font-size: 15px; color:#222; font-weight: bold;}
+.layer_popup.layer_attendance .coupon_list .text {font-size: 14px}
+.layer_popup.layer_attendance .btn_default_modal_confirm {color:#782fff; font-size: 16px}
+
+/* 출석체크 완료 팝업 */
+.layer_attendance .product_list {margin-top:30px}
+.layer_attendance .product_visual{width: 80px !important; vertical-align:top}
 .layer_attendance .product_info{padding-right: 0 !important; font-size: 12px;}
-.layer_attendance .product_info .link>em{}
+.layer_attendance .product_info .price {font-size:13px}
+.layer_attendance .product_info .price strong {font-size:14px}
+.layer_attendance .product_info .dis_price {margin-left:7px; color:#888; font-size:12px}
+.layer_attendance .product_info .dis_price del {font-size:13px}
+.layer_attendance .product_info .link {display:inline-block; margin-left:9px; color:#782fff; font-size:11px}
 .layer_attendance .product_info .link:after{content:''; display: inline-block; width: 0; height: 0; margin-left:4px; border: 4px solid transparent; border-left-color:#782fff; vertical-align: middle;}
-.layer_attendance .coupon{width: 168px; height: 98px; padding: 25px 0 0 30px; margin:20px auto 0;}
+.layer_attendance .coupon{width: 168px; height: 98px; padding: 23px 0 0 30px; margin:20px auto 0;}
 .layer_attendance .coupon>dt{font-size: 12px;}
-.layer_attendance .coupon .cont b{font-size: 35px;}
+.layer_attendance .coupon .cont {margin-top:12px}
+.layer_attendance .coupon .cont strong{font-size: 40px; font-weight:normal }
+.layer_attendance .coupon .cont .unit {font-size:15px; vertical-align:baseline}
+
 
 .three_slide {padding:0 30px; }
 .three_slide .brand_coupon_list {padding:0}
@@ -510,7 +534,7 @@
 .plus_tit01 {padding:30px 0; color:#000; font-size:14px; text-align:center; font-weight:normal}
 .plus_tit02 {padding:20px; color:#000; font-size:20px; line-height:20px}
 .plus_tit01 strong {display:block; margin-bottom:10px; font-size:20px; line-height:20px; font-weight:normal}
-.attendance_notice {background:none}
+.attendance_notice {background:#fff}
 .attendance_notice.plus .noti_tit01 {text-align:left}
 
 .plus_membership .slide{position:relative; border-bottom:1px solid #d1d1d1}
@@ -543,7 +567,6 @@
 .policy_wrap .policy .list_bullet_num li {padding-left:26px; color:#666; font-size:12px; line-height:17px; text-indent:-13px}
 .policy_wrap .policy .list_bullet_num .num {padding-right:5px}
 
-.plus_membership .chk_h28 label {font-size:13px}
 .ap_policy_area .chk_h28 {display:block; margin-top:12px}
 
 .benefit_num {padding:0 15px; background:#fff}
@@ -551,14 +574,13 @@
 .benefit_num dl.ui_table {padding:16px 0 22px 0; border-top:1px solid #ebebeb}
 .benefit_num dl.ui_table dt {width:112px; color:#000; font-size:17px}
 .benefit_num .benefit_text01 {margin-top:6px; color:#000; font-size:13px; line-height:16px}
+.benefit_num .ui_table .input_h48_gray input{height:32px; padding: 14px 15px 16px 15px; font-size:15px}
 
 .plus_membership .ui_accordion>dl>dt {border-bottom:1px solid #f2f2f2;}
 .plus_membership .txt01 {padding:20px 0 18px 0; color:#000; font-size:13px; line-height:15px}
 
 /* 금액 계산 */
 .plus_membership .product_price{padding: 10px 16px 0;}
-.plus_membership .product_price>dl{padding: 12px 0}
-.plus_membership .product_price dl:first-child {padding-bottom:0}
 .plus_membership .product_price dl:after{content:''; display: block; clear: both;}
 .plus_membership .product_price dl>dt{float:left; color:#000; font-size:16px}
 .plus_membership .product_price dl>dd{float:right; color:#000; font-size:16px}
@@ -575,8 +597,11 @@
 .plus_membership .product_price .my_point i{margin-top: -2px;}
 .plus_membership .product_price>dl.total:only-child{margin-top: -10px; border-top:0;}
 .plus_membership .product_price{padding-top: 0;}
-.plus_membership .product_price>dl{padding: 20px 0;}
 .plus_membership .product_price>dl.shipping_costs{padding-top: 0;}
+
+.plus_membership .last .product_price {padding:6px 16px}
+.plus_membership .last .product_price>dl{padding: 12px 0; margin-top:0}
+.plus_membership .last .product_price>dl.total {padding:23px 0}
 
 .plus_membership .order_area .product_price .ui_tooltip {margin-top: 12px;}
 .plus_membership .order_area .product_price .ui_tooltip .add_point {color:#4f94c0}
@@ -627,6 +652,10 @@
 .plus_membership .payment_list .cont_phone p em{color:#782fff}
 
 .plus_membership .ui_accordion>dl>dt .title>span{display:inline-block; padding-left: 6px; font-size: 14px; color:#484848; font-weight: normal; line-height: 1;}
+
+.plus_membership .agree_area .color_light_gray {line-height:18px} 
+.plus_membership .order_layer {position:static; background:0}
+.plus_membership .use_benefit .price input {font-size:15px}
 
 
 /* .membership_layer .policy_wrap{height: 90px; margin: 20px 0 10px; background: #f2f2f2; padding:10px 8px;}

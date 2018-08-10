@@ -90,13 +90,13 @@ public class MemberViewController extends AbstractController {
 		case "00":
 			return "/customer/customernew/find-id.3";
 		case "01":
-			model.addAttribute("userId", userId);
+			model.addAttribute("userId", userId.substring(0, userId.length() - 2) + "**");
 			return "/customer/customernew/find-id.2";
 		case "02":
 			return "/customer/customernew/find-id.4";
 		case "03":
         case "04": //통합ID회원 정보
-			model.addAttribute("userId", userId);
+			model.addAttribute("userId", userId.substring(0, userId.length() - 2) + "**");
 			return "/customer/customernew/find-id.2";
         case "05": //통합비ID회원 정보 //FIXME 나중에 수정.
 			return "/customer/customernew/find-id.3";

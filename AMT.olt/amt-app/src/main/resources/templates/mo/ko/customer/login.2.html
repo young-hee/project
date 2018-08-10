@@ -24,7 +24,7 @@
 			<fieldset class="form">
 				<legend class="sr_only">휴대폰 간편 로그인</legend>
 				<div class="input_wrap">
-					<input type="text" title="이름 입력" name="custNm" placeholder="이름을 입력하세요">
+					<input type="text" title="이름 입력" required="required" name="custNm" placeholder="이름을 입력하세요" data-msg-required="이름을 입력해 주세요. 이름 입력란으로 이동합니다." user-name="user-name">
 				</div>
 				<div class="input_group">
 					<div class="select_wrap w30p">
@@ -38,7 +38,7 @@
 						</select>
 					</div>
 					<div class="gap"></div>
-					<div class="input_wrap"><input type="tel" name="phoneNumber2" required="required" title="휴대폰 번호 입력" maxlength="8" placeholder="휴대폰 번호 입력('-' 생략)" data-msg-required="휴대폰번호를 입력해 주세요."></div>
+					<div class="input_wrap"><input type="tel" required="required" name="phoneNumber2" required="required" title="휴대폰 번호 입력" maxlength="8" placeholder="휴대폰 번호 입력('-' 생략)" data-msg-required="휴대폰번호를 입력해 주세요."></div>
 				</div>
 				<div class="btn_login_wrap">
 					<a href="javascript:;" id="send-sms" class="bg_purple">인증번호 발송</a>
@@ -84,6 +84,11 @@
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
+<style>
+a[disabled=disabled] {
+    opacity: 0.3;
+}
+</style>
 <script>
 
 function back() {
@@ -118,7 +123,7 @@ $('form [name=redirectUrl]').val(returnUrl);
 
 var incsNo;
 function sendSms() {
-	var $form = $('form');
+	var $form = $('form.login');
     $form.validate().settings.ignore = "[name=smsNum]";
     if($form.valid()) {
     	$('#send-sms').attr("disabled", "disabled");
@@ -148,9 +153,11 @@ function sendSms() {
             } else if (xhr.errorCode == 'EAPI001') {
                 var contents = new Object();
                 contents.title = "인증실패";
-                contents.contents = data.message;
+                contents.contents = "인증번호 발송에 실패했습니다.";
                 contents.confirmLabel = "확인";
                 AP.modal.info(contents).addListener('modal-close', function(e) {});
+            } else if(xhr.errorCode == 'ESAL001') {
+                AP.modal.alert("존재하지 않는 회원입니다.");
             } else {
                 AP.modal.alert(xhr.errorMessage)
             }

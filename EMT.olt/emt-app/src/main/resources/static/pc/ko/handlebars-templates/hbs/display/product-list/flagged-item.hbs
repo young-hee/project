@@ -26,11 +26,13 @@
 			<!--/* 상품명 */-->
 			<div class="title_area">
 				<h3 class="h_title">{{ this.onlineProdName }}</h3>
-				{{#xif ../prodListUnitCode '==' 'Prod'}}
-				<div class="item_option">
-					<p class="color_name">{{ this.products.0.prodName }}</p>
-				</div>
-			{{/xif}}
+				{{#xif ../prodListUnitCode '==' 'Prod'}} 
+					{{#xif this.productCount '>' 1}}
+						<div class="item_option">
+							<p class="color_name">{{ this.products.0.prodName }}</p>
+						</div>
+					{{/xif}}
+				{{/xif}}
 			</div>
 			<!--/* color 옵션 */-->
 			<!-- 상품 옵션 영역 7개 이상 -->

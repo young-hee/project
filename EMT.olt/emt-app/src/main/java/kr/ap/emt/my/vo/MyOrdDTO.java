@@ -3,6 +3,7 @@ package kr.ap.emt.my.vo;
 import kr.ap.emt.order.vo.OrdOnlineProdFoDTO;
 import kr.ap.emt.order.vo.OrdOnlinePromoFoDTO;
 import net.g1project.ecp.api.model.order.order.*;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -22,6 +23,9 @@ public class MyOrdDTO {
 
 	// 온라인 상품
 	private List<OrdOnlineProdFoDTO> shippingOrdOnlineProdList;
+
+	// M+N 온라인
+	private List<OrdOnlinePromoFoDTO> shippingMNPromoProdList;
 
 	// 테이크아웃 상품
 	private List<OrdOnlineProdFoDTO> storePickupOrdOnlineProdList;
@@ -73,41 +77,73 @@ public class MyOrdDTO {
 
 	public MyOrdDTO(OrdEx ordEx) {
 
-		state = null;
-		this.goods = ordEx;
+//		state = null;
+//		this.goods = ordEx;
+//
+//		ordUnitAwardOrdPromo = ordEx.getOrdHistEx().getOrdUnitAwardOrdPromoExList();
+//		makeOrdSavingPoint(ordEx.getOrdHistEx().getOrdSavingPointList());
+//		makeOrdPayResult(ordEx.getOrdHistEx().getOrdPayExList());
+//		makeOrdAmt(ordEx.getOrdHistEx().getOrdHistAmtExList());
+//		setMembership(ordEx.getOrdMembershipExList());
+//		makeGoods(ordEx.getOrdShipAddressExList());
 
-		ordUnitAwardOrdPromo = ordEx.getOrdHistEx().getOrdUnitAwardOrdPromoExList();
-		makeOrdSavingPoint(ordEx.getOrdHistEx().getOrdSavingPointList());
-		makeOrdPayResult(ordEx.getOrdHistEx().getOrdPayExList());
-		makeOrdAmt(ordEx.getOrdHistEx().getOrdHistAmtExList());
-		setMembership(ordEx.getOrdMembershipExList());
-		makeGoods(ordEx.getOrdShipAddressExList());
+		init(ordEx, null);
 	}
 
 	public MyOrdDTO(OrdEx ordEx, String state) {
 
-		this.state = state;
-		this.goods = ordEx;
+//		this.state = state;
+//		this.goods = ordEx;
+//
+//		ordUnitAwardOrdPromo = ordEx.getOrdHistEx().getOrdUnitAwardOrdPromoExList();
+//		makeOrdSavingPoint(ordEx.getOrdHistEx().getOrdSavingPointList());
+//		makeOrdPayResult(ordEx.getOrdHistEx().getOrdPayExList());
+//		makeOrdAmt(ordEx.getOrdHistAmtCompareList());
+//		setMembership(ordEx.getOrdMembershipExList());
+//		makeGoods(ordEx.getOrdShipAddressExList());
 
-		ordUnitAwardOrdPromo = ordEx.getOrdHistEx().getOrdUnitAwardOrdPromoExList();
-		makeOrdSavingPoint(ordEx.getOrdHistEx().getOrdSavingPointList());
-		makeOrdPayResult(ordEx.getOrdHistEx().getOrdPayExList());
-		makeOrdAmt(ordEx.getOrdHistAmtCompareList());
-		setMembership(ordEx.getOrdMembershipExList());
-		makeGoods(ordEx.getOrdShipAddressExList());
+		init(ordEx, state);
 	}
 
 	public MyOrdDTO(ClaimOrdHistInfo c, String state) {
 
-		this.state = state;
-		this.goods = c;
+//		this.state = state;
+//		this.goods = c;
+//
+//		ordUnitAwardOrdPromo = c.getOrdHistEx().getOrdUnitAwardOrdPromoExList();
+//		makeOrdSavingPoint(c.getOrdHistEx().getOrdSavingPointList());
+//		makeOrdPayResult(c.getOrdHistEx().getOrdPayExList());
+//		makeOrdAmt(c.getOrdHistAmtCompareList());
+//		setMembership(c.getOrdMembershipExList());
+//		makeGoods(c.getOrdShipAddressExList());
 
-		ordUnitAwardOrdPromo = c.getOrdHistEx().getOrdUnitAwardOrdPromoExList();
-		makeOrdSavingPoint(c.getOrdHistEx().getOrdSavingPointList());
-		makeOrdPayResult(c.getOrdHistEx().getOrdPayExList());
-		makeOrdAmt(c.getOrdHistAmtCompareList());
-		setMembership(c.getOrdMembershipExList());
-		makeGoods(c.getOrdShipAddressExList());
+		init(c, state);
+	}
+
+	public void init(Object obj, String state) {
+		this.state = state;
+		this.goods = obj;
+
+		if (obj instanceof ClaimOrdHistInfo) {
+			ClaimOrdHistInfo c = (ClaimOrdHistInfo) obj;
+
+			ordUnitAwardOrdPromo = c.getOrdHistEx().getOrdUnitAwardOrdPromoExList();
+			makeOrdSavingPoint(c.getOrdHistEx().getOrdSavingPointList());
+			makeOrdPayResult(c.getOrdHistEx().getOrdPayExList());
+			makeOrdAmt(c.getOrdHistAmtCompareList());
+			setMembership(c.getOrdMembershipExList());
+			makeGoods(c.getOrdShipAddressExList());
+		}
+		else if (obj instanceof OrdEx) {
+			OrdEx ordEx = (OrdEx) obj;
+
+			ordUnitAwardOrdPromo = ordEx.getOrdHistEx().getOrdUnitAwardOrdPromoExList();
+			makeOrdSavingPoint(ordEx.getOrdHistEx().getOrdSavingPointList());
+			makeOrdPayResult(ordEx.getOrdHistEx().getOrdPayExList());
+			makeOrdAmt(ordEx.getOrdHistEx().getOrdHistAmtExList());
+			setMembership(ordEx.getOrdMembershipExList());
+			makeGoods(ordEx.getOrdShipAddressExList());
+		}
 	}
 
 	private void makeOrdPayResult(List<OrdPayEx> ordPay) {
@@ -145,6 +181,7 @@ public class MyOrdDTO {
 		storePickupOrdOnlineProdList = new ArrayList<>();
 		shippingOrdOnlineBeautyPointProdList = new ArrayList<>();
 		shippingOrdOnlineActivityPointProdList = new ArrayList<>();
+		shippingMNPromoProdList = new ArrayList<>();
 		ordOtfExList = new ArrayList<>();
 
 		Map<String, OrdOnlineProdFoDTO> ordOnlineProdFoMap = new HashMap<String, OrdOnlineProdFoDTO>();
@@ -236,7 +273,12 @@ public class MyOrdDTO {
 										shippingOrdOnlineActivityPointProdList.add(ordOnlineProdFo);
 									}
 									else{
-										shippingOrdOnlineProdList.add(ordOnlineProdFo);
+										if (!StringUtils.isEmpty(ordOnlineProdFo.getOrdHistProdTypeCode())
+											&& ("Ord".equals(ordOnlineProdFo.getOrdHistProdTypeCode())
+											|| "BulkDc".equals(ordOnlineProdFo.getOrdHistProdTypeCode())
+											|| "SameTimePur".equals(ordOnlineProdFo.getOrdHistProdTypeCode()))) {
+											shippingOrdOnlineProdList.add(ordOnlineProdFo);
+										}
 									}
 								}
 							}
@@ -299,6 +341,9 @@ public class MyOrdDTO {
 					ordChangeShipAddress.setShipMsg(ooe.getShipMsg());
 				}
 			}
+			if (shippingMNPromoMap.size() > 0) {
+				shippingMNPromoProdList = new ArrayList<>(shippingMNPromoMap.values());
+			}
 		}
 	}
 
@@ -310,6 +355,8 @@ public class MyOrdDTO {
 			ordOnlinePromoFo.setPromoName(ordHistProdEx.getmPlusNOrdPromoNameRlang());
 			ordOnlinePromoFo.setOrdOnlineProdFoMap(new HashMap<>());
 			ordOnlinePromoFo.setOrdOnlineProdFoList(new ArrayList<>());
+
+			ordOnlinePromoFo.setPromoTypeCode(ordHistProdEx.getmPlusNTypeCode());
 
 			ordOnlinePromoFoMap.put(ordHistProdEx.getmPlusNOrdPromoSn(), ordOnlinePromoFo);
 		}
@@ -575,5 +622,13 @@ public class MyOrdDTO {
 
 	public void setOrdUnitAwardOrdPromo(List<OrdUnitAwardOrdPromoEx> ordUnitAwardOrdPromo) {
 		this.ordUnitAwardOrdPromo = ordUnitAwardOrdPromo;
+	}
+
+	public List<OrdOnlinePromoFoDTO> getShippingMNPromoProdList() {
+		return shippingMNPromoProdList;
+	}
+
+	public void setShippingMNPromoProdList(List<OrdOnlinePromoFoDTO> shippingMNPromoProdList) {
+		this.shippingMNPromoProdList = shippingMNPromoProdList;
 	}
 }

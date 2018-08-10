@@ -5,8 +5,8 @@
 			<!--/*
 			<div class="item_thumb">
 				<div class="check_wrap">
-					<input type="checkbox" name="chkBox" id="chkBox{{ promoSn }}" value="{{ promoSn }}" promoSn="{{ promoSn }}">
-					<label for="chkBox{{ promoSn }}">
+					<input type="checkbox" name="chkBox" id="chkBoxS_{{ @index }}" value="S_{{ @index }}" promoSn="{{ promoSn }}">
+					<label for="chkBoxS_{{ @index }}">
 					</label>
 				</div>
 			</div>
@@ -22,27 +22,23 @@
 					{{/if}}
 				{{/if}}
 			</div>
-			<!--/*
 			<div class="btns">
-				<button type="button" class="btn_sm_bordered" onclick="sameTimeRemoveCartProd('{{ ../cartSn }}', '{{ promoSn }}', 'online')">삭제</button>
+				<button type="button" class="btn_sm_bordered" onclick="sameTimeRemoveCartProd('{{ ../cartSn }}', 'S_{{ @index }}', 'online')">삭제</button>
 			</div>
-			*/-->
 		</div>
-
 		{{#each this.promoOnlineProdExList }}
 			{{#each cartProdExList }}
 				<div class="item_wrap">
 					<input type="hidden" name="onlinePrdSn" value="{{ prodEx.prodSn }}"/>
 					<input type="hidden" name="cartProdSn" value="{{ cartProdSn }}"/>
-					<input type="hidden" name="promoInfo_{{ ../../promoSn }}" value="{{ cartProdSn }}"/>
-					<input type="hidden" name="prdInfo_{{ prodEx.prodSn }}" value="{{ cartProdSn }}"/>
-					<input type="hidden" name="saleDisplayStatus_{{ prodEx.prodSn }}" value="{{ prodEx.saleDisplayStatus }}"/>
+					<input type="hidden" name="prdInfo_S_{{ @index }}" value="{{ cartProdSn }}"/>
+					<input type="hidden" name="saleDisplayStatus_S_{{ @index }}" value="{{ prodEx.saleDisplayStatus }}"/>
 					<div class="item_info">
 						<!--/* 상품 선택 */-->
 						<div class="item_thumb">
 							<div class="check_wrap">
-								<input type="hidden" name="chkBox" id="chkBox{{ prodEx.prodSn }}" value="{{ prodEx.prodSn }}" {{#if (ne ../saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}>
-								<label for="chkBox{{ prodEx.prodSn }}">
+								<input type="hidden" name="chkBox" id="chkBoxS_{{ @index }}" value="S_{{ @index }}" {{#if (ne ../saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq ../saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}>
+								<label for="chkBoxS_{{ @index }}">
 									{{!-- 이미지 순위선정 : 1.단위상품 > 2.온라인상품 > noImage --}}
 									{{#if (ne prodEx.repProdImgEx null) }}
 										<img src="{{ prodEx.repProdImgEx.imgUrl }}" alt="">
@@ -58,7 +54,6 @@
 							</div>
 						</div>
 						<div class="item_name">
-							<a href="#none" class="title" onclick="fnProdDetail({{ ../onlineProdSn }})">{{ ../onlineProdName }}</a>
 							{{#if (gt prodEx.prodFlagExList.length 0) }}
 								{{#each prodEx.prodFlagExList}}
 									{{#switch prodFlagCode}}
@@ -70,6 +65,7 @@
 									{{/switch}}
 								{{/each}}
 							{{/if}}
+							<a href="#none" class="title" onclick="fnProdDetail({{ ../onlineProdSn }})">{{ ../onlineProdName }}</a>
 						</div>
 						<!--/* 상품 수량 */-->
 						<div class="count">

@@ -1,0 +1,11 @@
+<th:block layout:fragment="deposit-history-list">
+
+
+<tr class="deposit-item" th:each="item : ${depositHostory.depositHistories}">
+	<td th:text="${#IntegUtil.dateformat(item.depositHistOccurDt, 'yyyy.MM.dd')}">2018.09.10</td>
+	<td>(<th:block th:text="${#IntegUtil.currencyTypeConverter(item.depositHistTypeCode)}">주문 사용</th:block>)<br>
+		<th:block th:text="${item.ordNo}">201703291064376</th:block></td>
+	<td><th:block th:utext="${#IntegUtil.currencyConverter(item.deposit)}">(-) 2,999</th:block>원</td>
+</tr>
+	
+</th:block>

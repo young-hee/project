@@ -1,0 +1,61 @@
+{{!--
+	옵션 selectbox
+	viewThumbnail, options, prodTypeCode, bulkIncludedProds, productCount
+--}}
+<div class="ui_select option_select_list" data-not-label-change="true">
+	<input type="hidden" name="">
+	<button type="button">옵션을 선택해주세요</button>
+	<ul class="select_options selectbox_area">
+		{{#each this.options}}
+			<li class="select_option">
+				<code class="label_markup" style="display:none">{{ this.prodName }}</code>
+				
+				{{#xif this.saleDisplayStatus '==' 'OutOfStock' }}
+					<a data-value="{{ this.prodSn }}" data-disabled="true" class="disabled"><!--/*품절일때*/-->
+				{{else}}
+					<a data-value="{{ this.prodSn }}" data-selected="false">
+				{{/xif}}
+				
+					{{#if ../viewThumbnail}}
+						{{#xif this.colorchipTypeCode '==' 'RGB'}}
+							<span class="thumb" style="background-color: #{{ this.rgbVal }}"></span>
+						{{/xif}}
+						{{#xif this.colorchipTypeCode '==' 'Img'}}
+							<span class="thumb"><img alt="" src="{{ this.colorchipImg }}"></span>
+						{{/xif}}
+					{{/if}}
+					
+					<span class="option_info">
+						<span class="option_name ellipsis">{{ this.prodName }}</span>
+						<span class="price">
+							{{#if (eq this.saleDisplayStatus 'OutOfStock' ) }}
+								<span class="price">일시품절</span>
+							{{/if}}
+							
+							{{#if (eq this.saleDisplayStatus 'OnSale') }}
+								{{!-- 할인 경우 노출(온라인상품할인률 + 회원등급할인률 + 온라인회원할인률) --}}
+								{{#xif (availablePrices this.availablePrices 'doublePriceDisplayYn') '==' 'Y'}}
+								<b class="num discount">{{ calc (availablePrices this.availablePrices 'onlineSalePriceDiscountRate') '+'
+															    (availablePrices this.availablePrices 'memberLevelDiscountRate') '+'
+															    (availablePrices this.availablePrices 'onlineMemberDiscountRate') }}% </b>
+								{{/xif}}							   
+								<span>
+									<b class="num">{{ numberFormat (availablePrices this.availablePrices 'finalOnlinePrice') }}</b>
+									{{!-- 뷰티포인트 전용상품 --}}
+									{{#xif (eq ../productCount 1) '&&' (eq this.membershipExchOnly 'Y')}}
+										P
+									{{else}}
+										원
+									{{/xif}}
+								</span> 
+								{{#xif (availablePrices this.availablePrices 'doublePriceDisplayYn') '==' 'Y'}}
+									<del>{{ numberFormat (availablePrices this.availablePrices 'beforeOnlineSalePrice') }} 원</del>
+								{{/xif}}
+							{{/if}}
+						</span>
+					</span>
+				</a>
+			</li>
+		{{/each}}
+	</ul>
+</div>

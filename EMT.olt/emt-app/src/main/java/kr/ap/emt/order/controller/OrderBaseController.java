@@ -214,6 +214,7 @@ public class OrderBaseController extends AbstractViewController {
 			BigDecimal totalOrdPriceSum = new BigDecimal(0);
 			BigDecimal totalOrdDcPriceSum = new BigDecimal(0);
 			BigDecimal membershipExchAmt = new BigDecimal(0);
+			BigDecimal packingAmtSum = new BigDecimal(0);
 			for (OrdHistAmtEx o : ordEx.getOrdHistEx().getOrdHistAmtExList()) {
 				ordAmtMap.put(o.getOrdHistAmtTypeCode(), o.getAmtPcur());
 
@@ -247,7 +248,15 @@ public class OrderBaseController extends AbstractViewController {
 				if ("MembershipExch".equals(o.getOrdHistAmtTypeCode())) {
 					membershipExchAmt = o.getAmtPcur();
 				}
+
+				if ("ShipUnitPacking".equals(o.getOrdHistAmtTypeCode())) {
+					packingAmtSum.add(o.getAmtPcur());
+				}
 			}
+
+			//포장재
+			ordAmtMap.put("ShipUnitPacking", packingAmtSum);
+
 			//배송비 =  ordEx.getOrdHistEx().getShipFeeSumPcur();
 			ordAmtMap.put("ShipFee", ordEx.getOrdHistEx().getShipFeeSumPcur());
 
@@ -387,6 +396,7 @@ public class OrderBaseController extends AbstractViewController {
 		ordOnlineProdFo.setFinalOnlineSaleAmtPcurSum(BigDecimal.ZERO);						// 상품판매가(상품판매가 X 주문수량)
 		ordOnlineProdFo.setOrdQtySum(0);													// 주문수량(단위상품 X 주문수량)
 		ordOnlineProdFo.setOrdHistProdList(new ArrayList<OrdHistProdEx>());					// 주문이력(확장)
+		ordOnlineProdFo.setSingleProdYn(ordOnlineProdFo.getSingleProdYn());
 		return ordOnlineProdFo;
 	}
 

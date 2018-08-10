@@ -139,7 +139,7 @@ public class iniWPayment {
      	linkedHashMap.put("wpayUserKey", new String(Base64.encodeBase64(cipher.doFinal(payDTO.getWpayUserKey().getBytes(charset)))));	  //이니시스에서 발행한 wpayUserKey    	
      	linkedHashMap.put("ci", "");	  //고객의 Ci
     	linkedHashMap.put("oid", payDTO.getOid());	  // 주문번호
-    	linkedHashMap.put("goodsName", URLEncoder.encode(payDTO.getProdName(), charset));	  // 상품명  TODO : 문자열 MAX SIZE 100BYTE 미만 으로 셋팅해야함. 체크필요 
+    	linkedHashMap.put("goodsName", URLEncoder.encode(payDTO.getRepProdName(), charset));	  // 상품명  TODO : 문자열 MAX SIZE 100BYTE 미만 으로 셋팅해야함. 체크필요 
     	linkedHashMap.put("goodsPrice", payDTO.getPrice().replace(",",""));	  // 결제금액
     	linkedHashMap.put("buyerName", URLEncoder.encode(payDTO.getBuyerName(), charset));	  // 구매자명
     	linkedHashMap.put("buyerTel", payDTO.getMobile());	  // 구매자 연락처
