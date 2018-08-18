@@ -7,6 +7,7 @@
 package kr.ap.emt.display.controller;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.ap.comm.support.common.AbstractController;
@@ -61,7 +63,7 @@ import net.g1project.ecp.api.model.offlinestore.store.StoreResult;
  * @author Ria@g1project.net
  * @since {version}
  */
-@Controller
+@RestController
 @RequestMapping("/display")
 public class BrandRestController extends AbstractController {
 
@@ -72,22 +74,14 @@ public class BrandRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/stores")
-    @ResponseBody
     public ResponseEntity<?> stores( RequestBrand requestBrand) {
       
         HashMap<String, Object> result = new HashMap<String, Object>();
         
-        try {
-        	        	
-        	StoreResult storeResult = storeApi.getStores(getMemberSn(), requestBrand.getRegularStoreYn(), requestBrand.getFoStoreEventCode(), requestBrand.getKeyword(), requestBrand.getAddressDiv(), requestBrand.getAddressDetailDiv(), requestBrand.getLatitude(), requestBrand.getLogitude(), requestBrand.getRadius(), requestBrand.getOffset(), requestBrand.getLimit(), requestBrand.getSortBy());
-            result.put("storeResult", storeResult);
-            
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-        	result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		StoreResult storeResult = storeApi.getStores(getMemberSn(), requestBrand.getRegularStoreYn(), requestBrand.getFoStoreEventCode(), requestBrand.getKeyword(), requestBrand.getAddressDiv(), requestBrand.getAddressDetailDiv(), requestBrand.getLatitude(), requestBrand.getLogitude(), requestBrand.getRadius(), requestBrand.getOffset(), requestBrand.getLimit(), requestBrand.getSortBy());
+		result.put("storeResult", storeResult);
 
+		return ResponseEntity.ok(result);
     }
 	
 	/**
@@ -96,19 +90,13 @@ public class BrandRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/storeEvals")
-    @ResponseBody
     public ResponseEntity<?> storeEvals( RequestBrand requestBrand) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
-		try {
-        	StoreEvalsResult storeEvalsResult = storeApi.getStoreEvals(requestBrand.getSearchTypeCode(), requestBrand.getKeyword(), requestBrand.getTopStoreEvalYn(), getMemberSn(), requestBrand.getOffset(), requestBrand.getLimit());
-            result.put("storeEvalsResult", storeEvalsResult);
-	        
-	        return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		StoreEvalsResult storeEvalsResult = storeApi.getStoreEvals(requestBrand.getSearchTypeCode(), requestBrand.getKeyword(), requestBrand.getTopStoreEvalYn(), getMemberSn(), requestBrand.getOffset(), requestBrand.getLimit());
+		result.put("storeEvalsResult", storeEvalsResult);
+
+		return ResponseEntity.ok(result);
     }
 	
 	/**
@@ -117,48 +105,34 @@ public class BrandRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/storeEval")
-    @ResponseBody
     public ResponseEntity<?> storeEval( RequestBrand requestBrand) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
-		try {
-        	StoreEvalEx storeEvalEx = storeApi.getStoreEval( requestBrand.getStoreEvalSn(), getMemberSn());
-            result.put("storeEvalEx", storeEvalEx);
-	        
-	        return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		StoreEvalEx storeEvalEx = storeApi.getStoreEval( requestBrand.getStoreEvalSn(), getMemberSn());
+		result.put("storeEvalEx", storeEvalEx);
 
+		return ResponseEntity.ok(result);
     }
 	
 	/**
 	 * 매장칭찬등록
 	 */
 	@RequestMapping("/registStoreEval")
-    @ResponseBody
     public ResponseEntity<?> registStoreEval(@Valid StoreEvalPost storeEvalPost, MultipartFile[] picture, HttpServletRequest req) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 			   
-		try {
-		     
-			if (!ObjectUtils.isEmpty(picture)) {
-				List<UploadingFile> files = imageSettingList(picture);
-				storeEvalPost.setFiles(files);
-			}
-            
-			storeEvalPost.setMemberSn( getMemberSn());
-            
-            BooleanResult booleanResult = storeApi.postStoreEvaluation(storeEvalPost);
-            
-            result.put("booleanResult", booleanResult);
-	        
-	        return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+		if (!ObjectUtils.isEmpty(picture)) {
+			List<UploadingFile> files = imageSettingList(picture);
+			storeEvalPost.setFiles(files);
 		}
+
+		storeEvalPost.setMemberSn( getMemberSn());
+
+		BooleanResult booleanResult = storeApi.postStoreEvaluation(storeEvalPost);
+
+		result.put("booleanResult", booleanResult);
+
+		return ResponseEntity.ok(result);
 
     }
 	
@@ -166,27 +140,20 @@ public class BrandRestController extends AbstractController {
 	 * 매장칭찬수정
 	 */
 	@RequestMapping("/updateStoreEval")
-    @ResponseBody
     public ResponseEntity<?> updateStoreEval(@Valid StoreEvalPut storeEvalUpdateInfo, Long storeEvalSn, MultipartFile[] picture, HttpServletRequest req) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
-		try {
-		        	
-			if (!ObjectUtils.isEmpty(picture)) {
-				List<UploadingFile> files = imageSettingList(picture);
-				storeEvalUpdateInfo.setFiles(files);
-			}
-                
-                storeEvalUpdateInfo.setMemberSn( getMemberSn());
-                
-                BooleanResult booleanResult = storeApi.updateStoreEvaluation(storeEvalSn, storeEvalUpdateInfo);
-                result.put("booleanResult", booleanResult);
-	        
-	        return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+		if (!ObjectUtils.isEmpty(picture)) {
+			List<UploadingFile> files = imageSettingList(picture);
+			storeEvalUpdateInfo.setFiles(files);
 		}
+
+		storeEvalUpdateInfo.setMemberSn( getMemberSn());
+
+		BooleanResult booleanResult = storeApi.updateStoreEvaluation(storeEvalSn, storeEvalUpdateInfo);
+		result.put("booleanResult", booleanResult);
+
+		return ResponseEntity.ok(result);
 
     }
 	
@@ -196,20 +163,13 @@ public class BrandRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/removeStoreEval")
-    @ResponseBody
     public ResponseEntity<?> removeStoreEval( RequestBrand requestBrand) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
-		try {
-			BooleanResult booleanResult = storeApi.removeStoreEval(requestBrand.getStoreEvalSn(), getMemberSn());
-            result.put("booleanResult", booleanResult);
-	        
-	        return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		BooleanResult booleanResult = storeApi.removeStoreEval(requestBrand.getStoreEvalSn(), getMemberSn());
+		result.put("booleanResult", booleanResult);
 
+		return ResponseEntity.ok(result);
     }
 	
 	/**
@@ -218,29 +178,22 @@ public class BrandRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/postStoreOpenInquiry")
-    @ResponseBody
     public ResponseEntity<?> postStoreOpenInquiry(StoreOpenInquiry storeOpenInquiry, String preName, String prePhoneNo) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
-		try {
-			
-			EmbeddableName embeddableName = new EmbeddableName();
-			embeddableName.setName1(preName);
-			
-			EmbeddableTel embeddableTel = new EmbeddableTel();
-			embeddableTel.setPhoneNo(prePhoneNo);
-			
-			storeOpenInquiry.setName(embeddableName);
-			storeOpenInquiry.setPhoneNo(embeddableTel);
-			
-            BooleanResult booleanResult = bbsApi.postStoreOpenInquiry(storeOpenInquiry);
-            result.put("booleanResult", booleanResult);
-	        
-	        return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-		}
+		EmbeddableName embeddableName = new EmbeddableName();
+		embeddableName.setName1(preName);
+
+		EmbeddableTel embeddableTel = new EmbeddableTel();
+		embeddableTel.setPhoneNo(prePhoneNo);
+
+		storeOpenInquiry.setName(embeddableName);
+		storeOpenInquiry.setPhoneNo(embeddableTel);
+
+		BooleanResult booleanResult = bbsApi.postStoreOpenInquiry(storeOpenInquiry);
+		result.put("booleanResult", booleanResult);
+
+		return ResponseEntity.ok(result);
 
     }
 	
@@ -250,23 +203,17 @@ public class BrandRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/storeEventRequester")
-    @ResponseBody
     public ResponseEntity<?> storeEventRequester( RequestBrand requestBrand) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
-		try {
-			//예약한 시간 하루 전까지 취소 가능할 경우 add에 1로 세팅 (cancelAvailDt.add(Calendar.DATE, 1))
-			Calendar cancelAvailDt = Calendar.getInstance();
-			cancelAvailDt.add(Calendar.DATE, 1);
+		//예약한 시간 하루 전까지 취소 가능할 경우 add에 1로 세팅 (cancelAvailDt.add(Calendar.DATE, 1))
+		Calendar cancelAvailDt = Calendar.getInstance();
+		cancelAvailDt.add(Calendar.DATE, 1);
 
-			StoreEventRequesterEx storeEventRequesterEx = storeApi.getStoreEventRequester(requestBrand.getReserveNo(), cancelAvailDt.getTime());
-            result.put("storeEventRequesterEx", storeEventRequesterEx);
-	        
-	        return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		StoreEventRequesterEx storeEventRequesterEx = storeApi.getStoreEventRequester(requestBrand.getReserveNo(), cancelAvailDt.getTime());
+		result.put("storeEventRequesterEx", storeEventRequesterEx);
+
+		return ResponseEntity.ok(result);
     }
 	
 	/**
@@ -275,51 +222,44 @@ public class BrandRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/storeEventRequesters")
-    @ResponseBody
     public ResponseEntity<?> storeEventRequesters( RequestBrand requestBrand) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		StoreEventRequestersResult storeEventRequestersResult = new StoreEventRequestersResult();
 		
-		try {
+		//예약한 시간 하루 전까지 취소 가능할 경우 add에 1로 세팅 (cancelAvailDt.add(Calendar.DATE, 1))
+		Calendar cancelAvailDt = Calendar.getInstance();
+		cancelAvailDt.add(Calendar.DATE, 1);
 
-			//예약한 시간 하루 전까지 취소 가능할 경우 add에 1로 세팅 (cancelAvailDt.add(Calendar.DATE, 1))
-			Calendar cancelAvailDt = Calendar.getInstance();
-			cancelAvailDt.add(Calendar.DATE, 1);
-			
-			//비회원일 경우
-			if( requestBrand.getReserveNo() != null && !"".equals(requestBrand.getReserveNo())) {
-				StoreEventRequesterEx storeEventRequesterEx = storeApi.getStoreEventRequester(requestBrand.getReserveNo(), cancelAvailDt.getTime());
-				
-				Integer totalCount = 0;
-				Integer offset = 0;
-				Integer limit = 0;
-				
-				if(storeEventRequesterEx != null) {
-					totalCount = 1;
-				}
-				
-				storeEventRequestersResult.setTotalCount(totalCount);
-				storeEventRequestersResult.setOffset(offset);
-				storeEventRequestersResult.setLimit(limit);
-				
-				List <StoreEventRequesterEx> storeEventRequesterExList = new ArrayList <StoreEventRequesterEx> ();
-				storeEventRequesterExList.add( storeEventRequesterEx);
-				storeEventRequestersResult.setStoreEventRequesterExList( storeEventRequesterExList);
-				
-			}else { //회원일 경우
-			
-				Calendar cal = Calendar.getInstance();
-		        cal.add(Calendar.MONTH, -1);
-		        
-		        storeEventRequestersResult = storeApi.getStoreEventRequesters(getMemberSn(), cal.getTime(), requestBrand.getReserveCancelYn(),cancelAvailDt.getTime(), requestBrand.getOffset(), requestBrand.getLimit(), requestBrand.getSortBy());
+		//비회원일 경우
+		if( requestBrand.getReserveNo() != null && !"".equals(requestBrand.getReserveNo())) {
+			StoreEventRequesterEx storeEventRequesterEx = storeApi.getStoreEventRequester(requestBrand.getReserveNo(), cancelAvailDt.getTime());
+
+			Integer totalCount = 0;
+			Integer offset = 0;
+			Integer limit = 0;
+
+			if(storeEventRequesterEx != null) {
+				totalCount = 1;
 			}
-			
-			result.put("storeEventRequestersResult", storeEventRequestersResult);
-	        return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+
+			storeEventRequestersResult.setTotalCount(totalCount);
+			storeEventRequestersResult.setOffset(offset);
+			storeEventRequestersResult.setLimit(limit);
+
+			List <StoreEventRequesterEx> storeEventRequesterExList = new ArrayList <StoreEventRequesterEx> ();
+			storeEventRequesterExList.add( storeEventRequesterEx);
+			storeEventRequestersResult.setStoreEventRequesterExList( storeEventRequesterExList);
+
+		}else { //회원일 경우
+
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.MONTH, -1);
+
+			storeEventRequestersResult = storeApi.getStoreEventRequesters(getMemberSn(), cal.getTime(), requestBrand.getReserveCancelYn(),cancelAvailDt.getTime(), requestBrand.getOffset(), requestBrand.getLimit(), requestBrand.getSortBy());
+		}
+
+		result.put("storeEventRequestersResult", storeEventRequestersResult);
+		return ResponseEntity.ok(result);
     }
 	
 	/**
@@ -328,28 +268,21 @@ public class BrandRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/requestMobileVerification")
-    @ResponseBody
     public ResponseEntity<?> requestMobileVerification(HttpServletRequest req) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
-		try {
-			
-			ApMobileVerificationRequestInfo mobileVerificationRequestInfo = new ApMobileVerificationRequestInfo(); 
-			EmbeddableTel embedPhonNo = new EmbeddableTel(); 
-			
-			embedPhonNo.setPhoneNo(req.getParameter("phoneNo"));
-			
-			mobileVerificationRequestInfo.setPhoneNo(embedPhonNo);
-		
-			ApMobileVerificationResult apMobileVerificationResult = verifApi.requestMobileVerification(mobileVerificationRequestInfo); 
-            
-			result.put("mobileVerifSn", apMobileVerificationResult);
-	        
-	        return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		ApMobileVerificationRequestInfo mobileVerificationRequestInfo = new ApMobileVerificationRequestInfo();
+		EmbeddableTel embedPhonNo = new EmbeddableTel();
+
+		embedPhonNo.setPhoneNo(req.getParameter("phoneNo"));
+
+		mobileVerificationRequestInfo.setPhoneNo(embedPhonNo);
+
+		ApMobileVerificationResult apMobileVerificationResult = verifApi.requestMobileVerification(mobileVerificationRequestInfo);
+
+		result.put("mobileVerifSn", apMobileVerificationResult);
+
+		return ResponseEntity.ok(result);
 
     }
 	
@@ -359,21 +292,14 @@ public class BrandRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/resendMobileVerificationKey")
-    @ResponseBody
     public ResponseEntity<?> resendMobileVerificationKey(ApMobileVerificationResendRequestInfo mobileVerificationResendRequestInfo) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
-		try {
-			
-			ApMobileVerificationResult apMobileVerificationResult = verifApi.resendMobileVerificationKey(mobileVerificationResendRequestInfo); 
-            
-			result.put("mobileVerifSn", apMobileVerificationResult);
-	        
-	        return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		ApMobileVerificationResult apMobileVerificationResult = verifApi.resendMobileVerificationKey(mobileVerificationResendRequestInfo);
+
+		result.put("mobileVerifSn", apMobileVerificationResult);
+
+		return ResponseEntity.ok(result);
 
     }
 	
@@ -383,21 +309,14 @@ public class BrandRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/verifyMobileVerificationKey")
-    @ResponseBody
     public ResponseEntity<?> verifyMobileVerificationKey(ApMobileVerificationVerifyRequestInfo mobileVerificationResendRequestInfo) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
-		try {
-			
-			ApMobileVerificationVerifyResult apMobileVerificationVerifyResult = verifApi.verifyMobileVerificationKey(mobileVerificationResendRequestInfo); 
-            
-			result.put("result", apMobileVerificationVerifyResult);
-	        
-	        return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		ApMobileVerificationVerifyResult apMobileVerificationVerifyResult = verifApi.verifyMobileVerificationKey(mobileVerificationResendRequestInfo);
+
+		result.put("result", apMobileVerificationVerifyResult);
+
+		return ResponseEntity.ok(result);
 
     }
 	
@@ -408,35 +327,29 @@ public class BrandRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/postStoreEventRequester")
-    @ResponseBody
     public ResponseEntity<?> postStoreEventRequester(StoreEventRequesterPost storeEventRequesterPost, String preName, String cellNum) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
-		try {
-			EmbeddableName embeddableName = new EmbeddableName();
-			embeddableName.setName1(preName);
-			
-			EmbeddableTel embeddableTel = new EmbeddableTel();
-			embeddableTel.setPhoneNo(cellNum);
-			
-			storeEventRequesterPost.setName(embeddableName);
-			storeEventRequesterPost.setPhoneNo1(embeddableTel);
-			
-			Long memberSn = getMemberSn();
+		EmbeddableName embeddableName = new EmbeddableName();
+		embeddableName.setName1(preName);
 
-			if(memberSn != 0L) {
-				storeEventRequesterPost.setMemberYn("Y");
-				storeEventRequesterPost.setMemberSn(memberSn);
-			}
-			
-			StoreEventRequesterResult storeEventRequesterResult = storeApi.postStoreEventRequester( storeEventRequesterPost);
-            result.put("storeEventRequesterResult", storeEventRequesterResult);
-	        
-	        return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+		EmbeddableTel embeddableTel = new EmbeddableTel();
+		embeddableTel.setPhoneNo(cellNum);
+
+		storeEventRequesterPost.setName(embeddableName);
+		storeEventRequesterPost.setPhoneNo1(embeddableTel);
+
+		Long memberSn = getMemberSn();
+
+		if(memberSn != 0L) {
+			storeEventRequesterPost.setMemberYn("Y");
+			storeEventRequesterPost.setMemberSn(memberSn);
 		}
+
+		StoreEventRequesterResult storeEventRequesterResult = storeApi.postStoreEventRequester( storeEventRequesterPost);
+		result.put("storeEventRequesterResult", storeEventRequesterResult);
+
+		return ResponseEntity.ok(result);
 
     }
 	
@@ -446,90 +359,83 @@ public class BrandRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/storeEventScheduleInfo")
-    @ResponseBody
     public ResponseEntity<?> storeEventScheduleInfo( RequestBrand requestBrand) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
-		try {
-			
-			DateFormat dateFormat = new SimpleDateFormat("Z");
-			String timeZone = dateFormat.format(new Date());
-			
-			StoreEventScheduleInfo storeEventScheduleInfo = storeApi.getStoreEventScheduleInfoByfoStoreEventCode(requestBrand.getFoStoreEventCode(), timeZone);
-			
-			List <StoreEventDetailScheduleEx> storeEvtDtlSchExList = storeEventScheduleInfo.getStoreEventDetailScheduleExList();
-			
-			Map <Long, Object> scheduleListbyStoreSnMap = new HashMap <Long, Object> ();
-			
-			for(int i=0; i<storeEvtDtlSchExList.size(); i++) {
-				
-				StoreEventDetailScheduleEx storeEventDetailScheduleEx = storeEvtDtlSchExList.get(i);
-				
-				if( !scheduleListbyStoreSnMap.containsKey( storeEventDetailScheduleEx.getStoreSn())) {
-					
-					Map <String, Object> compStoreScheMap = new HashMap <String, Object> ();
-					
-					List <Map <String, Object>> scheduleList = new ArrayList <Map <String, Object>> ();
-					
-					for(int j=0; j<storeEvtDtlSchExList.size(); j++) {
-						StoreEventDetailScheduleEx storeEventDetailScheduleEx2 = storeEvtDtlSchExList.get(j);
-						
-						if(storeEventDetailScheduleEx.getStoreSn().equals(storeEventDetailScheduleEx2.getStoreSn())) {
-							Map <String, Object> scheduleMap = new HashMap <String, Object> ();
-							scheduleMap.put("storeSn", storeEventDetailScheduleEx2.getStoreSn());
-							scheduleMap.put("storeEventSn", storeEventDetailScheduleEx2.getStoreEventSn());
-							scheduleMap.put("storeEventDetailScheduleSn", storeEventDetailScheduleEx2.getStoreEventDetailScheduleSn());
-							scheduleMap.put("reservePossibleDate8", storeEventDetailScheduleEx2.getReservePossibleDate8());
-							scheduleMap.put("fromReservePossibleTime4", storeEventDetailScheduleEx2.getFromReservePossibleTime4());
-							scheduleMap.put("toReservePossibleTime4", storeEventDetailScheduleEx2.getToReservePossibleTime4());
-							scheduleMap.put("reservePossibleYn", storeEventDetailScheduleEx2.getReservePossibleYn());
-							scheduleMap.put("scheFromDate", StringUtils.join(storeEventDetailScheduleEx2.getReservePossibleDate8(), storeEventDetailScheduleEx2.getFromReservePossibleTime4()));
-							
-							scheduleList.add(scheduleMap);
-						}
+		DateFormat dateFormat = new SimpleDateFormat("Z");
+		String timeZone = dateFormat.format(new Date());
+
+		StoreEventScheduleInfo storeEventScheduleInfo = storeApi.getStoreEventScheduleInfoByfoStoreEventCode(requestBrand.getFoStoreEventCode(), timeZone);
+
+		List <StoreEventDetailScheduleEx> storeEvtDtlSchExList = storeEventScheduleInfo.getStoreEventDetailScheduleExList();
+
+		Map <Long, Object> scheduleListbyStoreSnMap = new HashMap <Long, Object> ();
+
+		for(int i=0; i<storeEvtDtlSchExList.size(); i++) {
+
+			StoreEventDetailScheduleEx storeEventDetailScheduleEx = storeEvtDtlSchExList.get(i);
+
+			if( !scheduleListbyStoreSnMap.containsKey( storeEventDetailScheduleEx.getStoreSn())) {
+
+				Map <String, Object> compStoreScheMap = new HashMap <String, Object> ();
+
+				List <Map <String, Object>> scheduleList = new ArrayList <Map <String, Object>> ();
+
+				for(int j=0; j<storeEvtDtlSchExList.size(); j++) {
+					StoreEventDetailScheduleEx storeEventDetailScheduleEx2 = storeEvtDtlSchExList.get(j);
+
+					if(storeEventDetailScheduleEx.getStoreSn().equals(storeEventDetailScheduleEx2.getStoreSn())) {
+						Map <String, Object> scheduleMap = new HashMap <String, Object> ();
+						scheduleMap.put("storeSn", storeEventDetailScheduleEx2.getStoreSn());
+						scheduleMap.put("storeEventSn", storeEventDetailScheduleEx2.getStoreEventSn());
+						scheduleMap.put("storeEventDetailScheduleSn", storeEventDetailScheduleEx2.getStoreEventDetailScheduleSn());
+						scheduleMap.put("reservePossibleDate8", storeEventDetailScheduleEx2.getReservePossibleDate8());
+						scheduleMap.put("fromReservePossibleTime4", storeEventDetailScheduleEx2.getFromReservePossibleTime4());
+						scheduleMap.put("toReservePossibleTime4", storeEventDetailScheduleEx2.getToReservePossibleTime4());
+						scheduleMap.put("reservePossibleYn", storeEventDetailScheduleEx2.getReservePossibleYn());
+						scheduleMap.put("scheFromDate", StringUtils.join(storeEventDetailScheduleEx2.getReservePossibleDate8(), storeEventDetailScheduleEx2.getFromReservePossibleTime4()));
+
+						scheduleList.add(scheduleMap);
 					}
-					
-					scheduleList.sort(new Comparator<Map<String, Object>>() {
-					    @Override
-					    public int compare(Map<String, Object> m1, Map<String, Object> m2) {
-					    	
-					    	long srcDate =  Long.parseLong( (String) m1.get("scheFromDate"));
-					    	long tgtDate =  Long.parseLong( (String) m2.get("scheFromDate"));
-					    	
-					        if(srcDate == tgtDate){
-					            return 0;
-					        }
-					        return srcDate < tgtDate ? -1 : 1;
-					     }
-					});
-					
-					Map <String, String> possDateMap = new HashMap<String, String>();
-					for(int j=0; j< scheduleList.size(); j++) {
-						Map <String, Object> scheduleMap = scheduleList.get(j);
-						String reservePossibleDate8 = (String) scheduleMap.get("reservePossibleDate8");
-						String reservePossibleYn = (String) scheduleMap.get("reservePossibleYn");
-						
-						if(!possDateMap.containsKey(reservePossibleDate8)) {
-							possDateMap.put(reservePossibleDate8, reservePossibleYn);
-						}else if("Y".equals(reservePossibleYn)) {
-							possDateMap.put(reservePossibleDate8, reservePossibleYn);
-						}
-					}
-					
-					compStoreScheMap.put("possDateMap", possDateMap);
-					compStoreScheMap.put("scheduleList", scheduleList);
-					scheduleListbyStoreSnMap.put(storeEventDetailScheduleEx.getStoreSn(), compStoreScheMap);
 				}
+
+				scheduleList.sort(new Comparator<Map<String, Object>>() {
+					@Override
+					public int compare(Map<String, Object> m1, Map<String, Object> m2) {
+
+						long srcDate =  Long.parseLong( (String) m1.get("scheFromDate"));
+						long tgtDate =  Long.parseLong( (String) m2.get("scheFromDate"));
+
+						if(srcDate == tgtDate){
+							return 0;
+						}
+						return srcDate < tgtDate ? -1 : 1;
+					 }
+				});
+
+				Map <String, String> possDateMap = new HashMap<String, String>();
+				for(int j=0; j< scheduleList.size(); j++) {
+					Map <String, Object> scheduleMap = scheduleList.get(j);
+					String reservePossibleDate8 = (String) scheduleMap.get("reservePossibleDate8");
+					String reservePossibleYn = (String) scheduleMap.get("reservePossibleYn");
+
+					if(!possDateMap.containsKey(reservePossibleDate8)) {
+						possDateMap.put(reservePossibleDate8, reservePossibleYn);
+					}else if("Y".equals(reservePossibleYn)) {
+						possDateMap.put(reservePossibleDate8, reservePossibleYn);
+					}
+				}
+
+				compStoreScheMap.put("possDateMap", possDateMap);
+				compStoreScheMap.put("scheduleList", scheduleList);
+				scheduleListbyStoreSnMap.put(storeEventDetailScheduleEx.getStoreSn(), compStoreScheMap);
 			}
-			
-            result.put("storeEventScheduleInfo", storeEventScheduleInfo);
-            result.put("storeSnMap", scheduleListbyStoreSnMap);
-	        
-	        return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		}
+
+		result.put("storeEventScheduleInfo", storeEventScheduleInfo);
+		result.put("storeSnMap", scheduleListbyStoreSnMap);
+
+		return ResponseEntity.ok(result);
     }
 	
 	/**
@@ -538,21 +444,14 @@ public class BrandRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/cancelScheduleInfo")
-    @ResponseBody
     public ResponseEntity<?> cancelScheduleInfo( RequestBrand requestBrand) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
-		try {
-			
-			BooleanResult booleanResult = storeApi.cancelStoreEventRequester(requestBrand.getReserveNo());
-			
-            result.put("booleanResult", booleanResult);
-	        
-	        return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		BooleanResult booleanResult = storeApi.cancelStoreEventRequester(requestBrand.getReserveNo());
+
+		result.put("booleanResult", booleanResult);
+
+		return ResponseEntity.ok(result);
     }
 	
 	/**
@@ -561,39 +460,32 @@ public class BrandRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/requestYouthLecture")
-   @ResponseBody
    public ResponseEntity<?> requestYouthLecture(YouthLectureRequest requestInfo, String preName, String prePhnNo, String preCpnName, String preCpnPhnNo) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
-		try {
-			
-			long youthLectureSn = 0;  // param 형식을 맞춰야해서 0으로 넘겨줌 
-			
-			EmbeddableName requesterName = new EmbeddableName(); // 예약자 
-			requesterName.setName1(preName);
-			
-			EmbeddableTel requesterPhoneNo = new EmbeddableTel(); // 예약자 전화번호
-			requesterPhoneNo.setPhoneNo(prePhnNo);
-			
-			EmbeddableName companionName = new EmbeddableName(); // 동반자 이름
-			companionName.setName1(preCpnName);
-			
-			EmbeddableTel companionPhoneNo = new EmbeddableTel();  // 동반자 전화번호
-			companionPhoneNo.setPhoneNo(preCpnPhnNo);
-			
-			requestInfo.setRequesterName(requesterName);
-			requestInfo.setRequesterPhoneNo(requesterPhoneNo);
-			requestInfo.setCompanionName(companionName);
-			requestInfo.setCompanionPhoneNo(companionPhoneNo);
-			requestInfo.setTermsAgreeYn("Y");
-			YouthLectureReturn  youthLectureReturn = bbsApi.requestYouthLecture(youthLectureSn, requestInfo); 
-             result.put("youthLectureReturn", youthLectureReturn);
-	        
-	        return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-		}
+		long youthLectureSn = 0;  // param 형식을 맞춰야해서 0으로 넘겨줌
+
+		EmbeddableName requesterName = new EmbeddableName(); // 예약자
+		requesterName.setName1(preName);
+
+		EmbeddableTel requesterPhoneNo = new EmbeddableTel(); // 예약자 전화번호
+		requesterPhoneNo.setPhoneNo(prePhnNo);
+
+		EmbeddableName companionName = new EmbeddableName(); // 동반자 이름
+		companionName.setName1(preCpnName);
+
+		EmbeddableTel companionPhoneNo = new EmbeddableTel();  // 동반자 전화번호
+		companionPhoneNo.setPhoneNo(preCpnPhnNo);
+
+		requestInfo.setRequesterName(requesterName);
+		requestInfo.setRequesterPhoneNo(requesterPhoneNo);
+		requestInfo.setCompanionName(companionName);
+		requestInfo.setCompanionPhoneNo(companionPhoneNo);
+		requestInfo.setTermsAgreeYn("Y");
+		YouthLectureReturn  youthLectureReturn = bbsApi.requestYouthLecture(youthLectureSn, requestInfo);
+		 result.put("youthLectureReturn", youthLectureReturn);
+
+		return ResponseEntity.ok(result);
 
    }
 	
@@ -604,82 +496,74 @@ public class BrandRestController extends AbstractController {
 	 * @return
 	 */
    @RequestMapping(value ="/requestBeautizen")
-   @ResponseBody
-   public ResponseEntity<?> requestBeautizen(SupportersRequester supportersRequester, MultipartFile[] picture, HttpServletRequest req) {
+   public ResponseEntity<?> requestBeautizen(SupportersRequester supportersRequester, MultipartFile[] picture, HttpServletRequest req) throws ParseException {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
-		try {
-			
-			long supportersSn = 0;  // param 형식을 맞춰야해서 0으로 넘겨줌 
-			
-			List<UploadingFile> uploadingFiles = new ArrayList<UploadingFile>(); 
-		
-        	for(int i=0; picture != null && i<picture.length; i++) {
-        		
-        		if(!("").equals(picture[i].getOriginalFilename())) {
-        			uploadingFiles = imageSettingList(picture);
-        		}
-            }
-        	 // SupportersRequster에 direct로 binding 되지 않는 param들은 수동으로 입력
-        	
-        	supportersRequester.setFiles(uploadingFiles); // 사진 
-            
-        	net.g1project.ecp.api.model.EmbeddableAddress address = new net.g1project.ecp.api.model.EmbeddableAddress(); 
-            address.setAddress1(req.getParameter("preLocal"));         
-            supportersRequester.setRequesterAddress(address); // 지역 setting
-           
-            EmbeddableTel tel = new EmbeddableTel(); 
-            tel.setPhoneNo(req.getParameter("prePhoneNo"));
-            supportersRequester.setRequesterPhoneNo(tel); // phone setting 
-            
-            supportersRequester.setMemberId(getMemberSession().getMember().getMemberId()); // 회원ID
-            supportersRequester.setMemberName(getMemberSession().getMember().getName().getName1()); // 회원이름
-            supportersRequester.setMemberSn(getMemberSession().getMember_sn()); //회원번호
+		long supportersSn = 0;  // param 형식을 맞춰야해서 0으로 넘겨줌
 
-            // 대외활동은 PC기준 10개
-            List<RequesterHist> requstHistList = new ArrayList<RequesterHist>();
-            
-            RequesterHist requestHist = new RequesterHist();
-             
-            String[] activityType = req.getParameterValues("activityType");
-            String[] activityBodyText = req.getParameterValues("activityBodyText");
-            String[] activityName = req.getParameterValues("activityName");
-            String[] activityStartDate = req.getParameterValues("activityStartDate");
-            String[] activityEndDate = req.getParameterValues("activityEndDate");
-            SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+		List<UploadingFile> uploadingFiles = new ArrayList<UploadingFile>();
 
-            if(activityType.length > 0) {
-		        for(int index = 0; index < activityType.length; index++) {
-		            	            	
-		        	requestHist.setActivityType(activityType[index]);//activityType);
-		            requestHist.setActivityBodyText(activityBodyText[index]);//activityBodyText);
-		            requestHist.setActivityName(activityName[index]);//activityName);
-		            requestHist.setActivityStartDate(sf.parse(activityStartDate[index]));//activityStartDate);
-		            requestHist.setActivityEndDate(sf.parse(activityEndDate[index]));//activityEndDate);
-		        	
-		            requstHistList.add(index, requestHist);
-		        }
-		        supportersRequester.setSupportersRequesterHist(requstHistList); 
-	        }
-            
-            if(!("Temp").equals(supportersRequester.getRequestStatus())){
-	            if(req.getParameter("check_all")!= null || 
-	            		(req.getParameter("check_agree_1").equals("on") && req.getParameter("check_agree_2").equals("on") 
-	            				&& req.getParameter("check_agree_3").equals("on"))) { // 전체동의가 체크되어있거나 동의1,2,3 이 모두 체크되어있다면 동의 체크
-	            	
-	            	supportersRequester.setTermsAgreeYn(req.getParameter("check_all").equals("on") ? "Y" : "N"); // 동의 
-	            }
-            }
-            
-	        BooleanResult booleanResult = bbsApi.requestSupporters(supportersSn, supportersRequester); 
-	        result.put("booleanResult", booleanResult);
-             
- 	        return ResponseEntity.ok(result);
- 	        
- 		} catch (Exception e) {
- 			result.put("errorData", e);
- 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
- 		}
+		for(int i=0; picture != null && i<picture.length; i++) {
+
+			if(!("").equals(picture[i].getOriginalFilename())) {
+				uploadingFiles = imageSettingList(picture);
+			}
+		}
+		 // SupportersRequster에 direct로 binding 되지 않는 param들은 수동으로 입력
+
+		supportersRequester.setFiles(uploadingFiles); // 사진
+
+		net.g1project.ecp.api.model.EmbeddableAddress address = new net.g1project.ecp.api.model.EmbeddableAddress();
+		address.setAddress1(req.getParameter("preLocal"));
+		supportersRequester.setRequesterAddress(address); // 지역 setting
+
+		EmbeddableTel tel = new EmbeddableTel();
+		tel.setPhoneNo(req.getParameter("prePhoneNo"));
+		supportersRequester.setRequesterPhoneNo(tel); // phone setting
+
+		supportersRequester.setMemberId(getMemberSession().getMember().getMemberId()); // 회원ID
+		supportersRequester.setMemberName(getMemberSession().getMember().getName().getName1()); // 회원이름
+		supportersRequester.setMemberSn(getMemberSession().getMember_sn()); //회원번호
+
+		// 대외활동은 PC기준 10개
+		List<RequesterHist> requstHistList = new ArrayList<RequesterHist>();
+
+		RequesterHist requestHist = new RequesterHist();
+
+		String[] activityType = req.getParameterValues("activityType");
+		String[] activityBodyText = req.getParameterValues("activityBodyText");
+		String[] activityName = req.getParameterValues("activityName");
+		String[] activityStartDate = req.getParameterValues("activityStartDate");
+		String[] activityEndDate = req.getParameterValues("activityEndDate");
+		SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+
+		if(activityType.length > 0) {
+			for(int index = 0; index < activityType.length; index++) {
+
+				requestHist.setActivityType(activityType[index]);//activityType);
+				requestHist.setActivityBodyText(activityBodyText[index]);//activityBodyText);
+				requestHist.setActivityName(activityName[index]);//activityName);
+				requestHist.setActivityStartDate(sf.parse(activityStartDate[index]));//activityStartDate);
+				requestHist.setActivityEndDate(sf.parse(activityEndDate[index]));//activityEndDate);
+
+				requstHistList.add(index, requestHist);
+			}
+			supportersRequester.setSupportersRequesterHist(requstHistList);
+		}
+
+		if(!("Temp").equals(supportersRequester.getRequestStatus())){
+			if(req.getParameter("check_all")!= null ||
+					(req.getParameter("check_agree_1").equals("on") && req.getParameter("check_agree_2").equals("on")
+							&& req.getParameter("check_agree_3").equals("on"))) { // 전체동의가 체크되어있거나 동의1,2,3 이 모두 체크되어있다면 동의 체크
+
+				supportersRequester.setTermsAgreeYn(req.getParameter("check_all").equals("on") ? "Y" : "N"); // 동의
+			}
+		}
+
+		BooleanResult booleanResult = bbsApi.requestSupporters(supportersSn, supportersRequester);
+		result.put("booleanResult", booleanResult);
+
+		return ResponseEntity.ok(result);
    }
 	
 	/**
@@ -688,26 +572,19 @@ public class BrandRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/supportersRequsterinfo")
-    @ResponseBody
     public ResponseEntity<?> supportersRequsterinfo(HttpServletRequest req) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
 		if(isLoggedIn()) {
 			
-			try{
-				
-				SupportersRequesterInfo suppoters = bbsApi.getSupportersRequester(getMemberSn());
-				
-	            result.put("suppoters", suppoters);
-		        
-		        return ResponseEntity.ok(result);
-			}catch (Exception e) {
-				result.put("errorData", e);
-	            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-	        }
-		
+			SupportersRequesterInfo suppoters = bbsApi.getSupportersRequester(getMemberSn());
+
+			result.put("suppoters", suppoters);
+
+			return ResponseEntity.ok(result);
+
 		}else {	
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
 		}
     }
 	

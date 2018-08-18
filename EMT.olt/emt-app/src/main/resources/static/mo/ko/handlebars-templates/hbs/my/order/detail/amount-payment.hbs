@@ -1,0 +1,129 @@
+<div class="panel gray">
+	<dl class="table_layout">
+		<dt>예치금</dt>
+		<dd class="align_right">{{currencyFormatDefault deposit '원'}}</dd>
+	</dl>
+
+	{{#each pgList}}
+		<hr class="div dotted">
+
+		{{#xif payMethodCode '===' 'virtual-account'}}
+
+			<dl class="table_layout">
+				<dt><b>무통장입금({{payMethodNameBlang}})</b></dt>
+				<dd class="align_right">{{currencyFormatDefault payAmt '원'}}</dd>
+			</dl>
+			<dl class="table_layout">
+				<dt>입금정보</dt>
+				<dd class="align_right w70p">
+					{{pgPayEx.virtualBankAcBankName}}  {{pgPayEx.virtualDepositBankAcNo}}<br>
+					{{pgPayEx.virtualBankAcAcHolder}}<br>
+					<em>입금기한 {{dateFormat pgPayEx.virtualBankAcDeadlineDt "YYYY-MM-DD"}} 까지</em>
+				</dd>
+			</dl>
+			<dl class="table_layout">
+				<dt>송금자</dt>
+				<dd class="align_right">홍길동</dd>
+			</dl>
+			<dl class="table_layout">
+				<dt>결제 처리일</dt>
+				<dd class="align_right">
+				{{#xif payStatusCode '==' 'Complete'}}
+					{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS"}}
+				{{else}}
+					<em>입금 미확인</em>
+				{{/xif}}
+				</dd>
+
+			</dl>
+
+		{{/xif}}
+
+		{{#xif payMethodCode '===' 'naverpay'}}
+			<dl class="table_layout">
+				<dt><b>{{payMethodNameBlang}}</b></dt>
+				<dd class="align_right">{{currencyFormatDefault payAmt '원'}}</dd>
+			</dl>
+		{{/xif}}
+
+		{{#xif payMethodCode '===' 'kakaopay'}}
+			<dl class="table_layout">
+				<dt><b>{{payMethodNameBlang}}</b></dt>
+				<dd class="align_right">{{currencyFormatDefault payAmt '원'}}</dd>
+			</dl>
+		{{/xif}}
+
+		{{#xif payMethodCode '===' 'credit-card'}}
+			<dl class="table_layout">
+				<dt><b>{{payMethodNameBlang}}</b></dt>
+				<dd class="align_right">{{currencyFormatDefault payAmt '원'}}</dd>
+			</dl>
+			<dl class="table_layout">
+				<dt>결제정보</dt>
+				<dd class="align_right w70p">{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})<br>
+					{{creditcardPayType pgPayEx.creditcardPayTypeCode}}<br>
+					{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS"}}</dd>
+			</dl>
+		{{/xif}}
+
+		{{#xif payMethodCode '===' 'wpay'}}
+			<dl class="table_layout">
+				<dt><b>{{payMethodNameBlang}}</b></dt>
+				<dd class="align_right">{{currencyFormatDefault payAmt '원'}}</dd>
+			</dl>
+			<dl class="table_layout">
+				<dt>결제정보</dt>
+				<dd class="align_right w70p">({{pgPayEx.cardNo}})<br>
+					{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS"}}</dd>
+			</dl>
+		{{/xif}}
+
+		{{#xif payMethodCode '===' 'mobile-phone-pay'}}
+			<dl class="table_layout">
+				<dt><b>{{payMethodNameBlang}}</b></dt>
+				<dd class="align_right">{{currencyFormatDefault payAmt '원'}}</dd>
+			</dl>
+			<dl class="table_layout">
+				<dt>결제정보</dt>
+				<dd class="align_right w70p">{{pgPayEx.mobilePhoneNo}}<br>
+					{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS"}}</dd>
+			</dl>
+		{{/xif}}
+
+		{{#xif payMethodCode '===' 'payco'}}
+			<dl class="table_layout">
+				<dt><b>{{payMethodNameBlang}}</b></dt>
+				<dd class="align_right">{{currencyFormatDefault payAmt '원'}}</dd>
+			</dl>
+			<dl class="table_layout">
+				<dt>결제정보</dt>
+				<dd class="align_right w70p">{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})<br>
+					{{creditcardPayType pgPayEx.creditcardPayTypeCode}}<br>
+					{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS"}}
+				</dd>
+			</dl>
+		{{/xif}}
+
+		{{#xif payMethodCode '===' 'bank-ac-transfer'}}
+
+			<dl class="table_layout">
+				<dt><b>{{payMethodNameBlang}}</b></dt>
+				<dd class="align_right">{{currencyFormatDefault payAmt '원'}}</dd>
+			</dl>
+			<dl class="table_layout">
+				<dt>출금정보</dt>
+				<dd class="align_right w70p">
+					{{pgPayEx.bankName}}<br>
+					{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS"}}
+				</dd>
+			</dl>
+
+		{{/xif}}
+
+		<!--<dl class="table_layout">-->
+			<!--<dt>{{pgName}}</dt>-->
+			<!--<dd class="align_right w70p">{{currencyFormatDefault pgPayAmt '원'}}</dd>-->
+		<!--</dl>-->
+
+	{{/each}}
+</div>

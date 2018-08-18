@@ -371,6 +371,17 @@
 		// 화면에 진입시 팝업 유무를 확인해서 팝업을 띄운다. 
 		_popUpload: function () {
 		
+			//console.log(AP.common.setCookie('popup_check')); 
+			//setCookie: function ( key, value, expireMinutes, path, domain, secure ) {};
+			
+		/*	function setCookie(cname, value, expire) {
+				   var todayValue = new Date();
+				   // 오늘 날짜를 변수에 저장
+
+				   todayValue.setDate(todayValue.getDate() + expire);
+				   document.cookie = cname + "=" + encodeURI(value) + "; expires=" + todayValue.toGMTString() + "; path=/;";*/
+				   
+			//console.log($B.utils);
 			AP.api.mainPopups().done( function ( result ) {
 			
 				$.each(result.popupList, function(index, popupInfo){
@@ -378,12 +389,24 @@
 					var modal = AP.modal.info({
 						title: popupInfo.popupTitle,
 						contents: popupInfo.popupBodyText,
-						containerClass: 'agree_terms'
+						containerClass : 'popup_check'
+						
 					});
 					
+					var $modal = modal.getElement(); 
+					
+					$modal.find( '.layer_cont' ).after( '<pre><div class="popup_check"><span class="check_wrap"><input type="checkbox" id="check1"><label for="check1">오늘하루 다시보지않기</label></span></div></pre>' );
 					modal.resetPosition();
+					
+					console.log(this);
+					
+					//AP.common.setCookie( key, 'popup', expireMinutes, path, domain, secure );
 				});
+				
+			
 			}.bind(this));
+			
+			 
 		}
 		
     });

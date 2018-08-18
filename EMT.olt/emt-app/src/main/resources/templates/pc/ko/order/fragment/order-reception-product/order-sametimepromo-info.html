@@ -1,11 +1,11 @@
             <!-- 동시구매프로모션 -->
             <div class="promotion" >
 				<div class="clear promotion_header">
-					<strong th:text="${sameTimePromo.promoName}">[EVENT] 섀도우 week 싱글 섀도우 1+1</strong>
+					<strong th:text="${sameTimePromo.promoName}">[EVENT] 동시구매</strong>
 				</div>
                 <!--/* 상품들 */-->
                 <th:block th:if="${#lists.size(sameTimePromo.ordOnlineProdFoList) > 0}">
-                  <div class="item_wrap" th:each="ordOnlineProd : ${sameTimePromo.ordOnlineProdFoList}" th:classappend="${iter.index != 0} ? plus : ''">
+                  <div class="item_wrap" th:each="ordOnlineProd, iter : ${sameTimePromo.ordOnlineProdFoList}" th:classappend="${iter.index != 0} ? 'plus' : ''">
                         <th:block ap:replace="~{order/fragment/order-reception-product/order-ordonlineprod-info}"/>
                   </div>
                 </th:block>

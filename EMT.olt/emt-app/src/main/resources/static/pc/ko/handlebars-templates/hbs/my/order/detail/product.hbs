@@ -1,0 +1,30 @@
+<div class="product {{condition (and (eq this.promoTypeCode 'Different') (gt index 0)) 'bundle' ''}}">
+	{{#if (eq this.viewYn.checkBox 'Y')}}
+		<div class="check_wrap check_only">
+			<input type="checkbox" id="oProd_{{this.oProd.onlineProdSn}}" name="onlineProd" value="{{json this.oProd}}" data-oProdSn="{{this.oProd.onlineProdSn}}">
+			<label for="oProd_{{this.oProd.onlineProdSn}}">
+				<span class="sr_only">선택</span>
+			</label>
+		</div>
+	{{/if}}
+	<div class="thumb"><img src="{{this.oProd.onlineProdImgUrl}}" alt=""></div>
+	<div class="info">
+		<div class="align_left">
+			<p class="name">{{this.oProd.onlineProdName}}</p>
+			{{#xif this.typeName '!==' null}}
+				<p class="flag">{{this.typeName}}</p>
+			{{/xif}}
+		</div>
+		<div class="align_right">
+			{{#if (eq this.oProd.ordHistProdStatusCode 'ProdCancel')}}
+				<p><em>취소완료</em></p>
+			{{/if}}
+			<p>
+				{{#if (eq this.promoTypeCode 'Same')}}
+					<strong class="giving num">+{{awardQty}}</strong>
+				{{/if}}
+				<strong class="num">{{currencyFormat this.oProd.finalOnlineSaleAmtPcurSum}}</strong>
+			</p>
+		</div>
+	</div>
+</div>

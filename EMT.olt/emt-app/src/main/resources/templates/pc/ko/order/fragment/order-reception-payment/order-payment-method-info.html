@@ -4,10 +4,9 @@
 </li>-->
 <th:block th:each="payMethod : ${payMethodResult.payMethodExList}">
 	<!--원터치 간편결제-->
-	<th:block th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'wpay'}">
+	<th:block th:if="${apMember != null and payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'wpay'}">
 		<li>
 			<button type="button" class="one_touch" name="payMethod" id="w_pay" value="WPAY"
-					th:if="${apMember != null}"
 					th:onclick="|setPayment(this,'WPAY','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|"
 					th:text="${payMethod.payMethodName}">원터치간편결제</button>
 		</li>

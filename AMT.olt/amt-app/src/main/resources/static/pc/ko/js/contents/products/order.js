@@ -43,6 +43,13 @@
 		},
 
 		/** =============== Public Methods =============== */
+		
+		/**
+		 * 상품에 컬러가 있을 경우 셀렉트 박스를 감춤
+		 */
+		invisibleSelectOption : function(){
+			this._optionsSelectBox.invisibleSelectOption();
+		},
 
 		/**
 		 * 아이템 추가 (product)

@@ -82,12 +82,6 @@
 
 			<!--결제수단 별 유의사항-->
 			<th:block ap:replace="~{order/fragment/order-reception-payment/order-payment-notice-info}"/>
-
-			<ul class="loading" id="paymentLoading" style="min-height: 100px; display: none">
-				<li></li>
-				<li></li>
-				<li></li>
-			</ul>
 		</div>
 	</dd>
 	<!--스크립트 정의-->
@@ -151,9 +145,9 @@
 			var finalPamtPcur = $('[name="finalPamtPcurPrice"]').val();		// 최종결제금액
 			if(depositAvailAmt > 0){
 				// 예치금 > 결제금액
-				if(depositAvailAmt > finalPamtPcur){
+				if(depositAvailAmt - finalPamtPcur > 0){
 					$('[name="depositPrice"]').val(finalPamtPcur);
-				}else if(depositAvailAmt <= finalPamtPcur){
+				}else {
 					$('[name="depositPrice"]').val(depositAvailAmt);
 				}
 			}
@@ -167,23 +161,25 @@
 		});
 
 		$('[name="depositPrice"]').on('blur', function(e){
-			var totDepositPrice = parseInt($(this).val());							// 입력한 사용가능금액
-			var finalPamtPcur = parseInt($('[name="finalPamtPcurPrice"]').val());	// 최종결제금액
-			if(totDepositPrice > 0){
-				// 예치금 > 결제금액
-				if(totDepositPrice > finalPamtPcur){
-					AP.modal.alert("예치금 사용금액이 최종결제금액보다 크므로 사용할수 없습니다.");
-					$(this).val(finalPamtPcur);
-				}else if(totDepositPrice <= finalPamtPcur){
-					$(this).val(totDepositPrice);
+			if ($(this).val()) {
+				var totDepositPrice = parseInt($(this).val());							// 입력한 사용가능금액
+				var finalPamtPcur = parseInt($('[name="finalPamtPcurPrice"]').val());	// 최종결제금액
+				if(totDepositPrice > 0){
+					// 예치금 > 결제금액
+					if(totDepositPrice > finalPamtPcur){
+						AP.modal.alert("예치금 사용금액이 최종결제금액보다 크므로 사용할수 없습니다.");
+						$(this).val(finalPamtPcur);
+					}else if(totDepositPrice <= finalPamtPcur){
+						$(this).val(totDepositPrice);
+					}
+				} else {
+					AP.modal.alert("금액 정확히 입력해주세요.");
+					$(this).val('');
 				}
-			} else {
-				AP.modal.alert("금액 정확히 입력해주세요.");
-				$(this).val('');
-			}
-			var payMethod = $('[name="payMethod"]').val();
-			if(payMethod == null || payMethod == '') {
-				$('[name="payMethod"]').attr('checked', false);
+				var payMethod = $('[name="payMethod"]').val();
+				if(payMethod == null || payMethod == '') {
+					$('[name="payMethod"]').attr('checked', false);
+				}
 			}
 		});
 

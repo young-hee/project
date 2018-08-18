@@ -13,8 +13,10 @@ import kr.ap.comm.support.constants.SessionKey;
 import kr.ap.emt.customer.vo.AuthCheckDTO;
 import kr.ap.emt.customer.vo.MemberDTO;
 import net.g1project.ecp.api.exception.ApiException;
+import net.g1project.ecp.api.model.EmbeddableTel;
 import net.g1project.ecp.api.model.ap.ap.ApFindMemberIdResult;
 import net.g1project.ecp.api.model.ap.ap.ApIssueTemporaryPassword;
+import net.g1project.ecp.api.model.ap.ap.ApRequestMemberIdGuide;
 import net.g1project.ecp.api.model.ap.ap.CheckResult;
 import net.g1project.ecp.api.model.ap.ap.SignupStatusResult;
 
@@ -22,10 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.WebUtils;
 import org.thymeleaf.util.StringUtils;
 
@@ -38,7 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping("/customer")
 public class MemberRestController extends AbstractController {
 
@@ -46,7 +45,6 @@ public class MemberRestController extends AbstractController {
 	CaptchaAPI captchaAPI;
 	
 	@PostMapping("/find/findPwd/changePwd")
-	@ResponseBody
 	public ResponseEntity<?> changePwdPost() {
 
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -58,42 +56,45 @@ public class MemberRestController extends AbstractController {
 			if(result2.isResult()) {
 				WebUtils.setSessionAttribute(getRequest(), "TEMP_PW_CHANGE", issueTemporaryPassword);
 			} else {
-				return error(result, HttpStatus.SERVICE_UNAVAILABLE ,"ERROR", "비밀번호 전송에 실패했습니다. 아래 재발급 버튼을 눌러 다시 시도해주세요.");
+				throw error(result, HttpStatus.INTERNAL_SERVER_ERROR ,"ERROR", "비밀번호 전송에 실패했습니다. 아래 재발급 버튼을 눌러 다시 시도해주세요.");
 			}
 		} catch (Exception e2) {
-			return error(result, HttpStatus.SERVICE_UNAVAILABLE ,"ERROR", "비밀번호 전송에 실패했습니다. 아래 재발급 버튼을 눌러 다시 시도해주세요.");
+			throw error(result, HttpStatus.INTERNAL_SERVER_ERROR ,"ERROR", "비밀번호 전송에 실패했습니다. 아래 재발급 버튼을 눌러 다시 시도해주세요.");
 		}
-		return null;
+		return ResponseEntity.ok("{}");
 		
 	}
 
 	/**
-	 * 회원 패스워드 찾기.
-	 * 검증하는 부분.(이메일, 자기폰, 외국인)
+	 * 회원 아이디를 SMS로 전송.
 	 */
-	@PostMapping("/find/findPwd/{subMenu}")
-	@ResponseBody
-	public ResponseEntity<?> findPwd(AuthCheckDTO authCheck, @PathVariable("subMenu") String subMenu, HttpServletRequest request) {
-		return findPwdM(authCheck, subMenu);
-	}
+	@PostMapping("/find/findId/sendId")
+	public ResponseEntity<?> sendId() {
+		ApRequestMemberIdGuide paramApRequestMemberIdGuide = new ApRequestMemberIdGuide();
 
-
-	/**
-	 * 회원 패스워드 찾기, 자기폰
-	 * sms 전송값 검증.
-	 */
-	@PostMapping("/find/findPwd/checkAuthNum")
-	@ResponseBody
-	public ResponseEntity<?> checkAuthNum(String custNm, String smsNum, HttpServletRequest request) {
-		return checkAuthNumM(custNm, smsNum);
+		String incsNo = getMemberSession().getUser_incsNo();
+		paramApRequestMemberIdGuide.setIncsNo(Long.parseLong(incsNo));
+		CicuemCuInfTotTcVo cicuemCuInfTotTcVo = new CicuemCuInfTotTcVo();
+		cicuemCuInfTotTcVo.setIncsNo(incsNo);
+		cicuemCuInfTotTcVo = amoreAPIService.getcicuemcuinfrbyincsno(cicuemCuInfTotTcVo);
+		
+		EmbeddableTel phoneNo = new EmbeddableTel();
+		phoneNo.setPhoneNo(cicuemCuInfTotTcVo.getCellTidn() + cicuemCuInfTotTcVo.getCellTexn() + cicuemCuInfTotTcVo.getCellTlsn());
+		paramApRequestMemberIdGuide.setPhoneNo(phoneNo);
+		
+		CheckResult rsltVo = apApi.requestMemberIdGuide(paramApRequestMemberIdGuide);
+		if(rsltVo.isResult()) {
+			return ResponseEntity.ok("{}");
+		}
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{}");
 	}
+	
 
 	/**
 	 * 패스워드 찾기.
 	 * 아이디 있나 없나 선행적으로 확인.
 	 */
 	@PostMapping("/checkId")
-	@ResponseBody
 	public ResponseEntity<?> checkId(String memberId, HttpServletRequest request) {
 		return checkIdM(memberId);
 	}
@@ -104,7 +105,6 @@ public class MemberRestController extends AbstractController {
 	 * 이름, 생년월일 폰번호로 아이디 찾기.
 	 */
 	@PostMapping("/find/findId/simple")
-	@ResponseBody
 	public ResponseEntity<?> findIdSimple(HttpServletRequest req, HttpServletResponse resp, MemberDTO user) {
 		return findIdSimpleM(resp, user);
 	}
@@ -114,7 +114,6 @@ public class MemberRestController extends AbstractController {
 	 * 외국인 번호로 아이디를 검색.
 	 */
 	@PostMapping("/find/findId/foreigner")
-	@ResponseBody
 	public ResponseEntity<?> findIdForeigner(HttpServletRequest req, HttpServletResponse resp, String memberName, String frgrRegNum) {
 		return findIdForeignerM(resp, memberName, frgrRegNum);
 	}
@@ -127,7 +126,6 @@ public class MemberRestController extends AbstractController {
 	 * @return
 	 */
 	@PostMapping("/custSelfOnline")
-	@ResponseBody
 	public ResponseEntity<?> custSelfOnline(HttpServletRequest request){
 		return custSelfOnlineM(request);
 	}
@@ -140,67 +138,12 @@ public class MemberRestController extends AbstractController {
 	 * @return
 	 */
 	@PostMapping("/authorizationPhoneNumber")
-	@ResponseBody
 	public ResponseEntity<?> authorizationPhoneNumber(HttpServletRequest request){
 		return authorizationPhoneNumberM(request);
 	}
 	
 	//=======================모바일 기능 구현 Method
 
-	private ResponseEntity<?> findPwdM(AuthCheckDTO authCheck, String subMenu) {
-		Map<String, Object> respMap = new HashMap<String, Object>();
-		if("email".equals(subMenu)) {
-			try {
-//				ApPasswordResetResult result = apApi.findMemberPasswordByEmailAddress((String) WebUtils.getSessionAttribute(getRequest(), SessionKey.TEMP_ID), authCheck.getCustNm(), authCheck.getEmail());
-//				getMemberSession().setMember_sn(result.getMemberSn());
-//				getMemberSession().setUser_incsNo(result.getIncsNo());
-			} catch(ApiException e) {
-				return error(respMap, e);
-			}
-			
-			return ResponseEntity.ok(respMap);
-		} else if("phone".equals(subMenu)) {
-
-			try {
-//				ApPasswordResetResult result = apApi.findMemberPasswordByCellPhoneNo((String) WebUtils.getSessionAttribute(getRequest(), SessionKey.TEMP_ID), authCheck.getCustNm(), "," + authCheck.getCellNum());
-//				getMemberSession().setMember_sn(result.getMemberSn());
-//				getMemberSession().setUser_incsNo(result.getIncsNo());
-			} catch(ApiException e) {
-				return error(respMap, e);
-			}
-			
-			
-			return ResponseEntity.ok(respMap);
-		} else if("certificate".equals(subMenu)) {
-
-			respMap.put("state", "failure");
-			respMap.put("message", "인증불가");
-			return ResponseEntity.ok(respMap);
-		}
-		
-		respMap.put("state", "success");
-		return ResponseEntity.ok(respMap);
-	}
-
-	private ResponseEntity<?> checkAuthNumM(String userName, String authNum) {
-		Map<String, Object> respMap = new HashMap<String, Object>();
-		
-		try {
-//			CheckResult result = apApi.checkPasswordVerifKey(getMemberSn(), authNum);
-//			if(result.isResult()) {
-//				WebUtils.setSessionAttribute(getRequest(), SessionKey.TEMP_PW_CNG, getMemberSn());
-//			} else {
-//				getMemberSession().setMember_sn(null);
-//				getMemberSession().setUser_incsNo(null);
-//				return error(respMap, HttpStatus.SERVICE_UNAVAILABLE, "ERR", "인증번호가 틀렸습니다. 다시 한 번 확인해주세요.");
-//			}
-		} catch(ApiException e) {
-			return error(respMap, e);
-			
-		}
-		
-		return ResponseEntity.ok(respMap);
-	}
 
 	private ResponseEntity<?> checkIdM(String memberId) {
 		Map<String, Object> respMap = new HashMap<String, Object>();
@@ -234,20 +177,16 @@ public class MemberRestController extends AbstractController {
 			MemberDTO user) {
 		Map<String, Object> respMap = new HashMap<String, Object>();
 		if(StringUtils.isEmpty(user.getMemberName()) || StringUtils.isEmpty(user.getAthtDtbr()) || StringUtils.isEmpty(user.getPhoneNumber())) {
-			return error(respMap, HttpStatus.SERVICE_UNAVAILABLE, "INFOERR", "누락된 정보가 있습니다.");
+			throw error(respMap, HttpStatus.INTERNAL_SERVER_ERROR, "INFOERR", "누락된 정보가 있습니다.");
 		}
 		String athtDt = user.getAthtDtbr().subSequence(0, 4) + "," +
 		user.getAthtDtbr().subSequence(4, 6) + "," +
 		user.getAthtDtbr().subSequence(6, 8);
 		ApFindMemberIdResult findMember = null;
-		try {
-			findMember = apApi.findMemberId(user.getMemberName(), athtDt, "," + user.getPhoneNumber());
-		} catch(ApiException e) {
-			return error(respMap, e);
-		}
+		findMember = apApi.findMemberId(user.getMemberName(), athtDt, "," + user.getPhoneNumber());
 		
 		if(findMember == null || findMember.getMemberId() == null) {
-			return error(respMap, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", getMessage("customer.find.notFindId"));
+			throw error(respMap, HttpStatus.INTERNAL_SERVER_ERROR, "EAPI001", getMessage("customer.find.notFindId"));
 		}
 		
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
@@ -265,7 +204,7 @@ public class MemberRestController extends AbstractController {
 			String memberName, String frgrRegNum) {
 		Map<String, Object> respMap = new HashMap<String, Object>();
 		if(StringUtils.isEmpty(memberName) || StringUtils.isEmpty(frgrRegNum)) {
-			return error(respMap, HttpStatus.SERVICE_UNAVAILABLE, "INFOERR", "누락된 정보가 있습니다.");
+			throw error(respMap, HttpStatus.INTERNAL_SERVER_ERROR, "INFOERR", "누락된 정보가 있습니다.");
 		}
 		
 		//FIXME 외국인 등록번호로 아이디 찾기.
@@ -275,7 +214,7 @@ public class MemberRestController extends AbstractController {
 			return ResponseEntity.ok(respMap);
 		}*/
 		
-		return error(respMap, HttpStatus.SERVICE_UNAVAILABLE, "INFOERR", "인증 불가");
+		throw error(respMap, HttpStatus.INTERNAL_SERVER_ERROR, "INFOERR", "인증 불가");
 	}
 	private ResponseEntity<?> custSelfOnlineM(HttpServletRequest request) {
 		String custNm = request.getParameter("custNm") == null?"":request.getParameter("custNm");
@@ -323,17 +262,17 @@ public class MemberRestController extends AbstractController {
 					
 					WebUtils.setSessionAttribute(request, SessionKey.KMS_CHECK_VO, cicuemCuInfTotTcVo3);
 				} else {
-					return error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "인증요청에 실패하였습니다. 입력 정보를 다시 한 번 확인해주세요.");
+					throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "EAPI001", "인증요청에 실패하였습니다. 입력 정보를 다시 한 번 확인해주세요.");
 				}
 			
 			
 			} catch (ApiException e) {
-				return error(result, e);
+				throw e;
 			} catch (Exception e) {
-				return error(result, HttpStatus.SERVICE_UNAVAILABLE, "unknown", "알 수 없는 오류입니다. 잠시 후 다시 시도해주세요.");
+				throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "unknown", "알 수 없는 오류입니다. 잠시 후 다시 시도해주세요.");
 			}
 		} else {
-			return error(result, HttpStatus.SERVICE_UNAVAILABLE, "INFOERR", "누락된 정보가 있습니다.");
+			throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "INFOERR", "누락된 정보가 있습니다.");
 		}
 
 		return ResponseEntity.ok(result);
@@ -351,47 +290,42 @@ public class MemberRestController extends AbstractController {
 			boolean check = captchaAPI.checkKeyValueSimple(chptchaKey, chptcha);
 			
 			if(!check) {
-				return error(result, HttpStatus.SERVICE_UNAVAILABLE, "chptcha", "입력한 숫자가 이미지 숫자와 일치하지 않습니다.");
+				throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "chptcha", "입력한 숫자가 이미지 숫자와 일치하지 않습니다.");
 			}
 			
 			CicuemCuInfTotTcVo cicuemCuInfTotTcVo = (CicuemCuInfTotTcVo) WebUtils.getSessionAttribute(request, SessionKey.KMS_CHECK_VO);
 			cicuemCuInfTotTcVo.setSmsNum(certNum);
 			
-			try {
-				
-				CicuemCuInfTotTcVo cicuemCuInfTotTcVo2 = amoreAPIService.certifyconfirm(cicuemCuInfTotTcVo);
-				if(APConstant.KIST9201.equals(cicuemCuInfTotTcVo2.getR_rsltCd())) {
-					return error(result, HttpStatus.SERVICE_UNAVAILABLE, "expire", "만료된 인증번호입니다. 재인증 버튼을 눌러주세요.");
-				}
-				if(!APConstant.KIST0000.equals(cicuemCuInfTotTcVo2.getR_rsltCd())) {
-					return error(result, HttpStatus.SERVICE_UNAVAILABLE, "certNum", "인증번호를 잘못 입력하셨습니다.");
-				}
-				if(APConstant.RESULT_OK.equals(cicuemCuInfTotTcVo2.getRsltCd())) {
-					SignupStatusResult signStatus = apApi.getSignupStatus(cicuemCuInfTotTcVo2.getCiNo());
-					if(!signStatus.isMember()) {
-						return error(result, HttpStatus.SERVICE_UNAVAILABLE, "nonRegist", "미가입");
-					}
-					ApFindMemberIdResult memberResult = apApi.findMemberIdByCI(cicuemCuInfTotTcVo2.getCiNo());
-					result.put("id", memberResult.getMemberId());
-					result.put("message", getMessage("customer.find.findIdComplete", memberResult.getMemberId(), memberResult.getMemberSignupDt()));
-					MemberSession memberSession = getMemberSession();
-					memberSession.setUser_incsNo(cicuemCuInfTotTcVo2.getIncsNo());
-					setMemberSession(memberSession);
-					
-				} else if(APConstant.EXIST_CH_JOIN_USER.equals(cicuemCuInfTotTcVo2.getRsltCd())) {
-					
-					ApFindMemberIdResult memberResult = apApi.findMemberIdByCI(cicuemCuInfTotTcVo2.getCiNo());
-					result.put("id", memberResult.getMemberId());
-					result.put("message", getMessage("customer.find.findIdComplete", memberResult.getMemberId(), memberResult.getMemberSignupDt()));
-				} else {
-					return error(result, HttpStatus.SERVICE_UNAVAILABLE, "nonRegist", "미가입");
-				}
-			
-			} catch (ApiException e) {
-				return error(result, e);
+			CicuemCuInfTotTcVo cicuemCuInfTotTcVo2 = amoreAPIService.certifyconfirm(cicuemCuInfTotTcVo);
+			if(APConstant.KIST9201.equals(cicuemCuInfTotTcVo2.getR_rsltCd())) {
+				throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "expire", "만료된 인증번호입니다. 재인증 버튼을 눌러주세요.");
 			}
+			if(!APConstant.KIST0000.equals(cicuemCuInfTotTcVo2.getR_rsltCd())) {
+				throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "certNum", "인증번호를 잘못 입력하셨습니다.");
+			}
+			if(APConstant.RESULT_OK.equals(cicuemCuInfTotTcVo2.getRsltCd())) {
+				SignupStatusResult signStatus = apApi.getSignupStatus(cicuemCuInfTotTcVo2.getCiNo());
+				if(!signStatus.isMember()) {
+					throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "nonRegist", "미가입");
+				}
+				ApFindMemberIdResult memberResult = apApi.findMemberIdByCI(cicuemCuInfTotTcVo2.getCiNo());
+				result.put("id", memberResult.getMemberId());
+				result.put("message", getMessage("customer.find.findIdComplete", memberResult.getMemberId(), memberResult.getMemberSignupDt()));
+				MemberSession memberSession = getMemberSession();
+				memberSession.setUser_incsNo(cicuemCuInfTotTcVo2.getIncsNo());
+				setMemberSession(memberSession);
+				
+			} else if(APConstant.EXIST_CH_JOIN_USER.equals(cicuemCuInfTotTcVo2.getRsltCd())) {
+				
+				ApFindMemberIdResult memberResult = apApi.findMemberIdByCI(cicuemCuInfTotTcVo2.getCiNo());
+				result.put("id", memberResult.getMemberId());
+				result.put("message", getMessage("customer.find.findIdComplete", memberResult.getMemberId(), memberResult.getMemberSignupDt()));
+			} else {
+				throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "nonRegist", "미가입");
+			}
+			
 		} else {
-			return error(result, HttpStatus.SERVICE_UNAVAILABLE, "INFOERR", "누락된 정보가 있습니다.");
+			throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "INFOERR", "누락된 정보가 있습니다.");
 		}
 
 		return ResponseEntity.ok(result);

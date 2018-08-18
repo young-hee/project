@@ -11,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
@@ -23,7 +25,7 @@ import java.util.HashMap;
  * 3. 나의 1:1 문의
  *
  */
-@Controller
+@RestController
 @RequestMapping("/my/api")
 public class MyActivityRestController extends AbstractController {
 
@@ -40,18 +42,11 @@ public class MyActivityRestController extends AbstractController {
 	 * @return
 	 */
 	@GetMapping("/getEventList")
-	@ResponseBody
 	public ResponseEntity<?> getEventList(int offset, int limit, String startDate, String endDate) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
-		try {
-			PlanDisplayEventDTOListResult planDisplayEventDTOListResult = plandisplayApi.planDisplayEventParticipats(null, startDate, endDate, "Deadline", offset, limit);
-			result.put("EventSearchResult", planDisplayEventDTOListResult);
-		} catch(Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		PlanDisplayEventDTOListResult planDisplayEventDTOListResult = plandisplayApi.planDisplayEventParticipats("All", startDate, endDate, "Deadline", offset, limit);
+		result.put("EventSearchResult", planDisplayEventDTOListResult);
 
 		return ResponseEntity.ok(result);
 	}
@@ -68,19 +63,13 @@ public class MyActivityRestController extends AbstractController {
 	 * @return
 	 */
 	@GetMapping("/getReviewList")
-	@ResponseBody
 	public ResponseEntity<?> getReviewList(int offset, int limit) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
-		try {
-			ProdReviewWritableOrderInfo productReviewWritableOrders = productApi.getProductReviewWritableOrders(getMemberSn(), null, offset, limit);
-			result.put("ProductReviewWritableOrders", productReviewWritableOrders);
+		ProdReviewWritableOrderInfo productReviewWritableOrders = productApi.getProductReviewWritableOrders(getMemberSn(), null, offset, limit);
+		result.put("ProductReviewWritableOrders", productReviewWritableOrders);
 
-			return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		return ResponseEntity.ok(result);
 	}
 
 
@@ -97,18 +86,12 @@ public class MyActivityRestController extends AbstractController {
 	 * @return
 	 */
 	@GetMapping("/getInquiryList")
-	@ResponseBody
-	public ResponseEntity<?> getInquiryList(int offset, int limit, String startDate, String answerYn) {
+	public ResponseEntity<?> getInquiryList(int offset, int limit, String startDate, String answerYn) throws ParseException {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
-		try {
-			InquiriesSearchResult inquiriesSearchResult = guideApi.getInquiries(getMemberSn(), offset, limit, sf.parse(startDate), null,answerYn);
-			result.put("InquiriesSearchResult", inquiriesSearchResult);
-		} catch(Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		InquiriesSearchResult inquiriesSearchResult = guideApi.getInquiries(getMemberSn(), offset, limit, sf.parse(startDate), null,answerYn);
+		result.put("InquiriesSearchResult", inquiriesSearchResult);
 
 		return ResponseEntity.ok(result);
 	}
@@ -120,17 +103,11 @@ public class MyActivityRestController extends AbstractController {
 	 * @return
 	 */
 	@GetMapping("/getInquiryCont")
-	@ResponseBody
 	public ResponseEntity<?> getInquiryCont(long inquirySn) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
-		try {
-			Inquiry inquiry = guideApi.getCustomerInquiry(inquirySn);
-			result.put("Inquiry", inquiry);
-		} catch(Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		Inquiry inquiry = guideApi.getCustomerInquiry(inquirySn);
+		result.put("Inquiry", inquiry);
 
 		return ResponseEntity.ok(result);
 	}

@@ -225,7 +225,7 @@
 			    });
 			}
 			function naverLogin() {
-				window.open('https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=xbLexjx52A_pQD0sZgIP&state=[[${state}]]&redirect_uri=' + location.href.replace('my/page/info/snsLink','navercallback').split('#')[0], 'naverloginpop', 'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550'); return false
+				window.open('https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=[[${@environment.getProperty('naver.key')}]]&state=[[${state}]]&redirect_uri=' + location.href.replace('my/page/info/snsLink','navercallback').split('#')[0], 'naverloginpop', 'titlebar=1, resizable=1, scrollbars=yes, width=750, height=550'); return false
 			}
 			function kakaoLogin() {
 				var returl = location.href.replace('my/page/info/snsLink', '').split('#')[0] + 'kakaocallback';

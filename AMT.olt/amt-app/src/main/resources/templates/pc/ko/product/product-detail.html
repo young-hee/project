@@ -280,15 +280,18 @@
 							
 						</div>
 						
-						<!--/* 립 옵션 */-->
-						<div class="color_option">
+						<!--/* 립 옵션 : color 가 1개 이상일때만 노출*/-->
+						<div class="color_option" th:if="${#lists.size(prd.products) > 1}">
 							<p class="color_name">색상을 선택해주세요.</p>
-							<ul class="color_list">
-								<li>
-									<a href="#none" title="11호 드리밍베이지">
-										<span style="background:#d6938a"></span>
-									</a>
-								</li>
+							<ul class="color_list color_chips_area">
+								<th:block th:each="product : ${prd.products}">
+									<li th:data-prod-sn="${product.prodSn}">
+										<a href="#none" th:title="${product.prodName}">
+											<span th:if="${product.colorchipTypeCode == 'RGB'}" th:style="'background-color:#' + ${product.rgbVal}"></span>
+											<span th:if="${product.colorchipTypeCode == 'Img'}" ><img alt="" th:src="${product.colorchipImg}"></span>
+										</a>
+									</li>
+								</th:block>
 							</ul>
 						</div>
 						
@@ -299,13 +302,13 @@
 						
 						<!--/* 선택 옵션 금액 */-->
 						<div class="product_money">
-							<span>총 1개</span> <em class="num"><b>999,000</b>원</em>
+							<span>총 <span class="total_count">0</span>개</span> <em class="num"><b class="total_price">0</b>[[${currencySign}]]</em> 
 						</div>
 						
 						<!--/* 구매버튼 */-->
 						<div class="purchase_btns">
-							<a class="btn_xlg_bordered">장바구니</a>
-							<a class="btn_xlg_neutral">구매하기</a>
+							<a class="btn_xlg_bordered btn_basket">장바구니</a>
+							<a class="btn_xlg_neutral btn_buy_now">구매하기</a>
 						</div>
 						
 						<!--/* 구매버튼 : 품절 */-->
@@ -318,596 +321,497 @@
 			</div>
 
 			<!--/* 상품정보 */-->
-			<div class="detail_body">
+			<div class="detail_body ui_tab">
 				<!--/* 상품정보 탭, 사이드바 */-->
-				<div class="tabside_bar">
-					<div class="tab_menu_wrap">
-						<div class="tab_menu_inner">
-							<ul class="tab_menu">
-								<li class="on"><a href="javascript:tab_menu(0);">상세정보</a></li>
-								<li><a href="javascript:tab_menu(1);">상품리뷰</a></li>
-								<li><a href="javascript:tab_menu(2);">배송정보</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div class="detail_cont">
+				<div class="tab_menu"> 
+					<ul> 
+						<li class="on"><button type="button">상세정보</button></li> 
+						<li><button type="button">상품리뷰</button></li> 
+						<li><button type="button">배송정보</button></li> 
+					</ul> 
+				</div> 
+				
 					<!-- tab contents wrap -->
-					<div class="tab_contents">
-						<!-- tab content1  : 상세정보 -->
-						<div class="tab_cont00 detail_goods_info" style="display:block">
-							<h3 class="sr_only">상세정보</h3>
-							<div class="detail_img" th:utext="${prd.detailDesc}">
-								<!--/* 상세정보 영역 */-->
-							</div>
+				<div class="detail_cont tab_contents">
+					<!-- tab content1  : 상세정보 -->
+					<div class="tab_cont detail_goods_info tab_cont" style="display:block">
+						<h3 class="sr_only">상세정보</h3>
+						<div class="detail_img" th:utext="${prd.detailDesc}">
+							<!--/* 상세정보 영역 */-->
+						</div>
 
-							<button type="button" class="btn_ingredient">전성분 확인하기</button>
-							<div class="ui_accordion" data-open-type="single">
-								<dl>
-									<dt class="on"><button type="button">상품정보제공공시</button></dt>
-									<dd>
-										<table class="align_left" summary="상품코드, 고객상담번호, 판매처, 품질보증기준, 개봉 후 사용기간, 사용시 주의사항이 있는 상품추가정보 표입니다.">
-											<caption class="sr_only">상품추가정보 표</caption>
-											<colgroup>
-												<col width="270px">
-												<col width="*">
-											</colgroup>
-											<tbody>
-												<tr>
-													<th scope="row">제품명</th>
-													<td>
-														[[${prd.onlineProdName}]]
-									                    <div class="select_wrap mgt10">  
-															<select name="ingredients" title="전성분 보기 옵션 선택" > 
-																<option th:each="unitProd : ${prd.products}" th:value="${unitProd.prodSn}" th:text="${unitProd.prodName}" ></option> 
-															</select> 
-														</div>  
-													</td>
-												</tr>
-												
-												<th:block th:each="unitProduct, iter : ${prd.products}">
-													<th:block th:each="disclosure : ${unitProduct.disclosures}">
-														<tr class="disclosure" data:prodSn="${unitProduct.prodSn}" th:style="${iter.index != 0} ? 'display:none'">
-															<th scope="row" th:text="${disclosure.disclosureItemName}"></th>
-															<td th:text="${disclosure.prodDisclosureInfo}"></td>
-														</tr>
-													</th:block>
+						<button type="button" class="btn_ingredient">전성분 확인하기</button>
+						<div class="ui_accordion" data-open-type="single">
+							<dl>
+								<dt class="on"><button type="button">상품정보제공공시</button></dt>
+								<dd>
+									<table class="align_left" summary="상품코드, 고객상담번호, 판매처, 품질보증기준, 개봉 후 사용기간, 사용시 주의사항이 있는 상품추가정보 표입니다.">
+										<caption class="sr_only">상품추가정보 표</caption>
+										<colgroup>
+											<col width="270px">
+											<col width="*">
+										</colgroup>
+										<tbody>
+											<tr>
+												<th scope="row">제품명</th>
+												<td>
+													[[${prd.onlineProdName}]]
+								                    <div class="select_wrap mgt10">  
+														<select name="ingredients" title="전성분 보기 옵션 선택" > 
+															<option th:each="unitProd : ${prd.products}" th:value="${unitProd.prodSn}" th:text="${unitProd.prodName}" ></option> 
+														</select> 
+													</div>  
+												</td>
+											</tr>
+											
+											<th:block th:each="unitProduct, iter : ${prd.products}">
+												<th:block th:each="disclosure : ${unitProduct.disclosures}">
+													<tr class="disclosure" data:prodSn="${unitProduct.prodSn}" th:style="${iter.index != 0} ? 'display:none'">
+														<th scope="row" th:text="${disclosure.disclosureItemName}"></th>
+														<td th:text="${disclosure.prodDisclosureInfo}"></td>
+													</tr>
 												</th:block>
-											</tbody>
-										</table>
-									</dd>
-								</dl>
-							</div>
-						</div>
-						
-						<!-- tab content : 상품리뷰 -->	
-						<div class="tab_cont01 detail_review" style="display:none;">
-							<h3 class="sr_only">상품리뷰</h3>
-							<div class="review_head">
-								<!--/*평점*/-->
-								<div class="rating_score">
-									<div class="table_layout">
-										<p class="title">인생템이에요</p>
-										<p class="score">1,035명 중 <strong>89%</strong>의 고객이 <strong>5점</strong>을 주었습니다.</p>
-									</div>
-								</div>
-								<div class="survey_total">
-									<div class="survey_01">
-										<p class="title">지속력</p>
-										<div class="table_layout">
-											<div>
-												<div class="graph"><span class="bar" style="width: 68%"></span></div>
-											</div>
-											<div class="score"><span>68%</span><span>오래 지속되요</span></div>
-										</div>
-										<div class="table_layout">
-											<div>
-												<div class="graph"><span class="bar" style="width: 28%"></span></div>
-											</div>
-											<div class="score"><span>28%</span><span>적당해요</span></div>
-										</div>
-										<div class="table_layout">
-											<div>
-												<div class="graph"><span class="bar" style="width: 4%"></span></div>
-											</div>
-											<div class="score"><span>4%</span><span>금방 지워져요</span></div>
-										</div>
-									</div>
-									<div class="survey_02">
-										<p class="title">커버력</p>
-										<div class="table_layout">
-											<div>
-												<div class="graph"><span class="bar" style="width: 68%"></span></div>
-											</div>
-											<div class="score"><span>68%</span><span>오래 지속되요</span></div>
-										</div>
-										<div class="table_layout">
-											<div>
-												<div class="graph"><span class="bar" style="width: 28%"></span></div>
-											</div>
-											<div class="score"><span>28%</span><span>적당해요</span></div>
-										</div>
-										<div class="table_layout">
-											<div>
-												<div class="graph"><span class="bar" style="width: 4%"></span></div>
-											</div>
-											<div class="score"><span>4%</span><span>금방 지워져요</span></div>
-										</div>
-									</div>
-									<div class="survey_03">
-										<p class="title">수분감</p>
-										<div class="table_layout">
-											<div>
-												<div class="graph"><span class="bar" style="width: 68%"></span></div>
-											</div>
-											<div class="score"><span>68%</span><span>오래 지속되요</span></div>
-										</div>
-										<div class="table_layout">
-											<div>
-												<div class="graph"><span class="bar" style="width: 28%"></span></div>
-											</div>
-											<div class="score"><span>28%</span><span>적당해요</span></div>
-										</div>
-										<div class="table_layout">
-											<div>
-												<div class="graph"><span class="bar" style="width: 4%"></span></div>
-											</div>
-											<div class="score"><span>4%</span><span>금방 지워져요</span></div>
-										</div>
-									</div>
-								</div>
-		
-								<!--/*포토리뷰*/-->
-								<div class="photo_list">
-									<p class="title">베스트 포토리뷰</p>	
-									<div class="reviews">	
-										<div class="">	
-											<div class="">
-												<ul class="">
-													<li class="">
-														<a href="#none"><img ap:src="@{/images/dummy/img_review.jpg}" alt=""></a>
-													</li>
-													<li class="">
-														<a href="#none"><img ap:src="@{/images/dummy/img_review.jpg}" alt=""></a>
-													</li>
-													<li class="">
-														<a href="#none"><img ap:src="@{/images/dummy/img_review.jpg}" alt=""></a>
-													</li>
-													<li class="">
-														<a href="#none"><img ap:src="@{/images/dummy/img_review.jpg}" alt=""></a>
-													</li>
-													<li class=""></li>
-													<li class=""></li>
-													<li class=""></li>
-													<li class=""></li>
-													<li class=""></li>
-													<li class=""></li>
-												</ul>
-											</div>
-											<div class="ix-controller">
-												<div class="slide_direction">
-													<a class="ix-btn-prev" href="#none"><span class="sr_only">이전</span></a>
-													<a class="ix-btn-next" href="#none"><span class="sr_only">다음</span></a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<!--/*뷰티테스터 리뷰*/-->
-								<div class="tester_review">
-									<p class="title">뷰티테스터 리뷰</p>
-									<div class="reviews">
-										<ul>
-											<li>
-												<a href="#none">
-													<img ap:src="@{/images/dummy/img_beautytester_review.jpg}" alt="">
-													<span class="info">
-														<span class="grade"><b>5.0</b></span>
-														<b class="ellipsis">매트한 쿠션을 찾는 분들에게 딱이에요.매트한 쿠션을 찾는 분들에게 딱이에요</b>
-													</span>
-												</a>
-											</li>
-											<li>
-												<a href="#none">
-													<img ap:src="@{/images/dummy/img_beautytester_review.jpg}" alt="">
-													<span class="info">
-														<span class="grade"><b>5.0</b></span>
-														<b class="ellipsis">매트한 쿠션을 찾는 분들에게 딱이에요</b>
-													</span>
-												</a>
-											</li>
-											<li>
-												<a href="#none">
-													<img ap:src="@{/images/dummy/img_beautytester_review.jpg}" alt="">
-													<span class="info">
-														<span class="grade"><b>5.0</b></span>
-														<b class="ellipsis">매트한 쿠션을 찾는 분들에게 딱이에요</b>
-													</span>
-												</a>
-											</li>
-											<li>
-												<a href="#none">
-													<img ap:src="@{/images/dummy/img_beautytester_review.jpg}" alt="">
-													<span class="info">
-														<span class="grade"><b>5.0</b></span>
-														<b class="ellipsis">매트한 쿠션을 찾는 분들에게 딱이에요</b>
-													</span>
-												</a>
-											</li>
-											<li>
-												<a href="#none">
-													<img ap:src="@{/images/dummy/img_beautytester_review.jpg}" alt="">
-													<span class="info">
-														<span class="grade"><b>5.0</b></span>
-														<b class="ellipsis">매트한 쿠션을 찾는 분들에게 딱이에요</b>
-													</span>
-												</a>
-											</li>
-											<li>
-												<a href="#none">
-													<img ap:src="@{/images/dummy/img_beautytester_review.jpg}" alt="">
-													<span class="info">
-														<span class="grade"><b>5.0</b></span>
-														<b class="ellipsis">매트한 쿠션을 찾는 분들에게 딱이에요</b>
-													</span>
-												</a>
-											</li>
-										</ul>
-										<button type="button" class="btn_view_more">더보기</button>
-									</div>
-								</div>
-							</div>
-		
-							<!--/*리뷰목록*/-->
-							<div class="review_list">
-								<!--/*sorting*/-->
-								<div class="review_sort">
-									<div class="left">
-										<a href="#none" class="on">추천순</a>
-										<a href="#none">최신순</a>
-									</div>
-									<div class="right">
-										<a href="#none" class="on">전체</a>
-										<a href="#none">5<span>(894)</span></a>
-										<a href="#none">4<span>(255)</span></a>
-										<a href="#none">3<span>(255)</span></a>
-										<a href="#none">2<span>(255)</span></a>
-										<a href="#none">1<span>(255)</span></a>
-									</div>
-								</div>
-		
-								<!--review content-->
-								<div class="review_cont">
-									<div class="review_box">
-										<div class="rating">
-											<span class="mark_star_mm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span>	
-											<span class="date">2018.05.06</span>
-										</div>
-										<div class="user_info clear">
-											<div class="inner">
-												<span class="name">amorep***</span>
-												<span class="grade">WELCOME</span>
-											</div>
-											<div class="modify">
-												<a href="#">수정</a>		<!--- 내가 쓴 리뷰에만 노출 -->
-											</div>
-										</div>
-										<div class="photos">
-											<ul>
-												<li><a href="#none"><img ap:src="@{/images/dummy/img_review.jpg}" alt=""></a></li>
-												<li><a href="#none"><img ap:src="@{/images/dummy/img_review.jpg}" alt=""></a></li>
-												<li><a href="#none"><img ap:src="@{/images/dummy/img_review.jpg}" alt=""></a></li>
-												<li><a href="#none"><img ap:src="@{/images/dummy/img_review.jpg}" alt=""></a></li>
-											</ul>
-										</div>
-										<div class="prd_option"><span>라이트 퍼블 40호</span></div>
-										<div class="survey">
-											<ul>
-												<li>
-													<span>지속력</span>
-													<strong>오래 지속되요</strong>
-												</li>
-		
-												<li>
-													<span>커버력</span>
-													<strong>감쪽같아요</strong>
-												</li>
-												<li>
-													<span>수분감</span>
-													<strong>적당해요</strong>
-												</li>
-											</ul>
-										</div>
-										<div class="comment">
-											<div class="ellipsis line5">
-												친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 날에 쓰면 화사해 보이고
-												화장한듯 안한듯 완전 친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 
-												친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 날에 쓰면 화사해 보이고
-												화장한듯 안한듯 완전 친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 
-												친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 날에 쓰면 화사해 보이고
-												화장한듯 안한듯 완전 친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 
-												친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 날에 쓰면 화사해 보이고
-												화장한듯 안한듯 완전 친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 
-												화장한듯 안한듯 완전 친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 
-												친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 날에 쓰면 화사해 보이고
-												화장한듯 안한듯 완전 친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 
-												친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 날에 쓰면 화사해 보이고
-												화장한듯 안한듯 완전 친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히 끝
-											</div>
-											<a href="#none" class="btn_view_more">더읽기</a>
-											<a href="#none" class="btn_view_close">닫기</a>
-										</div>
-										<div class="box_help">
-											<span class="left"><a class="btn_help">도움이되요 296</a></span>
-											<span class="right"><a class="btn_report"><span class="sr_only">신고하기</span></a></span>
-										</div>
-									</div>
-		
-									<div class="review_box">
-										<div class="rating">
-											<span class="mark_star_mm star4"><span class="sr_only">구매 평점 별 5개 중 1개</span></span>
-											<span class="date">2018.05.06</span>
-										</div>
-										<div class="user_info clear">
-											<div>
-												<span>amorep***</span>
-												<span>WELCOME</span>
-											</div>
-										</div>
-										<div class="prd_option"><span>라이트 퍼블 40호</span></div>
-										<div class="survey">
-											<ul>
-												<li>
-													<span>지속력</span>
-													<strong>오래 지속되요</strong>
-												</li>
-												<li>
-													<span>커버력</span>
-													<strong>감쪽같아요</strong>
-												</li>
-												<li>
-													<span>수분감</span>
-													<strong>적당해요</strong>
-												</li>
-											</ul>
-										</div>
-										<div class="comment">
-											<div>
-												친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 날에 쓰면 화사해 보이고
-											</div>
-										</div>
-										<div class="box_help">
-											<span class="left"><a class="btn_help on">도움이되요 296</a></span>
-											<span class="right"><a class="btn_report"><span class="sr_only">신고하기</span></a></span>
-										</div>
-									</div>
-		
-									<div class="review_box">
-										<div class="rating">
-											<span class="mark_star_mm star2"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
-											<span class="date">2018.05.06</span>
-										</div>
-										<div class="user_info clear">
-											<div>
-												<span>amorep***</span>
-												<span>WELCOME</span>
-											</div>
-										</div>
-										<div class="prd_option"><span>라이트 퍼블 40호</span></div>
-										<div class="survey">
-											<ul>
-												<li>
-													<span>지속력</span>
-													<strong>오래 지속되요</strong>
-												</li>
-												<li>
-													<span>커버력</span>
-													<strong>감쪽같아요</strong>
-												</li>
-												<li>
-													<span>수분감</span>
-													<strong>적당해요</strong>
-												</li>
-											</ul>
-										</div>
-										<div class="comment">
-											<div>
-												친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 날에 쓰면 화사해 보이고
-											</div>
-										</div>
-										<div class="box_help">
-											<span class="left"><a class="btn_help">도움이되요 296</a></span>
-											<span class="right"><a class="btn_report"><span class="sr_only">신고하기</span></a></span>
-										</div>
-									</div>
-								</div>
-								<div class="btn_list_more">
-									<a href="#none"><span>더보기</span></a>
-								</div>
-							</div>
-						</div>
-						
-						<!-- tab content : 배송정보 -->	
-						<div class="tab_cont02 detail_shipping">
-							<h3 class="sr_only">배송정보</h3>
-							<h4 class="h_title">배송/반품/교환 정보</h4>
-							<dl class="first">
-								<dt>배송지역</dt>
-								<dd>
-									<ul class="list_bullet_dot">
-										<li>전국 가능 (군부대 일부 지역은 제외)</li>
-									</ul>
-								</dd>
-							</dl>
-		
-							<dl>
-								<dt>배송기간</dt>
-								<dd>
-									<ul class="list_bullet_dot">
-										<li>입금확인 후 2~4일 가량 소요되며, 지역에 따라 약간의 차이가 있을 수 있습니다.<br>(연휴, 공휴일, 일부 도서지역 및 사서함 주소는 2~3일 추가 소요 예상됩니다.)</li>
-									</ul>
-								</dd>
-							</dl>
-		
-							<dl>
-								<dt>배송비</dt>
-								<dd>
-									<ul class="list_bullet_dot">
-										<li>총 구매금액 1만원 이상 무료배송, 1만원 미만 주문 시 배송비 2,500원이 부과됩니다.</li>
-										<li>뷰티포인트로 상품 구매시 30,000원 미만 주문 시 배송비 2,500원이 부과됩니다.</li>
-										<li>교환 및 반품시에는 배송비 2,500원이 부과됩니다.</li>
-									</ul>
-								</dd>
-							</dl>
-		
-							<dl>
-								<dt>교환/반품이 가능한 경우</dt>
-								<dd>
-									<ul class="list_bullet_dot">
-										<li>단순 변심, 착오 구매에 따른 교환/반품은 상품을 공급받은 날부터 10일이내에 가능합니다. (배송비 2,500원 소비자 부담)</li>
-										<li>단, 일부 제품의 경우 포장을 개봉하였거나 포장이 훼손되어 상품 가치가 상실된 경우에는 교환 및 반품이 불가능합니다.<br>(상품 확인을 위하여 포장 훼손한 경우는 제외)</li>
-										<li>공급 받으신 상품 내용이 표시, 광고내용과 다르거나 다르게 이행된 경우에는 그 상품을 공급받은 날부터 3개월 이내,<br>그 사실을 안 날 또는 알 수 있었던 날부터 30일 이내 청약철회가 가능합니다. (반품/교환 배송비 회사 부담)</li>
-										<li>반품 시, 상품대금 환불은 상품 회수 및 청약철회가 확정된 날로부터 3 영업일 이내 진행 되며, 기한을 초과한 경우 지연기간에<br>대하여 연 100분의 20을 곱하여 산정한 지연이자를 지급합니다.</li>
-									</ul>
-								</dd>
-							</dl>
-		
-							<dl>
-								<dt>교환/반품이 불가능한경우</dt>
-								<dd>
-									<ul class="list_bullet_dot">
-										<li>소비자에게 책임이 있는 사유로 재화등이 멸실되거나 훼손된 경우 (재화등의 내용을 확인하기 위하여 포장 등을 훼손한 경우는 제외)</li>
-										<li>소비자의 사용 또는 일부 소비로 재화등의 가치가 현저히 감소한 경우</li>
-										<li>시간이 지나 다시 판매하기 곤란할 정도로 재화등의 가치가 현저히 감소한 경우</li>
-										<li>복제가 가능한 재화등의 포장을 훼손한 경우</li>
-										<li>
-											소비자의 주문에 따라 개별적으로 생산되는 재화등 또는 이와 유사한 재화등에 대하여 청약철회등을 인정하는 경우<br>
-											통신판매업자에게 회복할 수 없는 중대한 피해가 예상되는 경우로서 사전에 해당 거래에 대하여 별도로 그 사실을 고지하고<br>
-											소비자의 서면(전자문서 포함)에 의한 동의를 받은 경우
-										</li>
-									</ul>
-								</dd>
-							</dl>
-		
-							<dl>
-								<dt>주의사항</dt>
-								<dd>
-									<ul class="list_bullet_dot">
-										<li>상품당 1회 최대 10개까지 주문할 수 있으며, 해당 상품에 대한 주문횟수는 1 아이디(ID)당 1일 최대 3회로 제한됩니다<br>
-											(고객 배송정보를 고려하여 동일 또는 사실상 동일 주소지 일 경우에는 1인 고객으로 집계할 수 있습니다. / 상품당 1일 최대<br>
-											구매가능수량은 30개입니다.)</li>
-										<li>상기의 기준에 부합하지 않는 것으로 판단되는 경우 사전 연락 없이 주문이 취소될 수 있습니다.</li>
-										<li>주문한 상품의 단종 또는 생산지연으로 부득이하게 공급될 수 없는 경우, SMS안내와 함께 자동 주문취소 및 환불 처리가 진행될<br>
-											수 있습니다.</li>
-										<li>상품 교환/반품 시에는 고객상담실 (080-030-5454)로 문의하신 후 보내주셔야 원활히 처리됩니다.<br>
-											상담시간 : 9:00~12:00 / 13:00~17:00 (토, 일, 공휴일 휴무)</li>
-										<li>반품시 증정사은품까지 함께 동봉하여 보내주셔야 합니다.택배는 CJ 택배를 꼭 이용해주시기 바랍니다.<br>
-											(타 택배 이용시 반품 및 교환이 지연되거나 추가 비용이 발생될 수 있습니다.)</li>
-										<li>반송주소 : 경기도 오산시 가장동 46-1번지 ㈜아모레퍼시픽 오산물류센터 아모레퍼시픽쇼핑몰 앞.</li>
-										<li>구매자가 미성년자인 경우에는 상품 구입 시 법정대리인이 동의하지 아니하면 미성년자 본인 또는 법정대리인이 구매 취소할 수 있습니다.</li>
-										<li>거래에 관한 이용약관은 본 쇼핑몰 하단의 사이트이용약관을 클릭하시면 확인하실 수 있습니다.</li>
-									</ul>
-								</dd>
-							</dl>
-		
-							<dl>
-								<dt>구매안전서비스 이용안내</dt>
-								<dd>
-									<ul class="list_bullet_dot">
-										<li>고객이 구매의 안전을 위하여 원하는 경우에는 재화등을 공급받을 때까지 결제대금예치 제도를 이용하실 수 있습니다.</li>
-										<li>당사는 엘지유플러스의 결제대금예치서비스를 이용하고 있습니다.</li>
-									</ul>
+											</th:block>
+										</tbody>
+									</table>
 								</dd>
 							</dl>
 						</div>
-
-						<!--/* 상품정보 사이드바 */-->
 					</div>
 					
-					<!--/* 주문레이어 */-->
-					<!--/* 뷰티포인트 전용상품은 단위가 "P" */-->
-					<div class="order_layer" th:with="currencySign=${prd.productCount == 1 and prd.products[0].membershipExchOnly == 'Y' ? 'P' : '원'}">
-						<div class="scroll_warp order_prd_list">
-							<!--/* 옵션선택 */-->
-							<div class="ui_select option_select_list selectbox_area" data-not-label-change="true">
+					<!-- tab content : 상품리뷰 -->	
+					<div class="tab_cont detail_review">
+						<h3 class="sr_only">상품리뷰</h3>
+						<div class="review_head">
+							<!--/*평점*/-->
+							<div class="rating_score">
+								<div class="table_layout" th:switch="${maxCountPerScope.scope}">
+									<p class="title" th:case="'1'">별로에요</p>
+									<p class="title" th:case="'2'">그저 그래요</p>
+									<p class="title" th:case="'3'">보통이에요</p>
+									<p class="title" th:case="'4'">마음에 들어요</p>
+									<p class="title" th:case="'5'">인생템이에요</p>
+									<p class="score"><span th:text="${#numbers.formatInteger( summary.totalCount, 0, 'COMMA')}">0</span>명 중 <strong>[[${maxCountPerScope.percent}]]%</strong>의 고객이 <strong>[[${maxCountPerScope.scope}]]점</strong>을 주었습니다.</p>
+								</div>
 							</div>
-							
-							<!--/* 립 옵션 */-->
-							<div class="color_option">
-								<p class="color_name">색상을 선택해주세요.</p>
-								<ul class="color_list">
+							<div class="survey_total">
+								<div class="survey_01" th:each="prodReviewSurveys : ${summary.prodReviewSurveys}">
+									<p class="title">[[${prodReviewSurveys.questionHeader}]]</p>
+									<div class="table_layout" th:each="item : ${prodReviewSurveys.countPerResItems}">
+										<div>
+											<div class="graph">
+												<span class="bar" style="width: [[${item.rate}]]%"></span>
+											</div>
+										</div>
+										<div class="score">
+											<span>[[${item.rate}]]%</span>
+											<span>[[${item.responseBodyText}]]</span>
+										</div>
+									</div>
+								</div>
+							</div>
+	
+							<!--/*포토리뷰*/-->
+							<div class="photo_list">
+								<p class="title">베스트 포토리뷰</p>	
+								<div class="reviews">	
+									<div class="">	
+										<div class="">
+											<ul class="">
+												<li class="">
+													<a href="#none"><img ap:src="@{/images/dummy/img_review.jpg}" alt=""></a>
+												</li>
+												<li class="">
+													<a href="#none"><img ap:src="@{/images/dummy/img_review.jpg}" alt=""></a>
+												</li>
+												<li class="">
+													<a href="#none"><img ap:src="@{/images/dummy/img_review.jpg}" alt=""></a>
+												</li>
+												<li class="">
+													<a href="#none"><img ap:src="@{/images/dummy/img_review.jpg}" alt=""></a>
+												</li>
+												<li class=""></li>
+												<li class=""></li>
+												<li class=""></li>
+												<li class=""></li>
+												<li class=""></li>
+												<li class=""></li>
+											</ul>
+										</div>
+										<div class="ix-controller">
+											<div class="slide_direction">
+												<a class="ix-btn-prev" href="#none"><span class="sr_only">이전</span></a>
+												<a class="ix-btn-next" href="#none"><span class="sr_only">다음</span></a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!--/*뷰티테스터 리뷰*/-->
+							<div class="tester_review">
+								<p class="title">뷰티테스터 리뷰</p>
+								<div class="reviews">
+									<ul>
+										<li>
+											<a href="#none">
+												<img ap:src="@{/images/dummy/img_beautytester_review.jpg}" alt="">
+												<span class="info">
+													<span class="grade"><b>5.0</b></span>
+													<b class="ellipsis">매트한 쿠션을 찾는 분들에게 딱이에요.매트한 쿠션을 찾는 분들에게 딱이에요</b>
+												</span>
+											</a>
+										</li>
+										<li>
+											<a href="#none">
+												<img ap:src="@{/images/dummy/img_beautytester_review.jpg}" alt="">
+												<span class="info">
+													<span class="grade"><b>5.0</b></span>
+													<b class="ellipsis">매트한 쿠션을 찾는 분들에게 딱이에요</b>
+												</span>
+											</a>
+										</li>
+										<li>
+											<a href="#none">
+												<img ap:src="@{/images/dummy/img_beautytester_review.jpg}" alt="">
+												<span class="info">
+													<span class="grade"><b>5.0</b></span>
+													<b class="ellipsis">매트한 쿠션을 찾는 분들에게 딱이에요</b>
+												</span>
+											</a>
+										</li>
+										<li>
+											<a href="#none">
+												<img ap:src="@{/images/dummy/img_beautytester_review.jpg}" alt="">
+												<span class="info">
+													<span class="grade"><b>5.0</b></span>
+													<b class="ellipsis">매트한 쿠션을 찾는 분들에게 딱이에요</b>
+												</span>
+											</a>
+										</li>
+										<li>
+											<a href="#none">
+												<img ap:src="@{/images/dummy/img_beautytester_review.jpg}" alt="">
+												<span class="info">
+													<span class="grade"><b>5.0</b></span>
+													<b class="ellipsis">매트한 쿠션을 찾는 분들에게 딱이에요</b>
+												</span>
+											</a>
+										</li>
+										<li>
+											<a href="#none">
+												<img ap:src="@{/images/dummy/img_beautytester_review.jpg}" alt="">
+												<span class="info">
+													<span class="grade"><b>5.0</b></span>
+													<b class="ellipsis">매트한 쿠션을 찾는 분들에게 딱이에요</b>
+												</span>
+											</a>
+										</li>
+									</ul>
+									<button type="button" class="btn_view_more">더보기</button>
+								</div>
+							</div>
+						</div>
+	
+						<!--/*리뷰목록*/-->
+						<div class="review_list">
+							<!--/*sorting*/-->
+							<div class="review_sort">
+								<div class="left">
+									<a href="#none" class="on">추천순</a>
+									<a href="#none">최신순</a>
+								</div>
+								<div class="right">
+									<a href="#none" class="on">전체</a>
+									<a href="#none">5<span>(894)</span></a>
+									<a href="#none">4<span>(255)</span></a>
+									<a href="#none">3<span>(255)</span></a>
+									<a href="#none">2<span>(255)</span></a>
+									<a href="#none">1<span>(255)</span></a>
+								</div>
+							</div>
+	
+							<!--review content-->
+							<div class="review_cont">
+								<div class="review_box">
+									<div class="rating">
+										<span class="mark_star_mm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span>	
+										<span class="date">2018.05.06</span>
+									</div>
+									<div class="user_info clear">
+										<div class="inner">
+											<span class="name">amorep***</span>
+											<span class="grade">WELCOME</span>
+										</div>
+										<div class="modify">
+											<a href="#">수정</a>		<!--- 내가 쓴 리뷰에만 노출 -->
+										</div>
+									</div>
+									<div class="photos">
+										<ul>
+											<li><a href="#none"><img ap:src="@{/images/dummy/img_review.jpg}" alt=""></a></li>
+											<li><a href="#none"><img ap:src="@{/images/dummy/img_review.jpg}" alt=""></a></li>
+											<li><a href="#none"><img ap:src="@{/images/dummy/img_review.jpg}" alt=""></a></li>
+											<li><a href="#none"><img ap:src="@{/images/dummy/img_review.jpg}" alt=""></a></li>
+										</ul>
+									</div>
+									<div class="prd_option"><span>라이트 퍼블 40호</span></div>
+									<div class="survey">
+										<ul>
+											<li>
+												<span>지속력</span>
+												<strong>오래 지속되요</strong>
+											</li>
+	
+											<li>
+												<span>커버력</span>
+												<strong>감쪽같아요</strong>
+											</li>
+											<li>
+												<span>수분감</span>
+												<strong>적당해요</strong>
+											</li>
+										</ul>
+									</div>
+									<div class="comment">
+										<div class="ellipsis line5">
+											친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 날에 쓰면 화사해 보이고
+											화장한듯 안한듯 완전 친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 
+											친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 날에 쓰면 화사해 보이고
+											화장한듯 안한듯 완전 친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 
+											친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 날에 쓰면 화사해 보이고
+											화장한듯 안한듯 완전 친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 
+											친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 날에 쓰면 화사해 보이고
+											화장한듯 안한듯 완전 친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 
+											화장한듯 안한듯 완전 친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 
+											친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 날에 쓰면 화사해 보이고
+											화장한듯 안한듯 완전 친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 
+											친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 날에 쓰면 화사해 보이고
+											화장한듯 안한듯 완전 친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히 끝
+										</div>
+										<a href="#none" class="btn_view_more">더읽기</a>
+										<a href="#none" class="btn_view_close">닫기</a>
+									</div>
+									<div class="box_help">
+										<span class="left"><a class="btn_help">도움이되요 296</a></span>
+										<span class="right"><a class="btn_report"><span class="sr_only">신고하기</span></a></span>
+									</div>
+								</div>
+	
+								<div class="review_box">
+									<div class="rating">
+										<span class="mark_star_mm star4"><span class="sr_only">구매 평점 별 5개 중 1개</span></span>
+										<span class="date">2018.05.06</span>
+									</div>
+									<div class="user_info clear">
+										<div>
+											<span>amorep***</span>
+											<span>WELCOME</span>
+										</div>
+									</div>
+									<div class="prd_option"><span>라이트 퍼블 40호</span></div>
+									<div class="survey">
+										<ul>
+											<li>
+												<span>지속력</span>
+												<strong>오래 지속되요</strong>
+											</li>
+											<li>
+												<span>커버력</span>
+												<strong>감쪽같아요</strong>
+											</li>
+											<li>
+												<span>수분감</span>
+												<strong>적당해요</strong>
+											</li>
+										</ul>
+									</div>
+									<div class="comment">
+										<div>
+											친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 날에 쓰면 화사해 보이고
+										</div>
+									</div>
+									<div class="box_help">
+										<span class="left"><a class="btn_help on">도움이되요 296</a></span>
+										<span class="right"><a class="btn_report"><span class="sr_only">신고하기</span></a></span>
+									</div>
+								</div>
+	
+								<div class="review_box">
+									<div class="rating">
+										<span class="mark_star_mm star2"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
+										<span class="date">2018.05.06</span>
+									</div>
+									<div class="user_info clear">
+										<div>
+											<span>amorep***</span>
+											<span>WELCOME</span>
+										</div>
+									</div>
+									<div class="prd_option"><span>라이트 퍼블 40호</span></div>
+									<div class="survey">
+										<ul>
+											<li>
+												<span>지속력</span>
+												<strong>오래 지속되요</strong>
+											</li>
+											<li>
+												<span>커버력</span>
+												<strong>감쪽같아요</strong>
+											</li>
+											<li>
+												<span>수분감</span>
+												<strong>적당해요</strong>
+											</li>
+										</ul>
+									</div>
+									<div class="comment">
+										<div>
+											친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 날에 쓰면 화사해 보이고
+										</div>
+									</div>
+									<div class="box_help">
+										<span class="left"><a class="btn_help">도움이되요 296</a></span>
+										<span class="right"><a class="btn_report"><span class="sr_only">신고하기</span></a></span>
+									</div>
+								</div>
+							</div>
+							<div class="btn_list_more">
+								<a href="#none"><span>더보기</span></a>
+							</div>
+						</div>
+					</div>
+					
+					<!-- tab content : 배송정보 -->	
+					<div class="tab_cont detail_shipping">
+						<h3 class="sr_only">배송정보</h3>
+						<h4 class="h_title">배송/반품/교환 정보</h4>
+						<dl class="first">
+							<dt>배송지역</dt>
+							<dd>
+								<ul class="list_bullet_dot">
+									<li>전국 가능 (군부대 일부 지역은 제외)</li>
+								</ul>
+							</dd>
+						</dl>
+	
+						<dl>
+							<dt>배송기간</dt>
+							<dd>
+								<ul class="list_bullet_dot">
+									<li>입금확인 후 2~4일 가량 소요되며, 지역에 따라 약간의 차이가 있을 수 있습니다.<br>(연휴, 공휴일, 일부 도서지역 및 사서함 주소는 2~3일 추가 소요 예상됩니다.)</li>
+								</ul>
+							</dd>
+						</dl>
+	
+						<dl>
+							<dt>배송비</dt>
+							<dd>
+								<ul class="list_bullet_dot">
+									<li>총 구매금액 1만원 이상 무료배송, 1만원 미만 주문 시 배송비 2,500원이 부과됩니다.</li>
+									<li>뷰티포인트로 상품 구매시 30,000원 미만 주문 시 배송비 2,500원이 부과됩니다.</li>
+									<li>교환 및 반품시에는 배송비 2,500원이 부과됩니다.</li>
+								</ul>
+							</dd>
+						</dl>
+	
+						<dl>
+							<dt>교환/반품이 가능한 경우</dt>
+							<dd>
+								<ul class="list_bullet_dot">
+									<li>단순 변심, 착오 구매에 따른 교환/반품은 상품을 공급받은 날부터 10일이내에 가능합니다. (배송비 2,500원 소비자 부담)</li>
+									<li>단, 일부 제품의 경우 포장을 개봉하였거나 포장이 훼손되어 상품 가치가 상실된 경우에는 교환 및 반품이 불가능합니다.<br>(상품 확인을 위하여 포장 훼손한 경우는 제외)</li>
+									<li>공급 받으신 상품 내용이 표시, 광고내용과 다르거나 다르게 이행된 경우에는 그 상품을 공급받은 날부터 3개월 이내,<br>그 사실을 안 날 또는 알 수 있었던 날부터 30일 이내 청약철회가 가능합니다. (반품/교환 배송비 회사 부담)</li>
+									<li>반품 시, 상품대금 환불은 상품 회수 및 청약철회가 확정된 날로부터 3 영업일 이내 진행 되며, 기한을 초과한 경우 지연기간에<br>대하여 연 100분의 20을 곱하여 산정한 지연이자를 지급합니다.</li>
+								</ul>
+							</dd>
+						</dl>
+	
+						<dl>
+							<dt>교환/반품이 불가능한경우</dt>
+							<dd>
+								<ul class="list_bullet_dot">
+									<li>소비자에게 책임이 있는 사유로 재화등이 멸실되거나 훼손된 경우 (재화등의 내용을 확인하기 위하여 포장 등을 훼손한 경우는 제외)</li>
+									<li>소비자의 사용 또는 일부 소비로 재화등의 가치가 현저히 감소한 경우</li>
+									<li>시간이 지나 다시 판매하기 곤란할 정도로 재화등의 가치가 현저히 감소한 경우</li>
+									<li>복제가 가능한 재화등의 포장을 훼손한 경우</li>
 									<li>
-										<a href="#none" title="11호 드리밍베이지">
-											<span style="background:#d6938a"></span>
-										</a>
+										소비자의 주문에 따라 개별적으로 생산되는 재화등 또는 이와 유사한 재화등에 대하여 청약철회등을 인정하는 경우<br>
+										통신판매업자에게 회복할 수 없는 중대한 피해가 예상되는 경우로서 사전에 해당 거래에 대하여 별도로 그 사실을 고지하고<br>
+										소비자의 서면(전자문서 포함)에 의한 동의를 받은 경우
 									</li>
 								</ul>
-							</div>
-							<!--/* 선택된 옵션 */-->
-							<div class="selected_option_area">
-							</div>
-							<!--/*
-							<div class="selected_option">
-								<div class="option_name">라이트 퍼플 40호</div>
-								<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="false">
-									<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
-									<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
-									<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
-								</div>
-								<div class="price"><b class="num">37,000</b>원</div>
-								<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
-							</div>
-							<div class="selected_option">
-								<div class="option_name">라이트 퍼플 40호</div>
-								<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="false">
-									<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
-									<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
-									<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
-								</div>
-								<div class="price"><b class="num">37,000</b>원</div>
-								<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
-							</div>
-							<div class="selected_option">
-								<div class="option_name">라이트 퍼플 40호</div>
-								<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="false">
-									<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
-									<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
-									<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
-								</div>
-								<div class="price"><b class="num">37,000</b>원</div>
-								<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
-							</div>
-							<div class="selected_option">
-								<div class="option_name">라이트 퍼플 40호</div>
-								<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="false">
-									<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
-									<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
-									<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
-								</div>
-								<div class="price"><b class="num">37,000</b>원</div>
-								<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
-							</div>
-							<!--/*  선택된 옵션 : 품절 
-							<div class="selected_option soldout"> 
-								<div class="option_name">라이트 퍼플 40호</div>
-								<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="true">
-									<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
-									<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
-									<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
-								</div>
-								<div class="price"><b class="num">37,000</b>원</div>
-								<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
-							</div>
-							*/-->
+							</dd>
+						</dl>
+	
+						<dl>
+							<dt>주의사항</dt>
+							<dd>
+								<ul class="list_bullet_dot">
+									<li>상품당 1회 최대 10개까지 주문할 수 있으며, 해당 상품에 대한 주문횟수는 1 아이디(ID)당 1일 최대 3회로 제한됩니다<br>
+										(고객 배송정보를 고려하여 동일 또는 사실상 동일 주소지 일 경우에는 1인 고객으로 집계할 수 있습니다. / 상품당 1일 최대<br>
+										구매가능수량은 30개입니다.)</li>
+									<li>상기의 기준에 부합하지 않는 것으로 판단되는 경우 사전 연락 없이 주문이 취소될 수 있습니다.</li>
+									<li>주문한 상품의 단종 또는 생산지연으로 부득이하게 공급될 수 없는 경우, SMS안내와 함께 자동 주문취소 및 환불 처리가 진행될<br>
+										수 있습니다.</li>
+									<li>상품 교환/반품 시에는 고객상담실 (080-030-5454)로 문의하신 후 보내주셔야 원활히 처리됩니다.<br>
+										상담시간 : 9:00~12:00 / 13:00~17:00 (토, 일, 공휴일 휴무)</li>
+									<li>반품시 증정사은품까지 함께 동봉하여 보내주셔야 합니다.택배는 CJ 택배를 꼭 이용해주시기 바랍니다.<br>
+										(타 택배 이용시 반품 및 교환이 지연되거나 추가 비용이 발생될 수 있습니다.)</li>
+									<li>반송주소 : 경기도 오산시 가장동 46-1번지 ㈜아모레퍼시픽 오산물류센터 아모레퍼시픽쇼핑몰 앞.</li>
+									<li>구매자가 미성년자인 경우에는 상품 구입 시 법정대리인이 동의하지 아니하면 미성년자 본인 또는 법정대리인이 구매 취소할 수 있습니다.</li>
+									<li>거래에 관한 이용약관은 본 쇼핑몰 하단의 사이트이용약관을 클릭하시면 확인하실 수 있습니다.</li>
+								</ul>
+							</dd>
+						</dl>
+	
+						<dl>
+							<dt>구매안전서비스 이용안내</dt>
+							<dd>
+								<ul class="list_bullet_dot">
+									<li>고객이 구매의 안전을 위하여 원하는 경우에는 재화등을 공급받을 때까지 결제대금예치 제도를 이용하실 수 있습니다.</li>
+									<li>당사는 엘지유플러스의 결제대금예치서비스를 이용하고 있습니다.</li>
+								</ul>
+							</dd>
+						</dl>
+					</div>
+
+					<!--/* 상품정보 사이드바 */-->
+				</div>
+				
+				<!--/* 주문레이어 */-->
+				<!--/* 뷰티포인트 전용상품은 단위가 "P" */-->
+				<div class="order_layer" th:with="currencySign=${prd.productCount == 1 and prd.products[0].membershipExchOnly == 'Y' ? 'P' : '원'}">
+					<div class="scroll_warp order_prd_list">
+						<!--/* 옵션선택 */-->
+						<div class="ui_select option_select_list selectbox_area" data-not-label-change="true">
 						</div>
-						<div class="total">
-							<div>
-								<span class="quantity">총 1개</span>
-								<span class="price"><b>8,800</b>원</span>
-							</div>
-							<a class="btn_xlg_bordered">장바구니</a>
-							<a class="btn_xlg_neutral">구매하기</a>
+						
+						<!--/* 립 옵션 : color 가 1개 이상일때만 노출*/-->
+						<div class="color_option" th:if="${#lists.size(prd.colorGroups) > 1 and prd.productCount > 1}">
+							<p class="color_name">색상을 선택해주세요.</p>
+							<ul class="color_list color_chips_area">
+								<th:block th:each="product : ${prd.products}">
+									<li th:data-prod-sn="${product.prodSn}">
+										<a href="#none" th:title="${product.prodName}">
+											<span th:if="${product.colorchipTypeCode == 'RGB'}" th:style="'background-color:#' + ${product.rgbVal}"></span>
+											<span th:if="${product.colorchipTypeCode == 'Img'}" ><img alt="" th:src="${product.colorchipImg}"></span>
+										</a>
+									</li>
+								</th:block>
+							</ul>
 						</div>
+						<!--/* 선택된 옵션 */-->
+						<div class="selected_option_area">
+						</div>
+						
+					</div>
+					<div class="total">
+						<div>
+							<span class="quantity">총 <span class="total_count">0</span>개</span> 
+               				<span class="price"><b class="num total_price">0</b>[[${currencySign}]]</span>
+						</div>
+						<a class="btn_xlg_bordered btn_basket">장바구니</a>
+						<a class="btn_xlg_neutral btn_buy_now">구매하기</a>
 					</div>
 				</div>
 	
@@ -2164,7 +2068,7 @@
 			$(window).scroll(function() {
 				$ptDetailoption = function(){
 					var $winH = $('html, body').height(),
-						$tabsideH = $('.tabside_bar').outerHeight(),
+						$tabsideH = $('.detail_body > .tab_menu').outerHeight(),
 						$orderLayer = $('.order_layer'),
 						$optionTotalH = $orderLayer.find('.total').outerHeight(),
 						$optionH = $winH - $tabsideH - $optionTotalH,
@@ -2178,17 +2082,16 @@
 				}
 				
 				if(window.pageYOffset >= $(".detail_body").offset().top) {
-					$(".tabside_bar, .order_layer").addClass("fixed");
+					$(".tab_menu, .order_layer").addClass("fixed");
 					$ptDetailoption();
 					$(window).resize(function(){
 						$ptDetailoption();
 					});
 				} else {
-					$(".tabside_bar, .order_layer").removeClass("fixed");
-					
+					$(".tab_menu, .order_layer").removeClass("fixed"); 
 				}
 				if (window.pageYOffset >= ($(".detail_foot").offset().top - $('.order_layer.fixed').outerHeight())){
-					$(".tabside_bar, .order_layer").removeClass("fixed");
+					$(".tab_menu, .order_layer").removeClass("fixed");
 					$('.order_layer').css('height', '');
 				}
 			});

@@ -16,7 +16,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-ship-address"] = Handlebar
     + alias4(alias3(((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.recipientPhoneNo1 : stack1)) != null ? stack1.phoneNo : stack1), depth0))
     + "</dd>\n			</dl>\n			<dl class=\"table_layout\">\n				<dt>주소</dt>\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.shipAddressTypeCode : stack1),"===","ShipAddressInput",{"name":"xif","hash":{},"fn":container.program(8, data, 0),"inverse":container.program(10, data, 0),"data":data})) != null ? stack1 : "")
-    + "			</dl>\n			<dl class=\"table_layout\">\n				<dt>배송 메세지</dt>\n				<dd>"
+    + "			</dl>\n			<dl class=\"table_layout\">\n				<dt>배송 시 요청사항</dt>\n				<dd>"
     + alias4(alias3(((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.shipMsg : stack1), depth0))
     + "</dd>\n			</dl>\n		</div>\n	</div>\n\n";
 },"4":function(container,depth0,helpers,partials,data) {

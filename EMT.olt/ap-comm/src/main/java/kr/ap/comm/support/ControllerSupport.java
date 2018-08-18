@@ -7,6 +7,8 @@ import kr.ap.comm.support.constants.APConstant;
 import net.g1project.ecp.api.model.sales.display.DisplayMenu;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Priority;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
@@ -24,10 +27,13 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * ControllerSupport
  * <p>
- *     모든요청에대해 수행해야할 내용을 추가 한다.
+ * 모든요청에대해 수행해야할 내용을 추가 한다.
  * </p>
  */
-@ControllerAdvice({"kr.ap.emt", "kr.ap.amt"})
+@Priority(2)
+@ControllerAdvice(
+	annotations = {Controller.class}
+)
 public class ControllerSupport extends AbstractController {
 
 	private List<DisplayMenu> gnb;
@@ -40,6 +46,7 @@ public class ControllerSupport extends AbstractController {
 
 	/**
 	 * GNB 와 SubGNB Menu 데이터
+	 *
 	 * @param model
 	 */
 	@ModelAttribute
@@ -50,28 +57,28 @@ public class ControllerSupport extends AbstractController {
 		if (uri.startsWith("/error")) {
 			return;
 		}
-		
+
 		/** GNB 정보 세팅 -start- **/
 		setGndMap();
 		/** GNB 정보 세팅 -end- **/
-		
+
 		/** Session 정보 세팅 -start- **/
 		Map<String, Object> memberMap = getMemberMap();
 		/** Session 정보 세팅 -end- **/
-		
+
 		/** 인기검색어 세팅 -start- **/
 		setPopularSearches();
 		/** 인기검색어 세팅 -end- **/
-		
+
 		model.addAttribute("gnb", gnb);
 		model.addAttribute("gnbMap", gnbMap);
 		model.addAttribute("currentTimeMillis", System.currentTimeMillis());
 		model.addAttribute("memberMap", memberMap);
 		model.addAttribute("popularSearchWord", popularSearches);
 	}
-	
+
 	private synchronized void setPopularSearches() {
-		
+
 		if (ObjectUtils.isEmpty(popularSearches) || isExpired()) {
 			popularSearches = displayApi.getPopularSearches(10); //인기검색어 조회
 			//gnbMap = getGNBMap(gnb); //GNB 조회
@@ -80,7 +87,7 @@ public class ControllerSupport extends AbstractController {
 	}
 
 	private synchronized void setGndMap() {
-		
+
 		if (ObjectUtils.isEmpty(gnb) || isExpired()) {
 
 			if ("M01".equals(mallId)) {
@@ -89,7 +96,7 @@ public class ControllerSupport extends AbstractController {
 				gnb = displayApi.getAllMenus(APConstant.EH_DISPLAY_MENU_SET_ID); //EH GNB메뉴 조회
 			}
 			gnbMap = getGNBMap(gnb); //GNB 조회
-			
+
 			lastModified = System.currentTimeMillis();
 		}
 	}
@@ -106,10 +113,10 @@ public class ControllerSupport extends AbstractController {
 		String phoneNo1 = "";
 		String phoneNo2 = "";
 
-		if( ms != null && ms.getMember() != null) {
-			id = StringUtils.defaultString( ms.getMember().getMemberId());
-			name = StringUtils.defaultString( ms.getMember().getName().getName1());
-			cstmid = StringUtils.defaultString( ms.getMember().getIncsNo());
+		if (ms != null && ms.getMember() != null) {
+			id = StringUtils.defaultString(ms.getMember().getMemberId());
+			name = StringUtils.defaultString(ms.getMember().getName().getName1());
+			cstmid = StringUtils.defaultString(ms.getMember().getIncsNo());
 			String dobYear = StringUtils.defaultString(ms.getMember().getDobYear());
 			String dobMonth = StringUtils.defaultString(ms.getMember().getDobMonth());
 			String dobDay = StringUtils.defaultString(ms.getMember().getDobDay());
@@ -118,23 +125,23 @@ public class ControllerSupport extends AbstractController {
 			phoneNo1 = ms.getMember().getPhoneNo1() == null ? "" : (ms.getMember().getPhoneNo1()).getPhoneNo();
 			phoneNo2 = ms.getMember().getPhoneNo2() == null ? "" : (ms.getMember().getPhoneNo2()).getPhoneNo();
 
-			if( dobYear.length()==4) {
-				dobYear = dobYear.substring(2,4);
+			if (dobYear.length() == 4) {
+				dobYear = dobYear.substring(2, 4);
 			}
 
-			dobMonth = StringUtils.leftPad( dobMonth, 2, "0");
+			dobMonth = StringUtils.leftPad(dobMonth, 2, "0");
 			dobDay = StringUtils.leftPad(dobDay, 2, "0");
 
 			residno1 = dobYear.concat(dobMonth).concat(dobDay);
 
-			if(residno1.length() != 6) {
+			if (residno1.length() != 6) {
 				residno1 = "";
 			}
 
-			gendDvCd = StringUtils.defaultString( ms.getMember().getGenderCode());
+			gendDvCd = StringUtils.defaultString(ms.getMember().getGenderCode());
 		}
 
-		Map <String, Object> memberMap = new HashMap<String, Object>();
+		Map<String, Object> memberMap = new HashMap<String, Object>();
 		memberMap.put("id", id);
 		memberMap.put("name", name);
 		memberMap.put("cstmid", cstmid);
@@ -195,6 +202,7 @@ public class ControllerSupport extends AbstractController {
 
 	/**
 	 * set GNB info to Map
+	 *
 	 * @param gnbList
 	 * @param gnbMap
 	 */
@@ -232,5 +240,5 @@ public class ControllerSupport extends AbstractController {
 		DisplayChannelResolver.resolveViewName(mv, viewName, loader);
 		return mv;
 	}
-	
+
 }

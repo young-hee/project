@@ -151,7 +151,7 @@
 			date = e.date;
 	    	$('#progress').show();
 	    	pageNumber = 1;
-	    	
+
 			AP.api.depositHitoryListFragment({}, {
 					pageNumber:1,
 					startDt:e.date.startDate,
@@ -171,7 +171,7 @@
 		    		$('.no_data').hide();
 		    		$('.table-body').append(data);
 		    	}
-		    	
+
 	        }).fail(function(xhr, textStatus, errorThrown) {
 	        	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
 	        }).always(function() {
@@ -179,8 +179,8 @@
 	            //성공, 실패
 	        });
 		});
-		
-		
+
+
 	$('select[name=depositType]').change(function() {
 
 		$('#progress').show();
@@ -209,7 +209,7 @@
 	    		$('.no_data').hide();
 	    		$('.table-body').append(data);
 	    	}
-			
+
 	    }).fail(function(xhr, textStatus, errorThrown) {
 	    	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
 	    }).always(function() {
@@ -233,14 +233,14 @@
 		}).done(function(data) {
 
 	    	$(".deposit-item:last").after(data);
-			
+
 	    }).fail(function(xhr, textStatus, errorThrown) {
 	    	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
 	    }).always(function() {
 	    	$('#progress').hide();
 	        //성공, 실패
 	    });
-		
+
 	}
 
 	function regist() {
@@ -259,7 +259,7 @@
 	        $modalEl.find('.layer_close, #cancelRegist').click(function() {
 	        	modal.close();
 	        });
-	        
+
 	        $modalEl.find('#saveBankNo').click(function() {
 	        	var $form = $('#registForm');
 	        	if(!$form.valid()) return;
@@ -267,15 +267,15 @@
 	            	AP.modal.alert("환불계좌가 정상적으로 등록되었습니다.").addListener( 'modal-close', function (e) {
 						location.reload(true);
 					});
-					
+
 	            }).fail(function(xhr, textStatus, errorThrown) {
 	            	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
 	            }).always(function() {
 	                //성공, 실패
 	            });
 	        });
-	        
-	        
+
+
 	    });
 	}
 	function withdraw() {
@@ -299,7 +299,7 @@
         	AP.modal.alert("정상적으로 출금되었습니다.").addListener( 'modal-close', function (e) {
         		location.reload();
 			});
-			
+
         }).fail(function(xhr, textStatus, errorThrown) {
         	if (xhr.errorCode == 'ESAL042') {
 		    	AP.modal.alert("현재 잔액보다 큰 금액을 입력하셨습니다. [[${#IntegUtil.toCommaNumber(depositHostory.depositBalance)}]]원 이하로 입력해 주세요.");

@@ -290,24 +290,19 @@
 			</div>
 
 			<!--/* 상품정보 */-->
-			<div class="detail_body">
+			<div class="detail_body ui_tab">
 				<!--/* 상품정보 탭, 사이드바 */-->
-				<div class="tabside_bar">
-					<div class="tab_menu_wrap">
-						<div class="tab_menu_inner">
-							<ul class="tab_menu">
-								<li class="on"><a href="javascript:tab_menu(0);">상세정보</a></li>
-								<li><a href="javascript:tab_menu(1);">상품리뷰</a></li>
-								<li><a href="javascript:tab_menu(2);">배송정보</a></li>
-							</ul>
-						</div>
-					</div>
+				<div class="tab_menu">
+					<ul>
+						<li class="on"><button type="button">상세정보</button></li>
+						<li><button type="button">상품리뷰</button></li>
+						<li><button type="button">배송정보</button></li>
+					</ul>
 				</div>
-				<div class="detail_cont">
 					<!-- tab contents wrap -->
-					<div class="tab_contents">
+					<div class="detail_cont tab_contents">
 						<!-- tab content1  : 상세정보 -->
-						<div class="tab_cont00 detail_goods_info" style="display:block">
+						<div class="tab_cont detail_goods_info" style="display:block">
 							<h3 class="sr_only">상세정보</h3>
 							<div class="detail_img">
 								<img ap:src="@{/images/dummy/detail_dummy.jpg}" alt="">
@@ -409,7 +404,7 @@
 						</div>
 						
 						<!-- tab content : 상품리뷰 -->	
-						<div class="tab_cont01 detail_review" style="display:none;">
+						<div class="tab_cont detail_review">
 							<h3 class="sr_only">상품리뷰</h3>
 							<div class="review_head">
 								<!--/*평점*/-->
@@ -526,24 +521,22 @@
 									<p class="title">뷰티테스터 리뷰</p>
 									<div class="reviews">
 										<ul>
-											<li>
-												<a href="#none">
-													<img ap:src="@{/images/dummy/img_beautytester_review.jpg}" alt="">
-													<span class="info">
-														<span class="grade"><b>5.0</b></span>
-														<b class="ellipsis">매트한 쿠션을 찾는 분들에게 딱이에요.매트한 쿠션을 찾는 분들에게 딱이에요</b>
-													</span>
-												</a>
-											</li>
-											<li>
-												<a href="#none">
-													<img ap:src="@{/images/dummy/img_beautytester_review.jpg}" alt="">
-													<span class="info">
-														<span class="grade"><b>5.0</b></span>
-														<b class="ellipsis">매트한 쿠션을 찾는 분들에게 딱이에요</b>
-													</span>
-												</a>
-											</li>
+											<!-- 리뷰 스타일 신규 추가_허은미 -->
+                                            <li class="no_photo">
+                                                <a href="#none">
+                                                    <span class="info">
+                                                        <span class="grade"><b>5.0</b></span>
+                                                        <b class="text">매트한 쿠션을 찾는 분들에게 딱이에요.</b></span>
+                                                </a>
+                                            </li>
+                                            <li class="no_photo">
+                                                <a href="#none">
+                                                    <span class="info">
+                                                        <span class="grade"><b>5.0</b></span>
+                                                        <b class="text">매트한 쿠션을 찾는 분들에게 딱이에요. 매트한 쿠션을 찾는 분들에게 딱이에요. 매트한 쿠션을 찾는 분들에게 딱이에요매트한 쿠션을 찾는 분들에게 딱이에요매트한 쿠션을 찾는 분들에게 딱이에요매트한 쿠션을 찾는 분들에게 딱이에요.매트한 쿠션을 찾는 분들에게 딱이에요매트한 쿠션을 찾는 분들에게 딱이에요매트한 쿠션을 찾는 분들에게 딱이에요매트한 쿠션을 찾는 분들에게 딱이에요</b></span>
+                                                </a>
+                                            </li>
+                                            <!-- //리뷰 스타일 신규 추가_허은미 -->
 											<li>
 												<a href="#none">
 													<img ap:src="@{/images/dummy/img_beautytester_review.jpg}" alt="">
@@ -756,7 +749,7 @@
 						</div>
 						
 						<!-- tab content : 배송정보 -->	
-						<div class="tab_cont02 detail_shipping">
+						<div class="tab_cont detail_shipping">
 							<h3 class="sr_only">배송정보</h3>
 							<h4 class="h_title">배송/반품/교환 정보</h4>
 							<dl class="first">
@@ -850,223 +843,223 @@
 						</div>
 
 						<!--/* 상품정보 사이드바 */-->
-					</div>
-					<div class="order_layer">
-						<div class="scroll_warp">
-							<!--/* 옵션선택 */-->
-							<div class="ui_select option_select_list" data-not-label-change="true">
-								<input type="hidden" name="">
-								<button type="button">옵션을 선택해주세요</button>
-								<ul class="select_options">
-									<li class="select_option soldout">
-										<code class="label_markup" style="display:none"><span>옵션선택</span><b>라이트퍼플 40호</b><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></code>
-										<a data-value="01" data-disabled="true" class="disabled"><!--/*품절일때*/-->
-											<span><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></span>
-											<span>
-												<span class="option_name ellipsis line3">라이트퍼플 40호 라이트 이름 길어질때는 여기까지 3줄</span>
-												<span class="price">일시품절</span>
-											</span>
-										</a>
-									</li>
-									<li class="select_option">
-										<code class="label_markup" style="display:none"><span>옵션선택</span><b>라이트퍼플 40호</b><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></code>
-										<a data-value="01">
-											<span><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></span>
-											<span>
-												<span class="option_name ellipsis line3">라이트퍼플 40호 라이트</span>
-												<span class="price"><span><b class="num">30,000</b>원</span></span>
-											</span>
-										</a>
-									</li>
-									<li class="select_option">
-										<code class="label_markup" style="display:none"><span>옵션선택</span><b>라이트퍼플 40호</b><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></code>
-										<a data-value="01">
-											<span><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></span>
-											<span>
-												<span class="option_name ellipsis line3">라이트퍼플 40호 라이트 이름 길어질때는 여기까 지 오게 해주세요 여기까지 3줄...</span>
-												<span class="price"><em>30%</em> <span><b class="num">30,000</b>원</span> <del>50,000원</del></span>
-											</span>
-										</a>
-									</li>
-									<li class="select_option">
-										<code class="label_markup" style="display:none"><span>옵션선택</span><b>라이트퍼플 40호</b><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></code>
-										<a data-value="01">
-											<span><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></span>
-											<span>
-												<span class="option_name ellipsis line3">라이트퍼플 40호 라이트</span>
-												<span class="price"><span><b class="num">30,000</b>원</span></span>
-											</span>
-										</a>
-									</li>
-								</ul>
-							</div>
-							<!--/* 립 옵션 */-->
-							<div class="color_option">
-								<p class="color_name">색상을 선택해주세요.</p>
-								<ul class="color_list">
-									<li>
-										<a href="#none" title="11호 드리밍베이지">
-											<span style="background:#d6938a"></span>
-										</a>
-									</li>
-									<li>
-										<a href="#none" title="12호 모카베이지">
-											<span style="background:#ac675e"></span>
-										</a>
-									</li>
-									<li>
-										<a href="#none" title="13호 오렌지선셋">
-											<span style="background:#c63527"></span>
-										</a>
-									</li>
-									<li>
-										<a href="#none" title="14호 엔젤오렌지">
-											<span style="background:#de3831"></span>
-										</a>
-									</li>
-									<li>
-										<a href="#none" title="15호 다즐링코랄">
-											<span style="background:#d0103a"></span>
-										</a>
-									</li>
-									<li>
-										<a href="#none" title="16호 코랄블라썸">
-											<span><img alt="색상명" ap:src="@{/images/dummy/img_color_chip.jpg}"></span>
-										</a>
-									</li>
-									<li>
-										<a href="#none" title="17호 체리블라썸">
-											<span style="background:#bb133e"></span>
-										</a>
-									</li>	
-									<li>
-										<a href="#none" title="18호 클래식레드">
-											<span style="background:#981e32"></span>
-										</a>
-									</li>	
-									<li>
-										<a href="#none" title="19호 글램로즈">
-											<span style="background:#e39b6c"></span>
-										</a>
-									</li>
-									<li>
-										<a href="#none" title="20호 블러시핑크 (일시품절)">
-											<span style="background:#c16784"></span>
-										</a>
-									</li>
-									<li>
-										<a href="#none" title="21호 푸시아틴트">
-											<span style="background:#cf0072"></span>
-										</a>
-									</li>
-									<li>
-										<a href="#none" title="22호 마젠타핑크">
-											<span style="background:#f04d98"></span>
-										</a>
-									</li>	
-									<li>
-										<a href="#none" title="23호 바이올렛핑크">
-											<span style="background:#ac2973"></span>
-										</a>
-									</li>	
-									<li>
-										<a href="#none" title="24호 스프링코랄">
-											<span style="background:#fa6380"></span>
-										</a>
-									</li>
-									<li>
-										<a href="#none" title="25호 센슈얼로즈">
-											<div class="state"></div>
-											<span style="background:#c4262e"></span>
-										</a>
-									</li>
-									<li>
-										<a href="#none" title="26호 로즈브라운">
-											<span style="background:#9e3039"></span>
-										</a>
-									</li>
-									<li>
-										<a href="#none" title="27호 클라우드핑크 (일시품절)">
-											<span style="background:#c16784"></span>
-										</a>
-									</li>
-									<li>
-										<a href="#none" title="28호 핑크쉬머">
-											<span style="background:#a8475a"></span>
-										</a>
-									</li>
-									<li>
-										<a href="#none" title="29호 메탈릭로즈">
-											<span style="background:#912f46"></span>
-										</a>
-									</li>
-									<li>
-										<a href="#none" title="30호 오키드퍼플 (일시품절)">
-											<span style="background:#83334a"></span>
-										</a>
-									</li>
-								</ul>
-							</div>
-							<!--/* 선택된 옵션 */-->
-							<div class="selected_option">
-								<div class="option_name">라이트 퍼플 40호</div>
-								<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="false">
-									<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
-									<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
-									<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
+						<div class="order_layer">
+							<div class="scroll_warp">
+								<!--/* 옵션선택 */-->
+								<div class="ui_select option_select_list" data-not-label-change="true">
+									<input type="hidden" name="">
+									<button type="button">옵션을 선택해주세요</button>
+									<ul class="select_options">
+										<li class="select_option soldout">
+											<code class="label_markup" style="display:none"><span>옵션선택</span><b>라이트퍼플 40호</b><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></code>
+											<a data-value="01" data-disabled="true" class="disabled"><!--/*품절일때*/-->
+												<span><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></span>
+												<span>
+													<span class="option_name ellipsis line3">라이트퍼플 40호 라이트 이름 길어질때는 여기까지 3줄</span>
+													<span class="price">일시품절</span>
+												</span>
+											</a>
+										</li>
+										<li class="select_option">
+											<code class="label_markup" style="display:none"><span>옵션선택</span><b>라이트퍼플 40호</b><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></code>
+											<a data-value="01">
+												<span><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></span>
+												<span>
+													<span class="option_name ellipsis line3">라이트퍼플 40호 라이트</span>
+													<span class="price"><span><b class="num">30,000</b>원</span></span>
+												</span>
+											</a>
+										</li>
+										<li class="select_option">
+											<code class="label_markup" style="display:none"><span>옵션선택</span><b>라이트퍼플 40호</b><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></code>
+											<a data-value="01">
+												<span><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></span>
+												<span>
+													<span class="option_name ellipsis line3">라이트퍼플 40호 라이트 이름 길어질때는 여기까 지 오게 해주세요 여기까지 3줄...</span>
+													<span class="price"><em>30%</em> <span><b class="num">30,000</b>원</span> <del>50,000원</del></span>
+												</span>
+											</a>
+										</li>
+										<li class="select_option">
+											<code class="label_markup" style="display:none"><span>옵션선택</span><b>라이트퍼플 40호</b><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></code>
+											<a data-value="01">
+												<span><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt=""></span>
+												<span>
+													<span class="option_name ellipsis line3">라이트퍼플 40호 라이트</span>
+													<span class="price"><span><b class="num">30,000</b>원</span></span>
+												</span>
+											</a>
+										</li>
+									</ul>
 								</div>
-								<div class="price"><b class="num">37,000</b>원</div>
-								<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
-							</div>
-							<div class="selected_option">
-								<div class="option_name">라이트 퍼플 40호</div>
-								<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="false">
-									<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
-									<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
-									<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
+								<!--/* 립 옵션 */-->
+								<div class="color_option">
+									<p class="color_name">색상을 선택해주세요.</p>
+									<ul class="color_list">
+										<li>
+											<a href="#none" title="11호 드리밍베이지">
+												<span style="background:#d6938a"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#none" title="12호 모카베이지">
+												<span style="background:#ac675e"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#none" title="13호 오렌지선셋">
+												<span style="background:#c63527"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#none" title="14호 엔젤오렌지">
+												<span style="background:#de3831"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#none" title="15호 다즐링코랄">
+												<span style="background:#d0103a"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#none" title="16호 코랄블라썸">
+												<span><img alt="색상명" ap:src="@{/images/dummy/img_color_chip.jpg}"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#none" title="17호 체리블라썸">
+												<span style="background:#bb133e"></span>
+											</a>
+										</li>	
+										<li>
+											<a href="#none" title="18호 클래식레드">
+												<span style="background:#981e32"></span>
+											</a>
+										</li>	
+										<li>
+											<a href="#none" title="19호 글램로즈">
+												<span style="background:#e39b6c"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#none" title="20호 블러시핑크 (일시품절)">
+												<span style="background:#c16784"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#none" title="21호 푸시아틴트">
+												<span style="background:#cf0072"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#none" title="22호 마젠타핑크">
+												<span style="background:#f04d98"></span>
+											</a>
+										</li>	
+										<li>
+											<a href="#none" title="23호 바이올렛핑크">
+												<span style="background:#ac2973"></span>
+											</a>
+										</li>	
+										<li>
+											<a href="#none" title="24호 스프링코랄">
+												<span style="background:#fa6380"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#none" title="25호 센슈얼로즈">
+												<div class="state"></div>
+												<span style="background:#c4262e"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#none" title="26호 로즈브라운">
+												<span style="background:#9e3039"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#none" title="27호 클라우드핑크 (일시품절)">
+												<span style="background:#c16784"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#none" title="28호 핑크쉬머">
+												<span style="background:#a8475a"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#none" title="29호 메탈릭로즈">
+												<span style="background:#912f46"></span>
+											</a>
+										</li>
+										<li>
+											<a href="#none" title="30호 오키드퍼플 (일시품절)">
+												<span style="background:#83334a"></span>
+											</a>
+										</li>
+									</ul>
 								</div>
-								<div class="price"><b class="num">37,000</b>원</div>
-								<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
-							</div>
-							<div class="selected_option">
-								<div class="option_name">라이트 퍼플 40호</div>
-								<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="false">
-									<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
-									<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
-									<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
+								<!--/* 선택된 옵션 */-->
+								<div class="selected_option">
+									<div class="option_name">라이트 퍼플 40호</div>
+									<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="false">
+										<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
+										<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
+										<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
+									</div>
+									<div class="price"><b class="num">37,000</b>원</div>
+									<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
 								</div>
-								<div class="price"><b class="num">37,000</b>원</div>
-								<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
-							</div>
-							<div class="selected_option">
-								<div class="option_name">라이트 퍼플 40호</div>
-								<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="false">
-									<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
-									<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
-									<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
+								<div class="selected_option">
+									<div class="option_name">라이트 퍼플 40호</div>
+									<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="false">
+										<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
+										<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
+										<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
+									</div>
+									<div class="price"><b class="num">37,000</b>원</div>
+									<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
 								</div>
-								<div class="price"><b class="num">37,000</b>원</div>
-								<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
-							</div>
-							<!--/* 선택된 옵션 : 품절 */-->
-							<div class="selected_option soldout"> 
-								<div class="option_name">라이트 퍼플 40호</div>
-								<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="true">
-									<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
-									<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
-									<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
+								<div class="selected_option">
+									<div class="option_name">라이트 퍼플 40호</div>
+									<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="false">
+										<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
+										<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
+										<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
+									</div>
+									<div class="price"><b class="num">37,000</b>원</div>
+									<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
 								</div>
-								<div class="price"><b class="num">37,000</b>원</div>
-								<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
+								<div class="selected_option">
+									<div class="option_name">라이트 퍼플 40호</div>
+									<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="false">
+										<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
+										<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
+										<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
+									</div>
+									<div class="price"><b class="num">37,000</b>원</div>
+									<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
+								</div>
+								<!--/* 선택된 옵션 : 품절 */-->
+								<div class="selected_option soldout"> 
+									<div class="option_name">라이트 퍼플 40호</div>
+									<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="true">
+										<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
+										<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
+										<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
+									</div>
+									<div class="price"><b class="num">37,000</b>원</div>
+									<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
+								</div>
 							</div>
-						</div>
-						<div class="total">
-							<div>
-								<span class="quantity">총 1개</span>
-								<span class="price"><b>8,800</b>원</span>
+							<div class="total">
+								<div>
+									<span class="quantity">총 1개</span>
+									<span class="price"><b>8,800</b>원</span>
+								</div>
+								<a class="btn_xlg_bordered">장바구니</a>
+								<a class="btn_xlg_neutral">구매하기</a>
 							</div>
-							<a class="btn_xlg_bordered">장바구니</a>
-							<a class="btn_xlg_neutral">구매하기</a>
 						</div>
 					</div>
 				</div>
@@ -2287,7 +2280,7 @@
 			});
 			
 			//상품 상세 탭
-			function tab_menu(num){
+			/*function tab_menu(num){
 				var f =$('.tab_menu li').find('a');
 				for (var i = 0; i < f.length; i++){
 					if(i==num){
@@ -2299,7 +2292,7 @@
 							$('.tab_cont0'+i).hide();
 						}
 					}	
-				}
+				}*/
 				
 			//리뷰 정렬	
 			$('.review_sort .left a').click(function(){
@@ -2324,11 +2317,12 @@
 			$(window).scroll(function() {
 				$ptDetailoption = function(){
 					var $winH = $('html, body').height(),
-						$tabsideH = $('.tabside_bar').outerHeight(),
+						$tabsideH = $('.detail_body > .tab_menu').outerHeight(),
 						$orderLayer = $('.order_layer'),
 						$optionTotalH = $orderLayer.find('.total').outerHeight(),
 						$optionH = $winH - $tabsideH - $optionTotalH,
 						$tabConH = $('.detail_goods_info').outerHeight();
+						console.log($tabsideH);
 
 					if ($orderLayer.hasClass('fixed')){
 						$orderLayer.css('height', $optionH + 'px');
@@ -2338,17 +2332,17 @@
 				}
 				
 				if(window.pageYOffset >= $(".detail_body").offset().top) {
-					$(".tabside_bar, .order_layer").addClass("fixed");
+					$(".tab_menu, .order_layer").addClass("fixed");
 					$ptDetailoption();
 					$(window).resize(function(){
 						$ptDetailoption();
 					});
 				} else {
-					$(".tabside_bar, .order_layer").removeClass("fixed");
+					$(".tab_menu, .order_layer").removeClass("fixed");
 					
 				}
 				if (window.pageYOffset >= ($(".detail_foot").offset().top - $('.order_layer.fixed').outerHeight())){
-					$(".tabside_bar, .order_layer").removeClass("fixed");
+					$(".tab_menu, .order_layer").removeClass("fixed");
 					$('.order_layer').css('height', '');
 				}
 			});

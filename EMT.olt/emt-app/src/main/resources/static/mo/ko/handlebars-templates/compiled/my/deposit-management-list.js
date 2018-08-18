@@ -15,10 +15,8 @@ this["AP"]["handlebars"]["my"]["deposit-management-list"] = Handlebars.template(
     + alias2((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias4).call(alias3,(depth0 != null ? depth0.depositHistOccurDt : depth0),"YYYY.MM.DD",{"name":"dateFormat","hash":{},"data":data}))
     + "</span></p>\n			</div>\n			<div class=\"price\">\n				<p>"
     + ((stack1 = (helpers.depositTypeName || (depth0 && depth0.depositTypeName) || alias4).call(alias3,(depth0 != null ? depth0.depositHistTypeCode : depth0),{"name":"depositTypeName","hash":{},"data":data})) != null ? stack1 : "")
-    + "</p>\n				<p><span class=\"num\">( "
-    + ((stack1 = (helpers.depositSwitch || (depth0 && depth0.depositSwitch) || alias4).call(alias3,(depth0 != null ? depth0.depositHistTypeCode : depth0),{"name":"depositSwitch","hash":{},"data":data})) != null ? stack1 : "")
-    + " ) "
-    + alias2((helpers.currencyFormatDefault || (depth0 && depth0.currencyFormatDefault) || alias4).call(alias3,(depth0 != null ? depth0.deposit : depth0),"원",{"name":"currencyFormatDefault","hash":{},"data":data}))
+    + "</p>\n				<p><span class=\"num\">"
+    + ((stack1 = (helpers.depositSwitch || (depth0 && depth0.depositSwitch) || alias4).call(alias3,(depth0 != null ? depth0.deposit : depth0),"원",{"name":"depositSwitch","hash":{},"data":data})) != null ? stack1 : "")
     + "</p>\n			</div>\n		</div>\n	</li>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;

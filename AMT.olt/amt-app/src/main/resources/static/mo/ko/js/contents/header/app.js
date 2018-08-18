@@ -14,6 +14,10 @@
             this._setEvent();
 			this._setFixed();
             this._setTitleArea();
+            
+            this._$target.find( '.btn_chat' ).on( 'click', function () {
+				window.open("http://www.amorepacificmall.com/mobile/cstm/mobile_cstm_chatbot_pop.do?i_sSeqCstmid=&i_sLoginFlag=N","","");
+			}.bind( this ));
         },
 
         /** =============== Public Methods =============== */

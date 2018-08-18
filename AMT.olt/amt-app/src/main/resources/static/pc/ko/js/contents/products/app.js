@@ -18,7 +18,6 @@
 			
 			this._setEvents( memberMap );
 			this._setPreviewSlide();
-			//this._setColorChips();
 			//this._setCompareMakeup();
 			this._setHeaderFixed();
 			this._setTabs();
@@ -35,6 +34,8 @@
 			}
 			this._setVideoPlugin(); 
 			 */
+			this.ingredientModalTitle = '전성분 확인하기';
+			this.ingredientModalPath = 'products.ingredient-modal';
 		},
 
 		/** =============== Private Methods =============== */
@@ -46,13 +47,13 @@
 					 selectBoxThumbnail: true
 				})
 				.addListener( 'add-item', function (e) {
-					//this._sideOrder.addItem( e.product );
+					this._sideOrder.addItem( e.product );
 				}.bind(this))
 				.addListener( 'remove-item', function (e) {
-					//this._sideOrder.removeItem( e.prodSn );
+					this._sideOrder.removeItem( e.prodSn );
 				}.bind(this))
 				.addListener( 'spinner-change', function (e) {
-					//this._sideOrder.changeSpinner( e.prodSn, e.value );
+					this._sideOrder.changeSpinner( e.prodSn, e.value );
 				}.bind(this));
 			
 			//side order
@@ -70,6 +71,41 @@
 					this._topOrder.changeSpinner( e.prodSn, e.value );
 				}.bind(this));
 
+			//전성분 확인하기
+			this._$target.find( '.btn_ingredient' ).on( 'click', function (e) {
+				
+				var modal = AP.modal.info({
+					title: '리뷰 작성하기',
+					contents: {
+						templateKey: 'products.ingredient-modal'
+					},
+					sizeType: 'L',
+					containerClass: 'btn_ingredient'
+				});
+				
+				var $modal = modal.getElement();
+				$modal.find('.closePop').on('click', function(){
+					$modal.find('.layer_close').click()
+				});
+				
+			}.bind(this));
+			
+			var $colorChips = this._$target.find( '.color_chips_area li' );
+			if( $colorChips.length > 0 ){
+				this._topOrder.invisibleSelectOption();
+				this._sideOrder.invisibleSelectOption();
+			}
+
+			$colorChips.find( 'a' ).on( 'click', function (e) {
+				$colorChips.find( 'a' ).removeClass('on');
+				e.preventDefault();
+				var prodSn = $(e.currentTarget).parent().data( 'prod-sn' ),
+					product = _.where( this._defaultModel.products, {prodSn: prodSn} )[0];
+				
+				this._topOrder._optionsSelectBox.dispatch( 'select-option', {product : product} );
+				$colorChips.filter('[data-prod-sn='+prodSn+']').find('a').addClass('on');
+			}.bind(this));
+			
 			/*
 			//언제 들어와? 알림 신청
 			this._$target.find( '.btn_restock_notify_me' ).on( 'click', function (e) {
@@ -96,6 +132,7 @@
 
 			}.bind(this));
 			*/
+			
 		},
 
 		//header fixed 설정
@@ -130,7 +167,6 @@
 		//tab fixed 설정
 		_setTabs: function () {
 			
-			console.log( this._$target.find( '.ui_tab' ) );
 			var $tabArea = this._$target.find( '.ui_tab' ),
 				$tabs = $tabArea.find( '> .tab_menu' );
 
@@ -163,39 +199,13 @@
 				if ( $B.utils.urlParam('review') ) {
 					$tabArea.tabs( 'change', 1 );
 				}
-
+				
 				/*
 				AP.reviewArea.addListener( 'change-height', function (e) {
 					this._sideOrder.resetPosition( true );
 				}.bind(this));
 				*/
 			}
-		},
-
-		_setColorChips: function () {
-			var $colorChips = this._$target.find( '.color_chips_area li' );
-
-			//color chips filtering
-			this._$target.find( '.color_group_area :radio' ).on( 'change', function (e) {
-				var colorCode = this._$target.find( '.color_group_area :radio:checked' ).val();
-				
-				if ( colorCode === 'all' ) {
-					$colorChips.show();
-				} else {
-					$colorChips.hide();
-					$colorChips.filter( '[data-group~="' + colorCode + '"]' ).show();
-				}
-			}.bind(this));
-
-			$colorChips.find( 'a' ).on( 'click', function (e) {
-				e.preventDefault();
-				var prodSn = $(e.currentTarget).parent().data( 'prod-sn' ),
-					product = _.where( this._defaultModel.products, {prodSn: prodSn} )[0];
-
-				this._changeFlag( product );
-				this._changeColorChpe( product );
-				this._changePreview( product );
-			}.bind(this));
 		},
 
 		_changeColorChpe: function ( product ) {

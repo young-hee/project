@@ -42,6 +42,7 @@
 					<div>
 						<span class="check_wrap"><input type="radio" name="delivery" id="delivery1" value="01" th:onclick="|shipInfo('SHIP')|" checked=""><label for="delivery1">일반택배</label></span>
 						<span class="check_wrap"><input type="radio" name="delivery" id="delivery2" value="02" th:onclick="|shipInfo('STORE')|"><label for="delivery2">편의점 배송받기</label></span>
+						<input type="hidden" name="shipType" value="SHIP"/>
 					</div>
 
 					<!--/* 일반택배일때만 */-->
@@ -77,7 +78,7 @@
 									th:text="${ordShipAddressExInfo.recipientPhoneNo1.phoneNo}">010-0000-0000</dd>
 							</dl>
 							<span class="check_wrap basic">
-								<input type="checkbox" id="latelyRepShipAddress" name="repShipAddressYn" th:onclick="|addRepShipAddress(this,'${memberSn}','latelyRepShipAddress')|" value="N"><label for="latelyRepShipAddress">기본배송지로 설정</label>
+								<input type="checkbox" th:onclick="|addRepShipAddress(this,'${memberSn}','latelyRepShipAddress')|" value="N"><label for="latelyRepShipAddress">기본배송지로 설정</label>
 							</span>
 							<input type="hidden" id="recipientName" th:value="${ordShipAddressExInfo.recipientName.name1}">
 							<input type="hidden" id="recipientPhoneNo" th:value="${ordShipAddressExInfo.recipientPhoneNo1.phoneNo}">
@@ -320,13 +321,14 @@
 
 			var shipAddressList = /*[[${shipAddressList}]]*/ '0';			// 기본배송지
 			var ordShipAddressExList = /*[[${ordShipAddressExList}]]*/ '0';	// 최근배송지
-			/* 최근배송지 */
-			if(ordShipAddressExList.length > 0){
-				setShipAddress("LATELY");
-			}
-			/* 기본배송지 */
+
+			/* 기본배송지*/
 			if(shipAddressList.length > 0){
 				setShipAddress("NOMAL");
+			}
+			/* 최근배송지(Default) */
+			if(ordShipAddressExList.length > 0){
+				setShipAddress("LATELY");
 			}
 			/* 새로입력 */
 			if(ordShipAddressExList.length == 0 && shipAddressList.length == 0){
@@ -351,10 +353,13 @@
 
 		// 배송지정보 공통
 		function setShipAddress(AddressType){
+			$('input[name=address]').prop('checked', false);
+
 			/* 최근배송지 */
 			if(AddressType == 'LATELY' ) {
 				$('input[name=addressType]').attr('value','LATELY');
 
+				$('#address01_1').prop('checked', true);
 				$('#address01_1_layer').show();
 				$('#address01_2_layer').hide();
 				$('#address01_3_01_layer').hide();
@@ -383,16 +388,18 @@
 				$('input[name=recipientAddress2]').attr('value',$('#recipientAddress2').val());
 
 				// 새로입력정보 초기화
-				$('input[name=userName]').val('');
-				$('input[name=userPhoneNo]').val('');
-				$('input[name=deliveryArea]').val('');
-				$('input[name=userAddress1]').val('');
-				$('input[name=userAddress2]').val('');
+				// $('input[name=userName]').val('');
+				// $('input[name=userPhoneNo]').val('');
+				// $('input[name=userPostCode]').val('');
+				// $('input[name=deliveryArea]').val('');
+				// $('input[name=userAddress1]').val('');
+				// $('input[name=userAddress2]').val('');
 
 			/* 기본배송지 */
 			} else if(AddressType == 'NOMAL' ) {
 				$('input[name=addressType]').attr('value','NOMAL');
 
+				$('#address01_2').prop('checked', true);
 				$('#address01_1_layer').hide();
 				$('#address01_2_layer').show();
 				$('#address01_3_01_layer').hide();
@@ -417,16 +424,18 @@
 				$('input[name=recipientAddress2]').attr('value',$('#addressAddress2').val());
 
 				// 새로입력정보 초기화
-				$('input[name=userName]').val('');
-				$('input[name=userPhoneNo]').val('');
-				$('input[name=deliveryArea]').val('');
-				$('input[name=userAddress1]').val('');
-				$('input[name=userAddress2]').val('');
+				// $('input[name=userName]').val('');
+				// $('input[name=userPhoneNo]').val('');
+				// $('input[name=userPostCode]').val('');
+				// $('input[name=deliveryArea]').val('');
+				// $('input[name=userAddress1]').val('');
+				// $('input[name=userAddress2]').val('');
 
 			/* 새로입력 */
 			} else {
 				$('input[name=addressType]').attr('value','NEW');
 
+				$('#address01_3').prop('checked', true);
 				$('#address01_1_layer').hide();
 				$('#address01_2_layer').hide();
 				$('#address01_3_01_layer').show();
@@ -454,13 +463,16 @@
 		/* 배송정보 선택구분(일반택배/편의점배송) */
 		function shipInfo(shipType){
 			if(shipType == 'SHIP' ) {
-				$('#delivery1_address_layer').show(); // 일반배송 상단구분탭
+				$('#delivery1_address_layer').show(); // 일반택배
 				$('#delivery1_layer').show();
 				$('#delivery2_layer').hide();
+				$('input[name=shipType]').val('SHIP');
 			} else if(shipType == 'STORE' ) {
-				$('#delivery1_address_layer').hide(); // 일반배송 상단구분탭
+				$('#delivery1_address_layer').hide(); // 편의점
 				$('#delivery1_layer').hide();
 				$('#delivery2_layer').show();
+				$('input[name=shipType]').val('STORE');
+				$('input[name=addressStoreType]').attr('value','MEMBER');
 			}
 		}
 
@@ -470,10 +482,12 @@
 				$('#address2_1_layer').show();
 				$('#address2_2_01_layer').hide();
 				$('#address2_2_02_layer').hide();
+				$('input[name=addressStoreType]').attr('value','MEMBER');
 			} else if(choiceType == 'NEW' ) {
 				$('#address2_1_layer').hide();
 				$('#address2_2_01_layer').show();
 				$('#address2_2_02_layer').show();
+				$('input[name=addressStoreType]').attr('value','NEW');
 			}
 
 			$('#name02').blur(function(){
@@ -489,11 +503,12 @@
 		$('[name=selectShipMsg]').on('change', function(e){
 			var selectedVal = $(this).val();
 			//console.log("selectedVal : " + selectedVal);
-			$('[name=shipMsg]').focus();
+			var obj = $(this).parents('.ui_table').find('[name=shipMsg]');
+			obj.focus();
 			if(!selectedVal){
-				$('[name=shipMsg]').val("");
+				obj.val("");
 			}else{
-				$('[name=shipMsg]').val(selectedVal);
+				obj.val(selectedVal);
 			}
 		});
 
@@ -510,8 +525,7 @@
 		/* 기본 배송지 데이터 검증 */
 		function addRepShipAddress(obj, memberSn, repShipAddress) {
 			if ($(obj).is(':checked')) {
-				var address = $('[name=address]:checked').val();
-				if(address == "03"){
+				if('newRepShipAddress' == repShipAddress){
 					//새로입력 -> 기본배송지로 설정
 					var $form = $( 'form.order-validate' );
 					//$form.validate().settings.ignore = "";
@@ -521,6 +535,7 @@
 						$('[name=recipientZipCode]').attr('value',$('[name=userPostCode]').val());
 						$('[name=recipientAddress1]').attr('value',$('[name=userAddress1]').val());
 						$('[name=recipientAddress2]').attr('value',$('[name=userAddress2]').val());
+						$('[name=repShipAddressYn]').attr('value','Y');
 						orderShipAddress(memberSn);
 					}else{
 						$('[id=' + repShipAddress + ']:checked').prop('checked', false);
@@ -542,8 +557,12 @@
 						orderUpdateAddress(data.param);
 					}
 				}
-			}).fail(function (e) {
-				AP.modal.alert("[ajax.fail]실패");
+			}).fail(function(xhr, textStatus, errorThrown) {
+				if (xhr.errorCode == 0) {
+					AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+				} else {
+					AP.modal.alert(xhr.errorMessage);
+				}
 			}).always(function () {
 			});
 		}

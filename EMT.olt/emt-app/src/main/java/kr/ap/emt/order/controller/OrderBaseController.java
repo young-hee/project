@@ -30,23 +30,23 @@ public class OrderBaseController extends AbstractViewController {
 	final Logger logger = LoggerFactory.getLogger(getClass());
 
 	/** members */
-	protected static final String PARAM_KEY_MEMBER = "Member";			// 회원
-	protected static final String PARAM_KEY_NONMEMBER = "NonMember";	// 비회원
+	public static final String PARAM_KEY_MEMBER = "Member";			// 회원
+	public static final String PARAM_KEY_NONMEMBER = "NonMember";	// 비회원
 
 	/** payMethodCode **/
-	protected static final String PAY_METHOD_CODE_CREDIT_CARD = "credit-card";
-	protected static final String PAY_METHOD_CODE_BANK_AC_TRANSFER = "bank-ac-transfer";
-	protected static final String PAY_METHOD_CODE_MOBILE_PHONE_PAY = "mobile-phone-pay";
-	protected static final String PAY_METHOD_CODE_VIRTUAL_ACCOUNT = "virtual-account";
-	protected static final String PAY_METHOD_CODE_PAYPAL = "paypal";
-	protected static final String PAY_METHOD_CODE_PAYCO = "payco";
-	protected static final String PAY_METHOD_CODE_WPAY = "wpay";
-	protected static final String PAY_METHOD_CODE_NAVERPAY = "naverpay";
-	protected static final String PAY_METHOD_CODE_KAKAOPAY = "kakaopay";
+	public static final String PAY_METHOD_CODE_CREDIT_CARD = "credit-card";
+	public static final String PAY_METHOD_CODE_BANK_AC_TRANSFER = "bank-ac-transfer";
+	public static final String PAY_METHOD_CODE_MOBILE_PHONE_PAY = "mobile-phone-pay";
+	public static final String PAY_METHOD_CODE_VIRTUAL_ACCOUNT = "virtual-account";
+	public static final String PAY_METHOD_CODE_PAYPAL = "paypal";
+	public static final String PAY_METHOD_CODE_PAYCO = "payco";
+	public static final String PAY_METHOD_CODE_WPAY = "wpay";
+	public static final String PAY_METHOD_CODE_NAVERPAY = "naverpay";
+	public static final String PAY_METHOD_CODE_KAKAOPAY = "kakaopay";
 	
 	/** YN Code **/
-    protected static final String CODE_Y = "Y";
-    protected static final String CODE_N = "N";
+	public static final String CODE_Y = "Y";
+	public static final String CODE_N = "N";
 	
 	
 	/**
@@ -54,10 +54,6 @@ public class OrderBaseController extends AbstractViewController {
 	 */
 	protected void makeOrdProdSet(OrdEx ordEx, Model model){
 		/* 주문정보 */
-		Integer shipOrdOnlineProdCnt = 0;
-		Integer storeOrdOnlineProdCnt = 0;
-		BigDecimal finalOnlineSaleAmtPcurSum = new BigDecimal(0);
-
 		List<OrdOnlineProdFoDTO> shippingOrdOnlineProdList = new ArrayList<OrdOnlineProdFoDTO>();
 		List<OrdOnlineProdFoDTO> shippingOrdOnlineBeautyPointProdList = new ArrayList<OrdOnlineProdFoDTO>();
 		List<OrdOnlineProdFoDTO> shippingOrdOnlineActivityPointProdList = new ArrayList<OrdOnlineProdFoDTO>();
@@ -88,43 +84,38 @@ public class OrderBaseController extends AbstractViewController {
 					if(ordHistProdEx.getmPlusNOrdPromoSn() != null) {
                         if (storePickup) {
                             ordOnlineProdFo = getMPlusNPromoOnlineProd(ordHistProdEx, storePickupMNPromoMap);
-							storeOrdOnlineProdCnt++;
                         }
                         else {
                             ordOnlineProdFo = getMPlusNPromoOnlineProd(ordHistProdEx, shippingMNPromoMap);
-							shipOrdOnlineProdCnt++;
                         }
 					}
                     // 동시구매상품
 					else if(ordHistProdEx.getSameTimePurPromoSn() != null) {
                         if (storePickup) {
                             ordOnlineProdFo = getSameTimePurPromoOnlineProd(ordHistProdEx, storePickupSameTimePurPromoMap);
-							storeOrdOnlineProdCnt++;
                         }
                         else {
                             ordOnlineProdFo = getSameTimePurPromoOnlineProd(ordHistProdEx, shippingSameTimePurPromoMap);
-							shipOrdOnlineProdCnt++;
                         }
                     }
 					//온라인상품
 					else {
                         ordOnlineProdFo = ordOnlineProdFoMap.get(key);
                         if(ordOnlineProdFo == null) {
+
                             ordOnlineProdFo = makeOrdOnlineProdFo(ordHistProdEx);
                             ordOnlineProdFoMap.put(key, ordOnlineProdFo);
+
                             if (storePickup) {
                                 storePickupOrdOnlineProdList.add(ordOnlineProdFo);
-								storeOrdOnlineProdCnt++;
                             } else {
 								//뷰티포인트상품
 								if ("Y".equals(ordHistProdEx.getIntegrationMembershipExchYn())) {
 									shippingOrdOnlineBeautyPointProdList.add(ordOnlineProdFo);
-									shipOrdOnlineProdCnt++;
 								}
 								//활동포인트상품
 								else if ("Y".equals(ordHistProdEx.getActivityPointExchYn())) {
 									shippingOrdOnlineActivityPointProdList.add(ordOnlineProdFo);
-									shipOrdOnlineProdCnt++;
 								}
 								else{
 									if (!StringUtils.isEmpty(ordOnlineProdFo.getOrdHistProdTypeCode())
@@ -132,11 +123,10 @@ public class OrderBaseController extends AbstractViewController {
 											|| "BulkDc".equals(ordOnlineProdFo.getOrdHistProdTypeCode())
 											|| "SameTimePur".equals(ordOnlineProdFo.getOrdHistProdTypeCode()))) {
 										shippingOrdOnlineProdList.add(ordOnlineProdFo);
-										shipOrdOnlineProdCnt++;
 									}
 
 									//사은품
-									//TODO: 사은품 다지인에 따리 수정이 필요함.
+									//TODO: 사은품 다지인에 따라 수정이 필요함.
 									List<OrdHistProdEx> ordHistProdList = ordOnlineProdFo.getOrdHistProdList();
 									for (OrdHistProdEx o : ordHistProdList) {
 										//상품사은품
@@ -147,29 +137,27 @@ public class OrderBaseController extends AbstractViewController {
 								}
                             }
                         }
-                    }
-                    
-					finalOnlineSaleAmtPcurSum = finalOnlineSaleAmtPcurSum.add(ordHistProdEx.getFinalOnlineSaleAmtPcur());
-					
+					}
+
+                    //충가격/수량 계산
 					ordOnlineProdFo.addOrdHistProdEx(ordHistProdEx);
 				}
 			}
 		}
-		model.addAttribute("ordEx", ordEx);												                                    	// 주문번호 확장
+		model.addAttribute("ordEx", ordEx);
+
 		model.addAttribute("shippingOrdOnlineProdList", shippingOrdOnlineProdList);		  										// 온라인쇼핑일반상품 목록
-		model.addAttribute("shippingOrdOnlineBeautyPointProdList", shippingOrdOnlineBeautyPointProdList);		            	// 온라인쇼핑 뷰티포인트 교환 상품 목록
-		model.addAttribute("shippingOrdOnlineActivityPointProdList", shippingOrdOnlineActivityPointProdList);		        	// 온라인쇼핑 진주알 교환 상품 목록
         model.addAttribute("shippingMNPromoList", new ArrayList<>(shippingMNPromoMap.values()));                           	// 온라인쇼핑M+N프로모션 목록
         model.addAttribute("shippingSameTimePurPromoList", new ArrayList<>(shippingSameTimePurPromoMap.values()));         	// 온라인쇼핑동시구매프로모션 목록
+		model.addAttribute("shippingOrdOnlineBeautyPointProdList", shippingOrdOnlineBeautyPointProdList);		            	// 온라인쇼핑 뷰티포인트 교환 상품 목록
+		model.addAttribute("shippingOrdOnlineActivityPointProdList", shippingOrdOnlineActivityPointProdList);		        	// 온라인쇼핑 진주알 교환 상품 목록
+
 		model.addAttribute("storePickupOrdOnlineProdList", storePickupOrdOnlineProdList);	                                 	// 테이크아웃일반상품 목록
         model.addAttribute("storePickupMNPromoList", new ArrayList<>(storePickupMNPromoMap.values()));                      	// 온라인쇼핑M+N프로모션 목록
         model.addAttribute("storePickupSameTimePurPromoList", new ArrayList<>(storePickupSameTimePurPromoMap.values()));    	// 온라인쇼핑동시구매프로모션 목록
+
 		model.addAttribute("ordOtfExList", ordOtfExList);									                                	// 주문배송지시목록
 		model.addAttribute("ordUnitAwardOrdPromoExList", ordEx.getOrdHistEx().getOrdUnitAwardOrdPromoExList());									                                	// 주문배송지시목록
-
-		model.addAttribute("totalOrdOnlineProdCnt", shipOrdOnlineProdCnt + storeOrdOnlineProdCnt);
-		model.addAttribute("shipOrdOnlineProdCnt", shipOrdOnlineProdCnt);
-		model.addAttribute("storeOrdOnlineProdCnt", storeOrdOnlineProdCnt);
 
 		if(isMember()){
 			List<ShipAddressInfo> shipAddressList = new ArrayList<ShipAddressInfo>();
@@ -211,19 +199,24 @@ public class OrderBaseController extends AbstractViewController {
 
 		if (ordEx != null && ordEx.getOrdHistEx() != null && ordEx.getOrdHistEx().getOrdHistAmtExList() != null) {
 
-			BigDecimal totalOrdPriceSum = new BigDecimal(0);
 			BigDecimal totalOrdDcPriceSum = new BigDecimal(0);
 			BigDecimal membershipExchAmt = new BigDecimal(0);
 			BigDecimal packingAmtSum = new BigDecimal(0);
+			BigDecimal onlineShipProdSum = new BigDecimal(0);
+
 			for (OrdHistAmtEx o : ordEx.getOrdHistEx().getOrdHistAmtExList()) {
+				//금액 세팅
 				ordAmtMap.put(o.getOrdHistAmtTypeCode(), o.getAmtPcur());
 
-				//총주문금액 = StorePickupProd + OnlineShipProd + MembershipExch + BP + ActivityPointExch
-				if ("StorePickupProd".equals(o.getOrdHistAmtTypeCode())
-					|| "OnlineShipProd".equals(o.getOrdHistAmtTypeCode())
-					|| "MembershipExch".equals(o.getOrdHistAmtTypeCode())
-					|| "ActivityPointExch".equals(o.getOrdHistAmtTypeCode())) {
-					totalOrdPriceSum = totalOrdPriceSum.add(o.getAmtPcur()) ;
+				//총주문금액 Prod = StorePickupProd + OnlineShipProd
+
+				//온라인 상품 가격 = OnlineShipProd - MembershipExch - ActivityPointExch
+				if ("OnlineShipProd".equals(o.getOrdHistAmtTypeCode())) {
+					onlineShipProdSum = onlineShipProdSum.add(o.getAmtPcur());
+				}
+				if ("MembershipExch".equals(o.getOrdHistAmtTypeCode())
+					||"ActivityPointExch".equals(o.getOrdHistAmtTypeCode())) {
+					onlineShipProdSum = onlineShipProdSum.subtract(o.getAmtPcur());
 				}
 
 				//총할인 = OnlineProdPromoDc + OnlineMemberPromoDc + MemberDcBenefit + ImmedDcCouponPromo
@@ -254,6 +247,9 @@ public class OrderBaseController extends AbstractViewController {
 				}
 			}
 
+			//온라인 상품 가격
+			ordAmtMap.put("onlineShipProdSum", onlineShipProdSum);
+
 			//포장재
 			ordAmtMap.put("ShipUnitPacking", packingAmtSum);
 
@@ -280,11 +276,18 @@ public class OrderBaseController extends AbstractViewController {
 				}
 			}
 
-			ordAmtMap.put("totalOrdPriceSum", totalOrdPriceSum);
 			ordAmtMap.put("totalOrdDcPriceSum", totalOrdDcPriceSum);
 
 			//정립예정포인트(뷰티포인트)
-			ordAmtMap.put("totalOrdPointSaveSum", new BigDecimal(0));
+			if (ordEx.getOrdMembershipExList() != null && ordEx.getOrdMembershipExList().size() > 0) {
+				for (OrdMembershipEx o : ordEx.getOrdMembershipExList()) {
+					if ("BP".equals(o.getMembershipServiceCode())) {
+						ordAmtMap.put("totalBeautyPointSaveSum", new BigDecimal(o.getSavingExpectedPoint()));
+					}
+				}
+			} else {
+				ordAmtMap.put("totalBeautyPointSaveSum", new BigDecimal(0));
+			}
 		}
 
 		return ordAmtMap;
@@ -309,7 +312,6 @@ public class OrderBaseController extends AbstractViewController {
 					for (OrdHistProdEx ordHistProdEx : ordOtfEx.getOrdHistProdExList()) {
 						boolean storePickup = ordShipAddressEx.getStoreSn() != null;
 
-
 						if (storePickup) {
 							storePickupProdCnt++;
 						} else {
@@ -321,17 +323,24 @@ public class OrderBaseController extends AbstractViewController {
 								//AP
 								activityPointExchCnt++;
 							} else {
-								onlineShipProdCnt++;
+								if ("Ord".equals(ordHistProdEx.getOrdHistProdTypeCode())
+									|| "BulkDc".equals(ordHistProdEx.getOrdHistProdTypeCode())
+									|| "SameTimePur".equals(ordHistProdEx.getOrdHistProdTypeCode())) {
+									onlineShipProdCnt++;
+								}
 							}
 						}
 					}
 				}
 			}
 
-			ordCntMap.put("onlineShipProdCnt", onlineShipProdCnt);
+			ordCntMap.put("shipOrdOnlineProdCnt", onlineShipProdCnt);
 			ordCntMap.put("membershipExchCnt", membershipExchCnt);
 			ordCntMap.put("activityPointExchCnt", activityPointExchCnt);
-			ordCntMap.put("storePickupProdCnt", storePickupProdCnt);
+
+			ordCntMap.put("shipOrdOnlineProdSumCnt", onlineShipProdCnt + membershipExchCnt + activityPointExchCnt);
+			ordCntMap.put("storeOrdOnlineProdSumCnt", storePickupProdCnt);
+			ordCntMap.put("totalOrdOnlineProdCnt", onlineShipProdCnt + membershipExchCnt + activityPointExchCnt + storePickupProdCnt);
 		}
 
 		return ordCntMap;
@@ -388,15 +397,16 @@ public class OrderBaseController extends AbstractViewController {
 		OrdOnlineProdFoDTO ordOnlineProdFo = new OrdOnlineProdFoDTO();
 		OrdProdEx ordProd = ordHistProd.getOrdProdEx();
 		ordOnlineProdFo.setOnlineProdCode(ordProd.getOnlineProdCode());						// 온라인상품코드
-		ordOnlineProdFo.setOnlineProdName(ordProd.getOnlineProdNameRlang());				// 온라인상품명
+		ordOnlineProdFo.setOnlineProdName(ordProd.getOnlineProdNameRlang());					// 온라인상품명
 		ordOnlineProdFo.setOnlineProdImgUrl(ordProd.getOnlineProdImgUrl());					// 온라인상품 이미지
+		ordOnlineProdFo.setProdImgUrl(ordProd.getProdImgUrl());								// 단위상품 이미지
 		ordOnlineProdFo.setBulkDcOnlineProdCode(ordProd.getBulkDcOnlineProdCode());			// 묶음할인온라인상품코드
-		ordOnlineProdFo.setBulkDcOnlineProdName(ordProd.getBulkDcOnlineProdNameRlang());	// 묶음할인온라인상품명
+		ordOnlineProdFo.setBulkDcOnlineProdName(ordProd.getBulkDcOnlineProdNameRlang());		// 묶음할인온라인상품명
 		ordOnlineProdFo.setOrdHistProdTypeCode(ordHistProd.getOrdHistProdTypeCode());		// 주문이력상품유형코드
-		ordOnlineProdFo.setFinalOnlineSaleAmtPcurSum(BigDecimal.ZERO);						// 상품판매가(상품판매가 X 주문수량)
-		ordOnlineProdFo.setOrdQtySum(0);													// 주문수량(단위상품 X 주문수량)
+		ordOnlineProdFo.setFinalOnlineSaleAmtPcurSum(BigDecimal.ZERO);							// 상품판매가(상품판매가 X 주문수량)
+		ordOnlineProdFo.setOrdQtySum(0);														// 주문수량(단위상품 X 주문수량)
 		ordOnlineProdFo.setOrdHistProdList(new ArrayList<OrdHistProdEx>());					// 주문이력(확장)
-		ordOnlineProdFo.setSingleProdYn(ordOnlineProdFo.getSingleProdYn());
+		ordOnlineProdFo.setSingleProdYn(ordProd.getSingleProdYn());
 		return ordOnlineProdFo;
 	}
 

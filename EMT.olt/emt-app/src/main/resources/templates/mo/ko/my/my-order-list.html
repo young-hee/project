@@ -1,4 +1,4 @@
-<html ap:decorate="~{layout/layout-contents}">
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='my-writable-reivew'">
 
 <body>
         <!-- #ap_container -->
@@ -63,9 +63,12 @@
 			<script ap:src="@{/handlebars-templates/compiled/my/order/orderList-footer.js}"></script>
 			<script th:inline="javascript">
 
+				let sessionStatus = 'order_list_save_status';
+
 				var loaded = false;
 
 				var limit = 10;
+				var currentCount = 0;
 				var totalCount = 50;
 				var c_type = /*[[${type}]]*/;
 				var c_offset = 0;
@@ -77,27 +80,57 @@
 				$( '.ui_tab' ).tabs();
 
 				//multiple date picker적용
-				$( '.ui_multiple_date_picker' ).multipleDatePicker({
-					defaultRangeDate: '1months',
-					minDate: moment().subtract( 50, 'years' )
-				}).on( 'multiple-date-picker-change', function (e) {
-					c_RS_Date = e.date.startDate;
-					c_RD_Date = e.date.endDate;
+				function setMultipleDate(date) {
+					$( '.ui_multiple_date_picker' ).multipleDatePicker({
+						defaultRangeDate: date,
+						minDate: moment().subtract( 50, 'years' )
+					}).on( 'multiple-date-picker-change', function (e) {
+						console.log(e);
+						c_RS_Date = e.date.startDate;
+						c_RD_Date = e.date.endDate;
 
-					getOrderList(c_type, c_RS_Date, c_RD_Date, 0, true);
-				});
+						getOrderList(c_type, c_RS_Date, c_RD_Date, 0, true);
+					});
+				}
+
 
 				$(document).ready(function() {
 
-					c_RS_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).startDate;
-		    		c_RD_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).endDate;
+					var ss = AP.common.getSessionStorage(sessionStatus);
+					console.log(ss)
 
-		    		// if(c_type == 'order'){
-		    		// 	c_type = 'online';
-		    		// }
 
-					getOrderList(c_type, c_RS_Date, c_RD_Date, 0, true);
-					getFooter(c_type);
+					if (ss != "" && ss != 'undefined' && ss != null) {
+						$('.loading').hide();
+
+						c_offset = ss.offset;
+						c_type = ss.type;
+						c_RS_Date = ss.rs_Date;
+						c_RD_Date = ss.rd_Date;
+						currentCount = ss.currentCount;
+						totalCount = ss.totalCount;
+
+						$( '.ui_multiple_date_picker' ).multipleDatePicker('clear');
+						setMultipleDate(ss.dateValue);
+						$('#order_list').empty();
+						$('#order_list').append(ss.html);
+						showCount(ss.currentCount, ss.totalCount);
+						getFooter(ss.type);
+						window.scroll(0, ss.scrollPosition);
+						AP.common.setSessionStorage(sessionStatus, null)
+					}
+					else {
+						setMultipleDate('1months');
+						c_RS_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).startDate;
+						c_RD_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).endDate;
+
+						// if(c_type == 'order'){
+						// 	c_type = 'online';
+						// }
+
+						getOrderList(c_type, c_RS_Date, c_RD_Date, 0, true);
+						getFooter(c_type);
+					}
 				});
 
 				//tab 변경시
@@ -159,17 +192,17 @@
 									list = resultData.onlineOrdInfoList;
 								}
 
-								var count = (offset + limit) > resultData.totalCount ? resultData.totalCount : (offset + limit);
-
 								var htmlStr = AP.common.getTemplate('my.order.orderList', {
 									list : list,
 									type : data.type
 								});
 
 								$('#order_list').append(htmlStr);
-								$('.btn_lg_more').html('더보기 (<em>'+ count +'</em>/'+ resultData.totalCount +')');
-								$('.btn_lg_more').show();
-							} else {
+
+								var count = (offset + limit) > resultData.totalCount ? resultData.totalCount : (offset + limit);
+								showCount(count, resultData.totalCount);
+							}
+							else {
 								var htmlStr = '<div class="panel notice">'
 											+ '		<i class="ico"></i>'
 										    + '		<p class="text">선택하신 기간에<br>주문내역이 없습니다.</p>'
@@ -177,11 +210,18 @@
 								$('#order_list').html(htmlStr);
 								$('.btn_lg_more').hide();
 							}
+
 						}
 					}).fail(function(e) {
 						AP.modal.alert(e.responseJSON.errorData.message);
 					}).always(function() {
 					});
+				}
+
+				function showCount(count, totalCount) {
+					currentCount = count;
+					$('.btn_lg_more').html('더보기 (<em>'+ count +'</em>/'+ totalCount +')');
+					$('.btn_lg_more').show();
 				}
 
 				function getFooter(type) {
@@ -230,6 +270,9 @@
 				}
 
 				function showDetailView(type, ordSn) {
+
+					var c = new SaveStatus();
+					AP.common.setSessionStorage(sessionStatus, c, 5);
 					$(location).attr("href", "/my/page/order/" + type + "/" + ordSn);
 				}
 
@@ -242,7 +285,42 @@
 						cusType = 'exchange';
 					}
 
+					var c = new SaveStatus();
+					AP.common.setSessionStorage(sessionStatus, c, 5);
 					$(location).attr("href", "/my/page/claim/" + cusType + "/" + ordHistNo);
+				}
+
+				function ordWriteReview(ordNo) {
+					AP.api.myReview({}, {ordNo}).done(function(data) {
+						if (data.data) {
+							var param = {
+								'orderNo' : data.data.ordNo,
+								'products' : data.data.orderProds
+							}
+							new AP.ReviewWriteModal(param).prevGetData();
+						}
+						else {
+							AP.modal.alert('구매리뷰 작성 가능한 주문상품이 없습니다.');
+						}
+					}).fail(function(e) {
+						AP.modal.alert(e);
+					}).always(function() {
+					});
+				}
+
+				function SaveStatus() {
+
+					this.scrollPosition = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+					this.type = c_type;
+					this.offset = c_offset;
+					this.rs_Date = c_RS_Date;
+					this.rd_Date = c_RD_Date;
+					// this.resultData = resultData;
+					this.html = $('#order_list').html();
+					this.totalCount = totalCount;
+					this.currentCount = currentCount;
+					this.dateValue = $('input[name="radio4"]:checked').val();
+					console.log(this);
 				}
 
 			</script>

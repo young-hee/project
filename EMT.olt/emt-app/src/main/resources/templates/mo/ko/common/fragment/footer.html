@@ -35,15 +35,16 @@
 </div>
 		
 <div class="footer_link"> <!-- /* 20180802:App설치 이미지배너 추가 */ -->
+<th:block th:if="${#device.isMobileWeb() && #device.isiOS()}">
 	<a href="https://itunes.apple.com/kr/app/id538275329" target="_blank" class="btn_app_store ios">
 		<img ap:src="@{/images/common/link_app.png}" alt="에뛰드 하우스 앱으로 더 많은 정보를 확인해 보세요~. 앱 설치하기" />
 	</a>
+</th:block>
+<th:block th:if="${#device.isMobileWeb() && #device.isAndroid()}">
 	<a href="market://details?id=com.etudehouse" target="_blank" class="btn_app_store android">
 		<img ap:src="@{/images/common/link_app.png}" alt="에뛰드 하우스 앱으로 더 많은 정보를 확인해 보세요~. 앱 설치하기" />
 	</a>
-<!-- 	<a href="https://itunes.apple.com/kr/app/id538275329" target="_blank" class="btn_app_store ios">APP 설치</a>
-	<a href="market://details?id=com.etudehouse" target="_blank" class="btn_app_store android">APP 설치</a> -->
-</div>
+</th:block>
 
 <ul class="policy_list">
 	<li><a href="#none" th:href=@{/common/servicePolicy}>이용약관</a></li>

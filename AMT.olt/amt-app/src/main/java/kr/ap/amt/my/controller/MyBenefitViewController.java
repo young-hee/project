@@ -37,7 +37,7 @@ public class MyBenefitViewController extends AbstractController {
 	public String myCouponList(Model model) {
 
 		//종료된쿠폰최대조회기간 90일
-		MemberCoupon coupons = couponApi.getMemberKeepingCoupons("Avail", getMemberSn(), 30l, 100l);
+		MemberCoupon coupons = couponApi.getMemberKeepingCoupons("All", getMemberSn(), 30l, 100l);
 		model.addAttribute("availCnt", coupons.getAvailCnt());
 		model.addAttribute("expCnt", coupons.getExpCnt());
 		
@@ -46,7 +46,7 @@ public class MyBenefitViewController extends AbstractController {
 		
 		List<MemberKeepingCoupon> immCoupons = new ArrayList<MemberKeepingCoupon>(coupons.getAvailCoupons());
 		
-		immCoupons.removeIf(memberKeepingCoupon -> memberKeepingCoupon.getdDay() > 8);
+		immCoupons.removeIf(memberKeepingCoupon -> memberKeepingCoupon.getdDay() > 7);
 		
 		model.addAttribute("immCnt", immCoupons.size());
 		model.addAttribute("immCoupons", immCoupons);

@@ -10,10 +10,10 @@
 						<div class="thumb"><img src="{{ this.onlineProdImages.0.imgUrl }}" alt="" /></div>
 						<div class="item_info">
 							<div>
-								{{#if this.lineDesc}}
-									<p class="s_name">{{ this.lineDesc }}</p>
-								{{/if}}
 								<p class="prd_name">{{ this.onlineProdName }}</p>
+								{{#xif this.productCount '>' 1 }}
+									<p class="color_name">{{ this.productCount }} colors</p>
+								{{/xif}}
 							</div>
 							<div class="price_area">
 								{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
@@ -29,7 +29,7 @@
 									{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
 										<del>{{ numberFormat this.onlineProdPriceSummary.minBeforeOnlineSalePrice }}<em>{{ condition ../isActivityPoint '알' '원' }}</em></del>
 									{{/xif}}
-									<span>{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>{{ condition ../isActivityPoint '알' '원' }}{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}} ~{{/xif}}</em></span>
+									 {{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>{{ condition ../isActivityPoint '알' '원' }}{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}} ~{{/xif}}</em>
 								</div>
 							</div>
 						</div>
@@ -48,9 +48,6 @@
 							<div class="thumb"><img src="{{ ../onlineProdImages.0.imgUrl }}" alt="" /></div>
 							<div class="item_info">
 								<div>
-									{{#if ../lineDesc}}
-										<p class="s_name">{{ ../lineDesc }}</p>
-									{{/if}}
 									<p class="prd_name">{{ this.prodName }}</p>
 								</div>
 								<div class="price_area">

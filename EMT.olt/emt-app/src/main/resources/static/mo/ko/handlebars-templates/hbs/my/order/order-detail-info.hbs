@@ -44,6 +44,14 @@
     	{{/xif}}
 	{{/xif}}
 
+	{{#if (or (eq ordEx.ordDetailStatusCode 'OrdHandlingComplete')(eq ordEx.ordDetailStatusCode 'ShipComplete'))}}
+
+		<button class="btn_md_primary w100p mgt15" type="button" onclick="ordWriteReview({{ordEx.ordNo}})">구매 리뷰 작성하고 진주알 받기</button>
+
+	{{/if}}
+
+
+
 	{{#xif type '===' 'cashReceipts'}}
 		<dl class="table_layout">
 			<dt>발급 상태</dt>

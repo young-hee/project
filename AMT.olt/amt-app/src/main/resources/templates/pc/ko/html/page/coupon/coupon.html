@@ -15,34 +15,32 @@
 					</div>
 				</div>
 				<!--/* 상세 */-->
-				<div class="tab_menu_wrap">
+				<div class="tab_menu_wrap ui_tab">
 					<div class="tab_menu black">
-						<ul>
-							<li class="on"><a href="javascript:tab_menu(0);"><span>쿠폰존</span></a></li><!--/* 로그인 전 */-->
-							<!-- li><a href="javascript:tab_menu(0);"><span>등급별혜택</span></a></li --><!--/* 로그인 후 */-->
-							<li><a href="javascript:tab_menu(1);"><span>VIP라운지</span></a></li>
-							<li><a href="javascript:tab_menu(2);"><span>출석체크</span></a></li>
+						<ul class="">
+							<li class="on"><button><span>쿠폰존</span></button></li><!--/* 로그인 전 */-->
+							<!-- <li><a href=""><span>등급별혜택</span></button></li> --><!--/* 로그인 후 */-->
+							<li><button><span>VIP라운지</span></button></li>
+							<li><button><span>출석체크</span></button></li>
 						</ul>
-					</div>
-				</div>
-				<div>
-					<div class="login_area"><!--/* 로그인 전 */-->
-						<div class="inner_wrap">
-							<p><em>로그인</em>하고 고객등급과 혜택을 확인하세요.</p>
-							<a href="#none" class="btn_login">로그인</a>
-						</div>
-					</div>
-					<div class="grade_area"><!--/* 로그인 후 */-->
-						<div class="inner_wrap">
-							<p class="member_grade level_01">김보영님은 <strong>WELCOME</strong>고객입니다.</p>
-							<p class="member_grade level_02">김보영님은 <strong>VIP</strong>고객입니다.</p>
-							<p class="member_grade level_03">김보영님은 <strong>VYIP</strong>고객입니다.</p>
-							<p class="member_grade level_04">김보영님은 <strong>YIP+</strong>고객입니다.</p>
-							<p class="member_grade level_05">김보영님은 <strong>YVIP+</strong>고객입니다.</p>
-						</div>
 					</div>
 					<!--/* 쿠폰,VIP라운지,출석체크 */-->
 					<div class="tab_contents">
+						<div class="login_area"><!--/* 로그인 전 */-->
+							<div class="inner_wrap">
+								<p><em>로그인</em>하고 고객등급과 혜택을 확인하세요.</p>
+								<a href="#none" class="btn_login">로그인</a>
+							</div>
+						</div>
+						<div class="grade_area"><!--/* 로그인 후 */-->
+							<div class="inner_wrap">
+								<p class="member_grade level_01">김보영님은 <strong>WELCOME</strong>고객입니다.</p>
+								<p class="member_grade level_02">김보영님은 <strong>VIP</strong>고객입니다.</p>
+								<p class="member_grade level_03">김보영님은 <strong>VYIP</strong>고객입니다.</p>
+								<p class="member_grade level_04">김보영님은 <strong>YIP+</strong>고객입니다.</p>
+								<p class="member_grade level_05">김보영님은 <strong>YVIP+</strong>고객입니다.</p>
+							</div>
+						</div>
 						<!--/* 쿠폰존 */-->
 						<div class="tab_cont tab_cont00">
 							<div class="couponzone">
@@ -552,19 +550,7 @@
 	<script>
 		$( '.ui_tooltip' ).tooltip();
 		$('.slide').ixSlideMax();
-
-		function tab_menu(num){
-		var f =$('.tab_menu li').find('a');
-		for (var i = 0; i < f.length; i++){
-			if(i==num){
-				f.eq(i).parent().addClass('on');
-				$('.tab_cont0'+i).show();
-				}else{
-					f.eq(i).parent().removeClass('on');
-					$('.tab_cont0'+i).hide();
-				}
-			}	
-		}
+		$( '.ui_tab' ).tabs();
 	</script>
 </th:block>
 </body>

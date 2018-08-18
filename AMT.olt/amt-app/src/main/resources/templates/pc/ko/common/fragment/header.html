@@ -254,12 +254,10 @@
 			<span>전체 메뉴</span>
 		</a>
 		<ul class="gnb">
-			<!--/* 임시메뉴
 			<li th:each="menuId : ${gnbMap.get('main').submenus}">
 				<a href="#" th:href="@{'/display/' + ${menuId.displayMenuId}(displayMenuId=${menuId.displayMenuId})}" th:text="${menuId.menuTitle}" th:class="${displayMenuId == menuId.displayMenuId} ? 'on' : ''"></a>
 			</li>
-			*/-->
-			<li><a href="#none" class="on">이슈</a></li>
+			<!-- <li><a href="#none" class="on">이슈</a></li>
 			<li><a href="#none">매거진</a></li>
 			<li><a href="#none">랭킹</a></li>
 			<li><a href="#none">리뷰</a></li>
@@ -267,7 +265,7 @@
 			<li><a href="#none">브랜드</a></li>
 			<li><a href="#none">쿠폰/혜택</a></li>
 			<li><a href="#none">플러스멤버십</a></li>
-			<li><a href="#none">ONE pay</a></li>
+			<li><a href="#none">ONE pay</a></li> -->
 			
 		</ul>
 	</div>
@@ -275,8 +273,40 @@
 <div class="category_wrap">
 	<div class="inner_wrap">
 		<!--/* 카테고리 메뉴 */-->
-		<th:block ap:replace="~{common/fragment/category-menu}"/>
+		<!-- <th:block ap:replace="~{common/fragment/category-menu}"/> -->
 		<!-- div class="align_right"><button class="btn_gradient btn_close" onclick="$('.category_wrap').slideUp();">닫기</button></div -->
+		<div class="category_menu">
+			<dl>
+				<dt class="sr_only">카테고리</dt>
+				<dd>
+					<ul class="category" th:if="${not #lists.isEmpty(gnbMap.get('category'))}">
+						<th:block th:each="cate, inx : ${gnbMap.get('category').submenus}">
+						<li th:class="${displayMenuId == cate.displayMenuId or upperMenuId == cate.displayMenuId ? 'on' : #lists.isEmpty(pageType) and inx.index == 0 ? 'on' : ''}">
+							<a href="#none" 
+								th:href="@{'/display/category/'+ ${cate.displayMenuId}(upperMenuId=${cate.displayMenuId}, categoryType=category)}" 
+								th:text="${cate.menuTitle}"></a>
+							<ul class="sub" th:if="${not #lists.isEmpty(cate.submenus)}">
+								<th:block th:each="subCate : ${cate.submenus}">
+									<li th:class="${displayMenuId == subCate.displayMenuId ? 'on' : ''}"><a href="#none"
+										       th:href="@{'/display/category/'+ ${subCate.displayMenuId}(upperMenuId=${subCate.displayMenuId}, categoryType=category)}"
+										       th:text="${subCate.menuTitle}"></a>
+										<ul th:if="${not #lists.isEmpty(subCate.submenus)}">
+											<th:block th:each="subCate2 : ${subCate.submenus}">
+											<li th:class="${displayMenuId == subCate2.displayMenuId ? 'on' : ''}"><a href="#none"
+										       th:href="@{'/display/category/'+ ${subCate2.displayMenuId}(upperMenuId=${subCate2.displayMenuId}, categoryType=category)}"
+										       th:text="${subCate2.menuTitle}"></a>										
+											</li>
+											</th:block>
+										</ul>
+									</li>
+								</th:block>
+							</ul>
+						</li>
+						</th:block>
+					</ul>
+				</dd>
+			</dl>
+		</div>
 	</div>
 </div>
 
@@ -285,15 +315,23 @@
  -->
 
 <script language="javascript" type="text/javascript">
-//header영역 로그인영역
-$('.log_area').on('mouseover', function(){
-	$(this).addClass('on');
-}).on('mouseout', function(){
-	$(this).removeClass('on');
-});
-//카테고리
-$('.btn_category').on('click', function(){
-	$(this).toggleClass('open');
-	$('.category_wrap').slideToggle();
-})
+	//header영역 로그인영역
+	$('.log_area').on('mouseover', function(){
+		$(this).addClass('on');
+	}).on('mouseout', function(){
+		$(this).removeClass('on');
+	});
+	//카테고리
+	$('.btn_category').on('click', function(){
+		$(this).toggleClass('open');
+		$('.category_wrap').slideToggle();
+	})
+
+	$('.category_menu dd>ul>li>a').parent().mouseenter(function(){
+		$(this).addClass('on').children('.sub').show();
+	});
+	$('.category_menu dd>ul>li>a').parent().mouseleave(function(){
+		$(this).removeClass('on').children('.sub').hide();
+	});
+
 </script>

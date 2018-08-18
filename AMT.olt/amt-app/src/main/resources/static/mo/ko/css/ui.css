@@ -74,7 +74,7 @@
 /* image lazy load */
 .lazy_load_wrap{position:relative; overflow:hidden; display:block; padding-top:100%; background:url(/mo/ko/images/common/img_loading.png) no-repeat 50% 50%; background-size:40%;}
 .lazy_load_wrap.loaded{background-image:none;}
-.lazy_load_wrap .lazy_load{position:absolute; top:0; left:0; z-index:1; opacity:0; transition:opacity .5s;}
+.lazy_load_wrap .lazy_load{position:absolute; top:0; left:0; opacity:0; transition:opacity .5s;}
 .lazy_load_wrap .lazy_load.loaded{opacity:1;}
 
 /* 배너 영역 */
@@ -110,7 +110,7 @@
 .ui_spinner>input:disabled,
 .ui_spinner.disabled,
 .ui_spinner>button:disabled{background:transparent;}
-.ui_spinner>button>[class^="ico"]{margin-top:-2px;}
+.ui_spinner>button>[class^="ico"]{margin-top:-1px;}
 /* .ui_spinner>button:disabled>[class^="ico"]{opacity:.3;} */
 
 /* tab menu */
@@ -149,7 +149,7 @@
 .check_btn_set{display:table; width:100%; height:44px; table-layout: fixed;}
 .check_btn_set>*{position:relative; display:table-cell; vertical-align: top;}
 .check_btn_set label{ display:block; height:100%; border:1px solid #dadada; border-left-width:0; text-align:center; background:#fff;}
-.check_btn_set input{position:absolute; z-index: -1;}
+.check_btn_set input{position:absolute; z-index: 0; opacity: 0;}
 .check_btn_set label:after{content:''; display:inline-block; width:0; height:100%; vertical-align: middle;}
 .check_btn_set>*:first-child label{border-left-width:1px;}
 .check_btn_set input:checked + label{border-color:#782fff; color:#782fff}
@@ -262,11 +262,11 @@
 /* 댓글 입력 */
 .comment_input{position:relative;}
 .comment_input .photo{position:absolute; top:0; left:0; overflow: hidden; width:40px; height:40px; background: url(/mo/ko/images/common/img_pho_empty.jpg) no-repeat; background-size: 100%; border-radius: 50%;}
-.comment_input>.input_wrap{position:relative; border:1px solid #d8d8d8; border-radius: 5px; background: url("/mo/ko/images/common/ico_comment.png") 97% 17px no-repeat; background-size: 13px 3px;}
+.comment_input>.input_wrap{position:relative; border:1px solid #d8d8d8; border-radius: 5px; background: url("/mo/ko/images/common/ico_comment.png") 97% 18px no-repeat; background-size: 13px 3px;}
 .comment_input>.input_wrap {padding:0 60px 0 10px;}
 .comment_input>.input_wrap:after{content:''; display: block; clear: both;}
 .comment_input>.input_wrap input {border: 0; width: 100%; padding: 11px 0 10px 0; font-size: 14px;}
-.comment_input button{position:absolute; top:10px; right:2%; font-weight:400; background:#fff;}
+.comment_input button{position:absolute; top:12px; right:2%; font-weight:400; background:#fff; font-size: 13px;}
 
 .comment_input input::-webkit-input-placeholder {color: #ccc; font-size: 14px;}
 .comment_input input::-moz-placeholder {color: #ccc; font-size: 14px;}
@@ -293,11 +293,14 @@
 .comment_list .text {overflow: hidden; display: -webkit-box; max-height: 71px; white-space: normal; word-break: break-all; -webkit-line-clamp: 4; -webkit-box-orient: vertical; color:#333; line-height: 1.2;}
 .comment_list .cont.open .text {overflow: auto; display: block; max-height: 100%; white-space: normal; word-break: break-all; -webkit-line-clamp: inherit; -webkit-box-orient: vertical; line-height: 1.2;}
 
-.comment_list .btns{margin-top: 15px;}
+.comment_list .btns{margin-top: 15px; position: relative;}
 .comment_list .btns>*{display:inline-block; width: 40px; height: 40px; padding: 0 7px; border-radius: 50%; border: 1px solid #eaeaea; white-space: nowrap; line-height: 38px !important; font-size: 14px;}
+.comment_list .btns button {line-height: inherit !important;}
 .comment_list .btns>*.on{border-color:#782fff;}
 .comment_list .btns>.btn_good * + *{margin: 3px 0 0 13px;}
 .comment_list .btns [class^="ico_"]{width: 25px; height: 25px; background:url(/mo/ko/images/common/ico_review.png) no-repeat; -webkit-background-size: 25px;background-size: 25px;}
+.comment_list .btns [class^="ico_"] + span {position: absolute; left: 30px; top: 50%; margin-top: -8px;}
+.comment_list .btns [class^="ico_"] + span.sr_only {left: 0; top: 0; margin-top: 0;}
 .comment_list .ico_thumb{background-position: 0 0;}
 .comment_list .on .ico_thumb{background-position: 0 -25px;}
 .comment_list .ico_report{background-position: 0 -75px !important;}

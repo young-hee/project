@@ -91,5 +91,5 @@ this["AP"]["handlebars"]["order"]["gift-packing-qty-info"] = Handlebars.template
 
   return "<dd>\n	<div class=\"cont\">\n"
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.list : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "	</div>\n</dd>\n";
+    + "\n		<ul class=\"loading\" id=\"packingLoading\" style=\"min-height: 100px; display: none\">\n			<li></li>\n			<li></li>\n			<li></li>\n		</ul>\n	</div>\n</dd>\n";
 },"useData":true,"useDepths":true});

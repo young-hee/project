@@ -142,7 +142,8 @@ public class IniPayment {
         String currency =  "WON";
         
         //주문번호 (mid + "_" + timestamp)
-        String oid =  payDTO.getpMid() + "_" + SignatureUtil.getTimestamp();
+        //String oid =  payDTO.getpMid() + "_" + SignatureUtil.getTimestamp();
+        String oid = payDTO.getOid();
         String price =  payDTO.getPrice().replace(",", "");
         
        /********************************************************************/        

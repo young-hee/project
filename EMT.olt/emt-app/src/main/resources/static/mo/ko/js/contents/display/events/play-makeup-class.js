@@ -51,14 +51,14 @@
 			
 			modal.addListener( 'modal-before-close', function (e) {
 				$modal.find( 'textarea, input:text' ).inputLimits( 'clear' );
-				//$modal.find( 'select' ).selectBox( 'clear' );
+				
 			}.bind(this));
 			
 			$modal.find( 'textarea, input:text' ).inputLimits();
+			//$modal.find( 'textarea, input:text' ).placeholer();
 			$modal.find( '.ui_date_picker' ).datePicker();
 			$modal.find( '.ui_find_addresses' ).findAddresses();
-			//$modal.find( 'input[placeholder]' ).placeholder();
-			//$modal.find( 'select' ).selectBox();
+
 		},
 		
 		/** =============== Private Methods =============== */
@@ -85,8 +85,7 @@
 				.done(function ( result ) {
 					defer.resolve();
 					this.dispatch( 'success' );
-				}.bind(this))
-				.fail(function ( xhr ) {
+				}.bind(this)).fail(function ( xhr ) {
 					if ( xhr.errorCode === 'EAPI004' ) {
 						AP.login({trigger: true});
 					} else {

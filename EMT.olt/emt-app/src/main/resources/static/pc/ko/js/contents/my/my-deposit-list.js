@@ -14,7 +14,7 @@
 
 			this._param = {
 				offset: 0,
-				limit: 5,
+				limit: 10,
 				startDate: '',
 				endDate: '',
 				depositHistTypeCode: ''	// 예치금이력유형코드(적립:Saving, 출금:Transfer, 사용:Pay, 취소:PayCancel)
@@ -83,7 +83,7 @@
 
 				this._param = {
 					offset: 0,
-					limit: 5,
+					limit: 10,
 					startDate: e.date.startDate,
 					endDate: e.date.endDate,
 					depositHistTypeCode: $('input[name=depositHistTypeCode]').val()
@@ -100,7 +100,7 @@
 
 				this._param = {
 					offset: 0,
-					limit: 5,
+					limit: 10,
 					startDate: $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).startDate,
 					endDate: $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).endDate,
 					depositHistTypeCode: $('input[name=depositHistTypeCode]').val()

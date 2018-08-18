@@ -2,41 +2,38 @@
 <body>
 <!-- #ap_container -->
 <div ap:fragment="layout-contents">
-	<div class="ap_contents ap_cs">
+	<div class="ap_contents ap_cs inquiry_wrap">
 		<div class="section pd_md no_margin">
 			<fieldset class="form inquiry">
 				<legend class="sr_only">문의 정보 입력</legend>
 				
-				<!-- data-not-label-change="true" label변경을 하지 않는다 -->
-				<div class="ui_select" data-not-label-change="true">
-					<input type="hidden" name="">
-					<button type="button">기본 Label</button>
-					<ul class="select_options">
-						<!-- data-selected="true" 속성을 a 태그에 설정하면 해당 옵션이 기본 선택된다. -->
-						<!-- data-disabled="true" 속성을 a 태그에 설정하면 해당 옵션을 선택할수 없다. -->
-						<!-- data-value="value" 선택시 value로 리턴되는 값 -->
-						<li class="select_option"><code class="label_markup" style="display:none">선택 1</code><a data-value="01"><img alt="" src="/mo/ko/images/dummy/img005.jpg">선택 1</a></li>
-						<li class="select_option"><code class="label_markup" style="display:none">선택 2</code><a data-value="02" data-selected="true"><img alt="" src="/mo/ko/images/dummy/img006.jpg">선택 2</a></li>
-						<li class="select_option"><code class="label_markup" style="display:none">선택 3</code><a data-value="03" data-disabled="true"><img alt="" src="/mo/ko/images/dummy/img005.jpg">선택 3</a></li>
-						<li class="select_option"><code class="label_markup" style="display:none">선택 4</code><a data-value="04"><img alt="" src="/mo/ko/images/dummy/img006.jpg">선택 4</a></li>
-						<li class="select_option"><code class="label_markup" style="display:none">선택 5</code><a data-value="05"><img alt="" src="/mo/ko/images/dummy/img005.jpg">선택 5</a></li>
-						<li class="select_option"><code class="label_markup" style="display:none">선택 6</code><a data-value="06"><img alt="" src="/mo/ko/images/dummy/img006.jpg">선택 6</a></li>
-					</ul>
+				<div class="select_wrap">
+					<span class="select_h48_gray">
+						<select name="select01" title="">
+							<option value="val01">선택하세요</option>
+							<option value="val01">상품,결제</option>
+							<option value="val01">교환,포인트</option>
+							<option value="val01">이벤트</option>
+							<option value="val01">쿠폰,사이트이용</option>
+						</select>
+					</span>
 				</div>
-				<button type="button" class="btn_lg_neutral w100p mgt10">문의할 주문/제품 선택</button>
-				<div class="attached mgt10">
+				<a href="javascript:;" class="btn_h54_bl">문의할 주문/제품 선택</a>
+				
+				<!--<div class="attached mgt10">
 					<p class="bullet_dot ellipsis">프루프 10 방수펜슬 NEW 외 4개  </p>
 					<button class="ui_close" type="button"><span class="sr_only">선택상품 삭제</span></button>
-				</div>
-				<div class="input_wrap mgt20">
-					<input type="text" value="" placeholder="제목">
+				</div>-->
+				<div class="input_wrap">
+					<span class="input_h48_gray"><input type="text" placeholder="제목"></span>
 				</div>
 				<div class="textarea">
 					<textarea name="" id="" cols="" rows="" placeholder="내용"></textarea>
 				</div>
+				
 				<div class="ui_input_images">
 					<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="multiple" style="display:none" />
-					<label for="i_picture" class="btn_md_neutral w100p mgt10">사진첨부</label>
+					<label for="i_picture" class="btn_h40_bl">사진첨부</label>
 					<ul class="attach">
 						<li>
 							<img ap:src="@{/images/dummy/img_quick_menu_01.png}" alt="">
@@ -46,14 +43,17 @@
 					<p class="text_notice">첨부파일은 이미지 파일만 가능하며, 최대 10개까지 등록 하실 수 있습니다. (최대 파일 용량 3MB)</p>
 				</div>
 				<div class="input_wrap">
-					<input type="text" title="이메일  입력" placeholder="이메일 입력">
+					<span class="input_h48_gray"><input type="text" placeholder="이메일 입력"></span>
 				</div>
-				<div class="input_wrap">
-					<input type="tel" value="" placeholder="휴대폰번호(선택)">
+				<div class="input_wrap mt10">
+					<span class="input_h48_gray"><input type="tel" placeholder="휴대폰번호(선택)"></span>
 				</div>
-				<div class="check_wrap mgt10"><input type="checkbox" id="sms_check"><label for="sms_check">SMS 답변 알림 </label></div>
+				
+				<div class="chk_wrap">
+					<span class="chk_h28 f_mid"><input type="checkbox" name="chk01" id="check1_1"><label for="check1_1">SMS 답변 알림</label></span>
+				</div>
 				<div class="form_btns mgt20">
-					<button type="button" class="btn_lg_primary w100p">등록</button>
+					<a href="javascript:;" class="btn_h50_pp">등록</a>
 				</div>
 			</fieldset>
 		</div>
@@ -62,7 +62,9 @@
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
-
+	<script>
+		$( '.ui_select' ).designSelectBox();
+	</script>
 </th:block>
 
 </body>

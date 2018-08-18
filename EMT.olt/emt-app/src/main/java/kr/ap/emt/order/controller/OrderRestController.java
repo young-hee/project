@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/order")
 public class OrderRestController extends OrderBaseController {
 	/** logger setting.. */
@@ -44,21 +44,14 @@ public class OrderRestController extends OrderBaseController {
 	 * @return
 	 */
 	@GetMapping("/getOrderCount")
-	@ResponseBody
 	public ResponseEntity<?> getOrderCount() {
 
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
-		try {
-			OrdSummaryInfo ordSummary = orderApi.getOrdSummary(getMemberSn(), null, null);
+        OrdSummaryInfo ordSummary = orderApi.getOrdSummary(getMemberSn(), null, null);
 
-			//주문/배송건수(FO Header)
-			result.put("ordShippngCnt", ordSummary.getOrdReceptCnt() + ordSummary.getPayCompleteCnt() + ordSummary.getPreparingCnt() + ordSummary.getShippingCnt());
-
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+        //주문/배송건수(FO Header)
+        result.put("ordShippngCnt", ordSummary.getOrdReceptCnt() + ordSummary.getPayCompleteCnt() + ordSummary.getPreparingCnt() + ordSummary.getShippingCnt());
 
 		return ResponseEntity.ok(result);
 	}
@@ -70,20 +63,14 @@ public class OrderRestController extends OrderBaseController {
 	 * @return
 	 */
 	@GetMapping("/getCouponList")
-	@ResponseBody
 	public ResponseEntity<?> getCouponList(Long ordSn) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		try {
-			if(Long.valueOf(ordSn) != null){
-				AvailCouponListResult availCoupon = orderApi.getOrdAvailCouponList(ordSn);
-				result.put("availCouponCnt", availCoupon.getAvailCouponCnt());		// 사용가능쿠폰수
-				result.put("availCouponExList", availCoupon.getAvailCouponExList()); // 사용가능 쿠폰목록
-				result.put("result", "success");
-			}
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+        if(ordSn != null){
+            AvailCouponListResult availCoupon = orderApi.getOrdAvailCouponList(ordSn);
+            result.put("availCouponCnt", availCoupon.getAvailCouponCnt());		// 사용가능쿠폰수
+            result.put("availCouponExList", availCoupon.getAvailCouponExList()); // 사용가능 쿠폰목록
+            result.put("result", "success");
+        }
 		return ResponseEntity.ok(result);
 	}
 
@@ -93,19 +80,13 @@ public class OrderRestController extends OrderBaseController {
 	 * @return
 	 */
 	@GetMapping("/getDownloadCouponList")
-	@ResponseBody
 	public ResponseEntity<?> getDownloadCouponList() {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		try {
-			List<DownloadCoupons> downloadCoupons = couponApi.getDownloadCoupons("All", "N", getMemberSn(), null, null);
-			result.put("downloadCouponCnt", downloadCoupons.size());	// 다운로드 쿠폰수
-			result.put("downloadCouponList", downloadCoupons); 		// 다운로드 쿠폰목록
-			result.put("result", "success");
+        List<DownloadCoupons> downloadCoupons = couponApi.getDownloadCoupons("All", "N", getMemberSn(), null, null);
+        result.put("downloadCouponCnt", downloadCoupons.size());	// 다운로드 쿠폰수
+        result.put("downloadCouponList", downloadCoupons); 		// 다운로드 쿠폰목록
+        result.put("result", "success");
 
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
 		return ResponseEntity.ok(result);
 	}
 
@@ -115,18 +96,11 @@ public class OrderRestController extends OrderBaseController {
 	 * @return
 	 */
 	@PostMapping("/downloadCoupon")
-	@ResponseBody
 	public ResponseEntity<?> downloadCoupon(Long couponSn) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		try {
+        BooleanResult booleanResult = couponApi.registDownloadCoupon(couponSn, getMemberSn());
+        result.put("downloadResult", booleanResult.isResult());
 
-			BooleanResult booleanResult = couponApi.registDownloadCoupon(couponSn, getMemberSn());
-			result.put("downloadResult", booleanResult.isResult());
-
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
 		return ResponseEntity.ok(result);
 	}
 
@@ -136,29 +110,24 @@ public class OrderRestController extends OrderBaseController {
 	 * @return
 	 */
 	@GetMapping("/orderShipAddress")
-	@ResponseBody
 	public ResponseEntity<?> orderShipAddress(Long memberSn) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		try {
-			if(Long.valueOf(memberSn) != null){
-				ShipAddressInfo shipAddressInfo = new ShipAddressInfo();
-				List<ShipAddressInfo> sa = apApi.getShipAddresses(memberSn);
-				if(sa.size() > 0 ){
-					for(ShipAddressInfo si : sa){
-						shipAddressInfo.setShipAddressSn(si.getShipAddressSn());
-					}
-					result.put("shipAddressMethod", "updateShipAddress");
-					result.put("param", shipAddressInfo.getShipAddressSn());
-				}else{
-					result.put("shipAddressMethod", "insertShipAddress");
-				}
-				result.put("result", "success");
+        if(memberSn != null){
+            ShipAddressInfo shipAddressInfo = new ShipAddressInfo();
+            List<ShipAddressInfo> sa = apApi.getShipAddresses(memberSn);
+            if(sa.size() > 0 ){
+                for(ShipAddressInfo si : sa){
+                    shipAddressInfo.setShipAddressSn(si.getShipAddressSn());
+                }
+                result.put("shipAddressMethod", "updateShipAddress");
+                result.put("param", shipAddressInfo.getShipAddressSn());
+            }else{
+                result.put("shipAddressMethod", "insertShipAddress");
+            }
+            result.put("result", "success");
 
-			}
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+        }
+
 		return ResponseEntity.ok(result);
 	}
 
@@ -168,36 +137,30 @@ public class OrderRestController extends OrderBaseController {
 	 * @return
 	 */
 	@PostMapping("/orderAddAddress")
-	@ResponseBody
 	public ResponseEntity<?> orderAddAddress(@Valid OrdReceptChangeDTO ordRcDTO) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		try {
-			if(ordRcDTO != null){
-				PostAndPutShipAddressInfo body = new PostAndPutShipAddressInfo();
+        if(ordRcDTO != null){
+            PostAndPutShipAddressInfo body = new PostAndPutShipAddressInfo();
 
-				/* 수취인 정보 */
-				EmbeddableName en = new EmbeddableName();
-				EmbeddableAddress ea = new EmbeddableAddress();
-				EmbeddableTel et = new EmbeddableTel();
+            /* 수취인 정보 */
+            EmbeddableName en = new EmbeddableName();
+            EmbeddableAddress ea = new EmbeddableAddress();
+            EmbeddableTel et = new EmbeddableTel();
 
-				en.setName1(ordRcDTO.getRecipientName());
-				ea.setZipCode(ordRcDTO.getRecipientZipCode());
-				ea.setAddress1(ordRcDTO.getRecipientAddress1());
-				ea.setAddress2(ordRcDTO.getRecipientAddress2());
-				et.setPhoneNo(ordRcDTO.getRecipientPhoneNo());
+            en.setName1(ordRcDTO.getRecipientName());
+            ea.setZipCode(ordRcDTO.getRecipientZipCode());
+            ea.setAddress1(ordRcDTO.getRecipientAddress1());
+            ea.setAddress2(ordRcDTO.getRecipientAddress2());
+            et.setPhoneNo(ordRcDTO.getRecipientPhoneNo());
 
-				body.setShipAddressName(ordRcDTO.getRecipientName());	// 배송지명
-				body.setAddresseeName(en);								// 수취인명
-				body.setAddresseeAddress(ea);							// 수취인주소
-				body.setPhoneNo1(et);									// 수취인전화번호1
+            body.setShipAddressName(ordRcDTO.getRecipientName());	// 배송지명
+            body.setAddresseeName(en);								// 수취인명
+            body.setAddresseeAddress(ea);							// 수취인주소
+            body.setPhoneNo1(et);									// 수취인전화번호1
 
-				apApi.postShipAddress(getMemberSession().getMember_sn(), body);
-				result.put("result", "success");
-			}
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+            apApi.postShipAddress(getMemberSession().getMember_sn(), body);
+            result.put("result", "success");
+        }
 		return ResponseEntity.ok(result);
 	}
 
@@ -206,36 +169,30 @@ public class OrderRestController extends OrderBaseController {
 	 * @return
 	 */
 	@PutMapping("/orderUpdateAddress")
-	@ResponseBody
 	public ResponseEntity<?> orderUpdateAddress(@Valid OrdReceptChangeDTO ordRcDTO) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		try {
-			if(ordRcDTO != null && ordRcDTO.getShipAddressSn() > 0){
-				PostAndPutShipAddressInfo body = new PostAndPutShipAddressInfo();
+        if(ordRcDTO != null && ordRcDTO.getShipAddressSn() > 0){
+            PostAndPutShipAddressInfo body = new PostAndPutShipAddressInfo();
 
-				/* 수취인 정보 */
-				EmbeddableName en = new EmbeddableName();
-				EmbeddableAddress ea = new EmbeddableAddress();
-				EmbeddableTel et = new EmbeddableTel();
+            /* 수취인 정보 */
+            EmbeddableName en = new EmbeddableName();
+            EmbeddableAddress ea = new EmbeddableAddress();
+            EmbeddableTel et = new EmbeddableTel();
 
-				en.setName1(ordRcDTO.getRecipientName());
-				et.setPhoneNo(ordRcDTO.getRecipientPhoneNo());
-				ea.setZipCode(ordRcDTO.getRecipientZipCode());
-				ea.setAddress1(ordRcDTO.getRecipientAddress1());
-				ea.setAddress2(ordRcDTO.getRecipientAddress2());
+            en.setName1(ordRcDTO.getRecipientName());
+            et.setPhoneNo(ordRcDTO.getRecipientPhoneNo());
+            ea.setZipCode(ordRcDTO.getRecipientZipCode());
+            ea.setAddress1(ordRcDTO.getRecipientAddress1());
+            ea.setAddress2(ordRcDTO.getRecipientAddress2());
 
-				body.setShipAddressName(ordRcDTO.getRecipientName());	// 배송지명
-				body.setAddresseeName(en);								// 수취인명
-				body.setAddresseeAddress(ea);							// 수취인주소
-				body.setPhoneNo1(et);									// 수취인전화번호1
+            body.setShipAddressName(ordRcDTO.getRecipientName());	// 배송지명
+            body.setAddresseeName(en);								// 수취인명
+            body.setAddresseeAddress(ea);							// 수취인주소
+            body.setPhoneNo1(et);									// 수취인전화번호1
 
-				apApi.putShipAddress(getMemberSession().getMember_sn(), ordRcDTO.getShipAddressSn(), body);
-				result.put("result", "success");
-			}
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+            apApi.putShipAddress(getMemberSession().getMember_sn(), ordRcDTO.getShipAddressSn(), body);
+            result.put("result", "success");
+        }
 		return ResponseEntity.ok(result);
 	}
 
@@ -244,7 +201,6 @@ public class OrderRestController extends OrderBaseController {
 	 * @return
 	 */
 	@PostMapping("/ordReceptPayAmt")
-	@ResponseBody
 	public ResponseEntity<?> ordReceptPayAmt(
 		Long ordSn,
 		String depositYn,
@@ -257,43 +213,38 @@ public class OrderRestController extends OrderBaseController {
 		String payMethodCode
 	) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		try {
-			BigDecimal parsePayAmt = new BigDecimal(pgPrice.replaceAll(",", ""));
-			OrdReceptPayAmt body = new OrdReceptPayAmt();
-			List<PayAmt> PayAmtList = new ArrayList<PayAmt>();
-			PayAmt pgPayAmt = new PayAmt();
-			pgPayAmt.setDepositYn("N"); // 예치금여부('Y'면 결제수단일련번호 X)
-			pgPayAmt.setPayMethodSn(payMethodSn); //결제수단일련번호
-			pgPayAmt.setPayAmt(parsePayAmt); //결제금액
-			PayAmtList.add(pgPayAmt);
-			
-			PayAmt depositPayAmt = new PayAmt();
-			depositPayAmt.setDepositYn("Y");
-			BigDecimal parseDepositPrice = new BigDecimal(depositPrice.replaceAll(",", ""));
-			depositPayAmt.setPayAmt(parseDepositPrice); // 예치금
-            PayAmtList.add(depositPayAmt);
-            
-			if(PayAmtList.size() > 0){
-				body.setPayAmtList(PayAmtList);
-				orderApi.ordReceptPayAmt(ordSn, body);
+        BigDecimal parsePayAmt = new BigDecimal(pgPrice.replaceAll(",", ""));
+        OrdReceptPayAmt body = new OrdReceptPayAmt();
+        List<PayAmt> PayAmtList = new ArrayList<PayAmt>();
+        PayAmt pgPayAmt = new PayAmt();
+        pgPayAmt.setDepositYn("N"); // 예치금여부('Y'면 결제수단일련번호 X)
+        pgPayAmt.setPayMethodSn(payMethodSn); //결제수단일련번호
+        pgPayAmt.setPayAmt(parsePayAmt); //결제금액
+        PayAmtList.add(pgPayAmt);
 
-				MemberSession memberSession = getMemberSession();
-				memberSession.setOrdSn(ordSn);
-				memberSession.setDepositYn(depositYn);
-                memberSession.setDepositPrice(parseDepositPrice);
-				memberSession.setPayMethodSn(payMethodSn);
-				memberSession.setCreditcardCoSn(creditcardCoSn);
-				memberSession.setNextPayUseYn(nextPayUseYn);
-				memberSession.setPayServiceCode(payServiceCode);
-				memberSession.setPayMethodCode(payMethodCode);
-				setMemberSession(memberSession);
+        PayAmt depositPayAmt = new PayAmt();
+        depositPayAmt.setDepositYn("Y");
+        BigDecimal parseDepositPrice = new BigDecimal(depositPrice.replaceAll(",", ""));
+        depositPayAmt.setPayAmt(parseDepositPrice); // 예치금
+        PayAmtList.add(depositPayAmt);
 
-				result.put("result", "success");
-			}
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+        if(PayAmtList.size() > 0){
+            body.setPayAmtList(PayAmtList);
+            orderApi.ordReceptPayAmt(ordSn, body);
+
+            MemberSession memberSession = getMemberSession();
+            memberSession.setOrdSn(ordSn);
+            memberSession.setDepositYn(depositYn);
+            memberSession.setDepositPrice(parseDepositPrice);
+            memberSession.setPayMethodSn(payMethodSn);
+            memberSession.setCreditcardCoSn(creditcardCoSn);
+            memberSession.setNextPayUseYn(nextPayUseYn);
+            memberSession.setPayServiceCode(payServiceCode);
+            memberSession.setPayMethodCode(payMethodCode);
+            setMemberSession(memberSession);
+
+            result.put("result", "success");
+        }
 		return ResponseEntity.ok(result);
 	}
 
@@ -302,90 +253,83 @@ public class OrderRestController extends OrderBaseController {
 	 * @return
 	 */
 	@PostMapping("/ordReceptChange")
-	@ResponseBody
 	public ResponseEntity<?> ordReceptChange(@Valid OrdReceptChangeDTO ordRcDTO){
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		try {
-			if(ordRcDTO != null){
-				MemberSession memberSession = getMemberSession();
-				OrdReceptChange body = memberSession.getOrdReceptChange();
-				if (body == null) {
-					body = new OrdReceptChange();
-				}
+        if(ordRcDTO != null){
+            MemberSession memberSession = getMemberSession();
+            OrdReceptChange body = memberSession.getOrdReceptChange();
+            if (body == null) {
+                body = new OrdReceptChange();
+            }
 
-				/** 주문자 정보 */
-				EmbeddableName en = new EmbeddableName();
-				EmbeddableAddress ea = new EmbeddableAddress();
-				EmbeddableTel et = new EmbeddableTel();
-				en.setName1(ordRcDTO.getPurchaserName());
-				ea.setAddress1(ordRcDTO.getPurchaserAddress());
-				et.setPhoneNo(ordRcDTO.getPurchaserPhoneNo());
-				body.setPurchaserName(en);											// 주문자명
-				body.setPurchaserAddress(ea);										// 주문자주소
-				body.setPurchaserPhoneNo1(et);										// 주문자전화번호1
-				body.setPurchaserEmailAddress(ordRcDTO.getPurchaserEmailAddress());	// 주문자이메일주소
+            /** 주문자 정보 */
+            EmbeddableName en = new EmbeddableName();
+            EmbeddableAddress ea = new EmbeddableAddress();
+            EmbeddableTel et = new EmbeddableTel();
+            en.setName1(ordRcDTO.getPurchaserName());
+            ea.setAddress1(ordRcDTO.getPurchaserAddress());
+            et.setPhoneNo(ordRcDTO.getPurchaserPhoneNo());
+            body.setPurchaserName(en);											// 주문자명
+            body.setPurchaserAddress(ea);										// 주문자주소
+            body.setPurchaserPhoneNo1(et);										// 주문자전화번호1
+            body.setPurchaserEmailAddress(ordRcDTO.getPurchaserEmailAddress());	// 주문자이메일주소
 
-				/** 수취인 정보 */
-				EmbeddableName en2 = new EmbeddableName();
-				EmbeddableAddress ea2 = new EmbeddableAddress();
-				EmbeddableTel et2 = new EmbeddableTel();
+            /** 수취인 정보 */
+            EmbeddableName en2 = new EmbeddableName();
+            EmbeddableAddress ea2 = new EmbeddableAddress();
+            EmbeddableTel et2 = new EmbeddableTel();
 
-				/** 새로입력 정보*/
-				if(StringUtils.isNotBlank(ordRcDTO.getUserName()) && StringUtils.isNotBlank(ordRcDTO.getUserPhoneNo())){
-					en2.setName1(ordRcDTO.getUserName());
-					ea2.setZipCode(ordRcDTO.getUserPostCode());
-					ea2.setAddress1(ordRcDTO.getUserAddress1());
-					ea2.setAddress2(ordRcDTO.getUserAddress2());
-					et2.setPhoneNo(ordRcDTO.getUserPhoneNo());
-				}else{
-					en2.setName1(ordRcDTO.getRecipientName());
-					ea2.setZipCode(ordRcDTO.getRecipientZipCode());
-					ea2.setAddress1(ordRcDTO.getRecipientAddress1());
-					ea2.setAddress2(ordRcDTO.getRecipientAddress2());
-					et2.setPhoneNo(ordRcDTO.getRecipientPhoneNo());
-				}
-				body.setRecipientName(en2);											// 수취인명
-				body.setRecipientAddress(ea2);										// 수취인주소
-				body.setRecipientPhoneNo1(et2);										// 수취인전화번호1
-				body.setRecipientEmailAddress(ordRcDTO.getRecipientEmailAddress());	// 수취인이메일주소
+            /** 새로입력 정보*/
+            if(StringUtils.isNotBlank(ordRcDTO.getUserName()) && StringUtils.isNotBlank(ordRcDTO.getUserPhoneNo())){
+                en2.setName1(ordRcDTO.getUserName());
+                ea2.setZipCode(ordRcDTO.getUserPostCode());
+                ea2.setAddress1(ordRcDTO.getUserAddress1());
+                ea2.setAddress2(ordRcDTO.getUserAddress2());
+                et2.setPhoneNo(ordRcDTO.getUserPhoneNo());
+            }else{
+                en2.setName1(ordRcDTO.getRecipientName());
+                ea2.setZipCode(ordRcDTO.getRecipientZipCode());
+                ea2.setAddress1(ordRcDTO.getRecipientAddress1());
+                ea2.setAddress2(ordRcDTO.getRecipientAddress2());
+                et2.setPhoneNo(ordRcDTO.getRecipientPhoneNo());
+            }
+            body.setRecipientName(en2);											// 수취인명
+            body.setRecipientAddress(ea2);										// 수취인주소
+            body.setRecipientPhoneNo1(et2);										// 수취인전화번호1
+            body.setRecipientEmailAddress(ordRcDTO.getRecipientEmailAddress());	// 수취인이메일주소
 
-				body.setShipMsg(ordRcDTO.getShipMsg());							// 배송메세지
+            body.setShipMsg(ordRcDTO.getShipMsg());							// 배송메세지
 
-				/** 편의점 택백 */
-				if (StringUtils.isNotEmpty(ordRcDTO.getcStoreName()) && StringUtils.isNotEmpty(ordRcDTO.getcStorePhoneNo())) {
-					body.setcStoreName(ordRcDTO.getcStoreName());
-					EmbeddableTel cet = new EmbeddableTel();
-					cet.setPhoneNo(ordRcDTO.getcStorePhoneNo());
-					body.setcStorePhoneNo(cet);
-					body.setcStoreHqCode(ordRcDTO.getcStoreHqCode());
-					body.setcStoreCenterCode(ordRcDTO.getcStoreCenterCode());
-					body.setcStoreCenterName(ordRcDTO.getcStoreCenterName());
-					body.setcStoreStoreCode(ordRcDTO.getcStoreStoreCode());
-					body.setcStoreCompany(ordRcDTO.getcStoreCompany());
-					body.setcStoreDockNo(ordRcDTO.getcStoreDockNo());
-					EmbeddableAddress cea = new EmbeddableAddress();
-					cea.setAddress1(ordRcDTO.getcStoreAddressAddress1());
-					cea.setAddress2(ordRcDTO.getcStoreAddressAddress2());
-					cea.setZipCode(ordRcDTO.getcStoreAddressZipCode());
-					body.setcStoreAddress(cea);
-					body.setcStoreArrivalAreaCode(ordRcDTO.getcStoreArrivalAreaCode());
-					body.setcStoreArrivalAreaBarcode(ordRcDTO.getcStoreArrivalAreaBarcode());
-					body.setcStoreDongNmCode(ordRcDTO.getcStoreDongNmCode());
-					body.setcStoreArrivalDongNm(ordRcDTO.getcStoreArrivalDongNm());
-				}
+            /** 편의점 택백 */
+            if (StringUtils.isNotEmpty(ordRcDTO.getcStoreName()) && StringUtils.isNotEmpty(ordRcDTO.getcStorePhoneNo())) {
+                body.setcStoreName(ordRcDTO.getcStoreName());
+                EmbeddableTel cet = new EmbeddableTel();
+                cet.setPhoneNo(ordRcDTO.getcStorePhoneNo());
+                body.setcStorePhoneNo(cet);
+                body.setcStoreHqCode(ordRcDTO.getcStoreHqCode());
+                body.setcStoreCenterCode(ordRcDTO.getcStoreCenterCode());
+                body.setcStoreCenterName(ordRcDTO.getcStoreCenterName());
+                body.setcStoreStoreCode(ordRcDTO.getcStoreStoreCode());
+                body.setcStoreCompany(ordRcDTO.getcStoreCompany());
+                body.setcStoreDockNo(ordRcDTO.getcStoreDockNo());
+                EmbeddableAddress cea = new EmbeddableAddress();
+                cea.setAddress1(ordRcDTO.getcStoreAddressAddress1());
+                cea.setAddress2(ordRcDTO.getcStoreAddressAddress2());
+                cea.setZipCode(ordRcDTO.getcStoreAddressZipCode());
+                body.setcStoreAddress(cea);
+                body.setcStoreArrivalAreaCode(ordRcDTO.getcStoreArrivalAreaCode());
+                body.setcStoreArrivalAreaBarcode(ordRcDTO.getcStoreArrivalAreaBarcode());
+                body.setcStoreDongNmCode(ordRcDTO.getcStoreDongNmCode());
+                body.setcStoreArrivalDongNm(ordRcDTO.getcStoreArrivalDongNm());
+            }
 
-				orderApi.ordReceptChange(ordRcDTO.getOrdSn(), body);
+            orderApi.ordReceptChange(ordRcDTO.getOrdSn(), body);
 
-				memberSession.setOrdReceptChange(body);
-				setMemberSession(memberSession);
+            memberSession.setOrdReceptChange(body);
+            setMemberSession(memberSession);
 
-				result.put("result", "success");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+            result.put("result", "success");
+        }
 		return ResponseEntity.ok(result);
 	}
 
@@ -398,51 +342,45 @@ public class OrderRestController extends OrderBaseController {
 	 * @return
 	 */
 	@PostMapping("/ordReceptChangeCoupon")
-	@ResponseBody
 	public ResponseEntity<?> ordReceptChangeCoupon(Long ordSn, String[] memberKeepingCouponSnArr, Long membershipSn){
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		try {
-			MemberSession memberSession = getMemberSession();
-			OrdReceptChange body = memberSession.getOrdReceptChange();
-			if (body == null) {
-				body = new OrdReceptChange();
-			}
+        MemberSession memberSession = getMemberSession();
+        OrdReceptChange body = memberSession.getOrdReceptChange();
+        if (body == null) {
+            body = new OrdReceptChange();
+        }
 
-			List<Long> memberCouponSnList = new ArrayList<Long>();
-			List<String> inputCouponIdList = new ArrayList<String>();
+        List<Long> memberCouponSnList = new ArrayList<Long>();
+        List<String> inputCouponIdList = new ArrayList<String>();
 
-			if (ordSn != null) {
-				/* 보유쿠폰 */
-				if (memberKeepingCouponSnArr == null) {
-					//전부 삭제시 'null'로 처리함
-					body.setMemberCouponSnList(null);
-				} else if(memberKeepingCouponSnArr.length > 0){
-					for(int i=0; i < memberKeepingCouponSnArr.length; i++){
-						if(memberKeepingCouponSnArr[i] != null){
-							memberCouponSnList.add(Long.valueOf(memberKeepingCouponSnArr[i]));
-						}
-					}
-					body.setMemberCouponSnList(memberCouponSnList);
-				}
+        if (ordSn != null) {
+            /* 보유쿠폰 */
+            if (memberKeepingCouponSnArr == null) {
+                //전부 삭제시 'null'로 처리함
+                body.setMemberCouponSnList(null);
+            } else if(memberKeepingCouponSnArr.length > 0){
+                for(int i=0; i < memberKeepingCouponSnArr.length; i++){
+                    if(memberKeepingCouponSnArr[i] != null){
+                        memberCouponSnList.add(Long.valueOf(memberKeepingCouponSnArr[i]));
+                    }
+                }
+                body.setMemberCouponSnList(memberCouponSnList);
+            }
 
-				initPoint(membershipSn, body);
+            initPoint(membershipSn, body);
 
-				OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
+            OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
 
-				memberSession.setOrdReceptChange(body);
-				setMemberSession(memberSession);
+            memberSession.setOrdReceptChange(body);
+            setMemberSession(memberSession);
 
-				result.put("applyCouponExList", ordRc.getApplyCouponExList());
-				result.put("ordHistEx", ordRc.getOrdHistEx());
-				result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
-				result.put("ordCntMap", makeOrdCntList(ordRc));
-				result.put("apMember", apApi.getMemberInfo(getMemberSn()));
+            result.put("applyCouponExList", ordRc.getApplyCouponExList());
+            result.put("ordHistEx", ordRc.getOrdHistEx());
+            result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
+            result.put("ordCntMap", makeOrdCntList(ordRc));
+            result.put("apMember", apApi.getMemberInfo(getMemberSn()));
 
-			}
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+        }
 		return ResponseEntity.ok(result);
 	}
 
@@ -456,47 +394,41 @@ public class OrderRestController extends OrderBaseController {
 	 * @return
 	 */
 	@PostMapping("/ordReceptChangeBag")
-	@ResponseBody
 	public ResponseEntity<?> ordReceptChangeBag(Long ordSn, Long coSn, Long giftPackingSn, Integer giftPackingQty, Long membershipSn){
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		try {
-			MemberSession memberSession = getMemberSession();
-			OrdReceptChange body = memberSession.getOrdReceptChange();
-			if (body == null) {
-				body = new OrdReceptChange();
-			}
+        MemberSession memberSession = getMemberSession();
+        OrdReceptChange body = memberSession.getOrdReceptChange();
+        if (body == null) {
+            body = new OrdReceptChange();
+        }
 
-			List<OtfGiftPackingSelect> otfGiftPackingList = new ArrayList<OtfGiftPackingSelect>();
-			OtfGiftPackingSelect otfGiftPackingSelect = new OtfGiftPackingSelect();
+        List<OtfGiftPackingSelect> otfGiftPackingList = new ArrayList<OtfGiftPackingSelect>();
+        OtfGiftPackingSelect otfGiftPackingSelect = new OtfGiftPackingSelect();
 
-			if(ordSn != null){
+        if(ordSn != null){
 
-				if (giftPackingSn != null && giftPackingQty != null) {
-					otfGiftPackingSelect.setCoSn(coSn);                        // 업체일련번호
-					otfGiftPackingSelect.setGiftPackingSn(giftPackingSn);    // 선물포장일련번호
-					otfGiftPackingSelect.setGiftPackingQty(giftPackingQty);    // 선물포장수량
-					otfGiftPackingList.add(otfGiftPackingSelect);
-					body.setOtfGiftPackingSelectList(otfGiftPackingList);
-				} else {
-					body.setOtfGiftPackingSelectList(null);
-				}
+            if (giftPackingSn != null && giftPackingQty != null) {
+                otfGiftPackingSelect.setCoSn(coSn);                        // 업체일련번호
+                otfGiftPackingSelect.setGiftPackingSn(giftPackingSn);    // 선물포장일련번호
+                otfGiftPackingSelect.setGiftPackingQty(giftPackingQty);    // 선물포장수량
+                otfGiftPackingList.add(otfGiftPackingSelect);
+                body.setOtfGiftPackingSelectList(otfGiftPackingList);
+            } else {
+                body.setOtfGiftPackingSelectList(null);
+            }
 
-				initPoint(membershipSn, body);
+            initPoint(membershipSn, body);
 
-				OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
+            OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
 
-				memberSession.setOrdReceptChange(body);
-				setMemberSession(memberSession);
+            memberSession.setOrdReceptChange(body);
+            setMemberSession(memberSession);
 
-				result.put("ordHistEx", ordRc.getOrdHistEx());
-				result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
-				result.put("ordCntMap", makeOrdCntList(ordRc));
-				result.put("apMember", apApi.getMemberInfo(getMemberSn()));
-			}
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+            result.put("ordHistEx", ordRc.getOrdHistEx());
+            result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
+            result.put("ordCntMap", makeOrdCntList(ordRc));
+            result.put("apMember", apApi.getMemberInfo(getMemberSn()));
+        }
 		return ResponseEntity.ok(result);
 	}
 
@@ -509,43 +441,37 @@ public class OrderRestController extends OrderBaseController {
 	 * @return
 	 */
 	@PostMapping("/ordReceptChangePoint")
-	@ResponseBody
 	public ResponseEntity<?> ordReceptChangePoint(Long ordSn, Long membershipSn, int useMembershipPoint){
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		try {
-			MemberSession memberSession = getMemberSession();
-			OrdReceptChange body = memberSession.getOrdReceptChange();
-			if (body == null) {
-				body = new OrdReceptChange();
-			}
+        MemberSession memberSession = getMemberSession();
+        OrdReceptChange body = memberSession.getOrdReceptChange();
+        if (body == null) {
+            body = new OrdReceptChange();
+        }
 
-			List<MembershipPointSelect> membershipPointSelectsList = new ArrayList<MembershipPointSelect>();
-			MembershipPointSelect membershipPointSelect = new MembershipPointSelect();
-			if(ordSn != null){
+        List<MembershipPointSelect> membershipPointSelectsList = new ArrayList<MembershipPointSelect>();
+        MembershipPointSelect membershipPointSelect = new MembershipPointSelect();
+        if(ordSn != null){
 
-				if (membershipSn != null) {
-					membershipPointSelect.setMembershipSn(membershipSn);
-					membershipPointSelect.setUseMembershipPoint(useMembershipPoint);
-					membershipPointSelectsList.add(membershipPointSelect);
-					body.setMembershipPointSelectList(membershipPointSelectsList);
-				} else {
-					body.setMembershipPointSelectList(null);
-				}
+            if (membershipSn != null) {
+                membershipPointSelect.setMembershipSn(membershipSn);
+                membershipPointSelect.setUseMembershipPoint(useMembershipPoint);
+                membershipPointSelectsList.add(membershipPointSelect);
+                body.setMembershipPointSelectList(membershipPointSelectsList);
+            } else {
+                body.setMembershipPointSelectList(null);
+            }
 
-				OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
+            OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
 
-				memberSession.setOrdReceptChange(body);
-				setMemberSession(memberSession);
+            memberSession.setOrdReceptChange(body);
+            setMemberSession(memberSession);
 
-				result.put("ordHistEx", ordRc.getOrdHistEx());
-				result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
-				result.put("ordCntMap", makeOrdCntList(ordRc));
-				result.put("apMember", apApi.getMemberInfo(getMemberSn()));
-			}
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+            result.put("ordHistEx", ordRc.getOrdHistEx());
+            result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
+            result.put("ordCntMap", makeOrdCntList(ordRc));
+            result.put("apMember", apApi.getMemberInfo(getMemberSn()));
+        }
 		return ResponseEntity.ok(result);
 	}
 
@@ -559,47 +485,41 @@ public class OrderRestController extends OrderBaseController {
 	 * @return
 	 */
 	@PostMapping("/ordReceptChangeOrdUnit")
-	@ResponseBody
 	public ResponseEntity<?> ordReceptChangeOrdUnit(Long ordSn, Long[] ordUnitAwardSnArr, Integer[] awardSelectQtyArr, Long membershipSn){
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		try {
-			MemberSession memberSession = getMemberSession();
-			OrdReceptChange body = memberSession.getOrdReceptChange();
-			if (body == null) {
-				body = new OrdReceptChange();
-			}
+        MemberSession memberSession = getMemberSession();
+        OrdReceptChange body = memberSession.getOrdReceptChange();
+        if (body == null) {
+            body = new OrdReceptChange();
+        }
 
-			List<OrdUnitAwardSelect> ordUnitAwardSelectList = new ArrayList<OrdUnitAwardSelect>();
-			if(ordSn != null){
+        List<OrdUnitAwardSelect> ordUnitAwardSelectList = new ArrayList<OrdUnitAwardSelect>();
+        if(ordSn != null){
 
-				if (ordUnitAwardSnArr != null && ordUnitAwardSnArr.length > 0) {
-					int index = 0;
-					for (Long ordUnitAwardSn : ordUnitAwardSnArr) {
-						OrdUnitAwardSelect ordUnitAwardSelect = new OrdUnitAwardSelect();
-						ordUnitAwardSelect.setOrdUnitAwardSn(ordUnitAwardSn);
-						ordUnitAwardSelect.setAwardSelectQty(awardSelectQtyArr[index++]);
-						ordUnitAwardSelectList.add(ordUnitAwardSelect);
-					}
+            if (ordUnitAwardSnArr != null && ordUnitAwardSnArr.length > 0) {
+                int index = 0;
+                for (Long ordUnitAwardSn : ordUnitAwardSnArr) {
+                    OrdUnitAwardSelect ordUnitAwardSelect = new OrdUnitAwardSelect();
+                    ordUnitAwardSelect.setOrdUnitAwardSn(ordUnitAwardSn);
+                    ordUnitAwardSelect.setAwardSelectQty(awardSelectQtyArr[index++]);
+                    ordUnitAwardSelectList.add(ordUnitAwardSelect);
+                }
 
-					body.setOrdUnitAwardSelectList(ordUnitAwardSelectList);
-				} else {
-					body.setOrdUnitAwardSelectList(null);
-				}
+                body.setOrdUnitAwardSelectList(ordUnitAwardSelectList);
+            } else {
+                body.setOrdUnitAwardSelectList(null);
+            }
 
-				OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
+            OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
 
-				memberSession.setOrdReceptChange(body);
-				setMemberSession(memberSession);
+            memberSession.setOrdReceptChange(body);
+            setMemberSession(memberSession);
 
-				result.put("ordHistEx", ordRc.getOrdHistEx());
-				result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
-				result.put("ordCntMap", makeOrdCntList(ordRc));
-				result.put("apMember", apApi.getMemberInfo(getMemberSn()));
-			}
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+            result.put("ordHistEx", ordRc.getOrdHistEx());
+            result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
+            result.put("ordCntMap", makeOrdCntList(ordRc));
+            result.put("apMember", apApi.getMemberInfo(getMemberSn()));
+        }
 		return ResponseEntity.ok(result);
 	}
 
@@ -613,24 +533,18 @@ public class OrderRestController extends OrderBaseController {
 	 * @return
 	 */
 	@PutMapping("/orderPutMember")
-	@ResponseBody
 	public ResponseEntity<?> orderPutMember(String memberId, String name1, String phoneNo, String emailAddress){
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		try {
-			if(StringUtils.isNotEmpty(memberId) && StringUtils.isNotEmpty(name1) && StringUtils.isNotEmpty(phoneNo) && StringUtils.isNotEmpty(emailAddress)){
-				MemberForUpdate var2 = new MemberForUpdate();
-				EmbeddableTel et = new EmbeddableTel();
-				var2.setMemberId(memberId);
-				et.setPhoneNo(phoneNo);
-				var2.setPhoneNo1(et);
-				var2.setEmailAddress(emailAddress);
-				apApi.putMember(getMemberSession().getMember_sn(), var2);
-				result.put("result", "success");
-			}
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+        if(StringUtils.isNotEmpty(memberId) && StringUtils.isNotEmpty(name1) && StringUtils.isNotEmpty(phoneNo) && StringUtils.isNotEmpty(emailAddress)){
+            MemberForUpdate var2 = new MemberForUpdate();
+            EmbeddableTel et = new EmbeddableTel();
+            var2.setMemberId(memberId);
+            et.setPhoneNo(phoneNo);
+            var2.setPhoneNo1(et);
+            var2.setEmailAddress(emailAddress);
+            apApi.putMember(getMemberSession().getMember_sn(), var2);
+            result.put("result", "success");
+        }
 		return ResponseEntity.ok(result);
 	}
 

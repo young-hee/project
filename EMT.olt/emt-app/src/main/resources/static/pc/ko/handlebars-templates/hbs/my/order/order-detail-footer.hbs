@@ -2,21 +2,27 @@
 	<div class="page_btns pdt40">
 		{{#xif (eq this.type 'online') '||' (eq this.type 'store')}}
 			<div class="page_btns pdt40">
-				{{#if (or (eq this.statusCode 'OrdReceivedWaiting') (eq this.statusCode 'OrdReceivedComplete'))}}
-					{{#if (ne this.ordStatusCode 'OrdAllCancel')}}
-						{{#if this.data.shippingOrdOnlineProdList}}
-							<button class="btn_lg_bordered" type="button" onclick="chgStatus('cancel')">온라인 쇼핑 취소</button>
-						{{/if}}
-						{{#if this.data.storePickupOrdOnlineProdList}}
-							<button class="btn_lg_bordered" type="button" onclick="chgStatus('cancel')">테이크아웃 쇼핑 취소</button>
+				{{#if (eq this.type 'online')}}
+					{{#if (or (eq this.statusCode 'OrdReceivedWaiting') (eq this.statusCode 'OrdReceivedComplete'))}}
+						{{#if (ne this.ordStatusCode 'OrdAllCancel')}}
+							{{#if this.data.shippingOrdOnlineProdList}}
+								<button class="btn_lg_bordered" type="button" onclick="chgStatus('cancel')">온라인 쇼핑 취소</button>
+							{{/if}}
+							{{#if this.data.storePickupOrdOnlineProdList}}
+								<button class="btn_lg_bordered" type="button" onclick="chgStatus('cancel')">테이크아웃 쇼핑 취소</button>
+							{{/if}}
 						{{/if}}
 					{{/if}}
+				{{/if}}
+				{{#if (eq this.statusCode 'Shipping')}}
+					<button class="btn_lg_bordered" type="button" onclick="chkShippingStatus()">배송조회</button>
+					<button class="btn_lg_bordered" type="button" onclick="chkShippingComplete()">수령확인</button>
 				{{/if}}
 				{{#if (eq this.statusCode 'OrdHandlingComplete')}}
 					<button class="btn_lg_bordered" type="button" onclick="chgStatus('return')">반품신청</button>
 					<button class="btn_lg_bordered" type="button" onclick="chgStatus('exchange')">교환신청</button>
 				{{/if}}
-					<button class="btn_lg_neutral" type="button" onclick="javascript:location.href='/my/page/onlineOrderShipping'">목록으로</button>
+				<button class="btn_lg_neutral" type="button" onclick="javascript:location.href='/my/page/onlineOrderShipping'">목록으로</button>
 			</div>
 		{{else}}
 			{{#xif this.type '==' 'cashReceipts'}}

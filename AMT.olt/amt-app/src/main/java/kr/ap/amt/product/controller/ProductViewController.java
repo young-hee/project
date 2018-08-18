@@ -18,6 +18,7 @@ import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.sales.article.ArticleSearchResult;
 import net.g1project.ecp.api.model.sales.plandisplay.PlanDisplayEventListResult;
 import net.g1project.ecp.api.model.sales.product.OnlineProdInfo;
+import net.g1project.ecp.api.model.sales.product.ProdReviewCountPerScope;
 import net.g1project.ecp.api.model.sales.product.ProdReviewSummaryInfo;
 import net.g1project.ecp.api.model.sales.product.ProductInfo;
 import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkPost;
@@ -51,6 +52,7 @@ public class ProductViewController extends AbstractController{
     	
     	ProdReviewSummaryInfo summary;
     	PlanDisplayEventListResult relateEventList;
+    	ProdReviewCountPerScope maxCountPerScope = null;
     
     	//sns
     	String snsImage = null;
@@ -91,6 +93,16 @@ public class ProductViewController extends AbstractController{
     	
     	model.addAttribute("prd", onlineProdInfo);
     	model.addAttribute("summary", summary);
+    	if( summary != null ) {
+    		for (ProdReviewCountPerScope tempScope : summary.getCountPerScopes()) {
+    			if(maxCountPerScope == null) {
+    				maxCountPerScope = tempScope;
+    			} else if( tempScope.getPercent() >  maxCountPerScope.getPercent() ){
+    				maxCountPerScope = tempScope;
+    			}
+			}
+    	}
+    	model.addAttribute("maxCountPerScope", maxCountPerScope);
     	model.addAttribute("relateArticle", relateArticle);
     	model.addAttribute("relateEventList", relateEventList);
 

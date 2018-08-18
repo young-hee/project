@@ -13,8 +13,6 @@
 					<li class="clear"><span>구매 특가 상품 {{condition (eq this.step 'two') '취소' ''}}</span><span>{{currencyFormat this.data.spPriceAwardProd}}</span></li>
 					<li class="clear"><span>포장/쇼핑백 추가 {{condition (eq this.step 'two') '취소' ''}}</span><span>{{currencyFormat this.data.spUnitPacking}}</span></li>
 					<li class="clear"><span>배송비 {{condition (eq this.step 'two') '환불' ''}}</span><span>{{currencyFormat this.data.shipFee}}</span></li>
-					<li class="clear"><span>뷰티포인트 {{condition (eq this.step 'two') '환불' ''}}</span><span>{{this.data.membershipPoint}}P</span></li>
-					<li class="clear"><span>진주알 교환</span><span>{{this.data.activityPoint}}알</span></li>
 				</ul>
 			</dd>
 		</dl>
@@ -26,12 +24,12 @@
 			<dd>
 				<ul>
 					<li class="clear"><span>쿠폰할인 {{condition (eq this.step 'two') '취소' ''}}</span><span>{{currencyFormat this.data.couponPoint}}</span></li>
-					<li class="clear"><span>뷰티포인트 {{condition (eq this.step 'two') '환불' ''}}</span><span>{{this.data.membershipPoint}}P</span></li>
-					<li class="clear"><span>쿠션포인트 {{condition (eq this.step 'two') '환불' ''}}</span><span>0P</span></li>
-					<li class="clear"><span>진주알 교환</span><span>{{this.data.activityPoint}}알</span></li>
+					<li class="clear"><span>뷰티포인트 {{condition (eq this.step 'two') '환불' ''}}</span><span>{{currencyFormatDefault this.data.membershipPoint 'P'}}</span></li>
+					<li class="clear"><span>쿠션포인트 {{condition (eq this.step 'two') '환불' ''}}</span><span>{{currencyFormatDefault this.data.cushionPoint 'P'}}</span></li>
+					<li class="clear"><span>진주알 교환</span><span>{{currencyFormatDefault this.data.activityPoint '알'}}</span></li>
 					<li class="clear"><span>OK캐쉬백</span><span>0P</span></li>
 					<li class="clear"><span>두툼포인트M</span><span>0P</span></li>
-					<li class="clear"><span>기타 할인</span><span>{{this.data.etcPoint}}P</span></li>
+					<li class="clear"><span>기타 할인</span><span>{{currencyFormatDefault this.data.etcPoint 'P'}}</span></li>
 				</ul>
 			</dd>
 		</dl>
@@ -41,41 +39,7 @@
 				<p class="price"><strong class="num">{{currencyFormat this.data.totalPayment}}</strong><b></b></p>
 			</dt>
 			<dd>
-				{{#if (eq step 'one')}}
-					<ul>
-						<li class="clear"><b>예치금/상품권</b><b>{{currencyFormat this.payInfo.deposit}}</b></li>
-						<li class="clear"><span>예치금</span><span>{{currencyFormat this.payInfo.deposit}}</span></li>
-					</ul>
-					<hr class="div m20 dotted">
-					{{#if (gt this.payInfo.pgList.length 0)}}
-						{{#each this.payInfo.pgList}}
-							<ul>
-								<li class="clear"><b>{{this.pgName}}</b><b>{{currencyFormat this.pgPayAmt}}</b></li>
-							</ul>
-						{{/each}}
-					{{/if}}
-				{{/if}}
-				{{#if (eq step 'two')}}
-					{{#each this.info.ordPayCompareList}}
-						{{#if (eq this.payMethodCode 'Deposit')}}
-							<ul>
-								<li class="clear"><b>예치금/상품권</b><b>{{currencyFormat (calc this.beforePayAmt '-' this.afterPayAmt)}}</b></li>
-								<li class="clear"><span>예치금</span><span>{{currencyFormat (calc this.beforePayAmt '-' this.afterPayAmt)}}</span></li>
-							</ul>
-							<hr class="div m20 dotted">
-						{{/if}}
-						{{#if (ne this.payMethodCode 'Deposit')}}
-							<ul>
-								<li class="clear"><b>예치금/상품권</b><b>0원</b></li>
-								<li class="clear"><span>예치금</span><span>0원</span></li>
-							</ul>
-							<hr class="div m20 dotted">
-							<ul>
-								<li class="clear"><b>{{this.payMethodNameBlang}}</b><b>{{currencyFormat (calc this.beforePayAmt '-' this.afterPayAmt)}}</b></li>
-							</ul>
-						{{/if}}
-					{{/each}}
-				{{/if}}
+				{{{prodPartial 'my.order.detail.amount-payment' 'payInfo' payInfo 'compareList' compareList 'step' step}}}
 			</dd>
 		</dl>
 		</div>
@@ -105,18 +69,18 @@
 			<dd>
 				<hr class="div m20 dotted">
 				<ul>
-					<li class="clear"><span>온라인주문 포인트 적립</span><span>{{getSavingPoint this.ordSavingPoint ''}}P</span></li>
-					<li class="clear"><span>테이크아웃 포인트 적립</span><span>{{getSavingPoint this.ordSavingPoint ''}}P</span></li>
-					<li class="clear"><span>쿠션 포인트 적립</span><span>{{getSavingPoint this.ordSavingPoint ''}}P</span></li>
-					<li class="clear"><span>핑크멤버십 포인트 적립</span><span>{{getSavingPoint this.ordSavingPoint ''}}P</span></li>
-					<li class="clear"><span>뷰티포인트 적립</span><span>{{getSavingPoint this.ordSavingPoint 'MembershipPoint'}}P</span></li>
+					<li class="clear"><span>온라인주문 포인트 적립</span><span>{{currencyFormatDefault (getSavingPoint this.ordSavingPoint 'OnlinePoint') 'P'}}</span></li>
+					<li class="clear"><span>테이크아웃 포인트 적립</span><span>{{currencyFormatDefault (getSavingPoint this.ordSavingPoint '') 'P'}}</span></li>
+					<li class="clear"><span>쿠션 포인트 적립</span><span>{{currencyFormatDefault (getSavingPoint this.ordSavingPoint '') 'P'}}</span></li>
+					<li class="clear"><span>핑크멤버십 포인트 적립</span><span>{{currencyFormatDefault (getSavingPoint this.ordSavingPoint '') 'P'}}</span></li>
+					<li class="clear"><span>뷰티포인트 적립</span><span>{{currencyFormatDefault (getSavingPoint this.ordSavingPoint 'MembershipPoint') 'P'}}</span></li>
 				</ul>
 			</dd>
 		</dl>
 	</div>
 </div>
 
-{{#if (eq this.viewYN.addPay 'Y')}}
+{{#if (eq this.viewYn.addPay 'Y')}}
 	{{#if (gt this.data.ordAmt.AddShipFee 0)}}
 		{{#if (eq this.type 'cancel')}}
 			<h3 class="h_title sub mgb20">배송비 추가 결제 <small>취소 후 최종 결제금액이 10,000원 미만인 경우 배송비 결제가 필요합니다.</small></h3>
@@ -146,7 +110,7 @@
 		</div>
 	{{/if}}
 {{/if}}
-{{#if (and (eq this.viewYN.addPayResult 'Y'))}}
+<!-- {{#if (and (eq this.viewYn.addPayResult 'Y'))}}
 	{{#each this.info.ordPayCompareList}}
 		{{#if (eq this.addedPayYn 'Y')}}
 			<h3 class="h_title sub mgb20">반품 배송비 결제</h3>
@@ -162,4 +126,4 @@
 			</div>
 		{{/if}}
 	{{/each}}
-{{/if}}
+{{/if}} -->

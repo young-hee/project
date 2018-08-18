@@ -6,16 +6,16 @@
 				<td rowspan="{{ condition (isEmpty this.storePickupOrdProdInfo) 1 2 }}">
 					{{#xif ../type '==' 'online'}}
 						{{#xif this.onlineOrdProdInfo.ordDetailStatusCode '===' 'OrdAllCancel'}}
-							<a href="/my/page/claim/cancel/{{this.ordHistNo}}" class="order_number_link">{{this.ordNo}}</a>
+							<a href="javascript:;" onclick="showDetailView('claim/cancel', '{{this.ordHistNo}}')" class="order_number_link">{{this.ordNo}}</a>
 						{{else}}
-							<a href="/my/page/order/detail/{{this.ordNo}}" class="order_number_link">{{this.ordNo}}</a>
+							<a href="javascript:;" onclick="showDetailView('order/detail', '{{this.ordNo}}')" class="order_number_link">{{this.ordNo}}</a>
 						{{/xif}}
 						{{#if (eq this.onlineOrdProdInfo.ordDetailStatusCode 'OrdHandlingComplete')}}
-							<button class="btn_sm_neutral" type="button" onclick="writeReview()" id="b_review">구매 리뷰 쓰기</button>
+							<button class="btn_sm_neutral" type="button" onclick="writeReview('{{this.ordNo}}')" id="b_review">구매 리뷰 쓰기</button>
 						{{/if}}
 					{{else}}
-						<a href="/my/page/order/cashReceipts/{{this.ordNo}}" class="order_number_link">{{this.ordNo}}</a>
-					{{/xif}}
+						<a href="javascript:;" onclick="showDetailView('order/cashReceipts', '{{this.ordNo}}')" class="order_number_link">{{this.ordNo}}</a>
+                    {{/xif}}
 				</td>
 				<td class="align_left">
 					<div class="flag">
@@ -23,14 +23,14 @@
 					</div>
 					{{#xif ../type '==' 'online'}}
 						{{#xif this.onlineOrdProdInfo.ordDetailStatusCode '===' 'OrdAllCancel'}}
-							<a href="/my/page/claim/cancel/{{this.ordHistNo}}">
+							<a href="javascript:;" onclick="showDetailView('claim/cancel', '{{this.ordHistNo}}')">
 						{{else}}
-							<a href="/my/page/order/detail/{{this.ordNo}}">
+							<a href="javascript:;" onclick="showDetailView('order/detail', '{{this.ordNo}}')">
 						{{/xif}}
 					{{else}}
-						<a href="/my/page/order/cashReceipts/{{this.ordNo}}">
+						<a href="javascript:;" onclick="showDetailView('order/cashReceipts', '{{this.ordNo}}')">
 					{{/xif}}
-						{{this.onlineOrdProdInfo.prodNameRlang}} {{checkCnt 'cnt' this.onlineOrdProdInfo.ordProdCnt}}
+						{{this.onlineOrdProdInfo.onlineProdNameRlang}} {{checkCnt 'cnt' this.onlineOrdProdInfo.ordProdCnt}}
 					</a>
 				</td>
 				{{#if (eq ../type 'cashReceipts')}}
@@ -53,15 +53,15 @@
 							<!-- {{#if (eq this.onlineOrdProdInfo.ordDetailStatusCode 'PartialCancel')}}
 								<p>(부분취소)</p>
 							{{/if}} -->
-							<button class="btn_sm_form" type="button" onclick="javascript:location.href='/my/page/order/cancel/{{this.ordNo}}'">주문 취소</button>
+							<button class="btn_sm_form" type="button" onclick="showDetailView('order/cancel', '{{this.ordNo}}')">주문 취소</button>
 						{{/if}}
 						{{#if (eq this.onlineOrdProdInfo.ordDetailStatusCode 'Shipping')}}
 							<button class="btn_sm_bordered" type="button" onclick="chkShippingStatus()">배송조회</button>
 							<button class="btn_sm_primary" type="button" onclick="chkShippingComplete()">수령확인</button>
 						{{/if}}
 						{{#if (eq this.onlineOrdProdInfo.ordDetailStatusCode 'OrdHandlingComplete')}}
-							<button class="btn_sm_form" type="button" onclick="javascript:location.href='/my/page/order/return/{{this.ordNo}}'">반품신청</button>
-							<button class="btn_sm_form" type="button" onclick="javascript:location.href='/my/page/order/exchange/{{this.ordNo}}'">교환신청</button>
+							<button class="btn_sm_form" type="button" onclick="showDetailView('order/return', '{{this.ordNo}}')">반품신청</button>
+							<button class="btn_sm_form" type="button" onclick="showDetailView('order/exchange', '{{this.ordNo}}')">교환신청</button>
 						{{/if}}
 					</td>
 				{{/xif}}
@@ -74,15 +74,15 @@
 					<td>
 						{{#xif ../type '==' 'online'}}
 							{{#xif this.onlineOrdProdInfo.ordDetailStatusCode '===' 'OrdAllCancel'}}
-								<a href="/my/page/claim/cancel/{{this.ordHistNo}}" class="order_number_link">{{this.ordNo}}</a>
+								<a href="javascript:;" onclick="showDetailView('claim/cancel', '{{this.ordHistNo}}')" class="order_number_link">{{this.ordNo}}</a>
 							{{else}}
-								<a href="/my/page/order/detail/{{this.ordNo}}" class="order_number_link">{{this.ordNo}}</a>
+								<a href="javascript:;" onclick="showDetailView('order/detail', '{{this.ordNo}}')" class="order_number_link">{{this.ordNo}}</a>
 							{{/xif}}
 							{{#if (eq this.onlineOrdProdInfo.ordDetailStatusCode 'OrdHandlingComplete')}}
-								<button class="btn_sm_neutral" type="button" onclick="writeReview()" id="b_review">구매 리뷰 쓰기</button>
+								<button class="btn_sm_neutral" type="button" onclick="writeReview('{{this.ordNo}}')" id="b_review">구매 리뷰 쓰기</button>
 							{{/if}}
 						{{else}}
-							<a href="/my/page/order/cashReceipts/{{this.ordNo}}" class="order_number_link">{{this.ordNo}}</a>
+							<a href="javascript:;" onclick="showDetailView('order/cashReceipts', '{{this.ordNo}}')" class="order_number_link">{{this.ordNo}}</a>
 						{{/xif}}
 					</td>
 				{{/if}}
@@ -92,14 +92,14 @@
 					</div>
 					{{#xif ../type '==' 'online'}}
 						{{#xif this.onlineOrdProdInfo.ordDetailStatusCode '===' 'OrdAllCancel'}}
-							<a href="/my/page/claim/cancel/{{this.ordHistNo}}">
+							<a href="javascript:;" onclick="showDetailView('claim/cancel', '{{this.ordHistNo}}')">
 						{{else}}
-							<a href="/my/page/order/detail/{{this.ordNo}}">
+							<a href="javascript:;" onclick="showDetailView('order/detail', '{{this.ordNo}}')">
 						{{/xif}}
 					{{else}}
-						<a href="/my/page/order/cashReceipts/{{this.ordNo}}">
+						<a href="javascript:;" onclick="showDetailView('order/cashReceipts', '{{this.ordNo}}')">
 					{{/xif}}
-						{{this.storePickupOrdProdInfo.prodNameRlang}} {{checkCnt 'cnt' this.storePickupOrdProdInfo.ordProdCnt}}
+						{{this.storePickupOrdProdInfo.onlineProdNameRlang}} {{checkCnt 'cnt' this.storePickupOrdProdInfo.ordProdCnt}}
 					</a>
 				</td>
 				{{#if (eq ../type 'cashReceipts')}}
@@ -123,7 +123,7 @@
 								{{#if (eq this.onlineOrdProdInfo.ordDetailStatusCode 'PartialCancel')}}
 									<p>(부분취소)</p>
 								{{/if}}
-								<button class="btn_sm_form" type="button" onclick="javascript:location.href='/my/page/order/cancel/{{this.ordNo}}'">주문 취소</button>
+								<button class="btn_sm_form" type="button" onclick="showDetailView('order/cancel', '{{this.ordNo}}')">주문 취소</button>
 							{{/if}}
 						{{/if}}
 					</td>
@@ -136,9 +136,9 @@
 		<tr>
 			<td>{{dateFormat ordReceivedDt "YYYY-MM-DD"}}</td>
 			<td>
-				<a href="/my/page/order/detail/{{this.ordNo}}" class="order_number_link">{{this.ordNo}}</a>
+				<a href="javascript:;" onclick="showDetailView('order/detail', '{{this.ordNo}}')" class="order_number_link">{{this.ordNo}}</a>
 				{{#if (eq this.ordProdInfo.ordHistProdStatusCode 'ShipComplete')}}
-					<button class="btn_sm_neutral" type="button" onclick="writeReview()" id="b_review">구매 리뷰 쓰기</button>
+					<button class="btn_sm_neutral" type="button" onclick="writeReview('{{this.ordNo}}')" id="b_review">구매 리뷰 쓰기</button>
 				{{/if}}
 			</td>
 			<td class="align_left">
@@ -146,13 +146,13 @@
 					<b class="store">압구정점</b>
 					<span>스윗딜리버리</span>
 				</div>
-				<a href="/my/page/order/detail/{{this.ordNo}}">
-					{{this.claimProdInfo.prodNameRlang}} {{checkCnt 'cnt' this.claimProdInfo.totalProdCnt}}
+				<a href="javascript:;" onclick="showDetailView('order/detail', '{{this.ordNo}}')">
+					{{this.ordProdInfo.onlineProdNameRlang}} {{checkCnt 'cnt' this.ordProdInfo.totalProdCnt}}
 				</a>
 			</td>
-			<td>{{currencyFormat this.ordProdInfo.finalOnlineSaleAmtPcur}}</td>
+			<td>{{currencyFormat this.ordProdInfo.totalOrdAmt}}</td>
 			<td class="status">
-				<p><em>{{ordStatusCheck ../type this.ordProdInfo.ordDetailStatusCode}}</em></p>
+				<p><em>{{ordStatusCheck ../type this.ordProdInfo.ordHistProdStatusCode}}</em></p>
 				{{#if (eq this.ordProdInfo.ordDetailStatusCode 'Shipping')}}
 					<button class="btn_sm_bordered" type="button" onclick="chkShippingStatus()">배송조회</button>
 					<button class="btn_sm_primary" type="button" onclick="chkShippingComplete()">수령확인</button>
@@ -168,13 +168,13 @@
 		<tr>
 			<td>{{dateFormat ordReceivedDt "YYYY-MM-DD"}}</td>
 			<td>
-				<a href="/my/page/claim/{{condition (eq this.claimTypeCode 'Rtn') 'return' 'exchange'}}/{{this.ordHistNo}}" class="order_number_link">{{this.ordNo}}</a>
+				<a href="javascript:;" onclick="showDetailView('claim/{{condition (eq this.claimTypeCode 'Rtn') 'return' 'exchange'}}', '{{this.ordHistNo}}')" class="order_number_link">{{this.ordNo}}</a>
 			</td>
 			<td class="align_left">
 				<div class="flag">
 					<span>온라인 주문</span>
 				</div>
-				<a href="/my/page/claim/{{condition (eq this.claimTypeCode 'Rtn') 'return' 'exchange'}}/{{this.ordHistNo}}">
+				<a href="javascript:;" onclick="showDetailView('claim/{{condition (eq this.claimTypeCode 'Rtn') 'return' 'exchange'}}', '{{this.ordHistNo}}')">
 					{{this.claimProdInfo.prodNameRlang}} {{checkCnt 'cnt' this.claimProdInfo.totalProdCnt}}
 				</a>
 			</td>

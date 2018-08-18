@@ -15,7 +15,6 @@
 			this._setEtudePick();
 			this._setHotDeal();
 			this._setBest();
-			this._setColorOfYear();
             this._setChEtude();
             this._setFindYourLooks();
             this._data = null; 
@@ -27,6 +26,8 @@
         /** =============== Public Methods =============== */
         setData: function (data){
         	this._data = data; 
+        	
+        	this._setColorOfYear(this._data[0].contents);
         	
         },
         /** =============== Private Methods =============== */
@@ -143,10 +144,32 @@
 		},
 
 		//올해의 컬러
-		_setColorOfYear: function () {
+		_setColorOfYear: function (rmdColorProd) {
 			var $section = this._$target.find( '.recommend_item' );
 			if ( !$section.length ) return;
 
+			var onlineprdList = []; 
+			var products = []; 
+			
+			$.each(rmdColorProd, function(index, object){
+				
+				if ( _.findWhere(rmdColorProd, {menuPageCornerContentsId: 'M02_main_m.2.2'})) {
+					
+					onlineprdList = object.prodList;
+				}
+			}); 
+			
+			$.each(onlineprdList, function(index, object){
+				
+				object.products = _.findWhere(object.products , {prodSn : this.selectedProdSn});
+				
+			}); 
+			
+			var html = AP.common.getTemplate( 'main.home.recommend-items', onlineprdList);
+			
+			$section.find('.loading').remove();
+			$section.find('.slide .ix-list-items').html(html);
+			
 			$section.find( '.slide' ).ixSlideMax();
 			AP.lazyLoad.add( $section.find('img.lazy_load') );
 		},
@@ -214,7 +237,7 @@
 				
 			}).done( function ( result ) {  
 				this._$target.find( '.ch_etude .loading' ).remove();
-				console.log(result.onlineProdList); 
+				 
 				var html = '';
 					html = AP.common.getTemplate( 'main.home.ch-etude-article-list', result.onlineProdList);
 			

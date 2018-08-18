@@ -72,14 +72,22 @@
 		},
 
 		_draw: function ( data ) {
-			var html = AP.common.getTemplate( 'search.review-list', data );
+			
+			var listData = $B.object.clone(data); 
+			$.each(listData.list ,function(index, reviewArray){
+				reviewArray.prodReviewBodyText = AP.common.replaceHtmlEntites(reviewArray.prodReviewBodyText);
+				reviewArray.prodReviewBodyText = AP.common.removeHtmlTag(reviewArray.prodReviewBodyText);
+				
+			});
+			
+			var html = AP.common.getTemplate( 'search.review-list', listData );
 
 			//remove events
 			this._$target.find( '.review_detail' ).off( 'click' );
 			this._$target.find( '.pagination' ).paging( 'clear' ).off( 'paging-change' );
 
 			//draw
-			this._$listArea.html( html );
+			this._$listArea.html(html);
 			this._$target.show();
 
 			if ( data.totalCount ) {
@@ -108,14 +116,14 @@
 		},
 
 		_openDetail: function ( data, prodReviewSn ) {
-
-			//TODO: api 리턴모델 확인 후 적용
-
+			$.each(data.list ,function(index, reviewArray){
+				reviewArray.prodReviewBodyText = AP.common.replaceHtmlEntites(reviewArray.prodReviewBodyText);
+			});
 			var modal = AP.modal.info({
 					title: '리뷰/후기',
 					contents: {
 						templateKey: 'common.review-detail-modal',
-						templateModel: _.findWhere( data.prodReviewList, {prodReviewSn: prodReviewSn} )
+						templateModel: _.findWhere( data.list, {prodReviewSn: prodReviewSn} )
 					},
 					containerClass: 'review',
 					sizeType: 'L'
@@ -125,6 +133,8 @@
 			$modal.find( 'img' ).imagesLoaded().always( function () {
 				if ( modal ) modal.resetPosition();
 			});
+			
+			$modal.find
 		}
 
 	});

@@ -22,34 +22,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/common")
 public class CommonViewController extends AbstractController {
-
-    /**
-     * ET001: [필수] 에뛰드하우스 이용약관
-	 * 010	: [필수] 뷰티포인트 서비스 이용약관
-	 * 020	: [필수] 개인정보 이용 및 수집에 대한 동의
-	 * 030	: [선택] 개인정보 이용 및 수집에 대한 동의
-	 * 040	: [선택] 개인정보 제3자 제공 동의
-	 * 050	: [선택] 개인정보 제3자 제공 동의(외부컨텐츠)
-	 * 060	: [선택] 국외이전동의
-	 * ET002: 위치정보 이용약관
-	 * ET003: 개인정보처리방침
-	 * ET004: 서비스 이용약관
-	 * ET005: 영상정보처리기기 운영ㆍ관리 방침
-	 * ET006: 이메일 무단수집 거부
-	 *
-	 * 컬러 팩토리 예약
-	 * ET007: 개인정보 수집 이용 동의 (필수)
-	 * ET008: 개인정보 취급 위탁에 대한 동의 (필수)
-	 *
-	 * 뷰티즌
-	 * ET009: 개인정보 수집/이용 동의(필수)
-	 * ET010: 민감정보 수집 및 이용동의(필수)
-	 * ET011: 개인정보 취급위탁에 대한 동의(필수)
-	 *
-	 * 청춘강연
-	 * ET012: [필수] 개인정보 수집 및 이용동의
-	 * ET013: [필수] 사진 및 동영상 촬영 및 활용 동의
-	 *
+	
+	/* 약관은 APConstant 또는 BO에서 확인 가능합니다. 
      * @param model
      * @return
      */
@@ -63,15 +37,15 @@ public class CommonViewController extends AbstractController {
       
     	if (isMobileDevice()) {
 
-    		etudeTerms = termsApi.getTerms("ET004");
-            positionTerms = termsApi.getTerms("ET002");
+    		etudeTerms = termsApi.getTerms(APConstant.EH_SERVICE_POLICY_TERM_1);
+            positionTerms = termsApi.getTerms(APConstant.EH_SERVICE_POLICY_TERM_2);
           
             model.addAttribute("positionTerms", positionTerms.get(0));
         }
 
         //PC
         if (isPcDevice()) {
-        	etudeTerms = termsApi.getTerms("ET004");
+        	etudeTerms = termsApi.getTerms(APConstant.EH_SERVICE_POLICY_TERM_1);
         }
     	
         
@@ -85,7 +59,7 @@ public class CommonViewController extends AbstractController {
     @PageTitle(title = "개인정보처리방침")
     public String personalInfoPolicy(Model model) {
     	
-        List<Terms> terms = termsApi.getTerms("ET003");
+        List<Terms> terms = termsApi.getTerms(APConstant.EH_PERSONAL_INFO_POLICY_TERM_1);
 
 		model.addAttribute("terms", terms.get(0));
 
@@ -96,7 +70,7 @@ public class CommonViewController extends AbstractController {
     @PageTitle(title = "영상기기관리방침")
     public String imageryIntelliPolicy(Model model, String displayMenuId) {
     	
-        List<Terms> terms = termsApi.getTerms("ET005");
+        List<Terms> terms = termsApi.getTerms(APConstant.EH_IMAGERY_INTELLI_POLICY_TERM_1);
 
 		model.addAttribute("terms", terms.get(0));
 
@@ -115,7 +89,7 @@ public class CommonViewController extends AbstractController {
     @PageTitle(title = "이메일 무단수집 거부")
     public String emailCollecting(Model model, String displayMenuId) {
     	
-        List<Terms> terms = termsApi.getTerms("ET006");
+        List<Terms> terms = termsApi.getTerms(APConstant.EH_EMAIL_COLLECTING_TERM_1);
 
 		model.addAttribute("terms", terms.get(0));
 

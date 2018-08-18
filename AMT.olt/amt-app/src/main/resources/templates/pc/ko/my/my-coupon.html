@@ -13,7 +13,7 @@
 			<!-- com_cont -->
 			<div class="ap_com_cont mypage">
 				<!-- aside_area -->
-				<th:block ap:replace="~{html/page/my/fragment/my-menu}"/>
+				<th:block ap:replace="~{my/fragment/my-menu}"/>
 				<!-- aside_area -->
 
 				<!-- cont_area -->
@@ -213,6 +213,7 @@
 												<div class="type app">APP coupon</div>
 												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
 												<p class="condition" th:if="${item.availCoupon.prodDcCoupon.minPurProdPriceAssignYn == 'Y'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.minPurProdPrice)}">30,000</th:block>원 이상 구매 시</p>
+												<p class="condition" th:if="${item.prodDcCoupon.maxDcAmtLimitYn == 'Y'}">최대 <th:block th:text="${#IntegUtil.toCommaNumber(item.prodDcCoupon.maxDcAmt)}">30,000</th:block>원 할인</p>
 												<div class="page_btns">
 													<a href="javascript:;">상품 안내</a>
 													<a href="javascript:;">쿠폰 안내</a>
@@ -240,6 +241,7 @@
 												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
 												<p class="condition" th:if="${item.availCoupon.cartDcCoupon.sectionTypeCode == 'Amt'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.fromOrdAmt)}">30,000</th:block>원 이상 구매 시</p>
 												<p class="condition" th:if="${item.availCoupon.cartDcCoupon.sectionTypeCode == 'Qty'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.fromOrdQty)}">10</th:block>개 이상 구매 시</p>
+												<p class="condition" th:if="${item.availCoupon.cartDcCoupon.maxDcAmtLimitYn == 'Y'}">최대 <th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.maxDcAmt)}">30,000</th:block>원 할인</p>
 												<div class="page_btns">
 													<a href="javascript:;">쿠폰 안내</a>
 												</div>
@@ -285,7 +287,8 @@
 											<div>
 												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
 												<div class="cp_name" >
-													<p><span class="num"><span class="won">Buy1Get</span></span></p>
+													<p th:if="${item.buyOneGetCoupon.buy1getDcRate == 1}"><span class="num"><span class="won">하나 더!</span></span></p>
+													<p th:if="${item.buyOneGetCoupon.buy1getDcRate != 1}"><span class="num"><span class="won">하나 반값!</span></span></p>
 												</div>
 											</div>
 											<div>
@@ -321,9 +324,8 @@
 									<li th:each="item : ${expCoupons}">
 										<div class="coupon_box" th:if="${item.expCoupon.couponBenefitTypeCode == 'CartDc'}">
 											<div>
-												<div class="date" th:if="${item.expCoupon.expDt}"><strong>만료일</strong> <span class="num" th:text="${#dates.format(item.expCoupon.expDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
-												<div class="date" th:if="${item.expCoupon.useDt}"><strong>사용일</strong> <span class="num" th:text="${#dates.format(item.expCoupon.useDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
-												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="date" th:if="${item.expDt}"><strong>만료일</strong> <span class="num" th:text="${#dates.format(item.expDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
+												<div class="date" th:if="${item.useDt}"><strong>사용일</strong> <span class="num" th:text="${#dates.format(item.useDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
 												<div class="cp_name" th:if="${item.expCoupon.cartDcCoupon.dcMethodCode == 'FlatPrice'}">
 													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.flatPrice)}">3,000</span><span class="won">원</span></p>
 													<p>균일가</p>
@@ -349,7 +351,8 @@
 										</div>
 										<div class="coupon_box" th:if="${item.expCoupon.couponBenefitTypeCode == 'CartDc'}">
 											<div>
-												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="date" th:if="${item.expDt}"><strong>만료일</strong> <span class="num" th:text="${#dates.format(item.expDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
+												<div class="date" th:if="${item.useDt}"><strong>사용일</strong> <span class="num" th:text="${#dates.format(item.useDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
 												<div class="cp_name" th:if="${item.expCoupon.cartDcCoupon.dcMethodCode == 'FlatPrice'}">
 													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.flatPrice)}">3,000</span><span class="won">원</span></p>
 													<p>균일가</p>
@@ -375,7 +378,8 @@
 										</div>
 										<div class="coupon_box" th:if="${item.expCoupon.couponBenefitTypeCode == 'MPlusN'}">
 											<div>
-												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="date" th:if="${item.expDt}"><strong>만료일</strong> <span class="num" th:text="${#dates.format(item.expDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
+												<div class="date" th:if="${item.useDt}"><strong>사용일</strong> <span class="num" th:text="${#dates.format(item.useDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
 												<div class="cp_name" >
 													<p><span class="num"><th:block th:text="${item.expCoupon.mplusnCoupon.baseOrdQty}"><span class="won">N</th:block>+<th:block th:text="${item.expCoupon.mplusnCoupon.freeAwardQty}">N</th:block></span></span></p>
 												</div>
@@ -393,7 +397,8 @@
 										</div>
 										<div class="coupon_box" th:if="${item.expCoupon.couponBenefitTypeCode == 'CartAward'}">
 											<div>
-												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="date" th:if="${item.expDt}"><strong>만료일</strong> <span class="num" th:text="${#dates.format(item.expDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
+												<div class="date" th:if="${item.useDt}"><strong>사용일</strong> <span class="num" th:text="${#dates.format(item.useDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
 												<div class="cp_name" >
 													<p><span class="num"><span class="won">사은품 증정</span></span></p>
 												</div>
@@ -411,7 +416,8 @@
 										</div>
 										<div class="coupon_box" th:if="${item.expCoupon.couponBenefitTypeCode == 'Buy1Get'}">
 											<div>
-												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="date" th:if="${item.expDt}"><strong>만료일</strong> <span class="num" th:text="${#dates.format(item.expDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
+												<div class="date" th:if="${item.useDt}"><strong>사용일</strong> <span class="num" th:text="${#dates.format(item.useDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
 												<div class="cp_name" >
 													<p><span class="num"><span class="won">Buy1Get</span></span></p>
 												</div>
@@ -427,7 +433,8 @@
 										</div>
 										<div class="coupon_box" th:if="${item.expCoupon.couponBenefitTypeCode == 'ShipFeeFree'}">
 											<div>
-												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="date" th:if="${item.expDt}"><strong>만료일</strong> <span class="num" th:text="${#dates.format(item.expDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
+												<div class="date" th:if="${item.useDt}"><strong>사용일</strong> <span class="num" th:text="${#dates.format(item.useDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
 												<div class="cp_name" >
 													<p><span class="num"><span class="won">무료배송</span></span></p>
 												</div>

@@ -199,18 +199,28 @@
 						} else {
 							AP.api.shoppingHistoryList().done(function ( result ) {
 								var totalCount = 0;
-
 								_.each( result.shoppingHistoryList, function ( group ) {
 									_.each( group.shoppingHistoryList, function ( list ) {
+										 
+										if(list.shoppingMarkTgtCode === 'Article'){
+											AP.api.article(null,{
+												articleSn : list.articleSn
+											}).done(function(result){
+												list.prodImg = result.article.bannerImgP1; 
+											}).fail(function (e) {
+												//
+											}.bind(this));
+									
+										}
 										totalCount++;
 									});
 								});
-
+						
 								var html = AP.common.getTemplate( 'header.history-list', {
 									shoppingHistoryList: result.shoppingHistoryList,
 									totalCount: totalCount
 								});
-
+							 
 								$result.html( html );
 								$history.find( '.slide' ).ixSlideMax();
 

@@ -34,12 +34,12 @@
 														<p class="discountprice" th:if="${item.prodDcCoupon.dcMethodCode == 'FlatPrice'}"><span th:text="${#IntegUtil.toCommaNumber(item.prodDcCoupon.flatPrice)}">100</span>원 균일가</p>
 														<p class="discountprice" th:if="${item.prodDcCoupon.dcMethodCode == 'FixedRate'}"><span th:text="${#IntegUtil.toCommaNumber(item.prodDcCoupon.dcRate * 100)}">100</span>% 할인</p>
 														<p class="discountprice" th:if="${item.prodDcCoupon.dcMethodCode == 'FixedAmt'}"><span th:text="${#IntegUtil.toCommaNumber(item.prodDcCoupon.dcAmt)}">100</span>원 할인</p>
-														<p class="condition" th:if="${item.prodDcCoupon.minPurProdPriceAssignYn == 'Y'}"><span th:text="${#IntegUtil.toCommaNumber(item.prodDcCoupon.minPurProdPrice)}">100,000</span>원 이상 구매 시</p>
-														<p class="condition" th:if="${item.prodDcCoupon.maxDcAmtLimitYn == 'Y'}">최대 <span th:text="${#IntegUtil.toCommaNumber(item.prodDcCoupon.maxDcAmt)}">100,000</span>원 할인</p>
 													</div>
 													<div class="item_cont">
 														<p class="items"><span th:text="${#IntegUtil.toCommaNumber(item.exchActivityPoint)}">3,300</span>알</p>
 														<a href="#none" th:onclick="'exchange(' + ${item.couponSn} + ')'" class="exchange">교환</a>
+														<p class="condition2" th:if="${item.prodDcCoupon.minPurProdPriceAssignYn == 'Y'}"><span th:text="${#IntegUtil.toCommaNumber(item.prodDcCoupon.minPurProdPrice)}">100,000</span>원 이상 구매 시</p>
+														<p class="condition2" th:if="${item.prodDcCoupon.maxDcAmtLimitYn == 'Y'}">최대 <span th:text="${#IntegUtil.toCommaNumber(item.prodDcCoupon.maxDcAmt)}">100,000</span>원 할인</p>
 													</div>
 												</div>
 											</div>
@@ -52,13 +52,14 @@
 														<p class="discountprice" th:if="${item.cartDcCoupon.dcMethodCode == 'FlatPrice'}"><span th:text="${#IntegUtil.toCommaNumber(item.cartDcCoupon.flatPrice)}">100</span>원 균일가</p>
 														<p class="discountprice" th:if="${item.cartDcCoupon.dcMethodCode == 'FixedRate'}"><span th:text="${#IntegUtil.toCommaNumber(item.cartDcCoupon.dcRate * 100)}">100</span>% 할인</p>
 														<p class="discountprice" th:if="${item.cartDcCoupon.dcMethodCode == 'FixedAmt'}"><span th:text="${#IntegUtil.toCommaNumber(item.cartDcCoupon.dcAmt)}">100</span>원 할인</p>
-														<p class="condition" th:if="${item.cartDcCoupon.sectionTypeCode == 'Amt'}"><span th:text="${#IntegUtil.toCommaNumber(item.cartDcCoupon.fromOrdAmt)}">100,000</span>원 이상 구매 시</p>
-														<p class="condition" th:if="${item.cartDcCoupon.sectionTypeCode == 'Qty'}"><span th:text="${#IntegUtil.toCommaNumber(item.cartDcCoupon.fromOrdQty)}">100,000</span>개 이상 구매 시</p>
-														<p class="condition" th:if="${item.cartDcCoupon.maxDcAmtLimitYn == 'Y'}">최대 <span th:text="${#IntegUtil.toCommaNumber(item.cartDcCoupon.maxDcAmt)}">100,000</span>원 까지</p>
+														<p class="condition" th:text="${#IntegUtil.dateformat(item.issueEndDt, 'yyyy.MM.dd')}">~2018.12.31</p> <!--/* 20180801: 날짜 추가 */-->
 													</div>
 													<div class="item_cont">
 														<p class="items"><span th:text="${#IntegUtil.toCommaNumber(item.exchActivityPoint)}">3,300</span>알</p>
 														<a href="#none" th:onclick="'exchange(' + ${item.couponSn} + ')'" class="exchange">교환</a>
+														<p class="condition2" th:if="${item.cartDcCoupon.sectionTypeCode == 'Amt'}"><span th:text="${#IntegUtil.toCommaNumber(item.cartDcCoupon.fromOrdAmt)}">100,000</span>원 이상 구매 시</p>
+														<p class="condition2" th:if="${item.cartDcCoupon.sectionTypeCode == 'Qty'}"><span th:text="${#IntegUtil.toCommaNumber(item.cartDcCoupon.fromOrdQty)}">100,000</span>개 이상 구매 시</p>
+														<p class="condition2" th:if="${item.cartDcCoupon.maxDcAmtLimitYn == 'Y'}">최대 <span th:text="${#IntegUtil.toCommaNumber(item.cartDcCoupon.maxDcAmt)}">100,000</span>원 까지</p>
 													</div>
 												</div>
 											</div>
@@ -69,12 +70,13 @@
 												<div class="table_layout">
 													<div class="item_cont">
 														<p class="discountprice"><span th:text="${item.mplusnCoupon.baseOrdQty}">N</span>+<span th:text="${item.mplusnCoupon.freeAwardQty}">M</span>증정</p>
-														<p class="condition" th:if="${item.mplusnCoupon.couponMPlusNTypeCode == 'Same'}">동일상품 <span th:text="${item.mplusnCoupon.baseOrdQty}">N</span>개 구매시 <span th:text="${item.mplusnCoupon.freeAwardQty}">M</span>개 추가 증정</p>
-														<p class="condition" th:if="${item.mplusnCoupon.couponMPlusNTypeCode == 'Different'}">상품 <span th:text="${item.mplusnCoupon.baseOrdQty}">N</span>개 구매시 <span th:text="${item.mplusnCoupon.freeAwardQty}">M</span>개 추가 증정</p>
+														<p class="condition" th:text="${#IntegUtil.dateformat(item.issueEndDt, 'yyyy.MM.dd')}">~2018.12.31</p> <!--/* 20180801: 날짜 추가 */-->
 													</div>
 													<div class="item_cont">
 														<p class="items"><span th:text="${#IntegUtil.toCommaNumber(item.exchActivityPoint)}">3,300</span>알</p>
 														<a href="#none" th:onclick="'exchange(' + ${item.couponSn} + ')'" class="exchange">교환</a>
+														<p class="condition2" th:if="${item.mplusnCoupon.couponMPlusNTypeCode == 'Same'}">동일상품 <span th:text="${item.mplusnCoupon.baseOrdQty}">N</span>개 구매시 <span th:text="${item.mplusnCoupon.freeAwardQty}">M</span>개 추가 증정</p>
+														<p class="condition2" th:if="${item.mplusnCoupon.couponMPlusNTypeCode == 'Different'}">상품 <span th:text="${item.mplusnCoupon.baseOrdQty}">N</span>개 구매시 <span th:text="${item.mplusnCoupon.freeAwardQty}">M</span>개 추가 증정</p>
 													</div>
 												</div>
 											</div>
@@ -85,12 +87,13 @@
 												<div class="table_layout">
 													<div class="item_cont">
 														<p class="discountprice">사은품 증정</p>
-														<p class="condition" th:if="${item.cartAwardCoupon.sectionTypeCode == 'Amt'}"><span th:text="${#IntegUtil.toCommaNumber(item.cartAwardCoupon.fromOrdAmt)}">100</span>원 이상 구매 시</p>
-														<p class="condition" th:if="${item.cartAwardCoupon.sectionTypeCode == 'Qty'}"><span th:text="${#IntegUtil.toCommaNumber(item.cartAwardCoupon.fromOrdQty)}">100</span>개 이상 구매 시</p>
+														<p class="condition" th:text="${#IntegUtil.dateformat(item.issueEndDt, 'yyyy.MM.dd')}">~2018.12.31</p> <!--/* 20180801: 날짜 추가 */-->
 													</div>
 													<div class="item_cont">
 														<p class="items"><span th:text="${#IntegUtil.toCommaNumber(item.exchActivityPoint)}">3,300</span>알</p>
 														<a href="#none" th:onclick="'exchange(' + ${item.couponSn} + ')'" class="exchange">교환</a>
+														<p class="condition2" th:if="${item.cartAwardCoupon.sectionTypeCode == 'Amt'}"><span th:text="${#IntegUtil.toCommaNumber(item.cartAwardCoupon.fromOrdAmt)}">100</span>원 이상 구매 시</p>
+														<p class="condition2" th:if="${item.cartAwardCoupon.sectionTypeCode == 'Qty'}"><span th:text="${#IntegUtil.toCommaNumber(item.cartAwardCoupon.fromOrdQty)}">100</span>개 이상 구매 시</p>
 													</div>
 												</div>
 											</div>
@@ -102,6 +105,7 @@
 													<div class="item_cont">
 														<p class="discountprice">Buy1</p>
 														<p class="discountprice">Get <span th:text="${#IntegUtil.toCommaNumber(item.buyOneGetCoupon.buy1getDcRate * 100)}">100</span>%</p>
+														<p class="condition" th:text="${#IntegUtil.dateformat(item.issueEndDt, 'yyyy.MM.dd')}">~2018.12.31</p> <!--/* 20180801: 날짜 추가 */-->
 													</div>
 													<div class="item_cont">
 														<p class="items"><span th:text="${#IntegUtil.toCommaNumber(item.exchActivityPoint)}">3,300</span>알</p>

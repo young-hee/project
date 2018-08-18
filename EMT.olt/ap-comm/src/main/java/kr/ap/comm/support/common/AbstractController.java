@@ -214,6 +214,10 @@ public class AbstractController {
         return  memberSession;
 	}
 
+	/**
+	 * Redis 를 Session store 로 사용할 경우, session 데이터를 저장하기 위해 명시적으로 호출.
+	 * @param memberSession
+	 */
 	protected void setMemberSession(MemberSession memberSession) {
     	WebUtils.setSessionAttribute(getRequest(), SessionKey.LOGIN_USER, memberSession);
 	}
@@ -332,29 +336,23 @@ public class AbstractController {
 				getRequest().getQueryString() : ""); // "?" + "article=11";
 	}
 	
-	/**
-	 * Rest 오류 발생시 사용<br>
-	 * ApiException을 이용해 ResponseEntity<?>을 만들어서 리턴.
-	 */
-	protected ResponseEntity<?> error(Map<String,Object> result, ApiException e) {
-		result.put("errorData", e);
-		return ResponseEntity.status(e.getStatus()).body(result);
-	}
 
 	/**
 	 * Rest 오류 발생시 사용<br>
-	 * ApiException을 이용해 ResponseEntity<?>을 만들어서 리턴.
+	 * ApiException이 발생하지 않는 상황에서, ApiException을 만들어서 리턴.
 	 */
-	protected ResponseEntity<?> error(ApiException e) {
-		return ResponseEntity.status(e.getStatus()).body(e.getAdditional());
+	protected ApiException error(Map<String,Object> result, HttpStatus status, String code, String msg) {
+		ApiException error = new ApiException(status.value(), code, msg);
+		if(error != null)
+			error.setAdditional(result);
+		return error;
 	}
-
 	/**
 	 * Rest 오류 발생시 사용<br>
-	 * ApiException이 발생하지 않는 상황에서, ResponseEntity<?>을 만들어서 리턴.
+	 * ApiException이 발생하지 않는 상황에서, ApiException을 만들어서 리턴.
 	 */
-	protected ResponseEntity<?> error(Map<String,Object> result, HttpStatus status, String code, String msg) {
-		return error(result, new ApiException(status.value(), code, msg));
+	protected ApiException error(HttpStatus status, String code, String msg) {
+		return error(null, status, code, msg);
 	}
 
 	/**

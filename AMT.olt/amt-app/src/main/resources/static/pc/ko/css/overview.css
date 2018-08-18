@@ -155,13 +155,14 @@
 .coupon_overview .banner_couponzone {background:#f7f8f9; border-top:1px solid #d1d1d6; border-bottom:1px solid #d1d1d6; text-align:center;}
 .coupon_table + .benefit_more {overflow:hidden; margin-top:30px; text-align:right;}
 
-.coupon_overview .tab_menu_wrap {width:100%; height:59px; background:#333; border-bottom:1px solid #999; position:relative;}
-.coupon_overview .tab_menu_wrap .tab_menu {width:1200px; margin:0 auto; padding:20px 10px 19px;}
-.coupon_overview .tab_menu_wrap .tab_menu > ul > li > a {font-size:17px; color:#bfbfbf;}
-.coupon_overview .tab_menu_wrap .tab_menu > ul > li.on > a {color:#fff;}
-.coupon_overview .tab_contents {}
-.coupon_overview .tab_cont {}
-.coupon_overview .tab_cont + .tab_cont {}
+.coupon_overview .tab_menu_wrap.ui_tab {width:100%; overflow:hidden;}
+.coupon_overview .tab_menu {width:100%; height:59px; background:#333; border-bottom:1px solid #999; position:relative; overflow:hidden;}
+.coupon_overview .tab_menu.black {padding:0;}
+.coupon_overview .tab_menu > ul {width:1200px; margin:0 auto; padding:11px 10px;}
+.coupon_overview .tab_menu > ul > li {display:inline-block;}
+.coupon_overview .tab_menu.black > ul > li + li {margin-left:0;}
+.coupon_overview .tab_menu > ul > li > button {font-size:17px; color:#bfbfbf;}
+.coupon_overview .tab_menu > ul > li.on > button {color:#fff;}
 
 
 /* VIP 라운지 */
@@ -279,7 +280,7 @@
 .new_benefit_slide .slide [class*='_direction'] [class^="ix-btn"]{width:34px; height:34px; background:url(/pc/ko/images/common/ico.png) no-repeat; background-position:0 -304px; border:none; opacity:.2}
 .new_benefit_slide .slide [class*='_direction'] .ix-btn-prev {left:-40px;}
 .new_benefit_slide .slide [class*='_direction'] .ix-btn-next {right:-40px; background-position:-34px -304px;}
-.new_benefit_slide .slide .slide_direction a:hover{opacity:.5;}
+.new_benefit_slide .slide [class*='_direction'] [class^="ix-btn"].disabled {opacity:0;}
 .new_benefit_slide .list_product .product_box .visual_section {height:130px; padding-top:0;}
 .new_benefit_slide .list_product .product_box .visual_section img {width:130px; height:130px;}
 .new_benefit_slide .list_product .product_box .visual_section img + img {margin-left:-65px}
@@ -443,7 +444,8 @@
 .card_installment .sub_section.font_black {color:#000;}
 .card_installment .sub_section li {text-indent: -6px;padding-left: 6px; margin-top: 5px;}
 .card_installment .sub_section li em {color:#782fff}
-.card_installment .data_table{border-top:1px solid #000;background:#fff;font-size:10px;text-align:center;letter-spacing:-0.4px;}
+.card_installment .table_area {border-top:1px solid #000; overflow:hidden;}
+.card_installment .data_table{background:#fff;font-size:10px;text-align:center;letter-spacing:-0.4px;}
 .card_installment .data_table thead th{border:1px solid #bbb;border-top:0;padding:7px 0;color:#010101;background:#e9edf0;}
 .card_installment .data_table td{color:#676666;padding:6px 0;border-bottom:1px solid #bbb;border-right:1px solid #bbb;border-left:1px solid #bbb;}
 .card_installment .data_table td.left {text-align: left; padding-left: 10px}
@@ -453,3 +455,78 @@
 .card_installment .section{margin-top: 0 !important;}
 .card_installment a{display:block;}
 .card_installment .more_benefit a + a{border-top:1px solid #d1d1d1}
+
+/*메이크업 서비스*/
+.make_service{background-color:#e9edf0;}
+.make_service .gift_area{width:535px;padding: 79px 0 61px;margin: 0 auto;overflow: hidden;}
+.make_service .gift_area .gift_tit{font-size:50px; height:50px; color:#000000;line-height:50px}
+.make_service .gift_area .gift_txt{margin-top:25px; margin-bottom:30px; font-size:22px; line-height:30px; color:#333333;letter-spacing: -2px;}
+.request_wrap{overflow:hidden;padding:80px 0 60px 0;}
+.request_service{text-align:center; width:1200px; margin:0 auto; }
+.request_service .request_tit{font-size:50px; height:50px; color:#000000;line-height:50px;}
+.request_service .request_txt{margin-top:20px;font-size:22px; line-height:30px; color:#333333;letter-spacing: -2px;}
+.request_service .ui_accordion {margin-top:60px;}
+.request_service .ui_accordion dt{background-color: #333333; position:relative;padding:18px 20px;}
+.request_service .ui_accordion>dl>dt>*{color:#fff; display:inline-block;padding:0;position:inherit;}
+.request_service .ui_accordion>dl>dt .num1{position: absolute;top: 50%;left:20px;margin-top: -10px;}
+.request_service .ui_accordion>dl>dt button{text-align:center;}
+.request_service .ui_accordion>dl>dt button:after{content: '';position: absolute;top: 50%;right:0px;margin-top: -1px;width: 19px;height: 11px;background: url(/pc/ko/images/common/make_arrow.png)no-repeat;}
+.request_service .ui_accordion>dl>dt.on>button:after {background-position: 0 -11px;}
+.request_service .ui_accordion>dl>dd{border-bottom:none;}
+.request_service .ui_accordion>dl>dd .select_Area{display:table; width:100%;}
+.request_service .ui_accordion>dl>dd .select_Area .select_wrap{display:table-cell;background:#fff;}
+
+.request_service .step02{overflow:hidden;margin-top:100px;}
+.request_service .step02 dd{width:100%;}
+.request_service .step02 .half{float:left; width:600px; height:605px; overflow:hidden;box-sizing:border-box; background:#fff;}
+.request_service .step02 .half:last-child{border-left:1px solid #eeeeee;margin-left:-1px;}
+.request_service .step02 .half:after{content:''; clear:both; display:block;}
+.calendar_wrap .month_select {position:relative; height:99px; text-align:center;}
+.calendar_wrap .month_select .btn {position:absolute; top:0; width:36px; height:99px;}
+.calendar_wrap .month_select .btn:disabled {background:transparent;}
+.calendar_wrap .month_select .btn:after {content:''; display:inline-block; width:10px; height:16px;}
+.calendar_wrap .month_select .btn.prev {left:20px;}
+.calendar_wrap .month_select .btn.prev:after {background-image:url(/pc/ko/images/coupon/btn_month_prev.png);}
+.calendar_wrap .month_select .btn.next {right:20px;}
+.calendar_wrap .month_select .btn.next:after {background-image:url(/pc/ko/images/coupon/btn_month_next.png);}
+.calendar_wrap .month_select .current_month{color: #363636;font-size: 24px;line-height: 99px;}
+
+.calendar_wrap .calendar_area {position:relative;}
+.calendar_wrap table {width:100%;}
+.calendar_wrap th {width:50px;height:60px; color:#363636; font-weight:bold; font-size:18px; text-align:center;background:#eeeeee;}
+.calendar_wrap td {height:50px; padding:12px 18px; vertical-align:top; text-align:center;}
+.calendar_wrap td:first-child {border-left:none;}
+.calendar_wrap .date {display:block; width:50px; height:50px; color:#555; font-size:18px; line-height:50px; border-radius:50%; text-align:center;}
+.calendar_wrap .today .date{border:1px solid #cdcdcd;}
+.calendar_wrap .sat .date{color:#0066cc;}
+.calendar_wrap .sun .date{color:#ed0606;}
+.calendar_wrap .before_day .date{color:#d7d7d7;}
+.calendar_wrap .checked .date {background:#782fff; color:#fff;}
+.calendar_wrap .no_checked .date {background:#d7d7d7; color:#fff;}
+
+.calendar_info{overflow:hidden; text-align:left; padding:30px 34px;}
+.calendar_info .info_txt:before{display:inline-block; content:""; width: 16px;height: 16px;border-radius: 100%; background:#7052ce; margin-right:10px;vertical-align: middle;}
+.calendar_info .color_grey.info_txt:before{background:#d7d7d7;}
+.calendar_info .color_white.info_txt:before{background:#fff; border:1px solid #d4d4d4;}
+.calendar_info .info_txt{color:#363636; font-size:14px; margin-right:20px;}
+
+.half .time_list:after {content:''; clear:both; display:block;}
+.half .time_list li{float:left;width:149px;height:100px; border-right:1px solid #eeeeee; border-bottom:1px solid #eeeeee;}
+.half .time_list li:nth-child(4n){border-right:0;}
+.half .time_list li a{display:block;width:149px;height:100px;box-sizing:border-box;text-align:center;}
+.half .time_list li.on a{border:1px solid #782fff;}
+.half .time_list li.on a .time{color:#782fff;}
+.half .time_list li .time{display:table-cell;width:149px;height:100px;vertical-align:middle;font-weight:normal; font-size:18px; color:#333;}
+
+
+.request_service .step03{overflow:hidden;margin-top:100px;}
+.request_service .step03 .data_table{border-top:none; background:#fff;}
+.request_service .step03 .data_table tr>* +* {border-left:none;}
+.request_service .step03 .data_table .bd_left{border-left:1px solid #ebebeb !important;}
+.request_service .step03 .data_table tr th{color:#252525;}
+.request_service .step03 .data_table tr th, .request_service .step03 .data_table tr td{text-align:left;}
+.request_service .step03 .data_table tr th{padding:13px 30px;}
+.request_service .step03 .data_table tr td{padding:13px 10px;}
+.request_service .step03 .input_wrap>input{border:none;}
+
+.request_service + .section_boxing .page_btns{margin-top:100px;}

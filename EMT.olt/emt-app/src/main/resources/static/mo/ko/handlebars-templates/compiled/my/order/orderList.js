@@ -142,28 +142,36 @@ this["AP"]["handlebars"]["my"]["order"]["orderList"] = Handlebars.template({"1":
     + ")\" class=\"order_number_link\">"
     + alias2(alias1((depth0 != null ? depth0.ordNo : depth0), depth0))
     + "</a></div>\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depths[1] != null ? depths[1].type : depths[1]),"===","cashReceipts",{"name":"xif","hash":{},"fn":container.program(25, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.onlineOrdProdInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),"===","OrdHandlingComplete",{"name":"xif","hash":{},"fn":container.program(25, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n"
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depths[1] != null ? depths[1].type : depths[1]),"===","cashReceipts",{"name":"xif","hash":{},"fn":container.program(27, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "			</div>\n"
-    + ((stack1 = helpers["if"].call(alias3,(depth0 != null ? depth0.onlineOrdProdInfo : depth0),{"name":"if","hash":{},"fn":container.program(30, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(alias3,(depth0 != null ? depth0.storePickupOrdProdInfo : depth0),{"name":"if","hash":{},"fn":container.program(43, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,(depth0 != null ? depth0.onlineOrdProdInfo : depth0),{"name":"if","hash":{},"fn":container.program(32, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,(depth0 != null ? depth0.storePickupOrdProdInfo : depth0),{"name":"if","hash":{},"fn":container.program(45, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "		</div>\n";
 },"25":function(container,depth0,helpers,partials,data) {
+    var helper;
+
+  return "					<div><button type=\"button\" class=\"btn_sm_neutral type1\" onclick=\"ordWriteReview("
+    + container.escapeExpression(((helper = (helper = helpers.ordNo || (depth0 != null ? depth0.ordNo : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"ordNo","hash":{},"data":data}) : helper)))
+    + ")\">구매 리뷰 쓰기</button></div>\n";
+},"27":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.cashReceiptIssueYn : depth0),"===","Y",{"name":"xif","hash":{},"fn":container.program(26, data, 0),"inverse":container.program(28, data, 0),"data":data})) != null ? stack1 : "");
-},"26":function(container,depth0,helpers,partials,data) {
-    return "						<div><button type=\"button\" class=\"btn_sm_neutral type1\" onclick=\"receiptIssue("
-    + container.escapeExpression((helpers.json || (depth0 && depth0.json) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),depth0,{"name":"json","hash":{},"data":data}))
-    + ")\">발급 완료</button></div>\n";
+  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.cashReceiptIssueYn : depth0),"===","Y",{"name":"xif","hash":{},"fn":container.program(28, data, 0),"inverse":container.program(30, data, 0),"data":data})) != null ? stack1 : "");
 },"28":function(container,depth0,helpers,partials,data) {
     return "						<div><button type=\"button\" class=\"btn_sm_neutral type1\" onclick=\"receiptIssue("
     + container.escapeExpression((helpers.json || (depth0 && depth0.json) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),depth0,{"name":"json","hash":{},"data":data}))
+    + ")\">발급 완료</button></div>\n";
+},"30":function(container,depth0,helpers,partials,data) {
+    return "						<div><button type=\"button\" class=\"btn_sm_neutral type1\" onclick=\"receiptIssue("
+    + container.escapeExpression((helpers.json || (depth0 && depth0.json) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),depth0,{"name":"json","hash":{},"data":data}))
     + ")\">발급 신청</button></div>\n";
-},"30":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"32":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.lambda, alias4=container.escapeExpression;
 
   return "					<div class=\"table_layout\">\n						<div>\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.onlineOrdProdInfo : depth0)) != null ? stack1.imageUrl : stack1),"!=",null,{"name":"xif","hash":{},"fn":container.program(31, data, 0, blockParams, depths),"inverse":container.program(33, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.onlineOrdProdInfo : depth0)) != null ? stack1.imageUrl : stack1),"!=",null,{"name":"xif","hash":{},"fn":container.program(33, data, 0, blockParams, depths),"inverse":container.program(35, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "						</div>\n						<div>\n							<p class=\"flag\">온라인주문</p>\n							<p class=\"name\" id=\"prodName\">\n								<a href=\"javascript:;\" onclick=\"showDetailView('"
     + alias4(alias3((depths[1] != null ? depths[1].type : depths[1]), depth0))
     + "', "
@@ -179,38 +187,38 @@ this["AP"]["handlebars"]["my"]["order"]["orderList"] = Handlebars.template({"1":
     + "</small></p>\n						</div>\n						<div>\n							<p><em>"
     + alias4((helpers.ordStatusCheck || (depth0 && depth0.ordStatusCheck) || alias2).call(alias1,(depths[1] != null ? depths[1].type : depths[1]),((stack1 = (depth0 != null ? depth0.onlineOrdProdInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),{"name":"ordStatusCheck","hash":{},"data":data}))
     + "</em></p>\n"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].type : depths[1]),"online",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].type : depths[1]),"store",{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(35, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].type : depths[1]),"online",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].type : depths[1]),"store",{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(37, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depths[1] != null ? depths[1].type : depths[1]),"===","cashReceipts",{"name":"xif","hash":{},"fn":container.program(22, data, 0, blockParams, depths),"inverse":container.program(22, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "						</div>\n					</div>\n";
-},"31":function(container,depth0,helpers,partials,data) {
+},"33":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "								<img src=\""
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.onlineOrdProdInfo : depth0)) != null ? stack1.imageUrl : stack1), depth0))
     + "\">\n";
-},"33":function(container,depth0,helpers,partials,data) {
+},"35":function(container,depth0,helpers,partials,data) {
     return "								<img src="
     + container.escapeExpression((helpers.absolutePath || (depth0 && depth0.absolutePath) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"/images/cart/no_img.png",{"name":"absolutePath","hash":{},"data":data}))
     + ">\n";
-},"35":function(container,depth0,helpers,partials,data) {
+},"37":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return ((stack1 = (helpers.ordSwitch || (depth0 && depth0.ordSwitch) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.onlineOrdProdInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),{"name":"ordSwitch","hash":{},"fn":container.program(36, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
-},"36":function(container,depth0,helpers,partials,data) {
+  return ((stack1 = (helpers.ordSwitch || (depth0 && depth0.ordSwitch) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.onlineOrdProdInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),{"name":"ordSwitch","hash":{},"fn":container.program(38, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"38":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return ((stack1 = (helpers.ordCase || (depth0 && depth0.ordCase) || alias2).call(alias1,"a",{"name":"ordCase","hash":{},"fn":container.program(37, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = (helpers.ordCase || (depth0 && depth0.ordCase) || alias2).call(alias1,"b",{"name":"ordCase","hash":{},"fn":container.program(39, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = (helpers.ordCase || (depth0 && depth0.ordCase) || alias2).call(alias1,"c",{"name":"ordCase","hash":{},"fn":container.program(41, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
-},"37":function(container,depth0,helpers,partials,data) {
+  return ((stack1 = (helpers.ordCase || (depth0 && depth0.ordCase) || alias2).call(alias1,"a",{"name":"ordCase","hash":{},"fn":container.program(39, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.ordCase || (depth0 && depth0.ordCase) || alias2).call(alias1,"b",{"name":"ordCase","hash":{},"fn":container.program(41, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.ordCase || (depth0 && depth0.ordCase) || alias2).call(alias1,"c",{"name":"ordCase","hash":{},"fn":container.program(43, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"39":function(container,depth0,helpers,partials,data) {
     return "										<button type=\"button\" class=\"btn_sm_bordered\" onclick=\"showDetailView('cancel', "
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.ordNo : depth0), depth0))
     + ")\">주문취소</button>\n";
-},"39":function(container,depth0,helpers,partials,data) {
+},"41":function(container,depth0,helpers,partials,data) {
     return "										<button type=\"button\" class=\"btn_sm_bordered\" onclick=\"javascript:location.href='/my/page/orderCancel/first?orderSn="
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.orderSn : depth0), depth0))
     + "'\">배송조회</button>\n										<button type=\"button\" class=\"btn_sm_neutral\">수령확인</button>\n";
-},"41":function(container,depth0,helpers,partials,data) {
+},"43":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "										<button type=\"button\" class=\"btn_sm_bordered\" onclick=\"showDetailView('exchange', "
@@ -218,31 +226,39 @@ this["AP"]["handlebars"]["my"]["order"]["orderList"] = Handlebars.template({"1":
     + ")\">교환신청</button>\n										<button type=\"button\" class=\"btn_sm_neutral\" onclick=\"showDetailView('return', "
     + alias4(((helper = (helper = helpers.ordNo || (depth0 != null ? depth0.ordNo : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"ordNo","hash":{},"data":data}) : helper)))
     + ")\">반품신청</button>\n";
-},"43":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
+},"45":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.lambda, alias4=container.escapeExpression;
 
-  return "					<div class=\"table_layout\">\n						<div><img src=\""
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.storePickupOrdProdInfo : depth0)) != null ? stack1.imageUrl : stack1), depth0))
-    + "\"></div>\n							<div>\n								<p class=\"flag\">테이크아웃</p>\n								<p class=\"name\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.storePickupOrdProdInfo : depth0)) != null ? stack1.prodNameRlang : stack1), depth0))
-    + "</p>\n								<p class=\"font_md\"><strong class=\"num\" id=\""
-    + alias2(alias1((depth0 != null ? depth0.ordNo : depth0), depth0))
-    + "\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.storePickupOrdProdInfo : depth0)) != null ? stack1.ordQty : stack1), depth0))
-    + "</strong>개/<strong class=\"num\">"
-    + alias2((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.storePickupOrdProdInfo : depth0)) != null ? stack1.finalOnlineSaleAmtPcur : stack1),0,{"name":"currencyFormat","hash":{},"data":data}))
-    + "</strong></p>\n								<p class=\"num\"><small>"
-    + alias2((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias4).call(alias3,(depth0 != null ? depth0.ordReceivedDt : depth0),"YYYY-MM-DD",{"name":"dateFormat","hash":{},"data":data}))
-    + "</small></p>\n							</div>\n							<div>\n								<p><em>"
-    + alias2((helpers.ordStatusCheck || (depth0 && depth0.ordStatusCheck) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.storePickupOrdProdInfo : depth0)) != null ? stack1.ordHistProdStatusCode : stack1),{"name":"ordStatusCheck","hash":{},"data":data}))
+  return "					<div class=\"table_layout\">\n						<div>\n"
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.storePickupOrdProdInfo : depth0)) != null ? stack1.imageUrl : stack1),"!=",null,{"name":"xif","hash":{},"fn":container.program(46, data, 0, blockParams, depths),"inverse":container.program(35, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
+    + "						</div>\n						<div>\n							<p class=\"flag\">테이크아웃</p>\n							<p class=\"name\" id=\"prodName\">\n								<a href=\"javascript:;\" onclick=\"showDetailView('"
+    + alias4(alias3((depths[1] != null ? depths[1].type : depths[1]), depth0))
+    + "', "
+    + alias4(((helper = (helper = helpers.ordNo || (depth0 != null ? depth0.ordNo : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"ordNo","hash":{},"data":data}) : helper)))
+    + ")\">\n									"
+    + alias4(alias3(((stack1 = (depth0 != null ? depth0.storePickupOrdProdInfo : depth0)) != null ? stack1.prodNameRlang : stack1), depth0))
+    + " "
+    + alias4((helpers.ordCntCheck || (depth0 && depth0.ordCntCheck) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.storePickupOrdProdInfo : depth0)) != null ? stack1.ordProdCnt : stack1),{"name":"ordCntCheck","hash":{},"data":data}))
+    + "</a>\n							</p>\n							<p class=\"font_md\"><strong class=\"num\">"
+    + alias4((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.storePickupOrdProdInfo : depth0)) != null ? stack1.totalOrdAmt : stack1),0,{"name":"currencyFormat","hash":{},"data":data}))
+    + "</strong></p>\n							<p class=\"num\"><small>"
+    + alias4((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,(depth0 != null ? depth0.ordReceivedDt : depth0),"YYYY-MM-DD",{"name":"dateFormat","hash":{},"data":data}))
+    + "</small></p>\n						</div>\n						<div>\n							<p><em>"
+    + alias4((helpers.ordStatusCheck || (depth0 && depth0.ordStatusCheck) || alias2).call(alias1,(depths[1] != null ? depths[1].type : depths[1]),((stack1 = (depth0 != null ? depth0.storePickupOrdProdInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),{"name":"ordStatusCheck","hash":{},"data":data}))
     + "</em></p>\n"
-    + ((stack1 = (helpers.ordSwitch || (depth0 && depth0.ordSwitch) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.storePickupOrdProdInfo : depth0)) != null ? stack1.ordHistProdStatusCode : stack1),{"name":"ordSwitch","hash":{},"fn":container.program(44, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "							</div>\n						</div>\n";
-},"44":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
+    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].type : depths[1]),"online",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].type : depths[1]),"store",{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(48, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depths[1] != null ? depths[1].type : depths[1]),"===","cashReceipts",{"name":"xif","hash":{},"fn":container.program(22, data, 0, blockParams, depths),"inverse":container.program(22, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
+    + "						</div>\n					</div>\n";
+},"46":function(container,depth0,helpers,partials,data) {
+    var stack1;
 
-  return ((stack1 = (helpers.ordCase || (depth0 && depth0.ordCase) || alias2).call(alias1,"a",{"name":"ordCase","hash":{},"fn":container.program(37, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = (helpers.ordCase || (depth0 && depth0.ordCase) || alias2).call(alias1,"b",{"name":"ordCase","hash":{},"fn":container.program(39, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+  return "								<img src=\""
+    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.storePickupOrdProdInfo : depth0)) != null ? stack1.imageUrl : stack1), depth0))
+    + "\">\n";
+},"48":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return ((stack1 = (helpers.ordSwitch || (depth0 && depth0.ordSwitch) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.storePickupOrdProdInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),{"name":"ordSwitch","hash":{},"fn":container.program(38, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 

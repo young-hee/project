@@ -22,11 +22,17 @@
 								{{/xif}}
 
 								{{#xif this.shoppingMarkTgtCode '==' 'Article'}}
-									<a href="/display/{{ this.displayMenuId }}/detail?articleSn={{ this.articleSn }}">
+									{{#xif this.articleCateId '==' 'chEtude' }}
+										<a href="/display/etude_ch/detail?displayMenuid=etude_ch&articleSn={{ this.articleSn }}">	
+									{{/xif}}
+									{{#xif this.articleCateId '==' 'Looks' }}
+										<a href="/display/etude_looks/detail?displayMenuid=etude_looks&articleSn={{ this.articleSn }}">	
+									{{/xif}}
 										{{#xif @index '==' 0}}
 											<strong class="num">{{ ../date }}</strong>
 										{{/xif}}
 										<div class="item_wrap">
+											<span class="img"><img src="{{ this.prodImg }}" alt=""></span>
 											<span class="title">{{ this.articleTitle }}</span>
 										</div>
 									</a>
@@ -34,7 +40,7 @@
 
 								{{#xif this.shoppingMarkTgtCode '==' 'Plandisplay'}}
 									{{!-- TODO: 기획전시 경로확인 --}}
-									<a href="#none">
+									<a href="/display/event_detail?planDisplaySn={{this.planDisplaySn}}">
 										{{#xif @index '==' 0}}
 											<strong class="num">{{ ../date }}</strong>
 										{{/xif}}

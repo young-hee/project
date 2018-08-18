@@ -7,10 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
@@ -21,7 +18,7 @@ import java.util.HashMap;
  * 2. 나의 회원등급
  *
  */
-@Controller
+@RestController
 @RequestMapping("/my/api")
 public class MyBenefitRestController extends AbstractController {
 
@@ -35,18 +32,12 @@ public class MyBenefitRestController extends AbstractController {
 	 * @return
 	 */
 	@PostMapping("/registerCoupon")
-	@ResponseBody
 	public ResponseEntity<?> registerCoupon(String couponIdentifier) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
-		try {
-			if (!StringUtils.isEmpty(couponIdentifier)) {
-				BooleanResult booleanResult = couponApi.registInputCoupon(couponIdentifier, getMemberSn());
-				result.put("BooleanResult", booleanResult);
-			}
-		} catch(Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		if (!StringUtils.isEmpty(couponIdentifier)) {
+			BooleanResult booleanResult = couponApi.registInputCoupon(couponIdentifier, getMemberSn());
+			result.put("BooleanResult", booleanResult);
 		}
 
 		return ResponseEntity.ok(result);
@@ -54,17 +45,11 @@ public class MyBenefitRestController extends AbstractController {
 	}
 
 	@GetMapping("/getCouponList")
-	@ResponseBody
 	public ResponseEntity<?> getCouponList(String searchType, Long searchExpDayLimit, Long searchEndDayLimit) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
-		try {
-			MemberCoupon memberKeepingCoupons = couponApi.getMemberKeepingCoupons(searchType, getMemberSn(), searchExpDayLimit, searchEndDayLimit);
-			result.put("MemberKeepingCoupons", memberKeepingCoupons);
-		} catch(Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		MemberCoupon memberKeepingCoupons = couponApi.getMemberKeepingCoupons(searchType, getMemberSn(), searchExpDayLimit, searchEndDayLimit);
+		result.put("MemberKeepingCoupons", memberKeepingCoupons);
 
 		return ResponseEntity.ok(result);
 	}

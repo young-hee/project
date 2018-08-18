@@ -1,0 +1,57 @@
+{{#xif singleProdYn '==' 'Y'}}
+	<div class="product {{condition (and (eq this.promoTypeCode 'Different') (gt index 0)) 'bundle' ''}}">
+    	{{#if (eq this.viewYn.checkBox 'Y')}}
+			<div class="check_wrap check_only">
+				<input type="checkbox" id="prod_{{this.prod.ordProdEx.prodSn}}" name="prod_{{oProdSn}}" value="{{json this.prod}}" data-oProdSn="{{oProdSn}}">
+				<label for="prod_{{this.prod.ordProdEx.prodSn}}">
+					<span class="sr_only">선택</span>
+				</label>
+			</div>
+		{{/if}}
+    	<div class="thumb"><img src="{{this.prod.ordProdEx.prodImgUrl}}" alt=""></div>
+    	<div class="info">
+    		<div class="align_left">
+				<p class="name">{{this.prod.ordProdEx.prodNameRlang}}</p>
+				{{#xif typeName '!=' null}}
+					<p class="flag">{{typeName}}</p>
+				{{/xif}}
+			</div>
+			<div class="align_right">
+				{{#if (eq this.prod.ordHistProdStatusCode 'ProdCancel')}}
+					<p><em>취소완료</em></p>
+				{{/if}}
+				<p>
+					{{#if (eq this.promoTypeCode 'Same')}}
+						<strong class="giving num">+{{awardQty}}</strong>
+					{{/if}}
+					<strong class="num">{{condition (eq this.step 'two') this.prod.claimReceivedQty this.prod.ordQty}}</strong>개<span class="gap">/</span><strong class="num">{{currencyFormat this.prod.finalOnlineSaleAmtPcur}}</strong>
+				</p>
+			</div>
+		</div>
+    </div>
+{{else}}
+	<div class="prd_option">
+		<div class="set">
+			{{#if (eq this.viewYn.checkBox 'Y')}}
+				<div class="check_wrap check_only">
+					<input type="checkbox" id="prod_{{this.prod.ordProdEx.prodSn}}" name="prod_{{oProdSn}}" value="{{json this.prod}}" data-oProdSn="{{oProdSn}}">
+					<label for="prod_{{this.prod.ordProdEx.prodSn}}">
+						<span class="sr_only">선택</span>
+					</label>
+				</div>
+			{{/if}}
+			<!-- <div class="thumb"><span style="background-color: #c1373e;"><img src="" alt=""></span></div> 컬러칩 -->
+			<div class="info">
+				<p class="name">{{this.prod.ordProdEx.prodNameRlang}}</p>
+			</div>
+			<div class="align_right">
+				<span>{{condition (eq this.step 'two') this.prod.claimReceivedQty this.prod.ordQty}}개 / {{currencyFormat this.prod.finalOnlineSaleAmtPcur}}</span>
+				{{#if (and (ne this.prod.ordHistProdStatusCode 'ProdCancel') (eq this.step 'one'))}}
+					{{#if (or (eq this.statusCode 'PartialCancel') (eq this.statusCode 'OrdReceivedComplete'))}}
+						<button class="btn_sm_neutral" type="button" onclick="changeOption({{this.prod.ordHistProdSn}}, '{{this.prod.ordHistProdNo}}', {{this.prod.ordProdEx.prodSn}})">옵션변경</button>
+					{{/if}}
+				{{/if}}
+			</div>
+		</div>
+	</div>
+{{/xif}}

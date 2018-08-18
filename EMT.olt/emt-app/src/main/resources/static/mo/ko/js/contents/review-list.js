@@ -41,7 +41,7 @@
 		_getData: function ( offset, isMore ) {
 			if ( this._api ) this._api.abort();
 
-			this._api = AP.api.getReviewList( null, $B.object.extend(this._params, {offset: offset}, false) )
+			this._api = AP.api.getReviewList( null, $B.object.extend(this._params, {offset: 0}, false) )
 				.done( function ( result ) {
 					var data = result.prodReviewListInfo;
 					this._draw( data, isMore );

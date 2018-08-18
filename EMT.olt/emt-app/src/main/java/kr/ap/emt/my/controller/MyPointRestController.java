@@ -20,12 +20,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping("/my/point/api")
 public class MyPointRestController extends AbstractController {
 
@@ -38,7 +39,6 @@ public class MyPointRestController extends AbstractController {
 	 * @return
 	 */
 	@PostMapping("/checkPresentMember")
-	@ResponseBody
 	public ResponseEntity<?> checkPresentMember(String userNm, String phone, String userId, int giftPoint) {
 
 		SessionUtils.setAttribute(getRequest(), SessionKey.PRESENT_NAME, userNm);
@@ -74,14 +74,14 @@ public class MyPointRestController extends AbstractController {
 			cicuemCuInfTotTcVo.setIncsNo(incsNo);
 			CicuemCuInfTotTcVo resultVo = amoreAPIService.getcicuemcuinfrbyincsno(cicuemCuInfTotTcVo);
 			if(!userNm.equals(resultVo.getCustNm())) {
-				return error(result, HttpStatus.FORBIDDEN, "NO_MEMBER", "회원정보없음.");
+				throw error(result, HttpStatus.FORBIDDEN, "NO_MEMBER", "회원정보없음.");
 			}
 			} catch(Exception e) {
-				return error(result, HttpStatus.FORBIDDEN, "NO_MEMBER", "회원정보없음.");
+				throw error(result, HttpStatus.FORBIDDEN, "NO_MEMBER", "회원정보없음.");
 			}
 		}
 		if(getMemberSession().getUser_incsNo().equals(String.valueOf(incsNo))) {
-			return error(result, HttpStatus.FORBIDDEN, "FAIL", "포인트 선물하기는 본인을 제외한 친구에게만 가능합니다.");
+			throw error(result, HttpStatus.FORBIDDEN, "FAIL", "포인트 선물하기는 본인을 제외한 친구에게만 가능합니다.");
 		}
 		
 		if(incsNo != null && !incsNo.isEmpty()) {
@@ -89,7 +89,7 @@ public class MyPointRestController extends AbstractController {
 			return ResponseEntity.ok(result);
 		}
 		
-		return error(result, HttpStatus.FORBIDDEN, "NO_MEMBER", "회원정보없음.");
+		throw error(result, HttpStatus.FORBIDDEN, "NO_MEMBER", "회원정보없음.");
 	}
 	
 	public void noMemberCheckSms() {
@@ -100,7 +100,6 @@ public class MyPointRestController extends AbstractController {
 	 * @return
 	 */
 	@PostMapping("/presentPoint")
-	@ResponseBody
 	public ResponseEntity<?> presentPoint() {
 		Map<String, Object> resp = new HashMap<String, Object>();
 		try {
@@ -116,7 +115,7 @@ public class MyPointRestController extends AbstractController {
 			vo.setRqPrtnId(APConstant.EH_PRTN_ID);
 			
 			vo.setXttrNo(DateFormatUtils.format(now, "yyyyMMddhhmmss.SSS").replace(".", "") + APConstant.EH_PRTN_ID);
-			vo.setPrtnNm(APConstant.EH_CH_NAME);
+			vo.setPrtnNm("에뛰드하우스쇼핑몰");
 			vo.setUsgAplyPt(SessionUtils.getAttribute(getRequest(), SessionKey.PRESENT_POINT) + "");
 			vo.setTtSalAmt("0");
 			vo.setXttpCd("121");
@@ -134,41 +133,39 @@ public class MyPointRestController extends AbstractController {
 				return ResponseEntity.ok(resp);
 			} else if("ICITSVBIZ212".equals(result.getRsltCd())) {
 
-				return error(resp, HttpStatus.FORBIDDEN, "ICITSVBIZ212", "포인트 선물횟수를 초과하여 더 이상 선물하실 수 없습니다.<br> 포인트 선물하기 및 선물받기는 각각 한 달 최대 10회까지 가능합니다.");
+				throw error(resp, HttpStatus.FORBIDDEN, "ICITSVBIZ212", "포인트 선물횟수를 초과하여 더 이상 선물하실 수 없습니다.<br> 포인트 선물하기 및 선물받기는 각각 한 달 최대 10회까지 가능합니다.");
 			} else if("ICITSVBIZ206".equals(result.getRsltCd())) {
 
-				return error(resp, HttpStatus.FORBIDDEN, "ICITSVBIZ206", "잔여포인트보다 선물할 포인트가 더 많습니다.");
+				throw error(resp, HttpStatus.FORBIDDEN, "ICITSVBIZ206", "잔여포인트보다 선물할 포인트가 더 많습니다.");
 			} else if("ICITSVBIZ210".equals(result.getRsltCd())) {
 
-				return error(resp, HttpStatus.FORBIDDEN, "ICITSVBIZ210", "0포인트를 선물할 수 없습니다.");
+				throw error(resp, HttpStatus.FORBIDDEN, "ICITSVBIZ210", "0포인트를 선물할 수 없습니다.");
 			}
 		} catch(Exception e) {
-			return error(resp, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), "오류가 발생했습니다.");
+			throw error(resp, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), "오류가 발생했습니다.");
 		}
 
-		return error(resp, HttpStatus.FORBIDDEN, "ERROR", "선물실패");
+		throw error(resp, HttpStatus.FORBIDDEN, "ERROR", "선물실패");
 		
 	}
 	@PostMapping("/pearl/receive")
-	@ResponseBody
 	public ResponseEntity<?> ReseivePearl(Long activityPointHistSn) {
 		Map<String, Object> resp = new HashMap<String, Object>();
 		try {
 			BooleanResult result = pointApi.receiveActivityPointGift(getMemberSn(), activityPointHistSn);
 			if(!result.isResult()) {
-				return error(resp, HttpStatus.FORBIDDEN, "EAPI001", "fail");
+				throw error(resp, HttpStatus.FORBIDDEN, "EAPI001", "fail");
 			}
 		} catch(ApiException e) {
-			return error(resp, e);
+			throw e;
 		} catch(Exception e) {
-			return error(resp, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), "오류가 발생했습니다.");
+			throw error(resp, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), "오류가 발생했습니다.");
 		}
 		
 		return ResponseEntity.ok(resp);
 	}
 	
 	@PostMapping("/pearl/gift")
-	@ResponseBody
 	public ResponseEntity<?> giftPearl(String memberName, String phoneNumber, Integer point) {
 		Map<String, Object> resp = new HashMap<String, Object>();
 		try {
@@ -182,23 +179,22 @@ public class MyPointRestController extends AbstractController {
 			body.setPoint(point);
 			BooleanResult result = pointApi.giveActivityPointGift(getMemberSn(), body);
 			if(result == null) {
-				return error(resp, HttpStatus.FORBIDDEN, "EAPI002", "입력하신 이름과 휴대폰 정보의 회원을 찾을 수 없습니다.");
+				throw error(resp, HttpStatus.FORBIDDEN, "EAPI002", "입력하신 이름과 휴대폰 정보의 회원을 찾을 수 없습니다.");
 			}
 			if(!result.isResult()) {
-				return error(resp, HttpStatus.FORBIDDEN, "EAPI001", "fail");
+				throw error(resp, HttpStatus.FORBIDDEN, "EAPI001", "fail");
 			}
 		} catch(ApiException e) {
-			return error(resp, HttpStatus.FORBIDDEN, e.getErrorCode(), e.getMessage());
+			throw error(resp, HttpStatus.FORBIDDEN, e.getErrorCode(), e.getMessage());
 		
 		} catch(Exception e) {
-			return error(resp, HttpStatus.FORBIDDEN, "EAPI001", "fail");
+			throw error(resp, HttpStatus.FORBIDDEN, "EAPI001", "fail");
 		}
 		
 		return ResponseEntity.ok(resp);
 	}
 
 	@PostMapping("/pearl/exchange")
-	@ResponseBody
 	public ResponseEntity<?> exchange(long couponSn) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -207,17 +203,16 @@ public class MyPointRestController extends AbstractController {
 			if(result.isResult()) {
 				return ResponseEntity.ok("{}");
 			} else {
-				return error(map, HttpStatus.FORBIDDEN, "EAPI001", "fail");
+				throw error(map, HttpStatus.FORBIDDEN, "EAPI001", "fail");
 			}
 		} catch(ApiException e) {
-			return error(map, e);
+			throw e;
 		} catch(Exception e) {
-			return error(map, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), "오류가 발생했습니다.");
+			throw error(map, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), "오류가 발생했습니다.");
 		}
 	}
 	
 	@PostMapping("/pointCard/issued")
-	@ResponseBody
 	public ResponseEntity<?> issuingPointCard(String custNm, String cellNum) {
 		Map<String, Object> resp = new HashMap<String, Object>();
 		try {
@@ -236,12 +231,12 @@ public class MyPointRestController extends AbstractController {
 				setMemberSession(membersession);
 				return ResponseEntity.ok(resp);
 			} else {
-				return error(resp, HttpStatus.FORBIDDEN, "ERROR", "카드 발급에 실패했습니다.");
+				throw error(resp, HttpStatus.FORBIDDEN, "ERROR", "카드 발급에 실패했습니다.");
 			}
 		} catch(ApiException e) {
-			return error(resp, HttpStatus.FORBIDDEN, "ERROR", "카드 발급에 실패했습니다.");
+			throw error(resp, HttpStatus.FORBIDDEN, "ERROR", "카드 발급에 실패했습니다.");
 		} catch(Exception e) {
-			return error(resp, HttpStatus.FORBIDDEN, "ERROR", "카드 발급에 실패했습니다.");
+			throw error(resp, HttpStatus.FORBIDDEN, "ERROR", "카드 발급에 실패했습니다.");
 		}
 		
 	}

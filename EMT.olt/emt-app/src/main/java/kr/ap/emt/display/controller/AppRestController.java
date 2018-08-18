@@ -22,8 +22,9 @@ import net.g1project.ecp.api.model.sales.applications.ApplicationVer;
 import net.g1project.ecp.api.model.sales.applications.ExecuteResult;
 import net.g1project.ecp.api.model.sales.applications.PostAppInstall;
 import net.g1project.ecp.api.model.sales.display.OnlineProdList;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/application")
 public class AppRestController extends AbstractController {
 
@@ -35,21 +36,14 @@ public class AppRestController extends AbstractController {
      * @return hashMap 
      */
 	@RequestMapping("/getAppVersion")
-    @ResponseBody
     public ResponseEntity<?> getApplicationVersion(RequestAppInfo requestAppinfo , HttpServletRequest req) {
       
         HashMap<String, Object> result = new HashMap<String, Object>();
         
-        try {
-        	
-        	ApplicationVer applicationVer = applicationsApi.getApplicationVersion(requestAppinfo.getOsType());        	
-            result.put("appVer", applicationVer);
-            
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-        	result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		ApplicationVer applicationVer = applicationsApi.getApplicationVersion(requestAppinfo.getOsType());
+		result.put("appVer", applicationVer);
+
+		return ResponseEntity.ok(result);
 
     }
 	
@@ -60,26 +54,20 @@ public class AppRestController extends AbstractController {
 	 * @return hashMap { "result": true}
 	 */
 	@RequestMapping("/saveAppInstall")
-    @ResponseBody
     public ResponseEntity<?> saveAppInstall(RequestAppInfo requestAppinfo ,PostAppInstall postAppInstall, HttpServletRequest req) {
       
         HashMap<String, Object> result = new HashMap<String, Object>();
         
-        try {
-        	if(isLoggedIn()) {
-        		postAppInstall.setMemberYn("Y");
-        	}else {
-        		postAppInstall.setMemberYn("N");
-        	}
-        	postAppInstall.setMemberSn(getMemberSn());
-        	ExecuteResult executeResult = applicationsApi.saveAppInstall(requestAppinfo.getOsType(), postAppInstall);        	
-            result.put("executeResult", executeResult);
-            
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-        	result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		if(isLoggedIn()) {
+			postAppInstall.setMemberYn("Y");
+		}else {
+			postAppInstall.setMemberYn("N");
+		}
+		postAppInstall.setMemberSn(getMemberSn());
+		ExecuteResult executeResult = applicationsApi.saveAppInstall(requestAppinfo.getOsType(), postAppInstall);
+		result.put("executeResult", executeResult);
+
+		return ResponseEntity.ok(result);
 
     }
 	
@@ -90,21 +78,14 @@ public class AppRestController extends AbstractController {
 	 * @return hashMap { "result": true}
 	 */
 	@RequestMapping("/getAppInstall")
-    @ResponseBody
     public ResponseEntity<?> getAppInstall(RequestAppInfo requestAppinfo, HttpServletRequest req) {
       
         HashMap<String, Object> result = new HashMap<String, Object>();
-        
-        try {
-        	
-        	ExecuteResult executeResult = applicationsApi.getAppInstall(requestAppinfo.getOsType(), requestAppinfo.getToken());  	
-            result.put("executeResult", executeResult);
-            
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-        	result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+
+		ExecuteResult executeResult = applicationsApi.getAppInstall(requestAppinfo.getOsType(), requestAppinfo.getToken());
+		result.put("executeResult", executeResult);
+
+		return ResponseEntity.ok(result);
 
     }
 	
@@ -115,22 +96,15 @@ public class AppRestController extends AbstractController {
 	 * @return hashMap 
 	 */
 	@RequestMapping("/updateAppAgree")
-    @ResponseBody
     public ResponseEntity<?> updateAppAgree(RequestAppInfo requestAppinfo, HttpServletRequest req) {
       
         HashMap<String, Object> result = new HashMap<String, Object>();
         
-        try {
-        	//TODO 빌드 오류로 임시 수정합니다 By pollak
-        	//ExecuteResult executeResult = applicationsApi.updateAppAgree(requestAppinfo.getToken(), null);  	
-            //result.put("executeResult", executeResult);
-            
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-        	result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		//TODO 빌드 오류로 임시 수정합니다 By pollak
+		//ExecuteResult executeResult = applicationsApi.updateAppAgree(requestAppinfo.getToken(), null);
+		//result.put("executeResult", executeResult);
 
+		return ResponseEntity.ok(result);
     }
 	
 	/**
@@ -140,22 +114,13 @@ public class AppRestController extends AbstractController {
 	 * @return hashMap 
 	 */
 	@RequestMapping("/updateAppLogin")
-    @ResponseBody
     public ResponseEntity<?> updateAppLogin(RequestAppInfo requestAppinfo, HttpServletRequest req) {
       
         HashMap<String, Object> result = new HashMap<String, Object>();
-        
-        try {
-        	
-        	ExecuteResult executeResult = applicationsApi.updateAppLogin(requestAppinfo.getToken());  	
-            result.put("executeResult", executeResult);
-            
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-        	result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		ExecuteResult executeResult = applicationsApi.updateAppLogin(requestAppinfo.getToken());
+		result.put("executeResult", executeResult);
 
+		return ResponseEntity.ok(result);
     }
 	
 	/**
@@ -165,22 +130,14 @@ public class AppRestController extends AbstractController {
 	 * @return hashMap 
 	 */
 	@RequestMapping("/updateAppConnect")
-    @ResponseBody
     public ResponseEntity<?> updateAppConnect(RequestAppInfo requestAppinfo, HttpServletRequest req) {
       
         HashMap<String, Object> result = new HashMap<String, Object>();
         
-        try {
+		ExecuteResult executeResult = applicationsApi.updateAppConnect(requestAppinfo.getToken());
+		result.put("executeResult", executeResult);
 
-        	ExecuteResult executeResult = applicationsApi.updateAppConnect(requestAppinfo.getToken());  	
-            result.put("executeResult", executeResult);
-            
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-        	result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
-
+		return ResponseEntity.ok(result);
     }
 	
 	/**
@@ -190,22 +147,14 @@ public class AppRestController extends AbstractController {
 	 * @return hashMap 
 	 */
 	@RequestMapping("/updateAppSendSuccess")
-    @ResponseBody
     public ResponseEntity<?> updateAppSendSuccess(RequestAppInfo requestAppinfo, HttpServletRequest req) {
       
         HashMap<String, Object> result = new HashMap<String, Object>();
         
-        try {
-        	
-        	ExecuteResult executeResult = applicationsApi.updateAppSendSuccess(requestAppinfo.getToken(), requestAppinfo.getSuccess());  	
-            result.put("executeResult", executeResult);
-            
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-        	result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		ExecuteResult executeResult = applicationsApi.updateAppSendSuccess(requestAppinfo.getToken(), requestAppinfo.getSuccess());
+		result.put("executeResult", executeResult);
 
+		return ResponseEntity.ok(result);
     }
 	
 	/**
@@ -216,21 +165,14 @@ public class AppRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/getColorPickProd")
-    @ResponseBody
     public ResponseEntity<?> getColorPickProd(RequestAppInfo requestAppinfo, HttpServletRequest req) {
       
         HashMap<String, Object> result = new HashMap<String, Object>();
         
-        try {
-        	
-        	OnlineProdList onlineProdList = displayApi.getColorPickProd(requestAppinfo.getRed(), requestAppinfo.getBlue(), requestAppinfo.getBlue(), requestAppinfo.getPeal(), requestAppinfo.getGlossy());  	
-            result.put("onlineProdList", onlineProdList);
-            
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-        	result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		OnlineProdList onlineProdList = displayApi.getColorPickProd(requestAppinfo.getRed(), requestAppinfo.getBlue(), requestAppinfo.getBlue(), requestAppinfo.getPeal(), requestAppinfo.getGlossy());
+		result.put("onlineProdList", onlineProdList);
+
+		return ResponseEntity.ok(result);
 
     }
 	

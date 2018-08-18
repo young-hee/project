@@ -92,7 +92,7 @@ public class MyRestController extends AbstractController {
 		if(isAgreeTerms(termsCode)) {
 			return ResponseEntity.ok(result);
 		}
-		return error(null, null, null, null);
+		throw error(null, null, null, null);
 	}
 	
 	private boolean isAgreeTerms(String termsCode) {
@@ -164,25 +164,19 @@ public class MyRestController extends AbstractController {
 			body.setAddress(address);
 		}
 		
-
-		try {
-			CicuemCuInfCoOutVo resultVo = amoreAPIService.updatecicuemcuinfrfull(vo1);
-			if(APConstant.RESULT_OK.equals(resultVo.getRsltCd())) {
-				try {
-					apApi.putMember(memberSession.getMember_sn(), body);
-					ApMember apMember = apApi.getMemberInfo(memberSession.getMember_sn());
-					memberSession.setMember(apMember);
-				}  catch(Exception e) {
-				
-				}
-			} else {
-				return error(result, HttpStatus.FORBIDDEN, null, null);
-			}
+		CicuemCuInfCoOutVo resultVo = amoreAPIService.updatecicuemcuinfrfull(vo1);
+		if(APConstant.RESULT_OK.equals(resultVo.getRsltCd())) {
+			try {
+				apApi.putMember(memberSession.getMember_sn(), body);
+				ApMember apMember = apApi.getMemberInfo(memberSession.getMember_sn());
+				memberSession.setMember(apMember);
+			}  catch(Exception e) {
 			
-		} catch (ApiException e) {
-			return error(result, e);
+			}
+		} else {
+			throw error(result, HttpStatus.FORBIDDEN, null, null);
 		}
-		
+			
 		return ResponseEntity.ok(result);
 	}
 	/**
@@ -301,25 +295,20 @@ public class MyRestController extends AbstractController {
 		} catch (CloneNotSupportedException e1) {
 		}
 		
-		try {
-
-			CicuemCuOptiTcResultVo cicuemCuOptiTcResultVo = new CicuemCuOptiTcResultVo();
-			cicuemCuOptiTcResultVo.setCicuemCuOptiTcVo(list);
-			SimpleloVo rslt = amoreAPIService.savecicuemcuoptilist(cicuemCuOptiTcResultVo);
-			if(APConstant.RESULT_OK.equals(rslt.getRsltCd())) {
-				try {
-					apApi.putMember(memberSession.getMember_sn(), body);
-					ApMember apMember = apApi.getMemberInfo(memberSession.getMember_sn());
-					memberSession.setMember(apMember);
-					setMemberSession(memberSession);
-				} catch(Exception e) {
-					
-				}
-			} else {
-				return error(result, HttpStatus.FORBIDDEN, null, null);
+		CicuemCuOptiTcResultVo cicuemCuOptiTcResultVo = new CicuemCuOptiTcResultVo();
+		cicuemCuOptiTcResultVo.setCicuemCuOptiTcVo(list);
+		SimpleloVo rslt = amoreAPIService.savecicuemcuoptilist(cicuemCuOptiTcResultVo);
+		if(APConstant.RESULT_OK.equals(rslt.getRsltCd())) {
+			try {
+				apApi.putMember(memberSession.getMember_sn(), body);
+				ApMember apMember = apApi.getMemberInfo(memberSession.getMember_sn());
+				memberSession.setMember(apMember);
+				setMemberSession(memberSession);
+			} catch(Exception e) {
+				
 			}
-		} catch(ApiException e ) {
-			return error(result, e);
+		} else {
+			throw error(result, HttpStatus.FORBIDDEN, null, null);
 		}
 
 		return ResponseEntity.ok(result);
@@ -375,68 +364,64 @@ public class MyRestController extends AbstractController {
 		}
 		
 
-		try {
 
-			CicuemCuInfTotTcVo cicuemCuInfTotTcVo = new CicuemCuInfTotTcVo();
-			cicuemCuInfTotTcVo.setCicuedCuTncaTcVo(cicuedCuTncaTcVo);
-			SimpleloVo rslt = amoreAPIService.savecicuedcutnca(cicuemCuInfTotTcVo);
-			if(APConstant.RESULT_OK.equals(rslt.getRsltCd())) {
-				try {
+		CicuemCuInfTotTcVo cicuemCuInfTotTcVo = new CicuemCuInfTotTcVo();
+		cicuemCuInfTotTcVo.setCicuedCuTncaTcVo(cicuedCuTncaTcVo);
+		SimpleloVo rslt = amoreAPIService.savecicuedcutnca(cicuemCuInfTotTcVo);
+		if(APConstant.RESULT_OK.equals(rslt.getRsltCd())) {
+			try {
 
-					if(!agreed.isEmpty())
-						termsApi.postAgreedTerms(memberSession.getMember_sn(), agreed.substring(1));
-					if(!removeAgreed.isEmpty())
-						termsApi.deleteAgreeTerms(memberSession.getMember_sn(), removeAgreed.substring(1));
+				if(!agreed.isEmpty())
+					termsApi.postAgreedTerms(memberSession.getMember_sn(), agreed.substring(1));
+				if(!removeAgreed.isEmpty())
+					termsApi.deleteAgreeTerms(memberSession.getMember_sn(), removeAgreed.substring(1));
+				
+				if(removeAgreed.contains("030")) {
+
+					CicuemCuInfTotTcVo vo1 = new CicuemCuInfTotTcVo();
+					vo1.setChCd(APConstant.AP_CH_CD);
+					CicuemCuOptiCsTcVo vo = new CicuemCuOptiCsTcVo();
+					vo1.setCicuemCuOptiTcVo(vo);
+					vo1.setIncsNo(memberSession.getUser_incsNo());
+					vo1.setHomeZip("");
+					vo1.setHomeBscsAddr("");
+					vo1.setHomeDtlAddr("");
+					vo1.setCustEmid("");
+					vo1.setCustEmdn("");
 					
-					if(removeAgreed.contains("030")) {
+					MemberForUpdate body = new MemberForUpdate();
+					body.setEmailAddress("");
+					body.setPhoneNo1(getMemberSession().getMember().getPhoneNo1());
+					EmbeddableAddress address = new EmbeddableAddress();
+					
+					address.setZipCode("");
+					address.setAddress1("");
+					address.setAddress2("");
+					body.setAddress(address);
+					
 
-						CicuemCuInfTotTcVo vo1 = new CicuemCuInfTotTcVo();
-						vo1.setChCd(APConstant.AP_CH_CD);
-						CicuemCuOptiCsTcVo vo = new CicuemCuOptiCsTcVo();
-						vo1.setCicuemCuOptiTcVo(vo);
-						vo1.setIncsNo(memberSession.getUser_incsNo());
-						vo1.setHomeZip("");
-						vo1.setHomeBscsAddr("");
-						vo1.setHomeDtlAddr("");
-						vo1.setCustEmid("");
-						vo1.setCustEmdn("");
-						
-						MemberForUpdate body = new MemberForUpdate();
-						body.setEmailAddress("");
-						body.setPhoneNo1(getMemberSession().getMember().getPhoneNo1());
-						EmbeddableAddress address = new EmbeddableAddress();
-						
-						address.setZipCode("");
-						address.setAddress1("");
-						address.setAddress2("");
-						body.setAddress(address);
-						
-
-						try {
-							CicuemCuInfCoOutVo resultVo = amoreAPIService.updatecicuemcuinfrfull(vo1);
-							if(APConstant.RESULT_OK.equals(resultVo.getRsltCd())) {
-								try {
-									apApi.putMember(memberSession.getMember_sn(), body);
-									ApMember apMember = apApi.getMemberInfo(memberSession.getMember_sn());
-									memberSession.setMember(apMember);
-								}  catch(Exception e) {
-								
-								}
-							} else {
-							}
+					try {
+						CicuemCuInfCoOutVo resultVo = amoreAPIService.updatecicuemcuinfrfull(vo1);
+						if(APConstant.RESULT_OK.equals(resultVo.getRsltCd())) {
+							try {
+								apApi.putMember(memberSession.getMember_sn(), body);
+								ApMember apMember = apApi.getMemberInfo(memberSession.getMember_sn());
+								memberSession.setMember(apMember);
+							}  catch(Exception e) {
 							
-						} catch (ApiException e) {
+							}
+						} else {
 						}
+						
+					} catch (ApiException e) {
 					}
-				} catch(Exception e) {
-
-					return error(resp, HttpStatus.FORBIDDEN, null, null);
 				}
-			} else {
-				return error(resp, HttpStatus.FORBIDDEN, null, null);
+			} catch(Exception e) {
+
+				throw error(resp, HttpStatus.FORBIDDEN, null, null);
 			}
-		} catch(ApiException e ) {
-			return error(resp, e);
+		} else {
+			throw error(resp, HttpStatus.FORBIDDEN, null, null);
 		}
 		
 		
@@ -695,28 +680,16 @@ public class MyRestController extends AbstractController {
 		PostSnsIf snsIdIf = new PostSnsIf();
 		snsIdIf.setSnsId(snsId);
 		snsIdIf.setAccessToken(accessToken);
-		try {
-			SnsIfResult result = apApi.postMemberSns(getMemberSn(), snsCode, snsIdIf);
-			respMap.put("isLinked", result.isResult());
-			respMap.put("snsName", snsCode);
-			return ResponseEntity.ok(respMap);
-		} catch(ApiException e) {
-			Map<String, Object> result = new HashMap<String, Object>();
-			return error(result, e);
-		}
+		SnsIfResult result = apApi.postMemberSns(getMemberSn(), snsCode, snsIdIf);
+		respMap.put("isLinked", result.isResult());
+		respMap.put("snsName", snsCode);
+		return ResponseEntity.ok(respMap);
 	}
 
 	private ResponseEntity<?> snsDisconnectM(HttpServletRequest request, String sns) {
 		Map<String, Object> respMap = new HashMap<String, Object>();
-		
-		//FIXME sns로 연동해제.
-		try {
-			apApi.deleteMemberSns(getMemberSn(), sns);
-			return ResponseEntity.ok(respMap);
-		} catch(ApiException e) {
-			Map<String, Object> result = new HashMap<String, Object>();
-			return error(result, e);
-		}
+		apApi.deleteMemberSns(getMemberSn(), sns);
+		return ResponseEntity.ok(respMap);
 	}
 
 	private ResponseEntity<?> changeMyInfoM(MyInfoDTO myinfo) {
@@ -875,34 +848,28 @@ public class MyRestController extends AbstractController {
 	private ResponseEntity<?> changePwdM(String password,
 			String oriPassword) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		try {
-			MemberSession memberSession = getMemberSession();
-			
-			CheckResult pwResult = apApi.checkMemberPassword(getMemberSn(), oriPassword);
-			if(!pwResult.isResult()) {
-				return error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "잘못된 패스워드 입니다.");
-			}
-			
-			CicuemCuInfTotTcVo vo = new CicuemCuInfTotTcVo();
-			vo.setIncsNo(memberSession.getUser_incsNo());
-			List<CicuedCuChCsTcVo> cicuedCuChCsTcVo = new ArrayList<CicuedCuChCsTcVo>();
-			CicuedCuChCsTcVo csTcVo = new CicuedCuChCsTcVo();
-			csTcVo.setChCd(APConstant.AP_CH_CD);
-			csTcVo.setChcsNo(memberSession.getMember().getMemberId());
-			csTcVo.setUserPwdEc((ApPasswordEncoder.encryptPassword(password)));
-			csTcVo.setPrtnNm("에뛰드");
-			cicuedCuChCsTcVo.add(csTcVo);
-			vo.setCicuedCuChCsTcVo(cicuedCuChCsTcVo);
-			CicuemCuInfCoOutVo resultVo = amoreAPIService.updatecicuemcuinfrfull(vo);
-			if(APConstant.RESULT_OK.equals(resultVo.getRsltCd())) {
-				return ResponseEntity.ok(result);
-			} else {
-				return error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "잘못된 패스워드 입니다.");
-			}
-			
-			
-		} catch(ApiException e) {
-			return error(result, e);
+		MemberSession memberSession = getMemberSession();
+		
+		CheckResult pwResult = apApi.checkMemberPassword(getMemberSn(), oriPassword);
+		if(!pwResult.isResult()) {
+			throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "잘못된 패스워드 입니다.");
+		}
+		
+		CicuemCuInfTotTcVo vo = new CicuemCuInfTotTcVo();
+		vo.setIncsNo(memberSession.getUser_incsNo());
+		List<CicuedCuChCsTcVo> cicuedCuChCsTcVo = new ArrayList<CicuedCuChCsTcVo>();
+		CicuedCuChCsTcVo csTcVo = new CicuedCuChCsTcVo();
+		csTcVo.setChCd(APConstant.AP_CH_CD);
+		csTcVo.setChcsNo(memberSession.getMember().getMemberId());
+		csTcVo.setUserPwdEc((ApPasswordEncoder.encryptPassword(password)));
+		csTcVo.setPrtnNm("에뛰드");
+		cicuedCuChCsTcVo.add(csTcVo);
+		vo.setCicuedCuChCsTcVo(cicuedCuChCsTcVo);
+		CicuemCuInfCoOutVo resultVo = amoreAPIService.updatecicuemcuinfrfull(vo);
+		if(APConstant.RESULT_OK.equals(resultVo.getRsltCd())) {
+			return ResponseEntity.ok(result);
+		} else {
+			throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "잘못된 패스워드 입니다.");
 		}
 	}
 }

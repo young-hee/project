@@ -8,6 +8,18 @@ public class OrdReceptChangeDTO {
 	 * 배송정보 세팅
 	 */
 
+	/**
+	 * 01:일반택배
+	 * 02:편의점
+	 */
+	private String delivery;
+	/**
+	 * 01:최근배송지
+	 * 02:기본배송지
+	 * 03:새로입력
+	 */
+	private String address;
+
 	/*주문번호*/
 	private Long ordSn;
 
@@ -26,6 +38,18 @@ public class OrdReceptChangeDTO {
 	private String recipientPhoneNo;
 	/*수취인 이메일*/
 	private String recipientEmailAddress;
+	/*주소*/
+	private String recipientZipCode;
+	/*기본주소*/
+	private String recipientAddress1;
+	/*상세주소*/
+	private String recipientAddress2;
+	/*배송메세지*/
+	private String shipMsg;
+	/*배송메세지(모바일 직접입력)*/
+	private String shipMsg2;
+	/*새로입력 기본배송지로 설정*/
+	private String repShipAddressYn;
 
 	/*새로입력 이름*/
 	private String userName;
@@ -38,20 +62,8 @@ public class OrdReceptChangeDTO {
 	/*새로입력 상세주소*/
 	private String userAddress2;
 
-	/*주소*/
-	private String recipientZipCode;
-	/*기본주소*/
-	private String recipientAddress1;
-	/*상세주소*/
-	private String recipientAddress2;
-
 	/*배송지일련번호*/
 	private Long shipAddressSn;
-
-	/*배송메세지*/
-	private String shipMsg;
-	/*배송메세지(직접입력)*/
-	private String shipMsg2;
 
 	/* 선물포장금액기준통화*/
 	private BigDecimal giftPackingAmtBcur;
@@ -74,6 +86,24 @@ public class OrdReceptChangeDTO {
 	private String cStoreArrivalDongNm;
 	private String cStoreRecipientName;
 	private String cStoreRecipientPhoneNo;
+
+	private String nextPayUseYn;
+
+	public String getDelivery() {
+		return delivery;
+	}
+
+	public void setDelivery(String delivery) {
+		this.delivery = delivery;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
 	public Long getOrdSn() {
 		return ordSn;
@@ -173,6 +203,14 @@ public class OrdReceptChangeDTO {
 
 	public void setUserAddress2(String userAddress2) {
 		this.userAddress2 = userAddress2;
+	}
+
+	public String getRepShipAddressYn() {
+		return repShipAddressYn;
+	}
+
+	public void setRepShipAddressYn(String repShipAddressYn) {
+		this.repShipAddressYn = repShipAddressYn;
 	}
 
 	public String getRecipientZipCode() { return recipientZipCode; }
@@ -357,5 +395,13 @@ public class OrdReceptChangeDTO {
 
 	public void setcStoreRecipientPhoneNo(String cStoreRecipientPhoneNo) {
 		this.cStoreRecipientPhoneNo = cStoreRecipientPhoneNo;
+	}
+
+	public String getNextPayUseYn() {
+		return nextPayUseYn;
+	}
+
+	public void setNextPayUseYn(String nextPayUseYn) {
+		this.nextPayUseYn = nextPayUseYn;
 	}
 }

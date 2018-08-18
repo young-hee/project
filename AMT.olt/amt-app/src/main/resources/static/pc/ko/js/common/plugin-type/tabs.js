@@ -18,7 +18,6 @@
          */
         tabs: function ( method, value ) {
             var pluginName = 'tabs';
-
             if ( typeof method === 'string' ) {
                 return plugin.callMethod( this, pluginName, method, value );
             } else {
@@ -37,6 +36,7 @@
 
 
     var Tabs = function ( $target, pluginName ) {
+    	
         var _$target = $target,
             _$tabMenuArea = $target.find( '> .tab_menu' ),
             _$tabs = _$tabMenuArea.find( '> ul > li' ),

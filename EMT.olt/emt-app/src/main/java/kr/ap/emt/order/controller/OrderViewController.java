@@ -19,16 +19,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/order")
@@ -48,20 +46,21 @@ public class OrderViewController extends OrderBaseController {
 
 	/**
 	 * 주문서생성
+	 *
+	 * @param request
+	 * @param model
+	 * @param redirectAttributes
+	 * @return
 	 */
-	@PageTitle(title = "주문/결제|에뛰드")
+	//@PageTitle(title = "주문/결제|에뛰드")
 	@PostMapping("/reception")
-	public String receiveOrder(HttpServletRequest request, Model model) {
+	public String receiveOrder(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
 
 		/* 회원구분 */
 		MemberSession memberSession = getMemberSession();
 
 		/* 주문 변경 정보 저장*/
-		OrdReceptChange ordReceptChange = memberSession.getOrdReceptChange();
-		if (ordReceptChange == null) {
-			ordReceptChange = new OrdReceptChange();
-			memberSession.setOrdReceptChange(ordReceptChange);
-		}
+		memberSession.setOrdReceptChange(new OrdReceptChange());
 
 		OrdEx ordEx = new OrdEx();
 
@@ -81,13 +80,11 @@ public class OrderViewController extends OrderBaseController {
 
 				/* 주문 상품목록 생성 */
 				makeOrdProdSet(ordEx, model);
+
 				model.addAttribute("result", true);
+				model.addAttribute("pageTitle", "주문/결제|에뛰드");
 			} catch (ApiException e) {
-				model.addAttribute("result", false);
-				model.addAttribute("errorCode", e.getErrorCode());
-				model.addAttribute("errorMessage", e.getMessage());
-				model.addAttribute("errorAdditional", e.getAdditional());
-				//return "redirect:"+request.getHeader("referer");
+				return redirectOrdErr(request, redirectAttributes, e);
 			}
 
 		}else{
@@ -98,13 +95,11 @@ public class OrderViewController extends OrderBaseController {
 
 				/* 주문 상품목록 생성 */
 				makeOrdProdSet(ordEx, model);
+
 				model.addAttribute("result", true);
+				model.addAttribute("pageTitle", "주문/결제|에뛰드");
 			} catch (ApiException e) {
-				model.addAttribute("result", false);
-				model.addAttribute("errorCode", e.getErrorCode());
-				model.addAttribute("errorMessage", e.getMessage());
-				model.addAttribute("errorAdditional", e.getAdditional());
-				//return "redirect:"+request.getHeader("referer");
+				return redirectOrdErr(request, redirectAttributes, e);
 			}
 		}
 
@@ -120,8 +115,25 @@ public class OrderViewController extends OrderBaseController {
 		return "order/order";
 	}
 
+	private String redirectOrdErr(HttpServletRequest request, RedirectAttributes redirectAttributes, ApiException e) {
+		Map<String, Object> map = new HashMap<String,Object>();
+		map.put("result", false);
+		map.put("errorCode", e.getErrorCode());
+		map.put("errorMessage", e.getMessage());
+		map.put("errorAdditional", e.getAdditional());
+		redirectAttributes.addFlashAttribute("ordErr", map);
+		request.removeAttribute("pageTitle");
+		request.removeAttribute("menuId");
+		request.removeAttribute("subMenuId");
+		return "redirect:"+request.getHeader("referer");
+	}
+
 	/**
 	 * 주문서접수완료(실시간 계좌이체 Get)
+	 *
+	 * @param request
+	 * @param model
+	 * @return
 	 */
 	@PageTitle(title = "결제완료|에뛰드")
     @GetMapping("/ordComplete")
@@ -241,8 +253,11 @@ public class OrderViewController extends OrderBaseController {
 					Date date = formatOutput.parse(dtTrans + tmTrans + "+0900");
 
 					NotifyAccountDeposit nad = new NotifyAccountDeposit();
+					nad.setPayMethodCode(PAY_METHOD_CODE_VIRTUAL_ACCOUNT);  // virtual-account
+					nad.setPgTradeNo(noTid);								// 거래번호
+					nad.setVirtualDepositBankAcNo(noVacct); 				// 가상계좌번호
 					nad.setVirtualBankAcDepositDt(date);
-					result = orderApi.notifyAccountDeposit(noOid, noTid, nad);
+					result = orderApi.notifyAccountDeposit(noOid, nad);
 				}
 			}
 		}
@@ -289,23 +304,24 @@ public class OrderViewController extends OrderBaseController {
 			String pType = request.getParameter("P_TYPE");       // 지불수단
 			String pTid = request.getParameter("P_TID");         // 거래번호
 			String ordNo = request.getParameter("P_OID");       // 상점 주문번호
+
+			//가상계좌입금일시
+			SimpleDateFormat formatOutput = new SimpleDateFormat("yyyyMMddHHmmssZ");
+			String pAuthDt = request.getParameter("P_AUTH_DT"); // 승인일자
+			Date date = formatOutput.parse(pAuthDt + "+0900");
 			
 			//로그파일에 로그 남기기
 			String file_path = inicisPgProperties.getIniPayhome() + "/log";
 			writeMobileNotiLog(file_path, request);
-			
+
 			if("02".equals(pgTradeNo)) {	// 가상계좌 입금 통보 시
 	
 				// 가상계좌
 				if ("VBANK".equals(pType)) {
-					//가상계좌입금일시
-					SimpleDateFormat formatOutput = new SimpleDateFormat("yyyyMMddHHmmssZ");
-					String pAuthDt = request.getParameter("P_AUTH_DT"); // 승인일자
-					Date date = formatOutput.parse(pAuthDt + "+0900");
-	
 					NotifyAccountDeposit nad = new NotifyAccountDeposit();
+					nad.setPayMethodCode(PAY_METHOD_CODE_VIRTUAL_ACCOUNT);  // virtual-account
 					nad.setVirtualBankAcDepositDt(date);
-					result = orderApi.notifyAccountDeposit(ordNo, pTid, nad);
+					result = orderApi.notifyAccountDeposit(ordNo, nad);
 				}
 				
 			} else {
@@ -313,11 +329,14 @@ public class OrderViewController extends OrderBaseController {
 				if("00".equals(pgTradeNo)) { //성공
 					// 실시간 계좌이체
 					if ("BANK".equals(pType)) {
-						result = orderApi.notifyAccountDeposit(ordNo, pTid, null);
+						NotifyAccountDeposit nad = new NotifyAccountDeposit();
+						nad.setPayMethodCode(PAY_METHOD_CODE_BANK_AC_TRANSFER);  // bank-ac-transfer
+						nad.setVirtualBankAcDepositDt(date);
+						result = orderApi.notifyAccountDeposit(ordNo, nad);
 					}
 				}
 			}
-			
+
 			if(result != null && result.isResult()) {			
 				return "payment/vacctSuccess";			
 			} else {

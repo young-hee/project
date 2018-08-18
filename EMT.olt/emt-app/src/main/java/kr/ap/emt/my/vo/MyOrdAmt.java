@@ -2,6 +2,7 @@ package kr.ap.emt.my.vo;
 
 import net.g1project.ecp.api.model.order.order.OrdHistAmtCompare;
 import net.g1project.ecp.api.model.order.order.OrdHistAmtEx;
+import net.g1project.ecp.api.model.order.order.OrdHistMembershipEx;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -41,18 +42,23 @@ public class MyOrdAmt {
 	// 뷰티포인트
 	private BigDecimal membershipPoint;
 
+	// 쿠션포인트
+	private BigDecimal cushionPoint = BigDecimal.ZERO;
+
 	// 진주알
 	private BigDecimal activityPoint;
 
 	// 기타 포인트
 	private BigDecimal etcPoint = BigDecimal.ZERO;
 
-
 	private Map<String, BigDecimal> ordAmt;
 
-	public MyOrdAmt(List compare) {
+	private List<OrdHistMembershipEx> membershipExList;
+
+	public MyOrdAmt(List compare, List<OrdHistMembershipEx> membershipExList) {
 
 		ordAmt = new HashMap();
+		this.membershipExList = membershipExList;
 
 		if (compare != null && compare.size() > 0) {
 			for (Object obj : compare) {
@@ -79,8 +85,8 @@ public class MyOrdAmt {
 		spPriceAwardProd = getOrDefault("SpPriceAwardProd", "payment");
 		spUnitPacking = getOrDefault("ShipUnitPacking", "payment").add(getOrDefault("ProdUnitPacking", "payment"));
 		shipFee = getOrDefault("DefaultShipFee", "payment").add(getOrDefault("AddShipFee", "payment"));
-		getOrDefault("MembershipExch", "payment");
-		getOrDefault("ActivityPointExch", "payment");
+		// getOrDefault("MembershipExch", "payment");
+		// getOrDefault("ActivityPointExch", "payment");
 
 
 		couponPoint = addBigDecimal(couponPoint, getOrDefault("ProdUnitCouponDc", "point"));
@@ -101,6 +107,24 @@ public class MyOrdAmt {
 		etcPoint = addBigDecimal(etcPoint, getOrDefault("DefaultExchShipFeeDc", "point"));
 		etcPoint = addBigDecimal(etcPoint, getOrDefault("ShipFeePromoDc", "point"));
 		etcPoint = addBigDecimal(etcPoint, getOrDefault("PayMethodDc", "point"));
+		etcPoint = addBigDecimal(etcPoint, getOrDefault("SameTimePurPromoDc", "point"));
+
+		if (membershipExList != null && membershipExList.size() > 0) {
+			for (OrdHistMembershipEx ex : membershipExList) {
+				// 멤버십서비스코드(BP, CP, PP)
+				if ("BP".equalsIgnoreCase(ex.getMembershipServiceCode())) {
+					membershipPoint = membershipPoint.add(ex.getMembershipUseAmtSumPcur());
+					salePoint = salePoint.add(ex.getMembershipUseAmtSumPcur());
+				}
+				else if ("CP".equalsIgnoreCase(ex.getMembershipServiceCode())) {
+					cushionPoint = cushionPoint.add(ex.getMembershipUseAmtSumPcur());
+					salePoint = salePoint.add(ex.getMembershipUseAmtSumPcur());
+				}
+				else if ("PP".equalsIgnoreCase(ex.getMembershipServiceCode())) {
+
+				}
+			}
+		}
 
 		totalPayment = ordPayment.subtract(salePoint);
 	}
@@ -219,5 +243,13 @@ public class MyOrdAmt {
 
 	public void setEtcPoint(BigDecimal etcPoint) {
 		this.etcPoint = etcPoint;
+	}
+
+	public BigDecimal getCushionPoint() {
+		return cushionPoint;
+	}
+
+	public void setCushionPoint(BigDecimal cushionPoint) {
+		this.cushionPoint = cushionPoint;
 	}
 }

@@ -53,21 +53,17 @@
 						verifNo: verifNo
 					}).done(function ( result ) {
 
-						result = result['awards'];
-
 						if ( result.eventWinStatus === 'Win' ) {
 							result.member = this._member;
 							AP.winningPop.open( '스윗레터', result );
 							this._clear();
+						} 
+					}.bind( this )).fail(function ( xhr ) {
+						if( AP.message[xhr.errorCode] != undefined ){
+							AP.modal.alert( AP.message[xhr.errorCode] );
 						} else {
-							AP.modal.alert( '유효하지 않은 쿠폰입니다.' );
+							AP.modal.alert( xhr.errorMessage );
 						}
-
-					}.bind( this )).fail(function ( error ) {
-						AP.modal.alert( '유효하지 않은 쿠폰입니다.' );
-						// AP.modal.alert( '이미 사용한 쿠폰입니다.' );
-
-						// TODO: 중복사용 error code api 미적용
 
 					}.bind( this ));
 				}.bind( this )

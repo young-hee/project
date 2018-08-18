@@ -27,8 +27,17 @@ public class MyOrdDTO {
 	// M+N 온라인
 	private List<OrdOnlinePromoFoDTO> shippingMNPromoProdList;
 
+	// 동시구매 온라인
+	private List<OrdOnlinePromoFoDTO> shippingSameTimePurPromoList;
+
 	// 테이크아웃 상품
 	private List<OrdOnlineProdFoDTO> storePickupOrdOnlineProdList;
+
+	// M+N 테이크 아웃
+	private List<OrdOnlinePromoFoDTO> storePickupMNPromoProdList;
+
+	// 동시구매 테이크 아웃
+	private List<OrdOnlinePromoFoDTO> storePickupSameTimePurPromoList;
 
 	// 뷰티포인트 상품
 	private List<OrdOnlineProdFoDTO> shippingOrdOnlineBeautyPointProdList;
@@ -130,7 +139,7 @@ public class MyOrdDTO {
 			ordUnitAwardOrdPromo = c.getOrdHistEx().getOrdUnitAwardOrdPromoExList();
 			makeOrdSavingPoint(c.getOrdHistEx().getOrdSavingPointList());
 			makeOrdPayResult(c.getOrdHistEx().getOrdPayExList());
-			makeOrdAmt(c.getOrdHistAmtCompareList());
+			makeOrdAmt(c.getOrdHistAmtCompareList(), c.getOrdHistEx());
 			setMembership(c.getOrdMembershipExList());
 			makeGoods(c.getOrdShipAddressExList());
 		}
@@ -140,7 +149,10 @@ public class MyOrdDTO {
 			ordUnitAwardOrdPromo = ordEx.getOrdHistEx().getOrdUnitAwardOrdPromoExList();
 			makeOrdSavingPoint(ordEx.getOrdHistEx().getOrdSavingPointList());
 			makeOrdPayResult(ordEx.getOrdHistEx().getOrdPayExList());
-			makeOrdAmt(ordEx.getOrdHistEx().getOrdHistAmtExList());
+			if (state != null && (ordEx.getOrdHistAmtCompareList() != null && ordEx.getOrdHistAmtCompareList().size() > 0))
+				makeOrdAmt(ordEx.getOrdHistAmtCompareList(), ordEx.getOrdHistEx());
+			else
+				makeOrdAmt(ordEx.getOrdHistEx().getOrdHistAmtExList(), ordEx.getOrdHistEx());
 			setMembership(ordEx.getOrdMembershipExList());
 			makeGoods(ordEx.getOrdShipAddressExList());
 		}
@@ -150,8 +162,8 @@ public class MyOrdDTO {
 		ordPayResult = new MyOrdPayResult(ordPay);
 	}
 
-	private void makeOrdAmt(List payment) {
-		ordAmt = new MyOrdAmt(payment);
+	private void makeOrdAmt(List payment, OrdHistEx ex) {
+		ordAmt = new MyOrdAmt(payment, ex.getOrdHistMembershipExList());
 	}
 
 	private void makeOrdSavingPoint(List<OrdSavingPoint> point) {
@@ -182,6 +194,9 @@ public class MyOrdDTO {
 		shippingOrdOnlineBeautyPointProdList = new ArrayList<>();
 		shippingOrdOnlineActivityPointProdList = new ArrayList<>();
 		shippingMNPromoProdList = new ArrayList<>();
+		shippingSameTimePurPromoList = new ArrayList<>();
+		storePickupMNPromoProdList = new ArrayList<>();
+		storePickupSameTimePurPromoList = new ArrayList<>();
 		ordOtfExList = new ArrayList<>();
 
 		Map<String, OrdOnlineProdFoDTO> ordOnlineProdFoMap = new HashMap<String, OrdOnlineProdFoDTO>();
@@ -241,18 +256,22 @@ public class MyOrdDTO {
 						if(ordHistProdEx.getmPlusNOrdPromoSn()!= null) {
 							if (storePickup) {
 								ordOnlineProdFo = getMPlusNPromoOnlineProd(ordHistProdEx, storePickupMNPromoMap);
+								storeOrdOnlineProdCnt++;
 							}
 							else {
 								ordOnlineProdFo = getMPlusNPromoOnlineProd(ordHistProdEx, shippingMNPromoMap);
+								shipOrdOnlineProdCnt++;
 							}
 						}
 						// 동시구매상품
 						else if(ordHistProdEx.getSameTimePurPromoSn() != null) {
 							if (storePickup) {
 								ordOnlineProdFo = getSameTimePurPromoOnlineProd(ordHistProdEx, storePickupSameTimePurPromoMap);
+								storeOrdOnlineProdCnt++;
 							}
 							else {
 								ordOnlineProdFo = getSameTimePurPromoOnlineProd(ordHistProdEx, shippingSameTimePurPromoMap);
+								shipOrdOnlineProdCnt++;
 							}
 						}
 						//온라인상품
@@ -263,31 +282,61 @@ public class MyOrdDTO {
 								ordOnlineProdFoMap.put(key, ordOnlineProdFo);
 								if (storePickup) {
 									storePickupOrdOnlineProdList.add(ordOnlineProdFo);
+									storeOrdOnlineProdCnt++;
+
 								} else {
 									//뷰티포인트상품
 									if ("Y".equals(ordHistProdEx.getIntegrationMembershipExchYn())) {
 										shippingOrdOnlineBeautyPointProdList.add(ordOnlineProdFo);
+										shipOrdOnlineProdCnt++;
 									}
 									//활동포인트상품
 									else if ("Y".equals(ordHistProdEx.getActivityPointExchYn())) {
 										shippingOrdOnlineActivityPointProdList.add(ordOnlineProdFo);
+										shipOrdOnlineProdCnt++;
 									}
 									else{
 										if (!StringUtils.isEmpty(ordOnlineProdFo.getOrdHistProdTypeCode())
 											&& ("Ord".equals(ordOnlineProdFo.getOrdHistProdTypeCode())
 											|| "BulkDc".equals(ordOnlineProdFo.getOrdHistProdTypeCode())
-											|| "SameTimePur".equals(ordOnlineProdFo.getOrdHistProdTypeCode()))) {
+											|| "SameTimePur".equals(ordOnlineProdFo.getOrdHistProdTypeCode())
+											|| "ProdCancel".equals(ordOnlineProdFo.getOrdHistProdTypeCode()))) {
 											shippingOrdOnlineProdList.add(ordOnlineProdFo);
+											shipOrdOnlineProdCnt++;
 										}
 									}
 								}
 							}
-						}
+							else {
+								if (!"ProdCancel".equals(ordOnlineProdFo.getOrdHistProdStatusCode())
+									&& "ProdCancel".equals(ordHistProdEx.getOrdHistProdStatusCode())) {
 
-						if (storePickup) {
-							storeOrdOnlineProdCnt++;
-						} else {
-							shipOrdOnlineProdCnt++;
+								}
+								else {
+									ordOnlineProdFo.setOrdHistProdStatusCode(ordHistProdEx.getOrdHistProdStatusCode());
+								}
+								if (storePickup) {
+									storeOrdOnlineProdCnt++;
+								}
+								else {
+									if ("Y".equals(ordHistProdEx.getIntegrationMembershipExchYn())) {
+										shipOrdOnlineProdCnt++;
+									}
+									//활동포인트상품
+									else if ("Y".equals(ordHistProdEx.getActivityPointExchYn())) {
+										shipOrdOnlineProdCnt++;
+									}
+									else{
+										if (!StringUtils.isEmpty(ordOnlineProdFo.getOrdHistProdTypeCode())
+											&& ("Ord".equals(ordOnlineProdFo.getOrdHistProdTypeCode())
+											|| "BulkDc".equals(ordOnlineProdFo.getOrdHistProdTypeCode())
+											|| "SameTimePur".equals(ordOnlineProdFo.getOrdHistProdTypeCode())
+											|| "ProdCancel".equals(ordOnlineProdFo.getOrdHistProdTypeCode()))) {
+											shipOrdOnlineProdCnt++;
+										}
+									}
+								}
+							}
 						}
 
 						totalOrdOnlineProdCnt++;
@@ -341,10 +390,25 @@ public class MyOrdDTO {
 					ordChangeShipAddress.setShipMsg(ooe.getShipMsg());
 				}
 			}
-			if (shippingMNPromoMap.size() > 0) {
-				shippingMNPromoProdList = new ArrayList<>(shippingMNPromoMap.values());
-			}
 		}
+		if (shippingMNPromoMap.size() > 0) {
+			shippingMNPromoProdList = new ArrayList<>(shippingMNPromoMap.values());
+		}
+		else if (shippingSameTimePurPromoMap.size() > 0) {
+			shippingSameTimePurPromoList = new ArrayList<>(shippingSameTimePurPromoMap.values());
+		}
+		else if (storePickupMNPromoMap.size() > 0) {
+			storePickupMNPromoProdList = new ArrayList<>(storePickupMNPromoMap.values());
+		}
+		else if (storePickupSameTimePurPromoMap.size() > 0) {
+			storePickupSameTimePurPromoList = new ArrayList<>(storePickupSameTimePurPromoMap.values());
+		}
+
+
+//		shipOrdOnlineProdCnt = shippingOrdOnlineProdList.size() + shippingMNPromoProdList.size()
+//			+ shippingSameTimePurPromoList.size() + shippingOrdOnlineBeautyPointProdList.size() + shippingOrdOnlineActivityPointProdList.size();
+//
+//		storeOrdOnlineProdCnt = storePickupOrdOnlineProdList.size() + storePickupMNPromoProdList.size() + storePickupSameTimePurPromoList.size();
 	}
 
 	private OrdOnlineProdFoDTO getMPlusNPromoOnlineProd(OrdHistProdEx ordHistProdEx, Map<Long, OrdOnlinePromoFoDTO> ordOnlinePromoFoMap) {
@@ -358,8 +422,21 @@ public class MyOrdDTO {
 
 			ordOnlinePromoFo.setPromoTypeCode(ordHistProdEx.getmPlusNTypeCode());
 
+			ordOnlinePromoFo.setReceivedClaimReasonName(ordHistProdEx.getReceivedClaimReasonName());
+			ordOnlinePromoFo.setFoReceivedClaimReason(ordHistProdEx.getFoReceivedClaimReason());
+
 			ordOnlinePromoFoMap.put(ordHistProdEx.getmPlusNOrdPromoSn(), ordOnlinePromoFo);
 		}
+
+		BigDecimal base = ordHistProdEx.getFinalOnlineSalePricePcur().multiply(new BigDecimal(ordHistProdEx.getmPlusNBaseQty()));
+		BigDecimal award = ordHistProdEx.getFinalOnlineSalePricePcur().multiply(new BigDecimal(ordHistProdEx.getmPlusNAwardQty()));
+
+		ordOnlinePromoFo.setTotalProductSaleAmount(ordOnlinePromoFo.getTotalProductSaleAmount().add(base));
+		ordOnlinePromoFo.setTotalFinalOnlineSaleAmount(ordOnlinePromoFo.getTotalFinalOnlineSaleAmount().add(base.add(award)));
+
+		ordOnlinePromoFo.setBaseQty(ordOnlinePromoFo.getBaseQty() + ordHistProdEx.getmPlusNBaseQty());
+		ordOnlinePromoFo.setAwardQty(ordOnlinePromoFo.getAwardQty() + ordHistProdEx.getmPlusNAwardQty());
+
 
 		return getOrdOnlineProdFo(ordHistProdEx, ordOnlinePromoFo);
 	}
@@ -373,6 +450,9 @@ public class MyOrdDTO {
 			ordOnlinePromoFo.setPromoName(ordHistProdEx.getSameTimePurOrdPromoNameRlang());
 			ordOnlinePromoFo.setOrdOnlineProdFoMap(new HashMap<>());
 			ordOnlinePromoFo.setOrdOnlineProdFoList(new ArrayList<>());
+
+			ordOnlinePromoFo.setReceivedClaimReasonName(ordHistProdEx.getReceivedClaimReasonName());
+			ordOnlinePromoFo.setFoReceivedClaimReason(ordHistProdEx.getFoReceivedClaimReason());
 
 			ordOnlinePromoFoMap.put(key, ordOnlinePromoFo);
 		}
@@ -413,6 +493,7 @@ public class MyOrdDTO {
 		ordOnlineProdFo.setPreSale(new ArrayList<OrdHistProdEx>());						// 주문이력(확장)
 		ordOnlineProdFo.setProdList(new ArrayList<OrdHistProdEx>());						// 주문이력(확장)
 		ordOnlineProdFo.setFreeGiftList(new ArrayList<OrdHistProdEx>());						// 주문이력(확장)
+		ordOnlineProdFo.setSingleProdYn(ordProd.getSingleProdYn());
 		if (repGoods == null) {
 			repGoods = ordProd.getOnlineProdNameRlang();
 		}
@@ -630,5 +711,29 @@ public class MyOrdDTO {
 
 	public void setShippingMNPromoProdList(List<OrdOnlinePromoFoDTO> shippingMNPromoProdList) {
 		this.shippingMNPromoProdList = shippingMNPromoProdList;
+	}
+
+	public List<OrdOnlinePromoFoDTO> getShippingSameTimePurPromoList() {
+		return shippingSameTimePurPromoList;
+	}
+
+	public void setShippingSameTimePurPromoList(List<OrdOnlinePromoFoDTO> shippingSameTimePurPromoList) {
+		this.shippingSameTimePurPromoList = shippingSameTimePurPromoList;
+	}
+
+	public List<OrdOnlinePromoFoDTO> getStorePickupMNPromoProdList() {
+		return storePickupMNPromoProdList;
+	}
+
+	public void setStorePickupMNPromoProdList(List<OrdOnlinePromoFoDTO> storePickupMNPromoProdList) {
+		this.storePickupMNPromoProdList = storePickupMNPromoProdList;
+	}
+
+	public List<OrdOnlinePromoFoDTO> getStorePickupSameTimePurPromoList() {
+		return storePickupSameTimePurPromoList;
+	}
+
+	public void setStorePickupSameTimePurPromoList(List<OrdOnlinePromoFoDTO> storePickupSameTimePurPromoList) {
+		this.storePickupSameTimePurPromoList = storePickupSameTimePurPromoList;
 	}
 }

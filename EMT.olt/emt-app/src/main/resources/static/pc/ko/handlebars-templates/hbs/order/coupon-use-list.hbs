@@ -1,8 +1,10 @@
 <li>
 	<span>{{ coupon.couponName }}</span>
 	<span>
-		{{#xif coupon.applyDcAmt '>' 0}}
-			<span class="price">-{{ coupon.applyDcAmt }} 원</span>
+		{{#xif coupon.applyDcAmt '==' 0}}
+			<span class="price">{{ currencyFormatDefault coupon.applyDcAmt '원' }}</span>
+		{{else}}
+			<span class="price">-{{ currencyFormatDefault coupon.applyDcAmt '원' }}</span>
 		{{/xif}}
 		<a href="javascript:;" name="removeCoupon" data-sn="{{coupon.memberKeepingCouponSn}}"><em>[취소]</em></a>
 	</span>

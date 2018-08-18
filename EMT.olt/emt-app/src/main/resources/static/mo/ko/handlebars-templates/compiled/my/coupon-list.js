@@ -14,7 +14,7 @@ this["AP"]["handlebars"]["my"]["coupon-list"] = Handlebars.template({"1":functio
     + "				<p class=\"channel\">\n					"
     + ((stack1 = (helpers.channelSwitch || (depth0 && depth0.channelSwitch) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.availCoupon : depth0)) != null ? stack1.availCh : stack1),{"name":"channelSwitch","hash":{},"data":data})) != null ? stack1 : "")
     + "\n				</p>\n			</div>\n			<div class=\"table_layout\">\n				"
-    + ((stack1 = (helpers.couponTypeBenefitSwitch || (depth0 && depth0.couponTypeBenefitSwitch) || alias2).call(alias1,(depth0 != null ? depth0.availCoupon : depth0),{"name":"couponTypeBenefitSwitch","hash":{},"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.couponTypeBenefitSwitch || (depth0 && depth0.couponTypeBenefitSwitch) || alias2).call(alias1,(depth0 != null ? depth0.availCoupon : depth0),(depth0 != null ? depth0.finalExpExpectedDt : depth0),{"name":"couponTypeBenefitSwitch","hash":{},"data":data})) != null ? stack1 : "")
     + "\n				<div>\n					<p class=\"coupon_name\">"
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.availCoupon : depth0)) != null ? stack1.couponName : stack1), depth0))
     + "</p>\n					<p class=\"condition\">"

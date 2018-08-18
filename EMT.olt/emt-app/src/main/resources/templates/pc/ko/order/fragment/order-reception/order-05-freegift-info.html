@@ -1,5 +1,4 @@
 <!--/* 주문사은품 */-->
-<th:block th:if="${apMember}">
 <dl id="ordUnit" th:if="${#lists.size(ordUnitAwardOrdPromoExList) > 0}">
 	<dt>
 		<span>보너스 혜택</span>
@@ -39,10 +38,25 @@
 				}
 			});
 
+			//첫구매 영역
+			$('[name^=firstPur_]').off('click').on('click', function () {
+				if ($(this).prop('checked')) {
+					if ($(this).data('methodCode') == 'Select') {
+						var type = $(this).data('type');
+						$('[name=firstPur_' + $(this).data('promosn') + ']').each(function (item) {
+							if (type != $(this).data('type')) {
+								$(this).attr("checked", false);
+							}
+						});
+					}
+					changeOrdUnit();
+				}
+			});
+
 			//주문단위 증정 Tab
 			$('[name=freebies]').off('click').on('click', function () {
 				if ($(this).prop('checked')) {
-					$('[class^=freebies]').hide();
+					$('.notFirstPur').hide();
 					$('.' + this.id).show();
 				}
 			});
@@ -71,9 +85,15 @@
 			});
 		}
 
+		var xhr;
 		function changeOrdUnit() {
 			var ordUnitAwardSnArr = [],
 				awardSelectQtyArr = [];
+
+			$('[name^=firstPur_]:checked').each(function () {
+				ordUnitAwardSnArr.push(this.id);
+				awardSelectQtyArr.push(this.dataset.qty);
+			});
 
 			$('[name^=ordUnitAward_]:checked').each(function () {
 				ordUnitAwardSnArr.push(this.id);
@@ -84,7 +104,11 @@
 				jQuery.ajaxSettings.traditional = true;
 			}
 
-			AP.api.ordReceptChangeOrdUnit({}, {
+			if (xhr != null) {
+				xhr.abort();
+			}
+
+			xhr = AP.api.ordReceptChangeOrdUnit({}, {
 				ordSn : ordSn,
 				ordUnitAwardSnArr : ordUnitAwardSnArr,
 				awardSelectQtyArr : awardSelectQtyArr,
@@ -116,7 +140,9 @@
 					}
 				}
 			}).fail(function (e) {
-				AP.modal.alert("fail");
+				if (e.errorCode == "EAPI001") {
+					AP.modal.alert(e.responseJSON.errorData.message);
+				}
 			}).always(function () {
 				$('#couponLoading').hide();
 				jQuery.ajaxSettings.traditional = true;
@@ -124,4 +150,3 @@
 		}
 	</script>
 </dl>
-</th:block>

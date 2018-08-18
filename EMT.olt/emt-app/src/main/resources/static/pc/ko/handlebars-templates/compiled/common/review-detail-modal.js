@@ -51,6 +51,6 @@ this["AP"]["handlebars"]["common"]["review-detail-modal"] = Handlebars.template(
     + "</h3>\n\n"
     + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.imgList : depth0)) != null ? stack1.length : stack1),{"name":"if","hash":{},"fn":container.program(10, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n		<div class=\"cont\">\n			<pre>"
-    + alias4(alias3((depth0 != null ? depth0.prodReviewBodyText : depth0), depth0))
+    + ((stack1 = alias3((depth0 != null ? depth0.prodReviewBodyText : depth0), depth0)) != null ? stack1 : "")
     + "</pre>\n		</div>\n	</dd>\n</dl>";
 },"useData":true,"useDepths":true});

@@ -12,7 +12,25 @@
 		<!-- com_cont -->
 		<div class="ap_com_cont">
 			<!-- aside_area -->
-			<th:block ap:replace="~{html/page/product/fragment/product-category2}"/>
+			<!--<th:block ap:replace="~{html/page/product/fragment/product-category2}"/>-->
+			<div class="aside_area filter product">
+				<h2 class="h_title"><a href="#" class="depth">스킨케어</a></h2>
+				<div class="category">
+					<ul>
+						<li><a href="#" class="on">클렌징 (00)</a></li>
+						<li><a href="#">메이크업 리무버 (00)</a></li>
+						<li><a href="#">페이스 워시 (00)</a></li>
+						<li><a href="#">필링 & 스크럽 (00)</a></li>
+					</ul>
+				</div>
+				<fieldset class="form">
+					<legend class="sr_only">선택 옵션 선택</legend>
+					<button type="button" class="btn_lg_gradient init">선택 옵션 초기화</button>
+					<div class="filter_option">
+
+					</div>
+				</fieldset>
+			</div>
 			<!-- aside_area -->
 
 			<!-- cont_area -->
@@ -21,7 +39,7 @@
 					<div class="title_result">
 						<h3 class="h_title d2"><strong>클렌징에서 제안드리는 상품</strong></h3>
 					</div>
-					<div class="recommended_item slide has_count" data-ix-options="view-length:3; move-length:3;loop:false;datum-point:-20px">
+					<div class="recommended_item slide recommend has_count" data-ix-options="view-length:3; move-length:3;loop:false;datum-point:-20px">
 						<div class="ix-list-viewport unit_1">
 							<ul class="ix-list-items">
 								<li class="ix-list-item">
@@ -336,18 +354,18 @@
 				</div>
 				<div class="category_area">
 					<div class="title_result">
-						<h3 class="h_title d2"><strong>전체상품(438)</strong></h3>
+						<h3 class="h_title d2"><strong>전체상품(<span class="total">438</span>)</strong></h3>
 						<div class="float_right">
 							<div class="search_sort">
-								<a href="#" class="on">판매순</a>
-								<a href="#">신상품순</a>
-								<a href="#">평점순</a>
-								<a href="#">가격이 높은순</a>
-								<a href="#">가격이 낮은순</a>
+								<a href="#" data-value="sort00" class="on">판매순</a>
+								<a href="#" data-value="sort01">신상품순</a>
+								<a href="#" data-value="sort02">평점순</a>
+								<a href="#" data-value="sort03">가격이 높은순</a>
+								<a href="#" data-value="sort04">가격이 낮은순</a>
 								<div class="select_wrap xsm"><!-- 선택시 open 클래스  -->
 									<select name="" id="" tabindex="-1">
-										<option value="">50개씩 보기</option>
-										<option value="">100개씩 보기</option>
+										<option value="50">50개씩 보기</option>
+										<option value="100">100개씩 보기</option>
 									</select>
 								</div>
 							</div>
@@ -1639,7 +1657,146 @@
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
 	<script>
-		$( '.slide' ).ixSlideMax();
+		var _filterData = {
+			addAttrs: [
+				{
+					addAttrsName: '브랜드',
+					addAttrCode: 'brand',
+					addAttrVals: [
+						{ addAttrValCode: 'brand00', addAttrValName: '프리메라' },
+						{ addAttrValCode: 'brand01', addAttrValName: '아모레퍼시픽' },
+						{ addAttrValCode: 'brand02', addAttrValName: '헤라' },
+						{ addAttrValCode: 'brand03', addAttrValName: '라네즈' },
+						{ addAttrValCode: 'brand04', addAttrValName: '리리코스' },
+						{ addAttrValCode: 'brand05', addAttrValName: '설화수' }
+					]
+				},
+				{
+					addAttrsName: '상품특징',
+					addAttrCode: 'feature',
+					addAttrVals: [
+						{ addAttrValCode: 'feature00', addAttrValName: '호수있어요' },
+						{ addAttrValCode: 'feature01', addAttrValName: '스페셜기프트' }
+					]
+				},
+				{
+					addAttrsName: '쇼핑찬스',
+					addAttrCode: 'chance',
+					addAttrVals: [
+						{ addAttrValCode: 'chance00', addAttrValName: 'On Sale' },
+						{ addAttrValCode: 'chance01', addAttrValName: 'M + N 행사' },
+						{ addAttrValCode: 'chance02', addAttrValName: '기프트카드' },
+						{ addAttrValCode: 'chance03', addAttrValName: '스페셜기프트' },
+						{ addAttrValCode: 'chance04', addAttrValName: '투데이핫딜' }
+					]
+				},
+				{
+					addAttrsName: '인기',
+					addAttrCode: 'popular',
+					addAttrVals: [
+						{ addAttrValCode: 'popular00', addAttrValName: '매진임박' }
+					]
+				},
+				{
+					addAttrsName: '판매상태',
+					addAttrCode: 'status',
+					addAttrVals: [
+						{ addAttrValCode: 'service00', addAttrValName: '일시품절' }
+					]
+				},
+				{
+					addAttrsName: '기능성',
+					addAttrCode: 'functional',
+					addAttrVals: [
+						{ addAttrValCode: 'functional00', addAttrValName: '자외선차단' },
+						{ addAttrValCode: 'functional01', addAttrValName: '주름개선' }
+					]
+				},
+				{
+					addAttrsName: 'PA',
+					addAttrCode: 'pa',
+					addAttrVals: [
+						{ addAttrValCode: 'pa00', addAttrValName: 'PA++' },
+						{ addAttrValCode: 'pa01', addAttrValName: 'PA+++' }
+					]
+				},
+				{
+					addAttrsName: '피부타입',
+					addAttrCode: 'skintype',
+					addAttrVals: [
+						{ addAttrValCode: 'skintype00', addAttrValName: '모든피부' },
+						{ addAttrValCode: 'skintype01', addAttrValName: '지성' },
+						{ addAttrValCode: 'skintype02', addAttrValName: '건성' },
+						{ addAttrValCode: 'skintype03', addAttrValName: '중성' },
+						{ addAttrValCode: 'skintype04', addAttrValName: '복합성' }
+					]
+				},
+				{
+					addAttrsName: '피부고민',
+					addAttrCode: 'skintrouble',
+					addAttrVals: [
+						{ addAttrValCode: 'skintrouble00', addAttrValName: '건조' },
+						{ addAttrValCode: 'skintrouble01', addAttrValName: '미맥' },
+						{ addAttrValCode: 'skintrouble02', addAttrValName: '탄력' }
+					]
+				},
+				{
+					addAttrsName: '텍스쳐',
+					addAttrCode: 'texture',
+					addAttrVals: [
+						{ addAttrValCode: 'texture00', addAttrValName: '리퀴드' }
+					]
+				},
+				{
+					addAttrsName: '메이크업효과',
+					addAttrCode: 'makeup',
+					addAttrVals: [
+						{ addAttrValCode: 'makeup00', addAttrValName: '듀이(촉촉)' },
+						{ addAttrValCode: 'makeup01', addAttrValName: '하이라이트' },
+						{ addAttrValCode: 'makeup02', addAttrValName: '샤이니' }
+					]
+				},
+				{
+					addAttrsName: 'SALE',
+					addAttrCode: 'sale',
+					addAttrVals: [
+						{ addAttrValCode: 'sale-10', addAttrValName: '10%이하' },
+						{ addAttrValCode: 'sale-10,30', addAttrValName: '10~30%' },
+						{ addAttrValCode: 'sale-30,50', addAttrValName: '30~50%' },
+						{ addAttrValCode: 'sale-50', addAttrValName: '50%이상' }
+					]
+				},
+				{
+					addAttrsName: 'SPF수치',
+					addAttrCode: 'spf',
+					addAttrVals: [
+						{ addAttrValCode: 'spf-25', addAttrValName: 'SPF 25 이하' },
+						{ addAttrValCode: 'spf-25,35', addAttrValName: 'SPF 25~35' },
+						{ addAttrValCode: 'spf-35,50', addAttrValName: 'SPF 35~50' },
+						{ addAttrValCode: 'spf-50', addAttrValName: 'SPF 50이상' }
+					]
+				},
+				{
+					addAttrsName: '색상',
+					addAttrCode: 'color',
+					addAttrVals: [
+						{ addAttrValCode: '#a50018', addAttrValName: '#a50018' },
+						{ addAttrValCode: '#ff0026', addAttrValName: '#ff0026' },
+						{ addAttrValCode: '#f28c9b', addAttrValName: '#f28c9b' },
+						{ addAttrValCode: '#fe4c67', addAttrValName: '#fe4c67' },
+						{ addAttrValCode: '#ff6100', addAttrValName: '#ff6100' },
+						{ addAttrValCode: '#f28cd8', addAttrValName: '#f28cd8' }
+					]
+				}
+			]
+		};
+
+		// test
+		AP.DISPLAY_MENU_ID = 'lib';
+
+		AP.display.init({
+			displayMenuId: AP.DISPLAY_MENU_ID
+		});
 	</script>
 </th:block>
 </body>

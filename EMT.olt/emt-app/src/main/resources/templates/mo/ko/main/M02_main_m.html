@@ -72,7 +72,7 @@
 				</th:block>
 				<!-- 에뛰드픽 -->
 				<div class="section etude_pick">
-					<h2 class="title">에뛰드 픽</h2>
+					<h2 class="title">#에뛰드픽</h2>
 					<!-- slide -->
 					<div class="slide two_half" data-ix-options="view-length:2; move-length:2; loop:false; correct-endpoint:true;">
 						<div class="ix-list-viewport">
@@ -121,30 +121,18 @@
 								<th:block th:if="${contents.menuPageCornerContentsId == 'M02_main_m.2.1'}">
 									<h2 class="title" th:text="${contents.text}"></h2>
 								</th:block>
-
+								
 								<th:block th:if="${contents.menuPageCornerContentsId == 'M02_main_m.2.2'}">
-									<!-- slide -->
+									<!-- slide --> 
 										<div class="slide two_half" data-ix-options="view-length:2; move-length:1; loop:false">
 								            <div class="ix-list-viewport">
 								                <ul class="ix-list-items">
-								                	<th:block th:each="prodList ,iterStat : ${contents.prodList}" th:class="${iterStat.index}? 'index'">
-								                    <li class="ix-list-item">
-								                        <a href="#none" th:href="@{/product/detail(onlineProdSn=${prodList.onlineProdSn})}">
-															<span class="lazy_load_wrap" th:style="'background-color:#e2bfe3;'">
-																<th:block th:if="${prodList.saleDisplayStatus eq 'OutOfStock'}">
-																	<div class="item_state out_of_stock">일시품절</div>
-																</th:block>
-																<img src="" th:data-src="${prodList.onlineProdImages[0].imgUrl}" class="lazy_load">
-															</span>
-								                        	<span class="item_title" th:text="${prodList.onlineProdName}"></span> 
-								                        	<span class="price" th:style="'font-weight: bold;'" th:text="${#numbers.formatInteger(prodList.onlineProdPriceSummary.minOnlineSalePrice, 0, 'COMMA')}"><span th:text="원"></span></span>
-								                       	 </a>
-								                  	  </li>
-								                  	  </th:block>
+								                	<ul class="loading"></ul>
+								                   
 								                	</ul>
 								           		 </div>
 											</div>
-										<!-- : end slide  -->
+										<!-- : end slide --> 
 									</th:block>
 								</th:block>
 							</th:block>
@@ -243,7 +231,9 @@
 
 		<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
 		<script th:inline="javascript">
+		var _colorData = /*[[${not #lists.isEmpty(cornersMap) ? cornersMap.get('M02_main_m.2') : ''}]]*/;
 		
+		AP.home.setData(_colorData); 
 		</script>
  
 	</th:block>

@@ -204,7 +204,7 @@
 	    if ($form.valid()) {
 
 	        if (!t.isRunning()) {
-	            AP.modal.alert("입력시간 초과했습니다. 재인증하세요.");
+	    	    AP.modal.alert("입력시간 초과했습니다. 인증번호 재전송 버튼을 눌러 인증 절차를 다시 진행하십시오.");
 	        } else {
 	            $('#complete').attr("disabled", "disabled");
 	            AP.api.stepOne({}, AP.common.getFormData($form)).done(function(data) {
@@ -230,7 +230,7 @@
 	                }
 	            }).always(function() {
 	                //성공, 실패
-	                $("#send").removeAttr("disabled");
+	                $("#complete").removeAttr("disabled");
 	            });
 
 	        }
@@ -301,17 +301,20 @@
 	    if ($form.valid()) {
 
 	        if (!t.isRunning()) {
-	            AP.modal.alert("입력시간 초과했습니다. 재인증하세요.");
+	    	    AP.modal.alert("입력시간 초과했습니다. 인증번호 재전송 버튼을 눌러 인증 절차를 다시 진행하십시오.");
 	        } else {
 	            AP.api.guestConfirm({}, AP.common.getFormData($form)).done(function(data) {
 	                //성공
 	                if (data) {
 
-	                    userData = data;
+	                    joinType = data.joinType;
+	                    signupDate = data;
+
+	                    AP.modal.alert("본인인증이 완료되었습니다.");
+	                    certTimeCnt = 2;
 	                    if (t.isRunning()) {
 	                        t.stop();
 	                    }
-	                    AP.modal.alert("본인인증이 완료되었습니다.");
 
 	                } else {
 	                    AP.modal.alert("[ajax.done]실패")
@@ -330,6 +333,7 @@
 	                    AP.modal.alert(xhr.errorMessage)
 	                }
 	            }).always(function() {
+	                $("#complete").removeAttr("disabled");
 	                //성공, 실패
 	            });
 

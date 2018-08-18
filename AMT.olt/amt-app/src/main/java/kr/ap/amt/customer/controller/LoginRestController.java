@@ -4,9 +4,12 @@ import kr.ap.comm.api.vo.CicuemCuInfTotTcVo;
 import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.support.APRequestContext;
 import kr.ap.comm.support.common.AbstractController;
+import kr.ap.comm.support.constants.CookieKey;
 import kr.ap.comm.support.constants.SessionKey;
+import kr.ap.comm.util.CookieUtils;
 import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.ap.ap.*;
+
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,10 @@ import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,10 +46,6 @@ public class LoginRestController extends AbstractController {
 			
 			ApMemberLoginReturnWithAutoLoginInfo resultInfo = apApi.memberLogin(loginInfo);
 			APRequestContext.setAccessToken(resultInfo.getAccessToken());
-			
-			if(resultInfo == null) {
-				return error(respMap, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "아이디 또는 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
-			}
 			ApMember apMember = apApi.getMemberInfo(resultInfo.getMemberSn());
 			
 			MemberSession memberSession = getMemberSession();
@@ -53,30 +56,71 @@ public class LoginRestController extends AbstractController {
 			memberSession.setAccessToken(resultInfo.getAccessToken());
 			memberSession.setRefreshToken(resultInfo.getRefreshToken());
 			memberSession.setAutoLoginToken(resultInfo.getAutoLoginToken());
+			
+			try {
+				if(memberSession.getCartSn() != null && memberSession.getCartSn() != 0)
+					cartApi.transferMemberCart(resultInfo.getMemberSn(), memberSession.getCartSn());
+			} catch(Exception e) {
+				logger.error(e.getMessage(), e);
+			}
 
 			CicuemCuInfTotTcVo cicuemCuInfTotTcVo = new CicuemCuInfTotTcVo();
 			cicuemCuInfTotTcVo.setIncsNo(memberSession.getUser_incsNo());
-			cicuemCuInfTotTcVo = amoreAPIService.getcicuemcuinfrbyincsno(cicuemCuInfTotTcVo);
+			try {
+				cicuemCuInfTotTcVo = amoreAPIService.getcicuemcuinfrbyincsno(cicuemCuInfTotTcVo);
+				memberSession.setUser_incsCardNoEc(cicuemCuInfTotTcVo.getIncsCardNoEc());
+			} catch(Exception e) {
+				logger.error(e.getMessage(), e);
+			}
 			
 			memberSession.setUser_incsCardNoEc(cicuemCuInfTotTcVo.getIncsCardNoEc());
-			
+
 			if("on".equals(autoLogin)) {
-				/*LoginTicket ticket = loginService.createLoginTicket(member);
-				CookieUtils.addCookie(resp, CookieKey.AUTO_LOGIN, ticket.getLoginTicket(), 3600);*/
+				Date date = resultInfo.getAutoLoginTokenExpireDt();
+				long time = date.getTime() - System.currentTimeMillis();
+				CookieUtils.addCookie(resp, CookieKey.AUTO_LOGIN, resultInfo.getAutoLoginToken(), (int)(time/1000));
+
 			}
 			respMap.put("sleep", resultInfo.getDormantAcConvertYn());
 			if("Y".equals(resultInfo.getDormantAcConvertYn())) {
-				respMap.put("message", getMessage("customer.login.sleepMember", DateFormatUtils.format(resultInfo.getMemberSignupDt(), "yyyy년MM월")));
+				respMap.put("userId", apMember.getMemberId().substring(0, apMember.getMemberId().length() - 2) + "**");
+				memberSession.setMember(null);
 			}
-			respMap.put("old", false);//FIXME 구회원 여부.
 			respMap.put("changePw", resultInfo.getPasswordLongtimeUnchangedYn());
 			if("Y".equals(resultInfo.getPasswordLongtimeUnchangedYn())) {
 				respMap.put("message", getMessage("customer.login.changePwdContant", DateFormatUtils.format(resultInfo.getMemberSignupDt(), "yyyy-MM-dd")));
 			}
+			
+			setMemberSession(memberSession);
 			return ResponseEntity.ok(respMap);
 
 		} catch (ApiException e) {
-			return error(respMap, e);
+			
+			Map<String, Object> map = e.getAdditional();
+			Boolean isLock = (Boolean) map.get("lockThisTime");
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+			Date lockReleaseDate;
+			try {
+				if(map.get("lockReleaseDate") != null) {
+					lockReleaseDate = (Date) format.parse((String) map.get("lockReleaseDate"));
+	
+					if(lockReleaseDate != null) {
+						long time = lockReleaseDate.getTime() - System.currentTimeMillis();
+						respMap.put("lockReleaseDate", time/1000/60.0);
+					}
+				}
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			if(isLock != null && isLock) {
+				respMap.put("isLock", true);
+			} else {
+				respMap.put("isLock", false);
+			}
+			
+			e.setAdditional(respMap);
+			throw e;
 		}
 	}
 	
@@ -85,9 +129,9 @@ public class LoginRestController extends AbstractController {
 	 */
 	@SuppressWarnings("unchecked")
 	@PostMapping("/doLoginLink")
-	public ResponseEntity<?>  doLoginLink(HttpServletRequest req, HttpServletResponse resp) {
+	public ResponseEntity<?> doLoginLink(HttpServletRequest req, HttpServletResponse resp) {
 		ResponseEntity<?> result = doLogin(req, resp);
-		if(getMemberSn() == null) {
+		if(getMemberSn() == 0) {
 			return result;
 		}
 		String snsCode = (String) WebUtils.getSessionAttribute(req, SessionKey.SNS_CODE);
@@ -96,13 +140,19 @@ public class LoginRestController extends AbstractController {
 		PostSnsIf snsIdIf = new PostSnsIf();
 		snsIdIf.setSnsId(snsId);
 		snsIdIf.setAccessToken(accessToken);
-		SnsIfResult snsResult = apApi.postMemberSns(getMemberSn(), snsCode, snsIdIf);
-		if(!snsResult.isResult()) {
-			return error((Map<String, Object>) result.getBody(), HttpStatus.SERVICE_UNAVAILABLE, "SNSERR", "SNS연계에 실패했습니다. 잠시 후 다시 시도해주세요.");
+		try {
+			SnsIfResult snsResult = apApi.postMemberSns(getMemberSn(), snsCode, snsIdIf);
+			if(!snsResult.isResult()) {
+				throw error((Map<String, Object>) result.getBody(), HttpStatus.SERVICE_UNAVAILABLE, "SNSERR", "SNS연계에 실패했습니다. 잠시 후 다시 시도해주세요.");
+			}
+		} catch(ApiException e) {
+			throw e;
+		} finally {
+
+			WebUtils.setSessionAttribute(req, SessionKey.SNS_CODE, null);
+			WebUtils.setSessionAttribute(req, SessionKey.SNS_ID, null);
+			WebUtils.setSessionAttribute(req, SessionKey.SNS_TOKEN, null);
 		}
-		WebUtils.setSessionAttribute(req, SessionKey.SNS_CODE, null);
-		WebUtils.setSessionAttribute(req, SessionKey.SNS_ID, null);
-		WebUtils.setSessionAttribute(req, SessionKey.SNS_TOKEN, null);
 		return result;
 	}
 
@@ -128,23 +178,43 @@ public class LoginRestController extends AbstractController {
 		snsLoginInfo.setSnsAccessToken(accessToken);
 		try {
 			ApMemberLoginReturnInfo resultInfo = apApi.memberSnsLogin(snsLoginInfo);
+			APRequestContext.setAccessToken(resultInfo.getAccessToken());
 			ApMember apMember = apApi.getMemberInfo(resultInfo.getMemberSn());
 			MemberSession memberSession = getMemberSession();
 			memberSession.setMember(apMember);
 			memberSession.setMember_sn(resultInfo.getMemberSn());
-			memberSession.setUser_incsNo("200002192");
+			memberSession.setUser_incsNo(apMember.getIncsNo());
 			memberSession.setAccessToken(resultInfo.getAccessToken());
 			memberSession.setRefreshToken(resultInfo.getRefreshToken());
+			
+			try {
+				CicuemCuInfTotTcVo cicuemCuInfTotTcVo = new CicuemCuInfTotTcVo();
+				cicuemCuInfTotTcVo.setIncsNo(memberSession.getUser_incsNo());
+				cicuemCuInfTotTcVo = amoreAPIService.getcicuemcuinfrbyincsno(cicuemCuInfTotTcVo);
+				memberSession.setUser_incsCardNoEc(cicuemCuInfTotTcVo.getIncsCardNoEc());
+			} catch(Exception e) {
+				logger.error(e.getMessage(), e);
+			}
 
+			try {
+				if(memberSession.getCartSn() != null && memberSession.getCartSn() != 0)
+					cartApi.transferMemberCart(resultInfo.getMemberSn(), memberSession.getCartSn());
+			} catch(Exception e) {
+				logger.error(e.getMessage(), e);
+			}
+			
 			result.put("sleep", resultInfo.getDormantAcConvertYn());
 			if("Y".equals(resultInfo.getDormantAcConvertYn())) {
-				result.put("message", getMessage("customer.login.sleepMember", DateFormatUtils.format(resultInfo.getMemberSignupDt(), "yyyy년MM월")));
+				result.put("userId", apMember.getMemberId().substring(0, apMember.getMemberId().length() - 2) + "**");
+				memberSession.setMember(null);
+			} else {
+				setMemberSession(memberSession);
 			}
-			result.put("old", false);//FIXME 구회원 여부.
 			result.put("changePw", resultInfo.getPasswordLongtimeUnchangedYn());
 			if("Y".equals(resultInfo.getPasswordLongtimeUnchangedYn())) {
 				result.put("message", getMessage("customer.login.changePwdContant", DateFormatUtils.format(resultInfo.getMemberSignupDt(), "yyyy-MM-dd")));
 			}
+			setMemberSession(memberSession);
 			result.put("isLinked", true);
 		} catch(ApiException e) {
 			result.put("isLinked", false);

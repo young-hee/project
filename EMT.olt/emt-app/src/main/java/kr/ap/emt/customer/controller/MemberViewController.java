@@ -34,7 +34,7 @@ public class MemberViewController extends AbstractController {
 	}
 	@PostMapping("/findPwd/complete")
 	@PageTitle(title = "비밀번호 변경")
-	public String findPwdComplete(Model model, String joinType, String incsNo) {
+	public String findPwdComplete(Model model, String joinType) {
 
 		if("00".equals(joinType) || "05".equals(joinType)) {
 			return "/customer/customernew/find-id.3";
@@ -43,7 +43,7 @@ public class MemberViewController extends AbstractController {
 			return "/customer/customernew/find-id.4";
 		}
 
-		
+		String incsNo = getMemberSession().getUser_incsNo();
 		CicuemCuInfTotTcVo cicuemCuInfTotTcVo = new CicuemCuInfTotTcVo();
 		cicuemCuInfTotTcVo.setIncsNo(incsNo);
 		cicuemCuInfTotTcVo = amoreAPIService.getcicuemcuinfrbyincsno(cicuemCuInfTotTcVo);
@@ -85,7 +85,7 @@ public class MemberViewController extends AbstractController {
 
 	@PostMapping("/findId/complete")
 	@PageTitle(title = "아이디 찾기")
-	public String findIdComplete(Model model, String joinType, String userId) {
+	public String findIdComplete(Model model, String joinType, String userId, String incsNo) {
 		switch (joinType) {
 		case "00":
 			return "/customer/customernew/find-id.3";

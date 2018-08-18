@@ -11,8 +11,10 @@ import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
 import kr.ap.comm.support.constants.SessionKey;
 import net.g1project.ecp.api.exception.ApiException;
+import net.g1project.ecp.api.model.EmbeddableTel;
 import net.g1project.ecp.api.model.ap.ap.ApFindMemberIdResult;
 import net.g1project.ecp.api.model.ap.ap.ApIssueTemporaryPassword;
+import net.g1project.ecp.api.model.ap.ap.ApRequestMemberIdGuide;
 import net.g1project.ecp.api.model.ap.ap.CheckResult;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,13 +56,38 @@ public class MemberRestController extends AbstractController {
 			if(result2.isResult()) {
 				WebUtils.setSessionAttribute(getRequest(), "TEMP_PW_CHANGE", issueTemporaryPassword);
 			} else {
-				return error(result, HttpStatus.SERVICE_UNAVAILABLE ,"ERROR", "비밀번호 전송에 실패했습니다. 아래 재발급 버튼을 눌러 다시 시도해주세요.");
+				throw error(result, HttpStatus.INTERNAL_SERVER_ERROR ,"ERROR", "비밀번호 전송에 실패했습니다. 아래 재발급 버튼을 눌러 다시 시도해주세요.");
 			}
 		} catch (Exception e2) {
-			return error(result, HttpStatus.SERVICE_UNAVAILABLE ,"ERROR", "비밀번호 전송에 실패했습니다. 아래 재발급 버튼을 눌러 다시 시도해주세요.");
+			throw error(result, HttpStatus.INTERNAL_SERVER_ERROR ,"ERROR", "비밀번호 전송에 실패했습니다. 아래 재발급 버튼을 눌러 다시 시도해주세요.");
 		}
 		return null;
 		
+	}
+
+	/**
+	 * 회원 아이디를 SMS로 전송.
+	 */
+	@PostMapping("/find/findId/sendId")
+	@ResponseBody
+	public ResponseEntity<?> sendId() {
+		ApRequestMemberIdGuide paramApRequestMemberIdGuide = new ApRequestMemberIdGuide();
+
+		String incsNo = getMemberSession().getUser_incsNo();
+		paramApRequestMemberIdGuide.setIncsNo(Long.parseLong(incsNo));
+		CicuemCuInfTotTcVo cicuemCuInfTotTcVo = new CicuemCuInfTotTcVo();
+		cicuemCuInfTotTcVo.setIncsNo(incsNo);
+		cicuemCuInfTotTcVo = amoreAPIService.getcicuemcuinfrbyincsno(cicuemCuInfTotTcVo);
+		
+		EmbeddableTel phoneNo = new EmbeddableTel();
+		phoneNo.setPhoneNo(cicuemCuInfTotTcVo.getCellTidn() + cicuemCuInfTotTcVo.getCellTexn() + cicuemCuInfTotTcVo.getCellTlsn());
+		paramApRequestMemberIdGuide.setPhoneNo(phoneNo);
+		
+		CheckResult rsltVo = apApi.requestMemberIdGuide(paramApRequestMemberIdGuide);
+		if(rsltVo.isResult()) {
+			return ResponseEntity.ok("{}");
+		}
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{}");
 	}
 
 	/**
@@ -175,20 +202,16 @@ public class MemberRestController extends AbstractController {
 			MemberDTO user) {
 		Map<String, Object> respMap = new HashMap<String, Object>();
 		if(StringUtils.isEmpty(user.getMemberName()) || StringUtils.isEmpty(user.getAthtDtbr()) || StringUtils.isEmpty(user.getPhoneNumber())) {
-			return error(respMap, HttpStatus.SERVICE_UNAVAILABLE, "INFOERR", "누락된 정보가 있습니다.");
+			throw error(respMap, HttpStatus.INTERNAL_SERVER_ERROR, "INFOERR", "누락된 정보가 있습니다.");
 		}
 		String athtDt = user.getAthtDtbr().subSequence(0, 4) + "," +
 		user.getAthtDtbr().subSequence(4, 6) + "," +
 		user.getAthtDtbr().subSequence(6, 8);
 		ApFindMemberIdResult findMember = null;
-		try {
-			findMember = apApi.findMemberId(user.getMemberName(), athtDt, "," + user.getPhoneNumber());
-		} catch(ApiException e) {
-			return error(respMap, e);
-		}
+		findMember = apApi.findMemberId(user.getMemberName(), athtDt, "," + user.getPhoneNumber());
 		
 		if(findMember == null || findMember.getMemberId() == null) {
-			return error(respMap, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", getMessage("customer.find.notFindId"));
+			throw error(respMap, HttpStatus.INTERNAL_SERVER_ERROR, "EAPI001", getMessage("customer.find.notFindId"));
 		}
 		
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
@@ -206,7 +229,7 @@ public class MemberRestController extends AbstractController {
 			String memberName, String frgrRegNum) {
 		Map<String, Object> respMap = new HashMap<String, Object>();
 		if(StringUtils.isEmpty(memberName) || StringUtils.isEmpty(frgrRegNum)) {
-			return error(respMap, HttpStatus.SERVICE_UNAVAILABLE, "INFOERR", "누락된 정보가 있습니다.");
+			throw error(respMap, HttpStatus.INTERNAL_SERVER_ERROR, "INFOERR", "누락된 정보가 있습니다.");
 		}
 		
 		//FIXME 외국인 등록번호로 아이디 찾기.
@@ -216,7 +239,7 @@ public class MemberRestController extends AbstractController {
 			return ResponseEntity.ok(respMap);
 		}*/
 		
-		return error(respMap, HttpStatus.SERVICE_UNAVAILABLE, "INFOERR", "인증 불가");
+		throw error(respMap, HttpStatus.INTERNAL_SERVER_ERROR, "INFOERR", "인증 불가");
 	}
 	private ResponseEntity<?> custSelfOnlineM(HttpServletRequest request) {
 		String custNm = request.getParameter("custNm") == null?"":request.getParameter("custNm");
@@ -264,17 +287,17 @@ public class MemberRestController extends AbstractController {
 					
 					WebUtils.setSessionAttribute(request, SessionKey.KMS_CHECK_VO, cicuemCuInfTotTcVo3);
 				} else {
-					return error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "인증요청에 실패하였습니다. 입력 정보를 다시 한 번 확인해주세요.");
+					throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "EAPI001", "인증요청에 실패하였습니다. 입력 정보를 다시 한 번 확인해주세요.");
 				}
 			
 			
 			} catch (ApiException e) {
-				return error(result, e);
+				throw e;
 			} catch (Exception e) {
-				return error(result, HttpStatus.SERVICE_UNAVAILABLE, "unknown", "알 수 없는 오류입니다. 잠시 후 다시 시도해주세요.");
+				throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "unknown", "알 수 없는 오류입니다. 잠시 후 다시 시도해주세요.");
 			}
 		} else {
-			return error(result, HttpStatus.SERVICE_UNAVAILABLE, "INFOERR", "누락된 정보가 있습니다.");
+			throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "INFOERR", "누락된 정보가 있습니다.");
 		}
 
 		return ResponseEntity.ok(result);
@@ -292,39 +315,34 @@ public class MemberRestController extends AbstractController {
 			boolean check = captchaAPI.checkKeyValueSimple(chptchaKey, chptcha);
 			
 			if(!check) {
-				return error(result, HttpStatus.SERVICE_UNAVAILABLE, "chptcha", "입력한 숫자가 이미지 숫자와 일치하지 않습니다.");
+				throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "chptcha", "입력한 숫자가 이미지 숫자와 일치하지 않습니다.");
 			}
 			
 			CicuemCuInfTotTcVo cicuemCuInfTotTcVo = (CicuemCuInfTotTcVo) WebUtils.getSessionAttribute(request, SessionKey.KMS_CHECK_VO);
 			cicuemCuInfTotTcVo.setSmsNum(certNum);
-			
-			try {
 				
-				CicuemCuInfTotTcVo cicuemCuInfTotTcVo2 = amoreAPIService.certifyconfirm(cicuemCuInfTotTcVo);
-				if(APConstant.KIST9201.equals(cicuemCuInfTotTcVo2.getR_rsltCd())) {
-					return error(result, HttpStatus.SERVICE_UNAVAILABLE, "expire", "만료된 인증번호입니다. 재인증 버튼을 눌러주세요.");
-				}
-				if(!APConstant.KIST0000.equals(cicuemCuInfTotTcVo2.getR_rsltCd())) {
-					return error(result, HttpStatus.SERVICE_UNAVAILABLE, "certNum", "인증번호를 잘못 입력하셨습니다.");
-				}
-				if(APConstant.RESULT_OK.equals(cicuemCuInfTotTcVo2.getRsltCd())) {
-					ApFindMemberIdResult memberResult = apApi.findMemberIdByCI(cicuemCuInfTotTcVo2.getCiNo());
-					result.put("id", memberResult.getMemberId());
-					result.put("message", getMessage("customer.find.findIdComplete", memberResult.getMemberId(), memberResult.getMemberSignupDt()));
-				} else if(APConstant.EXIST_CH_JOIN_USER.equals(cicuemCuInfTotTcVo2.getRsltCd())) {
-					
-					ApFindMemberIdResult memberResult = apApi.findMemberIdByCI(cicuemCuInfTotTcVo2.getCiNo());
-					result.put("id", memberResult.getMemberId());
-					result.put("message", getMessage("customer.find.findIdComplete", memberResult.getMemberId(), memberResult.getMemberSignupDt()));
-				} else {
-					return error(result, HttpStatus.SERVICE_UNAVAILABLE, "nonRegist", "미가입");
-				}
-			
-			} catch (ApiException e) {
-				return error(result, e);
+			CicuemCuInfTotTcVo cicuemCuInfTotTcVo2 = amoreAPIService.certifyconfirm(cicuemCuInfTotTcVo);
+			if(APConstant.KIST9201.equals(cicuemCuInfTotTcVo2.getR_rsltCd())) {
+				throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "expire", "만료된 인증번호입니다. 재인증 버튼을 눌러주세요.");
 			}
+			if(!APConstant.KIST0000.equals(cicuemCuInfTotTcVo2.getR_rsltCd())) {
+				throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "certNum", "인증번호를 잘못 입력하셨습니다.");
+			}
+			if(APConstant.RESULT_OK.equals(cicuemCuInfTotTcVo2.getRsltCd())) {
+				ApFindMemberIdResult memberResult = apApi.findMemberIdByCI(cicuemCuInfTotTcVo2.getCiNo());
+				result.put("id", memberResult.getMemberId());
+				result.put("message", getMessage("customer.find.findIdComplete", memberResult.getMemberId(), memberResult.getMemberSignupDt()));
+			} else if(APConstant.EXIST_CH_JOIN_USER.equals(cicuemCuInfTotTcVo2.getRsltCd())) {
+				
+				ApFindMemberIdResult memberResult = apApi.findMemberIdByCI(cicuemCuInfTotTcVo2.getCiNo());
+				result.put("id", memberResult.getMemberId());
+				result.put("message", getMessage("customer.find.findIdComplete", memberResult.getMemberId(), memberResult.getMemberSignupDt()));
+			} else {
+				throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "nonRegist", "미가입");
+			}
+			
 		} else {
-			return error(result, HttpStatus.SERVICE_UNAVAILABLE, "INFOERR", "누락된 정보가 있습니다.");
+			throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "INFOERR", "누락된 정보가 있습니다.");
 		}
 
 		return ResponseEntity.ok(result);

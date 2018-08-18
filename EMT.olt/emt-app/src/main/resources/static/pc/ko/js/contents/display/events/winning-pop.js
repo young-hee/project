@@ -17,7 +17,19 @@
 
 		/** =============== Public Methods =============== */
 		open: function ( title, result ) {
-			// TODO: 당첨팝업 data
+console.log(result); 
+			var prodCount = 0; 
+			_.each(result.awards ,function(list){
+				 
+				if(list.awardTgtCode === 'Prod'){
+					prodCount++; 
+				}else {
+					prodCount = 0;
+				}
+				
+				result.awards.prodCount = prodCount; 
+			});
+console.log(result); 	
 			this._winningPop = AP.modal.info({
 				title: title,
 				contents: {
@@ -35,9 +47,14 @@
 				this._winningPop.resetPosition();
 			}.bind( this ));
 
-			$winningPop.find( '.page_btns button' ).on( 'click', function () {
+			$winningPop.find( '.page_btns .btn_md_primary' ).on( 'click', function () {
 				this._winningPop.close();
 				AP.shippingInfo.open( result );
+			}.bind( this ));
+			
+			$winningPop.find( '.page_btns .btn_lg_primary' ).on( 'click', function () {
+				this._winningPop.close();
+				location.href = "/my/page/info/myEtude";
 			}.bind( this ));
 		}
 

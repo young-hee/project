@@ -1265,23 +1265,33 @@
 	 });
 
 
-	$('.option_select_wrap button').click(function(){
-		if($('.option_select_wrap .ui_select').hasClass('open')){
-			$(this).closest('.option_layer').addClass('sub_open');
- 	 }else {
-			$(this).closest('.option_layer').removeClass('sub_open');
- 	 }
-	});
+	 //주문변경 버튼 눌렀을때
+ 	$('.option_select_wrap button').click(function(){
+ 		if($('.option_select_wrap .ui_select').hasClass('open')){
+ 			$(this).closest('.option_layer').addClass('sub_open');
+  	 }else {
+ 			$(this).closest('.option_layer').removeClass('sub_open');
+  	 }
+ 	});
 
-		$('.option_select_list li').click(function(){
-			$(this).closest('.option_layer').removeClass('sub_open');
-		});
+ 	$('.option_select_list li').click(function(){
+ 		$(this).closest('.option_layer').removeClass('sub_open');
+ 	});
 
 
-	$('.option_close').on("click",function() {
-		$('.order_layer').removeClass('open');
-		$('.option_layer').removeClass('sub_open');
-	});
+ 	$('.option_close').on("click",function() {
+ 		$('.order_layer').removeClass('open');
+ 		$('.option_layer').removeClass('sub_open');
+ 	});
+
+ 	$(document).on('click', function(){
+ 		if($('.ui_select').hasClass('open')){
+ 			$('.option_layer').addClass('sub_open');
+ 		}else{
+ 			$('.option_layer').removeClass('sub_open');
+ 		}
+ 	});
+
 
 
 

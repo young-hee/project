@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,7 +24,7 @@ import java.util.HashMap;
  * 2. 예치금 관리
  *
  */
-@Controller
+@RestController
 @RequestMapping("/my/api")
 public class MyWalletRestController extends AbstractController {
 
@@ -49,18 +50,12 @@ public class MyWalletRestController extends AbstractController {
 	 * @return
 	 */
 	@GetMapping("/getDepositList")
-	@ResponseBody
-	public ResponseEntity<?> getDepositList(int offset, int limit, String startDate, String endDate, String depositHistTypeCode) {
+	public ResponseEntity<?> getDepositList(int offset, int limit, String startDate, String endDate, String depositHistTypeCode) throws ParseException {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
-		try {
-			DepositHistoriesResult depositHistories = depositsApi.getDepositHistories(getMemberSn(), sf.parse(startDate), endDate != null ? FromEndDateUtils.initEndDate(sf.parse(endDate)) : null, depositHistTypeCode, offset, limit);
-			result.put("DepositHistories", depositHistories);
-		} catch(Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		DepositHistoriesResult depositHistories = depositsApi.getDepositHistories(getMemberSn(), sf.parse(startDate), endDate != null ? FromEndDateUtils.initEndDate(sf.parse(endDate)) : null, depositHistTypeCode, offset, limit);
+		result.put("DepositHistories", depositHistories);
 
 		return ResponseEntity.ok(result);
 	}
@@ -72,16 +67,11 @@ public class MyWalletRestController extends AbstractController {
 	 * @return
 	 */
 	@PostMapping("/transferDeposit")
-	@ResponseBody
 	public ResponseEntity<?> transferDeposit(int amountOfTransfer) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		try {
-			DepositHistoriesResult depositHistoriesResult = depositsApi.requestWithdrawalDeposit(getMemberSn(), BigDecimal.valueOf(amountOfTransfer));
-			result.put("DepositHistories", depositHistoriesResult);
-		} catch(Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		DepositHistoriesResult depositHistoriesResult = depositsApi.requestWithdrawalDeposit(getMemberSn(), BigDecimal.valueOf(amountOfTransfer));
+		result.put("DepositHistories", depositHistoriesResult);
+
 
 		return ResponseEntity.ok(result);
 	}
@@ -93,16 +83,10 @@ public class MyWalletRestController extends AbstractController {
 	 * @return
 	 */
 	@PutMapping("/saveRefundAccounts")
-	@ResponseBody
 	public ResponseEntity<?> saveRefundAccounts(BankAccount bankAccount) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		try {
-			DepositRefundAccount depositRefundAccount = depositsApi.saveDepositRefundAccount(getMemberSn(), bankAccount);
-			result.put("DepositRefundAccount", depositRefundAccount);
-		} catch(Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		DepositRefundAccount depositRefundAccount = depositsApi.saveDepositRefundAccount(getMemberSn(), bankAccount);
+		result.put("DepositRefundAccount", depositRefundAccount);
 
 		return ResponseEntity.ok(result);
 	}

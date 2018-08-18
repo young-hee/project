@@ -134,17 +134,22 @@
 
 					var price = $('#price').val();
 					if (price == null || price == 0 || price > 300000) {
-						AP.modal.alert("출금가능금액 확인하세요.");
+						AP.modal.alert("출금가능금액을 확인해주세요.");
 					} else {
 						AP.api.transferDeposit({}, {
 							amountOfTransfer : price
 						}).done(function(data) {
 							//성공
 							//console.log("성공")
-							location.href = "/my/page/myDepositManagementList";
+			            	AP.modal.alert("정상적으로 출금되었습니다.").addListener( 'modal-close', function (e) {
+			            		location.reload();
+							});
 						}).fail(function(e) {
-							AP.modal.alert(e.responseJSON.errorData.message);
-							//실패
+			            	if (e.errorCode == 'ESAL042') {
+			    		    	AP.modal.alert("현재 잔액보다 큰 금액을 입력하셨습니다.");
+			            	} else {
+								AP.modal.alert(e.responseJSON.errorData.message);
+			            	}
 						}).always(function() {
 							//성공, 실패
 						});

@@ -25,6 +25,7 @@
 
 		/** =============== Public Methods =============== */
 		load: function ( param ) {
+			
 			if ( param.memberInfo ) {
 				this._memberInfo = param.memberInfo;
 			}
@@ -65,13 +66,11 @@
 				AP.login().done(function () {
 					AP.api.regularEventSummary({}, { regularEventType: 'ProdExperienceGrp'}).done(function () {
 						AP.applicationForm.open( '뷰티테스터 신청하기' );
-					}.bind( this )).fail(function ( e ) {
-						if ( e.errorCode == 'ESAL034' ) {
-							AP.modal.alert( '본 이벤트는 종료되었습니다.' );
-						} else if( e.errorCode === 'ESAL053'){
-							AP.modal.alert( '참여 진주알 개수가 부족합니다.' );
+					}.bind( this )).fail(function ( xhr ) {
+						if ( AP.message[xhr.errorCode] != undefined ) {
+							AP.modal.alert( AP.message[xhr.errorCode] );
 						} else {
-							AP.modal.alert(e.errorMessage);
+							AP.modal.alert( xhr.errorMessage );
 						}
 					}.bind( this ));
 				}.bind( this ));
@@ -92,8 +91,12 @@
 					AP.modal.alert( '신청이 완료되었습니다.' ).addListener( 'modal-close', function (e) {
 						AP.applicationForm.close();
 					}.bind( this ));
-				}.bind( this )).fail(function (e) {
-					AP.modal.alert( e.errorMessage );
+				}.bind( this )).fail(function (xhr) {
+					if ( AP.message[xhr.errorCode] != undefined ) {
+						AP.modal.alert( AP.message[xhr.errorCode] );
+					} else {
+						AP.modal.alert( xhr.errorMessage );
+					}
 				}.bind( this )).always(function (e) {});
 			}.bind( this ));
 		},

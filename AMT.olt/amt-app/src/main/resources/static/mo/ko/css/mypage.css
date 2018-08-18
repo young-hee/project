@@ -121,7 +121,7 @@
 .ap_good .no_data{margin-top:9px;padding: 100px 0 130px; text-align: center; color:#999; background-color:#fff}
 .ap_good .no_data .copy{margin: 10px 0; padding: 0 20px;font-size: 24px; text-align: center; color:#000; line-height: 30px}
 .ap_good .no_data .copy>*>*{vertical-align: top;}
-.ap_good .no_data .copy>*:first-child{position:relative; display:inline-block; max-width:100%; padding-right:150px;}
+.ap_good .no_data .copy>*:first-child{position:relative; display:inline-block; max-width:100%; padding-right:134px;}
 .ap_good .no_data .copy .name{display:inline-block; max-width: 100%;}
 .ap_good .no_data .copy .etc{position:absolute; top:0; right:0;}
 .ap_good .no_data .ico_heart{width: 51px; height: 44px; background-position: -105px -45px;}
@@ -143,7 +143,7 @@
 .my_page .review_writable>li:after{display:none;}
 .my_page .review_writable>li>a,
 .my_page .review_writable .product_info{padding-right: 0 !important;}
-.my_page .review_writable .btn_border_round{display:inline-block; border-radius: 5px; border-color: #eaeaea; height: 40px;color:#222 }
+.my_page .review_writable .btn_border_round{display:inline-block; padding: 0 15px; border-radius: 5px; border-color: #eaeaea; height: 40px;color:#222; line-height: 40px}
 .my_page .review_writable small{font-size: 14px; font-weight: normal; color:#999; padding: 10px 0 12px}
 .my_page .review_list .review{padding: 18px 16px; font-size: 14px;}
 .my_page .review_list .review .rating .count {font-size: 15px }
@@ -159,7 +159,7 @@
 .my_page .review_list .review .bottom{overflow:hidden;border-top:0; padding:0; margin:0; height:auto;}
 .my_page .review_list .review .btn_area {float: right;}
 .my_page .review_list .review .bottom div>* + * {margin-left: 2px;}
-.my_page .review_list .review .btn_border_round {display: inline-block; border-radius: 5px; border-color: #eaeaea; height: 40px; color:#222}
+.my_page .review_list .review .btn_border_round {display: inline-block; border-radius: 5px; border-color: #eaeaea; height: 40px; color:#222; padding:0 15px;}
 .my_page .review_list .ui_attach{margin:15px -16px 0; padding: 0 16px;}
 .my_page .review_list .flag{display:inline-block; height: 20px; padding: 0 5px; margin-right:5px;background: #1fb3f1; color:#fff; vertical-align: top; line-height: 20px; font-size: 11px;}
 .my_page .review .date {font-size: 14px; float: left; line-height: 40px; padding-top: 0}
@@ -170,8 +170,8 @@
 
 
 /*리뷰작성 display.css에서 가져옴*/
-.review_write{position:relative; height:calc(100% - 9px);}
-.review_write.step1{padding-top: 27px; text-align: center;}
+.review_write{position:relative; height:calc(100% - 9px); padding-bottom: 120px}
+.review_write.step1{padding-top: 27px; text-align: center; min-height: inherit !important;}
 .review_write.step1 .thumb{width: 115px; height: 115px; margin:0 auto 27px;}
 .review_write.step1 dt{font-size: 15px; color:#333; line-height: 1.5;}
 .review_write.step1 dt>*{display:block; line-height: 19px}
@@ -198,7 +198,7 @@
 .review_write .review_grade dl + dl{margin-top: 30px; }
 .check_btn_set.inline{white-space: nowrap; height: inherit;}
 .check_btn_set.inline>span{display:inline-block;}
-.check_btn_set.inline label{height: 38px;  padding: 0 10px; border-left-width:1px; border-radius: 9px; font-size: 15px; color:#484848;}
+.check_btn_set.inline label{height: 38px; line-height: 36px; padding: 0 10px; border-left-width:1px; border-radius: 9px; font-size: 15px; color:#484848;}
 .check_btn_set.inline label:before{display:none;}
 .check_btn_set.inline>* + * input:checked + label:before{display:none;}
 .check_btn_set.inline span + span{margin-left: 7px;}
@@ -222,13 +222,15 @@
 .review_write_form .textarea textarea{height: 100%; border:0;}
 .review_write_form .text_limit{position:absolute; bottom:27px; right:16px; z-index: 1; font-size: 16px; color:#999;}
 @media screen and (max-width:320px){
-	.review_write.step1{padding-top: 40px;}
+	.review_write.step1{padding-top: 40px;height: inherit; }
 	.review_write.step1 .text.notice{font-size: 13px;}
 	.check_btn_set.inline{}
 	.check_btn_set.inline span + span{margin-left: 0px;}
 	.check_btn_set.inline label{font-size: 13px;}
 	.review_guide .bubble{padding: 18px 20px 0;}
+
 }
+.review_write.step2 {height: auto; padding-bottom: 0; position: static}
 .review_write.step2 .review_product_summary {line-height: 22px}
 .review_write.step2 .section {padding:25px 16px 30px 16px}
 .review_write.step2 .section > dl > dt {padding-bottom: 27px}
@@ -362,7 +364,7 @@
 .my_coupon .ui_accordion{border:1px solid #d9d9d9; border-top:0;}
 .my_coupon .ui_accordion>dl>dt {padding:17px 40px 15px 20px; }
 .my_coupon .ui_accordion>dl>dt .title {font-size: 15px;}
-.my_coupon .ui_accordion>dl>dt>button .ico_navi{width: 18px; height: 11px; background: url(/mo/ko/images/my/ico_coupon_arrow.png) no-repeat; background-size: 18px 11px; transform: none;}
+.my_coupon .ui_accordion>dl>dt>button .ico_navi{width: 18px; height: 11px; background: url(/mo/ko/images/my/ico_coupon_arrow.png) no-repeat; background-size: 18px 11px; transform: none; opacity: 1}
 .my_coupon .ui_accordion>dl>dt em {color:#782fff}
 .my_coupon .ui_accordion>dl>dt.on>button .ico_navi {transform: rotate(180deg);}
 .my_coupon .ui_accordion>dl>dt{background: #ebebeb; border-top:1px solid #d9d9d9;}
@@ -400,7 +402,7 @@
 .layer_popup .mypage .coupon_list li:first-child {border-top: 0; padding-top: 0}
 .layer_popup .mypage .coupon_list .title {padding-bottom:20px; font-size: 15px; color:#222; font-weight: bold;}
 .layer_popup .mypage .coupon_list .text {font-size: 14px}
-.layer_popup .mypage .btn_default_modal_confirm {color:#782fff; font-size: 16px}
+.layer_popup .mypage .btn_default_modal_confirm {color:#782fff; font-size: 16px; vertical-align: baseline;}
 
 /* 뷰티 포인트 */
 .my_beauty_point{}
@@ -465,10 +467,10 @@
 .giftcard_info .clear .align_right {float: right;}
 .giftcard_info .clear .align_right dt {text-align: right;}
 .giftcard_info .clear + *{position:relative; margin-top: 13px; padding-top: 13px; border-top:1px solid #f3f3f3; line-height: 23px;}
-.giftcard_info .clear + *>small{position:absolute; top:13px; right:0;}
+.giftcard_info .clear + *>.b_num{position:absolute; top:13px; right:0; font-size: 12px}
 .giftcard_info .ui_table>dt{width: 90px;}
 /* 결과 없음*/
-.my_page .no_data{position:relative; height: 350px; background-color: #e9edf0; margin: 0 -16px}
+.my_page .no_data{position:relative; height: 350px; background-color: #f2f2f2; margin: 0 -16px}
 .my_page .no_data.transparent {background-color: transparent}
 .my_page .no_data>b{position:absolute; top:50%; left:0; width: 100%; font-size: 24px; color: #ddd; text-align: center; transform:translateY(-50%); line-height: 30px;}
 
@@ -491,7 +493,7 @@
 .my_address .address_info .ui_table>*{padding: 13px 0; line-height: 21px;}
 .my_address .address_info .ui_table>dt{width: 90px;}
 .my_address .address_info .ui_table + .ui_table{border-top:1px solid #f3f3f3;}
-.delivery_form {padding:15px 16px}
+.delivery_form {padding:15px 16px 120px 16px}
 .delivery_form .ui_table {margin-bottom: 8px}
 .delivery_form .chk_wrap {margin-top: 17px}
 .delivery_form .chk_h28 label {font-size: 17px;}
@@ -561,7 +563,7 @@
 .account_registration .copy>span:before,
 .account_registration .copy>span:after{content:''; position:absolute; top:9px; left:-25px; width: 14px; height: 11px; background:url(/mo/ko/images/common/ico.png) no-repeat -135px -200px; -webkit-background-size: 200px;background-size: 200px;}
 .account_registration .copy>span:after{left:auto; right:-26px; background-position: -135px -212px;}
-.account_registration .section {padding:0 16px}
+.account_registration .section {padding:0 16px 120px 16px}
 .account_registration .ui_table{margin-bottom: 10px}
 .account_registration .ui_table>dt{width: 90px; font-size: 17px; }
 .account_registration  p.text.font_xs{ font-size: 12px; line-height: 17px;}

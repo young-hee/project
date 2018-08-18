@@ -1,0 +1,7 @@
+this["AP"] = this["AP"] || {};
+this["AP"]["handlebars"] = this["AP"]["handlebars"] || {};
+this["AP"]["handlebars"]["products"] = this["AP"]["handlebars"]["products"] || {};
+
+this["AP"]["handlebars"]["products"]["ingredient-modal"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "<dt class=\"layer_title\">전성분 확인하기</dt>\n<dd class=\"layer_cont\">\n	<div class=\"all_component\">\n		<ul class=\"list\">\n			<li>\n				<strong class=\"tit\">해피바스</strong>\n				<p class=\"product\">내추럴 바디워시 [900g/500g]</p>\n				<p class=\"option\">내추럴 정말 순한 바디워시_900g</p>\n				<p class=\"txt\">\n					[순한 바디워시]<br>\n					정제수, 소듐라우레스설페이트, 암모늄라우릴설페이트, 코카미도프로필베타인, 소르비톨,\n					쌀겨수, 마시멜로뿌리추출물, 알로에베라잎추출물, 라우릭애씨드, 세틸알코올, 바나나수, 사과수, 소듐클로라이드, 스타이렌/아크릴레이트코폴리\n					머, 시트릭애씨드, 코카마이드엠이에이, 코코-글루코사이드, 트리하이드록시스테아린, 소듐설파이트, 소듐벤조에이트, 페녹시에탄올, 향료 \n				 </p>\n			</li>\n			<li>\n				<strong class=\"tit\">해피바스</strong>\n				<p class=\"product\">내추럴 바디워시 [900g/500g]</p>\n				<p class=\"option\">내추럴 정말 순한 바디워시_900g</p>\n				<p class=\"txt\">\n					[순한 바디워시]<br>\n					정제수, 소듐라우레스설페이트, 암모늄라우릴설페이트, 코카미도프로필베타인, 소르비톨,\n					쌀겨수, 마시멜로뿌리추출물, 알로에베라잎추출물, 라우릭애씨드, 세틸알코올, 바나나수, 사과수, 소듐클로라이드, 스타이렌/아크릴레이트코폴리\n					머, 시트릭애씨드, 코카마이드엠이에이, 코코-글루코사이드, 트리하이드록시스테아린, 소듐설파이트, 소듐벤조에이트, 페녹시에탄올, 향료 \n				 </p>\n			</li>\n		</ul>\n		<div class=\"layer_btns\">\n			<a href=\"#none\" class=\"btn_fix_neutral closePop\">확인</a>\n		</div>\n	</div>\n</dd>\n";
+},"useData":true});

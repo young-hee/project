@@ -23,12 +23,13 @@ import kr.ap.emt.display.vo.RequestBeautyLife;
 import net.g1project.ecp.api.model.sales.article.*;
 import net.g1project.ecp.api.model.sales.display.Corner;
 import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkPost;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Ria@g1project.net
  * @since {version}
  */
-@Controller
+@RestController
 @RequestMapping("/display")
 public class BeautyLifeRestController extends AbstractController {
 
@@ -40,20 +41,14 @@ public class BeautyLifeRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/articles")
-    @ResponseBody
     public ResponseEntity<?> articles( RequestBeautyLife requestBeautyLife) {
       
         HashMap<String, Object> result = new HashMap<String, Object>();
         
-        try {
-        	ArticleSearchResult articleSearchResult = articleApi.getArticleList(requestBeautyLife.getArticleCateId(), requestBeautyLife.getOrder(), requestBeautyLife.getKeyword(), "Y", requestBeautyLife.getHashTag(), requestBeautyLife.getOffset(), requestBeautyLife.getLimit());
-            result.put("articleSearchResult", articleSearchResult);
-            
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-        	result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		ArticleSearchResult articleSearchResult = articleApi.getArticleList(requestBeautyLife.getArticleCateId(), requestBeautyLife.getOrder(), requestBeautyLife.getKeyword(), "Y", requestBeautyLife.getHashTag(), requestBeautyLife.getOffset(), requestBeautyLife.getLimit());
+		result.put("articleSearchResult", articleSearchResult);
+
+		return ResponseEntity.ok(result);
 
     }
 	
@@ -65,21 +60,13 @@ public class BeautyLifeRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping({"/article", "/article/preview"})
-    @ResponseBody
     public ResponseEntity<?> article( RequestBeautyLife requestBeautyLife, String previewKey) {
       
         HashMap<String, Object> result = new HashMap<String, Object>();
-        
-        try {
-        	
-        	Article article = articleApi.getArticle(requestBeautyLife.getArticleSn(), previewKey);
-            result.put("article", article);
-            
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-        	result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		Article article = articleApi.getArticle(requestBeautyLife.getArticleSn(), previewKey);
+		result.put("article", article);
+
+		return ResponseEntity.ok(result);
 
     }
 	
@@ -89,21 +76,14 @@ public class BeautyLifeRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/comments")
-    @ResponseBody
     public ResponseEntity<?> comments( RequestBeautyLife requestBeautyLife) {
       
         HashMap<String, Object> result = new HashMap<String, Object>();
         
-        try {
-        	
-        	ArticleCommentResult articleCommentResult = articleApi.getArticleCommentList(requestBeautyLife.getArticleSn(), "Y", requestBeautyLife.getOrder(), requestBeautyLife.getOffset(), requestBeautyLife.getLimit());
-            result.put("articleCommentResult", articleCommentResult);
-            
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-        	result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		ArticleCommentResult articleCommentResult = articleApi.getArticleCommentList(requestBeautyLife.getArticleSn(), "Y", requestBeautyLife.getOrder(), requestBeautyLife.getOffset(), requestBeautyLife.getLimit());
+		result.put("articleCommentResult", articleCommentResult);
+
+		return ResponseEntity.ok(result);
     }
 	
 	/**
@@ -114,21 +94,15 @@ public class BeautyLifeRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/createArticleComment")
-    @ResponseBody
     public ResponseEntity<?> createArticleComment( RequestBeautyLife requestBeautyLife, ArticleCommentPost articleCommentParam) {
       
         HashMap<String, Object> result = new HashMap<String, Object>();
 
-        try {
-        	
-        	ExecuteResult executeResult = articleApi.createArticleComment(requestBeautyLife.getArticleSn(), articleCommentParam);
-        	result.put("executeResult", executeResult);
-        	
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-        	result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-        }
+		ExecuteResult executeResult = articleApi.createArticleComment(requestBeautyLife.getArticleSn(), articleCommentParam);
+		result.put("executeResult", executeResult);
+
+		return ResponseEntity.ok(result);
+
     }
 	
 	/**
@@ -139,31 +113,22 @@ public class BeautyLifeRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/deleteArticleComment")
-    @ResponseBody
     public ResponseEntity<?> deleteArticleComment( RequestBeautyLife requestBeautyLife, ArticleComment articleComment) {
       
         HashMap<String, Object> result = new HashMap<String, Object>();
         
-        try {
-        	
-        	ExecuteResult executeResult = articleApi.deleteArticleComment(requestBeautyLife.getArticleSn(), articleComment.getArticleCommentSn());
-        	result.put("executeResult", executeResult);
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-        	result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-        }
+		ExecuteResult executeResult = articleApi.deleteArticleComment(requestBeautyLife.getArticleSn(), articleComment.getArticleCommentSn());
+		result.put("executeResult", executeResult);
+		return ResponseEntity.ok(result);
+
     }
 	
 	/**
 	 *  코너 아이디 로 정보 조회 (룩스 main이 article 에서 coner 로 변경됨)
 	 *
-	 * @param requestBeautyLife
-	 * @param articleComment
 	 * @return
 	 */
 	@RequestMapping("/getCornerInfo")
-    @ResponseBody
     public ResponseEntity<?> getCornerInfo(HttpServletRequest req) {
       
 		HashMap<String, Object> result = new HashMap<String, Object>();
@@ -177,16 +142,11 @@ public class BeautyLifeRestController extends AbstractController {
 			cornerIds = "M02_main_p.6"; //PC룩스 코너 아이디
 		}
         
-        try {
- 
-        	List<Corner> corners = displayApi.getMenuPageCorners(APConstant.EH_DISPLAY_MENU_SET_ID, "main", null, null, cornerIds, false); 
-        	
-        	result.put("corners", corners);
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-        	result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-        }
+		List<Corner> corners = displayApi.getMenuPageCorners(APConstant.EH_DISPLAY_MENU_SET_ID, "main", null, null, cornerIds, false);
+
+		result.put("corners", corners);
+		return ResponseEntity.ok(result);
+
     }
 	
 }

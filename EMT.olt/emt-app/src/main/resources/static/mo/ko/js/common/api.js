@@ -24,13 +24,7 @@
 		 * @param {String}    keyword         검색 keyword
 		 * @param {Int}       currentPage     검색할 페이지
 		 */
-		getAddresses: { path:'//www.juso.go.kr/addrlink/addrLinkApiJsonp.do', method: 'POST', dataType: 'jsonp', crossDomain: true, data: {
-				confmKey: 'U01TX0FVVEgyMDE3MDgxODE2NTExMTIzODcy',
-				resultType: 'json',
-				countPerPage: 30
-			}
-		},
-
+		getAddresses: { path:'/common/getAddresses', method: 'POST', contentType: 'application/json' },
 		/**
 		 * pixlee api : 앨범의 사진 리스트 요청
 		 * @param {String}	albumId		해당리스트를 포함하고 있는 앨범 ID
@@ -186,8 +180,8 @@
 		//주문번호 전화번호로, 비회원 조회 가능한지 확인.
 		checkOrder: { path: '/nonMeber/checkOrder', method: 'POST' },
 
-		//간편ID찾기.
-		findIdSimple: { path: '/customer/find/findId/simple', method: 'POST' },
+		//아이디 SMS 전송.
+		sendId: { path: '/customer/find/findId/sendId', method: 'POST' },
 		findIdForeigner: { path: '/customer/find/findId/foreigner', method: 'POST' },
 		//아이디 중복확인.
 		checkId: { path: '/customer/checkId', method: 'POST' },
@@ -367,6 +361,9 @@
 		ordChangProds: { path: '/my/api/{ordSn}/ordChangProds', method: 'POST' },
 
 		getClaimReasonList: { path : '/my/api/getClaimReasonList' , method: 'GET' },
+
+		// 나의 주문 리뷰
+		myReview: { path:'/my/api/myReview', method: 'GET'},
 
 	    /**
 	     * CS *************************************************************
@@ -658,7 +655,7 @@
         regularEventSummary: { path:'/display/regularEventSummary', method: 'POST', data: {
         		regularEventType : null
 			}
-		},
+		}, 
 		
 		//행사참여
 		//regularEventType  : Roulette - 룰렛 , PackageLetter - 패키지레터 , ProdExperienceGrp - 뷰티테스터신청 , SampleExperienceGrp - 샘플체험단신청 , AttendanceCheck - 출석체크
@@ -845,6 +842,7 @@
 
 		// 회원정보 수정(apMember)
 		orderPutMember: { path: '/order/orderPutMember', method: 'PUT'},
+
 	    /**
 	     * 매장안내 *************************************************************
 	     */
@@ -1247,17 +1245,8 @@
 		
 		// 컬러파인더 추천상품
 		withLegacyModelCodes: { path:'/common/getWithLegacyModelCodes', method: 'GET'},
-		
-		/**
-		 * 컬러파인더 (app전용 메뉴) ***********************************************************
-		 */
-		/**
-		 * 내 피부톤에 어울리는 추천상품 sap 데이타
-		 * @param {String}	type	피부톤 타입 (봄웜: WS, 여름쿨: CS, 가을웜: WF, 겨울쿨: CW, 봄여름 뉴트럴: NSS, 가을겨울 뉴트럴: NFW)
-		 */
-		getRecommendWithSkinTone: { path: '//etude.aramhuvis.com/api/getData.do?type={type}', crossDomain: true },
-			
-		
+
+
 		/**
 		 * 홈화면 진입시 등록한 팝업 노출
 		 * 

@@ -46,19 +46,6 @@
 				modal.close();
 			});
 			
-			/*
-			$modal.find('#requestGrpName').val('에뛰듸 단체명'); 		//신청단체명
-			$modal.find('#preHopeTmHour').val('1'); 					//희망시간
-			$modal.find('#preHopeTmMin').val('20'); 					//희망시간
-			$modal.find('#requestPersonnel').val('15'); 	//신청인원
-			//$modal.find('#hopeThemeName').val(); //희망테마명
-			$modal.find('#cellPhoneNo').val('01012345678'); 			//신청자 전화번호
-			$modal.find('#termsAgreeYn').prop('checked', true); 			//약관동의여부
-			$modal.find('#address1').val('서울특별시 서초구 효령로 253'); 			//매장 주소1
-			$modal.find('#address2').val('서울특별시 서초구 효령로 253'); 			//매장 주소2
-			$modal.find('#addQuestion1').val('test'); 			//추가질문1
-			*/
-			
 			modal.addListener( 'modal-before-close', function (e) {
 				$modal.find( 'textarea, input:text' ).inputLimits( 'clear' );
 				$modal.find( 'select' ).selectBox( 'clear' );
@@ -68,7 +55,22 @@
 			$modal.find( '.ui_date_picker' ).datePicker();
 			$modal.find( '.ui_find_addresses' ).findAddresses();
 			$modal.find( 'input[placeholder]' ).placeholder();
-			$modal.find( 'select' ).selectBox();
+			
+			// hopeThemeName select박스 option 채워주기 
+			var selectBoxList = $modal.find( 'select'); 
+			var hopeThemeName = ['면접/프로필','파티','트렌디','이벤트','메이크오버','기타(네일 or 메이크업 지원)']; 
+			var selectsIds = {"hopeThemeName" : hopeThemeName}; 
+
+			$.each(selectBoxList , function(index, select){
+				
+				$(this).selectBox(); 
+				
+				$.each(selectsIds[select.id], function(index, value){
+					$(select).append($('<option>',{value:value, id: index , text:value}));
+				})
+				
+				$(this).selectBox('updated'); 
+			});
 			
 		},
 		/** =============== Private Methods =============== */
@@ -93,12 +95,10 @@
 				addQuestion1 		: $form.find('#addQuestion1').val() 			//추가질문1
 			};
 			
-			AP.api.visitEducations( null, data )
-				.done(function ( result ) {
+			AP.api.visitEducations( null, data ).done(function ( result ) {
 					defer.resolve();
 					this.dispatch( 'success' );
-				}.bind(this))
-				.fail(function ( xhr ) {
+				}.bind(this)).fail(function ( xhr ) {
 					if ( xhr.errorCode === 'EAPI004' ) {
 						AP.login({trigger: true});
 					} else {
@@ -106,7 +106,6 @@
 					}
 				}.bind(this));
 			return defer.promise();
-			
 		},
 		
 		_setEvent: function () {

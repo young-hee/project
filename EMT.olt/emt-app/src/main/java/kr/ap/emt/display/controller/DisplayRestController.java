@@ -7,6 +7,7 @@
 package kr.ap.emt.display.controller;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,13 +35,14 @@ import net.g1project.ecp.api.model.sales.keywordPopup.KeywordLinkInfo;
 import net.g1project.ecp.api.model.sales.keywordPopup.PopupInfo;
 import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkByDateSearchResult;
 import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkDeleteResult;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Ria@g1project.net
  * @since {version}
  *
  */
-@Controller
+@RestController
 @RequestMapping("/display")
 public class DisplayRestController extends AbstractController {
 
@@ -52,40 +54,35 @@ public class DisplayRestController extends AbstractController {
      * @return
      */
 	@RequestMapping({"/prodList/{displayMenuId}", "/prodList/{displayMenuId}/preview"})
-    @ResponseBody
-    public ResponseEntity<?> prodList( RequestDisplay requestDisplay, @PathVariable String displayMenuId, String previewKey, String previewDate) {
+    public ResponseEntity<?> prodList( RequestDisplay requestDisplay, @PathVariable String displayMenuId, String previewKey, String previewDate) throws Exception {
         
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
-		try {
-			OnlineProdList filterableOnlineProdList
-				= displayApi.getMenuPageProdList(
-				APConstant.EH_DISPLAY_MENU_SET_ID
-				, displayMenuId
-				, previewKey
-				, previewDate != null ? sf.parse(previewDate) : null
-				, false
-				, requestDisplay.getProdSort()
-				, requestDisplay.getOffset()
-				, requestDisplay.getLimit()
-				, requestDisplay.getIncludeFilters()
-				, requestDisplay.getDisplayCateDepth()
-				, requestDisplay.getDisplayCate()
-				, requestDisplay.getBrand()
-				, requestDisplay.getFlag()
-				, requestDisplay.getAttr()
-				, requestDisplay.getPriceRange());
-			if (filterableOnlineProdList == null) {
-				throw new Exception();
-			}
-
-			result.put("filterableOnlineProdList", filterableOnlineProdList);
-			return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		OnlineProdList filterableOnlineProdList
+			= displayApi.getMenuPageProdList(
+			APConstant.EH_DISPLAY_MENU_SET_ID
+			, displayMenuId
+			, previewKey
+			, previewDate != null ? sf.parse(previewDate) : null
+			, false
+			, requestDisplay.getProdSort()
+			, requestDisplay.getOffset()
+			, requestDisplay.getLimit()
+			, requestDisplay.getIncludeFilters()
+			, requestDisplay.getDisplayCateDepth()
+			, requestDisplay.getDisplayCate()
+			, requestDisplay.getBrand()
+			, requestDisplay.getFlag()
+			, requestDisplay.getAttr()
+			, requestDisplay.getPriceRange());
+		if (filterableOnlineProdList == null) {
+			throw new Exception();
 		}
+
+		result.put("filterableOnlineProdList", filterableOnlineProdList);
+		return ResponseEntity.ok(result);
+
     }
 	
 	/**
@@ -96,79 +93,66 @@ public class DisplayRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping({"/cornerList/{displayMenuId}", "/cornerList/{displayMenuId}/preview"})
-    @ResponseBody
-    public ResponseEntity<?> cornerList(RequestDisplay requestDisplay, @PathVariable String displayMenuId, String previewKey, String previewDate) {
+    public ResponseEntity<?> cornerList(RequestDisplay requestDisplay, @PathVariable String displayMenuId, String previewKey, String previewDate) throws ParseException {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		
-		try {
 
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
-        	List <Corner> cornerList = displayApi.getMenuPageCorners(
-        		APConstant.EH_DISPLAY_MENU_SET_ID
-				, displayMenuId
-				, previewKey
-				, previewDate != null ? sf.parse(previewDate) : null
-				, requestDisplay.getCornerIds()
-				, requestDisplay.isExcludeSoldOut());
-            result.put("cornerList", cornerList);
-	        
-	        return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		List <Corner> cornerList = displayApi.getMenuPageCorners(
+			APConstant.EH_DISPLAY_MENU_SET_ID
+			, displayMenuId
+			, previewKey
+			, previewDate != null ? sf.parse(previewDate) : null
+			, requestDisplay.getCornerIds()
+			, requestDisplay.isExcludeSoldOut());
+		result.put("cornerList", cornerList);
+
+		return ResponseEntity.ok(result);
 
     }
 	
 	/**
 	 * 메뉴페이지코너정보조회
 	 * 
-	 * @param requestDisplay
 	 * @param displayMenuId
+	 * @param previewKey
+	 * @param previewDate
 	 * @return
 	 */
 	@RequestMapping({"/cornerList", "/cornerList/preview"})
-    @ResponseBody
-    public ResponseEntity<?> cornerList2(String displayMenuId, String previewKey, String previewDate) {
+    public ResponseEntity<?> cornerList2(String displayMenuId, String previewKey, String previewDate) throws ParseException {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
-		try {
-			Map<String, List<CornerContentsSet>> cornersMap = new HashMap<String, List<CornerContentsSet>>();
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-			RequestDisplay rd = new RequestDisplay();
-			rd.setExcludeSoldOut(false);
-			String cornerIds = "";
-			// Mobile
-			if (isMobileDevice()) {
-				cornerIds = "M02_" + displayMenuId + "_m.1," + "M02_" + displayMenuId + "_m.2";
-				if(displayMenuId.equals("search")) {
-					rd.setCornerIds(cornerIds);
-				}
+		Map<String, List<CornerContentsSet>> cornersMap = new HashMap<String, List<CornerContentsSet>>();
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		RequestDisplay rd = new RequestDisplay();
+		rd.setExcludeSoldOut(false);
+		String cornerIds = "";
+		// Mobile
+		if (isMobileDevice()) {
+			cornerIds = "M02_" + displayMenuId + "_m.1," + "M02_" + displayMenuId + "_m.2";
+			if(displayMenuId.equals("search")) {
+				rd.setCornerIds(cornerIds);
 			}
+		}
 
-			// PC
-			if (isPcDevice()) {
-				cornerIds = "M02_" + displayMenuId + "_p.1," + "M02_" + displayMenuId + "_p.2";
-				if(displayMenuId.equals("search")) {
-					rd.setCornerIds(cornerIds);
-				}
+		// PC
+		if (isPcDevice()) {
+			cornerIds = "M02_" + displayMenuId + "_p.1," + "M02_" + displayMenuId + "_p.2";
+			if(displayMenuId.equals("search")) {
+				rd.setCornerIds(cornerIds);
 			}
-			
-        	List <Corner> cornerList = displayApi.getMenuPageCorners(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId, previewKey, previewDate != null ? sf.parse(previewDate) : null, rd.getCornerIds(), rd.isExcludeSoldOut());
-        	for (Corner c : cornerList) {
-				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
-			}
-        	
-			result.put("cornersMap", cornersMap);
-        	result.put("cornerList", cornerList);
-	        
-	        return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		}
 
+		List <Corner> cornerList = displayApi.getMenuPageCorners(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId, previewKey, previewDate != null ? sf.parse(previewDate) : null, rd.getCornerIds(), rd.isExcludeSoldOut());
+		for (Corner c : cornerList) {
+			cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
+		}
+
+		result.put("cornersMap", cornersMap);
+		result.put("cornerList", cornerList);
+
+		return ResponseEntity.ok(result);
     }
 	
 	/**
@@ -177,35 +161,29 @@ public class DisplayRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/flaggedProdList")
-    @ResponseBody
     public ResponseEntity<?> flaggedProdList( RequestDisplay requestDisplay) {
         
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
-		try {
-			OnlineProdList onlineProdList
-				= displayApi.getFlaggedProdList(
-				requestDisplay.getFlags()
-				, false
-				, requestDisplay.getProdListUnit()
-				, requestDisplay.getProdSort()
-				, requestDisplay.getOffset()
-				, requestDisplay.getLimit()
-				, requestDisplay.getIncludeFilters()
-				, requestDisplay.getDisplayCateDepth()
-				, requestDisplay.getDisplayCate()
-				, requestDisplay.getBrand()
-				, requestDisplay.getFlag()
-				, requestDisplay.getAttr()
-				, requestDisplay.getPriceRange()
-			);
-			result.put("onlineProdList", onlineProdList);
+		OnlineProdList onlineProdList
+			= displayApi.getFlaggedProdList(
+			requestDisplay.getFlags()
+			, false
+			, requestDisplay.getProdListUnit()
+			, requestDisplay.getProdSort()
+			, requestDisplay.getOffset()
+			, requestDisplay.getLimit()
+			, requestDisplay.getIncludeFilters()
+			, requestDisplay.getDisplayCateDepth()
+			, requestDisplay.getDisplayCate()
+			, requestDisplay.getBrand()
+			, requestDisplay.getFlag()
+			, requestDisplay.getAttr()
+			, requestDisplay.getPriceRange()
+		);
+		result.put("onlineProdList", onlineProdList);
 
-			return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		return ResponseEntity.ok(result);
     }
 	
 	/**
@@ -214,19 +192,14 @@ public class DisplayRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/flaggedProdRankChanges")
-	@ResponseBody
 	public ResponseEntity<?> flaggedProdRankChanges( RequestDisplay requestDisplay) {
         
 		HashMap<String, Object> result = new HashMap<String, Object>();
         
-        try {
-        	List<FlaggedProdRankChange> flaggedProdRankChange = displayApi.getFlaggedProdRankChanges(requestDisplay.getRankFlag(), requestDisplay.getLimit());
-        	result.put("flaggedProdRankChange", flaggedProdRankChange);
-        	return ResponseEntity.ok(result);
-        } catch (Exception e) {
-        	result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		List<FlaggedProdRankChange> flaggedProdRankChange = displayApi.getFlaggedProdRankChanges(requestDisplay.getRankFlag(), requestDisplay.getLimit());
+		result.put("flaggedProdRankChange", flaggedProdRankChange);
+		return ResponseEntity.ok(result);
+
     }
 	
 	
@@ -236,21 +209,15 @@ public class DisplayRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/inPromoProdList")
-    @ResponseBody
     public ResponseEntity<?> inPromoProdList( RequestDisplay requestDisplay) {
         
 		HashMap<String, Object> result = new HashMap<String, Object>();
         
-        try {
-        	
-        	//OnlineProdList onlineProdList = displayApi.getInPromoProdList(getMemberSn(), requestDisplay.getPromoSn(), false, "OnlineProd", requestDisplay.getProdSort(), requestDisplay.getOffset(), requestDisplay.getLimit());
-        	//result.put("onlineProdList", onlineProdList);
+		//OnlineProdList onlineProdList = displayApi.getInPromoProdList(getMemberSn(), requestDisplay.getPromoSn(), false, "OnlineProd", requestDisplay.getProdSort(), requestDisplay.getOffset(), requestDisplay.getLimit());
+		//result.put("onlineProdList", onlineProdList);
 
-        	return ResponseEntity.ok(result);
-        } catch (Exception e) {
-        	result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		return ResponseEntity.ok(result);
+
     }
 	
 	/**
@@ -259,19 +226,14 @@ public class DisplayRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/downloadCoupons")
-    @ResponseBody
     public ResponseEntity<?> downloadCoupons( RequestDisplay requestDisplay) {
         
 		HashMap<String, Object> result = new HashMap<String, Object>();
-        
-        try {
-        	//result.put("onlineProdList", onlineProdList);
 
-        	return ResponseEntity.ok(result);
-        } catch (Exception e) {
-        	result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		//result.put("onlineProdList", onlineProdList);
+
+		return ResponseEntity.ok(result);
+
     }
 	
 	/**
@@ -280,21 +242,16 @@ public class DisplayRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/downloadCoupon")
-    @ResponseBody
     public ResponseEntity<?> downloadCoupon( RequestDisplay requestDisplay) {
         
 		HashMap<String, Object> result = new HashMap<String, Object>();
         
-        try {
-        	BooleanResult booleanResult = couponApi.registDownloadCoupon(requestDisplay.getCouponSn(), getMemberSn());
-        	
-        	result.put("result", booleanResult);
+		BooleanResult booleanResult = couponApi.registDownloadCoupon(requestDisplay.getCouponSn(), getMemberSn());
 
-        	return ResponseEntity.ok(result);
-        } catch (Exception e) {
-        	result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		result.put("result", booleanResult);
+
+		return ResponseEntity.ok(result);
+
     }
 	
 	/**
@@ -303,7 +260,6 @@ public class DisplayRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/pointExchangeableProdList")
-    @ResponseBody
     public ResponseEntity<?> pointExchangeableProdList( RequestDisplay requestDisplay) {
         
 		HashMap<String, Object> result = new HashMap<String, Object>();
@@ -322,30 +278,26 @@ public class DisplayRestController extends AbstractController {
 		, @Param("attr") String attr
 		, @Param("priceRange") String priceRange
 		*/
-		try {
-			OnlineProdList onlineProdList
-				= displayApi.getPointExchangeableProdList(
-				requestDisplay.getPointType()
-				, requestDisplay.getPointExch()
-				, false
-				, requestDisplay.getProdSort()
-				, requestDisplay.getOffset()
-				, requestDisplay.getLimit()
-				, requestDisplay.getIncludeFilters()
-				, requestDisplay.getDisplayCateDepth()
-				, requestDisplay.getDisplayCate()
-				, requestDisplay.getBrand()
-				, requestDisplay.getFlag()
-				, requestDisplay.getAttr()
-				, requestDisplay.getPriceRange()
-			);
-			result.put("onlineProdList", onlineProdList);
+		OnlineProdList onlineProdList
+			= displayApi.getPointExchangeableProdList(
+			requestDisplay.getPointType()
+			, requestDisplay.getPointExch()
+			, false
+			, requestDisplay.getProdSort()
+			, requestDisplay.getOffset()
+			, requestDisplay.getLimit()
+			, requestDisplay.getIncludeFilters()
+			, requestDisplay.getDisplayCateDepth()
+			, requestDisplay.getDisplayCate()
+			, requestDisplay.getBrand()
+			, requestDisplay.getFlag()
+			, requestDisplay.getAttr()
+			, requestDisplay.getPriceRange()
+		);
+		result.put("onlineProdList", onlineProdList);
 
-			return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		return ResponseEntity.ok(result);
+
     }
 	
 	/**
@@ -354,25 +306,20 @@ public class DisplayRestController extends AbstractController {
 	 * @return giftList : { ProductSummaryList : data }
 	 */
 	@RequestMapping("/pointExchangeableGiftList")
-    @ResponseBody
     public ResponseEntity<?> pointExchangeableGiftList( RequestDisplay requestDisplay) {
         
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		try {
-			ProductSummaryList giftList
-				= displayApi.getPointExchangeableGiftList(
-						  requestDisplay.getPointType()
-						, requestDisplay.isExcludeSoldOut()
-						, requestDisplay.getOffset()
-						, requestDisplay.getLimit()
-						);
-			result.put("giftList", giftList);
+		ProductSummaryList giftList
+			= displayApi.getPointExchangeableGiftList(
+					  requestDisplay.getPointType()
+					, requestDisplay.isExcludeSoldOut()
+					, requestDisplay.getOffset()
+					, requestDisplay.getLimit()
+					);
+		result.put("giftList", giftList);
 
-			return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		return ResponseEntity.ok(result);
+
     }
 	
 	/**
@@ -381,7 +328,6 @@ public class DisplayRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/inSameTimePurProdGrp")
-    @ResponseBody
     public ResponseEntity<?> inSameTimePurProdGrp( RequestDisplay requestDisplay) {
         
 		HashMap<String, Object> result = new HashMap<String, Object>();
@@ -401,29 +347,24 @@ public class DisplayRestController extends AbstractController {
 		, @Param("priceRange") String priceRange
 		*/
 
-		try {
 
-			OnlineProdListStp onlineProdList
-				= displayApi.getInSameTimePurProdGrpProdList(
-				requestDisplay.getSameTimePurProdGrpSn()
-				, false
-				, requestDisplay.getOffset()
-				, requestDisplay.getLimit()
-				, requestDisplay.getIncludeFilters()
-				, requestDisplay.getDisplayCateDepth()
-				, requestDisplay.getDisplayCate()
-				, requestDisplay.getBrand()
-				, requestDisplay.getFlag()
-				, requestDisplay.getAttr()
-				, requestDisplay.getPriceRange()
-			);
-			result.put("onlineProdList", onlineProdList);
+		OnlineProdListStp onlineProdList
+			= displayApi.getInSameTimePurProdGrpProdList(
+			requestDisplay.getSameTimePurProdGrpSn()
+			, false
+			, requestDisplay.getOffset()
+			, requestDisplay.getLimit()
+			, requestDisplay.getIncludeFilters()
+			, requestDisplay.getDisplayCateDepth()
+			, requestDisplay.getDisplayCate()
+			, requestDisplay.getBrand()
+			, requestDisplay.getFlag()
+			, requestDisplay.getAttr()
+			, requestDisplay.getPriceRange()
+		);
+		result.put("onlineProdList", onlineProdList);
 
-			return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		return ResponseEntity.ok(result);
     }
 	
 	/**
@@ -432,7 +373,6 @@ public class DisplayRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/inPlanDisplayProdGrp")
-    @ResponseBody
     public ResponseEntity<?> inPlanDisplayProdGrp( RequestDisplay requestDisplay) {
         
 		HashMap<String, Object> result = new HashMap<String, Object>();
@@ -451,28 +391,24 @@ public class DisplayRestController extends AbstractController {
 		, @Param("priceRange") String priceRange
 		*/
 
-		try {
-			OnlineProdList onlineProdList
-				= displayApi.getInPlanDisplayProdGrpProdList(
-				requestDisplay.getPlanDisplayProdGrpSn()
-				, false
-				, requestDisplay.getOffset()
-				, requestDisplay.getLimit()
-				, requestDisplay.getIncludeFilters()
-				, requestDisplay.getDisplayCateDepth()
-				, requestDisplay.getDisplayCate()
-				, requestDisplay.getBrand()
-				, requestDisplay.getFlag()
-				, requestDisplay.getAttr()
-				, requestDisplay.getPriceRange()
-			);
-			result.put("onlineProdList", onlineProdList);
+		OnlineProdList onlineProdList
+			= displayApi.getInPlanDisplayProdGrpProdList(
+			requestDisplay.getPlanDisplayProdGrpSn()
+			, false
+			, requestDisplay.getOffset()
+			, requestDisplay.getLimit()
+			, requestDisplay.getIncludeFilters()
+			, requestDisplay.getDisplayCateDepth()
+			, requestDisplay.getDisplayCate()
+			, requestDisplay.getBrand()
+			, requestDisplay.getFlag()
+			, requestDisplay.getAttr()
+			, requestDisplay.getPriceRange()
+		);
+		result.put("onlineProdList", onlineProdList);
 
-			return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		return ResponseEntity.ok(result);
+
     }
 	
 	/**
@@ -481,7 +417,6 @@ public class DisplayRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/articleRelated")
-    @ResponseBody
     public ResponseEntity<?> articleRelated( RequestDisplay requestDisplay) {
         
 		HashMap<String, Object> result = new HashMap<String, Object>();
@@ -498,29 +433,25 @@ public class DisplayRestController extends AbstractController {
 		, @Param("attr") String attr
 		, @Param("priceRange") String priceRange
 		*/
-		try {
 
-			OnlineProdList onlineProdList
-				= displayApi.getArticleRelatedProdList(
-				requestDisplay.getArticleSn()
-				, false
-				, requestDisplay.getOffset()
-				, requestDisplay.getLimit()
-				, requestDisplay.getIncludeFilters()
-				, requestDisplay.getDisplayCateDepth()
-				, requestDisplay.getDisplayCate()
-				, requestDisplay.getBrand()
-				, requestDisplay.getFlag()
-				, requestDisplay.getAttr()
-				, requestDisplay.getPriceRange()
-			);
-			result.put("onlineProdList", onlineProdList);
+		OnlineProdList onlineProdList
+			= displayApi.getArticleRelatedProdList(
+			requestDisplay.getArticleSn()
+			, false
+			, requestDisplay.getOffset()
+			, requestDisplay.getLimit()
+			, requestDisplay.getIncludeFilters()
+			, requestDisplay.getDisplayCateDepth()
+			, requestDisplay.getDisplayCate()
+			, requestDisplay.getBrand()
+			, requestDisplay.getFlag()
+			, requestDisplay.getAttr()
+			, requestDisplay.getPriceRange()
+		);
+		result.put("onlineProdList", onlineProdList);
 
-			return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		return ResponseEntity.ok(result);
+
     }
 	
 	/**
@@ -529,7 +460,6 @@ public class DisplayRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/boughtTogether")
-    @ResponseBody
     public ResponseEntity<?> boughtTogether( RequestDisplay requestDisplay) {
         
 		HashMap<String, Object> result = new HashMap<String, Object>();
@@ -549,35 +479,30 @@ public class DisplayRestController extends AbstractController {
 		, @Param("attr") String attr
 		, @Param("priceRange") String priceRange
         */
-		try {
-			/**
-			 * 화면와 무관하게 검색엔진쪽 조회할 listSize 설정.
-			 */
-			Integer totalListSize = 20;
-			OnlineProdList onlineProdList
-				= displayApi.getBoughtTogetherProdList(
-				requestDisplay.getProdSnList()
-				, totalListSize
-				, false
-				, "OnlineProd"
-				, requestDisplay.getProdSort()
-				, requestDisplay.getOffset()
-				, requestDisplay.getLimit()
-				, requestDisplay.getIncludeFilters()
-				, requestDisplay.getDisplayCateDepth()
-				, requestDisplay.getDisplayCate()
-				, requestDisplay.getBrand()
-				, requestDisplay.getFlag()
-				, requestDisplay.getAttr()
-				, requestDisplay.getPriceRange()
-			);
-			result.put("onlineProdList", onlineProdList);
+		/**
+		 * 화면와 무관하게 검색엔진쪽 조회할 listSize 설정.
+		 */
+		Integer totalListSize = 20;
+		OnlineProdList onlineProdList
+			= displayApi.getBoughtTogetherProdList(
+			requestDisplay.getProdSnList()
+			, totalListSize
+			, false
+			, "OnlineProd"
+			, requestDisplay.getProdSort()
+			, requestDisplay.getOffset()
+			, requestDisplay.getLimit()
+			, requestDisplay.getIncludeFilters()
+			, requestDisplay.getDisplayCateDepth()
+			, requestDisplay.getDisplayCate()
+			, requestDisplay.getBrand()
+			, requestDisplay.getFlag()
+			, requestDisplay.getAttr()
+			, requestDisplay.getPriceRange()
+		);
+		result.put("onlineProdList", onlineProdList);
 
-			return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		return ResponseEntity.ok(result);
     }
 	
 	/**
@@ -586,19 +511,14 @@ public class DisplayRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/deleteShoppingMarksAll")
-    @ResponseBody
     public ResponseEntity<?> deleteShoppingMarksAll() {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
-		try {
-			ShoppingMarkDeleteResult shoppingMarkDeleteResult = shoppingmarkApi.deleteShoppingHistoriesByMember(getMemberSn());
-			result.put("shoppingMarkDeleteResult", shoppingMarkDeleteResult);
-			
-	        return ResponseEntity.ok(result);
-		 } catch (Exception e) {
-			 result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-         }
+		ShoppingMarkDeleteResult shoppingMarkDeleteResult = shoppingmarkApi.deleteShoppingHistoriesByMember(getMemberSn());
+		result.put("shoppingMarkDeleteResult", shoppingMarkDeleteResult);
+
+		return ResponseEntity.ok(result);
+
     }
 	
 	/**
@@ -607,7 +527,6 @@ public class DisplayRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/marketingKeyword")
-    @ResponseBody
     public ResponseEntity<?> marketingKeyword() {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
@@ -617,15 +536,12 @@ public class DisplayRestController extends AbstractController {
     		memberOnlyYn = "Y";
     	}
     	
-		try {
-        	List <KeywordLinkInfo> keywordLinkList = keywordPopupApi.getKeywordLink( memberOnlyYn, getMemberSn());
-            result.put("keywordLinkList", keywordLinkList);
-	        
-	        return ResponseEntity.ok(result);
-		 } catch (Exception e) {
-			 result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-         }
+		// FIXME offset, limit 값 임의지정함.
+		List <KeywordLinkInfo> keywordLinkList = keywordPopupApi.getKeywordLink( memberOnlyYn, getMemberSn(), 0, 10);
+		result.put("keywordLinkList", keywordLinkList);
+
+		return ResponseEntity.ok(result);
+
     }
 	
 	/**
@@ -634,22 +550,17 @@ public class DisplayRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/shoppingHistoryList")
-	@ResponseBody
 	public ResponseEntity<?> shoppingHistoryList() {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
-		try {
-			DateFormat dateFormat = new SimpleDateFormat("Z");
-			String timeZone = dateFormat.format(new Date());
+		DateFormat dateFormat = new SimpleDateFormat("Z");
+		String timeZone = dateFormat.format(new Date());
 
-			List <ShoppingMarkByDateSearchResult> shoppingHistoryList = shoppingmarkApi.getShoppingHistoriesByDate(getMemberSn(), APConstant.EH_DISPLAY_MENU_SET_ID, 3, 100, timeZone);
-			result.put("shoppingHistoryList", shoppingHistoryList);
-			
-			return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		List <ShoppingMarkByDateSearchResult> shoppingHistoryList = shoppingmarkApi.getShoppingHistoriesByDate(getMemberSn(), APConstant.EH_DISPLAY_MENU_SET_ID, 3, 100, timeZone);
+		result.put("shoppingHistoryList", shoppingHistoryList);
+
+		return ResponseEntity.ok(result);
+
 	}
 	
 	/**
@@ -658,42 +569,37 @@ public class DisplayRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping({"/categoryTypeImgList", "/categoryTypeImgList/preview"})
-	@ResponseBody
-	public ResponseEntity<?> categoryTypeImgList(String previewKey, String previewDate) {
+	public ResponseEntity<?> categoryTypeImgList(String previewKey, String previewDate) throws ParseException {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
-		try {
-			Map<String, List<CornerContentsSet>> cornersMap = new HashMap<String, List<CornerContentsSet>>();
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-			
-			String cornerIds = "M02_prod_types_p.1";
-			List<Corner> corners = displayApi.getMenuPageCorners(APConstant.EH_DISPLAY_MENU_SET_ID, "prod_types", previewKey, previewDate != null ? sf.parse(previewDate) : null, cornerIds, false);
-        	
-        	for (Corner c : corners) {
-				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
-			}
-        	
-        	cornerIds = "M02_prod_lines_p.1,M02_prod_lines_p.2";
-        	corners = displayApi.getMenuPageCorners(APConstant.EH_DISPLAY_MENU_SET_ID, "prod_lines", previewKey, previewDate != null ? sf.parse(previewDate) : null, cornerIds, false);
-        	
-        	for (Corner c : corners) {
-				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
-			}
-        	
-        	cornerIds = "M02_prod_thema_p.1,M02_prod_thema_p.2";
-        	corners = displayApi.getMenuPageCorners(APConstant.EH_DISPLAY_MENU_SET_ID, "prod_thema", previewKey, previewDate != null ? sf.parse(previewDate) : null, cornerIds, false);
-        	
-        	for (Corner c : corners) {
-				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
-			}
-        	
-			result.put("cornersMap", cornersMap);
-			
-			return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		Map<String, List<CornerContentsSet>> cornersMap = new HashMap<String, List<CornerContentsSet>>();
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+
+		String cornerIds = "M02_prod_types_p.1";
+		List<Corner> corners = displayApi.getMenuPageCorners(APConstant.EH_DISPLAY_MENU_SET_ID, "prod_types", previewKey, previewDate != null ? sf.parse(previewDate) : null, cornerIds, false);
+
+		for (Corner c : corners) {
+			cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
 		}
+
+		cornerIds = "M02_prod_lines_p.1,M02_prod_lines_p.2";
+		corners = displayApi.getMenuPageCorners(APConstant.EH_DISPLAY_MENU_SET_ID, "prod_lines", previewKey, previewDate != null ? sf.parse(previewDate) : null, cornerIds, false);
+
+		for (Corner c : corners) {
+			cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
+		}
+
+		cornerIds = "M02_prod_thema_p.1,M02_prod_thema_p.2";
+		corners = displayApi.getMenuPageCorners(APConstant.EH_DISPLAY_MENU_SET_ID, "prod_thema", previewKey, previewDate != null ? sf.parse(previewDate) : null, cornerIds, false);
+
+		for (Corner c : corners) {
+			cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
+		}
+
+		result.put("cornersMap", cornersMap);
+
+		return ResponseEntity.ok(result);
+
 	}
 	
 	/**
@@ -701,21 +607,15 @@ public class DisplayRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping({"/mainPopups", "/mainPopups/preview"})
-	@ResponseBody
 	public ResponseEntity<?> mainPopups() {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
-		try {
-			
-			List<PopupInfo> popupList = keywordPopupApi.getPopups();
-			
-			result.put("popupList", popupList);
-			
-			return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-		}
+		List<PopupInfo> popupList = keywordPopupApi.getPopups();
+
+		result.put("popupList", popupList);
+
+		return ResponseEntity.ok(result);
+
 	
 	}
 	

@@ -16,9 +16,9 @@
 
 			//포장/쇼핑백 화면 그리기
 			function boxInit() {
-				var ordOtfExList = /*[[${ordOtfExList}]]*/ '0';	// 주문배송지시
+				var ordOtfExList = /*[[${ordOtfExList}]]*/ null;	// 주문배송지시
 				var finalPamtPcur = /*[[${ordEx.ordHistEx.finalPamtPcur}]]*/ '0'; // 최종결제금액
-				if (ordOtfExList.length > 0) {
+				if (ordOtfExList != null && ordOtfExList.length > 0) {
 					var html = AP.common.getTemplate( 'order.gift-packing-qty-info', {
 						list: ordOtfExList
 						, finalPamtPcur: finalPamtPcur
@@ -39,7 +39,7 @@
 					$('[data-flag=' + id + ']').prop('disabled', true);
 					$('#' + id + '_cnt').val(0);
 					$('#' + id + '_sum').text(' 추가 0원');
-
+					boxBagQtyChange(coSn, giftPackingSn, 0);
 				}
 			}
 
@@ -67,6 +67,8 @@
 			/* 포장/쇼핑백 금액 계산 */
 			var ordSn = /*[[${ordEx.ordSn}]]*/ '0';
 			function boxBagQtyChange(coSn, giftPackingSn, cnt) {
+				$('#packingLoading').show();
+
 				AP.api.ordReceptChangeBag({}, {
 					ordSn: ordSn,
 					coSn : coSn,
@@ -100,8 +102,14 @@
 						}
 					}
 				}).fail(function (e) {
-					AP.modal.alert("[ajax.fail]실패");
+					//실패
+					if (xhr.errorCode == 0) {
+						AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+					} else {
+						AP.modal.alert(xhr.errorMessage);
+					}
 				}).always(function () {
+					$('#packingLoading').hide();
 				});
 			}
 		</script>

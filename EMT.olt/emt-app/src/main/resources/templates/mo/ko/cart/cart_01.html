@@ -110,8 +110,22 @@
 
 	<script th:inline="javascript">
 	$( document ).ready(function() {
-		/* spinner 적용 */
 		$( '.ui_spinner' ).spinner();
+
+		$('#onlinePrdCheck').prop('checked', $( '[name=chkBox]' ).length == $( '[name=chkBox]:checked' ).length);
+		$('#takeoutPrdCheck').prop('checked', $( '[name=takeoutChkBox]' ).length == $( '[name=takeoutChkBox]:checked' ).length);
+
+		/* 주문서 진입 실패시 에러처리 */
+		var ordErr = /*[[${ordErr}]]*/ null;
+		if(ordErr != null){
+			var result = ordErr.result,
+				errorCode = ordErr.errorCode,
+				errorMessage = ordErr.errorMessage,
+				errorAdditional = ordErr.errorAdditional;
+			if (!result) {
+				AP.modal.alert(errorMessage + '(' + errorCode + ')<br/>' + errorAdditional.detail);
+			}
+		}
 	});
 
 	var pageLimit = 5;
@@ -140,6 +154,8 @@
 	var cartSn = cartEx.cartSn;
 
 	var xhr;
+
+	var takeoutModal ;
 
 	/* 온라인 체크시 */
 	$('#onlinePrdCheck').on('click', function(e) {
@@ -175,6 +191,22 @@
 
 	/* 테이크아웃 선택매장정보 */
 	setStoreSelect();
+
+	/* 주문서 진입 실패시 에러처리 */
+	getMessageResult();
+
+	/* 주문서 진입 실패시 에러처리 */
+	function getMessageResult() {
+		var result = /*[[${result}]]*/;
+		var errorCode = /*[[${errorCode}]]*/;
+		var errorMessage = /*[[${errorMessage}]]*/;
+		var errorAdditional = /*[[${errorAdditional}]]*/;
+
+		if(result == false){
+			AP.modal.alert(errorMessage + '(' + errorCode + ') : ' + errorAdditional);
+			return false;
+		}
+	}
 
 	/* 온라인상품 */
 	function setOnlineProd() {
@@ -376,7 +408,7 @@
 	}
 
 	/* 테이크아웃 매장레이어 */
-	var takeoutModal ;
+
 	function fnLayerOpenStore() {
 		takeoutModal = AP.modal.full({
 			contents: {
@@ -846,26 +878,33 @@
 					if(prodSnVal == ''){
 						AP.modal.alert("변경하실 옵션을 선택하세요.");
 					}else{
-						AP.api.modifyCartProd({}, {
-							cartSn : cartSn,
-							cartProdSn : cartProdSn,
-							prodSn : prodSnVal,
-							cartProdQty : cartProdQty,
-							storePickupYn : storePickupYn,
-							modifyType : 'O' // option type setting..
-						}).done(function (data) {
-							if (data.data) {
-								cartEx = data.data;
-								setOnlineProd();
-								setStoreProd();
-								setCalculationResult();
-								setProdCnt();
-								modal.close();
+						if (xhr != null){
+							xhr.abort();
+						}
+
+						var indexed_array = {};
+						indexed_array['cartSn'] = cartSn;
+						indexed_array['cartProdSn'] = cartProdSn;
+						indexed_array['prodSn'] = prodSnVal;
+						indexed_array['cartProdQty'] = cartProdQty;
+						indexed_array['storePickupYn'] = storePickupYn;
+						indexed_array['modifyType'] = "O";
+
+						xhr = $.ajax({
+							type: "PUT",
+							url: "/cart/modifyCartProd",
+							data: indexed_array,
+							error : function(xhr, textStatus, errorThrown) {},
+							success: function(data){
+								if (data.data) {
+									cartEx = data.data;
+									setOnlineProd();
+									setStoreProd();
+									setCalculationResult();
+									setProdCnt();
+									modal.close();
+								}
 							}
-						}).fail(function (e) {
-							AP.modal.alert("[ajax.fail]실패");
-							modal.close();
-						}).always(function () {
 						});
 					}
 				});
@@ -1172,49 +1211,20 @@
 		indexed_array['activityPointExchYn'] = activityPointExchYn;
 		indexed_array['modifyType'] = "Q";
 
-		xhr = $.ajax({
-			type: "PUT",
-			url: "/cart/modifyCartProd",
-			data: indexed_array,
-			error : function(xhr, textStatus, errorThrown) {},
-			success: function(data){
-				if (data.data) {
-					cartEx = data.data;
-					setOnlineProd();
-					setStoreProd();
-					setCalculationResult();
-					setProdCnt();
-				}
-			}
-		});
-	}
+		var cartBulkIncludedProdSn	= $('.cart_item_scroll').find("[name='bulkPrdInfo_" + cartProdSn + "']").attr('cartBulkIncludedProdSn');
+		var bulkDcIncludedProdGrpSn	= $('.cart_item_scroll').find("[name='bulkPrdInfo_" + cartProdSn + "']").attr('bulkDcIncludedProdGrpSn');
+		var includedProdSn			= $('.cart_item_scroll').find("[name='bulkPrdInfo_" + cartProdSn + "']").attr('includedProdSn');
+		var includedProdQty			= $('.cart_item_scroll').find("[name='bulkPrdInfo_" + cartProdSn + "']").attr('includedProdQty');
 
-	/* 묶음상품 주문수량 수정 */
-	function bulkProdQtyOperate(num, cartSn, cartProdSn, prodSn, storePickupYn, storeSn,
-								cartBulkIncludedProdSn, bulkDcIncludedProdGrpSn, includedProdSn, includedProdQty, operate) {
-
-		var ordQty = parseInt($(num).closest("div").find("input[name=cartProdQty]").val());
-		if(operate == '+'){
-			ordQty++;
+		if(cartBulkIncludedProdSn != undefined
+			&& bulkDcIncludedProdGrpSn != undefined
+			&& includedProdSn != undefined
+			&& includedProdQty != undefined){
+			indexed_array['cartBulkIncludedProdSn'] = cartBulkIncludedProdSn;
+			indexed_array['bulkDcIncludedProdGrpSn'] = bulkDcIncludedProdGrpSn;
+			indexed_array['includedProdSn'] = includedProdSn;
+			indexed_array['includedProdQty'] = includedProdQty;
 		}
-		else if(operate == '-'){
-			ordQty--;
-		}
-		if (xhr != null){
-			xhr.abort();
-		}
-		var indexed_array = {};
-		indexed_array['cartSn'] = cartSn;
-		indexed_array['cartProdSn'] = cartProdSn;
-		indexed_array['prodSn'] = prodSn;
-		indexed_array['cartProdQty'] = ordQty;
-		indexed_array['storePickupYn'] = storePickupYn;
-		indexed_array['storeSn'] = storeSn;
-		indexed_array['cartBulkIncludedProdSn'] = cartBulkIncludedProdSn;
-		indexed_array['bulkDcIncludedProdGrpSn'] = bulkDcIncludedProdGrpSn;
-		indexed_array['includedProdSn'] = includedProdSn;
-		indexed_array['includedProdQty'] = includedProdQty;
-		indexed_array['modifyType'] = "Q";
 
 		xhr = $.ajax({
 			type: "PUT",

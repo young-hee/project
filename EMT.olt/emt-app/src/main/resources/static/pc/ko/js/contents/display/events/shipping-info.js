@@ -13,15 +13,30 @@
 
 		/** =============== Public Methods ================ */
 		open: function ( result ) {
+			 
 			var productName = '';
 			for ( var i = 0; i < result.awards.length; ++i ) {
-				productName += result.awards[i].prodName;
+				if(result.awards[i].awardTgtCode !== null){ // 진주알 or 뷰티포인트 
+					if(result.awards[i].pointTypeCode === 'ActivityPoint'){ // 진주알
+						productName += ('진주알 ' + result.awards[i].savingPoint+' 알'); 
+					}
+					if(result.awards[i].pointTypeCode === 'BeautyPoint'){ // 뷰티포인트
+						productName += (result.awards[i].pointTypeName + result.awards[i].savingPoint+' 점'); 
+					}
+				}
+				if(result.awards[i].awardTgtCode === 'Coupon'){ // 쿠폰
+					productName += result.awards[i].couponName; 
+				}
+				if(result.awards[i].prodName !== null){ // 상품 : 상품값에 진주알이나, 뷰티포인트, 쿠폰일때 null 표기 방지
+					productName += result.awards[i].prodName;
+				}
 				if ( i != result.awards.length - 1 ) {
 					productName += ', ';
 				}
 			}
 			result.productName = productName;
 			result.memberSn = result.member.memberSn;
+			
 			this._member = result.member;
 
 			this._modal = AP.modal.info({
@@ -72,8 +87,17 @@
 			// 회원정보 불러오기
 			this._$modal.find( 'input.load_info' ).on( 'change', function (e) {
 				if ( $( e.target ).prop( 'checked' ) ){
-					// this._getMemberInfo( this._member );
+				
 					this._getMemberInfo( this._member );
+				}else {
+					this._$modal.find( 'input[name="name"]' ).val( '' );
+					this._$modal.find( 'input[name="telNo1"]' ).val( '' );
+					this._$modal.find( 'input[name="post_code"]' ).val( '' );
+					this._$modal.find( 'input[name="address_keyword"]' ).val( '' );
+					this._$modal.find( 'input[name="address_first"]' ).val( '');
+					this._$modal.find( 'input[name="address_last"]' ).val('');
+					
+					this._$modal.find( '.ui_table input' ).placeholder( 'updated' );
 				}
 			}.bind( this ));
 
@@ -123,24 +147,21 @@
 
 		_getMemberInfo: function ( member ) {
 			AP.api.regularEventShipAddress({}, { memberSn: member.memberSn }).done(function ( result ) {
+			  
 				var shipInfo = null;
-				for ( var i = 0; i < result.data.length; ++i ) {
-					if ( result.data[i]['repShipAddressYn'] === 'Y' ) {
-						shipInfo = result.data[i];
-					}
-				}
+					shipInfo = result.member;
 
-				var name = $.trim( shipInfo['addresseeName']['name1'] ),
-					phoneNo = $.trim( shipInfo['phoneNo1']['phoneNo'] ),
-					zipCode = $.trim( shipInfo['addresseeAddress']['zipCode'] ),
-					address1 = $.trim( shipInfo['addresseeAddress']['address1'] ),
-					address2 = $.trim( shipInfo['addresseeAddress']['address2'] );
+				var name = $.trim( shipInfo.name.name1 ),
+					phoneNo = $.trim( shipInfo.phoneNo1.phoneNo ),
+					zipCode = $.trim( shipInfo.address.zipCode ),
+					address1 = $.trim( shipInfo.address.address1 ),
+					address2 = $.trim( shipInfo.address.address2 );
 
 				this._$modal.find( 'input[name="name"]' ).val( name );
 				this._$modal.find( 'input[name="telNo1"]' ).val( phoneNo );
 				this._$modal.find( 'input[name="post_code"]' ).val( zipCode );
-				this._$modal.find( 'input[name="address_first"]' ).val( address1 );
-				this._$modal.find( 'input[name="address_last"]' ).val( address2 );
+				this._$modal.find( 'input[name="address_first"]' ).val( ( zipCode ) ? (zipCode + ' ' + address1) : '');
+				this._$modal.find( 'input[name="address_last"]' ).val( ( zipCode ) ? address2 : '');
 
 				this._$modal.find( '.ui_table input' ).placeholder( 'updated' );
 

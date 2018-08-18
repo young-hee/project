@@ -251,7 +251,7 @@
 	            } else if (xhr.errorCode == 'EAPI001') {
 	                var contents = new Object();
 	                contents.title = "인증실패";
-	                contents.contents = data.message;
+	                contents.contents = xhr.errorMessage;
 	                contents.confirmLabel = "확인";
 	                AP.modal.info(contents).addListener('modal-close', function(e) {});
 	            } else {
@@ -830,7 +830,7 @@
 	}
 
 	function naverLogin() {
-	    window.open('https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=[[${@environment.getProperty('naver.key')}]]&state=[[${state}]]&redirect_uri=' + location.href.replace('login', 'navercallback').split('#')[0], 'naverloginpop', 'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550');
+	    window.open('https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=[[${@environment.getProperty('naver.key')}]]&state=[[${state}]]&redirect_uri=' + location.href.replace('login', 'navercallback').split('#')[0], 'naverloginpop', 'titlebar=1, resizable=1, scrollbars=yes, width=750, height=550');
 	    return false;
 	}
 

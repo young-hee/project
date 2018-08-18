@@ -30,7 +30,7 @@ this["AP"]["handlebars"]["my"]["order"]["orderList"] = Handlebars.template({"1":
     + "				</td>\n				<td class=\"align_left\">\n					<div class=\"flag\">\n						<span>온라인 주문</span>\n					</div>\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depths[1] != null ? depths[1].type : depths[1]),"==","online",{"name":"xif","hash":{},"fn":container.program(13, data, 0, blockParams, depths),"inverse":container.program(18, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "						"
-    + alias3(container.lambda(((stack1 = (depth0 != null ? depth0.onlineOrdProdInfo : depth0)) != null ? stack1.prodNameRlang : stack1), depth0))
+    + alias3(container.lambda(((stack1 = (depth0 != null ? depth0.onlineOrdProdInfo : depth0)) != null ? stack1.onlineProdNameRlang : stack1), depth0))
     + " "
     + alias3((helpers.checkCnt || (depth0 && depth0.checkCnt) || alias2).call(alias1,"cnt",((stack1 = (depth0 != null ? depth0.onlineOrdProdInfo : depth0)) != null ? stack1.ordProdCnt : stack1),{"name":"checkCnt","hash":{},"data":data}))
     + "\n					</a>\n				</td>\n"
@@ -48,27 +48,29 @@ this["AP"]["handlebars"]["my"]["order"]["orderList"] = Handlebars.template({"1":
 },"5":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "							<a href=\"/my/page/claim/cancel/"
+  return "							<a href=\"javascript:;\" onclick=\"showDetailView('claim/cancel', '"
     + alias2(alias1((depth0 != null ? depth0.ordHistNo : depth0), depth0))
-    + "\" class=\"order_number_link\">"
+    + "')\" class=\"order_number_link\">"
     + alias2(alias1((depth0 != null ? depth0.ordNo : depth0), depth0))
     + "</a>\n";
 },"7":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "							<a href=\"/my/page/order/detail/"
+  return "							<a href=\"javascript:;\" onclick=\"showDetailView('order/detail', '"
     + alias2(alias1((depth0 != null ? depth0.ordNo : depth0), depth0))
-    + "\" class=\"order_number_link\">"
+    + "')\" class=\"order_number_link\">"
     + alias2(alias1((depth0 != null ? depth0.ordNo : depth0), depth0))
     + "</a>\n";
 },"9":function(container,depth0,helpers,partials,data) {
-    return "							<button class=\"btn_sm_neutral\" type=\"button\" onclick=\"writeReview()\" id=\"b_review\">구매 리뷰 쓰기</button>\n";
+    return "							<button class=\"btn_sm_neutral\" type=\"button\" onclick=\"writeReview('"
+    + container.escapeExpression(container.lambda((depth0 != null ? depth0.ordNo : depth0), depth0))
+    + "')\" id=\"b_review\">구매 리뷰 쓰기</button>\n";
 },"11":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "						<a href=\"/my/page/order/cashReceipts/"
+  return "						<a href=\"javascript:;\" onclick=\"showDetailView('order/cashReceipts', '"
     + alias2(alias1((depth0 != null ? depth0.ordNo : depth0), depth0))
-    + "\" class=\"order_number_link\">"
+    + "')\" class=\"order_number_link\">"
     + alias2(alias1((depth0 != null ? depth0.ordNo : depth0), depth0))
     + "</a>\n";
 },"13":function(container,depth0,helpers,partials,data) {
@@ -76,17 +78,17 @@ this["AP"]["handlebars"]["my"]["order"]["orderList"] = Handlebars.template({"1":
 
   return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.onlineOrdProdInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),"===","OrdAllCancel",{"name":"xif","hash":{},"fn":container.program(14, data, 0),"inverse":container.program(16, data, 0),"data":data})) != null ? stack1 : "");
 },"14":function(container,depth0,helpers,partials,data) {
-    return "							<a href=\"/my/page/claim/cancel/"
+    return "							<a href=\"javascript:;\" onclick=\"showDetailView('claim/cancel', '"
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.ordHistNo : depth0), depth0))
-    + "\">\n";
+    + "')\">\n";
 },"16":function(container,depth0,helpers,partials,data) {
-    return "							<a href=\"/my/page/order/detail/"
+    return "							<a href=\"javascript:;\" onclick=\"showDetailView('order/detail', '"
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.ordNo : depth0), depth0))
-    + "\">\n";
+    + "')\">\n";
 },"18":function(container,depth0,helpers,partials,data) {
-    return "						<a href=\"/my/page/order/cashReceipts/"
+    return "						<a href=\"javascript:;\" onclick=\"showDetailView('order/cashReceipts', '"
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.ordNo : depth0), depth0))
-    + "\">\n";
+    + "')\">\n";
 },"20":function(container,depth0,helpers,partials,data) {
     return "					<td>가상계좌</td>\n";
 },"22":function(container,depth0,helpers,partials,data,blockParams,depths) {
@@ -123,9 +125,9 @@ this["AP"]["handlebars"]["my"]["order"]["orderList"] = Handlebars.template({"1":
 
   return "							<!-- "
     + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || helpers.helperMissing).call(alias1,((stack1 = (depth0 != null ? depth0.onlineOrdProdInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),"PartialCancel",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(29, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + " -->\n							<button class=\"btn_sm_form\" type=\"button\" onclick=\"javascript:location.href='/my/page/order/cancel/"
+    + " -->\n							<button class=\"btn_sm_form\" type=\"button\" onclick=\"showDetailView('order/cancel', '"
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.ordNo : depth0), depth0))
-    + "'\">주문 취소</button>\n";
+    + "')\">주문 취소</button>\n";
 },"29":function(container,depth0,helpers,partials,data) {
     return "\n								<p>(부분취소)</p>\n							";
 },"31":function(container,depth0,helpers,partials,data) {
@@ -133,11 +135,11 @@ this["AP"]["handlebars"]["my"]["order"]["orderList"] = Handlebars.template({"1":
 },"33":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "							<button class=\"btn_sm_form\" type=\"button\" onclick=\"javascript:location.href='/my/page/order/return/"
+  return "							<button class=\"btn_sm_form\" type=\"button\" onclick=\"showDetailView('order/return', '"
     + alias2(alias1((depth0 != null ? depth0.ordNo : depth0), depth0))
-    + "'\">반품신청</button>\n							<button class=\"btn_sm_form\" type=\"button\" onclick=\"javascript:location.href='/my/page/order/exchange/"
+    + "')\">반품신청</button>\n							<button class=\"btn_sm_form\" type=\"button\" onclick=\"showDetailView('order/exchange', '"
     + alias2(alias1((depth0 != null ? depth0.ordNo : depth0), depth0))
-    + "'\">교환신청</button>\n";
+    + "')\">교환신청</button>\n";
 },"35":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
@@ -146,7 +148,7 @@ this["AP"]["handlebars"]["my"]["order"]["orderList"] = Handlebars.template({"1":
     + "				<td class=\"align_left\">\n					<div class=\"flag\">\n						<span>테이크아웃</span>\n					</div>\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depths[1] != null ? depths[1].type : depths[1]),"==","online",{"name":"xif","hash":{},"fn":container.program(13, data, 0, blockParams, depths),"inverse":container.program(18, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "						"
-    + alias3(container.lambda(((stack1 = (depth0 != null ? depth0.storePickupOrdProdInfo : depth0)) != null ? stack1.prodNameRlang : stack1), depth0))
+    + alias3(container.lambda(((stack1 = (depth0 != null ? depth0.storePickupOrdProdInfo : depth0)) != null ? stack1.onlineProdNameRlang : stack1), depth0))
     + " "
     + alias3((helpers.checkCnt || (depth0 && depth0.checkCnt) || alias2).call(alias1,"cnt",((stack1 = (depth0 != null ? depth0.storePickupOrdProdInfo : depth0)) != null ? stack1.ordProdCnt : stack1),{"name":"checkCnt","hash":{},"data":data}))
     + "\n					</a>\n				</td>\n"
@@ -172,27 +174,29 @@ this["AP"]["handlebars"]["my"]["order"]["orderList"] = Handlebars.template({"1":
 },"38":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "								<a href=\"/my/page/claim/cancel/"
+  return "								<a href=\"javascript:;\" onclick=\"showDetailView('claim/cancel', '"
     + alias2(alias1((depth0 != null ? depth0.ordHistNo : depth0), depth0))
-    + "\" class=\"order_number_link\">"
+    + "')\" class=\"order_number_link\">"
     + alias2(alias1((depth0 != null ? depth0.ordNo : depth0), depth0))
     + "</a>\n";
 },"40":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "								<a href=\"/my/page/order/detail/"
+  return "								<a href=\"javascript:;\" onclick=\"showDetailView('order/detail', '"
     + alias2(alias1((depth0 != null ? depth0.ordNo : depth0), depth0))
-    + "\" class=\"order_number_link\">"
+    + "')\" class=\"order_number_link\">"
     + alias2(alias1((depth0 != null ? depth0.ordNo : depth0), depth0))
     + "</a>\n";
 },"42":function(container,depth0,helpers,partials,data) {
-    return "								<button class=\"btn_sm_neutral\" type=\"button\" onclick=\"writeReview()\" id=\"b_review\">구매 리뷰 쓰기</button>\n";
+    return "								<button class=\"btn_sm_neutral\" type=\"button\" onclick=\"writeReview('"
+    + container.escapeExpression(container.lambda((depth0 != null ? depth0.ordNo : depth0), depth0))
+    + "')\" id=\"b_review\">구매 리뷰 쓰기</button>\n";
 },"44":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "							<a href=\"/my/page/order/cashReceipts/"
+  return "							<a href=\"javascript:;\" onclick=\"showDetailView('order/cashReceipts', '"
     + alias2(alias1((depth0 != null ? depth0.ordNo : depth0), depth0))
-    + "\" class=\"order_number_link\">"
+    + "')\" class=\"order_number_link\">"
     + alias2(alias1((depth0 != null ? depth0.ordNo : depth0), depth0))
     + "</a>\n";
 },"46":function(container,depth0,helpers,partials,data,blockParams,depths) {
@@ -226,9 +230,9 @@ this["AP"]["handlebars"]["my"]["order"]["orderList"] = Handlebars.template({"1":
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
 
   return ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || helpers.helperMissing).call(alias1,((stack1 = (depth0 != null ? depth0.onlineOrdProdInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),"PartialCancel",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(52, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "								<button class=\"btn_sm_form\" type=\"button\" onclick=\"javascript:location.href='/my/page/order/cancel/"
+    + "								<button class=\"btn_sm_form\" type=\"button\" onclick=\"showDetailView('order/cancel', '"
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.ordNo : depth0), depth0))
-    + "'\">주문 취소</button>\n";
+    + "')\">주문 취소</button>\n";
 },"52":function(container,depth0,helpers,partials,data) {
     return "									<p>(부분취소)</p>\n";
 },"54":function(container,depth0,helpers,partials,data,blockParams,depths) {
@@ -236,28 +240,30 @@ this["AP"]["handlebars"]["my"]["order"]["orderList"] = Handlebars.template({"1":
 
   return "		<tr>\n			<td>"
     + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,(depth0 != null ? depth0.ordReceivedDt : depth0),"YYYY-MM-DD",{"name":"dateFormat","hash":{},"data":data}))
-    + "</td>\n			<td>\n				<a href=\"/my/page/order/detail/"
+    + "</td>\n			<td>\n				<a href=\"javascript:;\" onclick=\"showDetailView('order/detail', '"
     + alias3(alias4((depth0 != null ? depth0.ordNo : depth0), depth0))
-    + "\" class=\"order_number_link\">"
+    + "')\" class=\"order_number_link\">"
     + alias3(alias4((depth0 != null ? depth0.ordNo : depth0), depth0))
     + "</a>\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordProdInfo : depth0)) != null ? stack1.ordHistProdStatusCode : stack1),"ShipComplete",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(55, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "			</td>\n			<td class=\"align_left\">\n				<div class=\"flag\">\n					<b class=\"store\">압구정점</b>\n					<span>스윗딜리버리</span>\n				</div>\n				<a href=\"/my/page/order/detail/"
+    + "			</td>\n			<td class=\"align_left\">\n				<div class=\"flag\">\n					<b class=\"store\">압구정점</b>\n					<span>스윗딜리버리</span>\n				</div>\n				<a href=\"javascript:;\" onclick=\"showDetailView('order/detail', '"
     + alias3(alias4((depth0 != null ? depth0.ordNo : depth0), depth0))
-    + "\">\n					"
-    + alias3(alias4(((stack1 = (depth0 != null ? depth0.claimProdInfo : depth0)) != null ? stack1.prodNameRlang : stack1), depth0))
+    + "')\">\n					"
+    + alias3(alias4(((stack1 = (depth0 != null ? depth0.ordProdInfo : depth0)) != null ? stack1.onlineProdNameRlang : stack1), depth0))
     + " "
-    + alias3((helpers.checkCnt || (depth0 && depth0.checkCnt) || alias2).call(alias1,"cnt",((stack1 = (depth0 != null ? depth0.claimProdInfo : depth0)) != null ? stack1.totalProdCnt : stack1),{"name":"checkCnt","hash":{},"data":data}))
+    + alias3((helpers.checkCnt || (depth0 && depth0.checkCnt) || alias2).call(alias1,"cnt",((stack1 = (depth0 != null ? depth0.ordProdInfo : depth0)) != null ? stack1.totalProdCnt : stack1),{"name":"checkCnt","hash":{},"data":data}))
     + "\n				</a>\n			</td>\n			<td>"
-    + alias3((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordProdInfo : depth0)) != null ? stack1.finalOnlineSaleAmtPcur : stack1),{"name":"currencyFormat","hash":{},"data":data}))
+    + alias3((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordProdInfo : depth0)) != null ? stack1.totalOrdAmt : stack1),{"name":"currencyFormat","hash":{},"data":data}))
     + "</td>\n			<td class=\"status\">\n				<p><em>"
-    + alias3((helpers.ordStatusCheck || (depth0 && depth0.ordStatusCheck) || alias2).call(alias1,(depths[1] != null ? depths[1].type : depths[1]),((stack1 = (depth0 != null ? depth0.ordProdInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),{"name":"ordStatusCheck","hash":{},"data":data}))
+    + alias3((helpers.ordStatusCheck || (depth0 && depth0.ordStatusCheck) || alias2).call(alias1,(depths[1] != null ? depths[1].type : depths[1]),((stack1 = (depth0 != null ? depth0.ordProdInfo : depth0)) != null ? stack1.ordHistProdStatusCode : stack1),{"name":"ordStatusCheck","hash":{},"data":data}))
     + "</em></p>\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordProdInfo : depth0)) != null ? stack1.ordDetailStatusCode : stack1),"Shipping",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(57, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordProdInfo : depth0)) != null ? stack1.ordHistProdStatusCode : stack1),"ShipComplete",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(59, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "			</td>\n		</tr>\n";
 },"55":function(container,depth0,helpers,partials,data) {
-    return "					<button class=\"btn_sm_neutral\" type=\"button\" onclick=\"writeReview()\" id=\"b_review\">구매 리뷰 쓰기</button>\n";
+    return "					<button class=\"btn_sm_neutral\" type=\"button\" onclick=\"writeReview('"
+    + container.escapeExpression(container.lambda((depth0 != null ? depth0.ordNo : depth0), depth0))
+    + "')\" id=\"b_review\">구매 리뷰 쓰기</button>\n";
 },"57":function(container,depth0,helpers,partials,data) {
     return "					<button class=\"btn_sm_bordered\" type=\"button\" onclick=\"chkShippingStatus()\">배송조회</button>\n					<button class=\"btn_sm_primary\" type=\"button\" onclick=\"chkShippingComplete()\">수령확인</button>\n";
 },"59":function(container,depth0,helpers,partials,data) {
@@ -267,17 +273,17 @@ this["AP"]["handlebars"]["my"]["order"]["orderList"] = Handlebars.template({"1":
 
   return "		<tr>\n			<td>"
     + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,(depth0 != null ? depth0.ordReceivedDt : depth0),"YYYY-MM-DD",{"name":"dateFormat","hash":{},"data":data}))
-    + "</td>\n			<td>\n				<a href=\"/my/page/claim/"
+    + "</td>\n			<td>\n				<a href=\"javascript:;\" onclick=\"showDetailView('claim/"
     + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.claimTypeCode : depth0),"Rtn",{"name":"eq","hash":{},"data":data}),"return","exchange",{"name":"condition","hash":{},"data":data}))
-    + "/"
+    + "', '"
     + alias3(alias4((depth0 != null ? depth0.ordHistNo : depth0), depth0))
-    + "\" class=\"order_number_link\">"
+    + "')\" class=\"order_number_link\">"
     + alias3(alias4((depth0 != null ? depth0.ordNo : depth0), depth0))
-    + "</a>\n			</td>\n			<td class=\"align_left\">\n				<div class=\"flag\">\n					<span>온라인 주문</span>\n				</div>\n				<a href=\"/my/page/claim/"
+    + "</a>\n			</td>\n			<td class=\"align_left\">\n				<div class=\"flag\">\n					<span>온라인 주문</span>\n				</div>\n				<a href=\"javascript:;\" onclick=\"showDetailView('claim/"
     + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.claimTypeCode : depth0),"Rtn",{"name":"eq","hash":{},"data":data}),"return","exchange",{"name":"condition","hash":{},"data":data}))
-    + "/"
+    + "', '"
     + alias3(alias4((depth0 != null ? depth0.ordHistNo : depth0), depth0))
-    + "\">\n					"
+    + "')\">\n					"
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.claimProdInfo : depth0)) != null ? stack1.prodNameRlang : stack1), depth0))
     + " "
     + alias3((helpers.checkCnt || (depth0 && depth0.checkCnt) || alias2).call(alias1,"cnt",((stack1 = (depth0 != null ? depth0.claimProdInfo : depth0)) != null ? stack1.totalProdCnt : stack1),{"name":"checkCnt","hash":{},"data":data}))

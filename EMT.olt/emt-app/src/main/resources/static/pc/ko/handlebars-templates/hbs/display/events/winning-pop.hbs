@@ -1,17 +1,43 @@
 <div class="align_center">
 	{{#each this.awards}}
+		{{#if this.prodImg}}
 		<img src="{{ this.prodImg }}" alt="">
+		{{/if}}
 	{{/each}}
 </div>
 <p class="h_title cont text_center">축하드립니다.</p>
 <p class="text_center mgt15 line_h_25">
 	{{#each this.awards}}
-		{{#if this.prodName }}<em>[{{ this.prodName }}]</em>{{/if}}
-		{{#xif ../awards.length '>' 1}}<br>{{/xif}}
-	{{/each}}
+		{{#if this.pointTypeCode}}
+		<em>
+			{{#xif this.pointTypeCode '==' 'ActivityPoint'}}
+				진주알 {{ this.savingPoint }}알
+			{{/xif}}
+			{{#xif this.pointTypeCode '==' 'MembershipPoint'}}
+				{{this.membershipName}} {{ this.savingPoint }}점
+			{{/xif}}
+		</em>
+		{{/if}}
+		{{#if this.awardTgtCode }}<em>{{ this.couponName }}</em>{{/if}}
+		{{#if this.prodName }}<em>{{ this.prodName }}</em>{{/if}}
+		
+		{{#xif ../awards.length '>' 1}}<br>{{/xif}} 
+	
+{{/each}}	
 	에 당첨되셨습니다.<br>
-	배송지 정보를 입력하셔야 당첨이 완료됩니다.
+	{{#xif this.awards.prodCount '>'  0}}
+		배송지 정보를 입력하셔야 당첨이 완료됩니다.
+	{{/xif}}
+	{{#xif this.awards.prodCount '<' 1}}
+		당첨내역은 마이에뛰드에서 확인 가능합니다.
+	{{/xif}}	
 </p>
 <div class="page_btns mgt40">
-	<button class="btn_lg_primary" type="button">배송지 정보 입력하기</button>
+	{{#xif this.awards.prodCount '>' 0}}
+		<button class="btn_md_primary" type="button">배송지 정보 입력하기</button>
+		{{/xif}}	
+	{{#xif this.awards.prodCount '<' 1}}
+		<button class="btn_lg_primary" type="button">마이 에뛰드</button>
+	{{/xif}}
 </div>
+

@@ -94,9 +94,10 @@ public class DisplayViewController extends AbstractController {
 		model.addAttribute("pageType", "category");
 		model.addAttribute("displayCateSn", pageInfo.getDisplayCateSns());
 		// 진주알갯수 확인
-		ActivityPointHists activityPoint = pointApi.getActivityPointHists(getMemberSn(), null, null, 0, 1);
-		model.addAttribute("pealPoint", activityPoint); 
-		 
+		if(0L != getMemberSn()) {
+			ActivityPointHists activityPoint = pointApi.getActivityPointHists(getMemberSn(), null, null, 0, 1);
+			model.addAttribute("pealPoint", activityPoint); 
+		}
 		// 쇼핑히스토리 추가
 		
 		if(0L != getMemberSn()) {

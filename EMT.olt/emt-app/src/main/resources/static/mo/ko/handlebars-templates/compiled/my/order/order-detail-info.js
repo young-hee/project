@@ -29,12 +29,18 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-info"] = Handlebars.templa
 },"7":function(container,depth0,helpers,partials,data) {
     return "        	<dl class=\"table_layout\">\n        		<dt>테이크 아웃</dt>\n        		<dd><em>주문접수</em></dd>\n        		<dd class=\"align_right\">\n        			<button type=\"button\" class=\"btn_take_out\"><img src=\"@{/images/my/btn_barcode.gif}\" alt=\"테이크아웃바코드 보기\"></button>\n        		</dd>\n        	</dl>\n";
 },"9":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return "\n		<button class=\"btn_md_primary w100p mgt15\" type=\"button\" onclick=\"ordWriteReview("
+    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.ordEx : depth0)) != null ? stack1.ordNo : stack1), depth0))
+    + ")\">구매 리뷰 작성하고 진주알 받기</button>\n\n";
+},"11":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
   return "		<dl class=\"table_layout\">\n			<dt>발급 상태</dt>\n			<dd><span class=\"num color_gray2\">"
     + container.escapeExpression((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordEx : depth0)) != null ? stack1.cashReceiptIssueYn : stack1),"Y",{"name":"eq","hash":{},"data":data}),"발급완료","발급가능",{"name":"condition","hash":{},"data":data}))
     + "</span></dd>\n		</dl>\n";
-},"11":function(container,depth0,helpers,partials,data) {
+},"13":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
   return "		<dl class=\"table_layout\">\n			<dt>"
@@ -52,8 +58,10 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-info"] = Handlebars.templa
     + "</span></dd>\n	</dl>\n\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias3).call(alias2,(depth0 != null ? depth0.type : depth0),"===",(depth0 != null ? depth0.store : depth0),{"name":"xif","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias3).call(alias2,(depth0 != null ? depth0.type : depth0),"===","cashReceipts",{"name":"xif","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias2,(helpers.or || (depth0 && depth0.or) || alias3).call(alias2,(helpers.eq || (depth0 && depth0.eq) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.ordEx : depth0)) != null ? stack1.ordDetailStatusCode : stack1),"OrdHandlingComplete",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.ordEx : depth0)) != null ? stack1.ordDetailStatusCode : stack1),"ShipComplete",{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n\n\n"
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias3).call(alias2,(depth0 != null ? depth0.type : depth0),"===","cashReceipts",{"name":"xif","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = helpers["if"].call(alias2,(helpers.or || (depth0 && depth0.or) || alias3).call(alias2,(helpers.eq || (depth0 && depth0.eq) || alias3).call(alias2,(depth0 != null ? depth0.type : depth0),"return",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias3).call(alias2,(depth0 != null ? depth0.type : depth0),"exchange",{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias2,(helpers.or || (depth0 && depth0.or) || alias3).call(alias2,(helpers.eq || (depth0 && depth0.eq) || alias3).call(alias2,(depth0 != null ? depth0.type : depth0),"return",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias3).call(alias2,(depth0 != null ? depth0.type : depth0),"exchange",{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(13, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "</div>";
 },"useData":true});

@@ -37,7 +37,7 @@ import java.util.List;
  * @since {version}
  *
  */
-@Controller
+@RestController
 @RequestMapping("/cs")
 public class CSRestController extends AbstractController {
 
@@ -45,7 +45,6 @@ public class CSRestController extends AbstractController {
     CSFormValidator csFormValidator;
 
     @PostMapping("/doInquiry")
-    @ResponseBody
     public ResponseEntity<?> createInquiry(@Valid InquiryPost inquiryPostInfo, BindingResult bindingResult,
 										   MultipartFile[] picture) {
 
@@ -62,80 +61,63 @@ public class CSRestController extends AbstractController {
 				inquiryPostInfo.setSmsResponseNotifyYn("N");
 			}
 
-			try {
-				if (!ObjectUtils.isEmpty(picture)) {
-					List<UploadingFile> files = imageSettingList(picture);
-					inquiryPostInfo.setFiles(files);
-				}
-				InquiryPostResult registYn = guideApi.postCustomerInquiry(inquiryPostInfo);
-				result.put("registYn", registYn.isResult());
-			} catch (Exception e) {
-				result.put("errorData", e);
-				return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+			if (!ObjectUtils.isEmpty(picture)) {
+				List<UploadingFile> files = imageSettingList(picture);
+				inquiryPostInfo.setFiles(files);
 			}
+			InquiryPostResult registYn = guideApi.postCustomerInquiry(inquiryPostInfo);
+			result.put("registYn", registYn.isResult());
 		}
 
 		return ResponseEntity.ok(result);
     }
 
     @GetMapping("/getOrderPage")
-    @ResponseBody
     public ResponseEntity<?> getOrderPage(int offset, int limit, Date RS_Date, Date RD_Date) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
-		try {
-			OrdListResult ordListResult = orderApi.getOrdList(getMemberSn(), null, RS_Date, getEndDate(RD_Date), offset, limit);
-			List<OrderDTO> ordList = new ArrayList<OrderDTO>();
-			int totalCount = ordListResult.getTotalCount();
+		OrdListResult ordListResult = orderApi.getOrdList(getMemberSn(), null, RS_Date, getEndDate(RD_Date), offset, limit);
+		List<OrderDTO> ordList = new ArrayList<OrderDTO>();
+		int totalCount = ordListResult.getTotalCount();
 
-			for(OrdEx ordEx : ordListResult.getOrdExList()) {
-				OrderDTO orderDTO = new OrderDTO();
-				orderDTO.setOrdSn(ordEx.getOrdSn());
-				orderDTO.setOrdHistNo(ordEx.getOrdHistEx().getOrdHistNo());
-				orderDTO.setOrdName(ordEx.getOrdHistEx().getOrdHistProdExList().get(0).getOrdProdEx().getProdNameBlang());
-				orderDTO.setOrdStatusCode(ordEx.getOrdHistEx().getOrdHistProdExList().get(0).getOrdHistProdStatusCode());
-				orderDTO.setFinalOrdPrice(ordEx.getOrdHistEx().getFinalOrdAmtPcur());
-				orderDTO.setOrdQty(ordEx.getOrdHistEx().getOrdHistProdExList().size());
-				ordList.add(orderDTO);
-			}
-
-			result.put("data", ordList);
-			result.put("totalCount", totalCount);
-		} catch (Exception e) {
-			result.put("errorData", e);
-			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		for(OrdEx ordEx : ordListResult.getOrdExList()) {
+			OrderDTO orderDTO = new OrderDTO();
+			orderDTO.setOrdSn(ordEx.getOrdSn());
+			orderDTO.setOrdHistNo(ordEx.getOrdHistEx().getOrdHistNo());
+			orderDTO.setOrdName(ordEx.getOrdHistEx().getOrdHistProdExList().get(0).getOrdProdEx().getProdNameBlang());
+			orderDTO.setOrdStatusCode(ordEx.getOrdHistEx().getOrdHistProdExList().get(0).getOrdHistProdStatusCode());
+			orderDTO.setFinalOrdPrice(ordEx.getOrdHistEx().getFinalOrdAmtPcur());
+			orderDTO.setOrdQty(ordEx.getOrdHistEx().getOrdHistProdExList().size());
+			ordList.add(orderDTO);
 		}
+
+		result.put("data", ordList);
+		result.put("totalCount", totalCount);
 
 		return ResponseEntity.ok(result);
     }
 
     @PostMapping("/csList")
-    @ResponseBody
     public ResponseEntity<?> csList(RequestCS request) {
 
         // Mobile
         if (isMobileDevice()) {
             HashMap<String, Object> result = new HashMap<String, Object>();
-            try {
-                if ("faq".equalsIgnoreCase(request.getType())) {
-                    FaqSearchResult d = guideApi.getFaqs(request.getKeyword(), request.getInquiryTypeSn(), null,
-                            request.getOffset(), request.getLimit());
-                    if (d != null) {
-                        result.put("data", d);
-                    }
-                } else if ("notice".equalsIgnoreCase(request.getType())) {
-                    FoNoticeResult d = guideApi.getFoNotices(request.getKeyword(), request.getNoticeTypeCode(),
-                            request.getOffset(), request.getLimit(), request.getImportantNoticeYn(),
-                            CSViewController.EVENT_YN);
+			if ("faq".equalsIgnoreCase(request.getType())) {
+				FaqSearchResult d = guideApi.getFaqs(request.getKeyword(), request.getInquiryTypeSn(), null,
+						request.getOffset(), request.getLimit());
+				if (d != null) {
+					result.put("data", d);
+				}
+			} else if ("notice".equalsIgnoreCase(request.getType())) {
+				FoNoticeResult d = guideApi.getFoNotices(request.getKeyword(), request.getNoticeTypeCode(),
+						request.getOffset(), request.getLimit(), request.getImportantNoticeYn(),
+						CSViewController.EVENT_YN);
 
-                    if (d != null) {
-                        result.put("data", d);
-                    }
-                }
-            } catch (Exception e) {
-                result.put("errorData", e);
-                return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-            }
+				if (d != null) {
+					result.put("data", d);
+				}
+			}
 
             return ResponseEntity.ok(result);
 
@@ -144,25 +126,20 @@ public class CSRestController extends AbstractController {
         // PC
         if (isPcDevice()) {
             HashMap<String, Object> result = new HashMap<String, Object>();
-            try {
-                if ("faq".equalsIgnoreCase(request.getType())) {
-                    FaqSearchResult d = guideApi.getFaqs(request.getKeyword(), request.getInquiryTypeSn(), null,
-                            request.getOffset(), request.getLimit());
-                    if (d != null) {
-                        result.put("data", d);
-                    }
-                } else if ("notice".equalsIgnoreCase(request.getType())) {
-                    FoNoticeResult d = guideApi.getFoNotices(request.getKeyword(), request.getNoticeTypeCode(),
-                            request.getOffset(), request.getLimit(), request.getImportantNoticeYn(),
-                            CSViewController.EVENT_YN);
-                    if (d != null) {
-                        result.put("data", d);
-                    }
-                }
-            } catch (Exception e) {
-                result.put("errorData", e);
-                return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-            }
+			if ("faq".equalsIgnoreCase(request.getType())) {
+				FaqSearchResult d = guideApi.getFaqs(request.getKeyword(), request.getInquiryTypeSn(), null,
+						request.getOffset(), request.getLimit());
+				if (d != null) {
+					result.put("data", d);
+				}
+			} else if ("notice".equalsIgnoreCase(request.getType())) {
+				FoNoticeResult d = guideApi.getFoNotices(request.getKeyword(), request.getNoticeTypeCode(),
+						request.getOffset(), request.getLimit(), request.getImportantNoticeYn(),
+						CSViewController.EVENT_YN);
+				if (d != null) {
+					result.put("data", d);
+				}
+			}
 
             return ResponseEntity.ok(result);
         }
@@ -171,7 +148,6 @@ public class CSRestController extends AbstractController {
     }
 
     @GetMapping("/noticeContent")
-    @ResponseBody
     public ResponseEntity<?> noticeContent(int seq) {
 
         // Mobile
@@ -179,12 +155,6 @@ public class CSRestController extends AbstractController {
 
             HashMap<String, Object> result = new HashMap<String, Object>();
 
-            try {
-            } catch (Exception e) {
-                result.put("errorData", e);
-                return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-            }
-            
             return ResponseEntity.ok(result);
         }
 
@@ -197,7 +167,6 @@ public class CSRestController extends AbstractController {
     }
 
     @PostMapping("/faqList")
-    @ResponseBody
     public ResponseEntity<?> faqList(RequestCS request) {
         // Mobile
         if (isMobileDevice()) {
@@ -208,18 +177,13 @@ public class CSRestController extends AbstractController {
         if (isPcDevice()) {
             HashMap<String, Object> result = new HashMap<String, Object>();
 
-            try {
-                FaqSearchResult d = guideApi.getFaqs(request.getKeyword(), request.getInquiryTypeSn(), null, request.getOffset(),
-                        request.getLimit());
+			FaqSearchResult d = guideApi.getFaqs(request.getKeyword(), request.getInquiryTypeSn(), null, request.getOffset(),
+					request.getLimit());
 
-                if (d != null) {
-                    result.put("data", d);
-                }
-            } catch (Exception e) {
-                result.put("errorData", e);
-                return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-            }
-            
+			if (d != null) {
+				result.put("data", d);
+			}
+
             return ResponseEntity.ok(result);
         }
 
@@ -227,19 +191,13 @@ public class CSRestController extends AbstractController {
     }
 
     @GetMapping("/summary/{type}")
-    @ResponseBody
     public ResponseEntity<?> summary(@PathVariable String type) {
         HashMap<String, Object> result = new HashMap<String, Object>();
-        try {
-            if ("faq".equals(type)) {
-                result.put("data", guideApi.getFaqSummary(null));
-            } else {
-                result.put("data", guideApi.getFoNoticeSummary(CSViewController.EVENT_YN));
-            }
-        } catch (Exception e) {
-            result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
+		if ("faq".equals(type)) {
+			result.put("data", guideApi.getFaqSummary(null));
+		} else {
+			result.put("data", guideApi.getFoNoticeSummary(CSViewController.EVENT_YN));
+		}
 
         return ResponseEntity.ok(result);
     }

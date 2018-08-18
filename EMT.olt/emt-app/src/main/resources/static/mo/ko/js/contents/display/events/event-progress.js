@@ -18,6 +18,7 @@
 			};
 
 			this._setMore();
+			this._setEvent(); 
 		},
 
 		/** =============== Public Methods =============== */
@@ -63,6 +64,52 @@
 			}.bind( this )).fail(function (e) {
 				console.log( 'error' );
 			}).always(function (e) {});
+		},
+		
+		_setEvent:function(){
+			
+			this._$target.find( '.beauty_tester' ).on('click', function () {
+				
+				AP.api.regularEventSummary({}, {regularEventType : 'ProdExperienceGrp'}).done(function (result){
+					location.href='/display/beauty_test?displayMenuId=beauty_test';
+				}.bind( this )).fail(function (xhr) {
+					if ( AP.message[xhr.errorCode] != undefined ) {
+						AP.modal.alert( AP.message[xhr.errorCode] );
+					} else {
+						AP.modal.alert( xhr.errorMessage );
+					}
+				}).always(function (e) {});
+
+			}.bind( this ));
+			
+			this._$target.find( '.sweet_letter' ).on('click', function () {
+				
+				AP.api.regularEventSummary({}, {regularEventType : 'PackageLetter'}).done(function (result){
+					location.href='/display/sweet_letter?displayMenuId=sweet_letter';
+				}.bind( this )).fail(function (xhr) {
+					if ( AP.message[xhr.errorCode] != undefined ) {
+						AP.modal.alert( AP.message[xhr.errorCode] );
+					} else {
+						AP.modal.alert( xhr.errorMessage );
+					}
+				}).always(function (e) {});
+
+			}.bind( this ));
+			 
+			this._$target.find( '.free_sample' ).on('click', function () {
+				
+				AP.api.regularEventSummary({}, {regularEventType : 'SampleExperienceGrp'}).done(function (result){
+					location.href='/display/free_sample?displayMenuId=free_sample';
+				}.bind( this )).fail(function (xhr) {
+					if ( AP.message[xhr.errorCode] != undefined ) {
+						AP.modal.alert( AP.message[xhr.errorCode] );
+					} else {
+						AP.modal.alert( xhr.errorMessage );
+					}
+				}).always(function (e) {});
+
+			}.bind( this ));
+			
 		},
 
 		/** =============== Private Methods =============== */

@@ -233,6 +233,21 @@ public class SignupViewController extends AbstractController {
 	}
 
 	/**
+	 * 실패
+	 *
+	 * @return
+	 */
+	@PostMapping("/joinFailed")
+	@PageTitle(title = "회원가입")
+	@BreadCrumb("EH.LO.10")
+	public String joinFailed(Model model, String message) {
+		if(message != null && !message.isEmpty()) {
+			model.addAttribute("errorMessage", message);
+		}
+		return "customer/customernew/member-join.4.5.html";
+	}
+
+	/**
 	 * 에뛰드 약관동의
 	 *
 	 * @return

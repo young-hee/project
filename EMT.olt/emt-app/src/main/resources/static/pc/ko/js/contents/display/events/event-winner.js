@@ -27,12 +27,21 @@
 			}
 
 			AP.api.winnerNoticeList( {}, param ).done(function ( result ) {
+				
 				result = result['winnerNoticeList'];
-
+				
 				var html = AP.common.getTemplate( 'display.events.event-winner', result );
+				
+				if(result.totalCount === 0){ // 검색결과가 0 이면
+					html = '<div class="panel notice"><i class="ico"></i><p class="text font_lg align_center w100p"><b>'+this._param.keyword;
+					html += '</b>&nbsp;&nbsp;<span class="color_light_gray">검색어와 일치하는 내용이 없습니다.</span></p></div>';
+				}else {
+					
+				}
+				
 				this._$target.find( '.board_list2 tbody' ).html( html );
 
-				if ( !this._pagination ) {
+				if ( this._pagination !== null) {
 					this._setPaging( result.limit, result.totalCount );
 				}
 

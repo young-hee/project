@@ -7,7 +7,17 @@
 					<input type="hidden" id="ordHistProdCnt" name="ordHistProdCnt" th:value="${#lists.size(ordOnlineProd.ordHistProdList)}"/>
 					<!--/* 상품 선택 */-->
 					<div class="item_thumb">
-						<img class="lazy_load thm_cart_item" th:src="${ordOnlineProd.onlineProdImgUrl}">
+						<th:block th:switch="${memberShip}">
+							<th:block th:case="'P'">
+								<th:block th:if="${ordOnlineProd.prodImgUrl != null}"><img class="thm_cart_item" th:src="${ordOnlineProd.prodImgUrl}"></th:block>
+								<th:block th:unless="${ordOnlineProd.prodImgUrl != null}"><img class="thm_cart_item" th:src="${ordOnlineProd.onlineProdImgUrl}"></th:block>
+							</th:block>
+							<th:block th:case="'A'">
+								<th:block th:if="${ordOnlineProd.prodImgUrl != null}"><img class="thm_cart_item" th:src="${ordOnlineProd.prodImgUrl}"></th:block>
+								<th:block th:unless="${ordOnlineProd.prodImgUrl != null}"><img class="thm_cart_item" th:src="${ordOnlineProd.onlineProdImgUrl}"></th:block>
+							</th:block>
+							<th:block th:case="*"><img class="thm_cart_item" th:src="${ordOnlineProd.onlineProdImgUrl}"></th:block>
+						</th:block>
 					</div>
 					<!--/* 상품/플래그/옵션명 */-->
 					<div class="item_name">
@@ -27,6 +37,10 @@
 					</div>
 					<!--/* 포인트 및 가격 */-->
 					<div class="price">
-						<span class="strong"><b th:text="${#IntegUtil.toCommaNumber(ordOnlineProd.finalOnlineSaleAmtPcurSum)}">0</b>원</span>
+						<th:block th:switch="${memberShip}">
+							<th:block th:case="'P'"><span class="strong"><b th:text="${#IntegUtil.toCommaNumber(ordOnlineProd.finalOnlineSaleAmtPcurSumExchMembership)}">0</b>P</span></th:block>
+							<th:block th:case="'A'"><span class="strong"><b th:text="${#IntegUtil.toCommaNumber(ordOnlineProd.finalOnlineSaleAmtPcurSumExchActivity)}">0</b>알</span></th:block>
+							<th:block th:case="*"><span class="strong"><b th:text="${#IntegUtil.toCommaNumber(ordOnlineProd.finalOnlineSaleAmtPcurSum)}">0</b>원</span></th:block>
+						</th:block>
 					</div>
 				</div>

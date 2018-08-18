@@ -23,12 +23,8 @@
 		 * @param {String}    keyword         검색 keyword
 		 * @param {Int}       currentPage     검색할 페이지
 		 */
-		getAddresses: { path:'//www.juso.go.kr/addrlink/addrLinkApiJsonp.do', method: 'POST', dataType: 'jsonp', crossDomain: true, data: {
-				confmKey: 'U01TX0FVVEgyMDE3MDgxODE2NTExMTIzODcy',
-				resultType: 'json',
-				countPerPage: 10
-			}
-		},
+	
+    	getAddresses: { path:'/common/getAddresses', method: 'POST', contentType: 'application/json' },
 
 	    /**
 		 * pixlee api : 앨범의 사진 리스트 요청
@@ -162,9 +158,8 @@
 		//주문번호 전화번호로, 비회원 조회 가능한지 확인.
 		checkOrder: { path: '/nonMeber/checkOrder', method: 'POST' },
 
-		//간편ID찾기.
-		findIdSimple: { path: '/customer/find/findId/simple', method: 'POST' },
-		findIdForeigner: { path: '/customer/find/findId/foreigner', method: 'POST' },
+		//아이디 SMS 전송.
+		sendId: { path: '/customer/find/findId/sendId', method: 'POST' },
 		//아이디 중복확인.
 		checkId: { path: '/customer/checkId', method: 'POST' },
 		
@@ -361,6 +356,8 @@
 		 //배송지 추가/수정
 		 ordChangeShipAddress: { path : '/my/api/{ordSn}/ordChangeShipAddress' , method: 'POST'},
 
+		 // 주문 리뷰
+		 myReview: { path:'/my/api/myReview', method: 'GET'},
 
 		/**
 		 * 상품 *************************************************************

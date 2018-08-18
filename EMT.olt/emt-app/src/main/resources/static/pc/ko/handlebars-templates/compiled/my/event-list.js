@@ -31,7 +31,9 @@ this["AP"]["handlebars"]["my"]["event-list"] = Handlebars.template({"1":function
     + alias2(alias1((depth0 != null ? depth0.planDisplayTitle : depth0), depth0))
     + "</span></a></td>\n";
 },"6":function(container,depth0,helpers,partials,data) {
-    return "<a href=\"#none\">당첨자 발표 확인</a>";
+    return "<a href=\"/display/eventWinner_detail?foNoticeSn="
+    + container.escapeExpression(container.lambda((depth0 != null ? depth0.winnerFoNoticeSn : depth0), depth0))
+    + "\">당첨자 발표 확인</a>";
 },"8":function(container,depth0,helpers,partials,data) {
     return "-";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {

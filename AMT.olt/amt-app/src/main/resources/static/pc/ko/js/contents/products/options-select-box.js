@@ -36,6 +36,13 @@
 				productCount: this._defaultModel.productCount
 			});
 		},
+		
+		/**
+		 * 상품에 컬러가 있을 경우 셀렉트 박스를 감춤
+		 */
+		invisibleSelectOption : function(){
+			this._$appendTarget.find( '.ui_select' ).hide();
+		},
 
 		/**
 		 * 옵션삭제

@@ -137,10 +137,10 @@
             if ( _keyword ) {
                 setLoading( true, $loading, $result );
 
-                AP.api.getAddresses({
-                    keyword: _keyword,
+                AP.api.getAddresses(JSON.stringify({
+                	 keyword: _keyword,
                     currentPage: page
-                }).done( function ( data, commonData ) {
+                })).done( function ( data, commonData ) {
                     if ( _modal ) {
                         drawResult( $modal, data.juso, commonData );
                     }

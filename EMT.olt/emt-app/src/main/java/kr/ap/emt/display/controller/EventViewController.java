@@ -55,11 +55,7 @@ public class EventViewController extends AbstractController {
         	
         	pageName = "M02_event_p"; 
         }
-        
-        
-        Map<String, Long> dDays = new HashMap<String, Long>(); 
-        String regularEventType[] = {APConstant.PROD_EXPERIENCE_GRP,APConstant.SAMPLE_EXPERIENCE_GRP};  // 무료체험단 무료샘플
-    	   
+           
         //이벤트 목록
         PlanDisplayEventListResult planDisplayEventListResult 
         	= plandisplayApi.getPlanDisplayEventList(
@@ -77,6 +73,9 @@ public class EventViewController extends AbstractController {
         
         // 상시 이벤트 (뷰티테스터 , 무료샘플신청 D-Day) 날짜 계산
 
+        Map<String, Long> dDays = new HashMap<String, Long>(); 
+        String regularEventType[] = {APConstant.PROD_EXPERIENCE_GRP,APConstant.SAMPLE_EXPERIENCE_GRP};  // 무료체험단 무료샘플
+        
     	for(int i = 0; i < regularEventType.length; i++) {
     		
     		 try { 
@@ -110,51 +109,7 @@ public class EventViewController extends AbstractController {
 		 * 일반기획전시: M02_d_generel_1
 		 * 동시구매기획전시: M02_d_same_time_1
 		 */
-		//Mobile
-		if (isMobileDevice()) {
 
-			//types: 기획전시 유형코드 리스트(PlanDisplayType) , Link - URL링크 , General - 일반구성기획전시 , SameTimePur - 동시구매기획전시,
-			/*
-			if("Link".equals(planDisplay.getPlanDisplayTypeCode())) {
-				pageName = "event-template.1";
-			}else if ("General".equals(planDisplay.getPlanDisplayTypeCode())){ // 상품 유무
-				pageName = planDisplay.getDetailPageId();
-			}else if ("SameTimePur".equals(planDisplay.getPlanDisplayTypeCode())){ // 상품 유무
-				pageName = planDisplay.getDetailPageId();
-			}else {
-				return "redirect:/main";
-			}
-			*/
-			//TODO: 상품포함여부가 들어오기 전까지 임시
-			//pageName = "event-template.5";
-
-		}
-
-		//PC
-		if (isPcDevice()) {
-			//pageName = "event-template.5";
-		}
-
-
-		model.addAttribute("planDisplay", planDisplay);
-
-		//기획전시 히스토리 저장
-		if(0L != getMemberSn()) {
-			ShoppingMarkPost body = new ShoppingMarkPost();
-			body.setShoppingMarkTgtCode("Plandisplay");
-			
-				if(planDisplaySn != null) {
-					body.setPlanDisplaySn(planDisplaySn);
-					body.setDisplayMenuSetId(APConstant.EH_DISPLAY_MENU_SET_ID);
-					body.setDisplayMenuId("event");
-
-				try{
-					shoppingmarkApi.addShoppingHistories(getMemberSn(), body);
-				}catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
 		SnsEntity snsEntity = new SnsEntity();
         snsEntity.setUrl(getFullUri());
         if(StringUtils.isEmpty(planDisplay.getSnsIfImg())) {
@@ -185,6 +140,26 @@ public class EventViewController extends AbstractController {
 		seoEntity.setKeyword(planDisplay.getSeoSearchKeyword());
 		model.addAttribute("seo", seoEntity);
 		
+		model.addAttribute("planDisplay", planDisplay);
+		
+		//기획전시 히스토리 저장
+		if(0L != getMemberSn()) {
+			ShoppingMarkPost body = new ShoppingMarkPost();
+			body.setShoppingMarkTgtCode("Plandisplay");
+			
+				if(planDisplaySn != null) {
+					body.setPlanDisplaySn(planDisplaySn);
+					body.setDisplayMenuSetId(APConstant.EH_DISPLAY_MENU_SET_ID);
+					body.setDisplayMenuId("event");
+
+				try{
+					shoppingmarkApi.addShoppingHistories(getMemberSn(), body);
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+				
 		return "display/" + planDisplay.getDetailPageId();
 
 	}
@@ -203,6 +178,25 @@ public class EventViewController extends AbstractController {
 			pageName = "event-over";
 		}
 
+		Map<String, Long> dDays = new HashMap<String, Long>(); 
+        String regularEventType[] = {APConstant.PROD_EXPERIENCE_GRP,APConstant.SAMPLE_EXPERIENCE_GRP};  // 무료체험단 무료샘플
+        
+    	for(int i = 0; i < regularEventType.length; i++) {
+    		
+    		 try { 
+	    	
+    			RegularEvent regularEvent = regulareventApi.regularEventSummary(regularEventType[i]);
+	    		long dday = dDaycalc(new Date(), regularEvent.getEventEndDt()); 
+	    		dDays.put( regularEventType[i], + dday);
+    		
+    		 }catch(Exception e){
+    			 
+    			 dDays.put( regularEventType[i], + -1L); 
+    		 }
+      
+    	}  
+	    	   
+		model.addAttribute("dDays", dDays);
 		model.addAttribute("displayMenuId", displayMenuId);
 
 		return "display/"+ pageName;
@@ -212,21 +206,10 @@ public class EventViewController extends AbstractController {
 	@RequestMapping("/event_winner")
 	@PageTitle(title = "당첨자 발표")
 	public String eventWinner(Model model, String displayMenuId) {
-		String pageName = "";
-		//Mobile
-		if (isMobileDevice()) {
-			pageName = "event-list";
-
-		}
-
-		//PC
-		if (isPcDevice()) {
-			pageName = "event-list";
-		}
-
+		
 		model.addAttribute("displayMenuId", displayMenuId);
 
-		return "display/" + pageName;
+		return "display/event-list";
 	}
 	
 	@RequestMapping("/eventWinner_detail")
@@ -243,6 +226,7 @@ public class EventViewController extends AbstractController {
 		if (isPcDevice()) {
 			pageName = "event-view";
 		}
+		
 		FoNotice winnerDetail = guideApi.getFoNotice(Long.parseLong(foNoticeSn));  
 		
 		model.addAttribute("displayMenuId", displayMenuId);
@@ -254,18 +238,8 @@ public class EventViewController extends AbstractController {
 	@RequestMapping("/daily_check")
     @PageTitle(title = "행운의 출첵")
     public String daily_check(Model model, String displayMenuId) {
+	
 		
-        //Mobile
-        if (isMobileDevice()) {
-    		
-    		
-        }
-
-        //PC
-        if (isPcDevice()) {
-        	
-        }
-        
         PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
         
         model.addAttribute("displayMenuId", displayMenuId);
@@ -278,17 +252,6 @@ public class EventViewController extends AbstractController {
     @PageTitle(title = "진주알 룰렛")
     public String pearl_roulette(Model model, String displayMenuId) {
 		
-        //Mobile
-        if (isMobileDevice()) {
-    		
-    		
-        }
-
-        //PC
-        if (isPcDevice()) {
-        	
-        }
-        
         PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
         
         model.addAttribute("displayMenuId", displayMenuId);
@@ -301,10 +264,10 @@ public class EventViewController extends AbstractController {
     @PageTitle(title = "뷰티테스터 신청 안내")
     public String beauty_test(Model model, String displayMenuId) {
 		 
-        RegularEvent regularEvent = regulareventApi.regularEventSummary(APConstant.PROD_EXPERIENCE_GRP);
+		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
         
-        PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
-        
+        RegularEvent regularEvent = regulareventApi.regularEventSummary(APConstant.PROD_EXPERIENCE_GRP);	
+		
         model.addAttribute("displayMenuId", displayMenuId);
         model.addAttribute("regularEvent", regularEvent);
         
@@ -315,18 +278,7 @@ public class EventViewController extends AbstractController {
 	@RequestMapping("/sweet_letter")
     @PageTitle(title = "스윗레터 100% 당첨")
     public String sweet_letter(Model model, String displayMenuId) {
-		
-        //Mobile
-        if (isMobileDevice()) {
-    		
-    		
-        }
-
-        //PC
-        if (isPcDevice()) {
-        	
-        }
-        
+	
         PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
         
         model.addAttribute("displayMenuId", displayMenuId);
@@ -338,18 +290,7 @@ public class EventViewController extends AbstractController {
 	@RequestMapping("/free_sample")
     @PageTitle(title = "무료샘플신청")
     public String free_sample(Model model, String displayMenuId) {
-		
-        //Mobile
-        if (isMobileDevice()) {
-        	//pageName = "/display/M02_free_sample_m"; 
-    		
-        }
-
-        //PC
-        if (isPcDevice()) {
-        	//pageName = "/display/M02_free_sample_p"; 
-        }
-        
+	
         RegularEvent regularEvent = regulareventApi.regularEventSummary(APConstant.SAMPLE_EXPERIENCE_GRP);
         
         PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
@@ -364,19 +305,9 @@ public class EventViewController extends AbstractController {
 	@RequestMapping("/play_makeup_class")
     @PageTitle(title = "PLAY메이크업 클래스")
     public String play_makeup_class(Model model, String displayMenuId) {
-		
-        //Mobile
-        if (isMobileDevice()) {
-        	//M02_play_makeup_class_m
-    		
-        }
 
-        //PC
-        if (isPcDevice()) {
-        	//M02_play_makeup_class_p
-        }
-        
-        if( displayMenuId == null ) {
+		
+        if( displayMenuId == null || ("").equals(displayMenuId)) {
         	displayMenuId = "play_makeup_class";
         }
         
@@ -390,7 +321,6 @@ public class EventViewController extends AbstractController {
 	
 	/**
 	 * D-Day 계산  ( 일자로만 리턴합니다. ex) 1111 
-	 * 더 좋은 소스 있으면 수정 부탁
 	 * @param paramFDate
 	 * @param paramEDate
 	 * @return long 

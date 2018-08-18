@@ -15,7 +15,9 @@
 				{{#xif this.colorchipTypeCode '==' 'RGB'}}
 					<span class="color_box" style="background-color:#{{ this.rgbVal }}"></span>
 				{{else}}
-					<img class="goods_select_thm" src="{{ this.colorchipImg }}" alt="">
+					{{#xif this.colorchipTypeCode '==' 'Img'}}
+						<img class="goods_select_thm" src="{{ this.colorchipImg }}" alt="">
+					{{/xif}}
 				{{/xif}}
 				{{!-- title --}}
 				{{ this.prodName }}

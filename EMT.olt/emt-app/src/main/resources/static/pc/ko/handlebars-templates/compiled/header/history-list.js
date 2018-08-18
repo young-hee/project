@@ -24,11 +24,11 @@ this["AP"]["handlebars"]["header"]["history-list"] = Handlebars.template({"1":fu
     + "\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.shoppingMarkTgtCode : depth0),"==","Article",{"name":"xif","hash":{},"fn":container.program(9, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.shoppingMarkTgtCode : depth0),"==","Plandisplay",{"name":"xif","hash":{},"fn":container.program(11, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.shoppingMarkTgtCode : depth0),"==","Plandisplay",{"name":"xif","hash":{},"fn":container.program(14, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.shoppingMarkTgtCode : depth0),"==","Menu",{"name":"xif","hash":{},"fn":container.program(13, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.shoppingMarkTgtCode : depth0),"==","Menu",{"name":"xif","hash":{},"fn":container.program(16, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.shoppingMarkTgtCode : depth0),"==","SearchWord",{"name":"xif","hash":{},"fn":container.program(15, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.shoppingMarkTgtCode : depth0),"==","SearchWord",{"name":"xif","hash":{},"fn":container.program(18, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n							</li>\n";
 },"6":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression, alias4=container.lambda;
@@ -47,26 +47,35 @@ this["AP"]["handlebars"]["header"]["history-list"] = Handlebars.template({"1":fu
     + container.escapeExpression(container.lambda((depths[1] != null ? depths[1].date : depths[1]), depth0))
     + "</strong>\n";
 },"9":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.lambda, alias4=container.escapeExpression;
+
+  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.articleCateId : depth0),"==","chEtude",{"name":"xif","hash":{},"fn":container.program(10, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.articleCateId : depth0),"==","Looks",{"name":"xif","hash":{},"fn":container.program(12, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(data && data.index),"==",0,{"name":"xif","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "										<div class=\"item_wrap\">\n											<span class=\"img\"><img src=\""
+    + alias4(alias3((depth0 != null ? depth0.prodImg : depth0), depth0))
+    + "\" alt=\"\"></span>\n											<span class=\"title\">"
+    + alias4(alias3((depth0 != null ? depth0.articleTitle : depth0), depth0))
+    + "</span>\n										</div>\n									</a>\n";
+},"10":function(container,depth0,helpers,partials,data) {
+    return "										<a href=\"/display/etude_ch/detail?displayMenuid=etude_ch&articleSn="
+    + container.escapeExpression(container.lambda((depth0 != null ? depth0.articleSn : depth0), depth0))
+    + "\">	\n";
+},"12":function(container,depth0,helpers,partials,data) {
+    return "										<a href=\"/display/etude_looks/detail?displayMenuid=etude_looks&articleSn="
+    + container.escapeExpression(container.lambda((depth0 != null ? depth0.articleSn : depth0), depth0))
+    + "\">	\n";
+},"14":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "									<a href=\"/display/"
-    + alias2(alias1((depth0 != null ? depth0.displayMenuId : depth0), depth0))
-    + "/detail?articleSn="
-    + alias2(alias1((depth0 != null ? depth0.articleSn : depth0), depth0))
+  return "									<a href=\"/display/event_detail?planDisplaySn="
+    + alias2(alias1((depth0 != null ? depth0.planDisplaySn : depth0), depth0))
     + "\">\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(data && data.index),"==",0,{"name":"xif","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "										<div class=\"item_wrap\">\n											<span class=\"title\">"
-    + alias2(alias1((depth0 != null ? depth0.articleTitle : depth0), depth0))
-    + "</span>\n										</div>\n									</a>\n";
-},"11":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1;
-
-  return "									<a href=\"#none\">\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(data && data.index),"==",0,{"name":"xif","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "										<dl>\n											<dt>이벤트</dt>\n											<dd>"
-    + container.escapeExpression(container.lambda((depth0 != null ? depth0.planDisplayTitle : depth0), depth0))
+    + alias2(alias1((depth0 != null ? depth0.planDisplayTitle : depth0), depth0))
     + "</dd>\n										</dl>\n									</a>\n";
-},"13":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"16":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "									<a href=\"/display/category/"
@@ -76,7 +85,7 @@ this["AP"]["handlebars"]["header"]["history-list"] = Handlebars.template({"1":fu
     + "										<dl>\n											<dt>카테고리</dt>\n											<dd>"
     + alias2(alias1((depth0 != null ? depth0.menuTitle : depth0), depth0))
     + "</dd>\n										</dl>\n									</a>\n";
-},"15":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"18":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "									<a href=\"/common/search?searchWord="
@@ -86,7 +95,7 @@ this["AP"]["handlebars"]["header"]["history-list"] = Handlebars.template({"1":fu
     + "										<dl>\n											<dt>검색</dt>\n											<dd>#"
     + alias2(alias1((depth0 != null ? depth0.searchWord : depth0), depth0))
     + "</dd>\n										</dl>\n									</a>\n";
-},"17":function(container,depth0,helpers,partials,data) {
+},"20":function(container,depth0,helpers,partials,data) {
     return "		<div class=\"panel notice\">\n			<i class=\"ico\"></i>\n			<p class=\"text font_lg\">쇼핑히스토리가 없습니다.<br>에뛰드하우스 이곳 저곳을 둘러보세요~</p>\n		</div>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
@@ -94,6 +103,6 @@ this["AP"]["handlebars"]["header"]["history-list"] = Handlebars.template({"1":fu
   return "<dt>쇼핑 히스토리"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.totalCount : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "</dt>\n<dd>\n"
-    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.totalCount : depth0),{"name":"if","hash":{},"fn":container.program(3, data, 0, blockParams, depths),"inverse":container.program(17, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.totalCount : depth0),{"name":"if","hash":{},"fn":container.program(3, data, 0, blockParams, depths),"inverse":container.program(20, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "</dd>";
 },"useData":true,"useDepths":true});

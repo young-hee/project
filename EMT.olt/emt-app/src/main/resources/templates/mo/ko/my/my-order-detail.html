@@ -1,4 +1,4 @@
-<html ap:decorate="~{layout/layout-contents}">
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='my-writable-reivew'">
 
 <body>
 <!-- #ap_container -->
@@ -57,6 +57,8 @@
 
 	<!-- 마이페이지 맵 01-24 위치변경 -->
 	<th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+	<!--<th:block ap:replace="~{my/case-prod}"/>-->
+
 	<!-- // 마이페이지 맵 -->
 
 </div>
@@ -84,6 +86,11 @@
 	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-bottom.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-change-var.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/fullpage-cash-receipts.js}"></script>
+	<script ap:src="@{/handlebars-templates/compiled/my/order/detail/product.js}"></script>
+	<script ap:src="@{/handlebars-templates/compiled/my/order/detail/product-option.js}"></script>
+	<script ap:src="@{/handlebars-templates/compiled/my/order/detail/claim-reason.js}"></script>
+	<script ap:src="@{/handlebars-templates/compiled/my/order/detail/claim-reason-select.js}"></script>
+	<script ap:src="@{/handlebars-templates/compiled/my/order/detail/amount-payment.js}"></script>
 	<script>
 		//주소찾기
 
@@ -105,8 +112,18 @@
 		var checkProds = [];
 
 		$(document).ready(function() {
+
+			// Handlebars.registerPartial("unit", $("#unit-partial").html())
+			// var template = Handlebars.compile($("#unit-partial").html());
+			// console.log(template);;
 			refreshOrdDetail(ordInfo);
 		});
+
+		window.onpopstate = function(event) {
+
+			// alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
+			alert('123');
+		};
 
 		function refreshOrdDetail(ord) {
 
@@ -121,7 +138,10 @@
 
 
 
-			setOrdInfo();
+			if (step != 2) {
+				setOrdInfo();
+			}
+
 			setOnlineTake();
 			setOrdShipAddress();
 			setREPanelBox();
@@ -165,13 +185,14 @@
 
 		/* 상품영역 */
 		function setOnlineTake() {
-			if (customOrd.shippingOrdOnlineProdList && customOrd.shippingOrdOnlineProdList.length > 0) {
+			if (customOrd.shippingOrdOnlineProdList) {
 				var orderDetailGoods = AP.common.getTemplate('my.order.order-detail-goods', {
-					cnt : customOrd.shippingOrdOnlineProdList.length,
+					cnt : customOrd.shipOrdOnlineProdCnt,
 					list : customOrd.shippingOrdOnlineProdList,
 					mnList : customOrd.shippingMNPromoProdList,
 					bList : customOrd.shippingOrdOnlineBeautyPointProdList,
 					aList : customOrd.shippingOrdOnlineActivityPointProdList,
+					sList : customOrd.shippingSameTimePurPromoList,
 					state : 'on',
 					reason : reason,
 					type : type,
@@ -344,6 +365,12 @@
 			$("input:checkbox").prop('checked', check);
 		}
 
+		function selectProdPromo(cb) {
+			$("input[promoSn=" + $(cb).attr("promoSn") + "]:checkbox").prop('checked', cb.checked);
+
+			allChecked();
+		}
+
 		function selectOnlineProd(cb) {
 			$("input[onlineProdCode=" + cb.value + "]:checkbox").prop('checked', cb.checked);
 
@@ -353,6 +380,10 @@
 		function selectProd(cb) {
 			var allObj = $("input[id=" + $(cb).attr("onlineProdCode") + "]");
 			var objName = $(cb).attr("onlineProdCode");
+			var promoSn = $(cb).attr("promoSn");
+			if (promoSn != null) {
+				$("input[promoSn=" + $(cb).attr("promoSn") + "]:checkbox").prop('checked', cb.checked);
+			}
 
 			if($(cb).prop("checked"))
 			{
@@ -475,6 +506,7 @@
 			// });
 
 			var isEmpty = false;
+			checkProds = [];
 
 			$("input[prod=prod]:checkbox").each(function() {
 
@@ -483,12 +515,17 @@
 					var test = $(this).attr('val');
 
 					var checkValue = JSON.parse(test);
+					console.log(checkValue);
+
 					var rs = $('#rs_' + $(this).attr('ordHistProdNo')).val();
 					var rst = $('#rst_' + $(this).attr('ordHistProdNo')).val();
 					if ("" == rst || null == rst) {
 						isEmpty = true;
 					}
 
+					checkValue.ordOtfResultExList = [];
+					checkValue.ordHistProdAwardExList = [];
+					checkValue.ordHistProdPromoAwardExList = [];
 
 					checkValue.receivedClaimReasonSn = rs;
 					checkValue.foReceivedClaimReason = rst;
@@ -497,13 +534,16 @@
 					// for (var i = 0; i < reason.claimReasonExList.length; i++) {
 					// 	checkValue.claimReasonSn = reason.claimReasonExList[i].claimReasonSn;
 					// 	checkValue.customerFaultYn = reason.claimReasonExList[i].customerFaultYn;
-					// 	break;
+					// 	break;F
 					// }
+					console.log(checkValue);
 
 					checkProds.push(checkValue);
 				}
 			});
 
+			// console.log(checkProds.length);
+			// return;
 
 			if (checkProds.length == 0) {
 				AP.modal.alert(type == 'return' ? '반품하실 상품을 선택해 주세요.' : '교환하실 상품을 선택해 주세요.');
@@ -524,7 +564,8 @@
 				}
 			}
 
-			console.log(checkProds.length);
+			console.log(checkProds);
+			console.log('1231');
 
 			AP.api.ordSelect({
 				ordSn : customOrd.goods.ordSn,
@@ -592,7 +633,7 @@
 		}
 
 		function changeVar(ordHistProdSn, ordHistProdNo, prodSn) {
-			console.log(prodSn);
+			console.log(ordHistProdSn + " " +prodSn + " " + ordHistProdNo);
 			AP.api.onlineProdUnitVariationProds({
 				ordHistProdSn : ordHistProdSn
 			}).done(function(data) {
@@ -604,27 +645,30 @@
 				// design select 적용
 				$( '.ui_select' ).designSelectBox();
 				$('#b_save').off('click').on('click', function (e) {
-					var prodSnVal = $('[name=prodSn]').val();
-					// alert(prodSnVal);
-					// ordChangeVar(prodSnVal, ordHistProdNo);
-					AP.api.ordChangProds({
-						ordSn : customOrd.goods.ordSn
-					}, {
-						changeProdSn : prodSnVal,
-						ordHistProdNo : ordHistProdNo
-					}).done(function(data) {
-						modal.close();
-						AP.modal.alert("선택하신 옵션으로 주문이 변경되었습니다.").addListener('modal-close', function (e) {
-							refreshOrdDetail(data.data);
-						});
-						//성공
-					}).fail(function(e) {
-						AP.modal.alert(e.errorCode);
-						//실패
-					}).always(function() {
-						//성공, 실패
+					AP.modal.alert("선택하신 옵션으로 변경하시겠습니까?").addListener('modal-close', function (e) {
+						if ( e.closeType == 'confirm' ) {
+							modal.close();
+							var prodSnVal = $('[name=prodSn]').val();
+							// alert(prodSnVal);
+							// ordChangeVar(prodSnVal, ordHistProdNo);
+							AP.api.ordChangProds({
+								ordSn : customOrd.goods.ordSn
+							}, {
+								changeProdSn : prodSnVal,
+								ordHistProdNo : ordHistProdNo
+							}).done(function(data) {
+								AP.modal.alert("선택하신 옵션으로 주문이 변경되었습니다.").addListener('modal-close', function (e) {
+									refreshOrdDetail(data.data);
+								});
+								//성공
+							}).fail(function(e) {
+								AP.modal.alert(e.errorCode);
+								//실패
+							}).always(function() {
+								//성공, 실패
+							});
+						}
 					});
-
 				});
 				$('#b_close').off('click').on('click', function (e) {
 					modal.close();
@@ -696,8 +740,27 @@
 			});
 		}
 
+		function ordWriteReview(ordNo) {
+			AP.api.myReview({}, {ordNo}).done(function(data) {
+				if (data.data) {
+					var param = {
+						'orderNo' : data.data.ordNo,
+						'products' : data.data.orderProds
+					}
+					new AP.ReviewWriteModal(param).prevGetData();
+				}
+				else {
+					AP.modal.alert('구매리뷰 작성 가능한 주문상품이 없습니다.');
+				}
+			}).fail(function(e) {
+				AP.modal.alert(e);
+			}).always(function() {
+			});
+		}
+
 		function onBack() {
 			history.back();
+			// window.location.reload(history.back());
 		}
 
 	</script>

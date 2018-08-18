@@ -1,9 +1,9 @@
 <div class="srch_filter_wrap">
 	<div class="ui_accordion">
 		{{#each addAttrs}}
-			{{#xif this.addAttrsName '==' '색상'}}
+			{{#xif this.addAttrCode '==' 'color'}}
 				<dl>
-					<dt class="on"><button type="button"><span>{{ this.addAttrsName }}<i class="ico_navi"></i></span></button></dt>
+					<dt class="{{#if this.visible}}on{{/if}}"><button type="button"><span>{{ this.addAttrsName }}<i class="ico_navi"></i></span></button></dt>
 					<dd>
 						<div class="srch_filter_list01">
 							<div class="color_ck_list">
@@ -11,29 +11,29 @@
 									<span style="background-color:{{ this.addAttrValCode }}" data-value="{{ this.addAttrValCode }}" class="btn{{#xif this.selected '==' true}} on{{/xif}}"></span>
 								{{/each}}
 								<!--<span class="btn"><img src="/mo/ko/images/dummy/img_ck_col01.png" alt=""></span>-->
-								<!--<span class="btn"><img src="/mo/ko/images/dummy/img_ck_col01.png" alt=""></span>-->
 							</div>
 						</div>
 					</dd>
 				</dl>
 			{{else}}
-				{{#xif this.addAttrsName '==' '가격' }}
+				{{#xif this.addAttrCode '==' 'price' }}
 					<dl class="price">
-						<dt class="on"><button type="button"><span>가격<i class="ico_navi"></i></span></button></dt>
+						<dt class="{{#if this.visible}}on{{/if}}"><button type="button"><span>가격<i class="ico_navi"></i></span></button></dt>
 						<dd>
 							<div class="price_sel01">
 								<ul>
-									{{#each addAttrVals}}
-										<li><a href="javascript:;" class="btn{{#xif this.selected '==' true}} on{{/xif}}" data-value="{{ this.addAttrValCode }}" data-min="{{ this.min }}" data-max="{{ this.max }}">{{ this.addAttrValName }}</a></li>
-									{{/each}}
+									<li><a class="btn{{#xif this.addAttrVals.[0].selected  '==' true}} on{{/xif}}" href="javascript:;" data-value="{{ this.addAttrVals.[0].addAttrValCode }}" data-min="0" data-max="30000">3만원미만</a></li>
+									<li><a class="btn{{#xif this.addAttrVals.[1].selected  '==' true}} on{{/xif}}" href="javascript:;" data-value="{{ this.addAttrVals.[1].addAttrValCode }}" data-min="30000" data-max="50000">3~5만원</a></li>
+									<li><a class="btn{{#xif this.addAttrVals.[2].selected  '==' true}} on{{/xif}}" href="javascript:;" data-value="{{ this.addAttrVals.[2].addAttrValCode }}" data-min="50000" data-max="70000">5~7만원</a></li>
+									<li><a class="btn{{#xif this.addAttrVals.[3].selected  '==' true}} on{{/xif}}" href="javascript:;" data-value="{{ this.addAttrVals.[3].addAttrValCode }}" data-min="70000" data-max="">7만원</a></li>
 								</ul>
 							</div>
 							<div class="price_input_area">
 								<form class="validate">
 									<span class="input_h48_gray">
-										<input type="text" name="min" class="min" placeholder="최소금액" number="number" data-msg="숫자만 입력해 주세요.">
+										<input type="text" name="min" class="min" value="{{ this.min }}" placeholder="최소금액" number="number" data-msg="숫자만 입력해 주세요.">
 									</span><span class="p_bar">-</span><span class="input_h48_gray">
-										<input type="text" name="max" class="max" placeholder="최대금액" number="number" data-msg="숫자만 입력해 주세요.">
+										<input type="text" name="max" class="max" value="{{ this.max }}" placeholder="최대금액" number="number" data-msg="숫자만 입력해 주세요.">
 									</span>
 								</form>
 							</div>
@@ -41,7 +41,7 @@
 					</dl>
 				{{else}}
 					<dl>
-						<dt class="on"><button type="button"><span>{{ this.addAttrsName }}<i class="ico_navi"></i></span></button></dt>
+						<dt class="{{#if this.visible}}on{{/if}}"><button type="button"><span>{{ this.addAttrsName }}<i class="ico_navi"></i></span></button></dt>
 						<dd>
 							<div class="srch_filter_list01">
 								<ul>

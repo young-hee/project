@@ -17,9 +17,8 @@
 				offset: 0,
 				limit: 10
 			};
-
-
 			this._setEvent();
+			
 		},
 
 		/** =============== Public Methods =============== */
@@ -61,28 +60,35 @@
 				AP.login().done(function () {
 					AP.api.regularEventSummary({}, { regularEventType: 'SampleExperienceGrp'}).done(function () {
 						AP.applicationForm.open( '무료 샘플 신청하기' );
-					}.bind( this )).fail(function ( e ) {
-						if ( e.errorCode == 'ESAL034' ) {
-							AP.modal.alert( '본 이벤트는 종료되었습니다.' );
+					}.bind( this )).fail(function ( xhr) {
+						if( AP.message[xhr.errorCode] != undefined ){
+							AP.modal.alert( AP.message[xhr.errorCode] );
 						} else {
-							AP.modal.alert( e.errorMessage );
+							AP.modal.alert( xhr.errorMessage );
 						}
 					}.bind( this ));
 				}.bind( this ));
 			}.bind( this ));
 
 			AP.applicationForm.addListener( 'application-submit', function (e) {
+				
 				$.extend( e.data, {
 					memberSn: this._memberInfo.memberSn,
 					regularEventType: this._param.regularEventType
 				});
-
+				
 				AP.api.participated( {}, e.data ).done(function ( result ) {
 					AP.modal.alert( '신청이 완료되었습니다.' ).addListener( 'modal-close', function (e) {
 						AP.applicationForm.close();
+
 					}.bind( this ));
-				}.bind( this )).fail(function (e) {
-					AP.modal.alert( e.errorMessage );
+				}.bind( this )).fail(function (xhr) {
+					if( AP.message[xhr.errorCode] != undefined ){
+						AP.modal.alert( AP.message[xhr.errorCode] );
+					} else {
+						AP.modal.alert( xhr.errorMessage );
+					}
+				
 				}).always(function (e) {});
 			}.bind( this ));
 		},

@@ -26,7 +26,12 @@ import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
 import kr.ap.emt.display.vo.RequestBrand;
 import net.g1project.ecp.api.model.ap.bbs.SupportersRequesterInfo;
-import net.g1project.ecp.api.model.offlinestore.store.*;
+import net.g1project.ecp.api.model.offlinestore.store.StoreEvalEx;
+import net.g1project.ecp.api.model.offlinestore.store.StoreEventDetailScheduleEx;
+import net.g1project.ecp.api.model.offlinestore.store.StoreEventRequesterEx;
+import net.g1project.ecp.api.model.offlinestore.store.StoreEventRequestersResult;
+import net.g1project.ecp.api.model.offlinestore.store.StoreEventScheduleInfo;
+import net.g1project.ecp.api.model.offlinestore.store.StoreResult;
 import net.g1project.ecp.api.model.sales.display.PageInfo;
 import net.g1project.ecp.api.model.sales.terms.Terms;
 
@@ -49,13 +54,6 @@ public class BrandViewController extends AbstractController {
     @PageTitle(title = "브랜드")
     public String brand(Model model, String displayMenuId) {
 		
-        //Mobile
-        if (isMobileDevice()) {        	
-        }
-        //PC
-        if (isPcDevice()) {        	
-        }
-        
         PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
 
         model.addAttribute("displayMenuId", displayMenuId);
@@ -152,15 +150,8 @@ public class BrandViewController extends AbstractController {
 	@RequestMapping("/store_review_write")
     @PageTitle(title = "매장칭찬")
     public String store_review_write(Model model, String displayMenuId, String categoryType, String groupId, Long storeEvalSn) {
-        //Mobile
-        if (isMobileDevice()) {
-        }
 
-        //PC
-        if (isPcDevice()) {
-        }
-        
-        if(categoryType == null || "".equals(categoryType)) categoryType = "l_community";
+		if(categoryType == null || "".equals(categoryType)) categoryType = "l_community";
         
         if(groupId == null || "".equals(groupId)) groupId = "l_store_location";
         
@@ -253,14 +244,6 @@ public class BrandViewController extends AbstractController {
         
 		displayMenuId = "brand_etudehouse";
 		
-		//Mobile
-        if (isMobileDevice()) {
-        }
-
-        //PC
-        if (isPcDevice()) {
-        }
-        
         PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
         
         if(categoryType == null || "".equals(categoryType)) categoryType = "l_etude_story";
@@ -440,14 +423,10 @@ public class BrandViewController extends AbstractController {
 	        
 	        if(groupId == null || "".equals(groupId)) groupId = "l_beautizen";
 	
-	        //지역 local 
-	        
-	        //SupportersRequesterInfo sriInfo = bbsApi.getSupportersRequester(getMemberSn()); //
-	        
 	        model.addAttribute("displayMenuId", displayMenuId);
 	        model.addAttribute("categoryType", categoryType);
 	        model.addAttribute("groupId", groupId);
-	       // model.addAttribute("supportersInfo" , sriInfo); 
+
 	        return pageFileName;
 	        
 		}else {
@@ -481,9 +460,9 @@ public class BrandViewController extends AbstractController {
 	
 	        SupportersRequesterInfo suppoters = bbsApi.getSupportersRequester(getMemberSn());
 	        
-	        List<Terms> beautizenTerm1= termsApi.getTerms("ET009");
-	        List<Terms> beautizenTerm2 = termsApi.getTerms("ET010");
-	        List<Terms> beautizenTerm3 = termsApi.getTerms("ET011");
+	        List<Terms> beautizenTerm1= termsApi.getTerms(APConstant.EH_BEAUTIZEN_TERM_1);
+	        List<Terms> beautizenTerm2 = termsApi.getTerms(APConstant.EH_BEAUTIZEN_TERM_2);
+	        List<Terms> beautizenTerm3 = termsApi.getTerms(APConstant.EH_BEAUTIZEN_TERM_3);
 	        
 	        model.addAttribute("beautizenTerm1", beautizenTerm1.get(0));
 	        model.addAttribute("beautizenTerm2", beautizenTerm2.get(0));
@@ -686,8 +665,8 @@ public class BrandViewController extends AbstractController {
         
         getStoreEventScheduleInfo(model);
         
-        List<Terms> terms1 = termsApi.getTerms("ET007"); // ET007: 개인정보 수집 이용 동의 (필수)
-        List<Terms> terms2 = termsApi.getTerms("ET008"); // ET008: 개인정보 취급 위탁에 대한 동의 (필수)
+        List<Terms> terms1 = termsApi.getTerms(APConstant.EH_COLOR_FACTORY_TERM_1); // ET007: 개인정보 수집 이용 동의 (필수)
+        List<Terms> terms2 = termsApi.getTerms(APConstant.EH_COLOR_FACTORY_TERM_2); // ET008: 개인정보 취급 위탁에 대한 동의 (필수)
 
 		model.addAttribute("terms1", terms1.get(0));
 		model.addAttribute("terms2", terms2.get(0));
@@ -754,15 +733,6 @@ public class BrandViewController extends AbstractController {
     @PageTitle(title = "컬러 팩토리 예약")
     public String color_factory_reserve_confirm(Model model, RequestBrand requestBrand, String displayMenuId, String categoryType, String groupId) {
 		
-		
-		//Mobile
-        if (isMobileDevice()) {
-        }
-
-        //PC
-        if (isPcDevice()) {
-        }
-        
         if(categoryType == null || "".equals(categoryType)) categoryType = "l_community";
         
         if(groupId == null || "".equals(groupId)) groupId = "l_color_factory_info";
@@ -935,19 +905,12 @@ public class BrandViewController extends AbstractController {
 	 */
 	@RequestMapping({"/l_makeup_your_dream", "/makeup_your_dream"})
     @PageTitle(title = "MAKEUP YOUR DREAM")
-    public String makeup_your_dream(Model model, String displayMenuId, String categoryType, String groupId) {
+    public String makeupYourDream(Model model, String displayMenuId, String categoryType, String groupId) {
 		
 		displayMenuId = "makeup_your_dream";
+		
 		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
 		
-        //Mobile
-        if (isMobileDevice()) {
-        }
-
-        //PC
-        if (isPcDevice()) {
-        }
-        
         if(categoryType == null || "".equals(categoryType)) categoryType = "l_community";
         
         if(groupId == null || "".equals(groupId)) groupId = "l_makeup_your_dream";
@@ -957,7 +920,7 @@ public class BrandViewController extends AbstractController {
         model.addAttribute("groupId", groupId);
 
         return "display/" + pageInfo.getMenuPageFileId();
-//        return "display/makeup-dream-01";
+
     }
 	
 	/**
@@ -971,7 +934,7 @@ public class BrandViewController extends AbstractController {
 	 */
 	@RequestMapping("/makeup_your_dream_lecture")
     @PageTitle(title = "청춘강연")
-    public String makeup_your_dream_lecture(Model model, String displayMenuId, String categoryType, String groupId) {
+    public String makeupYourDreamLecture(Model model, String displayMenuId, String categoryType, String groupId) {
 		String pageFileName = "";
 		
 		//Mobile
@@ -1007,7 +970,7 @@ public class BrandViewController extends AbstractController {
 	@RequestMapping("/makeup_your_dream_apply")
     @PageTitle(title = "청춘강연")
 	
-    public String makeup_your_dream_apply(Model model, String displayMenuId, String categoryType, String groupId) {
+    public String makeupYourDreamApply(Model model, String displayMenuId, String categoryType, String groupId) {
 		String pageFileName = "";
 				
 		//Mobile
@@ -1045,7 +1008,7 @@ public class BrandViewController extends AbstractController {
     @PageTitle(title = "청춘강연 신청")
     public String makeup_your_dream_reserve_regist(Model model, String displayMenuId, String categoryType, String groupId) {
 		
-		displayMenuId = "makeup_your_dream";
+		displayMenuId = "makeup_your_dream_apply";
 		
 		String pageFileName = "";
 		
@@ -1063,9 +1026,9 @@ public class BrandViewController extends AbstractController {
         
         if(groupId == null || "".equals(groupId)) groupId = "l_makeup_your_dream";
         
-        List<Terms> terms1 = termsApi.getTerms("ET012"); //  [필수] 개인정보 수집 및 이용동의
-        List<Terms> terms2 = termsApi.getTerms("ET013"); //  [필수] 개인정보 처리 위탁에 대한 동의
-        List<Terms> terms3 = termsApi.getTerms("ET014"); //  [필수] 사진 및 동영상 촬영 및 활용 동의
+        List<Terms> terms1 = termsApi.getTerms(APConstant.EH_MAKEUP_YOUR_DREAM_TERM_1); //  [필수] 개인정보 수집 및 이용동의
+        List<Terms> terms2 = termsApi.getTerms(APConstant.EH_MAKEUP_YOUR_DREAM_TERM_2); //  [필수] 개인정보 처리 위탁에 대한 동의
+        List<Terms> terms3 = termsApi.getTerms(APConstant.EH_MAKEUP_YOUR_DREAM_TERM_3); //  [필수] 사진 및 동영상 촬영 및 활용 동의
 
 		model.addAttribute("terms1", terms1.get(0));
 		model.addAttribute("terms2", terms2.get(0));
@@ -1077,39 +1040,5 @@ public class BrandViewController extends AbstractController {
 
         return pageFileName;
     }
-	
-	/**
-	 * 청춘강연 신청하기 페이지 이동
-	 * 
-	 * @param model
-	 * @param displayMenuId
-	 * @param categoryType
-	 * @param groupId
-	 * @return
-	 */
-	@RequestMapping("/makeup_your_dream_reserve")
-    @PageTitle(title = "청춘강연 신청결과")
-	
-    public String makeup_your_dream_reserve(Model model, RequestBrand requestBrand, String displayMenuId, String categoryType, String groupId) {
-		
-		String pageFileName =""; 
-	
-        //PC
-        if (isPcDevice()) {
-        	pageFileName = "display/makeup-your-dream-05";
-        }
-        
-        if(categoryType == null || "".equals(categoryType)) categoryType = "l_community";
-        
-        if(groupId == null || "".equals(groupId)) groupId = "l_makeup_your_dream";
-        
-       
-        model.addAttribute("displayMenuId", displayMenuId);
-        model.addAttribute("categoryType", categoryType);
-        model.addAttribute("groupId", groupId);
-        model.addAttribute("result", requestBrand);   
-        
-        return pageFileName;
-    }
-	
+
 }

@@ -1,4 +1,4 @@
-<html ap:decorate="~{layout/default}">
+<html ap:decorate="~{layout/default}" th:with="_jsfile='main-home'">
 <head>
 	<link rel="stylesheet" type="text/css" ap:href="@{/css/main.css}">
 </head>
@@ -7,10 +7,19 @@
 <div ap:fragment="layout-contents">
 
 	<div class="ap_contents main_contents">
-		<!--/* 띠배너 */-->
-		<div class="banner" style="background: #f1feee;">
-			<a href="#none"><img ap:src="@{/images/dummy/img_banner_sample.jpg}" alt=""></a>
-		</div>
+		<!--/* 띠배너
+		<th:block th:if="${not #lists.isEmpty(cornersMap)}">
+			<th:block th:each="corner, inx : ${cornersMap.get('M01_main_m.2')}">
+				<th:block th:each="contents : ${corner.contents}" th:if="${inx.index == 0}">
+					<th:block th:if="${contents.menuPageCornerContentsId == 'M01_main_m.2.1'}">
+						<div class="banner" th:style="'background-color:#' + ${contents.bgColor}">
+							<a href="#none" th:href="${contents.linkUrl}"><img th:src="${contents.imgUrl}" alt=""></a>
+						</div>
+					</th:block>
+				</th:block>
+			</th:block>
+		</th:block>
+		 */-->
 		<!--/* [S] event_banner */-->
 		<div class="main_visual">
 			<div class="slide" data-ix-options="view-length:1; auto-play:false;">

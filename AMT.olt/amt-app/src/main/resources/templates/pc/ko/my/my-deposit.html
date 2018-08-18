@@ -10,10 +10,17 @@
 			<th:block ap:replace="~{common/fragment/breadcrumb-only}"/>
 			<!-- // breadcrumbe -->
 
+			<div id="progress" style="top: 0;margin-top: 800px;left: 0;margin-left: calc(50% + 130px);position: absolute;z-index: 10;opacity: 1;display: none;">
+				   <div class="loading_full">
+						<span>
+							<span style="color: red;font-weight: 900;">LOADING...</span>
+						</span>
+				   </div>
+			 </div>
 			<!-- com_cont -->
 			<div class="ap_com_cont mypage">
 				<!-- aside_area -->
-				<th:block ap:replace="~{html/page/my/fragment/my-menu}"/>
+				<th:block ap:replace="~{my/fragment/my-menu}"/>
 				<!-- aside_area -->
 
 				<!-- cont_area -->
@@ -45,7 +52,7 @@
 								<h3 class="sr_only">예치금 내역</h3>
 								<div class="date_search table_layout">
 									<div>조회 기간</div>
-									<div class="ui_multiple_date_picker">
+									<div class="ui_multiple_date_picker" id="tab1">
 										<div class="date_btn_set">
 											<span><input type="radio" class="select_range_date" name="radio5" id="radio5_0" value="all" checked=""><label for="radio5_0">전체</label></span>
 											<span><input type="radio" class="select_range_date" name="radio5" id="radio5_1" value="1weeks"><label for="radio5_1">1주일</label></span>
@@ -64,7 +71,7 @@
 								            </div>
 							            </div>
 									</div>
-									<div><button class="btn_sm_form" type="button"><span class="ie_press">검색</span></button></div>
+									<div><button class="btn_sm_form" onclick="more(1)" type="button"><span class="ie_press">검색</span></button></div>
 								</div>
 								<div class="date_search2 table_layout body1">
 									<div>
@@ -253,24 +260,27 @@
 					date = e.date;
 			    	$('#progress').show();
 			    	
-					AP.api.depositHitoryListFragment({}, {
-							pageNumber:1,
-							startDt:e.date.startDate,
-							endDt:e.date.endDate,
-							depositType:$('select[name=depositType]').val()
-					}).done(function(data) {
+			    	if($(this).attr('id') == 'tab1') {
+						AP.api.depositHitoryListFragment({}, {
+								pageNumber:1,
+								startDt:e.date.startDate,
+								endDt:e.date.endDate,
+								depositType:$('select[name=depositType]').val()
+						}).done(function(data) {
 
-				    	date = e.date;
-				    	$(".pbody").remove();
-				    	$(".body1").after(data);
-				    	$('#date2').html($('#date1').html());
-				    	
-	                }).fail(function(xhr, textStatus, errorThrown) {
-	                	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
-	                }).always(function() {
-				    	$('#progress').hide();
-	                    //성공, 실패
-	                });
+					    	date = e.date;
+					    	$(".pbody").remove();
+					    	$(".body1").after(data);
+					    	$('#date2').html($('#date1').html());
+					    	
+		                }).fail(function(xhr, textStatus, errorThrown) {
+		                	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+		                }).always(function() {
+					    	$('#progress').hide();
+		                    //성공, 실패
+		                });
+			    	}
+			    	
 				});
 				
 				
@@ -365,7 +375,7 @@
 					});
 					return;
 				}
-				if(Number($('[name=amount]').valid()) <= 0) {
+				if(Number($('[name=amount]').val()) <= 0) {
 	            	AP.modal.alert("출금할 금액을 입력해 주세요").addListener( 'modal-close', function (e) {
 	            		$('[name=amount]').focus();
 					});

@@ -1,5 +1,4 @@
 <dl id="amtPcur">
-
 	<script th:inline="javascript">
 		$( document ).ready(function() {
 			amtPcurInit();
@@ -8,5 +7,27 @@
 
 			$('.spinner_increase').attr('disabled', true);
 		});
+
+		//결제금액 영역 그리기
+		function amtPcurInit() {
+			var ordHistEx = /*[[${ordEx.ordHistEx}]]*/ '0', // 최종결제금액
+				ordAmtMap = /*[[${ordAmtMap}]]*/ null,
+				ordCntMap = /*[[${ordCntMap}]]*/ null,
+				apMember = /*[[${apMember}]]*/ null;
+
+			/**
+			 * 총결제금액
+			 * @type {*|String}
+			 */
+			var html = AP.common.getTemplate( 'order.final-price-amt-pcur', {
+				ordHistEx : ordHistEx,
+				ordAmtMap : ordAmtMap,
+				ordCntMap : ordCntMap,
+				apMember : apMember
+			});
+			$('#amtPcur').html(html);
+			$("[name=finalPamtPcur]").val(ordHistEx.finalPamtPcur);
+			$("#orderPayment").html($B.string.numberFormat(ordHistEx.finalPamtPcur)+'원 결제하기');
+		}
 	</script>
 </dl>

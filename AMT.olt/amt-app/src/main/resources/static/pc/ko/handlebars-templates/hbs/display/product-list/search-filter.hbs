@@ -1,0 +1,101 @@
+{{#each this.addAttrs}}
+	{{#xif this.addAttrCode '==' 'price'}}
+
+		<!-- price -->
+		<dl class="price">
+			<dt>{{ this.addAttrsName }}</dt>
+			<dd>
+				<ul>
+					<li><span><input type="radio" name="{{ this.addAttrCode }}" id="{{ this.addAttrVals.[0].addAttrValCode }}" data-value="{{ this.addAttrVals.[0].addAttrValCode }}" data-min="0" data-max="30000">
+						<label for="{{ this.addAttrVals.[0].addAttrValCode }}">3만원미만</label>
+					</span></li>
+					<li><span><input type="radio" name="{{ this.addAttrCode }}" id="{{ this.addAttrVals.[1].addAttrValCode }}" data-value="{{ this.addAttrVals.[1].addAttrValCode }}" data-min="30000" data-max="50000">
+						<label for="{{ this.addAttrVals.[1].addAttrValCode }}">3~5만원</label>
+					</span></li>
+					<li><span><input type="radio" name="{{ this.addAttrCode }}" id="{{ this.addAttrVals.[2].addAttrValCode }}" data-value="{{ this.addAttrVals.[2].addAttrValCode }}" data-min="50000" data-max="70000">
+						<label for="{{ this.addAttrVals.[2].addAttrValCode }}">5~7만원</label>
+					</span></li>
+					<li><span><input type="radio" name="{{ this.addAttrCode }}" id="{{ this.addAttrVals.[3].addAttrValCode }}" data-value="{{ this.addAttrVals.[3].addAttrValCode }}" data-min="70000" data-max="">
+						<label for="{{ this.addAttrVals.[3].addAttrValCode }}">7만원</label>
+					</span></li>
+				</ul>
+				<div style="margin: 5px 0 5px 0";><span>직접입력</span></div>
+				<div class="direct_entry">
+					<form class="validate">
+						<span class="input_wrap"><input type="text" name="min" class="min" data-value="{{ this.value }}" placeholder="최소금액" number="number" data-msg="숫자만 입력해 주세요."></span>
+						<span class="input_wrap"><input type="text" name="max" class="max" data-value="{{ this.value }}" placeholder="최대금액" number="number" data-msg="숫자만 입력해 주세요."></span>
+						<span><button class="btn_fix_gradient2 price_search" type="button">검색</button></span>
+					</form>
+				</div>
+			</dd>
+		</dl>
+
+	{{else}}
+		{{#xif this.addAttrCode '==' 'sale'}}
+
+			<!-- sale -->
+			<dl>
+				<dt>{{ this.addAttrsName }}</dt>
+				<dd>
+					<ul>
+						{{#each this.addAttrVals}}
+							<li><span><input type="radio" name="{{ ../addAttrCode }}" id="{{ this.addAttrValCode }}" data-value="{{ this.addAttrValCode }}"><label for="{{ this.addAttrValCode }}">{{ this.addAttrValName }}</label></span></li>
+						{{/each}}
+					</ul>
+				</dd>
+			</dl>
+
+		{{else}}
+			{{#xif this.addAttrCode '==' 'spf'}}
+
+				<!-- spf -->
+				<dl>
+					<dt>{{ this.addAttrsName }}</dt>
+					<dd>
+						<ul>
+							{{#each this.addAttrVals}}
+								<li><span><input type="radio" name="{{ ../addAttrCode }}" id="{{ this.addAttrValCode }}" data-value="{{ this.addAttrValCode }}"><label for="{{ this.addAttrValCode }}">{{ this.addAttrValName }}</label></span></li>
+							{{/each}}
+						</ul>
+					</dd>
+				</dl>
+
+			{{else}}
+				{{#xif this.addAttrCode '==' 'color'}}
+
+					<!-- color -->
+					<dl>
+						<dt>{{ this.addAttrsName }}</dt>
+						<dd>
+							<ul class="colors">
+								{{#each this.addAttrVals}}
+									<li><span><input type="checkbox" name="{{ ../addAttrCode }}" id="{{ this.addAttrValCode }}" data-value="{{ this.addAttrValCode }}"><label for="{{ this.addAttrValCode }}" style="background-color:{{ this.addAttrValCode }}">{{ this.addAttrValName }}</label></span></li>
+								{{/each}}
+								<!--<li><span><input type="checkbox" id="color_2"><label for="color_2"><img ap:src="@{/images/dummy/IMG1424Fif683185312.jpg}" alt="색상명"></label></span></li>-->
+							</ul>
+						</dd>
+					</dl>
+
+				{{else}}
+
+					<!-- base -->
+					<dl>
+						<dt>{{ this.addAttrsName }}</dt>
+						<dd>
+							<ul class="leg_tgArea" data-min-height="180" style="height: {{#xif this.addAttrVals.length '>' 5}}180px{{else}}auto{{/xif}}">
+								{{#each this.addAttrVals}}
+									<li><span class="check_wrap"><input type="checkbox" id="{{ this.addAttrValCode }}" data-value="{{ this.addAttrValCode }}"><label for="{{ this.addAttrValCode }}">{{ this.addAttrValName }}</label></span></li>
+								{{/each}}
+							</ul>
+
+							{{#xif this.addAttrVals.length '>' 5}}
+								<button type="button" class="btn_src_more leg_btn">더보기</button>
+							{{/xif}}
+						</dd>
+					</dl>
+
+				{{/xif}}
+			{{/xif}}
+		{{/xif}}
+	{{/xif}}
+{{/each}}

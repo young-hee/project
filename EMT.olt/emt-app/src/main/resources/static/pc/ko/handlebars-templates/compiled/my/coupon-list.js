@@ -5,7 +5,7 @@ this["AP"]["handlebars"]["my"] = this["AP"]["handlebars"]["my"] || {};
 this["AP"]["handlebars"]["my"]["coupon-list"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "	<table class=\"align_center coupon_table\">\n		<caption class=\"sr_only\">사용 가능한 쿠폰 정보</caption>\n		<colgroup>\n			<col style=\"width:163px;\"> <!-- 컬럼 사이즈 -->\n			<col style=\"width:163px;\">\n			<col>\n			<col style=\"width:127px;\">\n			<col style=\"width:210px;\">\n			<col style=\"width:163px;\">\n		</colgroup>\n		<thead>\n		<tr>\n			<th scope=\"col\">취득일</th>\n			<th scope=\"col\">종류</th>\n			<th scope=\"col\">쿠폰명</th>\n			<th scope=\"col\">혜택</th>\n			<th scope=\"col\">유효기간</th>\n			<th scope=\"col\">사용제한</th>\n		</tr>\n		</thead>\n		<tbody>\n"
+  return "	<table class=\"align_center benefit_table\">\n		<caption class=\"sr_only\">사용 가능한 쿠폰 정보</caption>\n		<colgroup>\n			<col style=\"width:163px;\"> <!-- 컬럼 사이즈 -->\n			<col style=\"width:163px;\">\n			<col>\n			<col style=\"width:127px;\">\n			<col style=\"width:210px;\">\n			<col style=\"width:163px;\">\n		</colgroup>\n		<thead>\n		<tr>\n			<th scope=\"col\">취득일</th>\n			<th scope=\"col\">종류</th>\n			<th scope=\"col\">쿠폰명</th>\n			<th scope=\"col\">혜택</th>\n			<th scope=\"col\">유효기간</th>\n			<th scope=\"col\">사용제한</th>\n		</tr>\n		</thead>\n		<tbody>\n"
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.list : depth0),{"name":"each","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "		</tbody>\n	</table>\n";
 },"2":function(container,depth0,helpers,partials,data) {
@@ -37,7 +37,7 @@ this["AP"]["handlebars"]["my"]["coupon-list"] = Handlebars.template({"1":functio
 },"7":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "	<table class=\"align_center coupon_table\">\n		<caption class=\"sr_only\">사용 가능한 쿠폰 정보</caption>\n		<colgroup>\n			<col style=\"width:163px;\"> <!-- 컬럼 사이즈 -->\n			<col style=\"width:163px;\">\n			<col>\n			<col style=\"width:127px;\">\n			<col style=\"width:210px;\">\n			<col style=\"width:163px;\">\n		</colgroup>\n		<thead>\n		<tr>\n			<th scope=\"col\">취득일</th>\n			<th scope=\"col\">종류</th>\n			<th scope=\"col\">쿠폰명</th>\n			<th scope=\"col\">혜택</th>\n			<th scope=\"col\">사용/만료</th>\n			<th scope=\"col\">사용제한</th>\n		</tr>\n		</thead>\n		<tbody>\n"
+  return "	<table class=\"align_center benefit_table\">\n		<caption class=\"sr_only\">사용 가능한 쿠폰 정보</caption>\n		<colgroup>\n			<col style=\"width:163px;\"> <!-- 컬럼 사이즈 -->\n			<col style=\"width:163px;\">\n			<col>\n			<col style=\"width:127px;\">\n			<col style=\"width:210px;\">\n			<col style=\"width:163px;\">\n		</colgroup>\n		<thead>\n		<tr>\n			<th scope=\"col\">취득일</th>\n			<th scope=\"col\">종류</th>\n			<th scope=\"col\">쿠폰명</th>\n			<th scope=\"col\">혜택</th>\n			<th scope=\"col\">사용/만료</th>\n			<th scope=\"col\">사용제한</th>\n		</tr>\n		</thead>\n		<tbody>\n"
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.list : depth0),{"name":"each","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "		</tbody>\n	</table>\n";
 },"8":function(container,depth0,helpers,partials,data) {
@@ -71,9 +71,9 @@ this["AP"]["handlebars"]["my"]["coupon-list"] = Handlebars.template({"1":functio
 },"14":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "					<td class=\"limit_of_usage\">\n						<span class=\"ui_tooltip_tit\">사용제한 보기</span>\n						<span class=\"\">\n					<span class=\"ui_tooltip\">\n						<button type=\"button\" class=\"btn_tooltip\">툴팁보기</button>\n						<span class=\"arr\"></span>\n						<span class=\"layer_tooltip\">\n							<pre>"
+  return "					<td class=\"limit_of_usage\">\n						<span class=\"ui_tooltip_tit\">사용제한 보기</span>\n						<span class=\"\">\n							<span class=\"ui_tooltip\">\n								<button type=\"button\" class=\"btn_tooltip\">툴팁보기</button>\n								<span class=\"arr\"></span>\n								<span class=\"layer_tooltip\">\n									<pre>"
     + ((stack1 = container.lambda(((stack1 = (depth0 != null ? depth0.expCoupon : depth0)) != null ? stack1.foGuide : stack1), depth0)) != null ? stack1 : "")
-    + "</pre>\n							<button type=\"button\" class=\"ui_close\"><span class=\"sr_only\">툴팁 닫기</span></button>\n						</span>\n					</span>\n				</span>\n					</td>\n";
+    + "</pre>\n									<button type=\"button\" class=\"ui_close\"><span class=\"sr_only\">툴팁 닫기</span></button>\n								</span>\n							</span>\n						</span>\n					</td>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 

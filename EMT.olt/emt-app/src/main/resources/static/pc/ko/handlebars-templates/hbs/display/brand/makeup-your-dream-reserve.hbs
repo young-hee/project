@@ -1,0 +1,71 @@
+{{!--
+	청춘강연 결과 return 
+--}}
+<h3 class="sr_only">청춘강연 신청</h3>
+<div class="makeup_join_info">
+	<h4 class="h_title lare align_center">‘{{this.titleYear}}’ 에뛰드하우스 <strong><청춘강연></strong> 참가신청완료</h4>
+		<ul>
+			<li class="clear">
+				<b>신청자명</b>
+				<span>{{this.requesterName.name1}}</span>
+			</li>
+			<li class="clear">
+				<b>휴대폰번호</b>
+				<span>{{phoneNumberFormat this.requesterPhoneNo.phoneNo}}</span>
+			</li>
+			<li class="clear">
+				<b>연령대</b>
+				{{#switch this.requesterAgeGrp}}
+					{{#case "15" }}<span>15~19세</span>{{/case}}
+					{{#case "20" }}<span>20~24세</span>{{/case}}
+					{{#case "25" }}<span>25~29세</span>{{/case}}
+					{{#case "30" }}<span>30~34세</span>{{/case}}
+					{{#case "35" }}<span>35~39세</span>{{/case}}
+					{{#case "40" }}<span>40세 이상</span>{{/case}}
+				{{/switch}}
+				
+			</li>
+			<li class="clear">
+				<b>성별</b>
+				{{#xif this.requesterGender '==' 'Male'}}
+					<span>남성</span>
+				{{/xif}}
+				{{#xif this.requesterGender '==' 'Female'}}
+					<span>여성</span>
+				{{/xif}}
+			</li>
+			{{#xif this.companionName.name1 '!=' ''}}
+				<li class="clear">
+					<b>동반인원명</b>
+					<span>{{this.companionName.name1}}</span>
+				</li>
+				<li class="clear">
+					<b>동반인원 휴대폰번호</b>
+					<span>{{phoneNumberFormat this.companionPhoneNo.phoneNo}}</span>
+				</li>
+			{{/xif}}
+			<li>
+				<dl>
+					<dt><b>신청이유</b></dt>
+					<dd align="right">
+						<div>
+						{{this.requestReason}}
+						<div>
+					</dd>
+				</dl>
+			</li>
+		</ul>
+		<div class="prize_msg">
+			<div class="img"><img src="../pc/ko/images/brand/makeup_prize.jpg" alt=""></div>
+			<p>최종 당첨자로 선정되시면<br>작성해주신 휴대폰번호로 안내문자가 발송 됩니다.</p>
+		</div>
+		<div class="panel gray">
+			<dl class="clear">
+				<dt><b>당첨자 발표</b></dt>
+				<dd class="lh">당첨  발표일에  문자 및 유선으로 안내합니다. (문의 : 031-751-7277 에뛰드 청춘강연 운영팀)</dd>
+			</dl>
+		</div>
+		<div class="page_btns">
+			<button class="btn_lg_neutral" type="button">확인</button>
+		</div>
+	</div>

@@ -35,7 +35,7 @@
 				</th:block>
 
 				<!--수취인 배송정보-->
-				<input type="hidden" name="addressType"/>
+				<input type="hidden" name="addressType" value="LATELY"/>
 				<input type="hidden" name="recipientName"/>
 				<input type="hidden" name="recipientPhoneNo"/>
 				<input type="hidden" name="recipientEmailAddress"/>
@@ -43,6 +43,7 @@
 				<input type="hidden" name="recipientAddress1"/>
 				<input type="hidden" name="recipientAddress2"/>
 				<!--편의점택배 배송정보-->
+				<input type="hidden" name="addressStoreType" value="MEMBER"/>
 				<input type="hidden" name="storeHeadCd"/>
 				<input type="hidden" name="storeShopCd"/>
 				<input type="hidden" name="storeNm"/>
@@ -77,6 +78,11 @@
 			<p class="text_center mgt50">
 				<span class="check_wrap"><input type="checkbox" id="orderAgree"><label for="orderAgree"><span class="font_xl">주문정보 및 결제 대행 서비스 이용약관에 모두 동의합니다.</span></label></span>
 			</p>
+			<ul class="loading" id="paymentLoading" style="min-height: 100px; display: none">
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
 			<div class="page_btns">
 				<button type="button" class="btn_lg_primary" id="orderPayment" th:text="${#IntegUtil.toCommaNumber(ordEx.ordHistEx.finalPamtPcur)} + '원 결제하기'">0 원 결제하기</button>
 				<input type="hidden" name="finalPamtPcur" value="${ordEx.ordHistEx.finalPamtPcur}">
@@ -129,27 +135,60 @@
 		$("#orderPayment").on('click', function() {
 
 			//배송지 체크로직
-			//최근배송지
-			var addressType = $('input[name=addressType]').val();
-			if (addressType == 'LATELY'
-				&& ($('#recipientName').val() == null
-					|| $('#recipientPhoneNo').val() == null
-					|| $('#recipientEmailAddress').val() == null
-					|| $('#recipientZipCode').val() == null
-					|| $('#recipientAddress1').val() == null
-					|| $('#recipientAddress2').val() == null)) {
-				AP.modal.alert("최근배송지 정보가 존재하지 않습니다.");
-				return;
+			var shipType = $('input[name=shipType]').val();
+			if (shipType == 'SHIP') {
+				//일반택배------------
+				//최근배송지
+				var addressType = $('input[name=addressType]').val();
+				if (addressType == 'LATELY'
+					&& ($('#recipientName').val() == null
+						|| $('#recipientPhoneNo').val() == null
+						|| $('#recipientEmailAddress').val() == null
+						|| $('#recipientZipCode').val() == null
+						|| $('#recipientAddress1').val() == null
+						|| $('#recipientAddress2').val() == null)) {
+					AP.modal.alert("최근배송지 정보가 존재하지 않습니다.");
+					return;
+				}
+				//기본배송지
+				else if (addressType == 'NOMAL'
+					&& ($('#addressName').val() == null
+						|| $('#addressPhoneNo').val() == null
+						|| $('#addressZipCode').val() == null
+						|| $('#addressAddress1').val() == null
+						|| $('#addressAddress2').val() == null)) {
+					AP.modal.alert("기본배송지 정보가 존재하지 않습니다.");
+					return;
+				}
+				//새로입력(form validation)
+				/*else if (addressType == 'NEW'
+					&& ($('#userName').val() == null
+						|| $('#userPhoneNo').val() == null
+						|| $('#userPostCode').val() == null
+						|| $('#userAddress1').val() == null
+						|| $('#userAddress2').val() == null)) {
+					AP.modal.alert("주소정보를 입력해 주세요.");
+					return;
+				}*/
 			}
-			//기본배송지
-			if (addressType == 'NOMAL'
-				&& ($('#addressName').val() == null
-					|| $('#addressPhoneNo').val() == null
-					|| $('#addressZipCode').val() == null
-					|| $('#addressAddress1').val() == null
-					|| $('#addressAddress2').val() == null)) {
-				AP.modal.alert("기본배송지 정보가 존재하지 않습니다.");
-				return;
+			else if (shipType == 'STORE') {
+				//편의점-----------
+				//주문자와 동일
+				var addressStoreType = $('input[name=addressStoreType]').val();
+
+				if (addressStoreType == 'MEMBER'
+					&& ($('#cStoreName').val() == ''
+						|| $('#cStorePhoneNo').val() == '')) {
+					AP.modal.alert("편의점정보를 선택해 주세요.");
+					return;
+				}
+				//새로입력(form validation)
+				/*else if (addressStoreType == 'NEW'
+					&& ($('#cStoreRecipientName').val() == null
+						|| $('#cStoreRecipientPhoneNo').val() == null)) {
+					AP.modal.alert("주소정보를 입력해 주세요.");
+					return;
+				}*/
 			}
 
 			var $form = $( 'form.order-validate' );
@@ -175,11 +214,14 @@
 			}
 			/*************************************** 임시 적용 end******************************************/
 
-			var userName = $("input[name=userName]").val();
-			var userPhoneNo = $("input[name=userPhoneNo]").val();
+			//주문자 정보 세팅
+			var userName = $("input[name=purchaserName]").val();
+			var userPhoneNo = $("input[name=purchaserPhoneNo]").val();
+			var userEmail = $("input[name=purchaserEmailAddress]").val();
 			if(userName != "" || userPhoneNo != ""){
 				$('input[name=buyerName]').attr('value', userName);
 				$('input[name=mobile]').attr('value', userPhoneNo);
+				$('input[name=email]').attr('value', userEmail);
 			}
 
 			var memberSn		 = /*[[${memberSn}]]*/ '0'; // 회원키
@@ -406,28 +448,6 @@
 				modal.close();
 				location.replace('/cart/cartList');
 			});
-		}
-
-		//결제금액 영역 그리기
-		function amtPcurInit() {
-			var ordHistEx = /*[[${ordEx.ordHistEx}]]*/ '0', // 최종결제금액
-				ordAmtMap = /*[[${ordAmtMap}]]*/ null,
-				ordCntMap = /*[[${ordCntMap}]]*/ null,
-				apMember = /*[[${apMember}]]*/ null;
-
-			/**
-			 * 총결제금액
-			 * @type {*|String}
-			 */
-			var html = AP.common.getTemplate( 'order.final-price-amt-pcur', {
-				ordHistEx : ordHistEx,
-				ordAmtMap : ordAmtMap,
-				ordCntMap : ordCntMap,
-				apMember : apMember
-			});
-			$('#amtPcur').html(html);
-			$("[name=finalPamtPcur]").val(ordHistEx.finalPamtPcur);
-			$("#orderPayment").html($B.string.numberFormat(ordHistEx.finalPamtPcur)+'원 결제하기');
 		}
 	</script>
 </th:block>

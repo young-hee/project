@@ -11,13 +11,15 @@
 			this._$target = options.$target;
 			this._$list = this._$target.find( '.product_list_new' );
 			this._$sort = this._$target.find( '.sort_filter_wrap' );
+			this._$filterArea = this._$sort.find( '.filter_sel_area' );
 			this._$noneResult = this._$target.find( '.no_product' );
 			this._$loading = this._$target.find( '.loading' );
 
 			this._winScrollend = null;
 
 			this._searchFilter = null;
-			this._isFilterData = false;
+			this._invokedFilter = null;
+			this._isSearchFilterData = false;
 
 			this._currentIndex = 0;
 			this._lastIndex = 0;
@@ -25,10 +27,11 @@
 			this._param = {
 				offset: 0,
 				limit: 10,
-				sort: ''
+				sort: this._$sort.find( 'select' ).val()
 			};
 
 			this._setEvent();
+			this._setSort();
 		},
 
 		/** =============== Public Methods =============== */
@@ -51,16 +54,15 @@
 			AP.api.test({}, param ).done(function ( result ) {
 				// TODO: test
 				result = {
-					"result": [0,1,2,3,4,5,6,7,8,9],
+					"list": [0,1,2,3,4,5,6,7,8,9],
 					"offset": 0,
 					"limit": 10,
 					"totalLength": 21,
 					"filter": _filterData
 				};
 
-				if ( !this._isFilterData ) {
-					this._isFilterData = true;
-					this._searchFilter = new AP.searchFilter( result.filter );
+				if ( !this._isSearchFilterData ) {
+					this._setSearchFilter( result.filter );
 				}
 
 				if( result.totalLength == 0 ) {
@@ -99,27 +101,6 @@
 			}.bind( this ), 300);
 		},
 
-		sort: function ( sort ) {
-			this._param.sort = sort;
-			this._currentIndex = 0;
-			this.load();
-		},
-
-		changeView: function () {
-			if ( this._$sort.find( '.btn_align' ).hasClass( 'gallery' )) {
-				this._$sort.find( '.btn_align' ).removeClass( 'gallery' );
-				this._$list.removeClass( 'gallery' );
-			} else {
-				this._$sort.find( '.btn_align' ).addClass( 'gallery' );
-				this._$list.addClass( 'gallery' );
-			}
-		},
-
-		openFilter: function () {
-			this._searchFilter.open() ;
-		},
-
-
 		/** =============== Private Methods ============== */
 		_setEvent: function () {
 			// scroll
@@ -134,6 +115,70 @@
 			this._$list.on( 'click', '.btn_toggle', function (e) {
 				$( e.currentTarget ).toggleClass( 'on' ).find( '.ico_heart_s' ).toggleClass( 'on' );
 			}.bind( this ));
+		},
+
+		_setSort: function () {
+			// sort
+			this._$sort.find( '.select_type01_new select' ).on( 'change', function (e) {
+				this._param.sort = $( e.target ).val();
+				this._currentIndex = 0;
+				this.load();
+			}.bind( this ));
+
+			// filter
+			this._$sort.find( '.btn_filter' ).on( 'click', function (e) {
+				this._searchFilter.open() ;
+			}.bind( this ));
+		},
+
+		_setSearchFilter: function ( data ) {
+			AP.display.searchFilterData = data;
+
+			this._isSearchFilterData = true;
+
+			this._searchFilter = new AP.searchFilter( AP.display.searchFilterData );
+			this._invokedFilter = new AP.invokedFilter( this._$filterArea );
+
+			this._searchFilter.addListener( 'apply-search-filter', function (e) {
+				this._invokedFilter.set( e.data );
+				this._applyFilter( e.data );
+			}.bind( this ));
+
+			this._invokedFilter.addListener( 'delete-invoked-filter', function (e) {
+				if ( e.data.type == 'price' ) {
+					// 가격 filter data 삭제하기
+					var priceData = AP.display.searchFilterData.addAttrs[AP.display.searchFilterData.addAttrs.length - 1];
+					priceData.min = null;
+					priceData.max = null;
+					for ( var i = 0; i < priceData.addAttrVals.length; ++i ) {
+						priceData.addAttrVals[i].selected = false;
+					}
+				} else {
+					_.each( AP.display.searchFilterData.addAttrs, function ( value, index ) {
+						if ( e.data.attr == value.addAttrCode ) {
+							_.each( value.addAttrVals, function ( value, index ) {
+								if ( e.data.value == value.addAttrValCode ) {
+									value.selected = false;
+								}
+							});
+						}
+					});
+				}
+				this._invokedFilter.set( AP.display.searchFilterData );
+				this._applyFilter( AP.display.searchFilterData );
+
+			}.bind( this ));
+		},
+
+		_applyFilter: function ( data ) {
+			if ( this._invokedFilter.isFilter( data )) {
+				this._$target.find( '.btn_filter' ).addClass( 'on' );
+			} else {
+				this._$target.find( '.btn_filter' ).removeClass( 'on' );
+			}
+
+			this._currentIndex = 0;
+			this.load();
 		}
 
 	});

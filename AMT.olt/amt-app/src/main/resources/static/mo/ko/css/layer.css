@@ -28,18 +28,17 @@
 
 /* fullpage */
 .layer_popup.fullpage{display:block;}
-.layer_popup.fullpage .layer_wrap{top:0; left:0; right:0; bottom:0;}
-.layer_popup.fullpage .layer{padding:0;}
+.layer_popup.fullpage .layer_wrap{position:relative; top: inherit; left: inherit;right: inherit;height: 100%; overflow:hidden;}
+.layer_popup.fullpage .layer{padding:0; overflow:hidden; height:100%;}
 .layer_popup.fullpage .layer.transparent{background: transparent;}
-.layer_popup.fullpage .layer_title{height:50px; padding:12px 0 10px 0;line-height: 1.5; border-bottom:1px solid #e6e6e6; background:#fff; font-size:17px; text-align:center;}
+.layer_popup.fullpage .layer_title{position:fixed; top:0; left:0;right:0; height:50px; padding:12px 0 10px 0;line-height: 1.5; border-bottom:1px solid #e6e6e6; background:#fff; font-size:17px; text-align:center;z-index: 1;}
 .layer_popup.fullpage .layer_cont{padding:0;}
-.layer_popup.fullpage .layer_btns{width:100%; margin:0; padding:0; text-align:center;}
-.layer_popup.fullpage .layer_btns:after{content:''; display:block; clear:both;}
+.layer_popup.fullpage .layer_btns{width:100%; margin:0; padding:0; text-align:center; position:fixed; bottom:0; left:0; display:block; overflow:hidden; z-index:2;}
 .layer_popup.fullpage .layer_btns>*{float:left; width:50% !important; margin:0 !important;}
 .layer_popup.fullpage .layer_btns>*:only-child{width:100% !important;}
 .layer_popup.fullpage .layer_close{position:absolute; top:0; right:0; z-index: 3; width:50px; height:50px; padding:0;}
-.layer_popup.fullpage [class*="fixed"] .layer_cont{overflow:auto; position:absolute; top:50px; left:0; right:0; bottom:50px;}
-.layer_popup.fullpage .layer.fixed_top .layer_cont{bottom:0;}
+.layer_popup.fullpage [class*="fixed"] .layer_cont{height:100%;padding-top: 50px; overflow-y:auto;}
+/* .layer_popup.fullpage .layer.fixed_top .layer_cont{bottom:0;} */
 .layer_popup.fullpage  .fixed .layer_btns{position:fixed; bottom:0; left:0; }
 .layer_popup.fullpage  [class*="fixed"] + .layer_close{position:fixed;}
 .layer_popup.fullpage.black .layer{background:rgba(0,0,0,0.5);}
@@ -49,8 +48,18 @@
 .layer_popup.fullpage .btn_edit{position:absolute; top:8px; right:50px; height: 33px; padding: 2px 10px 0; color:#fff; font-size: 15px; border:1px solid #fff; border-radius: 5px;}
 .layer_popup.fullpage .btn_submit{position:absolute; top:8px; right:0; height: 33px; padding: 0 10px; font-size: 17px; color:#782fff;}
 .layer_popup.fullpage .btn_submit:disabled{color:#999; background:transparent !important;}
-.layer_popup.fullpage .btn_review_delete{position:absolute; top:6px; left:0;  height: 33px; padding: 0 10px; font-size: 17px; color:#646464; font-weight: bold;}
+.layer_popup.fullpage .btn_review_delete{position:absolute; top:0; left:0;  height: 50px; line-height: 50px; padding: 0 10px; font-size: 17px; color:#646464; font-weight: bold; z-index:1;}
 .layer_popup.fullpage .layer_cont>.section:only-child{min-height:calc(100% - 9px);}
+
+/* fullpage 안에 layer-popup*/
+.layer_popup.fullpage .layer_popup {display: none;}
+.layer_popup.fullpage .layer_popup {position:absolute; top:50%; left:12%; right:12%; bottom: auto;}
+.layer_popup.fullpage .layer_popup .layer_cont{padding:24px 23px 19px;}
+.layer_popup.fullpage .layer_popup .layer_btns{text-align:right; padding:24px; width: auto;}
+.layer_popup.fullpage .layer_popup .btn_default_modal_confirm {color:#782fff; font-size:16px}
+.layer_popup.fullpage .layer_popup .text {color:#000; font-size:15px; line-height:18px}
+.layer_popup.fullpage .layer_popup .layer_btns>*{float:none; width:auto !important;}
+.layer_popup.fullpage .layer_popup .layer_btns>* + *{margin-left:45px !important;}
 
 /* 툴팁 */
 .layer_tooltip{display:none; position:absolute; left: 15px; right: 15px; width: auto; z-index: 10; padding:0 15px; background:#fff; border:1px solid #e5e5e5; font-size:13px;}

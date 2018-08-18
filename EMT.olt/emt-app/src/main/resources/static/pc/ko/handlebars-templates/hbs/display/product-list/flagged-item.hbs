@@ -14,15 +14,17 @@
 		</div>
 		<div class="info_box">
 			<!--/* flag */-->
-			<div class="flag_set">
-				{{#each this.flags}}
-					{{#xif this.prodFlagCode '==' 'icon_reco_new'}}		<span class="new">신상품</span>			{{/xif}}
-					{{#xif this.prodFlagCode '==' 'icon_reco_best_w'}}	<span class="best">베스트</span>		{{/xif}}
-					{{#xif this.prodFlagCode '==' 'icon_pr_prod'}}		<span class="event">이벤트</span>		{{/xif}}
-					{{#xif this.prodFlagCode '==' 'icon_reco_md'}}		<span class="md">MD추천</span>			{{/xif}}
-					{{#xif this.prodFlagCode '==' 'icon_reco_online'}}	<span class="online">온라인전용</span>	{{/xif}}
-				{{/each}}
-			</div>
+			{{#if this.flags}}
+				<div class="flag_set">
+					{{#each this.flags}}
+						{{#xif this.prodFlagCode '==' 'icon_reco_new'}}		<span class="new">신상품</span>			{{/xif}}
+						{{#xif this.prodFlagCode '==' 'icon_reco_best_w'}}	<span class="best">베스트</span>		{{/xif}}
+						{{#xif this.prodFlagCode '==' 'icon_pr_prod'}}		<span class="event">이벤트</span>		{{/xif}}
+						{{#xif this.prodFlagCode '==' 'icon_reco_md'}}		<span class="md">MD추천</span>			{{/xif}}
+						{{#xif this.prodFlagCode '==' 'icon_reco_online'}}	<span class="online">온라인전용</span>	{{/xif}}
+					{{/each}}
+				</div>
+			{{/if}}
 			<!--/* 상품명 */-->
 			<div class="title_area">
 				<h3 class="h_title">{{ this.onlineProdName }}</h3>
@@ -47,6 +49,7 @@
 			{{/xif}}
 			<!--/* 가격,장바구니 */-->
 			<div class="price_area">
+				<div>
 				{{#with (calc this.onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' this.onlineProdPriceSummary.maxMemberLevelDiscountRate '+' this.onlineProdPriceSummary.maxOnlineMemberDiscountRate) as |maxRate|}}
 					{{#xif maxRate '!=' 0}}
 					<div class="discount">
@@ -61,6 +64,7 @@
 						</strong>
 					</div>
 				{{/with}}
+				</div>
 			</div>
 		</div>
 	</div>

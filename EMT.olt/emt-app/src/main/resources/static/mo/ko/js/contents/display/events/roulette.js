@@ -34,7 +34,7 @@
 
 			AP.api.participated({}, {
 				regularEventType: 'Roulette'
-			}).done(function ( result ) {;
+			}).done(function ( result ) {
 				this._alert( 'start' ).addListener( 'modal-close', function (e) {
 					if ( e.closeType === 'confirm' ) {
 						this._winValue = ( result.eventWinStatus === 'Win' ) ? 1 : 0;
@@ -93,7 +93,7 @@
 				if ( this._winValue ) {
 					// 당첨
 					result.member = this._member;
-					AP.winningPop.open( '진주알 룰렛', result );
+					AP.winningPop.open( '진주알 룰렛', result);
 				} else {
 					// 꽝
 					this._alert( 'fail' );

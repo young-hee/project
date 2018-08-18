@@ -45,7 +45,7 @@ public class AccessTokenHandlerInterceptor extends HandlerInterceptorAdapter {
 				APRequestContext.setAccessToken(accessToken);
 			} else {
 				// refresh_token 을 이용해서 access_token 재발급
-				refreshAccessToken(memberSession);
+				refreshAccessToken(request, memberSession);
 			}
 		} else {
 			if (StringUtils.hasText(APRequestContext.getAccessToken())) {
@@ -56,7 +56,7 @@ public class AccessTokenHandlerInterceptor extends HandlerInterceptorAdapter {
 		return true;
 	}
 
-	private void refreshAccessToken(MemberSession memberSession) {
+	private void refreshAccessToken(HttpServletRequest request, MemberSession memberSession) {
 		// endpoint 구성
 		String refreshToken = memberSession.getRefreshToken();
 		String domain = env.getProperty("ecp.api.base-url");
@@ -82,6 +82,9 @@ public class AccessTokenHandlerInterceptor extends HandlerInterceptorAdapter {
 
 		// 갱신된 access token 으로 교체
 		memberSession.setAccessToken(refreshedAccessToken);
+		// redis 에 저장하기 위해 setSessionAttribute 호출
+		WebUtils.setSessionAttribute(request, SessionKey.LOGIN_USER, memberSession);
+
 		APRequestContext.setAccessToken(refreshedAccessToken);
 	}
 

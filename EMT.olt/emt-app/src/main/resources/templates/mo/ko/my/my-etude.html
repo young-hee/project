@@ -70,21 +70,22 @@
 				</dd>
 				<dd>
 					<div class="table_layout">
-						<a href="/my/page/returnExchange" class="null">취소/반품/교환 (<strong class="num">0</strong>)</a>
+						<a href="/my/page/returnExchange" class="null">취소/반품/교환 (<strong class="num" th:text="${cancelCnt + returnCnt + exchangeCnt}">0</strong>)</a>
 						<a href="/my/page/myReviewList">미작성 구매후기 (<strong class="num" th:text="${reviewCnt}">1</strong>)</a>
 					</div>
 				</dd>
 			</dl>
 		</div>
 		<!--/* 20180502 : 장바구니 상품 삭제 / 마이 컬러파인터 신규 추가 */-->
-		<div class="my_color_finder" th:if="${skinTon != null && skinTon.skinToneMeasureYN == 'Y'}">
+		<div class="my_color_finder">
 			<h3 class="h_title cont"><strong>마이 컬러파인더</strong></h3>
 			<!--/* [S]20180515 : 마크업 수정 */-->
+			<th:block th:if="${skinTon != null && #lists.size(skinTon.skinToneList) > 0}">
 			<div class="tone_wrap">
 				<img ap:src="@{/images/my/tone_spring.jpg}" alt="">
 				<div class="text">
-					<p class="eng" th:text="${skinTon.skinToneMeasureName}">Warm Tone <strong>Spring</strong></p>
-					<p class="tone_text">홍길동 님의<br>피부톤은<br><b th:text="${skinTon.skinToneMeasureName}">웜톤 봄</b> 타입</p>
+					<p class="eng" >Warm Tone <strong>Spring</strong></p>
+					<p class="tone_text">홍길동 님의<br>피부톤은<br><b >웜톤 봄</b> 타입</p>
 				</div>
 				<div>
 					<div class="my_skin table_layout">
@@ -106,8 +107,24 @@
 					</div>
 				</div>
 			</div>
+			</th:block>
+				<!--/* 피부측정 데이터가 없는 경우 */-->
+           <th:block th:if="${skinTon == null || #lists.size(skinTon.skinToneList) == 0}">
+	            <div class="panel notice">
+	                <i class="ico"></i>
+	                <p class="text mgb20">피부 측정 데이터가 없습니다.<br>
+	                    <span class="color_gray2">가까운 에뛰드 하우스 매장에서 무료로<br>피부톤 측정을 받으세요~</span>
+	                </p>
+	                <a href="#" class="btn_md_neutral w90p">가까운 매장 찾기</a>
+	            </div>
+			</th:block>
+			<!-- /* 20180802:삭제 */ -->
+ 			<div class="banner"> 
+				<a href="javascript:setApp();"><img ap:src="@{/images/my/link_app.jpg}" alt="에뛰드 하우스 앱으로 더 많은 정보를 확인해 보세요~. 앱 설치하기" /></a>
+			</div>
+             
 			<!--/* [E]20180515 : 마크업 수정 */-->
-			<div class="my_tone_recommend" th:data-skinton-measure-code="${skinTon.skinToneMeasureCode}">
+			<div class="my_tone_recommend" > <!-- th:data-skinton-measure-code="${skinTon.skinToneMeasureCode}"-->
 				<h4 class="h_title"><b>내 피부톤과 어울리는 추천 제품</b></h4>
 				<!--/*20180531 : 슬라이드 상품노출 영역 수정*/-->
 				<div class="slide two_half" data-ix-options="view-length:3; move-length:2;">
@@ -169,21 +186,6 @@
 					</div>
 				</div>
 			</div>
-			<!-- /* 20180802:삭제 */ -->
- 			<!--<div class="banner"> 
-				<a href="javascript:setApp();"><img ap:src="@{/images/my/link_app.jpg}" alt="에뛰드 하우스 앱으로 더 많은 정보를 확인해 보세요~. 앱 설치하기" /></a>
-			</div> -->
-			<!--/* 피부측정 데이터가 있는 경우
-            <div class="panel notice">
-                <i class="ico"></i>
-                <p class="text mgb20">
-                    피부 측정 데이터가 없습니다.<br>
-                    <span class="color_gray2">가까운 에뛰드 하우스 매장에서 무료로<br>
-                    피부톤 측정을 받으세요~</span>
-                </p>
-                <a href="#" class="btn_md_neutral w90p">가까운 매장 찾기</a>
-            </div>
-             */-->
 		</div>
 
 		<!-- 마이 에뛰드 메뉴 -->

@@ -21,7 +21,7 @@
 												<dd>
 													<div class="input_group">
 														<div>
-															<input type="text" name="acHolderName.name1" placeholder="예금주 입력">
+															<input type="text" required="reuqired" name="acHolderName.name1" placeholder="예금주 입력" data-msg-required="예금주를 입력해 주세요.">
 														</div>
 													</div>
 												</dd>
@@ -31,7 +31,7 @@
 												<dd>
 													<div class="input_group">
 														<div>
-															<select name="bankCode" id="bankCode" title="은행 선택">
+															<select name="bankCode" required="reuqired" id="bankCode" tabindex="-1" class="＠selectbox-apply" placeholder="예금주 입력" data-msg-required="예금은행을 입력해 주세요.">
 																<option value="">은행 선택</option>
 																<option value="039">경남은행</option>
 																<option value="034">광주은행</option>
@@ -56,7 +56,7 @@
 													</div>
 													<div class="input_group">
 														<div>
-															<input type="number" name="bankAcNo" placeholder="‘-’없이 계좌번호 입력" >
+															<input type="number" title="계좌번호 입력" required="reuqired" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" name="bankAcNo" placeholder="‘-’없이 계좌번호 입력" data-msg-required="이체 계좌번호를 입력해 주세요.">
 														</div>
 													</div>
 												</dd>
@@ -85,23 +85,24 @@
 		<script th:inline="javascript">
 			$('#cancelBtn').on('click', function() {
 				//console.log("취소");
-				location.href = "/my/page/myDepositManagementList";
+				location.replace("/my/page/myDepositManagementList");
 			});
 
 			$('#closeBtn').on('click', function() {
 				//console.log("닫기");
-				location.href = "/my/page/myDepositManagementList";
+				location.replace("/my/page/myDepositManagementList");
 			});
 
 			$('#saveBtn').on('click', function() {
 				//console.log("저장");
 
 				var $form = $('form');
+				if(!$form.valid()) return;
 				AP.api.saveRefundAccounts({}, AP.common.getFormData($form)).done(function(data) {
 					//성공
-					console.log("성공");
-
-					location.href = "/my/page/myDepositManagementList";
+	            	AP.modal.alert("환불계좌가 정상적으로 등록되었습니다.").addListener( 'modal-close', function (e) {
+						location.replace("/my/page/myDepositManagementList");
+					});
 				}).fail(function(e) {
 					AP.modal.alert(e.responseJSON.errorData.message);
 					//실패

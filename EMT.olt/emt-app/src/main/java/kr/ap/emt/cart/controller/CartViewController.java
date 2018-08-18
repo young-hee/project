@@ -9,9 +9,12 @@ package kr.ap.emt.cart.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import kr.ap.comm.member.vo.OrdCartInfo;
+import net.g1project.ecp.api.exception.ApiException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -35,21 +38,55 @@ public class CartViewController extends CartBaseController{
 
 	/**
 	 * 장바구니 목록
+	 * @param model
+	 * @return
 	 */
 	@PageTitle(title = "장바구니|에뛰드")
 	@GetMapping("/cartList")
 	public String cartList(Model model) {
 
-		/* 회원정보 조회 */
+		/* 세션 세팅 */
 		MemberSession memberSession = getMemberSession();
 
 		/* 카트정보 세팅*/
-		cartEx = setCart(memberSession, model);
-		memberSession.setCartProdSnList(null);
-		
-		// 재계산을 위하여 최종 cartEx를 넣어 놓음
+		if(getMemberSn() > 0L){
+			// 회원
+			CartSnResult cartSnResult = cartApi.getMemberCartSn(getMemberSn());
+			cartEx = getCart(cartSnResult.getCartSn());
+
+			/* 테이크아웃 매장정보 */
+			makeSelectStore(cartEx, model, getMemberSn());
+
+			/* 뷰티포인트 정보 */
+			CartMemberMembershipEx bpCartMemberMembershipEx = null;
+			if(cartEx.getCartMemberEx().getMemberMembershipExList() != null){
+				for(CartMemberMembershipEx cartMemberMembershipEx: cartEx.getCartMemberEx().getMemberMembershipExList()){
+					if("BP".equals(cartMemberMembershipEx.getMembershipServiceCode())){
+						bpCartMemberMembershipEx = cartMemberMembershipEx;
+						break;
+					}
+				}
+			}
+			model.addAttribute("memberSn", getMemberSn());
+			model.addAttribute("bpCartMemberMembershipEx", bpCartMemberMembershipEx);
+		}
+		else{
+			// 비회원
+			if (getMemberSession().getCartSn() == 0L) {
+				CartSnResult cartSnResult = cartApi.createNonmemberCart();
+				cartEx = getCart(cartSnResult.getCartSn());
+			}
+			else{
+				cartEx = getCart(getMemberSession().getCartSn());
+			}
+			model.addAttribute("memberSn", (long)0);
+		}
+
+		model.addAttribute("cartEx", cartEx);
+
+		/* 재계산을 위하여 최종 cartEx를 넣어 놓음 */
+		memberSession.setCartSn(cartEx.getCartSn());
 		memberSession.setCartEx(cartEx);
-		
 		setMemberSession(memberSession);
 
 		// Mobile
@@ -60,107 +97,29 @@ public class CartViewController extends CartBaseController{
 		if (isPcDevice()) {
 			return "cart/cart";
 		}
+
 		return null;
 	}
 
 	/**
-	 * 회원구분 및 매장정보
+	 *  장바구니 정보
+	 * @param cartSn
+	 * @return
 	 */
-	private CartEx setCart(MemberSession memberSession, Model model) {
-		/* 비 회 */
-		CartMemberMembershipEx bpCartMemberMembershipEx = null;
-		if(memberSession.getMember_sn() == 0L) {
-			if (memberSession.getCartSn() == 0L) {
-				CartSnResult cartSnResult = cartApi.createNonmemberCart();
-				cartEx = checkCart(memberSession, cartSnResult.getCartSn(), model);
-				model.addAttribute("cartEx", cartEx);
-			}else{
-				cartEx = checkCart(memberSession, memberSession.getCartSn(), model);
-				model.addAttribute("cartEx", cartEx);
-			}
-		/* 회원 */
-		}else{
-			CartSnResult memberCartSn = cartApi.getMemberCartSn(memberSession.getMember_sn());
-			cartEx = checkCart(memberSession, memberCartSn.getCartSn(), model);
-
-			if(cartEx.getCartMemberEx().getMemberMembershipExList() != null){
-				for(CartMemberMembershipEx cartMemberMembershipEx: cartEx.getCartMemberEx().getMemberMembershipExList()){
-					if("BP".equals(cartMemberMembershipEx.getMembershipServiceCode())){
-						bpCartMemberMembershipEx = cartMemberMembershipEx;
-						break;
-					}
-				}
-			}
-			model.addAttribute("cartEx", cartEx);
-			model.addAttribute("bpCartMemberMembershipEx", bpCartMemberMembershipEx);
-
-			/* 테이크아웃 매장정보 */
-			makeSelectStore(cartEx, model, memberSession.getMember_sn());
-		}
-		return cartEx;
-	}
-
-
-	/**
-	 * 장바구니 정보
-	 */
-	private CartEx checkCart(MemberSession memberSession, Long cartSn, Model model) {
-
+	private CartEx getCart(Long cartSn) {
 		if(cartSn != null){
-			CartEx cartEx = cartApi.getCart(cartSn);
-			
-			/* 보유포인트로 선택여부 재계산 */
-			calculationExchPoint(cartEx);
-			
-			makeCartEx2(cartEx);
-			memberSession.setCartSn(cartEx.getCartSn());
-			if(memberSession.getMember_sn() > 0L){
-				model.addAttribute("memberSn", memberSession.getMember_sn());
-			}else{
-				model.addAttribute("memberSn", (long)0);
-			}
+			cartEx = cartApi.getCart(cartSn);
+			cartEx = calculationBySelect(cartEx);
 			return cartEx;
 		}
 		return null;
 	}
 
 	/**
-	 * 쇼핑상품 정의
-	 */
-	private CartEx makeCartEx2(CartEx cartEx) {
-
-		/* 온라인쇼핑 상품 */
-		{
-			// 장바구니-배송-온라인상품목록
-			for (CartOnlineProdEx cartOnlineProdEx : cartEx.getCartDeliveryOnlineProdExList()) {
-				for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-					if (!"OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus())
-						|| "N".equals(cartProdEx.getCalculationResultYn())) {
-						cartOnlineProdEx.setSaleDisplayStatus("NotSelect");
-						break;
-					}
-				}
-			}
-		}
-
-		/* 테이크 아웃 상품 */
-		{
-			// 장바구니매장픽업-온라인상품목록
-			for (CartOnlineProdEx cartOnlineProdEx : cartEx.getCartStorePickupOnlineProdExList()) {
-				for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-					if (!"OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus())
-						|| "N".equals(cartProdEx.getCalculationResultYn())) {
-						cartOnlineProdEx.setSaleDisplayStatus("NotSelect");
-						break;
-					}
-				}
-			}
-		}
-		return cartEx;
-	}
-
-	/**
 	 * 테이크아웃 매장정보
+	 * @param cartEx
+	 * @param model
+	 * @param memberSn
 	 */
 	private void makeSelectStore(CartEx cartEx, Model model, Long memberSn) {
 
@@ -251,7 +210,11 @@ public class CartViewController extends CartBaseController{
 		model.addAttribute("addressDivInfoList", storeApi.getStoreAddressDivs(null));	// 지역시구군 목록
 	}
 
-	/* 일반상품 */
+	/**
+	 * 일반상품
+	 * @param cartStorePickupOnlineProdExList
+	 * @return
+	 */
 	private List<ProdInvtEx> getProdInvtExList( List<CartOnlineProdEx> cartStorePickupOnlineProdExList) {
 		List<ProdInvtEx> prodInvtExList = new ArrayList<>();
 		for(CartOnlineProdEx cartOnlineProdEx : cartStorePickupOnlineProdExList ){
@@ -265,7 +228,11 @@ public class CartViewController extends CartBaseController{
 		return prodInvtExList;
 	}
 
-	/* M+N, 동시구매 프로모션 상품 */
+	/**
+	 * M+N, 동시구매 프로모션 상품
+	 * @param cartStorePickupOnlineProdExList
+	 * @return
+	 */
 	private List<ProdInvtEx> getPromoProdInvtExList( List<CartPromoEx> cartStorePickupOnlineProdExList) {
 		List<ProdInvtEx> prodInvtExList = new ArrayList<>();
 		for(CartPromoEx cartPromoEx : cartStorePickupOnlineProdExList ){

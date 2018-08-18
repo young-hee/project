@@ -1,28 +1,46 @@
-<html ap:decorate="~{layout/layout-main}">
-
+<html ap:decorate="~{layout/layout-main}" th:with="_jsfile='main-home'">
+<head>
+    <link rel="stylesheet" type="text/css" ap:href="@{/css/main.css}">
+</head>
 <body>
 <!-- #ap_container -->
 <div ap:fragment="layout-contents">
 
 	<div class="ap_contents main_contents">
 		<!--/* 이미지 배너 */-->
-		<div class="section banner">
-			<a href="#none"><img ap:src="@{/images/dummy/img_banner.jpg}" alt="배너내용"></a>
-		</div>
+		<th:block th:if="${not #lists.isEmpty(cornersMap)}">
+			<th:block th:each="corner, inx : ${cornersMap.get('M01_main_m.2')}">
+				<th:block th:each="contents : ${corner.contents}" th:if="${inx.index == 0}">
+					<th:block th:if="${contents.menuPageCornerContentsId == 'M01_main_m.2.1'}">
+						<div class="section banner" th:style="'background-color:#' + ${contents.bgColor}">
+							<a href="#none" th:href="${contents.linkUrl}"><img th:src="${contents.imgUrl}" alt="${contents.text}"></a>
+						</div>
+					</th:block>
+				</th:block>
+			</th:block>
+		</th:block>
 		<!--/* 슬라이드 */-->
+		<th:block th:if="${not #lists.isEmpty(cornersMap)}">
 		<div class="section slide" data-ix-options="view-length:1;">
 			<div class="ix-list-viewport">
 				<ul class="ix-list-items">
-					<li class="ix-list-item">
-						<a href="#none">
-							<img alt="배너 내용" ap:src="@{/images/dummy/img_banner_01.jpg}">
-						</a>
-					</li>
-					<li class="ix-list-item">
-						<a href="#none">
-							<img alt="배너 내용" ap:src="@{/images/dummy/img_banner_02.jpg}">
-						</a>
-					</li>
+					<th:block th:each="corner : ${cornersMap.get('M01_main_m.3')}">
+						<th:block th:each="contents : ${corner.contents}">
+							<th:block th:if="${contents.menuPageCornerContentsId == 'M01_main_m.3.1'}">
+								<li class="ix-list-item" th:style="'background-color:#' + ${contents.bgColor}">
+									<a href="#none" th:href="${contents.linkUrl}">
+										<img th:src="${contents.imgUrl}" alt="">
+							</th:block>
+							<th:block th:if="${contents.menuPageCornerContentsId == 'M01_main_m.3.2'}">
+								<strong class="title" th:utext="${contents.text}"></strong>
+							</th:block>
+							<th:block th:if="${contents.menuPageCornerContentsId == 'M01_main_m.3.3'}">
+								<p class="text" th:utext="${contents.text}"></p>
+							</th:block>
+						</th:block>
+							</a>
+						</li>
+					</th:block>
 				</ul>
 			</div>
 			<div class="ix-controller overlay">
@@ -30,23 +48,21 @@
 				<button type="button" class="btn_view_all">전체보기</button>
 			</div>
 		</div>
+		</th:block>
 		<!--/* 바로가기 메뉴 영역 */-->
-		<div class="section quick_menu">
+		<div class="section quick_menu" th:if="${not #lists.isEmpty(gnbMap.get('mainQuick'))}">
 			<ul class="menu_list col_05">
-				<li><a href="#none"><span class="icon"><img ap:src="@{/images/dummy/img_quick_menu_01.png}" alt=""></span><span>출석체크</span></a></li>
-				<li><a href="#none"><span class="icon"><img ap:src="@{/images/dummy/img_quick_menu_02.png}" alt=""></span><span>쿠션존</span></a></li>
-				<li><a href="#none"><span class="icon"><img ap:src="@{/images/dummy/img_quick_menu_03.png}" alt=""></span><span>베스트</span></a></li>
-				<li><a href="#none"><span class="icon"><img ap:src="@{/images/dummy/img_quick_menu_04.png}" alt=""></span><span>이벤트</span></a></li>
-				<li><a href="#none" class="updated"><span class="icon"><img ap:src="@{/images/dummy/img_quick_menu_05.png}" alt=""></span><span>Ap맴버십</span></a></li>
-				<li><a href="#none"><img ap:src="@{/images/dummy/img_brand_01.png}" alt="{브랜드명}"><span>1+1행사</span></a></li>
-				<li><a href="#none" class="updated"><img ap:src="@{/images/dummy/img_brand_02.png}" alt="{브랜드명}"><span>쿠션 대전</span></a></li>
-				<li><a href="#none"><img ap:src="@{/images/dummy/img_brand_03.png}" alt="{브랜드명}"><span>블랙쿠션</span></a></li>
-				<li><a href="#none"><img ap:src="@{/images/dummy/img_brand_04.png}" alt="{브랜드명}"><span>특별할인</span></a></li>
-				<li><a href="#none"><span class="icon"><img ap:src="@{/images/dummy/img_quick_menu_06.png}" alt=""></span><span>전체보기</span></a></li>
+				<th:block th:each="quick, inx : ${gnbMap.get('mainQuick').submenus}">
+					<li>
+						<a href="#none" th:href="@{'/display/'+ ${quick.displayMenuId}}">
+							<span class="icon"><img th:src="${quick.menuTitleImgUrl}" alt=""></span><span th:text="${quick.menuTitle}">출석체크</span>
+						</a>
+					</li>
+				</th:block>
 			</ul>
 		</div>
 		<!--/* 로그인 전 */-->
-		<div class="section pd_md">
+		<div class="section pd_md" th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
 			<p class="font_md">로그인을 하시면 더 좋은 쇼핑 제안을 드립니다.</p>
 			<br>
 			<a href="#none" class="btn_login w100p">로그인</a>
@@ -54,11 +70,13 @@
 			<p class="color_primary"> 30초면 완료되는! 신규회원가입하기 <i class="ico_arr_p"></i></p>
 		</div>
 		<!--/* 로그인 후 */-->
+		<th:block th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}">
 		<h3 class="h_title d2 welcome_text"><b><span>반가워요</span> <span class="ellipsis">홍길동</span><span>님</span></b></h3>
 		<div class="section pd_md">
 			<p class="text font_lg">홍길동님의 뷰티포인트를 확인하세요.</p>
 			<p class="text font_lg num"><b>210,000P</b></p>
 		</div>
+		</th:block>
 		<!--/* 쿠폰 영역 */-->
 		<div class="section pd_md">
 			<dl>
@@ -244,6 +262,7 @@
 				<dt class="h_title d3">홍길동님 이 상품은 어떠세요?</dt>
 				<dd class="product_slide">
 					<ul class="two_half">
+						<!-- <th:block ap:replace="~{main/fragment/product-fragment :: product-list}"></th:block> -->
 						<li class="product">
 							<!--/* 비주얼 영역 */-->
 							<a href="#none">
@@ -457,7 +476,13 @@
 		<!--/* 컨텐츠 블록 제목 */-->
 		<h3 class="h_title d2"><b>실시간 이슈 상품</b></h3>
 		<!--/* 카드 타입 상품 목록 */-->
+		<th:block th:if="${not #lists.isEmpty(cornersMap)}">
 		<ul class="product_list card_type">
+		<th:block th:each="corner : ${cornersMap.get('M01_main_m.4')}">
+			<th:block th:each="contents : ${corner.contents}">
+			<th:block th:if="${contents.contentsTypeCode == Prod}"
+			<th:block th:each="product : ${contents.prodList}">
+			<th:block ap:replace="~{main/fragment/product-fragment :: product-list (prodList = ${product})}"></th:block>
 			<li class="product">
 				<!--/* 비주얼 영역 */-->
 				<a href="#none">
@@ -485,6 +510,9 @@
 					<a href="#none" class="btn_brand"><span>헤라</span><i class="ico_arr_s"></i></a>
 				</div>
 			</li>
+			</th:block>
+			</th:block>
+			</th:block>
 			<li class="product">
 				<!--/* 비주얼 영역 */-->
 				<a href="#none">
@@ -605,6 +633,7 @@
 				</div>
 			</li>
 		</ul>
+		</th:block>
 		<!--/* 이미지 + 텍스트 배너 형태 흰글씨 */-->
 		<div class="section banner white">
 			<a href="#none" class="lazy_load_wrap">

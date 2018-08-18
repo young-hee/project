@@ -27,14 +27,14 @@
 			<span>배송비</span>
 			<span>{{currencyFormatDefault ordAmt.shipFee '원'}}</span>
 		</li>
-		<li class="table_layout">
-			<span>뷰티포인트</span>
-			<span>{{currencyFormatDefault ordAmt.membershipPoint '알'}}</span>
-		</li>
-		<li class="table_layout">
-			<span>진주알 교환</span>
-			<span>{{currencyFormatDefault ordAmt.activityPoint '알'}}</span>
-		</li>
+		<!--<li class="table_layout">-->
+			<!--<span>뷰티포인트</span>-->
+			<!--<span>{{currencyFormatDefault ordAmt.membershipPoint '알'}}</span>-->
+		<!--</li>-->
+		<!--<li class="table_layout">-->
+			<!--<span>진주알 교환</span>-->
+			<!--<span>{{currencyFormatDefault ordAmt.activityPoint '알'}}</span>-->
+		<!--</li>-->
 	</ul>
 
 	<dl class="table_layout">
@@ -77,46 +77,13 @@
 		<dt><strong>{{condition (eq claim true) '총 환불 금액' '결제 금액'}}</strong></dt>
 		<dd class="align_right"><em>{{currencyFormatDefault ordAmt.totalPayment ''}}</em>원</dd>
 	</dl>
-	<div class="panel gray">
-		<dl class="table_layout">
-			<dt>예치금</dt>
-			<dd class="align_right">{{currencyFormatDefault ordPayResult.deposit '원'}}</dd>
-		</dl>
-		<hr class="div dotted">
 
-		{{#each ordPayResult.pgList}}
-			<dl class="table_layout">
-				<dt>{{pgName}}</dt>
-				<dd class="align_right w70p">{{currencyFormatDefault pgPayAmt '원'}}</dd>
-			</dl>
-		{{/each}}
+	{{#unless (or (and (or (eq type 'return')(eq type 'cancel'))(eq step 2))(eq claimYn 'Y'))}}
 
+		{{{include 'my.order.detail.amount-payment' ordPayResult}}}
 
+	{{/unless}}
 
-
-		<!--/*
-		<dl class="table_layout">
-			<dt><b>예치금/상품권/선불카드</b></dt>
-			<dd class="align_right">20,000원</dd>
-		</dl>
-		<dl class="table_layout">
-			<dt>예치금</dt>
-			<dd class="align_right">20,000원</dd>
-		</dl>
-		<hr class="div dotted">
-		<dl class="table_layout">
-			<dt><b>원터치 간편결제</b></dt>
-			<dd class="align_right">900,000원</dd>
-		</dl>
-		<dl class="table_layout">
-			<dt>결제정보</dt>
-			<dd class="align_right w70p">KB국민카드(123456******1234)<br>
-				일시불<br>
-				2018-09-12  18:02:34</dd>
-		</dl>
-
-		*/-->
-	</div>
 
 	<button class="btn_md_bordered w100p btn_up" type="button" onclick="paymentDetail('cont open')">상세보기 <i class="ico_arr_up"></i></button>
 	<button class="btn_md_bordered w100p btn_down" type="button" onclick="paymentDetail('cont')">접기 <i class="ico_arr_down"></i></button>
@@ -180,7 +147,7 @@
     				{{#each compareList}}
     					{{#xif addedPayYn '===' 'N'}}
     						<dl class="table_layout">
-								<dt><b>{{payMethodNameBlang}}</b></dt>
+								<dt><b>{{condition (eq payMethodCode 'Deposit') '예치금' payMethodNameBlang}}</b></dt>
 								<dd class="align_right">{{currencyFormatDefault (calc beforePayAmt '-' afterPayAmt) '원'}}</dd>
 							</dl>
     					{{/xif}}

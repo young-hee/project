@@ -16,14 +16,20 @@ public class OrdOnlinePromoFoDTO {
     private String promoTypeCode;
 
     /* 프로모션 합계정보 */
-    private BigDecimal totalProductSaleAmount;
-    private BigDecimal totalFinalOnlineSaleAmount;
+    private BigDecimal totalProductSaleAmount = BigDecimal.ZERO;
+    private BigDecimal totalFinalOnlineSaleAmount = BigDecimal.ZERO;
     
     /* 프로모션 주문온라인상품 목록 */
     private List<OrdOnlineProdFoDTO> ordOnlineProdFoList;
     private Map<String, OrdOnlineProdFoDTO> ordOnlineProdFoMap;
 
-    /**
+    private Integer baseQty = 0;
+	private Integer awardQty = 0;
+
+	private String receivedClaimReasonName;
+	private String foReceivedClaimReason;
+
+	/**
      * @return the promoSn
      */
     public Long getPromoSn() {
@@ -120,6 +126,36 @@ public class OrdOnlinePromoFoDTO {
     public void setOrdOnlineProdFoMap(Map<String, OrdOnlineProdFoDTO> ordOnlineProdFoMap) {
         this.ordOnlineProdFoMap = ordOnlineProdFoMap;
     }
-    
-    
+
+	public Integer getBaseQty() {
+		return baseQty;
+	}
+
+	public void setBaseQty(Integer baseQty) {
+		this.baseQty = baseQty;
+	}
+
+	public Integer getAwardQty() {
+		return awardQty;
+	}
+
+	public void setAwardQty(Integer awardQty) {
+		this.awardQty = awardQty;
+	}
+
+	public String getFoReceivedClaimReason() {
+		return foReceivedClaimReason;
+	}
+
+	public void setFoReceivedClaimReason(String foReceivedClaimReason) {
+		this.foReceivedClaimReason = foReceivedClaimReason;
+	}
+
+	public String getReceivedClaimReasonName() {
+		return receivedClaimReasonName;
+	}
+
+	public void setReceivedClaimReasonName(String receivedClaimReasonName) {
+		this.receivedClaimReasonName = receivedClaimReasonName;
+	}
 }

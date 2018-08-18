@@ -39,18 +39,14 @@ import net.g1project.ecp.api.model.ap.ap.MemberAddAttr;
 import net.g1project.ecp.api.model.ap.ap.MemberMembership;
 import net.g1project.ecp.api.model.ap.ap.SNS;
 import net.g1project.ecp.api.model.ap.ap.ShipAddressInfo;
-import net.g1project.ecp.api.model.ap.ap.SignupReceiveAgree;
 import net.g1project.ecp.api.model.ap.ap.SignupTermsAgree;
 import net.g1project.ecp.api.model.ap.ap.StoreSkinTonMeasureInfo;
 import net.g1project.ecp.api.model.order.order.OrdSummaryInfo;
-import net.g1project.ecp.api.model.sales.member.CloseMember;
-import net.g1project.ecp.api.model.sales.member.ClosedAcInfo;
 import net.g1project.ecp.api.model.sales.member.ClosedAcReason;
 import net.g1project.ecp.api.model.sales.member.MemberAddAttrs;
 import net.g1project.ecp.api.model.sales.product.ProdReviewWritableOrderInfo;
 import net.g1project.ecp.api.model.sales.terms.MemberTermsAgree;
 import net.g1project.ecp.api.model.sales.terms.Terms;
-
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +57,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.WebUtils;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -103,89 +98,76 @@ public class MyViewControllor extends AbstractController {
 		MemberSession memberSession = getMemberSession();
 		memberSession.setMember(apApi.getMemberInfo(memberSession.getMember_sn()));
 		
-		try {
-			OrdSummaryInfo ordSummary = orderApi.getOrdSummary(getMemberSn(), startDate, endDate);
+		OrdSummaryInfo ordSummary = orderApi.getOrdSummary(getMemberSn(), startDate, endDate);
 
-			//주문접수건수
-			model.addAttribute("ordReceptCnt", ordSummary.getOrdReceptCnt());
+		//주문접수건수
+		model.addAttribute("ordReceptCnt", ordSummary.getOrdReceptCnt());
 
-			//결제완료건수
-			model.addAttribute("payCompleteCnt", ordSummary.getPayCompleteCnt());
+		//결제완료건수
+		model.addAttribute("payCompleteCnt", ordSummary.getPayCompleteCnt());
 
-			//배송준비중건수
-			model.addAttribute("preparingCnt", ordSummary.getPreparingCnt());
+		//배송준비중건수
+		model.addAttribute("preparingCnt", ordSummary.getPreparingCnt());
 
-			//배송중건수
-			model.addAttribute("shippingCnt", ordSummary.getShippingCnt());
+		//배송중건수
+		model.addAttribute("shippingCnt", ordSummary.getShippingCnt());
 
-			//배송완료건수
-			model.addAttribute("shipCompleteCnt", ordSummary.getShipCompleteCnt());
+		//배송완료건수
+		model.addAttribute("shipCompleteCnt", ordSummary.getShipCompleteCnt());
 
-			//취소건수
-			model.addAttribute("cancelCnt", ordSummary.getCancelCnt());
+		//취소건수
+		model.addAttribute("cancelCnt", ordSummary.getCancelCnt());
 
-			//반품건수
-			model.addAttribute("returnCnt", ordSummary.getReturnCnt());
+		//반품건수
+		model.addAttribute("returnCnt", ordSummary.getReturnCnt());
 
-			//교환건수
-			model.addAttribute("exchangeCnt", ordSummary.getExchangeCnt());
-			
-			//미작성 구매후기.
-			ProdReviewWritableOrderInfo productReviewWritableOrders = productApi.getProductReviewWritableOrders(getMemberSn(), null, 0, 10);
-			model.addAttribute("reviewCnt", productReviewWritableOrders.getTotalCount());
+		//교환건수
+		model.addAttribute("exchangeCnt", ordSummary.getExchangeCnt());
 
-			{//포인트 조회
-				CicueaCuPtAccmTcVo vo = new CicueaCuPtAccmTcVo();
-				vo.setIncsNo(getMemberSession().getUser_incsNo());
-				vo = amoreAPIService.getptinq(vo);
-				model.addAttribute("point", vo);
-			}
-			{
-				try {
-					CustCushinPoint cushin = posService.getCustCushinPoint(getMemberSession().getUser_incsNo());
-					if(cushin == null) {
-						cushin = new CustCushinPoint();
-						if(memberSession.getMember().getRemainCushionPoint() == null) {
-							cushin.setTotRemainPt(0);
-						} else {
-							cushin.setTotRemainPt(memberSession.getMember().getRemainCushionPoint());
-						}
-					}
-					model.addAttribute("cushin", cushin);
-				} catch(Exception e) {
-					CustCushinPoint cushin = new CustCushinPoint();
+		//미작성 구매후기.
+		ProdReviewWritableOrderInfo productReviewWritableOrders = productApi.getProductReviewWritableOrders(getMemberSn(), null, 0, 10);
+		model.addAttribute("reviewCnt", productReviewWritableOrders.getTotalCount());
+
+		{//포인트 조회
+			CicueaCuPtAccmTcVo vo = new CicueaCuPtAccmTcVo();
+			vo.setIncsNo(getMemberSession().getUser_incsNo());
+			vo = amoreAPIService.getptinq(vo);
+			model.addAttribute("point", vo);
+		}
+		{
+			try {
+				CustCushinPoint cushin = posService.getCustCushinPoint(getMemberSession().getUser_incsNo());
+				if(cushin == null) {
+					cushin = new CustCushinPoint();
 					if(memberSession.getMember().getRemainCushionPoint() == null) {
 						cushin.setTotRemainPt(0);
 					} else {
 						cushin.setTotRemainPt(memberSession.getMember().getRemainCushionPoint());
 					}
-					model.addAttribute("cushin", cushin);
 				}
+				model.addAttribute("cushin", cushin);
+			} catch(Exception e) {
+				CustCushinPoint cushin = new CustCushinPoint();
+				if(memberSession.getMember().getRemainCushionPoint() == null) {
+					cushin.setTotRemainPt(0);
+				} else {
+					cushin.setTotRemainPt(memberSession.getMember().getRemainCushionPoint());
+				}
+				model.addAttribute("cushin", cushin);
 			}
+		}
+
+		//피부톤
+		try { 
 			
-			//피부톤
 			StoreSkinTonMeasureInfo skinTon = apApi.getSkinToneMeasures(getMemberSn());
 			model.addAttribute("skinTon", skinTon);
-
-		} catch (Exception e) {
-			model.addAttribute("errorData", e);
+			
+		} catch (ApiException e) {
+			e.getErrorCode();
 		}
 
-		/**
-		 * Mobile
-		 */
-		if(isMobileDevice()) {
-			return "my/my-etude";
-		}
-
-		/**
-		 * PC
-		 */
-		if(isPcDevice()) {
-			return "my/my-etude";
-		}
-
-		return null;
+		return "my/my-etude";
 	}
 
 

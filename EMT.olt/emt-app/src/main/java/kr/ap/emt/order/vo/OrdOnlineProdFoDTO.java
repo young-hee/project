@@ -16,12 +16,15 @@ public class OrdOnlineProdFoDTO {
     private String onlineProdCode;				 // 온라인상품코드
     private String onlineProdName;				 // 온라인상품명
 	private String onlineProdImgUrl;			 // 온라인상품 이미지
+	private String prodImgUrl;
 	private String bulkDcOnlineProdCode;		 // 묶음할인온라인상품코드
 	private String bulkDcOnlineProdName;		 // 묶음할인온라인상품명
     private Integer repImgNo; 					 // 대표이미지번호
 	private String ordHistProdStatusCode;		 //주문이력상품상태코드
 	private String ordHistProdTypeCode;			 // 주문이력상품유형코드
-	private BigDecimal finalOnlineSaleAmtPcurSum;// 상품판매가(상품판매가 X 주문수량)
+	private BigDecimal finalOnlineSaleAmtPcurSum = new BigDecimal(0);// 상품판매가(상품판매가 X 주문수량)
+	private BigDecimal finalOnlineSaleAmtPcurSumExchMembership = new BigDecimal(0);// 뷰티포인트 포인트(상품판매가 X 주문수량)
+	private BigDecimal finalOnlineSaleAmtPcurSumExchActivity = new BigDecimal(0);// 진주알 알(상품판매가 X 주문수량)
 	private Integer ordQtySum;					 // 주문수량(단위상품 X 주문수량)
 	private Long claimReasonSn;				 	 // 클레임사유 일련번호
 	private String claimReasonName;				 // 클레임 사유명
@@ -34,6 +37,8 @@ public class OrdOnlineProdFoDTO {
 	private String singleProdYn; //단일 단위상품 여부
 
 	public void addOrdHistProdEx(OrdHistProdEx ordHistProdEx) {
+		setFinalOnlineSaleAmtPcurSumExchMembership(getFinalOnlineSaleAmtPcurSumExchMembership().add(new BigDecimal(ordHistProdEx.getExchMembership() * ordHistProdEx.getOrdQty())));
+		setFinalOnlineSaleAmtPcurSumExchActivity(getFinalOnlineSaleAmtPcurSumExchActivity().add(new BigDecimal(ordHistProdEx.getExchActivityPoint() * ordHistProdEx.getOrdQty())));
         setFinalOnlineSaleAmtPcurSum(getFinalOnlineSaleAmtPcurSum().add(ordHistProdEx.getFinalOnlineSaleAmtPcur()));
         setOrdQtySum(getOrdQtySum() + ordHistProdEx.getOrdQty());
         if(ordHistProdList == null) {
@@ -90,6 +95,14 @@ public class OrdOnlineProdFoDTO {
 
 	public void setOnlineProdImgUrl(String onlineProdImgUrl) {
 		this.onlineProdImgUrl = onlineProdImgUrl;
+	}
+
+	public String getProdImgUrl() {
+		return prodImgUrl;
+	}
+
+	public void setProdImgUrl(String prodImgUrl) {
+		this.prodImgUrl = prodImgUrl;
 	}
 
 	public String getBulkDcOnlineProdCode() {
@@ -230,5 +243,21 @@ public class OrdOnlineProdFoDTO {
 
 	public void setSingleProdYn(String singleProdYn) {
 		this.singleProdYn = singleProdYn;
+	}
+
+	public BigDecimal getFinalOnlineSaleAmtPcurSumExchMembership() {
+		return finalOnlineSaleAmtPcurSumExchMembership;
+	}
+
+	public void setFinalOnlineSaleAmtPcurSumExchMembership(BigDecimal finalOnlineSaleAmtPcurSumExchMembership) {
+		this.finalOnlineSaleAmtPcurSumExchMembership = finalOnlineSaleAmtPcurSumExchMembership;
+	}
+
+	public BigDecimal getFinalOnlineSaleAmtPcurSumExchActivity() {
+		return finalOnlineSaleAmtPcurSumExchActivity;
+	}
+
+	public void setFinalOnlineSaleAmtPcurSumExchActivity(BigDecimal finalOnlineSaleAmtPcurSumExchActivity) {
+		this.finalOnlineSaleAmtPcurSumExchActivity = finalOnlineSaleAmtPcurSumExchActivity;
 	}
 }

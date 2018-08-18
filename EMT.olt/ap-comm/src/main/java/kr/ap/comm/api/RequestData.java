@@ -71,7 +71,7 @@ public class RequestData {
 			// AMORE API 는 모두 POST 요청
 			HttpPost post = new HttpPost(url);
 			addSLTCommonHeaders(post);
-			post.setEntity(new StringEntity(postData.toString()));
+			post.setEntity(new StringEntity(postData.toString(), "UTF-8"));
 			if (logger.isDebugEnabled()) {
 				logger.debug("[AMORE_API]REQUEST BODY={}", postData.toString());
 			}
@@ -79,6 +79,7 @@ public class RequestData {
 			// API Call
 			HttpResponse response = httpClient.execute(post);
 			int statusCode = response.getStatusLine().getStatusCode();
+			status = statusCode;
 			if (logger.isDebugEnabled()) {
 				logger.debug("[AMORE_API]RESPONSE CODE={}", statusCode);
 			}

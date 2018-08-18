@@ -15,9 +15,23 @@
 						<ul class="event_menu">
 							<li><a href="#none" th:href="@{/display/daily_check?displayMenuId=daily_check}" class="attendance">행운의 출첵</a></li>
 							<li><a href="#none" th:href="@{/display/pearl_roulette?displayMenuId=pearl_roulette}" class="roulette">진주알 룰렛</a></li>
-							<li><a href="#none" th:href="@{/display/sweet_letter?displayMenuId=sweet_letter}" class="sweet_letter">스윗레터 100% 당첨</a></li>
-							<li><a href="#none" th:href="@{/display/beauty_test?displayMenuId=beauty_test}" class="beauty_tester">뷰티테스터 신청<span class="d_day">D-6</span></a></li>
-							<li><a href="#none" th:href="@{/display/free_sample?displayMenuId=free_sample}" class="free_sample">무료 샘플 신청<span class="d_day">D-6</span></a></li>
+							<li><a href="#none" class="sweet_letter">스윗레터 100% 당첨</a></li>
+							<li><a href="#none" class="beauty_tester">뷰티테스터 신청
+								<th:block th:if="${dDays.ProdExperienceGrp > 0}">
+									<th:block th:if="${dDays.ProdExperienceGrp <= 3}">
+										<span class="d_day" th:text="D-+ ${dDays.ProdExperienceGrp == 0 ? 'Day' : dDays.ProdExperienceGrp}"></span>
+									</th:block>
+								</th:block>
+								</a>
+							</li>
+							<li><a href="#none" class="free_sample">무료 샘플 신청
+								<th:block th:if="${dDays.SampleExperienceGrp > 0}">
+									<th:block th:if="${dDays.SampleExperienceGrp <= 3}">
+										<span class="d_day" th:text="D-+ ${dDays.SampleExperienceGrp == 0 ? 'Day' : dDays.SampleExperienceGrp}"></span>
+									</th:block>
+								</th:block>
+								</a>
+							</li>
 							<li><a href="#none" th:href="@{/display/play_makeup_class?displayMenuId=play_makeup_class}" class="makeup">PLAY 메이크업 클래스</a></li>
 						</ul>
 					</div>

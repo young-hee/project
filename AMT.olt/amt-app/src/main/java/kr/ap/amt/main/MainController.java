@@ -62,6 +62,8 @@ public class MainController extends AbstractController {
 			for (Corner c : corners) {
 				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
 			}
+			
+			//model.addAttribute("cornersMap", cornersMap);
 		
 		}catch(Exception e) {
 			model.addAttribute("popupInfo", null);

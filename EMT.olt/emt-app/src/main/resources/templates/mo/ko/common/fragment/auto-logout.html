@@ -95,12 +95,12 @@
 		}
 		function logout() {
 
-		    if (/Android/i.test(navigator.userAgent)) {
+		    if (/device=android/i.test(navigator.userAgent)) {
 		    	try {
 		    		window.webview.mobile('logout');
 		    	} catch(e) {
 		    	}
-		    } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+		    } else if (/device=ios/i.test(navigator.userAgent)) {
 		        window.location = "webview://mobile?action=logout";
 		    }
 		    setTimeout(function() {

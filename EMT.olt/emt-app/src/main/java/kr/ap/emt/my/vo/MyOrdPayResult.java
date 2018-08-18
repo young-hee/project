@@ -11,44 +11,7 @@ import java.util.Map;
 
 public class MyOrdPayResult {
 
-	public class PGData {
-
-		private String pgName;
-		private BigDecimal pgPayAmt;
-		private PgPayEx pgPayEx;
-
-		public  PGData(String name, BigDecimal payAmt, PgPayEx pgPayEx) {
-			this.pgName = name;
-			this.pgPayAmt = payAmt;
-			this.pgPayEx = pgPayEx;
-		}
-
-		public String getPgName() {
-			return pgName;
-		}
-
-		public BigDecimal getPgPayAmt() {
-			return pgPayAmt;
-		}
-
-		public void setPgName(String pgName) {
-			this.pgName = pgName;
-		}
-
-		public void setPgPayAmt(BigDecimal pgPayAmt) {
-			this.pgPayAmt = pgPayAmt;
-		}
-
-		public PgPayEx getPgPayEx() {
-			return pgPayEx;
-		}
-
-		public void setPgPayEx(PgPayEx pgPayEx) {
-			this.pgPayEx = pgPayEx;
-		}
-	}
-
-	private List<PGData> pgList;
+	private List<OrdPayEx> pgList;
 
 	private BigDecimal deposit = BigDecimal.ZERO;
 
@@ -64,19 +27,19 @@ public class MyOrdPayResult {
 						deposit = o.getPayAmt().subtract(o.getRefundAmtSum());
 					}
 					else if ("PG".equals(o.getPayMethodTypeCode())) {
-						pgList.add(new PGData(o.getPayMethodNameBlang(), o.getPayAmt().subtract(o.getRefundAmtSum()), o.getPgPayEx()));
-
+						// pgList.add(new PGData(o.getPayMethodNameBlang(), o.getPayAmt().subtract(o.getRefundAmtSum()), o.getPgPayEx()));
+						pgList.add(o);
 					}
 				}
 			}
 		}
 	}
 
-	public List<PGData> getPgList() {
+	public List<OrdPayEx> getPgList() {
 		return pgList;
 	}
 
-	public void setPgList(List<PGData> pgList) {
+	public void setPgList(List<OrdPayEx> pgList) {
 		this.pgList = pgList;
 	}
 

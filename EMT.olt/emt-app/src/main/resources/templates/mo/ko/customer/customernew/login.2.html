@@ -188,7 +188,7 @@ function sendSms() {
             } else if (xhr.errorCode == 'EAPI001') {
                 var contents = new Object();
                 contents.title = "인증실패";
-                contents.contents = data.message;
+                contents.contents = xhr.errorMessage;
                 contents.confirmLabel = "확인";
                 AP.modal.info(contents).addListener('modal-close', function(e) {});
             } else if(xhr.errorCode == 'ESAL001') {
@@ -545,12 +545,12 @@ function doSnsLogin() {
 }
 function loginComplete() {
 
-    if (/Android/i.test(navigator.userAgent)) {
+    if (/device=android/i.test(navigator.userAgent)) {
     	try {
     		window.webview.mobile('login');
     	} catch(e) {
     	}
-    } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    } else if (/device=ios/i.test(navigator.userAgent)) {
         window.location = "webview://mobile?action=login";
     }
     setTimeout(function() {

@@ -75,7 +75,7 @@
 									<li><a href="/my/page/onlineOrderShipping" class="null"><em class="num" th:text="${shipCompleteCnt}">0</em><span>배송완료</span></a></li>
 								</ul>
 								<div class="_btns clear">
-									<a href="/my/page/returnExchange" class="btn_md_bordered">취소/반품/교환 (<strong class="num">0</strong>)</a>
+									<a href="/my/page/returnExchange" class="btn_md_bordered">취소/반품/교환 (<strong class="num" th:text="${cancelCnt + returnCnt + exchangeCnt}">0</strong>)</a>
 									<a href="/my/page/myReviewList" class="btn_md_bordered">미작성 구매후기 (<strong class="num" th:text="${reviewCnt}">1</strong>)</a>
 								</div>
 								<a href="/my/page/onlineOrderShipping" class="more" title="주문/배송조회">더보기</a>
@@ -85,35 +85,50 @@
 				</div>
 
 				<!--/* 20180502 : 마이 컬러파인더 변경 */-->
-				<div class="my_color_finder" th:if="${skinTon != null && skinTon.skinToneMeasureYN == 'Y'}">
+				<div class="my_color_finder" >
 					<h3 class="h_title sub"><strong>마이 컬러파인더</strong></h3>
-					<div class="tone_wrap spring">
-						<!--/* 웜톤-봄 : spring, 쿨톤-여름 : summer, 웜톤-가을 : fall, 쿨톤-겨울 : winter */-->
-						<div class="text">
-							<p class="eng" th:text="${skinTon.skinToneMeasureName}">Warm Tone <strong>Spring</strong></p>
-							<p class="tone_text">홍길동 님의 피부톤은<br><b th:text="${skinTon.skinToneMeasureName}">웜톤 봄</b> 타입</p>
-						</div>
-						<div class="tone_color">
-							<p>비비드 오렌지, 옐로우, 그린또는 노란빛이 감도는 파스텔 피치핑크, 베이비핑크 계열</p>
-						</div>
-						<div class="my_skin table_layout">
-							<div>
-								<p>나의 피부색 - <b>크림색</b></p>
-								<div class="skin_color" style="background-color: #fbe2ba;"></div>
+					<!-- 측정값이 있는 경우 -->
+					<th:block th:if="${skinTon != null && #lists.size(skinTon.skinToneList) > 0 }">
+						<div class="tone_wrap spring">
+							<!--/* 웜톤-봄 : spring, 쿨톤-여름 : summer, 웜톤-가을 : fall, 쿨톤-겨울 : winter */-->
+							<div class="text">
+								<p class="eng" >Warm Tone <strong>Spring</strong></p>
+								<p class="tone_text">홍길동 님의 피부톤은<br><b>웜톤 봄</b> 타입</p>
 							</div>
-							<div>
-								<p>톤 대표색</p>
-								<div class="my_tone table_layout">
-									<span class="tone" style="background-color: #f18910;"></span>
-									<span class="tone" style="background-color: #f8be99;"></span>
-									<span class="tone" style="background-color: #f9d3d2;"></span>
+							<div class="tone_color">
+								<p>비비드 오렌지, 옐로우, 그린또는 노란빛이 감도는 파스텔 피치핑크, 베이비핑크 계열</p>
+							</div>
+							<div class="my_skin table_layout">
+								<div>
+									<p>나의 피부색 - <b>크림색</b></p>
+									<div class="skin_color" style="background-color: #fbe2ba;"></div>
+								</div>
+								<div>
+									<p>톤 대표색</p>
+									<div class="my_tone table_layout">
+										<span class="tone" style="background-color: #f18910;"></span>
+										<span class="tone" style="background-color: #f8be99;"></span>
+										<span class="tone" style="background-color: #f9d3d2;"></span>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-
+					</th:block>
+					<!-- end:  측정값이 있는 경우 -->
+					<!-- 측정값이 없는 경우 -->
+					<th:block th:if="${skinTon == null || #lists.size(skinTon.skinToneList) == 0}">
+						<div class="panel notice">
+							<i class="ico"></i>
+							<p class="text font_lg">
+								<span>피부 측정 데이터가 없습니다.<br>가까운 에뛰드 하우스 매장에서 무료로 피부톤 측정을 받으세요~</span>
+							</p>
+							<div class="page_btns">
+		                        <a href="" class="btn_lg_big_neutral">가까운 매장 찾기</a>
+		                   </div>							
+						</div>
+					</th:block>
 					<!--/* 추천템 */-->
-					<div class="my_tone_recommend" th:data-skinton-measure-code="${skinTon.skinToneMeasureCode}">
+`					<div class="my_tone_recommend" > <!-- th:data-skinton-measure-code="" -->
 						<h3 class="h_title sub">내 피부톤과 어울리는 추천 제품</h3>
 						<div class="slide" data-ix-options="view-length:5;">
 							<div class="ix-list-viewport">
@@ -220,12 +235,11 @@
 							</div>
 						</div>
 					</div>
-
-					<div class="banner"> <!-- /* 20180803:App설치배너 수정*/ -->
-						<a href="https://play.google.com/store/apps/details?id=com.etudehouse" target="_blank" class="android"><img ap:src="@{/images/my/ico_android.png}" alt="에뛰드 하우스 앱으로 더 많은 정보를 확인해 보세요~. 앱 설치하기" /></a>					
-						<a href="https://itunes.apple.com/kr/app/id538275329" target="_blank" class="ios"><img ap:src="@{/images/my/ico_ios.png}" alt="에뛰드 하우스 앱으로 더 많은 정보를 확인해 보세요~. 앱 설치하기" /></a>						
-					</div>
 				</div>
+				<div class="my_banner"> <!-- /* 20180803:App설치배너 수정*/ -->
+					<a href="https://play.google.com/store/apps/details?id=com.etudehouse" target="_blank" class="android"><img ap:src="@{/images/my/ico_android.png}" alt="에뛰드 하우스 앱으로 더 많은 정보를 확인해 보세요~. 앱 설치하기" /></a>					
+					<a href="https://itunes.apple.com/kr/app/id538275329" target="_blank" class="ios"><img ap:src="@{/images/my/ico_ios.png}" alt="에뛰드 하우스 앱으로 더 많은 정보를 확인해 보세요~. 앱 설치하기" /></a>						
+				</div>				
 			</div>
         	<!-- // page contents -->
         </div><!-- // #ap_container -->

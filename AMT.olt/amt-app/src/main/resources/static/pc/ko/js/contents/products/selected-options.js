@@ -40,14 +40,12 @@
 			}.bind(this));
 
 			if ( isSameProd ) {
-				/*
 				if ( !silent ) {
 					AP.modal.alert({
 						contents: AP.message.DUPLICATE_SELECTED_PRODUCT,
 						returnFocusTarget: this._$appendTarget.find( '.product_item[data-prod-sn="' + product.prodSn + '"] .spinner_increase' )
 					});
 				}
-				*/
 			} else {
 				//기본 구매수량 최소수량으로 설정
 				product.cartProdQty = product.minPurLimitQty;

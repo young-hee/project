@@ -108,10 +108,13 @@
 		<script ap:src="@{/handlebars-templates/compiled/my/order/ordSummary.js}"></script>
 		<script th:inline="javascript">
 
+			let sessionStatus = 'order_pc_list_save_status';
+
 			var limit = 10;
 			var c_type = /*[[${type}]]*/;
 			var c_offset = 0;
 			var c_RS_Date, c_RD_Date;
+			var totalCount = 0;
 
 			$( '.ui_tooltip' ).tooltip();
 			$( '.ui_multiple_date_picker' ).multipleDatePicker({
@@ -125,11 +128,40 @@
 
 			$(document).ready(function() {
 
-				c_RS_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).startDate;
-				c_RD_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).endDate;
+				var ss = AP.common.getSessionStorage(sessionStatus);
 
-				getOrderList(c_type, 0, c_RS_Date, c_RD_Date);
-				getFooter(c_type);
+				if (ss != "" && ss != 'undefined' && ss != null && c_type == ss.type) {
+					$('.loading').hide();
+
+					c_offset = ss.offset;
+					c_type = ss.type;
+					c_RS_Date = ss.rs_Date;
+					c_RD_Date = ss.rd_Date;
+					totalCount = ss.totalCount;
+
+					$('#order_list').empty();
+					$('#order_list').append(ss.html);
+					$('.my_order_list').show();
+					if(c_type == 'cashReceipts'){
+						$('.order_status_process').hide();
+					}
+					else {
+						$('.order_status_process').empty();
+						$('.order_status_process').append(ss.summary_html);
+					}
+
+					settingPageNav(ss.totalCount);
+					getFooter(ss.type);
+					window.scroll(0, ss.scrollPosition);
+					AP.common.setSessionStorage(sessionStatus, null)
+				}
+				else {
+					c_RS_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).startDate;
+					c_RD_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).endDate;
+
+					getOrderList(c_type, 0, c_RS_Date, c_RD_Date);
+					getFooter(c_type);
+				}
 			});
 
 			//tab 변경시
@@ -167,6 +199,7 @@
 					if (data) {
 						var d = data.data;
 						var list;
+						totalCount = d.totalCount;
 
 						//summary
 						if(type == 'cashReceipts'){
@@ -277,9 +310,22 @@
 			}
 
 			//리뷰 작성하기
-			function writeReview(){
-				//TODO : 리뷰작성
-				AP.modal.alert('개발중입니다.');
+			function writeReview(ordNo) {
+				AP.api.myReview({}, {ordNo}).done(function(data) {
+					if (data.data) {
+						var param = {
+							'orderNo' : data.data.ordNo,
+							'products' : data.data.orderProds
+						}
+						new AP.ReviewWriteModal(param).prevGetData();
+					}
+					else {
+						AP.modal.alert('구매리뷰쓰기 가능한 상품목록이 없습니다.');
+					}
+				}).fail(function(e) {
+					AP.modal.alert(e);
+				}).always(function() {
+				});
 			}
 
 			//배송조회 버튼 클릭
@@ -292,8 +338,28 @@
 			function chkShippingComplete() {
 				//TODO : 수령확인
 				AP.modal.alert('개발중입니다.');
-
 			}
+
+			function showDetailView(type, ordSn) {
+
+				var c = new SaveStatus()
+				AP.common.setSessionStorage(sessionStatus, c, 5);
+				$(location).attr("href", "/my/page/" + type + "/" + ordSn);
+			}
+
+			function SaveStatus() {
+
+				this.scrollPosition = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+				this.type = c_type;
+				this.offset = c_offset;
+				this.rs_Date = c_RS_Date;
+				this.rd_Date = c_RD_Date;
+				this.html = $('#order_list').html();
+				this.summary_html = $('.order_status_process').html();
+				this.totalCount = totalCount;
+				console.log(this);
+			}
+
 		</script>
 	</th:block>
 </body>

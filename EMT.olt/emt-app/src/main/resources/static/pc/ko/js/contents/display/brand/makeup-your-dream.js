@@ -22,16 +22,17 @@
 		
 			// 확인 / 취소
 			this._$target.find( '.form_btns .confirm' ).on( 'click', function (e) {
+			
 				this._$target.find( 'form.validate' ).submit();
 			}.bind( this ));
 			
 			this._$target.find( '.form_btns .cancel' ).on( 'click', function (e) {
-				this.dispatch( 'reserve-complete' );
+				location.href='/display/makeup_your_dream_apply?displayMenuId=makeup_your_dream_apply';
 			}.bind( this ));
 			
 			this._$target.find( '.ac_yn input' ).on( 'change', function (e) {
 
-				if($( e.target ).val() == 'Y'){
+				if($( e.target ).val() === 'Y'){
 					this._$target.find( '#accompanyInfo' ).show();
 					$('input[name=companionAgeGrp]').attr('required','required');
 					$('input[name=companionGender]').eq(0).attr('required','required');
@@ -54,37 +55,35 @@
 			this._$target.find( 'form.validate' ).validate({
 				
 				submitHandler: function ( form, e ) {
+					
 					AP.modal.confirm( '해당 내용으로 <br>신청하시겠습니까?' ).addListener( 'modal-close', function (e) {
 						if ( e.closeType == 'confirm' ) {
 							var formData = new FormData( form );
 							
 								AP.api.requestYouthLecture( {}, formData ).done(function ( result ) {
 									
-									//console.log(result); 
-									
-									var form = $('<form></form>');
-									form.attr('action' , '/display/makeup_your_dream_reserve'); 
-									form.attr('method','post');
-									
 									var youthLectureReturn = result.youthLectureReturn;
-
-									this._$target.append(form);
 									
-									$('<input/>').attr({type:'hidden', name:'preName', value: youthLectureReturn.requesterName.name1}).appendTo(form); 
-									$('<input/>').attr({type:'hidden', name:'prePhnNo', value:youthLectureReturn.requesterPhoneNo.phoneNo}).appendTo(form); 
-									$('<input/>').attr({type:'hidden', name:'requesterAgeGrp', value:youthLectureReturn.requesterAgeGrp}).appendTo(form); 
-									$('<input/>').attr({type:'hidden', name:'requesterGender', value:youthLectureReturn.requesterGender}).appendTo(form); 
-									$('<input/>').attr({type:'hidden', name:'preCpnName', value:youthLectureReturn.companionName.name1}).appendTo(form); 
-									$('<input/>').attr({type:'hidden', name:'preCpnNo', value:youthLectureReturn.companionPhoneNo.phoneNo}).appendTo(form);
-									$('<input/>').attr({type:'hidden', name:'companionAgeGrp', value:youthLectureReturn.companionAgeGrp}).appendTo(form); 
-									$('<input/>').attr({type:'hidden', name:'companionGender', value:youthLectureReturn.companionGender}).appendTo(form); 
-									$('<input/>').attr({type:'hidden', name:'requestReason', value:youthLectureReturn.requestReason}).appendTo(form);
+									youthLectureReturn.titleYear = moment().format('YYYY'); 
+									 
+									var html = ''; 
+										html = AP.common.getTemplate( 'display.brand.makeup-your-dream-reserve', youthLectureReturn );
+										
+										this._$target.find('.tab_cont').html(html); 
 									
-									form.submit();
-									
-							}.bind( this )).fail(function (e) {
-								console.log( 'error', e );
+										this._$target.find( '.page_btns .btn_lg_neutral' ).on( 'click', function (e) {
+											location.href='/display/makeup_your_dream_apply?displayMenuId=makeup_your_dream_apply';
+										}.bind( this ));
+										
+							}.bind( this )).fail(function (xhr) {
+								if( AP.message[xhr.errorCode] != undefined ){
+									AP.modal.alert( AP.message[xhr.errorCode] );
+								} else {
+									AP.modal.alert( xhr.errorMessage );
+								}
 					    	}.bind( this )).always(function () {});
+								
+						
 						}
 					}.bind( this ));
 				}.bind( this )

@@ -537,11 +537,34 @@
 			strHtml = strHtml.replace(/<head>/ig, '');
 			strHtml = strHtml.replace(/<\/html>/ig, '');
 			strHtml = strHtml.replace(/<\/head>/ig, '');
+			strHtml = strHtml.replace(/<!--.*?-->/ig, '');
 			//strHtml = strHtml.replace(/<br\/>/ig, '\n\r ');
-			//strHtml = strHtml.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, '');
+			strHtml = strHtml.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, '');
 		 
 			return $.trim(strHtml); 
-		}		
+		},
+		
+		replaceHtmlEntites : function(str) {
+			
+			var translate_re = /&(nbsp|amp|quot|lt|gt);/g;
+			var translate = {
+				    "nbsp": " ",
+				    "amp" : "&",
+				    "quot": "\"",
+				    "lt"  : "<",
+				    "gt"  : ">"
+				  };
+				
+				  
+			var cleanText = str.replace(/\xA0/g,' ');
+				
+				cleanText = cleanText.replace(translate_re, function(match,entity){
+					return translate[entity];
+				});	
+				
+				return cleanText;
+			}
+		
 	};
 
 	AP.common = AP.common || Common;

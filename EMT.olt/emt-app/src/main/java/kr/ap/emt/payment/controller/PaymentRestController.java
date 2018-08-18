@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.support.common.AbstractController;
@@ -29,7 +26,7 @@ import net.g1project.ecp.api.model.basis.mall.MallSalesPolicy;
  * @since {version}
  *
  */
-@Controller
+@RestController
 @RequestMapping("/payment")
 public class PaymentRestController extends AbstractController {
 
@@ -60,39 +57,29 @@ public class PaymentRestController extends AbstractController {
      * @return
      */
  	@PostMapping("/inipayReq")
- 	@ResponseBody
- 	public ResponseEntity<?> inipayReq(PayDTO payDTO) {
+ 	public ResponseEntity<?> inipayReq(PayDTO payDTO) throws Exception {
 
  		HashMap<String, Object> result = new HashMap<String, Object>();
 
- 		try {
- 			
- 			if(!StringUtils.isEmpty(payDTO.getGoPayMethod()) && 
- 	    			(KAKAO.equals(payDTO.getGoPayMethod()) || PAYCO.equals(payDTO.getGoPayMethod()))) {    		
- 	    		payDTO.setpMid(inicisPgProperties.getIniDrctMid());
- 	    		payDTO.setSignKey(inicisPgProperties.getIniDrctSignKey());
- 	    	} else {
- 	    		
- 	    		if(VBANK.equals(payDTO.getPayMethod())) {
- 	    			MallSalesPolicy mallSalePolicy = mallApi.getMallPolicies();
- 	    			payDTO.setDepositWatingHours(mallSalePolicy.getDepositWatingHours());
- 	    			
- 	    		}
- 	    		payDTO.setpMid(inicisPgProperties.getIniMid());
- 	    		payDTO.setSignKey(inicisPgProperties.getIniSignKey());
- 	    	}
- 	     	
- 	     	payDTO.setSiteDomain(inicisPgProperties.getIniSiteDomain());
- 	     	
- 	     	result = IniPayment.makeRequestParam(payDTO); 
- 	     	
- 	     	//System.out.println(result.toString());
- 	     	
+		if(!StringUtils.isEmpty(payDTO.getGoPayMethod()) &&
+				(KAKAO.equals(payDTO.getGoPayMethod()) || PAYCO.equals(payDTO.getGoPayMethod()))) {
+			payDTO.setpMid(inicisPgProperties.getIniDrctMid());
+			payDTO.setSignKey(inicisPgProperties.getIniDrctSignKey());
+		} else {
 
- 		} catch (Exception e) {
- 			result.put("errorData", e);
- 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
- 		}
+			if(VBANK.equals(payDTO.getPayMethod())) {
+				MallSalesPolicy mallSalePolicy = mallApi.getMallPolicies();
+				payDTO.setDepositWatingHours(mallSalePolicy.getDepositWatingHours());
+
+			}
+			payDTO.setpMid(inicisPgProperties.getIniMid());
+			payDTO.setSignKey(inicisPgProperties.getIniSignKey());
+		}
+
+		payDTO.setSiteDomain(inicisPgProperties.getIniSiteDomain());
+
+		result = IniPayment.makeRequestParam(payDTO);
+
 
  		return ResponseEntity.ok(result);
  	}
@@ -107,28 +94,21 @@ public class PaymentRestController extends AbstractController {
  	 /**
      * 이니시스 - wpay 회원 가입 여부 체크
      * 
-     * @param meberSn
      * @return
      */
  	@GetMapping("/getMemberWPayInfo")
- 	@ResponseBody
  	public ResponseEntity<?> getMemberWPayInfo() {
  		HashMap<String, Object> result = new HashMap<String, Object>();
 
- 		try {
- 			MemberSession memberSession = getMemberSession();
- 			if(memberSession == null || memberSession.getMember_sn() == null) {
- 				result.put("result", "fail");
- 			} else {
- 				ApMemberWPayInfo apMemberWpayInfo = apApi.getMemberWPayInfo(memberSession.getMember_sn());
- 	 			if(apMemberWpayInfo.isUseWpay()) {
- 	 				result.put("result", "success");
- 	 			}
- 			}
- 		} catch (Exception e) {
- 			result.put("errorData", e);
- 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
- 		}
+		MemberSession memberSession = getMemberSession();
+		if(memberSession == null || memberSession.getMember_sn() == null) {
+			result.put("result", "fail");
+		} else {
+			ApMemberWPayInfo apMemberWpayInfo = apApi.getMemberWPayInfo(memberSession.getMember_sn());
+			if(apMemberWpayInfo.isUseWpay()) {
+				result.put("result", "success");
+			}
+		}
 
  		return ResponseEntity.ok(result);
  	}

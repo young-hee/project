@@ -1,0 +1,12 @@
+this["AP"] = this["AP"] || {};
+this["AP"]["handlebars"] = this["AP"]["handlebars"] || {};
+this["AP"]["handlebars"]["display"] = this["AP"]["handlebars"]["display"] || {};
+this["AP"]["handlebars"]["display"]["product-list"] = this["AP"]["handlebars"]["display"]["product-list"] || {};
+
+this["AP"]["handlebars"]["display"]["product-list"]["recommend-item"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
+    return "	<li class=\"ix-list-item\">\n		<div class=\"product_box\">\n			<a href=\"#none\">\n				<div class=\"visual_section\"><!--unitw285-->\n					<img src=\"/pc/ko/images/dummy/img_product_thumb_guide_02.jpg\" alt=\"\">\n					<img src=\"/pc/ko/images/dummy/img_product_thumb_03.jpg\" alt=\"\">\n\n					<div class=\"benefit\">\n						<span class=\"special\">스페셜기프트</span>\n						<span class=\"gift\">기프트카드</span>\n					</div>\n					<div class=\"soldout\">\n						<span>일시품절</span>\n					</div>\n				</div>\n				<div class=\"info_section\">\n\n					<p class=\"txt_summary ellipsis line2\">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>\n					<div class=\"price_atc\">\n						<span class=\"txt_sale\">30%</span>\n						<span class=\"txt_price\"><em>218,500</em>원</span>\n						<del class=\"txt_del\">230,000원</del>\n					</div>\n					<div class=\"user_atc\">\n						<span class=\"mark_star_sm star0\"><span class=\"sr_only\">구매 평점 별 5개 중 0개</span></span>\n						<span class=\"txt_review\">리뷰 2,454,000</span>\n					</div>\n				</div>\n			</a>\n			<div class=\"work_box\">\n				<ul class=\"item_user\">\n					<li>\n						<a href=\"#none\" role=\"button\" class=\"like\">\n							<i class=\"ico_favorite\"></i><!-- active : on -->\n							<span class=\"sr_only\">좋아요</span>\n						</a>\n					</li>\n					<li>\n						<a href=\"#none\" role=\"button\" class=\"cart\">\n							<i class=\"ico_basket\"></i>\n							<span class=\"sr_only\">장바구니</span>\n						</a>\n					</li>\n				</ul>\n			</div>\n			<div class=\"item_section\">\n				<div class=\"rside\">\n					<a href=\"#none\" class=\"link_brand\">헤라</a>\n				</div>\n			</div>\n		</div>\n	</li>\n";
+},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.list : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"useData":true});

@@ -43,6 +43,7 @@
 				}.bind( this ));
 
 			}.bind( this )).fail(function ( fail ) {
+				
 				this._$target.find( '.btn_start' ).attr( 'disabled', false );
 
 				if ( fail.errorCode === 'ESAL031' ) {			// ESAL031 : 참여횟수 초과 : 3
@@ -50,12 +51,14 @@
 				} else if ( fail.errorCode === 'ESAL053' ) {	// ESAL031 : 진주알 포인트 부족
 					this._alert( 'point' );
 				} else {
+					
 					this._alert( 'start' ).addListener( 'modal-close', function (e) {
 						if ( e.closeType === 'confirm' ) {
 							this._winValue = 0;
 							this._rotate( this._arrAngle[this._winValue], {} );
 						}
 					}.bind( this ));
+					 
 				}
 			}.bind( this ));
 		},

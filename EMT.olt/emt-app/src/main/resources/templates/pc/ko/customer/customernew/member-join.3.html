@@ -670,7 +670,7 @@ function doComplete() {
         if (xhr.errorCode == 0) {
             AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
         } else {
-            AP.modal.alert(xhr.errorMessage);
+        	post_goto('/customer/joinFailed', {'message':xhr.errorMessage});
         }
     }).always(function() {
         //성공, 실패

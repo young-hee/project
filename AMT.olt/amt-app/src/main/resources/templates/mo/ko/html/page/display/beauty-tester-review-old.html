@@ -1,0 +1,86 @@
+<html ap:decorate="~{layout/only-contents}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+	<div class="layer_popup fullpage filter_layer ">
+		<div class="layer_wrap">
+			<dl class="layer bg_gray fixed">
+				<!--  역스크롤 시 헤더(타이틀) 영역 픽스 -->
+				<dt class="layer_title">뷰티테스터 리뷰</dt>
+				<dd class="layer_cont">
+					<div class="review tester_review_wrap">
+						<div class="review_header">
+							<span>amore***</span><span>VVIP</span>
+							<span class="rating">
+								<span class="mark_star_sm star4"><span class="sr_only">구매 평점 별 5개 중 5개</span></span> <!--평점에따라 클래스변경(star0~star5)-->
+								<span class="count">4</span>
+							</span>
+						</div>
+						<div class="review_cont">
+							<div class="title_box">
+								<p class="title">매트한 쿠션 찾는 분들에게 딱이에요 매트한 쿠션 찾는 분들에게 딱이에요</p>
+								<a href="#1" class="product_name"><em class="ellipsis">상품명, 옵션명 노출 길어지면 말줄임 상품명, 옵션명 노출 길어지면 말줄임</em><i class="ico_arr"></i></a>
+							</div>
+							<div class="cont">
+								기존 뷰티테스트 리뷰 영역
+							</div>
+						</div>
+					</div>
+				</dd>
+			</dl>
+			<!-- 스크롤 시 하단 픽스 -->
+			<div class="fix_bottom_wrap">
+				<div class="fix_bottom">
+					<div class="inbox">
+						<span class="share_area"><a href="#1" class=""><img src="/mo/ko/images/display/ico_share.png" class="" alt="공유하기" /></a></span>
+						<span class="recommend_area"><a href="#1" class=""><img src="/mo/ko/images/display/ico_recommend.png" class="" alt="도움이되요" />도움이 되요</a><span class="num">296</span></span>
+					</div>
+				</div>
+			</div>
+			<button class="layer_close" type="button"><i class="ico_close"></i><span class="sr_only">레이어 닫기</span></button>
+
+			<div class="layer_popup" style="margin-top:-79px;">
+				<div class="layer_dimmed"></div>
+				<div class="layer_wrap">
+					<dl class="layer ">
+						<dd class="layer_cont">
+							<p class="text">amor**님의 후기가<br />도움이 되셨나요???</p>
+						</dd>
+						<dd class="layer_btns">
+							<button class="btn_default_modal_confirm" type="button">아니오</button>
+							<button class="btn_default_modal_confirm" type="button">네</button>
+						</dd>
+					</dl>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+<script>
+	
+	$(".layer_close").click(function(){
+		
+		$(".layer_popup.fullpage .layer_popup").show();
+
+	});
+
+	$(".layer_popup.fullpage .layer_popup .layer_btns button").click(function(){
+		
+		$(".layer_popup.fullpage .layer_popup").hide();
+
+	});
+
+
+</script>
+	
+</th:block>
+
+</body>
+</html>

@@ -13,6 +13,9 @@ import net.g1project.ecp.api.model.EmbeddableName;
 import net.g1project.ecp.api.model.EmbeddableTel;
 import net.g1project.ecp.api.model.ap.ap.*;
 import net.g1project.ecp.api.model.order.order.OrdEx;
+import net.g1project.ecp.api.model.sales.applications.AgreeYN;
+import net.g1project.ecp.api.model.sales.applications.ExecuteResult;
+import net.g1project.ecp.api.model.sales.applications.PostAppInstall;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.http.HttpStatus;
@@ -58,7 +61,7 @@ public class LoginRestController extends AbstractController {
 			
 			ApMemberLoginReturnWithAutoLoginInfo resultInfo = apApi.memberLogin(loginInfo);
 			if(resultInfo == null) {
-				return error(respMap, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "아이디 또는 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+				throw error(HttpStatus.INTERNAL_SERVER_ERROR, "EAPI001", "아이디 또는 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
 			}
 
 			try {
@@ -79,17 +82,17 @@ public class LoginRestController extends AbstractController {
 							MemberSession memberSession = getMemberSession();
 							memberSession.setUser_incsNo(resultInfo.getIncsNo());
 							setMemberSession(memberSession);
-							return error(respMap, HttpStatus.FORBIDDEN, "EXTRA", "예외처리");
+							throw error(respMap, HttpStatus.FORBIDDEN, "EXTRA", "예외처리");
 						}
 					} else {
 						respMap.put("cs", 2);
 						respMap.put("userId", resultInfo.getIncsMemberId().substring(0, 2) + "*******");
-						return error(respMap, HttpStatus.FORBIDDEN, "EXTRA", "예외처리");
+						throw error(respMap, HttpStatus.FORBIDDEN, "EXTRA", "예외처리");
 					}
 				} else if(resultInfo.isOldMember()) {
 					respMap.put("cs", 3);
 					respMap.put("userId", memberId);
-					return error(respMap, HttpStatus.FORBIDDEN, "EXTRA", "예외처리");
+					throw error(respMap, HttpStatus.FORBIDDEN, "EXTRA", "예외처리");
 				}
 			}
 			APRequestContext.setAccessToken(resultInfo.getAccessToken());
@@ -162,9 +165,8 @@ public class LoginRestController extends AbstractController {
 			} else {
 				respMap.put("isLock", false);
 			}
-			
-			
-			return error(respMap, e);
+			e.setAdditional(respMap);
+			throw e;
 		}
 	}
 	
@@ -187,10 +189,10 @@ public class LoginRestController extends AbstractController {
 		try {
 			SnsIfResult snsResult = apApi.postMemberSns(getMemberSn(), snsCode, snsIdIf);
 			if(!snsResult.isResult()) {
-				return error((Map<String, Object>) result.getBody(), HttpStatus.SERVICE_UNAVAILABLE, "SNSERR", "SNS연계에 실패했습니다. 잠시 후 다시 시도해주세요.");
+				throw error((Map<String, Object>) result.getBody(), HttpStatus.SERVICE_UNAVAILABLE, "SNSERR", "SNS연계에 실패했습니다. 잠시 후 다시 시도해주세요.");
 			}
 		} catch(ApiException e) {
-			return error((Map<String, Object>) result.getBody(), e);
+			throw e;
 		} finally {
 
 			WebUtils.setSessionAttribute(req, SessionKey.SNS_CODE, null);
@@ -271,8 +273,8 @@ public class LoginRestController extends AbstractController {
 
     @RequestMapping("/api/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
-		WebUtils.setSessionAttribute(request, SessionKey.LOGIN_USER, null);
 		MemberSession memberSession = getMemberSession();
+		WebUtils.setSessionAttribute(request, SessionKey.LOGIN_USER, null);
 		if (memberSession.getMember_sn() != null) {
 			try {
 
@@ -301,12 +303,8 @@ public class LoginRestController extends AbstractController {
 			phoneNumber3 = "";
 		cellPhoneNo.setPhoneNo(phoneNumber1 + phoneNumber2 + phoneNumber3);
 		requestMobileAuthInfo.setCellPhoneNo(cellPhoneNo);
-		try {
-			ApMobileAuthRequestResultInfo result = apApi.requestMobileAuthLogin(requestMobileAuthInfo);
-			resp.put("incsNo", result.getMemberSn());
-		} catch(ApiException e) {
-			return error(resp, e);
-		}
+		ApMobileAuthRequestResultInfo result = apApi.requestMobileAuthLogin(requestMobileAuthInfo);
+		resp.put("incsNo", result.getMemberSn());
     	return ResponseEntity.ok(resp);
     }
     
@@ -314,86 +312,78 @@ public class LoginRestController extends AbstractController {
     public ResponseEntity<?> mobileLogin(HttpServletRequest request, long incsNo, String smsNum) {
 
     	Map<String, Object> respMap = new HashMap<String, Object>();
-    	try {
-	    	ApMobileAuthLoginInfo loginInfo = new ApMobileAuthLoginInfo();
-	    	loginInfo.setMemberSn(incsNo);
-	    	loginInfo.setAuthKey(smsNum);
-	    	ApMemberLoginReturnInfo resultInfo =  apApi.mobileAuthLogin(loginInfo);
-			if(resultInfo == null) {
-				return error(respMap, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "로그인에 실패했습니다.");
-			}
+    	ApMobileAuthLoginInfo loginInfo = new ApMobileAuthLoginInfo();
+    	loginInfo.setMemberSn(incsNo);
+    	loginInfo.setAuthKey(smsNum);
+    	ApMemberLoginReturnInfo resultInfo =  apApi.mobileAuthLogin(loginInfo);
 
-			if(!resultInfo.isMember()) {
-				if(resultInfo.isIncsMember() && resultInfo.getIncsMemberId() != null && !resultInfo.getIncsMemberId().isEmpty()) {
-					if(resultInfo.isIntegrationPasswordMatch()) {
+		if(!resultInfo.isMember()) {
+			if(resultInfo.isIncsMember() && resultInfo.getIncsMemberId() != null && !resultInfo.getIncsMemberId().isEmpty()) {
+				if(resultInfo.isIntegrationPasswordMatch()) {
 
-						if(resultInfo.isOldMember()) {
-							respMap.put("cs", 0);
-							
-						} else {
-							respMap.put("cs", 1);
-							MemberSession memberSession = getMemberSession();
-							memberSession.setUser_incsNo(resultInfo.getIncsNo());
-							setMemberSession(memberSession);
-							return error(respMap, HttpStatus.FORBIDDEN, "EXTRA", "예외처리");
-						}
+					if(resultInfo.isOldMember()) {
+						respMap.put("cs", 0);
+						
 					} else {
-						respMap.put("cs", 2);
-						respMap.put("userId", resultInfo.getIncsMemberId().substring(0, 2) + "*******");
-						return error(respMap, HttpStatus.FORBIDDEN, "EXTRA", "예외처리");
+						respMap.put("cs", 1);
+						MemberSession memberSession = getMemberSession();
+						memberSession.setUser_incsNo(resultInfo.getIncsNo());
+						setMemberSession(memberSession);
+						throw error(respMap, HttpStatus.FORBIDDEN, "EXTRA", "예외처리");
 					}
-				} else if(resultInfo.isOldMember()) {
-					respMap.put("cs", 3);
-					respMap.put("userId", "");
-					return error(respMap, HttpStatus.FORBIDDEN, "EXTRA", "예외처리");
+				} else {
+					respMap.put("cs", 2);
+					respMap.put("userId", resultInfo.getIncsMemberId().substring(0, 2) + "*******");
+					throw error(respMap, HttpStatus.FORBIDDEN, "EXTRA", "예외처리");
 				}
+			} else if(resultInfo.isOldMember()) {
+				respMap.put("cs", 3);
+				respMap.put("userId", "");
+				throw error(respMap, HttpStatus.FORBIDDEN, "EXTRA", "예외처리");
 			}
-			
-			
-			APRequestContext.setAccessToken(resultInfo.getAccessToken());
-	
-			ApMember apMember = apApi.getMemberInfo(resultInfo.getMemberSn());
-	
-			MemberSession memberSession = getMemberSession();
-			memberSession.setMember(apMember);
-			memberSession.setMember_sn(resultInfo.getMemberSn());
-			memberSession.setUser_incsNo(apMember.getIncsNo());
-			memberSession.setAccessToken(resultInfo.getAccessToken());
-			memberSession.setRefreshToken(resultInfo.getRefreshToken());
-	
-			CicuemCuInfTotTcVo cicuemCuInfTotTcVo = new CicuemCuInfTotTcVo();
-			cicuemCuInfTotTcVo.setIncsNo(memberSession.getUser_incsNo());
-			try {
-				cicuemCuInfTotTcVo = amoreAPIService.getcicuemcuinfrbyincsno(cicuemCuInfTotTcVo);
-				memberSession.setUser_incsCardNoEc(cicuemCuInfTotTcVo.getIncsCardNoEc());
-			} catch(Exception e) {
-				logger.error(e.getMessage(), e);
-			}
+		}
+		
+		
+		APRequestContext.setAccessToken(resultInfo.getAccessToken());
 
-			try {
-				if(memberSession.getCartSn() != null && memberSession.getCartSn() != 0)
-					cartApi.transferMemberCart(resultInfo.getMemberSn(), memberSession.getCartSn());
-			} catch(Exception e) {
-				logger.error(e.getMessage(), e);
-			}
-			
-			respMap.put("sleep", resultInfo.getDormantAcConvertYn());
-			if("Y".equals(resultInfo.getDormantAcConvertYn())) {
-				respMap.put("userId", apMember.getMemberId().substring(0, apMember.getMemberId().length() - 2) + "**");
-				memberSession.setMember(null);
-			} else {
-				setMemberSession(memberSession);
-			}
-			respMap.put("old", false);//FIXME 구회원 여부.
-			respMap.put("changePw", resultInfo.getPasswordLongtimeUnchangedYn());
-			if("Y".equals(resultInfo.getPasswordLongtimeUnchangedYn())) {
-				respMap.put("message", getMessage("customer.login.changePwdContant", DateFormatUtils.format(resultInfo.getMemberSignupDt(), "yyyy-MM-dd")));
-			}
-			return ResponseEntity.ok(respMap);
-			
-    	} catch(ApiException e) {
-			return error(e);
-    	}
+		ApMember apMember = apApi.getMemberInfo(resultInfo.getMemberSn());
+
+		MemberSession memberSession = getMemberSession();
+		memberSession.setMember(apMember);
+		memberSession.setMember_sn(resultInfo.getMemberSn());
+		memberSession.setUser_incsNo(apMember.getIncsNo());
+		memberSession.setAccessToken(resultInfo.getAccessToken());
+		memberSession.setRefreshToken(resultInfo.getRefreshToken());
+
+		CicuemCuInfTotTcVo cicuemCuInfTotTcVo = new CicuemCuInfTotTcVo();
+		cicuemCuInfTotTcVo.setIncsNo(memberSession.getUser_incsNo());
+		try {
+			cicuemCuInfTotTcVo = amoreAPIService.getcicuemcuinfrbyincsno(cicuemCuInfTotTcVo);
+			memberSession.setUser_incsCardNoEc(cicuemCuInfTotTcVo.getIncsCardNoEc());
+		} catch(Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+
+		try {
+			if(memberSession.getCartSn() != null && memberSession.getCartSn() != 0)
+				cartApi.transferMemberCart(resultInfo.getMemberSn(), memberSession.getCartSn());
+		} catch(Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		
+		respMap.put("sleep", resultInfo.getDormantAcConvertYn());
+		if("Y".equals(resultInfo.getDormantAcConvertYn())) {
+			respMap.put("userId", apMember.getMemberId().substring(0, apMember.getMemberId().length() - 2) + "**");
+			memberSession.setMember(null);
+		} else {
+			setMemberSession(memberSession);
+		}
+		respMap.put("old", false);//FIXME 구회원 여부.
+		respMap.put("changePw", resultInfo.getPasswordLongtimeUnchangedYn());
+		if("Y".equals(resultInfo.getPasswordLongtimeUnchangedYn())) {
+			respMap.put("message", getMessage("customer.login.changePwdContant", DateFormatUtils.format(resultInfo.getMemberSignupDt(), "yyyy-MM-dd")));
+		}
+		return ResponseEntity.ok(respMap);
     	
     }
 
@@ -413,7 +403,7 @@ public class LoginRestController extends AbstractController {
     	} catch(Exception e) {
     		
     	}
-		return error(result, HttpStatus.NOT_FOUND, "NOTFOUND", "해당 정보로 주문을 조회하지 못했습니다.");
+    	throw error(result, HttpStatus.NOT_FOUND, "NOTFOUND", "해당 정보로 주문을 조회하지 못했습니다.");
     }
 
     @PostMapping("/saveUrl")
@@ -427,13 +417,8 @@ public class LoginRestController extends AbstractController {
      */
     @PostMapping("/customer/unlockUser")
     public ResponseEntity<?> unlockUser() {
-    	try {
-    		apApi.recoveryToNormalMember(getMemberSn());
-        	return ResponseEntity.ok("{}");
-    		
-    	} catch(ApiException e) {
-    		return error(e);
-    	}
+		apApi.recoveryToNormalMember(getMemberSn());
+    	return ResponseEntity.ok("{}");
     }
     
     /**
@@ -442,10 +427,37 @@ public class LoginRestController extends AbstractController {
      */
     @RequestMapping("/app/appToWeb")
     public ResponseEntity<?> appToWeb(String type, AppCumuData data) {
+    	logger.info("[appToWeb]{},{},{},{},{},{},{},{},{}", type, data.getAppUid(),data.getAppVer(),data.getDeviceModel(),data.getLocation(),data.getMarketing(),data.getOsVer(),data.getPush(),data.getTokenData());
     	Map<String, Object> result = new HashMap<String, Object>();
+    	if(getMemberSn() == 0) {
+        	result.put("rsltCd", "FAILURE");
+        	result.put("rsltMsg", "저장에 실패했습니다.");
+    		return ResponseEntity.ok(result);
+    	}
     	result.put("rsltCd", "SUCCESS");
     	result.put("rsltMsg", "저장되었습니다.");
-    	logger.info("[appToWeb]{},{},{},{},{},{},{},{},{}", type, data.getAppUid(),data.getAppVer(),data.getDeviceModel(),data.getLocation(),data.getMarketing(),data.getOsVer(),data.getPush(),data.getTokenData());
+    	if("info".equals(type)) {
+    		ExecuteResult token = applicationsApi.getAppInstall(isAndroid()? "Android" : "iOS", data.getTokenData());
+    		if(!token.isResult()) {
+    			PostAppInstall body = new PostAppInstall();
+    			body.setAppVer(data.getAppVer());
+    			body.setAppUid(data.getAppUid());
+    			body.setMemberSn(getMemberSn());
+    			body.setMemberYn("Y");
+    			body.setModelName(data.getDeviceModel());
+    			body.setOsVer(data.getOsVer());
+    			body.setToken(data.getTokenData());
+    			applicationsApi.saveAppInstall(null, body);
+    		}
+    	}
+    	if("pmAgree".equals(type)) {
+    		AgreeYN agreeYN = new AgreeYN();
+    		agreeYN.setAgreeYn(data.getPush());
+			applicationsApi.updateAppAgree(data.getTokenData(), getMemberSn(), agreeYN);
+			agreeYN.setAgreeYn(data.getMarketing());
+			applicationsApi.updateAppMaktingAgree(data.getTokenData(), getMemberSn(), agreeYN);
+    	}
+    	
     	return ResponseEntity.ok(result);
     }
     /**

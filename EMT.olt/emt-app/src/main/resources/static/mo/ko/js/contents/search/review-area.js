@@ -71,7 +71,7 @@
 		},
 
 		_draw: function ( data ) {
-			console.log( data );
+			
 			var html = AP.common.getTemplate( 'search.review-list', data );
 
 			//remove events
@@ -80,7 +80,7 @@
 
 			//draw
 			if ( data.offset ) {
-				this._$listArea.append( html );
+				this._$listArea.append( html);
 			} else {
 				this._$listArea.html( html );
 			}
@@ -104,14 +104,12 @@
 		},
 
 		_openDetail: function ( data, prodReviewSn ) {
-
-			//TODO: api 리턴모델 확인 후 적용
-
+			
 			AP.modal.full({
 				title: '리뷰/후기',
 				contents: {
 					templateKey: 'common.review-detail-modal',
-					templateModel: _.findWhere( data.prodReviewList, {prodReviewSn: prodReviewSn} )
+					templateModel: _.findWhere( data.list, {prodReviewSn: prodReviewSn} )
 				},
 				containerClass: 'review'
 			});

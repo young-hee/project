@@ -83,6 +83,8 @@
 
 		//아이디 중복확인.
 		checkId: { path: '/customer/checkId', method: 'POST' },
+		//아이디 SMS 전송.
+		sendId: { path: '/customer/find/findId/sendId', method: 'POST' },
 
 		//비밀번호 찾기
 		//email
@@ -253,6 +255,27 @@
 
 		// 상품리스트 ------------------------------------------------------------------ dummy
 		productList: { path: '/pc/ko/dummy-apis/test.json', method: 'GET' },
+		
+		/**
+		 * 상품 *************************************************************
+		 */
+		//상품평 목록 조회
+		getReviewList : {path : '/product/getReviewList', method : 'GET', data: {
+				prodReviewUnit : 'OnlineProd', //(필수) 상품평단위코드 - Member(회원단위) - OnlineProd(온라인상품단위) - UnitProd(단위상품단위, 단위상품일련번호 필수) - StyleCode(스타일코드단위, 스타일코드 필수)
+				prodReviewType : 'All', //(필수) 상품평유형코드. All(전체), Pur(구매후기), Prod(상품리뷰), ExperienceGrp(체험단)
+				onlineProdSn : null, //(필수) 온라인상품일련번호
+				prodSn : null, //단위상품일련번호
+				styleCode : null, //스타일코드
+				prodReviewSort : 'Last', //(필수) 정렬방식 - Last(최근등록순) - Scope(별점높은순) - LowScope(별점낮은순) - Recommend(추천많은순) - View(조회많은순)
+				scope  : 'All', //(필수)별점 필터. All(전체), 5, 4, 3, 2, 1
+				topReviewOnlyYn : 'N', //(필수) 우수상품평만노출여부
+				topReviewFirstYn  : 'N', //(필수)우수상품평우선정렬여부
+				startDate: null,
+				endDate: null,
+				offset: 0, //(필수)
+				limit: 20 //(필수)
+			}
+		},
 
 		/**
 		 * 이벤트 *************************************************************
@@ -303,7 +326,15 @@
 				articleSn: null, //아티클일련번호
 				articleCommentSn: null, //아티클댓글일련번호
 				memberSn: null //회원일련번호
-			}}
+			}},
+
+
+		/**
+		 * test *************************************************************
+		 */
+
+		// test
+		test: { path: '/mo/ko/dummy-apis/test.json', method: 'GET' }
 
 	};
 

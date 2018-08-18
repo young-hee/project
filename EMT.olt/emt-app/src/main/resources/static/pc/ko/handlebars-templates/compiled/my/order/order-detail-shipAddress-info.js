@@ -62,7 +62,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-shipAddress-info"] = Handl
     + "</span></li>\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.shipAddressTypeCode : stack1),"ShipAddressInput",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.shipAddressTypeCode : stack1),"CStoreSelect",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "			<li><b>배송 메세지</b><span>"
+    + "			<li><b>배송 시 요청사항</b><span>"
     + alias4(alias3(((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.shipMsg : stack1), depth0))
     + "</span></li>\n		</ul>\n	</div>\n</div>";
 },"useData":true});

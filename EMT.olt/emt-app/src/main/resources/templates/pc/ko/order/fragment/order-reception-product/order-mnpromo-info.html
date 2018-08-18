@@ -1,11 +1,11 @@
             <!-- M+N프로모션 -->
             <div class="promotion" >
 				<div class="clear promotion_header">
-					<strong th:text="${mPlusNPromo.promoName}">[EVENT] 섀도우 week 싱글 섀도우 1+1</strong>
+					<strong th:text="${mPlusNPromo.promoName}">[EVENT] M+N</strong>
 				</div>
                 <!--/* 상품들 */-->
                 <th:block th:if="${#lists.size(mPlusNPromo.ordOnlineProdFoList) > 0}">
-                  <div class="item_wrap" th:each="ordOnlineProd, iter : ${mPlusNPromo.ordOnlineProdFoList}" th:classappend="${iter.index != 0} ? plus : ''">
+                  <div class="item_wrap" th:each="ordOnlineProd, iter : ${mPlusNPromo.ordOnlineProdFoList}" th:classappend="${iter.index != 0} ? 'plus' : ''">
                         <th:block ap:replace="~{order/fragment/order-reception-product/order-ordonlineprod-info}"/>
                   </div>
                 </th:block>

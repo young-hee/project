@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class MyOrdInfoDTO {
 
 	public MyOrdInfoDTO() {
@@ -312,7 +313,7 @@ public class MyOrdInfoDTO {
 	}
 
 	private void makeOrdAmt(List payment) {
-		ordAmt = new MyOrdAmt(payment);
+		ordAmt = new MyOrdAmt(payment, null);
 	}
 
 	private void makeOrdSavingPoint(List<OrdSavingPoint> point) {

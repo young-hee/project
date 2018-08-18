@@ -1,0 +1,35 @@
+{{!--
+
+추천컬러 상품 목록 MO
+
+--}}
+
+{{#each this}}
+
+	<li class="ix-list-item">
+	    <a href="{{ productDetailPath this.onlineProdSn }}">
+			<span class="lazy_load_wrap" style="background-color:#{{this.products.rgbVal}}";>
+				{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+						<div class="item_state out_of_stock">일시품절</div>
+					{{/xif}}
+				<img class="lazy_load" src="" data-src="{{ this.products.prodImages.0.imgUrl }}" alt="">
+			</span>
+		<div class="info_box">
+			{{!-- 상품명  --}}
+			<div class="title_area">
+				<span class="item_title">{{ this.onlineProdName }}</span>
+			</div>
+			{{!-- 옵션 이름 --}}
+			<div class="item_option">
+				<p class="option_name">{{ this.products.prodName }}</p>
+			</div>
+			{{!-- 가격,장바구니 --}}
+			<div class="price_area">
+				<div class="price">
+					<strong>{{ numberFormat this.products.prodPriceSummary.onlineSalePrice }} 원</strong>
+				</div>
+			</div>
+		</div>
+	   	 </a>
+	  </li>
+{{/each}}
