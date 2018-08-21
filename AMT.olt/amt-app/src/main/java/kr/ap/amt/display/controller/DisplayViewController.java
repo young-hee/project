@@ -14,23 +14,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.ap.amt.display.vo.RequestArticle;
 import kr.ap.comm.config.interceptor.PageTitle;
 import kr.ap.comm.support.common.AbstractController;
+import kr.ap.comm.support.common.SeoEntity;
+import kr.ap.comm.support.common.SnsEntity;
 import kr.ap.comm.support.constants.APConstant;
 import kr.ap.comm.util.FromEndDateUtils;
-import kr.ap.amt.display.vo.RequestArticle;
 import net.g1project.ecp.api.model.sales.article.Article;
+import net.g1project.ecp.api.model.sales.article.ArticleComment;
+import net.g1project.ecp.api.model.sales.article.ArticleCommentPost;
+import net.g1project.ecp.api.model.sales.article.ArticleCommentResult;
 import net.g1project.ecp.api.model.sales.article.ArticleSearchResult;
+import net.g1project.ecp.api.model.sales.article.ExecuteResult;
+import net.g1project.ecp.api.model.sales.article.PlanDisplayResult;
 import net.g1project.ecp.api.model.sales.display.Corner;
 import net.g1project.ecp.api.model.sales.display.CornerContentsSet;
 import net.g1project.ecp.api.model.sales.display.PageInfo;
@@ -128,7 +137,6 @@ public class DisplayViewController extends AbstractController {
 	        List<Corner> corners = displayApi.getMenuPageCorners(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId, previewKey, previewDate != null ? sf.parse(previewDate) : null, cornerIds, false);
 			Map<String, List<CornerContentsSet>> cornersMap = new HashMap<String, List<CornerContentsSet>>();
 			for (Corner c : corners) {
-				System.out.println("========================================= " + c.getMenuPageCornerId());
 				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
 			}
 			
@@ -150,16 +158,16 @@ public class DisplayViewController extends AbstractController {
 		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
 
 		model.addAttribute("displayMenuId", displayMenuId);
-		System.out.println("========================================= " + pageInfo.getMenuPageFileId());
 		// return "display/product-list-12";
 		return "display/" + pageInfo.getMenuPageFileId();
 	}
 	
 	@RequestMapping({"/trendOnAir"})
-    @PageTitle(title = "트랜드온에어")
-    public String etude_pick(Model model, String displayMenuId) {
+    @PageTitle(title = "트렌드온에어")
+    public String trendOnAir(Model model, String displayMenuId) {
 				
-		displayMenuId ="trendOnAir";
+		//displayMenuId = displayMenuId;
+		String displayPageId ="a" + WordUtils.capitalize(displayMenuId);
 		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
 		
         //Mobile
@@ -171,41 +179,279 @@ public class DisplayViewController extends AbstractController {
         }
         
         model.addAttribute("displayMenuId", displayMenuId);
+        model.addAttribute("displayPageId", displayPageId);
         
         return "display/" + pageInfo.getMenuPageFileId();
        // return "display/etude-pick"; 
 
     }
+	
+	@RequestMapping({"/trendOnAir/detail"})
+    @PageTitle(title = "트렌드온에어")
+    public String trendOnAirDatail(Model model, String displayMenuId, RequestArticle requestArticle, String previewKey) {
+		
+		displayMenuId = "trendOnAir";
+		String displayPageId ="a" + WordUtils.capitalize(displayMenuId);
+		//Mobile
+        if (isMobileDevice()) {
+    		
+        }
 
-	@RequestMapping({"/best", "/best/preview"})
-	@PageTitle(title = "베스트")
-	public String best(Model model, String displayMenuId, String previewKey, String previewDate) {
+        //PC
+        if (isPcDevice()) {
+        	
+        }
+        
+        Article article = articleApi.getArticle(requestArticle.getArticleSn(), previewKey);
 
-		/**
-		 * 코너 없어짐 //메뉴페이지 코너정보 조회 String cornerIds = "";
-		 * 
-		 * //Mobile if (isMobileDevice()) { cornerIds = "M02_best_m.1"; }
-		 * 
-		 * //PC if (isPcDevice()) { //cornerIds = "M02_best_p.1"; }
-		 * 
-		 * List<Corner> corners =
-		 * displayApi.getMenuPageCorners(APConstant.AP_DISPLAY_MENU_SET_ID,
-		 * displayMenuId, getMemberSn(), cornerIds, false); Map<String,
-		 * List<CornerContentsSet>> cornersMap = new HashMap<String,
-		 * List<CornerContentsSet>>();
-		 * 
-		 * for (Corner c : corners) { cornersMap.put(c.getMenuPageCornerId(),
-		 * c.getContentsSets()); }
-		 * 
-		 * model.addAttribute("cornersMap", cornersMap);
-		 */
+        //sns 공유하기 설정
+		SnsEntity snsEntity = new SnsEntity();
+        snsEntity.setUrl(getFullUri());
+        if(StringUtils.isEmpty(article.getSnsIfImg())) {
+        	if (isMobileDevice()) {
+        		snsEntity.setImage(article.getBannerImgM1());
+        	}else {
+        		snsEntity.setImage(article.getBannerImgP1());
+        	}
+        }else {
+        	snsEntity.setImage(article.getSnsIfImg());
+        }      
+        if(StringUtils.isEmpty(article.getSnsIfTitle())) {
+        	snsEntity.setTitle(article.getArticleTitle());
+        }else {
+        	snsEntity.setTitle(article.getSnsIfTitle());
+        }
+        if(StringUtils.isEmpty(article.getSnsIfDesc())) {
+        	snsEntity.setDescription(article.getArticleTitle());
+        }else {
+        	snsEntity.setDescription(article.getSnsIfDesc());
+        }
+        snsEntity.setHashtag(article.getSnsHashTag());
+		model.addAttribute("sns", snsEntity);
+
+		SeoEntity seoEntity = new SeoEntity();
+		seoEntity.setTitle(article.getSeoTitle());
+		seoEntity.setDescription(article.getSeoDesc());
+		seoEntity.setKeyword(article.getSeoSearchKeyword());
+		model.addAttribute("seo", seoEntity);
+
+        model.addAttribute("displayMenuId", displayMenuId);
+        model.addAttribute("displayPageId", displayPageId);
+        model.addAttribute("article", article);
+
+
+        //아티클 히스토리 저장
+//  		if(0L != getMemberSn()) {
+//  			ShoppingMarkPost body = new ShoppingMarkPost();
+//  			body.setShoppingMarkTgtCode("Article");
+//  			body.setArticleSn(article.getArticleSn());      			
+//  			body.setDisplayMenuSetId(APConstant.AP_DISPLAY_MENU_SET_ID);
+//  			body.setDisplayMenuId(displayMenuId);
+//  			try{
+//  				shoppingmarkApi.addShoppingHistories(getMemberSn(), body);
+//  			}catch(Exception e) {
+//  				e.printStackTrace();
+//  			}
+//  		}
+        
+
+        return "display/" + displayMenuId + "-detail"; 
+
+    }
+	
+	@RequestMapping({"/superBeautyTip"})
+    @PageTitle(title = "슈퍼뷰티팁")
+    public String superBeautyTip(Model model, String displayMenuId) {
+				
+		//displayMenuId ="superBeautyTip";
+		String displayPageId ="a" + WordUtils.capitalize(displayMenuId);
 		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
+		
+        //Mobile
+        if (isMobileDevice()) {
+        }
 
-		model.addAttribute("displayMenuId", displayMenuId);
+        //PC
+        if (isPcDevice()) {
+        }
+        
+        model.addAttribute("displayMenuId", displayMenuId);
+        model.addAttribute("displayPageId", displayPageId);
+        
+        return "display/" + pageInfo.getMenuPageFileId();
+       // return "display/etude-pick"; 
 
-		return "display/" + pageInfo.getMenuPageFileId();
-	}
+    }
+	
+	@RequestMapping({"/superBeautyTip/detail"})
+    @PageTitle(title = "슈퍼뷰티팁")
+    public String superBeautyTipDatail(Model model, String displayMenuId, RequestArticle requestArticle, String previewKey) {
+		
+		displayMenuId ="superBeautyTip";
+		String displayPageId ="a" + WordUtils.capitalize(displayMenuId);
+		//Mobile
+        if (isMobileDevice()) {
+    		
+        }
 
+        //PC
+        if (isPcDevice()) {
+        	
+        }
+        
+        Article article = articleApi.getArticle(requestArticle.getArticleSn(), previewKey);
+
+        //sns 공유하기 설정
+		SnsEntity snsEntity = new SnsEntity();
+        snsEntity.setUrl(getFullUri());
+        if(StringUtils.isEmpty(article.getSnsIfImg())) {
+        	if (isMobileDevice()) {
+        		snsEntity.setImage(article.getBannerImgM1());
+        	}else {
+        		snsEntity.setImage(article.getBannerImgP1());
+        	}
+        }else {
+        	snsEntity.setImage(article.getSnsIfImg());
+        }      
+        if(StringUtils.isEmpty(article.getSnsIfTitle())) {
+        	snsEntity.setTitle(article.getArticleTitle());
+        }else {
+        	snsEntity.setTitle(article.getSnsIfTitle());
+        }
+        if(StringUtils.isEmpty(article.getSnsIfDesc())) {
+        	snsEntity.setDescription(article.getArticleTitle());
+        }else {
+        	snsEntity.setDescription(article.getSnsIfDesc());
+        }
+        snsEntity.setHashtag(article.getSnsHashTag());
+		model.addAttribute("sns", snsEntity);
+
+		SeoEntity seoEntity = new SeoEntity();
+		seoEntity.setTitle(article.getSeoTitle());
+		seoEntity.setDescription(article.getSeoDesc());
+		seoEntity.setKeyword(article.getSeoSearchKeyword());
+		model.addAttribute("seo", seoEntity);
+
+        model.addAttribute("displayMenuId", displayMenuId);
+        model.addAttribute("displayPageId", displayPageId);
+        model.addAttribute("article", article);
+
+
+        //아티클 히스토리 저장
+//  		if(0L != getMemberSn()) {
+//  			ShoppingMarkPost body = new ShoppingMarkPost();
+//  			body.setShoppingMarkTgtCode("Article");
+//  			body.setArticleSn(article.getArticleSn());      			
+//  			body.setDisplayMenuSetId(APConstant.AP_DISPLAY_MENU_SET_ID);
+//  			body.setDisplayMenuId(displayMenuId);
+//  			try{
+//  				shoppingmarkApi.addShoppingHistories(getMemberSn(), body);
+//  			}catch(Exception e) {
+//  				e.printStackTrace();
+//  			}
+//  		}
+        
+
+        return "display/superBeautyTip-detail"; 
+
+    }
+
+	@RequestMapping({"/apShoppingTip"})
+    @PageTitle(title = "AP쇼핑팁")
+    public String apTip(Model model, String displayMenuId) {
+				
+		//displayMenuId ="apShoppingTip";
+		String displayPageId ="a" + WordUtils.capitalize(displayMenuId);
+		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
+		
+        //Mobile
+        if (isMobileDevice()) {
+        }
+
+        //PC
+        if (isPcDevice()) {
+        }
+        
+        model.addAttribute("displayMenuId", displayMenuId);
+        model.addAttribute("displayPageId", displayPageId);
+        
+        return "display/" + pageInfo.getMenuPageFileId();
+       // return "display/etude-pick"; 
+
+    }
+	
+	@RequestMapping({"/apShoppingTip/detail"})
+    @PageTitle(title = "AP쇼핑팁")
+    public String apTipDatail(Model model, String displayMenuId, RequestArticle requestArticle, String previewKey) {
+		
+		displayMenuId ="apShoppingTip";
+		String displayPageId ="a" + WordUtils.capitalize(displayMenuId);		
+		//Mobile
+        if (isMobileDevice()) {
+    		
+        }
+
+        //PC
+        if (isPcDevice()) {
+        	
+        }
+        
+        Article article = articleApi.getArticle(requestArticle.getArticleSn(), previewKey);
+
+        //sns 공유하기 설정
+		SnsEntity snsEntity = new SnsEntity();
+        snsEntity.setUrl(getFullUri());
+        if(StringUtils.isEmpty(article.getSnsIfImg())) {
+        	if (isMobileDevice()) {
+        		snsEntity.setImage(article.getBannerImgM1());
+        	}else {
+        		snsEntity.setImage(article.getBannerImgP1());
+        	}
+        }else {
+        	snsEntity.setImage(article.getSnsIfImg());
+        }      
+        if(StringUtils.isEmpty(article.getSnsIfTitle())) {
+        	snsEntity.setTitle(article.getArticleTitle());
+        }else {
+        	snsEntity.setTitle(article.getSnsIfTitle());
+        }
+        if(StringUtils.isEmpty(article.getSnsIfDesc())) {
+        	snsEntity.setDescription(article.getArticleTitle());
+        }else {
+        	snsEntity.setDescription(article.getSnsIfDesc());
+        }
+        snsEntity.setHashtag(article.getSnsHashTag());
+		model.addAttribute("sns", snsEntity);
+
+		SeoEntity seoEntity = new SeoEntity();
+		seoEntity.setTitle(article.getSeoTitle());
+		seoEntity.setDescription(article.getSeoDesc());
+		seoEntity.setKeyword(article.getSeoSearchKeyword());
+		model.addAttribute("seo", seoEntity);
+
+        model.addAttribute("displayMenuId", displayMenuId);
+        model.addAttribute("displayPageId", displayPageId);
+        model.addAttribute("article", article);
+
+
+        //아티클 히스토리 저장
+//  		if(0L != getMemberSn()) {
+//  			ShoppingMarkPost body = new ShoppingMarkPost();
+//  			body.setShoppingMarkTgtCode("Article");
+//  			body.setArticleSn(article.getArticleSn());      			
+//  			body.setDisplayMenuSetId(APConstant.AP_DISPLAY_MENU_SET_ID);
+//  			body.setDisplayMenuId(displayMenuId);
+//  			try{
+//  				shoppingmarkApi.addShoppingHistories(getMemberSn(), body);
+//  			}catch(Exception e) {
+//  				e.printStackTrace();
+//  			}
+//  		}
+        
+
+        return "display/apShoppingTip-detail"; 
+
+    }
 	/**
 	 * 핫딜 (투데이핫딜) 페이지 이동
 	 * 
@@ -326,75 +572,6 @@ public class DisplayViewController extends AbstractController {
 
 		return fileName;
 	}
-
-	/**
-	 * APP 전용 마이 컬러 파인더
-	 *
-	 * @param model
-	 * @param displayMenuId
-	 * @return
-	 */
-	@RequestMapping("/color_finder_list")
-	@PageTitle(title = "컬러파인더")
-	public String colorFinderList(Model model, String displayMenuId) {
-
-		String fileName = "";
-
-		if (isMobileDevice() || isAndroid() || isiOS()) {
-
-			if (isLoggedIn()) { // 로그인이 되어있으면
-
-				fileName = "display/color-finder-01"; // 로그인후
-				// 로그인이 되어있으나, 피부톤 이 있는지 없는지에 따른 분기가 필요함API 필요함
-				// if() {
-				//
-				// }
-			} else {
-
-				fileName = "display/color-finder-01"; // 로그인전
-			}
-
-		}
-
-		model.addAttribute("displayMenuId", displayMenuId);
-
-		return fileName;
-	}
-	
-	/**
-	 * APP 전용 마이 컬러 파인더 상세
-	 *
-	 * @param model
-	 * @param displayMenuId
-	 * @param type
-	 * @return
-	 */
-	@RequestMapping("/color_finder_detail")
-	@PageTitle(title = "컬러파인더")
-	public String colorFinderDetail(Model model, String displayMenuId, String type) {
-
-		String fileName = "";
-
-		if (isMobileDevice() || isAndroid() || isiOS()) {
-
-			if (isLoggedIn()) { // 로그인이 되어있으면
-
-				fileName = "display/color-finder-03"; // 로그인후
-				// 로그인이 되어있으나, 피부톤 이 있는지 없는지에 따른 분기가 필요함API 필요함
-				// if() {
-				//
-				// }
-			} else {
-
-				fileName = "display/color-finder-" + type; // 로그인전
-			}
-
-		}
-
-		model.addAttribute("displayMenuId", displayMenuId);
-
-		return fileName;
-	}
 	
 	/**
 	 *  아티클 목록 조회
@@ -445,5 +622,125 @@ public class DisplayViewController extends AbstractController {
         }
 
     }
+	
+	/**
+	 *  아티클 댓글 목록 조회
+	 * @param requestBeautyLife
+	 * @return
+	 */
+	@RequestMapping("/comments")
+    @ResponseBody
+    public ResponseEntity<?> comments( RequestArticle requestArticle) {
+      
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        
+        try {
+        	
+        	ArticleCommentResult articleCommentResult = articleApi.getArticleCommentList(requestArticle.getArticleSn(), "Y", requestArticle.getOrder(), requestArticle.getOffset(), requestArticle.getLimit());
+            result.put("articleCommentResult", articleCommentResult);
+            
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+        	result.put("errorData", e);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+        }
+    }
 
+	/**
+	 * 아티클 댓글 등록
+	 *
+	 * @param requestArticle
+	 * @param articleCommentParam
+	 * @return
+	 */
+	@RequestMapping("/createArticleComment")
+    @ResponseBody
+    public ResponseEntity<?> createArticleComment( RequestArticle requestArticle, ArticleCommentPost articleCommentParam) {
+      
+        HashMap<String, Object> result = new HashMap<String, Object>();
+
+        try {
+        	
+        	ExecuteResult executeResult = articleApi.createArticleComment(requestArticle.getArticleSn(), articleCommentParam);
+        	result.put("executeResult", executeResult);
+        	
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+        	result.put("errorData", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
+    }
+	
+	/**
+	 * 아티클 댓글 수정
+	 *
+	 * @param requestArticle
+	 * @param articleCommentParam
+	 * @return
+	 */
+	@RequestMapping("/updateArticleComment")
+    @ResponseBody
+    public ResponseEntity<?> updateArticleComment( RequestArticle requestArticle, ArticleComment articleComment, ArticleCommentPost articleCommentParam) {
+      
+        HashMap<String, Object> result = new HashMap<String, Object>();
+
+        try {
+        	
+        	ExecuteResult executeResult = articleApi.saveArticleComment(requestArticle.getArticleSn(), articleComment.getArticleCommentSn(), articleCommentParam);
+        	result.put("executeResult", executeResult);
+        	
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+        	result.put("errorData", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
+    }
+	
+	/**
+	 *  아티클 댓글 삭제
+	 *
+	 * @param requestArticle
+	 * @param articleComment
+	 * @return
+	 */
+	@RequestMapping("/deleteArticleComment")
+    @ResponseBody
+    public ResponseEntity<?> deleteArticleComment( RequestArticle requestArticle, ArticleComment articleComment) {
+      
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        
+        try {
+        	
+        	ExecuteResult executeResult = articleApi.deleteArticleComment(requestArticle.getArticleSn(), articleComment.getArticleCommentSn());
+        	result.put("executeResult", executeResult);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+        	result.put("errorData", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
+    }
+	
+	/**
+	 *  아티클 댓글 추천
+	 *
+	 * @param requestArticle
+	 * @param articleComment
+	 * @return
+	 */
+	@RequestMapping("/recommendArticleComment")
+    @ResponseBody
+    public ResponseEntity<?> recommendArticleComment( RequestArticle requestArticle, ArticleComment articleComment) {
+      
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        
+        try {
+        	
+        	ExecuteResult executeResult = articleApi.recommendArticleComment(requestArticle.getArticleSn(), articleComment.getArticleCommentSn());
+        	result.put("executeResult", executeResult);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+        	result.put("errorData", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
+    }
 }

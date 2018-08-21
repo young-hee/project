@@ -20,11 +20,9 @@
 						<dt><b>휴대폰번호</b></dt>
 						<dd th:text="${ordShipAddressExInfo.recipientPhoneNo1.phoneNo}">010-0000-0000</dd>
 					</dl>
-					<dl>
+					<dl th:if="${#lists.size(ordOtfExList) > 0}" th:each="ordOtfEx : ${ordOtfExList}" >
 						<dt><b>배송시 요청사항</b></dt>
-						<dd th:if="${#lists.size(ordShipAddressExInfo.ordOtfExList) > 0}"
-							th:each="ordOtfEx : ${ordShipAddressExInfo.ordOtfExList}" th:text="${ordOtfEx.shipMsg}">부재시 경비실에 맡겨주세요.
-						</dd>
+						<dd th:text="${ordOtfEx.shipMsg}">부재시 경비실에 맡겨주세요.</dd>
 					</dl>
 				</div>
 			</div>

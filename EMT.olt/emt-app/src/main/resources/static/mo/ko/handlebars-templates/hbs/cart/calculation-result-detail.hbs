@@ -1,2 +1,4 @@
-총 <strong class="num" id="totalPrdCnt">0</strong>개 <span class="vline"></span>
-<strong class="num">{{ numberFormat cartEx.calculationResult.paidAmountInfo.standardCurrency.amount }}</strong>원
+	총 <strong class="num" id="totalPrdCnt">0</strong>개 <span class="vline"></span>
+	<strong class="num">
+		{{#if (eq cartEx.calculationResult.paidAmountInfo.standardCurrency.amount null) }} 0 {{else}} {{ numberFormat cartEx.calculationResult.paidAmountInfo.standardCurrency.amount }} {{/if}}
+	</strong>원

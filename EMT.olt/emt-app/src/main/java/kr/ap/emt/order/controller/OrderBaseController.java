@@ -157,7 +157,7 @@ public class OrderBaseController extends AbstractViewController {
         model.addAttribute("storePickupSameTimePurPromoList", new ArrayList<>(storePickupSameTimePurPromoMap.values()));    	// 온라인쇼핑동시구매프로모션 목록
 
 		model.addAttribute("ordOtfExList", ordOtfExList);									                                	// 주문배송지시목록
-		model.addAttribute("ordUnitAwardOrdPromoExList", ordEx.getOrdHistEx().getOrdUnitAwardOrdPromoExList());									                                	// 주문배송지시목록
+		model.addAttribute("ordUnitAwardOrdPromoExList", ordEx.getOrdHistEx().getOrdUnitAwardOrdPromoExList());				// 주문배송지시목록
 
 		if(isMember()){
 			List<ShipAddressInfo> shipAddressList = new ArrayList<ShipAddressInfo>();
@@ -179,6 +179,8 @@ public class OrderBaseController extends AbstractViewController {
 			model.addAttribute("payMethodResult", payMethodList); // 결제수단목록
 		}
 
+		model.addAttribute("isApMember", apApi.getMemberInfo(getMemberSn()) != null ? true : false);
+
 		/*****************************************************************
 		 * 주문금액 계산
 		 *****************************************************************/
@@ -188,7 +190,6 @@ public class OrderBaseController extends AbstractViewController {
 		 * 주문수량 계산
 		 *****************************************************************/
 		model.addAttribute("ordCntMap", makeOrdCntList(ordEx));
-
 	}
 
 	/*****************************************************************
@@ -243,7 +244,7 @@ public class OrderBaseController extends AbstractViewController {
 				}
 
 				if ("ShipUnitPacking".equals(o.getOrdHistAmtTypeCode())) {
-					packingAmtSum.add(o.getAmtPcur());
+					packingAmtSum = packingAmtSum.add(o.getAmtPcur());
 				}
 			}
 

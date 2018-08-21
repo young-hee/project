@@ -13,30 +13,35 @@
 								<span class="slt_color_name">{{ prodName }}</span>
 							</code>
 							{{#switch saleDisplayStatus}}
-								{{#case "OnSale"	 break=true}}
+								{{#case "OnSale"}}
 									<a data-value="{{ prodSn }}">
-										<span class="color_chip">
-											<img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}">
-										</span>
+										{{#if (ne repProdImgEx.imgUrl null) }}
+											<span class="color_chip">
+												<img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}">
+											</span>
+										{{/if}}
 										<span class="color_name">{{ prodName }}</span>
-										<span class="price"><strong class="num">{{numberFormat salePrice }}</strong>원</span>
+										<span class="price"><strong class="num">{{numberFormat onlineSalePrice }}</strong>원</span>
 									</a>
-
 								{{/case}}
-								{{#case "Exhaustion" break=true}}
+								{{#case "Exhaustion"}}
 									<a data-value="{{ prodSn }}" data-disabled="true">
-										<span class="color_chip">
-											<img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}">
-										</span>
+										{{#if (ne repProdImgEx.imgUrl null) }}
+											<span class="color_chip">
+												<img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}">
+											</span>
+										{{/if}}
 										<span class="color_name">{{ prodName }}</span>
 										<span class="sold_out">[조기소진]</span>
 									</a>
 								{{/case}}
-								{{#case "OutOfStock" break=true}}
+								{{#case "OutOfStock"}}
 									<a data-value="{{ prodSn }}" data-disabled="true">
-										<span class="color_chip">
-											<img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}">
-										</span>
+										{{#if (ne repProdImgEx.imgUrl null) }}
+											<span class="color_chip">
+												<img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}">
+											</span>
+										{{/if}}
 										<span class="color_name">{{ prodName }}</span>
 										<span class="sold_out">[일시품절]</span>
 									</a>

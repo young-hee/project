@@ -22,7 +22,7 @@
 							<span class="input_wrap" id="depositPriceCheck" style="display: none">
 								<input type="number" id="depositPrice" name="depositPrice" value="" title="사용할 예치금 입력">
 							</span>
-							/ <span id="totDepositPrice" th:text="${#IntegUtil.toCommaNumber(session.LOGIN_USER.member.remainDeposit)}">0</span>원
+							/ <span id="totDepositPrice" th:text="${#IntegUtil.toCommaNumber(ordEx.depositKeepingAmt)}">0</span>원
 							<button type="button" class="btn_sm_neutral" id="b_deposit" style="display: none">모두 사용</button>
 						</dd>
 					</dl>
@@ -527,8 +527,9 @@
 				} else {
 					setViewWpay(obj, payMethod, goPayMethod, payMethodSn, payServiceCode, payMethodCode);
 				}
-			}).fail(function (e) {
-				AP.modal.alert("[ajax.fail]실패");
+			}).fail( function (xhr) {
+				//실패
+				console.log(xhr.errorMessage);
 			}).always(function () {
 			});
 		}

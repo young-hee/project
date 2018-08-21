@@ -7,27 +7,17 @@
 			{{#each this.cartProdExList }}
 				<div class="promotion">
 					<div class="promotion_header">
-						{{#if (eq prodEx.saleDisplayStatus 'OnSale') }}
-							{{#if (eq promoApplyResultCode 'All') }}
-								<span class="benefit"><em>{{ ../../baseOrdQty }} + {{ ../../freeAwardQty }} 혜택 적용</em></span>
-							{{/if}}
-							{{#if (eq promoApplyResultCode 'Partial') }}
-								<span class="benefit ty2"><em>{{ ../../baseOrdQty }} + {{ ../../freeAwardQty }} 혜택 부분적용</em></span>
-							{{/if}}
-							{{#if (eq promoApplyResultCode 'None') }}
-								<span class="benefit ty3"><em>{{ ../../baseOrdQty }} + {{ ../../freeAwardQty }} 미적용</em></span>
-							{{/if}}
+						{{#if (eq promoApplyResultCode 'All') }}
+							<span class="benefit"><em>{{ ../../baseOrdQty }} + {{ ../../freeAwardQty }} 혜택 적용</em></span>
+						{{/if}}
+						{{#if (eq promoApplyResultCode 'Partial') }}
+							<span class="benefit ty2"><em>{{ ../../baseOrdQty }} + {{ ../../freeAwardQty }} 혜택 부분적용</em></span>
+						{{/if}}
+						{{#if (eq promoApplyResultCode 'None') }}
+							<span class="benefit ty3"><em>{{ ../../baseOrdQty }} + {{ ../../freeAwardQty }} 미적용</em></span>
 						{{/if}}
 						<a href="#none"><strong>{{ ../../promoName }}</strong></a>
 						<div class="price">
-							{{#if (ne ../../finalOnlineSalesAmountInfo null) }}
-								<span class="strong"><b>{{numberFormat ../../finalOnlineSalesAmountInfo.standardCurrency.amount }}</b>원</span>
-							{{/if}}
-							{{#if (ne ../../productSaleAmountInfo null) }}
-								{{#if (and (ne ../../productSaleAmountInfo.standardCurrency.amount ../../finalOnlineSalesAmountInfo.standardCurrency.amount) ) }}
-									<del><b>{{numberFormat ../../productSaleAmountInfo.standardCurrency.amount }}</b>원</del>
-								{{/if}}
-							{{/if}}
 						</div>
 					</div>
 					<div class="item_wrap">
@@ -43,19 +33,15 @@
 									<label for="takeoutChkBox{{ cartProdSn }}">
 										{{#if (ne prodEx.repProdImgEx null) }}
 											<img src="{{ prodEx.repProdImgEx.imgUrl }}" alt="">
-										{{else}}
-											{{#if (ne ../repOnlineProdImgEx null) }}
-												<img src="{{ ../repOnlineProdImgEx.imgUrl }}" alt="">
-											{{/if}}
 										{{/if}}
 										<span class="sr_only">{{ ../onlineProdName }}</span>
 									</label>
 								</div>
 							</div>
 							<div class="item_name">
-								{{#if (gt this.prodEx.prodFlagExList.length 0) }}
-									{{#each this.prodEx.prodFlagExList}}
-										{{#switch this.prodFlagCode}}
+								{{#if (gt prodEx.prodFlagExList.length 0) }}
+									{{#each prodEx.prodFlagExList}}
+										{{#switch prodFlagCode}}
 											{{#case "icon_reco_new"}} <span class="flag">신상품</span> {{/case}}
 											{{#case "icon_reco_best_w"}} <span class="flag">베스트</span> {{/case}}
 											{{#case "icon_pr_prod"}} <span class="flag">이벤트</span> {{/case}}
@@ -65,6 +51,7 @@
 									{{/each}}
 								{{/if}}
 								<a href="#none" class="title" onclick="fnProdDetail({{ ../onlineProdSn }})">{{ ../onlineProdName }}</a>
+								<span class="opt">{{ prodEx.prodName }}</span>
 							</div>
 							<!--/* 상품 수량 */-->
 							<div class="count">
@@ -138,16 +125,14 @@
 
 		<div class="promotion">
 			<div class="promotion_header">
-				{{#if (eq prodEx.saleDisplayStatus 'OnSale') }}
-					{{#if (eq promoApplyResultCode 'All') }}
-						<span class="benefit"><em>{{ this.baseOrdQty }} + {{ this.freeAwardQty }} 혜택 적용</em></span>
-					{{/if}}
-					{{#if (eq promoApplyResultCode 'Partial') }}
-						<span class="benefit ty2"><em>{{ this.baseOrdQty }} + {{ this.freeAwardQty }} 혜택 부분적용</em></span>
-					{{/if}}
-					{{#if (eq promoApplyResultCode 'None') }}
-						<span class="benefit ty3"><em>{{ this.baseOrdQty }} + {{ this.freeAwardQty }} 미적용</em></span>
-					{{/if}}
+				{{#if (eq promoApplyResultCode 'All') }}
+					<span class="benefit"><em>{{ baseOrdQty }} + {{ freeAwardQty }} 혜택 적용</em></span>
+				{{/if}}
+				{{#if (eq promoApplyResultCode 'Partial') }}
+					<span class="benefit ty2"><em>{{ baseOrdQty }} + {{ eeAwardQty }} 혜택 부분적용</em></span>
+				{{/if}}
+				{{#if (eq promoApplyResultCode 'None') }}
+					<span class="benefit ty3"><em>{{ baseOrdQty }} + {{ freeAwardQty }} 미적용</em></span>
 				{{/if}}
 				<a href="#none"><strong>{{ promoName }}</strong></a>
 				<div class="price">
@@ -164,7 +149,7 @@
 
 			{{#each promoOnlineProdExList }}
 				{{#each cartProdExList }}
-					<div class="item_wrap">
+					{{#if (gt @../index 0) }} <div class="item_wrap plus"> {{else}} <div class="item_wrap">  {{/if}}
 						<input type="hidden" name="takeoutPrdSn" value="{{ prodEx.prodSn }}"/>
 						<input type="hidden" name="cartProdSn" value="{{ cartProdSn }}"/>
 						<input type="hidden" name="takeoutPrdInfo_{{ cartProdSn }}" value="{{ cartProdSn }}"/>
@@ -177,10 +162,6 @@
 									<label for="takeoutChkBox{{ cartProdSn }}">
 										{{#if (ne prodEx.repProdImgEx null) }}
 											<img src="{{ prodEx.repProdImgEx.imgUrl }}" alt="">
-										{{else}}
-											{{#if (ne ../repOnlineProdImgEx null) }}
-												<img src="{{ ../repOnlineProdImgEx.imgUrl }}" alt="">
-											{{/if}}
 										{{/if}}
 										<span class="sr_only">{{ ../this.onlineProdName }}</span>
 									</label>
@@ -199,6 +180,7 @@
 									{{/each}}
 								{{/if}}
 								<a href="#none" class="title" onclick="fnProdDetail({{ ../onlineProdSn }})">{{ ../onlineProdName }}</a>
+								<span class="opt">{{ prodEx.prodName }}</span>
 							</div>
 							<!--/* 상품 수량 */-->
 							<div class="count">
@@ -261,9 +243,9 @@
 					</div>
 				{{/each}}
 			{{/each}}
+			{{#if (ne promoApplyResultCode 'All') }}
+				<p class="text_notice">{{calc recommandBaseOrdQty '+' recommandFreeAwardQty}}개 담으면 {{ recommandFreeAwardQty }}개 무료증정</p> {{!--2개 담으면 1개 무료증정--}}
+			{{/if}}
 		</div>
-		{{#if (ne promoApplyResultCode 'All') }}
-			<p class="text_notice">{{calc recommandBaseOrdQty '+' recommandFreeAwardQty}}개 담으면 {{ recommandFreeAwardQty }}개 무료증정</p> {{!--2개 담으면 1개 무료증정--}}
-		{{/if}}
 	{{/xif}}
 {{/each}}

@@ -67,7 +67,7 @@
 
 		function clickHandler (e) {
 			_modal = AP.modal.info({
-				title: 'SNS 공유하기',
+				title: '공유하기',
 				contents: {
 					templateKey: 'common.sns-share'
 				}
@@ -75,8 +75,10 @@
 
 			var $modal = _modal.getElement();
 			$modal.find( '.url_input' ).val( Origin.href );
+			$modal.find('.layer_wrap').addClass('layer_ss');
 
 			_modal.addListener( 'modal-before-close', function (e) {
+				$modal.find('.layer_wrap').removeClass('layer_ss');
 				$modal.find( '.share_btn' ).off( 'click', shareClickHandler );
 			});
 
@@ -100,9 +102,11 @@
 			//IE9~
 			if ( typeof document.execCommand === 'function' ) {
 				var $input = _modal.getElement().find( '.url_input' );
+				$input.val( window.location.href );
+				$input.show();
 				$input.select();
 				document.execCommand( 'Copy' );
-				$input.focus();
+				$input.hide();
 			}
 		}
 

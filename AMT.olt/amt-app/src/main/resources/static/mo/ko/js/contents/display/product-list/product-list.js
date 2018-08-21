@@ -9,14 +9,15 @@
 	var ProductList = $B.Class.extend({
 		initialize: function ( options ) {
 			this._$target = options.$target;
+			this._key = { displayMenuId: options.displayMenuId };
+
 			this._$list = this._$target.find( '.product_list_new' );
 			this._$sort = this._$target.find( '.sort_filter_wrap' );
 			this._$filterArea = this._$sort.find( '.filter_sel_area' );
-			this._$noneResult = this._$target.find( '.no_product' );
+			this._$resultNone = this._$target.find( '.no_product' );
 			this._$loading = this._$target.find( '.loading' );
 
 			this._winScrollend = null;
-
 			this._searchFilter = null;
 			this._invokedFilter = null;
 			this._isSearchFilterData = false;
@@ -24,10 +25,13 @@
 			this._currentIndex = 0;
 			this._lastIndex = 0;
 			this._isLoading = false;
+
 			this._param = {
 				offset: 0,
 				limit: 10,
-				sort: this._$sort.find( 'select' ).val()
+				attr: '',
+				prodSort: this._$sort.find( 'select' ).val(),
+				includeFilters: true
 			};
 
 			this._setEvent();
@@ -35,9 +39,7 @@
 		},
 
 		/** =============== Public Methods =============== */
-		load: function ( param ) {
-			param = param || this._param;
-
+		load: function () {
 			this._isLoading = true;
 			this._$loading.show();
 			if ( this._currentIndex == 0 ) {
@@ -51,22 +53,22 @@
 			/**
 			 * ******************************************************************************************
 			 */
-			AP.api.test({}, param ).done(function ( result ) {
+			AP.api.itemList( this._key, this._param ).done(function ( result ) {
 				// TODO: test
 				result = {
-					"list": [0,1,2,3,4,5,6,7,8,9],
-					"offset": 0,
-					"limit": 10,
-					"totalLength": 21,
-					"filter": _filterData
+					list: [0,1,2,3,4,5,6,7,8,9],
+					offset: 0,
+					limit: 10,
+					totalCount: 21,
+					filter: _filterData
 				};
 
 				if ( !this._isSearchFilterData ) {
 					this._setSearchFilter( result.filter );
 				}
 
-				if( result.totalLength == 0 ) {
-					this._$noneResult.show();
+				if( result.totalCount == 0 ) {
+					this._$resultNone.show();
 					this._winScrollend.clear();
 				} else {
 					var html = AP.common.getTemplate( 'display.product-list.item', result );
@@ -77,14 +79,14 @@
 					}
 				}
 
-				this._$sort.find( '.f_prd_num' ).text( $B.string.numberFormat( result.totalLength ));
+				this._$sort.find( '.f_prd_num' ).text( $B.string.numberFormat( result.totalCount ));
 				AP.lazyLoad.add( this._$list.find( 'img.lazy_load' )).updated();
 				this._isLoading = false;
 				this._$loading.hide();
 
 				this._param.offset = result.offset;
 				this._param.limit = result.limit;
-				this._lastIndex = Math.ceil( result.totalLength / result.limit ) - 1;
+				this._lastIndex = Math.ceil( result.totalCount / result.limit ) - 1;
 
 				if ( this._currentIndex == this._lastIndex ) {
 					this._winScrollend.clear();
@@ -120,7 +122,7 @@
 		_setSort: function () {
 			// sort
 			this._$sort.find( '.select_type01_new select' ).on( 'change', function (e) {
-				this._param.sort = $( e.target ).val();
+				this._param.prodSort = $( e.target ).val();
 				this._currentIndex = 0;
 				this.load();
 			}.bind( this ));

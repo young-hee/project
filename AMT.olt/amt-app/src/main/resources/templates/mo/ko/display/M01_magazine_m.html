@@ -29,7 +29,7 @@
 					<ul class="thumb_list">
 						<th:block th:each="article : ${trandArticleResult.articleList}">
 		            		<li>
-			                    <a href="#none" th:href="@{'/display/'+${displayMenuId}+'/detail'(displayMenuId=${displayMenuId},articleSn=${article.articleSn})}">
+			                    <a href="#none" th:href="@{'/display/trendOnAir/detail'(articleSn=${article.articleSn})}">
 			                        <img th:src="${article.videoImgDescM == null ? article.articleVideoUrl : article.videoImgDescM}" alt="" />
 			                        <span class="name" th:text="${article.articleTitle}"></span>
 			                    </a>
@@ -38,7 +38,7 @@
 					</ul>
 				</dd>
 			</dl>
-			<a href="#none" class="more"><span class="sr_only">트렌드 온에어</span><i class="ico_navi_s next"></i></a>
+			<a href="#none" th:href="@{'/display/trendOnAir'(displayMenuId=trendOnAir)}" class="more"><span class="sr_only">트렌드 온에어</span><i class="ico_navi_s next"></i></a>
 		</div>
 		<!--/* 슈퍼 뷰티팁 */-->
 		<div class="section pd_md beauty_tip">
@@ -48,7 +48,7 @@
 					<ul class="thumb_list col_02">
 						<th:block th:each="article : ${beautyArticleResult.articleList}">
 		            		<li>
-			                    <a href="#none" th:href="@{'/display/'+${displayMenuId}+'/detail'(displayMenuId=${displayMenuId},articleSn=${article.articleSn})}">
+			                    <a href="#none" th:href="@{'/display/superBeautyTip/detail'(articleSn=${article.articleSn})}">
 			                        <span class="thumb">
 			                        	<img th:src="${article.bannerImgM1}" alt="" />
 			                        </span>
@@ -61,7 +61,7 @@
 					</ul>
 				</dd>
 			</dl>
-			<a href="#none" class="more"><span class="sr_only">슈퍼 뷰티팁</span><i class="ico_navi_s next"></i></a>
+			<a href="#none" th:href="@{'/display/superBeautyTip'(displayMenuId=superBeautyTip)}" class="more"><span class="sr_only">슈퍼 뷰티팁</span><i class="ico_navi_s next"></i></a>
 		</div>
 		<!--/* 지금제일핫해 */-->
  		<th:block th:if="${not #lists.isEmpty(cornersMap)}">

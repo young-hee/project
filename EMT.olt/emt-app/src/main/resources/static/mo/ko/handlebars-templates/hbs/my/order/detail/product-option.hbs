@@ -13,8 +13,10 @@
 				<p class="flag">{{condition (eq typeName 'a') '진주알 상품' '뷰티포인트'}}</p>
 			{{/xif}}
 			<p class="name">{{sub.ordProdEx.prodNameBlang}}</p>
+
+			{{sub.cancelQtySum}}
 			{{#if (or (eq step 2)(eq claimYn 'Y'))}}
-			<p><strong class="num font_md">{{cancelQtySum}}</strong>개 /
+			<p><strong class="num font_md">{{sub.claimConfirmQty}}</strong>개 /
 			{{else}}
 			<p><strong class="num font_md">{{calc sub.ordQty '-' sub.rtnQty}}</strong>개 /
 			{{/if}}
@@ -75,7 +77,9 @@
 						{{/if}}
 					{{/if}}
 					{{#xif sub.ordHistProdStatusCode '===' 'ProdCancel'}}
-						<p>취소</p>
+						<div class="status">
+							<p><em>취소완료</em></p>
+						</div>
 					{{/xif}}
 				</div>
 			</div>

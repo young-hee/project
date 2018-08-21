@@ -1,0 +1,553 @@
+<html ap:decorate="~{layout/layout-title-only}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+			<form th:method="${method}" id="sub" th:action="${returnUrl}">
+				<th:block th:if="${pVal}" th:each="item : ${pVal}">
+					<th:block th:if="${pVal}" th:each="item : ${pVal}">
+						<input  type="hidden" th:name="${item.key}" th:value="${item.value}">
+					</th:block>
+				</th:block>
+			</form>
+			<form class="login" method="post" action="/loginRedirect">
+	            <div class="panel login">
+	            	<h2 class="h_title page">휴대폰 로그인</h2>
+	            	<p class="text font_md">로그인 후 더 다양한 서비스를 이용해보세요.</p>
+	            	<hr class="div m30" /> <!-- 02-21 클래스 수정 -->
+					<div class="ui_toggle_contents keyboard_view">
+	                	<button type="button" class="toggle_btn view">한글자판 열기</button>
+	                 	<div class="keyboard_img">
+							<img ap:src="@{/images/member/bg_keyboard.png}" alt="">
+						</div>
+					</div>
+		            <fieldset class="form">
+		                 <legend class="sr_only">로그인 정보 입력</legend>
+		                 <div class="login_area">
+		                     <div class="input_group">
+		                     	<div>
+		                     		<input type="text" title="이름 입력" required="required" name="custNm" placeholder="이름을 입력하세요"data-msg-required="이름을 입력해 주세요. 이름 입력란으로 이동합니다." user-name="user-name">
+		                     	</div>
+		                     </div>
+	
+	                        <div class="input_group">
+	                        	<div>
+									<select name="phoneNumber1" required="required" title="휴대폰 사업자 식별번호 선택" data-msg-required="휴대전화 사업자 식별번호를 입력해주세요.">
+										<option value="010">010</option>
+										<option value="011">011</option>
+										<option value="016">016</option>
+										<option value="017">017</option>
+										<option value="018">018</option>
+										<option value="019">019</option>
+									</select>
+								</div>
+							</div>
+							<div class="input_group">
+								<div>
+									<input type="tel" name="phoneNumber2" required="required" title="휴대폰 번호 입력" maxlength="8" placeholder="휴대폰 번호 입력('-' 생략)" data-msg-required="휴대폰번호를 입력해 주세요.">
+								</div>
+								<div class="btn">
+									<button type="button" id="send-sms">인증요청</button>
+									<button type="button" id="btn_re_send_sms" style="display:none;">재인증요청</button>
+								</div>
+							</div>
+		                    <div class="input_group">
+								<div>
+									<input type="tel" name="smsNum" required="required" title="인증번호를 입력하세요." maxlength="8" placeholder="인증번호를 입력하세요." data-msg-required="인증번호를 입력해 주세요.">
+									<em class="unit" name="timer">3:00</em> 
+								</div>
+								<div class="btn">
+									<button type="button" id="complete" disabled>인증확인</button>
+								</div>
+							</div>
+	                        <div>
+	                        	<ul class="list_bullet_dot mgt10">
+	                        		<li>3분 이내에 인증번호를 입력하셔야 합니다.</li>
+	                        		<li>입력 시간 초과 시 재전송 버튼을 눌러주세요.</li>
+	                        	</ul>
+	                        </div>
+		                     <button type="button" onclick="loginComplete()" class="btn_lg_primary w100p">로그인</button>
+		                     <div class="clear">
+		                         <div>
+		                             <a href="/customer/find/find-id">아이디 찾기</a><a href="/customer/find/find-pwd">비밀번호 찾기</a>
+		                         </div>
+		                     </div>
+		                     <button type="button" class="btn_lg_bordered2_primary w100p">일반 로그인</button>	                     
+		                 </div>
+		            </fieldset>
+	                <dl class="dl_cont sns">
+	                    <dt class="h_title cont"><strong>간편로그인</strong></dt>
+						<dd>
+							<br>
+							<ul>
+							    <li><a href="javascript:;" onclick="naverLogin()">네이버</a></li>
+							    <li><a href="javascript:;" onclick="facebookLogin()">페이스북</a></li>
+							    <li><a href="javascript:;" onclick="kakaoLogin()">카카오톡</a></li>
+							</ul>
+						</dd>
+					</dl>
+				    <dl class="dl_cont">
+				        <dt class="h_title cont"><strong>아직도 회원이 아니세요?</strong></dt>
+				        <dd>
+				            <p class="text">가입 한번으로 많은 혜택을 누리세요.</p>
+				            <div>
+				            	<a href="#none" class="btn_lg_bordered w100p">회원가입</a>
+				            	<a href="#none" class="btn_lg_bordered w100p">비회원 주문조회</a>
+				            </div>
+				        </dd>
+				    </dl>
+				</div>
+			</form>
+        </div>
+        <!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+<script>
+
+function back() {
+    location.href = "/main";
+}
+$('#send-sms, #btn_re_send_sms').on('click', function() {
+    if ($(this).attr('disabled') == 'disabled') return;
+    sendSms();
+    return false;
+});
+$('#complete').on('click', function() {
+    if ($(this).attr('disabled') == 'disabled') return;
+	if (!t.isRunning()) {
+	    AP.modal.alert("입력시간 초과했습니다. 인증번호 재전송 버튼을 눌러 인증 절차를 다시 진행하십시오.");
+	    return;
+	}
+	loginProcess();
+    return false;
+});
+
+var def_Time = 3,
+    def_TimeCnt = 3,
+    t = new AP.common.timeCountDown(def_Time, function() {
+    	$('.result_box p').hide();
+    	$('#time-over').show();
+	}),
+    certTimeCnt = 0,
+    extTimeCnt = 0;
+
+var returnUrl = '[[${returnUrl}]]';
+if (returnUrl == '') returnUrl = "/main";
+
+$('form [name=redirectUrl]').val(returnUrl);
+
+var incsNo;
+function sendSms() {
+	var $form = $('form.login');
+    $form.validate().settings.ignore = "[name=smsNum]";
+    if($form.valid()) {
+    	$('#send-sms').attr("disabled", "disabled");
+
+        AP.api.mobileLoginRequest({}, AP.common.getFormData($form)).done(function(data) {
+            //성공
+            if (data) {
+            	incsNo = data.incsNo;
+                AP.modal.alert("인증번호가 전송되었습니다.");
+                $('#send-sms').hide();
+                $('#btn_re_send_sms').show();
+                $('#complete').removeAttr('disabled');
+                certTimeCnt = 2;
+                if (t.isRunning()) {
+                    t.stop();
+                }
+                t.start();
+
+            } else {
+                $("#send-sms").removeAttr("disabled");
+                AP.modal.alert("[ajax.done]실패")
+            }
+        }).fail(function(xhr, textStatus, errorThrown) {
+            $("#send-sms").removeAttr("disabled");
+
+            if (xhr.errorCode == 0) {
+                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+            } else if (xhr.errorCode == 'EAPI001') {
+                var contents = new Object();
+                contents.title = "인증실패";
+                contents.contents = xhr.errorMessage;
+                contents.confirmLabel = "확인";
+                AP.modal.info(contents).addListener('modal-close', function(e) {});
+            } else if(xhr.errorCode == 'ESAL001') {
+                AP.modal.alert("존재하지 않는 회원입니다.");
+            } else {
+                AP.modal.alert(xhr.errorMessage)
+            }
+        }).always(function() {
+            //성공, 실패
+        });
+    }
+}
+var isLoginComplete = false;
+function loginProcess() {
+    var $form = $('form');
+    $form.validate().settings.ignore = "";
+    if ($form.valid()) {
+
+        $("#complete").attr("disabled", "disabled");
+        AP.api.mobileLogin({}, {
+        	'incsNo':incsNo,
+        	'smsNum':$('[name=smsNum]').val()
+        	
+        }, AP.common.getFormData($form)).done(function(data) {
+
+            if (data.sleep == 'Y') {
+        		post_goto('/sleepUser' , {'userId': data.userId});
+
+            } else if (data.changePw == 'Y') {
+                var contents = new Object();
+                contents.title = "알림";
+                contents.contents = data.message;
+                contents.cancelLabel = "다음에 변경";
+                contents.confirmLabel = "비밀번호 변경";
+
+                AP.modal.info(contents).addListener('modal-close', function(e) {
+                    if (e.closeType == 'close' || e.closeType == 'cancel') {
+                        location.href = returnUrl;
+                    } else if (e.closeType == 'confirm') {
+                        changePassword();
+                    }
+                    console.log(e.closeType); //close, confirm, cancel
+                });
+            } else {
+                AP.modal.alert("인증이 완료되었습니다.");
+                isLoginComplete = true;
+            }
+
+        }).fail(function(xhr, textStatus, errorThrown) {
+            $("#complete").removeAttr("disabled");
+            if (xhr.errorCode == 0) {
+                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+            } else if (xhr.errorCode == 'ESAL062') {
+                AP.modal.alert("일일 인증실패 횟수를 초과했습니다.");
+            } else if (xhr.status == 401) {
+          	  $('#err_count').html(xhr.responseJSON.dailyFailureCount);
+              AP.modal.alert("인증번호를 " + xhr.responseJSON.dailyFailureCount + "회 잘못 입력하셨습니다.");
+            } else if(xhr.errorCode == 'EXTRA') {
+
+	        	if(xhr.responseJSON.errorData.additional.cs == 1) {
+
+	                $.get("/customer/popup?pageId=8" , function(data) {
+	
+	                    var contents = new Object();
+	                    contents.contents = data;
+	                    var modal = AP.modal.full(contents);
+	                    var $modalEl = modal.getElement(); //jquery object
+						$modalEl.find('.term').click(function() {
+							AP.modal.agreeTerms({title:'에뛰드 사이트 이용 약관', displayCode:'ET001'});
+						});
+	                    
+
+                        $modalEl.find('[name=ET001]').on('click', function() {
+                        	if($(this).prop('checked')) {
+                        		$('.btn_lg_secondary').addClass('btn_lg_primary').removeClass('btn_lg_secondary');
+                        	} else {
+                        		$('.btn_lg_primary').addClass('btn_lg_secondary').removeClass('btn_lg_primary');
+                        	}
+                        });
+                        $modalEl.find('input').on('click', function() {
+                            if ($(this).attr('id') == 'choice0') {
+
+                                $modalEl.find("input[type=checkbox]").prop('checked', $(this).prop('checked'));
+
+	                        	if($(this).prop('checked')) {
+	                        		$('.btn_lg_secondary').addClass('btn_lg_primary').removeClass('btn_lg_secondary');
+	                        	} else {
+	                        		$('.btn_lg_primary').addClass('btn_lg_secondary').removeClass('btn_lg_primary');
+	                        	}
+	                        	
+                            } else {
+
+                                var isAll = true;
+
+                                $modalEl.find("input[type=checkbox]").each(function() {
+                                    if ($(this).attr('id') != 'choice0') {
+                                        if (!$(this).prop('checked')) {
+                                            isAll = false;
+                                        }
+                                    }
+                                });
+
+                                $('#choice0').prop('checked', isAll);
+                            }
+                        });
+	                    
+	                    $modalEl.find(".btn_lg_secondary").click(function() {
+	                    	
+	                    	if(!$modalEl.find('[name=ET001]').prop('checked')) {
+	        	                AP.modal.alert("필수 약관에 동의해주셔야 합니다.");
+	        	                return;
+	                    	}
+
+	    		            AP.api.simpleJoin({}, {
+	    		            	terms : $modalEl.find('[name=ET001]').prop('checked'),
+	    		            	sms : $modalEl.find('[name=SMS]').prop('checked'),
+	    		            	email : $modalEl.find('[name=Email]').prop('checked')
+	    		    		}).done(function(data) {
+	    		    			location.reload();
+	    	                }).fail(function(xhr, textStatus, errorThrown) {
+	        	                AP.modal.alert("예상치 못한 오류가 발생하여 회원가입에 실패했습니다. 관리자에게 문의해 주세요.");
+	    	                }).always(function() {
+	    	                    //성공, 실패
+	    	                });
+	                    	
+	                    });
+	                });
+	        	} else if(xhr.responseJSON.errorData.additional.cs == 2) {
+
+	                $.get("/customer/popup?pageId=4&userId1=" + xhr.responseJSON.userId , function(data) {
+	
+	                    var contents = new Object();
+	                    contents.contents = data;
+	                    var modal = AP.modal.info(contents);
+	                    var $modalEl = modal.getElement(); //jquery object
+	
+	                    $modalEl.find(".btn_md_primary").click(function() {
+	                    	modal.close();
+	                    	
+	                    });
+	                });
+	        	} else if(xhr.responseJSON.errorData.additional.cs == 3) {
+
+	                $.get("/customer/popup?pageId=2" , function(data) {
+	
+	                    var contents = new Object();
+	                    contents.contents = data;
+	                    var modal = AP.modal.info(contents);
+	                    var $modalEl = modal.getElement(); //jquery object
+	
+	                    $modalEl.find(".btn_md_primary").click(function() {
+	                    	location.href = "/customer/signup?oldId=" + xhr.responseJSON.userId;
+	                    	
+	                    });
+	                });
+	        	}
+            	
+            } else {
+                AP.modal.alert(xhr.errorMessage)
+            }
+        }).always(function() {
+            //성공, 실패
+        });
+    }
+}
+
+$('input[type=tel]').keydown(function (event) {
+    if (event.keyCode) {
+        var code = event.keyCode;
+        if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+            return true;
+        } else {
+            return false;
+        }
+    } else if (e.which) {
+        var code = e.which;
+        if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+});
+$('input[type=tel]').keyup(function (event) {
+	event = event || window.event;
+	var keyID = (event.which) ? event.which : event.keyCode;
+	if ( keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39 ) 
+		return;
+	else
+		event.target.value = event.target.value.replace(/[^0-9]/g, "");
+});
+
+//카카오으로 로그인
+function snsKakao() {
+    Kakao.Auth.login({
+        persistRefreshToken: true,
+        success: function(authObj) {
+            Kakao.Auth.setAccessToken(authObj.access_token);
+
+            Kakao.API.request({
+                url: '/v1/user/me',
+                success: function(res) {
+
+                    var indexed_array = {};
+                    indexed_array['snsName'] = 'Kakao';
+                    indexed_array['id'] = res.id;
+                    $.ajax({
+                        type: "POST",
+                        url: "/login/snsloginProcess",
+                        data: indexed_array,
+                        success: function(data) {
+                            if (data.state == 'success') {
+                                if (data.isLinked) {
+                                    window.location.href = returnUrl;
+                                } else {
+                                    location.href = "/login/snsLinkPage";
+                                    window.close();
+                                }
+                            }
+                            //성공
+                        },
+                        dataType: "json"
+                    });
+                },
+                fail: function(error) {
+                    alert(JSON.stringify(error));
+                }
+            });
+
+
+        },
+        fail: function(err) {
+            console.log(JSON.stringify(err));
+            alert(JSON.stringify(err));
+        }
+    });
+}
+
+//페이스북으로 로그인
+window.fbAsyncInit = function() {
+    FB.init({
+        appId: '[[${@environment.getProperty('facebook.key')}]]',
+        cookie: true,
+        xfbml: true,
+        version: 'v2.11'
+    });
+
+    FB.AppEvents.logPageView();
+
+};
+
+(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {
+        return;
+    }
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+
+}(document, 'script', 'facebook-jssdk'));
+function naverLogin() {
+	window.open('https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=[[${@environment.getProperty('naver.key')}]]&state=[[${state}]]&redirect_uri=' + location.href.replace('loginSimple','navercallback').split('#')[0], 'naverloginpop', 'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550'); return false
+}
+function kakaoLogin() {
+	var returl = location.href.replace('loginSimple', '').split('#')[0] + 'kakaocallback';
+	AP.api.saveUrl({}, {
+		url:returl
+	}).done(function(data) {
+		window.open('https://kauth.kakao.com/oauth/authorize?client_id=[[${@environment.getProperty('kakao.restkey')}]]&response_type=code&redirect_uri=' + returl, 'kakaologinpop', 'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550');
+    }).fail(function(xhr, textStatus, errorThrown) {
+		AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+    }).always(function() {
+        $("#send-sms").removeAttr("disabled");
+        //성공, 실패
+    });
+	
+	return false
+}
+
+function facebookLogin() {
+
+    FB.login(function(response) {
+        //statusChangeCallback(response);   -- FB 로그인 취소시, 무한루프에 빠지게됨
+        if (response.status === 'connected') {
+            // 페이스북과 앱에 같이 로그인되어 있다.
+            $("#accessToken").val(response.authResponse.accessToken);
+            fncFBCallback(response.authResponse.accessToken);
+        } else if (response.status === 'not_authorized') {
+            // 페이스북에는 로그인 되어있으나, 앱에는 로그인 되어있지 않다.
+            AP.modal.alert('Facebook 계정 설정에서 해당 어플리케이션이 인가되지 않았습니다.\n다시 로그인 버튼을 클릭후, 어플리케이션 사용을 승인하여 주십시오.');
+        }
+    });
+}
+
+function fncFBCallback(token) {
+    FB.api('/me', {
+        fields: 'email, birthday, name'
+    }, function(response) {
+
+        var indexed_array = {};
+        indexed_array['snsName'] = 'Facebook';
+        indexed_array['id'] = response.id;
+        indexed_array['accessToken'] = token;
+
+        $.ajax({
+            type: "POST",
+            url: "/login/snsloginProcess",
+            data: indexed_array,
+            success: function(data) {
+                if (data.isLinked) {
+                	nbSuccess(data);
+                } else {
+                    location.href = "/login/snsLinkPage";
+                }
+                //성공
+            },
+            dataType: "json"
+        });
+    });
+}
+
+function nbSuccess(data) {
+
+    if (data.sleep == 'Y') {
+		post_goto('/sleepUser' , {'userId': data.userId});
+    } else if (data.old == 'Y') {
+        changeInfoModal();
+    } else if (data.changePw == 'Y') {
+        var contents = new Object();
+        contents.title = "[[#{common.alert}]]";
+        contents.contents = "고객님!<br>" +
+            "비밀번호를 2개월동안 변경하지 않으셨습니다.<br><br>" +
+            "개인정보보호를 위해<br>비밀번호를 변경해주세요.";
+        contents.cancelLabel = "다음에 변경";
+        contents.confirmLabel = "비밀번호 변경";
+
+        AP.modal.info(contents).addListener('modal-close', function(e) {
+            if (e.closeType == 'close' || e.closeType == 'cancel') {
+                location.href = returnUrl;
+            } else if (e.closeType == 'confirm') {
+                changePassword();
+            }
+            console.log(e.closeType); //close, confirm, cancel
+        });
+    } else {
+    	loginComplete(true);
+    }
+}
+
+function doSnsLogin() {
+    window.location.href = "/login/snsLinkPage?returl=" + returnUrl;
+}
+function loginComplete(flag) {
+	if(!flag && !isLoginComplete) {
+		AP.modal.alert("휴대폰 인증이 필요합니다.");
+		return;
+	}
+    if (/device=android/i.test(navigator.userAgent)) {
+    	try {
+    		window.webview.mobile('login');
+    	} catch(e) {
+    	}
+    } else if (/device=ios/i.test(navigator.userAgent)) {
+        window.location = "webview://mobile?action=login";
+    }
+    setTimeout(function() {
+        if ($('#sub').attr('method') == 'POST')
+            $('#sub').submit();
+        else
+            location.href = $('#sub').attr('action').replace('?isRequiredLogin=true', '');
+    }, 1);
+
+}
+
+</script>
+        </th:block>
+</body>
+</html>

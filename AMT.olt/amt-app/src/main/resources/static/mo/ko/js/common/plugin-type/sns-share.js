@@ -67,15 +67,17 @@
 
 		function clickHandler (e) {
 			_modal = AP.modal.info({
-					title: 'SNS 공유하기',
+					title: '공유하기',
 					contents: {
 						templateKey: 'common.sns-share'
 					}
 				});
 
 			var $modal = _modal.getElement();
+			$modal.find('.layer_wrap').addClass('layer_ss');
 
 			_modal.addListener( 'modal-before-close', function (e) {
+				$modal.find('.layer_wrap').removeClass('layer_ss');
 				$modal.find( '.share_btn' ).off( 'click', shareClickHandler );
 			});
 

@@ -7,7 +7,7 @@
 	var TrendOnAir = $B.Class.extend({
 
 		initialize: function () {
-			this._$target = $( '#trend_on_air' );
+			this._$target = $( 'magazine' );
 			this._$listArea = this._$target.find( '.thumb_list' );
 						
 			this._$loading = this._$target.find( '.loading' );
@@ -68,11 +68,11 @@
 		_getTrendOnAir: function () {
 			if ( this._loading ) return;
 			
-			//this._loading = true;
-			//this._$loading.show();
-			console.log("_11111 : ");
+			var displayType = $( '.magazine' ).attr('id');
+			this._loading = true;
+			this._$loading.show();
 			AP.api.articles( null, { // article num 
-				articleCateId: 'aTrendOnAir',
+				articleCateId: displayType,
 				order : "StartDt", 
 				keyword : null, 
 				liveYn : "Y", 
@@ -95,7 +95,6 @@
 			}.bind(this)).always(function () {
 				this._loading = false;
 				this._$loading.hide();
-				console.log("_222222 : ");
 			}.bind(this)); 
 		}
 	});

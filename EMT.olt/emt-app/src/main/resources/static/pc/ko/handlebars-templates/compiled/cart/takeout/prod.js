@@ -30,7 +30,7 @@ this["AP"]["handlebars"]["cart"]["takeout"]["prod"] = Handlebars.template({"1":f
     + alias2(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
     + "\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1), depth0))
-    + "\"/>\n					<!--/* 상품 선택 */-->\n					<div class=\"item_thumb\">\n						<div class=\"check_wrap\">\n							<input type=\"checkbox\" name=\"takeoutChkBox\" id=\"takeoutChkBox"
+    + "\"/>\n\n					<!--/* 상품 선택 */-->\n					<div class=\"item_thumb\">\n						<div class=\"check_wrap\">\n							<input type=\"checkbox\" name=\"takeoutChkBox\" id=\"takeoutChkBox"
     + alias2(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
     + "\" value=\""
     + alias2(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"cartProdSn","hash":{},"data":data}) : helper)))

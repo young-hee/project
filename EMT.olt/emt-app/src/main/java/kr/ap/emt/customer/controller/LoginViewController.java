@@ -10,10 +10,9 @@ import kr.ap.comm.support.constants.SessionKey;
 import kr.ap.comm.util.CookieUtils;
 import kr.ap.comm.util.G1SecureRandom;
 import kr.ap.emt.customer.vo.ParamValue;
-import kr.ap.emt.my.vo.MyOrdInfoDTO;
+import kr.ap.emt.my.vo.MyOrdDTO;
 import net.g1project.ecp.api.model.ap.ap.ApLogoutInfo;
 import net.g1project.ecp.api.model.order.order.OrdEx;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -28,7 +27,6 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +52,7 @@ public class LoginViewController extends AbstractController {
 		if(isPcDevice())
 			return "customer/customernew/login";
 		if(isMobileDevice())
-			return "customer/customernew/login.1";
+			return "customer/fullpage-login-01";
 		return null;
 	}
 	
@@ -69,7 +67,7 @@ public class LoginViewController extends AbstractController {
 		model.addAttribute("state", state);
 		
         if(isMobileDevice())
-        	return "customer/customernew/login.2";
+        	return "customer/fullpage-login-02";
 
 		return "redirect:/login";
 	}
@@ -217,11 +215,11 @@ public class LoginViewController extends AbstractController {
 				type = "store";
 			}
 
-			model.addAttribute("ord", new MyOrdInfoDTO(ordEx));
+			model.addAttribute("ord", new MyOrdDTO(ordEx));
 			model.addAttribute("type", type);
 			model.addAttribute("claimYn", "N");
 			model.addAttribute("status", "detail");
-
+ 
 			return "my/my-order-detail";
 		}
 

@@ -13,23 +13,23 @@
 							<li class="select_option">
 								<code class="label_markup" style="display:none">{{ prodName }}</code>
 								{{#switch saleDisplayStatus}}
-									{{#case "OnSale"	 break=true}}
+									{{#case "OnSale"}}
 										<a data-value="{{ prodSn }}">
-											<img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}"></span>
+											{{#if (ne repProdImgEx.imgUrl null) }} <img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}"> {{/if}}
 											<span class="option_title">{{ prodName }}</span>
-											<strong class="num">{{numberFormat salePrice }}<span>원</span></strong>
+											<strong class="num">{{numberFormat onlineSalePrice }}<span>원</span></strong>
 										</a>
 									{{/case}}
-									{{#case "Exhaustion" break=true}}
+									{{#case "Exhaustion"}}
 										<a data-value="{{ prodSn }}" data-disabled="true">
-											<img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}"></span>7
+											{{#if (ne repProdImgEx.imgUrl null) }} <img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}"> {{/if}}
 											<span class="option_title">{{ prodName }}</span>
 											<span class="sold_out">[조기소진]</span>
 										</a>
 									{{/case}}
-									{{#case "OutOfStock" break=true}}
+									{{#case "OutOfStock"}}
 										<a data-value="{{ prodSn }}" data-disabled="true">
-											<img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}"></span>
+											{{#if (ne repProdImgEx.imgUrl null) }} <img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}"> {{/if}}
 											<span class="option_title">{{ prodName }}</span>
 											<span class="sold_out">[일시품절]</span>
 										</a>

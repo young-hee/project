@@ -1,0 +1,116 @@
+{{!--
+	전시 : 구매버튼이 있는 상세 상품목록 (Ch.Etude)
+--}}
+
+{{#xif this.prodListUnitCode '==' 'OnlineProd' }}
+	{{#each this.list}}
+		<li>
+			<!-- 상품 리스트 -->
+			<div class="product_new">
+				<a href="{{ productDetailPath this.onlineProdSn }}">
+					<!--  상품이미지  -->
+					<span class="product_visual_new">
+						{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+							<span class="out_of_stock"><span class="img_badge">일시품절</span></span>
+						{{/xif}}
+						<span class="lazy_load_wrap">
+							<img src="{{ this.onlineProdImages.0.imgUrl }}" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="" class="lazy_load">
+						</span>
+					</span>
+
+					<!-- 상품 정보 -->
+					<span class="product_info_new">
+						<strong class="prd_brand">{{ this.products.0.brandName }}</strong>
+						<span class="prd_name">{{ this.onlineProdName }}</span>
+						<span class="price_wrap">
+							{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+								<strong class="discount">
+									{{#with (calc this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate '+' this.onlineProdPriceSummary.minMemberLevelDiscountRate '+' this.onlineProdPriceSummary.minOnlineMemberDiscountRate) as |disMinRate|}}
+										{{#with (calc ../onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.maxMemberLevelDiscountRate '+' ../onlineProdPriceSummary.maxOnlineMemberDiscountRate) as |disMaxRate|}}
+											{{#xif disMinRate '!=' disMaxRate}}<span class="from">~</span>{{/xif}}<span class="to">{{ disMaxRate }}<em>%</em></span>
+										{{/with}}
+									{{/with}}
+								</strong>
+							{{/xif}}
+							<strong class="price">{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>{{ condition ../isActivityPoint '알' '원' }}{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}} ~{{/xif}}</em></strong>
+							{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+								<del>{{ numberFormat this.onlineProdPriceSummary.minBeforeOnlineSalePrice }}<em>{{ condition ../isActivityPoint '알' '원' }}</em></del>
+							{{/xif}}
+						</span>
+
+						<!-- 평점 리뷰 -->
+						<span class="product_rating">
+							<span class="mark_star_sm star{{this.reviewScopeAvg}}"><span class="sr_only">구매 평점 별 5개 중 {{reviewScopeAvg}}개</span></span>
+							<span class="prd_review">리뷰 {{ this.reviewCount }}</span>
+						</span>
+						
+						<!-- 태그 -->
+						<span class="tags">
+							<em class="badge special">스페셜기프트</em>
+							<em class="badge gift">기프트카드</em>
+						</span>
+					</span>
+				</a>
+			</div>
+			<!-- // 상품 리스트 -->
+		</li>
+	{{/each}}
+{{/xif}}
+
+<!-- ==================================== 단위상품일때 ==================================== -->
+{{#xif this.prodListUnitCode '==' 'Prod' }}	
+	{{#each this.list}}
+		{{#each this.products}}
+			<li>
+				<!-- 상품 리스트 -->
+				<div class="product_new">
+					<a href="{{ productDetailPath ../onlineProdSn ../prodSn }}">
+						<!--  상품이미지  -->
+						<span class="product_visual_new">
+							{{#xif ../saleDisplayStatus '==' 'OutOfStock'}}
+								<span class="out_of_stock"><span class="img_badge">일시품절</span></span>
+							{{/xif}}
+							<span class="lazy_load_wrap">
+								<img src="{{ ../onlineProdImages.0.imgUrl }}" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="" class="lazy_load">
+							</span>
+						</span>
+	
+						<!-- 상품 정보 -->
+						<span class="product_info_new">
+							<strong class="prd_brand">{{ this.brandName }}</strong>
+							<span class="prd_name">{{ this.prodName }}</span>
+							<span class="price_wrap">
+								{{#xif ../onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+									<strong class="discount">
+										{{#with (calc ../onlineProdPriceSummary.minOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.minMemberLevelDiscountRate '+' ../onlineProdPriceSummary.minOnlineMemberDiscountRate) as |disMinRate|}}
+											{{#with (calc ../onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.maxMemberLevelDiscountRate '+' ../onlineProdPriceSummary.maxOnlineMemberDiscountRate) as |disMaxRate|}}
+												{{#xif disMinRate '!=' disMaxRate}}<span class="from">~</span>{{/xif}}<span class="to">{{ disMaxRate }}<em>%</em></span>
+											{{/with}}
+										{{/with}}
+									</strong>
+								{{/xif}}
+								<strong class="price">{{ numberFormat ../onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>{{ condition ../isActivityPoint '알' '원' }}</em></strong>
+								{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+									<del>{{ numberFormat ../onlineProdPriceSummary.minBeforeOnlineSalePrice }}<em>{{ condition ../isActivityPoint '알' '원' }}</em></del>
+								{{/xif}}
+							</span>
+	
+							<!-- 평점 리뷰 -->
+							<span class="product_rating">
+								<span class="mark_star_sm star{{../reviewScopeAvg}}"><span class="sr_only">구매 평점 별 5개 중 {{../reviewScopeAvg}}개</span></span>
+								<span class="prd_review">리뷰 {{ ../reviewCount }}</span>
+							</span>
+							
+							<!-- 태그 -->
+							<span class="tags">
+								<em class="badge special">스페셜기프트</em>
+								<em class="badge gift">기프트카드</em>
+							</span>
+						</span>
+					</a>
+				</div>
+				<!-- // 상품 리스트 -->
+			</li>
+		{{/each}}
+	{{/each}}
+{{/xif}}

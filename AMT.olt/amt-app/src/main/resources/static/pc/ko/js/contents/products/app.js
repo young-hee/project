@@ -106,6 +106,35 @@
 				$colorChips.filter('[data-prod-sn='+prodSn+']').find('a').addClass('on');
 			}.bind(this));
 			
+			//카드사 혜택 정보 더보기 버튼
+			this._$target.find('#cardBenefitMoreBtn').on('click', function(e){
+				var modal = AP.modal.info({
+					title : '<img alt="카드혜택" src="/pc/ko/images/product/img_card_benefit.jpg">',
+					contents: {
+						templateKey: 'products.layer-card-benefit'
+					},
+					sizeType : 'L'
+				});
+				
+				var $modal = modal.getElement();
+				$modal.find('.layer_title').removeClass();
+				$modal.find('.layer_wrap').addClass('card_benefit');
+				modal.resetPosition();
+				$modal.find('.closePop').on('click', function(){
+					$modal.find('.layer_wrap').removeClass('card_benefit');
+					$modal.find('.layer_close').click()
+				});
+			}.bind(this));
+			
+			//좋아요
+			this._$target.find( '#likeBtn').on( 'click', function (e) {
+				var $this = $(e.currentTarget);
+				if( $this.find('i').hasClass('on') ){
+					return false;
+				}
+				$this.find('i').addClass( 'on' );
+			}.bind(this));
+			
 			/*
 			//언제 들어와? 알림 신청
 			this._$target.find( '.btn_restock_notify_me' ).on( 'click', function (e) {

@@ -68,6 +68,7 @@
 
 				//보유예치금 세팅
 				this._$target.find('#savedDeposit').html($B.string.numberFormat( result.depositBalance ));
+				this._$target.find('#amount').html($B.string.numberFormat( result.depositBalance <= 300000? result.depositBalance : 300000 ));
 
 			}.bind( this )).fail(function (e) {
 				console.log( 'error' );

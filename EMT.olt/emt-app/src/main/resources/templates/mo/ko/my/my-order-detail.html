@@ -113,17 +113,8 @@
 
 		$(document).ready(function() {
 
-			// Handlebars.registerPartial("unit", $("#unit-partial").html())
-			// var template = Handlebars.compile($("#unit-partial").html());
-			// console.log(template);;
 			refreshOrdDetail(ordInfo);
 		});
-
-		window.onpopstate = function(event) {
-
-			// alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
-			alert('123');
-		};
 
 		function refreshOrdDetail(ord) {
 
@@ -133,10 +124,6 @@
 
 			console.log(ord.shippingOrdOnlineProdList);
 			console.log(ord);
-			// console.log(ord.goods.ordPayCompareList);
-			// console.log(ord.ordAmt);
-
-
 
 			if (step != 2) {
 				setOrdInfo();
@@ -148,8 +135,6 @@
 			setOrdPayment();
 
 			checkboxStepType();
-
-
 		}
 
 		function setREPanelBox() {
@@ -203,6 +188,7 @@
 
 				});
 
+
 				$('.online').empty();
 				$('.online').append(orderDetailGoods);
 			}
@@ -223,6 +209,9 @@
 				$('.takeout').empty();
 				$('.takeout').append(storDetailGoods);
 			}
+
+			$( '.ui_accordion' ).accordion('clear');
+			$( '.ui_accordion' ).accordion();
 		}
 
 		function setOrdShipAddress() {
@@ -347,15 +336,9 @@
 			$("#editShipCancel").on('click', function() {
 				modal.close();
 			});
-
-			// modal.addListener( 'modal-before-close', function (e) {
-			// 	$btn.off( 'click' );
-			// });
 		}
 
 		function allCheck(cb) {
-			// $("#all").checked();
-			// $('input:checkbox').prop('checked', cb.checked);
 			checkboxControl(cancelState, cb.checked);
 		}
 
@@ -363,12 +346,6 @@
 			var ss = type === 'all' ? '' : "[state=" + type + "]";
 			// $("input[name=goods]" + ss  + ":checkbox").prop('checked', check);
 			$("input:checkbox").prop('checked', check);
-		}
-
-		function selectProdPromo(cb) {
-			$("input[promoSn=" + $(cb).attr("promoSn") + "]:checkbox").prop('checked', cb.checked);
-
-			allChecked();
 		}
 
 		function selectOnlineProd(cb) {
@@ -399,7 +376,6 @@
 			}
 			else
 			{
-				// $("fieldset[id=" + $(cb).attr("ordHistProdNo") + "]").hide();
 				allObj.prop("checked", false);
 			}
 
@@ -470,12 +446,10 @@
 					if (type !== 'cancel') {
 						$('.panel_box.payment').hide();
 					}
-					// $('#allCheck').show();
-					// $('.form.sel').show();
-
+					$('html, body').scrollTop(0);
 				}
 			}).fail(function(e) {
-				AP.modal.alert(e.errorCode);
+				AP.modal.alert(e.errorMessage);
 				//실패
 			}).always(function() {
 				//성공, 실패
@@ -496,15 +470,6 @@
 		}
 
 		function ordSelect() {
-			var ss = cancelState === 'all' ? '' : "[state=" + cancelState + "]";
-
-			// $('.order_prd_panel').each(function () {
-			// 	var ch = $(this).find('input[name=goods]');
-			// 	if (ch.prop('checked')) {
-			//
-			// 	}
-			// });
-
 			var isEmpty = false;
 			checkProds = [];
 
@@ -529,13 +494,7 @@
 
 					checkValue.receivedClaimReasonSn = rs;
 					checkValue.foReceivedClaimReason = rst;
-					// alert(rs + " " + rst)
-					// checkValue.onlineProdCode
-					// for (var i = 0; i < reason.claimReasonExList.length; i++) {
-					// 	checkValue.claimReasonSn = reason.claimReasonExList[i].claimReasonSn;
-					// 	checkValue.customerFaultYn = reason.claimReasonExList[i].customerFaultYn;
-					// 	break;F
-					// }
+
 					console.log(checkValue);
 
 					checkProds.push(checkValue);
@@ -546,12 +505,13 @@
 			// return;
 
 			if (checkProds.length == 0) {
-				AP.modal.alert(type == 'return' ? '반품하실 상품을 선택해 주세요.' : '교환하실 상품을 선택해 주세요.');
+
+				AP.modal.alert(getTypeName(1) + '하실 상품을 선택해 주세요.');
 				return;
 			}
 
 			if (isEmpty) {
-				AP.modal.alert(type == 'return' ? '반품사유를 입력해 주세요.' : '교환사유를 입력해 주세요.');
+				AP.modal.alert(getTypeName(1) + '사유를 입력해 주세요.');
 				return;
 			}
 
@@ -565,7 +525,6 @@
 			}
 
 			console.log(checkProds);
-			console.log('1231');
 
 			AP.api.ordSelect({
 				ordSn : customOrd.goods.ordSn,
@@ -577,7 +536,7 @@
 				$('html, body').scrollTop(0);
 
 			}).fail(function(e) {
-				AP.modal.alert(e.errorCode);
+				AP.modal.alert(e.errorMessage);
 				//실패
 			}).always(function() {
 				//성공, 실패
@@ -595,12 +554,13 @@
 				type : type
 			// }, JSON.stringify(customOrd.shippingOrdOnlineProdList)).done(function(data) {
 			}, JSON.stringify(cd)).done(function(data) {
-				AP.modal.alert(type == 'return' ? '반품신청이 정상적으로 접수 되었습니다.' : '교환신청이 정상적으로 접수 되었습니다.').addListener('modal-close', function (e) {
+				AP.modal.alert(getTypeName(1) + '신청이 정상적으로 접수 되었습니다.').addListener('modal-close', function (e) {
+					AP.common.setSessionStorage('order_list_save_status', null)
 					history.back();
 				});
 
 			}).fail(function(e) {
-				AP.modal.alert(e.errorCode);
+				AP.modal.alert(e.errorMessage);
 			}).always(function() {
 			});
 		}
@@ -624,7 +584,7 @@
 					$('.panel_box.delivery').append(html);
 					//성공
 				}).fail(function(e) {
-					AP.modal.alert(e.errorCode);
+					AP.modal.alert(e.errorMessage);
 					//실패
 				}).always(function() {
 					//성공, 실패
@@ -662,7 +622,7 @@
 								});
 								//성공
 							}).fail(function(e) {
-								AP.modal.alert(e.errorCode);
+								AP.modal.alert(e.errorMessage);
 								//실패
 							}).always(function() {
 								//성공, 실패
@@ -673,28 +633,8 @@
 				$('#b_close').off('click').on('click', function (e) {
 					modal.close();
 				});
-				// if (data) {
-				// 	var html = AP.common.getTemplate('my.order.order-detail-change-var', {
-				// 		list : data.data
-				// 	});
-				// }
-				// AP.modal.info({
-				// 	// title: '로그인',
-				// 	contents: html,
-				// 	confirmLabel: '확인',
-				// 	// cancelLabel: '취소'
-				// }).addListener( 'modal-before-close', function (e) {
-				// 	if ( e.closeType === 'confirm' ) {
-				// 		var ss = $('#changeVar').attr('prodSn');
-				// 		alert(ss);
-				// 		// AP.login.go();
-				// 	} else {
-				// 		// defer.reject();
-				// 	}
-				// });
-				//성공
 			}).fail(function(e) {
-				AP.modal.alert(e.errorCode);
+				AP.modal.alert(e.errorMessage);
 				//실패
 			}).always(function() {
 				//성공, 실패
@@ -711,7 +651,7 @@
 				refreshOrdDetail(data.data);
 				//성공
 			}).fail(function(e) {
-				AP.modal.alert(e.errorCode);
+				AP.modal.alert(e.errorMessage);
 				//실패
 			}).always(function() {
 				//성공, 실패
@@ -753,14 +693,13 @@
 					AP.modal.alert('구매리뷰 작성 가능한 주문상품이 없습니다.');
 				}
 			}).fail(function(e) {
-				AP.modal.alert(e);
+				AP.modal.alert(e.errorMessage);
 			}).always(function() {
 			});
 		}
 
 		function onBack() {
 			history.back();
-			// window.location.reload(history.back());
 		}
 
 	</script>

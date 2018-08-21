@@ -7,39 +7,42 @@
 		<!--/* category  */-->
 		<th:block ap:replace="~{common/fragment/sub-category}"/>
 
-		<!-- 중카테고리 립일때 색상/브랜드 탭 노출 -->
-		<!--
+		<!-- 중카테고리 립일때 색상/브랜드 탭 노출
 		<div class="mid_cate_tab">
 			<ul class="cate_tab01">
 				<li><a href="#mid_tab01" class="on">색상 <span class="sel_num">2</span></a></li>
 				<li><a href="#mid_tab02">브랜드</a></li>
 			</ul>
 
-			// 탭 컨텐츠 영역
-			// 색상
-			<div class="mid_tab_cont on" id="mid_tab01">	// default값 on
-				<div class="color_ck_list">
-					<span style="background-color:#a50018" class="on"></span>
-					<span style="background-color:#ff0026"></span>
-					<span style="background-color:#f28c9b"></span>
-					<span style="background-color:#fe4c67"></span>
-					<span style="background-color:#ff6100"></span>
-					<span style="background-color:#f28cd8"></span>
-					<span><img src="/mo/ko/images/dummy/img_ck_col01.png" alt="" /></span>
-					<span><img src="/mo/ko/images/dummy/img_ck_col01.png" alt="" /></span>
-					<span style="background-color:#ff6100"></span>
-					<span style="background-color:#f28cd8"></span>
-					<span style="background-color:#ff6100"></span>
-					<span style="background-color:#f28cd8"></span>
+			<!--// 탭 컨텐츠 영역
+			<!--// 색상
+			<div class="mid_tab_cont on" id="mid_tab01">	<!--// default값 on
+				<!-- 2018-08-20 구조 변경 : 8개로 고정
+				<div class="color_ck_wrap">
+					<ul class="color_ck_list">
+						<li><span style="background-color:#a50018" class="on"></span></li>
+						<li><span style="background-color:#ff0026"></span></li>
+						<li><span style="background-color:#f28c9b"></span></li>
+						<li><span style="background-color:#fe4c67"></span></li>
+						<li><span style="background-color:#ff6100"></span></li>
+						<li><span style="background-color:#f28cd8"></span></li>	
+						<li><span class="img"><img src="/mo/ko/images/dummy/img_ck_col01.png" alt="" /></span></li>
+						<li><span class="img"><img src="/mo/ko/images/dummy/img_ck_col01.png" alt="" /></span></li>
+						<li><span style="background-color:#ff6100"></span></li>
+						<li><span style="background-color:#f28cd8"></span></li>
+						<li><span style="background-color:#ff6100"></span></li>
+						<li><span style="background-color:#f28cd8"></span></li>
+					</ul>
 				</div>
+				<!-- // 2018-08-20 구조 변경 : 8개로 고정
 			</div>
 
-			// 브랜드
+			<!--// 브랜드
 			<div class="mid_tab_cont ca_brand" id="mid_tab02">
 				<div class="slide" data-ix-options="view-length:1;">
 					<div class="mid_brand_wrap ix-list-viewport">
 						<ul class="ix-list-items">
-							<li class="ix-list-item"> //브랜드명 6개이하일 경우 인디케이터 비노출
+							<li class="ix-list-item"> <!-- //브랜드명 6개이하일 경우 인디케이터 비노출
 								<div class="mid_brand_list">
 									<ul>
 										<li><a href="javascript:;">설화수</a></li>
@@ -111,7 +114,6 @@
 			</script>
 
 		</div>
-		-->
 		<!-- // 중카테고리 립일때 색상/브랜드 탭 노출 -->
 
 		<!-- 상품 영역 -->
@@ -125,12 +127,12 @@
 
 						<!-- select -->
 						<span class="select_type01_new">
-							<select name="type01">
-								<option value="align01">판매순</option>
-								<option value="align02">신상품순</option>
-								<option value="align03">평점순</option>
-								<option value="align04">높은 가격순</option>
-								<option value="align05">낮은 가격순</option>
+							<select name="prodSort">
+								<option value="Bestselling">판매순</option>
+								<option value="NewProd">신상품순</option>
+								<option value="MostProdReview">평점순</option>
+								<option value="HighestPrice">높은 가격순</option>
+								<option value="LowestPrice">낮은 가격순</option>
 							</select>
 						</span>
 						<!-- // select -->
@@ -638,10 +640,8 @@
 		</div>
 	</div>
 
-	<!--
-	<script type="text/javascript">
-		$(".bubble").fadeOut(4000);
 
+	<script type="text/javascript">
 		// 최근 본 상품 버튼 노출 시: 컬러큐레이션 위치 변경
 		$(window).on('load', function(){
 			if($(".floating_area").hasClass('in')){
@@ -652,14 +652,11 @@
 			}
 		});
 	</script>
-	-->
-
 </div>
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
 	<script type="text/javascript">
-
 		var _filterData = {
 			addAttrs: [
 				{
@@ -724,7 +721,11 @@
 			]
 		};
 
-		AP.display.init({});
+		AP.DISPLAY_MENU_ID = 'lip';
+
+		AP.display.init({
+			displayMenuId: AP.DISPLAY_MENU_ID
+		});
 	</script>
 </th:block>
 

@@ -32,6 +32,8 @@ public class OrdReceptChangeDTO {
 	/*주문자 이메일*/
 	private String purchaserEmailAddress;
 
+	/*최근배송지 기본배송지로 설정*/
+	private String latelyRepShipAddressYn;
 	/*수취인 이름*/
 	private String recipientName;
 	/*수취인 휴대폰번호*/
@@ -44,13 +46,9 @@ public class OrdReceptChangeDTO {
 	private String recipientAddress1;
 	/*상세주소*/
 	private String recipientAddress2;
-	/*배송메세지*/
-	private String shipMsg;
-	/*배송메세지(모바일 직접입력)*/
-	private String shipMsg2;
-	/*새로입력 기본배송지로 설정*/
-	private String repShipAddressYn;
 
+	/*새로입력 기본배송지로 설정*/
+	private String newRepShipAddressYn;
 	/*새로입력 이름*/
 	private String userName;
 	/*새로입력 휴대폰번호*/
@@ -64,6 +62,11 @@ public class OrdReceptChangeDTO {
 
 	/*배송지일련번호*/
 	private Long shipAddressSn;
+
+	/*배송메세지*/
+	private String shipMsg;
+	/*배송메세지(모바일 직접입력)*/
+	private String shipMsg2;
 
 	/* 선물포장금액기준통화*/
 	private BigDecimal giftPackingAmtBcur;
@@ -143,6 +146,14 @@ public class OrdReceptChangeDTO {
 
 	public void setPurchaserEmailAddress(String purchaserEmailAddress) { this.purchaserEmailAddress = purchaserEmailAddress; }
 
+	public String getLatelyRepShipAddressYn() {
+		return latelyRepShipAddressYn;
+	}
+
+	public void setLatelyRepShipAddressYn(String latelyRepShipAddressYn) {
+		this.latelyRepShipAddressYn = latelyRepShipAddressYn;
+	}
+
 	public String getRecipientName() {
 		return recipientName;
 	}
@@ -205,12 +216,12 @@ public class OrdReceptChangeDTO {
 		this.userAddress2 = userAddress2;
 	}
 
-	public String getRepShipAddressYn() {
-		return repShipAddressYn;
+	public String getNewRepShipAddressYn() {
+		return newRepShipAddressYn;
 	}
 
-	public void setRepShipAddressYn(String repShipAddressYn) {
-		this.repShipAddressYn = repShipAddressYn;
+	public void setNewRepShipAddressYn(String newRepShipAddressYn) {
+		this.newRepShipAddressYn = newRepShipAddressYn;
 	}
 
 	public String getRecipientZipCode() { return recipientZipCode; }

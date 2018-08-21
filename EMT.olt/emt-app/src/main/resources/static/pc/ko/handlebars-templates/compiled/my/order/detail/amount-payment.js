@@ -72,21 +72,21 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["amount-payment"] = Handlebars
 },"13":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression, alias4=container.lambda;
 
-  return "				<ul>\n						<li class=\"clear\"><b>무통장입금("
+  return "				<ul>\n					<li class=\"clear\"><b>무통장입금("
     + alias3(((helper = (helper = helpers.payMethodNameBlang || (depth0 != null ? depth0.payMethodNameBlang : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"payMethodNameBlang","hash":{},"data":data}) : helper)))
     + ")</b><b>"
     + alias3((helpers.currencyFormatDefault || (depth0 && depth0.currencyFormatDefault) || alias2).call(alias1,(depth0 != null ? depth0.payAmt : depth0),"원",{"name":"currencyFormatDefault","hash":{},"data":data}))
-    + "</b></li>\n						<li class=\"clear\">\n							<span>입금정보</span>\n							<span class=\"align_right line_h_20\">"
+    + "</b></li>\n					<li class=\"clear\">\n						<span>입금정보</span>\n						<span class=\"align_right line_h_20\">"
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.virtualBankAcBankName : stack1), depth0))
     + " "
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.virtualDepositBankAcNo : stack1), depth0))
-    + "<br>\n								"
+    + "<br>\n							"
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.virtualBankAcAcHolder : stack1), depth0))
-    + "<br>\n								<em>입금기한 "
+    + "<br>\n							<em>입금기한 "
     + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.virtualBankAcDeadlineDt : stack1),"YYYY-MM-DD",{"name":"dateFormat","hash":{},"data":data}))
-    + " 까지</em>\n							</span>\n						</li>\n						<li class=\"clear\"><span>송금자</span><span>홍길동</span></li>\n						<li class=\"clear\"><span>결제처리일</span>\n						<span>\n							<em>\n								<dd class=\"align_right\">"
+    + " 까지</em>\n						</span>\n					</li>\n					<li class=\"clear\"><span>송금자</span><span>홍길동</span></li>\n					<li class=\"clear\"><span>결제처리일</span>\n					<span>\n						<em>\n							<dd class=\"align_right\">"
     + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.payStatusCode : depth0),"Complete",{"name":"eq","hash":{},"data":data}),(helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.payApprovalDt : stack1),"YYYY-MM-DD HH:MM:SS",{"name":"dateFormat","hash":{},"data":data}),"입금 미확인",{"name":"condition","hash":{},"data":data}))
-    + "</dd>\n							</em>\n						</span></li>\n					</ul>\n";
+    + "</dd>\n						</em>\n					</span></li>\n				</ul>\n";
 },"15":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 

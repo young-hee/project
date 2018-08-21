@@ -143,7 +143,7 @@ public class LoginRestController extends AbstractController {
 		try {
 			SnsIfResult snsResult = apApi.postMemberSns(getMemberSn(), snsCode, snsIdIf);
 			if(!snsResult.isResult()) {
-				throw error((Map<String, Object>) result.getBody(), HttpStatus.SERVICE_UNAVAILABLE, "SNSERR", "SNS연계에 실패했습니다. 잠시 후 다시 시도해주세요.");
+				throw error((Map<String, Object>) result.getBody(), HttpStatus.UNAUTHORIZED, "SNSERR", "SNS연계에 실패했습니다. 잠시 후 다시 시도해주세요.");
 			}
 		} catch(ApiException e) {
 			throw e;

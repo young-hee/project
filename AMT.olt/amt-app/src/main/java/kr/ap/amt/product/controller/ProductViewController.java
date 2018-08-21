@@ -18,6 +18,7 @@ import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.sales.article.ArticleSearchResult;
 import net.g1project.ecp.api.model.sales.plandisplay.PlanDisplayEventListResult;
 import net.g1project.ecp.api.model.sales.product.OnlineProdInfo;
+import net.g1project.ecp.api.model.sales.product.PriceInfo;
 import net.g1project.ecp.api.model.sales.product.ProdReviewCountPerScope;
 import net.g1project.ecp.api.model.sales.product.ProdReviewSummaryInfo;
 import net.g1project.ecp.api.model.sales.product.ProductInfo;
@@ -39,13 +40,31 @@ public class ProductViewController extends AbstractController{
     @PageTitle(title = "상품상세")
 	public String productDetail(Model model, RequestReview requestReview, String previewKey, String onlyProd) {
 		OnlineProdInfo onlineProdInfo = productApi.getOnlineProduct( requestReview.getOnlineProdSn(), requestReview.getProdSn(), getMemberSn(), onlyProd);
+		ProductInfo maxProd = null;
+		boolean isMaxRate = false;
 		
 		//단위상품 판매표시상태코드 체크 방어로직추가, 정의되지 않은 상태라면 main로 return한다.
 		for (ProductInfo p : onlineProdInfo.getProducts()) {
 			boolean validEnum = EnumUtils.isValidEnum(ProductSaleDisplayStatus.class, p.getSaleDisplayStatus());
+			
+			// 상품상태에 따른 return  온라인상품 판매표시상태코드 - OnSale(판매중) - OutOfStock(품절) - Exhaustion(조기소진) - WaitingSale(판매대기) - SuspendSale(판매일시중지) - EndSale(판매종료)
 			if(!validEnum) {
-				return "redirect:/main"; // 상품상태에 따른 return  온라인상품 판매표시상태코드 - OnSale(판매중) - OutOfStock(품절) - Exhaustion(조기소진) - WaitingSale(판매대기) - SuspendSale(판매일시중지) - EndSale(판매종료)
+				return "redirect:/main"; 
 			}
+			
+			if( maxProd == null ) {
+				maxProd = p;
+			} else {
+				PriceInfo maxPInfo = maxProd.getAvailablePrices().get(0);
+				PriceInfo curInfo = p.getAvailablePrices().get(0);
+				Integer maxRate = maxPInfo.getOnlineSalePriceDiscountRate() + maxPInfo.getMemberLevelDiscountRate() + maxPInfo.getOnlineMemberDiscountRate() + maxPInfo.getImmedDiscountRate();
+				Integer curRate = curInfo.getOnlineSalePriceDiscountRate() + curInfo.getMemberLevelDiscountRate() + curInfo.getOnlineMemberDiscountRate() + curInfo.getImmedDiscountRate();
+				if( curRate > maxRate ) {
+					maxProd = p;
+					isMaxRate = true;
+				}
+			}
+			
 		}
 		
 		ArticleSearchResult relateArticle = articleApi.getProdArticleList(requestReview.getOnlineProdSn(), "SortOrder", "Y", 0, 1 );
@@ -58,6 +77,8 @@ public class ProductViewController extends AbstractController{
     	String snsImage = null;
     	String snsTitle = null;
     	String snsDesc = null;
+    	
+    	
     	
     	//sns 이미지(default)
     	if(!StringUtils.isEmpty(onlineProdInfo.getOnlineProdImages())) {
@@ -102,6 +123,8 @@ public class ProductViewController extends AbstractController{
     			}
 			}
     	}
+    	model.addAttribute("isMaxRate", isMaxRate);
+    	model.addAttribute("maxProd", maxProd);
     	model.addAttribute("maxCountPerScope", maxCountPerScope);
     	model.addAttribute("relateArticle", relateArticle);
     	model.addAttribute("relateEventList", relateEventList);
@@ -144,7 +167,7 @@ public class ProductViewController extends AbstractController{
 				shoppingMarkPost.setProdSn(onlineProdInfo.getProducts().get(0).getProdSn());
 			}
 
-			shoppingMarkPost.setDisplayMenuSetId(APConstant.EH_DISPLAY_MENU_SET_ID);
+			shoppingMarkPost.setDisplayMenuSetId(APConstant.AP_DISPLAY_MENU_SET_ID);
 
 			try{
 				shoppingmarkApi.addShoppingHistories(getMemberSn(), shoppingMarkPost);

@@ -391,16 +391,17 @@ public class MyOrdDTO {
 				}
 			}
 		}
+
 		if (shippingMNPromoMap.size() > 0) {
 			shippingMNPromoProdList = new ArrayList<>(shippingMNPromoMap.values());
 		}
-		else if (shippingSameTimePurPromoMap.size() > 0) {
+		if (shippingSameTimePurPromoMap.size() > 0) {
 			shippingSameTimePurPromoList = new ArrayList<>(shippingSameTimePurPromoMap.values());
 		}
-		else if (storePickupMNPromoMap.size() > 0) {
+		if (storePickupMNPromoMap.size() > 0) {
 			storePickupMNPromoProdList = new ArrayList<>(storePickupMNPromoMap.values());
 		}
-		else if (storePickupSameTimePurPromoMap.size() > 0) {
+		if (storePickupSameTimePurPromoMap.size() > 0) {
 			storePickupSameTimePurPromoList = new ArrayList<>(storePickupSameTimePurPromoMap.values());
 		}
 

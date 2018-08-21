@@ -326,22 +326,24 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-goods"] = Handlebars.templ
     + "\"><label for=\""
     + alias2(((helper = (helper = helpers.ordHistProdNo || (depth0 != null ? depth0.ordHistProdNo : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"ordHistProdNo","hash":{},"data":data}) : helper)))
     + "\">\n								<span class=\"sr_only\">선택</span></label>\n							</div>\n							<div class=\"thumb\">\n								<img src=\""
-    + alias2(alias1((depths[1] != null ? depths[1].onlineProdImgUrl : depths[1]), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.ordProdEx : depth0)) != null ? stack1.prodImgUrl : stack1), depth0))
     + "\">\n							</div>\n							<div class=\"info\">\n								<p class=\"name\">"
-    + alias2(alias1((depths[1] != null ? depths[1].onlineProdName : depths[1]), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.ordProdEx : depth0)) != null ? stack1.prodNameBlang : stack1), depth0))
     + "</p>\n"
     + ((stack1 = helpers["if"].call(alias3,(helpers.or || (depth0 && depth0.or) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depths[2] != null ? depths[2].step : depths[2]),2,{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depths[2] != null ? depths[2].claimYn : depths[2]),"Y",{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(51, data, 0, blockParams, depths),"inverse":container.program(53, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "								<strong class=\"num font_md\">"
-    + alias2((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias4).call(alias3,(depths[1] != null ? depths[1].finalOnlineSaleAmtPcurSum : depths[1]),{"name":"currencyFormat","hash":{},"data":data}))
+    + alias2((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias4).call(alias3,(depth0 != null ? depth0.finalOnlineSaleAmtPcur : depth0),{"name":"currencyFormat","hash":{},"data":data}))
     + "</strong></p>\n							</div>\n						</div>\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.ordHistProdPromoAwardExList : depth0),"!=",null,{"name":"xif","hash":{},"fn":container.program(55, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
-},"51":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    return "								<p><strong class=\"num font_md\">"
-    + container.escapeExpression(container.lambda((depths[1] != null ? depths[1].cancelQtySum : depths[1]), depth0))
+},"51":function(container,depth0,helpers,partials,data) {
+    var helper;
+
+  return "								<p><strong class=\"num font_md\">"
+    + container.escapeExpression(((helper = (helper = helpers.claimConfirmQty || (depth0 != null ? depth0.claimConfirmQty : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"claimConfirmQty","hash":{},"data":data}) : helper)))
     + "</strong>개 /\n";
-},"53":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"53":function(container,depth0,helpers,partials,data) {
     return "								<p><strong class=\"num font_md\">"
-    + container.escapeExpression((helpers.calc || (depth0 && depth0.calc) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depths[1] != null ? depths[1].ordQtySum : depths[1]),"-",(depths[1] != null ? depths[1].cancelQtySum : depths[1]),{"name":"calc","hash":{},"data":data}))
+    + container.escapeExpression((helpers.calc || (depth0 && depth0.calc) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.ordQty : depth0),"-",(depth0 != null ? depth0.rtnQty : depth0),{"name":"calc","hash":{},"data":data}))
     + "</strong>개 /\n";
 },"55":function(container,depth0,helpers,partials,data) {
     var stack1;
@@ -370,7 +372,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-goods"] = Handlebars.templ
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
 
-  return "<dt class=\"\">\n"
+  return "<dt class=\"on\">\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(alias1,(depth0 != null ? depth0.step : depth0),"===",2,{"name":"xif","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.program(3, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "	<button type=\"button\"><span class=\"sr_only\">더보기</span></button>\n</dt>\n\n"
     + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.list : depth0),{"name":"each","hash":{},"fn":container.program(5, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")

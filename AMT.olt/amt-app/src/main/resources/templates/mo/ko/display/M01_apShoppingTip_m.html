@@ -1,0 +1,29 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='magazine'">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+	<div class="ap_contents magazine title_two_depth" th:id="${displayPageId}">
+		<div class="section pd_sm transparent txt_total_con">
+			<p>총 <b>150</b>개 컨텐츠</p>
+		</div>
+		<div class="section">
+			<ul class="thumb_list">
+				
+			</ul>
+		</div>
+		<div class="loading" style="height:50px;"> <!-- 로딩이 들어가야 하는 영역 높이값 inline으로..-->
+			<img alt="로딩중" src="/mo/ko/images/common/loading_sm.gif">
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script>
+		$( '.youtube_video' ).video();
+	</script>
+</th:block>
+
+</body>
+</html>

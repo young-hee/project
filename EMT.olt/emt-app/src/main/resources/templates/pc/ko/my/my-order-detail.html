@@ -144,9 +144,11 @@
 			//단위상품 선택시
 			$('[name^=prod_]').off('click').on('click', function(e) {
 				var oProdSn = $(this).data('oprodsn');
+				var promoSn = $(this).data('promosn');
 
 				if($(this).prop('checked')) {
 					var isCheckedAll = true;
+					$('[name=prod_' + promoSn + ']').prop('checked', true);
 
 					$('[name=prod_' + oProdSn + ']').each(function () {
 						if(isCheckedAll) {
@@ -168,6 +170,7 @@
 					}
 				} else {
 					$('#oProd_' + oProdSn).prop('checked', false);
+					$('[name=prod_' + promoSn + ']').prop('checked', false);
 					$('#checkAll').prop('checked', false);
 				}
 			});
@@ -181,7 +184,6 @@
 			$( '.ui_accordion' ).accordion('open', 0);
 
 			$('html, body').scrollTop(0);
-
 		}
 
 		function setViewYn(checkBox, selectReason, selectReasonResult, payInfo, addPay, addPayResult, addressInfo) {
@@ -207,8 +209,8 @@
 				type : type,
 				ordInfo : ordInfo,
 				title : getTitle(),
-				onlineCnt : ord.shippingOrdOnlineProdList.length,
-				storeCnt : ord.storePickupOrdOnlineProdList.length
+				onlineCnt : ord.shipOrdOnlineProdCnt,
+				storeCnt : ord.storeOrdOnlineProdCnt
 			});
 
 			$('.my_order_status').empty();
@@ -236,13 +238,14 @@
 			$('.online').empty();
 			$('.takeout').empty();
 
-			if (ord.totalOrdOnlineProdCnt > 0) {
+			if (ord.shipOrdOnlineProdCnt > 0) {
 				var onlineProds = AP.common.getTemplate('my.order.order-detail-prodList', {
 					cnt : ord.shipOrdOnlineProdCnt,
 					list : ord.shippingOrdOnlineProdList,
 					mnList : ord.shippingMNPromoProdList,
 					bList : ord.shippingOrdOnlineBeautyPointProdList,
 					aList : ord.shippingOrdOnlineActivityPointProdList,
+					sList : ord.shippingSameTimePurPromoList,
 					reason : reason,
 					statusCode : statusCode,
 					title : getTitle(),
@@ -256,10 +259,14 @@
 			}
 
 			//테이크아웃 주문 상품
-			if (ord.storePickupOrdOnlineProdList.length > 0) {
+			if (ord.storeOrdOnlineProdCnt > 0) {
 				var takeoutProds = AP.common.getTemplate('my.order.order-detail-prodList', {
 					cnt : ord.storeOrdOnlineProdCnt,
 					list : ord.storePickupOrdOnlineProdList,
+					mnList : ord.storePickupMNPromoProdList,
+					bList : ord.shippingOrdOnlineBeautyPointProdList,
+					aList : ord.shippingOrdOnlineActivityPointProdList,
+					sList : ord.storePickupSameTimePurPromoList,
 					reason : reason,
 					statusCode : statusCode,
 					title : getTitle(),
@@ -321,7 +328,9 @@
 					if(chkReasonYn) {
 						var info = JSON.parse($(this).val());
 						var prodSn = info.ordHistProdSn;
-						console.log(prodSn);
+						if ($(this).data('promosn') != null) {
+							prodSn = $(this).data('promosn');
+						}
 						info.receivedClaimReasonSn = $('#reason_'+prodSn).find('.ui_select').designSelectBox( 'getValue' );
 						info.foReceivedClaimReason = $('#reason_'+prodSn).find('.input_wrap > input').val();
 						selectProds.push(info);
@@ -331,7 +340,7 @@
 							AP.modal.alert(getTitle() + "유형을 선택해주세요").addListener( 'modal-close', function (e) {
 								return;
 							});
-						} else if (info.foReceivedClaimReason == '') {
+						} else if (info.foReceivedClaimReason == '' || info.foReceivedClaimReason == null) {
 							chkReasonYn = false;
 							AP.modal.alert(getTitle() + "사유를 입력해주세요").addListener( 'modal-close', function (e) {
 								$('#reason_'+prodSn).find('.input_wrap > input').focus();

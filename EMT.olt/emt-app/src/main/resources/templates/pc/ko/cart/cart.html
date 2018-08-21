@@ -2,112 +2,74 @@
 <body>
 <!-- #ap_container -->
 <div ap:fragment="layout-contents">
+
 	<!-- page title -->
 	<div class="page_title">
 		<h2 class="h_title page">장바구니</h2>
 		<p class="text font_lg"></p>
 	</div>
 	<!-- // page title -->
+
 	<!-- page contents -->
 	<div class="ap_contents cart">
-		<!--/* 결제 step */-->
-
 		<!--공통 진행사항-->
 		<th:block ap:replace="~{cart/fragment/current :: tab (state = 1)}"/>
-
 		<form id="order-info" class="validate" method="post" action="/order/reception">
-		<!--주문접수 데이터-->
-		<input type="hidden" name="memberSn" th:value="${memberSn}"/>
-		<input type="hidden" name="cartSn" th:value="${cartEx.cartSn}"/>
-		<input type="hidden" name="orderFlag" value="cart"/>
-		<input type="hidden" name="onlineProdSnArr"/>													<!--온라인쇼핑 상품-->
-		<th:block th:if="${memberSn > 0}"><input type="hidden" name="takeoutProdSnArr"/></th:block>		<!--테이크아웃 상품-->
-		<th:block th:unless="${memberSn > 0}"><input type="hidden" name="NonMember" value="NonMember"/></th:block>
-		<!--//주문접수 데이터-->
+			<!--주문접수 데이터-->
+			<input type="hidden" name="memberSn" th:value="${memberSn}"/>
+			<input type="hidden" name="cartSn" th:value="${cartEx.cartSn}"/>
+			<input type="hidden" name="orderFlag" value="cart"/>
+			<input type="hidden" name="onlineProdSnArr"/>													<!--온라인쇼핑 상품-->
+			<th:block th:if="${memberSn > 0}"><input type="hidden" name="takeoutProdSnArr"/></th:block>		<!--테이크아웃 상품-->
+			<th:block th:unless="${memberSn > 0}"><input type="hidden" name="NonMember" value="NonMember"/></th:block>
 
-		<!--/* 장바구니 목록 */-->
-		<div class="ui_accordion cart_list">
-			<th:block th:if="${ #lists.size(cartEx.cartDeliveryOnlineProdExList) > 0 ||
-								#lists.size(cartEx.cartDeliveryMembershipPointExchOnlineProdExList) > 0 ||
-								#lists.size(cartEx.cartDeliveryActivityPointExchOnlineProdExList) > 0 ||
-								#lists.size(cartEx.cartDeliveryMNPromoExList) > 0 ||
-					  			#lists.size(cartEx.cartDeliverySameTimePurPromoExList) > 0 }">
+			<div class="ui_accordion cart_list">
 				<!--온라인쇼핑 상품-->
 				<th:block ap:replace="~{cart/fragment/cart-01-online-product}"/>
-			</th:block>
-			<th:block th:if="${ #lists.size(cartEx.cartStorePickupOnlineProdExList) > 0 ||
-								#lists.size(cartEx.cartStorePickupMembershipPointExchOnlineProdExList) > 0 ||
-								#lists.size(cartEx.cartStorePickupActivityPointExchOnlineProdExList) > 0 ||
-								#lists.size(cartEx.cartStorePickupMNPromoExList) > 0 ||
-					  			#lists.size(cartEx.cartStorePickupSameTimePurPromoExList) > 0 }">
 				<!--테이크아웃 상품-->
-				<th:block th:if="${memberSn > 0}" ap:replace="~{cart/fragment/cart-02-takeout-product}"/>
-			</th:block>
-		</div>
+				<th:block th:if="${ #lists.size(cartEx.cartStorePickupOnlineProdExList) > 0 ||
+									#lists.size(cartEx.cartStorePickupMembershipPointExchOnlineProdExList) > 0 ||
+									#lists.size(cartEx.cartStorePickupActivityPointExchOnlineProdExList) > 0 ||
+									#lists.size(cartEx.cartStorePickupMNPromoExList) > 0 ||
+									#lists.size(cartEx.cartStorePickupSameTimePurPromoExList) > 0 }">
+					<th:block th:if="${memberSn > 0}" ap:replace="~{cart/fragment/cart-02-takeout-product}"/>
+				</th:block>
+			</div>
 		</form>
-
-		<div class="panel notice"
-			 th:if="${#lists.size(cartEx.cartDeliveryOnlineProdExList) == 0 &&
-					  #lists.size(cartEx.cartDeliveryMembershipPointExchOnlineProdExList) == 0 &&
-					  #lists.size(cartEx.cartDeliveryActivityPointExchOnlineProdExList) == 0 &&
-					  #lists.size(cartEx.cartDeliveryMNPromoExList) == 0 &&
-					  #lists.size(cartEx.cartDeliverySameTimePurPromoExList) == 0 &&
-
-					  #lists.size(cartEx.cartStorePickupOnlineProdExList) == 0 &&
-					  #lists.size(cartEx.cartStorePickupMembershipPointExchOnlineProdExList) == 0 &&
-					  #lists.size(cartEx.cartStorePickupActivityPointExchOnlineProdExList) == 0  &&
-			 		  #lists.size(cartEx.cartStorePickupMNPromoExList) == 0 &&
-					  #lists.size(cartEx.cartStorePickupSameTimePurPromoExList) == 0 }">
-			<i class="ico"></i>
-			<p class="text color_gray">장바구니에 담긴 상품이 없습니다.</p>
-		</div>
-		<th:block th:if="${ #lists.size(cartEx.cartDeliveryOnlineProdExList) > 0 ||
-							#lists.size(cartEx.cartDeliveryMembershipPointExchOnlineProdExList) > 0 ||
-							#lists.size(cartEx.cartDeliveryActivityPointExchOnlineProdExList) > 0 ||
-							#lists.size(cartEx.cartDeliveryMNPromoExList) > 0 ||
-					  		#lists.size(cartEx.cartDeliverySameTimePurPromoExList) > 0 ||
-
-							#lists.size(cartEx.cartStorePickupOnlineProdExList) > 0 ||
-							#lists.size(cartEx.cartStorePickupMembershipPointExchOnlineProdExList) > 0 ||
-							#lists.size(cartEx.cartStorePickupActivityPointExchOnlineProdExList) > 0 ||
-							#lists.size(cartEx.cartStorePickupMNPromoExList) > 0 ||
-					  		#lists.size(cartEx.cartStorePickupSameTimePurPromoExList) > 0 }" >
+		<!--/* 선택삭제 */-->
 		<div class="align_right mgt20">
 			<button type="button" class="btn_md_form" onclick="selectRemoveCartProd()">선택 삭제</button>
 		</div>
-
 		<!--/* 결제 금액 내역 */-->
 		<div class="total_money" id="calculationResult">
 		</div>
-
 		<!--/* 주문결제 */-->
 		<div class="page_btns">
 			<button type="button" class="btn_lg_bordered" onclick="javascript:location.href='/main'">계속 쇼핑하기</button>
 			<button type="button" class="btn_lg_primary" onclick="fnCheckOrder()">주문결제하기</button>
 		</div>
-		</th:block>
 	</div>
 	<!-- // page contents -->
 </div><!-- // #ap_container -->
 
 <th:block ap:fragment="layout-endpoint">
 
-	<script ap:src="@{/handlebars-templates/compiled/cart/online/prod.js}"></script>					<!-- 온라인 상품 -->
-	<script ap:src="@{/handlebars-templates/compiled/cart/online/membership-point-prod.js}"></script>	<!-- 온라인 뷰티포인트상품 -->
-	<script ap:src="@{/handlebars-templates/compiled/cart/online/activity-point-prod.js}"></script>		<!-- 온라인 진주알상품 -->
-	<script ap:src="@{/handlebars-templates/compiled/cart/online/mn-promo-list.js}"></script>			<!-- 온라인 프로모션 상품목록 -->
-	<script ap:src="@{/handlebars-templates/compiled/cart/online/same-time-promo-list.js}"></script>	<!-- 온라인 동시구매 상품목록 -->
+	<script ap:src="@{/handlebars-templates/compiled/cart/online/prod.js}"></script>						<!-- 온라인 상품 -->
+	<script ap:src="@{/handlebars-templates/compiled/cart/online/membership-point-prod.js}"></script>		<!-- 온라인 뷰티포인트상품 -->
+	<script ap:src="@{/handlebars-templates/compiled/cart/online/activity-point-prod.js}"></script>			<!-- 온라인 진주알상품 -->
+	<script ap:src="@{/handlebars-templates/compiled/cart/online/mn-promo-list.js}"></script>				<!-- 온라인 프로모션 상품목록 -->
+	<script ap:src="@{/handlebars-templates/compiled/cart/online/same-time-promo-list.js}"></script>		<!-- 온라인 동시구매 상품목록 -->
 
-	<script ap:src="@{/handlebars-templates/compiled/cart/takeout/prod.js}"></script>					<!-- 테이크아웃 상품 -->
-	<script ap:src="@{/handlebars-templates/compiled/cart/takeout/membership-point-prod.js}"></script>	<!-- 테이크아웃 뷰티포인트상품 -->
-	<script ap:src="@{/handlebars-templates/compiled/cart/takeout/activity-point-prod.js}"></script>	<!-- 테이크아웃 진주알상품 -->
-	<script ap:src="@{/handlebars-templates/compiled/cart/takeout/mn-promo-list.js}"></script>			<!-- 테이크아웃 프로모션 상품목록 -->
-	<script ap:src="@{/handlebars-templates/compiled/cart/takeout/same-time-promo-list.js}"></script>	<!-- 테이크아웃 동시구매 상품목록 -->
-	<script ap:src="@{/handlebars-templates/compiled/cart/takeout/store-select-info.js}"></script>		<!-- 테이크아웃 선택매장목록 -->
+	<script ap:src="@{/handlebars-templates/compiled/cart/takeout/prod.js}"></script>						<!-- 테이크아웃 상품 -->
+	<script ap:src="@{/handlebars-templates/compiled/cart/takeout/membership-point-prod.js}"></script>		<!-- 테이크아웃 뷰티포인트상품 -->
+	<script ap:src="@{/handlebars-templates/compiled/cart/takeout/activity-point-prod.js}"></script>		<!-- 테이크아웃 진주알상품 -->
+	<script ap:src="@{/handlebars-templates/compiled/cart/takeout/mn-promo-list.js}"></script>				<!-- 테이크아웃 프로모션 상품목록 -->
+	<script ap:src="@{/handlebars-templates/compiled/cart/takeout/same-time-promo-list.js}"></script>		<!-- 테이크아웃 동시구매 상품목록 -->
+	<script ap:src="@{/handlebars-templates/compiled/cart/takeout/store-select-info.js}"></script>			<!-- 테이크아웃 선택매장목록 -->
 
-	<script ap:src="@{/handlebars-templates/compiled/cart/calculation-result.js}"></script>				<!-- 결제목록 -->
+	<script ap:src="@{/handlebars-templates/compiled/cart/calculation-result.js}"></script>					<!-- 결제목록 -->
 
-	<script ap:src="@{/handlebars-templates/compiled/cart/empty-prod.js}"></script>						<!-- 상품목록이 존재하지 않을때 -->
+	<script ap:src="@{/handlebars-templates/compiled/cart/empty-prod.js}"></script>							<!-- 상품목록이 존재하지 않을때 -->
 
 	<script ap:src="@{/handlebars-templates/compiled/cart/layer-cart-03.js}"></script>						<!--옵션변경 -->
 	<script ap:src="@{/handlebars-templates/compiled/cart/layer-cart-02.js}"></script>						<!--테이크아웃 Layer-->
@@ -120,9 +82,6 @@
 
 	$( document ).ready(function() {
 		$( '.ui_spinner' ).spinner()
-
-		$('#onlinePrdCheck').prop('checked', $( '[name=chkBox]' ).length == $( '[name=chkBox]:checked' ).length);
-		$('#takeoutPrdCheck').prop('checked', $( '[name=takeoutChkBox]' ).length == $( '[name=takeoutChkBox]:checked' ).length);
 
 		/* 주문서 진입 실패시 에러처리 */
 		var ordErr = /*[[${ordErr}]]*/ null;
@@ -313,9 +272,9 @@
 			&& cartEx.cartStorePickupSameTimePurPromoExList.length == 0
 			&& cartEx.cartStorePickupMembershipPointExchOnlineProdExList.length == 0
 			&& cartEx.cartStorePickupActivityPointExchOnlineProdExList.length == 0) {
-			var onlineHtml = AP.common.getTemplate('cart.empty-prod', {});
-			$('#allStoreProd').append(onlineHtml);
 			$('#storeSelectInfo').empty();
+			var storeHtml = AP.common.getTemplate('cart.empty-prod', {});
+			$('#allStoreProd').append(storeHtml);
 		}
 		$('[name=takeoutChkBox]').on('click', function(e) {
 			if($(this).is(":checked")){
@@ -382,7 +341,7 @@
 		$("#takeoutPrdCnt").html(takeoutTotalCnt);
 
 		/* 온라인 총 수량 */
-		$("#calOnlinePrdCnt").html(onlineChkCnt);
+		$("#calOnlinePrdCnt").html(onlineChkCnt); // 온라인상품 총수량 다시 체크할것! 포인트상품도 합산됨.
 		/* 테이크아웃 총 수량 */
 		$("#calTakeoutPrdCnt").html(takeoutChkCnt);
 		/* 맴버쉽포인트 총 수량 */

@@ -66,10 +66,16 @@
 
 			/* 포장/쇼핑백 금액 계산 */
 			var ordSn = /*[[${ordEx.ordSn}]]*/ '0';
+			var p_xhr;
 			function boxBagQtyChange(coSn, giftPackingSn, cnt) {
+
+				if (p_xhr != null) {
+					p_xhr.abort();
+				}
+
 				$('#packingLoading').show();
 
-				AP.api.ordReceptChangeBag({}, {
+				p_xhr = AP.api.ordReceptChangeBag({}, {
 					ordSn: ordSn,
 					coSn : coSn,
 					giftPackingSn : giftPackingSn,
@@ -86,10 +92,11 @@
 							ordHistEx : data.ordHistEx,
 							ordAmtMap : data.ordAmtMap,
 							ordCntMap : data.ordCntMap,
-							apMember : data.apMember
+							isApMember : data.isApMember
 						});
 						$('#amtPcur').html(html);
 						$("[name=finalPamtPcur]").val(data.ordHistEx.finalPamtPcur);
+						$("[name=depositAvailAmt]").val(data.depositAvailAmt);
 						$("#orderPayment").html($B.string.numberFormat(data.ordHistEx.finalPamtPcur)+'원 결제하기');
 
 						$('#amtPriceTab > button').trigger("click");
@@ -101,13 +108,9 @@
 							$('[name="beauty_point"]').val('');
 						}
 					}
-				}).fail(function (e) {
+				}).fail(function (xhr) {
 					//실패
-					if (xhr.errorCode == 0) {
-						AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
-					} else {
-						AP.modal.alert(xhr.errorMessage);
-					}
+					console.log(xhr.errorMessage);
 				}).always(function () {
 					$('#packingLoading').hide();
 				});

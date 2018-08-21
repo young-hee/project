@@ -159,7 +159,8 @@
 											<div>
 												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
 												<div class="cp_name" >
-													<p><span class="num"><span class="won">Buy1Get</span></span></p>
+													<p th:if="${item.availCoupon.buyOneGetCoupon.buy1getDcRate == 1}"><span class="num"><span class="won">하나 더!</span></span></p>
+													<p th:if="${item.availCoupon.buyOneGetCoupon.buy1getDcRate != 1}"><span class="num"><span class="won">하나 반값!</span></span></p>
 												</div>
 											</div>
 											<div>
@@ -287,8 +288,8 @@
 											<div>
 												<div class="date"><span class="num">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
 												<div class="cp_name" >
-													<p th:if="${item.buyOneGetCoupon.buy1getDcRate == 1}"><span class="num"><span class="won">하나 더!</span></span></p>
-													<p th:if="${item.buyOneGetCoupon.buy1getDcRate != 1}"><span class="num"><span class="won">하나 반값!</span></span></p>
+													<p th:if="${item.availCoupon.buyOneGetCoupon.buy1getDcRate == 1}"><span class="num"><span class="won">하나 더!</span></span></p>
+													<p th:if="${item.availCoupon.buyOneGetCoupon.buy1getDcRate != 1}"><span class="num"><span class="won">하나 반값!</span></span></p>
 												</div>
 											</div>
 											<div>
@@ -419,7 +420,8 @@
 												<div class="date" th:if="${item.expDt}"><strong>만료일</strong> <span class="num" th:text="${#dates.format(item.expDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
 												<div class="date" th:if="${item.useDt}"><strong>사용일</strong> <span class="num" th:text="${#dates.format(item.useDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
 												<div class="cp_name" >
-													<p><span class="num"><span class="won">Buy1Get</span></span></p>
+													<p th:if="${item.availCoupon.buyOneGetCoupon.buy1getDcRate == 1}"><span class="num"><span class="won">하나 더!</span></span></p>
+													<p th:if="${item.availCoupon.buyOneGetCoupon.buy1getDcRate != 1}"><span class="num"><span class="won">하나 반값!</span></span></p>
 												</div>
 											</div>
 											<div>

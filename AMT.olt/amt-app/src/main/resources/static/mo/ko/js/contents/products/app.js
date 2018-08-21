@@ -10,16 +10,19 @@
 			this._$target = $( '#ap_container' );
 
 			this._defaultModel = {};
+			this._swiper = null;
 			this._setSlide();
-			this._setHeaderFixed();
+			//this._setHeaderFixed();
+			this._header_bg();
+			this._setPreviewSlide();
 		},
 
 		/** =============== Public Methods =============== */
 		
 		//페이지를 구성한는 기본 데이타 설정
 		setDefaultData: function ( model, memberMap ) {
-			
 			this._defaultModel = model;
+			/*
 			AP.previewArea.setDefaultData( this._defaultModel, memberMap );
 
 			//상단 리뷰 클릭
@@ -27,18 +30,55 @@
 				this._$target.find( '.ui_tab' ).tabs( 'change', 1 );
 			}.bind(this));
 
-			this._orderLayer = new AP.Order( this._$target.find('.option_layer'), model, memberMap );
-
+			 */
+			this._orderLayer = new AP.Order( this._$target.find('.order_layer'), model, memberMap );
 			this._setEvents();
+			/*
 			this._setArtistTalk( memberMap );
 			this._setRecommendList();
 			this._setTabs();
 			this._setVideoPlugin();
+			*/
 		},
 
 		/** =============== Private Methods =============== */
 
 		_setEvents: function () {
+			/*컬러칩 옵션 선택*/
+			$('.color_option .color_chip input').change(function(e){
+				var $this = $(e.currentTarget);
+				var checked = $this.is(":checked");
+				if(checked){
+					$('.color_option .color_chip input').prop("checked", false);
+					$('.color_option .color_chip input').prop("disabled", false);
+					$this.prop("checked", true);
+					$this.prop("disabled", true);
+					
+					if($this.next('label').hasClass('img')){
+						var opt_name_img = $this.next('label').find('img').attr('alt');
+						$this.closest('.color_option').find('.selected').text(opt_name_img);
+					}else{
+						var opt_name_span = $this.next('label').find('span').text();
+						$this.closest('.color_option').find('.selected').text(opt_name_span);
+					}
+					
+					var prodSn = $(e.currentTarget).parent().data( 'prod-sn' ),
+						product = _.where( this._defaultModel.products, {prodSn: prodSn} )[0];
+					
+					this._changePreview( product );
+				}
+			}.bind(this));
+			
+			//주문변경 버튼 눌렀을때
+			this._$target.find('.option_select_wrap button').click(function(){
+				if($('.option_select_wrap .ui_select').hasClass('open')){
+					$(this).closest('.option_layer').addClass('sub_open');
+				} else {
+					$(this).closest('.option_layer').removeClass('sub_open');
+				}
+			}.bind(this));
+			 
+			/*
 			//전성분/상세정보제공고시 보기
 			this._$target.find( '.btn_detail_info_notice' ).on( 'click', function (e) {
 				var data = AP.previewArea.getSelectedOption();
@@ -83,6 +123,49 @@
 			this._$target.find( '.btn_goods_more' ).one('click', function (e) {
 				this._$target.find( '.more_wrap' ).addClass( 'on' );
 				$( e.currentTarget ).remove();
+			}.bind(this));
+			*/
+		},
+		
+		_changePreview: function ( product ) {
+			var html = AP.common.getTemplate( 'products.option-slide-list', product.prodImages ),
+				$wrap = this._$target.find( '.swiper-wrapper' ),
+				$slide = this._$target.find( '.swiper-pagination' );
+			
+			//$wrap.find( '.preview_thumbs button' ).off( 'click' );
+			//$slide.find( '.youtube_video' ).video( 'clear' );
+			//$slide.off( 'ixSlideMax:change' ).ixSlideMax( 'clear' );
+			$wrap.html( html );
+			$slide.html('');
+			this._setPreviewSlide();
+		},
+		
+		_setPreviewSlide : function() {
+			/*상단 비주얼 슬라이드*/
+			if( this._swiper != null ){
+				this._swiper.destroy();
+			}
+			this._swiper = new Swiper('.swiper-container', {
+				pagination: {
+					el: '.swiper-pagination',
+					type: 'progressbar',
+				},
+				autoplay: {
+					delay: 4000,
+					disableOnInteraction: false,
+				},
+			});
+			
+			/*슬라이드 사진 1개일경우 progressbar 숨김*/
+			$('.product_visual').each(function(e){
+				var $this = $(e.currentTarget);
+				var slide_length = $('.swiper-wrapper .swiper-slide').length;
+				if(slide_length <= 1){
+					$this.addClass('none').find('.swiper-pagination-progressbar').hide();
+					this._swiper.destroy();
+				}else{
+					$this.removeClass('none').find('.swiper-pagination-progressbar').show();
+				}
 			}.bind(this));
 		},
 		
@@ -136,7 +219,7 @@
 		},
 		//slide 적용
 		_setSlide: function () {
-			this._$target.find( '.slide.goods_detail_banner' ).ixSlideMax();
+			this._$target.find( '.slide' ).ixSlideMax();
 
 			AP.responsiveWidth.addListener( 'resize', function (e) {
 				this._$target.find( '.slide' ).ixSlideMax( 'resize' );
@@ -169,6 +252,15 @@
 			}.bind(this));
 
 			$( window ).trigger( 'header-fixed' );
+		},
+		
+		_header_bg : function (){
+			var winP = $(window).scrollTop();
+			if(winP > 0){
+				$('#header').addClass('scroll');
+			}else{
+				$('#header').removeClass('scroll');
+			}
 		},
 
 		//tab fixed 설정

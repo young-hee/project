@@ -7,7 +7,13 @@
 			</label>
 		</div>
 	{{/if}}
-	<div class="thumb"><img src="{{this.oProd.onlineProdImgUrl}}" alt=""></div>
+	<div class="thumb">
+		{{#xif this.oProd.onlineProdImgUrl '===' null}}
+			<img src="/images/cart/no_img.png" alt="">
+		{{else}}
+			<img src="{{this.oProd.onlineProdImgUrl}}" alt="">
+		{{/xif}}
+	</div>
 	<div class="info">
 		<div class="align_left">
 			<p class="name">{{this.oProd.onlineProdName}}</p>

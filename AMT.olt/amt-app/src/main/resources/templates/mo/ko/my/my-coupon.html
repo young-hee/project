@@ -54,8 +54,8 @@
 									</div>
 									<ul class="coupon_cont">
 										<li th:if="${item.availCoupon.prodDcCoupon.minPurProdPriceAssignYn == 'Y'}"><span>최소사용 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.minPurProdPrice)}">30,000</th:block>원 이상</span></li>
-										<li th:if="${item.prodDcCoupon.maxDcAmtLimitYn == 'Y'}"><span>최대할인 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.prodDcCoupon.maxDcAmt)}">30,000</th:block>원</span></li>
-										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.expDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
+										<li th:if="${item.availCoupon.prodDcCoupon.maxDcAmtLimitYn == 'Y'}"><span>최대할인 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.prodDcCoupon.maxDcAmt)}">30,000</th:block>원</span></li>
+										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
 									</ul>
 								</dd>
 							</th:block>
@@ -84,7 +84,7 @@
 										<li th:if="${item.availCoupon.cartDcCoupon.sectionTypeCode == 'Amt'}"><span>최소사용 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.fromOrdAmt)}">30,000</th:block>원 이상</span></li>
 										<li th:if="${item.availCoupon.cartDcCoupon.sectionTypeCode == 'Qty'}"><span>최소사용 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.fromOrdQty)}">10</th:block>개</span></li>
 										<li th:if="${item.availCoupon.cartDcCoupon.maxDcAmtLimitYn == 'Y'}"><span>최대할인 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.maxDcAmt)}">30,000</th:block>원</span></li>
-										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.expDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
+										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
 									</ul>
 								</dd>
 							</th:block>
@@ -105,7 +105,7 @@
 									<ul class="coupon_cont">
 										<li th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Same'}"><span>동일상품 </span><span><th:block th:text="${item.availCoupon.mplusnCoupon.baseOrdQty}">N</th:block>개 구매시 <th:block th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">M</th:block>개 추가 증정</span></li>
 										<li th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Different'}"><span>이종상품 </span><span><th:block th:text="${item.availCoupon.mplusnCoupon.baseOrdQty}">N</th:block>개 구매시 <th:block th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">M</th:block>개 추가 증정</span></li>
-										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.expDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
+										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
 									</ul>
 								</dd>
 							</th:block>
@@ -125,7 +125,7 @@
 									<ul class="coupon_cont">
 										<li th:if="${item.availCoupon.cartAwardCoupon.sectionTypeCode == 'Qty'}"><span>최소사용 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartAwardCoupon.fromOrdQty)}">30,000</th:block>원 이상</span></li>
 										<li th:if="${item.availCoupon.cartAwardCoupon.sectionTypeCode == 'Amt'}"><span>최소사용 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartAwardCoupon.fromOrdAmt)}">10</th:block>개</span></li>
-										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.expDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
+										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
 									</ul>
 								</dd>
 							</th:block>
@@ -134,11 +134,11 @@
 								<dd>
 									<div class="coupon_area">
 										<div class="coupon">
-											<div class="inner" th:if="${item.buyOneGetCoupon.buy1getDcRate == 1}">
+											<div class="inner" th:if="${item.availCoupon.buyOneGetCoupon.buy1getDcRate == 1}">
 												<span class="num">하나</span>
 												<small>더</small>
 											</div>
-											<div class="inner" th:if="${item.buyOneGetCoupon.buy1getDcRate != 1}">
+											<div class="inner" th:if="${item.availCoupon.buyOneGetCoupon.buy1getDcRate != 1}">
 												<span class="num">하나</span>
 												<small>반값</small>
 											</div>
@@ -147,7 +147,25 @@
 										<button type="button" class="btn_gray_round">쿠폰안내</button>
 									</div>
 									<ul class="coupon_cont">
-										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.expDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
+										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
+									</ul>
+								</dd>
+							</th:block>
+							<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'ShipFeeFree'}">
+								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em>(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
+								<dd>
+									<div class="coupon_area">
+										<div class="coupon">
+											<div class="inner">
+												<span class="num">배송비</span>
+												<small>무료</small>
+											</div>
+										</div>
+										<button type="button" class="btn_gray_round">브랜드안내</button>
+										<button type="button" class="btn_gray_round">쿠폰안내</button>
+									</div>
+									<ul class="coupon_cont">
+										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
 									</ul>
 								</dd>
 							</th:block>
@@ -182,7 +200,7 @@
 									<ul class="coupon_cont">
 										<li th:if="${item.availCoupon.prodDcCoupon.minPurProdPriceAssignYn == 'Y'}"><span>최소사용 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.minPurProdPrice)}">30,000</th:block>원 이상</span></li>
 										<li th:if="${item.prodDcCoupon.maxDcAmtLimitYn == 'Y'}"><span>최대할인 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.prodDcCoupon.maxDcAmt)}">30,000</th:block>원</span></li>
-										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.expDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
+										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
 									</ul>
 								</dd>
 							</th:block>
@@ -211,7 +229,7 @@
 										<li th:if="${item.availCoupon.cartDcCoupon.sectionTypeCode == 'Amt'}"><span>최소사용 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.fromOrdAmt)}">30,000</th:block>원 이상</span></li>
 										<li th:if="${item.availCoupon.cartDcCoupon.sectionTypeCode == 'Qty'}"><span>최소사용 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.fromOrdQty)}">10</th:block>개</span></li>
 										<li th:if="${item.availCoupon.cartDcCoupon.maxDcAmtLimitYn == 'Y'}"><span>최대할인 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.maxDcAmt)}">30,000</th:block>원</span></li>
-										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.expDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
+										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
 									</ul>
 								</dd>
 							</th:block>
@@ -232,7 +250,7 @@
 									<ul class="coupon_cont">
 										<li th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Same'}"><span>동일상품 </span><span><th:block th:text="${item.availCoupon.mplusnCoupon.baseOrdQty}">N</th:block>개 구매시 <th:block th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">M</th:block>개 추가 증정</span></li>
 										<li th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Different'}"><span>이종상품 </span><span><th:block th:text="${item.availCoupon.mplusnCoupon.baseOrdQty}">N</th:block>개 구매시 <th:block th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">M</th:block>개 추가 증정</span></li>
-										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.expDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
+										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
 									</ul>
 								</dd>
 							</th:block>
@@ -252,7 +270,7 @@
 									<ul class="coupon_cont">
 										<li th:if="${item.availCoupon.cartAwardCoupon.sectionTypeCode == 'Qty'}"><span>최소사용 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartAwardCoupon.fromOrdQty)}">30,000</th:block>원 이상</span></li>
 										<li th:if="${item.availCoupon.cartAwardCoupon.sectionTypeCode == 'Amt'}"><span>최소사용 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartAwardCoupon.fromOrdAmt)}">10</th:block>개</span></li>
-										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.expDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
+										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
 									</ul>
 								</dd>
 							</th:block>
@@ -261,11 +279,11 @@
 								<dd>
 									<div class="coupon_area">
 										<div class="coupon">
-											<div class="inner" th:if="${item.buyOneGetCoupon.buy1getDcRate == 1}">
+											<div class="inner" th:if="${item.availCoupon.buyOneGetCoupon.buy1getDcRate == 1}">
 												<span class="num">하나</span>
 												<small>더</small>
 											</div>
-											<div class="inner" th:if="${item.buyOneGetCoupon.buy1getDcRate != 1}">
+											<div class="inner" th:if="${item.availCoupon.buyOneGetCoupon.buy1getDcRate != 1}">
 												<span class="num">하나</span>
 												<small>반값</small>
 											</div>
@@ -274,7 +292,25 @@
 										<button type="button" class="btn_gray_round">쿠폰안내</button>
 									</div>
 									<ul class="coupon_cont">
-										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.expDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
+										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
+									</ul>
+								</dd>
+							</th:block>
+							<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'ShipFeeFree'}">
+								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em>(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
+								<dd>
+									<div class="coupon_area">
+										<div class="coupon">
+											<div class="inner">
+												<span class="num">배송비</span>
+												<small>무료</small>
+											</div>
+										</div>
+										<button type="button" class="btn_gray_round">브랜드안내</button>
+										<button type="button" class="btn_gray_round">쿠폰안내</button>
+									</div>
+									<ul class="coupon_cont">
+										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
 									</ul>
 								</dd>
 							</th:block>
@@ -294,3 +330,4 @@
 
 </body>
 </html>
+

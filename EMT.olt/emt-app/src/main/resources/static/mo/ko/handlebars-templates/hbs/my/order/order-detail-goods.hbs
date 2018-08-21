@@ -1,4 +1,4 @@
-<dt class="">
+<dt class="on">
 	{{#xif step '===' 2}}
 		<span class="title">{{orderCheckState state}} 쇼핑 {{typeName}} 상품 (<em>{{cnt}}</em>개)</span>
 	{{else}}
@@ -251,16 +251,16 @@
 								<span class="sr_only">선택</span></label>
 							</div>
 							<div class="thumb">
-								<img src="{{../onlineProdImgUrl}}">
+								<img src="{{ordProdEx.prodImgUrl}}">
 							</div>
 							<div class="info">
-								<p class="name">{{../onlineProdName}}</p>
+								<p class="name">{{ordProdEx.prodNameBlang}}</p>
 								{{#if (or (eq ../../step 2)(eq ../../claimYn 'Y'))}}
-								<p><strong class="num font_md">{{../cancelQtySum}}</strong>개 /
+								<p><strong class="num font_md">{{claimConfirmQty}}</strong>개 /
 								{{else}}
-								<p><strong class="num font_md">{{ calc ../ordQtySum '-' ../cancelQtySum}}</strong>개 /
+								<p><strong class="num font_md">{{calc ordQty '-' rtnQty}}</strong>개 /
 								{{/if}}
-								<strong class="num font_md">{{currencyFormat ../finalOnlineSaleAmtPcurSum}}</strong></p>
+								<strong class="num font_md">{{currencyFormat finalOnlineSaleAmtPcur}}</strong></p>
 							</div>
 						</div>
 						{{#xif ordHistProdPromoAwardExList '!=' null}}

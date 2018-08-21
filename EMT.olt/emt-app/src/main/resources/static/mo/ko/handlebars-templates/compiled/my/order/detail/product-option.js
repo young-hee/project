@@ -23,7 +23,9 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["product-option"] = Handlebars
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.typeName : depth0),"!=",null,{"name":"xif","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "			<p class=\"name\">"
     + alias3(alias4(((stack1 = ((stack1 = (depth0 != null ? depth0.sub : depth0)) != null ? stack1.ordProdEx : stack1)) != null ? stack1.prodNameBlang : stack1), depth0))
-    + "</p>\n"
+    + "</p>\n\n			"
+    + alias3(alias4(((stack1 = (depth0 != null ? depth0.sub : depth0)) != null ? stack1.cancelQtySum : stack1), depth0))
+    + "\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.step : depth0),2,{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.claimYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.program(6, data, 0),"data":data})) != null ? stack1 : "")
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.typeName : depth0),"!=",null,{"name":"xif","hash":{},"fn":container.program(8, data, 0),"inverse":container.program(13, data, 0),"data":data})) != null ? stack1 : "")
     + "		</div>\n"
@@ -37,10 +39,10 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["product-option"] = Handlebars
     + container.escapeExpression((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.typeName : depth0),"a",{"name":"eq","hash":{},"data":data}),"진주알 상품","뷰티포인트",{"name":"condition","hash":{},"data":data}))
     + "</p>\n";
 },"4":function(container,depth0,helpers,partials,data) {
-    var helper;
+    var stack1;
 
   return "			<p><strong class=\"num font_md\">"
-    + container.escapeExpression(((helper = (helper = helpers.cancelQtySum || (depth0 != null ? depth0.cancelQtySum : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"cancelQtySum","hash":{},"data":data}) : helper)))
+    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.sub : depth0)) != null ? stack1.claimConfirmQty : stack1), depth0))
     + "</strong>개 /\n";
 },"6":function(container,depth0,helpers,partials,data) {
     var stack1;
@@ -148,7 +150,7 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["product-option"] = Handlebars
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.sub : depth0)) != null ? stack1.ordProdEx : stack1)) != null ? stack1.prodSn : stack1), depth0))
     + "')\">옵션변경</button>\n";
 },"32":function(container,depth0,helpers,partials,data) {
-    return "						<p>취소</p>\n";
+    return "						<div class=\"status\">\n							<p><em>취소완료</em></p>\n						</div>\n";
 },"34":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 

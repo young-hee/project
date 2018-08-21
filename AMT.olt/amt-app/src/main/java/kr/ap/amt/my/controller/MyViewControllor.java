@@ -654,14 +654,13 @@ public class MyViewControllor extends AbstractController {
 			vo.setWtcrTxt(desc);
 			vo.setWtrqDttm(today);
 			vo.setWtdnDttm(today);
-			vo.setWtrqChCd(APConstant.EH_CH_CD);
 			if(isMobileDevice())
 				vo.setWtrdCd("M");
 			if(isPcDevice())
 				vo.setWtrdCd("W");
 			if(isAndroid() || isiOS())
 				vo.setWtrdCd("A");
-			vo.setWtrqChCd(APConstant.EH_CH_CD);
+			vo.setWtrqChCd(APConstant.OS_CH_CD);
 			vo.setWtrqPrtnId(APConstant.EH_PRTN_ID);
 			vo.setWtrsCd("99");
 			vo.setWtrsTxt(desc);

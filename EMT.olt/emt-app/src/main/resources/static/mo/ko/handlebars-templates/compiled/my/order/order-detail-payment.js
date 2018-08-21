@@ -25,7 +25,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-payment"] = Handlebars.tem
     var alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
   return "    						<dl class=\"table_layout\">\n								<dt><b>"
-    + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.payMethodCode : depth0),"Deposit",{"name":"eq","hash":{},"data":data}),"예치금",(depth0 != null ? depth0.payMethodNameBlang : depth0),{"name":"condition","hash":{},"data":data}))
+    + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.payMethodTypeCode : depth0),"PG",{"name":"eq","hash":{},"data":data}),(depth0 != null ? depth0.payMethodNameBlang : depth0),(helpers.payServiceCodeName || (depth0 && depth0.payServiceCodeName) || alias2).call(alias1,(depth0 != null ? depth0.payServiceCode : depth0),(depth0 != null ? depth0[":"] : depth0),{"name":"payServiceCodeName","hash":{},"data":data}),{"name":"condition","hash":{},"data":data}))
     + "</b></dt>\n								<dd class=\"align_right\">"
     + alias3((helpers.currencyFormatDefault || (depth0 && depth0.currencyFormatDefault) || alias2).call(alias1,(helpers.calc || (depth0 && depth0.calc) || alias2).call(alias1,(depth0 != null ? depth0.beforePayAmt : depth0),"-",(depth0 != null ? depth0.afterPayAmt : depth0),{"name":"calc","hash":{},"data":data}),"원",{"name":"currencyFormatDefault","hash":{},"data":data}))
     + "</dd>\n							</dl>\n";
@@ -70,7 +70,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-payment"] = Handlebars.tem
     + "</strong>원</dd>\n	</dl>\n\n	<ul class=\"s_cont\">\n		<li class=\"table_layout\">\n			<span>쿠폰할인</span>\n			<span>"
     + alias3((helpers.currencyFormatDefault || (depth0 && depth0.currencyFormatDefault) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordAmt : depth0)) != null ? stack1.couponPoint : stack1),"P",{"name":"currencyFormatDefault","hash":{},"data":data}))
     + "</span>\n		</li>\n		<li class=\"table_layout\">\n			<span>뷰티포인트</span>\n			<span>"
-    + alias3((helpers.currencyFormatDefault || (depth0 && depth0.currencyFormatDefault) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordAmt : depth0)) != null ? stack1.membershipPoint : stack1),"알",{"name":"currencyFormatDefault","hash":{},"data":data}))
+    + alias3((helpers.currencyFormatDefault || (depth0 && depth0.currencyFormatDefault) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordAmt : depth0)) != null ? stack1.membershipPoint : stack1),"P",{"name":"currencyFormatDefault","hash":{},"data":data}))
     + "</span>\n		</li>\n		<li class=\"table_layout\">\n			<span>쿠션포인트</span>\n			<span>0P</span>\n		</li>\n		<li class=\"table_layout\">\n			<span>진주알 교환</span>\n			<span>"
     + alias3((helpers.currencyFormatDefault || (depth0 && depth0.currencyFormatDefault) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordAmt : depth0)) != null ? stack1.activityPoint : stack1),"알",{"name":"currencyFormatDefault","hash":{},"data":data}))
     + "</span>\n		</li>\n		<li class=\"table_layout\">\n			<span>OK캐쉬백</span>\n			<span>0P</span>\n		</li>\n		<li class=\"table_layout\">\n			<span>두툼포인트M</span>\n			<span>0P</span>\n		</li>\n		<li class=\"table_layout\">\n			<span>기타 할인</span>\n			<span>"

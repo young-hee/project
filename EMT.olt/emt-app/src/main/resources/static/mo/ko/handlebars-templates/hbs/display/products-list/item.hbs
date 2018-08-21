@@ -5,9 +5,9 @@
 				<span>{{ this.ranking }}</span>
 			</div>
 		{{/xif}}
-
+{{!-- color collection이 main의 best와 design이 동일하게 변경됨--}}
 		{{#xif this.displayMenuId '==' 'color_collection_shop' }}
-			<div class="ranking">
+			<div class="ranking {{#xif this.ranking '==' 1 }}first{{/xif}}">
 				<span>{{ this.ranking }}</span>
 			</div>
 		{{/xif}}
@@ -70,22 +70,20 @@
 				{{/xif}}
 				{{/xif}}
 
-				{{#xif this.displayMenuId '==' 'color_collection_shop' }}
-
+			{{!-- #xif this.displayMenuId '==' 'color_collection_shop' --}} {{!-- design 구성이 변경되어 주석처리--}}
 					<!--// 컬러컬렉션 -->
-
 					<!-- view type3 -->
-					{{#each this.products }}
-						{{#xif ../selectedProdSn '==' this.prodSn }}
-							<a href="{{ productDetailPath this.onlineProdSn this.prodSn }}" class="lazy_load_wrap first_img">
-								<img class="lazy_load" src="" data-src="{{ replaceImagePath this.prodImages.[0].imgUrl 280 280 }}" alt="{{ this.prodName }}">
-							</a>
-						{{/xif}}
-					{{/each}}
+					{{!-- #each this.products --}}
+						{{!-- #xif ../selectedProdSn '==' this.prodSn --}}
+							{{!-- <a href="{{ productDetailPath this.onlineProdSn this.prodSn }}" class="lazy_load_wrap first_img"> --}}
+								{{!-- <img class="lazy_load" src="" data-src="{{ replaceImagePath this.prodImages.[0].imgUrl 280 280 }}" alt="{{ this.prodName }}"> --}}
+							{{!--</a> --}}
+						{{!--/xif--}}
+					{{!-- /each-- }}
 
 					<!-- 컬러컬렉션 //-->
 
-				{{else}}
+			{{!-- else --}} {{!-- design 구성이 변경되어 주석처리--}}
 
 					<!--// 공용 ( 컬러컬렉션 제외 ) -->
 
@@ -121,7 +119,7 @@
 
 					<!-- 공용 ( 컬러컬렉션 제외 )//-->
 
-				{{/xif}}
+				{{!--/xif --}} {{!-- design 구성이 변경되어 주석처리--}}
 
 				<!--/* 일시품절일경우 */-->
 				{{{stockImg this.saleDisplayStatus this.prodTypeCode }}}
@@ -135,16 +133,18 @@
 			<!-- 상품 이미지 //-->
 
 
-			<!--// 상품명 -->
+			<!--// 상품명 //-->
 			<div class="item_info list">
-				{{#xif this.displayMenuId '!=' 'color_collection_shop' }}
+				{{#xif this.displayMenuId '!=' 'color_collection_shop'}} 
 
 					<!--// 공용 ( 컬러컬렉션 제외 )-->
 					<div class="prd_name">
-						<p class="s_name">
-							<em class="tag">{{stockTxt this.saleDisplayStatus this.prodTypeCode}}</em>
-							{{{this.linePromoDesc}}}
-						</p>
+						{{#xif this.displayMenuId '!=' 'color_collection_shop'}} {{!--color collection shop 은 프로모션 설명 제외 --}}
+							<p class="s_name">
+								<em class="tag">{{stockTxt this.saleDisplayStatus this.prodTypeCode}}</em>
+								{{{this.linePromoDesc}}}
+							</p>
+						{{/xif}}
 						<div>
 							<em class="name">{{ this.onlineProdName }}</em>
 						</div>
@@ -158,7 +158,7 @@
 										{{/xif}}
 									{{/xif}}
 								{{/each}}
-							{{else}}
+								{{else}}    
 								{{#xif this.productCount '==' 1 }}
 									<p class="color_name">{{ this.products.[0].prodName }}</p>
 								{{/xif}}
@@ -220,7 +220,7 @@
 				<!-- 핫딜 //-->
 
 			{{else}}
-				{{#xif this.displayMenuId '!=' 'color_collection_shop' }}
+			{{!--	{{#xif this.displayMenuId '!=' 'color_collection_shop' }} --}}
 				{{#xif this.displayMenuId '!=' 'beauty_point_shop' }}
 
 					<!--// 공용 ( 핫딜, 컬러컬렉션 제외 )-->
@@ -295,14 +295,14 @@
 
 					<!-- 공용 ( 핫딜, 컬러컬렉션 제외 ) //-->
 
-				{{/xif}}
+			{{!--	{{/xif}}  --}}
 				{{/xif}}
 			{{/xif}}
 			<!-- 옵션 //-->
 
 			<!--// 가격 -->
 			<div class="price_area">
-				{{#xif this.displayMenuId '!=' 'color_collection_shop' }}
+				{{#xif this.displayMenuId '!=' 'color_collection_shop'}}
 				{{#xif this.displayMenuId '!=' 'beauty_point_shop' }}
 
 					{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
@@ -328,7 +328,7 @@
 				{{/xif}}
 
 				<span class="price">
-					{{#xif this.displayMenuId '==' 'beauty_point_shop' }}
+					{{#xif this.displayMenuId '==' 'beauty_point_shop'}}
 						<span>
 							{{ numberFormat this.products.[0].exchMembershipPoint }}<em>P</em>
 						</span>

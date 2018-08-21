@@ -1,112 +1,139 @@
-<html ap:decorate="~{layout/layout-item-only}">
+<html ap:decorate="~{layout/layout-item-only}" th:with="_jsfile='products'">
 <body>
 <!-- #ap_container -->
 <div ap:fragment="layout-contents">
+
 	<div class="ap_contents">
 		<!--/* 상품 상세 정보 영역 */-->
 		<div class="product detail">
 			<!--/* 상품 이미지 */-->
 			<div class="product_visual">
-				<div class="slide" data-ix-options="view-length:1; loop:false;">
-					<div class="ix-list-viewport">
-						<ul class="ix-list-items">
-							<li class="ix-list-item"><img ap:src="@{/images/dummy/img_item_05.jpg}" alt=""></li>
-							<!--<li class="ix-list-item vod"><img ap:src="@{/images/dummy/img_vod.jpg}" alt=""></li>-->
-						</ul>
-					</div>
-					<div class="ix-controller">
-						<div class="ix-progress-bar">
-							<span class="bar" style="width:50%"></span>
+				<!-- Swiper -->
+				<div class="swiper-container">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide" th:each="onlineImg : ${ prd.onlineProdImages }">
+							<img th:src="${onlineImg.imgUrl}" alt="">
 						</div>
 					</div>
+					
+					<!-- Add Pagination -->
+					<div class="swiper-pagination" th:if="${#lists.size(prd.onlineProdImages) > 1}"></div>
 				</div>
+				
+				<!--/* 상품 아이콘 */-->
+				<span class="tags" th:if="${#lists.size(prd.onlineProdGift.giftProds) > 0 || prd.onlineProdGift.giftcardTargetYn == 'Y'}" >
+					<span class="badge special" th:if="${#lists.size(prd.onlineProdGift.giftProds) > 0 }" >스페셜기프트</span>
+					<span class="badge gift" th:if="${prd.onlineProdGift.giftcardTargetYn == 'Y' }" >기프트카드</span>
+				</span>
+				
+				<!--/* 리워드 마크 */-->
+				<span class="mark">
+					<img ap:src="@{/images/dummy/img_mark_01.png}" alt="어워드 명">
+				</span>
 			</div>
+			
 			<!--/* 상품 정보 */-->
 			<div class="product_info">
-				<!--/* 상품명 */-->
-				<div class="product_name">라네즈 [NEW] 스킨베일 베이스 30ml</div>
-				<!--/* 가격 */-->
-				<div class="product_price">
-					<span class="discount">최대 <span><em>30</em>%</span></span>
-					<b class="num">999,000</b>원
-					<del>999,000원</del>
-					<b>VVIP 할인가</b>
+				
+				<!--/* 기프트 카드 */-->
+				<div class="ui_tooltip gift_card" th:if="${prd.onlineProdGift.giftcardTargetYn == 'Y'}">
+					<button type="button" class="btn_tooltip">
+						<i class="ico_gift"></i>[[${prd.onlineProdGift.giftcardTitle}]] <span>자세히</span>
+					</button>
+					
+					<div class="layer_tooltip">
+						<dl>
+							<dt>기프트카드 증정 안내</dt>
+							<dd>
+								<p class="text" th:text="${prd.onlineProdGift.giftcardGuide}">5/15~31 1+1 구매고객 6/5일 일괄 지급 띄어쓰기 포함 총 80자 제한 띄어쓰기 포함 총 80자 제한 띄어쓰기 포함 총 80자 제한 띄어쓰기 포함 총 80자 제한</p>
+								<button type="button" class="ui_close sm"><span class="sr_only">툴팁 닫기</span></button>
+							</dd>
+						</dl>
+					</div>
 				</div>
+				
+				<!--/* 상품명 */-->
+				<div class="product_name" th:text="${prd.onlineProdName}"></div>
+				
+				<!--/* 상품 설명 */-->
+				<p class="product_exp" th:text="${prd.lineDesc}"></p>
+				
+				<!--/* 옵션선택 */-->
+				<button type="button" class="btn_options" th:if="${#lists.size(prd.colorGroups) == 0}"><span>옵션을 선택해주세요</span></button>
+				
+				<!--/* 옵션 선택 후 */-->
+				<button type="button" class="btn_options"><small>옵션선택</small><span>라이트 퍼플 라이트 퍼플 라이트 퍼플 40호 1개</span><span class="color_chip"><img alt="색상명" ap:src="@{/images/dummy/img_item_04.jpg}"></span></button>
+				
+				<!--/* 컬러 옵션 선택 */-->
+				<div class="color_option" th:if="${#lists.size(prd.colorGroups) > 1 and prd.productCount > 1}">
+					<div class="scrollable_x">
+						<th:block th:each="product : ${prd.products}">
+							<span class="color_chip" th:data-prod-sn="${product.prodSn}">
+								<input type="checkbox" th:id="${'color_' + product.prodSn}">
+								<label th:for="${'color_' + product.prodSn}" th:if="${product.colorchipTypeCode == 'RGB'}" th:style="'background-color:#' + ${product.rgbVal}">
+									<span class="sr_only" th:text="${product.prodName}"></span>
+								</label>
+								
+								<label th:for="${'color_' + product.prodSn}" class="img" th:if="${product.colorchipTypeCode == 'Img'}">
+									<img class="color" th:alt="${product.prodName}" th:src="${product.colorchipImg}">
+								</label>
+							</span>
+						</th:block>
+					</div>
+					
+					<!--선택 전 -->
+					<p class="selected">색상을 선택해주세요.</p>
+				</div>
+				
+				<!--/* 가격 */-->
+				<div class="product_price" th:if="${maxProd.membershipExchOnly == 'N'}"
+					 th:with="curPrice=${maxProd.availablePrices[0]},
+							  maxRate=${curPrice.onlineSalePriceDiscountRate + curPrice.memberLevelDiscountRate + curPrice.onlineMemberDiscountRate + curPrice.immedDiscountRate}">
+					<span class="discount" th:if="${maxRate != 0}">
+						<span th:if="${isMaxRate}">최대</span>
+						<span><em th:text="${maxRate}">30</em>%</span>
+					</span>
+					
+					<b class="num" th:text="${#numbers.formatInteger( curPrice.finalOnlinePrice, 0, 'COMMA')}">999,000</b>원
+					<del th:if="${curPrice.doublePriceDisplayYn == 'Y'}">[[${ #numbers.formatInteger( curPrice.beforeOnlineSalePrice, 0, 'COMMA') }]]원</del>
+					<b class="txt" th:if="${curPrice.onlineMemberDiscountYn == 'Y'}">VVIP 할인가</b>
+				</div>
+				
+				
+				<div class="product_price" th:if="${maxProd.membershipExchOnly == 'Y'}">
+					<em class="beautypoint">
+						<b class="num">[[${ #numbers.formatInteger( maxProd.exchMembershipPoint, 0, 'COMMA') }]]</b>P
+					</em>
+					<small>뷰티포인트로만 결제 가능</small>
+				</div>
+				
+				<!-- 
+				<div class="product_price">
+					<span class="discount"><span><em>1+1</em></span></span>
+					<b class="num">999,000</b>원
+				</div>
+				 -->
 			</div>
 		</div>
 		<!--/* 스페셜 기프트 */-->
-		<div class="section pd_md">
+		<div class="section special_gift" th:if="${#lists.size(prd.onlineProdGift.giftProds) > 0 }">
 			<dl>
-				<dt class="h_title d4"><i class="ico_gift"></i>스페셜기프트 <small>뷰티포인트 결제 제외</small></dt>
-				<dd class="product_slide">
+				<dt class="h_title d4"><i class="ico_gift"></i><span>스페셜기프트</span> <span>뷰티포인트 결제 제외</span></dt>
+				<dd class="product_slide_new">
 					<ul class="three_half">
-						<li class="product">
+						<li th:each="giftProd : ${prd.onlineProdGift.giftProds}">
 							<a href="#none">
 								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_02.jpg" alt="" class="lazy_load">
+									<div class="lazy_load_wrap loaded">
+										<img th:src="${giftProd.repImgUrl}" alt="" class="lazy_load loaded">
 									</div>
 								</div>
 								<div class="product_info">
-									<p class="brand">헤라</p>
-									<p class="product_name">[대용량] 더마 리페어 시카크림 [대용량] 더마 리페어 시카크림</p>
-									<div class="price_area">2개</div>
-								</div>
-							</a>
-						</li>
-						<li class="product">
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load">
+									<p class="brand">[[${giftProd.brandName}]]</p>
+									<p class="product_name">[[${giftProd.prodName}]]</p>
+									<div class="price_area">
+										<span class="price"><span class="num">[[${giftProd.qty}]]</span>개</span>
 									</div>
-								</div>
-								<div class="product_info">
-									<p class="brand">헤라</p>
-									<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-									<div class="price_area">2개</div>
-								</div>
-							</a>
-						</li>
-						<li class="product">
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
-									</div>
-								</div>
-								<div class="product_info">
-									<p class="brand">헤라</p>
-									<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-									<div class="price_area">2개</div>
-								</div>
-							</a>
-						</li>
-						<li class="product">
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_05.jpg" alt="" class="lazy_load">
-									</div>
-								</div>
-								<div class="product_info">
-									<p class="brand">헤라</p>
-									<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-									<div class="price_area">2개</div>
-								</div>
-							</a>
-						</li>
-						<li class="product">
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_06.jpg" alt="" class="lazy_load">
-									</div>
-								</div>
-								<div class="product_info">
-									<p class="brand">헤라</p>
-									<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-									<div class="price_area">2개</div>
 								</div>
 							</a>
 						</li>
@@ -115,17 +142,31 @@
 			</dl>
 			<a href="#none" class="more"><span class="sr_only">스페셜 기프트</span><i class="ico_navi_s next"></i></a>
 		</div>
-		<!--/* 포인트, 혜택, 공유 : full case 는 product-detail-full 참고 */-->
+		
+		<!--/* 포인트, 혜택, 공유 : full case  */-->
 		<div class="section purchase_benefit">
-			<p class="title"><i class="ico_point"></i>뷰티포인트 100P 적립 예정</p>
-			<a href="#none" class="title"><i class="ico_delivery"></i>무료배송 <small>자세한 배송 정보</small></a>
+			
+			<p class="title" th:if="${prd.points != null and #lists.size(prd.points) > 0}">
+				<th:block th:each="point : ${prd.points}">
+					<i class="ico_point" th:if="${point.membershipServiceCode == 'BP'}"></i>뷰티포인트 [[${point.expectedPoint}]]P 적립 예정
+					<i class="ico_point" th:if="${point.membershipServiceCode == 'CP'}"></i>쿠션포인트 [[${point.expectedPoint}]]P 적립 예정
+				</th:block>
+			</p>
+			
+			<p class="title" th:if="${prd.points == null or #lists.size(prd.points) == 0}">
+				<i class="ico_point"></i>뷰티포인트 미적립 상품
+			</p>
+			
+			<a href="#none" class="title"><i class="ico_delivery"></i>무료배송 <span>자세한 배송 정보</span></a>
+			<a href="#none" class="title"><i class="ico_delivery"></i>일반배송 <em>2,500원</em> <span>자세한 배송 정보</span></a>
+			<a href="#none" class="title"><i class="ico_delivery"></i>무료배송 / <em>예약주문</em> <span>자세한 배송 정보</span></a>
 			<div class="ui_accordion">
 				<dl>
 					<dt><button type="button" class="title"><i class="ico_pay"></i>ONE pay/카드사 혜택 정보</span></button></dt>
 					<dd>
 						<div class="card_benefit">
 							<ul>
-								<li><span>ONE pay 결제</span><em>추가 3% 할인</em></li>
+								<li><span>ONE pay결제</span><em>추가 3% 할인</em></li>
 								<li><span>카드 무이자</span><em>최대 12개월 무이자</em></li>
 								<li><span>카드 추가 혜택</span><em>신한, 국민 3% 할인</em></li>
 							</ul>
@@ -136,120 +177,34 @@
 			</div>
 			<button type="button" class="title btn_share"><i class="ico_share"></i>이 상품과 혜택을 친구에게 공유하세요</button>
 		</div>
-		<!--/* 세트 구성품
-		<div class="section pd_md">
-			<dl>
-				<dt class="h_title d4">이 세트의 구성품</dt>
-				<dd class="product_slide">
-					<ul class="three_half">
-						<li class="product">
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_02.jpg" alt="" class="lazy_load">
-									</div>
-								</div>
-								<div class="product_info">
-									<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-									<div class="price_area">
-										<span class="price"><span class="num">32,000</span>원</span>
-									</div>
-								</div>
-							</a>
-						</li>
-						<li class="product">
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load">
-									</div>
-								</div>
-								<div class="product_info">
-									<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-									<div class="price_area">
-										<span class="price"><span class="num">32,000</span>원</span>
-									</div>
-								</div>
-							</a>
-						</li>
-						<li class="product">
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
-									</div>
-								</div>
-								<div class="product_info">
-									<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-									<div class="price_area">
-										<span class="price"><span class="num">32,000</span>원</span>
-									</div>
-								</div>
-							</a>
-						</li>
-						<li class="product">
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_05.jpg" alt="" class="lazy_load">
-									</div>
-								</div>
-								<div class="product_info">
-									<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-									<div class="price_area">
-										<span class="price"><span class="num">32,000</span>원</span>
-									</div>
-								</div>
-							</a>
-						</li>
-						<li class="product">
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_06.jpg" alt="" class="lazy_load">
-									</div>
-								</div>
-								<div class="product_info">
-									<p class="product_name">[대용량] 더마 리페어 시카크림</p>
 
-									<div class="price_area">
-										<span class="price"><span class="num">32,000</span>원</span>
-									</div>
-								</div>
-							</a>
-						</li>
-					</ul>
-				</dd>
-			</dl>
-		</div>
-		*/-->
-		<!--/* 구매리뷰 */-->
+		<!-- 베스트리뷰  -->
 		<div class="section recommended_review">
-			<!--/* 평점 */-->
-			<div class="rating">
-				<i class="ico_star on"></i>
-				<i class="ico_star on"></i>
-				<i class="ico_star on"></i>
-				<i class="ico_star on"></i>
-				<i class="ico_star"></i>
-				<span class="count">4.8</span>
-			</div>
-			<!--/* 베스트 리뷰 */-->
+
+			<span class="rating">
+				<span class="mark_star_md star0" th:if="${prd.reviewScopeAvg == 0}"><span class="sr_only">구매 평점 별 5개 중 0개</span></span> <!--평점에따라 클래스변경(star0~star5)-->
+				<span class="mark_star_md star1" th:if="${prd.reviewScopeAvg == 1}"><span class="sr_only">구매 평점 별 5개 중 1개</span></span> <!--평점에따라 클래스변경(star0~star5)-->
+				<span class="mark_star_md star2" th:if="${prd.reviewScopeAvg == 2}"><span class="sr_only">구매 평점 별 5개 중 2개</span></span> <!--평점에따라 클래스변경(star0~star5)-->
+				<span class="mark_star_md star3" th:if="${prd.reviewScopeAvg == 3}"><span class="sr_only">구매 평점 별 5개 중 3개</span></span> <!--평점에따라 클래스변경(star0~star5)-->
+				<span class="mark_star_md star4" th:if="${prd.reviewScopeAvg == 4}"><span class="sr_only">구매 평점 별 5개 중 4개</span></span> <!--평점에따라 클래스변경(star0~star5)-->
+				<span class="mark_star_md star5" th:if="${prd.reviewScopeAvg == 5}"><span class="sr_only">구매 평점 별 5개 중 5개</span></span> <!--평점에따라 클래스변경(star0~star5)-->
+				<span class="count" th:text="${prd.reviewScopeAvg}"></span>
+			</span>
+
+			<!--베스트 리뷰가 있는경우 해당영역 노출  -->
 			<div class="best_review">
 				<dl>
 					<dt><em class="font_md">베스트리뷰</em></dt>
 					<dd>
-						<!--/* 포토 리뷰 */-->
+						<!-- 베스트리뷰에서 사진이 있는경우 노출(없는경우 해당영역 삭제) -->
 						<div class="photo_review scrollable_x">
-							<a href="#none"><img ap:src="@{/images/dummy/img_color_curation_01.jpg}" alt="리뷰 제목"></a>
-							<a href="#none"><img ap:src="@{/images/dummy/img_color_curation_03.jpg}" alt="리뷰 제목"></a>
-							<a href="#none"><img ap:src="@{/images/dummy/img_color_curation_01.jpg}" alt="리뷰 제목"></a>
-							<a href="#none"><img ap:src="@{/images/dummy/img_color_curation_03.jpg}" alt="리뷰 제목"></a>
-							<a href="#none"><img ap:src="@{/images/dummy/img_color_curation_01.jpg}" alt="리뷰 제목"></a>
-							<a href="#none"><img ap:src="@{/images/dummy/img_color_curation_03.jpg}" alt="리뷰 제목"></a>
+							<a href="#none"><img alt="리뷰 제목" src="/mo/ko/images/dummy/img_color_curation_01.jpg"></a>
+							<a href="#none"><img alt="리뷰 제목" src="/mo/ko/images/dummy/img_color_curation_03.jpg"></a>
+							<a href="#none"><img alt="리뷰 제목" src="/mo/ko/images/dummy/img_color_curation_01.jpg"></a>
+							<a href="#none"><img alt="리뷰 제목" src="/mo/ko/images/dummy/img_color_curation_03.jpg"></a>
+							<a href="#none"><img alt="리뷰 제목" src="/mo/ko/images/dummy/img_color_curation_01.jpg"></a>
+							<a href="#none"><img alt="리뷰 제목" src="/mo/ko/images/dummy/img_color_curation_03.jpg"></a>
 						</div>
-						<!--/* 포토 리뷰 없을때 여기까지 삭제 */-->
-						<!--/* 텍스트 리뷰 */-->
 						<a href="#none" class="text_review">
 							<dl>
 								<dt>
@@ -257,7 +212,7 @@
 									<span class="option_name">라이트 퍼플 40호</span>
 								</dt>
 								<dd>
-									<!--/* 375 기준 4줄 이상 절삭 */-->
+
 									<p class="text">친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히 피부색 칙칙한 날에 쓰면 화사해 보이고 화장한듯 안한듯 친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히 피부색 칙칙한 날에 쓰면 화사해 ...</p>
 									<small>2018.01.01</small>
 								</dd>
@@ -266,21 +221,52 @@
 					</dd>
 				</dl>
 			</div>
-			<!--/* 베스트 리뷰 없을때 여기까지 삭제 */-->
+
 			<a href="#none" class="more">
-				<span>구매리뷰 <span class="num">1,350</span> 개 모두보기</span>
+				<span>구매리뷰 <span class="num">[[${ #numbers.formatInteger( prd.reviewCount , 0, 'COMMA' )}]]</span> 개 모두보기</span>
 				<i class="ico_navi_s next"></i>
 			</a>
 		</div>
-		<!--/* 브랜드관 */-->
+		
+		<!-- 브랜드관 -->
 		<div class="section">
-			<a href="#none" class="btn_go">라네즈 브랜드관 가기 <i class="ico_navi_s next"></i></a>
+			<a href="#none" class="btn_go">[[${prd.products[0].brandName}]] 브랜드관 가기 <i class="ico_navi_s next"></i></a>
 		</div>
+		
 		<!--/* 상품 상세정보 */-->
 		<dl class="section detail_info ui_toggle_contents">
-			<dt>상세정보</dt>
+			<dt>상품 상세정보</dt>
 			<dd class="cont">
 				<img ap:src="@{/images/product/img_expand.jpg}" alt="상세 정보를 확대해서 보실 수 있어요">
+				
+				<div class="detail_img" th:utext="${prd.detailDesc}">
+					<!--/* 상세정보 영역 */-->
+				</div>
+				
+				<!-- 유투브 영역 -->
+				<div class="slide" data-ix-options="view-length:1;">
+					<div class="ix-list-viewport">
+							<ul class="ix-list-items">
+								<li class="ix-list-item">
+									<div class="video_wrap">
+										<iframe class="youtube_video" width="800" height="450" src="http://www.youtube.com/embed/mLlMYER51SI?wmode=transparent&showinfo=0;&autoplay=0" frameborder="0" allowfullscreen="" data-vendor="youtube" data-ratio="true" data-mute="false"></iframe>
+									</div>
+								</li>
+								<li class="ix-list-item">
+									<div class="video_wrap">
+										<iframe class="youtube_video" width="800" height="450" src="http://www.youtube.com/embed/mLlMYER51SI?wmode=transparent&showinfo=0;&autoplay=0" frameborder="0" allowfullscreen="" data-vendor="youtube" data-ratio="true" data-mute="false"></iframe>
+									</div>
+								</li>
+							</ul>
+					</div>
+					<div class="ix-controller">
+							<div class="slide_direction">
+								<a class="ix-btn-prev" href="#">Prev</a>
+								<a class="ix-btn-next" href="#">Next</a>
+							</div>
+					</div>
+				</div>
+
 				<img ap:src="@{/images/dummy/img_detail_info.jpg}" alt="이미지 대체 텍스트 짧을 경우">
 				<div class="sr_only">
 					이미지 대체 텍스트 영역 텍스트가 길 경우
@@ -291,488 +277,633 @@
 				<button type="button" class="toggle_btn close">상세정보 닫기 <i class="ico_up"></i></button>
 			</dd>
 		</dl>
-		<!--/* 어워드 수상내역 */-->
-		<div class="section pd_md">
+		<!-- 어워드 수상내역 -->
+		<div class="section awards_area">
 			<dl>
-				<dt class="h_title d4"><i class="ico_award"></i>어워드 수상 내역</dt>
+				<dt class="h_title d4"><i class="ico_award"></i>어워드 수상내역</dt>
 				<dd class="awards scrollable_x">
-					<img ap:src="@{/images/dummy/img_mark_01.png}" alt="어워드 명">
-					<img ap:src="@{/images/dummy/img_mark_01.png}" alt="어워드 명">
-					<img ap:src="@{/images/dummy/img_mark_01.png}" alt="어워드 명">
-					<img ap:src="@{/images/dummy/img_mark_01.png}" alt="어워드 명">
-					<img ap:src="@{/images/dummy/img_mark_01.png}" alt="어워드 명">
-					<img ap:src="@{/images/dummy/img_mark_01.png}" alt="어워드 명">
-					<img ap:src="@{/images/dummy/img_mark_01.png}" alt="어워드 명">
+					<img alt="어워드 명" src="/mo/ko/images/dummy/img_mark_01.png">
+					<img alt="어워드 명" src="/mo/ko/images/dummy/img_mark_02.png">
+					<img alt="어워드 명" src="/mo/ko/images/dummy/img_mark_03.png">
+					<img alt="어워드 명" src="/mo/ko/images/dummy/img_mark_04.png">
+					<img alt="어워드 명" src="/mo/ko/images/dummy/img_mark_02.png">
+					<img alt="어워드 명" src="/mo/ko/images/dummy/img_mark_03.png">
+					<img alt="어워드 명" src="/mo/ko/images/dummy/img_mark_01.png">
 				</dd>
 			</dl>
 		</div>
-		<!--/* 전성분 */-->
+		<!-- 전성분 확인하기, 상세정보 제공 공시 -->
 		<div class="section">
 			<a href="#none" class="btn_go">전성분 확인하기 <i class="ico_navi_s next"></i></a>
 		</div>
-		<!--/* 상세정보 제공 고시 */-->
 		<div class="section">
 			<a href="#none" class="btn_go">상세정보 제공 공시 <i class="ico_navi_s next"></i></a>
 		</div>
-		<!--/* 인기상품 */-->
-		<div class="section pd_md">
-			<dl>
+		<!-- 인기상품, 다른고객님이 선택한제품, 브랜드인기상품 -->
+		<div class="section ">
+			<dl class="slide">
 				<dt class="h_title d4">스킨베일베이스와 비슷한 인기상품</dt>
 				<dd class="product_slide">
-					<ul class="two_half">
-						<li class="product">
-							<a href="#none">
-								<!--/* 비주얼 영역 */-->
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="" class="lazy_load">
-									</div>
-									<div class="out_of_stock"><span class="badge">일시품절</span></div>
-								</div>
-								<div class="product_info">
-									<p class="brand"><b>라네즈</b></p>
-									<p class="product_name">루즈홀릭 크림</p>
-									<!--/* 가격정보 */-->
-									<div class="price_area">
-										<em class="discount num"><b>30</b>%</em>
-										<span class="price"><b class="num">32,000</b>원</span>
-										<del>32,000원</del>
-									</div>
-									<!--/* 평점 리뷰 */-->
-									<div class="product_rating">
-										<span class="rating">
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s"></i>
-											<span class="sr_only">4점</span>
+					<div class="swipe_wrap">
+						<ul class="product_list_new swipe">
+							<li>
+								<!-- 상품 리스트 -->
+								<div class="product_new">
+									<a href="javascript:;">
+										<!--  상품이미지  -->
+										<span class="product_visual_new">
+											<span class="out_of_stock"><span class="img_badge">일시품절</span></span>
+											<span class="lazy_load_wrap loaded">
+												<img src="/mo/ko/images/dummy/img_item_01.jpg" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="" class="lazy_load loaded">
+											</span>
 										</span>
-										<span>리뷰 <span class="num">360</span></span>
-									</div>
-								</div>
-							</a>
-						</li>
-						<li class="product">
-							<!--/* 비주얼 영역 */-->
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
-									</div>
-								</div>
-								<div class="product_info">
-									<p class="brand"><b>라네즈</b></p>
-									<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-									<!--/* 가격정보 */-->
-									<div class="price_area">
-										<em class="discount num"><b>1+1</b></em>
-										<span class="price"><b class="num">32,000</b>원</span>
-										<del>32,000원</del>
-									</div>
-									<!--/* 평점 리뷰 */-->
-									<div class="product_rating">
-										<span class="rating">
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s"></i>
-											<span class="sr_only">4점</span>
+
+										<!-- 상품 정보 -->
+										<span class="product_info_new">
+											<strong class="prd_brand">마몽드</strong>
+											<span class="prd_name">세라마이드 크림</span>
+											<span class="price_wrap">
+												<strong class="discount">30%</strong>
+												<strong class="price">30,300<em>원</em></strong>
+												<del>29,000원</del>
+											</span>
+
+											<!-- 평점 리뷰 -->
+											<span class="product_rating">
+												<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 개</span></span>
+												<span class="prd_review">리뷰 828</span>
+											</span>
+
 										</span>
-										<span>리뷰 <span class="num">360</span></span>
-									</div>
-									<!--/* 태그 */-->
-									<div class="tags">
-										<span class="badge special">스페셜기프트</span>
-										<span class="badge gift">기프트카드</span>
-									</div>
+									</a>
 								</div>
-							</a>
-						</li>
-						<li class="product">
-							<!--/* 비주얼 영역 */-->
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
-									</div>
-								</div>
-								<div class="product_info">
-									<p class="brand"><b>라네즈</b></p>
-									<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-									<!--/* 가격정보 */-->
-									<div class="price_area">
-										<span class="price"><b class="num">32,000</b>원</span>
-										<del>32,000원</del>
-									</div>
-									<!--/* 평점 리뷰 */-->
-									<div class="product_rating">
-										<span class="rating">
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s"></i>
-											<span class="sr_only">4점</span>
+								<!-- // 상품 리스트 -->
+							</li>
+							<li>
+								<!-- 상품 리스트 -->
+								<div class="product_new">
+									<a href="javascript:;">
+										<!--  상품이미지  -->
+										<span class="product_visual_new">
+											<span class="lazy_load_wrap loaded">
+												<img src="/mo/ko/images/dummy/img_item_02.jpg" data-src="/mo/ko/images/dummy/img_item_02.jpg" alt="" class="lazy_load loaded">
+											</span>
 										</span>
-										<span>리뷰 <span class="num">360</span></span>
-									</div>
-								</div>
-							</a>
-						</li>
-						<li class="product">
-							<!--/* 비주얼 영역 */-->
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
-									</div>
-								</div>
-								<div class="product_info">
-									<p class="brand"><b>라네즈</b></p>
-									<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-									<!--/* 가격정보 */-->
-									<div class="price_area">
-										<span class="price"><b class="num">32,000</b>원</span>
-										<del>32,000원</del>
-									</div>
-									<!--/* 평점 리뷰 */-->
-									<div class="product_rating">
-										<span class="rating">
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s"></i>
-											<span class="sr_only">4점</span>
+
+										<!-- 상품 정보 -->
+										<span class="product_info_new">
+											<strong class="prd_brand">마몽드</strong>
+											<span class="prd_name">[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림</span>
+											<span class="price_wrap">
+												<strong class="discount">28%</strong>
+												<strong class="price">32,000<em>원</em></strong>
+												<del>45,000원</del>
+											</span>
+
+											<!-- 평점 리뷰 -->
+											<span class="product_rating">
+												<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
+												<span class="prd_review">리뷰 1,035</span>
+											</span>
 										</span>
-										<span>리뷰 <span class="num">360</span></span>
-									</div>
+
+										<!-- 태그 -->
+										<span class="tags">
+											<em class="badge special">스페셜기프트</em>
+											<em class="badge gift">기프트카드</em>
+										</span>
+
+									</a>
 								</div>
-							</a>
-						</li>
-					</ul>
+								<!-- // 상품 리스트 -->
+							</li>
+							<li>
+								<!-- 상품 리스트 -->
+								<div class="product_new">
+									<a href="javascript:;">
+										<!--  상품이미지  -->
+										<span class="product_visual_new">
+											<span class="lazy_load_wrap loaded">
+												<img src="/mo/ko/images/dummy/img_item_03.jpg" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load loaded">
+											</span>
+										</span>
+
+										<!-- 상품 정보 -->
+										<span class="product_info_new">
+											<strong class="prd_brand">마몽드</strong>
+											<span class="prd_name">[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림</span>
+											<span class="price_wrap">
+												<strong class="discount">28%</strong>
+												<strong class="price">32,000<em>원</em></strong>
+												<del>45,000원</del>
+											</span>
+
+											<!-- 평점 리뷰 -->
+											<span class="product_rating">
+												<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
+												<span class="prd_review">리뷰 1,035</span>
+											</span>
+
+										</span>
+
+										<!-- 태그 -->
+										<span class="tags">
+											<em class="badge special">스페셜기프트</em>
+											<em class="badge gift">기프트카드</em>
+										</span>
+
+									</a>
+								</div>
+								<!-- // 상품 리스트 -->
+							</li>
+							<li>
+								<!-- 상품 리스트 -->
+								<div class="product_new">
+									<a href="javascript:;">
+										<!--  상품이미지  -->
+										<span class="product_visual_new">
+											<span class="lazy_load_wrap loaded">
+												<img src="/mo/ko/images/dummy/img_item_04.jpg" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load loaded">
+											</span>
+										</span>
+
+										<!-- 상품 정보 -->
+										<span class="product_info_new">
+											<strong class="prd_brand">마몽드</strong>
+											<span class="prd_name">[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림</span>
+											<span class="price_wrap">
+												<strong class="discount">28%</strong>
+												<strong class="price">32,000<em>원</em></strong>
+												<del>45,000원</del>
+											</span>
+
+											<!-- 평점 리뷰 -->
+											<span class="product_rating">
+												<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
+												<span class="prd_review">리뷰 1,035</span>
+											</span>
+
+										</span>
+
+										<!-- 태그 -->
+										<span class="tags">
+											<em class="badge special">스페셜기프트</em>
+											<em class="badge gift">기프트카드</em>
+										</span>
+									</a>
+								</div>
+								<!-- // 상품 리스트 -->
+							</li>
+							<li>
+								<!-- 상품 리스트 -->
+								<div class="product_new">
+									<a href="javascript:;">
+										<!--  상품이미지  -->
+										<span class="product_visual_new">
+											<span class="lazy_load_wrap loaded">
+												<img src="/mo/ko/images/dummy/img_item_05.jpg" data-src="/mo/ko/images/dummy/img_item_05.jpg" alt="" class="lazy_load loaded">
+											</span>
+										</span>
+
+										<!-- 상품 정보 -->
+										<span class="product_info_new">
+											<strong class="prd_brand">마몽드</strong>
+											<span class="prd_name">[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림</span>
+											<span class="price_wrap">
+												<strong class="discount">28%</strong>
+												<strong class="price">32,000<em>원</em></strong>
+												<del>45,000원</del>
+											</span>
+
+											<!-- 평점 리뷰 -->
+											<span class="product_rating">
+												<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
+												<span class="prd_review">리뷰 1,035</span>
+											</span>
+										</span>
+
+										<!-- 태그 -->
+										<span class="tags">
+											<em class="badge special">스페셜기프트</em>
+											<em class="badge gift">기프트카드</em>
+										</span>
+									</a>
+								</div>
+								<!-- // 상품 리스트 -->
+							</li>
+						</ul>
+					</div>
 				</dd>
 			</dl>
-		</div>
-		<!--/* 다른 고객 제품 */-->
-		<div class="section pd_md">
-			<dl>
+			<dl class="slide">
 				<dt class="h_title d4">다른 고객님이 선택한 페이스 제품</dt>
 				<dd class="product_slide">
-					<ul class="two_half">
-						<li class="product">
-							<!--/* 비주얼 영역 */-->
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
-									</div>
-								</div>
-								<div class="product_info">
-									<p class="brand"><b>라네즈</b></p>
-									<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-									<!--/* 가격정보 */-->
-									<div class="price_area">
-										<span class="price"><b class="num">32,000</b>원</span>
-										<del>32,000원</del>
-									</div>
-									<!--/* 평점 리뷰 */-->
-									<div class="product_rating">
-										<span class="rating">
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s"></i>
-											<span class="sr_only">4점</span>
+					<div class="swipe_wrap">
+						<ul class="product_list_new swipe">
+							<li>
+								<!-- 상품 리스트 -->
+								<div class="product_new">
+									<a href="javascript:;">
+										<!--  상품이미지  -->
+										<span class="product_visual_new">
+											<span class="out_of_stock"><span class="img_badge">일시품절</span></span>
+											<span class="lazy_load_wrap loaded">
+												<img src="/mo/ko/images/dummy/img_item_01.jpg" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="" class="lazy_load loaded">
+											</span>
 										</span>
-										<span>리뷰 <span class="num">360</span></span>
-									</div>
-								</div>
-							</a>
-						</li>
-						<li class="product">
-							<a href="#none">
-								<!--/* 비주얼 영역 */-->
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="" class="lazy_load">
-									</div>
-									<div class="out_of_stock"><span class="badge">일시품절</span></div>
-								</div>
-								<div class="product_info">
-									<p class="brand"><b>라네즈</b></p>
-									<p class="product_name">루즈홀릭 크림</p>
-									<!--/* 가격정보 */-->
-									<div class="price_area">
-										<em class="discount num"><b>30</b>%</em>
-										<span class="price"><b class="num">32,000</b>원</span>
-										<del>32,000원</del>
-									</div>
-									<!--/* 평점 리뷰 */-->
-									<div class="product_rating">
-										<span class="rating">
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s"></i>
-											<span class="sr_only">4점</span>
+
+										<!-- 상품 정보 -->
+										<span class="product_info_new">
+											<strong class="prd_brand">마몽드</strong>
+											<span class="prd_name">세라마이드 크림</span>
+											<span class="price_wrap">
+												<strong class="discount">30%</strong>
+												<strong class="price">30,300<em>원</em></strong>
+												<del>29,000원</del>
+											</span>
+
+											<!-- 평점 리뷰 -->
+											<span class="product_rating">
+												<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 개</span></span>
+												<span class="prd_review">리뷰 828</span>
+											</span>
+
 										</span>
-										<span>리뷰 <span class="num">360</span></span>
-									</div>
+									</a>
 								</div>
-							</a>
-						</li>
-						<li class="product">
-							<!--/* 비주얼 영역 */-->
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
-									</div>
-								</div>
-								<div class="product_info">
-									<p class="brand"><b>라네즈</b></p>
-									<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-									<!--/* 가격정보 */-->
-									<div class="price_area">
-										<span class="price"><b class="num">32,000</b>원</span>
-										<del>32,000원</del>
-									</div>
-									<!--/* 평점 리뷰 */-->
-									<div class="product_rating">
-										<span class="rating">
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s"></i>
-											<span class="sr_only">4점</span>
+								<!-- // 상품 리스트 -->
+							</li>
+							<li>
+								<!-- 상품 리스트 -->
+								<div class="product_new">
+									<a href="javascript:;">
+										<!--  상품이미지  -->
+										<span class="product_visual_new">
+											<span class="lazy_load_wrap loaded">
+												<img src="/mo/ko/images/dummy/img_item_02.jpg" data-src="/mo/ko/images/dummy/img_item_02.jpg" alt="" class="lazy_load loaded">
+											</span>
 										</span>
-										<span>리뷰 <span class="num">360</span></span>
-									</div>
-									<!--/* 태그 */-->
-									<div class="tags">
-										<span class="badge special">스페셜기프트</span>
-										<span class="badge gift">기프트카드</span>
-									</div>
-								</div>
-							</a>
-						</li>
-						<li class="product">
-							<!--/* 비주얼 영역 */-->
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
-									</div>
-								</div>
-								<div class="product_info">
-									<p class="brand"><b>라네즈</b></p>
-									<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-									<!--/* 가격정보 */-->
-									<div class="price_area">
-										<span class="price"><b class="num">32,000</b>원</span>
-										<del>32,000원</del>
-									</div>
-									<!--/* 평점 리뷰 */-->
-									<div class="product_rating">
-										<span class="rating">
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s"></i>
-											<span class="sr_only">4점</span>
+
+										<!-- 상품 정보 -->
+										<span class="product_info_new">
+											<strong class="prd_brand">마몽드</strong>
+											<span class="prd_name">[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림</span>
+											<span class="price_wrap">
+												<strong class="discount">28%</strong>
+												<strong class="price">32,000<em>원</em></strong>
+												<del>45,000원</del>
+											</span>
+
+											<!-- 평점 리뷰 -->
+											<span class="product_rating">
+												<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
+												<span class="prd_review">리뷰 1,035</span>
+											</span>
 										</span>
-										<span>리뷰 <span class="num">360</span></span>
-									</div>
-								</div>
-							</a>
-						</li>
-						<li class="product">
-							<!--/* 비주얼 영역 */-->
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
-									</div>
-								</div>
-								<div class="product_info">
-									<p class="brand"><b>라네즈</b></p>
-									<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-									<!--/* 가격정보 */-->
-									<div class="price_area">
-										<span class="price"><b class="num">32,000</b>원</span>
-										<del>32,000원</del>
-									</div>
-									<!--/* 평점 리뷰 */-->
-									<div class="product_rating">
-										<span class="rating">
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s"></i>
-											<span class="sr_only">4점</span>
+
+										<!-- 태그 -->
+										<span class="tags">
+											<em class="badge special">스페셜기프트</em>
+											<em class="badge gift">기프트카드</em>
 										</span>
-										<span>리뷰 <span class="num">360</span></span>
-									</div>
+
+									</a>
 								</div>
-							</a>
-						</li>
-					</ul>
+								<!-- // 상품 리스트 -->
+							</li>
+							<li>
+								<!-- 상품 리스트 -->
+								<div class="product_new">
+									<a href="javascript:;">
+										<!--  상품이미지  -->
+										<span class="product_visual_new">
+											<span class="lazy_load_wrap loaded">
+												<img src="/mo/ko/images/dummy/img_item_03.jpg" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load loaded">
+											</span>
+										</span>
+
+										<!-- 상품 정보 -->
+										<span class="product_info_new">
+											<strong class="prd_brand">마몽드</strong>
+											<span class="prd_name">[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림</span>
+											<span class="price_wrap">
+												<strong class="discount">28%</strong>
+												<strong class="price">32,000<em>원</em></strong>
+												<del>45,000원</del>
+											</span>
+
+											<!-- 평점 리뷰 -->
+											<span class="product_rating">
+												<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
+												<span class="prd_review">리뷰 1,035</span>
+											</span>
+
+										</span>
+
+										<!-- 태그 -->
+										<span class="tags">
+											<em class="badge special">스페셜기프트</em>
+											<em class="badge gift">기프트카드</em>
+										</span>
+
+									</a>
+								</div>
+								<!-- // 상품 리스트 -->
+							</li>
+							<li>
+								<!-- 상품 리스트 -->
+								<div class="product_new">
+									<a href="javascript:;">
+										<!--  상품이미지  -->
+										<span class="product_visual_new">
+											<span class="lazy_load_wrap loaded">
+												<img src="/mo/ko/images/dummy/img_item_04.jpg" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load loaded">
+											</span>
+										</span>
+
+										<!-- 상품 정보 -->
+										<span class="product_info_new">
+											<strong class="prd_brand">마몽드</strong>
+											<span class="prd_name">[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림</span>
+											<span class="price_wrap">
+												<strong class="discount">28%</strong>
+												<strong class="price">32,000<em>원</em></strong>
+												<del>45,000원</del>
+											</span>
+
+											<!-- 평점 리뷰 -->
+											<span class="product_rating">
+												<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
+												<span class="prd_review">리뷰 1,035</span>
+											</span>
+
+										</span>
+
+										<!-- 태그 -->
+										<span class="tags">
+											<em class="badge special">스페셜기프트</em>
+											<em class="badge gift">기프트카드</em>
+										</span>
+									</a>
+								</div>
+								<!-- // 상품 리스트 -->
+							</li>
+							<li>
+								<!-- 상품 리스트 -->
+								<div class="product_new">
+									<a href="javascript:;">
+										<!--  상품이미지  -->
+										<span class="product_visual_new">
+											<span class="lazy_load_wrap loaded">
+												<img src="/mo/ko/images/dummy/img_item_05.jpg" data-src="/mo/ko/images/dummy/img_item_05.jpg" alt="" class="lazy_load loaded">
+											</span>
+										</span>
+
+										<!-- 상품 정보 -->
+										<span class="product_info_new">
+											<strong class="prd_brand">마몽드</strong>
+											<span class="prd_name">[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림</span>
+											<span class="price_wrap">
+												<strong class="discount">28%</strong>
+												<strong class="price">32,000<em>원</em></strong>
+												<del>45,000원</del>
+											</span>
+
+											<!-- 평점 리뷰 -->
+											<span class="product_rating">
+												<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
+												<span class="prd_review">리뷰 1,035</span>
+											</span>
+										</span>
+
+										<!-- 태그 -->
+										<span class="tags">
+											<em class="badge special">스페셜기프트</em>
+											<em class="badge gift">기프트카드</em>
+										</span>
+									</a>
+								</div>
+								<!-- // 상품 리스트 -->
+							</li>
+						</ul>
+					</div>
 				</dd>
 			</dl>
-		</div>
-		<!--/* 브랜드 인기상품 */-->
-		<div class="section pd_md">
-			<dl>
+			<dl class="slide">
 				<dt class="h_title d4">라네즈 인기상품</dt>
 				<dd class="product_slide">
-					<ul class="two_half">
-						<li class="product">
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load">
-									</div>
-									<div class="out_of_stock"><span class="badge">일시품절</span></div>
-								</div>
-								<div class="product_info">
-									<p class="brand"><b>라네즈</b></p>
-									<p class="product_name">루즈홀릭 크림</p>
-									<div class="price_area">
-										<em class="discount num"><b>30</b>%</em>
-										<span class="price"><b class="num">32,000</b>원</span>
-										<del>32,000원</del>
-									</div>
-									<div class="product_rating">
-										<span class="rating">
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s"></i>
-											<span class="sr_only">4점</span>
+					<div class="swipe_wrap">
+						<ul class="product_list_new swipe">
+							<li>
+								<!-- 상품 리스트 -->
+								<div class="product_new">
+									<a href="javascript:;">
+										<!--  상품이미지  -->
+										<span class="product_visual_new">
+											<span class="out_of_stock"><span class="img_badge">일시품절</span></span>
+											<span class="lazy_load_wrap loaded">
+												<img src="/mo/ko/images/dummy/img_item_01.jpg" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="" class="lazy_load loaded">
+											</span>
 										</span>
-										<span>리뷰 <span class="num">360</span></span>
-									</div>
-								</div>
-							</a>
-						</li>
-						<li class="product">
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load">
-									</div>
-								</div>
-								<div class="product_info">
-									<p class="brand"><b>라네즈</b></p>
-									<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-									<div class="price_area">
-										<span class="price"><b class="num">32,000</b>원</span>
-										<del>32,000원</del>
-									</div>
-									<div class="product_rating">
-										<span class="rating">
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s"></i>
-											<span class="sr_only">4점</span>
+
+										<!-- 상품 정보 -->
+										<span class="product_info_new">
+											<strong class="prd_brand">마몽드</strong>
+											<span class="prd_name">세라마이드 크림</span>
+											<span class="price_wrap">
+												<strong class="discount">30%</strong>
+												<strong class="price">30,300<em>원</em></strong>
+												<del>29,000원</del>
+											</span>
+
+											<!-- 평점 리뷰 -->
+											<span class="product_rating">
+												<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 개</span></span>
+												<span class="prd_review">리뷰 828</span>
+											</span>
+
 										</span>
-										<span>리뷰 <span class="num">360</span></span>
-									</div>
-									<div class="tags">
-										<span class="badge special">스페셜기프트</span>
-										<span class="badge gift">기프트카드</span>
-									</div>
+									</a>
 								</div>
-							</a>
-						</li>
-						<li class="product">
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_05.jpg" alt="" class="lazy_load">
-									</div>
-								</div>
-								<div class="product_info">
-									<p class="brand"><b>라네즈</b></p>
-									<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-									<div class="price_area">
-										<span class="price"><b class="num">32,000</b>원</span>
-										<del>32,000원</del>
-									</div>
-									<div class="product_rating">
-										<span class="rating">
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s"></i>
-											<span class="sr_only">4점</span>
+								<!-- // 상품 리스트 -->
+							</li>
+							<li>
+								<!-- 상품 리스트 -->
+								<div class="product_new">
+									<a href="javascript:;">
+										<!--  상품이미지  -->
+										<span class="product_visual_new">
+											<span class="lazy_load_wrap loaded">
+												<img src="/mo/ko/images/dummy/img_item_02.jpg" data-src="/mo/ko/images/dummy/img_item_02.jpg" alt="" class="lazy_load loaded">
+											</span>
 										</span>
-										<span>리뷰 <span class="num">360</span></span>
-									</div>
-								</div>
-							</a>
-						</li>
-						<li class="product">
-							<a href="#none">
-								<div class="product_visual">
-									<div class="lazy_load_wrap">
-										<img src="" data-src="/mo/ko/images/dummy/img_item_06.jpg" alt="" class="lazy_load">
-									</div>
-								</div>
-								<div class="product_info">
-									<p class="brand"><b>라네즈</b></p>
-									<p class="product_name">[대용량] 더마 리페어 시카크림</p>
-									<div class="price_area">
-										<span class="price"><b class="num">32,000</b>원</span>
-										<del>32,000원</del>
-									</div>
-									<div class="product_rating">
-										<span class="rating">
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s on"></i>
-											<i class="ico_star_s"></i>
-											<span class="sr_only">4점</span>
+
+										<!-- 상품 정보 -->
+										<span class="product_info_new">
+											<strong class="prd_brand">마몽드</strong>
+											<span class="prd_name">[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림</span>
+											<span class="price_wrap">
+												<strong class="discount">28%</strong>
+												<strong class="price">32,000<em>원</em></strong>
+												<del>45,000원</del>
+											</span>
+
+											<!-- 평점 리뷰 -->
+											<span class="product_rating">
+												<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
+												<span class="prd_review">리뷰 1,035</span>
+											</span>
 										</span>
-										<span>리뷰 <span class="num">360</span></span>
-									</div>
+
+										<!-- 태그 -->
+										<span class="tags">
+											<em class="badge special">스페셜기프트</em>
+											<em class="badge gift">기프트카드</em>
+										</span>
+
+									</a>
 								</div>
-							</a>
-						</li>
-					</ul>
+								<!-- // 상품 리스트 -->
+							</li>
+							<li>
+								<!-- 상품 리스트 -->
+								<div class="product_new">
+									<a href="javascript:;">
+										<!--  상품이미지  -->
+										<span class="product_visual_new">
+											<span class="lazy_load_wrap loaded">
+												<img src="/mo/ko/images/dummy/img_item_03.jpg" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load loaded">
+											</span>
+										</span>
+
+										<!-- 상품 정보 -->
+										<span class="product_info_new">
+											<strong class="prd_brand">마몽드</strong>
+											<span class="prd_name">[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림</span>
+											<span class="price_wrap">
+												<strong class="discount">28%</strong>
+												<strong class="price">32,000<em>원</em></strong>
+												<del>45,000원</del>
+											</span>
+
+											<!-- 평점 리뷰 -->
+											<span class="product_rating">
+												<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
+												<span class="prd_review">리뷰 1,035</span>
+											</span>
+
+										</span>
+
+										<!-- 태그 -->
+										<span class="tags">
+											<em class="badge special">스페셜기프트</em>
+											<em class="badge gift">기프트카드</em>
+										</span>
+
+									</a>
+								</div>
+								<!-- // 상품 리스트 -->
+							</li>
+							<li>
+								<!-- 상품 리스트 -->
+								<div class="product_new">
+									<a href="javascript:;">
+										<!--  상품이미지  -->
+										<span class="product_visual_new">
+											<span class="lazy_load_wrap loaded">
+												<img src="/mo/ko/images/dummy/img_item_04.jpg" data-src="/mo/ko/images/dummy/img_item_04.jpg" alt="" class="lazy_load loaded">
+											</span>
+										</span>
+
+										<!-- 상품 정보 -->
+										<span class="product_info_new">
+											<strong class="prd_brand">마몽드</strong>
+											<span class="prd_name">[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림</span>
+											<span class="price_wrap">
+												<strong class="discount">28%</strong>
+												<strong class="price">32,000<em>원</em></strong>
+												<del>45,000원</del>
+											</span>
+
+											<!-- 평점 리뷰 -->
+											<span class="product_rating">
+												<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
+												<span class="prd_review">리뷰 1,035</span>
+											</span>
+
+										</span>
+
+										<!-- 태그 -->
+										<span class="tags">
+											<em class="badge special">스페셜기프트</em>
+											<em class="badge gift">기프트카드</em>
+										</span>
+									</a>
+								</div>
+								<!-- // 상품 리스트 -->
+							</li>
+							<li>
+								<!-- 상품 리스트 -->
+								<div class="product_new">
+									<a href="javascript:;">
+										<!--  상품이미지  -->
+										<span class="product_visual_new">
+											<span class="lazy_load_wrap loaded">
+												<img src="/mo/ko/images/dummy/img_item_05.jpg" data-src="/mo/ko/images/dummy/img_item_05.jpg" alt="" class="lazy_load loaded">
+											</span>
+										</span>
+
+										<!-- 상품 정보 -->
+										<span class="product_info_new">
+											<strong class="prd_brand">마몽드</strong>
+											<span class="prd_name">[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림</span>
+											<span class="price_wrap">
+												<strong class="discount">28%</strong>
+												<strong class="price">32,000<em>원</em></strong>
+												<del>45,000원</del>
+											</span>
+
+											<!-- 평점 리뷰 -->
+											<span class="product_rating">
+												<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
+												<span class="prd_review">리뷰 1,035</span>
+											</span>
+										</span>
+
+										<!-- 태그 -->
+										<span class="tags">
+											<em class="badge special">스페셜기프트</em>
+											<em class="badge gift">기프트카드</em>
+										</span>
+									</a>
+								</div>
+								<!-- // 상품 리스트 -->
+							</li>
+						</ul>
+					</div>
 				</dd>
 			</dl>
 		</div>
-		<!--/* 띠배너 */-->
+		<!-- 배너 -->
 		<div class="section banner">
-			<a href="#none"><img alt="배너내용" ap:src="@{/images/dummy/img_banner.jpg}"></a>
+			<a href="#none"><img alt="배너내용" src="/mo/ko/images/dummy/img_banner.jpg"></a>
 		</div>
-		<!--/* order layer */-->
+		<!--/* order layer full case */-->
 		<div class="order_layer"><!--/* 구매하기 클릭시 open 클래스 */-->
-			<!--/* 기본 버튼 */-->
+			<!--/* 구매하기 버튼 */-->
 			<div class="default_btns">
 				<button type="button" class="btn_good btn_toggle" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i><span class="num">123</span></button>
-				<button type="button" class="btn_neutral" onclick="$('.order_layer').addClass('open');">구매하기</button>
+				<!-- 좋아요가 없을경우  -->
+				<!-- <button type="button" class="btn_good btn_toggle none_like" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i></button> -->
+				<button type="button" class="btn_h50_bk round btn_order">구매하기</button>
 			</div>
+			
 			<!--/* 옵선선택 레이어 */-->
-			<div class="option_layer"> <!--/* 옵션 select 선택시 open 클래스 추가 */-->
-				<button type="button" class="option_close" onclick="$('.order_layer').removeClass('open');"><span class="sr_only">옵션선택 레이어 닫기</span></button>
+			<div class="option_layer"> <!--/* 옵션 select 선택시 open */-->
+				<button type="button" class="option_close"><span class="sr_only">옵션선택 레이어 닫기</span></button>
 				<!--/* 옵션선택 select */-->
 				<div class="option_select_wrap">
-					<div class="ui_select static" data-not-label-change="true">
+					<div class="ui_select type2" data-not-label-change="true">
 						<input type="hidden" name="">
 						<button type="button">옵션을 선택해주세요</button>
 						<ul class="select_options option_select_list">
@@ -781,7 +912,7 @@
 								<a data-value="01">
 									<span class="color_chip" style="background-color: #f00;"></span>
 									<span class="option_info">
-										<span class="option_name">라이트 퍼플 50호</span>
+										<span class="option_name">라이트 퍼플 50호 라이트 퍼플 50호 라이트 퍼플 50호</span>
 										<span class="price">
 											<em class="discount">30%</em>
 											<b class="num">37,000</b>원
@@ -802,17 +933,115 @@
 									</span>
 								</a>
 							</li>
-							<li class="select_option out_of_stock"><!--/* 일시품절시.. 선택 가능 */-->
-								<code class="label_markup" style="display:none">선택 1</code>
-								<a data-value="03">
-									<span class="color_chip"><img alt="" ap:src="@{/images/dummy/img_color_chip.jpg}"></span>
-									<span class="option_info">
-										<span class="option_name">라이트 퍼플 50호 라이트 퍼플 50호 라이트 퍼플 50호 라이트 퍼플 50호</span>
-										<span class="price">
-											<small>일시품절</small>
-										</span>
-									</span>
-								</a>
+							<li class="select_option">
+									<code class="label_markup" style="display:none">선택 1</code>
+									<a data-value="03" class="out_of_stock"> <!--/* 일시품절시.. 선택 가능 */-->
+											<span class="color_chip"><img alt="" ap:src="@{/images/dummy/img_color_chip.jpg}"></span>
+											<span class="option_info">
+													<span class="option_name">라이트 퍼플 50호 라이트 퍼플 50호 라이트 퍼플 50호 라이트 퍼플 50호</span>
+													<span class="price">
+															<small>일시품절</small>
+													</span>
+											</span>
+									</a>
+							</li>
+							<li class="select_option">
+									<code class="label_markup" style="display:none">선택 1</code>
+									<a data-value="04">
+											<span class="color_chip" style="background-color: #f00;"></span>
+											<span class="option_info">
+													<span class="option_name">라이트 퍼플 50호</span>
+													<span class="price">
+															<em class="discount">30%</em>
+															<b class="num">37,000</b>원
+															<del>42,000원</del>
+													</span>
+											</span>
+									</a>
+							</li>
+							<li class="select_option">
+									<code class="label_markup" style="display:none">선택 1</code>
+									<a data-value="05">
+											<span class="color_chip"><img alt="" ap:src="@{/images/dummy/img_item_07.jpg}"></span>
+											<span class="option_info">
+													<span class="option_name">라이트 퍼플 50호</span>
+													<span class="price">
+															<b class="num">37,000</b>원
+													</span>
+											</span>
+									</a>
+							</li>
+							<li class="select_option">
+									<code class="label_markup" style="display:none">선택 1</code>
+									<a data-value="06" class="out_of_stock"> <!--/* 일시품절시.. 선택 가능 */-->
+											<span class="color_chip"><img alt="" ap:src="@{/images/dummy/img_color_chip.jpg}"></span>
+											<span class="option_info">
+													<span class="option_name">라이트 퍼플 50호 라이트 퍼플 50호 라이트 퍼플 50호 라이트 퍼플 50호</span>
+													<span class="price">
+															<small>일시품절</small>
+													</span>
+											</span>
+									</a>
+							</li>
+							<li class="select_option">
+									<code class="label_markup" style="display:none">선택 1</code>
+									<a data-value="07">
+											<span class="color_chip"><img alt="" ap:src="@{/images/dummy/img_item_07.jpg}"></span>
+											<span class="option_info">
+													<span class="option_name">라이트 퍼플 50호</span>
+													<span class="price">
+															<b class="num">37,000</b>원
+													</span>
+											</span>
+									</a>
+							</li>
+							<li class="select_option">
+									<code class="label_markup" style="display:none">선택 1</code>
+									<a data-value="07">
+											<span class="color_chip"><img alt="" ap:src="@{/images/dummy/img_item_07.jpg}"></span>
+											<span class="option_info">
+													<span class="option_name">라이트 퍼플 50호</span>
+													<span class="price">
+															<b class="num">37,000</b>원
+													</span>
+											</span>
+									</a>
+							</li>
+							<li class="select_option">
+									<code class="label_markup" style="display:none">선택 1</code>
+									<a data-value="07">
+											<span class="color_chip"><img alt="" ap:src="@{/images/dummy/img_item_07.jpg}"></span>
+											<span class="option_info">
+													<span class="option_name">라이트 퍼플 50호</span>
+													<span class="price">
+															<b class="num">37,000</b>원
+													</span>
+											</span>
+									</a>
+							</li>
+							<li class="select_option">
+									<code class="label_markup" style="display:none">선택 1</code>
+									<a data-value="07">
+											<span class="color_chip"><img alt="" ap:src="@{/images/dummy/img_item_07.jpg}"></span>
+											<span class="option_info">
+													<span class="option_name">라이트 퍼플 50호</span>
+													<span class="price">
+															<b class="num">37,000</b>원
+													</span>
+											</span>
+									</a>
+							</li>
+							<li class="select_option">
+									<code class="label_markup" style="display:none">선택 1</code>
+									<a data-value="07">
+											<span class="color_chip"><img alt="" ap:src="@{/images/dummy/img_item_07.jpg}"></span>
+											<span class="option_info">
+													<span class="option_name">라이트 퍼플 51호</span>
+													<span class="price">
+															<b class="num">37,000</b>원
+													</span>
+											</span>
+									</a>
 							</li>
 						</ul>
 					</div>
@@ -829,8 +1058,39 @@
 						<div class="price"><b>37,000</b>원</div>
 						<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
 					</div>
+					<div class="selected_option">
+						<div class="option_name">라이트 퍼플 40호 라이트 퍼플 40호 라이트 퍼플 40호 라이트 퍼플 40호</div>
+						<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="false">
+							<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
+							<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
+							<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
+						</div>
+						<div class="price"><b>37,000</b>원</div>
+						<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
+					</div>
+					<!--/* 단독으로 쓰이는 경우 옵션 삭제 버튼 없음 */-->
+					<div class="selected_option">
+						<div class="option_name">라이트 퍼플 40호 라이트 퍼플 40호 라이트 퍼플 40호 라이트 퍼플 40호</div>
+						<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="false">
+							<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
+							<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
+							<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
+						</div>
+						<div class="price"><b>37,000</b>원</div>
+					</div>
+					<!--/* 일시품절 케이스 */-->
+					<div class="selected_option out_of_stock">
+						<div class="option_name">라이트 퍼플 40호 라이트 퍼플 40호 라이트 퍼플 40호 라이트 퍼플 40호</div>
+						<div class="alarm">
+							일시품절 <a href="javascript:;" class="btn_h32_gradient">입고알리미신청</a>
+						</div>
+						<div class="price"><b>37,000</b>원</div>
+						<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
+					</div>
 				</div>
 				<div class="order_bottom">
+					<!--/* 1 + 1 상품인 경우  */-->
+					<p class="text notice">해당상품은 <em>1+1</em> 상품입니다.<br>구매수량을 2개 선택시, 1개 가격으로 혜택이 적용됩니다.</p>
 					<!--/* 선택, 금액 */-->
 					<div class="total clear">
 						<div><span class="num">1</span>개 선택</div>
@@ -841,28 +1101,75 @@
 					</div>
 					<!--/* 버튼 */-->
 					<div class="purchase_btns">
-						<button type="button" class="btn_neutral">장바구니</button>
-						<button type="button" class="btn_neutral">구매하기</button>
+						<button type="button" class="btn_lg_neutral">장바구니</button>
+						<button type="button" class="btn_lg_neutral" disabled>구매하기</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
 </div>
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
-	<script>
-		$( '.slide' ).each( function () {
-			var $slide = $( this );
+	<script type="text/javascript" th:inline="javascript">
+		
+		$( '.ui_spinner' ).spinner();
 
-			$slide.ixSlideMax();
-
-			$( window ).on( 'resize', function (e) {
-				$slide.ixSlideMax( 'resize' );
-			});
-		});
+		$( '.youtube_video' ).video();
 		$( '.ui_select' ).designSelectBox();
+		
+	 
+ 	$('.option_select_list li').click(function(){
+ 		$(this).closest('.option_layer').removeClass('sub_open');
+ 	});
+
+
+ 	$('.option_close').on("click",function() {
+ 		$('.order_layer').removeClass('open');
+ 		$('.option_layer').removeClass('sub_open');
+ 	});
+
+ 	$(document).on('click', function(){
+ 		if($('.ui_select').hasClass('open')){
+ 			$('.option_layer').addClass('sub_open');
+ 		}else{
+ 			$('.option_layer').removeClass('sub_open');
+ 		}
+ 	});
+
+
+
+
+
+
+	$(window).scroll(function() {
+ 		header_bg();
+ 	});
+	/*헤더 배경추가(top값이 0이아닌경우)*/
+	function header_bg(){
+		var winP = $(window).scrollTop();
+		if(winP > 0){
+			$('#header').addClass('scroll');
+		}else{
+			$('#header').removeClass('scroll');
+		}
+	}
+	
+	var model = /*[[${prd}]]*/,
+	memberMap = {
+		id: /*[[${memberMap.id}]]*/,
+		name: /*[[${memberMap.name}]]*/,
+		cstmid: /*[[${memberMap.cstmid}]]*/,
+		residno1: /*[[${memberMap.residno1}]]*/,
+		gendDvCd: /*[[${memberMap.gendDvCd}]]*/,
+		phoneNo1: /*[[${memberMap.phoneNo1}]]*/
+	};
+	
+	AP.productDetail.setDefaultData(model, memberMap);
+
+
 	</script>
 </th:block>
 

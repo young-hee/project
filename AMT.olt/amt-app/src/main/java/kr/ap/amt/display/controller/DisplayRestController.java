@@ -51,31 +51,22 @@ public class DisplayRestController extends AbstractController {
      * @param displayMenuId
      * @return
      */
-	@RequestMapping({"/prodList/{displayMenuId}", "/prodList/{displayMenuId}/preview"})
-    @ResponseBody
-    public ResponseEntity<?> prodList( RequestDisplay requestDisplay, @PathVariable String displayMenuId, String previewKey, String previewDate) {
-        
+	@RequestMapping({ "/prodList/{displayMenuId}", "/prodList/{displayMenuId}/preview" })
+	@ResponseBody
+	public ResponseEntity<?> prodList(RequestDisplay requestDisplay, @PathVariable String displayMenuId,
+			String previewKey, String previewDate) {
+
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
 		try {
-			OnlineProdList filterableOnlineProdList
-				= displayApi.getMenuPageProdList(
-				APConstant.EH_DISPLAY_MENU_SET_ID
-				, displayMenuId
-				, previewKey
-				, previewDate != null ? sf.parse(previewDate) : null
-				, false
-				, requestDisplay.getProdSort()
-				, requestDisplay.getOffset()
-				, requestDisplay.getLimit()
-				, requestDisplay.getIncludeFilters()
-				, requestDisplay.getDisplayCateDepth()
-				, requestDisplay.getDisplayCate()
-				, requestDisplay.getBrand()
-				, requestDisplay.getFlag()
-				, requestDisplay.getAttr()
-				, requestDisplay.getPriceRange());
+			OnlineProdList filterableOnlineProdList = displayApi.getMenuPageProdList(APConstant.AP_DISPLAY_MENU_SET_ID,
+					displayMenuId, previewKey, previewDate != null ? sf.parse(previewDate) : null, false,
+					requestDisplay.getProdSort(), requestDisplay.getOffset(), requestDisplay.getLimit(),
+					requestDisplay.getIncludeFilters(), requestDisplay.getDisplayCateDepth(),
+					requestDisplay.getDisplayCate(), requestDisplay.getBrand(), requestDisplay.getFlag(),
+					requestDisplay.getAttr(), requestDisplay.getPriceRange());
+
 			if (filterableOnlineProdList == null) {
 				throw new Exception();
 			}
@@ -86,7 +77,7 @@ public class DisplayRestController extends AbstractController {
 			result.put("errorData", e);
 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
 		}
-    }
+	}
 	
 	/**
 	 * 메뉴페이지코너정보조회
@@ -105,7 +96,7 @@ public class DisplayRestController extends AbstractController {
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
         	List <Corner> cornerList = displayApi.getMenuPageCorners(
-        		APConstant.EH_DISPLAY_MENU_SET_ID
+        		APConstant.AP_DISPLAY_MENU_SET_ID
 				, displayMenuId
 				, previewKey
 				, previewDate != null ? sf.parse(previewDate) : null
@@ -155,7 +146,7 @@ public class DisplayRestController extends AbstractController {
 				}
 			}
 			
-        	List <Corner> cornerList = displayApi.getMenuPageCorners(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId, previewKey, previewDate != null ? sf.parse(previewDate) : null, rd.getCornerIds(), rd.isExcludeSoldOut());
+        	List <Corner> cornerList = displayApi.getMenuPageCorners(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId, previewKey, previewDate != null ? sf.parse(previewDate) : null, rd.getCornerIds(), rd.isExcludeSoldOut());
         	for (Corner c : cornerList) {
 				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
 			}
@@ -228,7 +219,6 @@ public class DisplayRestController extends AbstractController {
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
         }
     }
-	
 	
 	/**
 	 * 프로모션 상품목록
@@ -643,7 +633,7 @@ public class DisplayRestController extends AbstractController {
 			DateFormat dateFormat = new SimpleDateFormat("Z");
 			String timeZone = dateFormat.format(new Date());
 
-			List <ShoppingMarkByDateSearchResult> shoppingHistoryList = shoppingmarkApi.getShoppingHistoriesByDate(getMemberSn(), APConstant.EH_DISPLAY_MENU_SET_ID, 3, 100, timeZone);
+			List <ShoppingMarkByDateSearchResult> shoppingHistoryList = shoppingmarkApi.getShoppingHistoriesByDate(getMemberSn(), APConstant.AP_DISPLAY_MENU_SET_ID, 3, 100, timeZone);
 			result.put("shoppingHistoryList", shoppingHistoryList);
 			
 			return ResponseEntity.ok(result);
@@ -668,21 +658,21 @@ public class DisplayRestController extends AbstractController {
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			
 			String cornerIds = "M02_prod_types_p.1";
-			List<Corner> corners = displayApi.getMenuPageCorners(APConstant.EH_DISPLAY_MENU_SET_ID, "prod_types", previewKey, previewDate != null ? sf.parse(previewDate) : null, cornerIds, false);
+			List<Corner> corners = displayApi.getMenuPageCorners(APConstant.AP_DISPLAY_MENU_SET_ID, "prod_types", previewKey, previewDate != null ? sf.parse(previewDate) : null, cornerIds, false);
         	
         	for (Corner c : corners) {
 				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
 			}
         	
         	cornerIds = "M02_prod_lines_p.1,M02_prod_lines_p.2";
-        	corners = displayApi.getMenuPageCorners(APConstant.EH_DISPLAY_MENU_SET_ID, "prod_lines", previewKey, previewDate != null ? sf.parse(previewDate) : null, cornerIds, false);
+        	corners = displayApi.getMenuPageCorners(APConstant.AP_DISPLAY_MENU_SET_ID, "prod_lines", previewKey, previewDate != null ? sf.parse(previewDate) : null, cornerIds, false);
         	
         	for (Corner c : corners) {
 				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
 			}
         	
         	cornerIds = "M02_prod_thema_p.1,M02_prod_thema_p.2";
-        	corners = displayApi.getMenuPageCorners(APConstant.EH_DISPLAY_MENU_SET_ID, "prod_thema", previewKey, previewDate != null ? sf.parse(previewDate) : null, cornerIds, false);
+        	corners = displayApi.getMenuPageCorners(APConstant.AP_DISPLAY_MENU_SET_ID, "prod_thema", previewKey, previewDate != null ? sf.parse(previewDate) : null, cornerIds, false);
         	
         	for (Corner c : corners) {
 				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());

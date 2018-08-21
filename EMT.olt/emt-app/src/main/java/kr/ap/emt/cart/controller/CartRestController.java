@@ -140,7 +140,7 @@ public class CartRestController extends CartBaseController{
 		return ResponseEntity.ok(result);
 	}
 
-	/*
+	/**
 	 * 단일삭제(단품상품)
 	 * @param cartSn
 	 * @param cartProdSn
@@ -230,6 +230,14 @@ public class CartRestController extends CartBaseController{
 
 	/**
 	 * 매장정보(재고)찾기
+	 * @param regularStoreSearchYn
+	 * @param keyword
+	 * @param latitude
+	 * @param longitude
+	 * @param radius
+	 * @param offSet
+	 * @param limit
+	 * @param sortBy
 	 * @return
 	 */
 	@PostMapping("/takeoutStore")
@@ -295,6 +303,7 @@ public class CartRestController extends CartBaseController{
 
 	/**
 	 * 단골 매장 등록
+	 * @param storeSn
 	 * @return
 	 */
 	@PostMapping("/addTakeoutStore")
@@ -320,6 +329,7 @@ public class CartRestController extends CartBaseController{
 
 	/**
 	 * 단골 매장 취소
+	 * @param storeSn
 	 * @return
 	 */
 	@PostMapping("/delTakeoutStore")
@@ -355,6 +365,8 @@ public class CartRestController extends CartBaseController{
 
 	/**
 	 * 매장선택 변경
+	 * @param cartSn
+	 * @param storeSn
 	 * @return
 	 */
 	@PutMapping("/changeStore")
@@ -457,7 +469,11 @@ public class CartRestController extends CartBaseController{
 		return ResponseEntity.ok(result);
 	}
 
-	/* 일반상품 */
+	/**
+	 * 일반상품
+	 * @param cartStorePickupOnlineProdExList
+	 * @return
+	 */
 	private List<ProdInvtEx> getProdInvtExList( List<CartOnlineProdEx> cartStorePickupOnlineProdExList) {
 		List<ProdInvtEx> prodInvtExList = new ArrayList<>();
 		for(CartOnlineProdEx cartOnlineProdEx : cartStorePickupOnlineProdExList ){
@@ -471,7 +487,11 @@ public class CartRestController extends CartBaseController{
 		return prodInvtExList;
 	}
 
-	/* M+N, 동시구매 프로모션 상품 */
+	/**
+	 * M+N, 동시구매 프로모션 상품
+	 * @param cartStorePickupOnlineProdExList
+	 * @return
+	 */
 	private List<ProdInvtEx> getPromoProdInvtExList( List<CartPromoEx> cartStorePickupOnlineProdExList) {
 		List<ProdInvtEx> prodInvtExList = new ArrayList<>();
 		for(CartPromoEx cartPromoEx : cartStorePickupOnlineProdExList ){
@@ -732,6 +752,12 @@ public class CartRestController extends CartBaseController{
 		return ResponseEntity.ok(result);
 	}
 
+	/**
+	 * 장바구니 상품 갯수
+	 * @param result
+	 * @param cartSn
+	 * @return
+	 */
 	private boolean setCartCount(HashMap<String, Object> result, Long cartSn) {
 		if (cartSn != 0L) {
 			CartProdCountInfo cartProdCountInfo = cartApi.getCartProdCount(cartSn);

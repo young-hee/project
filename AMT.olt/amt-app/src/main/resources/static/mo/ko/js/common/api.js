@@ -239,12 +239,6 @@
 		getOrderPage : { path: '/cs/getOrderPage', method : 'GET'},
 
 		/**
-		 * 상품 *************************************************************
-		 */
-
-		getReviewList : {path : '/product/api/getReviewList', method : 'GET'},
-
-		/**
 		 * sweetshot *************************************************************
 		 */
 
@@ -253,10 +247,60 @@
 
 		/**
 		 * 전시 *************************************************************
-		 */
+		 * param
+		 * flag -
+		 * 	신상품 : icon_reco_new
+		 * 	베스트 : icon_reco_best_w
+		 * 	온라인전용: icon_reco_online
+		 * 	투데이핫딜: icon_type_sp_today
+		 * 	한정판특가: icon_type_sp_qty
+		 *  대카테고리 추천 : icon_reco_best_w + 카테고리 필터(displayCate)
+		 *  온라인전용 추천 : icon_reco_online,icon_reco_best_w
+		 * 	뷰티포인트샵 - 인기상품 : icon_reco_hot,icon_membership1
+		 *  진주알스토어 - 인기상품 : icon_reco_hot,icon_point_activity
+		 * includeFilters
+		 * 	- 필터용 정보들도 포함해서 내려보내야 하는지
+		 *  - true / false
+		 * displayCate
+		 * 	- display_cate_sn. 예) “1,50”
+		 * brand
+		 * 	- brand_sn. 예) “2,995”
+		 * attr
+		 * 	- “color=red,color=blue,size=L,size=XL”
+		 * priceRange
+		 * 	- 예1) “10000,”- 10000~ 예2) “2000,8000”- 2000~8000 예3) “,50000”- ~50000
+		 * */
+		//페이지별 상품목록
+		itemList: { path:'/display/prodList/{displayMenuId}', method: 'POST' , data: {
+				flag: null, //icon_pr_prod (행사상품여부)
+				attr: null, //검색필터, 컬러, 피부톤 등 (color=red,blue|size=L,XL)
+				prodSort: null, //판매순(Bestselling), 신상품순(NewProd), 높은 가격순(HighestPrice), 낮은가격순(LowestPrice), 상품평순(MostProdReview)
+				offset: 0,
+				limit: 10,
+				includeFilters:false,
+				displayCateDepth: 0,
+				displayCate:null,
+				brand:null,
+				priceRange:null
+			}
+		},
 
-		// 상품리스트 ----------------------------------------------------------------- dummy
-		productList: { path: '/mo/ko/dummy-apis/test.json', method: 'GET' },
+		//플래그상품목록
+		flaggedItemList: { path:'/display/flaggedProdList', method: 'POST' , data: {
+				flags: null, //대카(icon_reco_best_w), 온라인 전용(icon_reco_online,icon_reco_best_w), 뷰티포인트샵(icon_reco_hot,icon_membership1), (main 플래그 신상품 (icon_reco_new), 핫딜( icon_type_sp_today)베스트(icon_reco_best_w)
+				flag: null,
+				prodListUnit : 'OnlineProd',
+				prodSort: 'NewProd', //판매순(Bestselling), 신상품순(NewProd), 높은 가격순(HighestPrice), 낮은가격순(LowestPrice), 상품평순(MostProdReview)
+				offset: 0,
+				limit: 5, //대카(5), 온라인전용(5), 뷰티포인트(10)
+				includeFilters:false,
+				displayCateDepth: 0,
+				displayCate : null, //대카추천상품일 경우만 입력
+				brand:null,
+				attr:null,
+				priceRange:null
+			}
+		},
 		
 		/**
 	     * 상품 *************************************************************
@@ -279,8 +323,6 @@
 				limit: 20 //(필수)
 			}
         },
-
-		itemList: { path:'/display/prodList/{displayMenuId}', method: 'POST'},
 
 		//쇼핑히스토리 전체삭제
 		deleteShoppingHistory: { path:'/display/deleteShoppingMarksAll', method: 'GET'},
@@ -357,6 +399,13 @@
 				memberSn: null //회원일련번호
 			}},
 
+		//아티클댓글 수정
+		updateArticleComment : { path:'/display/updateArticleComment', method: 'POST', data: {
+			articleSn: null, //아티클일련번호
+			articleCommentSn: null, //아티클댓글일련번호
+			articleCommentBodyText: '' //댓글내용
+		}},
+			
 		//아티클댓글 삭제
 		deleteArticleComment : { path:'/display/deleteArticleComment', method: 'POST', data: {
 				articleSn: null, //아티클일련번호
@@ -364,7 +413,33 @@
 				memberSn: null //회원일련번호
 			}},
 
-
+		//아티클댓글 추천
+		recommendArticleComment : { path:'/display/recommendArticleComment', method: 'POST', data: {
+			articleSn: null, //아티클일련번호
+			articleCommentSn: null, //아티클댓글일련번호
+			memberSn: null //회원일련번호
+		}},
+		
+		//아티클댓글 신고
+		reportArticleComment : { path:'/display/reportArticleComment', method: 'POST', data: {
+			articleSn: null, //아티클일련번호
+			articleCommentSn: null, //아티클댓글일련번호
+			memberSn: null //회원일련번호
+		}},
+		//아티클연관상품목록
+		articleRelated: { path:'/display/articleRelated', method: 'POST' , data: {
+				articleSn: null, //아티클일련번호
+				offset: 0,
+				limit: 20,
+				includeFilters:false, 
+				displayCateDepth: 0,
+				displayCate:null,
+				brand:null,
+				flag:null,
+				attr:null,
+				priceRange:null
+			}
+		},		
 		/**
 		 * test *************************************************************
 		 */

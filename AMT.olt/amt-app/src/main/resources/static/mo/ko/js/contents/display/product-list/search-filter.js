@@ -50,10 +50,6 @@
 			this._setPrice();
 		},
 
-		delete: function () {
-
-		},
-
 		/** =============== Private Methods ============== */
 		_close: function () {
 			this._modal.close();
@@ -61,6 +57,10 @@
 
 		_clear: function () {
 			this._$modal.find( '.ui_accordion' ).accordion( 'clear' );
+			this._$modal.find( '.ui_accordion > dl > dt > button' ).off( 'click' );
+			this._$modal.find( '.btn_wrap a' ).off( 'click' );
+			this._$modal.find( '.price li a' ).off( 'click' );
+			this._$modal.find( '.price' ).find( 'input' ).off( 'focusin focusout' );
 		},
 
 		_reset: function () {

@@ -10,10 +10,11 @@
 
 		//결제금액 영역 그리기
 		function amtPcurInit() {
-			var ordHistEx = /*[[${ordEx.ordHistEx}]]*/ '0', // 최종결제금액
+			var ordHistEx = /*[[${ordEx.ordHistEx}]]*/ null, // 최종결제금액
 				ordAmtMap = /*[[${ordAmtMap}]]*/ null,
 				ordCntMap = /*[[${ordCntMap}]]*/ null,
-				apMember = /*[[${apMember}]]*/ null;
+				depositAvailAmt = /*[[${ordEx.depositAvailAmt}]]*/ 0,
+				isApMember = /*[[${isApMember}]]*/ null;
 
 			/**
 			 * 총결제금액
@@ -23,10 +24,11 @@
 				ordHistEx : ordHistEx,
 				ordAmtMap : ordAmtMap,
 				ordCntMap : ordCntMap,
-				apMember : apMember
+				isApMember : isApMember
 			});
 			$('#amtPcur').html(html);
 			$("[name=finalPamtPcur]").val(ordHistEx.finalPamtPcur);
+			$("[name=depositAvailAmt]").val(depositAvailAmt);
 			$("#orderPayment").html($B.string.numberFormat(ordHistEx.finalPamtPcur)+'원 결제하기');
 		}
 	</script>

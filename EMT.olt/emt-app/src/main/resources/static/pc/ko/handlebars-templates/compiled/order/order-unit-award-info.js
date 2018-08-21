@@ -27,7 +27,9 @@ this["AP"]["handlebars"]["order"]["order-unit-award-info"] = Handlebars.template
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depths[1] != null ? depths[1].ordPromoAwardSectionEx : depths[1])) != null ? stack1.awardMethodCode : stack1),"==","All",{"name":"xif","hash":{},"fn":container.program(5, data, 0, blockParams, depths),"inverse":container.program(10, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "									<label for=\""
     + alias4(alias3((depth0 != null ? depth0.ordUnitAwardSn : depth0), depth0))
-    + "\">\n										<span class=\"img\"><img ap:src=\"@{/images/cart/ico_beautypoint.png}\" alt=\"\"></span>\n										<span class=\"title\">"
+    + "\">\n										<span class=\"img\"><img src=\""
+    + alias4((helpers.absolutePath || (depth0 && depth0.absolutePath) || alias2).call(alias1,"/images/cart/ico_beautypoint.png",{"name":"absolutePath","hash":{},"data":data}))
+    + "\" alt=\"\"></span>\n										<span class=\"title\">"
     + alias4((helpers.pointTypeSwitch || (depth0 && depth0.pointTypeSwitch) || alias2).call(alias1,(depth0 != null ? depth0.pointTypeCode : depth0),{"name":"pointTypeSwitch","hash":{},"data":data}))
     + " "
     + alias4(alias3((depth0 != null ? depth0.savingPoint : depth0), depth0))
@@ -223,16 +225,18 @@ this["AP"]["handlebars"]["order"]["order-unit-award-info"] = Handlebars.template
 
   return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.ordUnitAwardExCouponList : depth0),{"name":"each","hash":{},"fn":container.program(34, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"34":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.lambda, alias4=container.escapeExpression;
 
   return "							<li>\n								<span class=\"check_wrap\">\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depths[1] != null ? depths[1].ordPromoAwardSectionEx : depths[1])) != null ? stack1.awardMethodCode : stack1),"==","All",{"name":"xif","hash":{},"fn":container.program(35, data, 0, blockParams, depths),"inverse":container.program(40, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depths[1] != null ? depths[1].ordPromoAwardSectionEx : depths[1])) != null ? stack1.awardMethodCode : stack1),"==","All",{"name":"xif","hash":{},"fn":container.program(35, data, 0, blockParams, depths),"inverse":container.program(40, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "									<label for=\""
-    + alias2(alias1((depth0 != null ? depth0.ordUnitAwardSn : depth0), depth0))
-    + "\">\n										<span class=\"img\"><img ap:src=\"@{/images/cart/ico_beautypoint.png}\" alt=\"\"></span>\n										<span class=\"title\">"
-    + alias2(alias1((depth0 != null ? depth0.couponName : depth0), depth0))
+    + alias4(alias3((depth0 != null ? depth0.ordUnitAwardSn : depth0), depth0))
+    + "\">\n										<span class=\"img\"><img src=\""
+    + alias4((helpers.absolutePath || (depth0 && depth0.absolutePath) || alias2).call(alias1,"/images/cart/ico_coupon.png",{"name":"absolutePath","hash":{},"data":data}))
+    + "\" alt=\"\"></span>\n										<span class=\"title\">"
+    + alias4(alias3((depth0 != null ? depth0.couponName : depth0), depth0))
     + " "
-    + alias2(alias1((depth0 != null ? depth0.couponTypeCode : depth0), depth0))
+    + alias4(alias3((depth0 != null ? depth0.couponTypeCode : depth0), depth0))
     + "</span>\n									</label>\n								</span>\n							</li>\n";
 },"35":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
@@ -289,16 +293,18 @@ this["AP"]["handlebars"]["order"]["order-unit-award-info"] = Handlebars.template
 
   return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.ordUnitAwardExGiftcardList : depth0),{"name":"each","hash":{},"fn":container.program(44, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"44":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.lambda, alias4=container.escapeExpression;
 
   return "							<li>\n								<span class=\"check_wrap\">\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depths[1] != null ? depths[1].ordPromoAwardSectionEx : depths[1])) != null ? stack1.awardMethodCode : stack1),"==","All",{"name":"xif","hash":{},"fn":container.program(45, data, 0, blockParams, depths),"inverse":container.program(50, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depths[1] != null ? depths[1].ordPromoAwardSectionEx : depths[1])) != null ? stack1.awardMethodCode : stack1),"==","All",{"name":"xif","hash":{},"fn":container.program(45, data, 0, blockParams, depths),"inverse":container.program(50, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "									<label for=\""
-    + alias2(alias1((depth0 != null ? depth0.ordUnitAwardSn : depth0), depth0))
-    + "\">\n										<span class=\"img\"><img ap:src=\"@{/images/cart/ico_beautypoint.png}\" alt=\"\"></span>\n										<span class=\"title\">"
-    + alias2(alias1((depth0 != null ? depth0.giftcardName : depth0), depth0))
+    + alias4(alias3((depth0 != null ? depth0.ordUnitAwardSn : depth0), depth0))
+    + "\">\n										<span class=\"img\"><img src=\""
+    + alias4((helpers.absolutePath || (depth0 && depth0.absolutePath) || alias2).call(alias1,"/images/cart/ico_giftcard.png",{"name":"absolutePath","hash":{},"data":data}))
+    + "\" alt=\"\"></span>\n										<span class=\"title\">"
+    + alias4(alias3((depth0 != null ? depth0.giftcardName : depth0), depth0))
     + " "
-    + alias2(alias1((depth0 != null ? depth0.giftcardBaseAmt : depth0), depth0))
+    + alias4(alias3((depth0 != null ? depth0.giftcardBaseAmt : depth0), depth0))
     + "</span>\n									</label>\n								</span>\n							</li>\n";
 },"45":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;

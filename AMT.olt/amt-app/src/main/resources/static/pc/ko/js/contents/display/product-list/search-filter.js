@@ -41,7 +41,11 @@
 
 		/** =============== Private Methods ============== */
 		_reset: function () {
+			this._$filter.find( 'input' ).prop( 'checked', false );
+			this._$filter.find( '.price .direct_entry input' ).val( '' );
+			this._dataReset();
 
+			this._apply();
 		},
 
 		_dataReset: function () {
@@ -62,6 +66,8 @@
 
 			// 더보기
 			this._$filter.find( '.btn_src_more' ).on( 'click', function () {
+				e.preventDefault();
+
 				var $area = $( this ).siblings( '.leg_tgArea' );
 				$( this ).toggleClass( 'on' );
 				if ( $( this ).hasClass( 'on' )) {
@@ -73,8 +79,9 @@
 
 			// 필터 항목
 			this._$filter.find( 'dl:not(.price) li input' ).on( 'change', function (e) {
+				e.preventDefault();
+
 				var $input = $( e.currentTarget ),
-					value = $input.data( 'value' ),
 					index = $input.closest( 'dl' ).index();
 
 				$input.closest( 'ul' ).find( 'li' ).each(function ( idx, target ) {
@@ -84,6 +91,8 @@
 						this._searchFilterData.addAttrs[index].addAttrVals[idx].selected = false;
 					}
 				}.bind( this ));
+
+				this._apply();
 			}.bind( this ));
 		},
 
@@ -92,6 +101,8 @@
 
 			// 가격
 			this._$filter.find( '.price ul input' ).on( 'change', function (e) {
+				e.preventDefault();
+
 				var $input = $( e.currentTarget ),
 					value = $input.data( 'value' ),
 					index = $input.closest( 'dl' ).index(),
@@ -114,8 +125,7 @@
 					}
 				}
 
-
-				e.preventDefault();
+				this._apply();
 			}.bind( this ));
 
 			// 가격 입력
@@ -151,7 +161,7 @@
 						}
 						if ( min || max ) {
 							if ( parseInt( beforePrice ) != parseInt($input.val().replace( /,/g, '' )) ) {
-								this._$filter.find( '.price .btn' ).removeClass( 'on' );
+								this._$filter.find( '.price input' ).prop( 'checked', false );
 							}
 
 							for ( var i = 0; i < priceFilterData.addAttrVals.length; ++i ) {
@@ -167,7 +177,14 @@
 			}.bind( this ));
 
 			this._$filter.find( '.price_search' ).on( 'click', function (e) {
-				this._apply();
+				var min = parseInt( this._$filter.find( '.min' ).val() ),
+					max = parseInt( this._$filter.find( '.max' ).val() );
+				if ( !min && !max ) {
+					AP.modal.alert( '금액을 입력하세요.' );
+				} else {
+					this._apply();
+				}
+
 			}.bind( this ));
 		},
 
@@ -185,8 +202,9 @@
 		},
 
 		_apply: function () {
-			var min = parseInt( this._$filter.find( '.min' ).val() ),
-				max = parseInt( this._$filter.find( '.max' ).val() );
+			var min = parseInt( this._$filter.find( '.min' ).val().replace( /,/g, '' ) || ''),
+				max = parseInt( this._$filter.find( '.max' ).val().replace( /,/g, '' ) || '' );
+
 			var isComparePrice = this._comparePrice( min, max );
 			if ( isComparePrice ) {
 				AP.display.searchFilterData = this._searchFilterData;

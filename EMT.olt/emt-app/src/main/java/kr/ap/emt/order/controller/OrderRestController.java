@@ -105,98 +105,6 @@ public class OrderRestController extends OrderBaseController {
 	}
 
 	/**
-	 * 기본배송지 목록조회
-	 *
-	 * @return
-	 */
-	@GetMapping("/orderShipAddress")
-	public ResponseEntity<?> orderShipAddress(Long memberSn) {
-		HashMap<String, Object> result = new HashMap<String, Object>();
-        if(memberSn != null){
-            ShipAddressInfo shipAddressInfo = new ShipAddressInfo();
-            List<ShipAddressInfo> sa = apApi.getShipAddresses(memberSn);
-            if(sa.size() > 0 ){
-                for(ShipAddressInfo si : sa){
-                    shipAddressInfo.setShipAddressSn(si.getShipAddressSn());
-                }
-                result.put("shipAddressMethod", "updateShipAddress");
-                result.put("param", shipAddressInfo.getShipAddressSn());
-            }else{
-                result.put("shipAddressMethod", "insertShipAddress");
-            }
-            result.put("result", "success");
-
-        }
-
-		return ResponseEntity.ok(result);
-	}
-
-	/**
-	 * 기본배송지 등록
-	 *
-	 * @return
-	 */
-	@PostMapping("/orderAddAddress")
-	public ResponseEntity<?> orderAddAddress(@Valid OrdReceptChangeDTO ordRcDTO) {
-		HashMap<String, Object> result = new HashMap<String, Object>();
-        if(ordRcDTO != null){
-            PostAndPutShipAddressInfo body = new PostAndPutShipAddressInfo();
-
-            /* 수취인 정보 */
-            EmbeddableName en = new EmbeddableName();
-            EmbeddableAddress ea = new EmbeddableAddress();
-            EmbeddableTel et = new EmbeddableTel();
-
-            en.setName1(ordRcDTO.getRecipientName());
-            ea.setZipCode(ordRcDTO.getRecipientZipCode());
-            ea.setAddress1(ordRcDTO.getRecipientAddress1());
-            ea.setAddress2(ordRcDTO.getRecipientAddress2());
-            et.setPhoneNo(ordRcDTO.getRecipientPhoneNo());
-
-            body.setShipAddressName(ordRcDTO.getRecipientName());	// 배송지명
-            body.setAddresseeName(en);								// 수취인명
-            body.setAddresseeAddress(ea);							// 수취인주소
-            body.setPhoneNo1(et);									// 수취인전화번호1
-
-            apApi.postShipAddress(getMemberSession().getMember_sn(), body);
-            result.put("result", "success");
-        }
-		return ResponseEntity.ok(result);
-	}
-
-	/**
-	 * 기본배송지 수정
-	 * @return
-	 */
-	@PutMapping("/orderUpdateAddress")
-	public ResponseEntity<?> orderUpdateAddress(@Valid OrdReceptChangeDTO ordRcDTO) {
-		HashMap<String, Object> result = new HashMap<String, Object>();
-        if(ordRcDTO != null && ordRcDTO.getShipAddressSn() > 0){
-            PostAndPutShipAddressInfo body = new PostAndPutShipAddressInfo();
-
-            /* 수취인 정보 */
-            EmbeddableName en = new EmbeddableName();
-            EmbeddableAddress ea = new EmbeddableAddress();
-            EmbeddableTel et = new EmbeddableTel();
-
-            en.setName1(ordRcDTO.getRecipientName());
-            et.setPhoneNo(ordRcDTO.getRecipientPhoneNo());
-            ea.setZipCode(ordRcDTO.getRecipientZipCode());
-            ea.setAddress1(ordRcDTO.getRecipientAddress1());
-            ea.setAddress2(ordRcDTO.getRecipientAddress2());
-
-            body.setShipAddressName(ordRcDTO.getRecipientName());	// 배송지명
-            body.setAddresseeName(en);								// 수취인명
-            body.setAddresseeAddress(ea);							// 수취인주소
-            body.setPhoneNo1(et);									// 수취인전화번호1
-
-            apApi.putShipAddress(getMemberSession().getMember_sn(), ordRcDTO.getShipAddressSn(), body);
-            result.put("result", "success");
-        }
-		return ResponseEntity.ok(result);
-	}
-
-	/**
 	 * 결제정보 요청
 	 * @return
 	 */
@@ -269,9 +177,9 @@ public class OrderRestController extends OrderBaseController {
             en.setName1(ordRcDTO.getPurchaserName());
             ea.setAddress1(ordRcDTO.getPurchaserAddress());
             et.setPhoneNo(ordRcDTO.getPurchaserPhoneNo());
-            body.setPurchaserName(en);											// 주문자명
-            body.setPurchaserAddress(ea);										// 주문자주소
-            body.setPurchaserPhoneNo1(et);										// 주문자전화번호1
+            body.setPurchaserName(en);												// 주문자명
+            body.setPurchaserAddress(ea);											// 주문자주소
+            body.setPurchaserPhoneNo1(et);											// 주문자전화번호1
             body.setPurchaserEmailAddress(ordRcDTO.getPurchaserEmailAddress());	// 주문자이메일주소
 
             /** 수취인 정보 */
@@ -279,26 +187,27 @@ public class OrderRestController extends OrderBaseController {
             EmbeddableAddress ea2 = new EmbeddableAddress();
             EmbeddableTel et2 = new EmbeddableTel();
 
-            /** 새로입력 정보*/
             if(StringUtils.isNotBlank(ordRcDTO.getUserName()) && StringUtils.isNotBlank(ordRcDTO.getUserPhoneNo())){
+				/** 새로입력 정보*/
                 en2.setName1(ordRcDTO.getUserName());
                 ea2.setZipCode(ordRcDTO.getUserPostCode());
                 ea2.setAddress1(ordRcDTO.getUserAddress1());
                 ea2.setAddress2(ordRcDTO.getUserAddress2());
                 et2.setPhoneNo(ordRcDTO.getUserPhoneNo());
             }else{
+            	//최근배송지
                 en2.setName1(ordRcDTO.getRecipientName());
                 ea2.setZipCode(ordRcDTO.getRecipientZipCode());
                 ea2.setAddress1(ordRcDTO.getRecipientAddress1());
                 ea2.setAddress2(ordRcDTO.getRecipientAddress2());
                 et2.setPhoneNo(ordRcDTO.getRecipientPhoneNo());
             }
-            body.setRecipientName(en2);											// 수취인명
-            body.setRecipientAddress(ea2);										// 수취인주소
+            body.setRecipientName(en2);												// 수취인명
+            body.setRecipientAddress(ea2);											// 수취인주소
             body.setRecipientPhoneNo1(et2);										// 수취인전화번호1
             body.setRecipientEmailAddress(ordRcDTO.getRecipientEmailAddress());	// 수취인이메일주소
 
-            body.setShipMsg(ordRcDTO.getShipMsg());							// 배송메세지
+            body.setShipMsg(ordRcDTO.getShipMsg());								// 배송메세지
 
             /** 편의점 택백 */
             if (StringUtils.isNotEmpty(ordRcDTO.getcStoreName()) && StringUtils.isNotEmpty(ordRcDTO.getcStorePhoneNo())) {
@@ -324,6 +233,38 @@ public class OrderRestController extends OrderBaseController {
             }
 
             orderApi.ordReceptChange(ordRcDTO.getOrdSn(), body);
+
+            //기본배송지 설정
+			if ((StringUtils.isNotEmpty(ordRcDTO.getLatelyRepShipAddressYn()) 	&& "Y".equals(ordRcDTO.getLatelyRepShipAddressYn()))
+				|| (StringUtils.isNotEmpty(ordRcDTO.getNewRepShipAddressYn()) 	&& "Y".equals(ordRcDTO.getNewRepShipAddressYn()))) {
+
+				List<ShipAddressInfo> shipAddressInfoList = apApi.getShipAddresses(getMemberSn());
+
+				String flag = "Insert";
+				Long shipAddressSn = 0L;
+				if (shipAddressInfoList != null && shipAddressInfoList.size() > 0) {
+					//업데이트
+					for (ShipAddressInfo si : shipAddressInfoList) {
+						if ("Y".equals(si.getRepShipAddressYn())) {
+							shipAddressSn = si.getShipAddressSn();
+							flag = "Update";
+						}
+					}
+				}
+
+				PostAndPutShipAddressInfo postAndPutShipAddressInfo = new PostAndPutShipAddressInfo();
+
+				postAndPutShipAddressInfo.setShipAddressName(body.getRecipientName().getName1());		// 배송지명
+				postAndPutShipAddressInfo.setAddresseeName(body.getRecipientName());					// 수취인명
+				postAndPutShipAddressInfo.setAddresseeAddress(body.getRecipientAddress());				// 수취인주소
+				postAndPutShipAddressInfo.setPhoneNo1(body.getPurchaserPhoneNo1());					// 수취인전화번호1
+
+				if ("Insert".equals(flag)) {
+					apApi.postShipAddress(getMemberSession().getMember_sn(), postAndPutShipAddressInfo);
+				} else {
+					apApi.putShipAddress(getMemberSession().getMember_sn(), shipAddressSn, postAndPutShipAddressInfo);
+				}
+			}
 
             memberSession.setOrdReceptChange(body);
             setMemberSession(memberSession);
@@ -375,10 +316,7 @@ public class OrderRestController extends OrderBaseController {
             setMemberSession(memberSession);
 
             result.put("applyCouponExList", ordRc.getApplyCouponExList());
-            result.put("ordHistEx", ordRc.getOrdHistEx());
-            result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
-            result.put("ordCntMap", makeOrdCntList(ordRc));
-            result.put("apMember", apApi.getMemberInfo(getMemberSn()));
+			finalPriceAmtPcur(result, ordRc);
 
         }
 		return ResponseEntity.ok(result);
@@ -424,10 +362,7 @@ public class OrderRestController extends OrderBaseController {
             memberSession.setOrdReceptChange(body);
             setMemberSession(memberSession);
 
-            result.put("ordHistEx", ordRc.getOrdHistEx());
-            result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
-            result.put("ordCntMap", makeOrdCntList(ordRc));
-            result.put("apMember", apApi.getMemberInfo(getMemberSn()));
+			finalPriceAmtPcur(result, ordRc);
         }
 		return ResponseEntity.ok(result);
 	}
@@ -467,10 +402,7 @@ public class OrderRestController extends OrderBaseController {
             memberSession.setOrdReceptChange(body);
             setMemberSession(memberSession);
 
-            result.put("ordHistEx", ordRc.getOrdHistEx());
-            result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
-            result.put("ordCntMap", makeOrdCntList(ordRc));
-            result.put("apMember", apApi.getMemberInfo(getMemberSn()));
+			finalPriceAmtPcur(result, ordRc);
         }
 		return ResponseEntity.ok(result);
 	}
@@ -515,10 +447,7 @@ public class OrderRestController extends OrderBaseController {
             memberSession.setOrdReceptChange(body);
             setMemberSession(memberSession);
 
-            result.put("ordHistEx", ordRc.getOrdHistEx());
-            result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
-            result.put("ordCntMap", makeOrdCntList(ordRc));
-            result.put("apMember", apApi.getMemberInfo(getMemberSn()));
+			finalPriceAmtPcur(result, ordRc);
         }
 		return ResponseEntity.ok(result);
 	}
@@ -558,5 +487,14 @@ public class OrderRestController extends OrderBaseController {
 			membershipPointSelectsList.add(membershipPointSelect);
 			body.setMembershipPointSelectList(membershipPointSelectsList);
 		}
+	}
+
+	private void finalPriceAmtPcur(HashMap<String, Object> result, OrdEx ordRc) {
+		result.put("ordHistEx", ordRc.getOrdHistEx());
+		result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
+		result.put("ordCntMap", makeOrdCntList(ordRc));
+
+		result.put("depositAvailAmt", ordRc.getDepositAvailAmt());
+		result.put("isApMember", apApi.getMemberInfo(getMemberSn()) != null ? true : false);
 	}
 }

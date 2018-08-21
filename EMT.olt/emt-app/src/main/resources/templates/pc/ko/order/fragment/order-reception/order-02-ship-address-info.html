@@ -78,7 +78,7 @@
 									th:text="${ordShipAddressExInfo.recipientPhoneNo1.phoneNo}">010-0000-0000</dd>
 							</dl>
 							<span class="check_wrap basic">
-								<input type="checkbox" th:onclick="|addRepShipAddress(this,'${memberSn}','latelyRepShipAddress')|" value="N"><label for="latelyRepShipAddress">기본배송지로 설정</label>
+								<input type="checkbox" id="latelyRepShipAddress" name="latelyRepShipAddressYn" th:onclick="|setRepShipAddress(this,'latelyRepShipAddress')|" value="N"><label for="latelyRepShipAddress">기본배송지로 설정</label>
 							</span>
 							<input type="hidden" id="recipientName" th:value="${ordShipAddressExInfo.recipientName.name1}">
 							<input type="hidden" id="recipientPhoneNo" th:value="${ordShipAddressExInfo.recipientPhoneNo1.phoneNo}">
@@ -219,7 +219,7 @@
 							</dd>
 						</dl>
 						<span class="check_wrap basic">
-							<input type="checkbox" id="newRepShipAddress" name="repShipAddressYn" th:onclick="|addRepShipAddress(this, '${memberSn}','newRepShipAddress')|" value="N"><label for="newRepShipAddress">기본배송지로 설정</label>
+							<input type="checkbox" id="newRepShipAddress" name="newRepShipAddressYn" th:onclick="|setRepShipAddress(this, 'newRepShipAddress')|" value="N"><label for="newRepShipAddress">기본배송지로 설정</label>
 						</span>
 					</div>
 				</fieldset>
@@ -522,92 +522,18 @@
 			}
 		}
 
-		/* 기본 배송지 데이터 검증 */
-		function addRepShipAddress(obj, memberSn, repShipAddress) {
+		/* 기본배송지로 설정 */
+		function setRepShipAddress(obj, repShipAddress) {
 			if ($(obj).is(':checked')) {
 				if('newRepShipAddress' == repShipAddress){
 					//새로입력 -> 기본배송지로 설정
-					var $form = $( 'form.order-validate' );
-					//$form.validate().settings.ignore = "";
-					if ($form.valid()) {
-						$('[name=recipientName]').attr('value',$('[name=userName]').val());
-						$('[name=recipientPhoneNo]').attr('value',$('[name=userPhoneNo]').val());
-						$('[name=recipientZipCode]').attr('value',$('[name=userPostCode]').val());
-						$('[name=recipientAddress1]').attr('value',$('[name=userAddress1]').val());
-						$('[name=recipientAddress2]').attr('value',$('[name=userAddress2]').val());
-						$('[name=repShipAddressYn]').attr('value','Y');
-						orderShipAddress(memberSn);
-					}else{
-						$('[id=' + repShipAddress + ']:checked').prop('checked', false);
-					}
+					$('[name=newRepShipAddressYn]').attr('value','Y');
 				}else{
 					//최근배송지 -> 기본배송지로 설정
-					orderShipAddress(memberSn);
+					$('[name=latelyRepShipAddressYn]').attr('value','Y');
 				}
 			}
 		}
 
-		/* 기본 배송지 조회 */
-		function orderShipAddress(memberSn) {
-			AP.api.orderShipAddress({}, { memberSn: memberSn }).done(function (data) {
-				if (data.result == "success"){
-					if (data.shipAddressMethod == "insertShipAddress"){
-						orderAddAddress();
-					} else if(data.shipAddressMethod == "updateShipAddress" && data.param != null){ // data.para : shipAddressSn
-						orderUpdateAddress(data.param);
-					}
-				}
-			}).fail(function(xhr, textStatus, errorThrown) {
-				if (xhr.errorCode == 0) {
-					AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
-				} else {
-					AP.modal.alert(xhr.errorMessage);
-				}
-			}).always(function () {
-			});
-		}
-
-		/* 기본 배송지 등록*/
-		function orderAddAddress() {
-			var $form = $('form.order-validate');
-			var formData = AP.common.getFormData($form);
-			$.ajaxSettings.traditional = true;
-			AP.api.orderAddAddress({}, formData).done(function(data) {
-				//성공
-				if (data.result == "success"){
-					AP.modal.alert("기본 배송지로 등록 되었습니다.");
-				}
-			}).fail(function(xhr, textStatus, errorThrown) {
-				if (xhr.errorCode == 0) {
-					AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
-				} else {
-					AP.modal.alert(xhr.errorMessage);
-				}
-			}).always(function() {
-				//성공, 실패
-			});
-		}
-
-		/* 기본 배송지 수정*/
-		function orderUpdateAddress(shipAddressSn) {
-			var $form = $('form.order-validate');
-			var formData = AP.common.getFormData($form);
-			formData['shipAddressSn'] = shipAddressSn;
-			$.ajaxSettings.traditional = true;
-			AP.api.orderUpdateAddress({}, formData).done(function(data) {
-				//성공
-				if (data.result == "success"){
-					AP.modal.alert("기본 배송지가 변경되었습니다.");
-				}
-			}).fail(function(xhr, textStatus, errorThrown) {
-				if (xhr.errorCode == 0) {
-					AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
-				} else {
-					AP.modal.alert(xhr.errorMessage);
-				}
-			}).always(function() {
-				//성공, 실패
-			});
-		}
 	</script>
 </dl>

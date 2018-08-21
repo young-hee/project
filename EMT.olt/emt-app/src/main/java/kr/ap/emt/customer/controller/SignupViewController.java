@@ -54,7 +54,6 @@ public class SignupViewController extends AbstractController {
 		sb.insert(6, ".");
 		sb.insert(4, ".");
 		
-		sb.toString();
 		model.addAttribute("mbrJoinDt", sb.toString());
 		
 		return "customer/customernew/member-join.4.3";

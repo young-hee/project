@@ -51,7 +51,6 @@ public class MyBenefitViewController extends AbstractController {
 		model.addAttribute("immCnt", immCoupons.size());
 		model.addAttribute("immCoupons", immCoupons);
 		
-		
 		return "my/my-coupon";
 	}
 

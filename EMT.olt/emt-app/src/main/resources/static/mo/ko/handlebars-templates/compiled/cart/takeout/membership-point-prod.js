@@ -280,5 +280,5 @@ this["AP"]["handlebars"]["cart"]["takeout"]["membership-point-prod"] = Handlebar
     + alias3((helpers.numberFormat || (depth0 && depth0.numberFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.bpMembershipEx : depth0)) != null ? stack1.membershipPoints : stack1),{"name":"numberFormat","hash":{},"data":data}))
     + "</strong><span>P</span>\n					</span>\n				</span>\n			</div>\n		</div>\n	</div>\n"
     + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.list : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "</div>";
+    + "</div>\n";
 },"useData":true,"useDepths":true});

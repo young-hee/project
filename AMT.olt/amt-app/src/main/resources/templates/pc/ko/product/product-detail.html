@@ -44,43 +44,59 @@
 					
 					<!--/* 상품 정보 */-->
 					<div class="product_info" th:with="currencySign=${prd.productCount == 1 and prd.products[0].membershipExchOnly == 'Y' ? 'P' : '원'}">
+						
 						<!--/* 기프트 카드 */-->
-						<div class="ui_tooltip gift_card">
-							<button type="button" class="btn_tooltip"><img ap:src="@{/images/product/ico_gift.png}" class="ico" alt="기프트"><strong>기프트카드 최대  1,000원 증정 [~30일까지]</strong> <span>자세히 보기</span></button>
+						<div class="ui_tooltip gift_card" th:if="${prd.onlineProdGift.giftcardTargetYn == 'Y'}">
+							<button type="button" class="btn_tooltip">
+								<img ap:src="@{/images/product/ico_gift.png}" class="ico" alt="기프트">
+								<strong th:text="${prd.onlineProdGift.giftcardTitle}">기프트카드 최대  1,000원 증정 [~30일까지]</strong> 
+								<span>자세히 보기</span>
+							</button>
 							<div class="layer_tooltip">
-								<p class="txt">기간 : 3/6~12 결제완료시, 3월 16일 증정 (포인트결제 제외) 길어지면 여기까지 쭉쭉쭉쭉쭉쭉쭉쭉</p>
+								<p class="txt" th:text="${prd.onlineProdGift.giftcardGuide}"></p>
 							</div>
 						</div>
+						
 						<!--/* 브랜드명 */-->
-						<div class="product_brand"><a href="#none">라네즈 <i class="ico_arr"></i></a></div>
+						<div class="product_brand">
+							<a href="#none">[[${prd.products[0].brandName}]] <i class="ico_arr"></i></a>
+						</div>
 						<!--/* 상품명 */-->
 						<div class="product_name" th:text="${prd.onlineProdName}"></div>
+						
 						<!--/* 상품 설명 */-->
 						<div class="product_desc" th:text="${prd.lineDesc}"></div>
+						
 						<!--/* tag */-->
-						<div class="product_tag">
-							<em>스페셜기프트</em>
-							<span>기프트카드</span>
+						<div class="product_tag" th:if="${#lists.size(prd.onlineProdGift.giftProds) > 0 || prd.onlineProdGift.giftcardTargetYn == 'Y'}" >
+							<em th:if="${#lists.size(prd.onlineProdGift.giftProds) > 0 }" >스페셜기프트</em>
+							<span th:if="${prd.onlineProdGift.giftcardTargetYn == 'Y' }" >기프트카드</span>
 						</div>
+						
 						<!--/* 평점/리뷰 */-->
 						<div class="product_grade">
-							<span class="mark_star_md star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span>
+							<span class="mark_star_md star0" th:if="${prd.reviewScopeAvg == 0}"><span class="sr_only">구매 평점 별 5개 중 0개</span></span>
+							<span class="mark_star_md star1" th:if="${prd.reviewScopeAvg == 1}"><span class="sr_only">구매 평점 별 5개 중 1개</span></span>
+							<span class="mark_star_md star2" th:if="${prd.reviewScopeAvg == 2}"><span class="sr_only">구매 평점 별 5개 중 2개</span></span>
+							<span class="mark_star_md star3" th:if="${prd.reviewScopeAvg == 3}"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
+							<span class="mark_star_md star4" th:if="${prd.reviewScopeAvg == 4}"><span class="sr_only">구매 평점 별 5개 중 4개</span></span>
+							<span class="mark_star_md star5" th:if="${prd.reviewScopeAvg == 5}"><span class="sr_only">구매 평점 별 5개 중 5개</span></span>
 							
 							<a href="#none" class="review">
-								<span class="txt" th:if="${not #lists.isEmpty(summary.totalCount)}" th:text="${'리뷰 ' + #numbers.formatInteger( summary.totalCount, 0, 'COMMA')}">리뷰 360</span>
-								<span class="txt" th:if="${#lists.isEmpty(summary.totalCount)}">리뷰</span>
+								<span class="txt" th:text="${'리뷰 ' + #numbers.formatInteger( prd.reviewCount, 0, 'COMMA')}">리뷰 360</span>
+								<span class="txt">리뷰</span>
 							</a>
 						</div>
 						
 						<!--/* 가격 영역 */-->
-						<div class="product_price" th:each="availablePrice : ${prd.availablePrices}" th:if="${availablePrice.currencyCode == 'KRW'}">
+						<div class="product_price" th:each="price : ${prd.availablePrices}" th:if="${price.currencyCode == 'KRW'}">
 							<div class="inner">
 							
 								<!-- /* 이중가 표기 및 할인률 표기 */ -->
 								<span class="discount" 
-									  th:if="${availablePrice.doublePriceDisplayYn == 'Y'}" 
-									  th:with="disMinRate=${availablePrice.minOnlineSalePriceDiscountRate + availablePrice.minMemberLevelDiscountRate + availablePrice.minOnlineMemberDiscountRate}
-									  		  ,disMaxRate=${availablePrice.maxOnlineSalePriceDiscountRate + availablePrice.maxMemberLevelDiscountRate + availablePrice.maxOnlineMemberDiscountRate}">
+									  th:if="${price.doublePriceDisplayYn == 'Y'}" 
+									  th:with="disMinRate=${price.minOnlineSalePriceDiscountRate + price.minMemberLevelDiscountRate + price.minOnlineMemberDiscountRate + price.minImmedDiscountRate}
+									  		  ,disMaxRate=${price.maxOnlineSalePriceDiscountRate + price.maxMemberLevelDiscountRate + price.maxOnlineMemberDiscountRate + price.maxImmedDiscountRate}">
 									<span th:if="${disMinRate != disMaxRate}">최대</span>
 									<span class="num">
 										<em th:text="${disMaxRate}">30</em>%
@@ -88,10 +104,10 @@
 								</span>
 								
 								<!-- /* 이중가 표기하지 않고 회원 할인만 있을 경우 처리 */ -->
-								<span class="discount" th:if="${availablePrice.doublePriceDisplayYn == 'N' && availablePrice.onlineMemberDiscountYn == 'Y'}">
-									<span class="from" th:if="${availablePrice.minOnlineMemberDiscountRate != availablePrice.maxOnlineMemberDiscountRate}">~</span>
+								<span class="discount" th:if="${price.doublePriceDisplayYn == 'N' && price.onlineMemberDiscountYn == 'Y'}">
+									<span class="from" th:if="${price.minOnlineMemberDiscountRate != price.maxOnlineMemberDiscountRate}">~</span>
 									<span class="to">
-										<strong th:text="${availablePrice.minOnlineMemberDiscountRate}"></strong>%
+										<strong th:text="${price.minOnlineMemberDiscountRate}"></strong>%
 									</span>
 								</span>
 								
@@ -104,18 +120,29 @@
 								
 								<!-- /* 일반 */ -->
 								<span class="price" th:if="${currencySign != 'P'}"> 
-									<del th:if="${availablePrice.doublePriceDisplayYn == 'Y'}" th:text="${#numbers.formatInteger(availablePrice.minBeforeOnlineSalePrice, 0, 'COMMA') + currencySign}">0원</del>
-									<span class="num" th:text="${#numbers.formatInteger( availablePrice.minOnlineMemberDiscountPrice, 0, 'COMMA')}">0</strong>
+									<del th:if="${price.doublePriceDisplayYn == 'Y'}" th:text="${#numbers.formatInteger(price.minBeforeOnlineSalePrice, 0, 'COMMA') + currencySign}">0원</del>
+									<span class="num" th:text="${#numbers.formatInteger( price.minOnlineMemberDiscountPrice, 0, 'COMMA')}">0</strong>
 									<span th:text="${currencySign}"></span>
-									<span th:if="${availablePrice.minOnlineMemberDiscountPrice != availablePrice.maxOnlineMemberDiscountPrice}">~</span>
+									<span th:if="${price.minOnlineMemberDiscountPrice != price.maxOnlineMemberDiscountPrice}">~</span>
 								</span>
-								<b th:if="${availablePrice.onlineMemberDiscountYn == 'Y'}">VVIP 할인가</b>
+								<b th:if="${price.onlineMemberDiscountYn == 'Y'}">VVIP 할인가</b>
 							</div>
 							
 							<!-- /* SNS 공유 & 좋아요 */ -->
 							<div class="util">
-								<button type="button"><i class="ico_good on"><span class="sr_only">좋아요</span></i> <b class="num">540</b></button>	<!-- 좋아요 class="on" -->
-								<button type="button"><i class="ico_share on"></i><span class="sr_only">공유하기</span></button>
+								<!-- 좋아요 class="on" -->
+								<button type="button" id="likeBtn">
+									<i class="ico_good">
+										<span class="sr_only">좋아요</span>
+									</i> 
+									<b class="num" th:text="${prd.recommendCount}"></b>
+								</button>
+									
+								<!-- 공유하기 class="on" -->
+								<button type="button" class="btn_share">
+									<i class="ico_share"></i>
+									<span class="sr_only">공유하기</span>
+								</button>
 							</div>
 						</div>
 						
@@ -156,7 +183,7 @@
 												<li><span>카드 무이자</span><em>최대 12개월 무이자</em></li>
 												<li><span>카드 추가혜택</span><em>신한, 국민 3%할인</em></li>
 											</ul>
-											<a href="#none" class="more">더보기 <i class="ico_navi_s next"></i></a>
+											<a href="#none" class="more" id="cardBenefitMoreBtn">더보기 <i class="ico_navi_s next"></i></a>
 										</div>
 									</dd>
 								</dl>
@@ -177,47 +204,19 @@
 						<!--/* 스페셜 기프트 / 어워드 */-->
 						<div class="additional">
 							<!--/* 스펠셜 기프트 */-->
-							<dl class="special_gift">
-								<dt class="title"><i class="ico_gift"></i> 스페셜 기프트 <small>뷰티포인트 결제시 제외</small></dt>
+							<dl class="special_gift" th:if="${#lists.size(prd.onlineProdGift.giftProds) > 0 }">
+								<dt class="title">
+									<i class="ico_gift"></i> 스페셜 기프트 <small>뷰티포인트 결제시 제외</small>
+								</dt>
 								<dd>
 									<div class="slide" data-ix-options="view-length:4; loop:false;">
 										<div class="ix-list-viewport">
 											<ul class="ix-list-items">
-												<li class="ix-list-item">
-													<img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt="">
+												<li class="ix-list-item" th:each="giftProd : ${prd.onlineProdGift.giftProds}">
+													<img th:src="${giftProd.repImgUrl}" alt="">
 													<dl class="info">
-														<dt>헤라</dt>
-														<dd>화이트 프로그램 4종 1개</dd>
-													</dl>
-												</li>
-												<li class="ix-list-item"><img ap:src="@{/images/dummy/img_product_thumb_08.jpg}" alt="">
-													<dl class="info">
-														<dt>헤라</dt>
-														<dd>화이트 프로그램 4종 1개</dd>
-													</dl>
-												</li>
-												<li class="ix-list-item"><img ap:src="@{/images/dummy/img_item_02.jpg}" alt="">
-													<dl class="info">
-														<dt>헤라</dt>
-														<dd>화이트 프로그램 4종 1개</dd>
-													</dl>
-												</li>
-												<li class="ix-list-item"><img ap:src="@{/images/dummy/IMG1521TdB505709594.jpg}" alt="">
-													<dl class="info">
-														<dt>헤라</dt>
-														<dd>화이트 프로그램 4종 1개</dd>
-													</dl>
-												</li>
-												<li class="ix-list-item"><img ap:src="@{/images/dummy/img_product_thumb_08.jpg}" alt="">
-													<dl class="info">
-														<dt>헤라</dt>
-														<dd>화이트 프로그램 4종 1개</dd>
-													</dl>
-												</li>
-												<li class="ix-list-item"><img ap:src="@{/images/dummy/img_item_02.jpg}" alt="">
-													<dl class="info">
-														<dt>헤라</dt>
-														<dd>화이트 프로그램 4종 1개</dd>
+														<dt>[[${giftProd.brandName}]]</dt>
+														<dd>[[${giftProd.prodName}]] [[${giftProd.qty}]]개</dd>
 													</dl>
 												</li>
 											</ul>
@@ -305,17 +304,18 @@
 							<span>총 <span class="total_count">0</span>개</span> <em class="num"><b class="total_price">0</b>[[${currencySign}]]</em> 
 						</div>
 						
+						<!--/* 구매버튼 : 품절 */-->
+						<div class="purchase_btns" th:if="${prd.saleDisplayStatus == 'OutOfStock'}">
+							<a class="btn_xlg_bordergray">장바구니</a>
+							<a class="btn_xlg_bggray">구매하기</a>
+						</div>
+						
 						<!--/* 구매버튼 */-->
-						<div class="purchase_btns">
+						<div class="purchase_btns" th:unless="${prd.saleDisplayStatus == 'OutOfStock'}">
 							<a class="btn_xlg_bordered btn_basket">장바구니</a>
 							<a class="btn_xlg_neutral btn_buy_now">구매하기</a>
 						</div>
 						
-						<!--/* 구매버튼 : 품절 */-->
-						<div class="purchase_btns">
-							<a class="btn_xlg_bordergray">장바구니</a>
-							<a class="btn_xlg_bggray">구매하기</a>
-						</div>
 					</div>
 				</div>
 			</div>

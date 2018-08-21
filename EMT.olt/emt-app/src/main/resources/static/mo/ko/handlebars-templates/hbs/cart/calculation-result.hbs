@@ -8,7 +8,10 @@
 	<li class="cart_rst_item">
 		<strong class="text_rst_item">결제 예정 금액</strong>
 		<span class="cart_rst_num">
-			<strong class="num">{{ numberFormat cartEx.calculationResult.paidAmountInfo.standardCurrency.amount }}</strong><span class="text_rst_unit">원</span>
+			<strong class="num">
+				{{#if (eq cartEx.calculationResult.paidAmountInfo.standardCurrency.amount null) }} 0 {{else}} {{ numberFormat cartEx.calculationResult.paidAmountInfo.standardCurrency.amount }} {{/if}}
+			</strong>
+			<span class="text_rst_unit">원</span>
 		</span>
 	</li>
 </ul>

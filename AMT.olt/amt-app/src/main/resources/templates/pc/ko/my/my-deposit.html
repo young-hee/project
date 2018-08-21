@@ -120,8 +120,8 @@
 														<input type="number" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" placeholder="0" required="required" name="amount" data-msg-required="출금할 금액을 입력해 주세요." th:attr="disabled=${depositRefundAccount.bankAcNo == null? 'disabled' : null}" /> <!-- 등록된 계좌가 없을시 'disabled' 추가 -->
 													</span>
 													<span class="pdl20 font_lg">/ 
-													<th:text th:if="${depositHostory.depositBalance <= 300000}" th:text="${#IntegUtil.toCommaNumber(depositHostory.depositBalance)}">100,000</th:text>
-													<th:text th:unless="${depositHostory.depositBalance <= 300000}">300,000</th:text>
+													<th:block th:if="${depositHostory.depositBalance <= 300000}" th:text="${#IntegUtil.toCommaNumber(depositHostory.depositBalance)}">100,000</th:block>
+													<th:block th:unless="${depositHostory.depositBalance <= 300000}">300,000</th:block>
 													원</span>
 												</div>
 												<p>출금 신청은 보유 예치금 내에서 1일 1회 최대 30만원까지 가능합니다.</p>

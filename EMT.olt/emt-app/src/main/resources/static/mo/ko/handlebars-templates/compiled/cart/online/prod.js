@@ -325,7 +325,7 @@ this["AP"]["handlebars"]["cart"]["online"]["prod"] = Handlebars.template({"1":fu
 },"70":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "		<div class=\"cart_item_box type2\">\n			<div class=\"cart_name_wrap\">\n				<span class=\"check_wrap\">\n					<input type=\"checkbox\" name=\"chkBox\" id=\"chkBoxO_"
+  return "\n		<div class=\"cart_item_box type2\">\n			<div class=\"cart_name_wrap\">\n				<span class=\"check_wrap\">\n					<input type=\"checkbox\" name=\"chkBox\" id=\"chkBoxO_"
     + alias4(((helper = (helper = helpers.onlineProdSn || (depth0 != null ? depth0.onlineProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"onlineProdSn","hash":{},"data":data}) : helper)))
     + "\" value=\"O_"
     + alias4(((helper = (helper = helpers.onlineProdSn || (depth0 != null ? depth0.onlineProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"onlineProdSn","hash":{},"data":data}) : helper)))
@@ -346,7 +346,7 @@ this["AP"]["handlebars"]["cart"]["online"]["prod"] = Handlebars.template({"1":fu
     + "</a></span>\n				</div>\n			</div>\n			<div class=\"cart_item_info nospinner\">\n				<span class=\"cart_price\">\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,(depth0 != null ? depth0.finalOnlineSalesAmountInfo : depth0),null,{"name":"ne","hash":{},"data":data}),(helpers.gt || (depth0 && depth0.gt) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.finalOnlineSalesAmountInfo : depth0)) != null ? stack1.standardCurrency : stack1)) != null ? stack1.amount : stack1),0,{"name":"gt","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(79, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,(depth0 != null ? depth0.productSaleAmountInfo : depth0),null,{"name":"ne","hash":{},"data":data}),(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.productSaleAmountInfo : depth0)) != null ? stack1.standardCurrency : stack1)) != null ? stack1.amount : stack1),((stack1 = ((stack1 = (depth0 != null ? depth0.finalOnlineSalesAmountInfo : depth0)) != null ? stack1.standardCurrency : stack1)) != null ? stack1.amount : stack1),{"name":"ne","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(81, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "				</span>\n			</div>\n			<div class=\"cart_item_scroll\">\n"
+    + "				</span>\n			</div>\n			<div class=\"cart_item_scroll\">\n\n"
     + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.cartProdExList : depth0),{"name":"each","hash":{},"fn":container.program(83, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "			</div>\n		</div>\n";
 },"71":function(container,depth0,helpers,partials,data) {

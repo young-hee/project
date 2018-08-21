@@ -300,7 +300,7 @@
 	            $("#complete").removeAttr("disabled");
 	            if (xhr.errorCode == 0) {
 	                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
-	            } else if (xhr.errorCode == 401) {
+	            } else if (xhr.status == 401) {
 	                $('.result_box p').hide();
 	                $('#err_cert').show();
 	                $('#err_count').html(xhr.responseJSON.dailyFailureCount);
@@ -308,7 +308,7 @@
 	                AP.modal.alert("일일 인증실패 횟수를 초과했습니다.");
 	            } else if (xhr.errorCode == 'EXTRA') {
 
-	                if (xhr.responseJSON.cs == 1) {
+	                if (xhr.responseJSON.errorData.additional.cs == 1) {
 
 	                    $.get("/customer/popup?pageId=8", function(data) {
 
@@ -379,7 +379,7 @@
 
 	                        });
 	                    });
-	                } else if (xhr.responseJSON.cs == 2) {
+	                } else if (xhr.responseJSON.errorData.additional.cs == 2) {
 
 	                    $.get("/customer/popup?pageId=4&userId1=" + xhr.responseJSON.userId, function(data) {
 
@@ -393,7 +393,7 @@
 
 	                        });
 	                    });
-	                } else if (xhr.responseJSON.cs == 3) {
+	                } else if (xhr.responseJSON.errorData.additional.cs == 3) {
 
 	                    $.get("/customer/popup?pageId=2", function(data) {
 
@@ -561,7 +561,7 @@
 
 	            } else if (xhr.errorCode == 'EXTRA') {
 
-	                if (xhr.responseJSON.cs == 1) {
+	                if (xhr.responseJSON.errorData.additional.cs == 1) {
 
 	                    $.get("/customer/popup?pageId=8", function(data) {
 
@@ -632,7 +632,7 @@
 
 	                        });
 	                    });
-	                } else if (xhr.responseJSON.cs == 2) {
+	                } else if (xhr.responseJSON.errorData.additional.cs == 2) {
 
 	                    $.get("/customer/popup?pageId=4&userId1=" + xhr.responseJSON.userId, function(data) {
 
@@ -646,7 +646,7 @@
 
 	                        });
 	                    });
-	                } else if (xhr.responseJSON.cs == 3) {
+	                } else if (xhr.responseJSON.errorData.additional.cs == 3) {
 
 	                    $.get("/customer/popup?pageId=2", function(data) {
 

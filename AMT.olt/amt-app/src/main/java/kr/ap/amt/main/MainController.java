@@ -49,12 +49,12 @@ public class MainController extends AbstractController {
 
 			//Mobile
 			if (isMobileDevice()) {
-				cornerIds = "M02_main_m.2,M02_main_m.3,M02_main_m.4,M01_main_m.5,M01_main_m.9,M01_main_m.10";
+				cornerIds = "M01_main_m.2,M01_main_m.3,M01_main_m.4,M01_main_m.5,M01_main_m.6,M01_main_m.7,M01_main_m.8,M01_main_m.9,M01_main_m.10";
 			}
 
 			//PC
 			if (isPcDevice()) {
-				cornerIds = "M02_main_m.1,M02_main_m.2,M02_main_m.3,M01_main_m.4,M01_main_m.6,,M01_main_m.7,M01_main_m.8,M01_main_m.9,M01_main_m.10";
+				cornerIds = "M01_main_m.2,M01_main_m.3,M01_main_m.4,M01_main_m.5,M01_main_m.6,M01_main_m.7,M01_main_m.8,M01_main_m.9,M01_main_m.10";
 			}
 
 	        List<Corner> corners = displayApi.getMenuPageCorners(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId, previewKey, previewDate != null ? sf.parse(previewDate) : null, cornerIds, false);
@@ -63,7 +63,7 @@ public class MainController extends AbstractController {
 				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
 			}
 			
-			//model.addAttribute("cornersMap", cornersMap);
+			model.addAttribute("cornersMap", cornersMap);
 		
 		}catch(Exception e) {
 			model.addAttribute("popupInfo", null);

@@ -1,16 +1,22 @@
 /**
- * 매거진 메인
+ * 매거진 > 트랜드온에어/슈퍼뷰티팁/AP쇼핑팁
  */
 ;(function ( $ ) {
 	'use strict';
 
-	var Magazine = $B.Class.extend({
+	var MagazineArticle = $B.Class.extend({
 
 		initialize: function () {
-			this._$target = $( '#ap_container' );
-
-			this._setPlugins();
-			this._setSuperBeautyTip();
+			this._$target = $( '.magazine' );
+			this._$listArea = this._$target.find( '.thumb_list' );
+						
+			this._$loading = this._$target.find( '.loading' );
+			this._offset = 0;
+			this._total = 0;
+			this._loading = false;
+			
+			//this._setPlugins();
+			this._setArticle();
 		},
 
 		/** =============== Public Methods =============== */
@@ -18,82 +24,83 @@
 
 		/** =============== Private Methods =============== */
 
-		_setPixleeList: function () {
-			this._getPixleeData();
-
-			this._$target.find( '.etude_pick_list' ).on( 'click', 'a', function (e) {
-				e.preventDefault();
-
-				var idx = $( e.currentTarget ).parent().index(),
-					pixleeModal = new AP.PixleeModal( this._model ).open( idx );
-			}.bind(this));
-		},
-
 		_setPlugins: function () {
 			//slide 적용
-			var $slide = this._$target.find( '.slide' );
-
-			$slide.ixSlideMax();
-			AP.responsiveWidth.addListener( 'resize', function (e) {
-				$slide.ixSlideMax( 'resize' );
-			});
-
-			//youtube
-			this._$target.find( '.youtube_video' ).video();
+//			var $slide = this._$target.find( '.slide' );
+//
+//			$slide.ixSlideMax();
+//			AP.responsiveWidth.addListener( 'resize', function (e) {
+//				$slide.ixSlideMax( 'resize' );
+//			});
+//
+//			//youtube
+//			this._$target.find( '.youtube_video' ).video();
 		},
 		
-		//Ch.에뛰드
-		_setSuperBeautyTip: function () {
-			var $section = this._$target.find( '.ch_etude' );
-			if ( !$section.length ) return;
-			 
-			AP.DISPLAY_MENU_ID = 'ch_etude';
+		//Ch.트랜드온에어
+		_setArticle: function () {
+//			var $section = this._$target.find( '.thumb_list' );
+//			if ( !$section.length ) return;
+//			 
+//			AP.DISPLAY_MENU_ID = 'trend_on_air'; 
+			this._getArticle();
 			
-			var articles_articleSn = null;  
+//			this._winScrollend = new $B.event.ScrollEnd( window )
+//			.gap({bottom: AP.footer.getHeight()})
+//			.addListener( 'scrollbottom', function (e) {
+//				
+//				if(this._total > this._offset){
+//					if ( !this._loading ) {
+//						console.log("dfdfdfdfdf");
+//						this._getTrendOnAir();
+//					}
+//				}
+//			}.bind(this)).disable();
+//
+//			$( window ).on( 'load resize', function (e) {
+//				this._winScrollend.gap({
+//					bottom: AP.footer.getHeight()
+//				});
+//			}.bind(this));
 			
+		},
+		
+		_getArticle: function () {
+			if ( this._loading ) return;
 			
+			var displayType = $( '.magazine' ).attr('id');
+
+			this._loading = true;
+			this._$loading.show();
 			AP.api.articles( null, { // article num 
-				articleCateId: 'chEtude',
-				order : "Deadline", 
+				articleCateId: displayType,
+				order : "StartDt", 
 				keyword : null, 
 				liveYn : "Y", 
 				hashTag : null,
-				offset: 0,
-				limit: 1			
+				offset: this._offset,
+				limit: 10			
 			}).done( function ( result ) {
+
+				this._total = result.articleSearchResult.totalCount;				
+				var html = AP.common.getTemplate( 'display.magazine.article-list', result.articleSearchResult); 
 				
-				articles_articleSn = result.articleSearchResult.articleList[0].articleSn;  
+				this._$target.find('.txt_total_con>p>b').text(this._total);
+
+				this._$listArea.append( html );
 				
-				AP.api.article( null, { // article detail 
-					
-					articleSn: articles_articleSn
-					
-				}).done( function ( result ) { 
-				
-					// 동영상 URL 제목 , 라이브 유무 
-					var html = AP.common.getTemplate( 'main.home.ch-etude-video-info', result.article);
-	
-					$section.find('.video_wrap').html(html);
-					$section.find('.youtube_video').video(); // 비디오 그리기 디테일정보가 필요함 
-					
-					var titleText = ''; 
-					
-					if(result.article.liveSettingsYn === 'Y'){
-						titleText ='[라이브쇼]'; 
-					}
-					titleText+= result.article.articleTitle; 
-					this._$target.find('.ch_etude dl dt').text(titleText);   
-					this._articleProdList(articles_articleSn) ; // 관련 상품 그리기
-					
-				}.bind(this)).fail(function ( xhr ) {
-					console.log( xhr.errorMessage );
-					this._$target.find('.youtube_video').video('clear');
-				}.bind( this ));
-				
+				this._offset += result.articleSearchResult.limit;
+				console.log("_offset : " + this._offset);
+			}.bind(this)).fail(function (e) {
+				//this._winScrollend.clear();
+				AP.modal.alert( '데이타를 불러오지 못했습니다.' );
+			}.bind(this)).always(function () {
+				this._loading = false;
+				this._$loading.hide();
 			}.bind(this)); 
 		}
 	});
 
 
-	AP.Magazine = new Magazine();
+	AP.magazineArticle = new MagazineArticle();
 })( jQuery );

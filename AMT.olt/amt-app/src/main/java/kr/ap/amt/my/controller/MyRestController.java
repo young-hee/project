@@ -852,7 +852,7 @@ public class MyRestController extends AbstractController {
 		
 		CheckResult pwResult = apApi.checkMemberPassword(getMemberSn(), oriPassword);
 		if(!pwResult.isResult()) {
-			throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "잘못된 패스워드 입니다.");
+			throw error(result, HttpStatus.UNAUTHORIZED, "EAPI001", "잘못된 패스워드 입니다.");
 		}
 		
 		CicuemCuInfTotTcVo vo = new CicuemCuInfTotTcVo();

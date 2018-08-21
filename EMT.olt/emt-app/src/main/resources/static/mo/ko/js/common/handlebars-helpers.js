@@ -4,6 +4,20 @@
 ;(function ( $ ) {
     'use strict';
 
+	/**
+	 * 결제 수단명
+	 * @returns {String}
+	 */
+	Handlebars.registerHelper('payServiceCodeName', function (type) {
+		switch (type) {
+			case 'Deposit': return '예치금';
+			case 'MembershipPoint': return '뷰티포인트';
+			case 'ActivityPoint': return '진주알';
+		}
+
+		return '';
+	});
+
 
 	/**
 	 * 사은품 명
@@ -254,9 +268,9 @@
 		if (type === 'online' || type === 'cashReceipts' || type === 'cancel') {
 			switch (condition) {
 				case 'OrdReceivedWaiting' :
-					return '주문접수대기';
+					return '주문접수';
 				case 'OrdReceivedComplete' :
-					return '주문접수완료';
+					return '결제완료';
 				case 'ProdCancel' :
 					return '상품취소';
 				case 'ProdPreparing' :
@@ -276,9 +290,9 @@
 		else if (type === 'store') {
 			switch (condition) {
 				case 'OrdReceivedWaiting' :
-					return '주문접수대기';
+					return '주문접수';
 				case 'OrdReceivedComplete' :
-					return '주문접수완료';
+					return '결제완료';
 				case 'ProdCancel' :
 					return '상품취소';
 				case 'ProdPreparing' :

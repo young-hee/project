@@ -137,18 +137,18 @@ public class SignupRestController extends AbstractController {
 			} else {//FIXME 오류 케이스에 대한 처리가 필요.
 				if(!ObjectUtils.isEmpty(cicuemCuInfTotTcVoRslt)) {
 					if("KISQ9207".equals(cicuemCuInfTotTcVoRslt.getR_rsltCd())) {
-						throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "KISQ9207", "SMS 인증번호 발송 실패하였습니다. : 일 5회 인증 실패.");
+						throw error(result, HttpStatus.UNAUTHORIZED, "KISQ9207", "SMS 인증번호 발송 실패하였습니다. : 일 5회 인증 실패.");
 					}
 					
 					if("KISH0003".equals(cicuemCuInfTotTcVoRslt.getR_rsltCd())) {
-						throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "KISH0003", "휴대폰 번호 또는 통신사 불일치입니다. 입력하신 정보를 확인해 주세요.");
+						throw error(result, HttpStatus.UNAUTHORIZED, "KISH0003", "휴대폰 번호 또는 통신사 불일치입니다. 입력하신 정보를 확인해 주세요.");
 					}
-					throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "ICITSVBIZ127", "휴대폰 명의자와 입력하신 정보가 일치 하지 않습니다.\n"
+					throw error(result, HttpStatus.UNAUTHORIZED, "ICITSVBIZ127", "휴대폰 명의자와 입력하신 정보가 일치 하지 않습니다.\n"
 							+ "타인 명의로 회원가입을 원하시면 '확인' 버튼을,"
 							+ "다시 입력하시려면 '취소' 버튼을 선택해 주세요.");
 				} else {
 					//실패
-					throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "인증실패했습니다. 다시 인증하세요.");
+					throw error(result, HttpStatus.UNAUTHORIZED, "EAPI001", "인증실패했습니다. 다시 인증하세요.");
 				}
 			}
 
@@ -177,7 +177,7 @@ public class SignupRestController extends AbstractController {
 		CicuemCuInfCoOutVo resultObj = amoreAPIService.certifycheck90(cicuemCuInfCoInVo);
 		
 		if(!APConstant.NON_EXIST_INFO.equals(resultObj.getRsltCd())) {
-			throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "CERT90", "인증번호 발송에 실패했습니다.<br>90일 이내 점유인증 이력이 있는 사용자는 가입할 수 없습니다.");
+			throw error(result, HttpStatus.UNAUTHORIZED, "CERT90", "인증번호 발송에 실패했습니다.<br>90일 이내 점유인증 이력이 있는 사용자는 가입할 수 없습니다.");
 		}
 
 		memberForm.setValidFlag("phoneCert");
@@ -228,12 +228,12 @@ public class SignupRestController extends AbstractController {
 			} else { //FIXME 오류 케이스에 대한 처리가 필요.
 				if(!ObjectUtils.isEmpty(cicuemCuInfTotTcVoRslt)) {
 					if("KISQ9207".equals(cicuemCuInfTotTcVoRslt.getR_rsltCd())) {
-						throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "KISQ9207", "SMS 인증번호 발송 실패하였습니다. : 일 5회 인증 실패.");
+						throw error(result, HttpStatus.UNAUTHORIZED, "KISQ9207", "SMS 인증번호 발송 실패하였습니다. : 일 5회 인증 실패.");
 					}
-					throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "인증실패했습니다.");
+					throw error(result, HttpStatus.UNAUTHORIZED, "EAPI001", "인증실패했습니다.");
 					
 				} else {
-					throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "인증실패했습니다.");
+					throw error(result, HttpStatus.UNAUTHORIZED, "EAPI001", "인증실패했습니다.");
 				}
 			}
 
@@ -319,18 +319,18 @@ public class SignupRestController extends AbstractController {
 			} else {
 				if(!ObjectUtils.isEmpty(cicuemCuInfTotTcVoRslt)) {
 					if("KISQ9207".equals(cicuemCuInfTotTcVoRslt.getR_rsltCd())) {
-						throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "KISQ9207", "SMS 인증번호 발송 실패하였습니다. : 일 5회 인증 실패.");
+						throw error(result, HttpStatus.UNAUTHORIZED, "KISQ9207", "SMS 인증번호 발송 실패하였습니다. : 일 5회 인증 실패.");
 					}
 					
 					if("KISH0003".equals(cicuemCuInfTotTcVoRslt.getR_rsltCd())) {
-						throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "KISH0003", "휴대폰 번호 또는 통신사 불일치입니다. 입력하신 정보를 확인해 주세요.");
+						throw error(result, HttpStatus.UNAUTHORIZED, "KISH0003", "휴대폰 번호 또는 통신사 불일치입니다. 입력하신 정보를 확인해 주세요.");
 					}
-					throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "ICITSVBIZ127", "휴대폰 명의자와 입력하신 정보가 일치 하지 않습니다.\n"
+					throw error(result, HttpStatus.UNAUTHORIZED, "ICITSVBIZ127", "휴대폰 명의자와 입력하신 정보가 일치 하지 않습니다.\n"
 							+ "타인 명의로 회원가입을 원하시면 '확인' 버튼을,"
 							+ "다시 입력하시려면 '취소' 버튼을 선택해 주세요.");
 				} else {
 					//실패
-					throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "인증실패했습니다. 다시 인증하세요.");
+					throw error(result, HttpStatus.UNAUTHORIZED, "EAPI001", "인증실패했습니다. 다시 인증하세요.");
 				}
 			}
 
@@ -359,7 +359,7 @@ public class SignupRestController extends AbstractController {
 		//captcha체크
 		if (!captchaAPI.checkKeyValueSimple(captchaKey, captcha)) {
 			//실패
-			throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "chptcha", "자동입력 방지문자를 정확히 입력하세요.");
+			throw error(result, HttpStatus.UNAUTHORIZED, "chptcha", "자동입력 방지문자를 정확히 입력하세요.");
 		}
 		
 
@@ -486,7 +486,7 @@ public class SignupRestController extends AbstractController {
 		//captcha체크
 		if (!captchaAPI.checkKeyValueSimple(captchaKey, captcha)) {
 			//실패
-			throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "chptcha", "자동입력 방지문자를 정확히 입력하세요.");
+			throw error(result, HttpStatus.UNAUTHORIZED, "chptcha", "자동입력 방지문자를 정확히 입력하세요.");
 		}
 		
 		if (!StringUtils.isEmpty(r_certNum)
@@ -534,10 +534,10 @@ public class SignupRestController extends AbstractController {
 				if (!ObjectUtils.isEmpty(certifyconfirmRslt)) {
 
 					if(APConstant.KIST9201.equals(certifyconfirmRslt.getR_rsltCd())) {
-						throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "expire", "만료된 인증번호입니다. 재인증 버튼을 눌러주세요.");
+						throw error(result, HttpStatus.UNAUTHORIZED, "expire", "만료된 인증번호입니다. 재인증 버튼을 눌러주세요.");
 					}
 					if(!APConstant.KIST0000.equals(certifyconfirmRslt.getR_rsltCd())) {
-						throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "certNum", "인증번호를 잘못 입력하셨습니다.");
+						throw error(result, HttpStatus.UNAUTHORIZED, "certNum", "인증번호를 잘못 입력하셨습니다.");
 					}
 
 					//성공
@@ -643,7 +643,7 @@ public class SignupRestController extends AbstractController {
 
 				} else {
 					//실패
-					throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "STEP1ERR", "인증실패했습니다. 다시 인증하세요.");
+					throw error(result, HttpStatus.UNAUTHORIZED, "STEP1ERR", "인증실패했습니다. 다시 인증하세요.");
 				}
 
 			} catch (ApiException e) {
@@ -656,7 +656,7 @@ public class SignupRestController extends AbstractController {
 
 		} else {
 			//실패
-			throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "STEP1ERR", "인증실패했습니다. 다시 인증하세요.");
+			throw error(result, HttpStatus.UNAUTHORIZED, "STEP1ERR", "인증실패했습니다. 다시 인증하세요.");
 		}
 
 
@@ -696,7 +696,7 @@ public class SignupRestController extends AbstractController {
 			return ResponseEntity.ok(result);
 		} else {
 			//실패
-			throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "ERROR", "오류입니다.");
+			throw error(result, HttpStatus.UNAUTHORIZED, "ERROR", "오류입니다.");
 		}
 
     }
@@ -718,7 +718,7 @@ public class SignupRestController extends AbstractController {
 
 		if (bindingResult.hasErrors()) {
 			bindErrorResult(bindingResult, result);
-			throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "ERROR", "가입실패, 다시 시도 하세요.");
+			throw error(result, HttpStatus.UNAUTHORIZED, "ERROR", "가입실패, 다시 시도 하세요.");
 
 		} else {
 
@@ -1001,10 +1001,10 @@ public class SignupRestController extends AbstractController {
 				if (!ObjectUtils.isEmpty(status)) {
 					if(status.isMember()) {
 						//실패
-						throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "ALREADY", "가입실패, 이미 가입되어있는 회원입니다.");
+						throw error(result, HttpStatus.UNAUTHORIZED, "ALREADY", "가입실패, 이미 가입되어있는 회원입니다.");
 					} else if(status.isIncsMember()) {
 						if(status.getIncsMemberId() != null)
-							throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "ALREADY", "가입실패, 이미 가입되어있는 회원입니다.");
+							throw error(result, HttpStatus.UNAUTHORIZED, "ALREADY", "가입실패, 이미 가입되어있는 회원입니다.");
 
 						CicuemCuInfTotTcVo vo = new CicuemCuInfTotTcVo();
 						vo.setIncsNo(status.getIncsNo());
@@ -1117,10 +1117,13 @@ public class SignupRestController extends AbstractController {
 							e.printStackTrace();
 						}
 						if("ICITSVCOM004".equals(cicuemCuInfCoOutVo.getRsltCd())) {
-							throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "ERROR", "통합회원 동기화가 안되어 있습니다.");
+							throw error(result, HttpStatus.UNAUTHORIZED, "ERROR", "통합회원 동기화가 안되어 있습니다.");
 						}
 						if("ICITSVBIZ152".equals(cicuemCuInfCoOutVo.getRsltCd())) {
-							throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "ERROR", "고객님은 아모레 퍼시픽 탈퇴고객입니다.<br>탈퇴고객은, 탈퇴 후 30일 내 재 가입이 불가능합니다.");
+							throw error(result, HttpStatus.UNAUTHORIZED, "ERROR", "고객님은 아모레 퍼시픽 탈퇴고객입니다.<br>탈퇴고객은, 탈퇴 후 30일 내 재 가입이 불가능합니다.");
+						}
+						if("ICITSVBIZ113".equals(cicuemCuInfCoOutVo.getRsltCd())) {
+							throw error(result, HttpStatus.UNAUTHORIZED, "ERROR", "존재하는 ID입니다. 다른 아이디를 입력해 주세요.");
 						}
 
 						if((APConstant.RESULT_OK.equals(cicuemCuInfCoOutVo.getRsltCd()))) {
@@ -1181,7 +1184,7 @@ public class SignupRestController extends AbstractController {
 						}
 					}
 				} else {
-					throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "ERROR", "일시적 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+					throw error(result, HttpStatus.UNAUTHORIZED, "ERROR", "일시적 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
 				}
 
 				//TODO: ecp api - 회원가입
@@ -1287,7 +1290,7 @@ public class SignupRestController extends AbstractController {
 
 				} else {
 					//실패
-					throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "ERROR", "가입실패, 다시 시도 하세요.");
+					throw error(result, HttpStatus.UNAUTHORIZED, "ERROR", "가입실패, 다시 시도 하세요.");
 				}
 
 			} catch (ApiException e) {
@@ -1297,7 +1300,7 @@ public class SignupRestController extends AbstractController {
 			} catch (Exception e) {
 				e.printStackTrace();
 				//실패
-				throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "ERROR", "가입실패, 다시 시도 하세요.");
+				throw error(result, HttpStatus.UNAUTHORIZED, "ERROR", "가입실패, 다시 시도 하세요.");
 			}
 		}
 

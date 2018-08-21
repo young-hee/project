@@ -9,7 +9,7 @@
         initialize: function () {
             this._$target = $( '#ap_container' );
 
-            this._setPlugins();
+            //this._setPlugins();
             //this._setTopBanner();
             //this._setNewProducts();
 			//this._setEtudePick();

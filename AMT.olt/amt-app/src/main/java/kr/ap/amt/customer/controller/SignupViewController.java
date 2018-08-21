@@ -6,6 +6,7 @@ import kr.ap.comm.support.breadcrumb.BreadCrumb;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.util.G1SecureRandom;
 import net.g1project.ecp.api.model.sales.terms.Terms;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import javax.servlet.http.HttpServletRequest;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -192,6 +194,24 @@ public class SignupViewController extends AbstractController {
 		}
 
 		return result;
+	}
+	
+	/**
+	 * 가입완료
+	 *
+	 * @return
+	 */
+	@RequestMapping("/joinComplete")
+	@PageTitle(title = "회원가입")
+	@BreadCrumb("EH.LO.10")
+	public String joinComplete(Model model, Integer remainPoint, String custNm) {
+		if(remainPoint == null || remainPoint == 0)
+			return "customer/member-join.4.1.html";
+		else {
+			model.addAttribute("remainPoint", remainPoint);
+			model.addAttribute("custNm", custNm);
+			return "customer/member-join.4.2.html";
+		}
 	}
 
 	/**

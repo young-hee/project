@@ -54,23 +54,23 @@
 		{{#switch payMethodCode}}
 			{{#case 'virtual-account' break=true}}
 				<ul>
-						<li class="clear"><b>무통장입금({{payMethodNameBlang}})</b><b>{{currencyFormatDefault payAmt '원'}}</b></li>
-						<li class="clear">
-							<span>입금정보</span>
-							<span class="align_right line_h_20">{{pgPayEx.virtualBankAcBankName}} {{pgPayEx.virtualDepositBankAcNo}}<br>
-								{{pgPayEx.virtualBankAcAcHolder}}<br>
-								<em>입금기한 {{dateFormat pgPayEx.virtualBankAcDeadlineDt "YYYY-MM-DD"}} 까지</em>
-							</span>
-						</li>
-						<li class="clear"><span>송금자</span><span>홍길동</span></li>
-						<li class="clear"><span>결제처리일</span>
-						<span>
-							<em>
-								<dd class="align_right">{{condition (eq payStatusCode 'Complete')
-													(dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS") '입금 미확인'}}</dd>
-							</em>
-						</span></li>
-					</ul>
+					<li class="clear"><b>무통장입금({{payMethodNameBlang}})</b><b>{{currencyFormatDefault payAmt '원'}}</b></li>
+					<li class="clear">
+						<span>입금정보</span>
+						<span class="align_right line_h_20">{{pgPayEx.virtualBankAcBankName}} {{pgPayEx.virtualDepositBankAcNo}}<br>
+							{{pgPayEx.virtualBankAcAcHolder}}<br>
+							<em>입금기한 {{dateFormat pgPayEx.virtualBankAcDeadlineDt "YYYY-MM-DD"}} 까지</em>
+						</span>
+					</li>
+					<li class="clear"><span>송금자</span><span>홍길동</span></li>
+					<li class="clear"><span>결제처리일</span>
+					<span>
+						<em>
+							<dd class="align_right">{{condition (eq payStatusCode 'Complete')
+												(dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS") '입금 미확인'}}</dd>
+						</em>
+					</span></li>
+				</ul>
 			{{/case}}
 			{{#case 'mobile-phone-pay' break=true}}
 				<ul>

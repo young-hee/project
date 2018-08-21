@@ -163,9 +163,9 @@
 		if (type === 'online') {
 			switch (condition) {
 				case 'OrdReceivedWaiting' :
-					return '주문접수대기';
+					return '주문접수';
 				case 'OrdReceivedComplete' :
-					return '주문접수완료';
+					return '결제완료';
 				case 'OrdAllCancel' :
 					return '취소완료';
 				case 'ProdCancel' :
@@ -184,9 +184,9 @@
 		} else if (type === 'store') {
 			switch (condition) {
 				case 'OrdReceivedWaiting' :
-					return '주문접수대기';
+					return '주문접수';
 				case 'OrdReceivedComplete' :
-					return '주문접수완료';
+					return '결제완료';
 				case 'OrdAllCancel' :
 					return '상품취소';
 				case 'ProdCancel' :
