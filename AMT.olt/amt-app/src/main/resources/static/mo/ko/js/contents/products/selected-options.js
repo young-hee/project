@@ -13,7 +13,7 @@
 		 * @param {Object}	model
 		 */
 		initialize: function ( $appendTarget, model ) {
-			this._$appendTarget = $appendTarget;
+			this._$appendTarget = $appendTarget.find('.selected_option_wrap');
 			this._defaultModel = model;
 			this._selectedData = [];
 
@@ -130,7 +130,6 @@
 			var salePrice = this._getSalePrice( product ),
 				beforeSalePrice = AP.common.availablePrices( product.availablePrices, 'beforeOnlineSalePrice' );
 
-			$el.find( '.item_before_total_price' ).text( $B.string.numberFormat(beforeSalePrice * count) );
 			$el.find( '.item_total_price' ).text( $B.string.numberFormat(salePrice * count) );
 		},
 

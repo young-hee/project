@@ -1,0 +1,68 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='product-list'">
+<body>
+
+<div ap:fragment="layout-contents">
+	<div class="ap_contents ap_product">
+		<th:block ap:replace="~{common/fragment/sub-category}"/>
+
+		<div class="cate_prd_wrap01">
+			<div class="sort_filter_wrap">
+				<div class="sort_inner">
+					<div class="sort_filter_top">
+						<span class="tot_result_num">총 <em class="f_prd_num">1,056</em> 개의 상품</span>
+						<span class="select_type01_new">
+							<select name="prodSort">
+								<option value="Bestselling">판매순</option>
+								<option value="NewProd">신상품순</option>
+								<option value="MostProdReview">평점순</option>
+								<option value="HighestPrice">높은 가격순</option>
+								<option value="LowestPrice">낮은 가격순</option>
+							</select>
+						</span>
+							<a href="javascript:;" class="btn_align">상품 정렬 선택</a>
+							<a href="javascript:;" class="btn_filter">필터</a>
+					</div>
+					<div class="filter_sel_area" style="display: none">
+					</div>
+				</div>
+			</div>
+
+			<ul class="product_list_new"></ul>
+
+			<div class="loading" data-loading-first="300" data-loading-more="90" style="display: none">
+				<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+			</div>
+			<div class="section no_product" style="display: none">
+				<p class="text_center">더 좋은 상품을 준비중입니다.</p>
+			</div>
+		</div>
+
+		<div class="color_curation">
+			<a href="javascript:;" class="btn"><span class="sr_only">컬러 큐레이션</span></a>
+			<span class="bubble">이런 립 컬러는 어떠세요?</span>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script type="text/javascript">
+
+		// 최근 본 상품 버튼 노출 시: 컬러큐레이션 위치 변경
+		$(window).on('load', function(){
+			if($(".floating_area").hasClass('in')){
+				$(".color_curation").css("bottom","115px")
+
+			}else{
+				$(".color_curation").css("bottom","16px")
+			}
+		});
+
+		AP.display.init({
+			displayMenuId: AP.DISPLAY_MENU_ID
+		});
+	</script>
+</th:block>
+
+</body>
+</html>

@@ -89,6 +89,7 @@ public class OrderViewController extends OrderBaseController {
 
 		}else{
 
+			//바로구매
 			try {
 				ordEx = createOrder(memberSession.getCartSn(), null);/* 주문한 장바구니 상품 목록 세션에 저장 */
 				memberSession.addOrdCartInfo(ordEx.getOrdSn(), new OrdCartInfo(memberSession.getCartSn(), null));
@@ -141,7 +142,6 @@ public class OrderViewController extends OrderBaseController {
         //TODO aki : 리턴되는 결과값 없음, 세션에서 주문번호 꺼내서 완료 페이지로 이동
 
 		MemberSession memberSession = getMemberSession();
-		String memberUser = memberSession.getMember_sn() > 0L ? PARAM_KEY_MEMBER : PARAM_KEY_NONMEMBER;
 
 		OrdReceptComplete body = new OrdReceptComplete();
 		List<PayResult> payResultList = new ArrayList<PayResult>();
@@ -164,25 +164,32 @@ public class OrderViewController extends OrderBaseController {
 		body.setPayResultList(payResultList);
 
 		/* 1.주문완료 데이터 */
-		OrdEx ordEx = orderApi.ordReceptComplete(memberSession.getOrdSn(), body);
+		OrdEx ordEx = null;
+		try {
+			ordEx = orderApi.ordReceptComplete(memberSession.getOrdSn(), body);
+		} catch (ApiException e) {
+			logger.error(e.getMessage());
+			model.addAttribute("ordCompleteError", e.getMessage());
+		}
 		if(ordEx != null) {
 			/* 2.주문완료 상품목록 추출*/
 			makeOrdProdSet(ordEx, model);
 
 			/* 주문완료했을 때 장바구니상품삭제 */
-			removeOrdCartInfo(ordEx.getOrdSn());
+			//removeOrdCartInfo(ordEx.getOrdSn());
 			return "order/order-complete";
 		} else {
-			getRedirectPath(PathConstants.ORDER_RECEPTION.concat("?").concat(PARAM_KEY_NONMEMBER));
+			//주문오류 발생시.
+			//return redirectOrderReception(request, model, redirectAttributes);
+			return "redirect:/order/reception";
 		}
-		return null;
     }
 
 	/**
 	 * 주문서접수완료(POST)
 	 */
 	@PostMapping("/ordComplete")
-	public String ordComplete(HttpServletRequest request, Model model) {
+	public String ordComplete(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
 
 		MemberSession memberSession = getMemberSession();
 
@@ -207,19 +214,62 @@ public class OrderViewController extends OrderBaseController {
         body.setPayResultList(payResultList);
         
         /* 1.주문완료 데이터 */
-        OrdEx ordEx = orderApi.ordReceptComplete(memberSession.getOrdSn(), body);
+		OrdEx ordEx = null;
+		try {
+			ordEx = orderApi.ordReceptComplete(memberSession.getOrdSn(), body);
+		} catch (ApiException e) {
+			logger.error(e.getMessage());
+			model.addAttribute("ordCompleteError", e.getMessage());
+		}
         if(ordEx != null) {
             /* 2.주문완료 상품목록 추출*/
             makeOrdProdSet(ordEx, model);
-            
+
             /* 주문완료했을 때 장바구니상품삭제 */
-            removeOrdCartInfo(ordEx.getOrdSn());
+            //removeOrdCartInfo(ordEx.getOrdSn());
             return "order/order-complete";
         } else {
-            getRedirectPath(PathConstants.ORDER_RECEPTION.concat("?").concat(PARAM_KEY_NONMEMBER));
+			//주문오류 발생시.
+			//return redirectOrderReception(request, model, redirectAttributes);
+			return "redirect:/order/reception";
         }
-		return null;
 	}
+
+	/**
+	 * 주문서 조회
+	 *
+	 * @param request
+	 * @param model
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@GetMapping("/reception")
+	public String redirectOrderReception(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+
+		try {
+			OrdEx ordEx = orderApi.getOrd(getMemberSession().getOrdSn());
+
+			/* 주문 상품목록 생성 */
+			makeOrdProdSet(ordEx, model);
+
+			model.addAttribute("result", true);
+			model.addAttribute("pageTitle", "주문/결제|에뛰드");
+		} catch (ApiException e) {
+			return redirectOrdErr(request, redirectAttributes, e);
+		}
+
+		// MOBILE
+		if (isMobileDevice()) {
+			model.addAttribute("storeMoUrl", storeMoUrl);	// 모바일편의점 택배
+		}
+		// PC
+		if(isPcDevice()){
+			model.addAttribute("storePcUrl", storePcUrl);	// PC편의점 택배
+		}
+
+		return "order/order";
+	}
+
 
 	/**
 	 * 이니시스 결제 - 입금결과 통보 (PC)

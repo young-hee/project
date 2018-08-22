@@ -106,7 +106,7 @@
 					<td>가상계좌</td>
 				{{/if}}
 				<td>{{currencyFormat this.storePickupOrdProdInfo.totalOrdAmt}}</td>
-				{{#xif ../type '===' 'cashReceipts' '&&' (isEmpty this.onlineOrdProdInfo)}}
+				{{#xif (eq ../type 'cashReceipts') '&&' (isEmpty this.onlineOrdProdInfo)}}
 					<td class="status"><em>{{ordStatusCheck ../type this.storePickupOrdProdInfo.ordDetailStatusCode}}</em></td>
 					{{#xif this.cashReceiptIssueYn '==' 'Y'}}
 						<td>발급완료</td>
@@ -143,7 +143,7 @@
 			</td>
 			<td class="align_left">
 				<div class="flag">
-					<b class="store">압구정점</b>
+					<!-- <b class="store">압구정점</b> -->
 					<span>스윗딜리버리</span>
 				</div>
 				<a href="javascript:;" onclick="showDetailView('order/detail', '{{this.ordNo}}')">

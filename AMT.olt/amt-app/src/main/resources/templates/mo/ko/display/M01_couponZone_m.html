@@ -1,0 +1,228 @@
+<html ap:decorate="~{layout/layout-main}">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents coupon_benefit">
+		<div class="ui_tab">
+			<div class="tab_menu equally">
+				<ul>
+					<li class="on"><button type="button">쿠폰존</button></li>
+					<li><button type="button" onclick="location.href='/display/vipLounge?displayMenuId=vipLounge'">VIP라운지</button></li>
+					<li><button type="button" onclick="location.href='/display/daily_check?displayMenuId=attendanceCheck'">출석체크</button></li>
+				</ul>
+			</div>
+			
+			<!-- 탭 컨텐츠 -->
+			<div class="tab_contents">
+				<!-- 로그인 전 -->
+				<div class="section coup_log_before" th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+					<p class="text"><em>로그인</em>하고 고객등급과 혜택을 확인하세요</p>
+					<div class="btn_log_before01"><a href="/login" class="btn_h50_pp round">로그인</a></div>
+				</div>
+
+				<!-- 로그인 후 -->
+				<div class="section coup_log_after" th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}">
+					<div class="custom_level_area welcome" style="display:none"><!-- 화면 노출시 display:inline-block -->
+						<span>김보영님은 <strong>WELCOM</strong>고객입니다</span>
+					</div>
+
+					<div class="custom_level_area vip" style="display:none">
+						<span>김보영님은 <strong>VIP</strong>고객입니다</span>
+					</div>
+
+					<div class="custom_level_area vip_plus" style="display:none">
+						<span>김보영님은 <strong>VIP+</strong>고객입니다</span>
+					</div>
+
+					<div class="custom_level_area vvip" style="display:none">
+						<span>김보영님은 <strong>VVIP</strong>고객입니다</span>
+					</div>
+
+					<div class="custom_level_area vvip_plus" style="display:none">
+						<span>김보영님은 <strong>VVIP+</strong>고객입니다</span>
+					</div>
+					<div class="custom_level_area vip" style="display:inline-block">
+						<span th:text="${session.LOGIN_USER.member.name.name1}">김보영님은 <strong th:text="${session.LOGIN_USER.member.memberLevelName}">VIP</strong>고객입니다</span>
+					</div>
+				</div>
+				
+				<!-- 등급별 혜택 -->
+				<div class="tab_cont">
+					<!-- 쿠폰 리스트 --> 
+					<div class="coup_list01">
+						<h3 class="tit_f_20"><strong>WELCOME 고객혜택</strong></h3>
+						<ul class="coup_dt_list01">
+							<li>
+								<div class="benefit_coup_area">
+									<div class="coup_detail">
+										<p class="coup_name">할인 쿠폰</p>
+										<strong class="dis_price">5,000<em>원</em></strong>
+										<p class="coup_benefit_txt01">20,000원 이상 결제시</p>
+									</div>
+									<div class="coup_down01"><a href="javascript:;">쿠폰 다운로드</a>	</div>
+								</div>
+							</li>
+							<li>
+								<div class="benefit_coup_area">
+									<div class="coup_detail">
+										<p class="coup_name">생일쿠폰</p>
+										<strong class="dis_price">10%</strong>
+										<p class="coup_benefit_txt01">장바구니 할인</p>
+									</div>
+									<div class="coup_down01"><a href="javascript:;">쿠폰 다운로드</a>	</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+
+					<!-- 쿠폰 리스트 --> 
+					<div class="coup_list01">
+						<h3 class="tit_f_20"><strong>VIP 고객 혜택</strong></h3>
+						<ul class="coup_dt_list01">
+							<li>
+								<div class="benefit_coup_area">
+									<div class="coup_detail">
+										<p class="coup_name">할인 쿠폰</p>
+										<strong class="dis_price">7,000<em>원</em></strong>
+										<p class="coup_benefit_txt01">20,000원 이상 결제시</p>
+									</div>
+									<div class="coup_down01"><a href="javascript:;">쿠폰 다운로드</a>	</div>
+								</div>
+							</li>
+							<li>
+								<div class="benefit_coup_area">
+									<div class="coup_detail">
+										<p class="coup_name">생일쿠폰</p>
+										<strong class="dis_price">10%</strong>
+										<p class="coup_benefit_txt01">장바구니 할인</p>
+									</div>
+									<div class="coup_down01"><a href="javascript:;">쿠폰 다운로드</a>	</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+
+					<!-- 쿠폰 리스트 --> 
+					<div class="coup_list01">
+						<h3 class="tit_f_20"><strong>VVIP 고객 혜택</strong></h3>
+						<ul class="coup_dt_list01">
+							<li>
+								<div class="benefit_coup_area">
+									<div class="coup_detail">
+										<p class="coup_name">할인 쿠폰</p>
+										<strong class="dis_price">7,000<em>원</em></strong>
+										<p class="coup_benefit_txt01">20,000원 이상 결제시</p>
+									</div>
+									<div class="coup_down01"><a href="javascript:;">쿠폰 다운로드</a>	</div>
+								</div>
+							</li>
+							<li>
+								<div class="benefit_coup_area">
+									<div class="coup_detail">
+										<p class="coup_name">생일쿠폰</p>
+										<strong class="dis_price">10%</strong>
+										<p class="coup_benefit_txt01">장바구니 할인</p>
+									</div>
+									<div class="coup_down01"><a href="javascript:;">쿠폰 다운로드</a>	</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+
+					<!-- 쿠폰 리스트 --> 
+					<div class="coup_list01">
+						<h3 class="tit_f_20"><strong>플러스멤버십 슈퍼쿠폰</strong></h3>
+						<ul class="coup_dt_list01">
+							<li>
+								<div class="benefit_coup_area plus_member">
+									<div class="coup_detail">
+										<p class="coup_name">슈퍼 쿠폰</p>
+										<strong class="dis_price">1,000<em>원</em></strong>
+										<p class="coup_benefit_txt01">10,000원 이상 결제시</p>
+									</div>
+									<div class="coup_down01"><a href="javascript:;">쿠폰 다운로드</a>	</div>
+								</div>
+							</li>
+							<li>
+								<div class="benefit_coup_area plus_member">
+									<div class="coup_detail">
+										<p class="coup_name">슈퍼 쿠폰</p>
+										<strong class="dis_price">3,000<em>원</em></strong>
+										<p class="coup_benefit_txt01">15,000원 이상 결제시</p>
+									</div>
+									<div class="coup_down01"><a href="javascript:;">쿠폰 다운로드</a>	</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+
+					<!-- 쿠폰 리스트 --> 
+					<div class="coup_list01">
+						<h3 class="tit_f_20">신규회원 쿠폰</h3>
+						<ul class="coup_dt_list01">
+							<li>
+								<div class="benefit_coup_area tool_tip">
+									<div class="coup_detail">
+										<p class="coup_name">할인 쿠폰</p>
+										<strong class="dis_price">30%</em></strong>
+										<p class="coup_benefit_txt01">최대 3만원 할인</p>
+									</div>
+									<div class="coup_down01"><a href="javascript:;">쿠폰 다운로드</a>	</div>
+
+									<!-- 쿠폰 사용안내 -->
+									<div class="coup_use_info">쿠폰 사용안내 <a href="javascript:;"><img src="/mo/ko/images/common/ico_tooltip01.png" alt="" /></a></div>
+									<!-- // 쿠폰 사용안내 -->
+								</div>
+							</li>
+						</ul>
+					</div>
+
+					<!-- 쿠폰 리스트 --> 
+					<div class="coup_list01">
+						<h3 class="tit_f_20">컴백 회원 쿠폰</h3>
+						<ul class="coup_dt_list01">
+							<li>
+								<div class="benefit_coup_area tool_tip">
+									<div class="coup_detail">
+										<p class="coup_name">할인 쿠폰</p>
+										<strong class="dis_price">10%</em></strong>
+										<p class="coup_benefit_txt01">최대 5,000원 할인</p>
+									</div>
+									<div class="coup_down01"><a href="javascript:;">쿠폰 다운로드</a>	</div>
+
+									<!-- 쿠폰 사용안내 -->
+									<div class="coup_use_info">쿠폰 사용안내 <a href="javascript:;"><img src="/mo/ko/images/common/ico_tooltip01.png" alt="" /></a></div>
+									<!-- // 쿠폰 사용안내 -->
+								</div>
+							</li>
+						</ul>
+					</div>
+					
+					<div class="section">
+						<div class="grade_benefit">
+							<h4 class="sr_only"><b>Apmall 고객 등급별 혜택</b></h4>
+							<img ap:src="@{/images/common/img_grade_benefits.jpg}" alt="WELCOME등급 - 쇼핑지원금 5,000원, 생일 쿠폰 10%, 뷰티포인트 적립 결제금액의 2%, 월 구매 캐시백 20만원 이상 구매 시 1만원 캐시백 / VIP등급 - 쇼핑지원금 7,000원, 생일 쿠폰 20%, 뷰티포인트 적립 결제금액의 2%, 월 구매 캐시백 20만원 이상 구매 시 1만원 캐시백, 무료배송 상시, 무료 포장 서비스 월 1회, VIP 라운지 월 1회 응모 가능, VIP 서비스 월 1회 신청 가능 / VVIP등급 - 쇼핑지원금 10,000원, 생일 쿠폰 30%, 뷰티포인트 적립 결제금액의 2%, 월 구매 캐시백 20만원 이상 구매 시 1만원 캐시백, 무료배송 상시, 무료반품 상시, 무료 포장 서비스 월 2회, VIP 라운지 월 1회 응모 가능, VIP 서비스 월 1회 신청 가능 / 플러스멤버십에 가입하고 365일 추가 혜택 누리세요">
+							<a href="#none" class="join_plus"><span class="sr_only">플러스멤버십에 가입하고 365일 추가 혜택 누리세요</span></a>
+							<a href="#none" class="view_benefit"><span class="sr_only">혜택 자세히보기</span></a>
+						</div>
+						<a href="#none"><img ap:src="@{/images/common/ban_new_benefit_04.jpg}" alt="즉시할인 카드혜택 보러가기"></a>
+					</div>
+					
+				</div>
+
+			</div>
+			<!-- // 탭 컨텐츠 -->
+
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script>
+		$('.slide').ixSlideMax();
+	</script>
+</th:block>
+
+</body>
+</html>

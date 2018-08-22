@@ -214,6 +214,7 @@ public class MyOrdDTO {
 			}
 
 			List otfList = null;
+			StoreEx storeEx = ordShipAddressEx.getStoreEx();
 
 			if ("return".equals(state) || "exchange".equals(state)) {
 				otfList = ordShipAddressEx.getClaimRtnOrderExList();
@@ -281,6 +282,7 @@ public class MyOrdDTO {
 								ordOnlineProdFo = makeOrdOnlineProdFo(ordHistProdEx);
 								ordOnlineProdFoMap.put(key, ordOnlineProdFo);
 								if (storePickup) {
+									ordOnlineProdFo.setStoreEx(storeEx);
 									storePickupOrdOnlineProdList.add(ordOnlineProdFo);
 									storeOrdOnlineProdCnt++;
 
@@ -451,12 +453,16 @@ public class MyOrdDTO {
 			ordOnlinePromoFo.setPromoName(ordHistProdEx.getSameTimePurOrdPromoNameRlang());
 			ordOnlinePromoFo.setOrdOnlineProdFoMap(new HashMap<>());
 			ordOnlinePromoFo.setOrdOnlineProdFoList(new ArrayList<>());
+			ordOnlinePromoFo.setPromoTypeCode(key);
 
 			ordOnlinePromoFo.setReceivedClaimReasonName(ordHistProdEx.getReceivedClaimReasonName());
 			ordOnlinePromoFo.setFoReceivedClaimReason(ordHistProdEx.getFoReceivedClaimReason());
 
 			ordOnlinePromoFoMap.put(key, ordOnlinePromoFo);
 		}
+
+		ordOnlinePromoFo.setTotalProductSaleAmount(ordOnlinePromoFo.getTotalProductSaleAmount().add(ordHistProdEx.getFinalOnlineSaleAmtPcur()));
+		ordOnlinePromoFo.setTotalFinalOnlineSaleAmount(ordOnlinePromoFo.getTotalFinalOnlineSaleAmount().add(ordHistProdEx.getProdSalePricePcur()));
 
 		return getOrdOnlineProdFo(ordHistProdEx, ordOnlinePromoFo);
 	}

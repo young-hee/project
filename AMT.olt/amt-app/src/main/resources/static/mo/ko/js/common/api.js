@@ -365,6 +365,13 @@
 
 		// 진주알 --------------------------------------------------------------------- dummy
 		rouletteShippingInfo: { path: '/mo/ko/dummy-apis/test.json', method: 'GET' },
+		
+		/**
+	     * 장바구니(Cart) ***********************************************************
+	     */
+		// 장바구니 담기
+		//data = JSON.stringify( {cartProdExPostList: [{prodSn: 95, cartProdQty: 1, storePickupYn: 'N', integrationMembershipExchYn: 'N', activityPointExchYn: 'N'}]} );
+		addCartProd : { path: '/cart/addCartProd', method: 'POST', contentType: 'application/json' },
 
 		/**
 		 * 아티클(CH.에뛰드, FindYourLooks) *************************************************************

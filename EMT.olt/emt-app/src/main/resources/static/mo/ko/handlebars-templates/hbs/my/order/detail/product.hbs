@@ -1,9 +1,17 @@
+{{#xif state '===' 'take'}}
+	{{#xif prod.storeEx '!=' null}}
+		<div class="takeout_title">
+			<p class="w70p"><strong>{{prod.storeEx.storeName}}</strong> <span class="color_gray2 font_md">({{prod.storeEx.phoneNo1.phoneNo}})</span></p>
+			<div><button type="button" class="btn_sm_neutral type2" onclick="takeOutStoreInfo({{json prod.storeEx}})">매장보기</button></div>
+		</div>
+	{{/xif}}
+{{/xif}}
+
 <div class="product">
 	<div class="check_wrap check_only" style="display: none">
 		<input type="checkbox" name="goods" id="{{prod.onlineProdCode}}" value="{{prod.onlineProdCode}}" onclick="selectOnlineProd(this);">
 		<label for="{{prod.onlineProdCode}}"><span class="sr_only">선택</span></label>
 	</div>
-
 	<div class="thumb">
 		<img src="{{prod.onlineProdImgUrl}}">
 	</div>
@@ -13,7 +21,7 @@
 		{{/xif}}
 		<p class="name">{{prod.onlineProdName}}</p>
 
-		{{#if (or (eq step 2)(eq claimYn 'Y'))}}
+		{{#if (or (or (eq step 2)(eq claimYn 'Y'))(eq prod.ordHistProdStatusCode 'ProdCancel'))}}
 		<p><strong class="num font_md">{{prod.cancelQtySum}}</strong>개 /
 		{{else}}
 		<p><strong class="num font_md">{{calc prod.ordQtySum '-' prod.cancelQtySum}}</strong>개 /

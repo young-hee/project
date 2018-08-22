@@ -174,8 +174,10 @@
 			</div>
 
 			<!--/* 옵션 : 수정, 삭제 가능 */-->
-			{{#each cartProdExList}}
-				<ul class="item_option">
+			<ul class="item_option">
+
+				{{#each cartProdExList}}
+
 					<input type="hidden" name="onlinePrdSn" value="{{prodEx.prodSn}}"/>
 					<input type="hidden" name="cartProdSn" value="{{cartProdSn}}"/>
 					<input type="hidden" name="prdInfo_O_{{ ../onlineProdSn}}" value="{{cartProdSn}}"/>
@@ -236,25 +238,27 @@
 							<button type="button" class="btn_delete" onclick="removeCartProd('{{ ../../cartSn}}', '{{ cartProdSn }}')"><span class="sr_only">삭제</span></button>
 						</div>
 					</li>
-				</ul>
-				{{#if (gt cartProdAwardList.length 0) }}
-					<ul class="freebies">
-						{{#each cartProdAwardList}}
-							<li>
-								<span class="option_name">
-									{{#if (ne awardProdEx.repProdImgEx null) }}
-										<img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/>
-									{{/if}}
-									사은품 : {{ awardProdEx.prodName }}
-								</span>
-								<span class="term">
-									기간 : {{dateFormat awardStartDt "YYYY.MM.DD"}} ~ {{dateFormat awardEndDt "YYYY.MM.DD"}}
-								</span>
-							</li>
-						{{/each}}
-					</ul>
-				{{/if}}
-			{{/each}}
+
+					{{#if (gt cartProdAwardList.length 0) }}
+						<ul class="freebies">
+							{{#each cartProdAwardList}}
+								<li>
+									<span class="option_name">
+										{{#if (ne awardProdEx.repProdImgEx null) }}
+											<img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/>
+										{{/if}}
+										사은품 : {{ awardProdEx.prodName }}
+									</span>
+									<span class="term">
+										기간 : {{dateFormat awardStartDt "YYYY.MM.DD"}} ~ {{dateFormat awardEndDt "YYYY.MM.DD"}}
+									</span>
+								</li>
+							{{/each}}
+						</ul>
+					{{/if}}
+
+				{{/each}}
+			</ul>
 		{{/xif}}
 	</div>
 {{/each}}

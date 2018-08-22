@@ -28,7 +28,16 @@
 					<p><em>취소완료</em></p>
 				{{/if}}
 				<p>
-					<strong class="num">{{condition (eq this.step 'two') this.prod.claimReceivedQty this.prod.ordQty}}</strong>개<span class="gap">/</span><strong class="num">{{currencyFormat this.prod.finalOnlineSaleAmtPcur}}</strong>
+					<strong class="num">{{condition (eq this.step 'two') this.prod.claimReceivedQty this.prod.ordQty}}</strong>개<span class="gap">/</span>
+					{{#xif typeName '!=' null}}
+						{{#xif typeName '==' '뷰티포인트'}}
+							<strong class="num">{{currencyFormatDefault prod.exchMembership 'P'}}</strong></p>
+						{{else}}
+							<strong class="num">{{currencyFormatDefault prod.exchActivityPoint '알'}}</strong></p>
+						{{/xif}}
+					{{else}}
+						<strong class="num font_md">{{currencyFormat prod.finalOnlineSaleAmtPcur}}</strong></p>
+					{{/xif}}
 				</p>
 			</div>
 		</div>

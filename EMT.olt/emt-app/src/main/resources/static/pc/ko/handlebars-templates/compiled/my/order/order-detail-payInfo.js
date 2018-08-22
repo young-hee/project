@@ -58,9 +58,9 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-payInfo"] = Handlebars.tem
     + "</span><span>"
     + alias3((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.spUnitPacking : stack1),{"name":"currencyFormat","hash":{},"data":data}))
     + "</span></li>\n					<li class=\"clear\"><span>배송비 "
-    + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.step : depth0),"two",{"name":"eq","hash":{},"data":data}),"환불","",{"name":"condition","hash":{},"data":data}))
+    + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.gt || (depth0 && depth0.gt) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.shipFee : stack1),0,{"name":"gt","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.step : depth0),"two",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),"환불","",{"name":"condition","hash":{},"data":data}))
     + "</span><span>"
-    + alias3((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.shipFee : stack1),{"name":"currencyFormat","hash":{},"data":data}))
+    + alias3((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,(helpers.absNum || (depth0 && depth0.absNum) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.shipFee : stack1),{"name":"absNum","hash":{},"data":data}),{"name":"currencyFormat","hash":{},"data":data}))
     + "</span></li>\n				</ul>\n			</dd>\n		</dl>\n		<dl class=\"discount_amount\">\n			<dt>\n				<p>"
     + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.step : depth0),"two",{"name":"eq","hash":{},"data":data}),"환불","",{"name":"condition","hash":{},"data":data}))
     + " 할인/포인트</p>\n				<p class=\"price\"><strong class=\"num\">"

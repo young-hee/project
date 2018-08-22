@@ -35,10 +35,10 @@
 				{{/if}} -->
 			</dd>
 		</dl>
-		<!-- <dl>
+		<dl>
 			<dt>구매매장</dt>
 			<dd><em>명동2호점</em> <span class="flag">스윗딜리버리</span> <button class="btn_sm_neutral" type="button" onclick="viewStoreMap()">매장 보기</button></dd>
-		</dl> -->
+		</dl>
 	{{else}}
 		{{#if (gt this.onlineCnt 0)}}
 			<dl>
@@ -54,8 +54,8 @@
 		{{#if (gt this.storeCnt 0)}}
 			<dl>
 				<dt>테이크아웃</dt>
-				<dd><em>{{ordStatus 'online' ordInfo.ordDetailStatusCode}}</em></dd>
-				<button class="btn_sm_neutral" type="button">매장 보기</button></dd>
+				<dd><em>{{ordStatusCheck 'online' ordInfo.ordDetailStatusCode}}</em></dd>
+				<button class="btn_sm_neutral" type="button" onclick="viewStoreMap()">매장 보기</button></dd>
 			</dl>
 		{{/if}}
 	{{/xif}}

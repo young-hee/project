@@ -1,0 +1,49 @@
+<dl class="layer">
+	<dt class="layer_title">테이크아웃 매장 변경</dt>
+	<dd class="layer_cont">
+		<div class="panel">
+			<h2 class="h_title page">테이크아웃 매장 변경</h2>
+			<p class="text font_md">상품을 전달받을 매장을 선택해주세요.</p>
+			<fieldset class="form">
+				<legend class="sr_only">테이크아웃 매장 검색</legend>
+				<div class="input_group">
+					<div>
+						<select name="addressDiv" id="addressDiv" title="지역 선택">
+							<option value="">지역선택</option>
+							{{#each addressDivInfoList}}
+								<option value="{{ addressDiv }}">{{ addressDiv }}</option>
+							{{/each}}
+						</select>
+					</div>
+					<div class="div">
+						<select name="addressDetailDivs" id="addressDetailDivs" title="시/구/군 선택">
+							<option value="">시/구/군</option>
+							{{#each addressDivInfoList}}
+								{{#each addressDetailDivs}}
+									<option value="{{ addressDetail }}">{{ addressDetail }}</option>
+								{{/each}}
+							{{/each}}
+						</select>
+					</div>
+				</div>
+				<div class="input_group">
+					<div>
+						<input type="text" id="searchText" name="searchText" placeholder="매장명을 검색하세요.">
+						<button type="button" class="btn_search" id="search" name="search"><span class="sr_only">검색</span></button>
+						<button class="input_del"><i class="ico_close_w"></i><span class="sr_only">검색어 삭제</span></button>
+					</div>
+				</div>
+				<div class="store_count">
+					<div>검색된 매장 <em id="searchCnt">0</em>개</div>
+					<div class="check_set">
+						<span class="check_wrap"><input type="radio" name="searchGubun" id="radio1" value="1"><label for="radio1">거리 순</label></span>
+						<span class="check_wrap"><input type="radio" name="searchGubun" id="radio2" value="2"><label for="radio2">단골매장</label></span>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+		<div class="store_list_wrap" id="addStore">
+		</div>
+		<button type="button" class="btn_lg_more w100p morePage" id="b_page">더보기 (<em>0</em>/0)</button>
+	</dd>
+</dl>

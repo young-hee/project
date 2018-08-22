@@ -26,6 +26,7 @@
 		 * 기본설정
 		 */
 		setDefault: function () {
+			/*
 			if ( this._defaultModel.productCount > 5 && this._defaultModel.colorGroups.length > 1 ) {
 				//칼라그룹을 먼저 선택
 				this._draw({
@@ -33,10 +34,13 @@
 					options: this._defaultModel.colorGroups
 				}, true );
 			} else {
+			*/
 				this._draw({
 					options: this._defaultModel.products
 				});
+			/*
 			}
+			*/
 		},
 
 		/**
@@ -50,48 +54,37 @@
 
 		_draw: function ( data, isColorGroup ) {
 			data.productCount = this._defaultModel.productCount;
-
+			
+			$.each(data.options, function(idx, obj){
+				for( var i = 0; i < obj.availablePrices.length; i++ ){
+					var price = obj.availablePrices[i];
+					obj.totalRate = price.onlineSalePriceDiscountRate + price.memberLevelDiscountRate + price.onlineMemberDiscountRate + price.immedDiscountRate;
+				}
+			});
+			
 			var html = AP.common.getTemplate( 'products.option-selectbox', data ),
 				$el = $( html ),
-				$select = $el.find( '.ui_select' ),
-				$prevItem = this._$appendTarget.find( '.option_selectbox_item:last' );
+				$select = this._$appendTarget.find( '.ui_select' ),
+				$wrap = this._$appendTarget.find( '.option_select_list' );
 
-			if ( $prevItem.length ) {
-				$prevItem.after( $el );
-			} else {
-				this._$appendTarget.prepend( $el );
-			}
+			$wrap.html( $el );
 
-			if ( isColorGroup ) {
-				$select.on( 'design-selectbox-selected', function (e) {
-					//e.value = colorGroupCode
-					//기존 하위 selectbox 이벤트 삭제 및 대상삭제
-					this._removeSelectBoxItem( this.CHILD_ITEM_CLASS );
-					this._draw({
-						childItemClass: this.CHILD_ITEM_CLASS,
-						options: this._getProductWithColorGroup( e.value )
-					});
+			$select.on( 'design-selectbox-selected', function (e) {
+				//e.value = prodSn
+				var selectedProduct = {};
 
-					this.dispatch( 'add-selectbox' );
-				}.bind(this));
-			} else {
-				$select.on( 'design-selectbox-selected', function (e) {
-					//e.value = prodSn
-					var selectedProduct = {};
+				_.some( this._defaultModel.products, function (product) {
+					if ( product.prodSn === e.value ) {
+						selectedProduct = product;
+						return true;
+					}
+				});
 
-					_.some( this._defaultModel.products, function (product) {
-						if ( product.prodSn === e.value ) {
-							selectedProduct = product;
-							return true;
-						}
-					});
-
-					this.dispatch( 'select-option', {
-						product: selectedProduct
-					});
-				}.bind(this));
-			}
-
+				this.dispatch( 'select-option', {
+					product: selectedProduct
+				});
+			}.bind(this));
+			
 			$select.designSelectBox();
 		},
 

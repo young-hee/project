@@ -4,7 +4,7 @@
 			<div class="item_info">
 				<div class="item_name2">
 					<div class="check_wrap">
-						<input type="checkbox" name="chkBox" id="chkBoxS_{{ @index }}" value="S_{{ @index }}" {{#if (eq selectYn 'NotSelect') }}disabled{{/if}} {{condition (eq selectYn 'Y') 'checked' ''}}>
+						<input type="checkbox" name="chkBox" id="chkBoxS_{{ @index }}" value="S_{{ @index }}" {{#if (ne saleDisplayStatus 'OnSale') }}disabled{{/if}} {{condition (eq selectYn 'Y') 'checked' ''}}>
 						<label for="chkBoxS_{{ @index }}">
 							<a href="#none"><strong>{{ promoName }}</strong></a>
 						</label>
@@ -46,7 +46,6 @@
 				<input type="hidden" name="cartProdSn" value="{{ cartProdSn }}"/>
 				<input type="hidden" name="prdInfo_S_{{ @../../index }}" value="{{ cartProdSn }}"/>
 				<input type="hidden" name="saleDisplayStatus_S_{{ @../../index }}" value="{{ prodEx.saleDisplayStatus }}"/>
-
 				<div class="item_info">
 					<!--/* 증정품 상품은 선택 불가 */-->
 					<div class="item_thumb">

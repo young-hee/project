@@ -118,6 +118,14 @@
 	<script language="javascript" type="text/javascript" src="https://stdpay.inicis.com/stdjs/INIStdPay.js" charset="UTF-8"></script>
 	<script th:inline="javascript">
 		$( document ).ready(function() {
+
+			//주문완료화면 오류 발생시
+			var ordCompleteError = /*[[${ordCompleteError}]]*/ null;
+			if(ordCompleteError != null){
+				AP.modal.alert(ordCompleteError);
+			}
+
+
 			var memberSn		 = /*[[${memberSn}]]*/ '0'; // 회원일련번호
 			if(memberSn <= 0){
 				nonmemberNotice();

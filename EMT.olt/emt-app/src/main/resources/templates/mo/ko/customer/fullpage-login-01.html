@@ -467,8 +467,9 @@ function loginComplete() {
     setTimeout(function() {
         if ($('#sub').attr('method') == 'POST')
             $('#sub').submit();
-        else
-            location.href = $('#sub').attr('action').replace('?isRequiredLogin=true', '');
+        else {
+            location.href = $('#sub').attr('action').replace('?isRequiredLogin=true', '').replace('/order/reception','/cart/cartList');
+        }
     }, 1);
 
 }

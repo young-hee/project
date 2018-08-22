@@ -38,7 +38,7 @@
 
 			if ( !isPriceSelected ) {
 				if ( min || max ) {
-					min = ( min ) ? $B.string.numberFormat( min ) + '원 ~ ' : 0;
+					min = ( min ) ? $B.string.numberFormat( min ) + '원~' : '~';
 					max = ( max ) ? $B.string.numberFormat( max ) + '원' : '';
 					html = '<div class="brand_sel"><span><em>' + min + max + '</em><a class="price" href="javascript:;" data-attr="" data-value="' + min + ',' + max + '">닫기</a></span></div>';
 					this._$target.show().append( html );

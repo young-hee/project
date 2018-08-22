@@ -158,23 +158,23 @@
 						<dl>
 							<dt id="repShipAddressLayer" style="display: none" th:if="${#lists.size(ordShipAddressExList) > 0}" >
 								<span class="check_wrap">
-									<input type="checkbox" id="repShipAddressYn" th:onclick="|addRepShipAddress('${memberSn}')|"><label for="repShipAddressYn">기본 배송지로 설정</label>
+									<input type="checkbox" id="repShipAddressYn" th:onclick="|setRepShipAddress(this)|" value="N"><label for="repShipAddressYn">기본 배송지로 설정</label>
 								</span>
 							</dt>
 							<dd th:if="${#lists.size(ordEx.shipMsgList) > 0}">
 								<!--<th:block th:if="${#lists.size(shipAddressList) > 0 or #lists.size(ordShipAddressExList) > 0}">-->
-									<div class="input_group">
+								<div class="input_group">
 									<div>
-										<select class="request" name="shipMsg" id="shipMsg" title="배송시 요청사항을 선택">
+										<select class="request" name="selectShipMsg" title="배송시 요청사항을 선택">
 											<option value="">배송시 요청사항을 선택해주세요.</option>
 											<option th:each="shipMsg : ${ordEx.shipMsgList}" th:value="${shipMsg}" th:text="${shipMsg}">직접 입력</option>
 										</select>
 									</div>
 								</div>
 								<!--직접입력 선택시 노출-->
-								<div class="input_group direct" id="inputDirect" style="display: none"><!--/* 직접입력 선택 후 보이게 할경우 display:table 로 보이게 해주세요. */-->
+								<div class="input_group direct"><!--/* 직접입력 선택 후 보이게 할경우 display:table 로 보이게 해주세요. */-->
 									<div>
-										<input type="text" name="shipMsg2" maxlength="80" placeholder="80자 이내로 작성해 주세요." data-msg-required="배송 요청사항을 입력하세요.">
+										<input type="text" name="shipMsg" maxlength="80" placeholder="80자 이내로 작성해 주세요." data-msg-required="배송 요청사항을 입력하세요.">
 									</div>
 								</div>
 								<!--</th:block>-->
@@ -194,9 +194,9 @@
 							<div class="report_box">
 								<dl>
 									<dt>지점명</dt>
-									<dd id="storeShopNmDisp">CU 신용산점</dd>
+									<dd id="storeShopNmDisp">&nbsp;</dd>
 									<dt>연락처</dt>
-									<dd id="storeTelnoDisp">02-0000-0000</dd>
+									<dd id="storeTelnoDisp">&nbsp;</dd>
 								</dl>
 							</div>
 							<h3 class="h_title cont"><strong>받으실 분</strong></h3>
@@ -241,18 +241,6 @@
 			</form>
 		</div>
 		<!--//배송정보-->
-
-		<hr class="div m25">
-		<!--테이크아웃-->
-		<th:block th:if="${memberSn > 0 and #lists.size(storePickupOrdOnlineProdList) > 0}">
-			<h3 class="h_title cont"><strong>테이크아웃</strong></h3>
-			<div class="take_out_store">
-				<p>강남지하점<span class="text_warning">재고없음</span></p>
-				<span><button type="button" id="b_storeChange">매장변경</button></span>
-			</div>
-			<th:block ap:replace="~{cart/fragment/fullpage-takeout-store}"/>
-		</th:block>
-		<!--//테이크아웃-->
 	</dd>
 	<!--스크립트 정의-->
 	<script th:inline="javascript">
@@ -408,19 +396,14 @@
 		}
 
 		/* 배송메세지 설정 */
-		/*$('#shipMsg').on('change', function() {
+		$('[name=selectShipMsg]').on('change', function(e){
 			var selectedVal = $(this).val();
-			if(selectedVal == "직접 입력"){
-				$('#inputDirect').show();
+			//console.log("selectedVal : " + selectedVal);
+			if(!selectedVal){
+				$('[name=shipMsg]').val("");
 			}else{
-				$('#inputDirect').hide();
+				$('[name=shipMsg]').val(selectedVal);
 			}
-		});*/
-
-		/* 테이크아웃 매장변경 레이어 */
-		$("#b_storeChange").on('click', function(e){
-			$("#storeChangeLayer").show();
-			getTakeoutStore(null, 0, false, 0, 0);
 		});
 
 		/* 편의점 찾기 */
@@ -432,6 +415,24 @@
 				window.open("http://www.cupost.co.kr/GIS/chzero/mobile/cvs_pickup.jsp?id=" + id + "&UID=" + storeMoUrl + "/order/orderStore", "storeMap", "width=1000,height=650,resizable=no,scrollbars=no");
 			}
 		}
+
+		/* 기본배송지로 설정 */
+		function setRepShipAddress(obj) {
+			if ($(obj).is(':checked')) {
+				$('[name=repShipAddressYn]').attr('value','Y');
+			}
+		}
+
+
+
+
+
+
+
+
+
+
+
 
 		/* 기본 배송지 데이터 검증 */
 		function addRepShipAddress(memberSn) {

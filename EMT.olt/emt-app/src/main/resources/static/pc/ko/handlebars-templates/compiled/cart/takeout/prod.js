@@ -345,8 +345,9 @@ this["AP"]["handlebars"]["cart"]["takeout"]["prod"] = Handlebars.template({"1":f
     + alias4(container.lambda((depths[1] != null ? depths[1].cartSn : depths[1]), depth0))
     + "', 'O_"
     + alias4(((helper = (helper = helpers.onlineProdSn || (depth0 != null ? depth0.onlineProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"onlineProdSn","hash":{},"data":data}) : helper)))
-    + "', 'online')\">삭제</button>\n				</div>\n			</div>\n\n			<!--/* 옵션 : 수정, 삭제 가능 */-->\n"
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.cartProdExList : depth0),{"name":"each","hash":{},"fn":container.program(79, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+    + "', 'online')\">삭제</button>\n				</div>\n			</div>\n\n			<!--/* 옵션 : 수정, 삭제 가능 */-->\n			<ul class=\"item_option\">\n\n"
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.cartProdExList : depth0),{"name":"each","hash":{},"fn":container.program(79, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "			</ul>\n";
 },"67":function(container,depth0,helpers,partials,data) {
     var stack1;
 
@@ -392,7 +393,7 @@ this["AP"]["handlebars"]["cart"]["takeout"]["prod"] = Handlebars.template({"1":f
 },"79":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, helper, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing, alias5="function";
 
-  return "				<ul class=\"item_option\">\n					<input type=\"hidden\" name=\"takeoutPrdSn\" value=\""
+  return "\n					<input type=\"hidden\" name=\"takeoutPrdSn\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
     + "\"/>\n					<input type=\"hidden\" name=\"cartProdSn\" value=\""
     + alias2(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
@@ -478,8 +479,9 @@ this["AP"]["handlebars"]["cart"]["takeout"]["prod"] = Handlebars.template({"1":f
     + alias2(alias1((depths[2] != null ? depths[2].cartSn : depths[2]), depth0))
     + "', '"
     + alias2(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
-    + "')\"><span class=\"sr_only\">삭제</span></button>\n						</div>\n					</li>\n				</ul>\n"
-    + ((stack1 = helpers["if"].call(alias3,(helpers.gt || (depth0 && depth0.gt) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.cartProdAwardList : depth0)) != null ? stack1.length : stack1),0,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(62, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+    + "')\"><span class=\"sr_only\">삭제</span></button>\n						</div>\n					</li>\n\n"
+    + ((stack1 = helpers["if"].call(alias3,(helpers.gt || (depth0 && depth0.gt) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.cartProdAwardList : depth0)) != null ? stack1.length : stack1),0,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(100, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n";
 },"80":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
@@ -560,6 +562,30 @@ this["AP"]["handlebars"]["cart"]["takeout"]["prod"] = Handlebars.template({"1":f
   return "								<em>"
     + container.escapeExpression((helpers.cartStatusTxt || (depth0 && depth0.cartStatusTxt) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),{"name":"cartStatusTxt","hash":{},"data":data}))
     + "</em>\n";
+},"100":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return "						<ul class=\"freebies\">\n"
+    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.cartProdAwardList : depth0),{"name":"each","hash":{},"fn":container.program(101, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "						</ul>\n";
+},"101":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
+
+  return "								<li>\n									<span class=\"option_name\">\n"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.awardProdEx : depth0)) != null ? stack1.repProdImgEx : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(102, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "										사은품 : "
+    + alias3(container.lambda(((stack1 = (depth0 != null ? depth0.awardProdEx : depth0)) != null ? stack1.prodName : stack1), depth0))
+    + "\n									</span>\n									<span class=\"term\">\n										기간 : "
+    + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,(depth0 != null ? depth0.awardStartDt : depth0),"YYYY.MM.DD",{"name":"dateFormat","hash":{},"data":data}))
+    + " ~ "
+    + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,(depth0 != null ? depth0.awardEndDt : depth0),"YYYY.MM.DD",{"name":"dateFormat","hash":{},"data":data}))
+    + "\n									</span>\n								</li>\n";
+},"102":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return "											<img src=\""
+    + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.awardProdEx : depth0)) != null ? stack1.repProdImgEx : stack1)) != null ? stack1.imgUrl : stack1), depth0))
+    + "\" alt=\"\"/>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 

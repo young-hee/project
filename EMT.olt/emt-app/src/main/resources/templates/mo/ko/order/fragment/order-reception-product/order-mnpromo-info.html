@@ -1,0 +1,39 @@
+            <!-- M+N프로모션 -->
+			<div class="cart_item_box_wrap type4 ">
+				<div class="cart_item_box ico_plus">
+					<div class="top_tit_wrap order_type">
+						<div class="cart_item_exclusive_wrap">
+							<span class="cart_item_exclusive"><th:block th:text="${mPlusNPromo.baseQty + ' + ' + mPlusNPromo.awardQty}">2 + 1</th:block></span>
+						</div>
+						<h3><th:block th:text="${mPlusNPromo.promoName}">[2월의 얼리버드] 피치팜 얼리버드 PINK LOVE</th:block></h3>
+						<div class="price">
+							<span class="quantity"><th:block th:text="${mPlusNPromo.ordQtySum > 0 ? mPlusNPromo.ordQtySum + '개' : '0개'}">3개</th:block></span> /
+							<strong class="eng"><th:block th:text="${#IntegUtil.toCommaNumber(mPlusNPromo.totalProductSaleAmount)}">2,600</th:block><em>원</em></strong>
+						</div>
+					</div>
+					<div class="cart_name_wrap order_type">
+						<div class="thumb"><img alt="" src="/mo/ko/images/dummy/150_20171224234040145.png"></div>
+						<div class="info">
+							<p class="name">미러 홀릭 리퀴드 아이즈</p>
+							<p class="cart_item_opt">RD302 말린딸기시럽 (1개)</p>
+						</div>
+					</div>
+				</div>
+				<th:block th:if="${#lists.size(mPlusNPromo.ordOnlineProdFoList) > 0}">
+					<th:block th:if="${mPlusNPromo.singleProdYn != 'Y'}">
+						<th:block th:each="ordOnlineProd, iter : ${mPlusNPromo.ordOnlineProdFoList}" >
+							<div class="cart_item_box" th:classappend="${!iter.last} ? 'ico_plus' : ''">
+								<div class="cart_name_wrap order_type">
+									<div class="thumb">
+										<th:block th:if="${ordOnlineProd.prodImgUrl != null}"><img th:src="${ordOnlineProd.prodImgUrl}"></th:block>
+										<th:block th:unless="${ordOnlineProd.prodImgUrl != null}"><img th:src="${ordOnlineProd.onlineProdImgUrl}"></th:block>
+									</div>
+									<div class="info">
+										<p class="name"><th:block th:text="${ordOnlineProd.onlineProdName}">RD302 말린딸기시럽</th:block><th:block th:text="(${ordOnlineProd.ordQtySum} + 개)">1개</th:block></p>
+									</div>
+								</div>
+							</div>
+						</th:block>
+					</th:block>
+				</th:block>
+			</div>

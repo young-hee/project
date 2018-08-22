@@ -108,7 +108,7 @@
 			,limit 					: 3
 		}},
 		
-		//아티클 검색
+		//아티클 검색 
 		searchArticleList: { path: '/common/searchArticleList', data: {
 			 toSearchFor: ''
 			,toBeExcluded: null
@@ -177,6 +177,8 @@
 		mobileLoginRequest: { path: '/login/mobileLoginRequest', method: 'POST' },
 		//휴대폰 간편 로그인.
 		mobileLogin: { path: '/login/mobileLogin', method: 'POST' },
+		//휴대폰 간편 로그인 완료.
+		mobileLoginComplete: { path: '/login/mobileLoginComplete', method: 'POST' },
 		//주문번호 전화번호로, 비회원 조회 가능한지 확인.
 		checkOrder: { path: '/nonMeber/checkOrder', method: 'POST' },
 
@@ -756,6 +758,8 @@
 		// 장바구니 담기
 		//data = JSON.stringify( {cartProdExPostList: [{prodSn: 95, cartProdQty: 1, storePickupYn: 'N', integrationMembershipExchYn: 'N', activityPointExchYn: 'N'}]} );
 		addCartProd : { path: '/cart/addCartProd', method: 'POST', contentType: 'application/json' },
+		// 상품등록(동시구매)
+		addCartProdSameTime : { path: '/cart/addCartProdSameTime', method: 'POST', contentType: 'application/json' },
 
 		// 상품수량 수정
 		modifyCartProd: { path: '/cart/modifyCartProd', method: 'PUT' },

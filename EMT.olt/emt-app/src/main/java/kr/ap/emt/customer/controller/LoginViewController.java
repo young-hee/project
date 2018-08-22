@@ -50,7 +50,7 @@ public class LoginViewController extends AbstractController {
 		commonLogin(model, request, returl);
 		
 		if(isPcDevice())
-			return "customer/customernew/login";
+			return "customer/login";
 		if(isMobileDevice())
 			return "customer/fullpage-login-01";
 		return null;
@@ -159,7 +159,7 @@ public class LoginViewController extends AbstractController {
         commonLogin(model, request, returl);
 		
 		if(isMobileDevice())
-			return "customer/customernew/login.3";
+			return "customer/fullpage-login-04";
 
 		return "redirect:/login";
 	}

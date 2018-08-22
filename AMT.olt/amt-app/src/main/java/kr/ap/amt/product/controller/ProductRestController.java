@@ -3,25 +3,23 @@ package kr.ap.amt.product.controller;
 import kr.ap.amt.product.vo.ExternalVO;
 import kr.ap.amt.product.vo.RequestReview;
 import kr.ap.comm.support.common.AbstractController;
+import net.g1project.ecp.api.model.sales.display.OnlineProdList;
 import net.g1project.ecp.api.model.sales.product.ProdReviewListInfo;
-
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.json.BasicJsonParser;
-import org.springframework.boot.json.JsonParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Simjaekyu@
@@ -33,71 +31,93 @@ import java.util.Map;
 public class ProductRestController extends AbstractController {
 	
 	@Value("${external.api.base-url}")
-    private String baseUrl;	//SmartOffer 추천 요청 URL
+	private String externalBaseUrl; // SmartOffer 추천 요청 URL
+	
+	private final String EXTERNAL_ITEMS_KEY = "items"; // SmartOffer item array
+	
+	private final String EXTERNAL_ITEM_CODE_KEY = "ITEM_VALUE"; // SmartOffer item code
 	
 	@GetMapping("/getExternalData")
-    @ResponseBody
-    public Map<String, Object> getReviewList(ExternalVO vo, HttpServletRequest request) throws Exception {
-		
+	@ResponseBody
+	public ResponseEntity<?> getExternalData(ExternalVO vo, HttpServletRequest request) throws Exception {
 		HttpURLConnection conn = null;
 		InputStream inStream = null;
 		DataOutputStream outStream = null;
-		
-		Map<String, Object> result = new HashMap<>();
-		
-		try{
-			URL url = new URL(baseUrl.concat(vo.toString()));
+		HashMap<String, Object> result = new HashMap<>();
+		OnlineProdList onlineProdList = new OnlineProdList();
+		String jsonText = "";
+
+		// 1. call external api
+		try {
+			URL url = new URL(externalBaseUrl.concat(vo.toString()));
 			conn = (HttpURLConnection) url.openConnection();
-			
-			
+
 			conn.setRequestMethod("GET");
-			conn.setDoInput(true); 
-            conn.setDoOutput(true); 
-            conn.setUseCaches(false); 
+			conn.setDoInput(true);
+			conn.setDoOutput(true);
+			conn.setUseCaches(false);
+			conn.setConnectTimeout(10000);
+			conn.setReadTimeout(8000);
+			conn.connect();
 
-            conn.setConnectTimeout(10000);
-            conn.setReadTimeout(8000);
-            conn.connect();
+			outStream = new DataOutputStream(conn.getOutputStream());
+			outStream.flush();
+			outStream.close();
 
-            outStream = new DataOutputStream(conn.getOutputStream());
-            
-            outStream.flush();
-            outStream.close();
-            
-            int resStatCode = conn.getResponseCode();
-            if (200 == resStatCode) {
-            	inStream = conn.getInputStream();
-            	BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream, "utf-8"));
-            	StringBuilder sb = new StringBuilder();
-            	int cp;
-                while ((cp = bReader.read()) != -1) {
-                  sb.append((char) cp);
-                }
-                String jsonText = sb.toString();
-                JsonParser jsonParser = new BasicJsonParser();
-                result = jsonParser.parseMap( jsonText );
-                bReader.close();
-                inStream.close();
-            }
-		}catch(Exception e){
-			return result;
-		}finally {
-        	try {
-                if (outStream != null) {
-                    outStream.close();
-                }
-                if (inStream != null) {
-                    inStream.close();
-                }
-            } catch (IOException ie) {
-                ie.printStackTrace();
-            }
-            if (conn != null) {
-                conn.disconnect();
-            }
-        }
+			int resStatCode = conn.getResponseCode();
+			if (200 == resStatCode) {
+				inStream = conn.getInputStream();
+				BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream, "utf-8"));
+				StringBuilder sb = new StringBuilder();
+				int cp;
+				while ((cp = bReader.read()) != -1) {
+					sb.append((char) cp);
+				}
+				jsonText = sb.toString();
+				
+				bReader.close();
+				inStream.close();
+			}
+		} catch (Exception e) {
+			result.put("errorData", e);
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		} finally {
+			try {
+				if (outStream != null) {
+					outStream.close();
+				}
+				if (inStream != null) {
+					inStream.close();
+				}
+			} catch (IOException ie) {
+				ie.printStackTrace();
+			}
+			if (conn != null) {
+				conn.disconnect();
+			}
+		}
 		
-		return result;
+		// 2. call internal api
+		if (!jsonText.isEmpty()) {
+			StringBuffer legacyModelCodes = new StringBuffer();
+			JSONObject json = null;
+			JSONArray items = null;
+
+			json = new JSONObject(jsonText);
+			items = json.getJSONArray(EXTERNAL_ITEMS_KEY);
+			for (int i = 0; i < items.length(); i++) {
+				JSONObject item = (JSONObject) items.get(i);
+				if (i > 0) {
+					legacyModelCodes.append(",");
+				}
+				legacyModelCodes.append(item.get(EXTERNAL_ITEM_CODE_KEY));
+			}
+
+			onlineProdList = displayApi.getWithLegacyModelCodesProdList(legacyModelCodes.toString());
+		}
+		
+		result.put("onlineProdList", onlineProdList);
+		return ResponseEntity.ok(result);
 	}
 	
 	/**

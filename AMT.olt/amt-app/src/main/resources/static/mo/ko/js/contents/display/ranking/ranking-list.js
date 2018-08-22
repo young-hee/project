@@ -9,15 +9,17 @@
 	var RankingList = $B.Class.extend({
 		initialize: function ( options ) {
 			this._$target = options.$target;
+			this._key = { displayMenuId: options.displayMenuId };
+
 			this._$list = this._$target.find( '.product_list_new' );
 			this._$loading = this._$target.find( '.loading' );
 
-			this._displayMenuId = options.displayMenuId;
-
 			this._param = {
+				prodListUnit: 'Prod',
 				offset: 0,
 				limit: 20
 			};
+			$.extend( this._param, options.param );
 
 			this._setEvent();
 		},
@@ -28,19 +30,15 @@
 				$.extend( this._param, param );
 			}
 
-			this._$loading.show().css( 'height', this._$loading.data( 'loading-first' ));
 			this._$list.empty();
+			this._$loading.show().css( 'height', this._$loading.data( 'loading-first' ));
 
-			setTimeout(function () {
-			/**
-			 * ******************************************************************************************
-			 */
-			AP.api.test({}, this._param ).done(function ( result ) {
+			AP.api.flaggedItemList({}, this._param ).done(function ( result ) {
 				// TODO: test
 				result = {
 					"list": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
 					"offset": 0,
-					"limit": 10,
+					"limit": 20,
 					"totalCount": 20
 				};
 
@@ -53,10 +51,6 @@
 			}.bind( this )).fail(function(xhr) {
 				console.log( xhr );
 			}.bind( this ));
-			/**
-			 * ******************************************************************************************
-			 */
-			}.bind( this ), 300);
 
 			return this;
 		},

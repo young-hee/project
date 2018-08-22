@@ -317,6 +317,19 @@ public class LoginRestController extends AbstractController {
     	loginInfo.setAuthKey(smsNum);
     	ApMemberLoginReturnInfo resultInfo =  apApi.mobileAuthLogin(loginInfo);
 
+    	WebUtils.setSessionAttribute(getRequest(), SessionKey.MOBILE_LOGIN_INFO, resultInfo);
+    	
+		return ResponseEntity.ok(respMap);
+    	
+    }
+    
+    @PostMapping("/login/mobileLoginComplete")
+    public ResponseEntity<?> mobileLoginComplete(HttpServletRequest request) {
+    	
+    	Map<String, Object> respMap = new HashMap<String, Object>();
+    	ApMemberLoginReturnInfo resultInfo =  (ApMemberLoginReturnInfo) WebUtils.getSessionAttribute(getRequest(), SessionKey.MOBILE_LOGIN_INFO);
+
+
 		if(!resultInfo.isMember()) {
 			if(resultInfo.isIncsMember() && resultInfo.getIncsMemberId() != null && !resultInfo.getIncsMemberId().isEmpty()) {
 				if(resultInfo.isIntegrationPasswordMatch()) {
@@ -383,7 +396,7 @@ public class LoginRestController extends AbstractController {
 		if("Y".equals(resultInfo.getPasswordLongtimeUnchangedYn())) {
 			respMap.put("message", getMessage("customer.login.changePwdContant", DateFormatUtils.format(resultInfo.getMemberSignupDt(), "yyyy-MM-dd")));
 		}
-		return ResponseEntity.ok(respMap);
+    	return ResponseEntity.ok(respMap);
     	
     }
 

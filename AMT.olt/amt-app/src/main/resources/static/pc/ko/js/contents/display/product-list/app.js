@@ -15,8 +15,6 @@
 
 			this._productList = null;
 
-			this._displayMenuId = '';
-
 			this._setEvent();
 			this._setRecommendProduct();
 			this._setBestProduct();
@@ -28,9 +26,9 @@
 		searchFilterData: null,
 
 		init: function ( options ) {
-			this._displayMenuId = options.displayMenuId;
 			this._productList = new AP.productList({
-				$target: this._$productList
+				$target: this._$productList,
+				displayMenuId: options.displayMenuId
 			});
 			this._productList.load();
 		},

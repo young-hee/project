@@ -15,5 +15,5 @@ this["AP"]["handlebars"]["common"]["modal"] = Handlebars.template({"1":function(
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias3).call(alias2,(depth0 != null ? depth0.fixed : depth0),"==",true,{"name":"xif","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\">\n            "
     + ((stack1 = (helpers.include || (depth0 && depth0.include) || alias3).call(alias2,(depth0 != null ? depth0.templateKey : depth0),(depth0 != null ? depth0.templateModel : depth0),{"name":"include","hash":{},"data":data})) != null ? stack1 : "")
-    + "\n        </dl>\n		<button class=\"layer_close\" type=\"button\"><i class=\"ico_close_l_w\"></i><span class=\"sr_only\">레이어 닫기</span></button>\n    </div>\n</div>";
+    + "\n        </dl>\n		<button class=\"layer_close\" type=\"button\"><i class=\"ico_close_l\"></i><span class=\"sr_only\">레이어 닫기</span></button>\n    </div>\n</div>";
 },"useData":true});

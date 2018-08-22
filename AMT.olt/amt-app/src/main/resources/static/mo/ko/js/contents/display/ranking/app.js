@@ -34,7 +34,10 @@
 						this._bestView = new AP.rankingList({
 							$target: this._$bestView,
 							displayMenuId: this._displayMenuId,
-							flagged: 'rankBestViewProd'
+							flagged: 'rankBestViewProd',
+							param: {
+								flags: 'icon_reco_pop_7d'
+							}
 						}).load();
 					}
 				} else if ( e.index == 1 ) {
@@ -42,9 +45,12 @@
 						this._bestSell = new AP.rankingList({
 							$target: this._$bestSell,
 							displayMenuId: this._displayMenuId,
-							flagged: 'rankBestSellProd'
+							flagged: 'rankBestSellProd',
+							param: {
+								flags: 'icon_reco_best_7d'
+							}
 						}).load({
-							price: this._$bestSell.find( '.check_btn_set input' ).val()
+							priceRange: this._$bestSell.find( '.check_btn_set input' ).val()
 						});
 					}
 				}
@@ -52,7 +58,7 @@
 
 			this._$bestSell.on( 'change', '.check_btn_set input', function (e) {
 				this._bestSell.load({
-					price: $( e.currentTarget ).val()
+					priceRange: $( e.currentTarget ).val()
 				});
 			}.bind( this ));
 		}

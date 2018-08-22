@@ -1,6 +1,6 @@
 <div class="promotion">
 	<div class="promotion_header">
-		<a href="#none"><strong>진주알 교환 상품</strong></a>
+		<a href="#none"><strong>진주알 전용 상품</strong></a>
 		<div class="price">
 			<span class="strong"><b>{{numberFormat pointSum }}</b>알</span> /
 			<span>보유 <b>{{numberFormat activityPoints }}</b>알</span>
@@ -47,7 +47,8 @@
 								{{/switch}}
 							{{/each}}
 						{{/xif}}
-						<a href="#none" class="title">{{#if (ne ../onlineProdName null) }} {{ ../onlineProdName }} {{else}} {{ prodEx.prodName }} {{/if}}</a>
+						<a href="#none" class="title" {{#if (ne ../onlineProdSn null) }} onclick="fnProdDetail({{ ../onlineProdSn }})" {{/if}}>{{#if (ne ../onlineProdName null) }} {{ ../onlineProdName }} {{else}} {{ prodEx.prodName }} {{/if}}</a>
+						{{#if (ne ../onlineProdName null) }} <span class="opt">{{ prodEx.prodName }}</span> {{/if}}
 					</div>
 					<!--/* 상품 수량 */-->
 					<div class="count">

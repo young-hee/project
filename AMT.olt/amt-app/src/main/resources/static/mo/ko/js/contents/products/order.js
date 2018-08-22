@@ -15,15 +15,17 @@
 		initialize: function ( $target, model, memberMap ) {
 			AP.OrderLayer.prototype.initialize.call( this, $target );
 
-			this._$result = this._$target.find( '.option_wrap' );
+			this._$result = this._$target.find( '.option_layer' );
 			this._$beatyPoint = this._$target.find( '#buy_beauty_point' );
-			this._$totalCount = this._$target.find( '.buy_info .opt_selected .num' );
-			this._$totalPrice = this._$target.find( '.buy_info .buy_result .num' );
+			this._$totalCount = this._$target.find( '#totalCnt' );
+			this._$totalPrice = this._$target.find( '#totalPrice' );
 
 			this._defaultModel = model;
 			this._setUserSelectEvents();
 			this._setEvents( memberMap );
 			this._setBeautyPointCheckBox();
+			
+			this._selectOption = null;
 
 			if ( this._defaultModel.saleDisplayStatus === 'EndSale' ) {
 				this._$target.hide();
@@ -40,6 +42,14 @@
 		},
 
 		/** =============== Public Methods =============== */
+		
+		/**
+		 * 주문레이어를 열지 않고 단위 상품 셀렉트 박스를 선택하거나 컬러칩을 선택할 경우 
+		 * 미리 주문레이어에 담을 옵션을 셋팅해 둠.
+		 */
+		selectOption : function( product ){
+			this._selectOption = product;
+		},
 
 
 		/** =============== Private Methods =============== */
@@ -50,9 +60,20 @@
 		 */
 		_setEvents: function ( memberMap ) {
 			
+			$(document).on('click', function(){
+		 		if( this._$target.find('.ui_select').hasClass('open') ){
+		 			this._$target.find('.option_layer').addClass('sub_open');
+		 		}else{
+		 			this._$target.find('.option_layer').removeClass('sub_open');
+		 		}
+		 	}.bind(this));
+			
 			//구매하기 버튼
 			this._$target.find( '.btn_order' ).on( 'click', function (e) {
 				this.open();
+				if( this._selectOption != null ){
+					this._selectedOptions.add( this._selectOption );
+				}
 			}.bind(this));
 			
 			//바로구매, 예약구매 클릭
@@ -74,43 +95,24 @@
 				}.bind(this));
 			}.bind(this));
 
-			//테이크아웃 클릭
-			this._$target.find( '.btn_takeout' ).on( 'click', function (e) {
-				AP.login().done(function () {
-					var products = this._selectedOptions.getSelectedData(),
-						isAllTackout = _.every( products, function ( product ) {
-							return product.storePickupBtnEnable === 'Y';
-						});
-
-					if ( isAllTackout ) {
-						this._addCartProd( 'takeout', products ).done( function () {
-							this._goToPage( 'takeout' );
-						}.bind(this)).fail( function ( xhr ) {
-							//에러처리
-						}.bind(this));
-					} else {
-						AP.modal.alert( AP.message.IN_INVALID_TAKEOUT_PRODUCT );
-					}
-				}.bind(this));
-			}.bind(this));
-
 			//장바구니 클릭
 			this._$target.find( '.btn_basket' ).on( 'click', function (e) {
 				var products = this._selectedOptions.getSelectedData();
-				if ( AP.LOGIN_USER ) {
-					this._addCartProd( 'cart', products ).done( function () {
-						AP.modal.confirm( AP.message.ADDED_CART_TO_CART_PAGE ).addListener( 'modal-close', function (e) {
-							if ( e.closeType === 'confirm' ) {
-								this._goToPage( 'cart' );
-							}
-						}.bind(this));
-					}.bind(this)).fail( function ( xhr ) {
-						//에러처리
-						console.log( '-error:', xhr.errorCode );
+				this._addCartProd( 'cart', products ).done( function () {
+					AP.modal.confirm({
+						 contents : AP.message.ADDED_CART_TO_CART_PAGE
+						,cancelLabel : '계속 쇼핑하기'
+						,confirmLabel : '장바구니로 이동'
+						,containerClass : 'system_alert'
+					}).addListener( 'modal-close', function (e) {
+						if ( e.closeType === 'confirm' ) {
+							this._goToPage( 'cart' );
+						}
 					}.bind(this));
-				} else {
-					this._noneMemberOrderInfo( products, 'cart' );
-				}
+				}.bind(this)).fail( function ( xhr ) {
+					//에러처리
+					//console.log( '-error:', xhr.errorCode );
+				}.bind(this));
 				/*
 				this._productsInOutOfStock( products ).done( function () {
 					this._addCartProd( 'cart', products ).done( function () {
@@ -136,6 +138,7 @@
 		},
 
 		_setUserSelectEvents: function () {
+			
 			//옵션 selectbox
 			this._optionsSelectBox = new AP.OptionsSelectBox( this._$result, this._defaultModel )
 				.addListener( 'add-selectbox', function (e) {
@@ -278,7 +281,7 @@
 			if ( products.length ) {
 				//장바구니 저장 api
 				AP.api.addCartProd( null, JSON.stringify({cartProdExPostList: cartProdExPostList})).done( function ( result ) {
-					AP.header.resetCartCount();
+					//AP.header.resetCartCount();
 					defer.resolve();
 				}).fail( function ( xhr ) {
 					AP.modal.alert( AP.message.API_SAVE_ERROR );

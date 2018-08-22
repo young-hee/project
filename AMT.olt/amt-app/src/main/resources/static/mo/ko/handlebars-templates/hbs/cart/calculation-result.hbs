@@ -1,0 +1,17 @@
+<ul>
+	<li class="cart_rst_item">
+		<span class="text_rst_item">할인</span>
+		<span class="cart_rst_num">
+			<strong class="num">{{numberFormat (calc cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount '+' cartEx.calculationResult.exchIPointSum '+' cartEx.calculationResult.exchAPointSum ) }}</strong><span class="text_rst_unit">원</span>
+		</span>
+	</li>
+	<li class="cart_rst_item">
+		<strong class="text_rst_item">결제 예정 금액</strong>
+		<span class="cart_rst_num">
+			<strong class="num">
+				{{#if (eq cartEx.calculationResult.paidAmountInfo.standardCurrency.amount null) }} 0 {{else}} {{ numberFormat cartEx.calculationResult.paidAmountInfo.standardCurrency.amount }} {{/if}}
+			</strong>
+			<span class="text_rst_unit">원</span>
+		</span>
+	</li>
+</ul>

@@ -156,7 +156,7 @@ this["AP"]["handlebars"]["my"]["order"]["orderList"] = Handlebars.template({"1":
     + "				<td>"
     + alias3((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.storePickupOrdProdInfo : depth0)) != null ? stack1.totalOrdAmt : stack1),{"name":"currencyFormat","hash":{},"data":data}))
     + "</td>\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depths[1] != null ? depths[1].type : depths[1]),"===","cashReceipts","&&",(helpers.isEmpty || (depth0 && depth0.isEmpty) || alias2).call(alias1,(depth0 != null ? depth0.onlineOrdProdInfo : depth0),{"name":"isEmpty","hash":{},"data":data}),{"name":"xif","hash":{},"fn":container.program(46, data, 0, blockParams, depths),"inverse":container.program(49, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].type : depths[1]),"cashReceipts",{"name":"eq","hash":{},"data":data}),"&&",(helpers.isEmpty || (depth0 && depth0.isEmpty) || alias2).call(alias1,(depth0 != null ? depth0.onlineOrdProdInfo : depth0),{"name":"isEmpty","hash":{},"data":data}),{"name":"xif","hash":{},"fn":container.program(46, data, 0, blockParams, depths),"inverse":container.program(49, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "			</tr>\n";
 },"36":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
@@ -246,7 +246,7 @@ this["AP"]["handlebars"]["my"]["order"]["orderList"] = Handlebars.template({"1":
     + alias3(alias4((depth0 != null ? depth0.ordNo : depth0), depth0))
     + "</a>\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordProdInfo : depth0)) != null ? stack1.ordHistProdStatusCode : stack1),"ShipComplete",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(55, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "			</td>\n			<td class=\"align_left\">\n				<div class=\"flag\">\n					<b class=\"store\">압구정점</b>\n					<span>스윗딜리버리</span>\n				</div>\n				<a href=\"javascript:;\" onclick=\"showDetailView('order/detail', '"
+    + "			</td>\n			<td class=\"align_left\">\n				<div class=\"flag\">\n					<!-- <b class=\"store\">압구정점</b> -->\n					<span>스윗딜리버리</span>\n				</div>\n				<a href=\"javascript:;\" onclick=\"showDetailView('order/detail', '"
     + alias3(alias4((depth0 != null ? depth0.ordNo : depth0), depth0))
     + "')\">\n					"
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.ordProdInfo : depth0)) != null ? stack1.onlineProdNameRlang : stack1), depth0))

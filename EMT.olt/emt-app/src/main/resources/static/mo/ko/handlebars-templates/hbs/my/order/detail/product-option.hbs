@@ -1,7 +1,11 @@
 {{#xif singleProdYn '===' 'Y'}}
 	<div class="product">
 		<div class="check_wrap check_only" style="display: none">
-			<input type="checkbox" name="goods" prod="prod" onclick="selectProd(this);" onlineProdCode="{{oCode}}" ordHistProdNo="{{sub.ordHistProdNo}}" id="{{sub.ordHistProdNo}}" val="{{json sub}}"><label for="{{sub.ordHistProdNo}}">
+			{{#xif promoSn '!=' null}}
+				<input type="checkbox" name="goods" prod="prod" onclick="selectProd(this);" promoSn="{{promoSn}}" onlineProdCode="{{oCode}}" ordHistProdNo="{{promoSn}}" id="{{sub.ordHistProdNo}}" val="{{json sub}}"><label for="{{sub.ordHistProdNo}}">
+			{{else}}
+				<input type="checkbox" name="goods" prod="prod" onclick="selectProd(this);" onlineProdCode="{{oCode}}" ordHistProdNo="{{sub.ordHistProdNo}}" id="{{sub.ordHistProdNo}}" val="{{json sub}}"><label for="{{sub.ordHistProdNo}}">
+			{{/xif}}
 			<span class="sr_only">선택</span></label>
 		</div>
 
@@ -28,7 +32,7 @@
 				{{/xif}}
 
 			{{else}}
-				<strong class="num font_md">{{currencyFormat sub.prodOrdAmtPcur}}</strong></p>
+				<strong class="num font_md">{{currencyFormat sub.finalOnlineSaleAmtPcur}}</strong></p>
 			{{/xif}}
 		</div>
 		{{#xif sub.ordHistProdStatusCode '===' 'ProdCancel'}}

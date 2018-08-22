@@ -249,7 +249,60 @@
 
 		/**
 		 * 전시 *************************************************************
-		 */
+		 * param
+		 * flag -
+		 * 	신상품 : icon_reco_new
+		 * 	베스트 : icon_reco_best_w
+		 * 	온라인전용: icon_reco_online
+		 * 	투데이핫딜: icon_type_sp_today
+		 * 	한정판특가: icon_type_sp_qty
+		 *  대카테고리 추천 : icon_reco_best_w + 카테고리 필터(displayCate)
+		 *  온라인전용 추천 : icon_reco_online,icon_reco_best_w
+		 * 	뷰티포인트샵 - 인기상품 : icon_reco_hot,icon_membership1
+		 *  진주알스토어 - 인기상품 : icon_reco_hot,icon_point_activity
+		 * includeFilters
+		 * 	- 필터용 정보들도 포함해서 내려보내야 하는지
+		 *  - true / false
+		 * displayCate
+		 * 	- display_cate_sn. 예) “1,50”
+		 * brand
+		 * 	- brand_sn. 예) “2,995”
+		 * attr
+		 * 	- “color=red,color=blue,size=L,size=XL”
+		 * priceRange
+		 * 	- 예1) “10000,”- 10000~ 예2) “2000,8000”- 2000~8000 예3) “,50000”- ~50000
+		 * */
+		//페이지별 상품목록
+		itemList: { path:'/display/prodList/{displayMenuId}', method: 'POST' , data: {
+				flag: null, //icon_pr_prod (행사상품여부)
+				attr: null, //검색필터, 컬러, 피부톤 등 (color=red,blue|size=L,XL)
+				prodSort: null, //판매순(Bestselling), 신상품순(NewProd), 높은 가격순(HighestPrice), 낮은가격순(LowestPrice), 상품평순(MostProdReview)
+				offset: 0,
+				limit: 10,
+				includeFilters:false,
+				displayCateDepth: 0,
+				displayCate:null,
+				brand:null,
+				priceRange:null
+			}
+		},
+
+		//플래그상품목록
+		flaggedItemList: { path:'/display/flaggedProdList', method: 'POST' , data: {
+				flags: null, //대카(icon_reco_best_w), 온라인 전용(icon_reco_online,icon_reco_best_w), 뷰티포인트샵(icon_reco_hot,icon_membership1), (main 플래그 신상품 (icon_reco_new), 핫딜( icon_type_sp_today)베스트(icon_reco_best_w)
+				flag: null,
+				prodListUnit : 'OnlineProd',
+				prodSort: 'NewProd', //판매순(Bestselling), 신상품순(NewProd), 높은 가격순(HighestPrice), 낮은가격순(LowestPrice), 상품평순(MostProdReview)
+				offset: 0,
+				limit: 5, //대카(5), 온라인전용(5), 뷰티포인트(10)
+				includeFilters:false,
+				displayCateDepth: 0,
+				displayCate : null, //대카추천상품일 경우만 입력
+				brand:null,
+				attr:null,
+				priceRange:null
+			}
+		},
 		
 		/**
 		 * 상품 *************************************************************
@@ -269,6 +322,24 @@
 				endDate: null,
 				offset: 0, //(필수)
 				limit: 20 //(필수)
+			}
+		},
+		
+		// 넷스루 상품조회
+		getReviewList : {path : '/product/getExternalData', method : 'GET', data: {
+				dp : null, //필수 DP 아이디
+				pcid : null, //해당 단말(PC/모바일/브라우저 등) 식별
+				uid : null, //해당 접속자 식별 (일반적으로 회원ID)
+				simulation : null, //시뮬레이션 모드 동작 여부
+				pretty : null, //응답결과에 대한 indentation 적용 여부
+				sid : null, //A/B 시나리오 선택을 위한 Session ID값
+				skipLogging : null, //추천노출로그 생성 유무(예, donottrack처리). 기본값 false
+				i_sBrand : null, //브랜드코드
+				i_sProductcd : null, //상품코드
+				i_sCategorycd1 : null, //1레벨 카테고리 코드
+				i_sCategorycd2 : null, //2레벨 카테고리 코드
+				i_sCategorycd3 : null, //3레벨 카테고리 코드
+				i_sKwd : null //검색어
 			}
 		},
 

@@ -20,10 +20,10 @@
 				addAttrsName: '가격',
 				addAttrCode: 'price',
 				addAttrVals: [
-					{ addAttrValCode: '0,30000', 		addAttrValName: '3만원미만' },
-					{ addAttrValCode: '30000,50000', 	addAttrValName: '3~5만원' },
-					{ addAttrValCode: '50000,70000', 	addAttrValName: '5~7만원' },
-					{ addAttrValCode: '70000',	 		addAttrValName: '7만원' }
+					{ addAttrValCode: '~30000', 		addAttrValName: '3만원미만' },
+					{ addAttrValCode: '30000~50000', 	addAttrValName: '3~5만원' },
+					{ addAttrValCode: '50000~70000', 	addAttrValName: '5~7만원' },
+					{ addAttrValCode: '70000~',	 		addAttrValName: '7만원' }
 				],
 				min: '',
 				max: ''
@@ -40,14 +40,6 @@
 		/** =============== Public Methods =============== */
 
 		/** =============== Private Methods ============== */
-		_reset: function () {
-			this._$filter.find( 'input' ).prop( 'checked', false );
-			this._$filter.find( '.price .direct_entry input' ).val( '' );
-			this._dataReset();
-
-			this._apply();
-		},
-
 		_dataReset: function () {
 			for ( var i = 0; i < this._searchFilterData.addAttrs.length; ++i ) {
 				for ( var j = 0; j < this._searchFilterData.addAttrs[i].addAttrVals.length; ++j ) {
@@ -156,9 +148,6 @@
 						if ( min && max ) {
 							this._comparePrice( min, max );
 						}
-						if ( !min && max ) {
-							this._$filter.find( '.price' ).find( 'input.min' ).val(0);
-						}
 						if ( min || max ) {
 							if ( parseInt( beforePrice ) != parseInt($input.val().replace( /,/g, '' )) ) {
 								this._$filter.find( '.price input' ).prop( 'checked', false );
@@ -201,14 +190,22 @@
 			}
 		},
 
+		_reset: function () {
+			this._$filter.find( 'input' ).prop( 'checked', false );
+			this._$filter.find( '.price .direct_entry input' ).val( '' );
+			this._dataReset();
+
+			this.dispatch( 'apply-search-filter', { data: AP.display.searchFilterData, reset: true });
+		},
+
 		_apply: function () {
-			var min = parseInt( this._$filter.find( '.min' ).val().replace( /,/g, '' ) || ''),
+			var min = parseInt( this._$filter.find( '.min' ).val().replace( /,/g, '' ) || '' ),
 				max = parseInt( this._$filter.find( '.max' ).val().replace( /,/g, '' ) || '' );
 
 			var isComparePrice = this._comparePrice( min, max );
 			if ( isComparePrice ) {
 				AP.display.searchFilterData = this._searchFilterData;
-				this.dispatch( 'apply-search-filter', {data: AP.display.searchFilterData });
+				this.dispatch( 'apply-search-filter', { data: AP.display.searchFilterData });
 			}
 		}
 	});

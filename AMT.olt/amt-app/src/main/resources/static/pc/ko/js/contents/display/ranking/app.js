@@ -1,104 +1,70 @@
 /**
- * Display
+ * Ranking
  *
  */
 
 ;(function ( $ ) {
 	'use strict';
 
-	var Display = $B.Class.extend({
+	var Ranking = $B.Class.extend({
 		initialize: function () {
-			this.SLIDE_VIEW_LENGTH = 3;
-
-			this._$target = $( '#ap_container .ap_contents.goods_list' );
-			this._$productList = this._$target.find( '.list_product' ).closest( '.category_area' );
-
-			this._productList = null;
+			this._$target = $( '#ap_container .ap_contents.ap_ranking' );
+			this._$bestView = this._$target.find( '.tab_cont.best_view' );
+			this._$bestSell = this._$target.find( '.tab_cont.best_sell' );
 
 			this._displayMenuId = '';
 
+			this._bestView = null;
+			this._bestSell = null;
+
 			this._setEvent();
-			this._setRecommendProduct();
-			this._setBestProduct();
-			this._setPopularBrand();
-			this._setReviewBest();
 		},
 
 		/** =============== Public Methods =============== */
-		searchFilterData: null,
-
 		init: function ( options ) {
 			this._displayMenuId = options.displayMenuId;
-			this._productList = new AP.productList({
-				$target: this._$productList
-			});
-			this._productList.load();
+			this._$target.find( '.tab_menu ul li' ).eq(0).find( 'button' ).trigger( 'click' );
 		},
 
 		/** =============== Private Methods ============== */
-		_setEvent: function () {},
-
-		_initProductSlide: function ( options ) {
-			options.api({}, options.param).done(function ( result ) {
-				result = {
-					list: [1,2,3,4,5,6,7,8,9,10,11,12]
-				};
-
-				var html = AP.common.getTemplate( options.template, result );
-				options.$slide.find( 'ul.ix-list-items' ).html( html );
-				options.$slide.ixSlideMax();
-				options.$slide.find( '.paging .total' ).text( Math.ceil( options.$slide.ixSlideMax( 'getTotalLength' ) / this.SLIDE_VIEW_LENGTH ));
-				options.$slide.on( 'ixSlideMax:change', function (e) {
-					options.$slide.find( '.paging .current' ).text( Math.ceil( e.currentIndex / this.SLIDE_VIEW_LENGTH ) + 1 );
-				}.bind( this ));
-			}.bind( this )).fail(function () {}.bind( this ));
-
-			options.$slide.on( 'click', '.like, .cart', function (e) {
-				$( e.currentTarget ).find( 'i' ).toggleClass( 'on' );
+		_setEvent: function () {
+			this._$target.find( '.ui_tab.wide' ).on( 'tabs-change', function(e) {
+				if ( e.index == 0 ) {
+					if ( !this._bestView ) {
+						this._bestView = new AP.rankingList({
+							$target: this._$bestView,
+							displayMenuId: this._displayMenuId,
+							flagged: 'rankBestViewProd',
+							param: {
+								flags: 'icon_reco_pop_7d'
+							}
+						}).load();
+					}
+				} else if ( e.index == 1 ) {
+					if ( !this._bestSell ) {
+						this._bestSell = new AP.rankingList({
+							$target: this._$bestSell,
+							displayMenuId: this._displayMenuId,
+							flagged: 'rankBestSellProd',
+							param: {
+								flags: 'icon_reco_best_7d'
+							}
+						}).load({
+							priceRange: this._$bestSell.find( '.tab_menu li:eq(0) button' ).data( 'value' )
+						});
+					}
+				}
 			}.bind( this ));
-		},
 
-		_setRecommendProduct: function () {
-			if ( this._$target.find( '.recommended_item.slide.recommend' ).length == 0 ) return;
-			this._initProductSlide({
-				api: AP.api.test,
-				param: {},
-				template: 'display.product-list.recommend-item',
-				$slide: this._$target.find( '.recommended_item.slide.recommend' )
-			});
-		},
-
-		_setBestProduct: function () {
-			if ( this._$target.find( '.recommended_item.slide.popular' ).length == 0 ) return;
-			this._initProductSlide({
-				api: AP.api.test,
-				param: {},
-				template: 'display.product-list.recommend-item',
-				$slide: this._$target.find( '.recommended_item.slide.popular' )
-			});
-		},
-
-		_setPopularBrand: function () {
-			if ( this._$target.find( '.brandWrap01.slide.popular_brand' ).length == 0 ) return;
-			this._initProductSlide({
-				api: AP.api.test,
-				param: {},
-				template: 'display.product-list.popular-brand-item',
-				$slide: this._$target.find( '.brandWrap01.slide.popular_brand' )
-			});
-		},
-
-		_setReviewBest: function () {
-			if ( this._$target.find( '.bast_review.slide' ).length == 0 ) return;
-			this._initProductSlide({
-				api: AP.api.test,
-				param: {},
-				template: 'display.product-list.best-review-item',
-				$slide: this._$target.find( '.bast_review.slide' )
-			});
-
+			this._$bestSell.on( 'click', '.tab_menu li button', function (e) {
+				this._$bestSell.find( '.tab_menu li' ).removeClass( 'on' );
+				$( e.currentTarget ).parent( 'li' ).addClass( 'on' );
+				this._bestSell.load({
+					priceRange: $( e.currentTarget ).data( 'value' )
+				});
+			}.bind( this ));
 		}
 	});
 
-	AP.display = new Display();
+	AP.ranking = new Ranking();
 })( jQuery );

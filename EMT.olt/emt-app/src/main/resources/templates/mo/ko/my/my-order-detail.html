@@ -83,6 +83,7 @@
 	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-payment.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-ship-address.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/fullpage-address-edit.js}"></script>
+	<script ap:src="@{/handlebars-templates/compiled/my/order/fullpage-store-view.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-bottom.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-change-var.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/fullpage-cash-receipts.js}"></script>
@@ -91,6 +92,8 @@
 	<script ap:src="@{/handlebars-templates/compiled/my/order/detail/claim-reason.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/detail/claim-reason-select.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/detail/amount-payment.js}"></script>
+
+
 	<script>
 		//주소찾기
 
@@ -170,7 +173,7 @@
 
 		/* 상품영역 */
 		function setOnlineTake() {
-			if (customOrd.shippingOrdOnlineProdList) {
+			if (customOrd.shipOrdOnlineProdCnt > 0) {
 				var orderDetailGoods = AP.common.getTemplate('my.order.order-detail-goods', {
 					cnt : customOrd.shipOrdOnlineProdCnt,
 					list : customOrd.shippingOrdOnlineProdList,
@@ -193,7 +196,7 @@
 				$('.online').append(orderDetailGoods);
 			}
 
-			if (customOrd.storePickupOrdOnlineProdList && customOrd.storePickupOrdOnlineProdList.length > 0) {
+			if (customOrd.storeOrdOnlineProdCnt > 0) {
 				var storDetailGoods = AP.common.getTemplate('my.order.order-detail-goods', {
 					cnt : customOrd.storePickupOrdOnlineProdList.length,
 					list : customOrd.storePickupOrdOnlineProdList,
@@ -338,6 +341,23 @@
 			});
 		}
 
+		function takeOutStoreInfo(storeEx) {
+			var modal = AP.modal.full({
+				contents: {
+					templateKey: 'my.order.fullpage-store-view',
+					templateModel: {
+						storeEx : storeEx
+					}
+				}
+			});
+			$( '.map_area' ).mapApi('resize');
+			$( '.map_area' ).mapApi('setCenter', storeEx.latitude, storeEx.longitude);
+			$( '.map_area' ).mapApi('addMarker', storeEx.latitude, storeEx.longitude, 1);
+			$( '.slide' ).ixSlideMax();
+
+
+		}
+
 		function allCheck(cb) {
 			checkboxControl(cancelState, cb.checked);
 		}
@@ -480,7 +500,6 @@
 					var test = $(this).attr('val');
 
 					var checkValue = JSON.parse(test);
-					console.log(checkValue);
 
 					var rs = $('#rs_' + $(this).attr('ordHistProdNo')).val();
 					var rst = $('#rst_' + $(this).attr('ordHistProdNo')).val();
@@ -500,9 +519,6 @@
 					checkProds.push(checkValue);
 				}
 			});
-
-			// console.log(checkProds.length);
-			// return;
 
 			if (checkProds.length == 0) {
 
@@ -524,7 +540,7 @@
 				}
 			}
 
-			console.log(checkProds);
+			// console.log(checkProds);
 
 			AP.api.ordSelect({
 				ordSn : customOrd.goods.ordSn,

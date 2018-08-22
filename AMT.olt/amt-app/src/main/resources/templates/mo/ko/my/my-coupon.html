@@ -54,7 +54,7 @@
 									</div>
 									<ul class="coupon_cont">
 										<li th:if="${item.availCoupon.prodDcCoupon.minPurProdPriceAssignYn == 'Y'}"><span>최소사용 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.minPurProdPrice)}">30,000</th:block>원 이상</span></li>
-										<li th:if="${item.availCoupon.prodDcCoupon.maxDcAmtLimitYn == 'Y'}"><span>최대할인 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.prodDcCoupon.maxDcAmt)}">30,000</th:block>원</span></li>
+										<li th:if="${item.availCoupon.prodDcCoupon.maxDcAmtLimitYn == 'Y'}"><span>최대할인 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.maxDcAmt)}">30,000</th:block>원</span></li>
 										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
 									</ul>
 								</dd>
@@ -94,7 +94,7 @@
 									<div class="coupon_area">
 										<div class="coupon">
 											<div class="inner">
-												<span class="num"><th:block class="won">M</th:block>+<th:block th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">N</th:block></span>
+												<span class="num"><th:block th:text="${item.availCoupon.mplusnCoupon.baseOrdQty}">M</th:block>+<th:block th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">N</th:block></span>
 												<small th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Same'}">동일상품</small>
 												<small th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Different'}">이종상품</small>
 											</div>
@@ -199,7 +199,7 @@
 									</div>
 									<ul class="coupon_cont">
 										<li th:if="${item.availCoupon.prodDcCoupon.minPurProdPriceAssignYn == 'Y'}"><span>최소사용 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.minPurProdPrice)}">30,000</th:block>원 이상</span></li>
-										<li th:if="${item.prodDcCoupon.maxDcAmtLimitYn == 'Y'}"><span>최대할인 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.prodDcCoupon.maxDcAmt)}">30,000</th:block>원</span></li>
+										<li th:if="${item.availCoupon.prodDcCoupon.maxDcAmtLimitYn == 'Y'}"><span>최대할인 : </span><span><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.maxDcAmt)}">30,000</th:block>원</span></li>
 										<li><span>만료예정 : </span><span th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2018.10.01</span></li>
 									</ul>
 								</dd>
@@ -239,7 +239,7 @@
 									<div class="coupon_area">
 										<div class="coupon">
 											<div class="inner">
-												<span class="num"><th:block class="won">M</th:block>+<th:block th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">N</th:block></span>
+												<span class="num"><th:block th:text="${item.availCoupon.mplusnCoupon.baseOrdQty}">M</th:block>+<th:block th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">N</th:block></span>
 												<small th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Same'}">동일상품</small>
 												<small th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Different'}">이종상품</small>
 											</div>

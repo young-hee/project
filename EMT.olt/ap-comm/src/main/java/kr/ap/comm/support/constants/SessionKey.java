@@ -23,6 +23,8 @@ public class SessionKey {
     public static final String OLD_ID = "OLD_ID";
     
     public static final String RETURL = "RETURL";
+    
+    public static final String MOBILE_LOGIN_INFO = "MOBILE_LOGIN_INFO";
 
     /**
      * Sns

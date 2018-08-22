@@ -155,6 +155,8 @@
 		mobileLoginRequest: { path: '/login/mobileLoginRequest', method: 'POST' },
 		//휴대폰 간편 로그인.
 		mobileLogin: { path: '/login/mobileLogin', method: 'POST' },
+		//휴대폰 간편 로그인 완료.
+		mobileLoginComplete: { path: '/login/mobileLoginComplete', method: 'POST' },
 		//주문번호 전화번호로, 비회원 조회 가능한지 확인.
 		checkOrder: { path: '/nonMeber/checkOrder', method: 'POST' },
 

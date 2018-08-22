@@ -12,7 +12,7 @@
 					<li class="clear"><span>테이크아웃 {{condition (eq this.step 'two') '취소' ''}}</span><span>{{currencyFormat this.data.storeShipProd}}</span></li>
 					<li class="clear"><span>구매 특가 상품 {{condition (eq this.step 'two') '취소' ''}}</span><span>{{currencyFormat this.data.spPriceAwardProd}}</span></li>
 					<li class="clear"><span>포장/쇼핑백 추가 {{condition (eq this.step 'two') '취소' ''}}</span><span>{{currencyFormat this.data.spUnitPacking}}</span></li>
-					<li class="clear"><span>배송비 {{condition (eq this.step 'two') '환불' ''}}</span><span>{{currencyFormat this.data.shipFee}}</span></li>
+					<li class="clear"><span>배송비 {{condition (and (gt this.data.shipFee 0) (eq this.step 'two')) '환불' ''}}</span><span>{{currencyFormat (absNum this.data.shipFee)}}</span></li>
 				</ul>
 			</dd>
 		</dl>

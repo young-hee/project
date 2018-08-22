@@ -94,6 +94,12 @@
 	<script th:inline="javascript">
 		$( document ).ready(function() {
 			init();
+
+			//주문완료화면 오류 발생시
+			var ordCompleteError = /*[[${ordCompleteError}]]*/ null;
+			if(ordCompleteError != null){
+				AP.modal.alert(ordCompleteError);
+			}
 		});
 		// 주소 찾기
 		$( '.ui_find_addresses' ).findAddresses();

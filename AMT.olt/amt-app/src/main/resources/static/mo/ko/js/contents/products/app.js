@@ -22,9 +22,10 @@
 		//페이지를 구성한는 기본 데이타 설정
 		setDefaultData: function ( model, memberMap ) {
 			this._defaultModel = model;
-			/*
+
 			AP.previewArea.setDefaultData( this._defaultModel, memberMap );
 
+			/*
 			//상단 리뷰 클릭
 			AP.previewArea.addListener( 'call-review', function () {
 				this._$target.find( '.ui_tab' ).tabs( 'change', 1 );
@@ -44,6 +45,11 @@
 		/** =============== Private Methods =============== */
 
 		_setEvents: function () {
+			
+			$(window).scroll(function() {
+				this._header_bg();
+		 	}.bind(this));
+			
 			/*컬러칩 옵션 선택*/
 			$('.color_option .color_chip input').change(function(e){
 				var $this = $(e.currentTarget);
@@ -77,9 +83,60 @@
 					$(this).closest('.option_layer').removeClass('sub_open');
 				}
 			}.bind(this));
-			 
-			/*
-			//전성분/상세정보제공고시 보기
+			
+			//스페셜 기프트
+			this._$target.find( '.special_gift .more' ).on( 'click', function (e) { 
+				var modal = AP.modal.full({
+					title: '스페셜 기프트',
+					containerClass : 'fixed_top',
+					contents: {
+						templateKey: 'products.special-gift',
+						templateModel : {
+							giftProds: this._defaultModel.onlineProdGift.giftProds
+						}
+					}
+				});
+			}.bind(this));
+			
+			//카드사 혜택정보
+			this._$target.find( '.card_benefit .more' ).on( 'click', function (e) { 
+				var modal = AP.modal.full({
+					title: '카드사 혜택정보',
+					containerClass : 'fixed_top card_installment',
+					contents: {
+						templateKey: 'products.card-benefit'
+					}
+				});
+			}.bind(this));
+			
+			//공유하기
+			this._$target.find( '.btn_share .ico_share' ).on( 'click', function (e) { 
+				
+			}.bind(this));
+			
+			//전성분
+			this._$target.find( '.btn_ingredient' ).on( 'click', function (e) { 
+				var data = AP.previewArea.getSelectedOption();
+
+				if ( !data ) {
+					data = this._defaultModel.products[0];
+				}
+
+				var modal = AP.modal.full({
+						title: '전성분확인',
+						containerClass : 'fixed_top',
+						contents: {
+							templateKey: 'products.ingredients-modal',
+							templateModel : {
+								selectedData: data,
+								onlineProd: this._defaultModel,
+								products: this._defaultModel.products
+							}
+						}
+					});
+			}.bind(this));
+			
+			//상세정보제공고시 보기
 			this._$target.find( '.btn_detail_info_notice' ).on( 'click', function (e) {
 				var data = AP.previewArea.getSelectedOption();
 
@@ -88,29 +145,19 @@
 				}
 
 				var modal = AP.modal.full({
-						title: '전성분/상세정보제공고시 보기',
+						title: '상세정보제공공시',
+						containerClass : 'fixed_top',
 						contents: {
-							templateKey: 'products.all-ingredients-modal',
+							templateKey: 'products.detail_info_notice',
 							templateModel : {
 								selectedData: data,
 								onlineProd: this._defaultModel,
 								products: this._defaultModel.products
 							}
 						}
-					}),
-					$modal = modal.getElement();
-				
-				modal.addListener( 'modal-before-close', function (e) {
-					$modal.find( 'select' ).off();
-				});
-
-				$modal.find( 'select' ).on( 'change', function (e) {
-					var $target = $(e.currentTarget).parents('.panel'); 
-					$target.find('.disclosure').hide()
-					$target.find('[data-prodSn='+$(e.currentTarget).val()+']').show();
-				}.bind(this));
+					});
 			}.bind(this));
-
+			/*
 			//배송/교환/반품 안내
 			this._$target.find( '.btn_shipping_returns' ).on( 'click', function (e) {
 				AP.modal.full({
@@ -132,6 +179,8 @@
 				$wrap = this._$target.find( '.swiper-wrapper' ),
 				$slide = this._$target.find( '.swiper-pagination' );
 			
+			this._orderLayer.selectOption( product );
+			
 			//$wrap.find( '.preview_thumbs button' ).off( 'click' );
 			//$slide.find( '.youtube_video' ).video( 'clear' );
 			//$slide.off( 'ixSlideMax:change' ).ixSlideMax( 'clear' );
@@ -148,12 +197,12 @@
 			this._swiper = new Swiper('.swiper-container', {
 				pagination: {
 					el: '.swiper-pagination',
-					type: 'progressbar',
+					type: 'progressbar'
 				},
 				autoplay: {
 					delay: 4000,
-					disableOnInteraction: false,
-				},
+					disableOnInteraction: false
+				}
 			});
 			
 			/*슬라이드 사진 1개일경우 progressbar 숨김*/

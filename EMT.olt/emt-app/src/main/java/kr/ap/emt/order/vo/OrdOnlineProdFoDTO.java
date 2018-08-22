@@ -1,7 +1,6 @@
 package kr.ap.emt.order.vo;
 
-import net.g1project.ecp.api.model.order.order.OrdHistProdEx;
-import net.g1project.ecp.api.model.order.order.OrdProdEx;
+import net.g1project.ecp.api.model.order.order.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -31,10 +30,14 @@ public class OrdOnlineProdFoDTO {
 	private String claimReason;				 	 // 클레임사유
     private List<OrdHistProdEx> ordHistProdList; // 주문이력상품목록(단위)
 	private Integer cancelQtySum;                // 취소수량
-	private List<OrdHistProdEx> prodList; // 주문이력상품목록(단위)
-	private List<OrdHistProdEx> freeGiftList; // 주문이력상품목록(단위)
-	private List<OrdHistProdEx> preSale; // 주문이력상품목록(단위)
-	private String singleProdYn; //단일 단위상품 여부
+	private List<OrdHistProdEx> prodList; 		// 주문이력상품목록(단위)
+	private List<OrdHistProdEx> freeGiftList; 	// 주문이력상품목록(단위)
+	private List<OrdHistProdEx> preSale; 		// 주문이력상품목록(단위)
+	private String singleProdYn; 				//단일 단위상품 여부
+
+	private List<OrdHistProdPromoAwardEx> ordHistProdPromoAwardExList;
+	private List<OrdHistProdAwardEx> ordHistProdAwardExList;
+	private StoreEx storeEx;
 
 	public void addOrdHistProdEx(OrdHistProdEx ordHistProdEx) {
 		setFinalOnlineSaleAmtPcurSumExchMembership(getFinalOnlineSaleAmtPcurSumExchMembership().add(new BigDecimal(ordHistProdEx.getExchMembership() * ordHistProdEx.getOrdQty())));
@@ -260,4 +263,29 @@ public class OrdOnlineProdFoDTO {
 	public void setFinalOnlineSaleAmtPcurSumExchActivity(BigDecimal finalOnlineSaleAmtPcurSumExchActivity) {
 		this.finalOnlineSaleAmtPcurSumExchActivity = finalOnlineSaleAmtPcurSumExchActivity;
 	}
+
+	public List<OrdHistProdPromoAwardEx> getOrdHistProdPromoAwardExList() {
+		return ordHistProdPromoAwardExList;
+	}
+
+	public void setOrdHistProdPromoAwardExList(List<OrdHistProdPromoAwardEx> ordHistProdPromoAwardExList) {
+		this.ordHistProdPromoAwardExList = ordHistProdPromoAwardExList;
+	}
+
+	public List<OrdHistProdAwardEx> getOrdHistProdAwardExList() {
+		return ordHistProdAwardExList;
+	}
+
+	public void setOrdHistProdAwardExList(List<OrdHistProdAwardEx> ordHistProdAwardExList) {
+		this.ordHistProdAwardExList = ordHistProdAwardExList;
+	}
+
+	public StoreEx getStoreEx() {
+		return storeEx;
+	}
+
+	public void setStoreEx(StoreEx storeEx) {
+		this.storeEx = storeEx;
+	}
+
 }

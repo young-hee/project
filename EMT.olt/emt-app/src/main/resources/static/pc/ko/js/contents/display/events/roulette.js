@@ -68,7 +68,7 @@
 
 			switch ( type ) {
 				case 'start': 	msg = '진주알 20알이 차감됩니다.<br>계속 하시겠습니까?'; 		break;
-				case 'count': 	msg = '일일 참여 횟수는 3회입니다.<br>내일 이용해 주세요.'; 	break;
+				case 'count': 	msg = '일일 최대 참여 횟수는 3회입니다.<br>내일 이용해 주세요.'; 	break;
 				case 'point': 	msg = '참여 진주알 개수가 부족합니다.'; 					break;
 				case 'fail': 	msg = '당첨되지 않았습니다.<br>다음 기회에 다시 참여해 주세요.';
 			}

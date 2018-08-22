@@ -29,9 +29,10 @@
 			this._param = {
 				offset: 0,
 				limit: 10,
-				attr: '',
 				prodSort: this._$sort.find( 'select' ).val(),
-				includeFilters: true
+				includeFilters: true,
+				attr: '',
+				priceRange: ''
 			};
 
 			this._setEvent();
@@ -49,61 +50,49 @@
 				this._$loading.css( 'height', this._$loading.data( 'loading-more' ));
 			}
 
-			setTimeout(function () {
-			/**
-			 * ******************************************************************************************
-			 */
 			AP.api.itemList( this._key, this._param ).done(function ( result ) {
-				// TODO: test
-				result = {
-					list: [0,1,2,3,4,5,6,7,8,9],
-					offset: 0,
-					limit: 10,
-					totalCount: 21,
-					filter: _filterData
-				};
-
-				if ( !this._isSearchFilterData ) {
-					this._setSearchFilter( result.filter );
-				}
-
-				if( result.totalCount == 0 ) {
-					this._$resultNone.show();
-					this._winScrollend.clear();
-				} else {
-					var html = AP.common.getTemplate( 'display.product-list.item', result );
-					if ( this._currentIndex == 0 ) {
-						this._$list.html( html );
-					} else {
-						this._$list.append( html );
-					}
-				}
-
-				this._$sort.find( '.f_prd_num' ).text( $B.string.numberFormat( result.totalCount ));
-				AP.lazyLoad.add( this._$list.find( 'img.lazy_load' )).updated();
-				this._isLoading = false;
-				this._$loading.hide();
-
-				this._param.offset = result.offset;
-				this._param.limit = result.limit;
-				this._lastIndex = Math.ceil( result.totalCount / result.limit ) - 1;
-
-				if ( this._currentIndex == this._lastIndex ) {
-					this._winScrollend.clear();
-				}
-
-				this._currentIndex++;
-
-			}.bind( this )).fail(function(xhr) {
-				console.log( xhr );
+				this._done( result );
+			}.bind( this )).fail(function( error ) {
+				console.log( error );
 			}.bind( this ));
-			/**
-			 * ******************************************************************************************
-			 */
-			}.bind( this ), 300);
 		},
 
 		/** =============== Private Methods ============== */
+		_done: function ( result ) {
+			result = result.filterableOnlineProdList;
+
+			if ( !this._isSearchFilterData ) {
+				this._setSearchFilter( result.filter );
+			}
+
+			if( result.totalCount == 0 ) {
+				this._$resultNone.show();
+				this._winScrollend.clear();
+			} else {
+				var html = AP.common.getTemplate( 'display.product-list.item', result );
+				if ( this._currentIndex == 0 ) {
+					this._$list.html( html );
+				} else {
+					this._$list.append( html );
+				}
+			}
+
+			this._$sort.find( '.f_prd_num' ).text( $B.string.numberFormat( result.totalCount ));
+			AP.lazyLoad.add( this._$list.find( 'img.lazy_load' )).updated();
+			this._isLoading = false;
+			this._$loading.hide();
+
+			this._param.offset = result.offset;
+			this._param.limit = result.limit;
+			this._lastIndex = Math.ceil( result.totalCount / result.limit ) - 1;
+
+			if ( this._currentIndex == this._lastIndex ) {
+				this._winScrollend.clear();
+			}
+
+			this._currentIndex++;
+		},
+
 		_setEvent: function () {
 			// scroll
 			this._winScrollend = new $B.event.ScrollEnd( window ).gap({ bottom: AP.footer.getHeight() }).addListener( 'scrollbottom', function (e) {
@@ -129,7 +118,7 @@
 
 			// filter
 			this._$sort.find( '.btn_filter' ).on( 'click', function (e) {
-				this._searchFilter.open() ;
+				this._searchFilter.open();
 			}.bind( this ));
 		},
 
@@ -172,6 +161,47 @@
 			}.bind( this ));
 		},
 
+		_setFilterData: function ( data ) {
+			// price
+			var priceData = data.addAttrs[data.addAttrs.length - 1],
+				min = priceData.min,
+				max = priceData.max;
+			if ( min || max ) {
+				if ( min && max ) {
+					this._param.priceRange = min + '~' + max;
+				} else {
+					if ( min && !max ) {
+						this._param.priceRange = min + '~';
+					} else if ( !min && max ) {
+						this._param.priceRange = '~' + max;
+					}
+				}
+			} else {
+				this._param.priceRange = '';
+			}
+
+			// other ( 가격 제외 )
+			data = data.addAttrs;
+
+			var addAttrs = '';
+			for ( var i = 0; i < data.length - 1; ++i ) {
+				var attrStr = data[i].addAttrCode + '=';
+				_.each(data[i], function ( value, key ) {
+					if ( key == 'addAttrVals' ) {
+						for ( var j = 0; j < value.length; j++ ) {
+							if ( value[j].selected ) {
+								attrStr += value[j].addAttrValCode + ','
+							}
+						}
+					}
+				});
+				if ( attrStr.substr( -1 ) != '=' ) {
+					addAttrs += attrStr;
+				}
+			}
+			this._param.attr = addAttrs.substring( 0, addAttrs.length - 1 );
+		},
+
 		_applyFilter: function ( data ) {
 			if ( this._invokedFilter.isFilter( data )) {
 				this._$target.find( '.btn_filter' ).addClass( 'on' );
@@ -180,6 +210,7 @@
 			}
 
 			this._currentIndex = 0;
+			this._setFilterData( data );
 			this.load();
 		}
 

@@ -56,10 +56,35 @@ public class DisplayViewController extends AbstractController {
 	@RequestMapping({"/category/{displayMenuId}", "/category/{displayMenuId}/preview"})
 	public String bigCategory(Model model, @PathVariable String displayMenuId, String upperMenuId,
 			String categoryType, String previewKey, String previewDate) {
-
+		
 		// 메뉴페이지 코너정보 조회
 		String cornerIds = "";
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+
+		/*
+		if ("prod_types".equals(categoryType) || "prod_lines".equals(categoryType)) {
+			cornerIds = "";
+		} else if ("prod_thema".equals(categoryType)) {
+			cornerIds = "M01_" + displayMenuId + "_m.1,M01_" + displayMenuId + "_m.2,M01_" + displayMenuId + "_m.3,M01_"
+					+ displayMenuId + "_m.4";
+		}
+		*/
+
+		try {
+			List<Corner> corners = displayApi.getMenuPageCorners(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId,
+					previewKey, previewDate != null ? sf.parse(previewDate) : null, cornerIds, false);
+
+			Map<String, List<CornerContentsSet>> cornersMap = new HashMap<String, List<CornerContentsSet>>();
+
+			for (Corner c : corners) {
+				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
+			}
+
+			model.addAttribute("cornersMap", cornersMap);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			model.addAttribute("cornersMap", null);
+		}
 
 		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
 
@@ -68,6 +93,21 @@ public class DisplayViewController extends AbstractController {
 		model.addAttribute("categoryType", categoryType);
 		model.addAttribute("pageType", "category");
 		model.addAttribute("displayCateSn", pageInfo.getDisplayCateSns());
+		
+		// 쇼핑히스토리 추가
+		/*
+		f(0L != getMemberSn()) {
+  			ShoppingMarkPost body = new ShoppingMarkPost();
+  			body.setShoppingMarkTgtCode("Menu");
+  			body.setDisplayMenuId(displayMenuId);     			
+  			body.setDisplayMenuSetId(APConstant.EH_DISPLAY_MENU_SET_ID);
+  			try{
+  				shoppingmarkApi.addShoppingHistories(getMemberSn(), body);
+  			}catch(Exception e) {
+  				e.printStackTrace();
+  			}
+  		}
+  		*/
 
 		return "display/" + pageInfo.getMenuPageFileId();
 	}

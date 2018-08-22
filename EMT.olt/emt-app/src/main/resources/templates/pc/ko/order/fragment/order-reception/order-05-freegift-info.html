@@ -38,21 +38,6 @@
 				}
 			});
 
-			//첫구매 영역
-			$('[name^=firstPur_]').off('click').on('click', function () {
-				if ($(this).prop('checked')) {
-					if ($(this).data('methodCode') == 'Select') {
-						var type = $(this).data('type');
-						$('[name=firstPur_' + $(this).data('promosn') + ']').each(function (item) {
-							if (type != $(this).data('type')) {
-								$(this).attr("checked", false);
-							}
-						});
-					}
-					changeOrdUnit();
-				}
-			});
-
 			//주문단위 증정 Tab
 			$('[name=freebies]').off('click').on('click', function () {
 				if ($(this).prop('checked')) {

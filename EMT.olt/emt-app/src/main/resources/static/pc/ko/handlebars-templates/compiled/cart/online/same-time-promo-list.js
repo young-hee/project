@@ -11,7 +11,7 @@ this["AP"]["handlebars"]["cart"]["online"]["same-time-promo-list"] = Handlebars.
     + "\" value=\"S_"
     + alias4(((helper = (helper = helpers.index || (data && data.index)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"index","hash":{},"data":data}) : helper)))
     + "\" "
-    + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.selectYn : depth0),"NotSelect",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,(depth0 != null ? depth0.saleDisplayStatus : depth0),"OnSale",{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + " "
     + alias4((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.selectYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),"checked","",{"name":"condition","hash":{},"data":data}))
     + ">\n						<label for=\"chkBoxS_"
@@ -69,7 +69,7 @@ this["AP"]["handlebars"]["cart"]["online"]["same-time-promo-list"] = Handlebars.
     + alias3(alias4((container.data(data, 2) && container.data(data, 2).index), depth0))
     + "\" value=\""
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1), depth0))
-    + "\"/>\n\n				<div class=\"item_info\">\n					<!--/* 증정품 상품은 선택 불가 */-->\n					<div class=\"item_thumb\">\n"
+    + "\"/>\n				<div class=\"item_info\">\n					<!--/* 증정품 상품은 선택 불가 */-->\n					<div class=\"item_thumb\">\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.repProdImgEx : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(15, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "					</div>\n					<div class=\"item_name\">\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodFlagExList : stack1)) != null ? stack1.length : stack1),0,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(17, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")

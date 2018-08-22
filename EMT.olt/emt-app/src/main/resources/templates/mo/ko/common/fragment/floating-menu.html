@@ -189,29 +189,40 @@
 		</div>
 		<!-- /* 기타 바로가기 메뉴 */--><!--/* 20180420 : 명칭명변경, 메뉴삭제, 순서 변경 */-->
 		<ul class="etc_menu" th:if="${#lists.isEmpty(pageConnType) and not #lists.isEmpty(gnbMap)}">
-			<li th:if="${not #lists.isEmpty(gnbMap.get('new'))}"><a href="#none" th:href="@{/display/new(displayMenuId=new)}" th:text="${gnbMap.get('new').menuTitle}">신상품</a></li>
-			<li th:if="${not #lists.isEmpty(gnbMap.get('best'))}"><a href="#none" th:href="@{/display/best(displayMenuId=best)}" th:text="${gnbMap.get('best').menuTitle}">베스트</a></li>
-			<li th:if="${not #lists.isEmpty(gnbMap.get('etude_pick'))}"><a href="#none" th:href="@{/display/etude_pick(displayMenuId=etude_pick)}" th:text="${gnbMap.get('etude_pick').menuTitle}">#에뛰드픽</a></li>
-			<li th:if="${not #lists.isEmpty(gnbMap.get('etude_ch'))}"><a href="#none"
-																		 th:href="@{/display/etude_ch(displayMenuId=etude_ch)}"
-																		 th:text="${gnbMap.get('etude_ch').menuTitle}">채널에뛰드</a>
+			<li th:if="${not #lists.isEmpty(gnbMap.get('new'))}"
+				<a href="#none" th:href="@{/display/new(displayMenuId=new)}" th:text="${gnbMap.get('new').menuTitle}">신상품</a>
+			</li>
+			<li th:if="${not #lists.isEmpty(gnbMap.get('best'))}">
+				<a href="#none" th:href="@{/display/best(displayMenuId=best)}" th:text="${gnbMap.get('best').menuTitle}">베스트</a>
+			</li>
+			<li th:if="${not #lists.isEmpty(gnbMap.get('etude_pick'))}">
+				<a href="#none" th:href="@{/display/etude_pick(displayMenuId=etude_pick)}" th:text="${gnbMap.get('etude_pick').menuTitle}">#에뛰드픽</a>
+			</li>
+			<li th:if="${not #lists.isEmpty(gnbMap.get('etude_ch'))}">
+				<a href="#none" th:href="@{/display/etude_ch(displayMenuId=etude_ch)}" th:text="${gnbMap.get('etude_ch').menuTitle}">채널에뛰드</a>
 			</li><!--/* 20180420 : 명칭변경 */-->
-			<li th:if="${not #lists.isEmpty(gnbMap.get('event'))}"><a href="#none" th:href="@{/display/event(displayMenuId=event)}" th:text="${gnbMap.get('event').menuTitle}">이벤트</a></li>
-			<li th:if="${not #lists.isEmpty(gnbMap.get('hotdeal'))}"><a href="#none" th:href="@{/display/l_hotdeal_today(displayMenuId=hotdeal)}" th:text="${gnbMap.get('hotdeal').menuTitle}">핫딜</a></li>
+			<li th:if="${not #lists.isEmpty(gnbMap.get('event'))}">
+				<a href="#none" th:href="@{/display/event(displayMenuId=event)}" th:text="${gnbMap.get('event').menuTitle}">이벤트</a>
+			</li>
+			<li th:if="${not #lists.isEmpty(gnbMap.get('hotdeal'))}">
+				<a href="#none" th:href="@{/display/l_hotdeal_today(displayMenuId=hotdeal)}" th:text="${gnbMap.get('hotdeal').menuTitle}">핫딜</a>
+			</li>
 			<!--/* 20180420 : 메뉴삭제(브랜드, 매장안내)
 			<li th:if="${not #lists.isEmpty(gnbMap.get('brand'))}"><a href="#none" th:href="@{/display/brand(displayMenuId=brand)}" th:text="${gnbMap.get('brand').menuTitle}">브랜드</a></li>
 			<li th:if="${not #lists.isEmpty(gnbMap.get('l_store_location'))}"><a href="#none" th:href="@{/display/store_location(displayMenuId=store_location)}" th:text="${gnbMap.get('l_store_location').menuTitle}">매장안내</a></li>
 			*/-->
-			<li th:if="${not #lists.isEmpty(gnbMap.get('beauty_test'))}"><a href="#none"
-																			th:href="@{/display/beauty_test(displayMenuId=beauty_test)}"
-																			th:text="${gnbMap.get('beauty_test').menuTitle}">뷰티테스트</a>
+			<li th:if="${not #lists.isEmpty(gnbMap.get('beauty_test'))}">
+				<a href="#none" th:href="@{/display/beauty_test(displayMenuId=beauty_test)}" th:text="${gnbMap.get('beauty_test').menuTitle}">뷰티테스트</a>
 			</li>
-			<li th:if="${not #lists.isEmpty(gnbMap.get('sweet_letter'))}"><a href="#none"
-																			 th:href="@{/display/sweet_letter(displayMenuId=sweet_letter)}"
-																			 th:text="${gnbMap.get('sweet_letter').menuTitle}">스윗레터
-				100%당첨</a></li>
-			<li th:if="${not #lists.isEmpty(gnbMap.get('daily_check'))}"><a href="#none" th:href="@{/display/daily_check(displayMenuId=daily_check)}" th:text="${gnbMap.get('daily_check').menuTitle}">행운의 출첵</a></li>
-			<li th:if="${not #lists.isEmpty(gnbMap.get('pearl_roulette'))}"><a href="#none" th:href="@{/display/pearl_roulette(displayMenuId=pearl_roulette)}" th:text="${gnbMap.get('pearl_roulette').menuTitle}">진주알 룰렛</a></li>
+			<li th:if="${not #lists.isEmpty(gnbMap.get('sweet_letter'))}">
+				<a href="#none" th:href="@{/display/sweet_letter(displayMenuId=sweet_letter)}" th:text="${gnbMap.get('sweet_letter').menuTitle}">스윗레터 100%당첨</a>
+			</li>
+			<li th:if="${not #lists.isEmpty(gnbMap.get('daily_check'))}">
+				<a href="#none" th:href="@{/display/daily_check(displayMenuId=daily_check)}" th:text="${gnbMap.get('daily_check').menuTitle}">행운의 출첵</a>
+			</li>
+			<li th:if="${not #lists.isEmpty(gnbMap.get('pearl_roulette'))}">
+				<a href="#none" th:href="@{/display/pearl_roulette(displayMenuId=pearl_roulette)}" th:text="${gnbMap.get('pearl_roulette').menuTitle}">진주알 룰렛</a>
+			</li>
 		</ul>
 		
 		<!-- /* 기타 바로가기 메뉴 퍼플리싱*/-->
@@ -248,7 +259,7 @@
 		<div class="table_layout aside_footer">
 
 			<span><a href="/cs/customerCenter" class="btn_md_neutral">고객센터</a></span>
-			<span th:unless="${#device.isMobileApp()}"><a href="/cs/pinkMembership" class="btn_md_primary">맴버십</a></span>
+			<span th:if="${#device.isMobileApp()}"><a href="/cs/pinkMembership" class="btn_md_primary">맴버십</a></span>
 			<!--/* app 전용 */-->
 			<span th:if="${#device.isMobileApp()}"><a href="javascript:AP.webview.method('callSetting', { isLogin: AP.LOGIN_USER });" class="btn_md_secondary">설정</a></span>
 
@@ -294,35 +305,51 @@
 			<!--/* 로그인후 */-->
 			<div class="membership_layer" style="display:none;" th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
 				<dl>
-					<dt class="layer_header" th:text="${session.LOGIN_USER.member.name.name1}"+ '님의 멤버십'></dt>
+					<dt class="layer_header" th:text="${session.LOGIN_USER.member.name.name1} +' 님의 멤버십'"></dt>
 					<dd class="layer_cont">
 						<dl class="beautypoint">
 							<dt>뷰티포인트</dt>
 							<dd>
 								<div class="clear">
-									<span class="point"><strong class="num">123,123</strong>p</span>
-									<a href="#none" class="link"><span>포인트 확인</span><i class="ico_arr_m_r"></i></a>
+									<span class="point"><strong class="num" th:text="${#IntegUtil.toCommaNumber(session.LOGIN_USER.member.remainBeautyPoint)}"></strong>p</span>
+									<a href="#none" th:href="@{/my/page/info/beautyPoint}" class="link"><span>포인트 확인</span><i class="ico_arr_m_r"></i></a>
 								</div>
 								<div class="barcode">
-									<img ap:src="@{/images/dummy/img_dummy_barcode.gif}" alt="">
-									<p class="text">1234-1234-1234-1234</p>
+									<th:block th:unless="${#strings.isEmpty(session.LOGIN_USER.user_incsCardNoEc)}">
+										<img src="/barcode/btPointBcd?width=285&height=88">
+										<p class="text" th:text="${#IntegUtil.btCardNumber(session.LOGIN_USER)}"></p>
+									</th:block>
+									<th:block th:if="${#strings.isEmpty(session.LOGIN_USER.user_incsCardNoEc)}">
+										<div class="panel notice">
+											<i class="ico"></i>
+											<p class="text">모바일 카드가  존재하지 않습니다.</p>
+											<a href="#none" th:href="@{/my/page/info/btpMobileCard}" class="link"><span>모바일 카드 신청</span><i class="ico_arr_m_r"></i></a>
+										</div>
+									</th:block>
 								</div>
 							</dd>
 						</dl>
 						<dl class="member_grade friends"> <!--/* 등급별 클래스 pink_love friends hello */-->
-							<dt><a href="#none">나의 등급은 <b><em>FRIENDS</em></b> 입니다. <i class="ico_arr_m_r"></i></a></dt>
+							<dt>
+								<a href th:href="@{/my/page/myLevelList}">나의 등급은 <b><em th:text="${session.LOGIN_USER.member.memberLevelName}">FRIENDS</em></b> 입니다. <i class="ico_arr_m_r"></i></a>
+							</dt>
 							<dd class="coupons">
-								<span>신제품 선구매(매월)</span>
-								<span>생일쿠폰(30% 할인)</span>
-								<span>상시할인 15%</span>
-								<span>멤버십데이 할인(추가 10%)</span>
-								<!--<span class="no_coupon">쿠폰이 없습니다.</span>-->
+								<th:block th:if="${not #lists.isEmpty(memberKeepingCoupons)}">
+									 <th:block th:each="availCoupons : ${memberKeepingCoupons.availCoupons}">
+									 	<th:block th:each="availCoupon, index : ${availCoupons.availCoupon}"> 
+											<span th:text="${availCoupon.couponName}"></span>
+										</th:block>
+									</th:block>
+								</th:block>
+								<th:block th:if="${#lists.size(memberKeepingCoupons.availCoupons) == 0}">
+									<span class="no_coupon">쿠폰이 없습니다.</span>
+								</th:block>
 							</dd>
 						</dl>
 					</dd>
 				</dl>
 				<div class="div"><img ap:src="@{/images/common/div_membership_layer.png}" alt=""></div>
-				<div class="layer_bottom">
+				<div class="layer_bottom"><!-- API 미개발 -->
 					<p class="text">다음등급(<span class="color_block">PINK LOVE</span>) 까지 <b><em class="num">3,000</em></b>원 +</p>
 				</div>
 			</div>
@@ -334,7 +361,7 @@
 	<button type="button" class="btn_talk"><span class="sr_only">아티스트톡</span></button>
 </nav>
 <!--/* app 멤버십 레이어 오픈시 */-->
-<div class="layer_dimmed app_layer_dimmed" style="display: none;"></div>
+<div class="layer_dimmed app_layer_dimmed" style="display:none;"></div>
 
 <script  th:inline="javascript">
 	/*<![CDATA[*/
@@ -354,7 +381,7 @@
 			parms += ( '&RESIDNO1' + '=' + /*[[${memberMap.residno1}]]*/ );
 			parms += ( '&GEND_DV_CD' + '=' + /*[[${memberMap.gendDvCd}]]*/ );
 		[/]
-
+		
 		AP.footer.setArtistTalk( parms, banner );
 	});
 	/*]]>*/

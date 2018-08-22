@@ -44,7 +44,7 @@ this["AP"]["handlebars"]["display"]["product-list"]["search-filter"] = Handlebar
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.addAttrVals : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.selected : stack1),"==",true,{"name":"xif","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\" href=\"javascript:;\" data-value=\""
     + alias4(alias3(((stack1 = ((stack1 = (depth0 != null ? depth0.addAttrVals : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.addAttrValCode : stack1), depth0))
-    + "\" data-min=\"0\" data-max=\"30000\">3만원미만</a></li>\n									<li><a class=\"btn"
+    + "\" data-min=\"\" data-max=\"30000\">3만원미만</a></li>\n									<li><a class=\"btn"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.addAttrVals : depth0)) != null ? stack1["1"] : stack1)) != null ? stack1.selected : stack1),"==",true,{"name":"xif","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\" href=\"javascript:;\" data-value=\""
     + alias4(alias3(((stack1 = ((stack1 = (depth0 != null ? depth0.addAttrVals : depth0)) != null ? stack1["1"] : stack1)) != null ? stack1.addAttrValCode : stack1), depth0))

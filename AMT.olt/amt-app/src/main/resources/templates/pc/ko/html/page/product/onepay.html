@@ -1,0 +1,71 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!--/* ap_contents */-->
+	<div class="ap_contents">
+		<div class="ap_com_cont overview onepay">
+			<div class="sec_Onepay">
+				<div class="sec01">
+					<img ap:src="@{/images/product/img_onepay_01.png}" alt="">
+					<map name="onePayT">	
+						<area shape="rect" class="btn_billkey_reg" coords="214,409,429,465" href="javascript:;" onClick="trackClicksEx('메인^ONE pay탭','apmall^ONE pay 등록하기',true);"/>
+					</map>
+				</div>
+				<div class="sec02">
+					<div class="inBox">
+						<img ap:src="@{/images/product/img_onepay_02.png}" alt="">
+						<img ap:src="@{/images/product/img_onepay_02_01.png}" class="img_trans v01" alt="">
+						<img ap:src="@{/images/product/img_onepay_02_02.png}" class="img_trans v02" alt="">
+						<img ap:src="@{/images/product/img_onepay_02_03.png}" class="img_trans v03" alt="">
+					</div>
+				</div>
+				<div class="sec03">
+					<div class="inBox">
+						<img ap:src="@{/images/product/img_onepay_03.png}" alt="">
+						<img ap:src="@{/images/product/img_onepay_03_01.png}" class="img_trans" alt="">
+					</div>
+				</div>
+				<div class="sec_payType">
+					<div class="addCard_area">
+						<div class="top_tit">
+							<h3>Apmall ONE pay</h3>
+							<p>한번의 등록으로 간편한 쇼핑</p>
+						</div>
+						<a href="javascript:;" class="addCard">카드 추가하기</a>
+					</div>
+				</div>
+				<div class="sec05">
+					<ul>
+						<li>ONE pay로 등록한 카드정보는 (주)케이지이니시스에서 위탁 관리하며, 아모레퍼시픽은 개인정보보호를 위해 이를 관리·감독합니다. </li>
+						<li>일부 신용카드사의 경우 ONE pay 서비스 이용에 제한이 있을 수 있습니다.</li>
+						<li>휴대폰 분실 등을 통한 타인의 자동결제에 대해서는 AMOREPACIFIC MALL에서 책임지지 않습니다.</li>
+						<li>ONE pay 이용시 일부 브랜드, 상품의 프로모션에 제한이 있을 수 있습니다.</li>
+						<li>일부 제휴카드의 청구할인이 적용되지 않을 수 있습니다.</li>
+					</ul>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script>
+		// 이미지 transform 관련
+		$(window).scroll(function(){
+			var sc = $(document).scrollTop();
+			if (sc >= 200){
+				$('.sec02 > .inBox').addClass('on');
+			}
+			if (sc >= 1100){
+				$('.sec03 > .inBox').addClass('on');
+			}
+		});
+	</script>
+</th:block>
+
+</body>
+</html>

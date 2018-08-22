@@ -1,0 +1,108 @@
+<dl>
+	<dt><b>테이크아웃</b>
+		<!--/* tooltip */-->
+		<span class="ui_tooltip">
+			<button type="button" class="btn_tooltip">툴팁보기</button>
+			<span class="arr"></span>
+			<span class="layer_tooltip">
+				<dl>
+					<dt class="title">테이크아웃</dt>
+					<dd>
+						<ul class="list_bullet_dot">
+							<li>테이크아웃 매장 운영시간: 오전 11시 ~ 오후 9시</li>
+							<li>테이크아웃 서비스는 온라인 주문 후 매장을 직접 방문하여 수령하는 서비스입니다.</li>
+							<li>미수령시 주문은 자동 취소됩니다. (결제완료 후 2일 후 자동취소)</li>
+							<li>테이크아웃 상품의 교환/반품은 수령매장에서만 가능합니다.</li>
+							<li>테이크아웃 주문은 매장에서 상품 준비가 완료되면 SMS를 발송하며 수신한 SMS 내 주문번호나 주문내역의 바코드를 수령매장에 제시하면 상품을 찾을 수 있습니다.</li>
+						</ul>
+					</dd>
+				</dl>
+				<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
+			</span>
+		</span>
+	</dt>
+
+	<dd>
+		{{#if (ne storeSelect null) }}
+		<div class="store_wrap">
+			<div>
+				{{ storeSelect.storeName }}
+				{{#switch storeSelect.invtEnoughType }}
+					{{#case "No"}} <em>[재고없음]</em> {{/case}}
+					{{#case "Enough"}} <em>[재고있음]</em> {{/case}}
+					{{#case "NotEnougho"}} <em>[재고부족]</em> {{/case}}
+				{{/switch}}
+			</div>
+			<div class="seller">판매자 정보 확인
+				<!--/* tooltip */-->
+				<div class="ui_tooltip">
+					<button type="button" class="btn_tooltip">툴팁보기</button>
+					<span class="arr"></span>
+					<div class="layer_tooltip">
+						<dl>
+							<dt class="title">판매자 정보 확인</dt>
+							<dd>
+								<dl class="table_layout">
+									<dt class="w30p"><b>상호</b></dt>
+									<dd>{{ storeSelect.storeTypeName }}</dd>
+								</dl>
+								<br>
+								{{#if (ne storeSelect.phoneNo2 null) }}
+								<dl class="table_layout">
+									<dt class="w30p"><b>연락처</b></dt>
+									<dd>{{ storeSelect.phoneNo2.phoneNo }}</dd>
+								</dl>
+								<br>
+								{{/if}}
+								{{#if (ne storeSelect.address null) }}
+								<dl class="table_layout">
+									<dt class="w30p"><b>사업장 소재지</b></dt>
+									<dd>{{ storeSelect.address.address1 }} {{ storeSelect.address.address2 }}</dd>
+								</dl>
+								{{/if}}
+								<br>
+								{{#if (ne storeSelect.brn null) }}
+								<dl class="table_layout">
+									<dt class="w30p"><b>통신판매신고번호</b></dt>
+									<dd><a href="http://www.ftc.go.kr/bizCommPop.do?wrkr_no={{ storeSelect.brn }}&apv_perm_no=" title="새창" target="_blank" class="link">사업자정보 확인</a></dd>
+								</dl>
+								{{/if}}
+								<br>
+								{{#if (ne storeSelect.emailAddress null) }}
+								<dl class="table_layout">
+									<dt class="w30p"><b>e-mail</b></dt>
+									<dd>{{ storeSelect.emailAddress }}</dd>
+								</dl>
+								{{/if}}
+							</dd>
+						</dl>
+						<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
+					</div>
+				</div>
+			</div>
+		</div>
+		{{/if}}
+		<button class="btn_md_form" type="button" onclick="fnLayerOpenStore()">매장변경</button>
+	</dd>
+</dl>
+<dl>
+	<dt><i class="ico"></i><b>단골매장</b></dt>
+	<dd>
+		<!--/* 단골매장이 없을 경우 */-->
+{{#xif storeRegularList.length '<' 1 }}
+		<p class="text_notice">단골매장이 없습니다.</p>
+{{/xif}}
+		<!--/* 단골매장이 있을 경우 */-->
+{{#xif storeRegularList.length '>' 0 }}
+		<div class="favorite_store">
+			{{#each storeRegularList }}
+				{{#switch invtEnoughType}}
+					{{#case "No"}} 			<button type="button" disabled>{{ storeName }}<em>[재고없음]</em></button> {{/case}}
+					{{#case "NotEnougho"}}	<button type="button" disabled>{{ storeName }}<em>[재고부족]</em></button> {{/case}}
+					{{#case "Enough"}}		<button type="button" onclick="fnChangeStore('{{ storeSn }}')">{{ storeName }}<em>[재고있음]</em></button> {{/case}}
+				{{/switch}}
+			{{/each}}
+		</div>
+{{/xif}}
+	</dd>
+</dl>

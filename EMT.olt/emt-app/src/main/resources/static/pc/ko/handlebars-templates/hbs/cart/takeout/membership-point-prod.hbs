@@ -1,6 +1,6 @@
 <div class="promotion">
 	<div class="promotion_header">
-		<a href="#none"><strong>뷰티 포인트 교환 상품</strong></a>
+		<a href="#none"><strong>뷰티 포인트 전용 상품</strong></a>
 		<div class="price">
 			<span class="strong"><b>{{numberFormat pointSum }}</b>P</span> /
 			<span>보유 <b>{{numberFormat bpMembershipEx.membershipPoints }}</b>P</span>
@@ -48,6 +48,7 @@
 							{{/each}}
 						{{/xif}}
 						<a href="#none" class="title" {{#if (ne ../onlineProdSn null) }} onclick="fnProdDetail({{ ../onlineProdSn }})" {{/if}}>{{#if (ne ../onlineProdName null) }} {{ ../onlineProdName }} {{else}} {{ prodEx.prodName }} {{/if}}</a>
+						{{#if (ne ../onlineProdName null) }} <span class="opt">{{ prodEx.prodName }}</span> {{/if}}
 					</div>
 					<!--/* 상품 수량 */-->
 					<div class="count">

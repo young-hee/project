@@ -70,15 +70,15 @@
 				<div class="tab_cont">
 					<h3 class="sr_only">FAQ</h3>
 					<div class="view_btn"><a href="#none"><span>전체보기</span> <i class="ico_arr2"></i></a></div>
-					<div class="ui_accordion faq" data-open-type="single">
+					<div class="faq_div">
 						<dl>
-							<dt class="on">
+							<dt class="bod_top">
 								<button type="button">
 									<span class="title">플러스 멤버십 추천인/피추천인 기프트카드가 발급 안됐어요!</span>
 								</button>
 								<small>플러스 멤버십</small>
 							</dt>
-							<dd>
+							<dd class="open">
 								<div class="cont">
 									<p class="text">
 										<span class="txt_answer">A <span class="sr_only">답변</span></span>
@@ -144,7 +144,31 @@
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
+<script>
+	//함수 실행
+	$(function(){
+	  $(".faq_div").faq();
+	});
 
+	//함수 선언
+	$.fn.faq=function(){
+	  return this.each(function(){
+		var $obj = $(this);
+		var $btn = $obj.find("dt button");
+		
+		$btn.on("click",onToggle);
+		
+		function onToggle(){
+		  if(!$(this).parent().next().hasClass("open")){
+			$("dd").removeClass("open"); //모든 창 닫기
+			$(this).parent().next().addClass("open")
+		  } else{
+			$(this).parent().next().removeClass("open")
+		  };  
+		};
+	  });
+	}
+</script>
 </th:block>
 
 </body>

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import kr.ap.comm.config.interceptor.PageTitle;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
+import kr.ap.emt.my.controller.MyBenefitViewController;
+import net.g1project.ecp.api.model.sales.coupon.MemberCoupon;
 import net.g1project.ecp.api.model.sales.display.*;
 import net.g1project.ecp.api.model.sales.guide.FoNoticeResult;
 import net.g1project.ecp.api.model.sales.keywordPopup.PopupInfo;
@@ -113,7 +115,12 @@ public class MainController extends AbstractController {
 	    }
         
 		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
-        
+		
+		if(0L != getMemberSn()) {
+			MemberCoupon memberKeepingCoupons = couponApi.getMemberKeepingCoupons("Avail", getMemberSn(), 0L, 0L);
+			model.addAttribute("memberKeepingCoupons", memberKeepingCoupons); 
+			
+		}
 		return "main/" + pageInfo.getMenuPageFileId();
 	}
 

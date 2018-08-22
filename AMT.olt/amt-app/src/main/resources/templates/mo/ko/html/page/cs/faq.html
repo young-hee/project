@@ -2,7 +2,7 @@
 <body>
 <!-- #ap_container -->
 <div ap:fragment="layout-contents">
-	<div class="ap_contents ap_cs faq">
+	<div class="ap_contents ap_cs faq_wrap">
 		<div class="section pd_sm transparent">
 			<ul class="sort_btn_set col_03">
 				<li><span class="check_wrap"><input type="radio" name="faq" id="faq1" checked><label for="faq1">전체FAQ</label></span></li><!--/* active : on */-->
@@ -54,7 +54,7 @@
 		</div>
 		<!--/* 공지사항 목록 */-->
 		<div class="section">
-			<div class="ui_accordion faq" data-open-type="single">
+			<div class="faq_div">
 				<dl>
 					<dt>
 						<button type="button">
@@ -62,7 +62,7 @@
 						</button>
 						<small>상품/주문/결제</small>
 					</dt>
-					<dd>
+					<dd class="open">
 						<div class="cont">
 							<p class="text">
 								<span class="txt_answer">A <span class="sr_only">답변</span></span>
@@ -180,7 +180,31 @@
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
+<script>
+	//함수 실행
+	$(function(){
+	  $(".faq_div").faq();
+	});
 
+	//함수 선언
+	$.fn.faq=function(){
+	  return this.each(function(){
+		var $obj = $(this);
+		var $btn = $obj.find("dt button");
+		
+		$btn.on("click",onToggle);
+		
+		function onToggle(){
+		  if(!$(this).parent().next().hasClass("open")){
+			$("dd").removeClass("open"); //모든 창 닫기
+			$(this).parent().next().addClass("open")
+		  } else{
+			$(this).parent().next().removeClass("open")
+		  };  
+		};
+	  });
+	}
+</script>
 </th:block>
 
 </body>

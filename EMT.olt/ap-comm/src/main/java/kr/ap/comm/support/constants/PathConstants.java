@@ -28,7 +28,7 @@ public class PathConstants {
      */
     public static final String ORDER = "/order";
     public static final String ORDER_RECEPTION = ORDER + "/reception/{cartSn}";
-    
+
     /**
      * 매장칭찬하기
      */

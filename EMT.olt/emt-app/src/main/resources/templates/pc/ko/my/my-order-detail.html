@@ -62,6 +62,7 @@
 	<script ap:src="@{/handlebars-templates/compiled/my/order/layer-address-edit.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/layer-option-list.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/layer-cash-receipts.js}"></script>
+	<script ap:src="@{/handlebars-templates/compiled/my/order/layer-order-delivery-store.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/detail/product.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/detail/product-option.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/detail/claim-reason-select.js}"></script>
@@ -182,6 +183,7 @@
 			$( '.ui_select' ).designSelectBox('setValue', setReasonSn);
 			$( '.ui_tooltip' ).tooltip();
 			$( '.ui_accordion' ).accordion('open', 0);
+			$( '.ui_accordion' ).accordion('open', 1);
 
 			$('html, body').scrollTop(0);
 		}
@@ -260,6 +262,7 @@
 
 			//테이크아웃 주문 상품
 			if (ord.storeOrdOnlineProdCnt > 0) {
+				console.log(ord.storePickupOrdOnlineProdList);
 				var takeoutProds = AP.common.getTemplate('my.order.order-detail-prodList', {
 					cnt : ord.storeOrdOnlineProdCnt,
 					list : ord.storePickupOrdOnlineProdList,
@@ -352,7 +355,9 @@
 			});
 
 			if(selectProds.length == 0) {
-				AP.modal.alert(getTitle() + "하실 상품을 선택해 주세요");
+				AP.modal.alert(getTitle() + "하실 상품을 선택해 주세요").addListener( 'modal-close', function (e) {
+					$('html, body').scrollTop(0);
+				});
 				return;
 			} else if(!chkReasonYn) {
 				return;
@@ -387,6 +392,7 @@
 				type : type
 			}, JSON.stringify(reqData)).done(function(data) {
 				AP.modal.alert(getTitle() + '신청이 정상적으로 접수 되었습니다.').addListener( 'modal-close', function (e) {
+					AP.common.setSessionStorage('order_pc_list_save_status', null, 5);
 					location.href="/my/page/onlineOrderShipping";
 				});
 			}).fail(function(e) {
@@ -609,7 +615,17 @@
 		}
 
 		function viewStoreMap() {
-			AP.modal.alert('개발중입니다.');
+			var modal = AP.modal.info({
+				contents: {
+					templateKey: 'my.order.layer-order-delivery-store',
+					templateModel: {
+					}
+				},
+				sizeType : 'L'
+			});
+
+			$( '.map_area' ).mapApi();
+			$( '.slide' ).ixSlideMax();
 		}
 
 		//배송조회 버튼 클릭

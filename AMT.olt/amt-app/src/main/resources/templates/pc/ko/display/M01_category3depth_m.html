@@ -1,0 +1,101 @@
+<html ap:decorate="~{layout/layout-sub}" th:with="_jsfile='product-list'">
+
+<body>
+<div ap:fragment="layout-contents">
+	<div class="ap_contents goods_list">
+		<th:block ap:replace="~{common/fragment/product-page-title}"/>
+
+		<div class="ap_com_cont">
+			<div class="aside_area filter product">
+				<h2 class="h_title"><a href="#" class="depth">스킨케어</a></h2>
+				<div class="category">
+					<ul>
+						<li><a href="#" class="depth on">클렌징 (00)</a></li>
+						<li><a href="#" class="on">메이크업 리무버 (00)</a></li>
+						<li><a href="#">페이스 워시 (00)</a></li>
+						<li><a href="#">필링 & 스크럽 (00)</a></li>
+					</ul>
+					<a href="#" class="cate_more">클렌징 전체보기</a>
+				</div>
+				<fieldset class="form">
+					<legend class="sr_only">선택 옵션 선택</legend>
+					<button type="button" class="btn_lg_gradient init">선택 옵션 초기화</button>
+					<div class="filter_option">
+					</div>
+				</fieldset>
+			</div>
+
+			<div class="cont_area">
+				<div class="category_area">
+					<div class="title_result">
+						<h3 class="h_title d2"><strong>메이크업 리무버에서 제안드리는 상품</strong></h3>
+					</div>
+					<div class="recommended_item slide recommend has_count" data-ix-options="view-length:3; move-length:3;loop:false;datum-point:-20px">
+						<div class="ix-list-viewport unit_1">
+
+							<ul class="ix-list-items"></ul>
+
+						</div>
+						<div class="ix-controller">
+							<div class="slide_direction">
+								<div class="paging"><span class="current">1</span>/<span class="total">10</span></div>
+								<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
+								<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="category_area">
+					<div class="title_result">
+						<h3 class="h_title d2"><strong>전체상품(<span class="total"></span>)</strong></h3>
+						<div class="float_right">
+							<div class="search_sort">
+								<a href="#" class="on" data-value="Bestselling">판매순</a>
+								<a href="#" data-value="NewProd">신상품순</a>
+								<a href="#" data-value="MostProdReview">평점순</a>
+								<a href="#" data-value="HighestPrice">가격이 높은순</a>
+								<a href="#" data-value="LowestPrice">가격이 낮은순</a>
+								<div class="select_wrap xsm">
+									<select name="" id="" tabindex="-1">
+										<option value="20">20개씩 보기</option>
+										<option value="40">40개씩 보기</option>
+										<option value="60">60개씩 보기</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="category_area">
+					<div class="list_product cell04">
+
+						<ul></ul>
+
+					</div>
+
+					<div class="loading" style="height: 400px;">
+						<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+					</div>
+
+					<div class="product_none" style="display: none">
+						더 좋은 상품을 준비중입니다.
+					</div>
+
+					<div class="pagination" style="display: none;"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<th:block ap:fragment="layout-endpoint">
+	<script>
+		AP.display.init({
+			displayMenuId: AP.DISPLAY_MENU_ID
+		});
+	</script>
+</th:block>
+</body>
+</html>

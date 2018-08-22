@@ -24,10 +24,25 @@
 		load: function () {
 			this._$storeList.empty();
 			this._api = AP.api.stores( null, { foStoreEventCode: 'Color Factory', resularStoreYn: 'N', offset: 0, limit: 0 }).done(function ( result ) {
+				
+				var reArray = _.toArray(); 
+				var count = 0; 
+				// 기획서에 명동점이 default로 되어있다고 똑같이 구현요청.. BO에 설정값이 따로 없어서 명동지점 storesn 으로 일단 정령함 .. 차후 변경 필요 
+				$.each(result.storeResult.storeExList, function(inx, store){
+					if(store.storeSn === 957){
+						reArray[0] = this;
+					}else {
+						count++;
+						reArray[count] = this;
+					}
+					result.storeResult.storeExList = reArray; 
+				});
+				
 				var html = AP.common.getTemplate( 'display.brand.color-factory-store', result['storeResult'] );
 				this._$storeList.html( html );
-
+				
 				this._setStore( result['storeResult'] );
+				 
 			}.bind( this )).fail(function (e) {
 				console.log( 'error', e );
 			}).always(function () {});

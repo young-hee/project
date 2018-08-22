@@ -124,16 +124,6 @@ public class OrderBaseController extends AbstractViewController {
 											|| "SameTimePur".equals(ordOnlineProdFo.getOrdHistProdTypeCode()))) {
 										shippingOrdOnlineProdList.add(ordOnlineProdFo);
 									}
-
-									//사은품
-									//TODO: 사은품 다지인에 따라 수정이 필요함.
-									List<OrdHistProdEx> ordHistProdList = ordOnlineProdFo.getOrdHistProdList();
-									for (OrdHistProdEx o : ordHistProdList) {
-										//상품사은품
-										List<OrdHistProdAwardEx> ordHistProdAwardExList = o.getOrdHistProdAwardExList();
-										//상품프로모션사은품
-										List<OrdHistProdPromoAwardEx> ordHistProdPromoAwardExList = o.getOrdHistProdPromoAwardExList();
-									}
 								}
                             }
                         }
@@ -179,7 +169,7 @@ public class OrderBaseController extends AbstractViewController {
 			model.addAttribute("payMethodResult", payMethodList); // 결제수단목록
 		}
 
-		model.addAttribute("isApMember", apApi.getMemberInfo(getMemberSn()) != null ? true : false);
+		model.addAttribute("isApMember", isMember());
 
 		/*****************************************************************
 		 * 주문금액 계산
@@ -223,7 +213,7 @@ public class OrderBaseController extends AbstractViewController {
 				//총할인 = OnlineProdPromoDc + OnlineMemberPromoDc + MemberDcBenefit + ImmedDcCouponPromo
 				//		+ MPlusNPromoDc + SameTimePurPromoDc + OrdUnitPromoDc + *BeautyPointExchUse*
 				//		+ *CushionPointUse* + ActivityPointExch + ProdUnitCouponDc + MPlusNCouponDc
-				//		+ Buy1GetCouponDc + OrdUnitCouponDc
+				//		+ Buy1GetCouponDc + OrdUnitCouponDc + ShipFeePromoDc
 				if ("OnlineProdPromoDc".equals(o.getOrdHistAmtTypeCode())
 					|| "OnlineMemberPromoDc".equals(o.getOrdHistAmtTypeCode())
 					|| "MemberDcBenefit".equals(o.getOrdHistAmtTypeCode())
@@ -235,7 +225,8 @@ public class OrderBaseController extends AbstractViewController {
 					|| "ProdUnitCouponDc".equals(o.getOrdHistAmtTypeCode())
 					|| "MPlusNCouponDc".equals(o.getOrdHistAmtTypeCode())
 					|| "Buy1GetCouponDc".equals(o.getOrdHistAmtTypeCode())
-					|| "OrdUnitCouponDc".equals(o.getOrdHistAmtTypeCode())) {
+					|| "OrdUnitCouponDc".equals(o.getOrdHistAmtTypeCode())
+					|| "ShipFeePromoDc".equals(o.getOrdHistAmtTypeCode())) {
 					totalOrdDcPriceSum = totalOrdDcPriceSum.add(o.getAmtPcur()) ;
 				}
 
@@ -347,8 +338,6 @@ public class OrderBaseController extends AbstractViewController {
 		return ordCntMap;
 	}
 
-
-
 	private OrdOnlineProdFoDTO getMPlusNPromoOnlineProd(OrdHistProdEx ordHistProdEx, Map<Long, OrdOnlinePromoFoDTO> ordOnlinePromoFoMap) {
         OrdOnlinePromoFoDTO ordOnlinePromoFo = ordOnlinePromoFoMap.get(ordHistProdEx.getmPlusNOrdPromoSn());
         if(ordOnlinePromoFo == null) {
@@ -357,9 +346,19 @@ public class OrderBaseController extends AbstractViewController {
             ordOnlinePromoFo.setPromoName(ordHistProdEx.getmPlusNOrdPromoNameRlang());
             ordOnlinePromoFo.setOrdOnlineProdFoMap(new HashMap<>());
             ordOnlinePromoFo.setOrdOnlineProdFoList(new ArrayList<>());
-            
-            ordOnlinePromoFoMap.put(ordHistProdEx.getmPlusNOrdPromoSn(), ordOnlinePromoFo);
+			ordOnlinePromoFo.setPromoTypeCode(ordHistProdEx.getmPlusNTypeCode());
+
+			ordOnlinePromoFoMap.put(ordHistProdEx.getmPlusNOrdPromoSn(), ordOnlinePromoFo);
         }
+
+		BigDecimal base = ordHistProdEx.getFinalOnlineSalePricePcur().multiply(new BigDecimal(ordHistProdEx.getmPlusNBaseQty()));
+		BigDecimal award = ordHistProdEx.getFinalOnlineSalePricePcur().multiply(new BigDecimal(ordHistProdEx.getmPlusNAwardQty()));
+
+		ordOnlinePromoFo.setTotalProductSaleAmount(ordOnlinePromoFo.getTotalProductSaleAmount().add(base));
+		ordOnlinePromoFo.setTotalFinalOnlineSaleAmount(ordOnlinePromoFo.getTotalFinalOnlineSaleAmount().add(base.add(award)));
+
+		ordOnlinePromoFo.setBaseQty(ordOnlinePromoFo.getBaseQty() + ordHistProdEx.getmPlusNBaseQty());
+		ordOnlinePromoFo.setAwardQty(ordOnlinePromoFo.getAwardQty() + ordHistProdEx.getmPlusNAwardQty());
         
         return getOrdOnlineProdFo(ordHistProdEx, ordOnlinePromoFo);
     }
@@ -373,6 +372,7 @@ public class OrderBaseController extends AbstractViewController {
 			ordOnlinePromoFo.setPromoName(ordHistProdEx.getSameTimePurOrdPromoNameRlang());
 			ordOnlinePromoFo.setOrdOnlineProdFoMap(new HashMap<>());
 			ordOnlinePromoFo.setOrdOnlineProdFoList(new ArrayList<>());
+			ordOnlinePromoFo.setPromoTypeCode(key);
 
 			ordOnlinePromoFoMap.put(key, ordOnlinePromoFo);
 		}
@@ -408,6 +408,8 @@ public class OrderBaseController extends AbstractViewController {
 		ordOnlineProdFo.setOrdQtySum(0);														// 주문수량(단위상품 X 주문수량)
 		ordOnlineProdFo.setOrdHistProdList(new ArrayList<OrdHistProdEx>());					// 주문이력(확장)
 		ordOnlineProdFo.setSingleProdYn(ordProd.getSingleProdYn());
+		ordOnlineProdFo.setOrdHistProdPromoAwardExList(ordHistProd.getOrdHistProdPromoAwardExList());
+		ordOnlineProdFo.setOrdHistProdAwardExList(ordHistProd.getOrdHistProdAwardExList());
 		return ordOnlineProdFo;
 	}
 

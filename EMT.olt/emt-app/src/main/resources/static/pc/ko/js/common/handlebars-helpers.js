@@ -4,55 +4,6 @@
 ;(function ( $ ) {
     'use strict';
 
-    /**
-	 * 주문목록 경로
-	 * @returns {String}
-	 */
-	Handlebars.registerHelper('prodPartial', function (path) {
-
-		var paramData = [];
-		var args = Array.prototype.slice.call( arguments ).slice(1, arguments.length),
-			options = args.pop();
-		var obj = {};
-		var name = null;
-		$.each(args, function (i, arg) {
-			if ((i %= 2) == 0) {
-				name = arg;
-			}
-			else {
-				obj[name] = arg;
-			}
-
-		});
-
-		return AP.common.getTemplate( path, obj, true );
-	});
-
-	/**
-	 * 주문상세 포인트 반환
-	 * @returns {Integer}
-	 */
-	Handlebars.registerHelper('getSavingPoint', function (map, key) {
-
-		var value = map[key];
-		return value != null ? value : 0;
-	});
-
-    /**
-	 * 주문 수량 체크
-	 * @param {Int}  ordQty, cancelQty
-	 * @returns {Int}
-	 */
-	 Handlebars.registerHelper( 'checkQty', function ( ordQty, cancelQty ) {
-		var qty = ordQty - cancelQty;
-
-		if(qty > 0) {
-			return qty;
-		} else {
-			return cancelQty;
-		}
-	 });
-	 
 	 /**
    	  * 판매 상태 이미지
    	  * @param {String}  saleDisplayStatus : OnSale(판매중) - OutOfStock(품절) - Exhaustion(조기소진) - WaitingSale(판매대기) - SuspendSale(판매일시중지) - EndSale(판매종료)
@@ -155,90 +106,6 @@
 		return result + str;
 	});
 
-    /**
-	 * 주문배송 상태
-	 * @returns {String}
-	 */
-	Handlebars.registerHelper('ordStatusCheck', function (type, condition) {
-		if (type === 'online') {
-			switch (condition) {
-				case 'OrdReceivedWaiting' :
-					return '주문접수';
-				case 'OrdReceivedComplete' :
-					return '결제완료';
-				case 'OrdAllCancel' :
-					return '취소완료';
-				case 'ProdCancel' :
-					return '취소완료';
-				case 'PartialCancel' :
-					return '부분취소';
-				case 'ProdPreparing' :
-					return '상품준비중';
-				case 'Shipping' :
-					return '배송중';
-				case 'OrdHandlingComplete' :
-					return '배송완료';
-				case 'ShipComplete' :
-					return '배송완료';
-			}
-		} else if (type === 'store') {
-			switch (condition) {
-				case 'OrdReceivedWaiting' :
-					return '주문접수';
-				case 'OrdReceivedComplete' :
-					return '결제완료';
-				case 'OrdAllCancel' :
-					return '상품취소';
-				case 'ProdCancel' :
-					return '상품취소';
-				case 'ProdPreparing' :
-					return '상품준비중';
-				case 'Shipping' :
-					return '배송중';
-				case 'OrdHandlingComplete' :
-					return '구매완료';
-				case 'ShipComplete' :
-					return '구매완료';
-			}
-		} else if (type === 'returnExchange') {
-			switch (condition) {
-				case 'Request' :
-					return '신청';
-				case 'CancelRequest' :
-					return '신청취소';
-				case 'Received' :
-					return '접수';
-				case 'CancelReceived' :
-					return '접수취소';
-				case 'Confirm' :
-					return '확정';
-				case 'Complete' :
-					return '완료';
-			}
-		}
-
-		return 'UnKnown';
-	});
-
-	/**
-	 * 주문배송 상태
-	 * @returns {String}
-	 */
-	Handlebars.registerHelper('ordMgmtStatusCheck', function (code) {
-		switch (code) {
-			case 'OrdReceivedWaiting' :
-				return '주문접수';
-			case 'OrdReceivedComplete' :
-				return '결제완료';
-			case 'OrdHandlingComplete' :
-				return '배송완료';
-			case 'OrdAllCancel' :
-				return '주문취소';
-		}
-
-		return 'UnKnown';
-	});
-
 	/**
 	 * 장바구니 판매 상태정보
 	 * @param {String}  saleDisplayStatus : OutOfStock(품절) - Exhaustion(조기소진) - WaitingSale(판매대기) - SuspendSale(판매일시중지) - EndSale(판매종료)
@@ -309,21 +176,6 @@
 	 */
 	Handlebars.registerHelper("counter", function (index){
 		return index + 1;
-	});
-
-	/**
-	 * 나의 주문 건수
-	 * @returns {String}
-	 */
-	Handlebars.registerHelper('checkCnt', function (type, condition) {
-
-		if(type === 'qty') {
-			return (condition) - 1 == 0 ? '' : condition + '개';
-		} else if (type === 'cnt') {
-			return (condition) - 1 == 0 ? '' : ' 외 ' + (condition - 1) + '건';
-		}
-
-		return '';
 	});
 
     /**
@@ -1305,6 +1157,132 @@
 			}
 		}
 		return html;
+	});
+
+	/** MyPage - 나의 주문관리 *****************************************************************/
+
+	/**
+	 * 주문목록 경로
+	 * @returns {String}
+	 */
+	Handlebars.registerHelper('prodPartial', function (path) {
+
+		var paramData = [];
+		var args = Array.prototype.slice.call( arguments ).slice(1, arguments.length),
+			options = args.pop();
+		var obj = {};
+		var name = null;
+		$.each(args, function (i, arg) {
+			if ((i %= 2) == 0) {
+				name = arg;
+			}
+			else {
+				obj[name] = arg;
+			}
+
+		});
+
+		return AP.common.getTemplate( path, obj, true );
+	});
+
+	/**
+	 * 주문상세 포인트 반환
+	 * @returns {Integer}
+	 */
+	Handlebars.registerHelper('getSavingPoint', function (map, key) {
+
+		var value = map[key];
+		return value != null ? value : 0;
+	});
+
+	 /**
+	 * 주문배송 상태
+	 * @returns {String}
+	 */
+	Handlebars.registerHelper('ordStatusCheck', function (type, condition) {
+		if (type === 'online') {
+			switch (condition) {
+				case 'OrdReceivedWaiting' :
+					return '주문접수';
+				case 'OrdReceivedComplete' :
+					return '결제완료';
+				case 'OrdAllCancel' :
+					return '취소완료';
+				case 'ProdCancel' :
+					return '취소완료';
+				case 'PartialCancel' :
+					return '부분취소';
+				case 'ProdPreparing' :
+					return '상품준비중';
+				case 'Shipping' :
+					return '배송중';
+				case 'OrdHandlingComplete' :
+					return '배송완료';
+				case 'ShipComplete' :
+					return '배송완료';
+			}
+		} else if (type === 'store') {
+			switch (condition) {
+				case 'OrdReceivedWaiting' :
+					return '주문접수';
+				case 'OrdReceivedComplete' :
+					return '결제완료';
+				case 'OrdAllCancel' :
+					return '상품취소';
+				case 'ProdCancel' :
+					return '상품취소';
+				case 'ProdPreparing' :
+					return '상품준비중';
+				case 'Shipping' :
+					return '배송중';
+				case 'OrdHandlingComplete' :
+					return '구매완료';
+				case 'ShipComplete' :
+					return '구매완료';
+			}
+		} else if (type === 'returnExchange') {
+			switch (condition) {
+				case 'Request' :
+					return '신청';
+				case 'CancelRequest' :
+					return '신청취소';
+				case 'Received' :
+					return '접수';
+				case 'CancelReceived' :
+					return '접수취소';
+				case 'Confirm' :
+					return '확정';
+				case 'Complete' :
+					return '완료';
+			}
+		}
+
+		return 'UnKnown';
+	});
+
+	/**
+	 * 나의 주문 건수
+	 * @returns {String}
+	 */
+	Handlebars.registerHelper('checkCnt', function (type, condition) {
+
+		if(type === 'qty') {
+			return (condition) - 1 == 0 ? '' : condition + '개';
+		} else if (type === 'cnt') {
+			return (condition) - 1 == 0 ? '' : ' 외 ' + (condition - 1) + '건';
+		}
+
+		return '';
+	});
+
+	/**
+	 * value의 절대값 반환
+	 * @param	{Number}	value
+	 * @returns {Number}
+	 */
+	Handlebars.registerHelper('absNum', function (value) {
+
+		return Math.abs(value)
 	});
 
 })( jQuery );

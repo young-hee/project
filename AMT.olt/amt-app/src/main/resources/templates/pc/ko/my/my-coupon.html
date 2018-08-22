@@ -87,6 +87,7 @@
 												<div class="type app">APP coupon</div>
 												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
 												<p class="condition" th:if="${item.availCoupon.prodDcCoupon.minPurProdPriceAssignYn == 'Y'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.minPurProdPrice)}">30,000</th:block>원 이상 구매 시</p>
+												<p class="condition" th:if="${item.availCoupon.prodDcCoupon.maxDcAmtLimitYn == 'Y'}">최대 <th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.maxDcAmt)}">30,000</th:block>원 할인</p>
 												<div class="page_btns">
 													<a href="javascript:;">상품 안내</a>
 													<a href="javascript:;">쿠폰 안내</a>
@@ -114,6 +115,7 @@
 												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
 												<p class="condition" th:if="${item.availCoupon.cartDcCoupon.sectionTypeCode == 'Amt'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.fromOrdAmt)}">30,000</th:block>원 이상 구매 시</p>
 												<p class="condition" th:if="${item.availCoupon.cartDcCoupon.sectionTypeCode == 'Qty'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.fromOrdQty)}">10</th:block>개 이상 구매 시</p>
+												<p class="condition" th:if="${item.availCoupon.cartDcCoupon.maxDcAmtLimitYn == 'Y'}">최대 <th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.maxDcAmt)}">30,000</th:block>원 할인</p>
 												<div class="page_btns">
 													<a href="javascript:;">쿠폰 안내</a>
 												</div>
@@ -214,7 +216,7 @@
 												<div class="type app">APP coupon</div>
 												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
 												<p class="condition" th:if="${item.availCoupon.prodDcCoupon.minPurProdPriceAssignYn == 'Y'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.minPurProdPrice)}">30,000</th:block>원 이상 구매 시</p>
-												<p class="condition" th:if="${item.prodDcCoupon.maxDcAmtLimitYn == 'Y'}">최대 <th:block th:text="${#IntegUtil.toCommaNumber(item.prodDcCoupon.maxDcAmt)}">30,000</th:block>원 할인</p>
+												<p class="condition" th:if="${item.availCoupon.prodDcCoupon.maxDcAmtLimitYn == 'Y'}">최대 <th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.maxDcAmt)}">30,000</th:block>원 할인</p>
 												<div class="page_btns">
 													<a href="javascript:;">상품 안내</a>
 													<a href="javascript:;">쿠폰 안내</a>
@@ -312,12 +314,12 @@
 												<div class="type app">APP coupon</div>
 												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
 												<div class="page_btns">
-													<a href="javascript:;">상품 안내</a>
 													<a href="javascript:;">쿠폰 안내</a>
 												</div>
 											</div>
 										</div>
 									</li>
+								</ul>
 							</div>
 							<div class="tab_cont">
 								<h3 class="sr_only">사용/만료된 쿠폰</h3>
