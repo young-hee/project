@@ -28,6 +28,7 @@ import kr.ap.comm.util.CookieUtils;
 import kr.ap.comm.util.G1SecureRandom;
 import kr.ap.emt.api.pos.POSApiService;
 import kr.ap.emt.api.pos.vo.CustCushinPoint;
+import kr.ap.emt.api.pos.vo.SkinToneMeasureInfo;
 import kr.ap.emt.my.vo.MyInfoDTO;
 import kr.ap.emt.my.vo.TermsAgree;
 import net.g1project.ecp.api.exception.ApiException;
@@ -40,7 +41,6 @@ import net.g1project.ecp.api.model.ap.ap.MemberMembership;
 import net.g1project.ecp.api.model.ap.ap.SNS;
 import net.g1project.ecp.api.model.ap.ap.ShipAddressInfo;
 import net.g1project.ecp.api.model.ap.ap.SignupTermsAgree;
-import net.g1project.ecp.api.model.ap.ap.StoreSkinTonMeasureInfo;
 import net.g1project.ecp.api.model.order.order.OrdSummaryInfo;
 import net.g1project.ecp.api.model.sales.member.ClosedAcReason;
 import net.g1project.ecp.api.model.sales.member.MemberAddAttrs;
@@ -130,13 +130,13 @@ public class MyViewControllor extends AbstractController {
 
 		{//포인트 조회
 			CicueaCuPtAccmTcVo vo = new CicueaCuPtAccmTcVo();
-			vo.setIncsNo(getMemberSession().getUser_incsNo());
+			vo.setIncsNo(memberSession.getUser_incsNo());
 			vo = amoreAPIService.getptinq(vo);
 			model.addAttribute("point", vo);
 		}
 		{
 			try {
-				CustCushinPoint cushin = posService.getCustCushinPoint(getMemberSession().getUser_incsNo());
+				CustCushinPoint cushin = posService.getCustCushinPoint(memberSession.getUser_incsNo());
 				if(cushin == null) {
 					cushin = new CustCushinPoint();
 					if(memberSession.getMember().getRemainCushionPoint() == null) {
@@ -160,11 +160,11 @@ public class MyViewControllor extends AbstractController {
 		//피부톤
 		try { 
 			
-			StoreSkinTonMeasureInfo skinTon = apApi.getSkinToneMeasures(getMemberSn());
-			model.addAttribute("skinTon", skinTon);
+			SkinToneMeasureInfo skinTone = posService.getSkinToneMeasures(memberSession.getUser_incsNo(), "1", "100");
+			model.addAttribute("skinTon", skinTone);
 			
 		} catch (ApiException e) {
-			e.getErrorCode();
+			logger.error(e.getMessage(), e);
 		}
 
 		return "my/my-etude";
@@ -246,7 +246,7 @@ public class MyViewControllor extends AbstractController {
 			return "my/layer-member-info-03";
 		return null;
 	}
-	
+
 	@GetMapping("/info/btpMobileCard")
 	@PageTitle(title = "뷰티포인트 모바일 카드 신청")
 	public String btpMobileCard(Model model) {
@@ -705,6 +705,8 @@ public class MyViewControllor extends AbstractController {
 				Cookie token = CookieUtils.getCookie(request, CookieKey.AUTO_LOGIN);
 				CookieUtils.removeCookie(request, response, CookieKey.AUTO_LOGIN);
 				WebUtils.setSessionAttribute(request, SessionKey.LOGIN_USER, null);
+				WebUtils.setSessionAttribute(request, SessionKey.CART, null);
+				WebUtils.setSessionAttribute(request, SessionKey.ORDER, null);
 				if (memberSession.getMember_sn() != 0) {
 					try {
 						ApLogoutInfo logoutInfo = new ApLogoutInfo();

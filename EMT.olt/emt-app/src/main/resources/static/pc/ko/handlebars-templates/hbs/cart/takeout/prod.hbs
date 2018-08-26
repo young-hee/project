@@ -7,10 +7,9 @@
 			{{#each cartProdExList}}
 				<div class="item_info">
 					<input type="hidden" name="takeoutPrdSn" value="{{prodEx.prodSn}}"/>
-					<input type="hidden" name="cartProdSn" value="{{cartProdSn}}"/>
+					<input type="hidden" name="cartProdSn" prod="prod" value="{{cartProdSn}}"/>
 					<input type="hidden" name="takeoutPrdInfo_{{ cartProdSn }}" value="{{cartProdSn}}"/>
 					<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{prodEx.saleDisplayStatus}}"/>
-
 					<!--/* 상품 선택 */-->
 					<div class="item_thumb">
 						<div class="check_wrap">
@@ -66,18 +65,13 @@
 								{{#if (eq doublePriceDisplayYn 'Y') }}
 									{{#if (ne calculationResultProduct.productSaleAmountInfo null) }}
 										{{#if (gt calculationResultProduct.productSaleAmountInfo.standardCurrency.amount calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount) }}
-											<span class="right_num">
-												<del><b>{{numberFormat this.calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}</b>원</del>
-											</span>
+											<del><b>{{numberFormat this.calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}</b>원</del>
 										{{/if}}
 									{{/if}}
 								{{/if}}
-							{{/if}}
-							{{#if (eq calculationResultYn 'N') }}
+							{{else}}
 								{{#if (ne prodEx.salePrice null) }}
-									<span class="left_num">
-										<strong class="num">{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}</strong><span>원</span>
-									</span>
+									<span class="strong"><b>{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}</b>원</span>
 								{{/if}}
 							{{/if}}
 						{{else}}
@@ -129,7 +123,6 @@
 
 		<!--/* 그룹상품 */-->
 		{{#xif singleProdYn '==' 'N'}}
-
 			<div class="item_info">
 				<!--/* 상품 선택 */-->
 				<div class="item_thumb">
@@ -176,11 +169,9 @@
 
 			<!--/* 옵션 : 수정, 삭제 가능 */-->
 			<ul class="item_option">
-
 				{{#each cartProdExList}}
-
 					<input type="hidden" name="takeoutPrdSn" value="{{prodEx.prodSn}}"/>
-					<input type="hidden" name="cartProdSn" value="{{cartProdSn}}"/>
+					<input type="hidden" name="cartProdSn" prod="prod" value="{{cartProdSn}}"/>
 					<input type="hidden" name="takeoutPrdInfo_O_{{../onlineProdSn}}" value="{{cartProdSn}}"/>
 					<input type="hidden" name="saleDisplayStatus_O_{{../onlineProdSn}}" value="{{prodEx.saleDisplayStatus}}"/>
 					<li>
@@ -216,18 +207,13 @@
 									{{#if (eq doublePriceDisplayYn 'Y') }}
 										{{#if (ne calculationResultProduct.productSaleAmountInfo null) }}
 											{{#if (gt calculationResultProduct.productSaleAmountInfo.standardCurrency.amount calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount) }}
-												<span class="right_num">
-													<del><b>{{numberFormat this.calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}</b>원</del>
-												</span>
+												<del><b>{{numberFormat this.calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}</b>원</del>
 											{{/if}}
 										{{/if}}
 									{{/if}}
-								{{/if}}
-								{{#if (eq calculationResultYn 'N') }}
+								{{else}}
 									{{#if (ne prodEx.salePrice null) }}
-										<span class="left_num">
-											<strong class="num">{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}</strong><span>원</span>
-										</span>
+										<span class="strong"><b>{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}</b>원</span>
 									{{/if}}
 								{{/if}}
 							{{else}}
@@ -239,7 +225,6 @@
 							<button type="button" class="btn_delete" onclick="removeCartProd('{{ ../../cartSn}}', '{{ cartProdSn }}')"><span class="sr_only">삭제</span></button>
 						</div>
 					</li>
-
 					{{#if (gt cartProdAwardList.length 0) }}
 						<ul class="freebies">
 							{{#each cartProdAwardList}}
@@ -257,7 +242,6 @@
 							{{/each}}
 						</ul>
 					{{/if}}
-
 				{{/each}}
 			</ul>
 		{{/xif}}

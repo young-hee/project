@@ -206,13 +206,11 @@
 			//선택된 옵션들
 			this._selectedOptions = new AP.GroupOrderSelectedOptions( this._$result, this._defaultModel )
 				.addListener( 'price-change', function (e) {
-					this._$totalCount.text( $B.string.format(e.totalCount, 2) );
+					this._$totalCount.text( $B.string.numberFormat(e.totalCount, 2) );
 					this._$totalPrice.text( $B.string.numberFormat(e.totalPrice) );
-				}.bind(this))
-				.addListener( 'remove-all', function (e) {
+				}.bind(this)).addListener( 'remove-all', function (e) {
 					this.close();
-				}.bind(this))
-				.addListener( 'selectProd', function (e) {
+				}.bind(this)).addListener( 'selectProd', function (e) {
 					this.close();
 				}.bind(this));
 		},
@@ -302,7 +300,7 @@
 			if ( products.length ) {
 				//장바구니 저장 api
 				//data = JSON.stringify( {cartProdExPostList: [{prodSn: 95, cartProdQty: 1, storePickupYn: 'N', integrationMembershipExchYn: 'N', activityPointExchYn: 'N'}]} );
-				AP.api.addCartProd( null, JSON.stringify({sameTimeCartProdExPostList: sameTimeCartProdExPostList}))
+				AP.api.addCartProdSameTime( null, JSON.stringify({sameTimeCartProdExPostList: sameTimeCartProdExPostList}))
 					.done( function ( result ) {
 						AP.header.resetCartCount();
 						defer.resolve();

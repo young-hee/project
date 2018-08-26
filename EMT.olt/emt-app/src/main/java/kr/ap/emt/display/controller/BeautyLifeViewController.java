@@ -83,7 +83,7 @@ public class BeautyLifeViewController extends AbstractController {
     }
 	
 	@RequestMapping({"/l_etude_ch", "/etude_ch", "/etude_ch/preview"})
-    @PageTitle(title = "Ch.에뛰드")
+    @PageTitle(title = "채널에뛰드")
     public String etude_ch(Model model, String displayMenuId, String previewKey, String previewDate) {
 		
 		displayMenuId="etude_ch";
@@ -138,7 +138,7 @@ public class BeautyLifeViewController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping({"/etude_ch/detail", "/etude_ch/detail/preview"})
-    @PageTitle(title = "Ch.에뛰드")
+    @PageTitle(title = "채널에뛰드")
     public String etude_ch_detail(Model model, String displayMenuId, RequestBeautyLife requestBeautyLife, String previewKey) {
 		
         //Mobile
@@ -193,7 +193,7 @@ public class BeautyLifeViewController extends AbstractController {
 
 
         //아티클 히스토리 저장
-  		if(0L != getMemberSn()) {
+  		if(isLoggedIn()) {
   			ShoppingMarkPost body = new ShoppingMarkPost();
   			body.setShoppingMarkTgtCode("Article");
   			body.setArticleSn(article.getArticleSn());      			
@@ -289,7 +289,7 @@ public class BeautyLifeViewController extends AbstractController {
         model.addAttribute("articleSearchResult", articleSearchResult);
         
         //아티클 히스토리 저장
-  		if(0L != getMemberSn()) {
+  		if(isLoggedIn()) {
   			ShoppingMarkPost body = new ShoppingMarkPost();
   			body.setShoppingMarkTgtCode("Article");
   			body.setArticleSn(article.getArticleSn());      			

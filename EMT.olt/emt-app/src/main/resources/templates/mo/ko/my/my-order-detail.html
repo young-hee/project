@@ -198,7 +198,7 @@
 
 			if (customOrd.storeOrdOnlineProdCnt > 0) {
 				var storDetailGoods = AP.common.getTemplate('my.order.order-detail-goods', {
-					cnt : customOrd.storePickupOrdOnlineProdList.length,
+					cnt : customOrd.storeOrdOnlineProdCnt,
 					list : customOrd.storePickupOrdOnlineProdList,
 					state : 'take',
 					reason : reason,
@@ -213,6 +213,7 @@
 				$('.takeout').append(storDetailGoods);
 			}
 
+			//
 			$( '.ui_accordion' ).accordion('clear');
 			$( '.ui_accordion' ).accordion();
 		}
@@ -697,11 +698,13 @@
 		}
 
 		function ordWriteReview(ordNo) {
-			AP.api.myReview({}, {ordNo}).done(function(data) {
+			AP.api.myReview({}, {
+				ordNo : ordNo
+			}).done(function(data) {
 				if (data.data) {
 					var param = {
-						'orderNo' : data.data.ordNo,
-						'products' : data.data.orderProds
+						orderNo : data.data.ordNo,
+						products : data.data.orderProds
 					}
 					new AP.ReviewWriteModal(param).prevGetData();
 				}

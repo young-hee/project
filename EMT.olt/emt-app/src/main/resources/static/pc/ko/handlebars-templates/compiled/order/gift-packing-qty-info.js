@@ -27,7 +27,9 @@ this["AP"]["handlebars"]["order"]["gift-packing-qty-info"] = Handlebars.template
     + "\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias1,(depth0 != null ? depth0.payYn : depth0),"==","Y",{"name":"xif","hash":{},"fn":container.program(11, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias4).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias1,(depth0 != null ? depth0.payYn : depth0),"N",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias1,(depth0 != null ? depth0.freeConditionYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),(helpers.gt || (depth0 && depth0.gt) || alias4).call(alias1,(depth0 != null ? depth0.freeConditionAmt : depth0),0,{"name":"gt","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(13, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "						</label>\n					</span>\n					<div class=\"ui_tooltip\">\n						<button type=\"button\" class=\"btn_tooltip\">툴팁보기</button>\n						<span class=\"arr\"></span>\n						<div class=\"layer_tooltip\">\n							<dl>\n								<dt class=\"title\">포장박스 추가</dt>\n								<dd>\n									<ul class=\"list_bullet_dot\">\n										<li><pre>"
+    + "						</label>\n					</span>\n					<div class=\"ui_tooltip\">\n						<button type=\"button\" class=\"btn_tooltip\">툴팁보기</button>\n						<span class=\"arr\"></span>\n						<div class=\"layer_tooltip\">\n							<dl>\n								<dt class=\"title\">"
+    + alias3(alias2((depth0 != null ? depth0.giftPackingName : depth0), depth0))
+    + " 추가</dt>\n								<dd>\n									<ul class=\"list_bullet_dot\">\n										<li><pre>"
     + ((stack1 = alias2((depth0 != null ? depth0.foGuide : depth0), depth0)) != null ? stack1 : "")
     + "</pre></li>\n									</ul>\n								</dd>\n							</dl>\n							<button type=\"button\" class=\"ui_close\"><span class=\"sr_only\">툴팁 닫기</span></button>\n						</div>\n					</div>\n\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias4).call(alias1,(helpers.gte || (depth0 && depth0.gte) || alias4).call(alias1,(depths[2] != null ? depths[2].finalPamtPcur : depths[2]),(depth0 != null ? depth0.freeConditionAmt : depth0),{"name":"gte","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias1,(depth0 != null ? depth0.qtySelectPossibleYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(15, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -91,5 +93,5 @@ this["AP"]["handlebars"]["order"]["gift-packing-qty-info"] = Handlebars.template
 
   return "<dd>\n	<div class=\"cont\">\n"
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.list : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\n		<ul class=\"loading\" id=\"packingLoading\" style=\"min-height: 100px; display: none\">\n			<li></li>\n			<li></li>\n			<li></li>\n		</ul>\n	</div>\n</dd>\n";
+    + "	</div>\n</dd>\n";
 },"useData":true,"useDepths":true});

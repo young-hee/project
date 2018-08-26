@@ -143,7 +143,7 @@ public class EventViewController extends AbstractController {
 		model.addAttribute("planDisplay", planDisplay);
 		
 		//기획전시 히스토리 저장
-		if(0L != getMemberSn()) {
+		if(isLoggedIn()) {
 			ShoppingMarkPost body = new ShoppingMarkPost();
 			body.setShoppingMarkTgtCode("Plandisplay");
 			

@@ -1,0 +1,55 @@
+<!--최종 결제금액-->
+<dl class="final_payment" id="amtPcur">
+	<script th:inline="javascript">
+		$( document ).ready(function() {
+			amtPcurInit();
+			$( '.ui_spinner' ).spinner();
+			$( '.ui_tooltip' ).tooltip();
+
+			$('.spinner_increase').attr('disabled', true);
+		});
+
+		//결제금액 영역 그리기
+		function amtPcurInit() {
+			var ordHistEx = /*[[${ordEx.ordHistEx}]]*/ null, // 최종결제금액
+				ordAmtMap = /*[[${ordAmtMap}]]*/ null,
+				ordCntMap = /*[[${ordCntMap}]]*/ null,
+				depositAvailAmt = /*[[${ordEx.depositAvailAmt}]]*/ 0,
+				isApMember = /*[[${isApMember}]]*/ null;
+
+			/**
+			 * 총결제금액
+			 * @type {*|String}
+			 */
+			var html = AP.common.getTemplate( 'order.final-price-amt-pcur', {
+				ordHistEx : ordHistEx,
+				ordAmtMap : ordAmtMap,
+				ordCntMap : ordCntMap,
+				isApMember : isApMember
+			});
+			$('#amtPcur').html(html);
+			$("[name=finalPamtPcur]").val(ordHistEx.finalPamtPcur);
+			$("[name=depositAvailAmt]").val(depositAvailAmt);
+			$("#orderPayment").html($B.string.numberFormat(ordHistEx.finalPamtPcur)+'원 결제하기');
+		}
+
+		//결제금액 영역 그리기(ajax)
+		function amtPcurInitAjax(data) {
+			/**
+			 * 총결제금액
+			 * @type {*|String}
+			 */
+			var html = AP.common.getTemplate('order.final-price-amt-pcur', {
+				ordHistEx: data.ordHistEx,
+				ordAmtMap: data.ordAmtMap,
+				ordCntMap: data.ordCntMap,
+				isApMember: data.isApMember
+			});
+			$('#amtPcur').html(html);
+			$("[name=finalPamtPcur]").val(data.ordHistEx.finalPamtPcur);
+			$("[name=depositAvailAmt]").val(data.depositAvailAmt);
+			$("#orderPayment").html($B.string.numberFormat(data.ordHistEx.finalPamtPcur) + '원 결제하기');
+		}
+	</script>
+</dl>
+<!--최종 결제금액-->

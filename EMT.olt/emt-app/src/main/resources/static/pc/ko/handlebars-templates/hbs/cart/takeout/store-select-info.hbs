@@ -21,88 +21,85 @@
 			</span>
 		</span>
 	</dt>
-
 	<dd>
 		{{#if (ne storeSelect null) }}
-		<div class="store_wrap">
-			<div>
-				{{ storeSelect.storeName }}
-				{{#switch storeSelect.invtEnoughType }}
-					{{#case "No"}} <em>[재고없음]</em> {{/case}}
-					{{#case "Enough"}} <em>[재고있음]</em> {{/case}}
-					{{#case "NotEnougho"}} <em>[재고부족]</em> {{/case}}
-				{{/switch}}
-			</div>
-			<div class="seller">판매자 정보 확인
-				<!--/* tooltip */-->
-				<div class="ui_tooltip">
-					<button type="button" class="btn_tooltip">툴팁보기</button>
-					<span class="arr"></span>
-					<div class="layer_tooltip">
-						<dl>
-							<dt class="title">판매자 정보 확인</dt>
-							<dd>
-								<dl class="table_layout">
-									<dt class="w30p"><b>상호</b></dt>
-									<dd>{{ storeSelect.storeTypeName }}</dd>
-								</dl>
-								<br>
+			<div class="store_wrap">
+				<div>
+					{{ storeSelect.storeName }}
+					{{#switch storeSelect.invtEnoughType }}
+						{{#case "No"}}			<em>[재고없음]</em> {{/case}}
+						{{#case "Enough"}}		<em>[재고있음]</em> {{/case}}
+						{{#case "NotEnougho"}}	<em>[재고부족]</em> {{/case}}
+					{{/switch}}
+				</div>
+				<div class="seller">판매자 정보 확인
+					<!--/* tooltip */-->
+					<div class="ui_tooltip">
+						<button type="button" class="btn_tooltip">툴팁보기</button>
+						<span class="arr"></span>
+						<div class="layer_tooltip">
+							<dl>
+								<dt class="title">판매자 정보 확인</dt>
+								<dd>
+									<dl class="table_layout">
+										<dt class="w30p"><b>상호</b></dt>
+										<dd>{{ storeSelect.storeTypeName }}</dd>
+									</dl>
+									<br>
 								{{#if (ne storeSelect.phoneNo2 null) }}
-								<dl class="table_layout">
-									<dt class="w30p"><b>연락처</b></dt>
-									<dd>{{ storeSelect.phoneNo2.phoneNo }}</dd>
-								</dl>
-								<br>
+									<dl class="table_layout">
+										<dt class="w30p"><b>연락처</b></dt>
+										<dd>{{ storeSelect.phoneNo2.phoneNo }}</dd>
+									</dl>
+									<br>
 								{{/if}}
 								{{#if (ne storeSelect.address null) }}
-								<dl class="table_layout">
-									<dt class="w30p"><b>사업장 소재지</b></dt>
-									<dd>{{ storeSelect.address.address1 }} {{ storeSelect.address.address2 }}</dd>
-								</dl>
+									<dl class="table_layout">
+										<dt class="w30p"><b>사업장 소재지</b></dt>
+										<dd>{{ storeSelect.address.address1 }} {{ storeSelect.address.address2 }}</dd>
+									</dl>
 								{{/if}}
-								<br>
+									<br>
 								{{#if (ne storeSelect.brn null) }}
-								<dl class="table_layout">
-									<dt class="w30p"><b>통신판매신고번호</b></dt>
-									<dd><a href="http://www.ftc.go.kr/bizCommPop.do?wrkr_no={{ storeSelect.brn }}&apv_perm_no=" title="새창" target="_blank" class="link">사업자정보 확인</a></dd>
-								</dl>
+									<dl class="table_layout">
+										<dt class="w30p"><b>통신판매신고번호</b></dt>
+										<dd><a href="http://www.ftc.go.kr/bizCommPop.do?wrkr_no={{ storeSelect.brn }}&apv_perm_no=" title="새창" target="_blank" class="link">사업자정보 확인</a></dd>
+									</dl>
 								{{/if}}
-								<br>
+									<br>
 								{{#if (ne storeSelect.emailAddress null) }}
-								<dl class="table_layout">
-									<dt class="w30p"><b>e-mail</b></dt>
-									<dd>{{ storeSelect.emailAddress }}</dd>
-								</dl>
+									<dl class="table_layout">
+										<dt class="w30p"><b>e-mail</b></dt>
+										<dd>{{ storeSelect.emailAddress }}</dd>
+									</dl>
 								{{/if}}
-							</dd>
-						</dl>
-						<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
+								</dd>
+							</dl>
+							<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 		{{/if}}
-		<button class="btn_md_form" type="button" onclick="fnLayerOpenStore()">매장변경</button>
+		<button class="btn_md_form" type="button" onclick="fnLayerOpenStore()">{{#if (eq storeSelect null) }} 매장선택 {{else}} 매장변경 {{/if}}</button>
 	</dd>
 </dl>
 <dl>
 	<dt><i class="ico"></i><b>단골매장</b></dt>
 	<dd>
-		<!--/* 단골매장이 없을 경우 */-->
-{{#xif storeRegularList.length '<' 1 }}
-		<p class="text_notice">단골매장이 없습니다.</p>
-{{/xif}}
-		<!--/* 단골매장이 있을 경우 */-->
-{{#xif storeRegularList.length '>' 0 }}
-		<div class="favorite_store">
-			{{#each storeRegularList }}
-				{{#switch invtEnoughType}}
-					{{#case "No"}} 			<button type="button" disabled>{{ storeName }}<em>[재고없음]</em></button> {{/case}}
-					{{#case "NotEnougho"}}	<button type="button" disabled>{{ storeName }}<em>[재고부족]</em></button> {{/case}}
-					{{#case "Enough"}}		<button type="button" onclick="fnChangeStore('{{ storeSn }}')">{{ storeName }}<em>[재고있음]</em></button> {{/case}}
-				{{/switch}}
-			{{/each}}
-		</div>
-{{/xif}}
+		{{#if (eq storeRegularList.length 0) }}
+			<p class="text_notice">단골매장이 없습니다.</p>
+		{{/if}}
+		{{#if (gt storeRegularList.length 0) }}
+			<div class="favorite_store">
+				{{#each storeRegularList }}
+					{{#switch invtEnoughType}}
+						{{#case "No"}} 			<button type="button" disabled>{{ storeName }}<em>[재고없음]</em></button> {{/case}}
+						{{#case "NotEnougho"}}	<button type="button" disabled>{{ storeName }}<em>[재고부족]</em></button> {{/case}}
+						{{#case "Enough"}}		<button type="button" onclick="fnChangeStore('{{ storeSn }}')">{{ storeName }}<em>[재고있음]</em></button> {{/case}}
+					{{/switch}}
+				{{/each}}
+			</div>
+		{{/if}}
 	</dd>
 </dl>

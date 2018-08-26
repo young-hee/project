@@ -151,34 +151,67 @@ public class IntegratedAPIUtils {
 	}
 	
 	/**
-	 * FIXME
-	 * 코드를 실제 메시지로 바꿔줘야함. 아직안함. 
 	 * @param code
 	 * @return
 	 */
-	public String codeMan(int flag, String code) {
-		if(flag == 0)
-			return "*" + code + "*";
-		else {
+	public String pearlOccur(int flag, String name, String code, String type) {
+		
+		StringBuffer sb = new StringBuffer();
+		if(name != null) {
+			sb.append("[");
+			sb.append(name);
+			sb.append("] ");
+		}
+		if(type != null) {
+			switch (type) {
+			case "Award":
+				sb.append("증정");
+				break;
+			case "Gift":
+				sb.append("선물하기");
+				break;
+			case "ProdExch":
+				sb.append("상품교환");
+				break;
+			case "FreeGiftExch":
+				sb.append("사은품교환");
+				break;
+			case "CouponExch":
+				sb.append("쿠폰교환");
+				break;
+			case "Event":
+				sb.append("행사참여");
+				break;
+			}
+
+			sb.append(" ");
+		}
+		
+		if(code != null) {
 			switch (code) {
 			case "Saving":
-				return "+";
+				sb.append("적립");
+				break;
 			case "SavingCancel":
-				return "-";
+				sb.append("적립취소");
+				break;
 			case "Use":
-				return "-";
+				sb.append("사용");
+				break;
 			case "UseCancel":
-				return "+";
+				sb.append("사용취소");
+				break;
 			case "Dec":
-				return "-";
+				sb.append("차감");
+				break;
 			case "Exp":
-				return "+";
-
+				sb.append("소멸");
+				break;
 			default:
 				break;
 			}
 		}
-		return code;
+		return sb.toString();
 	}
 	
 	public List<?> subList(List<?> list, int size) {

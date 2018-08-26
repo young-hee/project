@@ -1,5 +1,7 @@
 package kr.ap.amt.product.controller;
 
+import java.text.ParseException;
+
 import org.apache.commons.lang3.EnumUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -178,4 +180,44 @@ public class ProductViewController extends AbstractController{
 
 		return "product/product-detail";
 	}
+	
+	/**
+     * 상품평 목록 화면 
+     * @param requestReview
+     * @return
+     */
+    @GetMapping("/reviewList")
+    public String reviewList(Model model, RequestReview requestReview) throws ParseException {
+    	if( requestReview.getProdReviewUnit() == null ) {
+    		requestReview.setProdReviewUnit("OnlineProd");
+    	}
+    	
+    	if( requestReview.getProdReviewType() == null ) {
+    		requestReview.setProdReviewType("All");
+    	}
+    	
+    	//상품평요약정보조회
+		ProdReviewSummaryInfo reviewStats 
+			= productApi.getProductReviewSummary(
+					  requestReview.getProdReviewUnit()	//상품평단위코드. - OnlineProd(온라인상품단위) - UnitProd(단위상품단위, 단위상품일련번호 필수) - StyleCode(스타일코드단위, 스타일코드 필수)
+					, requestReview.getProdReviewType()	//상품평유형코드. All(전체), Pur(구매후기), Prod(상품리뷰), ExperienceGrp(체험단)
+					, requestReview.getOnlineProdSn()	//온라인상품일련번호
+					, null								//단위상품일련번호
+					, null);							//스타일코드
+		
+		ProdReviewCountPerScope maxCountPerScope = null;
+    	if( reviewStats != null ) {
+    		for (ProdReviewCountPerScope tempScope : reviewStats.getCountPerScopes()) {
+    			if(maxCountPerScope == null) {
+    				maxCountPerScope = tempScope;
+    			} else if( tempScope.getPercent() >  maxCountPerScope.getPercent() ){
+    				maxCountPerScope = tempScope;
+    			}
+			}
+    	}
+    	model.addAttribute("maxCountPerScope", maxCountPerScope);
+    	model.addAttribute("reviewStats", reviewStats);
+    	
+		return "product/review-list";
+    }
 }

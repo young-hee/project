@@ -317,19 +317,30 @@
 
 	/* 상품수량 카운트*/
 	function setProdCnt() {
+
 		/* 온라인상품 수량 */
-		var onlineCnt			= $("input[name=onlinePrdSn]").length;							// 온라인상품 수량
-		var onlineMembershipCnt = $("input[name=onlineMembershipPrdSn]").length;		// 온라인맴버쉽포인트상품 수량
-		var onlineActivityCnt	= $("input[name=onlineActivityPrdSn]").length;			// 온라인활동포인트상품 수량
-		var onlineTotalCnt		= onlineCnt + onlineMembershipCnt + onlineActivityCnt;  		// 온라인 총 수량
-		var onlineChkCnt		=  $( "input[name=chkBox]:checked" ).length;					// 상품 체크수량
+		var onlineCnt			= $("input[name=onlinePrdSn]").length;
+		var onlineMembershipCnt = $("input[name=onlineMembershipPrdSn]").length;
+		var onlineActivityCnt	= $("input[name=onlineActivityPrdSn]").length;
+		var onlineTotalCnt		= onlineCnt + onlineMembershipCnt + onlineActivityCnt;
+
+		var onlineChkCnt 			= $("input[name=chkBox]:checked").closest('.item_wrap').find('[prod=prod]').length;
+		var onlineMembershipChkCnt 	= $("input[name=chkBox]:checked").closest('.item_wrap').find('[membership=membership]').length;
+		var onlineActivityChkCnt 	= $("input[name=chkBox]:checked").closest('.item_wrap').find('[activity=activity]').length;
+		var onlineMnPromoChkCnt 	= $("input[name=chkBox]:checked").closest('.item_wrap').find('[mnPromo=mnPromo]').length;
+		var onlineSameTimePromoChkCnt 	= $("input[name=chkBox]:checked").closest('.promotion').find('[sameTimePromo=sameTimePromo]').length;
 
 		/* 테이크아웃상품 수량*/
-		var takeoutCnt			= $("input[name=takeoutPrdSn]").length;							// 테이크아웃상품 수량
-		var takeoutMembershipCnt= $("input[name=takeoutMembershipPrdSn]").length;		// 테이크아웃맴버쉽포인트상품 수량
-		var takeoutActivityCnt	= $("input[name=takeoutActivityPrdSn]").length;			// 테이크아웃활동포인트상품 수량
-		var takeoutTotalCnt		= takeoutCnt + takeoutMembershipCnt + takeoutActivityCnt;	// 테이크아웃 총 수량
-		var takeoutChkCnt		=  $( "input[name=takeoutChkBox]:checked" ).length;			// 상품 체크수량
+		var takeoutCnt			= $("input[name=takeoutPrdSn]").length;
+		var takeoutMembershipCnt= $("input[name=takeoutMembershipPrdSn]").length;
+		var takeoutActivityCnt	= $("input[name=takeoutActivityPrdSn]").length;
+		var takeoutTotalCnt		= takeoutCnt + takeoutMembershipCnt + takeoutActivityCnt;
+
+		var takeoutChkCnt 			= $("input[name=takeoutChkBox]:checked").closest('.item_wrap').find('[prod=prod]').length;
+		var takeoutMembershipChkCnt 	= $("input[name=takeoutChkBox]:checked").closest('.item_wrap').find('[membership=membership]').length;
+		var takeoutActivityChkCnt 	= $("input[name=takeoutChkBox]:checked").closest('.item_wrap').find('[activity=activity]').length;
+		var takeoutMnPromoChkCnt 	= $("input[name=takeoutChkBox]:checked").closest('.item_wrap').find('[mnPromo=mnPromo]').length;
+		var takeoutSameTimePromoChkCnt 	= $("input[name=takeoutChkBox]:checked").closest('.promotion').find('[sameTimePromo=sameTimePromo]').length;
 
 		/* 최상단 카운트 표기 */
 		$("#totalOnlinePrdCnt").html(onlineTotalCnt);
@@ -340,17 +351,18 @@
 		/* 테이크아웃 상품 갯수 */
 		$("#takeoutPrdCnt").html(takeoutTotalCnt);
 
-		/* 온라인 총 수량 */
-		$("#calOnlinePrdCnt").html(onlineChkCnt); // 온라인상품 총수량 다시 체크할것! 포인트상품도 합산됨.
-		/* 테이크아웃 총 수량 */
-		$("#calTakeoutPrdCnt").html(takeoutChkCnt);
-		/* 맴버쉽포인트 총 수량 */
-		$("#calMemberPrdCnt").html(onlineMembershipCnt + takeoutMembershipCnt);
-		/* 활동포인트 총 수량 */
-		$("#calActivityPrdCnt").html(onlineActivityCnt + takeoutActivityCnt);
+		/* 총 주문금액 */
+		// 온라인상품
+		$("#calOnlinePrdCnt").html(onlineChkCnt + onlineMnPromoChkCnt + onlineSameTimePromoChkCnt);
+		// 테이크아웃
+		$("#calTakeoutPrdCnt").html(takeoutChkCnt + takeoutMnPromoChkCnt + takeoutSameTimePromoChkCnt);
+		// 뷰티포인트
+		$("#calMemberPrdCnt").html(onlineMembershipChkCnt + takeoutMembershipChkCnt);
+		// 진주알
+		$("#calActivityPrdCnt").html(onlineActivityChkCnt + takeoutActivityChkCnt);
 
 		/* 총주문 갯수 */
-		$("#totalPrdCnt").html(onlineChkCnt + takeoutChkCnt);
+		$("#totalPrdCnt").html(onlineChkCnt + onlineMembershipChkCnt + onlineActivityChkCnt + onlineMnPromoChkCnt + onlineSameTimePromoChkCnt + takeoutChkCnt + takeoutMembershipChkCnt + takeoutActivityChkCnt + takeoutMnPromoChkCnt + takeoutSameTimePromoChkCnt);
 	}
 
 	/* 테이크아웃 매장레이어 */

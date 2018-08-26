@@ -41,9 +41,11 @@
 			} else {
 				//기본 구매수량 최소수량으로 설정
 				product.cartProdQty = product.minPurLimitQty;
-				this._selectedData.push( product );
+				if( product.saleDisplayStatus != 'OutOfStock' ){
+					this._selectedData.push( product );
+				}
 				this._draw( product );
-
+				
 				this.dispatch( 'price-change', {
 					totalPrice: this._getTotalPrice(),
 					totalCount: this._getTotalCount()
@@ -74,7 +76,7 @@
 
 			$el.find( '.ui_spinner' ).spinner( 'clear' ).off( 'spinner-change' );
 			$el.remove();
-
+			
 			this.dispatch( 'price-change', {
 				totalPrice: this._getTotalPrice(),
 				totalCount: this._getTotalCount()
@@ -97,7 +99,7 @@
 		 */
 		_setEvents: function () {
 			this._$appendTarget.on( 'click', '.btn_del', function (e) {
-				var prodSn = $( e.currentTarget ).data( 'prod-sn' );
+				var prodSn = $( e.currentTarget ).parent().data( 'prod-sn' );
 				this.remove( prodSn );
 			}.bind(this));
 		},
@@ -124,6 +126,22 @@
 					totalCount: this._getTotalCount()
 				});
 			}.bind(this));
+			
+			$el.find( '.incoming_alarm' ).on( 'click', function(){
+				AP.modal.confirm({
+					 contents : AP.message.LINK_ALARM_APP_STORE
+					,confirmLabel : '다운로드'
+					,cancelLabel : '닫기'
+				}).addListener( 'modal-before-close', function (e) { 
+					if( e.closeType == 'confirm' ){
+						if( $B.ua.ANDROID ){
+							location.href = AP.url.ANDROID_APP_STORE;
+						}else{
+							location.href = AP.url.IOS_APP_STORE;
+						}
+					}
+				});
+			});
 		},
 
 		_setProductValue: function ( $el, product, count ) {

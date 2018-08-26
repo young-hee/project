@@ -77,6 +77,10 @@
 				for ( var j = 0; j < this._searchFilterData.addAttrs[i].addAttrVals.length; ++j ) {
 					this._searchFilterData.addAttrs[i].addAttrVals[j].selected = false;
 				}
+				if ( i == this._searchFilterData.addAttrs.length - 1 ) {
+					this._searchFilterData.addAttrs[i].min = '';
+					this._searchFilterData.addAttrs[i].max = '';
+				}
 			}
 			AP.display.searchFilterData = this._searchFilterData;
 		},

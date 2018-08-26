@@ -239,7 +239,7 @@ public interface AmoreAPIService {
 	
 	/**
 	 * 휴대전화인증/변경90일체크
-	 * @param cicuemCuInfCoInVo
+	 * @param deletecicuedcuchcustwt
 	 * @return
 	 */
 	@RequestLine(value = "/cip/cit/custmgnt/custmgnt/svc/custinfrmgnt/athtchgcheck90/v1.00")

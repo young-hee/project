@@ -1,9 +1,9 @@
 package kr.ap.emt.order.controller;
 
+import kr.ap.comm.cart.CartSession;
 import kr.ap.comm.config.interceptor.PageTitle;
-import kr.ap.comm.member.vo.MemberSession;
-import kr.ap.comm.member.vo.OrdCartInfo;
-import kr.ap.comm.support.constants.PathConstants;
+import kr.ap.comm.cart.OrdCartInfo;
+import kr.ap.comm.order.OrderSession;
 import kr.ap.emt.order.vo.OrdStoreDTO;
 import kr.ap.emt.payment.config.InicisPgProperties;
 import net.g1project.ecp.api.exception.ApiException;
@@ -56,11 +56,10 @@ public class OrderViewController extends OrderBaseController {
 	@PostMapping("/reception")
 	public String receiveOrder(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
 
-		/* 회원구분 */
-		MemberSession memberSession = getMemberSession();
+		OrderSession orderSession = getOrderSession();
 
 		/* 주문 변경 정보 저장*/
-		memberSession.setOrdReceptChange(new OrdReceptChange());
+		orderSession.setOrdReceptChange(new OrdReceptChange());
 
 		OrdEx ordEx = new OrdEx();
 
@@ -76,7 +75,7 @@ public class OrderViewController extends OrderBaseController {
 				ordEx = createOrder(Long.valueOf(cartSn), cartProdSnList);
 
 				/* 주문한 장바구니 상품 목록 세션에 저장 */
-				memberSession.addOrdCartInfo(ordEx.getOrdSn(), new OrdCartInfo(Long.valueOf(cartSn), cartProdSnList));
+				orderSession.addOrdCartInfo(ordEx.getOrdSn(), new OrdCartInfo(Long.valueOf(cartSn), cartProdSnList));
 
 				/* 주문 상품목록 생성 */
 				makeOrdProdSet(ordEx, model);
@@ -91,8 +90,9 @@ public class OrderViewController extends OrderBaseController {
 
 			//바로구매
 			try {
-				ordEx = createOrder(memberSession.getCartSn(), null);/* 주문한 장바구니 상품 목록 세션에 저장 */
-				memberSession.addOrdCartInfo(ordEx.getOrdSn(), new OrdCartInfo(memberSession.getCartSn(), null));
+				CartSession cartSession = getCartSession();
+				ordEx = createOrder(cartSession.getCartSn(), null);/* 주문한 장바구니 상품 목록 세션에 저장 */
+				orderSession.addOrdCartInfo(ordEx.getOrdSn(), new OrdCartInfo(cartSession.getCartSn(), null));
 
 				/* 주문 상품목록 생성 */
 				makeOrdProdSet(ordEx, model);
@@ -140,23 +140,22 @@ public class OrderViewController extends OrderBaseController {
     @GetMapping("/ordComplete")
     public String ordBankComplete(HttpServletRequest request, Model model) {
         //TODO aki : 리턴되는 결과값 없음, 세션에서 주문번호 꺼내서 완료 페이지로 이동
-
-		MemberSession memberSession = getMemberSession();
+		OrderSession orderSession = getOrderSession();
 
 		OrdReceptComplete body = new OrdReceptComplete();
 		List<PayResult> payResultList = new ArrayList<PayResult>();
 
 		/* PG PayResult 만들기 */
-		PayResult pgPayResult = makePgPayResult(request, memberSession);
+		PayResult pgPayResult = makePgPayResult(request, orderSession);
 		if(pgPayResult != null) {
 			payResultList.add(pgPayResult);
 		}
 
 		/* Deposit PayResult 만들기 */
-		if(memberSession.getDepositPrice().compareTo(BigDecimal.ZERO) > 0) {
+		if(orderSession.getDepositPrice().compareTo(BigDecimal.ZERO) > 0) {
 			PayResult depositPayResult = new PayResult();
 			depositPayResult.setDepositYn(CODE_Y);
-			depositPayResult.setPayAmt(memberSession.getDepositPrice());
+			depositPayResult.setPayAmt(orderSession.getDepositPrice());
 
 			payResultList.add(depositPayResult);
 		}
@@ -166,10 +165,13 @@ public class OrderViewController extends OrderBaseController {
 		/* 1.주문완료 데이터 */
 		OrdEx ordEx = null;
 		try {
-			ordEx = orderApi.ordReceptComplete(memberSession.getOrdSn(), body);
+			ordEx = orderApi.ordReceptComplete(orderSession.getOrdSn(), body);
 		} catch (ApiException e) {
-			logger.error(e.getMessage());
-			model.addAttribute("ordCompleteError", e.getMessage());
+			Map<String, Object> map = new HashMap<String,Object>();
+			map.put("errorCode", e.getErrorCode());
+			map.put("errorMessage", e.getMessage());
+			map.put("errorAdditional", e.getAdditional());
+			model.addAttribute("ordCompleteError", map);
 		}
 		if(ordEx != null) {
 			/* 2.주문완료 상품목록 추출*/
@@ -191,35 +193,38 @@ public class OrderViewController extends OrderBaseController {
 	@PostMapping("/ordComplete")
 	public String ordComplete(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
 
-		MemberSession memberSession = getMemberSession();
+		OrderSession orderSession = getOrderSession();
 
         OrdReceptComplete body = new OrdReceptComplete();
         List<PayResult> payResultList = new ArrayList<PayResult>();
 
         /* PG PayResult 만들기 */
-        PayResult pgPayResult = makePgPayResult(request, memberSession);
+        PayResult pgPayResult = makePgPayResult(request, orderSession);
         if(pgPayResult != null) {
             payResultList.add(pgPayResult);
         }
-        
+
         /* Deposit PayResult 만들기 */
-        if(memberSession.getDepositPrice().compareTo(BigDecimal.ZERO) > 0) {
+        if(orderSession.getDepositPrice().compareTo(BigDecimal.ZERO) > 0) {
             PayResult depositPayResult = new PayResult();
             depositPayResult.setDepositYn(CODE_Y);
-            depositPayResult.setPayAmt(memberSession.getDepositPrice());
-            
+            depositPayResult.setPayAmt(orderSession.getDepositPrice());
+
             payResultList.add(depositPayResult);
         }
-        
+
         body.setPayResultList(payResultList);
-        
+
         /* 1.주문완료 데이터 */
 		OrdEx ordEx = null;
 		try {
-			ordEx = orderApi.ordReceptComplete(memberSession.getOrdSn(), body);
+			ordEx = orderApi.ordReceptComplete(orderSession.getOrdSn(), body);
 		} catch (ApiException e) {
-			logger.error(e.getMessage());
-			model.addAttribute("ordCompleteError", e.getMessage());
+			Map<String, Object> map = new HashMap<String,Object>();
+			map.put("errorCode", e.getErrorCode());
+			map.put("errorMessage", e.getMessage());
+			map.put("errorAdditional", e.getAdditional());
+			model.addAttribute("ordCompleteError", map);
 		}
         if(ordEx != null) {
             /* 2.주문완료 상품목록 추출*/
@@ -247,7 +252,7 @@ public class OrderViewController extends OrderBaseController {
 	public String redirectOrderReception(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
 
 		try {
-			OrdEx ordEx = orderApi.getOrd(getMemberSession().getOrdSn());
+			OrdEx ordEx = orderApi.getOrd(getOrderSession().getOrdSn());
 
 			/* 주문 상품목록 생성 */
 			makeOrdProdSet(ordEx, model);
@@ -304,7 +309,7 @@ public class OrderViewController extends OrderBaseController {
 
 					NotifyAccountDeposit nad = new NotifyAccountDeposit();
 					nad.setPayMethodCode(PAY_METHOD_CODE_VIRTUAL_ACCOUNT);  // virtual-account
-					nad.setPgTradeNo(noTid);								// 거래번호
+					//nad.setPgTradeNo(noTid);								// 거래번호
 					nad.setVirtualDepositBankAcNo(noVacct); 				// 가상계좌번호
 					nad.setVirtualBankAcDepositDt(date);
 					result = orderApi.notifyAccountDeposit(noOid, nad);
@@ -370,6 +375,7 @@ public class OrderViewController extends OrderBaseController {
 				if ("VBANK".equals(pType)) {
 					NotifyAccountDeposit nad = new NotifyAccountDeposit();
 					nad.setPayMethodCode(PAY_METHOD_CODE_VIRTUAL_ACCOUNT);  // virtual-account
+					nad.setPgTradeNo(pTid);
 					nad.setVirtualBankAcDepositDt(date);
 					result = orderApi.notifyAccountDeposit(ordNo, nad);
 				}
@@ -381,7 +387,8 @@ public class OrderViewController extends OrderBaseController {
 					if ("BANK".equals(pType)) {
 						NotifyAccountDeposit nad = new NotifyAccountDeposit();
 						nad.setPayMethodCode(PAY_METHOD_CODE_BANK_AC_TRANSFER);  // bank-ac-transfer
-						nad.setVirtualBankAcDepositDt(date);
+						nad.setPgTradeNo(pTid);
+						//nad.setVirtualBankAcDepositDt(date);
 						result = orderApi.notifyAccountDeposit(ordNo, nad);
 					}
 				}

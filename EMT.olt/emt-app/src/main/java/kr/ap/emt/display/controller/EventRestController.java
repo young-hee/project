@@ -181,7 +181,7 @@ public class EventRestController extends AbstractController {
 		
 		ApMember member = new ApMember(); 
 		// 이름 , 휴대폰번호, 주소지, 주소, 상세주소
-		if(0L != getMemberSn()) {
+		if(isLoggedIn()) {
 
 			member= apApi.getMemberInfo(getMemberSn());
 		}
@@ -403,7 +403,7 @@ public class EventRestController extends AbstractController {
 		
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
-		if(0L != getMemberSn()) {
+		if(isLoggedIn()) {
 			requestEvent.setMemberSn(getMemberSn());
 		}
 

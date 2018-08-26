@@ -6,32 +6,18 @@
  */
 package kr.ap.amt.cart.controller;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import kr.ap.comm.cart.CartSession;
+import kr.ap.comm.support.common.AbstractController;
+import kr.ap.comm.support.constants.APConstant;
+import net.g1project.ecp.api.model.sales.cart.*;
+import net.g1project.ecp.api.model.sales.display.BrandDisplayMainMenu;
+import net.g1project.ecp.api.model.sales.display.BrandDisplayMenu;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Controller;
-
-import kr.ap.comm.member.vo.MemberSession;
-import kr.ap.comm.support.common.AbstractController;
-import net.g1project.ecp.api.model.sales.cart.CalculationCurrencyInfo;
-import net.g1project.ecp.api.model.sales.cart.CalculationCurrencyValue;
-import net.g1project.ecp.api.model.sales.cart.CalculationRequestOtf;
-import net.g1project.ecp.api.model.sales.cart.CalculationResult;
-import net.g1project.ecp.api.model.sales.cart.CalculationResultOtf;
-import net.g1project.ecp.api.model.sales.cart.CalculationResultProduct;
-import net.g1project.ecp.api.model.sales.cart.CartEx;
-import net.g1project.ecp.api.model.sales.cart.CartMemberMembershipEx;
-import net.g1project.ecp.api.model.sales.cart.CartOnlineProdEx;
-import net.g1project.ecp.api.model.sales.cart.CartProdAward;
-import net.g1project.ecp.api.model.sales.cart.CartProdEx;
-import net.g1project.ecp.api.model.sales.cart.CartPromoEx;
 import org.springframework.util.StringUtils;
+
+import java.math.BigDecimal;
+import java.util.*;
 
 @Controller
 public class CartBaseController extends AbstractController{
@@ -43,15 +29,36 @@ public class CartBaseController extends AbstractController{
 	 */
 	protected CartEx getCartApi(Long cartSn) {
 		if(cartSn != null){
-			MemberSession memberSession = getMemberSession();
+			CartSession cartSession = getCartSession();
 
 			CartEx cartEx = cartApi.getCart(cartSn);
 			cartEx = calculationBySelect(cartEx); // 상품 선택정의
 
-			memberSession.setCartEx(cartEx);
-			setMemberSession(memberSession);
+			cartSession.setCartEx(cartEx);
+			setCartSession(cartSession);
 			return cartEx;
 		}
+		return null;
+	}
+	
+	/**
+	 * 빈 장바구니에 보여줄 브랜드 선택
+	 *
+	 * @return
+	 */
+	protected BrandDisplayMenu showBrandSelect() {
+
+		String displayMenuId = "brandMain";
+		Random random = new Random();
+		try {
+	        BrandDisplayMainMenu brandDisplayMainMenu = displayApi.getBrandMenu(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
+	        List<BrandDisplayMenu> brandSubMenuList = brandDisplayMainMenu.getSubmenus();
+			
+			return brandSubMenuList.get(random.nextInt(brandSubMenuList.size()));
+		}catch(Exception e) {
+			e.printStackTrace();
+	    }
+		
 		return null;
 	}
 
@@ -93,13 +100,11 @@ public class CartBaseController extends AbstractController{
 	 * @param selectedCartProdSnStr
 	 * @return
 	 */
-    protected CartEx calculationBySelect(Long cartSn,
-                                         String selectedCartProdSnStr) {
-        /* 회원정보 조회 */
-        MemberSession memberSession = getMemberSession();
+    protected CartEx calculationBySelect(Long cartSn, String selectedCartProdSnStr) {
 
+    	CartSession cartSession = getCartSession();
         /* 재계산을 위한 최종 cartEx */
-        CartEx cartEx = memberSession.getCartEx();
+        CartEx cartEx = cartSession.getCartEx();
         
         if(cartEx == null
                 || !cartSn.equals(cartEx.getCartSn())) {
@@ -156,8 +161,8 @@ public class CartBaseController extends AbstractController{
             }
         }
 
-        memberSession.setCartEx(cartEx);
-        setMemberSession(memberSession);
+		cartSession.setCartEx(cartEx);
+        setCartSession(cartSession);
         
         return cartEx;
     }
@@ -262,12 +267,11 @@ public class CartBaseController extends AbstractController{
 	 * @return
 	 */
 	protected CartEx calculationByRemove(Long cartSn, List<Long> removeCartProdSnList) {
-        
-        /* 회원정보 조회 */
-        MemberSession memberSession = getMemberSession();
+
+		CartSession cartSession = getCartSession();
 
         /* 재계산을 위한 최종 cartEx */
-        CartEx cartEx = memberSession.getCartEx();
+        CartEx cartEx = cartSession.getCartEx();
 
         if(cartEx == null
                 || !cartSn.equals(cartEx.getCartSn())) {
@@ -306,8 +310,8 @@ public class CartBaseController extends AbstractController{
 
         }
 
-        memberSession.setCartEx(cartEx);
-        setMemberSession(memberSession);
+		cartSession.setCartEx(cartEx);
+        setCartSession(cartSession);
         
         return cartEx;
     }
@@ -370,11 +374,11 @@ public class CartBaseController extends AbstractController{
     protected CartEx calculationByChangeQty(Long cartSn,
                                         Long cartProdSn,
                                         Long cartProdQty) {
-        /* 회원정보 조회 */
-        MemberSession memberSession = getMemberSession();
+
+		CartSession cartSession = getCartSession();
 
         /* 재계산을 위한 최종 cartEx */
-        CartEx cartEx = memberSession.getCartEx();
+        CartEx cartEx = cartSession.getCartEx();
         
         if(cartEx == null
                 || !cartSn.equals(cartEx.getCartSn())) {
@@ -412,9 +416,9 @@ public class CartBaseController extends AbstractController{
             }
         }
 
-        
-        memberSession.setCartEx(cartEx);
-        setMemberSession(memberSession);
+
+		cartSession.setCartEx(cartEx);
+        setCartSession(cartSession);
         
         return cartEx;
     }
@@ -680,32 +684,32 @@ public class CartBaseController extends AbstractController{
                         }
                     }
                 }
-                
-                // 배송비
-                BigDecimal shipFeeFreeBaseAmt = requestOtf.getShipFeeFreeBaseAmt() != null ? requestOtf.getShipFeeFreeBaseAmt() : BigDecimal.ZERO;
 
-                BigDecimal shipFee = BigDecimal.ZERO;
-                BigDecimal shipFeeDiscountAmount = BigDecimal.ZERO;
-                
-                if(onlineSalesTotalAmount.compareTo(BigDecimal.ZERO) > 0
-                        && onlineSalesTotalAmount.compareTo(shipFeeFreeBaseAmt) < 0) {
-                    shipFee = requestOtf.getCoDefaultShipFee() != null ? requestOtf.getCoDefaultShipFee() : new BigDecimal("2500");
+				// 배송비
+				BigDecimal shipFeeFreeBaseAmt = requestOtf.getShipFeeFreeBaseAmt() != null ? requestOtf.getShipFeeFreeBaseAmt() : BigDecimal.ZERO;
 
-                    // TODO : 배송비할인프로모션 정보
-                }
-                        
-                // 초도배송비 청구금액 정보
-                calculationResultOtf.setShipFeeInfo(setCalculationCurrencyInfo(calculationResultOtf.getShipFeeInfo(), shipFee));
+				BigDecimal calcDefaultShipFee = BigDecimal.ZERO;
+				BigDecimal shipFeeDiscountAmount = BigDecimal.ZERO;
 
-                // 초도배송비 할인금액 정보
-                calculationResultOtf.setShipFeeDiscountAmountInfo(setCalculationCurrencyInfo(calculationResultOtf.getShipFeeDiscountAmountInfo(), shipFeeDiscountAmount));
+				if(onlineSalesTotalAmount.compareTo(BigDecimal.ZERO) > 0
+					&& onlineSalesTotalAmount.compareTo(shipFeeFreeBaseAmt) < 0) {
+					calcDefaultShipFee = requestOtf.getCoDefaultShipFee() != null ? requestOtf.getCoDefaultShipFee() : new BigDecimal("2500");
 
-                // 최종초도배송비 정보
-                calculationResultOtf.setFinalShipFeeInfo(setCalculationCurrencyInfo(calculationResultOtf.getFinalShipFeeInfo(), shipFee.subtract(shipFeeDiscountAmount)));
-                
-                totalShipFee = totalShipFee.add(shipFee);
-                totalShipFeeDiscountAmount = totalShipFeeDiscountAmount.add(shipFeeDiscountAmount);
-            }
+					// TODO : 배송비할인프로모션 정보
+				}
+
+				// 초도배송비 계산금액 정보
+				calculationResultOtf.setCalcDefaultShipFeeInfo(setCalculationCurrencyInfo(calculationResultOtf.getCalcDefaultShipFeeInfo(), calcDefaultShipFee));
+
+				// 초도배송비 할인금액 정보
+				calculationResultOtf.setShipFeeDcAmountInfo(setCalculationCurrencyInfo(calculationResultOtf.getShipFeeDcAmountInfo(), shipFeeDiscountAmount));
+
+				// 최종초도배송비 정보
+				calculationResultOtf.setDefaultShipFeeInfo(setCalculationCurrencyInfo(calculationResultOtf.getDefaultShipFeeInfo(), calcDefaultShipFee.subtract(shipFeeDiscountAmount)));
+
+				totalShipFee = totalShipFee.add(calcDefaultShipFee);
+				totalShipFeeDiscountAmount = totalShipFeeDiscountAmount.add(shipFeeDiscountAmount);
+			}
         }
         
         

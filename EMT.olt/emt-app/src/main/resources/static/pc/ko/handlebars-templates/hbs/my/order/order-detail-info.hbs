@@ -37,7 +37,7 @@
 		</dl>
 		<dl>
 			<dt>구매매장</dt>
-			<dd><em>명동2호점</em> <span class="flag">스윗딜리버리</span> <button class="btn_sm_neutral" type="button" onclick="viewStoreMap()">매장 보기</button></dd>
+			<dd><em>{{ordInfo.ordShipAddressExList.0.storeEx.storeName}}</em> <span class="flag">스윗딜리버리</span> <button class="btn_sm_neutral" type="button" onclick="showStoreMap({{json this.storeEx}})">매장 보기</button></dd>
 		</dl>
 	{{else}}
 		{{#if (gt this.onlineCnt 0)}}
@@ -54,8 +54,8 @@
 		{{#if (gt this.storeCnt 0)}}
 			<dl>
 				<dt>테이크아웃</dt>
-				<dd><em>{{ordStatusCheck 'online' ordInfo.ordDetailStatusCode}}</em></dd>
-				<button class="btn_sm_neutral" type="button" onclick="viewStoreMap()">매장 보기</button></dd>
+				<dd><em>{{ordStatusCheck 'takeOut' ordInfo.ordDetailStatusCode}}</em></dd>
+				<button class="btn_sm_neutral" type="button" onclick="showStoreMap({{json ordInfo.ordShipAddressExList.0.storeEx}})">매장 보기</button></dd>
 			</dl>
 		{{/if}}
 	{{/xif}}

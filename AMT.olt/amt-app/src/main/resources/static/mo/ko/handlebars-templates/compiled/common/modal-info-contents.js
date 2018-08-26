@@ -39,7 +39,7 @@ this["AP"]["handlebars"]["common"]["modal-info-contents"] = Handlebars.template(
 },"13":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
 
-  return "            <div class=\"page_btns\">\n"
+  return "            <div class=\"layer_btns\">\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.btnCancel : depth0),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.btnConfirm : depth0),{"name":"if","hash":{},"fn":container.program(16, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "            </div>\n";

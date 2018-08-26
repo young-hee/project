@@ -69,6 +69,11 @@
 				this._$resultNone.show();
 				this._winScrollend.clear();
 			} else {
+				// for ( var i = 0; i < result.list.length; ++i ) {
+				// 	var repImgNo = result.list[i].repImgNo - 1;
+				// 	result.list[i].repImgSrc = result.list[i].onlineProdImages[repImgNo].imgSrc;
+				// }
+
 				var html = AP.common.getTemplate( 'display.product-list.item', result );
 				if ( this._currentIndex == 0 ) {
 					this._$list.html( html );
@@ -104,7 +109,10 @@
 
 			// 좋아요
 			this._$list.on( 'click', '.btn_toggle', function (e) {
-				$( e.currentTarget ).toggleClass( 'on' ).find( '.ico_heart_s' ).toggleClass( 'on' );
+				AP.login().done(function () {
+					$( e.currentTarget ).toggleClass( 'on' ).find( '.ico_heart_s' ).toggleClass( 'on' );
+				});
+				return false;
 			}.bind( this ));
 		},
 

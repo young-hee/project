@@ -32,9 +32,16 @@
 									</th:block>
 								</ul>
 							</div>
-							<div class="ix-controller">
+							<!--/* 20180823:삭제 */-->
+							<!-- <div class="ix-controller">
 								<div class="paging" style="display:none;"><span class="current"></span> / <span class="total"></span></div>
-							</div>
+							</div> -->
+							<!--/* 20180823:페이징 변경 */-->
+							<div class="ix-controller">
+								<ul class="ix-thumbs">
+									<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+								</ul>
+							</div>						
 						</div>
 					</th:block>
 					<!--/* 최초 로딩시 높이 잡아주기 */-->
@@ -126,10 +133,8 @@
 									<!-- slide --> 
 										<div class="slide two_half" data-ix-options="view-length:2; move-length:1; loop:false">
 								            <div class="ix-list-viewport">
-								                <ul class="ix-list-items">
+								                <ul class="ix-list-items"></ul>
 								                	<ul class="loading"></ul>
-								                   
-								                	</ul>
 								           		 </div>
 											</div>
 										<!-- : end slide --> 
@@ -138,9 +143,9 @@
 							</th:block>
 						</th:block>
 	         	   </div>
-				<!-- ch.에뛰드 -->
+				<!-- 채널에뛰드 -->
 				<div class="section ch_etude">
-					<h2 class="title">Ch.에뛰드</h2>
+					<h2 class="title">채널에뛰드</h2>
 					<div class="video_wrap">
 					</div>
 					<h3 class="sub_title"></h3>
@@ -201,7 +206,7 @@
 						</th:block>
 					</div>
 				</th:block>
-				                
+<th:block th:unless="${#device.isMobileWeb()}">                
                 <!-- 공지사항 -->
                 <dl class="footer_notice" th:if="${not #lists.isEmpty(footerNotice)}">
                     <dt>공지</dt>
@@ -223,6 +228,7 @@
                     </dd>
                 </dl>
                 <!-- // 공지사항 -->
+</th:block>
             </div>
         </div>
 

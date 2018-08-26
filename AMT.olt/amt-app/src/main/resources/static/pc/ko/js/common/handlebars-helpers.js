@@ -19,7 +19,7 @@
 	 */
 
 	Handlebars.registerHelper('repClass', function (condition) {
-		return (condition) == 'Y' ? 'address_default' : '';
+		return (condition) == 'Y' ? 'default' : '';
 	});
 
 	/**
@@ -28,7 +28,7 @@
 	 */
 
 	Handlebars.registerHelper('repText', function (condition) {
-		return (condition) == 'Y' ? '기본' : '';
+		return (condition) == 'Y' ? '기본배송지' : '';
 	});
 
 

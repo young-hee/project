@@ -21,7 +21,7 @@ this["AP"]["handlebars"]["products"]["selected-option-list"] = Handlebars.templa
 },"2":function(container,depth0,helpers,partials,data) {
     return "out_of_stock";
 },"4":function(container,depth0,helpers,partials,data) {
-    return "			<div class=\"alarm\">\n				일시품절 <a href=\"javascript:;\" class=\"btn_h32_gradient\">입고알리미신청</a>\n			</div>\n";
+    return "			<div class=\"alarm\">\n				일시품절 <a href=\"javascript:;\" class=\"btn_h32_gradient incoming_alarm\">입고알리미신청</a>\n			</div>\n";
 },"6":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 

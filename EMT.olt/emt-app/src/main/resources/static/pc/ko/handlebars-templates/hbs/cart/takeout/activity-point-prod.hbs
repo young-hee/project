@@ -13,15 +13,14 @@
 				<input type="hidden" name="cartProdSn" value="{{ cartProdSn }}"/>
 				<input type="hidden" name="takeoutPrdInfo_{{ cartProdSn }}" value="{{ cartProdSn }}"/>
 				<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{ prodEx.saleDisplayStatus }}"/>
-
 				<div class="item_info">
 					<!--/* 상품 선택 */-->
 					<div class="item_thumb">
 						<div class="check_wrap">
 							{{#if (and (eq ../onlineProdSn null) (eq prodEx.prodTypeCode 'FreeGift') ) }}
-								<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{ cartProdSn }}" pointExch="activity" point="{{ exchPoint }}" value="{{ cartProdSn }}" exchCheckYn="{{ selectYn }}" {{#if (and (ne prodEx.saleDisplayStatus 'OnSale')(ne prodEx.saleDisplayStatus null) ) }}disabled{{/if}}  {{condition (and (eq prodEx.saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}>
+								<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{ cartProdSn }}" activity="activity" pointExch="activity" point="{{ exchPoint }}" value="{{ cartProdSn }}" exchCheckYn="{{ selectYn }}" {{#if (and (ne prodEx.saleDisplayStatus 'OnSale')(ne prodEx.saleDisplayStatus null) ) }}disabled{{/if}}  {{condition (and (eq prodEx.saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}>
 							{{else}}
-								<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{ cartProdSn }}" pointExch="activity" point="{{ exchPoint }}" value="{{ cartProdSn }}" exchCheckYn="{{ selectYn }}" {{#if (and (ne prodEx.saleDisplayStatus 'OnSale')) }}disabled{{/if}}  {{condition (and (eq prodEx.saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}>
+								<input type="checkbox" name="takeoutChkBox" id="takeoutChkBox{{ cartProdSn }}" activity="activity" pointExch="activity" point="{{ exchPoint }}" value="{{ cartProdSn }}" exchCheckYn="{{ selectYn }}" {{#if (and (ne prodEx.saleDisplayStatus 'OnSale')) }}disabled{{/if}}  {{condition (and (eq prodEx.saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}>
 							{{/if}}
 							<label for="takeoutChkBox{{ cartProdSn }}">
 								{{#if (ne prodEx.repProdImgEx null) }}
@@ -47,8 +46,12 @@
 								{{/switch}}
 							{{/each}}
 						{{/xif}}
-						<a href="#none" class="title" {{#if (ne ../onlineProdSn null) }} onclick="fnProdDetail({{ ../onlineProdSn }})" {{/if}}>{{#if (ne ../onlineProdName null) }} {{ ../onlineProdName }} {{else}} {{ prodEx.prodName }} {{/if}}</a>
-						{{#if (ne ../onlineProdName null) }} <span class="opt">{{ prodEx.prodName }}</span> {{/if}}
+						{{#if (and (eq ../onlineProdSn null) (eq prodEx.prodTypeCode 'FreeGift') ) }}
+							<a href="#none" class="title">{{ prodEx.prodName }}</a>
+						{{else}}
+							<a href="#none" class="title" onclick="fnProdDetail({{ ../onlineProdSn }})">{{ ../onlineProdName }}</a>
+							{{#if (eq ../singleProdYn 'N') }} <span class="opt">{{ prodEx.prodName }}</span> {{/if}}
+						{{/if}}
 					</div>
 					<!--/* 상품 수량 */-->
 					<div class="count">

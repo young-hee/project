@@ -57,7 +57,7 @@
 			//TODO: 해당 api로 변경
 			this._api = AP.api.searchReviewList( null, {
 					toSearchFor: this._keyword,
-					prodReviewType: this._$prodFilterCheck.is( ':checked' ) ? 'Pur' : 'All',
+					prodReviewTypeCodes: this._$prodFilterCheck.is( ':checked' ) ? 'Pur' : '',
 					prodReviewSort: this._$sortSelect.val(),
 					offset: offset,
 					limit: 5

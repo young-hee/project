@@ -59,11 +59,6 @@
 						<dd>
 							<ul class="coupon_list" id="coupon_list"></ul>
 						</dd>
-						<ul class="loading" id="couponLoading" style="min-height: 100px; display: none">
-							<li></li>
-							<li></li>
-							<li></li>
-						</ul>
 					</dl>
 					<dl class="beauty">
 						<dt><b>진주알</b></dt></strong>
@@ -100,16 +95,18 @@
 									/ <span>사용가능 <th:block th:text="${#IntegUtil.toCommaNumber(ordMembershipEx.membershipAvailPoint)}"></th:block> P</span>
 									/ <span>보유 <th:block th:text="${#IntegUtil.toCommaNumber(ordMembershipEx.membershipKeepingPoint)}"></th:block> P</span>
 								</dd>
-								<dd th:if="${ordCntMap.get('membershipExchCnt') > 0}">
-									<ul class="coupon_list">
-										<li>
-											<span>뷰티포인트 상품 (<th:block th:text="${ordCntMap.get('membershipExchCnt')}">1</th:block>개)</span>
-											<span>
+								<th:block th:if="${ordCntMap.get('membershipExchCnt') > 0}">
+									<dd>
+										<ul class="coupon_list">
+											<li>
+												<span>뷰티포인트 상품 (<th:block th:text="${ordCntMap.get('membershipExchCnt')}">1</th:block>개)</span>
+												<span>
 												<span class="price">-<th:block th:text="${#IntegUtil.toCommaNumber(ordAmtMap.get('MembershipExch'))}">0</th:block></th> P</span>
 											</span>
-										</li>
-									</ul>
-								</dd>
+											</li>
+										</ul>
+									</dd>
+								</th:block>
 								<dd><p class="text_notice light">뷰티포인트 전용 제품구매시 자동으로 보유 포인트 중 사용액이 설정됩니다.</p></dd>
 							</th:block>
 							<th:block th:if="${ordMembershipEx.membershipServiceCode == 'CP'}">
@@ -123,11 +120,6 @@
 									/ <span>보유 <th:block th:text="${#IntegUtil.toCommaNumber(ordMembershipEx.membershipKeepingPoint)}"></th:block> P</span></dd>
 								<dd><p class="text_notice light">쿠션포인트는 쿠션상품 구매 시만 사용이 가능합니다.</p></dd>
 							</th:block>
-							<ul class="loading" id="pointLoading" style="min-height: 100px; display: none">
-								<li></li>
-								<li></li>
-								<li></li>
-							</ul>
 						</dl>
 					</th:block>
 
@@ -170,7 +162,6 @@
 	<script th:inline="javascript">
 		var ordSn = /*[[${ordEx.ordSn}]]*/ 0;
 		var memberSn = /*[[${memberSn}]]*/ null;
-		var memberKeepingCouponSnArr = [];
 		var modal;
 
 		//쿠폰조회
@@ -179,7 +170,7 @@
 		});
 
 		//뷰티포인트
-		$('[name=beauty_point]').on('blur', function() {
+		$('[name=beauty_point]').on('change', function() {
 			var membershipSn = this.dataset.membershipsn,
 				useMembershipPoint = parseInt(this.value);
 
@@ -188,7 +179,7 @@
 			if (useMembershipPoint >= 0 && useMembershipPoint <= parseInt(this.max)) {
 				calculationPoint(membershipSn, useMembershipPoint);
 			} else {
-				AP.modal.alert("사용가능한 뷰티포인트는 " + this.max + "입니다.");
+				AP.modal.alert("사용가능한 뷰티포인트는 " + this.max + "P입니다.");
 				$('[name=beauty_point]').val(this.max);
 				calculationPoint(membershipSn, this.max)
 			}
@@ -196,41 +187,23 @@
 		});
 
 		function calculationPoint(membershipSn, useMembershipPoint){
-			$('#pointLoading').show();
+			$('#orderLoading').show();
 
 			AP.api.ordReceptChangePoint({}, {
 				ordSn : ordSn,
 				membershipSn : membershipSn,
 				useMembershipPoint : useMembershipPoint
 			}).done(function (data) {
-				$('#pointLoading').hide();
 				if (data.ordHistEx != null) {
+					amtPcurInitAjax(data);
 
-					/**
-					 * 총결제금액
-					 * @type {*|String}
-					 */
-					var html = AP.common.getTemplate( 'order.final-price-amt-pcur', {
-						ordHistEx : data.ordHistEx,
-						ordAmtMap : data.ordAmtMap,
-						ordCntMap : data.ordCntMap,
-						isApMember : data.isApMember
-					});
-				}
-				$('#amtPcur').html(html);
-				$("[name=finalPamtPcur]").val(data.ordHistEx.finalPamtPcur);
-				$("[name=depositAvailAmt]").val(data.depositAvailAmt);
-				$("#orderPayment").html($B.string.numberFormat(data.ordHistEx.finalPamtPcur)+'원 결제하기');
-
-				$('#amtPriceTab > button').trigger("click");
-				$('html, body').animate({scrollTop: $("#amtPcur").offset().top-50}, 1000);
-
-				if ($('[name="depositPrice"]').val() != ""){
-					AP.modal.alert('뷰티포인트 사용으로 예치금 사용이 초기화됩니다. <br/>예치금 사용액을 다시 입력해 주세요.');
-					$('[name="depositPrice"]').val('')
+					if ($('[name="depositPrice"]') != undefined && $('[name="depositPrice"]').val() != ""){
+						AP.modal.alert('뷰티포인트 사용으로 예치금 사용이 초기화됩니다. <br/>예치금 사용액을 다시 입력해 주세요.');
+						$('[name="depositPrice"]').val('')
+					}
 				}
 			}).always(function(){
-				$('#pointLoading').hide();
+				$('#orderLoading').hide();
 			});
 		}
 
@@ -258,7 +231,6 @@
 		}
 
 		function initLayer() {
-			memberKeepingCouponSnArr = [];
 			modal = AP.modal.info({
 				contents: {
 					templateKey: 'order.fullpage-coupon-use',
@@ -411,12 +383,12 @@
 						if($("input[name=couponSn]").is(':checked') == false){
 							AP.modal.alert("선택하신 쿠폰이 없습니다.");
 						}else{
-							memberKeepingCouponSnArr = [];
+							var applyCouponSnArr = [];
 							$("input[name=couponSn]:checked").each(function() {
-								memberKeepingCouponSnArr.push(this.id);
+								applyCouponSnArr.push(this.id);
 							});
 
-							drawCouponList(memberKeepingCouponSnArr, 'apply');
+							drawCouponList(applyCouponSnArr, 'apply');
 						}
 					});
 
@@ -427,7 +399,7 @@
 				}
 			}).fail(function(xhr) {
 				//실패
-				console.log(xhr.errorMessage);
+				AP.modal.alert(xhr.errorMessage);
 			}).always(function() {
 			});
 		}
@@ -443,7 +415,7 @@
 			if (flag == 'apply') {
 				$('#couponApplyLoading').show();
 			} else {
-				$('#couponLoading').show();
+				$('#orderLoading').show();
 			}
 
 			if (couponSnArr != null && couponSnArr.length > 0) {
@@ -455,51 +427,58 @@
 				memberKeepingCouponSnArr: couponSnArr,
 				membershipSn : $('[name=beauty_point]').data().membershipsn
 			}).done(function (data) {
-				if (data != null && data.applyCouponExList != "" && data.applyCouponExList.length > 0) {
 
+				if (data != null) {
 					if (flag == 'apply') {
-						//쿠폰적용
-						if (couponSnArr.length == data.applyCouponExList.length) {
+						//쿠폰적용(Layer)
+						if (data.applyCouponExList != "" && data.applyCouponExList.length > 0) {
 
-							drawCouponUnit(data);
-							modal.close();
+							//적용할 쿠폰 존재한 경우
+							if (couponSnArr.length == data.applyCouponExList.length) {
 
+								drawCouponUnit(data);
+								modal.close();
+
+							} else {
+								//사용불가한 쿠폰 존재한 경우
+								AP.modal.alert('본주문에 사용하지 못 한 쿠폰 존재합니다.');
+
+								var applyCouponSnArr = [];
+								$.each(data.applyCouponExList, function (index, item) {
+									if (item.memberKeepingCouponSn > 0) {
+										applyCouponSnArr.push(item.memberKeepingCouponSn);
+									}
+								});
+
+								var resultArr = couponSnArr.filter(function (item) {
+									return applyCouponSnArr.indexOf(parseInt(item)) === -1;
+								});
+								$.each(resultArr, function (index, item) {
+									$('[id=' + item + ']').prop('checked', false);
+								});
+
+								return;
+							}
 						} else {
-							//사용불가한 쿠폰 존재한 경우
-							AP.modal.alert('본주문에 사용하지 못 한 쿠폰 존재합니다.');
-
-							var applyCouponSnArr = [];
-							$.each(data.applyCouponExList, function (index, item) {
-								if (item.memberKeepingCouponSn > 0) {
-									applyCouponSnArr.push(item.memberKeepingCouponSn);
-								}
-							});
-
-							var resultArr = couponSnArr.filter(function(item){ return applyCouponSnArr.indexOf(parseInt(item)) === -1; });
-							$.each(resultArr, function (index, item) {
-								$('[id='+item+']').prop('checked', false);
-							});
-
-							return;
+							//적용한 쿠폰 없을때
+							$('[name=couponSn]').attr("checked", false);
+							AP.modal.alert("이번 주문에 사용할 수 없는 쿠폰을 선택하셨습니다. 쿠폰을 다시 선택해 주세요. ");
 						}
-
 					} else {
+						//flag == 'remove'
 						//쿠폰삭제
 						drawCouponUnit(data);
 					}
-
 				} else {
-					//쿠폰 전부 삭제시
-					$('#coupon_list').html('');
-					$('#couponDcAmtSum').html('')
+					AP.modal.alert("no data error");
 				}
 
 			}).fail(function (xhr) {
 				//실패
-				console.log(xhr.errorMessage);
+				AP.modal.alert(xhr.errorMessage);
 			}).always(function () {
 				$('#couponApplyLoading').hide();
-				$('#couponLoading').hide();
+				$('#orderLoading').hide();
 				jQuery.ajaxSettings.traditional = true;
 			});
 		}
@@ -543,7 +522,7 @@
 				}
 			}).fail(function(xhr) {
 				//실패
-				console.log(xhr.errorMessage);
+				AP.modal.alert(xhr.errorMessage);
 			}).always(function() {
 			});
 		}
@@ -551,66 +530,58 @@
 		//적용된 쿠폰목록 그리기
 		function drawCouponUnit(data) {
 
-			var couponDcAmtSum = 0
-				, couponStr = '';
+			if (data != null) {
+				var couponDcAmtSum = 0
+					, couponStr = '';
 
-			memberKeepingCouponSnArr = [];
-			$.each(data.applyCouponExList, function (idx, obj) {
-				if (obj.memberKeepingCouponSn > 0) {
-					couponStr += AP.common.getTemplate('order.coupon-use-list', {
-						coupon: obj
-					});
-					console.log("받은목록: " + obj.memberKeepingCouponSn);
+				$.each(data.applyCouponExList, function (idx, obj) {
+					if (obj.memberKeepingCouponSn > 0) {
+						couponStr += AP.common.getTemplate('order.coupon-use-list', {
+							coupon: obj
+						});
+						console.log("받은목록: " + obj.memberKeepingCouponSn);
+						couponDcAmtSum += obj.applyDcAmt;
+					}
+				});
 
-					couponDcAmtSum += obj.applyDcAmt;
-
-					//실제 적용된 쿠폰 목록
-					memberKeepingCouponSnArr.push(obj.memberKeepingCouponSn);
+				//화면적용
+				$('#coupon_list').html('');
+				$('#coupon_list').append(couponStr);
+				if (couponDcAmtSum == 0) {
+					//0원 노출 안함.
+					$('#couponDcAmtSum').html('');
+				} else {
+					$('#couponDcAmtSum').html('-' + $B.string.numberFormat(couponDcAmtSum) + '원');
 				}
-			});
 
-			//화면적용
-			$('#coupon_list').html('');
-			$('#coupon_list').append(couponStr);
-			if (couponDcAmtSum == 0) {
-				$('#couponDcAmtSum').html($B.string.numberFormat(couponDcAmtSum) + '원');
-			} else {
-				$('#couponDcAmtSum').html('-' + $B.string.numberFormat(couponDcAmtSum) + '원');
+				// 쿠폰 취소
+				$('[name=removeCoupon]').off('click').on('click', function (e) {
+					//console.log(this.dataset.sn);
+					var sn = this.dataset.sn;
+
+					//전제목록
+					var removeCouponSnArr = [];
+					$('[name=removeCoupon]').each(function(i, selected){
+						removeCouponSnArr.push(this.dataset.sn);
+					});
+
+					//삭제후의 목록
+					removeCouponSnArr = removeCouponSnArr.filter(function (item, index) {
+						return item != sn
+					});
+
+					drawCouponList(removeCouponSnArr, 'remove');
+				});
 			}
 
-			/**
-			 * 총결제금액
-			 * @type {*|String}
-			 */
-			var html = AP.common.getTemplate('order.final-price-amt-pcur', {
-				ordHistEx: data.ordHistEx,
-				ordAmtMap: data.ordAmtMap,
-				ordCntMap: data.ordCntMap,
-				isApMember: data.isApMember
-			});
-			$('#amtPcur').html(html);
-			$("[name=finalPamtPcur]").val(data.ordHistEx.finalPamtPcur);
-			$("[name=depositAvailAmt]").val(data.depositAvailAmt);
-			$("#orderPayment").html($B.string.numberFormat(data.ordHistEx.finalPamtPcur) + '원 결제하기');
+			amtPcurInitAjax(data);
 
-			$('#amtPriceTab > button').trigger("click");
-			//$('html, body').animate({scrollTop: $("#amtPcur").offset().top-50}, 1000);
-
-			if ($('[name="depositPrice"]').val() != "" || $('[name="beauty_point"]').val() != "") {
+			if ($('[name="depositPrice"]') != undefined && $('[name="depositPrice"]').val() != ""
+				|| $('[name="beauty_point"]') != undefined && $('[name="beauty_point"]').val() != "") {
 				AP.modal.alert('쿠폰 사용으로 포인트 및 예치금 사용이 초기화됩니다. <br/>포인트 및 예치금 사용액을 다시 입력해 주세요.');
 				$('[name="depositPrice"]').val('');
 				$('[name="beauty_point"]').val('');
 			}
-
-			// 쿠폰 취소
-			$('[name=removeCoupon]').off('click').on('click', function (e) {
-				//console.log(this.dataset.sn);
-				var sn = this.dataset.sn;
-				memberKeepingCouponSnArr = memberKeepingCouponSnArr.filter(function (item, index) {
-					return item != sn
-				});
-				drawCouponList(memberKeepingCouponSnArr, 'remove');
-			});
 		}
 
 	</script>

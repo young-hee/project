@@ -183,7 +183,7 @@
 			AP.lazyLoad.add( $section.find('img.lazy_load') );
 		},
 
-		//Ch.에뛰드
+		//채널에뛰드
 		_setChEtude: function () {
 			var $section = this._$target.find( '.ch_etude' );
 			if ( !$section.length ) return;

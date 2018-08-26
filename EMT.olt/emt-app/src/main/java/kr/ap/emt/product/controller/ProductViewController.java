@@ -15,9 +15,6 @@ import net.g1project.ecp.api.model.sales.product.ProdReviewSummaryInfo;
 import net.g1project.ecp.api.model.sales.product.ProductInfo;
 import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkPost;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang3.EnumUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -125,7 +122,7 @@ public class ProductViewController extends AbstractController {
 		model.addAttribute("seo", seoEntity);
 
       	//상품히스토리 저장
-		if(0L != getMemberSn()) {
+		if(isLoggedIn()) {
 			ShoppingMarkPost shoppingMarkPost = new ShoppingMarkPost();
 			shoppingMarkPost.setShoppingMarkTgtCode("Prod");
 

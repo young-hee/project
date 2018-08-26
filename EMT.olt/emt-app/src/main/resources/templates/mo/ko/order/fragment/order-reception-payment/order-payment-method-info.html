@@ -1,0 +1,86 @@
+<!-- 선택시 on 클래스 -->
+<!--<li>
+	<button type="button" class="one_touch on">원터치간편결제</button>
+</li>-->
+<th:block th:each="payMethod : ${payMethodResult.payMethodExList}">
+	<!--원터치 간편결제-->
+	<th:block th:if="${apMember != null and payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'wpay'}">
+		<span class="w_pay">
+			<input type="text" name="payMethodSn" value="2">
+			<input type="text" name="payServiceCode" value="inicis-pg">
+			<input type="text" name="payMethodCode" value="wpay">
+			<input type="radio" name="payMethod" id="w_pay" value="wpay" onclick="setPayment(this,'WPAY','')" title="원터치 간편결제" class="">
+			<label for="w_pay">원터치 간편결제</label>
+		</span>
+	</th:block>
+	<!--신용카드 결제-->
+	<th:block th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'credit-card'}">
+		<span class="credit">
+			<input type="text" name="payMethodSn" value="1">
+			<input type="text" name="payServiceCode" value="inicis-pg">
+			<input type="text" name="payMethodCode" value="credit-card">
+			<input type="radio" name="payMethod" id="credit" value="wcard" onclick="setPayment(this,'wcard','')" title="신용카드" class="">
+			<label for="credit">신용카드</label>
+		</span>
+	</th:block>
+	<!--휴대폰 결제-->
+	<th:block th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'mobile-phone-pay'}">
+		<span class="phone">
+			<input type="text" name="payMethodSn" value="6">
+			<input type="text" name="payServiceCode" value="inicis-pg">
+			<input type="text" name="payMethodCode" value="mobile-phone-pay">
+			<input type="radio" name="payMethod" id="phone" value="mobile" onclick="setPayment(this,'mobile','')" title="휴대폰 결제" class="">
+			<label for="phone">휴대폰결제</label>
+		</span>
+	</th:block>
+	<!--네이버 페이-->
+	<th:block th:if="${payMethod.payServiceCode == 'naver-pg' and payMethod.payMethodCode == 'naverpay'}">
+		<span class="n_pay">
+			<input type="text" name="payMethodSn" value="3">
+			<input type="text" name="payServiceCode" value="naver-pg">
+			<input type="text" name="payMethodCode" value="naverpay">
+			<input type="radio" name="payMethod" id="n_pay" value="naverpay" onclick="setPayment(this,'NAVERPAY','')" title="네이버 페이" class="">
+			<label for="n_pay">네이버페이</label>
+		</span>
+	</th:block>
+	<!--페이코-->
+	<th:block th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'payco'}">
+		<span class="payco">
+			<input type="text" name="payMethodSn" value="4">
+			<input type="text" name="payServiceCode" value="inicis-pg">
+			<input type="text" name="payMethodCode" value="payco">
+			<input type="radio" name="payMethod" id="payco" value="wcard" onclick="setPayment(this,'wcard','onlypayco')" title="페이코" class="">
+			<label for="payco">페이코</label>
+		</span>
+	</th:block>
+	<!--카카오페이-->
+	<th:block th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'kakaopay'}">
+		<span class="kakao_pay">
+			<input type="text" name="payMethodSn" value="5">
+			<input type="text" name="payServiceCode" value="inicis-pg">
+			<input type="text" name="payMethodCode" value="kakaopay">
+			<input type="radio" name="payMethod" id="kakao_pay" value="wcard" onclick="setPayment(this,'wcard','onlykakaopay')" title="카카오 페이" class="">
+			<label for="kakao_pay">카카오페이</label>
+		</span>
+	</th:block>
+	<!--실시간 계좌이체-->
+	<th:block th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'bank-ac-transfer'}">
+		<span class="account_transfer">
+			<input type="text" name="payMethodSn" value="8">
+			<input type="text" name="payServiceCode" value="inicis-pg">
+			<input type="text" name="payMethodCode" value="bank-ac-transfer">
+			<input type="radio" name="payMethod" id="account_transfer" value="bank" onclick="setPayment(this,'bank','')" title="실시간 계좌이체" class="">
+			<label for="account_transfer">실시간계좌이체</label>
+		</span>
+	</th:block>
+	<!--무통장 입금-->
+	<th:block th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'virtual-account'}">
+		<span class="remit_bank">
+			<input type="text" name="payMethodSn" value="7">
+			<input type="text" name="payServiceCode" value="inicis-pg">
+			<input type="text" name="payMethodCode" value="virtual-account">
+			<input type="radio" name="payMethod" id="remit_bank" value="vbank" onclick="setPayment(this,'vbank','')" title="무통장 입금" class="">
+			<label for="remit_bank">가상계좌</label>
+		</span>
+	</th:block>
+</th:block>

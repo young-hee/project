@@ -30,16 +30,20 @@ public class CSViewController extends AbstractController {
 
 	@GetMapping("/customerCenter")
 	@PageTitle(title = "고객센터")
-	public String cuetomerCenter() {
+	public String cuetomerCenter(Model model) {
 		//Mobile
 		if (isMobileDevice()) {
+			FaqSearchResult f = guideApi.getFaqs(null, null, null, 0, 5);
+			FoNoticeResult n = guideApi.getFoNotices(null, null,0, 5, "N", CSViewController.EVENT_YN);
+
+			model.addAttribute("faq", f);
+			model.addAttribute("notice", n);
 			return "/cs/customer-center";
 		}
 
 		if (isPcDevice()) {
 			return "/cs/notice-list";
 		}
-
 		return null;
 	}
 
@@ -55,43 +59,47 @@ public class CSViewController extends AbstractController {
 	@BreadCrumb("EH.CS.01")
 	public String faq(Model model, @PathVariable(required = false) String keyword) {
 		//Mobile
-		if (isMobileDevice()) {
+//		if (isMobileDevice()) {
+//
+//			//FAQ Summary 조회
+//			model.addAttribute("keyword", keyword);
+//			model.addAttribute("summary", guideApi.getFaqSummary(null));
+//			return "cs/faq";
+//		}
+//
+//		//PC
+//		if (isPcDevice()) {
+//			Long inquiryTypeSn = StringUtils.isEmpty(getRequest().getParameter("inquiryTypeSn")) ? null : Long.valueOf(getRequest().getParameter("inquiryTypeSn"));
+//			Integer offset = StringUtils.isEmpty(getRequest().getParameter("offset")) ? null : Integer.parseInt(getRequest().getParameter("offset"));
+//			Integer limit = StringUtils.isEmpty(getRequest().getParameter("limit")) ? null : Integer.parseInt(getRequest().getParameter("limit"));
+//			String searchKeyword;
+//			if(keyword == null){
+//				searchKeyword = StringUtils.isEmpty(getRequest().getParameter("keyword")) ? null : getRequest().getParameter("keyword");
+//			} else {
+//				searchKeyword = keyword;
+//			}
+//
+//			if( limit == null) limit = PC_CS_FAQ;  //최초 조회시 페이지 당 건수 세팅
+//			if( offset == null) offset = 0;
+//
+//			//FAQ Summary 조회
+//			FaqSummary faqSummary = guideApi.getFaqSummary(null);
+//
+//			//FAQ 목록 조회
+//			FaqSearchResult faqSR = guideApi.getFaqs(searchKeyword, inquiryTypeSn, null, offset, limit);
+//
+//			model.addAttribute("keyword", searchKeyword);
+//			model.addAttribute("faqType", faqSummary);
+//			model.addAttribute("faqSrchRst", faqSR);
+//			model.addAttribute("inquiryTypeSn", inquiryTypeSn);
+//			model.addAttribute("cntPerPage", PC_CS_FAQ);
+//
+//			return "cs/cs_faq";
+//		}
 
-			model.addAttribute("keyword", keyword);
-			return "cs/fullpage-faq";
-		}
-
-		//PC
-		if (isPcDevice()) {
-			Long inquiryTypeSn = StringUtils.isEmpty(getRequest().getParameter("inquiryTypeSn")) ? null : Long.valueOf(getRequest().getParameter("inquiryTypeSn"));
-			Integer offset = StringUtils.isEmpty(getRequest().getParameter("offset")) ? null : Integer.parseInt(getRequest().getParameter("offset"));
-			Integer limit = StringUtils.isEmpty(getRequest().getParameter("limit")) ? null : Integer.parseInt(getRequest().getParameter("limit"));
-			String searchKeyword;
-			if(keyword == null){
-				searchKeyword = StringUtils.isEmpty(getRequest().getParameter("keyword")) ? null : getRequest().getParameter("keyword");
-			} else {
-				searchKeyword = keyword;
-			}
-
-			if( limit == null) limit = PC_CS_FAQ;  //최초 조회시 페이지 당 건수 세팅
-			if( offset == null) offset = 0;
-
-			//FAQ Summary 조회
-			FaqSummary faqSummary = guideApi.getFaqSummary(null);
-
-			//FAQ 목록 조회
-			FaqSearchResult faqSR = guideApi.getFaqs(searchKeyword, inquiryTypeSn, null, offset, limit);
-
-			model.addAttribute("keyword", searchKeyword);
-			model.addAttribute("faqType", faqSummary);
-			model.addAttribute("faqSrchRst", faqSR);
-			model.addAttribute("inquiryTypeSn", inquiryTypeSn);
-			model.addAttribute("cntPerPage", PC_CS_FAQ);
-
-			return "cs/cs_faq";
-		}
-
-		return null;
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("summary", guideApi.getFaqSummary(null));
+		return "cs/faq";
 	}
 
 	@RequestMapping("/notice")
@@ -99,44 +107,50 @@ public class CSViewController extends AbstractController {
 	@BreadCrumb("EH.CS.06.001")
 	public String notice(Model model) {
 		//Mobile
-		if (isMobileDevice()) {
-			return "cs/fullpage-notice";
-		}
+//		if (isMobileDevice()) {
+//			FoNoticeSummary foNoticeSummary = guideApi.getFoNoticeSummary(EVENT_YN);
+//			model.addAttribute("summary", foNoticeSummary);
+//			return "cs/notice-list";
+//		}
+//
+//		//PC
+//		if (isPcDevice()) {
+//			String keyword = StringUtils.isEmpty(getRequest().getParameter("keyword")) ? null : getRequest().getParameter("keyword");
+//			Long noticeTypeSn = StringUtils.isEmpty(getRequest().getParameter("noticeTypeSn")) ? null : Long.parseLong(getRequest().getParameter("noticeTypeSn"));
+//			Integer offset = StringUtils.isEmpty(getRequest().getParameter("offset")) ? null : Integer.parseInt(getRequest().getParameter("offset"));
+//			Integer limit = StringUtils.isEmpty(getRequest().getParameter("limit")) ? null : Integer.parseInt(getRequest().getParameter("limit"));
+//
+//			if( limit == null) limit = PC_CS_NORMAL_NOTICE;  //최초 조회시 페이지 당 건수 세팅
+//			if( offset == null) offset = 0;
+//
+//			//Notice Summary 조회
+//			FoNoticeSummary foNoticeSummary = guideApi.getFoNoticeSummary(EVENT_YN);
+//
+//			//Notice 목록 조회(중요공지)
+//			FoNoticeResult impotyNotice = guideApi.getFoNotices("", null, 0, PC_CS_IMPORTANT_NOTICE, "Y", EVENT_YN);
+//
+//			if( impotyNotice != null && impotyNotice.getTotalCount() > 0) {
+//				limit = PC_CS_NORMAL_NOTICE - impotyNotice.getTotalCount();
+//			}
+//
+//			//Notice 목록 조회(일반공지)
+//			FoNoticeResult nomalNotice = guideApi.getFoNotices(keyword, noticeTypeSn, offset, limit, "N", EVENT_YN);
+//
+//			model.addAttribute("keyword", keyword);
+//			model.addAttribute("noticeType", foNoticeSummary);
+//			model.addAttribute("impotyNotice", impotyNotice);
+//			model.addAttribute("nomalNotice", nomalNotice);
+//			model.addAttribute("noticeTypeSn", noticeTypeSn);
+//			model.addAttribute("cntPerPage", PC_CS_FAQ);
+//
+//			return "cs/board_notice_list";
+//		}
 
-		//PC
-		if (isPcDevice()) {
-			String keyword = StringUtils.isEmpty(getRequest().getParameter("keyword")) ? null : getRequest().getParameter("keyword");
-			Long noticeTypeSn = StringUtils.isEmpty(getRequest().getParameter("noticeTypeSn")) ? null : Long.parseLong(getRequest().getParameter("noticeTypeSn"));
-			Integer offset = StringUtils.isEmpty(getRequest().getParameter("offset")) ? null : Integer.parseInt(getRequest().getParameter("offset"));
-			Integer limit = StringUtils.isEmpty(getRequest().getParameter("limit")) ? null : Integer.parseInt(getRequest().getParameter("limit"));
+		FoNoticeSummary foNoticeSummary = guideApi.getFoNoticeSummary(EVENT_YN);
+		model.addAttribute("summary", foNoticeSummary);
+		return "cs/notice-list";
 
-			if( limit == null) limit = PC_CS_NORMAL_NOTICE;  //최초 조회시 페이지 당 건수 세팅
-			if( offset == null) offset = 0;
-
-			//Notice Summary 조회
-			FoNoticeSummary foNoticeSummary = guideApi.getFoNoticeSummary(EVENT_YN);
-
-			//Notice 목록 조회(중요공지)
-			FoNoticeResult impotyNotice = guideApi.getFoNotices("", null, 0, PC_CS_IMPORTANT_NOTICE, "Y", EVENT_YN);
-
-			if( impotyNotice != null && impotyNotice.getTotalCount() > 0) {
-				limit = PC_CS_NORMAL_NOTICE - impotyNotice.getTotalCount();
-			}
-
-			//Notice 목록 조회(일반공지)
-			FoNoticeResult nomalNotice = guideApi.getFoNotices(keyword, noticeTypeSn, offset, limit, "N", EVENT_YN);
-
-			model.addAttribute("keyword", keyword);
-			model.addAttribute("noticeType", foNoticeSummary);
-			model.addAttribute("impotyNotice", impotyNotice);
-			model.addAttribute("nomalNotice", nomalNotice);
-			model.addAttribute("noticeTypeSn", noticeTypeSn);
-			model.addAttribute("cntPerPage", PC_CS_FAQ);
-
-			return "cs/board_notice_list";
-		}
-
-		return null;
+//		return null;
 	}
 
 	@RequestMapping(value = {"/noticeView", "/noticeView/{sn}"} )
@@ -146,7 +160,7 @@ public class CSViewController extends AbstractController {
 		//Mobile
 		if (isMobileDevice()) {
 			model.addAttribute("notice", guideApi.getFoNotice(sn));
-			return "cs/fullpage-notice-view";
+			return "cs/notice-view";
 		}
 
 		//PC

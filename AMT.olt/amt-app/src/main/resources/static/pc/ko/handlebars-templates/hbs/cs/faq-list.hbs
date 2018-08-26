@@ -1,0 +1,26 @@
+{{#xif totalLength '>' 0}}
+	{{#each result}}
+		<tr>
+			<td>100</td>
+			<td class="cont">
+				<div class="qna_box">
+					<div class="question">
+						<span class="txt_question">Q<span class="sr_only">질문</span></span>
+						<button type="button" title="답변 보기">
+							<span>
+								<span class="type">[{{inquiryTypeName}}]</span>{{inquiryText}}
+							</span>
+						</button>
+					</div>
+					<div class="answer">
+						<span class="txt_answer">
+							A <span class="sr_only">답변</span>
+						</span>
+						{{{responseBodyText}}}
+					</div>
+				</div>
+			</td>
+		</tr>
+	{{/each}}
+{{else}}
+{{/xif}}

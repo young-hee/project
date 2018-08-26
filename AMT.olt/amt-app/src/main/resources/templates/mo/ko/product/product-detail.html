@@ -59,10 +59,18 @@
 				<p class="product_exp" th:text="${prd.lineDesc}"></p>
 				
 				<!--/* 옵션선택 */-->
-				<button type="button" class="btn_options" th:if="${#lists.size(prd.colorGroups) == 0}"><span>옵션을 선택해주세요</span></button>
+				<button type="button" class="btn_options" id="optionSelectBox" th:if="${#lists.size(prd.colorGroups) == 0 && #lists.size(prd.products) > 0}">
+					<span>옵션을 선택해주세요</span>
+				</button>
 				
 				<!--/* 옵션 선택 후 */-->
-				<button type="button" class="btn_options"><small>옵션선택</small><span>라이트 퍼플 라이트 퍼플 라이트 퍼플 40호 1개</span><span class="color_chip"><img alt="색상명" ap:src="@{/images/dummy/img_item_04.jpg}"></span></button>
+				<button type="button" class="btn_options" id="optionSelectedBox" data-prod-sn="" style="display:none;">
+					<small>옵션선택</small>
+					<span id="selectedProdName">라이트 퍼플 라이트 퍼플 라이트 퍼플 40호 1개</span>
+					<span class="color_chip">
+						<img alt="색상명" ap:src="@{/images/dummy/img_item_04.jpg}">
+					</span>
+				</button>
 				
 				<!--/* 컬러 옵션 선택 */-->
 				<div class="color_option" th:if="${#lists.size(prd.colorGroups) > 1 and prd.productCount > 1}">
@@ -86,7 +94,8 @@
 				</div>
 				
 				<!--/* 가격 */-->
-				<div class="product_price" th:if="${maxProd.membershipExchOnly == 'N'}"
+				<div class="product_price" 
+					 th:if="${maxProd.membershipExchOnly == 'N'}"
 					 th:with="curPrice=${maxProd.availablePrices[0]},
 							  maxRate=${curPrice.onlineSalePriceDiscountRate + curPrice.memberLevelDiscountRate + curPrice.onlineMemberDiscountRate + curPrice.immedDiscountRate}">
 					<span class="discount" th:if="${maxRate != 0}">
@@ -224,7 +233,7 @@
 				</dl>
 			</div>
 
-			<a href="#none" class="more">
+			<a th:href="@{/product/reviewList(onlineProdSn=${prd.onlineProdSn})}" class="more">
 				<span>구매리뷰 <span class="num">[[${ #numbers.formatInteger( prd.reviewCount , 0, 'COMMA' )}]]</span> 개 모두보기</span>
 				<i class="ico_navi_s next"></i>
 			</a>
@@ -894,14 +903,18 @@
 		<div class="section banner">
 			<a href="#none"><img alt="배너내용" src="/mo/ko/images/dummy/img_banner.jpg"></a>
 		</div>
+
 		<!--/* order layer full case */-->
-		<div class="order_layer"><!--/* 구매하기 클릭시 open 클래스 */-->
-			<!--/* 구매하기 버튼 */-->
+		<div class="order_layer">
+
 			<div class="default_btns">
-				<button type="button" class="btn_good btn_toggle" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i><span class="num">123</span></button>
-				<!-- 좋아요가 없을경우  -->
-				<!-- <button type="button" class="btn_good btn_toggle none_like" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i></button> -->
-				<button type="button" class="btn_h50_bk round btn_order">구매하기</button>
+				<!-- 좋아요  버튼  -->
+				<button type="button" class="btn_good btn_toggle" th:classappend="${prd.recommendCount == 0} ? none_like" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')">
+					<i class="ico_heart_s"></i>
+					<span class="num" th:if="${prd.recommendCount > 0}">[[${prd.recommendCount}]]</span>
+				</button>
+				<!--/* 구매하기 버튼 */-->
+				<button type="button" class="btn_h50_bk round btn_order" th:disabled="${prd.saleDisplayStatus == 'OutOfStock'}">구매하기</button>
 			</div>
 			
 			<!--/* 옵선선택 레이어 */-->

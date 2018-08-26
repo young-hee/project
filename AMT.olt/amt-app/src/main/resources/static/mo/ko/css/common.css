@@ -488,8 +488,8 @@ textarea:focus {outline:0}
 
 
 /* 원뷰 - 와이드 이미지 */
-.product_one_view.wide_img > a .product_visual_new {position:relative; width:100%; height:56.26vw}
-.product_one_view.wide_img > a .product_visual_new .lazy_load_wrap {padding-top:0; height:56.26vw}
+.product_one_view.wide_img > a .product_visual_new {position:relative; width:100%; height:50.66vw}
+.product_one_view.wide_img > a .product_visual_new .lazy_load_wrap {padding-top:0; height:50.66vw}
 .product_one_view > a .product_visual_new .out_of_stock {display:block; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.5); text-align:center; z-index:15}
 .product_one_view > a .product_visual_new .out_of_stock .img_badge {display:inline-block; position:relative; top:50%; padding:2px 6px 3px 6px; color:#fff; background:#000; font-size:12px; transform: translateY(-50%)}
 
@@ -500,12 +500,12 @@ textarea:focus {outline:0}
 .product_one_view.wide_video .btn_prd_video {position:absolute; right:10px; bottom:10px; width:34px; height:34px; z-index:20}
 
 /* 좌우 스와이프 : 150px */
-.swipe_wrap {background:#fff; overflow:hidden;}
-.product_list_new.swipe {overflow-x:auto; background:#fff; white-space:nowrap; -webkit-overflow-scrolling: touch; overflow-scrolling: touch;}
+.swipe_wrap {width:100%; background:#fff; overflow:hidden;}
+.product_list_new.swipe {overflow-x:auto; overflow-y:hidden; background:#fff; white-space:nowrap; -webkit-overflow-scrolling: touch; overflow-scrolling: touch;}
 .product_list_new.swipe::-webkit-scrollbar {width: 0; height: 0; background-color: transparent}
-.product_list_new.swipe li {display:inline-block; width:150px; margin:0 0 0 10px}
+.product_list_new.swipe li {display:inline-block; width:150px; height:100%; margin:0 0 0 10px}
 .product_list_new.swipe li:last-child {margin-right:10px}
-.swipe .product_new > a {position:relative; display:block;}
+.swipe .product_new > a {position:relative; /*display:inline-block;*/}/* 2018-08-23 수정*/
 .swipe .product_new > a .product_visual_new {display:block}
 .swipe .product_new > a .product_info_new {display:inline-block; position:relative; height:129px; padding:10px 0 23px 0}
 .swipe .product_new > a .product_info_new .price_wrap {margin-top:8px}
@@ -586,10 +586,6 @@ textarea:focus {outline:0}
 /* layout.css 으로 옮겨야 함 */
 .header_common .gnb_menu.fixed {position:fixed; top:0; left:0; right:0; z-index: 30;}
 
-/* 모달팝업 btn*/
-.layer_popup .btn_default_modal_confirm {color:#782fff; font-size:16px}
-.layer_popup .text {color:#000; font-size:15px; line-height:18px}
-
 /* 신고하기 */
 .report_wrap {background:#fff; padding:20px 0  45px 0}
 .tit_area {padding:20px 10px}
@@ -607,3 +603,18 @@ textarea:focus {outline:0}
 .btn_area_report {overflow:hidden; margin-top:15px; padding:0 7.5px}
 .btn_area_report li {float:left; width:50%; padding:0 2.5px}
 
+
+/* 모달팝업 NEW */
+.system_alert {position:fixed; top:0; left:0; right:0; bottom:0; z-index:100}
+.system_alert .layer_dimmed {position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0, 0, 0, 0.3); z-index:100}
+.system_alert .layer_wrap {position:absolute; top:50%; left:12%; right:12%; z-index:105 }
+.system_alert .layer {width:100%; min-height:100%; background:#fff;}
+.system_alert .layer_title {padding:24px 23px 0; font-size:16px; font-weight:bold; color:#000;}
+.system_alert .layer_cont {padding:24px 23px 19px;}
+.system_alert .layer_btns {text-align:right; padding:24px;}
+.system_alert .layer_btns button {margin-left:45px; color:#782fff; font-size:16px}
+.system_alert .layer_btns button:first-child {margin-left:0}
+
+/*btn*/
+.system_alert .btn_default_modal_confirm,.layer_popup.system_alert .btn_default_modal_cancel,.layer_popup.system_alert .layer_btns .close {color:#782fff; font-size:16px}
+.system_alert .text {color:#000; font-size:15px; line-height:18px}

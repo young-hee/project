@@ -47,16 +47,14 @@ this["AP"]["handlebars"]["header"]["history-list"] = Handlebars.template({"1":fu
     + container.escapeExpression(container.lambda((depths[1] != null ? depths[1].date : depths[1]), depth0))
     + "</strong>\n";
 },"9":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.lambda, alias4=container.escapeExpression;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
   return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.articleCateId : depth0),"==","chEtude",{"name":"xif","hash":{},"fn":container.program(10, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.articleCateId : depth0),"==","Looks",{"name":"xif","hash":{},"fn":container.program(12, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(data && data.index),"==",0,{"name":"xif","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "										<div class=\"item_wrap\">\n											<span class=\"img\"><img src=\""
-    + alias4(alias3((depth0 != null ? depth0.prodImg : depth0), depth0))
-    + "\" alt=\"\"></span>\n											<span class=\"title\">"
-    + alias4(alias3((depth0 != null ? depth0.articleTitle : depth0), depth0))
-    + "</span>\n										</div>\n									</a>\n";
+    + "										<dl>\n											<dt>아티클</dt>\n											<dd>"
+    + container.escapeExpression(container.lambda((depth0 != null ? depth0.articleTitle : depth0), depth0))
+    + "</dd>\n										</dl>\n									</a>\n";
 },"10":function(container,depth0,helpers,partials,data) {
     return "										<a href=\"/display/etude_ch/detail?displayMenuid=etude_ch&articleSn="
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.articleSn : depth0), depth0))

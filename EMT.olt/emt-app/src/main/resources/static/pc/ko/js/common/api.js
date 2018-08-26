@@ -61,6 +61,7 @@
 			,excludeSoldOut		: false
 			,offset				: 0
 			,limitProd 			: 8
+			,prodReviewSort     : null
 			,limitReview 		: 5
 			,limitArticle 		: 50
 			,limitPlan 			: 50
@@ -930,11 +931,11 @@
 		},
 
 		/**
-		 * 아티클(CH.에뛰드, FindYourLooks) *************************************************************
+		 * 아티클(채널에뛰드, FindYourLooks) *************************************************************
 		 */
 		//아티클 목록 조회
 		articles : { path:'/display/articles', method: 'POST', data: {
-			articleCateId: 'chEtude', //ch.에뛰드 : chEtude, FindYourLooks : Looks
+			articleCateId: 'chEtude', //채널에뛰드 : chEtude, FindYourLooks : Looks
 			order: null, //정렬방식코드 ArticleSortMethod, StartDt (시작일), Deadline(종료일), SortOrder(정렬순 - 기본값)
 			keyword: null,
 			hashTag: null, //해시태그 (SNS 해쉬태그 검색, '#’을 제거하고 입력)

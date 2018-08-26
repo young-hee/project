@@ -1,0 +1,14 @@
+<!--배송정보입력-->
+<dl class="delivery">
+	<dt class="on">
+		<div class="title"><b>배송정보 입력</b></div>
+		<button type="button"><span class="sr_only">더보기</span></button>
+	</dt>
+	<dd class="panel">
+		<ul class="info_list" th:if="${#lists.size(ordShipAddressExList) > 0 }" th:each="ordShipAddressExInfo : ${ordShipAddressExList}">
+			<li th:text="${ordShipAddressExInfo.recipientName.name1} + ' / ' + ${ordShipAddressExInfo.recipientPhoneNo1.phoneNo}">김이름 / 010-0000-0000</li>
+			<li th:text="'(' + ${ordShipAddressExInfo.recipientAddress.zipCode} + ') ' + ${ordShipAddressExInfo.recipientAddress.address1} + ' ' + ${ordShipAddressExInfo.recipientAddress.address2}">서울시 서울동 서울로 777 888 123</li>
+		</ul>
+	</dd>
+</dl>
+<!--//배송정보입력-->

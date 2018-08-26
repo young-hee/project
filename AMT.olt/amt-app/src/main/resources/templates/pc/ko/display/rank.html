@@ -1,0 +1,87 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='ranking'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!--/* ap_contents */-->
+	<div class="ap_contents ap_ranking">
+		<div class="ap_com_cont overview">
+			<!--/* [S] 랭킹 */-->
+			<div class="ranking_overview">
+				<!--/* 배너 */-->
+				<div class="com_banner ranking">
+					<div class="inner">RANKING, 지금 가장 핫한 상품</div>
+				</div>
+				
+				<div class="ui_tab wide">
+					<div class="tab_menu black">
+						<ul>
+							<li class="on"><button type="button"><span>실시간 많이 본 상품</span></button></li>
+							<li><button type="button"><span>주간 구매 많은 상품</span></button></li>
+						</ul>
+					</div>
+					<div class="tab_contents">
+						<!--/* 실시간 많이 본 상품 [S] */-->
+						<div class="tab_cont best_view">
+							<h3 class="sr_only">실시간 많이 본 상품</h3>
+							<div class="inner_wrap">
+								<div class="ranking_article">
+									<div class="list_product wide200">
+										<ul>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="loading" style="height: 400px;">
+								<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+							</div>
+						</div>
+						<!--/* 실시간 많이 본 상품 [E] */-->
+						<!--/* 주간 구매 많은 상품 [S] */-->
+						<div class="tab_cont best_sell">
+							<h3 class="sr_only">주간 구매 많은 상품</h3>
+							<div class="inner_wrap">
+								<h3 class="sr_only">주간 구매 많은 상품</h3>
+								<!--/* 가격대별 tab */-->
+								<div>
+									<div class="tab_menu box white">
+										<ul>
+											<li class="on"><button type="button" data-value="~30000"><span>~3만원</span></button></li>
+											<li><button type="button" data-value="30000~50000"><span>3~5만원</span></button></li>
+											<li><button type="button" data-value="50000~70000"><span>5~7만원</span></button></li>
+											<li><button type="button" data-value="~70000"><span>7만원~</span></button></li>
+										</ul>
+									</div>
+									<div class="tab_contents">
+										<div class="tab_cont">
+											<h3 class="sr_only">~3만원</h3>
+											<div class="ranking_article">
+												<div class="list_product wide200">
+													<ul></ul>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="loading" style="height: 400px;">
+								<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+<script language="javascript" type="text/javascript">
+	AP.ranking.init({
+		displayMenuId: AP.DISPLAY_MENU_ID
+	});
+</script>
+</th:block>
+</body>
+</html>

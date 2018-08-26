@@ -92,11 +92,13 @@
 	                            </div>
 								<!-- // 비회원로그인 -->                             
 	                            <div class="login_area" style="display:none;">
-	                                <div class="input_wrap"><input type="text" name="custNm2" title="주문자 이름 입력" placeholder="주문자 이름"></div>
-	                                <div class="input_wrap"><input type="text" title="주문번호 입력" name="ordNo" placeholder="주문번호를 입력하세요"></div>
-	                                <button type="button" onclick="nomember()" class="btn_primary_login">주문조회</button>
-	                                <br>
-                        			<p class="text font_sl">비회원으로 구매하신 경우에만 주문조회가 가능합니다.</p>
+	                            	<form>
+		                                <div class="input_wrap"><input type="text" name="custNm2" title="주문자 이름 입력" placeholder="주문자 이름"></div>
+		                                <div class="input_wrap"><input type="text" title="주문번호 입력" name="ordNo" placeholder="주문번호를 입력하세요"></div>
+		                                <button type="button" onclick="nomember()" class="btn_primary_login">주문조회</button>
+		                                <br>
+	                        			<p class="text font_sl">비회원으로 구매하신 경우에만 주문조회가 가능합니다.</p>
+	                       			</form>
 	                            </div>
 	                            
 							</div>                                                 
@@ -106,7 +108,7 @@
                             <dt class="h_title cont">아직도 회원이 아니세요?</dt>
                             <dd>
                                 <p class="text">아모레퍼시픽계열 모든 쇼핑몰을 하나의 아이디로 편리하게, <br>통합멤버십(뷰티포인트)적립 및 다양한 서비스와 혜택을 누리세요.</p>
-                                <a href="#none" class="btn_md_bordered vertical">회원가입 </a>
+                                <a href="/customer/signup" class="btn_md_bordered vertical">회원가입 </a>
                             </dd>
                         </dl>
                     </div>
@@ -248,7 +250,7 @@
 						}
 
 				        $("#complete3").attr("disabled", "disabled");
-				        AP.api.mobileLoginComplete({}, {}, AP.common.getFormData($form)).done(function(data) {
+				        AP.api.mobileLoginComplete({}, {}).done(function(data) {
 
 				            if (data.sleep == 'Y') {
 				    			post_goto('/sleepUser' , {'userId': data.userId});
@@ -992,15 +994,15 @@
 					}
 
 					function nomember() {
-						if(!$('[name=ordNo]').val()) {
-	                        AP.modal.alert("주문번호를 입력해 주세요. 주문번호 입력창으로 이동합니다.").addListener('modal-close', function(e) {
-	                        	$('[name=ordNo]').focus();
-						    });
-	                        return;
-						}
 						if(!$('[name=custNm2]').val()) {
 	                        AP.modal.alert("이름을 입력해 주세요. 이름 입력창으로 이동합니다.").addListener('modal-close', function(e) {
 	                        	$('[name=custNm2]').focus();
+						    });
+	                        return;
+						}
+						if(!$('[name=ordNo]').val()) {
+	                        AP.modal.alert("주문번호를 입력해 주세요. 주문번호 입력창으로 이동합니다.").addListener('modal-close', function(e) {
+	                        	$('[name=ordNo]').focus();
 						    });
 	                        return;
 						}

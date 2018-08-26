@@ -42,26 +42,95 @@
 			</div>
 		</div>
     </div>
+    <!-- 상품단위 증정 사은품 -->
+    {{#if (ne this.prod.ordHistProdAwardExList null)}}
+		{{#each this.prod.ordHistProdAwardExList}}
+			<div class="freebies">
+				<div class="thumb">
+					{{#xif this.prod.ordProdEx.prodImgUrl '===' null}}
+						<img src="/images/cart/no_img.png" alt="">
+					{{else}}
+						<img src="{{awardOrdHistProdEx.ordProdEx.prodImgUrl}}" alt="">
+					{{/xif}}
+				</div>
+				<div class="info">
+					<div class="align_left">
+						<p class="name">{{awardOrdHistProdEx.ordProdEx.prodNameBlang}}</p>
+						<p class="flag">증정사은품</p>
+					</div>
+					<div class="align_right">
+						{{#if (eq awardOrdHistProdEx.ordHistProdStatusCode 'ProdCancel')}}
+							<p><em>취소완료</em></p>
+						{{/if}}
+						<p><strong class="num">{{awardQty}}</strong>개<span class="gap">/</span><strong class="num">{{currencyFormat awardOrdHistProdEx.finalOnlineSaleAmtPcur}}</strong></p>
+					</div>
+				</div>
+			</div>
+		{{/each}}
+	{{/if}}
+	{{#if (ne this.prod.ordHistProdPromoAwardExList null)}}
+		{{#each this.prod.ordHistProdPromoAwardExList}}
+			<div class="freebies">
+				<div class="thumb">
+					{{#xif this.prod.ordProdEx.prodImgUrl '===' null}}
+						<img src="/images/cart/no_img.png" alt="">
+					{{else}}
+						<img src="{{awardOrdHistProdEx.ordProdEx.prodImgUrl}}" alt="">
+					{{/xif}}
+				</div>
+				<div class="info">
+					<div class="align_left">
+						<p class="name">{{awardOrdHistProdEx.ordProdEx.prodNameBlang}}</p>
+						<p class="flag">증정사은품</p>
+					</div>
+					<div class="align_right">
+						{{#if (eq awardOrdHistProdEx.ordHistProdStatusCode 'ProdCancel')}}
+							<p><em>취소완료</em></p>
+						{{/if}}
+						<p><strong class="num">{{awardQty}}</strong>개<span class="gap">/</span><strong class="num">{{currencyFormat awardOrdHistProdEx.finalOnlineSaleAmtPcur}}</strong></p>
+					</div>
+				</div>
+			</div>
+		{{/each}}
+	{{/if}}
+	<!-- //상품단위 증정 사은품 -->
 {{else}}
 	<div class="prd_option">
 		<div class="set">
 			<!-- 클레임 체크박스 -->
 			{{#if (eq this.viewYn.checkBox 'Y')}}
-				<div class="check_wrap check_only">
-					<input type="checkbox" id="prod_{{this.prod.ordProdEx.prodSn}}" name="prod_{{oProdSn}}" value="{{json this.prod}}" data-oProdSn="{{oProdSn}}">
-					<label for="prod_{{this.prod.ordProdEx.prodSn}}">
-						<span class="sr_only">선택</span>
-					</label>
-				</div>
+				{{#xif this.prod.ordHistProdTypeCode '==' 'BulkDc'}}
+					<div class="check_wrap check_only" style="display:none">
+						<input type="checkbox" id="prod_{{this.prod.ordProdEx.prodSn}}" name="prod_{{oProdSn}}" value="{{json this.prod}}"
+							data-oProdSn="{{oProdSn}}" data-promoSn="{{prod.ordProdEx.bulkDcOnlineProdCode}}">
+						<label for="prod_{{this.prod.ordProdEx.prodSn}}">
+							<span class="sr_only">선택</span>
+						</label>
+					</div>
+				{{else}}
+					<div class="check_wrap check_only">
+						<input type="checkbox" id="prod_{{this.prod.ordProdEx.prodSn}}" name="prod_{{oProdSn}}" value="{{json this.prod}}" data-oProdSn="{{oProdSn}}">
+						<label for="prod_{{this.prod.ordProdEx.prodSn}}">
+							<span class="sr_only">선택</span>
+						</label>
+					</div>
+				{{/xif}}
 			{{/if}}
-			<!-- <div class="thumb"><span style="background-color: #c1373e;"><img src="" alt=""></span></div> 컬러칩 -->
+			<div class="thumb"><img src="{{this.prod.ordProdEx.prodImgUrl}}" alt=""></div>
 			<div class="info">
 				<p class="name">{{this.prod.ordProdEx.prodNameRlang}}</p>
-				{{#xif this.prod.ordHistProdAwardExList '!=' null}}
+				<!-- 상품단위 증정 사은품 -->
+				{{#if (ne this.prod.ordHistProdAwardExList null)}}
 					{{#each this.prod.ordHistProdAwardExList}}
-						<p class="text">{{awardOrdHistProdEx.ordProdEx.onlineProdNameBlang}}</p>
+						<p class="text">{{awardOrdHistProdEx.ordProdEx.prodNameBlang}}</p>
 					{{/each}}
-				{{/xif}}
+				{{/if}}
+				{{#if (ne this.prod.ordHistProdPromoAwardExList null)}}
+					{{#each this.prod.ordHistProdPromoAwardExList}}
+						<p class="text">{{awardOrdHistProdEx.ordProdEx.prodNameBlang}}</p>
+					{{/each}}
+				{{/if}}
+				<!-- // 상품단위 증정 사은품 -->
 			</div>
 			<div class="align_right">
 				<span>{{condition (eq this.step 'two') this.prod.claimReceivedQty this.prod.ordQty}}개 / {{currencyFormat this.prod.finalOnlineSaleAmtPcur}}</span>

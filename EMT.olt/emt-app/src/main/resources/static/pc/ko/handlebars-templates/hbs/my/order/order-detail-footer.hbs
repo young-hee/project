@@ -3,12 +3,12 @@
 		{{#xif (eq this.type 'online') '||' (eq this.type 'store')}}
 			<div class="page_btns pdt40">
 				{{#if (eq this.type 'online')}}
-					{{#if (or (eq this.statusCode 'OrdReceivedWaiting') (eq this.statusCode 'OrdReceivedComplete'))}}
+					{{#if (or (or (eq this.statusCode 'OrdReceivedWaiting') (eq this.statusCode 'OrdReceivedComplete')) (eq this.statusCode 'PartialCancel'))}}
 						{{#if (ne this.ordStatusCode 'OrdAllCancel')}}
-							{{#if this.data.shippingOrdOnlineProdList}}
+							{{#if (gt this.data.shipOrdOnlineProdCnt 0)}}
 								<button class="btn_lg_bordered" type="button" onclick="chgStatus('cancel')">온라인 쇼핑 취소</button>
 							{{/if}}
-							{{#if this.data.storePickupOrdOnlineProdList}}
+							{{#if (gt this.data.storeOrdOnlineProdCnt 0)}}
 								<button class="btn_lg_bordered" type="button" onclick="chgStatus('cancel')">테이크아웃 쇼핑 취소</button>
 							{{/if}}
 						{{/if}}

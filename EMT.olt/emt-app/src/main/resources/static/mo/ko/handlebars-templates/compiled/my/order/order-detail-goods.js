@@ -25,7 +25,9 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-goods"] = Handlebars.templ
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
   return "	<dd>\n		<div class=\"cont\">\n\n"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.ordHistProdTypeCode : depth0),"Ord",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.ordHistProdTypeCode : depth0),"ProdUnitAward",{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(6, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.ordHistProdTypeCode : depth0),"===","Ord",{"name":"xif","hash":{},"fn":container.program(6, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n"
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.ordHistProdTypeCode : depth0),"===","BulkDc",{"name":"xif","hash":{},"fn":container.program(15, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n\n		</div>\n	</dd>\n";
 },"6":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
@@ -50,7 +52,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-goods"] = Handlebars.templ
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
   return "							"
-    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || alias2).call(alias1,"my.order.detail.product-option","sub",depth0,"oCode",(depths[1] != null ? depths[1].onlineProdCode : depths[1]),"claimYn",(depths[2] != null ? depths[2].claimYn : depths[2]),"step",(depths[2] != null ? depths[2].step : depths[2]),"singleProdYn",(depths[1] != null ? depths[1].singleProdYn : depths[1]),"status",(depths[2] != null ? depths[2].status : depths[2]),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || alias2).call(alias1,"my.order.detail.product-option","sub",depth0,"oCode",(depths[1] != null ? depths[1].onlineProdCode : depths[1]),"prodNo",(depth0 != null ? depth0.ordHistProdNo : depth0),"claimYn",(depths[2] != null ? depths[2].claimYn : depths[2]),"step",(depths[2] != null ? depths[2].step : depths[2]),"singleProdYn",(depths[1] != null ? depths[1].singleProdYn : depths[1]),"status",(depths[2] != null ? depths[2].status : depths[2]),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
     + "\n\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[2] != null ? depths[2].status : depths[2]),"request",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[2] != null ? depths[2].step : depths[2]),1,{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(11, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
@@ -65,92 +67,133 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-goods"] = Handlebars.templ
     var stack1;
 
   return "\n								<!--/* 클레임 사유 */-->\n								"
-    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.claim-reason","type",(depths[2] != null ? depths[2].type : depths[2]),"receivedClaimReasonName",(depth0 != null ? depth0.receivedClaimReasonName : depth0),"foReceivedClaimReason",(depth0 != null ? depth0.foReceivedClaimReason : depth0),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.claim-reason","type",(depths[2] != null ? depths[2].type : depths[2]),"receivedClaimReasonName",(depths[1] != null ? depths[1].claimReasonName : depths[1]),"foReceivedClaimReason",(depths[1] != null ? depths[1].claimReason : depths[1]),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
     + "\n\n";
 },"15":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
+
+  return "				<div class=\"order_prd_panel\">\n\n					"
+    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || alias2).call(alias1,"my.order.detail.product","prod",depth0,"claimYn",(depths[1] != null ? depths[1].claimYn : depths[1]),"step",(depths[1] != null ? depths[1].step : depths[1]),"state",(depths[1] != null ? depths[1].state : depths[1]),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
+    + "\n\n"
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.ordHistProdList : depth0),{"name":"each","hash":{},"fn":container.program(16, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].status : depths[1]),"request",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].step : depths[1]),1,{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(19, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].claimYn : depths[1]),"Y",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].step : depths[1]),2,{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(21, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "				</div>\n";
+},"16":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
+
+  return ((stack1 = helpers.unless.call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[2] != null ? depths[2].status : depths[2]),"request",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.ordHistProdStatusCode : depth0),"ProdCancel",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"unless","hash":{},"fn":container.program(17, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n";
+},"17":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1;
+
+  return "							"
+    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.product-option","sub",depth0,"oCode",(depths[1] != null ? depths[1].bulkDcOnlineProdCode : depths[1]),"prodNo",(depths[1] != null ? depths[1].bulkDcOnlineProdCode : depths[1]),"claimYn",(depths[2] != null ? depths[2].claimYn : depths[2]),"step",(depths[2] != null ? depths[2].step : depths[2]),"singleProdYn","N","status",(depths[2] != null ? depths[2].status : depths[2]),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
+    + "\n\n\n";
+},"19":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1;
+
+  return "\n						"
+    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.claim-reason-select","ordHistProdNo",(depth0 != null ? depth0.bulkDcOnlineProdCode : depth0),"reason",(depths[1] != null ? depths[1].reason : depths[1]),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
+    + "\n\n";
+},"21":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1;
+
+  return "\n						<!--/* 클레임 사유 */-->\n						"
+    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.claim-reason","type",(depths[1] != null ? depths[1].type : depths[1]),"receivedClaimReasonName",(depth0 != null ? depth0.claimReasonName : depth0),"foReceivedClaimReason",(depth0 != null ? depth0.claimReason : depth0),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
+    + "\n\n";
+},"23":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
   return "	<dd>\n		<div class=\"cont\">\n\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.ordHistProdTypeCode : depth0),"===","Ord",{"name":"xif","hash":{},"fn":container.program(16, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.ordHistProdTypeCode : depth0),"===","Ord",{"name":"xif","hash":{},"fn":container.program(24, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n		</div>\n	</dd>\n";
-},"16":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"24":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
 
   return "				<div class=\"order_prd_panel\">\n\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(alias1,(depth0 != null ? depth0.singleProdYn : depth0),"===","N",{"name":"xif","hash":{},"fn":container.program(17, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(alias1,(depth0 != null ? depth0.singleProdYn : depth0),"===","N",{"name":"xif","hash":{},"fn":container.program(25, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.ordHistProdList : depth0),{"name":"each","hash":{},"fn":container.program(19, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.ordHistProdList : depth0),{"name":"each","hash":{},"fn":container.program(27, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "				</div>\n";
-},"17":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"25":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
   return "						"
     + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.product","prod",depth0,"claimYn",(depths[1] != null ? depths[1].claimYn : depths[1]),"step",(depths[1] != null ? depths[1].step : depths[1]),"typeName","b",{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
     + "\n";
-},"19":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"27":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return ((stack1 = helpers.unless.call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[2] != null ? depths[2].status : depths[2]),"request",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.ordHistProdStatusCode : depth0),"ProdCancel",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"unless","hash":{},"fn":container.program(20, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+  return ((stack1 = helpers.unless.call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[2] != null ? depths[2].status : depths[2]),"request",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.ordHistProdStatusCode : depth0),"ProdCancel",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"unless","hash":{},"fn":container.program(28, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n";
-},"20":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"28":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
   return "							"
-    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || alias2).call(alias1,"my.order.detail.product-option","sub",depth0,"oCode",(depths[1] != null ? depths[1].onlineProdCode : depths[1]),"claimYn",(depths[2] != null ? depths[2].claimYn : depths[2]),"step",(depths[2] != null ? depths[2].step : depths[2]),"singleProdYn",(depths[1] != null ? depths[1].singleProdYn : depths[1]),"status",(depths[2] != null ? depths[2].status : depths[2]),"typeName","b",{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || alias2).call(alias1,"my.order.detail.product-option","sub",depth0,"oCode",(depths[1] != null ? depths[1].onlineProdCode : depths[1]),"prodNo",(depth0 != null ? depth0.ordHistProdNo : depth0),"claimYn",(depths[2] != null ? depths[2].claimYn : depths[2]),"step",(depths[2] != null ? depths[2].step : depths[2]),"singleProdYn",(depths[1] != null ? depths[1].singleProdYn : depths[1]),"status",(depths[2] != null ? depths[2].status : depths[2]),"typeName","b",{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
     + "\n\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[2] != null ? depths[2].status : depths[2]),"request",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[2] != null ? depths[2].step : depths[2]),1,{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(11, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[2] != null ? depths[2].claimYn : depths[2]),"Y",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[2] != null ? depths[2].step : depths[2]),2,{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(13, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
-},"22":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[2] != null ? depths[2].claimYn : depths[2]),"Y",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[2] != null ? depths[2].step : depths[2]),2,{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(29, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"29":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1;
+
+  return "\n								<!--/* 클레임 사유 */-->\n								"
+    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.claim-reason","type",(depths[2] != null ? depths[2].type : depths[2]),"receivedClaimReasonName",(depth0 != null ? depth0.receivedClaimReasonName : depth0),"foReceivedClaimReason",(depth0 != null ? depth0.foReceivedClaimReason : depth0),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
+    + "\n\n";
+},"31":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
   return "	<dd>\n		<div class=\"cont\">\n\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.ordHistProdTypeCode : depth0),"===","Ord",{"name":"xif","hash":{},"fn":container.program(23, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.ordHistProdTypeCode : depth0),"===","Ord",{"name":"xif","hash":{},"fn":container.program(32, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n		</div>\n	</dd>\n";
-},"23":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"32":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
 
   return "				<div class=\"order_prd_panel\">\n\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(alias1,(depth0 != null ? depth0.singleProdYn : depth0),"===","N",{"name":"xif","hash":{},"fn":container.program(24, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(alias1,(depth0 != null ? depth0.singleProdYn : depth0),"===","N",{"name":"xif","hash":{},"fn":container.program(33, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.ordHistProdList : depth0),{"name":"each","hash":{},"fn":container.program(26, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.ordHistProdList : depth0),{"name":"each","hash":{},"fn":container.program(35, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "				</div>\n";
-},"24":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"33":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
   return "						"
     + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.product","prod",depth0,"claimYn",(depths[1] != null ? depths[1].claimYn : depths[1]),"step",(depths[1] != null ? depths[1].step : depths[1]),"typeName","a",{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
     + "\n";
-},"26":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"35":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return ((stack1 = helpers.unless.call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[2] != null ? depths[2].status : depths[2]),"request",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.ordHistProdStatusCode : depth0),"ProdCancel",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"unless","hash":{},"fn":container.program(27, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+  return ((stack1 = helpers.unless.call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[2] != null ? depths[2].status : depths[2]),"request",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.ordHistProdStatusCode : depth0),"ProdCancel",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"unless","hash":{},"fn":container.program(36, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n";
-},"27":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"36":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
   return "							"
-    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || alias2).call(alias1,"my.order.detail.product-option","sub",depth0,"oCode",(depths[1] != null ? depths[1].onlineProdCode : depths[1]),"claimYn",(depths[2] != null ? depths[2].claimYn : depths[2]),"step",(depths[2] != null ? depths[2].step : depths[2]),"singleProdYn",(depths[1] != null ? depths[1].singleProdYn : depths[1]),"status",(depths[2] != null ? depths[2].status : depths[2]),"typeName","a",{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || alias2).call(alias1,"my.order.detail.product-option","sub",depth0,"oCode",(depths[1] != null ? depths[1].onlineProdCode : depths[1]),"prodNo",(depth0 != null ? depth0.ordHistProdNo : depth0),"claimYn",(depths[2] != null ? depths[2].claimYn : depths[2]),"step",(depths[2] != null ? depths[2].step : depths[2]),"singleProdYn",(depths[1] != null ? depths[1].singleProdYn : depths[1]),"status",(depths[2] != null ? depths[2].status : depths[2]),"typeName","a",{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
     + "\n\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[2] != null ? depths[2].status : depths[2]),"request",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[2] != null ? depths[2].step : depths[2]),1,{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(11, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[2] != null ? depths[2].claimYn : depths[2]),"Y",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[2] != null ? depths[2].step : depths[2]),2,{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(13, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
-},"29":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[2] != null ? depths[2].claimYn : depths[2]),"Y",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[2] != null ? depths[2].step : depths[2]),2,{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(29, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"38":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
   return "\n	<dd>\n		<div class=\"cont\">\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.promoTypeCode : depth0),"===","Same",{"name":"xif","hash":{},"fn":container.program(30, data, 0, blockParams, depths),"inverse":container.program(39, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.promoTypeCode : depth0),"===","Same",{"name":"xif","hash":{},"fn":container.program(39, data, 0, blockParams, depths),"inverse":container.program(48, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "		</div>\n	</dd>\n";
-},"30":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"39":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
-  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.ordOnlineProdFoList : depth0),{"name":"each","hash":{},"fn":container.program(31, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.ordOnlineProdFoList : depth0),{"name":"each","hash":{},"fn":container.program(40, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n";
-},"31":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"40":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
-  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.ordHistProdList : depth0),{"name":"each","hash":{},"fn":container.program(32, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
-},"32":function(container,depth0,helpers,partials,data,blockParams,depths) {
+  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.ordHistProdList : depth0),{"name":"each","hash":{},"fn":container.program(41, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"41":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression, alias5=container.lambda;
 
   return "						<div class=\"order_prd_panel\">\n\n							<div class=\"title\">\n								<p class=\"benefit\"><em>"
@@ -184,27 +227,27 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-goods"] = Handlebars.templ
     + "</strong>개\n										<strong class=\"amount num\">+"
     + alias4(((helper = (helper = helpers.mPlusNAwardQty || (depth0 != null ? depth0.mPlusNAwardQty : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"mPlusNAwardQty","hash":{},"data":data}) : helper)))
     + "</strong>\n									</p>\n								</div>\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.ordHistProdStatusCode : depth0),"===","ProdCancel",{"name":"xif","hash":{},"fn":container.program(33, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.ordHistProdStatusCode : depth0),"===","ProdCancel",{"name":"xif","hash":{},"fn":container.program(42, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n							</div>\n\n"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[3] != null ? depths[3].status : depths[3]),"request",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[3] != null ? depths[3].step : depths[3]),1,{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(35, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[3] != null ? depths[3].status : depths[3]),"request",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[3] != null ? depths[3].step : depths[3]),1,{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(44, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[3] != null ? depths[3].claimYn : depths[3]),"Y",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[3] != null ? depths[3].step : depths[3]),2,{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(37, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[3] != null ? depths[3].claimYn : depths[3]),"Y",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[3] != null ? depths[3].step : depths[3]),2,{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(46, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "						</div>\n";
-},"33":function(container,depth0,helpers,partials,data) {
+},"42":function(container,depth0,helpers,partials,data) {
     return "									<div class=\"status\">\n										<p><em>취소완료</em></p>\n									</div>\n";
-},"35":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"44":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
   return "\n								"
     + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.claim-reason-select","ordHistProdNo",(depth0 != null ? depth0.ordHistProdNo : depth0),"reason",(depths[3] != null ? depths[3].reason : depths[3]),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
     + "\n\n";
-},"37":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"46":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
   return "\n								<!--/* 클레임 사유 */-->\n								"
     + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.claim-reason","type",(depths[3] != null ? depths[3].type : depths[3]),"receivedClaimReasonName",(depth0 != null ? depth0.receivedClaimReasonName : depth0),"foReceivedClaimReason",(depth0 != null ? depth0.foReceivedClaimReason : depth0),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
     + "\n\n";
-},"39":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"48":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "				<div class=\"order_prd_panel\">\n					<div class=\"check_wrap\" style=\"display: none\">\n						<input type=\"checkbox\" name=\"goods\" id=\""
@@ -226,16 +269,16 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-goods"] = Handlebars.templ
     + "</strong>원 <del>"
     + alias4((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,(depth0 != null ? depth0.totalFinalOnlineSaleAmount : depth0),{"name":"currencyFormat","hash":{},"data":data}))
     + "</del></p>\n					</div>\n"
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.ordOnlineProdFoList : depth0),{"name":"each","hash":{},"fn":container.program(40, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].status : depths[1]),"request",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].step : depths[1]),1,{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(46, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.ordOnlineProdFoList : depth0),{"name":"each","hash":{},"fn":container.program(49, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].status : depths[1]),"request",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].step : depths[1]),1,{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(55, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].claimYn : depths[1]),"Y",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].step : depths[1]),2,{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(48, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].claimYn : depths[1]),"Y",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].step : depths[1]),2,{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(57, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n				</div>\n";
-},"40":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"49":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
-  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.ordHistProdList : depth0),{"name":"each","hash":{},"fn":container.program(41, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
-},"41":function(container,depth0,helpers,partials,data,blockParams,depths) {
+  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.ordHistProdList : depth0),{"name":"each","hash":{},"fn":container.program(50, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"50":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression, alias4=container.lambda, alias5="function";
 
   return "							<div class=\""
@@ -257,35 +300,35 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-goods"] = Handlebars.templ
     + "\">\n								</div>\n								<div class=\"info\">\n									<p class=\"name\">"
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.ordProdEx : depth0)) != null ? stack1.prodNameBlang : stack1), depth0))
     + "</p>\n"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].step : depths[1]),2,{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].claimYn : depths[1]),"Y",{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(42, data, 0, blockParams, depths),"inverse":container.program(44, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].step : depths[1]),2,{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].claimYn : depths[1]),"Y",{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(51, data, 0, blockParams, depths),"inverse":container.program(53, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "									<strong class=\"num font_md\">"
     + alias3((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,(depth0 != null ? depth0.finalOnlineSaleAmtPcur : depth0),{"name":"currencyFormat","hash":{},"data":data}))
     + "</strong></p>\n								</div>\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.ordHistProdStatusCode : depth0),"===","ProdCancel",{"name":"xif","hash":{},"fn":container.program(33, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.ordHistProdStatusCode : depth0),"===","ProdCancel",{"name":"xif","hash":{},"fn":container.program(42, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "							</div>\n\n\n";
-},"42":function(container,depth0,helpers,partials,data) {
+},"51":function(container,depth0,helpers,partials,data) {
     var helper;
 
   return "									<p><strong class=\"num font_md\">"
     + container.escapeExpression(((helper = (helper = helpers.claimConfirmQty || (depth0 != null ? depth0.claimConfirmQty : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"claimConfirmQty","hash":{},"data":data}) : helper)))
     + "</strong>개 /\n";
-},"44":function(container,depth0,helpers,partials,data) {
+},"53":function(container,depth0,helpers,partials,data) {
     return "									<p><strong class=\"num font_md\">"
     + container.escapeExpression((helpers.calc || (depth0 && depth0.calc) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.ordQty : depth0),"-",(depth0 != null ? depth0.rtnQty : depth0),{"name":"calc","hash":{},"data":data}))
     + "</strong>개 /\n";
-},"46":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"55":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
   return "\n						"
     + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.claim-reason-select","ordHistProdNo",(depth0 != null ? depth0.promoSn : depth0),"reason",(depths[1] != null ? depths[1].reason : depths[1]),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
     + "\n\n";
-},"48":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"57":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
   return "						<!--/* 클레임 사유 */-->\n						"
     + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.claim-reason","type",(depths[1] != null ? depths[1].type : depths[1]),"receivedClaimReasonName",(depth0 != null ? depth0.receivedClaimReasonName : depth0),"foReceivedClaimReason",(depth0 != null ? depth0.foReceivedClaimReason : depth0),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
     + "\n\n";
-},"50":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"59":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "\n	<dd>\n		<div class=\"cont\">\n			<div class=\"order_prd_panel\">\n				<div class=\"check_wrap\" style=\"display: none\">\n					<input type=\"checkbox\" name=\"goods\" id=\""
@@ -307,28 +350,28 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-goods"] = Handlebars.templ
     + "</strong>원 <del>"
     + alias4((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,(depth0 != null ? depth0.totalFinalOnlineSaleAmount : depth0),{"name":"currencyFormat","hash":{},"data":data}))
     + "</del></p>-->\n				</div>\n"
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.ordOnlineProdFoList : depth0),{"name":"each","hash":{},"fn":container.program(51, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].status : depths[1]),"request",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].step : depths[1]),1,{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(54, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.ordOnlineProdFoList : depth0),{"name":"each","hash":{},"fn":container.program(60, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].status : depths[1]),"request",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].step : depths[1]),1,{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(63, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].claimYn : depths[1]),"Y",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].step : depths[1]),2,{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(56, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].claimYn : depths[1]),"Y",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].step : depths[1]),2,{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(65, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "			</div>\n		</div>\n	</dd>\n\n\n";
-},"51":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"60":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
-  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.ordHistProdList : depth0),{"name":"each","hash":{},"fn":container.program(52, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
-},"52":function(container,depth0,helpers,partials,data,blockParams,depths) {
+  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.ordHistProdList : depth0),{"name":"each","hash":{},"fn":container.program(61, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"61":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
   return "\n						"
     + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.product-option","sub",depth0,"promoSn",(depths[2] != null ? depths[2].promoTypeCode : depths[2]),"bulkNo",(depth0 != null ? depth0.sameTimePurProdBulkNo : depth0),"oCode",(depths[2] != null ? depths[2].promoTypeCode : depths[2]),"claimYn",(depths[2] != null ? depths[2].claimYn : depths[2]),"step",(depths[2] != null ? depths[2].step : depths[2]),"singleProdYn","Y","status",(depths[2] != null ? depths[2].status : depths[2]),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
     + "\n\n";
-},"54":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"63":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
   return "\n					"
     + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.claim-reason-select","ordHistProdNo",(depth0 != null ? depth0.promoTypeCode : depth0),"reason",(depths[1] != null ? depths[1].reason : depths[1]),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
     + "\n\n";
-},"56":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"65":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
   return "					<!--/* 클레임 사유 */-->\n					"
@@ -342,12 +385,12 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-goods"] = Handlebars.templ
     + "	<button type=\"button\"><span class=\"sr_only\">더보기</span></button>\n</dt>\n\n"
     + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.list : depth0),{"name":"each","hash":{},"fn":container.program(5, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.bList : depth0),{"name":"each","hash":{},"fn":container.program(15, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.bList : depth0),{"name":"each","hash":{},"fn":container.program(23, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.aList : depth0),{"name":"each","hash":{},"fn":container.program(22, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.aList : depth0),{"name":"each","hash":{},"fn":container.program(31, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.mnList : depth0),{"name":"each","hash":{},"fn":container.program(29, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.mnList : depth0),{"name":"each","hash":{},"fn":container.program(38, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.sList : depth0),{"name":"each","hash":{},"fn":container.program(50, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.sList : depth0),{"name":"each","hash":{},"fn":container.program(59, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n\n";
 },"useData":true,"useDepths":true});

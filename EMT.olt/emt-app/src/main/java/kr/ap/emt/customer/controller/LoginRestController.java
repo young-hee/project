@@ -1,6 +1,7 @@
 package kr.ap.emt.customer.controller;
 
 import kr.ap.comm.api.vo.CicuemCuInfTotTcVo;
+import kr.ap.comm.cart.CartSession;
 import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.support.APRequestContext;
 import kr.ap.comm.support.common.AbstractController;
@@ -26,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.WebUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.http.Cookie;
@@ -99,6 +99,7 @@ public class LoginRestController extends AbstractController {
 
 			ApMember apMember = apApi.getMemberInfo(resultInfo.getMemberSn());
 
+			CartSession cartSession = getCartSession();
 			MemberSession memberSession = getMemberSession();
 			memberSession.setMember(apMember);
 			memberSession.setMember_sn(resultInfo.getMemberSn());
@@ -107,8 +108,8 @@ public class LoginRestController extends AbstractController {
 			memberSession.setRefreshToken(resultInfo.getRefreshToken());
 			
 			try {
-				if(memberSession.getCartSn() != null && memberSession.getCartSn() != 0)
-					cartApi.transferMemberCart(resultInfo.getMemberSn(), memberSession.getCartSn());
+				if(cartSession.getCartSn() != null && cartSession.getCartSn() != 0)
+					cartApi.transferMemberCart(resultInfo.getMemberSn(), cartSession.getCartSn());
 			} catch(Exception e) {
 				logger.error(e.getMessage(), e);
 			}
@@ -177,7 +178,7 @@ public class LoginRestController extends AbstractController {
 	@PostMapping("/doLoginLink")
 	public ResponseEntity<?>  doLoginLink(HttpServletRequest req, HttpServletResponse resp) {
 		ResponseEntity<?> result = doLogin(req, resp);
-		if(getMemberSn() == 0) {
+		if(!isLoggedIn()) {
 			return result;
 		}
 		String snsCode = (String) WebUtils.getSessionAttribute(req, SessionKey.SNS_CODE);
@@ -226,6 +227,7 @@ public class LoginRestController extends AbstractController {
 			ApMemberLoginReturnInfo resultInfo = apApi.memberSnsLogin(snsLoginInfo);
 			APRequestContext.setAccessToken(resultInfo.getAccessToken());
 			ApMember apMember = apApi.getMemberInfo(resultInfo.getMemberSn());
+			CartSession cartSessionn = getCartSession();
 			MemberSession memberSession = getMemberSession();
 			memberSession.setMember(apMember);
 			memberSession.setMember_sn(resultInfo.getMemberSn());
@@ -243,8 +245,8 @@ public class LoginRestController extends AbstractController {
 			}
 
 			try {
-				if(memberSession.getCartSn() != null && memberSession.getCartSn() != 0)
-					cartApi.transferMemberCart(resultInfo.getMemberSn(), memberSession.getCartSn());
+				if(cartSessionn.getCartSn() != null && cartSessionn.getCartSn() != 0)
+					cartApi.transferMemberCart(resultInfo.getMemberSn(), cartSessionn.getCartSn());
 			} catch(Exception e) {
 				logger.error(e.getMessage(), e);
 			}
@@ -275,6 +277,8 @@ public class LoginRestController extends AbstractController {
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
 		MemberSession memberSession = getMemberSession();
 		WebUtils.setSessionAttribute(request, SessionKey.LOGIN_USER, null);
+		WebUtils.setSessionAttribute(request, SessionKey.CART, null);
+		WebUtils.setSessionAttribute(request, SessionKey.ORDER, null);
 		if (memberSession.getMember_sn() != null) {
 			try {
 
@@ -360,7 +364,7 @@ public class LoginRestController extends AbstractController {
 		APRequestContext.setAccessToken(resultInfo.getAccessToken());
 
 		ApMember apMember = apApi.getMemberInfo(resultInfo.getMemberSn());
-
+		CartSession cartSessionn = getCartSession();
 		MemberSession memberSession = getMemberSession();
 		memberSession.setMember(apMember);
 		memberSession.setMember_sn(resultInfo.getMemberSn());
@@ -378,8 +382,8 @@ public class LoginRestController extends AbstractController {
 		}
 
 		try {
-			if(memberSession.getCartSn() != null && memberSession.getCartSn() != 0)
-				cartApi.transferMemberCart(resultInfo.getMemberSn(), memberSession.getCartSn());
+			if(cartSessionn.getCartSn() != null && cartSessionn.getCartSn() != 0)
+				cartApi.transferMemberCart(resultInfo.getMemberSn(), cartSessionn.getCartSn());
 		} catch(Exception e) {
 			logger.error(e.getMessage(), e);
 		}
@@ -442,7 +446,7 @@ public class LoginRestController extends AbstractController {
     public ResponseEntity<?> appToWeb(String type, AppCumuData data) {
     	logger.info("[appToWeb]{},{},{},{},{},{},{},{},{}", type, data.getAppUid(),data.getAppVer(),data.getDeviceModel(),data.getLocation(),data.getMarketing(),data.getOsVer(),data.getPush(),data.getTokenData());
     	Map<String, Object> result = new HashMap<String, Object>();
-    	if(getMemberSn() == 0) {
+    	if(!isLoggedIn()) {
         	result.put("rsltCd", "FAILURE");
         	result.put("rsltMsg", "저장에 실패했습니다.");
     		return ResponseEntity.ok(result);

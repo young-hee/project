@@ -388,7 +388,7 @@ this["AP"]["handlebars"]["order"]["order-unit-award-info"] = Handlebars.template
     + alias4(alias3(((stack1 = (depth0 != null ? depth0.ordProdEx : depth0)) != null ? stack1.prodNameBlang : stack1), depth0))
     + "</span>\n										<span class=\"price\">\n											<span class=\"strong\"><b>"
     + alias4((helpers.currencyFormatDefault || (depth0 && depth0.currencyFormatDefault) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordProdEx : depth0)) != null ? stack1.prodSalePrice : stack1),"원",{"name":"currencyFormatDefault","hash":{},"data":data}))
-    + "</b>원</span>\n										</span>\n									</label>\n								</span>\n							</li>\n";
+    + "</b></span>\n										</span>\n									</label>\n								</span>\n							</li>\n";
 },"60":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
@@ -456,7 +456,7 @@ this["AP"]["handlebars"]["order"]["order-unit-award-info"] = Handlebars.template
     + alias4(alias3(((stack1 = (depth0 != null ? depth0.ordProdEx : depth0)) != null ? stack1.prodNameBlang : stack1), depth0))
     + "</span>\n										<span class=\"price\">\n											<span class=\"strong\"><b>"
     + alias4((helpers.currencyFormatDefault || (depth0 && depth0.currencyFormatDefault) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordProdEx : depth0)) != null ? stack1.prodSalePrice : stack1),"원",{"name":"currencyFormatDefault","hash":{},"data":data}))
-    + "</b>원</span>\n										</span>\n									</label>\n								</span>\n							</li>\n";
+    + "</b></span>\n										</span>\n									</label>\n								</span>\n							</li>\n";
 },"70":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 

@@ -1,11 +1,26 @@
 <li>
 	<span>{{ coupon.couponName }}</span>
 	<span>
-		{{#xif coupon.applyDcAmt '==' 0}}
-			<span class="price">{{ currencyFormatDefault coupon.applyDcAmt '원' }}</span>
+		{{#if (eq coupon.applyDcAmt 0)}}
+			<span>
+				{{#each coupon.couponAwardExList}}
+					{{#if (or (eq this.awardTgtCode 'Prod')(eq this.awardTgtCode 'SpPrice'))}}
+						<span class="price">[사은품 증정]{{ this.prodName }}</span>
+					{{/if}}
+					{{#if (eq this.awardTgtCode 'Point')}}
+						<span class="price">[뷰티포인트 증정]{{ this.applySavingPoint }}P</span>
+					{{/if}}
+					{{#if @first}}
+						<a href="javascript:;" name="removeCoupon" data-sn="{{../coupon.memberKeepingCouponSn}}"><em>[취소]</em></a>
+					{{/if}}
+					{{#if (and (gt coupon.couponAwardExList.length 1)(ne @last))}}
+						<br/>
+					{{/if}}
+				{{/each}}
+			</span>
 		{{else}}
 			<span class="price">-{{ currencyFormatDefault coupon.applyDcAmt '원' }}</span>
-		{{/xif}}
-		<a href="javascript:;" name="removeCoupon" data-sn="{{coupon.memberKeepingCouponSn}}"><em>[취소]</em></a>
+			<a href="javascript:;" name="removeCoupon" data-sn="{{coupon.memberKeepingCouponSn}}"><em>[취소]</em></a>
+		{{/if}}
 	</span>
 </li>

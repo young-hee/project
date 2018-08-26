@@ -1,35 +1,39 @@
 {{!--
 
-추천컬러 상품 목록 MO
+추천컬러 상품 목록 MO // main_ 올해의 추천컬러 only 사용함 
 
 --}}
+{{#xif isEmpty this}}
+	<div class="panel notice">
+		<i class="ico"></i>
+		<p class="text">추천컬러 상품이 존재하지 않습니다.</p>
+	</div>
+{{else}}
 
-{{#each this}}
-
-	<li class="ix-list-item">
-	    <a href="{{ productDetailPath this.onlineProdSn }}">
-			<span class="lazy_load_wrap" style="background-color:#{{this.products.rgbVal}}";>
-				{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+	{{#each this}}
+		<li class="ix-list-item">
+		    <a href="{{ productDetailPath this.onlineProdSn }}">
+				<span class="lazy_load_wrap" style="background-color:#{{this.products.rgbVal}}";>
+					{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
 						<div class="item_state out_of_stock">일시품절</div>
 					{{/xif}}
-				<img class="lazy_load" src="" data-src="{{ this.products.prodImages.0.imgUrl }}" alt="">
-			</span>
-		<div class="info_box">
-			{{!-- 상품명  --}}
-			<div class="title_area">
-				<span class="item_title">{{ this.onlineProdName }}</span>
-			</div>
-			{{!-- 옵션 이름 --}}
-			<div class="item_option">
-				<p class="option_name">{{ this.products.prodName }}</p>
-			</div>
-			{{!-- 가격,장바구니 --}}
-			<div class="price_area">
-				<div class="price">
-					<strong>{{ numberFormat this.products.prodPriceSummary.onlineSalePrice }} 원</strong>
+					<img class="lazy_load" data-src="{{ this.products.prodImages.0.imgUrl }}">
+				</span>
+			<div class="info_box">
+				{{!-- 상품명  --}}
+				<div class="title_area">
+					<span class="item_title">{{ this.products.prodName }}</span> {{!--this.onlineProdName --}}
+					{{!-- <span class="option_name">{{ this.products.prodName }}</span> --}}
+				</div>
+				{{!-- 가격,장바구니 --}}
+				<div class="price_area">
+					<div class="price">
+						<b>{{ numberFormat this.products.prodPriceSummary.onlineSalePrice }}</b> 원
+					</div>
 				</div>
 			</div>
-		</div>
-	   	 </a>
-	  </li>
-{{/each}}
+		  </a>
+	   </li>
+	{{/each}}
+
+{{/xif}}

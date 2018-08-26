@@ -61,6 +61,7 @@
 			<script ap:src="@{/handlebars-templates/compiled/my/order/orderList.js}"></script>
 			<script ap:src="@{/handlebars-templates/compiled/my/order/fullpage-cash-receipts.js}"></script>
 			<script ap:src="@{/handlebars-templates/compiled/my/order/orderList-footer.js}"></script>
+			<script ap:src="@{/handlebars-templates/compiled/my/order/detail/order-list-prod.js}"></script>
 			<script th:inline="javascript">
 
 				let sessionStatus = 'order_list_save_status';
@@ -269,25 +270,22 @@
 					}
 				}
 
-				function showDetailView(type, ordSn) {
-
-					var c = new SaveStatus();
-					AP.common.setSessionStorage(sessionStatus, c, 5);
-					$(location).attr("href", "/my/page/order/" + type + "/" + ordSn);
-				}
-
-				function showClaimDetailView(type, ordHistNo) {
+				function showDetailView(type, ordHistNo) {
 					var cusType = null;
 					if ('Rtn' === type) {
-						cusType = 'return'
+						cusType = 'claim/return'
 					}
 					else if ('Exch' === type) {
-						cusType = 'exchange';
+						cusType = 'claim/exchange';
+					}
+					else {
+						cusType = "order/" + type;
 					}
 
+					console.log(type);
 					var c = new SaveStatus();
 					AP.common.setSessionStorage(sessionStatus, c, 5);
-					$(location).attr("href", "/my/page/claim/" + cusType + "/" + ordHistNo);
+					$(location).attr("href", "/my/page/" + cusType + "/" + ordHistNo);
 				}
 
 				function ordWriteReview(ordNo) {

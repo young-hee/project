@@ -50,6 +50,41 @@
 				this._header_bg();
 		 	}.bind(this));
 			
+			//옵션 선택 영역
+			this._$target.find('#optionSelectBox, #optionSelectedBox').on('click', function(e){
+				var modal = AP.modal.full({
+					title: '옵션 선택',
+					contents: {
+						templateKey: 'products.option-select',
+						templateModel : {
+							products: this._defaultModel.products
+						}
+					}
+				}).addListener( 'modal-close', function (e) {
+					if( e.closeType == 'select' ){
+						var selectedObj = _.findWhere( this._defaultModel.products, {prodSn : e.data} );
+						var $selectredWrap = this._$target.find('#optionSelectedBox');
+						$selectredWrap.find('#selectedProdName').text( selectedObj.prodName );
+						$selectredWrap.find('img').attr('src', selectedObj.prodImages[0].imgUrl );
+						$selectredWrap.data('prod-sn', selectedObj.prodSn).show();
+						this._$target.find('#optionSelectBox').hide();
+						this._changePreview( selectedObj );
+					}
+				}.bind(this));
+				
+				var $modal = modal.getElement();
+				if( this._$target.find('#optionSelectedBox').is(':visible') ){
+					$modal.find('[data-prod-sn="'+ this._$target.find('#optionSelectedBox').data('prod-sn') +'"]').addClass('selected');
+				}
+				$modal.find('.option_select_list li').on('click', function(e){
+					var $this = $(e.currentTarget);
+					$this.parent().find('li').removeClass('selected');
+					$this.addClass('selected');
+					modal.close( $this.data('prod-sn'), 'select' );
+				}.bind(this));
+				
+			}.bind(this));
+			
 			/*컬러칩 옵션 선택*/
 			$('.color_option .color_chip input').change(function(e){
 				var $this = $(e.currentTarget);

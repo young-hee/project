@@ -9,7 +9,7 @@
 	'use strict';
 
 	var Search = $B.Class.extend({
-		initialize: function () {
+		initialize: function() {
 			this._$target = $( '#ap_container .ap_contents.search.result' );
 			this._reviewArea = new AP.ReviewArea( this._$target.find('.review') );
 			this._$reviewCnt = this._$target.find('.review_total_count');
@@ -64,7 +64,8 @@
 		_getEverything : function(){
 			this._$prodLoading.show();
 			var param = $.extend(this._param, {
-				 toSearchFor : this._searchWord
+				 toSearchFor : this._searchWord,
+				 prodReviewSort : 'RecentRegistDt'
 			});
 			AP.api.searchEverything( {},param ).done(function(result){
 				if( result.everything != undefined ){
@@ -100,7 +101,7 @@
 			}.bind(this));
 		},
 		
-		_setProduct: function ( data ) {
+		_setProduct: function( data ) {
 			var prodListData = data.prods == undefined ? data : data.prods ;
 			
 			if ( !prodListData ) {
@@ -258,7 +259,7 @@
 		},
 		
 		// 페이징 초기화
-		_clearPaging: function () {
+		_clearPaging: function() {
 			var $pagination = $( '#prodPagenation' );
 			$pagination.paging( 'clear' ).off( 'paging-change' );
 			this._isClearPaging = true;

@@ -1,6 +1,6 @@
-{{#each this.list }}
+{{#each list }}
 	<div class="cart_item_box_wrap type2 group">
-		<div class="cart_item_box">
+		<div class="cart_item_box_header">
 			<div class="top_tit_wrap2">
 				<div class="cart_name_wrap2">
 					<span class="check_wrap">
@@ -21,13 +21,13 @@
 					</span>
 					*/-->
 					<span class="cart_price">
-						{{#if (ne this.finalOnlineSalesAmountInfo null) }}
+						{{#if (ne finalOnlineSalesAmountInfo null) }}
 						<span class="left_num">
 							<strong class="num">{{ numberFormat finalOnlineSalesAmountInfo.standardCurrency.amount }}</strong><span>원</span>
 						</span>
 						{{/if}}
-						{{#if (ne this.productSaleAmountInfo null) }}
-							{{#if (and (ne this.productSaleAmountInfo.standardCurrency.amount this.finalOnlineSalesAmountInfo.standardCurrency.amount) ) }}
+						{{#if (ne productSaleAmountInfo null) }}
+							{{#if (and (ne productSaleAmountInfo.standardCurrency.amount finalOnlineSalesAmountInfo.standardCurrency.amount) ) }}
 								<span class="right_num">
 									<del class="num">{{ numberFormat productSaleAmountInfo.standardCurrency.amount }}<span>원</span></del>
 								</span>
@@ -40,23 +40,22 @@
 
 		{{#each promoOnlineProdExList }}
 			{{#each cartProdExList }}
-			<!--/* {{#if (gte @../index 0) }} <div class="cart_item_box ico_plus"> {{else}} <div class="cart_item_box"> {{/if}} */-->
+			{{#if (gte @../index 0) }} <div class="cart_item_box ico_plus"> {{else}} <div class="cart_item_box"> {{/if}}
 				<div class="cart_name_wrap">
 					{{#if (ne prodEx.repProdImgEx null) }}
 						<img src="{{ prodEx.repProdImgEx.imgUrl }}" class="thm_cart_item" alt="">
 					{{/if}}
 					<div class="cart_table_cell">
 						<span class="cart_item_name"><a href="#none" class="title" onclick="fnProdDetail({{ ../onlineProdSn }})">{{ ../onlineProdName }}</a></span>
-						<b class="cart_item_opt">{{ prodEx.prodName }}</b>
+						{{#if (eq ../singleProdYn 'N') }} <b class="cart_item_opt">{{ prodEx.prodName }}</b> {{/if}}
 					</div>
 				</div>
 				<div class="cart_item_info">
 					<input type="hidden" name="index" value="{{ @../index }}"/>
 					<input type="hidden" name="takeoutPrdSn" value="{{ prodEx.prodSn }}"/>
-					<input type="hidden" name="cartProdSn" value="{{ cartProdSn }}"/>
+					<input type="hidden" name="cartProdSn" sameTimePromo="sameTimePromo" value="{{ cartProdSn }}"/>
 					<input type="hidden" name="takeoutPrdInfo_S_{{ @../../index }}" value="{{ cartProdSn }}"/>
 					<input type="hidden" name="saleDisplayStatus_S_{{ @../../index }}" value="{{ prodEx.saleDisplayStatus }}"/>
-
 					<span class="cart_price">
 						{{#if (eq prodEx.saleDisplayStatus 'OnSale') }}
 							{{#if (eq calculationResultYn 'Y') }}
@@ -65,6 +64,7 @@
 										<strong class="num">{{numberFormat calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}</strong><span>원</span>
 									</span>
 								{{/if}}
+								<!--/*
 								{{#if (eq doublePriceDisplayYn 'Y') }}
 									{{#if (ne calculationResultProduct.productSaleAmountInfo null) }}
 										{{#if (gt calculationResultProduct.productSaleAmountInfo.standardCurrency.amount calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount) }}
@@ -74,8 +74,8 @@
 										{{/if}}
 									{{/if}}
 								{{/if}}
-							{{/if}}
-							{{#if (eq calculationResultYn 'N') }}
+								*/-->
+							{{else}}
 								{{#if (ne prodEx.salePrice null) }}
 									<span class="left_num">
 										<strong class="num">{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}</strong><span>원</span>

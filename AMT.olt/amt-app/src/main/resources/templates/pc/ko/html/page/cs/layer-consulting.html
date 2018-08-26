@@ -9,7 +9,7 @@
 			<dl class="layer">
 				<dt class="layer_title">1:1 상담등록</dt>
 				<dd class="layer_cont">
-					<fieldset class="form sm">
+					<fieldset class="form">
 						<legend class="sr_only">질문 입력 항목</legend>
 						<div class="ui_table board_write s120">
 							<dl>
@@ -68,69 +68,33 @@
 								<dt>파일첨부</dt>
 								<dd>
 									<div class="attach_wrap ui_input_images">
-										<!--[if lte ie 9]>
-										<div class="input_btn_wrap">
-											<span class="input_wrap">
-												<input class="input_file_name ie9_lte" type="text" title="첨부 파일 선택" readonly value="">
-												<button class="input_del"><i class="ico_close_w"></i><span class="sr_only">첨부파일 삭제</span></button>
-											</span>
-											<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png">
-											<label for="i_picture" class="btn_md_form">파일 선택</label>
-										</div>
-										<ul class="list_bullet_dot mgt5">
-											<li>3MB미만의 jpg, gif, png의 이미지 파일</li>
-											<li>internet Explorer 9.0버전에서는 첨부파일 1개만 가능합니다.</li>
-										</ul>
-										<![endif]-->
-										<!--[if gt ie 9]><!-->
-										<!--<![endif]-->
 										<ul class="attach">
 											<li class="input_file_btn_area">
 												<div class="attach_file">
-													<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="multiple">
-													<label for="input_file" class="btn_md_form">파일 선택</label>
-												
+													<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="">
+													<label for="i_picture">파일선택</label>
 												</div>
 											</li>
 										</ul>
-										<p class="text">3MB미만의 jpg, gif, png의 이미지 파일 최대 10개까지 등록가능</p>
-										
+										<p class="text_notice">3MB미만의 jpg, gif, png의 이미지 파일 최대 10개까지 등록가능</p>
 									</div>
-									<div class="attach_img w100p">
-										<ul>
-											<li>
-												<span class="img"><img alt="sulwhasoo" src="/pc/ko/images/dummy/img_brand_thumb_01.jpg"></span>
-												<a href="#none" class="btn_del_s"><i class="ico_close_s"></i><span class="sr_only">이미지 닫기</span></a>
-											</li>
-											<li>
-												<a href="#none" class="btn_del_s"><i class="ico_close_s"></i><span class="sr_only">이미지 닫기</span></a>
-											</li>
-											<li>
-												<a href="#none" class="btn_del_s"><i class="ico_close_s"></i><span class="sr_only">이미지 닫기</span></a>
-											</li>
-											<li>
-												<a href="#none" class="btn_del_s"><i class="ico_close_s"></i><span class="sr_only">이미지 닫기</span></a>
-											</li>
-											<li>
-												<a href="#none" class="btn_del_s"><i class="ico_close_s"></i><span class="sr_only">이미지 닫기</span></a>
-											</li>
-											<li>
-												<a href="#none" class="btn_del_s"><i class="ico_close_s"></i><span class="sr_only">이미지 닫기</span></a>
-											</li>
-											<li>
-												<a href="#none" class="btn_del_s"><i class="ico_close_s"></i><span class="sr_only">이미지 닫기</span></a>
-											</li>
-											<li>
-												<a href="#none" class="btn_del_s"><i class="ico_close_s"></i><span class="sr_only">이미지 닫기</span></a>
-											</li>
-											<li>
-												<a href="#none" class="btn_del_s"><i class="ico_close_s"></i><span class="sr_only">이미지 닫기</span></a>
-											</li>
-											<li>
-												<a href="#none" class="btn_del_s"><i class="ico_close_s"></i><span class="sr_only">이미지 닫기</span></a>
-											</li>
-										</ul>
+									<!--[if lte ie 9]>
+									<div class="input_btn_wrap">
+										<span class="input_wrap">
+											<input class="input_file_name ie9_lte" type="text" title="첨부 파일 선택" readonly value="">
+											<button class="input_del"><i class="ico_close_w"></i><span class="sr_only">첨부파일 삭제</span></button>
+										</span>
+										<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png">
+										<label for="i_picture" class="btn_md_form">파일 선택</label>
 									</div>
+									<ul class="list_bullet_dot mgt5">
+										<li>3MB미만의 jpg, gif, png의 이미지 파일</li>
+										<li>internet Explorer 9.0버전에서는 첨부파일 1개만 가능합니다.</li>
+									</ul>
+									<![endif]-->
+									<!--[if gt ie 9]><!-->
+									<!--<![endif]-->
+									<!--<ul class="attach">-->	
 								</dd>
 							</dl>
 							<dl>
@@ -144,9 +108,10 @@
 								</dd>
 							</dl>
 						</div>
-						<div class="form_btns">
-							<a href="#none" class="btn_lg_secondary">취소</a>
-							<a href="#none" class="btn_lg_neutral">확인</a>
+						<div class="layer_btns">
+							<!-- "btn_default_modal_confirm" 를 넣으면 기본 modal의 확인 기능이 적용된다. (e.closeType = 'confirm') -->
+							<a href="#none" class="btn_fix_bordered">취소</a>
+							<a href="#none" class="btn_fix_neutral btn_default_modal_confirm">확인</a>
 						</div>
 					</fieldset>
 				</dd>
@@ -161,6 +126,8 @@
 <th:block ap:fragment="layout-endpoint">
 	<script>
 		$( '.ui_input_images' ).inputImages();
+
+
 	</script>
 </th:block>
 

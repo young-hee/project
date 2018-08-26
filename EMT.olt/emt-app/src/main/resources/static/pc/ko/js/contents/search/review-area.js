@@ -28,8 +28,8 @@
 		reset: function ( keyword, $reviewCnt, data ) {
 			this._keyword = keyword;
 			//필터 초기화
-			this._$reviewType.val( 'All' );
-			this._$reviewSort.val( 'Last' );
+			this._$reviewType.val( '' );
+			this._$reviewSort.val( 'RecentRegistDt' );
 			this._$scope.val( 'All' );
 			//this._getData( 0 );
 			this._$reviewCnt = $reviewCnt;
@@ -59,7 +59,7 @@
 					toSearchFor			: this._keyword,
 					prodReviewTypeCodes	: this._$reviewType.val(),
 					prodReviewSort		: this._$reviewSort.val(),
-					scope				: this._$scope.val(),
+					scopes				: this._$scope.val(),
 					offset				: offset,
 					limit				: 5
 				})

@@ -63,21 +63,7 @@ public class MemberViewController extends AbstractController {
 		
 		
 		model.addAttribute("phone", sb.toString());
-		try {
-
-			WebUtils.setSessionAttribute(getRequest(), "TEMP_PW_CHANGE", issueTemporaryPassword);
-			CheckResult result = apApi.requestIssueTemporaryPassword(issueTemporaryPassword);
-			if(result.isResult()) {
-				model.addAttribute("incsNo", incsNo);
-			} else {
-				model.addAttribute("error", "비밀번호 전송에 실패했습니다. 아래 재발급 버튼을 눌러 다시 시도해주세요.");
-			}
-			
-		} catch(Exception e) {
-
-			model.addAttribute("error", "비밀번호 전송에 실패했습니다. 아래 재발급 버튼을 눌러 다시 시도해주세요.");
-		}
-		
+		WebUtils.setSessionAttribute(getRequest(), "TEMP_PW_CHANGE", issueTemporaryPassword);
 		
 		return "customer/find-pwd.2";
 	}

@@ -23,11 +23,7 @@ public class MyOrdPayResult {
 
 			for (OrdPayEx o : ordPay) {
 				if ("OrdPay".equals(o.getOrdPayTypeCode())) {
-					if ("deposit".equalsIgnoreCase(o.getPayMethodTypeCode())) {
-						deposit = o.getPayAmt().subtract(o.getRefundAmtSum());
-					}
-					else if ("PG".equals(o.getPayMethodTypeCode())) {
-						// pgList.add(new PGData(o.getPayMethodNameBlang(), o.getPayAmt().subtract(o.getRefundAmtSum()), o.getPgPayEx()));
+					if ("PG".equals(o.getPayMethodTypeCode()) || "Deposit".equals(o.getPayMethodTypeCode())) {
 						pgList.add(o);
 					}
 				}

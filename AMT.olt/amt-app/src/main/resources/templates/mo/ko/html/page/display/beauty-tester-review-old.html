@@ -35,26 +35,11 @@
 				<div class="fix_bottom">
 					<div class="inbox">
 						<span class="share_area"><a href="#1" class=""><img src="/mo/ko/images/display/ico_share.png" class="" alt="공유하기" /></a></span>
-						<span class="recommend_area"><a href="#1" class=""><img src="/mo/ko/images/display/ico_recommend.png" class="" alt="도움이되요" />도움이 되요</a><span class="num">296</span></span>
+						<span class="recommend_area"><a href="#1">도움이 되요</a><span class="num">296</span></span>
 					</div>
 				</div>
 			</div>
 			<button class="layer_close" type="button"><i class="ico_close"></i><span class="sr_only">레이어 닫기</span></button>
-
-			<div class="layer_popup" style="margin-top:-79px;">
-				<div class="layer_dimmed"></div>
-				<div class="layer_wrap">
-					<dl class="layer ">
-						<dd class="layer_cont">
-							<p class="text">amor**님의 후기가<br />도움이 되셨나요???</p>
-						</dd>
-						<dd class="layer_btns">
-							<button class="btn_default_modal_confirm" type="button">아니오</button>
-							<button class="btn_default_modal_confirm" type="button">네</button>
-						</dd>
-					</dl>
-				</div>
-			</div>
 
 		</div>
 	</div>
@@ -65,16 +50,12 @@
 <th:block ap:fragment="layout-endpoint">
 <script>
 	
-	$(".layer_close").click(function(){
-		
-		$(".layer_popup.fullpage .layer_popup").show();
-
-	});
-
-	$(".layer_popup.fullpage .layer_popup .layer_btns button").click(function(){
-		
-		$(".layer_popup.fullpage .layer_popup").hide();
-
+	$(".recommend_area a").click(function(){
+		if ($(this).hasClass("on")) {
+			$(this).removeClass("on");
+		} else {
+			$(this).addClass("on");			
+		}
 	});
 
 

@@ -75,7 +75,7 @@
 				</div>
 			</fieldset>
 			<!--결제수단 별 유의사항-->
-			<th:block ap:replace="~{order/fragment/order-payment-notice-info}"/>
+			<th:block ap:replace="~{order/fragment/order-reception-payment/order-payment-notice-info}"/>
 		</div>
 	</div>
 	<!-- // page contents -->
@@ -84,11 +84,17 @@
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
-	<script ap:src="@{/handlebars-templates/compiled/order/layer-order-non-member-02.js}"></script>	<!-- 비회원 개인정보 수집동의 -->
-	<!--<script ap:src="@{/handlebars-templates/compiled/cart/fullpage-takeout-store.js}"></script>-->		<!--테이크아웃 Layer-->
 	<script ap:src="@{/handlebars-templates/compiled/my/location-auth.js}"></script> 				<!--위치기반 동의 -->
-	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use.js}"></script> 		<!--사용가능한 쿠폰목록 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/layer-order-non-member-02.js}"></script>	<!-- 비회원 개인정보 수집동의 -->
 	<script ap:src="@{/handlebars-templates/compiled/order/layer-info-change.js}"></script> 		<!--주문고객 정보변경 Layer -->
+
+	<script ap:src="@{/handlebars-templates/compiled/order/gift-packing-qty-info.js}"></script>					<!-- 쇼핑백 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use.js}"></script> 		<!--사용가능한 쿠폰목록 Layer-->
+	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use-avail.js}"></script> 		<!--사용가능한 쿠폰목록 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use-download.js}"></script> 		<!--다운로드 쿠폰목록 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/coupon-use-list.js}"></script> 		<!--선택된 쿠폰목록 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/final-price-amt-pcur.js}"></script> 		<!-- 최종 결제금액 영역 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/order-unit-award-info.js}"></script> 		<!-- 주문단위증정 -->
 
 	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
 	<script th:inline="javascript">
@@ -98,8 +104,14 @@
 			//주문완료화면 오류 발생시
 			var ordCompleteError = /*[[${ordCompleteError}]]*/ null;
 			if(ordCompleteError != null){
-				AP.modal.alert(ordCompleteError);
+				var errorCode = ordCompleteError.errorCode,
+					errorMessage = ordCompleteError.errorMessage,
+					errorAdditional = ordCompleteError.errorAdditional;
+				if (errorCode != null) {
+					AP.modal.alert(errorMessage + '(' + errorCode + ')<br/>' + errorAdditional.detail);
+				}
 			}
+
 		});
 		// 주소 찾기
 		$( '.ui_find_addresses' ).findAddresses();
@@ -133,6 +145,20 @@
 
 		var payPopup;
 		$("#orderPayment").on('click', function() {
+			//카드결제 필요없으면 선택 취소
+			var memberSn		 = /*[[${memberSn}]]*/ '0'; // 회원키
+			var finalPamtPcur	= $("[name=finalPamtPcur]").val() == '' || $("[name=finalPamtPcur]").val() == undefined ? 0 : $("[name=finalPamtPcur]").val();	// 최종결제금액
+			var depositPrice	= $("[name=depositPrice]").val() == '' || $("[name=depositPrice]").val() == undefined ? 0 : $("[name=depositPrice]").val();		// 예치금
+			var pgPrice 		= memberSn > 0 ? finalPamtPcur - parseInt(depositPrice) : finalPamtPcur;		// 최종결제금액 - 예치금사용금액
+			if (pgPrice <= 0) {
+				$.each($('[name=payMethod]'), function (index, item) {
+					if ($(this).hasClass("on")) {
+						$(this).trigger("click");
+						$(this).attr("checked", false);
+					}
+				});
+			}
+
 			var $checkbox = $('input[id="orderAgree"]');
 			if($checkbox.is(':checked')) {
 				var $form = $( 'form.order-validate' );
@@ -156,25 +182,9 @@
 
 			var memberSn 		= /*[[${memberSn}]]*/ '0'; // 회원키
 			var ordSn			= /*[[${ordEx.ordSn}]]*/ '0';													// 주문번호
-			var finalPamtPcur	= /*[[${ordEx.ordHistEx.finalPamtPcur}]]*/ '0';									// 최종결제금액
+			var finalPamtPcur	= $("[name=finalPamtPcur]").val() == '' || $("[name=finalPamtPcur]").val() == undefined ? 0 : $("[name=finalPamtPcur]").val();	// 최종결제금액
 			var depositPrice	= $("[name=depositPrice]").val() == '' || $("[name=depositPrice]").val() == undefined ? 0 : $("[name=depositPrice]").val();	// 예치금
 			var pgPrice 		= memberSn > 0 ? finalPamtPcur - parseInt(depositPrice) : finalPamtPcur;		// 최종결제금액 - 예치금사용금액
-			if(pgPrice > 0){
-				if(depositPrice == 0) {
-					var selectedPaymethod = $('input:radio[name="payMethod"]:checked').val();
-					if(selectedPaymethod == null || selectedPaymethod == '') {
-						AP.modal.alert("결제수단을 선택해 주세요.");
-						return false;
-					}
-				}else{
-					var selectedPaymethod = $('input:radio[name="payMethod"]:checked').val();
-					if(selectedPaymethod == null || selectedPaymethod == '') {
-						AP.modal.alert("최종결제금액이 부족합니다. 결제수단을 선택해 주세요.");
-						return false;
-					}
-				}
-				$('[name=price]').attr('value', pgPrice);
-			}
 
 			// PG사 결제정보 세팅
 			var payMethodSn		= $('input:radio[name=payMethod]:checked').closest('span').find('[name=payMethodSn]').val(); 	// 결제수단일련번호
@@ -184,6 +194,20 @@
 			var creditcardCoSn	= $("select[name=cardCo] option:selected").attr("id");
 			var nextPayUseYn	= $("[name=nextPayUseYn]").val();																// 선택한 결제수단을 다음사용여부
 
+			if (pgPrice > 0) {
+				if (depositPrice == 0) {
+					if (payMethod == null || payMethod == '') {
+						AP.modal.alert("결제수단을 선택해 주세요.");
+						return false;
+					}
+				} else {
+					if (payMethod == null || payMethod == '') {
+						AP.modal.alert("최종결제금액이 부족합니다. 결제수단을 선택해 주세요.");
+						return false;
+					}
+				}
+				$('[name=price]').attr('value', pgPrice);
+			}
 			AP.api.ordReceptPayAmt({}, {
 				ordSn: ordSn,
 				payMethodSn : payMethodSn,

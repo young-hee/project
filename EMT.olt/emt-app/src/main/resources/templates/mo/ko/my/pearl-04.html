@@ -43,7 +43,7 @@
 									</div>
 									<div class="item_cont">
 										<p class="items"><span th:text="${#IntegUtil.toCommaNumber(item.exchActivityPoint)}">3,300</span>알</p>
-										<a href="#none" th:onclick="'exchange(' + ${item.couponSn} + ')'" class="exchange">교환</a>
+										<a href="javascript:;" th:onclick="'exchange(' + ${item.couponSn} + ')'" class="exchange">교환</a>
 									</div>
 								</div>
 							</div>
@@ -103,11 +103,13 @@
             }).fail(function(xhr, textStatus, errorThrown) {
             	if (xhr.errorCode == 0) {
                     AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
-                } else if (xhr.errorCode == 'EAPI003') {
+                } else if (xhr.errorCode == 'ESAL090') {
+                    AP.modal.alert("해당 쿠폰의 발급가능횟수를 초과하였습니다.");
+                } else if (xhr.errorCode == 'ESAL085') {
                     AP.modal.alert("보유하신 진주알이 부족하여 쿠폰 교환을 할 수 없습니다.");
                 } else {
-                    AP.modal.alert(xhr.errorMessage);
-                }
+                	AP.modal.alert(xhr.errorMessage);
+                } 
             }).always(function() {
                 //성공, 실패
             });

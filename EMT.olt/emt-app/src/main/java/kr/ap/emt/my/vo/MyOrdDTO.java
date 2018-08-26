@@ -181,6 +181,7 @@ public class MyOrdDTO {
 		/* 3.상품목록 추출 */
 		Integer ordQtySum = 0;
 		Integer cancelQtySum = 0;
+		Integer claimQtySum = 0;
 		totalOrdOnlineProdCnt = 0;
 		shipOrdOnlineProdCnt = 0;
 		storeOrdOnlineProdCnt = 0;
@@ -250,7 +251,11 @@ public class MyOrdDTO {
 					for (OrdHistProdEx ordHistProdEx : ohpe) { //주문이력상품 목록
 						// 매장번호가 존재하는지..
 						boolean storePickup = ordShipAddressEx.getStoreSn() != null;
-						String key = String.format("%s_%s", ordHistProdEx.getOrdProdEx().getOnlineProdCode(), storePickup ? "Store" : "Ship"); // 온라인상품코드,매장일련번호
+						String prodCode = ordHistProdEx.getOrdProdEx().getOnlineProdCode();
+						if (ordHistProdEx.getOrdProdEx().getBulkDcOnlineProdCode() != null) {
+							prodCode = ordHistProdEx.getOrdProdEx().getBulkDcOnlineProdCode();
+						}
+						String key = String.format("%s_%s", prodCode, storePickup ? "Store" : "Ship"); // 온라인상품코드,매장일련번호
 
 						OrdOnlineProdFoDTO ordOnlineProdFo = null;
 						// M+N상품
@@ -347,23 +352,15 @@ public class MyOrdDTO {
 
 						/* 금액합산, 수량합산 start */
 						ordQtySum += ordHistProdEx.getOrdQty();
-						if ("cancel".equals(state) || "ProdCancel".equals(ordHistProdEx.getOrdHistProdStatusCode())) {
-							cancelQtySum += ordHistProdEx.getCancelQty();
-						}
-						else {
-							cancelQtySum += ordHistProdEx.getClaimReceivedQty();
-						}
+						cancelQtySum += ordHistProdEx.getCancelQty();
+						claimQtySum += ordHistProdEx.getClaimReceivedQty();
 
 						finalOnlineSaleAmtPcurSum = finalOnlineSaleAmtPcurSum.add(ordHistProdEx.getFinalOnlineSaleAmtPcur());
 
 						ordOnlineProdFo.setFinalOnlineSaleAmtPcurSum(ordOnlineProdFo.getFinalOnlineSaleAmtPcurSum().add(ordHistProdEx.getFinalOnlineSaleAmtPcur()));
 						ordOnlineProdFo.setOrdQtySum(ordOnlineProdFo.getOrdQtySum() + ordHistProdEx.getOrdQty());
-						if ("cancel".equals(state) || "ProdCancel".equals(ordHistProdEx.getOrdHistProdStatusCode())) {
-							ordOnlineProdFo.setCancelQtySum(ordOnlineProdFo.getCancelQtySum() + ordHistProdEx.getCancelQty());
-						}
-						else {
-							ordOnlineProdFo.setCancelQtySum(ordOnlineProdFo.getCancelQtySum() + ordHistProdEx.getClaimReceivedQty());
-						}
+						ordOnlineProdFo.setCancelQtySum(ordOnlineProdFo.getCancelQtySum() + ordHistProdEx.getCancelQty());
+						ordOnlineProdFo.setClaimQtySum(ordOnlineProdFo.getClaimQtySum() + ordHistProdEx.getClaimReceivedQty());
 
 						if (ordHistProdEx.getOrdProdEx() != null) {
 							if ("Prod".equals(ordHistProdEx.getOrdProdEx().getProdTypeCode())) {
@@ -496,6 +493,7 @@ public class MyOrdDTO {
 		ordOnlineProdFo.setClaimReasonName(ordHistProd.getReceivedClaimReasonName());			// 주문클레임 사유명
 		ordOnlineProdFo.setOrdQtySum(0);														// 주문수량(단위상품 X 주문수량)
 		ordOnlineProdFo.setCancelQtySum(0);														// 취소수량
+		ordOnlineProdFo.setClaimQtySum(0);
 		ordOnlineProdFo.setOrdHistProdList(new ArrayList<OrdHistProdEx>());						// 주문이력(확장)
 		ordOnlineProdFo.setPreSale(new ArrayList<OrdHistProdEx>());						// 주문이력(확장)
 		ordOnlineProdFo.setProdList(new ArrayList<OrdHistProdEx>());						// 주문이력(확장)

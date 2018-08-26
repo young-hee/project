@@ -24,6 +24,8 @@ import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
 import kr.ap.amt.display.vo.RequestDisplay;
 import net.g1project.ecp.api.model.BooleanResult;
+import net.g1project.ecp.api.model.sales.coupon.DownloadCoupons;
+import net.g1project.ecp.api.model.sales.coupon.MemberKeepingCouponCount;
 import net.g1project.ecp.api.model.sales.display.Corner;
 import net.g1project.ecp.api.model.sales.display.CornerContentsSet;
 import net.g1project.ecp.api.model.sales.display.FlaggedProdRankChange;
@@ -253,10 +255,13 @@ public class DisplayRestController extends AbstractController {
     public ResponseEntity<?> downloadCoupons( RequestDisplay requestDisplay) {
         
 		HashMap<String, Object> result = new HashMap<String, Object>();
-        
-        try {
-        	//result.put("onlineProdList", onlineProdList);
 
+        try {
+        	List<DownloadCoupons> myCouponListResult = couponApi.getDownloadCoupons("All", "Y", getMemberSn(), null, null);
+        	MemberKeepingCouponCount memberKeepingCouponsCount = couponApi.getMemberKeepingCouponsCount(getMemberSn(), 90L);
+
+        	result.put("myCouponListResult", myCouponListResult);
+        	result.put("availCnt", memberKeepingCouponsCount);
         	return ResponseEntity.ok(result);
         } catch (Exception e) {
         	result.put("errorData", e);

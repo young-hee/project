@@ -109,6 +109,8 @@
 .discount_complete>* {color:#333; font-size:12px;}
 .discount_complete>p {margin-bottom:13px;}
 .discount_complete>button {min-width:190px;}
+/* 쿠폰조회 팝업_2018-08-23 */
+.layer_wrap.coupon_wrap .coupon_ck_list li.freebie .check_wrap {width:85%;}
 
 /* 사은품 증정 */
 .spc_benefit_slide {width:785px; margin:0 auto;}
@@ -223,14 +225,17 @@
 .cart .item_list .item_info .thumb .check_wrap{position:absolute;left:0;top:0;}
 .cart .item_list .item_info .name{display:table-cell;padding:0 20px;vertical-align:middle;}
 .cart .item_list .item_info .name .txt{margin-top:10px;color:#000;font-size:18px;}
+.cart .item_list .item_info .name .reservation {margin-top:10px;color:#782fff;font-size:16px;}
+.cart .item_list .item_info .name .reservation span {font-size:14px;padding-left:13px;vertical-align: -1px;}
 .cart .item_list .item_info .delete{position:absolute;right:-5px;top:4px;}
 .cart .item_list .item_info .delete .btn_delete{width:24px;height:24px;padding:0;background:url(/pc/ko/images/cart/bg_cart_close.png) no-repeat center center;}
 
-.cart .benefit{display:inline-block;min-width:78px;margin-top:-4px;padding:4px 5px;color:#fff;font-size:13px;box-sizing:border-box;text-align:center;vertical-align:middle;}
+.cart .benefit{display:inline-block;margin-top:-4px;padding:4px 7px;color:#fff;font-size:13px;box-sizing:border-box;text-align:center;vertical-align:middle;}
 .cart .benefit.special{background:#782fff;}
 .cart .benefit.gift{background:#222;}
 .cart .benefit.soldout{background:#222;font-size:12px;min-width:72px;padding:7px 5px;}
 .cart .benefit.delivery{border:1px solid #782fff;background:#fff;font-size:14px;color:#782fff;font-weight:bold;}
+.cart .benefit.office{border:1px solid #2f5bff;background:#fff;font-size:14px;color:#2f5bff;font-weight:bold;}
 
 .cart .item_list .item_option{display:table;width:783px;margin-top:20px;border:1px solid #e5e5e5;}
 .cart .item_list .item_option .inner{margin:0 20px;border-top:1px solid #e5e5e5;padding:19px 0px 15px;}
@@ -248,10 +253,21 @@
 .cart .item_list .item_option .count .ui_spinner .ico_oper_p.disabled:after{background:#eee;border:none;}
 .cart .item_list .item_option .count .btn_fix_gradient{margin-left:8px;padding:13px;font-size:14px;}
 .cart .item_list .item_option .price{display:table-cell;width:234px;text-align:right;vertical-align:middle;}
-.cart .item_list .item_option .price strong{display:inline-block;margin-top:-3px; color:#333;font-size:24px;letter-spacing:-1px}
-.cart .item_list .item_option .price del{margin-left:10px;font-size:20px;letter-spacing:-1px;}
+.cart .item_list .item_option .price strong{display:inline-block;margin-top:-3px; color:#333;font-size:24px;/*letter-spacing:-1px*/}
+.cart .item_list .item_option .price del{margin-left:10px;font-size:20px;/*letter-spacing:-1px;*/}
 .cart .item_list .item_option .delete{display:table-cell;padding-left:8px;vertical-align:middle;text-align:right;}
 .cart .item_list .item_option .delete .btn_delete{width:24px;height:24px;padding:0;background:url(/pc/ko/images/cart/bg_cart_close.png) no-repeat right 3px;}
+
+/* 상품명 및 수량_2018-08-22 */
+.cart .item_list .pack_prd {margin: 10px 0 50px;padding:11px 20px;background: #f8f8f8;}
+.cart .item_list .pack_prd li {margin:0;padding:5px 0;color:#666;padding-left: 20px;background: url(/pc/ko/images/cart/bg_special_gift.png) no-repeat left 3px;}
+.cart .item_list .pack_prd li span {padding-left:10px;}
+
+/* 기프트카드 증정_2018-08-22 */
+.cart .special_gift + .gift_card {margin-top:-40px;}
+.cart .gift_card {margin:10px 0 50px;padding:11px 20px;background: #f8f8f8;}
+.cart .gift_card > p {margin:0;padding:5px 0;color: #333;font-size: 16px;padding-left: 20px;background: url(/pc/ko/images/cart/bg_special_gift.png) no-repeat left 3px;}
+/*.cart .gift_card > p:before {content:'';display:inline-block;width:45px;height: 27px;padding-right:10px;vertical-align: middle;background: url(/pc/ko/images/cart/ico_gift.png) no-repeat left 0;background-size:45px auto;}*/
 
 .cart .item_list .item_change{display:none;margin-top:18px;}
 .cart .item_list .item_change .select_wrap button,
@@ -339,7 +355,7 @@
 .cart .cart_list .receive .ui_list li .top{vertical-align:top;padding-top:10px;}
 .cart .cart_list .receive .ui_list li *{font-size:16px;}
 .cart .cart_list .receive .ui_list li .mgt_15{margin-top:15px;}
-.cart .cart_list .receive .delivery_list{max-height:265px;overflow:hidden;}
+.cart .cart_list .receive .delivery_list{max-height:355px;overflow:hidden;}
 .cart .cart_list .receive .delivery_list.on{max-height:none;overflow:visible;}
 .cart .cart_list .receive .delivery_list li{position:relative;margin-top:14px;padding:20px;border:1px solid #eaeaea;border-radius:10px;color:#000;font-size:16px;}
 .cart .cart_list .receive .delivery_list li:first-child{margin-top:14px;}
@@ -358,6 +374,7 @@
 .cart .cart_list .delivery_order span.check_wrap{display:block;margin:15px 0 0 0;}
 .cart .cart_list .delivery_order span.check_wrap:first-child{margin-top:0;}
 .cart .cart_list .delivery_order span.check_wrap label{color:#000;font-size:18px;}
+.cart .cart_list .delivery_order span.check_wrap em {color:#ff0000;font-size:14px;padding-left:10px;vertical-align: -1px;}
 .cart .cart_list .delivery_order+.input_wrap{display:none;width:100%;font-size:16px;margin-top:15px;}
 
 .cart .cart_list .use_list li{/*margin-top:20px;*/border-top:1px solid #e5e5e5;}
@@ -469,6 +486,8 @@
 .cart .cart_list .payway .receive .space{margin-top:20px;}
 .cart .cart_list .payway .receive .txt_tel{line-height:24px;color:#484848;font-size:14px;}
 .cart .cart_list .payway .receive .txt_tel em{color:#0000ff;}
+.cart .cart_list .payway .receive .txt_tel.mgt10 {margin-top:10px;}
+.cart .cart_list .payway .receive.cont_naver{display:none;}
 .cart .cart_list .payway .receive.cont_bankbook{display:none;}
 .cart .cart_list .payway .receive.cont_realtime{display:none;}
 .cart .cart_list .payway .receive.cont_phone{display:none;}
@@ -491,15 +510,15 @@
 .cart .pay_list dl .result .price{display:table-cell;width:155px;text-align:right;font-weight:bold;}
 .cart .pay_list dl .result ul li{margin-top:13px;font-size:15px;}
 .cart .pay_list dl .result ul li:first-child{margin-top:14px;}
-.cart .pay_list dl .result ul li em{display:table-cell;width:150px;padding-left:22px;color:#999;background:url(/pc/ko/images/cart/bg_payment_arr.png) no-repeat left top;}
+.cart .pay_list dl .result ul li em{display:table-cell;width:350px;padding-left:22px;color:#999;background:url(/pc/ko/images/cart/bg_payment_arr.png) no-repeat left top;}/* 2018-08-22 */
 .cart .pay_list dl .result ul li .price{font-weight:normal;}
 .cart .pay_list dl .total{padding:11px 0 28px;border-top:2px solid #f2f2f2;font-weight:bold;}
 .cart .pay_list dl .total .set strong{display:table-cell;width:130px;color:#782fff;font-size:18px;}
 .cart .pay_list dl .total .set .price{display:table-cell;width:165px;text-align:right;color:#782fff;font-size:28px;}
 .cart .pay_list dl .total .set .price .small{font-size:15px;}
 .cart .pay_list dl .total .beauty{margin-top:15px;}
-.cart .pay_list dl .total .beauty strong{display:table-cell;width:155px;color:#4f94c0;font-size:15px;}
-.cart .pay_list dl .total .beauty .point{display:table-cell;width:155px;text-align:right;color:#4f94c0;font-size:15px;}
+.cart .pay_list dl .total .beauty strong{display:table-cell;width:165px;color:#4f94c0;font-size:15px;}
+.cart .pay_list dl .total .beauty .point{display:table-cell;width:150px;text-align:right;color:#4f94c0;font-size:15px;}
 .cart .pay_list dl .total .beauty .ui_tooltip button{width:25px;height:20px;padding-top:1px;}
 .cart .pay_list dl .total .beauty .ui_tooltip button:after{top:0;}
 .cart .pay_list dl .total .beauty .ui_tooltip .layer_tooltip{width:293px;right:-172px;}

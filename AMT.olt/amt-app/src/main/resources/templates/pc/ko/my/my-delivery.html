@@ -1,0 +1,376 @@
+<html ap:decorate="~{layout/layout-sub}">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page contents -->
+		<div class="ap_contents">
+
+			<!-- breadcrumbe -->
+			<th:block ap:replace="~{common/fragment/breadcrumb-only}"/>
+			<!-- // breadcrumbe -->
+
+			<!-- com_cont -->
+			<div class="ap_com_cont mypage">
+				<!-- aside_area -->
+				<th:block ap:replace="~{html/page/my/fragment/my-menu}"/>
+				<!-- aside_area -->
+
+				<!-- cont_area -->
+				<div class="cont_area my_delivery_manage">
+					<div class="sub_title">
+						<!-- page title -->
+						<th:block ap:replace="~{common/fragment/page-title}"/>
+						<!-- // page title -->
+					</div>
+					<div class="panel table_layout">
+						<div><em id="countEm"></em> <span>의 배송지가 등록되어 있습니다.</span></div>
+						<div class="align_right">
+							<a href="#" class="btn_lg_gradient" onclick="showUpdateLayer()">배송지 추가</a>
+						</div>
+					</div>
+
+					<fieldset class="form panel bg_white">
+						<legend class="sr_only">배송지 선택 항목</legend>
+						<div class="table_layout pd20">
+							<div>
+								<span class="check_wrap small"><input type="checkbox" onclick="checkboxControl(this);" id="checkAll"><label for="checkAll" class="font_lg" id="cntCheck">전체선택(3/3)</label></span>
+							</div>
+							<div class="align_right">
+								<button type="button" class="btn_smx_bggray" onclick="repShip()">기본배송지로 설정</button>
+								<button type="button" class="btn_smx_bggray" onclick="delShip()">선택삭제</button>
+							</div>
+						</div>
+					</fieldset>
+
+					<div class="panel bg_white">
+						<div class="board_list type02">
+						<table id="shipTable" name="shipTable">
+							<caption class="sr_only">배송지 목록</caption>
+							<colgroup>
+								<col width="70">
+								<col width="110">
+								<col width="110">
+								<col width="">
+								<col width="130">
+								<col width="130">
+							</colgroup>
+							<thead>
+							<tr>
+								<th scope="col"><span class="check_wrap check_only"><input type="checkbox" id="check_only"><label for="check_only"><span class="sr_only">checkbox만 보일때</span></label></span></th>
+								<th scope="col">배송지</th>
+								<th scope="col">받는사람</th>
+								<th scope="col">주소</th>
+								<th scope="col">연락처</th>
+								<th scope="col">수정ㆍ삭제</th>
+							</tr>
+							</thead>
+							<tbody id="paging">
+							</tbody>
+						</table>
+					</div>
+					</div>
+					<!--<div class="pagination bg_gray">-->
+							<!--<a href="#none" class="navi prev">&lt;<span class="sr_only">이전</span></a>-->
+							<!--<span class="current">1</span>-->
+							<!--<a href="#none">2</a>-->
+							<!--<a href="#none">3</a>-->
+							<!--<a href="#none">4</a>-->
+							<!--<a href="#none">5</a>-->
+							<!--<a href="#none">6</a>-->
+							<!--<a href="#none">7</a>-->
+							<!--<a href="#none">8</a>-->
+							<!--<a href="#none">9</a>-->
+							<!--<a href="#none">10</a>-->
+							<!--<a href="#none" class="navi next">&gt;<span class="sr_only">다음</span></a>-->
+						<!--</div>-->
+				</div>
+				<!-- // cont_area -->
+
+			</div>
+			<!-- // com_cont -->
+
+		</div>
+		<!-- // page contents -->
+	</div><!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script ap:src="@{/handlebars-templates/compiled/my/ship-address-list.js}"></script>
+		<script ap:src="@{/handlebars-templates/compiled/my/ship-address-add.js}"></script>
+
+		<script>
+			$( '.ui_input_images' ).inputImages();
+			$( '.recommended_item .slide' ).ixSlideMax();
+		</script>
+		<script th:inline="javascript">
+			var shipCnt = 0;
+			var layerModal;
+
+			$(document).ready(function() {
+				getShipAddress();
+			});
+
+			function showUpdateLayer(data, sn) {
+
+				if (shipCnt >= 10 && data == null) {
+					AP.modal.alert('배송지를 10개 이상 추가할 수 없습니다.');
+					return;
+				}
+				layerModal = AP.modal.info({
+					contents : AP.common.getTemplate('my.ship-address-add', {
+						result : data,
+						sn : sn
+					}),
+					sizeType : "L"
+				});
+				var $modalEl = layerModal.getElement();
+
+				$( '.ui_find_addresses' ).findAddresses();
+
+				// $('input[type=tel]').on('keypress', function(e){
+				// 	if (event.which && (event.which <= 47 || event.which >= 58) && event.which != 8) { event.preventDefault(); }
+				// });
+
+				$('input[type=tel]').keydown(function (event) {
+
+					if (event.keyCode) {
+						var code = event.keyCode;
+						if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+							return true;
+						} else {
+							return false;
+						}
+					} else if (e.which) {
+						var code = e.which;
+						if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+							return true;
+						} else {
+							return false;
+						}
+					}
+				});
+
+				$('input[type=tel]').keyup(function (event) {
+					event = event || window.event;
+					var keyID = (event.which) ? event.which : event.keyCode;
+					if ( keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39 )
+						return;
+					else
+						event.target.value = event.target.value.replace(/[^0-9]/g, "");
+				});
+			}
+
+			function getShipAddress() {
+				AP.api.shipAddress({}).done(function(data) {
+					if (data && 'success' == data.result) {
+						showPage(data.data);
+
+					}
+					//성공
+				}).fail(function(e) {
+					//실패
+					AP.modal.alert(e.errorMessage);
+				}).always(function() {
+					//성공, 실패
+				});
+			}
+
+			function showPage(shipData) {
+				shipCnt = shipData.length;
+				setCount();
+				var resultHtml = AP.common.getTemplate('my.ship-address-list', {
+					totalLength : shipData.length,
+					totalLengthLabel : $B.string.numberFormat(shipData.length),
+					result : shipData
+				});
+
+				$('#paging').empty();
+				$('#paging').append(resultHtml);
+
+			}
+
+			function setCount() {
+				$('#countEm').html(shipCnt + "개");
+				cbCount();
+			}
+
+			function cbCount() {
+				var cbLen = $("input[name=check]:checked").length ;
+				$('#cntCheck').text('전체선택 ' + cbLen + '/' + shipCnt);
+			}
+
+			function checkboxControl(cb) {
+				$("input:checkbox").prop('checked', cb.checked);
+				cbCount();
+			}
+
+			function cbClick(cb) {
+				cbCount();
+			}
+
+			function repAddress(val, element) {
+				AP.api.repAddress({}, { type : 'rep', shipAddressSn : String(val) }).done(function(data) {
+					if (data && 'success' == data.result) {
+						AP.modal.alert("기본 배송지가 변경되었습니다.").addListener('modal-close', function(e) {
+							// $('#shipTable span[type=rep][class=store_default]').each(function() {
+							// 	$(this).removeClass("store_default");
+							// 	$(this).html("");
+							// });
+							// rowChange(val);
+							getShipAddress();
+						});
+					}
+					//성공
+				}).fail(function(e) {
+					//실패
+					AP.modal.alert(e.errorMessage);
+				}).always(function() {
+					//성공, 실패
+				});
+			}
+
+			function deleteAddress(val) {
+				AP.api.repAddress({}, { type : 'delete', shipAddressSn : String(val) }).done(function(data) {
+					if (data && 'success' == data.result) {
+						AP.modal.alert("배송지가 삭제되었습니다.").addListener('modal-close', function(e) {
+							// Array.prototype.map.call(elements, function (c, i) {
+							// 	shipCnt--;
+							// 	rowRemover(c.value);
+							// });
+							// setCount();
+							getShipAddress();
+						});
+					}
+					//성공
+				}).fail(function(e) {
+					//실패
+					AP.modal.alert(e.errorMessage);
+				}).always(function() {
+					//성공, 실패
+				});
+			}
+
+			function delShip() {
+				var box = document.querySelectorAll('input[type=checkbox][name=check]:checked');
+				var boxChecked = Array.prototype.map.call(box, function (c, i) {
+					return c.value;
+				});
+
+				var elememts = Array.prototype.map.call(box, function (c, i) {
+					return c;
+				});
+
+				if (boxChecked != null && boxChecked.length > 0) {
+					// var msg = boxChecked.length <= 1 ? "매장을 삭제하시겠습니까?" : boxChecked.length + "개의 매장을 삭제하시겠습니까?";
+					AP.modal.confirm(boxChecked.length + "건을 삭제하시겠습니까?").addListener('modal-close', function(e) {
+						if ( e.closeType == 'confirm' ) {
+							if (!checkRep(elememts)) {
+								deleteAddress(boxChecked);
+							}
+							else {
+								AP.modal.alert("기본 배송지는 삭제할수 없습니다.");
+							}
+						}
+					});
+				}
+			}
+
+			function repShip() {
+				var box = document.querySelectorAll('input[type=checkbox][name=check]:checked');
+				var boxChecked = Array.prototype.map.call(box, function (c, i) {
+					return c.value;
+				});
+
+				var elememts = Array.prototype.map.call(box, function (c, i) {
+					return c;
+				});
+
+				if (boxChecked != null && boxChecked.length > 0) {
+					var split = String(boxChecked).split(",");
+					if (split != null && split.length == 1) {
+						repAddress(boxChecked, elememts);
+					}
+					else {
+						AP.modal.alert("기본 배송지는 1개만 선택해주세요.");
+					}
+				}
+			}
+
+			function checkRep(elements) {
+
+				var retVal;
+				$('#shipTable span[type=rep][class=default]').each(function() {
+					retVal =  $(this).attr("val");
+				});
+				var ret = false;
+				Array.prototype.map.call(elements, function (c, i) {
+					if (retVal === c.value) {
+						ret = true;
+					}
+				});
+				return ret;
+			}
+
+			function sendForm() {
+
+				$('#updateYn').val($('#check1').prop('checked') ? 'Y' : 'N');
+				console.log('sendForm');
+
+				var $form = $('#infoForm');
+				if ($form.valid()) {
+					var formData = AP.common.getFormData($form);
+
+					if (formData.shipAddressSn != null && formData.shipAddressSn.length > 0) {
+						putAddress("updateAddress", formData);
+					} else {
+						putAddress("putAddress", formData);
+					}
+				}
+			}
+
+			function putAddress(path, str) {
+				AP.api.putAddress({
+					address : path
+				}, str).done(function(data) {
+					success(data, "배송 정보를 저장하였습니다.");
+					//성공
+				}).fail(function(e) {
+					AP.modal.alert(e.errorMessage);
+					//실패
+				}).always(function() {
+					//성공, 실패
+				});
+			}
+
+			function success(data, msg) {
+				if (data != null && "" != data) {
+
+					var result = data.result;
+					if ("success" == result) {
+						AP.modal.alert(msg).addListener('modal-close', function(e) {
+							// $(location).attr("href", "javascript:history.back()");
+							// $(location).attr("href", "/my/page/ship/address");
+							if (layerModal != null) {
+								layerModal.close();
+								getShipAddress();
+							}
+						});
+					}
+					if ("fail" == result) {
+
+					}
+				}
+			}
+
+			function hideLayer() {
+				if (layerModal != null) {
+					layerModal.close();
+				}
+			}
+
+
+		</script>
+	</th:block>
+</body>
+</html>

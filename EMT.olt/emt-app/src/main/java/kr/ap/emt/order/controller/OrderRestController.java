@@ -6,8 +6,7 @@
  */
 package kr.ap.emt.order.controller;
 
-import kr.ap.comm.member.vo.MemberSession;
-import kr.ap.comm.support.common.AbstractController;
+import kr.ap.comm.order.OrderSession;
 import kr.ap.emt.order.vo.OrdReceptChangeDTO;
 import net.g1project.ecp.api.model.BooleanResult;
 import net.g1project.ecp.api.model.EmbeddableAddress;
@@ -21,9 +20,7 @@ import net.g1project.ecp.api.model.sales.coupon.DownloadCoupons;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -140,16 +137,16 @@ public class OrderRestController extends OrderBaseController {
             body.setPayAmtList(PayAmtList);
             orderApi.ordReceptPayAmt(ordSn, body);
 
-            MemberSession memberSession = getMemberSession();
-            memberSession.setOrdSn(ordSn);
-            memberSession.setDepositYn(depositYn);
-            memberSession.setDepositPrice(parseDepositPrice);
-            memberSession.setPayMethodSn(payMethodSn);
-            memberSession.setCreditcardCoSn(creditcardCoSn);
-            memberSession.setNextPayUseYn(nextPayUseYn);
-            memberSession.setPayServiceCode(payServiceCode);
-            memberSession.setPayMethodCode(payMethodCode);
-            setMemberSession(memberSession);
+			OrderSession orderSession = getOrderSession();
+			orderSession.setOrdSn(ordSn);
+			orderSession.setDepositYn(depositYn);
+			orderSession.setDepositPrice(parseDepositPrice);
+			orderSession.setPayMethodSn(payMethodSn);
+			orderSession.setCreditcardCoSn(creditcardCoSn);
+			orderSession.setNextPayUseYn(nextPayUseYn);
+			orderSession.setPayServiceCode(payServiceCode);
+			orderSession.setPayMethodCode(payMethodCode);
+			setOrderSession(orderSession);
 
             result.put("result", "success");
         }
@@ -164,8 +161,8 @@ public class OrderRestController extends OrderBaseController {
 	public ResponseEntity<?> ordReceptChange(@Valid OrdReceptChangeDTO ordRcDTO){
 		HashMap<String, Object> result = new HashMap<String, Object>();
         if(ordRcDTO != null){
-            MemberSession memberSession = getMemberSession();
-            OrdReceptChange body = memberSession.getOrdReceptChange();
+			OrderSession orderSession = getOrderSession();
+            OrdReceptChange body = orderSession.getOrdReceptChange();
             if (body == null) {
                 body = new OrdReceptChange();
             }
@@ -266,8 +263,8 @@ public class OrderRestController extends OrderBaseController {
 				}
 			}
 
-            memberSession.setOrdReceptChange(body);
-            setMemberSession(memberSession);
+			orderSession.setOrdReceptChange(body);
+			setOrderSession(orderSession);
 
             result.put("result", "success");
         }
@@ -285,8 +282,8 @@ public class OrderRestController extends OrderBaseController {
 	@PostMapping("/ordReceptChangeCoupon")
 	public ResponseEntity<?> ordReceptChangeCoupon(Long ordSn, String[] memberKeepingCouponSnArr, Long membershipSn){
 		HashMap<String, Object> result = new HashMap<String, Object>();
-        MemberSession memberSession = getMemberSession();
-        OrdReceptChange body = memberSession.getOrdReceptChange();
+		OrderSession orderSession = getOrderSession();
+        OrdReceptChange body = orderSession.getOrdReceptChange();
         if (body == null) {
             body = new OrdReceptChange();
         }
@@ -312,8 +309,8 @@ public class OrderRestController extends OrderBaseController {
 
             OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
 
-            memberSession.setOrdReceptChange(body);
-            setMemberSession(memberSession);
+			orderSession.setOrdReceptChange(body);
+			setOrderSession(orderSession);
 
             result.put("applyCouponExList", ordRc.getApplyCouponExList());
 			finalPriceAmtPcur(result, ordRc);
@@ -334,8 +331,8 @@ public class OrderRestController extends OrderBaseController {
 	@PostMapping("/ordReceptChangeBag")
 	public ResponseEntity<?> ordReceptChangeBag(Long ordSn, Long coSn, Long giftPackingSn, Integer giftPackingQty, Long membershipSn){
 		HashMap<String, Object> result = new HashMap<String, Object>();
-        MemberSession memberSession = getMemberSession();
-        OrdReceptChange body = memberSession.getOrdReceptChange();
+		OrderSession orderSession = getOrderSession();
+        OrdReceptChange body = orderSession.getOrdReceptChange();
         if (body == null) {
             body = new OrdReceptChange();
         }
@@ -359,8 +356,8 @@ public class OrderRestController extends OrderBaseController {
 
             OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
 
-            memberSession.setOrdReceptChange(body);
-            setMemberSession(memberSession);
+			orderSession.setOrdReceptChange(body);
+			setOrderSession(orderSession);
 
 			finalPriceAmtPcur(result, ordRc);
         }
@@ -378,8 +375,8 @@ public class OrderRestController extends OrderBaseController {
 	@PostMapping("/ordReceptChangePoint")
 	public ResponseEntity<?> ordReceptChangePoint(Long ordSn, Long membershipSn, int useMembershipPoint){
 		HashMap<String, Object> result = new HashMap<String, Object>();
-        MemberSession memberSession = getMemberSession();
-        OrdReceptChange body = memberSession.getOrdReceptChange();
+		OrderSession orderSession = getOrderSession();
+        OrdReceptChange body = orderSession.getOrdReceptChange();
         if (body == null) {
             body = new OrdReceptChange();
         }
@@ -399,8 +396,8 @@ public class OrderRestController extends OrderBaseController {
 
             OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
 
-            memberSession.setOrdReceptChange(body);
-            setMemberSession(memberSession);
+			orderSession.setOrdReceptChange(body);
+			setOrderSession(orderSession);
 
 			finalPriceAmtPcur(result, ordRc);
         }
@@ -419,8 +416,8 @@ public class OrderRestController extends OrderBaseController {
 	@PostMapping("/ordReceptChangeOrdUnit")
 	public ResponseEntity<?> ordReceptChangeOrdUnit(Long ordSn, Long[] ordUnitAwardSnArr, Integer[] awardSelectQtyArr, Long membershipSn){
 		HashMap<String, Object> result = new HashMap<String, Object>();
-        MemberSession memberSession = getMemberSession();
-        OrdReceptChange body = memberSession.getOrdReceptChange();
+		OrderSession orderSession = getOrderSession();
+        OrdReceptChange body = orderSession.getOrdReceptChange();
         if (body == null) {
             body = new OrdReceptChange();
         }
@@ -444,8 +441,8 @@ public class OrderRestController extends OrderBaseController {
 
             OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
 
-            memberSession.setOrdReceptChange(body);
-            setMemberSession(memberSession);
+			orderSession.setOrdReceptChange(body);
+			setOrderSession(orderSession);
 
 			finalPriceAmtPcur(result, ordRc);
         }

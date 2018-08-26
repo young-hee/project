@@ -2,7 +2,9 @@ package kr.ap.comm.support.common;
 
 import kr.ap.comm.api.AmoreAPIService;
 import kr.ap.comm.api.vo.MultiInfo;
+import kr.ap.comm.cart.CartSession;
 import kr.ap.comm.member.vo.MemberSession;
+import kr.ap.comm.order.OrderSession;
 import kr.ap.comm.support.APRequestContext;
 import kr.ap.comm.support.constants.SessionKey;
 import net.g1project.bluewave.imagescaler.service.ImageScaler;
@@ -30,7 +32,6 @@ import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -45,6 +46,7 @@ import org.springframework.web.util.WebUtils;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -206,12 +208,52 @@ public class AbstractController {
      * @return
      */
     protected MemberSession getMemberSession() {
-		MemberSession memberSession =  (MemberSession) WebUtils.getSessionAttribute(getRequest(), SessionKey.LOGIN_USER);
-        if (ObjectUtils.isEmpty(memberSession)) {
-            memberSession = new MemberSession();
-            WebUtils.setSessionAttribute(getRequest(), SessionKey.LOGIN_USER, memberSession);
-        }
-        return  memberSession;
+        final HttpServletRequest request = getRequest();
+        final HttpSession session = request.getSession();
+        synchronized (WebUtils.getSessionMutex(session)) {
+            MemberSession memberSession = (MemberSession) WebUtils.getSessionAttribute(request, SessionKey.LOGIN_USER);
+            if (ObjectUtils.isEmpty(memberSession)) {
+                memberSession = new MemberSession();
+                WebUtils.setSessionAttribute(request, SessionKey.LOGIN_USER, memberSession);
+            }
+            return  memberSession;
+         }
+    }
+
+	/**
+	 * get CartSession object
+	 *
+	 * @return
+	 */
+	protected CartSession getCartSession() {
+		final HttpServletRequest request = getRequest();
+		final HttpSession session = request.getSession();
+		synchronized (WebUtils.getSessionMutex(session)) {
+			CartSession cartSession = (CartSession) WebUtils.getSessionAttribute(request, SessionKey.CART);
+			if (ObjectUtils.isEmpty(cartSession)) {
+				cartSession = new CartSession();
+				WebUtils.setSessionAttribute(request, SessionKey.CART, cartSession);
+			}
+			return cartSession;
+		}
+	}
+
+	/**
+	 * get orderSession object
+	 *
+	 * @return
+	 */
+	protected OrderSession getOrderSession() {
+		final HttpServletRequest request = getRequest();
+		final HttpSession session = request.getSession();
+		synchronized (WebUtils.getSessionMutex(session)) {
+			OrderSession orderSession = (OrderSession) WebUtils.getSessionAttribute(request, SessionKey.ORDER);
+			if (ObjectUtils.isEmpty(orderSession)) {
+				orderSession = new OrderSession();
+				WebUtils.setSessionAttribute(request, SessionKey.ORDER, orderSession);
+			}
+			return orderSession;
+		}
 	}
 
 	/**
@@ -222,21 +264,31 @@ public class AbstractController {
     	WebUtils.setSessionAttribute(getRequest(), SessionKey.LOGIN_USER, memberSession);
 	}
 
+	/**
+	 * Redis 를 Session store 로 사용할 경우, session 데이터를 저장하기 위해 명시적으로 호출.
+	 * cartSesseion 정의하여 구분
+	 * @param cartSession
+	 */
+	protected void setCartSession(CartSession cartSession) {
+		WebUtils.setSessionAttribute(getRequest(), SessionKey.CART, cartSession);
+	}
+
+	/**
+	 * Redis 를 Session store 로 사용할 경우, session 데이터를 저장하기 위해 명시적으로 호출.
+	 * orderSesseion 정의하여 구분
+	 * @param orderSession
+	 */
+	protected void setOrderSession(OrderSession orderSession) {
+		WebUtils.setSessionAttribute(getRequest(), SessionKey.ORDER, orderSession);
+	}
+
     /**
      * get MemberSn
      *
      * @return
      */
     protected Long getMemberSn() {
-        try {
-            MemberSession m = getMemberSession();
-            return ObjectUtils.isEmpty(m.getMember_sn()) ? 0L : m.getMember_sn();
-        }
-        catch (Exception e) {
-            // TODO: handle exception
-            logger.error(e.getMessage(), e);
-        }
-        return 0L;
+        return getMemberSession().getMember_sn();
     }
 
     /**
@@ -253,12 +305,8 @@ public class AbstractController {
 	 *
 	 * @return
 	 */
-	protected Boolean isLoggedIn() {
-    	if(getMemberSn() == 0L){
-    		return false;
-		} else {
-    		return true;
-		}
+	protected boolean isLoggedIn() {
+		return getMemberSn()!=null;
 	}
 
     protected MultiInfo getMultiinfoByChCd(List<?> list, String chCd) {

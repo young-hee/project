@@ -25,11 +25,13 @@ public class OrdOnlineProdFoDTO {
 	private BigDecimal finalOnlineSaleAmtPcurSumExchMembership = new BigDecimal(0);// 뷰티포인트 포인트(상품판매가 X 주문수량)
 	private BigDecimal finalOnlineSaleAmtPcurSumExchActivity = new BigDecimal(0);// 진주알 알(상품판매가 X 주문수량)
 	private Integer ordQtySum;					 // 주문수량(단위상품 X 주문수량)
+	private Integer cancelQtySum;                // 취소수량
+	private Integer claimQtySum;                 // 반품, 교환수량
 	private Long claimReasonSn;				 	 // 클레임사유 일련번호
 	private String claimReasonName;				 // 클레임 사유명
 	private String claimReason;				 	 // 클레임사유
     private List<OrdHistProdEx> ordHistProdList; // 주문이력상품목록(단위)
-	private Integer cancelQtySum;                // 취소수량
+
 	private List<OrdHistProdEx> prodList; 		// 주문이력상품목록(단위)
 	private List<OrdHistProdEx> freeGiftList; 	// 주문이력상품목록(단위)
 	private List<OrdHistProdEx> preSale; 		// 주문이력상품목록(단위)
@@ -288,4 +290,11 @@ public class OrdOnlineProdFoDTO {
 		this.storeEx = storeEx;
 	}
 
+	public Integer getClaimQtySum() {
+		return claimQtySum;
+	}
+
+	public void setClaimQtySum(Integer claimQtySum) {
+		this.claimQtySum = claimQtySum;
+	}
 }

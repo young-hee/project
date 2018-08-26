@@ -86,6 +86,6 @@ public interface POSApiService {
 	 */
 	@RequestLine(value = "epl/getskintoneposinfo/v1.00")
 	@SuccessCode(rsltCd = "SUCC")
-	GiftCardUseInfo getSkinTonePosInfo(@Param("cstmId") String cstmId);
-	
+	SkinToneMeasureInfo getSkinToneMeasures(@Param("cstmId") String cstmId, @Param("startNo") String startNo, @Param("endNo") String endNo);
+
 }

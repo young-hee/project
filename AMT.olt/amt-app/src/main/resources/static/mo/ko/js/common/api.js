@@ -103,9 +103,9 @@
 		//아이디 SMS 전송.
 		sendId: { path: '/customer/find/findId/sendId', method: 'POST' },
 
-		//비밀번호 찾기
-		//email
-		findPwdEmail: { path: '/customer/find/findPwd/email', method: 'POST' },
+		//임직원 인증.
+		authEmployee: { path: '/customer/authEmployee', method: 'POST' },
+		
 		findPwdPhone: { path: '/customer/find/findPwd/phone', method: 'POST' },
 		findPwdCertificate: { path: '/customer/find/findPwd/certificate', method: 'POST' },
 		checkAuthNum: { path: '/customer/find/findPwd/checkAuthNum', method: 'POST' },
@@ -323,6 +323,30 @@
 				limit: 20 //(필수)
 			}
         },
+        
+        //상품평 상세 조회
+        getReviewDetail : {path : '/product/getReviewDetail', method : 'GET', data: {
+        		prodReviewSn  : '' //(필수) 상품평일련번호
+			}
+        },
+        
+        // 넷스루 상품조회
+		getExternalData : {path : '/product/getExternalData', method : 'GET', data: {
+				dp : null, //필수 DP 아이디
+				pcid : null, //해당 단말(PC/모바일/브라우저 등) 식별
+				uid : null, //해당 접속자 식별 (일반적으로 회원ID)
+				simulation : null, //시뮬레이션 모드 동작 여부
+				pretty : null, //응답결과에 대한 indentation 적용 여부
+				sid : null, //A/B 시나리오 선택을 위한 Session ID값
+				skipLogging : null, //추천노출로그 생성 유무(예, donottrack처리). 기본값 false
+				i_sBrand : null, //브랜드코드
+				i_sProductcd : null, //상품코드
+				i_sCategorycd1 : null, //1레벨 카테고리 코드
+				i_sCategorycd2 : null, //2레벨 카테고리 코드
+				i_sCategorycd3 : null, //3레벨 카테고리 코드
+				i_sKwd : null //검색어
+			}
+		},
 
 		//쇼핑히스토리 전체삭제
 		deleteShoppingHistory: { path:'/display/deleteShoppingMarksAll', method: 'GET'},
@@ -367,12 +391,69 @@
 		rouletteShippingInfo: { path: '/mo/ko/dummy-apis/test.json', method: 'GET' },
 		
 		/**
-	     * 장바구니(Cart) ***********************************************************
-	     */
-		// 장바구니 담기
-		//data = JSON.stringify( {cartProdExPostList: [{prodSn: 95, cartProdQty: 1, storePickupYn: 'N', integrationMembershipExchYn: 'N', activityPointExchYn: 'N'}]} );
-		addCartProd : { path: '/cart/addCartProd', method: 'POST', contentType: 'application/json' },
+		 * 장바구니(Cart) ***********************************************************
+		 */
+		// 상품상세
+		detailCartProd : { path: '/cart/detailCartProd', method: 'GET' },
 
+		// 주문계산 상세
+		getOrderCalcuation : { path: '/cart/getOrderCalcuation', method: 'GET' },
+
+		// 베리에이션 변경
+		getLayerPage : { path: '/cart/getLayerPage', method: 'GET' },
+
+		// 상품등록(일반/묶음) / 장바구니 담기
+		//data = JSON.stringify( {storePickupYn: 'N', membershipExch: 'N', activityPointYn: 'Y', cartProdExPostList: [{prodSn: 95, cartProdQty: 1}]} );
+		addCartProd : { path: '/cart/addCartProd', method: 'POST', contentType: 'application/json' },
+		// 상품등록(동시구매)
+		addCartProdSameTime : { path: '/cart/addCartProdSameTime', method: 'POST', contentType: 'application/json' },
+
+		// 상품수량 수정
+		modifyCartProd: { path: '/cart/modifyCartProd', method: 'PUT' },
+
+		// 단일삭제(단일상품)
+		removeCartProd: { path: '/cart/removeCartProd', method: 'POST' },
+
+		// 단일삭제(그룹상품)
+		removeRowCartProd: { path: '/cart/removeRowCartProd', method: 'POST' },
+
+		// 선택삭제
+		removeSelectCartProd: { path: '/cart/removeSelectCartProd', method: 'POST' },
+
+		// 픽업매장 검색
+		takeoutStore: { path: '/cart/takeoutStore', method: 'POST'},
+
+		// 단골매장 등록
+		addTakeoutStore: { path: '/cart/addTakeoutStore', method: 'POST'},
+
+		// 단골매장 등록
+		delTakeoutStore : { path: '/cart/delTakeoutStore', method: 'POST'},
+
+		// 매장지역 정보
+		storeAddressDivs: { path: '/cart/storeAddressDivs', method: 'GET'},
+
+		// 주문불가상품 삭제
+		orderRemoveCartProd: { path: '/cart/orderRemoveCartProd', method: 'POST' },
+
+		// 장바구니 담긴 건수
+		getCartCount: { path: '/cart/getCartCount', method: 'GET'},
+		
+		// 바로구매
+		buyNowCartProd : { path: '/cart/buyNowCartProd', method: 'POST', contentType: 'application/json', data: {
+				prodSn : null, 						//상품일련번호 - required
+				cartProdQty : 1, 					//장바구니상품수량 - required
+				integrationMembershipExchYn : 'N', 	//통합멤버십교환여부 - required
+				activityPointExchYn : 'N', 			//활동포인트교환여부 - required
+				storePickupYn : 'N', 				//매장픽업여부 - required
+				storeSn : null, 					//매장일련번호
+				cartBulkIncludedProdExList : [] 	//장바구니묶음구성상품목록
+		}},
+
+		// 선택상품장바구니조회
+		getCartBySelectCartProds: { path: '/cart/getCartBySelectCartProds', method: 'GET'},
+
+		// 매장선택변경
+		changeStore: { path: '/cart/changeStore', method: 'PUT'},
 		/**
 		 * 아티클(CH.에뛰드, FindYourLooks) *************************************************************
 		 */
@@ -446,7 +527,61 @@
 				attr:null,
 				priceRange:null
 			}
-		},		
+		},	
+		
+		/**
+	     * 이벤트 *************************************************************
+	     */
+        
+        //출석체크 이력조회
+		//regularEventType  : Roulette - 룰렛 , PackageLetter - 패키지레터 , ProdExperienceGrp - 뷰티테스터신청 , SampleExperienceGrp - 샘플체험단신청 , AttendanceCheck - 출석체크
+        status: { path:'/display/status', method: 'POST', data: {
+        		regularEventType : null,
+        		day : null //yyyyMM
+			}
+		},
+		
+		// 
+		//regularEventType  : Roulette - 룰렛 , PackageLetter - 패키지레터 , ProdExperienceGrp - 뷰티테스터신청 , SampleExperienceGrp - 샘플체험단신청 , AttendanceCheck - 출석체크
+        regularEventSummary: { path:'/display/regularEventSummary', method: 'POST', data: {
+        		regularEventType : null
+			}
+		}, 
+		
+		//행사참여
+		//regularEventType  : Roulette - 룰렛 , PackageLetter - 패키지레터 , ProdExperienceGrp - 뷰티테스터신청 , SampleExperienceGrp - 샘플체험단신청 , AttendanceCheck - 출석체크
+		participated: { path:'/display/participated', method: 'POST', data: {
+        		regularEventType : null, //상세행사유형코드
+        		requestTitle : null, //신청제목
+        		requestReason : null, //신청사유 (내용) 2000자
+        		emailAddress : null, //신청자이메일
+        		verifNo : null //인증번호 (패키지레터인경우 필수)
+			}
+		},
+		
+		/**
+		 * 행사참여 신청자 목록
+		 * @param: regularEventType * 필수(Roulette - 룰렛 , PackageLetter - 패키지레터 , ProdExperienceGrp - 상품체험단신청 , SampleExperienceGrp - 샘플체험단신청 , AttendanceCheck - 출석체크 , VIPLounge - VIP라운지 , VVIPLounge - VVIP라운지)
+		 *         regularEventSn 상시행사일련번호-미입력시 현재진행중인행사
+		 *         offset
+		 *         limit
+		 *  @response :  {offset, limit {regularEventRequesters : {regularEventRequesterSn,requestTitle,requestReason,emailAddress,memberId}}}             
+		 */ 
+		regularEventRequesters: { path:'/display/regularEventRequesters', method: 'GET', data: {
+				regularEventType  : null, // 이벤트 유형
+				regularEventSn : null, // 상시행사일련번호-미입력시 현재진행중인행사
+				offset : null, // 
+				limit : null // 
+			}
+		},
+		
+		//쿠폰 목록
+		couponZoneMyList: { path:'/display/downloadCoupons', method: 'GET'},
+		
+		//다운로드 쿠폰 등록
+		downloadCoupon : { path:'/display/downloadCoupon', method: 'POST', data: {
+			couponSn: null //쿠폰일련번호
+		}},
 		/**
 		 * test *************************************************************
 		 */

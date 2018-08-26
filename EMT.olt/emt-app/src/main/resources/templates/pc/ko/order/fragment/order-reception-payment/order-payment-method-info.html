@@ -6,7 +6,7 @@
 	<!--원터치 간편결제-->
 	<th:block th:if="${apMember != null and payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'wpay'}">
 		<li>
-			<button type="button" class="one_touch" name="payMethod" id="w_pay" value="WPAY"
+			<button type="button" class="one_touch" name="payMethod" id="w_pay" value="wpay"
 					th:onclick="|setPayment(this,'WPAY','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|"
 					th:text="${payMethod.payMethodName}">원터치간편결제</button>
 		</li>
@@ -30,7 +30,7 @@
 	<!--네이버 페이-->
 	<th:block th:if="${payMethod.payServiceCode == 'naver-pg' and payMethod.payMethodCode == 'naverpay'}">
 		<li>
-			<button type="button" class="naver_pay" name="payMethod" id="n_pay" value="NAVERPAY"
+			<button type="button" class="naver_pay" name="payMethod" id="n_pay" value="naverpay"
 					th:onclick="|setPayment(this,'NAVERPAY','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|"
 					th:text="${payMethod.payMethodName}">네이버 페이</button>
 		</li>

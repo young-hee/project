@@ -22,7 +22,5 @@ public class POSResultVo {
 	public void setRsltMsg(String rsltMsg) {
 		this.rsltMsg = rsltMsg;
 	}
-	
-	
 
 }

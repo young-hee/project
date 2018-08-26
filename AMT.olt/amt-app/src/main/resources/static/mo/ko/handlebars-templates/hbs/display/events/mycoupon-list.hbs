@@ -1,0 +1,174 @@
+	
+<div class="coup_down_num">
+	{{#if this.myCouponListResult.length}}
+		<p>이달 <span>{{this.availCnt}}</span>장의 쿠폰을 받으셨습니다.</p>
+	{{else}}
+		<p>이달 쿠폰을 모두 받으셨습니다.</p> <!-- 이달의 쿠폰을 모두 다운로드 받았을 경우 노출 : 쿠폰리스트 미노출 -->
+	{{/if}}
+	<a href="/my/myPouch">마이파우치에서 확인하기</a>
+</div>
+<!-- 쿠폰 리스트 --> 
+{{#if this.myCouponListResult.length}}
+	<div class="coup_list01">
+		<ul class="coup_dt_list01">
+				{{#each this.myCouponListResult}}
+				{{#if this.couponBenefitTypeCode '==' 'ProdDc'}}
+				<li>
+					<div class="benefit_coup_area down_ok"><!-- 다운로드 완료 쿠폰 -->
+						<div class="coup_detail">
+							<p class="coup_name">{{this.couponName}}</p>
+							{{#if this.prodDcCoupon.dcMethodCode '==' 'FlatPrice'}}
+								<strong class="dis_price">{{ numberFormat this.prodDcCoupon.flatPrice }}<em>원</em></strong>
+							{{/if}}
+							{{#if this.prodDcCoupon.dcMethodCode '==' 'FixedRate'}}
+								<strong class="dis_price">{{ this.prodDcCoupon.dcRate '*' 100 }}<em>%</em></strong>
+							{{/if}}
+							{{#if this.prodDcCoupon.dcMethodCode '==' 'FixedAmt'}}
+								<strong class="dis_price">{{ numberFormat this.prodDcCoupon.dcAmt }}<em>원</em></strong>
+							{{/if}}
+							<p class="coup_benefit_txt01">
+								{{#if this.prodDcCoupon.minPurProdPriceAssignYn '==' 'Y'}}
+									{{ numberFormat this.prodDcCoupon.minPurProdPrice }}원 이상 결제시 
+								{{/if}}
+								{{#if this.prodDcCoupon.maxDcAmtLimitYn '==' 'Y'}}
+									최대할인 {{ numberFormat this.prodDcCoupon.maxDcAmt }}원 
+								{{/if}}
+								<span>{{ dateFormat this.finalExpExpectedDt }}일까지 <em>({{this.dDay}}일남음)</em>
+								</span>
+							</p>
+						</div>
+						<div class="coup_down01"><a href="javascript:;" data-coupon-sn="{{ this.couponSn }}" id="downloadCoupon">쿠폰 다운로드</a>	</div>
+					</div>
+				</li>
+				{{/if}}
+				{{#if this.couponBenefitTypeCode '==' 'CartDc'}}
+				<li>
+					<div class="benefit_coup_area down_ok"><!-- 다운로드 완료 쿠폰 -->
+						<div class="coup_detail">
+							<p class="coup_name">{{this.couponName}}</p>
+							{{#if this.cartDcCoupon.dcMethodCode '==' 'FlatPrice'}}
+								<strong class="dis_price">{{ numberFormat this.cartDcCoupon.flatPrice }}<em>원</em></strong>
+							{{/if}}
+							{{#if this.cartDcCoupon.dcMethodCode '==' 'FixedRate'}}
+								<strong class="dis_price">{{ this.cartDcCoupon.dcRate '*' 100 }}<em>%</em></strong>
+							{{/if}}
+							{{#if this.cartDcCoupon.dcMethodCode '==' 'FixedAmt'}}
+								<strong class="dis_price">{{ numberFormat this.cartDcCoupon.dcAmt }}<em>원</em></strong>
+							{{/if}}
+							<p class="coup_benefit_txt01">
+								{{#if this.cartDcCoupon.sectionTypeCode '==' 'Amt'}}
+									{{ numberFormat this.cartDcCoupon.fromOrdAmt }}원 이상 결제시 
+								{{/if}}
+								{{#if this.cartDcCoupon.sectionTypeCode '==' 'Qty'}}
+									{{ numberFormat this.cartDcCoupon.fromOrdQty }}개 이상 구매시
+								{{/if}}
+								{{#if this.cartDcCoupon.maxDcAmtLimitYn '==' 'Y'}}
+									최대할인 {{ numberFormat this.cartDcCoupon.maxDcAmt }}원 
+								{{/if}}
+								<span>{{ dateFormat this.finalExpExpectedDt }}일까지 <em>({{this.dDay}}일남음)</em>
+								</span>
+							</p>
+						</div>
+						<div class="coup_down01"><a href="javascript:;" data-coupon-sn="{{ this.couponSn }}" id="downloadCoupon">쿠폰 다운로드</a>	</div>
+					</div>
+				</li>
+				{{/if}}
+				{{#if this.couponBenefitTypeCode '==' 'MPlusN'}}
+				<li>
+					<div class="benefit_coup_area down_ok"><!-- 다운로드 완료 쿠폰 -->
+						<div class="coup_detail">
+							<p class="coup_name">{{this.couponName}}</p>
+								<strong class="dis_price">
+									{{ this.mplusnCoupon.baseOrdQty }}+{{ this.mplusnCoupon.freeAwardQty }}
+									{{#if this.mplusnCoupon.couponMPlusNTypeCode '==' 'Same'}}
+										동일상품
+									{{/if}}
+									{{#if this.mplusnCoupon.couponMPlusNTypeCode '==' 'Different'}}
+										이종상품
+									{{/if}}
+								</strong>
+
+							<p class="coup_benefit_txt01">
+								{{#if this.mplusnCoupon.couponMPlusNTypeCode '==' 'Same'}}
+									동일상품 {{ this.mplusnCoupon.baseOrdQty }}개 구매시 {{ this.mplusnCoupon.freeAwardQty }}개 추가 증정
+								{{/if}}
+								{{#if this.mplusnCoupon.couponMPlusNTypeCode '==' 'Different'}}
+									이종상품 {{ this.mplusnCoupon.baseOrdQty }}개 구매시 {{ this.mplusnCoupon.freeAwardQty }}개 추가 증정
+								{{/if}}
+								<span>{{ dateFormat this.finalExpExpectedDt }}일까지 <em>({{this.dDay}}일남음)</em>
+								</span>
+							</p>
+						</div>
+						<div class="coup_down01"><a href="javascript:;" data-coupon-sn="{{ this.couponSn }}" id="downloadCoupon">쿠폰 다운로드</a>	</div>
+					</div>
+				</li>
+				{{/if}}
+				{{#if this.couponBenefitTypeCode '==' 'CartAward'}}
+				<li>
+					<div class="benefit_coup_area down_ok"><!-- 다운로드 완료 쿠폰 -->
+						<div class="coup_detail">
+							<p class="coup_name">{{this.couponName}}</p>
+							<strong class="dis_price">사은품 증정</strong>
+							<p class="coup_benefit_txt01">
+								{{#if this.cartAwardCoupon.sectionTypeCode '==' 'Amt'}}
+									{{ numberFormat this.cartAwardCoupon.fromOrdAmt }}원 이상 결제시 
+								{{/if}}
+								{{#if this.cartAwardCoupon.sectionTypeCode '==' 'Qty'}}
+									{{ numberFormat this.cartAwardCoupon.fromOrdQty }}개 이상 구매시
+								{{/if}}
+								<span>{{ dateFormat this.finalExpExpectedDt }}일까지 <em>({{this.dDay}}일남음)</em>
+								</span>
+							</p>
+						</div>
+						<div class="coup_down01"><a href="javascript:;" data-coupon-sn="{{ this.couponSn }}" id="downloadCoupon">쿠폰 다운로드</a>	</div>
+					</div>
+				</li>
+				{{/if}}
+				{{#if this.couponBenefitTypeCode '==' 'Buy1Get'}}
+				<li>
+					<div class="benefit_coup_area down_ok"><!-- 다운로드 완료 쿠폰 -->
+						<div class="coup_detail">
+							<p class="coup_name">{{this.couponName}}</p>
+							{{#if this.buyOneGetCoupon.buy1getDcRate '==' '1'}}
+								<strong class="dis_price">하나 더</strong>
+							{{/if}}
+							{{#if this.buyOneGetCoupon.buy1getDcRate '!=' '1'}}
+								<strong class="dis_price">하나 반값</strong>
+							{{/if}}
+							<p class="coup_benefit_txt01">
+								<span>{{ dateFormat this.finalExpExpectedDt }}일까지 <em>({{this.dDay}}일남음)</em></span>
+							</p>
+						</div>
+						<div class="coup_down01"><a href="javascript:;" data-coupon-sn="{{ this.couponSn }}" id="downloadCoupon">쿠폰 다운로드</a>	</div>
+					</div>
+				</li>
+				{{/if}}
+				{{#if this.couponBenefitTypeCode '==' 'ShipFeeFree'}}
+				<li>
+					<div class="benefit_coup_area down_ok"><!-- 다운로드 완료 쿠폰 -->
+						<div class="coup_detail">
+							<p class="coup_name">{{this.couponName}}</p>
+							<strong class="dis_price">배송비 무료</strong>
+							<p class="coup_benefit_txt01">
+								<span>{{ dateFormat this.finalExpExpectedDt }}일까지 <em>({{this.dDay}}일남음)</em></span>
+							</p>
+						</div>
+						<div class="coup_down01"><a href="javascript:;" data-coupon-sn="{{ this.couponSn }}" id="downloadCoupon">쿠폰 다운로드</a>	</div>
+					</div>
+				</li>
+				{{/if}}
+				{{/each}}
+		</ul>
+	</div>		
+
+{{/if}}
+
+<div class="section">
+	<div class="grade_benefit">
+		<h4 class="sr_only"><b>Apmall 고객 등급별 혜택</b></h4>
+		<img src="/mo/ko/images/common/img_grade_benefits.jpg" alt="WELCOME등급 - 쇼핑지원금 5,000원, 생일 쿠폰 10%, 뷰티포인트 적립 결제금액의 2%, 월 구매 캐시백 20만원 이상 구매 시 1만원 캐시백 / VIP등급 - 쇼핑지원금 7,000원, 생일 쿠폰 20%, 뷰티포인트 적립 결제금액의 2%, 월 구매 캐시백 20만원 이상 구매 시 1만원 캐시백, 무료배송 상시, 무료 포장 서비스 월 1회, VIP 라운지 월 1회 응모 가능, VIP 서비스 월 1회 신청 가능 / VVIP등급 - 쇼핑지원금 10,000원, 생일 쿠폰 30%, 뷰티포인트 적립 결제금액의 2%, 월 구매 캐시백 20만원 이상 구매 시 1만원 캐시백, 무료배송 상시, 무료반품 상시, 무료 포장 서비스 월 2회, VIP 라운지 월 1회 응모 가능, VIP 서비스 월 1회 신청 가능 / 플러스멤버십에 가입하고 365일 추가 혜택 누리세요">
+		<a href="#none" class="join_plus"><span class="sr_only">플러스멤버십에 가입하고 365일 추가 혜택 누리세요</span></a>
+		<a href="#none" class="view_benefit"><span class="sr_only">혜택 자세히보기</span></a>
+	</div>
+	<a href="#none"><img src="/mo/ko/images/common/ban_new_benefit_04.jpg" alt="즉시할인 카드혜택 보러가기"></a>
+</div>

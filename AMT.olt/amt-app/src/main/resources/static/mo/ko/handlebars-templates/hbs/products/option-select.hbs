@@ -1,0 +1,25 @@
+<ul class="option_select_list popup">
+	{{#each this.products}}
+		<li data-prod-sn="{{ this.prodSn }}" class="{{#xif this.saleDisplayStatus '==' 'OutOfStock'}} disabled{{/xif}}" >
+			<span class="color_chip">
+				<img alt="" src="{{ this.prodImages.0.imgUrl }}">
+			</span>
+			<span class="option_info">
+				<span class="option_name">{{ this.prodName }}</span>
+				<span class="price">
+					{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+						<small>일시품절</small>
+					{{else}}
+						{{#xif ( calc (availablePrices this.availablePrices 'onlineSalePriceDiscountRate') '+' (availablePrices this.availablePrices 'memberLevelDiscountRate') '+' (availablePrices this.availablePrices 'immedDiscountRate') ) '>' 0}}
+						<em class="discount">{{ calc (availablePrices this.availablePrices 'onlineSalePriceDiscountRate') '+' (availablePrices this.availablePrices 'memberLevelDiscountRate') '+' (availablePrices this.availablePrices 'immedDiscountRate') }}%</em>
+						{{/xif}}
+						<b class="num">{{ numberFormat (availablePrices this.availablePrices 'finalOnlinePrice') }}</b>원
+						{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+							<del>{{ numberFormat (availablePrices this.availablePrices 'beforeOnlineSalePrice') }} 원</del>
+						{{/xif}}
+					{{/xif}}
+				</span>
+			</span>
+		</li>
+	{{/each}}
+</ul>

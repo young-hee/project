@@ -25,12 +25,16 @@
 		{{#xif onlineCnt ">" 0}}
     		<dl class="table_layout">
     			<dt>온라인 주문</dt>
+				<dd>
 				{{#if (or (eq type 'return')(eq type 'exchange'))}}
-					<dd><em>{{ordStatusCheck type ordEx.ordDetailStatusCode}}</em></dd>
+					<em>{{ordStatusCheck type ordEx.ordDetailStatusCode}}</em>
 				{{else}}
-					<dd><em>{{ordStatusCheck type ordEx.ordDetailStatusCode}}</em></dd>
+					<em>{{ordStatusCheck type ordEx.ordDetailStatusCode}}</em>
 				{{/if}}
-
+				{{#xif ordEx.ordDetailStatusCode '===' 'PartialCancel'}}
+					<span class="color_gray2">(부분취소)</span>
+				{{/xif}}
+				</dd>
     		</dl>
     	{{/xif}}
     	{{#xif storeCnt ">" 0}}
@@ -38,7 +42,7 @@
         		<dt>테이크 아웃</dt>
         		<dd><em>주문접수</em></dd>
         		<dd class="align_right">
-        			<button type="button" class="btn_take_out"><img src="@{/images/my/btn_barcode.gif}" alt="테이크아웃바코드 보기"></button>
+        			<button type="button" class="btn_take_out"><img src={{absolutePath '/images/my/btn_barcode.gif'}} alt="테이크아웃바코드 보기"></button>
         		</dd>
         	</dl>
     	{{/xif}}

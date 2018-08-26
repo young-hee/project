@@ -99,6 +99,19 @@ public class CicuemCuAdtInfTcVo {
      * 응답메시지.
      */
     private String rsltMsg;
+
+	/**
+	 * 임직원 사번.
+	 */
+	private String hqEmpId;
+	
+	
+	public String getHqEmpId() {
+		return hqEmpId;
+	}
+	public void setHqEmpId(String hqEmpId) {
+		this.hqEmpId = hqEmpId;
+	}
 	public String getIncsNo() {
 		return incsNo;
 	}

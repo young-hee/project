@@ -57,7 +57,7 @@
 				cancelLabel: options.cancelLabel
 			};
 			options.sizeType = options.sizeType? options.sizeType : 'M';
-			options.containerClass = options.containerClass? 'modal_info ' + options.containerClass : 'modal_info';
+			options.containerClass = options.containerClass? 'modal_info system_alert' + options.containerClass : 'modal_info system_alert';
 			return this.open( options );
 		},
 
@@ -199,6 +199,44 @@
 			return modal;
 		},
 
+		/**
+         * 이벤트 모달 - 출석체크
+         * title이 있는 모달 열기
+         * handlebars template을 간단히 연결할수 있다.
+         * @param   {Object}    options
+         *  - {String}        title             타이틀형식으로 입력할때 사용
+         *  - {String}        contents          contents를 string이나 html로 설정할때 (text center 정렬)
+         *  - {Object}        contents          contents를 handlebars template으로 표출할때 사용
+         *     + {String}    templateKey     Handlebars template key, ex) 'common.paging'
+         *     + {Object}    templateModel   template 에서 사용할 model object
+         *  - {String}        confirmLabel      확인 버튼의 label (확인 버튼이 필요할때 해당 label설정)
+         *  - {String}        cancelLabel       취소 버튼의 label (취소 버튼이 필요할때 해당 label설정)
+         *  - {String}        sizeType          layer size type : "S", "M", "L" (default:M)
+         *  - {String}        containerClass    추가로 들어가야 하는 CSS className 이 필요한경우 설정.
+         *  - {jQueryObject}  returnFocusTarget (default:modal을 열때 클릭한 대상)
+         * @return {ModalCore}
+         * ex) AP.modal.info().addListener( 'modal-before-close', function (e) { console.log(e.closeType, e.data) })
+         *     AP.modal.info().addListener( 'modal-close', function (e) { console.log(e.closeType, e.data) })
+         */
+        attendance: function ( options ) {
+            if ( !_.isObject(options) ) options = {};
+
+            options.templateKey = 'common.modal-attendance-contents';
+            options.templateModel = {
+                title: options.title || '',
+                contents: options.contents,
+                btnConfirm: !!options.confirmLabel,
+                btnCancel: !!options.cancelLabel,
+                confirmLabel: options.confirmLabel,
+                cancelLabel: options.cancelLabel,
+                linkLabel: options.linkLabel
+            };
+            options.sizeType = options.sizeType? options.sizeType : 'M';
+            options.containerClass = options.containerClass? 'layer_attendance ' + options.containerClass : 'layer_attendance';
+            return this.open( options );
+            
+        },
+        
 		/**
 		 * modal 모두 닫기
 		 * @param   {*}         data  리스너에서 전달받을 데이타
@@ -375,6 +413,13 @@
 			this._$btnConfirm.on( 'click', function (e) {
 				e.preventDefault();
 				this._$pop.triggerHandler( 'close', ['confirm'] );
+				
+				//출석체크 레이어 이동
+				if(this._$btnConfirm.hasClass('anchor')){					
+					location.href="#brand_coupon";
+				}else if(this._$btnConfirm.hasClass('link')){
+					location.href="/";
+				}
 			}.bind(this));
 
 			this._$modal.on( 'resetPosition', function (e) {

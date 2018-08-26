@@ -23,6 +23,7 @@ import kr.ap.comm.api.vo.LeaverResultVo;
 import kr.ap.comm.config.interceptor.FragmentPage;
 import kr.ap.comm.config.interceptor.PageTitle;
 import kr.ap.comm.member.vo.MemberSession;
+import kr.ap.comm.support.breadcrumb.BreadCrumb;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
 import kr.ap.comm.support.constants.CookieKey;
@@ -74,6 +75,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * 4. 회원탈퇴
  * 5. 선택약관 동의 변경
  * 6. SNS 계정 연동 관리.
+ * 7. 임직원 인증.
  *
  */
 @Controller
@@ -312,15 +314,15 @@ public class MyViewControllor extends AbstractController {
 	@PageTitle(title = "배송지 관리")
 	public String address(Model model, HttpServletRequest req) {
 
-		// List<ShipAddressInfo> add = memberApi.getShipAddresses(getMemberSn(req));
-		// model.addAttribute("address", add);
+//		List<ShipAddressInfo> add = apApi.getShipAddresses(getMemberSn());
+//		model.addAttribute("address", add);
 		if (isMobileDevice()) {
-			return "my/address-management";
+			return "my/my-address";
 		}
 
 		//PC
 		if (isPcDevice()) {
-			return "my/address-list";
+			return "my/my-delivery";
 		}
 
 		return null;
@@ -345,6 +347,8 @@ public class MyViewControllor extends AbstractController {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
+			System.out.println(data);
 
 			model.addAttribute("address", mapper.readValue(data, ShipAddressInfo.class));
 		} catch (Exception e) {
@@ -625,8 +629,38 @@ public class MyViewControllor extends AbstractController {
 			return "my/member-sns";
 		return null;
 	}
+
+	/**********************************************************************************************
+	 *  7. 임직원 인증
+	 **********************************************************************************************/
+
+
+	@PageTitle(title = "임직원 인증")
+	@GetMapping("/employee")
+	public String employee() {
+		
+		if("Y".equals(getMemberSession().getMember().getEmployeeYn())) {
+			//FIXME 임직원 페이지로 이동.
+			return "redirect:/main";
+		}
+		
+		/**
+		 * Mobile
+		 */
+		if(isMobileDevice()) {
+			return "customer/login.0";
+		}
+
+		/**
+		 * PC
+		 */
+		if(isPcDevice()) {
+			return "customer/login.0";
+		}
+		
+		return null;
+	}
 	
-    
 	//=======================모바일 기능 구현 Method
 
 	private String doLeaverIdM(HttpServletRequest req, String code, String desc, HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -698,6 +732,8 @@ public class MyViewControllor extends AbstractController {
 				Cookie token = CookieUtils.getCookie(request, CookieKey.AUTO_LOGIN);
 				CookieUtils.removeCookie(request, response, CookieKey.AUTO_LOGIN);
 				WebUtils.setSessionAttribute(request, SessionKey.LOGIN_USER, null);
+				WebUtils.setSessionAttribute(request, SessionKey.CART, null);
+				WebUtils.setSessionAttribute(request, SessionKey.ORDER, null);
 				if (memberSession.getMember_sn() != 0) {
 					try {
 						ApLogoutInfo logoutInfo = new ApLogoutInfo();

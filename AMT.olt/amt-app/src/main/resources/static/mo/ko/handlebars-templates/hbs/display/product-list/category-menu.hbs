@@ -1,0 +1,8 @@
+<li><a href="/display/category/{{ this.displayMenuId }}?upperMenuId={{ this.upperMenuId }}" class="on">전체(<span class="count">00</span>)</a></li>
+{{#xif this.submenus.length '>' 0}}
+	{{#each this.submenus}}
+		<li><a href="/display/category/{{ this.displayMenuId }}?upperMenuId={{ ../upperMenuId }}" class="">{{ this.menuTitle }}(<span class="count">00</span>)</a></li>
+	{{/each}}
+{{else}}
+	<li><a href="/display/category/{{ this.displayMenuId }}?upperMenuId={{ this.upperMenuId }}" class="">{{ this.menuTitle }}(<span class="count">00</span>)</a></li>
+{{/xif}}

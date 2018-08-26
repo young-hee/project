@@ -4,10 +4,10 @@
 <div ap:fragment="layout-contents">
 	<div class="ap_contents cs_overview">
 		<!--/* 고객센터 정보 & 바로가기 */-->
-		<div class="section pd_md transparent">
+		<div class="section pd_md transparent cs_info_wrap">
 			<div class="clear cs_info">
 				<dl>
-					<dt>배송, 사이트 문의 fff</dt>
+					<dt>배송, 사이트 문의</dt>
 					<dd>
 						<a href="tel:080-030-5454" class="tel num">080-030-5454</a>
 						<small>(수신자요금부담)</small>
@@ -15,7 +15,7 @@
 							<dt class="fwb">운영시간</dt>
 							<dd>
 								<ul class="list_bullet_dash">
-									<li><span class="fwb">평일 : AM9~ PM5</span><br><small>(주말/공휴일 휴무)</small></li>
+									<li><span class="fwb">평일 : AM9~ PM6</span><br><small>(주말/공휴일 휴무)</small></li>
 									<li><span class="fwb">점심 : PM12~ PM1</span></li>
 								</ul>
 							</dd>
@@ -40,8 +40,8 @@
 				</dl>
 			</div>
 			<div class="clear cs_info">
-				<a href="/cs/inquiry"><i class="ico_inquiry"></i><span>1:1 상담 등록</span></a>
-				<a href="#none"><i class="ico_chat"></i><span>챗봇 상담</span></a>
+				<a href="#none"><i class="ico_inquiry"></i><span class="txt_col_888">1:1 상담등록</span></a>
+				<a href="#none"><i class="ico_chat"></i><span class="txt_col_888">챗봇 상담</span></a>
 			</div>
 		</div>
 		<!--/* 공지사항 & faq 탭 */-->
@@ -58,67 +58,35 @@
 				<!-- tab content -->
 				<div class="tab_cont">
 					<h3 class="sr_only">공지사항</h3>
-					<div class="pd10 align_right"><a href="#none"><span>전체보기</span> <i class="ico_arr2"></i></a></div>
+					<div class="view_btn"><a href="/cs/notice"><span>전체보기</span> <i class="ico_arr2"></i></a></div>
 					<ul class="board_list">
-						<li><a href="#none"><small>[당첨자 발표]</small> 12월 설화수 브랜드위크 '리미티드 구성 제안하기' 이벤트 당첨자 발표 <span class="new">새글</span></a></li>
-						<li><a href="#none"><small>[공지]</small> 12월 설화수 브랜드위크 '리미티드 구성 제안하기' 이벤트 당첨자 발표</a></li>
-						<li><a href="#none"><small>[공지]</small> 12월 설화수 브랜드위크 '리미티드 구성 제안하기' 이벤트 당첨자 발표</a></li>
-						<li><a href="#none"><small>[공지]</small> 12월 설화수 브랜드위크 '리미티드 구성 제안하기' 이벤트 당첨자 발표</a></li>
-						<li><a href="#none"><small>[공지]</small> 12월 설화수 브랜드위크 '리미티드 구성 제안하기' 이벤트 당첨자 발표</a></li>
+						<th:block th:each="n : ${notice.foNoticeList}">
+							<li><a href="javascript:;" th:href="'/cs/noticeView/' + ${n.foNoticeSn}"  th:text="${n.foNoticeTitle}"><small th:text="${n.noticeTypeName}">[당첨자 발표]</small> 12월 설화수 브랜드위크 '리미티드 구성 제안하기' 이벤트 당첨자 발표 </a></li>
+						</th:block>
+						<!--<li><a href="#none"><small>[당첨자 발표]</small> 12월 설화수 브랜드위크 '리미티드 구성 제안하기' 이벤트 당첨자 발표 <span class="new">새글</span></a></li>-->
 					</ul>
 				</div>
 				<div class="tab_cont">
 					<h3 class="sr_only">FAQ</h3>
-					<div class="pd10 align_right"><a href="#none"><span>전체보기</span> <i class="ico_arr2"></i></a></div>
-					<div class="ui_accordion faq" data-open-type="single">
-						<dl>
-							<dt class="on">
-								<span class="title">플러스 멤버십 추천인/피추천인 기프트카드가 발급 안됐어요!</span>
-								<small>플러스 멤버십</small>
-								<button type="button"><i class="ico_down"></i><span class="sr_only">더보기</span></button>
-							</dt>
-							<dd>
-								<div class="cont">
-									<p class="text">안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다. 안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다. 안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다.</p>
-								</div>
-							</dd>
-						</dl>
-						<dl>
-							<dt>
-								<span class="title">월 구매 캐시백 기프트 카드 발급 조건이 뭔가요?</span>
-								<small>사이트 이용</small>
-								<button type="button"><i class="ico_down"></i><span class="sr_only">더보기</span></button>
-							</dt>
-							<dd>
-								<div class="cont">
-									<p class="text">안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다. 안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다. 안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다.</p>
-								</div>
-							</dd>
-						</dl>
-						<dl>
-							<dt>
-								<span class="title">VIP 라운지 신청 자격이 뭔가요?</span>
-								<small>사이트 이용</small>
-								<button type="button"><i class="ico_down"></i><span class="sr_only">더보기</span></button>
-							</dt>
-							<dd>
-								<div class="cont">
-									<p class="text">안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다. 안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다. 안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다.</p>
-								</div>
-							</dd>
-						</dl>
-						<dl>
-							<dt>
-								<span class="title">갑자기 주문취소 문자가 왔어요</span>
-								<small>사이트 이용</small>
-								<button type="button"><i class="ico_down"></i><span class="sr_only">더보기</span></button>
-							</dt>
-							<dd>
-								<div class="cont">
-									<p class="text">안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다. 안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다. 안전한 회원 가입을 위해 회원가입시 본인인증 과정을 거치도록 하고 있습니다.</p>
-								</div>
-							</dd>
-						</dl>
+					<div class="view_btn"><a href="/cs/faq"><span>전체보기</span> <i class="ico_arr2"></i></a></div>
+					<div class="faq_div">
+						<th:block th:each="f : ${faq.faqList}">
+							<dl>
+								<dt class="bod_top">
+									<button type="button">
+										<span class="title" th:text="${f.inquiryText}">플러스 멤버십 추천인/피추천인 기프트카드가 발급 안됐어요!</span>
+									</button>
+									<small th:text="${f.inquiryTypeName}">플러스 멤버십</small>
+								</dt>
+								<dd>
+									<div class="cont">
+										<p class="text">
+											<span class="txt_answer" th:utext="${f.responseBodyText}">A <span class="sr_only">답변</span></span>
+										</p>
+									</div>
+								</dd>
+							</dl>
+						</th:block>
 					</div>
 				</div>
 			</div>
@@ -128,7 +96,31 @@
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
+	<script>
+		//함수 실행
+		$(function(){
+			$(".faq_div").faq();
+		});
 
+		//함수 선언
+		$.fn.faq=function(){
+			return this.each(function(){
+				var $obj = $(this);
+				var $btn = $obj.find("dt button");
+
+				$btn.on("click",onToggle);
+
+				function onToggle(){
+					if(!$(this).parent().next().hasClass("open")){
+						$("dd").removeClass("open"); //모든 창 닫기
+						$(this).parent().next().addClass("open")
+					} else{
+						$(this).parent().next().removeClass("open")
+					};
+				};
+			});
+		}
+	</script>
 </th:block>
 
 </body>

@@ -31,8 +31,8 @@
 			<tbody>
 			<tr th:each="item : ${activityPointInfo.histories}">
 				<td class="pearl_date" th:text="${#dates.format(item.pointHistOccurDt, 'yyyy.MM.dd')}">2018.01.05</td>
-				<td class="pearl_order_number"><a href="javascript:;" th:text="${item.ordNo}">2017012102010101</a></td>
-				<td class="pearl_detail" th:text="${#IntegUtil.codeMan(0, item.pointHistOccurTypeCode)}">SNS연동 진주알</td>
+				<td class="pearl_order_number"><a th:href="'/my/page/order/detail/' + ${item.ordNo}" th:text="${item.ordNo}">2017012102010101</a></td>
+				<td class="pearl_detail" th:text="${#IntegUtil.pearlOccur(0, item.occurName, item.pointHistTypeCode, item.pointHistOccurTypeCode)}">SNS연동 진주알</td>
 				<td class="pearl_type" th:if="${item.pointHistTypeCode == 'Saving'}">적립</td>
 				<td class="pearl_type" th:if="${item.pointHistTypeCode == 'SavingCancel'}">적립취소</td>
 				<td class="pearl_type" th:if="${item.pointHistTypeCode == 'Use'}">사용</td>

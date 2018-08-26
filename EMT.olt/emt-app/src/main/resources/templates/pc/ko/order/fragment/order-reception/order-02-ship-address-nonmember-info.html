@@ -129,6 +129,21 @@
 							<dt><b>연락처</b></dt>
 							<dd id="storeTelnoDisp"></dd>
 						</dl>
+						<input type="hidden" id="cStoreName" name="cStoreName">
+						<input type="hidden" id="cStorePhoneNo" name="cStorePhoneNo">
+						<input type="hidden" id="cStoreHqCode" name="cStoreHqCode">
+						<input type="hidden" id="cStoreCenterCode" name="cStoreCenterCode">
+						<input type="hidden" id="cStoreCenterName" name="cStoreCenterName">
+						<input type="hidden" id="cStoreStoreCode" name="cStoreStoreCode">
+						<input type="hidden" id="cStoreCompany" name="cStoreCompany">
+						<input type="hidden" id="cStoreDockNo" name="cStoreDockNo">
+						<input type="hidden" id="cStoreAddressZipCode" name="cStoreAddressZipCode">
+						<input type="hidden" id="cStoreAddressAddress1" name="cStoreAddressAddress1">
+						<input type="hidden" id="cStoreAddressAddress2" name="cStoreAddressAddress2">
+						<input type="hidden" id="cStoreArrivalAreaCode" name="cStoreArrivalAreaCode">
+						<input type="hidden" id="cStoreArrivalAreaBarcode" name="cStoreArrivalAreaBarcode">
+						<input type="hidden" id="cStoreDongNmCode" name="cStoreDongNmCode">
+						<input type="hidden" id="cStoreArrivalDongNm" name="cStoreArrivalDongNm">
 					</div>
 				</div>
 				<!--/* 받으실분 정보 */-->
@@ -145,11 +160,13 @@
 						<div class="panel_cont ui_table">
 							<dl>
 								<dt><b>이름</b></dt>
-								<dd id="orderNonmemberName">홍길동</dd>
+								<dd id="orderNonmemberName">&nbsp;</dd>
+								<input type="hidden" id="name01" name="cStoreRecipientName">
 							</dl>
 							<dl>
 								<dt><b>연락처</b></dt>
-								<dd id="orderNonmemberMobile">010-0000-0000</dd>
+								<dd id="orderNonmemberMobile">&nbsp;</dd>
+								<input type="hidden" id="phone01" name="cStoreRecipientPhoneNo">
 							</dl>
 						</div>
 					</div>
@@ -159,18 +176,18 @@
 				<legend class="sr_only">받으실분 정보 입력</legend>
 				<div class="ui_table" id="address2_2_01_layer" style="display: none">
 					<dl>
-						<dt><label for="storeRecipientName"><b>이름</b></label></dt>
+						<dt><label for="name02"><b>이름</b></label></dt>
 						<dd>
 							<div class="input_wrap w100p">
-								<input type="text" id="storeRecipientName" name="storeRecipientName" placeholder="이름을 입력해 주세요." required="required" data-msg-required="받으시는 분의 이름을 입력하세요.">
+								<input type="text" id="name02" name="name02" placeholder="이름을 입력해 주세요." required="required" data-msg-required="받으시는 분의 이름을 입력하세요.">
 							</div>
 						</dd>
 					</dl>
 					<dl>
-						<dt><label for="storeRecipientPhoneNo"><b>휴대폰번호</b></label></dt>
+						<dt><label for="phone02"><b>휴대폰번호</b></label></dt>
 						<dd>
 							<div class="input_wrap w100p">
-								<input type="text" id="storeRecipientPhoneNo" name="storeRecipientPhoneNo" placeholder="‘-’없이 숫자만 입력" required="required" data-msg-required="받으시는 분의 휴대폰 번호를 입력하세요.">
+								<input type="text" id="phone02" name="phone02" placeholder="‘-’없이 숫자만 입력" required="required" data-msg-required="받으시는 분의 휴대폰 번호를 입력하세요.">
 							</div>
 							<p class="text_notice light w100p" id="choice02_2_02_layer" style="display: none">배송 물품이 편의점 도착 시, 도착 안내 SMS가 발송됩니다.</p>
 						</dd>
@@ -185,14 +202,15 @@
 		/* 배송정보 선택구분(일반택배/편의점배송) */
 		function shipInfo(shipType){
 			if(shipType == 'SHIP' ) {
-				$('#orderNonmemberName').empty();
-				$('#orderNonmemberMobile').empty();
-
 				$('#delivery1_layer').show();
 				$('#delivery2_layer').hide();
 			} else if(shipType == 'STORE' ) {
-				$('#orderNonmemberName').html($('[name=purchaserName]').val());
-				$('#orderNonmemberMobile').html($('[name=purchaserPhoneNo]').val());
+				if ($('[name=purchaserName]').val() != "") {
+					$('#orderNonmemberName').html($('[name=purchaserName]').val());
+				}
+				if ($('[name=purchaserPhoneNo]').val() != "") {
+					$('#orderNonmemberMobile').html($('[name=purchaserPhoneNo]').val());
+				}
 
 				$('#delivery1_layer').hide();
 				$('#delivery2_layer').show();
@@ -202,22 +220,46 @@
 		/* 추가정보입력 구분선택(주문자와동일/새로입력) */
 		function orderMemberChoice(choiceType){
 			if(choiceType == 'MEMBER' ) {
-				$('#orderNonmemberName').html($('[name=purchaserName]').val());
-				$('#orderNonmemberMobile').html($('[name=purchaserPhoneNo]').val());
+				if ($('[name=purchaserName]').val() != "") {
+					$('#orderNonmemberName').html($('[name=purchaserName]').val());
+				}
+				if ($('[name=purchaserPhoneNo]').val() != "") {
+					$('#orderNonmemberMobile').html($('[name=purchaserPhoneNo]').val());
+				}
 
 				$('#address2_1_layer').show();
 				$('#address2_2_01_layer').hide();
 				$('#address2_2_02_layer').hide();
 			} else if(choiceType == 'NEW' ) {
-				$('#orderNonmemberName').empty();
-				$('#orderNonmemberMobile').empty();
-
 				$('#address2_1_layer').hide();
 				$('#address2_2_01_layer').show();
 				$('#address2_2_02_layer').show();
 			}
+
+			$('#name02').blur(function(){
+				$('#name01').val($(this).val());
+			});
+
+			$('#phone02').blur(function(){
+				$('#phone01').val($(this).val());
+			});
 		}
 
+		//주문자정보 자동 입력
+		$('[name=purchaserName]').on('blur', function(e){
+			if ($(this).val()) {
+				$('#orderNonmemberName').html($(this).val());
+				$('#name01').val($(this).val());
+			}
+		});
+		$('[name=purchaserPhoneNo]').on('blur', function(e){
+			if ($(this).val()) {
+				$('#orderNonmemberMobile').html($(this).val());
+				$('#phone01').html($(this).val());
+			}
+		});
+
+		/* 배송메세지 설정 */
 		$('[name=selectShipMsg]').on('change', function(e){
 			var selectedVal = $(this).val();
 			//console.log("selectedVal : " + selectedVal);

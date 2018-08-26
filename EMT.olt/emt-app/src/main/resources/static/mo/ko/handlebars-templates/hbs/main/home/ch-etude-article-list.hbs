@@ -1,30 +1,36 @@
 {{!--
-	ch.Etude 관련 상품 목록 
+	채널에뛰드 관련 상품 목록 
 --}}
 
-{{#each this.list}}
-	<li>
-		<a href="{{productDetailPath this.onlineProdSn}}">
-			<span class="lazy_load_wrap">
-			{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
-				<div class="item_state out_of_stock">일시품절</div>
-			{{/xif}}
-			{{#xif ../prodListUnitCode '==' 'OnlineProd'}}
-				<img src="" data-src="{{this.onlineProdImages.0.imgUrl}}" alt="" class="lazy_load">
-			{{/xif}}
-			{{#xif ../prodListUnitCode '==' 'Prod'}}
-				<img src="" data-src="{{this.prodImages.0.imgUrl}}" alt="" class="lazy_load">
-			{{/xif}}
-			</span>
-			<span class="item_title">{{this.onlineProdName}}</span>
-				{{#xif ../prodListUnitCode '==' 'Prod'}}
-					<p class="option_name">{{this.products.0.prodName}}</p>
+{{#xif this.totalCount '==' 0}}
+	<div class="panel notice">
+		<i class="ico"></i>
+		<p class="text">채널에뛰드 관련 상품이 존재하지 않습니다.</p>
+	</div>
+{{else}}
+	{{#each this.list}}
+		<li>
+			<a href="{{productDetailPath this.onlineProdSn}}">
+				<span class="lazy_load_wrap">
+				{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+					<div class="item_state out_of_stock">일시품절</div>
 				{{/xif}}
-			<span class="price"><b class="num">{{ numberFormat this.onlineProdPriceSummary.minOnlineSalePrice}}</b> 원</span>
-		</a>
-	</li>
-{{/each}}
-
+				{{#xif ../prodListUnitCode '==' 'OnlineProd'}}
+					<img src="" data-src="{{this.onlineProdImages.0.imgUrl}}" alt="" class="lazy_load">
+				{{/xif}}
+				{{#xif ../prodListUnitCode '==' 'Prod'}}
+					<img src="" data-src="{{this.prodImages.0.imgUrl}}" alt="" class="lazy_load">
+				{{/xif}}
+				</span>
+				<span class="item_title">{{this.onlineProdName}}</span>
+					{{#xif ../prodListUnitCode '==' 'Prod'}}
+						<p class="option_name">{{this.products.0.prodName}}</p>
+					{{/xif}}
+				<span class="price"><b class="num">{{ numberFormat this.onlineProdPriceSummary.minOnlineSalePrice}}</b> 원</span>
+			</a>
+		</li>
+	{{/each}}
+{{/xif}}
 
 	
 

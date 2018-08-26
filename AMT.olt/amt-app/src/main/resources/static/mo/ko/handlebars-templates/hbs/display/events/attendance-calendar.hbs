@@ -24,18 +24,8 @@
 	{{#each this.weeks}}
 		<tr>
 			{{#each this}}
-				<td class="{{#if this.sunday}}sun{{/if}} {{#if this.saturday}}sat{{/if}} {{#if this.today}}today{{/if}} {{#if this.select}}selected{{/if}} {{#if this.disabled}}disabled{{/if}} {{#if this.other}}other{{/if}} {{ this.time }} {{#if this.attendanced10}}day10{{/if}} {{#if this.attendanced30}}day30{{/if}}">
+				<td class="{{#if this.today}}today{{/if}} {{ this.time }}">
 					<span class="date">{{ this.date }}</span>
-					{{#if this.attendanced}}
-						<span class="mark">
-							{{!-- 10일 개근, 30일 개근 --}}
-							{{#xif this.attendanced10 '||' this.attendanced30}}
-								<span class="sr_only">30일개근</span>
-							{{else}}
-								출첵
-							{{/xif}}
-						</span>
-					{{/if}}
 				</td>
 			{{/each}}
 		</tr>

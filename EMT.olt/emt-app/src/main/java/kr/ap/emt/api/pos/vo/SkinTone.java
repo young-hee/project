@@ -4,10 +4,10 @@ import java.util.Date;
 
 public class SkinTone {
 
-	private String storeNm;
-	private Date measureDt;
-	private String skinToneMeasureCode;
-	private String skinToneMeasureNm;
+	private String storeNm;	// 매장명
+	private Date measureDt;	// 측정날짜
+	private String skinToneMeasureCode;	// 측색정보코드
+	private String skinToneMeasureNm;	// 측색정보명
 	public String getStoreNm() {
 		return storeNm;
 	}
@@ -32,6 +32,5 @@ public class SkinTone {
 	public void setSkinToneMeasureNm(String skinToneMeasureNm) {
 		this.skinToneMeasureNm = skinToneMeasureNm;
 	}
-	
-	
+
 }

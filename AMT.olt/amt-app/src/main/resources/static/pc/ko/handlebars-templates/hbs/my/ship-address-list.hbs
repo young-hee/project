@@ -1,0 +1,25 @@
+{{#xif totalLength '>' 0}}
+	{{#each result}}
+		<tr>
+			<td><span class="check_wrap check_only">
+				<input type="checkbox" name="check" id="{{shipAddressSn}}" value="{{shipAddressSn}}" onclick="cbClick(this);"><label for="{{shipAddressSn}}"><span class="sr_only">checkbox만 보일때</span></label></span></td>
+			<td>{{shipAddressName}}<br>
+				<span type="rep" val="{{shipAddressSn}}" class="{{repClass repShipAddressYn}}">{{repText repShipAddressYn}}</span>
+			<td>{{addresseeName.name1}}</td>
+			<td class="align_left"><p>{{addresseeAddress.address1}} {{addresseeAddress.address2}}</p></td>
+			<td>{{phoneNo1.phoneNo}}<br>{{phoneNo2.phoneNo}}</td>
+			<td>
+				<button type="button" class="btn_modify" onclick="showUpdateLayer({{json this}}, {{shipAddressSn}})"><span class="sr_only">수정</span></button>
+				<button type="button" class="btn_del" onclick="deleteAddress({{shipAddressSn}})"><span class="sr_only">삭제</span></button>
+			</td>
+		</tr>
+	{{/each}}
+{{else}}
+	<tr>
+		<td colspan="6">
+			<div class="no_data">
+				<p>내역이 없습니다.</p>
+			</div>
+		</td>
+	</tr>
+{{/xif}}

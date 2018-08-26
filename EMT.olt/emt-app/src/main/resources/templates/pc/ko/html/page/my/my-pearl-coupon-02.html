@@ -1,0 +1,81 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+        	<!-- mypage sitemap -->
+            <th:block ap:replace="~{my/fragment/mypage-sitemap}"/>
+            <!-- //  mypage sitemap -->
+
+        	<!-- page title -->
+            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
+            <!-- // page title -->
+
+            <!-- page contents -->
+            <div class="ap_contents mypage cushion_point_list">
+
+				<div class="user_pearl_total mgt0">
+					<div class="pearl_text">홍길동 님의 현재 진주알</div>
+					<div class="pearl_agg"><strong>100,000</strong> <span>알</span></div>
+				</div>
+
+
+				<div class="coupon_box">
+					<div class="title">
+						<h3>장바구니 할인 쿠폰</h3>
+					</div>
+					<div class="coupon_list">
+						<!-- 결과 없을때 -->
+						<div class="panel notice">
+							<i class="ico"></i>
+							<p class="text font_lg">쿠폰을 준비 중입니다.</p>
+						</div>
+						<!-- 결과 없을때 -->					
+					</div> <!--  // coupon_list -->
+					
+					<div class="title">
+						<h3>무료 배송 쿠폰</h3>
+					</div>
+					<div class="coupon_list">
+						<!-- 결과 없을때 -->
+						<div class="panel notice">
+							<i class="ico"></i>
+							<p class="text font_lg">쿠폰을 준비 중입니다.</p>
+						</div>
+						<!-- 결과 없을때 -->		
+					</div> <!--  // coupon_list -->					
+				</div>
+
+
+				<div class="panel gray mgt40">
+					<div class="panel_cont">
+						<h3 class="h_title sub">유의사항</h3>
+						<br>
+						<ul class="list_bullet_dot">
+							<li>쿠폰 교환 후에는 취소할 수 없습니다.</li>
+							<li>온라인 전용 할인쿠폰 입니다.</li>
+							<li>일부 상품의 경우 쿠폰 적용이 제외됩니다.</li>
+							<li>주문 취소 시 사용한 쿠폰의 유효기간이 만료 된 후에는 재발급되지 않습니다.</li>
+							<li>쿠폰은 교환일로부터 1개월간 사용가능 합니다.</li>
+						</ul>
+					</div>
+				</div>
+
+            </div>
+        	<!-- // page contents -->
+        </div><!-- // #ap_container -->
+
+        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+        <th:block ap:fragment="layout-endpoint">
+            <script>
+				//multiple date picker적용
+				$( '.ui_multiple_date_picker' ).multipleDatePicker({
+					defaultRangeDate: 'all',
+					minDate: moment().subtract( 50, 'years' )
+				}).on( 'multiple-date-picker-change', function (e) {
+					console.log( e.type, e.date );
+				});
+            </script>
+        </th:block>
+</body>
+</html>

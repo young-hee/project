@@ -35,23 +35,30 @@
 				</ul>
 			{{/case}}
 			{{#default break=true}}
-				<ul>
-					<li class="clear"><b>{{payMethodNameBlang}}</b><b>{{currencyFormatDefault (calc beforePayAmt '-' afterPayAmt) '원'}}</b></li>
-					<!-- <li class="align_right line_h_20">{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})<br>
-						{{pgPayEx.creditcardPayTypeCode}}<br>
-						{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS"}}</li> -->
-				</ul>
+				{{#if (ne this.payMethodTypeCode 'Point')}}
+					<ul>
+						<li class="clear"><b>{{payMethodNameBlang}}</b><b>{{currencyFormatDefault (calc beforePayAmt '-' afterPayAmt) '원'}}</b></li>
+						<!-- <li class="align_right line_h_20">{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})<br>
+							{{pgPayEx.creditcardPayTypeCode}}<br>
+							{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS"}}</li> -->
+					</ul>
+				{{/if}}
 			{{/default}}
 		{{/switch}}
 	{{/each}}
 {{else}}
-	<ul>
-    	<li class="clear"><b>예치금/상품권</b><b>{{currencyFormat this.payInfo.deposit}}</b></li>
-    	<li class="clear"><span>예치금</span><span>{{currencyFormat this.payInfo.deposit}}</span></li>
-    </ul>
-    <hr class="div m20 dotted">
 	{{#each this.payInfo.pgList}}
 		{{#switch payMethodCode}}
+			{{#case 'Deposit' break=true}}
+				<ul>
+					<li class="clear"><b>예치금/상품권</b><b>{{currencyFormat this.payAmt}}</b></li>
+					<li class="clear"><span>예치금</span><span>{{currencyFormat this.payAmt}}</span></li>
+					{{#if (ne this.refundAmtSum 0)}}
+						<li class="clear"><span>ㄴ환불</span><span>-{{currencyFormatDefault refundAmtSum '원'}}</span></li>
+					{{/if}}
+				</ul>
+				<hr class="div m20 dotted">
+			{{/case}}
 			{{#case 'virtual-account' break=true}}
 				<ul>
 					<li class="clear"><b>무통장입금({{payMethodNameBlang}})</b><b>{{currencyFormatDefault payAmt '원'}}</b></li>
@@ -71,28 +78,43 @@
 						</em>
 					</span></li>
 				</ul>
+				<hr class="div m20 dotted">
 			{{/case}}
 			{{#case 'mobile-phone-pay' break=true}}
 				<ul>
 					<li class="clear"><b>{{payMethodNameBlang}}</b><b>{{currencyFormatDefault payAmt '원'}}</b></li>
+					{{#if (ne this.refundAmtSum 0)}}
+						<li class="clear"><span>ㄴ환불</span><span>-{{currencyFormatDefault refundAmtSum '원'}}</span></li>
+					{{/if}}
 					<li class="align_right line_h_20">{{pgPayEx.mobilePhoneNo}}<br>
 						{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS"}}</li>
 				</ul>
+				<hr class="div m20 dotted">
 			{{/case}}
 			{{#case 'bank-ac-transfer' break=true}}
 				<ul>
 					<li class="clear"><b>{{payMethodNameBlang}}</b><b>{{currencyFormatDefault payAmt '원'}}</b></li>
+					{{#if (ne this.refundAmtSum 0)}}
+						<li class="clear"><span>ㄴ환불</span><span>-{{currencyFormatDefault refundAmtSum '원'}}</span></li>
+					{{/if}}
 					<li class="align_right line_h_20">{{pgPayEx.bankName}}<br>
 						{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS"}}</li>
 				</ul>
+				<hr class="div m20 dotted">
 			{{/case}}
 			{{#default break=true}}
-				<ul>
-					<li class="clear"><b>{{payMethodNameBlang}}</b><b>{{currencyFormatDefault payAmt '원'}}</b></li>
-					<li class="align_right line_h_20">{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})<br>
-						{{pgPayEx.creditcardPayTypeCode}}<br>
-						{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS"}}</li>
-				</ul>
+				{{#if (ne this.payMethodTypeCode 'Point')}}
+					<ul>
+						<li class="clear"><b>{{payMethodNameBlang}}</b><b>{{currencyFormatDefault payAmt '원'}}</b></li>
+						{{#if (ne this.refundAmtSum 0)}}
+							<li class="clear"><span>ㄴ환불</span><span>-{{currencyFormatDefault refundAmtSum '원'}}</span></li>
+						{{/if}}
+						<li class="align_right line_h_20">{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})<br>
+							{{pgPayEx.creditcardPayTypeCode}}<br>
+							{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS"}}</li>
+					</ul>
+					<hr class="div m20 dotted">
+				{{/if}}
 			{{/default}}
 		{{/switch}}
 	{{/each}}

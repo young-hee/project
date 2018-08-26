@@ -150,7 +150,7 @@ public class ControllerSupport extends AbstractController {
 		memberMap.put("memberSn", memberSn);
 		memberMap.put("phoneNo1", phoneNo1);
 		memberMap.put("phoneNo2", phoneNo2);
-		memberMap.put("cartSn", ms.getCartSn());
+		// memberMap.put("cartSn", ms.getCartSn()); casrtSession 생성 후 사용여부 확인(미사용)
 		return memberMap;
 	}
 

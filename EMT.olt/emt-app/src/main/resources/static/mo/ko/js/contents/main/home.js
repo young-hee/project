@@ -174,7 +174,7 @@
 			AP.lazyLoad.add( $section.find('img.lazy_load') );
 		},
 
-		//Ch.에뛰드
+		//채널에뛰드
 		_setChEtude: function () {
 			var $section = this._$target.find( '.ch_etude' );
 			if ( !$section.length ) return;
@@ -240,7 +240,7 @@
 				 
 				var html = '';
 					html = AP.common.getTemplate( 'main.home.ch-etude-article-list', result.onlineProdList);
-			
+					
 				this._$target.find('.ch_etude .table_layout' ).html( html );
 				
 				AP.lazyLoad.add( $section.find( 'img.lazy_load' ));

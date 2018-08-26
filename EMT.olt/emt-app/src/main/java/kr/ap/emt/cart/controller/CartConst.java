@@ -20,5 +20,9 @@ public class CartConst {
     // M+N증정기준코드(이종일 경우)
     public final static String MN_AWARD_BASE_HIGHEST_PRICE = "HighestPrice";
     public final static String MN_AWARD_BASE_LOWEST_PRICE = "LowestPrice";
-    
+
+	// 판매표시상태 설정(체크박스 제어)
+	public final static String SALE_DISPLAY_STATUS_ONSALE = "OnSale";
+	public final static String SALE_DISPLAY_STATUS_NOTSELECT = "NotSelect";
+
 }

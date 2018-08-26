@@ -1,0 +1,169 @@
+<html ap:decorate="~{layout/layout-contents}">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents ap_cs">
+		<div class="section pd_sm transparent">
+			<fieldset class="board_search">
+				<!--<legend class="sr_only">게시물 검색</legend>-->
+				<!--<div class="section pd_sm transparent">-->
+					<!--<ul class="sort_btn_set col_03">-->
+						<!--<li><span class="check_wrap"><input type="radio" name="faq" id="faq1" value="all" checked><label for="faq1">전체Notice</label></span></li>&lt;!&ndash;/* active : on */&ndash;&gt;-->
+						<!--<th:block th:each="s : ${summary.noticeTypeList}">-->
+							<!--<li><span class="check_wrap"><input type="radio" name="faq" th:id="${s.foNoticeTypeSn}" th:value="${s.foNoticeTypeSn}"><label th:for="${s.foNoticeTypeSn}" th:text="${s.noticeTypeName}"></label></span></li>-->
+						<!--</th:block>-->
+					<!--</ul>-->
+				<!--</div>-->
+				<div class="input_group">
+					<!--<div class="select_wrap">
+						<select name="" title="검색 분류 선택">
+							<option value="">전체</option>
+							<option value="">공지</option>
+							<option value="">뉴스</option>
+							<option value="">이벤트공지</option>
+							<option value="">당첨자발표</option>
+						</select>
+					</div>-->
+			
+					<div class="select_wrap">
+						<span class="select_h48_gray h_30">
+							<select name="select01" title="">
+								<option value="">전체</option>
+								<option value="">2주</option>
+								<option value="">1개월</option>
+								<option value="">3개월</option>
+								<option value="">6개월</option>
+								<option value="">1년</option>
+							</select>
+						</span>
+					</div>
+					<div class="input_wrap">
+						<span class="input_h48_gray h_30"><input type="text" placeholder="검색어를 입력하세요" id="searchText"
+																 name="searchText" onkeypress="return searchKeyPress(event);"></span>
+					</div>
+					<div class="input_wrap">
+						<button type="button" class="btn_h30_search" id="search" name="search">검색</button>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+		<!--/* 공지사항 목록 */-->
+		<div class="section">
+			<div id="noticePaging">
+
+			</div>
+			<button type="button" class="btn_lg_more w100p" id="add"><i class="ico_down"></i><span>더 보기</span></button>
+			<!--<button type="button" class="btn_lg_more w100p"><span>더보기</span><i class="ico_down"></i></button>-->
+		</div>
+		<!--/* 검색 결과가 없을 경우 */-->
+		<!--<div class="section notice">-->
+			<!--&lt;!&ndash;<i class="ico"></i>&ndash;&gt;-->
+			<!--<p class="font_lg">등록된 공지사항이<br> 없습니다.</p>-->
+		<!--</div>-->
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+	<script ap:src="@{/handlebars-templates/compiled/cs/notice-list.js}"></script>
+
+	<script th:inline="javascript">
+		var currentOffset;
+		var currentType;
+		var currentKeyword;
+
+		var pageLimit = 10;
+
+		$(document).ready(function() {
+			// noticeSummary();
+			// importNotice();
+			getNotice('', '', 0);
+		});
+
+		function showNotice(faqData, resultHtml, isReplace) {
+
+			if ('true' == isReplace) {
+				$('#noticePaging').empty();
+			}
+			if (faqData.totalCount === 0) {
+				$('#add').hide();
+			}
+			else {
+				$('#add').show();
+			}
+			var c = (faqData.offset + faqData.limit) > faqData.totalCount ? faqData.totalCount : (faqData.offset + faqData.limit);
+			// $("#add").html("더보기(<em> " + c + "</em> / " + faqData.totalCount + ")");
+			$('#noticePaging').append(resultHtml);
+		}
+
+		function getNotice(keyword, noticeTypeCode, offset, isReplace) {
+
+			if (currentKeyword == keyword && currentType == noticeTypeCode && 'true' == isReplace)
+				return;
+
+			if (keyword == null || keyword == '') {
+				$('#searchText').val("");
+			}
+
+			currentKeyword = keyword;
+			currentType = noticeTypeCode;
+			currentOffset = offset;
+			AP.api.csList({}, {
+				type : 'notice',
+				keyword : currentKeyword,
+				offset : offset,
+				limit : pageLimit,
+				noticeTypeCode : noticeTypeCode,
+				importantNoticeYn : 'N'
+			}).done(function(data) {
+				if (data) {
+					// alert(JSON.stringify(data.data));
+					// getPostNotice(data.data, isReplace);
+					var resultHtml = AP.common.getTemplate('cs.notice-list', {
+						totalLength: data.data.foNoticeList.length,
+						totalLengthLabel: $B.string.numberFormat( data.data.foNoticeList.length ),
+						result: data.data.foNoticeList
+					});
+					showNotice(data.data, resultHtml, isReplace);
+				}
+				//성공
+			}).fail(function(e) {
+				AP.modal.alert(e.responseJSON.errorData.message);
+			}).always(function() {
+				//성공, 실패
+			});
+		}
+
+		function searchKeyPress(e)
+		{
+			// look for window.event in case event isn't passed in
+			e = e || window.event;
+			if (e.keyCode == 13)
+			{
+				document.getElementById('search').click();
+				return false;
+			}
+			return true;
+		}
+
+		$("#noticeSearch").change(function(){
+
+			getNotice('', $(this).val(), 0, 'true')
+		});
+
+		$('#search').on('click', function(e) {
+			var search = $('#searchText').val();
+			// alert(search);
+			if (search != null && search.length > 0)
+				getNotice(search, '', 0, 'true');
+		});
+
+
+	</script>
+
+
+</th:block>
+
+</body>
+</html>

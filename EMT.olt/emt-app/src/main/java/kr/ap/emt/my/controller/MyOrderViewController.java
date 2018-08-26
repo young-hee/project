@@ -222,40 +222,9 @@ public class MyOrderViewController extends AbstractController {
 		return null;
 	}
 
-	protected static final String PARAM_KEY_MEMBER = "Member";			// 회원
-	protected static final String PARAM_KEY_NONMEMBER = "NonMember";	// 비회원
-
 	private MyOrdDTO getOrdInfoDTO(String ordNo) {
 
-
-
-//		return new MyOrdDTO(orderApi.getOrdByOrdNo(ordNo));
-
-//		List<Long> sn = new ArrayList<>();
-//		sn.add(2235L);
-//		sn.add(2239L);
-//		sn.add(2238L);
-//		sn.add(2237L);
-//		sn.add(2236L);
-//
-//		OrdRecept ordRecept = new OrdRecept();
-//		ordRecept.setOrdReceivedChCode(getDisplayChannel());
-////		if(isMember()) {
-//			ordRecept.setMemberSn(getMemberSn());
-//			ordRecept.setPurchaserTypeCode(PARAM_KEY_MEMBER);
-////		}else{
-////			ordRecept.setNonmemberOrdTermsAgreeYn("Y");
-////			ordRecept.setPurchaserTypeCode(PARAM_KEY_NONMEMBER);
-////		}
-//		if(!ObjectUtils.isEmpty(sn) && sn.size() > 0) {
-//			ordRecept.setCartProdSnList(sn);
-//		}
-
-
-
 		return new MyOrdDTO(orderApi.getOrdByOrdNo(ordNo));
-
-//		return new MyOrdDTO(orderApi.ordRecept(794L, ordRecept));
 	}
 
 

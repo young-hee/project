@@ -1,6 +1,6 @@
 <!--/* 배송정보 입력 */-->
 <dl th:if="${apMember != null}">
-	<dt id="openTab">
+	<dt class="on">
 		<span>배송정보 입력</span>
 		<button type="button"><span class="sr_only">닫기</span></button>
 	</dt>
@@ -135,7 +135,7 @@
 								<dd th:text="${shipAddressInfo.phoneNo1.phoneNo}">010-0000-0000</dd>
 							</dl>
 							<input type="hidden" id="addressName" th:value="${shipAddressInfo.addresseeName.name1}">
-							<input type="hidden" id="addressPhoneNo" th:value="${#IntegUtil.hyphenPhoneNumber(shipAddressInfo.phoneNo1.phoneNo)}">
+							<input type="hidden" id="addressPhoneNo" th:value="${shipAddressInfo.phoneNo1.phoneNo}">
 							<input type="hidden" id="addressZipCode" th:value="${shipAddressInfo.addresseeAddress.zipCode}">
 							<input type="hidden" id="addressAddress1" th:value="${shipAddressInfo.addresseeAddress.address1}">
 							<input type="hidden" id="addressAddress2" th:value="${shipAddressInfo.addresseeAddress.address2}">
@@ -314,10 +314,6 @@
 		shipAddressInit();
 
 		function shipAddressInit(){
-			//주문정보 - 이메일 체크
-			if ($('[name=purchaserEmailAddress]').val() == '') {
-				$('#openTab').addClass(' on');
-			}
 
 			var shipAddressList = /*[[${shipAddressList}]]*/ '0';			// 기본배송지
 			var ordShipAddressExList = /*[[${ordShipAddressExList}]]*/ '0';	// 최근배송지
@@ -332,7 +328,6 @@
 			}
 			/* 새로입력 */
 			if(ordShipAddressExList.length == 0 && shipAddressList.length == 0){
-				$('#openTab').addClass(' on');
 				setShipAddress("NEW");
 			}
 		}
@@ -372,11 +367,11 @@
 				$('input[name=email]').attr('value',$('#recipientEmailAddress').val());
 
 				// 배송정보 입력
-				if($('#recipientZipCode').val() == undefined && $('#recipientAddress1').val() == undefined && $('#recipientAddress2').val() == undefined){
-					$('#checkedAddress').empty();
-				}else{
-					$('#checkedAddress').html( '(' + $('#recipientZipCode').val() + ') ' + $('#recipientAddress1').val() + ' ' + $('#recipientAddress2').val() );
-				}
+				// if($('#recipientZipCode').val() == undefined && $('#recipientAddress1').val() == undefined && $('#recipientAddress2').val() == undefined){
+				// 	$('#checkedAddress').empty();
+				// }else{
+				// 	$('#checkedAddress').html( '(' + $('#recipientZipCode').val() + ') ' + $('#recipientAddress1').val() + ' ' + $('#recipientAddress2').val() );
+				// }
 
 				// 배송정보
 				$('input[name=recipientName]').attr('value',$('#recipientName').val());
@@ -412,7 +407,7 @@
 				$('input[name=email]').attr('value','');
 
 				// 배송정보 입력
-				$('#checkedAddress').html( '(' + $('#addressZipCode').val() + ') ' + $('#addressAddress1').val() + ' ' + $('#addressAddress2').val() );
+				// $('#checkedAddress').html( '(' + $('#addressZipCode').val() + ') ' + $('#addressAddress1').val() + ' ' + $('#addressAddress2').val() );
 
 				// 배송정보
 				$('input[name=recipientName]').attr('value',$('#addressName').val());
@@ -448,7 +443,7 @@
 				$('input[name=email]').attr('value', '');
 
 				// 배송정보 입력
-				$('#checkedAddress').empty();
+				// $('#checkedAddress').empty();
 
 				// 배송정보
 				$('input[name=recipientName]').val('');

@@ -189,7 +189,7 @@
 		</div>
 		<!-- /* 기타 바로가기 메뉴 */--><!--/* 20180420 : 명칭명변경, 메뉴삭제, 순서 변경 */-->
 		<ul class="etc_menu" th:if="${#lists.isEmpty(pageConnType) and not #lists.isEmpty(gnbMap)}">
-			<li th:if="${not #lists.isEmpty(gnbMap.get('new'))}"
+			<li th:if="${not #lists.isEmpty(gnbMap.get('new'))}">
 				<a href="#none" th:href="@{/display/new(displayMenuId=new)}" th:text="${gnbMap.get('new').menuTitle}">신상품</a>
 			</li>
 			<li th:if="${not #lists.isEmpty(gnbMap.get('best'))}">
@@ -259,7 +259,7 @@
 		<div class="table_layout aside_footer">
 
 			<span><a href="/cs/customerCenter" class="btn_md_neutral">고객센터</a></span>
-			<span th:if="${#device.isMobileApp()}"><a href="/cs/pinkMembership" class="btn_md_primary">맴버십</a></span>
+			<span th:if="${#device.isMobileWeb()}"><a href="/cs/pinkMembership" class="btn_md_primary">맴버십</a></span>
 			<!--/* app 전용 */-->
 			<span th:if="${#device.isMobileApp()}"><a href="javascript:AP.webview.method('callSetting', { isLogin: AP.LOGIN_USER });" class="btn_md_secondary">설정</a></span>
 
@@ -272,7 +272,7 @@
 <nav class="floating_menu" th:unless="${#device.isMobileApp()}">
 	<ul>
 		<li><a href="#none" class="aside_menu_btn categ"><span>카테고리</span></a></li>
-		<li><a href="/my/page/info/myEtude" class="my"><span>마이에뛰드</span></a></li>
+		<li><a href="" th:href="@{/my/page/info/myEtude}" class="my"><span>마이에뛰드</span></a></li>
 		<li><a href="/main" class="home"><span>홈으로</span></a></li>
 		<li><a href="#none" th:href="@{/display/shopping_history(displayMenuId=shopping_history)}" class="history"><span>히스토리</span></a></li>
 		<li><a href="#none" th:href="@{/display/notification(displayMenuId=notification)}" class="alarm"><span>알림</span><span class="noti" style="display:none;">있음</span></a></li>
@@ -341,7 +341,7 @@
 										</th:block>
 									</th:block>
 								</th:block>
-								<th:block th:if="${#lists.size(memberKeepingCoupons.availCoupons) == 0}">
+								<th:block th:if="${#lists.isEmpty(memberKeepingCoupons)}">
 									<span class="no_coupon">쿠폰이 없습니다.</span>
 								</th:block>
 							</dd>

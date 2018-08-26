@@ -5,6 +5,8 @@
 ;(function ( $ ) {
 	'use strict';
 
+	var depositBalance;
+	
 	var MyDepositManagementList = $B.Class.extend({
 		initialize: function () {
 			this._$target = $( '#ap_container .ap_contents.mypage.deposit-management' );
@@ -72,7 +74,7 @@
 				//보유예치금 세팅
 				this._$target.find('#savedDeposit').html($B.string.numberFormat( result.depositBalance ));
 				this._$target.find('#amount').html($B.string.numberFormat( result.depositBalance <= 300000? result.depositBalance : 300000 ));
-
+				depositBalance = result.depositBalance;
 			}.bind( this )).fail(function (e) {
 				console.log( 'error' );
 			}).always(function (e) {});
@@ -147,7 +149,7 @@
 							});
 						}).fail(function(e) {
 			            	if (e.errorCode == 'ESAL042') {
-			    		    	AP.modal.alert("현재 잔액보다 큰 금액을 입력하셨습니다.");
+			    		    	AP.modal.alert("현재 잔액보다 큰 금액을 입력하셨습니다. " + $B.string.numberFormat(depositBalance) + "원 이하로 입력하세요.");
 			            	} else {
 								AP.modal.alert(e.responseJSON.errorData.message);
 			            	}

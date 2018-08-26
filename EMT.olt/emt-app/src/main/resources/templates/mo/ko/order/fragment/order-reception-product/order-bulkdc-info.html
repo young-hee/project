@@ -1,0 +1,36 @@
+            <!-- 묶음판매상품 -->
+			<div class="cart_item_box">
+				<div class="cart_name_wrap">
+					<img alt="" class="thm_cart_item" th:src="${bulkDc.bulkDcOnlineProdImgUrl}">
+					<div class="cart_table_cell">
+						<div class="cart_item_name" th:text="${bulkDc.bulkDcOnlineProdName}">디어 마이 블루밍 립스 톡 쉬폰</div>
+						<div class="price">
+							<span class="quantity"><th:block th:text="${bulkDc.ordQtySum > 0 ? bulkDc.ordQtySum + '개' : '0개'}">1개</th:block></span> /
+							<strong class="eng"><th:block th:text="${#IntegUtil.toCommaNumber(bulkDc.totalProductSaleAmount)}">2,600</th:block><em>원</em></strong>
+						</div>
+					</div>
+				</div>
+				<div class="cart_item_scroll type3">
+					<!--/* 상품들 */-->
+					<th:block th:if="${#lists.size(bulkDc.ordOnlineProdFoList) > 0}" th:each="ordOnlineProd, iter : ${bulkDc.ordOnlineProdFoList}">
+						<li>
+							<div class="option_name">
+								<th:block th:if="${ordOnlineProd.prodImgUrl != null}"><img class="thm_cart_item" th:src="${ordOnlineProd.prodImgUrl}"></th:block>
+								<th:block th:unless="${ordOnlineProd.prodImgUrl != null}"><img class="thm_cart_item" th:src="${ordOnlineProd.onlineProdImgUrl}"></th:block>
+								<th:block th:text="${ordOnlineProd.onlineProdName}">RD302 말린딸기시럽</th:block>
+							</div>
+							<div class="option_price">
+								<span th:text="${ordOnlineProd.ordQtySum > 0 ? ordOnlineProd.ordQtySum + '개' : '0개'}">1개</span>
+							</div>
+						</li>
+						<div class="cart_item_info">
+							<span class="cart_option_name">
+								<th:block th:if="${ordOnlineProd.prodImgUrl != null}"><img class="cart_option_name_thm" th:src="${ordOnlineProd.prodImgUrl}"></th:block>
+								<th:block th:unless="${ordOnlineProd.prodImgUrl != null}"><img class="cart_option_name_thm" th:src="${ordOnlineProd.onlineProdImgUrl}"></th:block>
+								<th:block th:text="${ordOnlineProd.onlineProdName}">01 바닐라</th:block>
+							</span>
+							<span class="prd_num" th:text="${ordOnlineProd.ordQtySum > 0 ? ordOnlineProd.ordQtySum + '개' : '0개'}">1개</span>
+						</div>
+					</th:block>
+				</div>
+			</div>

@@ -10,7 +10,7 @@
 		//장바구니
 		CART: '/cart/cartList',
 		//바로구매, 비회원구매
-		ORDER: '/주문페이지'
+		ORDER: '/order/reception'
 	};
 
 })( jQuery );

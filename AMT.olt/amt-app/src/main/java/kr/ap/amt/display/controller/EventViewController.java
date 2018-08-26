@@ -272,6 +272,14 @@ public class EventViewController extends AbstractController {
         if (isPcDevice()) {
         	
         }
+        try { 
+	    	
+			RegularEvent regularEvent = regulareventApi.regularEventSummary("VIPLounge ");
+
+			model.addAttribute("regularEvent", regularEvent);
+		 }catch(Exception e){
+			 model.addAttribute("regularEvent", null);
+		 }
         
         PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
         

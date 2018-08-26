@@ -113,7 +113,7 @@ public class CommonViewController extends AbstractController {
     @PageTitle(title = "검색")
     public String search(Model model, String searchWord) {
     	
-    	if(0L != getMemberSn()) {
+    	if(isLoggedIn()) {
   			ShoppingMarkPost body = new ShoppingMarkPost();
   			body.setShoppingMarkTgtCode("SearchWord");
   			body.setDisplayMenuSetId(APConstant.EH_DISPLAY_MENU_SET_ID);

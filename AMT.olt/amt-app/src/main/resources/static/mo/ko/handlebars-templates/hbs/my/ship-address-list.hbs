@@ -1,0 +1,35 @@
+{{#xif this.totalLength '>' 0 }}
+	{{#each this.result }}
+		<dl class="address_info">
+			<dt class="title">
+				<b>{{shipAddressName}}
+					{{#xif repShipAddressYn '===' 'Y'}}
+						<em>(기본배송지)</em>
+					{{/xif}}
+				</b>
+			</dt>
+			<dd>
+				<dl class="ui_table">
+					<dt><b>받는사람</b></dt>
+					<dd>{{addresseeName.name1}}</dd>
+				</dl>
+				<dl class="ui_table address">
+					<dt><b>주소</b></dt>
+					<dd>{{addresseeAddress.address1}} {{addresseeAddress.address2}}</dd>
+				</dl>
+				<dl class="ui_table">
+					<dt><b>연락처</b></dt>
+					<dd>{{phoneNo1.phoneNo}}</dd>
+				</dl>
+				<dl class="ui_table">
+					<dt><b>추가연락처</b></dt>
+					<dd>{{phoneNo2.phoneNo}}</dd>
+				</dl>
+				<div class="btns">
+					<button type="button" onclick="addShip({{json this}})"><i class="ico_edit"></i><span class="sr_only">수정</span></button>
+					<button type="button" onclick="deleteShipAddress({{shipAddressSn}})"><i class="ico_trash_s"></i><span class="sr_only">삭제</span></button>
+				</div>
+			</dd>
+		</dl>
+	{{/each}}
+{{/xif}}

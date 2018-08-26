@@ -26,22 +26,48 @@
 		searchFilterData: null,
 
 		init: function ( options ) {
-			this._productList = new AP.productList({
+			this._productList = new AP.ProductList({
 				$target: this._$productList,
 				displayMenuId: options.displayMenuId
 			});
 			this._productList.load();
+
+			AP.pageTitle.init({
+				displayMenuId: options.displayMenuId,
+				gnbMap: AP.GNBMAP,
+				$target: this._$target.find( '.page_title_area.prd_category' )
+			});
+
+			AP.categoryMenu.init({
+				displayMenuId: options.displayMenuId,
+				gnbMap: AP.GNBMAP,
+				$target: this._$target.find( '.aside_area .category_list' )
+			});
 		},
 
 		/** =============== Private Methods ============== */
-		_setEvent: function () {},
+		_setEvent: function () {
+			AP.categoryMenu.addListener( 'set-category-title', function (e) {
+				if ( this._$target.find( '.recommended_item.slide.recommend' ).length ) {
+					this._$target.find( '.recommended_item.slide.recommend' ).siblings( '.title_result' ).find( 'strong' ).text( e.title + '에서 제안드리는 상품' );
+				}
+				if ( this._$target.find( '.recommended_item.slide.popular' ).length ) {
+					this._$target.find( '.recommended_item.slide.popular' ).siblings( '.title_result' ).find( 'strong' ).text( e.title + '인기상품' );
+				}
+				if ( this._$target.find( '.brandWrap01.slide.popular_brand' ).length ){
+					this._$target.find( '.brandWrap01.slide.popular_brand' ).siblings( '.title_result' ).find( 'strong' ).text( e.title + '인기브랜드' );
+				}
+			}.bind( this ));
+		},
 
 		_initProductSlide: function ( options ) {
-			options.api({}, options.param).done(function ( result ) {
+			options.api( {}, options.param ).done(function ( result ) {
 				result = {
 					list: [1,2,3,4,5,6,7,8,9,10,11,12]
 				};
 
+				options.$slide.siblings( '.loading' ).remove();
+				options.$slide.show();
 				var html = AP.common.getTemplate( options.template, result );
 				options.$slide.find( 'ul.ix-list-items' ).html( html );
 				options.$slide.ixSlideMax();
@@ -51,46 +77,68 @@
 				}.bind( this ));
 			}.bind( this )).fail(function () {}.bind( this ));
 
-			options.$slide.on( 'click', '.like, .cart', function (e) {
+			options.$slide.on( 'click', '.like', function (e) {
 				$( e.currentTarget ).find( 'i' ).toggleClass( 'on' );
+			}.bind( this ));
+			options.$slide.on( 'click', '.cart', function (e) {
+				e.preventDefault();
+				console.log( 'cart' );
 			}.bind( this ));
 		},
 
+		// 제안드리는 상품
 		_setRecommendProduct: function () {
 			if ( this._$target.find( '.recommended_item.slide.recommend' ).length == 0 ) return;
 			this._initProductSlide({
 				api: AP.api.test,
-				param: {},
+				param: {
+					offset: 0,
+					limit: 12
+				},
 				template: 'display.product-list.recommend-item',
 				$slide: this._$target.find( '.recommended_item.slide.recommend' )
 			});
 		},
 
+		// 인기상품
 		_setBestProduct: function () {
 			if ( this._$target.find( '.recommended_item.slide.popular' ).length == 0 ) return;
 			this._initProductSlide({
-				api: AP.api.test,
-				param: {},
+				api: AP.api.flaggedItemList,
+				param: {
+					offset: 0,
+					limit: 12,
+					flags: 'icon_reco_best_24h',
+					displayCate: ''
+				},
 				template: 'display.product-list.recommend-item',
 				$slide: this._$target.find( '.recommended_item.slide.popular' )
 			});
 		},
 
+		// 인기브랜드
 		_setPopularBrand: function () {
 			if ( this._$target.find( '.brandWrap01.slide.popular_brand' ).length == 0 ) return;
 			this._initProductSlide({
 				api: AP.api.test,
-				param: {},
+				param: {
+					offset: 0,
+					limit: 12
+				},
 				template: 'display.product-list.popular-brand-item',
 				$slide: this._$target.find( '.brandWrap01.slide.popular_brand' )
 			});
 		},
 
+		// 구매리뷰 베스트
 		_setReviewBest: function () {
 			if ( this._$target.find( '.bast_review.slide' ).length == 0 ) return;
 			this._initProductSlide({
 				api: AP.api.test,
-				param: {},
+				param: {
+					offset: 0,
+					limit: 12
+				},
 				template: 'display.product-list.best-review-item',
 				$slide: this._$target.find( '.bast_review.slide' )
 			});

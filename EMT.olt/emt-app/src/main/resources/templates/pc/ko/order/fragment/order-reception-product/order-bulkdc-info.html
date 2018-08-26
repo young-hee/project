@@ -1,0 +1,33 @@
+            <!-- 묶음판매상품 -->
+			<div class="item_wrap">
+				<div class="item_info">
+					<div class="item_thumb">
+						<img alt="" th:src="${bulkDc.bulkDcOnlineProdImgUrl}">
+					</div>
+
+					<div class="item_name">
+						<span class="title" th:text="${bulkDc.bulkDcOnlineProdName}">애니 쿠편 올데이 퍼펙트 리필 SPF50+/PA+++</span>
+					</div>
+
+					<div class="price">
+						<span class="strong"><th:block th:text="${bulkDc.ordQtySum > 0 ? bulkDc.ordQtySum + '개' : '0개'}">1개</th:block></span> /
+						<span class="strong"><th:block th:text="${#IntegUtil.toCommaNumber(bulkDc.totalProductSaleAmount)}">2,600</th:block>원</span>
+					</div>
+				</div>
+
+				<ul class="item_option">
+					<!--/* 상품들 */-->
+					<th:block th:if="${#lists.size(bulkDc.ordOnlineProdFoList) > 0}" th:each="ordOnlineProd, iter : ${bulkDc.ordOnlineProdFoList}">
+						<li>
+							<div class="option_name">
+								<th:block th:if="${ordOnlineProd.prodImgUrl != null}"><img class="thm_cart_item" th:src="${ordOnlineProd.prodImgUrl}"></th:block>
+								<th:block th:unless="${ordOnlineProd.prodImgUrl != null}"><img class="thm_cart_item" th:src="${ordOnlineProd.onlineProdImgUrl}"></th:block>
+								<th:block th:text="${ordOnlineProd.onlineProdName}">RD302 말린딸기시럽</th:block>
+							</div>
+							<div class="option_price">
+								<span th:text="${ordOnlineProd.ordQtySum > 0 ? ordOnlineProd.ordQtySum + '개' : '0개'}">1개</span>
+							</div>
+						</li>
+					</th:block>
+				</ul>
+			</div>

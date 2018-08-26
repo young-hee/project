@@ -23,15 +23,15 @@ public class AbstractViewController  extends AbstractController{
 	 * The constant PARAM_KEY_NONMEMBER.
 	 */
 	public static final String PARAM_KEY_NONMEMBER = "nonmember";
-	
-    
+
+
     /**
      * is Member
      *
      * @return
      */
     protected boolean isMember() {
-        return getMemberSn() > 0L;
+        return getMemberSn() != null;
     }
 
     /**
@@ -128,5 +128,5 @@ public class AbstractViewController  extends AbstractController{
         }
         return viewPath.concat(path);
     }
-    
+
 }

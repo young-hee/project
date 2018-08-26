@@ -1,0 +1,130 @@
+<html ap:decorate="~{layout/layout-sub}">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page contents -->
+		<div class="ap_contents">
+
+			<!-- page title -->
+			<th:block ap:replace="~{common/fragment/breadcrumb-only}"/>
+			<!-- // page title -->
+
+			<!-- com_cont -->
+			<div class="ap_com_cont cs_wrap">
+				<!-- aside_area -->
+				<th:block ap:replace="~{cs/fragment/cs-info}"/>
+				<!-- aside_area -->
+
+				<!-- cont_area -->
+				<div class="cont_area">
+
+					<!--/* tab menu wrap */-->
+					<div class="ui_tab">
+						<!--<div class="tab_menu w220">
+								<ul>
+									<li class="on"><a href="#none">공지사항</a></li>
+									<li><a href="#none">FAQ</a></li>
+								</ul>
+							</div>-->
+						<div class="tab_menu_02">
+							<ul>
+								<li><a href="#none">공지사항</a></li>
+								<li class="on"><a href="#none">FAQ</a></li>
+							</ul>
+						</div>
+						<!--/* [S] 내용 */--> 
+						<div class="tab_cont">
+							<h3 class="sr_only">FAQ</h3>
+							<div class="board_box">
+								<!--/* board_menu_area */-->
+								<div class="board_menu_area">
+									<ul>
+										<li class="on"><button type="button" onclick="summaryClick('all')"><span>전체FAQ</span></button></li><!--/* active : on */-->
+										<th:block th:each="s : ${summary.faqList}">
+											<li><button type="button" th:onclick="'javascript:summaryClick(' + ${s.inquiryTypeSn} + ')'"><span th:text="${s.inquiryTypeName}">상품</span></button></li>
+										</th:block>
+									</ul>
+								</div>
+								<!--/* board_toggle */-->
+								<div class="board_toggle">
+									<table>
+										<caption class="sr_only">FAQ</caption>
+										<colgroup>
+											<col width="126">
+											<col width="*">
+										</colgroup>
+										<thead>
+										<tr>
+											<th scope="col">번호</th>
+											<th scope="col">질문</th>
+										</tr>
+										</thead>
+										<tbody id="faqPaging">
+										<!--<tr>&lt;!&ndash; 등록된 게시물이 없을 경우 &ndash;&gt;-->
+											<!--<td colspan="2">-->
+												<!--원하시는 내용을 찾을수가 없어요.<br>다른 검색어로 검색해주시겠어요?-->
+											<!--</td>-->
+										<!--</tr>-->
+										</tbody>
+									</table>
+								</div>
+
+								<!--/* pagination */-->
+								<div class="pagination bg_gray">
+									<a href="#none" class="navi prev">&lt;<span class="sr_only">이전</span></a>
+									<span class="current">1</span>
+									<a href="#none">2</a>
+									<a href="#none">3</a>
+									<a href="#none">4</a>
+									<a href="#none">5</a>
+									<a href="#none">6</a>
+									<a href="#none">7</a>
+									<a href="#none">8</a>
+									<a href="#none">9</a>
+									<a href="#none">10</a>
+									<a href="#none" class="navi next">&gt;<span class="sr_only">다음</span></a>
+								</div>
+								<script type="text/javascript">
+									// 임시 테스트용입니다.
+									$('.board_toggle .answer').hide();
+
+									$('.board_toggle .qna_box button').click(function(e){
+										if ($(this).parent().hasClass('on')){
+											$(this).attr('title','답변 보기').parent().removeClass('on').next('.answer').hide();
+										} else {
+											$(this).parents('.board_toggle').find('.question').removeClass('on').children('button').attr('title','답변 보기').parent().next('.answer').hide();
+											$(this).attr('title','답변 보기 닫기').parent().addClass('on').next('.answer').show();
+										}
+										return false;
+									});
+								</script>
+							</div>
+						</div>
+						<!--/* [E] 내용 */-->
+					</div>
+
+				</div>
+				<!-- // cont_area -->
+
+			</div>
+			<!-- // com_cont -->
+
+		</div>
+		<!-- // page contents -->
+	</div><!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+
+		<script th:inline="javascript">
+
+			function summaryClick(sn) {
+
+			}
+
+		</script>
+
+	</th:block>
+</body>
+</html>

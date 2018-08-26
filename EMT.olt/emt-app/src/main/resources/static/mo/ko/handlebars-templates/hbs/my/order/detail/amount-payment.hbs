@@ -1,18 +1,21 @@
 <div class="panel gray">
-	<dl class="table_layout">
-		<dt>예치금</dt>
-		<dd class="align_right">{{currencyFormatDefault deposit '원'}}</dd>
-	</dl>
+
 
 	{{#each pgList}}
-		<hr class="div dotted">
+
+		{{#xif @index '>' 0}}
+			<hr class="div dotted">
+		{{/xif}}
+		<dl class="table_layout">
+			<dt>{{condition (eq payMethodTypeCode 'Deposit') '예치금' payMethodNameBlang}}</dt>
+			<dd class="align_right">{{currencyFormatDefault payAmt '원'}}
+				{{#xif refundAmtSum '>' 0}}
+					<br>-{{currencyFormatDefault refundAmtSum '원'}}
+				{{/xif}}
+			</dd>
+		</dl>
 
 		{{#xif payMethodCode '===' 'virtual-account'}}
-
-			<dl class="table_layout">
-				<dt><b>무통장입금({{payMethodNameBlang}})</b></dt>
-				<dd class="align_right">{{currencyFormatDefault payAmt '원'}}</dd>
-			</dl>
 			<dl class="table_layout">
 				<dt>입금정보</dt>
 				<dd class="align_right w70p">
@@ -34,30 +37,10 @@
 					<em>입금 미확인</em>
 				{{/xif}}
 				</dd>
-
-			</dl>
-
-		{{/xif}}
-
-		{{#xif payMethodCode '===' 'naverpay'}}
-			<dl class="table_layout">
-				<dt><b>{{payMethodNameBlang}}</b></dt>
-				<dd class="align_right">{{currencyFormatDefault payAmt '원'}}</dd>
-			</dl>
-		{{/xif}}
-
-		{{#xif payMethodCode '===' 'kakaopay'}}
-			<dl class="table_layout">
-				<dt><b>{{payMethodNameBlang}}</b></dt>
-				<dd class="align_right">{{currencyFormatDefault payAmt '원'}}</dd>
 			</dl>
 		{{/xif}}
 
 		{{#xif payMethodCode '===' 'credit-card'}}
-			<dl class="table_layout">
-				<dt><b>{{payMethodNameBlang}}</b></dt>
-				<dd class="align_right">{{currencyFormatDefault payAmt '원'}}</dd>
-			</dl>
 			<dl class="table_layout">
 				<dt>결제정보</dt>
 				<dd class="align_right w70p">{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})<br>
@@ -68,10 +51,6 @@
 
 		{{#xif payMethodCode '===' 'wpay'}}
 			<dl class="table_layout">
-				<dt><b>{{payMethodNameBlang}}</b></dt>
-				<dd class="align_right">{{currencyFormatDefault payAmt '원'}}</dd>
-			</dl>
-			<dl class="table_layout">
 				<dt>결제정보</dt>
 				<dd class="align_right w70p">({{pgPayEx.cardNo}})<br>
 					{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS"}}</dd>
@@ -80,10 +59,6 @@
 
 		{{#xif payMethodCode '===' 'mobile-phone-pay'}}
 			<dl class="table_layout">
-				<dt><b>{{payMethodNameBlang}}</b></dt>
-				<dd class="align_right">{{currencyFormatDefault payAmt '원'}}</dd>
-			</dl>
-			<dl class="table_layout">
 				<dt>결제정보</dt>
 				<dd class="align_right w70p">{{pgPayEx.mobilePhoneNo}}<br>
 					{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS"}}</dd>
@@ -91,10 +66,6 @@
 		{{/xif}}
 
 		{{#xif payMethodCode '===' 'payco'}}
-			<dl class="table_layout">
-				<dt><b>{{payMethodNameBlang}}</b></dt>
-				<dd class="align_right">{{currencyFormatDefault payAmt '원'}}</dd>
-			</dl>
 			<dl class="table_layout">
 				<dt>결제정보</dt>
 				<dd class="align_right w70p">{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})<br>
@@ -105,11 +76,6 @@
 		{{/xif}}
 
 		{{#xif payMethodCode '===' 'bank-ac-transfer'}}
-
-			<dl class="table_layout">
-				<dt><b>{{payMethodNameBlang}}</b></dt>
-				<dd class="align_right">{{currencyFormatDefault payAmt '원'}}</dd>
-			</dl>
 			<dl class="table_layout">
 				<dt>출금정보</dt>
 				<dd class="align_right w70p">
@@ -117,7 +83,6 @@
 					{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS"}}
 				</dd>
 			</dl>
-
 		{{/xif}}
 
 		<!--<dl class="table_layout">-->

@@ -325,8 +325,14 @@
 			}
 		},
 		
+		//상품평 상세 조회
+        getReviewDetail : {path : '/product/getReviewDetail', method : 'GET', data: {
+        		prodReviewSn  : '' //(필수) 상품평일련번호
+			}
+        },
+		
 		// 넷스루 상품조회
-		getReviewList : {path : '/product/getExternalData', method : 'GET', data: {
+		getExternalData : {path : '/product/getExternalData', method : 'GET', data: {
 				dp : null, //필수 DP 아이디
 				pcid : null, //해당 단말(PC/모바일/브라우저 등) 식별
 				uid : null, //해당 접속자 식별 (일반적으로 회원ID)
@@ -342,6 +348,13 @@
 				i_sKwd : null //검색어
 			}
 		},
+
+		/**
+		 * 장바구니(Cart) ***********************************************************
+		 */
+		// 상품등록(일반/묶음) / 장바구니 담기
+		//data = JSON.stringify( {storePickupYn: 'N', membershipExch: 'N', activityPointYn: 'Y', cartProdExPostList: [{prodSn: 95, cartProdQty: 1}]} );
+		addCartProd : { path: '/cart/addCartProd', method: 'POST', contentType: 'application/json' },
 
 		/**
 		 * 이벤트 *************************************************************

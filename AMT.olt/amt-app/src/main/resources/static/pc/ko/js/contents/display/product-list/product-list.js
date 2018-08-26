@@ -20,6 +20,7 @@
 			this._$resultNone = this._$target.find( '.product_none' );
 
 			this._searchFilter = null;
+			this._arrProductItem = [];
 
 			this._isLoading = true;
 			this._isClearPaging = false;
@@ -64,8 +65,21 @@
 				this._$resultNone.show();
 			} else {
 				var html = AP.common.getTemplate( 'display.product-list.item', result );
+				this._$title.find( '.total' ).text( '(' + result.totalCount + ')' );
+
+				if ( this._arrProductItem.length > 0 ) {
+					for ( var i = 0; i < this._arrProductItem.length; ++i ) {
+						this._arrProductItem[i].clear();
+					}
+				}
+
 				this._$list.html( html );
-				this._$title.find( '.total' ).text( result.totalCount );
+				this._$list.find( '.item' ).each(function ( index, target ) {
+					this._arrProductItem.push( new AP.ProductItem({
+						$target: $(target),
+						data: result.list[index]
+					}));
+				}.bind( this ));
 
 				this._$paging.show();
 				if ( this._isClearPaging ) {
@@ -75,34 +89,7 @@
 			}
 		},
 
-		_setEvent: function () {
-			this._$list.on( 'click', '.like, .cart',function (e) {
-				$( e.currentTarget ).find( 'i' ).toggleClass( 'on' );
-			}.bind( this ));
-		},
-
-		_setSort: function () {
-			this._$sort.find( '> a' ).on( 'click', function (e) {
-				e.preventDefault();
-
-				if ( $( e.target ).hasClass( 'on' )) return;
-				$( e.target ).siblings().removeClass( 'on' );
-				$( e.target ).addClass( 'on' );
-
-				var value = $( e.target ).data( 'value' );
-				this._param.prodSort = value;
-				this._isClearPaging = true;
-				this.load();
-			}.bind( this ));
-
-			this._$sortView.on( 'change', function (e) {
-				this._isClearPaging = true;
-				this._param.limit = $( e.target ).val();
-				this.load();
-
-				e.preventDefault();
-			}.bind( this ));
-		},
+		_setEvent: function () {},
 
 		_setPaging: function ( limit, totalCount ) {
 			this._$paging = this._$target.find( '.pagination' );
@@ -127,6 +114,30 @@
 
 			this._$paging.paging( 'clear' ).off( 'paging-change' );
 			this._param.offset = 0;
+		},
+
+		_setSort: function () {
+			this._$sort.find( '> a' ).on( 'click', function (e) {
+				e.preventDefault();
+
+				var $btn = $( e.currentTarget );
+				if ( $btn.hasClass( 'on' )) return;
+				$btn.siblings().removeClass( 'on' );
+				$btn.addClass( 'on' );
+
+				var value = $btn.data( 'value' );
+				this._param.prodSort = value;
+				this._isClearPaging = true;
+				this.load();
+			}.bind( this ));
+
+			this._$sortView.on( 'change', function (e) {
+				this._isClearPaging = true;
+				this._param.limit = $( e.target ).val();
+				this.load();
+
+				e.preventDefault();
+			}.bind( this ));
 		},
 
 		_setFilterData: function ( data ) {
@@ -183,8 +194,26 @@
 				this._isClearPaging = true;
 				this.load();
 			}.bind( this ));
+		},
+
+		/**
+		 * products 안에 품절상이 있는지 체크하여 에러메세지 처리
+		 * @param	{Array}		products
+		 * @returns	{Promise}
+		 */
+		_productsInOutOfStock: function ( products ) {
+			var defer = new $.Deferred();
+
+			if ( _.findWhere(products, {saleDisplayStatus: 'OutOfStock'}) ) {
+				AP.modal.alert( AP.message.IN_OUT_OF_STOCK_PRODUCT );
+				defer.reject();
+			} else {
+				defer.resolve();
+			}
+
+			return defer.promise();
 		}
 	});
 
-	AP.productList = ProductList;
+	AP.ProductList = ProductList;
 })( jQuery );

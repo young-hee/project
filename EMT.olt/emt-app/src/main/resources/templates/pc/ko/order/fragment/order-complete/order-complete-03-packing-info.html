@@ -1,22 +1,24 @@
-<dl th:if="${ordOtfExList != null and #lists.size(ordOtfExList) > 0}">
-	<dt>
-		<span>포장지/포장재</span>
-		<button type="button"><span class="sr_only">닫기</span></button>
-	</dt>
+<th:block th:if="${ordOtfExList != null and #lists.size(ordOtfExList) > 0}">
 	<th:block th:each="ordOtfEx : ${ordOtfExList}">
 		<th:block th:if="${#lists.size(ordOtfEx.ordOtfGiftPackingExList) > 0}">
-			<dd th:each="giftPackingEx : ${ordOtfEx.ordOtfGiftPackingExList}">
-				<div class="cont">
-					<div class="panel bordered gray">
-						<div class="panel_cont ui_table">
-							<dl>
-								<dt><b th:text="${giftPackingEx.giftPackingNameBlang}">포장박스</b></dt>
-								<dd><th:block th:text="${giftPackingEx.giftPackingQty}">1개</th:block></dd>
-							</dl>
+			<dl>
+				<dt>
+					<span>포장/쇼핑백</span>
+					<button type="button"><span class="sr_only">닫기</span></button>
+				</dt>
+				<dd th:each="giftPackingEx : ${ordOtfEx.ordOtfGiftPackingExList}">
+					<div class="cont">
+						<div class="panel bordered gray">
+							<div class="panel_cont ui_table">
+								<dl>
+									<dt><b th:text="${giftPackingEx.giftPackingNameBlang}">포장박스</b></dt>
+									<dd><th:block th:text="${giftPackingEx.giftPackingQty}">1개</th:block></dd>
+								</dl>
+							</div>
 						</div>
 					</div>
-				</div>
-			</dd>
+				</dd>
+			</dl>
 		</th:block>
 	</th:block>
-</dl>
+</th:block>

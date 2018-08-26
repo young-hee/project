@@ -649,7 +649,7 @@ public class MyPointViewController extends AbstractController {
 			return "my/pearl-03";
 		}
 		if(isPcDevice()) {
-			return "my/layer-pearl-gift-01";
+			return "my/my-pearl-coupon";
 		}
 		return null;
 	}
@@ -838,8 +838,13 @@ public class MyPointViewController extends AbstractController {
 		int savePoint = 0;
 		int usingPoint = 0;
 		for (Cushin cushin : listVo.getCushinList()) {
-			if(cushin.getAccumptPoint() != 0) {
+			if(cushin.getAccumptPoint() > 0) {
 				savePoint += cushin.getAccumptPoint();
+			} else {
+				usingPoint += cushin.getAccumptPoint();
+			}
+			if(cushin.getRdmptPoint() > 0) {
+				savePoint += cushin.getRdmptPoint();
 			} else {
 				usingPoint += cushin.getRdmptPoint();
 			}

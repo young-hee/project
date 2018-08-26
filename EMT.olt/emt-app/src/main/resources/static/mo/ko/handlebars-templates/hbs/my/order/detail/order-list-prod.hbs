@@ -1,0 +1,44 @@
+<div class="table_layout">
+	<div>
+		{{#xif prodInfo.imageUrl '!=' null}}
+			<img src="{{prodInfo.imageUrl}}">
+		{{else}}
+			<img src={{absolutePath '/images/cart/no_img.png'}}>
+		{{/xif}}
+	</div>
+	<div>
+		<p class="flag">{{typeName}}</p>
+		<p class="name" id="prodName">
+			<a href="javascript:;" onclick="showDetailView('{{prodType}}', '{{condition (eq claimYn 'Y') info.ordHistNo info.ordNo}}')">
+				{{prodInfo.prodNameRlang}} {{ordCntCheck prodInfo.totalProdCnt}}</a>
+		</p>
+		<p class="font_md"><strong class="num">{{currencyFormat ordAmt 0}}</strong></p>
+		<p class="num"><small>{{dateFormat info.ordReceivedDt "YYYY-MM-DD"}}</small></p>
+	</div>
+	<div>
+	<p>
+		<em>{{ordStatusCheck prodType statusCode}}</em>
+		{{#xif statusCode '===' 'PartialCancel'}}
+			<p class="color_gray2">(부분취소)</p>
+		{{/xif}}
+		</p>
+		{{#if (or (eq prodType "online")(eq prodType "store"))}}
+			{{#ordSwitch statusCode}}
+				{{#ordCase 'a'}}
+					<button type="button" class="btn_sm_bordered" onclick="showDetailView('cancel', {{info.ordNo}})">주문취소</button>
+				{{/ordCase}}
+				{{#ordCase 'b'}}
+					<button type="button" class="btn_sm_bordered" onclick="javascript:location.href='/my/page/orderCancel/first?orderSn={{info.ordSn}}'">배송조회</button>
+					<button type="button" class="btn_sm_neutral">수령확인</button>
+				{{/ordCase}}
+				{{#ordCase 'c'}}
+					<button type="button" class="btn_sm_bordered" onclick="showDetailView('exchange', {{info.ordNo}})">교환신청</button>
+					<button type="button" class="btn_sm_neutral" onclick="showDetailView('return', {{info.ordNo}})">반품신청</button>
+				{{/ordCase}}
+			{{/ordSwitch}}
+		{{/if}}
+		{{#xif prodType "===" "cashReceipts"}}
+		{{else}}
+		{{/xif}}
+	</div>
+</div>

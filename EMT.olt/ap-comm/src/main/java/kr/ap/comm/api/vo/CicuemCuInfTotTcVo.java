@@ -286,6 +286,10 @@ public class CicuemCuInfTotTcVo {
      * 대표카드번호여부.
      */
     private String rprsCardNoYn;
+    /**
+     * 변경요청경로코드.
+     */
+    private String chgChCd;
 
 	private String rnarCdYn;
 	/**
@@ -300,7 +304,6 @@ public class CicuemCuInfTotTcVo {
 	 * 최초접촉거래처
 	 */
 	private String fstCnttPrtnId;
-	
 
 	private List<CicuedCuTncaTcVo> cicuedCuTncaTcVo;
     private CicuemCuAdtInfTcVo cicuemCuAdtInfTcVo;
@@ -948,6 +951,14 @@ public class CicuemCuInfTotTcVo {
 
 	public CicuemCuOptiCsTcVo getCicuemCuOptiTcVo() {
 		return cicuemCuOptiTcVo;
+	}
+
+	public String getChgChCd() {
+		return chgChCd;
+	}
+
+	public void setChgChCd(String chgChCd) {
+		this.chgChCd = chgChCd;
 	}
 	
 }

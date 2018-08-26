@@ -47,4 +47,14 @@ public class SessionKey {
     public static final String PRESENT_NAME = "PRESENT_NAME";
     
     public static final String PRESENT_POINT = "PRESENT_POINT";
+
+	/**
+	 * cart
+	 */
+	public static final String CART = "CART";
+
+	/**
+	 * order
+	 */
+	public static final String ORDER = "ORDER";
 }

@@ -99,40 +99,6 @@
 
 			}.bind( this ));
 
-			// 진주알교환
-			this._$target.on( 'click', '.button_my_coupon_change', function(e) {
-
-				//TODO: my-pearl-gift-01.html 참조
-				$.get('/my/page/pearl/salesCushion', function(data) {
-					var contents = new Object();
-					contents.contents = data;
-
-					var modal = AP.modal.info(contents);
-					var $modalEl = modal.getElement(); //jquery object
-					$(".layer_close").click(function() {
-						modal.close();
-					});
-
-					var $tabBtn = $modalEl.find( '.ui_tab .tab_menu button' ),
-						$tabLi = $modalEl.find( '.ui_tab .tab_menu li' ),
-						$tabs = $modalEl.find( '.tab_cont' );
-
-					var flag = 0;
-
-					$($tabBtn[0]).click(function() {
-						$tabs.css('display','none');
-						$tabLi.removeClass('on');
-						$($tabLi[0]).addClass('on')
-						$($tabs[0]).css('display','block');
-					});
-					$($tabBtn[1]).click(function() {
-						$tabs.css('display','none');
-						$tabLi.removeClass('on');
-						$($tabLi[1]).addClass('on')
-						$($tabs[1]).css('display','block');
-					});
-				});
-			}.bind( this ));
 		}
 	});
 

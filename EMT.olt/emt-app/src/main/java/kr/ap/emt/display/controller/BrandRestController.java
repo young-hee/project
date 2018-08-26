@@ -78,7 +78,12 @@ public class BrandRestController extends AbstractController {
       
         HashMap<String, Object> result = new HashMap<String, Object>();
         
-		StoreResult storeResult = storeApi.getStores(getMemberSn(), requestBrand.getRegularStoreYn(), requestBrand.getFoStoreEventCode(), requestBrand.getKeyword(), requestBrand.getAddressDiv(), requestBrand.getAddressDetailDiv(), requestBrand.getLatitude(), requestBrand.getLogitude(), requestBrand.getRadius(), requestBrand.getOffset(), requestBrand.getLimit(), requestBrand.getSortBy());
+        Long memberSn = null;
+        
+        if("Y".equals(requestBrand.getRegularStoreYn())){
+        	memberSn = getMemberSn(); 
+        }
+		StoreResult storeResult = storeApi.getStores(memberSn, requestBrand.getRegularStoreYn(), requestBrand.getFoStoreEventCode(), requestBrand.getKeyword(), requestBrand.getAddressDiv(), requestBrand.getAddressDetailDiv(), requestBrand.getLatitude(), requestBrand.getLogitude(), requestBrand.getRadius(), requestBrand.getOffset(), requestBrand.getLimit(), requestBrand.getSortBy());
 		result.put("storeResult", storeResult);
 
 		return ResponseEntity.ok(result);
@@ -341,7 +346,7 @@ public class BrandRestController extends AbstractController {
 
 		Long memberSn = getMemberSn();
 
-		if(memberSn != 0L) {
+		if(isLoggedIn()) {
 			storeEventRequesterPost.setMemberYn("Y");
 			storeEventRequesterPost.setMemberSn(memberSn);
 		}

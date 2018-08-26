@@ -1,39 +1,36 @@
 <html ap:decorate="~{layout/default}">
 
 <body>
-        <!-- #ap_container -->
-        <div ap:fragment="layout-contents">
-        	<!-- page title -->
-            <th:block ap:replace="~{common/fragment/contents-page-title}"/>
-            <!-- // page title -->
-            <!-- page contents -->
-            <div class="ap_contents event">
-				<div class="board_view2">
-					<dl class="subj">
-                        <dt
-                        th:text="${winnerDetail.noticeTypeName}"></dt>
-                        <dd th:text="${winnerDetail.foNoticeTitle}"></dd>
-                        <dd class="date" 
-                        th:text="${#dates.format(winnerDetail.noticeStartDt, 'yyyy-MM-dd')}"></dd>
-                    </dl>
-                    <dl class="cont">
-                        <dt class="sr_only">내용</dt>
-                        <dd th:utext="${winnerDetail.foNoticeText}">
-                        </dd>
-                    </dl>
-				</div>
-				<div class="page_btns">
-                    <a href="#none" class="btn_md_neutral"
-                    th:href="@{/display/event_winner?displayMenuId=event_winner}">목록</a>
-                </div>
-            </div>
-        	<!-- // page contents -->
-        </div><!-- // #ap_container -->
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page title -->
+		<th:block ap:replace="~{common/fragment/contents-page-title}" />
+		<!-- // page title -->
+		<!-- page contents -->
+		<div class="ap_contents event">
+			<div class="board_view2">
+				<dl class="subj">
+					<dt th:text="${winnerDetail.noticeTypeName}"></dt>
+					<dd th:text="${winnerDetail.foNoticeTitle}"></dd>
+					<dd class="date" th:text="${#dates.format(winnerDetail.noticeStartDt, 'yyyy-MM-dd')}"></dd>
+				</dl>
+				<dl class="cont">
+					<dt class="sr_only">내용</dt>
+					<dd th:utext="${winnerDetail.foNoticeText}"></dd>
+				</dl>
+			</div>
+			<div class="page_btns">
+				<a href="#none" class="btn_md_neutral" th:href="@{/display/event_winner?displayMenuId=event_winner}">목록</a>
+			</div>
+		</div>
+		<!-- // page contents -->
+	</div>
+	<!-- // #ap_container -->
 
-        <!--/* 하단 js등을 실행하는 마지막 영역 */-->
-        <th:block ap:fragment="layout-endpoint">
-			<script>
-			</script>
-        </th:block>
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+	<script>
+	</script>
+	</th:block>
 </body>
 </html>

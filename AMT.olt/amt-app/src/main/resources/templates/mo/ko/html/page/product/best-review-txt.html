@@ -1,4 +1,4 @@
-<html ap:decorate="~{layout/layout-title-only}">
+<html ap:decorate="~{layout/layout-common}">
 <body>
 <!-- #ap_container -->
 <div ap:fragment="layout-contents">
@@ -97,28 +97,6 @@
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
-	<script>
-		$( '.slide' ).each( function () {
-			var $slide = $( this );
-
-			$slide.ixSlideMax();
-
-			$( window ).on( 'resize', function (e) {
-				$slide.ixSlideMax( 'resize' );
-			});
-		});
-
-		$(".review_pos_wrap .btn_review_more .read_more").click(function(){
-			$(this).parent().parent(".review_pos_wrap").addClass("open");
-		
-		});
-		$(".review_pos_wrap .btn_review_more .read_more_close").click(function(){
-			
-			$(this).parent().parent(".review_pos_wrap").removeClass("open");
-		
-		});
-
-	</script>
 </th:block>
 
 </body>

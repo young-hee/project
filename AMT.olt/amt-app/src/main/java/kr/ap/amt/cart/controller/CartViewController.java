@@ -6,29 +6,20 @@
  */
 package kr.ap.amt.cart.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import kr.ap.comm.member.vo.OrdCartInfo;
-import net.g1project.ecp.api.exception.ApiException;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
+import kr.ap.comm.cart.CartSession;
 import kr.ap.comm.config.interceptor.PageTitle;
-import kr.ap.comm.member.vo.MemberSession;
 import net.g1project.ecp.api.model.offlinestore.store.ProdInvtEx;
 import net.g1project.ecp.api.model.offlinestore.store.StoreResult;
 import net.g1project.ecp.api.model.offlinestore.store.StoresInvtSearchInfo;
-import net.g1project.ecp.api.model.sales.cart.CartEx;
-import net.g1project.ecp.api.model.sales.cart.CartMemberMembershipEx;
-import net.g1project.ecp.api.model.sales.cart.CartOnlineProdEx;
-import net.g1project.ecp.api.model.sales.cart.CartProdEx;
-import net.g1project.ecp.api.model.sales.cart.CartPromoEx;
-import net.g1project.ecp.api.model.sales.cart.CartSnResult;
+import net.g1project.ecp.api.model.sales.cart.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/cart")
@@ -46,7 +37,7 @@ public class CartViewController extends CartBaseController{
 	public String cartList(Model model) {
 
 		/* 세션 세팅 */
-		MemberSession memberSession = getMemberSession();
+		CartSession cartSession = getCartSession();
 
 		/* 카트정보 세팅*/
 		if(getMemberSn() > 0L){
@@ -56,38 +47,38 @@ public class CartViewController extends CartBaseController{
 
 			/* 테이크아웃 매장정보 */
 			makeSelectStore(cartEx, model, getMemberSn());
-
-			/* 뷰티포인트 정보 */
-			CartMemberMembershipEx bpCartMemberMembershipEx = null;
-			if(cartEx.getCartMemberEx().getMemberMembershipExList() != null){
-				for(CartMemberMembershipEx cartMemberMembershipEx: cartEx.getCartMemberEx().getMemberMembershipExList()){
-					if("BP".equals(cartMemberMembershipEx.getMembershipServiceCode())){
-						bpCartMemberMembershipEx = cartMemberMembershipEx;
-						break;
-					}
-				}
-			}
+			
 			model.addAttribute("memberSn", getMemberSn());
-			model.addAttribute("bpCartMemberMembershipEx", bpCartMemberMembershipEx);
 		}
 		else{
 			// 비회원
-			if (getMemberSession().getCartSn() == 0L) {
+			if (cartSession.getCartSn() == 0L) {
 				CartSnResult cartSnResult = cartApi.createNonmemberCart();
-				cartEx = getCart(cartSnResult.getCartSn());
+				//cartEx = getCart(cartSnResult.getCartSn());
+				// 테스트 카트
+				cartEx = getCart((long)1476);	// test
+//				cartEx = getCart((long)1420);	//일반상품
+//				cartEx = getCart((long)1424);	//묶음판매
+//				cartEx = getCart((long)1425);	//뷰티포인트 전용상품
+//				cartEx = getCart((long)1426);	//M+N 프로모션
+//				cartEx = getCart((long)1427);	//온라인상품에 사은품
+//				cartEx = getCart((long)1428);	//단위상품에 사은품
 			}
 			else{
-				cartEx = getCart(getMemberSession().getCartSn());
+				cartEx = getCart(cartSession.getCartSn());
 			}
 			model.addAttribute("memberSn", (long)0);
 		}
+		
+		
 
 		model.addAttribute("cartEx", cartEx);
+		model.addAttribute("emptyCartViewBrand", showBrandSelect());
 
 		/* 재계산을 위하여 최종 cartEx를 넣어 놓음 */
-		memberSession.setCartSn(cartEx.getCartSn());
-		memberSession.setCartEx(cartEx);
-		setMemberSession(memberSession);
+		cartSession.setCartSn(cartEx.getCartSn());
+		cartSession.setCartEx(cartEx);
+		setCartSession(cartSession);
 
 		// Mobile
 		if (isMobileDevice()) {

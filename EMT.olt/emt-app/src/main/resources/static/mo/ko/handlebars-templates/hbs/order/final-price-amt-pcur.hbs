@@ -1,0 +1,201 @@
+<dt id="amtPriceTab">
+	<div class="title clear">
+		<b>최종 결제금액</b>
+		<span class="price">{{currencyFormatDefault ordHistEx.finalPamtPcur '원'}}</span>
+		<input type="hidden" name="finalPamtPcurPrice" value="{{ordHistEx.finalPamtPcur}}"/>
+	</div>
+	<button type="button"><span class="sr_only">더보기</span></button>
+</dt>
+<dd class="panel">
+	<div class="payment_details">
+		<div class="inner_box">
+			<p class="total clear">
+				<strong>주문금액</strong>
+				<b><strong class="num" >{{getAmtMapPrice ordAmtMap 'Prod' '원'}}</strong></b>
+			</p>
+			<ul>
+				<li class="clear">
+					{{#if (checkAmtMapPrice ordAmtMap 'onlineShipProdSum')}}
+						<span>온라인 상품(<em>{{getCntMap ordCntMap 'shipOrdOnlineProdCnt'}}</em>개)</span>
+						<span><span class="num">{{getAmtMapPrice ordAmtMap 'onlineShipProdSum' '원'}}</span></span>
+					{{/if}}
+					{{#if isApMember}}
+						{{#if (checkAmtMapPrice ordAmtMap 'MembershipExch')}}
+							<span>뷰티포인트 상품(<em>{{getCntMap ordCntMap 'membershipExchCnt'}}</em>개)</span>
+							<span><span class="num">{{getAmtMapPrice ordAmtMap 'MembershipExch' '원'}}</span></span>
+						{{/if}}
+						{{#if (checkAmtMapPrice ordAmtMap 'ActivityPointExch')}}
+							<span>뷰티포인트 상품(<em>{{getCntMap ordCntMap 'activityPointExchCnt'}}</em>개)</span>
+							<span><span class="num">{{getAmtMapPrice ordAmtMap 'ActivityPointExch' '원'}}</span></span>
+						{{/if}}
+					{{/if}}
+					{{#if (checkAmtMapPrice ordAmtMap 'StorePickupProd')}}
+						<span>뷰티포인트 상품(<em>{{getCntMap ordCntMap 'storeOrdOnlineProdSumCnt'}}</em>개)</span>
+						<span><span class="num">{{getAmtMapPrice ordAmtMap 'StorePickupProd' '원'}}</span></span>
+					{{/if}}
+				</li>
+			</ul>
+		</div>
+
+		{{#if (checkAmtMapPrice ordAmtMap 'ShipUnitPacking')}}
+			<div class="inner_box">
+				<p class="total clear">
+					<strong>포장재</strong>
+					<b><strong class="num">{{getAmtMapPrice ordAmtMap 'ShipUnitPacking' '원'}}</strong>원</b><!--id="totalGiftPackingAmtBcur"-->
+				</p>
+			</div>
+		{{/if}}
+
+		{{#if (checkAmtMapPrice ordAmtMap 'CaclDefaultShipFee')}}
+			<div class="inner_box">
+				<p class="total clear">
+					<strong>배송비</strong>
+					<b><strong class="num">{{getAmtMapPrice ordAmtMap 'CaclDefaultShipFee' '원'}}</strong>원</b>
+				</p>
+			</div>
+		{{/if}}
+
+		<!-- /* 활인 */-->
+		{{#if (checkAmtMapPrice ordAmtMap 'totalOrdDcPriceSum')}}
+			<hr class="icon_minus">
+			<div class="inner_box">
+				<p class="total clear">
+					<strong>총 할인</strong>
+					<b><strong class="num">{{#if (checkAmtMapPrice ordAmtMap 'totalOrdDcPriceSum')}}-{{/if}}{{getAmtMapPrice ordAmtMap 'totalOrdDcPriceSum' '원'}}</strong></b>
+				</p>
+				<ul>
+					{{#if (checkAmtMapPrice ordAmtMap 'OnlineProdPromoDc')}}
+						<li class="clear">
+							<span>상품프로모션할인</span>
+							<span><span class="num">{{getAmtMapPrice ordAmtMap 'OnlineProdPromoDc' '원'}}</span></span>
+						</li>
+					{{/if}}
+					{{#if isApMember}}
+						{{#if (checkAmtMapPrice ordAmtMap 'OnlineMemberPromoDc')}}
+							<li class="clear">
+								<span>온라인회원프로모션할인</span>
+								<span><span class="num">{{getAmtMapPrice ordAmtMap 'OnlineMemberPromoDc' '원'}}</span></span>
+							</li>
+						{{/if}}
+						{{#if (checkAmtMapPrice ordAmtMap 'MemberDcBenefit')}}
+							<li class="clear">
+								<span>회원혜택할인</span>
+								<span><span class="num">{{getAmtMapPrice ordAmtMap 'MemberDcBenefit' '원'}}</span></span>
+							</li>
+						{{/if}}
+					{{/if}}
+					{{#if (checkAmtMapPrice ordAmtMap 'ImmedDcCouponPromo')}}
+						<li class="clear">
+							<span>즉시할인쿠폰프로모션</span>
+							<span><span class="num">{{getAmtMapPrice ordAmtMap 'ImmedDcCouponPromo' '원'}}</span></span>
+						</li>
+					{{/if}}
+					{{#if (checkAmtMapPrice ordAmtMap 'MPlusNPromoDc')}}
+						<li class="clear">
+							<span>M+N할인쿠폰프로모션</span>
+							<span><span class="num">{{getAmtMapPrice ordAmtMap 'MPlusNPromoDc' '원'}}</span></span>
+						</li>
+					{{/if}}
+					{{#if (checkAmtMapPrice ordAmtMap 'SameTimePurPromoDc')}}
+						<li class="clear">
+							<span>동시구매쿠폰프로모션</span>
+							<span><span class="num">{{getAmtMapPrice ordAmtMap 'SameTimePurPromoDc' '원'}}</span></span>
+						</li>
+					{{/if}}
+					{{#if (checkAmtMapPrice ordAmtMap 'OrdUnitPromoDc')}}
+						<li class="clear">
+							<span>주문프로모션할인</span>
+							<span><span class="num">{{getAmtMapPrice ordAmtMap 'OrdUnitPromoDc' '원'}}</span></span>
+						</li>
+					{{/if}}
+					{{#if isApMember}}
+						{{#if (checkAmtMapPrice ordAmtMap 'BeautyPointExchUse')}}
+							<li class="clear">
+								<span>뷰티포인트 교환사용</span>
+								<span><span class="num">{{getAmtMapPrice ordAmtMap 'BeautyPointExchUse' 'P'}}</span></span>
+							</li>
+						{{/if}}
+						{{#if (checkAmtMapPrice ordAmtMap 'CushionPointUse')}}
+							<li class="clear">
+								<span>쿠션포인트 사용</span>
+								<span><span class="num">{{getAmtMapPrice ordAmtMap 'CushionPointUse' 'P'}}</span></span>
+							</li>
+						{{/if}}
+						{{#if (checkAmtMapPrice ordAmtMap 'ActivityPointExch')}}
+							<li class="clear">
+								<span>진주알 교환</span>
+								<span><span class="num">{{getAmtMapPrice ordAmtMap 'ActivityPointExch' '알'}}</span></span>
+							</li>
+						{{/if}}
+					{{/if}}
+					{{#if (checkAmtMapPrice ordAmtMap 'ProdUnitCouponDc')}}
+						<li class="clear">
+							<span>상품쿠폰할인</span>
+							<span><span class="num">{{getAmtMapPrice ordAmtMap 'ProdUnitCouponDc' '원'}}</span></span>
+						</li>
+					{{/if}}
+					{{#if (checkAmtMapPrice ordAmtMap 'MPlusNCouponDc')}}
+						<li class="clear">
+							<span>M+N쿠폰할인</span>
+							<span><span class="num">{{getAmtMapPrice ordAmtMap 'MPlusNCouponDc' '원'}}</span></span>
+						</li>
+					{{/if}}
+					{{#if (checkAmtMapPrice ordAmtMap 'Buy1GetCouponDc')}}
+						<li class="clear">
+							<span>Buy1Get쿠폰할인</span>
+							<span><span class="num">{{getAmtMapPrice ordAmtMap 'Buy1GetCouponDc' '원'}}</span></span>
+						</li>
+					{{/if}}
+					{{#if (checkAmtMapPrice ordAmtMap 'OrdUnitCouponDc')}}
+						<li class="clear">
+							<span>주문쿠폰할인</span>
+							<span><span class="num">{{getAmtMapPrice ordAmtMap 'OrdUnitCouponDc' '원'}}</span></span>
+						</li>
+					{{/if}}
+					{{#if (checkAmtMapPrice ordAmtMap 'ShipFeePromoDc')}}
+						<li class="clear">
+							<span>배송비할인</span>
+							<span><span class="num">{{getAmtMapPrice ordAmtMap 'ShipFeePromoDc' '원'}}</span></span>
+						</li>
+					{{/if}}
+				</ul>
+			</div>
+		{{/if}}
+		<!--/* 회원일 경우 */-->
+		{{#if isApMember}}
+			<div class="inner_box">
+				<div class="panel gray mgt15">
+					<p class="total clear">
+						<strong>결제 후 포인트 적립</strong>
+						<b><strong class="num">{{getAmtMapPrice ordAmtMap 'totalBeautyPointSaveSum' 'P'}}</strong></b>
+					</p>
+					<ul>
+						<li class="clear">
+							<div>뷰티 포인트 적립
+								<div class="ui_tooltip take_out">
+									<button type="button" class="btn_tooltip">툴팁보기</button>
+									<span class="arr"></span>
+									<div class="layer_tooltip">
+										<dl>
+											<dt>뷰티포인트 적립 안내</dt>
+											<dd>
+												<ul class="list_bullet_dot">
+													<li>아모레퍼시픽 뷰티포인트 통합회원은 에뛰드 회원등급에 관계없이 결제금액(할인 후)의 ‘기본 3% + 우대 최대 2%’가 추가 적립됩니다.</li>
+													<li>뷰티포인트 적립 기준금액은 [최종결제금액-뷰티포인트 적립 제외상품 금액-포장서비스-배송비]로 계산된 금액입니다.</li>
+													<li>일부 구매 상품 중 ‘뷰티포인트 적립 제외 상품’이 있을 경우, 뷰티 포인트가 적립되지 않습니다.</li>
+													<li>테이크아웃 주문에 대한 뷰티포인트 적립은 매장에서 확인 가능합니다.</li> <!-- /* 20180717:수정 */ -->
+												</ul>
+												<button type="button" class="ui_close sm"><span class="sr_only">툴팁 닫기</span></button>
+											</dd>
+										</dl>
+									</div>
+								</div>
+							</div>
+							<span><span class="num">{{getAmtMapPrice ordAmtMap 'totalBeautyPointSaveSum' 'P'}}</span></span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		{{/if}}
+	</div>
+</dd>

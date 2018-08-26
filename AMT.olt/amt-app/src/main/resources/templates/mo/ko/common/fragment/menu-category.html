@@ -31,8 +31,8 @@
 			<dl>
 				<dt><a href="/my/page/info/beautyPoint"><span>뷰티포인트</span> <i class="ico_arr"></i></a></dt>
 				<dd>
-					<!-- <strong class="num" th:text="${#IntegUtil.toCommaNumber(point.rmnPt)}"><em>3,306</em> P</strong> -->
-					<strong class="num"><em>3,306</em> P</strong>
+					<strong class="num" th:text="${#IntegUtil.toCommaNumber(session.LOGIN_USER.member.remainBeautyPoint)}"><em>3,306</em> P</strong>
+					<!-- <strong class="num"><em>3,306</em> P</strong> -->
 				</dd>
 			</dl>
 		</div>
@@ -90,7 +90,7 @@
 						<div th:id="|#depth${cate2.displayMenuId}|" style="display: none"  th:if="${rowNum == cateIndex2.index / 4}">
 							<ul class="category_list">
 							<th:block th:each="subCate, subCateIndex : ${cate2.submenus}">
-								<li><a href="javascript:;" th:text="${subCate.menuTitle}">전체(360)</a></li>
+								<li><a th:href="@{'/display/category/'+ ${subCate.displayMenuId}(upperMenuId=${cate.displayMenuId})}" th:text="${subCate.menuTitle}">전체(360)</a></li>
 							</th:block>
 							</ul>
 						</div>

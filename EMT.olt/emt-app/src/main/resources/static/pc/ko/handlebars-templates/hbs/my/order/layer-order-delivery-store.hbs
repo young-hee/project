@@ -4,24 +4,21 @@
 		<div class="map_area"></div>
 		<div class="info">
 			<dl>
-				<dt>명동 FSS점(플래그십스토어)</dt>
-				<dd><span class="color_gray">서울 중구 명동 1가 64-2</span><br>02-3789-5463</dd>
+				<dt>{{this.data.storeName}}</dt>
+				<dd><span class="color_gray">{{this.data.address.address1}}</span><br>{{phoneNumberFormat this.data.phoneNo1.phoneNo}}</dd>
 			</dl>
 		</div>
 	</div>
 	<div class="slide" data-ix-options="view-length:1;">
 		<div class="ix-list-viewport">
 			<ul class="ix-list-items">
-				<li class="ix-list-item">
-					<a href="#none">
-						<img src="/images/dummy/factory_store_01.jpg" alt="COLOR FACTORY 단 하나뿐인 컬러를 만들어 주는 컬러 팩토리">
-					</a>
-				</li>
-				<li class="ix-list-item">
-					<a href="#none">
-						<img src="/images/dummy/factory_store_01.jpg" alt="COLOR FACTORY 단 하나뿐인 컬러를 만들어 주는 컬러 팩토리">
-					</a>
-				</li>
+				{{#each storeImgUrlList}}
+					<li class="ix-list-item">
+						<a href="#none">
+							<img src="{{this}}" alt="COLOR FACTORY 단 하나뿐인 컬러를 만들어 주는 컬러 팩토리">
+						</a>
+					</li>
+				{{/each}}
 			</ul>
 		</div>
 		<div class="ix-controller round_box">

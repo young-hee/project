@@ -1,0 +1,75 @@
+<html ap:decorate="~{layout/layout-item-only}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents cart order_complete">
+		<div class="panel order_cmplt_info">
+			<h3 class="h_title"><strong>주문이 완료되었습니다.</strong></h3>
+			<div class="order_number_wrap">주문번호 : <em class="num" th:text="${ordEx.ordNo}">201711179727881</em></div>
+			<div class="img_order_complete"><img ap:src="@{/images/cart/img_order_complete.png}" alt="" class=""></div>
+			<div class="h_title align_center lh">결제 완료 이후에 주문 및 배송에 관한 확인은<br><strong class="font_md">마이 에뛰드 > 배송조회</strong>에서 확인하세요.</div>
+			<div class="panel gray mgt20">
+				<ul class="list_bullet_dot">
+					<li>기타 주문 상품의 교환/반품/환불에 대한 신청이나 문의는 고객센터 이하 1:1 문의 메뉴, 또는 주문 조회 리스트 페이지를 통해 처리가 가능합니다.</li>
+					<li>주문접수 이후에는 상품 변경이 불가 합니다. 부득이 상품 변경이 필요하신 경우에는 해당 주문건을 취소하신 후에 다시 주문해 주시기 바랍니다.</li>
+				</ul>
+			</div>
+		</div>
+		<div class="ui_accordion" data-open-type="single">
+			<!--주문상품확인-->
+			<th:block ap:replace="~{order/fragment/order-complete/order-complete-01-product-info}"/>
+			<!--사은품 확인-->
+			<!--<th:block ap:replace="~{order/fragment/order-complete/order-complete-02-freegift-info}"/>-->
+			<!--배송정보입력-->
+			<th:block ap:replace="~{order/fragment/order-complete/order-complete-03-ship-address-info}"/>
+			<!--포장/쇼핑백 추가신청-->
+			<th:block ap:replace="~{order/fragment/order-complete/order-complete-04-packing-info}"/>
+			<!--결제수단 선택-->
+			<th:block ap:replace="~{order/fragment/order-complete/order-complete-05-pay-method-info}"/>
+			<!--최종 결제금액-->
+			<th:block ap:replace="~{order/fragment/order-complete/order-complete-06-final-pay-amount-info}"/>
+		</div>
+		<div class="panel btns">
+			<div class="page_btns">
+				<button class="btn_md_bordered" type="button" id="b_myOrder" onclick="javascript:location.href='/my/page/onlineOrderShipping'">배송/주문조회</button>
+				<button class="btn_md_primary" type="button" id="b_main" onclick="javascript:location.href='/main'">계속 쇼핑하기</button>
+			</div>
+		</div>
+	</div>
+	<!-- // page contents -->
+</div>
+<!-- // #ap_container -->
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script th:inline="javascript">
+	$( document ).ready(function() {
+		init();
+	});
+	function init() {
+		var ordOnlineProdList = /*[[${#lists.size(shippingOrdOnlineProdList)}]]*/ '0';							// 온라인상품 카운트
+		var storeOrdOnlineProdList = /*[[${#lists.size(storePickupOrdOnlineProdList)}]]*/ '0';					// 테이크아웃상품 카운트
+		var ordHistProdCnt = ordOnlineProdList > 0 ? $("input[name=ordHistProdCnt]").length : 0;				// 온라인 단위상품 카운트
+		var storeOrdHistProdCnt = storeOrdOnlineProdList > 0 ? $("input[name=storeOrdHistProdCnt]").length : 0;	// 테이크아웃 단위상품 카운트
+		var memberSn = /*[[${memberSn}]]*/ '0'; // 회원키
+		if(memberSn > 0){
+			// 주문상품 확인 수량
+			$("#totalOrdOnlineProdCnt").html(parseInt(ordHistProdCnt) + parseInt(storeOrdHistProdCnt));
+			// 온라인쇼핑상품 수량(단위상품 수량합계)
+			$("#shipOrdOnlineProdCnt").html(parseInt(ordHistProdCnt));
+			// 테이크아웃상품 수량(단위상품 수량합계)
+			$("#storeOrdOnlineProdCnt").html(parseInt(storeOrdHistProdCnt));
+		}else{
+			// 주문상품 확인 수량
+			$("#totalOrdOnlineProdCnt").html(parseInt(ordHistProdCnt));
+			// 온라인쇼핑상품 수량(단위상품 수량합계)
+			$("#shipOrdOnlineProdCnt").html(parseInt(ordHistProdCnt));
+
+		}
+	}
+	</script>
+</th:block>
+</body>
+</html>

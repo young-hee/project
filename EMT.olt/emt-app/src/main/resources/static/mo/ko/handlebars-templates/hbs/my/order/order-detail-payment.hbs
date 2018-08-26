@@ -80,7 +80,9 @@
 
 	{{#unless (or (and (or (eq type 'return')(eq type 'cancel'))(eq step 2))(eq claimYn 'Y'))}}
 
-		{{{include 'my.order.detail.amount-payment' ordPayResult}}}
+		{{#xif ordPayResult.pgList.length '>' 0}}
+			{{{include 'my.order.detail.amount-payment' ordPayResult}}}
+		{{/xif}}
 
 	{{/unless}}
 

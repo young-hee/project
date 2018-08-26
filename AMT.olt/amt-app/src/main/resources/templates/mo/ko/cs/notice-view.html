@@ -1,0 +1,40 @@
+<html ap:decorate="~{layout/layout-contents}">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents ap_cs">
+		<div class="section board_view">
+			<dl>
+				<dt class="board_title"><small th:text="${notice.noticeTypeName}">[당첨자발표]</small>
+					<b>3월 뷰티테스터 우수후기 당첨자 발표입니다. 3월 뷰티테스터 우수후기 당첨자 발표입니다.
+						<!--<span class="new">새글</span></b>-->
+					<span class="date" th:text="${#dates.format(notice.noticeStartDt, 'yyyy-MM-dd')}">2014.01.23</span><span class="views">조회 330</span>
+				</dt>
+				<dd class="board_cont">
+					<div class="attached">
+						<a href="#none">APmall-mobile01.jpg (100kb)</a>
+						<!--<a href="#none">APmall-mobile01.jpg (100kb)</a>-->
+					</div>
+					<div class="cont">
+						<span th:utext="${notice.foNoticeText}"></span>
+					</div>
+					<div class="btns">
+						<a href="javascript:history.back()" class="btn_sm_bordered"><i class="ico_list"></i><span>목록보기</span></a>
+					</div>
+				</dd>
+			</dl>
+			<ul class="prev_next">
+				<li><span>이전</span><a href="#none">12월 출석 이벤트 재공지 <span class="new">새글</span></a></li>
+				<li><span>다음</span><a href="#none">AP몰 응답하라 블링블링 이벤트 당첨자 발표 이벤트 당첨자 발표</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+</th:block>
+
+</body>
+</html>

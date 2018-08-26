@@ -71,9 +71,13 @@
 			//구매하기 버튼
 			this._$target.find( '.btn_order' ).on( 'click', function (e) {
 				this.open();
+				
 				if( this._selectOption != null ){
 					this._selectedOptions.add( this._selectOption );
 				}
+				
+				this._visibleBasketBtn();
+				
 			}.bind(this));
 			
 			//바로구매, 예약구매 클릭
@@ -135,8 +139,25 @@
 					this._openRestockNotifyModal( memberMap );
 				}.bind(this));
 			}.bind(this));
+			
+			//좋아요  버튼 
+			this._$target.find( '.btn_good' ).on( 'click', function (e) {
+				AP.login().done(function () {
+					
+				}.bind(this));
+			}.bind(this));
 		},
-
+		
+		//장바구니 & 바로구매 버튼 활성화 여부
+		_visibleBasketBtn: function () {
+			if( this._selectedOptions.getSelectedData().length == 0 ){
+				this._$target.find( '.btn_basket' ).prop('disabled', true);
+				this._$target.find( '.btn_buy_now' ).prop('disabled', true);
+			}else{
+				this._$target.find( '.btn_basket' ).prop('disabled', false);
+				this._$target.find( '.btn_buy_now' ).prop('disabled', false);
+			}
+		},
 		_setUserSelectEvents: function () {
 			
 			//옵션 selectbox
@@ -152,8 +173,12 @@
 				.addListener( 'price-change', function (e) {
 					this._$totalCount.text( $B.string.format(e.totalCount, 2) );
 					this._$totalPrice.text( $B.string.numberFormat(e.totalPrice) );
+					
+					this._visibleBasketBtn();
 				}.bind(this));
 		},
+		
+		
 
 		_setBeautyPointCheckBox: function () {
 			var isBtnView = _.some( this._defaultModel.products, function ( product ) {

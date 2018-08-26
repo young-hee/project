@@ -1,7 +1,7 @@
 package kr.ap.emt.order.controller;
 
-import kr.ap.comm.member.vo.MemberSession;
-import kr.ap.comm.member.vo.OrdCartInfo;
+import kr.ap.comm.cart.OrdCartInfo;
+import kr.ap.comm.order.OrderSession;
 import kr.ap.comm.support.common.AbstractViewController;
 import kr.ap.emt.order.vo.OrdOnlineProdFoDTO;
 import kr.ap.emt.order.vo.OrdOnlinePromoFoDTO;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -63,9 +62,11 @@ public class OrderBaseController extends AbstractViewController {
 
         /* M+N, 동시구매프로모션 그룹 만들기 */
         Map<Long, OrdOnlinePromoFoDTO> shippingMNPromoMap = new HashMap<>();
-        Map<String, OrdOnlinePromoFoDTO> shippingSameTimePurPromoMap = new HashMap<>(); // key : 동시구매프로모션일련번호 + 동시구매묶음번호
+        Map<String, OrdOnlinePromoFoDTO> shippingSameTimePurPromoMap = new HashMap<>(); 	// key : 동시구매프로모션일련번호 + 동시구매묶음번호
+        Map<String, OrdOnlinePromoFoDTO> shippingBulkDcMap = new HashMap<>(); 				// key : 주문구성상품묶음번호
         Map<Long, OrdOnlinePromoFoDTO> storePickupMNPromoMap = new HashMap<>();
-        Map<String, OrdOnlinePromoFoDTO> storePickupSameTimePurPromoMap = new HashMap<>(); // key : 동시구매프로모션일련번호 + 동시구매묶음번호
+        Map<String, OrdOnlinePromoFoDTO> storePickupSameTimePurPromoMap = new HashMap<>(); 	// key : 동시구매프로모션일련번호 + 동시구매묶음번호
+		Map<String, OrdOnlinePromoFoDTO> storeBulkDcPromoMap = new HashMap<>(); 				// key : 주문구성상품묶음번호
 
 		List<OrdShipAddressEx> ordShipAddressList = ordEx.getOrdShipAddressExList();
 		for (OrdShipAddressEx ordShipAddressEx : ordShipAddressList) {
@@ -119,10 +120,13 @@ public class OrderBaseController extends AbstractViewController {
 								}
 								else{
 									if (!StringUtils.isEmpty(ordOnlineProdFo.getOrdHistProdTypeCode())
-										&& ("Ord".equals(ordOnlineProdFo.getOrdHistProdTypeCode())
-											|| "BulkDc".equals(ordOnlineProdFo.getOrdHistProdTypeCode())
-											|| "SameTimePur".equals(ordOnlineProdFo.getOrdHistProdTypeCode()))) {
+										&& ("Ord".equals(ordOnlineProdFo.getOrdHistProdTypeCode()))) {
 										shippingOrdOnlineProdList.add(ordOnlineProdFo);
+									}
+
+									if (!StringUtils.isEmpty(ordOnlineProdFo.getOrdHistProdTypeCode())
+										&& ("BulkDc".equals(ordOnlineProdFo.getOrdHistProdTypeCode()))) {
+										ordOnlineProdFo = getBulkDcOnlineProd(ordHistProdEx, shippingBulkDcMap);
 									}
 								}
                             }
@@ -137,10 +141,11 @@ public class OrderBaseController extends AbstractViewController {
 		model.addAttribute("ordEx", ordEx);
 
 		model.addAttribute("shippingOrdOnlineProdList", shippingOrdOnlineProdList);		  										// 온라인쇼핑일반상품 목록
-        model.addAttribute("shippingMNPromoList", new ArrayList<>(shippingMNPromoMap.values()));                           	// 온라인쇼핑M+N프로모션 목록
-        model.addAttribute("shippingSameTimePurPromoList", new ArrayList<>(shippingSameTimePurPromoMap.values()));         	// 온라인쇼핑동시구매프로모션 목록
-		model.addAttribute("shippingOrdOnlineBeautyPointProdList", shippingOrdOnlineBeautyPointProdList);		            	// 온라인쇼핑 뷰티포인트 교환 상품 목록
-		model.addAttribute("shippingOrdOnlineActivityPointProdList", shippingOrdOnlineActivityPointProdList);		        	// 온라인쇼핑 진주알 교환 상품 목록
+		model.addAttribute("shippingBulkDcList", new ArrayList<>(shippingBulkDcMap.values()));         							// 온라인쇼핑묶음판매상품 목록
+		model.addAttribute("shippingMNPromoList", new ArrayList<>(shippingMNPromoMap.values()));                           	// 온라인쇼핑M+N프로모션 목록
+		model.addAttribute("shippingSameTimePurPromoList", new ArrayList<>(shippingSameTimePurPromoMap.values()));         	// 온라인쇼핑동시구매프로모션 목록
+		model.addAttribute("shippingOrdOnlineBeautyPointProdList", shippingOrdOnlineBeautyPointProdList);		            	// 온라인쇼핑 뷰티포인트 교환상품 목록
+		model.addAttribute("shippingOrdOnlineActivityPointProdList", shippingOrdOnlineActivityPointProdList);		        	// 온라인쇼핑 진주알 교환상품 목록
 
 		model.addAttribute("storePickupOrdOnlineProdList", storePickupOrdOnlineProdList);	                                 	// 테이크아웃일반상품 목록
         model.addAttribute("storePickupMNPromoList", new ArrayList<>(storePickupMNPromoMap.values()));                      	// 온라인쇼핑M+N프로모션 목록
@@ -294,6 +299,7 @@ public class OrderBaseController extends AbstractViewController {
 		if (ordEx != null && ordEx.getOrdHistEx() != null && ordEx.getOrdHistEx().getOrdHistAmtExList() != null) {
 
 			Integer onlineShipProdCnt = 0;
+			Integer ordIncludeProdBulkNo = 0;
 			Integer membershipExchCnt = 0;
 			Integer activityPointExchCnt = 0;
 			Integer storePickupProdCnt = 0;
@@ -307,7 +313,6 @@ public class OrderBaseController extends AbstractViewController {
 						if (storePickup) {
 							storePickupProdCnt++;
 						} else {
-
 							if ("Y".equals(ordHistProdEx.getIntegrationMembershipExchYn())) {
 								//BP
 								membershipExchCnt++;
@@ -315,10 +320,14 @@ public class OrderBaseController extends AbstractViewController {
 								//AP
 								activityPointExchCnt++;
 							} else {
-								if ("Ord".equals(ordHistProdEx.getOrdHistProdTypeCode())
-									|| "BulkDc".equals(ordHistProdEx.getOrdHistProdTypeCode())
-									|| "SameTimePur".equals(ordHistProdEx.getOrdHistProdTypeCode())) {
+								if ("Ord".equals(ordHistProdEx.getOrdHistProdTypeCode())) {
 									onlineShipProdCnt++;
+								}
+								if ("BulkDc".equals(ordHistProdEx.getOrdHistProdTypeCode())) {
+									if (ordIncludeProdBulkNo != ordHistProdEx.getOrdIncludedProdBulkNo()) {
+										onlineShipProdCnt++;
+										ordIncludeProdBulkNo = ordHistProdEx.getOrdIncludedProdBulkNo();
+									}
 								}
 							}
 						}
@@ -359,7 +368,9 @@ public class OrderBaseController extends AbstractViewController {
 
 		ordOnlinePromoFo.setBaseQty(ordOnlinePromoFo.getBaseQty() + ordHistProdEx.getmPlusNBaseQty());
 		ordOnlinePromoFo.setAwardQty(ordOnlinePromoFo.getAwardQty() + ordHistProdEx.getmPlusNAwardQty());
-        
+
+		ordOnlinePromoFo.setOrdQtySum(ordOnlinePromoFo.getOrdQtySum() + ordHistProdEx.getOrdQty());
+
         return getOrdOnlineProdFo(ordHistProdEx, ordOnlinePromoFo);
     }
 
@@ -376,6 +387,33 @@ public class OrderBaseController extends AbstractViewController {
 
 			ordOnlinePromoFoMap.put(key, ordOnlinePromoFo);
 		}
+
+		ordOnlinePromoFo.setTotalProductSaleAmount(ordOnlinePromoFo.getTotalProductSaleAmount().add(ordHistProdEx.getFinalOnlineSaleAmtPcur()));
+		ordOnlinePromoFo.setTotalFinalOnlineSaleAmount(ordOnlinePromoFo.getTotalFinalOnlineSaleAmount().add(ordHistProdEx.getProdSalePricePcur()));
+
+		ordOnlinePromoFo.setOrdQtySum(ordOnlinePromoFo.getOrdQtySum() + ordHistProdEx.getOrdQty());
+
+		return getOrdOnlineProdFo(ordHistProdEx, ordOnlinePromoFo);
+	}
+
+	private OrdOnlineProdFoDTO getBulkDcOnlineProd(OrdHistProdEx ordHistProdEx, Map<String, OrdOnlinePromoFoDTO> ordOnlinePromoFoMap) {
+		ordHistProdEx.setOrdIncludedProdBulkNo(111);
+		String key = ordHistProdEx.getOrdIncludedProdBulkNo().toString();
+		OrdOnlinePromoFoDTO ordOnlinePromoFo = ordOnlinePromoFoMap.get(key);
+		if(ordOnlinePromoFo == null) {
+			ordOnlinePromoFo = new OrdOnlinePromoFoDTO();
+			ordOnlinePromoFo.setOrdOnlineProdFoMap(new HashMap<>());
+			ordOnlinePromoFo.setOrdOnlineProdFoList(new ArrayList<>());
+			ordOnlinePromoFo.setBulkDcOnlineProdName(ordHistProdEx.getOrdProdEx().getBulkDcOnlineProdNameRlang());
+			ordOnlinePromoFo.setBulkDcOnlineProdImgUrl(ordHistProdEx.getOrdProdEx().getOnlineProdImgUrl());
+
+			ordOnlinePromoFoMap.put(key, ordOnlinePromoFo);
+		}
+
+		ordOnlinePromoFo.setTotalProductSaleAmount(ordOnlinePromoFo.getTotalProductSaleAmount().add(ordHistProdEx.getFinalOnlineSaleAmtPcur()));
+		ordOnlinePromoFo.setTotalFinalOnlineSaleAmount(ordOnlinePromoFo.getTotalFinalOnlineSaleAmount().add(ordHistProdEx.getProdSalePricePcur()));
+
+		ordOnlinePromoFo.setOrdQtySum(ordOnlinePromoFo.getOrdQtySum() + ordHistProdEx.getOrdQty());
 
 		return getOrdOnlineProdFo(ordHistProdEx, ordOnlinePromoFo);
 	}
@@ -458,21 +496,21 @@ public class OrderBaseController extends AbstractViewController {
 	/**
 	 * PG결제 분기
 	 */
-    protected PayResult makePgPayResult(HttpServletRequest request, MemberSession memberSession) {
-        String payMethodCode = memberSession.getPayMethodCode();
+    protected PayResult makePgPayResult(HttpServletRequest request, OrderSession orderSession) {
+		String payMethodCode = orderSession.getPayMethodCode();
         
         /* 네이버페이 결제(MOBILE/PC 동일) */
         if(PAY_METHOD_CODE_NAVERPAY.equals(payMethodCode)) {
             String resultCode = request.getParameter("resultCode");
             if("Success".equals(resultCode)) { /* 거래상태 : "Success" 이외 실패 */
-                return makeNaverPayResult(request, memberSession);
+                return makeNaverPayResult(request, orderSession);
             }
         }
         /* WPAY 결제(MOBILE/PC 동일) */
         else if(PAY_METHOD_CODE_WPAY.equals(payMethodCode)){
 			String resultCode = request.getParameter("resultCode");
 			if("0000".equals(resultCode)) { /* 거래상태 : "0000" 이외 실패 */
-				return makeWPayResult(request, memberSession);
+				return makeWPayResult(request, orderSession);
 			}
 		}
         /* 이니시스 결제 */
@@ -485,13 +523,13 @@ public class OrderBaseController extends AbstractViewController {
             if (isMobileDevice()) { // MOBILE
                 String pStatus = request.getParameter("P_STATUS");
                 if(pStatus == "00" || "00".equals(pStatus)){ /* 거래상태 : "00" 이외 실패 */
-                    return makeINIMobilePayResult(request, memberSession);
+                    return makeINIMobilePayResult(request, orderSession);
                 }
             }
             if (isPcDevice()) { // PC
                 String pStatus = request.getParameter("resultCode");
                 if(pStatus == "0000" || "0000".equals(pStatus)) { /* 거래상태 : "0000" 이외 실패 */
-                    return makeINIPcPayResult(request, memberSession);
+                    return makeINIPcPayResult(request, orderSession);
                 }
             }
         }
@@ -502,12 +540,12 @@ public class OrderBaseController extends AbstractViewController {
     /**
 	 * 네이버페이 결제정보
 	 */
-	protected PayResult makeNaverPayResult(HttpServletRequest request, MemberSession memberSession) {
+	protected PayResult makeNaverPayResult(HttpServletRequest request, OrderSession orderSession) {
 
 		Date date;
 
 		PayResult payResult = new PayResult();
-		String payMethodCode = memberSession.getPayMethodCode();
+		String payMethodCode = orderSession.getPayMethodCode();
 
 		try{
 			/**
@@ -534,11 +572,11 @@ public class OrderBaseController extends AbstractViewController {
 				payResult.setPartialCancelAvailYn(CODE_Y); //TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 
 				payResult.setDepositYn(CODE_N);									// 예치금여부
-				payResult.setPayMethodSn(memberSession.getPayMethodSn());       // 결제수단일련번호
-				payResult.setPayServiceCode(memberSession.getPayServiceCode()); // 결제서비스코드
-				payResult.setPayMethodCode(memberSession.getPayMethodCode());   // 결제수단코드
-				payResult.setCreditcardCoSn(memberSession.getCreditcardCoSn()); // 신용카드업체일련번호
-				payResult.setNextPayUseYn(memberSession.getNextPayUseYn());     // 다음결제사용여부
+				payResult.setPayMethodSn(orderSession.getPayMethodSn());       // 결제수단일련번호
+				payResult.setPayServiceCode(orderSession.getPayServiceCode()); // 결제서비스코드
+				payResult.setPayMethodCode(orderSession.getPayMethodCode());   // 결제수단코드
+				payResult.setCreditcardCoSn(orderSession.getCreditcardCoSn()); // 신용카드업체일련번호
+				payResult.setNextPayUseYn(orderSession.getNextPayUseYn());     // 다음결제사용여부
 				payResult.setPayApprovalNo(null);                               // 결제승인번호
 				payResult.setOptAssignData(null);                               // 임의지정데이터
 			}
@@ -552,12 +590,12 @@ public class OrderBaseController extends AbstractViewController {
 	/**
 	 * W페이 결제정보
 	 */
-	protected PayResult makeWPayResult(HttpServletRequest request, MemberSession memberSession) {
+	protected PayResult makeWPayResult(HttpServletRequest request, OrderSession orderSession) {
 
 		Date date;
 
 		PayResult payResult = new PayResult();
-		String payMethodCode = memberSession.getPayMethodCode();
+		String payMethodCode = orderSession.getPayMethodCode();
 
 		try{
 
@@ -628,11 +666,11 @@ public class OrderBaseController extends AbstractViewController {
 				payResult.setPayAmt(parseTotalPayAmount);						// 결제금액
 
 				payResult.setDepositYn(CODE_N);									// 예치금여부
-				payResult.setPayMethodSn(memberSession.getPayMethodSn());       // 결제수단일련번호
-				payResult.setPayServiceCode(memberSession.getPayServiceCode()); // 결제서비스코드
-				payResult.setPayMethodCode(memberSession.getPayMethodCode());   // 결제수단코드
-				payResult.setCreditcardCoSn(memberSession.getCreditcardCoSn()); // 신용카드업체일련번호
-				payResult.setNextPayUseYn(memberSession.getNextPayUseYn());     // 다음결제사용여부
+				payResult.setPayMethodSn(orderSession.getPayMethodSn());       // 결제수단일련번호
+				payResult.setPayServiceCode(orderSession.getPayServiceCode()); // 결제서비스코드
+				payResult.setPayMethodCode(orderSession.getPayMethodCode());   // 결제수단코드
+				payResult.setCreditcardCoSn(orderSession.getCreditcardCoSn()); // 신용카드업체일련번호
+				payResult.setNextPayUseYn(orderSession.getNextPayUseYn());     // 다음결제사용여부
 				payResult.setPayApprovalNo(null);                               // 결제승인번호
 				payResult.setOptAssignData(null);                               // 임의지정데이터
 			}
@@ -646,12 +684,12 @@ public class OrderBaseController extends AbstractViewController {
     /**
      * 이니시스 결제정보(MOBILE)
      */
-    protected PayResult makeINIMobilePayResult(HttpServletRequest request, MemberSession memberSession) {
+    protected PayResult makeINIMobilePayResult(HttpServletRequest request, OrderSession orderSession) {
 
     	Date date;
 
         PayResult payResult = new PayResult();
-        String payMethodCode = memberSession.getPayMethodCode();
+        String payMethodCode = orderSession.getPayMethodCode();
 
         try {
 
@@ -688,6 +726,8 @@ public class OrderBaseController extends AbstractViewController {
 
 			switch (payMethodCode) {
 				case PAY_METHOD_CODE_CREDIT_CARD:
+				case PAY_METHOD_CODE_PAYCO:// 페이코
+				case PAY_METHOD_CODE_KAKAOPAY:// 카카오페이
 					/**
 					 * 신용카드 결제
 					 * P_FN_CD1 : 카드코드
@@ -794,22 +834,15 @@ public class OrderBaseController extends AbstractViewController {
 					payResult.setPartialCancelAvailYn(CODE_Y);  // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 					break;
 
-				case PAY_METHOD_CODE_PAYCO:// 페이코
-					payResult.setPartialCancelAvailYn(CODE_Y);  // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
-					break;
-
-				case PAY_METHOD_CODE_KAKAOPAY:// 카카오페이
-					payResult.setPartialCancelAvailYn(CODE_Y); //TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
-					break;
 			}
 
 			/* 공통 파라미터 */
 			payResult.setDepositYn(CODE_N);           						// 예치금여부
-			payResult.setPayMethodSn(memberSession.getPayMethodSn());       // 결제수단일련번호
-			payResult.setPayServiceCode(memberSession.getPayServiceCode()); // 결제서비스코드
-			payResult.setPayMethodCode(memberSession.getPayMethodCode());   // 결제수단코드
-			payResult.setCreditcardCoSn(memberSession.getCreditcardCoSn()); // 신용카드업체일련번호
-			payResult.setNextPayUseYn(memberSession.getNextPayUseYn());     // 다음결제사용여부
+			payResult.setPayMethodSn(orderSession.getPayMethodSn());       // 결제수단일련번호
+			payResult.setPayServiceCode(orderSession.getPayServiceCode()); // 결제서비스코드
+			payResult.setPayMethodCode(orderSession.getPayMethodCode());   // 결제수단코드
+			payResult.setCreditcardCoSn(orderSession.getCreditcardCoSn()); // 신용카드업체일련번호
+			payResult.setNextPayUseYn(orderSession.getNextPayUseYn());     // 다음결제사용여부
 			payResult.setPayApprovalNo(null);                               // 결제승인번호
 			payResult.setOptAssignData(null);                               // 임의지정데이터
 		}
@@ -822,12 +855,12 @@ public class OrderBaseController extends AbstractViewController {
     /**
      * 이니시스 결제정보(PC)
      */
-    protected PayResult makeINIPcPayResult(HttpServletRequest request, MemberSession memberSession) {
+    protected PayResult makeINIPcPayResult(HttpServletRequest request, OrderSession orderSession) {
 
     	Date date;
 
     	PayResult payResult = new PayResult();
-        String payMethodCode = memberSession.getPayMethodCode();
+        String payMethodCode = orderSession.getPayMethodCode();
 
 		try {
 			/**
@@ -865,6 +898,8 @@ public class OrderBaseController extends AbstractViewController {
 			/* 결제수단구분 */
 			switch(payMethodCode){
 				case PAY_METHOD_CODE_CREDIT_CARD:
+				case PAY_METHOD_CODE_PAYCO:// 페이코
+				case PAY_METHOD_CODE_KAKAOPAY:// 카카오페이
 					/**
 					 * 신용카드 결제
 					 * CARD_Code(P_FN_CD1) : 카드사코드(카드코드)
@@ -957,23 +992,15 @@ public class OrderBaseController extends AbstractViewController {
 					payResult.setVirtualBankAcClosedSmsYn(null);                    // 가상계좌마감SMS여부
 					payResult.setPartialCancelAvailYn(CODE_Y);             // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 					break;
-
-				case PAY_METHOD_CODE_PAYCO:// 페이코
-					payResult.setPartialCancelAvailYn(CODE_Y); //TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
-					break;
-
-				case PAY_METHOD_CODE_KAKAOPAY:// 카카오페이
-					payResult.setPartialCancelAvailYn(CODE_Y); //TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
-					break;
 			}
 
 			/* 공통 파라미터(세션정보) */
 			payResult.setDepositYn(CODE_N);                                 // 예치금여부
-			payResult.setPayMethodSn(memberSession.getPayMethodSn());       // 결제수단일련번호
-			payResult.setPayServiceCode(memberSession.getPayServiceCode()); // 결제서비스코드
-			payResult.setPayMethodCode(memberSession.getPayMethodCode());   // 결제수단코드
-			payResult.setCreditcardCoSn(memberSession.getCreditcardCoSn()); // 신용카드업체일련번호
-			payResult.setNextPayUseYn(memberSession.getNextPayUseYn());     // 다음결제사용여부
+			payResult.setPayMethodSn(orderSession.getPayMethodSn());       // 결제수단일련번호
+			payResult.setPayServiceCode(orderSession.getPayServiceCode()); // 결제서비스코드
+			payResult.setPayMethodCode(orderSession.getPayMethodCode());   // 결제수단코드
+			payResult.setCreditcardCoSn(orderSession.getCreditcardCoSn()); // 신용카드업체일련번호
+			payResult.setNextPayUseYn(orderSession.getNextPayUseYn());     // 다음결제사용여부
 			payResult.setPayApprovalNo(null);                               // 결제승인번호
 			payResult.setOptAssignData(null);                               // 임의지정데이터
 		}
@@ -985,9 +1012,9 @@ public class OrderBaseController extends AbstractViewController {
 
     /* 주문완료했을 때 장바구니상품삭제 */
     protected void removeOrdCartInfo(Long ordSn) {
-        MemberSession memberSession = getMemberSession();        
+		OrderSession orderSession = getOrderSession();
         
-        OrdCartInfo ordCartInfo = memberSession.getOrdCartInfo(ordSn);
+        OrdCartInfo ordCartInfo = orderSession.getOrdCartInfo(ordSn);
         if(ordCartInfo != null) {
             String cartProdSnListStr = "";
             if(ordCartInfo.getCartProdSnList() != null
@@ -997,10 +1024,10 @@ public class OrderBaseController extends AbstractViewController {
                 }
             }
             cartApi.removeCartProds(ordCartInfo.getCartSn(), cartProdSnListStr);
-            memberSession.removeOrdCartInfo(ordSn);
+			orderSession.removeOrdCartInfo(ordSn);
         }
-        
-        setMemberSession(memberSession);
+
+		setOrderSession(orderSession);
    }
 
     protected Map<String, OrdHistAmtCompare> makeOrdAmtMap(OrdHistEx ordHist, OrdHistEx prevOrdHist, List<OrdHistAmtCompare> ordHistAmtCompareList) {

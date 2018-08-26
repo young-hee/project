@@ -22,27 +22,22 @@
 				
 				<!-- 로그인 후 -->
 				<div class="section coup_log_after" th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}">
-					<div class="custom_level_area welcome" style="display:none"><!-- 화면 노출시 display:inline-block -->
-						<span>김보영님은 <strong>WELCOM</strong>고객입니다</span>
-					</div>
-
-					<div class="custom_level_area vip" style="display:none">
-						<span>김보영님은 <strong>VIP</strong>고객입니다</span>
-					</div>
-
-					<div class="custom_level_area vip_plus" style="display:none">
-						<span>김보영님은 <strong>VIP+</strong>고객입니다</span>
-					</div>
-
-					<div class="custom_level_area vvip" style="display:none">
-						<span>김보영님은 <strong>VVIP</strong>고객입니다</span>
-					</div>
-
-					<div class="custom_level_area vvip_plus" style="display:none">
-						<span>김보영님은 <strong>VVIP+</strong>고객입니다</span>
-					</div>
-					<div class="custom_level_area vip" style="display:inline-block">
-						<span th:text="${session.LOGIN_USER.member.name.name1}">김보영님은 <strong th:text="${session.LOGIN_USER.member.memberLevelName}">VIP</strong>고객입니다</span>
+					<th:block th:if="${session.LOGIN_USER.member.memberLevelName eq 'WELCOME'}">
+						<div class="custom_level_area welcome" style="display:inline-block">
+					</th:block>
+					<th:block th:if="${session.LOGIN_USER.member.memberLevelName eq 'VIP'}">
+						<div class="custom_level_area vip" style="display:inline-block">
+					</th:block>
+					<th:block th:if="${session.LOGIN_USER.member.memberLevelName eq 'VIP+'}">
+						<div class="custom_level_area vip_plus" style="display:inline-block">
+					</th:block>
+					<th:block th:if="${session.LOGIN_USER.member.memberLevelName eq 'VVIP'}">
+						<div class="custom_level_area vvip" style="display:inline-block">
+					</th:block>
+					<th:block th:if="${session.LOGIN_USER.member.memberLevelName eq 'VVIP+'}">
+						<div class="custom_level_area vvip_plus" style="display:inline-block">
+					</th:block>
+						<span><em th:text="${session.LOGIN_USER.member.name.name1}">김보영님은 </em><strong th:text="${session.LOGIN_USER.member.memberLevelName}">VIP</strong>고객입니다</span>
 					</div>
 				</div>
 				
@@ -60,19 +55,19 @@
 				<div class="tab_cont">
 					<ul class="attendance_benefit">
 						<li>
-							<a href="javascript:;">
+							<a href="javascript:;" id="beauty_point">
 								<span class="a_tit"><em>BENEFIT 01</em><strong>뷰티포인트 증정</strong> <i class="ico_arr"></i></span>
 								<p class="text">매일 출석할때마다 <span>뷰티포인트 5P</span>를 드려요</p>
 							</a>
 						</li>
 						<li>
-							<a href="javascript:;">
+							<a href="javascript:;" id="beauty_point">
 								<span class="a_tit"><em>BENEFIT 02</em><strong>개근고객 혜택</strong> <i class="ico_arr"></i></span>
 								<p class="text">출석률에 따라 뷰티포인트 <span>최대 2000P 추가</span>로 드려요</p>
 							</a>
 						</li>
 						<li>
-							<a href="javascript:;">
+							<a href="javascript:;" id="beauty_point">
 								<span class="a_tit"><em>BENEFIT 03</em><strong>브랜드 할인쿠폰</strong> <i class="ico_arr"></i></span>
 								<p class="text">Today 브랜드쿠폰 뽑고 <span>3,000원 할인쿠폰 </span>받으세요</p>
 							</a>
@@ -89,12 +84,12 @@
 						<div class="attendance_graph">
 							<div class="graph">
 								<div class="bar">
-									<span class="current current_rate" style="width: 3%;"></span>
+									<span class="current current_rate" style="width: 0%;"></span>
 								</div>
 							</div>
 							<div class="percent">
 								<span class="tl">이달의 출석률</span>
-								<em>98</em>%
+								<em>0</em>%
 							</div>
 						</div>
 						<!-- // 이달의 출석률 -->
@@ -182,18 +177,18 @@
 					</div>
 					
 					<!-- 브랜드 쿠폰 뽑기 -->
-					<div class="section today_brand_coupon">
+					<div class="section today_brand_coupon" id="brand_coupon">
 						<h4 class="tit">Apmall 출석체크하고 <span><em>Today 브랜드쿠폰</em> 뽑자</span></h4>
 						<div class="slide three_slide " data-ix-options="view-length:3; move-length:3; loop:false;">
 							<div class="brand_coupon_list ix-list-viewport">
 								<ul class="ix-list-items">
-									<li class="ix-list-item"><a href="#none" class="btn_brand_coupon" onclick="$(this).parent('li').toggleClass('on')"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/dummy/img_brand_trans_02.png}"></span></a></li>
-									<li class="ix-list-item on"><a href="#none" class="btn_brand_coupon" onclick="$(this).parent('li').toggleClass('on')"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/dummy/img_brand_trans_01.png}"></span></a></li>
-									<li class="ix-list-item"><a href="#none" class="btn_brand_coupon" onclick="$(this).parent('li').toggleClass('on')"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/dummy/img_brand_trans_01.png}"></span></a></li>
-									<li class="ix-list-item"><a href="#none" class="btn_brand_coupon" onclick="$(this).parent('li').toggleClass('on')"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/dummy/img_brand_trans_01.png}"></span></a></li>
-									<li class="ix-list-item"><a href="#none" class="btn_brand_coupon" onclick="$(this).parent('li').toggleClass('on')"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/dummy/img_brand_trans_01.png}"></span></a></li>
-									<li class="ix-list-item"><a href="#none" class="btn_brand_coupon" onclick="$(this).parent('li').toggleClass('on')"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/dummy/img_brand_trans_01.png}"></span></a></li>
-									<li class="ix-list-item"><a href="#none" class="btn_brand_coupon" onclick="$(this).parent('li').toggleClass('on')"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/common/blank.png}"></span></a></li>
+									<li class="ix-list-item"><a href="#none" class="btn_brand_coupon" th:data-brand-coupon-sn="brand1"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/dummy/img_brand_trans_02.png}"></span></a></li>
+									<li class="ix-list-item"><a href="#none" class="btn_brand_coupon" th:data-brand-coupon-sn="brand2"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/dummy/img_brand_trans_01.png}"></span></a></li>
+									<li class="ix-list-item"><a href="#none" class="btn_brand_coupon" th:data-brand-coupon-sn="brand3"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/dummy/img_brand_trans_01.png}"></span></a></li>
+									<li class="ix-list-item"><a href="#none" class="btn_brand_coupon" th:data-brand-coupon-sn="brand4"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/dummy/img_brand_trans_01.png}"></span></a></li>
+									<li class="ix-list-item"><a href="#none" class="btn_brand_coupon" th:data-brand-coupon-sn="brand5"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/dummy/img_brand_trans_01.png}"></span></a></li>
+									<li class="ix-list-item"><a href="#none" class="btn_brand_coupon" th:data-brand-coupon-sn="brand6"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/dummy/img_brand_trans_01.png}"></span></a></li>
+									<li class="ix-list-item"><a href="#none" class="btn_brand_coupon" th:data-brand-coupon-sn="brand7"><img ap:src="@{/images/display/img_brand_coupon.png}" alt=""><span class="brand_coupon"><img ap:src="@{/images/common/blank.png}"></span></a></li>
 								</ul>
 							</div>
 
@@ -211,8 +206,8 @@
 					
 					<!-- 이벤트 배너 -->
 					<div class="bnn_area01">
-						<a href="#none"><img ap:src="@{/images/display/img_banner_benefit_03.jpg}" alt="Today 브랜드쿠폰 혜택 사용하세요 보러가기"></a>
-						<a href="#none"><img ap:src="@{/images/display/img_banner_benefit_04.jpg}" alt="Apmall의 풍성한 이벤트 보러가기"></a>
+						<a href="#none" id="use_coupon"><img ap:src="@{/images/display/img_banner_benefit_03.jpg}" alt="Today 브랜드쿠폰 혜택 사용하세요 보러가기"></a>
+						<a href="/display/event"><img ap:src="@{/images/display/img_banner_benefit_04.jpg}" alt="Apmall의 풍성한 이벤트 보러가기"></a>
 					</div>
 					
 					<!-- notice -->
@@ -244,6 +239,7 @@
 	<script>
 		$('.slide').ixSlideMax();
 	</script>
+	<script ap:src="@{/handlebars-templates/compiled/display/events/fullpage-attendance.js}"></script>
 </th:block>
 
 </body>

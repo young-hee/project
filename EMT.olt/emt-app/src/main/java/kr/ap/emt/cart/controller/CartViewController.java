@@ -9,17 +9,14 @@ package kr.ap.emt.cart.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import kr.ap.comm.member.vo.OrdCartInfo;
-import net.g1project.ecp.api.exception.ApiException;
+import kr.ap.comm.cart.CartSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import kr.ap.comm.config.interceptor.PageTitle;
-import kr.ap.comm.member.vo.MemberSession;
 import net.g1project.ecp.api.model.offlinestore.store.ProdInvtEx;
 import net.g1project.ecp.api.model.offlinestore.store.StoreResult;
 import net.g1project.ecp.api.model.offlinestore.store.StoresInvtSearchInfo;
@@ -45,14 +42,14 @@ public class CartViewController extends CartBaseController{
 	@GetMapping("/cartList")
 	public String cartList(Model model) {
 
-		/* 세션 세팅 */
-		MemberSession memberSession = getMemberSession();
+		/* 카트세션 세팅*/
+		CartSession cartSession = getCartSession();
 
 		/* 카트정보 세팅*/
-		if(getMemberSn() > 0L){
+		if(isLoggedIn()){
 			// 회원
 			CartSnResult cartSnResult = cartApi.getMemberCartSn(getMemberSn());
-			cartEx = getCart(cartSnResult.getCartSn());
+			cartEx = getCartInfo(cartSnResult.getCartSn());
 
 			/* 테이크아웃 매장정보 */
 			makeSelectStore(cartEx, model, getMemberSn());
@@ -61,33 +58,32 @@ public class CartViewController extends CartBaseController{
 			CartMemberMembershipEx bpCartMemberMembershipEx = null;
 			if(cartEx.getCartMemberEx().getMemberMembershipExList() != null){
 				for(CartMemberMembershipEx cartMemberMembershipEx: cartEx.getCartMemberEx().getMemberMembershipExList()){
-					if("BP".equals(cartMemberMembershipEx.getMembershipServiceCode())){
+					if(CartConst.BP_SERVICE_CODE.equals(cartMemberMembershipEx.getMembershipServiceCode())){
 						bpCartMemberMembershipEx = cartMemberMembershipEx;
 						break;
 					}
 				}
 			}
-			model.addAttribute("memberSn", getMemberSn());
 			model.addAttribute("bpCartMemberMembershipEx", bpCartMemberMembershipEx);
 		}
 		else{
 			// 비회원
-			if (getMemberSession().getCartSn() == 0L) {
+			if (cartSession.getCartSn() == 0L) {
 				CartSnResult cartSnResult = cartApi.createNonmemberCart();
-				cartEx = getCart(cartSnResult.getCartSn());
+				cartEx = getCartInfo(cartSnResult.getCartSn());
 			}
 			else{
-				cartEx = getCart(getMemberSession().getCartSn());
+				cartEx = getCartInfo(cartSession.getCartSn());
 			}
-			model.addAttribute("memberSn", (long)0);
 		}
 
+		model.addAttribute("memberSn", getMemberSn());
 		model.addAttribute("cartEx", cartEx);
 
-		/* 재계산을 위하여 최종 cartEx를 넣어 놓음 */
-		memberSession.setCartSn(cartEx.getCartSn());
-		memberSession.setCartEx(cartEx);
-		setMemberSession(memberSession);
+		/* 재 계산을 위해 세션정보 세팅 */
+		cartSession.setCartSn(cartEx.getCartSn());
+		cartSession.setCartEx(cartEx);
+		setCartSession(cartSession);
 
 		// Mobile
 		if (isMobileDevice()) {
@@ -106,10 +102,12 @@ public class CartViewController extends CartBaseController{
 	 * @param cartSn
 	 * @return
 	 */
-	private CartEx getCart(Long cartSn) {
+	private CartEx getCartInfo(Long cartSn) {
 		if(cartSn != null){
+			// 카트정보 최초 진입
 			cartEx = cartApi.getCart(cartSn);
-			cartEx = calculationBySelect(cartEx);
+			// 처음부터 재 계산을 해준다.
+			cartEx = calculationCartEx(cartEx);
 			return cartEx;
 		}
 		return null;

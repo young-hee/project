@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import kr.ap.comm.cart.CartSession;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Controller;
 
@@ -41,18 +42,27 @@ public class CartBaseController extends AbstractController{
 	 * @param cartSn
 	 * @return
 	 */
-	protected CartEx getCartApi(Long cartSn) {
+	protected CartEx getCart(Long cartSn) {
 		if(cartSn != null){
-			MemberSession memberSession = getMemberSession();
-
+			// 카트정보 최초 진입
 			CartEx cartEx = cartApi.getCart(cartSn);
-			cartEx = calculationBySelect(cartEx); // 상품 선택정의
-
-			memberSession.setCartEx(cartEx);
-			setMemberSession(memberSession);
+			// 처음부터 재 계산을 해준다.
+			cartEx = calculationCartEx(cartEx);
+			// 세션에 정보를 넣어준다.
+			setSession(cartEx);
 			return cartEx;
 		}
 		return null;
+	}
+
+	/**
+	 * 세션정보 set
+	 * @param cartEx
+	 */
+	private void setSession(CartEx cartEx) {
+		CartSession cartSession = getCartSession();
+		cartSession.setCartEx(cartEx);
+		setCartSession(cartSession);
 	}
 
 	/**
@@ -60,7 +70,7 @@ public class CartBaseController extends AbstractController{
 	 * @param cartEx
 	 * @return
 	 */
-	protected CartEx calculationBySelect(CartEx cartEx) {
+	private CartEx calculationBySelect(CartEx cartEx) {
 
 		// 장바구니-배송-온라인상품목록
 		setSaleDisplayStatusCartOnlineProdExList(cartEx.getCartDeliveryOnlineProdExList());
@@ -84,7 +94,7 @@ public class CartBaseController extends AbstractController{
 		// 장바구니-매장픽업-동시구매프로모션목록-온라인상품목록
 		setSaleDisplayStatusCartSameTimePromoExList(cartEx.getCartStorePickupSameTimePurPromoExList());
 
-		return calculationCartEx(cartEx);
+		return cartEx;
 	}
 
 	/**
@@ -96,10 +106,11 @@ public class CartBaseController extends AbstractController{
     protected CartEx calculationBySelect(Long cartSn,
                                          String selectedCartProdSnStr) {
         /* 회원정보 조회 */
-        MemberSession memberSession = getMemberSession();
+        //MemberSession memberSession = getMemberSession();
 
         /* 재계산을 위한 최종 cartEx */
-        CartEx cartEx = memberSession.getCartEx();
+		CartSession cartSession = getCartSession();
+        CartEx cartEx = cartSession.getCartEx();
         
         if(cartEx == null
                 || !cartSn.equals(cartEx.getCartSn())) {
@@ -144,8 +155,6 @@ public class CartBaseController extends AbstractController{
                 // 장바구니-매장픽업-동시구매프로모션목록-온라인상품목록
 				setSelectCartSameTimePromoExList(cartEx.getCartStorePickupSameTimePurPromoExList(), selectedCartProdSnList);
 
-                // 판매표시 상태에 따른 YN여부
-				cartEx = calculationBySelect(cartEx);
 				// 카트상품 계산
                 cartEx = calculationCartEx(cartEx);
             }
@@ -156,8 +165,8 @@ public class CartBaseController extends AbstractController{
             }
         }
 
-        memberSession.setCartEx(cartEx);
-        setMemberSession(memberSession);
+        cartSession.setCartEx(cartEx);
+        setCartSession(cartSession);
         
         return cartEx;
     }
@@ -204,9 +213,6 @@ public class CartBaseController extends AbstractController{
 			}
 		}
 	}
-
-
-
 
 	/**
 	 * 체크박스 선택 시 자기 자신과 자기 부모 Y,N 변경처리
@@ -291,14 +297,15 @@ public class CartBaseController extends AbstractController{
 	protected CartEx calculationByRemove(Long cartSn, List<Long> removeCartProdSnList) {
         
         /* 회원정보 조회 */
-        MemberSession memberSession = getMemberSession();
+        //MemberSession memberSession = getMemberSession();
 
         /* 재계산을 위한 최종 cartEx */
-        CartEx cartEx = memberSession.getCartEx();
+		CartSession cartSession = getCartSession();
+        CartEx cartEx = cartSession.getCartEx();
 
         if(cartEx == null
                 || !cartSn.equals(cartEx.getCartSn())) {
-            cartEx = getCartApi(cartSn);
+            cartEx = getCart(cartSn);
         }
         else {
         	try {
@@ -328,13 +335,13 @@ public class CartBaseController extends AbstractController{
 			}
 			catch(Exception e) {
 				e.printStackTrace();
-				cartEx =  getCartApi(cartSn);
+				cartEx =  getCart(cartSn);
 			}
 
         }
 
-        memberSession.setCartEx(cartEx);
-        setMemberSession(memberSession);
+        cartSession.setCartEx(cartEx);
+        setCartSession(cartSession);
         
         return cartEx;
     }
@@ -398,14 +405,15 @@ public class CartBaseController extends AbstractController{
                                         Long cartProdSn,
                                         Long cartProdQty) {
         /* 회원정보 조회 */
-        MemberSession memberSession = getMemberSession();
+        //MemberSession memberSession = getMemberSession();
 
         /* 재계산을 위한 최종 cartEx */
-        CartEx cartEx = memberSession.getCartEx();
+		CartSession cartSession = getCartSession();
+        CartEx cartEx = cartSession.getCartEx();
         
         if(cartEx == null
                 || !cartSn.equals(cartEx.getCartSn())) {
-            cartEx =  getCartApi(cartSn);
+            cartEx =  getCart(cartSn);
         }
         else {
             try {
@@ -435,13 +443,13 @@ public class CartBaseController extends AbstractController{
             }
             catch (Exception e) {
                 e.printStackTrace();
-                cartEx =  getCartApi(cartSn);
+                cartEx = getCart(cartSn);
             }
         }
 
         
-        memberSession.setCartEx(cartEx);
-        setMemberSession(memberSession);
+        cartSession.setCartEx(cartEx);
+        setCartSession(cartSession);
         
         return cartEx;
     }
@@ -479,7 +487,7 @@ public class CartBaseController extends AbstractController{
     }
 
 	/**
-	 * 체크박스 셀렉 여부
+	 * 체크박스 선택(셀렉)여부
 	 * @param cartProdEx
 	 * @return
 	 */
@@ -501,20 +509,30 @@ public class CartBaseController extends AbstractController{
 		}
 
 		// 판매상태 체크(판매중)
-		if (!"OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus())
-			&& !"NotSelected".equals(cartProdEx.getProdEx().getSaleDisplayStatus())){
+		if (!CartConst.SALE_DISPLAY_STATUS_ONSALE.equals(cartProdEx.getProdEx().getSaleDisplayStatus())
+			&& !CartConst.SALE_DISPLAY_STATUS_NOTSELECT.equals(cartProdEx.getProdEx().getSaleDisplayStatus())){
 			retValue = false;
 		}
 
-		if(retValue) {
-				cartProdEx.getProdEx().setSaleDisplayStatus("OnSale");
+		return retValue;
+	}
+
+	/**
+	 * 선택여부에 따른 판매표시상태와 선택상태 변경
+	 * @param cartProdEx
+	 * @param selectable
+	 */
+	private void setCartProdSelectable(CartProdEx cartProdEx, boolean selectable) {
+		if (selectable) {
+			if (CartConst.SALE_DISPLAY_STATUS_NOTSELECT.equals(cartProdEx.getProdEx().getSaleDisplayStatus())) {
+				cartProdEx.getProdEx().setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_ONSALE);
+			}
 		} else {
-			if ("OnSale".equals(cartProdEx.getProdEx().getSaleDisplayStatus())) {
-				cartProdEx.getProdEx().setSaleDisplayStatus("NotSelected");
+			if (CartConst.SALE_DISPLAY_STATUS_ONSALE.equals(cartProdEx.getProdEx().getSaleDisplayStatus())) {
+				cartProdEx.getProdEx().setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_NOTSELECT);
+				cartProdEx.setSelectYn(CartConst.N);
 			}
 		}
-
-		return retValue;
 	}
 
 	/**
@@ -523,16 +541,15 @@ public class CartBaseController extends AbstractController{
 	 */
 	private void setSaleDisplayStatusCartOnlineProdExList(List<CartOnlineProdEx> cartOnlineProdExList) {
 		for(CartOnlineProdEx cartOnlineProdEx : cartOnlineProdExList){
-			// 디폴트 판매중 설정..
-			cartOnlineProdEx.setSaleDisplayStatus("OnSale");
+			cartOnlineProdEx.setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_ONSALE);
 			for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-				// 체크박스 셀렉 여부(최소구매수량 > 주문수량 체크 / 주문수량 > 최대구매수량 체크 / 계산결과여부 체크 / 판매상태 체크(판매중))
+				// 체크박스 선택여부
 				if(isCartProdSelectable(cartProdEx) == false){
-					cartOnlineProdEx.setSaleDisplayStatus("NotSelect");
+					cartOnlineProdEx.setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_NOTSELECT);
 					break;
 				}
 			}
-			if("NotSelect".equals(cartOnlineProdEx.getSaleDisplayStatus())){
+			if(CartConst.SALE_DISPLAY_STATUS_NOTSELECT.equals(cartOnlineProdEx.getSaleDisplayStatus())){
 				for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
 					cartProdEx.setSelectYn(CartConst.N);
 				}
@@ -549,16 +566,10 @@ public class CartBaseController extends AbstractController{
 			for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
 				// 판매표시가 없을때
 				if(StringUtils.isEmpty(cartProdEx.getProdEx().getSaleDisplayStatus())){
-					cartProdEx.getProdEx().setSaleDisplayStatus("OnSale");
+					cartProdEx.getProdEx().setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_ONSALE);
 				}
-				// 체크박스 셀렉 여부(최소구매수량 > 주문수량 체크 / 주문수량 > 최대구매수량 체크 / 계산결과여부 체크 / 판매상태 체크(판매중))
-				if(isCartProdSelectable(cartProdEx) == false){
-					cartProdEx.getProdEx().setSaleDisplayStatus("NotSelect");
-					cartProdEx.setSelectYn(CartConst.N);
-				}
-				else if("NotSelect".equals(cartProdEx.getProdEx().getSaleDisplayStatus())){
-					cartProdEx.getProdEx().setSaleDisplayStatus("OnSale");
-				}
+				// 셀렉여부에 따른 판매표시상태와 셀렉상태 변경
+				setCartProdSelectable(cartProdEx, isCartProdSelectable(cartProdEx));
 			}
 		}
 	}
@@ -587,13 +598,8 @@ public class CartBaseController extends AbstractController{
 	private void setSaleDisplayStatusCartPromoSameProdExList(List<CartOnlineProdEx> cartOnlineProdExList) {
 		for(CartOnlineProdEx cartOnlineProdEx : cartOnlineProdExList){
 			for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-				if(isCartProdSelectable(cartProdEx) == false){
-					cartProdEx.getProdEx().setSaleDisplayStatus("NotSelect");
-					cartProdEx.setSelectYn(CartConst.N);
-				}
-				else if("NotSelect".equals(cartProdEx.getProdEx().getSaleDisplayStatus())){
-					cartProdEx.getProdEx().setSaleDisplayStatus("OnSale");
-				}
+				// 셀렉여부에 따른 판매표시상태와 셀렉상태 변경
+				setCartProdSelectable(cartProdEx, isCartProdSelectable(cartProdEx));
 			}
 		}
 	}
@@ -605,13 +611,8 @@ public class CartBaseController extends AbstractController{
 	private void setSaleDisplayStatusCartPromoDifferentProdExList(List<CartOnlineProdEx> cartOnlineProdExList) {
 		for(CartOnlineProdEx cartOnlineProdEx : cartOnlineProdExList){
 			for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-				if(isCartProdSelectable(cartProdEx) == false){
-					cartProdEx.getProdEx().setSaleDisplayStatus("NotSelect");
-					cartProdEx.setSelectYn(CartConst.N);
-				}
-				else if("NotSelect".equals(cartProdEx.getProdEx().getSaleDisplayStatus())){
-					cartProdEx.getProdEx().setSaleDisplayStatus("OnSale");
-				}
+				// 셀렉여부에 따른 판매표시상태와 셀렉상태 변경
+				setCartProdSelectable(cartProdEx, isCartProdSelectable(cartProdEx));
 			}
 		}
 	}
@@ -624,17 +625,17 @@ public class CartBaseController extends AbstractController{
 		for (CartPromoEx cartPromoEx : cartPromoExList) {
 
 			// disableed 제어
-			cartPromoEx.setSaleDisplayStatus("OnSale");
+			cartPromoEx.setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_ONSALE);
 			for (CartOnlineProdEx cartOnlineProdEx : cartPromoEx.getPromoOnlineProdExList()) {
 				for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
 					if(isCartProdSelectable(cartProdEx) == false){ // 선택여부 체크
-						cartPromoEx.setSaleDisplayStatus("NotSelect");
+						cartPromoEx.setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_NOTSELECT);
 						cartPromoEx.setSelectYn(CartConst.N);
 						break;
 					}
 				}
 			}
-			if("NotSelect".equals(cartPromoEx.getSaleDisplayStatus())){
+			if(CartConst.SALE_DISPLAY_STATUS_NOTSELECT.equals(cartPromoEx.getSaleDisplayStatus())){
 				for (CartOnlineProdEx cartOnlineProdEx : cartPromoEx.getPromoOnlineProdExList()) {
 					for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
 						cartProdEx.setSelectYn(CartConst.N);
@@ -661,6 +662,9 @@ public class CartBaseController extends AbstractController{
 	 * @return
 	 */
     protected CartEx calculationCartEx(CartEx cartEx) {
+
+    	/* 셀렉트된 계산정보 */
+		calculationBySelect(cartEx);
 
         /* M+N프로모션 기준수량/증정수량계산 */
         if(cartEx.getCartDeliveryMNPromoExList() != null) {
@@ -743,26 +747,26 @@ public class CartBaseController extends AbstractController{
                 // 배송비
                 BigDecimal shipFeeFreeBaseAmt = requestOtf.getShipFeeFreeBaseAmt() != null ? requestOtf.getShipFeeFreeBaseAmt() : BigDecimal.ZERO;
 
-                BigDecimal shipFee = BigDecimal.ZERO;
+                BigDecimal calcDefaultShipFee = BigDecimal.ZERO;
                 BigDecimal shipFeeDiscountAmount = BigDecimal.ZERO;
                 
                 if(onlineSalesTotalAmount.compareTo(BigDecimal.ZERO) > 0
                         && onlineSalesTotalAmount.compareTo(shipFeeFreeBaseAmt) < 0) {
-                    shipFee = requestOtf.getCoDefaultShipFee() != null ? requestOtf.getCoDefaultShipFee() : new BigDecimal("2500");
+                    calcDefaultShipFee = requestOtf.getCoDefaultShipFee() != null ? requestOtf.getCoDefaultShipFee() : new BigDecimal("2500");
 
                     // TODO : 배송비할인프로모션 정보
                 }
                         
-                // 초도배송비 청구금액 정보
-                calculationResultOtf.setShipFeeInfo(setCalculationCurrencyInfo(calculationResultOtf.getShipFeeInfo(), shipFee));
+                // 초도배송비 계산금액 정보
+                calculationResultOtf.setCalcDefaultShipFeeInfo(setCalculationCurrencyInfo(calculationResultOtf.getCalcDefaultShipFeeInfo(), calcDefaultShipFee));
 
                 // 초도배송비 할인금액 정보
-                calculationResultOtf.setShipFeeDiscountAmountInfo(setCalculationCurrencyInfo(calculationResultOtf.getShipFeeDiscountAmountInfo(), shipFeeDiscountAmount));
+                calculationResultOtf.setShipFeeDcAmountInfo(setCalculationCurrencyInfo(calculationResultOtf.getShipFeeDcAmountInfo(), shipFeeDiscountAmount));
 
                 // 최종초도배송비 정보
-                calculationResultOtf.setFinalShipFeeInfo(setCalculationCurrencyInfo(calculationResultOtf.getFinalShipFeeInfo(), shipFee.subtract(shipFeeDiscountAmount)));
+                calculationResultOtf.setDefaultShipFeeInfo(setCalculationCurrencyInfo(calculationResultOtf.getDefaultShipFeeInfo(), calcDefaultShipFee.subtract(shipFeeDiscountAmount)));
                 
-                totalShipFee = totalShipFee.add(shipFee);
+                totalShipFee = totalShipFee.add(calcDefaultShipFee);
                 totalShipFeeDiscountAmount = totalShipFeeDiscountAmount.add(shipFeeDiscountAmount);
             }
         }

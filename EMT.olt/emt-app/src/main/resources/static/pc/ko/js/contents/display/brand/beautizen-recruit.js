@@ -19,9 +19,7 @@
 			this._setEvent();
 			this._setPlugins(); 
 			
-			this._setMobileVerification();
 			this._mobileVerifSn = '';
-			
 			
 		},
 		
@@ -30,16 +28,17 @@
 		setData:function(data){
 		this._data = data;
 		
-			console.log(AP.DISPLAY_MENU_ID);
-			
 			if(AP.DISPLAY_MENU_ID === 'beautizen_update' ){
 				
 				if(this._data === null){ //한번도 저장한 적이 없다면
 					
 				}else {
-				
-					this._loading_modify(this._data); // 수정화면으로 진입 : 한번이라도 작성해서 저장한 적이 있다면
+					
+					this._loading_modify(); // 수정화면으로 진입 : 한번이라도 작성해서 저장한 적이 있다면
+					
 				}
+			}else {
+				this._setMobileVerification();
 			}; 
 		
 			
@@ -153,7 +152,6 @@
 		},
 		
 		_setEvent: function () {
-			
 			// 초기화
 			this._$target.find('button.type').on('click', function (e){
 				 
@@ -320,6 +318,8 @@
 					this._$target.find('.activities_history .h_'+count).remove();
 					
 				}.bind(this)); 
+				
+				 
 		},	
 		
 		_submit : function(paramData, btEvent){
@@ -382,10 +382,9 @@
 		},
 		
 		// 수정화면 로딩( 이전에 입력한 데이터가 있는 경우 
-		_loading_modify :function(supporters){
+		_loading_modify :function(){
 
 			var memberId = ''; 
-			
 			AP.api.getLoginMemberInfo().done(function(result){
 				memberId = result.id;  
 			}); 
@@ -394,45 +393,34 @@
 			
 			var supportersInfo = ''; 
 			
-			var html = '';	
-			var selectBoxs = ''; 
-			
 			AP.api.supportersRequsterinfo().done(function(result){
 				  
 				result.suppoters.memberId = memberId; 
 				supportersInfo = result.suppoters; 
-				html = AP.common.getTemplate( 'display.brand.beautizen-modify', supportersInfo);
-				this._$target.find( 'fieldset.form div.clear' ).html(html);
 				
-				this._load(); 
-				this._setPlugins();
+				var html = '';
+					html = AP.common.getTemplate( 'display.brand.beautizen-modify', supportersInfo);
 				
-				this._$target.find( 'textarea, input:text' ).inputLimits( 'upadted' ).placeholder( 'updated' );
-				//preLocal, academic04, academic05, academic01
+					this._$target.find( 'fieldset.form div.clear' ).html(html);
 				
-				selectBoxs = this._$target.find('select');
-				 
-				$.each(selectBoxs, function( id, select){ // 4번 select 구역
-
-					$.each(supporters, function(id, value){
-	 
-								if(select.name === id) {
-									$(select).val(value); 
-									$(select).selectBox('updated');	
-								}
-								if(id === 'requesterAddress'){
-									$(select).val(this.address1); 
-									
-								} 
-								if(id === 'requesterPhoneNo'){
-									$(select).val(this.address1); 
-								
-								}
-								
-								$(select).selectBox('updated');
-						} );
-						
-				});
+					this._load(); 
+					this._$target.find( 'textarea, input:text' ).inputLimits( 'upadted' ).placeholder( 'updated' );
+				
+				var selectBoxs = ''; 
+					selectBoxs = this._$target.find('select'); //preLocal, academic04, academic05, academic01
+					 
+					$.each(selectBoxs, function( id, select){ // 5번 loop(통신사제외) select 구역
+						$.each(result.suppoters, function(id, value){
+							if(select.name === id) { // 입력한 selectBox setting 
+								$(select).val(value); 
+							}
+							if(id === 'requesterAddress'){ // 거주지역 setting
+								$(select).val(this.address1); 
+							} 
+							$(select).selectBox('updated');
+						});
+							
+					});
 				
 				/*********************** 대외활동 Layer 추가버튼 *******************************/ 
 				this._$target.find('.btn_add').off('click');
@@ -450,30 +438,42 @@
 					
 				}.bind( this ));
 				
-				/*********************** 초기화 버튼 *******************************/ 
+				/*********************** 초기화 버튼 확인 보류 초기화 안됨*******************************/ 
+				// 수정화면에 초기화버튼의 존재가 어떤 역할을 하는지 확인 // 보류
+				this._$target.find('button.type').off('click'); // 문서내부의 클릭이벤트 무효화
 				
-				this._$target.find('button.type').off('click');
+				this._$target.find('button.type').on('click', function (e){ // 이벤트 새로 생성
+					
+					this._$target.find('input').val('');
+					this._$target.find('textarea').val('');
+					this._$target.find('select').selectBox('clear');
+					this._$target.find('select').selectBox('');
+										
+					$(this._$target.find('form.validate')).validate().destroy();
+				}.bind(this)); // end : button.type'.on'click
+				/***********************end : 초기화 버튼 *******************************/ 
 				
-				this._$target.find('button.type').on('click', function (e){
-					 
-					this._$target.find( 'form.validate' ).reset(); // form 에 작성된 데이터 reset  
-					this._$target.find( 'textarea, input:text' ).inputLimits( 'upadted' ).placeholder( 'updated' ); 
-
-					var selectBoxs = this._$target.find('select'); 
-					
-					$.each(selectBoxs, function( id, select){ 
-						$(select).val(''); 
-						$(select).selectBox('updated');	
-					});
-					
-					this._$target.find( '.ui_input_images' ).inputImages('clear'); 
-					this._$target.find( '.ui_input_images' ).inputImages();
-					
-					$(this._$target.find( 'form.validate' )).validate().destroy();  
-					
-				}.bind(this));
+				/*********************** 전체동의 버튼  *******************************/
 				
-			}.bind(this)); // end : supportersRequsterinfo
+				this._$target.find( 'input#check_all' ).off('change');
+				
+				this._$target.find( 'input#check_all' ).on( 'change', function (e) {
+					
+					if ( $( e.target ).prop('checked') ) {
+						$( e.target ).closest( '.relative' ).find( 'input' ).prop( 'checked', true );
+					}else {
+						$( e.target ).closest( '.relative' ).find( 'input' ).prop( 'checked', false );
+					}
+				}.bind( this ));
+				
+				/*********************** end : 전체동의 버튼  *******************************/
+								
+				this._$target.find( '#certBtn' ).off('click');
+				this._$target.find( '#reCertBtn' ).off('click');
+				this._$target.find( '.certification_btn' ).off('click');
+				this._setMobileVerification();
+				
+			}.bind(this)); // end : AP.api.supportersRequsterinfo().done(function(result)
 			
 		},
 	

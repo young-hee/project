@@ -30,6 +30,9 @@
 				// up
 				this._$floating.removeClass( 'in' );
 			}
+			if ( $( '.color_curation' ).length > 0 ) {
+				AP.display.toggleLibCuration( this._currentScrollTop < st );
+			}
 		},
 
         /** =============== Private Methods =============== */

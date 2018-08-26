@@ -1,9 +1,17 @@
 package kr.ap.amt.customer.controller;
 
+import kr.ap.amt.api.pshop.PShopService;
+import kr.ap.amt.api.pshop.vo.PShopResult;
+import kr.ap.comm.api.vo.CicuemCuAdtInfTcVo;
+import kr.ap.comm.api.vo.CicuemCuInfCoOutVo;
 import kr.ap.comm.api.vo.CicuemCuInfTotTcVo;
+import kr.ap.comm.cart.CartSession;
 import kr.ap.comm.member.vo.MemberSession;
+import kr.ap.comm.order.OrderSession;
 import kr.ap.comm.support.APRequestContext;
+import kr.ap.comm.support.ApPasswordEncoder;
 import kr.ap.comm.support.common.AbstractController;
+import kr.ap.comm.support.constants.APConstant;
 import kr.ap.comm.support.constants.CookieKey;
 import kr.ap.comm.support.constants.SessionKey;
 import kr.ap.comm.util.CookieUtils;
@@ -11,11 +19,12 @@ import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.ap.ap.*;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,14 +36,18 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller
+@RestController
 public class LoginRestController extends AbstractController {
 
+	@Autowired
+	private PShopService pShopService;
+	
 	/**
 	 * 로그인.
 	 */
 	@PostMapping("/doLogin")
 	public ResponseEntity<?> doLogin(HttpServletRequest req, HttpServletResponse resp) {
+		
 		String memberId = req.getParameter("chcsNo");
 		String password = req.getParameter("userPwdEc");
 		String autoLogin = req.getParameter("autoLogin");
@@ -52,14 +65,16 @@ public class LoginRestController extends AbstractController {
 			memberSession.setMember(apMember);
 			memberSession.setMember_sn(resultInfo.getMemberSn());
 			memberSession.setUser_incsNo(apMember.getIncsNo());
-			memberSession.setCartSn(0L);
 			memberSession.setAccessToken(resultInfo.getAccessToken());
 			memberSession.setRefreshToken(resultInfo.getRefreshToken());
 			memberSession.setAutoLoginToken(resultInfo.getAutoLoginToken());
-			
+
+			CartSession cartSession = getCartSession();
+			cartSession.setCartSn(0L);
+
 			try {
-				if(memberSession.getCartSn() != null && memberSession.getCartSn() != 0)
-					cartApi.transferMemberCart(resultInfo.getMemberSn(), memberSession.getCartSn());
+				if(cartSession.getCartSn() != null && cartSession.getCartSn() != 0)
+					cartApi.transferMemberCart(resultInfo.getMemberSn(), cartSession.getCartSn());
 			} catch(Exception e) {
 				logger.error(e.getMessage(), e);
 			}
@@ -197,8 +212,9 @@ public class LoginRestController extends AbstractController {
 			}
 
 			try {
-				if(memberSession.getCartSn() != null && memberSession.getCartSn() != 0)
-					cartApi.transferMemberCart(resultInfo.getMemberSn(), memberSession.getCartSn());
+				CartSession cartSession = getCartSession();
+				if(cartSession.getCartSn() != null && cartSession.getCartSn() != 0)
+					cartApi.transferMemberCart(resultInfo.getMemberSn(), cartSession.getCartSn());
 			} catch(Exception e) {
 				logger.error(e.getMessage(), e);
 			}
@@ -224,4 +240,41 @@ public class LoginRestController extends AbstractController {
 
 		return ResponseEntity.ok(result);
     }
+
+	/**
+	 * 임직원 인증.
+	 */
+	@PostMapping("/customer/authEmployee")
+	public ResponseEntity<?> authEmployee(String v_userid, String v_pass_word) {
+		
+		PShopResult result = pShopService.userInfoPass(v_userid, "08dbfaee4b2458145d73fe291ffea44f0a61b6fa941c808054bc9a59dbf3aa2ed341ca1c465625c31d37fcba29e74c11c8386e2cb0ddc7f5b3ce72c3a1764fd3");
+		
+		if("SUCC".equals(result.getRsltCd()) && "Y".equals(result.getData().get("v_flag_yn"))) {
+			
+			MemberSession memberSession = getMemberSession();
+
+			CicuemCuInfTotTcVo cicuemCuInfTotTcVo = new CicuemCuInfTotTcVo();
+			cicuemCuInfTotTcVo.setIncsNo(memberSession.getUser_incsNo());
+			cicuemCuInfTotTcVo.setChCd(APConstant.OS_CH_CD);
+			cicuemCuInfTotTcVo.setChgChCd(APConstant.OS_CH_CD);
+			cicuemCuInfTotTcVo.setLschId(v_userid);
+			
+			CicuemCuAdtInfTcVo cicuemCuOptiCsTcVo = new CicuemCuAdtInfTcVo();
+			cicuemCuOptiCsTcVo.setHqEmpId(v_userid);
+			cicuemCuInfTotTcVo.setCicuemCuAdtInfTcVo(cicuemCuOptiCsTcVo);
+			
+			CicuemCuInfCoOutVo resultVo = amoreAPIService.updatecicuemcuinfrfull(cicuemCuInfTotTcVo);
+			
+			if(APConstant.RESULT_OK.equals(resultVo.getRsltCd())) {
+				memberSession.getMember().setEmployeeYn("Y");
+				setMemberSession(memberSession);
+			} else {
+				throw error(HttpStatus.UNAUTHORIZED, "ERROR32", "임직원 인증 실패");
+			}
+			
+			return ResponseEntity.ok("{}");
+		}
+		
+		throw error(HttpStatus.UNAUTHORIZED, "ERROR32", "임직원 인증 실패");
+	}
 }

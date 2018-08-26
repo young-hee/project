@@ -29,6 +29,24 @@
 				displayMenuId: options.displayMenuId
 			});
 			this._productList.load();
+
+			var $header = $( '#header' );
+			AP.categoryMenu.init({
+				displayMenuId: options.displayMenuId,
+				gnbMap: AP.GNBMAP,
+				$pageTitle: $header.find( '.page_title_new' ),
+				$menuLayer: $header.find( '.menu_layer' ),
+				$dimmed: $header.find( 'cate_dimmed' ),
+				$categoryMenu: this._$target.find( '.mid_category_list' )
+			});
+		},
+
+		toggleLibCuration: function ( open ) {
+			if ( open ) {
+				this._$target.find( '.color_curation' ).css({ bottom: '115px' });
+			} else {
+				this._$target.find( '.color_curation' ).css({ bottom: '16px' });
+			}
 		},
 
 		/** =============== Private Methods ============== */
@@ -69,7 +87,15 @@
 		},
 
 		_libCuration: function () {
-			if ( this._$target.find( '.color_curation' ).length == 0 ) return;
+			if ( AP.DISPLAY_MENU_ID.indexOf( 'CTG002002' ) > -1 ) {
+				var html = '<div class="color_curation" style="bottom: 115px">';
+					html += 	'<a href="javascript:;" class="btn"><span class="sr_only">컬러 큐레이션</span></a>';
+					html += 	'<span class="bubble">이런 립 컬러는 어떠세요?</span>';
+					html += '</div>';
+
+					this._$target.append( html );
+			}
+
 			this._$target.find( '.color_curation .bubble' ).delay( 2000 ).fadeOut( 1000 );
 		}
 	});

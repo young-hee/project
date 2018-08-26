@@ -11,22 +11,22 @@
 	<dd>
 		<div class="cont">
 
-			{{#if (or (eq ordHistProdTypeCode 'Ord')(eq ordHistProdTypeCode 'ProdUnitAward'))}}
+			{{#xif ordHistProdTypeCode '===' 'Ord'}}
 				<div class="order_prd_panel">
 
 					{{#xif singleProdYn '===' 'N'}}
-						{{!--/* 온라인 상품 */--}}
+					{{!--/* 온라인 상품 */--}}
 						{{{prodPartial 'my.order.detail.product' 'prod' this 'claimYn' ../claimYn 'step' ../step 'state' ../state}}}
 					{{/xif}}
 
 					{{#each ordHistProdList}}
 						{{#unless (and (eq ../../status 'request')(eq ordHistProdStatusCode 'ProdCancel'))}}
-							{{!--/* 단위 상품 */--}}
-							{{{prodPartial 'my.order.detail.product-option' 'sub' this 'oCode' ../onlineProdCode 'claimYn' ../../claimYn 'step' ../../step 'singleProdYn'../singleProdYn 'status' ../../status}}}
+						{{!--/* 단위 상품 */--}}
+							{{{prodPartial 'my.order.detail.product-option' 'sub' this 'oCode' ../onlineProdCode 'prodNo' ordHistProdNo 'claimYn' ../../claimYn 'step' ../../step 'singleProdYn'../singleProdYn 'status' ../../status}}}
 
 							{{#if (and (eq ../../status 'request')(eq ../../step 1))}}
 
-								{{!--/* 클레임 선택 */--}}
+							{{!--/* 클레임 선택 */--}}
 								{{{prodPartial 'my.order.detail.claim-reason-select' 'ordHistProdNo' ordHistProdNo 'reason' ../../reason}}}
 
 							{{/if}}
@@ -34,14 +34,45 @@
 							{{#if (or (eq ../../claimYn 'Y')(eq ../../step 2))}}
 
 								<!--/* 클레임 사유 */-->
-								{{{prodPartial 'my.order.detail.claim-reason' 'type' ../../type 'receivedClaimReasonName' receivedClaimReasonName 'foReceivedClaimReason' foReceivedClaimReason}}}
+								{{{prodPartial 'my.order.detail.claim-reason' 'type' ../../type 'receivedClaimReasonName' ../claimReasonName 'foReceivedClaimReason' ../claimReason}}}
 
 							{{/if}}
 						{{/unless}}
 
 					{{/each}}
 				</div>
-			{{/if}}
+			{{/xif}}
+
+			{{#xif ordHistProdTypeCode '===' 'BulkDc'}}
+				<div class="order_prd_panel">
+
+					{{{prodPartial 'my.order.detail.product' 'prod' this 'claimYn' ../claimYn 'step' ../step 'state' ../state}}}
+
+					{{#each ordHistProdList}}
+						{{#unless (and (eq ../../status 'request')(eq ordHistProdStatusCode 'ProdCancel'))}}
+						{{!--/* 단위 상품 */--}}
+							{{{prodPartial 'my.order.detail.product-option' 'sub' this 'oCode' ../bulkDcOnlineProdCode 'prodNo' ../bulkDcOnlineProdCode 'claimYn' ../../claimYn 'step' ../../step 'singleProdYn' 'N' 'status' ../../status}}}
+
+
+						{{/unless}}
+
+					{{/each}}
+
+					{{#if (and (eq ../status 'request')(eq ../step 1))}}
+
+						{{!--/* 클레임 선택 */--}}
+						{{{prodPartial 'my.order.detail.claim-reason-select' 'ordHistProdNo' bulkDcOnlineProdCode 'reason' ../reason}}}
+
+					{{/if}}
+
+					{{#if (or (eq ../claimYn 'Y')(eq ../step 2))}}
+
+						<!--/* 클레임 사유 */-->
+						{{{prodPartial 'my.order.detail.claim-reason' 'type' ../type 'receivedClaimReasonName' claimReasonName 'foReceivedClaimReason' claimReason}}}
+
+					{{/if}}
+				</div>
+			{{/xif}}
 
 
 		</div>
@@ -63,7 +94,7 @@
 					{{#each ordHistProdList}}
 						{{#unless (and (eq ../../status 'request')(eq ordHistProdStatusCode 'ProdCancel'))}}
 						{{!--/* 단위 상품 */--}}
-							{{{prodPartial 'my.order.detail.product-option' 'sub' this 'oCode' ../onlineProdCode 'claimYn' ../../claimYn 'step' ../../step 'singleProdYn'../singleProdYn 'status' ../../status 'typeName' 'b'}}}
+							{{{prodPartial 'my.order.detail.product-option' 'sub' this 'oCode' ../onlineProdCode 'prodNo' ordHistProdNo 'claimYn' ../../claimYn 'step' ../../step 'singleProdYn'../singleProdYn 'status' ../../status 'typeName' 'b'}}}
 
 							{{#if (and (eq ../../status 'request')(eq ../../step 1))}}
 
@@ -103,7 +134,7 @@
 					{{#each ordHistProdList}}
 						{{#unless (and (eq ../../status 'request')(eq ordHistProdStatusCode 'ProdCancel'))}}
 						{{!--/* 단위 상품 */--}}
-							{{{prodPartial 'my.order.detail.product-option' 'sub' this 'oCode' ../onlineProdCode 'claimYn' ../../claimYn 'step' ../../step 'singleProdYn'../singleProdYn 'status' ../../status 'typeName' 'a'}}}
+							{{{prodPartial 'my.order.detail.product-option' 'sub' this 'oCode' ../onlineProdCode 'prodNo' ordHistProdNo 'claimYn' ../../claimYn 'step' ../../step 'singleProdYn'../singleProdYn 'status' ../../status 'typeName' 'a'}}}
 
 							{{#if (and (eq../../status 'request')(eq ../../step 1))}}
 

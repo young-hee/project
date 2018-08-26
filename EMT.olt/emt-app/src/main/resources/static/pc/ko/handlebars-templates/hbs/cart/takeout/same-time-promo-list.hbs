@@ -40,13 +40,12 @@
 
 		{{#each promoOnlineProdExList }}
 			{{#each cartProdExList }}
-			{{#if (gt @../index 0) }} <div class="item_wrap plus"> {{else}} <div class="item_wrap">  {{/if}}
+			{{#if (gt @index 0) }} <div class="item_wrap plus"> {{else}} <div class="item_wrap">  {{/if}}
 				<input type="hidden" name="index" value="{{counter @../index }}"/>
 				<input type="hidden" name="takeoutPrdSn" value="{{ prodEx.prodSn }}"/>
-				<input type="hidden" name="cartProdSn" value="{{ cartProdSn }}"/>
+				<input type="hidden" name="cartProdSn" sameTimePromo="sameTimePromo" value="{{ cartProdSn }}"/>
 				<input type="hidden" name="takeoutPrdInfo_S_{{ @../../index }}" value="{{ cartProdSn }}"/>
 				<input type="hidden" name="saleDisplayStatus_S_{{ @../../index }}" value="{{ prodEx.saleDisplayStatus }}"/>
-
 				<div class="item_info">
 					<!--/* 증정품 상품은 선택 불가 */-->
 					<div class="item_thumb">
@@ -67,7 +66,7 @@
 							{{/each}}
 						{{/if}}
 						<a href="#none" class="title" onclick="fnProdDetail({{ ../onlineProdSn }})">{{ ../onlineProdName }}</a>
-						<span class="opt">{{ prodEx.prodName }}</span>
+						{{#if (eq ../singleProdYn 'N') }} <span class="opt">{{ prodEx.prodName }}</span> {{/if}}
 					</div>
 					<!--/* 포인트 및 가격 */-->
 					<div class="price">
@@ -76,6 +75,7 @@
 								{{#if (ne calculationResultProduct.finalOnlineSalesAmountInfo null) }}
 									<span class="strong"><b>{{numberFormat calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}</b>원</span>
 								{{/if}}
+								<!--/*
 								{{#if (eq doublePriceDisplayYn 'Y') }}
 									{{#if (ne calculationResultProduct.productSaleAmountInfo null) }}
 										{{#if (gt calculationResultProduct.productSaleAmountInfo.standardCurrency.amount calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount) }}
@@ -83,8 +83,8 @@
 										{{/if}}
 									{{/if}}
 								{{/if}}
-							{{/if}}
-							{{#if (eq calculationResultYn 'N') }}
+								 */-->
+							{{else}}
 								{{#if (ne prodEx.salePrice null) }}
 									<span class="strong"><b>{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}</b>원</span>
 								{{/if}}

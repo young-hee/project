@@ -14,12 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
@@ -532,7 +529,7 @@ public class DisplayRestController extends AbstractController {
 
     	String memberOnlyYn = "N";
     	
-    	if(0L != getMemberSn()) {
+    	if(isLoggedIn()) {
     		memberOnlyYn = "Y";
     	}
     	

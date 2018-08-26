@@ -2,6 +2,7 @@ package kr.ap.amt.my.controller;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+
 import kr.ap.amt.my.vo.MyInfoDTO;
 import kr.ap.amt.my.vo.TermsAgree;
 import kr.ap.comm.api.vo.*;
@@ -25,6 +26,7 @@ import net.g1project.ecp.api.model.offlinestore.store.RegularStorePostResult;
 import net.g1project.ecp.api.model.offlinestore.store.StoreResult;
 import net.g1project.ecp.api.model.sales.member.*;
 import net.g1project.ecp.api.model.sales.terms.MemberTermsAgree;
+
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,10 +35,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -58,7 +62,7 @@ import java.util.Map;
  * 5. 선택약관 동의 변경
  *
  */
-@Controller
+@RestController
 @RequestMapping("/my/api")
 public class MyRestController extends AbstractController {
 
@@ -448,89 +452,106 @@ public class MyRestController extends AbstractController {
 	/**
 	 * 기본 배송지, 배송지 삭제
 	 *
-	 * @param request
+	 * @param req
 	 * @param type
 	 * @param shipAddressSn
 	 * @return
 	 */
 	@PostMapping("/repAddress")
-	@ResponseBody
-	public HashMap<String, Object> repAddress(HttpServletRequest request, String type, String shipAddressSn) {
-
-		System.out.println("shipAddressSn: " + shipAddressSn);
+	public ResponseEntity<?> repAddress(HttpServletRequest req, String type, String shipAddressSn) {
 
 		HashMap<String, Object> respMap = new HashMap<String, Object>();
 
 		MemberSession m = getMemberSession();
 		if ("rep".equalsIgnoreCase(type)) {
-			SetRepAddressResult result = apApi.setRepShipAddress(102L, Long.parseLong(shipAddressSn));
-			// SetRepAddressResult result = memberApi.setRepShipAddress(102L, Long.parseLong(shipAddressSn));
-			respMap.put("result", result.isResult() ? "success" : "fail");
-		} else if ("delete".equalsIgnoreCase(type)) {
-			//
-			if (shipAddressSn != null) {
-				apApi.deleteShipAddress(102L, shipAddressSn);
-				respMap.put("result", "success");
+			try {
+				SetRepAddressResult result = apApi.setRepShipAddress(getMemberSn(), Long.parseLong(shipAddressSn));
+				// SetRepAddressResult result = memberApi.setRepShipAddress(102L, Long.parseLong(shipAddressSn));
+				respMap.put("result", result.isResult() ? "success" : "fail");
+
+				return ResponseEntity.ok(respMap);
+			}
+			catch (ApiException e) {
+				if ("ESAL009".equals(e.getErrorCode()))
+					throw error(respMap, HttpStatus.SERVICE_UNAVAILABLE, e.getErrorCode(), "배송지를 10개 이상 추가할 수 없습니다.");
+				else {
+					throw e;
+				}
 			}
 
+		} else if ("delete".equalsIgnoreCase(type)) {
+			//
+//			try {
+				if (shipAddressSn != null) {
+					apApi.deleteShipAddress(getMemberSn(), shipAddressSn);
+					respMap.put("result", "success");
 
+					return ResponseEntity.ok(respMap);
+				}
+//			}
+//			catch (ApiException e) {
+//				if ("EAPI003".equals(e.getErrorCode()))
+//					throw error(respMap, HttpStatus.SERVICE_UNAVAILABLE, e.getErrorCode(), "기본 배송지는 삭제할 수 없습니다.");
+//				else {
+//					throw e;
+//				}
+//			}
 		}
 
-		return respMap;
+		return null;
 	}
-
-	// /**
-	// * 기본 배송지, 배송지 삭제
-	// *
-	// * @param request
-	// * @param accessToken
-	// * @return
-	// */
-	// @PostMapping("/repAddress")
-	// @ResponseBody
-	// public HashMap<String, Object> repAddress(HttpServletRequest req, String type, String shipAddressSn) {
-	//
-	// System.out.println("shipAddressSn: " + shipAddressSn);
-	// HashMap<String, Object> respMap = new HashMap<String, Object>();
-	//
-	// MemberSession m = getMemberSession();
-	// if ("rep".equalsIgnoreCase(type)) {
-	// // SetRepAddressResult result = memberApi.setRepShipAddress(m.getMember_sn(), shipAddressSn);
-	//// SetRepAddressResult result = memberApi.setRepShipAddress(102L, shipAddressSn);
-	//// respMap.put("result", result.isResult() ? "success" : "fail");
-	// } else if ("delete".equalsIgnoreCase(type)) {
-	// // memberApi.deleteShipAddress(m.getMember_sn(), shipAddressSn);
-	// // memberApi.deleteShipAddress(102L, shipAddressSn);
-	// respMap.put("result", "success");
-	// }
-	// respMap.put("result", "success");
-	// return respMap;
-	// }
 
 	@PostMapping("/putAddress")
 	@ResponseBody
-	public HashMap<String, Object> putAddress(@Valid PostAndPutShipAddressInfo ship) throws JsonParseException, JsonMappingException, IOException {
+	public ResponseEntity<?> putAddress(@Valid PostAndPutShipAddressInfo ship, String updateYn) {
 
 		HashMap<String, Object> result = new HashMap<String, Object>();
-
-		ShipAddressInfo add = apApi.postShipAddress(102L, ship);
-		// ShipAddressInfo add = memberApi.postShipAddress(102L, ship);
-		result.put("result", "success");
-
-		return result;
+		if ("Y".equalsIgnoreCase(updateYn)) {
+			putMemberAddress(ship.getAddresseeAddress());
+		}
+		try {
+			ShipAddressInfo add = apApi.postShipAddress(getMemberSn(), ship);
+			result.put("result", "success");
+			return ResponseEntity.ok(result);
+		}
+		catch (ApiException e) {
+			if ("ESAL009".equals(e.getErrorCode()))
+				throw error(result, HttpStatus.SERVICE_UNAVAILABLE, e.getErrorCode(), "배송지를 10개 이상 추가할 수 없습니다.");
+			else {
+				throw e;
+			}
+		}
 	}
 
 	@PostMapping("/updateAddress")
 	@ResponseBody
-	public HashMap<String, Object> updateAddress(@Valid PostAndPutShipAddressInfo ship, Long shipAddressSn) throws JsonParseException, JsonMappingException, IOException {
+	public ResponseEntity<?> updateAddress(@Valid PostAndPutShipAddressInfo ship, String updateYn, Long shipAddressSn) throws JsonParseException, JsonMappingException, IOException {
 
 		HashMap<String, Object> result = new HashMap<String, Object>();
+		if ("Y".equalsIgnoreCase(updateYn)) {
+			putMemberAddress(ship.getAddresseeAddress());
+		}
+		try {
+			ShipAddressInfo add = apApi.putShipAddress(getMemberSn(), shipAddressSn, ship);
+			result.put("result", "success");
+			return ResponseEntity.ok(result);
+		}
+		catch (ApiException e) {
+			if ("ESAL009" .equals(e.getErrorCode()))
+				throw error(result, HttpStatus.SERVICE_UNAVAILABLE, e.getErrorCode(), "배송지를 10개 이상 추가할 수 없습니다.");
+			else {
+				throw e;
+			}
+		}
+	}
 
-		ShipAddressInfo add = apApi.putShipAddress(102L, shipAddressSn, ship);
-		// ShipAddressInfo add = memberApi.putShipAddress(102L, shipAddressSn, ship);
-		result.put("result", "success");
-
-		return result;
+	private void putMemberAddress(EmbeddableAddress ea) {
+		try {
+			apApi.putMemberAddress(getMemberSn(), ea);
+		}
+		catch (Exception e) {
+			System.err.println(e);
+		}
 	}
 
 	@GetMapping("/shipAddress")
@@ -539,7 +560,7 @@ public class MyRestController extends AbstractController {
 
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
-		List<ShipAddressInfo> sa = apApi.getShipAddresses(102L);
+		List<ShipAddressInfo> sa = apApi.getShipAddresses(getMemberSn());
 		// List<ShipAddressInfo> sa = memberApi.getShipAddresses(102L);
 		result.put("result", "success");
 		result.put("data", sa);

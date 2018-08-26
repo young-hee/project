@@ -142,10 +142,9 @@
 					$('#order_list').empty();
 					$('#order_list').append(ss.html);
 					$('.my_order_list').show();
-					if(c_type == 'cashReceipts'){
+					if (c_type == 'cashReceipts') {
 						$('.order_status_process').hide();
-					}
-					else {
+					} else {
 						$('.order_status_process').empty();
 						$('.order_status_process').append(ss.summary_html);
 					}
@@ -311,11 +310,13 @@
 
 			//리뷰 작성하기
 			function writeReview(ordNo) {
-				AP.api.myReview({}, {ordNo}).done(function(data) {
+				AP.api.myReview({}, {
+					ordNo : ordNo
+				}).done(function(data) {
 					if (data.data) {
 						var param = {
-							'orderNo' : data.data.ordNo,
-							'products' : data.data.orderProds
+							orderNo : data.data.ordNo,
+							products : data.data.orderProds
 						}
 						new AP.ReviewWriteModal(param).prevGetData();
 					}

@@ -231,7 +231,7 @@
 				location.href = '/common/search?searchWord='+$('#searchWord').val();
 			});
 			
-			// Ch.에띄드 이동
+			// 채널에뛰드 이동
 			this._contentArea.find('ul.video_list').on('click', 'li', function(e){
 				e.preventDefault();
 				location.href = '/display/etude_ch/detail?articleSn='+$(e.currentTarget).data('articleSn');

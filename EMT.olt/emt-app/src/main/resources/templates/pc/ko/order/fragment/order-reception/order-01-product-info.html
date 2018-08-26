@@ -9,11 +9,17 @@
 			<th:block th:if="${ordCntMap.get('shipOrdOnlineProdSumCnt') > 0}">
 				<h4 class="h_title sub">온라인 쇼핑상품 (<em th:text="${ordCntMap.get('shipOrdOnlineProdSumCnt')}">00</em>개)</h4>
 
-				<!--/* 옵션타입(그룹상품) */-->
+				<!--/* 일단상품 */-->
 				<th:block th:if="${#lists.size(shippingOrdOnlineProdList) > 0}">
 					<div class="item_wrap" th:each="ordOnlineProd : ${shippingOrdOnlineProdList}">
 						<th:block ap:replace="~{order/fragment/order-reception-product/order-ordonlineprod-info}"/>
 					</div>
+				</th:block>
+				<!--/* 묶음판매상품 */-->
+				<th:block th:if="${#lists.size(shippingBulkDcList) > 0}">
+					<th:block th:each="bulkDc : ${shippingBulkDcList}">
+						<th:block ap:replace="~{order/fragment/order-reception-product/order-bulkdc-info}"/>
+					</th:block>
 				</th:block>
 				<!--/* 뷰티포인트 */-->
 				<th:block th:if="${#lists.size(shippingOrdOnlineBeautyPointProdList) > 0}">

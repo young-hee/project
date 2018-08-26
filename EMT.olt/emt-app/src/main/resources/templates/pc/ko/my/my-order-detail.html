@@ -262,7 +262,6 @@
 
 			//테이크아웃 주문 상품
 			if (ord.storeOrdOnlineProdCnt > 0) {
-				console.log(ord.storePickupOrdOnlineProdList);
 				var takeoutProds = AP.common.getTemplate('my.order.order-detail-prodList', {
 					cnt : ord.storeOrdOnlineProdCnt,
 					list : ord.storePickupOrdOnlineProdList,
@@ -276,7 +275,8 @@
 					status : status,
 					step : step,
 					viewYn : viewYn,
-					takeOutYn : 'Y'
+					takeOutYn : 'Y',
+					storeInfo : ordInfo.ordShipAddressExList[0].storeEx
 				});
 
 				$('.takeout').append(takeoutProds);
@@ -469,6 +469,7 @@
 				$( '.ui_select' ).designSelectBox();
 
 				$('#b_save').off('click').on('click', function(e) {
+
 					if ($( '.option_select > .ui_select' ).designSelectBox('getValue') == '') {
 						AP.modal.alert('변경하실 옵션을 선택해주세요.').addListener( 'modal-close', function (e) {
 							return;
@@ -581,11 +582,13 @@
 		//리뷰쓰기
 		$('#b_review').off('click').on('click', function(e) {
 			var ordNo = ord.goods.ordNo;
-			AP.api.myReview({}, {ordNo}).done(function(data) {
+			AP.api.myReview({}, {
+				ordNo : ordNo
+			}).done(function(data) {
 				if (data.data) {
 					var param = {
-						'orderNo' : data.data.ordNo,
-						'products' : data.data.orderProds
+						orderNo : data.data.ordNo,
+						products : data.data.orderProds
 					}
 					new AP.ReviewWriteModal(param).prevGetData();
 				}
@@ -593,7 +596,7 @@
 					AP.modal.alert('구매리뷰쓰기 가능한 상품목록이 없습니다.');
 				}
 			}).fail(function(e) {
-				AP.modal.alert(e);
+				AP.modal.alert(e.responseJSON.errorData.message);
 			}).always(function() {
 			});
 		});
@@ -614,17 +617,23 @@
 			return title;
 		}
 
-		function viewStoreMap() {
+		//매장보기
+		function showStoreMap(storeInfo) {
+			console.log(storeInfo);
 			var modal = AP.modal.info({
 				contents: {
 					templateKey: 'my.order.layer-order-delivery-store',
 					templateModel: {
+						data : storeInfo
 					}
 				},
 				sizeType : 'L'
 			});
 
 			$( '.map_area' ).mapApi();
+			if (storeInfo.latitude != null && storeInfo.longitude != null) {
+				$( '.map_area' ).mapApi( 'setCenter', storeInfo.latitude, storeInfo.longitude );
+			}
 			$( '.slide' ).ixSlideMax();
 		}
 

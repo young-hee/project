@@ -938,14 +938,15 @@ public class SignupRestController extends AbstractController {
 							if(APConstant.OS_CH_CD.equals(optiTcVo.getChCd())) {
 								chTcVo.setUserPwdEc(ApPasswordEncoder.encryptPassword(userPwdEc));
 							}
+							chTcVo.setFstCnttPrtnId(detail.getFstCnttPrtnId());
 							chTcVo.setCicuemCuOptiTcVo(optiTcVo);
 							chTcVo.setChcsNo(chcsNo);
 							chTcVo.setChCd(optiTcVo.getChCd());
 							chTcVo.setIncsNo(status.getIncsNo());
 							if(APConstant.AP_CH_CD.equals(optiTcVo.getChCd()))
 								chTcVo.setFstCnttPrtnId(APConstant.AP_PRTN_ID);
-							chTcVo.setFscrId("AC919532");
-							chTcVo.setLschId("AC919532");
+							chTcVo.setFscrId(APConstant.EH_PRTN_ID);
+							chTcVo.setLschId(APConstant.EH_PRTN_ID);
 							chTcVo.setPrtnNm(getPrntNm(chTcVo.getChCd()));
 							optiTcVo.setIncsNo(status.getIncsNo());
 							cicuedCuChTcVo.add(chTcVo);
@@ -965,51 +966,6 @@ public class SignupRestController extends AbstractController {
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
-						if(joinChCd) {
-
-							WebDBSignupVo webDBSignupVo = new WebDBSignupVo();
-							webDBSignupVo.setAgree1("Y");
-							webDBSignupVo.setAgree2("Y");
-							webDBSignupVo.setApAgree(is040Check);
-							webDBSignupVo.setAppChCd(cicuemCuInfTotTcVo.getJndvCd());
-							webDBSignupVo.setAtclCd(cicuemCuInfTotTcVo.getAtclCd().equals("10")?"1":"2");
-							webDBSignupVo.setBirthDate01(cicuemCuInfTotTcVo.getAthtDtbr().substring(0, 4));
-							webDBSignupVo.setBirthDate02(cicuemCuInfTotTcVo.getAthtDtbr().substring(4, 6));
-							webDBSignupVo.setBirthDate03(cicuemCuInfTotTcVo.getAthtDtbr().substring(6));
-							webDBSignupVo.setCertCi(cicuemCuInfTotTcVo.getCiNo());
-							webDBSignupVo.setCstmId(chcsNo);
-							webDBSignupVo.setEmailReceiveType(is030Email);
-							webDBSignupVo.setEmailReceiveTypeBp(is000Email);
-							webDBSignupVo.setFrtroptfl(is060Check);
-							webDBSignupVo.setGenderFlg(cicuemCuInfTotTcVo.getSxclCd().equals("F")? "1":"0");
-							webDBSignupVo.setInfoProvide(is030Check);
-							webDBSignupVo.setMktuseinfsupfl(is050Check);
-							webDBSignupVo.setMobileNo1(cicuemCuInfTotTcVo.getCellTidn());
-							webDBSignupVo.setMobileNo2(cicuemCuInfTotTcVo.getCellTexn() + cicuemCuInfTotTcVo.getCellTlsn());
-							webDBSignupVo.setNation("K".equals(cicuemCuInfTotTcVo.getFrclCd())?"0":"1");
-							webDBSignupVo.setParamSiteCd("CMC");
-							webDBSignupVo.setPswd(ApPasswordEncoder.encryptPassword(userPwdEc));
-							webDBSignupVo.setRes1(cicuemCuInfTotTcVo.getAthtDtbr().substring(2));
-							int res2 = 1;
-							if(cicuemCuInfTotTcVo.getSxclCd().equals("F")) {
-								res2 += 1;
-							}
-							if(cicuemCuInfTotTcVo.getAthtDtbr().startsWith("20")) {
-								res2 += 2;
-							}
-							if("F".equals(cicuemCuInfTotTcVo.getFrclCd())) {
-								res2 += 4;
-							}
-							
-							webDBSignupVo.setRes2(res2 + "");
-							webDBSignupVo.setSex(cicuemCuInfTotTcVo.getSxclCd().equals("F")? "0":"1");
-							webDBSignupVo.setSmsReceiveType(is030SMS);
-							webDBSignupVo.setSmsReceiveTypeBp(is000SMS);
-							webDBSignupVo.setUserName(custNm);
-							Map<String, String> webDBResult = webDBApiService.createWebDBUser(webDBSignupVo);
-							logger.info("createWebDBUser:{},{}", webDBResult.get("RESULT"), webDBResult.get("CODE"));
-							System.out.println(result);
-						}
 					} else {
 						//회원가입
 						cicuemCuInfTotTcVo.setCicuemCuOptiTcVo(null);
@@ -1027,50 +983,6 @@ public class SignupRestController extends AbstractController {
 							throw error(result, HttpStatus.UNAUTHORIZED, "ERROR", "고객님은 아모레 퍼시픽 탈퇴고객입니다.<br>탈퇴고객은, 탈퇴 후 30일 내 재 가입이 불가능합니다.");
 						}
 
-						if((APConstant.RESULT_OK.equals(cicuemCuInfCoOutVo.getRsltCd()))) {
-							WebDBSignupVo webDBSignupVo = new WebDBSignupVo();
-							webDBSignupVo.setAgree1("Y");
-							webDBSignupVo.setAgree2("Y");
-							webDBSignupVo.setApAgree(is040Check);
-							webDBSignupVo.setAppChCd(cicuemCuInfTotTcVo.getJndvCd());
-							webDBSignupVo.setAtclCd(cicuemCuInfTotTcVo.getAtclCd().equals("10")?"1":"2");
-							webDBSignupVo.setBirthDate01(cicuemCuInfTotTcVo.getAthtDtbr().substring(0, 4));
-							webDBSignupVo.setBirthDate02(cicuemCuInfTotTcVo.getAthtDtbr().substring(4, 6));
-							webDBSignupVo.setBirthDate03(cicuemCuInfTotTcVo.getAthtDtbr().substring(6));
-							webDBSignupVo.setCertCi(cicuemCuInfTotTcVo.getCiNo());
-							webDBSignupVo.setCstmId(chcsNo);
-							webDBSignupVo.setEmailReceiveType(is030Email);
-							webDBSignupVo.setEmailReceiveTypeBp(is000Email);
-							webDBSignupVo.setFrtroptfl(is060Check);
-							webDBSignupVo.setGenderFlg(cicuemCuInfTotTcVo.getSxclCd().equals("F")? "1":"0");
-							webDBSignupVo.setInfoProvide(is030Check);
-							webDBSignupVo.setMktuseinfsupfl(is050Check);
-							webDBSignupVo.setMobileNo1(cicuemCuInfTotTcVo.getCellTidn());
-							webDBSignupVo.setMobileNo2(cicuemCuInfTotTcVo.getCellTexn() + cicuemCuInfTotTcVo.getCellTlsn());
-							webDBSignupVo.setNation("K".equals(cicuemCuInfTotTcVo.getFrclCd())?"0":"1");
-							webDBSignupVo.setParamSiteCd("CMC");
-							webDBSignupVo.setPswd(ApPasswordEncoder.encryptPassword(userPwdEc));
-							webDBSignupVo.setRes1(cicuemCuInfTotTcVo.getAthtDtbr().substring(2));
-							int res2 = 1;
-							if(cicuemCuInfTotTcVo.getSxclCd().equals("F")) {
-								res2 += 1;
-							}
-							if(cicuemCuInfTotTcVo.getAthtDtbr().startsWith("20")) {
-								res2 += 2;
-							}
-							if("F".equals(cicuemCuInfTotTcVo.getFrclCd())) {
-								res2 += 4;
-							}
-							
-							webDBSignupVo.setRes2(res2 + "");
-							webDBSignupVo.setSex(cicuemCuInfTotTcVo.getSxclCd().equals("F")? "0":"1");
-							webDBSignupVo.setSmsReceiveType(is030SMS);
-							webDBSignupVo.setSmsReceiveTypeBp(is000SMS);
-							webDBSignupVo.setUserName(custNm);
-							Map<String, String> webDBResult = webDBApiService.createWebDBUser(webDBSignupVo);
-							logger.info("createWebDBUser:{},{}", webDBResult.get("RESULT"), webDBResult.get("CODE"));
-							System.out.println(result);
-						}
 					}
 				} else {
 					throw error(result, HttpStatus.UNAUTHORIZED, "ERROR", "일시적 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");

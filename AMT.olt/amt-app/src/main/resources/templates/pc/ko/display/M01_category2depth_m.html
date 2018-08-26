@@ -3,24 +3,26 @@
 <body>
 <div ap:fragment="layout-contents">
 	<div class="ap_contents goods_list">
-		<th:block ap:replace="~{common/fragment/product-page-title}"/>
+		<div class="page_title_area prd_category">
+			<div class="breadcrumb">
+				<span>홈</span>
+			</div>
+		</div>
 
 		<div class="ap_com_cont">
 			<div class="aside_area filter product">
-				<h2 class="h_title"><a href="#" class="depth">스킨케어</a></h2>
-				<div class="category">
-					<ul>
-						<li><a href="#" class="on">클렌징 (00)</a></li>
-						<li><a href="#">메이크업 리무버 (00)</a></li>
-						<li><a href="#">페이스 워시 (00)</a></li>
-						<li><a href="#">필링 & 스크럽 (00)</a></li>
-					</ul>
+				<div class="category_list">
+					<div class="loading" style="height: 300px;">
+						<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+					</div>
 				</div>
 				<fieldset class="form">
 					<legend class="sr_only">선택 옵션 선택</legend>
 					<button type="button" class="btn_lg_gradient init">선택 옵션 초기화</button>
 					<div class="filter_option">
-
+						<div class="loading" style="height: 400px;">
+							<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+						</div>
 					</div>
 				</fieldset>
 			</div>
@@ -30,7 +32,10 @@
 					<div class="title_result">
 						<h3 class="h_title d2"><strong>클렌징에서 제안드리는 상품</strong></h3>
 					</div>
-					<div class="recommended_item slide recommend has_count" data-ix-options="view-length:3; move-length:3;loop:false;datum-point:-20px">
+					<div class="loading" style="height: 200px;">
+						<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+					</div>
+					<div class="recommended_item slide recommend has_count" data-ix-options="view-length:3; move-length:3;loop:false;datum-point:-20px" style="display:none">
 						<div class="ix-list-viewport unit_1">
 
 							<ul class="ix-list-items"></ul>
@@ -39,7 +44,6 @@
 						<div class="ix-controller">
 							<div class="slide_direction">
 								<div class="paging"><span class="current">1</span>/<span class="total">10</span></div>
-								<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
 								<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
 								<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
 							</div>
@@ -49,7 +53,7 @@
 
 				<div class="category_area">
 					<div class="title_result">
-						<h3 class="h_title d2"><strong>전체상품(<span class="total"></span>)</strong></h3>
+						<h3 class="h_title d2"><strong>전체상품 <span class="total"></span></strong></h3>
 						<div class="float_right">
 							<div class="search_sort">
 								<a href="#" class="on" data-value="Bestselling">판매순</a>

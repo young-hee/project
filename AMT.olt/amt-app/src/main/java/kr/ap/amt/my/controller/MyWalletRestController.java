@@ -21,7 +21,7 @@ import java.util.HashMap;
  * 7. 예치금/계좌 관리
  *
  */
-@Controller
+@RestController
 @RequestMapping("/my/api")
 public class MyWalletRestController extends AbstractController {
 

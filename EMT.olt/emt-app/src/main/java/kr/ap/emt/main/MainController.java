@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import kr.ap.comm.config.interceptor.PageTitle;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
-import kr.ap.emt.my.controller.MyBenefitViewController;
 import net.g1project.ecp.api.model.sales.coupon.MemberCoupon;
 import net.g1project.ecp.api.model.sales.display.*;
 import net.g1project.ecp.api.model.sales.guide.FoNoticeResult;
@@ -30,13 +29,6 @@ public class MainController extends AbstractController {
 	@GetMapping({"/", "/main", "/main/preview"})
 	@PageTitle(title = "에뛰드하우스에 오신걸 환영합니다.")
 	public String main(Model model, String previewKey, String previewDate) {
-		
-//		Cookie cookie = CookieUtils.getCookie(request, CookieKey.AUTO_LOGIN);
-//		if(cookie != null) {
-//			LoginTicket ticket = loginService.getLoginTicket(cookie.getValue());
-//			if(ticket != null)
-//				WebUtils.setSessionAttribute(response, SessionKey.LOGIN_USER, ticket.getUser());
-//		}
 	
 		//메뉴페이지 파일아이디 조회
 		String displayMenuId = "main";
@@ -56,16 +48,6 @@ public class MainController extends AbstractController {
 
 	        // 코너정보
 	        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-	        
-	        /*	
-	          @Param("displayMenuSetId") String displayMenuSetId
-	        , @Param("displayMenuId") String displayMenuId
-	        , @Param("memberSn") Long memberSn
-	        , @Param("previewKey") String previewKey
-	        , @Param(value = "previewDate", expander = ISO8601DateTimeExpander.class) Date previewDate
-	        , @Param("cornerIds") String cornerIds
-	        , @Param("excludeSoldOut") Boolean excludeSoldOut
-	        */
 	        
 			List<Corner> corners = 
 				displayApi.getMenuPageCorners(
@@ -116,10 +98,9 @@ public class MainController extends AbstractController {
         
 		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
 		
-		if(0L != getMemberSn()) {
+		if(isLoggedIn()) {
 			MemberCoupon memberKeepingCoupons = couponApi.getMemberKeepingCoupons("Avail", getMemberSn(), 0L, 0L);
-			model.addAttribute("memberKeepingCoupons", memberKeepingCoupons); 
-			
+			model.addAttribute("memberKeepingCoupons", memberKeepingCoupons); //floating menu 쿠폰목록 조회
 		}
 		return "main/" + pageInfo.getMenuPageFileId();
 	}

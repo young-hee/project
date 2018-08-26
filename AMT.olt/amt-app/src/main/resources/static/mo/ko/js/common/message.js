@@ -5,6 +5,10 @@
 	'use strict';
 
 	/** ========== Messages ========== */
+	AP.url = {
+		ANDROID_APP_STORE : 'https://play.google.com/store/apps/details?id=com.amorepacific.amorepacificmall',
+		IOS_APP_STORE : 'https://itunes.apple.com/kr/app/id662044174?mt=8'
+	};
 
 	AP.message = {
 		API_SAVE_ERROR: '정상적으로 처리되지 않았습니다.<br>잠시 후 다시 이용해 주시기 바랍니다.',
@@ -17,7 +21,8 @@
 		IN_INVALID_BEAUTYPOINT_PRODUCT: '뷰티포인트로 구매할 수 없는 상품이 포함되어 있습니다.',
 		ADDED_CART_TO_CART_PAGE: '장바구니에 상품이 추가 되었어요.',
 		RESTOCK_NOTIFY_APPLY_SUCCESS: '입고알림 신청이 완료되었습니다.',
-		DUPLICATE_SELECTED_PRODUCT: '이미 추가한 옵션입니다.'
+		DUPLICATE_SELECTED_PRODUCT: '이미 추가한 옵션입니다.',
+		LINK_ALARM_APP_STORE: '해당 서비스는 아모레퍼시픽몰 어플에서만 신청가능합니다.'
 	};
 
 })( jQuery );

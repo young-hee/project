@@ -1,0 +1,68 @@
+<html ap:decorate="~{layout/only-contents}">
+  
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="modal_dimmed"></div>
+	<div class="layer_popup" style="display: block;">
+		<div class="layer_wrap layer_sm" style="margin-top:-116px;">
+			<dl class="layer">
+				<dt class="layer_title line">시스템 오류신고</dt>
+				<!-- AP.modal.open() 의 contents 영역 -->
+				<dd class="layer_cont">
+					<div class="ly_info">
+						<form method="post">
+							<fieldset class="form">
+								<legend></legend>
+								<div class="">
+									<span class="check_wrap"><input type="checkbox" id="check0_1" checked=""><label for="check0_1">페이지에 글자, 링크가 어긋나 보여요</label></span>
+									<span class="check_wrap"><input type="checkbox" id="check0_2" checked=""><label for="check0_2">로그인이 안되요</label></span>
+									<span class="check_wrap"><input type="checkbox" id="check0_3" checked=""><label for="check0_3">알림이 잘못와요/ 오지 않아요</label></span>
+									<span class="check_wrap"><input type="checkbox" id="check0_4" checked=""><label for="check0_4">결제가 되지 않아요</label></span>
+									<span class="check_wrap"><input type="checkbox" id="check0_5" checked=""><label for="check0_5">기타</label></span>
+								</div>
+								<div class="input_wrap">
+									<input type="text" placeholder="placeholder">
+								</div>
+								<div class="attach_wrap ui_input_images">
+									<ul class="attach">
+										<li class="input_file_btn_area">
+											<div class="attach_file">
+												<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="">
+												<label for="i_picture">사진 첨부</label>
+											</div>
+										</li>
+									</ul>
+								</div>
+								<div class="">
+									<div class="textarea">
+										<textarea name="" id="" cols="30" rows="3" placeholder="500자 이내로 입력해주세요." maxlength="500"></textarea>
+									</div>
+									<p class="text_right"><small><em class="current">0</em>/<span class="limits">500</span></small></p>
+								</div>
+							</div>
+						</fieldset> 
+					</form>
+					<div class="layer_btns">
+						<!-- "btn_default_modal_confirm" 를 넣으면 기본 modal의 확인 기능이 적용된다. (e.closeType = 'confirm') -->
+						<a href="#none" class="btn_fix_bordered">취소</a>
+						<a href="#none" class="btn_fix_neutral btn_default_modal_confirm">확인</a>
+					</div>
+				</dd>
+				<!-- //AP.modal.open() 의 contents 영역 -->
+			</dl>
+			<button type="button" class="layer_close"><span class="sr_only">레이어 닫기</span></button>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+<script language="javascript" type="text/javascript">
+	$('.ui_input_images').inputImages();
+</script>
+</th:block>
+
+</body>
+</html>
+

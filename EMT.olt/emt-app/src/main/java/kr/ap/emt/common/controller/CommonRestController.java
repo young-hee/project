@@ -188,8 +188,7 @@ public class CommonRestController extends AbstractController {
 	 */
 	@RequestMapping("/searchReviewList")
     public ResponseEntity<?> searchReviewList(SearchVO searchVO) {
-		HashMap<String, Object> result = new HashMap<String, Object>();
-
+		
 			return ResponseEntity.ok(
 					displayApi.searchProdReviewList(
 						 searchVO.getToSearchFor()
@@ -209,8 +208,7 @@ public class CommonRestController extends AbstractController {
 	 */
 	@RequestMapping("/searchArticleList")
     public ResponseEntity<?> searchArticleList(SearchVO searchVO) {
-		HashMap<String, Object> result = new HashMap<String, Object>();
-
+		
 		return ResponseEntity.ok(
 				displayApi.searchArticleList(
 				 searchVO.getToSearchFor()
@@ -227,8 +225,7 @@ public class CommonRestController extends AbstractController {
 	 */
 	@RequestMapping("/searchPlanDisplayList")
     public ResponseEntity<?> searchPlanDisplayList(SearchVO searchVO) {
-		HashMap<String, Object> result = new HashMap<String, Object>();
-            
+		    
 		return ResponseEntity.ok(
 				displayApi.searchPlanDisplayList(
 					 searchVO.getToSearchFor()
@@ -246,7 +243,6 @@ public class CommonRestController extends AbstractController {
 	 */
 	@RequestMapping("/getWithLegacyModelCodes")
 	public ResponseEntity<?> legacyModelCodes(String legacyModelCodes) {
-        HashMap<String, Object> result = new HashMap<String, Object>();
         
 		return ResponseEntity.ok(displayApi.getWithLegacyModelCodesProdList(legacyModelCodes));
 	}

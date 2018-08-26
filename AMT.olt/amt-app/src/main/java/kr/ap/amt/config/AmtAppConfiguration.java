@@ -1,12 +1,11 @@
 package kr.ap.amt.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mxab.thymeleaf.extras.dataattribute.dialect.DataAttributeDialect;
 
-import kr.ap.comm.config.interceptor.AccessTokenHandlerInterceptor;
-import kr.ap.comm.config.interceptor.BreadCrumbInterceptor;
-import kr.ap.comm.config.interceptor.DisplayChannelResolver;
-import kr.ap.comm.config.interceptor.IncompatableBrowserChecker;
-import kr.ap.comm.config.interceptor.LoginInterceptor;
+import kr.ap.amt.api.pshop.PShopService;
+import kr.ap.amt.api.pshop.PShopServiceImpl;
+import kr.ap.comm.config.interceptor.*;
 import kr.ap.comm.config.thymeleaf.APCustomDialect;
 import kr.ap.comm.support.breadcrumb.BreadCrumbPostProcessor;
 
@@ -51,6 +50,16 @@ public class AmtAppConfiguration extends WebMvcConfigurerAdapter {
     public BreadCrumbPostProcessor breadCrumbPostProcessor() {
         return new BreadCrumbPostProcessor();
     }
+    
+    @Bean
+    public PShopService pShopService() {
+    	return new PShopServiceImpl();
+    }
+
+    @Bean
+	public ObjectMapper objectMapper() {
+    	return new ObjectMapper();
+	}
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {

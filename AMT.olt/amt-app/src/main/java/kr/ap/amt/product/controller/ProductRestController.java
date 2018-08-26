@@ -1,25 +1,30 @@
 package kr.ap.amt.product.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.ap.amt.product.vo.ExternalVO;
 import kr.ap.amt.product.vo.RequestReview;
 import kr.ap.comm.support.common.AbstractController;
 import net.g1project.ecp.api.model.sales.display.OnlineProdList;
+import net.g1project.ecp.api.model.sales.product.ProdReviewInfo;
 import net.g1project.ecp.api.model.sales.product.ProdReviewListInfo;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
+
 import javax.servlet.http.HttpServletRequest;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.StringJoiner;
 
 /**
  * @author Simjaekyu@
@@ -32,6 +37,9 @@ public class ProductRestController extends AbstractController {
 	
 	@Value("${external.api.base-url}")
 	private String externalBaseUrl; // SmartOffer 추천 요청 URL
+
+	@Autowired
+	private ObjectMapper mapper;
 	
 	private final String EXTERNAL_ITEMS_KEY = "items"; // SmartOffer item array
 	
@@ -40,14 +48,23 @@ public class ProductRestController extends AbstractController {
 	@GetMapping("/getExternalData")
 	@ResponseBody
 	public ResponseEntity<?> getExternalData(ExternalVO vo, HttpServletRequest request) throws Exception {
-		HttpURLConnection conn = null;
-		InputStream inStream = null;
-		DataOutputStream outStream = null;
 		HashMap<String, Object> result = new HashMap<>();
 		OnlineProdList onlineProdList = new OnlineProdList();
 		String jsonText = "";
 
 		// 1. call external api
+		RestTemplate template = new RestTemplateBuilder()
+			.additionalMessageConverters(new StringHttpMessageConverter(StandardCharsets.UTF_8))
+			.setConnectTimeout(10000)
+			.setReadTimeout(8000)
+			.build();
+
+		ResponseEntity<String> stringResponseEntity = template.getForEntity(externalBaseUrl.concat(vo.toString()), String.class);
+		if (stringResponseEntity.getStatusCode().equals(HttpStatus.OK)) {
+			jsonText = stringResponseEntity.getBody();
+		}
+
+		/*
 		try {
 			URL url = new URL(externalBaseUrl.concat(vo.toString()));
 			conn = (HttpURLConnection) url.openConnection();
@@ -96,9 +113,22 @@ public class ProductRestController extends AbstractController {
 				conn.disconnect();
 			}
 		}
+		*/
 		
 		// 2. call internal api
 		if (!jsonText.isEmpty()) {
+			StringJoiner legacyModelCodes = new StringJoiner(",");
+			JsonNode root = mapper.readTree(jsonText);
+			JsonNode items = root.get(EXTERNAL_ITEMS_KEY);
+			if (items.isArray()) {
+				for (JsonNode item : items) {
+					legacyModelCodes.add(item.get(EXTERNAL_ITEM_CODE_KEY).textValue());
+				}
+			}
+
+			onlineProdList = displayApi.getWithLegacyModelCodesProdList(legacyModelCodes.toString());
+
+			/*
 			StringBuffer legacyModelCodes = new StringBuffer();
 			JSONObject json = null;
 			JSONArray items = null;
@@ -114,6 +144,7 @@ public class ProductRestController extends AbstractController {
 			}
 
 			onlineProdList = displayApi.getWithLegacyModelCodesProdList(legacyModelCodes.toString());
+			*/
 		}
 		
 		result.put("onlineProdList", onlineProdList);
@@ -135,6 +166,27 @@ public class ProductRestController extends AbstractController {
     		ProdReviewListInfo prodReviewListInfo = productApi.getProductReviews(requestReview.getProdReviewUnit(), requestReview.getProdReviewType(), requestReview.getOffset(), requestReview.getLimit(), getMemberSn(), requestReview.getOnlineProdSn(), requestReview.getProdSn(), requestReview.getStyleCode(), requestReview.getProdReviewSort(), requestReview.getScope(), requestReview.getTopReviewOnlyYn(), requestReview.getTopReviewFirstYn(), (!requestReview.getStartDate().isEmpty()) ? sf.parse(requestReview.getStartDate()) : null, (!requestReview.getEndDate().isEmpty()) ? sf.parse(requestReview.getEndDate()) : null, "N");
     		result.put("prodReviewListInfo", prodReviewListInfo);
     		
+    		return ResponseEntity.ok(result);
+    	} catch (Exception e) {
+    		result.put("errorData", e);
+    		return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+    	}
+    }
+    
+    /**
+     * 상품평 상세 조회
+     * @param requestReview
+     * @return
+     */
+    @GetMapping("/getReviewDetail")
+    @ResponseBody
+    public ResponseEntity<?> getReviewDetail(RequestReview requestReview) {
+    	HashMap<String, Object> result = new HashMap<String, Object>();
+
+		try {
+    		ProdReviewInfo review = productApi.getProductReviewDetail(requestReview.getProdReviewSn());
+    		
+    		result.put("review", review);
     		return ResponseEntity.ok(result);
     	} catch (Exception e) {
     		result.put("errorData", e);

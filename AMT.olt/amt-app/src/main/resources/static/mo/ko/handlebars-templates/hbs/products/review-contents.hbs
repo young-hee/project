@@ -1,0 +1,57 @@
+{{#each this.prodReviewList}}
+	<dl class="review">
+		<dt class="review_header">
+			<span>{{ this.memberId }}</span><span>{{ this.memberLevelName }}</span>
+			<span class="rating">
+				<span class="mark_star_sm star{{ this.scope }}"><span class="sr_only">구매 평점 별 5개 중 {{ this.scope }}개</span></span> <!--평점에따라 클래스변경(star0~star5)-->
+				<span class="count">{{ this.scope }}</span>
+			</span>
+		</dt>
+		<dd class="review_cont">
+			<p class="product_name"><em class="ellipsis">{{ this.onlineProdName }}, {{ prodName }}</em></p>
+			
+			{{#xif this.imgList.length '>' 0}}
+			<div class="product_slide">
+				<ul class="three_half">
+					{{#each this.imgList}}
+						<li><a href="#none"><img src="{{this.imageFileUrl}}" alt="{{../prodReviewTitle}}"></a></li>
+					{{/each}}
+				</ul>
+			</div>
+			{{/xif}}
+
+			<div class="ui_table summary">
+				{{#each this.surveys}}
+				<dl>
+					<dt>지속력</dt>
+					<dd><b>오래 지속되요</b></dd>
+				</dl>
+				{{/each}}
+			</div>
+			
+			<div class="cont">
+				<!--/* 375 해상도 기준 4줄에 절삭 : 더읽기 클릭시 전체 보임 */-->
+				<p class="text">{{ this.prodReviewBodyText }}</p>
+				<a href="javascript:;" class="read_more" style="display:none;">더읽기 <i class="ico_down"></i></a>
+				<a href="javascript:;" class="more_view close" style="display:none;">닫기 <i class="ico_up"></i></a>
+			</div>
+			
+			<div class="clear btns">
+				<button type="button" class="btn_good on" onclick="$(this).toggleClass('on');">
+					<i class="ico_thumb animated500ms rotate"></i>
+					<span>도움이 되요 <span class="num">{{this.recommendCnt}}</span></span>
+				</button>
+				
+				<button type="button" class="btn_report"><i class="ico_report"></i><span class="sr_only">신고하기</span></button>
+			</div>
+			
+			<div class="clear bottom">
+				<p class="date">{{dateFormat prodReviewRegistDt "YYYY.MM.DD"}}</p>
+				<!--/* 내가 작성한 글 수정 버튼 노출 */-->
+				{{#xif ../memberSn '==' this.memberSn}}
+					<a href="#none" class="btn_sm_bordered">수정</a>
+				{{/xif}}
+			</div>
+		</dd>
+	</dl>
+{{/each}}

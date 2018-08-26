@@ -4,18 +4,35 @@
 <div ap:fragment="layout-contents">
 
 	<div class="ap_contents magazine">
-		<!--/* 동영상 영역 */-->
-		<div class="section banner white" style="background-color: #000;">
-			<div class="video_wrap">
-				<iframe class="youtube_video" width="100%" height="210px" src="https://youtube.com/embed/85GbWBQgSok?wmode=transparent&showinfo=0;&autoplay=0" frameborder="0" allowfullscreen data-vendor="youtube" data-ratio="true" data-mute="false"></iframe>
-			</div>
-			<a href="#none"> <!--/* 관리자 지정 bg 컬러 */-->
-				<div class="banner_info align_center">
-					<p class="copy">헤라<br>그리고 박찬욱</p>
-					<p class="text">about SEOULISTA<br>16년 헤라 브랜드 영상 2탄</p>
+		<!-- Beauty Video -->
+		<div class="section m_video_area"><!-- 2018-08-24 Beauty Video 수정 -->
+			<div class="y_video_wrap">
+				<div class="video_wrap">
+					<iframe class="youtube_video ＠video-apply" width="750" height="420" src="https://youtube.com/embed/85GbWBQgSok?wmode=transparent&amp;showinfo=0;&amp;autoplay=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="" data-vendor="youtube" data-ratio="true" data-mute="false" id="widget2"></iframe>
 				</div>
-			</a>
+				
+				<!-- 썸네일 -->
+				<div class="video_thumb_area">
+					<a href="javascript:;">
+						<img src="/mo/ko/images/dummy/img_youtube_thumb02.jpg" alt="" class="thumb_img">
+						<img src="/mo/ko/images/common/btn_video_play.png" alt="" class="btn_video_thumb">
+					</a>
+				</div>
+
+			</div>
+
+			<div class="y_text_wrap" style="background-color:#120a1e">
+				<a href="javascript:;">
+					<div class="banner_info">
+						<p class="copy" style="color:#fff"><span>헤라</span><span>그리고 박찬욱</span></p>
+						<p class="text" style="color:#fff"><span>about SEOULISTA</span><span>16년 헤라 브랜드 영상 2탄</span></p>
+					</div>
+				</a>
+				
+			</div>
+
 		</div>
+		<!-- // Beauty Video -->
 
 		<div class="section">
 			<!--/* 상품 목록 : 가로 슬라이드 형  */-->
@@ -827,6 +844,14 @@
 		$(".comment_list .more_view.close").click(function(){
 			$(this).parent(".cont").removeClass("open");
 		});
+		
+		/* Youtube 재생 스크립트 */
+		$('.video_thumb_area').bind('click', function() {
+			var $ytb_iframe = $(this).prev().find("iframe");
+			  $(this).hide();
+			  $ytb_iframe.show();
+		 });	
+
 
 	</script>
 </th:block>

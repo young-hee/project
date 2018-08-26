@@ -62,8 +62,7 @@ public class LoginViewController extends AbstractController {
 		
 		return null;
 	}
-
-
+	
 	private void commonLogin(Model model, HttpServletRequest request, String returl) {
 		String returnUrl = (String) WebUtils.getSessionAttribute(request, SessionKey.LOGIN_REDIRECT_URI);
         String reqReturnUrl = request.getParameter("returnUrl");
@@ -105,6 +104,8 @@ public class LoginViewController extends AbstractController {
 		CookieUtils.removeCookie(request, response, CookieKey.AUTO_LOGIN);
 		MemberSession memberSession = getMemberSession();
 		WebUtils.setSessionAttribute(request, SessionKey.LOGIN_USER, null);
+		WebUtils.setSessionAttribute(request, SessionKey.CART, null);
+		WebUtils.setSessionAttribute(request, SessionKey.ORDER, null);
 		if (memberSession.getMember_sn() != 0) {
 			try {
 				ApLogoutInfo logoutInfo = new ApLogoutInfo();

@@ -16,6 +16,7 @@
 									<img ap:src="@{/images/dummy/img_item_04.jpg}" alt="">
 								</div>
 								<div class="product_info">
+									<div class="reservation_txt"><span>예약상품</span> 11월 25일부터 순차배송 예정</div> <!--예약상품 영역추가 (180823)-->
 									<div class="product_name">브랜드명 상품명 또는 이벤트명 브랜드명 상품명 또는 이벤트명 최대 두줄 넘어가면 말줄임표 해주세요.</div>
 									<div class="option_name">20ml 촉촉 인텐시브 오일 1개</div>
 									<div class="option_name">온라인상품의 다른 옵션 2개 담았을 경우 제목이 길어지면 말줄임</div>
@@ -35,14 +36,16 @@
 								</div>
 							</a>
 						</li>
+						<!-- 묶음상품일경우 (180823) -->
 						<li class="product_order">
 							<a href="#none">
 								<div class="product_visual">
 									<img ap:src="@{/images/dummy/img_item_06.jpg}" alt="">
 								</div>
 								<div class="product_info">
-									<div class="product_name">브랜드명 상품명 또는 이벤트명</div>
-									<div class="option_name">20ml 촉촉 인텐시브 오일 1개</div>
+									<div class="product_name">데미지 케어 샴푸 + 안티에이징 트리트먼트 묶음세트</div>
+									<div class="option_name">데미지 케어 샴푸 750ml 2개</div>
+									<div class="option_name">안티에이징 트리트먼트 380ml 2개</div>
 									<div class="price_area"><span class="price"><b>40,600</b>P</span></div>
 								</div>
 							</a>
@@ -84,10 +87,46 @@
 			</dl>
 		</div>
 
-		<!--/* 입점몰 상품 목록 : 상품 갯수가 0일 경우 비노출 */-->
+		<!--/* 입점몰 상품 목록 (입점몰별로 구분) : 상품 갯수가 0일 경우 비노출 */-->
 		<div class="ui_accordion">
 			<dl>
-				<dt><b class="title">입점몰 상품 2개</b> <button type="button"><i class="ico_navi"></i><span class="sr_only">더보기</span></button></dt>
+				<dt><b class="title">이니스프리 상품 2개</b> <button type="button"><i class="ico_navi"></i><span class="sr_only">더보기</span></button></dt> <!--입점몰별로 타이틀 구분 (180823)-->
+				<dd>
+					<ul class="product_list_order">
+						<li class="product_order">
+							<a href="#none">
+								<div class="product_visual">
+									<img ap:src="@{/images/dummy/img_item_02.jpg}" alt="">
+								</div>
+								<div class="product_info">
+									<div class="product_name">브랜드명 상품명 또는 이벤트명 브랜드명 상품명 또는 이벤트명 최대 두줄 넘어가면 말줄임표 해주세요.</div>
+									<div class="option_name">20ml 촉촉 인텐시브 오일 1개</div>
+									<div class="option_name">온라인상품의 다른 옵션 2개 담았을 경우 제목이 길어지면 말줄임</div>
+									<div class="price_area"><span class="price"><b>40,600</b>원</span> <del>50,000원</del></div>
+								</div>
+							</a>
+						</li>
+						<li class="product_order">
+							<a href="#none">
+								<div class="product_visual">
+									<img ap:src="@{/images/dummy/img_item_03.jpg}" alt="">
+								</div>
+								<div class="product_info">
+									<div class="product_name">브랜드명 상품명 또는 이벤트명</div>
+									<div class="option_name">20ml 촉촉 인텐시브 오일 1개</div>
+									<div class="price_area"><span class="price"><b>40,600</b>원</span> <del>50,000원</del></div>
+								</div>
+							</a>
+						</li>
+					</ul>
+				</dd>
+			</dl>
+		</div>
+
+		<!--/* 입점몰 상품 목록 (입점몰별로 구분) : 상품 갯수가 0일 경우 비노출 */-->
+		<div class="ui_accordion">
+			<dl>
+				<dt><b class="title">데싱디바, 머지 상품 2개</b> <button type="button"><i class="ico_navi"></i><span class="sr_only">더보기</span></button></dt> <!--입점몰별로 타이틀 구분 (180823)-->
 				<dd>
 					<ul class="product_list_order">
 						<li class="product_order">
@@ -131,15 +170,15 @@
 						<div class="layer_tooltip">
 							<dl>
 								<dt>포장 서비스 안내</dt>
+								<!-- 레이아웃 변경 (180824) -->
 								<dd>
-									<p class="text">
-										고객님의 구매등급에 따라 주문건당 무료포장 서비스를 이용하실 수 있습니다.<br>
-										<span>홍길동</span>님은 <b>VVIP</b> 고객으로, <b>1</b>개 상품 신청할 수 있습니다.<br>
-										포장이 어려운 상품은 선택 목록에서 자동 제외됩니다<br>
-										포장 서비스 이용 주문이 많을 경우, 배송이 지연될 수 있습니다.
-									</p>
+									<p class="text">고객님의 구매등급에 따라 주문건당 무료포장 서비스를 이용하실 수 있습니다.</p>
+									<p class="text"><span>홍길동</span>님은 <b>VVIP</b> 고객으로, <b>1</b>개 상품 신청할 수 있습니다.</p>
+									<p class="text">포장이 어려운 상품은 선택 목록에서 자동 제외됩니다</p>
+									<p class="text">포장 서비스 이용 주문이 많을 경우, 배송이 지연될 수 있습니다.</p>
 									<button type="button" class="ui_close sm"><span class="sr_only">툴팁 닫기</span></button>
 								</dd>
+								<!--// 레이아웃 변경 (180824) -->
 							</dl>
 						</div>
 					</div>
@@ -302,7 +341,9 @@
 										<!--/* 선택시 노출 */-->
 										<div class="check_set">
 											<span class="chk_round_h24"><input type="checkbox" name="chk" id="default" disabled><label for="default">기본배송지 설정</label></span>
+											<!-- 군부대 배송 삭제 (180823)
 											<span class="chk_round_h24"><input type="checkbox" name="chk" id="army"><label for="army">군부대 배송</label></span>
+											-->
 										</div>
 									</li>
 									<li>
@@ -383,7 +424,7 @@
 						<!--/* 쿠폰안내  (회원만 사용가능)*/-->
 						<div class="ui_accordion">
 							<dl>
-								<dt><span class="title">할인율 높은 쿠폰으로 자동 적용합니다</span> <button type="button"><i class="ico_navi"></i><span class="sr_only">더보기</span></button></dt>
+								<dt><span class="title">더 자세한 쿠폰할인 안내</span> <button type="button"><i class="ico_navi"></i><span class="sr_only">더보기</span></button></dt> <!--문구수정(180823)-->
 								<dd>
 									<div class="section bg_gray">
 										<dl class="dl_cont">
@@ -541,13 +582,14 @@
 					<div class="layer_tooltip">
 						<dl>
 							<dt>추가 사은품 안내</dt>
+							<!-- 레이아웃 변경 (180824) -->
 							<dd>
-								<p class="text">사은품의 재고가 부족할 경우 사은품이 대체되어 발송될 수 있습니다. <br>
-									사은품은 이미지와 상이할 수 있습니다.<br>
-									사은품의 교환이나 추가 증정은 불가하며 본품 반품/환불시 사은품도 동봉해주셔야 합니다.
-								</p>
+								<p class="text">사은품의 재고가 부족할 경우 사은품이 대체되어 발송될 수 있습니다.</p>
+								<p class="text">사은품은 이미지와 상이할 수 있습니다.</p>
+								<p class="text">사은품의 교환이나 추가 증정은 불가하며 본품 반품/환불시 사은품도 동봉해주셔야 합니다.</p>
 								<button type="button" class="ui_close sm"><span class="sr_only">툴팁 닫기</span></button>
 							</dd>
+							<!--// 레이아웃 변경 (180824) -->
 						</dl>
 					</div>
 					<div class="ui_accordion">
@@ -706,6 +748,7 @@
 								</div>
 							</dd>
 						</dl>
+						<!-- 구매금액대 사은품 영역 삭제 (180823)
 						<dl>
 							<dt><b class="title">구매금액대 사은품 <span>2개</span></b> <button type="button"><i class="ico_navi"></i><span class="sr_only">더보기</span></button></dt>
 							<dd>
@@ -782,6 +825,7 @@
 								</div>
 							</dd>
 						</dl>
+						-->
 						<dl>
 							<dt><b class="title">쿠폰 사은품 <span>2개</span></b> <button type="button"><i class="ico_navi"></i><span class="sr_only">더보기</span></button></dt>
 							<dd>
@@ -983,9 +1027,9 @@
 							<ul class="card_list col_04">
 								<li><div class="card"><input type="radio" name="other" id="other1"><label for="other1" class="naver_pay"><img alt="" ap:src="@{/images/order/img_other_01.jpg}"><span>네이버페이</span></label></div></li>
 								<li><div class="card"><input type="radio" name="other" id="other2"><label for="other2"><img alt="" ap:src="@{/images/order/img_other_02.jpg}"><span>페이코</span></label></div></li>
-								<li><div class="card"><input type="radio" name="other" id="other3"><label for="other3"><img alt="" ap:src="@{/images/order/img_other_03.jpg}"><span>페이나우</span></label></div></li>
+								<!-- <li><div class="card"><input type="radio" name="other" id="other3"><label for="other3"><img alt="" ap:src="@{/images/order/img_other_03.jpg}"><span>페이나우</span></label></div></li> 페이나우 삭제 (180823) -->
 								<li><div class="card"><input type="radio" name="other" id="other4"><label for="other4" class="cash"><img alt="" ap:src="@{/images/order/img_other_04.jpg}"><span>무통장입금<br>(가상계좌)</span></label></div></li>
-								<li><div class="card"><input type="radio" name="other" id="other5"><label for="other5"><img alt="" ap:src="@{/images/order/img_other_05.jpg}"><span>실시간<br>계좌이체</span></label></div></li>
+								<li><div class="card"><input type="radio" name="other" id="other5"><label for="other5" class="real_time"><img alt="" ap:src="@{/images/order/img_other_05.jpg}"><span>실시간<br>계좌이체</span></label></div></li>
 								<li><div class="card"><input type="radio" name="other" id="other6"><label for="other6" class="phone"><img alt="" ap:src="@{/images/order/img_other_06.jpg}"><span>휴대폰결제</span></label></div></li>
 								<li><div class="card"><input type="radio" name="other" id="other7"><label for="other7"><img alt="" ap:src="@{/images/order/img_other_07.jpg}"><span>Global Credit<br>Card</span></label></div></li>
 								<li><div class="card"><input type="radio" name="other" id="other8"><label for="other8"><img alt="" ap:src="@{/images/order/img_other_08.jpg}"><span>PayPal</span></label></div></li>
@@ -1022,25 +1066,53 @@
 											</dd>
 										</dl>
 										<dl class="ui_table">
-											<dt>에스크로<br>결제여부</dt>
-											<dd>
-												<div class="rdo_wrap">
-													<span class="rdo_h30"><input type="radio" name="escrow" id="escrow1" checked="checked"><label for="escrow1">네</label></span>
-													<span class="rdo_h30"><input type="radio" name="escrow" id="escrow2" ><label for="escrow2">아니오</label></span>
-												</div>
-											</dd>
-										</dl>
-										<dl class="ui_table">
-											<dt>현금영수증</dt>
+											<dt class="align_t">현금영수증</dt>
 											<dd>
 												<div class="rdo_wrap">
 													<span class="rdo_h30"><input type="radio"  name="receipt" id="receipt1" checked="checked"><label for="receipt1">개인</label></span>
 													<span class="rdo_h30"><input type="radio" name="receipt" id="receipt2" ><label for="receipt2">사업자</label></span>
 												</div>
 												<span class="input_h48_gray"><input type="text" title="휴대전화번호 또는 사업자 등록번호 입력" placeholder="휴대전화 또는 사업자 등록번호 입력"></span>
-												<span class="chk_round_h24"><input type="checkbox" id="receipt_info"><label for="receipt_info">현재 현금영수증 정보 저장</label></span>
 											</dd>
 										</dl>
+										<span class="chk_round_h24"><input type="checkbox" id="receipt_info"><label for="receipt_info">현재 현금영수증 정보 저장</label></span>
+
+										<!-- 서울보증보험 신청여부 영역 추가 (180824) -->
+										<div class="insurance_wrap">
+											<dl class="ui_table">
+												<dt>서울보증보험<br>신청여부</dt>
+												<dd>
+													<div class="rdo_wrap">
+														<span class="rdo_h30"><input type="radio" name="insurance" id="insurance1" checked="checked"><label for="insurance1">네</label></span>
+														<span class="rdo_h30"><input type="radio" name="insurance" id="insurance2" ><label for="insurance2">아니오</label></span>
+													</div>
+												</dd>
+											</dl>
+											<span class="chk_round_h24"><input type="checkbox" id="agree_email"><label for="agree_email">개인정보제공 및 보험증권 이메일 수신 동의</label></span>
+											<span class="chk_round_h24"><input type="checkbox" id="agree_sms"><label for="agree_sms">개인정보제공 및 보험증권 SMS 수신 동의</label></span>
+
+											<div class="birth_area">
+												<span class="input_h48_gray"><input type="text" title="생년월일6자리(ex.980905)" placeholder="생년월일6자리(ex.980905)"></span>
+												<div class="check_btn_set">
+													<span><input type="radio" name="gender" id="gender1" checked><label for="gender1">여자</label></span>
+													<span><input type="radio" name="gender" id="gender2"><label for="gender2">남자</label></span>
+												</div>
+											</div>
+											<ul class="list">
+												<li><a href="#">정보제공 안내</a></li>
+												<li>
+													고객님은 안전거래를 위해 현금 등으로 5만원 이상 결제시 저희
+													쇼핑몰에서 가입한 구매안전서비스 소비자 피해보상 보험서비스
+													를 이용하실 수 있습니다
+												</li>
+												<li>[보상대상] 미배송, 반품/환불거부/쇼핑몰 부도</li>
+												<li>
+													구매안전서비스를 통하여 주문하시고 서울보증보험에서 발급하는
+													보험계약 체감내역서를 반드시 확인하시기 바랍니다
+												</li>
+											</ul>
+										</div>
+										<!--// 서울보증보험 신청여부 영역 추가 (180824) -->
 									</fieldset>
 									<p class="txt_tel">
 										무통장입금은 인터넷뱅킹, 텔레뱅킹, 은행창구를 이용해 주세요.(ATM 사용은 불가합니다.)<br>
@@ -1055,6 +1127,44 @@
 										휴대폰결제 최소는 결제 당월에만 가능하며, 익월 취소 시 휴대폰요금은 청구되고 고객님이 지정한 은행계좌 혹은 예치금으로 환불됩니다.
 									</p>
 								</div>
+								<!-- 실시간계좌이체일경우 서울보증보험 영역 추가 (180824) -->
+								<div class="real_time">
+									<div class="insurance_wrap">
+										<dl class="ui_table">
+											<dt>서울보증보험<br>신청여부</dt>
+											<dd>
+												<div class="rdo_wrap">
+													<span class="rdo_h30"><input type="radio" name="insurance_2" id="insurance_2_1" checked="checked"><label for="insurance_2_1">네</label></span>
+													<span class="rdo_h30"><input type="radio" name="insurance_2" id="insurance_2_2" ><label for="insurance_2_2">아니오</label></span>
+												</div>
+											</dd>
+										</dl>
+										<span class="chk_round_h24"><input type="checkbox" id="agree_email2"><label for="agree_email2">개인정보제공 및 보험증권 이메일 수신 동의</label></span>
+										<span class="chk_round_h24"><input type="checkbox" id="agree_sms2"><label for="agree_sms2">개인정보제공 및 보험증권 SMS 수신 동의</label></span>
+
+										<div class="birth_area">
+											<span class="input_h48_gray"><input type="text" title="생년월일6자리(ex.980905)" placeholder="생년월일6자리(ex.980905)"></span>
+											<div class="check_btn_set">
+												<span><input type="radio" name="gender_2" id="gender_2_1" checked><label for="gender_2_1">여자</label></span>
+												<span><input type="radio" name="gender_2" id="gender_2_2"><label for="gender_2_2">남자</label></span>
+											</div>
+										</div>
+										<ul class="list">
+											<li><a href="#">정보제공 안내</a></li>
+											<li>
+												고객님은 안전거래를 위해 현금 등으로 5만원 이상 결제시 저희
+												쇼핑몰에서 가입한 구매안전서비스 소비자 피해보상 보험서비스
+												를 이용하실 수 있습니다
+											</li>
+											<li>[보상대상] 미배송, 반품/환불거부/쇼핑몰 부도</li>
+											<li>
+												구매안전서비스를 통하여 주문하시고 서울보증보험에서 발급하는
+												보험계약 체감내역서를 반드시 확인하시기 바랍니다
+											</li>
+										</ul>
+									</div>
+								</div>
+								<!--// 실시간계좌이체일경우 서울보증보험 영역 추가 (180824)  -->
 							</div>
 						</li>
 					</ul>
@@ -1076,10 +1186,16 @@
 									<dt>Apmall 상품 9개</dt>
 									<dd>153,000원</dd>
 								</dl>
+								<!-- 주문금액 입점몰별로 구분 (180823) -->
 								<dl>
-									<dt>입점몰 상품 0개</dt>
-									<dd>0원</dd>
+									<dt>이니스프리 상품 2개</dt>
+									<dd>23,000원</dd>
 								</dl>
+								<dl>
+									<dt>데싱디바, 머지 상품 4개</dt>
+									<dd>23,000원</dd>
+								</dl>
+								<!--// 주문금액 입점몰별로 구분 (180823) -->
 							</dd>
 						</dl>
 						<dl>
@@ -1094,10 +1210,16 @@
 									<dt>Apmall 배송비</dt>
 									<dd>0원</dd>
 								</dl>
+								<!-- 배송비 입점몰별로 구분 (180823) -->
 								<dl>
-									<dt>입점몰 배송비</dt>
+									<dt>이니스프리 배송비</dt>
 									<dd>2,500원</dd>
 								</dl>
+								<dl>
+									<dt>데싱디바, 머지 배송비</dt>
+									<dd>2,500원</dd>
+								</dl>
+								<!--// 배송비 입점몰별로 구분 (180823) -->
 							</dd>
 						</dl>
 						<dl>
@@ -1131,18 +1253,18 @@
 							<div class="layer_tooltip">
 								<dl>
 									<dt>뷰티포인트 적립안내</dt>
+									<!-- 레이아웃 변경 (180824) -->
 									<dd>
-										<p class="text">
-											고객님의 아모레퍼시픽 뷰티포인트 통합회원 등급에 따라 결제금액의 기본 1%+우대 최대 4%가 적립됩니다. (고객별 상이)<br>
-											뷰티포인트 적립 기준금액은 [최종결제금액-뷰티포인트 적립 제외상품 금액-배송비]로 계산된 금액입니다. <br>
-											특가상품(투데이핫딜), 프로모션 상품(상품할인, M+N, 즉시할인, 동시구매 등)은 뷰티포인트 적립대상에서 제외됩니다<br>
-											플러스멤버십 할인(10%)이 적용된 상품은 뷰티포인트 적립대상에 포함됩니다.<br>
-											적립 예정 뷰티포인트는 주문상품의 구매확정 시점에 자동으로 적립되며, 사용기한은 적립일로부터 1년입니다.<br>
-											주문 제품의 취소/환불/반품시 적립된 뷰티포인트도 자동 회수 처리됩니다. <br>
-											보다 자세한 뷰티포인트 이용 안내는 뷰티포인트 웹사이트(www.beautypoint.co.kr)에서 확인하실 수 있습니다.
-										</p>
+										<p class="text"><p class="text">고객님의 아모레퍼시픽 뷰티포인트 통합회원 등급에 따라 결제금액의 기본 1%+우대 최대 4%가 적립됩니다. (고객별 상이)</p>
+										<p class="text">뷰티포인트 적립 기준금액은 [최종결제금액-뷰티포인트 적립 제외상품 금액-배송비]로 계산된 금액입니다.</p>
+										<p class="text">특가상품(투데이핫딜), 프로모션 상품(상품할인, M+N, 즉시할인, 동시구매 등)은 뷰티포인트 적립대상에서 제외됩니다.</p>
+										<p class="text">플러스멤버십 할인(10%)이 적용된 상품은 뷰티포인트 적립대상에 포함됩니다.</p>
+										<p class="text">적립 예정 뷰티포인트는 주문상품의 구매확정 시점에 자동으로 적립되며, 사용기한은 적립일로부터 1년입니다.</p>
+										<p class="text">주문 제품의 취소/환불/반품시 적립된 뷰티포인트도 자동 회수 처리됩니다.</p>
+										<p class="text">보다 자세한 뷰티포인트 이용 안내는 뷰티포인트 웹사이트(www.beautypoint.co.kr)에서 확인하실 수 있습니다.</p>
 										<button type="button" class="ui_close sm"><span class="sr_only">툴팁 닫기</span></button>
 									</dd>
+									<!--// 레이아웃 변경 (180824) -->
 								</dl>
 							</div>
 						</div>

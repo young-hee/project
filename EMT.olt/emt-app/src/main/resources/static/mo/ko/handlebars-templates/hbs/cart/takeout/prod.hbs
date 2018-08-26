@@ -1,7 +1,8 @@
+<!--/* 일반,예약,특가,묶음상품 */-->
 {{#each list}}
 
-	<!--/* 일반,예약,특가,묶음상품 */-->
 	{{#xif prodTypeCode '==' 'BulkFixedProd'}} <div class="cart_item_box type2"> {{/xif}}
+		<!--/* 싱글상품 */-->
 		{{#xif singleProdYn '==' 'Y'}}
 			<div class="cart_item_box">
 				{{#each cartProdExList}}
@@ -37,7 +38,7 @@
 					</div>
 					<div class="cart_item_info">
 						<input type="hidden" name="takeoutPrdSn" value="{{prodEx.prodSn}}"/>
-						<input type="hidden" name="cartProdSn" value="{{ cartProdSn }}"/>
+						<input type="hidden" name="cartProdSn" prod="prod" value="{{ cartProdSn }}"/>
 						<input type="hidden" name="takeoutPrdInfo_{{ cartProdSn }}" value="{{cartProdSn}}"/>
 						<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{prodEx.saleDisplayStatus}}"/>
 
@@ -61,15 +62,16 @@
 											<strong class="num">{{numberFormat calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}</strong><span>원</span>
 										</span>
 									{{/if}}
-									{{#if (ne calculationResultProduct.productSaleAmountInfo null) }}
-										{{#if (ne calculationResultProduct.productSaleAmountInfo.standardCurrency.amount this.calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount) }}
-											<span class="right_num">
-												<del class="num">{{numberFormat calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}<span>원</span></del>
-											</span>
+									{{#if (eq doublePriceDisplayYn 'Y') }}
+										{{#if (ne calculationResultProduct.productSaleAmountInfo null) }}
+											{{#if (ne calculationResultProduct.productSaleAmountInfo.standardCurrency.amount this.calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount) }}
+												<span class="right_num">
+													<del class="num">{{numberFormat calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}<span>원</span></del>
+												</span>
+											{{/if}}
 										{{/if}}
 									{{/if}}
-								{{/if}}
-								{{#if (eq calculationResultYn 'N') }}
+								{{else}}
 									{{#if (ne prodEx.salePrice null) }}
 										<span class="left_num">
 											<strong class="num">{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}</strong><span>원</span>
@@ -110,7 +112,7 @@
 		{{/xif}}
 	{{#xif prodTypeCode '==' 'BulkFixedProd'}} </div> {{/xif}}
 
-	<!--/* 일반,예약,특가상품 */-->
+	<!--/* 그룹상품 */-->
 	{{#xif singleProdYn '==' 'N'}}
 		<div class="cart_item_box type2">
 			<div class="cart_name_wrap">
@@ -154,14 +156,14 @@
 					{{/if}}
 				</span>
 			</div>
+
 			<div class="cart_item_scroll">
 				{{#each cartProdExList}}
 					<div class="cart_item_info">
 						<input type="hidden" name="takeoutPrdSn" value="{{prodEx.prodSn}}"/>
-						<input type="hidden" name="cartProdSn" value="{{cartProdSn}}"/>
+						<input type="hidden" name="cartProdSn" prod="prod" value="{{cartProdSn}}"/>
 						<input type="hidden" name="takeoutPrdInfo_O_{{ ../onlineProdSn }}" value="{{cartProdSn}}"/>
 						<input type="hidden" name="saleDisplayStatus_O_{{ ../onlineProdSn }}" value="{{prodEx.saleDisplayStatus}}"/>
-
 						<div class="cart_option_name">
 							{{#if (ne prodEx.repProdImgEx null) }}
 								<img src="{{ prodEx.repProdImgEx.imgUrl }}" class="cart_option_name_thm" alt="">
@@ -202,8 +204,7 @@
 											{{/if}}
 										{{/if}}
 									{{/if}}
-								{{/if}}
-								{{#if (eq calculationResultYn 'N') }}
+								{{else}}
 									{{#if (ne prodEx.salePrice null) }}
 										<span class="left_num">
 											<strong class="num">{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}</strong><span>원</span>

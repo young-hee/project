@@ -73,7 +73,7 @@
 					p_xhr.abort();
 				}
 
-				$('#packingLoading').show();
+				$('#orderLoading').show();
 
 				p_xhr = AP.api.ordReceptChangeBag({}, {
 					ordSn: ordSn,
@@ -83,26 +83,10 @@
 					membershipSn : $('[name=beauty_point]').data().membershipsn
 				}).done(function (data) {
 					if (data.ordHistEx != null){
+						amtPcurInitAjax(data);
 
-						/**
-						 * 총결제금액
-						 * @type {*|String}
-						 */
-						var html = AP.common.getTemplate( 'order.final-price-amt-pcur', {
-							ordHistEx : data.ordHistEx,
-							ordAmtMap : data.ordAmtMap,
-							ordCntMap : data.ordCntMap,
-							isApMember : data.isApMember
-						});
-						$('#amtPcur').html(html);
-						$("[name=finalPamtPcur]").val(data.ordHistEx.finalPamtPcur);
-						$("[name=depositAvailAmt]").val(data.depositAvailAmt);
-						$("#orderPayment").html($B.string.numberFormat(data.ordHistEx.finalPamtPcur)+'원 결제하기');
-
-						$('#amtPriceTab > button').trigger("click");
-						//$('html, body').animate({scrollTop: $("#amtPcur").offset().top-50}, 1000);
-
-						if ($('[name="depositPrice"]').val() != "" || $('[name="beauty_point"]').val() != "") {
+						if ($('[name="depositPrice"]') != undefined && $('[name="depositPrice"]').val() != ""
+							|| $('[name="beauty_point"]') != undefined && $('[name="beauty_point"]').val() != "") {
 							AP.modal.alert('포장/쇼핑백 추가로 인해 포인트 및 예치금 사용이 초기화됩니다.');
 							$('[name="depositPrice"]').val('');
 							$('[name="beauty_point"]').val('');
@@ -112,7 +96,7 @@
 					//실패
 					console.log(xhr.errorMessage);
 				}).always(function () {
-					$('#packingLoading').hide();
+					$('#orderLoading').hide();
 				});
 			}
 		</script>

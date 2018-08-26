@@ -1056,7 +1056,6 @@
 							break;
 					}
 					break;
-					break;
 				case 'MPlusN' :
 					//M+N쿠폰
 					html = 'M + N';
@@ -1211,15 +1210,36 @@
 				case 'ProdCancel' :
 					return '취소완료';
 				case 'PartialCancel' :
-					return '부분취소';
+					return '결제완료';
 				case 'ProdPreparing' :
-					return '상품준비중';
+					return '배송준비중';
 				case 'Shipping' :
 					return '배송중';
 				case 'OrdHandlingComplete' :
 					return '배송완료';
 				case 'ShipComplete' :
 					return '배송완료';
+			}
+		} else if (type === 'takeOut') {
+			switch (condition) {
+				case 'OrdReceivedWaiting' :
+					return '주문접수';
+				case 'OrdReceivedComplete' :
+					return '결제완료';
+				case 'OrdAllCancel' :
+					return '취소완료';
+				case 'ProdCancel' :
+					return '취소완료';
+				case 'PartialCancel' :
+					return '결제완료';
+				case 'ProdPreparing' :
+					return '상품준비완료';
+				case 'Shipping' :
+					return '상품준비완료';
+				case 'OrdHandlingComplete' :
+					return '수령확인';
+				case 'ShipComplete' :
+					return '수령확인';
 			}
 		} else if (type === 'store') {
 			switch (condition) {

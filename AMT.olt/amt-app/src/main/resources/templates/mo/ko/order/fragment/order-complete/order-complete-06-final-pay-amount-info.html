@@ -1,0 +1,122 @@
+<!--최종 결제금액-->
+<dl class="final_payment">
+	<dt>
+		<div class="title clear">
+			<b>최종 결제금액</b>
+			<span class="price"><strong class="num" th:text="${#IntegUtil.toCommaNumber(ordEx.ordHistEx.finalPamtPcur)}">0</strong>원</span>
+		</div>
+		<button type="button"><span class="sr_only">더보기</span></button>
+	</dt>
+	<dd class="panel">
+		<div class="payment_details">
+			<div class="inner_box">
+				<p class="total clear">
+					<strong>주문금액</strong>
+					<b><strong class="num" th:text="${#IntegUtil.toCommaNumber(ordEx.ordHistEx.prodOrdAmtSumPcur)}">0</strong>원</b>
+				</p>
+				<ul>
+					<li class="clear" th:if="${#lists.size(ordEx.ordHistEx.ordHistAmtExList) > 0 }" th:each="ordHistAmtEx : ${ordEx.ordHistEx.ordHistAmtExList}">
+						<th:block th:if="${ordHistAmtEx.ordHistAmtTypeCode == 'OnlineShipProd' and ordHistAmtEx.amtPcur > 0}"><!--온라인배송상품금액-->
+							<span th:text="'온라인 상품(' + ${#lists.size(shippingOrdOnlineProdList)} + ')개'"></span>
+							<span><span class="num" th:text="${#IntegUtil.toCommaNumber(ordHistAmtEx.amtPcur)}">0</span>원</span>
+						</th:block>
+						<th:block th:if="${ordHistAmtEx.ordHistAmtTypeCode == 'StorePickupProd' and ordHistAmtEx.amtPcur > 0}"><!--매장픽업상품금액-->
+							<span th:text="'테이크아웃 상품(' + ${#lists.size(storePickupOrdOnlineProdList)} + ')개'"></span>
+							<span><span class="num" th:text="${#IntegUtil.toCommaNumber(ordHistAmtEx.amtPcur)}">0</span>원</span>
+						</th:block>
+						<th:block th:if="${apMember != null and ordHistAmtEx.ordHistAmtTypeCode == 'MembershipExch' and ordHistAmtEx.amtPcur > 0}">
+							<span th:text="'뷰티포인트 상품(0)개'"></span>
+							<span><span class="num" th:text="${#IntegUtil.toCommaNumber(ordHistAmtEx.amtPcur)}">0</span>원</span>
+						</th:block>
+					</li>
+				</ul>
+			</div>
+			<div class="inner_box"
+				 th:if="${#lists.size(ordEx.ordHistEx.ordHistAmtExList) > 0 and ordHistAmtEx.ordHistAmtTypeCode == 'ShipUnitPacking' and ordHistAmtEx.amtPcur > 0}"
+				 th:each="ordHistAmtEx : ${ordEx.ordHistEx.ordHistAmtExList}">
+				<p class="total clear">
+					<strong>포장재</strong>
+					<b><strong class="num" th:text="${#IntegUtil.toCommaNumber(ordHistAmtEx.amtPcur)}">0</strong>원</b><!--id="totalGiftPackingAmtBcur"-->
+				</p>
+			</div>
+			<div class="inner_box" th:if="${ordEx.ordHistEx.shipFeeSumPcur > 0}">
+				<p class="total clear">
+					<strong>배송비</strong>
+					<b><strong class="num" th:text="${#IntegUtil.toCommaNumber(ordEx.ordHistEx.shipFeeSumPcur)}">0</strong>원</b>
+				</p>
+			</div>
+
+			<hr class="icon_minus">
+
+			<div class="inner_box">
+				<p class="total clear" th:if="${ordEx.ordHistEx.prodUnitDcAmtSumPcur > 0}">
+					<strong>총 할인</strong>
+					<b><strong class="num" th:text="'-'+${#IntegUtil.toCommaNumber(ordEx.ordHistEx.prodUnitDcAmtSumPcur)}">-0</strong>원</b>
+				</p>
+				<ul>
+					<li class="clear" th:if="${ordEx.ordHistEx.couponDcAmtPcur > 0}">
+						<span>쿠폰 할인</span>
+						<span><span class="num" th:text="'-'+${#IntegUtil.toCommaNumber(ordEx.ordHistEx.couponDcAmtPcur)}">-0</span>원</span>
+					</li>
+					<!--사용멤버십포인트목록-->
+					<li class="clear" th:if="${#lists.size(ordEx.ordHistEx.ordHistMembershipExList) > 0 and ordHistMembershipEx.membershipUseAmtSumPcur > 0}" th:each="ordHistMembershipEx : ${ordEx.ordHistEx.ordHistMembershipExList}">
+						<span th:text="${ordHistMembershipEx.membershipName}">뷰티포인트</span>
+						<span><span class="num" th:text="'-'+${#IntegUtil.toCommaNumber(ordHistMembershipEx.membershipUseAmtSumPcur)}">-0</span>P</span>
+					</li>
+					<!--<li class="clear">
+						<span>뷰티포인트</span>
+						<span><span class="num">-0</span>P</span>
+					</li>
+					<li class="clear">
+						<span>쿠션포인트</span>
+						<span><span class="num">-0</span>P</span>
+					</li>
+					<li class="clear">
+						<span>OK캐쉬백</span>
+						<span><span class="num">-0</span>P</span>
+					</li>
+					<li class="clear">
+						<span>두툼포인트</span>
+						<span><span class="num">-0</span>P</span>
+					</li>
+					-->
+				</ul>
+				<!--/* 회원일 경우 */-->
+				<div class="panel gray mgt15"
+					 th:if="${apMember != null and #lists.size(ordEx.ordHistEx.ordSavingPointList) > 0 and ordSavingPoint.pointTypeCode == 'MembershipPoint'}"
+					 th:each="ordSavingPoint : ${ordEx.ordHistEx.ordSavingPointList}">
+					<p class="total clear">
+						<strong>결제 후 포인트 적립</strong>
+						<b><strong class="num" th:text="${ordSavingPoint.totalSavingPoint}">0</strong>P</b>
+					</p>
+					<ul>
+						<li class="clear">
+							<div>뷰티 포인트 적립
+								<div class="ui_tooltip take_out">
+									<button type="button" class="btn_tooltip">툴팁보기</button>
+									<span class="arr"></span>
+									<div class="layer_tooltip">
+										<dl>
+											<dt th:text="${ordSavingPoint.pointName} + ' 적립 안내'">뷰티포인트 적립 안내</dt>
+											<dd>
+												<ul class="list_bullet_dot">
+													<li>아모레퍼시픽 뷰티포인트 통합회원은 에뛰드 회원등급에 관계없이 결제금액(할인 후)의 ‘기본 3% + 우대 최대 2%’가 추가 적립됩니다.</li>
+													<li>뷰티포인트 적립 기준금액은 [최종결제금액-뷰티포인트 적립 제외상품 금액-포장서비스-배송비]로 계산된 금액입니다.</li>
+													<li>일부 구매 상품 중 ‘뷰티포인트 적립 제외 상품’이 있을 경우, 뷰티 포인트가 적립되지 않습니다.</li>
+													<li>테이크아웃 주문은 더블 적립되며 뷰티포인트 적립 제외 상품 결제금액을 제외한 결제금액을 기준으로 적립됩니다.</li>
+												</ul>
+												<button type="button" class="ui_close sm"><span class="sr_only">툴팁 닫기</span></button>
+											</dd>
+										</dl>
+									</div>
+								</div>
+							</div>
+							<span><span class="num" th:text="${ordSavingPoint.totalSavingPoint}">0</span>P</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</dd>
+</dl>
+<!--최종 결제금액-->

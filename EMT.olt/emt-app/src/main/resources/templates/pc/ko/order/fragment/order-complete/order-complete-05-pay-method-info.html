@@ -1,36 +1,27 @@
-<dl>
+<!--결제수단 선택-->
+<dl class="payment">
 	<dt class="on">
-		<span>결제수단</span>
-		<button type="button"><span class="sr_only">닫기</span></button>
+		<div class="title"><b>결제수단 선택</b></div>
+		<button type="button"><span class="sr_only">더보기</span></button>
 	</dt>
-	<dd>
-		<div class="cont payment">
-			<div class="panel bordered gray">
-				<div class="panel_cont ui_table">
-					<dl th:if="${#lists.size(ordEx.ordHistEx.ordPayExList) > 0}">
-						<th:block th:each="ordPayEx : ${ordEx.ordHistEx.ordPayExList}">
-							<th:block th:if="${ordPayEx.payMethodCode == 'Deposit'}">
-								<dt><b>예치금결제</b></dt>
-								<dd>
-									<p class="text" th:text="${#IntegUtil.toCommaNumber(ordPayEx.payAmt)} + '원'">0 원</p>
-								</dd>
-							</th:block>
-							<th:block th:if="${ordPayEx.payMethodTypeCode == 'Point' && ordPayEx.payMethodCode == 'BP'}">
-								<dt><b>뷰티포인트결제</b></dt>
-								<dd>
-									<p class="text" th:text="${#IntegUtil.toCommaNumber(ordPayEx.usePoint)} + 'P'">0 P</p>
-								</dd>
-							</th:block>
-							<th:block th:if="${ordPayEx.payMethodTypeCode == 'PG'}">
-								<dt><b th:text="${ordPayEx.payMethodCode == 'PG' ? 'PG결제' : ordPayEx.payMethodNameBlang + '결제'}">PG결제</b></dt>
-								<dd>
-									<p class="text" th:text="${#IntegUtil.toCommaNumber(ordPayEx.payAmt)} + '원'">0 원</p>
-								</dd>
-							</th:block>
-						</th:block>
-					</dl>
-				</div>
-			</div>
-		</div>
-	</dd>
+
+	<dd class="panel" id="paymentArea"></dd>
+
+	<script th:inline="javascript">
+		$( document ).ready(function() {
+			ordUnitInit();
+		});
+
+		function ordUnitInit() {
+			var ordPayEx = /*[[${ordEx.ordHistEx.ordPayExList}]]*/ null;
+
+			if (ordPayEx.length > 0) {
+				var html = AP.common.getTemplate('order.complete-final-price-amt', {
+					pgList: ordPayEx
+				});
+				$('#paymentArea').append(html);
+			}
+		}
+	</script>
 </dl>
+<!--결제수단 선택-->

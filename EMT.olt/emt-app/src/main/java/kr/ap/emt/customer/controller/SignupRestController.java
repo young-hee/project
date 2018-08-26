@@ -1023,14 +1023,15 @@ public class SignupRestController extends AbstractController {
 							if(APConstant.OS_CH_CD.equals(optiTcVo.getChCd())) {
 								chTcVo.setUserPwdEc(ApPasswordEncoder.encryptPassword(userPwdEc));
 							}
+							chTcVo.setFstCnttPrtnId(detail.getFstCnttPrtnId());
 							chTcVo.setCicuemCuOptiTcVo(optiTcVo);
 							chTcVo.setChcsNo(chcsNo);
 							chTcVo.setChCd(optiTcVo.getChCd());
 							chTcVo.setIncsNo(status.getIncsNo());
 							if(APConstant.EH_CH_CD.equals(optiTcVo.getChCd()))
 								chTcVo.setFstCnttPrtnId(APConstant.EH_PRTN_ID);
-							chTcVo.setFscrId("AC919532");
-							chTcVo.setLschId("AC919532");
+							chTcVo.setFscrId(detail.getFstCnttPrtnId());
+							chTcVo.setLschId(APConstant.EH_PRTN_ID);
 							chTcVo.setPrtnNm(getPrntNm(chTcVo.getChCd()));
 							optiTcVo.setIncsNo(status.getIncsNo());
 							cicuedCuChTcVo.add(chTcVo);
@@ -1049,60 +1050,6 @@ public class SignupRestController extends AbstractController {
 							logger.info("경로가입 결과 " + joinChCd + " : " + mapper.writeValueAsString(detail));
 						} catch (Exception e) {
 							e.printStackTrace();
-						}
-						if(joinChCd) {
-							WebDBSignupVo webDBSignupVo = new WebDBSignupVo();
-							webDBSignupVo.setAgree1("Y");
-							webDBSignupVo.setAgree2("Y");
-							webDBSignupVo.setApAgree(is040Check);
-							webDBSignupVo.setAppChCd(cicuemCuInfTotTcVo.getJndvCd());
-							webDBSignupVo.setAtclCd(cicuemCuInfTotTcVo.getAtclCd().equals("10")?"1":"2");
-							webDBSignupVo.setBirthDate01(cicuemCuInfTotTcVo.getAthtDtbr().substring(0, 4));
-							webDBSignupVo.setBirthDate02(cicuemCuInfTotTcVo.getAthtDtbr().substring(4, 6));
-							webDBSignupVo.setBirthDate03(cicuemCuInfTotTcVo.getAthtDtbr().substring(6));
-							webDBSignupVo.setCertCi(cicuemCuInfTotTcVo.getCiNo());
-							webDBSignupVo.setCstmId(chcsNo);
-							webDBSignupVo.setEmailReceiveType(is030Email);
-							webDBSignupVo.setEmailReceiveTypeBp(is000Email);
-							webDBSignupVo.setFrtroptfl(is060Check);
-							webDBSignupVo.setGenderFlg(cicuemCuInfTotTcVo.getSxclCd().equals("F")? "1":"0");
-							webDBSignupVo.setInfoProvide(is030Check);
-							webDBSignupVo.setMktuseinfsupfl(is050Check);
-							webDBSignupVo.setMobileNo1(cicuemCuInfTotTcVo.getCellTidn());
-							webDBSignupVo.setMobileNo2(cicuemCuInfTotTcVo.getCellTexn() + cicuemCuInfTotTcVo.getCellTlsn());
-							webDBSignupVo.setNation("K".equals(cicuemCuInfTotTcVo.getFrclCd())?"0":"1");
-							webDBSignupVo.setParamSiteCd("EDK");
-							webDBSignupVo.setPswd(ApPasswordEncoder.encryptPassword(userPwdEc));
-							webDBSignupVo.setRes1(cicuemCuInfTotTcVo.getAthtDtbr().substring(2));
-							int res2 = 1;
-							if(cicuemCuInfTotTcVo.getSxclCd().equals("F")) {
-								res2 += 1;
-							}
-							if(cicuemCuInfTotTcVo.getAthtDtbr().startsWith("20")) {
-								res2 += 2;
-							}
-							if("F".equals(cicuemCuInfTotTcVo.getFrclCd())) {
-								res2 += 4;
-							}
-							
-							webDBSignupVo.setRes2(res2 + "");
-							webDBSignupVo.setSex(cicuemCuInfTotTcVo.getSxclCd().equals("F")? "0":"1");
-							webDBSignupVo.setSmsReceiveType(is030SMS);
-							webDBSignupVo.setSmsReceiveTypeBp(is000SMS);
-							webDBSignupVo.setUserName(custNm);
-							new Thread(new Runnable() {
-								
-								@Override
-								public void run() {
-									try {
-										logger.info("CreateWebDBData : " + mapper.writeValueAsString(webDBSignupVo));
-										Map<String, String> webDBResult = webDBApiService.createWebDBUser(webDBSignupVo);
-										logger.info("createWebDBUser:{},{}", webDBResult.get("RESULT"), webDBResult.get("CODE"));
-									} catch(Exception e) {
-										logger.error("createWebDBUser:" + e.getMessage(), e);
-									}
-								}
-							}).start();
 						}
 						
 					} else {
@@ -1125,63 +1072,6 @@ public class SignupRestController extends AbstractController {
 						if("ICITSVBIZ113".equals(cicuemCuInfCoOutVo.getRsltCd())) {
 							throw error(result, HttpStatus.UNAUTHORIZED, "ERROR", "존재하는 ID입니다. 다른 아이디를 입력해 주세요.");
 						}
-
-						if((APConstant.RESULT_OK.equals(cicuemCuInfCoOutVo.getRsltCd()))) {
-							WebDBSignupVo webDBSignupVo = new WebDBSignupVo();
-							webDBSignupVo.setAgree1("Y");
-							webDBSignupVo.setAgree2("Y");
-							webDBSignupVo.setApAgree(is040Check);
-							webDBSignupVo.setAppChCd(cicuemCuInfTotTcVo.getJndvCd());
-							webDBSignupVo.setAtclCd(cicuemCuInfTotTcVo.getAtclCd().equals("10")?"1":"2");
-							webDBSignupVo.setBirthDate01(cicuemCuInfTotTcVo.getAthtDtbr().substring(0, 4));
-							webDBSignupVo.setBirthDate02(cicuemCuInfTotTcVo.getAthtDtbr().substring(4, 6));
-							webDBSignupVo.setBirthDate03(cicuemCuInfTotTcVo.getAthtDtbr().substring(6));
-							webDBSignupVo.setCertCi(cicuemCuInfTotTcVo.getCiNo());
-							webDBSignupVo.setCstmId(chcsNo);
-							webDBSignupVo.setEmailReceiveType(is030Email);
-							webDBSignupVo.setEmailReceiveTypeBp(is000Email);
-							webDBSignupVo.setFrtroptfl(is060Check);
-							webDBSignupVo.setGenderFlg(cicuemCuInfTotTcVo.getSxclCd().equals("F")? "1":"0");
-							webDBSignupVo.setInfoProvide(is030Check);
-							webDBSignupVo.setMktuseinfsupfl(is050Check);
-							webDBSignupVo.setMobileNo1(cicuemCuInfTotTcVo.getCellTidn());
-							webDBSignupVo.setMobileNo2(cicuemCuInfTotTcVo.getCellTexn() + cicuemCuInfTotTcVo.getCellTlsn());
-							webDBSignupVo.setNation("K".equals(cicuemCuInfTotTcVo.getFrclCd())?"0":"1");
-							webDBSignupVo.setParamSiteCd("EDK");
-							webDBSignupVo.setPswd(ApPasswordEncoder.encryptPassword(userPwdEc));
-							webDBSignupVo.setRes1(cicuemCuInfTotTcVo.getAthtDtbr().substring(2));
-							int res2 = 1;
-							if(cicuemCuInfTotTcVo.getSxclCd().equals("F")) {
-								res2 += 1;
-							}
-							if(cicuemCuInfTotTcVo.getAthtDtbr().startsWith("20")) {
-								res2 += 2;
-							}
-							if("F".equals(cicuemCuInfTotTcVo.getFrclCd())) {
-								res2 += 4;
-							}
-							
-							webDBSignupVo.setRes2(res2 + "");
-							webDBSignupVo.setSex(cicuemCuInfTotTcVo.getSxclCd().equals("F")? "0":"1");
-							webDBSignupVo.setSmsReceiveType(is030SMS);
-							webDBSignupVo.setSmsReceiveTypeBp(is000SMS);
-							webDBSignupVo.setUserName(custNm);
-							
-							new Thread(new Runnable() {
-								
-								@Override
-								public void run() {
-									try {
-										logger.info("CreateWebDBData : " + mapper.writeValueAsString(webDBSignupVo));
-										Map<String, String> webDBResult = webDBApiService.createWebDBUser(webDBSignupVo);
-										logger.info("createWebDBUser:{},{}", webDBResult.get("RESULT"), webDBResult.get("CODE"));
-									} catch(Exception e) {
-										logger.error("createWebDBUser:" + e.getMessage(), e);
-									}
-								}
-							}).start();
-							
-						}
 					}
 				} else {
 					throw error(result, HttpStatus.UNAUTHORIZED, "ERROR", "일시적 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
@@ -1197,6 +1087,7 @@ public class SignupRestController extends AbstractController {
 					ApMemberForPost memberForPost = new ApMemberForPost();
 					memberForPost.setSolarLunarCode("Solar");
 					memberForPost.setMembershipCardNo(cicuemCuInfCoOutVo.getIncsCardNoEc());
+					memberForPost.setNativeYn("K".equals(frclCd)? "Y" : "N");
 					
 					memberForPost.setMemberId(chcsNo);
 					memberForPost.setMemberPassword(userPwdEc);

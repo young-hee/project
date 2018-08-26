@@ -4,7 +4,7 @@
 		
 		{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
 			<div class="alarm">
-				일시품절 <a href="javascript:;" class="btn_h32_gradient">입고알리미신청</a>
+				일시품절 <a href="javascript:;" class="btn_h32_gradient incoming_alarm">입고알리미신청</a>
 			</div>
 		{{else}}
 			<div class="ui_spinner" data-min="{{#xif (eq this.storePickupBtnEnable 'Y') '&&' (eq this.saleDisplayStatus 'OutOfStock')}}1{{else}}{{ this.minPurLimitQty }}{{/xif}}" {{#xif (eq this.storePickupBtnEnable 'Y') '&&' (eq this.saleDisplayStatus 'OutOfStock')}}data-max="99"{{else}}{{#xif this.maxPurLimitYn '==' 'Y'}}data-max="{{ this.maxPurLimitQty }}"{{/xif}}{{/xif}} data-step="1" data-disabled="false">

@@ -5,26 +5,44 @@
 				<a href="#none">
 					<strong class="rank_num">{{ calc @index '+' 1 }}</strong>
 					<div class="visual_section">
-						<img src="/pc/ko/images/dummy/img_product_thumb_guide_04.jpg" alt="플라워 에센스 마스크">
-						<img src="/pc/ko/images/dummy/img_product_thumb_03.jpg" alt="플라워 에센스 마스크">
+						<img src="{{ this.onlineProdImages.[0].imgUrl }}" alt="">
+						{{#if this.onlineProdImages.[1].imgUrl}}
+							<img src="{{ this.onlineProdImages.[1].imgUrl }}" alt="">
+						{{else}}
+							<img src="{{ this.onlineProdImages.[0].imgUrl }}" alt="">
+						{{/if}}
 						<div class="benefit">
-							<span class="special">스페셜기프트</span>
-							<span class="gift">기프트카드</span>
+							{{#xif this.onlineProdGift.giftProds '>' 0}}
+								<span class="special">스페셜기프트</span>
+							{{/xif}}
+							{{#xif this.onlineProdGift.giftcardTargetYn '==' 'Y'}}
+								<span class="gift">기프트카드</span>
+							{{/xif}}
 						</div>
-						<div class="soldout">
-							<span>일시품절</span>
-						</div>
+						{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+							<div class="soldout">
+								<span>일시품절</span>
+							</div>
+						{{/xif}}
 					</div>
 					<div class="info_section">
-						<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+						<p class="txt_summary ellipsis line2">{{ this.onlineProdName }}</p>
 						<div class="price_atc">
-							<span class="txt_sale">30%</span>
-							<span class="txt_price"><em>218,500</em>원</span>
-							<del class="txt_del">230,000원</del>
+							{{#with (calc this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate '+' this.onlineProdPriceSummary.minMemberLevelDiscountRate '+' this.onlineProdPriceSummary.minOnlineMemberDiscountRate '+' this.onlineProdPriceSummary.minImmedDiscountRate) as |minRate|}}
+								{{#with (calc ../onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.maxMemberLevelDiscountRate '+' ../onlineProdPriceSummary.maxOnlineMemberDiscountRate '+' this.onlineProdPriceSummary.maxImmedDiscountRate) as |maxRate|}}
+									{{#xif maxRate '>' 0}}
+										<span class="txt_sale">{{ maxRate }}%</span>
+									{{/xif}}
+								{{/with}}
+							{{/with}}
+							<span class="txt_price"><em>{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}</em>원{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}}~{{/xif}}</span>
+							{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+								<del class="txt_del">{{ numberFormat this.onlineProdPriceSummary.minBeforeOnlineSalePrice }}원</del>
+							{{/xif}}
 						</div>
 						<div class="user_atc">
-							<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
-							<span class="txt_review">리뷰 2,454,000</span>
+							<span class="mark_star_sm star{{ this.reviewScopeAvg }}"><span class="sr_only">구매 평점 별 5개 중 {{ this.reviewScopeAvg }}개</span></span>
+							<span class="txt_review">리뷰 {{ numberFormat this.reviewCount }}</span>
 						</div>
 					</div>
 				</a>
@@ -32,7 +50,7 @@
 					<ul class="item_user">
 						<li>
 							<a href="#none" role="button" class="like">
-								<i class="ico_favorite"></i><!-- active : on -->
+								<i class="ico_favorite"></i>
 								<span class="sr_only">좋아요</span>
 							</a>
 						</li>
@@ -57,23 +75,29 @@
 				<a href="#none">
 					<strong class="rank_num">{{ calc @index '+' 1 }}</strong>
 					<div class="visual_section">
-						<img src="/pc/ko/images/dummy/img_product_thumb_05.jpg" alt="플라워 에센스 마스크">
+						<img src="{{ this.onlineProdImages.[0].imgUrl }}" alt="">
 						<div class="benefit">
-							<span class="special">스페셜기프트</span>
-							<span class="gift">기프트카드</span>
+							{{#xif this.onlineProdGift.giftProds '>' 0}}
+								<span class="special">스페셜기프트</span>
+							{{/xif}}
+							{{#xif this.onlineProdGift.giftcardTargetYn '==' 'Y'}}
+								<span class="gift">기프트카드</span>
+							{{/xif}}
 						</div>
-						<div class="soldout">
-							<span>일시품절</span>
-						</div>
+						{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+							<div class="soldout">
+								<span>일시품절</span>
+							</div>
+						{{/xif}}
 					</div>
 					<div class="info_section">
-						<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션</p>
+						<p class="txt_summary ellipsis line2">{{ this.onlineProdName }}</p>
 						<div class="price_atc">
-							<span class="txt_price"><em>100,000</em>원</span>
+							<span class="txt_price"><em>{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}</em>원{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}}~{{/xif}}</span>
 						</div>
 						<div class="user_atc">
-							<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
-							<span class="txt_review">리뷰 2,454</span>
+							<span class="mark_star_sm star{{ this.reviewScopeAvg }}"><span class="sr_only">구매 평점 별 5개 중 {{ this.reviewScopeAvg }}개</span></span>
+							<span class="txt_review">리뷰 {{ numberFormat this.reviewCount }}</span>
 						</div>
 					</div>
 				</a>
@@ -81,7 +105,7 @@
 					<ul class="item_user">
 						<li>
 							<a href="#none" role="button" class="like">
-								<i class="ico_favorite"></i><!-- active : on -->
+								<i class="ico_favorite"></i>
 								<span class="sr_only">좋아요</span>
 							</a>
 						</li>

@@ -817,6 +817,12 @@
 		// 사용가능 쿠폰 목록
 		getCouponList: { path: '/order/getCouponList', method: 'GET'},
 
+		// 다운로드 쿠폰 목록
+		getDownloadCouponList: { path: '/order/getDownloadCouponList', method: 'GET'},
+
+		// 쿠폰 다운로드
+		orderDownloadCoupon: { path: '/order/downloadCoupon', method: 'POST'},
+
 		// 기본배송지 수정
 		orderAddAddress: { path: '/order/orderAddAddress', method: 'POST' },
 
@@ -840,6 +846,12 @@
 
 		// 포장박스, 쇼핑백 수량 변경
 		ordReceptChangeBag: { path: '/order/ordReceptChangeBag', method: 'POST'},
+
+		// 포인트 사용
+		ordReceptChangePoint: { path: '/order/ordReceptChangePoint', method: 'POST'},
+
+		//주문단위 사은품
+		ordReceptChangeOrdUnit: { path: '/order/ordReceptChangeOrdUnit', method: 'POST'},
 		
 		// wpay회원정보 조회
 		getMemberWPayInfo: { path: '/payment/getMemberWPayInfo', method: 'GET'},
@@ -973,11 +985,11 @@
 
 		
 	    /**
-	     * 아티클(CH.에뛰드, FindYourLooks) *************************************************************
+	     * 아티클(채널에뛰드, FindYourLooks) *************************************************************
 	     */
 		//아티클 목록 조회
 		articles : { path:'/display/articles', method: 'POST', data: {
-			articleCateId: 'chEtude', //ch.에뛰드 : chEtude, FindYourLooks : Looks
+			articleCateId: 'chEtude', //채널에뛰드 : chEtude, FindYourLooks : Looks
 			order: null, //정렬방식코드 ArticleSortMethod, StartDt (시작일), Deadline(종료일), SortOrder(정렬순 - 기본값) // ch.etude 에 deadline가 필요해서 null로 변경
 			keyword: null,
 			hashTag: null, //해시태그 (SNS 해쉬태그 검색, '#’을 제거하고 입력)

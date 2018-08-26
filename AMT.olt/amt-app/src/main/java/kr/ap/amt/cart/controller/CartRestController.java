@@ -6,44 +6,21 @@
  */
 package kr.ap.amt.cart.controller;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-
+import kr.ap.comm.cart.CartSession;
+import net.g1project.ecp.api.exception.ApiException;
+import net.g1project.ecp.api.model.BooleanResult;
+import net.g1project.ecp.api.model.offlinestore.store.*;
+import net.g1project.ecp.api.model.sales.cart.*;
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import kr.ap.comm.member.vo.MemberSession;
-import net.g1project.ecp.api.exception.ApiException;
-import net.g1project.ecp.api.model.BooleanResult;
-import net.g1project.ecp.api.model.offlinestore.store.AddressDivInfo;
-import net.g1project.ecp.api.model.offlinestore.store.ProdInvtEx;
-import net.g1project.ecp.api.model.offlinestore.store.RegularStoreForPost;
-import net.g1project.ecp.api.model.offlinestore.store.RegularStorePostResult;
-import net.g1project.ecp.api.model.offlinestore.store.StoreResult;
-import net.g1project.ecp.api.model.offlinestore.store.StoresInvtSearchInfo;
-import net.g1project.ecp.api.model.sales.cart.CartBulkIncludedProdExPost;
-import net.g1project.ecp.api.model.sales.cart.CartBulkIncludedProdExPut;
-import net.g1project.ecp.api.model.sales.cart.CartEx;
-import net.g1project.ecp.api.model.sales.cart.CartOnlineProdEx;
-import net.g1project.ecp.api.model.sales.cart.CartProdCountInfo;
-import net.g1project.ecp.api.model.sales.cart.CartProdEx;
-import net.g1project.ecp.api.model.sales.cart.CartProdExPost;
-import net.g1project.ecp.api.model.sales.cart.CartProdExPut;
-import net.g1project.ecp.api.model.sales.cart.CartPromoEx;
-import net.g1project.ecp.api.model.sales.cart.CartSnResult;
-import net.g1project.ecp.api.model.sales.cart.ProdEx;
-import net.g1project.ecp.api.model.sales.cart.SameTimePurCartProd;
-import net.g1project.ecp.api.model.sales.cart.SameTimePurCartProdSet;
+import java.math.BigDecimal;
+import java.util.*;
 
 @RestController
 @RequestMapping("/cart")
@@ -247,13 +224,12 @@ public class CartRestController extends CartBaseController{
 										  Integer limit, String sortBy) {
 
 		HashMap<String, Object> result = new HashMap<String, Object>();
-
-		MemberSession memberSession = getMemberSession();
+		CartSession cartSession = getCartSession();
 
 		CartProdEx storePickupCartProdEx = null;
 		List<ProdInvtEx> prodInvtExList = new ArrayList<>();
 
-		CartEx cartEx =  getCartApi(memberSession.getCartSn());
+		CartEx cartEx =  getCartApi(cartSession.getCartSn());
 
 		// 장바구니매장픽업-온라인상품목록
 		if(!CollectionUtils.isEmpty(cartEx.getCartStorePickupOnlineProdExList())){
@@ -509,7 +485,7 @@ public class CartRestController extends CartBaseController{
 
 	/**
 	 * 장바구니에 담기
-	 * 일반상품/묶은상품
+	 * 일반상품/묶음판매상품
 	 * (매장픽업 같이 사용함.)
 	 *
 	 * @param jsonObj
@@ -529,8 +505,8 @@ public class CartRestController extends CartBaseController{
 
 		//TODO:주문하기위해 재고체크,
 
-		MemberSession memberSession = getMemberSession();
-		Long cartSn = memberSession.getCartSn();
+		CartSession cartSession = getCartSession();
+		Long cartSn = cartSession.getCartSn();
 
 		if (isLoggedIn()) {
 
@@ -551,9 +527,9 @@ public class CartRestController extends CartBaseController{
 				//장바구니번호 없으면.
 				CartSnResult nonmemberCart = cartApi.createNonmemberCart();
 				cartSn = nonmemberCart.getCartSn();
-				memberSession.setCartSn(cartSn);
+				cartSession.setCartSn(cartSn);
 				// SpringSession with Redis 로 Session 사용변경. 세션값 변경이 있을 경우 명시적으로 setAttribute
-				setMemberSession(memberSession);
+				setCartSession(cartSession);
 			}
 
 			BooleanResult booleanResult = cartApi.addCartProds(cartSn, cartProdExPostList);
@@ -586,8 +562,8 @@ public class CartRestController extends CartBaseController{
 
 		//TODO:주문하기위해 재고체크,
 
-		MemberSession memberSession = getMemberSession();
-		Long cartSn = memberSession.getCartSn();
+		CartSession cartSession = getCartSession();
+		Long cartSn = cartSession.getCartSn();
 
 		if (isLoggedIn()) {
 
@@ -610,9 +586,9 @@ public class CartRestController extends CartBaseController{
 				//장바구니번호 없으면.
 				CartSnResult nonmemberCart = cartApi.createNonmemberCart();
 				cartSn = nonmemberCart.getCartSn();
-				memberSession.setCartSn(cartSn);
+				cartSession.setCartSn(cartSn);
 				// SpringSession with Redis 로 Session 사용변경. 세션값 변경이 있을 경우 명시적으로 setAttribute
-				setMemberSession(memberSession);
+				setCartSession(cartSession);
 			}
 
 			BooleanResult booleanResult = cartApi.addSameTimePurCartProds(cartSn, sameTimeCartProdExPostList);
@@ -650,10 +626,10 @@ public class CartRestController extends CartBaseController{
 
 		if (booleanResult.isResult()) {
 			//성공하면 주문서화면 진입하기 위해 cartSn 전달
-			MemberSession memberSession = getMemberSession();
-			memberSession.setCartSn(cartSn);
+			CartSession cartSession = getCartSession();
+			cartSession.setCartSn(cartSn);
 			// SpringSession with Redis 로 Session 사용변경. 세션값 변경이 있을 경우 명시적으로 setAttribute
-			setMemberSession(memberSession);
+			setCartSession(cartSession);
 		}
 
 		result.put("booleanResult", booleanResult);
@@ -745,7 +721,7 @@ public class CartRestController extends CartBaseController{
 
 		} else {
 
-			cartSn = getMemberSession().getCartSn();
+			cartSn = getCartSession().getCartSn();
 			if (setCartCount(result, cartSn)) return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
 		}
 

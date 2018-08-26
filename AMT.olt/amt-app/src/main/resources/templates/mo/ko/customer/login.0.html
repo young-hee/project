@@ -1,0 +1,76 @@
+<html ap:decorate="~{layout/layout-member-join}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents member_login">
+		
+		<p class="staff_login_txt01">아모레퍼시픽 임직원이라면<br /> <span>AP-ON 계정 인증</span>을 통해<br /> 임직원 서비스를 이용하실 수 있습니다.</p>	
+
+		<div class="ui_toggle_contents view_keyboard">
+			<button class="toggle_btn">PC 키보드 보기 <i class="ico_down"></i></button>
+			<div>
+				<img ap:src="@{/images/member/img_keyboard.png}" alt="pc 용 키보드 배열">
+			</div>
+		</div>
+		<form>
+			<fieldset class="form">
+				<legend class="sr_only">로그인</legend>
+				<div class="input_wrap">
+					<input type="text" title="아이디 입력" name="v_userid" required="required" placeholder="AP-ON 아이디를 입력해주세요" class="focus_purple">
+				</div>
+	
+				<div class="input_wrap">
+					<input type="password" name="v_pass_word" required="required" title="비밀번호 입력" placeholder="AP-ON 비밀번호를 입력하세요" class="focus_purple">
+				</div>
+	
+				<div class="btn_login_wrap">
+					<a href="javascript:;" id="login" class="bg_purple">인증하기</a>
+				</div>
+			</fieldset>
+		</form>
+
+		<p class="staff_login_txt02">임직원 인증은 최초 1회에 한해 진행되며<br /> 로그인한 뷰티포인트 통합 멤버십 계정에 연동되므로<br /> 인증 전 꼭 확인해주세요</p>	
+
+	</div>
+
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+<script>
+
+$('#login').on('click', function() {
+    loginProcess();
+    return false;
+});
+
+function loginProcess() {
+    var $form = $('form');
+    if ($form.valid()) {
+
+        $("#login").attr("disabled", "disabled");
+        AP.api.authEmployee({}, AP.common.getFormData($form)).done(function(data) {
+
+
+            AP.modal.alert("<font style=\"color:\#7052ce\">[[${session.LOGIN_USER.member.name.name1}]]</font>님.임직원인증이 완료되었습니다. <br>앞으로 임직원 추가 혜택이 적용됩니다.").addListener('modal-close', function(e) {
+            	location.replace('/my/page/info/myPouch');
+            });
+
+        }).fail(function(xhr, textStatus, errorThrown) {
+            $("#login").removeAttr("disabled");
+            if (xhr.errorCode == 0) {
+                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+            } else {
+                AP.modal.alert("임직원 인증에 실패하였습니다. 아이디와 비밀번호를 정확히 입력해주세요.");
+            }
+        }).always(function() {
+            //성공, 실패
+        });
+    }
+}
+</script>
+</th:block>
+
+</body>
+</html>

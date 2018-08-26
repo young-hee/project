@@ -30,21 +30,10 @@
 				$.extend( this._param, param );
 			}
 
-			console.log( param );
-			console.log( this._param );
-
 			this._$list.empty();
 			this._$loading.show();
 
 			AP.api.flaggedItemList({}, this._param ).done(function ( result ) {
-				// TODO: test
-				result = {
-					"list": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26],
-					"offset": 0,
-					"limit": 20,
-					"totalCount": 20
-				};
-
 				var html = AP.common.getTemplate( 'display.ranking.ranking-item', result );
 				this._$list.html( html );
 
@@ -61,8 +50,13 @@
 		/** =============== Private Methods ============== */
 		_setEvent: function () {
 			// 좋아요
-			this._$list.on( 'click', '.like, .cart',function (e) {
+			this._$list.on( 'click', '.like',function (e) {
 				$( e.currentTarget ).find( 'i' ).toggleClass( 'on' );
+			}.bind( this ));
+
+			// 장바구니
+			this._$list.on( 'click', '.cart',function (e) {
+				console.log( 'cart' );
 			}.bind( this ));
 		}
 	});

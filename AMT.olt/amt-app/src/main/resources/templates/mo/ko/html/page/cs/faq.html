@@ -56,13 +56,13 @@
 		<div class="section">
 			<div class="faq_div">
 				<dl>
-					<dt>
-						<button type="button">
+					<dt class="question">
+						<button type="button" title="답변 보기">
 							<span class="title">주문취소는 어떻게 하나요?</span>
 						</button>
 						<small>상품/주문/결제</small>
 					</dt>
-					<dd class="open">
+					<dd class="answer">
 						<div class="cont">
 							<p class="text">
 								<span class="txt_answer">A <span class="sr_only">답변</span></span>
@@ -72,13 +72,13 @@
 					</dd>
 				</dl>
 				<dl>
-					<dt>
-						<button type="button">
+					<dt class="question">
+						<button type="button" title="답변 보기">
 							<span class="title">불루리본 포인트는 소멸이 되나요?</span>
 						</button>
 						<small>포인트/이벤트/쿠폰</small>
 					</dt>
-					<dd>
+					<dd class="answer">
 						<div class="cont">
 							<p class="text">
 								<span class="txt_answer">A <span class="sr_only">답변</span></span>
@@ -88,13 +88,13 @@
 					</dd>
 				</dl>
 				<dl>
-					<dt>
-						<button type="button">
+					<dt class="question">
+						<button type="button" title="답변 보기">
 							<span class="title">주문취소는 어떻게 하나요?</span>
 						</button>
 						<small>상품/주문/결제</small>
 					</dt>
-					<dd>
+					<dd class="answer">
 						<div class="cont">
 							<p class="text">
 								<span class="txt_answer">A <span class="sr_only">답변</span></span>
@@ -104,13 +104,13 @@
 					</dd>
 				</dl>
 				<dl>
-					<dt>
-						<button type="button">
+					<dt class="question">
+						<button type="button" title="답변 보기">
 							<span class="title">불루리본 포인트는 소멸이 되나요?</span>
 						</button>
 						<small>포인트/이벤트/쿠폰</small>
 					</dt>
-					<dd>
+					<dd class="answer">
 						<div class="cont">
 							<p class="text">
 								<span class="txt_answer">A <span class="sr_only">답변</span></span>
@@ -120,13 +120,13 @@
 					</dd>
 				</dl>
 				<dl>
-					<dt>
-						<button type="button">
+					<dt class="question">
+						<button type="button" title="답변 보기">
 							<span class="title">월 구매 캐시백 기프트 카드 발급 조건이 뭔가요?</span>
 						</button>
 						<small>사이트 이용</small>
 					</dt>
-					<dd>
+					<dd class="answer">
 						<div class="cont">
 							<p class="text">
 								<span class="txt_answer">A <span class="sr_only">답변</span></span>
@@ -136,13 +136,13 @@
 					</dd>
 				</dl>
 				<dl>
-					<dt>
-						<button type="button">
+					<dt class="question">
+						<button type="button" title="답변 보기">
 							<span class="title">월 구매 캐시백 기프트 카드 발급 조건이 뭔가요?</span>
 						</button>
 						<small>사이트 이용</small>
 					</dt>
-					<dd>
+					<dd class="answer">
 						<div class="cont">
 							<p class="text">
 								<span class="txt_answer">A <span class="sr_only">답변</span></span>
@@ -152,13 +152,13 @@
 					</dd>
 				</dl>
 				<dl>
-					<dt>
-						<button type="button">
+					<dt class="question">
+						<button type="button" title="답변 보기">
 							<span class="title">월 구매 캐시백 기프트 카드 발급 조건이 뭔가요?</span>
 						</button>
 						<small>사이트 이용</small>
 					</dt>
-					<dd>
+					<dd class="answer">
 						<div class="cont">
 							<p class="text">
 								<span class="txt_answer">A <span class="sr_only">답변</span></span>
@@ -181,29 +181,22 @@
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
 <script>
-	//함수 실행
-	$(function(){
-	  $(".faq_div").faq();
+	
+	
+
+	$('.faq_div .answer').hide();
+
+	$('.faq_div .question button').click(function(e){
+		if ($(this).parent().hasClass('on')){
+			$(this).attr('title','답변 보기').parent().removeClass('on').next('.answer').hide();
+		} else {
+			$(this).parents('.faq_div').find('.question').removeClass('on').children('button').attr('title','답변 보기').parent().next('.answer').hide();
+			$(this).attr('title','답변 보기 닫기').parent().addClass('on').next('.answer').show();
+		}
+		return false;
 	});
 
-	//함수 선언
-	$.fn.faq=function(){
-	  return this.each(function(){
-		var $obj = $(this);
-		var $btn = $obj.find("dt button");
-		
-		$btn.on("click",onToggle);
-		
-		function onToggle(){
-		  if(!$(this).parent().next().hasClass("open")){
-			$("dd").removeClass("open"); //모든 창 닫기
-			$(this).parent().next().addClass("open")
-		  } else{
-			$(this).parent().next().removeClass("open")
-		  };  
-		};
-	  });
-	}
+	
 </script>
 </th:block>
 

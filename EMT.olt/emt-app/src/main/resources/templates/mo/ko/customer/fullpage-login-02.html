@@ -324,7 +324,7 @@ function mobileLoginComplete() {
 	}
 
     $("#complete3").attr("disabled", "disabled");
-    AP.api.mobileLoginComplete({}, {}, AP.common.getFormData($form)).done(function(data) {
+    AP.api.mobileLoginComplete({}, {}).done(function(data) {
 
         if (data.sleep == 'Y') {
 			post_goto('/sleepUser' , {'userId': data.userId});
@@ -354,6 +354,7 @@ function mobileLoginComplete() {
         } else {
             AP.modal.alert(xhr.errorMessage)
         }
+	});
 }
 
 $('input[type=tel]').keydown(function (event) {

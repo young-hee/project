@@ -5,7 +5,7 @@
 				</div>
                 <!--/* 상품들 */-->
                 <th:block th:if="${#lists.size(mPlusNPromo.ordOnlineProdFoList) > 0}">
-                  <div class="item_wrap" th:each="ordOnlineProd, iter : ${mPlusNPromo.ordOnlineProdFoList}" th:classappend="${iter.index != 0} ? 'plus' : ''">
+                  <div class="item_wrap" th:each="ordOnlineProd, iter : ${mPlusNPromo.ordOnlineProdFoList}" th:classappend="${!iter.first} ? 'plus' : ''">
                         <th:block ap:replace="~{order/fragment/order-reception-product/order-ordonlineprod-info}"/>
                   </div>
                 </th:block>

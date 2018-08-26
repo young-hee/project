@@ -6,7 +6,7 @@
 	'use strict';
 
 	var FindSotre = $B.Class.extend({
-		initialize: function () {
+		initialize: function() {
 			this._$target = $( '#ap_container .store_find_area' );
 			this._$map = this._$target.find( '.map_area' );
 			this._$result = this._$target.find( '.store_items' );
@@ -16,7 +16,7 @@
 			this._$total = this._$target.find( '.total_count' );
 			this._$paging = this._$target.find( '.pagination' );
 
-			this._keyword = '서울특별시';
+			this._keyword = '';  
 			this._api = null;
 
 			this._setPlugins();
@@ -68,6 +68,7 @@
 
 			//단골매장만 보기 필터링
 			this._$favoriteFilterBtn.on( 'click', function (e) {
+				//TODO 단골매장만 보기를 누른 경우 단골매장만 보이게 함 ? 그상태에서 검색하면? 검색한 상태에서 단골매장만 보기 누르면? 
 				this._$favoriteFilterBtn.prop( 'disabled', true ).toggleClass( 'on' );
 				this._getData( 0 );
 			}.bind(this));
@@ -120,11 +121,25 @@
 		},
 
 		_getData: function ( offset ) {
+			
 			var favoriteFilter = this._$favoriteFilterBtn.hasClass( 'on' );
-
+			
+			
 			this._$paging.paging( 'disable' );
+			
 			if ( this._api ) this._api.abort();
-
+				
+			if(this._keyword === '' && favoriteFilter === false){
+				this._keyword = '서울특별시';
+			}
+			if(favoriteFilter === true){
+				this._keyword = '';
+				
+			}
+			
+			console.log(this._keyword);
+			console.log(favoriteFilter);
+			
 			this._api = AP.api.stores( null, {
 				keyword: this._keyword,
 				offset: offset,

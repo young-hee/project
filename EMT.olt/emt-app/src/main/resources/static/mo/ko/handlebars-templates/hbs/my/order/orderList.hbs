@@ -4,85 +4,15 @@
 		<div class="panel">
 			<div class="table_layout">
 				<div>주문번호</div>
-				<div class="num"><a href="javascript:;" onclick="showClaimDetailView('{{claimTypeCode}}', '{{ordHistNo}}')" class="order_number_link">{{ordNo}}</a></div>
-				<div><button type="button" class="btn_sm_neutral type2" onclick="showClaimDetailView('{{claimTypeCode}}', '{{ordHistNo}}')">상세 보기</button></div>
+				<div class="num"><a href="javascript:;" onclick="showDetailView('{{claimTypeCode}}', '{{ordHistNo}}')" class="order_number_link">{{ordNo}}</a></div>
+				<div><button type="button" class="btn_sm_neutral type2" onclick="showDetailView('{{claimTypeCode}}', '{{ordHistNo}}')">상세 보기</button></div>
 			</div>
 			{{#if claimProdInfo}}
-				<div class="table_layout">
-					<div>
-						{{#xif claimProdInfo.imageUrl '!=' null}}
-							<img src="{{claimProdInfo.imageUrl}}">
-						{{else}}
-							<img src={{absolutePath '/images/cart/no_img.png'}}>
-						{{/xif}}
-					</div>
-					<div>
-						<p class="flag online v2">온라인주문</p>
-						<p class="name"><a href="javascript:;" onclick="showClaimDetailView('{{claimTypeCode}}', '{{ordHistNo}}')">{{claimProdInfo.prodNameRlang}}</a></p>
-						<p class="font_md"><strong class="num">{{claimProdInfo.claimQty}}</strong>개/<strong class="num">{{currencyFormat claimProdInfo.finalOnlineSaleAmtPcur 0}}</strong></p>
-						<p class="num"><small>{{dateFormat ordReceivedDt "YYYY-MM-DD"}}</small></p>
-					</div>
-					<div>
-						<p><em>{{ordStatusCheck ../type claimTypeCode}}</em></p>
-					</div>
-				</div>
+
+				{{{prodPartial 'my.order.detail.order-list-prod' 'prodType' claimTypeCode 'info' this 'prodInfo' claimProdInfo 'typeName' '온라인주문'
+							   'statusCode' claimProdInfo.ordHistProdStatusCode 'ordAmt' claimProdInfo.finalOnlineSaleAmtPcur 'claimYn' 'Y'}}}
 			{{/if}}
 		</div>
-	{{/xif}}
-
-	{{#xif ../type '===' 'store'}}
-		<div class="panel">
-			<div class="table_layout">
-				<div>주문번호</div>
-				<div class="num"><a href="javascript:;" onclick="showDetailView('{{../type}}', {{ordNo}})" class="order_number_link">{{ordNo}}</a></div>
-				{{#if (and (eq ../type "store")(eq onlineOrdProdInfo.ordHistProdStatusCode "ShipComplete"))}}
-					<div><button type="button" class="btn_sm_neutral type1">구매리뷰쓰기</button></div>
-				{{/if}}
-			</div>
-			{{#if ordProdInfo}}
-				<div class="table_layout">
-					<div>
-						{{#xif ordProdInfo.imageUrl '!=' null}}
-							<img src="{{ordProdInfo.imageUrl}}">
-						{{else}}
-							<img src={{absolutePath '/images/cart/no_img.png'}}>
-						{{/xif}}
-					</div>
-					<div>
-						<p class="flag online v2">스윗딜리버리</p>
-						<p class="name">
-							<a href="javascript:;" onclick="showDetailView('{{../type}}', {{ordNo}})">
-							{{this.ordProdInfo.prodNameRlang}} {{ordCntCheck ordProdInfo.ordProdCnt}}</a>
-						</p>
-						<p class="font_md"><strong class="num">{{currencyFormat ordProdInfo.totalOrdAmt 0}}</strong></p>
-						<p class="num"><small>{{dateFormat ordReceivedDt "YYYY-MM-DD"}}</small></p>
-					</div>
-					<div>
-						<p><em>{{ordStatusCheck ../type ordProdInfo.ordHistProdStatusCode}}</em></p>
-						{{#if (or (eq ../type "online")(eq ../type "store"))}}
-							{{#ordSwitch ordProdInfo.ordHistProdStatusCode}}
-								{{#ordCase 'a'}}
-									<button type="button" class="btn_sm_bordered" onclick="showDetailView('cancel', {{this.ordNo}})">주문취소</button>
-								{{/ordCase}}
-								{{#ordCase 'b'}}
-									<button type="button" class="btn_sm_bordered" onclick="javascript:location.href='/my/page/orderCancel/first?orderSn={{this.orderSn}}'">배송조회</button>
-									<button type="button" class="btn_sm_neutral">수령확인</button>
-								{{/ordCase}}
-								{{#ordCase 'c'}}
-									<button type="button" class="btn_sm_bordered" onclick="showDetailView('exchange', {{ordNo}})">교환신청</button>
-									<button type="button" class="btn_sm_neutral" onclick="showDetailView('return', {{ordNo}})">반품신청</button>
-								{{/ordCase}}
-							{{/ordSwitch}}
-						{{/if}}
-						{{#xif ../type "===" "cashReceipts"}}
-						{{else}}
-						{{/xif}}
-					</div>
-				</div>
-			{{/if}}
-
-		</div>
-
 	{{/xif}}
 
 	{{#if (or (eq ../type 'online')(eq ../type 'cashReceipts'))}}
@@ -103,88 +33,32 @@
 				{{/xif}}
 			</div>
 				{{#if onlineOrdProdInfo}}
-					<div class="table_layout">
-						<div>
-							{{#xif onlineOrdProdInfo.imageUrl '!=' null}}
-								<img src="{{onlineOrdProdInfo.imageUrl}}">
-							{{else}}
-								<img src={{absolutePath '/images/cart/no_img.png'}}>
-							{{/xif}}
-						</div>
-						<div>
-							<p class="flag">온라인주문</p>
-							<p class="name" id="prodName">
-								<a href="javascript:;" onclick="showDetailView('{{../type}}', {{ordNo}})">
-									{{this.onlineOrdProdInfo.prodNameRlang}} {{ordCntCheck onlineOrdProdInfo.ordProdCnt}}</a>
-							</p>
-							<p class="font_md"><strong class="num">{{currencyFormat onlineOrdProdInfo.totalOrdAmt 0}}</strong></p>
-							<p class="num"><small>{{dateFormat ordReceivedDt "YYYY-MM-DD"}}</small></p>
-						</div>
-						<div>
-							<p><em>{{ordStatusCheck ../type onlineOrdProdInfo.ordDetailStatusCode}}</em></p>
-							{{#if (or (eq ../type "online")(eq ../type "store"))}}
-								{{#ordSwitch onlineOrdProdInfo.ordDetailStatusCode}}
-									{{#ordCase 'a'}}
-										<button type="button" class="btn_sm_bordered" onclick="showDetailView('cancel', {{this.ordNo}})">주문취소</button>
-									{{/ordCase}}
-									{{#ordCase 'b'}}
-										<button type="button" class="btn_sm_bordered" onclick="javascript:location.href='/my/page/orderCancel/first?orderSn={{this.orderSn}}'">배송조회</button>
-										<button type="button" class="btn_sm_neutral">수령확인</button>
-									{{/ordCase}}
-									{{#ordCase 'c'}}
-										<button type="button" class="btn_sm_bordered" onclick="showDetailView('exchange', {{ordNo}})">교환신청</button>
-										<button type="button" class="btn_sm_neutral" onclick="showDetailView('return', {{ordNo}})">반품신청</button>
-									{{/ordCase}}
-								{{/ordSwitch}}
-							{{/if}}
-							{{#xif ../type "===" "cashReceipts"}}
-							{{else}}
-							{{/xif}}
-						</div>
-					</div>
+					{{{prodPartial 'my.order.detail.order-list-prod' 'prodType' ../type 'info' this 'prodInfo' onlineOrdProdInfo 'typeName' '온라인주문'
+								   'statusCode' onlineOrdProdInfo.ordDetailStatusCode 'ordAmt' onlineOrdProdInfo.totalOrdAmt}}}
 				{{/if}}
 				{{#if storePickupOrdProdInfo}}
-					<div class="table_layout">
-						<div>
-							{{#xif storePickupOrdProdInfo.imageUrl '!=' null}}
-								<img src="{{storePickupOrdProdInfo.imageUrl}}">
-							{{else}}
-								<img src={{absolutePath '/images/cart/no_img.png'}}>
-							{{/xif}}
-						</div>
-						<div>
-							<p class="flag">테이크아웃</p>
-							<p class="name" id="prodName">
-								<a href="javascript:;" onclick="showDetailView('{{../type}}', {{ordNo}})">
-									{{this.storePickupOrdProdInfo.prodNameRlang}} {{ordCntCheck storePickupOrdProdInfo.ordProdCnt}}</a>
-							</p>
-							<p class="font_md"><strong class="num">{{currencyFormat storePickupOrdProdInfo.totalOrdAmt 0}}</strong></p>
-							<p class="num"><small>{{dateFormat ordReceivedDt "YYYY-MM-DD"}}</small></p>
-						</div>
-						<div>
-							<p><em>{{ordStatusCheck ../type storePickupOrdProdInfo.ordDetailStatusCode}}</em></p>
-							{{#if (or (eq ../type "online")(eq ../type "store"))}}
-								{{#ordSwitch storePickupOrdProdInfo.ordDetailStatusCode}}
-									{{#ordCase 'a'}}
-										<button type="button" class="btn_sm_bordered" onclick="showDetailView('cancel', {{this.ordNo}})">주문취소</button>
-									{{/ordCase}}
-									{{#ordCase 'b'}}
-										<button type="button" class="btn_sm_bordered" onclick="javascript:location.href='/my/page/orderCancel/first?orderSn={{this.orderSn}}'">배송조회</button>
-										<button type="button" class="btn_sm_neutral">수령확인</button>
-									{{/ordCase}}
-									{{#ordCase 'c'}}
-										<button type="button" class="btn_sm_bordered" onclick="showDetailView('exchange', {{ordNo}})">교환신청</button>
-										<button type="button" class="btn_sm_neutral" onclick="showDetailView('return', {{ordNo}})">반품신청</button>
-									{{/ordCase}}
-								{{/ordSwitch}}
-							{{/if}}
-							{{#xif ../type "===" "cashReceipts"}}
-							{{else}}
-							{{/xif}}
-						</div>
-					</div>
+					{{{prodPartial 'my.order.detail.order-list-prod' 'prodType' ../type 'info' this 'prodInfo' storePickupOrdProdInfo 'typeName' '테이크아웃'
+								   'statusCode' storePickupOrdProdInfo.ordDetailStatusCode 'ordAmt' storePickupOrdProdInfo.totalOrdAmt}}}
 				{{/if}}
 		</div>
 	{{/if}}
+
+	{{#xif ../type '===' 'store'}}
+		<div class="panel">
+			<div class="table_layout">
+				<div>주문번호</div>
+				<div class="num"><a href="javascript:;" onclick="showDetailView('{{../type}}', {{ordNo}})" class="order_number_link">{{ordNo}}</a></div>
+				{{#if (and (eq ../type "store")(eq onlineOrdProdInfo.ordHistProdStatusCode "ShipComplete"))}}
+					<div><button type="button" class="btn_sm_neutral type1">구매리뷰쓰기</button></div>
+				{{/if}}
+			</div>
+			{{#if ordProdInfo}}
+				{{{prodPartial 'my.order.detail.order-list-prod' 'prodType' ../type 'info' this 'prodInfo' ordProdInfo 'typeName' '스윗딜리버리'
+							   'statusCode' ordProdInfo.ordHistProdStatusCode 'ordAmt' ordProdInfo.totalOrdAmt}}}
+			{{/if}}
+
+		</div>
+
+	{{/xif}}
 
 {{/each}}

@@ -252,6 +252,42 @@
 		return moment( end ).isAfter( now );
 	});
 
+	/**
+	 * 장바구니 판매 상태정보
+	 * @param {String}  saleDisplayStatus : OutOfStock(품절) - Exhaustion(조기소진) - WaitingSale(판매대기) - SuspendSale(판매일시중지) - EndSale(판매종료)
+	 * @param {String}  prodTypeCode
+	 * @returns {String}
+	 */
+	Handlebars.registerHelper( 'cartStatusTxt', function ( saleDisplayStatus) {
+		var statusTxt = '';
+		switch(saleDisplayStatus){
+			case 'OutOfStock':		//품절
+				statusTxt = '[일시품절]';
+				break;
+			case 'Exhaustion':		//조기소진
+				statusTxt = '[조기소진]';
+				break;
+			case 'WaitingSale':		//판매대기
+				statusTxt = '[판매대기]';
+				break;
+			case 'EndSale':			//판매종료
+				statusTxt = '[판매종료]';
+				break;
+			case 'SuspendSale':		//판매일시중지
+				statusTxt = '[판매일시중지]';
+				break;
+			case 'WaitingDisplay':	//판매대기
+				statusTxt = '[판매대기]';
+				break;
+			case 'EndDisplay':		//판매종료
+				statusTxt = '[판매종료]';
+				break;
+			case 'PermanentEnd':	//영구종료
+				statusTxt = '[영구종료]';
+				break;
+		}
+		return statusTxt;
+	});
 
 	/** ==================== Collections Helpers ==================== */
 

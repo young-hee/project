@@ -9,8 +9,13 @@
 
 <div class="product">
 	<div class="check_wrap check_only" style="display: none">
-		<input type="checkbox" name="goods" id="{{prod.onlineProdCode}}" value="{{prod.onlineProdCode}}" onclick="selectOnlineProd(this);">
-		<label for="{{prod.onlineProdCode}}"><span class="sr_only">선택</span></label>
+		{{#xif prod.ordHistProdTypeCode '===' 'BulkDc'}}
+			<input type="checkbox" name="goods" id="{{prod.bulkDcOnlineProdCode}}" value="{{prod.bulkDcOnlineProdCode}}" onclick="selectOnlineProd(this);">
+			<label for="{{prod.bulkDcOnlineProdCode}}"><span class="sr_only">선택</span></label>
+		{{else}}
+			<input type="checkbox" name="goods" id="{{prod.onlineProdCode}}" value="{{prod.onlineProdCode}}" onclick="selectOnlineProd(this);">
+			<label for="{{prod.onlineProdCode}}"><span class="sr_only">선택</span></label>
+		{{/xif}}
 	</div>
 	<div class="thumb">
 		<img src="{{prod.onlineProdImgUrl}}">
@@ -19,13 +24,22 @@
 		{{#xif typeName '!=' null}}
 			<p class="flag">{{condition (eq typeName 'a') '진주알 상품' '뷰티포인트'}}</p>
 		{{/xif}}
-		<p class="name">{{prod.onlineProdName}}</p>
-
-		{{#if (or (or (eq step 2)(eq claimYn 'Y'))(eq prod.ordHistProdStatusCode 'ProdCancel'))}}
-		<p><strong class="num font_md">{{prod.cancelQtySum}}</strong>개 /
+		{{#xif prod.ordHistProdTypeCode '===' 'BulkDc'}}
+			<p class="name">{{prod.bulkDcOnlineProdName}}</p>
 		{{else}}
-		<p><strong class="num font_md">{{calc prod.ordQtySum '-' prod.cancelQtySum}}</strong>개 /
-		{{/if}}
+			<p class="name">{{prod.onlineProdName}}</p>
+		{{/xif}}
+
+
+		{{#xif claimYn '===' 'Y'}}
+			<p><strong class="num font_md">{{prod.claimQtySum}}</strong>개 /
+		{{else}}
+			{{#if (or (eq step 2)(eq prod.ordHistProdStatusCode 'ProdCancel'))}}
+				<p><strong class="num font_md">{{prod.cancelQtySum}}</strong>개 /
+			{{else}}
+				<p><strong class="num font_md">{{calc (calc prod.ordQtySum '-' prod.cancelQtySum) '-' prod.claimQtySum}}</strong>개 /
+			{{/if}}
+		{{/xif}}
 		<strong class="num font_md">{{currencyFormat prod.finalOnlineSaleAmtPcurSum}}</strong></p>
 	</div>
 	{{#xif prod.ordHistProdStatusCode '===' 'ProdCancel'}}

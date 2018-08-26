@@ -1,63 +1,67 @@
-<ul class="footer_menu">
-	<li>
-		<a href="javascript:;" onclick="login()" th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">로그인</a>
-		<a href="javascript:;" onclick="logout()" th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">로그아웃</a>
-	</li>
-	<li>
-		<a href="/customer/signup" th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">회원가입</a>
-		<a href="/my/page/leaveId" th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">회원탈퇴</a>
-		<!--<a href="">마이에뛰드</a> --> <!-- /* 20180726:로그인시 회원가입에서 마이에뛰드로 변경*/ -->
-	</li>
-	<li><a href="/display/store_opening">매장개설문의</a></li>
-	<li><a href="/cs/customerCenter">고객센터</a></li>
-</ul>
-<!-- 사업자 정보 -->
-<button type="button" class="btn_footer_more">(주) 에뛰드 사업자 정보 <i class="ico_arr_d"></i></button>
-<!-- toggle area -->
-<div class="company_info">
-	<address>㈜에뛰드  │ 대표이사 권금주<br>
-서울특별시 용산구 한강대로 100(한강로2가)<br>
-개인정보보호책임자 : 양민주 │ 사업자등록번호 135-81-05033<br>
-통신판매업신고번호 제2017-서울용산-1292<br>
-호스팅제공자 ㈜에뛰드 │ etudemall@etude.co.kr<br>
-고객상담 평일 9시~18시(토/일/공휴일 휴무)
-	</address>
-</div>
-
-<div class="company_info2">
-	<!-- 전화번호 안내 -->
-	<div class="table_layout cs_info">
-		<a href="tel://1544-5418"><b>1544-5418</b><br>(쇼핑몰)</a>
-		<a href="tel://080-022-2285"><b>080-022-2285</b><br>(제품, 매장외)</a>
+<th:block th:if="${#device.isMobileWeb()}"> <!-- app전용은 footer 생략 -->
+	<ul class="footer_menu">
+		<li>
+			<a href="javascript:;" onclick="login()" th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">로그인</a>
+			<a href="javascript:;" onclick="logout()" th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">로그아웃</a>
+		</li>
+		<li>
+			<a href="/customer/signup" th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">회원가입</a>
+			<a href="/my/page/leaveId" th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">회원탈퇴</a>
+			<!--<a href="">마이에뛰드</a> --> <!-- /* 20180726:로그인시 회원가입에서 마이에뛰드로 변경*/ -->
+		</li>
+		<li><a href="/display/store_opening">매장개설문의</a></li>
+		<li><a href="/cs/customerCenter">고객센터</a></li>
+	</ul>
+	<!-- 사업자 정보 -->
+	<button type="button" class="btn_footer_more">(주) 에뛰드 사업자 정보 <i class="ico_arr_d"></i></button>
+	<!-- toggle area -->
+	<div class="company_info">
+		<address>㈜에뛰드  │ 대표이사 권금주<br>
+	서울특별시 용산구 한강대로 100(한강로2가)<br>
+	개인정보보호책임자 : 양민주 │ 사업자등록번호 135-81-05033<br>
+	통신판매업신고번호 제2017-서울용산-1292<br>
+	호스팅제공자 ㈜에뛰드 │ etudemall@etude.co.kr<br>
+	고객상담 평일 9시~18시(토/일/공휴일 휴무)
+		</address>
 	</div>
-	<p class="text">가맹점 테이크아웃 서비스에 대해 (주)에뛰드는 통신판매중개 시스템의 제공자로서 통신판매의 당사자가 아닙니다. 따라서 테이크아웃 서비스 거래에 대한 주문, 환불 등과 관련한 책임은
-		각 매장에 있습니다.</p>
-</div>
+	
+	<div class="company_info2">
+		<!-- 전화번호 안내 -->
+		<div class="table_layout cs_info">
+			<a href="tel://1544-5418"><b>1544-5418</b><br>(쇼핑몰)</a>
+			<a href="tel://080-022-2285"><b>080-022-2285</b><br>(제품, 매장외)</a>
+		</div>
+		<p class="text">가맹점 테이크아웃 서비스에 대해 (주)에뛰드는 통신판매중개 시스템의 제공자로서 통신판매의 당사자가 아닙니다. 따라서 테이크아웃 서비스 거래에 대한 주문, 환불 등과 관련한 책임은
+			각 매장에 있습니다.</p>
+	</div>
+			
+	
+	
+	
+		<div class="footer_link"> <!-- /* 20180802:App설치 이미지배너 추가 */ -->
+			<a href="https://itunes.apple.com/kr/app/id538275329" target="_blank" class="btn_app_store ios">
+				<img ap:src="@{/images/common/link_app.png}" alt="에뛰드 하우스 앱으로 더 많은 정보를 확인해 보세요~. 앱 설치하기" />
+			</a>
+			<a href="market://details?id=com.etudehouse" target="_blank" class="btn_app_store android">
+				<img ap:src="@{/images/common/link_app.png}" alt="에뛰드 하우스 앱으로 더 많은 정보를 확인해 보세요~. 앱 설치하기" />
+			</a>
 		
-<div class="footer_link"> <!-- /* 20180802:App설치 이미지배너 추가 */ -->
-<th:block th:if="${#device.isMobileWeb() && #device.isiOS()}">
-	<a href="https://itunes.apple.com/kr/app/id538275329" target="_blank" class="btn_app_store ios">
-		<img ap:src="@{/images/common/link_app.png}" alt="에뛰드 하우스 앱으로 더 많은 정보를 확인해 보세요~. 앱 설치하기" />
-	</a>
+		</div>
+		
+		<ul class="policy_list">
+			<li><a href="#none" th:href=@{/common/servicePolicy}>이용약관</a></li>
+			<li><a href="#none" th:href=@{/common/personalInfoPolicy}><b>개인정보처리방침</b></a></li>
+			<li><a href="http://www.ftc.go.kr/info/bizinfo/communicationViewPopup.jsp?wrkr_no=1358105033" target="_blank">사업자 정보확인</a></li>
+			<li><a href="#none" th:href=@{/common/imageryIntelliPolicy}>영상정보처리기기 운영/관리방침</a></li>
+		</ul>
+		<br>
+		<ul class="footer_sns">
+			<li><a target="_blank" href="https://www.facebook.com/etudehouseofficial/"><span class="sr_only">페이스북</span></a></li>
+			<li><a target="_blank" href="https://twitter.com/etudeplay"><span class="sr_only">트위터</span></a></li>
+			<li><a target="_blank" href="https://www.youtube.com/user/etudeblog"><span class="sr_only">유투브</span></a></li>
+			<li><a target="_blank" href="https://www.instagram.com/etudehouseofficial/"><span class="sr_only">인스타그램</span></a></li>
+			<li><a target="_blank" href="https://blog.naver.com/etudeblog"><span class="sr_only">네이버</span></a></li>
+		</ul>
+	
+	<p class="copy">Copyright &copy; 2018 ETUDE HOUSE. All Rights Reserved.</p>
 </th:block>
-<th:block th:if="${#device.isMobileWeb() && #device.isAndroid()}">
-	<a href="market://details?id=com.etudehouse" target="_blank" class="btn_app_store android">
-		<img ap:src="@{/images/common/link_app.png}" alt="에뛰드 하우스 앱으로 더 많은 정보를 확인해 보세요~. 앱 설치하기" />
-	</a>
-</th:block>
-
-<ul class="policy_list">
-	<li><a href="#none" th:href=@{/common/servicePolicy}>이용약관</a></li>
-	<li><a href="#none" th:href=@{/common/personalInfoPolicy}><b>개인정보처리방침</b></a></li>
-	<li><a href="http://www.ftc.go.kr/info/bizinfo/communicationViewPopup.jsp?wrkr_no=1358105033" target="_blank">사업자 정보확인</a></li>
-	<li><a href="#none" th:href=@{/common/imageryIntelliPolicy}>영상정보처리기기 운영/관리방침</a></li>
-</ul>
-<br>
-<ul class="footer_sns">
-	<li><a target="_blank" href="https://www.facebook.com/etudehouseofficial/"><span class="sr_only">페이스북</span></a></li>
-	<li><a target="_blank" href="https://twitter.com/etudeplay"><span class="sr_only">트위터</span></a></li>
-	<li><a target="_blank" href="https://www.youtube.com/user/etudeblog"><span class="sr_only">유투브</span></a></li>
-	<li><a target="_blank" href="https://www.instagram.com/etudehouseofficial/"><span class="sr_only">인스타그램</span></a></li>
-	<li><a target="_blank" href="https://blog.naver.com/etudeblog"><span class="sr_only">네이버</span></a></li>
-</ul>
-<p class="copy">Copyright &copy; 2018 ETUDE HOUSE. All Rights Reserved.</p>

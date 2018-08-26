@@ -1,4 +1,4 @@
-<html ap:decorate="~{layout/layout-main}">
+<html ap:decorate="~{layout/layout-main}" th:with="_jsfile='events-coupon-zone'">
 <body>
 <!-- #ap_container -->
 <div ap:fragment="layout-contents">
@@ -24,8 +24,22 @@
 				<!-- 로그인 후 -->
 				<div class="section coup_log_after" th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}">
 
-					<div class="custom_level_area vip" style="display:inline-block">
-						<span th:text="${session.LOGIN_USER.member.name.name1}">김보영님은 <strong th:text="${session.LOGIN_USER.member.memberLevelName}">VIP</strong>고객입니다</span>
+					<th:block th:if="${session.LOGIN_USER.member.memberLevelName == 'WELCOME'}">
+						<div class="custom_level_area welcome" style="display:inline-block">
+					</th:block>
+					<th:block th:if="${session.LOGIN_USER.member.memberLevelName == 'VIP'}">
+						<div class="custom_level_area vip" style="display:inline-block">
+					</th:block>
+					<th:block th:if="${session.LOGIN_USER.member.memberLevelName == 'VIP+'}">
+						<div class="custom_level_area vip_plus" style="display:inline-block">
+					</th:block>
+					<th:block th:if="${session.LOGIN_USER.member.memberLevelName == 'VVIP'}">
+						<div class="custom_level_area vvip" style="display:inline-block">
+					</th:block>
+					<th:block th:if="${session.LOGIN_USER.member.memberLevelName == 'VVIP+'}">
+						<div class="custom_level_area vvip_plus" style="display:inline-block">
+					</th:block>
+						<span><em th:text="${session.LOGIN_USER.member.name.name1}">김보영님은 </em><strong th:text="${session.LOGIN_USER.member.memberLevelName}">VIP</strong>고객입니다</span>
 					</div>
 				</div>
 				<!-- 등급별 혜택 -->
@@ -37,6 +51,10 @@
 				<div class="tab_cont">
 
 					<div class="vip_lounge">
+						<div class="rounge_benefit01" th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}">
+							<p class="tit">이달의 라운지 혜택</p>
+							<p class="txt">응모하기 클릭 후 혜택을 확인하세요</p>
+						</div>
 						<div class="title_area">
 							<h4 class="v_title">VIP고객을 위한 혜택존</h4>
 							<p class="text">VIP등급 이상이라면 매월 1회 응모하고 혜택을 받으세요</p>

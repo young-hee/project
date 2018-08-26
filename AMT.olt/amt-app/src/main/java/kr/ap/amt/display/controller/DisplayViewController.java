@@ -492,6 +492,82 @@ public class DisplayViewController extends AbstractController {
         return "display/apShoppingTip-detail"; 
 
     }
+	
+	/**
+	 * APP 전용 멤버십 메뉴 추가
+	 * 
+	 * @param model
+	 * @param displayMenuId
+	 * @return
+	 */
+	@RequestMapping("/l_plusMembership")
+	@PageTitle(title = "플러스멤버십")
+	public String plusMembership(Model model, String displayMenuId) {
+
+		String fileName = "M01_plusMembership_m";
+
+		//Mobile
+        if (isMobileDevice()) {
+    		
+        }
+
+        //PC
+        if (isPcDevice()) {
+        	
+        }
+
+		model.addAttribute("displayMenuId", displayMenuId);
+
+		return "display/" + fileName;
+	}
+	
+	/**
+	 * 퍼시픽샵 페이지 이동
+	 * 
+	 * @param model
+	 * @param displayMenuId
+	 * @return
+	 */
+	@RequestMapping({ "/pacificShop" })
+	@PageTitle(title = "퍼시픽샵")
+	public String pacificshop(Model model, String displayMenuId, String previewKey, String previewDate) {
+
+		String cornerIds =  "";
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		displayMenuId = "pacificShop";
+
+		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
+		
+		try {
+			//Mobile
+			if (isMobileDevice()) {
+				cornerIds = "M01_" + displayMenuId + "_m.1," + "M01_" + displayMenuId + "_m.2," + "M01_" + displayMenuId + "_m.3";
+			}
+
+			//PC
+			if (isPcDevice()) {
+				cornerIds = "M01_" + displayMenuId + "_p.1," + "M01_" + displayMenuId + "_p.2," + "M01_" + displayMenuId + "_p.3";
+			}
+
+	        List<Corner> corners = displayApi.getMenuPageCorners(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId, previewKey, previewDate != null ? sf.parse(previewDate) : null, cornerIds, false);
+			Map<String, List<CornerContentsSet>> cornersMap = new HashMap<String, List<CornerContentsSet>>();
+			for (Corner c : corners) {
+				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
+			}
+			
+			model.addAttribute("cornersMap", cornersMap);
+		
+		}catch(Exception e) {
+			model.addAttribute("popupInfo", null);
+	        model.addAttribute("footerNotice", null);
+	    }
+
+
+		model.addAttribute("displayMenuId", displayMenuId);
+
+		return "display/" + pageInfo.getMenuPageFileId();
+	}
+	
 	/**
 	 * 핫딜 (투데이핫딜) 페이지 이동
 	 * 
@@ -783,4 +859,22 @@ public class DisplayViewController extends AbstractController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
         }
     }
+	
+	
+	/**
+	 * 랭킹 페이지 이동
+	 * 
+	 * @param model
+	 * @param displayMenuId
+	 * @return
+	 */
+	@RequestMapping({ "/rank", "/rank/preview" })
+	@PageTitle(title = "랭킹")
+	public String rank(Model model, String displayMenuId, String previewKey, String previewDate) {
+		String fileName = "display/rank";
+		
+		model.addAttribute("displayMenuId", displayMenuId);
+		
+		return fileName;
+	}
 }

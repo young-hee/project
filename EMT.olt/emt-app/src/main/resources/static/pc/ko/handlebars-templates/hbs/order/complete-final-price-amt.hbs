@@ -1,0 +1,112 @@
+<div class="cont payment">
+	<div class="panel bordered gray">
+		<div class="panel_cont ui_table">
+		{{#each pgList}}
+			{{#xif payMethodTypeCode '===' 'Deposit'}}
+				<dl>
+					<dt><b>예치금</b></dt>
+					<dd>
+						<p class="text">{{currencyFormatDefault payAmt '원'}}</p>
+					</dd>
+				</dl>
+			{{/xif}}
+			{{#xif pointTypeCode '===' 'MembershipPoint'}}
+				<dl>
+					<dt><b>뷰티포인트</b></dt>
+					<dd>
+						<p class="text">{{currencyFormatDefault usePoint 'P'}}</p>
+					</dd>
+				</dl>
+			{{/xif}}
+			{{#xif pointTypeCode '===' 'ActivityPoint'}}
+				<dl>
+					<dt><b>쿠션포인트</b></dt>
+					<dd>
+						<p class="text">{{currencyFormatDefault usePoint 'P'}}</p>
+					</dd>
+				</dl>
+			{{/xif}}
+			{{#xif payMethodCode '===' 'wpay'}}
+				<dl>
+					<dt><b>원터치 간편결제</b></dt>
+					<dd>
+						<p class="text">{{currencyFormatDefault payAmt '원'}}</p>
+						<p class="text">{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})</p>
+						<p class="text">{{creditcardPayType pgPayEx.creditcardPayTypeCode}} / {{pgPayEx.instPeriod}}{{pgPayEx.intFreeInstPeriod}}</p>
+					</dd>
+				</dl>
+			{{/xif}}
+			{{#xif payMethodCode '===' 'naverpay'}}
+				<dl>
+					<dt><b>네이버 페이</b></dt>
+					<dd>
+						<p class="text">{{currencyFormatDefault payAmt '원'}}</p>
+						<p class="text">{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})</p>
+						<p class="text">{{creditcardPayType pgPayEx.creditcardPayTypeCode}} / {{pgPayEx.instPeriod}}{{pgPayEx.intFreeInstPeriod}}</p>
+					</dd>
+				</dl>
+			{{/xif}}
+			{{#xif payMethodCode '===' 'payco'}}
+				<dl>
+					<dt><b>페이코</b></dt>
+					<dd>
+						<p class="text">{{currencyFormatDefault payAmt '원'}}</p>
+						<p class="text">{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})</p>
+						<p class="text">{{creditcardPayType pgPayEx.creditcardPayTypeCode}} / {{pgPayEx.instPeriod}}{{pgPayEx.intFreeInstPeriod}}</p>
+					</dd>
+				</dl>
+			{{/xif}}
+			{{#xif payMethodCode '===' 'kakaopay'}}
+				<dl>
+					<dt><b>카카오 페이</b></dt>
+					<dd>
+						<p class="text">{{currencyFormatDefault payAmt '원'}}</p>
+						<p class="text">{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})</p>
+						<p class="text">{{creditcardPayType pgPayEx.creditcardPayTypeCode}} / {{pgPayEx.instPeriod}}{{pgPayEx.intFreeInstPeriod}}</p>
+					</dd>
+				</dl>
+			{{/xif}}
+			{{#xif payMethodCode '===' 'credit-card'}}
+				<dl>
+					<dt><b>신용카드 결제</b></dt>
+					<dd>
+						<p class="text">{{currencyFormatDefault payAmt '원'}}</p>
+						<p class="text">{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})</p>
+						<p class="text">{{creditcardPayType pgPayEx.creditcardPayTypeCode}} / {{pgPayEx.instPeriod}}{{pgPayEx.intFreeInstPeriod}}</p>
+					</dd>
+				</dl>
+			{{/xif}}
+			{{#xif payMethodCode '===' 'bank-ac-transfer'}}
+				<dl>
+					<dt><b>실시간 계좌이체</b></dt>
+					<dd>
+						<p class="text">{{currencyFormatDefault payAmt '원'}}</p>
+						<p class="text">{{pgPayEx.virtualBankAcBankName}}({{pgPayEx.virtualDepositBankAcNo}})</p>
+						<p class="text">예금주 {{pgPayEx.virtualBankAcAcHolder}}</p>
+					</dd>
+				</dl>
+			{{/xif}}
+			{{#xif payMethodCode '===' 'virtual-account'}}
+				<dl>
+					<dt><b>가상계좌</b></dt>
+					<dd>
+						<p class="text">{{currencyFormatDefault payAmt '원'}}</p>
+						<p class="text">{{pgPayEx.virtualBankAcBankName}}({{pgPayEx.virtualDepositBankAcNo}})</p>
+						<p class="text">예금주 {{pgPayEx.virtualBankAcAcHolder}}</p>
+						<p class="text"><em>입금기한 {{dateFormat pgPayEx.virtualBankAcDeadlineDt "YYYY-MM-DD"}} 까지</em></p>
+					</dd>
+				</dl>
+			{{/xif}}
+			{{#xif payMethodCode '===' 'mobile-phone-pay'}}
+				<dl>
+					<dt><b>휴대폰 결제</b></dt>
+					<dd>
+						<p class="text">{{currencyFormatDefault payAmt '원'}}</p>
+						<p class="text">{{pgPayEx.mobilePhoneNo}}</p>
+					</dd>
+				</dl>
+			{{/xif}}
+		{{/each}}
+		</div>
+	</div>
+</div>

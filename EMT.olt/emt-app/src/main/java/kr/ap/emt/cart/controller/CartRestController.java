@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import kr.ap.comm.cart.CartSession;
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -129,8 +130,7 @@ public class CartRestController extends CartBaseController{
 					ce = calculationByChangeQty(cartSn, cartProdSn, cartProdQty);
 				}
 				else {
-					ce = getCartApi(cartSn);
-					//ce = calculationBySelect(ce);
+					ce = getCart(cartSn);
 				}
 				result.put("data", ce);
 			}
@@ -248,12 +248,11 @@ public class CartRestController extends CartBaseController{
 
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
-		MemberSession memberSession = getMemberSession();
-
 		CartProdEx storePickupCartProdEx = null;
 		List<ProdInvtEx> prodInvtExList = new ArrayList<>();
 
-		CartEx cartEx =  getCartApi(memberSession.getCartSn());
+		CartSession cartSession = getCartSession();
+		CartEx cartEx = getCart(cartSession.getCartSn());
 
 		// 장바구니매장픽업-온라인상품목록
 		if(!CollectionUtils.isEmpty(cartEx.getCartStorePickupOnlineProdExList())){
@@ -379,7 +378,7 @@ public class CartRestController extends CartBaseController{
 				CartProdEx storePickupCartProdEx = null;
 				List<ProdInvtEx> prodInvtExList = new ArrayList<>();
 
-				CartEx cartEx =  getCartApi(cartSn);
+				CartEx cartEx = getCart(cartSn);
 
 				// 장바구니매장픽업-온라인상품목록
 				if(!CollectionUtils.isEmpty(cartEx.getCartStorePickupOnlineProdExList())){
@@ -509,7 +508,7 @@ public class CartRestController extends CartBaseController{
 
 	/**
 	 * 장바구니에 담기
-	 * 일반상품/묶은상품
+	 * 일반상품/묶음상품
 	 * (매장픽업 같이 사용함.)
 	 *
 	 * @param jsonObj
@@ -529,8 +528,8 @@ public class CartRestController extends CartBaseController{
 
 		//TODO:주문하기위해 재고체크,
 
-		MemberSession memberSession = getMemberSession();
-		Long cartSn = memberSession.getCartSn();
+		CartSession cartSession = getCartSession();
+		Long cartSn = cartSession.getCartSn();
 
 		if (isLoggedIn()) {
 
@@ -551,9 +550,9 @@ public class CartRestController extends CartBaseController{
 				//장바구니번호 없으면.
 				CartSnResult nonmemberCart = cartApi.createNonmemberCart();
 				cartSn = nonmemberCart.getCartSn();
-				memberSession.setCartSn(cartSn);
+				cartSession.setCartSn(cartSn);
 				// SpringSession with Redis 로 Session 사용변경. 세션값 변경이 있을 경우 명시적으로 setAttribute
-				setMemberSession(memberSession);
+				setCartSession(cartSession);
 			}
 
 			BooleanResult booleanResult = cartApi.addCartProds(cartSn, cartProdExPostList);
@@ -586,8 +585,9 @@ public class CartRestController extends CartBaseController{
 
 		//TODO:주문하기위해 재고체크,
 
-		MemberSession memberSession = getMemberSession();
-		Long cartSn = memberSession.getCartSn();
+		//MemberSession memberSession = getMemberSession();
+		CartSession cartSession = getCartSession();
+		Long cartSn = cartSession.getCartSn();
 
 		if (isLoggedIn()) {
 
@@ -610,9 +610,9 @@ public class CartRestController extends CartBaseController{
 				//장바구니번호 없으면.
 				CartSnResult nonmemberCart = cartApi.createNonmemberCart();
 				cartSn = nonmemberCart.getCartSn();
-				memberSession.setCartSn(cartSn);
+				cartSession.setCartSn(cartSn);
 				// SpringSession with Redis 로 Session 사용변경. 세션값 변경이 있을 경우 명시적으로 setAttribute
-				setMemberSession(memberSession);
+				setCartSession(cartSession);
 			}
 
 			BooleanResult booleanResult = cartApi.addSameTimePurCartProds(cartSn, sameTimeCartProdExPostList);
@@ -650,10 +650,10 @@ public class CartRestController extends CartBaseController{
 
 		if (booleanResult.isResult()) {
 			//성공하면 주문서화면 진입하기 위해 cartSn 전달
-			MemberSession memberSession = getMemberSession();
-			memberSession.setCartSn(cartSn);
+			CartSession cartSession = getCartSession();
+			cartSession.setCartSn(cartSn);
 			// SpringSession with Redis 로 Session 사용변경. 세션값 변경이 있을 경우 명시적으로 setAttribute
-			setMemberSession(memberSession);
+			setCartSession(cartSession);
 		}
 
 		result.put("booleanResult", booleanResult);
@@ -738,14 +738,14 @@ public class CartRestController extends CartBaseController{
 		Long cartSn = 0L;
 		Long memberSn = getMemberSn();
 
-		if (memberSn != 0L) {
+		if (memberSn != null) {
 
 			cartSn = cartApi.getMemberCartSn(memberSn).getCartSn();
 			if (setCartCount(result, cartSn)) return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
 
 		} else {
-
-			cartSn = getMemberSession().getCartSn();
+			CartSession cartSession = getCartSession();
+			cartSn = cartSession.getCartSn();
 			if (setCartCount(result, cartSn)) return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
 		}
 
