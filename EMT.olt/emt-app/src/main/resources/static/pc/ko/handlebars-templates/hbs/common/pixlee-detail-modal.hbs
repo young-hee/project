@@ -19,7 +19,14 @@
 				{{!-- thumbnail list --}}
 				{{#each this.model}}
 				<li class="ix-list-item">
-					<button type="button"><img src="{{ this.pixlee_cdn_photos.square_medium_url }}" alt=""></button>
+					<button type="button">
+						{{#xif this.content_type '==' 'video'}}
+							<img src="{{ this.thumbnail_url }}" alt="">
+							<div class="play_button"></div>
+						{{else}}
+							<img src="{{ this.pixlee_cdn_photos.square_medium_url }}" alt="">
+						{{/xif}}
+					</button>
 				</li>
 				{{/each}}
 			</ul>

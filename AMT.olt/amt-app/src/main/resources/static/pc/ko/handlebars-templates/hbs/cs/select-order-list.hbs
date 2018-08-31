@@ -1,0 +1,19 @@
+{{#xif this.totalCount '>' 0}}
+	{{#each this.list}}
+		<tr class="selected">
+			<td><span class="check_wrap check_only"><input type="checkbox" class="table_striped" id="ord_{{this.ordSn}}" name="order"><label for="ord_{{this.ordSn}}"><span class="sr_only">{주문번호}</span></label></span></td>
+			<td>{{ordNo}}</td>
+			<td>{{ordName}}</td>
+			<td>{{currencyFormat finalOrdPrice}}</td>
+			<td>{{ordStatusCode}}</td>
+		</tr>
+	{{/each}}
+{{else}}
+	<tr>
+		<td colspan="5">
+			<div class="panel notice">
+				<p class="text">검색결과가 없습니다.</p>
+			</div>
+		</td>
+	</tr>
+{{/xif}}

@@ -118,22 +118,11 @@ public class DisplayViewController extends AbstractController {
 	@RequestMapping("/shopping_history")
 	@PageTitle(title = "쇼핑 히스토리")
 	public String shopping_history(Model model, String displayMenuId) {
-
-		// Mobile
-		if (isMobileDevice()) {
-
-		}
-
-		// PC
-		if (isPcDevice()) {
-
-		}
-
+		
 		DateFormat dateFormat = new SimpleDateFormat("Z");
 		String timeZone = dateFormat.format(new Date());
 
-		List<ShoppingMarkByDateSearchResult> shoppingHistoryList = shoppingmarkApi
-				.getShoppingHistoriesByDate(getMemberSn(), APConstant.EH_DISPLAY_MENU_SET_ID, 3, 100, timeZone);
+		List<ShoppingMarkByDateSearchResult> shoppingHistoryList = shoppingmarkApi.getShoppingHistoriesByDate(getMemberSn(), APConstant.EH_DISPLAY_MENU_SET_ID, 3, 100, timeZone);
 
 		model.addAttribute("displayMenuId", displayMenuId);
 		model.addAttribute("shoppingHistoryList", shoppingHistoryList);
@@ -148,8 +137,7 @@ public class DisplayViewController extends AbstractController {
 		Date endDt = new Date();
 		Date fromDt = DateUtils.addMonths(endDt, -1);
 
-		FoPushResult foPushResult = guideApi.getFoPushes(0, null, FromEndDateUtils.initFromDate(fromDt),
-				FromEndDateUtils.initEndDate(endDt));
+		FoPushResult foPushResult = guideApi.getFoPushes(0, null, FromEndDateUtils.initFromDate(fromDt),FromEndDateUtils.initEndDate(endDt));
 
 		model.addAttribute("displayMenuId", displayMenuId);
 		model.addAttribute("foPushResult", foPushResult);
@@ -160,30 +148,11 @@ public class DisplayViewController extends AbstractController {
 	@RequestMapping({"/new", "/new/preview"})
 	@PageTitle(title = "신상품")
 	public String newProduct(Model model, String displayMenuId, String previewKey, String previewDate) {
-
-		/**
-		 * 코너 없어짐 //메뉴페이지 코너정보 조회 String cornerIds = "";
-		 * 
-		 * //Mobile if (isMobileDevice()) { cornerIds = "M02_new_m.1"; }
-		 * 
-		 * //PC if (isPcDevice()) { //cornerIds = "M02_new_p.1"; }
-		 * 
-		 * List<Corner> corners =
-		 * displayApi.getMenuPageCorners(APConstant.EH_DISPLAY_MENU_SET_ID,
-		 * displayMenuId, getMemberSn(), cornerIds, false); Map<String,
-		 * List<CornerContentsSet>> cornersMap = new HashMap<String,
-		 * List<CornerContentsSet>>();
-		 * 
-		 * for (Corner c : corners) { cornersMap.put(c.getMenuPageCornerId(),
-		 * c.getContentsSets()); }
-		 * 
-		 * model.addAttribute("cornersMap", cornersMap);
-		 */
+		
 		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
 
 		model.addAttribute("displayMenuId", displayMenuId);
 
-		// return "display/product-list-12";
 		return "display/" + pageInfo.getMenuPageFileId();
 	}
 
@@ -191,24 +160,6 @@ public class DisplayViewController extends AbstractController {
 	@PageTitle(title = "베스트")
 	public String best(Model model, String displayMenuId, String previewKey, String previewDate) {
 
-		/**
-		 * 코너 없어짐 //메뉴페이지 코너정보 조회 String cornerIds = "";
-		 * 
-		 * //Mobile if (isMobileDevice()) { cornerIds = "M02_best_m.1"; }
-		 * 
-		 * //PC if (isPcDevice()) { //cornerIds = "M02_best_p.1"; }
-		 * 
-		 * List<Corner> corners =
-		 * displayApi.getMenuPageCorners(APConstant.EH_DISPLAY_MENU_SET_ID,
-		 * displayMenuId, getMemberSn(), cornerIds, false); Map<String,
-		 * List<CornerContentsSet>> cornersMap = new HashMap<String,
-		 * List<CornerContentsSet>>();
-		 * 
-		 * for (Corner c : corners) { cornersMap.put(c.getMenuPageCornerId(),
-		 * c.getContentsSets()); }
-		 * 
-		 * model.addAttribute("cornersMap", cornersMap);
-		 */
 		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
 
 		model.addAttribute("displayMenuId", displayMenuId);
@@ -228,33 +179,20 @@ public class DisplayViewController extends AbstractController {
 	public String l_hotdeal_today(Model model, String displayMenuId, String previewKey, String previewDate) {
 
 		String fileName = "";
-		// String cornerIds = "";
+	
 		displayMenuId = "hotdeal";
 
 		// Mobile
 		if (isMobileDevice()) {
 			fileName = "display/product-list-10-03";
-			// cornerIds = "M02_hotdeal_m.1";
+	
 		}
 
 		// PC
 		if (isPcDevice()) {
 			fileName = "display/product-list-09-02";
-			// cornerIds = "M02_best_p.1";
+	
 		}
-
-		/**
-		 * 코너 없음 List<Corner> corners =
-		 * displayApi.getMenuPageCorners(APConstant.EH_DISPLAY_MENU_SET_ID,
-		 * displayMenuId, getMemberSn(), cornerIds, false); Map<String,
-		 * List<CornerContentsSet>> cornersMap = new HashMap<String,
-		 * List<CornerContentsSet>>();
-		 * 
-		 * for (Corner c : corners) { cornersMap.put(c.getMenuPageCornerId(),
-		 * c.getContentsSets()); }
-		 * 
-		 * model.addAttribute("cornersMap", cornersMap);
-		 **/
 
 		model.addAttribute("displayMenuId", displayMenuId);
 
@@ -273,33 +211,20 @@ public class DisplayViewController extends AbstractController {
 	public String hotdeal_sp_price(Model model, String displayMenuId) {
 
 		String fileName = "";
-		// String cornerIds = "";
+		
 		displayMenuId = "hotdeal";
 
 		// Mobile
 		if (isMobileDevice()) {
 			fileName = "display/product-list-10-02";
-			// cornerIds = "M02_hotdeal_m.2";
+		
 		}
 
 		// PC
 		if (isPcDevice()) {
 			fileName = "display/product-list-10";
-			// cornerIds = "M02_best_p.2";
+		
 		}
-
-		/**
-		 * 코너 없음 List<Corner> corners =
-		 * displayApi.getMenuPageCorners(APConstant.EH_DISPLAY_MENU_SET_ID,
-		 * displayMenuId, getMemberSn(), cornerIds, false); Map<String,
-		 * List<CornerContentsSet>> cornersMap = new HashMap<String,
-		 * List<CornerContentsSet>>();
-		 * 
-		 * for (Corner c : corners) { cornersMap.put(c.getMenuPageCornerId(),
-		 * c.getContentsSets()); }
-		 * 
-		 * model.addAttribute("cornersMap", cornersMap);
-		 **/
 
 		model.addAttribute("displayMenuId", displayMenuId);
 
@@ -355,10 +280,7 @@ public class DisplayViewController extends AbstractController {
 			if (isLoggedIn()) { // 로그인이 되어있으면
 
 				fileName = "display/color-finder-01"; // 로그인후
-				// 로그인이 되어있으나, 피부톤 이 있는지 없는지에 따른 분기가 필요함API 필요함
-				// if() {
-				//
-				// }
+				
 			} else {
 
 				fileName = "display/color-finder-01"; // 로그인전
@@ -390,10 +312,7 @@ public class DisplayViewController extends AbstractController {
 			if (isLoggedIn()) { // 로그인이 되어있으면
 
 				fileName = "display/color-finder-03"; // 로그인후
-				// 로그인이 되어있으나, 피부톤 이 있는지 없는지에 따른 분기가 필요함API 필요함
-				// if() {
-				//
-				// }
+
 			} else {
 
 				fileName = "display/color-finder-" + type; // 로그인전

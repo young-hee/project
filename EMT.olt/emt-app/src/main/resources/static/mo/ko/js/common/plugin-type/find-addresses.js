@@ -72,7 +72,7 @@
                 address = $el.data( 'address' ),
                 detail = getDetailAddress( $el.data('detail-address') );
 
-            _$addressFirstInput.val( postCode + ' ' + address );
+            _$addressFirstInput.val( postCode + ', ' + address );
             _$postCodeHidden.val( postCode );
             _$addressFirstHidden.val( address );
             _$addressLastInput.val( detail + ' ' );

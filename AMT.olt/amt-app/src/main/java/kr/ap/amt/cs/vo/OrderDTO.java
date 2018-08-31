@@ -15,7 +15,7 @@ import java.math.BigDecimal;
  */
 public class OrderDTO {
     private Long ordSn;
-    private String ordHistNo;
+    private String ordNo;
     private String ordName;
     private String ordStatusCode;
     private BigDecimal finalOrdPrice;
@@ -29,12 +29,12 @@ public class OrderDTO {
 		this.ordSn = ordSn;
 	}
 
-	public String getOrdHistNo() {
-		return ordHistNo;
+	public String getOrdNo() {
+		return ordNo;
 	}
 
-	public void setOrdHistNo(String ordHistNo) {
-		this.ordHistNo = ordHistNo;
+	public void setOrdNo(String ordNo) {
+		this.ordNo = ordNo;
 	}
 
 	public String getOrdName() {

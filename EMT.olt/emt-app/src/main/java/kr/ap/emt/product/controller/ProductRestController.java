@@ -60,7 +60,26 @@ public class ProductRestController extends AbstractController {
     	HashMap<String, Object> result = new HashMap<String, Object>();
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
-		ProdReviewListInfo prodReviewListInfo = productApi.getProductReviews(requestReview.getProdReviewUnit(), requestReview.getProdReviewType(), requestReview.getOffset(), requestReview.getLimit(), getMemberSn(), requestReview.getOnlineProdSn(), requestReview.getProdSn(), requestReview.getStyleCode(), requestReview.getProdReviewSort(), requestReview.getScope(), requestReview.getTopReviewOnlyYn(), requestReview.getTopReviewFirstYn(), (!requestReview.getStartDate().isEmpty()) ? sf.parse(requestReview.getStartDate()) : null, (!requestReview.getEndDate().isEmpty()) ? sf.parse(requestReview.getEndDate()) : null, "N");
+		ProdReviewListInfo prodReviewListInfo = productApi.getProductReviews(
+			requestReview.getProdReviewUnit(),
+			requestReview.getProdReviewType(),
+			requestReview.getOffset(),
+			requestReview.getLimit(),
+			getMemberSn(),
+			requestReview.getOnlineProdSn(),
+			requestReview.getProdSn(),
+			requestReview.getStyleCode(),
+			requestReview.getProdReviewSort(),
+			requestReview.getScope(),
+			requestReview.getTopReviewOnlyYn(),
+			requestReview.getTopReviewFirstYn(),
+			(!requestReview.getStartDate().isEmpty()) ? sf.parse(requestReview.getStartDate()) : null,
+			(!requestReview.getEndDate().isEmpty()) ? sf.parse(requestReview.getEndDate()) : null,
+			"N",	// imageOnlyYn
+			null,	// displayMenuSetId
+			null)	// displayMenuId
+			;
+
 		result.put("prodReviewListInfo", prodReviewListInfo);
 
 		return ResponseEntity.ok(result);

@@ -5,9 +5,19 @@ this["AP"]["handlebars"]["common"] = this["AP"]["handlebars"]["common"] || {};
 this["AP"]["handlebars"]["common"]["pixlee-detail-modal"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "				<li class=\"ix-list-item\">\n					<button type=\"button\"><img src=\""
+  return "				<li class=\"ix-list-item\">\n					<button type=\"button\">\n"
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.content_type : depth0),"==","video",{"name":"xif","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(4, data, 0),"data":data})) != null ? stack1 : "")
+    + "					</button>\n				</li>\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    return "							<img src=\""
+    + container.escapeExpression(container.lambda((depth0 != null ? depth0.thumbnail_url : depth0), depth0))
+    + "\" alt=\"\">\n							<div class=\"play_button\"></div>\n";
+},"4":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return "							<img src=\""
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.pixlee_cdn_photos : depth0)) != null ? stack1.square_medium_url : stack1), depth0))
-    + "\" alt=\"\"></button>\n				</li>\n";
+    + "\" alt=\"\">\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 

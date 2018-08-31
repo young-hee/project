@@ -82,9 +82,8 @@
 			var $section = this._$target.find( '.hot_deal' );
 			if ( !$section.length ) return;
 
-			AP.api.flaggedItemList( null, {
-				flags: 'icon_type_sp_today',
-				prodListUnit: 'Prod'
+			AP.api.inSpPriceSale( null, {
+				spPriceSaleType: 'Today'
 			}).done( function ( result ) {
 				var data = result.onlineProdList,
 					html = AP.common.getTemplate( 'main.home.hot-deal-list', data );
@@ -119,43 +118,11 @@
 				AP.lazyLoad.add( $section.find('img.lazy_load') );
 			}.bind(this));
 			
-			/*var $section = this._$target.find( '.best' );
-			if ( !$section.length ) return;
-			
-			AP.api.flaggedProdRankChanges().done( function ( result ) {
-				
-				var html = AP.common.getTemplate( 'main.home.best-list', result ),
-				
-				$slide = $section.find( '.slide' );
-
-				$slide.html( html );
-				$slide.ixSlideMax().ixSlideMax( 'stopTimer' );
-				
-
-				$section.on( 'touchstart touchend touchcancel', function (e) {
-					if ( e.type === 'touchstart' ) {
-						$slide.ixSlideMax( 'stopTimer' );
-					} else {
-						$slide.ixSlideMax( 'startTimer' );
-					}
-				});
-
-				$slide.on( 'bonding-rect-activate bonding-rect-deactivate', function (e) {
-					if ( e.type === 'bonding-rect-activate' ) {
-						$slide.ixSlideMax( 'startTimer' );
-					} else {
-						$slide.ixSlideMax( 'stopTimer' );
-					}
-				}).bondingRect();
-				
-				AP.lazyLoad.add( $section.find('img.lazy_load') );
-				
-			}.bind(this));*/
 		},
 
 		//올해의 컬러
 		_setColorOfYear: function (rmdColorProd) {
-			
+		
 			var $section = this._$target.find( '.color_pick' );
 			if ( !$section.length ) return;
 			
@@ -169,7 +136,7 @@
 					onlineprdList = object.prodList;
 				}
 			}); 
-			
+
 			$.each(onlineprdList, function(index, object){
 				
 				object.products = _.findWhere(object.products , {prodSn : this.selectedProdSn});
@@ -177,7 +144,7 @@
 			}); 
 			
 			var html = AP.common.getTemplate( 'main.home.recommend-items', onlineprdList);
-			
+ 
 			$section.find('.recommend_items').html(html);
 			
 			AP.lazyLoad.add( $section.find('img.lazy_load') );
@@ -287,47 +254,6 @@
 
 			}.bind( this ));
 
-			/*
-			AP.api.articles( null, { // article num 
-				articleCateId: 'Looks',
-				offset: 0,
-				limit: 3			
-			}).done( function ( result ) {
-				
-				var html = AP.common.getTemplate( 'main.home.looks-article-list', result.articleSearchResult);
-				var articleList = result.articleSearchResult.articleList;
-
-				$section.find( '.slide' ).html( html );
-				
-				var $slide = $section.find( '.slide' ),
-				viewLength = $slide.ixOptions( 'view-length' );
-
-				for(var i = 0 ; i <  articleList.length ; i++){
-
-					var hashTagList = articleList[i].snsHashTag.split(',');
-					var $cont = $section.find( '.cont' ).eq(i);
-					var contHtml = '<b class="eng">'+ articleList[i].articleTitle + '</b>';
-					
-					for(var j = 0 ; j <  hashTagList.length ; j++){
-						contHtml = contHtml + '<span class="tag">'+'#'+hashTagList[j]+'</span>';
-					}
-					
-					$cont.html(contHtml);
-				}
-				
-				$slide.on( 'ixSlideMax:init ixSlideMax:change', function (e) {
-					var currentPage = Math.ceil( e.currentIndex / viewLength ),
-						totalPage = Math.ceil( e.totalLength / viewLength );
-	
-					$slide.find( '.paging' ).show();
-					$slide.find( '.paging .current' ).text( currentPage + 1 );
-					$slide.find( '.paging .total' ).text( totalPage );
-				}).ixSlideMax();
-	
-				AP.lazyLoad.add( $section.find('img.lazy_load') );
-
-			}.bind(this)); 
-			*/
 		},
 
 		//에뛰드픽

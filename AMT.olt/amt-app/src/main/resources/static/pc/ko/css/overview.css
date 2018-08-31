@@ -131,12 +131,24 @@
 .couponzone .page_title .h_title, .couponzone .title_area .h_title {color:#000;}
 .couponzone .page_title .tooltip_box, .couponzone .title_area .tooltip_box {position:absolute; top:16px; right:0;}
 
-.down_couponzone {width:989px; padding:0 0 50px 22px;}
+.down_couponzone {width:989px; padding:0 189px 50px 22px; overflow:hidden;}
 .couponzone_list {margin-top:-25px;}
 .couponzone_list:after {content:''; clear:both; display:block;}
 .couponzone_list li {float:left; margin-top:25px;}
 .couponzone_list li + li {margin-left:50px;}
-.couponzone_box>button {margin-left:7px;}
+.couponzone_box {width:459px; overflow:hidden;}
+.couponzone_box > div {width:313px; height:183px; overflow:hidden; float:left; box-sizing:border-box;}
+.couponzone_box > div > p {font-size:21px;}
+.couponzone_box > div > p.price {font-size:70px; margin:5px 0;}
+.couponzone_box > div > p.price > span {font-size:21px;}
+.couponzone_box > div > p > .coupon_logo {width:75px; height:25px; font-size:0; background:url(/pc/ko/images/coupon/coupon_logo.png) 0 0 no-repeat; display:inline-block; vertical-align:middle;}
+.couponzone_box > .coupon_bs {padding:20px 10px 24px 50px; background:url(/pc/ko/images/coupon/bg_coupon01.png) 0 0 no-repeat; color:#000;}
+.couponzone_box > .coupon_sp {padding:20px 10px 24px 37px; background:url(/pc/ko/images/coupon/bg_coupon02.png) 0 0 no-repeat; color:#fff;}
+.couponzone_box > div > p.sub_txt {font-size:17px; color:#777;}
+.couponzone_box > .coupon_sp > p.sub_txt {font-size:17px; opacity:0.5; font-weight:300; color:#fff;}
+.couponzone_box>button {float:right;}
+.section_boxing.clear > div {width:459px; float:left;}
+.section_boxing.clear > div + div {margin-left:50px;}
 
 .benefit_couponzone {padding:7px 0 30px 0; background:#fff;}
 .benefit_couponzone .page_title {padding:20px;}
@@ -158,7 +170,6 @@
 
 .coupon_overview .tab_menu_wrap.ui_tab {width:100%; overflow:hidden;}
 .coupon_overview .tab_menu > ul {width:1200px; margin:0 auto; }
-
 
 /* VIP 라운지 */
 .viplounge {}
@@ -428,7 +439,7 @@
 .overview .sale_swipe ul > li > a,
 .overview .sale_swipe ul > li > a > span {width:100%; display:inline-block;}
 .overview .sale_swipe ul > li > a > img {width:96px; height:96px; margin-top:20px;}
-.overview .sale_swipe ul > li > a > span {margin-top:13px;}
+.overview .sale_swipe ul > li > a > span {margin-top:13px; font-size:16px;}
 .overview .sale_swipe ul > li > a > span.cate_text {width:96px; height:96px; border-radius:50%; background:#000; color:#fff; font-size:22px; line-height:98px; font-weight:400; text-align:center; display:inline-block;}
 
 /* 카드 혜택 */
@@ -437,29 +448,35 @@
 
 /*메이크업 서비스*/
 .make_service{background-color:#e9edf0;}
-.make_service .gift_area{width:528px;padding: 79px 0 61px;margin: 0 auto;overflow: hidden;}
+.make_service .gift_area{width:535px;padding: 79px 0 61px;margin: 0 auto;overflow: hidden;}
 .make_service .gift_area .gift_tit{font-size:50px; height:50px; color:#000000;line-height:50px}
-.make_service .gift_area .gift_txt{margin-top:25px; margin-bottom:30px; font-size:22px; line-height:30px; color:#333333;/*letter-spacing: -2px;*/}
+.make_service .gift_area .gift_txt{margin-top:25px; margin-bottom:30px; font-size:22px; line-height:30px; color:#333333;letter-spacing: -1px;}
 .request_wrap{overflow:hidden;padding:80px 0 60px 0;}
 .request_service{text-align:center; width:1200px; margin:0 auto; }
 .request_service .request_tit{font-size:50px; height:50px; color:#000000;line-height:50px;}
-.request_service .request_txt{margin-top:20px;font-size:22px; line-height:30px; color:#333333;/*letter-spacing: -2px;*/}
-.request_service .ui_accordion {margin-top:60px;}
-.request_service .ui_accordion dt{background-color: #333333; position:relative;padding:18px 20px; border-bottom:none;}
+.request_service .request_txt{margin-top:20px;font-size:22px; line-height:30px; color:#333333;letter-spacing: -1px;}
+
+.request_service .ui_accordion {border-top:none;}
+.request_service .ui_accordion dt{background-color: #333333; position:relative;padding:18px 20px; border-bottom:none;box-sizing:border-box;}
 .request_service .ui_accordion>dl>dt>*{color:#fff; display:inline-block;padding:0;position:inherit;}
-.request_service .ui_accordion>dl>dt .num1{position: absolute;top: 50%;left:20px;margin-top: -10px;}
-.request_service .ui_accordion>dl>dt button{text-align:center;}
+.request_service .ui_accordion>dl>dt .num1{position: absolute;top: 50%;left:20px;margin-top: -10px;font-size:18px;}
+.request_service .ui_accordion>dl>dt button{text-align:center; font-size:18px;}
 .request_service .ui_accordion>dl>dt button:after{content: '';position: absolute;top: 50%;right:0px;margin-top: -5px;width: 19px;height: 11px;background: url(/pc/ko/images/common/make_arrow.png)no-repeat;}
 .request_service .ui_accordion>dl>dt.on>button:after {background-position: 0 -11px;}
-.request_service .ui_accordion>dl>dd{border-bottom:none;}
-.request_service .ui_accordion>dl>dd .select_Area{display:table; width:100%;}
-.request_service .ui_accordion>dl>dd .select_Area .select_wrap{display:table-cell;background:#fff;}
-.request_service .select_wrap>button:after{border-top: 6px solid #a1a1a1;}
+.request_service .ui_accordion>dl>dd{border-bottom:none; box-sizing:border-box;}
+
+.request_service .step01{margin-top:60px;}
+.request_service .step01 .ui_accordion>dl>dd{border-left:1px solid #e5e5e5; border-top:1px solid #e5e5e5;border-bottom:1px solid #e5e5e5;}
+.request_service .step01 .ui_accordion>dl>dd .select_Area{display:table; width:100%;}
+.request_service .step01 .ui_accordion>dl>dd .select_Area .select_wrap{display:table-cell; border-right:1px solid #e5e5e5;}
+.request_service .step01 .ui_accordion>dl>dd .select_Area .select_wrap>button{background:#fff;border:none; height:70px;}
+.request_service .step01 .select_wrap>button:after{border-top: 6px solid #a1a1a1;}
+.request_service .step01 .select_wrap.open>button:after{border-top:0; border-bottom:6px solid #a1a1a1;}
 
 .request_service .step02{overflow:hidden;margin-top:100px;}
 .request_service .step02 dd{width:100%;}
 .request_service .step02 .half{float:left; width:600px; height:605px; overflow:hidden;box-sizing:border-box; background:#fff;}
-.request_service .step02 .half:last-child{border-left:1px solid #eeeeee;margin-left:-1px;}
+.request_service .step02 .half:last-child{border-left:1px solid #eeeeee;}
 .request_service .step02 .half:after{content:''; clear:both; display:block;}
 .request_service .calendar_wrap .month_select {position:relative; height:99px; text-align:center;}
 .request_service .calendar_wrap .month_select .btn {position:absolute; top:0; width:36px; height:99px;}
@@ -496,7 +513,10 @@
 .half .time_list li a{display:block;width:149px;height:100px;box-sizing:border-box;text-align:center;}
 .half .time_list li.on a{border:1px solid #782fff;}
 .half .time_list li.on a .time{color:#782fff;}
-.half .time_list li .time{display:table-cell;width:149px;height:100px;vertical-align:middle;font-weight:normal; font-size:18px; color:#333;}
+.half .time_list li .time{display:table-cell;position:relative;width:149px;height:100px;vertical-align:middle;font-weight:normal; font-size:18px; color:#666;}
+.half .time_list li.no_time{position:relative; pointer-events: none;}
+.half .time_list li.no_time:after{content:''; display:inline-block;position:absolute; top:0; left:0; right:0; bottom:0; width:149px; height:100px; background-image:url(/pc/ko/images/product/slash.png);background-size:100% 100%;}
+.half .time_list li.no_time .time{color:#cccccc;}
 
 
 .request_service .step03{overflow:hidden;margin-top:100px;}
@@ -510,3 +530,5 @@
 .request_service .step03 .input_wrap>input{border:none;}
 
 .request_service + .section_boxing .page_btns{margin-top:100px;}
+.make_service .btn_joins{ background-image:url(/pc/ko/images/product/bg_gradation_make.png);width:330px; height:90px; font-size:32px; position:relative; padding:0;}
+.make_service .btn_joins i{position:absolute; top:50%; right:40px;margin:-8px 0 0 0;}

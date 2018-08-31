@@ -211,7 +211,7 @@
 				prodSnList = _.pluck( this._defaultModel.products, 'prodSn' );
 
 			AP.api.boughtTogether( null, {
-				prodSnList : prodSnList,
+				prodSnList : String(prodSnList),
 				prodSort: 'Bestselling',
 				offset: 0,
 				limit: 10

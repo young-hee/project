@@ -58,15 +58,16 @@ public class CartRestController extends CartBaseController{
 	@GetMapping("/getLayerPage")
 	public ResponseEntity<?> getLayerPage(Long cartProdSn, Long prodSn) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		if(Long.valueOf(cartProdSn) != null){
+		if(Long.valueOf(cartProdSn) != null && Long.valueOf(prodSn) != null){
 			List<ProdEx> prodExList = new ArrayList<>();
 			List<ProdEx> apiProdExList = cartApi.getOnlineProdUnitVariationProds(cartProdSn);
 			if(apiProdExList.size() > 0 ){
 				for(ProdEx pe : apiProdExList){
-					if(!prodSn.equals(pe.getProdSn()) &&
-						"OnSale".equals(pe.getSaleDisplayStatus()) ||
-						"Exhaustion".equals(pe.getSaleDisplayStatus()) ||
-						"OutOfStock".equals(pe.getSaleDisplayStatus()) ){
+					if(!prodSn.equals(pe.getProdSn())
+						&& CartConst.SALE_DISPLAY_STATUS_ONSALE.equals(pe.getSaleDisplayStatus())
+						|| CartConst.SALE_DISPLAY_STATUS_EXHAUSTION.equals(pe.getSaleDisplayStatus())
+						|| CartConst.SALE_DISPLAY_STATUS_OUTOFSTOCK.equals(pe.getSaleDisplayStatus())
+					){
 						prodExList.add(pe);
 					}
 				}

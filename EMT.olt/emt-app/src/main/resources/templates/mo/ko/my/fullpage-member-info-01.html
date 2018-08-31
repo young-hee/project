@@ -138,6 +138,7 @@
 																<button type="button" class="btn_find_addresses">검색</button>
 															</div>
 														</div>
+														<div class="address_list"></div>
 			                            				<input th:value="${session.LOGIN_USER.member.address != null? (session.LOGIN_USER.member.address.zipCode) : ''}" type="hidden" class="post_code" name="homeZip" title="우편번호 입력" placeholder="우편번호" readonly>
 														<div class="input_group mgtm1">
 															<input type="text"name="homeBscsAddr" th:value="${session.LOGIN_USER.member.address != null? (session.LOGIN_USER.member.address.address1) : ''}" class="address_first" title="기본주소 입력" placeholder="기본주소" readonly="">
@@ -146,7 +147,6 @@
 															<input type="text" th:value="${session.LOGIN_USER.member.address != null? (session.LOGIN_USER.member.address.address2) : ''}" name="homeDtlAddr" class="address_last" title="상세주소 입력" placeholder="상세주소를 입력해주세요.">
 														</div>
 														
-														<div class="address_list"></div>
 													</div>
 												</div>
 												<div class="form_btns">
@@ -340,17 +340,17 @@
         </div>
 
     <!--/* 하단 js등을 실행하는 마지막 영역 */-->
-    <style>
-	    .address_list ul li a p {
-		    display: block;
-		    padding: 15px 0;
-		    border-bottom: 1px solid #e5e5e5;
-		    color: #999;
-		    line-height: 1.5;
-		    padding-left: 10px;
-		}
-    </style>
         <th:block ap:fragment="layout-endpoint">
+	    <style>
+		    .address_list ul li a p {
+			    display: block;
+			    padding: 15px 0;
+			    border-bottom: 1px solid #e5e5e5;
+			    color: #999;
+			    line-height: 1.5;
+			    padding-left: 10px;
+			}
+	    </style>
 			<script>
 
 			$('.ui_find_addresses').findAddresses();
@@ -620,6 +620,7 @@
 
 			        var modal = AP.modal.full(contents);
 			        var $modalEl = modal.getElement(); //jquery object
+			        $modalEl.find('select').selectBox( 'clear' );
 
 			        $modalEl.find('input[type=tel]').keydown(function(event) {
 			    	    if (event.keyCode) {

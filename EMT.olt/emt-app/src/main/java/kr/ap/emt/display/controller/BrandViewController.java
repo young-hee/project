@@ -585,7 +585,7 @@ public class BrandViewController extends AbstractController {
         
         if(groupId == null || "".equals(groupId)) groupId = "l_color_factory_info";
        
-        StoreResult storeResult = storeApi.getStores(0L, "N", APConstant.EH_FO_EVENT_CD_COLOR_FACTORY, null, null, null, null, null, null, 0, 0, null);
+        StoreResult storeResult = storeApi.getStores(null, "N", APConstant.EH_FO_EVENT_CD_COLOR_FACTORY, null, null, null, null, null, null, 0, 0, null);
         
         model.addAttribute("displayMenuId", displayMenuId);
         model.addAttribute("categoryType", categoryType);
@@ -624,7 +624,7 @@ public class BrandViewController extends AbstractController {
         
         if(groupId == null || "".equals(groupId)) groupId = "l_color_factory_info";
         
-        StoreResult storeResult = storeApi.getStores(0L, "N", APConstant.EH_FO_EVENT_CD_COLOR_FACTORY, null, null, null, null, null,null, 0, 0, null);
+        StoreResult storeResult = storeApi.getStores(null, "N", APConstant.EH_FO_EVENT_CD_COLOR_FACTORY, null, null, null, null, null,null, 0, 0, null);
         
         model.addAttribute("displayMenuId", displayMenuId);
         model.addAttribute("categoryType", categoryType);

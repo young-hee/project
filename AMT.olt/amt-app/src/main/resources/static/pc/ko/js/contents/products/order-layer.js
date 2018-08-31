@@ -16,15 +16,16 @@
 		 */
 		initialize: function ( $target, model, options ) {
 			this._$target = $target;
+			
 			this._$win = $( window );
-			this._$tabs = $( '.tab_menu' );
+			this._$tabs = $( '.detail_body > .tab_menu' );
 			this._$selectBoxArea = this._$target.find( '.selectbox_area' );
 			this._$selectedOptionArea = this._$target.find( '.scroll_area' );
 			this._$orderBottomArea = this._$target.find( '.order_bottom' );
 
 			this._options = options || {};
 			this._defaultModel = model;
-
+			
 			if ( this._options.layerFixed ) {
 				if ( this._$tabs.length ) {
 					this._$startHeightTartget = this._$tabs;
@@ -50,8 +51,9 @@
 			var scrollY = this._$win.scrollTop(),
 				startY = this._getStartY(),
 				endY = this._getEndY(),
-				layerH = this._getLayerHeight();
-
+				optionTotalH = this._$target.find('.total').outerHeight(),
+				layerH = this._$win.height() - this._$tabs.height() - optionTotalH;//this._getLayerHeight(),;
+			
 			if ( scrollY >= (startY + this._top) ) {
 				if ( (scrollY + layerH + this._startH) > endY ) {
 					//맨끝
@@ -69,9 +71,10 @@
 				} else {
 					//시작
 					if ( trigger || this._fixedState !== 'top-activate' ) {
+						//layerH(레이어 기본 높이) = this._winH(윈도우 높이) - this._startH(시작위치 : 탭 높이);
 						this._$target.addClass( 'fixed' ).css({
 							position: '',
-							top: this._startH + 'px',
+							top: this._startH + 1 + 'px',
 							bottom: '',
 							height: layerH + 'px'
 						});
@@ -87,9 +90,14 @@
 						top: '',
 						height: ( (layerH - this._top) < this.DEFAULT_HEIGHT ? layerH - this._top : this.DEFAULT_HEIGHT ) + 'px'
 					});
-
+					
 					this._fixedState = 'deactivate';
 				}
+			}
+			
+			//옵션 레이어가 없을 경우 paddingTop 을 '0'으로 셋팅
+			if ( !this._$selectBoxArea.find('.ui_select').is(':visible') ) {
+				this._$target.css('padding-top' , '0');
 			}
 		},
 
@@ -117,8 +125,8 @@
 
 		_getLayerHeight: function () {
 			var result = 0,
-				targetH = ( this._$tabs.length )? this._$target.parent().height() - this._startH : this._$target.parent().height();
-
+				targetH = ( this._$tabs.length )? this._$target.parents('.detail_body').height() - this._startH : this._$target.parents('.detail_body').height();
+				
 			result = this._winH - this._startH;
 
 			if ( result > targetH ) {
@@ -140,12 +148,12 @@
 
 		//y의 시작점 반환
 		_getStartY: function () {
-			return this._$target.parent().offset().top;
+			return this._$target.parents('.detail_body').offset().top;
 		},
 
 		//y의 끝점 반환
 		_getEndY: function () {
-			return this._getStartY() + this._$target.parent().height();
+			return this._getStartY() + this._$target.parents('.detail_body').height();
 		},
 
 		_getTop: function () {

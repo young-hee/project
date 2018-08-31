@@ -169,10 +169,16 @@
                 _$startSpan.text( _$startDate.datePicker('getDate', AP.DATE_FORMAT) );
                 _$endSpan.text( _$endDate.datePicker('getDate', AP.DATE_FORMAT) );
 
-                if ( val === 'all' ) {
+                /*if ( val === 'all' ) {
                     _$infoArea.hide();
                 } else {
                     _$infoArea.show();
+                }*/
+
+                if ( val === 'all' ) {
+                	_$startSpan.hide();
+                } else {
+                	_$startSpan.show();
                 }
 
                 setValidate();

@@ -1,0 +1,7 @@
+this["AP"] = this["AP"] || {};
+this["AP"]["handlebars"] = this["AP"]["handlebars"] || {};
+this["AP"]["handlebars"]["my"] = this["AP"]["handlebars"]["my"] || {};
+
+this["AP"]["handlebars"]["my"]["layer-eval-inquiryResponse"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "<dl class=\"layer\">\n	<dt class=\"layer_title brd\">상담 평가하기</dt>\n	<dd class=\"layer_cont\">\n		<fieldset class=\"form align_center\">\n			<legend class=\"sr_only\">상담 평가 항목</legend>\n			<p class=\"font_lg mgb20\">답변 완료된 상담에 만족하시나요?</p>\n			<div class=\"check_set\">\n				<span class=\"check_wrap base\"><input type=\"radio\" name=\"responseEvalCode\" id=\"satisfaction\" value=\"Satisfaction\" checked=\"\"><label for=\"satisfaction\"> 만족해요</label></span>\n				<span class=\"check_wrap base\"><input type=\"radio\" name=\"responseEvalCode\" id=\"dissatisfaction\" value=\"Dissatisfaction\"><label for=\"dissatisfaction\"> 불만족해요</label></span>\n			</div>\n		</fieldset>\n		<div class=\"layer_btns\">\n			<a href=\"#none\" class=\"btn_fix_bordered\" id=\"b_evalCancel\">취소</a> <!-- 버튼변경_2018-08-20 -->\n			<a href=\"#none\" class=\"btn_fix_neutral btn_default_modal_confirm\" id=\"b_evalConfirm\">확인</a> <!-- 버튼변경_2018-08-20 -->\n		</div>\n	</dd>\n</dl>";
+},"useData":true});

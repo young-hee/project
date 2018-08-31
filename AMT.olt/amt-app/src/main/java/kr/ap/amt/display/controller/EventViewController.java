@@ -22,6 +22,8 @@ import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.common.SeoEntity;
 import kr.ap.comm.support.common.SnsEntity;
 import kr.ap.comm.support.constants.APConstant;
+import net.g1project.ecp.api.model.sales.display.Corner;
+import net.g1project.ecp.api.model.sales.display.CornerContentsSet;
 import net.g1project.ecp.api.model.sales.display.PageInfo;
 import net.g1project.ecp.api.model.sales.guide.FoNotice;
 import net.g1project.ecp.api.model.sales.plandisplay.PlanDisplay;
@@ -46,14 +48,14 @@ public class EventViewController extends AbstractController {
         //Mobile
         if (isMobileDevice()) {
     		
-        	pageName = "M02_event_m"; 
+        	pageName = "M01_event_m"; 
     		
         }
 
         //PC
         if (isPcDevice()) {
         	
-        	pageName = "M02_event_p"; 
+        	pageName = "M01_event_p"; 
         }
            
         //이벤트 목록
@@ -71,27 +73,27 @@ public class EventViewController extends AbstractController {
         
         List<PlanDisplay> resultList = planDisplayEventListResult.getPlanDisplayList();
         
-        // 상시 이벤트 (뷰티테스터 , 무료샘플신청 D-Day) 날짜 계산
-
-        Map<String, Long> dDays = new HashMap<String, Long>(); 
-        String regularEventType[] = {APConstant.PROD_EXPERIENCE_GRP,APConstant.SAMPLE_EXPERIENCE_GRP};  // 무료체험단 무료샘플
-        
-    	for(int i = 0; i < regularEventType.length; i++) {
-    		
-    		 try { 
-	    	
-    			RegularEvent regularEvent = regulareventApi.regularEventSummary(regularEventType[i]);
-	    		long dday = dDaycalc(new Date(), regularEvent.getEventEndDt()); 
-	    		dDays.put( regularEventType[i], + dday);
-    		
-    		 }catch(Exception e){
-    			 
-    			 dDays.put( regularEventType[i], + -1L); 
-    		 }
-      
-    	}  
+//        // 상시 이벤트 (뷰티테스터 , 무료샘플신청 D-Day) 날짜 계산
+//
+//        Map<String, Long> dDays = new HashMap<String, Long>(); 
+//        String regularEventType[] = {APConstant.PROD_EXPERIENCE_GRP,APConstant.SAMPLE_EXPERIENCE_GRP};  // 무료체험단 무료샘플
+//        
+//    	for(int i = 0; i < regularEventType.length; i++) {
+//    		
+//    		 try { 
+//	    	
+//    			RegularEvent regularEvent = regulareventApi.regularEventSummary(regularEventType[i]);
+//	    		long dday = dDaycalc(new Date(), regularEvent.getEventEndDt()); 
+//	    		dDays.put( regularEventType[i], + dday);
+//    		
+//    		 }catch(Exception e){
+//    			 
+//    			 dDays.put( regularEventType[i], + -1L); 
+//    		 }
+//      
+//    	}  
     	   
-		model.addAttribute("dDays", dDays);
+//		model.addAttribute("dDays", dDays);
 		model.addAttribute("resultList", resultList);
 		model.addAttribute("displayMenuId", displayMenuId);
        
@@ -143,24 +145,25 @@ public class EventViewController extends AbstractController {
 		model.addAttribute("planDisplay", planDisplay);
 		
 		//기획전시 히스토리 저장
-		if(0L != getMemberSn()) {
-			ShoppingMarkPost body = new ShoppingMarkPost();
-			body.setShoppingMarkTgtCode("Plandisplay");
-			
-				if(planDisplaySn != null) {
-					body.setPlanDisplaySn(planDisplaySn);
-					body.setDisplayMenuSetId(APConstant.EH_DISPLAY_MENU_SET_ID);
-					body.setDisplayMenuId("event");
-
-				try{
-					shoppingmarkApi.addShoppingHistories(getMemberSn(), body);
-				}catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
+//		if(0L != getMemberSn()) {
+//			ShoppingMarkPost body = new ShoppingMarkPost();
+//			body.setShoppingMarkTgtCode("Plandisplay");
+//			
+//				if(planDisplaySn != null) {
+//					body.setPlanDisplaySn(planDisplaySn);
+//					body.setDisplayMenuSetId(APConstant.AP_DISPLAY_MENU_SET_ID);
+//					body.setDisplayMenuId("event");
+//
+//				try{
+//					shoppingmarkApi.addShoppingHistories(getMemberSn(), body);
+//				}catch(Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}
 				
-		return "display/" + planDisplay.getDetailPageId();
+		//return "display/" + planDisplay.getDetailPageId();
+		return "display/event-detail";
 
 	}
 
@@ -318,7 +321,7 @@ public class EventViewController extends AbstractController {
     @PageTitle(title = "진주알 룰렛")
     public String pearl_roulette(Model model, String displayMenuId) {
 		
-        PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
+        PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
         
         model.addAttribute("displayMenuId", displayMenuId);
         
@@ -330,7 +333,7 @@ public class EventViewController extends AbstractController {
     @PageTitle(title = "뷰티테스터 신청 안내")
     public String beauty_test(Model model, String displayMenuId) {
 		 
-		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
+		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
         
         RegularEvent regularEvent = regulareventApi.regularEventSummary(APConstant.PROD_EXPERIENCE_GRP);	
 		
@@ -345,7 +348,7 @@ public class EventViewController extends AbstractController {
     @PageTitle(title = "스윗레터 100% 당첨")
     public String sweet_letter(Model model, String displayMenuId) {
 	
-        PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
+        PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
         
         model.addAttribute("displayMenuId", displayMenuId);
         
@@ -359,7 +362,7 @@ public class EventViewController extends AbstractController {
 	
         RegularEvent regularEvent = regulareventApi.regularEventSummary(APConstant.SAMPLE_EXPERIENCE_GRP);
         
-        PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
+        PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
         
         model.addAttribute("displayMenuId", displayMenuId);
         model.addAttribute("regularEvent", regularEvent);
@@ -377,13 +380,37 @@ public class EventViewController extends AbstractController {
         	displayMenuId = "play_makeup_class";
         }
         
-        PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
+        PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
         
         model.addAttribute("displayMenuId", displayMenuId);
         
         return "display/" + pageInfo.getMenuPageFileId();
 
     }
+	
+	@RequestMapping("/freeGift")
+	@PageTitle(title = "구매금액대 사은품")
+	public String freeGift(Model model, String displayMenuId) {
+		if (displayMenuId == null || ("").equals(displayMenuId)) {
+			displayMenuId = "freeGift";
+		}
+
+		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
+		model.addAttribute("displayMenuId", displayMenuId);
+		
+		String cornerIds = "";
+//		cornerIds = "M01_freeGift_m.4.1,M01_freeGift_m.4.2,M01_freeGift_m.4.3,M01_freeGift_m.4.4";
+		List<Corner> corners = displayApi.getMenuPageCorners(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId, null,
+				null, cornerIds, false);
+		Map<String, List<CornerContentsSet>> cornersMap = new HashMap<String, List<CornerContentsSet>>();
+		for (Corner c : corners) {
+			cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
+		}
+
+		model.addAttribute("cornersMap", cornersMap);
+
+		return "display/" + pageInfo.getMenuPageFileId();
+	}
 	
 	/**
 	 * D-Day 계산  ( 일자로만 리턴합니다. ex) 1111 

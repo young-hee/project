@@ -206,20 +206,25 @@
 						</th:block>
 					</div>
 				</th:block>
-<th:block th:unless="${#device.isMobileWeb()}">                
+         
                 <!-- 공지사항 -->
-                <dl class="footer_notice" th:if="${not #lists.isEmpty(footerNotice)}">
+                <dl class="footer_notice" th:unless="${#device.isMobileApp()}"> <!-- app 전용인경우 보이지 않음 -->
                     <dt>공지</dt>
                     <dd>
                         <div class="slide footer_slide" data-ix-options="view-length:1; auto-play:true; axis:vertical; touch-disable:true">
                             <div class="ix-list-viewport">
                                 <ul class="ix-list-items">
-                                    <th:block th:each="fnotice : ${footerNotice.foNoticeList}">
-                                        <li class="ix-list-item">
-                                            <a href="#none" 
-                                            th:href="@{|/cs/noticeView/${fnotice.foNoticeSn}|}"
-                                            th:text="${fnotice.foNoticeTitle}">테이크아웃 적립 혜택 변경 안내</a>
-                                        </li>
+                                	<th:block th:if="${not #lists.isEmpty(footerNotice)}">
+	                                    <th:block th:each="fnotice : ${footerNotice.foNoticeList}">
+	                                        <li class="ix-list-item">
+	                                            <a href="#none" th:href="@{|/cs/noticeView/${fnotice.foNoticeSn}|}" th:text="${fnotice.foNoticeTitle}">테이크아웃 적립 혜택 변경 안내</a>
+	                                       </li>
+	                                    </th:block>
+                                    </th:block>
+                                    <th:block th:unless="${not #lists.isEmpty(footerNotice)}">
+                                    	 <li class="ix-list-item">
+	                                           <a href="#none"> 공지사항이 없습니다. </a> 
+	                                       </li>
                                     </th:block>
                                 </ul>
                             </div>
@@ -228,7 +233,6 @@
                     </dd>
                 </dl>
                 <!-- // 공지사항 -->
-</th:block>
             </div>
         </div>
 

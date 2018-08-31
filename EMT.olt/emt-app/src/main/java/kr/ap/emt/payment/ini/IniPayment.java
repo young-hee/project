@@ -99,9 +99,9 @@ public class IniPayment {
 	   	// 실시간 계좌이체
 	   	else if(BANK.equals(payDTO.getPayMethod())) {
 	   		
-	   		//승인결과 통보 Url
-	   		map.put("P_RETURN_URL", payDTO.getSiteDomain() + "/payment/iniComplete");	   		
 	   		//결제완료  Url
+	   		map.put("P_RETURN_URL", payDTO.getSiteDomain() + "/payment/iniBankComplete");	   		
+	   		//승인결과 통보 Url
 	   		map.put("P_NOTI_URL", payDTO.getSiteDomain() + "/order/iniPayNoti");
 	   		
 	   	}

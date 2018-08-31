@@ -15,13 +15,7 @@
 								<input type="checkbox" disabled="disabled">
 							{{/xif}}
 							<label for="box_{{this.giftPackingSn}}">
-								{{this.giftPackingName}}
-									{{#xif this.payYn '==' 'Y'}}
-										<span id="box_{{this.giftPackingSn}}_sum"></span>
-									{{/xif}}
-									{{#if (and (eq this.payYn 'N')(eq this.freeConditionYn 'Y')(gt this.freeConditionAmt 0))}}
-										추가 ({{currencyFormatDefault this.freeConditionAmt '원'}}이상 주문시 무료)
-									{{/if}}
+								{{this.giftPackingName}} 추가
 							</label>
 						</span>
 						<div class="ui_tooltip">
@@ -39,12 +33,20 @@
 								<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
 							</div>
 						</div>
+						<span class="price">
+							{{#xif this.payYn '==' 'Y'}}
+								<span class="eng" id="box_{{this.giftPackingSn}}_sum"></span>
+							{{/xif}}
+							{{#if (and (eq this.payYn 'N')(eq this.freeConditionYn 'Y')(gt this.freeConditionAmt 0))}}
+								({{currencyFormatDefault this.freeConditionAmt '원'}}이상 주문시 무료)
+							{{/if}}
+						</span>
 					</div>
 					{{#if (and (gte ../../finalPamtPcur this.freeConditionAmt)(eq this.qtySelectPossibleYn 'Y'))}}
 						<span class="ui_spinner small" data-min="0" data-max="{{ this.maxSelectPossibleQty }}" data-step="1" >
-							<button class="spinner_decrease" type="button" title="제품 수량 감소" data-flag="box_{{this.giftPackingSn}}" onclick="boxQtyOperate(this, {{../coSn}}, {{this.giftPackingSn}}, {{this.giftPackingFee}}, '{{this.giftPackingName}}', '-')"><img alt="제품 수량 감소" src="/pc/ko/images/common/ico_minus1.gif"></button>
+							<button class="spinner_decrease" type="button" title="제품 수량 감소" data-flag="box_{{this.giftPackingSn}}" onclick="boxQtyOperate(this, {{../coSn}}, {{this.giftPackingSn}}, {{this.giftPackingFee}}, '{{this.giftPackingName}}', '-')"><img alt="제품 수량 감소" src="/mo/ko/images/common/ico_minus1.gif"></button>
 							<input class="spinner_input" type="text" title="선택품목갯수" id="box_{{this.giftPackingSn}}_cnt" data-name="{{this.giftPackingName}}" value="0">
-							<button class="spinner_increase" type="button" title="제품 수량 증가" disabled data-flag="box_{{this.giftPackingSn}}" onclick="boxQtyOperate(this, {{../coSn}}, {{this.giftPackingSn}}, {{this.giftPackingFee}}, '{{this.giftPackingName}}', '+')"><img alt="제품 수량 증가" src="/pc/ko/images/common/icon_plus1.gif"></button>
+							<button class="spinner_increase" type="button" title="제품 수량 증가" disabled data-flag="box_{{this.giftPackingSn}}" onclick="boxQtyOperate(this, {{../coSn}}, {{this.giftPackingSn}}, {{this.giftPackingFee}}, '{{this.giftPackingName}}', '+')"><img alt="제품 수량 증가" src="/mo/ko/images/common/icon_plus1.gif"></button>
 						</span>
 					{{/if}}
 				</div>

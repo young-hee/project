@@ -1,33 +1,48 @@
 {{#each list}}
-<li>
-	<div class="product_one_view">
-		<a href="javascript:;">
-			<span class="rank_num">{{ calc @index '+' 1 }}</span>
-			<span class="rank_down">234</span>
-			<span class="product_visual_new">
-				<span class="lazy_load_wrap loaded">
-					<img src="" data-src="/mo/ko/images/dummy/img_oneView_01.jpg" alt="" class="lazy_load loaded">
-				</span>
-			</span>
-
-			<span class="product_info_new">
-				<span class="prd_name">Apmall x HERA 블랙쿠션 시크릿박스_17호</span>
-				<span class="price_wrap">
-					<strong class="discount">5%</strong>
-					<strong class="price">129,600<em>원</em></strong>
-				</span>
-				<span class="product_rating">
-					<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
-					<span class="prd_review">리뷰 828</span>
-				</span>
-				<span class="tags">
-					<em class="badge special">스페셜기프트</em>
-					<em class="badge gift">기프트카드</em>
+	<li class="item" data-online-prod-sn="{{ this.onlineProdSn }}" data-index="{{@index}}">
+		<div class="product_one_view">
+			<a href="{{ productDetailPath this.onlineProdSn }}">
+				<span class="rank_num">{{ calc @index '+' 1 }}</span>
+				<span class="rank_down">234</span>
+				<span class="product_visual_new">
+					<span class="lazy_load_wrap">
+						<img src="" data-src="{{ this.onlineProdImages.[0].imgUrl }}" alt="{{ this.onlineProdName }}" class="lazy_load">
+					</span>
 				</span>
 
-				<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
-			</span>
-		</a><a href="javascript:;" class="direct_brand">리리코스 마린에너지</a>
-	</div>
-</li>
+				<span class="product_info_new">
+					<span class="prd_name">{{ this.onlineProdName }}</span>
+					<span class="price_wrap">
+						{{#with (calc this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate '+' this.onlineProdPriceSummary.minMemberLevelDiscountRate '+' this.onlineProdPriceSummary.minOnlineMemberDiscountRate '+' this.onlineProdPriceSummary.minImmedDiscountRate) as |minRate|}}
+							{{#with (calc ../onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.maxMemberLevelDiscountRate '+' ../onlineProdPriceSummary.maxOnlineMemberDiscountRate '+' this.onlineProdPriceSummary.maxImmedDiscountRate) as |maxRate|}}
+								{{#xif maxRate '>' 0}}
+									<strong class="discount">{{ maxRate }}%</strong>
+								{{/xif}}
+							{{/with}}
+						{{/with}}
+						<strong class="price">{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>원</em>{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}}~{{/xif}}</strong>
+						{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+							<del>{{ numberFormat this.onlineProdPriceSummary.minBeforeOnlineSalePrice }}원</del>
+						{{/xif}}
+					</span>
+
+					<span class="product_rating">
+						<span class="mark_star_sm star{{ this.reviewScopeAvg }}"><span class="sr_only">구매 평점 별 5개 중 {{ this.reviewScopeAvg }}개</span></span>
+						<span class="prd_review">리뷰 {{ numberFormat this.reviewCount }}</span>
+					</span>
+
+					<span class="tags">
+						{{#xif this.onlineProdGift.giftProds '>' 0}}
+							<em class="badge special">스페셜기프트</em>
+						{{/xif}}
+						{{#xif this.onlineProdGift.giftcardTargetYn '==' 'Y'}}
+							<em class="badge gift">기프트카드</em>
+						{{/xif}}
+					</span>
+
+					<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+				</span>
+			</a><a href="javascript:;" class="direct_brand">리리코스 마린에너지</a>
+		</div>
+	</li>
 {{/each}}

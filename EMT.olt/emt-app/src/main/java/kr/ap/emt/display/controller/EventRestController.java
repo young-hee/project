@@ -159,10 +159,10 @@ public class EventRestController extends AbstractController {
     public ResponseEntity<?> regularEventTermsAgree(RequestEvent requestEvent, HttpServletRequest req) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
-		//	PAMRAM : Long eventParticipantSn, Long memberSn, String termsAgreeYn, String name, String telNo1, String telNo2, String address, String email
-
+		String telNo1 = requestEvent.getCountryNo()+"," + req.getParameter("telNo1");
+		
 		BooleanResult booleanResult = regulareventApi.regularEventTermsAgree(requestEvent.getEventParticipantSn(), requestEvent.getTermsAgreeYn()
-				, requestEvent.getName(), requestEvent.getPhoneNo1(), requestEvent.getPhoneNo2(), requestEvent.getAddress(), requestEvent.getEmailAddress());
+				, requestEvent.getName(), telNo1, requestEvent.getPhoneNo2(), requestEvent.getCountryCode()+","+requestEvent.getAddress(), requestEvent.getEmailAddress());
 
 		result.put("booleanResult", booleanResult);
 

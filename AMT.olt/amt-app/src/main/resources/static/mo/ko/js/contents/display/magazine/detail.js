@@ -8,7 +8,7 @@
 	var MagazineDetail = $B.Class.extend({
 		initialize: function () {
 			this._$target = $( '#ap_container' );
-
+			this._$header = $( '.ap_header' );
 			//this._setSlide();
 			
 		},
@@ -17,7 +17,10 @@
 
 		//페이지를 구성한는 기본 데이타 설정
 		setDefaultData: function ( article ) {
-			console.log(article);
+			//console.log(article.articleTitle);
+			console.log(this._$header.find('.page_title_area>h2>span').text());
+			//this._$header.find('.page_title_area>h2>span').text(article.articleTitle);
+			this._$header.find('.page_title_area .btn_share_txt').show();
 			this._setOtherMoveList();
 			this._setInProductsList( article.articleSn );
 			this._setComments( article.articleSn, article.liveSettingsYn );

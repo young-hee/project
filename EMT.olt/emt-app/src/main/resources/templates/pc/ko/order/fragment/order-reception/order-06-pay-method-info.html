@@ -15,7 +15,7 @@
 							<button type="button" class="btn_sm_neutral" id="b_mobileGift">등록/사용</button>
 						</dd>
 					</dl>
-					<dl th:if="${memberSn > 0 and ordEx.depositAvailAmt > 0}">
+					<dl th:if="${isApMember and ordEx.depositAvailAmt > 0}">
 						<input type="hidden" name="depositAvailAmt" th:value="${ordEx.depositAvailAmt}">
 						<dt><b>예치금</b></dt>
 						<dd>
@@ -26,7 +26,7 @@
 							<button type="button" class="btn_sm_neutral" id="b_deposit" style="display: none">모두 사용</button>
 						</dd>
 					</dl>
-					<dl th:unless="${memberSn > 0}">
+					<dl th:unless="${isApMember}">
 						<input type="hidden" name="depositPrice" value="0" placeholder="숫자입력">
 					</dl>
 				</div>
@@ -37,7 +37,9 @@
 				<!--결제수단 목록-->
 				<th:block ap:replace="~{order/fragment/order-reception-payment/order-payment-method-info}"/>
 			</ul>
-			<div class="check_wrap mgt20"><input type="checkbox" id="nextPayUseYn" name="nextPayUseYn"><label for="nextPayUseYn">선택한 결제 수단을 다음에도 사용</label></div>
+			<th:block th:if="${isApMember}">
+				<div class="check_wrap mgt20"><input type="checkbox" id="nextPayUseYn" name="nextPayUseYn"><label for="nextPayUseYn">선택한 결제 수단을 다음에도 사용</label></div>
+			</th:block>
 
 			<!--/* 신용카드 선택 */-->
 			<fieldset class="form mgt20">
@@ -137,25 +139,26 @@
 				}
 
 				$("[name=nextPayUseYn]").trigger("click");
+
+				/* 선택한 결제 수단을 다음에도 사용 */
+				$('[name=nextPayUseYn]').on('click', function(e){
+					if($(this).is(":checked")) {
+						var payMethod = $('[name=payMethod]').val();
+						if(payMethod == null || payMethod == '') {
+							AP.modal.alert("결제수단을 선택해 주세요.");
+							$('[name=nextPayUseYn]:checked').prop('checked', false);
+							$("[name=nextPayUseYn]").attr("value","N");
+						} else {
+							$('[name=nextPayUseYn]:checked').prop('checked', true);
+							$("[name=nextPayUseYn]").attr("value","Y");
+						}
+					}else{
+						$('[name=nextPayUseYn]:checked').prop('checked', false);
+						$("[name=nextPayUseYn]").attr("value","N");
+					}
+				});
 			}
 		}
-
-		/* 선택한 결제 수단을 다음에도 사용 */
-		$('[name=nextPayUseYn]').on('click', function(e){
-			var payMethod = $('[name=payMethod]').val();
-			if(payMethod == null || payMethod == '') {
-				AP.modal.alert("결제수단을 선택해 주세요.");
-				$('[name=nextPayUseYn]:checked').prop('checked', false);
-				$("[name=nextPayUseYn]").attr("value","N");
-			}
-			if($(this).is(":checked")) {
-				$('[name=nextPayUseYn]:checked').prop('checked', true);
-				$("[name=nextPayUseYn]").attr("value","Y");
-			}else{
-				$('[name=nextPayUseYn]:checked').prop('checked', false);
-				$("[name=nextPayUseYn]").attr("value","N");
-			}
-		});
 
 		/* 모바일 상품권 등록/사용하기 */
 		$("#b_mobileGift").on('click', function(e){
@@ -184,26 +187,24 @@
 			var depositAvailAmt =  $('[name=depositAvailAmt]').val();		// 예치금 사용가능한 금액
 			var finalPamtPcur = $('[name=finalPamtPcurPrice]').val();		// 최종결제금액
 			if(depositAvailAmt > 0){
-				// 예치금 > 결제금액
-				if(depositAvailAmt - finalPamtPcur > 0){
+				// 예치금 > 결제금액(예치금 전액사용 가능)
+				if(depositAvailAmt - finalPamtPcur >= 0){
 					$('[name=depositPrice]').val(finalPamtPcur);
+
+					//결제수단 초기화
+					$('[name=nextPayUseYn]:checked').prop('checked', false);
+					$("[name=nextPayUseYn]").attr("value","N");
+
+					$.each($('[name=payMethod]'), function (index, item) {
+						if ($(this).hasClass("on")) {
+							$(this).trigger("click");
+							$(this).attr("checked", false);
+						}
+					});
 				}else {
 					$('[name=depositPrice]').val(depositAvailAmt);
 				}
 			}
-			var payMethod = $('[name=payMethod]').val();
-			if(payMethod == null || payMethod == '') {
-				$('[name=payMethod]').attr('checked', false);
-
-				$('[name=nextPayUseYn]:checked').prop('checked', false);
-				$("[name=nextPayUseYn]").attr("value","N");
-			}
-
-			$.each($('[name=payMethod]'), function (index, item) {
-				if ($(this).hasClass("on")) {
-					$(this).trigger("click");
-				}
-			});
 		});
 
 		$('[name=depositPrice]').on('change', function(e){

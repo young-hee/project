@@ -1,33 +1,36 @@
 <dl>
 	<dt>상품금액</dt>
-	<dd class="price"><b>{{numberFormat (calc cartEx.calculationResult.prodSaleTotalAmountInfo.standardCurrency.amount '+' cartEx.calculationResult.exchIPointSum ) }}</b>원</dd>
+	<dd class="price"><b>{{numberFormat prodSumAmount}}</b>원</dd>
 	<dd class="details">
+		{{#each cartEx.calculationResult.resultOtfList}}
 		<dl>
-			<b>Apmall <span name="totalPrdCnt">0</span>개 상품</b>
-			<dd>{{numberFormat cartEx.calculationResult.onlineShipProdSaleTotalAmountInfo.standardCurrency.amount }}원</dd>
+			<b>{{requestOtf.coName}} <span>{{#if (ne productTotalCnt null)}}{{productTotalCnt}}{{else}}0{{/if}}</span>개 상품</b>
+			<dd>{{numberFormat onlineSalesTotalAmountInfo.standardCurrency.amount }}원</dd>
 		</dl>
+		{{/each}}
 	</dd>
 </dl>
 <dl class="shipping_costs">
 	<dt>배송비</dt>
-	<dd class="price"><b>{{numberFormat cartEx.calculationResult.shipFeeSumInfo.standardCurrency.amount }}</b>원</dd>
+	<dd class="price"><b>{{numberFormat shipFeeSumAmount }}</b>원</dd>
 	<!-- 배송비 세부항목 추가 (180822) -->
 	<dd class="details">
-		<dl>
-			<dt>Apmall 배송비</dt>
-			<dd>{{numberFormat cartEx.calculationResult.shipFeeSumInfo.standardCurrency.amount }}원</dd>
-		</dl>
+		{{#each cartEx.calculationResult.resultOtfList}}
+			<dl>
+				<dt>{{requestOtf.coName}}  배송비</dt>
+				<dd>{{numberFormat defaultShipFeeInfo.standardCurrency.amount }}원</dd>
+			</dl>
+		{{/each}}
 	</dd>
 	<!--// 배송비 세부항목 추가 (180822) -->
 </dl>
-{{#if (ne cartEx.cartMemberEx null) }}
+{{#if (gt cartEx.cartDeliveryMembershipPointExchOnlineProdExList.length 0) }}
 <dl>
-	코딩 필요
-	<dt>뷰티포인트 사용 <em class="my_point">보유 50,000 <i class="ico_p_b_s"></i></em></dt>
+	<dt>뷰티포인트 사용 <em class="my_point">보유 {{#if (ne cartEx.cartMemberEx.onlinePoints null)}}{{cartEx.cartMemberEx.onlinePoints}}{{else}}0{{/if}} <i class="ico_p_b_s"></i></em></dt>
 	<dd class="price"><b>12,000</b>P</dd>
 	<dd class="details">
 		<dl>
-			<dt>뷰티포인트 상품 1개</dt>
+			<dt>뷰티포인트 상품 1개 코딩 필요</dt>
 			<dd><span>12,000</span>P</dd>
 		</dl>
 	</dd>
@@ -35,15 +38,29 @@
 {{/if}}
 <dl>
 	<dt>할인내역</dt>
-	<dd class="price"><b>{{numberFormat (calc cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount '+' cartEx.calculationResult.exchIPointSum '+' cartEx.calculationResult.exchAPointSum ) }}</b>원</dd>
+	<dd class="price"><b>{{numberFormat (calc discountAmountInfoByOrderDiscountPromotion '+' discountAmountInfoByPayAmountDiscountCoupon '+' discountAmountInfoByProductPriceDiscountCoupon ) }}</b>원</dd>
 	<dd class="details">
-		<dl>
-			<dt>상품할인</dt>
-			<dd><span>{{numberFormat cartEx.calculationResult.dsicountAmountInfoByOnlineProdDc.standardCurrency.amount }}</span>원</dd>
-		</dl>
+		{{#if (gt discountAmountInfoByOrderDiscountPromotion 0) }}
+			<dl>
+				<dt>주문 할인 프로모션</dt>
+				<dd><span>{{numberFormat discountAmountInfoByOrderDiscountPromotion }}</span>원</dd>
+			</dl>
+		{{/if}}
+		{{#if (gt discountAmountInfoByPayAmountDiscountCoupon 0) }}
+			<dl>
+				<dt>지불금액 쿠폰할인</dt>
+				<dd><span>{{numberFormat discountAmountInfoByPayAmountDiscountCoupon }}</span>원</dd>
+			</dl>
+		{{/if}}
+		{{#if (gt discountAmountInfoByProductPriceDiscountCoupon 0) }}
+			<dl>
+				<dt>상품가격 쿠폰할인</dt>
+				<dd><span>{{numberFormat discountAmountInfoByProductPriceDiscountCoupon }}</span>원</dd>
+			</dl>
+		{{/if}}
 	</dd>
 </dl>
 <dl class="total">
 	<dt><b>예상 결제 금액</b></dt>
-	<dd class="price"><em><b>{{numberFormat cartEx.calculationResult.paidAmountInfo.standardCurrency.amount }}</b>원</em></dd>
+	<dd class="price"><em><b>{{numberFormat (calc prodSumAmount '+' shipFeeSumAmount '-' discountAmountInfoByOrderDiscountPromotion '-' discountAmountInfoByPayAmountDiscountCoupon '-' discountAmountInfoByProductPriceDiscountCoupon ) }}</b>원</em></dd>
 </dl>

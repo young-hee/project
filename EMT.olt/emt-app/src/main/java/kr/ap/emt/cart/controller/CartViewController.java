@@ -98,19 +98,14 @@ public class CartViewController extends CartBaseController{
 	}
 
 	/**
-	 *  장바구니 정보
+	 * 장바구니 정보
 	 * @param cartSn
 	 * @return
 	 */
 	private CartEx getCartInfo(Long cartSn) {
-		if(cartSn != null){
-			// 카트정보 최초 진입
-			cartEx = cartApi.getCart(cartSn);
-			// 처음부터 재 계산을 해준다.
-			cartEx = calculationCartEx(cartEx);
-			return cartEx;
-		}
-		return null;
+		cartEx = cartApi.getCart(cartSn);
+		cartEx = calculationCartEx(cartEx);
+		return cartEx;
 	}
 
 	/**
@@ -209,7 +204,7 @@ public class CartViewController extends CartBaseController{
 	}
 
 	/**
-	 * 일반상품
+	 * 매장픽업 일반상품
 	 * @param cartStorePickupOnlineProdExList
 	 * @return
 	 */
@@ -227,7 +222,7 @@ public class CartViewController extends CartBaseController{
 	}
 
 	/**
-	 * M+N, 동시구매 프로모션 상품
+	 * 매장픽업 M+N, 동시구매 프로모션 상품
 	 * @param cartStorePickupOnlineProdExList
 	 * @return
 	 */

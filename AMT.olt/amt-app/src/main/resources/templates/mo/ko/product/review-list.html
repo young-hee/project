@@ -7,11 +7,11 @@
 				<div class="review_overview">
 					<!--/* 전체 평점 종합 */-->
 					<div class="section pd_md review_summary">
-						<p class="review_copy" th:if="${#numbers.formatInteger(reviewStats.scopeAvg, 0) == '1'}">별로에요</p>
-						<p class="review_copy" th:if="${#numbers.formatInteger(reviewStats.scopeAvg, 0) == '2'}">그저 그래요</p>
-						<p class="review_copy" th:if="${#numbers.formatInteger(reviewStats.scopeAvg, 0) == '3'}">보통이에요</p>
-						<p class="review_copy" th:if="${#numbers.formatInteger(reviewStats.scopeAvg, 0) == '4'}">마음에 들어요</p>
-						<p class="review_copy" th:if="${#numbers.formatInteger(reviewStats.scopeAvg, 0) == '5'}">인생템이에요</p>
+						<p class="review_copy" th:if="${#numbers.formatInteger(maxCountPerScope.scope, 0) == '1'}">별로에요</p>
+						<p class="review_copy" th:if="${#numbers.formatInteger(maxCountPerScope.scope, 0) == '2'}">그저 그래요</p>
+						<p class="review_copy" th:if="${#numbers.formatInteger(maxCountPerScope.scope, 0) == '3'}">보통이에요</p>
+						<p class="review_copy" th:if="${#numbers.formatInteger(maxCountPerScope.scope, 0) == '4'}">마음에 들어요</p>
+						<p class="review_copy" th:if="${#numbers.formatInteger(maxCountPerScope.scope, 0) == '5'}">인생템이에요</p>
 						<p class="text color_gray font_md">
 							<span class="num" >[[${#numbers.formatInteger( reviewStats.totalCount, 0, 'COMMA')}]]</span>명 중 <span class="bold_222">[[${maxCountPerScope.percent}]]%</span>의 고객이 <span class="bold_222">[[${maxCountPerScope.scope}]]점</span>을 주었습니다.
 						</p>
@@ -209,17 +209,18 @@
 					<div class="section ui_accordion review_sort">
 						<dl>
 							<dt>
-								<a href="#1" class="filter on"><span>추천순</span></a>
-								<a href="#1" class="filter"><span>최신순</span></a>
+								<a href="javascript:;" class="filter on" data-sort="Recommend"><span>추천순</span></a>
+								<a href="javascript:;" class="filter" data-sort="Last"><span>최신순</span></a>
 								<button type="button">평점별로 보기 <i class="ico_down"></i></button>
 							</dt>
 							<dd>
 								<div class="btns">
-									<button type="button"><i class="ico_star on"></i> <span class="color_black">5</span><br><span>(894)</span></button>
-									<button type="button"><i class="ico_star on"></i> <span class="color_black">4</span><br><span>(894)</span></button>
-									<button type="button"><i class="ico_star on"></i> <span class="color_black">3</span><br><span>(894)</span></button>
-									<button type="button"><i class="ico_star on"></i> <span class="color_black">2</span><br><span>(894)</span></button>
-									<button type="button"><i class="ico_star on"></i> <span class="color_black">1</span><br><span>(894)</span></button>
+									<button type="button" class="statBtn" th:each="stats : ${purchaseReviewStats.countPerScopes}">
+										<i class="ico_star on"></i> 
+										<span class="color_black">[[${stats.scope}]]</span>
+										<br>
+										<span class="statCnt">([[${stats.count}]])</span>
+									</button>
 								</div>
 							</dd>
 						</dl>

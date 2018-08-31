@@ -31,14 +31,19 @@
 				this._$target.hide();
 				AP.modal.alert( AP.message.OUT_OF_STOCK_PRODUCT );
 			} else if ( _.contains(['OnSale', 'OutOfStock'], this._defaultModel.saleDisplayStatus) ) {
-				//기본
-				if ( this._defaultModel.productCount > 1 ) {
-					this._optionsSelectBox.setDefault();
-				} else {
-					//products 가 1개 일때는 단품으로 처리 (단품, 세트상품)
+				//묶음 상품일 경우 
+				if ( this._defaultModel.prodTypeCode == 'BulkFixedProd' ) {
 					this._selectedOptions.add( this._defaultModel.products[0] );
+				} else {
+					//기본
+					if ( this._defaultModel.productCount > 1 ) {
+						this._optionsSelectBox.setDefault();
+					} else {
+						//products 가 1개 일때는 단품으로 처리 (단품, 세트상품)
+						this._selectedOptions.add( this._defaultModel.products[0] );
+					}
 				}
-			}
+			} 
 		},
 
 		/** =============== Public Methods =============== */
@@ -154,7 +159,9 @@
 				this._$target.find( '.btn_basket' ).prop('disabled', true);
 				this._$target.find( '.btn_buy_now' ).prop('disabled', true);
 			}else{
-				this._$target.find( '.btn_basket' ).prop('disabled', false);
+				if( this._defaultModel.prodTypeCode != 'Presale' ){
+					this._$target.find( '.btn_basket' ).prop('disabled', false);
+				}
 				this._$target.find( '.btn_buy_now' ).prop('disabled', false);
 			}
 		},

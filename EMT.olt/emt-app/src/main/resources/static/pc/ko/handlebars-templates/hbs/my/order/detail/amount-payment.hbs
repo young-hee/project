@@ -40,14 +40,14 @@
 						<li class="clear"><b>{{payMethodNameBlang}}</b><b>{{currencyFormatDefault (calc beforePayAmt '-' afterPayAmt) '원'}}</b></li>
 						<!-- <li class="align_right line_h_20">{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})<br>
 							{{pgPayEx.creditcardPayTypeCode}}<br>
-							{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS"}}</li> -->
+							{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:mm:SS"}}</li> -->
 					</ul>
 				{{/if}}
 			{{/default}}
 		{{/switch}}
 	{{/each}}
 {{else}}
-	{{#each this.payInfo.pgList}}
+	{{#each this.ordPayResult.pgList}}
 		{{#switch payMethodCode}}
 			{{#case 'Deposit' break=true}}
 				<ul>
@@ -69,12 +69,12 @@
 							<em>입금기한 {{dateFormat pgPayEx.virtualBankAcDeadlineDt "YYYY-MM-DD"}} 까지</em>
 						</span>
 					</li>
-					<li class="clear"><span>송금자</span><span>홍길동</span></li>
+					<li class="clear"><span>송금자</span><span>{{../memberName}}</span></li>
 					<li class="clear"><span>결제처리일</span>
 					<span>
 						<em>
 							<dd class="align_right">{{condition (eq payStatusCode 'Complete')
-												(dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS") '입금 미확인'}}</dd>
+												(dateFormat pgPayEx.virtualBankAcDepositDt "YYYY-MM-DD HH:mm:SS") '입금 미확인'}}</dd>
 						</em>
 					</span></li>
 				</ul>
@@ -87,7 +87,7 @@
 						<li class="clear"><span>ㄴ환불</span><span>-{{currencyFormatDefault refundAmtSum '원'}}</span></li>
 					{{/if}}
 					<li class="align_right line_h_20">{{pgPayEx.mobilePhoneNo}}<br>
-						{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS"}}</li>
+						{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:mm:SS"}}</li>
 				</ul>
 				<hr class="div m20 dotted">
 			{{/case}}
@@ -98,7 +98,7 @@
 						<li class="clear"><span>ㄴ환불</span><span>-{{currencyFormatDefault refundAmtSum '원'}}</span></li>
 					{{/if}}
 					<li class="align_right line_h_20">{{pgPayEx.bankName}}<br>
-						{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS"}}</li>
+						{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:mm:SS"}}</li>
 				</ul>
 				<hr class="div m20 dotted">
 			{{/case}}
@@ -111,7 +111,7 @@
 						{{/if}}
 						<li class="align_right line_h_20">{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})<br>
 							{{pgPayEx.creditcardPayTypeCode}}<br>
-							{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:MM:SS"}}</li>
+							{{dateFormat pgPayEx.payApprovalDt "YYYY-MM-DD HH:mm:SS"}}</li>
 					</ul>
 					<hr class="div m20 dotted">
 				{{/if}}

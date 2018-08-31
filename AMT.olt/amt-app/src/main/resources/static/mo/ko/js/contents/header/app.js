@@ -26,12 +26,20 @@
 		getHeight: function () {
 			return this._$target.find( '.header_top' ).height();
 		},
+		
+		setTitle : function(title){
+			this._$target.find( '.page_title' ).text(title);
+		},
 
         /** =============== Private Methods =============== */
 
         _setEvent: function () {
 			this._$target.find( '.btn_menu' ).on( 'click', function () {
 				AP.menuCategory.open();
+			}.bind( this ));
+			
+			this._$target.find( '.btn_previous' ).on( 'click', function () {
+				history.back();
 			}.bind( this ));
 		},
 

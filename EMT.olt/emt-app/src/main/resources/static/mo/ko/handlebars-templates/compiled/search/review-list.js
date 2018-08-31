@@ -56,7 +56,7 @@ this["AP"]["handlebars"]["search"]["review-list"] = Handlebars.template({"1":fun
     + "				</dd>\n\n				<dd class=\"item_shortcut\">\n					<a href=\""
     + alias2((helpers.productDetailPath || (depth0 && depth0.productDetailPath) || helpers.helperMissing).call(alias1,(depth0 != null ? depth0.onlineProdSn : depth0),{"name":"productDetailPath","hash":{},"data":data}))
     + "\" class=\"btn_more\">\n						<span class=\"thumb\"><img src=\""
-    + alias2(alias3(((stack1 = ((stack1 = (depth0 != null ? depth0.onlineProdImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
+    + alias2(alias3((depth0 != null ? depth0.repProdImage : depth0), depth0))
     + "\" alt=\"\"></span> <span>"
     + alias2(alias3((depth0 != null ? depth0.onlineProdName : depth0), depth0))
     + " </span> <i class=\"ico_arr\"></i>\n					</a>\n				</dd>\n";

@@ -30,16 +30,8 @@
 			<p class="name">{{prod.onlineProdName}}</p>
 		{{/xif}}
 
+		<p><strong class="num font_md">{{myOrdQty 'group' prod step claimYn}}</strong>개 /
 
-		{{#xif claimYn '===' 'Y'}}
-			<p><strong class="num font_md">{{prod.claimQtySum}}</strong>개 /
-		{{else}}
-			{{#if (or (eq step 2)(eq prod.ordHistProdStatusCode 'ProdCancel'))}}
-				<p><strong class="num font_md">{{prod.cancelQtySum}}</strong>개 /
-			{{else}}
-				<p><strong class="num font_md">{{calc (calc prod.ordQtySum '-' prod.cancelQtySum) '-' prod.claimQtySum}}</strong>개 /
-			{{/if}}
-		{{/xif}}
 		<strong class="num font_md">{{currencyFormat prod.finalOnlineSaleAmtPcurSum}}</strong></p>
 	</div>
 	{{#xif prod.ordHistProdStatusCode '===' 'ProdCancel'}}

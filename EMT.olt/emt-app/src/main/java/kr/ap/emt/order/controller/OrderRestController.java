@@ -121,6 +121,7 @@ public class OrderRestController extends OrderBaseController {
         BigDecimal parsePayAmt = new BigDecimal(pgPrice.replaceAll(",", ""));
         OrdReceptPayAmt body = new OrdReceptPayAmt();
         List<PayAmt> PayAmtList = new ArrayList<PayAmt>();
+
         PayAmt pgPayAmt = new PayAmt();
         pgPayAmt.setDepositYn("N"); // 예치금여부('Y'면 결제수단일련번호 X)
         pgPayAmt.setPayMethodSn(payMethodSn); //결제수단일련번호
@@ -166,6 +167,8 @@ public class OrderRestController extends OrderBaseController {
             if (body == null) {
                 body = new OrdReceptChange();
             }
+
+            /** 일반/편의점 구분 */
 
             /** 주문자 정보 */
             EmbeddableName en = new EmbeddableName();
@@ -340,13 +343,25 @@ public class OrderRestController extends OrderBaseController {
         List<OtfGiftPackingSelect> otfGiftPackingList = new ArrayList<OtfGiftPackingSelect>();
         OtfGiftPackingSelect otfGiftPackingSelect = new OtfGiftPackingSelect();
 
-        if(ordSn != null){
+        //기준에 선택된 포장박스/쇼핑백정보 유지
+		List<OtfGiftPackingSelect> otfGiftPackingSelectList = body.getOtfGiftPackingSelectList();
 
+		if(ordSn != null){
             if (giftPackingSn != null && giftPackingQty != null) {
                 otfGiftPackingSelect.setCoSn(coSn);                        // 업체일련번호
-                otfGiftPackingSelect.setGiftPackingSn(giftPackingSn);    // 선물포장일련번호
+                otfGiftPackingSelect.setGiftPackingSn(giftPackingSn);    	// 선물포장일련번호
                 otfGiftPackingSelect.setGiftPackingQty(giftPackingQty);    // 선물포장수량
                 otfGiftPackingList.add(otfGiftPackingSelect);
+
+				//기준에 선택된 포장박스/쇼핑백정보 유지
+				if (otfGiftPackingSelectList != null) {
+					for (OtfGiftPackingSelect o : otfGiftPackingSelectList) {
+						if (!o.getGiftPackingSn().equals(giftPackingSn)) {
+							otfGiftPackingList.add(o);
+						}
+					}
+				}
+
                 body.setOtfGiftPackingSelectList(otfGiftPackingList);
             } else {
                 body.setOtfGiftPackingSelectList(null);
@@ -439,6 +454,8 @@ public class OrderRestController extends OrderBaseController {
                 body.setOrdUnitAwardSelectList(null);
             }
 
+			initPoint(membershipSn, body);
+
             OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
 
 			orderSession.setOrdReceptChange(body);
@@ -474,9 +491,9 @@ public class OrderRestController extends OrderBaseController {
 		return ResponseEntity.ok(result);
 	}
 
+	//포인트도 초기화.(포장/쇼핑백, 쿠폰 및 주문단위 사은품 수정시)
 	private void initPoint(Long membershipSn, OrdReceptChange body) {
 		if (membershipSn != null) {
-			//쿠폰수정하면 포인트도 초기화.
 			List<MembershipPointSelect> membershipPointSelectsList = new ArrayList<MembershipPointSelect>();
 			MembershipPointSelect membershipPointSelect = new MembershipPointSelect();
 			membershipPointSelect.setMembershipSn(membershipSn);
@@ -491,7 +508,19 @@ public class OrderRestController extends OrderBaseController {
 		result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
 		result.put("ordCntMap", makeOrdCntList(ordRc));
 
+		//가용 예치금
 		result.put("depositAvailAmt", ordRc.getDepositAvailAmt());
-		result.put("isApMember", apApi.getMemberInfo(getMemberSn()) != null ? true : false);
+
+		//가용 뷰티포인트
+		List<OrdMembershipEx> ordMembershipExList = ordRc.getOrdMembershipExList();
+		BigDecimal membershipAvailPoint = new BigDecimal(0);
+		for (OrdMembershipEx o : ordMembershipExList) {
+			if ("BP".equals(o.getMembershipServiceCode())) {
+				membershipAvailPoint = ordRc.getDepositAvailAmt();
+			}
+		}
+		result.put("membershipAvailPoint", membershipAvailPoint);
+
+		result.put("isApMember", isMember());
 	}
 }

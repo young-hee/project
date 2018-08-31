@@ -48,6 +48,9 @@ public class MyOrdAmt {
 	// 진주알
 	private BigDecimal activityPoint;
 
+	// 배송비 할인
+	private BigDecimal shipFeePromoDc;
+
 	// 기타 포인트
 	private BigDecimal etcPoint = BigDecimal.ZERO;
 
@@ -84,7 +87,7 @@ public class MyOrdAmt {
 		storeShipProd = getOrDefault("StorePickupProd", "payment");
 		spPriceAwardProd = getOrDefault("SpPriceAwardProd", "payment");
 		spUnitPacking = getOrDefault("ShipUnitPacking", "payment").add(getOrDefault("ProdUnitPacking", "payment"));
-		shipFee = getOrDefault("DefaultShipFee", "payment").add(getOrDefault("AddShipFee", "payment"));
+		shipFee = getOrDefault("CaclDefaultShipFee", "payment");
 		// getOrDefault("MembershipExch", "payment");
 		// getOrDefault("ActivityPointExch", "payment");
 
@@ -95,6 +98,7 @@ public class MyOrdAmt {
 		couponPoint = addBigDecimal(couponPoint, getOrDefault("OrdUnitCouponDc", "point"));
 		membershipPoint = getOrDefault("MembershipExch", "point");
 		activityPoint = getOrDefault("ActivityPointExch", "point");
+		shipFeePromoDc = getOrDefault("ShipFeePromoDc", "point");
 
 		etcPoint = addBigDecimal(etcPoint, getOrDefault("OnlineProdPromoDc", "point"));
 		etcPoint = addBigDecimal(etcPoint, getOrDefault("OnlineMemberPromoDc", "point"));
@@ -105,9 +109,10 @@ public class MyOrdAmt {
 		etcPoint = addBigDecimal(etcPoint, getOrDefault("DefaultShipFeeCouponDc", "point"));
 		etcPoint = addBigDecimal(etcPoint, getOrDefault("DefaultShipFeeDc", "point"));
 		etcPoint = addBigDecimal(etcPoint, getOrDefault("DefaultExchShipFeeDc", "point"));
-		etcPoint = addBigDecimal(etcPoint, getOrDefault("ShipFeePromoDc", "point"));
+
 		etcPoint = addBigDecimal(etcPoint, getOrDefault("PayMethodDc", "point"));
 		etcPoint = addBigDecimal(etcPoint, getOrDefault("SameTimePurPromoDc", "point"));
+
 
 		if (membershipExList != null && membershipExList.size() > 0) {
 			for (OrdHistMembershipEx ex : membershipExList) {
@@ -251,5 +256,13 @@ public class MyOrdAmt {
 
 	public void setCushionPoint(BigDecimal cushionPoint) {
 		this.cushionPoint = cushionPoint;
+	}
+
+	public BigDecimal getShipFeePromoDc() {
+		return shipFeePromoDc;
+	}
+
+	public void setShipFeePromoDc(BigDecimal shipFeePromoDc) {
+		this.shipFeePromoDc = shipFeePromoDc;
 	}
 }

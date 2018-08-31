@@ -16,12 +16,12 @@
 
 			this._bestView = null;
 			this._bestSell = null;
-
-			this._setEvent();
 		},
 
 		/** =============== Public Methods =============== */
 		init: function ( options ) {
+			this._setEvent();
+
 			this._displayMenuId = options.displayMenuId;
 			this._$target.find( '.tab_menu ul li' ).eq(0).find( 'button' ).trigger( 'click' );
 		},
@@ -31,25 +31,28 @@
 			this._$target.find( '.ui_tab' ).on( 'tabs-change', function(e) {
 				if ( e.index == 0 ) {
 					if ( !this._bestView ) {
-						this._bestView = new AP.rankingList({
+						this._bestView = new AP.productList({
 							$target: this._$bestView,
 							displayMenuId: this._displayMenuId,
-							flagged: 'rankBestViewProd',
-							param: {
-								flags: 'icon_reco_pop_7d'
-							}
-						}).load();
+							template: 'display.ranking.ranking-item',
+							api: 'flaggedItemList'
+						}).load({
+							limit: 20,
+							prodListUnit: 'Prod',
+							flags: 'icon_reco_pop_7d'
+						});
 					}
 				} else if ( e.index == 1 ) {
 					if ( !this._bestSell ) {
-						this._bestSell = new AP.rankingList({
+						this._bestSell = new AP.productList({
 							$target: this._$bestSell,
 							displayMenuId: this._displayMenuId,
-							flagged: 'rankBestSellProd',
-							param: {
-								flags: 'icon_reco_best_7d'
-							}
+							template: 'display.ranking.ranking-item',
+							api: 'flaggedItemList'
 						}).load({
+							limit: 20,
+							prodListUnit: 'Prod',
+							flags: 'icon_reco_best_7d',
 							priceRange: this._$bestSell.find( '.check_btn_set input' ).val()
 						});
 					}
@@ -57,6 +60,7 @@
 			}.bind( this ));
 
 			this._$bestSell.on( 'change', '.check_btn_set input', function (e) {
+				this._bestSell.resetIndex();
 				this._bestSell.load({
 					priceRange: $( e.currentTarget ).val()
 				});

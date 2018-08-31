@@ -125,8 +125,11 @@
 		_save: function ( formData ) {
 			var defer = new $.Deferred();
 
+			$('.btn_lg_primary.submit').attr('disabled', 'disabled');
+
 			AP.api.reviewWithImages( null, formData )
 				.done(function ( result ) {
+					$('.btn_lg_primary.submit').removeAttr('disabled');
 
 					if (result.booleanResult.result) {
 						if (result.failureExist) {
@@ -167,6 +170,8 @@
 					} else {
 						AP.modal.alert( AP.message.API_SAVE_ERROR );
 					}
+
+					$('.btn_lg_primary.submit').removeAttr('disabled');
 				}.bind(this));
 
 			return defer.promise();

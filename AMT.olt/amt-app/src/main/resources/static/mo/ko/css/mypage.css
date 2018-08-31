@@ -169,7 +169,12 @@
 .pop_review .section {padding:25px 15px; line-height: 19px}
 .pop_review .review_writable .product_info>* + * {margin-top: 0}
 .pop_review .review_writable .product_info .rating {margin-top: 8px}
+.pop_review .review_writable .product .product_visual {width: 80px}
+.pop_review .review_writable .product {padding:17px 16px 17px 10px;}
+.pop_review .review_writable .product_info {position: relative;}
+.pop_review .review_writable .product_info:before {content: ''; position: absolute; top: 50%; right: 0; width: 11px; height: 19px; margin-top: -9px; background: url(/mo/ko/images/common/ico_arr_aside2.png) no-repeat 0 0; -webkit-background-size: 11px 19px; background-size: 11px 19px;}
 
+.pop_review .review_writable .product_info .product_name {max-height: 23px;-webkit-line-clamp:1 }
 
 /*리뷰작성 display.css에서 가져옴*/
 .review_write{position:relative; height:calc(100% - 9px); padding-bottom: 120px}
@@ -213,16 +218,12 @@
 .review_write .btn_write i{position:absolute; top:50%; right:0; margin:-9px 0 0; opacity:.3}
 .review_write .btn_write + p.text{margin-top: 10px;}
 .review_write .text.notice{font-size: 13px; color:#999;}
-.review_write_form .layer_cont{padding-bottom: 80px !important;}
 .review_guide{position:absolute; bottom:16px; width: 100%; height: 52px; white-space: nowrap;}
 .review_guide .ix-list-viewport{height: 52px;}
 .review_guide .ix-list-items{position:relative; width: 100%; height: 52px;}
 .review_guide .ix-list-item{padding:1px 0 1px 16px; background: #fff;}
 .review_guide .bubble{position:relative; display:inline-block; height: 50px; padding: 18px 30px 0; background: #13c0dc; border-radius: 25px; color:#fff;}
 .review_guide .bubble:before{content:''; position:absolute; bottom:0; left:0; width: 27px; height: 7px; background:url(/mo/ko/images/display/bg_review_guide.png) no-repeat; -webkit-background-size: 100%;background-size: 100%;}
-.review_write_form .textarea{height: 100%;}
-.review_write_form .textarea textarea{height: 100%; border:0;}
-.review_write_form .text_limit{position:absolute; bottom:27px; right:16px; z-index: 1; font-size: 16px; color:#999;}
 @media screen and (max-width:320px){
 	.review_write.step1{padding-top: 40px;height: inherit; }
 	.review_write.step1 .text.notice{font-size: 13px;}
@@ -232,7 +233,7 @@
 	.review_guide .bubble{padding: 18px 20px 0;}
 
 }
-.review_write.step2 {height: auto; padding-bottom: 50px; position: static}
+.review_write.step2 {height: auto; padding-bottom: 0; position: static}
 .review_write.step2 .review_product_summary {line-height: 22px}
 .review_write.step2 .section {padding:25px 16px 30px 16px}
 .review_write.step2 .section.photo_upload > dl > dt {padding-bottom: 0}
@@ -269,63 +270,6 @@
 .review_write.step2 .layer_btns button:disabled{background-color:#ccc !important}
 
 .term_of_use.review .depth2 li {text-indent:-15px; margin-left: 17px}
-/* 주문/배송조회 목록 */
-.my_order_list .order{padding: 0 16px 16px;}
-.my_order_list .order_title{}
-.my_order_list .order_title>a{position:relative; display:block; height: 46px; padding-top: 16px; border-bottom:1px solid #f2f2f2;}
-.my_order_list .order_title .date{margin-right: 10px;}
-.my_order_list .order_title em{position:absolute; top:16px; right:0;}
-.my_order_list .product_list{margin-top: 18px;}
-.my_order_list .product{display:table; width: 100%; table-layout: fixed;}
-.my_order_list .product>*{display:table-cell; vertical-align: middle;}
-.my_order_list .product .product_visual{width: 90px !important;}
-.my_order_list .product .price_area{margin-top: 8px;}
-.my_order_list .product .price_area span + span {position:relative; margin-left: 5px; padding-left: 8px;}
-.my_order_list .product .price_area span + span:before{content:''; position:absolute; top:2px; bottom:2px; left:0; width: 1px; background: #b7b7b7;}
-.my_order_list .product .btn_border_round{display:inline-block !important; height: 22px; margin-top: 10px; padding: 0 10px; font-size: 11px;}
-.my_order_list .order_btns{margin-top: 25px;}
-.my_order_list .order_btns>*{position:relative; border-radius: 5px; font-size: 15px; color:#222; border-color: #eaeaea;}
-.my_order_list .order_btns>* i{position:absolute; top:50%; right:11px; transform:translateY(-50%)}
-.my_order_list .order_btns.col_03>*{width:calc((100% - 10px) / 3 ); min-width: inherit;}
-.my_order_list .order_btns + .order_btns{margin-top:8px;}
-/* 주문/배송조회 상세 */
-.my_order_detail .ap_order{margin-top: 9px; padding-bottom: 0;}
-.my_order_summary dl + dl,
-.my_order_detail .order_info dl + dl{border-top: 1px solid #f2f2f2;}
-.layer_popup .ap_order{padding-bottom: 0;}
-/* 주문 상세 mypage_order.css 에서 수정 후 삭제
-.my_order_summary{margin: -20px 0;}
-.my_order_summary>dl:after{content:''; display: block; clear: both;}
-.my_order_summary>dl>*{height: 48px;}
-.my_order_summary>dl>*:after{content:''; display: inline-block; width: 0; height: 100%; vertical-align: middle;}
-.my_order_detail .ui_accordion>dl>dt .title{padding: 5px 0;}
-.my_order_detail>.ui_accordion>dl>dd{padding: 0 16px;background: #fff; border-top:1px solid #f2f2f2;}
-.my_order_detail .order_info>dl>dd>*{padding: 20px 0;}
-.my_order_detail .btn_address_change{position:absolute; top:16px; right:0;}
-.my_order_detail .h_title{padding-bottom: 20px;	font-size: 16px; font-weight: 600;}
-.my_order_detail .payment_info dd dt{position:relative;}
-.my_order_detail .payment_info dd dd{position:relative; color:#484848; margin-top: 8px;}
-.my_order_detail .payment_info span{display:inline-block; line-height: 1.2;}
-.my_order_detail .payment_info span.account{letter-spacing: -1px}
-.my_order_detail .payment_info span + span{position:relative; margin-left: 10px; padding-left: 10px;}
-.my_order_detail .payment_info span + span:before{content:''; position:absolute; top:1px; left:0; width: 1px; height:12px; background: #cdcdcd;}
-.my_order_detail .payment_info .title{position:absolute; top:0; left:0; width: 85px;}
-.my_order_detail .payment_info .title + span{display:block; margin-left: 95px;}
-.my_order_detail [class^="btn_lg"]{position:relative; font-size: 15px; -webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px;}
-.my_order_detail [class^="btn_lg"] i{position: absolute; top:50%; right:10px; transform: translateY(-50%)}
-.my_order_detail .page_btns{padding: 9px;}
-.my_order_detail .page_btns.col_03>*{width:calc((100% - 10px) / 3 ); min-width: inherit;}
-.my_order_detail .page_btns + .page_btns{padding-top: 0;}
- */
-/* 주문취소 */
-.order_cancel .payment_info .title{padding-bottom: 25px; color:#999; font-size: 15px;}
-.order_cancel .payment_info dd{font-size: 17px;}
-.order_cancel .payment_info dd + dd{margin-top: 23px;}
-.order_cancel .payment_info span{display:inline-block; line-height: 1.2; letter-spacing: -1px}
-.order_cancel .payment_info span.account{letter-spacing: -1px}
-.order_cancel .payment_info span + span{position:relative; margin-left: 10px; padding-left: 10px;}
-.order_cancel .payment_info span:not(.hidden) + span:before{content:''; position:absolute; top:4px; left:0; width: 1px; height:13px; background: #cdcdcd;}
-.order_cancel .payment_info span.hidden{visibility: hidden;}
 
 /* 교환/반품 */
 .return_info .ui_accordion>dl>dt .title{padding: 5px 0;}
@@ -441,16 +385,19 @@
 .my_page .data_table.th_gray td {font-size: 14px; text-align: center}
 .my_page .btn_lg_more .ico_down {width: 10px;height: 19px;background-position:-15px -20px; opacity: .3; transform: rotate(-90deg); margin-top: 0; margin-left: 10px}
 
-.beautypoint_info {padding:0 16px 35px 16px;}
+
+.beautypoint_info {}
+.beautypoint_info .section {padding:0 16px 35px 16px;}
 .beautypoint_info .dl_cont dt {padding:31px 0 20px; font-size:16px; color:#000 }
 .beautypoint_info .dl_cont dd p.text {font-size: 14px; line-height: 20px; color:#999}
 .beautypoint_info .dl_cont + .dl_cont {margin-top:6px }
 .beautypoint_info .data_table.th_gray td {text-align: center; color:#999; font-size: 12px;}
 .beautypoint_info .data_table.th_gray td:last-child {text-align: left; padding-right: 0; letter-spacing: -1px}
-.my_page .section .list li {font-size: 12px; line-height: 16px; color:#888; margin-top: 10px; }
-.my_page .section .h_title + .list {padding-top: 16px}
-.my_page .section .list_title {font-size: 13px}
-.my_page .section .list li:first-child {margin-top: 0}
+.beautypoint_info .section.transparent {padding: 0}
+.beautypoint_info .section .list li {font-size: 12px; line-height: 16px; color:#888; margin-top: 10px; }
+.beautypoint_info .section .h_title + .list {padding-top: 16px}
+.beautypoint_info .section .list_title {font-size: 13px}
+.beautypoint_info .section .list li:first-child {margin-top: 0}
 /* 기프트 카드 */
 .my_giftcard .no_data {margin-bottom: -16px !important}
 .my_giftcard .section {padding: 15px 16px;}
@@ -502,7 +449,7 @@
 .my_address .address_info .ui_table>dt{width: 90px;}
 .my_address .address_info .ui_table.address>dt {vertical-align: top; padding-top: 13px}
 .my_address .address_info .ui_table + .ui_table{border-top:1px solid #f3f3f3;}
-.delivery_form {padding:15px 16px 120px 16px}
+.delivery_form {padding:15px 16px 0 16px}
 .delivery_form .ui_table {margin-bottom: 8px}
 .delivery_form .chk_wrap {margin-top: 17px}
 .delivery_form .chk_h28 label {font-size: 17px;}
@@ -584,7 +531,7 @@
 .account_registration .copy>span:before,
 .account_registration .copy>span:after{content:''; position:absolute; top:9px; left:-25px; width: 14px; height: 11px; background:url(/mo/ko/images/common/ico.png) no-repeat -135px -200px; -webkit-background-size: 200px;background-size: 200px;}
 .account_registration .copy>span:after{left:auto; right:-26px; background-position: -135px -212px;}
-.account_registration .section {padding:0 16px 120px 16px}
+.account_registration .section {padding:0 16px 30px 16px}
 .account_registration .ui_table{margin-bottom: 10px}
 .account_registration .ui_table>dt{width: 90px; font-size: 17px; }
 .account_registration  p.text.font_xs{ font-size: 12px; line-height: 17px;}
@@ -636,3 +583,55 @@
 .ap_message p.noty span {color:#333}
 .ap_message .no_data.message p {font-size:16px; color:#bbb; text-align: center;}
 .ap_message .no_data.message p:before {content:''; position:absolute; top:160px; left:50%; margin-left: -28px;width: 57px; height: 50px; background:url(/mo/ko/images/my/no_message.png) no-repeat center top; -webkit-background-size: 57px 50px;background-size: 57px 50px;}
+
+
+/*마이페이지 주문취소*/
+.my_cancel_app .h_title {font-weight: bold; color:#000}
+.my_cancel_app .payment_info dt.h_title {padding-bottom: 25px}
+.my_cancel_app .ap_order .h_title{padding-bottom: 8px}
+.my_cancel_app .event_product_wrap .h_title {font-weight: normal; padding-left: 0}
+.my_order_summary>dl dd.cont {position: relative;clear: both;float: none;display: block; height: 48px;line-height:20px; padding:3px 25px 20px 0; overflow: hidden;color: #888; white-space: nowrap; text-overflow: ellipsis; font-size: 14px; }
+.my_order_summary>dl dd.cont button{position: absolute; top: 3px; right: 0; bottom: 0;  width: 20px; height: 20px; transform: rotate(-90deg); opacity: .3;}
+.my_order_summary>dl dd.cont.on button {transform: rotate(90deg); opacity: .2}
+.my_order_summary>dl dd.cont.on {overflow: inherit; height: 100%; white-space: inherit;}
+.my_order_summary>dl dd.cont>button [class^="ico_"] {transition: .3s;}
+.my_order_detail .payment_info span + span.refund_price {color:#782fff}
+.my_order_detail .payment_info .explain {margin-left: 0; padding-left: 16px; margin-top: 10px; font-size: 14px; color:#888}
+.my_order_detail .payment_info .explain:before {content: ''; position: absolute; top: 2px; left: 0; width: 9px; height: 9px; border-left:1px solid #e5e5e5;border-bottom:1px solid #e5e5e5; background-color:inherit}
+.my_order_detail .payment_info .btn_refund_account {margin: 10px 0 3px}
+.my_order_detail .payment_info .block {display: block; line-height: 22px}
+
+.my_cancel_app .delivery .h_title {padding-bottom: 25px}
+.my_cancel_app .delivery dd {padding: 0 16px}
+.my_cancel_app .delivery dd .payment_list {padding: 0}
+
+.my_cancel_app .delivery dd .title,
+.my_cancel_app .delivery dd .price {display:inline-block; padding:17px 0}
+.my_cancel_app .delivery dd .price {float: right; font-weight: bold}
+
+.my_cancel_app .delivery dd.ap_order {overflow: hidden; margin-top: 6px; padding-bottom: 13px; border-top:1px solid #f2f2f2}
+.my_cancel_app .delivery dd.ap_order >p {padding-top: 23px; padding-bottom: 5px; font-size: 14px; color:#484848}
+.my_cancel_app .ap_order .payment_list>li {padding:11px 0;}
+.my_cancel_app .ap_order .payment_list>li + li {border-top: 0}
+
+.my_cancel_app .notice_list,
+.my_order_detail .notice_list {padding: 24px 16px 50px; background-color: transparent;}
+.my_cancel_app .notice_list li,
+.my_order_detail .notice_list li {margin-top: 22px; color: #b3b3b3; line-height: 20px;}
+.my_cancel_app .notice_list li:first-child,
+.my_order_detail .notice_list li:first-child {margin-top: 0 !important;}
+
+.my_cancel_app .notice_list.type2 li,
+.my_order_detail .notice_list.type2 li  {font-size: 12px; line-height: 16px; margin-top: 13px}
+.my_cancel_app .my_order_detail.type2 .payment_info dd dl {padding-bottom: 0}
+.my_cancel_app .payment_info dd .notice {padding: 24px 16px 24px 16px;font-size: 13px; color:#888; line-height: 20px;}
+.my_cancel_app .ui_accordion.type2>dl>dt {padding:18px 16px 18px 16px;}
+.my_cancel_app .ui_accordion>dl>dd {padding-bottom: 24px;}
+.my_cancel_app .ui_accordion>dl>dt>button .ico_navi {opacity: .2}
+.my_cancel_app .order_area .customer_info .text:first-child {font-weight: bold}
+
+.my_cancel_app .ap_order .delivery_info {position: relative}
+.my_cancel_app .delivery .delivery_info dd {padding:0}
+.my_cancel_app .ap_order .address_list {padding:0 0 25px 0}
+.my_cancel_app .ap_order .btn_go {top: 18px;right: 0}
+.my_cancel_app  .ap_order .ui_accordion>dl>dd {padding-bottom: 0}

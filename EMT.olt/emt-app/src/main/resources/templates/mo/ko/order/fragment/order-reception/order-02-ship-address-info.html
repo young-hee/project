@@ -34,11 +34,11 @@
 			<h3 class="h_title cont"><strong>배송정보</strong></h3>
 			<form class="validate">
 				<fieldset class="form mgt20">
-					<input type="hidden" id="memberSn" name="memberSn" th:value="${memberSn != null} ? ${memberSn} : ''" />
 					<legend class="sr_only">배송정보 입력항목</legend>
 					<div class="check_set clear">
 						<span class="check_wrap"><input type="radio" name="delivery" id="delivery1" value="01" th:onclick="|shipInfo('SHIP')|" checked=""><label for="delivery1">일반택배</label></span>
 						<span class="check_wrap"><input type="radio" name="delivery" id="delivery2" value="02" th:onclick="|shipInfo('STORE')|"><label for="delivery2">편의점 배송</label></span>
+						<input type="hidden" name="shipType" value="SHIP"/>
 					</div>
 
 					<!--일반택배 선택시-->
@@ -452,12 +452,10 @@
 		$('[name=selectShipMsg]').on('change', function(e){
 			var selectedVal = $(this).val();
 			//console.log("selectedVal : " + selectedVal);
-			var obj = $(this).parents('.ui_table').find('[name=shipMsg]');
-			obj.focus();
 			if(!selectedVal){
-				obj.val("");
+				$('[name=shipMsg]').val("");
 			}else{
-				obj.val(selectedVal);
+				$('[name=shipMsg]').val(selectedVal);
 			}
 		});
 
@@ -482,6 +480,92 @@
 					$('[name=latelyRepShipAddressYn]').attr('value','Y');
 				}
 			}
+		}
+
+
+
+		/* 주문고객 정보 변경 */
+		function fnMemberChangeInfo() {
+			var name1		 = $('#orderMemberName').text();
+			var phoneNo		 = $('#orderMemberPhoneNo').text();
+			var emailAddress = $('#orderMemberEmail').text();
+			var modal = AP.modal.info({
+					contents: {
+						templateKey: 'order.layer-info-change',
+						templateModel: {
+							name1 : name1 == '' || name1 == null ? '' : name1,
+							phoneNo : phoneNo == '' || phoneNo == null  ? '' : phoneNo,
+							purchaserEmailAddress : emailAddress == '' || emailAddress == null  ? '' : emailAddress,
+						}
+					}
+				}),
+				$modal = modal.getElement();
+
+			// 회원정보 변경
+			$modal.find( '#memberChageCheck' ).on( 'click', function (e) {
+				var $checkbox = $('input[name="memberChageCheck"]');
+				if($checkbox.is(':checked')) {
+					var $form = $('form.change-validate');
+					//$form.validate().settings.ignore = "";
+					if ( $form.valid() ) {
+						// 회원정보 수정 apMember api 연동!
+						var memberId = $('[name=userId]').val();
+						var changeName1 = $('[name=changeName1]').val();
+						var changePhoneNo = $('[name=changePhoneNo]').val();
+						var changePurchaserEmailAddress = $('[name=changePurchaserEmailAddress]').val();
+						if(changeName1 != '' && changePhoneNo != ''&& changePurchaserEmailAddress != ''){
+							$.ajaxSettings.traditional = true;
+							AP.api.orderPutMember({}, {
+								memberId : memberId,
+								name1: changeName1,
+								phoneNo : changePhoneNo,
+								emailAddress : changePurchaserEmailAddress
+							}).done(function (data) {
+								if (data.result == "success"){
+									AP.modal.alert("회원정보가 변경되었습니다.");
+								}else{
+									AP.modal.alert("회원정보 변경이 실패하였습니다.");
+								}
+							}).fail(function (e) {
+								AP.modal.alert("[ajax.fail]실패");
+							}).always(function () {
+							});
+						}
+					}
+				}
+				else{
+					console.log("비 체크")
+				}
+			});
+
+			// 변경하기
+			$modal.find( '.btn_md_neutral' ).on( 'click', function (e) {
+				var $form = $('form.change-validate');
+				//$form.validate().settings.ignore = "";
+				if ($form.valid()) {
+					// 주문고객정보 세팅
+					var changeName1 = $('[name=changeName1]').val()
+					var changePhoneNo = $('[name=changePhoneNo]').val()
+					var changePurchaserEmailAddress = $('[name=changePurchaserEmailAddress]').val()
+					if(changeName1 != '' && changePhoneNo != ''&& changePurchaserEmailAddress != ''){
+						$('#orderMemberName').html(changeName1);
+						$('#orderMemberPhoneNo').html(changePhoneNo);
+						$('#orderMemberEmail').html(changePurchaserEmailAddress);
+
+						// 주문고객정보 value 세팅
+						$('[name=purchaserName]').attr('value',changeName1);
+						$('[name=purchaserPhoneNo]').attr('value',changePhoneNo);
+						$('[name=purchaserEmailAddress]').attr('value',changePurchaserEmailAddress);
+
+						$modal.find( '.layer_close' ).click();
+					}
+				}
+			});
+
+			// 취소
+			$modal.find( '.btn_md_secondary' ).on( 'click', function (e) {
+				$modal.find( '.layer_close' ).click();
+			});
 		}
 	</script>
 	<!--// 스크립트 정의-->

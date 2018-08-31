@@ -3,18 +3,14 @@
 		<!-- 클레임 체크박스 -->
     	{{#if (eq this.viewYn.checkBox 'Y')}}
 			<div class="check_wrap check_only">
-				<input type="checkbox" id="prod_{{this.prod.ordProdEx.prodSn}}" name="prod_{{oProdSn}}" value="{{json this.prod}}" data-oProdSn="{{oProdSn}}">
-				<label for="prod_{{this.prod.ordProdEx.prodSn}}">
+				<input type="checkbox" id="prod_{{this.prod.ordHistProdNo}}" name="prod_{{oProdCode}}" value="{{json this.prod}}" data-oProdCode="{{oProdCode}}">
+				<label for="prod_{{this.prod.ordHistProdNo}}">
 					<span class="sr_only">선택</span>
 				</label>
 			</div>
 		{{/if}}
     	<div class="thumb">
-    		{{#xif this.prod.ordProdEx.prodImgUrl '===' null}}
-				<img src="/images/cart/no_img.png" alt="">
-			{{else}}
-				<img src="{{this.prod.ordProdEx.prodImgUrl}}" alt="">
-			{{/xif}}
+			<img src="{{this.prod.ordProdEx.prodImgUrl}}" alt="">
 		</div>
     	<div class="info">
     		<div class="align_left">
@@ -31,9 +27,9 @@
 					<strong class="num">{{condition (eq this.step 'two') this.prod.claimReceivedQty this.prod.ordQty}}</strong>개<span class="gap">/</span>
 					{{#xif typeName '!=' null}}
 						{{#xif typeName '==' '뷰티포인트'}}
-							<strong class="num">{{currencyFormatDefault prod.exchMembership 'P'}}</strong></p>
+							<strong class="num">{{currencyFormatDefault (calc prod.exchMembership '*' (condition (eq this.step 'two') this.prod.claimReceivedQty this.prod.ordQty)) 'P'}}</strong></p>
 						{{else}}
-							<strong class="num">{{currencyFormatDefault prod.exchActivityPoint '알'}}</strong></p>
+							<strong class="num">{{currencyFormatDefault (calc prod.exchActivityPoint '*' (condition (eq this.step 'two') this.prod.claimReceivedQty this.prod.ordQty)) '알'}}</strong></p>
 						{{/xif}}
 					{{else}}
 						<strong class="num font_md">{{currencyFormat prod.finalOnlineSaleAmtPcur}}</strong></p>
@@ -47,11 +43,7 @@
 		{{#each this.prod.ordHistProdAwardExList}}
 			<div class="freebies">
 				<div class="thumb">
-					{{#xif this.prod.ordProdEx.prodImgUrl '===' null}}
-						<img src="/images/cart/no_img.png" alt="">
-					{{else}}
-						<img src="{{awardOrdHistProdEx.ordProdEx.prodImgUrl}}" alt="">
-					{{/xif}}
+					<img src="{{awardOrdHistProdEx.ordProdEx.prodImgUrl}}" alt="">
 				</div>
 				<div class="info">
 					<div class="align_left">
@@ -72,11 +64,7 @@
 		{{#each this.prod.ordHistProdPromoAwardExList}}
 			<div class="freebies">
 				<div class="thumb">
-					{{#xif this.prod.ordProdEx.prodImgUrl '===' null}}
-						<img src="/images/cart/no_img.png" alt="">
-					{{else}}
-						<img src="{{awardOrdHistProdEx.ordProdEx.prodImgUrl}}" alt="">
-					{{/xif}}
+					<img src="{{awardOrdHistProdEx.ordProdEx.prodImgUrl}}" alt="">
 				</div>
 				<div class="info">
 					<div class="align_left">
@@ -101,16 +89,17 @@
 			{{#if (eq this.viewYn.checkBox 'Y')}}
 				{{#xif this.prod.ordHistProdTypeCode '==' 'BulkDc'}}
 					<div class="check_wrap check_only" style="display:none">
-						<input type="checkbox" id="prod_{{this.prod.ordProdEx.prodSn}}" name="prod_{{oProdSn}}" value="{{json this.prod}}"
-							data-oProdSn="{{oProdSn}}" data-promoSn="{{prod.ordProdEx.bulkDcOnlineProdCode}}">
-						<label for="prod_{{this.prod.ordProdEx.prodSn}}">
+						<input type="checkbox" id="prod_{{this.prod.ordHistProdNo}}" name="prod_{{oProdCode}}" value="{{json this.prod}}"
+							data-oProdCode="{{oProdCode}}" data-promoSn="{{prod.ordProdEx.bulkDcOnlineProdCode}}">
+						<label for="prod_{{this.prod.ordHistProdNo}}">
 							<span class="sr_only">선택</span>
 						</label>
 					</div>
 				{{else}}
 					<div class="check_wrap check_only">
-						<input type="checkbox" id="prod_{{this.prod.ordProdEx.prodSn}}" name="prod_{{oProdSn}}" value="{{json this.prod}}" data-oProdSn="{{oProdSn}}">
-						<label for="prod_{{this.prod.ordProdEx.prodSn}}">
+						<input type="checkbox" id="prod_{{this.prod.ordHistProdNo}}" name="prod_{{oProdCode}}" value="{{json this.prod}}"
+							data-oProdCode="{{oProdCode}}">
+						<label for="prod_{{this.prod.ordHistProdNo}}">
 							<span class="sr_only">선택</span>
 						</label>
 					</div>

@@ -48,6 +48,12 @@ public class MyOrdDTO {
 	// 주문단위증정프로모션목록
 	private List<OrdUnitAwardOrdPromoEx> ordUnitAwardOrdPromo;
 
+	// 주문이력-쿠폰(확장)목록
+	private List<OrdHistCouponEx> ordHistCouponExList;
+
+	// 주문이력-프로모션(확장)목록
+	private List<OrdHistPromoEx> ordHistPromoExList;
+
 	// 정체 불명
 	private List<OrdOtfEx> ordOtfExList;
 
@@ -136,7 +142,7 @@ public class MyOrdDTO {
 		if (obj instanceof ClaimOrdHistInfo) {
 			ClaimOrdHistInfo c = (ClaimOrdHistInfo) obj;
 
-			ordUnitAwardOrdPromo = c.getOrdHistEx().getOrdUnitAwardOrdPromoExList();
+			makeOrdHistEx(c.getOrdHistEx());
 			makeOrdSavingPoint(c.getOrdHistEx().getOrdSavingPointList());
 			makeOrdPayResult(c.getOrdHistEx().getOrdPayExList());
 			makeOrdAmt(c.getOrdHistAmtCompareList(), c.getOrdHistEx());
@@ -146,7 +152,8 @@ public class MyOrdDTO {
 		else if (obj instanceof OrdEx) {
 			OrdEx ordEx = (OrdEx) obj;
 
-			ordUnitAwardOrdPromo = ordEx.getOrdHistEx().getOrdUnitAwardOrdPromoExList();
+
+			makeOrdHistEx(ordEx.getOrdHistEx());
 			makeOrdSavingPoint(ordEx.getOrdHistEx().getOrdSavingPointList());
 			makeOrdPayResult(ordEx.getOrdHistEx().getOrdPayExList());
 			if (state != null && (ordEx.getOrdHistAmtCompareList() != null && ordEx.getOrdHistAmtCompareList().size() > 0))
@@ -156,6 +163,12 @@ public class MyOrdDTO {
 			setMembership(ordEx.getOrdMembershipExList());
 			makeGoods(ordEx.getOrdShipAddressExList());
 		}
+	}
+
+	private void makeOrdHistEx(OrdHistEx ex) {
+		ordUnitAwardOrdPromo = ex.getOrdUnitAwardOrdPromoExList();
+		ordHistPromoExList = ex.getOrdHistPromoExList();
+		ordHistCouponExList = ex.getOrdHistCouponExList();
 	}
 
 	private void makeOrdPayResult(List<OrdPayEx> ordPay) {
@@ -740,5 +753,21 @@ public class MyOrdDTO {
 
 	public void setStorePickupSameTimePurPromoList(List<OrdOnlinePromoFoDTO> storePickupSameTimePurPromoList) {
 		this.storePickupSameTimePurPromoList = storePickupSameTimePurPromoList;
+	}
+
+	public List<OrdHistCouponEx> getOrdHistCouponExList() {
+		return ordHistCouponExList;
+	}
+
+	public void setOrdHistCouponExList(List<OrdHistCouponEx> ordHistCouponExList) {
+		this.ordHistCouponExList = ordHistCouponExList;
+	}
+
+	public List<OrdHistPromoEx> getOrdHistPromoExList() {
+		return ordHistPromoExList;
+	}
+
+	public void setOrdHistPromoExList(List<OrdHistPromoEx> ordHistPromoExList) {
+		this.ordHistPromoExList = ordHistPromoExList;
 	}
 }

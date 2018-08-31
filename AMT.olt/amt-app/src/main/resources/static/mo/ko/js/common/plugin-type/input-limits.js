@@ -33,7 +33,9 @@
 
     var InputLimits = function ( $target, pluginName ) {
         var _$input = $target,
-			_$txt = $target.parent( '.textarea, .input_wrap' ).siblings( '.text_right' ).find( 'small' );
+			_$txt = $target.parent( '.textarea, .input_wrap' ).siblings( '.text_right' ).find( 'small' ),
+			_$current = _$txt.find( '> .current' ),
+			_$limits = _$txt.find( '> .limits' );
 
         var _pluginName = pluginName,
             _maxByte = _$input.attr( 'max-byte' ) || 1,
@@ -80,11 +82,19 @@
         }
 
         function setCountTxt ( str ) {
+        	var current = '',
+				limits = '';
+
 			if ( _isByteCheck ) {
-				_$txt.text( AP.common.getByteLength(str) + '/' + _maxByte );
+				current = AP.common.getByteLength( str );
+				limits = _maxByte;
 			} else {
-				_$txt.text( str.length + '/' + _maxLength );
+				current = str.length;
+				limits = _maxLength;
 			}
+
+			_$current.text( current );
+			_$limits.text( limits );
 		}
 
     };

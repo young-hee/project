@@ -1,0 +1,26 @@
+<html ap:decorate="~{layout/layout-main}" th:with="_jsfile='events-overview'">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents ap_event">
+		<ul class="event_list">
+
+		</ul>
+		
+		<ul class="loading" style="display: none">
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script>
+	AP.eventProgress.load({ status: 'Progress' });
+	</script>
+</th:block>
+
+</body>
+</html>

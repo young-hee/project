@@ -40,14 +40,13 @@
 
 		_getData: function ( offset, isMore ) {
 			if ( this._api ) this._api.abort();
-
-			this._api = AP.api.getReviewList( null, $B.object.extend(this._params, {offset: 0}, false) )
+			
+			this._api = AP.api.getReviewList( null, $B.object.extend(this._params, {offset: offset}, false) )
 				.done( function ( result ) {
 					var data = result.prodReviewListInfo;
 					this._draw( data, isMore );
-				}.bind(this))
-				.fail( function ( xhr ) {
-					//
+				}.bind(this)).fail( function ( xhr ) {
+					console.log(xhr); 
 				}.bind(this));
 		},
 
@@ -71,7 +70,7 @@
 					$target.append( html ).show();	//draw
 					this._$target.show();
 				} else {
-					$target.html( html ).show();		//draw
+					$target.html( html ).show();	//draw
 					this._$target.show();
 				}
 	
@@ -93,40 +92,45 @@
 				
 				//html 태그 삭제
 				var strlength = 58;
+				
 				for ( var i = 0; i < data.prodReviewList.length; i++ ) {
 					var bodyText = data.prodReviewList[i].prodReviewBodyText;
 					var bodyTextReduce = data.prodReviewList[i].prodReviewBodyText;
-					//var bodyTextReduce = $('#bodyTextReduce'+prodReviewSn).text();
+				
 					var prodReviewSn = data.prodReviewList[i].prodReviewSn;
 
-					bodyTextReduce = bodyTextReduce.replace(/<br\/>/ig, "\n");
+					bodyTextReduce = bodyTextReduce.replace(/<br \/>/ig, "\n");
 					bodyTextReduce = bodyTextReduce.replace(/<\/br>/ig, "\n");
 					bodyTextReduce = bodyTextReduce.replace(/<br>/ig, "\n");
 					bodyTextReduce = bodyTextReduce.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "");
 					bodyText = bodyTextReduce;
+					
 					if(bodyTextReduce.length > strlength){
 						bodyTextReduce = bodyTextReduce.substr(0, strlength-2) + '...';
 					}
+					
 					document.getElementById('bodyTextReduce'+prodReviewSn).innerHTML = bodyTextReduce;
 					document.getElementById('bodyTextOrigin'+prodReviewSn).innerHTML = '<pre>' + bodyText + '</pre>';
 					
 				}
-			} else {
-				
-			}
+			} 
 			
 			$loading.hide();
-			
+
 			//상세보기
 			this._$target.find( '.review_detail' ).on( 'click', function (e) {
+				
+			
 				if( $(this).hasClass('off') ){
 					$(this).siblings('.reduce').hide();
 					$(this).siblings('.origin').slideDown('slow');
-					$(this).text('감추기 ∧').toggleClass('off on');
+					$(this).text('감추기').toggleClass('off on');
+					$(this).append('<i class="ico_arr_down"></i>'); 
 				} else {
 					$(this).siblings('.reduce').show();
 					$(this).siblings('.origin').slideUp('slow');
-					$(this).text('더보기 ∨').toggleClass('on off');
+					$(this).text('더보기').toggleClass('on off');
+					$(this).append('<i class="ico_arr_up"></i>');
 				}
 			});
 

@@ -1,0 +1,26 @@
+<html ap:decorate="~{layout/layout-title-only}" th:with="_jsfile='review'">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents">
+		<!--/* 리뷰 목록 */-->
+		<div class="review_list review_overview">
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script type="text/javascript" th:inline="javascript">
+		var param = {
+				 onlineProdSn : /*[[${param.onlineProdSn}]]*/
+				,memberSn : /*[[${memberMap.memberSn}]]*/
+				,filterType : /*[[${filterType}]]*/
+				,keyword : /*[[${keyword}]]*/
+		};
+		AP.filterReviewList.setDefaultData( param );
+	</script>
+</th:block>
+
+</body>
+</html>

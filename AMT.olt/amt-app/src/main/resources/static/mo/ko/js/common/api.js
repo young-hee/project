@@ -53,6 +53,9 @@
 		// 알림
 		notification: { path: '/common/todayNotification', method: 'GET' },
 
+		//로그인한 멤버 정보 
+		getLoginMemberInfo : { path : '/common/getLoginMemberInfo', method: 'GET' },
+
 
 		/**
 		 * 검색 ***********************************************************
@@ -190,6 +193,9 @@
 		// 1:1 문의 상세
 		inquiryCont: { path:'/my/api/getInquiryCont', method: 'GET'},
 
+		// 1:1 문의 답변 평가
+		evalInquiryResponse: { path:'/my/api/evalInquiryResponse', method: 'POST'},
+
 		// 쿠폰 등록
 		registerCoupon: { path:'/my/api/registerCoupon', method: 'POST'},
 
@@ -323,6 +329,24 @@
 				limit: 20 //(필수)
 			}
         },
+        
+        //상품평 미작성 목록 조회
+        getWritableReviewList : {path : '/product/getWritableReviewList', method : 'GET', data: {
+				prodReviewUnit : null, //상품평단위코드 - Member(회원단위) - OnlineProd(온라인상품단위) - UnitProd(단위상품단위, 단위상품일련번호 필수) - StyleCode(스타일코드단위, 스타일코드 필수)
+				prodReviewType : null, //상품평유형코드. All(전체), Pur(구매후기), Prod(상품리뷰), ExperienceGrp(체험단)
+				onlineProdSn : null, //온라인상품일련번호
+				prodSn : null, //단위상품일련번호
+				styleCode : null, //스타일코드
+				prodReviewSort : null, //정렬방식 - Last(최근등록순) - Scope(별점높은순) - LowScope(별점낮은순) - Recommend(추천많은순) - View(조회많은순)
+				scope  : null, //별점 필터. All(전체), 5, 4, 3, 2, 1
+				topReviewOnlyYn : null, //우수상품평만노출여부
+				topReviewFirstYn  : null, //우수상품평우선정렬여부
+				startDate: null,
+				endDate: null,
+				offset: 0, //(필수)
+				limit: 999 //(필수) - 마이파우치에 페이징 없음
+			}
+		},
         
         //상품평 상세 조회
         getReviewDetail : {path : '/product/getReviewDetail', method : 'GET', data: {
@@ -582,6 +606,111 @@
 		downloadCoupon : { path:'/display/downloadCoupon', method: 'POST', data: {
 			couponSn: null //쿠폰일련번호
 		}},
+		
+		/**
+	     * 기획전시 댓글목록 (planDisplayComments, )  *************************************************************
+	     * @param  {String}
+	     * @param  {int}
+	     * @param  {int}
+	     * @return  {ajax}
+	     */
+		// 기획전시 댓글 목록
+		planDisplayComments: { path:'/display/planDisplayComments', method: 'GET', data: {
+			planDisplaySn: null, // 기획전시일련번호 (Long 타입)
+			offset: 0,
+			limit: 20
+		}},
+		
+		/**
+	     * 기획전시 댓글등록 참여댓글형 행사참여 - 이미지 포함*************************************************************
+	     * @param planDisplayPost : participantComment(댓글), planDisplaySn(기획전시일련번호) , termsAgreeYn(약관동의여부 : 필수)  
+	     * @param picture
+		 * @return 
+	     */
+		planDisplayParticipated: { path:'/display/planDisplayParticipated', method: 'POST', contentType:false, processData: false },
+		
+		/**
+	     * 기획전시 댓글등록 참여댓글형 행사참여 *************************************************************
+	     * @param planDisplayPost : participantComment(댓글), planDisplaySn(기획전시일련번호) , termsAgreeYn(약관동의여부 : 필수)  
+		 * @return 
+	     */
+		planDisplaySimpleParticipated: { path:'/display/planDisplaySimpleParticipated', method: 'POST', data: {
+			planDisplaySn: '', 				// 기획전시일련번호
+			participantCommentTitle: '', 	// 행사참여자댓글제목
+			participantComment: '', 		// 행사참여자댓글
+			termsAgreeYn: '' 				// 약관동의여부
+		} },
+		
+		/**
+	     * 기획전시 댓글수정 참여댓글형 행사참여 - 이미지 포함*************************************************************
+	     * @param requestEvent : planDisplaySn(기획전시일련번호) , eventParticipantSn 
+	     * @param planDisplayPost : participantComment(댓글),termsAgreeYn(약관동의여부 : 필수), 유지될 기존파일일련번호만 넘김
+	     * @param picture
+	     */
+		updateParticipated: { path:'/display/updateParticipated', method: 'POST', contentType:false, processData: false },
+		
+		/**
+	     * 기획전시 댓글삭제 *************************************************************
+	     * @param requestEvent : planDisplaySn(기획전시일련번호), eventParticipantSn(행사참여자일련번호(댓글일련번호))
+	     * @return booleanResult ( true, false)
+	     */
+		deleteParticipated: { path:'/display/deleteParticipated', method: 'GET',data: { 
+			planDisplaySn: null,
+			eventParticipantSn: null 
+			
+		}},
+
+		/**
+	     * 기획전시 댓글추천 *************************************************************
+	     * @param requestEvent : planDisplaySn(기획전시일련번호), eventParticipantSn(행사참여자일련번호(댓글일련번호))
+	     * @return booleanResult ( true, false)
+	     */
+		recommendParticipated : { path:'/display/recommendParticipated', method: 'GET', data: {
+			planDisplaySn: null,
+			eventParticipantSn: null 
+		}},
+		
+		/**
+	     * 기획전시 목록 *************************************************************
+	     * @param requestEvent : keyword(검색), status(기획전시상태코드 (PlanDisplayStatus) , Progress - 진행 , End - 종료)
+	     * 									, types(기획전시 유형코드 리스트(PlanDisplayType) = Link - URL링크 , General - 일반구성기획전시 , SameTimePur - 동시구매기획전시)
+	     * 									, order(정렬방식 (PlanDisplaySortMethod) = SortOrder , StartDt , Deadline
+	     * 									, offset , limit 
+	     */								 
+		planDisplayList: { path:'/display/planDisplayList', method: 'GET', data: {
+			keyword : null, 
+			status : null,
+			types : null, 
+			order : null, 	
+			offset : null,
+			limit : null 
+		}},
+		
+		
+		/**
+	     * 기획전시 상세 *************************************************************
+	     * @param requestEvent : planDisplaySn(기획전시일련번호) , memberSn 
+	     */
+		planDisplayEvent: { path:'/display/planDisplayEvent', method: 'GET', data: {
+			planDisplaySn: null // 기획전시일련번호 (Long 타입)
+			
+		}},
+		
+		//상품기획전 그룹별 상품목록
+		inPlanDisplayProdGrp: { path:'/display/inPlanDisplayProdGrp', method: 'POST' , data: {
+				planDisplayProdGrpSn: null, //기획전시상품그룹일련번호
+				offset: 0,
+				limit: 20,
+				includeFilters:false, 
+				displayCateDepth: 0,
+				displayCate:null,
+				brand:null,
+				flag:null,
+				attr:null,
+				priceRange:null
+			}
+		},
+		
 		/**
 		 * test *************************************************************
 		 */

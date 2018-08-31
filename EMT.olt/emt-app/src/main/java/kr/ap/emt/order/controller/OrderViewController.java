@@ -78,7 +78,7 @@ public class OrderViewController extends OrderBaseController {
 				orderSession.addOrdCartInfo(ordEx.getOrdSn(), new OrdCartInfo(Long.valueOf(cartSn), cartProdSnList));
 
 				/* 주문 상품목록 생성 */
-				makeOrdProdSet(ordEx, model);
+				makeOrdProdSet(ordEx, model, "Reception");
 
 				model.addAttribute("result", true);
 				model.addAttribute("pageTitle", "주문/결제|에뛰드");
@@ -95,7 +95,7 @@ public class OrderViewController extends OrderBaseController {
 				orderSession.addOrdCartInfo(ordEx.getOrdSn(), new OrdCartInfo(cartSession.getCartSn(), null));
 
 				/* 주문 상품목록 생성 */
-				makeOrdProdSet(ordEx, model);
+				makeOrdProdSet(ordEx, model, "Reception");
 
 				model.addAttribute("result", true);
 				model.addAttribute("pageTitle", "주문/결제|에뛰드");
@@ -130,14 +130,14 @@ public class OrderViewController extends OrderBaseController {
 	}
 
 	/**
-	 * 주문서접수완료(실시간 계좌이체 Get)
+	 * 주문서접수완료(모바일 실시간 계좌이체)
 	 *
 	 * @param request
 	 * @param model
 	 * @return
 	 */
-	@PageTitle(title = "결제완료|에뛰드")
-    @GetMapping("/ordComplete")
+	//@PageTitle(title = "결제완료|에뛰드")
+    @PostMapping("/ordBankComplete")
     public String ordBankComplete(HttpServletRequest request, Model model) {
         //TODO aki : 리턴되는 결과값 없음, 세션에서 주문번호 꺼내서 완료 페이지로 이동
 		OrderSession orderSession = getOrderSession();
@@ -146,7 +146,7 @@ public class OrderViewController extends OrderBaseController {
 		List<PayResult> payResultList = new ArrayList<PayResult>();
 
 		/* PG PayResult 만들기 */
-		PayResult pgPayResult = makePgPayResult(request, orderSession);
+		PayResult pgPayResult = makePgPayBankResult(request, orderSession);
 		if(pgPayResult != null) {
 			payResultList.add(pgPayResult);
 		}
@@ -159,8 +159,6 @@ public class OrderViewController extends OrderBaseController {
 
 			payResultList.add(depositPayResult);
 		}
-
-		body.setPayResultList(payResultList);
 
 		/* 1.주문완료 데이터 */
 		OrdEx ordEx = null;
@@ -175,7 +173,7 @@ public class OrderViewController extends OrderBaseController {
 		}
 		if(ordEx != null) {
 			/* 2.주문완료 상품목록 추출*/
-			makeOrdProdSet(ordEx, model);
+			makeOrdProdSet(ordEx, model, "Complete");
 
 			/* 주문완료했을 때 장바구니상품삭제 */
 			//removeOrdCartInfo(ordEx.getOrdSn());
@@ -228,7 +226,7 @@ public class OrderViewController extends OrderBaseController {
 		}
         if(ordEx != null) {
             /* 2.주문완료 상품목록 추출*/
-            makeOrdProdSet(ordEx, model);
+            makeOrdProdSet(ordEx, model, "Complete");
 
             /* 주문완료했을 때 장바구니상품삭제 */
             //removeOrdCartInfo(ordEx.getOrdSn());
@@ -255,7 +253,7 @@ public class OrderViewController extends OrderBaseController {
 			OrdEx ordEx = orderApi.getOrd(getOrderSession().getOrdSn());
 
 			/* 주문 상품목록 생성 */
-			makeOrdProdSet(ordEx, model);
+			makeOrdProdSet(ordEx, model, "Reception");
 
 			model.addAttribute("result", true);
 			model.addAttribute("pageTitle", "주문/결제|에뛰드");

@@ -479,7 +479,7 @@
 		 *
 		 * @param min
 		 */
-		timeCountDown: function ( min, callback ) {
+		timeCountDown: function ( min, callback, target ) {
 
 			var timer = false;
 
@@ -497,11 +497,12 @@
 
 					// Output the result in an element with id="time"
 					if ( seconds < 10 ) seconds = "0" + seconds;
-					$( '[name=timer]' ).html( minutes + ":" + seconds );
+					if(target == null) target = '';
+					$( target + '[name=timer]' ).html( minutes + ":" + seconds );
 
 					// If the count down is over, write some text
 					if ( distance < 0 ) {
-						$( '[name=timer]' ).html( "0:00" );
+						$( target +  '[name=timer]' ).html( "0:00" );
 						clearInterval( timer );
 						timer = false;
 			            if(callback)

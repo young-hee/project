@@ -56,8 +56,8 @@
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
-	<script ap:src="@{/handlebars-templates/compiled/order/final-price-amt-pcur.js}"></script> 		<!-- 최종 결제금액 영역 -->
-	<script ap:src="@{/handlebars-templates/compiled/order/complete-final-price-amt.js}"></script> 		<!-- 최종 결제금액 영역 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/complete-final-price-amt.js}"></script> 		<!-- 결제수단 영역 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/final-price-amt-pcur.js}"></script> 			<!-- 최종 결제금액 영역 -->
 
 	<script th:inline="javascript">
 		$( '.ui_spinner' ).spinner();
@@ -70,8 +70,8 @@
 			var storeOrdOnlineProdList = /*[[${#lists.size(storePickupOrdOnlineProdList)}]]*/ '0';					// 테이크아웃상품 카운트
 			var ordHistProdCnt = ordOnlineProdList > 0 ? $("input[name=ordHistProdCnt]").length : 0;					// 온라인 단위상품 카운트
 			var storeOrdHistProdCnt = storeOrdOnlineProdList > 0 ? $("input[name=storeOrdHistProdCnt]").length : 0;	// 테이크아웃 단위상품 카운트
-			var memberSn = /*[[${memberSn}]]*/ '0'; // 회원키
-			if(memberSn > 0){
+			var isApMember = /*[[${isApMember}]]*/ false;		// 회원여부
+			if(isApMember){
 				// 주문상품 확인 수량
 				$("#totalOrdOnlineProdCnt").html(parseInt(ordHistProdCnt) + parseInt(storeOrdHistProdCnt));
 				// 온라인쇼핑상품 수량(단위상품 수량합계)

@@ -12,22 +12,21 @@
 			<input type="hidden" name="mobile"/>
 			<input type="hidden" name="email"/>
 			<input type="hidden" name="goPayMethod"/>
+			<input type="hidden" name="payMethodSn"/>
+			<input type="hidden" name="payServiceCode"/>
+			<input type="hidden" name="payMethodCode"/>
+
 			<!--주문자 배송정보-->
-			<th:block th:if="${memberSn > 0}">
+			<th:block th:if="${isApMember}">
 				<input type="hidden" name="userId" th:value="${apMember.memberId}"/><!--W페이적용-->
 				<input type="hidden" name="purchaserName" th:value="${apMember.name.name1}"/>
 				<input type="hidden" name="purchaserPhoneNo" th:value="${#IntegUtil.hyphenPhoneNumber(apMember.phoneNo1.phoneNo)}"/>
 				<!--<input type="hidden" name="purchaserAddress" th:value="${apMember.address.address1} + ' ' +${apMember.address.address2}"/>-->
 				<input type="hidden" name="purchaserEmailAddress" th:value="${apMember.emailAddress}"/>
-<!--
-				<dd id="orderMemberName" th:text="${apMember.name.name1}">홍길동</dd>
-				<dt>휴대폰번호</dt>
-				<dd id="orderMemberPhoneNo" th:text="${#IntegUtil.hyphenPhoneNumber(apMember.phoneNo1.phoneNo)}">010-0000-0000</dd>
-				<dt>이메일</dt>
-				<dd id="orderMemberEmail" th:text="${apMember.emailAddress}">이메일을 등록해주세요.<em>(필수)</em></dd>
--->
 			</th:block>
+
 			<!--수취인 배송정보-->
+			<input type="hidden" name="addressType" value="LATELY"/>
 			<input type="hidden" name="recipientName"/>
 			<input type="hidden" name="recipientPhoneNo"/>
 			<input type="hidden" name="recipientEmailAddress"/>
@@ -35,6 +34,7 @@
 			<input type="hidden" name="recipientAddress1"/>
 			<input type="hidden" name="recipientAddress2"/>
 			<!--편의점택배 배송정보-->
+			<input type="hidden" name="addressStoreType" value="MEMBER"/>
 			<input type="hidden" name="storeHeadCd"/>
 			<input type="hidden" name="storeShopCd"/>
 			<input type="hidden" name="storeNm"/>
@@ -73,9 +73,15 @@
 				<div class="form_btns">
 					<button class="btn_lg_primary" type="button" id="orderPayment" th:text="${#IntegUtil.toCommaNumber(ordEx.ordHistEx.finalPamtPcur)} + '원 결제하기'">0원 결제하기</button>
 				</div>
+				<input type="hidden" name="finalPamtPcur" value="${ordEx.ordHistEx.finalPamtPcur}">
 			</fieldset>
 			<!--결제수단 별 유의사항-->
 			<th:block ap:replace="~{order/fragment/order-reception-payment/order-payment-notice-info}"/>
+		</div>
+		<div class="loading_full_order" id="orderLoading" style="min-height: 100px; display: none">
+			<div class="icon_large">
+				<img alt="" ap:src="@{/images/common/img_page_loading.png}">
+			</div>
 		</div>
 	</div>
 	<!-- // page contents -->
@@ -84,20 +90,24 @@
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
-	<script ap:src="@{/handlebars-templates/compiled/my/location-auth.js}"></script> 				<!--위치기반 동의 -->
-	<script ap:src="@{/handlebars-templates/compiled/order/layer-order-non-member-02.js}"></script>	<!-- 비회원 개인정보 수집동의 -->
-	<script ap:src="@{/handlebars-templates/compiled/order/layer-info-change.js}"></script> 		<!--주문고객 정보변경 Layer -->
+	<script ap:src="@{/handlebars-templates/compiled/my/location-auth.js}"></script> 						<!--위치기반 동의 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/layer-order-non-member-02.js}"></script>			<!-- 비회원 개인정보 수집동의 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/layer-info-change.js}"></script> 				<!--주문고객 정보변경 Layer -->
 
-	<script ap:src="@{/handlebars-templates/compiled/order/gift-packing-qty-info.js}"></script>					<!-- 쇼핑백 -->
-	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use.js}"></script> 		<!--사용가능한 쿠폰목록 Layer-->
+	<script ap:src="@{/handlebars-templates/compiled/order/gift-packing-qty-info.js}"></script>				<!-- 쇼핑백 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use.js}"></script> 				<!--사용가능한 쿠폰목록 Layer-->
 	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use-avail.js}"></script> 		<!--사용가능한 쿠폰목록 -->
 	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use-download.js}"></script> 		<!--다운로드 쿠폰목록 -->
-	<script ap:src="@{/handlebars-templates/compiled/order/coupon-use-list.js}"></script> 		<!--선택된 쿠폰목록 -->
-	<script ap:src="@{/handlebars-templates/compiled/order/final-price-amt-pcur.js}"></script> 		<!-- 최종 결제금액 영역 -->
-	<script ap:src="@{/handlebars-templates/compiled/order/order-unit-award-info.js}"></script> 		<!-- 주문단위증정 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/coupon-use-list.js}"></script> 					<!--선택된 쿠폰목록 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/final-price-amt-pcur.js}"></script> 				<!-- 최종 결제금액 영역 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/order-unit-award-info.js}"></script> 			<!-- 주문단위증정 -->
 
 	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
 	<script th:inline="javascript">
+
+		var payPopup,
+			isApMember = /*[[${isApMember}]]*/ false;
+
 		$( document ).ready(function() {
 			init();
 
@@ -112,6 +122,8 @@
 				}
 			}
 
+			$('#footer').remove();
+
 		});
 		// 주소 찾기
 		$( '.ui_find_addresses' ).findAddresses();
@@ -125,8 +137,7 @@
 			var storeOrdOnlineProdList = /*[[${#lists.size(storePickupOrdOnlineProdList)}]]*/ '0';					// 테이크아웃상품 카운트
 			var ordHistProdCnt = ordOnlineProdList > 0 ? $("input[name=ordHistProdCnt]").length : 0;				// 온라인 단위상품 카운트
 			var storeOrdHistProdCnt = storeOrdOnlineProdList > 0 ? $("input[name=storeOrdHistProdCnt]").length : 0;	// 테이크아웃 단위상품 카운트
-			var memberSn = /*[[${memberSn}]]*/ '0'; // 회원키
-			if(memberSn > 0){
+			if(isApMember){
 				// 주문상품 확인 수량
 				$("#totalOrdOnlineProdCnt").html(parseInt(ordHistProdCnt) + parseInt(storeOrdHistProdCnt));
 				// 온라인쇼핑상품 수량(단위상품 수량합계)
@@ -143,13 +154,61 @@
 			}
 		}
 
-		var payPopup;
 		$("#orderPayment").on('click', function() {
+
+			//배송지 체크로직
+			var shipType = $('input[name=shipType]').val();
+			if (shipType == 'SHIP') {
+				if (isApMember) {
+					//일반택배------------
+					//최근배송지
+					var addressType = $('input[name=addressType]').val();
+					if (addressType == 'LATELY'
+						&& ($('#recipientName').val() == null
+							|| $('#recipientPhoneNo').val() == null
+							|| $('#recipientEmailAddress').val() == null
+							|| $('#recipientZipCode').val() == null
+							|| $('#recipientAddress1').val() == null
+							|| $('#recipientAddress2').val() == null)) {
+						AP.modal.alert("최근배송지 정보가 존재하지 않습니다.");
+						return;
+					}
+					//기본배송지
+					else if (addressType == 'NOMAL'
+						&& ($('#addressName').val() == null
+							|| $('#addressPhoneNo').val() == null
+							|| $('#addressZipCode').val() == null
+							|| $('#addressAddress1').val() == null
+							|| $('#addressAddress2').val() == null)) {
+						AP.modal.alert("기본배송지 정보가 존재하지 않습니다.");
+						return;
+					}
+					//새로입력(form validation)
+					/*else if (addressType == 'NEW'
+                        && ($('#userName').val() == null
+                            || $('#userPhoneNo').val() == null
+                            || $('#userPostCode').val() == null
+                            || $('#userAddress1').val() == null
+                            || $('#userAddress2').val() == null)) {
+                        AP.modal.alert("주소정보를 입력해 주세요.");
+                        return;
+                    }*/
+				}
+			}
+			else if (shipType == 'STORE') {
+
+				//편의점-----------
+				if ($('#cStoreName').val() == ''
+						|| $('#cStorePhoneNo').val() == '') {
+					AP.modal.alert("편의점정보를 선택해 주세요.");
+					return;
+				}
+			}
+
 			//카드결제 필요없으면 선택 취소
-			var memberSn		 = /*[[${memberSn}]]*/ '0'; // 회원키
 			var finalPamtPcur	= $("[name=finalPamtPcur]").val() == '' || $("[name=finalPamtPcur]").val() == undefined ? 0 : $("[name=finalPamtPcur]").val();	// 최종결제금액
 			var depositPrice	= $("[name=depositPrice]").val() == '' || $("[name=depositPrice]").val() == undefined ? 0 : $("[name=depositPrice]").val();		// 예치금
-			var pgPrice 		= memberSn > 0 ? finalPamtPcur - parseInt(depositPrice) : finalPamtPcur;		// 최종결제금액 - 예치금사용금액
+			var pgPrice 		= isApMember ? finalPamtPcur - parseInt(depositPrice) : finalPamtPcur;		// 최종결제금액 - 예치금사용금액
 			if (pgPrice <= 0) {
 				$.each($('[name=payMethod]'), function (index, item) {
 					if ($(this).hasClass("on")) {
@@ -159,40 +218,78 @@
 				});
 			}
 
-			var $checkbox = $('input[id="orderAgree"]');
-			if($checkbox.is(':checked')) {
-				var $form = $( 'form.order-validate' );
-				//$form.validate().settings.ignore = "";
-				if ( $form.valid() ) {
-					ordReceptPayAmt();
+			var $form = $( 'form.order-validate' );
+			//$form.validate().settings.ignore = "";
+
+			if ( $form.valid() ) {
+
+				//약관동의 여부
+				var $checkbox = $('input[id="orderAgree"]');
+				if ($checkbox.is(':checked')) {
+
+					//주문사은품 선택 안내
+					if ($('[select-required]').length > 0 && $('[select-required]:checked').length == 0) {
+
+						var msg = null;
+						if ($('[all-required]').length == 0) {
+							//선택지급만 존재
+							msg = '주문증정 사은품을 선택하지 않았습니다. <br/>결제를 진행하시겠습니까?';
+						} else {
+							//전체지급, 선택지급 혼용
+							msg = '선택하지 않은 주문증정 사은품이 있습니다. <br/>선택하지 않고 결제를 진행하시겠습니까?';
+						}
+						AP.modal.info({
+							contents: msg,
+							confirmLabel: '확인',
+							cancelLabel: '취소'
+						}).addListener('modal-close', function (e) {
+							if (e.closeType === 'confirm') {
+								//주문사은품 선택하지 않고 결제 진행.
+								ordReceptPayAmt();
+							} else {
+								//주문사은품 선택하기로
+								$('#ordUnitAcc').addClass("on");
+								$( '.ui_accordion' ).accordion('clear').accordion();
+							}
+						});
+					} else {
+						//주문사은품 선택했고 결제 진행.
+						ordReceptPayAmt();
+					}
+
+				} else {
+					AP.modal.alert("위 상품의 판매조건을 확인하였으며, <br/>구매진행에 동의해주세요.");
 				}
-			}else{
-				AP.modal.alert("위 상품의 판매조건을 확인하였으며, 구매진행에 동의해주세요.");
 			}
+
 		});
 
 		/* 결제하기(최종결제수단선택) */
 		function ordReceptPayAmt() {
-			/*************************************** 임시 적용 start ***************************************/
-			var payMethod = $("input:radio[name=payMethod]:checked").val();
-			if(payMethod == "account_transfer" || payMethod == "remit_bank") {
-				AP.modal.alert("준비중입니다. 다른 결제수단을 선택해 주세요.");
-			}
-			/*************************************** 임시 적용 end******************************************/
 
-			var memberSn 		= /*[[${memberSn}]]*/ '0'; // 회원키
+			//주문자 정보 세팅
+			var userName = $("input[name=purchaserName]").val();
+			var userPhoneNo = $("input[name=purchaserPhoneNo]").val();
+			var userEmail = $("input[name=purchaserEmailAddress]").val();
+			if(userName != "" || userPhoneNo != ""){
+				$('input[name=buyerName]').attr('value', userName);
+				$('input[name=mobile]').attr('value', userPhoneNo);
+				$('input[name=email]').attr('value', userEmail);
+			}
+
 			var ordSn			= /*[[${ordEx.ordSn}]]*/ '0';													// 주문번호
 			var finalPamtPcur	= $("[name=finalPamtPcur]").val() == '' || $("[name=finalPamtPcur]").val() == undefined ? 0 : $("[name=finalPamtPcur]").val();	// 최종결제금액
 			var depositPrice	= $("[name=depositPrice]").val() == '' || $("[name=depositPrice]").val() == undefined ? 0 : $("[name=depositPrice]").val();	// 예치금
-			var pgPrice 		= memberSn > 0 ? finalPamtPcur - parseInt(depositPrice) : finalPamtPcur;		// 최종결제금액 - 예치금사용금액
+			var pgPrice 		= isApMember ? finalPamtPcur - parseInt(depositPrice) : finalPamtPcur;		// 최종결제금액 - 예치금사용금액
 
 			// PG사 결제정보 세팅
-			var payMethodSn		= $('input:radio[name=payMethod]:checked').closest('span').find('[name=payMethodSn]').val(); 	// 결제수단일련번호
-			var payMethodCode	= $('input:radio[name=payMethod]:checked').closest('span').find('[name=payMethodCode]').val();	// 결제수단코드
-			var payServiceCode	= $('input:radio[name=payMethod]:checked').closest('span').find('[name=payServiceCode]').val();	// 결제서비스코드
-			var cardCo			= $("select[name=cardCo]").val();																// 신용카드사 선택
+			var payMethod 		= $("input:radio[name=payMethod]:checked").val();
+			var payMethodSn =  $("input[name=payMethodSn]").val();						// 결제수단일련번호
+			var payMethodCode =  $("input[name=payMethodCode]").val();					// 결제수단코드
+			var payServiceCode =  $("input[name=payServiceCode]").val();				// 결제서비스코드
+			var cardCo			= $("select[name=cardCo]").val();						// 신용카드사 선택
 			var creditcardCoSn	= $("select[name=cardCo] option:selected").attr("id");
-			var nextPayUseYn	= $("[name=nextPayUseYn]").val();																// 선택한 결제수단을 다음사용여부
+			var nextPayUseYn	= $("[name=nextPayUseYn]").val();
 
 			if (pgPrice > 0) {
 				if (depositPrice == 0) {
@@ -208,6 +305,8 @@
 				}
 				$('[name=price]').attr('value', pgPrice);
 			}
+
+			$('#orderLoading').show();
 			AP.api.ordReceptPayAmt({}, {
 				ordSn: ordSn,
 				payMethodSn : payMethodSn,
@@ -220,9 +319,12 @@
 			}).done(function (data) {
 				if (data.result == "success"){
 					ordReceptChange(ordSn, pgPrice);
+				} else {
+					AP.modal.alert("[api.ordReceptPayAmt]실패");
 				}
 			}).fail(function (e) {
-				AP.modal.alert("[ajax.fail]실패");
+				AP.modal.alert(e.responseJSON.errorData.message);
+				$('#orderLoading').hide();
 			}).always(function () {
 			});
 		}
@@ -244,8 +346,9 @@
 						$form.attr("action", "/order/ordComplete");
 						$form.submit();
 					}
+					$('#orderLoading').hide();
 				}else {
-					AP.modal.alert("[ajax.done]실패");
+					AP.modal.alert("[api.ordReceptChange]실패");
 				}
 			}).fail(function(xhr, textStatus, errorThrown) {
 				if (xhr.errorCode == 0) {
@@ -253,6 +356,7 @@
 				} else {
 					AP.modal.alert(xhr.errorMessage);
 				}
+				$('#orderLoading').hide();
 			}).always(function() {
 				//성공, 실패
 			});
@@ -266,6 +370,7 @@
 
 			//모두 새창으로 연결 (기확자 확인)
 			payPopup = window.open('about:blank','payPopup');
+
 			var $form = $("form[name='orderForm']");
 			
 			//상품명 대표 상품명 한개로 셋팅

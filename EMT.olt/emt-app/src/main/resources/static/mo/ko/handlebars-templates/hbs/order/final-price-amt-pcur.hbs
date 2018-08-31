@@ -41,16 +41,23 @@
 			<div class="inner_box">
 				<p class="total clear">
 					<strong>포장재</strong>
-					<b><strong class="num">{{getAmtMapPrice ordAmtMap 'ShipUnitPacking' '원'}}</strong>원</b><!--id="totalGiftPackingAmtBcur"-->
+					<b><strong class="num">{{getAmtMapPrice ordAmtMap 'ShipUnitPacking' '원'}}</strong></b>
 				</p>
 			</div>
 		{{/if}}
-
+		{{#if (checkAmtMapPrice ordAmtMap 'SpPriceAwardProd')}}
+			<div class="inner_box">
+				<p class="total clear">
+					<strong>구매특가</strong>
+					<b><strong class="num">{{getAmtMapPrice ordAmtMap 'SpPriceAwardProd' '원'}}</strong></b>
+				</p>
+			</div>
+		{{/if}}
 		{{#if (checkAmtMapPrice ordAmtMap 'CaclDefaultShipFee')}}
 			<div class="inner_box">
 				<p class="total clear">
 					<strong>배송비</strong>
-					<b><strong class="num">{{getAmtMapPrice ordAmtMap 'CaclDefaultShipFee' '원'}}</strong>원</b>
+					<b><strong class="num">{{getAmtMapPrice ordAmtMap 'CaclDefaultShipFee' '원'}}</strong></b>
 				</p>
 			</div>
 		{{/if}}
@@ -92,13 +99,13 @@
 					{{/if}}
 					{{#if (checkAmtMapPrice ordAmtMap 'MPlusNPromoDc')}}
 						<li class="clear">
-							<span>M+N할인쿠폰프로모션</span>
+							<span>M+N할인프로모션</span>
 							<span><span class="num">{{getAmtMapPrice ordAmtMap 'MPlusNPromoDc' '원'}}</span></span>
 						</li>
 					{{/if}}
 					{{#if (checkAmtMapPrice ordAmtMap 'SameTimePurPromoDc')}}
 						<li class="clear">
-							<span>동시구매쿠폰프로모션</span>
+							<span>동시구매프로모션</span>
 							<span><span class="num">{{getAmtMapPrice ordAmtMap 'SameTimePurPromoDc' '원'}}</span></span>
 						</li>
 					{{/if}}

@@ -12,8 +12,10 @@
 
 	<!-- page contents -->
 	<div class="ap_contents cart">
-		<!--공통 진행사항-->
+
+		<!--/* 결제 step */-->
 		<th:block ap:replace="~{cart/fragment/current :: tab (state = 1)}"/>
+
 		<form id="order-info" class="validate" method="post" action="/order/reception">
 			<!--주문접수 데이터-->
 			<input type="hidden" name="memberSn" th:value="${memberSn}"/>
@@ -40,9 +42,11 @@
 		<div class="align_right mgt20">
 			<button type="button" class="btn_md_form" onclick="selectRemoveCartProd()">선택 삭제</button>
 		</div>
-		<!--/* 결제 금액 내역 */-->
-		<div class="total_money" id="calculationResult">
-		</div>
+		<!--/* 최종 결제금액 */-->	<!-- /* 20180822:수정 */ -->
+		<dl class="total_money_list" id="calculationResult">
+		</dl>
+		<!--<div class="total_money" id="calculationResult">
+		</div>-->
 		<!--/* 주문결제 */-->
 		<div class="page_btns">
 			<button type="button" class="btn_lg_bordered" onclick="javascript:location.href='/main'">계속 쇼핑하기</button>
@@ -50,6 +54,14 @@
 		</div>
 	</div>
 	<!-- // page contents -->
+
+	<!--/* 로딩바 적용 */-->
+	<div class="loading_full_order" id="orderLoading" style="min-height: 100px; display: none">
+		<span>
+			<img ap:src="@{/images/common/loading.gif}" alt="">
+		</span>
+	</div>
+
 </div><!-- // #ap_container -->
 
 <th:block ap:fragment="layout-endpoint">
@@ -93,6 +105,8 @@
 			if (!result) {
 				AP.modal.alert(errorMessage + '(' + errorCode + ')<br/>' + errorAdditional.detail);
 			}
+			// 로딩바 종료
+			$('#orderLoading').hide();
 		}
 	});
 
@@ -214,7 +228,12 @@
 			$('#allOnlineProd').append(onlineHtml);
 		}
 		$('[name=chkBox]').on('click', function(e) {
+			/* 재고수량 체크 */
+			if(fnCheckPossibleQty($(this)) == false){
+				return;
+			}
 			if($(this).is(":checked")){
+				/* 맴버쉽,활동 포인트 체크 */
 				if(fncheckExchPoint($(this)) == false){
 					return;
 				}
@@ -277,7 +296,12 @@
 			$('#allStoreProd').append(storeHtml);
 		}
 		$('[name=takeoutChkBox]').on('click', function(e) {
+			/* 재고수량 체크 */
+			if(fnCheckPossibleQty($(this)) == false){
+				return;
+			}
 			if($(this).is(":checked")){
+				/* 맴버쉽,활동 포인트 체크 */
 				if(fncheckExchPoint($(this)) == false){
 					return;
 				}
@@ -481,6 +505,8 @@
 
 	/* 주소입력 매장 검색 */
 	function getTakeoutStore(keyword, offset, latitude, longitude) {
+		// 로딩바 시작
+		$('#orderLoading').show();
 		currentKeyword = keyword;
 		AP.api.takeoutStore({}, {
 			keyword: keyword,
@@ -497,12 +523,16 @@
 					showAddPaging(data.param.totalCount);
 				}
 			}
-			//성공
+			// 로딩바 종료
+			$('#orderLoading').hide();
 		}).fail(function (e) {
 			//실패
 			AP.modal.alert(e.responseJSON.errorData.message);
+			// 로딩바 종료
+			$('#orderLoading').hide();
 		}).always(function () {
-			//성공, 실패
+			// 로딩바 종료
+			$('#orderLoading').hide();
 		});
 	}
 
@@ -742,6 +772,8 @@
 
 	/* 매장선택 변경 */
 	function fnChangeStore(storeSn) {
+		// 로딩바 시작
+		$('#orderLoading').show();
 		takeoutModal.close();
 		AP.api.changeStore({}, {
 			cartSn : cartSn,
@@ -752,9 +784,15 @@
 				storeRegularList = data.storeRegularList;
 				setStoreSelect();
 			}
+			// 로딩바 종료
+			$('#orderLoading').hide();
 		}).fail(function (e) {
 			AP.modal.alert("fail");
+			// 로딩바 종료
+			$('#orderLoading').hide();
 		}).always(function () {
+			// 로딩바 종료
+			$('#orderLoading').hide();
 		});
 	}
 
@@ -777,16 +815,27 @@
 			return false;
 		}
 
+		// 테이크아웃 체크상품과 선택매장 재고확인
+		/*if(takeoutChkCnt > 0 && storeSelect != null){
+			if(storeSelect.invtEnoughType == 'No'){
+				AP.modal.alert('선택하신 매장의 재고가 없습니다.');
+				return false;
+			}
+			else if(storeSelect.invtEnoughType == 'NotEnougho'){
+				AP.modal.alert('선택하신 매장의 재고가 부족합니다.');
+				return false;
+			}
+		}*/
 		if(chkCnt > 0 && takeoutChkCnt > 0){
 			fnOrderReception(chkCnt, takeoutChkCnt);
 		}
 		else if(chkCnt > 0){
 			fnOrderProdReception(chkCnt, 0);
+
 		}
 		else if(takeoutChkCnt > 0){
 			fnOrderProdReception(0, takeoutChkCnt);
 		}
-
 		return true;
 	}
 
@@ -910,6 +959,38 @@
 		});
 	}
 
+	/* 재고수량 체크 */
+	function fnCheckPossibleQty(obj) {
+
+		// 주문수량
+		var cartProdQty	= obj.closest('.item_wrap').find('[cartProdQty]').attr('cartProdQty') == undefined ? obj.closest('.promotion').find('[cartProdQty]').attr('cartProdQty') : obj.closest('.item_wrap').find('[cartProdQty]').attr('cartProdQty');
+		// 최소수량
+		var minPurLimitQty	= obj.closest('.item_wrap').find('[minPurLimitQty]').attr('minPurLimitQty') == undefined ? obj.closest('.promotion').find('[minPurLimitQty]').attr('minPurLimitQty') : obj.closest('.item_wrap').find('[minPurLimitQty]').attr('minPurLimitQty');
+		// 최대수량
+		var maxPurLimitQty	= obj.closest('.item_wrap').find('[maxPurLimitQty]').attr('maxPurLimitQty') == undefined ? obj.closest('.promotion').find('[maxPurLimitQty]').attr('maxPurLimitQty') : obj.closest('.item_wrap').find('[maxPurLimitQty]').attr('maxPurLimitQty');
+
+		// 동시구매 수량잘 체크 되는지 확인할것!
+		/*console.log("cartProdQty : " + cartProdQty);
+		console.log("minPurLimitQty : " + minPurLimitQty);
+		console.log("maxPurLimitQty : " + maxPurLimitQty);*/
+
+		// 최소구매수량 > 주문수량
+		if( Number(minPurLimitQty) > Number(cartProdQty) ){
+			AP.modal.alert('선택한 상품은 ' + minPurLimitQty + '개 이상 구매 가능합니다.<br> 주문수량을 변경해 주세요.');
+			obj.attr('checked', false);
+			return false;
+		}
+
+		// 주문수량 > 최대구매수량
+		if( Number(cartProdQty) > Number(maxPurLimitQty) ){
+			AP.modal.alert('선택한 상품은 ' + maxPurLimitQty + '개 구매 가능합니다.<br> 주문수량을 변경해 주세요.');
+			obj.attr('checked', false);
+			return false;
+		}
+
+		return true;
+	}
+
 	/* 맴버쉽,활동 포인트 체크 */
 	function fncheckExchPoint(obj) {
 		if(memberSn > 0){
@@ -928,26 +1009,18 @@
 			});
 
 			if (activitySum > cartEx.cartMemberEx.activityPoints) {
-				AP.modal.alert('보유 진주알이 부족합니다. 상품을 다시 선택해주세요.');
-				$(obj).attr('checked', false);
+				AP.modal.alert('보유 진주알이 부족하여 구매하실 수 없습니다.<br> 다른 상품으로 선택해 주세요.');
+				obj.attr('checked', false);
 				return false;
-			}
-			else{
-				$(obj).attr('checked', true);
 			}
 
 			if(bpMembershipEx != null){
 				membershipPoints = bpMembershipEx.membershipPoints;
-			}else{
-				membershipPoints = 0;
 			}
-
 			if (membershipSum > membershipPoints) {
-				AP.modal.alert('보유 뷰티포인트가 부족합니다. 상품을 다시 선택해주세요.');
-				$(obj).attr('checked', false);
+				AP.modal.alert('보유 뷰티포인트가 부족하여 구매하실 수 없습니다.<br> 다른 상품으로 선택해 주세요.');
+				obj.attr('checked', false);
 				return false;
-			}else{
-				$(obj).attr('checked', true);
 			}
 			return true;
 		}
@@ -988,6 +1061,9 @@
 						});
 					});
 				}
+
+				// 로딩바 시작
+				$('#orderLoading').show();
 				jQuery.ajaxSettings.traditional = true;
 				AP.api.removeSelectCartProd({}, {
 					cartSn : cartSn,
@@ -1001,11 +1077,17 @@
 							setStoreProd();
 							setCalculationResult();
 							setProdCnt();
+							// 로딩바 종료
+							$('#orderLoading').hide();
 						});
 					}
 				}).fail(function (e) {
 					AP.modal.alert("fail");
+					// 로딩바 종료
+					$('#orderLoading').hide();
 				}).always(function () {
+					// 로딩바 종료
+					$('#orderLoading').hide();
 				});
 			}
 		});
@@ -1133,59 +1215,74 @@
 			prodSn: prodSn
 		}).done(function (data) {
 			if (data.result == "success") {
-				var modal = AP.modal.open({
-					templateKey: 'cart.layer-cart-03',
-					templateModel: { list : data.param, prodSn : prodSn }
-				});
+				if(data.param.length > 0){
+					var modal = AP.modal.open({
+						templateKey: 'cart.layer-cart-03',
+						templateModel: { list : data.param, prodSn : prodSn }
+					});
 
-				// design select 적용
-				$( '.ui_select' ).designSelectBox();
-				// selectBox 적용
-				modal.getElement().find( 'select' ).selectBox();
+					// design select 적용
+					$( '.ui_select' ).designSelectBox();
 
-				$('#b_save').off('click').on('click', function (e) {
-					var prodSnVal = $('[name=prodSn]').val();
-					if(prodSnVal == ''){
-						AP.modal.alert("변경하실 옵션을 선택하세요.");
-					}else{
-						if (xhr != null){
-							xhr.abort();
-						}
+					// selectBox 적용
+					modal.getElement().find( 'select' ).selectBox();
 
-						var indexed_array = {};
-						indexed_array['cartSn'] = cartSn;
-						indexed_array['cartProdSn'] = cartProdSn;
-						indexed_array['prodSn'] = prodSnVal;
-						indexed_array['cartProdQty'] = cartProdQty;
-						indexed_array['storePickupYn'] = storePickupYn;
-						indexed_array['modifyType'] = "O";
+					$('#b_save').off('click').on('click', function (e) {
+						var prodSnVal = $('[name=prodSn]').val();
+						if(prodSnVal == ''){
+							AP.modal.alert("변경하실 옵션을 선택하세요.");
+						}else{
+							// 로딩바 시작
+							$('#orderLoading').show();
 
-						xhr = $.ajax({
-							type: "PUT",
-							url: "/cart/modifyCartProd",
-							data: indexed_array,
-							error : function(xhr, textStatus, errorThrown) {},
-							success: function(data){
-								if (data.data) {
-									cartEx = data.data;
-									setOnlineProd();
-									setStoreProd();
-									setCalculationResult();
-									setProdCnt();
-									modal.close();
-								}
+							if (xhr != null){
+								xhr.abort();
 							}
-						});
-					}
-				});
-				$('#b_close').off('click').on('click', function (e) {
-					modal.close();
-				});
+
+							var indexed_array = {};
+							indexed_array['cartSn'] = cartSn;
+							indexed_array['cartProdSn'] = cartProdSn;
+							indexed_array['prodSn'] = prodSnVal;
+							indexed_array['cartProdQty'] = cartProdQty;
+							indexed_array['storePickupYn'] = storePickupYn;
+							indexed_array['modifyType'] = "O";
+
+							xhr = $.ajax({
+								type: "PUT",
+								url: "/cart/modifyCartProd",
+								data: indexed_array,
+								error : function(xhr, textStatus, errorThrown) {
+									// 로딩바 종료
+									$('#orderLoading').hide();
+								},
+								success: function(data){
+									if (data.data) {
+										cartEx = data.data;
+										calculateSelectCartProds();
+										setOnlineProd();
+										setStoreProd();
+										setCalculationResult();
+										setProdCnt();
+										AP.modal.alert("변경 처리되었습니다.");
+										// 로딩바 종료
+										$('#orderLoading').hide();
+										modal.close();
+									}
+								}
+							});
+						}
+					});
+					$('#b_close').off('click').on('click', function (e) {
+						modal.close();
+					});
+				}
+				else{
+					AP.modal.alert("변경 가능한 옵션상품이 없습니다.");
+				}
 			}
 		}).fail(function (e) {
 			AP.modal.alert("[ajax.fail]실패");
 		}).always(function () {
-
 		});
 	}
 
@@ -1246,6 +1343,16 @@
 				}
 			}
 		});
+	}
+
+	/* 포인트 상품 페이지 이동*/
+	function goStore(storeType){
+		if(storeType == 'activity'){
+			location.href = "/display/category/pearl_shop?upperMenuId=pearl_shop&categoryType=prod_thema";
+		}
+		else{
+			location.href = "/display/category/beauty_point_shop?upperMenuId=beauty_point_shop&categoryType=prod_thema";
+		}
 	}
 	</script>
 </th:block>

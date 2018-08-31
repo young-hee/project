@@ -1,12 +1,11 @@
 package kr.ap.amt.order.controller;
 
-import kr.ap.amt.order.vo.OrdStoreDTO;
-import kr.ap.amt.payment.config.InicisPgProperties;
 import kr.ap.comm.cart.CartSession;
 import kr.ap.comm.cart.OrdCartInfo;
 import kr.ap.comm.config.interceptor.PageTitle;
-import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.order.OrderSession;
+import kr.ap.amt.order.vo.OrdStoreDTO;
+import kr.ap.amt.payment.config.InicisPgProperties;
 import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.BooleanResult;
 import net.g1project.ecp.api.model.order.order.*;
@@ -15,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,21 +52,21 @@ public class OrderViewController extends OrderBaseController {
 	 * @param redirectAttributes
 	 * @return
 	 */
-	//@PageTitle(title = "주문/결제|AP몰")
+	//@PageTitle(title = "주문/결제|에뛰드")
 	@PostMapping("/reception")
 	public String receiveOrder(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
 
 		OrderSession orderSession = getOrderSession();
-		CartSession cartSession = getCartSession();
 
 		/* 주문 변경 정보 저장*/
 		orderSession.setOrdReceptChange(new OrdReceptChange());
-		setOrderSession(orderSession);
 
 		OrdEx ordEx = new OrdEx();
 
 		/* 주문진입 경로(cart:장바구니, null:바로구매) */
 		String orderFlag = request.getParameter("orderFlag");
+		String pageTitle = "주문/결제|AP몰";
+
 		if("cart".equals(orderFlag)){
 			String cartSn = request.getParameter("cartSn");
 			String onlineProdSnArr = request.getParameter("onlineProdSnArr") == null ? "" : request.getParameter("onlineProdSnArr");
@@ -82,10 +80,10 @@ public class OrderViewController extends OrderBaseController {
 				orderSession.addOrdCartInfo(ordEx.getOrdSn(), new OrdCartInfo(Long.valueOf(cartSn), cartProdSnList));
 
 				/* 주문 상품목록 생성 */
-				makeOrdProdSet(ordEx, model);
+				makeOrdProdSetApMall(ordEx, model);
 
 				model.addAttribute("result", true);
-				model.addAttribute("pageTitle", "주문/결제|에뛰드");
+				model.addAttribute("pageTitle", pageTitle);
 			} catch (ApiException e) {
 				return redirectOrdErr(request, redirectAttributes, e);
 			}
@@ -94,14 +92,15 @@ public class OrderViewController extends OrderBaseController {
 
 			//바로구매
 			try {
+				CartSession cartSession = getCartSession();
 				ordEx = createOrder(cartSession.getCartSn(), null);/* 주문한 장바구니 상품 목록 세션에 저장 */
 				orderSession.addOrdCartInfo(ordEx.getOrdSn(), new OrdCartInfo(cartSession.getCartSn(), null));
 
 				/* 주문 상품목록 생성 */
-				makeOrdProdSet(ordEx, model);
+				makeOrdProdSetApMall(ordEx, model);
 
 				model.addAttribute("result", true);
-				model.addAttribute("pageTitle", "주문/결제|에뛰드");
+				model.addAttribute("pageTitle", pageTitle);
 			} catch (ApiException e) {
 				return redirectOrdErr(request, redirectAttributes, e);
 			}
@@ -143,7 +142,6 @@ public class OrderViewController extends OrderBaseController {
     @GetMapping("/ordComplete")
     public String ordBankComplete(HttpServletRequest request, Model model) {
         //TODO aki : 리턴되는 결과값 없음, 세션에서 주문번호 꺼내서 완료 페이지로 이동
-
 		OrderSession orderSession = getOrderSession();
 
 		OrdReceptComplete body = new OrdReceptComplete();
@@ -207,18 +205,18 @@ public class OrderViewController extends OrderBaseController {
         if(pgPayResult != null) {
             payResultList.add(pgPayResult);
         }
-        
+
         /* Deposit PayResult 만들기 */
         if(orderSession.getDepositPrice().compareTo(BigDecimal.ZERO) > 0) {
             PayResult depositPayResult = new PayResult();
             depositPayResult.setDepositYn(CODE_Y);
             depositPayResult.setPayAmt(orderSession.getDepositPrice());
-            
+
             payResultList.add(depositPayResult);
         }
-        
+
         body.setPayResultList(payResultList);
-        
+
         /* 1.주문완료 데이터 */
 		OrdEx ordEx = null;
 		try {
@@ -255,10 +253,8 @@ public class OrderViewController extends OrderBaseController {
 	@GetMapping("/reception")
 	public String redirectOrderReception(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
 
-		OrderSession orderSession = getOrderSession();
-
 		try {
-			OrdEx ordEx = orderApi.getOrd(orderSession.getOrdSn());
+			OrdEx ordEx = orderApi.getOrd(getOrderSession().getOrdSn());
 
 			/* 주문 상품목록 생성 */
 			makeOrdProdSet(ordEx, model);
@@ -315,7 +311,7 @@ public class OrderViewController extends OrderBaseController {
 
 					NotifyAccountDeposit nad = new NotifyAccountDeposit();
 					nad.setPayMethodCode(PAY_METHOD_CODE_VIRTUAL_ACCOUNT);  // virtual-account
-					nad.setPgTradeNo(noTid);								// 거래번호
+					//nad.setPgTradeNo(noTid);								// 거래번호
 					nad.setVirtualDepositBankAcNo(noVacct); 				// 가상계좌번호
 					nad.setVirtualBankAcDepositDt(date);
 					result = orderApi.notifyAccountDeposit(noOid, nad);
@@ -381,6 +377,7 @@ public class OrderViewController extends OrderBaseController {
 				if ("VBANK".equals(pType)) {
 					NotifyAccountDeposit nad = new NotifyAccountDeposit();
 					nad.setPayMethodCode(PAY_METHOD_CODE_VIRTUAL_ACCOUNT);  // virtual-account
+					nad.setPgTradeNo(pTid);
 					nad.setVirtualBankAcDepositDt(date);
 					result = orderApi.notifyAccountDeposit(ordNo, nad);
 				}
@@ -392,7 +389,8 @@ public class OrderViewController extends OrderBaseController {
 					if ("BANK".equals(pType)) {
 						NotifyAccountDeposit nad = new NotifyAccountDeposit();
 						nad.setPayMethodCode(PAY_METHOD_CODE_BANK_AC_TRANSFER);  // bank-ac-transfer
-						nad.setVirtualBankAcDepositDt(date);
+						nad.setPgTradeNo(pTid);
+						//nad.setVirtualBankAcDepositDt(date);
 						result = orderApi.notifyAccountDeposit(ordNo, nad);
 					}
 				}

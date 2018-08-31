@@ -129,6 +129,20 @@ public class PaymentViewController extends AbstractController {
      
     }
     
+    @GetMapping("/iniBankComplete")//주문완료페이지 - 실시간 계좌이체 
+    public String iniBankComplete(Model model, HttpServletRequest request) throws Exception {
+        
+    	HashMap<String, String> resultMap = new HashMap<String, String>();
+        resultMap.put("resultCode", "00");
+        resultMap.put("P_STATUS", "00");
+        
+        model.addAttribute("resultMap", resultMap);
+    	
+    	return "payment/iniBankComplete";
+     
+    }
+    
+    
    /* private String getEuckrStr(String str) {
 		try {
 			String euckr = new String(str.getBytes("iso-8859-1"), "euc-kr");

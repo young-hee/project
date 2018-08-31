@@ -18,7 +18,6 @@
          */
         accordion: function ( method, value ) {
             var pluginName = 'accordion';
-
             if ( typeof method === 'string' ) {
                 return plugin.callMethod( this, pluginName, method, value );
             } else {
@@ -47,6 +46,7 @@
 
         /* ==================== Public Methods ==================== */
         this.clear = function () {
+        	console.log('clear');
             _$target.off( 'click', '>dl >dt >button', eventHandler );
             plugin.remove( _$target, _pluginName );
         };

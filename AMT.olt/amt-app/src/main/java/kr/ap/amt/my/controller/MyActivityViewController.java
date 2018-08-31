@@ -121,7 +121,7 @@ public class MyActivityViewController extends AbstractController {
 		 * PC
 		 */
 		if(isPcDevice()) {
-			return "my/my-activity.1";
+			return "my/my-inquiry";
 		}
 
 		return null;

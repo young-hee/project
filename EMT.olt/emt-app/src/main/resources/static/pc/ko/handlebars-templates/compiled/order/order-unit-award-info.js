@@ -119,7 +119,7 @@ this["AP"]["handlebars"]["order"]["order-unit-award-info"] = Handlebars.template
     + alias2(alias1((depths[1] != null ? depths[1].promoSn : depths[1]), depth0))
     + "\" data-qty=\""
     + alias2(alias1((depth0 != null ? depth0.awardUnitQty : depth0), depth0))
-    + "\" data-type=\"Prod\">\n";
+    + "\" data-type=\"Prod\" all-required=\"free-gift\">\n";
 },"18":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
@@ -133,7 +133,7 @@ this["AP"]["handlebars"]["order"]["order-unit-award-info"] = Handlebars.template
     + alias2(alias1((depths[1] != null ? depths[1].promoSn : depths[1]), depth0))
     + "\" data-qty=\""
     + alias2(alias1((depth0 != null ? depth0.awardUnitQty : depth0), depth0))
-    + "\" data-type=\"Prod\">\n";
+    + "\" data-type=\"Prod\" select-required=\"free-gift\">\n";
 },"20":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
@@ -151,7 +151,7 @@ this["AP"]["handlebars"]["order"]["order-unit-award-info"] = Handlebars.template
     + alias2(alias1((depths[1] != null ? depths[1].promoSn : depths[1]), depth0))
     + "\" data-qty=\""
     + alias2(alias1((depth0 != null ? depth0.awardUnitQty : depth0), depth0))
-    + "\" data-type=\"Prod\">\n";
+    + "\" data-type=\"Prod\" select-required=\"free-gift\">\n";
 },"23":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
@@ -323,7 +323,7 @@ this["AP"]["handlebars"]["order"]["order-unit-award-info"] = Handlebars.template
     + alias2(alias1((depths[1] != null ? depths[1].promoSn : depths[1]), depth0))
     + "\" data-qty=\""
     + alias2(alias1((depth0 != null ? depth0.awardUnitQty : depth0), depth0))
-    + "\" data-type=\"Giftcard \">\n";
+    + "\" data-type=\"Giftcard\">\n";
 },"48":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
@@ -337,7 +337,7 @@ this["AP"]["handlebars"]["order"]["order-unit-award-info"] = Handlebars.template
     + alias2(alias1((depths[1] != null ? depths[1].promoSn : depths[1]), depth0))
     + "\" data-qty=\""
     + alias2(alias1((depth0 != null ? depth0.awardUnitQty : depth0), depth0))
-    + "\" data-type=\"Giftcard \">\n";
+    + "\" data-type=\"Giftcard\">\n";
 },"50":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
@@ -355,13 +355,13 @@ this["AP"]["handlebars"]["order"]["order-unit-award-info"] = Handlebars.template
     + alias2(alias1((depths[1] != null ? depths[1].promoSn : depths[1]), depth0))
     + "\" data-qty=\""
     + alias2(alias1((depth0 != null ? depth0.awardUnitQty : depth0), depth0))
-    + "\" data-type=\"Giftcard \">\n";
+    + "\" data-type=\"Giftcard\">\n";
 },"53":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
   return "				<div class=\"relative title_area\">\n					<h4 class=\"h_title sub\">구매특가 or 사은품</h4>\n					<div class=\"date_btn_set\">\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordUnitAwardExProdList : depth0)) != null ? stack1.length : stack1),">",0,{"name":"xif","hash":{},"fn":container.program(54, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordUnitAwardExSpPriceList : depth0)) != null ? stack1.length : stack1),">",0,{"name":"xif","hash":{},"fn":container.program(56, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordUnitAwardExSpPriceList : depth0)) != null ? stack1.length : stack1),">",0,{"name":"xif","hash":{},"fn":container.program(54, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordUnitAwardExProdList : depth0)) != null ? stack1.length : stack1),">",0,{"name":"xif","hash":{},"fn":container.program(56, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "					</div>\n				</div>\n				<!--/* 구매특가 */-->\n				<ul class=\"freebies_list freebies1 notFirstPur\">\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordUnitAwardExSpPriceList : depth0)) != null ? stack1.length : stack1),">",0,{"name":"xif","hash":{},"fn":container.program(58, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "				</ul>\n				<!--/* 사은품 */-->\n				<ul class=\"freebies_list freebies2 notFirstPur\" style=\"display:none\">\n"
@@ -474,7 +474,7 @@ this["AP"]["handlebars"]["order"]["order-unit-award-info"] = Handlebars.template
     + alias2(alias1((depths[1] != null ? depths[1].promoSn : depths[1]), depth0))
     + "\" data-qty=\""
     + alias2(alias1((depth0 != null ? depth0.awardUnitQty : depth0), depth0))
-    + "\" data-type=\"Prod\">\n";
+    + "\" data-type=\"Prod\" all-required=\"free-gift\">\n";
 },"73":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
@@ -488,7 +488,7 @@ this["AP"]["handlebars"]["order"]["order-unit-award-info"] = Handlebars.template
     + alias2(alias1((depths[1] != null ? depths[1].promoSn : depths[1]), depth0))
     + "\" data-qty=\""
     + alias2(alias1((depth0 != null ? depth0.awardUnitQty : depth0), depth0))
-    + "\" data-type=\"Prod\">\n";
+    + "\" data-type=\"Prod\" select-required=\"free-gift\">\n";
 },"75":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
@@ -506,7 +506,7 @@ this["AP"]["handlebars"]["order"]["order-unit-award-info"] = Handlebars.template
     + alias2(alias1((depths[1] != null ? depths[1].promoSn : depths[1]), depth0))
     + "\" data-qty=\""
     + alias2(alias1((depth0 != null ? depth0.awardUnitQty : depth0), depth0))
-    + "\" data-type=\"Prod\">\n";
+    + "\" data-type=\"Prod\" select-required=\"free-gift\">\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 

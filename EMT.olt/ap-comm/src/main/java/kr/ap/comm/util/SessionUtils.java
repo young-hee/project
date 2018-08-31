@@ -1,14 +1,22 @@
 package kr.ap.comm.util;
 
+import kr.ap.comm.cart.CartSession;
+import kr.ap.comm.member.vo.MemberSession;
+import kr.ap.comm.order.OrderSession;
+import kr.ap.comm.support.constants.SessionKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.security.InvalidParameterException;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Helper class for session generation
@@ -213,5 +221,95 @@ public class SessionUtils {
             return this.createdTime;
         }
     }
-    
+
+	/**
+	 * {@code HttpSession}의 속성을 추출한다.
+	 *
+	 * @param session Http Session
+	 * @return 추출된 {@code HttpSession}의 속성
+	 */
+    public static Map<String, Object> extractSessionAttributes(final HttpSession session) {
+		final Map<String, Object> extracted = new HashMap<>();
+		final Enumeration<String> names = session.getAttributeNames();
+		while(names.hasMoreElements()) {
+			final String key = names.nextElement();
+			extracted.put(key, session.getAttribute(key));
+		}
+		return extracted;
+	}
+
+	/**
+	 * Session Fixation Protection을 적용한다.
+	 *
+	 * @param request Http Request
+	 */
+	public static void applyFixationProtection(final HttpServletRequest request) {
+		final HttpSession session = request.getSession(false);
+		if (session!=null) {
+			final Map<String, Object> transfer = extractSessionAttributes(session);
+			session.invalidate();
+			//새로운 세션 생성
+			final HttpSession newSession = request.getSession(true);
+			transfer.forEach((key, value) -> newSession.setAttribute(key, value));
+		}
+	}
+
+	public static MemberSession getMemberSession() {
+		final HttpServletRequest request = getRequest();
+		return getMemberSession(request);
+	}
+
+	public static MemberSession getMemberSession(HttpServletRequest request) {
+		final HttpSession session = request.getSession();
+		synchronized (WebUtils.getSessionMutex(session)) {
+			MemberSession memberSession = (MemberSession) WebUtils.getSessionAttribute(request, SessionKey.LOGIN_USER);
+			if (ObjectUtils.isEmpty(memberSession)) {
+				memberSession = new MemberSession();
+				WebUtils.setSessionAttribute(request, SessionKey.LOGIN_USER, memberSession);
+			}
+			return  memberSession;
+		}
+	}
+
+	public static CartSession getCartSession() {
+		final HttpServletRequest request = getRequest();
+		return getCartSession(request);
+	}
+
+	private static HttpServletRequest getRequest() {
+		return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+	}
+
+	public static CartSession getCartSession(HttpServletRequest request) {
+		final HttpSession session = request.getSession();
+		synchronized (WebUtils.getSessionMutex(session)) {
+			CartSession cartSession = (CartSession) WebUtils.getSessionAttribute(request, SessionKey.CART);
+			if (ObjectUtils.isEmpty(cartSession)) {
+				cartSession = new CartSession();
+				WebUtils.setSessionAttribute(request, SessionKey.CART, cartSession);
+			}
+			return cartSession;
+		}
+	}
+
+	public static OrderSession getOrderSession() {
+		return getOrderSession(getRequest());
+	}
+
+	public static OrderSession getOrderSession(HttpServletRequest request) {
+		final HttpSession session = request.getSession();
+		synchronized (WebUtils.getSessionMutex(session)) {
+			OrderSession orderSession = (OrderSession) WebUtils.getSessionAttribute(request, SessionKey.ORDER);
+			if (ObjectUtils.isEmpty(orderSession)) {
+				orderSession = new OrderSession();
+				WebUtils.setSessionAttribute(request, SessionKey.ORDER, orderSession);
+			}
+			return orderSession;
+		}
+	}
+
+	public static String getMallId() {
+		HttpServletRequest request = getRequest();
+		return (String) WebUtils.getSessionAttribute(request, SessionKey.MALL_ID);
+	}
 }

@@ -501,17 +501,40 @@
 		
 		/** html tag remove ===**/
 		removeHtmlTag : function(strHtml){
+			
 			strHtml = strHtml.replace(/<title.*?([ㄱ-힣]*).title>/ig, '');
 			strHtml = strHtml.replace(/<meta.*?>/ig, '');
 			strHtml = strHtml.replace(/<html>/ig, '');
 			strHtml = strHtml.replace(/<head>/ig, '');
 			strHtml = strHtml.replace(/<\/html>/ig, '');
 			strHtml = strHtml.replace(/<\/head>/ig, '');
-			//strHtml = strHtml.replace(/<br\/>/ig, '\n\r ');
+			//strHtml = strHtml.replace(/<br \/>/ig, '\r\n\r ');
 			//strHtml = strHtml.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, '');
 		 
 			return $.trim(strHtml); 
-		}		
+		},
+		
+		// html entires 제거 &nbsp; &amp; 등등..
+		replaceHtmlEntites : function(str) {
+			
+			var translate_re = /&(nbsp|amp|quot|lt|gt);/g;
+			var translate = {
+				    "nbsp": " ",
+				    "amp" : "&",
+				    "quot": "\"",
+				    "lt"  : "<",
+				    "gt"  : ">"
+				  };
+				
+				  
+			var cleanText = str.replace(/\xA0/g,' ');
+				
+				cleanText = cleanText.replace(translate_re, function(match,entity){
+					return translate[entity];
+				});	
+				
+				return cleanText;
+			}
     };
 
     AP.common = AP.common || Common;

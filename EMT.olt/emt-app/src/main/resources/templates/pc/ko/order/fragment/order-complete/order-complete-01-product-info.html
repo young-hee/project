@@ -1,16 +1,34 @@
 <!--/* 주문상품 확인 */-->
 <dl>
 	<dt>
-		<span>주문상품 확인 (<em id="totalOrdOnlineProdCnt">00</em>개)</span>
+		<span>주문상품 확인 (<em th:text="${ordCntMap.get('totalOrdOnlineProdCnt')}">00</em>개)</span>
 		<button type="button"><span class="sr_only">닫기</span></button>
 	</dt>
 	<dd>
 		<div class="cont">
 			<th:block th:if="${#lists.size(shippingOrdOnlineProdList) > 0}">
 				<h4 class="h_title sub">온라인 쇼핑상품 (<em id="shipOrdOnlineProdCnt">00</em>개)</h4>
-				<!--/* 옵션타입(그룹상품) */-->
+				<!--/* 일단상품 */-->
 				<th:block th:if="${#lists.size(shippingOrdOnlineProdList) > 0}">
 					<div class="item_wrap" th:each="ordOnlineProd : ${shippingOrdOnlineProdList}">
+						<th:block ap:replace="~{order/fragment/order-reception-product/order-ordonlineprod-info}"/>
+					</div>
+				</th:block>
+				<!--/* 묶음판매상품 */-->
+				<th:block th:if="${#lists.size(shippingBulkDcList) > 0}">
+					<th:block th:each="bulkDcOnlineProd : ${shippingBulkDcList}">
+						<th:block ap:replace="~{order/fragment/order-reception-product/order-bulkdc-info}"/>
+					</th:block>
+				</th:block>
+				<!--/* 뷰티포인트 */-->
+				<th:block th:if="${#lists.size(shippingOrdOnlineBeautyPointProdList) > 0}">
+					<div class="item_wrap" th:each="ordOnlineProd : ${shippingOrdOnlineBeautyPointProdList}" th:with="memberShip='P'">
+						<th:block ap:replace="~{order/fragment/order-reception-product/order-ordonlineprod-info}"/>
+					</div>
+				</th:block>
+				<!--/* 활동포인트 */-->
+				<th:block th:if="${#lists.size(shippingOrdOnlineActivityPointProdList) > 0}">
+					<div class="item_wrap" th:each="ordOnlineProd : ${shippingOrdOnlineActivityPointProdList}" th:with="memberShip='A'">
 						<th:block ap:replace="~{order/fragment/order-reception-product/order-ordonlineprod-info}"/>
 					</div>
 				</th:block>
@@ -26,15 +44,9 @@
 						<th:block ap:replace="~{order/fragment/order-reception-product/order-sametimepromo-info}"/>
 					</th:block>
 				</th:block>
-				<!--/* 뷰티포인트 */-->
-				<th:block th:if="${#lists.size(shippingOrdOnlineBeautyPointProdList) > 0}">
-					<div class="item_wrap" th:each="ordOnlineProd : ${shippingOrdOnlineBeautyPointProdList}">
-						<th:block ap:replace="~{order/fragment/order-reception-product/order-ordonlineprod-info}"/>
-					</div>
-				</th:block>
 			</th:block>
 
-			<th:block th:if="${#lists.size(storePickupOrdOnlineProdList) > 0 and memberSn > 0}">
+			<th:block th:if="${#lists.size(storePickupOrdOnlineProdList) > 0 and isApMember}">
 				<h4 class="h_title sub">테이크아웃 상품 (<em th:text="${storeOrdOnlineProdCnt}">00</em>개)</h4>
 
 				<!--/* 옵션타입 */-->

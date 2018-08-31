@@ -1,6 +1,6 @@
 <!--/* 주문사은품 */-->
 <dl id="ordUnit" th:if="${#lists.size(ordUnitAwardOrdPromoExList) > 0}">
-	<dt>
+	<dt id="ordUnitAcc">
 		<span>보너스 혜택</span>
 		<button type="button"><span class="sr_only">닫기</span></button>
 	</dt>
@@ -8,6 +8,9 @@
 	<script th:inline="javascript">
 		$( document ).ready(function() {
 			ordUnitInit();
+
+			//주문증정 '전제직급'시 화면 자동체크하기 때문에 별도 계산
+			changeOrdUnit('initLoading');
 		});
 
 		function ordUnitInit() {
@@ -24,7 +27,7 @@
 			}
 
 			//첫구매 영역
-			$('[name^=firstPur_]').off('click').on('click', function () {
+			$('[name^=firstPur_]').on('change', function () {
 				if ($(this).prop('checked')) {
 					if ($(this).data('methodCode') == 'Select') {
 						var type = $(this).data('type');
@@ -34,12 +37,12 @@
 							}
 						});
 					}
-					changeOrdUnit();
 				}
+				changeOrdUnit();
 			});
 
 			//주문단위 증정 Tab
-			$('[name=freebies]').off('click').on('click', function () {
+			$('[name=freebies]').on('change', function () {
 				if ($(this).prop('checked')) {
 					$('.notFirstPur').hide();
 					$('.' + this.id).show();
@@ -47,7 +50,7 @@
 			});
 
 			//주문단위 증정 영역
-			$('[name^=ordUnitAward_]').off('click').on('click', function () {
+			$('[name^=ordUnitAward_]').on('change', function () {
 				if ($(this).prop('checked')) {
 					if ($(this).data('methodCode') == 'Select') {
 						var type = $(this).data('type');
@@ -57,21 +60,23 @@
 							}
 						});
 					}
-					changeOrdUnit();
 				}
+				changeOrdUnit();
 			});
 
 			//선택취소
 			$('#cancelBtn').off('click').on('click', function () {
-				$('[name^=ordUnitAward_]').each(function (item) {
-					$(this).attr("checked", false);
-				});
-				changeOrdUnit();
+				if ($('[name^=ordUnitAward_]:checked').length > 0) {
+					$('[name^=ordUnitAward_]').each(function (item) {
+						$(this).attr("checked", false);
+					});
+					changeOrdUnit();
+				}
 			});
 		}
 
 		var xhr;
-		function changeOrdUnit() {
+		function changeOrdUnit(initLoading) {
 			var ordUnitAwardSnArr = [],
 				awardSelectQtyArr = [];
 
@@ -93,31 +98,40 @@
 				xhr.abort();
 			}
 
-			xhr = AP.api.ordReceptChangeOrdUnit({}, {
-				ordSn : ordSn,
-				ordUnitAwardSnArr : ordUnitAwardSnArr,
-				awardSelectQtyArr : awardSelectQtyArr,
-				membershipSn : $('[name=beauty_point]').data().membershipsn
-			}).done(function(data){
-				if (data.ordHistEx != null){
+			if (('initLoading' == initLoading && ordUnitAwardSnArr.length > 0 && awardSelectQtyArr.length > 0)
+				|| 'initLoading' != initLoading) {
 
-					amtPcurInitAjax(data);
+				xhr = AP.api.ordReceptChangeOrdUnit({}, {
+					ordSn : ordSn,
+					ordUnitAwardSnArr : ordUnitAwardSnArr,
+					awardSelectQtyArr : awardSelectQtyArr,
+					membershipSn : $('[name=beauty_point]').length > 0 ? $('[name=beauty_point]').data().membershipsn : null
+				}).done(function(data){
+					if (data.ordHistEx != null){
 
-					if ($('[name="depositPrice"]') != undefined && $('[name="depositPrice"]').val() != ""
-						|| $('[name="beauty_point"]') != undefined && $('[name="beauty_point"]').val() != "") {
-						AP.modal.alert('포장/쇼핑백 추가로 인해 포인트 및 예치금 사용이 초기화됩니다.');
-						$('[name="depositPrice"]').val('');
-						$('[name="beauty_point"]').val('');
+						if (data.ordAmtMap["SpPriceAwardProd"] > 0) {
+							amtPcurInitAjax(data, initLoading);
+						}
+
+						var isApMember = /*[[${isApMember}]]*/ null;
+						if (isApMember && 'initLoading' != initLoading) {
+							if ($('[name="depositPrice"]').length > 0 && $('[name="depositPrice"]').val() != ""
+								|| $('[name="beauty_point"]').length > 0 && $('[name="beauty_point"]').val() != "") {
+								AP.modal.alert('포장/쇼핑백 추가로 인해 포인트 및 예치금 사용이 초기화됩니다.');
+								$('[name="depositPrice"]').val('');
+								$('[name="beauty_point"]').val('');
+							}
+						}
 					}
-				}
-			}).fail(function (e) {
-				if (e.errorCode == "EAPI001") {
-					AP.modal.alert(e.responseJSON.errorData.message);
-				}
-			}).always(function () {
-				$('#orderLoading').hide();
-				jQuery.ajaxSettings.traditional = true;
-			});
+				}).fail(function (e) {
+					if (e.errorCode == "EAPI001") {
+						AP.modal.alert(e.responseJSON.errorData.message);
+					}
+				}).always(function () {
+					$('#orderLoading').hide();
+					jQuery.ajaxSettings.traditional = true;
+				});
+			}
 		}
 	</script>
 </dl>

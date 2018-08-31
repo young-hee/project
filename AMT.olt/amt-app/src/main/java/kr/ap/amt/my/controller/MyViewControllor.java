@@ -641,7 +641,7 @@ public class MyViewControllor extends AbstractController {
 		
 		if("Y".equals(getMemberSession().getMember().getEmployeeYn())) {
 			//FIXME 임직원 페이지로 이동.
-			return "redirect:/main";
+			return "redirect:/my/page/employeeBenefits";
 		}
 		
 		/**
@@ -659,6 +659,37 @@ public class MyViewControllor extends AbstractController {
 		}
 		
 		return null;
+	}
+	@PageTitle(title = "임직원 혜택")
+	@GetMapping("/employeeBenefits")
+	public String employeeBenefits() {
+		if("N".equals(getMemberSession().getMember().getEmployeeYn())) {
+			//FIXME 임직원 페이지로 이동.
+			return "redirect:/my/page/employee";
+		}
+		/**
+		 * Mobile
+		 */
+		if(isMobileDevice()) {
+			return "customer/pacific-shop_benefit01";
+		}
+
+		/**
+		 * PC
+		 */
+		if(isPcDevice()) {
+			return "customer/login.0";
+		}
+		
+		return null;
+		
+	}
+	
+	@PageTitle(title = "구매리뷰")
+	@GetMapping("/review")
+	public String review(Model model) {
+		
+		return "my/my-review";
 	}
 	
 	//=======================모바일 기능 구현 Method

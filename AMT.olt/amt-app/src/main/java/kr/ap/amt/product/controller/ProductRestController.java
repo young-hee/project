@@ -8,6 +8,8 @@ import kr.ap.comm.support.common.AbstractController;
 import net.g1project.ecp.api.model.sales.display.OnlineProdList;
 import net.g1project.ecp.api.model.sales.product.ProdReviewInfo;
 import net.g1project.ecp.api.model.sales.product.ProdReviewListInfo;
+import net.g1project.ecp.api.model.sales.product.ProdReviewWritableOrderInfo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -163,8 +165,31 @@ public class ProductRestController extends AbstractController {
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
 		try {
-    		ProdReviewListInfo prodReviewListInfo = productApi.getProductReviews(requestReview.getProdReviewUnit(), requestReview.getProdReviewType(), requestReview.getOffset(), requestReview.getLimit(), getMemberSn(), requestReview.getOnlineProdSn(), requestReview.getProdSn(), requestReview.getStyleCode(), requestReview.getProdReviewSort(), requestReview.getScope(), requestReview.getTopReviewOnlyYn(), requestReview.getTopReviewFirstYn(), (!requestReview.getStartDate().isEmpty()) ? sf.parse(requestReview.getStartDate()) : null, (!requestReview.getEndDate().isEmpty()) ? sf.parse(requestReview.getEndDate()) : null, "N");
+    		ProdReviewListInfo prodReviewListInfo = productApi.getProductReviews(requestReview.getProdReviewUnit(), requestReview.getProdReviewType(), requestReview.getOffset(), requestReview.getLimit(), getMemberSn(), requestReview.getOnlineProdSn(), requestReview.getProdSn(), requestReview.getStyleCode(), requestReview.getProdReviewSort(), requestReview.getScope(), requestReview.getTopReviewOnlyYn(), requestReview.getTopReviewFirstYn(), (!requestReview.getStartDate().isEmpty()) ? sf.parse(requestReview.getStartDate()) : null, (!requestReview.getEndDate().isEmpty()) ? sf.parse(requestReview.getEndDate()) : null, "N", null, null);
     		result.put("prodReviewListInfo", prodReviewListInfo);
+    		
+    		return ResponseEntity.ok(result);
+    	} catch (Exception e) {
+    		result.put("errorData", e);
+    		return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+    	}
+    }
+    
+    /**
+     * 상품평 미작성 목록 조회
+     * @param requestReview
+     * @return
+     */
+    @GetMapping("/getWritableReviewList")
+    @ResponseBody
+    public ResponseEntity<?> getWritableReviewList(RequestReview requestReview) {
+    	HashMap<String, Object> result = new HashMap<String, Object>();
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+
+		try {
+    		//미작성 구매후기.
+    		ProdReviewWritableOrderInfo productReviewWritableOrders = productApi.getProductReviewWritableOrders(getMemberSn(), null, requestReview.getOffset(), requestReview.getLimit());
+    		result.put("productReviewWritableOrders", productReviewWritableOrders);
     		
     		return ResponseEntity.ok(result);
     	} catch (Exception e) {

@@ -26,6 +26,7 @@ public class RequestReview {
 	private String startDate;
 	private String endDate;
 	private String status;
+	private String imageOnlyYn;
 
 	/*공통*/
 	private Integer offset;
@@ -125,5 +126,11 @@ public class RequestReview {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getImageOnlyYn() {
+		return imageOnlyYn;
+	}
+	public void setImageOnlyYn(String imageOnlyYn) {
+		this.imageOnlyYn = imageOnlyYn;
 	}
 }

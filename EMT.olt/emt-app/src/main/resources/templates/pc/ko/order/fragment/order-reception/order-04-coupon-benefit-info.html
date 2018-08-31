@@ -60,11 +60,13 @@
 							<ul class="coupon_list" id="coupon_list"></ul>
 						</dd>
 					</dl>
+					<th:block th:if="${isApMember}">
 					<dl class="beauty">
 						<dt><b>진주알</b></dt></strong>
 						<dd class="point"><span><b><strong th:text="${ordAmtMap.get('ActivityPointExch')}"></strong> 알</b></span></dd>
 					</dl>
-					<th:block th:if="${apMember != null and #lists.size(ordEx.ordMembershipExList) > 0}">
+					</th:block>
+					<th:block th:if="${isApMember and #lists.size(ordEx.ordMembershipExList) > 0}">
 						<dl class="beauty" th:each="ordMembershipEx : ${ordEx.ordMembershipExList}">
 							<th:block th:if="${ordMembershipEx.membershipServiceCode == 'BP'}">
 								<dt>
@@ -92,7 +94,7 @@
 									<span class="input_wrap bpoint">
 										<input type="number" title="사용할 포인트 입력" id="beauty_point" th:data-membershipSn="${ordMembershipEx.membershipSn}" name="beauty_point" value="" th:max="${ordMembershipEx.membershipAvailPoint}">
 									</span><b>P</b>
-									/ <span>사용가능 <th:block th:text="${#IntegUtil.toCommaNumber(ordMembershipEx.membershipAvailPoint)}"></th:block> P</span>
+									<!--/ <span>사용가능 <th:block th:text="${#IntegUtil.toCommaNumber(ordMembershipEx.membershipAvailPoint)}"></th:block> P</span>-->
 									/ <span>보유 <th:block th:text="${#IntegUtil.toCommaNumber(ordMembershipEx.membershipKeepingPoint)}"></th:block> P</span>
 								</dd>
 								<th:block th:if="${ordCntMap.get('membershipExchCnt') > 0}">
@@ -123,6 +125,7 @@
 						</dl>
 					</th:block>
 
+					<th:block th:if="${isApMember}">
 					<dl>
 						<dt><span class="check_wrap"><input type="checkbox" id="okcashbag" name="okcashbag">
 							<label for="okcashbag">OK캐시백 포인트</label></span>
@@ -154,6 +157,7 @@
 							<p class="text_notice light">OK캐쉬백 최소 사용 금액은 000점 이상 사용해 주세요 100P 단위로 사용 가능합니다.</p>
 						</dd>
 					</dl>
+					</th:block>
 				</div>
 			</div>
 		</div>
@@ -161,7 +165,6 @@
 
 	<script th:inline="javascript">
 		var ordSn = /*[[${ordEx.ordSn}]]*/ 0;
-		var memberSn = /*[[${memberSn}]]*/ null;
 		var modal;
 
 		//쿠폰조회
@@ -179,9 +182,19 @@
 			if (useMembershipPoint >= 0 && useMembershipPoint <= parseInt(this.max)) {
 				calculationPoint(membershipSn, useMembershipPoint);
 			} else {
-				AP.modal.alert("사용가능한 뷰티포인트는 " + this.max + "P입니다.");
-				$('[name=beauty_point]').val(this.max);
-				calculationPoint(membershipSn, this.max)
+				var max = this.max;
+				AP.modal.info({
+					contents: '사용가능한 뷰티포인트는 ' + max + 'P입니다.',
+					confirmLabel: '확인',
+					cancelLabel: '취소'
+				}).addListener('modal-close', function (e) {
+					if (e.closeType === 'confirm') {
+						$('[name=beauty_point]').val(max);
+						calculationPoint(membershipSn, max);
+					} else {
+						$('[name=beauty_point]').val('');
+					}
+				});
 			}
 
 		});
@@ -221,7 +234,7 @@
 
 		//보유한 쿠폰 Layer
 		function getCouponLayer(){
-			if (memberSn != null) {
+			if (isApMember) {
 				//layer 및 보유 쿠폰 조회
 				getAvailCouponList('first');
 			} else {
@@ -235,7 +248,7 @@
 				contents: {
 					templateKey: 'order.fullpage-coupon-use',
 					templateModel: {
-						memberSn: memberSn
+						isApMember : isApMember
 					}
 				},
 				sizeType: 'L',
@@ -278,7 +291,7 @@
 						} else if (xhr.errorCode == 'EAPI003') {
 							AP.modal.alert("쿠폰등록 실패했습니다, 쿠폰번호 확인하세요.");
 						} else {
-							AP.modal.alert(xhr.errorMessage);
+							AP.modal.alert("쿠폰등록 실패했습니다, 쿠폰번호 확인하세요.");
 						}
 					}).always(function() {
 						//성공, 실패
@@ -425,7 +438,7 @@
 			a_xhr = AP.api.ordReceptChangeCoupon({}, {
 				ordSn : ordSn,
 				memberKeepingCouponSnArr: couponSnArr,
-				membershipSn : $('[name=beauty_point]').data().membershipsn
+				membershipSn : $('[name=beauty_point]').length > 0 ? $('[name=beauty_point]').data().membershipsn : null
 			}).done(function (data) {
 
 				if (data != null) {
@@ -576,8 +589,8 @@
 
 			amtPcurInitAjax(data);
 
-			if ($('[name="depositPrice"]') != undefined && $('[name="depositPrice"]').val() != ""
-				|| $('[name="beauty_point"]') != undefined && $('[name="beauty_point"]').val() != "") {
+			if ($('[name="depositPrice"]').length > 0 && $('[name="depositPrice"]').val() != ""
+				|| $('[name="beauty_point"]').length > 0 && $('[name="beauty_point"]').val() != "") {
 				AP.modal.alert('쿠폰 사용으로 포인트 및 예치금 사용이 초기화됩니다. <br/>포인트 및 예치금 사용액을 다시 입력해 주세요.');
 				$('[name="depositPrice"]').val('');
 				$('[name="beauty_point"]').val('');

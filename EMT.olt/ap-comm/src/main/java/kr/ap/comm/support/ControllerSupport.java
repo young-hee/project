@@ -7,7 +7,6 @@ import kr.ap.comm.support.constants.APConstant;
 import net.g1project.ecp.api.model.sales.display.DisplayMenu;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
@@ -19,9 +18,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Priority;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -44,6 +47,10 @@ public class ControllerSupport extends AbstractController {
 	@Value("${platform.frontend.mall-id}")
 	private String mallId;
 
+	public static final String GNB_NOT_REQUIRED = "_GNB_NOT_REQUIRED_";
+
+	private static final Set<String> GNB_NOT_REQUIRED_URI = Collections.unmodifiableSet(new HashSet<>(Arrays.asList("/doLogout")));
+
 	/**
 	 * GNB 와 SubGNB Menu 데이터
 	 *
@@ -55,6 +62,12 @@ public class ControllerSupport extends AbstractController {
 		// 에러페이지 요청에서는 GNB 및 SubGNB 를 조회하지 않게 처리
 		String uri = request.getRequestURI();
 		if (uri.startsWith("/error")) {
+			return;
+		}
+		else if (model.containsAttribute(GNB_NOT_REQUIRED)) {
+			return;
+		}
+		else if (GNB_NOT_REQUIRED_URI.contains(uri)) {
 			return;
 		}
 
@@ -109,7 +122,7 @@ public class ControllerSupport extends AbstractController {
 		String cstmid = ""; //통합회원번호
 		String residno1 = ""; //생년월일
 		String gendDvCd = ""; //남녀구분
-		Long memberSn = 0L;
+		Long memberSn = null;
 		String phoneNo1 = "";
 		String phoneNo2 = "";
 

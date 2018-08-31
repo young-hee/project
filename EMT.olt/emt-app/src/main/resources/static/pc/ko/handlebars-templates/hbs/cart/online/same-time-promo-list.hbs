@@ -43,7 +43,7 @@
 				{{#if (gt @../index 0) }} <div class="item_wrap plus"> {{else}} <div class="item_wrap"> {{/if}}
 					<input type="hidden" name="index" value="{{counter @../index }}"/>
 					<input type="hidden" name="onlinePrdSn" value="{{ prodEx.prodSn }}"/>
-					<input type="hidden" name="cartProdSn" sameTimePromo="sameTimePromo" value="{{ cartProdSn }}"/>
+					<input type="hidden" name="cartProdSn" sameTimePromo="sameTimePromo" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}" value="{{ cartProdSn }}"/>
 					<input type="hidden" name="prdInfo_S_{{ @../../index }}" value="{{ cartProdSn }}"/>
 					<input type="hidden" name="saleDisplayStatus_S_{{ @../../index }}" value="{{ prodEx.saleDisplayStatus }}"/>
 					<div class="item_info">
@@ -65,35 +65,43 @@
 									{{/switch}}
 								{{/each}}
 							{{/if}}
-							<a href="#none" class="title" onclick="fnProdDetail({{ ../onlineProdSn }})">{{ ../onlineProdName }}</a>
+							<a href="#none" class="title" onclick="fnProdDetail({{ ../onlineProdSn }})">
+								{{#if (ne prodEx.saleDisplayStatus 'OnSale') }} <em>{{cartStatusTxt prodEx.saleDisplayStatus}}</em> {{/if}} {{ ../onlineProdName }}
+							</a>
 							{{#if (eq ../singleProdYn 'N') }} <span class="opt">{{ prodEx.prodName }}</span> {{/if}}
 						</div>
 						<!--/* 포인트 및 가격 */-->
 						<div class="price">
-							{{#if (eq prodEx.saleDisplayStatus 'OnSale') }}
-								{{#if (eq calculationResultYn 'Y') }}
-									{{#if (ne calculationResultProduct.finalOnlineSalesAmountInfo null) }}
-										<span class="strong"><b>{{numberFormat calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}</b>원</span>
-									{{/if}}
-									<!--/*
-									{{#if (eq doublePriceDisplayYn 'Y') }}
-										{{#if (ne calculationResultProduct.productSaleAmountInfo null) }}
-											{{#if (gt calculationResultProduct.productSaleAmountInfo.standardCurrency.amount calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount) }}
-												<del><b>{{numberFormat this.calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}</b>원</del>
-											{{/if}}
-										{{/if}}
-									{{/if}}
-									*/-->
-								{{else}}
-									{{#if (ne prodEx.salePrice null) }}
-										<span class="strong"><b>{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}</b>원</span>
-									{{/if}}
+							{{#if (eq calculationResultYn 'Y') }}
+								{{#if (ne calculationResultProduct.finalOnlineSalesAmountInfo null) }}
+									<span class="strong"><b>{{numberFormat calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}</b>원</span>
 								{{/if}}
+								<!--/* 프로모션상품은 이중가표기를 않한다. */-->
 							{{else}}
-								<em>{{cartStatusTxt prodEx.saleDisplayStatus}}</em>
+								{{#if (ne prodEx.salePrice null) }}
+									<span class="strong"><b>{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}</b>원</span>
+								{{/if}}
 							{{/if}}
 						</div>
 					</div>
+					<!--/* 사은품 목록 */-->
+					{{#if (gt cartProdAwardList.length 0) }}
+						<ul class="freebies">
+							{{#each cartProdAwardList}}
+								<li>
+									<span class="option_name">
+										{{#if (ne awardProdEx.repProdImgEx null) }}
+											<img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/>
+										{{/if}}
+										사은품 : {{ awardProdEx.prodName }} {{#if (gt awardUnitQty 0 ) }}{{ awardUnitQty }}개 {{/if}}
+									</span>
+									<span class="term">
+										증정기간 : {{dateFormat awardStartDt "YYYY.MM.DD"}} ~ {{dateFormat awardEndDt "YYYY.MM.DD"}}
+									</span>
+								</li>
+							{{/each}}
+						</ul>
+					{{/if}}
 				</div>
 			{{/each}}
 		{{/each}}

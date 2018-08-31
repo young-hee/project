@@ -627,6 +627,9 @@
 
 			        var modal = AP.modal.info(contents);
 			        var $modalEl = modal.getElement(); //jquery object
+			        $modalEl.find('select').selectBox();
+    		        $modalEl.find('.layer_wrap.layer_md').addClass('layer_type2');
+    		        $modalEl.find('.layer_wrap.layer_md').addClass('modify_my_info');
 
 			        $modalEl.find('input[type=tel]').keydown(function(event) {
 			    	    if (event.keyCode) {
@@ -765,6 +768,9 @@
 	        		        contents.contents = data;
 	        		        var modal = AP.modal.info(contents);
 	        		        var $modalEl = modal.getElement(); //jquery object
+	        		        
+	        		        $modalEl.find('.layer_wrap.layer_md').addClass('modify_my_info');
+	        		        $modalEl.find('.layer_wrap.layer_md').addClass('layer_type2');
 
 	        		        $modalEl.find('#terms-ok').click(function() {
 	        	    			sendPrivateInfo(data1);

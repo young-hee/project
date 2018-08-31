@@ -1,0 +1,57 @@
+<html ap:decorate="~{layout/only-contents}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+	<div class="layer_popup fullpage evt_review01">
+		<div class="layer_wrap">
+			<dl class="layer">
+				<dt class="layer_title">댓글작성</dt>
+				<dd class="layer_cont">
+
+				<div class="repl_wrap01">
+					<div class="repl_only_txt">
+
+						<div class="repl_text_area01">
+							<!-- 텍스트 입력 영역 -->
+							<div class="textarea">
+								<textarea name="" id="" cols="30" rows="3" placeholder="200자 이내로 입력해주세요." maxlength="200"></textarea>
+							</div>
+							<p class="text_right byte"><small><em class="current">0</em>/<span class="limits">200</span></small></p>
+						</div>
+
+						
+						<div class="txt_upload01 on"><a href="javascript:;">올리기</a></div><!-- 10글자 이상 넘어가면 class="on"  활성화 -->
+					</div>
+					<!-- // repl_only_txt -->
+				</div>
+				<!-- // repl_wrap01 -->
+
+				
+				<!-- 사진 등록 영역 -->
+				<div class="pic_area01">
+					<div class="ui_input_images">
+						<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="multiple" data-single-input ="true" style="display:none">
+						<label for="i_picture" class="btn_pic_add">사진</label>
+						<ul class="attach"></ul>
+					</div>
+				</div>
+					
+				</dd>
+			</dl>
+			<button class="layer_close" type="button"><i class="ico_close"></i><span class="sr_only">레이어 닫기</span></button>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+<script>
+$( 'textarea' ).inputLimits();
+$( '.ui_input_images' ).inputImages();
+</script>
+</th:block>
+
+</body>
+</html>

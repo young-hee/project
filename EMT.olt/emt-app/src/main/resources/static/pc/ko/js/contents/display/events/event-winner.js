@@ -30,7 +30,8 @@
 				
 				result = result['winnerNoticeList'];
 		
-				result.totalCount = (result.offset + 1) * result.totalCount; // 당첨자전용게시판이 아니기에 넘버링에 필요 
+				result.totalCount = result.totalCount - (result.offset * result.limit) ; // 당첨자전용게시판이 아니기에 넘버링에 필요
+				
 				
 				var html = AP.common.getTemplate( 'display.events.event-winner', result );
 				

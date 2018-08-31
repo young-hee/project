@@ -59,7 +59,8 @@
 				<p class="product_exp" th:text="${prd.lineDesc}"></p>
 				
 				<!--/* 옵션선택 */-->
-				<button type="button" class="btn_options" id="optionSelectBox" th:if="${#lists.size(prd.colorGroups) == 0 && #lists.size(prd.products) > 0}">
+				<button type="button" class="btn_options" id="optionSelectBox" 
+						th:if="${#lists.size(prd.colorGroups) == 0 && #lists.size(prd.products) > 0 && prd.prodTypeCode != 'BulkFixedProd'}">
 					<span>옵션을 선택해주세요</span>
 				</button>
 				
@@ -203,29 +204,27 @@
 			</span>
 
 			<!--베스트 리뷰가 있는경우 해당영역 노출  -->
-			<div class="best_review">
+			<div class="best_review" th:if="${#lists.size(bestReview.prodReviewList) > 0}">
 				<dl>
 					<dt><em class="font_md">베스트리뷰</em></dt>
 					<dd>
 						<!-- 베스트리뷰에서 사진이 있는경우 노출(없는경우 해당영역 삭제) -->
 						<div class="photo_review scrollable_x">
-							<a href="#none"><img alt="리뷰 제목" src="/mo/ko/images/dummy/img_color_curation_01.jpg"></a>
-							<a href="#none"><img alt="리뷰 제목" src="/mo/ko/images/dummy/img_color_curation_03.jpg"></a>
-							<a href="#none"><img alt="리뷰 제목" src="/mo/ko/images/dummy/img_color_curation_01.jpg"></a>
-							<a href="#none"><img alt="리뷰 제목" src="/mo/ko/images/dummy/img_color_curation_03.jpg"></a>
-							<a href="#none"><img alt="리뷰 제목" src="/mo/ko/images/dummy/img_color_curation_01.jpg"></a>
-							<a href="#none"><img alt="리뷰 제목" src="/mo/ko/images/dummy/img_color_curation_03.jpg"></a>
+							<a href="#none" th:each="bPhotoReview : ${bestPhotoReview.prodReviewList}">
+								<img alt="리뷰 제목" th:src="${bPhotoReview.imgList[0].imageFileUrl}">
+							</a>
 						</div>
-						<a href="#none" class="text_review">
+						
+						<a href="#none" class="text_review" th:each="bReview : ${bestReview.prodReviewList}">
 							<dl>
 								<dt>
-									<span>amorep***</span><small>WELCOME</small>
-									<span class="option_name">라이트 퍼플 40호</span>
+									<span th:text="${bReview.memberId}"></span><small th:text="${bReview.memberLevelName}"></small>
+									<span class="option_name" th:text="${bReview.prodName}"></span>
 								</dt>
 								<dd>
 
-									<p class="text">친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히 피부색 칙칙한 날에 쓰면 화사해 보이고 화장한듯 안한듯 친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히 피부색 칙칙한 날에 쓰면 화사해 ...</p>
-									<small>2018.01.01</small>
+									<p class="text" th:text="${bReview.prodReviewBodyText}">친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히 피부색 칙칙한 날에 쓰면 화사해 보이고 화장한듯 안한듯 친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히 피부색 칙칙한 날에 쓰면 화사해 ...</p>
+									<small th:text="${#dates.format(bReview.prodReviewRegistDt, 'yyyy년 MM월 dd일')}"></small>
 								</dd>
 							</dl>
 						</a>
@@ -922,18 +921,17 @@
 				<button type="button" class="option_close"><span class="sr_only">옵션선택 레이어 닫기</span></button>
 				
 				<!--/* 옵션선택 select */-->
-				<div class="option_select_wrap">
+				<div class="option_select_wrap" th:unless="${prd.prodTypeCode == 'BulkFixedProd'}">
 					<div class="ui_select type2" data-not-label-change="true">
 						<input type="hidden" name="">
 						<button type="button">옵션을 선택해주세요</button>
-						
 						<ul class="select_options option_select_list">
 						</ul>
 					</div>
 				</div>
 				
 				<!--/* 선택된 옵션 scroll area */-->
-				<div class="selected_option_wrap scrollable_y"> <!--/* option_select_wrap 와 order_bottom 사이즈를 제외한 max-height 필요*/-->
+				<div class="selected_option_wrap scrollable_y" th:classappend="${prd.prodTypeCode == 'BulkFixedProd'} ? 'bunch'" > <!--/* option_select_wrap 와 order_bottom 사이즈를 제외한 max-height 필요*/-->
 					
 				</div>
 				<div class="order_bottom">
@@ -958,7 +956,7 @@
 					
 					<!--/* 버튼 */-->
 					<div class="purchase_btns">
-						<button type="button" class="btn_lg_neutral btn_basket">장바구니</button>
+						<button type="button" class="btn_lg_neutral btn_basket" th:disabled="${prd.prodTypeCode == 'Presale'}">장바구니</button>
 						<button type="button" class="btn_lg_neutral btn_buy_now" disabled>구매하기</button>
 					</div>
 				</div>

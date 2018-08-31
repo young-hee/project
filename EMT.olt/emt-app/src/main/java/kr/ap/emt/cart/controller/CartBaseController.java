@@ -289,15 +289,12 @@ public class CartBaseController extends AbstractController{
 	}
 
 	/**
-	 *
+	 * 재 계산 상품삭제
 	 * @param cartSn
 	 * @param removeCartProdSnList
 	 * @return
 	 */
 	protected CartEx calculationByRemove(Long cartSn, List<Long> removeCartProdSnList) {
-        
-        /* 회원정보 조회 */
-        //MemberSession memberSession = getMemberSession();
 
         /* 재계산을 위한 최종 cartEx */
 		CartSession cartSession = getCartSession();
@@ -347,7 +344,7 @@ public class CartBaseController extends AbstractController{
     }
 
 	/**
-	 *
+	 * 상품삭제 프로모션상품
 	 * @param cartPromoExList
 	 * @param removeCartProdSnList
 	 */
@@ -371,7 +368,7 @@ public class CartBaseController extends AbstractController{
     }
 
 	/**
-	 *
+	 * 상품삭제 일반상품
 	 * @param cartOnlineProdExList
 	 * @param removeCartProdSnList
 	 */
@@ -400,8 +397,15 @@ public class CartBaseController extends AbstractController{
 		cartOnlineProdExList.clear();
 		cartOnlineProdExList.addAll(newCartOnlineProdExList);
     }
-    
-    protected CartEx calculationByChangeQty(Long cartSn,
+
+	/**
+	 * 상품수량 변경 계산식
+	 * @param cartSn
+	 * @param cartProdSn
+	 * @param cartProdQty
+	 * @return
+	 */
+	protected CartEx calculationByChangeQty(Long cartSn,
                                         Long cartProdSn,
                                         Long cartProdQty) {
         /* 회원정보 조회 */
@@ -453,7 +457,13 @@ public class CartBaseController extends AbstractController{
         
         return cartEx;
     }
-    
+
+	/**
+	 * 상품수량 변경 프로모션상품
+	 * @param cartPromoExList
+	 * @param cartProdSn
+	 * @param cartProdQty
+	 */
     private void setChangeQtyCartPromoOnlineProdExList(List<CartPromoEx> cartPromoExList, Long cartProdSn, Long cartProdQty) {
         if(cartPromoExList == null) {
             return;
@@ -463,7 +473,13 @@ public class CartBaseController extends AbstractController{
             setChangeQtyCartOnlineProdExList(cartPromoEx.getPromoOnlineProdExList(), cartProdSn, cartProdQty);
         }
     }
-    
+
+	/**
+	 * 상품수량 변경 일반상품
+	 * @param cartOnlineProdExList
+	 * @param cartProdSn
+	 * @param cartProdQty
+	 */
     private void setChangeQtyCartOnlineProdExList(List<CartOnlineProdEx> cartOnlineProdExList, Long cartProdSn, Long cartProdQty) {
         // 상품수량변경
         if(cartOnlineProdExList != null) {
@@ -495,13 +511,13 @@ public class CartBaseController extends AbstractController{
 		boolean retValue = true;
 
 		// 최소구매수량 > 주문수량 체크
-		if(cartProdEx.getProdEx().getMinPurLimitQty() > cartProdEx.getCartProdQty()){
+		/*if(cartProdEx.getProdEx().getMinPurLimitQty() > cartProdEx.getCartProdQty()){
 			retValue = false;
-		}
+		}*/
 		// 주문수량 > 최대구매수량 체크
-		if(cartProdEx.getCartProdQty() > cartProdEx.getProdEx().getMaxPurLimitQty()){
+		/*if(cartProdEx.getCartProdQty() > cartProdEx.getProdEx().getMaxPurLimitQty()){
 			retValue = false;
-		}
+		}*/
 
 		// 계산결과여부 체크
 		if (CartConst.N.equals(cartProdEx.getCalculationResultYn())){
@@ -527,6 +543,14 @@ public class CartBaseController extends AbstractController{
 			if (CartConst.SALE_DISPLAY_STATUS_NOTSELECT.equals(cartProdEx.getProdEx().getSaleDisplayStatus())) {
 				cartProdEx.getProdEx().setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_ONSALE);
 			}
+			// 최소구매수량 > 주문수량 체크
+			if(cartProdEx.getProdEx().getMinPurLimitQty() > cartProdEx.getCartProdQty()){
+				cartProdEx.setSelectYn(CartConst.N);
+			}
+			// 주문수량 > 최대구매수량 체크
+			if(cartProdEx.getCartProdQty() > cartProdEx.getProdEx().getMaxPurLimitQty()){
+				cartProdEx.setSelectYn(CartConst.N);
+			}
 		} else {
 			if (CartConst.SALE_DISPLAY_STATUS_ONSALE.equals(cartProdEx.getProdEx().getSaleDisplayStatus())) {
 				cartProdEx.getProdEx().setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_NOTSELECT);
@@ -543,10 +567,20 @@ public class CartBaseController extends AbstractController{
 		for(CartOnlineProdEx cartOnlineProdEx : cartOnlineProdExList){
 			cartOnlineProdEx.setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_ONSALE);
 			for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-				// 체크박스 선택여부
+				// 체크박스 선택(셀렉)여부 체크
 				if(isCartProdSelectable(cartProdEx) == false){
 					cartOnlineProdEx.setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_NOTSELECT);
 					break;
+				}
+				// 최소구매수량 > 주문수량 체크
+				if(cartProdEx.getProdEx().getMinPurLimitQty() > cartProdEx.getCartProdQty()){
+					cartOnlineProdEx.setSelectYn(CartConst.N);
+					cartProdEx.setSelectYn(CartConst.N);
+				}
+				// 주문수량 > 최대구매수량 체크
+				if(cartProdEx.getCartProdQty() > cartProdEx.getProdEx().getMaxPurLimitQty()){
+					cartOnlineProdEx.setSelectYn(CartConst.N);
+					cartProdEx.setSelectYn(CartConst.N);
 				}
 			}
 			if(CartConst.SALE_DISPLAY_STATUS_NOTSELECT.equals(cartOnlineProdEx.getSaleDisplayStatus())){
@@ -633,6 +667,17 @@ public class CartBaseController extends AbstractController{
 						cartPromoEx.setSelectYn(CartConst.N);
 						break;
 					}
+					// TODO : 주문수량 적용 시 주문수량 체크 부분 확인할 것!
+					// 최소구매수량 > 주문수량 체크
+					if(cartProdEx.getProdEx().getMinPurLimitQty() > cartProdEx.getCartProdQty()){
+						cartPromoEx.setSelectYn(CartConst.N);
+						cartProdEx.setSelectYn(CartConst.N);
+					}
+					// 주문수량 > 최대구매수량 체크
+					if(cartProdEx.getCartProdQty() > cartProdEx.getProdEx().getMaxPurLimitQty()){
+						cartPromoEx.setSelectYn(CartConst.N);
+						cartProdEx.setSelectYn(CartConst.N);
+					}
 				}
 			}
 			if(CartConst.SALE_DISPLAY_STATUS_NOTSELECT.equals(cartPromoEx.getSaleDisplayStatus())){
@@ -663,10 +708,10 @@ public class CartBaseController extends AbstractController{
 	 */
     protected CartEx calculationCartEx(CartEx cartEx) {
 
-    	/* 셀렉트된 계산정보 */
+    	/* 선택 된 계산정보 */
 		calculationBySelect(cartEx);
 
-        /* M+N프로모션 기준수량/증정수량계산 */
+        /* M+N 프로모션 기준수량/증정수량계산 */
         if(cartEx.getCartDeliveryMNPromoExList() != null) {
             for(CartPromoEx cartPromoEx : cartEx.getCartDeliveryMNPromoExList()) {
                 // 동종M+N프로모션 기준수량/증정수량계산 
@@ -731,6 +776,7 @@ public class CartBaseController extends AbstractController{
                 }
                 
                 // 온라인판매금액합계 정보
+				int cnt = 0;
                 BigDecimal onlineSalesTotalAmount = BigDecimal.ZERO;
                 if(calculationResultOtf.getResultProductKeyList() != null) {
                     for(String productKey : calculationResultOtf.getResultProductKeyList()) {
@@ -740,6 +786,11 @@ public class CartBaseController extends AbstractController{
                                 && CartConst.Y.equals(cartProdEx.getSelectYn())
                                 && cartProdEx.getCalculationResultProduct() != null) {
                             onlineSalesTotalAmount = onlineSalesTotalAmount.add(getStandardAmount(cartProdEx.getCalculationResultProduct().getFinalOnlineSalesAmountInfo()));
+							// 뷰티포인트 배송비 합산 추가
+							if(CartConst.Y.equals(cartProdEx.getIntegrationMembershipExchYn())){
+								onlineSalesTotalAmount = onlineSalesTotalAmount.add(new BigDecimal(cartProdEx.getExchPoint()));
+							}
+							cnt++;
                         }
                     }
                 }
@@ -749,14 +800,15 @@ public class CartBaseController extends AbstractController{
 
                 BigDecimal calcDefaultShipFee = BigDecimal.ZERO;
                 BigDecimal shipFeeDiscountAmount = BigDecimal.ZERO;
-                
-                if(onlineSalesTotalAmount.compareTo(BigDecimal.ZERO) > 0
-                        && onlineSalesTotalAmount.compareTo(shipFeeFreeBaseAmt) < 0) {
-                    calcDefaultShipFee = requestOtf.getCoDefaultShipFee() != null ? requestOtf.getCoDefaultShipFee() : new BigDecimal("2500");
 
-                    // TODO : 배송비할인프로모션 정보
-                }
-                        
+                // 활동포인트상품(진주알)은 상품을 1개이상 금액관계없이 무조건 배송비가 부과되도록 처리(ex : cnt 적용으로 인한 처리)
+				if(cnt > 0
+					&& onlineSalesTotalAmount.compareTo(shipFeeFreeBaseAmt) < 0) {
+					calcDefaultShipFee = requestOtf.getCoDefaultShipFee() != null ? requestOtf.getCoDefaultShipFee() : new BigDecimal("2500");
+
+					// TODO : 배송비할인프로모션 정보
+				}
+
                 // 초도배송비 계산금액 정보
                 calculationResultOtf.setCalcDefaultShipFeeInfo(setCalculationCurrencyInfo(calculationResultOtf.getCalcDefaultShipFeeInfo(), calcDefaultShipFee));
 
@@ -882,7 +934,11 @@ public class CartBaseController extends AbstractController{
         return cartEx;
     }
 
-    protected void calculationExchPoint(CartEx cartEx) {
+	/**
+	 * 재 계산 포인트상품
+	 * @param cartEx
+	 */
+	protected void calculationExchPoint(CartEx cartEx) {
         CalculationResult calculationResult = cartEx.getCalculationResult();
         
         if(calculationResult != null) {
@@ -928,24 +984,18 @@ public class CartBaseController extends AbstractController{
             for(CartOnlineProdEx cartOnlineProdEx : cartOnlineProdExList) {
 				for(CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
 					if(CartConst.Y.equals(cartProdEx.getSelectYn())) {
-						if(remainPoints >= cartProdEx.getExchPoint()) {
-							selectExchPointSum += cartProdEx.getExchPoint();
-							remainPoints -= cartProdEx.getExchPoint();
+						// 판매표시상태가 "판매중" 상태인 포인트 상품만 합산 (최종결제금액에 표기여부) 2018-08-30
+						if(CartConst.SALE_DISPLAY_STATUS_ONSALE.equals(cartProdEx.getProdEx().getSaleDisplayStatus())){
+							if(remainPoints >= cartProdEx.getExchPoint()) {
+								selectExchPointSum += cartProdEx.getExchPoint();
+								remainPoints -= cartProdEx.getExchPoint();
+							}
+							else {
+								cartProdEx.setSelectYn(CartConst.N);
+							}
+							exchPointSum += cartProdEx.getExchPoint();
 						}
-						else {
-							cartProdEx.setSelectYn(CartConst.N);
-						}
-						exchPointSum += cartProdEx.getExchPoint();
 					}
-					/*if(CartConst.Y.equals(cartOnlineProdEx.getSelectYn())) {
-						if(remainPoints >= cartOnlineProdEx.getExchPoints()) {
-							selectExchPointSum += cartOnlineProdEx.getExchPoints();
-							remainPoints -= cartOnlineProdEx.getExchPoints();
-						}
-						else {
-							cartOnlineProdEx.setSelectYn(CartConst.N);
-						}
-					}*/
 				}
             }
         }
@@ -1013,7 +1063,7 @@ public class CartBaseController extends AbstractController{
     }
 
 	/**
-	 * 상품금액 계산
+	 * 온라인상품 금액 계산정보
 	 * @param cartOnlineProdExList
 	 * @param allCartProdExMap
 	 * @param allCartOnlineProdExMap
@@ -1079,11 +1129,10 @@ public class CartBaseController extends AbstractController{
 							finalOnlineSaleAmount = finalOnlineSaleAmount.add(getStandardAmount(resultProduct.getFinalOnlineSalesAmountInfo()));
 						}*/
                     }
-                    
+
                     if(CartConst.Y.equals(cartProdEx.getExchYn())) {
 						exchPoints = exchPoints + (cartProdEx.getExchPoint() != null ? cartProdEx.getExchPoint().intValue() : 0);
-
-						/*if("Y".equals(cartProdEx.getSelectYn())) {
+						/*if(CartConst.Y.equals(cartProdEx.getSelectYn())) {
 							exchPoints = exchPoints + (cartProdEx.getExchPoint() != null ? cartProdEx.getExchPoint().intValue() : 0);
 						}*/
                     }

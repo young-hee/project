@@ -31,23 +31,25 @@
 					}).done( function ( result ) {
 						//vip라운지
 						console.log(result.awards);
-						var modal = AP.modal.attendance({
-							title: '쿠폰',
-							contents: {
-								templateKey: 'display.events.attendance-success',
-								templateModel: {
-									today: AP.common.date()
-								}
-							},
-							confirmLabel: '쿠폰상품 보기',
-							cancelLabel: '닫기'
-						});
-
-						modal.getElement().find('.btn_default_modal_confirm').addClass('link');
+//						var modal = AP.modal.attendance({
+//							title: '쿠폰',
+//							contents: {
+//								templateKey: 'display.events.attendance-success',
+//								templateModel: {
+//									today: AP.common.date()
+//								}
+//							},
+//							confirmLabel: '쿠폰상품 보기',
+//							cancelLabel: '닫기'
+//						})
+//
+//						modal.getElement().find('.btn_default_modal_confirm').addClass('link');
+//						
+//						modal.getElement().find( 'img' ).imagesLoaded( function() {
+//							modal.resetPosition();
+//						});
 						
-						modal.getElement().find( 'img' ).imagesLoaded( function() {
-							modal.resetPosition();
-						});
+						AP.modal.alert("응모되었습니다.");
 
 					}.bind(this)).fail( function ( xhr ) {
 						//중복참여시

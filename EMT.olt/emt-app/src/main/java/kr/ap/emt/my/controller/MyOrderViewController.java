@@ -272,4 +272,18 @@ public class MyOrderViewController extends AbstractController {
 		model.addAttribute("status", state);
 		return "my/my-order-detail";
 	}
+
+	@GetMapping("/order/{ordNo}")
+	@PageTitle(title = "주문상세 확인용")
+	public String ordGetOrd(Model model, @PathVariable Long ordNo) {
+
+		System.out.println("ordNo: " + ordNo);
+
+		model.addAttribute("ord", new MyOrdDTO(orderApi.getOrd(ordNo)));
+		model.addAttribute("type", "online");
+		model.addAttribute("claimYn", "N");
+		model.addAttribute("status", "detail");
+
+		return "my/my-order-detail";
+	}
 }

@@ -18,20 +18,12 @@
 			
 			this._setEvents( memberMap );
 			this._setPreviewSlide();
-			//this._setCompareMakeup();
 			this._setHeaderFixed();
 			this._setTabs();
 			/*
 			this._setIngredients();
 			this._setRecommendList();
 			
-			//핫딜 시간 설정
-			if ( this._defaultModel.prodTypeCode === 'SpPriceSale' ) {
-				this._$target.find( '.hot_deal .ui_remain_timer' ).remainTimer({
-					startTime: AP.common.date(),
-					finishTime: this._defaultModel.saleEndDt
-				});
-			}
 			this._setVideoPlugin(); 
 			 */
 			this.ingredientModalTitle = '전성분 확인하기';
@@ -48,6 +40,7 @@
 				})
 				.addListener( 'add-item', function (e) {
 					this._sideOrder.addItem( e.product );
+					this._changePreview( e.product );
 				}.bind(this))
 				.addListener( 'remove-item', function (e) {
 					this._sideOrder.removeItem( e.prodSn );
@@ -63,6 +56,7 @@
 				})
 				.addListener( 'add-item', function (e) {
 					this._topOrder.addItem( e.product );
+					this._changePreview( e.product );
 				}.bind(this))
 				.addListener( 'remove-item', function (e) {
 					this._topOrder.removeItem( e.prodSn );
@@ -104,6 +98,19 @@
 				
 				this._topOrder._optionsSelectBox.dispatch( 'select-option', {product : product} );
 				$colorChips.filter('[data-prod-sn='+prodSn+']').find('a').addClass('on');
+				
+				this._changePreview( product );
+			}.bind(this)).bind('mouseenter',function (e){
+				var $this = $(e.currentTarget);
+				var $colorName = this._$target.find( '.color_name' );
+				var chip_name = $this.attr('title');
+				if ($this.parents("li").hasClass("soldPD")) {
+					$colorName.text(chip_name);
+					$colorName.addClass("soldPD");
+				} else{
+					$colorName.text(chip_name);
+					$colorName.removeClass("soldPD");
+				}
 			}.bind(this));
 			
 			//카드사 혜택 정보 더보기 버튼
@@ -134,6 +141,19 @@
 				}
 				$this.find('i').addClass( 'on' );
 			}.bind(this));
+			
+			// 기프트카드 Toggle
+			this._$target.find(".gift_card button").bind('click',function (e){
+				var $this = $(e.currentTarget);
+				$this.toggleClass("on");
+				if ( $this.hasClass("on") ) {
+					$(".layer_tooltip").show();
+					$this.children("span").text("닫기");
+				} else{
+					$(".layer_tooltip").hide();
+					$this.children("span").text("자세히보기");
+				}
+			});
 			
 			/*
 			//언제 들어와? 알림 신청
@@ -201,16 +221,15 @@
 
 			if ( $tabArea.length ) {
 				$tabArea.on( 'tabs-change', function (e) {
-					
 					$( window ).scrollTop( $tabArea.offset().top );
 
 					if ( e.index === 1 ) {
-						AP.reviewArea.setDefault( this._defaultModel );
+						//AP.reviewArea.setDefault( this._defaultModel );
 					}
 
 					this._sideOrder.resetPosition( true );
 				}.bind(this));
-
+				
 				$( window ).on( 'load scroll tabs-fixed', function (e) {
 					var scrollY = $( e.currentTarget ).scrollTop(),
 						tabY = $tabArea.offset().top;
@@ -223,21 +242,20 @@
 				}.bind(this));
 
 				$( window ).trigger( 'tabs-fixed' );
-
+				
 				//?review=true 로 들어오면 review tab 활성화
 				if ( $B.utils.urlParam('review') ) {
 					$tabArea.tabs( 'change', 1 );
 				}
 				
-				/*
 				AP.reviewArea.addListener( 'change-height', function (e) {
 					this._sideOrder.resetPosition( true );
 				}.bind(this));
-				*/
+				
 			}
 		},
 
-		_changeColorChpe: function ( product ) {
+		_changeColorChip: function ( product ) {
 			var isNew = _.some( product.flags, function (flag) {
 					return flag.prodFlagCode === 'icon_reco_new';
 				});
@@ -260,7 +278,8 @@
 			$slide.find( '.youtube_video' ).video( 'clear' );
 			$slide.off( 'ixSlideMax:change' ).ixSlideMax( 'clear' );
 
-			$slide.html( html );
+			$wrap.html( html );
+			AP.lazyLoad.add( $wrap.find('img.lazy_load') );
 			this._setPreviewSlide();
 		},
 		
@@ -317,11 +336,13 @@
 		_setPreviewSlide: function () {
 			var $wrap = this._$target.find( '.prd_img_wrap' ),
 				$slide = $wrap.find( '.slide' ),
-				$thumbBtns = $wrap.find( '.preview_thumbs button' ),
+				$thumbBtns = $wrap.find( '.preview_thumbs' ),
 				$videos = $wrap.find( '.youtube_video' );
 
 			$thumbBtns.on( 'click', function (e) {
 				var idx = $( e.currentTarget ).index();
+				$thumbBtns.removeClass('active')
+				$( e.currentTarget ).addClass('active');
 				$slide.ixSlideMax( 'changeIndex', idx );
 			});
 
@@ -331,12 +352,6 @@
 			});
 
 			$videos.video();
-		},
-
-		_setCompareMakeup: function () {
-			this._$target.find( '.btn_compare_makeup' ).on( 'click', function (e) {
-				new AP.CompareMakeup().open( this._defaultModel.products );
-			}.bind(this));
 		},
 
 		//전성분

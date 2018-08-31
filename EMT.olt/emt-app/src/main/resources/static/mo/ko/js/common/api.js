@@ -241,6 +241,10 @@
 		checkPresentMember: { path: '/my/point/api/checkPresentMember', method: 'POST'},
 		//포인트 선물!
 		presentPoint: { path: '/my/point/api/presentPoint', method: 'POST'},
+		//발신번호 사전등록 인증.
+		simpleMyCertifySend: { path: '/my/point/api/simpleMyCertifySend', method: 'POST'},
+		//발신번호 사전등록 인증 확인.
+		simpleMyCertifyCheck: { path: '/my/point/api/simpleMyCertifyCheck', method: 'POST'},
 		
 		//간단 점유인증 전송
 		simpleCertifySend: { path: '/my/api/simpleCertifySend', method: 'POST'},
@@ -512,9 +516,8 @@
 		},
 		
 		//플래그상품목록
-		flaggedItemList: { path:'/display/flaggedProdList', method: 'POST' , data: {
+		flaggedItemList: { path:'/display/flaggedProdList', method: 'GET' , data: {
 				flags: null, //대카(icon_reco_best_w), 온라인 전용(icon_reco_online,icon_reco_best_w), 뷰티포인트샵(icon_reco_hot,icon_membership1), (main 플래그 신상품 (icon_reco_new), 핫딜( icon_type_sp_today)베스트(icon_reco_best_w)
-	    		flag: null, 
 	    		prodListUnit : 'OnlineProd',
 	    		prodSort: 'NewProd', //판매순(Bestselling), 신상품순(NewProd), 높은 가격순(HighestPrice), 낮은가격순(LowestPrice), 상품평순(MostProdReview)
 	    		offset: 0,
@@ -523,15 +526,26 @@
 	    		displayCateDepth: 0,
 	    		displayCate : null, //대카추천상품일 경우만 입력
 				brand:null,
+				flag:null,
 				attr:null,
 				priceRange:null
+			}
+		},
+		
+		//핫딜 api 변경 inSpPriceSale
+		inSpPriceSale: { path:'/display/inSpPriceSale', method: 'GET', data:{
+				spPriceSaleType: 'Today', // 투데이핫딜(Today), 수량한정('Qty')
+				prodListUnit: 'Prod', 
+				prodSort: 'NewProd',
+				offset : 0,
+				limit: 5
 			}
 		},
 		
 		//플래그상품순위 목록
 		flaggedProdRankChanges: { path:'/display/flaggedProdRankChanges', method: 'GET' , data: {
 				rankFlag : 'icon_reco_best_w', //플래그명 (주간베스트: icon_reco_best_w)
-				limit : 9
+				limit : 10
 			}
 		},
 		

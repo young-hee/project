@@ -10,11 +10,11 @@ this["AP"]["handlebars"]["main"]["home"]["hot-deal-list"] = Handlebars.template(
     + alias2(alias1((depth0 != null ? depth0.saleEndDt : depth0), depth0))
     + "\">\n					<span class=\"hour\"></span>:<span class=\"minute\"></span>:<span class=\"second\"></span>\n				</div>\n"
     + ((stack1 = helpers.each.call(alias3,(depth0 != null ? depth0.products : depth0),{"name":"each","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"blockParams":blockParams})) != null ? stack1 : "")
-    + "					<div class=\"info\">\n						<em class=\"discount\">\n"
-    + ((stack1 = helpers["with"].call(alias3,(helpers.calc || (depth0 && depth0.calc) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.onlineProdPriceSummary : depth0)) != null ? stack1.minOnlineSalePriceDiscountRate : stack1),"+",((stack1 = (depth0 != null ? depth0.onlineProdPriceSummary : depth0)) != null ? stack1.minMemberLevelDiscountRate : stack1),"+",((stack1 = (depth0 != null ? depth0.onlineProdPriceSummary : depth0)) != null ? stack1.minOnlineMemberDiscountRate : stack1),{"name":"calc","hash":{},"data":data,"blockParams":blockParams}),{"name":"with","hash":{},"fn":container.program(13, data, 1, blockParams, depths),"inverse":container.noop,"data":data,"blockParams":blockParams})) != null ? stack1 : "")
-    + "						</em>\n						<span class=\"title\">"
+    + "					<div class=\"info\">\n						<span class=\"title\">"
     + alias2(alias1((depth0 != null ? depth0.onlineProdName : depth0), depth0))
-    + "</span>\n						<span class=\"price_wrap\">\n"
+    + "</span>\n						<span class=\"price_wrap\">\n							<em class=\"discount\">\n"
+    + ((stack1 = helpers["with"].call(alias3,(helpers.calc || (depth0 && depth0.calc) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.onlineProdPriceSummary : depth0)) != null ? stack1.minOnlineSalePriceDiscountRate : stack1),"+",((stack1 = (depth0 != null ? depth0.onlineProdPriceSummary : depth0)) != null ? stack1.minMemberLevelDiscountRate : stack1),"+",((stack1 = (depth0 != null ? depth0.onlineProdPriceSummary : depth0)) != null ? stack1.minOnlineMemberDiscountRate : stack1),{"name":"calc","hash":{},"data":data,"blockParams":blockParams}),{"name":"with","hash":{},"fn":container.program(13, data, 1, blockParams, depths),"inverse":container.noop,"data":data,"blockParams":blockParams})) != null ? stack1 : "")
+    + "							</em>\n						\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.onlineProdPriceSummary : depth0)) != null ? stack1.doublePriceDisplayYn : stack1),"==","Y",{"name":"xif","hash":{},"fn":container.program(19, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"blockParams":blockParams})) != null ? stack1 : "")
     + "							<span class=\"price\">"
     + alias2((helpers.numberFormat || (depth0 && depth0.numberFormat) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.onlineProdPriceSummary : depth0)) != null ? stack1.minOnlineMemberDiscountPrice : stack1),{"name":"numberFormat","hash":{},"data":data,"blockParams":blockParams}))
@@ -82,7 +82,7 @@ this["AP"]["handlebars"]["main"]["home"]["hot-deal-list"] = Handlebars.template(
 },"14":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return "									"
+  return "										"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,blockParams[1][0],"!=",blockParams[0][0],{"name":"xif","hash":{},"fn":container.program(15, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams})) != null ? stack1 : "")
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,blockParams[0][0],"!=",0,{"name":"xif","hash":{},"fn":container.program(17, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams})) != null ? stack1 : "")
     + "\n";

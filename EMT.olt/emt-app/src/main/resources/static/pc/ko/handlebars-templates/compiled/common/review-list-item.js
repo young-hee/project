@@ -43,7 +43,7 @@ this["AP"]["handlebars"]["common"]["review-list-item"] = Handlebars.template({"1
 },"15":function(container,depth0,helpers,partials,data) {
     return "					<a href=\"javascript:;\" class=\"review_detail off\" data-prod-review-sn=\""
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.prodReviewSn : depth0), depth0))
-    + "\">더보기 ∨</a>\n";
+    + "\">더보기 <i class=\"ico_arr_up\"></i></a>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.lambda, alias4=container.escapeExpression;
 

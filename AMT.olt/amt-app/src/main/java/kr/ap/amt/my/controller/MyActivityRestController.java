@@ -1,18 +1,19 @@
 package kr.ap.amt.my.controller;
 
 import kr.ap.comm.support.common.AbstractController;
+import net.g1project.ecp.api.model.BooleanResult;
+import net.g1project.ecp.api.model.sales.guide.InquiriesEvalResponse;
 import net.g1project.ecp.api.model.sales.guide.InquiriesSearchResult;
 import net.g1project.ecp.api.model.sales.guide.Inquiry;
-import net.g1project.ecp.api.model.sales.plandisplay.PlanDisplayEventDTOListResult;
 import net.g1project.ecp.api.model.sales.product.ProdReviewWritableOrderInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
 /**
@@ -71,7 +72,6 @@ public class MyActivityRestController extends AbstractController {
 	@ResponseBody
 	public ResponseEntity<?> getInquiryList(int offset, int limit) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
 		try {
 			InquiriesSearchResult responseNList = guideApi.getInquiries(getMemberSn(), offset, limit, null, null, "N");
@@ -100,6 +100,28 @@ public class MyActivityRestController extends AbstractController {
 		try {
 			Inquiry inquiry = guideApi.getCustomerInquiry(inquirySn);
 			result.put("Inquiry", inquiry);
+		} catch(Exception e) {
+			result.put("errorData", e);
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+
+		return ResponseEntity.ok(result);
+	}
+
+	/**
+	 * 1:1 문의 답변 평가
+	 *
+	 * @param inquirySn
+	 * @return
+	 */
+	@PostMapping("/evalInquiryResponse")
+	@ResponseBody
+	public ResponseEntity<?> evalInquiryResponse(long inquirySn, InquiriesEvalResponse evalResponse) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+
+		try {
+			BooleanResult evalResult = guideApi.postInquiriesEvalResponse(inquirySn, evalResponse);
+			result.put("result", evalResult);
 		} catch(Exception e) {
 			result.put("errorData", e);
 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);

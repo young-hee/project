@@ -1,0 +1,91 @@
+<html ap:decorate="~{layout/default}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!--/* ap_contents */-->
+	<div class="ap_contents">
+		<div class="ap_com_cont overview">
+			<!--/* [S] 구매금액대별 사은품 */-->
+			<div class="event_overview">
+				<div class="inner_wrap section_wrap">
+					<div class="section_boxing">
+						<div class="page_title">
+							<h3 class="h_title d2">구매금액대별 사은품</h3>
+						</div>
+						<div class="list_gift">
+							<ul>
+								<li>
+									<div class="gift_box">
+										<p class="mark">5만원이상 10만원미만 구매고객</p>
+										<div class="visual_section">
+											<img ap:src="@{/images/dummy/gift.jpg}" alt="3만원이상 5만원미만 구매고객 사은품">
+										</div>
+										<div class="info_section">
+											<p class="name ellipsis">제목 1줄입니다. 길이테스트 제목 1줄입니다. 길이테스트 제목 1줄입니다. 길이테스트 제목 1줄입니다. 길이테스트 제목 1줄입니다. 길이테스트</p>
+											<p class="summary">사은품 내용 자동으로 영역이 늘어납니다. 가장 높이가 큰 li 기준으로 아래 스크립트를 통해 높이가 자동으로 변경됨</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class="gift_box">
+										<p class="mark">5만원이상 10만원미만 구매고객</p>
+										<div class="visual_section">
+											<img ap:src="@{/images/dummy/gift.jpg}" alt="3만원이상 5만원미만 구매고객 사은품">
+										</div>
+										<div class="info_section">
+											<p class="name">제목</p>
+											<p class="summary">사은품 내용 자동으로 영역이 늘어납니다. 가장 높이가 큰 li 기준으로 아래 스크립트를 통해 높이가 자동으로 변경됨 사은품 내용 자동으로 영역이 늘어납니다. 가장 높이가 큰 li 기준으로 아래 스크립트를 통해 높이가 자동으로 변경됨 사은품 내용 자동으로 영역이 늘어납니다. 가장 높이가 큰 li 기준으로 아래 스크립트를 통해 높이가 자동으로 변경됨 사은품 내용 자동으로 영역이 늘어납니다. 가장 높이가 큰 li 기준으로 아래 스크립트를 통해 높이가 자동으로 변경됨</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class="gift_box">
+										<p class="mark">20만원이상 구매고객</p>
+										<div class="visual_section">
+											<img ap:src="@{/images/dummy/gift.jpg}" alt="3만원이상 5만원미만 구매고객 사은품">
+										</div>
+										<div class="info_section">
+											<p class="name">제목</p>
+											<p class="summary">사은품 내용 자동으로 영역이 늘어납니다. 가장 높이가 큰 li 기준으로 아래 스크립트를 통해 높이가 자동으로 변경됨</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class="gift_box">
+										<p class="mark">20만원이상 구매고객</p>
+										<div class="visual_section">
+											<img ap:src="@{/images/dummy/gift.jpg}" alt="3만원이상 5만원미만 구매고객 사은품">
+										</div>
+										<div class="info_section">
+											<p class="name">제목</p>
+											<p class="summary">사은품 내용 자동으로 영역이 늘어납니다. 가장 높이가 큰 li 기준으로 아래 스크립트를 통해 높이가 자동으로 변경됨 사은품 내용 자동으로 영역이 늘어납니다. 가장 높이가 큰 li 기준으로 아래 스크립트를 통해 높이가 자동으로 변경됨</p>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--/* [E] 구매금액대별 사은품 */-->
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+<script language="javascript" type="text/javascript">
+	//높이가 유동적인 유닛 (최대 높이값으로 고정) js
+	var $listArray = $('.list_gift > ul > li');
+	var $listHArray = $listArray.map(function(){
+		return $(this).height();
+	});
+	var $listHMax = Math.max.apply(Math, $listHArray);
+	$listArray.css('height', $listHMax + 'px');
+</script>
+
+</th:block>
+
+</body>
+</html>

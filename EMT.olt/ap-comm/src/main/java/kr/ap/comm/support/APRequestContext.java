@@ -150,4 +150,8 @@ public class APRequestContext {
 	public static String getAccessToken() {
 		return accessTokenThreadLocal.get();
 	}
+
+	public static void clearAccessToken() {
+		accessTokenThreadLocal.remove();
+	}
 }

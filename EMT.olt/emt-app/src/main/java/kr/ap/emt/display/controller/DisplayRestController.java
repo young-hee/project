@@ -165,7 +165,7 @@ public class DisplayRestController extends AbstractController {
 		OnlineProdList onlineProdList
 			= displayApi.getFlaggedProdList(
 			requestDisplay.getFlags()
-			, false
+			, requestDisplay.isExcludeSoldOut()
 			, requestDisplay.getProdListUnit()
 			, requestDisplay.getProdSort()
 			, requestDisplay.getOffset()
@@ -600,15 +600,34 @@ public class DisplayRestController extends AbstractController {
 	}
 	
 	/**
+	 * 홈화면 hotdeal, 한정판매 
+	 * @return
+	 */
+	
+	@RequestMapping({"/inSpPriceSale","/inSpPriceSale/preview"})
+	public ResponseEntity<?> inSpPriceSale(RequestDisplay requestDisplay) {
+		
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		
+		OnlineProdList onlineProdList = displayApi.getInSpPriceSaleProdList(requestDisplay.getSpPriceSaleType(), requestDisplay.isExcludeSoldOut(), requestDisplay.getProdListUnit(), requestDisplay.getProdSort(), requestDisplay.getOffset(), requestDisplay.getLimit(), requestDisplay.getIncludeFilters(),requestDisplay.getDisplayCateDepth(),requestDisplay.getDisplayCate(),requestDisplay.getBrand(),requestDisplay.getFlag(),requestDisplay.getAttr(),requestDisplay.getPriceRange());
+		
+		result.put("onlineProdList", onlineProdList);
+
+		return ResponseEntity.ok(result);
+
+	
+	}
+
+	/**
 	 * 홈화면 진입시 등록한 팝업 노출
 	 * @return
 	 */
 	@RequestMapping({"/mainPopups", "/mainPopups/preview"})
 	public ResponseEntity<?> mainPopups() {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		
+ 
 		List<PopupInfo> popupList = keywordPopupApi.getPopups();
-
+	
 		result.put("popupList", popupList);
 
 		return ResponseEntity.ok(result);

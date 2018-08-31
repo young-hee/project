@@ -259,7 +259,11 @@
 		checkPresentMember: { path: '/my/point/api/checkPresentMember', method: 'POST'},
 		//포인트 선물!
 		presentPoint: { path: '/my/point/api/presentPoint', method: 'POST'},
-		
+		//발신번호 사전등록 인증.
+		simpleMyCertifySend: { path: '/my/point/api/simpleMyCertifySend', method: 'POST'},
+		//발신번호 사전등록 인증 확인.
+		simpleMyCertifyCheck: { path: '/my/point/api/simpleMyCertifyCheck', method: 'POST'},
+
 		//간단 점유인증 전송
 		simpleCertifySend: { path: '/my/api/simpleCertifySend', method: 'POST'},
 		
@@ -486,6 +490,15 @@
 			}
 		},
 		
+		//핫딜 api 변경 inSpPriceSale
+		inSpPriceSale: { path:'/display/inSpPriceSale', method: 'GET', data:{
+				spPriceSaleType: 'Today', // 투데이핫딜(Today), 수량한정('Qty')
+				prodListUnit: 'Prod', 
+				prodSort: 'NewProd',
+				offset : 0,
+				limit: 5
+			}
+		},
 		//플래그상품순위 목록
 		flaggedProdRankChanges: { path:'/display/flaggedProdRankChanges', method: 'GET' , data: {
 				rankFlag : 'icon_reco_best_w', //플래그명 (주간베스트: icon_reco_best_w)

@@ -6,11 +6,14 @@
  */
 package kr.ap.amt.cart.controller;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+
 import kr.ap.comm.cart.CartSession;
-import net.g1project.ecp.api.exception.ApiException;
-import net.g1project.ecp.api.model.BooleanResult;
-import net.g1project.ecp.api.model.offlinestore.store.*;
-import net.g1project.ecp.api.model.sales.cart.*;
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +22,27 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.util.*;
+import net.g1project.ecp.api.exception.ApiException;
+import net.g1project.ecp.api.model.BooleanResult;
+import net.g1project.ecp.api.model.offlinestore.store.AddressDivInfo;
+import net.g1project.ecp.api.model.offlinestore.store.ProdInvtEx;
+import net.g1project.ecp.api.model.offlinestore.store.RegularStoreForPost;
+import net.g1project.ecp.api.model.offlinestore.store.RegularStorePostResult;
+import net.g1project.ecp.api.model.offlinestore.store.StoreResult;
+import net.g1project.ecp.api.model.offlinestore.store.StoresInvtSearchInfo;
+import net.g1project.ecp.api.model.sales.cart.CartBulkIncludedProdExPost;
+import net.g1project.ecp.api.model.sales.cart.CartBulkIncludedProdExPut;
+import net.g1project.ecp.api.model.sales.cart.CartEx;
+import net.g1project.ecp.api.model.sales.cart.CartOnlineProdEx;
+import net.g1project.ecp.api.model.sales.cart.CartProdCountInfo;
+import net.g1project.ecp.api.model.sales.cart.CartProdEx;
+import net.g1project.ecp.api.model.sales.cart.CartProdExPost;
+import net.g1project.ecp.api.model.sales.cart.CartProdExPut;
+import net.g1project.ecp.api.model.sales.cart.CartPromoEx;
+import net.g1project.ecp.api.model.sales.cart.CartSnResult;
+import net.g1project.ecp.api.model.sales.cart.ProdEx;
+import net.g1project.ecp.api.model.sales.cart.SameTimePurCartProd;
+import net.g1project.ecp.api.model.sales.cart.SameTimePurCartProdSet;
 
 @RestController
 @RequestMapping("/cart")
@@ -34,15 +56,16 @@ public class CartRestController extends CartBaseController{
 	@GetMapping("/getLayerPage")
 	public ResponseEntity<?> getLayerPage(Long cartProdSn, Long prodSn) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		if(Long.valueOf(cartProdSn) != null){
+		if(Long.valueOf(cartProdSn) != null && Long.valueOf(prodSn) != null){
 			List<ProdEx> prodExList = new ArrayList<>();
 			List<ProdEx> apiProdExList = cartApi.getOnlineProdUnitVariationProds(cartProdSn);
 			if(apiProdExList.size() > 0 ){
 				for(ProdEx pe : apiProdExList){
-					if(!prodSn.equals(pe.getProdSn()) &&
-						"OnSale".equals(pe.getSaleDisplayStatus()) ||
-						"Exhaustion".equals(pe.getSaleDisplayStatus()) ||
-						"OutOfStock".equals(pe.getSaleDisplayStatus()) ){
+					if(!prodSn.equals(pe.getProdSn())
+						&& CartConst.SALE_DISPLAY_STATUS_ONSALE.equals(pe.getSaleDisplayStatus())
+						|| CartConst.SALE_DISPLAY_STATUS_EXHAUSTION.equals(pe.getSaleDisplayStatus())
+						|| CartConst.SALE_DISPLAY_STATUS_OUTOFSTOCK.equals(pe.getSaleDisplayStatus())
+					){
 						prodExList.add(pe);
 					}
 				}
@@ -76,7 +99,7 @@ public class CartRestController extends CartBaseController{
 											Long includedProdSn,
 											Integer	includedProdQty,
 											String modifyType
-											){
+	){
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		CartProdExPut cartProdExPut = new CartProdExPut();
 		cartProdExPut.setCartProdSn(cartProdSn);
@@ -106,8 +129,7 @@ public class CartRestController extends CartBaseController{
 					ce = calculationByChangeQty(cartSn, cartProdSn, cartProdQty);
 				}
 				else {
-					ce = getCartApi(cartSn);
-					//ce = calculationBySelect(ce);
+					ce = getCart(cartSn);
 				}
 				result.put("data", ce);
 			}
@@ -145,7 +167,7 @@ public class CartRestController extends CartBaseController{
 	@PostMapping("/removeSelectCartProd")
 	public ResponseEntity<?> removeSelectCartProd(Long cartSn,
 												  String[] prdCdArr,
-											  	  String[] takeoutCdArr) {
+												  String[] takeoutCdArr) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		List<Long> removeCartProdSnList = new ArrayList<>();
 		if(!ArrayUtils.isEmpty(prdCdArr)){
@@ -224,12 +246,12 @@ public class CartRestController extends CartBaseController{
 										  Integer limit, String sortBy) {
 
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		CartSession cartSession = getCartSession();
 
 		CartProdEx storePickupCartProdEx = null;
 		List<ProdInvtEx> prodInvtExList = new ArrayList<>();
 
-		CartEx cartEx =  getCartApi(cartSession.getCartSn());
+		CartSession cartSession = getCartSession();
+		CartEx cartEx = getCart(cartSession.getCartSn());
 
 		// 장바구니매장픽업-온라인상품목록
 		if(!CollectionUtils.isEmpty(cartEx.getCartStorePickupOnlineProdExList())){
@@ -355,7 +377,7 @@ public class CartRestController extends CartBaseController{
 				CartProdEx storePickupCartProdEx = null;
 				List<ProdInvtEx> prodInvtExList = new ArrayList<>();
 
-				CartEx cartEx =  getCartApi(cartSn);
+				CartEx cartEx = getCart(cartSn);
 
 				// 장바구니매장픽업-온라인상품목록
 				if(!CollectionUtils.isEmpty(cartEx.getCartStorePickupOnlineProdExList())){
@@ -485,7 +507,7 @@ public class CartRestController extends CartBaseController{
 
 	/**
 	 * 장바구니에 담기
-	 * 일반상품/묶음판매상품
+	 * 일반상품/묶음상품
 	 * (매장픽업 같이 사용함.)
 	 *
 	 * @param jsonObj
@@ -562,6 +584,7 @@ public class CartRestController extends CartBaseController{
 
 		//TODO:주문하기위해 재고체크,
 
+		//MemberSession memberSession = getMemberSession();
 		CartSession cartSession = getCartSession();
 		Long cartSn = cartSession.getCartSn();
 
@@ -714,14 +737,14 @@ public class CartRestController extends CartBaseController{
 		Long cartSn = 0L;
 		Long memberSn = getMemberSn();
 
-		if (memberSn != 0L) {
+		if (memberSn != null) {
 
 			cartSn = cartApi.getMemberCartSn(memberSn).getCartSn();
 			if (setCartCount(result, cartSn)) return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
 
 		} else {
-
-			cartSn = getCartSession().getCartSn();
+			CartSession cartSession = getCartSession();
+			cartSn = cartSession.getCartSn();
 			if (setCartCount(result, cartSn)) return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
 		}
 
@@ -745,6 +768,6 @@ public class CartRestController extends CartBaseController{
 		}
 		return false;
 	}
-	
-	
+
+
 }

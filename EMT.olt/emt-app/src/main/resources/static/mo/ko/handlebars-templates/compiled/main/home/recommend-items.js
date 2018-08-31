@@ -23,8 +23,10 @@ this["AP"]["handlebars"]["main"]["home"]["recommend-items"] = Handlebars.templat
     + "					<img class=\"lazy_load\" data-src=\""
     + alias3(alias4(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.products : depth0)) != null ? stack1.prodImages : stack1)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
     + "\">\n				</span>\n			<div class=\"info_box\">\n				<div class=\"title_area\">\n					<span class=\"item_title\">"
+    + alias3(alias4((depth0 != null ? depth0.onlineProdName : depth0), depth0))
+    + "</span>\n					<span class=\"option_name\">"
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.products : depth0)) != null ? stack1.prodName : stack1), depth0))
-    + "</span> \n				</div>\n				<div class=\"price_area\">\n					<div class=\"price\">\n						<b>"
+    + "</span>\n				</div>\n				<div class=\"price_area\">\n					<div class=\"price\">\n						<b>"
     + alias3((helpers.numberFormat || (depth0 && depth0.numberFormat) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.products : depth0)) != null ? stack1.prodPriceSummary : stack1)) != null ? stack1.onlineSalePrice : stack1),{"name":"numberFormat","hash":{},"data":data}))
     + "</b> 원\n					</div>\n				</div>\n			</div>\n		  </a>\n	   </li>\n";
 },"5":function(container,depth0,helpers,partials,data) {

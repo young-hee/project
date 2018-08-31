@@ -1,12 +1,17 @@
 package kr.ap.amt.product.controller;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 import org.apache.commons.lang3.EnumUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import kr.ap.amt.product.vo.RequestReview;
@@ -17,11 +22,12 @@ import kr.ap.comm.support.common.SnsEntity;
 import kr.ap.comm.support.constants.APConstant;
 import kr.ap.comm.support.constants.ProductSaleDisplayStatus;
 import net.g1project.ecp.api.exception.ApiException;
-import net.g1project.ecp.api.model.sales.article.ArticleSearchResult;
-import net.g1project.ecp.api.model.sales.plandisplay.PlanDisplayEventListResult;
 import net.g1project.ecp.api.model.sales.product.OnlineProdInfo;
 import net.g1project.ecp.api.model.sales.product.PriceInfo;
 import net.g1project.ecp.api.model.sales.product.ProdReviewCountPerScope;
+import net.g1project.ecp.api.model.sales.product.ProdReviewImg;
+import net.g1project.ecp.api.model.sales.product.ProdReviewInfo;
+import net.g1project.ecp.api.model.sales.product.ProdReviewListInfo;
 import net.g1project.ecp.api.model.sales.product.ProdReviewSummaryInfo;
 import net.g1project.ecp.api.model.sales.product.ProductInfo;
 import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkPost;
@@ -42,6 +48,7 @@ public class ProductViewController extends AbstractController{
     @PageTitle(title = "상품상세")
 	public String productDetail(Model model, RequestReview requestReview, String previewKey, String onlyProd) {
 		OnlineProdInfo onlineProdInfo = productApi.getOnlineProduct( requestReview.getOnlineProdSn(), requestReview.getProdSn(), getMemberSn(), onlyProd);
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 		ProductInfo maxProd = null;
 		boolean isMaxRate = false;
 		
@@ -69,18 +76,15 @@ public class ProductViewController extends AbstractController{
 			
 		}
 		
-		ArticleSearchResult relateArticle = articleApi.getProdArticleList(requestReview.getOnlineProdSn(), "SortOrder", "Y", 0, 1 );
+    	ProdReviewSummaryInfo summary;	// 상품평 요약 정보
+    	ProdReviewListInfo bestPhotoReview;	// 베스트 포토 리뷰
+    	ProdReviewListInfo bestReview;	// 베스트 리뷰
+    	ProdReviewCountPerScope maxCountPerScope = null; // 상품평 중 최대 값
     	
-    	ProdReviewSummaryInfo summary;
-    	PlanDisplayEventListResult relateEventList;
-    	ProdReviewCountPerScope maxCountPerScope = null;
-    
     	//sns
     	String snsImage = null;
     	String snsTitle = null;
     	String snsDesc = null;
-    	
-    	
     	
     	//sns 이미지(default)
     	if(!StringUtils.isEmpty(onlineProdInfo.getOnlineProdImages())) {
@@ -106,12 +110,65 @@ public class ProductViewController extends AbstractController{
     	try {
     		requestReview.setProdReviewType("All"); //All(전체), Pur(구매후기), Prod(상품리뷰), ExperienceGrp(체험단)
     		requestReview.setProdReviewUnit("OnlineProd"); //OnlineProd(온라인상품단위) - UnitProd(단위상품단위, 단위상품일련번호 필수) - StyleCode(스타일코드단위, 스타일코드 필수)
+    		
+    		// 상품평 요약 정보 조회
     		summary = productApi.getProductReviewSummary(requestReview.getProdReviewUnit(), requestReview.getProdReviewType(), requestReview.getOnlineProdSn(), requestReview.getProdSn(), requestReview.getStyleCode());
-    		//relateEventList = plandisplayApi.getOnlineProdPlanDisplayEventList(requestReview.getOnlineProdSn(), "Progress", 0, 2, getMemberSn());
-    		relateEventList = plandisplayApi.getOnlineProdPlanDisplayEventList(requestReview.getOnlineProdSn(), requestReview.getStatus(), requestReview.getProdReviewType(), "Y", "SortOrder", 0, 0);
+    		
+    		//베스트 포토 리뷰
+    		requestReview.setProdReviewType("Pur"); 
+    		requestReview.setProdReviewSort("Recommend");
+    		requestReview.setLimit(10);
+    		requestReview.setTopReviewOnlyYn("Y");
+    		requestReview.setTopReviewFirstYn("Y");
+    		requestReview.setImageOnlyYn("Y");
+    		requestReview.setScope("All");
+    		bestPhotoReview = productApi.getProductReviews(
+    				requestReview.getProdReviewUnit()
+    				, requestReview.getProdReviewType()
+    				, requestReview.getOffset()
+    				, requestReview.getLimit()
+    				, getMemberSn()
+    				, requestReview.getOnlineProdSn()
+    				, requestReview.getProdSn()
+    				, requestReview.getStyleCode()
+    				, requestReview.getProdReviewSort()
+    				, requestReview.getScope()
+    				, requestReview.getTopReviewOnlyYn()
+    				, requestReview.getTopReviewFirstYn()
+    				, null
+    	    		, null
+    	    	    , "N"
+					, null	// displayMenuSetId
+					, null	// displayMenuId
+			);
+    	
+    		//베스트 리뷰
+    		requestReview.setLimit(1);
+    		requestReview.setImageOnlyYn("N");
+    		bestReview  = productApi.getProductReviews(
+    				requestReview.getProdReviewUnit()
+    				, requestReview.getProdReviewType()
+    				, requestReview.getOffset()
+    				, requestReview.getLimit()
+    				, getMemberSn()
+    				, requestReview.getOnlineProdSn()
+    				, requestReview.getProdSn()
+    				, requestReview.getStyleCode()
+    				, requestReview.getProdReviewSort()
+    				, requestReview.getScope()
+    				, requestReview.getTopReviewOnlyYn()
+    				, requestReview.getTopReviewFirstYn()
+    				, null
+    	    		, null
+    	    	    , "N"
+					, null
+					, null
+			);
+    		
     	}catch(ApiException apiEx) {
     		summary = new ProdReviewSummaryInfo();
-    		relateEventList = new PlanDisplayEventListResult();
+    		bestPhotoReview = new ProdReviewListInfo();
+    		bestReview = new ProdReviewListInfo();
     	}
     	
     	model.addAttribute("prd", onlineProdInfo);
@@ -128,8 +185,59 @@ public class ProductViewController extends AbstractController{
     	model.addAttribute("isMaxRate", isMaxRate);
     	model.addAttribute("maxProd", maxProd);
     	model.addAttribute("maxCountPerScope", maxCountPerScope);
-    	model.addAttribute("relateArticle", relateArticle);
-    	model.addAttribute("relateEventList", relateEventList);
+    	
+    	// bestPhotoReview dummy data
+    	if( bestPhotoReview.getTotalCount() == 0 ) {
+    		bestPhotoReview.setTotalCount(10);
+    		bestPhotoReview.setOffset(0);
+    		bestPhotoReview.setLimit(10);
+    		List<ProdReviewInfo> list = new ArrayList<>();
+    		ProdReviewInfo info = null;
+    		for (int i = 0; i < bestPhotoReview.getTotalCount(); i++) {
+    			info = new ProdReviewInfo();
+    			List<ProdReviewImg> imgList = new ArrayList<>();
+    			ProdReviewImg img = null;
+    			for (int j = 0; j < 3; j++) {
+					img = new ProdReviewImg();
+					img.setImageFileUrl("/mo/ko/images/dummy/img_mark_01.png");
+					imgList.add(img);
+				}
+    			info.setImgList(imgList);
+    			list.add(info);
+			}
+    		bestPhotoReview.setProdReviewList(list);
+    	}
+    	model.addAttribute("bestPhotoReview", bestPhotoReview);		//베스트 포토 리뷰
+    	
+    	// bestPhotoReview dummy data
+    	if( bestReview.getTotalCount() == 0 ) {
+    		bestReview.setTotalCount(1);
+    		bestReview.setOffset(0);
+    		bestReview.setLimit(1);
+    		List<ProdReviewInfo> list = new ArrayList<>();
+    		ProdReviewInfo info = null;
+    		for (int i = 0; i < bestReview.getTotalCount(); i++) {
+    			info = new ProdReviewInfo();
+    			List<ProdReviewImg> imgList = new ArrayList<>();
+    			ProdReviewImg img = null;
+    			for (int j = 0; j < 3; j++) {
+					img = new ProdReviewImg();
+					img.setImageFileUrl("/mo/ko/images/dummy/img_mark_01.png");
+					imgList.add(img);
+				}
+    			
+    			Calendar c = Calendar.getInstance();
+    			info.setMemberId("amorep***");
+    			info.setMemberLevelName("WELCOME");
+    			info.setProdName("라이트 퍼플 40호");
+    			info.setProdReviewRegistDt( c.getTime() );
+    			info.setProdReviewBodyText("친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히 피부색 칙칙한 날에 쓰면 화사해 보이고 화장한듯 안한듯 친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히 피부색 칙칙한 날에 쓰면 화사해 ...");
+    			info.setImgList(imgList);
+    			list.add(info);
+			}
+    		bestReview.setProdReviewList(list);
+    	}
+    	model.addAttribute("bestReview", bestReview);				//베스트 리뷰
 
         SnsEntity snsEntity = new SnsEntity();
         snsEntity.setUrl(getFullUri());
@@ -158,7 +266,7 @@ public class ProductViewController extends AbstractController{
 		model.addAttribute("seo", seoEntity);
 
       	//상품히스토리 저장
-		if(0L != getMemberSn()) {
+		if(getMemberSn() != null && 0L != getMemberSn()) {
 			ShoppingMarkPost shoppingMarkPost = new ShoppingMarkPost();
 			shoppingMarkPost.setShoppingMarkTgtCode("Prod");
 
@@ -196,7 +304,7 @@ public class ProductViewController extends AbstractController{
     		requestReview.setProdReviewType("All");
     	}
     	
-    	//상품평요약정보조회
+    	//상품평요약정보조회 = 뷰티테스터 + 구매 후기
 		ProdReviewSummaryInfo reviewStats 
 			= productApi.getProductReviewSummary(
 					  requestReview.getProdReviewUnit()	//상품평단위코드. - OnlineProd(온라인상품단위) - UnitProd(단위상품단위, 단위상품일련번호 필수) - StyleCode(스타일코드단위, 스타일코드 필수)
@@ -205,6 +313,7 @@ public class ProductViewController extends AbstractController{
 					, null								//단위상품일련번호
 					, null);							//스타일코드
 		
+		//후기 총합
 		ProdReviewCountPerScope maxCountPerScope = null;
     	if( reviewStats != null ) {
     		for (ProdReviewCountPerScope tempScope : reviewStats.getCountPerScopes()) {
@@ -215,9 +324,34 @@ public class ProductViewController extends AbstractController{
     			}
 			}
     	}
+    	
+    	//구매후기
+    	requestReview.setProdReviewType("Pur");
+    	ProdReviewSummaryInfo purchaseReviewStats 
+		= productApi.getProductReviewSummary(
+				  requestReview.getProdReviewUnit()	//상품평단위코드. - OnlineProd(온라인상품단위) - UnitProd(단위상품단위, 단위상품일련번호 필수) - StyleCode(스타일코드단위, 스타일코드 필수)
+				, requestReview.getProdReviewType()	//상품평유형코드. All(전체), Pur(구매후기), Prod(상품리뷰), ExperienceGrp(체험단)
+				, requestReview.getOnlineProdSn()	//온라인상품일련번호
+				, null								//단위상품일련번호
+				, null);							//스타일코드
+    	
     	model.addAttribute("maxCountPerScope", maxCountPerScope);
     	model.addAttribute("reviewStats", reviewStats);
+    	model.addAttribute("purchaseReviewStats", purchaseReviewStats);
     	
 		return "product/review-list";
+    }
+    
+    /**
+     * 리뷰 필터링
+     * @param requestReview
+     * @return
+     */
+    @GetMapping("/filterReviewList/{filterType}")
+    public String filterReviewList(@PathVariable String filterType, String keyword, Model model) throws ParseException {
+    	model.addAttribute("filterType", filterType);
+    	model.addAttribute("keyword", keyword);
+    	
+    	return "product/filter-review-list";
     }
 }

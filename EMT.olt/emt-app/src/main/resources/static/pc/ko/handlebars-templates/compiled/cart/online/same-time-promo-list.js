@@ -59,7 +59,15 @@ this["AP"]["handlebars"]["cart"]["online"]["same-time-promo-list"] = Handlebars.
     + alias3((helpers.counter || (depth0 && depth0.counter) || alias2).call(alias1,(container.data(data, 1) && container.data(data, 1).index),{"name":"counter","hash":{},"data":data}))
     + "\"/>\n					<input type=\"hidden\" name=\"onlinePrdSn\" value=\""
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
-    + "\"/>\n					<input type=\"hidden\" name=\"cartProdSn\" sameTimePromo=\"sameTimePromo\" value=\""
+    + "\"/>\n					<input type=\"hidden\" name=\"cartProdSn\" sameTimePromo=\"sameTimePromo\" cartProdQty=\""
+    + alias3(((helper = (helper = helpers.cartProdQty || (depth0 != null ? depth0.cartProdQty : depth0)) != null ? helper : alias2),(typeof helper === alias5 ? helper.call(alias1,{"name":"cartProdQty","hash":{},"data":data}) : helper)))
+    + "\" minPurLimitQty=\""
+    + alias3(alias4(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.minPurLimitQty : stack1), depth0))
+    + "\" maxPurLimitYn=\""
+    + alias3(alias4(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitYn : stack1), depth0))
+    + "\" maxPurLimitQty=\""
+    + alias3(alias4(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitQty : stack1), depth0))
+    + "\" value=\""
     + alias3(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias5 ? helper.call(alias1,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
     + "\"/>\n					<input type=\"hidden\" name=\"prdInfo_S_"
     + alias3(alias4((container.data(data, 2) && container.data(data, 2).index), depth0))
@@ -75,13 +83,17 @@ this["AP"]["handlebars"]["cart"]["online"]["same-time-promo-list"] = Handlebars.
     + ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodFlagExList : stack1)) != null ? stack1.length : stack1),0,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(17, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "							<a href=\"#none\" class=\"title\" onclick=\"fnProdDetail("
     + alias3(alias4((depths[1] != null ? depths[1].onlineProdSn : depths[1]), depth0))
-    + ")\">"
+    + ")\">\n								"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OnSale",{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(30, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + " "
     + alias3(alias4((depths[1] != null ? depths[1].onlineProdName : depths[1]), depth0))
-    + "</a>\n							"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].singleProdYn : depths[1]),"N",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(30, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n							</a>\n							"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].singleProdYn : depths[1]),"N",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(32, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n						</div>\n						<!--/* 포인트 및 가격 */-->\n						<div class=\"price\">\n"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OnSale",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(32, data, 0, blockParams, depths),"inverse":container.program(43, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
-    + "						</div>\n					</div>\n				</div>\n";
+    + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.calculationResultYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(34, data, 0, blockParams, depths),"inverse":container.program(37, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
+    + "						</div>\n					</div>\n					<!--/* 사은품 목록 */-->\n"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.cartProdAwardList : depth0)) != null ? stack1.length : stack1),0,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(40, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "				</div>\n";
 },"11":function(container,depth0,helpers,partials,data) {
     return " <div class=\"item_wrap plus\"> ";
 },"13":function(container,depth0,helpers,partials,data) {
@@ -127,56 +139,67 @@ this["AP"]["handlebars"]["cart"]["online"]["same-time-promo-list"] = Handlebars.
 },"30":function(container,depth0,helpers,partials,data) {
     var stack1;
 
+  return " <em>"
+    + container.escapeExpression((helpers.cartStatusTxt || (depth0 && depth0.cartStatusTxt) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),{"name":"cartStatusTxt","hash":{},"data":data}))
+    + "</em> ";
+},"32":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
   return " <span class=\"opt\">"
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodName : stack1), depth0))
     + "</span> ";
-},"32":function(container,depth0,helpers,partials,data) {
+},"34":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
 
-  return ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || helpers.helperMissing).call(alias1,(depth0 != null ? depth0.calculationResultYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(33, data, 0),"inverse":container.program(40, data, 0),"data":data})) != null ? stack1 : "");
-},"33":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
-
-  return ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.calculationResultProduct : depth0)) != null ? stack1.finalOnlineSalesAmountInfo : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(34, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "									<!--/*\n"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.doublePriceDisplayYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(36, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "									*/-->\n";
-},"34":function(container,depth0,helpers,partials,data) {
+  return ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || helpers.helperMissing).call(alias1,((stack1 = (depth0 != null ? depth0.calculationResultProduct : depth0)) != null ? stack1.finalOnlineSalesAmountInfo : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(35, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "								<!--/* 프로모션상품은 이중가표기를 않한다. */-->\n";
+},"35":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "										<span class=\"strong\"><b>"
+  return "									<span class=\"strong\"><b>"
     + container.escapeExpression((helpers.numberFormat || (depth0 && depth0.numberFormat) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.calculationResultProduct : depth0)) != null ? stack1.finalOnlineSalesAmountInfo : stack1)) != null ? stack1.standardCurrency : stack1)) != null ? stack1.amount : stack1),{"name":"numberFormat","hash":{},"data":data}))
     + "</b>원</span>\n";
-},"36":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
-
-  return ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || helpers.helperMissing).call(alias1,((stack1 = (depth0 != null ? depth0.calculationResultProduct : depth0)) != null ? stack1.productSaleAmountInfo : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(37, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"37":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
 
-  return ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || helpers.helperMissing).call(alias1,((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.calculationResultProduct : depth0)) != null ? stack1.productSaleAmountInfo : stack1)) != null ? stack1.standardCurrency : stack1)) != null ? stack1.amount : stack1),((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.calculationResultProduct : depth0)) != null ? stack1.finalOnlineSalesAmountInfo : stack1)) != null ? stack1.standardCurrency : stack1)) != null ? stack1.amount : stack1),{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(38, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+  return ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || helpers.helperMissing).call(alias1,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.salePrice : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(38, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"38":function(container,depth0,helpers,partials,data) {
-    var stack1;
-
-  return "												<del><b>"
-    + container.escapeExpression((helpers.numberFormat || (depth0 && depth0.numberFormat) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.calculationResultProduct : depth0)) != null ? stack1.productSaleAmountInfo : stack1)) != null ? stack1.standardCurrency : stack1)) != null ? stack1.amount : stack1),{"name":"numberFormat","hash":{},"data":data}))
-    + "</b>원</del>\n";
-},"40":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
-
-  return ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || helpers.helperMissing).call(alias1,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.salePrice : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(41, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
-},"41":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return "										<span class=\"strong\"><b>"
+  return "									<span class=\"strong\"><b>"
     + container.escapeExpression((helpers.numberFormat || (depth0 && depth0.numberFormat) || alias2).call(alias1,(helpers.calc || (depth0 && depth0.calc) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.salePrice : stack1),"*",(depth0 != null ? depth0.cartProdQty : depth0),{"name":"calc","hash":{},"data":data}),{"name":"numberFormat","hash":{},"data":data}))
     + "</b>원</span>\n";
-},"43":function(container,depth0,helpers,partials,data) {
+},"40":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "								<em>"
-    + container.escapeExpression((helpers.cartStatusTxt || (depth0 && depth0.cartStatusTxt) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),{"name":"cartStatusTxt","hash":{},"data":data}))
-    + "</em>\n";
+  return "						<ul class=\"freebies\">\n"
+    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.cartProdAwardList : depth0),{"name":"each","hash":{},"fn":container.program(41, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "						</ul>\n";
+},"41":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
+
+  return "								<li>\n									<span class=\"option_name\">\n"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.awardProdEx : depth0)) != null ? stack1.repProdImgEx : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(42, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "										사은품 : "
+    + alias3(container.lambda(((stack1 = (depth0 != null ? depth0.awardProdEx : depth0)) != null ? stack1.prodName : stack1), depth0))
+    + " "
+    + ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || alias2).call(alias1,(depth0 != null ? depth0.awardUnitQty : depth0),0,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(44, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n									</span>\n									<span class=\"term\">\n										증정기간 : "
+    + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,(depth0 != null ? depth0.awardStartDt : depth0),"YYYY.MM.DD",{"name":"dateFormat","hash":{},"data":data}))
+    + " ~ "
+    + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,(depth0 != null ? depth0.awardEndDt : depth0),"YYYY.MM.DD",{"name":"dateFormat","hash":{},"data":data}))
+    + "\n									</span>\n								</li>\n";
+},"42":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return "											<img src=\""
+    + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.awardProdEx : depth0)) != null ? stack1.repProdImgEx : stack1)) != null ? stack1.imgUrl : stack1), depth0))
+    + "\" alt=\"\"/>\n";
+},"44":function(container,depth0,helpers,partials,data) {
+    var helper;
+
+  return container.escapeExpression(((helper = (helper = helpers.awardUnitQty || (depth0 != null ? depth0.awardUnitQty : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"awardUnitQty","hash":{},"data":data}) : helper)))
+    + "개 ";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 

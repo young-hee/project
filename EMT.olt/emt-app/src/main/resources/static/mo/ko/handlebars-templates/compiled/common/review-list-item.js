@@ -57,9 +57,9 @@ this["AP"]["handlebars"]["common"]["review-list-item"] = Handlebars.template({"1
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.imageFileUrl : depth0), depth0))
     + "\" alt=\"\">\n				</span>\n";
 },"20":function(container,depth0,helpers,partials,data) {
-    return "		<a href=\"javascript:;\" class=\"review_detail off\" data-prod-review-sn=\""
+    return "		<a href=\"#none\" class=\"review_detail off\" data-prod-review-sn=\""
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.prodReviewSn : depth0), depth0))
-    + "\">더보기 ∨</a>\n";
+    + "\">더보기 <i class=\"ico_arr_up\"></i></a>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
 

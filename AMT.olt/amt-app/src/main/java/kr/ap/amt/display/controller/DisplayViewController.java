@@ -33,6 +33,7 @@ import kr.ap.comm.support.common.SeoEntity;
 import kr.ap.comm.support.common.SnsEntity;
 import kr.ap.comm.support.constants.APConstant;
 import kr.ap.comm.util.FromEndDateUtils;
+import kr.ap.amt.product.vo.RequestReview;
 import net.g1project.ecp.api.model.sales.article.Article;
 import net.g1project.ecp.api.model.sales.article.ArticleComment;
 import net.g1project.ecp.api.model.sales.article.ArticleCommentPost;
@@ -153,10 +154,10 @@ public class DisplayViewController extends AbstractController {
 
 		return "display/notification";
 	}
-
-	@RequestMapping({"/magazine", "/magazine/preview"})
-	@PageTitle(title = "매거진")
-	public String magazine(Model model, String displayMenuId, String previewKey, String previewDate) {
+	
+	@RequestMapping({"/issue1", "/issue1/preview", "/issue2", "/issue2/preview"})
+	@PageTitle(title = "이슈")
+	public String issue1(Model model, String displayMenuId, String previewKey, String previewDate) {
 
 		String cornerIds =  "";
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -166,12 +167,18 @@ public class DisplayViewController extends AbstractController {
 		try {
 			//Mobile
 			if (isMobileDevice()) {
-				cornerIds = "M01_" + displayMenuId + "_m.1," + "M01_" + displayMenuId + "_m.2," + "M01_" + displayMenuId + "_m.3";
+				cornerIds = "M01_" + displayMenuId + "_m.1," + "M01_" + displayMenuId + "_m.2," + "M01_" + displayMenuId + "_m.3," + "M01_" + displayMenuId + "_m.4," + "M01_" + displayMenuId + "_m.5";
+				if("issue1".equals(displayMenuId)) {
+					cornerIds = cornerIds + "," + "M01_" + displayMenuId + "_m.6," + "M01_" + displayMenuId + "_m.7," + "M01_" + displayMenuId + "_m.8," + "M01_" + displayMenuId + "_m.9," + "M01_" + displayMenuId + "_m.10";					
+				}
 			}
 
 			//PC
 			if (isPcDevice()) {
-				cornerIds = "M01_" + displayMenuId + "_p.1," + "M01_" + displayMenuId + "_p.2," + "M01_" + displayMenuId + "_p.3";
+				cornerIds = "M01_" + displayMenuId + "_m.1," + "M01_" + displayMenuId + "_m.2," + "M01_" + displayMenuId + "_m.3," + "M01_" + displayMenuId + "_m.4," + "M01_" + displayMenuId + "_m.5";
+				if("issue1".equals(displayMenuId)) {
+					cornerIds = cornerIds + "," + "M01_" + displayMenuId + "_m.6," + "M01_" + displayMenuId + "_m.7," + "M01_" + displayMenuId + "_m.8," + "M01_" + displayMenuId + "_m.9," + "M01_" + displayMenuId + "_m.10";					
+				}
 			}
 
 	        List<Corner> corners = displayApi.getMenuPageCorners(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId, previewKey, previewDate != null ? sf.parse(previewDate) : null, cornerIds, false);
@@ -183,17 +190,9 @@ public class DisplayViewController extends AbstractController {
 			model.addAttribute("cornersMap", cornersMap);
 		
 		}catch(Exception e) {
-			model.addAttribute("popupInfo", null);
-	        model.addAttribute("footerNotice", null);
+			model.addAttribute("cornersMap", null);
 	    }
 		
-		ArticleSearchResult trandArticleResult = articleApi.getArticleList("aTrendOnAir", "StartDt", null, "N", null, 0, 3);
-		ArticleSearchResult beautyArticleResult = articleApi.getArticleList("aSuperBeautyTip", "StartDt", null, "N", null, 0, 2);
-		ProdReviewListInfo prodReviewListInfo = productApi.getProductReviews("OnlineProd", "Prod", 0, 2, null, null, null, null, "Recommend", "All", "N", "N", null, null, "Y");
-		
-		model.addAttribute("trandArticleResult", trandArticleResult);
-		model.addAttribute("beautyArticleResult", beautyArticleResult);
-		model.addAttribute("prodReviewListInfo", prodReviewListInfo);
 		
 		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
 
@@ -569,6 +568,159 @@ public class DisplayViewController extends AbstractController {
 	}
 	
 	/**
+	 * 리뷰 페이지 이동
+	 * 
+	 * @param model
+	 * @param displayMenuId
+	 * @return
+	 */
+	@RequestMapping({ "/review" })
+	@PageTitle(title = "리뷰")
+	public String review(Model model, String displayMenuId, String previewKey, String previewDate) {
+		
+		
+		String cornerIds =  "";
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		displayMenuId = "review";
+		DateUtils.addDays(new Date(), -7);
+		DateUtils.addMonths(new Date(), -1);
+		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
+		RequestReview requestReview = new RequestReview();
+		requestReview.setProdReviewUnit("OnlineProd");
+		requestReview.setProdReviewType("Pur");
+		requestReview.setOffset(0);
+		requestReview.setLimit(10);
+		requestReview.setProdReviewSort("Recommend");
+		requestReview.setScope("All");
+		requestReview.setTopReviewOnlyYn("N");
+		requestReview.setTopReviewFirstYn("N");
+		requestReview.setImageOnlyYn("N");
+		
+		// 이번주 리뷰 랭킹
+		ProdReviewListInfo thisWeekReviewRank = productApi.getProductReviews(
+				requestReview.getProdReviewUnit(),
+				requestReview.getProdReviewType(),
+				requestReview.getOffset(),
+				requestReview.getLimit(),
+				null,
+				requestReview.getOnlineProdSn(),
+				requestReview.getProdSn(),
+				requestReview.getStyleCode(),
+				requestReview.getProdReviewSort(),
+				requestReview.getScope(),
+				requestReview.getTopReviewOnlyYn(),
+				requestReview.getTopReviewFirstYn(),
+				null,
+				null,
+				requestReview.getImageOnlyYn(),	// imageOnlyYn
+				null,	// displayMenuSetId
+				null)	// displayMenuId
+				;
+		
+		// 화제의 제품 - API 추가후 개발
+//			ProdReviewListInfo bestProductReview = productApi.getProductReviews(
+//					requestReview.getProdReviewUnit(),
+//					requestReview.getProdReviewType(),
+//					requestReview.getOffset(),
+//					requestReview.getLimit(),
+//					getMemberSn(),
+//					requestReview.getOnlineProdSn(),
+//					requestReview.getProdSn(),
+//					requestReview.getStyleCode(),
+//					requestReview.getProdReviewSort(),
+//					requestReview.getScope(),
+//					requestReview.getTopReviewOnlyYn(),
+//					requestReview.getTopReviewFirstYn(),
+//					null,
+//					null,
+//					"N",	// imageOnlyYn
+//					null,	// displayMenuSetId
+//					null)	// displayMenuId
+//					;
+		
+		//지난달 리뷰랭킹 - 포토리뷰
+		requestReview.setImageOnlyYn("Y");
+		ProdReviewListInfo lastMonthReviewRank = productApi.getProductReviews(
+				requestReview.getProdReviewUnit(),
+				requestReview.getProdReviewType(),
+				requestReview.getOffset(),
+				requestReview.getLimit(),
+				null,
+				requestReview.getOnlineProdSn(),
+				requestReview.getProdSn(),
+				requestReview.getStyleCode(),
+				requestReview.getProdReviewSort(),
+				requestReview.getScope(),
+				requestReview.getTopReviewOnlyYn(),
+				requestReview.getTopReviewFirstYn(),
+//				DateUtils.addMonths(new Date(), -1),
+//				new Date(),
+				null,//임시
+				null,//임시
+				requestReview.getImageOnlyYn(),	// imageOnlyYn
+				null,	// displayMenuSetId
+				null)	// displayMenuId
+				;
+		
+		//실시간구매리뷰 - 등록된 리뷰 카운트
+		requestReview.setImageOnlyYn("N");
+		requestReview.setProdReviewType("All");
+		ProdReviewListInfo onlineBuyReviewCount = productApi.getProductReviews(
+				requestReview.getProdReviewUnit(),
+				requestReview.getProdReviewType(),
+				requestReview.getOffset(),
+				requestReview.getLimit(),
+				getMemberSn(),
+				requestReview.getOnlineProdSn(),
+				requestReview.getProdSn(),
+				requestReview.getStyleCode(),
+				requestReview.getProdReviewSort(),
+				requestReview.getScope(),
+				requestReview.getTopReviewOnlyYn(),
+				requestReview.getTopReviewFirstYn(),
+//				DateUtils.addDays(new Date(), -7),
+//				new Date(),
+				null,//임시
+				null,//임시
+				requestReview.getImageOnlyYn(),	// imageOnlyYn
+				null,	// displayMenuSetId
+				null)	// displayMenuId
+				;
+		//실시간구매리뷰 - 리뷰목록
+		ProdReviewListInfo onlineBuyReview = productApi.getProductReviews(
+				requestReview.getProdReviewUnit(),
+				requestReview.getProdReviewType(),
+				requestReview.getOffset(),
+				requestReview.getLimit(),
+				getMemberSn(),
+				requestReview.getOnlineProdSn(),
+				requestReview.getProdSn(),
+				requestReview.getStyleCode(),
+				requestReview.getProdReviewSort(),
+				requestReview.getScope(),
+				requestReview.getTopReviewOnlyYn(),
+				requestReview.getTopReviewFirstYn(),
+//				DateUtils.addDays(new Date(), -7),
+//				new Date(),
+				null,//임시
+				null,//임시
+				requestReview.getImageOnlyYn(),	// imageOnlyYn
+				null,	// displayMenuSetId
+				null)	// displayMenuId
+				;
+		
+		model.addAttribute("thisWeekReviewRank", thisWeekReviewRank);
+		//model.addAttribute("bestProductReview", bestProductReview);
+		model.addAttribute("lastMonthReviewRank", lastMonthReviewRank);
+		model.addAttribute("onlineBuyReviewCount", onlineBuyReviewCount);
+		model.addAttribute("onlineBuyReview", onlineBuyReview);
+
+		model.addAttribute("displayMenuId", displayMenuId);
+		
+		return "display/" + pageInfo.getMenuPageFileId();
+	}
+	
+	/**
 	 * 핫딜 (투데이핫딜) 페이지 이동
 	 * 
 	 * @param model
@@ -876,5 +1028,21 @@ public class DisplayViewController extends AbstractController {
 		model.addAttribute("displayMenuId", displayMenuId);
 		
 		return fileName;
+	}
+	
+	/**
+	 * 쇼핑팁 이동
+	 * 
+	 * @param model
+	 * @param displayMenuId
+	 * @return
+	 */
+	@RequestMapping({ "/shoppingTip", "/shoppingTip/preview" })
+	@PageTitle(title = "쇼핑팁")
+	public String shoppingTip(Model model, String displayMenuId, String previewKey, String previewDate) {
+		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
+		model.addAttribute("displayMenuId", displayMenuId);
+
+		return "display/" + pageInfo.getMenuPageFileId();
 	}
 }

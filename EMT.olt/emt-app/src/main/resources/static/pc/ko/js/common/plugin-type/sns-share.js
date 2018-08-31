@@ -149,7 +149,7 @@
 							},
 							buttons: [
 								{
-									title: '제세히 보기',
+									title: '자세히 보기',
 									link: {
 										mobileWebUrl: originUrl,
 										webUrl: originUrl

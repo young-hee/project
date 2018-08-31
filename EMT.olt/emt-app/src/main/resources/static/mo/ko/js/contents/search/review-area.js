@@ -54,15 +54,13 @@
 
 			if ( this._api ) this._api.abort();
 
-			//TODO: 해당 api로 변경
 			this._api = AP.api.searchReviewList( null, {
 					toSearchFor: this._keyword,
 					prodReviewTypeCodes: this._$prodFilterCheck.is( ':checked' ) ? 'Pur' : '',
 					prodReviewSort: this._$sortSelect.val(),
 					offset: offset,
 					limit: 5
-				})
-				.done( function ( result ) {
+				}).done( function ( result ) {
 					this._draw( result );
 				}.bind(this))
 				.fail( function ( xhr ) {
@@ -71,8 +69,14 @@
 		},
 
 		_draw: function ( data ) {
+			$.each(data.list, function(inx, review){
+				
+				review.prodReviewBodyText=
+				AP.common.replaceHtmlEntites(AP.common.removeHtmlTag(review.prodReviewBodyText).replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, ''));
+				 
+			});
 			
-			var html = AP.common.getTemplate( 'search.review-list', data );
+			var html = AP.common.getTemplate( 'search.review-list', data);
 
 			//remove events
 			this._$target.find( '.review_detail' ).off( 'click' );

@@ -3,6 +3,7 @@ package kr.ap.emt.config;
 import com.github.mxab.thymeleaf.extras.dataattribute.dialect.DataAttributeDialect;
 
 import kr.ap.comm.api.HttpsTrustManager;
+import kr.ap.comm.config.filter.MallIdFilter;
 import kr.ap.comm.config.interceptor.*;
 import kr.ap.comm.config.thymeleaf.APCustomDialect;
 import kr.ap.comm.support.breadcrumb.BreadCrumbPostProcessor;
@@ -85,6 +86,11 @@ public class EmtAppConfiguration extends WebMvcConfigurerAdapter {
 		filter.setEncoding("utf-8");
 		filter.setForceEncoding(true);
     	return filter;
+	}
+
+	@Bean
+	public MallIdFilter mallIdFilter() {
+    	return  new MallIdFilter();
 	}
 
     @Override

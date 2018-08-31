@@ -1,5 +1,5 @@
 <!--배송정보입력-->
-<dl class="delivery" th:if="${apMember == null}">
+<dl class="delivery" th:unless="${isApMember}">
 	<dt class="on">
 		<div class="title"><b>배송정보 입력</b></div>
 		<button type="button"><span class="sr_only">더보기</span></button>
@@ -48,6 +48,7 @@
 				<div class="check_set clear">
 					<span class="check_wrap"><input type="radio" name="delivery" id="delivery1" value="01" th:onclick="|shipInfo('SHIP')|" checked><label for="delivery1">일반택배</label></span>
 					<span class="check_wrap"><input type="radio" name="delivery" id="delivery2" value="02" th:onclick="|shipInfo('STORE')|"><label for="delivery2">편의점 배송</label></span>
+					<input type="hidden" name="shipType" value="SHIP"/>
 				</div>
 
 				<!--일반택배 선택시-->
@@ -203,6 +204,7 @@
 			if(shipType == 'SHIP' ) {
 				$('#delivery1_layer').show();
 				$('#delivery2_layer').hide();
+				$('input[name=shipType]').val('SHIP');
 			} else if(shipType == 'STORE' ) {
 				if ($('[name=purchaserName]').val() != "") {
 					$('#orderNonmemberName').html($('[name=purchaserName]').val());
@@ -215,6 +217,8 @@
 
 				$('#delivery1_layer').hide();
 				$('#delivery2_layer').show();
+				$('input[name=shipType]').val('STORE');
+				$('input[name=addressStoreType]').attr('value','MEMBER');
 			}
 		}
 
@@ -231,10 +235,12 @@
 				$('#address2_1_layer').show();
 				$('#address2_2_01_layer').hide();
 				$('#address2_2_02_layer').hide();
+				$('input[name=addressStoreType]').attr('value','MEMBER');
 			} else if(choiceType == 'NEW' ) {
 				$('#address2_1_layer').hide();
 				$('#address2_2_01_layer').show();
 				$('#address2_2_02_layer').show();
+				$('input[name=addressStoreType]').attr('value','NEW');
 			}
 
 			$('#name02').blur(function(){
@@ -264,7 +270,6 @@
 		$('[name=selectShipMsg]').on('change', function(e){
 			var selectedVal = $(this).val();
 			//console.log("selectedVal : " + selectedVal);
-			$('[name=shipMsg]').focus();
 			if(!selectedVal){
 				$('[name=shipMsg]').val("");
 			}else{

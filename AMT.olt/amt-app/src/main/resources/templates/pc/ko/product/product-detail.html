@@ -12,7 +12,7 @@
 				<!--/* 상품 상세 정보 영역 */-->
 				<div class="inner_wrap">
 					<!--/* 상품 이미지 */-->
-					<div class="product_visual" th:with="defaultProdImages=${prd.selectedProdSn == null or #lists.size(#collections.where(prd.products, {prodSn: prd.selectedProdSn})) < 1 ? prd.onlineProdImages : #collections.where(prd.products, {prodSn: prd.selectedProdSn})[0].prodImages }">
+					<div class="product_visual prd_img_wrap" th:with="defaultProdImages=${prd.selectedProdSn == null or #lists.size(#collections.where(prd.products, {prodSn: prd.selectedProdSn})) < 1 ? prd.onlineProdImages : #collections.where(prd.products, {prodSn: prd.selectedProdSn})[0].prodImages }">
 						<div class="slide" data-ix-options="view-length:1; loop:false;">
 							<div class="ix-list-viewport">
 								<ul class="ix-list-items">
@@ -26,9 +26,9 @@
 						<div class="slide thumb" data-ix-options="view-length:3; move-length:1; loop:false;">	<!-- 섬네일 클릭하면 class="active" 추가되고 viewport에 해당 썸네일 큰 이미지가 뷰에 보여야 함 -->
 							<div class="ix-list-viewport">
 								<ul class="ix-list-items">
-									<li class="ix-list-item" th:each="onlineImg, iterStat : ${defaultProdImages}" th:classappend="${iterStat.index == 0? 'active' : ''}">
+									<li class="ix-list-item preview_thumbs" th:each="onlineImg, iterStat : ${defaultProdImages}" th:classappend="${iterStat.index == 0? 'active' : ''}">
 										<a href="#none">
-											<img th:src="${onlineImg.imgUrl}"  alt="">
+											<img th:src="${onlineImg.imgUrl}" alt="">
 										</a>
 									</li>
 								</ul>
@@ -203,7 +203,7 @@
 						
 						<!--/* 스페셜 기프트 / 어워드 */-->
 						<div class="additional">
-							<!--/* 스펠셜 기프트 */-->
+							<!--/* 스펠셜 기프트 *
 							<dl class="special_gift" th:if="${#lists.size(prd.onlineProdGift.giftProds) > 0 }">
 								<dt class="title">
 									<i class="ico_gift"></i> 스페셜 기프트 <small>뷰티포인트 결제시 제외</small>
@@ -230,34 +230,14 @@
 									</div>
 								</dd>
 							</dl>
-							<!--/* 어워드 */-->
+							/-->
+							<!--/* 어워드 
 							<dl class="awards_list">
 								<dt class="title"><i class="ico_award"></i> 어워드 수상내역</dt>
 								<dd>
 									<div class="slide" data-ix-options="view-length:6; loop:false;">
 										<div class="ix-list-viewport">
 											<ul class="ix-list-items">
-												<li class="ix-list-item">
-													<img ap:src="@{/images/product/img_award.png}" alt="{어워드명}" class="award">
-												</li>
-												<li class="ix-list-item">
-													<img ap:src="@{/images/product/img_award.png}" alt="{어워드명}" class="award">
-												</li>
-												<li class="ix-list-item">
-													<img ap:src="@{/images/product/img_award.png}" alt="{어워드명}" class="award">
-												</li>
-												<li class="ix-list-item">
-													<img ap:src="@{/images/product/img_award.png}" alt="{어워드명}" class="award">
-												</li>
-												<li class="ix-list-item">
-													<img ap:src="@{/images/product/img_award.png}" alt="{어워드명}" class="award">
-												</li>
-												<li class="ix-list-item">
-													<img ap:src="@{/images/product/img_award.png}" alt="{어워드명}" class="award">
-												</li>
-												<li class="ix-list-item">
-													<img ap:src="@{/images/product/img_award.png}" alt="{어워드명}" class="award">
-												</li>
 												<li class="ix-list-item">
 													<img ap:src="@{/images/product/img_award.png}" alt="{어워드명}" class="award">
 												</li>
@@ -272,6 +252,7 @@
 									</div>
 								</dd>
 							</dl>
+							*/-->
 						</div>
 						
 						<!--/* 옵션선택 */-->
@@ -280,7 +261,7 @@
 						</div>
 						
 						<!--/* 립 옵션 : color 가 1개 이상일때만 노출*/-->
-						<div class="color_option" th:if="${#lists.size(prd.products) > 1}">
+						<div class="color_option" th:if="${#lists.size(prd.products) > 1 && #lists.size(prd.colorGroups) > 1}">
 							<p class="color_name">색상을 선택해주세요.</p>
 							<ul class="color_list color_chips_area">
 								<th:block th:each="product : ${prd.products}">
@@ -331,10 +312,10 @@
 					</ul> 
 				</div> 
 				
-					<!-- tab contents wrap -->
+				<!-- tab contents wrap -->
 				<div class="detail_cont tab_contents">
 					<!-- tab content1  : 상세정보 -->
-					<div class="tab_cont detail_goods_info tab_cont" style="display:block">
+					<div class="tab_cont detail_goods_info" style="display:block">
 						<h3 class="sr_only">상세정보</h3>
 						<div class="detail_img" th:utext="${prd.detailDesc}">
 							<!--/* 상세정보 영역 */-->
@@ -775,1217 +756,1216 @@
 						</dl>
 					</div>
 
+					<!--/* 주문레이어 */-->
+					<!--/* 뷰티포인트 전용상품은 단위가 "P" */-->
+					<div class="order_layer" th:with="currencySign=${prd.productCount == 1 and prd.products[0].membershipExchOnly == 'Y' ? 'P' : '원'}">
+						<div class="scroll_warp order_prd_list">
+							<!--/* 옵션선택 */-->
+							<div class="ui_select option_select_list selectbox_area" data-not-label-change="true">
+							</div>
+							
+							<!--/* 립 옵션 : color 가 1개 이상일때만 노출*/-->
+							<div class="color_option" th:if="${#lists.size(prd.colorGroups) > 1 and prd.productCount > 1}">
+								<p class="color_name">색상을 선택해주세요.</p>
+								<ul class="color_list color_chips_area">
+									<th:block th:each="product : ${prd.products}">
+										<li th:data-prod-sn="${product.prodSn}">
+											<a href="#none" th:title="${product.prodName}">
+												<span th:if="${product.colorchipTypeCode == 'RGB'}" th:style="'background-color:#' + ${product.rgbVal}"></span>
+												<span th:if="${product.colorchipTypeCode == 'Img'}" ><img alt="" th:src="${product.colorchipImg}"></span>
+											</a>
+										</li>
+									</th:block>
+								</ul>
+							</div>
+							<!--/* 선택된 옵션 */-->
+							<div class="selected_option_area scroll_area">
+							</div>
+							
+						</div>
+						<div class="total order_bottom">
+							<div>
+								<span class="quantity">총 <span class="total_count">0</span>개</span> 
+	               				<span class="price"><b class="num total_price">0</b>[[${currencySign}]]</span>
+							</div>
+							<a class="btn_xlg_bordered btn_basket">장바구니</a>
+							<a class="btn_xlg_neutral btn_buy_now">구매하기</a>
+						</div>
+					</div>
 					<!--/* 상품정보 사이드바 */-->
 				</div>
-				
-				<!--/* 주문레이어 */-->
-				<!--/* 뷰티포인트 전용상품은 단위가 "P" */-->
-				<div class="order_layer" th:with="currencySign=${prd.productCount == 1 and prd.products[0].membershipExchOnly == 'Y' ? 'P' : '원'}">
-					<div class="scroll_warp order_prd_list">
-						<!--/* 옵션선택 */-->
-						<div class="ui_select option_select_list selectbox_area" data-not-label-change="true">
-						</div>
-						
-						<!--/* 립 옵션 : color 가 1개 이상일때만 노출*/-->
-						<div class="color_option" th:if="${#lists.size(prd.colorGroups) > 1 and prd.productCount > 1}">
-							<p class="color_name">색상을 선택해주세요.</p>
-							<ul class="color_list color_chips_area">
-								<th:block th:each="product : ${prd.products}">
-									<li th:data-prod-sn="${product.prodSn}">
-										<a href="#none" th:title="${product.prodName}">
-											<span th:if="${product.colorchipTypeCode == 'RGB'}" th:style="'background-color:#' + ${product.rgbVal}"></span>
-											<span th:if="${product.colorchipTypeCode == 'Img'}" ><img alt="" th:src="${product.colorchipImg}"></span>
-										</a>
-									</li>
-								</th:block>
-							</ul>
-						</div>
-						<!--/* 선택된 옵션 */-->
-						<div class="selected_option_area">
-						</div>
-						
-					</div>
-					<div class="total">
-						<div>
-							<span class="quantity">총 <span class="total_count">0</span>개</span> 
-               				<span class="price"><b class="num total_price">0</b>[[${currencySign}]]</span>
-						</div>
-						<a class="btn_xlg_bordered btn_basket">장바구니</a>
-						<a class="btn_xlg_neutral btn_buy_now">구매하기</a>
-					</div>
-				</div>
+			</div>
 	
-				<!--하단 상품 목록-->
-				<div class="detail_foot">
-					<div class="inner_wrap">
-						<div class="category_area">
-							<div class="title_wrap">
-								<h3 class="h_title d2"><strong>이 상품과 함께 많은 고객님들이 선택한 상품</strong></h3>
+			<!--하단 상품 목록-->
+			<div class="detail_foot">
+				<div class="inner_wrap">
+					<div class="category_area">
+						<div class="title_wrap">
+							<h3 class="h_title d2"><strong>이 상품과 함께 많은 고객님들이 선택한 상품</strong></h3>
+						</div>
+						<div class="category_slide slide" data-ix-options="view-length:6; move-length:6;loop:false;datum-point:-4px">
+							<div class="ix-list-viewport list_product wide155 ">
+								<ul class="ix-list-items">
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] ygq베이비 선쿠션리미티드 SPF32 PA++ 베이비 ygq선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">30%</span> -->
+														<span class="txt_price"><em>218,500</em>원</span>
+														<del class="txt_del">230,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 54,000</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">1+1</span> -->
+														<span class="txt_price"><em>100,000</em>원</span>
+														<del class="txt_del">10,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 2,454</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">30%</span> -->
+														<span class="txt_price"><em>218,500</em>원</span>
+														<del class="txt_del">230,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 54,000</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">1+1</span> -->
+														<span class="txt_price"><em>100,000</em>원</span>
+														<del class="txt_del">10,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 2,454</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] ygq베이비 선쿠션리미티드 SPF32 PA++ 베이비 ygq선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">30%</span> -->
+														<span class="txt_price"><em>218,500</em>원</span>
+														<del class="txt_del">230,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 54,000</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">1+1</span> -->
+														<span class="txt_price"><em>100,000</em>원</span>
+														<del class="txt_del">10,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 2,454</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">30%</span> -->
+														<span class="txt_price"><em>218,500</em>원</span>
+														<del class="txt_del">230,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 54,000</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">1+1</span> -->
+														<span class="txt_price"><em>100,000</em>원</span>
+														<del class="txt_del">10,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 2,454</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+								</ul>
 							</div>
-							<div class="category_slide slide" data-ix-options="view-length:6; move-length:6;loop:false;datum-point:-4px">
-								<div class="ix-list-viewport list_product wide155 ">
-									<ul class="ix-list-items">
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
-													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] ygq베이비 선쿠션리미티드 SPF32 PA++ 베이비 ygq선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">30%</span> -->
-															<span class="txt_price"><em>218,500</em>원</span>
-															<del class="txt_del">230,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 54,000</span>
-														</div>
-													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
-													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">1+1</span> -->
-															<span class="txt_price"><em>100,000</em>원</span>
-															<del class="txt_del">10,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 2,454</span>
-														</div>
-													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
-													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">30%</span> -->
-															<span class="txt_price"><em>218,500</em>원</span>
-															<del class="txt_del">230,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 54,000</span>
-														</div>
-													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
-													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">1+1</span> -->
-															<span class="txt_price"><em>100,000</em>원</span>
-															<del class="txt_del">10,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 2,454</span>
-														</div>
-													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
-													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] ygq베이비 선쿠션리미티드 SPF32 PA++ 베이비 ygq선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">30%</span> -->
-															<span class="txt_price"><em>218,500</em>원</span>
-															<del class="txt_del">230,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 54,000</span>
-														</div>
-													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
-													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">1+1</span> -->
-															<span class="txt_price"><em>100,000</em>원</span>
-															<del class="txt_del">10,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 2,454</span>
-														</div>
-													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
-													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">30%</span> -->
-															<span class="txt_price"><em>218,500</em>원</span>
-															<del class="txt_del">230,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 54,000</span>
-														</div>
-													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
-													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">1+1</span> -->
-															<span class="txt_price"><em>100,000</em>원</span>
-															<del class="txt_del">10,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 2,454</span>
-														</div>
-													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</li>
-									</ul>
-								</div>
-								<div class="ix-controller">
-									<div class="slide_direction">
-										<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
-										<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
-										<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
-									</div>
+							<div class="ix-controller">
+								<div class="slide_direction">
+									<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
+									<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
+									<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
 								</div>
 							</div>
 						</div>
-						
-						<div class="category_area">
-							<div class="title_wrap">
-								<h3 class="h_title d2"><strong>클렌징 인기상품</strong></h3>
+					</div>
+					
+					<div class="category_area">
+						<div class="title_wrap">
+							<h3 class="h_title d2"><strong>클렌징 인기상품</strong></h3>
+						</div>
+						<div class="category_slide slide" data-ix-options="view-length:6; move-length:6;loop:false;datum-point:-4px">
+							<div class="ix-list-viewport list_product wide155 ">
+								<ul class="ix-list-items">
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] ygq베이비 선쿠션리미티드 SPF32 PA++ 베이비 ygq선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">30%</span> -->
+														<span class="txt_price"><em>218,500</em>원</span>
+														<del class="txt_del">230,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 54,000</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">1+1</span> -->
+														<span class="txt_price"><em>100,000</em>원</span>
+														<del class="txt_del">10,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 2,454</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">30%</span> -->
+														<span class="txt_price"><em>218,500</em>원</span>
+														<del class="txt_del">230,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 54,000</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">1+1</span> -->
+														<span class="txt_price"><em>100,000</em>원</span>
+														<del class="txt_del">10,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 2,454</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] ygq베이비 선쿠션리미티드 SPF32 PA++ 베이비 ygq선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">30%</span> -->
+														<span class="txt_price"><em>218,500</em>원</span>
+														<del class="txt_del">230,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 54,000</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">1+1</span> -->
+														<span class="txt_price"><em>100,000</em>원</span>
+														<del class="txt_del">10,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 2,454</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">30%</span> -->
+														<span class="txt_price"><em>218,500</em>원</span>
+														<del class="txt_del">230,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 54,000</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">1+1</span> -->
+														<span class="txt_price"><em>100,000</em>원</span>
+														<del class="txt_del">10,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 2,454</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+								</ul>
 							</div>
-							<div class="category_slide slide" data-ix-options="view-length:6; move-length:6;loop:false;datum-point:-4px">
-								<div class="ix-list-viewport list_product wide155 ">
-									<ul class="ix-list-items">
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
-													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] ygq베이비 선쿠션리미티드 SPF32 PA++ 베이비 ygq선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">30%</span> -->
-															<span class="txt_price"><em>218,500</em>원</span>
-															<del class="txt_del">230,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 54,000</span>
-														</div>
-													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
-													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">1+1</span> -->
-															<span class="txt_price"><em>100,000</em>원</span>
-															<del class="txt_del">10,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 2,454</span>
-														</div>
-													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
-													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">30%</span> -->
-															<span class="txt_price"><em>218,500</em>원</span>
-															<del class="txt_del">230,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 54,000</span>
-														</div>
-													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
-													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">1+1</span> -->
-															<span class="txt_price"><em>100,000</em>원</span>
-															<del class="txt_del">10,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 2,454</span>
-														</div>
-													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
-													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] ygq베이비 선쿠션리미티드 SPF32 PA++ 베이비 ygq선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">30%</span> -->
-															<span class="txt_price"><em>218,500</em>원</span>
-															<del class="txt_del">230,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 54,000</span>
-														</div>
-													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
-													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">1+1</span> -->
-															<span class="txt_price"><em>100,000</em>원</span>
-															<del class="txt_del">10,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 2,454</span>
-														</div>
-													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
-													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">30%</span> -->
-															<span class="txt_price"><em>218,500</em>원</span>
-															<del class="txt_del">230,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 54,000</span>
-														</div>
-													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
-													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">1+1</span> -->
-															<span class="txt_price"><em>100,000</em>원</span>
-															<del class="txt_del">10,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 2,454</span>
-														</div>
-													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</li>
-									</ul>
-								</div>
-								<div class="ix-controller">
-									<div class="slide_direction">
-										<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
-										<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
-										<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
-									</div>
+							<div class="ix-controller">
+								<div class="slide_direction">
+									<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
+									<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
+									<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
 								</div>
 							</div>
 						</div>
-						
-						<div class="category_area">
-							<div class="title_wrap">
-								<h3 class="h_title d2"><strong>일리윤 인기상품</strong><a href="#" class="btn_go">브랜드관</a></h3>
-								<div class="search_sort">
-									<a href="#" class="on">베스트</a>
-									<a href="#">세일중</a>
-									<a href="#">신상품</a>
-									<a href="#">지금뜨는상품</a>
-								</div>
+					</div>
+					
+					<div class="category_area">
+						<div class="title_wrap">
+							<h3 class="h_title d2"><strong>일리윤 인기상품</strong><a href="#" class="btn_go">브랜드관</a></h3>
+							<div class="search_sort">
+								<a href="#" class="on">베스트</a>
+								<a href="#">세일중</a>
+								<a href="#">신상품</a>
+								<a href="#">지금뜨는상품</a>
 							</div>
-							<div class="category_slide slide" data-ix-options="view-length:6; move-length:6;loop:false;datum-point:-4px">
-								<div class="ix-list-viewport list_product wide155 ">
-									<ul class="ix-list-items">
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
+						</div>
+						<div class="category_slide slide" data-ix-options="view-length:6; move-length:6;loop:false;datum-point:-4px">
+							<div class="ix-list-viewport list_product wide155 ">
+								<ul class="ix-list-items">
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
 													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] ygq베이비 선쿠션리미티드 SPF32 PA++ 베이비 ygq선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">30%</span> -->
-															<span class="txt_price"><em>218,500</em>원</span>
-															<del class="txt_del">230,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 54,000</span>
-														</div>
+													<div class="soldout">
+														<span>일시품절</span>
 													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
 												</div>
-											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] ygq베이비 선쿠션리미티드 SPF32 PA++ 베이비 ygq선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">30%</span> -->
+														<span class="txt_price"><em>218,500</em>원</span>
+														<del class="txt_del">230,000원</del>
 													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">1+1</span> -->
-															<span class="txt_price"><em>100,000</em>원</span>
-															<del class="txt_del">10,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 2,454</span>
-														</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 54,000</span>
 													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
 												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
 											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
 													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">30%</span> -->
-															<span class="txt_price"><em>218,500</em>원</span>
-															<del class="txt_del">230,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 54,000</span>
-														</div>
+													<div class="soldout">
+														<span>일시품절</span>
 													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
 												</div>
-											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">1+1</span> -->
+														<span class="txt_price"><em>100,000</em>원</span>
+														<del class="txt_del">10,000원</del>
 													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">1+1</span> -->
-															<span class="txt_price"><em>100,000</em>원</span>
-															<del class="txt_del">10,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 2,454</span>
-														</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 2,454</span>
 													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
 												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
 											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
 													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] ygq베이비 선쿠션리미티드 SPF32 PA++ 베이비 ygq선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">30%</span> -->
-															<span class="txt_price"><em>218,500</em>원</span>
-															<del class="txt_del">230,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 54,000</span>
-														</div>
+													<div class="soldout">
+														<span>일시품절</span>
 													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
 												</div>
-											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">30%</span> -->
+														<span class="txt_price"><em>218,500</em>원</span>
+														<del class="txt_del">230,000원</del>
 													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">1+1</span> -->
-															<span class="txt_price"><em>100,000</em>원</span>
-															<del class="txt_del">10,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 2,454</span>
-														</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 54,000</span>
 													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
 												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
 											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
 													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">30%</span> -->
-															<span class="txt_price"><em>218,500</em>원</span>
-															<del class="txt_del">230,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 54,000</span>
-														</div>
+													<div class="soldout">
+														<span>일시품절</span>
 													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
 												</div>
-											</div>
-										</li>
-										<li class="ix-list-item">
-											<div class="product_box">
-												<a href="#none">
-													<div class="visual_section">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
-														<div class="benefit">
-															<span class="special">스페셜기프트</span>
-															<span class="gift">기프트카드</span>
-														</div>
-														<div class="soldout">
-															<span>일시품절</span>
-														</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">1+1</span> -->
+														<span class="txt_price"><em>100,000</em>원</span>
+														<del class="txt_del">10,000원</del>
 													</div>
-													<div class="info_section">
-														<p class="txt_name">프리메라</p>
-														<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
-														<div class="price_atc">
-															<!-- <span class="txt_sale">1+1</span> -->
-															<span class="txt_price"><em>100,000</em>원</span>
-															<del class="txt_del">10,000원</del>
-														</div>
-														<div class="user_atc">
-															<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
-															<span class="txt_review">리뷰 2,454</span>
-														</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 2,454</span>
 													</div>
-												</a>
-												<div class="work_box">
-													<ul class="item_user">
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_favorite"></i><!-- active : on -->
-																<span class="sr_only">좋아요</span>
-															</a>
-														</li>
-														<li>
-															<a href="#none" role="button">
-																<i class="ico_basket"></i>
-																<span class="sr_only">장바구니</span>
-															</a>
-														</li>
-													</ul>
 												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
 											</div>
-										</li>
-									</ul>
-								</div>
-								<div class="ix-controller">
-									<div class="slide_direction">
-										<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
-										<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
-										<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
-									</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] ygq베이비 선쿠션리미티드 SPF32 PA++ 베이비 ygq선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">30%</span> -->
+														<span class="txt_price"><em>218,500</em>원</span>
+														<del class="txt_del">230,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 54,000</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">1+1</span> -->
+														<span class="txt_price"><em>100,000</em>원</span>
+														<del class="txt_del">10,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 2,454</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_01.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">30%</span> -->
+														<span class="txt_price"><em>218,500</em>원</span>
+														<del class="txt_del">230,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star0"><span class="sr_only">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 54,000</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="ix-list-item">
+										<div class="product_box">
+											<a href="#none">
+												<div class="visual_section">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<img ap:src="@{/images/dummy/img_cart_02.jpg}" alt="플라워 에센스 마스크">
+													<div class="benefit">
+														<span class="special">스페셜기프트</span>
+														<span class="gift">기프트카드</span>
+													</div>
+													<div class="soldout">
+														<span>일시품절</span>
+													</div>
+												</div>
+												<div class="info_section">
+													<p class="txt_name">프리메라</p>
+													<p class="txt_summary ellipsis line2">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+													<div class="price_atc">
+														<!-- <span class="txt_sale">1+1</span> -->
+														<span class="txt_price"><em>100,000</em>원</span>
+														<del class="txt_del">10,000원</del>
+													</div>
+													<div class="user_atc">
+														<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span><!-- star0 ~ star5 -->
+														<span class="txt_review">리뷰 2,454</span>
+													</div>
+												</div>
+											</a>
+											<div class="work_box">
+												<ul class="item_user">
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_favorite"></i><!-- active : on -->
+															<span class="sr_only">좋아요</span>
+														</a>
+													</li>
+													<li>
+														<a href="#none" role="button">
+															<i class="ico_basket"></i>
+															<span class="sr_only">장바구니</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<div class="ix-controller">
+								<div class="slide_direction">
+									<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
+									<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
+									<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
 								</div>
 							</div>
 						</div>
-					</div>	
-				</div>
+					</div>
+				</div>	
 			</div>
 		</div>
 		<!-- // page contents -->
@@ -2000,37 +1980,9 @@
 			$( '.ui_spinner' ).spinner();
 			$( '.slide' ).ixSlideMax();
 			$( '.ui_select' ).designSelectBox();
-			
-			// 기프트카드 Toggle
-			$(".gift_card button").bind('click',function (){
-				$(this).toggleClass("on");
-				if ($(this).hasClass("on")) {
-					$(".layer_tooltip").show();
-					$(this).children("span").text("닫기");
-				} else{
-					$(".layer_tooltip").hide();
-					$(this).children("span").text("자세히보기");
-				}
-			});
 	
-			//립 칼라 선택
-			$(".color_list li a").bind('mouseenter',function (){
-				var name_filter = $(".color_name");
-				var chip_name = $(this).attr("title");
-				name_filter.text(chip_name);
-				/*if ($(this).parents("li").hasClass("soldPD")) {
-					name_filter.text(chip_name);
-					name_filter.addClass("soldPD");
-				} else{
-					name_filter.text(chip_name);
-					name_filter.removeClass("soldPD");
-				}*/
-			});
-			$(".color_list li a").bind('click',function (){
-				$(this).toggleClass("on");
-			});
-			
 			//상품 상세 탭
+			/*
 			function tab_menu(num){
 				var f =$('.tab_menu li').find('a');
 				for (var i = 0; i < f.length; i++){
@@ -2038,12 +1990,13 @@
 						f.eq(i).parent().addClass('on');
 						$('.tab_cont0'+i).show();
 							
-						}else{
-							f.eq(i).parent().removeClass('on');
-							$('.tab_cont0'+i).hide();
-						}
-					}	
-				}
+					}else{
+						f.eq(i).parent().removeClass('on');
+						$('.tab_cont0'+i).hide();
+					}
+				}	
+			}
+			*/
 				
 			//리뷰 정렬	
 			$('.review_sort .left a').click(function(){
@@ -2064,6 +2017,7 @@
 				$(this).parent().removeClass("on");
 			});
 			
+			/*
 			// 스크롤 시 탭 상단에 fixed
 			$(window).scroll(function() {
 				$ptDetailoption = function(){
@@ -2095,6 +2049,7 @@
 					$('.order_layer').css('height', '');
 				}
 			});
+			*/
 		</script>
 		
 		<script type="text/javascript" th:inline="javascript">

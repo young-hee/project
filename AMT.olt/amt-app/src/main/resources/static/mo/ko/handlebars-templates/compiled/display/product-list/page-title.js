@@ -9,7 +9,7 @@ this["AP"]["handlebars"]["display"]["product-list"]["page-title"] = Handlebars.t
   return "		<li>\n			<a href=\"/display/category/"
     + alias2(alias1((depth0 != null ? depth0.displayMenuId : depth0), depth0))
     + "?upperMenuId="
-    + alias2(alias1((depths[1] != null ? depths[1].upperMenuId : depths[1]), depth0))
+    + alias2(alias1((depths[1] != null ? depths[1].displayMenuId : depths[1]), depth0))
     + "\">\n				<img alt=\"\" src=\""
     + alias2(alias1((depth0 != null ? depth0.menuTitleImgUrl : depth0), depth0))
     + "\">\n				<span>"

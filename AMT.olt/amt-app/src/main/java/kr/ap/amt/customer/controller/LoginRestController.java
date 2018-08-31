@@ -15,7 +15,10 @@ import kr.ap.comm.support.constants.APConstant;
 import kr.ap.comm.support.constants.CookieKey;
 import kr.ap.comm.support.constants.SessionKey;
 import kr.ap.comm.util.CookieUtils;
+import kr.ap.comm.util.SessionUtils;
 import net.g1project.ecp.api.exception.ApiException;
+import net.g1project.ecp.api.model.EmbeddableName;
+import net.g1project.ecp.api.model.EmbeddableTel;
 import net.g1project.ecp.api.model.ap.ap.*;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -194,6 +197,7 @@ public class LoginRestController extends AbstractController {
 		try {
 			ApMemberLoginReturnInfo resultInfo = apApi.memberSnsLogin(snsLoginInfo);
 			APRequestContext.setAccessToken(resultInfo.getAccessToken());
+			//보안조치
 			ApMember apMember = apApi.getMemberInfo(resultInfo.getMemberSn());
 			MemberSession memberSession = getMemberSession();
 			memberSession.setMember(apMember);
@@ -246,8 +250,9 @@ public class LoginRestController extends AbstractController {
 	 */
 	@PostMapping("/customer/authEmployee")
 	public ResponseEntity<?> authEmployee(String v_userid, String v_pass_word) {
-		
-		PShopResult result = pShopService.userInfoPass(v_userid, "08dbfaee4b2458145d73fe291ffea44f0a61b6fa941c808054bc9a59dbf3aa2ed341ca1c465625c31d37fcba29e74c11c8386e2cb0ddc7f5b3ce72c3a1764fd3");
+
+		//PShopResult result = pShopService.userInfoPass(v_userid, ApPasswordEncoder.encryptPassword(v_pass_word));
+		PShopResult result = pShopService.userInfoPass(v_userid, "8d2e1db0de88c6785cb1bcf93dbe6a34276440ee24031ec780e91391076bd2558a6a5aaef715d5231404a3c9de02985c4ee36530524e3c14507f47d38c2e9392");
 		
 		if("SUCC".equals(result.getRsltCd()) && "Y".equals(result.getData().get("v_flag_yn"))) {
 			
@@ -268,6 +273,7 @@ public class LoginRestController extends AbstractController {
 			if(APConstant.RESULT_OK.equals(resultVo.getRsltCd())) {
 				memberSession.getMember().setEmployeeYn("Y");
 				setMemberSession(memberSession);
+				apApi.updateMemberEmployee(getMemberSn(), v_userid);
 			} else {
 				throw error(HttpStatus.UNAUTHORIZED, "ERROR32", "임직원 인증 실패");
 			}
@@ -277,4 +283,88 @@ public class LoginRestController extends AbstractController {
 		
 		throw error(HttpStatus.UNAUTHORIZED, "ERROR32", "임직원 인증 실패");
 	}
+
+    @PostMapping("/login/mobileLoginRequest")
+    public ResponseEntity<?> mobileLoginRequest(HttpServletRequest request, String custNm, String phoneNumber1, String phoneNumber2, String phoneNumber3) {
+    	Map<String, Object> resp = new HashMap<String, Object>();
+    	ApMobileAuthRequestInfo requestMobileAuthInfo = new ApMobileAuthRequestInfo();
+    	EmbeddableName name = new EmbeddableName();
+    	name.setName1(custNm);
+		requestMobileAuthInfo.setName(name);
+		EmbeddableTel cellPhoneNo = new EmbeddableTel();
+		if(phoneNumber3 == null)
+			phoneNumber3 = "";
+		cellPhoneNo.setPhoneNo(phoneNumber1 + phoneNumber2 + phoneNumber3);
+		requestMobileAuthInfo.setCellPhoneNo(cellPhoneNo);
+		ApMobileAuthRequestResultInfo result = apApi.requestMobileAuthLogin(requestMobileAuthInfo);
+		resp.put("incsNo", result.getMemberSn());
+    	return ResponseEntity.ok(resp);
+    }
+
+    @PostMapping("/login/mobileLogin")
+    public ResponseEntity<?> mobileLogin(HttpServletRequest request, long incsNo, String smsNum) {
+
+    	Map<String, Object> respMap = new HashMap<String, Object>();
+    	ApMobileAuthLoginInfo loginInfo = new ApMobileAuthLoginInfo();
+    	loginInfo.setMemberSn(incsNo);
+    	loginInfo.setAuthKey(smsNum);
+    	ApMemberLoginReturnInfo resultInfo =  apApi.mobileAuthLogin(loginInfo);
+
+    	WebUtils.setSessionAttribute(getRequest(), SessionKey.MOBILE_LOGIN_INFO, resultInfo);
+
+		return ResponseEntity.ok(respMap);
+
+    }
+
+    @PostMapping("/login/mobileLoginComplete")
+    public ResponseEntity<?> mobileLoginComplete(HttpServletRequest request) {
+
+    	Map<String, Object> respMap = new HashMap<String, Object>();
+    	ApMemberLoginReturnInfo resultInfo =  (ApMemberLoginReturnInfo) WebUtils.getSessionAttribute(getRequest(), SessionKey.MOBILE_LOGIN_INFO);
+
+		APRequestContext.setAccessToken(resultInfo.getAccessToken());
+
+		//보안조치
+		SessionUtils.applyFixationProtection(request);
+
+		ApMember apMember = apApi.getMemberInfo(resultInfo.getMemberSn());
+		CartSession cartSessionn = getCartSession();
+		MemberSession memberSession = getMemberSession();
+		memberSession.setMember(apMember);
+		memberSession.setMember_sn(resultInfo.getMemberSn());
+		memberSession.setUser_incsNo(apMember.getIncsNo());
+		memberSession.setAccessToken(resultInfo.getAccessToken());
+		memberSession.setRefreshToken(resultInfo.getRefreshToken());
+
+		CicuemCuInfTotTcVo cicuemCuInfTotTcVo = new CicuemCuInfTotTcVo();
+		cicuemCuInfTotTcVo.setIncsNo(memberSession.getUser_incsNo());
+		try {
+			cicuemCuInfTotTcVo = amoreAPIService.getcicuemcuinfrbyincsno(cicuemCuInfTotTcVo);
+			memberSession.setUser_incsCardNoEc(cicuemCuInfTotTcVo.getIncsCardNoEc());
+		} catch(Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+
+		try {
+			if(cartSessionn.getCartSn() != null && cartSessionn.getCartSn() != 0)
+				cartApi.transferMemberCart(resultInfo.getMemberSn(), cartSessionn.getCartSn());
+		} catch(Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+
+		respMap.put("sleep", resultInfo.getDormantAcConvertYn());
+		if("Y".equals(resultInfo.getDormantAcConvertYn())) {
+			respMap.put("userId", apMember.getMemberId().substring(0, apMember.getMemberId().length() - 2) + "**");
+			memberSession.setMember(null);
+		} else {
+			setMemberSession(memberSession);
+		}
+		respMap.put("changePw", resultInfo.getPasswordLongtimeUnchangedYn());
+		if("Y".equals(resultInfo.getPasswordLongtimeUnchangedYn())) {
+			respMap.put("message", getMessage("customer.login.changePwdContant", DateFormatUtils.format(resultInfo.getMemberSignupDt(), "yyyy-MM-dd")));
+		}
+    	return ResponseEntity.ok(respMap);
+
+    }
+
 }

@@ -6,7 +6,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -24,6 +26,11 @@ import java.util.Map;
 public class RestControllerSupport {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
+
+	@ModelAttribute
+	public void gnbAndSubGnb(final Model model) {
+		model.addAttribute(ControllerSupport.GNB_NOT_REQUIRED, "");
+	}
 
 	@ExceptionHandler({
 		Exception.class

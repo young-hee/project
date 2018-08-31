@@ -59,28 +59,29 @@ public class EcpApiClientConfiguration {
 
     private <T> T createApi(Class<T> apiClass) {
         EcpApiClientTarget<T> target = new EcpApiClientTarget<T>(apiClass, apiBaseUrl, mallId);
-        return Feign.builder()
-                .client(new OkHttpClient())
-                .encoder(new JacksonEncoder(objectMapper()))
-                .decoder(new JacksonDecoder(objectMapper()))
-                .errorDecoder(new EcpErrorDecoder())
-                .logger(new Logger.JavaLogger())
-                .logLevel(getLogLevel())
-                .requestInterceptor(new EMTPRequestInterceptor(apiKey))
-                .target(target);
+		return Feign.builder()
+			.client(new OkHttpClient())
+			.encoder(new JacksonEncoder(objectMapper()))
+			.decoder(new JacksonDecoder(objectMapper()))
+			.errorDecoder(new EcpErrorDecoder())
+			.logger(new Logger.JavaLogger())
+			.logLevel(getLogLevel())
+			.retryer(Retryer.NEVER_RETRY)
+			.requestInterceptor(new EMTPRequestInterceptor(apiKey))
+			.target(target);
     }
 
     private <T> T createMultipartApi(Class<T> apiClass) {
         EcpApiClientTarget<T> target = new EcpApiClientTarget<T>(apiClass, apiBaseUrl, mallId);
-        
-        return Feign.builder()
-        .encoder(new FormEncoder(new JacksonEncoder(objectMapper())))
-        .decoder(new JacksonDecoder(objectMapper()))
-        .errorDecoder(new EcpErrorDecoder())
-        .logger(new Logger.JavaLogger())
-        .logLevel(getLogLevel())
-        .requestInterceptor(new EMTPRequestInterceptor(apiKey))
-        .target(target);
+		return Feign.builder()
+			.encoder(new FormEncoder(new JacksonEncoder(objectMapper())))
+			.decoder(new JacksonDecoder(objectMapper()))
+			.errorDecoder(new EcpErrorDecoder())
+			.logger(new Logger.JavaLogger())
+			.logLevel(getLogLevel())
+			.retryer(Retryer.NEVER_RETRY)
+			.requestInterceptor(new EMTPRequestInterceptor(apiKey))
+			.target(target);
     }
 
     private Level getLogLevel() {

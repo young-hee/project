@@ -9,21 +9,10 @@
 		{{#each this.options}}
 			<li class="select_option">
 				<code class="label_markup" style="display:none">{{ this.prodName }}</code>
-				
-				{{#xif this.saleDisplayStatus '==' 'OutOfStock' }}
-					<a data-value="{{ this.prodSn }}" data-disabled="true" class="disabled"><!--/*품절일때*/-->
-				{{else}}
 					<a data-value="{{ this.prodSn }}" data-selected="false">
-				{{/xif}}
-				
-					{{#if ../viewThumbnail}}
-						{{#xif this.colorchipTypeCode '==' 'RGB'}}
-							<span class="thumb" style="background-color: #{{ this.rgbVal }}"></span>
-						{{/xif}}
-						{{#xif this.colorchipTypeCode '==' 'Img'}}
-							<span class="thumb"><img alt="" src="{{ this.colorchipImg }}"></span>
-						{{/xif}}
-					{{/if}}
+					<span class="thumb">
+						<img alt="" src="{{ this.prodImages.0.imgUrl }}">
+					</span>
 					
 					<span class="option_info">
 						<span class="option_name ellipsis">{{ this.prodName }}</span>

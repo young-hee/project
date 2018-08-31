@@ -9,7 +9,6 @@
 	var RankingList = $B.Class.extend({
 		initialize: function ( options ) {
 			this._$target = options.$target;
-			this._key = { displayMenuId: options.displayMenuId };
 
 			this._$list = this._$target.find( '.product_list_new' );
 			this._$loading = this._$target.find( '.loading' );
@@ -57,10 +56,11 @@
 
 		/** =============== Private Methods ============== */
 		_setEvent: function () {
-
 			// 좋아요
 			this._$list.on( 'click', '.btn_toggle', function (e) {
-				$( e.currentTarget ).toggleClass( 'on' ).find( '.ico_heart_s' ).toggleClass( 'on' );
+				AP.login().done(function () {
+					$( e.currentTarget ).toggleClass( 'on' ).find( '.ico_heart_s' ).toggleClass( 'on' );
+				}.bind( this ));
 			}.bind( this ));
 		}
 	});

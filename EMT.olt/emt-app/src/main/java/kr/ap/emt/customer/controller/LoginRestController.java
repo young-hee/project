@@ -8,6 +8,7 @@ import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.CookieKey;
 import kr.ap.comm.support.constants.SessionKey;
 import kr.ap.comm.util.CookieUtils;
+import kr.ap.comm.util.SessionUtils;
 import kr.ap.emt.customer.vo.AppCumuData;
 import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.EmbeddableName;
@@ -15,13 +16,13 @@ import net.g1project.ecp.api.model.EmbeddableTel;
 import net.g1project.ecp.api.model.ap.ap.*;
 import net.g1project.ecp.api.model.order.order.OrdEx;
 import net.g1project.ecp.api.model.sales.applications.AgreeYN;
+import net.g1project.ecp.api.model.sales.applications.ApplicationVer;
 import net.g1project.ecp.api.model.sales.applications.ExecuteResult;
 import net.g1project.ecp.api.model.sales.applications.PostAppInstall;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,7 +44,7 @@ import java.util.Map;
 @RestController
 public class LoginRestController extends AbstractController {
 
-    
+
     private ObjectMapper mapper = new ObjectMapper();
 	/**
 	 * 로그인.
@@ -58,25 +60,25 @@ public class LoginRestController extends AbstractController {
 			loginInfo.setMemberId(memberId);
 			loginInfo.setMemberPassword(password);
 			loginInfo.setUseAutoLogin("on".equals(autoLogin));
-			
+
 			ApMemberLoginReturnWithAutoLoginInfo resultInfo = apApi.memberLogin(loginInfo);
 			if(resultInfo == null) {
 				throw error(HttpStatus.INTERNAL_SERVER_ERROR, "EAPI001", "아이디 또는 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
 			}
 
 			try {
-				logger.info("로그인 결과 : " + mapper.writeValueAsString(resultInfo));
+				logger.info("로그인 결과 : {}", mapper.writeValueAsString(resultInfo));
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e.getMessage(), e);
 			}
-			
+
 			if(!resultInfo.isMember()) {
 				if(resultInfo.isIncsMember() && resultInfo.getIncsMemberId() != null && !resultInfo.getIncsMemberId().isEmpty()) {
 					if(resultInfo.isIntegrationPasswordMatch()) {
 
 						if(resultInfo.isOldMember()) {
 							respMap.put("cs", 0);
-							
+
 						} else {
 							respMap.put("cs", 1);
 							MemberSession memberSession = getMemberSession();
@@ -97,6 +99,9 @@ public class LoginRestController extends AbstractController {
 			}
 			APRequestContext.setAccessToken(resultInfo.getAccessToken());
 
+			//보안조치
+			SessionUtils.applyFixationProtection(req);
+
 			ApMember apMember = apApi.getMemberInfo(resultInfo.getMemberSn());
 
 			CartSession cartSession = getCartSession();
@@ -106,7 +111,7 @@ public class LoginRestController extends AbstractController {
 			memberSession.setUser_incsNo(apMember.getIncsNo());
 			memberSession.setAccessToken(resultInfo.getAccessToken());
 			memberSession.setRefreshToken(resultInfo.getRefreshToken());
-			
+
 			try {
 				if(cartSession.getCartSn() != null && cartSession.getCartSn() != 0)
 					cartApi.transferMemberCart(resultInfo.getMemberSn(), cartSession.getCartSn());
@@ -143,7 +148,7 @@ public class LoginRestController extends AbstractController {
 			return ResponseEntity.ok(respMap);
 
 		} catch (ApiException e) {
-			
+
 			Map<String, Object> map = e.getAdditional();
 			Boolean isLock = (Boolean) map.get("lockThisTime");
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
@@ -151,7 +156,7 @@ public class LoginRestController extends AbstractController {
 			try {
 				if(map.get("lockReleaseDate") != null) {
 					lockReleaseDate = (Date) format.parse((String) map.get("lockReleaseDate"));
-	
+
 					if(lockReleaseDate != null) {
 						long time = lockReleaseDate.getTime() - System.currentTimeMillis();
 						respMap.put("lockReleaseDate", time/1000/60.0);
@@ -170,7 +175,7 @@ public class LoginRestController extends AbstractController {
 			throw e;
 		}
 	}
-	
+
 	/**
 	 * SNS연결 로그인.
 	 */
@@ -207,7 +212,7 @@ public class LoginRestController extends AbstractController {
      * sns login process
      *
      * @param snsName
-     * @param request 
+     * @param request
      * @return
      */
     @RequestMapping("/login/snsloginProcess")
@@ -218,7 +223,7 @@ public class LoginRestController extends AbstractController {
 		WebUtils.setSessionAttribute(request, SessionKey.SNS_CODE, snsName);
 		WebUtils.setSessionAttribute(request, SessionKey.SNS_ID, id);
 		WebUtils.setSessionAttribute(request, SessionKey.SNS_TOKEN, accessToken);
-		
+
 		ApSnsLoginInfo snsLoginInfo = new ApSnsLoginInfo();
 		snsLoginInfo.setSnsType(snsName);
 		snsLoginInfo.setSnsId(id);
@@ -226,6 +231,8 @@ public class LoginRestController extends AbstractController {
 		try {
 			ApMemberLoginReturnInfo resultInfo = apApi.memberSnsLogin(snsLoginInfo);
 			APRequestContext.setAccessToken(resultInfo.getAccessToken());
+			//보안조치
+			SessionUtils.applyFixationProtection(request);
 			ApMember apMember = apApi.getMemberInfo(resultInfo.getMemberSn());
 			CartSession cartSessionn = getCartSession();
 			MemberSession memberSession = getMemberSession();
@@ -234,7 +241,7 @@ public class LoginRestController extends AbstractController {
 			memberSession.setUser_incsNo(apMember.getIncsNo());
 			memberSession.setAccessToken(resultInfo.getAccessToken());
 			memberSession.setRefreshToken(resultInfo.getRefreshToken());
-			
+
 			try {
 				CicuemCuInfTotTcVo cicuemCuInfTotTcVo = new CicuemCuInfTotTcVo();
 				cicuemCuInfTotTcVo.setIncsNo(memberSession.getUser_incsNo());
@@ -250,7 +257,7 @@ public class LoginRestController extends AbstractController {
 			} catch(Exception e) {
 				logger.error(e.getMessage(), e);
 			}
-			
+
 			result.put("sleep", resultInfo.getDormantAcConvertYn());
 			if("Y".equals(resultInfo.getDormantAcConvertYn())) {
 				result.put("userId", apMember.getMemberId().substring(0, apMember.getMemberId().length() - 2) + "**");
@@ -266,35 +273,45 @@ public class LoginRestController extends AbstractController {
 			result.put("isLinked", true);
 		} catch(ApiException e) {
 			result.put("isLinked", false);
-			
+
 		}
-		
+
 
 		return ResponseEntity.ok(result);
     }
 
     @RequestMapping("/api/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
-		MemberSession memberSession = getMemberSession();
-		WebUtils.setSessionAttribute(request, SessionKey.LOGIN_USER, null);
-		WebUtils.setSessionAttribute(request, SessionKey.CART, null);
-		WebUtils.setSessionAttribute(request, SessionKey.ORDER, null);
-		if (memberSession.getMember_sn() != null) {
-			try {
-
-				Cookie token = CookieUtils.getCookie(request, CookieKey.AUTO_LOGIN);
-				ApLogoutInfo tokenBody = new ApLogoutInfo();
-				if(token != null) {
-					tokenBody.setAutoLoginToken(token.getValue());
+    	final HttpSession httpSession = request.getSession(false);
+    	if (httpSession!=null) {
+    		synchronized (WebUtils.getSessionMutex(httpSession)) {
+				MemberSession memberSession = getMemberSession();
+				WebUtils.setSessionAttribute(request, SessionKey.LOGIN_USER, null);
+				WebUtils.setSessionAttribute(request, SessionKey.CART, null);
+				WebUtils.setSessionAttribute(request, SessionKey.ORDER, null);
+				if (memberSession.getMember_sn() != null) {
+					try {
+						Cookie token = CookieUtils.getCookie(request, CookieKey.AUTO_LOGIN);
+						ApLogoutInfo tokenBody = new ApLogoutInfo();
+						if (token != null) {
+							tokenBody.setAutoLoginToken(token.getValue());
+						}
+						apApi.memberLogout(memberSession.getMember_sn(), tokenBody);
+					} catch (Exception e) {
+						logger.error(e.getMessage());
+					}
 				}
-				apApi.memberLogout(memberSession.getMember_sn(), tokenBody);
-			} catch (Exception e) {
-				logger.error(e.getMessage());
+				try {
+					httpSession.invalidate();
+				} catch (IllegalStateException e) {
+					//Ignore already invalided session
+				}
 			}
 		}
+
 		return ResponseEntity.ok("{}");
     }
-    
+
     @PostMapping("/login/mobileLoginRequest")
     public ResponseEntity<?> mobileLoginRequest(HttpServletRequest request, String custNm, String phoneNumber1, String phoneNumber2, String phoneNumber3) {
     	Map<String, Object> resp = new HashMap<String, Object>();
@@ -311,7 +328,7 @@ public class LoginRestController extends AbstractController {
 		resp.put("incsNo", result.getMemberSn());
     	return ResponseEntity.ok(resp);
     }
-    
+
     @PostMapping("/login/mobileLogin")
     public ResponseEntity<?> mobileLogin(HttpServletRequest request, long incsNo, String smsNum) {
 
@@ -322,14 +339,14 @@ public class LoginRestController extends AbstractController {
     	ApMemberLoginReturnInfo resultInfo =  apApi.mobileAuthLogin(loginInfo);
 
     	WebUtils.setSessionAttribute(getRequest(), SessionKey.MOBILE_LOGIN_INFO, resultInfo);
-    	
+
 		return ResponseEntity.ok(respMap);
-    	
+
     }
-    
+
     @PostMapping("/login/mobileLoginComplete")
     public ResponseEntity<?> mobileLoginComplete(HttpServletRequest request) {
-    	
+
     	Map<String, Object> respMap = new HashMap<String, Object>();
     	ApMemberLoginReturnInfo resultInfo =  (ApMemberLoginReturnInfo) WebUtils.getSessionAttribute(getRequest(), SessionKey.MOBILE_LOGIN_INFO);
 
@@ -340,7 +357,7 @@ public class LoginRestController extends AbstractController {
 
 					if(resultInfo.isOldMember()) {
 						respMap.put("cs", 0);
-						
+
 					} else {
 						respMap.put("cs", 1);
 						MemberSession memberSession = getMemberSession();
@@ -359,9 +376,12 @@ public class LoginRestController extends AbstractController {
 				throw error(respMap, HttpStatus.FORBIDDEN, "EXTRA", "예외처리");
 			}
 		}
-		
-		
+
+
 		APRequestContext.setAccessToken(resultInfo.getAccessToken());
+
+		//보안조치
+		SessionUtils.applyFixationProtection(request);
 
 		ApMember apMember = apApi.getMemberInfo(resultInfo.getMemberSn());
 		CartSession cartSessionn = getCartSession();
@@ -387,7 +407,7 @@ public class LoginRestController extends AbstractController {
 		} catch(Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		
+
 		respMap.put("sleep", resultInfo.getDormantAcConvertYn());
 		if("Y".equals(resultInfo.getDormantAcConvertYn())) {
 			respMap.put("userId", apMember.getMemberId().substring(0, apMember.getMemberId().length() - 2) + "**");
@@ -401,7 +421,7 @@ public class LoginRestController extends AbstractController {
 			respMap.put("message", getMessage("customer.login.changePwdContant", DateFormatUtils.format(resultInfo.getMemberSignupDt(), "yyyy-MM-dd")));
 		}
     	return ResponseEntity.ok(respMap);
-    	
+
     }
 
 
@@ -418,7 +438,7 @@ public class LoginRestController extends AbstractController {
     			return ResponseEntity.ok(result);
     		}
     	} catch(Exception e) {
-    		
+
     	}
     	throw error(result, HttpStatus.NOT_FOUND, "NOTFOUND", "해당 정보로 주문을 조회하지 못했습니다.");
     }
@@ -437,7 +457,7 @@ public class LoginRestController extends AbstractController {
 		apApi.recoveryToNormalMember(getMemberSn());
     	return ResponseEntity.ok("{}");
     }
-    
+
     /**
      * 앱 통신
      *
@@ -455,16 +475,17 @@ public class LoginRestController extends AbstractController {
     	result.put("rsltMsg", "저장되었습니다.");
     	if("info".equals(type)) {
     		ExecuteResult token = applicationsApi.getAppInstall(isAndroid()? "Android" : "iOS", data.getTokenData());
-    		if(!token.isResult()) {
+    		if(token != null && token.isResult() != null && !token.isResult()) {
     			PostAppInstall body = new PostAppInstall();
     			body.setAppVer(data.getAppVer());
     			body.setAppUid(data.getAppUid());
     			body.setMemberSn(getMemberSn());
     			body.setMemberYn("Y");
     			body.setModelName(data.getDeviceModel());
+    			body.setAgreeYn("N");
     			body.setOsVer(data.getOsVer());
     			body.setToken(data.getTokenData());
-    			applicationsApi.saveAppInstall(null, body);
+    			applicationsApi.saveAppInstall(isAndroid()? "Android" : "iOS", body);
     		}
     	}
     	if("pmAgree".equals(type)) {
@@ -474,20 +495,17 @@ public class LoginRestController extends AbstractController {
 			agreeYN.setAgreeYn(data.getMarketing());
 			applicationsApi.updateAppMaktingAgree(data.getTokenData(), getMemberSn(), agreeYN);
     	}
-    	
+
     	return ResponseEntity.ok(result);
     }
     /**
      * 앱 버전.
      */
-    @RequestMapping("/getAppVersion/{osType}")
-    public ResponseEntity<?> appVersion(@PathVariable("osType") String osType) {
+    @RequestMapping("/customer/getAppVersion")
+    public ResponseEntity<?> appVersion() {
 
-    	Map<String, Object> result = new HashMap<String, Object>();
-    	result.put("appVersion", "1.1");
-    	result.put("minVersion", "1.0");
-    	
-    	return ResponseEntity.ok(result);
+    	ApplicationVer version = applicationsApi.getApplicationVersion(isAndroid()? "Android" : "iOS");
+    	return ResponseEntity.ok(version);
     }
-    
+
 }

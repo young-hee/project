@@ -1,9 +1,9 @@
-<html ap:decorate="~{layout/layout-item-only}">
+<html ap:decorate="~{layout/layout-order-only}">
 <body>
 <!-- #ap_container -->
 <div ap:fragment="layout-contents">
 	<!-- page contents -->
-	<div class="ap_contents cart order">
+	<div class="ap_contents order_area">
 		<form class="order-validate" id="order-recept-info" name="orderForm" method="post">
 			<!--결제 모듈연동 정보-->
 			<input type="hidden" name="oid" th:value="${ordEx.ordNo}"/>
@@ -48,34 +48,36 @@
 			<input type="hidden" name="storeDdBag"/>
 			<input type="hidden" name="storeEupmyeon"/>
 
-			<div class="ui_accordion" data-open-type="single">
-				<!--주문상품확인-->
-				<th:block ap:replace="~{order/fragment/order-reception/order-01-product-info}"/>
-				<!--배송정보입력-->
-				<th:block ap:replace="~{order/fragment/order-reception/order-02-ship-address-info}"/>			<!--회원-->
-				<th:block ap:replace="~{order/fragment/order-reception/order-02-ship-address-nonmember-info}"/> <!--비 회원-->
-				<!--포장/쇼핑백 추가신청-->
-				<th:block ap:replace="~{order/fragment/order-reception/order-03-packing-info}"/>
-				<!--쿠폰/포인트 혜택사용-->
-				<th:block ap:replace="~{order/fragment/order-reception/order-04-coupon-benefit-info}"/>
-				<!--사은품 확인-->
-				<th:block ap:replace="~{order/fragment/order-reception/order-05-freegift-info}"/>
-				<!--결제수단 선택-->
-				<th:block ap:replace="~{order/fragment/order-reception/order-06-pay-method-info}"/>
-				<!--최종 결제금액-->
-				<th:block ap:replace="~{order/fragment/order-reception/order-07-final-pay-amount-info}"/>
-			</div>
+			<!--주문상품확인-->
+			<th:block ap:replace="~{order/fragment/order-reception/order-01-product-info}"/>
+			<!--포장서비스-->
+			<th:block ap:replace="~{order/fragment/order-reception/order-02-packing-info}"/>
+			<!--배송정보입력-->
+			<th:block ap:replace="~{order/fragment/order-reception/order-03-ship-address-info}"/>				<!--회원-->
+			<th:block ap:replace="~{order/fragment/order-reception/order-03-ship-address-nonmember-info}"/> <!--비 회원-->
+			<!--쿠폰/포인트 혜택사용-->
+			<th:block ap:replace="~{order/fragment/order-reception/order-04-coupon-benefit-info}"/>
+			<!--추가 사은품 안내-->
+			<th:block ap:replace="~{order/fragment/order-reception/order-05-freegift-info}"/>
+			<!--결제수단 선택-->
+			<th:block ap:replace="~{order/fragment/order-reception/order-06-pay-method-info}"/>
+			<!--최종 결제금액-->
+			<th:block ap:replace="~{order/fragment/order-reception/order-07-final-pay-amount-info}"/>
+
 		</form>
-		<div class="panel mgt10">
-			<fieldset class="form">
-				<legend class="sr_only">주문정보 및 결제대행 서비스 동의 여부 선택</legend>
-				<div class="check_wrap pdr0"><input type="checkbox" id="orderAgree"><label for="orderAgree">주문하신 정보 및 결제 대행 서비스 이용약관에 모두 동의 하십니까?</label></div>
-				<div class="form_btns">
-					<button class="btn_lg_primary" type="button" id="orderPayment" th:text="${#IntegUtil.toCommaNumber(ordEx.ordHistEx.finalPamtPcur)} + '원 결제하기'">0원 결제하기</button>
-				</div>
-			</fieldset>
-			<!--결제수단 별 유의사항-->
-			<th:block ap:replace="~{order/fragment/order-payment-notice-info}"/>
+		<div class="section agree_area">
+			<div class="chk_wrap vertical">
+				<span class="chk_h28 f_mid"><input type="checkbox" name="chk05" id="pay"><label for="pay">선택한 결제수단을 다음에도 사용</label></span>
+				<span class="chk_h28 f_mid"><input type="checkbox" name="chk06" id="agree" checked=""><label for="agree">구매조건 및 결제진행 동의</label></span>
+			</div>
+			<p class="text font_sm"><span class="color_light_gray">주문할 상품의 상품명과 가격, 배송정보를 명확히 확인하였으며 구매진행에 동의합니다 (전자상거래법 제 8조 2항)</span></p>
+			<p class="text font_sm"><span class="color_light_gray">ONE pay로 결제시 일시불만 가능합니다</span></p>
+		</div>
+
+		<div class="order_layer">
+			<div class="default_btns">
+				<a href="#none" class="btn_h50_bk round">결제하기</a>
+			</div>
 		</div>
 	</div>
 	<!-- // page contents -->
@@ -84,21 +86,21 @@
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
-	<!-- <script ap:src="@{/handlebars-templates/compiled/my/location-auth.js}"></script>  -->			<!--위치기반 동의 -->
+	<script ap:src="@{/handlebars-templates/compiled/my/location-auth.js}"></script>  						<!--위치기반 동의 -->
 	<script ap:src="@{/handlebars-templates/compiled/order/layer-order-non-member-02.js}"></script>		<!-- 비회원 개인정보 수집동의 -->
-	<script ap:src="@{/handlebars-templates/compiled/order/layer-info-change.js}"></script> 			<!--주문고객 정보변경 Layer -->
+	<script ap:src="@{/handlebars-templates/compiled/order/layer-info-change.js}"></script> 				<!--주문고객 정보변경 Layer -->
 
 	<script ap:src="@{/handlebars-templates/compiled/order/gift-packing-qty-info.js}"></script>			<!-- 쇼핑백 -->
-	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use.js}"></script> 			<!--사용가능한 쿠폰목록 Layer-->
-	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use-avail.js}"></script> 	<!--사용가능한 쿠폰목록 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use.js}"></script> 				<!--사용가능한 쿠폰목록 Layer-->
+	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use-avail.js}"></script> 		<!--사용가능한 쿠폰목록 -->
 	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use-download.js}"></script>	<!--다운로드 쿠폰목록 -->
-	<script ap:src="@{/handlebars-templates/compiled/order/coupon-use-list.js}"></script> 				<!--선택된 쿠폰목록 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/coupon-use-list.js}"></script> 					<!--선택된 쿠폰목록 -->
 	<script ap:src="@{/handlebars-templates/compiled/order/final-price-amt-pcur.js}"></script> 			<!-- 최종 결제금액 영역 -->
 
 	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
 	<script th:inline="javascript">
 		$( document ).ready(function() {
-			init();
+			//init();
 
 			//주문완료화면 오류 발생시
 			var ordCompleteError = /*[[${ordCompleteError}]]*/ null;

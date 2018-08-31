@@ -408,9 +408,11 @@
 										<textarea name="" id="" cols="" rows="" placeholder="10자 이상 입력해주세요." maxlength="200"></textarea>
 									</div>
 									<div class="add_file">
+										<!-- 08-27 이미지 첨부 삭제 요청
 										<input type="file" id="ip_file" class="fileInput" accept="image/gif,image/jpeg,image/png,image/jpg">
 										<label for="ip_file">이미지 첨부</label>
 										<p class="fileName"></p>
+										-->
 									</div>
 									<p class="text_right byte"><small><em class="current">0</em>/<span class="limits">200</span></small></p>
 								</div>
@@ -467,9 +469,11 @@
 												<p class="text_right byte"><small><em class="current">0</em>/<span class="limits">200</span></small></p>
 												<div class="add_file_wrap">
 													<div class="add_file">
+														<!--  08-27 이미지 첨부 삭제 요청 
 														<input type="file" id="ip_file" class="fileInput" accept="image/gif,image/jpeg,image/png,image/jpg">
 														<label for="ip_file">이미지 첨부</label>
 														<p class="fileName"></p>
+														-->
 													</div>
 													<button type="button"><span class="ie_press">등록</span></button>
 												</div>
@@ -666,22 +670,23 @@
 		$( 'input:file' ).inputFile();
 		$( '.slide' ).ixSlideMax();
 
-		/* 디자인상 파일명영역이 유동적이여서 별도 처리 */
-		var $fileTarget = $('.fileInput');
-		$fileTarget.on('change', function(){ 
-			if(window.FileReader){
-				var fileName = $(this)[0].files[0].name; 
-			} else { // old IE 
-				var fileName = $(this).val().split('/').pop().split('\\').pop(); 
-			}
-			var fileCard = '<span>'+fileName+ '<a href="javascript:;" class="fileDel">삭제</a>'+'</span>'
-			$(".fileName").html(fileCard);
-			$('.fileDel').on('click', function(){
-				$(this).parent().remove();
-				$fileTarget.val('');
-			});
-		}); 
-		
+		/* 08-27 이미지 첨부 삭제 요청 
+			//디자인상 파일명영역이 유동적이여서 별도 처리
+			var $fileTarget = $('.fileInput');
+			$fileTarget.on('change', function(){ 
+				if(window.FileReader){
+					var fileName = $(this)[0].files[0].name; 
+				} else { // old IE 
+					var fileName = $(this).val().split('/').pop().split('\\').pop(); 
+				}
+				var fileCard = '<span>'+fileName+ '<a href="javascript:;" class="fileDel">삭제</a>'+'</span>'
+				$(".fileName").html(fileCard);
+				$('.fileDel').on('click', function(){
+					$(this).parent().remove();
+					$fileTarget.val('');
+				});
+			}); 
+		*/
 
 	</script>
 </th:block>

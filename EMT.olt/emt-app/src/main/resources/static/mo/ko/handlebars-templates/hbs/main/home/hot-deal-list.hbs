@@ -37,15 +37,16 @@
 					{{/if}}
 				{{/each}}
 					<div class="info">
-						<em class="discount">
-							{{#with (calc this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate '+' this.onlineProdPriceSummary.minMemberLevelDiscountRate '+' this.onlineProdPriceSummary.minOnlineMemberDiscountRate) as |disMinRate|}}
-								{{#with (calc ../onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.maxMemberLevelDiscountRate '+' ../onlineProdPriceSummary.maxOnlineMemberDiscountRate) as |disMaxRate|}}
-									{{#xif disMinRate '!=' disMaxRate}}<span class="from">~</span>{{/xif}}{{#xif disMaxRate '!=' 0}}<span class="to">{{ disMaxRate }}<em>%</em></span>{{/xif}}
-								{{/with}}
-							{{/with}}
-						</em>
 						<span class="title">{{ this.onlineProdName }}</span>
 						<span class="price_wrap">
+							<em class="discount">
+								{{#with (calc this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate '+' this.onlineProdPriceSummary.minMemberLevelDiscountRate '+' this.onlineProdPriceSummary.minOnlineMemberDiscountRate) as |disMinRate|}}
+									{{#with (calc ../onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.maxMemberLevelDiscountRate '+' ../onlineProdPriceSummary.maxOnlineMemberDiscountRate) as |disMaxRate|}}
+										{{#xif disMinRate '!=' disMaxRate}}<span class="from">~</span>{{/xif}}{{#xif disMaxRate '!=' 0}}<span class="to">{{ disMaxRate }}<em>%</em></span>{{/xif}}
+									{{/with}}
+								{{/with}}
+							</em>
+						
 							{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
 								<del>{{ numberFormat this.onlineProdPriceSummary.minBeforeOnlineSalePrice }}<em>{{ condition ../isActivityPoint '알' '원' }}</em></del>
 							{{/xif}}

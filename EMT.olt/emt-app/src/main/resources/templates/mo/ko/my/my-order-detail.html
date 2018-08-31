@@ -80,6 +80,7 @@
 
 	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-info.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-goods.js}"></script>
+	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-freebies.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-payment.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-ship-address.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/fullpage-address-edit.js}"></script>
@@ -132,7 +133,7 @@
 				setOrdInfo();
 			}
 
-			setOnlineTake();
+			setProds();
 			setOrdShipAddress();
 			setREPanelBox();
 			setOrdPayment();
@@ -172,7 +173,7 @@
 		}
 
 		/* 상품영역 */
-		function setOnlineTake() {
+		function setProds() {
 			if (customOrd.shipOrdOnlineProdCnt > 0) {
 				var orderDetailGoods = AP.common.getTemplate('my.order.order-detail-goods', {
 					cnt : customOrd.shipOrdOnlineProdCnt,
@@ -213,9 +214,27 @@
 				$('.takeout').append(storDetailGoods);
 			}
 
+			if ((customOrd.ordHistPromoExList != null && customOrd.ordHistPromoExList.length > 0) ||
+				(customOrd.ordHistCouponExList != null && customOrd.ordHistCouponExList.length > 0)) {
+				var freebies = AP.common.getTemplate('my.order.order-detail-freebies', {
+					promo : customOrd.ordHistPromoExList,
+					coupon : customOrd.ordHistCouponExList
+				});
+
+				$('.freebies').empty();
+				$('.freebies').append(freebies);
+			}
+
 			//
-			$( '.ui_accordion' ).accordion('clear');
-			$( '.ui_accordion' ).accordion();
+			// $( '.ui_accordion' ).accordion('clear');
+			$( '.ui_accordion' ).accordion('open', 0);
+			$( '.ui_accordion' ).accordion('open', 1);
+			$( '.ui_accordion' ).accordion('open', 2);
+
+
+			// $( '.ui_accordion' ).on('accordion-open', function(e){
+			// 	console.log(e.index);
+			// });
 		}
 
 		function setOrdShipAddress() {
@@ -448,7 +467,7 @@
 					type = claimType;
 					status = 'request';
 					reason = data.data;
-					setOnlineTake();
+					setProds();
 					checkType(claimType);
 
 					if (cancelState === 'on') {
@@ -572,7 +591,7 @@
 			// }, JSON.stringify(customOrd.shippingOrdOnlineProdList)).done(function(data) {
 			}, JSON.stringify(cd)).done(function(data) {
 				AP.modal.alert(getTypeName(1) + '신청이 정상적으로 접수 되었습니다.').addListener('modal-close', function (e) {
-					AP.common.setSessionStorage('order_list_save_status', null)
+					AP.common.setSessionStorage('order_list_save_status', null);
 					history.back();
 				});
 

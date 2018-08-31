@@ -60,7 +60,13 @@
 					data = result.data[i];
 
 				if ( data ) {
-					$designImg.data( 'src', data.pixlee_cdn_photos.square_medium_url ).attr( 'data-idx', i );
+					if(data.content_type === 'video'){
+						$designImg.data( 'src', data.medium_url ).attr( 'data-idx', i );
+						$designImg.after('<div class="play_button"></div>'); 
+						
+					}else {
+						$designImg.data( 'src', data.pixlee_cdn_photos.square_medium_url ).attr( 'data-idx', i );
+					}
 					drawLength++;
 				}
 			}

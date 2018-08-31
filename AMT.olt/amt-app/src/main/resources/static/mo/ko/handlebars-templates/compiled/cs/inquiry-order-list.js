@@ -21,7 +21,7 @@ this["AP"]["handlebars"]["cs"]["inquiry-order-list"] = Handlebars.template({"1":
     + alias2(alias1((depth0 != null ? depth0.ordStatusCode : depth0), depth0))
     + "</td>\n		</tr>\n";
 },"4":function(container,depth0,helpers,partials,data) {
-    return "	<tr>\n		<td colspan=\"2\">\n			<div class=\"section notice\">\n				<i class=\"ico\"></i>\n				<p class=\"text\">주문내역이 없습니다.</p>\n			</div>\n		</td>\n	</tr>\n";
+    return "	<tr>\n		<td colspan=\"2\">\n			<div class=\"section notice\">\n				<p class=\"text\">주문내역이 없습니다.</p>\n			</div>\n		</td>\n	</tr>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 

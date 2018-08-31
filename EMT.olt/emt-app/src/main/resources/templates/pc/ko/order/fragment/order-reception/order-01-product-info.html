@@ -17,7 +17,7 @@
 				</th:block>
 				<!--/* 묶음판매상품 */-->
 				<th:block th:if="${#lists.size(shippingBulkDcList) > 0}">
-					<th:block th:each="bulkDc : ${shippingBulkDcList}">
+					<th:block th:each="bulkDcOnlineProd : ${shippingBulkDcList}">
 						<th:block ap:replace="~{order/fragment/order-reception-product/order-bulkdc-info}"/>
 					</th:block>
 				</th:block>
@@ -47,7 +47,7 @@
 				</th:block>
 			</th:block>
 
-			<th:block th:if="${ordCntMap.get('storeOrdOnlineProdSumCnt') > 0 and memberSn > 0}">
+			<th:block th:if="${ordCntMap.get('storeOrdOnlineProdSumCnt') > 0 and isApMember}">
 				<h4 class="h_title sub">테이크아웃 상품 (<em th:text="${ordCntMap.get('storeOrdOnlineProdSumCnt')}">00</em>개)</h4>
 
 				<!--/* 옵션타입 */-->

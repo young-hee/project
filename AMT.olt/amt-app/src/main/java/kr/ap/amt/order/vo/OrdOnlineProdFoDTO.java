@@ -1,6 +1,9 @@
 package kr.ap.amt.order.vo;
 
-import net.g1project.ecp.api.model.order.order.*;
+import net.g1project.ecp.api.model.order.order.OrdHistProdAwardEx;
+import net.g1project.ecp.api.model.order.order.OrdHistProdEx;
+import net.g1project.ecp.api.model.order.order.OrdHistProdPromoAwardEx;
+import net.g1project.ecp.api.model.order.order.StoreEx;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

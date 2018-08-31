@@ -6,13 +6,9 @@
 	<li class="select_option">
 		<code class="label_markup" style="display:none"></code>
 		<a data-value="{{ this.prodSn }}" data-selected="false"  {{#xif this.saleDisplayStatus '==' 'OutOfStock'}} class="out_of_stock" {{/xif}} >
-			{{#xif this.colorchipTypeCode '==' 'RGB'}}
-				<span class="color_chip" style="background-color:#{{ this.rgbVal }}"></span>
-			{{/xif}}
-			{{#xif this.colorchipTypeCode '==' 'Img'}}
-				<span class="color_chip"><img alt="" src="{{ this.colorchipImg }}"></span>
-			{{/xif}}
-
+			<span class="color_chip">
+				<img alt="" src="{{ this.prodImages.0.imgUrl }}">
+			</span>
 			<span class="option_info">
 				<span class="option_name">{{ this.prodName }}</span>
 				<span class="price">

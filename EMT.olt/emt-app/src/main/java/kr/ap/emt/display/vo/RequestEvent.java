@@ -13,8 +13,10 @@ public class RequestEvent {
 	private String verifNo; // 스윗레터 인증 코드
 	private String day; // yyyyMM
 	private String name; // 참가자 이름
+	private String countryNo = ""; 
 	private String phoneNo1; // 참가자 전화번호1
 	private String phoneNo2; // 참가자 전화번호2
+	private String countryCode =""; 
 	private String address; // 참가자 주소
 	private String termsAgreeYn; // 동의 유무
 	private String emailAddress; // 이메일주소
@@ -310,5 +312,22 @@ public class RequestEvent {
 	public void setRegularEventSn(Long regularEventSn) {
 		this.regularEventSn = regularEventSn;
 	}
+
+	public String getCountryNo() {
+		return countryNo;
+	}
+
+	public void setCountryNo(String countryNo) {
+		this.countryNo = countryNo;
+	}
+
+	public String getCountryCode() {
+		return countryCode;
+	}
+
+	public void setCountryCode(String countryCode) {
+		this.countryCode = countryCode;
+	}
+	
 
 }

@@ -8,6 +8,110 @@
 	 * 결제 수단명
 	 * @returns {String}
 	 */
+	Handlebars.registerHelper('ordFreebiesCode', function (type, code) {
+		if ('promo' == type) {
+			switch (code) {
+				case 'Prod': return '사은품/상품증정';
+				case 'SpPrice': return '상품특가증정';
+				case 'Coupon': return '쿠폰발급';
+				case 'Point': return '포인트적립';
+				case 'Giftcard': return '기프트카드증정';
+			}
+		}
+		else if ('coupon' == type) {
+			switch (code) {
+				case 'ProdDc': return '상품할인쿠폰';
+				case 'CartDc': return '장바구니할인쿠폰';
+				case 'MPlusN': return 'M+N쿠폰';
+				case 'Buy1Get': return 'Buy1Get쿠폰';
+				case 'CartAward': return '장바구니증정쿠폰';
+				case 'ShipFeeFree': return '배송비무료쿠폰';
+			}
+		}
+
+
+		return '';
+	});
+
+	/**
+	 * 수량
+	 * @returns {Integer}
+	 */
+	Handlebars.registerHelper('myOrdQty', function (prodType, prod, step, claimYn) {
+
+		var qty = 0;
+		if ('group' == prodType) {
+			if ('Y' == claimYn) {
+				qty = prod.claimQtySum;
+			}
+			else {
+				if ('ProdCancel' == prod.ordHistProdStatusCode || step == 2) {
+					qty = prod.cancelQtySum;
+				}
+				else {
+					qty = (prod.ordQtySum - prod.cancelQtySum) - prod.claimQtySum;
+				}
+			}
+
+		}
+		else {
+			if ('Y' === claimYn) {
+				qty = prod.claimReceivedQty;
+			}
+			else {
+				if ('ProdCancel' == prod.ordHistProdStatusCode || step == 2) {
+					qty = prod.cancelQty;
+				}
+				else {
+					qty = (prod.ordQty - prod.cancelQty) - prod.claimReceivedQty;
+				}
+			}
+		}
+
+		return qty;
+	});
+
+	/**
+	 * 금액
+	 * @returns {Integer}
+	 */
+	Handlebars.registerHelper('myOrdAmt', function (prodType, prod, step, claimYn) {
+
+		var amt = 0;
+		var qty = 0;
+		if (prodType == null) {
+			return Handlebars.helpers.currencyFormat(prod.finalOnlineSaleAmtPcur);
+		}
+
+		if ('Y' === claimYn) {
+			qty = prod.claimReceivedQty;
+		}
+		else {
+			if ('ProdCancel' == prod.ordHistProdStatusCode || step == 2) {
+				qty = prod.cancelQty;
+			}
+			else {
+				qty = (prod.ordQty - prod.cancelQty) - prod.claimReceivedQty;
+			}
+		}
+
+		if ('b' == prodType) {
+			amt = prod.exchMembership;
+			return Handlebars.helpers.currencyFormatDefault((prod.exchMembership * qty), 'P');
+
+		}
+		else if ('a' == prodType) {
+			amt = prod.exchActivityPoint;
+			return Handlebars.helpers.currencyFormatDefault((prod.exchActivityPoint * qty), '알');
+		}
+
+		return amt * qty;
+	});
+
+	/**
+	 * 결제 수단명
+	 * @returns {String}
+	 */
 	Handlebars.registerHelper('payServiceCodeName', function (type) {
 		switch (type) {
 			case 'Deposit': return '예치금';
@@ -1056,7 +1160,7 @@
 					break;
 				case 'exceptMA' :
 					//모바일웹, PC
-					html = '';
+					html = '<span class="pm">PC/APP 전용</span>';
 					break;
 				case 'exceptPC' :
 					//App, 모바일웹

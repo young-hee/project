@@ -1,8 +1,5 @@
 package kr.ap.amt.order.vo;
 
-import net.g1project.ecp.api.model.order.order.OrdHistProdEx;
-import net.g1project.ecp.api.model.order.order.OrdProdEx;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -12,13 +9,11 @@ public class OrdOnlinePromoFoDTO {
     /* 프로모션 기본정보 */
     private Long promoSn;
     private String promoName;
-    
     private String promoTypeCode;
 
     /* 프로모션 합계정보 */
     private BigDecimal totalProductSaleAmount = BigDecimal.ZERO;
     private BigDecimal totalFinalOnlineSaleAmount = BigDecimal.ZERO;
-	private Integer ordQtySum = 0;
 
     /* 프로모션 주문온라인상품 목록 */
     private List<OrdOnlineProdFoDTO> ordOnlineProdFoList;
@@ -28,108 +23,76 @@ public class OrdOnlinePromoFoDTO {
     private Integer baseQty = 0;
 	private Integer awardQty = 0;
 
+	/* 묶음판매상품 기본정보 */
+	private String bulkDcOnlineProdName;
+	private String bulkDcOnlineProdImgUrl;
+
+	/* 묶음판매상품 합계정보 */
+	private BigDecimal totalBulkDcProductSaleAmount = BigDecimal.ZERO;
+	private BigDecimal totalBulkDcFinalOnlineSaleAmount = BigDecimal.ZERO;
+
 	private String receivedClaimReasonName;
 	private String foReceivedClaimReason;
 
+	private Integer ordQtySum = 0;
+
 	private String singleProdYn;
 
-	/**
-     * @return the promoSn
-     */
-    public Long getPromoSn() {
-        return promoSn;
-    }
+	public Long getPromoSn() {
+		return promoSn;
+	}
 
-    /**
-     * @param promoSn the promoSn to set
-     */
-    public void setPromoSn(Long promoSn) {
-        this.promoSn = promoSn;
-    }
+	public void setPromoSn(Long promoSn) {
+		this.promoSn = promoSn;
+	}
 
-    /**
-     * @return the promoName
-     */
-    public String getPromoName() {
-        return promoName;
-    }
+	public String getPromoName() {
+		return promoName;
+	}
 
-    /**
-     * @param promoName the promoName to set
-     */
-    public void setPromoName(String promoName) {
-        this.promoName = promoName;
-    }
+	public void setPromoName(String promoName) {
+		this.promoName = promoName;
+	}
 
-    /**
-     * @return the promoTypeCode
-     */
-    public String getPromoTypeCode() {
-        return promoTypeCode;
-    }
+	public String getPromoTypeCode() {
+		return promoTypeCode;
+	}
 
-    /**
-     * @param promoTypeCode the promoTypeCode to set
-     */
-    public void setPromoTypeCode(String promoTypeCode) {
-        this.promoTypeCode = promoTypeCode;
-    }
+	public void setPromoTypeCode(String promoTypeCode) {
+		this.promoTypeCode = promoTypeCode;
+	}
 
-    /**
-     * @return the totalProductSaleAmount
-     */
-    public BigDecimal getTotalProductSaleAmount() {
-        return totalProductSaleAmount;
-    }
+	public BigDecimal getTotalProductSaleAmount() {
+		return totalProductSaleAmount;
+	}
 
-    /**
-     * @param totalProductSaleAmount the totalProductSaleAmount to set
-     */
-    public void setTotalProductSaleAmount(BigDecimal totalProductSaleAmount) {
-        this.totalProductSaleAmount = totalProductSaleAmount;
-    }
+	public void setTotalProductSaleAmount(BigDecimal totalProductSaleAmount) {
+		this.totalProductSaleAmount = totalProductSaleAmount;
+	}
 
-    /**
-     * @return the totalFinalOnlineSaleAmount
-     */
-    public BigDecimal getTotalFinalOnlineSaleAmount() {
-        return totalFinalOnlineSaleAmount;
-    }
+	public BigDecimal getTotalFinalOnlineSaleAmount() {
+		return totalFinalOnlineSaleAmount;
+	}
 
-    /**
-     * @param totalFinalOnlineSaleAmount the totalFinalOnlineSaleAmount to set
-     */
-    public void setTotalFinalOnlineSaleAmount(BigDecimal totalFinalOnlineSaleAmount) {
-        this.totalFinalOnlineSaleAmount = totalFinalOnlineSaleAmount;
-    }
+	public void setTotalFinalOnlineSaleAmount(BigDecimal totalFinalOnlineSaleAmount) {
+		this.totalFinalOnlineSaleAmount = totalFinalOnlineSaleAmount;
+	}
 
-    /**
-     * @return the ordOnlineProdFoList
-     */
-    public List<OrdOnlineProdFoDTO> getOrdOnlineProdFoList() {
-        return ordOnlineProdFoList;
-    }
+	public List<OrdOnlineProdFoDTO> getOrdOnlineProdFoList() {
+		return ordOnlineProdFoList;
+	}
 
-    /**
-     * @param ordOnlineProdFoList the ordOnlineProdFoList to set
-     */
-    public void setOrdOnlineProdFoList(List<OrdOnlineProdFoDTO> ordOnlineProdFoList) {
-        this.ordOnlineProdFoList = ordOnlineProdFoList;
-    }
+	public void setOrdOnlineProdFoList(List<OrdOnlineProdFoDTO> ordOnlineProdFoList) {
+		this.ordOnlineProdFoList = ordOnlineProdFoList;
+	}
 
-    /**
-     * @return the ordOnlineProdFoMap
-     */
-    public Map<String, OrdOnlineProdFoDTO> getOrdOnlineProdFoMap() {
-        return ordOnlineProdFoMap;
-    }
+	public Map<String, OrdOnlineProdFoDTO> getOrdOnlineProdFoMap() {
+		return ordOnlineProdFoMap;
+	}
 
-    /**
-     * @param ordOnlineProdFoMap the ordOnlineProdFoMap to set
-     */
-    public void setOrdOnlineProdFoMap(Map<String, OrdOnlineProdFoDTO> ordOnlineProdFoMap) {
-        this.ordOnlineProdFoMap = ordOnlineProdFoMap;
-    }
+	public void setOrdOnlineProdFoMap(Map<String, OrdOnlineProdFoDTO> ordOnlineProdFoMap) {
+		this.ordOnlineProdFoMap = ordOnlineProdFoMap;
+	}
 
 	public Integer getBaseQty() {
 		return baseQty;
@@ -147,12 +110,44 @@ public class OrdOnlinePromoFoDTO {
 		this.awardQty = awardQty;
 	}
 
-	public Integer getOrdQtySum() {
-		return ordQtySum;
+	public String getBulkDcOnlineProdName() {
+		return bulkDcOnlineProdName;
 	}
 
-	public void setOrdQtySum(Integer ordQtySum) {
-		this.ordQtySum = ordQtySum;
+	public void setBulkDcOnlineProdName(String bulkDcOnlineProdName) {
+		this.bulkDcOnlineProdName = bulkDcOnlineProdName;
+	}
+
+	public String getBulkDcOnlineProdImgUrl() {
+		return bulkDcOnlineProdImgUrl;
+	}
+
+	public void setBulkDcOnlineProdImgUrl(String bulkDcOnlineProdImgUrl) {
+		this.bulkDcOnlineProdImgUrl = bulkDcOnlineProdImgUrl;
+	}
+
+	public BigDecimal getTotalBulkDcProductSaleAmount() {
+		return totalBulkDcProductSaleAmount;
+	}
+
+	public void setTotalBulkDcProductSaleAmount(BigDecimal totalBulkDcProductSaleAmount) {
+		this.totalBulkDcProductSaleAmount = totalBulkDcProductSaleAmount;
+	}
+
+	public BigDecimal getTotalBulkDcFinalOnlineSaleAmount() {
+		return totalBulkDcFinalOnlineSaleAmount;
+	}
+
+	public void setTotalBulkDcFinalOnlineSaleAmount(BigDecimal totalBulkDcFinalOnlineSaleAmount) {
+		this.totalBulkDcFinalOnlineSaleAmount = totalBulkDcFinalOnlineSaleAmount;
+	}
+
+	public String getReceivedClaimReasonName() {
+		return receivedClaimReasonName;
+	}
+
+	public void setReceivedClaimReasonName(String receivedClaimReasonName) {
+		this.receivedClaimReasonName = receivedClaimReasonName;
 	}
 
 	public String getFoReceivedClaimReason() {
@@ -163,12 +158,12 @@ public class OrdOnlinePromoFoDTO {
 		this.foReceivedClaimReason = foReceivedClaimReason;
 	}
 
-	public String getReceivedClaimReasonName() {
-		return receivedClaimReasonName;
+	public Integer getOrdQtySum() {
+		return ordQtySum;
 	}
 
-	public void setReceivedClaimReasonName(String receivedClaimReasonName) {
-		this.receivedClaimReasonName = receivedClaimReasonName;
+	public void setOrdQtySum(Integer ordQtySum) {
+		this.ordQtySum = ordQtySum;
 	}
 
 	public String getSingleProdYn() {

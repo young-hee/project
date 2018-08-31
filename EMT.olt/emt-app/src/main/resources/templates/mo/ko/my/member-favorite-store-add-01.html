@@ -121,18 +121,29 @@
 				}
 
 			   function auth() {
-				   var modal = AP.modal.open({
-					   templateKey : 'my.location-auth'
-				   });
-				   var $modalEl = modal.getElement();
-				   $("#cancel").on('click', function() {
-					   modal.close();
-				   });
+				   var ss = AP.common.getSessionStorage('location-auth');
+				   console.log(ss)
 
-				   $("#ok").on('click', function() {
-					   modal.close();
+
+				   if (ss != "" && ss != 'undefined' && ss != null) {
 					   myLocation();
-				   });
+				   }
+				   else {
+						var modal = AP.modal.open({
+						   templateKey : 'my.location-auth'
+						});
+						var $modalEl = modal.getElement();
+						$("#cancel").on('click', function() {
+						   modal.close();
+						});
+
+						$("#ok").on('click', function() {
+						   modal.close();
+						   AP.common.setSessionStorage('location-auth', 'Y');
+						   myLocation();
+						});
+				   }
+
 			   }
 
 			   function myLocation() {

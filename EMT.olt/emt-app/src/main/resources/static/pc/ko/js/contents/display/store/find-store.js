@@ -68,7 +68,7 @@
 
 			//단골매장만 보기 필터링
 			this._$favoriteFilterBtn.on( 'click', function (e) {
-				//TODO 단골매장만 보기를 누른 경우 단골매장만 보이게 함 ? 그상태에서 검색하면? 검색한 상태에서 단골매장만 보기 누르면? 
+			
 				this._$favoriteFilterBtn.prop( 'disabled', true ).toggleClass( 'on' );
 				this._getData( 0 );
 			}.bind(this));
@@ -124,21 +124,13 @@
 			
 			var favoriteFilter = this._$favoriteFilterBtn.hasClass( 'on' );
 			
-			
 			this._$paging.paging( 'disable' );
 			
 			if ( this._api ) this._api.abort();
 				
 			if(this._keyword === '' && favoriteFilter === false){
-				this._keyword = '서울특별시';
+				this._keyword = '서울';
 			}
-			if(favoriteFilter === true){
-				this._keyword = '';
-				
-			}
-			
-			console.log(this._keyword);
-			console.log(favoriteFilter);
 			
 			this._api = AP.api.stores( null, {
 				keyword: this._keyword,
@@ -209,11 +201,6 @@
 					}).done( function ( result ) {
 						$btn.addClass( 'on' );
 						AP.modal.alert( '"' + storeName + '"이<br>단골 매장으로 설정 되었습니다.' );
-						//$btn.text('단골해제');
-						//console.log("current : " + this._$paging.find('.current').text());
-						//console.log("offset : " + this._offset);
-						//console.log("total : " + this._$total.show().find( '.num' ).text());						
-						//console.log("hasClass : " + this._$favoriteFilterBtn.hasClass( 'on' ));
 						if(this._$favoriteFilterBtn.hasClass( 'on' )){
 							this._getData(0);
 						}else{

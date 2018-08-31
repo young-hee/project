@@ -42,43 +42,12 @@ public class BeautyLifeViewController extends AbstractController {
     @PageTitle(title = "#에뛰드픽")
     public String etude_pick(Model model, String displayMenuId) {
 				
-		displayMenuId ="etude_pick";
+		displayMenuId ="etude_pick"; 
 		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
 		
-        //Mobile
-        if (isMobileDevice()) {
-        }
-
-        //PC
-        if (isPcDevice()) {
-        }
-        
         model.addAttribute("displayMenuId", displayMenuId);
         
         return "display/" + pageInfo.getMenuPageFileId();
-       // return "display/etude-pick"; 
-
-    }
-	
-	@RequestMapping("/beauty_life")
-    @PageTitle(title = "뷰티라이프")
-    public String beauty_life(Model model, String displayMenuId) {
-		
-        //Mobile
-        if (isMobileDevice()) {
-    		
-    		
-        }
-
-        //PC
-        if (isPcDevice()) {
-        	
-        }
-        
-        
-        model.addAttribute("displayMenuId", displayMenuId);
-        
-        return "display/moBeautyLife"; 
 
     }
 	
@@ -124,7 +93,6 @@ public class BeautyLifeViewController extends AbstractController {
         model.addAttribute("displayMenuId", "etude_ch");
         
         return "display/" + pageInfo.getMenuPageFileId();
- //       return "display/ch-etude"; 
 
     }
 
@@ -140,17 +108,7 @@ public class BeautyLifeViewController extends AbstractController {
 	@RequestMapping({"/etude_ch/detail", "/etude_ch/detail/preview"})
     @PageTitle(title = "채널에뛰드")
     public String etude_ch_detail(Model model, String displayMenuId, RequestBeautyLife requestBeautyLife, String previewKey) {
-		
-        //Mobile
-        if (isMobileDevice()) {
-    		
-        }
-
-        //PC
-        if (isPcDevice()) {
-        	
-        }
-        
+	    
         Article article = articleApi.getArticle(requestBeautyLife.getArticleSn(), previewKey);
         
         if( "Y".equals(article.getPlanDisplayYn())){
@@ -240,16 +198,6 @@ public class BeautyLifeViewController extends AbstractController {
     @PageTitle(title = "LOOKS")
     public String etude_looks_detail(Model model, String displayMenuId, RequestBeautyLife requestBeautyLife, String previewKey) {
 		
-		//Mobile
-        if (isMobileDevice()) {
-    		
-        }
-
-        //PC
-        if (isPcDevice()) {
-        	
-        }
-        
         Article article = articleApi.getArticle(requestBeautyLife.getArticleSn(), previewKey);
         
         ArticleSearchResult articleSearchResult = articleApi.getArticleList("Looks", "SortOrder", null, "N", null, 0, 0);

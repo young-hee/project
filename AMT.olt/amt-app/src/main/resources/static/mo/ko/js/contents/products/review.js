@@ -13,8 +13,11 @@
 			this._offset = 0;
 			this._limit = 10;
 			this._totalCnt = 0;
+			this._isLoading = false;
+			this._winScrollend = null;
+			this._sort = 'Recommend';
 			
-			//this._setEvents();
+			this._setEvents();
 		},
 
 		/** =============== Public Methods =============== */
@@ -32,8 +35,7 @@
 		
 		//리뷰 상세
 		openBestReviewDetail : function( prodReviewSn ){
-			var reviewDetail = new AP.ReviewDetail( prodReviewSn );
-			reviewDetail.openDetail();
+			//to-Do 김진수 책임 진행 후 개발
 		},
 
 		/** =============== Private Methods =============== */
@@ -47,30 +49,55 @@
 			$(".review_overview .review .more_view.close").click(function(){
 				$(this).parent(".cont").removeClass("open");
 			});
-			/*
-			window.onscroll = function(ev) {
-			    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-			    	if( this._offset < this._totalCnt ){
-			    		this._getReviewList();
-			    	}
-			    }
-			};
-			*/
 			
+			// scroll
+			this._winScrollend = new $B.event.ScrollEnd( window ).gap({ bottom: AP.footer.getHeight() }).addListener( 'scrollbottom', function (e) {
+				if ( this._isLoading ) return;
+				if ( this._offset < this._totalCnt ) {
+					this._getReviewList();
+				}
+				
+			}.bind( this ));
+			
+			//sort option Click event
+			this._$target.find('.review_sort .filter').on('click', function(e){
+				var $this = $(e.currentTarget);
+				if( $this.hasClass('on') )return false;
+				$this.siblings('a').removeClass('on');
+				$this.addClass('on');
+				this._sort = $this.data('sort');
+				this._offset = 0;
+				this._totalCnt = 0;
+				this._$target.find( '.review_list' ).empty();
+				this._getReviewList();
+			}.bind(this));
+			
+			//stat option Click event - 별점
+			this._$target.find('.statBtn').on('click', function(e){
+				var $this = $(e.currentTarget);
+				var scope = $this.find('.color_black').text();
+				var statCnt = $this.find('.statCnt').text().replace(/[( )]/gi, "");
+				//if( statCnt == 0 )return false;
+				
+				location.href = '/product/filterReviewList/stat?onlineProdSn='+this._onlineProdSn+'&keyword='+scope;
+				
+			}.bind(this));
 		},
 		
 		//리뷰 리스트
 		_getReviewList: function () {
+			this._isLoading = true;
 			var $reviewList = this._$target.find( '.review_list' );
 			
 			AP.api.getReviewList(null, {
 				//onlineProdSn : this._onlineProdSn
 				offset : this._offset,
-				limit : this._limit
+				limit : this._limit,
+				prodReviewSort  : this._sort
 			}).done( function ( result ) {
-				this._offset += this.limit;
-				this._totalCnt = result.totalCount;
 				var data = result.prodReviewListInfo;
+				this._offset += data.limit;
+				this._totalCnt = data.totalCount;
 				data.memberSn = this._memberSn;
 				
 				var dummyArr = [
@@ -91,7 +118,13 @@
 				var html = AP.common.getTemplate( 'products.review-contents', data );
 				
 				if ( data.totalCount ) {
-					$reviewList.html( html );
+					if( this._offset > 0 ){
+						$reviewList.append( html );
+					}else{
+						$reviewList.html( html );
+					}
+					
+					// 좋아요
 					$reviewList.find('.btn_good').off('click').on('click', function(e){
 						var $this = $(e.currentTarget);
 						if( $this.hasClass('on') ){
@@ -100,10 +133,26 @@
 							$this.addClass('on');
 						}
 					}.bind(this));
+					
+					// 신고하기 to-Do 김진수 책임 진행 후 개발
+					$reviewList.find('.btn_report').off('click').on('click', function(e){
+						var $this = $(e.currentTarget);
+						if( $this.hasClass('on') ){
+							$this.removeClass('on');
+						} else {
+							$this.addClass('on');
+						}
+					}.bind(this));
+					
 					//.find( '.slide' ).ixSlideMax();
+					if ( this._offset >= this._totalCnt ) {
+						this._winScrollend.clear();
+					}
 				} else {
+					this._winScrollend.clear();
 					$reviewList.hide();
 				}
+				this._isLoading = false;
             }.bind(this)).fail( function (memberSn) {
             
             });;

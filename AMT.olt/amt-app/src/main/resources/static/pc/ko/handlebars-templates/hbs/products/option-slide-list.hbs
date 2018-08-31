@@ -1,0 +1,35 @@
+<div class="slide" data-ix-options="view-length:1; loop:false;">
+	<div class="ix-list-viewport">
+		<ul class="ix-list-items">
+			{{#each this.prodImages}}
+			<li class="ix-list-item">
+				{{#xif this.videoYn '==' 'N' }}
+				<img class="lazy_load" data-src="{{ this.imgUrl }}" src="" alt="" data-width="540" data-height="540">
+				{{/xif}}
+				<span class="award">
+					<img class="lazy_load" data-src="{{absolutePath '/images/product/img_award.png' }}" src="" alt="어워드명">
+				</span>
+			</li>
+			{{/each}}
+		</ul>
+	</div>
+</div>
+<div class="slide thumb" data-ix-options="view-length:3; move-length:1; loop:false;">
+	<div class="ix-list-viewport">
+		<ul class="ix-list-items">
+			{{#each this.prodImages}}
+			<li class="ix-list-item preview_thumbs {{#if @first}}active{{/if}}">
+				<a href="#none">
+					<img class="lazy_load" data-src="{{ this.imgUrl }}"  src="" alt="">
+				</a>
+			</li>
+			{{/each}}
+		</ul>
+	</div>
+	<div class="ix-controller">
+		<div class="slide_direction">
+			<a class="ix-btn-prev" href="#"><span class="sr_only">이전</span></a>
+			<a class="ix-btn-next" href="#"><span class="sr_only">다음</span></a>
+		</div>
+	</div>
+</div>

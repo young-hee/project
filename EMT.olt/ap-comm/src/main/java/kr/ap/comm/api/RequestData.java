@@ -1,7 +1,10 @@
 package kr.ap.comm.api;
 
 import kr.ap.comm.member.vo.MemberSession;
+import kr.ap.comm.support.APRequestContext;
+import kr.ap.comm.support.constants.DisplayChannel;
 import kr.ap.comm.support.constants.SessionKey;
+import kr.ap.comm.util.SessionUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
@@ -116,12 +119,14 @@ public class RequestData {
 	private void addSLTCommonHeaders(HttpPost post) {
 		post.setHeader("Content-Type", "application/json; charset=UTF-8");
 
+		post.setHeader("X-ProjectCd", getProjectCd());
+		post.setHeader("X-DeviceCd", getDeviceCd());
 		post.setHeader("x-dsp-uuid", UUID.randomUUID().toString());
 		Optional<String> userId = getUserId();
 		if (userId.isPresent()) {
 			post.setHeader("x-dsp-userid", userId.get());
 		}
-		// FIXME: screenid 값을 가져올수 있는 방안 필요
+		// FIXME screenid 값을 가져올수 있는 방안 필요
 		post.setHeader("x-dsp-screenid", "screenid");
 		post.setHeader("x-dsp-langcd", "ko");
 		String serviceUrl = getServiceUrl();
@@ -140,6 +145,35 @@ public class RequestData {
 	private String getServiceUrl() {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		return request.getRequestURI();
+	}
+
+	private String getProjectCd() {
+		String mallId = SessionUtils.getMallId();
+		switch (mallId) {
+		case "M01":
+			return "AMT";
+		case "M02":
+			return "EMT";
+		default:
+			logger.warn("Unknown mallId value [{}]", mallId);
+			return "";
+		}
+	}
+
+	private String getDeviceCd() {
+		DisplayChannel displayChannel = APRequestContext.getDisplayChannel();
+		switch (displayChannel) {
+		case PC:
+			return "1";
+		case Mobile:
+		case iOS:
+		case Android:
+			return "2";
+		default:
+			logger.warn("Unknown DisplayChannel value [{}]", displayChannel);
+			return "";
+		}
+
 	}
 
 	/**

@@ -60,17 +60,29 @@ public class MyWalletViewController extends AbstractController {
 		if(isPcDevice())
 			pageSize = P_PAGE_SIZE;
 		DepositHistoriesResult depositHostory = depositsApi.getDepositHistories(getMemberSn(), null, null, null, 0, pageSize);
-		model.addAttribute("depositHostory", depositHostory);
+		model.addAttribute("depositHostory1", depositHostory);
 		
 		PageVo pageVo = new PageVo();
 		pageVo.setPageNumber(1 + "");
 		pageVo.setTotalRowCount(depositHostory.getTotalCount() + "");
 		pageVo.setPageSize(pageSize + "");
-		model.addAttribute("pageVo", pageVo);
+		model.addAttribute("pageVo1", pageVo);
 
-		DepositRefundAccount depositRefundAccount = depositsApi.getDepositRefundAccount(getMemberSn());
-		model.addAttribute("depositRefundAccount", depositRefundAccount);
+		
+		if(isPcDevice()) {
 
+			DepositRefundAccount depositRefundAccount = depositsApi.getDepositRefundAccount(getMemberSn());
+			model.addAttribute("depositRefundAccount", depositRefundAccount);
+			
+			depositHostory = depositsApi.getDepositHistories(getMemberSn(), null, null, "Transfer", 0, pageSize);
+			model.addAttribute("depositHostory2", depositHostory);
+			
+			pageVo = new PageVo();
+			pageVo.setPageNumber(1 + "");
+			pageVo.setTotalRowCount(depositHostory.getTotalCount() + "");
+			pageVo.setPageSize(pageSize + "");
+			model.addAttribute("pageVo2", pageVo);
+		}
 		if(isMobileDevice())
 			return "my/deposit_account.1";
 		if(isPcDevice())
@@ -105,8 +117,9 @@ public class MyWalletViewController extends AbstractController {
 
 		if(isMobileDevice())
 			return "my/deposit_account.2";
-		if(isPcDevice())
+		if(isPcDevice()) {
 			return "my/my-deposit";
+		}
 		return null;
 	}
 	/**
@@ -168,6 +181,10 @@ public class MyWalletViewController extends AbstractController {
 		pageVo.setTotalRowCount(depositHostory.getTotalCount() + "");
 		pageVo.setPageSize(pageSize + "");
 		model.addAttribute("pageVo", pageVo);
+
+		if(isPcDevice()) {
+			model.addAttribute("code", getRequest().getParameter("code"));
+		}
 		return "my/fragment/deposit-history-fragment";
 	}
 

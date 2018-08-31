@@ -1,13 +1,13 @@
 {{!--
 	베스트
 --}}
-{{#if this.flaggedProdRankChange.length }}
+{{#if this.onlineProdList.totalCount }}
 	<div class="ix-list-viewport">
 		<ul class="ix-list-items">
-			{{#each this.flaggedProdRankChange}}
+			{{#each this.onlineProdList.list}}
 				<li class="ix-list-item">
 					<a href="{{ productDetailPath this.onlineProdSn this.prodSn }}">
-					{{#xif this.rankChang '>' 9}}
+					{{#xif this.rank '>' 9}}
 						<span class="grade">{{ numberCipher this.rank 2 }}
 					{{else}}
 						<span class="grade">{{ numberCipher this.rank 1 }}
@@ -16,10 +16,13 @@
 							<span class="{{#xif this.rankChange '>' 0}}up{{/xif}} {{#xif this.rankChange '<' 0}}down{{/xif}}">{{ this.rankChange }}</span></span>
 						{{/xif}}
 						<span>
-							<span class="item_title">{{ this.prodName }}</span>
-							<span class="price"><b>{{ numberFormat this.prodPriceSummary.minOnlineSalePrice }}</b> 원</span>
+							<span class="item_title">{{ this.products.0.prodName }}</span>
+							<span class="price"><b>{{ numberFormat this.products.0.prodPriceSummary.onlineSalePrice }}</b> 원</span>
 						</span>
 						<span class="img">
+							{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+									<div class="item_state out_of_stock">일시품절</div>
+							{{/xif}}
 							<img src="{{ this.prodImages.0.imgUrl }}" alt="">
 						</span>
 					</a>

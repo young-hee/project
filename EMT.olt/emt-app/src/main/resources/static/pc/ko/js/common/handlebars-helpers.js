@@ -1305,4 +1305,33 @@
 		return Math.abs(value)
 	});
 
+	/**
+	 * 결제 수단명
+	 * @returns {String}
+	 */
+	Handlebars.registerHelper('ordFreebiesCode', function (type, code) {
+		if ('promo' == type) {
+			switch (code) {
+				case 'Prod':
+				return '사은품/상품증정';
+				case 'SpPrice': return '상품특가증정';
+				case 'Coupon': return '쿠폰발급';
+				case 'Point': return '포인트적립';
+				case 'Giftcard': return '기프트카드증정';
+			}
+		}
+		else if ('coupon' == type) {
+			switch (code) {
+				case 'ProdDc': return '상품할인쿠폰';
+				case 'CartDc': return '장바구니할인쿠폰';
+				case 'MPlusN': return 'M+N쿠폰';
+				case 'Buy1Get': return 'Buy1Get쿠폰';
+				case 'CartAward': return '장바구니증정쿠폰';
+				case 'ShipFeeFree': return '배송비무료쿠폰';
+			}
+		}
+
+		return '';
+	});
+
 })( jQuery );

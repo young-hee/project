@@ -1,4 +1,4 @@
-<th:block th:if="${#device.isMobileWeb()}"> <!-- app전용은 footer 생략 -->
+<th:block th:unless="${#device.isMobileApp()}"> <!-- app전용은 footer 생략 -->
 	<ul class="footer_menu">
 		<li>
 			<a href="javascript:;" onclick="login()" th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">로그인</a>

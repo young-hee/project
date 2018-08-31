@@ -11,15 +11,15 @@
 
 			<!--/* 일단상품 */-->
 			<th:block th:if="${#lists.size(shippingOrdOnlineProdList) > 0}">
-				<div class="cart_item_box_wrap">
-					<div class="cart_item_box" th:each="ordOnlineProd : ${shippingOrdOnlineProdList}">
+				<th:block th:each="ordOnlineProd : ${shippingOrdOnlineProdList}">
+					<div class="cart_item_box" >
 						<th:block ap:replace="~{order/fragment/order-reception-product/order-ordonlineprod-info}"/>
 					</div>
-				</div>
+				</th:block>
 			</th:block>
 			<!--/* 묶음판매상품 */-->
 			<th:block th:if="${#lists.size(shippingBulkDcList) > 0}">
-				<th:block th:each="bulkDc : ${shippingBulkDcList}">
+				<th:block th:each="bulkDcOnlineProd : ${shippingBulkDcList}">
 					<th:block ap:replace="~{order/fragment/order-reception-product/order-bulkdc-info}"/>
 				</th:block>
 			</th:block>
@@ -50,7 +50,7 @@
 		</th:block>
 
 		<!--테이크아웃쇼핑상품-->
-		<th:block th:if="${#lists.size(storePickupOrdOnlineProdList) > 0 and memberSn > 0}">
+		<th:block th:if="${#lists.size(storePickupOrdOnlineProdList) > 0 and isApMember}">
 		<p class="item_count">테이크아웃 상품 (<span id="storeOrdOnlineProdCnt" th:text="${ordCntMap.get('storeOrdOnlineProdSumCnt')}">0</span>개)</p>
 		<div class="cart_item_box_wrap">
 			<div class="cart_item_box" th:each="storeOrdOnlineProd : ${storePickupOrdOnlineProdList}" >

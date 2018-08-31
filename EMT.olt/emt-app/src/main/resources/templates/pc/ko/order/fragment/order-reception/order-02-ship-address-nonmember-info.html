@@ -48,6 +48,7 @@
 					<div>
 						<span class="check_wrap"><input type="radio" name="delivery" id="delivery1" value="01" th:onclick="|shipInfo('SHIP')|" checked><label for="delivery1">일반택배</label></span>
 						<span class="check_wrap"><input type="radio" name="delivery" id="delivery2" value="02" th:onclick="|shipInfo('STORE')|"><label for="delivery2">편의점 배송</label></span>
+						<input type="hidden" name="shipType" value="SHIP"/>
 					</div>
 				</div>
 			</div>
@@ -173,26 +174,28 @@
 					<p class="text_notice light mgt20">배송 물품이 편의점 도착시, 도착 안내 SMS가 발송 됩니다.</p>
 				</div>
 				<!--/* 편의점택배 받으실분 새로입력 */-->
-				<legend class="sr_only">받으실분 정보 입력</legend>
-				<div class="ui_table" id="address2_2_01_layer" style="display: none">
-					<dl>
-						<dt><label for="name02"><b>이름</b></label></dt>
-						<dd>
-							<div class="input_wrap w100p">
-								<input type="text" id="name02" name="name02" placeholder="이름을 입력해 주세요." required="required" data-msg-required="받으시는 분의 이름을 입력하세요.">
-							</div>
-						</dd>
-					</dl>
-					<dl>
-						<dt><label for="phone02"><b>휴대폰번호</b></label></dt>
-						<dd>
-							<div class="input_wrap w100p">
-								<input type="text" id="phone02" name="phone02" placeholder="‘-’없이 숫자만 입력" required="required" data-msg-required="받으시는 분의 휴대폰 번호를 입력하세요.">
-							</div>
-							<p class="text_notice light w100p" id="choice02_2_02_layer" style="display: none">배송 물품이 편의점 도착 시, 도착 안내 SMS가 발송됩니다.</p>
-						</dd>
-					</dl>
-				</div>
+				<fieldset class="form">
+					<legend class="sr_only">받으실분 정보 입력</legend>
+					<div class="ui_table" id="address2_2_01_layer" style="display: none">
+						<dl>
+							<dt><label for="name02"><b>이름</b></label></dt>
+							<dd>
+								<div class="input_wrap w100p">
+									<input type="text" id="name02" name="name02" placeholder="이름을 입력해 주세요." required="required" data-msg-required="받으시는 분의 이름을 입력하세요.">
+								</div>
+							</dd>
+						</dl>
+						<dl>
+							<dt><label for="phone02"><b>휴대폰번호</b></label></dt>
+							<dd>
+								<div class="input_wrap w100p">
+									<input type="text" id="phone02" name="phone02" placeholder="‘-’없이 숫자만 입력" required="required" data-msg-required="받으시는 분의 휴대폰 번호를 입력하세요.">
+								</div>
+								<p class="text_notice light w100p" id="choice02_2_02_layer">배송 물품이 편의점 도착 시, 도착 안내 SMS가 발송됩니다.</p>
+							</dd>
+						</dl>
+					</div>
+				</fieldset>
 			</div>
 		</div>
 	</dd>
@@ -204,6 +207,7 @@
 			if(shipType == 'SHIP' ) {
 				$('#delivery1_layer').show();
 				$('#delivery2_layer').hide();
+				$('input[name=shipType]').val('SHIP');
 			} else if(shipType == 'STORE' ) {
 				if ($('[name=purchaserName]').val() != "") {
 					$('#orderNonmemberName').html($('[name=purchaserName]').val());
@@ -214,6 +218,8 @@
 
 				$('#delivery1_layer').hide();
 				$('#delivery2_layer').show();
+				$('input[name=shipType]').val('STORE');
+				$('input[name=addressStoreType]').attr('value','MEMBER');
 			}
 		}
 
@@ -230,10 +236,12 @@
 				$('#address2_1_layer').show();
 				$('#address2_2_01_layer').hide();
 				$('#address2_2_02_layer').hide();
+				$('input[name=addressStoreType]').attr('value','MEMBER');
 			} else if(choiceType == 'NEW' ) {
 				$('#address2_1_layer').hide();
 				$('#address2_2_01_layer').show();
 				$('#address2_2_02_layer').show();
+				$('input[name=addressStoreType]').attr('value','NEW');
 			}
 
 			$('#name02').blur(function(){

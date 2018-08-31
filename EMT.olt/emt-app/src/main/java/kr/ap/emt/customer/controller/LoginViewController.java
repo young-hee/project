@@ -27,6 +27,7 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -124,21 +125,30 @@ public class LoginViewController extends AbstractController {
 
 	@GetMapping("/doLogout")
 	public String doLogout(HttpServletRequest request, HttpServletResponse response, String returl) {
-
-		Cookie token = CookieUtils.getCookie(request, CookieKey.AUTO_LOGIN);
-		CookieUtils.removeCookie(request, response, CookieKey.AUTO_LOGIN);
-		MemberSession memberSession = getMemberSession();
-		WebUtils.setSessionAttribute(request, SessionKey.LOGIN_USER, null);
-		WebUtils.setSessionAttribute(request, SessionKey.CART, null);
-		WebUtils.setSessionAttribute(request, SessionKey.ORDER, null);
-		if (memberSession.getMember_sn() != 0) {
-			try {
-				ApLogoutInfo logoutInfo = new ApLogoutInfo();
-				if(token != null)
-					logoutInfo.setAutoLoginToken(token.getValue());
-				apApi.memberLogout(memberSession.getMember_sn(), logoutInfo);
-			} catch (Exception e) {
-				logger.error(e.getMessage());
+		final HttpSession httpSession = request.getSession(false);
+		if (httpSession!=null) {
+			synchronized (WebUtils.getSessionMutex(httpSession)) {
+				Cookie token = CookieUtils.getCookie(request, CookieKey.AUTO_LOGIN);
+				CookieUtils.removeCookie(request, response, CookieKey.AUTO_LOGIN);
+				MemberSession memberSession = getMemberSession();
+				WebUtils.setSessionAttribute(request, SessionKey.LOGIN_USER, null);
+				WebUtils.setSessionAttribute(request, SessionKey.CART, null);
+				WebUtils.setSessionAttribute(request, SessionKey.ORDER, null);
+				if (memberSession.getMember_sn() != null) {
+					try {
+						ApLogoutInfo logoutInfo = new ApLogoutInfo();
+						if (token != null)
+							logoutInfo.setAutoLoginToken(token.getValue());
+						apApi.memberLogout(memberSession.getMember_sn(), logoutInfo);
+					} catch (Exception e) {
+						logger.error(e.getMessage());
+					}
+				}
+				try {
+					httpSession.invalidate();
+				} catch (IllegalStateException e) {
+					//Ignore already invalided session
+				}
 			}
 		}
 		if(returl == null)

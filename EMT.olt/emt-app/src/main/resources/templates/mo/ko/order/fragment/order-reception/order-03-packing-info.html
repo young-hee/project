@@ -43,7 +43,8 @@
 				}else{
 					$('[data-flag=' + id + ']').prop('disabled', true);
 					$('#' + id + '_cnt').val(0);
-					$('#' + id + '_sum').text(' 추가 0원');
+					$('#' + id + '_sum').text('0원');
+					//makeBoxInfoTitle();
 					boxBagQtyChange(coSn, giftPackingSn, 0);
 				}
 			}
@@ -63,8 +64,8 @@
 						cnt = (parseInt($('#' + id + '_cnt').val()) - 1);
 						totSum = cnt * parseInt(giftPackingFee);
 					}
-					$('#' + id + '_sum').text(' 추가 ' + $B.string.numberFormat(totSum) + '원');
-					makeBoxInfoTitle(cnt);
+					$('#' + id + '_sum').text($B.string.numberFormat(totSum) + '원');
+					//makeBoxInfoTitle();
 					boxBagQtyChange(coSn, giftPackingSn, cnt);
 				}
 
@@ -79,20 +80,18 @@
 					p_xhr.abort();
 				}
 
-				$('#packingLoading').show();
-
 				p_xhr = AP.api.ordReceptChangeBag({}, {
 					ordSn: ordSn,
 					coSn : coSn,
 					giftPackingSn : giftPackingSn,
 					giftPackingQty : cnt,
-					membershipSn : $('[name=beauty_point]').data().membershipsn
+					membershipSn : $('[name=beauty_point]').length > 0 ? $('[name=beauty_point]').data().membershipsn : null
 				}).done(function (data) {
 					if (data.ordHistEx != null){
 						amtPcurInitAjax(data);
 
-						if ($('[name="depositPrice"]') != undefined && $('[name="depositPrice"]').val() != ""
-							|| $('[name="beauty_point"]') != undefined && $('[name="beauty_point"]').val() != "") {
+						if ($('[name="depositPrice"]').length > 0 && $('[name="depositPrice"]').val() != ""
+							|| $('[name="beauty_point"]').length > 0 && $('[name="beauty_point"]').val() != "") {
 							AP.modal.alert('포장/쇼핑백 추가로 인해 포인트 및 예치금 사용이 초기화됩니다.');
 							$('[name="depositPrice"]').val('');
 							$('[name="beauty_point"]').val('');
@@ -102,7 +101,6 @@
 					//실패
 					console.log(xhr.errorMessage);
 				}).always(function () {
-					$('#packingLoading').hide();
 				});
 			}
 

@@ -391,6 +391,25 @@ public class EventRestController extends AbstractController {
 
 	  }
 	
+	/***
+	 * 기획전시 이벤트 _참여댓글형 추천 -/v1/{mallId}/sales/plandisplays/{planDisplaySn}/recommendComment/{eventParticipantSn}
+	 *
+	 * @param requestEvent
+	 * @return
+	 */
+	@RequestMapping("/recommendParticipated")
+	public ResponseEntity<?> recommendParticipated(RequestEvent requestEvent) {
+
+		HashMap<String, Object> result = new HashMap<String, Object>();
+
+		BooleanResult booleanResult = plandisplayApi.planDisplayEventRecommendComment(requestEvent.getPlanDisplaySn(), requestEvent.getEventParticipantSn());
+
+		result.put("booleanResult", booleanResult);
+
+		return ResponseEntity.ok(result);
+
+	}
+	
 	/**
 	 * 기획전시 이벤트 상세
 	 *

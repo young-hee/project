@@ -16,10 +16,8 @@ import net.g1project.ecp.api.model.sales.point.GiveActivityPointGift;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
@@ -91,10 +89,7 @@ public class MyPointRestController extends AbstractController {
 		
 		throw error(result, HttpStatus.FORBIDDEN, "NO_MEMBER", "회원정보없음.");
 	}
-	
-	public void noMemberCheckSms() {
-		
-	}
+
 	/**
 	 * 포인트 선물.
 	 * @return

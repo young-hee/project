@@ -5,21 +5,52 @@
 	<script th:inline="javascript">
 		var orderStore = /*[[${ordStore}]]*/;
 		console.log("orderStore : " + orderStore);
-		opener.parent.document.orderForm.storeHeadCd.value = orderStore.storeHeadCd;
-		opener.parent.document.orderForm.storeShopCd.value = orderStore.storeShopCd;
-		opener.parent.document.orderForm.storeNm.value = orderStore.storeNm;
-		opener.parent.document.orderForm.storeShopNm.value = orderStore.storeShopNm;
-		opener.parent.document.orderForm.storeTelno.value = orderStore.storeTelno;
-		opener.parent.document.orderForm.storeZip.value = orderStore.storeZip;
-		opener.parent.document.orderForm.storeAddr1.value = orderStore.storeAddr1;
-		opener.parent.document.orderForm.storeAddr2.value = orderStore.storeAddr2;
-		opener.parent.document.orderForm.storeCodeF.value = orderStore.storeCodeF;
-		opener.parent.document.orderForm.storeDdZone.value = orderStore.storeDdZone;
-		opener.parent.document.orderForm.storeDdBag.value = orderStore.storeDdBag;
-		opener.parent.document.orderForm.storeEupmyeon.value = orderStore.storeEupmyeon;
+		opener.parent.opener.document.orderForm.storeHeadCd.value = orderStore.storeHeadCd;
+		opener.parent.opener.document.orderForm.storeShopCd.value = orderStore.storeShopCd;
+		opener.parent.opener.document.orderForm.storeNm.value = orderStore.storeNm;
+		opener.parent.opener.document.orderForm.storeShopNm.value = orderStore.storeShopNm;
+		opener.parent.opener.document.orderForm.storeTelno.value = orderStore.storeTelno;
+		opener.parent.opener.document.orderForm.storeZip.value = orderStore.storeZip;
+		opener.parent.opener.document.orderForm.storeAddr1.value = orderStore.storeAddr1;
+		opener.parent.opener.document.orderForm.storeAddr2.value = orderStore.storeAddr2;
+		opener.parent.opener.document.orderForm.storeCodeF.value = orderStore.storeCodeF;
+		opener.parent.opener.document.orderForm.storeDdZone.value = orderStore.storeDdZone;
+		opener.parent.opener.document.orderForm.storeDdBag.value = orderStore.storeDdBag;
+		opener.parent.opener.document.orderForm.storeEupmyeon.value = orderStore.storeEupmyeon;
 
-		opener.parent.document.getElementById("storeShopNmDisp").innerHTML = orderStore.storeShopNm;
-		opener.parent.document.getElementById("storeTelnoDisp").innerHTML = orderStore.storeTelno;
+		opener.parent.opener.document.getElementById("storeShopNmDisp").innerHTML = orderStore.storeShopNm;
+		opener.parent.opener.document.getElementById("storeTelnoDisp").innerHTML = orderStore.storeTelno;
+
+		opener.parent.opener.document.getElementById("cStoreName").value = orderStore.storeShopNm;
+		opener.parent.opener.document.getElementById("cStorePhoneNo").value =orderStore.storeTelno;
+
+		//cStoreHqCode 		편의점본부코드
+		//cStoreCenterCode	편의점센터코드
+		//cStoreStoreCode	편의점점포코드
+		//cStoreCompany		편의점회사
+		//cStoreName		편의점명
+		//cStorePhoneNo
+		//cStoreDockNo		편의점도크번호
+		//cStoreCenterName	편의점센터명
+		//cStoreAddress
+		//cStoreArrivalAreaCode		편의점도착지역코드
+		//cStoreArrivalAreaBarcode	편의점도착지역바코드
+		//cStoreDongNmCode			편의점동명코드
+		//cStoreArrivalDongNm		편의점도착동명
+		opener.parent.opener.document.getElementById("cStoreHqCode").value =orderStore.storeHeadCd;
+		opener.parent.opener.document.getElementById("cStoreCenterCode").value ="";
+		opener.parent.opener.document.getElementById("cStoreCenterName").value ="";
+		opener.parent.opener.document.getElementById("cStoreStoreCode").value =orderStore.storeShopCd;
+		opener.parent.opener.document.getElementById("cStoreCompany").value =orderStore.storeNm;
+		opener.parent.opener.document.getElementById("cStoreDockNo").value ="";
+		opener.parent.opener.document.getElementById("cStoreAddressZipCode").value =orderStore.storeZip;
+		opener.parent.opener.document.getElementById("cStoreAddressAddress1").value =orderStore.storeAddr1;
+		opener.parent.opener.document.getElementById("cStoreAddressAddress2").value =orderStore.storeAddr2;
+		opener.parent.opener.document.getElementById("cStoreArrivalAreaCode").value =orderStore.storeCodeF;
+		opener.parent.opener.document.getElementById("cStoreArrivalAreaBarcode").value =orderStore.storeDdZone;
+		opener.parent.opener.document.getElementById("cStoreDongNmCode").value =orderStore.storeDdBag;
+		opener.parent.opener.document.getElementById("cStoreArrivalDongNm").value =orderStore.storeEupmyeon;
+
 
 		if (!window.opener.parent.closed) window.opener.parent.close();
 		if (!window.closed) window.close();

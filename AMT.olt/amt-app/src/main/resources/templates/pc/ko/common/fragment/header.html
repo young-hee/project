@@ -254,9 +254,21 @@
 			<span>전체 메뉴</span>
 		</a>
 		<ul class="gnb">
-			<li th:each="menuId : ${gnbMap.get('main').submenus}">
-				<a href="#" th:href="@{'/display/' + ${menuId.displayMenuId}(displayMenuId=${menuId.displayMenuId})}" th:text="${menuId.menuTitle}" th:class="${displayMenuId == menuId.displayMenuId} ? 'on' : ''"></a>
+			<th:block th:each="menu : ${gnbMap.get('main').submenus}" th:if="${not #lists.isEmpty(gnbMap.get('main'))}">
+			<th:block th:if="${menu.displayMenuId} == 'issue'">
+				<th:block th:each="subMenu : ${menu.submenus}">
+					<li><a href="#" th:href="@{'/display/' + ${subMenu.displayMenuId}(displayMenuId=${subMenu.displayMenuId})}" th:text="${subMenu.menuTitle}"  
+						th:class="${displayMenuId == subMenu.displayMenuId} ? 'on' : ''">GNBs</a>
+					</li>
+				</th:block>
+			</th:block>
+			<li th:if="${menu.displayMenuId != 'issue'}"><a href="#" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}"  
+					th:class="${displayMenuId == menu.displayMenuId} ? 'on' : ''" th:data="${menu.displayMenuId}">GNBs</a>
 			</li>
+			<!-- <li th:each="menuId : ${gnbMap.get('main').submenus}">
+				<a href="#" th:href="@{'/display/' + ${menuId.displayMenuId}(displayMenuId=${menuId.displayMenuId})}" th:text="${menuId.menuTitle}" th:class="${displayMenuId == menuId.displayMenuId} ? 'on' : ''"></a>
+			</li> -->
+			</th:block>
 			<!-- <li><a href="#none" class="on">이슈</a></li>
 			<li><a href="#none">매거진</a></li>
 			<li><a href="#none">랭킹</a></li>

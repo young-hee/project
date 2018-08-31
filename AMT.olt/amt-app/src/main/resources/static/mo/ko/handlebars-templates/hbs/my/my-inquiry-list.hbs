@@ -14,13 +14,15 @@
 										<small>결과알림 : <span class="color_black">{{condition (eq this.smsResponseNotifyYn 'Y') 'SMS 수신' 'SMS 수신거부'}}</span></small>
 									{{/if}}
 									{{#if (eq ../this.YN 'Y')}}
-										<button type="button" class="btn_gray_round">상담평가</button>
+										{{#if (eq this.responseEvalCode null)}}
+											<button type="button" class="btn_gray_round" onclick="evalResponse('{{this.customerInquirySn}}')">상담평가</button>
+										{{/if}}
 									{{/if}}
 								</span>
 								{{#xif ../this.YN '==' 'N'}}
 									<span class="status unread"><i class="ico_check"></i> 미확인</span>
 								{{else}}
-									<span class="status"><i class="ico_check"></i> 답변완료</span>
+									<span class="status"><i class="ico_check"></i> {{condition (eq this.responseEvalCode null) '답변완료' this.responseEvalName}}</span>
 								{{/xif}}
 							</span>
 						</dt>

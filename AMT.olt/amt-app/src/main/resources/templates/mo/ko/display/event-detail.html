@@ -1,0 +1,45 @@
+<html ap:decorate="~{layout/layout-event}" th:with="_jsfile='events-detail'">
+
+<body>
+        <!-- #ap_container -->
+        <div ap:fragment="layout-contents">
+			<th:block ap:replace="~{display/fragment/event-contents}"/>
+
+        </div>
+
+    <!--/* 하단 js등을 실행하는 마지막 영역 */-->
+    <th:block ap:fragment="layout-endpoint">
+		
+		<script>
+
+		 // 스크롤 시 탭 상단에 fixed
+			$(window).scroll(function() {
+				if(window.pageYOffset >= $(".ui_select_box_wrap").offset().top) {
+					$(".ui_select_box").addClass("fixed");
+				} else {
+					$(".ui_select_box").removeClass("fixed");
+				}
+			});
+
+			$(".comment_list .read_more").click(function(){
+				$(this).parent(".cont").addClass("open");
+			});
+			$(".comment_list .more_view.close").click(function(){
+				$(this).parent(".cont").removeClass("open");
+			});
+
+			
+			$( '.youtube_video' ).video();
+
+		</script>	
+		<script th:inline="javascript">
+		(function () {
+			var planDisplay = /*[[${planDisplay}]]*/;
+
+			AP.eventsDetail.setDefaultData( planDisplay );
+		}());
+	</script>
+    </th:block>
+
+</body>
+</html>

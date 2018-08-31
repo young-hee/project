@@ -77,7 +77,7 @@
 			if ( !$section.length ) return;
 
 			AP.api.flaggedItemList( null, {
-				flags: 'icon_reco_new'
+				flags: 'icon_reco_new',
 			}).done( function ( result ) {
 				var data = result.onlineProdList,
 					html = AP.common.getTemplate( 'main.home.new-product-list', data );
@@ -88,17 +88,16 @@
 			}.bind(this));
 		},
 
-		//Today hot deal
+		//Today hot deal inSpPriceSale API 변경
 		_setHotDeal: function () {
 			var $section = this._$target.find( '.hot_deal' );
 			if ( !$section.length ) return;
 
-			AP.api.flaggedItemList( null, {
-				flags: 'icon_type_sp_today',
-				prodListUnit: 'Prod'
+			AP.api.inSpPriceSale( null, {
+				spPriceSaleType: 'Today'
 			}).done( function ( result ) {
 				var data = result.onlineProdList,
-					html = AP.common.getTemplate( 'main.home.hot-deal-list', data );
+				html = AP.common.getTemplate( 'main.home.hot-deal-list', data );
 
 				$section.find( '.slide' ).html( html );
 				$section.find( '.slide' ).ixSlideMax();
@@ -112,12 +111,23 @@
 			}.bind(this));
 		},
 
-		//베스트 랭킹정보가 필요하여 API flaggedProdRankChanges 사용
+		//베스트 주간 랭킹으로 변경됨 
 		_setBest: function () {
 			var $section = this._$target.find( '.best_item' );
 			if ( !$section.length ) return;
 
-			AP.api.flaggedProdRankChanges().done( function ( result ) {
+			AP.api.flaggedItemList( null, {
+				flags: 'icon_reco_best_w',
+				prodListUnit : 'Prod',
+				limit: 10
+			}).done( function ( result ) {
+
+				$.each(result.onlineProdList.list, function(index, list){
+					$.each(list, function(inx, products){
+						list.rank = Number(index+1);
+					});
+				});
+				 
 				var html = AP.common.getTemplate( 'main.home.best-list', result ),
 					$slide = $section.find( '.slide' );
 
@@ -297,6 +307,7 @@
 		},
 
 		_drawPixleeList: function ( data ) {
+			
 			var html = AP.common.getTemplate( 'main.home.pixlee-list', data );
 			this._$target.find( '.etude_pick .ix-list-items' ).html( html );
 		},
@@ -321,21 +332,55 @@
 		
 		// 화면에 진입시 팝업 유무를 확인해서 팝업을 띄운다. 
 		_popUpload: function () {
-		
+			
 			AP.api.mainPopups().done( function ( result ) {
 				
 				$.each(result.popupList, function(index, popupInfo){
 					
 					var modal = AP.modal.info({
-						title: popupInfo.popupTitle,
-						contents: popupInfo.popupBodyText
+						title: popupInfo.popupTitle +index + popupInfo.popupMgmtSn,
+						contents: popupInfo.popupBodyText,
+						containerClass : 'popup_check'
 					});
 					
+					var $modal = modal.getElement(); 
+					$modal.find( '.layer' ).append( '<dd class="popup_check"><span class="check_wrap"><input type="checkbox" id="check1" name="mainPop_'+popupInfo.popupMgmtSn+'"><label for="check1">오늘하루 다시보지않기</label></span></dd>' );
+					
 					modal.resetPosition();
+					
+					$modal.find('.layer .popup_check input[name=mainPop_'+popupInfo.popupMgmtSn+']').on( 'change', function () {
+					/*
+						console.log(popupInfo.popupMgmtSn); 
+						console.log(this); */
+					
+					}.bind( this ));
+					
+					//$modal.setSessionStorage(); // ( key, value, expireMinutes ) (1*60 *24) 
+					//AP.common.getSessionStorage();
+					//AP.common.setSessionStorage('mainPop'+popupInfo.popupMgmtSn, 'Y', 0.5); 
+				//	console.log($modal.find('.layer .popup_check input[name=mainPop_'+index+']').val());
+					//console.log(AP.common.getSessionStorage('mainPop'+popupInfo.popupMgmtSn));
+					
 				});
+				
+				
+				
+				$.each(result.popupList, function(index, popupInfo){
+					
+					$(this).find('.layer .popup_check input[name=mainPop_'+popupInfo.popupMgmtSn+']').on( 'change', function () {
+						
+						//console.log(this); 
+						//console.log(this); 
+					}.bind( this ));
+				
+				
+				});
+				
 			}.bind(this));
-		}
+			
+			
 		
+		}
     });
 
     AP.home = new Home();

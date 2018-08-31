@@ -1,0 +1,219 @@
+<dd class="panel" aria-hidden="false" style="display: block;">
+	{{#each this.list}}
+		{{#if (and (eq this.memberOnlyYn 'Y')(eq this.tgtMemberCode 'FirstPur'))}}
+			<h3 class="h_title cont"><strong>첫 구매 사은품</strong></h3>
+			<fieldset class="form">
+				<legend class="sr_only">사은품 선택</legend>
+				{{#xif this.ordUnitAwardExPointList.length '>' 0}}
+					{{#each this.ordUnitAwardExPointList}}
+						<li>
+							<span class="check_wrap">
+								{{#xif ../this.ordPromoAwardSectionEx.awardMethodCode '==' 'All'}}
+									{{#xif this.freeGiftAwardMethodCode '==' 'All'}}
+										<input type="checkbox" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" checked data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Point">
+									{{else}}
+										<input type="radio" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Point">
+									{{/xif}}
+								{{else}}
+									{{#xif this.freeGiftAwardMethodCode '==' 'All'}}
+										<input type="checkbox" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Point">
+									{{else}}
+										<input type="radio" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Point">
+									{{/xif}}
+								{{/xif}}
+								<label for="{{this.ordUnitAwardSn}}">
+									<span class="thumb"><img src="{{absolutePath '/images/cart/ico_beautypoint.png'}}" alt=""></span>
+									<span class="text">{{pointTypeSwitch this.pointTypeCode}} {{this.savingPoint}}P</span>
+								</label>
+							</span>
+						</li>
+					{{/each}}
+				{{/xif}}
+				{{#xif this.ordUnitAwardExProdList.length '>' 0}}
+					{{#each this.ordUnitAwardExProdList}}
+						<li>
+							<span class="check_wrap">
+								{{#xif ../this.ordPromoAwardSectionEx.awardMethodCode '==' 'All'}}
+									{{#xif this.freeGiftAwardMethodCode '==' 'All'}}
+										<input type="checkbox" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" checked data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Prod">
+									{{else}}
+										<input type="radio" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Prod">
+									{{/xif}}
+								{{else}}
+									{{#xif this.freeGiftAwardMethodCode '==' 'All'}}
+										<input type="checkbox" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Prod">
+									{{else}}
+										<input type="radio" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Prod">
+									{{/xif}}
+								{{/xif}}
+								<label for="{{this.ordUnitAwardSn}}">
+									<span class="thumb"><img src="{{this.ordProdEx.prodImgUrl}}" alt=""></span>
+									<span class="text">{{this.ordProdEx.prodNameBlang}} {{currencyFormatDefault this.ordProdEx.prodSalePrice '원'}}</span>
+								</label>
+							</span>
+						</li>
+					{{/each}}
+				{{/xif}}
+				{{#xif this.ordUnitAwardExSpPriceList.length '>' 0}}
+					{{#each this.ordUnitAwardExSpPriceList}}
+						<li>
+							<span class="check_wrap">
+								{{#xif ../this.ordPromoAwardSectionEx.awardMethodCode '==' 'All'}}
+									{{#xif this.freeGiftAwardMethodCode '==' 'All'}}
+										<input type="checkbox" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" checked data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="SpPrice">
+									{{else}}
+										<input type="radio" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="SpPrice">
+									{{/xif}}
+								{{else}}
+									{{#xif this.freeGiftAwardMethodCode '==' 'All'}}
+										<input type="checkbox" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="SpPrice">
+									{{else}}
+										<input type="radio" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="SpPrice">
+									{{/xif}}
+								{{/xif}}
+								<label for="{{this.ordUnitAwardSn}}">
+									<span class="thumb"><img src="{{this.ordProdEx.prodImgUrl}}" alt=""></span>
+									<span class="text">{{this.ordProdEx.prodNameBlang}} {{currencyFormatDefault this.ordProdEx.prodSalePrice '원'}}</span>
+								</label>
+							</span>
+						</li>
+					{{/each}}
+				{{/xif}}
+				{{#xif this.ordUnitAwardExCouponList.length '>' 0}}
+					{{#each this.ordUnitAwardExCouponList}}
+						<li>
+							<span class="check_wrap">
+								{{#xif ../this.ordPromoAwardSectionEx.awardMethodCode '==' 'All'}}
+									{{#xif this.freeGiftAwardMethodCode '==' 'All'}}
+										<input type="checkbox" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" checked data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Coupon">
+									{{else}}
+										<input type="radio" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Coupon">
+									{{/xif}}
+								{{else}}
+									{{#xif this.freeGiftAwardMethodCode '==' 'All'}}
+										<input type="checkbox" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Coupon">
+									{{else}}
+										<input type="radio" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Coupon">
+									{{/xif}}
+								{{/xif}}
+								<label for="{{this.ordUnitAwardSn}}">
+									<span class="thumb"><img src="{{absolutePath '/images/cart/ico_coupon.png'}}" alt=""></span>
+									<span class="text">{{this.couponName}} {{this.couponTypeCode}}</span>
+								</label>
+							</span>
+						</li>
+					{{/each}}
+				{{/xif}}
+				{{#xif this.ordUnitAwardExGiftcardList.length '>' 0}}
+					{{#each this.ordUnitAwardExGiftcardList}}
+						<li>
+							<span class="check_wrap">
+								{{#xif ../this.ordPromoAwardSectionEx.awardMethodCode '==' 'All'}}
+									{{#xif this.freeGiftAwardMethodCode '==' 'All'}}
+										<input type="checkbox" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" checked data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Giftcard ">
+									{{else}}
+										<input type="radio" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Giftcard ">
+									{{/xif}}
+								{{else}}
+									{{#xif this.freeGiftAwardMethodCode '==' 'All'}}
+										<input type="checkbox" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Giftcard ">
+									{{else}}
+										<input type="radio" name="firstPur_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Giftcard ">
+									{{/xif}}
+								{{/xif}}
+								<label for="{{this.ordUnitAwardSn}}">
+									<span class="thumb"><img src="{{absolutePath '/images/cart/ico_giftcard.png'}}" alt=""></span>
+									<span class="text">{{this.giftcardName}} {{this.giftcardBaseAmt}}</span>
+								</label>
+							</span>
+						</li>
+					{{/each}}
+				{{/xif}}
+			</fieldset>
+		{{else}}
+			<hr class="div m25">
+			<h3 class="h_title cont"><strong>구매특가 or 사은품</strong></h3>
+			<fieldset class="form">
+				<legend class="sr_only">구매특가 및 사은품 선택</legend>
+
+				<div class="box_btn_set">
+					{{#xif this.ordUnitAwardExProdList.length '>' 0}}
+						<span><input type="radio" name="freebies" id="freebies1" checked="checked"><label for="freebies1">구매특가</label></span>
+					{{/xif}}
+					{{#xif this.ordUnitAwardExSpPriceList.length '>' 0}}
+						<span><input type="radio" name="freebies" id="freebies2"><label for="freebies2">사은품</label></span>
+					{{/xif}}
+				</div>
+
+				<!--/* 구매특가 */-->
+				<ul class="freebies_list notFirstPur">
+					{{#xif this.ordUnitAwardExSpPriceList.length '>' 0}}
+						{{#each this.ordUnitAwardExSpPriceList}}
+							<li>
+								<span class="check_wrap">
+									{{#xif ../this.ordPromoAwardSectionEx.awardMethodCode '==' 'All'}}
+										{{#xif this.freeGiftAwardMethodCode '==' 'All'}}
+											<input type="checkbox" name="ordUnitAward_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" checked data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}"data-type="SpPrice">
+										{{else}}
+											<input type="radio" name="ordUnitAward_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="SpPrice">
+										{{/xif}}
+									{{else}}
+										{{#xif this.freeGiftAwardMethodCode '==' 'All'}}
+											<input type="checkbox" name="ordUnitAward_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="SpPrice">
+										{{else}}
+											<input type="radio" name="ordUnitAward_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="SpPrice">
+										{{/xif}}
+									{{/xif}}
+								</span>
+								<label for="{{this.ordUnitAwardSn}}">
+									<span class="thumb"><img src="{{this.ordProdEx.prodImgUrl}}" alt=""></span>
+									<span class="text">{{this.ordProdEx.prodNameBlang}}</span>
+									<span class="price">
+										<span class="strong">{{currencyFormatDefault this.ordProdEx.prodSalePrice '원'}}</span>
+									</span>
+								</label>
+							</li>
+						{{/each}}
+					{{/xif}}
+				</ul>
+
+				<!--/* 사은품 */-->
+				<ul class="freebies_list notFirstPur" style="display:none">
+					{{#xif this.ordUnitAwardExProdList.length '>' 0}}
+						{{#each this.ordUnitAwardExProdList}}
+							<li>
+								<span class="check_wrap">
+									{{#xif ../this.ordPromoAwardSectionEx.awardMethodCode '==' 'All'}}
+										{{#xif this.freeGiftAwardMethodCode '==' 'All'}}
+											<input type="checkbox" name="ordUnitAward_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" checked data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Prod">
+										{{else}}
+											<input type="radio" name="ordUnitAward_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Prod">
+										{{/xif}}
+									{{else}}
+										{{#xif this.freeGiftAwardMethodCode '==' 'All'}}
+											<input type="checkbox" name="ordUnitAward_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Prod">
+										{{else}}
+											<input type="radio" name="ordUnitAward_{{../this.promoSn}}" id="{{this.ordUnitAwardSn}}" data-method-code="{{../this.ordPromoAwardSectionEx.awardMethodCode}}" data-promoSn="{{../this.promoSn}}" data-qty="{{this.awardUnitQty}}" data-type="Prod">
+										{{/xif}}
+									{{/xif}}
+								</span>
+								<label for="{{this.ordUnitAwardSn}}">
+									<span class="thumb"><img src="{{this.ordProdEx.prodImgUrl}}" alt=""></span>
+									<span class="text">{{this.ordProdEx.prodNameBlang}}</span>
+									<span class="price">
+										<span class="strong">{{currencyFormatDefault this.ordProdEx.prodSalePrice '원'}}</span>
+									</span>
+								</label>
+							</li>
+						{{/each}}
+					{{/xif}}
+				</ul>
+
+				<div class="order_btns"> <!-- 디폴트 히든값 / 라디오버튼 선택 시 버튼 활성화 -->
+					<button type="button" class="btn_sm2_neutral">선택 취소</button>
+				</div>
+
+			</fieldset>
+		{{/if}}
+	{{/each}}
+</dd>

@@ -8,13 +8,11 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["product"] = Handlebars.templa
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "		<div class=\"check_wrap check_only\">\n			<input type=\"checkbox\" id=\"oProd_"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.onlineProdSn : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.onlineProdCode : stack1), depth0))
     + "\" name=\"onlineProd\" value=\""
-    + alias2((helpers.json || (depth0 && depth0.json) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.oProd : depth0),{"name":"json","hash":{},"data":data}))
-    + "\" data-oProdSn=\""
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.onlineProdSn : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.onlineProdCode : stack1), depth0))
     + "\">\n			<label for=\"oProd_"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.onlineProdSn : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.onlineProdCode : stack1), depth0))
     + "\">\n				<span class=\"sr_only\">선택</span>\n			</label>\n		</div>\n";
 },"3":function(container,depth0,helpers,partials,data) {
     return "			<img src=\"/images/cart/no_img.png\" alt=\"\">\n";

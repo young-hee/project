@@ -136,8 +136,13 @@
 				} else {
 
 					var price = $('#price').val();
-					if (price == null || price == 0 || price > 300000) {
-						AP.modal.alert("출금가능금액을 확인해주세요.");
+					if (price == null || price == 0 || price > 300000 || price > depositBalance) {
+						if(price == null || price == 0)
+		    		    	AP.modal.alert("출금 가능 금액을 입력해 주세요.");
+						else if(price > depositBalance)
+		    		    	AP.modal.alert("현재 잔액보다 큰 금액을 입력하셨습니다. " + $B.string.numberFormat(depositBalance) + "원 이하로 입력하세요.");
+						else	
+		    		    	AP.modal.alert("출금 신청은 1일 1회 최대 30만원까지 가능합니다.");
 					} else {
 						AP.api.transferDeposit({}, {
 							amountOfTransfer : price

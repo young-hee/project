@@ -6,10 +6,7 @@ import kr.ap.comm.support.common.AbstractController;
 import net.g1project.ecp.api.model.UploadingFile;
 import net.g1project.ecp.api.model.order.order.OrdEx;
 import net.g1project.ecp.api.model.order.order.OrdListResult;
-import net.g1project.ecp.api.model.sales.guide.FaqSearchResult;
-import net.g1project.ecp.api.model.sales.guide.FoNoticeResult;
-import net.g1project.ecp.api.model.sales.guide.InquiryPost;
-import net.g1project.ecp.api.model.sales.guide.InquiryPostResult;
+import net.g1project.ecp.api.model.sales.guide.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -68,15 +65,15 @@ public class CSRestController extends AbstractController {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
 		try {
-			OrdListResult ordListResult = orderApi.getOrdList(getMemberSn(), null, RS_Date, RD_Date, offset, limit);
+			OrdListResult ordListResult = orderApi.getOrdList(getMemberSn(), null, RS_Date, getEndDate(RD_Date), offset, limit);
 			List<OrderDTO> ordList = new ArrayList<OrderDTO>();
 
-			for(OrdEx ordEx : ordListResult.getOrdExList()) {
+			for (OrdEx ordEx : ordListResult.getOrdExList()) {
 				OrderDTO orderDTO = new OrderDTO();
 				orderDTO.setOrdSn(ordEx.getOrdSn());
-				orderDTO.setOrdHistNo(ordEx.getOrdHistEx().getOrdHistNo());
+				orderDTO.setOrdNo(ordEx.getOrdNo());
 				orderDTO.setOrdName(ordEx.getOrdHistEx().getOrdHistProdExList().get(0).getOrdProdEx().getProdNameBlang());
-				orderDTO.setOrdStatusCode(ordEx.getOrdHistEx().getOrdHistProdExList().get(0).getOrdHistProdStatusCode());
+				orderDTO.setOrdStatusCode(ordEx.getOrdDetailStatusCode());
 				orderDTO.setFinalOrdPrice(ordEx.getOrdHistEx().getFinalOrdAmtPcur());
 				orderDTO.setOrdQty(ordEx.getOrdHistEx().getOrdHistProdExList().size());
 				ordList.add(orderDTO);
@@ -84,6 +81,23 @@ public class CSRestController extends AbstractController {
 
 			result.put("data", ordList);
 			result.put("totalCount", ordListResult.getTotalCount());
+		} catch (Exception e) {
+			result.put("errorData", e);
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+
+		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/getInquiryTypes")
+	@ResponseBody
+	public ResponseEntity<?> getInquiryTypes() {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+
+		try {
+			List<InquiryType> inquiryTypes = guideApi.getInquiryTypes();
+
+			result.put("data", inquiryTypes);
 		} catch (Exception e) {
 			result.put("errorData", e);
 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
@@ -225,5 +239,19 @@ public class CSRestController extends AbstractController {
 		}
 
 		return ResponseEntity.ok(result);
+	}
+
+	/**
+	 * 날짜 시간을 23:59:59 로 세팅
+	 *
+	 * @param date
+	 * @return date - yyyy-MM-ddT23:59:59
+	 *
+	 */
+	private Date getEndDate(Date date) {
+		if(date != null) {
+			return new Date(date.getTime() + (24*60*60*1000) - 1);
+		}
+		return null;
 	}
 }

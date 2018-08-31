@@ -1,0 +1,15 @@
+<h2 class="h_title"><a href="/display/category/{{ this.displayMenuId }}?upperMenuId={{ this.upperMenuId }}">{{ this.menuTitle }}</a></h2>
+<div class="category">
+	{{#xif this.submenus.length '>' 0}}
+		{{#each this.submenus}}
+			<p><a href="/display/category/{{ this.displayMenuId }}?upperMenuId={{ ../upperMenuId }}">{{ this.menuTitle }} ({{ this.prodCount }})</a></p>
+			<ul>
+				{{#each this.submenus}}
+					<li><a href="/display/category/{{ this.displayMenuId }}?upperMenuId={{ ../../upperMenuId }}">{{ this.menuTitle }} ({{ this.prodCount }})</a></li>
+				{{/each}}
+			</ul>
+		{{/each}}
+	{{else}}
+		<p><a href="/display/category/{{ this.displayMenuId }}?upperMenuId={{ this.upperMenuId }}">{{ this.menuTitle }} ({{ this.prodCount }})</a></p>
+	{{/xif}}
+</div>

@@ -142,14 +142,13 @@
 		faqList: { path:'/cs/faqList', method: 'POST'},
 
 		// 1:1 문의 등록
-		inquiry: { path:'/cs/doInquiry', method: 'POST'},
+		inquiry: { path:'/cs/doInquiry', method: 'POST', contentType:false, processData: false},
 
 		// 1:1 문의 주문/제품 선택 목록
 		getOrderPage : { path: '/cs/getOrderPage', method : 'GET'},
 
-		// 1:1 문의 주문/제품 선택 레이어
-		getOrderList : { path: '/cs/getOrderList', method : 'GET', dataType: 'html'},
-
+		// 1:1 문의유형
+		getInquiryTypes: { path:'/cs/getInquiryTypes', method: 'GET'},
 
 		/**
 		 * MY *************************************************************
@@ -216,6 +215,9 @@
 		// 1:1 문의 내용
 		inquiryCont: { path:'/my/api/getInquiryCont', method: 'GET'},
 
+		// 1:1 문의 답변 평가
+		evalInquiryResponse: { path:'/my/api/evalInquiryResponse', method: 'POST'},
+
 		// 쿠폰 등록
 		registerCoupon: { path:'/my/api/registerCoupon', method: 'POST'},
 
@@ -278,7 +280,7 @@
 				attr: null, //검색필터, 컬러, 피부톤 등 (color=red,blue|size=L,XL)
 				prodSort: null, //판매순(Bestselling), 신상품순(NewProd), 높은 가격순(HighestPrice), 낮은가격순(LowestPrice), 상품평순(MostProdReview)
 				offset: 0,
-				limit: 10,
+				limit: 20,
 				includeFilters:false,
 				displayCateDepth: 0,
 				displayCate:null,
@@ -292,7 +294,7 @@
 				flags: null, //대카(icon_reco_best_w), 온라인 전용(icon_reco_online,icon_reco_best_w), 뷰티포인트샵(icon_reco_hot,icon_membership1), (main 플래그 신상품 (icon_reco_new), 핫딜( icon_type_sp_today)베스트(icon_reco_best_w)
 				flag: null,
 				prodListUnit : 'OnlineProd',
-				prodSort: 'NewProd', //판매순(Bestselling), 신상품순(NewProd), 높은 가격순(HighestPrice), 낮은가격순(LowestPrice), 상품평순(MostProdReview)
+				prodSort: null, //판매순(Bestselling), 신상품순(NewProd), 높은 가격순(HighestPrice), 낮은가격순(LowestPrice), 상품평순(MostProdReview)
 				offset: 0,
 				limit: 5, //대카(5), 온라인전용(5), 뷰티포인트(10)
 				includeFilters:false,
@@ -322,6 +324,24 @@
 				endDate: null,
 				offset: 0, //(필수)
 				limit: 20 //(필수)
+			}
+		},
+
+		//상품평 미작성 목록 조회
+		getWritableReviewList : {path : '/product/getWritableReviewList', method : 'GET', data: {
+				prodReviewUnit : null, //상품평단위코드 - Member(회원단위) - OnlineProd(온라인상품단위) - UnitProd(단위상품단위, 단위상품일련번호 필수) - StyleCode(스타일코드단위, 스타일코드 필수)
+				prodReviewType : null, //상품평유형코드. All(전체), Pur(구매후기), Prod(상품리뷰), ExperienceGrp(체험단)
+				onlineProdSn : null, //온라인상품일련번호
+				prodSn : null, //단위상품일련번호
+				styleCode : null, //스타일코드
+				prodReviewSort : null, //정렬방식 - Last(최근등록순) - Scope(별점높은순) - LowScope(별점낮은순) - Recommend(추천많은순) - View(조회많은순)
+				scope  : null, //별점 필터. All(전체), 5, 4, 3, 2, 1
+				topReviewOnlyYn : null, //우수상품평만노출여부
+				topReviewFirstYn  : null, //우수상품평우선정렬여부
+				startDate: null,
+				endDate: null,
+				offset: 0, //(필수)
+				limit: 999 //(필수) - 마이파우치에 페이징 없음
 			}
 		},
 		

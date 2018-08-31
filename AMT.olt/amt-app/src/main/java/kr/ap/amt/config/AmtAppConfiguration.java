@@ -5,6 +5,7 @@ import com.github.mxab.thymeleaf.extras.dataattribute.dialect.DataAttributeDiale
 
 import kr.ap.amt.api.pshop.PShopService;
 import kr.ap.amt.api.pshop.PShopServiceImpl;
+import kr.ap.comm.config.filter.MallIdFilter;
 import kr.ap.comm.config.interceptor.*;
 import kr.ap.comm.config.thymeleaf.APCustomDialect;
 import kr.ap.comm.support.breadcrumb.BreadCrumbPostProcessor;
@@ -59,6 +60,11 @@ public class AmtAppConfiguration extends WebMvcConfigurerAdapter {
     @Bean
 	public ObjectMapper objectMapper() {
     	return new ObjectMapper();
+	}
+
+	@Bean
+	public MallIdFilter mallIdFilter() {
+    	return new MallIdFilter();
 	}
 
     @Override

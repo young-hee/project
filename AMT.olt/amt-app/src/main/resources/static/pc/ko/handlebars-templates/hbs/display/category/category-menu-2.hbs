@@ -1,0 +1,16 @@
+<h2 class="h_title"><a class="depth" href="/display/category/{{ this.displayMenuId }}?upperMenuId={{ this.upperMenuId }}">{{ this.menuTitle }}</a></h2>
+<div class="category">
+	{{#each this.submenus}}
+		{{#xif @index '==' ../selectedIndex }}
+			<ul>
+				<li><a href="/display/category/{{ this.displayMenuId }}?upperMenuId={{ ../upperMenuId }}" class="on">{{ this.menuTitle }} ({{ this.prodCount }})</a></li>
+				{{#each this.submenus}}
+					<li><a href="/display/category/{{ this.displayMenuId }}?upperMenuId={{ ../../upperMenuId }}">{{ this.menuTitle }} ({{ this.prodCount }})</a></li>
+				{{/each}}
+			</ul>
+		{{/xif}}
+	{{/each}}
+</div>
+
+
+

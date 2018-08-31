@@ -20,10 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.support.common.AbstractController;
@@ -67,7 +65,7 @@ public class CommonRestController extends AbstractController {
 
 		String id = "";
 		String name = "";
-		Long memberSn = 0L;
+		Long memberSn = null;
 
 		if( ms != null && ms.getMember() != null) {
 			id = StringUtils.defaultString( ms.getMember().getMemberId());

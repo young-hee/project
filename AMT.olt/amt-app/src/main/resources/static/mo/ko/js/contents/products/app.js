@@ -65,7 +65,9 @@
 						var selectedObj = _.findWhere( this._defaultModel.products, {prodSn : e.data} );
 						var $selectredWrap = this._$target.find('#optionSelectedBox');
 						$selectredWrap.find('#selectedProdName').text( selectedObj.prodName );
-						$selectredWrap.find('img').attr('src', selectedObj.prodImages[0].imgUrl );
+						if( selectedObj.prodImages[0] ){
+							$selectredWrap.find('img').attr('src', selectedObj.prodImages[0].imgUrl );
+						}
 						$selectredWrap.data('prod-sn', selectedObj.prodSn).show();
 						this._$target.find('#optionSelectBox').hide();
 						this._changePreview( selectedObj );

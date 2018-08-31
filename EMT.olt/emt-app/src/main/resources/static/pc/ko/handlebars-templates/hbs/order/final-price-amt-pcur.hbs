@@ -46,6 +46,12 @@
 						<dd><span class="price">{{getAmtMapPrice ordAmtMap 'ShipUnitPacking' '원'}}</span></dd>
 					</dl>
 				{{/if}}
+				{{#if (checkAmtMapPrice ordAmtMap 'SpPriceAwardProd')}}
+					<dl>
+						<dt><b>구매특가</b></dt>
+						<dd><span class="price">{{getAmtMapPrice ordAmtMap 'SpPriceAwardProd' '원'}}</span></dd>
+					</dl>
+				{{/if}}
 				{{#if (checkAmtMapPrice ordAmtMap 'CaclDefaultShipFee')}}
 					<dl>
 						<dt><b>배송비</b></dt>
@@ -86,13 +92,13 @@
 							{{/if}}
 							{{#if (checkAmtMapPrice ordAmtMap 'MPlusNPromoDc')}}
 								<dl>
-									<dt>M+N할인쿠폰프로모션</dt>
+									<dt>M+N할인프로모션</dt>
 									<dd>{{getAmtMapPrice ordAmtMap 'MPlusNPromoDc' '원'}}</dd>
 								</dl>
 							{{/if}}
 							{{#if (checkAmtMapPrice ordAmtMap 'SameTimePurPromoDc')}}
 								<dl>
-									<dt>동시구매쿠폰프로모션</dt>
+									<dt>동시구매프로모션</dt>
 									<dd>{{getAmtMapPrice ordAmtMap 'SameTimePurPromoDc' '원'}}</dd>
 								</dl>
 							{{/if}}

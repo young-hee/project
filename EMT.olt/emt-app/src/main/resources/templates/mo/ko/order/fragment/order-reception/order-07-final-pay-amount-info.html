@@ -34,7 +34,7 @@
 		}
 
 		//결제금액 영역 그리기(ajax)
-		function amtPcurInitAjax(data) {
+		function amtPcurInitAjax(data, initLoading) {
 			/**
 			 * 총결제금액
 			 * @type {*|String}
@@ -47,13 +47,19 @@
 			});
 			$('#amtPcur').html(html);
 			$("[name=finalPamtPcur]").val(data.ordHistEx.finalPamtPcur);
-			$("[name=depositAvailAmt]").val(data.depositAvailAmt);
-			$("#orderPayment").html($B.string.numberFormat(data.ordHistEx.finalPamtPcur) + '원 결제하기');
+
+			if (isApMember) {
+				$("[name=depositAvailAmt]").val(data.depositAvailAmt);
+				$("[name=beauty_point]").prop('max', data.membershipAvailPoint);
+				$("#orderPayment").html($B.string.numberFormat(data.ordHistEx.finalPamtPcur) + '원 결제하기');
+			}
 
 			$('#amtPriceTab').addClass("on");
 			$( '.ui_accordion' ).accordion('clear').accordion();
 			//$('#amtPriceTab > button').trigger("click");
-			$('html, body').animate({scrollTop: $("#amtPcur").offset().top-50}, 1000);
+			if ('initLoading' != initLoading) {
+				$('html, body').animate({scrollTop: $("#amtPcur").offset().top-50}, 1000);
+			}
 		}
 	</script>
 </dl>

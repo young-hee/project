@@ -16,7 +16,9 @@ this["AP"]["handlebars"]["display"]["product-list"]["category-menu"] = Handlebar
     + alias2(alias1((depths[1] != null ? depths[1].upperMenuId : depths[1]), depth0))
     + "\" class=\"\">"
     + alias2(alias1((depth0 != null ? depth0.menuTitle : depth0), depth0))
-    + "(<span class=\"count\">00</span>)</a></li>\n";
+    + "(<span class=\"count\">"
+    + alias2(alias1((depth0 != null ? depth0.prodCount : depth0), depth0))
+    + "</span>)</a></li>\n";
 },"4":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
@@ -26,7 +28,9 @@ this["AP"]["handlebars"]["display"]["product-list"]["category-menu"] = Handlebar
     + alias2(alias1((depth0 != null ? depth0.upperMenuId : depth0), depth0))
     + "\" class=\"\">"
     + alias2(alias1((depth0 != null ? depth0.menuTitle : depth0), depth0))
-    + "(<span class=\"count\">00</span>)</a></li>\n";
+    + "(<span class=\"count\">"
+    + alias2(alias1((depth0 != null ? depth0.prodCount : depth0), depth0))
+    + "</span>)</a></li>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
@@ -34,6 +38,8 @@ this["AP"]["handlebars"]["display"]["product-list"]["category-menu"] = Handlebar
     + alias2(alias1((depth0 != null ? depth0.displayMenuId : depth0), depth0))
     + "?upperMenuId="
     + alias2(alias1((depth0 != null ? depth0.upperMenuId : depth0), depth0))
-    + "\" class=\"on\">전체(<span class=\"count\">00</span>)</a></li>\n"
+    + "\" class=\"on\">전체(<span class=\"count\">"
+    + alias2(alias1((depth0 != null ? depth0.prodCount : depth0), depth0))
+    + "</span>)</a></li>\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.submenus : depth0)) != null ? stack1.length : stack1),">",0,{"name":"xif","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.program(4, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "");
 },"useData":true,"useDepths":true});

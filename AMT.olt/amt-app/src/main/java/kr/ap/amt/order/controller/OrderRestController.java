@@ -6,26 +6,8 @@
  */
 package kr.ap.amt.order.controller;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.validation.Valid;
-
 import kr.ap.comm.order.OrderSession;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import kr.ap.amt.order.vo.OrdReceptChangeDTO;
-import kr.ap.comm.member.vo.MemberSession;
 import net.g1project.ecp.api.model.BooleanResult;
 import net.g1project.ecp.api.model.EmbeddableAddress;
 import net.g1project.ecp.api.model.EmbeddableName;
@@ -33,16 +15,19 @@ import net.g1project.ecp.api.model.EmbeddableTel;
 import net.g1project.ecp.api.model.ap.ap.MemberForUpdate;
 import net.g1project.ecp.api.model.ap.ap.PostAndPutShipAddressInfo;
 import net.g1project.ecp.api.model.ap.ap.ShipAddressInfo;
-import net.g1project.ecp.api.model.order.order.AvailCouponListResult;
-import net.g1project.ecp.api.model.order.order.MembershipPointSelect;
-import net.g1project.ecp.api.model.order.order.OrdEx;
-import net.g1project.ecp.api.model.order.order.OrdReceptChange;
-import net.g1project.ecp.api.model.order.order.OrdReceptPayAmt;
-import net.g1project.ecp.api.model.order.order.OrdSummaryInfo;
-import net.g1project.ecp.api.model.order.order.OrdUnitAwardSelect;
-import net.g1project.ecp.api.model.order.order.OtfGiftPackingSelect;
-import net.g1project.ecp.api.model.order.order.PayAmt;
+import net.g1project.ecp.api.model.order.order.*;
 import net.g1project.ecp.api.model.sales.coupon.DownloadCoupons;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/order")
@@ -161,7 +146,7 @@ public class OrderRestController extends OrderBaseController {
 			orderSession.setNextPayUseYn(nextPayUseYn);
 			orderSession.setPayServiceCode(payServiceCode);
 			orderSession.setPayMethodCode(payMethodCode);
-            setOrderSession(orderSession);
+			setOrderSession(orderSession);
 
             result.put("result", "success");
         }
@@ -278,8 +263,8 @@ public class OrderRestController extends OrderBaseController {
 				}
 			}
 
-            orderSession.setOrdReceptChange(body);
-            setOrderSession(orderSession);
+			orderSession.setOrdReceptChange(body);
+			setOrderSession(orderSession);
 
             result.put("result", "success");
         }
@@ -296,7 +281,6 @@ public class OrderRestController extends OrderBaseController {
 	 */
 	@PostMapping("/ordReceptChangeCoupon")
 	public ResponseEntity<?> ordReceptChangeCoupon(Long ordSn, String[] memberKeepingCouponSnArr, Long membershipSn){
-
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		OrderSession orderSession = getOrderSession();
         OrdReceptChange body = orderSession.getOrdReceptChange();
@@ -326,7 +310,7 @@ public class OrderRestController extends OrderBaseController {
             OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
 
 			orderSession.setOrdReceptChange(body);
-            setOrderSession(orderSession);
+			setOrderSession(orderSession);
 
             result.put("applyCouponExList", ordRc.getApplyCouponExList());
 			finalPriceAmtPcur(result, ordRc);
@@ -346,10 +330,9 @@ public class OrderRestController extends OrderBaseController {
 	 */
 	@PostMapping("/ordReceptChangeBag")
 	public ResponseEntity<?> ordReceptChangeBag(Long ordSn, Long coSn, Long giftPackingSn, Integer giftPackingQty, Long membershipSn){
-
 		HashMap<String, Object> result = new HashMap<String, Object>();
-        OrderSession orderSession = getOrderSession();
-		OrdReceptChange body = orderSession.getOrdReceptChange();
+		OrderSession orderSession = getOrderSession();
+        OrdReceptChange body = orderSession.getOrdReceptChange();
         if (body == null) {
             body = new OrdReceptChange();
         }
@@ -357,13 +340,25 @@ public class OrderRestController extends OrderBaseController {
         List<OtfGiftPackingSelect> otfGiftPackingList = new ArrayList<OtfGiftPackingSelect>();
         OtfGiftPackingSelect otfGiftPackingSelect = new OtfGiftPackingSelect();
 
-        if(ordSn != null){
+        //기준에 선택된 포장박스/쇼핑백정보 유지
+		List<OtfGiftPackingSelect> otfGiftPackingSelectList = body.getOtfGiftPackingSelectList();
 
+		if(ordSn != null){
             if (giftPackingSn != null && giftPackingQty != null) {
                 otfGiftPackingSelect.setCoSn(coSn);                        // 업체일련번호
-                otfGiftPackingSelect.setGiftPackingSn(giftPackingSn);    // 선물포장일련번호
+                otfGiftPackingSelect.setGiftPackingSn(giftPackingSn);    	// 선물포장일련번호
                 otfGiftPackingSelect.setGiftPackingQty(giftPackingQty);    // 선물포장수량
                 otfGiftPackingList.add(otfGiftPackingSelect);
+
+				//기준에 선택된 포장박스/쇼핑백정보 유지
+				if (otfGiftPackingSelectList != null) {
+					for (OtfGiftPackingSelect o : otfGiftPackingSelectList) {
+						if (!o.getGiftPackingSn().equals(giftPackingSn)) {
+							otfGiftPackingList.add(o);
+						}
+					}
+				}
+
                 body.setOtfGiftPackingSelectList(otfGiftPackingList);
             } else {
                 body.setOtfGiftPackingSelectList(null);
@@ -374,7 +369,7 @@ public class OrderRestController extends OrderBaseController {
             OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
 
 			orderSession.setOrdReceptChange(body);
-            setOrderSession(orderSession);
+			setOrderSession(orderSession);
 
 			finalPriceAmtPcur(result, ordRc);
         }
@@ -391,10 +386,9 @@ public class OrderRestController extends OrderBaseController {
 	 */
 	@PostMapping("/ordReceptChangePoint")
 	public ResponseEntity<?> ordReceptChangePoint(Long ordSn, Long membershipSn, int useMembershipPoint){
-
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		OrderSession orderSession = getOrderSession();
-		OrdReceptChange body = orderSession.getOrdReceptChange();
+        OrdReceptChange body = orderSession.getOrdReceptChange();
         if (body == null) {
             body = new OrdReceptChange();
         }
@@ -433,10 +427,9 @@ public class OrderRestController extends OrderBaseController {
 	 */
 	@PostMapping("/ordReceptChangeOrdUnit")
 	public ResponseEntity<?> ordReceptChangeOrdUnit(Long ordSn, Long[] ordUnitAwardSnArr, Integer[] awardSelectQtyArr, Long membershipSn){
-
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		OrderSession orderSession = getOrderSession();
-		OrdReceptChange body = orderSession.getOrdReceptChange();
+        OrdReceptChange body = orderSession.getOrdReceptChange();
         if (body == null) {
             body = new OrdReceptChange();
         }
@@ -457,6 +450,8 @@ public class OrderRestController extends OrderBaseController {
             } else {
                 body.setOrdUnitAwardSelectList(null);
             }
+
+			initPoint(membershipSn, body);
 
             OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
 
@@ -493,9 +488,9 @@ public class OrderRestController extends OrderBaseController {
 		return ResponseEntity.ok(result);
 	}
 
+	//포인트도 초기화.(포장/쇼핑백, 쿠폰 및 주문단위 사은품 수정시)
 	private void initPoint(Long membershipSn, OrdReceptChange body) {
 		if (membershipSn != null) {
-			//쿠폰수정하면 포인트도 초기화.
 			List<MembershipPointSelect> membershipPointSelectsList = new ArrayList<MembershipPointSelect>();
 			MembershipPointSelect membershipPointSelect = new MembershipPointSelect();
 			membershipPointSelect.setMembershipSn(membershipSn);
@@ -510,7 +505,19 @@ public class OrderRestController extends OrderBaseController {
 		result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
 		result.put("ordCntMap", makeOrdCntList(ordRc));
 
+		//가용 예치금
 		result.put("depositAvailAmt", ordRc.getDepositAvailAmt());
-		result.put("isApMember", apApi.getMemberInfo(getMemberSn()) != null ? true : false);
+
+		//가용 뷰티포인트
+		List<OrdMembershipEx> ordMembershipExList = ordRc.getOrdMembershipExList();
+		BigDecimal membershipAvailPoint = new BigDecimal(0);
+		for (OrdMembershipEx o : ordMembershipExList) {
+			if ("BP".equals(o.getMembershipServiceCode())) {
+				membershipAvailPoint = ordRc.getDepositAvailAmt();
+			}
+		}
+		result.put("membershipAvailPoint", membershipAvailPoint);
+
+		result.put("isApMember", isMember());
 	}
 }

@@ -1,0 +1,180 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='issue'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!--/* ap_contents */-->
+	<div class="ap_contents">
+		<div class="ap_com_cont prd overview">
+			<div class="prd_issue typeB">
+				<!--/*이슈&테마 B타입*/-->
+<th:block th:if="${not #lists.isEmpty(cornersMap)}">
+				<th:block th:if="${not #lists.isEmpty(cornersMap.get('M01_issue2_m.1'))}">
+				<div class="visual_wrap" style="background-color: #2b3038;">
+					<div class="inner_wrap clear">
+						
+						<div th:each="corner : ${cornersMap.get('M01_issue2_m.1')}">
+							<!-- 08-28 말줄임 클래스 추가 [S] -->
+							<div class="text_box">
+							<th:block th:each="contents : ${corner.contents}">
+								<p class="text1 ellipsis" th:if="${contents.menuPageCornerContentsId == 'M01_issue2_m.1.2'}" th:text="${contents.text}">입술에 빛나는</p>
+								<p class="text2 ellipsis" th:if="${contents.menuPageCornerContentsId == 'M01_issue2_m.1.3'}" th:text="${contents.text}">그녀의 트루컬러</p>
+								<p class="text3 ellipsis" th:if="${contents.menuPageCornerContentsId == 'M01_issue2_m.1.4'}" th:text="${contents.text}">온라인 단독 선런칭</p>
+								<p class="text4 ellipsis" th:if="${contents.menuPageCornerContentsId == 'M01_issue2_m.1.5'}" th:text="${contents.text}">런칭 기념 추가 4종 사은품 증정</p>
+							</th:block>
+							</div>
+							<!-- 08-28 말줄임 클래스 추가 [E] -->
+						</div>
+						
+						<th:block th:each="corner : ${cornersMap.get('M01_issue2_m.1')}">
+						<div>
+							<th:block th:each="contents : ${corner.contents}">
+							<img th:if="${contents.menuPageCornerContentsId == 'M01_issue2_m.1.1'}" th:src="${contents.imgUrl}" alt="">
+							<th:block th:each="contents : ${corner.contents}">
+						</div>
+						</th:block>
+					</div>
+				</div>
+				</th:block>
+				</th:block>	
+				<div class="inner_wrap section_wrap">
+					<!--/* 타이틀 */-->
+					<th:block th:if="${not #lists.isEmpty(cornersMap.get('M01_issue2_m.2'))}">
+					<div class="title_wrap mgt20">
+						<th:block th:each="corner : ${cornersMap.get('M01_issue2_m.2')}">
+						<th:block th:each="contents, conIdx : ${corner.contents}">
+							<th:block th:if="${contents.menuPageCornerContentsId == 'M01_issue2_m.2.1'}">
+								<h3 class="h_title d2"><strong th:text="${contents.text}">가을 립스틱 추천 상품</strong></h3>
+							</th:block>
+						</th:block>
+						</th:block>
+					</div>
+					</th:block>
+					
+					<!--/* 상품리스트 */-->
+					<div class="issue_area">
+						<div class="list_product unit_1">
+							<ul class="grid">
+								<th:block th:if="${not #lists.isEmpty(cornersMap.get('M01_issue2_m.3'))}">
+								<th:block th:each="corner : ${cornersMap.get('M01_issue2_m.3')}">
+									<th:block th:each="contents, conIdx : ${corner.contents}">
+										<th:block th:if="${contents.menuPageCornerContentsId == 'M01_issue2_m.3.1'}">
+											<li class="movie stamp stampL"><!-- stampL : 왼쪽정렬 클래스 / stampR: 오른쪽정렬 클래스 -->
+												<div class="video_wrap">
+													<button type="button" class="thumbnail"><img th:src="${contents.videoImgThumbnailUrl}" alt=""></button> <!-- 이미지 사이즈 : 590 * 332 -->
+													<iframe class="youtube_video" width="590" height="332" th:src="${contents.videoUrl} + '?enablejsapi=1'" frameborder="0" allowfullscreen="" data-vendor="youtube" data-ratio="true" data-mute="false"></iframe>
+												</div>
+											</li>
+										</th:block>
+										</th:block>
+									</th:block>
+								</th:block>
+								<th:block th:if="${not #lists.isEmpty(cornersMap.get('M01_issue2_m.5'))}">
+								<th:block th:each="corner : ${cornersMap.get('M01_issue2_m.5')}">
+									<th:block th:each="contents, conIdx : ${corner.contents}">
+										<th:block th:if="${contents.menuPageCornerContentsId == 'M01_issue2_m.5.1'}">
+											<th:block th:each="prod : ${contents.prodList}">
+												<li class="grid-sizer">
+													<div class="product_box">
+														<a href="#none" th:href="@{'/product/detail'(onlineProdSn=${prod.onlineProdSn})}">
+															<div class="visual_section">
+																<th:block th:each="img, imgIdx : ${prod.onlineProdImages}">
+																<img th:if="${imgIdx.count == 1}" th:src="${img.imgUrl}" alt="플라워 에센스 마스크">
+																</th:block>
+																<div class="benefit">
+																	<span class="special">스페셜기프트</span>
+																	<span class="gift">기프트카드</span>
+																</div>
+																<div class="soldout" th:if="${prod.saleDisplayStatus == 'OutOfStock'}">
+																	<span>일시품절</span>
+																</div>
+															</div>
+															<div class="info_section">
+																<p class="txt_summary ellipsis line2" th:text="${prod.onlineProdName}">[NEW] 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++ 베이비 선쿠션리미티드 SPF32 PA++</p>
+																<div class="price_atc">
+																	<th:block th:if="${prod.onlineProdPriceSummary.doublePriceDisplayYn == 'Y'}"
+																	th:with="disMinRate=${prod.onlineProdPriceSummary.minOnlineSalePriceDiscountRate + prod.onlineProdPriceSummary.minMemberLevelDiscountRate + prod.onlineProdPriceSummary.minOnlineMemberDiscountRate},disMaxRate=${prod.onlineProdPriceSummary.maxOnlineSalePriceDiscountRate + prod.onlineProdPriceSummary.maxMemberLevelDiscountRate + prod.onlineProdPriceSummary.maxOnlineMemberDiscountRate}">
+																	<span class="txt_sale"><span th:if="${disMinRate != disMaxRate}" th:remove="tag">~</span><span th:text="${disMaxRate}" th:remove="tag">30</span>%</span>
+																	</th:block>
+																	<span class="txt_price"><em th:text="${#numbers.formatInteger( prod.onlineProdPriceSummary.minOnlineMemberDiscountPrice, 0, 'COMMA')}">218,500</em>원</span>
+																	<th:block th:if="${prod.onlineProdPriceSummary.doublePriceDisplayYn == 'Y'}">
+																	<del class="txt_del" th:text="${prod.onlineProdPriceSummary.minBeforeOnlineSalePrice}"><span th:text="${prod.onlineProdPriceSummary.minBeforeOnlineSalePrice}" th:remove="tag">230,000</span>원</del>
+																	</th:block>
+																</div>
+																<div class="user_atc">
+																	<span th:class="|mark_star_sm star${#numbers.formatInteger(prod.reviewScopeAvg, 0)}|"><span class="sr_only" th:text="${#numbers.formatInteger(prod.reviewScopeAvg, 0)}">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
+																	<span class="txt_review">리뷰 <span th:if="${prod.reviewCount > 0}" th:text="${prod.reviewCount}" th:remove="tag">2,454,000</span></span>
+																</div>
+															</div>
+														</a>
+														<div class="work_box">
+															<ul class="item_user">
+																<li>
+																	<a href="#none" role="button">
+																		<i class="ico_favorite"></i><!-- active : on -->
+																		<span class="sr_only">좋아요</span>
+																	</a>
+																</li>
+																<li>
+																	<a href="#none" role="button">
+																		<i class="ico_basket"></i>
+																		<span class="sr_only">장바구니</span>
+																	</a>
+																</li>
+															</ul>
+														</div>
+														<div class="item_section">
+															<div class="rside">
+															<th:block th:each="brand, brndIdx : ${prod.products}">
+																<a href="#none" class="link_brand" th:if="${brndIdx.count == 1}" th:text="${brand.brandName}">헤라</a>
+															</th:block>
+															</div>
+														</div>
+													</div>
+												</li>
+											</th:block>
+										</th:block>
+									</th:block>
+								</th:block>
+							</th:block>
+							</ul>
+						</div>
+					</div>
+
+				</div>
+</th:block>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script>
+		$( '.youtube_video' ).video();
+
+		//이슈탭 정렬관련 플러그인
+		var _grid = $( '.issue_area .grid' ).masonry({
+			// options
+			itemSelector: '.grid > li',
+			columnWidth: '.grid-sizer',
+			stamp: '.stamp',
+			horizontalOrder: true
+		});
+	</script>
+	<script th:inline="javascript">
+		(function () {
+			var issue = /*[[${cornersMap}]]*/;
+			var model = new Array();
+			
+			if(issue['M01_issue2_m.5'].length > 0 && issue['M01_issue2_m.5'][0]['contents'].length > 0){
+				model.push(issue['M01_issue2_m.5'][0]['contents'][0]);
+			}
+			//console.log(issue);
+			//AP.issue.setDefaultData( model );
+		}());
+	</script>
+</th:block>
+
+</body>
+</html>

@@ -13,8 +13,10 @@ this["AP"]["handlebars"]["my"]["my-inquiry-cont"] = Handlebars.template({"1":fun
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.fileUrl : depth0), depth0))
     + "\" alt=\"\">\n";
 },"4":function(container,depth0,helpers,partials,data) {
-    return "	<dl class=\"answer\">\n		<dt>상담원답변</dt>\n		<dd>\n			<pre class=\"text\">"
-    + container.escapeExpression(container.lambda((depth0 != null ? depth0.responseBodyText : depth0), depth0))
+    var stack1;
+
+  return "	<dl class=\"answer\">\n		<dt>상담원답변</dt>\n		<dd>\n			<pre class=\"text\">"
+    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.info : depth0)) != null ? stack1.responseBodyText : stack1), depth0))
     + "</pre>\n		</dd>\n	</dl>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;

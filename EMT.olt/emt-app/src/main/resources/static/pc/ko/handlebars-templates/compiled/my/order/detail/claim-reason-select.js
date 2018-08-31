@@ -18,7 +18,7 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["claim-reason-select"] = Handl
     var stack1, helper, alias1=container.escapeExpression, alias2=depth0 != null ? depth0 : (container.nullContext || {});
 
   return "<div class=\"reason\" id=\"reason_"
-    + alias1(container.lambda((depth0 != null ? depth0.ordHistProdSn : depth0), depth0))
+    + alias1(container.lambda((depth0 != null ? depth0.ordProdCode : depth0), depth0))
     + "\">\n	<div class=\"input_group\">\n		<div class=\"ui_select w20p\" data-not-label-change=\"false\">\n			<input type=\"hidden\">\n			<button type=\"button\">"
     + alias1(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(alias2,{"name":"title","hash":{},"data":data}) : helper)))
     + "사유 선택</button>\n			<ul class=\"select_options\">\n"

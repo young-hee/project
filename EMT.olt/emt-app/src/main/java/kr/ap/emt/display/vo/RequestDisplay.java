@@ -32,6 +32,10 @@ public class RequestDisplay {
 	private Long brand; //2, 995
 	private String priceRange; //예1) “10000,”- 10000~ 예2) “2000,8000”- 2000~8000 예3) “,50000”- ~50000
 	
+	//main _ hotdeal ( 특가판매,핫딜상품) 
+	private String spPriceSaleType;  // 투데이핫딜 /수량한정  Today ,Qty  
+	
+	
 	public Integer getTotalListSize() {
 		return totalListSize;
 	}
@@ -176,6 +180,13 @@ public class RequestDisplay {
 	public void setPriceRange(String priceRange) {
 		this.priceRange = priceRange;
 	}
+	public String getSpPriceSaleType() {
+		return spPriceSaleType;
+	}
+	public void setSpPriceSaleType(String spPriceSaleType) {
+		this.spPriceSaleType = spPriceSaleType;
+	}
 
+	
 	
 }

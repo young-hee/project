@@ -51,24 +51,24 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["amount-payment"] = Handlebars
     + ")<br>\n							"
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.creditcardPayTypeCode : stack1), depth0))
     + "<br>\n							"
-    + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.payApprovalDt : stack1),"YYYY-MM-DD HH:MM:SS",{"name":"dateFormat","hash":{},"data":data}))
+    + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.payApprovalDt : stack1),"YYYY-MM-DD HH:mm:SS",{"name":"dateFormat","hash":{},"data":data}))
     + "</li> -->\n					</ul>\n";
-},"11":function(container,depth0,helpers,partials,data) {
+},"11":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
-  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.payInfo : depth0)) != null ? stack1.pgList : stack1),{"name":"each","hash":{},"fn":container.program(12, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
-},"12":function(container,depth0,helpers,partials,data) {
+  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.ordPayResult : depth0)) != null ? stack1.pgList : stack1),{"name":"each","hash":{},"fn":container.program(12, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"12":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
-  return ((stack1 = (helpers["switch"] || (depth0 && depth0["switch"]) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.payMethodCode : depth0),{"name":"switch","hash":{},"fn":container.program(13, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
-},"13":function(container,depth0,helpers,partials,data) {
+  return ((stack1 = (helpers["switch"] || (depth0 && depth0["switch"]) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.payMethodCode : depth0),{"name":"switch","hash":{},"fn":container.program(13, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"13":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return ((stack1 = (helpers["case"] || (depth0 && depth0["case"]) || alias2).call(alias1,"Deposit",{"name":"case","hash":{"break":true},"fn":container.program(14, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = (helpers["case"] || (depth0 && depth0["case"]) || alias2).call(alias1,"virtual-account",{"name":"case","hash":{"break":true},"fn":container.program(17, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = (helpers["case"] || (depth0 && depth0["case"]) || alias2).call(alias1,"mobile-phone-pay",{"name":"case","hash":{"break":true},"fn":container.program(19, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = (helpers["case"] || (depth0 && depth0["case"]) || alias2).call(alias1,"bank-ac-transfer",{"name":"case","hash":{"break":true},"fn":container.program(21, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = (helpers["default"] || (depth0 && depth0["default"]) || alias2).call(alias1,{"name":"default","hash":{"break":true},"fn":container.program(23, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+  return ((stack1 = (helpers["case"] || (depth0 && depth0["case"]) || alias2).call(alias1,"Deposit",{"name":"case","hash":{"break":true},"fn":container.program(14, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers["case"] || (depth0 && depth0["case"]) || alias2).call(alias1,"virtual-account",{"name":"case","hash":{"break":true},"fn":container.program(17, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers["case"] || (depth0 && depth0["case"]) || alias2).call(alias1,"mobile-phone-pay",{"name":"case","hash":{"break":true},"fn":container.program(19, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers["case"] || (depth0 && depth0["case"]) || alias2).call(alias1,"bank-ac-transfer",{"name":"case","hash":{"break":true},"fn":container.program(21, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers["default"] || (depth0 && depth0["default"]) || alias2).call(alias1,{"name":"default","hash":{"break":true},"fn":container.program(23, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"14":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
@@ -83,7 +83,7 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["amount-payment"] = Handlebars
     return "						<li class=\"clear\"><span>ㄴ환불</span><span>-"
     + container.escapeExpression((helpers.currencyFormatDefault || (depth0 && depth0.currencyFormatDefault) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.refundAmtSum : depth0),"원",{"name":"currencyFormatDefault","hash":{},"data":data}))
     + "</span></li>\n";
-},"17":function(container,depth0,helpers,partials,data) {
+},"17":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression, alias4=container.lambda;
 
   return "				<ul>\n					<li class=\"clear\"><b>무통장입금("
@@ -98,8 +98,10 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["amount-payment"] = Handlebars
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.virtualBankAcAcHolder : stack1), depth0))
     + "<br>\n							<em>입금기한 "
     + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.virtualBankAcDeadlineDt : stack1),"YYYY-MM-DD",{"name":"dateFormat","hash":{},"data":data}))
-    + " 까지</em>\n						</span>\n					</li>\n					<li class=\"clear\"><span>송금자</span><span>홍길동</span></li>\n					<li class=\"clear\"><span>결제처리일</span>\n					<span>\n						<em>\n							<dd class=\"align_right\">"
-    + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.payStatusCode : depth0),"Complete",{"name":"eq","hash":{},"data":data}),(helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.payApprovalDt : stack1),"YYYY-MM-DD HH:MM:SS",{"name":"dateFormat","hash":{},"data":data}),"입금 미확인",{"name":"condition","hash":{},"data":data}))
+    + " 까지</em>\n						</span>\n					</li>\n					<li class=\"clear\"><span>송금자</span><span>"
+    + alias3(alias4((depths[1] != null ? depths[1].memberName : depths[1]), depth0))
+    + "</span></li>\n					<li class=\"clear\"><span>결제처리일</span>\n					<span>\n						<em>\n							<dd class=\"align_right\">"
+    + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.payStatusCode : depth0),"Complete",{"name":"eq","hash":{},"data":data}),(helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.virtualBankAcDepositDt : stack1),"YYYY-MM-DD HH:mm:SS",{"name":"dateFormat","hash":{},"data":data}),"입금 미확인",{"name":"condition","hash":{},"data":data}))
     + "</dd>\n						</em>\n					</span></li>\n				</ul>\n				<hr class=\"div m20 dotted\">\n";
 },"19":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
@@ -113,7 +115,7 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["amount-payment"] = Handlebars
     + "					<li class=\"align_right line_h_20\">"
     + alias3(container.lambda(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.mobilePhoneNo : stack1), depth0))
     + "<br>\n						"
-    + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.payApprovalDt : stack1),"YYYY-MM-DD HH:MM:SS",{"name":"dateFormat","hash":{},"data":data}))
+    + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.payApprovalDt : stack1),"YYYY-MM-DD HH:mm:SS",{"name":"dateFormat","hash":{},"data":data}))
     + "</li>\n				</ul>\n				<hr class=\"div m20 dotted\">\n";
 },"21":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
@@ -127,7 +129,7 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["amount-payment"] = Handlebars
     + "					<li class=\"align_right line_h_20\">"
     + alias3(container.lambda(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.bankName : stack1), depth0))
     + "<br>\n						"
-    + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.payApprovalDt : stack1),"YYYY-MM-DD HH:MM:SS",{"name":"dateFormat","hash":{},"data":data}))
+    + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.payApprovalDt : stack1),"YYYY-MM-DD HH:mm:SS",{"name":"dateFormat","hash":{},"data":data}))
     + "</li>\n				</ul>\n				<hr class=\"div m20 dotted\">\n";
 },"23":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
@@ -149,15 +151,15 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["amount-payment"] = Handlebars
     + ")<br>\n							"
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.creditcardPayTypeCode : stack1), depth0))
     + "<br>\n							"
-    + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.payApprovalDt : stack1),"YYYY-MM-DD HH:MM:SS",{"name":"dateFormat","hash":{},"data":data}))
+    + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.payApprovalDt : stack1),"YYYY-MM-DD HH:mm:SS",{"name":"dateFormat","hash":{},"data":data}))
     + "</li>\n					</ul>\n					<hr class=\"div m20 dotted\">\n";
 },"25":function(container,depth0,helpers,partials,data) {
     return "							<li class=\"clear\"><span>ㄴ환불</span><span>-"
     + container.escapeExpression((helpers.currencyFormatDefault || (depth0 && depth0.currencyFormatDefault) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.refundAmtSum : depth0),"원",{"name":"currencyFormatDefault","hash":{},"data":data}))
     + "</span></li>\n";
-},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
-  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.step : depth0),"==","two",{"name":"xif","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(11, data, 0),"data":data})) != null ? stack1 : "")
+  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.step : depth0),"==","two",{"name":"xif","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.program(11, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "\n\n";
-},"useData":true});
+},"useData":true,"useDepths":true});

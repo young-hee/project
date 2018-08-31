@@ -72,7 +72,7 @@
 		                                     <div>
 		                                         <div class="input_wrap">
 		                                         	<input type="tel" name="smsNum" required="required" title="인증번호를 입력하세요." maxlength="8" placeholder="인증번호를 입력하세요." data-msg-required="인증번호를 입력해 주세요.">
-		                                         	<em class="count" name="timer">3:00</em>
+		                                         	<em class="count" id="sms-time" name="timer">3:00</em>
 		                                         	<button class="btn_round" id="complete2" type="button" disabled>인증확인</button>
 		                                         </div>                                                                            
 		                                     </div>                                     
@@ -154,6 +154,7 @@
 
             <!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
             <script>
+            var t2;
                 //하단 베너 제어
                 (function () {
                     var $banner = $( '.banner_area > .slide' ).ixSlideMax();
@@ -191,7 +192,7 @@
 					    t = new AP.common.timeCountDown(def_Time, function() {
 					        $('.result_box p').hide();
 					        $('#time-over').show();
-					    }),
+					    }, '#sms-time'),
 					    certTimeCnt = 0,
 					    extTimeCnt = 0;
 
@@ -548,9 +549,13 @@
 					                        contents.contents = data;
 					                        var modal = AP.modal.info(contents);
 					                        var $modalEl = modal.getElement(); //jquery object
-					                        if (!t.isRunning()) {
-					                            t = new AP.common.timeCountDown(xhr.responseJSON.lockReleaseDate, function() {});
-					                            t.start();
+					                        if(t2 == null) {
+					                        	t2 = new AP.common.timeCountDown(xhr.responseJSON.errorData.additional.lockReleaseDate, function() {}, "#lock-time");
+					                        	t2.start();
+					                        } else {
+					                        	t2.stop();
+					                            t2 = new AP.common.timeCountDown(xhr.responseJSON.errorData.additional.lockReleaseDate, function() {}, "#lock-time");
+					                            t2.start();
 					                        }
 					                        $modalEl.find(".btn_md_primary").click(function() {
 					                            t.stop;

@@ -17,7 +17,7 @@
 
 			this._lat = '';
 			this._lng = '';
-			this._keyword = '서울특별시';
+			this._keyword = '서울';
 
 			this._setPlugins();
 			this._setEvents();
@@ -79,7 +79,13 @@
 			//주소로 검색
 			this._$addressInputBtn.on( 'click', function (e) {
 				var keyword = this._$addressInput.val();
-
+				
+				if(this._$favoriteFilterBtn.eq( 0 ).hasClass('on')){
+					this._$favoriteFilterBtn.eq( 0 ).removeClass('on');
+				}
+				//this._$favoriteFilterBtn.eq( 0 ).removeClass('on');
+				//this._$favoriteFilterBtn.eq( 1 ).removeClass('on');
+				
 				if ( keyword ) {
 					this._keyword = keyword;
 
@@ -147,9 +153,9 @@
 							this._$locationInputBtn.prop( 'disabled', false );
 
 							if ( error.code == 1 ) {
-								AP.modal.alert( 'Error(' + error.code + '):내 위치 확인을 "허용" 해주시기 바랍니다.' );
+								AP.modal.alert( '내 위치 확인을 "허용" 해주시기 바랍니다.' );
 							} else if ( error.code == 2 ) {
-								AP.modal.alert( 'Error(' + error.code + '):현재 위치를 확인할 수 없습니다.' );
+								AP.modal.alert( '현재 위치를 확인할 수 없습니다.' );
 							} else {
 								//AP.modal.alert( 'Error(' + error.code + '):' + error.message );
 							}

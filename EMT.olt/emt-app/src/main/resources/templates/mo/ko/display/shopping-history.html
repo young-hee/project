@@ -25,40 +25,51 @@
 								<span class="state">날짜</span>
 								<strong class="num" th:text="${shoppingHistory.date}"></strong>
 							</div>
+							<!-- TODO: 확실하게 고객이 선택한 단위상품에 대한 이력을 남길수 없어서 확인 필요함--> 
 							<!-- /* 이력 */ -->
 							<ul class="history_list">
 								<th:block th:each="shoppingMark : ${shoppingHistory.shoppingHistoryList}">
 									<li th:if="${shoppingMark.shoppingMarkTgtCode == 'Prod'}">
-										<a href="#none" th:href="@{/product/detail(onlineProdSn=${shoppingMark.onlineProdSn})}">
+										<a href="#none" th:href="@{/product/detail(onlineProdSn=${shoppingMark.onlineProdSn},prodSn=${shoppingMark.prodSn})}">
 											<span class="thumb"><img th:src="${shoppingMark.prodImg}" alt=""></span>
-											<span class="title" th:text="${shoppingMark.onlineProdName}">플레이 네일 NEW 펄&amp;글리터 플레이 네일 NEW 펄&amp;글리터 플레이 네일 NEW 펄&amp;글리터</span>
+												<th:block th:if="${shoppingMark.prodName eq null or shoppingMark.prodName eq shoppingMark.OnlineProdName}">
+													<span class="title" th:text="${shoppingMark.onlineProdName}" th:shoppingMarkSn="${shoppingMark.shoppingMarkSn}"></span>						
+												</th:block>
+												<th:block th:if="${shoppingMark.prodName ne null and shoppingMark.prodName ne shoppingMark.OnlineProdName}">
+													<span class="title" th:shoppingMarkSn="${shoppingMark.shoppingMarkSn}">
+														<ul>
+															<li th:text="${shoppingMark.onlineProdName}"></li>
+															<li><small th:text="${shoppingMark.prodName}"></small></li>
+														</ul>
+													</span>						
+												</th:block>
 										</a>
 									</li>
 									<li th:if="${shoppingMark.shoppingMarkTgtCode == 'Plandisplay'}">
-										<a href="@{/display/event_detail(planDisplaySn=${shoppingMark.planDisplaySn})">
+										<a href="#none" th:href="@{/display/event_detail(planDisplaySn=${shoppingMark.planDisplaySn})}">
 											<span class="state">기획전</span>
 											<span class="title" th:text="${shoppingMark.planDisplayTitle}"></span>
 										</a>
 									</li>
 									<li th:if="${shoppingMark.shoppingMarkTgtCode == 'Article'}">
 										<th:block th:if="${shoppingMark.articleCateId eq 'chEtude'}">
-											<a href="@{/display/etude_ch/detail(displayMenuid=etude_ch&articleSn=${shoppingMark.articleSn })}">	
+											<a href="#none" th:href="@{/display/etude_ch/detail(articleSn=${shoppingMark.articleSn })}">	
 										</th:block>
 										<th:block th:if="${shoppingMark.articleCateId eq 'Looks'}">
-											<a href="@{/display/etude_ch/detail(displayMenuid=etude_ch&articleSn=${ shoppingMark.articleSn )}}">
+											<a href="#none" th:href="@{/display/etude_looks/detail(articleSn=${shoppingMark.articleSn})}">
 										</th:block>
 											<span class="state">아티클</span>
 											<span class="title" th:text="${shoppingMark.articleTitle}"></span>
 										</a>
 									</li>
 									<li th:if="${shoppingMark.shoppingMarkTgtCode == 'Menu'}">
-										<a href="">
+										<a href="#none" th:href="@{'/display/category/'+${shoppingMark.displayMenuId}(categoryType=prod_types)}">
 											<span class="state">카테고리</span>
 											<span class="title" th:text="${shoppingMark.menuTitle}">아이</span>
 										</a>
 									</li>
 									<li th:if="${shoppingMark.shoppingMarkTgtCode == 'SearchWord'}">
-										<a href="">
+										<a href="#none" th:href="@{/common/search(searchWord=${shoppingMark.searchWord})}">
 											<span class="state">검색</span>
 											<span class="title" th:text="${shoppingMark.searchWord}">#에코백</span>
 										</a>

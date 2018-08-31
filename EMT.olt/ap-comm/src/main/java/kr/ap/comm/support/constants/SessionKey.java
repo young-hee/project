@@ -1,9 +1,8 @@
 package kr.ap.comm.support.constants;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class SessionKey {
+
+	public static final String MALL_ID = "MALL_ID";
 
     /**
      * Member
@@ -40,13 +39,13 @@ public class SessionKey {
 	/**
 	 * MyPoint
 	 */
-    public static final String PRESENT_INCS_NO = "PRESENT_INCS_NO";
-
-    public static final String PRESENT_PHONE_NO = "PRESENT_PHONE_NO";
-
-    public static final String PRESENT_NAME = "PRESENT_NAME";
-    
-    public static final String PRESENT_POINT = "PRESENT_POINT";
+    public static final String PRESENT_INFO = "PRESENT_INFO";
+    public static final String AUTH_INFO = "AUTH_INFO";
+    // 컴파일오류 수정을 위해 임시 추가
+	public static final String PRESENT_NAME = "PRESENT_NAME";
+	public static final String PRESENT_PHONE_NO = "PRESENT_PHONE_NO";
+	public static final String PRESENT_POINT = "PRESENT_POINT";
+	public static final String PRESENT_INCS_NO = "PRESENT_INCS_NO";
 
 	/**
 	 * cart

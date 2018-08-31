@@ -55,6 +55,7 @@
 			</div>
 
 			<!-- /* 20180801:진주알 추가 */ -->
+			<th:block th:if="${isApMember}">
 			<div class="coupon">
 				<div class="clear">
 					<div class="mgt7">
@@ -62,15 +63,17 @@
 					</div>
 					<div>
 						<span class="price">
-							<strong class="num" th:text="${ordAmtMap.get('ActivityPointExch')}">10,000</strong> 알
+							<strong class="num" th:text="${ordAmtMap.get('ActivityPointExch')} + 알">10,000알</strong> /
+							<span> 보유 <strong class="num" th:text="${#IntegUtil.toCommaNumber(session.LOGIN_USER.member.activityPoint)} + 알">7,000알</strong></span>
 						</span>	<!-- /* 20180816:추가 */ -->
 					</div>
 				</div>
 			</div>
+			</th:block>
 			<!-- /* 20180801:진주알 추가 끝*/ -->
 
 			<!-- /* 20180801:뷰티포인트 수정 */ -->
-			<th:block th:if="${apMember != null and #lists.size(ordEx.ordMembershipExList) > 0}">
+			<th:block th:if="${isApMember and #lists.size(ordEx.ordMembershipExList) > 0}">
 				<th:block th:each="ordMembershipEx : ${ordEx.ordMembershipExList}">
 					<th:block th:if="${ordMembershipEx.membershipServiceCode == 'BP'}">
 						<div class="coupon">
@@ -98,9 +101,8 @@
 								</div>
 								<div>
 								<span class="price">
-									<strong class="num"><th:block th:text="${#IntegUtil.toCommaNumber(ordMembershipEx.membershipAvailPoint)}"></th:block> P /</strong>
 									<span>
-										보유<strong class="num"><th:block th:text="${#IntegUtil.toCommaNumber(ordMembershipEx.membershipKeepingPoint)}"></th:block> P</strong>
+										보유 <strong class="num"><th:block th:text="${#IntegUtil.toCommaNumber(ordMembershipEx.membershipKeepingPoint)}"></th:block> P</strong>
 									</span>
 								</span>
 								</div>
@@ -127,7 +129,8 @@
 								<span class="price">
 									<span class="input_group beauty">
 										<span>
-										<input type="number" title="사용할 포인트 입력" id="beauty_point" th:data-membershipSn="${ordMembershipEx.membershipSn}" name="beauty_point" value="" th:max="${ordMembershipEx.membershipAvailPoint}">										</span>
+											<input type="number" title="사용할 포인트 입력" id="beauty_point" th:data-membershipSn="${ordMembershipEx.membershipSn}" name="beauty_point" value="" th:max="${ordMembershipEx.membershipAvailPoint}">
+										</span>
 									</span>
 								</span>
 								</div>
@@ -174,7 +177,7 @@
 
 	<script th:inline="javascript">
 		var ordSn = /*[[${ordEx.ordSn}]]*/ 0;
-		var memberSn = /*[[${memberSn}]]*/ null;
+		var isApMember = /*[[${isApMember}]]*/ false;
 		var modal;
 
 		//쿠폰조회
@@ -183,7 +186,7 @@
 		});
 
 		//뷰티포인트
-		$('[name=beauty_point]').on('blur', function() {
+		$('[name=beauty_point]').on('change', function() {
 			var membershipSn = this.dataset.membershipsn,
 				useMembershipPoint = parseInt(this.value);
 
@@ -192,22 +195,31 @@
 			if (useMembershipPoint >= 0 && useMembershipPoint <= parseInt(this.max)) {
 				calculationPoint(membershipSn, useMembershipPoint);
 			} else {
-				AP.modal.alert("사용가능한 뷰티포인트는 " + this.max + "입니다.");
-				$('[name=beauty_point]').val(this.max);
-				calculationPoint(membershipSn, this.max)
+				var max = this.max;
+				AP.modal.info({
+					contents: '사용가능한 뷰티포인트는 ' + max + 'P입니다.',
+					confirmLabel: '확인',
+					cancelLabel: '취소'
+				}).addListener('modal-close', function (e) {
+					if (e.closeType === 'confirm') {
+						$('[name=beauty_point]').val(max);
+						calculationPoint(membershipSn, max);
+					} else {
+						$('[name=beauty_point]').val('');
+					}
+				});
 			}
 
 		});
 
 		function calculationPoint(membershipSn, useMembershipPoint){
-			$('#pointLoading').show();
+			$('#orderLoading').show();
 
 			AP.api.ordReceptChangePoint({}, {
 				ordSn : ordSn,
 				membershipSn : membershipSn,
 				useMembershipPoint : useMembershipPoint
 			}).done(function (data) {
-				$('#pointLoading').hide();
 				if (data.ordHistEx != null) {
 					amtPcurInitAjax(data);
 
@@ -217,7 +229,7 @@
 					}
 				}
 			}).always(function(){
-				$('#pointLoading').hide();
+				$('#orderLoading').hide();
 			});
 		}
 
@@ -235,7 +247,7 @@
 
 		//보유한 쿠폰 Layer
 		function getCouponLayer(){
-			if (memberSn != null) {
+			if (isApMember) {
 				//layer 및 보유 쿠폰 조회
 				getAvailCouponList('first');
 			} else {
@@ -250,7 +262,7 @@
 				contents: {
 					templateKey: 'order.fullpage-coupon-use',
 					templateModel: {
-						memberSn: memberSn
+						isApMember: isApMember
 					}
 				},
 				sizeType: 'L',
@@ -430,7 +442,7 @@
 			if (flag == 'apply') {
 				$('#couponApplyLoading').show();
 			} else {
-				$('#couponLoading').show();
+				$('#orderLoading').show();
 			}
 
 			if (couponSnArr != null && couponSnArr.length > 0) {
@@ -440,7 +452,7 @@
 			a_xhr = AP.api.ordReceptChangeCoupon({}, {
 				ordSn : ordSn,
 				memberKeepingCouponSnArr: couponSnArr,
-				membershipSn : $('[name=beauty_point]').data().membershipsn
+				membershipSn : $('[name=beauty_point]').length > 0 ? $('[name=beauty_point]').data().membershipsn : null
 			}).done(function (data) {
 
 				if (data != null) {
@@ -493,7 +505,7 @@
 				AP.modal.alert(xhr.errorMessage);
 			}).always(function () {
 				$('#couponApplyLoading').hide();
-				$('#couponLoading').hide();
+				$('#orderLoading').hide();
 				jQuery.ajaxSettings.traditional = false;
 			});
 		}
@@ -593,8 +605,8 @@
 			//$('#amtPriceTab > button').trigger("click");
 			//$('html, body').animate({scrollTop: $("#amtPcur").offset().top-50}, 1000);
 
-			if ($('[name="depositPrice"]') != undefined && $('[name="depositPrice"]').val() != ""
-				|| $('[name="beauty_point"]') != undefined && $('[name="beauty_point"]').val() != "") {
+			if ($('[name="depositPrice"]').length > 0 && $('[name="depositPrice"]').val() != ""
+				|| $('[name="beauty_point"]').length > 0 && $('[name="beauty_point"]').val() != "") {
 				AP.modal.alert('쿠폰 사용으로 포인트 및 예치금 사용이 초기화됩니다. <br/>포인트 및 예치금 사용액을 다시 입력해 주세요.');
 				$('[name="depositPrice"]').val('');
 				$('[name="beauty_point"]').val('');

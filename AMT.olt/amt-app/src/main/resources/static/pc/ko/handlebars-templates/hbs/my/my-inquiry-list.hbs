@@ -1,0 +1,41 @@
+{{#xif this.result.totalCount '>' 0}}
+	{{#xif responseYn '===' 'N'}}
+		{{#each this.result.inquiryList}}
+			<tr>
+				<td>{{calc ../this.result.offset '+' (calc @index '+' 1)}}</td>
+				<td>{{this.inquiryTypeName}}</td>
+				<td class="align_left"><a href="#">{{this.inquiryTitle}}</a></td>
+				<td>{{dateFormat this.receivedDt "YYYY-MM-DD"}}</td>
+				<td>미답변</td>
+			</tr>
+		{{/each}}
+	{{else}}
+		{{#each this.result.inquiryList}}
+			<tr>
+				<td class="align_left qna_box" colspan="5">
+					<div>
+						<p class="num">{{calc ../this.result.offset '+' (calc @index '+' 1)}}</p>
+						<span>{{this.inquiryTypeName}}</span>
+						<button type="button" class="question" onclick="getCont('{{customerInquirySn}}')">{{this.inquiryTitle}}</button>
+						<p class="date">{{this.inquiryTitle}}</p>
+						{{#xif this.responseEvalCode '==' null}}
+							<p class="btn"><button class="btn_sm_form" type="button" onclick="evalResponse('{{this.customerInquirySn}}')"><span class="ie_press">평가하기</span></button></p>
+						{{else}}
+							<p class="btn"><span class="btn_sm_bordered">{{this.responseEvalName}}</span></p>
+						{{/xif}}
+					</div>
+					<div class="answer" id="cont_{{customerInquirySn}}">
+					</div>
+				</td>
+			</tr>
+		{{/each}}
+	{{/xif}}
+{{else}}
+	<tr>
+		<td colspan="5">
+			<div class="no_data">
+				<p>문의하신 1:1 상담내역이 없습니다.</p>
+			</div>
+		</td>
+	</tr>
+{{/xif}}

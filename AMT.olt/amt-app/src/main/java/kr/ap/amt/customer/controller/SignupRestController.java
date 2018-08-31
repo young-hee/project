@@ -26,6 +26,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.WebUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,7 +37,7 @@ import javax.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Controller
+@RestController
 @RequestMapping("/customer")
 public class SignupRestController extends AbstractController {
 
@@ -722,8 +723,6 @@ public class SignupRestController extends AbstractController {
 
 				//TODO: ap api - 고객가입(createcicuemcuinfrjoin)
 				CicuemCuInfTotTcVo cicuemCuInfTotTcVo = new CicuemCuInfTotTcVo();
-				cicuemCuInfTotTcVo.setFscrId("AC919532");
-				cicuemCuInfTotTcVo.setLschId("AC919532");
 				cicuemCuInfTotTcVo.setCustNm(custNm);
 				cicuemCuInfTotTcVo.setAthtDtbr(athtDtbr);
 				cicuemCuInfTotTcVo.setFrclCd(frclCd);
@@ -732,12 +731,21 @@ public class SignupRestController extends AbstractController {
 				cicuemCuInfTotTcVo.setCiNo(getMemberSession().getUser_ciNo());
 				cicuemCuInfTotTcVo.setJoinChCd(APConstant.AP_CH_CD);
 				cicuemCuInfTotTcVo.setJoinPrtnId(APConstant.EH_PRTN_ID);
-				if(isMobileDevice())
+				if(isMobileDevice()) {
 					cicuemCuInfTotTcVo.setJndvCd("M");
-				if(isPcDevice())
+					cicuemCuInfTotTcVo.setFscrId("MOBILE");
+					cicuemCuInfTotTcVo.setLschId("MOBILE");
+				}
+				if(isPcDevice()) {
 					cicuemCuInfTotTcVo.setJndvCd("W");
+					cicuemCuInfTotTcVo.setFscrId("WEB");
+					cicuemCuInfTotTcVo.setLschId("WEB");
+					
+				}
 				if(isAndroid() || isiOS()) {
 					cicuemCuInfTotTcVo.setJndvCd("A");
+					cicuemCuInfTotTcVo.setFscrId("MOBILE");
+					cicuemCuInfTotTcVo.setLschId("MOBILE");
 				}
 				if(cicuemCuInfTotTcVo.getCiNo().endsWith("=="))
 					cicuemCuInfTotTcVo.setAtclCd("10");
@@ -759,8 +767,8 @@ public class SignupRestController extends AbstractController {
 				cicuemCuAdtInfTcVo.setPsnDtbr(athtDtbr);
 //				cicuemCuAdtInfTcVo.setJobCd("000006");
 //				cicuemCuAdtInfTcVo.setWdanDt("19991231");
-				cicuemCuAdtInfTcVo.setFscrId("AC919532");
-				cicuemCuAdtInfTcVo.setLschId("AC919532");
+				cicuemCuAdtInfTcVo.setFscrId(cicuemCuInfTotTcVo.getFscrId());
+				cicuemCuAdtInfTcVo.setLschId(cicuemCuInfTotTcVo.getLschId());
 				cicuemCuInfTotTcVo.setCicuemCuAdtInfTcVo(cicuemCuAdtInfTcVo);
 				cicuemCuInfTotTcVo.setJoinPrtnId(APConstant.AP_PRTN_ID);
 
@@ -773,32 +781,32 @@ public class SignupRestController extends AbstractController {
 				cicuedCuChCsTcVo.setChCd(APConstant.OS_CH_CD);
 				cicuedCuChCsTcVo.setUserPwdEc(ApPasswordEncoder.encryptPassword(userPwdEc));
 				cicuedCuChCsTcVo.setPrtnNm(getPrntNm(cicuedCuChCsTcVo.getChCd()));
-				cicuedCuChCsTcVo.setFscrId("AC919532");
-				cicuedCuChCsTcVo.setLschId("AC919532");
+				cicuedCuChCsTcVo.setFscrId(cicuemCuInfTotTcVo.getFscrId());
+				cicuedCuChCsTcVo.setLschId(cicuemCuInfTotTcVo.getLschId());
 				list.add(cicuedCuChCsTcVo);
 				
 				cicuedCuChCsTcVo = new CicuedCuChCsTcVo();
 				cicuedCuChCsTcVo.setChcsNo(chcsNo);
 				cicuedCuChCsTcVo.setChCd(APConstant.OSULLOC_CH_CD);
 				cicuedCuChCsTcVo.setPrtnNm(getPrntNm(cicuedCuChCsTcVo.getChCd()));
-				cicuedCuChCsTcVo.setFscrId("AC919532");
-				cicuedCuChCsTcVo.setLschId("AC919532");
+				cicuedCuChCsTcVo.setFscrId(cicuemCuInfTotTcVo.getFscrId());
+				cicuedCuChCsTcVo.setLschId(cicuemCuInfTotTcVo.getLschId());
 				list.add(cicuedCuChCsTcVo);
 				
 				cicuedCuChCsTcVo = new CicuedCuChCsTcVo();
 				cicuedCuChCsTcVo.setChcsNo(chcsNo);
 				cicuedCuChCsTcVo.setChCd(APConstant.LLCOS_CH_CD);
 				cicuedCuChCsTcVo.setPrtnNm(getPrntNm(cicuedCuChCsTcVo.getChCd()));
-				cicuedCuChCsTcVo.setFscrId("AC919532");
-				cicuedCuChCsTcVo.setLschId("AC919532");
+				cicuedCuChCsTcVo.setFscrId(cicuemCuInfTotTcVo.getFscrId());
+				cicuedCuChCsTcVo.setLschId(cicuemCuInfTotTcVo.getLschId());
 				list.add(cicuedCuChCsTcVo);
 				
 				cicuedCuChCsTcVo = new CicuedCuChCsTcVo();
 				cicuedCuChCsTcVo.setChcsNo(chcsNo);
 				cicuedCuChCsTcVo.setChCd(APConstant.AP_CH_CD);
 				cicuedCuChCsTcVo.setPrtnNm(getPrntNm(cicuedCuChCsTcVo.getChCd()));
-				cicuedCuChCsTcVo.setFscrId("AC919532");
-				cicuedCuChCsTcVo.setLschId("AC919532");
+				cicuedCuChCsTcVo.setFscrId(cicuemCuInfTotTcVo.getFscrId());
+				cicuedCuChCsTcVo.setLschId(cicuemCuInfTotTcVo.getLschId());
 				list.add(cicuedCuChCsTcVo);
 
 				cicuemCuInfTotTcVo.setCicuedCuChCsTcVo(list);
@@ -826,8 +834,8 @@ public class SignupRestController extends AbstractController {
 					cicuedCuTncaTcVo.setTcatCd(entry.getKey());
 					cicuedCuTncaTcVo.setTncvNo("1");
 					cicuedCuTncaTcVo.setTncAgrYn(entry.getValue());
-					cicuedCuTncaTcVo.setFscrId("AC919532");
-					cicuedCuTncaTcVo.setLschId("AC919532");
+					cicuedCuTncaTcVo.setFscrId(cicuemCuInfTotTcVo.getFscrId());
+					cicuedCuTncaTcVo.setLschId(cicuemCuInfTotTcVo.getLschId());
 					cicuedCuTncaTcVos.add(cicuedCuTncaTcVo);
 				}
 				cicuemCuInfTotTcVo.setCicuedCuTncaTcVo(cicuedCuTncaTcVos);
@@ -860,8 +868,8 @@ public class SignupRestController extends AbstractController {
 				}
 				cicuemCuOptiTcVo.setDmOptiDt("N");
 				cicuemCuOptiTcVo.setTmOptiDt("N");
-				cicuemCuOptiTcVo.setFscrId("AC919532");
-				cicuemCuOptiTcVo.setLschId("AC919532");
+				cicuemCuOptiTcVo.setFscrId(cicuemCuInfTotTcVo.getFscrId());
+				cicuemCuOptiTcVo.setLschId(cicuemCuInfTotTcVo.getLschId());
 				
 				String is030Email = "";
 				String is030SMS = "";
@@ -888,8 +896,8 @@ public class SignupRestController extends AbstractController {
 				}
 				CicuemCuOptiCsTcVo2.setDmOptiDt("N");
 				CicuemCuOptiCsTcVo2.setTmOptiDt("N");
-				CicuemCuOptiCsTcVo2.setFscrId("AC919532");
-				CicuemCuOptiCsTcVo2.setLschId("AC919532");
+				CicuemCuOptiCsTcVo2.setFscrId(cicuemCuInfTotTcVo.getFscrId());
+				CicuemCuOptiCsTcVo2.setLschId(cicuemCuInfTotTcVo.getLschId());
 				list2.add(CicuemCuOptiCsTcVo2);
 
 				CicuemCuOptiCsTcVo2 = CicuemCuOptiCsTcVo2.clone();
@@ -945,8 +953,8 @@ public class SignupRestController extends AbstractController {
 							chTcVo.setIncsNo(status.getIncsNo());
 							if(APConstant.AP_CH_CD.equals(optiTcVo.getChCd()))
 								chTcVo.setFstCnttPrtnId(APConstant.AP_PRTN_ID);
-							chTcVo.setFscrId(APConstant.EH_PRTN_ID);
-							chTcVo.setLschId(APConstant.EH_PRTN_ID);
+							chTcVo.setFscrId(cicuemCuInfTotTcVo.getFscrId());
+							chTcVo.setLschId(cicuemCuInfTotTcVo.getLschId());
 							chTcVo.setPrtnNm(getPrntNm(chTcVo.getChCd()));
 							optiTcVo.setIncsNo(status.getIncsNo());
 							cicuedCuChTcVo.add(chTcVo);

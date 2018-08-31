@@ -4,42 +4,43 @@
 		<dl class="order_amount">
 			<dt>
 				<p>{{condition (eq this.step 'two') '환불' ''}} 주문금액</p>
-				<p class="price"><strong class="num">{{currencyFormat this.data.ordPayment}}</strong><b></b></p>
+				<p class="price"><strong class="num">{{currencyFormat this.ordAmt.ordPayment}}</strong><b></b></p>
 			</dt>
 			<dd>
 				<ul>
-					<li class="clear"><span>온라인주문 {{condition (eq this.step 'two') '취소' ''}}</span><span>{{currencyFormat this.data.onlineShipProd}}</span></li>
-					<li class="clear"><span>테이크아웃 {{condition (eq this.step 'two') '취소' ''}}</span><span>{{currencyFormat this.data.storeShipProd}}</span></li>
-					<li class="clear"><span>구매 특가 상품 {{condition (eq this.step 'two') '취소' ''}}</span><span>{{currencyFormat this.data.spPriceAwardProd}}</span></li>
-					<li class="clear"><span>포장/쇼핑백 추가 {{condition (eq this.step 'two') '취소' ''}}</span><span>{{currencyFormat this.data.spUnitPacking}}</span></li>
-					<li class="clear"><span>배송비 {{condition (and (gt this.data.shipFee 0) (eq this.step 'two')) '환불' ''}}</span><span>{{currencyFormat (absNum this.data.shipFee)}}</span></li>
+					<li class="clear"><span>온라인주문 {{condition (eq this.step 'two') '취소' ''}}</span><span>{{currencyFormat this.ordAmt.onlineShipProd}}</span></li>
+					<li class="clear"><span>테이크아웃 {{condition (eq this.step 'two') '취소' ''}}</span><span>{{currencyFormat this.ordAmt.storeShipProd}}</span></li>
+					<li class="clear"><span>구매 특가 상품 {{condition (eq this.step 'two') '취소' ''}}</span><span>{{currencyFormat this.ordAmt.spPriceAwardProd}}</span></li>
+					<li class="clear"><span>포장/쇼핑백 추가 {{condition (eq this.step 'two') '취소' ''}}</span><span>{{currencyFormat this.ordAmt.spUnitPacking}}</span></li>
+					<li class="clear"><span>배송비 {{condition (and (gt this.ordAmt.shipFee 0) (eq this.step 'two')) '환불' ''}}</span><span>{{currencyFormat (absNum this.ordAmt.shipFee)}}</span></li>
 				</ul>
 			</dd>
 		</dl>
 		<dl class="discount_amount">
 			<dt>
 				<p>{{condition (eq this.step 'two') '환불' ''}} 할인/포인트</p>
-				<p class="price"><strong class="num">{{currencyFormat this.data.salePoint}}</strong><b></b></p>
+				<p class="price"><strong class="num">{{currencyFormat this.ordAmt.salePoint}}</strong><b></b></p>
 			</dt>
 			<dd>
 				<ul>
-					<li class="clear"><span>쿠폰할인 {{condition (eq this.step 'two') '취소' ''}}</span><span>{{currencyFormat this.data.couponPoint}}</span></li>
-					<li class="clear"><span>뷰티포인트 {{condition (eq this.step 'two') '환불' ''}}</span><span>{{currencyFormatDefault this.data.membershipPoint 'P'}}</span></li>
-					<li class="clear"><span>쿠션포인트 {{condition (eq this.step 'two') '환불' ''}}</span><span>{{currencyFormatDefault this.data.cushionPoint 'P'}}</span></li>
-					<li class="clear"><span>진주알 교환</span><span>{{currencyFormatDefault this.data.activityPoint '알'}}</span></li>
+					<li class="clear"><span>쿠폰할인 {{condition (eq this.step 'two') '취소' ''}}</span><span>{{currencyFormat this.ordAmt.couponPoint}}</span></li>
+					<li class="clear"><span>뷰티포인트 {{condition (eq this.step 'two') '환불' ''}}</span><span>{{currencyFormatDefault this.ordAmt.membershipPoint 'P'}}</span></li>
+					<li class="clear"><span>쿠션포인트 {{condition (eq this.step 'two') '환불' ''}}</span><span>{{currencyFormatDefault this.ordAmt.cushionPoint 'P'}}</span></li>
+					<li class="clear"><span>진주알 교환</span><span>{{currencyFormatDefault this.ordAmt.activityPoint '알'}}</span></li>
 					<li class="clear"><span>OK캐쉬백</span><span>0P</span></li>
 					<li class="clear"><span>두툼포인트M</span><span>0P</span></li>
-					<li class="clear"><span>기타 할인</span><span>{{currencyFormatDefault this.data.etcPoint 'P'}}</span></li>
+					<li class="clear"><span>배송비할인</span><span>{{currencyFormatDefault this.ordAmt.shipFeePromoDc '원'}}</span></li>
+					<li class="clear"><span>기타 할인</span><span>{{currencyFormatDefault this.ordAmt.etcPoint 'P'}}</span></li>
 				</ul>
 			</dd>
 		</dl>
 		<dl class="payment_amount">
 			<dt>
 				<p>{{condition (eq this.step 'two') '총 환불 금액' '결제 금액'}}</p>
-				<p class="price"><strong class="num">{{currencyFormat this.data.totalPayment}}</strong><b></b></p>
+				<p class="price"><strong class="num">{{currencyFormat this.ordAmt.totalPayment}}</strong><b></b></p>
 			</dt>
 			<dd>
-				{{{prodPartial 'my.order.detail.amount-payment' 'payInfo' payInfo 'compareList' compareList 'step' step}}}
+				{{{prodPartial 'my.order.detail.amount-payment' 'ordPayResult' ordPayResult 'compareList' ordPayCompareList 'step' step 'memberName' memberName}}}
 			</dd>
 		</dl>
 		</div>
@@ -81,7 +82,7 @@
 </div>
 
 {{#if (eq this.viewYn.addPay 'Y')}}
-	{{#if (gt this.data.ordAmt.AddShipFee 0)}}
+	{{#if (gt this.ordAmt.ordAmt.AddShipFee 0)}}
 		{{#if (eq this.type 'cancel')}}
 			<h3 class="h_title sub mgb20">배송비 추가 결제 <small>취소 후 최종 결제금액이 10,000원 미만인 경우 배송비 결제가 필요합니다.</small></h3>
 		{{/if}}
@@ -91,7 +92,7 @@
 		<div class="refund_delivery">
 			<dl>
 				<dt><b>추가 배송비</b></dt>
-				<dd>2,500원</dd>
+				<dd>{{currencyFormatDefault this.ordAmt.ordAmt.AddShipFee}}</dd>
 			</dl>
 			<dl>
 				<dt><b>결제수단</b></dt>
@@ -110,8 +111,9 @@
 		</div>
 	{{/if}}
 {{/if}}
+
 <!-- {{#if (and (eq this.viewYn.addPayResult 'Y'))}}
-	{{#each this.info.ordPayCompareList}}
+	{{#each this.ordPayCompareList}}
 		{{#if (eq this.addedPayYn 'Y')}}
 			<h3 class="h_title sub mgb20">반품 배송비 결제</h3>
 			<div class="refund_delivery">

@@ -112,7 +112,7 @@ this["AP"]["handlebars"]["order"]["complete-final-price-amt"] = Handlebars.templ
     + alias1(alias2(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.virtualBankAcBankName : stack1), depth0))
     + "("
     + alias1(alias2(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.virtualDepositBankAcNo : stack1), depth0))
-    + ")</p>\n						<p class=\"text\">예금주 "
+    + ")</p>\n						<p class=\"text\">예금주: "
     + alias1(alias2(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.virtualBankAcAcHolder : stack1), depth0))
     + "</p>\n					</dd>\n				</dl>\n";
 },"20":function(container,depth0,helpers,partials,data) {
@@ -124,9 +124,9 @@ this["AP"]["handlebars"]["order"]["complete-final-price-amt"] = Handlebars.templ
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.virtualBankAcBankName : stack1), depth0))
     + "("
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.virtualDepositBankAcNo : stack1), depth0))
-    + ")</p>\n						<p class=\"text\">예금주 "
+    + ")</p>\n						<p class=\"text\">예금주: "
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.virtualBankAcAcHolder : stack1), depth0))
-    + "</p>\n						<p class=\"text\"><em>입금기한 "
+    + "</p>\n						<p class=\"text\"><em>입금기한: "
     + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.virtualBankAcDeadlineDt : stack1),"YYYY-MM-DD",{"name":"dateFormat","hash":{},"data":data}))
     + " 까지</em></p>\n					</dd>\n				</dl>\n";
 },"22":function(container,depth0,helpers,partials,data) {

@@ -1,0 +1,20 @@
+{{#each this.planDisplayList }}
+<li>
+	{{#xif this.planDisplayTypeCode '==' 'Link'}}
+	<a href="{{this.linkNoticeUrl}}" {{#xif this.newWindowYn '==' 'Y'}}target="_blank"{{/xif}} >
+	{{else}}
+	<a href="/display/event_detail?planDisplaySn={{ this.planDisplaySn }}">
+	{{/xif}}
+		<div class="lazy_load_wrap">
+		<img alt="" data-src="{{ absolutePath this.bannerImgM1 }}" class="lazy_load">
+		</div>
+		{{#xif this.closedRestDays '>' '0'}}
+			<dl class="event_info">
+				<dt class="event_title ellipsis">{{this.planDisplayTitle}}</dt>
+				<dd><span class="date"><p>{{ dateFormat this.startDt }}~{{ dateFormat this.endDt }}</p></span></dd>
+			</dl>
+		{{/xif}}
+	</a>
+	<button type="button" class="btn_toggle"><i class="ico_heart_s on"></i><span class="sr_only">좋아요</span><span class="count">10</span></button>
+</li>
+{{/each}}

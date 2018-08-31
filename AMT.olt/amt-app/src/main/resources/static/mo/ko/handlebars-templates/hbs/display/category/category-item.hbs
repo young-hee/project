@@ -1,0 +1,56 @@
+{{#each list}}
+<li class="item" data-online-prod-sn="{{ this.onlineProdSn }}" data-index="{{@index}}">
+	<div class="product_new">
+		<a href="{{ productDetailPath this.onlineProdSn }}">
+			<span class="product_visual_new">
+				{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+					<span class="out_of_stock"><span class="img_badge">일시품절</span></span>
+				{{/xif}}
+				<span class="lazy_load_wrap">
+					<img src="" data-src="{{ this.onlineProdImages.[0].imgUrl }}" alt="{{ this.onlineProdName }}" class="lazy_load">
+				</span>
+			</span>
+			<span class="product_info_new">
+				<strong class="prd_brand">{{ this.products.[0].brandName }}</strong>
+				<span class="prd_name">{{ this.onlineProdName }}</span>
+				<span class="price_wrap">
+					{{#with (calc this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate '+' this.onlineProdPriceSummary.minMemberLevelDiscountRate '+' this.onlineProdPriceSummary.minOnlineMemberDiscountRate '+' this.onlineProdPriceSummary.minImmedDiscountRate) as |minRate|}}
+						{{#with (calc ../onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.maxMemberLevelDiscountRate '+' ../onlineProdPriceSummary.maxOnlineMemberDiscountRate '+' this.onlineProdPriceSummary.maxImmedDiscountRate) as |maxRate|}}
+							{{#xif maxRate '>' 0}}
+								<strong class="discount">{{ maxRate }}%</strong>
+							{{/xif}}
+						{{/with}}
+					{{/with}}
+					<strong class="price">{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>원</em>{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}}~{{/xif}}</strong>
+					{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+						<del>{{ numberFormat this.onlineProdPriceSummary.minBeforeOnlineSalePrice }}원</del>
+					{{/xif}}
+				</span>
+
+				<span class="product_rating">
+					<span class="mark_star_sm star{{ this.reviewScopeAvg }}"><span class="sr_only">구매 평점 별 5개 중 {{ this.reviewScopeAvg }}개</span></span>
+					<span class="prd_review">리뷰 {{ numberFormat this.reviewCount }}</span>
+				</span>
+
+				<span class="prd_color">
+					{{#each this.colorGroups}}
+						<span style="background:#{{ this.colorGroupCode }}"><span class="sr_only">{{ this.colorGroupName }}</span></span>
+					{{/each}}
+					{{#xif this.colorGroup.length '>' 10}}
+						<span class="more"></span>
+					{{/xif}}
+				</span>
+				<span class="tags">
+					{{#xif this.onlineProdGift.giftProds '>' 0}}
+						<em class="badge special">스페셜기프트</em>
+					{{/xif}}
+					{{#xif this.onlineProdGift.giftcardTargetYn '==' 'Y'}}
+						<em class="badge gift">기프트카드</em>
+					{{/xif}}
+				</span>
+			</span>
+			<button type="button" class="btn_toggle"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+		</a>
+	</div>
+</li>
+{{/each}}

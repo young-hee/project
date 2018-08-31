@@ -1,8 +1,15 @@
 {{#each this.products}}
 	<div class="selected_option goods_box product_item {{#xif this.saleDisplayStatus '==' 'OutOfStock'}}out_of_stock{{/xif}}" data-prod-sn="{{ this.prodSn }}">
 		<div class="option_name">{{ this.prodName }}</div>
-		
-		{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+		{{#xif ../bulkIncludedProds.length '>' 0}}
+		<ul class="option_list">
+			{{#each ../bulkIncludedProds}}
+				<li>{{ this.prodName }}<span class="count">{{ this.includedProdQty }}개</span></li>
+			{{/each}}			
+		</ul>
+		{{/xif}}
+
+		{{#xif (eq this.saleDisplayStatus 'OutOfStock') '||' (eq this.saleDisplayStatus 'Exhaustion') }}
 			<div class="alarm">
 				일시품절 <a href="javascript:;" class="btn_h32_gradient incoming_alarm">입고알리미신청</a>
 			</div>
@@ -14,7 +21,9 @@
 			</div>
 		{{/xif}}
 		
-		<div class="price"><b class="item_total_price">{{ numberFormat (availablePrices this.availablePrices 'finalOnlinePrice') }}</b>원</div>
+		<div class="price">
+			<b class="item_total_price">{{ numberFormat (availablePrices this.availablePrices 'finalOnlinePrice') }}</b>원
+		</div>
 		{{#xif ../productCount '>' '1'}}
 		<button class="ui_close btn_del" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
 		{{/xif}}

@@ -2,54 +2,50 @@
 <body>
 <!-- #ap_container -->
 <div ap:fragment="layout-contents">
-	<div class="ap_contents ap_cs">
+	<div class="ap_contents ap_cs inquiry_wrap">
 		<div class="section pd_md no_margin">
 			<form class="validate">
 				<fieldset class="form inquiry">
 					<legend class="sr_only">문의 정보 입력</legend>
+
 					<div class="select_wrap">
-						<select name="foReceivedInquiryTypeSn" title="문의 유형 선택">
-							<option value="all">전체</option>
-							<option th:each=" t : ${type}" th:value="${t.inquiryTypeSn}" th:text="${t.inquiryTypeName}">매장픽업</option>
-						</select>
+						<span class="select_h48_gray">
+							<select name="foReceivedInquiryTypeSn" title="문의 유형 선택">
+								<option value="all">전체</option>
+								<option th:each=" t : ${type}" th:value="${t.inquiryTypeSn}" th:text="${t.inquiryTypeName}">매장픽업</option>
+							</select>
+						</span>
 					</div>
-					<button type="button" class="btn_lg_neutral w100p mgt10" id="b_inqOrd">문의할 주문/제품 선택</button>
-					<input type="hidden" name="ordHistNo" id="ordHistNo">
+					<a href="javascript:;" onclick="selectOrd()" class="btn_h54_bl">문의할 주문/제품 선택</a>
+
 					<div class="attached mgt10">
 					</div>
-					<div class="input_wrap mgt20">
-						<input type="text" name="inquiryTitle" placeholder="제목" required="required" data-msg="제목을 입력해 주세요." maxlength="200">
+					<div class="input_wrap">
+						<span class="input_h48_gray"><input type="text" name="inquiryTitle" placeholder="제목" required="required" data-msg="제목을 입력해 주세요." maxlength="200"></span>
 					</div>
 					<div class="textarea">
 						<textarea name="inquiryBodyText" placeholder="내용" required="required" data-msg="내용을 입력해 주세요."></textarea>
 					</div>
+
 					<div class="ui_input_images">
 						<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="multiple" style="display:none" />
-						<label for="i_picture" class="btn_md_neutral w100p mgt10">사진첨부</label>
+						<label for="i_picture" class="btn_h40_bl">사진첨부</label>
 						<ul class="attach">
 						</ul>
 						<p class="text_notice">첨부파일은 이미지 파일만 가능하며, 최대 10개까지 등록 하실 수 있습니다. (최대 파일 용량 3MB)</p>
 					</div>
 					<div class="input_wrap">
-						<!--<input type="text" name="customerEmailAddress" title="이메일  입력" placeholder="이메일 입력" email="email"
-							   th:value="${session.LOGIN_USER.member.emailAddress}">-->
-						<input type="text" name="customerEmailAddress" title="이메일  입력" placeholder="이메일 입력" email="email">
+						<span class="input_h48_gray"><input type="text" name="customerEmailAddress" title="이메일 입력" placeholder="이메일 입력" email="email"></span>
 					</div>
-					<div class="input_wrap">
-						<!--<input type="tel" value="" placeholder="휴대폰번호(선택)" name="customerPhoneNo1.phoneNo" mobile-number="mobile-number"
-							   th:value="${session.LOGIN_USER.member.phoneNo1.phoneNo}">-->
-						<input type="tel" value="" placeholder="휴대폰번호(선택)" id="phoneNo" name="customerPhoneNo1.phoneNo" mobile-number="mobile-number">
+					<div class="input_wrap mt10">
+						<span class="input_h48_gray"><input type="tel" placeholder="휴대폰번호(선택)" id="phoneNo" name="customerPhoneNo1.phoneNo" mobile-number="mobile-number"></span>
 					</div>
-					<!--<div class="check_wrap mgt10">
-						<input type="checkbox" id="sms_check" name="smsResponseNotifyYn"  value="Y" th:checked="${session.LOGIN_USER.member.phoneNo1.phoneNo} == null ? false : true">
-						<label for="sms_check">SMS 답변 알림 </label>
-					</div>-->
-					<div class="check_wrap mgt10">
-						<input type="checkbox" id="sms_check" name="smsResponseNotifyYn" value="Y">
-						<label for="sms_check">SMS 답변 알림 </label>
+
+					<div class="chk_wrap">
+						<span class="chk_h28 f_mid"><input type="checkbox" id="sms_check" name="smsResponseNotifyYn" value="Y"><label for="sms_check">SMS 답변 알림</label></span>
 					</div>
 					<div class="form_btns mgt20">
-						<button type="button" class="btn_lg_primary w100p" id="b_submit">등록</button>
+						<a href="javascript:;" onclick="submit()" class="btn_h50_pp">등록</a>
 					</div>
 				</fieldset>
 			</form>
@@ -69,7 +65,7 @@
 		$( '.ui_input_images' ).inputImages();
 
 		//문의 등록
-		$('#b_submit').off('click').on('click', function(e) {
+		function submit() {
 			var $form = $('form.validate');
 			if($('[name=foReceivedInquiryTypeSn]').val() == 'all') {
 				AP.modal.alert('문의 유형을 선택해주세요.');
@@ -92,7 +88,7 @@
 					//성공, 실패
 				});
 			}
-		});
+		}
 
 		//sms 답변알림 체크
 		$('#phoneNo').on('blur', function(e){
@@ -104,10 +100,11 @@
 		});
 
 		//문의할 제품/주문 선택
-		$('#b_inqOrd').on('click', function(e){
+		function selectOrd() {
 			var modal = AP.modal.open({
 				templateKey : 'cs.layer-inquiry'
 			});
+
 			getOrderPage(0, true);
 			$el = modal.getElement();
 			$('#b_more').hide();
@@ -133,7 +130,7 @@
 
 				modal.close();
 			});
-		});
+		}
 
 		function getOrderPage(offset, restart) {
 

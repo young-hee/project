@@ -7,7 +7,6 @@ import kr.ap.comm.support.common.AbstractController;
 import kr.ap.emt.api.pos.POSApiService;
 import kr.ap.emt.api.pos.vo.CustCstmAmt;
 import kr.ap.emt.api.pos.vo.CustGradeDetail;
-import kr.ap.emt.api.pos.vo.GBN;
 import net.g1project.ecp.api.model.sales.coupon.MemberKeepingCouponCount;
 
 import org.springframework.beans.factory.annotation.Autowired;

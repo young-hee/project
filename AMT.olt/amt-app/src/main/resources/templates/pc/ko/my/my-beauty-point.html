@@ -59,7 +59,7 @@
 					            </div>
 				            </div>
 						</div>
-						<div><button class="btn_sm_form" type="button"><span class="ie_press">검색</span></button></div>
+						<div><button class="btn_sm_form" onclick="more(1)" type="button"><span class="ie_press">검색</span></button></div>
 					</div>
 
             		<div ap:replace="~{my/fragment/point-fragment :: beauty-point-list}"></div>
@@ -103,6 +103,8 @@
 			    	$(".pbody").remove();
 			    	$(".body").after(data);
 			    	$('#date2').html($('#date1').html());
+			    	$('select').selectBox();
+					initSelect();
 			    	
                 }).fail(function(xhr, textStatus, errorThrown) {
                 	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
@@ -111,35 +113,39 @@
                     //성공, 실패
                 });
 			});
-			
-			
-		$('select[name=tlmcCd]').change(function() {
+		function initSelect() {
 
-	    	$('#progress').show();
-	    	var startDtVal = null;
-	    	var endDtVal = null;
-	    	if(date != null) {
-	    		startDtVal = date.startDate;
-	    		endDtVal = date.endDate;
-	    	}
-			AP.api.beautyPointListFragment({}, {
-					pageNumber:1,
-					startDt:startDtVal,
-					endDt:endDtVal,
-					tlmcCd:$('select[name=tlmcCd]').val()
-			}).done(function(data) {
+			$('select[name=tlmcCd]').change(function() {
 
-		    	$(".pbody").remove();
-		    	$(".body").after(data);
-		    	$('#date2').html($('#date1').html());
-				
-            }).fail(function(xhr, textStatus, errorThrown) {
-            	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
-            }).always(function() {
-		    	$('#progress').hide();
-                //성공, 실패
-            });
-		});
+		    	$('#progress').show();
+		    	var startDtVal = null;
+		    	var endDtVal = null;
+		    	if(date != null) {
+		    		startDtVal = date.startDate;
+		    		endDtVal = date.endDate;
+		    	}
+				AP.api.beautyPointListFragment({}, {
+						pageNumber:1,
+						startDt:startDtVal,
+						endDt:endDtVal,
+						tlmcCd:$('select[name=tlmcCd]').val()
+				}).done(function(data) {
+
+			    	$(".pbody").remove();
+			    	$(".body").after(data);
+			    	$('#date2').html($('#date1').html());
+			    	$('select').selectBox();
+					initSelect();
+					
+	            }).fail(function(xhr, textStatus, errorThrown) {
+	            	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	            }).always(function() {
+			    	$('#progress').hide();
+	                //성공, 실패
+	            });
+			});
+		}
+		initSelect();
 		function more(page) {
 			if(page == 0 || page == null) return;
 	    	var startDtVal = null;

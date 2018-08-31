@@ -1,0 +1,416 @@
+<html ap:decorate="~{layout/layout-sub}">
+
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page contents -->
+		<div class="ap_contents">
+
+			<!-- breadcrumbe -->
+			<th:block ap:replace="~{common/fragment/breadcrumb-only}"/>
+			<!-- // breadcrumbe -->
+
+			<!-- com_cont -->
+			<div class="ap_com_cont mypage">
+				<!-- aside_area -->
+				<th:block ap:replace="~{html/page/my/fragment/my-menu}"/>
+				<!-- aside_area -->
+
+				<!-- cont_area -->
+				<div class="cont_area my_order_detail">
+					<div class="sub_title">
+						<!-- page title -->
+						<th:block ap:replace="~{common/fragment/page-title}"/>
+						<!-- // page title -->
+					</div>
+
+					<div class="order_detail_list apply">
+						
+						<!-- 취소사유_2018-08-28 -->
+						<div class="panel bg_white">
+							<div class="return_reason">
+								<p>취소 사유를 알려주세요</p>
+								<div class="ui_table">
+									<dl>
+										<dt>취소사유</dt>
+										<dd>
+											<span class="check_wrap"><input type="radio" name="cancel" id="cancel1" checked=""><label for="cancel1">고객변심</label></span>
+											<span class="check_wrap"><input type="radio" name="cancel" id="cancel2"><label for="cancel2">주문상품변경</label></span>
+											<span class="check_wrap"><input type="radio" name="cancel" id="cancel3"><label for="cancel3">재주문</label></span>
+											<span class="check_wrap"><input type="radio" name="cancel" id="cancel4"><label for="cancel4">타사할인</label></span>
+											<span class="check_wrap"><input type="radio" name="cancel" id="cancel5"><label for="cancel5">기타</label></span>
+										</dd>
+									</dl>
+									<dl>
+										<dt>상세사유<br><small>(100자 이내)</small></dt>
+										<dd>
+											<div class="input_wrap w100p">
+												<input type="text" placeholder="취소하시는 상세 사유를 작성해주세요(100자 한정)">
+											</div>
+										</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+						<!-- //취소사유_2018-08-28 -->
+					
+						<p class="date">취소 상품을 선택해주세요</p> <!-- 문구수정_2018-08-29 -->
+						<div class="panel bg_white">
+							<div class="board_list type02">
+								<table class="tb_return">
+									<caption class="sr_only">주문상품 목록</caption>
+									<!--<colgroup>-->
+										<!--<col width="60">-->
+										<!--<col width="">-->
+										<!--<col width="150">-->
+										<!--<col width="200">-->
+									<!--</colgroup>-->
+									<thead>
+									<tr>
+										<th scope="col">
+											<span class="check_wrap check_only"><input type="checkbox" id="check_all"><label for="check_all"><span class="sr_only">전체 선택</span></label></span>
+										</th>
+										<th scope="col">상품/옵션정보</th>
+										<th scope="col">수량</th>
+										<th scope="col">상품금액</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr>
+										<td class="check"><span class="check_wrap check_only"><input type="checkbox" id="check_01"><label for="check_01"><span class="sr_only">선택</span></label></span></td>
+										<td class="product">
+											<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb_2.jpg}" alt=""></div>
+											<div class="info">
+												<div class="name">마몽드 페탈 스파 클렌징 오일마몽드 페탈 스파 클렌징 오일마몽드 페탈 스파 클렌징 오일마몽드 페탈 스파 클렌징 오일</div>
+											</div>
+										</td>
+										<td class="amount">
+											<div class="select_wrap w80px"><!-- 선택시 open 클래스  -->
+												<select name="" id="" tabindex="-1">
+													<option value="01">01</option>
+													<option value="02">2</option>
+													<option value="03">3</option>
+													<option value="04">4</option>
+													<option value="05">5</option>
+													<option value="06">06</option>
+												</select>
+											</div>
+										</td>
+										<td class="price">
+											<del>30,000원</del>
+											<strong>23,500<span class="won">원</span></strong>
+										</td>
+									</tr>
+									<tr>
+										<td class="check"><span class="check_wrap check_only"><input type="checkbox" id="check_02"><label for="check_02"><span class="sr_only">선택</span></label></span></td>
+										<td class="product">
+											<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb.jpg}" alt=""></div>
+											<div class="info">
+												<div class="benefit">
+													<span class="special">스페셜기프트</span>
+													<span class="gift">기프트카드</span>
+												</div>
+												<div class="name">마몽드 페탈 스파 클렌징 오일마몽드 페탈 스파 클렌징 오일마몽드 페탈 스파 클렌징 오일마몽드 페탈 스파 클렌징 오일</div>
+											</div>
+										</td>
+										<td class="amount">
+											<div class="select_wrap w80px"><!-- 선택시 open 클래스  -->
+												<select name="" id="" tabindex="-1">
+													<option value="01">01</option>
+													<option value="02">2</option>
+													<option value="03">3</option>
+													<option value="04">4</option>
+													<option value="05">5</option>
+													<option value="06">06</option>
+												</select>
+											</div>
+										</td>
+										<td class="price">
+											<del>30,000원</del>
+											<strong>23,500<span class="won">원</span></strong>
+										</td>
+									</tr>
+									<!--/* [S] 상품 옵션 노출시 */-->
+									<tr class="prd_option">
+										<td colspan="4">
+											<div class="check_wrap check_only"><input type="checkbox" id="check_03"><label for="check_03"><span class="sr_only">선택</span></label></div>
+											<div class="opt_name">
+												<div>21호 베이지 (Beige)</div>
+											</div>
+											<div class="amount">
+												<div class="select_wrap w80px"><!-- 선택시 open 클래스  -->
+													<select name="" id="" tabindex="-1">
+														<option value="01">01</option>
+														<option value="02">2</option>
+														<option value="03">3</option>
+														<option value="04">4</option>
+														<option value="05">5</option>
+														<option value="06">06</option>
+													</select>
+												</div>
+											</div>
+											<div class="price">
+												<del>30,000원</del>
+												<strong>23,500<span class="won">원</span></strong>
+											</div>
+										</td>
+									</tr>
+									<!--/* [E] 상품 옵션 노출시 */-->
+									<tr class="prd_option">
+										<td colspan="4">
+											<div class="check_wrap check_only"><input type="checkbox" id="check_04"><label for="check_04"><span class="sr_only">선택</span></label></div>
+											<div class="opt_name"><div>21호 베이지 (Beige)21호 베이지 (Beige)21호 베이지 (Beige)21호 베이지 (Beige)21호 베이지 (Beige)</div></div>
+											<div class="amount">
+												<div class="select_wrap w80px"><!-- 선택시 open 클래스  -->
+													<select name="" id="" tabindex="-1">
+														<option value="01">01</option>
+														<option value="02">2</option>
+														<option value="03">3</option>
+														<option value="04">4</option>
+														<option value="05">5</option>
+														<option value="06">06</option>
+													</select>
+												</div>
+											</div>
+											<div class="price">
+												<del>30,000원</del>
+												<strong>23,500<span class="won">원</span></strong>
+											</div>
+										</td>
+									</tr>
+									<tr class="prd_option">
+										<td colspan="4">
+											<div class="check_wrap check_only"><input type="checkbox" id="check_05"><label for="check_05"><span class="sr_only">선택</span></label></div>
+											<div class="opt_name"><div>21호 베이지 (Beige)</div></div>
+											<div class="amount">
+												<div class="select_wrap w80px"><!-- 선택시 open 클래스  -->
+													<select name="" id="" tabindex="-1">
+														<option value="01">01</option>
+														<option value="02">2</option>
+														<option value="03">3</option>
+														<option value="04">4</option>
+														<option value="05">5</option>
+														<option value="06">06</option>
+													</select>
+												</div>
+											</div>
+											<div class="price">
+												<del>30,000원</del>
+												<strong>23,500<span class="won">원</span></strong>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td class="check"><span class="check_wrap check_only"><input type="checkbox" id="check_06"><label for="check_06"><span class="sr_only">선택</span></label></span></td>
+										<td class="product">
+											<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb.jpg}" alt=""></div>
+											<div class="info">
+												<div class="name">마몽드 페탈 스파 클렌징 오일마몽드 페탈 스파 클렌징 오일마몽드 페탈 스파 클렌징 오일마몽드 페탈 스파 클렌징 오일</div>
+											</div>
+										</td>
+										<td class="amount">
+											<div class="select_wrap w80px"><!-- 선택시 open 클래스  -->
+												<select name="" id="" tabindex="-1">
+													<option value="01">01</option>
+													<option value="02">2</option>
+													<option value="03">3</option>
+													<option value="04">4</option>
+													<option value="05">5</option>
+													<option value="06">06</option>
+												</select>
+											</div>
+										</td>
+										<td class="price">
+											<del>30,000원</del>
+											<strong>23,500<span class="won">원</span></strong>
+										</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<!-- 1+1 상품 추가_2018-08-28 -->
+						<div class="panel bg_white">
+							<div class="board_list type02 plus">
+								<table class="tb_return">
+									<caption class="sr_only">주문상품 목록</caption>
+									<!--<colgroup>-->
+										<!--<col width="60">-->
+										<!--<col width="">-->
+										<!--<col width="150">-->
+										<!--<col width="200">-->
+									<!--</colgroup>-->
+									<thead>
+									<tr>
+										<th scope="col" colspan="4">
+											<p class="one_plus">
+												<strong class="tit"><em class="no">1+1 적용</em><span class="txt">M+N 상품일 경우 길어지면 우측여백(가이드참조)주고 말줄임 처리 M+N 상품일 경우 길어지면 우측여백(가이드참조)주고 말줄임 처리...</span></strong>
+											</p>
+										</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr>
+										<td class="check"><span class="check_wrap check_only"><input type="checkbox" id="check_01"><label for="check_01"><span class="sr_only">선택</span></label></span></td>
+										<td class="product">
+											<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb_2.jpg}" alt=""></div>
+											<div class="info">
+												<div class="name">마몽드 페탈 스파 클렌징 오일마몽드 페탈 스파 클렌징 오일마몽드 페탈 스파 클렌징 오일마몽드 페탈 스파 클렌징 오일</div>
+											</div>
+										</td>
+										<td class="amount">
+											<div class="select_wrap w80px"><!-- 선택시 open 클래스  -->
+												<select name="" id="" tabindex="-1">
+													<option value="01">01</option>
+													<option value="02">2</option>
+													<option value="03">3</option>
+													<option value="04">4</option>
+													<option value="05">5</option>
+													<option value="06">06</option>
+												</select>
+											</div>
+										</td>
+										<td class="price">
+											<del>30,000원</del>
+											<strong>23,500<span class="won">원</span></strong>
+										</td>
+									</tr>
+									<tr>
+										<td class="check"><span class="check_wrap check_only"><input type="checkbox" id="check_02"><label for="check_02"><span class="sr_only">선택</span></label></span></td>
+										<td class="product">
+											<div class="thumb"><img ap:src="@{/images/dummy/my_pouch_thumb.jpg}" alt=""></div>
+											<div class="info">
+												<div class="benefit">
+													<span class="special">스페셜기프트</span>
+													<span class="gift">기프트카드</span>
+												</div>
+												<div class="name">마몽드 페탈 스파 클렌징 오일마몽드 페탈 스파 클렌징 오일마몽드 페탈 스파 클렌징 오일마몽드 페탈 스파 클렌징 오일</div>
+											</div>
+										</td>
+										<td class="amount">
+											<div class="select_wrap w80px"><!-- 선택시 open 클래스  -->
+												<select name="" id="" tabindex="-1">
+													<option value="01">01</option>
+													<option value="02">2</option>
+													<option value="03">3</option>
+													<option value="04">4</option>
+													<option value="05">5</option>
+													<option value="06">06</option>
+												</select>
+											</div>
+										</td>
+										<td class="price">
+											<del>30,000원</del>
+											<strong>23,500<span class="won">원</span></strong>
+										</td>
+									</tr>
+									<!--/* [S] 상품 옵션 노출시 */-->
+									<tr class="prd_option">
+										<td colspan="4">
+											<div class="check_wrap check_only"><input type="checkbox" id="check_03"><label for="check_03"><span class="sr_only">선택</span></label></div>
+											<div class="opt_name">
+												<div>21호 베이지 (Beige)</div>
+											</div>
+											<div class="amount">
+												<div class="select_wrap w80px"><!-- 선택시 open 클래스  -->
+													<select name="" id="" tabindex="-1">
+														<option value="01">01</option>
+														<option value="02">2</option>
+														<option value="03">3</option>
+														<option value="04">4</option>
+														<option value="05">5</option>
+														<option value="06">06</option>
+													</select>
+												</div>
+											</div>
+											<div class="price">
+												<del>30,000원</del>
+												<strong>23,500<span class="won">원</span></strong>
+											</div>
+										</td>
+									</tr>
+									<!--/* [E] 상품 옵션 노출시 */-->
+									<tr class="prd_option">
+										<td colspan="4">
+											<div class="check_wrap check_only"><input type="checkbox" id="check_04"><label for="check_04"><span class="sr_only">선택</span></label></div>
+											<div class="opt_name"><div>21호 베이지 (Beige)21호 베이지 (Beige)21호 베이지 (Beige)21호 베이지 (Beige)21호 베이지 (Beige)</div></div>
+											<div class="amount">
+												<div class="select_wrap w80px"><!-- 선택시 open 클래스  -->
+													<select name="" id="" tabindex="-1">
+														<option value="01">01</option>
+														<option value="02">2</option>
+														<option value="03">3</option>
+														<option value="04">4</option>
+														<option value="05">5</option>
+														<option value="06">06</option>
+													</select>
+												</div>
+											</div>
+											<div class="price">
+												<del>30,000원</del>
+												<strong>23,500<span class="won">원</span></strong>
+											</div>
+										</td>
+									</tr>
+									<tr class="prd_option">
+										<td colspan="4">
+											<div class="check_wrap check_only"><input type="checkbox" id="check_05"><label for="check_05"><span class="sr_only">선택</span></label></div>
+											<div class="opt_name"><div>21호 베이지 (Beige)</div></div>
+											<div class="amount">
+												<div class="select_wrap w80px"><!-- 선택시 open 클래스  -->
+													<select name="" id="" tabindex="-1">
+														<option value="01">01</option>
+														<option value="02">2</option>
+														<option value="03">3</option>
+														<option value="04">4</option>
+														<option value="05">5</option>
+														<option value="06">06</option>
+													</select>
+												</div>
+											</div>
+											<div class="price">
+												<del>30,000원</del>
+												<strong>23,500<span class="won">원</span></strong>
+											</div>
+										</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<!-- //1+1 상품 추가_2018-08-28 -->
+
+						<ul class="list_bullet_dot order">
+							<li>주문 취소는 상품준비중 이전까지 가능합니다. </li>
+							<li>사용하셨던 뷰티포인트, 기프트카드, 예치금은 취소 완료 시 복원됩니다. 단, 유효기간이 만료되었다면 복원되지 않을 수 있습니다.</li>
+							<li>부분취소 시 일부 쿠폰은 복원되지 않을 수 있습니다. </li>
+							<li>취소 후 주문 금액이 무료 배송조건 미만일 경우 배송비가 부과됩니다.</li>
+							<li>환불 승인 불가시 해당 금액은 예치금으로 반환됩니다.</li>
+						</ul>
+
+						<div class="page_btns">
+							<button class="btn_xlg_bordered" type="button"><span class="ie_press">취소</span></button>
+							<button class="btn_xlg_neutral" type="button"><span class="ie_press">확인</span></button>
+						</div>
+					</div>
+				</div>
+				<!-- // cont_area -->
+
+			</div>
+			<!-- // com_cont -->
+
+		</div>
+		<!-- // page contents -->
+	</div><!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script>
+			$( '.ui_find_addresses' ).findAddresses();
+			$( '.ui_input_images' ).inputImages();
+			$( '.recommended_item .slide' ).ixSlideMax();
+		</script>
+	</th:block>
+</body>
+</html>

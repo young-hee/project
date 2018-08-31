@@ -259,7 +259,7 @@
 		<div class="table_layout aside_footer">
 
 			<span><a href="/cs/customerCenter" class="btn_md_neutral">고객센터</a></span>
-			<span th:if="${#device.isMobileWeb()}"><a href="/cs/pinkMembership" class="btn_md_primary">맴버십</a></span>
+			<span th:unless="${#device.isMobileApp()}"><a href="/cs/pinkMembership" class="btn_md_primary">맴버십</a></span>
 			<!--/* app 전용 */-->
 			<span th:if="${#device.isMobileApp()}"><a href="javascript:AP.webview.method('callSetting', { isLogin: AP.LOGIN_USER });" class="btn_md_secondary">설정</a></span>
 
@@ -318,13 +318,6 @@
 									<th:block th:unless="${#strings.isEmpty(session.LOGIN_USER.user_incsCardNoEc)}">
 										<img src="/barcode/btPointBcd?width=285&height=88">
 										<p class="text" th:text="${#IntegUtil.btCardNumber(session.LOGIN_USER)}"></p>
-									</th:block>
-									<th:block th:if="${#strings.isEmpty(session.LOGIN_USER.user_incsCardNoEc)}">
-										<div class="panel notice">
-											<i class="ico"></i>
-											<p class="text">모바일 카드가  존재하지 않습니다.</p>
-											<a href="#none" th:href="@{/my/page/info/btpMobileCard}" class="link"><span>모바일 카드 신청</span><i class="ico_arr_m_r"></i></a>
-										</div>
 									</th:block>
 								</div>
 							</dd>

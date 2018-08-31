@@ -1,4 +1,4 @@
-<dt><button type="button">{{condition (eq this.takeOutYn 'N') '온라인 주문' '테이크아웃'}} 상품 (<em>{{this.cnt}}</em>개)</button></dt>
+<dt><button type="button">{{condition (eq this.takeOutYn 'N') '온라인 주문' '테이크아웃'}} {{condition (eq this.step 'two') this.title ''}} 상품 (<em>{{this.cnt}}</em>개)</button></dt>
 <dd>
 	{{#if (eq takeOutYn 'Y')}}
     	<div class="store_info">
@@ -17,6 +17,7 @@
     		{{/if}}
     	</div>
     {{/if}}
+
 	{{#each this.list}}
 		<!-- 일반상품 -->
 		{{#if (eq this.ordHistProdTypeCode 'Ord')}}
@@ -29,11 +30,11 @@
 					<!-- 단위상품 -->
 					{{#each this.ordHistProdList}}
 						{{#unless (and (eq this.ordHistProdStatusCode 'ProdCancel') (eq ../status 'request'))}}
-							{{{prodPartial 'my.order.detail.product-option' 'prod' this 'viewYn' ../../viewYn 'oProdSn' ../this.onlineProdSn 'step'
+							{{{prodPartial 'my.order.detail.product-option' 'prod' this 'viewYn' ../../viewYn 'oProdCode' ../this.onlineProdCode 'step'
 								../../step 'statusCode' ../../this.statusCode 'singleProdYn' ../singleProdYn}}}
 							{{#if (eq ../../viewYn.selectReason 'Y')}}
 								<!-- 클레임 사유 선택 -->
-								{{{prodPartial 'my.order.detail.claim-reason-select' 'ordHistProdSn' this.ordHistProdSn 'reason' ../../reason 'title' ../../title}}}
+								{{{prodPartial 'my.order.detail.claim-reason-select' 'ordProdCode' this.ordHistProdSn 'reason' ../../reason 'title' ../../title}}}
 							{{/if}}
 							{{#if (eq ../../viewYn.selectReasonResult 'Y')}}
 								<!-- 클레임 사유 -->
@@ -44,6 +45,9 @@
 				</div>
 			{{/unless}}
 		{{/if}}
+		<!-- //일반상품 -->
+
+		<!-- 묶음상품 -->
 		{{#if (eq this.ordHistProdTypeCode 'BulkDc')}}
 			{{#unless (and (eq this.ordHistProdStatusCode 'ProdCancel') (eq ../status 'request'))}}
 				<div class="panel_box">
@@ -52,13 +56,13 @@
 					<!-- 단위상품 -->
 					{{#each this.ordHistProdList}}
 						{{#unless (and (eq this.ordHistProdStatusCode 'ProdCancel') (eq ../status 'request'))}}
-							{{{prodPartial 'my.order.detail.product-option' 'prod' this 'viewYn' ../../viewYn 'oProdSn' ../this.onlineProdSn 'step'
+							{{{prodPartial 'my.order.detail.product-option' 'prod' this 'viewYn' ../../viewYn 'oProdCode' ../this.onlineProdCode 'step'
 								../../step 'statusCode' ../../this.statusCode 'singleProdYn' 'N' }}}
 						{{/unless}}
 					{{/each}}
 					{{#if (eq ../viewYn.selectReason 'Y')}}
 						<!-- 클레임 사유 선택 -->
-						{{{prodPartial 'my.order.detail.claim-reason-select' 'ordHistProdSn' this.bulkDcOnlineProdCode 'reason' ../reason 'title' ../title}}}
+						{{{prodPartial 'my.order.detail.claim-reason-select' 'ordProdCode' this.bulkDcOnlineProdCode 'reason' ../reason 'title' ../title}}}
 					{{/if}}
 					{{#if (eq ../viewYn.selectReasonResult 'Y')}}
 						<!-- 클레임 사유 -->
@@ -67,6 +71,7 @@
 				</div>
 			{{/unless}}
 		{{/if}}
+		<!-- // 묶음삼품 -->
 	{{/each}}
 
 	{{#each this.bList}}
@@ -81,11 +86,11 @@
 					{{#each this.ordHistProdList}}
 						{{#unless (and (eq this.ordHistProdStatusCode 'ProdCancel') (eq ../status 'request'))}}
 							<!-- 단위상품 -->
-							{{{prodPartial 'my.order.detail.product-option' 'prod' this 'viewYn' ../../viewYn 'oProdSn' ../this.onlineProdSn 'step'
+							{{{prodPartial 'my.order.detail.product-option' 'prod' this 'viewYn' ../../viewYn 'oProdCode' ../this.onlineProdCode 'step'
 								../../step 'statusCode'../../this.statusCode 'singleProdYn' ../singleProdYn 'typeName' '뷰티포인트'}}}
 							{{#if (eq ../../viewYn.selectReason 'Y')}}
 								<!-- 클레임 사유 선택 -->
-								{{{prodPartial 'my.order.detail.claim-reason-select' 'ordHistProdSn' this.ordHistProdSn 'reason' ../../reason 'title' ../../title}}}
+								{{{prodPartial 'my.order.detail.claim-reason-select' 'ordProdCode' this.ordHistProdSn 'reason' ../../reason 'title' ../../title}}}
 							{{/if}}
 							{{#if (eq ../../viewYn.selectReasonResult 'Y')}}
 								<!-- 클레임 사유 -->
@@ -110,11 +115,11 @@
 					{{#each this.ordHistProdList}}
 						{{#unless (and (eq this.ordHistProdStatusCode 'ProdCancel') (eq ../status 'request'))}}
 							<!-- 단위상품 -->
-							{{{prodPartial 'my.order.detail.product-option' 'prod' this 'viewYn' ../../viewYn 'oProdSn'
-								../this.onlineProdSn 'step' ../../step 'statusCode'../../this.statusCode 'singleProdYn' ../singleProdYn 'typeName' '진주알상품'}}}
+							{{{prodPartial 'my.order.detail.product-option' 'prod' this 'viewYn' ../../viewYn
+								'oProdCode' ../this.onlineProdCode 'step' ../../step 'statusCode'../../this.statusCode 'singleProdYn' ../singleProdYn 'typeName' '진주알상품'}}}
 							{{#if (eq ../../viewYn.selectReason 'Y')}}
 								<!-- 클레임 사유 선택 -->
-								{{{prodPartial 'my.order.detail.claim-reason-select' 'ordHistProdSn' this.ordHistProdSn 'reason' ../../reason 'title' ../../title}}}
+								{{{prodPartial 'my.order.detail.claim-reason-select' 'ordProdCode' this.ordHistProdSn 'reason' ../../reason 'title' ../../title}}}
 							{{/if}}
 							{{#if (eq ../../viewYn.selectReasonResult 'Y')}}
 								<!-- 클레임 사유 -->
@@ -149,7 +154,7 @@
 								<!-- 클레임 체크박스 -->
 								{{#if (eq ../../../viewYn.checkBox 'Y')}}
 									<div class="check_wrap check_only">
-										<input type="checkbox" id="prod_{{this.ordProdEx.prodSn}}" name="prod_{{../this.onlineProdSn}}" value="{{json this}}" data-oProdSn="{{../this.onlineProdSn}}">
+										<input type="checkbox" id="prod_{{this.ordProdEx.prodSn}}" name="prod_{{../this.onlineProdSn}}" value="{{json this}}" data-oProdCode="{{../this.onlineProdCode}}">
 										<label for="prod_{{this.ordProdEx.prodSn}}">
 											<span class="sr_only">선택</span>
 										</label>
@@ -179,7 +184,7 @@
 							</div>
 							{{#if (eq ../../../viewYn.selectReason 'Y')}}
 								<!-- 클레임 사유 선택 -->
-								{{{prodPartial 'my.order.detail.claim-reason-select' 'ordHistProdSn' this.ordHistProdSn 'reason' ../../../reason 'title' ../../../title}}}
+								{{{prodPartial 'my.order.detail.claim-reason-select' 'ordProdCode' this.ordHistProdSn 'reason' ../../../reason 'title' ../../../title}}}
 							{{/if}}
 							{{#if (eq ../../../viewYn.selectReasonResult 'Y')}}
 								<!-- 클레임 사유 -->
@@ -190,9 +195,9 @@
 				{{/each}}
 			{{/each}}
 		{{else}}
-			{{#each this.ordOnlineProdFoList}}
-				{{#unless (and (eq this.ordHistProdStatusCode 'ProdCancel') (eq ../../status 'request'))}}
-					<div class="panel_box">
+			<div class="panel_box">
+				{{#each this.ordOnlineProdFoList}}
+					{{#unless (and (eq this.ordHistProdStatusCode 'ProdCancel') (eq ../../status 'request'))}}
 						{{#if (eq @index 0)}}
 							<div class="title">
 								<span class="benefit"><em>{{../baseQty}}+{{../awardQty}} 혜택 적용</em></span>
@@ -238,26 +243,24 @@
 								</div>
 							{{/unless}}
 						{{/each}}
-						{{#if (gt (condition (eq ../singleProdYn 'Y') @../index @index) 0)}}
-							{{#if (eq ../../viewYn.selectReason 'Y')}}
-								<!-- 클레임 사유 선택 -->
-								{{{prodPartial 'my.order.detail.claim-reason-select' 'ordHistProdSn' ../this.promoSn 'reason' ../../reason 'title' ../../title}}}
-							{{/if}}
-							{{#if (eq ../../viewYn.selectReasonResult 'Y')}}
-								<!-- 클레임 사유 -->
-								{{{prodPartial 'my.order.detail.claim-reason' 'title' ../../title 'receivedClaimReasonName' receivedClaimReasonName 'foReceivedClaimReason' foReceivedClaimReason}}}
-							{{/if}}
-						{{/if}}
-					</div>
-				{{/unless}}
-			{{/each}}
+					{{/unless}}
+				{{/each}}
+				{{#if (eq ../viewYn.selectReason 'Y')}}
+					<!-- 클레임 사유 선택 -->
+					{{{prodPartial 'my.order.detail.claim-reason-select' 'ordProdCode' this.promoSn 'reason' ../reason 'title' ../title}}}
+				{{/if}}
+				{{#if (eq ../../viewYn.selectReasonResult 'Y')}}
+					<!-- 클레임 사유 -->
+					{{{prodPartial 'my.order.detail.claim-reason' 'title' ../title 'receivedClaimReasonName' receivedClaimReasonName 'foReceivedClaimReason' foReceivedClaimReason}}}
+				{{/if}}
+			</div>
 		{{/xif}}
 	{{/each}}
 
 	{{#each sList}}
 		<!-- 동시구매 상품 -->
-		{{#each this.ordOnlineProdFoList}}
-			{{#unless (and (eq this.ordHistProdStatusCode 'ProdCancel') (eq ../../status 'request'))}}
+		{{#unless (and (eq this.ordHistProdStatusCode 'ProdCancel') (eq ../../status 'request'))}}
+			{{#each this.ordOnlineProdFoList}}
 				<div class="panel_box">
 				{{#if (eq @index 0)}}
 					<div class="title">
@@ -303,19 +306,19 @@
 						</div>
 					{{/unless}}
 				{{/each}}
-				{{#if (eq @index 0)}}
-					{{#if (eq ../viewYn.selectReason 'Y')}}
-						<!-- 클레임 사유 선택 -->
-						{{{prodPartial 'my.order.detail.claim-reason-select' 'ordHistProdSn' this.promoTypeCode 'reason' ../reason 'title' ../title}}}
-					{{/if}}
-					{{#if (eq ../viewYn.selectReasonResult 'Y')}}
-						<!-- 클레임 사유 -->
-						{{{prodPartial 'my.order.detail.claim-reason' 'title' ../title 'receivedClaimReasonName' receivedClaimReasonName 'foReceivedClaimReason' foReceivedClaimReason}}}
-					{{/if}}
+			{{/each}}
+			{{#if (eq @index 0)}}
+				{{#if (eq ../viewYn.selectReason 'Y')}}
+					<!-- 클레임 사유 선택 -->
+					{{{prodPartial 'my.order.detail.claim-reason-select' 'ordProdCode' this.promoTypeCode 'reason' ../reason 'title' ../title}}}
 				{{/if}}
-				</div>
-			{{/unless}}
-		{{/each}}
+				{{#if (eq ../viewYn.selectReasonResult 'Y')}}
+					<!-- 클레임 사유 -->
+					{{{prodPartial 'my.order.detail.claim-reason' 'title' ../title 'receivedClaimReasonName' receivedClaimReasonName 'foReceivedClaimReason' foReceivedClaimReason}}}
+				{{/if}}
+			{{/if}}
+			</div>
+		{{/unless}}
 	{{/each}}
 
 	{{#if (eq this.takeOutYn 'Y')}}

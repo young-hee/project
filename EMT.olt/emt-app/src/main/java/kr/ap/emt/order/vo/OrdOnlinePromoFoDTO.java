@@ -17,7 +17,6 @@ public class OrdOnlinePromoFoDTO {
     /* 프로모션 합계정보 */
     private BigDecimal totalProductSaleAmount = BigDecimal.ZERO;
     private BigDecimal totalFinalOnlineSaleAmount = BigDecimal.ZERO;
-	private Integer ordQtySum = 0;
 
     /* 프로모션 주문온라인상품 목록 */
     private List<OrdOnlineProdFoDTO> ordOnlineProdFoList;
@@ -31,8 +30,14 @@ public class OrdOnlinePromoFoDTO {
 	private String bulkDcOnlineProdName;
 	private String bulkDcOnlineProdImgUrl;
 
+	/* 묶음판매상품 합계정보 */
+	private BigDecimal totalBulkDcProductSaleAmount = BigDecimal.ZERO;
+	private BigDecimal totalBulkDcFinalOnlineSaleAmount = BigDecimal.ZERO;
+
 	private String receivedClaimReasonName;
 	private String foReceivedClaimReason;
+
+	private Integer ordQtySum = 0;
 
 	private String singleProdYn;
 
@@ -74,14 +79,6 @@ public class OrdOnlinePromoFoDTO {
 
 	public void setTotalFinalOnlineSaleAmount(BigDecimal totalFinalOnlineSaleAmount) {
 		this.totalFinalOnlineSaleAmount = totalFinalOnlineSaleAmount;
-	}
-
-	public Integer getOrdQtySum() {
-		return ordQtySum;
-	}
-
-	public void setOrdQtySum(Integer ordQtySum) {
-		this.ordQtySum = ordQtySum;
 	}
 
 	public List<OrdOnlineProdFoDTO> getOrdOnlineProdFoList() {
@@ -132,6 +129,22 @@ public class OrdOnlinePromoFoDTO {
 		this.bulkDcOnlineProdImgUrl = bulkDcOnlineProdImgUrl;
 	}
 
+	public BigDecimal getTotalBulkDcProductSaleAmount() {
+		return totalBulkDcProductSaleAmount;
+	}
+
+	public void setTotalBulkDcProductSaleAmount(BigDecimal totalBulkDcProductSaleAmount) {
+		this.totalBulkDcProductSaleAmount = totalBulkDcProductSaleAmount;
+	}
+
+	public BigDecimal getTotalBulkDcFinalOnlineSaleAmount() {
+		return totalBulkDcFinalOnlineSaleAmount;
+	}
+
+	public void setTotalBulkDcFinalOnlineSaleAmount(BigDecimal totalBulkDcFinalOnlineSaleAmount) {
+		this.totalBulkDcFinalOnlineSaleAmount = totalBulkDcFinalOnlineSaleAmount;
+	}
+
 	public String getReceivedClaimReasonName() {
 		return receivedClaimReasonName;
 	}
@@ -146,6 +159,14 @@ public class OrdOnlinePromoFoDTO {
 
 	public void setFoReceivedClaimReason(String foReceivedClaimReason) {
 		this.foReceivedClaimReason = foReceivedClaimReason;
+	}
+
+	public Integer getOrdQtySum() {
+		return ordQtySum;
+	}
+
+	public void setOrdQtySum(Integer ordQtySum) {
+		this.ordQtySum = ordQtySum;
 	}
 
 	public String getSingleProdYn() {

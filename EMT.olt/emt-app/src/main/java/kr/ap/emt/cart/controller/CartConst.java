@@ -23,6 +23,8 @@ public class CartConst {
 
 	// 판매표시상태 설정(체크박스 제어)
 	public final static String SALE_DISPLAY_STATUS_ONSALE = "OnSale";
+	public final static String SALE_DISPLAY_STATUS_EXHAUSTION = "Exhaustion";
+	public final static String SALE_DISPLAY_STATUS_OUTOFSTOCK = "OutOfStock";
 	public final static String SALE_DISPLAY_STATUS_NOTSELECT = "NotSelect";
 
 }
