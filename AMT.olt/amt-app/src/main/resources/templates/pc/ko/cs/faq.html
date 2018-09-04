@@ -40,7 +40,7 @@
 								<!--/* board_menu_area */-->
 								<div class="board_menu_area">
 									<ul>
-										<li class="on"><button type="button" onclick="summaryClick('all')"><span>전체FAQ</span></button></li><!--/* active : on */-->
+										<li class="on"><button type="button" onclick="summaryClick('')"><span>전체FAQ</span></button></li><!--/* active : on */-->
 										<th:block th:each="s : ${summary.faqList}">
 											<li><button type="button" th:onclick="'javascript:summaryClick(' + ${s.inquiryTypeSn} + ')'"><span th:text="${s.inquiryTypeName}">상품</span></button></li>
 										</th:block>
@@ -70,21 +70,23 @@
 									</table>
 								</div>
 
+								<div class="ui_paging pagination"></div>
+
 								<!--/* pagination */-->
-								<div class="pagination bg_gray">
-									<a href="#none" class="navi prev">&lt;<span class="sr_only">이전</span></a>
-									<span class="current">1</span>
-									<a href="#none">2</a>
-									<a href="#none">3</a>
-									<a href="#none">4</a>
-									<a href="#none">5</a>
-									<a href="#none">6</a>
-									<a href="#none">7</a>
-									<a href="#none">8</a>
-									<a href="#none">9</a>
-									<a href="#none">10</a>
-									<a href="#none" class="navi next">&gt;<span class="sr_only">다음</span></a>
-								</div>
+								<!--<div class="pagination bg_gray">-->
+									<!--<a href="#none" class="navi prev">&lt;<span class="sr_only">이전</span></a>-->
+									<!--<span class="current">1</span>-->
+									<!--<a href="#none">2</a>-->
+									<!--<a href="#none">3</a>-->
+									<!--<a href="#none">4</a>-->
+									<!--<a href="#none">5</a>-->
+									<!--<a href="#none">6</a>-->
+									<!--<a href="#none">7</a>-->
+									<!--<a href="#none">8</a>-->
+									<!--<a href="#none">9</a>-->
+									<!--<a href="#none">10</a>-->
+									<!--<a href="#none" class="navi next">&gt;<span class="sr_only">다음</span></a>-->
+								<!--</div>-->
 								<script type="text/javascript">
 									// 임시 테스트용입니다.
 									$('.board_toggle .answer').hide();
@@ -117,11 +119,145 @@
 	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
 	<th:block ap:fragment="layout-endpoint">
 
+		<script ap:src="@{/handlebars-templates/compiled/cs/faq-list.js}"></script>
+
 		<script th:inline="javascript">
 
-			function summaryClick(sn) {
+			var currentOffset;
+			var currentType;
+			var currentKeyword;
 
+			var pageLimit = 10;
+
+			$(document).ready(function() {
+				var keyword = /*[[${keyword}]]*/;
+				if (keyword != null && keyword.length > 0) {
+					$('#searchText').val(keyword);
+				}
+				getFaq(keyword, '', 0);
+			});
+
+			function summaryClick(sn) {
+				$( '.ui_paging' ).paging( 'clear' );
+				getFaq('', sn, 0, 'true')
 			}
+
+			$( '.ui_paging' ).on( 'paging-change', function (e) {
+				getFaq(currentKeyword, currentType, e.offset, 'true');
+			});
+
+			function showFaq(faqData, resultHtml, isReplace) {
+
+				if ('true' == isReplace) {
+					$('#faqPaging').empty();
+				}
+				if (faqData.totalCount === 0) {
+					$('#add').hide();
+				}
+				else {
+					$('#add').show();
+				}
+				var c = (faqData.offset + faqData.limit) > faqData.totalCount ? faqData.totalCount : (faqData.offset + faqData.limit);
+				// $("#add").html("더보기 (<em> " + c + "</em> / " + faqData.totalCount + ")");
+				$('#faqPaging').append(resultHtml);
+
+
+				$('.board_toggle .answer').hide();
+
+				$('.board_toggle .qna_box button').click(function(e){
+					if ($(this).parent().hasClass('on')){
+						$(this).attr('title','답변 보기').parent().removeClass('on').next('.answer').hide();
+					} else {
+						$(this).parents('.board_toggle').find('.question').removeClass('on').children('button').attr('title','답변 보기').parent().next('.answer').hide();
+						$(this).attr('title','답변 보기 닫기').parent().addClass('on').next('.answer').show();
+					}
+					return false;
+				});
+			}
+
+			function getFaq(keyword, inquiryTypeSn, offset, isReplace) {
+
+				// if (currentKeyword == keyword && currentType == inquiryTypeSn && 'true' == isReplace)
+				// 	return;
+				//
+				// if (keyword == null || keyword == '') {
+				// 	$('#searchText').val("");
+				// }
+
+				currentKeyword = keyword;
+				currentType = inquiryTypeSn;
+				currentOffset = offset;
+				AP.api.csList({}, {
+					type : 'faq',
+					keyword : currentKeyword,
+					inquiryTypeSn : inquiryTypeSn,
+					offset : offset,
+					limit : pageLimit
+				}).done(function(data) {
+					//성공
+					if (data) {
+						// getPostFaq(data.data, isReplace);
+						var resultHtml = AP.common.getTemplate('cs.faq-list', {
+							totalLength: data.data.faqList.length,
+							totalLengthLabel: $B.string.numberFormat( data.data.faqList.length ),
+							result: data.data.faqList,
+							cnt : data.data.totalCount - currentOffset
+						});
+						showFaq(data.data, resultHtml, isReplace);
+						setPagination(data.data.totalCount);
+					}
+				}).fail(function(e) {
+					//실패
+					AP.modal.alert(e.responseJSON.errorData.message);
+				}).always(function() {
+					//성공, 실패
+				});
+			}
+
+			function setPagination(totalCount) {
+				var options = {
+					offset : currentOffset,
+					limit : pageLimit,
+					totalCount : totalCount,
+					pagingLength : 5
+				}
+
+				$('.ui_paging').paging( options );
+			}
+
+
+			function searchKeyPress(e)
+			{
+				// look for window.event in case event isn't passed in
+				e = e || window.event;
+				if (e.keyCode == 13)
+				{
+					document.getElementById('search').click();
+					return false;
+				}
+				return true;
+			}
+
+			$('#search').on('click', function(e) {
+				var search = $('#searchText').val();
+				if (search != null && search.length > 0)
+					getFaq(search, '', 0, 'true');
+			});
+
+			$('#add').on('click', function(e) {
+				// getFaq(currentType, ++currentPage);
+				getFaq(currentKeyword, currentType, (currentOffset + pageLimit));
+			});
+
+			$('input[type=radio]').change(function() {
+				var sn = null;
+				if (this.value != 'all') {
+					sn = this.value;
+				}
+				getFaq('', sn, 0, 'true')
+			});
+
+
 
 		</script>
 

@@ -113,15 +113,25 @@
 		_setEvent: function () {
 			// 좋아요
 			this._$list.on( 'click', '.like', function (e) {
-				e.preventDefault();
-				var index = $( e.currentTarget ).closest( '.item' ).data( 'index' );
+				var $like = $( e.currentTarget ),
+					index = $like.closest( '.item' ).data( 'index' ),
+					prodSn = this._data[index].products[0].prodSn;
+
+				AP.login().done(function () {
+					// TODO: 좋아요
+					// AP.api.postRecommend({}, { prodSn: prodSn }).done(function ( result ) {
+					// 	$like.find( '.ico_favorite' ).toggleClass( 'on' );
+					// }.bind( this ));
+				}.bind( this ));
+
+				return false;
 			}.bind( this ));
 
 			// 장바구니
 			this._$list.on( 'click', '.cart', function (e) {
 				e.preventDefault();
 				var index = $( e.currentTarget ).closest( '.item' ).data( 'index' );
-				AP.addCart.put( this._data[index].products );
+				AP.addCart.add( this._data[index].products );
 			}.bind( this ));
 
 			// 정렬

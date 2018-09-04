@@ -175,6 +175,7 @@
 				}
 			}
 			else if (shipType == 'STORE') {
+
 				//편의점-----------
 				//주문자와 동일
 				var addressStoreType = $('input[name=addressStoreType]').val();
@@ -186,12 +187,12 @@
 					return;
 				}
 				//새로입력(form validation)
-				/*else if (addressStoreType == 'NEW'
+				else if (addressStoreType == 'NEW'
 					&& ($('#cStoreRecipientName').val() == null
 						|| $('#cStoreRecipientPhoneNo').val() == null)) {
-					AP.modal.alert("주소정보를 입력해 주세요.");
+					AP.modal.alert("받으시는 분의 이름을 입력하세요.");
 					return;
-				}*/
+				}
 			}
 
 			//카드결제 필요없으면 선택 취소
@@ -207,9 +208,9 @@
 			}
 
 			var $form = $( 'form.order-validate' );
-			//$form.validate().settings.ignore = "";
+			$form.validate().settings.ignore = "";
 
-			if ( $form.valid() ) {
+			if ($form.valid()) {
 
 				//약관동의 여부
 				var $checkbox = $('input[id="orderAgree"]');
@@ -221,10 +222,10 @@
 						var msg = null;
 						if ($('[all-required]').length == 0) {
 							//선택지급만 존재
-							msg = '주문증정 사은품을 선택하지 않았습니다. <br/>결제를 진행하시겠습니까?';
+							msg = '주문증정 사은품을 선택하지 않았습니다. <br/>그대로 결제를 진행하시겠습니까?';
 						} else {
 							//전체지급, 선택지급 혼용
-							msg = '선택하지 않은 주문증정 사은품이 있습니다. <br/>선택하지 않고 결제를 진행하시겠습니까?';
+							msg = '선택하지 않은 주문증정 사은품이 있습니다. <br/>선택하지 않고 그대로 결제를 진행하시겠습니까?';
 						}
 						AP.modal.info({
 							contents: msg,
@@ -237,8 +238,8 @@
 							} else {
 								//주문사은품 선택하기로
 								$('#ordUnitAcc').addClass("on");
-								$( '.ui_accordion' ).accordion('clear').accordion();
-								$('html, body').animate({scrollTop: $("#ordUnitAcc").offset().top-50}, 1000);
+								$('.ui_accordion').accordion('clear').accordion();
+								$('html, body').animate({scrollTop: $("#ordUnitAcc").offset().top - 50}, 1000);
 							}
 						});
 					} else {
@@ -249,6 +250,9 @@
 				} else {
 					AP.modal.alert("위 상품의 판매조건을 확인하였으며, 구매진행에 동의해주세요.");
 				}
+			} else {
+				//$('#shipAddrTab').addClass("on");
+				//$( '.ui_accordion' ).accordion('clear').accordion();
 			}
 
 		});

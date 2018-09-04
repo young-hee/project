@@ -8,7 +8,9 @@
 		$(function() {
 		
 		    $(document).ready(function() {
-		        pageInfo.warning = setTimeout(warningEndOfSession, pageInfo.WARNING_TIME);
+				if(!AP.common.getCookie('AUTO_LOGIN')) {
+			        pageInfo.warning = setTimeout(warningEndOfSession, pageInfo.WARNING_TIME);
+				}
 		    })
 		
 		    function warningEndOfSession() {
@@ -52,38 +54,7 @@
 		            location.reload();
 		    });
 		}
-	         
-	         
-	
-	     /* $.get("/customer/popup?pageId=7" , function(data) {
-	
-	              var contents = new Object();
-	              contents.contents = data;
-	              var modal = AP.modal.info(contents);
-	              modal.addListener('modal-close', function(e) {
-	              	logout(true);
-	        });
-	              var $modalEl = modal.getElement(); //jquery object
-	
-	              $modalEl.find(".btn_md_primary").click(function() {
-	                  var clickTime = new Date();
-	                  if (clickTime.getTime() - warningTime.getTime() > 60000) {
-	                      endOfSession();
-	                      return false;
-	                  }
-	                  if (pageInfo.warning != undefined) {
-	                      clearTimeout(pageInfo.warning);
-	                      clearTimeout(logoutJob);
-	                  }
-	                  pageInfo.warning = setTimeout(warningEndOfSession, pageInfo.WARNING_TIME);
-	              });
-	
-	              $modalEl.find(".btn_md_bordered").click(function() {
-	              	logout(true);
-	              });
-	          });
-	     
-	     */
+
 	</script>
 	<script>
 

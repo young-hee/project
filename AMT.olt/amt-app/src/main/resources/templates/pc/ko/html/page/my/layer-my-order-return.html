@@ -63,7 +63,9 @@
 										<dd>600원</dd>
 									</dl>
 								</div>
+								<!-- 09-04 삭제 
 								<p>최초 주문시 무료배송 수령후 반품신청제품의 가격이 2,500원 미만이며 반품신청금액을 제외한 최종주문금액이 20,000원 미만일경우에는 추가로 2,500원의 배송비를 결제해야 됩니다.</p>
+								-->
 								<!-- //결제 정보 -->
 							</li>
 							<li>
@@ -522,6 +524,7 @@
 																	</a>
 																</li>
 																<!-- 페이나우 삭제_2018-08-23 -->
+																<!-- 09-04 삭제
 																<li class="bankbook">
 																	<a href="#none">
 																		<span class="thumb"><img ap:src="@{/images/order/pay_bank_01.png}" alt=""></span>
@@ -534,6 +537,7 @@
 																		<span class="name">실시간<br>계좌이체</span>
 																	</a>
 																</li>
+																 -->
 																<li class="phone">
 																	<a href="#none">
 																		<span class="thumb"><img ap:src="@{/images/order/pay_mpp.png}" alt=""></span>
@@ -653,57 +657,7 @@
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
-<script>
-	 //배송지 정보
-		$('.delivery_list li').click(function(){
-			$(this).addClass('on').siblings().removeClass('on');
-		});
-		
-		//결제수단선택
-		$('.credit_list li').click(function(){
-			$(this).addClass('on').siblings().removeClass('on');
-		});
-	 
-		 //네이버페이인경우
-		$('.credit_list li').click(function() {
-		//	$('.payment_list').find('.card_list').hide();
-			 if ($(this).hasClass('naver')) {
-				 $(this).closest('dd').find('.cont_naver').show();
-			}else{
-				 $(this).closest('dd').find('.cont_naver').hide();
-			}
-		});
 
-		 //무통장입금인경우
-		$('.credit_list li').click(function() {
-		//	$('.payment_list').find('.card_list').hide();
-			 if ($(this).hasClass('bankbook')) {
-				 $(this).closest('dd').find('.cont_bankbook').show();
-			}else{
-				 $(this).closest('dd').find('.cont_bankbook').hide();
-			}
-		});
-		
-		 //실시간 계좌이체
-		$('.credit_list li').click(function() {
-		//	$('.payment_list').find('.card_list').hide();
-			 if ($(this).hasClass('realtime')) {
-				 $(this).closest('dd').find('.cont_realtime').show();
-			}else{
-				 $(this).closest('dd').find('.cont_realtime').hide();
-			}
-		});
-		
-		 //휴대폰 이체
-		$('.credit_list li').click(function() {
-		//	$('.payment_list').find('.card_list').hide();
-			 if ($(this).hasClass('phone')) {
-				 $(this).closest('dd').find('.cont_phone').show();
-			}else{
-				 $(this).closest('dd').find('.cont_phone').hide();
-			}
-		});
-	</script>
 </th:block>
 
 </body>

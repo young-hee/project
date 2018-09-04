@@ -136,7 +136,10 @@
 		 */
 
 		// summary
-		csSummary: { path:'/cs/summary/{type}', method: 'GET' },
+		csSummary: { path:'/cs/summary/{type}', method: 'GET'},
+
+		// 자주묻는 질문, 공지사항 목록
+		csList: { path:'/cs/csList', method: 'POST'},
 
 		// 자주묻는 질문, 공지사항 목록
 		faqList: { path:'/cs/faqList', method: 'POST'},
@@ -323,7 +326,9 @@
 				startDate: null,
 				endDate: null,
 				offset: 0, //(필수)
-				limit: 20 //(필수)
+				limit: 10, //(필수)
+				displayMenuSetId : null, //전시메뉴세트아이디
+				displayMenuId : null //전시메뉴아이디
 			}
 		},
 
@@ -368,6 +373,11 @@
 				i_sKwd : null //검색어
 			}
 		},
+		
+		// 앱 다운 URL 문자 전송
+		sendSms : {path : '/product/sendSms', method : 'GET', data: {
+			cellNum : ''
+		}},
 
 		/**
 		 * 장바구니(Cart) ***********************************************************
@@ -379,6 +389,40 @@
 		/**
 		 * 이벤트 *************************************************************
 		 */
+		
+		//AP 전용 뷰티테스터 행사 상세 조회
+		getRegularEventDetail : {path:'/display/beauty_test/regular_event_detail', method: 'POST', data:{
+				regularEventSn: null			// - integer($int64)	상시행사일련번호
+		}},
+		
+		//AP 전용 뷰티테스터 행사 상품 리뷰 조회
+		getRegularEventProdReviews : {path:'/display/beauty_test/regular_event_product_reviews', method: 'POST', data:{
+			regularEventSn: null,			// - integer($int64)	상시행사일련번호
+			offset: 0,
+			limit: 10,
+			reviewSort: null
+		}},
+		
+		//AP 전용 뷰티테스터 행사 신청자 조회
+		getRegularRequesters : {path:'/display/beauty_test/regular_event_requesters', method: 'POST', data:{
+			regularEventSn: null,			// - integer($int64)	상시행사일련번호
+			offset: 0,
+			limit: 10
+		}},
+		
+		//AP 전용 상품 좋아용
+		postRecommend : {path:'/product/postRecommend', method: 'POST', data:{
+				   shoppingMarkTgtCode : 'Prod' 
+				  ,prodSn : 0
+				  ,articleSn : 0
+				  ,planDisplaySn : 0
+				  ,displayMenuId : '' 
+				  ,displayMenuSetId : '' 
+				  ,searchWord : '' 
+				  ,onlineProdSn : 0
+				  ,brandSn : 0
+	
+		}},
 
 		/**
 		 * 아티클(CH.에뛰드, FindYourLooks) *************************************************************
@@ -392,35 +436,138 @@
 				hashTag: null, //해시태그 (SNS 해쉬태그 검색, '#’을 제거하고 입력)
 				offset: 0,
 				limit: 10
-			}},
+		}},
 
 		//아티클 상세 조회
 		article : { path:'/display/article', method: 'POST', data: {
 				articleSn: null //아티클일련번호
-			}},
+		}},
 
 		//아티클댓글 목록 조회
 		comments : { path:'/display/comments', method: 'POST', data: {
 				articleSn: null, //아티클일련번호
 				offset: 0,
 				limit: 10
-			}},
+		}},
 
 		//아티클댓글 등록
 		createArticleComment : { path:'/display/createArticleComment', method: 'POST', data: {
 				articleSn: null, //아티클일련번호
 				articleCommentBodyText: "", //댓글내용
 				memberSn: null //회원일련번호
-			}},
+		}},
 
 		//아티클댓글 삭제
 		deleteArticleComment : { path:'/display/deleteArticleComment', method: 'POST', data: {
 				articleSn: null, //아티클일련번호
 				articleCommentSn: null, //아티클댓글일련번호
 				memberSn: null //회원일련번호
-			}},
+		}},
 
+		/**
+	     * 기획전시 댓글목록 (planDisplayComments, )  *************************************************************
+	     * @param  {String}
+	     * @param  {int}
+	     * @param  {int}
+	     * @return  {ajax}
+	     */
+		// 기획전시 댓글 목록
+		planDisplayComments: { path:'/display/planDisplayComments', method: 'GET', data: {
+			planDisplaySn: null, // 기획전시일련번호 (Long 타입)
+			offset: 0,
+			limit: 20
+		}},
+		
+		/**
+	     * 기획전시 댓글등록 참여댓글형 행사참여 - 이미지 포함*************************************************************
+	     * @param planDisplayPost : participantComment(댓글), planDisplaySn(기획전시일련번호) , termsAgreeYn(약관동의여부 : 필수)  
+	     * @param picture
+		 * @return 
+	     */
+		planDisplayParticipated: { path:'/display/planDisplayParticipated', method: 'POST', contentType:false, processData: false },
+		
+		/**
+	     * 기획전시 댓글등록 참여댓글형 행사참여 *************************************************************
+	     * @param planDisplayPost : participantComment(댓글), planDisplaySn(기획전시일련번호) , termsAgreeYn(약관동의여부 : 필수)  
+		 * @return 
+	     */
+		planDisplaySimpleParticipated: { path:'/display/planDisplaySimpleParticipated', method: 'POST', data: {
+			planDisplaySn: '', 				// 기획전시일련번호
+			participantCommentTitle: '', 	// 행사참여자댓글제목
+			participantComment: '', 		// 행사참여자댓글
+			termsAgreeYn: '' 				// 약관동의여부
+		} },
+		
+		/**
+	     * 기획전시 댓글수정 참여댓글형 행사참여 - 이미지 포함*************************************************************
+	     * @param requestEvent : planDisplaySn(기획전시일련번호) , eventParticipantSn 
+	     * @param planDisplayPost : participantComment(댓글),termsAgreeYn(약관동의여부 : 필수), 유지될 기존파일일련번호만 넘김
+	     * @param picture
+	     */
+		updateParticipated: { path:'/display/updateParticipated', method: 'POST', contentType:false, processData: false },
+		
+		/**
+	     * 기획전시 댓글삭제 *************************************************************
+	     * @param requestEvent : planDisplaySn(기획전시일련번호), eventParticipantSn(행사참여자일련번호(댓글일련번호))
+	     * @return booleanResult ( true, false)
+	     */
+		deleteParticipated: { path:'/display/deleteParticipated', method: 'GET',data: { 
+			planDisplaySn: null,
+			eventParticipantSn: null 
+			
+		}},
 
+		/**
+	     * 기획전시 댓글추천 *************************************************************
+	     * @param requestEvent : planDisplaySn(기획전시일련번호), eventParticipantSn(행사참여자일련번호(댓글일련번호))
+	     * @return booleanResult ( true, false)
+	     */
+		recommendParticipated : { path:'/display/recommendParticipated', method: 'GET', data: {
+			planDisplaySn: null,
+			eventParticipantSn: null 
+		}},
+		
+		/**
+	     * 기획전시 목록 *************************************************************
+	     * @param requestEvent : keyword(검색), status(기획전시상태코드 (PlanDisplayStatus) , Progress - 진행 , End - 종료)
+	     * 									, types(기획전시 유형코드 리스트(PlanDisplayType) = Link - URL링크 , General - 일반구성기획전시 , SameTimePur - 동시구매기획전시)
+	     * 									, order(정렬방식 (PlanDisplaySortMethod) = SortOrder , StartDt , Deadline
+	     * 									, offset , limit 
+	     */								 
+		planDisplayList: { path:'/display/planDisplayList', method: 'GET', data: {
+			keyword : null, 
+			status : null,
+			types : null, 
+			order : null, 	
+			offset : null,
+			limit : null 
+		}},
+		
+		
+		/**
+	     * 기획전시 상세 *************************************************************
+	     * @param requestEvent : planDisplaySn(기획전시일련번호) , memberSn 
+	     */
+		planDisplayEvent: { path:'/display/planDisplayEvent', method: 'GET', data: {
+			planDisplaySn: null // 기획전시일련번호 (Long 타입)
+			
+		}},
+		
+		//상품기획전 그룹별 상품목록
+		inPlanDisplayProdGrp: { path:'/display/inPlanDisplayProdGrp', method: 'POST' , data: {
+				planDisplayProdGrpSn: null, //기획전시상품그룹일련번호
+				offset: 0,
+				limit: 20,
+				includeFilters:false, 
+				displayCateDepth: 0,
+				displayCate:null,
+				brand:null,
+				flag:null,
+				attr:null,
+				priceRange:null
+			}
+		},
+		
 		/**
 		 * test *************************************************************
 		 */

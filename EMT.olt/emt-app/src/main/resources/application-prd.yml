@@ -1,0 +1,95 @@
+ecp:
+  api:
+    base-url: https://qg330konjg.execute-api.ap-northeast-2.amazonaws.com/ect_open
+    api-key: KILD3W2H2VQIM4PU6IY5DFN12H7140U4
+
+amore:
+  api:
+    base-url: https://cit-prv-api.amorepacific.com/
+
+webdb:
+  api:
+    base-url: http://10.155.8.76:8319/
+  sso:
+    gateway-url: https://sso.amorepacific.com
+    
+naver:
+  key: ali0vfa8RMWZ3JP0tKKb
+
+pos:
+  api:
+    base-url: https://epl-prv-api.amorepacific.com/
+
+kakao:
+  key: daf78194797745c52f56602b1fd75e67
+  restkey: 11e3927e92f955efd1009ea108027296
+  secret: qk4U7p5h73aKWBlTweLeiTBvqCpJu4Rh
+
+spring:
+  session:
+    store-type: redis
+    redis:
+      namespace: EMT
+
+  redis:
+    host: dspprd-rd-session-01.7r6rmr.ng.0001.apn2.cache.amazonaws.com
+    port: 63791
+    database: 2
+
+#편의점택배
+store:
+  url:
+    pc:
+      base-url: https://prd.etudehouse.com
+    mo:
+      base-url: https://m.etudehouse.com
+
+#결제
+payment:
+  #inicis 
+  ini:
+    inipayhome: /data/was/INIpay50
+    mid: etudetest1
+    keyPw: 1111
+    signKey: bGRtZXBXZU11UWQ1R3RNY2FvN1NPZz09
+    pc:
+      siteDomain: https://prd.etudehouse.com
+    mo:
+      siteDomain: https://m.etudehouse.com
+    # 이니시스 PC 결제 스크립트 import
+    # 테스트 https://stgstdpay.inicis.com/stdjs/INIStdPay.js
+    # 운영    https://stdpay.inicis.com/stdjs/INIStdPay.js
+    # paymentJsUrl: https://stgstdpay.inicis.com/stdjs/INIStdPay.js
+    
+    #이니시스 다이렉트 결제 - 카카오페이, 페이코결제
+    direct: 
+      mid: etudetest0
+      signKey: Q1F3Q3N2a2RGYW5lbG0xQkVvQ2ZBdz09
+
+  #네이버페이  
+  naver:
+    partnerId: etude-shop
+    clientId: iytyZfbZhrPBMOuunkqU
+    clientSecret: epR8U0DeMy
+    mode: development
+    apiDomain: https://dev.apis.naver.com
+    confirmUrl: /naverpay/payments/v2/apply/payment
+    cancelUrl: /naverpay/payments/v1/cancel
+
+  #inicis 간편결제 (wpay)  
+  wpay:
+    mid: INIWPAYTST
+    hashKey: F3149950A7B6289723F325833F588STD
+    seedKey: YXfk5YpaAlFPjFpczsB/yA==
+    seedIv: WPAYINIWPAYTSTST
+
+  krp:
+    mid: 2E673024B7
+    secretKey: 44D3FA8EB70206CC4DCB7018984364B7
+
+bluewave:
+  fileupload:
+    location:
+      temp: /data/was/temp/upload
+  imageresize:
+    imagemagick: true

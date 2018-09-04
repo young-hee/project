@@ -23,7 +23,7 @@
 				<div class="direct_entry">
 					<form class="validate">
 						<span class="input_wrap"><input type="text" name="min" class="min" data-value="{{ this.value }}" placeholder="최소금액" number="number" data-msg="숫자만 입력해 주세요."></span>
-						<span class="input_wrap"><input type="text" name="max" class="max" data-value="{{ this.value }}" placeholder="최대금액" number="number" data-msg="숫자만 입력해 주세요."></span>
+						<span class="input_wrap"><input type="text0" name="max" class="max" data-value="{{ this.value }}" placeholder="최대금액" number="number" data-msg="숫자만 입력해 주세요."></span>
 						<span><button class="btn_fix_gradient2 price_search" type="button">검색</button></span>
 					</form>
 				</div>
@@ -61,7 +61,7 @@
 				</dl>
 
 			{{else}}
-				{{#xif this.addAttrCode '==' 'color'}}
+				{{#xif this.addAttrCode '==' 'colorgroup'}}
 
 					<!-- color -->
 					<dl>
@@ -69,16 +69,29 @@
 						<dd>
 							<ul class="colors">
 								{{#each this.addAttrVals}}
-									<li><span><input type="checkbox" name="{{ ../addAttrCode }}" id="{{ this.addAttrValCode }}" data-value="{{ this.addAttrValCode }}"><label for="{{ this.addAttrValCode }}" style="background-color:{{ this.addAttrValCode }}">{{ this.addAttrValName }}</label></span></li>
+									{{#if this.addAttrValImgSrc}}
+										<li>
+											<span>
+												<input type="checkbox" name="{{ ../addAttrCode }}" id="{{ this.addAttrValCode }}">
+												<label for="{{ this.addAttrValCode }}"><img src="{{ this.addAttrValImgSrc }}" alt="{{ this.addAttrValName }}">{{ this.addAttrValName }}</label>
+											</span>
+										</li>
+									{{else}}
+										<li>
+											<span>
+												<input type="checkbox" name="{{ ../addAttrCode }}" id="{{ this.addAttrValCode }}" data-value="{{ this.addAttrValCode }}">
+												<label for="{{ this.addAttrValCode }}" style="background-color:{{ this.addAttrValCode }}">{{ this.addAttrValName }}</label>
+											</span>
+										</li>
+									{{/if}}
 								{{/each}}
-								<!--<li><span><input type="checkbox" id="color_2"><label for="color_2"><img ap:src="@{/images/dummy/IMG1424Fif683185312.jpg}" alt="색상명"></label></span></li>-->
 							</ul>
 						</dd>
 					</dl>
 
 				{{else}}
 
-					<!-- base -->
+					<!-- default -->
 					<dl>
 						<dt>{{ this.addAttrsName }}</dt>
 						<dd>

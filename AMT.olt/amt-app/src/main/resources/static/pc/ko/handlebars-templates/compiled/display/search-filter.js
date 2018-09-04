@@ -45,7 +45,7 @@ this["AP"]["handlebars"]["display"]["search-filter"] = Handlebars.template({"1":
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.addAttrVals : depth0)) != null ? stack1["3"] : stack1)) != null ? stack1.addAttrValCode : stack1), depth0))
     + "\">7만원</label>\n					</span></li>\n				</ul>\n				<div style=\"margin: 5px 0 5px 0\";><span>직접입력</span></div>\n				<div class=\"direct_entry\">\n					<form class=\"validate\">\n						<span class=\"input_wrap\"><input type=\"text\" name=\"min\" class=\"min\" data-value=\""
     + alias2(alias1((depth0 != null ? depth0.value : depth0), depth0))
-    + "\" placeholder=\"최소금액\" number=\"number\" data-msg=\"숫자만 입력해 주세요.\"></span>\n						<span class=\"input_wrap\"><input type=\"text\" name=\"max\" class=\"max\" data-value=\""
+    + "\" placeholder=\"최소금액\" number=\"number\" data-msg=\"숫자만 입력해 주세요.\"></span>\n						<span class=\"input_wrap\"><input type=\"text0\" name=\"max\" class=\"max\" data-value=\""
     + alias2(alias1((depth0 != null ? depth0.value : depth0), depth0))
     + "\" placeholder=\"최대금액\" number=\"number\" data-msg=\"숫자만 입력해 주세요.\"></span>\n						<span><button class=\"btn_fix_gradient2 price_search\" type=\"button\">검색</button></span>\n					</form>\n				</div>\n			</dd>\n		</dl>\n\n";
 },"4":function(container,depth0,helpers,partials,data,blockParams,depths) {
@@ -103,7 +103,7 @@ this["AP"]["handlebars"]["display"]["search-filter"] = Handlebars.template({"1":
 },"12":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
-  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.addAttrCode : depth0),"==","color",{"name":"xif","hash":{},"fn":container.program(13, data, 0, blockParams, depths),"inverse":container.program(16, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "");
+  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.addAttrCode : depth0),"==","colorgroup",{"name":"xif","hash":{},"fn":container.program(13, data, 0, blockParams, depths),"inverse":container.program(19, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "");
 },"13":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
@@ -111,40 +111,60 @@ this["AP"]["handlebars"]["display"]["search-filter"] = Handlebars.template({"1":
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.addAttrsName : depth0), depth0))
     + "</dt>\n						<dd>\n							<ul class=\"colors\">\n"
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.addAttrVals : depth0),{"name":"each","hash":{},"fn":container.program(14, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "								<!--<li><span><input type=\"checkbox\" id=\"color_2\"><label for=\"color_2\"><img ap:src=\"@{/images/dummy/IMG1424Fif683185312.jpg}\" alt=\"색상명\"></label></span></li>-->\n							</ul>\n						</dd>\n					</dl>\n\n";
+    + "							</ul>\n						</dd>\n					</dl>\n\n";
 },"14":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1;
+
+  return ((stack1 = helpers["if"].call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.addAttrValImgSrc : depth0),{"name":"if","hash":{},"fn":container.program(15, data, 0, blockParams, depths),"inverse":container.program(17, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "");
+},"15":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "									<li><span><input type=\"checkbox\" name=\""
+  return "										<li>\n											<span>\n												<input type=\"checkbox\" name=\""
+    + alias2(alias1((depths[1] != null ? depths[1].addAttrCode : depths[1]), depth0))
+    + "\" id=\""
+    + alias2(alias1((depth0 != null ? depth0.addAttrValCode : depth0), depth0))
+    + "\">\n												<label for=\""
+    + alias2(alias1((depth0 != null ? depth0.addAttrValCode : depth0), depth0))
+    + "\"><img src=\""
+    + alias2(alias1((depth0 != null ? depth0.addAttrValImgSrc : depth0), depth0))
+    + "\" alt=\""
+    + alias2(alias1((depth0 != null ? depth0.addAttrValName : depth0), depth0))
+    + "\">"
+    + alias2(alias1((depth0 != null ? depth0.addAttrValName : depth0), depth0))
+    + "</label>\n											</span>\n										</li>\n";
+},"17":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var alias1=container.lambda, alias2=container.escapeExpression;
+
+  return "										<li>\n											<span>\n												<input type=\"checkbox\" name=\""
     + alias2(alias1((depths[1] != null ? depths[1].addAttrCode : depths[1]), depth0))
     + "\" id=\""
     + alias2(alias1((depth0 != null ? depth0.addAttrValCode : depth0), depth0))
     + "\" data-value=\""
     + alias2(alias1((depth0 != null ? depth0.addAttrValCode : depth0), depth0))
-    + "\"><label for=\""
+    + "\">\n												<label for=\""
     + alias2(alias1((depth0 != null ? depth0.addAttrValCode : depth0), depth0))
     + "\" style=\"background-color:"
     + alias2(alias1((depth0 != null ? depth0.addAttrValCode : depth0), depth0))
     + "\">"
     + alias2(alias1((depth0 != null ? depth0.addAttrValName : depth0), depth0))
-    + "</label></span></li>\n";
-},"16":function(container,depth0,helpers,partials,data) {
+    + "</label>\n											</span>\n										</li>\n";
+},"19":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return "\n					<!-- base -->\n					<dl>\n						<dt>"
+  return "\n					<!-- default -->\n					<dl>\n						<dt>"
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.addAttrsName : depth0), depth0))
     + "</dt>\n						<dd>\n							<ul class=\"leg_tgArea\" data-min-height=\"180\" style=\"height: "
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.addAttrVals : depth0)) != null ? stack1.length : stack1),">",5,{"name":"xif","hash":{},"fn":container.program(17, data, 0),"inverse":container.program(19, data, 0),"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.addAttrVals : depth0)) != null ? stack1.length : stack1),">",5,{"name":"xif","hash":{},"fn":container.program(20, data, 0),"inverse":container.program(22, data, 0),"data":data})) != null ? stack1 : "")
     + "\">\n"
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.addAttrVals : depth0),{"name":"each","hash":{},"fn":container.program(21, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.addAttrVals : depth0),{"name":"each","hash":{},"fn":container.program(24, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "							</ul>\n\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.addAttrVals : depth0)) != null ? stack1.length : stack1),">",5,{"name":"xif","hash":{},"fn":container.program(23, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.addAttrVals : depth0)) != null ? stack1.length : stack1),">",5,{"name":"xif","hash":{},"fn":container.program(26, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "						</dd>\n					</dl>\n\n";
-},"17":function(container,depth0,helpers,partials,data) {
+},"20":function(container,depth0,helpers,partials,data) {
     return "180px";
-},"19":function(container,depth0,helpers,partials,data) {
+},"22":function(container,depth0,helpers,partials,data) {
     return "auto";
-},"21":function(container,depth0,helpers,partials,data) {
+},"24":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
   return "									<li><span class=\"check_wrap\"><input type=\"checkbox\" id=\""
@@ -156,7 +176,7 @@ this["AP"]["handlebars"]["display"]["search-filter"] = Handlebars.template({"1":
     + "\">"
     + alias2(alias1((depth0 != null ? depth0.addAttrValName : depth0), depth0))
     + "</label></span></li>\n";
-},"23":function(container,depth0,helpers,partials,data) {
+},"26":function(container,depth0,helpers,partials,data) {
     return "								<button type=\"button\" class=\"btn_src_more leg_btn\">더보기</button>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;

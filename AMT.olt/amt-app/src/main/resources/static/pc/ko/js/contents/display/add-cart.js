@@ -12,7 +12,7 @@
 		},
 
 		/** =============== Public Methods =============== */
-		put: function ( products ) {
+		add: function ( products ) {
 			this._defaultModel = products;
 
 			products = [products[0]];

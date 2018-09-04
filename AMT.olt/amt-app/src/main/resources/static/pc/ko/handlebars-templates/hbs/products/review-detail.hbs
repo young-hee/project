@@ -1,0 +1,65 @@
+<dl class="review">
+	<dt class="review_header">
+		<span class="name">{{ this.memberId }}</span><span class="grade">{{ this.memberLevelName }}</span>
+		<div class="product_rating">
+			<span class="mark_star_sm star{{ this.scope }}"><span class="sr_only">구매 평점 별 5개 중 {{ this.scope }}개</span></span>
+			<span class="count">{{ this.scope }}</span>
+		</div>
+		</span>
+	</dt>
+	<!--/* 첨부 동영상 & 이미지 영역 */-->
+	{{#xif this.imgList.length '>' 0}}
+	<dd class="attached">
+		<div class="slide" data-ix-options="view-legnth:1;loop:false">
+			<div class="ix-list-viewport">
+				<ul class="ix-list-items">
+					{{#each this.imgList}}
+						<li class="ix-list-item">
+							<img src="{{ this.imageFileUrl }}" alt="{{ this.imgDesc }}">
+						</li>
+					{{/each}}
+				</ul>
+			</div>
+			<div class="ix-controller">
+				<div class="slide_direction">
+					<a class="ix-btn-prev" href="#"><span class="sr_only">이전</span></a>
+					<a class="ix-btn-next" href="#"><span class="sr_only">다음</span></a>
+				</div>
+				<ul class="ix-thumbs">
+					<li class="ix-thumb"><button type="button" class="ix-btn"><!--ix-index-->번째 배너</button></li>
+				</ul>
+			</div>
+		</div>
+	</dd>
+	{{/xif}}
+	
+	<dd>
+		<div class="review_box">
+			<div class="prd_option"><span>{{ this.prodName }}</span></div>
+			<!--/* 상품설명 */-->
+			<div class="survey">
+				<ul>
+					{{#each this.surveys}}
+						<li>
+							<span>{{ this.questionHeader }}</span>
+							<strong>{{ this.responseBodyText }}</strong>
+						</li>
+					{{/each}}
+				</ul>
+			</div>
+			<!--/* 코멘트 */-->
+			<div class="comment">
+				<div class="ellipsis line5">{{ this.prodReviewBodyText }}</div>
+				<a href="#none" class="btn_view_more">더읽기</a>
+				<a href="#none" class="btn_view_close">닫기</a>
+			</div>
+			<div class="box_help">
+				<span class="left"><a href="#none" class="btn_help {{#xif this.recommendYn '==' 'Y'}}on{{/xif}}">도움이되요 {{ this.recommendCnt }}</a></span>
+				<span class="right"><a href="#none" class="btn_report"><span class="sr_only">신고하기</span></a></span>
+			</div>
+		</div>
+		<div class="date">{{ dateFormat this.prodReviewRegistDt }}</div>
+	</dd>
+</dl>
+
+

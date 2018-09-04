@@ -57,9 +57,9 @@
 											<dd>
 												<div class="w100p input_btn_wrap">
 													<div class="input_wrap">
-                                                    	<input type="tel" th:value="${session.LOGIN_USER.member.phoneNo1.phoneNo}" title="‘-’제외 숫자 입력">
+                                                    	<input type="tel" th:value="${session.LOGIN_USER.member.phoneNo1.phoneNo}" readonly="readonly" title="‘-’제외 숫자 입력">
 													</div>
-													<button type="button" class="btn_md_form">인증번호 발송</button>
+													<button type="button" onclick="sendSms()" class="btn_md_form">인증번호 발송</button>
 												</div>
 												<p class="bullet_dot">인증번호발송 버튼을 선택하시면 고객님의 휴대폰으로 인증문자가 전송됩니다.</p>
 											</dd>
@@ -71,12 +71,12 @@
 												<div class="input_group ea_03">
 													<span class="input_wrap">
                                                 		<input type="tel" id="number2" placeholder="인증번호" name="smsNum" title="인증번호 6자리 입력">
-														<em class="count">3:00</em>
+														<em class="count" name="timer">3:00</em>
 													</span>
 													<span class="gap">&nbsp;</span>
-													<span><button type="button" id="reCertBtn" style="display: none">재전송</button></span>
+													<span><button type="button" onclick="sendSms()" class="btn_md_secondary">재전송</button></span>
 													<span class="gap">&nbsp;</span>
-                                                	<button type="button" id="extTimeBtn">시간 연장</button>
+													<!-- <span><button type="button" class="btn_md_form">시간 연장</button></span> -->
 												</div>
 											</dd>
 										</dl>

@@ -24,6 +24,7 @@
 			this._searchFilter = null;
 			this._invokedFilter = null;
 
+			this._data = [];
 			this._currentIndex = 0;
 			this._lastIndex = 0;
 
@@ -82,6 +83,8 @@
 				result = result['onlineProdList']
 			}
 
+			this._data = result;
+
 			if( this._isLoading ) {
 				this.loadingStop();
 			}
@@ -130,9 +133,17 @@
 
 			// 좋아요
 			this._$list.on( 'click', '.btn_toggle', function (e) {
+				var $like = $( e.currentTarget ),
+					index = $like.closest( '.item' ).data( 'index' ),
+					prodSn = this._data[index].products[0].prodSn;
+
 				AP.login().done(function () {
-					$( e.currentTarget ).toggleClass( 'on' ).find( '.ico_heart_s' ).toggleClass( 'on' );
-				});
+					// TODO: 좋아요
+					// AP.api.postRecommend({}, { prodSn: prodSn }).done(function ( result ) {
+					// 	$like.toggleClass( 'on' ).find( '.ico_heart_s' ).toggleClass( 'on' );
+					// }.bind( this ));
+				}.bind( this ));
+
 				return false;
 			}.bind( this ));
 

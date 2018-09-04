@@ -167,9 +167,29 @@
 				<i class="ico_point"></i>뷰티포인트 미적립 상품
 			</p>
 			
-			<a href="#none" class="title"><i class="ico_delivery"></i>무료배송 <span>자세한 배송 정보</span></a>
-			<a href="#none" class="title"><i class="ico_delivery"></i>일반배송 <em>2,500원</em> <span>자세한 배송 정보</span></a>
-			<a href="#none" class="title"><i class="ico_delivery"></i>무료배송 / <em>예약주문</em> <span>자세한 배송 정보</span></a>
+			<!--/* 배송  */-->
+			<div class="ui_accordion ＠accordion-apply">
+				<dl>
+					<dt class="">
+						<button type="button" class="title" th:if="${prd.availablePrices[0].minFinalOnlinePrice > prd.shipFeeFreeBamt}">
+							<i class="ico_delivery"></i>무료배송 <!-- / <em>예약주문</em> --> 
+						</button>
+						<button type="button" class="title" th:unless="${prd.availablePrices[0].minFinalOnlinePrice > prd.shipFeeFreeBamt}">
+							<i class="ico_delivery"></i>일반배송 <em>[[${#numbers.formatInteger(prd.defaultShipFee, 0, 'COMMA')}]]원</em>
+						</button>
+					</dt>
+					<dd aria-hidden="true" style="display: none;">
+						<div class="card_benefit type2">
+							<ul>
+								<li>최종 결제금액이 [[${#numbers.formatInteger(prd.shipFeeFreeBamt, 0, 'COMMA')}]]원 이상이면 무료로 배송됩니다</li>
+								<!--/* <li>해당 상품은 <em>사전예약상품</em>으로 <em>01월 26일</em>부터 순차배송 예정입니다</li> */-->
+							</ul>
+							<a href="#none" class="more" id="shipMoreView">더보기 <i class="ico_navi_s next"></i></a>
+						</div>
+					</dd>
+				</dl>
+			</div>
+			
 			<div class="ui_accordion">
 				<dl>
 					<dt><button type="button" class="title"><i class="ico_pay"></i>ONE pay/카드사 혜택 정보</span></button></dt>
@@ -180,7 +200,7 @@
 								<li><span>카드 무이자</span><em>최대 12개월 무이자</em></li>
 								<li><span>카드 추가 혜택</span><em>신한, 국민 3% 할인</em></li>
 							</ul>
-							<a href="#none" class="more">더보기 <i class="ico_navi_s next"></i></a>
+							<a href="#none" class="more" id="cardMoreView">더보기 <i class="ico_navi_s next"></i></a>
 						</div>
 					</dd>
 				</dl>

@@ -21,7 +21,7 @@ this["AP"]["handlebars"]["main"]["home"]["recommend-items"] = Handlebars.templat
     + "\";>\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.saleDisplayStatus : depth0),"==","OutOfStock",{"name":"xif","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "					<img class=\"lazy_load\" data-src=\""
-    + alias3(alias4(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.products : depth0)) != null ? stack1.prodImages : stack1)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
+    + alias3((helpers.replaceImagePath || (depth0 && depth0.replaceImagePath) || alias2).call(alias1,((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.products : depth0)) != null ? stack1.prodImages : stack1)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1),260,260,{"name":"replaceImagePath","hash":{},"data":data}))
     + "\">\n				</span>\n			<div class=\"info_box\">\n				<div class=\"title_area\">\n					<span class=\"item_title\">"
     + alias3(alias4((depth0 != null ? depth0.onlineProdName : depth0), depth0))
     + "</span>\n					<span class=\"option_name\">"

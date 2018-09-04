@@ -98,7 +98,7 @@ public class MyViewControllor extends AbstractController {
 		MemberSession memberSession = getMemberSession();
 		memberSession.setMember(apApi.getMemberInfo(memberSession.getMember_sn()));
 		
-		OrdSummaryInfo ordSummary = orderApi.getOrdSummary(getMemberSn(), startDate, endDate);
+		OrdSummaryInfo ordSummary = orderApi.getOrdSummary(getMemberSn(), startDate, endDate, null);
 
 		//주문접수건수
 		model.addAttribute("ordReceptCnt", ordSummary.getOrdReceptCnt());

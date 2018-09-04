@@ -85,14 +85,9 @@
 
 		_initLibCuration: function () {
 			if ( this._displayMenuId.indexOf( 'CTG002002' ) > -1 ) {
-				var html = '<div class="color_curation" style="bottom: 115px">';
-					html += 	'<a href="javascript:;" class="btn"><span class="sr_only">컬러 큐레이션</span></a>';
-					html += 	'<span class="bubble">이런 립 컬러는 어떠세요?</span>';
-					html += '</div>';
-
-					this._$target.append( html );
+				this._$target.append(AP.common.getTemplate( 'display.category.lib-curation' ));
+				this._$target.find( '.color_curation .bubble' ).delay( 2000 ).fadeOut( 1000 );
 			}
-			this._$target.find( '.color_curation .bubble' ).delay( 2000 ).fadeOut( 1000 );
 		}
 	});
 

@@ -158,20 +158,8 @@ public class CSViewController extends AbstractController {
 	@BreadCrumb("EH.CS.06.001.001")
 	public String noticeView(Model model, @PathVariable Long sn) {
 		//Mobile
-		if (isMobileDevice()) {
-			model.addAttribute("notice", guideApi.getFoNotice(sn));
-			return "cs/notice-view";
-		}
-
-		//PC
-		if (isPcDevice()) {
-			//Long lSn = StringUtils.isEmpty(getRequest().getParameter("sn")) ? null : Long.parseLong( getRequest().getParameter("sn"));
-
-			model.addAttribute("notice", guideApi.getFoNotice(sn));
-			return "cs/board_notice_view";
-		}
-
-		return null;
+		model.addAttribute("notice", guideApi.getFoNotice(sn));
+		return "cs/notice-view";
 	}
 
 	// ============================  fragment start =============================== //

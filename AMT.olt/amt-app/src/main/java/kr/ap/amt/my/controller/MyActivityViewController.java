@@ -114,14 +114,14 @@ public class MyActivityViewController extends AbstractController {
 		 * Mobile
 		 */
 		if(isMobileDevice()) {
-			return "my/my-inquiry";
+			return "my/my-inquiry_";
 		}
 
 		/**
 		 * PC
 		 */
 		if(isPcDevice()) {
-			return "my/my-inquiry";
+			return "my/my-inquiry_";
 		}
 
 		return null;

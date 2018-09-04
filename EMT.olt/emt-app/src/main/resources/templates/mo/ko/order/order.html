@@ -109,7 +109,6 @@
 			isApMember = /*[[${isApMember}]]*/ false;
 
 		$( document ).ready(function() {
-			init();
 
 			//주문완료화면 오류 발생시
 			var ordCompleteError = /*[[${ordCompleteError}]]*/ null;
@@ -122,6 +121,10 @@
 				}
 			}
 
+			if(!isApMember){
+				nonmemberNotice();
+			}
+
 			$('#footer').remove();
 
 		});
@@ -131,28 +134,6 @@
 		$( '.ui_spinner' ).spinner();
 		// 글자수 제한
 		$( 'input[maxlength]' ).inputLimits();
-
-		function init() {
-			var ordOnlineProdList = /*[[${#lists.size(shippingOrdOnlineProdList)}]]*/ '0';							// 온라인상품 카운트
-			var storeOrdOnlineProdList = /*[[${#lists.size(storePickupOrdOnlineProdList)}]]*/ '0';					// 테이크아웃상품 카운트
-			var ordHistProdCnt = ordOnlineProdList > 0 ? $("input[name=ordHistProdCnt]").length : 0;				// 온라인 단위상품 카운트
-			var storeOrdHistProdCnt = storeOrdOnlineProdList > 0 ? $("input[name=storeOrdHistProdCnt]").length : 0;	// 테이크아웃 단위상품 카운트
-			if(isApMember){
-				// 주문상품 확인 수량
-				$("#totalOrdOnlineProdCnt").html(parseInt(ordHistProdCnt) + parseInt(storeOrdHistProdCnt));
-				// 온라인쇼핑상품 수량(단위상품 수량합계)
-				$("#shipOrdOnlineProdCnt").html(parseInt(ordHistProdCnt));
-				// 테이크아웃상품 수량(단위상품 수량합계)
-				$("#storeOrdOnlineProdCnt").html(parseInt(storeOrdHistProdCnt));
-			}else{
-				// 주문상품 확인 수량
-				$("#totalOrdOnlineProdCnt").html(parseInt(ordHistProdCnt));
-				// 온라인쇼핑상품 수량(단위상품 수량합계)
-				$("#shipOrdOnlineProdCnt").html(parseInt(ordHistProdCnt));
-				// 비회원 개인정보 수집,이용 동의
-				nonmemberNotice();
-			}
-		}
 
 		$("#orderPayment").on('click', function() {
 
@@ -198,9 +179,20 @@
 			else if (shipType == 'STORE') {
 
 				//편의점-----------
-				if ($('#cStoreName').val() == ''
-						|| $('#cStorePhoneNo').val() == '') {
+				//주문자와 동일
+				var addressStoreType = $('input[name=addressStoreType]').val();
+
+				if (addressStoreType == 'MEMBER'
+					&& ($('#cStoreName').val() == ''
+						|| $('#cStorePhoneNo').val() == '')) {
 					AP.modal.alert("편의점정보를 선택해 주세요.");
+					return;
+				}
+				//새로입력(form validation)
+				else if (addressStoreType == 'NEW'
+					&& ($('#cStoreRecipientName').val() == null
+						|| $('#cStoreRecipientPhoneNo').val() == null)) {
+					AP.modal.alert("받으시는 분의 이름을 입력하세요.");
 					return;
 				}
 			}
@@ -219,7 +211,7 @@
 			}
 
 			var $form = $( 'form.order-validate' );
-			//$form.validate().settings.ignore = "";
+			$form.validate().settings.ignore = "";
 
 			if ( $form.valid() ) {
 
@@ -233,10 +225,10 @@
 						var msg = null;
 						if ($('[all-required]').length == 0) {
 							//선택지급만 존재
-							msg = '주문증정 사은품을 선택하지 않았습니다. <br/>결제를 진행하시겠습니까?';
+							msg = '주문증정 사은품을 선택하지 않았습니다. <br/>그대로 결제를 진행하시겠습니까?';
 						} else {
 							//전체지급, 선택지급 혼용
-							msg = '선택하지 않은 주문증정 사은품이 있습니다. <br/>선택하지 않고 결제를 진행하시겠습니까?';
+							msg = '선택하지 않은 주문증정 사은품이 있습니다. <br/>선택하지 않고 그대로 결제를 진행하시겠습니까?';
 						}
 						AP.modal.info({
 							contents: msg,

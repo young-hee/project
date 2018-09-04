@@ -127,9 +127,11 @@
 				});
 			}.bind(this));
 			
+			//일시 품절일때 > 앱다운받기 버튼
 			$el.find( '.incoming_alarm' ).on( 'click', function(){
 				AP.modal.confirm({
 					 contents : AP.message.LINK_ALARM_APP_STORE
+					,containerClass: 'system_alert'
 					,confirmLabel : '다운로드'
 					,cancelLabel : '닫기'
 				}).addListener( 'modal-before-close', function (e) { 

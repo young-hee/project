@@ -42,16 +42,16 @@ this["AP"]["handlebars"]["main"]["home"]["hot-deal-list"] = Handlebars.template(
 
   return ((stack1 = helpers["if"].call(depth0 != null ? depth0 : (container.nullContext || {}),(data && data.first),{"name":"if","hash":{},"fn":container.program(6, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"6":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression, alias4=container.lambda;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
   return "										<a href=\""
     + alias3((helpers.productDetailPath || (depth0 && depth0.productDetailPath) || alias2).call(alias1,(depths[2] != null ? depths[2].onlineProdSn : depths[2]),{"name":"productDetailPath","hash":{},"data":data}))
     + "\" class=\"lazy_load_wrap\">\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.saleDisplayStatus : depth0),"==","OutOfStock",{"name":"xif","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "											<img class=\"lazy_load\" src=\"\" data-src=\""
-    + alias3(alias4((depth0 != null ? depth0.imgUrl : depth0), depth0))
+    + alias3((helpers.replaceImagePath || (depth0 && depth0.replaceImagePath) || alias2).call(alias1,(depth0 != null ? depth0.imgUrl : depth0),208,208,{"name":"replaceImagePath","hash":{},"data":data}))
     + "\" alt=\""
-    + alias3(alias4((depths[1] != null ? depths[1].onlineProdName : depths[1]), depth0))
+    + alias3(container.lambda((depths[1] != null ? depths[1].onlineProdName : depths[1]), depth0))
     + "\">\n											</a>\n";
 },"7":function(container,depth0,helpers,partials,data) {
     return "												<div class=\"item_state out_of_stock\">일시품절</div>\n";
@@ -64,16 +64,16 @@ this["AP"]["handlebars"]["main"]["home"]["hot-deal-list"] = Handlebars.template(
 
   return ((stack1 = helpers["if"].call(depth0 != null ? depth0 : (container.nullContext || {}),(data && data.first),{"name":"if","hash":{},"fn":container.program(11, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"11":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression, alias4=container.lambda;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
   return "										<a href=\""
     + alias3((helpers.productDetailPath || (depth0 && depth0.productDetailPath) || alias2).call(alias1,(depths[2] != null ? depths[2].onlineProdSn : depths[2]),(depths[1] != null ? depths[1].prodSn : depths[1]),{"name":"productDetailPath","hash":{},"data":data}))
     + "\" class=\"lazy_load_wrap\">\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.saleDisplayStatus : depth0),"==","OutOfStock",{"name":"xif","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "										<img class=\"lazy_load\" src=\"\" data-src=\""
-    + alias3(alias4((depth0 != null ? depth0.imgUrl : depth0), depth0))
+    + alias3((helpers.replaceImagePath || (depth0 && depth0.replaceImagePath) || alias2).call(alias1,(depth0 != null ? depth0.imgUrl : depth0),208,208,{"name":"replaceImagePath","hash":{},"data":data}))
     + "\" alt=\""
-    + alias3(alias4((depths[1] != null ? depths[1].prodName : depths[1]), depth0))
+    + alias3(container.lambda((depths[1] != null ? depths[1].prodName : depths[1]), depth0))
     + "\"></a>\n";
 },"13":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});

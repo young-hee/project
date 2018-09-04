@@ -23,62 +23,26 @@
 			</div>
 			<div class="product_slide_new gift_wrapping">
 				<ul class="three_half check">
-					<li>
-						<div class="check_wrap">
-							<span class="chk_round_h24"><input type="checkbox" name="" id="product_item1" checked=""></span>
-							<label for="product_item1">
+					<th:block th:each="ordHistProdEx: ${ordEx.ordHistEx.ordHistProdExList}">
+						<th:block th:each="giftPackingEx: ${ordHistProdEx.ordProdEx.possibleGiftPackingExList}">
+							<li>
+								<div class="check_wrap">
+									<span class="chk_round_h24"><input type="checkbox" name="giftPackingCheck" id="product_item1"></span>
+									<label for="product_item1">
 										<span class="product_visual">
-											<img alt="" src="/mo/ko/images/dummy/img_thumb_sm1.jpg">
+											<th:block th:each="giftImgUrl, iterStat : ${giftPackingEx.giftPackingImgUrlList}">
+												<img th:src="${giftImgUrl}" th:if="${iterStat.first}">
+											</th:block>
 										</span>
-								<span class="product_info">
-											<span class="brand">헤라</span>
-											<span class="product_name">브랜드명 제품명 최대 두줄 브랜드명 제품명 최대 두줄</span>
+										<span class="product_info">
+											<span class="brand" th:text="${ordHistProdEx.ordProdEx.onlineProdNameBlang}">헤라</span>
+											<span class="product_name" th:text="${ordHistProdEx.ordProdEx.prodNameBlang}">제품명 최대 두줄</span>
 										</span>
-							</label>
-						</div>
-					</li>
-					<li>
-						<div class="check_wrap">
-							<span class="chk_round_h24"><input type="checkbox" name="" id="product_item2"></span>
-							<label for="product_item2">
-										<span class="product_visual">
-											<img alt="" src="/mo/ko/images/dummy/img_thumb_sm2.jpg">
-										</span>
-								<span class="product_info">
-											<span class="brand">라네즈</span>
-											<span class="product_name">인텐시브오일 120ml</span>
-										</span>
-							</label>
-						</div>
-					</li>
-					<li>
-						<div class="check_wrap">
-							<span class="chk_round_h24"><input type="checkbox" name="" id="product_item3"></span>
-							<label for="product_item3">
-										<span class="product_visual">
-											<img alt="" src="/mo/ko/images/dummy/img_thumb_sm3.jpg">
-										</span>
-								<span class="product_info">
-											<span class="brand">헤라</span>
-											<span class="product_name">브랜드명 제품명 최대 두줄</span>
-										</span>
-							</label>
-						</div>
-					</li>
-					<li>
-						<div class="check_wrap">
-							<span class="chk_round_h24"><input type="checkbox" name="" id="product_item4"></span>
-							<label for="product_item4">
-										<span class="product_visual">
-											<img alt="" src="/mo/ko/images/dummy/img_thumb_sm1.jpg">
-										</span>
-								<span class="product_info">
-											<span class="brand">헤라</span>
-											<span class="product_name">브랜드명 제품명 최대 두줄</span>
-										</span>
-							</label>
-						</div>
-					</li>
+									</label>
+								</div>
+							</li>
+						</th:block>
+					</th:block>
 				</ul>
 			</div>
 		</dd>

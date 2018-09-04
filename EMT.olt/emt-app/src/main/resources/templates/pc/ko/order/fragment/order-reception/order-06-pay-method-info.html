@@ -49,7 +49,7 @@
 						<dt><label for="cardCo">신용카드사 선택</label></dt>
 						<dd>
 							<div class="select_wrap w100p">
-								<select name="cardCo" id="cardCo" title="신용카드사 선택" required="required" data-msg-required="신용카드사를 선택해주세요.">
+								<select name="cardCo" id="cardCo" title="신용카드사 선택" data-msg-required="신용카드사를 선택해주세요.">
 									<option value="">신용카드사 선택</option>
 									<th:block th:each="payMethod : ${payMethodResult.payMethodExList}" th:if="${payMethod.creditcardCoMgmtYn == 'Y'}">
 										<option th:each="option : ${payMethod.creditcardCoExList}" th:id="${option.creditcardCoSn}" th:value="${option.creditcardCoCode}" th:text="${option.creditCardName}"></option>
@@ -75,7 +75,7 @@
 							</div>
 							<!--/* 개인 소득공제용, 사업자 증빙용 */-->
 							<div class="input_wrap w100p" id="reg_num" style="display: none">
-								<input type="text" id="receipt" name="receipt" required="required" data-msg-required="휴대폰번호 10자리(11자리) 또는 현금 영수증 카드번호 18자리를 입력하세요.">
+								<input type="text" id="receipt" name="receipt" data-msg-required="휴대폰번호 10자리(11자리) 또는 현금 영수증 카드번호 18자리를 입력하세요.">
 							</div>
 						</dd>
 					</dl>
@@ -91,6 +91,9 @@
 		$( document ).ready(function() {
 			defaultPayMethodInit();
 			depositPriceInit();
+
+			// 증빙서류신청 디폴드 설정
+			$("#receipt1").trigger('click');
 		});
 
 		//지난번 사용했던 결제 수단 선택하기
@@ -138,27 +141,27 @@
 						break;
 				}
 
-				$("[name=nextPayUseYn]").trigger("click");
-
-				/* 선택한 결제 수단을 다음에도 사용 */
-				$('[name=nextPayUseYn]').on('click', function(e){
-					if($(this).is(":checked")) {
-						var payMethod = $('[name=payMethod]').val();
-						if(payMethod == null || payMethod == '') {
-							AP.modal.alert("결제수단을 선택해 주세요.");
-							$('[name=nextPayUseYn]:checked').prop('checked', false);
-							$("[name=nextPayUseYn]").attr("value","N");
-						} else {
-							$('[name=nextPayUseYn]:checked').prop('checked', true);
-							$("[name=nextPayUseYn]").attr("value","Y");
-						}
-					}else{
-						$('[name=nextPayUseYn]:checked').prop('checked', false);
-						$("[name=nextPayUseYn]").attr("value","N");
-					}
-				});
+				$('[name=nextPayUseYn]').trigger("click");
 			}
 		}
+
+		/* 선택한 결제 수단을 다음에도 사용 */
+		$('[name=nextPayUseYn]').on('click', function(e){
+			if($(this).is(":checked")) {
+				var payMethod = $('[name=payMethod]').val();
+				if(payMethod == null || payMethod == '') {
+					AP.modal.alert("결제수단을 선택해 주세요.");
+					$('[name=nextPayUseYn]:checked').prop('checked', false);
+					$('[name=nextPayUseYn]').attr("value","N");
+				} else {
+					$('[name=nextPayUseYn]:checked').prop('checked', true);
+					$('[name=nextPayUseYn]').attr("value","Y");
+				}
+			}else{
+				$('[name=nextPayUseYn]:checked').prop('checked', false);
+				$('[name=nextPayUseYn]').attr("value","N");
+			}
+		});
 
 		/* 모바일 상품권 등록/사용하기 */
 		$("#b_mobileGift").on('click', function(e){
@@ -193,7 +196,7 @@
 
 					//결제수단 초기화
 					$('[name=nextPayUseYn]:checked').prop('checked', false);
-					$("[name=nextPayUseYn]").attr("value","N");
+					$('[name=nextPayUseYn]').attr("value","N");
 
 					$.each($('[name=payMethod]'), function (index, item) {
 						if ($(this).hasClass("on")) {
@@ -213,19 +216,28 @@
 				var finalPamtPcur = parseInt($('[name="finalPamtPcurPrice"]').val());	// 최종결제금액
 				if(totDepositPrice > 0){
 					// 예치금 > 결제금액
-					if(totDepositPrice > finalPamtPcur){
-						AP.modal.alert("예치금 사용금액이 최종결제금액보다 크므로 사용할수 없습니다.");
+					if(totDepositPrice >= finalPamtPcur){
+						if(totDepositPrice > finalPamtPcur){
+							AP.modal.alert("예치금 사용금액이 최종결제금액보다 크므로 사용할수 없습니다.");
+						}
 						$(this).val(finalPamtPcur);
-					}else if(totDepositPrice <= finalPamtPcur){
+
+						//결제수단 초기화
+						$('[name=nextPayUseYn]:checked').prop('checked', false);
+						$('[name=nextPayUseYn]').attr("value","N");
+
+						$.each($('[name=payMethod]'), function (index, item) {
+							if ($(this).hasClass("on")) {
+								$(this).trigger("click");
+								$(this).attr("checked", false);
+							}
+						});
+					} else {
 						$(this).val(totDepositPrice);
 					}
 				} else {
 					AP.modal.alert("금액 정확히 입력해주세요.");
 					$(this).val('');
-				}
-				var payMethod = $('[name=payMethod]').val();
-				if(payMethod == null || payMethod == '') {
-					$('[name=payMethod]').attr('checked', false);
 				}
 			}
 		});
@@ -258,6 +270,10 @@
 					isWpayMember(obj, payMethod, goPayMethod, payMethodSn, payServiceCode, payMethodCode);	//wpay 회원가입 여부 체크
 				}
 
+				//validation
+				$('select[name=cardCo]').prop("required", false);
+				$('input[name=receipt]').prop("required", false);
+
 				/* var payMethod = $('[name="payMethod"]').val();
 				if(payMethod == null || payMethod == '') {
 					$('[name="payMethod"]').attr('checked', false);
@@ -272,10 +288,10 @@
 				$("#choose_payment_02").hide();
 				$('input[name=goPayMethod]').val('');
 				$("select[name=cardCo]").prop('selectedIndex',0); // 콤보박스 초기화
-				$('#checkedPayMethod').html($(obj).attr('title')); // 결제수단 선택
+				$('#checkedPayMethod').html($(obj).attr('title')); // 선택결제수단 Title
 
 				// 현금영수증신청 디폴드 설정
-				setCash('x');
+				$("#receipt1").trigger('click');
 
 				// 결제수단 별 유의사항
 				$("#payment_info_01").show();
@@ -297,6 +313,9 @@
 					$("#choose_payment_01").hide();
 
 					$('input[name=payMethod]').attr("value", '');
+
+					//validation
+					$('select[name=cardCo]').prop("required", false);
 				} else {
 					$('[name=payMethod]').removeClass('on');
 					$('#credit').addClass('on');
@@ -304,10 +323,10 @@
 					$("#choose_payment_01").show();
 					$("#choose_payment_02").hide();
 					$('input[name=goPayMethod]').val('');
-					$('#checkedPayMethod').html($(obj).attr('title'));	// 결제수단 선택
+					$('#checkedPayMethod').html($(obj).attr('title'));	// 선택결제수단 Title
 
 					// 현금영수증신청 디폴드 설정
-					setCash('x');
+					$("#receipt1").trigger('click');
 
 					// 결제수단 유의사항
 					paymentNoticeClose();
@@ -317,7 +336,14 @@
 					$('input[name=payMethodSn]').attr("value", payMethodSn);
 					$('input[name=payServiceCode]').attr("value", payServiceCode);
 					$('input[name=payMethodCode]').attr("value", payMethodCode);
+
+					//validation
+					$('select[name=cardCo]').prop("required", true);
 				}
+
+				//validation
+				//$('select[name=cardCo]').prop("required", false);
+				$('input[name=receipt]').prop("required", false);
 			}
 			else if(payMethod == 'wcard' && goPayMethod == 'onlypayco'){ // 신용카드(페이코결제)
 				if ($('#payco').hasClass('on')) {
@@ -332,10 +358,10 @@
 					$("#choose_payment_02").hide();
 					$('input[name=goPayMethod]').attr('value',goPayMethod);
 					$("select[name=cardCo]").prop('selectedIndex',0);	// 콤보박스 초기화
-					$('#checkedPayMethod').html($(obj).attr('title'));	// 결제수단 선택
+					$('#checkedPayMethod').html($(obj).attr('title'));	// 선택결제수단 Title
 
 					// 현금영수증신청 디폴드 설정
-					setCash('x');
+					$("#receipt1").trigger('click');
 
 					// 결제수단 유의사항
 					paymentNoticeClose();
@@ -346,6 +372,10 @@
 					$('input[name=payServiceCode]').attr("value", payServiceCode);
 					$('input[name=payMethodCode]').attr("value", payMethodCode);
 				}
+
+				//validation
+				$('select[name=cardCo]').prop("required", false);
+				$('input[name=receipt]').prop("required", false);
 			}
 			else if(payMethod == 'wcard' && goPayMethod == 'onlykakaopay'){ // 신용카드(카카오페이)
 				if ($('#kakao_pay').hasClass('on')) {
@@ -363,10 +393,10 @@
 					$("#choose_payment_02").hide();
 					$('input[name=goPayMethod]').attr('value',goPayMethod);
 					$("select[name=cardCo]").prop('selectedIndex',0);	// 콤보박스 초기화
-					$('#checkedPayMethod').html($(obj).attr('title'));	// 결제수단 선택
+					$('#checkedPayMethod').html($(obj).attr('title'));	// 선택결제수단 Title
 
 					// 현금영수증신청 디폴드 설정
-					setCash('x');
+					$("#receipt1").trigger('click');
 
 					// 결제수단 별 유의사항
 					$("#payment_info_01").hide();
@@ -381,6 +411,10 @@
 					$('input[name=payServiceCode]').attr("value", payServiceCode);
 					$('input[name=payMethodCode]').attr("value", payMethodCode);
 				}
+
+				//validation
+				$('select[name=cardCo]').prop("required", false);
+				$('input[name=receipt]').prop("required", false);
 			}
 			else if(payMethod == 'NAVERPAY' && goPayMethod == ''){ // 네이버 페이
 				if ($('#n_pay').hasClass('on')) {
@@ -398,10 +432,10 @@
 					$("#choose_payment_02").hide();
 					$('input[name=goPayMethod]').val('');
 					$("select[name=cardCo]").prop('selectedIndex',0);	// 콤보박스 초기화
-					$('#checkedPayMethod').html($(obj).attr('title'));	// 결제수단 선택
+					$('#checkedPayMethod').html($(obj).attr('title'));	// 선택결제수단 Title
 
 					// 현금영수증신청 디폴드 설정
-					setCash('x');
+					$("#receipt1").trigger('click');
 
 					// 결제수단 별 유의사항
 					$("#payment_info_01").hide();
@@ -416,6 +450,10 @@
 					$('input[name=payServiceCode]').attr("value", payServiceCode);
 					$('input[name=payMethodCode]').attr("value", payMethodCode);
 				}
+
+				//validation
+				$('select[name=cardCo]').prop("required", false);
+				$('input[name=receipt]').prop("required", false);
 			}
 			else if(payMethod == 'mobile' && goPayMethod == ''){ // 모바일결제(휴대폰 결제)
 				if ($('#phone').hasClass('on')) {
@@ -433,10 +471,10 @@
 					$("#choose_payment_02").hide();
 					$('input[name=goPayMethod]').val('');
 					$("select[name=cardCo]").prop('selectedIndex',0);	// 콤보박스 초기화
-					$('#checkedPayMethod').html($(obj).attr('title'));	// 결제수단 선택
+					$('#checkedPayMethod').html($(obj).attr('title'));	// 선택결제수단 Title
 
 					// 현금영수증신청 디폴드 설정
-					setCash('x');
+					$("#receipt1").trigger('click');
 
 					// 결제수단 별 유의사항
 					$("#payment_info_01").hide();
@@ -451,6 +489,10 @@
 					$('input[name=payServiceCode]').attr("value", payServiceCode);
 					$('input[name=payMethodCode]').attr("value", payMethodCode);
 				}
+
+				//validation
+				$('select[name=cardCo]').prop("required", false);
+				$('input[name=receipt]').prop("required", false);
 			}
 			else if(payMethod == 'bank' && goPayMethod == ''){ // 실시간 계좌이체
 				if ($('#account_transfer').hasClass('on')) {
@@ -473,7 +515,10 @@
 					$("#choose_payment_02").show();
 					$('input[name=goPayMethod]').val('');
 					$("select[name=cardCo]").prop('selectedIndex',0);	// 콤보박스 초기화
-					$('#checkedPayMethod').html($(obj).attr('title'));	// 결제수단 선택
+					// 현금영수증신청 디폴드 설정
+					$("#receipt1").trigger('click');
+
+					$('#checkedPayMethod').html($(obj).attr('title'));	// 선택결제수단 Title
 
 					// 결제수단 유의사항
 					paymentNoticeClose();
@@ -484,6 +529,10 @@
 					$('input[name=payServiceCode]').attr("value", payServiceCode);
 					$('input[name=payMethodCode]').attr("value", payMethodCode);
 				}
+
+				//validation
+				$('select[name=cardCo]').prop("required", false);
+				$('input[name=receipt]').prop("required", false);
 			}
 			else if(payMethod == 'vbank' && goPayMethod == ''){ // 가상계좌(무통장 입금)
 				if ($('#remit_bank').hasClass('on')) {
@@ -508,7 +557,10 @@
 					$("#choose_payment_02").show();
 					$('input[name=goPayMethod]').val('');
 					$("select[name=cardCo]").prop('selectedIndex',0);	// 콤보박스 초기화
-					$('#checkedPayMethod').html($(obj).attr('title'));	// 결제수단 선택
+					// 현금영수증신청 디폴드 설정
+					$("#receipt1").trigger('click');
+
+					$('#checkedPayMethod').html($(obj).attr('title'));	// 선택결제수단 Title
 
 					// 결제수단 별 유의사항
 					$("#payment_info_01").hide();
@@ -523,6 +575,10 @@
 					$('input[name=payServiceCode]').attr("value", payServiceCode);
 					$('input[name=payMethodCode]').attr("value", payMethodCode);
 				}
+
+				//validation
+				$('select[name=cardCo]').prop("required", false);
+				$('input[name=receipt]').prop("required", false);
 			}
 		}
 
@@ -531,16 +587,18 @@
 			if (type == "x"){
 				$("#reg_num").hide();
 				$("#receipt1").attr("checked", true);
+				//validation
+				$("#receipt").prop("required", false);
 			} else if (type == "0"){
 				$("#reg_num").show();
 				$("#receipt").attr("placeholder","휴대폰번호 혹은 카드번호 숫자만 입력");
-				$("#receipt").attr("required","required");
+				$("#receipt").prop("required", "required");
 				$("#receipt").attr("data-msg-required","휴대폰번호 10자리(11자리) 또는 현금 영수증 카드번호 18자리를 입력하세요.");
 				$("#receipt").focus();
 			} else if (type == "1"){
 				$("#reg_num").show();
 				$("#receipt").attr("placeholder", "사업자등록번호 숫자만 입력");
-				$("#receipt").attr("required","required");
+				$("#receipt").prop("required", "required");
 				$("#receipt").attr("data-msg-required","사업자등록번호를 입력하세요.");
 				$("#receipt").focus();
 			}
@@ -602,10 +660,10 @@
 			$("#choose_payment_02").hide();
 			$('input[name=goPayMethod]').val('');
 			$("select[name=cardCo]").prop('selectedIndex',0); // 콤보박스 초기화
-			$('#checkedPayMethod').html($(obj).attr('title')); // 결제수단 선택
+			$('#checkedPayMethod').html($(obj).attr('title')); // 선택결제수단 Title
 
 			// 현금영수증신청 디폴드 설정
-			setCash('x');
+			$("#receipt1").trigger('click');
 
 			// 결제수단 별 유의사항
 			$("#payment_info_01").show();

@@ -136,13 +136,21 @@
 			}.bind(this));
 			
 			//카드사 혜택정보
-			this._$target.find( '.card_benefit .more' ).on( 'click', function (e) { 
+			this._$target.find( '#cardMoreView' ).on( 'click', function (e) { 
 				var modal = AP.modal.full({
 					title: '카드사 혜택정보',
 					containerClass : 'fixed_top card_installment',
 					contents: {
 						templateKey: 'products.card-benefit'
 					}
+				});
+			}.bind(this));
+			
+			//배송
+			this._$target.find( '#shipMoreView' ).on( 'click', function (e) { 
+				var modal = AP.modal.full({
+					title: '배송정보',
+					contents: '<div class="section list">' + this._defaultModel.shipPolicyInfo + '</div>'
 				});
 			}.bind(this));
 			

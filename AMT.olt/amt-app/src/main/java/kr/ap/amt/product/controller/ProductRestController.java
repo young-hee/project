@@ -1,14 +1,14 @@
 package kr.ap.amt.product.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.ap.amt.product.vo.ExternalVO;
-import kr.ap.amt.product.vo.RequestReview;
-import kr.ap.comm.support.common.AbstractController;
-import net.g1project.ecp.api.model.sales.display.OnlineProdList;
-import net.g1project.ecp.api.model.sales.product.ProdReviewInfo;
-import net.g1project.ecp.api.model.sales.product.ProdReviewListInfo;
-import net.g1project.ecp.api.model.sales.product.ProdReviewWritableOrderInfo;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,14 +19,23 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpServletRequest;
-import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.StringJoiner;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import kr.ap.amt.product.vo.ExternalVO;
+import kr.ap.amt.product.vo.RequestReview;
+import kr.ap.comm.support.common.AbstractController;
+import net.g1project.ecp.api.model.sales.display.OnlineProdList;
+import net.g1project.ecp.api.model.sales.product.ProdRecommendReq;
+import net.g1project.ecp.api.model.sales.product.ProdReviewImg;
+import net.g1project.ecp.api.model.sales.product.ProdReviewInfo;
+import net.g1project.ecp.api.model.sales.product.ProdReviewListInfo;
+import net.g1project.ecp.api.model.sales.product.ProdReviewWritableOrderInfo;
+import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkPost;
 
 /**
  * @author Simjaekyu@
@@ -166,6 +175,26 @@ public class ProductRestController extends AbstractController {
 
 		try {
     		ProdReviewListInfo prodReviewListInfo = productApi.getProductReviews(requestReview.getProdReviewUnit(), requestReview.getProdReviewType(), requestReview.getOffset(), requestReview.getLimit(), getMemberSn(), requestReview.getOnlineProdSn(), requestReview.getProdSn(), requestReview.getStyleCode(), requestReview.getProdReviewSort(), requestReview.getScope(), requestReview.getTopReviewOnlyYn(), requestReview.getTopReviewFirstYn(), (!requestReview.getStartDate().isEmpty()) ? sf.parse(requestReview.getStartDate()) : null, (!requestReview.getEndDate().isEmpty()) ? sf.parse(requestReview.getEndDate()) : null, "N", null, null);
+    		
+    		//뷰티테스터 더미데이터
+    		if( "ExperienceGrp".equalsIgnoreCase(requestReview.getProdReviewType()) &&  prodReviewListInfo.getTotalCount() == 0) {
+    			List<ProdReviewInfo> list = new ArrayList<>();
+    			for (int i = 0; i < 6; i++) {
+    				List<ProdReviewImg> imgList = new ArrayList<>();
+					ProdReviewInfo info = new ProdReviewInfo();
+					for (int j = 0; j < 10; j++) {
+						ProdReviewImg img = new ProdReviewImg();
+						img.setImageFileUrl("/pc/ko/images/dummy/img_beautytester_review.jpg");
+						imgList.add(img);
+					}
+					info.setImgList(imgList);
+					list.add(info);
+				}
+    			prodReviewListInfo.setProdReviewList(list);
+    			prodReviewListInfo.setOffset(0);
+    			prodReviewListInfo.setTotalCount(6);
+    		}
+    		
     		result.put("prodReviewListInfo", prodReviewListInfo);
     		
     		return ResponseEntity.ok(result);
@@ -217,5 +246,38 @@ public class ProductRestController extends AbstractController {
     		result.put("errorData", e);
     		return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
     	}
+    }
+    
+    /**
+     * 상품추천 (좋아요)
+     */
+    @RequestMapping("/postRecommend")
+    @ResponseBody
+    public ResponseEntity<?> postRecommend(ShoppingMarkPost markPost) {
+        HashMap<String, Object> result = new HashMap<String, Object>();
+
+        try {
+        	shoppingmarkApi.addShoppingBookmark(getMemberSn(), markPost);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            result.put("errorData", e);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+        }
+    }
+    
+    /**
+     * 앱 다운 URL 문자 전송
+     */
+    @RequestMapping("/sendSms")
+    @ResponseBody
+    public ResponseEntity<?> sendSms(String cellNum) {
+        HashMap<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            result.put("errorData", e);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+        }
     }
 }

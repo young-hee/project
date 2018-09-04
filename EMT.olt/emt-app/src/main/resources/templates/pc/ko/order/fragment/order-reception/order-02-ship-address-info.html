@@ -1,6 +1,6 @@
 <!--/* 배송정보 입력 */-->
 <dl th:if="${apMember != null}">
-	<dt class="on">
+	<dt class="on" id="shipAddrTab">
 		<span>배송정보 입력</span>
 		<button type="button"><span class="sr_only">닫기</span></button>
 	</dt>
@@ -176,13 +176,13 @@
 						<dl>
 							<dt><label for="userName"><b>이름</b></label></dt>
 							<dd>
-								<div class="input_wrap w100p"><input type="text" id="userName" name="userName" placeholder="이름을 입력해 주세요." required="required" data-msg-required="받으시는 분의 이름을 입력하세요."></div>
+								<div class="input_wrap w100p"><input type="text" id="userName" name="userName" placeholder="이름을 입력해 주세요." data-msg-required="받으시는 분의 이름을 입력하세요."></div>
 							</dd>
 						</dl>
 						<dl>
 							<dt><label for="userPhoneNo"><b>휴대폰번호</b></label></dt>
 							<dd>
-								<div class="input_wrap w100p"><input type="text" id="userPhoneNo" name="userPhoneNo" placeholder="‘-’없이 숫자만 입력" required="required" data-msg-required="받으시는 분의 휴대폰 번호를 입력하세요."></div>
+								<div class="input_wrap w100p"><input type="text" id="userPhoneNo" name="userPhoneNo" placeholder="‘-’없이 숫자만 입력" data-msg-required="받으시는 분의 휴대폰 번호를 입력하세요."></div>
 							</dd>
 						</dl>
 						<dl>
@@ -190,7 +190,7 @@
 							<dd class="ui_find_addresses">
 								<div class="w100p input_btn_wrap">
 									<div class="input_wrap">
-										<input type="text" id="delivery_area" name="deliveryArea" class="address_keyword" title="지역명 입력" placeholder="주소지 또는 건물명" required="required" data-msg-required="받으시는 분의 주소를 입력하세요.">
+										<input type="text" id="delivery_area" name="delivery_area" class="address_keyword" title="지역명 입력" placeholder="주소지 또는 건물명" data-msg-required="받으시는 분의 주소를 입력하세요.">
 									</div>
 									<button type="button" class="btn_md_form btn_address_find">찾기</button>
 								</div>
@@ -199,7 +199,7 @@
 									<span class="gap">&nbsp;</span>
 									<span class="input_wrap"><input type="text" name="userAddress1" class="address_first" title="기본주소 입력" placeholder="기본주소" readonly=""></span>
 								</div>
-								<div class="input_wrap w100p"><input type="text" name="userAddress2" class="address_last" title="상세주소 입력" placeholder="상세주소를 입력해주세요." required="required" data-msg-required="받으시는 분의 주소를 입력하세요."></div>
+								<div class="input_wrap w100p"><input type="text" name="userAddress2" class="address_last" title="상세주소 입력" placeholder="상세주소를 입력해주세요." data-msg-required="받으시는 분의 주소를 입력하세요."></div>
 								<p class="text_notice light w100p">찾으시는 주소지 또는 건물명을 입력해주세요. <br>(예:강남대로, 한강로2가, 한강대로 100)</p>
 							</dd>
 						</dl>
@@ -293,13 +293,13 @@
 						<dl>
 							<dt><label for="name02"><b>이름</b></label></dt>
 							<dd>
-								<div class="input_wrap w100p"><input type="text" id="name02" name="name02" placeholder="이름을 입력해 주세요." required="required" data-msg-required="받으시는 분의 이름을 입력하세요."></div>
+								<div class="input_wrap w100p"><input type="text" id="name02" name="name02" placeholder="이름을 입력해 주세요." data-msg-required="받으시는 분의 이름을 입력하세요."></div>
 							</dd>
 						</dl>
 						<dl>
 							<dt><label for="phone02"><b>휴대폰번호</b></label></dt>
 							<dd>
-								<div class="input_wrap w100p"><input type="text" id="phone02" name="phone02" placeholder="‘-’없이 숫자만 입력" required="required" data-msg-required="받으시는 분의 휴대폰 번호를 입력하세요."></div>
+								<div class="input_wrap w100p"><input type="text" id="phone02" name="phone02" placeholder="‘-’없이 숫자만 입력" data-msg-required="받으시는 분의 휴대폰 번호를 입력하세요."></div>
 								<p class="text_notice light w100p" id="address2_2_02_layer">배송 물품이 편의점 도착 시, 도착 안내 SMS가 발송됩니다.</p>
 							</dd>
 						</dl>
@@ -389,6 +389,14 @@
 				// $('input[name=userAddress1]').val('');
 				// $('input[name=userAddress2]').val('');
 
+				//validation
+				$('input[name=userName]').prop("required", false);
+				$('input[name=userPhoneNo]').prop("required", false);
+				$('input[name=delivery_area]').prop("required", false);
+				$('input[name=userAddress2]').prop("required", false);
+				$('input[name=name02]').prop("required", false);
+				$('input[name=phone02]').prop("required", false);
+
 			/* 기본배송지 */
 			} else if(AddressType == 'NOMAL' ) {
 				$('input[name=addressType]').attr('value','NOMAL');
@@ -425,6 +433,14 @@
 				// $('input[name=userAddress1]').val('');
 				// $('input[name=userAddress2]').val('');
 
+				//validation
+				$('input[name=userName]').prop("required", false);
+				$('input[name=userPhoneNo]').prop("required", false);
+				$('input[name=delivery_area]').prop("required", false);
+				$('input[name=userAddress2]').prop("required", false);
+				$('input[name=name02]').prop("required", false);
+				$('input[name=phone02]').prop("required", false);
+
 			/* 새로입력 */
 			} else {
 				$('input[name=addressType]').attr('value','NEW');
@@ -451,6 +467,14 @@
 				$('input[name=recipientAddress1]').val('');
 				$('input[name=recipientAddress2]').val('');
 				$('input[name=recipientEmailAddress]').val('');
+
+				//validation
+				$('input[name=userName]').prop("required", true);
+				$('input[name=userPhoneNo]').prop("required", true);
+				$('input[name=delivery_area]').prop("required", true);
+				$('input[name=userAddress2]').prop("required", true);
+				$('input[name=name02]').prop("required", false);
+				$('input[name=phone02]').prop("required", false);
 			}
 		}
 
@@ -477,11 +501,28 @@
 				$('#address2_2_01_layer').hide();
 				$('#address2_2_02_layer').hide();
 				$('input[name=addressStoreType]').attr('value','MEMBER');
+
+				//validation
+				$('input[name=userName]').prop("required", false);
+				$('input[name=userPhoneNo]').prop("required", false);
+				$('input[name=delivery_area]').prop("required", false);
+				$('input[name=userAddress2]').prop("required", false);
+				$('input[name=name02]').prop("required", false);
+				$('input[name=phone02]').prop("required", false);
+
 			} else if(choiceType == 'NEW' ) {
 				$('#address2_1_layer').hide();
 				$('#address2_2_01_layer').show();
 				$('#address2_2_02_layer').show();
 				$('input[name=addressStoreType]').attr('value','NEW');
+
+				//validation
+				$('input[name=userName]').prop("required", false);
+				$('input[name=userPhoneNo]').prop("required", false);
+				$('input[name=delivery_area]').prop("required", false);
+				$('input[name=userAddress2]').prop("required", false);
+				$('input[name=name02]').prop("required", true);
+				$('input[name=phone02]').prop("required", true);
 			}
 
 			$('#name02').blur(function(){
@@ -501,8 +542,10 @@
 			obj.focus();
 			if(!selectedVal){
 				obj.val("");
+				$('[name=shipMsg]').val("");
 			}else{
 				obj.val(selectedVal);
+				$('[name=shipMsg]').val(selectedVal);
 			}
 		});
 

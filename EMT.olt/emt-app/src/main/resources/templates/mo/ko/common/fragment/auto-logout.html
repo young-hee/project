@@ -8,7 +8,9 @@
 		$(function() {
 		
 		    $(document).ready(function() {
-		        pageInfo.warning = setTimeout(warningEndOfSession, pageInfo.WARNING_TIME);
+				if(!AP.common.getCookie('AUTO_LOGIN')) {
+			        pageInfo.warning = setTimeout(warningEndOfSession, pageInfo.WARNING_TIME);
+				}
 		    })
 		
 		    function warningEndOfSession() {
@@ -46,7 +48,15 @@
 		});
 		
 		function logout(flag) {
-		
+
+		    if (/Android/i.test(navigator.userAgent)) {
+		    	try {
+		    		window.webview.mobile('logout');
+		    	} catch(e) {
+		    	}
+		    } else if (/iPhone/i.test(navigator.userAgent)) {
+		        window.location = "webview://logout";
+		    }
 		    $.get("/api/logout", function(data) {
 		        if (flag)
 		            location.reload();
@@ -95,13 +105,13 @@
 		}
 		function logout() {
 
-		    if (/device=android/i.test(navigator.userAgent)) {
+		    if (/Android/i.test(navigator.userAgent)) {
 		    	try {
 		    		window.webview.mobile('logout');
 		    	} catch(e) {
 		    	}
-		    } else if (/device=ios/i.test(navigator.userAgent)) {
-		        window.location = "webview://mobile?action=logout";
+		    } else if (/iPhone/i.test(navigator.userAgent)) {
+		        window.location = "webview://logout";
 		    }
 		    setTimeout(function() {
 		    	location.href="/doLogout";

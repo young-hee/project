@@ -1,257 +1,83 @@
-<!--<dl class="layer">-->
-	<!--<dt class="layer_title">옵션변경</dt>-->
-	<!--<dd class="layer_cont">-->
-		<!--<div class="cart">-->
-			<!--<fieldset class="form">-->
-				<!--<legend class="sr_only">옵션변경</legend>-->
-				<!--<div class="input_group cart_ui_select">-->
-					<!--<div class="ui_select static" data-not-label-change="false">-->
-						<!--<input type="hidden" name="prodSn">-->
-						<!--<button type="button">옵션을 선택하세요.</button>-->
-						<!--<ul class="select_options">-->
-							<!--{{#each list}}-->
-							<!--<li class="select_option">-->
-								<!--<code class="label_markup" style="display:none">{{ prodName }}</code>-->
-								<!--{{#switch saleDisplayStatus}}-->
-									<!--{{#case "OnSale"}}-->
-										<!--<a data-value="{{ prodSn }}">-->
-											<!--{{#if (ne repProdImgEx.imgUrl null) }} <img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}"> {{/if}}-->
-											<!--<span class="option_title">{{ prodName }}</span>-->
-											<!--<strong class="num">{{numberFormat onlineSalePrice }}<span>원</span></strong>-->
-										<!--</a>-->
-									<!--{{/case}}-->
-									<!--{{#case "Exhaustion"}}-->
-										<!--<a data-value="{{ prodSn }}" data-disabled="true">-->
-											<!--{{#if (ne repProdImgEx.imgUrl null) }} <img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}"> {{/if}}-->
-											<!--<span class="option_title">{{ prodName }}</span>-->
-											<!--<span class="sold_out">[조기소진]</span>-->
-										<!--</a>-->
-									<!--{{/case}}-->
-									<!--{{#case "OutOfStock"}}-->
-										<!--<a data-value="{{ prodSn }}" data-disabled="true">-->
-											<!--{{#if (ne repProdImgEx.imgUrl null) }} <img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}"> {{/if}}-->
-											<!--<span class="option_title">{{ prodName }}</span>-->
-											<!--<span class="sold_out">[일시품절]</span>-->
-										<!--</a>-->
-									<!--{{/case}}-->
-								<!--{{/switch}}-->
-							<!--</li>-->
-							<!--{{/each}}-->
-						<!--</ul>-->
-					<!--</div>-->
-				<!--</div>-->
-				<!--<div class="form_btns">-->
-					<!--<button class="btn_md_secondary" type="button" id="b_close">취소</button>-->
-					<!--<button class="btn_md_neutral" type="button" id="b_save">확인</button>-->
-				<!--</div>-->
-			<!--</fieldset>-->
-		<!--</div>-->
-	<!--</dd>-->
-<!--</dl>-->
-<!--<button class="layer_close" type="button">레이어 닫기</button>-->
-
-<button type="button" class="option_close"><span class="sr_only">옵션선택 레이어 닫기</span></button>
+<button type="button" class="option_close" onclick="optionCloseFn()"><span class="sr_only">옵션선택 레이어 닫기</span></button>
 <!--/* 옵션선택 select */-->
 <div class="option_select_wrap">
 	<div class="ui_select type2" data-not-label-change="true">
 		<input type="hidden" name="">
 		<button type="button">옵션을 선택해주세요</button>
 		<ul class="select_options option_select_list">
-			<li class="select_option">
-				<code class="label_markup" style="display:none">선택 1</code>
-				<a data-value="01">
-					<span class="color_chip" style="background-color: #f00;"></span>
-					<span class="option_info">
-										<span class="option_name">라이트 퍼플 50호 라이트 퍼플 50호 라이트 퍼플 50호</span>
-										<span class="price">
-											<em class="discount">30%</em>
-											<b class="num">37,000</b>원
-											<del>42,000원</del>
-										</span>
+			{{#each list}}
+				<li class="select_option">
+					<code class="label_markup" style="display:none">{{ prodName }}</code>
+					<input type="hidden" prodSn="{{prodSn}}" prodName="{{prodName}}" onlineSalePrice="{{ onlineSalePrice }}"  minPurLimitQty="{{minPurLimitQty}}" maxPurLimitQty="{{maxPurLimitQty}}" maxPurLimitYn="{{ maxPurLimitYn }}">
+					{{#switch saleDisplayStatus}}
+						{{#case "OnSale"}}
+							<a data-value="{{ prodSn }}">
+								{{#if (ne repProdImgEx.imgUrl null) }}
+									<span class="color_chip"><img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}"></span>
+								{{else}}
+									<span class="color_chip" style="background-color: #f00;"></span>
+								{{/if}}
+								<span class="option_info">
+									<span class="option_name">{{ prodName }}</span>
+									<span class="price">
+										{{#if null}}<em class="discount">30%</em>{{/if}}
+										<b class="num">{{numberFormat onlineSalePrice }}</b>원
+										{{#if null}}<del>42,000원</del>{{/if}}
 									</span>
-				</a>
-			</li>
-			<li class="select_option">
-				<code class="label_markup" style="display:none">선택 1</code>
-				<a data-value="02">
-					<span class="color_chip"><img alt="" ap:src="@{/images/dummy/img_item_07.jpg}"></span>
-					<span class="option_info">
-										<span class="option_name">라이트 퍼플 50호</span>
-										<span class="price">
-											<b class="num">37,000</b>원
-										</span>
+								</span>
+							</a>
+						{{/case}}
+						{{#case "Exhaustion"}}
+							<a data-value="{{ prodSn }}" class="out_of_stock">
+								{{#if (ne repProdImgEx.imgUrl null) }}
+									<span class="color_chip"><img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}"></span>
+								{{else}}
+									<span class="color_chip" style="background-color: #f00;"></span>
+								{{/if}}
+								<span class="option_info">
+									<span class="option_name">{{ prodName }}</span>
+									<small>조기소진</small>
+								</span>
+							</a>
+						{{/case}}
+						{{#case "OutOfStock"}}
+							<a data-value="{{ prodSn }}" class="out_of_stock"> <!--/* 일시품절시.. 선택 가능 */-->
+								{{#if (ne repProdImgEx.imgUrl null) }}
+									<span class="color_chip"><img alt="{{ prodName }}" src="{{ repProdImgEx.imgUrl }}"></span>
+								{{else}}
+									<span class="color_chip" style="background-color: #f00;"></span>
+								{{/if}}
+								<span class="option_info">
+									<span class="option_name">{{ prodName }}</span>
+									<span class="price">
+											<small>일시품절</small>
 									</span>
-				</a>
-			</li>
-			<li class="select_option">
-				<code class="label_markup" style="display:none">선택 1</code>
-				<a data-value="03" class="out_of_stock"> <!--/* 일시품절시.. 선택 가능 */-->
-					<span class="color_chip"><img alt="" ap:src="@{/images/dummy/img_color_chip.jpg}"></span>
-					<span class="option_info">
-													<span class="option_name">라이트 퍼플 50호 라이트 퍼플 50호 라이트 퍼플 50호 라이트 퍼플 50호</span>
-													<span class="price">
-															<small>일시품절</small>
-													</span>
-											</span>
-				</a>
-			</li>
-			<li class="select_option">
-				<code class="label_markup" style="display:none">선택 1</code>
-				<a data-value="04">
-					<span class="color_chip" style="background-color: #f00;"></span>
-					<span class="option_info">
-													<span class="option_name">라이트 퍼플 50호</span>
-													<span class="price">
-															<em class="discount">30%</em>
-															<b class="num">37,000</b>원
-															<del>42,000원</del>
-													</span>
-											</span>
-				</a>
-			</li>
-			<li class="select_option">
-				<code class="label_markup" style="display:none">선택 1</code>
-				<a data-value="05">
-					<span class="color_chip"><img alt="" ap:src="@{/images/dummy/img_item_07.jpg}"></span>
-					<span class="option_info">
-													<span class="option_name">라이트 퍼플 50호</span>
-													<span class="price">
-															<b class="num">37,000</b>원
-													</span>
-											</span>
-				</a>
-			</li>
-			<li class="select_option">
-				<code class="label_markup" style="display:none">선택 1</code>
-				<a data-value="06" class="out_of_stock"> <!--/* 일시품절시.. 선택 가능 */-->
-					<span class="color_chip"><img alt="" ap:src="@{/images/dummy/img_color_chip.jpg}"></span>
-					<span class="option_info">
-													<span class="option_name">라이트 퍼플 50호 라이트 퍼플 50호 라이트 퍼플 50호 라이트 퍼플 50호</span>
-													<span class="price">
-															<small>일시품절</small>
-													</span>
-											</span>
-				</a>
-			</li>
-			<li class="select_option">
-				<code class="label_markup" style="display:none">선택 1</code>
-				<a data-value="07">
-					<span class="color_chip"><img alt="" ap:src="@{/images/dummy/img_item_07.jpg}"></span>
-					<span class="option_info">
-													<span class="option_name">라이트 퍼플 50호</span>
-													<span class="price">
-															<b class="num">37,000</b>원
-													</span>
-											</span>
-				</a>
-			</li>
-			<li class="select_option">
-				<code class="label_markup" style="display:none">선택 1</code>
-				<a data-value="07">
-					<span class="color_chip"><img alt="" ap:src="@{/images/dummy/img_item_07.jpg}"></span>
-					<span class="option_info">
-													<span class="option_name">라이트 퍼플 50호</span>
-													<span class="price">
-															<b class="num">37,000</b>원
-													</span>
-											</span>
-				</a>
-			</li>
-			<li class="select_option">
-				<code class="label_markup" style="display:none">선택 1</code>
-				<a data-value="07">
-					<span class="color_chip"><img alt="" ap:src="@{/images/dummy/img_item_07.jpg}"></span>
-					<span class="option_info">
-													<span class="option_name">라이트 퍼플 50호</span>
-													<span class="price">
-															<b class="num">37,000</b>원
-													</span>
-											</span>
-				</a>
-			</li>
-			<li class="select_option">
-				<code class="label_markup" style="display:none">선택 1</code>
-				<a data-value="07">
-					<span class="color_chip"><img alt="" ap:src="@{/images/dummy/img_item_07.jpg}"></span>
-					<span class="option_info">
-													<span class="option_name">라이트 퍼플 50호</span>
-													<span class="price">
-															<b class="num">37,000</b>원
-													</span>
-											</span>
-				</a>
-			</li>
-			<li class="select_option">
-				<code class="label_markup" style="display:none">선택 1</code>
-				<a data-value="07">
-					<span class="color_chip"><img alt="" ap:src="@{/images/dummy/img_item_07.jpg}"></span>
-					<span class="option_info">
-													<span class="option_name">라이트 퍼플 51호</span>
-													<span class="price">
-															<b class="num">37,000</b>원
-													</span>
-											</span>
-				</a>
-			</li>
+								</span>
+							</a>
+						{{/case}}
+					{{/switch}}
+				</li>
+			{{/each}}
 		</ul>
 	</div>
 </div>
 <!--/* 선택된 옵션 scroll area */-->
 <div class="selected_option_wrap scrollable_y"> <!--/* option_select_wrap 와 order_bottom 사이즈를 제외한 max-height 필요*/-->
-	<div class="selected_option">
-		<div class="option_name">라이트 퍼플 40호</div>
-		<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="false">
-			<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
-			<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
-			<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
-		</div>
-		<div class="price"><b>37,000</b>원</div>
-		<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
-	</div>
-	<div class="selected_option">
-		<div class="option_name">라이트 퍼플 40호 라이트 퍼플 40호 라이트 퍼플 40호 라이트 퍼플 40호</div>
-		<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="false">
-			<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
-			<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
-			<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
-		</div>
-		<div class="price"><b>37,000</b>원</div>
-		<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
-	</div>
 	<!--/* 단독으로 쓰이는 경우 옵션 삭제 버튼 없음 */-->
+	<input type="hidden" id="opProdInfo" selOpProdSn="" selOpProdDefaultPrice="{{ selProdPrice }}"  selOpMinPurLimitQty="{{opMinPurLimitQty}}" selOpMaxPurLimitQty="{{opMaxPurLimitQty}}" selOpMaxPurLimitYn="{{ opMaxPurLimitYn }}">
 	<div class="selected_option">
-		<div class="option_name">라이트 퍼플 40호 라이트 퍼플 40호 라이트 퍼플 40호 라이트 퍼플 40호</div>
+		<div class="option_name" id="opProdName">{{ selProdName }}</div>
 		<div class="ui_spinner" data-min="1" data-max="20" data-step="1" data-disabled="false">
-			<button class="spinner_decrease" type="button"><i class="ico_oper_p"></i><span class="sr_only">제품 수량 감소</span></button>
-			<input class="spinner_input" type="text" title="선택품목갯수" id="" value="1" name="">
-			<button class="spinner_increase" type="button"><i class="ico_oper_p plus"></i><span class="sr_only">제품 수량 증가</span></button>
+			<button class="spinner_decrease" type="button"><i class="ico_oper_p" onclick="optionCntChange('-');"></i><span class="sr_only">제품 수량 감소</span></button>
+			<input class="spinner_input" type="text" title="선택품목갯수" id="opProdCnt" value="{{ cartProdQty }}" name="">
+			<button class="spinner_increase" type="button" ><i class="ico_oper_p plus" onclick="optionCntChange('+');"></i><span class="sr_only">제품 수량 증가</span></button>
 		</div>
-		<div class="price"><b>37,000</b>원</div>
-	</div>
-	<!--/* 일시품절 케이스 */-->
-	<div class="selected_option out_of_stock">
-		<div class="option_name">라이트 퍼플 40호 라이트 퍼플 40호 라이트 퍼플 40호 라이트 퍼플 40호</div>
-		<div class="alarm">
-			일시품절 <a href="javascript:;" class="btn_h32_gradient">입고알리미신청</a>
-		</div>
-		<div class="price"><b>37,000</b>원</div>
-		<button class="ui_close" type="button"><span class="sr_only">선택 옵션 삭제</span></button>
+		<div class="price"><b id="opProdPrice">{{numberFormat (calc selProdPrice '*' cartProdQty) }}</b>원</div>
 	</div>
 </div>
 <div class="order_bottom">
-	<!--/* 1 + 1 상품인 경우  */-->
-	<p class="text notice">해당상품은 <em>1+1</em> 상품입니다.<br>구매수량을 2개 선택시, 1개 가격으로 혜택이 적용됩니다.</p>
-	<!--/* 선택, 금액 */-->
-	<div class="total clear">
-		<div><span class="num">1</span>개 선택</div>
-		<dl>
-			<dt>총금액</dt>
-			<dd class="price"><em><b class="num">37,000</b>원</em></dd>
-		</dl>
-	</div>
 	<!--/* 버튼 */-->
 	<div class="purchase_btns">
-		<button type="button" class="btn_lg_neutral">장바구니</button>
-		<button type="button" class="btn_lg_neutral" disabled>구매하기</button>
+		<button type="button" class="btn_lg_neutral">주문변경</button>
 	</div>
 </div>

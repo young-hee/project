@@ -18,6 +18,7 @@
 		initialize: function ( $appendTarget, model, viewThumbnail ) {
 			this._$appendTarget = $appendTarget;
 			this._defaultModel = model;
+			this._appSmsModal = null;
 			this._viewThumbnail = viewThumbnail;
 			this._selectedData = [];
 
@@ -134,6 +135,49 @@
 
 				this.dispatch( 'remove-item', {prodSn: prodSn} );
 			}.bind(this));
+			
+			//일시 품절일때 > 앱다운받기 버튼
+			this._$appendTarget.on( 'click', '.downAppLayerBtn', function (e) {
+				var modal = AP.modal.info({
+					title : AP.message.APP_DOWNLOAD_LAYER_TITLE,
+					sizeType : 'S',
+					contents: {
+						templateKey: 'products.layer-app'
+					}
+				}),
+				$modal = modal.getElement();
+				this._appSmsModal = modal;
+				
+				$modal.find('.cellNum').on('keyup', function(e){
+					this.value = this.value.replace(/[^0-9\.]/g,'');
+				});
+				
+				$modal.find('.send').on('click', function(e){
+					var cellNum = $(e.currentTarget).parent('.app_download').find('.cellNum').val();
+					if( cellNum == '' || !/^(010|011|016|017|018|019)\d{7,8}$/.test( cellNum ) ){
+						AP.modal.alert({
+							 contents: AP.message.INVALID_CELL_NUM
+						});
+						return false;
+					}
+					// 앱 다운 URL 문자 전송
+					AP.api.sendSms(null, {
+						cellNum : cellNum
+					}).done(function(result){
+						this._appSmsModal.close();
+						this._appSmsModal = null;
+						if( result ){
+							AP.modal.alert({
+								 contents: AP.message.APP_DOWNLOAD_SENT_SMS
+							});
+						}
+					}.bind(this)).fail(function(err){
+						this._appSmsModal.close();
+						this._appSmsModal = null;
+					});
+				}.bind(this));
+			}.bind(this));
+			
 		},
 
 		_draw: function ( product ) {
@@ -148,7 +192,10 @@
 				$el = $( html );
 			
 			this._$appendTarget.append( $el );
-			
+			/*
+			console.log( product.saleDisplayStatus );
+			console.log( this._$appendTarget );
+			*/
 			$el.find( '.ui_spinner' ).spinner().on( 'spinner-change', function (e) {
 				this._setProductValue( $el, product, e.value );
 				//구매수량 count

@@ -40,11 +40,15 @@
 				var id = obj.id;
 				if(obj.checked == true) {
 					$('[data-flag=' + id + ']').prop('disabled', false);
+
+					if ($('#' + id + '_cnt').val() > 0) {
+						boxBagQtyChange(coSn, giftPackingSn, 0);
+					}
 				}else{
 					$('[data-flag=' + id + ']').prop('disabled', true);
 					$('#' + id + '_cnt').val(0);
-					$('#' + id + '_sum').text('0원');
-					//makeBoxInfoTitle();
+					$('#' + id + '_sum').text(' 0원');
+
 					boxBagQtyChange(coSn, giftPackingSn, 0);
 				}
 			}

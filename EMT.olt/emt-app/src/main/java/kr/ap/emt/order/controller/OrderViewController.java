@@ -136,7 +136,7 @@ public class OrderViewController extends OrderBaseController {
 	 * @param model
 	 * @return
 	 */
-	//@PageTitle(title = "결제완료|에뛰드")
+	@PageTitle(title = "결제완료|에뛰드")
     @PostMapping("/ordBankComplete")
     public String ordBankComplete(HttpServletRequest request, Model model) {
         //TODO aki : 리턴되는 결과값 없음, 세션에서 주문번호 꺼내서 완료 페이지로 이동
@@ -159,6 +159,8 @@ public class OrderViewController extends OrderBaseController {
 
 			payResultList.add(depositPayResult);
 		}
+
+		body.setPayResultList(payResultList);
 
 		/* 1.주문완료 데이터 */
 		OrdEx ordEx = null;
@@ -188,6 +190,7 @@ public class OrderViewController extends OrderBaseController {
 	/**
 	 * 주문서접수완료(POST)
 	 */
+	@PageTitle(title = "결제완료|에뛰드")
 	@PostMapping("/ordComplete")
 	public String ordComplete(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
 
@@ -373,7 +376,7 @@ public class OrderViewController extends OrderBaseController {
 				if ("VBANK".equals(pType)) {
 					NotifyAccountDeposit nad = new NotifyAccountDeposit();
 					nad.setPayMethodCode(PAY_METHOD_CODE_VIRTUAL_ACCOUNT);  // virtual-account
-					nad.setPgTradeNo(pTid);
+					//nad.setPgTradeNo(pTid);
 					nad.setVirtualBankAcDepositDt(date);
 					result = orderApi.notifyAccountDeposit(ordNo, nad);
 				}
@@ -385,8 +388,9 @@ public class OrderViewController extends OrderBaseController {
 					if ("BANK".equals(pType)) {
 						NotifyAccountDeposit nad = new NotifyAccountDeposit();
 						nad.setPayMethodCode(PAY_METHOD_CODE_BANK_AC_TRANSFER);  // bank-ac-transfer
-						nad.setPgTradeNo(pTid);
+						nad.setNewPgTradeNo(pTid);
 						//nad.setVirtualBankAcDepositDt(date);
+						nad.setNewApprovalDt(date);
 						result = orderApi.notifyAccountDeposit(ordNo, nad);
 					}
 				}

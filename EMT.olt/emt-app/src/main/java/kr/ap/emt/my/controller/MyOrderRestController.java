@@ -127,7 +127,7 @@ public class MyOrderRestController extends AbstractController {
 
 		RD_Date = null;
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		OrdSummaryInfo summaryInfo = orderApi.getOrdSummary(getMemberSn(), RS_Date, RD_Date);
+		OrdSummaryInfo summaryInfo = orderApi.getOrdSummary(getMemberSn(), RS_Date, RD_Date, null);
 		result.put("summary", summaryInfo);
 		result.put("type", type);
 		//TODO : api 추가

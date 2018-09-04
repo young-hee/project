@@ -1,5 +1,5 @@
 {{#xif singleProdYn '==' 'Y'}}
-	<div class="product {{condition (and (eq this.promoTypeCode 'Different') (gt index 0)) 'bundle' ''}}">
+	<div class="product">
 		<!-- 클레임 체크박스 -->
     	{{#if (eq this.viewYn.checkBox 'Y')}}
 			<div class="check_wrap check_only">
@@ -87,23 +87,13 @@
 		<div class="set">
 			<!-- 클레임 체크박스 -->
 			{{#if (eq this.viewYn.checkBox 'Y')}}
-				{{#xif this.prod.ordHistProdTypeCode '==' 'BulkDc'}}
-					<div class="check_wrap check_only" style="display:none">
-						<input type="checkbox" id="prod_{{this.prod.ordHistProdNo}}" name="prod_{{oProdCode}}" value="{{json this.prod}}"
-							data-oProdCode="{{oProdCode}}" data-promoSn="{{prod.ordProdEx.bulkDcOnlineProdCode}}">
-						<label for="prod_{{this.prod.ordHistProdNo}}">
-							<span class="sr_only">선택</span>
-						</label>
-					</div>
-				{{else}}
-					<div class="check_wrap check_only">
-						<input type="checkbox" id="prod_{{this.prod.ordHistProdNo}}" name="prod_{{oProdCode}}" value="{{json this.prod}}"
-							data-oProdCode="{{oProdCode}}">
-						<label for="prod_{{this.prod.ordHistProdNo}}">
-							<span class="sr_only">선택</span>
-						</label>
-					</div>
-				{{/xif}}
+				<div class="check_wrap check_only" style="display:{{condition (eq this.prod.ordHistProdTypeCode 'BulkDc') 'none' ''}}">
+					<input type="checkbox" id="prod_{{this.prod.ordHistProdNo}}" name="prod_{{oProdCode}}" value="{{json this.prod}}"
+						data-oProdCode="{{oProdCode}}" data-promoSn="{{this.promoSn}}">
+					<label for="prod_{{this.prod.ordHistProdNo}}">
+						<span class="sr_only">선택</span>
+					</label>
+				</div>
 			{{/if}}
 			<div class="thumb"><img src="{{this.prod.ordProdEx.prodImgUrl}}" alt=""></div>
 			<div class="info">
@@ -126,8 +116,8 @@
 				{{#if (eq this.prod.ordHistProdStatusCode 'ProdCancel')}}
 					<p><em>취소완료</em></p>
 				{{/if}}
-				{{#if (and (ne this.prod.ordHistProdStatusCode 'ProdCancel') (eq this.step 'one'))}}
-					{{#if (or (eq this.statusCode 'PartialCancel') (eq this.statusCode 'OrdReceivedComplete'))}}
+				{{#if (eq this.status 'detail')}}
+					{{#if (or (eq this.prod.ordHistProdStatusCode 'OrdReceivedComplete') (eq this.prod.ordHistProdStatusCode 'OrdReceivedWaiting'))}}
 						<button class="btn_sm_neutral" type="button" onclick="changeOption({{this.prod.ordHistProdSn}}, '{{this.prod.ordHistProdNo}}', {{this.prod.ordProdEx.prodSn}})">옵션변경</button>
 					{{/if}}
 				{{/if}}

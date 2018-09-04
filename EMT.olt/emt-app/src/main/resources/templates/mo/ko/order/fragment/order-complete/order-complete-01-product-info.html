@@ -6,8 +6,8 @@
 	</dt>
 	<dd>
 		<!--온라인쇼핑상품-->
-		<th:block th:if="${#lists.size(shippingOrdOnlineProdList) > 0}">
-			<p class="item_count">온라인 쇼핑상품 (<em id="shipOrdOnlineProdCnt">00</em>개)</p>
+		<th:block th:if="${ordCntMap.get('shipOrdOnlineProdSumCnt') > 0}">
+			<p class="item_count">온라인 쇼핑상품 (<em th:text="${ordCntMap.get('shipOrdOnlineProdSumCnt')}">0</em>개)</p>
 
 			<!--/* 일단상품 */-->
 			<th:block th:if="${#lists.size(shippingOrdOnlineProdList) > 0}">
@@ -50,8 +50,8 @@
 		</th:block>
 
 		<!--테이크아웃쇼핑상품-->
-		<th:block th:if="${#lists.size(storePickupOrdOnlineProdList) > 0}">
-			<p class="item_count">테이크아웃 상품 (<span id="storeOrdOnlineProdCnt">0</span>개)</p>
+		<th:block th:if="${ordCntMap.get('storeOrdOnlineProdSumCnt') > 0}">
+			<p class="item_count">테이크아웃 상품 (<span th:text="${ordCntMap.get('storeOrdOnlineProdSumCnt')}">0</span>개)</p>
 			<div class="cart_item_box_wrap">
 				<div class="cart_item_box" th:each="ordOnlineProd : ${storePickupOrdOnlineProdList}" >
 					<div class="cart_name_wrap">

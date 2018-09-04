@@ -205,31 +205,33 @@
 		<!--/* 로그인 후 */--> 
 		<a th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}" href="#none" class="btn_login">홍길동님은<br><span>WELCOME</span>입니다.</a>
 		
+		<!-- 09-03 메뉴 추가 및 삭제로 인한 마크업 수정 [S] -->
 		<div>
 			<!--/* 로그인 전 */-->
 			<ul th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+				<li><a href="#none">쿠폰</a></li>
 				<li><a href="#none">뷰티포인트</a></li>
-				<li><a href="#none">나의 쿠폰</a></li>
-				<li><a href="#none">기프트 카드</a></li>
+				<li><a href="#none">기프트카드</a></li>
 			</ul>
 			
 			<!--/* 로그인 후 */-->
 			<ul th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}">
+				<li><a href="#none">쿠폰</a> <em>1장</em></li>
 				<li><a href="#none">뷰티포인트</a> <em>3,000 P</em></li>
-				<li><a href="#none">나의 쿠폰</a> <em>1장</em></li>
-				<li><a href="#none">기프트 카드</a> <em>1,000원</em></li>
+				<li><a href="#none">기프트카드</a> <em>1,000원</em></li>
 			</ul>
 			
 			<ul>
 				<li><a href="#none">마이파우치</a></li>
-				<li><a href="#none">플러스 멤버십</a></li>
-				<li th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}"><a href="#none">나의 커뮤니티 활동</a></li>
-				<!-- 로그인후 활성화표시 -->
-				<li th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}"><a href="#none" class="new">나의 커뮤니티 활동</a></li>
 				<li><a href="#none">배송지 관리</a></li>
-				<li><a href="#none">AP몰 정기배송</a></li>
-				<li><a href="#none">ONE pay</a></li>
+				<li th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}"><a href="#none">구매리뷰</a></li>
+				<!-- 로그인후 활성화표시 -->
+				<li th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}"><a href="#none" class="new">구매리뷰</a></li>
+				<li><a href="#none">회원정보수정</a></li>
 				<li><a href="#none">고객센터</a></li>
+			</ul>
+			<ul class="">
+				<li><a href="#none">APP 다운로드</a></li>
 			</ul>
 			<!--/* 로그인 전 */-->
 			<a th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}" href="#none" class="btn_join"><span>간편한 회원가입</span> <i class="ico_arr_s"></i></a>
@@ -238,6 +240,37 @@
 			<a th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}" href="#none" class="btn_logout"><span>로그아웃</span></a>
 			
 		</div>
+		<!-- 09-03 메뉴 위치와 추가 및 삭제로 인한 마크업 수정 [E] -->
+
+		<!-- 09-03 메뉴 수정 전 마크업 주석처리
+		<div>
+			<ul th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+				<li><a href="#none">뷰티포인트</a></li>
+				<li><a href="#none">나의 쿠폰</a></li>
+				<li><a href="#none">기프트 카드</a></li>
+			</ul>
+
+			<ul th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}">
+				<li><a href="#none">뷰티포인트</a> <em>3,000 P</em></li>
+				<li><a href="#none">나의 쿠폰</a> <em>1장</em></li>
+				<li><a href="#none">기프트 카드</a> <em>1,000원</em></li>
+			</ul>
+			<ul>
+				<li><a href="#none">마이파우치</a></li>
+				<li><a href="#none">플러스 멤버십</a></li>
+				<li th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}"><a href="#none">나의 커뮤니티 활동</a></li>
+
+				<li th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}"><a href="#none" class="new">나의 커뮤니티 활동</a></li>
+				<li><a href="#none">배송지 관리</a></li>
+				<li><a href="#none">AP몰 정기배송</a></li>
+				<li><a href="#none">ONE pay</a></li>
+				<li><a href="#none">고객센터</a></li>
+			</ul>
+
+			<a th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}" href="#none" class="btn_join"><span>간편한 회원가입</span> <i class="ico_arr_s"></i></a>
+			
+			<a th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}" href="#none" class="btn_logout"><span>로그아웃</span></a>
+		</div> -->
 	</div>
 
 	<!--/* 장바구니 메뉴 */-->

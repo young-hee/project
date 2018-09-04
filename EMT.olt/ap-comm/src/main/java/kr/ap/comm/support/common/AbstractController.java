@@ -7,6 +7,7 @@ import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.order.OrderSession;
 import kr.ap.comm.support.APRequestContext;
 import kr.ap.comm.support.constants.SessionKey;
+import kr.ap.comm.util.SessionUtils;
 import net.g1project.bluewave.imagescaler.service.ImageScaler;
 import net.g1project.bluewave.imagescaler.service.impl.ImageScalerFactory;
 import net.g1project.bluewave.imagescaler.vo.ResizedImageVO;
@@ -209,15 +210,7 @@ public class AbstractController {
      */
     protected MemberSession getMemberSession() {
         final HttpServletRequest request = getRequest();
-        final HttpSession session = request.getSession();
-        synchronized (WebUtils.getSessionMutex(session)) {
-            MemberSession memberSession = (MemberSession) WebUtils.getSessionAttribute(request, SessionKey.LOGIN_USER);
-            if (ObjectUtils.isEmpty(memberSession)) {
-                memberSession = new MemberSession();
-                WebUtils.setSessionAttribute(request, SessionKey.LOGIN_USER, memberSession);
-            }
-            return  memberSession;
-         }
+        return SessionUtils.getMemberSession(request);
     }
 
 	/**
@@ -227,15 +220,7 @@ public class AbstractController {
 	 */
 	protected CartSession getCartSession() {
 		final HttpServletRequest request = getRequest();
-		final HttpSession session = request.getSession();
-		synchronized (WebUtils.getSessionMutex(session)) {
-			CartSession cartSession = (CartSession) WebUtils.getSessionAttribute(request, SessionKey.CART);
-			if (ObjectUtils.isEmpty(cartSession)) {
-				cartSession = new CartSession();
-				WebUtils.setSessionAttribute(request, SessionKey.CART, cartSession);
-			}
-			return cartSession;
-		}
+		return SessionUtils.getCartSession(request);
 	}
 
 	/**
@@ -245,15 +230,7 @@ public class AbstractController {
 	 */
 	protected OrderSession getOrderSession() {
 		final HttpServletRequest request = getRequest();
-		final HttpSession session = request.getSession();
-		synchronized (WebUtils.getSessionMutex(session)) {
-			OrderSession orderSession = (OrderSession) WebUtils.getSessionAttribute(request, SessionKey.ORDER);
-			if (ObjectUtils.isEmpty(orderSession)) {
-				orderSession = new OrderSession();
-				WebUtils.setSessionAttribute(request, SessionKey.ORDER, orderSession);
-			}
-			return orderSession;
-		}
+		return SessionUtils.getOrderSession(request);
 	}
 
 	/**

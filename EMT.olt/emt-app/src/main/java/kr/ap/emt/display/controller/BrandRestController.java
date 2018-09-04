@@ -493,6 +493,7 @@ public class BrandRestController extends AbstractController {
    }
 	
 	
+	
 	/**
 	 * 뷰티즌 신청
 	 * @param 
@@ -504,17 +505,12 @@ public class BrandRestController extends AbstractController {
 		
 		long supportersSn = 0;  // param 형식을 맞춰야해서 0으로 넘겨줌
 
-		List<UploadingFile> uploadingFiles = new ArrayList<UploadingFile>();
 
-		for(int i=0; picture != null && i<picture.length; i++) {
-
-			if(!("").equals(picture[i].getOriginalFilename())) {
-				uploadingFiles = imageSettingList(picture);
-			}
+		if (!ObjectUtils.isEmpty(picture)) {
+			List<UploadingFile> files = imageSettingList(picture);
+			supportersRequester.setFiles(files);
 		}
-		 // SupportersRequster에 direct로 binding 되지 않는 param들은 수동으로 입력
-
-		supportersRequester.setFiles(uploadingFiles); // 사진
+		
 
 		net.g1project.ecp.api.model.EmbeddableAddress address = new net.g1project.ecp.api.model.EmbeddableAddress();
 		address.setAddress1(req.getParameter("preLocal"));
@@ -532,29 +528,29 @@ public class BrandRestController extends AbstractController {
 		List<RequesterHist> requstHistList = new ArrayList<RequesterHist>();
 
 		RequesterHist requestHist = new RequesterHist();
-
-		String[] activityType = req.getParameterValues("activityType");
-		String[] activityBodyText = req.getParameterValues("activityBodyText");
-		String[] activityName = req.getParameterValues("activityName");
-		String[] activityStartDate = req.getParameterValues("activityStartDate");
-		String[] activityEndDate = req.getParameterValues("activityEndDate");
-		SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
-
-		if(activityType.length > 0) {
-			for(int index = 0; index < activityType.length; index++) {
-
-				requestHist.setActivityType(activityType[index]);//activityType);
-				requestHist.setActivityBodyText(activityBodyText[index]);//activityBodyText);
-				requestHist.setActivityName(activityName[index]);//activityName);
-				requestHist.setActivityStartDate(sf.parse(activityStartDate[index]));//activityStartDate);
-				requestHist.setActivityEndDate(sf.parse(activityEndDate[index]));//activityEndDate);
-
-				requstHistList.add(index, requestHist);
-			}
-			supportersRequester.setSupportersRequesterHist(requstHistList);
+		if(req.getParameterValues("activityType") != null) {
+			String[] activityType = req.getParameterValues("activityType");
+			String[] activityBodyText = req.getParameterValues("activityBodyText");
+			String[] activityName = req.getParameterValues("activityName");
+			String[] activityStartDate = req.getParameterValues("activityStartDate");
+			String[] activityEndDate = req.getParameterValues("activityEndDate");
+			SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+	
+			if(activityType.length > 0) {
+				for(int index = 0; index < activityType.length; index++) {
+	
+					requestHist.setActivityType(activityType[index]);//activityType);
+					requestHist.setActivityBodyText(activityBodyText[index]);//activityBodyText);
+					requestHist.setActivityName(activityName[index]);//activityName);
+					requestHist.setActivityStartDate(sf.parse(activityStartDate[index]));//activityStartDate);
+					requestHist.setActivityEndDate(sf.parse(activityEndDate[index]));//activityEndDate);
+	
+					requstHistList.add(index, requestHist);
+				}
+				supportersRequester.setSupportersRequesterHist(requstHistList);
+			}	
 		}
-
-		if(!("Temp").equals(supportersRequester.getRequestStatus())){
+		if(("Complete").equals(supportersRequester.getRequestStatus())){
 			if(req.getParameter("check_all")!= null ||
 					(req.getParameter("check_agree_1").equals("on") && req.getParameter("check_agree_2").equals("on")
 							&& req.getParameter("check_agree_3").equals("on"))) { // 전체동의가 체크되어있거나 동의1,2,3 이 모두 체크되어있다면 동의 체크

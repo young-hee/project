@@ -155,6 +155,18 @@
 				}
 			});
 			
+			//리뷰 상세 팝업
+			this._$target.find('.reviewDetail').on('click', function(e){
+				var $this = $(e.currentTarget);
+				
+				new AP.ReviewDetail(this._$target, {
+					prodReviewType : $this.data('review-type')
+					, prodReviewSn : $this.data('review-sn')
+				}).open();
+			}.bind(this)); 
+			
+			this._$target.find('.reviewDetail:first').click();
+			
 			/*
 			//언제 들어와? 알림 신청
 			this._$target.find( '.btn_restock_notify_me' ).on( 'click', function (e) {
@@ -224,7 +236,7 @@
 					$( window ).scrollTop( $tabArea.offset().top );
 
 					if ( e.index === 1 ) {
-						//AP.reviewArea.setDefault( this._defaultModel );
+						AP.reviewArea.setDefault( this._defaultModel );
 					}
 
 					this._sideOrder.resetPosition( true );

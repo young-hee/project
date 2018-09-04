@@ -17,7 +17,7 @@ this["AP"]["handlebars"]["products"]["selected-option-list"] = Handlebars.templa
 },"2":function(container,depth0,helpers,partials,data) {
     return "		<div class=\"soldout_alarm product_item\" data-prod-sn=\""
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.prodSn : depth0), depth0))
-    + "\"> \n			<p class=\"txt\">선택하신 상품은 현재 품절입니다.<br>아모레퍼시픽몰 앱에서 입고알리미를 받으실 수 있습니다. </p>\n			<a href=\"#\" class=\"btn_fix_gradient\">앱다운받기</a>\n		</div>\n";
+    + "\"> \n			<p class=\"txt\">선택하신 상품은 현재 품절입니다.<br>아모레퍼시픽몰 앱에서 입고알리미를 받으실 수 있습니다. </p>\n			<a href=\"javascript:;\" class=\"btn_fix_gradient downAppLayerBtn\">앱다운받기</a>\n		</div>\n";
 },"4":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 

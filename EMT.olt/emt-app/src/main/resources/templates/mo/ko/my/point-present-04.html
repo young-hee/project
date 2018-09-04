@@ -28,8 +28,8 @@
 
                         <h4 class="h_title cont"><strong>선물 받는 분</strong></h4>
                         <div class="bt_point_recipient">
-                            <p class="name"><i class="ico"></i><strong th:text="${session.PRESENT_NAME}">홍길동</strong> 님</p>
-                            <p class="num"><i class="ico"></i><span th:text="${#IntegUtil.hyphenPhoneNumber(session.PRESENT_PHONE_NO)}">010-8234-5678</span></p>
+                            <p class="name"><i class="ico"></i><strong th:text="${session.PRESENT_INFO.name.name1}">홍길동</strong> 님</p>
+                            <p class="num"><i class="ico"></i><span th:text="${#IntegUtil.hyphenPhoneNumber(session.PRESENT_INFO.phoneNo.phoneNo)}">010-8234-5678</span></p>
                         </div>
                         <ul class="list_bullet_dot">
                             <li>선물받으신 분은 뷰티포인트 회원이 아닙니다.</li>
@@ -40,7 +40,7 @@
 
                         <div class="page_btns">
                             <button class="btn_lg_secondary" onclick="window.history.back()" type="button">취소</button>
-                            <button class="btn_lg_neutral" onclick="present()" type="button">다음</button>
+                            <button class="btn_lg_neutral" onclick="doPresent()" type="button">다음</button>
                         </div>
                     </div>
                	</div>
@@ -63,22 +63,8 @@
 				window.history.back();
 			}
 			function doPresent() {
-
-                AP.api.presentPoint({}, {}).done(function(data) {
-					AP.common.setSessionStorage("presentStep", 6);
-		        	location.replace('/my/page/info/presentComplete');
-                }).fail(function(xhr, textStatus, errorThrown) {
-    	            $(this).removeAttr("disabled");
-                    if (xhr.errorCode == 0) {
-                        AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
-                    } else if (xhr.errorCode == 'ERROR') {
-                        AP.modal.alert("포인트를 선물할 수 없습니다.");
-                    } else {
-                        AP.modal.alert(xhr.errorMessage)
-                    }
-                }).always(function() {
-                    //성공, 실패
-                });
+				AP.common.setSessionStorage("presentStep", 5);
+	        	location.replace('/my/page/info/giftPointCheck');
 			}
 			</script>
 

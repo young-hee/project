@@ -112,7 +112,7 @@ public class DisplayViewController extends AbstractController {
 
 		return "display/" + pageInfo.getMenuPageFileId();
 	}
-
+	
 	@RequestMapping("/shopping_history")
 	@PageTitle(title = "쇼핑 히스토리")
 	public String shopping_history(Model model, String displayMenuId) {

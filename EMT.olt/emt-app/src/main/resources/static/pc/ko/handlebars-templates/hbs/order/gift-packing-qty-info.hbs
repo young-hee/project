@@ -19,12 +19,9 @@
 						{{/xif}}
 
 						<label for="box_{{this.giftPackingSn}}">
-							{{this.giftPackingName}}
-							{{#xif this.payYn '==' 'Y'}}
-								<span id="box_{{this.giftPackingSn}}_sum"></span>
-							{{/xif}}
+							{{this.giftPackingName}} 추가
 							{{#if (and (eq this.payYn 'N')(eq this.freeConditionYn 'Y')(gt this.freeConditionAmt 0))}}
-								추가 ({{currencyFormatDefault this.freeConditionAmt '원'}}이상 주문시 무료)
+								({{currencyFormatDefault this.freeConditionAmt '원'}}이상 주문시 무료)
 							{{/if}}
 						</label>
 					</span>
@@ -43,7 +40,11 @@
 							<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
 						</div>
 					</div>
-
+					{{#xif this.payYn '==' 'Y'}}
+						<span class="wrapper_price">
+							<span id="box_{{this.giftPackingSn}}_sum"></span>
+						</span>
+					{{/xif}}
 					{{#if (and (gte ../../finalPamtPcur this.freeConditionAmt)(eq this.qtySelectPossibleYn 'Y'))}}
 						<span class="ui_spinner small" data-min="0" data-max="{{ this.maxSelectPossibleQty }}" data-step="1" >
 							<button class="spinner_decrease" type="button" title="제품 수량 감소" data-flag="box_{{this.giftPackingSn}}" onclick="boxQtyOperate(this, {{../coSn}}, {{this.giftPackingSn}}, {{this.giftPackingFee}}, '{{this.giftPackingName}}', '-')"><img alt="제품 수량 감소" src="/pc/ko/images/common/ico_minus1.gif"></button>

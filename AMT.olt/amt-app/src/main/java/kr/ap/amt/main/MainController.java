@@ -3,17 +3,12 @@ package kr.ap.amt.main;
 import kr.ap.comm.config.interceptor.PageTitle;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
-import net.g1project.ecp.api.model.sales.article.Article;
-import net.g1project.ecp.api.model.sales.article.ArticleSearchResult;
 import net.g1project.ecp.api.model.sales.display.Corner;
 import net.g1project.ecp.api.model.sales.display.CornerContentsSet;
-import net.g1project.ecp.api.model.sales.display.OnlineProdList;
 import net.g1project.ecp.api.model.sales.display.PageInfo;
-import net.g1project.ecp.api.model.sales.guide.FoNoticeResult;
-import net.g1project.ecp.api.model.sales.keywordPopup.PopupInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -29,7 +24,7 @@ public class MainController extends AbstractController {
 	 * @param model
 	 * @return
 	 */
-	@GetMapping({"/", "/main", "/main/preview"})
+	@RequestMapping({"/", "/main", "/main/preview"})
 	@PageTitle(title = "AP Mall에 오신걸 환영합니다.")
 	public String main(Model model, String previewKey, String previewDate) {
 		

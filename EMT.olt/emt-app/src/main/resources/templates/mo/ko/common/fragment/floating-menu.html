@@ -14,9 +14,13 @@
 				<a href="#none"><i class="ico store"></i><span class="sr_only">단골매장</span></a>
 				<a href="#none" th:href="@{/display/notification(displayMenuId=notification)}"><i class="ico notice"></i><span class="sr_only">알림</span><span class="noti" style="display:none;">있음</span></a>
 				 */-->
-				<!--/* 20180420 : 로그인 후 노출
-				<button><i class="ico logout"></i><span class="sr_only">로그아웃</span></button>
-				 */-->
+				<!--/* 20180831 : app native 전용 logout */-->
+				<th:block th:if="${#device.isMobileApp()}">
+					<a href="javascript:;" onclick="logout()" th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+						<i class="ico logout"></i>
+							<span class="sr_only">로그아웃</span>
+					</a>
+				</th:block>
 				<a href="#none" th:href="@{/display/shopping_history(displayMenuId=shopping_history)}"><i class="ico history"></i><span class="sr_only">쇼핑히스토리</span></a>
 			</span>
 		</div>

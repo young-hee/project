@@ -363,7 +363,8 @@ public class OrderBaseController extends AbstractViewController {
 		if (ordEx != null && ordEx.getOrdHistEx() != null && ordEx.getOrdHistEx().getOrdHistAmtExList() != null) {
 
 			BigDecimal totalOrdDcPriceSum = new BigDecimal(0);
-			BigDecimal membershipExchAmt = new BigDecimal(0);
+			BigDecimal beautyPointExchUseAmt = new BigDecimal(0);
+			BigDecimal cushionPointUseAmt = new BigDecimal(0);
 			BigDecimal packingAmtSum = new BigDecimal(0);
 			BigDecimal onlineShipProdSum = new BigDecimal(0);
 
@@ -403,7 +404,7 @@ public class OrderBaseController extends AbstractViewController {
 				}
 
 				if ("MembershipExch".equals(o.getOrdHistAmtTypeCode())) {
-					membershipExchAmt = o.getAmtPcur();
+					beautyPointExchUseAmt = o.getAmtPcur();
 				}
 
 				if ("ShipUnitPacking".equals(o.getOrdHistAmtTypeCode())) {
@@ -426,19 +427,17 @@ public class OrderBaseController extends AbstractViewController {
 			// CushionPointUse = CP -> ordEx.getOrdHistEx().getOrdHistMembershipExList().get(0).getMembershipUseAmtSumPcur();
 			for (OrdHistMembershipEx m : ordEx.getOrdHistEx().getOrdHistMembershipExList()) {
 				if ("BP".equals(m.getMembershipServiceCode())) {
-					ordAmtMap.put("BeautyPointExchUse", membershipExchAmt.add(m.getMembershipUseAmtSumPcur()));
-					totalOrdDcPriceSum = totalOrdDcPriceSum.add(membershipExchAmt.add(m.getMembershipUseAmtSumPcur()));
-				} else {
-					ordAmtMap.put("BeautyPointExchUse", new BigDecimal(0));
+					beautyPointExchUseAmt = beautyPointExchUseAmt.add(m.getMembershipUseAmtSumPcur());
+					totalOrdDcPriceSum = totalOrdDcPriceSum.add(beautyPointExchUseAmt);
 				}
 
 				if ("CP".equals(m.getMembershipServiceCode())) {
-					ordAmtMap.put("CushionPointUse", m.getMembershipUseAmtSumPcur());
-					totalOrdDcPriceSum = totalOrdDcPriceSum.add(m.getMembershipUseAmtSumPcur());
-				} else {
-					ordAmtMap.put("CushionPointUse", new BigDecimal(0));
+					cushionPointUseAmt = cushionPointUseAmt.add(m.getMembershipUseAmtSumPcur());
+					totalOrdDcPriceSum = totalOrdDcPriceSum.add(cushionPointUseAmt);
 				}
 			}
+			ordAmtMap.put("BeautyPointExchUse", beautyPointExchUseAmt);
+			ordAmtMap.put("CushionPointUse", cushionPointUseAmt);
 
 			ordAmtMap.put("totalOrdDcPriceSum", totalOrdDcPriceSum);
 
@@ -832,13 +831,13 @@ public class OrderBaseController extends AbstractViewController {
 					payResult.setPartialCancelAvailYn(CODE_Y);     // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 					break;
 
-				case PAY_METHOD_CODE_BANK_AC_TRANSFER:
-					/**
+				/*case PAY_METHOD_CODE_BANK_AC_TRANSFER:
+					*//**
 					 * 실시간계좌이체
-					 */
+					 *//*
 
 					payResult.setPartialCancelAvailYn(CODE_Y);     // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
-					break;
+					break;*/
 
 				case PAY_METHOD_CODE_VIRTUAL_ACCOUNT:
 					/**
@@ -854,6 +853,7 @@ public class OrderBaseController extends AbstractViewController {
 
 					String virtualBankAcDeadlineDt = request.getParameter("P_VACT_DATE");
 					String virtualBankAcDeadlineTime = request.getParameter("P_VACT_TIME");
+					String virtualBankAcRemitter = request.getParameter("VACT_InputName");
 					date = formatOutput.parse(virtualBankAcDeadlineDt + virtualBankAcDeadlineTime + "+0900");
 
 					String virtualBankAcAcHolder = request.getParameter("P_VACT_NAME");
@@ -866,6 +866,7 @@ public class OrderBaseController extends AbstractViewController {
 					payResult.setVirtualBankAcDeadlineDt(date);                     // 가상계좌기한일시
 					payResult.setVirtualBankAcDepositDt(date);                      // 가상계좌입금일시
 					payResult.setVirtualBankAcClosedSmsYn(null);                    // 가상계좌마감SMS여부
+					payResult.setVirtualBankAcRemitter(virtualBankAcRemitter);		//송금자명
 					payResult.setPartialCancelAvailYn(CODE_Y);  // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 					break;
 
@@ -893,12 +894,11 @@ public class OrderBaseController extends AbstractViewController {
 	 */
 	protected PayResult makeINIMobilePayBankResult(HttpServletRequest request, OrderSession orderSession) {
 
-		Date date;
 		PayResult payResult = new PayResult();
 
 		//payResult.setPgTradeNo(pgTradeNo);
 		//payResult.setPayApprovalDt(date);
-		//payResult.setPayAmt(parsePayAmt);
+		payResult.setPayAmt(orderSession.getPgPayAmt());
 		//payResult.setMerchantId(merchantId);
 		payResult.setPartialCancelAvailYn(CODE_Y);     // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 
@@ -1025,6 +1025,8 @@ public class OrderBaseController extends AbstractViewController {
 					String bankCode = request.getParameter("ACCT_BankCode");                    // 은행코드
 					String bankPCshrCode = request.getParameter("CSHR_ResultCode");             // 현금영수증 발행 정상여부
 					payResult.setPartialCancelAvailYn(CODE_Y);     // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
+					payResult.setBankCode(bankCode);
+					payResult.setPayTimeTypeCode("RealTime");
 					break;
 
 				case PAY_METHOD_CODE_VIRTUAL_ACCOUNT: // 가상계좌
@@ -1045,6 +1047,7 @@ public class OrderBaseController extends AbstractViewController {
 
 					String virtualBankAcDeadlineDt = request.getParameter("VACT_Date");
 					String virtualBankAcDeadlineTime = request.getParameter("VACT_Time");
+					String virtualBankAcRemitter = request.getParameter("VACT_InputName");
 					date = formatOutput.parse(virtualBankAcDeadlineDt + virtualBankAcDeadlineTime + "+0900");
 
 					payResult.setVirtualBankAcBankCode(virtualBankAcBankCode);      // 가상계좌은행코드
@@ -1054,6 +1057,7 @@ public class OrderBaseController extends AbstractViewController {
 					payResult.setVirtualBankAcDeadlineDt(date);                     // 가상계좌기한일시
 					payResult.setVirtualBankAcDepositDt(date);                      // 가상계좌입금일시
 					payResult.setVirtualBankAcClosedSmsYn(null);                    // 가상계좌마감SMS여부
+					payResult.setVirtualBankAcRemitter(virtualBankAcRemitter);		//송금자명
 					payResult.setPartialCancelAvailYn(CODE_Y);             // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 					break;
 			}

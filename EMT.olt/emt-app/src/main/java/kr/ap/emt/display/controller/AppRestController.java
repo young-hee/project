@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.g1project.ecp.api.model.sales.applications.LoginUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -28,25 +29,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/application")
 public class AppRestController extends AbstractController {
 
-	
-	
-    /** 앱 버전 체크 
+
+
+    /** 앱 버전 체크
      * @param requestAppinfo
      * @param req
-     * @return hashMap 
+     * @return hashMap
      */
 	@RequestMapping("/getAppVersion")
     public ResponseEntity<?> getApplicationVersion(RequestAppInfo requestAppinfo , HttpServletRequest req) {
-      
+
         HashMap<String, Object> result = new HashMap<String, Object>();
-        
+
 		ApplicationVer applicationVer = applicationsApi.getApplicationVersion(requestAppinfo.getOsType());
 		result.put("appVer", applicationVer);
 
 		return ResponseEntity.ok(result);
 
     }
-	
+
 	/***
 	 * 앱 설치 등록
 	 * @param requestAppinfo
@@ -55,9 +56,9 @@ public class AppRestController extends AbstractController {
 	 */
 	@RequestMapping("/saveAppInstall")
     public ResponseEntity<?> saveAppInstall(RequestAppInfo requestAppinfo ,PostAppInstall postAppInstall, HttpServletRequest req) {
-      
+
         HashMap<String, Object> result = new HashMap<String, Object>();
-        
+
 		if(isLoggedIn()) {
 			postAppInstall.setMemberYn("Y");
 		}else {
@@ -70,7 +71,7 @@ public class AppRestController extends AbstractController {
 		return ResponseEntity.ok(result);
 
     }
-	
+
 	/**
 	 * 앱 설치 내용 호출
 	 * @param requestAppinfo
@@ -79,7 +80,7 @@ public class AppRestController extends AbstractController {
 	 */
 	@RequestMapping("/getAppInstall")
     public ResponseEntity<?> getAppInstall(RequestAppInfo requestAppinfo, HttpServletRequest req) {
-      
+
         HashMap<String, Object> result = new HashMap<String, Object>();
 
 		ExecuteResult executeResult = applicationsApi.getAppInstall(requestAppinfo.getOsType(), requestAppinfo.getToken());
@@ -88,36 +89,39 @@ public class AppRestController extends AbstractController {
 		return ResponseEntity.ok(result);
 
     }
-	
+
 	/**
 	 * 앱 푸쉬 동의 수정
 	 * @param requestAppinfo
 	 * @param req
-	 * @return hashMap 
+	 * @return hashMap
 	 */
 	@RequestMapping("/updateAppAgree")
     public ResponseEntity<?> updateAppAgree(RequestAppInfo requestAppinfo, HttpServletRequest req) {
-      
+
         HashMap<String, Object> result = new HashMap<String, Object>();
-        
+
 		//TODO 빌드 오류로 임시 수정합니다 By pollak
 		//ExecuteResult executeResult = applicationsApi.updateAppAgree(requestAppinfo.getToken(), null);
 		//result.put("executeResult", executeResult);
 
 		return ResponseEntity.ok(result);
     }
-	
+
 	/**
 	 * 앱 로그인 접속 업데이트
 	 * @param requestAppinfo
 	 * @param req
-	 * @return hashMap 
+	 * @return hashMap
 	 */
 	@RequestMapping("/updateAppLogin")
     public ResponseEntity<?> updateAppLogin(RequestAppInfo requestAppinfo, HttpServletRequest req) {
-      
+
         HashMap<String, Object> result = new HashMap<String, Object>();
-		ExecuteResult executeResult = applicationsApi.updateAppLogin(requestAppinfo.getToken());
+        //TODO:빌드오류인한 임시처리, 확인이 필요함.
+		LoginUser loginUser = new LoginUser();
+		loginUser.setMemberSn(getMemberSn());
+		ExecuteResult executeResult = applicationsApi.updateAppLogin(requestAppinfo.getToken(), loginUser);
 		result.put("executeResult", executeResult);
 
 		return ResponseEntity.ok(result);

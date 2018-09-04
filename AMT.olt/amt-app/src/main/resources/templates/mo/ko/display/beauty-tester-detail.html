@@ -1,0 +1,340 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='beauty-tester'">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents title_two_depth beauty_tester_wrap">
+
+		<div class="section top course_wrap">
+			<div class="cont_top">
+				<p class="tiile" th:text="${regularEvent.regularEventName}"></p>
+				<p class="sub_txt">테스터 모집인원 30명</p>
+				<p class="apply"><span class="point_purple" th:text="${requesters.totalCount}+'명'"></span> 신청중</p>
+			</div>
+
+			<div class="course_list_wrap">
+				<ul class="course_list" th:classappend="${status}=='RQ'?step01:(${status}=='TN'?step02:(${status}=='RR'?step03:(${status}=='BR'?step04)))">
+					<li th:classappend="${status}=='RQ'?on">
+						<p class="title">참가신청</p>
+						<p class="date"><span class="align_right" th:utext="${#dates.format(regularEvent.requestStartDt,'MM.dd')}+'<br />~ '+${#dates.format(regularEvent.requestEndDt,'MM.dd')}"></span></p>
+					</li>
+					<li th:classappend="${status}=='TN'?on">
+						<p class="title">테스터발표</p>
+						<p class="date" th:if="${regularEvent.winnerNoticeExpectedDt != null}" th:utext="${#dates.format(regularEvent.winnerNoticeExpectedDt,'MM.dd')}"></p>
+					</li>
+					<li th:classappend="${status}=='RR'?on">
+						<p class="title">리뷰등록</p>
+						<p class="date" th:if="${regularEvent.reviewRegistEndDt != null}" th:utext="'~'+${#dates.format(regularEvent.reviewRegistEndDt,'MM.dd')}">~</p>
+					</li>
+					<li th:classappend="${status}=='BR'?on">
+						<p class="title">베스트리뷰<br />발표</p>
+						<p class="date" th:if="${regularEvent.bestReviewNoticeDt != null}" th:utext="${#dates.format(regularEvent.bestReviewNoticeDt,'MM.dd')}"></p>
+					</li>
+				</ul>		<!-- // course_list -->
+			</div>		<!-- // course_list_wrap -->
+		</div>		<!-- // course_wrap -->
+        
+    <div class="section" th:if="${(status=='TN' or status=='RR') and isReview==true}">
+      <div class="prize_wrap">
+        <ul class="prize_guide">
+          <li><strong th:text="${memberInfo.name.name1}"></strong>님,<br />당첨을 축하드립니다.</li>
+          <li><strong th:utext="|${#dates.format(regularEvent.reviewRegistEndDt,'MM.dd')}일|"></strong>까지 뷰티테스터 리뷰를 등록해주세요.</li>
+          <li>베스트리뷰로 선정되시면 뷰티포인트 1,000P를 드립니다.</li>
+        </ul>
+        <a href="#1" class="btn_h45_disabled" th:if="${status=='TN'}">25일부터 등록이 가능합니다.</a>
+        <a href="#1" class="btn_h45_pp" th:if="${status=='RR'}">Ap몰 앱에서 리뷰 등록하기</a>
+      </div>
+    </div>
+
+    <div class="section" th:if="${(status=='TN' or status=='RR') and isReview==false}">
+      <div class="prize_wrap">
+        <ul class="prize_guide">
+          <li>아쉽게도 이번엔<br />당첨이 되지 않았습니다.</li>
+          <li>다음에 꼭 다시 도전하세요.</li>
+        </ul>
+        <a th:href="@{/display/AppH010403(displayMenuId=beautyTester)}" class="btn_h45_pp">다른 뷰티테스터 이벤트 보러가기</a>
+      </div>
+    </div>
+    
+    <div class="section" th:if="${status=='BR' and regularEvent.bestReviewYn==true}">
+      <div class="prize_wrap">
+        <ul class="prize_guide">
+          <li><strong th:text="${memberInfo.name.name1}"></strong>님,<br />베스트 리뷰로 선정되셨습니다.</li>
+          <li>베스트리뷰로 선정되어 <br />뷰티포인트 1,000포인트를 지급해드렸습니다.</li>
+        </ul>
+        <a href="#1" class="btn_h45_pp">내 포인트 확인하기</a>
+      </div>
+    </div>
+
+    <div class="section" th:if="${status!='RQ'}">
+      <div class="title_box">
+        <p class="title">당첨자 명단</p>
+      </div>
+      <div class="prize_list_wrap">
+        <ul class="prize_list">
+          <th:block th:each="winner : ${winners.regularEventRequesters}">
+          <li><span class="id" th:text="${winner.memberId}"></span>[[${winner.memberLevel}]]</li>
+          </th:block>
+        </ul>
+        <button type="button" class="btn_open">전체보기<i class="ico_down"></i></button>
+        <button type="button" class="btn_close">닫기<i class="ico_up"></i></button>
+      </div>
+    </div>
+
+		<div class="section">
+			<div class="title_box">
+				<p class="title">뷰티테스터 상품</p>
+			</div>
+			<!-- 상품 리스트 -->
+			<div class="product_one_view">
+				<a href="javascript:;">
+					<!--  상품이미지  -->
+					<span class="product_visual_new">
+						<span class="lazy_load_wrap">
+							<img th:src="${prodImage}" th:data-src="${prd.onlineProdImages[0].imgUrl}" alt="" class="lazy_load">
+						</span>
+					</span>
+
+					<!-- 상품 정보 -->
+					<span class="product_info_new">
+						<span class="prd_name" th:text="${prd.onlineProdName}"></span>
+						<span class="price_wrap">
+							<strong class="discount" th:text="${discountRate}" th:if="${dblPriceDispYn}=='Y'">5%</strong>
+							<strong class="price" th:utext="|${#numbers.formatDecimal(cPrice, 0, 'COMMA', 0, 'POINT')}<em>원</em>|"></strong>
+							<del th:text="${#numbers.formatDecimal(bPrice, 0, 'COMMA', 0, 'POINT')}+'원'" th:if="${dblPriceDispYn}=='Y'"></del>
+						</span>
+
+						<!-- 평점 리뷰 -->
+						<span class="product_rating" th:with="cls_star=|star${prd.reviewScopeAvg}|">
+							<span class="mark_star_sm" th:classappend="${cls_star}"><span class="sr_only">구매 평점 별 5개 중 [[${reviewScopeAvg}]]개</span></span>
+							<span class="prd_review" th:text="|리뷰 ${prd.reviewCount}|"></span>
+						</span>
+
+						<!-- 태그 -->
+						<span class="tags">
+                            <th:block th:each="flag : ${flags}">
+                              <em class="badge special" th:if="${flag.prodFlagCode == ''}">스페셜기프트</em>
+                              <em class="badge special" th:if="${flag.prodFlagCode == 'icon_giftpacking'}">선물포장</em>
+                              <em class="badge gift" th:if="${flag.prodFlagCode == 'icon_award_giftcard'}">기프트카드</em>
+                            </th:block>
+						</span>
+
+						<button type="button" class="btn_toggle like" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+					</span>
+					<a href="javascript:;" class="direct_brand" th:text="${prd.products[0].brandName}"></a>
+				</a>
+			</div>
+			<!-- // 상품 리스트 -->
+		</div>
+
+		<!--/* 상품 상세정보 */-->
+		<dl class="section detail_info ui_toggle_contents">
+			<dt class="title_box"><span class="title">상품 상세정보</span></dt>
+			<dd class="cont">
+				<img ap:src="@{/images/product/img_expand.jpg}" alt="상세 정보를 확대해서 보실 수 있어요"> 
+				<!-- <img ap:src="@{/images/dummy/img_detail_info.jpg}" alt="이미지 대체 텍스트 짧을 경우"> -->
+                <img th:src="${prodDetailImage}" alt="" class="lazy_load">
+				<div class="sr_only">
+					이미지 대체 텍스트 영역 텍스트가 길 경우
+				</div>
+			</dd>
+			<dd>
+				<button type="button" class="toggle_btn view">상세정보 더보기 <i class="ico_down"></i></button>
+				<button type="button" class="toggle_btn close">상세정보 닫기 <i class="ico_up"></i></button>
+			</dd>
+		</dl>		<!-- // ui_toggle_contents -->
+
+			<div class="ui_tab" th:if="${status=='RQ'}">
+				<div class="tab_menu equally">
+					<ul>
+						<li class="on"><button type="button">신청하기</button></li>
+						<li><button type="button"> 신청자 (<span class="" th:text="${requesters.totalCount}"></span>명)</button></li>
+					</ul>
+				</div>		<!-- // tab_menu -->
+				<div class="tab_contents">
+					<div class="tab_cont">
+						<div class="bg_white">
+							<h3 class="sr_only">신청하기</h3>
+							<div class="mission_wrap">
+								<div class="inbox">
+									<p class="title">응모미션</p>
+									<div class="txt" th:utext="${regularEvent.entryMission}">
+									</div>
+								</div>
+								<div class="inbox">
+									<p class="title">리뷰미션</p>
+									<div class="txt" th:utext="${regularEvent.reviewMission}">
+									</div>
+								</div>
+							</div>
+							<div class="mission_notice">
+								<p class="title">알립니다</p>
+								<ul class="txt">
+									<li>뷰티테스터 신청은 2018년 1월부터 VIP등급 이상의 회원부터 가능합니다.</li>
+									<li>선정된 뷰티테스터에게는 해당 상품을 무료로 배송합니다.</li>
+									<li>정해진 기간에 맞춰서 리뷰등록을 해야하며, 미 등록시에는 차후 테스터 선정에 제외될 수 있습니다.</li>
+									<li>베스트 리뷰 선정시에는 특별한 선물을 받으실 수 있습니다.</li>
+								</ul>						
+							</div>
+							<div class="mission_guide">
+								<ul class="txt">
+									<li>뷰티테스터는 앱에서만 신청 가능한 서비스입니다.</li>
+									<li>새롭게 바뀐 아모레퍼시픽 앱을 다운받아<br />뷰티테스터에 참여해보세요</li>
+								</ul>
+								<a href="https://itunes.apple.com/kr/app/id538275329" target="_blank" class="btn_h45_pp">Ap몰 앱에서 신청하기</a>
+							</div>
+						</div>
+					</div>		<!-- // tab_cont -->
+
+					<div class="tab_cont">
+						<h3 class="sr_only">신청자</h3>
+						<div class="applicant_wrap" th:if="${requesters.totalCount>0}">
+							<dl class="review" th:each="requester : ${requesters.regularEventRequesters}">
+								<dt class="review_header">
+									<span>[[${requester.memberId}]]</span><span>[[${requester.memberLevel}]]</span>
+								</dt>
+								<dd class="review_cont">
+									<div class="cont">
+										<!--/* 375 해상도 기준 4줄에 절삭 : 더읽기 클릭시 전체 보임 */-->
+										<p class="text">[[${requester.requestReason}]]</p>
+										<div>
+											<a href="#none" class="read_more">더읽기 <i class="ico_down"></i></a>
+											<a href="#none" class="more_view close">닫기 <i class="ico_up"></i></a>
+										</div>
+										<a href="#1" class="link">[[${requester.snsUrl}]]</a>
+									</div>
+									<div class="clear bottom">
+										<p class="date">[[${#dates.format(requester.requestDt,'MM.dd')}]]</p>
+										<!--/* 내가 작성한 글 수정 / 삭제 버튼 노출 */-->
+										<div class="btn_wrap" th:if="${requester.memberSn==memberSn}">
+											<a href="#none" class="btn_sm_bordered">수정</a>
+											<a href="#none" class="btn_sm_bordered">삭제</a>
+										</div>
+									</div>
+								</dd>
+							</dl>
+						</div>
+						<div class="applicant_wrap" th:if="${requesters.totalCount==0}">
+							<p class="txt">아직 신청자가 없습니다.</p>
+							<a href="#none" class="btn_h45_pp">뷰티테스터 신청하기</a>
+						</div>
+					</div>		<!-- // tab_cont -->
+				</div>		<!-- // tab_contents -->
+			</div>		<!-- // ui_tab -->
+      
+      <div class="section prize_review" th:if="${reviews.totalCount==0}">
+        <div class="title_box">
+          <p class="title">등록된 리뷰</p>
+          <ul class="util">
+            <li class="on"><a href="#1">추천순</a></li>
+            <li><a href="#1">최신순</a></li>
+          </ul>
+        </div>    <!-- // title_box -->
+        <div class="best_cont">
+          <p class="review_none_txt">아직 등록된 리뷰가 없습니다.</p>
+        </div>
+      </div>
+      
+      <div class="section prize_review" th:if="${reviews.totalCount>0}">
+        <div class="title_box">
+          <p class="title">등록된 리뷰</p>
+          <ul class="util">
+            <li class="on"><a href="#1">추천순</a></li>
+            <li><a href="#1">최신순</a></li>
+          </ul>
+        </div>    <!-- // title_box -->
+        <div class="best_cont">
+          <div class="realtime_review">
+            <ul class="review_list grid" style="opacity: 0">
+              <li class="grid-item" th:each="review:${reviews.prodReviewList}">
+                <a href="#none">
+                  <!--/* 이미지 없는 경우 */-->
+                  <div class="flag_box">
+                    <div class="review_info">
+                      <span class="rating_one">
+                        <span class="star_one"><img src="/mo/ko/images/display/bg_rating_one.png" alt=""></span><span class="count">3</span>
+                      </span>
+                      <p class="text">[[${review.prodReviewTitle}]]</p>
+                      <p class="reviewer">[[${review.memberId}]]</p>
+                    </div>
+                    <div class="product_info">
+                      <div class="img_product"><img alt="" ap:src="@{/images/dummy/img_item_05.jpg}"></div>
+                      <ul class="product_name_wrap">
+                        <li>헤라 블랙쿠션 블랙쿠션 SPF34 PA+</li>
+                        <li>옵션명 옵션명 옵션명 옵션명 옵션명</li>
+                      </ul>
+                    </div>
+                    <div class="flag_best"><img src="/mo/ko/images/display/ico_best_64.png" alt="베스트"></div>
+                  </div>
+                  <!--/* 이미지 있는 경우 */-->
+                  <div class="flag_box" th:if="${false}">
+                    <div class="beauty_tester">
+                      <img ap:src="@{/images/dummy/img_beautytester_review.jpg}" alt="{리뷰 제목}">
+                      <span class="info">
+                        <span class="grade"><i class="ico_star_s_w on"></i> <b>5.0</b></span>
+                        <b class="title">매트한 쿠션을 찾는 분들에게 딱이에요매트한 쿠션을 찾는 분들에게 딱이에요매트한 쿠션을 찾는 분들에게 딱이에요</b>
+                      </span>
+                      <span class="bg_gradient"></span>
+                    </div>
+                    <div class="product_info">
+                      <div class="img_product"><img alt="" ap:src="@{/images/dummy/img_item_05.jpg}"></div>
+                      <ul class="product_name_wrap">
+                        <li>헤라 블랙쿠션 블랙쿠션 SPF34 PA+</li>
+                        <li>옵션명 옵션명 옵션명 옵션명 옵션명</li>
+                      </ul>
+                    </div>
+                    <div class="flag_best"><img src="/mo/ko/images/display/ico_best_64.png" alt="베스트"></div>
+                  </div>
+                </a>
+              </li>
+            </ul>   <!-- // review_list -->
+          </div>    <!-- // realtime_review -->
+        </div>    <!-- // best_cont -->
+      </div>
+
+	</div>		<!-- // ap_contents -->
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script>
+		$( '.youtube_video' ).video();
+		
+		$(".applicant_wrap .review .read_more").click(function(){
+			$(this).parents(".cont").addClass("open");
+		});
+		$(".applicant_wrap .review .more_view.close").click(function(){
+			$(this).parents(".cont").removeClass("open");
+		});
+		
+		$(document).ready(function(){
+    		$(".btn_toggle.like").click(function(){
+    			AP.api.postRecommend( null, {prodSn: [[${prd.products[0].prodSn}]]} )
+    			.done(function ( result ) {
+    			});
+    		});
+    		
+    		// 더보기
+    		$(".prize_list_wrap .btn_open").click(function(){
+    			$(this).parents(".prize_list_wrap").addClass("open");
+    		});
+    		$(".prize_list_wrap .btn_close").click(function(){
+    			$(this).parents(".prize_list_wrap").removeClass("open");
+    		});
+
+    		
+    		// grid
+    		var _grid = $( '.review_list.grid' ).masonry({
+    			// options
+    			itemSelector: '.grid-item',
+    			columnWidth: '.grid-item',
+    			percentPosition: true
+    		}).imagesLoaded().progress( function() {
+    			$( '.review_list.grid' ).css( 'opacity', 1 );
+    			_grid.masonry('layout');
+    		});
+		});
+	</script>
+</th:block>
+
+</body>
+</html>

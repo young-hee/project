@@ -17,7 +17,10 @@
 		IN_INVALID_BEAUTYPOINT_PRODUCT: '뷰티포인트로 구매할 수 없는 상품이 포함되어 있습니다.',
 		ADDED_CART_TO_CART_PAGE: '선택하신 상품이 장바구니에<br>추가되었습니다.<br>장바구니로 이동하시겠습니까?',
 		RESTOCK_NOTIFY_APPLY_SUCCESS: '입고알림 신청이 완료되었습니다.',
-		DUPLICATE_SELECTED_PRODUCT: '이미 추가한 옵션입니다.'
+		DUPLICATE_SELECTED_PRODUCT: '이미 추가한 옵션입니다.',
+		APP_DOWNLOAD_LAYER_TITLE: 'APmall 앱으로 만나보세요!',
+		APP_DOWNLOAD_SENT_SMS : '앱 다운로드 문자를 발송하였습니다.<br>AP몰 앱 다운받고 즐거운 쇼핑되세요!',
+		INVALID_CELL_NUM : '유효한 휴대폰 번호가 아닙니다.'
 	};
 
 })( jQuery );

@@ -25,11 +25,8 @@
 			this._$target.find('.page_btns .btn_lg_bordered').on('click', function (e){
 				e.preventDefault(); // 페이지 위로 이동 금함
 				
-				AP.login().done( function () { // 로그인이 안되어있으면, 로그인을 하도록 
-					AP.api.getLoginMemberInfo().done(function(result){
-					
-						if(result.memberSn !== 0 || result.memberSn !== null){ // 정상으로 로그인이 되었으면   
-							// 수정화면으로 이동
+					AP.login().done( function () { // 로그인이 안되어있으면, 로그인을 하도록 
+				
 							AP.api.supportersRequsterinfo().done(function(result){ // 작성한 기록 조회 
 								
 								if(result.suppoters === null){ 
@@ -55,21 +52,16 @@
 									AP.modal.alert(AP.message.API_SAVE_ERROR);
 								}
 							}.bind( this ));
-						}else { // 로그인을 했음에도 memberSn 이 없다면 로그인 페이지로 
-	 
-								AP.login.go();
-						} 
-					})
+						
 				}); 
 			}.bind(this));
 			
 			// 지원서 작성
 			this._$target.find('.page_btns .btn_lg_primary').on('click', function (e){
 				e.preventDefault(); // 페이지 위로 이동 금함
+				
 				AP.login().done( function () { // 로그인이 안되어있으면, 로그인을 하도록 
-					AP.api.getLoginMemberInfo().done(function(result){
-					
-						if(result.memberSn !== 0 || result.memberSn !== null){ // 정상으로 로그인이 되었으면   
+					   
 							// 수정화면으로 이동
 							AP.api.supportersRequsterinfo().done(function(result){ // 작성한 기록 조회 
 								if(result.suppoters === null){
@@ -97,19 +89,13 @@
 									AP.modal.alert(AP.message.API_SAVE_ERROR);
 								}
 							}.bind( this ));
-						}else { // 로그인을 했음에도 memberSn 이 없다면 로그인 페이지로 
-	 
-								AP.login.go();
-						} 
-					})
+						
 				}); 
 			}.bind(this));
 			
 		}
 		/** =============== function Methods =============== */
-		
-		
 	});
-
+		
 	AP.beautizenRecruitMain = new BeautizenRecruitMain();
 })( jQuery );

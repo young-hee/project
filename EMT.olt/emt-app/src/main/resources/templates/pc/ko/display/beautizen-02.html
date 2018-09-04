@@ -31,12 +31,28 @@
 							</div>
 							<div class="inner_contents recruitment_info">
 								<div class="title_wrap">
-									<p class="title"><span class="ico_tv"></span>뷰티크리에이터 모집 요강</p>
+									<span class="ico_tv" ></span>
+									<span class="title" th:text="${supportersDetail ne null ? supportersDetail.title : '뷰티즌'}">뷰티크리에이터 모집 요강</span>
 								</div>
-								<div class="align_center"><img ap:src="@{/images/brand/img_beautizen_03.jpg}" alt="다음 뷰티즌 클럽 소녀들에 지원하세요."></div>
+								
+								<th:block th:if="${not#lists.isEmpty(supportersDetail)}">
+									<div class="align_center" th:utext="${supportersDetail.detailHtmlM}">
+										
+									</div>
+								</th:block>
+								
+								<th:block th:if="${#lists.isEmpty(supportersDetail)}">
+									<div class="panel notice">
+										<i class="ico"></i>
+										<p class="text">뷰티크리에이터 모집 요강이 <br> 존재하지 않습니다.</p>
+									</div>
+								</th:block>
+								
 								<div class="page_btns">
-									<button class="btn_lg_bordered" type="button">지원서 수정</button>
-									<button class="btn_lg_primary" type="button">지원서 작성</button>
+									<th:block th:if="${supportersBtn eq 'able'}">
+										<button class="btn_lg_bordered" type="button">지원서 수정</button>
+										<button class="btn_lg_primary" type="button">지원서 작성</button>
+									</th:block>
 								</div>
 							</div>
 						</div>
@@ -49,24 +65,7 @@
         <!--/* 하단 js등을 실행하는 마지막 영역 */-->
         <th:block ap:fragment="layout-endpoint">
 			<script th:inline="javascript">
-			//$('.btn_lg_bordered').off('click').on('click', function(e) { 
-				
-				//e.preventDefault();
-				
-				//AP.login().done( function () {
-				//	location.href="/display/beautizen_update?displayMenuId=beautizen_update"; 
-				//});
-			//}); 
 			
-			//$('.btn_lg_primary').off('click').on('click', function(e) {
-					
-			//	e.preventDefault();
-					
-			//	AP.login().done( function () {
-			
-				//location.href="/display/beautizen_regist?displayMenuId=beautizen_recruit"; 
-			//	});
-			//}); 
 			</script>
         </th:block>
 </body>

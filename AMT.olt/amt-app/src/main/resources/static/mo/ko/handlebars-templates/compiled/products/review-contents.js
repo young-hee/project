@@ -13,7 +13,7 @@ this["AP"]["handlebars"]["products"]["review-contents"] = Handlebars.template({"
     + alias2(alias1((depth0 != null ? depth0.scope : depth0), depth0))
     + "\"><span class=\"sr_only\">구매 평점 별 5개 중 "
     + alias2(alias1((depth0 != null ? depth0.scope : depth0), depth0))
-    + "개</span></span> <!--평점에따라 클래스변경(star0~star5)-->\n				<span class=\"count\">"
+    + "개</span></span>\n				<span class=\"count\">"
     + alias2(alias1((depth0 != null ? depth0.scope : depth0), depth0))
     + "</span>\n			</span>\n		</dt>\n		<dd class=\"review_cont\">\n			<p class=\"product_name\"><em class=\"ellipsis\">"
     + alias2(alias1((depth0 != null ? depth0.onlineProdName : depth0), depth0))
@@ -47,7 +47,13 @@ this["AP"]["handlebars"]["products"]["review-contents"] = Handlebars.template({"
     + alias2(alias1((depths[1] != null ? depths[1].prodReviewTitle : depths[1]), depth0))
     + "\"></a></li>\n";
 },"5":function(container,depth0,helpers,partials,data) {
-    return "				<dl>\n					<dt>지속력</dt>\n					<dd><b>오래 지속되요</b></dd>\n				</dl>\n";
+    var alias1=container.lambda, alias2=container.escapeExpression;
+
+  return "				<dl>\n					<dt>"
+    + alias2(alias1((depth0 != null ? depth0.questionHeader : depth0), depth0))
+    + "</dt>\n					<dd><b>"
+    + alias2(alias1((depth0 != null ? depth0.responseBodyText : depth0), depth0))
+    + "</b></dd>\n				</dl>\n";
 },"7":function(container,depth0,helpers,partials,data) {
     return "					<a href=\"#none\" class=\"btn_sm_bordered\">수정</a>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {

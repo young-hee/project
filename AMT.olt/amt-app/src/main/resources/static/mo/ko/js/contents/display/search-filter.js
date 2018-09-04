@@ -157,6 +157,7 @@
 
 				var index = $btn.closest( 'dl' ).index(),
 					value = $btn.data( 'value' );
+
 				for ( var i = 0; i < this._searchFilterData.addAttrs[index].addAttrVals.length; ++i ) {
 					if ( value == this._searchFilterData.addAttrs[index].addAttrVals[i].addAttrValCode ) {
 						if ( $btn.hasClass( 'on' )) {

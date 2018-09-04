@@ -25,6 +25,8 @@ import kr.ap.comm.config.interceptor.PageTitle;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
 import kr.ap.emt.display.vo.RequestBrand;
+import net.g1project.ecp.api.model.ap.bbs.SupportersDetail;
+import net.g1project.ecp.api.model.ap.bbs.SupportersList;
 import net.g1project.ecp.api.model.ap.bbs.SupportersRequesterInfo;
 import net.g1project.ecp.api.model.offlinestore.store.StoreEvalEx;
 import net.g1project.ecp.api.model.offlinestore.store.StoreEventDetailScheduleEx;
@@ -385,6 +387,58 @@ public class BrandViewController extends AbstractController {
         
         if(groupId == null || "".equals(groupId)) groupId = "l_beautizen";
         
+        List<SupportersList> supportersList = bbsApi.getSupportersList(); //뷰티즌 기수 목록 조회 
+        
+        List<SupportersDetail> supporters = new ArrayList<SupportersDetail>();
+        
+        for(int inx =0; inx < supportersList.size(); inx++) {
+
+        	supporters.add(inx,bbsApi.getSupporters(supportersList.get(inx).getSupportersSn()));
+        	
+        }
+        
+        try {
+        	
+        	SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+            
+            String today = simpleFormat.format(new Date());
+            SupportersDetail supportersDetail = new SupportersDetail();
+            
+            for(int idx =0; idx < supporters.size(); idx++) {
+            	
+            	String startDay = simpleFormat.format(supporters.get(idx).getRecruitmentStartDt());
+            	String endDay = simpleFormat.format(supporters.get(idx).getRecruitmentEndDt());
+            	
+            	int compareTo = today.compareTo(startDay);
+            	int compareFrom = today.compareTo(endDay);
+            	
+            	if(compareTo >= 0){  
+            		
+            		if(supportersDetail.getSupportersSn() != null) { // 같은 날짜에 (같은 기수이지만 수정된 다른번호의 sn이 존재함
+            			
+            			if(supporters.get(idx).getSupportersSn() > supportersDetail.getSupportersSn()) { // 최근에 수정된 (추가된 sn) 
+            				supportersDetail = supporters.get(idx) ;
+            			} 
+            			
+            		}else{
+            			supportersDetail = supporters.get(idx) ;
+            		} 
+            		
+            		model.addAttribute("supportersDetail", supportersDetail);
+            	}
+            	
+            	if(compareTo >= 0 && 0 >= compareFrom) {
+            		model.addAttribute("supportersBtn", "able");
+            	}
+            	
+            }
+            
+		} catch (Exception e) {
+			
+			model.addAttribute("supportersDetail", supporters);
+			model.addAttribute("supportersBtn", "");
+		}
+        
         model.addAttribute("displayMenuId", displayMenuId);
         model.addAttribute("categoryType", categoryType);
         model.addAttribute("groupId", groupId);
@@ -423,6 +477,14 @@ public class BrandViewController extends AbstractController {
 	        
 	        if(groupId == null || "".equals(groupId)) groupId = "l_beautizen";
 	
+	        List<Terms> beautizenTerm1= termsApi.getTerms(APConstant.EH_BEAUTIZEN_TERM_1);
+	        List<Terms> beautizenTerm2 = termsApi.getTerms(APConstant.EH_BEAUTIZEN_TERM_2);
+	        List<Terms> beautizenTerm3 = termsApi.getTerms(APConstant.EH_BEAUTIZEN_TERM_3);
+	        
+	        model.addAttribute("beautizenTerm1", beautizenTerm1.get(0));
+	        model.addAttribute("beautizenTerm2", beautizenTerm2.get(0));
+	        model.addAttribute("beautizenTerm3", beautizenTerm3.get(0));
+	        
 	        model.addAttribute("displayMenuId", displayMenuId);
 	        model.addAttribute("categoryType", categoryType);
 	        model.addAttribute("groupId", groupId);
@@ -459,14 +521,6 @@ public class BrandViewController extends AbstractController {
 	        }
 	
 	        SupportersRequesterInfo suppoters = bbsApi.getSupportersRequester(getMemberSn());
-	        
-	        List<Terms> beautizenTerm1= termsApi.getTerms(APConstant.EH_BEAUTIZEN_TERM_1);
-	        List<Terms> beautizenTerm2 = termsApi.getTerms(APConstant.EH_BEAUTIZEN_TERM_2);
-	        List<Terms> beautizenTerm3 = termsApi.getTerms(APConstant.EH_BEAUTIZEN_TERM_3);
-	        
-	        model.addAttribute("beautizenTerm1", beautizenTerm1.get(0));
-	        model.addAttribute("beautizenTerm2", beautizenTerm2.get(0));
-	        model.addAttribute("beautizenTerm3", beautizenTerm3.get(0));
 	        
 	        model.addAttribute("suppoters", suppoters);
             
@@ -508,6 +562,14 @@ public class BrandViewController extends AbstractController {
 	        if(groupId == null || "".equals(groupId)) groupId = "l_beautizen";
 	        
 	        SupportersRequesterInfo sriInfo = bbsApi.getSupportersRequester(getMemberSn()); //
+	       
+	        List<Terms> beautizenTerm1= termsApi.getTerms(APConstant.EH_BEAUTIZEN_TERM_1);
+	        List<Terms> beautizenTerm2 = termsApi.getTerms(APConstant.EH_BEAUTIZEN_TERM_2);
+	        List<Terms> beautizenTerm3 = termsApi.getTerms(APConstant.EH_BEAUTIZEN_TERM_3);
+	        
+	        model.addAttribute("beautizenTerm1", beautizenTerm1.get(0));
+	        model.addAttribute("beautizenTerm2", beautizenTerm2.get(0));
+	        model.addAttribute("beautizenTerm3", beautizenTerm3.get(0));
 	        
 	        model.addAttribute("displayMenuId", displayMenuId);
 	        model.addAttribute("categoryType", categoryType);

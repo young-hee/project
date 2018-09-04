@@ -38,12 +38,12 @@ this["AP"]["handlebars"]["my"]["my-inquiry-list"] = Handlebars.template({"1":fun
     + "')\">"
     + alias3(alias4((depth0 != null ? depth0.inquiryTitle : depth0), depth0))
     + "</button>\n						<p class=\"date\">"
-    + alias3(alias4((depth0 != null ? depth0.inquiryTitle : depth0), depth0))
+    + alias3((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,(depth0 != null ? depth0.receivedDt : depth0),"YYYY-MM-DD",{"name":"dateFormat","hash":{},"data":data}))
     + "</p>\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.responseEvalCode : depth0),"==",null,{"name":"xif","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.program(9, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "					</div>\n					<div class=\"answer\" id=\"cont_"
     + alias3(((helper = (helper = helpers.customerInquirySn || (depth0 != null ? depth0.customerInquirySn : depth0)) != null ? helper : alias2),(typeof helper === alias5 ? helper.call(alias1,{"name":"customerInquirySn","hash":{},"data":data}) : helper)))
-    + "\">\n					</div>\n				</td>\n			</tr>\n";
+    + "\"></div>\n				</td>\n			</tr>\n";
 },"7":function(container,depth0,helpers,partials,data) {
     return "							<p class=\"btn\"><button class=\"btn_sm_form\" type=\"button\" onclick=\"evalResponse('"
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.customerInquirySn : depth0), depth0))

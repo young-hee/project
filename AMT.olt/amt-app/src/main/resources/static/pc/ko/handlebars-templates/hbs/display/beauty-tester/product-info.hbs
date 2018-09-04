@@ -1,0 +1,19 @@
+			<div class="product_visual">
+				<img src="{{this.prodImage}}" alt="">
+			</div>
+			<div class="product_info">
+				<p class="product_name">{{this.prodName}}</p>
+				<p class="price">
+					{{#xif '==' 'Y'}}
+					<em class="discount">{{this.discountRate}}%</em>
+					{{/xif}}
+					<b>{{ numberFormat this.cPrice }}원</b>
+					{{#xif '==' 'Y'}}
+					<del>{{ numberFormat this.bPrice }}원</del>
+					{{/xif}}
+				</p>
+				<div class="btns">
+					<button type="button" class="like"><span class="sr_only">좋아요</span></button> <!-- 버튼 비활성화 button > disabled="disabled" 추가 -->
+					<button type="button" class="cart"><span class="sr_only">장바구니</span></button>
+				</div>
+			</div>

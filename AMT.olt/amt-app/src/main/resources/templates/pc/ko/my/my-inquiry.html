@@ -29,7 +29,7 @@
 							<h4 class="h_title"><strong>이용안내</strong></h4>
 							<p>평일 10:00 - 17:00 까지 1:1 문의를 통해서 상담을 받을 수 있습니다.</p>
 							<p>제품, 트러블 관련 문의는 <em>고객센터 (080-023-5454)</em>로 문의주세요.</p>
-							<button class="btn_lg_neutral" type="button" onclick="doInquiry();"><span class="ie_press">1:1 문의하기</span></button>
+							<button class="btn_lg_neutral" type="button"><span class="ie_press">1:1 문의하기</span></button>
 						</div>
 						<div>
 							<h4 class="h_title"><strong>추천 FAQ</strong></h4>
@@ -44,101 +44,418 @@
 							<a href="#more" class="link_more">더보기<i class="ico_arr_s"></i></a>
 						</div>
 					</div>
+					
 
 					<!-- tab menu wrap -->
 					<div class="ui_tab">
-						<!-- tab menu -->
-						<div class="tab_menu brd equally">
-							<ul>
-								<li class="on"><button type="button" onclick="getList('N')"><span>미해결 상담 <em id="reponseN_cnt"></em></span></button></li>
-								<li><button type="button" onclick="getList('Y')"><span>답변완료된 상담 <em id="reponseY_cnt"></em></span></button></li>
-							</ul>
-						</div>
-
-						<!-- 로딩 -->
-						<div class="loading" style="display:none;">
-							<span>
-								<img ap:src="@{/images/common/loading.gif}" alt="">
-							</span>
-						</div>
-
-						<!-- tab contents wrap -->
-						<div class="tab_contents">
-							<!-- tab content -->
-							<div class="tab_cont" id="d_responseN">
-								<h3 class="sr_only">미해결 상담</h3>
-								<div class="board_list type02 inquiry">
-									<table>
-										<caption class="sr_only">미해결 상담 목록</caption>
-										<colgroup>
-											<col width="80">
-											<col width="160">
-											<col width="*">
-											<col width="120">
-											<col width="100">
-										</colgroup>
-										<thead>
-										<tr>
-											<th scope="col">번호</th>
-											<th scope="col">상담유형</th>
-											<th scope="col">제목</th>
-											<th scope="col">등록일</th>
-											<th scope="col">상태</th>
-										</tr>
-										</thead>
-										<tbody>
-
-										</tbody>
-									</table>
-								</div>
-
-								<div class="ui_paging pagination"></div>
+							<!-- tab menu -->
+							<div class="tab_menu brd equally">
+								<ul>
+									<li class="on"><button type="button"><span>미해결 상담 <em>20</em></span></button></li>
+									<li><button type="button"><span>답변완료된 상담 <em>1</em></span></button></li>
+								</ul>
 							</div>
-							<div class="tab_cont" id="d_responseY">
-								<h3 class="sr_only">답변완료된 상담</h3>
-
-								<div class="board_list type02 inquiry board_toggle">
-									<table>
-										<caption class="sr_only">미해결 상담 목록</caption>
-										<colgroup>
-											<col width="80">
-											<col width="160">
-											<col width="*">
-											<col width="120">
-											<col width="120">
-										</colgroup>
-										<thead>
-										<tr>
-											<th scope="col">번호</th>
-											<th scope="col">상담유형</th>
-											<th scope="col">제목</th>
-											<th scope="col">답변일</th>
-											<th scope="col">평가</th>
-										</tr>
-										</thead>
-										<tbody>
-										</tbody>
-									</table>
+							<!-- tab contents wrap -->
+							<div class="tab_contents">
+								<!-- tab content -->
+								<div class="tab_cont">
+									<h3 class="sr_only">미해결 상담</h3>
+									<div class="board_list type02 inquiry">
+										<table>
+											<caption class="sr_only">미해결 상담 목록</caption>
+											<colgroup>
+												<col width="80">
+												<col width="160">
+												<col width="*">
+												<col width="120">
+												<col width="100">
+											</colgroup>
+											<thead>
+											<tr>
+												<th scope="col">번호</th>
+												<th scope="col">상담유형</th>
+												<th scope="col">제목</th>
+												<th scope="col">등록일</th>
+												<th scope="col">상태</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr>
+												<td>1</td>
+												<td>포인트/이벤트/쿠폰</td>
+												<td class="align_left"><a href="#">뷰티포인트 최소 사용 단위가 뭔가요? </a></td>
+												<td>2018-05-18</td>
+												<td>미답변</td>
+											</tr>
+											<tr>
+												<td>2</td>
+												<td>포인트/이벤트/쿠폰</td>
+												<td class="align_left"><a href="#">뷰티포인트 전용상품과 뷰티포인트로 결제가능한 상품이 함께 장바구니에 담긴 경우, 어떻게 결제되나요?  </a></td>
+												<td>2018-05-18</td>
+												<td>미답변</td>
+											</tr>
+											<tr>
+												<td>3</td>
+												<td>포인트/이벤트/쿠폰</td>
+												<td class="align_left"><a href="#">뷰티포인트 최소 사용 단위가 뭔가요? </a></td>
+												<td>2018-05-18</td>
+												<td>미답변</td>
+											</tr>
+											<tr>
+												<td>4</td>
+												<td>포인트/이벤트/쿠폰</td>
+												<td class="align_left"><a href="#">뷰티포인트 전용상품과 뷰티포인트로 결제가능한 상품이 함께 장바구니에 담긴 경우, 어떻게 결제되나요?  </a></td>
+												<td>2018-05-18</td>
+												<td>미답변</td>
+											</tr>
+											<tr>
+												<td>5</td>
+												<td>포인트/이벤트/쿠폰</td>
+												<td class="align_left"><a href="#">뷰티포인트 최소 사용 단위가 뭔가요? </a></td>
+												<td>2018-05-18</td>
+												<td>미답변</td>
+											</tr>
+											<tr>
+												<td>6</td>
+												<td>포인트/이벤트/쿠폰</td>
+												<td class="align_left"><a href="#">뷰티포인트 전용상품과 뷰티포인트로 결제가능한 상품이 함께 장바구니에 담긴 경우, 어떻게 결제되나요?  </a></td>
+												<td>2018-05-18</td>
+												<td>미답변</td>
+											</tr>
+											<tr>
+												<td>7</td>
+												<td>포인트/이벤트/쿠폰</td>
+												<td class="align_left"><a href="#">뷰티포인트 최소 사용 단위가 뭔가요? </a></td>
+												<td>2018-05-18</td>
+												<td>미답변</td>
+											</tr>
+											<tr>
+												<td>8</td>
+												<td>포인트/이벤트/쿠폰</td>
+												<td class="align_left"><a href="#">뷰티포인트 전용상품과 뷰티포인트로 결제가능한 상품이 함께 장바구니에 담긴 경우, 어떻게 결제되나요?  </a></td>
+												<td>2018-05-18</td>
+												<td>미답변</td>
+											</tr>
+											<tr>
+												<td>9</td>
+												<td>포인트/이벤트/쿠폰</td>
+												<td class="align_left"><a href="#">뷰티포인트 최소 사용 단위가 뭔가요? </a></td>
+												<td>2018-05-18</td>
+												<td>미답변</td>
+											</tr>
+											<tr>
+												<td>10</td>
+												<td>포인트/이벤트/쿠폰</td>
+												<td class="align_left"><a href="#">뷰티포인트 전용상품과 뷰티포인트로 결제가능한 상품이 함께 장바구니에 담긴 경우, 어떻게 결제되나요?  </a></td>
+												<td>2018-05-18</td>
+												<td>미답변</td>
+											</tr>
+											<!--/*목록없을때
+											<tr>
+												<td colspan="5">
+													<div class="no_data">
+														<p>문의하신 1:1 상담내역이 없습니다.</p>
+													</div>
+												</td>
+											</tr>
+											*/-->
+											</tbody>
+										</table>
+									</div>
+									<div class="pagination bg_gray">
+										<a href="#none" class="navi prev">&lt;<span class="sr_only">이전</span></a>
+										<span class="current">1</span>
+										<a href="#none">2</a>
+										<a href="#none">3</a>
+										<a href="#none">4</a>
+										<a href="#none">5</a>
+										<a href="#none">6</a>
+										<a href="#none">7</a>
+										<a href="#none">8</a>
+										<a href="#none">9</a>
+										<a href="#none">10</a>
+										<a href="#none" class="navi next">&gt;<span class="sr_only">다음</span></a>
+									</div>
 								</div>
+								<div class="tab_cont">
 
-								<div class="ui_paging pagination"></div>
+
+									<h3 class="sr_only">답변완료된 상담</h3>
+
+									<div class="board_list type02 inquiry board_toggle">
+										<table>
+											<caption class="sr_only">미해결 상담 목록</caption>
+											<colgroup>
+												<col width="80">
+												<col width="160">
+												<col width="*">
+												<col width="120">
+												<col width="120">
+											</colgroup>
+											<thead>
+											<tr>
+												<th scope="col">번호</th>
+												<th scope="col">상담유형</th>
+												<th scope="col">제목</th>
+												<th scope="col">답변일</th>
+												<th scope="col">평가</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr>
+												<td class="align_left qna_box" colspan="5">
+													<div>
+														<p class="num">1</p>
+														<span>포인트/이벤트/쿠폰</span>
+														<button type="button" class="question">뷰티포인트 전용상품과 뷰티포인트로 결제가능한 상품이 함께 장바구니에 담긴 경우, 어떻게 결제되나요?</button>
+														<p class="date">2018-05-18</p>
+														<p class="btn"><button class="btn_sm_form" type="button"><span class="ie_press">평가하기</span></button></p>
+													</div>
+													<div class="answer">
+														<dl>
+															<dt>상담내용</dt>
+															<dd>뷰티포인트 전용상품과 뷰티포인트로 결제가능한 상품이 함께 장바구니에 담긴 경우, 어떻게 결제되나요?</dd>
+														</dl>
+														<dl>
+															<dt>상담원 답변</dt>
+															<dd>안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세요.<br>
+																안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세요.<br>
+																안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세</dd>
+														</dl>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td class="align_left qna_box" colspan="5">
+													<div>
+														<p class="num">2</p>
+														<span>포인트/이벤트/쿠폰</span>
+														<button type="button" class="question">
+															뷰티포인트 최소 사용 단위가 뭔가요?
+														</button>
+														<p class="date">2018-05-18</p>
+														<p class="btn"><span class="btn_sm_bordered">만족</span></p>
+													</div>
+													<div class="answer">
+														<dl>
+															<dt>상담내용</dt>
+															<dd>뷰티포인트 전용상품과 뷰티포인트로 결제가능한 상품이 함께 장바구니에 담긴 경우, 어떻게 결제되나요?</dd>
+														</dl>
+														<dl>
+															<dt>상담원 답변</dt>
+															<dd>안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세요.<br>
+																안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세요.<br>
+																안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세</dd>
+														</dl>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td class="align_left qna_box" colspan="5">
+													<div>
+														<p class="num">3</p>
+														<span>포인트/이벤트/쿠폰</span>
+														<button type="button" class="question">
+															뷰티포인트 최소 사용 단위가 뭔가요?
+														</button>
+														<p class="date">2018-05-18</p>
+														<p class="btn"><span class="btn_sm_bordered">불만족</span></p>
+													</div>
+													<div class="answer">
+														<dl>
+															<dt>상담내용</dt>
+															<dd>뷰티포인트 전용상품과 뷰티포인트로 결제가능한 상품이 함께 장바구니에 담긴 경우, 어떻게 결제되나요?</dd>
+														</dl>
+														<dl>
+															<dt>상담원 답변</dt>
+															<dd>안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세요.<br>
+																안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세요.<br>
+																안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세</dd>
+														</dl>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td class="align_left qna_box" colspan="5">
+													<div>
+														<p class="num">4</p>
+														<span>포인트/이벤트/쿠폰</span>
+														<button type="button" class="question">뷰티포인트 전용상품과 뷰티포인트로 결제가능한 상품이 함께 장바구니에 담긴 경우, 어떻게 결제되나요?</button>
+														<p class="date">2018-05-18</p>
+														<p class="btn"><button class="btn_sm_form" type="button"><span class="ie_press">평가하기</span></button></p>
+													</div>
+													<div class="answer">
+														<dl>
+															<dt>상담내용</dt>
+															<dd>뷰티포인트 전용상품과 뷰티포인트로 결제가능한 상품이 함께 장바구니에 담긴 경우, 어떻게 결제되나요?</dd>
+														</dl>
+														<dl>
+															<dt>상담원 답변</dt>
+															<dd>안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세요.<br>
+																안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세요.<br>
+																안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세</dd>
+														</dl>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td class="align_left qna_box" colspan="5">
+													<div>
+														<p class="num">5</p>
+														<span>포인트/이벤트/쿠폰</span>
+														<button type="button" class="question">
+															뷰티포인트 최소 사용 단위가 뭔가요?
+														</button>
+														<p class="date">2018-05-18</p>
+														<p class="btn"><span class="btn_sm_bordered">만족</span></p>
+													</div>
+													<div class="answer">
+														<dl>
+															<dt>상담내용</dt>
+															<dd>뷰티포인트 전용상품과 뷰티포인트로 결제가능한 상품이 함께 장바구니에 담긴 경우, 어떻게 결제되나요?</dd>
+														</dl>
+														<dl>
+															<dt>상담원 답변</dt>
+															<dd>안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세요.<br>
+																안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세요.<br>
+																안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세</dd>
+														</dl>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td class="align_left qna_box" colspan="5">
+													<div>
+														<p class="num">6</p>
+														<span>포인트/이벤트/쿠폰</span>
+														<button type="button" class="question">
+															뷰티포인트 최소 사용 단위가 뭔가요?
+														</button>
+														<p class="date">2018-05-18</p>
+														<p class="btn"><span class="btn_sm_bordered">불만족</span></p>
+													</div>
+													<div class="answer">
+														<dl>
+															<dt>상담내용</dt>
+															<dd>뷰티포인트 전용상품과 뷰티포인트로 결제가능한 상품이 함께 장바구니에 담긴 경우, 어떻게 결제되나요?</dd>
+														</dl>
+														<dl>
+															<dt>상담원 답변</dt>
+															<dd>안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세요.<br>
+																안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세요.<br>
+																안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세</dd>
+														</dl>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td class="align_left qna_box" colspan="5">
+													<div>
+														<p class="num">7</p>
+														<span>포인트/이벤트/쿠폰</span>
+														<button type="button" class="question">뷰티포인트 전용상품과 뷰티포인트로 결제가능한 상품이 함께 장바구니에 담긴 경우, 어떻게 결제되나요?</button>
+														<p class="date">2018-05-18</p>
+														<p class="btn"><button class="btn_sm_form" type="button"><span class="ie_press">평가하기</span></button></p>
+													</div>
+													<div class="answer">
+														<dl>
+															<dt>상담내용</dt>
+															<dd>뷰티포인트 전용상품과 뷰티포인트로 결제가능한 상품이 함께 장바구니에 담긴 경우, 어떻게 결제되나요?</dd>
+														</dl>
+														<dl>
+															<dt>상담원 답변</dt>
+															<dd>안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세요.<br>
+																안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세요.<br>
+																안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세</dd>
+														</dl>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td class="align_left qna_box" colspan="5">
+													<div>
+														<p class="num">8</p>
+														<span>포인트/이벤트/쿠폰</span>
+														<button type="button" class="question">
+															뷰티포인트 최소 사용 단위가 뭔가요?
+														</button>
+														<p class="date">2018-05-18</p>
+														<p class="btn"><span class="btn_sm_bordered">만족</span></p>
+													</div>
+													<div class="answer">
+														<dl>
+															<dt>상담내용</dt>
+															<dd>뷰티포인트 전용상품과 뷰티포인트로 결제가능한 상품이 함께 장바구니에 담긴 경우, 어떻게 결제되나요?</dd>
+														</dl>
+														<dl>
+															<dt>상담원 답변</dt>
+															<dd>안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세요.<br>
+																안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세요.<br>
+																안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세</dd>
+														</dl>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td class="align_left qna_box" colspan="5">
+													<div>
+														<p class="num">9</p>
+														<span>포인트/이벤트/쿠폰</span>
+														<button type="button" class="question">
+															뷰티포인트 최소 사용 단위가 뭔가요?
+														</button>
+														<p class="date">2018-05-18</p>
+														<p class="btn"><span class="btn_sm_bordered">만족</span></p>
+													</div>
+													<div class="answer">
+														<dl>
+															<dt>상담내용</dt>
+															<dd>뷰티포인트 전용상품과 뷰티포인트로 결제가능한 상품이 함께 장바구니에 담긴 경우, 어떻게 결제되나요?</dd>
+														</dl>
+														<dl>
+															<dt>상담원 답변</dt>
+															<dd>안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세요.<br>
+																안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세요.<br>
+																안녕하세요, 아모레퍼시픽몰입니다. 항상 저희 아모레퍼시픽몰을 이용해주셔서 감사합니다. 좋은 하루되세</dd>
+														</dl>
+													</div>
+												</td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+
+									<div class="pagination bg_gray">
+										<a href="#none" class="navi prev">&lt;<span class="sr_only">이전</span></a>
+										<span class="current">1</span>
+										<a href="#none">2</a>
+										<a href="#none">3</a>
+										<a href="#none">4</a>
+										<a href="#none">5</a>
+										<a href="#none">6</a>
+										<a href="#none">7</a>
+										<a href="#none">8</a>
+										<a href="#none">9</a>
+										<a href="#none">10</a>
+										<a href="#none" class="navi next">&gt;<span class="sr_only">다음</span></a>
+									</div>
+								</div>
 							</div>
 						</div>
-					</div>
-					<script type="text/javascript">
-						// 임시 테스트용입니다.
-						$('.board_toggle .answer').hide();
+						<script type="text/javascript">
+							// 임시 테스트용입니다.
+							$('.board_toggle .answer').hide();
 
-						$('.board_toggle .qna_box button').click(function(e){
-							if ($(this).parent().hasClass('on')){
-								$(this).attr('title','답변 보기').parent().removeClass('on').next('.answer').hide();
-							} else {
-								$(this).parents('.board_toggle').find('.question').removeClass('on').children('button').attr('title','답변 보기').parent().next('.answer').hide();
-								$(this).attr('title','답변 보기 닫기').parent().addClass('on').next('.answer').show();
-							}
-							return false;
-						});
-					</script>
+							$('.board_toggle .qna_box button').click(function(e){
+								if ($(this).parent().hasClass('on')){
+									$(this).attr('title','답변 보기').parent().removeClass('on').next('.answer').hide();
+								} else {
+									$(this).parents('.board_toggle').find('.question').removeClass('on').children('button').attr('title','답변 보기').parent().next('.answer').hide();
+									$(this).attr('title','답변 보기 닫기').parent().addClass('on').next('.answer').show();
+								}
+								return false;
+							});
+						</script>
 				</div>
 				<!-- // cont_area -->
 
@@ -151,277 +468,9 @@
 
 	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
 	<th:block ap:fragment="layout-endpoint">
-		<script ap:src="@{/handlebars-templates/compiled/my/my-inquiry-list.js}"></script>
-		<script ap:src="@{/handlebars-templates/compiled/my/my-inquiry-cont.js}"></script>
-		<script ap:src="@{/handlebars-templates/compiled/my/layer-eval-inquiryResponse.js}"></script>
-		<script ap:src="@{/handlebars-templates/compiled/cs/layer-inquiry.js}"></script>
-		<script ap:src="@{/handlebars-templates/compiled/cs/layer-order-select.js}"></script>
-		<script ap:src="@{/handlebars-templates/compiled/cs/select-order-list.js}"></script>
 		<script>
+			$( '.ui_input_images' ).inputImages();
 			$( '.recommended_item .slide' ).ixSlideMax();
-		</script>
-		<script th:inline="javascript">
-			var offset = 0, limit = 10;
-
-			$(document).ready(function() {
-				getList('N');
-			});
-
-			/* 문의 목록 */
-			function getList(responseYn) {
-				$('.tab_contents').hide();
-				$('.loading').show();
-
-				AP.api.inquiryList({}, {
-					offset : offset,
-					limit : limit
-				}).done(function ( data ) {
-
-					$('#reponseN_cnt').text(data.responseNList.totalCount);
-					$('#reponseY_cnt').text(data.responseYList.totalCount);
-
-					var result = responseYn == 'Y' ? data.responseYList : data.responseNList;
-
-					var htmlStr = AP.common.getTemplate('my.my-inquiry-list', {
-						responseYn : responseYn,
-						result : result
-					});
-
-					setPagination(responseYn,result.totalCount);
-
-					$('.loading').hide();
-					$('#d_response' + responseYn).find('tbody').empty();
-					$('#d_response' + responseYn).find('tbody').html(htmlStr);
-
-					$('.loading').hide();
-					$('.tab_contents').show();
-				}).fail(function ( xhr, textStatus, errorThrown ) {
-					//실패
-					console.log( xhr.errorCode, xhr.errorMessage );
-				}).always(function () {
-					//성공, 실패
-				});
-
-			}
-
-			/* 페이징 처리 */
-			function setPagination(responseYn,totalCount) {
-				var options = {
-					offset : offset,
-					limit : limit,
-					totalCount : totalCount,
-					pagingLength : 5
-				}
-
-				$('#d_response' + responseYn).find('.ui_paging').paging( options );
-			}
-
-			/* 문의 내용 */
-			function getCont(inquirySn) {
-				AP.api.inquiryCont({}, {
-					inquirySn : inquirySn
-				}).done(function ( data ) {
-					//성공
-					var cont = AP.common.getTemplate('my.my-inquiry-cont', {
-						info : data.Inquiry
-					});
-
-					$('#cont_' + inquirySn).html(cont);
-
-				}).fail(function ( xhr, textStatus, errorThrown ) {
-					//실패
-					console.log( xhr.errorCode, xhr.errorMessage );
-				}).always(function () {
-					//성공, 실패
-				});
-			}
-
-			/* 1:1 문의하기 */
-			function doInquiry() {
-				var phoneNoInfo = /*[[${session.LOGIN_USER.member.phoneNo1.phoneNo}]]*/
-				AP.api.getInquiryTypes({}, {}).done(function ( data ) {
-					//성공
-					var modal = AP.modal.open({
-						templateKey : 'cs.layer-inquiry',
-						templateModel : {
-							types : data.data,
-							phoneNoInfo : phoneNoInfo
-						},
-						sizeType : 'L',
-						containerClass : 'advice_board'
-					});
-
-					$( '.ui_input_images' ).inputImages();
-					$( 'select' ).selectBox();
-
-					//sms 답변알림 체크
-					$('#phoneNo').on('blur', function(e){
-						if ($('#phoneNo').val() == null || $('#phoneNo').val() == "") {
-							$('#sms').prop('checked', false);
-						} else {
-							$('#sms').prop('checked', true);
-						}
-					});
-
-					$('#b_cancel').on('click', function(e) {
-						modal.close();
-					})
-
-				}).fail(function ( xhr, textStatus, errorThrown ) {
-					//실패
-					console.log( xhr.errorCode, xhr.errorMessage );
-				}).always(function () {
-					//성공, 실패
-				});
-			}
-
-			/* 문의 등록 */
-			function submit() {
-				var $form = $('form.validate');
-				if($('[name=foReceivedInquiryTypeSn]').val() == 'all') {
-					AP.modal.alert('문의 유형을 선택해주세요.');
-				} else {
-					if($form.valid()) {
-						var formData = new FormData( $('form').get(0) );
-						$( '.ui_input_images' ).inputImages( 'extendFormData', formData );
-
-						AP.api.inquiry({}, formData ).done(function ( data ) {
-							if (data) {
-								AP.modal.alert("등록되었습니다.").addListener('modal-close', function(e) {
-								location.href="/my/page/myInquiryList"
-							});
-						}
-						}).fail(function ( e ) {
-							AP.modal.alert(e.responseJSON.errorData.message);
-						}).always(function () {
-							//성공, 실패
-						});
-					}
-				}
-			}
-
-			/* 문의할 제품/주문 선택 */
-			function selectOrd() {
-				var modal = AP.modal.open({
-					templateKey : 'cs.layer-order-select',
-					containerClass : 'layer_popup layer_select'
-				});
-
-				$( '.ui_multiple_date_picker' ).multipleDatePicker({
-					defaultRangeDate: '1months',
-					minDate: moment().subtract( 50, 'years' )
-				}).on( 'multiple-date-picker-change', function (e) {
-					RS_Date = e.date.startDate;
-					RD_Date = e.date.endDate;
-					getOrderPage(0, e.date.startDate, e.date.endDate);
-				});
-
-				var $el = modal.getElement();
-
-				var RS_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).startDate;
-				var RD_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).endDate;
-
-				getOrderPage(0,RS_Date,RD_Date);
-
-				//적용 버튼 클릭
-				$('#b_ordConfirm').off('click').on('click', function(e) {
-					/* var ordInfo = JSON.parse($('[name=order]:checked').val());
-					var str = "<p class='bullet_dot ellipsis'>" + ordInfo.ordName + "</p>" +
-								"<button class='ui_close' type='button' onclick='deleteOrd()'>" +
-								"<span class='sr_only'>선택상품 삭제</span></button>";
-
-					$('#ordHistNo').attr('value', ordInfo.ordHistNo);
-					$('.attached').html(str);
-
-					temp = ordInfo.ordSn; */
-
-					modal.close();
-				});
-
-				$('#b_ordClose').off('click').on('click', function(e) {
-					modal.close();
-				});
-			}
-
-			function getOrderPage(ord_offset,RS_Date,RD_Date) {
-
-				$('.loading').show();
-				$('table').hide();
-
-				c_offset = ord_offset;
-
-				AP.api.getOrderPage({}, {
-					offset : ord_offset,
-					limit : limit,
-					RS_Date : RS_Date,
-					RD_Date : RD_Date
-				}).done(function(data) {
-					if (data) {
-						totalCount = data.totalCount;
-
-						var htmlStr = AP.common.getTemplate('cs.select-order-list', {
-							list : data.data,
-							totalCount : totalCount
-						});
-
-						$('.ui_table_striped > tbody').empty();
-						$('.ui_table_striped > tbody').html(htmlStr);
-
-						var options = {
-							offset : ord_offset,
-							limit : limit,
-							totalCount : totalCount,
-							pagingLength : 5
-						}
-
-						$('.pagination').paging( options );
-
-						$('.loading').hide();
-						$('table').show();
-					}
-				}).fail(function(e) {
-					AP.modal.alert(e.responseJSON.errorData.message).addListener('modal-close', function(e) {
-						$('#b_ordClose').click();
-					});
-				}).always(function() {
-				});
-			}
-
-			/* 답변 평가하기 */
-			function evalResponse(inquirySn) {
-				var modal = AP.modal.open({
-					templateKey : 'my.layer-eval-inquiryResponse',
-					containerClass : 'layer_wrap layer_sm mypage'
-				});
-
-				$('#b_evalConfirm').off('click').on('click', function(e) {
-					var responseEvalCode = $('[name=responseEvalCode]:checked').val();
-
-					AP.api.evalInquiryResponse({}, {
-						inquirySn : inquirySn,
-						responseEvalCode : responseEvalCode
-					}).done(function ( data ) {
-						//성공
-						if (data.result) {
-							AP.modal.alert('답변에 대한 평가가 완료되었습니다.').addListener('modal-close', function(e) {
-								modal.close();
-								getList('Y');
-							});
-						} else {
-							AP.modal.alert('평가 등록에 실패했습니다. 잠시 후 다시 시도해 주시기 바랍니다.');
-						}
-
-					}).fail(function ( xhr, textStatus, errorThrown ) {
-						//실패
-						AP.modal.alert(xhr.errorMessage);
-						console.log( xhr.errorCode, xhr.errorMessage );
-					});
-				});
-
-				$('#b_evalCancel').off('click').on('click', function(e) {
-					modal.close();
-				});
-			}
 		</script>
 	</th:block>
 </body>

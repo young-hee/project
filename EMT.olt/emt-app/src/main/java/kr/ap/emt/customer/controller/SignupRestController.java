@@ -170,15 +170,6 @@ public class SignupRestController extends AbstractController {
 
 
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		CicuemCuInfTotTcVo cicuemCuInfCoInVo = new CicuemCuInfTotTcVo();
-		setCellNum(memberForm.getCellNum(), cicuemCuInfCoInVo);
-		cicuemCuInfCoInVo.setAtclCd("20");
-		
-		CicuemCuInfCoOutVo resultObj = amoreAPIService.certifycheck90(cicuemCuInfCoInVo);
-		
-		if(!APConstant.NON_EXIST_INFO.equals(resultObj.getRsltCd())) {
-			throw error(result, HttpStatus.UNAUTHORIZED, "CERT90", "인증번호 발송에 실패했습니다.<br>90일 이내 점유인증 이력이 있는 사용자는 가입할 수 없습니다.");
-		}
 
 		memberForm.setValidFlag("phoneCert");
 		validate(memberForm, bindingResult, memberFormValidator);
@@ -768,8 +759,18 @@ public class SignupRestController extends AbstractController {
 				}
 				if(cicuemCuInfTotTcVo.getCiNo().endsWith("=="))
 					cicuemCuInfTotTcVo.setAtclCd("10");
-				else
+				else {
 					cicuemCuInfTotTcVo.setAtclCd("20");
+
+					CicuemCuInfTotTcVo cicuemCuInfCoInVo2 = new CicuemCuInfTotTcVo();
+					setCellNum(memberForm.getCellNum(), cicuemCuInfCoInVo2);
+					cicuemCuInfCoInVo2.setAtclCd("20");					
+					CicuemCuInfCoOutVo resultObj = amoreAPIService.certifycheck90(cicuemCuInfCoInVo2);
+					
+					if(!APConstant.NON_EXIST_INFO.equals(resultObj.getRsltCd())) {
+						throw error(result, HttpStatus.UNAUTHORIZED, "CERT90", "가입에 실패했습니다.<br>90일 이내 점유인증 이력이 있는 사용자는 가입할 수 없습니다.");
+					}
+				}
 				cicuemCuInfTotTcVo.setChCd(APConstant.EH_CH_CD);
 				cicuemCuInfTotTcVo.setSmsNum(cicuemCuInfTotTcVoRslt.getR_certNum());
 				cicuemCuInfTotTcVo.setRnarCd("1");

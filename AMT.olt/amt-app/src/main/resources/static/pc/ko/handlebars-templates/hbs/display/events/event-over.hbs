@@ -1,0 +1,23 @@
+<ul>
+{{#each this.planDisplayList}}
+	<li>
+		<div class="event_box">
+			{{#xif this.planDisplayTypeCode '==' 'Link'}}
+			<a href="{{this.linkNoticeUrl}}" {{#xif this.newWindowYn '==' 'Y'}}target="_blank"{{/xif}} >
+			{{else}}
+			<a href="/display/event_detail?planDisplaySn={{ this.planDisplaySn }}">
+			{{/xif}}
+				<img alt="" src="{{ absolutePath this.bannerImgP1 }}" alt="{{ this.planDisplayTitle }}">
+			</a>
+			<div class="info_section">
+				<p class="name ellipsis">{{ this.planDisplayTitle }}</p>
+				<p class="date">{{ dateFormat this.eventStartDt }}~{{ dateFormat this.eventEndDt }}</p>
+				<div class="like_area">
+					<i class="ico_like_xs"><span class="sr_only">좋아요</span></i><!--/* active : on */-->
+					<em>0</em>
+				</div>
+			</div>
+		</div>
+	</li>
+{{/each}}
+</ul>

@@ -154,6 +154,15 @@
 
             <!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
             <script>
+
+            if (AP.common.getCookie('is-user-id')) {
+                var $id = $('[name=chcsNo]');
+                if (AP.common.getCookie('user-id', null, 1) != 'on') {
+                    $id.val(AP.common.getCookie('user-id', null, 1));
+                    $id.parents().find('.placeholder').css('display', 'none');
+                    $('#save_id').prop('checked', true);
+                }
+            }
             var t2;
                 //하단 베너 제어
                 (function () {

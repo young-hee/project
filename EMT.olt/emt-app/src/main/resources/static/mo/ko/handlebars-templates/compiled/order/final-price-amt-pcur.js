@@ -5,11 +5,11 @@ this["AP"]["handlebars"]["order"] = this["AP"]["handlebars"]["order"] || {};
 this["AP"]["handlebars"]["order"]["final-price-amt-pcur"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
     var alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
-  return "						<span>온라인 상품(<em>"
+  return "					<li class=\"clear\">\n						<span>온라인 상품(<em>"
     + alias3((helpers.getCntMap || (depth0 && depth0.getCntMap) || alias2).call(alias1,(depth0 != null ? depth0.ordCntMap : depth0),"shipOrdOnlineProdCnt",{"name":"getCntMap","hash":{},"data":data}))
     + "</em>개)</span>\n						<span><span class=\"num\">"
     + alias3((helpers.getAmtMapPrice || (depth0 && depth0.getAmtMapPrice) || alias2).call(alias1,(depth0 != null ? depth0.ordAmtMap : depth0),"onlineShipProdSum","원",{"name":"getAmtMapPrice","hash":{},"data":data}))
-    + "</span></span>\n";
+    + "</span></span>\n					</li>\n";
 },"3":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
@@ -18,27 +18,27 @@ this["AP"]["handlebars"]["order"]["final-price-amt-pcur"] = Handlebars.template(
 },"4":function(container,depth0,helpers,partials,data) {
     var alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
-  return "							<span>뷰티포인트 상품(<em>"
+  return "						<li class=\"clear\">\n							<span>뷰티포인트 상품(<em>"
     + alias3((helpers.getCntMap || (depth0 && depth0.getCntMap) || alias2).call(alias1,(depth0 != null ? depth0.ordCntMap : depth0),"membershipExchCnt",{"name":"getCntMap","hash":{},"data":data}))
     + "</em>개)</span>\n							<span><span class=\"num\">"
     + alias3((helpers.getAmtMapPrice || (depth0 && depth0.getAmtMapPrice) || alias2).call(alias1,(depth0 != null ? depth0.ordAmtMap : depth0),"MembershipExch","원",{"name":"getAmtMapPrice","hash":{},"data":data}))
-    + "</span></span>\n";
+    + "</span></span>\n						</li>\n";
 },"6":function(container,depth0,helpers,partials,data) {
     var alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
-  return "							<span>뷰티포인트 상품(<em>"
+  return "						<li class=\"clear\">\n							<span>진주알 상품(<em>"
     + alias3((helpers.getCntMap || (depth0 && depth0.getCntMap) || alias2).call(alias1,(depth0 != null ? depth0.ordCntMap : depth0),"activityPointExchCnt",{"name":"getCntMap","hash":{},"data":data}))
     + "</em>개)</span>\n							<span><span class=\"num\">"
     + alias3((helpers.getAmtMapPrice || (depth0 && depth0.getAmtMapPrice) || alias2).call(alias1,(depth0 != null ? depth0.ordAmtMap : depth0),"ActivityPointExch","원",{"name":"getAmtMapPrice","hash":{},"data":data}))
-    + "</span></span>\n";
+    + "</span></span>\n						</li>\n";
 },"8":function(container,depth0,helpers,partials,data) {
     var alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
-  return "						<span>뷰티포인트 상품(<em>"
+  return "					<li class=\"clear\">\n						<span>테이크아웃 상품(<em>"
     + alias3((helpers.getCntMap || (depth0 && depth0.getCntMap) || alias2).call(alias1,(depth0 != null ? depth0.ordCntMap : depth0),"storeOrdOnlineProdSumCnt",{"name":"getCntMap","hash":{},"data":data}))
     + "</em>개)</span>\n						<span><span class=\"num\">"
     + alias3((helpers.getAmtMapPrice || (depth0 && depth0.getAmtMapPrice) || alias2).call(alias1,(depth0 != null ? depth0.ordAmtMap : depth0),"StorePickupProd","원",{"name":"getAmtMapPrice","hash":{},"data":data}))
-    + "</span></span>\n";
+    + "</span></span>\n					</li>\n";
 },"10":function(container,depth0,helpers,partials,data) {
     return "			<div class=\"inner_box\">\n				<p class=\"total clear\">\n					<strong>포장재</strong>\n					<b><strong class=\"num\">"
     + container.escapeExpression((helpers.getAmtMapPrice || (depth0 && depth0.getAmtMapPrice) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.ordAmtMap : depth0),"ShipUnitPacking","원",{"name":"getAmtMapPrice","hash":{},"data":data}))
@@ -159,13 +159,13 @@ this["AP"]["handlebars"]["order"]["final-price-amt-pcur"] = Handlebars.template(
     + alias3((helpers.currencyFormatDefault || (depth0 && depth0.currencyFormatDefault) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ordHistEx : depth0)) != null ? stack1.finalPamtPcur : stack1),"원",{"name":"currencyFormatDefault","hash":{},"data":data}))
     + "</span>\n		<input type=\"hidden\" name=\"finalPamtPcurPrice\" value=\""
     + alias3(container.lambda(((stack1 = (depth0 != null ? depth0.ordHistEx : depth0)) != null ? stack1.finalPamtPcur : stack1), depth0))
-    + "\"/>\n	</div>\n	<button type=\"button\"><span class=\"sr_only\">더보기</span></button>\n</dt>\n<dd class=\"panel\">\n	<div class=\"payment_details\">\n		<div class=\"inner_box\">\n			<p class=\"total clear\">\n				<strong>주문금액</strong>\n				<b><strong class=\"num\" >"
+    + "\"/>\n	</div>\n	<button type=\"button\"><span class=\"sr_only\">더보기</span></button>\n</dt>\n<dd class=\"panel\">\n	<div class=\"payment_details\">\n		<div class=\"inner_box\">\n			<p class=\"total clear\">\n				<strong>총 주문금액</strong>\n				<b><strong class=\"num\" >"
     + alias3((helpers.getAmtMapPrice || (depth0 && depth0.getAmtMapPrice) || alias2).call(alias1,(depth0 != null ? depth0.ordAmtMap : depth0),"Prod","원",{"name":"getAmtMapPrice","hash":{},"data":data}))
-    + "</strong></b>\n			</p>\n			<ul>\n				<li class=\"clear\">\n"
+    + "</strong></b>\n			</p>\n			<ul>\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.checkAmtMapPrice || (depth0 && depth0.checkAmtMapPrice) || alias2).call(alias1,(depth0 != null ? depth0.ordAmtMap : depth0),"onlineShipProdSum",{"name":"checkAmtMapPrice","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.isApMember : depth0),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(helpers.checkAmtMapPrice || (depth0 && depth0.checkAmtMapPrice) || alias2).call(alias1,(depth0 != null ? depth0.ordAmtMap : depth0),"StorePickupProd",{"name":"checkAmtMapPrice","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "				</li>\n			</ul>\n		</div>\n\n"
+    + "			</ul>\n		</div>\n\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.checkAmtMapPrice || (depth0 && depth0.checkAmtMapPrice) || alias2).call(alias1,(depth0 != null ? depth0.ordAmtMap : depth0),"ShipUnitPacking",{"name":"checkAmtMapPrice","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(helpers.checkAmtMapPrice || (depth0 && depth0.checkAmtMapPrice) || alias2).call(alias1,(depth0 != null ? depth0.ordAmtMap : depth0),"SpPriceAwardProd",{"name":"checkAmtMapPrice","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(helpers.checkAmtMapPrice || (depth0 && depth0.checkAmtMapPrice) || alias2).call(alias1,(depth0 != null ? depth0.ordAmtMap : depth0),"CaclDefaultShipFee",{"name":"checkAmtMapPrice","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")

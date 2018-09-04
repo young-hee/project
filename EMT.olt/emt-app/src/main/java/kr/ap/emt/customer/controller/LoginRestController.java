@@ -23,6 +23,7 @@ import net.g1project.ecp.api.model.sales.applications.PostAppInstall;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -466,11 +467,7 @@ public class LoginRestController extends AbstractController {
     public ResponseEntity<?> appToWeb(String type, AppCumuData data) {
     	logger.info("[appToWeb]{},{},{},{},{},{},{},{},{}", type, data.getAppUid(),data.getAppVer(),data.getDeviceModel(),data.getLocation(),data.getMarketing(),data.getOsVer(),data.getPush(),data.getTokenData());
     	Map<String, Object> result = new HashMap<String, Object>();
-    	if(!isLoggedIn()) {
-        	result.put("rsltCd", "FAILURE");
-        	result.put("rsltMsg", "저장에 실패했습니다.");
-    		return ResponseEntity.ok(result);
-    	}
+
     	result.put("rsltCd", "SUCCESS");
     	result.put("rsltMsg", "저장되었습니다.");
     	if("info".equals(type)) {
@@ -480,7 +477,7 @@ public class LoginRestController extends AbstractController {
     			body.setAppVer(data.getAppVer());
     			body.setAppUid(data.getAppUid());
     			body.setMemberSn(getMemberSn());
-    			body.setMemberYn("Y");
+    			body.setMemberYn(isLoggedIn() ? "Y" : "N");
     			body.setModelName(data.getDeviceModel());
     			body.setAgreeYn("N");
     			body.setOsVer(data.getOsVer());
@@ -491,9 +488,9 @@ public class LoginRestController extends AbstractController {
     	if("pmAgree".equals(type)) {
     		AgreeYN agreeYN = new AgreeYN();
     		agreeYN.setAgreeYn(data.getPush());
-			applicationsApi.updateAppAgree(data.getTokenData(), getMemberSn(), agreeYN);
+			applicationsApi.updateAppAgree(data.getTokenData(), agreeYN);
 			agreeYN.setAgreeYn(data.getMarketing());
-			applicationsApi.updateAppMaktingAgree(data.getTokenData(), getMemberSn(), agreeYN);
+			applicationsApi.updateAppMaktingAgree(data.getTokenData(), agreeYN);
     	}
 
     	return ResponseEntity.ok(result);
@@ -501,10 +498,10 @@ public class LoginRestController extends AbstractController {
     /**
      * 앱 버전.
      */
-    @RequestMapping("/customer/getAppVersion")
-    public ResponseEntity<?> appVersion() {
+    @RequestMapping("/customer/getAppVersion/{osType}")
+    public ResponseEntity<?> appVersion(@PathVariable("osType") String osType) {
 
-    	ApplicationVer version = applicationsApi.getApplicationVersion(isAndroid()? "Android" : "iOS");
+    	ApplicationVer version = applicationsApi.getApplicationVersion(osType);
     	return ResponseEntity.ok(version);
     }
 

@@ -1,0 +1,40 @@
+				<dt>{{this.regularEvent.regularEventName}}</dt>
+				<dd>
+					<p class="text">테스터 모집인원 30명 / <b><em>{{this.requesters.totalCount}}명</em></b> 신청중</p>
+					<ul class="step">
+						<li class="on">
+							<span>참가신청</span>
+							<i class="ico"></i>
+							<span class="date">{{dateFormat this.regularEvent.requestStartDt "MM.DD"}}~{{dateFormat this.regularEvent.requestEndDt "MM.DD"}}</span>
+							<span class="sr_only">현재단계</span>
+						</li>
+						{{#xif this.status '!=' 'RQ'}}
+						<li class="on">
+						{{else}} 
+						<li>
+						{{/xif}}
+							<span>테스터발표</span>
+							<i class="ico"></i>
+							<span class="date">{{dateFormat this.regularEvent.winnerNoticeExpectedDt "MM.DD"}}</span>
+						</li>
+						{{#xif this.status '==' 'RQ'}}<li class="on">{{/xif}}
+						{{#xif this.status '==' 'TN'}}<li class="on">{{/xif}}
+						{{#xif this.status '==' 'RR'}}<li class="on">{{/xif}}
+						{{#xif this.status '==' 'BR'}}<li>{{/xif}}
+							<span>리뷰등록</span>
+							<i class="ico"></i>
+							{{#xif this.regularEvent.reviewRegistStartDt '!=' null}}
+							<span class="date">{{dateFormat this.regularEvent.reviewRegistStartDt "MM.DD"}}~{{dateFormat this.regularEvent.reviewRegistEndDt "MM.DD"}}</span>
+							{{/xif}}
+						</li>
+						{{#xif this.status '==' 'BR'}}
+						<li class="on">
+						{{else}}
+						<li>
+						{{/xif}}
+							<span>베스트리뷰발표</span>
+							<i class="ico"></i>
+							<span class="date">{{dateFormat this.regularEvent.bestReviewNoticeDt "MM.DD"}}</span>
+						</li>
+					</ul>
+				</dd>

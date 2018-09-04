@@ -1,0 +1,45 @@
+							<h3 class="h_title">등록된 리뷰</h3>
+						{{#xif this.prodReviewListInfo.totalCount '>' 0}}
+							<div class="tab_menu">
+								<ul>
+									<li class="on"><button type="button">추천순</button></li>
+									<li><button type="button">최신순</button></li>
+								</ul>
+							</div>
+							<div class="tab_contents">
+								<div class="tab_cont">
+									<div class="detail_review">
+										<div class="tester_review">
+											<div class="reviews">
+												<ul>
+													{{#each this.prodReviewListInfo.prodReviewList}}
+														{{#xif this.imgList.length '==' 0}}
+													<li class="review_item no_photo">
+														{{else}}
+													<li class="review_item">
+														{{/xif}}
+														<a href="#none" style="width:100%;">
+															{{#xif this.topReviewYn '==' 'Y'}}
+															<img alt="베스트 리뷰" class="best" src="/pc/ko/images/event/ico_best.png">
+															{{/xif}}
+															{{#xif this.imgList.length '>' 0}}
+																<img alt="" src="{{this.imgList.0.imageFileUrl}}">
+															{{/xif}}
+															<span class="info">
+																<span class="grade"><b>{{this.scope}}</b></span>
+																<b class="text">{{this.prodReviewTitle}}</b>
+															</span>
+														</a>
+													</li>
+													{{/each}}
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						{{else}}
+							<div class="no_review">
+								등록된 리뷰가 없습니다.
+							</div>
+						{{/xif}}

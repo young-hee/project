@@ -15,24 +15,27 @@
 						<p class="text color_gray font_md">
 							<span class="num" >[[${#numbers.formatInteger( reviewStats.totalCount, 0, 'COMMA')}]]</span>명 중 <span class="bold_222">[[${maxCountPerScope.percent}]]%</span>의 고객이 <span class="bold_222">[[${maxCountPerScope.scope}]]점</span>을 주었습니다.
 						</p>
+						
 						<ul class="review_graph">
 							<th:block th:each="survey : ${reviewStats.prodReviewSurveys}"
-							 th:unless="${#lists.isEmpty(survey.countPerResItems)}" 
-							 th:with="max=${survey.countPerResItems.0}">
+									  th:unless="${#lists.isEmpty(survey.countPerResItems)}"
+									  th:with="max=${survey.countPerResItems[0]}">
+									  <th:block th:each="item : ${survey.countPerResItems}" 
+									  			th:if="${max.count < item.count}" 
+									  			th:with="max=${item}"></th:block>
 								<li>
 									<span class="title" th:text="${survey.questionHeader}"></span>
-									<th:block th:each="item : ${survey.countPerResItems}">
-										<th:block th:if="${max.rate < item.rate}" th:with="max=${item}">
-									</th:block>
-										<span>
+									<span>
 										<span class="graph">
 											<em style="width:[[${max.rate}]]%"></em>
 										</span>
 										<span class="data">[[${max.rate}]]%</span>
+										<span class="exp">[[${max.responseBodyText}]]</span>
 									</span>
 								</li>
 							</th:block>
 						</ul>
+						
 						<div class="ui_toggle_contents mgt30">
 							<button type="button" class="btn_border_round toggle_btn view"><span>자세히보기</span><i class="ico_down"></i></button>
 							<div class="toggle_area graph_detail">

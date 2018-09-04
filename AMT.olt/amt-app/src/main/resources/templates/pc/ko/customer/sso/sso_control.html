@@ -1,24 +1,17 @@
-<%@page import="com.pacific.sso.util.SsoUtil"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="euc-kr"%>
-<%@ page import="java.io.*" %>
-<%@ page import="java.util.*" %>
-<%@page import="com.pacific.common.SITEProperty"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.net.InetAddress"%>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>SSO control page</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="GENERATOR" content="Rational Software Architect">
+	<title>SSO control page</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="GENERATOR" content="Rational Software Architect">
 	<style type="text/css">
 	    .tdTitle { font-weight: bold; font-size: 11pt; text-align: center; color:#202020;background-color: #eeeeee;}
 	    .tdName { font-weight: bold; width: 150px;padding:3 0 0 10;  color:#707070; }
 	    .tdView { font-weight: bold; width: 350px;padding:3 0 0 10; }
-	    td{  font-family: "±¼¸²", "±¼¸²Ã¼"; font-size: 9pt; font-style: normal; color:#3300FF; text-decoration: none;word-break:break-all}
-	    a:hover {  font-family: "±¼¸²", "±¼¸²Ã¼"; font-size: 9pt; font-style: normal; color: A91C8B; text-decoration: none}
+	    td{  font-family: "êµ´ë¦¼", "êµ´ë¦¼ì²´"; font-size: 9pt; font-style: normal; color:#3300FF; text-decoration: none;word-break:break-all}
+	    a:hover {  font-family: "êµ´ë¦¼", "êµ´ë¦¼ì²´"; font-size: 9pt; font-style: normal; color: A91C8B; text-decoration: none}
 	
 	    body {
-	         font-size: 9pt;
+	        font-size: 9pt;
 	        scrollbar-face-color:#FFFFFF;
 	        scrollbar-highlight-color: #CFCFCF;
 	        scrollbar-3dlight-color: #FFFFFF;
@@ -26,11 +19,11 @@
 	        scrollbar-darkshadow-color: #FFFFFF;
 	        scrollbar-track-color: #FFFFFF;
 	        scrollbar-arrow-color:#CFCFCF}
-	    .title { font-family: "±¼¸²"; font-size: 10px; color: #A01BA0; font-weight: bold }
-	    .text { font-family: "±¼¸²"; font-size: 10px; color: #333333; line-height: 20px}
-	     .hdnDiv {
+	    .title { font-family: "êµ´ë¦¼"; font-size: 10px; color: #A01BA0; font-weight: bold }
+	    .text { font-family: "êµ´ë¦¼"; font-size: 10px; color: #333333; line-height: 20px}
+	    .hdnDiv {
 	        display:none
-	     }
+	    }
 	</style>
 </head>
 <body>
@@ -51,60 +44,8 @@
 		}
 	}
 </script>
-<%
-	response.setHeader("Pragma","No-cache");
-	response.setDateHeader("Expires",0);
-	response.setHeader("Cache-Control","no-cache");
-	
-	
-	SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-	Date curDt = new Date();
-	
-	String siteCd= SITEProperty.getProperty("SITE_CD");
-	
-	// -------------------------------------------------------------
-	
-	String act = request.getParameter("act");
-	String applySsoDbParam = request.getParameter("appldb");
-	
-	try {
-		if("save".equals(act)) {
-			if("true".equals(applySsoDbParam)) {
-				SsoUtil.setSSODBApply(siteCd, true);
-			}
-			
-			if("false".equals(applySsoDbParam)) {
-				SsoUtil.setSSODBApply(siteCd, false);
-			}
-		}
-		
-		if("saveFilter".equals(act)) {
-			String filterStr = request.getParameter("filterlist");
-			SsoUtil.setDBFilterList(siteCd, filterStr);
-		}
-	}catch(Exception ex) {
-		out.println("<pre>");
-		out.println(ex.getMessage());
-		out.println("</pre>");
-	}
-	
-	/*
-	SSO Ã³¸® Á¤º¸¸¦ È®ÀÎ / ¼öÁ¤ÇÏ´Â ÆäÀÌÁö
-	*/
-	
-	
-	boolean applySsoDb = SsoUtil.isSSODBApply(siteCd);
-	String gatewayUrl =  SITEProperty.getProperty("SSO_GW_URL");
-	String filterList = SsoUtil.getDBFilterList(siteCd,"\n");
-	
-	boolean validGW = SsoUtil.validSsoGateway(siteCd, gatewayUrl, request);
-	String ctxPath = request.getContextPath();
-	
-	InetAddress address = InetAddress.getLocalHost();
-	
-%>
 
-<h2>SSO Control page for <%=siteCd %> (<%=fmt.format(curDt) %>)</h2>
+<h2>SSO Control page for [[${siteCd}]] ([[${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm:ss')}]])</h2>
 
 <table border="1" cellspacing="0" cellpadding="3" bordercolor="#9BB7C1">
      <tr>
@@ -112,37 +53,33 @@
      </tr>
      <tr>
          <td class='tdName'>HostName</td>
-         <td class='tdView'><%=address.getHostName()%>
-                 <% if("apxbrwas01".equals(address.getHostName())){ out.print("[43¹ø]");}%>
-                 <% if("apxbrwas02".equals(address.getHostName())){ out.print("[44¹ø]");}%>
-                 <% if("apxbrwas03".equals(address.getHostName())){ out.print("[253¹ø]");}%>                                
-         </td>
+         <td class='tdView'>[[${address.getHostName()}]]&nbsp;</td>
      </tr>
      <tr>
          <td class='tdName'>HostAddress</td>
-         <td class='tdView'><%=address.getHostAddress()%>&nbsp;</td>
+         <td class='tdView'>[[${address.getHostAddress()}]]&nbsp;</td>
      </tr>
      <tr>
          <td class='tdName'>My IP[RemoteAddr]</td>
-         <td class='tdView'><%=request.getRemoteAddr()%>&nbsp;</td>
+         <td class='tdView'>remote</td>
      </tr>
      <tr>
          <td class='tdName'>SSO properties</td>
-         <td class='tdView'><%=SsoUtil.getSsoProperty().getPropDirectory()%></td>
+         <td class='tdView'>[[${propDir}]]</td>
      </tr>
  </table>
  <br>
  <hr>
 
-<form action="<%=ctxPath %>/common/sso_control.jsp" name="frm" method="post">
+<form th:action="@{/common/sso_control.jsp}" name="frm" method="post">
 	<input type="hidden" name="act" value="">
-	<input type="hidden" name="appldb" value="<%=applySsoDb %>">
+	<input type="hidden" name="appldb" th:value="${applySsoDb}">
 
 <table border="1" cellspacing="0" cellpadding="3" bordercolor="#9BB7C1">
 	<tbody>
 		<tr>
-			<td class='tdName'>SSO DBÁ¶È¸</td>
-			<td class='tdView'><%=applySsoDb %></td>
+			<td class='tdName'>SSO DBì¡°íšŒ</td>
+			<td class='tdView'>[[${applySsoDb}]]</td>
 			<td>
 				<input type="button" value="on"  onclick="ssodbOnOff('true')">
 				<input type="button" value="off" onclick="ssodbOnOff('false')">
@@ -150,13 +87,13 @@
 		</tr>
 		<tr>
 			<td class='tdName'>SSO Gateway</td>
-			<td class='tdView'><%=gatewayUrl %></td>
-			<td><%=validGW %></td>
+			<td class='tdView'>[[${gatewayUrl}]]</td>
+			<td>[[${validGW}]]</td>
 		</tr>
 		<tr>
-			<td class='tdName'>SSO Ã³¸® ¿¹¿Ü filter</td>
+			<td class='tdName'>SSO ì²˜ë¦¬ ì˜ˆì™¸ filter</td>
 			<td>
-				<textarea rows="10" cols="50" name="filterlist"><%=filterList %></textarea>
+				<textarea rows="10" cols="50" name="filterlist">[[${filterList}]]</textarea>
 			</td>
 			<td>
 				<input type="button" value="Apply Filter" onclick="saveFilter()">

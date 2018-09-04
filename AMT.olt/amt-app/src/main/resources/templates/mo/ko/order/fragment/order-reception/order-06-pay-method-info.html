@@ -238,3 +238,27 @@
 	</dl>
 </div>
 <!--결제수단 선택-->
+
+
+<script th:inline="javascript">
+	$('.slide').ixSlideMax();
+
+	//결제 수단 선택 상태값
+	$('input:radio[name="pay"]').change(function() {
+		$('.other_noty_area > div').hide();
+		$('.payment_list').find('.card_list').hide();
+		$('.card_list .card').find('input').prop('checked',false);
+		if (!$(this).next().hasClass('one_pay')) {
+			$(this).closest('li').find('.card_list').show();
+		}
+	});
+
+	//다른결제수단 선택시 레이어 노출
+	$('input:radio[name="other"]').change(function() {
+		var class_name = $(this).next().attr('class');
+		$('.other_noty_area > div').hide();
+		if ($(this).next().hasClass(class_name)) {
+			$(this).closest('.card_list').next('.other_noty_area').find('.'+class_name).show();
+		}
+	});
+</script>

@@ -6,30 +6,46 @@
  */
 package kr.ap.amt.display.controller;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.ap.comm.config.interceptor.PageTitle;
+import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.common.SeoEntity;
 import kr.ap.comm.support.common.SnsEntity;
 import kr.ap.comm.support.constants.APConstant;
+import net.g1project.ecp.api.model.BooleanResult;
+import net.g1project.ecp.api.model.EmbeddableAddress;
+import net.g1project.ecp.api.model.EmbeddableTel;
 import net.g1project.ecp.api.model.sales.display.Corner;
 import net.g1project.ecp.api.model.sales.display.CornerContentsSet;
 import net.g1project.ecp.api.model.sales.display.PageInfo;
 import net.g1project.ecp.api.model.sales.guide.FoNotice;
 import net.g1project.ecp.api.model.sales.plandisplay.PlanDisplay;
 import net.g1project.ecp.api.model.sales.plandisplay.PlanDisplayEventListResult;
+import net.g1project.ecp.api.model.sales.product.OnlineProdInfo;
+import net.g1project.ecp.api.model.sales.product.OnlineProdPriceInfo;
+import net.g1project.ecp.api.model.sales.product.ProdReviewListInfo;
+import net.g1project.ecp.api.model.sales.regularevent.ApRegularEventRequester;
 import net.g1project.ecp.api.model.sales.regularevent.RegularEvent;
-import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkPost;
+import net.g1project.ecp.api.model.sales.regularevent.RegularEventRequester;
+import net.g1project.ecp.api.model.sales.regularevent.RegularEventRequesters;
+import net.g1project.ecp.api.model.sales.regularevent.RegularEvents;
 
 /**
  * @author Ria@g1project.net
@@ -48,14 +64,14 @@ public class EventViewController extends AbstractController {
         //Mobile
         if (isMobileDevice()) {
     		
-        	pageName = "M01_event_m"; 
+        	pageName = "M01_nowEvent_m"; 
     		
         }
 
         //PC
         if (isPcDevice()) {
         	
-        	pageName = "M01_event_p"; 
+        	pageName = "M01_nowEvent_m"; 
         }
            
         //이벤트 목록
@@ -329,19 +345,464 @@ public class EventViewController extends AbstractController {
 
     }
 	
-	@RequestMapping("/beauty_test")
+	@RequestMapping("/AppH010403")
     @PageTitle(title = "뷰티테스터 신청 안내")
     public String beauty_test(Model model, String displayMenuId) {
+	    
+	    if(!isLoggedIn()) {
+            return "redirect:/login";
+        }
 		 
-		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
+//		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
         
-        RegularEvent regularEvent = regulareventApi.regularEventSummary(APConstant.PROD_EXPERIENCE_GRP);	
+        RegularEvents regularEventsP = regulareventApi.apRegularEvents("Progress", 0, 1000);//.regularEventSummary(APConstant.PROD_EXPERIENCE_GRP);
+        RegularEvents regularEventsE = regulareventApi.apRegularEvents("End", 0, 1000);//.regularEventSummary(APConstant.PROD_EXPERIENCE_GRP);
+        
+        List<Map<String, Object>> regularEventsPrgs = new ArrayList();
+        List<Map<String, Object>> regularEventsEnd = new ArrayList();
+        
+        for(RegularEvent regularEvent : regularEventsP.getRegularEventList()) {
+            /*
+            displayStartDt //전시시작일시
+            displayEndDt   //전시종료일시
+            requestStartDt //신청시작일시 ~ requestEndDt   //신청종료일시   > 참가모집중
+            reviewRegistStartDt    //리뷰등록시작일시 ~ reviewRegistEndDt  //리뷰등록종료일시   > 후기등록중
+            bestReviewNoticeDt //베스트리뷰공지일시  > 베스트리뷰발표
+            */
+            String status = "";
+            RegularEventRequesters requesters = new RegularEventRequesters();
+            Date cDate = new Date();
+            try{
+                if(cDate.after(regularEvent.getRequestStartDt()) && cDate.before(regularEvent.getRequestEndDt())) {
+                    status = "RQ";
+                }else if(cDate.after(regularEvent.getWinnerNoticeExpectedDt()) && cDate.before(regularEvent.getReviewRegistStartDt())) {
+                    status = "TN";
+                }else if(cDate.after(regularEvent.getReviewRegistStartDt()) && cDate.before(regularEvent.getReviewRegistEndDt())) {
+                    status = "RR";
+                }else if(cDate.after(regularEvent.getBestReviewNoticeDt()) && cDate.before(regularEvent.getEventEndDt())){
+                    status = "BR";
+                }else if(cDate.after(regularEvent.getEventEndDt())){
+                    status = "EE";
+                }
+            }catch(Exception e){
+                //e.printStackTrace();
+            }
+            
+            try {
+                requesters = regulareventApi.apRegularEventRequesters(regularEvent.getRegularEventSn(), "All", null, null, "StartDt");
+            }catch(Exception e) {
+                requesters.setTotalCount(0);
+                requesters.setRegularEventRequesters(new ArrayList<RegularEventRequester>());
+            }
+            
+            Map<String, Object> rem = new HashMap();
+            rem.put("status", status);
+            rem.put("requesters", requesters);
+            rem.put("regularEvent", regularEvent);
+            
+            regularEventsPrgs.add(rem);
+        }
+        
+        for(RegularEvent regularEvent : regularEventsE.getRegularEventList()) {
+            String status = "";
+            RegularEventRequesters requesters = new RegularEventRequesters();
+            Date cDate = new Date();
+            try{
+                if(cDate.after(regularEvent.getRequestStartDt()) && cDate.before(regularEvent.getRequestEndDt())) {
+                    status = "RQ";
+                }else if(cDate.after(regularEvent.getWinnerNoticeExpectedDt()) && cDate.before(regularEvent.getReviewRegistStartDt())) {
+                    status = "TN";
+                }else if(cDate.after(regularEvent.getReviewRegistStartDt()) && cDate.before(regularEvent.getReviewRegistEndDt())) {
+                    status = "RR";
+                }else if(cDate.after(regularEvent.getBestReviewNoticeDt()) && cDate.before(regularEvent.getEventEndDt())){
+                    status = "BR";
+                }else if(cDate.after(regularEvent.getEventEndDt())){
+                    status = "EE";
+                }
+            }catch(Exception e){
+                //e.printStackTrace();
+            }
+            
+            try {
+                requesters = regulareventApi.apRegularEventRequesters(regularEvent.getRegularEventSn(), "All", null, null, "StartDt");
+            }catch(Exception e) {
+                requesters.setTotalCount(0);
+                requesters.setRegularEventRequesters(new ArrayList<RegularEventRequester>());
+            }
+            
+            Map<String, Object> rem = new HashMap();
+            rem.put("status", status);
+            rem.put("requesters", requesters);
+            rem.put("regularEvent", regularEvent);
+            
+            regularEventsEnd.add(rem);
+        }
 		
         model.addAttribute("displayMenuId", displayMenuId);
-        model.addAttribute("regularEvent", regularEvent);
+        model.addAttribute("regularEventsPrgs", regularEventsPrgs);
+        model.addAttribute("regularEventsEnd", regularEventsEnd);
         
-        return "display/" + pageInfo.getMenuPageFileId();
+        return "display/M01_beautyTester_m";// + pageInfo.getMenuPageFileId();
 
+    }
+	
+	@GetMapping("/beauty_test/request")
+	public String requestBeautyTester(String regularEventSn) {
+	    
+	    try {
+	        System.out.println(getMemberSn()==null?"null":getMemberSn());
+    	    long regularEventRequesterSn = 314;//getMemberSn()==null?280:getMemberSn();
+    	    ApRegularEventRequester body = new ApRegularEventRequester();
+    	    EmbeddableAddress addr = new EmbeddableAddress();
+    	    addr.setAddress1("address1");
+    	    addr.setZipCode("12345");
+    	    body.setAddress(addr);
+    	    body.setEmailAddress("aaa@bbb.com");
+    	    body.setPersonalHomepageUrl("http://personal.psn");
+    	    body.setRegularEventRequesterSn(regularEventRequesterSn);
+    	    body.setRequesterName("");
+    	    body.setRequestTitle("신청제목");
+    	    body.setRequestReason("신청사유");
+    	    body.setSnsUrl("http://facebook.com/tester");
+    	    EmbeddableTel tel = new EmbeddableTel();
+    	    tel.setCountryNo("82");
+    	    tel.setPhoneNo("1011112222");
+    	    body.setTel(tel);
+    	    body.setTermsAgreeYn("Y");
+    	    BooleanResult result = regulareventApi.apRegularEventUpdateParticipated(Long.parseLong(regularEventSn), regularEventRequesterSn, body);
+    	    System.out.println(result.isResult());
+	    }catch(Exception e) {
+	        e.printStackTrace();
+	    }
+	    return "";
+	}
+	
+	/**
+     * 뷰티테스터 상세 (mo specific)
+     *
+     * @param model
+     * @param requestReview
+     * @param previewKey
+     * @return
+     */
+    @GetMapping("/beauty_test/detail")
+    @PageTitle(title = "뷰티테스터 상세")
+    public String beautytesterDetail(Model model, String regularEventSn) {
+        
+        if(!isLoggedIn()) {
+            return "redirect:/login";
+        }
+        
+        System.out.println("#### regularEventSn : " + regularEventSn);
+        try {
+            
+            RegularEvent regularEvent = new RegularEvent();
+            try {
+                regularEvent = regulareventApi.apRegularEvent(Long.parseLong(regularEventSn));
+            }catch(Exception e) {
+                e.printStackTrace();
+            }
+            model.addAttribute("regularEvent", regularEvent);
+            
+            long onlineProdSn = (regularEvent.getAwards()==null || regularEvent.getAwards().size()==0)?-1:regularEvent.getAwards().get(0).getOnlineProdSn();
+            long prodSn = (regularEvent.getAwards()==null || regularEvent.getAwards().size()==0)?-1:regularEvent.getAwards().get(0).getProdSn();
+            long memberSn = getMemberSn()==null?-1:getMemberSn();
+            String onlyProd = "N";  //단일단위상품여부
+            
+            OnlineProdInfo op = new OnlineProdInfo();
+            try {
+                op = productApi.getOnlineProduct(onlineProdSn, prodSn, getMemberSn(), onlyProd);
+            }catch(Exception e) {
+                e.printStackTrace();
+            }
+            model.addAttribute("prodSn", prodSn);
+            model.addAttribute("prodName", op.getOnlineProdName());
+            model.addAttribute("prodImage", op.getProducts().get(0).getProdImages().get(0).getImgUrl());
+            model.addAttribute("detailDesc", op.getDetailDesc());
+            model.addAttribute("flags", op.getFlags());
+            model.addAttribute("brandName", op.getProducts().get(0).getBrandName());    //온라인제품정보에 브랜드 정보가 없어 첫번째 단위상품 정보에서 추출
+            //"onlineProdGift": {"giftProdTargetYn": "N", "giftProdImgDisplayYn": "N", "giftProds": [], "giftcardTargetYn": "N"},
+            model.addAttribute("reviewCount", op.getReviewCount());
+            model.addAttribute("reviewScopeAvg", op.getReviewScopeAvg());
+            
+            model.addAttribute("prd", op);
+
+            OnlineProdPriceInfo oppi = op.getAvailablePrices().get(0);
+            
+            int minRate = oppi.getMinOnlineSalePriceDiscountRate() + oppi.getMinMemberLevelDiscountRate() + oppi.getMinOnlineMemberDiscountRate() + oppi.getMinImmedDiscountRate();
+            int maxRate = oppi.getMaxOnlineSalePriceDiscountRate() + oppi.getMaxMemberLevelDiscountRate() + oppi.getMaxOnlineMemberDiscountRate() + oppi.getMaxImmedDiscountRate();
+            BigDecimal minPrice = oppi.getMinOnlineMemberDiscountPrice();
+            String dblPriceDispYn = oppi.getDoublePriceDisplayYn();
+            BigDecimal beforePrice = oppi.getMinBeforeOnlineSalePrice();        
+            model.addAttribute("discountRate", maxRate);
+            model.addAttribute("cPrice", minPrice);
+            model.addAttribute("bPrice", beforePrice);
+            model.addAttribute("dblPriceDispYn", dblPriceDispYn);
+            model.addAttribute("prodDetailImage", op.getOnlineProdImages().get(0).getImgUrl());
+            
+            MemberSession membersession = getMemberSession();
+            model.addAttribute("memberInfo", membersession.getMember());
+            model.addAttribute("memberSn", membersession.getMember_sn());
+            
+            String status = "";
+            Date cDate = new Date();
+            try{
+                if(cDate.after(regularEvent.getRequestStartDt()) && cDate.before(regularEvent.getRequestEndDt())) {
+                    status = "RQ";
+                }else if(cDate.after(regularEvent.getWinnerNoticeExpectedDt()) && cDate.before(regularEvent.getReviewRegistStartDt())) {
+                    status = "TN";
+                }else if(cDate.after(regularEvent.getReviewRegistStartDt()) && cDate.before(regularEvent.getReviewRegistEndDt())) {
+                    status = "RR";
+                }else if(cDate.after(regularEvent.getBestReviewNoticeDt()) && cDate.before(regularEvent.getEventEndDt())){
+                    status = "BR";
+                }else if(cDate.after(regularEvent.getEventEndDt())){
+                    status = "EE";
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            model.addAttribute("status", status);
+
+            RegularEventRequesters requesters = new RegularEventRequesters();
+            RegularEventRequesters winners = new RegularEventRequesters();
+            ProdReviewListInfo reviews = new ProdReviewListInfo();
+            boolean isReview = false;
+            
+            
+//            if(status.equals("RQ")) {
+                requesters = regulareventApi.apRegularEventRequesters(Long.parseLong(regularEventSn), "All", null, null, "StartDt");   //신청자 목록 : winStatusCode = All 추가 필요
+//            }
+            
+            if(status.equals("TN") || status.equals("RR") || status.equals("BR")) {
+                try {
+                    winners = regulareventApi.apRegularEventRequesters(Long.parseLong(regularEventSn), "Win", null, null, "StartDt");      //당첨자 목록
+                    isReview = regulareventApi.apRegularEventIsReview(Long.parseLong(regularEventSn)).isResult();
+//                    requesters.getRegularEventRequesters().stream().filter(o -> o.getMemberSn().equals(/**Long.parseLong("311")/*/memberSn/**/)).forEach(o -> ownRequesterSnList.add(o.getRegularEventRequesterSn()));
+                    
+                    String prodReviewUnit = "OnlineProd";
+                    String prodReviewType = "ExperienceGrp";
+                    //int offset = 0;
+                    //int limit = 15;
+                    String styleCode = "";
+                    String prodReviewSort = "HighScope";    //정렬방식 - Last(최근등록순) - HighScope(별점높은순) - LowScope(별점낮은순) - Recommend(추천많은순) - View(조회많은순)
+                    String scope = "All";   //별점 필터. All(전체), 5, 4, 3, 2, 1
+                    String topReviewOnlyYn = "N";
+                    String topReviewFirstYn = "Y";
+                    Date startDate = new Date();
+                    Date endDate = new Date();
+                    String imageOnlyYn = "N";
+                  //ProdReviewListInfo reviews = productApi.getProductReviews(prodReviewUnit, prodReviewType, offset, limit, memberSn, onlineProdSn, prodSn, styleCode, prodReviewSort, scope, topReviewOnlyYn, topReviewFirstYn, startDate, endDate, imageOnlyYn, null, null);
+                    reviews = productApi.getProductReviews(prodReviewUnit, "All", null, null, null, null, null, null, prodReviewSort, scope, topReviewOnlyYn, topReviewFirstYn, null, null, imageOnlyYn, null, null);
+                }catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            
+            model.addAttribute("requesters", requesters);
+            model.addAttribute("winners", winners);
+            model.addAttribute("isReview", isReview);
+            model.addAttribute("reviews", reviews);
+            
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return "display/beauty-tester-detail";
+    }
+	
+	/**
+     *  AP 전용 뷰티테스터 행사 상세 조회
+     *
+     * @param regularEventSn
+     * @return
+     */
+    @RequestMapping({"/beauty_test/regular_event_detail"})
+    @ResponseBody
+    public ResponseEntity<?> regularEventDetail(String regularEventSn) {
+        System.out.println("#### " + regularEventSn);
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        
+        try {
+            RegularEvent regularEvent = new RegularEvent();
+            try {
+                regularEvent = regulareventApi.apRegularEvent(Long.parseLong(regularEventSn));
+            }catch(Exception e) {
+                e.printStackTrace();
+            }
+            result.put("regularEvent", regularEvent);
+            
+            long onlineProdSn = /**360;/*/regularEvent.getAwards().get(0).getOnlineProdSn();/**/
+            long prodSn = /**261474;/*/regularEvent.getAwards().get(0).getProdSn();/**/
+            long memberSn = getMemberSn();
+            String onlyProd = "N";  //단일단위상품여부
+            
+            OnlineProdInfo op = new OnlineProdInfo();
+            try {
+                op = productApi.getOnlineProduct(onlineProdSn, prodSn, getMemberSn(), onlyProd);
+            }catch(Exception e) {
+                e.printStackTrace();
+            }
+            result.put("prodSn", prodSn);
+            result.put("prodName", op.getOnlineProdName());
+            result.put("prodImage", op.getProducts().get(0).getProdImages().get(0).getImgUrl());
+            result.put("detailDesc", op.getDetailDesc());
+            OnlineProdPriceInfo oppi = op.getAvailablePrices().get(0);
+            
+            int minRate = oppi.getMinOnlineSalePriceDiscountRate() + oppi.getMinMemberLevelDiscountRate() + oppi.getMinOnlineMemberDiscountRate() + oppi.getMinImmedDiscountRate();
+            int maxRate = oppi.getMaxOnlineSalePriceDiscountRate() + oppi.getMaxMemberLevelDiscountRate() + oppi.getMaxOnlineMemberDiscountRate() + oppi.getMaxImmedDiscountRate();
+            BigDecimal minPrice = oppi.getMinOnlineMemberDiscountPrice();
+            String dblPriceDispYn = oppi.getDoublePriceDisplayYn();
+            BigDecimal beforePrice = oppi.getMinBeforeOnlineSalePrice();        
+            result.put("discountRate", maxRate);
+            result.put("cPrice", minPrice);
+            result.put("bPrice", beforePrice);
+            result.put("dblPriceDispYn", dblPriceDispYn);
+            result.put("prodDetailImage", op.getOnlineProdImages().get(0).getImgUrl());
+            
+            MemberSession membersession = getMemberSession();
+            result.put("memberInfo", membersession.getMember());
+            
+            String status = "";
+            Date cDate = new Date();
+            try{
+                if(cDate.after(regularEvent.getRequestStartDt()) && cDate.before(regularEvent.getRequestEndDt())) {
+                    status = "RQ";
+                }else if(cDate.after(regularEvent.getWinnerNoticeExpectedDt()) && cDate.before(regularEvent.getReviewRegistStartDt())) {
+                    status = "TN";
+                }else if(cDate.after(regularEvent.getReviewRegistStartDt()) && cDate.before(regularEvent.getReviewRegistEndDt())) {
+                    status = "RR";
+                }else if(cDate.after(regularEvent.getBestReviewNoticeDt()) && cDate.before(regularEvent.getEventEndDt())){
+                    status = "BR";
+                }else if(cDate.after(regularEvent.getEventEndDt())){
+                    status = "EE";
+                }
+            }catch(Exception e){
+                
+            }
+            result.put("status", status);
+                        
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("errorData", e);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+        }
+    }
+    
+    /**
+     *  AP 전용 뷰티테스터 행사 제품 리뷰 조회
+     *
+     * @param regularEventSn
+     * @return
+     */
+    @RequestMapping({"/beauty_test/regular_event_product_reviews"})
+    @ResponseBody
+    public ResponseEntity<?> regularEventProductReviews(String regularEventSn, int offset, int limit, String reviewSort) {
+        System.out.println("#### regularEventSn : " + regularEventSn);
+        System.out.println("#### offset : " + offset);
+        System.out.println("#### limit : " + limit);
+        System.out.println("#### reviewSort : " + reviewSort);
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        
+        try {
+            RegularEvent regularEvent = regulareventApi.apRegularEvent(Long.parseLong(regularEventSn));
+            result.put("regularEvent", regularEvent);
+            
+            long onlineProdSn = /**360;/*/regularEvent.getAwards().get(0).getOnlineProdSn();/**/
+            long prodSn = /**261474;/*/regularEvent.getAwards().get(0).getProdSn();/**/
+            long memberSn = getMemberSn();
+            String onlyProd = "N";  //단일단위상품여부
+            
+            /** status 별 추가정보 조회 **/
+            //review
+            String prodReviewUnit = "OnlineProd";
+            String prodReviewType = "ExperienceGrp";
+            //int offset = 0;
+            //int limit = 15;
+            String styleCode = "";
+            String prodReviewSort = "HighScope";    //정렬방식 - Last(최근등록순) - HighScope(별점높은순) - LowScope(별점낮은순) - Recommend(추천많은순) - View(조회많은순)
+            String scope = "All";   //별점 필터. All(전체), 5, 4, 3, 2, 1
+            String topReviewOnlyYn = "N";
+            String topReviewFirstYn = "Y";
+            Date startDate = new Date();
+            Date endDate = new Date();
+            String imageOnlyYn = "N";
+            //ProdReviewListInfo prodReviewListInfo = productApi.getProductReviews(prodReviewUnit, prodReviewType, offset, limit, memberSn, onlineProdSn, prodSn, styleCode, prodReviewSort, scope, topReviewOnlyYn, topReviewFirstYn, startDate, endDate, imageOnlyYn, null, null);
+            ProdReviewListInfo prodReviewListInfo = productApi.getProductReviews(prodReviewUnit, "All", offset, limit, null, null, null, null, prodReviewSort, scope, topReviewOnlyYn, topReviewFirstYn, null, null, imageOnlyYn, null, null);
+            result.put("prodReviewListInfo", prodReviewListInfo);            
+            
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("errorData", e);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+        }
+    }
+    
+    /**
+     *  AP 전용 뷰티테스터 행사 신청자 조회
+     *
+     * @param regularEventSn
+     * @return
+     */
+    @RequestMapping({"/beauty_test/regular_event_requesters"})
+    @ResponseBody
+    public ResponseEntity<?> regularEventRequesters(String regularEventSn, int offset, int limit, String order) {
+        System.out.println("#### regularEventSn : " + regularEventSn);
+        System.out.println("#### offset : " + offset);
+        System.out.println("#### limit : " + limit);
+        System.out.println("#### order : " + order);
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        
+        try {
+            RegularEventRequesters requesters = new RegularEventRequesters();
+            RegularEventRequesters winners = new RegularEventRequesters();
+            
+            List<Long> ownRequesterSnList = new ArrayList();
+            boolean isWin = false;
+            
+            try {
+                requesters = regulareventApi.apRegularEventRequesters(Long.parseLong(regularEventSn), "All", offset, limit, order);   //신청자 목록 : winStatusCode = All 추가 필요
+                winners = regulareventApi.apRegularEventRequesters(Long.parseLong(regularEventSn), "Win", offset, limit, order);      //당첨자 목록 : winStatusCode = Win 추가 필요
+                
+                boolean isReview = regulareventApi.apRegularEventIsReview(Long.parseLong(regularEventSn)).isResult();
+                
+                long memberSn = getMemberSn();
+/*                
+                for(RegularEventRequester rer : requesters.getRegularEventRequesters()) {
+                    System.out.println(rer.getMemberSn() + " : " + rer.getMemberId() + " : " + rer.getRequestTitle());
+                }
+*/                
+                requesters.getRegularEventRequesters().stream().filter(o -> o.getMemberSn().equals(/**Long.parseLong("311")/*/memberSn/**/)).forEach(o -> ownRequesterSnList.add(o.getRegularEventRequesterSn()));
+                isWin = isReview;//winners.getRegularEventRequesters().stream().filter(o -> o.getMemberSn().equals(memberSn)).findFirst().isPresent();
+                
+                /*
+                if(ownRequesterSnList.size()==0) {
+                    try {
+                        ApRegularEventRequester body = new ApRegularEventRequester();
+                        body.setRequesterName("홍길동");
+                        body.setRequestTitle("제목");
+                        body.setRequestReason("사연");
+                        regulareventApi.apRegularEventParticipated(Long.parseLong(regularEventSn), body);
+                    }catch(Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                */
+            }catch(Exception e) {
+                e.printStackTrace();
+            }
+            result.put("requesters", requesters);
+            result.put("ownRequesterSnList", ownRequesterSnList);
+            result.put("winners", winners);
+            result.put("win", isWin);
+            
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("errorData", e);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+        }
     }
 	
 	@RequestMapping("/sweet_letter")

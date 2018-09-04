@@ -4,16 +4,16 @@ this["AP"]["handlebars"]["main"] = this["AP"]["handlebars"]["main"] || {};
 this["AP"]["handlebars"]["main"]["home"] = this["AP"]["handlebars"]["main"]["home"] || {};
 
 this["AP"]["handlebars"]["main"]["home"]["new-product-list"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression, alias4=container.lambda;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
   return "			<li class=\"ix-list-item\">\n				<a href=\""
     + alias3((helpers.productDetailPath || (depth0 && depth0.productDetailPath) || alias2).call(alias1,(depth0 != null ? depth0.onlineProdSn : depth0),{"name":"productDetailPath","hash":{},"data":data}))
     + "\">\n					<span class=\"lazy_load_wrap\">\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.saleDisplayStatus : depth0),"==","OutOfStock",{"name":"xif","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "						<img src=\"\" data-src=\""
-    + alias3(alias4(((stack1 = ((stack1 = (depth0 != null ? depth0.onlineProdImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
+    + alias3((helpers.replaceImagePath || (depth0 && depth0.replaceImagePath) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.onlineProdImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1),380,380,{"name":"replaceImagePath","hash":{},"data":data}))
     + "\" alt=\"\" class=\"lazy_load\">\n					</span>\n					<span class=\"item_title\">"
-    + alias3(alias4((depth0 != null ? depth0.onlineProdName : depth0), depth0))
+    + alias3(container.lambda((depth0 != null ? depth0.onlineProdName : depth0), depth0))
     + "</span>\n					<span class=\"price\"><b>"
     + alias3((helpers.numberFormat || (depth0 && depth0.numberFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.onlineProdPriceSummary : depth0)) != null ? stack1.minOnlineSalePrice : stack1),{"name":"numberFormat","hash":{},"data":data}))
     + "</b> 원</span>\n				</a>\n			</li>\n";

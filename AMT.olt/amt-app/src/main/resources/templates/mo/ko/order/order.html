@@ -52,9 +52,8 @@
 			<th:block ap:replace="~{order/fragment/order-reception/order-01-product-info}"/>
 			<!--포장서비스-->
 			<th:block ap:replace="~{order/fragment/order-reception/order-02-packing-info}"/>
-			<!--배송정보입력-->
-			<th:block ap:replace="~{order/fragment/order-reception/order-03-ship-address-info}"/>				<!--회원-->
-			<th:block ap:replace="~{order/fragment/order-reception/order-03-ship-address-nonmember-info}"/> <!--비 회원-->
+			<!--배송정보입력(회원, 비회원 통합) -->
+			<th:block ap:replace="~{order/fragment/order-reception/order-03-ship-address-info}"/>
 			<!--쿠폰/포인트 혜택사용-->
 			<th:block ap:replace="~{order/fragment/order-reception/order-04-coupon-benefit-info}"/>
 			<!--추가 사은품 안내-->
@@ -86,7 +85,6 @@
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
-	<script ap:src="@{/handlebars-templates/compiled/my/location-auth.js}"></script>  						<!--위치기반 동의 -->
 	<script ap:src="@{/handlebars-templates/compiled/order/layer-order-non-member-02.js}"></script>		<!-- 비회원 개인정보 수집동의 -->
 	<script ap:src="@{/handlebars-templates/compiled/order/layer-info-change.js}"></script> 				<!--주문고객 정보변경 Layer -->
 
@@ -100,7 +98,7 @@
 	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
 	<script th:inline="javascript">
 		$( document ).ready(function() {
-			//init();
+			init();
 
 			//주문완료화면 오류 발생시
 			var ordCompleteError = /*[[${ordCompleteError}]]*/ null;
@@ -114,6 +112,7 @@
 			}
 
 		});
+
 		// 주소 찾기
 		$( '.ui_find_addresses' ).findAddresses();
 		// 수량 조절
@@ -327,19 +326,37 @@
 			var $modalEl = modal.getElement();
 
 			// 비회원 구매하기
-			$modalEl.find(".btn_md_neutral").click(function() {
-				var radioVal = $('[name=radio]:checked').val();
-				if(radioVal == '1'){
+			$modalEl.find("#btnAgreeNext").click(function() {
+				var agree1 = $modalEl.find("#agree1").is(":checked");
+				var agree2 = $modalEl.find("#agree2").is(":checked");
+				var agree3 = $modalEl.find("#agree3").is(":checked");
+
+				if(agree1 && agree2 && agree3){
 					modal.close();
 				}else {
 					AP.modal.alert("비회원구매 서비스 제공을 위한\n 개인정보 수집·이용에 동의하셔야 주문이 가능합니다.");
 				}
 			});
 
-			// 장바구니 이동
-			$modalEl.find(".btn_md_secondary").click(function() {
-				modal.close();
-				location.replace('/cart/cartList');
+			// 모든 약관 동의
+			$modalEl.find("#check_all").click(function() {
+				var checkAll = $modalEl.find("#check_all").is(":checked");
+				$modalEl.find("#agree1").prop('checked', checkAll);
+				$modalEl.find("#agree2").prop('checked', checkAll);
+				$modalEl.find("#agree3").prop('checked', checkAll);
+			});
+
+			//각각의 동의 체크버튼
+			$modalEl.find("#agree1, #agree2, #agree3").click(function() {
+				var agree1 = $modalEl.find("#agree1").is(":checked");
+				var agree2 = $modalEl.find("#agree2").is(":checked");
+				var agree3 = $modalEl.find("#agree3").is(":checked");
+
+				if(agree1 && agree2 && agree3) {
+					$modalEl.find("#check_all").prop('checked', true);
+				} else {
+					$modalEl.find("#check_all").prop('checked', false);
+				}
 			});
 
 			// 레이어 닫기

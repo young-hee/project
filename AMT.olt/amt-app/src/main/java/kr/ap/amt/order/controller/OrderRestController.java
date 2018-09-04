@@ -45,7 +45,7 @@ public class OrderRestController extends OrderBaseController {
 
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
-        OrdSummaryInfo ordSummary = orderApi.getOrdSummary(getMemberSn(), null, null);
+        OrdSummaryInfo ordSummary = orderApi.getOrdSummary(getMemberSn(), null, null, null);
 
         //주문/배송건수(FO Header)
         result.put("ordShippngCnt", ordSummary.getOrdReceptCnt() + ordSummary.getPayCompleteCnt() + ordSummary.getPreparingCnt() + ordSummary.getShippingCnt());

@@ -32,7 +32,7 @@
 						<!--/* 쿠폰 한개 */-->
 						<dl class="coupon_info" th:each="item : ${immCoupons}">
 							<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'ProdDc'}">
-								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em>(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
+								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em th:if="${item.dDay > 0}">(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
 								<dd>
 									<div class="coupon_area">
 										<div class="coupon">
@@ -60,7 +60,7 @@
 								</dd>
 							</th:block>
 							<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'CartDc'}">
-								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em>(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
+								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em th:if="${item.dDay > 0}">(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
 								<dd>
 									<div class="coupon_area">
 										<div class="coupon">
@@ -89,7 +89,7 @@
 								</dd>
 							</th:block>
 							<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'MPlusN'}">
-								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em>(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
+								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em th:if="${item.dDay > 0}">(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
 								<dd>
 									<div class="coupon_area">
 										<div class="coupon">
@@ -110,7 +110,7 @@
 								</dd>
 							</th:block>
 							<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'CartAward'}">
-								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em>(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
+								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em th:if="${item.dDay > 0}">(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
 								<dd>
 									<div class="coupon_area">
 										<div class="coupon">
@@ -130,7 +130,7 @@
 								</dd>
 							</th:block>
 							<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'Buy1Get'}">
-								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em>(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
+								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em th:if="${item.dDay > 0}">(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
 								<dd>
 									<div class="coupon_area">
 										<div class="coupon">
@@ -152,7 +152,7 @@
 								</dd>
 							</th:block>
 							<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'ShipFeeFree'}">
-								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em>(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
+								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em th:if="${item.dDay > 0}">(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
 								<dd>
 									<div class="coupon_area">
 										<div class="coupon">
@@ -177,7 +177,7 @@
 					<dd class="cont">
 						<dl class="coupon_info" th:each="item : ${availCoupons}">
 							<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'ProdDc'}">
-								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em>(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
+								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em th:if="${item.dDay > 0}">(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
 								<dd>
 									<div class="coupon_area">
 										<div class="coupon">
@@ -205,7 +205,7 @@
 								</dd>
 							</th:block>
 							<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'CartDc'}">
-								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em>(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
+								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em th:if="${item.dDay > 0}">(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
 								<dd>
 									<div class="coupon_area">
 										<div class="coupon">
@@ -234,7 +234,7 @@
 								</dd>
 							</th:block>
 							<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'MPlusN'}">
-								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em>(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
+								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em th:if="${item.dDay > 0}">(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
 								<dd>
 									<div class="coupon_area">
 										<div class="coupon">
@@ -255,7 +255,7 @@
 								</dd>
 							</th:block>
 							<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'CartAward'}">
-								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em>(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
+								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em th:if="${item.dDay > 0}">(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
 								<dd>
 									<div class="coupon_area">
 										<div class="coupon">
@@ -275,7 +275,7 @@
 								</dd>
 							</th:block>
 							<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'Buy1Get'}">
-								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em>(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
+								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em th:if="${item.dDay > 0}">(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
 								<dd>
 									<div class="coupon_area">
 										<div class="coupon">
@@ -297,7 +297,7 @@
 								</dd>
 							</th:block>
 							<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'ShipFeeFree'}">
-								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em>(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
+								<dt><th:block th:text="${item.availCoupon.couponName}">베리떼 ONLY ONE 브랜드쿠폰 두줄일 때 이렇게 이렇게 이렇게 </th:block><em th:if="${item.dDay > 0}">(D-<th:block th:text="${item.dDay}">99</th:block>)</em></dt>
 								<dd>
 									<div class="coupon_area">
 										<div class="coupon">

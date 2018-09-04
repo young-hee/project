@@ -130,7 +130,7 @@
 			this._$target.find( '.btn_basket' ).on( 'click', function (e) {
 				var products = this._selectedOptions.getSelectedData();
 				this._productsInOutOfStock( products ).done( function () {
-					if ( AP.LOGIN_USER ) {
+					//if ( AP.LOGIN_USER ) {
 						this._addCartProd( 'order', products ).done( function () {
 							AP.modal.confirm( AP.message.ADDED_CART_TO_CART_PAGE ).addListener( 'modal-close', function (e) {
 								if ( e.closeType === 'confirm' ) {
@@ -140,9 +140,9 @@
 						}.bind(this)).fail( function ( xhr ) {
 							//에러처리
 						}.bind(this));
-					} else {
-						this._noneMemberOrderInfo( products, 'cart' );
-					}
+					//} else {
+						//this._noneMemberOrderInfo( products, 'cart' );
+					//}
 				}.bind(this));
 			}.bind(this));
 		},
@@ -305,7 +305,7 @@
 			if ( products.length ) {
 				//장바구니 저장 api
 				AP.api.addCartProd( null, JSON.stringify({cartProdExPostList: cartProdExPostList})).done( function ( result ) {
-					AP.header.resetCartCount();
+					//AP.header.resetCartCount();
 					defer.resolve();
 				}).fail( function ( xhr ) {
 					AP.modal.alert( AP.message.API_SAVE_ERROR );

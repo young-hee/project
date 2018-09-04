@@ -13,7 +13,7 @@ this["AP"]["handlebars"]["main"]["home"]["recommend-items"] = Handlebars.templat
     + "\" class=\"lazy_load_wrap\">\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.saleDisplayStatus : depth0),"==","OutOfStock",{"name":"xif","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "					<img class=\"lazy_load\" src=\"\" data-src=\""
-    + alias2(alias1(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.products : depth0)) != null ? stack1.prodImages : stack1)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
+    + alias2((helpers.replaceImagePath || (depth0 && depth0.replaceImagePath) || alias4).call(alias3,((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.products : depth0)) != null ? stack1.prodImages : stack1)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1),208,208,{"name":"replaceImagePath","hash":{},"data":data}))
     + "\" alt=\"\">\n				</a>\n		</div>\n		\n		<div class=\"info_box\">\n			<div class=\"title_area\">\n				<h3 class=\"h_title\">"
     + alias2(alias1((depth0 != null ? depth0.onlineProdName : depth0), depth0))
     + "</h3>\n			</div>\n			<div class=\"item_option\">\n				<p class=\"option_name\">"

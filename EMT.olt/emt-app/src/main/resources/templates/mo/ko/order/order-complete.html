@@ -6,10 +6,11 @@
 	<!-- page contents -->
 	<div class="ap_contents cart order_complete">
 		<div class="panel order_cmplt_info">
+						
+			<div class="img_order_complete"><img ap:src="@{/images/cart/img_order_complete.png}" alt="" class=""></div>
 			<h3 class="h_title"><strong>주문이 완료되었습니다.</strong></h3>
 			<div class="order_number_wrap">주문번호 : <em class="num" th:text="${ordEx.ordNo}">201711179727881</em></div>
-			<div class="img_order_complete"><img ap:src="@{/images/cart/img_order_complete.png}" alt="" class=""></div>
-			<div class="h_title align_center lh">결제 완료 이후에 주문 및 배송에 관한 확인은<br><strong class="font_md">마이 에뛰드 > 배송조회</strong>에서 확인하세요.</div>
+			<div class="align_center lh">결제 완료 이후에 주문 및 배송에 관한 확인은<br><strong class="font_md">마이 에뛰드 > 배송조회</strong>에서 확인하세요.</div>
 			<div class="panel gray mgt20">
 				<ul class="list_bullet_dot">
 					<li>기타 주문 상품의 교환/반품/환불에 대한 신청이나 문의는 고객센터 이하 1:1 문의 메뉴, 또는 주문 조회 리스트 페이지를 통해 처리가 가능합니다.</li>
@@ -48,30 +49,6 @@
 	<script ap:src="@{/handlebars-templates/compiled/order/final-price-amt-pcur.js}"></script> 			<!-- 최종 결제금액 영역 -->
 
 	<script th:inline="javascript">
-		$( document ).ready(function() {
-			init();
-		});
-		function init() {
-			var ordOnlineProdList = /*[[${#lists.size(shippingOrdOnlineProdList)}]]*/ '0';							// 온라인상품 카운트
-			var storeOrdOnlineProdList = /*[[${#lists.size(storePickupOrdOnlineProdList)}]]*/ '0';					// 테이크아웃상품 카운트
-			var ordHistProdCnt = ordOnlineProdList > 0 ? $("input[name=ordHistProdCnt]").length : 0;				// 온라인 단위상품 카운트
-			var storeOrdHistProdCnt = storeOrdOnlineProdList > 0 ? $("input[name=storeOrdHistProdCnt]").length : 0;	// 테이크아웃 단위상품 카운트
-			var isApMember = /*[[${isApMember}]]*/ false;		//회원여부
-			if(isApMember > 0){
-				// 주문상품 확인 수량
-				$("#totalOrdOnlineProdCnt").html(parseInt(ordHistProdCnt) + parseInt(storeOrdHistProdCnt));
-				// 온라인쇼핑상품 수량(단위상품 수량합계)
-				$("#shipOrdOnlineProdCnt").html(parseInt(ordHistProdCnt));
-				// 테이크아웃상품 수량(단위상품 수량합계)
-				$("#storeOrdOnlineProdCnt").html(parseInt(storeOrdHistProdCnt));
-			}else{
-				// 주문상품 확인 수량
-				$("#totalOrdOnlineProdCnt").html(parseInt(ordHistProdCnt));
-				// 온라인쇼핑상품 수량(단위상품 수량합계)
-				$("#shipOrdOnlineProdCnt").html(parseInt(ordHistProdCnt));
-
-			}
-		}
 	</script>
 </th:block>
 </body>

@@ -5,7 +5,7 @@
 <div ap:fragment="layout-contents">
 	<!-- page title -->
 	<div class="page_title">
-		<h2 class="h_title page">결제완료</h2>
+		<h2 class="h_title page">주문완료</h2>
 		<p class="text font_lg"></p>
 	</div>
 	<!-- // page title -->
@@ -61,31 +61,6 @@
 
 	<script th:inline="javascript">
 		$( '.ui_spinner' ).spinner();
-		$( document ).ready(function() {
-			init();
-		});
-
-		function init() {
-			var ordOnlineProdList = /*[[${#lists.size(shippingOrdOnlineProdList)}]]*/ '0';								// 온라인상품 카운트
-			var storeOrdOnlineProdList = /*[[${#lists.size(storePickupOrdOnlineProdList)}]]*/ '0';					// 테이크아웃상품 카운트
-			var ordHistProdCnt = ordOnlineProdList > 0 ? $("input[name=ordHistProdCnt]").length : 0;					// 온라인 단위상품 카운트
-			var storeOrdHistProdCnt = storeOrdOnlineProdList > 0 ? $("input[name=storeOrdHistProdCnt]").length : 0;	// 테이크아웃 단위상품 카운트
-			var isApMember = /*[[${isApMember}]]*/ false;		// 회원여부
-			if(isApMember){
-				// 주문상품 확인 수량
-				$("#totalOrdOnlineProdCnt").html(parseInt(ordHistProdCnt) + parseInt(storeOrdHistProdCnt));
-				// 온라인쇼핑상품 수량(단위상품 수량합계)
-				$("#shipOrdOnlineProdCnt").html(parseInt(ordHistProdCnt));
-				// 테이크아웃상품 수량(단위상품 수량합계)
-				$("#storeOrdOnlineProdCnt").html(parseInt(storeOrdHistProdCnt));
-			}else{
-				// 주문상품 확인 수량
-				$("#totalOrdOnlineProdCnt").html(parseInt(ordHistProdCnt));
-				// 온라인쇼핑상품 수량(단위상품 수량합계)
-				$("#shipOrdOnlineProdCnt").html(parseInt(ordHistProdCnt));
-
-			}
-		}
 	</script>
 </th:block>
 </body>

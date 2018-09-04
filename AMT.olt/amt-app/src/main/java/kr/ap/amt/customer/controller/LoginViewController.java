@@ -1,5 +1,6 @@
 package kr.ap.amt.customer.controller;
 
+import kr.ap.amt.config.SSOLoginHandler;
 import kr.ap.comm.api.CaptchaAPI;
 import kr.ap.comm.config.interceptor.PageTitle;
 import kr.ap.comm.member.vo.MemberSession;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.Cookie;
@@ -33,6 +35,8 @@ public class LoginViewController extends AbstractController {
 
 	@Autowired
 	CaptchaAPI captchaAPI;
+	@Autowired
+	private SSOLoginHandler ssoLoginHandler;
 	
     @Value("${kakao.restkey}")
 	private String appId;
@@ -42,7 +46,7 @@ public class LoginViewController extends AbstractController {
 	
 	
 	@PageTitle(title = "로그인")
-	@GetMapping("/login")
+	@RequestMapping("/login")
 	@BreadCrumb("EH.LO.01")
 	public String login(Model model, HttpServletRequest request, String returl) {
 		commonLogin(model, request, returl);
@@ -103,24 +107,31 @@ public class LoginViewController extends AbstractController {
 		Cookie token = CookieUtils.getCookie(request, CookieKey.AUTO_LOGIN);
 		CookieUtils.removeCookie(request, response, CookieKey.AUTO_LOGIN);
 		MemberSession memberSession = getMemberSession();
+		String memberId = memberSession.getMember().getMemberId();
 		WebUtils.setSessionAttribute(request, SessionKey.LOGIN_USER, null);
 		WebUtils.setSessionAttribute(request, SessionKey.CART, null);
 		WebUtils.setSessionAttribute(request, SessionKey.ORDER, null);
 		if (memberSession.getMember_sn() != 0) {
 			try {
 				ApLogoutInfo logoutInfo = new ApLogoutInfo();
-				if(token != null)
+				if (token != null)
 					logoutInfo.setAutoLoginToken(token.getValue());
 				apApi.memberLogout(memberSession.getMember_sn(), logoutInfo);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
 		}
-		if(returl == null)
+
+		if (env.acceptsProfiles("sso")) {
+			ssoLoginHandler.logout(request, memberId);
+		}
+
+		if (returl == null) {
 			return "redirect:/main";
-		else
+		} else {
 			return "redirect:/" + returl;
-			
+		}
+
 	}
 
 	/**

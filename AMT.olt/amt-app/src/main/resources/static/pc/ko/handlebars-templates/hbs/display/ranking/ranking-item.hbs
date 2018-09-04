@@ -28,16 +28,12 @@
 					<div class="info_section">
 						<p class="txt_summary ellipsis line2">{{ this.onlineProdName }}</p>
 						<div class="price_atc">
-							{{#with (calc this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate '+' this.onlineProdPriceSummary.minMemberLevelDiscountRate '+' this.onlineProdPriceSummary.minOnlineMemberDiscountRate '+' this.onlineProdPriceSummary.minImmedDiscountRate) as |minRate|}}
-								{{#with (calc ../onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.maxMemberLevelDiscountRate '+' ../onlineProdPriceSummary.maxOnlineMemberDiscountRate '+' this.onlineProdPriceSummary.maxImmedDiscountRate) as |maxRate|}}
-									{{#xif maxRate '>' 0}}
-										<span class="txt_sale">{{ maxRate }}%</span>
-									{{/xif}}
-								{{/with}}
-							{{/with}}
-							<span class="txt_price"><em>{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}</em>원{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}}~{{/xif}}</span>
+							{{#xif this.onlineProdPriceSummary.maxFinalDiscountRate '>' 0}}
+								<span class="txt_sale">{{ this.onlineProdPriceSummary.maxFinalDiscountRate }}%</span>
+							{{/xif}}
+							<span class="txt_price"><em>{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountOnlinePrice }}</em>원{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}}~{{/xif}}</span>
 							{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
-								<del class="txt_del">{{ numberFormat this.onlineProdPriceSummary.minBeforeOnlineSalePrice }}원</del>
+								<del class="txt_del">{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountBeforeSalePrice }}원</del>
 							{{/xif}}
 						</div>
 						<div class="user_atc">
@@ -50,7 +46,7 @@
 					<ul class="item_user">
 						<li>
 							<a href="#none" role="button" class="like">
-								<i class="ico_favorite"></i>
+								<i class="ico_favorite {{#xif this.shoppingMarkExistYn '==' 'Y'}}on{{/xif}}"></i>
 								<span class="sr_only">좋아요</span>
 							</a>
 						</li>
@@ -93,7 +89,13 @@
 					<div class="info_section">
 						<p class="txt_summary ellipsis line2">{{ this.onlineProdName }}</p>
 						<div class="price_atc">
-							<span class="txt_price"><em>{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}</em>원{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}}~{{/xif}}</span>
+							{{#xif this.onlineProdPriceSummary.maxFinalDiscountRate '>' 0}}
+								<span class="txt_sale">{{ this.onlineProdPriceSummary.maxFinalDiscountRate }}%</span>
+							{{/xif}}
+							<span class="txt_price"><em>{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountOnlinePrice }}</em>원{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}}~{{/xif}}</span>
+							{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+								<del class="txt_del">{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountBeforeSalePrice }}원</del>
+							{{/xif}}
 						</div>
 						<div class="user_atc">
 							<span class="mark_star_sm star{{ this.reviewScopeAvg }}"><span class="sr_only">구매 평점 별 5개 중 {{ this.reviewScopeAvg }}개</span></span>
@@ -105,7 +107,7 @@
 					<ul class="item_user">
 						<li>
 							<a href="#none" role="button" class="like">
-								<i class="ico_favorite"></i>
+								<i class="ico_favorite {{#xif this.shoppingMarkExistYn '==' 'Y'}}on{{/xif}}"></i>
 								<span class="sr_only">좋아요</span>
 							</a>
 						</li>

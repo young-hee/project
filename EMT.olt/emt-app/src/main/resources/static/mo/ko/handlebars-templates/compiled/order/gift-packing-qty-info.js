@@ -23,14 +23,15 @@ this["AP"]["handlebars"]["order"]["gift-packing-qty-info"] = Handlebars.template
     + alias2(alias1((depth0 != null ? depth0.giftPackingSn : depth0), depth0))
     + "\">\n								"
     + alias2(alias1((depth0 != null ? depth0.giftPackingName : depth0), depth0))
-    + " 추가\n							</label>\n						</span>\n						<div class=\"ui_tooltip\">\n							<button type=\"button\" class=\"btn_tooltip\">툴팁보기</button>\n							<span class=\"arr\"></span>\n							<div class=\"layer_tooltip\">\n								<dl>\n									<dt class=\"title\">"
+    + " 추가\n"
+    + ((stack1 = helpers["if"].call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depth0 != null ? depth0.payYn : depth0),"N",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depth0 != null ? depth0.freeConditionYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),(helpers.gt || (depth0 && depth0.gt) || alias4).call(alias3,(depth0 != null ? depth0.freeConditionAmt : depth0),0,{"name":"gt","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "							</label>\n						</span>\n						<div class=\"ui_tooltip\">\n							<button type=\"button\" class=\"btn_tooltip\">툴팁보기</button>\n							<span class=\"arr\"></span>\n							<div class=\"layer_tooltip\">\n								<dl>\n									<dt class=\"title\">"
     + alias2(alias1((depth0 != null ? depth0.giftPackingName : depth0), depth0))
     + " 추가</dt>\n									<dd>\n										<ul class=\"list_bullet_dot\">\n											<li><pre>"
     + ((stack1 = alias1((depth0 != null ? depth0.foGuide : depth0), depth0)) != null ? stack1 : "")
-    + "</pre></li>\n										</ul>\n									</dd>\n								</dl>\n								<button type=\"button\" class=\"ui_close\"><span class=\"sr_only\">툴팁 닫기</span></button>\n							</div>\n						</div>\n						<span class=\"price\">\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.payYn : depth0),"==","Y",{"name":"xif","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depth0 != null ? depth0.payYn : depth0),"N",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depth0 != null ? depth0.freeConditionYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),(helpers.gt || (depth0 && depth0.gt) || alias4).call(alias3,(depth0 != null ? depth0.freeConditionAmt : depth0),0,{"name":"gt","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(9, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "						</span>\n					</div>\n"
+    + "</pre></li>\n										</ul>\n									</dd>\n								</dl>\n								<button type=\"button\" class=\"ui_close\"><span class=\"sr_only\">툴팁 닫기</span></button>\n							</div>\n						</div>\n"
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.payYn : depth0),"==","Y",{"name":"xif","hash":{},"fn":container.program(9, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "					</div>\n"
     + ((stack1 = helpers["if"].call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.gte || (depth0 && depth0.gte) || alias4).call(alias3,(depths[2] != null ? depths[2].finalPamtPcur : depths[2]),(depth0 != null ? depth0.freeConditionAmt : depth0),{"name":"gte","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depth0 != null ? depth0.qtySelectPossibleYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(11, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "				</div>\n			</fieldset>\n";
 },"3":function(container,depth0,helpers,partials,data,blockParams,depths) {
@@ -48,13 +49,13 @@ this["AP"]["handlebars"]["order"]["gift-packing-qty-info"] = Handlebars.template
 },"5":function(container,depth0,helpers,partials,data) {
     return "								<input type=\"checkbox\" disabled=\"disabled\">\n";
 },"7":function(container,depth0,helpers,partials,data) {
-    return "								<span class=\"eng\" id=\"box_"
-    + container.escapeExpression(container.lambda((depth0 != null ? depth0.giftPackingSn : depth0), depth0))
-    + "_sum\"></span>\n";
-},"9":function(container,depth0,helpers,partials,data) {
-    return "								("
+    return "									("
     + container.escapeExpression((helpers.currencyFormatDefault || (depth0 && depth0.currencyFormatDefault) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.freeConditionAmt : depth0),"원",{"name":"currencyFormatDefault","hash":{},"data":data}))
     + "이상 주문시 무료)\n";
+},"9":function(container,depth0,helpers,partials,data) {
+    return "							<span class=\"price\">\n								<strong class=\"eng\" id=\"box_"
+    + container.escapeExpression(container.lambda((depth0 != null ? depth0.giftPackingSn : depth0), depth0))
+    + "_sum\"></strong>\n							</span>\n";
 },"11":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 

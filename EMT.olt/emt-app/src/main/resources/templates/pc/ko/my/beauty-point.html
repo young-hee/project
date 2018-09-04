@@ -308,10 +308,32 @@
     								});
     								break;
     							case 2:
-    								url += "noMemberAuthorized"; 
+    								$('#send').click(function() {
+    				                    if (!t.isRunning()) {
+    				                        AP.modal.alert("전화번호를 확인하신 후, 인증번호 전송버튼을 눌러주세요.");
+    				                        return;
+    				                    }
+    									if(!$('[name=smsNum]').val()) {
+    				                        AP.modal.alert("인증번호를 입력해주세요. 인증번호 입력란으로 이동합니다.").addListener('modal-close', function(e) {
+    				                        	$('[name=smsNum]').focus();
+					                        });
+    				                       	return;
+    									}
+    									AP.api.simpleMyCertifyCheck({}, {mobileVerifKey:$('[name=smsNum]').val()}).done(function(data) {
+    							        	openModal(3);
+    					                }).fail(function(xhr, textStatus, errorThrown) {
+    					                    if (xhr.errorCode == 0) {
+    					                        AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+    					                    } else {
+    					                        AP.modal.alert(xhr.errorMessage)
+    					                    }
+    					                }).always(function() {
+    					                    //성공, 실패
+    					                });
+    								});
+    								
     								break;
     							case 3:
-    								url += "noMemberPresent"; 
     								break;
     							case 4:
     								url += "giftPointCheck"; 
@@ -340,6 +362,28 @@
 		                }).always(function() {
 		                    //성공, 실패
 		                });
+					}
+
+			        var t = new AP.common.timeCountDown(3);
+			        
+					function sendSms() {
+
+			            AP.api.simpleMyCertifySend({}, {})
+			                .done(function(data) {
+			                    AP.modal.alert("인증번호가 발송되었습니다.");
+			                    if (t.isRunning()) {
+			                        t.stop();
+			                    }
+			                    t.start();
+			                }).fail(function(xhr, textStatus, errorThrown) {
+			                	if (xhr.errorCode == 0) {
+			                        AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+			                    } else {
+			                        AP.modal.alert(xhr.errorMessage);
+			                    }
+			                }).always(function() {
+			                    //성공, 실패
+			                });
 					}
 				</script>
         </th:block>

@@ -5,7 +5,7 @@
 		<dd aria-hidden="true" style="display: none;">
 
 			<ul class="product_list_order">
-				<!--/* 단일상품, 뷰티포인트, 활동 포인트, 묶은판매 상품 Start */-->
+				<!--/* 온라인 상품 Start */-->
 				<th:block th:if="${#lists.size(ordOtfExFo.shippingOrdOnlineProdList) > 0}">
 					<li class="product_order" th:each="ordOnlineProd : ${ordOtfExFo.shippingOrdOnlineProdList}">
 						<!--결제 히든값-->
@@ -35,7 +35,41 @@
 						</a>
 					</li>
 				</th:block>
-				<!--/* 일단상품 End */-->
+				<!--/* 온라인 상품 End */-->
+
+
+				<!--/*  뷰티포인트 상품 Start */-->
+				<th:block th:if="${#lists.size(ordOtfExFo.shippingOrdOnlineBeautyPointProdList) > 0}">
+					<li class="product_order" th:each="ordOnlineProd : ${ordOtfExFo.shippingOrdOnlineBeautyPointProdList}">
+						<!--결제 히든값-->
+						<input type="hidden" name="onlinePordSn" th:value="${ordOnlineProd.onlineProdCode}"/>
+						<input type="hidden" name="prodName" th:value="${ordOnlineProd.onlineProdName}"/>
+						<input type="hidden" name="prodQty" th:value="${ordOnlineProd.ordQtySum}"/>
+						<input type="hidden" name="ordHistProdCnt" th:value="${#lists.size(ordOnlineProd.ordHistProdList)}"/>
+						<!--//결제 히든값-->
+
+						<a href="#none">
+							<div class="product_visual">
+								<img th:src="${ordOnlineProd.onlineProdImgUrl}">
+							</div>
+							<div class="product_info" th:with="isPresaleDisp=${false}">
+								<th:block th:each="ordHistProd, iterStat : ${ordOnlineProd.ordHistProdList}">
+									<!-- 예약상품 -->
+									<div class="reservation_txt" th:if="${isPresaleDisp == false and ordHistProd.ordProdEx.prodTypeCode == 'Presale'}"><span th:with="isPresaleDisp=${true}">예약상품</span> <th:block th:text="${#dates.format(ordHistProd.ordProdEx.otfExpectedDt, 'MM월 dd일')}">11월 25일</th:block>부터 순차배송 예정</div>
+								</th:block>
+								<div class="product_name" th:text="${ordOnlineProd.onlineProdName}">브랜드명 상품명 또는 이벤트명 브랜드명</div>
+								<th:block th:each="ordHistProd, iterStat : ${ordOnlineProd.ordHistProdList}">
+									<!-- 옵션 -->
+									<div class="option_name"><th:block th:text="${ordHistProd.ordProdEx.prodNameBlang}"></th:block> <th:block th:text="${ordHistProd.ordQty}"></th:block>개</div>
+								</th:block>
+
+								<div class="price_area"><span class="price"><b th:text="${#IntegUtil.toCommaNumber(ordOnlineProd.finalOnlineSaleAmtPcurSum)}">0</b>P</span></div>
+							</div>
+						</a>
+					</li>
+				</th:block>
+				<!--/* 뷰티포인트 상품 End */-->
+
 
 				<!--/* 묶음판매상품 Start */-->
 				<th:block th:if="${#lists.size(ordOtfExFo.shippingBulkDcList) > 0}">
@@ -95,38 +129,6 @@
 				</div>
 			</th:block>
 			<!--/* M+N프로모션 End */-->
-
-			<!--/* 동시구매 프로모션 Start */-->
-			<th:block th:if="${#lists.size(ordOtfExFo.shippingSameTimePurPromoList) > 0}">
-				<div class="event_product_wrap" th:each="sameTimePromo : ${ordOtfExFo.shippingSameTimePurPromoList}">
-					<p class="h_title ellipsis"><span class="flag">동시구매 적용</span> <th:block th:text="${mPlusNPromo.promoName}">동시구매 프로모션 상품일 경우, 길어지면 말줄임 우측여백 32px</th:block></p>
-					<ul class="product_list_order">
-						<th:block th:if="${#lists.size(mPlusNPromo.ordOnlineProdFoList) > 0}">
-							<th:block th:if="${mPlusNPromo.singleProdYn != 'Y'}">
-								<th:block th:each="ordOnlineProd, iter : ${mPlusNPromo.ordOnlineProdFoList}" >
-									<li class="product_order">
-										<a href="#none">
-											<div class="product_visual">
-												<th:block th:if="${ordOnlineProd.prodImgUrl != null}"><img th:src="${ordOnlineProd.prodImgUrl}"></th:block>
-												<th:block th:unless="${ordOnlineProd.prodImgUrl != null}"><img th:src="${ordOnlineProd.onlineProdImgUrl}"></th:block>
-											</div>
-											<div class="product_info" th:with="isPriceDisp=${false}">
-												<div class="product_name" th:text="${ordOnlineProd.onlineProdName}">브랜드명1 상품명 또는 이벤트명 </div>
-												<div class="option_name"><th:block th:text="${ordOnlineProd.onlineProdName}">20ml 촉촉 인텐시브 오일</th:block> <th:block th:text="(${ordOnlineProd.ordQtySum} + 개)">1개</th:block></div>
-												<!-- 가격 -->
-												<th:block th:each="ordHistProd, iter : ${ordOnlineProd.ordHistProdList}" >
-													<div class="price_area" th:if="${isPriceDisp == false}"><span class="price" th:with="isPriceDisp=${true}"><b th:text="${#IntegUtil.toCommaNumber(ordHistProd.finalOnlineSaleAmtPcur)}">0</b>원</span></div>
-												</th:block>
-											</div>
-										</a>
-									</li>
-								</th:block>
-							</th:block>
-						</th:block>
-					</ul>
-				</div>
-			</th:block>
-			<!--/* 동시구매 프로모션 End */-->
 
 		</dd>
 	</dl>

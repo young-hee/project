@@ -15,33 +15,25 @@
 					<!--</ul>-->
 				<!--</div>-->
 				<div class="input_group">
-					<!--<div class="select_wrap">
-						<select name="" title="검색 분류 선택">
-							<option value="">전체</option>
-							<option value="">공지</option>
-							<option value="">뉴스</option>
-							<option value="">이벤트공지</option>
-							<option value="">당첨자발표</option>
-						</select>
-					</div>-->
-			
-					<div class="select_wrap">
-						<span class="select_h48_gray h_30">
-							<select name="select01" title="">
-								<option value="">전체</option>
-								<option value="">2주</option>
-								<option value="">1개월</option>
-								<option value="">3개월</option>
-								<option value="">6개월</option>
-								<option value="">1년</option>
-							</select>
-						</span>
+					<div class="ui_select" data-not-label-change="true">
+						<input type="hidden" name="">
+						<button type="button">전체</button>
+						<ul class="select_options" id="ss" name="ss">
+							<!-- data-selected="true" 속성을 a 태그에 설정하면 해당 옵션이 기본 선택된다. -->
+							<!-- data-disabled="true" 속성을 a 태그에 설정하면 해당 옵션을 선택할수 없다. -->
+							<!-- data-value="value" 선택시 value로 리턴되는 값 -->
+							<!-- code.label_markup 내부의 markeup이 선택된 이후에 label로 노출된다. -->
+							<li class="select_option"><code class="label_markup" style="display:none">전체</code><a data-value="01">전체</a></li>
+							<th:block th:each="s : ${summary.noticeTypeList}">
+								<li class="select_option"><code class="label_markup" style="display:none" th:id="${s.foNoticeTypeSn}" th:value="${s.foNoticeTypeSn}">공지</code><a th:data-value="${s.foNoticeTypeSn}" th:text="${s.noticeTypeName}">공지</a></li>
+
+								<!--<li><span class="check_wrap"><input type="radio" name="faq" th:id="${s.foNoticeTypeSn}" th:value="${s.foNoticeTypeSn}"><label th:for="${s.foNoticeTypeSn}" th:text="${s.noticeTypeName}"></label></span></li>-->
+							</th:block>
+						</ul>
 					</div>
-					<div class="input_wrap">
-						<span class="input_h48_gray h_30"><input type="text" placeholder="검색어를 입력하세요" id="searchText"
-																 name="searchText" onkeypress="return searchKeyPress(event);"></span>
-					</div>
-					<div class="input_wrap">
+					<div class="wrap">
+						<input type="text" title="검색어 입력" placeholder="검색어를 입력해주세요" id="searchText"
+							   name="searchText" onkeypress="return searchKeyPress(event);">
 						<button type="button" class="btn_h30_search" id="search" name="search">검색</button>
 					</div>
 				</div>
@@ -75,10 +67,17 @@
 
 		var pageLimit = 10;
 
+		$( '.ui_select' ).designSelectBox();
+
 		$(document).ready(function() {
 			// noticeSummary();
 			// importNotice();
 			getNotice('', '', 0);
+		});
+
+		$("#ss li a").on("change", function(){
+			// value 값으로 선택
+			alert($(this).val());
 		});
 
 		function showNotice(faqData, resultHtml, isReplace) {

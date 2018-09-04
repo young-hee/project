@@ -165,7 +165,8 @@ public class IniPayment {
        map.put("mid", payDTO.getpMid());
        map.put("oid", oid);
        map.put("goodname", payDTO.getRepProdName());
-       map.put("price", price);
+	   map.put("goodsname", payDTO.getRepProdName());
+	   map.put("price", price);
        map.put("currency", currency);
        map.put("buyername", payDTO.getBuyerName());
        map.put("buyertel", payDTO.getMobile());

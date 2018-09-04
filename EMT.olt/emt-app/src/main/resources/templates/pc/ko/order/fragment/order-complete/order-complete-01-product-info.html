@@ -1,13 +1,13 @@
 <!--/* 주문상품 확인 */-->
 <dl>
 	<dt>
-		<span>주문상품 확인 (<em th:text="${ordCntMap.get('totalOrdOnlineProdCnt')}">00</em>개)</span>
+		<span>주문상품 확인 (<em th:text="${ordCntMap.get('totalOrdOnlineProdCnt')}">0</em>개)</span>
 		<button type="button"><span class="sr_only">닫기</span></button>
 	</dt>
 	<dd>
 		<div class="cont">
-			<th:block th:if="${#lists.size(shippingOrdOnlineProdList) > 0}">
-				<h4 class="h_title sub">온라인 쇼핑상품 (<em id="shipOrdOnlineProdCnt">00</em>개)</h4>
+			<th:block th:if="${ordCntMap.get('shipOrdOnlineProdSumCnt') > 0}">
+				<h4 class="h_title sub">온라인 쇼핑상품 (<em th:text="${ordCntMap.get('shipOrdOnlineProdSumCnt')}">0</em>개)</h4>
 				<!--/* 일단상품 */-->
 				<th:block th:if="${#lists.size(shippingOrdOnlineProdList) > 0}">
 					<div class="item_wrap" th:each="ordOnlineProd : ${shippingOrdOnlineProdList}">
@@ -46,8 +46,8 @@
 				</th:block>
 			</th:block>
 
-			<th:block th:if="${#lists.size(storePickupOrdOnlineProdList) > 0 and isApMember}">
-				<h4 class="h_title sub">테이크아웃 상품 (<em th:text="${storeOrdOnlineProdCnt}">00</em>개)</h4>
+			<th:block th:if="${ordCntMap.get('storeOrdOnlineProdSumCnt') > 0 and isApMember}">
+				<h4 class="h_title sub">테이크아웃 상품 (<em th:text="${ordCntMap.get('storeOrdOnlineProdSumCnt')}">0</em>개)</h4>
 
 				<!--/* 옵션타입 */-->
 				<div class="item_wrap" th:each="storeOrdOnlineProd : ${storePickupOrdOnlineProdList}">

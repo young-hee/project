@@ -10,30 +10,36 @@
 	<div class="payment_details">
 		<div class="inner_box">
 			<p class="total clear">
-				<strong>주문금액</strong>
+				<strong>총 주문금액</strong>
 				<b><strong class="num" >{{getAmtMapPrice ordAmtMap 'Prod' '원'}}</strong></b>
 			</p>
 			<ul>
-				<li class="clear">
-					{{#if (checkAmtMapPrice ordAmtMap 'onlineShipProdSum')}}
+				{{#if (checkAmtMapPrice ordAmtMap 'onlineShipProdSum')}}
+					<li class="clear">
 						<span>온라인 상품(<em>{{getCntMap ordCntMap 'shipOrdOnlineProdCnt'}}</em>개)</span>
 						<span><span class="num">{{getAmtMapPrice ordAmtMap 'onlineShipProdSum' '원'}}</span></span>
-					{{/if}}
-					{{#if isApMember}}
-						{{#if (checkAmtMapPrice ordAmtMap 'MembershipExch')}}
+					</li>
+				{{/if}}
+				{{#if isApMember}}
+					{{#if (checkAmtMapPrice ordAmtMap 'MembershipExch')}}
+						<li class="clear">
 							<span>뷰티포인트 상품(<em>{{getCntMap ordCntMap 'membershipExchCnt'}}</em>개)</span>
 							<span><span class="num">{{getAmtMapPrice ordAmtMap 'MembershipExch' '원'}}</span></span>
-						{{/if}}
-						{{#if (checkAmtMapPrice ordAmtMap 'ActivityPointExch')}}
-							<span>뷰티포인트 상품(<em>{{getCntMap ordCntMap 'activityPointExchCnt'}}</em>개)</span>
+						</li>
+					{{/if}}
+					{{#if (checkAmtMapPrice ordAmtMap 'ActivityPointExch')}}
+						<li class="clear">
+							<span>진주알 상품(<em>{{getCntMap ordCntMap 'activityPointExchCnt'}}</em>개)</span>
 							<span><span class="num">{{getAmtMapPrice ordAmtMap 'ActivityPointExch' '원'}}</span></span>
-						{{/if}}
+						</li>
 					{{/if}}
-					{{#if (checkAmtMapPrice ordAmtMap 'StorePickupProd')}}
-						<span>뷰티포인트 상품(<em>{{getCntMap ordCntMap 'storeOrdOnlineProdSumCnt'}}</em>개)</span>
+				{{/if}}
+				{{#if (checkAmtMapPrice ordAmtMap 'StorePickupProd')}}
+					<li class="clear">
+						<span>테이크아웃 상품(<em>{{getCntMap ordCntMap 'storeOrdOnlineProdSumCnt'}}</em>개)</span>
 						<span><span class="num">{{getAmtMapPrice ordAmtMap 'StorePickupProd' '원'}}</span></span>
-					{{/if}}
-				</li>
+					</li>
+				{{/if}}
 			</ul>
 		</div>
 

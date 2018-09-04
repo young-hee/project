@@ -58,6 +58,7 @@
             };
             options.sizeType = options.sizeType? options.sizeType : 'M';
             options.containerClass = options.containerClass? 'modal_info ' + options.containerClass : 'modal_info';
+            options.wrapperClass = options.wrapperClass? options.wrapperClass : '';
             return this.open( options );
         },
 

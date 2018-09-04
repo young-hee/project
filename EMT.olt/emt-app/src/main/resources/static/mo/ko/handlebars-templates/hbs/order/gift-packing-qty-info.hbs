@@ -16,6 +16,9 @@
 							{{/xif}}
 							<label for="box_{{this.giftPackingSn}}">
 								{{this.giftPackingName}} 추가
+								{{#if (and (eq this.payYn 'N')(eq this.freeConditionYn 'Y')(gt this.freeConditionAmt 0))}}
+									({{currencyFormatDefault this.freeConditionAmt '원'}}이상 주문시 무료)
+								{{/if}}
 							</label>
 						</span>
 						<div class="ui_tooltip">
@@ -33,14 +36,11 @@
 								<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
 							</div>
 						</div>
-						<span class="price">
-							{{#xif this.payYn '==' 'Y'}}
-								<span class="eng" id="box_{{this.giftPackingSn}}_sum"></span>
-							{{/xif}}
-							{{#if (and (eq this.payYn 'N')(eq this.freeConditionYn 'Y')(gt this.freeConditionAmt 0))}}
-								({{currencyFormatDefault this.freeConditionAmt '원'}}이상 주문시 무료)
-							{{/if}}
-						</span>
+						{{#xif this.payYn '==' 'Y'}}
+							<span class="price">
+								<strong class="eng" id="box_{{this.giftPackingSn}}_sum"></strong>
+							</span>
+						{{/xif}}
 					</div>
 					{{#if (and (gte ../../finalPamtPcur this.freeConditionAmt)(eq this.qtySelectPossibleYn 'Y'))}}
 						<span class="ui_spinner small" data-min="0" data-max="{{ this.maxSelectPossibleQty }}" data-step="1" >

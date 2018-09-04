@@ -11,8 +11,8 @@
 				<p><strong>뷰티포인트</strong> <span class="point" style="cursor: pointer;" onclick="location.href='/my/page/info/beautyPoint'"><b th:text="${#IntegUtil.toCommaNumber(point.rmnPt)}">999,999</b>P</span></p>
 				<div>
 					<button th:unless="${#strings.isEmpty(session.LOGIN_USER.user_incsCardNoEc)}" type="button" onclick="pointCardBarcode()" class="btn_mobile_card"><img ap:src="@{/images/my/btn_barcode.png}" alt="뷰티포인트 멤버십카드 보기"></button>
-					<!--카드 신청 전-->
-					<a th:if="${#strings.isEmpty(session.LOGIN_USER.user_incsCardNoEc)}" href="/my/page/info/btpMobileCard" class="btn_card_apply">모바일 카드 신청</a>
+					<!--카드 신청 전 // 20180903:삭제 -->
+					<!-- <a th:if="${#strings.isEmpty(session.LOGIN_USER.user_incsCardNoEc)}" href="/my/page/info/btpMobileCard" class="btn_card_apply">모바일 카드 신청</a> -->
 				</div>
 			</dl>
 		</div>
@@ -201,7 +201,7 @@
 							<li><a href="/my/page/onlineOrderShipping">주문/배송조회</a></li>
 							<li><a href="/my/page/returnExchange">반품/교환</a></li><!--/* 20180418 : 문구수정 */-->
 							<li><a href="/my/page/storeOrderShipping">매장 주문조회</a></li>
-							<li><a href="/my/page/cashReceipts">현금영수증 발급</a></li><!--/* 20180418 : 문구수정 */-->
+							<li><a href="/my/page/cashReceipts">증빙서류발급</a></li><!--/* 20180418 : 문구수정 */-->
 						</ul>
 					</div>
 				</dd>

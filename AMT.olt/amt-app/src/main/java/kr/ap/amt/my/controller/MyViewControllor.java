@@ -100,7 +100,7 @@ public class MyViewControllor extends AbstractController {
 		memberSession.setMember(apApi.getMemberInfo(memberSession.getMember_sn()));
 		
 		try {
-			OrdSummaryInfo ordSummary = orderApi.getOrdSummary(getMemberSn(), startDate, endDate);
+			OrdSummaryInfo ordSummary = orderApi.getOrdSummary(getMemberSn(), startDate, endDate, null);
 
 			//주문접수건수
 			model.addAttribute("ordReceptCnt", ordSummary.getOrdReceptCnt());
@@ -685,11 +685,18 @@ public class MyViewControllor extends AbstractController {
 		
 	}
 	
-	@PageTitle(title = "구매리뷰")
+	@PageTitle(title = "구매 리뷰")
 	@GetMapping("/review")
 	public String review(Model model) {
 		
 		return "my/my-review";
+	}
+	
+	@PageTitle(title = "1:1 상담")
+	@GetMapping("/inquiry")
+	public String inquiry(Model model) {
+		
+		return "my/my-inquiry";
 	}
 	
 	//=======================모바일 기능 구현 Method

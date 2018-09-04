@@ -58,6 +58,7 @@
 			};
 			options.sizeType = options.sizeType? options.sizeType : 'M';
 			options.containerClass = options.containerClass? 'modal_info system_alert' + options.containerClass : 'modal_info system_alert';
+			options.wrapperClass = options.wrapperClass? options.wrapperClass : '';
 			return this.open( options );
 		},
 
@@ -119,7 +120,7 @@
 				confirmLabel: options.confirmLabel || '확인'
 			};
 			options.sizeType = options.sizeType? options.sizeType : 'S';
-			options.containerClass = options.containerClass? 'modal_alert ' + options.containerClass : 'modal_alert';
+			options.containerClass = options.containerClass? 'modal_alert ' + options.containerClass : 'modal_alert' + ' system_alert';
 			return this.open( options );
 		},
 
@@ -149,7 +150,7 @@
 				cancelLabel: options.cancelLabel || '취소'
 			};
 			options.sizeType = options.sizeType? options.sizeType : 'M';
-			options.containerClass = options.containerClass? 'modal_confirm ' + options.containerClass : 'modal_confirm';
+			options.containerClass = options.containerClass? 'modal_confirm ' + options.containerClass : 'modal_confirm' + ' system_alert';
 			return this.open( options );
 		},
 

@@ -585,6 +585,8 @@ public class CartBaseController extends AbstractController{
 	 */
 	private void setSaleDisplayStatusCartPointExchOnlineProdExList(List<CartOnlineProdEx> cartPointExchOnlineProdExList) {
 		for (CartOnlineProdEx cartOnlineProdEx : cartPointExchOnlineProdExList) {
+			cartOnlineProdEx.setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_ONSALE);
+
 			for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
 				// 판매표시가 없을때
 				if(StringUtils.isEmpty(cartProdEx.getProdEx().getSaleDisplayStatus())){
@@ -1338,16 +1340,19 @@ public class CartBaseController extends AbstractController{
 		long x = applyBaseOrdQty + applyFreeAwardQty;
 
 		if(x == q) {
+			cartPromoEx.setPromoApplyResultCode(CartConst.MN_PROMO_APPLY_CODE_ALL);
 			cartProdEx.setPromoApplyResultCode(CartConst.MN_PROMO_APPLY_CODE_ALL);
 			cartProdEx.setRecommandBaseOrdQty(applyBaseOrdQty);
 			cartProdEx.setRecommandFreeAwardQty(applyFreeAwardQty);
 		}
 		else if(q < mn) {
+			cartPromoEx.setPromoApplyResultCode(CartConst.MN_PROMO_APPLY_CODE_NONE);
 			cartProdEx.setPromoApplyResultCode(CartConst.MN_PROMO_APPLY_CODE_NONE);
 			cartProdEx.setRecommandBaseOrdQty(m);
 			cartProdEx.setRecommandFreeAwardQty(n);
 		}
 		else {
+			cartPromoEx.setPromoApplyResultCode(CartConst.MN_PROMO_APPLY_CODE_PARTIAL);
 			cartProdEx.setPromoApplyResultCode(CartConst.MN_PROMO_APPLY_CODE_PARTIAL);
 			long rq = q + mn - (q % mn);
 			cartProdEx.setRecommandBaseOrdQty(rq / mn * m);

@@ -9,7 +9,7 @@
 	var ReviewArea = $B.Class.extend({
 
 		initialize: function () {
-			this._$target = $( '#ap_container .product_review' );
+			this._$target = $( '#ap_container .detail_review' );
 		},
 
 		/** =============== Public Methods =============== */
@@ -25,29 +25,42 @@
 		/** =============== Private Methods =============== */
 
 		_setEvents: function () {
-			this._writeModal = new AP.ReviewWriteModal( this._defaultModel )
-				.addListener( 'success', function (e) {
-					this._etcList.reset({
-						prodReviewType: this._$target.find( '.review_filter select[name="prodReviewType"]' ).val(),
-						prodReviewSort: this._$target.find( '.review_filter select[name="prodReviewSort"]' ).val(),
-						scope: this._$target.find( '.review_filter select[name="scope"]' ).val()
-					});
-				}.bind(this));
-
-			this._bestList = new AP.ReviewList( this._$target.find('.best_review'), {
-				topReviewOnlyYn: 'Y',
-				onlineProdSn: this._defaultModel.onlineProdSn
+			
+			//일반 상품 리뷰
+			this._list = new AP.ReviewList( this._$target.find('.review_list'), {
+				//onlineProdSn: this._defaultModel.onlineProdSn,
+				//prodReviewType: 'Pur',
+				offset : 0,
+				limit : 10
 			}).addListener( 'review-draw', function (e) {
+				if( e.offset >= e.totalCnt ){this._$target.find('.btn_list_more').hide();}
 				this.dispatch( 'change-height' );
 			}.bind(this));
-
-			this._etcList = new AP.ReviewList( this._$target.find('.review_list'), {
+			
+			//더보기
+			this._$target.find('.btn_list_more').on('click', function(){
+				this._list.load();
+			}.bind(this));
+			
+			//뷰티테스터 리뷰
+			this._bestList = new AP.ReviewList( this._$target.find('.tester_review'), {
 				onlineProdSn: this._defaultModel.onlineProdSn,
-				limit: 8
+				prodReviewType: 'ExperienceGrp',
+				offset : 0,
+				limit : 6
 			}).addListener( 'review-draw', function (e) {
+				if( e.offset >= e.totalCnt ){this._$target.find('.btn_view_more').hide();}
 				this.dispatch( 'change-height' );
 			}.bind(this));
+			
+			//뷰티테스터 리뷰 더읽기
+			this._$target.find(".btn_view_more").click(function(){
+				this._bestList.load();
+				$(this).parent().addClass("on");
+				//$(this).parent().children('div').removeClass('ddd-truncated');
+			});
 
+			/*
 			//filter 적용
 			this._$target.find( '.review_filter select' ).on( 'change', function (e) {
 				var params = {
@@ -71,6 +84,7 @@
 					this._writeModal.prevGetData();
 				}.bind(this));
 			}.bind(this));
+			*/
 		}
 
 	});

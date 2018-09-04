@@ -262,28 +262,28 @@
 		var statusTxt = '';
 		switch(saleDisplayStatus){
 			case 'OutOfStock':		//품절
-				statusTxt = '[일시품절]';
+				statusTxt = '일시품절';
 				break;
 			case 'Exhaustion':		//조기소진
-				statusTxt = '[조기소진]';
+				statusTxt = '조기소진';
 				break;
 			case 'WaitingSale':		//판매대기
-				statusTxt = '[판매대기]';
+				statusTxt = '판매대기';
 				break;
 			case 'EndSale':			//판매종료
-				statusTxt = '[판매종료]';
+				statusTxt = '판매종료';
 				break;
 			case 'SuspendSale':		//판매일시중지
-				statusTxt = '[판매일시중지]';
+				statusTxt = '판매일시중지';
 				break;
 			case 'WaitingDisplay':	//판매대기
-				statusTxt = '[판매대기]';
+				statusTxt = '판매대기';
 				break;
 			case 'EndDisplay':		//판매종료
-				statusTxt = '[판매종료]';
+				statusTxt = '판매종료';
 				break;
 			case 'PermanentEnd':	//영구종료
-				statusTxt = '[영구종료]';
+				statusTxt = '영구종료';
 				break;
 		}
 		return statusTxt;
@@ -626,6 +626,18 @@
 		var path = '/product/detail';
 		if ( !/[^0-9]/.test(onlineProdSn) ) path += '?onlineProdSn=' + onlineProdSn;
 		if ( !/[^0-9]/.test(prodSn) ) path += ( /\?/.test(path) ? '&' : '?' ) + 'prodSn=' + prodSn;
+		return path;
+	});
+	
+	/**
+	 * beauty-tester 상세 경로 생성
+	 * @param	{Int}	onlineProdSn
+	 * @param	{Int}	prodSn
+	 * @returns {String}
+	 */
+	Handlebars.registerHelper( 'beautyTesterDetailPath', function ( regularEventSn ) {
+		var path = '/display/beauty_test/detail';
+		if ( !/[^0-9]/.test(regularEventSn) ) path += '?regularEventSn=' + regularEventSn;
 		return path;
 	});
 

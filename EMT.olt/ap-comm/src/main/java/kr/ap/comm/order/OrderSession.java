@@ -50,6 +50,11 @@ public class OrderSession implements Serializable {
 	 */
 	private String payMethodCode;
 
+	/**
+	 * PG 결제금액
+	 */
+	private BigDecimal pgPayAmt;
+
 	private String user_incsCardNoEc;
 
 	/**
@@ -158,6 +163,14 @@ public class OrderSession implements Serializable {
 
 	public void setPayMethodCode(String payMethodCode) {
 		this.payMethodCode = payMethodCode;
+	}
+
+	public BigDecimal getPgPayAmt() {
+		return pgPayAmt;
+	}
+
+	public void setPgPayAmt(BigDecimal pgPayAmt) {
+		this.pgPayAmt = pgPayAmt;
 	}
 
 	public String getUser_incsCardNoEc() {

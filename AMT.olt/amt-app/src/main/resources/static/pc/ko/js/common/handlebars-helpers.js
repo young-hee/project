@@ -223,6 +223,10 @@
 			return rawData === arg;
 		});
 	});
+	
+	Handlebars.registerHelper('contains', function( obj, value ) {
+		return obj.includes(value);
+	});
 
 	/**
 	 * 리스트 안에 Object 의 property 와 해당 값이 하나라도 같으면 true 반환

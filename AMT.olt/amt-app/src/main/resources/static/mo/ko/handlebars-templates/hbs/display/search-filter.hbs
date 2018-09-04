@@ -1,17 +1,26 @@
 <div class="srch_filter_wrap">
 	<div class="ui_accordion">
 		{{#each addAttrs}}
-			{{#xif this.addAttrCode '==' 'color'}}
+			{{#xif this.addAttrCode '==' 'colorgroup'}}
 				<dl>
 					<dt class="{{#if this.visible}}on{{/if}}"><button type="button"><span>{{ this.addAttrsName }}<i class="ico_navi"></i></span></button></dt>
 					<dd>
-						<div class="srch_filter_list01">
-							<div class="color_ck_list">
-								{{#each addAttrVals}}
-									<span style="background-color:{{ this.addAttrValCode }}" data-value="{{ this.addAttrValCode }}" class="btn{{#xif this.selected '==' true}} on{{/xif}}"></span>
+						<div class="color_ck_wrap">
+							<ul class="color_ck_list">
+								{{#each this.addAttrVals}}
+									{{#if this.addAttrValImgSrc}}
+										<li>
+											<span class="img btn {{#xif this.selected '==' true}}on{{/xif}}" data-value="{{ this.addAttrValCode }}">
+												<img src="{{ this.addAttrValImgSrc }}" alt="{{ this.addAttrValName }}">
+											</span>
+										</li>
+									{{else}}
+										<li>
+											<span style="background-color:{{ this.addAttrValCode }}" data-value="{{ this.addAttrValCode }}" class="btn {{#xif this.selected '==' true}}on{{/xif}}"></span>
+										</li>
+									{{/if}}
 								{{/each}}
-								<!--<span class="btn"><img src="/mo/ko/images/dummy/img_ck_col01.png" alt=""></span>-->
-							</div>
+							</ul>
 						</div>
 					</dd>
 				</dl>

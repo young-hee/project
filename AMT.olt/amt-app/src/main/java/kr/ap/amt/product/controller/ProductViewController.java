@@ -24,11 +24,13 @@ import kr.ap.comm.support.constants.ProductSaleDisplayStatus;
 import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.sales.product.OnlineProdInfo;
 import net.g1project.ecp.api.model.sales.product.PriceInfo;
+import net.g1project.ecp.api.model.sales.product.ProdReviewCountPerResItem;
 import net.g1project.ecp.api.model.sales.product.ProdReviewCountPerScope;
 import net.g1project.ecp.api.model.sales.product.ProdReviewImg;
 import net.g1project.ecp.api.model.sales.product.ProdReviewInfo;
 import net.g1project.ecp.api.model.sales.product.ProdReviewListInfo;
 import net.g1project.ecp.api.model.sales.product.ProdReviewSummaryInfo;
+import net.g1project.ecp.api.model.sales.product.ProdReviewSurveySummary;
 import net.g1project.ecp.api.model.sales.product.ProductInfo;
 import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkPost;
 
@@ -202,6 +204,7 @@ public class ProductViewController extends AbstractController{
 					img.setImageFileUrl("/mo/ko/images/dummy/img_mark_01.png");
 					imgList.add(img);
 				}
+    			info.setProdReviewSn(164L);
     			info.setImgList(imgList);
     			list.add(info);
 			}
@@ -313,8 +316,11 @@ public class ProductViewController extends AbstractController{
 					, null								//단위상품일련번호
 					, null);							//스타일코드
 		
+		
+		
 		//후기 총합
 		ProdReviewCountPerScope maxCountPerScope = null;
+		
     	if( reviewStats != null ) {
     		for (ProdReviewCountPerScope tempScope : reviewStats.getCountPerScopes()) {
     			if(maxCountPerScope == null) {
@@ -323,6 +329,22 @@ public class ProductViewController extends AbstractController{
     				maxCountPerScope = tempScope;
     			}
 			}
+    		
+    		//설문요약 
+    		ProdReviewSurveySummary maxSurvey = null;
+    		for (ProdReviewSurveySummary tempSurvey : reviewStats.getProdReviewSurveys()) {
+    			ProdReviewCountPerResItem resItem  = null;
+    			for (ProdReviewCountPerResItem tempItem : tempSurvey.getCountPerResItems() ) {
+    				
+    			}
+    			/*
+    			if(maxSurvey == null) {
+    				maxSurvey = tempSurvey;
+    			} else if( tempSurvey.getPercent() >  maxCountPerScope.getPercent() ){
+    				maxSurvey = tempSurvey;
+    			}
+    			*/
+    		}
     	}
     	
     	//구매후기

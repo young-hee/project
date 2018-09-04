@@ -74,10 +74,13 @@
 		},
 
 		_initProductSlide: function ( options ) {
+			var listData = [];
 			options.api( {}, options.param ).done(function ( result ) {
 				result = {
 					list: [1,2,3,4,5,6,7,8,9,10,11,12]
 				};
+
+				listData = result.list;
 
 				options.$slide.siblings( '.loading' ).remove();
 				options.$slide.show();
@@ -96,7 +99,8 @@
 
 			options.$slide.on( 'click', '.cart', function (e) {
 				e.preventDefault();
-				console.log( 'cart' );
+				var index = $( e.currentTarget ).closest( '.item' ).data( 'index' );
+				AP.addCart.add( this._data[index].products );
 			}.bind( this ));
 		},
 

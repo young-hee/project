@@ -1,11 +1,9 @@
-<!--결제수단 선택-->
+<!--결제수단-->
 <dl class="payment">
-	<dt class="on">
-		<div class="title"><b>결제수단 선택</b></div>
+	<dt id="paymentArea">
+		<div class="title"><b>결제수단</b></div>
 		<button type="button"><span class="sr_only">더보기</span></button>
 	</dt>
-
-	<dd class="panel" id="paymentArea"></dd>
 
 	<script th:inline="javascript">
 		$( document ).ready(function() {
@@ -19,9 +17,9 @@
 				var html = AP.common.getTemplate('order.complete-final-price-amt', {
 					pgList: ordPayEx
 				});
-				$('#paymentArea').append(html);
+				$('#paymentArea').after(html);
 			}
 		}
 	</script>
 </dl>
-<!--결제수단 선택-->
+<!--결제수단-->

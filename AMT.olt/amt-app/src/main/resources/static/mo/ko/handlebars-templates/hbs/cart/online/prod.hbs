@@ -1,364 +1,75 @@
-<dl>
-	<dt class="on">
-		<b class="title">{{cartCoEx.coName}} 상품 <strong>{{ prodCnt }}</strong>개</b> <button type="button"><i class="ico_navi"></i><span class="sr_only">더보기</span></button>
-	</dt>
-	<dd aria-hidden="false" style="display: block;">
-		<!--/* ap 상품 목록 */-->
-		<ul class="product_list_order">
-		{{#if (ne cartEx.cartDeliveryOnlineProdExList null)}}
-			{{#each cartEx.cartDeliveryOnlineProdExList}}
-				{{#xif singleProdYn '==' 'Y'}}
-					<li class="product_order">
-						{{#each cartProdExList}}
+<div class="ui_accordion ＠accordion-apply">
+	<dl>
+		<dt class="on">
+			<b class="title">{{cartCoEx.coName}} 상품 <strong>{{ prodCnt }}</strong>개</b> <button type="button"><i class="ico_navi"></i><span class="sr_only">더보기</span></button>
+		</dt>
+		<dd aria-hidden="false" style="display: block;">
+			<!--/* ap 상품 목록 */-->
+			{{#if (ne cartEx.cartDeliveryOnlineProdExList null)}}
+				<ul class="product_list_order">
+					{{#each cartEx.cartDeliveryOnlineProdExList}}
+						<li class="product_order">
+
 							<div class="check_wrap">
-								<span class="chk_h23"><input type="checkbox" name="chkBox" id="chkBox{{ ../onlineProdSn }}" value="{{ ../onlineProdSn }}" {{#if (ne prodEx.saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq prodEx.saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}></span>
+								<span class="chk_h23"><input type="checkbox" name="chkBox" id="chkBox{{ onlineProdSn }}" value="{{ onlineProdSn }}" {{#if (ne saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}></span>
 								<label for="item1" class="product_od">
 									<span class="product_visual">
 										<span class="lazy_load_wrap">
-											{{#if (ne prodEx.repProdImgEx null) }}
-												<img src="{{ prodEx.repProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
+											{{#if (ne repOnlineProdImgEx null) }}
+												<img src="{{ repOnlineProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
 											{{else}}
-												{{#if (ne ../repOnlineProdImgEx null) }}
-													<img src="{{ ../repOnlineProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
-												{{/if}}
+												<!--<img src="{{ absolutePath '/images/cart/no_img.png' }}" class="lazy_load loaded" alt="">-->
 											{{/if}}
 										</span>
 									</span>
 									<span class="product_info">
-										<span class="product_name"><a href="#none" onclick="fnProdDetail({{ ../onlineProdSn }})">{{ ../onlineProdName }}</a></span>
+										{{#xif prodEx.prodFlagExList.length '>' 0}}
+											<div class="cart_item_exclusive_wrap">
+												{{#each prodEx.prodFlagExList}}
+													{{#switch prodFlagCode}}
+														{{#case "icon_award_gift"}} <span class="cart_item_exclusive">스페셜기프트</span> {{/case}}
+														{{#case "icon_award_gift"}} <span class="cart_item_exclusive">임직원할인</span> {{/case}}
+													{{/switch}}
+												{{/each}}
+											</div>
+										{{/xif}}
+										<span class="product_name"><a href="#none" onclick="fnProdDetail({{ onlineProdSn }})">{{ onlineProdName }}</a></span>
 									</span>
 								</label>
 							</div>
-							<!--/* 선택 옵션 리스트 */-->
-							<ul class="selected_option_list">
-								<li class="selected_option" data-value="{{ ../onlineProdSn }}">
-									<input type="hidden" name="onlinePrdSn" value="{{prodEx.prodSn}}"/>
-									<input type="hidden" name="cartProdSn" value="{{cartProdSn}}"/>
-									<input type="hidden" name="prdInfo" value="{{cartProdSn}}"/>
-									<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{prodEx.saleDisplayStatus}}"/>
-									<div class="option_name">{{prodEx.prodName}}</div>
-									<div class="ui_spinner" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} data-min="{{ prodEx.minPurLimitQty }}" {{else}} data-min="1" {{/if}} {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} {{#if (gt cartProdQty prodEx.maxPurLimitQty) }} data-max="{{ cartProdQty}}" {{else}} data-max="{{ prodEx.maxPurLimitQty }}" {{/if}} {{else}} data-max="99" {{/if}} {{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}}>
-										<button class="spinner_decrease" type="button" title="제품 수량 감소" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt cartProdQty 1)(gt cartProdQty prodEx.minPurLimitQty) ) }} {{else}} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '-', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper"></i><span class="sr_only">제품 수량 감소</span></button>
-										<input class="spinner_input" type="text" name="cartProdQty" value="{{ cartProdQty }}">
-										<button class="spinner_increase" type="button" title="제품 수량 증가" {{#if (and (eq prodEx.maxPurLimitYn 'Y')(gt cartProdQty prodEx.maxPurLimitQty) ) }} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '+', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper plus"></i><span class="sr_only">제품 수량 증가</span></button>
-									</div>
-									<a href="#none" class="btn_h32_gradient btn_order_edit" onclick="fnUnitVariationProds('{{ ../../cartSn}}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}','{{ cartProdQty }}')">주문변경</a>
-									<div class="price">
-										{{#if (eq prodEx.saleDisplayStatus 'OnSale') }}
-											{{#if (eq calculationResultYn 'Y') }}
-												{{#if (ne calculationResultProduct.finalOnlineSalesAmountInfo null) }}
-													<b>{{numberFormat calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}원</b>
-												{{/if}}
-												{{#if (eq prodEx.doublePriceDisplayYn 'Y') }}
-													{{#if (ne calculationResultProduct.productSaleAmountInfo null) }}
-														{{#if (gt calculationResultProduct.productSaleAmountInfo.standardCurrency.amount calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount) }}
-															<del>{{numberFormat calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}원</del>
-														{{/if}}
-													{{/if}}
-												{{/if}}
-											{{else}}
-												{{#if (ne prodEx.salePrice null) }}
-													<b>{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}원</b>
-												{{/if}}
-											{{/if}}
-										{{else}}
-											<em>{{cartStatusTxt prodEx.saleDisplayStatus}}</em>
-										{{/if}}
-									</div>
-									<button class="ui_close" type="button" onclick="removeCartProd('{{ ../../cartSn }}', '{{cartProdSn}}')"><span class="sr_only">선택 옵션 삭제</span></button>
-								</li>
-							</ul>
-							<!--/* 묶음상품일 경우 */-->
-							{{#if (gt cartBulkIncludedProdExList.length 0) }}
-							<ul class="bunch_list">
-								{{#each cartBulkIncludedProdExList }}
-								<input type="hidden" name="bulkPrdInfo_{{ ../cartProdSn }}" cartBulkIncludedProdSn="{{ cartBulkIncludedProdSn }}" bulkDcIncludedProdGrpSn="{{ bulkDcIncludedProdGrpSn }}" includedProdSn="{{ includedProdSn }}" includedProdQty="{{ includedProdQty }}"/>
-								<li>{{ includeProdEx.prodName }}<span class="count">{{numberFormat (calc ../cartProdQty '*' includedProdQty) }}개</span></li>
-								{{/each}}
-							</ul>
-							{{/if}}
-							<!--/* 스페셜 기프트 있는 경우 */-->
-							{{#xif cartProdAwardList.length '>' 0}}
-							<dl class="special_gift">
-								<dt>상품 구매시 스페셜기프트 증정</dt>
-								<dd class="product_slide_new">
-									<ul class="three_half">
-										{{#each cartProdAwardList}}
-										<li>
-											<a href="#none" class="">
-												<div class="product_visual">
-													<div class="lazy_load_wrap">
-														{{#if (ne awardProdEx.repProdImgEx null) }}
-															<img src="{{ awardProdEx.repProdImgEx.imgUrl }}" data-src="{{ awardProdEx.repProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
-														{{/if}}
-													</div>
-												</div>
-												<div class="product_info">
-													<p class="brand">{{awardProdEx.brandName}}</p>
-													<p class="product_name">{{awardProdEx.prodName}}</p>
-													<div class="price_area">
-														<span class="price"><span class="num">{{awardQty}}</span>개</span>
-													</div>
-												</div>
-											</a>
-										</li>
-										{{/each}}
-									</ul>
-								</dd>
-							</dl>
-							{{/xif}}
-						{{/each}}
-					</li>
-				{{/xif}}
-				{{#xif singleProdYn '==' 'N'}}
-					<li class="product_order">
+							{{#each cartProdExList}}
 
-						<div class="check_wrap">
-							<span class="chk_h23"><input type="checkbox" name="chkBox" id="chkBox{{ onlineProdSn }}" value="{{ onlineProdSn }}" {{#if (ne saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}></span>
-							<label for="item1" class="product_od">
-								<span class="product_visual">
-									<span class="lazy_load_wrap">
-										{{#if (ne repOnlineProdImgEx null) }}
-											<img src="{{ repOnlineProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
-										{{else}}
-											<img src="{{ absolutePath '/images/cart/no_img.png' }}" class="lazy_load loaded" alt="">
-										{{/if}}
-									</span>
-								</span>
-								<span class="product_info">
-									<span class="product_name"><a href="#none" onclick="fnProdDetail({{ onlineProdSn }})">{{ onlineProdName }}</a></span>
-								</span>
-							</label>
-						</div>
-						{{#each cartProdExList}}
-
-							<!--/* 선택 옵션 리스트 */-->
-							<ul class="selected_option_list">
-								<li class="selected_option" data-value="{{ ../onlineProdSn }}">
-									<input type="hidden" name="onlinePrdSn" value="{{prodEx.prodSn}}"/>
-									<input type="hidden" name="cartProdSn" value="{{cartProdSn}}"/>
-									<input type="hidden" name="prdInfo" value="{{cartProdSn}}"/>
-									<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{prodEx.saleDisplayStatus}}"/>
-									<div class="option_name">{{prodEx.prodName}}</div>
-									<div class="ui_spinner" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} data-min="{{ prodEx.minPurLimitQty }}" {{else}} data-min="1" {{/if}} {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} {{#if (gt cartProdQty prodEx.maxPurLimitQty) }} data-max="{{ cartProdQty}}" {{else}} data-max="{{ prodEx.maxPurLimitQty }}" {{/if}} {{else}} data-max="99" {{/if}} {{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}}>
-										<button class="spinner_decrease" type="button" title="제품 수량 감소" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt cartProdQty 1)(gt cartProdQty prodEx.minPurLimitQty) ) }} {{else}} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '-', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper"></i><span class="sr_only">제품 수량 감소</span></button>
-										<input class="spinner_input" type="text" name="cartProdQty" value="{{ cartProdQty }}">
-										<button class="spinner_increase" type="button" title="제품 수량 증가" {{#if (and (eq prodEx.maxPurLimitYn 'Y')(gt cartProdQty prodEx.maxPurLimitQty) ) }} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '+', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper plus"></i><span class="sr_only">제품 수량 증가</span></button>
-									</div>
-									<a href="#none" class="btn_h32_gradient btn_order_edit" onclick="fnUnitVariationProds('{{ ../../cartSn}}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}','{{ cartProdQty }}')">주문변경</a>
-									<div class="price">
+								<!--/* 선택 옵션 리스트 */-->
+								<ul class="selected_option_list">
 									{{#if (eq prodEx.saleDisplayStatus 'OnSale') }}
-										{{#if (eq calculationResultYn 'Y') }}
-											{{#if (ne calculationResultProduct.finalOnlineSalesAmountInfo null) }}
-												<b>{{numberFormat calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}원</b>
-											{{/if}}
-											{{#if (eq doublePriceDisplayYn 'Y') }}
-												{{#if (ne calculationResultProduct.productSaleAmountInfo null) }}
-													{{#if (gt calculationResultProduct.productSaleAmountInfo.standardCurrency.amount calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount) }}
-														<del>{{numberFormat calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}원</del>
-													{{/if}}
-												{{/if}}
-											{{/if}}
-										{{/if}}
-										{{#if (eq calculationResultYn 'N') }}
-											{{#if (ne prodEx.salePrice null) }}
-												<b>{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}원</b>
-											{{/if}}
-										{{/if}}
+									<li class="selected_option" data-value="{{ ../onlineProdSn }}">
 									{{else}}
-										<em>{{cartStatusTxt prodEx.saleDisplayStatus}}</em>
+									<li class="selected_option out_of_stock" data-value="{{ ../onlineProdSn }}">
 									{{/if}}
-									</div>
-									<button class="ui_close" type="button" onclick="removeCartProd('{{ ../../cartSn }}', '{{cartProdSn}}')"><span class="sr_only">선택 옵션 삭제</span></button>
-								</li>
-							</ul>
-							<!--/* 묶음상품일 경우 */-->
-							{{#if (gt cartBulkIncludedProdExList.length 0) }}
-							<ul class="bunch_list">
-								{{#each cartBulkIncludedProdExList }}
-								<input type="hidden" name="bulkPrdInfo_{{ ../cartProdSn }}" cartBulkIncludedProdSn="{{ cartBulkIncludedProdSn }}" bulkDcIncludedProdGrpSn="{{ bulkDcIncludedProdGrpSn }}" includedProdSn="{{ includedProdSn }}" includedProdQty="{{ includedProdQty }}"/>
-								<li>{{ includeProdEx.prodName }}<span class="count">{{ includedProdQty }}개</span></li>
-								{{/each}}
-							</ul>
-							{{/if}}
-							<!--/* 스페셜 기프트 있는 경우 */-->
-							{{#xif cartProdAwardList.length '>' 0}}
-							<dl class="special_gift">
-								<dt>상품 구매시 스페셜기프트 증정</dt>
-								<dd class="product_slide_new">
-									<ul class="three_half">
-										{{#each cartProdAwardList}}
-										<li>
-											<a href="#none" class="">
-												<div class="product_visual">
-													<div class="lazy_load_wrap">
-														{{#if (ne awardProdEx.repProdImgEx null) }}
-															<img src="{{ awardProdEx.repProdImgEx.imgUrl }}" data-src="{{ awardProdEx.repProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
-														{{/if}}
-													</div>
-												</div>
-												<div class="product_info">
-													<p class="brand">{{awardProdEx.brandName}}</p>
-													<p class="product_name">{{awardProdEx.prodName}}</p>
-													<div class="price_area">
-														<span class="price"><span class="num">{{awardQty}}</span>개</span>
-													</div>
-												</div>
-											</a>
-										</li>
-										{{/each}}
-									</ul>
-								</dd>
-							</dl>
-							{{/xif}}
-						{{/each}}
-					</li>
-				{{/xif}}
-			{{/each}}
-		{{/if}}
-		{{#if (ne cartEx.cartDeliveryMembershipPointExchOnlineProdExList null)}}
-			{{#each cartEx.cartDeliveryMembershipPointExchOnlineProdExList}}
-				{{#xif singleProdYn '==' 'Y'}}
-					<li class="product_order">
-						{{#each cartProdExList}}
-							<div class="check_wrap">
-								<span class="chk_h23"><input type="checkbox" name="chkBox" id="chkBox{{ ../onlineProdSn }}" value="{{ ../onlineProdSn }}" {{#if (ne prodEx.saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq prodEx.saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}></span>
-								<label for="item1" class="product_od">
-								<span class="product_visual">
-									<span class="lazy_load_wrap">
-										{{#if (ne prodEx.repProdImgEx null) }}
-											<img src="{{ prodEx.repProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
-										{{else}}
-											{{#if (ne ../repOnlineProdImgEx null) }}
-												<img src="{{ ../repOnlineProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
-											{{/if}}
-										{{/if}}
-									</span>
-								</span>
-									<span class="product_info">
-									<span class="product_name"><a href="#none" onclick="fnProdDetail({{ ../onlineProdSn }})">{{ ../onlineProdName }}</a></span>
-								</span>
-								</label>
-							</div>
-							<!--/* 선택 옵션 리스트 */-->
-							<ul class="selected_option_list">
-								<li class="selected_option" data-value="{{ ../onlineProdSn }}">
-									<input type="hidden" name="onlinePrdSn" value="{{prodEx.prodSn}}"/>
-									<input type="hidden" name="cartProdSn" value="{{cartProdSn}}"/>
-									<input type="hidden" name="prdInfo" value="{{cartProdSn}}"/>
-									<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{prodEx.saleDisplayStatus}}"/>
-									<div class="option_name">{{prodEx.prodName}}</div>
-									<div class="ui_spinner" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} data-min="{{ prodEx.minPurLimitQty }}" {{else}} data-min="1" {{/if}} {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} {{#if (gt cartProdQty prodEx.maxPurLimitQty) }} data-max="{{ cartProdQty}}" {{else}} data-max="{{ prodEx.maxPurLimitQty }}" {{/if}} {{else}} data-max="99" {{/if}} {{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}}>
-										<button class="spinner_decrease" type="button" title="제품 수량 감소" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt cartProdQty 1)(gt cartProdQty prodEx.minPurLimitQty) ) }} {{else}} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '-', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper"></i><span class="sr_only">제품 수량 감소</span></button>
-										<input class="spinner_input" type="text" name="cartProdQty" value="{{ cartProdQty }}">
-										<button class="spinner_increase" type="button" title="제품 수량 증가" {{#if (and (eq prodEx.maxPurLimitYn 'Y')(gt cartProdQty prodEx.maxPurLimitQty) ) }} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '+', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper plus"></i><span class="sr_only">제품 수량 증가</span></button>
-									</div>
-									<a href="#none" class="btn_h32_gradient btn_order_edit" onclick="fnUnitVariationProds('{{ ../../cartSn}}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}','{{ cartProdQty }}')">주문변경</a>
-									<div class="price">
+										<input type="hidden" name="onlinePrdSn" value="{{prodEx.prodSn}}"/>
+										<input type="hidden" name="cartProdSn" prod="prod" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}" value="{{ cartProdSn }}"/>
+										<input type="hidden" name="prdInfo" value="{{cartProdSn}}"/>
+										<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{prodEx.saleDisplayStatus}}"/>
+										<div class="option_name">
+											{{#if (ne prodEx.saleDisplayStatus 'OnSale') }}
+												{{#if (or (eq prodEx.saleDisplayStatus 'OutOfStock')(eq prodEx.saleDisplayStatus 'Exhaustion')) }}
+													<span class="badge">{{cartStatusTxt prodEx.saleDisplayStatus}}</span>
+												{{else}}
+													<span class="badge">판매종료</span>
+												{{/if}}
+											{{/if}} {{prodEx.prodName}}
+										</div>
+										<div class="ui_spinner" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} data-min="{{ prodEx.minPurLimitQty }}" {{else}} data-min="1" {{/if}} {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} {{#if (gt cartProdQty prodEx.maxPurLimitQty) }} data-max="{{ cartProdQty}}" {{else}} data-max="{{ prodEx.maxPurLimitQty }}" {{/if}} {{else}} data-max="99" {{/if}} {{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}}>
+											<button class="spinner_decrease" type="button" title="제품 수량 감소" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt cartProdQty 1)(gt cartProdQty prodEx.minPurLimitQty) ) }} {{else}} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '-', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper"></i><span class="sr_only">제품 수량 감소</span></button>
+											<input class="spinner_input" type="text" name="cartProdQty" value="{{ cartProdQty }}">
+											<button class="spinner_increase" type="button" title="제품 수량 증가" {{#if (and (eq prodEx.maxPurLimitYn 'Y')(gt cartProdQty prodEx.maxPurLimitQty) ) }} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '+', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper plus"></i><span class="sr_only">제품 수량 증가</span></button>
+										</div>
 										{{#if (eq prodEx.saleDisplayStatus 'OnSale') }}
-											{{#if (eq calculationResultYn 'Y') }}
-												{{#if (ne calculationResultProduct.finalOnlineSalesAmountInfo null) }}
-													<b>{{numberFormat calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}원</b>
-												{{/if}}
-												{{#if (eq prodEx.doublePriceDisplayYn 'Y') }}
-													{{#if (ne calculationResultProduct.productSaleAmountInfo null) }}
-														{{#if (gt calculationResultProduct.productSaleAmountInfo.standardCurrency.amount calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount) }}
-															<del>{{numberFormat calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}원</del>
-														{{/if}}
-													{{/if}}
-												{{/if}}
-											{{else}}
-												{{#if (ne prodEx.salePrice null) }}
-													<b>{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}원</b>
-												{{/if}}
-											{{/if}}
+											<a href="#none" class="btn_h32_gradient btn_order_edit" onclick="fnUnitVariationProds('{{ ../../cartSn}}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}','{{ cartProdQty }}', '{{ prodEx.prodName }}', {{ prodEx.salePrice }}, {{ prodEx.minPurLimitQty }}, {{ prodEx.maxPurLimitQty }}, '{{ prodEx.maxPurLimitYn }}')">주문변경</a>
 										{{else}}
-											<em>{{cartStatusTxt prodEx.saleDisplayStatus}}</em>
+											<a href="javascript:;" class="btn_h32_gradient btn_order_edit downAppLayerBtn" onclick="applyAlarm();">입고알리미신청</a>
 										{{/if}}
-									</div>
-									<button class="ui_close" type="button" onclick="removeCartProd('{{ ../../cartSn }}', '{{cartProdSn}}')"><span class="sr_only">선택 옵션 삭제</span></button>
-								</li>
-							</ul>
-							<!--/* 묶음상품일 경우 */-->
-							{{#if (gt cartBulkIncludedProdExList.length 0) }}
-								<ul class="bunch_list">
-									{{#each cartBulkIncludedProdExList }}
-										<input type="hidden" name="bulkPrdInfo_{{ ../cartProdSn }}" cartBulkIncludedProdSn="{{ cartBulkIncludedProdSn }}" bulkDcIncludedProdGrpSn="{{ bulkDcIncludedProdGrpSn }}" includedProdSn="{{ includedProdSn }}" includedProdQty="{{ includedProdQty }}"/>
-										<li>{{ includeProdEx.prodName }}<span class="count">{{numberFormat (calc ../cartProdQty '*' includedProdQty) }}개</span></li>
-									{{/each}}
-								</ul>
-							{{/if}}
-							<!--/* 스페셜 기프트 있는 경우 */-->
-							{{#xif cartProdAwardList.length '>' 0}}
-								<dl class="special_gift">
-									<dt>상품 구매시 스페셜기프트 증정</dt>
-									<dd class="product_slide_new">
-										<ul class="three_half">
-											{{#each cartProdAwardList}}
-												<li>
-													<a href="#none" class="">
-														<div class="product_visual">
-															<div class="lazy_load_wrap">
-																{{#if (ne awardProdEx.repProdImgEx null) }}
-																	<img src="{{ awardProdEx.repProdImgEx.imgUrl }}" data-src="{{ awardProdEx.repProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
-																{{/if}}
-															</div>
-														</div>
-														<div class="product_info">
-															<p class="brand">{{awardProdEx.brandName}}</p>
-															<p class="product_name">{{awardProdEx.prodName}}</p>
-															<div class="price_area">
-																<span class="price"><span class="num">{{awardQty}}</span>개</span>
-															</div>
-														</div>
-													</a>
-												</li>
-											{{/each}}
-										</ul>
-									</dd>
-								</dl>
-							{{/xif}}
-						{{/each}}
-					</li>
-				{{/xif}}
-				{{#xif singleProdYn '==' 'N'}}
-					<li class="product_order">
-
-						<div class="check_wrap">
-							<span class="chk_h23"><input type="checkbox" name="chkBox" id="chkBox{{ onlineProdSn }}" value="{{ onlineProdSn }}" {{#if (ne saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}></span>
-							<label for="item1" class="product_od">
-							<span class="product_visual">
-								<span class="lazy_load_wrap">
-									{{#if (ne repOnlineProdImgEx null) }}
-										<img src="{{ repOnlineProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
-									{{else}}
-										<img src="{{ absolutePath '/images/cart/no_img.png' }}" class="lazy_load loaded" alt="">
-									{{/if}}
-								</span>
-							</span>
-								<span class="product_info">
-								<span class="product_name"><a href="#none" onclick="fnProdDetail({{ onlineProdSn }})">{{ onlineProdName }}</a></span>
-							</span>
-							</label>
-						</div>
-						{{#each cartProdExList}}
-
-							<!--/* 선택 옵션 리스트 */-->
-							<ul class="selected_option_list">
-								<li class="selected_option" data-value="{{ ../onlineProdSn }}">
-									<input type="hidden" name="onlinePrdSn" value="{{prodEx.prodSn}}"/>
-									<input type="hidden" name="cartProdSn" value="{{cartProdSn}}"/>
-									<input type="hidden" name="prdInfo" value="{{cartProdSn}}"/>
-									<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{prodEx.saleDisplayStatus}}"/>
-									<div class="option_name">{{prodEx.prodName}}</div>
-									<div class="ui_spinner" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} data-min="{{ prodEx.minPurLimitQty }}" {{else}} data-min="1" {{/if}} {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} {{#if (gt cartProdQty prodEx.maxPurLimitQty) }} data-max="{{ cartProdQty}}" {{else}} data-max="{{ prodEx.maxPurLimitQty }}" {{/if}} {{else}} data-max="99" {{/if}} {{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}}>
-										<button class="spinner_decrease" type="button" title="제품 수량 감소" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt cartProdQty 1)(gt cartProdQty prodEx.minPurLimitQty) ) }} {{else}} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '-', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper"></i><span class="sr_only">제품 수량 감소</span></button>
-										<input class="spinner_input" type="text" name="cartProdQty" value="{{ cartProdQty }}">
-										<button class="spinner_increase" type="button" title="제품 수량 증가" {{#if (and (eq prodEx.maxPurLimitYn 'Y')(gt cartProdQty prodEx.maxPurLimitQty) ) }} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '+', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper plus"></i><span class="sr_only">제품 수량 증가</span></button>
-									</div>
-									<a href="#none" class="btn_h32_gradient btn_order_edit" onclick="fnUnitVariationProds('{{ ../../cartSn}}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}','{{ cartProdQty }}')">주문변경</a>
-									<div class="price">
-										{{#if (eq prodEx.saleDisplayStatus 'OnSale') }}
+										<div class="price">
 											{{#if (eq calculationResultYn 'Y') }}
 												{{#if (ne calculationResultProduct.finalOnlineSalesAmountInfo null) }}
 													<b>{{numberFormat calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}원</b>
@@ -376,153 +87,27 @@
 													<b>{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}원</b>
 												{{/if}}
 											{{/if}}
-										{{else}}
-											<em>{{cartStatusTxt prodEx.saleDisplayStatus}}</em>
-										{{/if}}
-									</div>
-									<button class="ui_close" type="button" onclick="removeCartProd('{{ ../../cartSn }}', '{{cartProdSn}}')"><span class="sr_only">선택 옵션 삭제</span></button>
-								</li>
-							</ul>
-							<!--/* 묶음상품일 경우 */-->
-							{{#if (gt cartBulkIncludedProdExList.length 0) }}
+										</div>
+										<button class="ui_close" type="button" onclick="removeCartProd('{{ ../../cartSn }}', '{{cartProdSn}}')"><span class="sr_only">선택 옵션 삭제</span></button>
+									</li>
+								</ul>
+								<!--/* 묶음상품일 경우 */-->
+								{{#if (gt cartBulkIncludedProdExList.length 0) }}
 								<ul class="bunch_list">
 									{{#each cartBulkIncludedProdExList }}
-										<input type="hidden" name="bulkPrdInfo_{{ ../cartProdSn }}" cartBulkIncludedProdSn="{{ cartBulkIncludedProdSn }}" bulkDcIncludedProdGrpSn="{{ bulkDcIncludedProdGrpSn }}" includedProdSn="{{ includedProdSn }}" includedProdQty="{{ includedProdQty }}"/>
-										<li>{{ includeProdEx.prodName }}<span class="count">{{ includedProdQty }}개</span></li>
+									<input type="hidden" name="bulkPrdInfo_{{ ../cartProdSn }}" cartBulkIncludedProdSn="{{ cartBulkIncludedProdSn }}" bulkDcIncludedProdGrpSn="{{ bulkDcIncludedProdGrpSn }}" includedProdSn="{{ includedProdSn }}" includedProdQty="{{ includedProdQty }}"/>
+									<li>{{ includeProdEx.prodName }}<span class="count">{{ includedProdQty }}개</span></li>
 									{{/each}}
 								</ul>
-							{{/if}}
-							<!--/* 스페셜 기프트 있는 경우 */-->
-							{{#xif cartProdAwardList.length '>' 0}}
-								<dl class="special_gift">
-									<dt>상품 구매시 스페셜기프트 증정</dt>
-									<dd class="product_slide_new">
-										<ul class="three_half">
-											{{#each cartProdAwardList}}
-												<li>
-													<a href="#none" class="">
-														<div class="product_visual">
-															<div class="lazy_load_wrap">
-																{{#if (ne awardProdEx.repProdImgEx null) }}
-																	<img src="{{ awardProdEx.repProdImgEx.imgUrl }}" data-src="{{ awardProdEx.repProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
-																{{/if}}
-															</div>
-														</div>
-														<div class="product_info">
-															<p class="brand">{{awardProdEx.brandName}}</p>
-															<p class="product_name">{{awardProdEx.prodName}}</p>
-															<div class="price_area">
-																<span class="price"><span class="num">{{awardQty}}</span>개</span>
-															</div>
-														</div>
-													</a>
-												</li>
-											{{/each}}
-										</ul>
-									</dd>
-								</dl>
-							{{/xif}}
-						{{/each}}
-					</li>
-				{{/xif}}
-			{{/each}}
-		{{/if}}
-		{{#if (ne cartEx.cartDeliveryMNPromoExList null)}}
-				{{#each cartEx.cartDeliveryMNPromoExList}}
-					<!--/* 이벤트 상품 구분 */-->
-					<dl class="clear product_label event">
-						<dt>{{ promoName }}</dt>
-						<dd>
-							{{#if (eq promoApplyResultCode 'All') }}
-								<span>{{ baseOrdQty }} + {{ freeAwardQty }} 적용</span>
-							{{/if}}
-							{{#if (eq promoApplyResultCode 'Partial') }}
-								<span>{{ baseOrdQty }} + {{ freeAwardQty }} 부분적용</span>
-							{{/if}}
-							{{#if (eq promoApplyResultCode 'None') }}
-								<em>{{ baseOrdQty }} + {{ freeAwardQty }} 미적용</em>
-							{{/if}}
-							<b promSn={{ promoSn }}></b>
-						</dd>
-					</dl>
-					{{#each promoOnlineProdExList}}
-						{{#xif singleProdYn '==' 'Y'}}
-							<li class="product_order">
-								{{#each cartProdExList}}
-									<div class="check_wrap">
-										<span class="chk_h23"><input type="checkbox" name="chkBox" id="chkBox{{ ../onlineProdSn }}" value="{{ ../onlineProdSn }}" {{#if (ne prodEx.saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq prodEx.saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}></span>
-										<label for="item1" class="product_od">
-										<span class="product_visual">
-											<span class="lazy_load_wrap">
-												{{#if (ne prodEx.repProdImgEx null) }}
-													<img src="{{ prodEx.repProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
-												{{else}}
-													{{#if (ne ../repOnlineProdImgEx null) }}
-														<img src="{{ ../repOnlineProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
-													{{/if}}
-												{{/if}}
-											</span>
-										</span>
-											<span class="product_info">
-											<span class="product_name"><a href="#none" onclick="fnProdDetail({{ ../onlineProdSn }})">{{ ../onlineProdName }}</a></span>
-										</span>
-										</label>
-									</div>
-									<!--/* 선택 옵션 리스트 */-->
-									<ul class="selected_option_list">
-										<li class="selected_option" data-value="{{ ../onlineProdSn }}">
-											<input type="hidden" name="onlinePrdSn" value="{{prodEx.prodSn}}"/>
-											<input type="hidden" name="cartProdSn" value="{{cartProdSn}}"/>
-											<input type="hidden" name="prdInfo" value="{{cartProdSn}}"/>
-											<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{prodEx.saleDisplayStatus}}"/>
-											<div class="option_name">{{prodEx.prodName}}</div>
-											<div class="ui_spinner" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} data-min="{{ prodEx.minPurLimitQty }}" {{else}} data-min="1" {{/if}} {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} {{#if (gt cartProdQty prodEx.maxPurLimitQty) }} data-max="{{ cartProdQty}}" {{else}} data-max="{{ prodEx.maxPurLimitQty }}" {{/if}} {{else}} data-max="99" {{/if}} {{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}}>
-												<button class="spinner_decrease" type="button" title="제품 수량 감소" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt cartProdQty 1)(gt cartProdQty prodEx.minPurLimitQty) ) }} {{else}} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '-', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper"></i><span class="sr_only">제품 수량 감소</span></button>
-												<input class="spinner_input" type="text" name="cartProdQty" value="{{ cartProdQty }}">
-												<button class="spinner_increase" type="button" title="제품 수량 증가" {{#if (and (eq prodEx.maxPurLimitYn 'Y')(gt cartProdQty prodEx.maxPurLimitQty) ) }} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '+', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper plus"></i><span class="sr_only">제품 수량 증가</span></button>
-											</div>
-											<a href="#none" class="btn_h32_gradient btn_order_edit" onclick="fnUnitVariationProds('{{ ../../../cartSn}}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}','{{ cartProdQty }}')">주문변경</a>
-											<div class="price">
-												{{#if (eq prodEx.saleDisplayStatus 'OnSale') }}
-													{{#if (eq calculationResultYn 'Y') }}
-														{{#if (ne calculationResultProduct.finalOnlineSalesAmountInfo null) }}
-															<b name="promoPrice" promoSn="{{ ../../promoSn }}">{{numberFormat calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}원</b>
-														{{/if}}
-														{{#if (eq prodEx.doublePriceDisplayYn 'Y') }}
-															{{#if (ne calculationResultProduct.productSaleAmountInfo null) }}
-																{{#if (gt calculationResultProduct.productSaleAmountInfo.standardCurrency.amount calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount) }}
-																	<del>{{numberFormat calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}원</del>
-																{{/if}}
-															{{/if}}
-														{{/if}}
-													{{else}}
-														{{#if (ne prodEx.salePrice null) }}
-															<b name="promoPrice" promoSn="{{ ../../promoSn }}">{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}원</b>
-														{{/if}}
-													{{/if}}
-												{{else}}
-													<em>{{cartStatusTxt prodEx.saleDisplayStatus}}</em>
-												{{/if}}
-											</div>
-											<button class="ui_close" type="button" onclick="removeCartProd('{{ ../../../cartSn }}', '{{cartProdSn}}')"><span class="sr_only">선택 옵션 삭제</span></button>
-										</li>
-									</ul>
-									<!--/* 묶음상품일 경우 */-->
-									{{#if (gt cartBulkIncludedProdExList.length 0) }}
-										<ul class="bunch_list">
-											{{#each cartBulkIncludedProdExList }}
-												<input type="hidden" name="bulkPrdInfo_{{ ../cartProdSn }}" cartBulkIncludedProdSn="{{ cartBulkIncludedProdSn }}" bulkDcIncludedProdGrpSn="{{ bulkDcIncludedProdGrpSn }}" includedProdSn="{{ includedProdSn }}" includedProdQty="{{ includedProdQty }}"/>
-												<li>{{ includeProdEx.prodName }}<span class="count">{{numberFormat (calc ../cartProdQty '*' includedProdQty) }}개</span></li>
-											{{/each}}
-										</ul>
-									{{/if}}
-									<!--/* 스페셜 기프트 있는 경우 */-->
-									{{#xif cartProdAwardList.length '>' 0}}
-										<dl class="special_gift">
-											<dt>상품 구매시 스페셜기프트 증정</dt>
-											<dd class="product_slide_new">
-												<ul class="three_half">
-													{{#each cartProdAwardList}}
+								{{/if}}
+								<!--/* 기프트 or 스페셜기프트 있는 경우 */-->
+								{{#xif cartProdAwardList.length '>' 0}}
+									{{#each cartProdAwardList}}
+										{{#if (eq awardTgtCode "Prod")}}
+											<dl class="special_gift">
+												<dt>상품 구매시 스페셜기프트 증정</dt>
+												<dd class="product_slide_new">
+													<ul class="three_half">
 														<li>
 															<a href="#none" class="">
 																<div class="product_visual">
@@ -541,20 +126,39 @@
 																</div>
 															</a>
 														</li>
-													{{/each}}
-												</ul>
-											</dd>
-										</dl>
-									{{/xif}}
-								{{/each}}
-							</li>
-						{{/xif}}
-						{{#xif singleProdYn '==' 'N'}}
-							<li class="product_order">
-
-								<div class="check_wrap">
-									<span class="chk_h23"><input type="checkbox" name="chkBox" id="chkBox{{ onlineProdSn }}" value="{{ onlineProdSn }}" {{#if (ne saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}></span>
-									<label for="item1" class="product_od">
+													</ul>
+												</dd>
+											</dl>
+										{{/if}}
+										{{#if (eq awardTgtCode "Giftcard")}}
+											<p class="gift_card"><i class="ico_gift"></i>기프트카드 <em>{{ awardGiftcardEx.giftcardBaseAmt }}</em>원 증정</p>
+										{{/if}}
+									{{/each}}
+								{{/xif}}
+							{{/each}}
+						</li>
+					{{/each}}
+				</ul>
+			{{/if}}
+			{{#if (ne cartEx.cartDeliveryMembershipPointExchOnlineProdExList null)}}
+				{{#each cartEx.cartDeliveryMembershipPointExchOnlineProdExList}}
+					<!--/* 뷰티포인트 상품 구분 */-->
+					<dl class="product_label beauty_point">
+						<dt>뷰티포인트 상품</dt>
+						<dd>
+							{{#each ../cartEx.cartMemberEx.memberMembershipExList}}
+								{{#if (eq membershipServiceCode "BP")}}
+									<span>보유 {{numberFormat membershipPoints }} <i class="ico_p_s"></i></span>
+								{{/if}}
+							{{/each}}
+							<b allAmountMemOnlineProdSn={{ onlineProdSn }}></b>
+						</dd>
+					</dl>
+					<ul class="product_list_order">
+						<li class="product_order">
+							<div class="check_wrap">
+								<span class="chk_h23"><input type="checkbox" name="chkBox" id="chkBox{{ onlineProdSn }}" value="{{ onlineProdSn }}" {{#if (ne saleDisplayStatus  'OnSale') }}disabled{{/if}}  {{condition (and (eq saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}></span>
+								<label for="item1" class="product_od">
 									<span class="product_visual">
 										<span class="lazy_load_wrap">
 											{{#if (ne repOnlineProdImgEx null) }}
@@ -564,48 +168,205 @@
 											{{/if}}
 										</span>
 									</span>
-										<span class="product_info">
+									<span class="product_info">
+										{{#xif prodEx.prodFlagExList.length '>' 0}}
+											<div class="cart_item_exclusive_wrap">
+												{{#each prodEx.prodFlagExList}}
+													{{#switch prodFlagCode}}
+														{{#case "icon_award_gift"}} <span class="cart_item_exclusive">스페셜기프트</span> {{/case}}
+														{{#case "icon_award_gift"}} <span class="cart_item_exclusive">임직원할인</span> {{/case}}
+													{{/switch}}
+												{{/each}}
+											</div>
+										{{/xif}}
 										<span class="product_name"><a href="#none" onclick="fnProdDetail({{ onlineProdSn }})">{{ onlineProdName }}</a></span>
 									</span>
+								</span>
+								</label>
+							</div>
+							{{#each cartProdExList}}
+
+								<!--/* 선택 옵션 리스트 */-->
+								<ul class="selected_option_list">
+									{{#if (eq prodEx.saleDisplayStatus 'OnSale') }}
+									<li class="selected_option" data-value="{{ ../onlineProdSn }}">
+									{{else}}
+									<li class="selected_option out_of_stock" data-value="{{ ../onlineProdSn }}">
+									{{/if}}
+										<input type="hidden" name="onlinePrdSn" value="{{prodEx.prodSn}}"/>
+										<input type="hidden" name="cartProdSn" prod="prod" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}" value="{{ cartProdSn }}"/>
+										<input type="hidden" name="prdInfo" value="{{cartProdSn}}"/>
+										<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{prodEx.saleDisplayStatus}}"/>
+										<div class="option_name">
+											{{#if (ne prodEx.saleDisplayStatus 'OnSale') }}
+												{{#if (or (eq prodEx.saleDisplayStatus 'OutOfStock')(eq prodEx.saleDisplayStatus 'Exhaustion')) }}
+													<span class="badge">{{cartStatusTxt prodEx.saleDisplayStatus}}</span>
+												{{else}}
+													<span class="badge">판매종료</span>
+												{{/if}}
+											{{/if}} {{prodEx.prodName}}
+										</div>
+										<div class="ui_spinner" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} data-min="{{ prodEx.minPurLimitQty }}" {{else}} data-min="1" {{/if}} {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} {{#if (gt cartProdQty prodEx.maxPurLimitQty) }} data-max="{{ cartProdQty}}" {{else}} data-max="{{ prodEx.maxPurLimitQty }}" {{/if}} {{else}} data-max="99" {{/if}} {{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}}>
+											<button class="spinner_decrease" type="button" title="제품 수량 감소" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt cartProdQty 1)(gt cartProdQty prodEx.minPurLimitQty) ) }} {{else}} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '-', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper"></i><span class="sr_only">제품 수량 감소</span></button>
+											<input class="spinner_input" type="text" name="cartProdQty" value="{{ cartProdQty }}">
+											<button class="spinner_increase" type="button" title="제품 수량 증가" {{#if (and (eq prodEx.maxPurLimitYn 'Y')(gt cartProdQty prodEx.maxPurLimitQty) ) }} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '+', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper plus"></i><span class="sr_only">제품 수량 증가</span></button>
+										</div>
+										{{#if (eq prodEx.saleDisplayStatus 'OnSale') }}
+											<a href="#none" class="btn_h32_gradient btn_order_edit" onclick="fnUnitVariationProds('{{ ../../cartSn}}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}','{{ cartProdQty }}', '{{ prodEx.prodName }}', {{ prodEx.salePrice }}, {{ prodEx.minPurLimitQty }}, {{ prodEx.maxPurLimitQty }}, '{{ prodEx.maxPurLimitYn }}')">주문변경</a>
+										{{else}}
+											<a href="javascript:;" class="btn_h32_gradient btn_order_edit downAppLayerBtn" onclick="applyAlarm();">입고알리미신청</a>
+										{{/if}}
+										<div class="price">
+											<b name="memAmount" memOnlineProdSn="{{ ../onlineProdSn }}">{{numberFormat exchPoint }}P</b>
+										</div>
+										<button class="ui_close" type="button" onclick="removeCartProd('{{ ../../cartSn }}', '{{cartProdSn}}')"><span class="sr_only">선택 옵션 삭제</span></button>
+									</li>
+								</ul>
+								<!--/* 묶음상품일 경우 */-->
+								{{#if (gt cartBulkIncludedProdExList.length 0) }}
+									<ul class="bunch_list">
+										{{#each cartBulkIncludedProdExList }}
+											<input type="hidden" name="bulkPrdInfo_{{ ../cartProdSn }}" cartBulkIncludedProdSn="{{ cartBulkIncludedProdSn }}" bulkDcIncludedProdGrpSn="{{ bulkDcIncludedProdGrpSn }}" includedProdSn="{{ includedProdSn }}" includedProdQty="{{ includedProdQty }}"/>
+											<li>{{ includeProdEx.prodName }}<span class="count">{{ includedProdQty }}개</span></li>
+										{{/each}}
+									</ul>
+								{{/if}}
+								<!--/* 기프트 or 스페셜기프트 있는 경우 */-->
+								{{#xif cartProdAwardList.length '>' 0}}
+									{{#each cartProdAwardList}}
+										{{#if (eq awardTgtCode "Prod")}}
+											<dl class="special_gift">
+												<dt>상품 구매시 스페셜기프트 증정</dt>
+												<dd class="product_slide_new">
+													<ul class="three_half">
+														<li>
+															<a href="#none" class="">
+																<div class="product_visual">
+																	<div class="lazy_load_wrap">
+																		{{#if (ne awardProdEx.repProdImgEx null) }}
+																			<img src="{{ awardProdEx.repProdImgEx.imgUrl }}" data-src="{{ awardProdEx.repProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
+																		{{/if}}
+																	</div>
+																</div>
+																<div class="product_info">
+																	<p class="brand">{{awardProdEx.brandName}}</p>
+																	<p class="product_name">{{awardProdEx.prodName}}</p>
+																	<div class="price_area">
+																		<span class="price"><span class="num">{{awardQty}}</span>개</span>
+																	</div>
+																</div>
+															</a>
+														</li>
+													</ul>
+												</dd>
+											</dl>
+										{{/if}}
+										{{#if (eq awardTgtCode "Giftcard")}}
+											<p class="gift_card"><i class="ico_gift"></i>기프트카드 <em>{{ awardGiftcardEx.giftcardBaseAmt }}</em>원 증정</p>
+										{{/if}}
+									{{/each}}
+								{{/xif}}
+							{{/each}}
+						</li>
+					</ul>
+				{{/each}}
+			{{/if}}
+			{{#if (ne cartEx.cartDeliveryMNPromoExList null)}}
+				{{#each cartEx.cartDeliveryMNPromoExList}}
+					<dl class="clear product_label event">
+						<dt>{{ promoName }}</dt>
+						<dd>
+							{{#if (eq promoApplyResultCode 'All') }}
+								<span>{{ baseOrdQty }}+{{ freeAwardQty }} 적용</span>
+							{{/if}}
+							{{#if (eq promoApplyResultCode 'Partial') }}
+								<span>{{ baseOrdQty }}+{{ freeAwardQty }} 부분적용</span>
+							{{/if}}
+							{{#if (eq promoApplyResultCode 'None') }}
+								<em>{{ baseOrdQty }}+{{ freeAwardQty }} 미적용</em>
+							{{/if}}
+							<b allAmountPromoSn={{ promoSn }}></b>
+						</dd>
+					</dl>
+					<ul class="product_list_order">
+						<!--/* 이벤트 상품 구분 */-->
+						{{#each promoOnlineProdExList}}
+							<li class="product_order">
+								<p class="text">{{#if (isContains ../promoApplyResultCode 'Partial' 'None') }}<em class="color_warning">구매수량 2개 선택시, 1개 가격으로 혜택이 적용됩니다</em>{{/if}}</p>
+								<div class="check_wrap">
+									<span class="chk_h23"><input type="checkbox" name="chkBox" id="chkBox{{ onlineProdSn }}" value="{{ onlineProdSn }}" {{#if (ne saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}></span>
+									<label for="item1" class="product_od">
+										<span class="product_visual">
+											<span class="lazy_load_wrap">
+												{{#if (ne repOnlineProdImgEx null) }}
+													<img src="{{ repOnlineProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
+												{{else}}
+													<!--<img src="{{ absolutePath '/images/cart/no_img.png' }}" class="lazy_load loaded" alt="">-->
+												{{/if}}
+											</span>
+										</span>
+										<span class="product_info">
+											{{#xif prodEx.prodFlagExList.length '>' 0}}
+												<div class="cart_item_exclusive_wrap">
+													{{#each prodEx.prodFlagExList}}
+														{{#switch prodFlagCode}}
+															{{#case "icon_award_gift"}} <span class="cart_item_exclusive">스페셜기프트</span> {{/case}}
+															{{#case "icon_award_gift"}} <span class="cart_item_exclusive">임직원할인</span> {{/case}}
+														{{/switch}}
+													{{/each}}
+												</div>
+											{{/xif}}
+											<span class="product_name"><a href="#none" onclick="fnProdDetail({{ onlineProdSn }})">{{ onlineProdName }}</a></span>
+										</span>
 									</label>
 								</div>
 								{{#each cartProdExList}}
 
 									<!--/* 선택 옵션 리스트 */-->
 									<ul class="selected_option_list">
+										{{#if (eq prodEx.saleDisplayStatus 'OnSale') }}
 										<li class="selected_option" data-value="{{ ../onlineProdSn }}">
+										{{else}}
+										<li class="selected_option out_of_stock" data-value="{{ ../onlineProdSn }}">
+										{{/if}}
 											<input type="hidden" name="onlinePrdSn" value="{{prodEx.prodSn}}"/>
-											<input type="hidden" name="cartProdSn" value="{{cartProdSn}}"/>
+											<input type="hidden" name="cartProdSn" prod="prod" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}" value="{{ cartProdSn }}"/>
 											<input type="hidden" name="prdInfo" value="{{cartProdSn}}"/>
 											<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{prodEx.saleDisplayStatus}}"/>
-											<div class="option_name">{{prodEx.prodName}}</div>
+											<div class="option_name">
+												{{#if (ne prodEx.saleDisplayStatus 'OnSale') }}
+													{{#if (or (eq prodEx.saleDisplayStatus 'OutOfStock')(eq prodEx.saleDisplayStatus 'Exhaustion')) }}
+														<span class="badge">{{cartStatusTxt prodEx.saleDisplayStatus}}</span>
+													{{else}}
+														<span class="badge">판매종료</span>
+													{{/if}}
+												{{/if}} {{prodEx.prodName}}
+											</div>
 											<div class="ui_spinner" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} data-min="{{ prodEx.minPurLimitQty }}" {{else}} data-min="1" {{/if}} {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} {{#if (gt cartProdQty prodEx.maxPurLimitQty) }} data-max="{{ cartProdQty}}" {{else}} data-max="{{ prodEx.maxPurLimitQty }}" {{/if}} {{else}} data-max="99" {{/if}} {{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}}>
 												<button class="spinner_decrease" type="button" title="제품 수량 감소" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt cartProdQty 1)(gt cartProdQty prodEx.minPurLimitQty) ) }} {{else}} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '-', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper"></i><span class="sr_only">제품 수량 감소</span></button>
 												<input class="spinner_input" type="text" name="cartProdQty" value="{{ cartProdQty }}">
 												<button class="spinner_increase" type="button" title="제품 수량 증가" {{#if (and (eq prodEx.maxPurLimitYn 'Y')(gt cartProdQty prodEx.maxPurLimitQty) ) }} disabled {{/if}} onclick="prodQtyOperate(this, '{{../../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '+', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper plus"></i><span class="sr_only">제품 수량 증가</span></button>
 											</div>
-											<a href="#none" class="btn_h32_gradient btn_order_edit" onclick="fnUnitVariationProds('{{ ../../../cartSn}}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}','{{ cartProdQty }}')">주문변경</a>
+											{{#if (ne prodEx.saleDisplayStatus 'OnSale') }}
+												<a href="javascript:;" class="btn_h32_gradient btn_order_edit downAppLayerBtn" onclick="applyAlarm();">입고알리미신청</a>
+											{{/if}}
 											<div class="price">
-												{{#if (eq prodEx.saleDisplayStatus 'OnSale') }}
-													{{#if (eq calculationResultYn 'Y') }}
-														{{#if (ne calculationResultProduct.finalOnlineSalesAmountInfo null) }}
-															<b name="promoPrice" promoSn="{{ ../../promoSn }}">{{numberFormat calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}원</b>
-														{{/if}}
-														{{#if (eq doublePriceDisplayYn 'Y') }}
-															{{#if (ne calculationResultProduct.productSaleAmountInfo null) }}
-																{{#if (gt calculationResultProduct.productSaleAmountInfo.standardCurrency.amount calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount) }}
-																	<del>{{numberFormat calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}원</del>
-																{{/if}}
+												{{#if (eq calculationResultYn 'Y') }}
+													{{#if (ne calculationResultProduct.finalOnlineSalesAmountInfo null) }}
+														<b name="promoAmount" promoSn="{{ ../../promoSn }}">{{numberFormat calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}원</b>
+													{{/if}}
+													{{#if (eq doublePriceDisplayYn 'Y') }}
+														{{#if (ne calculationResultProduct.productSaleAmountInfo null) }}
+															{{#if (gt calculationResultProduct.productSaleAmountInfo.standardCurrency.amount calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount) }}
+																<del>{{numberFormat calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}원</del>
 															{{/if}}
 														{{/if}}
 													{{/if}}
-													{{#if (eq calculationResultYn 'N') }}
-														{{#if (ne prodEx.salePrice null) }}
-															<b name="promoPrice" promoSn="{{ ../../promoSn }}">{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}원</b>
-														{{/if}}
+												{{/if}}
+												{{#if (eq calculationResultYn 'N') }}
+													{{#if (ne prodEx.salePrice null) }}
+														<b name="promoAmount" promoSn="{{ ../../promoSn }}">{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}원</b>
 													{{/if}}
-												{{else}}
-													<em>{{cartStatusTxt prodEx.saleDisplayStatus}}</em>
 												{{/if}}
 											</div>
 											<button class="ui_close" type="button" onclick="removeCartProd('{{ ../../../cartSn }}', '{{cartProdSn}}')"><span class="sr_only">선택 옵션 삭제</span></button>
@@ -620,253 +381,47 @@
 											{{/each}}
 										</ul>
 									{{/if}}
-									<!--/* 스페셜 기프트 있는 경우 */-->
+									<!--/* 기프트 or 스페셜기프트 있는 경우 */-->
 									{{#xif cartProdAwardList.length '>' 0}}
-										<dl class="special_gift">
-											<dt>상품 구매시 스페셜기프트 증정</dt>
-											<dd class="product_slide_new">
-												<ul class="three_half">
-													{{#each cartProdAwardList}}
-														<li>
-															<a href="#none" class="">
-																<div class="product_visual">
-																	<div class="lazy_load_wrap">
-																		{{#if (ne awardProdEx.repProdImgEx null) }}
-																			<img src="{{ awardProdEx.repProdImgEx.imgUrl }}" data-src="{{ awardProdEx.repProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
-																		{{/if}}
+										{{#each cartProdAwardList}}
+											{{#if (eq awardTgtCode "Prod")}}
+												<dl class="special_gift">
+													<dt>상품 구매시 스페셜기프트 증정</dt>
+													<dd class="product_slide_new">
+														<ul class="three_half">
+															<li>
+																<a href="#none" class="">
+																	<div class="product_visual">
+																		<div class="lazy_load_wrap">
+																			{{#if (ne awardProdEx.repProdImgEx null) }}
+																				<img src="{{ awardProdEx.repProdImgEx.imgUrl }}" data-src="{{ awardProdEx.repProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
+																			{{/if}}
+																		</div>
 																	</div>
-																</div>
-																<div class="product_info">
-																	<p class="brand">{{awardProdEx.brandName}}</p>
-																	<p class="product_name">{{awardProdEx.prodName}}</p>
-																	<div class="price_area">
-																		<span class="price"><span class="num">{{awardQty}}</span>개</span>
+																	<div class="product_info">
+																		<p class="brand">{{awardProdEx.brandName}}</p>
+																		<p class="product_name">{{awardProdEx.prodName}}</p>
+																		<div class="price_area">
+																			<span class="price"><span class="num">{{awardQty}}</span>개</span>
+																		</div>
 																	</div>
-																</div>
-															</a>
-														</li>
-													{{/each}}
-												</ul>
-											</dd>
-										</dl>
+																</a>
+															</li>
+														</ul>
+													</dd>
+												</dl>
+											{{/if}}
+											{{#if (eq awardTgtCode "Giftcard")}}
+												<p class="gift_card"><i class="ico_gift"></i>기프트카드 <em>{{ awardGiftcardEx.giftcardBaseAmt }}</em>원 증정</p>
+											{{/if}}
+										{{/each}}
 									{{/xif}}
 								{{/each}}
 							</li>
-						{{/xif}}
-					{{/each}}
+						{{/each}}
+					</ul>
 				{{/each}}
-		{{/if}}
-		{{#if (ne cartEx.cartDeliverySameTimePurPromoExList null)}}
-			{{#each cartEx.cartDeliverySameTimePurPromoExList}}
-				{{#xif singleProdYn '==' 'Y'}}
-					<li class="product_order">
-						{{#each cartProdExList}}
-							<div class="check_wrap">
-								<span class="chk_h23"><input type="checkbox" name="chkBox" id="chkBox{{ ../onlineProdSn }}" value="{{ ../onlineProdSn }}" {{#if (ne prodEx.saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq prodEx.saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}></span>
-								<label for="item1" class="product_od">
-								<span class="product_visual">
-									<span class="lazy_load_wrap">
-										{{#if (ne prodEx.repProdImgEx null) }}
-											<img src="{{ prodEx.repProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
-										{{else}}
-											{{#if (ne ../repOnlineProdImgEx null) }}
-												<img src="{{ ../repOnlineProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
-											{{/if}}
-										{{/if}}
-									</span>
-								</span>
-									<span class="product_info">
-									<span class="product_name"><a href="#none" onclick="fnProdDetail({{ ../onlineProdSn }})">{{ ../onlineProdName }}</a></span>
-								</span>
-								</label>
-							</div>
-							<!--/* 선택 옵션 리스트 */-->
-							<ul class="selected_option_list">
-								<li class="selected_option" data-value="{{ ../onlineProdSn }}">
-									<input type="hidden" name="onlinePrdSn" value="{{prodEx.prodSn}}"/>
-									<input type="hidden" name="cartProdSn" value="{{cartProdSn}}"/>
-									<input type="hidden" name="prdInfo" value="{{cartProdSn}}"/>
-									<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{prodEx.saleDisplayStatus}}"/>
-									<div class="option_name">{{prodEx.prodName}}</div>
-									<div class="ui_spinner" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} data-min="{{ prodEx.minPurLimitQty }}" {{else}} data-min="1" {{/if}} {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} {{#if (gt cartProdQty prodEx.maxPurLimitQty) }} data-max="{{ cartProdQty}}" {{else}} data-max="{{ prodEx.maxPurLimitQty }}" {{/if}} {{else}} data-max="99" {{/if}} {{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}}>
-										<button class="spinner_decrease" type="button" title="제품 수량 감소" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt cartProdQty 1)(gt cartProdQty prodEx.minPurLimitQty) ) }} {{else}} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '-', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper"></i><span class="sr_only">제품 수량 감소</span></button>
-										<input class="spinner_input" type="text" name="cartProdQty" value="{{ cartProdQty }}">
-										<button class="spinner_increase" type="button" title="제품 수량 증가" {{#if (and (eq prodEx.maxPurLimitYn 'Y')(gt cartProdQty prodEx.maxPurLimitQty) ) }} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '+', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper plus"></i><span class="sr_only">제품 수량 증가</span></button>
-									</div>
-									<a href="#none" class="btn_h32_gradient btn_order_edit" onclick="fnUnitVariationProds('{{ ../../cartSn}}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}','{{ cartProdQty }}')">주문변경</a>
-									<div class="price">
-										{{#if (eq prodEx.saleDisplayStatus 'OnSale') }}
-											{{#if (eq calculationResultYn 'Y') }}
-												{{#if (ne calculationResultProduct.finalOnlineSalesAmountInfo null) }}
-													<b name="promoPrice" promoSn="{{ ../../promoSn }}">{{numberFormat calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}원</b>
-												{{/if}}
-												{{#if (eq prodEx.doublePriceDisplayYn 'Y') }}
-													{{#if (ne calculationResultProduct.productSaleAmountInfo null) }}
-														{{#if (gt calculationResultProduct.productSaleAmountInfo.standardCurrency.amount calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount) }}
-															<del>{{numberFormat calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}원</del>
-														{{/if}}
-													{{/if}}
-												{{/if}}
-											{{else}}
-												{{#if (ne prodEx.salePrice null) }}
-													<b name="promoPrice" promoSn="{{ ../../promoSn }}">{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}원</b>
-												{{/if}}
-											{{/if}}
-										{{else}}
-											<em>{{cartStatusTxt prodEx.saleDisplayStatus}}</em>
-										{{/if}}
-									</div>
-									<button class="ui_close" type="button" onclick="removeCartProd('{{ ../../cartSn }}', '{{cartProdSn}}')"><span class="sr_only">선택 옵션 삭제</span></button>
-								</li>
-							</ul>
-							<!--/* 묶음상품일 경우 */-->
-							{{#if (gt cartBulkIncludedProdExList.length 0) }}
-								<ul class="bunch_list">
-									{{#each cartBulkIncludedProdExList }}
-										<input type="hidden" name="bulkPrdInfo_{{ ../cartProdSn }}" cartBulkIncludedProdSn="{{ cartBulkIncludedProdSn }}" bulkDcIncludedProdGrpSn="{{ bulkDcIncludedProdGrpSn }}" includedProdSn="{{ includedProdSn }}" includedProdQty="{{ includedProdQty }}"/>
-										<li>{{ includeProdEx.prodName }}<span class="count">{{numberFormat (calc ../cartProdQty '*' includedProdQty) }}개</span></li>
-									{{/each}}
-								</ul>
-							{{/if}}
-							<!--/* 스페셜 기프트 있는 경우 */-->
-							{{#xif cartProdAwardList.length '>' 0}}
-								<dl class="special_gift">
-									<dt>상품 구매시 스페셜기프트 증정</dt>
-									<dd class="product_slide_new">
-										<ul class="three_half">
-											{{#each cartProdAwardList}}
-												<li>
-													<a href="#none" class="">
-														<div class="product_visual">
-															<div class="lazy_load_wrap">
-																{{#if (ne awardProdEx.repProdImgEx null) }}
-																	<img src="{{ awardProdEx.repProdImgEx.imgUrl }}" data-src="{{ awardProdEx.repProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
-																{{/if}}
-															</div>
-														</div>
-														<div class="product_info">
-															<p class="brand">{{awardProdEx.brandName}}</p>
-															<p class="product_name">{{awardProdEx.prodName}}</p>
-															<div class="price_area">
-																<span class="price"><span class="num">{{awardQty}}</span>개</span>
-															</div>
-														</div>
-													</a>
-												</li>
-											{{/each}}
-										</ul>
-									</dd>
-								</dl>
-							{{/xif}}
-						{{/each}}
-					</li>
-				{{/xif}}
-				{{#xif singleProdYn '==' 'N'}}
-					<li class="product_order">
-
-						<div class="check_wrap">
-							<span class="chk_h23"><input type="checkbox" name="chkBox" id="chkBox{{ onlineProdSn }}" value="{{ onlineProdSn }}" {{#if (ne saleDisplayStatus 'OnSale') }}disabled{{/if}}  {{condition (and (eq saleDisplayStatus 'OnSale')(eq selectYn 'Y') ) 'checked' ''}}></span>
-							<label for="item1" class="product_od">
-							<span class="product_visual">
-								<span class="lazy_load_wrap">
-									{{#if (ne repOnlineProdImgEx null) }}
-										<img src="{{ repOnlineProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
-									{{else}}
-										<img src="{{ absolutePath '/images/cart/no_img.png' }}" class="lazy_load loaded" alt="">
-									{{/if}}
-								</span>
-							</span>
-								<span class="product_info">
-								<span class="product_name"><a href="#none" onclick="fnProdDetail({{ onlineProdSn }})">{{ onlineProdName }}</a></span>
-							</span>
-							</label>
-						</div>
-						{{#each cartProdExList}}
-
-							<!--/* 선택 옵션 리스트 */-->
-							<ul class="selected_option_list">
-								<li class="selected_option" data-value="{{ ../onlineProdSn }}">
-									<input type="hidden" name="onlinePrdSn" value="{{prodEx.prodSn}}"/>
-									<input type="hidden" name="cartProdSn" value="{{cartProdSn}}"/>
-									<input type="hidden" name="prdInfo" value="{{cartProdSn}}"/>
-									<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{prodEx.saleDisplayStatus}}"/>
-									<div class="option_name">{{prodEx.prodName}}</div>
-									<div class="ui_spinner" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} data-min="{{ prodEx.minPurLimitQty }}" {{else}} data-min="1" {{/if}} {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} {{#if (gt cartProdQty prodEx.maxPurLimitQty) }} data-max="{{ cartProdQty}}" {{else}} data-max="{{ prodEx.maxPurLimitQty }}" {{/if}} {{else}} data-max="99" {{/if}} {{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}}>
-										<button class="spinner_decrease" type="button" title="제품 수량 감소" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt cartProdQty 1)(gt cartProdQty prodEx.minPurLimitQty) ) }} {{else}} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '-', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper"></i><span class="sr_only">제품 수량 감소</span></button>
-										<input class="spinner_input" type="text" name="cartProdQty" value="{{ cartProdQty }}">
-										<button class="spinner_increase" type="button" title="제품 수량 증가" {{#if (and (eq prodEx.maxPurLimitYn 'Y')(gt cartProdQty prodEx.maxPurLimitQty) ) }} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '+', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><i class="ico_oper plus"></i><span class="sr_only">제품 수량 증가</span></button>
-									</div>
-									<a href="#none" class="btn_h32_gradient btn_order_edit" onclick="fnUnitVariationProds('{{ ../../cartSn}}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}','{{ cartProdQty }}')">주문변경</a>
-									<div class="price">
-										{{#if (eq prodEx.saleDisplayStatus 'OnSale') }}
-											{{#if (eq calculationResultYn 'Y') }}
-												{{#if (ne calculationResultProduct.finalOnlineSalesAmountInfo null) }}
-													<b>{{numberFormat calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}원</b>
-												{{/if}}
-												{{#if (eq doublePriceDisplayYn 'Y') }}
-													{{#if (ne calculationResultProduct.productSaleAmountInfo null) }}
-														{{#if (gt calculationResultProduct.productSaleAmountInfo.standardCurrency.amount calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount) }}
-															<del>{{numberFormat calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}원</del>
-														{{/if}}
-													{{/if}}
-												{{/if}}
-											{{/if}}
-											{{#if (eq calculationResultYn 'N') }}
-												{{#if (ne prodEx.salePrice null) }}
-													<b>{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}원</b>
-												{{/if}}
-											{{/if}}
-										{{else}}
-											<em>{{cartStatusTxt prodEx.saleDisplayStatus}}</em>
-										{{/if}}
-									</div>
-									<button class="ui_close" type="button" onclick="removeCartProd('{{ ../../cartSn }}', '{{cartProdSn}}')"><span class="sr_only">선택 옵션 삭제</span></button>
-								</li>
-							</ul>
-							<!--/* 묶음상품일 경우 */-->
-							{{#if (gt cartBulkIncludedProdExList.length 0) }}
-								<ul class="bunch_list">
-									{{#each cartBulkIncludedProdExList }}
-										<input type="hidden" name="bulkPrdInfo_{{ ../cartProdSn }}" cartBulkIncludedProdSn="{{ cartBulkIncludedProdSn }}" bulkDcIncludedProdGrpSn="{{ bulkDcIncludedProdGrpSn }}" includedProdSn="{{ includedProdSn }}" includedProdQty="{{ includedProdQty }}"/>
-										<li>{{ includeProdEx.prodName }}<span class="count">{{ includedProdQty }}개</span></li>
-									{{/each}}
-								</ul>
-							{{/if}}
-							<!--/* 스페셜 기프트 있는 경우 */-->
-							{{#xif cartProdAwardList.length '>' 0}}
-								<dl class="special_gift">
-									<dt>상품 구매시 스페셜기프트 증정</dt>
-									<dd class="product_slide_new">
-										<ul class="three_half">
-											{{#each cartProdAwardList}}
-												<li>
-													<a href="#none" class="">
-														<div class="product_visual">
-															<div class="lazy_load_wrap">
-																{{#if (ne awardProdEx.repProdImgEx null) }}
-																	<img src="{{ awardProdEx.repProdImgEx.imgUrl }}" data-src="{{ awardProdEx.repProdImgEx.imgUrl }}" class="lazy_load loaded" alt="">
-																{{/if}}
-															</div>
-														</div>
-														<div class="product_info">
-															<p class="brand">{{awardProdEx.brandName}}</p>
-															<p class="product_name">{{awardProdEx.prodName}}</p>
-															<div class="price_area">
-																<span class="price"><span class="num">{{awardQty}}</span>개</span>
-															</div>
-														</div>
-													</a>
-												</li>
-											{{/each}}
-										</ul>
-									</dd>
-								</dl>
-							{{/xif}}
-						{{/each}}
-					</li>
-				{{/xif}}
-			{{/each}}
-		{{/if}}
-		</ul>
-	</dd>
-</dl>
+			{{/if}}
+		</dd>
+	</dl>
+</div>

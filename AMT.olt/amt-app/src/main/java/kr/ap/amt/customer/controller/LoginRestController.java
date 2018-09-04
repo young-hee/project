@@ -2,19 +2,16 @@ package kr.ap.amt.customer.controller;
 
 import kr.ap.amt.api.pshop.PShopService;
 import kr.ap.amt.api.pshop.vo.PShopResult;
+import kr.ap.amt.config.SSOLoginHandler;
 import kr.ap.comm.api.vo.CicuemCuAdtInfTcVo;
 import kr.ap.comm.api.vo.CicuemCuInfCoOutVo;
 import kr.ap.comm.api.vo.CicuemCuInfTotTcVo;
 import kr.ap.comm.cart.CartSession;
 import kr.ap.comm.member.vo.MemberSession;
-import kr.ap.comm.order.OrderSession;
 import kr.ap.comm.support.APRequestContext;
-import kr.ap.comm.support.ApPasswordEncoder;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
-import kr.ap.comm.support.constants.CookieKey;
 import kr.ap.comm.support.constants.SessionKey;
-import kr.ap.comm.util.CookieUtils;
 import kr.ap.comm.util.SessionUtils;
 import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.EmbeddableName;
@@ -23,6 +20,7 @@ import net.g1project.ecp.api.model.ap.ap.*;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,7 +41,13 @@ import java.util.Map;
 public class LoginRestController extends AbstractController {
 
 	@Autowired
+	private Environment env;
+	@Autowired
 	private PShopService pShopService;
+	@Autowired
+	private SSOLoginHandler ssoLoginHandler;
+	@Autowired
+	private LoginHandler loginHandler;
 	
 	/**
 	 * 로그인.
@@ -54,65 +58,20 @@ public class LoginRestController extends AbstractController {
 		String memberId = req.getParameter("chcsNo");
 		String password = req.getParameter("userPwdEc");
 		String autoLogin = req.getParameter("autoLogin");
-		Map<String, Object> respMap = new HashMap<String, Object>();
+		Map<String, Object> respMap;
 		try {
-			ApLoginInfo loginInfo = new ApLoginInfo();
-			loginInfo.setMemberId(memberId);
-			loginInfo.setMemberPassword(password);
-			
-			ApMemberLoginReturnWithAutoLoginInfo resultInfo = apApi.memberLogin(loginInfo);
-			APRequestContext.setAccessToken(resultInfo.getAccessToken());
-			ApMember apMember = apApi.getMemberInfo(resultInfo.getMemberSn());
-			
-			MemberSession memberSession = getMemberSession();
-			memberSession.setMember(apMember);
-			memberSession.setMember_sn(resultInfo.getMemberSn());
-			memberSession.setUser_incsNo(apMember.getIncsNo());
-			memberSession.setAccessToken(resultInfo.getAccessToken());
-			memberSession.setRefreshToken(resultInfo.getRefreshToken());
-			memberSession.setAutoLoginToken(resultInfo.getAutoLoginToken());
+			respMap = loginHandler.login(req, resp, memberId, password, autoLogin);
 
-			CartSession cartSession = getCartSession();
-			cartSession.setCartSn(0L);
-
-			try {
-				if(cartSession.getCartSn() != null && cartSession.getCartSn() != 0)
-					cartApi.transferMemberCart(resultInfo.getMemberSn(), cartSession.getCartSn());
-			} catch(Exception e) {
-				logger.error(e.getMessage(), e);
+			// TODO SSO Login??
+			if (env.acceptsProfiles("sso")) {
+				// id, pwd, sso_session_key 정보 넘겨야 함
+				ssoLoginHandler.login(req);
 			}
 
-			CicuemCuInfTotTcVo cicuemCuInfTotTcVo = new CicuemCuInfTotTcVo();
-			cicuemCuInfTotTcVo.setIncsNo(memberSession.getUser_incsNo());
-			try {
-				cicuemCuInfTotTcVo = amoreAPIService.getcicuemcuinfrbyincsno(cicuemCuInfTotTcVo);
-				memberSession.setUser_incsCardNoEc(cicuemCuInfTotTcVo.getIncsCardNoEc());
-			} catch(Exception e) {
-				logger.error(e.getMessage(), e);
-			}
-			
-			memberSession.setUser_incsCardNoEc(cicuemCuInfTotTcVo.getIncsCardNoEc());
-
-			if("on".equals(autoLogin)) {
-				Date date = resultInfo.getAutoLoginTokenExpireDt();
-				long time = date.getTime() - System.currentTimeMillis();
-				CookieUtils.addCookie(resp, CookieKey.AUTO_LOGIN, resultInfo.getAutoLoginToken(), (int)(time/1000));
-
-			}
-			respMap.put("sleep", resultInfo.getDormantAcConvertYn());
-			if("Y".equals(resultInfo.getDormantAcConvertYn())) {
-				respMap.put("userId", apMember.getMemberId().substring(0, apMember.getMemberId().length() - 2) + "**");
-				memberSession.setMember(null);
-			}
-			respMap.put("changePw", resultInfo.getPasswordLongtimeUnchangedYn());
-			if("Y".equals(resultInfo.getPasswordLongtimeUnchangedYn())) {
-				respMap.put("message", getMessage("customer.login.changePwdContant", DateFormatUtils.format(resultInfo.getMemberSignupDt(), "yyyy-MM-dd")));
-			}
-			
-			setMemberSession(memberSession);
 			return ResponseEntity.ok(respMap);
 
 		} catch (ApiException e) {
+			respMap = new HashMap<>();
 			
 			Map<String, Object> map = e.getAdditional();
 			Boolean isLock = (Boolean) map.get("lockThisTime");
@@ -198,6 +157,7 @@ public class LoginRestController extends AbstractController {
 			ApMemberLoginReturnInfo resultInfo = apApi.memberSnsLogin(snsLoginInfo);
 			APRequestContext.setAccessToken(resultInfo.getAccessToken());
 			//보안조치
+			SessionUtils.applyFixationProtection(request);
 			ApMember apMember = apApi.getMemberInfo(resultInfo.getMemberSn());
 			MemberSession memberSession = getMemberSession();
 			memberSession.setMember(apMember);
@@ -236,6 +196,11 @@ public class LoginRestController extends AbstractController {
 			}
 			setMemberSession(memberSession);
 			result.put("isLinked", true);
+
+			// TODO SSO Login ??
+			// id(sns_id), sso_session_key 정보 넘겨야 함
+			//ssoLoginHandler.login(req);
+
 		} catch(ApiException e) {
 			result.put("isLinked", false);
 			
@@ -274,6 +239,10 @@ public class LoginRestController extends AbstractController {
 				memberSession.getMember().setEmployeeYn("Y");
 				setMemberSession(memberSession);
 				apApi.updateMemberEmployee(getMemberSn(), v_userid);
+
+				// TODO SSO Login??
+				// id, pwd, sso_session_key 정보 넘겨야 함
+				//ssoLoginHandler.login(req);
 			} else {
 				throw error(HttpStatus.UNAUTHORIZED, "ERROR32", "임직원 인증 실패");
 			}

@@ -10,10 +10,15 @@ import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.BooleanResult;
 import net.g1project.ecp.api.model.EmbeddableName;
 import net.g1project.ecp.api.model.EmbeddableTel;
+import net.g1project.ecp.api.model.ap.ap.ApAdvanceRegistrationPhoneNo;
 import net.g1project.ecp.api.model.ap.ap.ApFindIncsNoResult;
+import net.g1project.ecp.api.model.ap.verif.ApMobileVerificationRequestInfo;
+import net.g1project.ecp.api.model.ap.verif.ApMobileVerificationResult;
+import net.g1project.ecp.api.model.ap.verif.ApMobileVerificationVerifyRequestInfo;
+import net.g1project.ecp.api.model.ap.verif.ApMobileVerificationVerifyResult;
 import net.g1project.ecp.api.model.sales.point.GiveActivityPointGift;
+import net.g1project.ecp.api.model.sales.point.GiveBeautyPointGift;
 
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,12 +44,18 @@ public class MyPointRestController extends AbstractController {
 	@PostMapping("/checkPresentMember")
 	public ResponseEntity<?> checkPresentMember(String userNm, String phone, String userId, int giftPoint) {
 
-		SessionUtils.setAttribute(getRequest(), SessionKey.PRESENT_NAME, userNm);
-		SessionUtils.setAttribute(getRequest(), SessionKey.PRESENT_PHONE_NO, phone);
-		SessionUtils.setAttribute(getRequest(), SessionKey.PRESENT_POINT, giftPoint);
+		GiveBeautyPointGift body = new GiveBeautyPointGift();
+		EmbeddableName name = new EmbeddableName();
+		name.setName1(userNm);
+		body.setName(name);
+		EmbeddableTel phoneNo = new  EmbeddableTel();
+		phoneNo.setPhoneNo(phone);
+		body.setPhoneNo(phoneNo);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		giftPoint = giftPoint - (giftPoint%10);
+		body.setPoint(giftPoint);
+		SessionUtils.setAttribute(getRequest(), SessionKey.PRESENT_INFO, body);
 		String incsNo = null;
 		if(phone != null && phone.length() > 9) {
 			CicuemCuInfCoInVo cicuemCuInfCoInVo = new CicuemCuInfCoInVo();
@@ -83,13 +94,49 @@ public class MyPointRestController extends AbstractController {
 		}
 		
 		if(incsNo != null && !incsNo.isEmpty()) {
-			SessionUtils.setAttribute(getRequest(), SessionKey.PRESENT_INCS_NO, incsNo);
+			body.setTargetIncsNo(Long.parseLong(incsNo));
+			SessionUtils.setAttribute(getRequest(), SessionKey.PRESENT_INFO, body);
 			return ResponseEntity.ok(result);
 		}
 		
 		throw error(result, HttpStatus.FORBIDDEN, "NO_MEMBER", "회원정보없음.");
 	}
 
+
+	/**
+	 * 발신번호 사전등록 인증번호 전송.
+	 * @return
+	 */
+	@PostMapping("/simpleMyCertifySend")
+	public ResponseEntity<?> simpleMyCertifySend() {
+		ApMobileVerificationRequestInfo mobileVerificationRequestInfo = new ApMobileVerificationRequestInfo();
+		mobileVerificationRequestInfo.setPhoneNo(getMemberSession().getMember().getPhoneNo1());
+		ApMobileVerificationResult rsltVo = verifApi.requestMobileVerification(mobileVerificationRequestInfo);
+		SessionUtils.setAttribute(getRequest(), SessionKey.AUTH_INFO, rsltVo.getMobileVerifSn());
+		return ResponseEntity.ok("{}");
+		
+	}
+	/**
+	 * 발신번호 사전등록 인증번호 확인.
+	 * @param mobileVerifKey 
+	 * @return
+	 */
+	@PostMapping("/simpleMyCertifyCheck")
+	public ResponseEntity<?> simpleMyCertifyCheck(String mobileVerifKey) {
+		
+		ApMobileVerificationVerifyRequestInfo mobileVerificationResendRequestInfo = new ApMobileVerificationVerifyRequestInfo();
+		mobileVerificationResendRequestInfo.setMobileVerifKey(mobileVerifKey);
+		mobileVerificationResendRequestInfo.setMobileVerifSn((Long) SessionUtils.getAttribute(getRequest(), SessionKey.AUTH_INFO));
+		ApMobileVerificationVerifyResult rsltVo = verifApi.verifyMobileVerificationKey(mobileVerificationResendRequestInfo);
+		if(rsltVo.isResult()) {
+			ApAdvanceRegistrationPhoneNo advanceRegistrationPhoneNo = new ApAdvanceRegistrationPhoneNo();
+			advanceRegistrationPhoneNo.setPhoneNo(getMemberSession().getMember().getPhoneNo1());
+			apApi.registerAdvanceRegistrationPhoneNo(getMemberSn(), advanceRegistrationPhoneNo);
+			return ResponseEntity.ok("{}");
+		}
+		throw error(HttpStatus.UNAUTHORIZED, "ERROR", "인증에 실패했습니다. 인증번호를 확인해 주세요.");
+	}
+	
 	/**
 	 * 포인트 선물.
 	 * @return
@@ -98,44 +145,31 @@ public class MyPointRestController extends AbstractController {
 	public ResponseEntity<?> presentPoint() {
 		Map<String, Object> resp = new HashMap<String, Object>();
 		try {
-
-			Date now = new Date();
-			CicuedTrBrkdTcVo vo = new CicuedTrBrkdTcVo();
-			vo.setTlmcCd("20");
-			vo.setTlmtCd("01");
-			vo.setIncsNo(getMemberSession().getUser_incsNo());
-			vo.setCustTrDt(DateFormatUtils.format(now, "yyyyMMdd"));
-			vo.setTrTime(DateFormatUtils.format(now, "hhmmss"));
-			vo.setChCd(APConstant.EH_CH_CD);
-			vo.setRqPrtnId(APConstant.EH_PRTN_ID);
+			GiveBeautyPointGift body = (GiveBeautyPointGift) SessionUtils.getAttribute(getRequest(), SessionKey.PRESENT_INFO);
+			if(body.getTargetIncsNo() != null) {
+				body.setName(null);
+				body.setPhoneNo(null);
+			}
+			BooleanResult result = pointApi.giveBeautyPointGift(getMemberSn(), body);
+			if(result.isResult()) {
+				return ResponseEntity.ok("{}");
+			}
 			
-			vo.setXttrNo(DateFormatUtils.format(now, "yyyyMMddhhmmss.SSS").replace(".", "") + APConstant.EH_PRTN_ID);
-			vo.setPrtnNm("에뛰드하우스쇼핑몰");
-			vo.setUsgAplyPt(SessionUtils.getAttribute(getRequest(), SessionKey.PRESENT_POINT) + "");
-			vo.setTtSalAmt("0");
-			vo.setXttpCd("121");
-			if(SessionUtils.getAttribute(getRequest(), SessionKey.PRESENT_INCS_NO) != null) {
-				vo.setPtgfTgtIncsNo((String) SessionUtils.getAttribute(getRequest(), SessionKey.PRESENT_INCS_NO));
-			} else {
-				vo.setNmbrPtgfCustNm((String) SessionUtils.getAttribute(getRequest(), SessionKey.PRESENT_NAME));
-				vo.setNmbrPtgfCellPhnm((String) SessionUtils.getAttribute(getRequest(), SessionKey.PRESENT_PHONE_NO));
-			}
-			vo.setDrfcCd("1");
-			vo.setFscrId(getMemberSession().getMember().getMemberId());
-			vo.setLschId(vo.getFscrId());
-			PtGiftOutCbcVo result = amoreAPIService.handlegift(vo);
-			if(APConstant.RESULT_OK.equals(result.getRsltCd())) {
-				return ResponseEntity.ok(resp);
-			} else if("ICITSVBIZ212".equals(result.getRsltCd())) {
-
-				throw error(resp, HttpStatus.FORBIDDEN, "ICITSVBIZ212", "포인트 선물횟수를 초과하여 더 이상 선물하실 수 없습니다.<br> 포인트 선물하기 및 선물받기는 각각 한 달 최대 10회까지 가능합니다.");
-			} else if("ICITSVBIZ206".equals(result.getRsltCd())) {
-
-				throw error(resp, HttpStatus.FORBIDDEN, "ICITSVBIZ206", "잔여포인트보다 선물할 포인트가 더 많습니다.");
-			} else if("ICITSVBIZ210".equals(result.getRsltCd())) {
-
-				throw error(resp, HttpStatus.FORBIDDEN, "ICITSVBIZ210", "0포인트를 선물할 수 없습니다.");
-			}
+//			
+//			if(APConstant.RESULT_OK.equals(result.getRsltCd())) {
+//				return ResponseEntity.ok(resp);
+//			} else if("ICITSVBIZ212".equals(result.getRsltCd())) {
+//
+//				throw error(resp, HttpStatus.FORBIDDEN, "ICITSVBIZ212", "포인트 선물횟수를 초과하여 더 이상 선물하실 수 없습니다.<br> 포인트 선물하기 및 선물받기는 각각 한 달 최대 10회까지 가능합니다.");
+//			} else if("ICITSVBIZ206".equals(result.getRsltCd())) {
+//
+//				throw error(resp, HttpStatus.FORBIDDEN, "ICITSVBIZ206", "잔여포인트보다 선물할 포인트가 더 많습니다.");
+//			} else if("ICITSVBIZ210".equals(result.getRsltCd())) {
+//
+//				throw error(resp, HttpStatus.FORBIDDEN, "ICITSVBIZ210", "0포인트를 선물할 수 없습니다.");
+//			}
+		} catch(ApiException e) {
+			throw e;
 		} catch(Exception e) {
 			throw error(resp, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), "오류가 발생했습니다.");
 		}
@@ -235,4 +269,5 @@ public class MyPointRestController extends AbstractController {
 		}
 		
 	}
+	
 }

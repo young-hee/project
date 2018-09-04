@@ -460,13 +460,13 @@ function doSnsLogin() {
 
 function loginComplete() {
 
-    if (/device=android/i.test(navigator.userAgent)) {
+    if (/Android/i.test(navigator.userAgent)) {
     	try {
     		window.webview.mobile('login');
     	} catch(e) {
     	}
-    } else if (/device=ios/i.test(navigator.userAgent)) {
-        window.location = "webview://mobile?action=login";
+    } else if (/iPhone/i.test(navigator.userAgent)) {
+        window.location = "webview://login";
     }
     setTimeout(function() {
         if ($('#sub').attr('method') == 'POST')

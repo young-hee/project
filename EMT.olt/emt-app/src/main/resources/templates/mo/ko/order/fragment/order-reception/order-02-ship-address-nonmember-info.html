@@ -25,7 +25,7 @@
 						<label for="user_phone">휴대폰 번호</label>
 					</div>
 					<div>
-						<input type="text" id="user_phone" name="purchaserPhoneNo" placeholder="‘-’없이 숫자만 입력" required="required" data-msg-required="휴대폰 번호를 입력해 주세요.">
+						<input type="text" id="user_phone" name="purchaserPhoneNo" placeholder="‘-’없이 숫자만 입력" required="required"  data-msg-required="휴대폰 번호를 입력해 주세요.">
 					</div>
 				</div>
 				<div class="input_group">
@@ -83,7 +83,7 @@
 							<div class="ui_find_addresses">
 								<div class="input_group">
 									<div>
-										<input type="text" id="delivery_area" class="find_addresses_input" placeholder="주소지 또는 건물명" required="required" data-msg-required="받으시는 분의 주소를 입력하세요.">
+										<input type="text" id="delivery_area" name="delivery_area" class="find_addresses_input" placeholder="주소지 또는 건물명" required="required" data-msg-required="받으시는 분의 주소를 입력하세요.">
 									</div>
 									<div class="btn">
 										<button type="button" class="btn_find_addresses">찾기</button>
@@ -175,7 +175,7 @@
 									<label for="name02">이름</label>
 								</div>
 								<div>
-									<input type="text" id="name02" name="name02" placeholder="이름을 입력해 주세요." required="required" data-msg-required="받으시는 분의 이름을 입력하세요.">
+									<input type="text" id="name02" name="name02" placeholder="이름을 입력해 주세요." data-msg-required="받으시는 분의 이름을 입력하세요.">
 								</div>
 							</div>
 							<div class="input_group">
@@ -183,7 +183,7 @@
 									<label for="phone02">휴대폰번호</label>
 								</div>
 								<div>
-									<input type="text" id="phone02" name="phone02" placeholder="‘-’없이 숫자만 입력" required="required" data-msg-required="받으시는 분의 휴대폰 번호를 입력하세요.">
+									<input type="text" id="phone02" name="phone02" placeholder="‘-’없이 숫자만 입력" data-msg-required="받으시는 분의 휴대폰 번호를 입력하세요.">
 								</div>
 							</div>
 						</div>
@@ -205,6 +205,11 @@
 				$('#delivery1_layer').show();
 				$('#delivery2_layer').hide();
 				$('input[name=shipType]').val('SHIP');
+
+				//validation
+				$('input[name=name02]').prop("required", false);
+				$('input[name=phone02]').prop("required", false);
+
 			} else if(shipType == 'STORE' ) {
 				if ($('[name=purchaserName]').val() != "") {
 					$('#orderNonmemberName').html($('[name=purchaserName]').val());
@@ -219,6 +224,10 @@
 				$('#delivery2_layer').show();
 				$('input[name=shipType]').val('STORE');
 				$('input[name=addressStoreType]').attr('value','MEMBER');
+
+				//validation
+				$('input[name=name02]').prop("required", false);
+				$('input[name=phone02]').prop("required", false);
 			}
 		}
 
@@ -236,11 +245,20 @@
 				$('#address2_2_01_layer').hide();
 				$('#address2_2_02_layer').hide();
 				$('input[name=addressStoreType]').attr('value','MEMBER');
+
+				//validation
+				$('input[name=name02]').prop("required", false);
+				$('input[name=phone02]').prop("required", false);
+
 			} else if(choiceType == 'NEW' ) {
 				$('#address2_1_layer').hide();
 				$('#address2_2_01_layer').show();
 				$('#address2_2_02_layer').show();
 				$('input[name=addressStoreType]').attr('value','NEW');
+
+				//validation
+				$('input[name=name02]').prop("required", true);
+				$('input[name=phone02]').prop("required", true);
 			}
 
 			$('#name02').blur(function(){
@@ -270,6 +288,7 @@
 		$('[name=selectShipMsg]').on('change', function(e){
 			var selectedVal = $(this).val();
 			//console.log("selectedVal : " + selectedVal);
+			$('[name=shipMsg]').focus();
 			if(!selectedVal){
 				$('[name=shipMsg]').val("");
 			}else{

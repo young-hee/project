@@ -1,0 +1,172 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='beauty-tester'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+	<!--/* ap_contents */-->
+	<div class="ap_contents beauty_tester_recruit">
+		<!-- page title -->
+		<th:block ap:replace="~{common/fragment/page-title-only}"/>
+		<!-- // page title -->
+
+
+
+		<!--/* 뷰티테스터 목록 */-->
+		<div class="ui_tab">
+			<div class="tab_menu bar">
+				<ul>
+					<li class="on"><button type="button"><span>진행중</span></button></li>
+					<li><button type="button"><span>종료</span></button></li>
+				</ul>
+			</div>
+			<div class="tab_contents">
+				<div class="tab_cont">
+					<h3 class="sr_only">진행중</h3>
+
+					<div class="slide" data-ix-options="view-length:3; move-length:1;loop:false;datum-point:-20px">
+						<div class="ix-list-viewport unit_1">
+							<ul class="ix-list-items tester_recruitment_list">
+                              <th:block th:each="event, stat : ${regularEventsPrgs}">
+                                <li class="ix-list-item" th:id="${event.regularEvent.regularEventSn}">
+                                <!-- <th:block th:if="${stat.first}"><a href="#none" class="selected"></th:block> -->
+                                <th:block th:if="${event.status=='RQ'}"><a href="#none"></th:block>
+                                <th:block th:if="${event.status=='TN'}"><a href="#none" class="closing"></th:block>
+										<img ap:src="@{/images/dummy/img_beautytester.jpg}" alt="이미지 대체 텍스트">
+                                        <!-- <img  th:src="${event.regularEvent.bannerImgP1}" alt="" > -->
+										<dl>
+											<dt th:switch="${event.status}">
+                                                <span class="status" th:case="'RQ'">참가모집중</span>
+                                                <span class="status" th:case="'TN'">테스터발표</span>
+                                                <span class="status" th:case="'RR'">후기등록중</span>
+                                                <span class="status" th:case="'BR'">베스트리뷰발표</span>
+												<b class="ellipsis" th:utext="${event.regularEvent.regularEventName}"></b>
+											</dt>
+											<dd>
+												<p class="text">테스터 모집 인원 30명 / <b><em th:utext="${event.requesters.totalCount}+'명'"></em></b> 신청중</p>
+												<p class="date" th:utext="'~'+${#dates.format(event.regularEvent.eventEndDt,'yyyy.MM.dd')}"></p>
+											</dd>
+										</dl>
+									</a>
+								</li>
+							  </th:block>
+							</ul>
+						</div>
+						<div class="ix-controller">
+							<div class="slide_direction">
+								<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
+								<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
+								<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="tab_cont">
+					<h3 class="sr_only">종료</h3>
+					<ul class="tester_recruitment_list">
+                      <th:block th:each="event, stat : ${regularEventsEnd}">
+                        <li class="ix-list-item" th:id="${event.regularEvent.regularEventSn}">
+                          <a href="#none" class="closing">
+                          <img  th:src="${event.regularEvent.bannerImgP1}" alt="" >
+                          <dl>
+                            <dt th:switch="${event.status}">
+                              <span class="status" th:case="'RR'">후기등록중</span>
+                              <span class="status" th:case="'BR'">베스트리뷰발표</span>
+                              <b class="ellipsis" th:utext="${event.regularEvent.regularEventName}"></b>
+                            </dt>
+                            <dd>
+                              <p class="text">테스터 모집 인원 30명 / <b><em th:utext="${event.requesters.totalCount}+'명'"></em></b> 신청중</p>
+                              <p class="date" th:utext="'~'+${#dates.format(event.regularEvent.eventEndDt,'yyyy.MM.dd')}"></p>
+                            </dd>
+                          </dl>
+                        </a>
+                        </li>
+                      </th:block>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!--/* 뷰티테스터 모집 정보 */-->
+		<div class="section">
+			<dl class="tester_process">
+				<dt>-</dt>
+				<dd>
+					<p class="text">테스터 모집인원 00명 / <b><em>00명</em></b> 신청중</p>
+					<ul class="step">
+						<li class="on">
+							<span>참가신청</span>
+							<i class="ico"></i>
+							<span class="date">-</span>
+							<span class="sr_only">현재단계</span>
+						</li>
+						<li>
+							<span>테스터발표</span>
+							<i class="ico"></i>
+							<span class="date">-</span>
+						</li>
+						<li>
+							<span>리뷰등록</span>
+							<i class="ico"></i>
+							<span class="date">-</span>
+						</li>
+						<li>
+							<span>베스트리뷰발표</span>
+							<i class="ico"></i>
+							<span class="date">-</span>
+						</li>
+					</ul>
+				</dd>
+			</dl>
+		</div>
+		<!--/* 상품 정보 */-->
+		<div id="product_visual" class="section clear">
+		</div>
+		<!--/* 상품상세, 신청하기, 신청자 */-->
+		<div class="clear">
+			<div class="section product_detail">
+			</div>
+			<div class="section ui_tab">
+				<div class="tab_menu underline">
+					<ul>
+						<li class="on"><button type="button"><span>신청하기</span></button></li>
+						<li><button type="button"><span id="btnRequesters">신청자</span></button></li>
+					</ul>
+				</div>
+				<div class="tab_contents">
+					<div id="request" class="tab_cont applying">
+					</div>
+					<div id="requesters" class="tab_cont">
+                      <div class="pagination" style="display:none;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script th:inline="javascript">
+		$( '.slide' ).ixSlideMax();
+		/* slide paging 개발필요 */
+		
+		$(document).ready(function(){
+			$(".tester_recruitment_list").find('a').each(function(){
+				$(this).on('click', function(e){
+					$(".tester_recruitment_list").find('a').each(function(){
+						if($(this).hasClass("selected")) $(this).removeClass("selected");
+					});
+					$(this).addClass("selected");
+					AP.beautytester.showDetail({regularEventSn: $(this).parent().attr('id')});
+				});
+			});
+		});
+		
+		AP.beautytester.init({
+			displayMenuId: AP.DISPLAY_MENU_ID
+		});
+	</script>
+</th:block>
+</body>
+</html>

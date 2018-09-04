@@ -288,8 +288,16 @@
 						//실패
 						if (xhr.errorCode == 0) {
 							AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
-						} else if (xhr.errorCode == 'EAPI003') {
-							AP.modal.alert("쿠폰등록 실패했습니다, 쿠폰번호 확인하세요.");
+						} else if (xhr.errorCode == 'ESAL089') {
+							AP.modal.alert("발급가능횟수를 초과하였습니다.");
+						} else if (xhr.errorCode == 'ESAL090') {
+							AP.modal.alert("회원별 발급제한 횟수를  초과하였습니다.");
+						} else if (xhr.errorCode == 'ESAL091') {
+							AP.modal.alert("해당 쿠폰코드로 조회된 쿠폰정보가 없습니다.");
+						} else if (xhr.errorCode == 'ESAL092') {
+							AP.modal.alert("이미 발급된 쿠폰입니다.");
+						} else if (xhr.errorCode == 'ESAL093') {
+							AP.modal.alert("쿠폰 발급 기간이 아닙니다.");
 						} else {
 							AP.modal.alert("쿠폰등록 실패했습니다, 쿠폰번호 확인하세요.");
 						}

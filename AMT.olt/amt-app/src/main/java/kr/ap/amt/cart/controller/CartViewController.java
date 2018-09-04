@@ -61,10 +61,10 @@ public class CartViewController extends CartBaseController{
 			// 비회원
 			if (cartSession.getCartSn() == 0L) {
 				CartSnResult cartSnResult = cartApi.createNonmemberCart();
-				//cartEx = getCartInfo(cartSnResult.getCartSn());
+				cartEx = getCartInfo(cartSnResult.getCartSn());
 				// 테스트 카트
 //				cartEx = getCartInfo((long)1604);	// test
-				cartEx = getCartInfo((long)1523);	// test
+//				cartEx = getCartInfo((long)1523);	// test
 //				cartEx = getCartInfo((long)1420);	//일반상품
 //				cartEx = getCartInfo((long)1424);	//묶음판매
 //				cartEx = getCartInfo((long)1425);	//뷰티포인트 전용상품

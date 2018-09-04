@@ -1,0 +1,54 @@
+{{#each this.prodReviewList}}
+	<div class="review_box" class="reviewDetail" data-review-type="pur" data-review-sn="{{ this.prodReviewSn }}">
+		<div class="rating">
+			<span class="mark_star_mm star{{ this.scope }}"><span class="sr_only">구매 평점 별 5개 중 {{ this.scope }}개</span></span>	
+			<span class="date">{{dateFormat prodReviewRegistDt "YYYY.MM.DD"}}</span>
+		</div>
+		<div class="user_info clear">
+			<div class="inner">
+				<span class="name">{{ this.memberId }}</span>
+				<span class="grade">{{ this.memberLevelName }}</span>
+			</div>
+			{{#xif ../memberSn '==' this.memberSn}}
+			<div class="modify">
+				<a href="#">수정</a>		<!--- 내가 쓴 리뷰에만 노출 -->
+			</div>
+			{{/xif}}
+		</div>
+		
+		{{#xif this.imgList.length '>' 0}}
+			<div class="photos">
+				<ul>
+					{{#each this.imgList}}
+						<li>
+							<a href="#none" class="reviewDetail" data-review-type="pur" data-review-sn="{{ ../prodReviewSn }}">
+								<img src="" data-src="{{this.imageFileUrl}}" alt="{{../prodReviewTitle}}" class="lazyLoad">
+							</a>
+						</li>
+					{{/each}}
+				</ul>
+			</div>
+		{{/xif}}
+		
+		<div class="prd_option"><span>{{ this.onlineProdName }}, {{ prodName }}</span></div>
+		<div class="survey">
+			<ul>
+				{{#each this.surveys}}
+					<li>
+						<span>{{ this.questionHeader }}</span>
+						<strong>{{ this.responseBodyText }}</strong>
+					</li>
+				{{/each}}
+			</ul>
+		</div>
+		<div class="comment">
+			<div class="ellipsis line5">{{ this.prodReviewBodyText }}</div>
+			<a href="#none" class="btn_view_more">더읽기</a>
+			<a href="#none" class="btn_view_close">닫기</a>
+		</div>
+		<div class="box_help">
+			<span class="left"><a class="btn_help">도움이되요 {{ this.recommendCnt }}</a></span>
+			<span class="right"><a class="btn_report"><span class="sr_only">신고하기</span></a></span>
+		</div>
+	</div>
+{{/each}}

@@ -371,6 +371,11 @@
 				i_sKwd : null //검색어
 			}
 		},
+		
+		// 앱 다운 URL 문자 전송
+		sendSms : {path : '/product/sendSms', method : 'GET', data: {
+			cellNum : ''
+		}},
 
 		//쇼핑히스토리 전체삭제
 		deleteShoppingHistory: { path:'/display/deleteShoppingMarksAll', method: 'GET'},
@@ -481,6 +486,20 @@
 		/**
 		 * 아티클(CH.에뛰드, FindYourLooks) *************************************************************
 		 */
+		
+		//상품 추천(좋아요)
+		postRecommend : {path:'/product/postRecommend', method: 'POST', data:{
+				   shoppingMarkTgtCode : 'Prod' 
+				  ,prodSn : 0
+				  ,articleSn : 0
+				  ,planDisplaySn : 0
+				  ,displayMenuId : '' 
+				  ,displayMenuSetId : '' 
+				  ,searchWord : '' 
+				  ,onlineProdSn : 0
+				  ,brandSn : 0
+	
+		}},
 
 		//아티클 목록 조회
 		articles : { path:'/display/articles', method: 'POST', data: {

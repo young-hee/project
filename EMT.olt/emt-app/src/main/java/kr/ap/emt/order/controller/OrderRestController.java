@@ -45,7 +45,7 @@ public class OrderRestController extends OrderBaseController {
 
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
-        OrdSummaryInfo ordSummary = orderApi.getOrdSummary(getMemberSn(), null, null);
+        OrdSummaryInfo ordSummary = orderApi.getOrdSummary(getMemberSn(), null, null, null);
 
         //주문/배송건수(FO Header)
         result.put("ordShippngCnt", ordSummary.getOrdReceptCnt() + ordSummary.getPayCompleteCnt() + ordSummary.getPreparingCnt() + ordSummary.getShippingCnt());
@@ -69,6 +69,25 @@ public class OrderRestController extends OrderBaseController {
             result.put("result", "success");
         }
 		return ResponseEntity.ok(result);
+	}
+
+	/**
+	 * 쿠폰 등록
+	 *
+	 * @param couponIdentifier
+	 * @return
+	 */
+	@PostMapping("/registerCoupon")
+	public ResponseEntity<?> registerCoupon(String couponIdentifier) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+
+		if (!StringUtils.isEmpty(couponIdentifier)) {
+			DownloadCoupons downloadCoupons = couponApi.nonMemberInputCoupon(couponIdentifier);
+			result.put("DownloadCoupons", downloadCoupons);
+		}
+
+		return ResponseEntity.ok(result);
+
 	}
 
 	/**
@@ -147,6 +166,7 @@ public class OrderRestController extends OrderBaseController {
 			orderSession.setNextPayUseYn(nextPayUseYn);
 			orderSession.setPayServiceCode(payServiceCode);
 			orderSession.setPayMethodCode(payMethodCode);
+			orderSession.setPgPayAmt(parsePayAmt);
 			setOrderSession(orderSession);
 
             result.put("result", "success");
@@ -168,8 +188,6 @@ public class OrderRestController extends OrderBaseController {
                 body = new OrdReceptChange();
             }
 
-            /** 일반/편의점 구분 */
-
             /** 주문자 정보 */
             EmbeddableName en = new EmbeddableName();
             EmbeddableAddress ea = new EmbeddableAddress();
@@ -181,6 +199,11 @@ public class OrderRestController extends OrderBaseController {
             body.setPurchaserAddress(ea);											// 주문자주소
             body.setPurchaserPhoneNo1(et);											// 주문자전화번호1
             body.setPurchaserEmailAddress(ordRcDTO.getPurchaserEmailAddress());	// 주문자이메일주소
+
+			/** 일반 택백 *********************************************************/
+
+			/** 일반/편의점 구분 */
+			body.setShipAddressTypeCode("ShipAddressInput");
 
             /** 수취인 정보 */
             EmbeddableName en2 = new EmbeddableName();
@@ -209,8 +232,12 @@ public class OrderRestController extends OrderBaseController {
 
             body.setShipMsg(ordRcDTO.getShipMsg());								// 배송메세지
 
-            /** 편의점 택백 */
+            /** 편의점 택백 *********************************************************/
             if (StringUtils.isNotEmpty(ordRcDTO.getcStoreName()) && StringUtils.isNotEmpty(ordRcDTO.getcStorePhoneNo())) {
+
+				/** 일반/편의점 구분 */
+				body.setShipAddressTypeCode("CStoreSelect");
+
                 body.setcStoreName(ordRcDTO.getcStoreName());
                 EmbeddableTel cet = new EmbeddableTel();
                 cet.setPhoneNo(ordRcDTO.getcStorePhoneNo());

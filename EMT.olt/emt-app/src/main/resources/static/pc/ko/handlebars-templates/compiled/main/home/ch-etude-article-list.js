@@ -28,13 +28,13 @@ this["AP"]["handlebars"]["main"]["home"]["ch-etude-article-list"] = Handlebars.t
     var stack1;
 
   return "				<img src=\"\" data-src=\""
-    + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.onlineProdImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
+    + container.escapeExpression((helpers.replaceImagePath || (depth0 && depth0.replaceImagePath) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = ((stack1 = (depth0 != null ? depth0.onlineProdImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1),115,115,{"name":"replaceImagePath","hash":{},"data":data}))
     + "\" alt=\"\" class=\"lazy_load\">\n";
 },"6":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "				<img src=\"\" data-src=\""
-    + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.prodImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1), depth0))
+    + container.escapeExpression((helpers.replaceImagePath || (depth0 && depth0.replaceImagePath) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = ((stack1 = (depth0 != null ? depth0.prodImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1),115,115,{"name":"replaceImagePath","hash":{},"data":data}))
     + "\" alt=\"\" class=\"lazy_load\">\n";
 },"8":function(container,depth0,helpers,partials,data) {
     var stack1;
