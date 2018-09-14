@@ -6,9 +6,18 @@ import com.ufo.common.UFORequest;
 import com.ufo.common.utility.CmUtil;
 import com.ufo.common.utility.JSPHelper;
 import kr.ap.amt.customer.controller.LoginHandler;
+import kr.ap.amt.customer.controller.SSOLoginHandler;
+import kr.ap.comm.api.vo.CicuemCuInfTotTcVo;
 import kr.ap.comm.config.interceptor.LoginInterceptor;
 import kr.ap.comm.member.vo.MemberSession;
+import kr.ap.comm.support.APRequestContext;
+import kr.ap.comm.support.constants.SessionKey;
+import kr.ap.comm.util.JwtUtils;
 import kr.ap.comm.util.SessionUtils;
+import kr.ap.comm.util.WebUtils;
+import net.g1project.ecp.api.client.basis.MallApi;
+import net.g1project.ecp.api.client.basis.OAuthApi;
+import net.g1project.ecp.api.model.ap.ap.ApMember;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +42,30 @@ public class AmtLoginCheckInterceptor extends LoginInterceptor {
 	private LoginHandler loginHandler;
 	@Autowired
 	private SSOLoginHandler ssoLoginHandler;
+	@Autowired
+	private OAuthApi oAuthApi;
 
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) { MemberSession memberSession = SessionUtils.getMemberSession(request);
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+
+		MemberSession memberSession = SessionUtils.getMemberSession(request);
 		// 로그인 상태
 		if (memberSession != null && memberSession.getMember() != null) {
 			return true;
 		}
 
-		if (env.acceptsProfiles("sso")) {
+		// MobileApp 에서 호출시 access_token 확인.
+		if (APRequestContext.isMobileApp()) {
+			String accessToken = request.getParameter("access_token");
+			// access token verify
+			boolean tokenValid = isValidToken(accessToken);
+			if (tokenValid) {
+				makeLoginMemberSession(request, memberSession, accessToken);
+			}
+			return super.preHandle(request, response, handler);
+		}
+
+		if (env.acceptsProfiles("sso") && APRequestContext.isPC()) {
 			// SSO skip
 			if (shouldSsoSkip(request)) {
 				// Local login check
@@ -78,7 +102,7 @@ public class AmtLoginCheckInterceptor extends LoginInterceptor {
 		ssoLoginEntity.mst.cstmId = CmUtil.nullTrim(reqSSO.getString("cstmId"));
 		ssoLoginEntity.mst.pswd = CmUtil.nullTrim(reqSSO.getString("pswd"));
 		ssoLoginEntity.sessionKey = reqSSO.getString("sessionKey");
-		ssoLoginEntity.ip = request.getRemoteAddr();
+		ssoLoginEntity.ip = WebUtils.getClientIP(request);
 		ssoLoginEntity.isLogin = false;
 
 		String SSO_sessionKey = SsoUtil.getSessionKeyStr(request);
@@ -95,8 +119,8 @@ public class AmtLoginCheckInterceptor extends LoginInterceptor {
 			// session key가 없는경우. 최초 접속인 경우임
 			if (!"Y".equals(SSO_CHECK_FL)) {
 
-				String gwSiteCd = env.getProperty("webdb.sso.site-cd", "CMC"); //SITEProperty.getProperty("SITE_CD");
-				String gatewayUrl = env.getProperty("webdb.sso.gateway-url"); //SITEProperty.getProperty("SSO_GW_URL");
+				String gwSiteCd = ssoLoginHandler.getSsoSiteCd(); //SITEProperty.getProperty("SITE_CD");
+				String gatewayUrl = ssoLoginHandler.getGatewayUrl(); //SITEProperty.getProperty("SSO_GW_URL");
 				Assert.notNull(gatewayUrl, "Please check the property value: 'webdb.sso.gateway-url'.");
 
 				boolean validGW = false;
@@ -154,9 +178,9 @@ public class AmtLoginCheckInterceptor extends LoginInterceptor {
 
 		SsoLoginEntity loginCheckEntity = SsoUtil.isLogin(siteCd, reqSSO, ssoLoginEntity);
 		if (loginCheckEntity.isLogin) {
-			// TODO SSO 정보로 memberSession 정보 만들기.
+			// SSO 정보로 memberSession 정보 만들기.
 			String memberId = loginCheckEntity.mst.cstmId;
-			// Map<String, Object> respMap = loginHandler.login(req, res, memberId, password, autoLogin);
+			loginHandler.ssoLogin(request, response, memberId, SSO_sessionKey);
 		}
 	}
 
@@ -166,6 +190,44 @@ public class AmtLoginCheckInterceptor extends LoginInterceptor {
 	 * @return true / false
 	 */
 	private boolean shouldSsoSkip(HttpServletRequest request) {
-		return ssoCheckSkips.contains(request.getRequestURI());
+		String uri = request.getRequestURI();
+		return ssoLoginHandler.shouldSsoSkip(uri);
 	}
+
+	private void makeLoginMemberSession(HttpServletRequest request, MemberSession memberSession, String accessToken) {
+		Long memberSn = JwtUtils.getMemberSn(accessToken);
+		ApMember apMember = apApi.getMemberInfo(memberSn);
+
+		memberSession.setMember(apMember);
+		memberSession.setMember_sn(memberSn);
+		memberSession.setUser_incsNo(apMember.getIncsNo());
+		memberSession.setAccessToken(accessToken);
+
+		CicuemCuInfTotTcVo cicuemCuInfTotTcVo = new CicuemCuInfTotTcVo();
+		cicuemCuInfTotTcVo.setIncsNo(memberSession.getUser_incsNo());
+		cicuemCuInfTotTcVo = amoreAPIService.getcicuemcuinfrbyincsno(cicuemCuInfTotTcVo);
+
+		memberSession.setUser_incsCardNoEc(cicuemCuInfTotTcVo.getIncsCardNoEc());
+
+		org.springframework.web.util.WebUtils.setSessionAttribute(request, SessionKey.LOGIN_USER, memberSession);
+	}
+
+	@Autowired
+	private MallApi mallApi;
+
+	private boolean isValidToken(final String accessToken) {
+		if (!StringUtils.hasText(accessToken)) {
+			return false;
+		}
+
+		try {
+			//oAuthApi.checkToken(accessToken);
+			mallApi.getMalls(); // FIXME API G/W 에 정상등록되면 checkToken 으로 변경 해야 함.
+			return true;
+		} catch (Exception e) {
+			logger.error("Verify access token error.", e);
+			return false;
+		}
+	}
+
 }

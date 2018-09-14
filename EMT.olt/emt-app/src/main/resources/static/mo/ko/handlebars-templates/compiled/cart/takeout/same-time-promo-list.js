@@ -98,9 +98,9 @@ this["AP"]["handlebars"]["cart"]["takeout"]["same-time-promo-list"] = Handlebars
 },"15":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "						<img src=\""
+  return "						<span class=\"thm_cart_item\"><img src=\""
     + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.repProdImgEx : stack1)) != null ? stack1.imgUrl : stack1), depth0))
-    + "\" class=\"thm_cart_item\" alt=\"\">\n";
+    + "\" alt=\"\"></span>\n";
 },"17":function(container,depth0,helpers,partials,data) {
     var stack1;
 
@@ -161,8 +161,9 @@ this["AP"]["handlebars"]["cart"]["takeout"]["same-time-promo-list"] = Handlebars
 },"31":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return container.escapeExpression(((helper = (helper = helpers.awardUnitQty || (depth0 != null ? depth0.awardUnitQty : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"awardUnitQty","hash":{},"data":data}) : helper)))
-    + "개 ";
+  return "("
+    + container.escapeExpression(((helper = (helper = helpers.awardUnitQty || (depth0 != null ? depth0.awardUnitQty : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"awardUnitQty","hash":{},"data":data}) : helper)))
+    + "개) ";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 

@@ -11,7 +11,7 @@ this["AP"]["handlebars"]["main"]["home"]["new-product-list"] = Handlebars.templa
     + "\" class=\"lazy_load_wrap first_img\">\n							<span class=\"lazy_load_wrap\">\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.saleDisplayStatus : depth0),"==","OutOfStock",{"name":"xif","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "								<img class=\"lazy_load\" src=\"\" data-src=\""
-    + alias3((helpers.replaceImagePath || (depth0 && depth0.replaceImagePath) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.onlineProdImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1),208,208,{"name":"replaceImagePath","hash":{},"data":data}))
+    + alias3((helpers.replaceImagePath || (depth0 && depth0.replaceImagePath) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.onlineProdImages : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imgUrl : stack1),270,270,{"name":"replaceImagePath","hash":{},"data":data}))
     + "\" alt=\"\">\n							</span>\n						</a>\n					</div>\n					<div class=\"info_box list\">\n"
     + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.flags : depth0)) != null ? stack1.length : stack1),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "						<div class=\"title_area\">\n							<h3 class=\"h_title\">"

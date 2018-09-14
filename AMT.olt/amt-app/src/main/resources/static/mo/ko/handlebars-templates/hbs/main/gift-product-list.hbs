@@ -1,0 +1,36 @@
+{{!--
+	gift per amount
+--}}
+
+<dt class="slide_title">
+	<a href="#none" class="prd_h_tit"><strong>구매금액대별 사은품</strong>
+	</a>
+</dt>
+<dd class="slide one_half" data-ix-options="view-length:2; move-length:1; datum-point:10%;">
+	<div class="ix-list-viewport">
+		<ul class="product_list_new prd_swipe_one ix-list-items">
+			{{#each this.list}}
+				<li class="ix-list-item">
+					<div class="product_one_view price_prd01">
+						<a href="{{ productDetailPath this.onlineProdSn }}">
+							<span class="product_visual_new">
+								<span class="lazy_load_wrap">
+									{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+										<div class="item_state out_of_stock">일시품절</div>
+									{{/xif}}
+									<img src="" data-src="{{ this.onlineProdImages.0.imgUrl }}" alt="" class="lazy_load">
+								</span>
+							</span>
+							<!-- 상품 정보 -->
+							<span class="product_info_new">
+								<strong class="prd_brand">{{ this.products.0.brandName }}</strong>
+								<span class="p_type">TYPE 01</span>
+								<span class="prd_name">{{ this.onlineProdName }}</span>
+							</span>
+						</a>
+					</div>
+				</li>
+			{{/each}}
+		</ul>
+	</div>
+</dd>

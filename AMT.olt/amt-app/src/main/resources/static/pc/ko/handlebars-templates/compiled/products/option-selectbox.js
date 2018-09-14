@@ -23,24 +23,36 @@ this["AP"]["handlebars"]["products"]["option-selectbox"] = Handlebars.template({
 },"4":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"doublePriceDisplayYn",{"name":"availablePrices","hash":{},"data":data}),"==","Y",{"name":"xif","hash":{},"fn":container.program(5, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.targetYN : stack1),"==","Y",{"name":"xif","hash":{},"fn":container.program(5, data, 0, blockParams, depths),"inverse":container.program(7, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "								<span>\n									<b class=\"num\">"
     + container.escapeExpression((helpers.numberFormat || (depth0 && depth0.numberFormat) || alias2).call(alias1,(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"finalOnlinePrice",{"name":"availablePrices","hash":{},"data":data}),{"name":"numberFormat","hash":{},"data":data}))
     + "</b>\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].productCount : depths[1]),1,{"name":"eq","hash":{},"data":data}),"&&",(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.membershipExchOnly : depth0),"Y",{"name":"eq","hash":{},"data":data}),{"name":"xif","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.program(9, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].productCount : depths[1]),1,{"name":"eq","hash":{},"data":data}),"&&",(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.membershipExchOnly : depth0),"Y",{"name":"eq","hash":{},"data":data}),{"name":"xif","hash":{},"fn":container.program(10, data, 0, blockParams, depths),"inverse":container.program(12, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "								</span> \n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"doublePriceDisplayYn",{"name":"availablePrices","hash":{},"data":data}),"==","Y",{"name":"xif","hash":{},"fn":container.program(11, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"doublePriceDisplayYn",{"name":"availablePrices","hash":{},"data":data}),"==","Y",{"name":"xif","hash":{},"fn":container.program(14, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"5":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
+
+  return "									<b class=\"num discount\">"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.baseOrdQty : stack1), depth0))
+    + "+"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.freeAwardQty : stack1), depth0))
+    + "</b>\n";
+},"7":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
+
+  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"doublePriceDisplayYn",{"name":"availablePrices","hash":{},"data":data}),"==","Y",{"name":"xif","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"8":function(container,depth0,helpers,partials,data) {
     var alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return "								<b class=\"num discount\">"
+  return "									<b class=\"num discount\">"
     + container.escapeExpression((helpers.calc || (depth0 && depth0.calc) || alias2).call(alias1,(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"onlineSalePriceDiscountRate",{"name":"availablePrices","hash":{},"data":data}),"+",(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"memberLevelDiscountRate",{"name":"availablePrices","hash":{},"data":data}),"+",(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"onlineMemberDiscountRate",{"name":"availablePrices","hash":{},"data":data}),{"name":"calc","hash":{},"data":data}))
     + "% </b>\n";
-},"7":function(container,depth0,helpers,partials,data) {
+},"10":function(container,depth0,helpers,partials,data) {
     return "										P\n";
-},"9":function(container,depth0,helpers,partials,data) {
+},"12":function(container,depth0,helpers,partials,data) {
     return "										원\n";
-},"11":function(container,depth0,helpers,partials,data) {
+},"14":function(container,depth0,helpers,partials,data) {
     var alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
   return "									<del>"

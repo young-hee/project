@@ -21,7 +21,7 @@
 				<ul>
 					{{#each this.imgList}}
 						<li>
-							<a href="#none" class="reviewDetail" data-review-type="pur" data-review-sn="{{ ../prodReviewSn }}">
+							<a href="javascript:;" class="reviewDetail" data-review-type="pur" data-review-sn="{{ ../prodReviewSn }}">
 								<img src="" data-src="{{this.imageFileUrl}}" alt="{{../prodReviewTitle}}" class="lazyLoad">
 							</a>
 						</li>
@@ -43,12 +43,21 @@
 		</div>
 		<div class="comment">
 			<div class="ellipsis line5">{{ this.prodReviewBodyText }}</div>
-			<a href="#none" class="btn_view_more">더읽기</a>
-			<a href="#none" class="btn_view_close">닫기</a>
+			<a href="javascript:;" class="btn_view_more">더읽기</a>
+			<a href="javascript:;" class="btn_view_close">닫기</a>
 		</div>
 		<div class="box_help">
-			<span class="left"><a class="btn_help">도움이되요 {{ this.recommendCnt }}</a></span>
-			<span class="right"><a class="btn_report"><span class="sr_only">신고하기</span></a></span>
+			<span class="left">
+				<a class="btn_help {{#xif this.recommendYn '==' 'Y'}}on{{/xif}}" data-review-sn="{{ this.prodReviewSn }}">
+					도움이되요
+					<span class="recommendCnt">{{ this.recommendCnt }}</span>
+				</a>
+			</span>
+			<span class="right">
+				<a href="javascript:;" class="btn_report {{#xif this.reportYn '==' 'Y'}}on{{/xif}}" data-review-sn="{{ this.prodReviewSn }}">
+					<span class="sr_only">신고하기</span>
+				</a>
+			</span>
 		</div>
 	</div>
 {{/each}}

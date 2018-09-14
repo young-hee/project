@@ -1,15 +1,15 @@
-{{#each this.list}}
+{{#each this.prodReviewList}}
 	<li class="ix-list-item">
 		<div class="review_img">
-			<img src="/pc/ko/images/dummy/img_bast_review.jpg" alt="구매리뷰 베스트">
+			<img src="{{ this.repProdImage }}" alt="{{ this.prodName }}">
 		</div>
 		<div class="review_area">
-			<p class="rv_txt ellipsis line3">요즘 피곤하고 기운이 없어서 정관장 먹다가 명작수 주문해 봤는데 효과가 있었으면 좋겠어요. 기대하고있습니다. 요즘 피곤하고 기운이 없어서 정관장 먹다가 명작수 주문해 봤는데 효과가 있었으면 좋겠어요. 기대하고있습니다.</p>
+			<p class="rv_txt ellipsis line3">{{ this.prodReviewBodyText }}</p>
 			<div class="user_atc">
-				<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
-				<span class="txt_review">리뷰 2,454</span>
+				<span class="mark_star_sm star{{ this.scope }}"><span class="sr_only">구매 평점 별 5개 중 {{ this.scope }}개</span></span>
+				<span class="txt_review">리뷰 {{ numberFormat this.lookupCnt }}</span>
 			</div>
-			<p class="date">2016.09.02 01:16</p>
+			<p class="date">{{ dateFormat this.prodReviewRegistDt }}</p>
 		</div>
 	</li>
 {{/each}}

@@ -1,10 +1,13 @@
 package kr.ap.amt.my.controller;
 
 import kr.ap.comm.support.common.AbstractController;
+import net.g1project.ecp.api.client.sales.GiftcardApi;
 import net.g1project.ecp.api.model.sales.deposits.BankAccount;
 import net.g1project.ecp.api.model.sales.deposits.DepositHistoriesResult;
 import net.g1project.ecp.api.model.sales.deposits.DepositRefundAccount;
+import net.g1project.ecp.api.model.sales.giftcard.GiftcardCouponResult;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,12 +28,31 @@ import java.util.HashMap;
 @RequestMapping("/my/api")
 public class MyWalletRestController extends AbstractController {
 
+    @Autowired
+    protected GiftcardApi giftcardApi;
 
 	/**********************************************************************************************
 	 * 4. 기프트카드 관리
 	 **********************************************************************************************/
 
 
+	/**
+	 * 기프트카드 등록
+	 *
+	 * @param barcode
+	 * @return
+	 */
+    @PutMapping("/regGiftCard")
+	@ResponseBody
+	public ResponseEntity<?> regGiftCard(String barcode) {
+		GiftcardCouponResult rsltVo = giftcardApi.regCoupon(barcode);
+		if("0000".equals(rsltVo.getResCode())) {
+			return ResponseEntity.ok("{}");
+		}
+		throw error(HttpStatus.BAD_REQUEST, "ERROR", "기프트카드 등록에 실패했습니다.");
+	}
+	
+	
 	/**********************************************************************************************
 	 * 6. One Pay 카드관리
 	 **********************************************************************************************/

@@ -1,0 +1,475 @@
+<html ap:decorate="~{layout/layout-sub}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!--/* ap_contents */-->
+	<div class="ap_contents">
+		<div class="ap_com_cont cart">
+			<!--/* [S] 장바구니 */-->
+			<div class="payform_box">
+				<!--/* page title */-->
+				<th:block ap:replace="~{common/fragment/page-title}"/>
+				<form class="order-validate" id="order-recept-info" name="orderForm" method="post">
+					<!--/* cont_area */-->
+					<div class="cont_area">
+						<ul class="ui_step">
+							<li>1</li>
+							<li class="current">2</li>
+							<li>3</li>
+						</ul>
+
+						<!--결제 모듈연동 정보-->
+						<input type="hidden" name="oid" th:value="${ordEx.ordNo}"/>
+						<input type="hidden" name="price" th:value="${#IntegUtil.toCommaNumber(ordEx.ordHistEx.finalPamtPcur)}"/>
+						<input type="hidden" name="buyerName"/>
+						<input type="hidden" name="mobile"/>
+						<input type="hidden" name="email"/>
+						<input type="hidden" name="goPayMethod"/>
+						<input type="hidden" name="payMethod"/>
+						<input type="hidden" name="payMethodSn"/>
+						<input type="hidden" name="payServiceCode"/>
+						<input type="hidden" name="payMethodCode"/>
+
+						<!--주문자 배송정보-->
+						<th:block th:if="${isApMember}">
+							<input type="hidden" name="userId" th:value="${apMember.memberId}"/><!--W페이적용-->
+							<input type="hidden" name="purchaserName" th:value="${apMember.name.name1}"/>
+							<input type="hidden" name="purchaserPhoneNo" th:value="${#IntegUtil.hyphenPhoneNumber(apMember.phoneNo1.phoneNo)}"/>
+							<input type="hidden" name="purchaserEmailAddress" th:value="${apMember.emailAddress}"/>
+						</th:block>
+
+						<!--수취인 배송정보-->
+						<input type="hidden" name="addressType" value="LATELY"/>
+						<input type="hidden" name="recipientName"/>
+						<input type="hidden" name="recipientPhoneNo"/>
+						<input type="hidden" name="recipientEmailAddress"/>
+						<input type="hidden" name="recipientZipCode"/>
+						<input type="hidden" name="recipientAddress1"/>
+						<input type="hidden" name="recipientAddress2"/>
+						<input type="hidden" name="shipMsg"/>
+
+						<!--편의점택배 배송정보-->
+						<input type="hidden" name="addressStoreType" value="MEMBER"/>
+						<input type="hidden" name="storeHeadCd"/>
+						<input type="hidden" name="storeShopCd"/>
+						<input type="hidden" name="storeNm"/>
+						<input type="hidden" name="storeShopNm"/>
+						<input type="hidden" name="storeTelno"/>
+						<input type="hidden" name="storeZip"/>
+						<input type="hidden" name="storeAddr1"/>
+						<input type="hidden" name="storeAddr2"/>
+						<input type="hidden" name="storeCodeF"/>
+						<input type="hidden" name="storeDdZone"/>
+						<input type="hidden" name="storeDdBag"/>
+						<input type="hidden" name="storeEupmyeon"/>
+
+						<!--주문상품확인-->
+						<th:block ap:replace="~{order/fragment/order-reception/order-01-product-info}"/>
+						<!--포장서비스-->
+						<th:block ap:replace="~{order/fragment/order-reception/order-02-packing-info}"/>
+						<!--배송정보입력(회원, 비회원 통합) -->
+						<th:block ap:replace="~{order/fragment/order-reception/order-03-ship-address-info}"/>
+						<!--쿠폰/포인트 혜택사용-->
+						<th:block ap:replace="~{order/fragment/order-reception/order-04-coupon-benefit-info}"/>
+						<!--추가 사은품 안내-->
+						<th:block ap:replace="~{order/fragment/order-reception/order-05-freegift-info}"/>
+						<!--결제수단 선택-->
+						<th:block ap:replace="~{order/fragment/order-reception/order-06-pay-method-info}"/>
+					</div>
+					<!--최종 결제금액-->
+					<th:block ap:replace="~{order/fragment/order-reception/order-07-final-pay-amount-info}"/>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- // page contents -->
+</div><!-- // #ap_container -->
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block th:if="${result}" ap:fragment="layout-endpoint">
+	<script ap:src="@{/handlebars-templates/compiled/order/layer-order-non-member-02.js}"></script>		<!-- 비회원 개인정보 수집동의 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/layer-info-change.js}"></script> 				<!--주문고객 정보변경 Layer -->
+	<script ap:src="@{/handlebars-templates/compiled/order/layer-find-address.js}"></script> 				<!--주소찾기 Layer -->
+	<script ap:src="@{/handlebars-templates/compiled/order/layer-find-address-result-template.js}"></script> <!--주소찾기 결과 Template -->
+	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use.js}"></script> 				<!--사용가능한 쿠폰목록 Layer-->
+	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use-avail.js}"></script> 		<!--사용가능한 쿠폰목록 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use-download.js}"></script>	<!--다운로드 쿠폰목록 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/coupon-use-list.js}"></script> 					<!--선택된 쿠폰목록 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/final-price-amt-pcur.js}"></script> 			<!-- 최종 결제금액 영역 -->
+
+	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<script language="javascript" type="text/javascript" src="https://stdpay.inicis.com/stdjs/INIStdPay.js" charset="UTF-8"></script>
+	<script th:inline="javascript">
+
+		//주문서 작성 화면에서 입력되는 모든 정보를 닫고 있는 객체
+		var ordReceptChangeDTO = {};
+
+		//테스트용 값
+		var apMember  = /*[[${apMember}]]*/;
+		var ordEx = /*[[${ordEx}]]*/;
+		var shipAddressList = /*[[${shipAddressList}]]*/;
+		console.log(apMember);
+		console.log(ordEx);
+		console.log(shipAddressList);
+		//테스트용 값
+
+		$( document ).ready(function() {
+			init();
+
+			//주문완료화면 오류 발생시
+			var ordCompleteError = /*[[${ordCompleteError}]]*/ null;
+			if(ordCompleteError != null){
+				var errorCode = ordCompleteError.errorCode,
+					errorMessage = ordCompleteError.errorMessage,
+					errorAdditional = ordCompleteError.errorAdditional;
+				if (errorCode != null) {
+					AP.modal.alert(errorMessage + '(' + errorCode + ')<br/>' + errorAdditional.detail);
+				}
+			}
+
+		});
+
+		function init() {
+			var memberSn = /*[[${memberSn}]]*/ '0'; // 회원키
+			if(memberSn > 0){
+
+			}else{
+				// 비회원 개인정보 수집,이용 동의
+				nonmemberNotice();
+			}
+
+			// 수량 조절
+			$( '.ui_spinner' ).spinner();
+			// 글자수 제한
+			$( 'input[maxlength]' ).inputLimits();
+			$( '.ui_tooltip' ).tooltip();
+			$( '.slide' ).ixSlideMax();
+
+			//토글 슬라이드
+			$('.tgArea').each(function(){
+				$(this).find('dl > dt').on('click', function(){
+					$(this).toggleClass('on');
+					$( '.slide' ).ixSlideMax();
+				})
+			});
+
+			//배송주문사항 직접입력
+			$('.delivery_order input:radio[name="request"]').change(function() {
+				if ($(this).hasClass('textbox')) {
+					$(this).closest('.delivery_order').next('.input_wrap').show();
+				}else{
+					$(this).closest('.delivery_order').next('.input_wrap').hide();
+				}
+			});
+
+			//배송지 더보기버튼 클릭시 사라짐
+			$('.cart .btn_more a').click(function(){
+				$(this).parent().hide();
+				$(this).parent().siblings('.delivery_list').addClass('on');
+			});
+
+			//배송지 정보
+			$('.delivery_list li').click(function(){
+				$(this).addClass('on').siblings().removeClass('on');
+			});
+
+			//결제수단선택
+			$('.credit_list li').click(function(){
+				$(this).addClass('on').siblings().removeClass('on');
+			});
+
+			//네이버페이인경우
+			$('.credit_list li').click(function() {
+				//	$('.payment_list').find('.card_list').hide();
+				if ($(this).hasClass('naver')) {
+					$(this).closest('dd').find('.cont_naver').show();
+				}else{
+					$(this).closest('dd').find('.cont_naver').hide();
+				}
+			});
+
+			//무통장입금인경우
+			$('.credit_list li').click(function() {
+				//	$('.payment_list').find('.card_list').hide();
+				if ($(this).hasClass('bankbook')) {
+					$(this).closest('dd').find('.cont_bankbook').show();
+				}else{
+					$(this).closest('dd').find('.cont_bankbook').hide();
+				}
+			});
+
+			//실시간 계좌이체
+			$('.credit_list li').click(function() {
+				//	$('.payment_list').find('.card_list').hide();
+				if ($(this).hasClass('realtime')) {
+					$(this).closest('dd').find('.cont_realtime').show();
+				}else{
+					$(this).closest('dd').find('.cont_realtime').hide();
+				}
+			});
+
+			//휴대폰 이체
+			$('.credit_list li').click(function() {
+				//	$('.payment_list').find('.card_list').hide();
+				if ($(this).hasClass('phone')) {
+					$(this).closest('dd').find('.cont_phone').show();
+				}else{
+					$(this).closest('dd').find('.cont_phone').hide();
+				}
+			});
+		}
+
+		var payPopup;
+		$("#orderPayment").on('click', function() {
+			var $checkbox = $('input[id="orderAgree"]');
+			if($checkbox.is(':checked')) {
+				var $form = $( 'form.order-validate' );
+				if ( $form.valid() ) {
+					ordReceptPayAmt();
+				}
+			}else{
+				AP.modal.alert("위 상품의 판매조건을 확인하였으며, 구매진행에 동의해주세요.");
+			}
+		});
+
+		/* 결제하기(최종결제수단선택) */
+		function ordReceptPayAmt() {
+			/*************************************** 임시 적용 start ***************************************/
+			var payMethod = $("input:radio[name=payMethod]:checked").val();
+			if(payMethod == "account_transfer" || payMethod == "remit_bank") {
+				AP.modal.alert("준비중입니다. 다른 결제수단을 선택해 주세요.");
+			}
+			/*************************************** 임시 적용 end******************************************/
+
+			var memberSn 		= /*[[${memberSn}]]*/ '0'; // 회원키
+			var ordSn			= /*[[${ordEx.ordSn}]]*/ '0';													// 주문번호
+			var finalPamtPcur	= /*[[${ordEx.ordHistEx.finalPamtPcur}]]*/ '0';									// 최종결제금액
+			var depositPrice	= $("[name=depositPrice]").val() == '' || $("[name=depositPrice]").val() == undefined ? 0 : $("[name=depositPrice]").val();	// 예치금
+			var pgPrice 		= memberSn > 0 ? finalPamtPcur - parseInt(depositPrice) : finalPamtPcur;		// 최종결제금액 - 예치금사용금액
+			if(pgPrice > 0){
+				if(depositPrice == 0) {
+					var selectedPaymethod = $('input:radio[name="payMethod"]:checked').val();
+					if(selectedPaymethod == null || selectedPaymethod == '') {
+						AP.modal.alert("결제수단을 선택해 주세요.");
+						return false;
+					}
+				}else{
+					var selectedPaymethod = $('input:radio[name="payMethod"]:checked').val();
+					if(selectedPaymethod == null || selectedPaymethod == '') {
+						AP.modal.alert("최종결제금액이 부족합니다. 결제수단을 선택해 주세요.");
+						return false;
+					}
+				}
+				$('[name=price]').attr('value', pgPrice);
+			}
+
+			// PG사 결제정보 세팅
+			var payMethodSn		= $('input:radio[name=payMethod]:checked').closest('span').find('[name=payMethodSn]').val(); 	// 결제수단일련번호
+			var payMethodCode	= $('input:radio[name=payMethod]:checked').closest('span').find('[name=payMethodCode]').val();	// 결제수단코드
+			var payServiceCode	= $('input:radio[name=payMethod]:checked').closest('span').find('[name=payServiceCode]').val();	// 결제서비스코드
+			var cardCo			= $("select[name=cardCo]").val();																// 신용카드사 선택
+			var creditcardCoSn	= $("select[name=cardCo] option:selected").attr("id");
+			var nextPayUseYn	= $("[name=nextPayUseYn]").val();																// 선택한 결제수단을 다음사용여부
+
+			AP.api.ordReceptPayAmt({}, {
+				ordSn: ordSn,
+				payMethodSn : payMethodSn,
+				depositPrice : depositPrice,
+				pgPrice : pgPrice,
+				creditcardCoSn : creditcardCoSn,
+				nextPayUseYn : nextPayUseYn,
+				payMethodCode : payMethodCode,
+				payServiceCode : payServiceCode
+			}).done(function (data) {
+				if (data.result == "success"){
+					ordReceptChange(ordSn, pgPrice);
+				}
+			}).fail(function (e) {
+				AP.modal.alert("[ajax.fail]실패");
+			}).always(function () {
+			});
+		}
+
+		/* 주문정보 변경 */
+		function ordReceptChange(ordSn, pgPrice) {
+			var $form = $('form.order-validate');
+			var formData = AP.common.getFormData($form);
+			formData['ordSn'] = ordSn;
+			$.ajaxSettings.traditional = true;
+			AP.api.ordReceptChange({}, formData).done(function(data) {
+				//성공
+				if (data.result == "success"){
+					if(pgPrice > 0){
+						getPayment();
+					}else{
+						var $form = $( 'form.order-validate' );
+						$form.attr("method", "post");
+						$form.attr("action", "/order/ordComplete");
+						$form.submit();
+					}
+				}else {
+					AP.modal.alert("[ajax.done]실패");
+				}
+			}).fail(function(xhr, textStatus, errorThrown) {
+				if (xhr.errorCode == 0) {
+					AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+				} else {
+					AP.modal.alert(xhr.errorMessage);
+				}
+			}).always(function() {
+				//성공, 실패
+			});
+		}
+
+		/* 결제모듈 연결 */
+		function getPayment() {
+			//aki 추가
+			//결제수단
+			var selectedPaymethod = $('input:radio[name="payMethod"]:checked').val();
+
+			//모두 새창으로 연결 (기확자 확인)
+			payPopup = window.open('about:blank','payPopup');
+			var $form = $("form[name='orderForm']");
+
+			//상품명 대표 상품명 한개로 셋팅
+			var $_productName = $(".cart_name_wrap").find("input:hidden[name='prodName']").first();
+			$hidden = $("<input />");
+			$hidden.prop("type", "hidden");
+			$hidden.prop("name", "repProdName");
+			$hidden.prop("value", $_productName.val());
+			$form.append($hidden);
+
+			var actionUrl;
+
+			//네이버 결제
+			if('NAVERPAY' == selectedPaymethod) {
+				actionUrl = "/payment/naverPay";
+				var prods = [];
+				var $prodBoundarys = $(".cart_name_wrap");
+
+				$prodBoundarys.each(function(idx, elem) {
+					$prdBoundary = $(elem);
+
+					var $_onlinePordSn = $prdBoundary.find("input:hidden[name='onlinePordSn']");
+					var $_productName = $prdBoundary.find("input:hidden[name='prodName']");
+					var $_prodQty = $prdBoundary.find("input:hidden[name='prodQty']");
+
+					$hidden = $("<input />");
+					$hidden.prop("type", "hidden");
+					$hidden.prop("name", "prods[" + idx + "].prodSn");
+					$hidden.prop("value", $_onlinePordSn.val());
+					$form.append($hidden);
+
+					$hidden = $("<input />");
+					$hidden.prop("type", "hidden");
+					$hidden.prop("name", "prods[" + idx + "].prodName");
+					$hidden.prop("value", $_productName.val());
+					$form.append($hidden);
+
+					$hidden = $("<input />");
+					$hidden.prop("type", "hidden");
+					$hidden.prop("name", "prods[" + idx + "].prodQty");
+					$hidden.prop("value", $_prodQty.val());
+					$form.append($hidden);
+				});
+			}
+			//원터치 간편결제
+			else if('WPAY' == selectedPaymethod) {
+				actionUrl = "/payment/wpay";
+			}
+			//기타 이니시스
+			else {
+				actionUrl = "/payment/iniPay";
+			}
+
+			$form.attr("method", "post");
+			$form.attr("action", actionUrl);
+			$form.attr("target", 'payPopup');
+			$form.submit();
+
+		}
+
+		/* 결제실패 혹은 중간에 결제 종료시 메세지 출력 */
+		function payFailResult(msg) {
+			AP.modal.alert(msg);
+		}
+
+		/* 비회원 개인정보 수집,이용 동의 */
+		function nonmemberNotice() {
+			//AP.modal.alert("비회원으로 구매시 회원할인가는 적용되지 않습니다.");
+			//var modal = AP.modal.open({ templateKey : 'order.layer-order-non-member-02' });
+			var modal = AP.modal.open({
+				templateKey: 'order.layer-order-non-member-02'
+			});
+			var $modalEl = modal.getElement();
+
+			//이용약관 개인정보 처리방침
+			var personPolicy1 = /*[[${personPolicy1 != null ? personPolicy1.termsBodyText : ''}]]*/ null; //주문사은품 목록
+			//이용약관 개인정보 제3자 제공 동의
+			var personPolicy2 = /*[[${personPolicy2 != null ? personPolicy2.termsBodyText : ''}]]*/ null; //주문사은품 목록
+
+			$modalEl.find("#personPolicy1").append(personPolicy1);
+			$modalEl.find("#personPolicy2").append(personPolicy2);
+
+			// 비회원 구매하기
+			$modalEl.find("#btnAgreeNext").click(function() {
+				var agree1 = $modalEl.find("#agree1").is(":checked");
+				var agree2 = $modalEl.find("#agree2").is(":checked");
+				var agree3 = $modalEl.find("#agree3").is(":checked");
+
+				if(agree1 && agree2 && agree3){
+					modal.close();
+				}else {
+					AP.modal.alert("비회원구매 서비스 제공을 위한\n 개인정보 수집·이용에 동의하셔야 주문이 가능합니다.");
+				}
+			});
+
+			// 모든 약관 동의
+			$modalEl.find("#check_all").click(function() {
+				var checkAll = $modalEl.find("#check_all").is(":checked");
+				$modalEl.find("#agree1").prop('checked', checkAll);
+				$modalEl.find("#agree2").prop('checked', checkAll);
+				$modalEl.find("#agree3").prop('checked', checkAll);
+
+				if(checkAll) {
+					//동의하고 진행 버튼 활성화
+					$("#btnAgreeNext").removeProp("disabled");
+				} else {
+					//동의하고 진행 버튼 비활성화
+					$("#btnAgreeNext").prop("disabled", "disabled");
+				}
+			});
+
+			//각각의 동의 체크버튼
+			$modalEl.find("#agree1, #agree2, #agree3").click(function() {
+				var agree1 = $modalEl.find("#agree1").is(":checked");
+				var agree2 = $modalEl.find("#agree2").is(":checked");
+				var agree3 = $modalEl.find("#agree3").is(":checked");
+
+				if(agree1 && agree2 && agree3) {
+					$modalEl.find("#check_all").prop('checked', true);
+					//동의하고 진행 버튼 활성화
+					$("#btnAgreeNext").removeProp("disabled");
+				} else {
+					$modalEl.find("#check_all").prop('checked', false);
+					//동의하고 진행 버튼 비활성화
+					$("#btnAgreeNext").prop("disabled", "disabled");
+				}
+			});
+
+			// 레이어 닫기
+			$modalEl.find(".layer_close").click(function() {
+				modal.close();
+				location.replace('/cart/cartList');
+			});
+
+			// 동의 안함
+			$modalEl.find(".btn_md_bordered").click(function() {
+				modal.close();
+				location.replace('/cart/cartList');
+			});
+		}; //end nonmemberNotice()
+	</script>
+</th:block>
+</body>
+</html>

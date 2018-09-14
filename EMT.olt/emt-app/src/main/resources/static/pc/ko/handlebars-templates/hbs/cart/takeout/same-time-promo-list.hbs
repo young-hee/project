@@ -39,7 +39,7 @@
 		</div>
 		{{#each promoOnlineProdExList }}
 			{{#each cartProdExList }}
-			{{#if (gt @index 0) }} <div class="item_wrap plus"> {{else}} <div class="item_wrap">  {{/if}}
+			{{#if (or (gt @../index 0)(gt @index 0) ) }} <div class="item_wrap plus"> {{else}} <div class="item_wrap">  {{/if}}
 				<input type="hidden" name="index" value="{{counter @../index }}"/>
 				<input type="hidden" name="takeoutPrdSn" value="{{ prodEx.prodSn }}"/>
 				<input type="hidden" name="cartProdSn" sameTimePromo="sameTimePromo" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}" value="{{ cartProdSn }}"/>
@@ -92,7 +92,7 @@
 									{{#if (ne awardProdEx.repProdImgEx null) }}
 										<img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/>
 									{{/if}}
-									사은품 : {{ awardProdEx.prodName }} {{#if (gt awardUnitQty 0 ) }}{{ awardUnitQty }}개 {{/if}}
+									사은품 : {{ awardProdEx.prodName }} {{#if (gt awardUnitQty 0 ) }}({{ awardUnitQty }}개) {{/if}}
 								</span>
 								<span class="term">
 									증정기간 : {{dateFormat awardStartDt "YYYY.MM.DD"}} ~ {{dateFormat awardEndDt "YYYY.MM.DD"}}

@@ -1,0 +1,19 @@
+{{#each this.eventParticipants}}
+	<li>
+		<dl>
+			<dt>
+				<b>{{ this.memberId }}</b>
+				<small>{{ dateFormat  this.participatedDt }}</small>
+				{{#if (isNewArticle this.participatedDt)}}
+					<span class="ico_new"><span class="sr_only">새글</span></span>
+				{{/if}}
+				{{#xif this.myCommentYn '==' 'Y'}}
+					<button class="btn_delete" type="button" data-event-participant-sn="{{ this.eventParticipantSn }}"><i class="ico_del"></i><span class="sr_only">댓글 삭제</span></button>
+				{{/xif}}
+			</dt>
+			<dd>
+				<p class="text">{{ this.participantComment }}</p>
+			</dd>
+		</dl>
+	</li>
+{{/each}}

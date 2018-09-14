@@ -15,10 +15,12 @@ this["AP"]["handlebars"]["products"]["selected-option-list"] = Handlebars.templa
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depths[1] != null ? depths[1].bulkIncludedProds : depths[1])) != null ? stack1.length : stack1),">",0,{"name":"xif","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.saleDisplayStatus : depth0),"OutOfStock",{"name":"eq","hash":{},"data":data}),"||",(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.saleDisplayStatus : depth0),"Exhaustion",{"name":"eq","hash":{},"data":data}),{"name":"xif","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.program(9, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
-    + "		\n		<div class=\"price\">\n			<b class=\"item_total_price\">"
+    + "		\n		<div class=\"price\">\n			"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.targetYN : stack1),"Y",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(19, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n			<b class=\"item_total_price\">"
     + alias4((helpers.numberFormat || (depth0 && depth0.numberFormat) || alias2).call(alias1,(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"finalOnlinePrice",{"name":"availablePrices","hash":{},"data":data}),{"name":"numberFormat","hash":{},"data":data}))
     + "</b>원\n		</div>\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depths[1] != null ? depths[1].productCount : depths[1]),">","1",{"name":"xif","hash":{},"fn":container.program(19, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depths[1] != null ? depths[1].productCount : depths[1]),">","1",{"name":"xif","hash":{},"fn":container.program(21, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "	</div>\n";
 },"2":function(container,depth0,helpers,partials,data) {
     return "out_of_stock";
@@ -63,6 +65,14 @@ this["AP"]["handlebars"]["products"]["selected-option-list"] = Handlebars.templa
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.maxPurLimitQty : depth0), depth0))
     + "\"";
 },"19":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
+
+  return "<em style=\"color: #f00;\">"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.baseOrdQty : stack1), depth0))
+    + "+"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.freeAwardQty : stack1), depth0))
+    + "</em>";
+},"21":function(container,depth0,helpers,partials,data) {
     return "		<button class=\"ui_close btn_del\" type=\"button\"><span class=\"sr_only\">선택 옵션 삭제</span></button>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;

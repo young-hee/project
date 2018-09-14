@@ -27,6 +27,7 @@ import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.util.FromEndDateUtils;
 import kr.ap.emt.common.vo.AddressVo;
+import kr.ap.emt.common.vo.PixleePhotoVo;
 import kr.ap.emt.common.vo.SearchVO;
 import net.g1project.ecp.api.model.sales.display.OnlineProdList;
 import net.g1project.ecp.api.model.sales.display.SearchResult;
@@ -298,6 +299,38 @@ public class CommonRestController extends AbstractController {
 
 		URL url = new URL(apiUrl+addressVo.getAddressUrl()+"confmKey="+confmKey);
 
+		StringBuffer sb = new StringBuffer();
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream(),"UTF-8"))) {
+
+			String tempStr = null;
+			while (true) {
+				tempStr = br.readLine();
+				if (tempStr == null) break;
+				sb.append(tempStr);
+
+			}
+
+		}
+         	
+		return ResponseEntity.ok(sb.toString());
+	}
+	
+	/**
+	 * 에뛰드픽 PixleePhoto 연결API 
+	 * @param keyword
+	 * @return
+	 */
+	@RequestMapping("/getPixleePhotos")
+	public ResponseEntity<?> getPixleePhotos( PixleePhotoVo pixleePhoto, HttpServletRequest req) throws IOException {
+		
+		String apiUrl = env.getProperty("pixlee.api.base-url");
+
+		pixleePhoto.setApi_key(env.getProperty("pixlee.api.api-key"));
+		
+		pixleePhoto.setAlbumId(env.getProperty("pixlee.api.albumId"));
+				
+		URL url = new URL(apiUrl + pixleePhoto.getAddressUrl());
+		
 		StringBuffer sb = new StringBuffer();
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream(),"UTF-8"))) {
 

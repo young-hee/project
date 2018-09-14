@@ -369,6 +369,9 @@ public class MyOrdDTO {
 						claimQtySum += ordHistProdEx.getClaimReceivedQty();
 
 						finalOnlineSaleAmtPcurSum = finalOnlineSaleAmtPcurSum.add(ordHistProdEx.getFinalOnlineSaleAmtPcur());
+						if ("ProdCancel".equals(ordHistProdEx.getOrdHistProdStatusCode())) {
+							ordOnlineProdFo.setProdCancelAmtSum(ordOnlineProdFo.getProdCancelAmtSum().add(ordHistProdEx.getFinalOnlineSalePricePcur().multiply(BigDecimal.valueOf(ordHistProdEx.getCancelQty()))));
+						}
 
 						ordOnlineProdFo.setFinalOnlineSaleAmtPcurSum(ordOnlineProdFo.getFinalOnlineSaleAmtPcurSum().add(ordHistProdEx.getFinalOnlineSaleAmtPcur()));
 						ordOnlineProdFo.setOrdQtySum(ordOnlineProdFo.getOrdQtySum() + ordHistProdEx.getOrdQty());
@@ -432,6 +435,7 @@ public class MyOrdDTO {
 			ordOnlinePromoFo.setPromoName(ordHistProdEx.getmPlusNOrdPromoNameRlang());
 			ordOnlinePromoFo.setOrdOnlineProdFoMap(new HashMap<>());
 			ordOnlinePromoFo.setOrdOnlineProdFoList(new ArrayList<>());
+			ordOnlinePromoFo.setOrdHistProdStatusCode(ordHistProdEx.getOrdHistProdStatusCode());
 
 			ordOnlinePromoFo.setPromoTypeCode(ordHistProdEx.getmPlusNTypeCode());
 
@@ -464,12 +468,19 @@ public class MyOrdDTO {
 			ordOnlinePromoFo.setOrdOnlineProdFoMap(new HashMap<>());
 			ordOnlinePromoFo.setOrdOnlineProdFoList(new ArrayList<>());
 			ordOnlinePromoFo.setPromoTypeCode(key);
+			ordOnlinePromoFo.setOrdHistProdStatusCode(ordHistProdEx.getOrdHistProdStatusCode());
 
 			ordOnlinePromoFo.setReceivedClaimReasonName(ordHistProdEx.getReceivedClaimReasonName());
 			ordOnlinePromoFo.setFoReceivedClaimReason(ordHistProdEx.getFoReceivedClaimReason());
 
 			ordOnlinePromoFoMap.put(key, ordOnlinePromoFo);
 		}
+
+		if ("ProdCancel".equals(ordHistProdEx.getOrdHistProdStatusCode())) {
+			ordOnlinePromoFo.setProdCancelAmtSum(ordOnlinePromoFo.getProdCancelAmtSum().add(ordHistProdEx.getFinalOnlineSalePricePcur().multiply(BigDecimal.valueOf(ordHistProdEx.getCancelQty()))));
+		}
+		ordOnlinePromoFo.setOrdQtySum(ordOnlinePromoFo.getOrdQtySum() + ordHistProdEx.getOrdQty());
+		ordOnlinePromoFo.setCancelQtySum(ordOnlinePromoFo.getCancelQtySum() + ordHistProdEx.getClaimReceivedQty());
 
 		ordOnlinePromoFo.setTotalProductSaleAmount(ordOnlinePromoFo.getTotalProductSaleAmount().add(ordHistProdEx.getFinalOnlineSaleAmtPcur()));
 		ordOnlinePromoFo.setTotalFinalOnlineSaleAmount(ordOnlinePromoFo.getTotalFinalOnlineSaleAmount().add(ordHistProdEx.getProdSalePricePcur()));

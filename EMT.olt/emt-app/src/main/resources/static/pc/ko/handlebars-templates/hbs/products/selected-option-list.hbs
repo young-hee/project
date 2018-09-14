@@ -36,11 +36,11 @@
 				{{/xif}}
 
 				{{!-- 사은품 --}}
-				{{#xif (eq ../onlineProdGift.giftProdTargetYn 'Y') '&&' (eq this.prodGift.giftProdTargetYn 'Y')}}
-					{{#each ../onlineProdGift.giftProds}}
+				{{!-- #xif (eq ../onlineProdGift.giftProdTargetYn 'Y') '&&' (eq this.prodGift.giftProdTargetYn 'Y') --}} 
+					{{#each this.giftProds}} 
 						<em class="additional">[사은품] {{ this.prodName }} {{ this.qty }}개</em>
 					{{/each}}
-				{{/xif}}
+				{{!-- /xif --}}
 			</div>
 			<div class="count">
 				{{!-- 품절이면서 takeout 상품은 min=1, max=99 --}}

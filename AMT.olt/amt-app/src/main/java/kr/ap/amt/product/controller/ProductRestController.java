@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.ap.amt.product.vo.ExternalVO;
 import kr.ap.amt.product.vo.RequestReview;
 import kr.ap.comm.support.common.AbstractController;
+import kr.ap.comm.support.constants.APConstant;
 import net.g1project.ecp.api.model.sales.display.OnlineProdList;
 import net.g1project.ecp.api.model.sales.product.ProdRecommendReq;
 import net.g1project.ecp.api.model.sales.product.ProdReviewImg;
@@ -36,6 +37,7 @@ import net.g1project.ecp.api.model.sales.product.ProdReviewInfo;
 import net.g1project.ecp.api.model.sales.product.ProdReviewListInfo;
 import net.g1project.ecp.api.model.sales.product.ProdReviewWritableOrderInfo;
 import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkPost;
+import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkPostForDelete;
 
 /**
  * @author Simjaekyu@
@@ -174,7 +176,7 @@ public class ProductRestController extends AbstractController {
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
 		try {
-    		ProdReviewListInfo prodReviewListInfo = productApi.getProductReviews(requestReview.getProdReviewUnit(), requestReview.getProdReviewType(), requestReview.getOffset(), requestReview.getLimit(), getMemberSn(), requestReview.getOnlineProdSn(), requestReview.getProdSn(), requestReview.getStyleCode(), requestReview.getProdReviewSort(), requestReview.getScope(), requestReview.getTopReviewOnlyYn(), requestReview.getTopReviewFirstYn(), (!requestReview.getStartDate().isEmpty()) ? sf.parse(requestReview.getStartDate()) : null, (!requestReview.getEndDate().isEmpty()) ? sf.parse(requestReview.getEndDate()) : null, "N", null, null);
+    		ProdReviewListInfo prodReviewListInfo = productApi.getProductReviews(requestReview.getProdReviewUnit(), requestReview.getProdReviewType(), requestReview.getOffset(), requestReview.getLimit(), getMemberSn(), requestReview.getOnlineProdSn(), requestReview.getProdSn(), requestReview.getStyleCode(), requestReview.getProdReviewSort(), requestReview.getScope(), requestReview.getTopReviewOnlyYn(), requestReview.getTopReviewFirstYn(), (!requestReview.getStartDate().isEmpty()) ? sf.parse(requestReview.getStartDate()) : null, (!requestReview.getEndDate().isEmpty()) ? sf.parse(requestReview.getEndDate()) : null, "N", APConstant.AP_DISPLAY_MENU_SET_ID, requestReview.getDisplayMenuId());
     		
     		//뷰티테스터 더미데이터
     		if( "ExperienceGrp".equalsIgnoreCase(requestReview.getProdReviewType()) &&  prodReviewListInfo.getTotalCount() == 0) {
@@ -228,28 +230,7 @@ public class ProductRestController extends AbstractController {
     }
     
     /**
-     * 상품평 상세 조회
-     * @param requestReview
-     * @return
-     */
-    @GetMapping("/getReviewDetail")
-    @ResponseBody
-    public ResponseEntity<?> getReviewDetail(RequestReview requestReview) {
-    	HashMap<String, Object> result = new HashMap<String, Object>();
-
-		try {
-    		ProdReviewInfo review = productApi.getProductReviewDetail(requestReview.getProdReviewSn());
-    		
-    		result.put("review", review);
-    		return ResponseEntity.ok(result);
-    	} catch (Exception e) {
-    		result.put("errorData", e);
-    		return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-    	}
-    }
-    
-    /**
-     * 상품추천 (좋아요)
+     * 상품추천 (좋아요) - on
      */
     @RequestMapping("/postRecommend")
     @ResponseBody
@@ -266,13 +247,49 @@ public class ProductRestController extends AbstractController {
     }
     
     /**
+     * 상품추천 (좋아요) - off
+     */
+    @RequestMapping("/offRecommend")
+    @ResponseBody
+    public ResponseEntity<?> offRecommend(ShoppingMarkPost markPost) {
+        HashMap<String, Object> result = new HashMap<String, Object>();
+
+        try {
+        	shoppingmarkApi.deleteShoppingBookmarkLike(getMemberSn(), markPost);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            result.put("errorData", e);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+        }
+    }
+    
+    /**
+     * 상품추천 (좋아요) - off
+     * 단위 상품 선택을 하지 않았을 경우
+     */
+    @RequestMapping("/offRecommendFromOnline")
+    @ResponseBody
+    public ResponseEntity<?> offRecommendFromOnline(Long onlineProdSn) {
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        ShoppingMarkPostForDelete mark = new ShoppingMarkPostForDelete();
+        mark.setOnlineProdSn(onlineProdSn);
+        try {
+        	shoppingmarkApi.deleteAllShoppingBookmarksUnder(getMemberSn(), mark);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            result.put("errorData", e);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+        }
+    }
+    
+    /**
      * 앱 다운 URL 문자 전송
      */
     @RequestMapping("/sendSms")
     @ResponseBody
     public ResponseEntity<?> sendSms(String cellNum) {
         HashMap<String, Object> result = new HashMap<String, Object>();
-
+        
         try {
             return ResponseEntity.ok(result);
         } catch (Exception e) {

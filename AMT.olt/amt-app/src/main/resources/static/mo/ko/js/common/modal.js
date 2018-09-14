@@ -57,7 +57,10 @@
 				cancelLabel: options.cancelLabel
 			};
 			options.sizeType = options.sizeType? options.sizeType : 'M';
-			options.containerClass = options.containerClass? 'modal_info system_alert' + options.containerClass : 'modal_info system_alert';
+			options.containerClass = options.containerClass? 'modal_info' + options.containerClass : 'modal_info';
+			//'system_alert' 클래스를 사용할 지 여부
+			if(options.noneSystemAlert)
+				options.containerClass = options.containerClass.replace('system_alert', '');
 			options.wrapperClass = options.wrapperClass? options.wrapperClass : '';
 			return this.open( options );
 		},
@@ -94,6 +97,8 @@
 			options.sizeType = 'FULL';
 			options.top = 0;
 			options.containerClass = options.containerClass? 'fullpage ' + options.containerClass : 'fullpage';
+			if(options.noneSystemAlert)
+				options.containerClass = options.containerClass.replace('system_alert', '');
 			return this.open( options );
 		},
 
@@ -116,11 +121,15 @@
 				title: '',
 				contents: options.contents,
 				textAlign: 'center',
-				btnConfirm: true,
+				btnConfirm: options.noneBtnConfirm ? false : true,
 				confirmLabel: options.confirmLabel || '확인'
 			};
 			options.sizeType = options.sizeType? options.sizeType : 'S';
-			options.containerClass = options.containerClass? 'modal_alert ' + options.containerClass : 'modal_alert' + ' system_alert';
+			options.containerClass = options.containerClass? 'modal_alert ' + options.containerClass : 'modal_alert';
+			//'system_alert' 클래스를 사용할 지 여부
+			if(options.noneSystemAlert)
+				options.containerClass = options.containerClass.replace('system_alert', '');
+			options.wrapperClass = options.wrapperClass? options.wrapperClass : '';
 			return this.open( options );
 		},
 
@@ -150,7 +159,38 @@
 				cancelLabel: options.cancelLabel || '취소'
 			};
 			options.sizeType = options.sizeType? options.sizeType : 'M';
-			options.containerClass = options.containerClass? 'modal_confirm ' + options.containerClass : 'modal_confirm' + ' system_alert';
+			options.containerClass = options.containerClass? 'modal_confirm ' + options.containerClass : 'modal_confirm';
+			return this.open( options );
+		},
+		
+		/**
+		 * open confirm
+		 * @param   {String || Object}    contents
+		 *  - {String}        contents   작은 텍스트의 contents로 입력할때 사용, (기본입력)
+		 *  - {String}        title      타이틀형식으로 입력할때 사용
+		 *  - {String}        confirmLabel   확인 버튼의 label, default:확인
+		 *  - {String}        cancelLabel    취소 버튼의 label, default:취소
+		 *  - {jQueryObject}  returnFocusTarget (default:modal을 열때 클릭한 대상)
+		 * @return {ModalCore}
+		 * ex) AP.modal.confirm().addListener( 'modal-before-close', function (e) { console.log(e.closeType, e.data) })
+		 *     AP.modal.confirm().addListener( 'modal-close', function (e) { console.log(e.closeType, e.data) })
+		 */
+		systemConfirm: function ( contents ) {
+			var options = ( typeof contents === 'string' )? {contents: contents} : contents;
+			
+			//options.templateKey = 'common.modal-system-alert-ios';
+			//if( $B.ua.ANDROID )
+				options.templateKey = 'common.modal-system-alert-android';
+			options.templateModel = {
+				title: '',
+				contents: options.contents,
+				textAlign: 'center',
+				btnConfirm: true,
+				btnCancel: true,
+				confirmLabel: options.confirmLabel || '확인',
+				cancelLabel: options.cancelLabel || '취소'
+			};
+			options.sizeType = options.sizeType? options.sizeType : 'M';
 			return this.open( options );
 		},
 
@@ -321,11 +361,14 @@
 				_templateKey: templateKey,
 				uId: this.__uId__
 			}, this._options));
-
+			
 			this._$win = $( window );
 			this._$body = $( 'body' );
+			if( this._options.target )this._$body = $(this._options.target);
 			this._$modal = $( html ).siblings( '.modal_popup' );
 			this._$iconClose = this._$modal.find( '.layer_close' );
+			if( this._options.hideCloseBtn )
+				this._$iconClose.hide();
 			this._$btnConfirm = this._$modal.find( '.btn_default_modal_confirm' );
 			this._$btnCancel = this._$modal.find( '.btn_default_modal_cancel' );
 			this._$dimmed = this._$modal.find( '.layer_dimmed' );

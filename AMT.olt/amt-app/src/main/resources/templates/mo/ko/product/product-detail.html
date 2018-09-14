@@ -101,11 +101,11 @@
 							  maxRate=${curPrice.onlineSalePriceDiscountRate + curPrice.memberLevelDiscountRate + curPrice.onlineMemberDiscountRate + curPrice.immedDiscountRate}">
 					<span class="discount" th:if="${maxRate != 0}">
 						<span th:if="${isMaxRate}">최대</span>
-						<span><em th:text="${maxRate}">30</em>%</span>
+						<span><em th:text="${prd.availablePrices[0].maxFinalDiscountRate}">30</em>%</span>
 					</span>
 					
-					<b class="num" th:text="${#numbers.formatInteger( curPrice.finalOnlinePrice, 0, 'COMMA')}">999,000</b>원
-					<del th:if="${curPrice.doublePriceDisplayYn == 'Y'}">[[${ #numbers.formatInteger( curPrice.beforeOnlineSalePrice, 0, 'COMMA') }]]원</del>
+					<b class="num" th:text="${#numbers.formatInteger( prd.availablePrices[0].maxFinalDiscountOnlinePrice, 0, 'COMMA')}">999,000</b>원
+					<del th:if="${curPrice.doublePriceDisplayYn == 'Y'}">[[${ #numbers.formatInteger( prd.availablePrices[0].maxFinalDiscountBeforeSalePrice, 0, 'COMMA') }]]원</del>
 					<b class="txt" th:if="${curPrice.onlineMemberDiscountYn == 'Y'}">VVIP 할인가</b>
 				</div>
 				
@@ -171,10 +171,10 @@
 			<div class="ui_accordion ＠accordion-apply">
 				<dl>
 					<dt class="">
-						<button type="button" class="title" th:if="${prd.availablePrices[0].minFinalOnlinePrice > prd.shipFeeFreeBamt}">
-							<i class="ico_delivery"></i>무료배송 <!-- / <em>예약주문</em> --> 
+						<button type="button" class="title" th:if="${prd.availablePrices[0].minFinalOnlinePrice > prd.shipFeeFreeBamt || prd.prodTypeCode == 'Presale'}">
+							<i class="ico_delivery"></i>무료배송<th:block th:if="${prd.prodTypeCode == 'Presale'}">  / <em>예약주문</em> </th:block>
 						</button>
-						<button type="button" class="title" th:unless="${prd.availablePrices[0].minFinalOnlinePrice > prd.shipFeeFreeBamt}">
+						<button type="button" class="title" th:if="${prd.prodTypeCode != 'Presale'}" th:unless="${prd.availablePrices[0].minFinalOnlinePrice > prd.shipFeeFreeBamt}">
 							<i class="ico_delivery"></i>일반배송 <em>[[${#numbers.formatInteger(prd.defaultShipFee, 0, 'COMMA')}]]원</em>
 						</button>
 					</dt>
@@ -182,7 +182,7 @@
 						<div class="card_benefit type2">
 							<ul>
 								<li>최종 결제금액이 [[${#numbers.formatInteger(prd.shipFeeFreeBamt, 0, 'COMMA')}]]원 이상이면 무료로 배송됩니다</li>
-								<!--/* <li>해당 상품은 <em>사전예약상품</em>으로 <em>01월 26일</em>부터 순차배송 예정입니다</li> */-->
+								<li th:if="${prd.prodTypeCode == 'Presale'}" th:utext="${prd.reserveShipDesc}"></li>
 							</ul>
 							<a href="#none" class="more" id="shipMoreView">더보기 <i class="ico_navi_s next"></i></a>
 						</div>
@@ -308,29 +308,25 @@
 			</dd>
 		</dl>
 		<!-- 어워드 수상내역 -->
-		<div class="section awards_area">
+		<div class="section awards_area" th:if="${#lists.size(awards) > 0}">
 			<dl>
 				<dt class="h_title d4"><i class="ico_award"></i>어워드 수상내역</dt>
 				<dd class="awards scrollable_x">
-					<img alt="어워드 명" src="/mo/ko/images/dummy/img_mark_01.png">
-					<img alt="어워드 명" src="/mo/ko/images/dummy/img_mark_02.png">
-					<img alt="어워드 명" src="/mo/ko/images/dummy/img_mark_03.png">
-					<img alt="어워드 명" src="/mo/ko/images/dummy/img_mark_04.png">
-					<img alt="어워드 명" src="/mo/ko/images/dummy/img_mark_02.png">
-					<img alt="어워드 명" src="/mo/ko/images/dummy/img_mark_03.png">
-					<img alt="어워드 명" src="/mo/ko/images/dummy/img_mark_01.png">
+					<th:block th:each="award : ${awards}">
+						<img th:alt="${award.addAttrValName}" th:src="${award.addAttrImg}">
+					</th:block>
 				</dd>
 			</dl>
 		</div>
 		
 		<!-- 전성분 확인하기  -->
 		<div class="section">
-			<a href="#none" class="btn_go btn_ingredient">전성분 확인하기 <i class="ico_navi_s next"></i></a>
+			<a href="javascript:;" class="btn_go btn_ingredient">전성분 확인하기 <i class="ico_navi_s next"></i></a>
 		</div>
 		
 		<!-- 상세정보 제공 공시 -->
 		<div class="section">
-			<a href="#none" class="btn_go btn_detail_info_notice">상세정보 제공 공시 <i class="ico_navi_s next"></i></a>
+			<a href="javascript:;" class="btn_go btn_detail_info_notice">상세정보 제공 공시 <i class="ico_navi_s next"></i></a>
 		</div>
 		
 		<!-- 인기상품, 다른고객님이 선택한제품, 브랜드인기상품 -->
@@ -928,10 +924,11 @@
 
 			<div class="default_btns">
 				<!-- 좋아요  버튼  -->
-				<button type="button" class="btn_good btn_toggle" th:classappend="${prd.recommendCount == 0} ? none_like" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')">
-					<i class="ico_heart_s"></i>
-					<span class="num" th:if="${prd.recommendCount > 0}">[[${prd.recommendCount}]]</span>
+				<button type="button" id="likeBtn" class="btn_good btn_toggle" th:classappend="|${prd.shoppingMarkCountSum == 0? 'none_like':''} ${prd.shoppingMarkExistYn == 'Y' ? 'on':''}|">
+					<i class="ico_heart_s" th:classappend="${prd.shoppingMarkExistYn == 'Y' ? 'on':''}"></i>
+					<span class="num" th:if="${prd.shoppingMarkCountSum > 0}">[[${prd.shoppingMarkCountSum}]]</span>
 				</button>
+				
 				<!--/* 구매하기 버튼 */-->
 				<button type="button" class="btn_h50_bk round btn_order" th:disabled="${prd.saleDisplayStatus == 'OutOfStock'}">구매하기</button>
 			</div>
@@ -956,9 +953,8 @@
 				</div>
 				<div class="order_bottom">
 					
-					<!--/* 1 + 1 상품인 경우  
-					<p class="text notice">해당상품은 <em>1+1</em> 상품입니다.<br>구매수량을 2개 선택시, 1개 가격으로 혜택이 적용됩니다.</p>
-					*/-->
+					<!--/* 1 + 1 상품인 경우  */-->
+					<p class="text notice promoInfo" style="diaplay:none;"></p>
 					
 					<!--/* 선택, 금액 */-->
 					<div class="total clear buy_info">
@@ -989,6 +985,28 @@
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
 	<script type="text/javascript" th:inline="javascript">
+	
+	function post_goto(url, parm, target) {
+		  var f = document.createElement('form');
+
+		  var objs, value;
+		  for (var key in parm) {
+		    value = parm[key];
+		    objs = document.createElement('input');
+		    objs.setAttribute('type', 'hidden');
+		    objs.setAttribute('name', key);
+		    objs.setAttribute('value', value);
+		    f.appendChild(objs);
+		  }
+		        
+		  if (target)
+		    f.setAttribute('target', target);
+		  
+		  f.setAttribute('method', 'post');
+		  f.setAttribute('action', url);
+		  document.body.appendChild(f);
+		  f.submit();
+	}
 		
 	$( '.ui_spinner' ).spinner();
 

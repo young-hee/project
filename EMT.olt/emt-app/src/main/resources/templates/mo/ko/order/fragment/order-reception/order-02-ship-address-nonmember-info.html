@@ -5,41 +5,6 @@
 		<button type="button"><span class="sr_only">더보기</span></button>
 	</dt>
 	<dd class="panel">
-		<!--주문고객정보-->
-		<div class="buyer">
-			<div class="clear">
-				<h3 class="h_title cont"><strong>주문고객 정보</strong></h3>
-			</div>
-			<legend class="sr_only">정보 입력 항목</legend>
-			<div class="address_basic mgt10">
-				<div class="input_group">
-					<div class="label">
-						<label for="user_name">이름</label>
-					</div>
-					<div>
-						<input type="text" id="user_name" name="purchaserName" placeholder="이름을 입력해 주세요." required="required" data-msg-required="이름을 입력해 주세요.">
-					</div>
-				</div>
-				<div class="input_group">
-					<div class="label">
-						<label for="user_phone">휴대폰 번호</label>
-					</div>
-					<div>
-						<input type="text" id="user_phone" name="purchaserPhoneNo" placeholder="‘-’없이 숫자만 입력" required="required"  data-msg-required="휴대폰 번호를 입력해 주세요.">
-					</div>
-				</div>
-				<div class="input_group">
-					<div class="label">
-						<label for="user_email">이메일</label>
-					</div>
-					<div>
-						<input type="text" id="user_email" name="purchaserEmailAddress" placeholder="이메일 주소를 입력해 주세요" required="required" data-msg-required="구매하시는 분의 이메일 주소를 입력하세요.">
-					</div>
-				</div>
-				<p class="text_notice mgt10">주문관련 e-Mail과 SMS가 발송됩니다.</p>
-			</div>
-		</div>
-		<hr class="div m25">
 		<!--배송정보-->
 		<div class="address_wrap">
 			<h3 class="h_title cont"><strong>배송정보</strong></h3>
@@ -83,7 +48,7 @@
 							<div class="ui_find_addresses">
 								<div class="input_group">
 									<div>
-										<input type="text" id="delivery_area" name="delivery_area" class="find_addresses_input" placeholder="주소지 또는 건물명" required="required" data-msg-required="받으시는 분의 주소를 입력하세요.">
+										<input type="text" id="delivery_area" name="delivery_area" class="find_addresses_input" required="required"  placeholder="주소지 또는 건물명" data-msg-required="받으시는 분의 주소를 입력하세요.">
 									</div>
 									<div class="btn">
 										<button type="button" class="btn_find_addresses">찾기</button>
@@ -91,11 +56,12 @@
 								</div>
 								<!-- 지역 검색 결과 -->
 								<div class="address_list"></div>
+								<!-- //지역 검색 결과 -->
 								<div class="input_group">
 									<div class="input_wrap">
 										<input type="hidden" class="post_code" name="userPostCode">
-										<!--<input type="hidden" class="address_first" name="address_first">-->
-										<input type="text" class="address_first" name="userAddress1" title="기본주소 입력" placeholder="주소" readonly="">
+										<input type="hidden" class="address_first" name="userAddress1">
+										<input type="text" class="address_first" name="address_first" title="기본주소 입력" placeholder="주소" readonly="">
 									</div>
 								</div>
 								<div class="input_group">
@@ -116,7 +82,7 @@
 					</div>
 					<div class="input_group">
 						<div>
-							<input type="text" name="shipMsg" maxlength="80" placeholder="80자 이내로 작성해 주세요." data-msg-required="배송 요청사항을 입력하세요." title="배송시 요청사항 직접 입력">
+							<input type="text" name="shipMsg" maxlength="80" placeholder="80자 이내로 작성해 주세요." title="배송시 요청사항 직접 입력">
 						</div>
 					</div>
 				</div>
@@ -195,6 +161,43 @@
 			</fieldset>
 		</div>
 		<!--//배송정보-->
+
+		<hr class="div m25">
+
+		<!--주문고객정보-->
+		<div class="buyer">
+			<div class="clear">
+				<h3 class="h_title cont"><strong>주문고객 정보</strong></h3>
+			</div>
+			<legend class="sr_only">정보 입력 항목</legend>
+			<div class="address_basic mgt10">
+				<div class="input_group">
+					<div class="label">
+						<label for="user_name">이름</label>
+					</div>
+					<div>
+						<input type="text" id="user_name" name="purchaserName" placeholder="이름을 입력해 주세요." required="required" data-msg-required="이름을 입력해 주세요.">
+					</div>
+				</div>
+				<div class="input_group">
+					<div class="label">
+						<label for="user_phone">휴대폰 번호</label>
+					</div>
+					<div>
+						<input type="text" id="user_phone" name="purchaserPhoneNo" placeholder="‘-’없이 숫자만 입력" required="required"  data-msg-required="휴대폰 번호를 입력해 주세요.">
+					</div>
+				</div>
+				<div class="input_group">
+					<div class="label">
+						<label for="user_email">이메일</label>
+					</div>
+					<div>
+						<input type="text" id="user_email" name="purchaserEmailAddress" placeholder="이메일 주소를 입력해 주세요" required="required" data-msg-required="구매하시는 분의 이메일 주소를 입력하세요.">
+					</div>
+				</div>
+				<p class="text_notice mgt10">주문관련 e-Mail과 SMS가 발송됩니다.</p>
+			</div>
+		</div>
 	</dd>
 	<!--스크립트 정의-->
 	<script th:inline="javascript">
@@ -207,6 +210,10 @@
 				$('input[name=shipType]').val('SHIP');
 
 				//validation
+				$('input[name=userName]').prop("required", true);
+				$('input[name=userPhoneNo]').prop("required", true);
+				$('input[name=delivery_area]').prop("required", true);
+				$('input[name=userAddress2]').prop("required", true);
 				$('input[name=name02]').prop("required", false);
 				$('input[name=phone02]').prop("required", false);
 
@@ -226,6 +233,10 @@
 				$('input[name=addressStoreType]').attr('value','MEMBER');
 
 				//validation
+				$('input[name=userName]').prop("required", false);
+				$('input[name=userPhoneNo]').prop("required", false);
+				$('input[name=delivery_area]').prop("required", false);
+				$('input[name=userAddress2]').prop("required", false);
 				$('input[name=name02]').prop("required", false);
 				$('input[name=phone02]').prop("required", false);
 			}

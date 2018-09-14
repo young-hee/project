@@ -17,7 +17,7 @@
 
 		/** =============== Public Methods =============== */
 		open: function ( title, result ) {
-console.log(result); 
+
 			var prodCount = 0; 
 			_.each(result.awards ,function(list){
 				 
@@ -29,7 +29,7 @@ console.log(result);
 				
 				result.awards.prodCount = prodCount; 
 			});
-console.log(result); 	
+
 			this._winningPop = AP.modal.info({
 				title: title,
 				contents: {

@@ -16,6 +16,7 @@
 			this._eventTitle = eventTitle;
 			this._member = null;
 			this._getLoginMemberInfo();
+			this._data = null;
 		},
 
 		/** =============== Public Methods =============== */
@@ -25,6 +26,7 @@
 		},
 
 		modify: function ( data ) {
+			this._data = data;
 			this._openModal( data );
 		},
 
@@ -127,7 +129,11 @@
 		//댓글 수정 저장
 		_modify: function ( formData ) {
 			var defer = new $.Deferred();
-
+//			console.log(this._data.eventCommentImgs);
+//			if($('input[name=deleteEvalImgSnList]').val() == ''){
+//			}
+//			//formData.append('eventCommentImgs', this._data.eventCommentImgs);
+//			console.log(formData);
 			AP.api.updateParticipated( null, formData )
 				.done(function ( result ) {
 					defer.resolve();
@@ -155,7 +161,9 @@
 						planDisplaySn: this._planDisplaySn,
 						data: data
 					}
-				}
+				},
+				containerClass: 'evt_review01'
+			
 			});
 
 			this._$modal = this._modal.getElement();
@@ -163,7 +171,7 @@
 			this._validator = this._$modal.find( 'form.validate' ).validate({
 				submitHandler: function ( form, e ) {
 					e.preventDefault();
-
+					var defer = new $.Deferred();
 					var formData = new FormData( form );
 					this._$modal.find( '.ui_input_images' ).inputImages( 'extendFormData', formData );
 
@@ -172,6 +180,8 @@
 							AP.modal.alert( '수정 되었습니다.' ).addListener( 'modal-close', function (e) {
 								//this._modal.close();
 								$('.layer_close').click();
+								defer.resolve();
+//								this.dispatch( 'success' );
 							}.bind(this));
 						});
 					} else {
@@ -179,6 +189,8 @@
 							AP.modal.alert( '입력이 완료되었습니다.' ).addListener( 'modal-close', function (e) {
 								//this._modal.close();
 								$('.layer_close').click();
+								defer.resolve();
+//								this.dispatch( 'success' );
 							}.bind(this));
 						});
 					}
@@ -202,7 +214,19 @@
 					input = '<input type="hidden" name="deleteEvalImgSnList" value="' + eventCommentImgSn + '">';
 
 				this._$modal.find( 'form.validate' ).append( input );
+				this._$modal.find( 'form.validate' ).find('input[name=eventCommentImgSn]').val('');
 				$( e.currentTarget ).closest( 'li' ).remove();
+			}.bind( this ));
+			
+			this._$modal.find( '.txt_upload01' ).on( 'click', function (e) {
+				console.log($('textarea').val());
+				this._$modal.find( 'form.validate' ).submit();
+			}.bind( this ));
+			
+			this._$modal.find( 'textarea' ).on( 'change keyup', function (e) {
+				if($( e.currentTarget ).val().length >= 10){
+					this._$modal.find( '.txt_upload01' ).addClass('on');
+				}
 			}.bind( this ));
 		}
 

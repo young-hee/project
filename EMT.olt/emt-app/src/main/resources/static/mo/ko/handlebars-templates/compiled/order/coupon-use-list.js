@@ -2,51 +2,14 @@ this["AP"] = this["AP"] || {};
 this["AP"]["handlebars"] = this["AP"]["handlebars"] || {};
 this["AP"]["handlebars"]["order"] = this["AP"]["handlebars"]["order"] || {};
 
-this["AP"]["handlebars"]["order"]["coupon-use-list"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1;
+this["AP"]["handlebars"]["order"]["coupon-use-list"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "			<span>\n"
-    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.coupon : depth0)) != null ? stack1.couponAwardExList : stack1),{"name":"each","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "			</span>\n";
-},"2":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
-
-  return ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.awardTgtCode : depth0),"Prod",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.awardTgtCode : depth0),"SpPrice",{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(3, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.awardTgtCode : depth0),"Point",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(5, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(alias1,(data && data.first),{"name":"if","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.gt || (depth0 && depth0.gt) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.coupon : depth0)) != null ? stack1.couponAwardExList : stack1)) != null ? stack1.length : stack1),1,{"name":"gt","hash":{},"data":data}),(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,(data && data.last),{"name":"ne","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(9, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
-},"3":function(container,depth0,helpers,partials,data) {
-    return "						<span class=\"price\">[사은품 증정]"
-    + container.escapeExpression(container.lambda((depth0 != null ? depth0.prodName : depth0), depth0))
-    + "</span>\n";
-},"5":function(container,depth0,helpers,partials,data) {
-    return "						<span class=\"price\">[뷰티포인트 증정]"
-    + container.escapeExpression(container.lambda((depth0 != null ? depth0.applySavingPoint : depth0), depth0))
-    + "P</span>\n";
-},"7":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1;
-
-  return "						<button type=\"button\" name=\"removeCoupon\" data-sn=\""
-    + container.escapeExpression(container.lambda(((stack1 = (depths[1] != null ? depths[1].coupon : depths[1])) != null ? stack1.memberKeepingCouponSn : stack1), depth0))
-    + "\"><em>취소</em></button></p>\n";
-},"9":function(container,depth0,helpers,partials,data) {
-    return "						<br/>\n";
-},"11":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=container.escapeExpression;
-
-  return "			-"
-    + alias1((helpers.currencyFormatDefault || (depth0 && depth0.currencyFormatDefault) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.coupon : depth0)) != null ? stack1.applyDcAmt : stack1),"원",{"name":"currencyFormatDefault","hash":{},"data":data}))
-    + "\n			<button type=\"button\" name=\"removeCoupon\" data-sn=\""
-    + alias1(container.lambda(((stack1 = (depth0 != null ? depth0.coupon : depth0)) != null ? stack1.memberKeepingCouponSn : stack1), depth0))
-    + "\"><em>취소</em></button></p>\n";
-},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
-
-  return "<div class=\"usage_details\">\n	<p class=\"title\">\n		<span class=\"flag coupon\">"
-    + alias3((helpers.couponBenefitTypeCodeSwitch || (depth0 && depth0.couponBenefitTypeCodeSwitch) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.coupon : depth0)) != null ? stack1.couponBenefitTypeCode : stack1),{"name":"couponBenefitTypeCodeSwitch","hash":{},"data":data}))
-    + "</span>\n"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.coupon : depth0)) != null ? stack1.applyDcAmt : stack1),0,{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.program(11, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
-    + "	<p class=\"desc\">"
-    + alias3(container.lambda(((stack1 = (depth0 != null ? depth0.coupon : depth0)) != null ? stack1.couponName : stack1), depth0))
-    + "</p>\n</div>";
-},"useData":true,"useDepths":true});
+  return "<div class=\"coupon_order\">\n	<div class=\"coupon_wrap\">\n		<div class=\"info\">\n			<div class=\"flag_wrap\">\n				<span class=\"flag\">온라인 전용</span>\n				<button type=\"button\" class=\"btn_del\" name=\"removeCoupon\" data-sn=\""
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.coupon : depth0)) != null ? stack1.memberKeepingCouponSn : stack1), depth0))
+    + "\"><span class=\"sr_only\">삭제</span></button> <!-- //삭제 -->\n			</div>\n			<span class=\"coupon_name\">"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.coupon : depth0)) != null ? stack1.couponName : stack1), depth0))
+    + "</span>\n			<div class=\"price_wrap\">\n				"
+    + ((stack1 = (helpers.couponBenefitTypeCodeSwitchWithRemove || (depth0 && depth0.couponBenefitTypeCodeSwitchWithRemove) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.coupon : depth0),{"name":"couponBenefitTypeCodeSwitchWithRemove","hash":{},"data":data})) != null ? stack1 : "")
+    + "\n			</div><!-- //price_wrap -->\n		</div><!-- //info -->\n	</div><!-- //coupon_wrap -->\n</div>";
+},"useData":true});

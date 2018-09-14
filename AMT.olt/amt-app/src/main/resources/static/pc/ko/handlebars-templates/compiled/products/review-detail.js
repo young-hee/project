@@ -29,7 +29,7 @@ this["AP"]["handlebars"]["products"]["review-detail"] = Handlebars.template({"1"
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
 
-  return "<dl class=\"review\">\n	<dt class=\"review_header\">\n		<span class=\"name\">"
+  return "<div class=\"review_title\">\n	<h2 class=\"h_title\">구매리뷰 상세</h2>\n</div>\n<dl class=\"review\">\n	<dt class=\"review_header\">\n		<span class=\"name\">"
     + alias2(alias1((depth0 != null ? depth0.memberId : depth0), depth0))
     + "</span><span class=\"grade\">"
     + alias2(alias1((depth0 != null ? depth0.memberLevelName : depth0), depth0))
@@ -47,11 +47,17 @@ this["AP"]["handlebars"]["products"]["review-detail"] = Handlebars.template({"1"
     + ((stack1 = helpers.each.call(alias3,(depth0 != null ? depth0.surveys : depth0),{"name":"each","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "				</ul>\n			</div>\n			<!--/* 코멘트 */-->\n			<div class=\"comment\">\n				<div class=\"ellipsis line5\">"
     + alias2(alias1((depth0 != null ? depth0.prodReviewBodyText : depth0), depth0))
-    + "</div>\n				<a href=\"#none\" class=\"btn_view_more\">더읽기</a>\n				<a href=\"#none\" class=\"btn_view_close\">닫기</a>\n			</div>\n			<div class=\"box_help\">\n				<span class=\"left\"><a href=\"#none\" class=\"btn_help "
+    + "</div>\n				<a href=\"#none\" class=\"btn_view_more\">더읽기</a>\n				<a href=\"#none\" class=\"btn_view_close\">닫기</a>\n			</div>\n			<div class=\"box_help\">\n				<span class=\"left\">\n					<a href=\"javascript:;\" class=\"btn_help "
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.recommendYn : depth0),"==","Y",{"name":"xif","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\">도움이되요 "
+    + "\" data-review-sn=\""
+    + alias2(alias1((depth0 != null ? depth0.prodReviewSn : depth0), depth0))
+    + "\">\n						도움이되요 \n						<span class=\"recommendCnt\">"
     + alias2(alias1((depth0 != null ? depth0.recommendCnt : depth0), depth0))
-    + "</a></span>\n				<span class=\"right\"><a href=\"#none\" class=\"btn_report\"><span class=\"sr_only\">신고하기</span></a></span>\n			</div>\n		</div>\n		<div class=\"date\">"
+    + "</span>\n					</a>\n				</span>\n				\n				<span class=\"right\">\n					<a href=\"javascript:;\" class=\"btn_report "
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.reportYn : depth0),"==","Y",{"name":"xif","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\" data-review-sn=\""
+    + alias2(alias1((depth0 != null ? depth0.prodReviewSn : depth0), depth0))
+    + "\">\n						<span class=\"sr_only\">신고하기</span>\n					</a>\n				</span>\n			</div>\n		</div>\n		<div class=\"date\">"
     + alias2((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias4).call(alias3,(depth0 != null ? depth0.prodReviewRegistDt : depth0),{"name":"dateFormat","hash":{},"data":data}))
     + "</div>\n	</dd>\n</dl>\n\n\n";
 },"useData":true});

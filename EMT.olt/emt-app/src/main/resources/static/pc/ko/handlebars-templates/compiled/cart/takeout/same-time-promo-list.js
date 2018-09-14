@@ -54,7 +54,7 @@ this["AP"]["handlebars"]["cart"]["takeout"]["same-time-promo-list"] = Handlebars
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression, alias4=container.lambda, alias5="function";
 
   return "			"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || alias2).call(alias1,(data && data.index),0,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(11, data, 0, blockParams, depths),"inverse":container.program(13, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.gt || (depth0 && depth0.gt) || alias2).call(alias1,(container.data(data, 1) && container.data(data, 1).index),0,{"name":"gt","hash":{},"data":data}),(helpers.gt || (depth0 && depth0.gt) || alias2).call(alias1,(data && data.index),0,{"name":"gt","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(11, data, 0, blockParams, depths),"inverse":container.program(13, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "\n				<input type=\"hidden\" name=\"index\" value=\""
     + alias3((helpers.counter || (depth0 && depth0.counter) || alias2).call(alias1,(container.data(data, 1) && container.data(data, 1).index),{"name":"counter","hash":{},"data":data}))
     + "\"/>\n				<input type=\"hidden\" name=\"takeoutPrdSn\" value=\""
@@ -198,8 +198,9 @@ this["AP"]["handlebars"]["cart"]["takeout"]["same-time-promo-list"] = Handlebars
 },"44":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return container.escapeExpression(((helper = (helper = helpers.awardUnitQty || (depth0 != null ? depth0.awardUnitQty : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"awardUnitQty","hash":{},"data":data}) : helper)))
-    + "개 ";
+  return "("
+    + container.escapeExpression(((helper = (helper = helpers.awardUnitQty || (depth0 != null ? depth0.awardUnitQty : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"awardUnitQty","hash":{},"data":data}) : helper)))
+    + "개) ";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 

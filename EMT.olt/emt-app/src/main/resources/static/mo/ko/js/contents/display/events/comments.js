@@ -46,7 +46,9 @@
 			//참여하기
 			this._$participateBtn.on( 'click', function (e) {
 				AP.login().done( function () {
+					
 					this._writeModal.participation();
+					
 				}.bind(this));
 			}.bind(this));
 		},

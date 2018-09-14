@@ -23,18 +23,30 @@ this["AP"]["handlebars"]["products"]["option-select"] = Handlebars.template({"1"
 },"6":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.calc || (depth0 && depth0.calc) || alias2).call(alias1,(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"onlineSalePriceDiscountRate",{"name":"availablePrices","hash":{},"data":data}),"+",(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"memberLevelDiscountRate",{"name":"availablePrices","hash":{},"data":data}),"+",(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"immedDiscountRate",{"name":"availablePrices","hash":{},"data":data}),{"name":"calc","hash":{},"data":data}),">",0,{"name":"xif","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.targetYN : stack1),"==","Y",{"name":"xif","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(9, data, 0),"data":data})) != null ? stack1 : "")
     + "						<b class=\"num\">"
     + container.escapeExpression((helpers.numberFormat || (depth0 && depth0.numberFormat) || alias2).call(alias1,(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"finalOnlinePrice",{"name":"availablePrices","hash":{},"data":data}),{"name":"numberFormat","hash":{},"data":data}))
     + "</b>원\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.saleDisplayStatus : depth0),"==","OutOfStock",{"name":"xif","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.saleDisplayStatus : depth0),"==","OutOfStock",{"name":"xif","hash":{},"fn":container.program(12, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"7":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
+
+  return "							<em class=\"discount\">"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.baseOrdQty : stack1), depth0))
+    + "+"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.freeAwardQty : stack1), depth0))
+    + "</em>\n";
+},"9":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
+
+  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.calc || (depth0 && depth0.calc) || alias2).call(alias1,(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"onlineSalePriceDiscountRate",{"name":"availablePrices","hash":{},"data":data}),"+",(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"memberLevelDiscountRate",{"name":"availablePrices","hash":{},"data":data}),"+",(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"immedDiscountRate",{"name":"availablePrices","hash":{},"data":data}),{"name":"calc","hash":{},"data":data}),">",0,{"name":"xif","hash":{},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"10":function(container,depth0,helpers,partials,data) {
     var alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return "						<em class=\"discount\">"
+  return "							<em class=\"discount\">"
     + container.escapeExpression((helpers.calc || (depth0 && depth0.calc) || alias2).call(alias1,(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"onlineSalePriceDiscountRate",{"name":"availablePrices","hash":{},"data":data}),"+",(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"memberLevelDiscountRate",{"name":"availablePrices","hash":{},"data":data}),"+",(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"immedDiscountRate",{"name":"availablePrices","hash":{},"data":data}),{"name":"calc","hash":{},"data":data}))
     + "%</em>\n";
-},"9":function(container,depth0,helpers,partials,data) {
+},"12":function(container,depth0,helpers,partials,data) {
     var alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
   return "							<del>"

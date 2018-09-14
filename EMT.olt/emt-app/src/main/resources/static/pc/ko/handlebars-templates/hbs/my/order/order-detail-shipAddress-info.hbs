@@ -16,7 +16,7 @@
 		{{/xif}}
 	</h3>
 	{{#xif this.status '==' 'detail'}}
-		{{#if (or (eq this.statusCode 'OrdReceivedWaiting') (eq this.statusCode 'OrdReceivedComplete'))}}
+		{{#if (or (or (eq this.statusCode 'OrdReceivedWaiting') (eq this.statusCode 'OrdReceivedComplete')) (eq this.statusCode 'PartialCancel'))}}
 			<button class="btn_sm_bordered" type="button" onclick="editShipAddress('{{this.data.shipAddressTypeCode}}')">배송 정보 수정</button>
 		{{/if}}
 	{{else}}

@@ -132,6 +132,9 @@ public class MyPointRestController extends AbstractController {
 			ApAdvanceRegistrationPhoneNo advanceRegistrationPhoneNo = new ApAdvanceRegistrationPhoneNo();
 			advanceRegistrationPhoneNo.setPhoneNo(getMemberSession().getMember().getPhoneNo1());
 			apApi.registerAdvanceRegistrationPhoneNo(getMemberSn(), advanceRegistrationPhoneNo);
+			MemberSession memberSession = getMemberSession();
+			memberSession.getMember().setAdvanceRegistrationPhoneNo(true);
+			setMemberSession(memberSession);
 			return ResponseEntity.ok("{}");
 		}
 		throw error(HttpStatus.UNAUTHORIZED, "ERROR", "인증에 실패했습니다. 인증번호를 확인해 주세요.");
@@ -146,28 +149,11 @@ public class MyPointRestController extends AbstractController {
 		Map<String, Object> resp = new HashMap<String, Object>();
 		try {
 			GiveBeautyPointGift body = (GiveBeautyPointGift) SessionUtils.getAttribute(getRequest(), SessionKey.PRESENT_INFO);
-			if(body.getTargetIncsNo() != null) {
-				body.setName(null);
-				body.setPhoneNo(null);
-			}
 			BooleanResult result = pointApi.giveBeautyPointGift(getMemberSn(), body);
 			if(result.isResult()) {
 				return ResponseEntity.ok("{}");
 			}
-			
-//			
-//			if(APConstant.RESULT_OK.equals(result.getRsltCd())) {
-//				return ResponseEntity.ok(resp);
-//			} else if("ICITSVBIZ212".equals(result.getRsltCd())) {
-//
-//				throw error(resp, HttpStatus.FORBIDDEN, "ICITSVBIZ212", "포인트 선물횟수를 초과하여 더 이상 선물하실 수 없습니다.<br> 포인트 선물하기 및 선물받기는 각각 한 달 최대 10회까지 가능합니다.");
-//			} else if("ICITSVBIZ206".equals(result.getRsltCd())) {
-//
-//				throw error(resp, HttpStatus.FORBIDDEN, "ICITSVBIZ206", "잔여포인트보다 선물할 포인트가 더 많습니다.");
-//			} else if("ICITSVBIZ210".equals(result.getRsltCd())) {
-//
-//				throw error(resp, HttpStatus.FORBIDDEN, "ICITSVBIZ210", "0포인트를 선물할 수 없습니다.");
-//			}
+
 		} catch(ApiException e) {
 			throw e;
 		} catch(Exception e) {

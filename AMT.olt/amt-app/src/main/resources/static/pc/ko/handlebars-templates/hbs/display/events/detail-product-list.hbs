@@ -1,0 +1,144 @@
+{{!--
+	전시 : 구매버튼이 있는 상세 상품목록 (Ch.Etude)
+--}}
+
+{{#xif this.prodListUnitCode '==' 'OnlineProd' }}
+	{{#each this.list}}
+		<li data-online-prod-sn="{{ this.onlineProdSn }}">
+			<!-- 상품 리스트 -->
+			<div class="product_box">
+				<a href="{{ productDetailPath this.onlineProdSn }}">
+					<div class="visual_section">
+						<img src="{{ this.onlineProdImages.0.imgUrl }}" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="">
+						<div class="benefit">
+							<span class="special">스페셜기프트</span>
+							<span class="gift">기프트카드</span>
+						</div>
+						{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+							<div class="soldout"><span>일시품절</span></div>
+						{{/xif}}
+					</div>
+					<!-- 상품 정보 -->
+					<div class="info_section">
+						<p class="txt_name">{{ this.onlineProdName }}</p>
+						<div class="price_atc">
+							{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+								<span class="txt_sale">
+									{{#with (calc this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate '+' this.onlineProdPriceSummary.minMemberLevelDiscountRate '+' this.onlineProdPriceSummary.minOnlineMemberDiscountRate) as |disMinRate|}}
+										{{#with (calc ../onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.maxMemberLevelDiscountRate '+' ../onlineProdPriceSummary.maxOnlineMemberDiscountRate) as |disMaxRate|}}
+											{{#xif disMinRate '!=' disMaxRate}}<span class="from">~</span>{{/xif}}<span class="to">{{ disMaxRate }}<em>%</em></span>
+										{{/with}}
+									{{/with}}
+								</span>
+							{{/xif}}
+							<span class="txt_price">{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>{{ condition ../isActivityPoint '알' '원' }}{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}} ~{{/xif}}</em></span>
+							{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+								<del class="txt_del">{{ numberFormat this.onlineProdPriceSummary.minBeforeOnlineSalePrice }}<em>{{ condition ../isActivityPoint '알' '원' }}</em></del>
+							{{/xif}}
+						</div>
+
+						<!-- 평점 리뷰 -->
+						<div class="user_atc">
+							<span class="mark_star_sm star{{this.reviewScopeAvg}}"><span class="sr_only">구매 평점 별 5개 중 {{reviewScopeAvg}}개</span></span>
+							<span class="txt_review">리뷰 {{ this.reviewCount }}</span>
+						</div>
+					</div>
+				</a>
+				<div class="work_box">
+					<ul class="item_user">
+						<li>
+							<a href="#none" role="button">
+								<i class="ico_favorite"></i><!-- active : on -->
+								<span class="sr_only">좋아요</span>
+							</a>
+						</li>
+						<li>
+							<a href="#none" role="button">
+								<i class="ico_basket"></i>
+								<span class="sr_only">장바구니</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="item_section">
+					<div class="rside">
+						<a href="#none" class="link_brand">{{ this.products.0.brandName }}</a>
+					</div>
+				</div>
+			</div>
+			<!-- // 상품 리스트 -->
+		</li>
+	{{/each}}
+{{/xif}}
+
+<!-- ==================================== 단위상품일때 ==================================== -->
+{{#xif this.prodListUnitCode '==' 'Prod' }}	
+	{{#each this.list}}
+		{{#each this.products}}
+			<li data-online-prod-sn="{{ this.prodSn }}">
+				<!-- 상품 리스트 -->
+				<div class="product_box">
+					<a href="{{ productDetailPath ../onlineProdSn ../prodSn }}">
+						<!--  상품이미지  -->
+						<span class="product_visual_new">
+							{{#xif ../saleDisplayStatus '==' 'OutOfStock'}}
+								<span class="out_of_stock"><span class="img_badge">일시품절</span></span>
+							{{/xif}}
+							<span class="lazy_load_wrap">
+								<img src="{{ ../onlineProdImages.0.imgUrl }}" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="" class="lazy_load">
+							</span>
+						</span>
+	
+						<!-- 상품 정보 -->
+						<div class="info_section">
+							<p class="txt_name">{{ this.prodName }}</p>
+							<div class="price_atc">
+								{{#xif ../onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+									<span class="txt_sale">
+										{{#with (calc ../onlineProdPriceSummary.minOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.minMemberLevelDiscountRate '+' ../onlineProdPriceSummary.minOnlineMemberDiscountRate) as |disMinRate|}}
+											{{#with (calc ../onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.maxMemberLevelDiscountRate '+' ../onlineProdPriceSummary.maxOnlineMemberDiscountRate) as |disMaxRate|}}
+												{{#xif disMinRate '!=' disMaxRate}}<span class="from">~</span>{{/xif}}<span class="to">{{ disMaxRate }}<em>%</em></span>
+											{{/with}}
+										{{/with}}
+									</span>
+								{{/xif}}
+								<span class="txt_price">{{ numberFormat ../onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>{{ condition ../isActivityPoint '알' '원' }}</em></span>
+								{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+									<del class="txt_del">{{ numberFormat ../onlineProdPriceSummary.minBeforeOnlineSalePrice }}<em>{{ condition ../isActivityPoint '알' '원' }}</em></del>
+								{{/xif}}
+							</div>
+
+							<!-- 평점 리뷰 -->
+							<div class="user_atc">
+								<span class="mark_star_sm star{{../reviewScopeAvg}}"><span class="sr_only">구매 평점 별 5개 중 {{reviewScopeAvg}}개</span></span>
+								<span class="txt_review">리뷰 {{ ../reviewCount }}</span>
+							</div>
+						</div>
+					</a>
+					<div class="work_box">
+						<ul class="item_user">
+							<li>
+								<a href="#none" role="button">
+									<i class="ico_favorite"></i><!-- active : on -->
+									<span class="sr_only">좋아요</span>
+								</a>
+							</li>
+							<li>
+								<a href="#none" role="button">
+									<i class="ico_basket"></i>
+									<span class="sr_only">장바구니</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="item_section">
+						<div class="rside">
+							<a href="#none" class="link_brand">{{ this.brandName }}</a>
+						</div>
+					</div>
+				</div>
+				<!-- // 상품 리스트 -->
+			</li>
+		{{/each}}
+	{{/each}}
+{{/xif}}

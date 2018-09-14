@@ -82,25 +82,44 @@
 				date = e.date;
 				$(".entry-point:last").after(progress);
 		    	$(".pbody").remove();
-				$.get("/my/page/myLevelListFragment?startDt="+date.startDate + "&endDt="+date.endDate + (searchGbn? ("&searchGbn=" + searchGbn) : ""), function(data) {
-					$("#m-loading").remove();
+
+				AP.api.myLevelListFragment({}, {
+						pageNumber:1,
+						startDt:date.startDate,
+						endDt:date.endDate,
+						searchGbn:$('[name=searchGbn]').val()
+				}).done(function(data) {
+
 					$(".entry-point").after(data);
 					$('#more em').text($('.item-detail').size());
 					if($('#total').text() == '0') {
 						$('#total').text($('#more em').text());
 					}
 					
-				});
+                }).fail(function(xhr, textStatus, errorThrown) {
+                	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+                }).always(function() {
+                    //성공, 실패
+					$("#m-loading").remove();
+                });
+		    	
 			});
 			$('[name=searchGbn]').change(function() {
+		    	var startDtVal = null;
+		    	var endDtVal = null;
+		    	if(date != null) {
+		    		startDtVal = date.startDate;
+		    		endDtVal = date.endDate;
+		    	}
 				searchGbn = $(this).val();
 				$(".entry-point:last").after(progress);
 		    	$(".pbody").remove();
 
-				AP.api.pearlList({}, {
+				AP.api.myLevelListFragment({}, {
 						pageNumber:1,
 						startDt:startDtVal,
-						endDt:endDtVal
+						endDt:endDtVal,
+						searchGbn:$('[name=searchGbn]').val()
 				}).done(function(data) {
 					
 					$(".entry-point").after(data);
@@ -127,9 +146,10 @@
 		    		endDtVal = date.endDate;
 		    	}
 				AP.api.myLevelListFragment({}, {
-						pageNumber:page,
+						pageNumber:pageNumber,
 						startDt:startDtVal,
-						endDt:endDtVal
+						endDt:endDtVal,
+						searchGbn:$('[name=searchGbn]').val()
 				}).done(function(data) {
 
 					$("#more").remove();

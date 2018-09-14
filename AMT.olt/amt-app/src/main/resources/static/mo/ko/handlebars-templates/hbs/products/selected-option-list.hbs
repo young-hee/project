@@ -22,6 +22,7 @@
 		{{/xif}}
 		
 		<div class="price">
+			{{#if (eq this.mPlusNPromoInfo.targetYN 'Y') }}<em style="color: #f00;">{{this.mPlusNPromoInfo.baseOrdQty}}+{{this.mPlusNPromoInfo.freeAwardQty}}</em>{{/if}}
 			<b class="item_total_price">{{ numberFormat (availablePrices this.availablePrices 'finalOnlinePrice') }}</b>원
 		</div>
 		{{#xif ../productCount '>' '1'}}

@@ -40,6 +40,11 @@
 		return this.optional( element ) || String( value ).length == param;
 	}, '{0} 자를 입력해야 합니다.' );
 
+	$.validator.addMethod( 'giftCard', function ( value, element, param ) {
+		return this.optional( element ) || String( value ).length == 12 || String( value ).length == 16;
+	}, '기프트카드의 일련번호는 12자리 또는 16자리에요. 다시 한번 확인해보시고 입력해주세요.' );
+
+
 	//최소 byte 제한
 	$.validator.addMethod( 'min-byte', function ( value, element, param ) {
 		return this.optional( element ) || AP.common.getByteLength( value ) >= param;

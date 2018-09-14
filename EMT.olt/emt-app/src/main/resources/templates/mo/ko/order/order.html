@@ -2,6 +2,13 @@
 <body>
 <!-- #ap_container -->
 <div ap:fragment="layout-contents">
+	
+	<!-- aki iframe test -->
+	<div id="mask">
+		<iframe id="paymentIframe" name="paymentIframe" style="display:none"></iframe>
+	</div>
+	<!-- //aki iframe test -->
+	
 	<!-- page contents -->
 	<div class="ap_contents cart order">
 		<form class="order-validate" id="order-recept-info" name="orderForm" method="post">
@@ -98,31 +105,30 @@
 	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use.js}"></script> 				<!--사용가능한 쿠폰목록 Layer-->
 	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use-avail.js}"></script> 		<!--사용가능한 쿠폰목록 -->
 	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use-download.js}"></script> 		<!--다운로드 쿠폰목록 -->
+	<script ap:src="@{/handlebars-templates/compiled/order/fullpage-coupon-use-nonMemberAvail.js}"></script><!--비회원 입력 쿠폰목록 -->
 	<script ap:src="@{/handlebars-templates/compiled/order/coupon-use-list.js}"></script> 					<!--선택된 쿠폰목록 -->
 	<script ap:src="@{/handlebars-templates/compiled/order/final-price-amt-pcur.js}"></script> 				<!-- 최종 결제금액 영역 -->
 	<script ap:src="@{/handlebars-templates/compiled/order/order-unit-award-info.js}"></script> 			<!-- 주문단위증정 -->
 
 	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
+	<!-- 네이버 페이 결제 스크립트 -->
+	<script src="https://nsp.pay.naver.com/sdk/js/naverpay.min.js"></script>
 	<script th:inline="javascript">
-
-		var payPopup,
-			isApMember = /*[[${isApMember}]]*/ false;
+		
+		//aki iframe test
+		$("#paymentIframe").css({"position":"fixed", "top":"0", "left":"0","width":"100%", "height":"100%", "background":"rgba(0, 0, 0, 0.3)", "z-index":"100"});
+		var  payPopup,
+			isApMember = /*[[${isApMember}]]*/ false,
+			promoLimitedProdSnList	= /*[[${ordEx.promoLimitedProdSnList}]]*/ null;		//프로모션 제한된 상품목록
 
 		$( document ).ready(function() {
 
-			//주문완료화면 오류 발생시
-			var ordCompleteError = /*[[${ordCompleteError}]]*/ null;
-			if(ordCompleteError != null){
-				var errorCode = ordCompleteError.errorCode,
-					errorMessage = ordCompleteError.errorMessage,
-					errorAdditional = ordCompleteError.errorAdditional;
-				if (errorCode != null) {
-					AP.modal.alert(errorMessage + '(' + errorCode + ')<br/>' + errorAdditional.detail);
-				}
-			}
-
 			if(!isApMember){
 				nonmemberNotice();
+			}
+
+			if (promoLimitedProdSnList != null && promoLimitedProdSnList.length > 0) {
+				AP.modal.alert("할인프로모션의 한도가 초과되어 일부 상품은 정상가로 결제됩니다.");
 			}
 
 			$('#footer').remove();
@@ -132,6 +138,7 @@
 		$( '.ui_find_addresses' ).findAddresses();
 		// 수량 조절
 		$( '.ui_spinner' ).spinner();
+		$( '.ui_tooltip' ).tooltip();
 		// 글자수 제한
 		$( 'input[maxlength]' ).inputLimits();
 
@@ -145,32 +152,31 @@
 					//최근배송지
 					var addressType = $('input[name=addressType]').val();
 					if (addressType == 'LATELY'
-						&& ($('#recipientName').val() == null
-							|| $('#recipientPhoneNo').val() == null
-							|| $('#recipientEmailAddress').val() == null
-							|| $('#recipientZipCode').val() == null
-							|| $('#recipientAddress1').val() == null
-							|| $('#recipientAddress2').val() == null)) {
-						AP.modal.alert("최근배송지 정보가 존재하지 않습니다.");
+						&& ($('#recipientName').val() == ''
+							|| $('#recipientPhoneNo').val() == ''
+							|| $('#recipientZipCode').val() == ''
+							|| $('#recipientAddress1').val() == ''
+							|| $('#recipientAddress2').val() == '')) {
+						AP.modal.alert("최근배송지 정보를 확인하세요.");
 						return;
 					}
 					//기본배송지
 					else if (addressType == 'NOMAL'
-						&& ($('#addressName').val() == null
-							|| $('#addressPhoneNo').val() == null
-							|| $('#addressZipCode').val() == null
-							|| $('#addressAddress1').val() == null
-							|| $('#addressAddress2').val() == null)) {
-						AP.modal.alert("기본배송지 정보가 존재하지 않습니다.");
+						&& ($('#addressName').val() == ''
+							|| $('#addressPhoneNo').val() == ''
+							|| $('#addressZipCode').val() == ''
+							|| $('#addressAddress1').val() == ''
+							|| $('#addressAddress2').val() == '')) {
+						AP.modal.alert("기본배송지 정보를 확인하세요.");
 						return;
 					}
 					//새로입력(form validation)
 					/*else if (addressType == 'NEW'
-                        && ($('#userName').val() == null
-                            || $('#userPhoneNo').val() == null
-                            || $('#userPostCode').val() == null
-                            || $('#userAddress1').val() == null
-                            || $('#userAddress2').val() == null)) {
+                        && ($('#userName').val() == '''
+                            || $('#userPhoneNo').val() == '''
+                            || $('#userPostCode').val() == ''
+                            || $('#userAddress1').val() == ''
+                            || $('#userAddress2').val() == '')) {
                         AP.modal.alert("주소정보를 입력해 주세요.");
                         return;
                     }*/
@@ -190,8 +196,8 @@
 				}
 				//새로입력(form validation)
 				else if (addressStoreType == 'NEW'
-					&& ($('#cStoreRecipientName').val() == null
-						|| $('#cStoreRecipientPhoneNo').val() == null)) {
+					&& ($('#cStoreRecipientName').val() == ''
+						|| $('#cStoreRecipientPhoneNo').val() == '')) {
 					AP.modal.alert("받으시는 분의 이름을 입력하세요.");
 					return;
 				}
@@ -237,7 +243,7 @@
 						}).addListener('modal-close', function (e) {
 							if (e.closeType === 'confirm') {
 								//주문사은품 선택하지 않고 결제 진행.
-								ordReceptPayAmt();
+								ordReceptChange();
 							} else {
 								//주문사은품 선택하기로
 								$('#ordUnitAcc').addClass("on");
@@ -246,7 +252,7 @@
 						});
 					} else {
 						//주문사은품 선택했고 결제 진행.
-						ordReceptPayAmt();
+						ordReceptChange();
 					}
 
 				} else {
@@ -256,33 +262,15 @@
 
 		});
 
-		/* 결제하기(최종결제수단선택) */
-		function ordReceptPayAmt() {
-
-			//주문자 정보 세팅
-			var userName = $("input[name=purchaserName]").val();
-			var userPhoneNo = $("input[name=purchaserPhoneNo]").val();
-			var userEmail = $("input[name=purchaserEmailAddress]").val();
-			if(userName != "" || userPhoneNo != ""){
-				$('input[name=buyerName]').attr('value', userName);
-				$('input[name=mobile]').attr('value', userPhoneNo);
-				$('input[name=email]').attr('value', userEmail);
-			}
-
+		/* 주문정보 변경 */
+		function ordReceptChange() {
 			var ordSn			= /*[[${ordEx.ordSn}]]*/ '0';													// 주문번호
 			var finalPamtPcur	= $("[name=finalPamtPcur]").val() == '' || $("[name=finalPamtPcur]").val() == undefined ? 0 : $("[name=finalPamtPcur]").val();	// 최종결제금액
-			var depositPrice	= $("[name=depositPrice]").val() == '' || $("[name=depositPrice]").val() == undefined ? 0 : $("[name=depositPrice]").val();	// 예치금
+			var depositPrice	= $("[name=depositPrice]").val() == '' || $("[name=depositPrice]").val() == undefined ? 0 : $("[name=depositPrice]").val();		// 예치금
 			var pgPrice 		= isApMember ? finalPamtPcur - parseInt(depositPrice) : finalPamtPcur;		// 최종결제금액 - 예치금사용금액
 
 			// PG사 결제정보 세팅
 			var payMethod 		= $("input:radio[name=payMethod]:checked").val();
-			var payMethodSn =  $("input[name=payMethodSn]").val();						// 결제수단일련번호
-			var payMethodCode =  $("input[name=payMethodCode]").val();					// 결제수단코드
-			var payServiceCode =  $("input[name=payServiceCode]").val();				// 결제서비스코드
-			var cardCo			= $("select[name=cardCo]").val();						// 신용카드사 선택
-			var creditcardCoSn	= $("select[name=cardCo] option:selected").attr("id");
-			var nextPayUseYn	= $("[name=nextPayUseYn]").val();
-
 			if (pgPrice > 0) {
 				if (depositPrice == 0) {
 					if (payMethod == null || payMethod == '') {
@@ -298,7 +286,58 @@
 				$('[name=price]').attr('value', pgPrice);
 			}
 
-			$('#orderLoading').show();
+			var $form = $('form.order-validate');
+			var formData = AP.common.getFormData($form);
+			formData['ordSn'] = ordSn;
+
+			//$('#orderLoading').show();
+			$.ajaxSettings.traditional = true;
+			AP.api.ordReceptChange({}, formData).done(function(data) {
+				//성공
+				if (data.result == "success"){
+					ordReceptPayAmt(ordSn);
+				}else {
+					AP.modal.alert("[api.ordReceptChange]실패");
+				}
+			}).fail(function(xhr, textStatus, errorThrown) {
+				if (xhr.errorCode == 0) {
+					AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+				} else {
+					AP.modal.alert(xhr.errorMessage);
+				}
+				//$('#orderLoading').hide();
+			}).always(function() {
+				//성공, 실패
+			});
+		}
+
+		/* 결제하기(최종결제수단선택) */
+		function ordReceptPayAmt(ordSn) {
+
+			//주문자 정보 세팅
+			var userName = $("input[name=purchaserName]").val();
+			var userPhoneNo = $("input[name=purchaserPhoneNo]").val();
+			var userEmail = $("input[name=purchaserEmailAddress]").val();
+			if(userName != "" || userPhoneNo != ""){
+				$('input[name=buyerName]').attr('value', userName);
+				$('input[name=mobile]').attr('value', userPhoneNo);
+				$('input[name=email]').attr('value', userEmail);
+			}
+
+			var finalPamtPcur	= $("[name=finalPamtPcur]").val() == '' || $("[name=finalPamtPcur]").val() == undefined ? 0 : $("[name=finalPamtPcur]").val();	// 최종결제금액
+			var depositPrice	= $("[name=depositPrice]").val() == '' || $("[name=depositPrice]").val() == undefined ? 0 : $("[name=depositPrice]").val();	// 예치금
+			var pgPrice 		= isApMember ? finalPamtPcur - parseInt(depositPrice) : finalPamtPcur;		// 최종결제금액 - 예치금사용금액
+
+			// PG사 결제정보 세팅
+			var payMethod 		= $("input:radio[name=payMethod]:checked").val();
+			var payMethodSn =  $("input[name=payMethodSn]").val();						// 결제수단일련번호
+			var payMethodCode =  $("input[name=payMethodCode]").val();					// 결제수단코드
+			var payServiceCode =  $("input[name=payServiceCode]").val();				// 결제서비스코드
+			var cardCo			= $("select[name=cardCo]").val();						// 신용카드사 선택
+			var creditcardCoSn	= $("select[name=cardCo] option:selected").attr("id");
+			var nextPayUseYn	= $("[name=nextPayUseYn]").val();
+
+			// 결제 레이어 호출전 체크 로직 api 호출 후 연결
 			AP.api.ordReceptPayAmt({}, {
 				ordSn: ordSn,
 				payMethodSn : payMethodSn,
@@ -310,26 +349,6 @@
 				payServiceCode : payServiceCode
 			}).done(function (data) {
 				if (data.result == "success"){
-					ordReceptChange(ordSn, pgPrice);
-				} else {
-					AP.modal.alert("[api.ordReceptPayAmt]실패");
-				}
-			}).fail(function (e) {
-				AP.modal.alert(e.responseJSON.errorData.message);
-				$('#orderLoading').hide();
-			}).always(function () {
-			});
-		}
-
-		/* 주문정보 변경 */
-		function ordReceptChange(ordSn, pgPrice) {
-			var $form = $('form.order-validate');
-			var formData = AP.common.getFormData($form);
-			formData['ordSn'] = ordSn;
-			$.ajaxSettings.traditional = true;
-			AP.api.ordReceptChange({}, formData).done(function(data) {
-				//성공
-				if (data.result == "success"){
 					if(pgPrice > 0){
 						getPayment();
 					}else{
@@ -338,45 +357,46 @@
 						$form.attr("action", "/order/ordComplete");
 						$form.submit();
 					}
-					$('#orderLoading').hide();
-				}else {
-					AP.modal.alert("[api.ordReceptChange]실패");
-				}
-			}).fail(function(xhr, textStatus, errorThrown) {
-				if (xhr.errorCode == 0) {
-					AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
 				} else {
-					AP.modal.alert(xhr.errorMessage);
+					AP.modal.alert("[api.ordReceptPayAmt]실패");
 				}
-				$('#orderLoading').hide();
-			}).always(function() {
-				//성공, 실패
+			}).fail(function (e) {
+				AP.modal.alert(e.responseJSON.errorData.message);
+				//$('#orderLoading').hide();
+			}).always(function () {
 			});
 		}
 
 		/* 결제모듈 연결 */
+		<!-- aki iframe test  중..-->
 		function getPayment() {
+			
+			payPopup = false;
 			//aki 추가
 			//결제수단
 			var selectedPaymethod = $('input:radio[name="payMethod"]:checked').val();
 
-			//모두 새창으로 연결 (기확자 확인)
-			payPopup = window.open('about:blank','payPopup');
+			//모두 iframe 처리
+			//payPopup = window.open('about:blank','payPopup');
 
 			var $form = $("form[name='orderForm']");
 			
 			//상품명 대표 상품명 한개로 셋팅
 			var $_productName = $(".cart_name_wrap").find("input:hidden[name='prodName']").first();
+			var $_bulkDcProductName = $(".cart_name_wrap").find("input:hidden[name='bulkDcProdName']").first();
 			$hidden = $("<input />");
 			$hidden.prop("type", "hidden");
 			$hidden.prop("name", "repProdName");
-			$hidden.prop("value", $_productName.val());
+			$hidden.prop("value", $_bulkDcProductName.val() ? $_bulkDcProductName.val() : $_productName.val());
 			$form.append($hidden);
 			
 			var actionUrl;
 
 			//네이버 결제
 			if('NAVERPAY' == selectedPaymethod) {
+				
+				//payPopup = window.open('about:blank','payPopup');
+				
 				actionUrl = "/payment/naverPay";
 				var prods = [];
 				var $prodBoundarys = $(".cart_name_wrap");
@@ -406,21 +426,207 @@
 					$hidden.prop("value", $_prodQty.val());
 					$form.append($hidden);
 				});
+				
+				AP.api.moNaverPay({}, AP.common.getFormData($form)).done(function(data) {
+					var naverParamMap = new Map();
+					naverParamMap = data;
+
+					var $naverPayForm = $("<form />");
+					$.map(naverParamMap, function(value, key) {
+						$hidden = $("<input />");
+						$hidden.prop("type", "hidden");
+						$hidden.prop("name", key);
+						$hidden.prop("value", value);
+						$naverPayForm.append($hidden);
+
+					});
+					
+					var clientId = $naverPayForm.find("input:hidden[name='clientId']").val(); 
+					var mode = $naverPayForm.find("input:hidden[name='mode']").val(); 
+					var merchantPayKey = $naverPayForm.find("input:hidden[name='merchantPayKey']").val();  
+					var productName =  $naverPayForm.find("input:hidden[name='productName']").val();   
+					var productCount = $naverPayForm.find("input:hidden[name='productCount']").val();  
+					var totalPayAmount = $naverPayForm.find("input:hidden[name='totalPayAmount']").val();  
+					var taxScopeAmount = $naverPayForm.find("input:hidden[name='taxScopeAmount']").val();  
+					var taxExScopeAmount = $naverPayForm.find("input:hidden[name='taxExScopeAmount']").val(); 
+					var returnUrl =  $naverPayForm.find("input:hidden[name='returnUrl']").val(); 
+					
+					 var oPay = Naver.Pay.create({
+				          "mode" : mode, // development or production
+				          "clientId": clientId, // clientId
+				          "openType": "page"
+				        
+				    });
+				
+				     oPay.open({
+				          "merchantPayKey": merchantPayKey,
+				          "productName": productName,
+				          "productCount" : productCount,
+				          "totalPayAmount": totalPayAmount,
+				          "taxScopeAmount": taxScopeAmount,
+				          "taxExScopeAmount": taxExScopeAmount,
+				          "returnUrl": returnUrl
+				        });
+				});
 			}
+			
 			//원터치 간편결제
 			else if('WPAY' == selectedPaymethod) {
+				
+				payPopup = window.open('about:blank','payPopup');				
+				
 				actionUrl = "/payment/wpay";
+				$form.attr("method", "post");
+				$form.attr("action", actionUrl);
+				$form.attr("target", 'payPopup');
+				$form.submit();
+				
 			}
 			//기타 이니시스
 			else {
-				actionUrl = "/payment/iniPay";
+				//actionUrl = "/payment/iniPay";
+				
+				$("form[name='inipayForm']").remove();
+
+				 AP.api.moInipayReq({}, AP.common.getFormData($form)).done(function(data) {
+
+					var iniParamMap = new Map();
+					iniParamMap = data;
+
+					var $iniform = $("<form />");
+
+					$.map(iniParamMap, function(value, key) {
+						$hidden = $("<input />");
+						$hidden.prop("type", "hidden");
+						$hidden.prop("name", key);
+						$hidden.prop("value", value);
+						$iniform.append($hidden);
+
+					});
+					
+					//<input type="hidden" name="P_CHARSET" value="utf8">
+					$hidden = $("<input />");
+					$hidden.prop("type", "hidden");
+					$hidden.prop("name", "P_CHARSET");
+					$hidden.prop("value", "utf8");
+					$iniform.append($hidden);
+					
+					var paymethod = $iniform.find("input:hidden[name='paymethod']").val();
+					var url = "https://mobile.inicis.com/smart/" + paymethod + "/";
+
+					$iniform.attr("method", "post");
+					$iniform.attr("name", "inipayForm");
+					$iniform.attr("target", "paymentIframe");
+					$iniform.attr("accept-charset", "euc-kr");
+					$iniform.attr("action", url);
+					$(document.body).append($iniform);
+					
+					//전체 dimm처리
+					wrapWindowByMask();
+					
+					//이니시스 아이프레임 활성화
+					$("#paymentIframe").css("display", "block");
+					 
+					//이니시스 아이프레임 화면의 높이와 너비를 구한다.
+			        var iframeHeight = $(window).height();  
+			        var iframeWidth = $(window).width();
+			        $("#paymentIframe").attr("width", iframeWidth);
+			        $("#paymentIframe").attr("height", iframeHeight);
+			        
+			        //호출
+					$iniform.submit();
+					
+				}).fail(function(xhr, textStatus, errorThrown) {
+					AP.modal.alert(xhr.errorMessage);
+					//$('#orderLoading').hide();
+				}).always(function() {
+					//성공, 실패
+				}); 
 			}
+			
+		
+		}
+		
+		function iniComplete($resultForm) {
+			
+			var $form = $resultForm;
+			
+			var resultCode = $form.find("input:hidden[name='resultCode']").val();
+			if(resultCode == '00') {	//결제 성공
+				
+				$form.attr("target", "_parent");	//본창에서 submit
+				$form.attr("name", "inipayResult");
+				$form.attr("action", "/order/ordComplete");
+				$form.submit();	
+				
+			} else {
+				var msg;
+				   if($form.find("input:hidden[name='P_RMESG1']") != null) {
+						msg = $form.find("input:hidden[name='P_RMESG1']").val();
+						if(msg ==null || msg == '' || msg== 'undefined') {
+							
+							msg = "결제 중 시스템 오류가 발생하였습니다. 관리자 문의바랍니다.";	
+						}
+					} else {
+						msg = "결제 중 시스템 오류가 발생하였습니다. 관리자 문의바랍니다.";
+					}
+				payFailResult(msg);
+				$('#mask').css("display","none");
+			}
+			
+		}
+		
+		function iniBankComplete($resultForm) {
+			var $form = $resultForm;
+			$form.attr("target", "_parent");	//본창에서 submit
+			$form.attr("name", "inipayResult");
+			$form.attr("action", "/order/ordBankComplete");
+			$form.submit();	
+		}
+		
+		function iniBankCancel(msg) {			
+			payFailResult(msg);
+			$('#mask').css("display","none");
+		}
+		
+		function iniWpayComplete($resultForm) {
+			var resultCode = $form.find("input:hidden[name='resultCode']").val();
+			if(resultCode == '0000') {	//결제 성공
+				
+				//부모창에서 서브밋
+				opener.window.name = "reception";
+				$form.attr("target", "_parent");
+				$form.attr("action", "/order/ordComplete")
+				$form.submit();	
+				
+			} else {
+				var msg;
+				if($form.find("input:hidden[name='resultMsg']") != null) {
+					msg = $form.find("input:hidden[name='resultMsg']").val();
+					if(msg ==null || msg == '' || msg== 'undefined') {
+						
+						msg = "결제 중 시스템 오류가 발생하였습니다. 관리자 문의바랍니다.";	
+					}
+				} else {
+					msg = "결제 중 시스템 오류가 발생하였습니다. 관리자 문의바랍니다.";
+				}
+			   
+			   alert(msg);
+			}
+		} 
+		
+		//결제창 호출시 dimm처리 
+		function wrapWindowByMask(){
+	        //화면의 높이와 너비를 구한다.
+	        var maskHeight = $(document).height();  
+	        var maskWidth = $(window).width();  
 
-			$form.attr("method", "post");
-			$form.attr("action", actionUrl);
-			$form.attr("target", 'payPopup');
-			$form.submit();
+	        //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
+	        $('#mask').css({'width':maskWidth,'height':maskHeight});  
 
+	        //애니메이션 효과
+	        $('#mask').fadeIn(500);      
+	       
 		}
 
 		/* 결제실패 혹은 중간에 결제 종료시 메세지 출력 */

@@ -3,6 +3,10 @@ this["AP"]["handlebars"] = this["AP"]["handlebars"] || {};
 this["AP"]["handlebars"]["products"] = this["AP"]["handlebars"]["products"] || {};
 
 this["AP"]["handlebars"]["products"]["detail_info_notice"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.disclosureItemCode : depth0),"!=","1807",{"name":"xif","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"2":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
   return "		<dl class=\"dl_cont2\">\n			<dt class=\"disclosure\" >"

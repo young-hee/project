@@ -1,0 +1,91 @@
+				<div class="item_info" >
+					<!--결제 히든값-->
+					<input type="hidden" name="onlinePordSn" th:value="${ordOnlineProd.onlineProdCode}"/>
+					<input type="hidden" name="prodName" th:value="${ordOnlineProd.onlineProdName}"/>
+					<input type="hidden" name="prodQty" th:value="${ordOnlineProd.ordQtySum}"/>
+					<!--//결제 히든값-->
+					<input type="hidden" id="ordHistProdCnt" name="ordHistProdCnt" th:value="${#lists.size(ordOnlineProd.ordHistProdList)}"/>
+					<!--/* 상품 이미지 */-->
+					<div class="item_thumb">
+						<th:block th:if="${ordOnlineProd.prodImgUrl != null}"><img class="thm_cart_item" th:src="${ordOnlineProd.prodImgUrl}"></th:block>
+						<th:block th:unless="${ordOnlineProd.prodImgUrl != null}"><img class="thm_cart_item" th:src="${ordOnlineProd.onlineProdImgUrl}"></th:block>
+					</div>
+					<!--/* 상품명 */-->
+					<div class="item_name">
+						<th:block th:switch="${memberShip}">
+							<th:block th:case="'P'"><span class="flag">뷰티포인트 전용</span></th:block>
+							<th:block th:case="'A'"><span class="flag">진주알 전용</span></th:block>
+						</th:block>
+						<span class="title">
+							<th:block th:if="${ordOnlineProd.prodTypeCode == 'Presale'}">
+								<em>[예약판매중]</em>
+							</th:block>
+							<th:block th:text="${ordOnlineProd.onlineProdName}">애니 쿠편 올데이 퍼펙트 리필 SPF50+/PA+++</th:block>
+						</span>
+					</div>
+					<!--/* 포인트 및 가격 */-->
+					<div class="price">
+						<!--/* 상품 수량 */-->
+						<span class="strong">
+							<b th:text="${ordOnlineProd.ordQtySum > 0 ? ordOnlineProd.ordQtySum : '0'}">0</b>개
+						</span>
+						<th:block th:switch="${memberShip}">
+							<th:block th:case="'P'"><span class="strong"><b th:text="${#IntegUtil.toCommaNumber(ordOnlineProd.finalOnlineSaleAmtPcurSumExchMembership)}">0</b>P</span></th:block>
+							<th:block th:case="'A'"><span class="strong"><b th:text="${#IntegUtil.toCommaNumber(ordOnlineProd.finalOnlineSaleAmtPcurSumExchActivity)}">0</b>알</span></th:block>
+							<th:block th:case="*"><span class="strong"><b th:text="${#IntegUtil.toCommaNumber(ordOnlineProd.finalOnlineSaleAmtPcurSum)}">0</b>원</span></th:block>
+						</th:block>
+					</div>
+				</div>
+
+				<th:block th:switch="${memberShip}">
+					<th:block th:case="'P'"></th:block>
+					<th:block th:case="'A'"></th:block>
+					<th:block th:case="*">
+						<!--단위상품-->
+						<th:block th:if="${#lists.size(ordOnlineProd.ordHistProdList) > 0}">
+							<th:block th:if="${ordOnlineProd.singleProdYn != 'Y'}">
+								<ul class="item_option">
+									<th:block th:each="ordHistProd, iterStat : ${ordOnlineProd.ordHistProdList}">
+										<li>
+											<div class="option_name">
+												<th:block th:if="${ordHistProd.ordProdEx.prodImgUrl != null}"><img class="thm_cart_item" th:src="${ordHistProd.ordProdEx.prodImgUrl}"></th:block>
+												<th:block th:unless="${ordHistProd.ordProdEx.prodImgUrl != null}"><img class="thm_cart_item" th:src="${ordHistProd.ordProdEx.onlineProdImgUrl}"></th:block>
+												<th:block th:text="${ordHistProd.ordProdEx.prodNameBlang}">RD302 말린딸기시럽</th:block>
+											</div>
+											<div class="option_price">
+												<span><th:block th:text="${ordHistProd.ordQty} + 개">1개</th:block></span>
+											</div>
+										</li>
+									</th:block>
+								</ul>
+							</th:block>
+						</th:block>
+						<!--단위상품-->
+
+						<!--사은품-->
+						<th:block th:if="${#lists.size(ordOnlineProd.ordHistProdPromoAwardExList) > 0 or #lists.size(ordOnlineProd.ordHistProdAwardExList) > 0}">
+							<ul class="freebies">
+								<th:block th:each="ordHistProdPromoAwardEx, iterStat : ${ordOnlineProd.ordHistProdPromoAwardExList}"
+										  th:with="ordOnlineProd=${ordHistProdPromoAwardEx.awardOrdHistProdEx.ordProdEx}">
+									<li>
+								<span class="option_name">
+									<img th:src="${ordOnlineProd.prodImgUrl}">
+									<th:block th:text="${ordOnlineProd.prodNameBlang}">사은품 : 컬러풀 드로잉 디어 마이 블루밍 립스톡 쉬폰</th:block>
+								</span>
+									</li>
+								</th:block>
+								<th:block th:each="ordHistProdAwardEx, iterStat : ${ordOnlineProd.ordHistProdAwardExList}"
+										  th:with="ordOnlineProd=${ordHistProdAwardEx.awardOrdHistProdEx.ordProdEx}">
+									<li>
+								<span class="option_name">
+									<img th:src="${ordOnlineProd.prodImgUrl}">
+									<th:block th:text="${ordOnlineProd.prodNameBlang}">사은품 : 컬러풀 드로잉 디어 마이 블루밍 립스톡 쉬폰</th:block>
+								</span>
+									</li>
+								</th:block>
+							</ul>
+						</th:block>
+						<!--사은품-->
+					</th:block>
+				</th:block>
+

@@ -21,7 +21,7 @@
                         <div class="my_bt_point">
                             <dl>
                                 <dt>나의 보유 뷰티포인트</dt>
-                                <dd><span class="num" th:text="${#IntegUtil.toCommaNumber(point.rmnPt)}">20,000</span>P</dd> <!-- 03-05 수정 -->
+                                <dd><span class="num" th:text="${#IntegUtil.toCommaNumber(point.remainBeautyPoint)}">20,000</span>P</dd> <!-- 03-05 수정 -->
                             </dl>
                         </div>
                         <hr class="div m30">
@@ -96,9 +96,6 @@
 					if(point%10 != 0) {
 						$(this).val(point - (point%10));
 					}
-					if(point > [[${point.rmnPt}]]) {
-						$(this).val([[${point.rmnPt}]]);
-					}
 				});
 
 				$('[name="changeMethod"]').change(function() {
@@ -130,6 +127,18 @@
 							AP.modal.alert("선물할 뷰티포인트를 입력해 주세요.");
 							$('#giftPoint').focus();
 							return;
+						}
+						var point = Number($('#giftPoint').val());
+						if(point > [[${point.remainBeautyPoint}]]) {
+							AP.modal.alert("보유 포인트보다 더 많은 액수를 선물할 수 없습니다.");
+							return;
+						}
+						if(point > 50000) {
+							AP.modal.alert("포인트 선물하기는 1회 최대 50,000P까지 가능합니다.");
+							return;
+						}
+						if(point%10 != 0) {
+							$('#giftPoint').val(point - (point%10));
 						}
 			      	  	$(this).attr("disabled", "disabled");
 		                AP.api.checkPresentMember({}, AP.common.getFormData($('form'))).done(function(data) {

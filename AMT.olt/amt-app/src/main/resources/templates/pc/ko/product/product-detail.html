@@ -84,7 +84,6 @@
 							
 							<a href="#none" class="review">
 								<span class="txt" th:text="${'리뷰 ' + #numbers.formatInteger( prd.reviewCount, 0, 'COMMA')}">리뷰 360</span>
-								<span class="txt">리뷰</span>
 							</a>
 						</div>
 						
@@ -99,15 +98,7 @@
 									  		  ,disMaxRate=${price.maxOnlineSalePriceDiscountRate + price.maxMemberLevelDiscountRate + price.maxOnlineMemberDiscountRate + price.maxImmedDiscountRate}">
 									<span th:if="${disMinRate != disMaxRate}">최대</span>
 									<span class="num">
-										<em th:text="${disMaxRate}">30</em>%
-									</span>
-								</span>
-								
-								<!-- /* 이중가 표기하지 않고 회원 할인만 있을 경우 처리 */ -->
-								<span class="discount" th:if="${price.doublePriceDisplayYn == 'N' && price.onlineMemberDiscountYn == 'Y'}">
-									<span class="from" th:if="${price.minOnlineMemberDiscountRate != price.maxOnlineMemberDiscountRate}">~</span>
-									<span class="to">
-										<strong th:text="${price.minOnlineMemberDiscountRate}"></strong>%
+										<em th:text="${prd.availablePrices[0].maxFinalDiscountRate}">30</em>%
 									</span>
 								</span>
 								
@@ -120,10 +111,9 @@
 								
 								<!-- /* 일반 */ -->
 								<span class="price" th:if="${currencySign != 'P'}"> 
-									<del th:if="${price.doublePriceDisplayYn == 'Y'}" th:text="${#numbers.formatInteger(price.minBeforeOnlineSalePrice, 0, 'COMMA') + currencySign}">0원</del>
-									<span class="num" th:text="${#numbers.formatInteger( price.minOnlineMemberDiscountPrice, 0, 'COMMA')}">0</strong>
+									<del th:if="${price.doublePriceDisplayYn == 'Y'}" th:text="${#numbers.formatInteger(prd.availablePrices[0].maxFinalDiscountBeforeSalePrice, 0, 'COMMA') + currencySign}">0원</del>
+									<span class="num" th:text="${#numbers.formatInteger( prd.availablePrices[0].maxFinalDiscountOnlinePrice, 0, 'COMMA')}">0</strong>
 									<span th:text="${currencySign}"></span>
-									<span th:if="${price.minOnlineMemberDiscountPrice != price.maxOnlineMemberDiscountPrice}">~</span>
 								</span>
 								<b th:if="${price.onlineMemberDiscountYn == 'Y'}">VVIP 할인가</b>
 							</div>
@@ -132,10 +122,10 @@
 							<div class="util">
 								<!-- 좋아요 class="on" -->
 								<button type="button" id="likeBtn">
-									<i class="ico_good">
+									<i class="ico_good" th:classappend="${prd.shoppingMarkExistYn == 'Y' ? 'on' : ''}">
 										<span class="sr_only">좋아요</span>
 									</i> 
-									<b class="num" th:text="${prd.recommendCount}"></b>
+									<b class="num" th:text="${prd.shoppingMarkCountSum}"></b>
 								</button>
 									
 								<!-- 공유하기 class="on" -->
@@ -150,30 +140,19 @@
 						<div class="purchase_benefit">
 							<div class="ui_accordion">
 								<dl>
-									<th:block th:if="${prd.availablePrices[0].minFinalOnlinePrice > prd.shipFeeFreeBamt}">
-										<dt><button type="button" class="title"><i class="ico_delivery"></i>무료배송</button></dt>
+									<th:block th:if="${prd.availablePrices[0].minFinalOnlinePrice > prd.shipFeeFreeBamt || prd.prodTypeCode == 'Presale'}">
+										<dt><button type="button" class="title"><i class="ico_delivery"></i>무료배송 <th:block th:if="${prd.prodTypeCode == 'Presale'}"> / <em>예약배송</em></th:block></button></dt>
 									</th:block>
-									<th:block th:unless="${prd.availablePrices[0].minFinalOnlinePrice > prd.shipFeeFreeBamt}">
+									<th:block th:if="${prd.prodTypeCode != 'Presale'}" th:unless="${prd.availablePrices[0].minFinalOnlinePrice > prd.shipFeeFreeBamt}">
 										<dt><button type="button" class="title"><i class="ico_delivery"></i>일반배송 <em>[[${#numbers.formatInteger(prd.defaultShipFee, 0, 'COMMA')}]]원</em></button></dt>
 									</th:block>
 									<dd>
 										<div>
 											<p>최종 결제금액이 [[${#numbers.formatInteger(prd.shipFeeFreeBamt, 0, 'COMMA')}]]원 이상이면 무료로 배송됩니다.</p>
+											<p th:if="${prd.prodTypeCode == 'Presale'}" th:utext="${prd.reserveShipDesc}"></p>
 										</div>
 									</dd>
 								</dl>
-								
-								<!-- 예약 배송
-								<dl> 
-									<dt><button type="button" class="title"><i class="ico_delivery"></i>무료배송 / <em>예약배송</em></button></dt>
-									<dd>
-										<div>
-											<p>최종 결제금액이 10,000원 이상이면 무료로 배송됩니다.</p>
-											<p>해당 상품은 <em>사전예약상품</em>으로 <em>01월 26일</em>부터 순차배송 예정입니다.</p>
-										</div>
-									</dd>
-								</dl>
-								-->
 								
 								<dl>
 									<dt><button type="button" class="title"><i class="ico_pay"></i>원페이 / 카드사 혜택정보</button></dt>
@@ -204,7 +183,7 @@
 						
 						<!--/* 스페셜 기프트 / 어워드 */-->
 						<div class="additional">
-							<!--/* 스펠셜 기프트 *
+							<!--/* 스펠셜 기프트 */-->
 							<dl class="special_gift" th:if="${#lists.size(prd.onlineProdGift.giftProds) > 0 }">
 								<dt class="title">
 									<i class="ico_gift"></i> 스페셜 기프트 <small>뷰티포인트 결제시 제외</small>
@@ -231,16 +210,16 @@
 									</div>
 								</dd>
 							</dl>
-							/-->
-							<!--/* 어워드 
-							<dl class="awards_list">
+							
+							<!--/* 어워드 */-->
+							<dl class="awards_list" th:if="${#lists.size(awards) > 0}">
 								<dt class="title"><i class="ico_award"></i> 어워드 수상내역</dt>
 								<dd>
 									<div class="slide" data-ix-options="view-length:6; loop:false;">
 										<div class="ix-list-viewport">
 											<ul class="ix-list-items">
-												<li class="ix-list-item">
-													<img ap:src="@{/images/product/img_award.png}" alt="{어워드명}" class="award">
+												<li class="ix-list-item" th:each="award : ${awards}">
+													<img th:src="${award.addAttrImg}" th:alt="${award.addAttrValName}" class="award">
 												</li>
 											</ul>
 										</div>
@@ -253,7 +232,7 @@
 									</div>
 								</dd>
 							</dl>
-							*/-->
+							
 						</div>
 						
 						<!--/* 옵션선택 */-->
@@ -294,7 +273,7 @@
 						
 						<!--/* 구매버튼 */-->
 						<div class="purchase_btns" th:unless="${prd.saleDisplayStatus == 'OutOfStock'}">
-							<a class="btn_xlg_bordered btn_basket">장바구니</a>
+							<a class="btn_basket" th:classappend="${prd.prodTypeCode == 'Presale'} ? btn_xlg_bordergray : btn_xlg_bordered">장바구니</a>
 							<a class="btn_xlg_neutral btn_buy_now">구매하기</a>
 						</div>
 						
@@ -348,7 +327,9 @@
 											
 											<th:block th:each="unitProduct, iter : ${prd.products}">
 												<th:block th:each="disclosure : ${unitProduct.disclosures}">
-													<tr class="disclosure" data:prodSn="${unitProduct.prodSn}" th:style="${iter.index != 0} ? 'display:none'">
+													<tr class="disclosure"
+														th:if="${disclosure.disclosureItemCode != '1807'}" 
+														data:prodSn="${unitProduct.prodSn}" th:style="${iter.index != 0} ? 'display:none'">
 														<th scope="row" th:text="${disclosure.disclosureItemName}"></th>
 														<td th:text="${disclosure.prodDisclosureInfo}"></td>
 													</tr>
@@ -382,7 +363,7 @@
 									<div class="table_layout" th:each="item : ${prodReviewSurveys.countPerResItems}">
 										<div>
 											<div class="graph">
-												<span class="bar" style="width: [[${item.rate}]]%"></span>
+												<span class="bar" th:style="'width:'+@{${item.rate}}+'%'"></span>
 											</div>
 										</div>
 										<div class="score">
@@ -401,7 +382,7 @@
 										<div class="">
 											<ul class="">
 												<li class="" th:each="bReview : ${bestPhotoReview.prodReviewList}">
-													<a href="#none" class="reviewDetail" data-review-type="bestPhoto" data:review-sn="${ bReview.prodReviewSn }">
+													<a href="javascript:;" class="reviewDetail" data-review-type="bestPhoto" data:review-sn="${ bReview.prodReviewSn }">
 														<img th:src="${bReview.imgList[0].imageFileUrl}" th:alt="${bReview.imgList[0].imgDesc}">
 													</a>
 												</li>
@@ -435,16 +416,12 @@
 							<!--/*sorting*/-->
 							<div class="review_sort">
 								<div class="left">
-									<a href="#none" class="on">추천순</a>
-									<a href="#none">최신순</a>
+									<a href="javascript:;" class="filter on" data-sort="Recommend">추천순</a>
+									<a href="javascript:;" class="filter" data-sort="Last">최신순</a>
 								</div>
 								<div class="right">
-									<a href="#none" class="on">전체</a>
-									<a href="#none">5<span>(894)</span></a>
-									<a href="#none">4<span>(255)</span></a>
-									<a href="#none">3<span>(255)</span></a>
-									<a href="#none">2<span>(255)</span></a>
-									<a href="#none">1<span>(255)</span></a>
+									<a href="javascript:;" class="on">전체</a>
+									<a href="javascript:;" th:each="stats : ${summary.countPerScopes}">[[${stats.scope}]]<span>([[${stats.count}]])</span></a>
 								</div>
 							</div>
 	
@@ -452,7 +429,7 @@
 							<div class="review_cont"></div>
 							
 							<div class="btn_list_more">
-								<a href="#none"><span>더보기</span></a>
+								<a href="javascript:;"><span>더보기</span></a>
 							</div>
 						</div>
 					</div>
@@ -492,7 +469,7 @@
 								<span class="quantity">총 <span class="total_count">0</span>개</span> 
 	               				<span class="price"><b class="num total_price">0</b>[[${currencySign}]]</span>
 							</div>
-							<a class="btn_xlg_bordered btn_basket">장바구니</a>
+							<a class="btn_basket" th:classappend="${prd.prodTypeCode == 'Presale'} ? btn_xlg_bordergray : btn_xlg_bordered">장바구니</a>
 							<a class="btn_xlg_neutral btn_buy_now">구매하기</a>
 						</div>
 					</div>
@@ -1685,32 +1662,28 @@
 			$( '.slide' ).ixSlideMax();
 			$( '.ui_select' ).designSelectBox();
 	
-			//상품 상세 탭
-			/*
-			function tab_menu(num){
-				var f =$('.tab_menu li').find('a');
-				for (var i = 0; i < f.length; i++){
-					if(i==num){
-						f.eq(i).parent().addClass('on');
-						$('.tab_cont0'+i).show();
-							
-					}else{
-						f.eq(i).parent().removeClass('on');
-						$('.tab_cont0'+i).hide();
-					}
-				}	
+			function post_goto(url, parm, target) {
+				  var f = document.createElement('form');
+
+				  var objs, value;
+				  for (var key in parm) {
+				    value = parm[key];
+				    objs = document.createElement('input');
+				    objs.setAttribute('type', 'hidden');
+				    objs.setAttribute('name', key);
+				    objs.setAttribute('value', value);
+				    f.appendChild(objs);
+				  }
+				        
+				  if (target)
+				    f.setAttribute('target', target);
+				  
+				  f.setAttribute('method', 'post');
+				  f.setAttribute('action', url);
+				  document.body.appendChild(f);
+				  f.submit();
 			}
-			*/
 				
-			//리뷰 정렬	
-			$('.review_sort .left a').click(function(){
-				$(this).addClass('on').siblings().removeClass('on');
-			});
-			
-			$('.review_sort .right a').click(function(){
-				$(this).addClass('on').siblings().removeClass('on');
-			});
-			
 			/*
 			//리뷰 더읽기
 			$(".review_box .comment .btn_view_more").click(function(){

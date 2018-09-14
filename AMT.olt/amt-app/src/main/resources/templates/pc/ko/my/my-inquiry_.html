@@ -31,18 +31,21 @@
 						<p>제품, 트러블 관련 문의는 <em>고객센터 (080-023-5454)</em>로 문의주세요.</p>
 						<button class="btn_lg_neutral" type="button" onclick="doInquiry();"><span class="ie_press">1:1 문의하기</span></button>
 					</div>
+					
 					<div>
 						<h4 class="h_title"><strong>추천 FAQ</strong></h4>
 						<ul>
-							<li><a href="#">[포인트/이벤트/쿠폰] 뷰티포인트 결제 가능한 브랜드 상품일지라도결제 가능한 브랜드 상품일지라도결제 가능한 브랜드 상품일지라도</a></li>
-							<li><a href="#">[포인트/이벤트/쿠폰] 뷰티포인트 결제 가능한 브랜드 상품일지라도</a></li>
-							<li><a href="#">[포인트/이벤트/쿠폰] 뷰티포인트 결제 가능한 브랜드 상품일지라도</a></li>
-							<li><a href="#">[포인트/이벤트/쿠폰] 뷰티포인트 결제 가능한 브랜드 상품일지라도</a></li>
-							<li><a href="#">[포인트/이벤트/쿠폰] 뷰티포인트 결제 가능한 브랜드 상품일지라도</a></li>
-							<li><a href="#">[포인트/이벤트/쿠폰] 뷰티포인트 결제 가능한 브랜드 상품일지라도</a></li>
+							<th:block th:each="faq : ${faqSrchRst.faqList}">
+							<li>
+								<a th:href="@{/cs/faq(type=${faq.inquiryTypeSn},sn=${faq.faqSn})}">
+								[<span th:text="${faq.inquiryTypeName}"></span>] <span th:text="${faq.inquiryText}"></span>
+								</a>
+							</li>
+							</th:block>
 						</ul>
-						<a href="#more" class="link_more">더보기<i class="ico_arr_s"></i></a>
+						<a href="/cs/faq" class="link_more">더보기<i class="ico_arr_s"></i></a>
 					</div>
+					
 				</div>
 
 				<!-- tab menu wrap -->
@@ -92,7 +95,7 @@
 								</table>
 							</div>
 
-							<div class="ui_paging pagination"></div>
+							<div class="ui_paging pagination bg_gray"></div>
 						</div>
 						<div class="tab_cont" id="d_responseY">
 							<h3 class="sr_only">답변완료된 상담</h3>
@@ -121,24 +124,24 @@
 								</table>
 							</div>
 
-							<div class="ui_paging pagination"></div>
+							<div class="ui_paging pagination bg_gray"></div>
 						</div>
 					</div>
 				</div>
 				<script type="text/javascript">
-						// 임시 테스트용입니다.
-						$('.board_toggle .answer').hide();
+					// 임시 테스트용입니다.
+					$('.board_toggle .answer').hide();
 
-						$('.board_toggle .qna_box button').click(function(e){
-							if ($(this).parent().hasClass('on')){
-								$(this).attr('title','답변 보기').parent().removeClass('on').next('.answer').hide();
-							} else {
-								$(this).parents('.board_toggle').find('.question').removeClass('on').children('button').attr('title','답변 보기').parent().next('.answer').hide();
-								$(this).attr('title','답변 보기 닫기').parent().addClass('on').next('.answer').show();
-							}
-							return false;
-						});
-					</script>
+					$('.board_toggle .qna_box button').click(function(e){
+						if ($(this).parent().hasClass('on')){
+							$(this).attr('title','답변 보기').parent().removeClass('on').next('.answer').hide();
+						} else {
+							$(this).parents('.board_toggle').find('.question').removeClass('on').children('button').attr('title','답변 보기').parent().next('.answer').hide();
+							$(this).attr('title','답변 보기 닫기').parent().addClass('on').next('.answer').show();
+						}
+						return false;
+					});
+				</script>
 			</div>
 			<!-- // cont_area -->
 
@@ -195,9 +198,21 @@
 
 					$('.loading').hide();
 					$('.tab_contents').show();
+
+					$('.board_toggle .answer').hide();
+
+					$('.question').click(function(e){
+						if ($(this).parent().hasClass('on')){
+							$(this).parent().removeClass('on').next('.answer').hide();
+						} else {
+							$(this).parents().find('.question').parents().removeClass('on').children('.question').parent().next('.answer').hide();
+							$(this).parent().addClass('on').next('.answer').show();
+						}
+						return false;
+					});
 				}).fail(function ( xhr, textStatus, errorThrown ) {
 					//실패
-					console.log( xhr.errorCode, xhr.errorMessage );
+					AP.modal.alert( xhr.errorCode, xhr.errorMessage );
 				}).always(function () {
 					//성공, 실패
 				});

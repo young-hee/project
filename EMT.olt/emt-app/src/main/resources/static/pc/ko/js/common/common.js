@@ -539,8 +539,11 @@
 			strHtml = strHtml.replace(/<\/html>/ig, '');
 			strHtml = strHtml.replace(/<\/head>/ig, '');
 			strHtml = strHtml.replace(/<!--.*?-->/ig, '');
+			strHtml = strHtml.replace(/<script.*?([a-zA-Z]*).script>/ig, '');
+			strHtml = strHtml.replace(/$.ajax({.*?([a-zA-Z]*).});/ig, '');
+			strHtml = strHtml.replace(/alert(.*?([a-zA-Z]*).)/ig, '');
 			//strHtml = strHtml.replace(/<br\/>/ig, '\n\r ');
-			strHtml = strHtml.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, '');
+			//strHtml = strHtml.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, '');
 		 
 			return $.trim(strHtml); 
 		},

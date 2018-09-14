@@ -103,4 +103,19 @@ public class MemberViewController extends AbstractController {
 		return "customer/customernew/find-id.1";
 		
 	}
+
+	/**
+	 * 회원탈퇴 완료화면.
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/leaveComplete")
+	@PageTitle(title = "회원 탈퇴", menuId = "myInfo", subMenuId = "leaverId")
+	public String leaveComplete(Model model) {
+		if(isMobileDevice())
+			return "my/member-info.4";
+		if(isPcDevice())
+			return "my/member-info-5";
+		return null;
+	}
 }

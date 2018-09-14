@@ -49,7 +49,7 @@
 			_fileUid = 0,
 			_files = [];
 
-
+		var _fileName;
 		/* ==================== Public Methods ==================== */
 
 		/**
@@ -60,7 +60,7 @@
 			if ( Object.prototype.toString.call(formData) === '[object FormData]' ) {
 				var length = _files.length,
 					name = _$findInput.attr( 'name' );
-
+				
 				for ( var i = 0; i < length; ++i ) {
 					formData.append( name || 'picture', _files[i].file );
 				}
@@ -117,14 +117,28 @@
 					break;
 				}
 			}
-
+			if(_$result.hasClass('fileName')){	
+				_$findInput.attr("disabled", false);
+			}
 			setFindInputBtnStae();
 		}
 
 		function fileChangeHandler (e) {
 			var files = Array.prototype.slice.call( e.target.files ),
 				attachFileLength = _$result.find( 'li:not(.input_file_btn_area)' ).length;
-
+			//alert("files : " + files.length);
+			//alert("attachFileLength : " + attachFileLength);			
+			//alert("_files : " + _files.length);
+//			if(_files.length > 0){
+//				_files = [];
+//			}
+			if(_$result.hasClass('fileName')){	
+				if(window.FileReader){
+					_fileName = $(this)[0].files[0].name;
+				} else { // old IE 
+					_fileName = $(this).val().split('/').pop().split('\\').pop(); 
+				}
+			}
 			if ( attachFileLength + files.length <= MAX_LENGTH ) {
 				files.every( function ( file ) {
 					if ( valid(file) ) {
@@ -178,9 +192,16 @@
 		}
 
 		function attach ( result, uid ) {
+			console.log("uid" + uid);
+
 			if ( _isSingle ) {
 				_$result.html( '<img src="' + result + '">' );
 			} else {
+				if(_$result.hasClass('fileName')){	
+					//_$result.html( '<li><img src="' + result + '" style="height:100%"><button type="button" class="btn_del user_attach_img" data-uid="' + uid + '"><span class="sr_only">첨부파일 삭제</span></button></li>' );
+					_$result.html('<span>'+_fileName+ '<a href="javascript:;" class="fileDel btn_del user_attach_img" data-uid="' + uid + '">삭제</a>'+'</span>');
+					_$findInput.attr("disabled", "disabled");
+				}
 				_$inputBtnArea.before( '<li><img src="' + result + '" style="height:100%"><button type="button" class="btn_del user_attach_img" data-uid="' + uid + '"><span class="sr_only">첨부파일 삭제</span></button></li>' );
 			}
 

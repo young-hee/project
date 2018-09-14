@@ -49,10 +49,10 @@
 	</div>
 		
 	<div class="pbody pagination bg_gray" th:with="pageVo=${#IntegUtil.initPageInfo(ptBrkd.pageVo, 10)}">
-		<a href="#none" th:onclick="'more(' + ${pageVo.prePage} + ')'" class="navi prev" th:classappend="${!pageVo.hasPrePage}? disabled : null" th:disabled="${!pageVo.hasPrePage}? 'disabled' : null">이전</a>
+		<a href="javascript:;" th:onclick="'more(' + ${pageVo.prePage} + ')'" class="navi prev" th:classappend="${!pageVo.hasPrePage}? disabled : null" th:disabled="${!pageVo.hasPrePage}? 'disabled' : null">이전</a>
 		<th:block th:each="page : ${pageVo.pageList}">
-			<a href="#none" th:onclick="'more(' + ${page} + ')'" th:text="${page}" th:classappend="${pageVo.curPage == page}? 'current' : null">2</a>
+			<a href="javascript:;" th:onclick="'more(' + ${page} + ')'" th:text="${page}" th:classappend="${pageVo.curPage == page}? 'current' : null">2</a>
 		</th:block>
-		<a href="#none" th:onclick="'more(' + ${pageVo.nextPage} + ')'" class="navi next" th:classappend="${!pageVo.hasNextPage}? disabled : null" th:disabled="${!pageVo.hasNextPage}? 'disabled' : null">다음</a>
+		<a href="javascript:;" th:onclick="'more(' + ${pageVo.nextPage} + ')'" class="navi next" th:classappend="${!pageVo.hasNextPage}? disabled : null" th:disabled="${!pageVo.hasNextPage}? 'disabled' : null">다음</a>
 	</div>
 </th:block>

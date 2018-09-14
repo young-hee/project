@@ -141,7 +141,7 @@
 			//선택된 옵션들
 			this._selectedOptions = new AP.SelectedOptions( this._$result, this._defaultModel )
 				.addListener( 'price-change', function (e) {
-					this._$totalCount.text( $B.string.format(e.totalCount, 2) );
+					this._$totalCount.text( $B.string.numberFormat(e.totalCount, 2) );
 					this._$totalPrice.text( $B.string.numberFormat(e.totalPrice) );
 				}.bind(this));
 		},

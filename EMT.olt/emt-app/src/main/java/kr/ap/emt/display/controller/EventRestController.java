@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.g1project.ecp.api.model.sales.regularevent.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,10 +31,6 @@ import net.g1project.ecp.api.model.sales.plandisplay.EventParticipantResult;
 import net.g1project.ecp.api.model.sales.plandisplay.EventParticipatedPost;
 import net.g1project.ecp.api.model.sales.plandisplay.PlanDisplay;
 import net.g1project.ecp.api.model.sales.plandisplay.PlanDisplayEventListResult;
-import net.g1project.ecp.api.model.sales.regularevent.AttendanceCheckHists;
-import net.g1project.ecp.api.model.sales.regularevent.Awards;
-import net.g1project.ecp.api.model.sales.regularevent.RegularEvent;
-import net.g1project.ecp.api.model.sales.regularevent.RegularEventRequesters;
 
 /**
  * @author Ria@g1project.net
@@ -158,11 +155,22 @@ public class EventRestController extends AbstractController {
 	@RequestMapping("/regularEventTermsAgree")
     public ResponseEntity<?> regularEventTermsAgree(RequestEvent requestEvent, HttpServletRequest req) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		
-		String telNo1 = requestEvent.getCountryNo()+"," + req.getParameter("telNo1");
-		
-		BooleanResult booleanResult = regulareventApi.regularEventTermsAgree(requestEvent.getEventParticipantSn(), requestEvent.getTermsAgreeYn()
-				, requestEvent.getName(), telNo1, requestEvent.getPhoneNo2(), requestEvent.getCountryCode()+","+requestEvent.getAddress(), requestEvent.getEmailAddress());
+
+		// FIXME 임시수정. 값 확인 필요
+		ApRegularEventRequester requester = new ApRegularEventRequester();
+		requester.setTermsAgreeYn(requestEvent.getTermsAgreeYn());
+		requester.setRequesterName(requestEvent.getName());
+		EmbeddableTel telNo1 = new EmbeddableTel();
+		telNo1.setCountryNo(requestEvent.getCountryNo());
+		telNo1.setPhoneNo(req.getParameter("telNo1"));
+		requester.setTel(telNo1);
+		EmbeddableAddress addr = new EmbeddableAddress();
+		addr.setCountryCode(requestEvent.getCountryNo());
+		addr.setAddress1(requestEvent.getAddress());
+		requester.setAddress(addr);
+		requester.setEmailAddress(requestEvent.getEmailAddress());
+
+		BooleanResult booleanResult = regulareventApi.regularEventTermsAgree(requestEvent.getEventParticipantSn(), requester);
 
 		result.put("booleanResult", booleanResult);
 

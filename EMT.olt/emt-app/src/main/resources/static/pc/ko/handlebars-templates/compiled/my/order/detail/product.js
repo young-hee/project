@@ -7,7 +7,7 @@ this["AP"]["handlebars"]["my"]["order"]["detail"] = this["AP"]["handlebars"]["my
 this["AP"]["handlebars"]["my"]["order"]["detail"]["product"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "		<div class=\"check_wrap check_only\">\n			<input type=\"checkbox\" id=\"oProd_"
+  return "		<div class=\"check_wrap\">\n			<input type=\"checkbox\" id=\"oProd_"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.onlineProdCode : stack1), depth0))
     + "\" name=\"onlineProd\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.onlineProdCode : stack1), depth0))
@@ -25,22 +25,27 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["product"] = Handlebars.templa
 },"7":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "				<p class=\"name\">"
+  return "			<span class=\"name\">\n				"
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.bulkDcOnlineProdName : stack1), depth0))
-    + "</p>\n";
+    + "\n			</span>\n";
 },"9":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "				<p class=\"name\">"
+  return "			<span class=\"name\">\n				"
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.onlineProdName : stack1), depth0))
-    + "</p>\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.typeName : depth0),"!==",null,{"name":"xif","hash":{},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
-},"10":function(container,depth0,helpers,partials,data) {
-    return "					<p class=\"flag\">"
-    + container.escapeExpression(container.lambda((depth0 != null ? depth0.typeName : depth0), depth0))
-    + "</p>\n";
-},"12":function(container,depth0,helpers,partials,data) {
-    return "				<p><em>취소완료</em></p>\n";
+    + "\n			</span>\n";
+},"11":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return "			<p class=\"font_lg mgb10\"><em>취소 완료</em></p>\n			<span class=\"strong\"><b>"
+    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.cancelQtySum : stack1), depth0))
+    + "</b>개</span> /\n";
+},"13":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
+
+  return "			<span class=\"strong\"><b>"
+    + container.escapeExpression((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.step : depth0),"two",{"name":"eq","hash":{},"data":data}),((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.claimQtySum : stack1),(helpers.calc || (depth0 && depth0.calc) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.ordQtySum : stack1),"-",((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.cancelQtySum : stack1),{"name":"calc","hash":{},"data":data}),{"name":"condition","hash":{},"data":data}))
+    + "</b>개</span> /\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
@@ -48,11 +53,11 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["product"] = Handlebars.templa
     + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.viewYn : depth0)) != null ? stack1.checkBox : stack1),"Y",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "	<div class=\"thumb\">\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.onlineProdImgUrl : stack1),"===",null,{"name":"xif","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(5, data, 0),"data":data})) != null ? stack1 : "")
-    + "	</div>\n	<div class=\"info\">\n		<div class=\"align_left\">\n"
+    + "	</div>\n	<div class=\"info\">\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.ordHistProdTypeCode : stack1),"==","BulkDc",{"name":"xif","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(9, data, 0),"data":data})) != null ? stack1 : "")
-    + "		</div>\n		<div class=\"align_right\">\n"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.ordHistProdStatusCode : stack1),"ProdCancel",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "			<p>\n				<strong class=\"num\">"
+    + "	</div>\n	<div class=\"price\">\n"
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.ordHistProdStatusCode : stack1),"===","ProdCancel",{"name":"xif","hash":{},"fn":container.program(11, data, 0),"inverse":container.program(13, data, 0),"data":data})) != null ? stack1 : "")
+    + "		<span class=\"strong\"><b>"
     + container.escapeExpression((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.finalOnlineSaleAmtPcurSum : stack1),{"name":"currencyFormat","hash":{},"data":data}))
-    + "</strong>\n			</p>\n		</div>\n	</div>\n</div>";
+    + "</b></span>\n	</div>\n</div>";
 },"useData":true});

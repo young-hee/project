@@ -25,9 +25,9 @@ this["AP"]["handlebars"]["cart"]["layer-cart-02-list"] = Handlebars.template({"1
     + alias4(((helper = (helper = helpers.storeSn || (depth0 != null ? depth0.storeSn : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"storeSn","hash":{},"data":data}) : helper)))
     + "'); return false;\">\n							"
     + alias4(((helper = (helper = helpers.storeName || (depth0 != null ? depth0.storeName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"storeName","hash":{},"data":data}) : helper)))
-    + "\n"
+    + "\n							"
     + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.defaultStoreYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "							"
+    + "\n							"
     + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.invtEnoughType : depth0),"No",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n							"
     + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.invtEnoughType : depth0),"Enough",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -43,7 +43,7 @@ this["AP"]["handlebars"]["cart"]["layer-cart-02-list"] = Handlebars.template({"1
     + alias4(((helper = (helper = helpers.longitude || (depth0 != null ? depth0.longitude : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"longitude","hash":{},"data":data}) : helper)))
     + "\">위치보기</button></td>\n				</tr>\n				<tr class=\"tr_map\">\n					<td colspan=\"5\" class=\"td_map\"><div class=\"map_area\"></div><button class=\"btn_map_close\">닫기</button></td>\n				</tr>\n";
 },"3":function(container,depth0,helpers,partials,data) {
-    return "								<span class=\"store_default\">기본</span>\n";
+    return "<span class=\"store_default\">기본</span>";
 },"5":function(container,depth0,helpers,partials,data) {
     return " <em>[재고없음]</em> ";
 },"7":function(container,depth0,helpers,partials,data) {
@@ -53,7 +53,7 @@ this["AP"]["handlebars"]["cart"]["layer-cart-02-list"] = Handlebars.template({"1
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
 
-  return "<div class=\"clear\">\n	<p class=\"text font_lg\"><b>검색된 매장<em id=\"searchCnt\">0</em>개</b></p>\n	<div>\n		<span class=\"check_wrap\"><input type=\"radio\" name=\"radioCheck\" id=\"radioCheck\" value=\"01\"/><label for=\"radioCheck\">단골매장</label></span>\n	</div>\n</div>\n<table class=\"ui_table_striped data_table thead_colored align_center mgt20\">\n	<caption class=\"sr_only\">테이크아웃매장 목록으로 단골등록, 매장, 전화번호, 주소, 매장위치로 구성</caption>\n	<colgroup>\n		<col style=\"width:67px\"/> <!-- /* 20180725:테이블 너비 수정*/ -->\n		<col style=\"width:137px\"/>\n		<col style=\"width:116px\"/>\n		<col style=\"width:189px\"/>\n		<col />\n	</colgroup>\n	<thead>\n	<tr>\n		<th scope=\"col\">단골매장</th>\n		<th scope=\"col\">매장</th>\n		<th scope=\"col\">전화번호</th>\n		<th scope=\"col\">주소</th>\n		<th scope=\"col\">매장위치</th>\n	</tr>\n	</thead>\n	<tbody>\n"
+  return "<table class=\"ui_table_striped data_table thead_colored align_center mgt20\">\n	<caption class=\"sr_only\">테이크아웃매장 목록으로 단골등록, 매장, 전화번호, 주소, 매장위치로 구성</caption>\n	<colgroup>\n		<col style=\"width:67px\"/> <!-- /* 20180725:테이블 너비 수정*/ -->\n		<col style=\"width:137px\"/>\n		<col style=\"width:116px\"/>\n		<col style=\"width:189px\"/>\n		<col />\n	</colgroup>\n	<thead>\n	<tr>\n		<th scope=\"col\">단골매장</th>\n		<th scope=\"col\">매장</th>\n		<th scope=\"col\">전화번호</th>\n		<th scope=\"col\">주소</th>\n		<th scope=\"col\">매장위치</th>\n	</tr>\n	</thead>\n	<tbody>\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || helpers.helperMissing).call(alias1,(depth0 != null ? depth0.totalLength : depth0),0,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "	</tbody>\n</table>\n<div class=\"ui_paging pagination\" id=\"addPagination\">\n</div>";
+    + "	</tbody>\n</table>\n<div class=\"ui_paging pagination\"></div>";
 },"useData":true});

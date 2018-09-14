@@ -1,3 +1,6 @@
+<div class="review_title">
+	<h2 class="h_title">구매리뷰 상세</h2>
+</div>
 <dl class="review">
 	<dt class="review_header">
 		<span class="name">{{ this.memberId }}</span><span class="grade">{{ this.memberLevelName }}</span>
@@ -54,8 +57,18 @@
 				<a href="#none" class="btn_view_close">닫기</a>
 			</div>
 			<div class="box_help">
-				<span class="left"><a href="#none" class="btn_help {{#xif this.recommendYn '==' 'Y'}}on{{/xif}}">도움이되요 {{ this.recommendCnt }}</a></span>
-				<span class="right"><a href="#none" class="btn_report"><span class="sr_only">신고하기</span></a></span>
+				<span class="left">
+					<a href="javascript:;" class="btn_help {{#xif this.recommendYn '==' 'Y'}}on{{/xif}}" data-review-sn="{{ this.prodReviewSn }}">
+						도움이되요 
+						<span class="recommendCnt">{{ this.recommendCnt }}</span>
+					</a>
+				</span>
+				
+				<span class="right">
+					<a href="javascript:;" class="btn_report {{#xif this.reportYn '==' 'Y'}}on{{/xif}}" data-review-sn="{{ this.prodReviewSn }}">
+						<span class="sr_only">신고하기</span>
+					</a>
+				</span>
 			</div>
 		</div>
 		<div class="date">{{ dateFormat this.prodReviewRegistDt }}</div>

@@ -37,8 +37,8 @@
         var _$target = $target,
             _$findInput = _$target.find( '.find_addresses_input' ),
             _$findBtn = _$target.find( '.btn_find_addresses' ),
-            _$addressFirstInput = _$target.find( '.address_first' ),
-            _$addressFirstHidden = _$target.find( '.address_first:hidden' ),
+            _$addressFirstInput = _$target.find( '.address_first[type=text]' ),
+            _$addressFirstHidden = _$target.find( '.address_first[type=hidden]' ),
             _$postCodeHidden = _$target.find( '.post_code:hidden' ),
             _$addressLastInput = _$target.find( '.address_last' ),
             _$resultArea = _$target.find( '.address_list' );
@@ -51,7 +51,7 @@
         this.clear = function () {
             _$findBtn.off( 'click', clickHandler );
             _$findInput.off( 'keydown', clickHandler );
-            _$resultArea.off( 'click', 'a.result', selectedResultHandler )
+            _$resultArea.off( 'click', 'a.result', selectedResultHandler );
             plugin.remove( _$target, _pluginName );
         };
 

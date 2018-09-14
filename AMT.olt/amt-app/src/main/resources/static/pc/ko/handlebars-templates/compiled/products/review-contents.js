@@ -29,9 +29,17 @@ this["AP"]["handlebars"]["products"]["review-contents"] = Handlebars.template({"
     + ((stack1 = helpers.each.call(alias3,(depth0 != null ? depth0.surveys : depth0),{"name":"each","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "			</ul>\n		</div>\n		<div class=\"comment\">\n			<div class=\"ellipsis line5\">"
     + alias2(alias1((depth0 != null ? depth0.prodReviewBodyText : depth0), depth0))
-    + "</div>\n			<a href=\"#none\" class=\"btn_view_more\">더읽기</a>\n			<a href=\"#none\" class=\"btn_view_close\">닫기</a>\n		</div>\n		<div class=\"box_help\">\n			<span class=\"left\"><a class=\"btn_help\">도움이되요 "
+    + "</div>\n			<a href=\"javascript:;\" class=\"btn_view_more\">더읽기</a>\n			<a href=\"javascript:;\" class=\"btn_view_close\">닫기</a>\n		</div>\n		<div class=\"box_help\">\n			<span class=\"left\">\n				<a class=\"btn_help "
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.recommendYn : depth0),"==","Y",{"name":"xif","hash":{},"fn":container.program(9, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\" data-review-sn=\""
+    + alias2(alias1((depth0 != null ? depth0.prodReviewSn : depth0), depth0))
+    + "\">\n					도움이되요\n					<span class=\"recommendCnt\">"
     + alias2(alias1((depth0 != null ? depth0.recommendCnt : depth0), depth0))
-    + "</a></span>\n			<span class=\"right\"><a class=\"btn_report\"><span class=\"sr_only\">신고하기</span></a></span>\n		</div>\n	</div>\n";
+    + "</span>\n				</a>\n			</span>\n			<span class=\"right\">\n				<a href=\"javascript:;\" class=\"btn_report "
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.reportYn : depth0),"==","Y",{"name":"xif","hash":{},"fn":container.program(9, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\" data-review-sn=\""
+    + alias2(alias1((depth0 != null ? depth0.prodReviewSn : depth0), depth0))
+    + "\">\n					<span class=\"sr_only\">신고하기</span>\n				</a>\n			</span>\n		</div>\n	</div>\n";
 },"2":function(container,depth0,helpers,partials,data) {
     return "			<div class=\"modify\">\n				<a href=\"#\">수정</a>		<!--- 내가 쓴 리뷰에만 노출 -->\n			</div>\n";
 },"4":function(container,depth0,helpers,partials,data,blockParams,depths) {
@@ -43,7 +51,7 @@ this["AP"]["handlebars"]["products"]["review-contents"] = Handlebars.template({"
 },"5":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "						<li>\n							<a href=\"#none\" class=\"reviewDetail\" data-review-type=\"pur\" data-review-sn=\""
+  return "						<li>\n							<a href=\"javascript:;\" class=\"reviewDetail\" data-review-type=\"pur\" data-review-sn=\""
     + alias2(alias1((depths[1] != null ? depths[1].prodReviewSn : depths[1]), depth0))
     + "\">\n								<img src=\"\" data-src=\""
     + alias2(alias1((depth0 != null ? depth0.imageFileUrl : depth0), depth0))
@@ -58,6 +66,8 @@ this["AP"]["handlebars"]["products"]["review-contents"] = Handlebars.template({"
     + "</span>\n						<strong>"
     + alias2(alias1((depth0 != null ? depth0.responseBodyText : depth0), depth0))
     + "</strong>\n					</li>\n";
+},"9":function(container,depth0,helpers,partials,data) {
+    return "on";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 

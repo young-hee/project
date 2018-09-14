@@ -20,9 +20,12 @@
 							원
 						{{/xif}}
 						--}}
-					
-						{{#xif this.totalRate '!=' '0'}}
-						<em class="discount">{{ numberFormat this.totalRate }}%</em>
+						{{#xif this.mPlusNPromoInfo.targetYN '==' 'Y'}}
+							<em class="discount">{{ this.mPlusNPromoInfo.baseOrdQty }}+{{ this.mPlusNPromoInfo.freeAwardQty }}</em>
+						{{else}}
+							{{#xif this.totalRate '!=' '0'}}
+								<em class="discount">{{ numberFormat this.totalRate }}%</em>
+							{{/xif}}
 						{{/xif}}
 						<b class="num">{{ numberFormat (availablePrices this.availablePrices 'finalOnlinePrice') }}</b>원  
 						{{#xif (availablePrices this.availablePrices 'doublePriceDisplayYn') '==' 'Y'}}

@@ -7,33 +7,6 @@
 	<dd>
 		<div class="cont delivery_info">
 
-			<!--/* 주문자 정보 */-->
-			<div class="title_area">
-				<h4 class="h_title sub">주문고객정보</h4>
-			</div>
-			<div class="panel bordered gray">
-				<div class="panel_cont ui_table">
-					<dl>
-						<dt><b>이름</b></dt>
-						<dd th:text="${apMember.name.name1}">홍길동</dd>
-					</dl>
-					<dl>
-						<dt><b>휴대폰번호</b></dt>
-						<dd th:text="${#IntegUtil.hyphenPhoneNumber(apMember.phoneNo1.phoneNo)}">010-0000-0000</dd>
-					</dl>
-					<dl>
-						<dt><b>이메일</b> (<em>필수</em>)</dt>
-						<dd>
-							<div class="input_wrap w70p">
-								<input type="text" name="purchaserEmailAddress" title="이메일" th:value="${apMember.emailAddress}" required="required" data-msg-required="이메일을 입력하세요.">
-							</div>
-						</dd>
-					</dl>
-				</div>
-			</div>
-			<br>
-			<p class="text_notice light">주문관련 e-Mail과 SMS가 발송됩니다.</p>
-
 			<!--/* 배송정보 */-->
 			<div class="title_area">
 				<h4 class="h_title sub">배송정보</h4>
@@ -100,13 +73,13 @@
 								<dt><b>배송시 요청사항 선택</b></dt>
 								<dd>
 									<div class="select_wrap w100p">
-										<select name="selectShipMsg" title="배송시 요청사항을 선택" tabindex="-1">
+										<select name="selectShipMsg" id="shipMsg1" title="배송시 요청사항을 선택" tabindex="-1">
 											<option value="">배송시 요청사항을 선택해주세요.</option>
 											<option th:each="shipMsg : ${ordEx.shipMsgList}" th:value="${shipMsg}" th:text="${shipMsg}">직접 입력</option>
 										</select>
 									</div>
 									<div class="input_wrap w100p">
-										<input type="text" name="shipMsg" maxlength="80" placeholder="80자 이내로 작성해주세요.">
+										<input type="text" name="shipMsg1" maxlength="80" placeholder="80자 이내로 작성해주세요.">
 									</div>
 								</dd>
 							</dl>
@@ -154,13 +127,13 @@
 								<dt><b>배송시 요청사항 선택</b></dt>
 								<dd>
 									<div class="select_wrap w100p">
-										<select name="selectShipMsg" title="배송시 요청사항을 선택" tabindex="-1">
+										<select name="selectShipMsg" id="shipMsg2" title="배송시 요청사항을 선택" tabindex="-1">
 											<option value="">배송시 요청사항을 선택해주세요.</option>
 											<option th:each="shipMsg : ${ordEx.shipMsgList}" th:value="${shipMsg}" th:text="${shipMsg}">직접 입력</option>
 										</select>
 									</div>
 									<div class="input_wrap w100p">
-										<input type="text" name="shipMsg" title="배송시 요청사항 직접 입력" maxlength="80" placeholder="80자 이내로 작성해주세요.">
+										<input type="text" name="shipMsg2" title="배송시 요청사항 직접 입력" maxlength="80" placeholder="80자 이내로 작성해주세요.">
 									</div>
 								</dd>
 							</dl>
@@ -207,13 +180,13 @@
 							<dt><b>배송시 요청사항 선택</b></dt>
 							<dd>
 								<div class="select_wrap w100p">
-									<select name="selectShipMsg" title="배송시 요청사항을 선택" tabindex="-1">
+									<select name="selectShipMsg" id="shipMsg3" title="배송시 요청사항을 선택" tabindex="-1">
 										<option value="">배송시 요청사항을 선택해주세요.</option>
 										<option th:each="shipMsg : ${ordEx.shipMsgList}" th:value="${shipMsg}" th:text="${shipMsg}">직접 입력</option>
 									</select>
 								</div>
 								<div class="input_wrap w100p">
-									<input type="text" name="shipMsg" title="배송시 요청사항 직접 입력" maxlength="80" placeholder="80자 이내로 작성해주세요.">
+									<input type="text" name="shipMsg3" title="배송시 요청사항 직접 입력" maxlength="80" placeholder="80자 이내로 작성해주세요.">
 								</div>
 							</dd>
 						</dl>
@@ -306,6 +279,33 @@
 					</div>
 				</fieldset>
 			</div>
+
+			<!--/* 주문자 정보 */-->
+			<div class="title_area">
+				<h4 class="h_title sub">주문고객정보</h4>
+			</div>
+			<div class="panel bordered gray">
+				<div class="panel_cont ui_table">
+					<dl>
+						<dt><b>이름</b></dt>
+						<dd th:text="${apMember.name.name1}">홍길동</dd>
+					</dl>
+					<dl>
+						<dt><b>휴대폰번호</b></dt>
+						<dd th:text="${#IntegUtil.hyphenPhoneNumber(apMember.phoneNo1.phoneNo)}">010-0000-0000</dd>
+					</dl>
+					<dl>
+						<dt><b>이메일</b> (<em>필수</em>)</dt>
+						<dd>
+							<div class="input_wrap w70p">
+								<input type="text" name="purchaserEmailAddress" title="이메일" th:value="${apMember.emailAddress}" required="required" data-msg-required="이메일을 입력하세요.">
+							</div>
+						</dd>
+					</dl>
+				</div>
+			</div>
+			<br>
+			<p class="text_notice light">주문관련 e-Mail과 SMS가 발송됩니다.</p>
 		</div>
 	</dd>
 	<!--스크립트 정의-->
@@ -381,6 +381,8 @@
 				$('input[name=recipientAddress1]').attr('value',$('#recipientAddress1').val());
 				$('input[name=recipientAddress2]').attr('value',$('#recipientAddress2').val());
 
+				$('input[name=shipMsg]').attr('value', $('input[name=shipMsg1]').val());
+
 				// 새로입력정보 초기화
 				// $('input[name=userName]').val('');
 				// $('input[name=userPhoneNo]').val('');
@@ -425,6 +427,8 @@
 				$('input[name=recipientAddress1]').attr('value',$('#addressAddress1').val());
 				$('input[name=recipientAddress2]').attr('value',$('#addressAddress2').val());
 
+				$('input[name=shipMsg]').attr('value', $('input[name=shipMsg2]').val());
+
 				// 새로입력정보 초기화
 				// $('input[name=userName]').val('');
 				// $('input[name=userPhoneNo]').val('');
@@ -467,6 +471,8 @@
 				$('input[name=recipientAddress1]').val('');
 				$('input[name=recipientAddress2]').val('');
 				$('input[name=recipientEmailAddress]').val('');
+
+				$('input[name=shipMsg]').attr('value', $('input[name=shipMsg3]').val());
 
 				//validation
 				$('input[name=userName]').prop("required", true);
@@ -536,15 +542,14 @@
 
 		/* 배송메세지 설정 */
 		$('[name=selectShipMsg]').on('change', function(e){
-			var selectedVal = $(this).val();
-			//console.log("selectedVal : " + selectedVal);
-			var obj = $(this).parents('.ui_table').find('[name=shipMsg]');
-			obj.focus();
+			var selectedVal = $(this).val(),
+				id = $(this).attr("id");
 			if(!selectedVal){
-				obj.val("");
+				$('[name='+id+']').val("");
 				$('[name=shipMsg]').val("");
 			}else{
-				obj.val(selectedVal);
+				$('[name='+id+']').focus();
+				$('[name='+id+']').val(selectedVal);
 				$('[name=shipMsg]').val(selectedVal);
 			}
 		});

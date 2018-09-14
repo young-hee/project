@@ -91,9 +91,6 @@ public class CartRestController extends CartBaseController{
 											Long prodSn,
 											Long cartProdQty,
 											String integrationMembershipExchYn,
-											String activityPointExchYn,
-											String storePickupYn,
-											Long StoreSn,
 											Long cartBulkIncludedProdSn,
 											Long bulkDcIncludedProdGrpSn,
 											Long includedProdSn,
@@ -106,9 +103,6 @@ public class CartRestController extends CartBaseController{
 		cartProdExPut.setProdSn(prodSn);
 		cartProdExPut.setCartProdQty(cartProdQty);
 		cartProdExPut.setIntegrationMembershipExchYn(integrationMembershipExchYn);
-		cartProdExPut.setActivityPointExchYn(activityPointExchYn);
-		cartProdExPut.setStorePickupYn(storePickupYn);
-		cartProdExPut.setStoreSn(StoreSn);
 
 		List<CartBulkIncludedProdExPut> cartBulkIncludedProdExList = new ArrayList<>();
 		CartBulkIncludedProdExPut cartBulkIncludedProdExPut = new CartBulkIncludedProdExPut();
@@ -204,21 +198,13 @@ public class CartRestController extends CartBaseController{
 	 */
 	@GetMapping("/getCartBySelectCartProds")
 	public ResponseEntity<?> getCartBySelectCartProds(Long cartSn,
-													  String[] prdCdArr,
-													  String[] takeoutCdArr) {
+													  String[] prdCdArr) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		String cartProdSnList = "";  // 3,4,5
 		if(!ArrayUtils.isEmpty(prdCdArr)){
 			for(int i=0; i< prdCdArr.length; i++){
 				if(prdCdArr[i] != null) {
 					cartProdSnList = cartProdSnList + (cartProdSnList.length() > 0 ? "," : "") + prdCdArr[i];
-				}
-			}
-		}
-		if(!ArrayUtils.isEmpty(takeoutCdArr)){
-			for(int i=0; i< takeoutCdArr.length; i++){
-				if(takeoutCdArr[i] != null) {
-					cartProdSnList = cartProdSnList + (cartProdSnList.length() > 0 ? "," : "") + takeoutCdArr[i];
 				}
 			}
 		}

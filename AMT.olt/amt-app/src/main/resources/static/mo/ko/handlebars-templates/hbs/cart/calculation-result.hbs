@@ -27,46 +27,46 @@
 {{#if (gt cartEx.cartDeliveryMembershipPointExchOnlineProdExList.length 0) }}
 <dl>
 	<dt>뷰티포인트 사용 <em class="my_point">보유 {{#if (ne cartEx.cartMemberEx.memberMembershipExList.0.membershipPoints null)}}{{cartEx.cartMemberEx.memberMembershipExList.0.membershipPoints}}{{else}}0{{/if}} <i class="ico_p_b_s"></i></em></dt>
-	<dd class="price"><b>{{numberFormat cartEx.calculationResult.membershipProdTotalAmount }}</b>P</dd>
+	<dd class="price"><b>- {{numberFormat totalMemAmount }}</b>P</dd>
 </dl>
 {{/if}}
 <dl>
 	<dt>할인내역</dt>
-	<dd class="price"><b>{{numberFormat cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount }}</b>원</dd>
+	<dd class="price"><b>- {{numberFormat cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount }}</b>원</dd>
 	<dd class="details">
 		{{#if (gt cartEx.calculationResult.dsicountAmountInfoByOnlineProdDc.standardCurrency.amount 0) }}
 			<dl>
 				<dt>온라인상품할인</dt>
-				<dd><span>{{numberFormat.calculationResult.dsicountAmountInfoByOnlineProdDc.standardCurrency.amount }}</span>원</dd>
+				<dd><span>- {{numberFormat.calculationResult.dsicountAmountInfoByOnlineProdDc.standardCurrency.amount }}</span>원</dd>
 			</dl>
 		{{/if}}
 		{{#if (gt cartEx.calculationResult.dsicountAmountInfoByMemberLevel.standardCurrency.amount 0) }}
 			<dl>
 				<dt>회원등급할인</dt>
-				<dd><span>{{numberFormat cartEx.calculationResult.dsicountAmountInfoByMemberLevel.standardCurrency.amount }}</span>원</dd>
+				<dd><span>- {{numberFormat cartEx.calculationResult.dsicountAmountInfoByMemberLevel.standardCurrency.amount }}</span>원</dd>
 			</dl>
 		{{/if}}
 		{{#if (gt cartEx.calculationResult.dsicountAmountInfoByOnlineMemberDc.standardCurrency.amount 0) }}
 			<dl>
 				<dt>온라인회원할인</dt>
-				<dd><span>{{numberFormat cartEx.calculationResult.dsicountAmountInfoByOnlineMemberDc.standardCurrency.amount }}</span>원</dd>
+				<dd><span>- {{numberFormat cartEx.calculationResult.dsicountAmountInfoByOnlineMemberDc.standardCurrency.amount }}</span>원</dd>
 			</dl>
 		{{/if}}
 		{{#if (gt cartEx.calculationResult.dsicountAmountInfoByinstantCouponDc.standardCurrency.amount 0) }}
 			<dl>
 				<dt>즉시할인쿠폰</dt>
-				<dd><span>{{numberFormat cartEx.calculationResult.dsicountAmountInfoByinstantCouponDc.standardCurrency.amount }}</span>원</dd>
+				<dd><span>- {{numberFormat cartEx.calculationResult.dsicountAmountInfoByinstantCouponDc.standardCurrency.amount }}</span>원</dd>
 			</dl>
 		{{/if}}
 		{{#if (gt cartEx.calculationResult.discountAmountInfoByMNPromotion.standardCurrency.amount 0) }}
 		<dl>
 			<dt>M+N프로모션할인</dt>
-			<dd><span>{{numberFormat cartEx.calculationResult.discountAmountInfoByMNPromotion.standardCurrency.amount }}</span>원</dd>
+			<dd><span>- {{numberFormat cartEx.calculationResult.discountAmountInfoByMNPromotion.standardCurrency.amount }}</span>원</dd>
 		</dl>
 		{{/if}}
 	</dd>
 </dl>
 <dl class="total">
 	<dt><b>예상 결제 금액</b></dt>
-	<dd class="price"><em><b>{{numberFormat (calc prodSumAmount '+' shipFeeSumAmount '-' cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount ) }}</b>원</em></dd>
+	<dd class="price"><em><b>{{numberFormat (calc prodSumAmount '+' shipFeeSumAmount '-' (calc cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount '+' totalMemAmount ) ) }}</b>원</em></dd>
 </dl>

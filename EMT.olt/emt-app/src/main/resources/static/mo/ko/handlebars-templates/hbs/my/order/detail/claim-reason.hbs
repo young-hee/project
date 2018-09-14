@@ -1,15 +1,17 @@
-<div class="panel gray reason">
-	<dl class="table_layout">
-		{{#xif type '===' 'cancel'}}
-			<dt class="w30p"><b>취소사유</b></dt>
-		{{else}}
-			<dt class="w30p"><b>{{condition (eq type 'return') '반품사유' '교환사유'}}</b></dt>
-		{{/xif}}
+<div class="reason">
+	<div>
+		<dl class="table_layout">
+			{{#xif type '===' 'cancel'}}
+				<dt class="w30p"><b>취소사유</b></dt>
+			{{else}}
+				<dt class="w30p"><b>{{condition (eq type 'return') '반품사유' '교환사유'}}</b></dt>
+			{{/xif}}
 
-		<dd>{{receivedClaimReasonName}}</dd>
-	</dl>
-	<dl class="table_layout">
-		<dt class="w30p vat"><b>내용</b></dt>
-		<dd class="lh2">{{foReceivedClaimReason}}</dd>
-	</dl>
+			<dd>{{receivedClaimReasonName}}</dd>
+		</dl>
+		<dl class="table_layout">
+			<dt class="w30p vat"><b>내용</b></dt>
+			<dd class="lh2">{{foReceivedClaimReason}}</dd>
+		</dl>
+	</div>
 </div>

@@ -51,8 +51,8 @@ public class CombineJsFileLoader {
     }
 
     private Map<String, List<String>> load(Resource resource, String channelPath) {
-    	if (logger.isDebugEnabled()) {
-			logger.debug("Loading js-files.yml...");
+    	if (logger.isTraceEnabled()) {
+			logger.trace("Loading js-files.yml...");
 		}
         try (InputStream is = resource.getInputStream()) {
             Yaml yaml = new Yaml();
@@ -66,7 +66,7 @@ public class CombineJsFileLoader {
     }
 
     private Map<String, List<String>> addChannelAndLangCode(Map<String, List<String>> jsmap, final String channelPath) {
-        Map<String, List<String>> map = jsmap.entrySet().stream().collect(Collectors.toMap(e -> e.getKey()
+        Map<String, List<String>> map = jsmap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey
 			, e -> e.getValue().stream().map(v -> channelPath + v).collect(Collectors.toList())));
         return map;
     }

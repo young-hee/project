@@ -12,6 +12,7 @@ import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.ap.ap.ApLoginInfo;
 import net.g1project.ecp.api.model.ap.ap.ApMember;
 import net.g1project.ecp.api.model.ap.ap.ApMemberLoginReturnWithAutoLoginInfo;
+import net.g1project.ecp.api.model.ap.ap.ApSsoLoginInfo;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ import java.util.Map;
 
 public class LoginHandler extends AbstractController {
 
-	public Map<String, Object> login(HttpServletRequest req, HttpServletResponse res,
+	public Map<String, Object> login(HttpServletRequest request, HttpServletResponse response,
 					  String memberId, String password, String autoLogin) throws ApiException {
 
 		Map<String, Object> respMap = new HashMap<>();
@@ -31,6 +32,12 @@ public class LoginHandler extends AbstractController {
 		loginInfo.setMemberPassword(password);
 
 		ApMemberLoginReturnWithAutoLoginInfo resultInfo = apApi.memberLogin(loginInfo);
+		makeMemberSession(request, response, autoLogin, respMap, resultInfo);
+
+		return respMap;
+	}
+
+	private void makeMemberSession(HttpServletRequest request, HttpServletResponse response, String autoLogin, Map<String, Object> respMap, ApMemberLoginReturnWithAutoLoginInfo resultInfo) {
 		APRequestContext.setAccessToken(resultInfo.getAccessToken());
 		ApMember apMember = apApi.getMemberInfo(resultInfo.getMemberSn());
 
@@ -66,7 +73,7 @@ public class LoginHandler extends AbstractController {
 		if("on".equals(autoLogin)) {
 			Date date = resultInfo.getAutoLoginTokenExpireDt();
 			long time = date.getTime() - System.currentTimeMillis();
-			CookieUtils.addCookie(res, CookieKey.AUTO_LOGIN, resultInfo.getAutoLoginToken(), (int)(time/1000));
+			CookieUtils.addCookie(response, CookieKey.AUTO_LOGIN, resultInfo.getAutoLoginToken(), (int)(time/1000));
 
 		}
 		respMap.put("sleep", resultInfo.getDormantAcConvertYn());
@@ -81,9 +88,18 @@ public class LoginHandler extends AbstractController {
 
 		setMemberSession(memberSession);
 		//보안조치
-		SessionUtils.applyFixationProtection(req);
+		SessionUtils.applyFixationProtection(request);
+	}
+
+	public Map<String, Object> ssoLogin(HttpServletRequest request, HttpServletResponse response,String memberId, String ssoSessionKey) {
+		Map<String, Object> respMap = new HashMap<>();
+
+		ApSsoLoginInfo loginInfo = new ApSsoLoginInfo();
+		loginInfo.setMemberId(memberId);
+		loginInfo.setSsoSessionKey(ssoSessionKey);
+		ApMemberLoginReturnWithAutoLoginInfo resultInfo = apApi.memberSsoLogin(loginInfo);
+		makeMemberSession(request, response, "", respMap, resultInfo);
 
 		return respMap;
 	}
-
 }

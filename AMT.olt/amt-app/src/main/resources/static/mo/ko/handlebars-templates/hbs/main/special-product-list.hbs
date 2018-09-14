@@ -1,0 +1,64 @@
+{{!--
+	special gift
+--}}
+
+<dt class="slide_title">
+	<a href="#none" class="prd_h_tit"><strong>스페셜기프트</strong>
+	</a>
+</dt>
+<dd class="slide one_half" data-ix-options="view-length:2; move-length:1; datum-point:10%;">
+	<div class="ix-list-viewport">
+		<ul class="product_list_new prd_swipe_one ix-list-items">
+			{{#each this.list}}
+				<li class="ix-list-item">
+					<div class="product_one_view thumb new_type">
+						<a href="{{ productDetailPath this.onlineProdSn }}">
+							<div class="prd_all_wrap">
+								<span class="product_visual_new">
+									<span class="lazy_load_wrap">
+										{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+											<div class="item_state out_of_stock">일시품절</div>
+										{{/xif}}
+										<img src="" data-src="{{ this.onlineProdImages.0.imgUrl }}" alt="" class="lazy_load">
+									</span>
+								</span>
+								<!-- 상품 정보 -->
+								<span class="product_info_new">
+									<strong class="prd_brand">{{ this.products.0.brandName }}</strong>
+									<span class="prd_name">{{ this.onlineProdName }}</span>
+									<span class="price_wrap">
+										{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+											<strong class="discount">
+												{{#with (calc this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate '+' this.onlineProdPriceSummary.minMemberLevelDiscountRate '+' this.onlineProdPriceSummary.minOnlineMemberDiscountRate) as |disMinRate|}}
+													{{#with (calc ../onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.maxMemberLevelDiscountRate '+' ../onlineProdPriceSummary.maxOnlineMemberDiscountRate) as |disMaxRate|}}
+														{{#xif disMinRate '!=' disMaxRate}}<span class="from">~</span>{{/xif}}<span class="to">{{ disMaxRate }}<em>%</em></span>
+													{{/with}}
+												{{/with}}
+											</strong>
+										{{/xif}}
+										<strong class="price">{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>{{ condition ../isActivityPoint '알' '원' }}{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}} ~{{/xif}}</em></strong>
+										{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+											<del>{{ numberFormat this.onlineProdPriceSummary.minBeforeOnlineSalePrice }}<em>{{ condition ../isActivityPoint '알' '원' }}</em></del>
+										{{/xif}}
+									</span>
+								</div>
+								
+								<span class="one_thumb_wrap">
+									<span class="one_thumb_list01">
+										{{#each this.onlineProdGift.giftProds}}
+										<span class="img_thumb01">
+											<span class="lazy_load_wrap">
+												<img src="" data-src="{{ absolutePath this.repImgUrl }}" alt="{{ this.prodName }}" class="lazy_load">
+											</span>
+										</span>
+										{{/each}}
+									</span>
+								</span>
+							</span>
+						</a>
+					</div>
+				</li>
+			{{/each}}
+		</ul>
+	</div>
+</dd>

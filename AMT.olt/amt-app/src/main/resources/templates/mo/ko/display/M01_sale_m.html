@@ -1,0 +1,81 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='sale'">
+<body>
+<div ap:fragment="layout-contents">
+
+	<div class="ap_contents title_two_depth">
+		<div class="section">
+			<th:block th:if="${not #lists.isEmpty(cornersMap.get('M01_sale_m.1'))}">
+				<th:block th:each="corner : ${cornersMap.get('M01_sale_m.1')}">
+					<th:block th:each="contents : ${corner.contents}">
+						<th:block th:if="${contents.menuPageCornerContentsId == 'M01_sale_m.1.1'}">
+							<h3 th:if="${contents.imgUrl}">
+								<img th:src="${contents.imgUrl}" th:alt="${contents.text}">
+							</h3>
+							<h3 th:unless="${contents.imgUrl}">
+								<img ap:src="@{/images/display/img_sale.jpg}" alt="Apmall이 드리는 최고의 혜택">
+							</h3>
+						</th:block>
+					</th:block>
+				</th:block>
+			</th:block>
+		</div>
+
+		<div class="section brand_category">
+			<div class="login_after_yes">
+				<ul>
+					<li>
+						<a href="javascript:;" data-display-cate-sn="">
+							<img alt="" src="/mo/ko/images/dummy/img_sale.png">
+							<strong class="b_name">전체상품</strong>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="cate_prd_wrap01">
+			<div class="sort_filter_wrap">
+				<div class="sort_inner">
+					<div class="sort_filter_top">
+						<span class="tot_result_num">총 <em class="f_prd_num">0</em> 개의 상품</span>
+						<span class="select_type01_new">
+							<select name="prodSort">
+								<option value="Bestselling">판매순</option>
+								<option value="NewProd">신상품순</option>
+								<option value="MostProdReview">평점순</option>
+								<option value="HighestPrice">높은 가격순</option>
+								<option value="LowestPrice">낮은 가격순</option>
+							</select>
+						</span>
+						<a href="javascript:;" class="btn_align">상품 정렬 선택</a>
+						<a href="javascript:;" class="btn_filter disabled">필터</a>
+					</div>
+				</div>
+			</div>
+
+			<ul class="product_list_new"></ul>
+
+			<div class="loading" data-loading-first="300" data-loading-more="90" style="height: 300px">
+				<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+			</div>
+
+			<div class="section no_product" style="display: none">
+				<p class="text_center">더 좋은 상품을 준비중입니다.</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<th:block ap:fragment="layout-endpoint">
+	<script type="text/javascript" th:inline="javascript">
+		var corners = /*[[${cornersMap}]]*/
+			console.log( corners );
+
+		AP.sale.init({
+			displayMenuId: AP.DISPLAY_MENU_ID
+		});
+	</script>
+</th:block>
+
+</body>
+</html>

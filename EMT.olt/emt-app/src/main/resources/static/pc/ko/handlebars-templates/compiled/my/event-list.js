@@ -19,13 +19,15 @@ this["AP"]["handlebars"]["my"]["event-list"] = Handlebars.template({"1":function
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.winnerFoNoticeSn : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.program(8, data, 0),"data":data})) != null ? stack1 : "")
     + "</td>\n	</tr>\n";
 },"2":function(container,depth0,helpers,partials,data) {
-    return "			<td class=\"subj\"><span>"
+    return "			<td class=\"subj\"><span class=\"sbj_flag\">진행종료</span><span>"
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.planDisplayTitle : depth0), depth0))
     + "</span></td>\n";
 },"4":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "			<td class=\"subj\"><span class=\"sbj_flag on\">진행중</span><a href=\"#none\"><span>"
+  return "			<td class=\"subj\"><span class=\"sbj_flag on\">진행중</span><a href=\"/display/event_detail?planDisplaySn="
+    + alias2(alias1((depth0 != null ? depth0.planDisplaySn : depth0), depth0))
+    + "\"><span>"
     + alias2(alias1((depth0 != null ? depth0.planDisplaySn : depth0), depth0))
     + " - "
     + alias2(alias1((depth0 != null ? depth0.planDisplayTitle : depth0), depth0))

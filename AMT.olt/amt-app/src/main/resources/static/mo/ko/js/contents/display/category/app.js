@@ -20,10 +20,11 @@
 
 		init: function ( options ) {
 			this._displayMenuId = options.displayMenuId;
-			this._productList = new AP.productList({
+			this._productList = new AP.ProductList({
+				component: 'category',
 				$target: this._$productList,
 				displayMenuId: options.displayMenuId,
-				template: 'display.category.category-item',
+				template: 'display.product-item',
 				api: 'itemList',
 				key: options.displayMenuId
 			}).load({
@@ -45,14 +46,11 @@
 		/** =============== Private Methods ============== */
 		_setEvent: function () {
 			// scroll fixed
-			var sortY = this._$sort.offset().top;
 			$( window ).on( 'scroll', function () {
 				if ( AP.header.getHeight() +  $( window ).scrollTop() > this._$sort.offset().top ) {
 					var isDisplay = this._$sort.find( '.filter_sel_area' ).css( 'display' ) == 'block',
 						 filterAreaH = ( isDisplay ) ? this._$sort.find( '.filter_sel_area' ).outerHeight() : 0,
 						 paddingBottom = this._$sort.find( '.sort_filter_top' ).height() + filterAreaH + 9;
-
-
 					this._$sort.addClass( 'fixed' ).css( 'padding-bottom', paddingBottom );
 				} else {
 					this._$sort.removeClass( 'fixed' ).css( 'padding-bottom', 0 );

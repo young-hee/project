@@ -67,9 +67,7 @@
 		},
 
 		_getPixleeData: function () {
-			AP.api.getPixleePhotos({
-				albumId: '2956835'//Homepage Gallery
-			}, {
+			AP.api.getPixleePhotos({}, {
 				page: 1,
 				per_page: 6
 			}).done(function ( data ) {

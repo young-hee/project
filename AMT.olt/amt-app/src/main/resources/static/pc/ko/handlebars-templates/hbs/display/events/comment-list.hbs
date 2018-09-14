@@ -1,0 +1,74 @@
+{{#each this.eventParticipants}}
+<li>
+	<div>
+		<div class="user_area">
+			<p class="user">{{ this.memberId }}<span>{{ this.memberLevelName }}</span></p>
+			{{#xif this.myCommentYn '==' 'Y'}}
+				<div class="control">
+					<button type="button" data-planDisplay-comment-sn="{{ this.eventParticipantSn }}" id="btn_modify"><span class="ie_press">수정</span></button>
+					<button type="button" data-planDisplay-comment-sn="{{ this.eventParticipantSn }}" id="btn_delete"><span class="ie_press">삭제</span></button>
+				</div>
+			{{/xif}}
+		</div>
+		<div class="cont">
+			{{#if this.eventCommentImgs.length}}
+				{{#each this.eventCommentImgs}}
+					<img src="{{ this.commentImgUrl }}" alt="">
+				{{/each}}
+			{{/if}}
+			<p>{{ this.participantComment }}</p>
+		</div>
+		<div class="comment_write" style="display:none;"><!--/* 댓글 수정 */-->
+			<form class="validate modify" id="mod_form" action="">
+			<input type="hidden" name="planDisplaySn" value="{{planDisplay.planDisplaySn}}">
+			<input type="hidden" name="eventParticipantSn" value="{{ this.eventParticipantSn }}">
+			{{#if this.eventCommentImgs.length}}
+				{{#each this.eventCommentImgs}}
+					<input type="hidden" name="eventCommentImgSn" value="{{ this.eventCommentImgSn }}">
+				{{/each}}
+			{{/if}}
+			<input type="hidden" name="termsAgreeYn" value="true">
+			<div class="textarea_box">
+				<div class="textarea">
+					<p class="user_name">{{ this.memberId }}</p>
+					<textarea name="participantComment" id="" cols="" rows="" placeholder="10자 이상 입력해주세요." maxlength="200">{{ this.participantComment }}</textarea>
+				</div>
+				<p class="text_right byte"><small><em class="current">0</em>/<span class="limits">200</span></small></p>
+				<div class="add_file_wrap">
+					<div class="add_file ui_input_images">
+						<input type="file" id="i_picture" class="fileInput" {{#if this.eventCommentImgs.length}}disabled="disabled"{{/if}} accept="image/gif,image/jpeg,image/png,image/jpg" multiple="multiple" data-single-input ="true">
+						<label for="i_picture">이미지 첨부</label>
+						<p class="fileName attach">
+						{{#if this.eventCommentImgs.length}}
+							{{#each this.eventCommentImgs}}
+								<span>{{substr this.commentImgUrl '/'}}<a href="javascript:;" class="fileDel btn_del modify_img" data-event-comment-img-sn="{{ this.eventCommentImgSn }}">삭제</a></span>
+							{{/each}}
+						{{/if}}
+						</p>
+					</div>
+					<button type="button" id="btn_update"><span class="ie_press">등록</span></button>
+				</div>
+			</div>
+			</form>
+		</div>
+		<p class="date">{{ dateFormat  this.participatedDt }}</p>
+		<button type="button" class="report" data-planDisplay-comment-sn="{{ this.eventParticipantSn }}">
+			<span class="ie_press">
+				<i class="ico_report">
+					<span class="sr_only">신고하기</span>
+				</i>
+			</span>
+		</button>
+	</div>
+</li>
+{{/each}}
+
+{{#xif this.isScrollType '&&' (lt (calc this.offset '+' this.eventParticipants.length) this.totalCount)}}
+	<li class="inner_loading">
+		<ul class="loading">
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</li>
+{{/xif}}

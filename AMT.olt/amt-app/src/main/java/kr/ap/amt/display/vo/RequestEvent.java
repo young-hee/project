@@ -19,6 +19,7 @@ public class RequestEvent {
 	private String termsAgreeYn; // 동의 유무
 	private String emailAddress; // 이메일주소
 	private Long regularEventSn; // 상시행사일련번호-미입력시 현재진행중인행사
+	private String countryNo = "";
 
 	// 기획전시 이벤트
 	private String keyword; // 검색
@@ -311,4 +312,11 @@ public class RequestEvent {
 		this.regularEventSn = regularEventSn;
 	}
 
+	public String getCountryNo() {
+		return countryNo;
+	}
+
+	public void setCountryNo(String countryNo) {
+		this.countryNo = countryNo;
+	}
 }

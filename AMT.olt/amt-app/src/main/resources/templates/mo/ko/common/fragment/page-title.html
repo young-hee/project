@@ -1,12 +1,42 @@
-<!-- 대/중/소카테고리 타이틀 : 토글버튼 있음-->
-<div class="page_title_new">
-	<h2><a href="javascript:;" class="btn_toggle"><span style="display: none"></span></a></h2>
-</div>
+<!-- category -->
+<th:block th:if="${displayMenuId}">
+	<th:block th:if="${displayMenuId.indexOf('CTG') > -1}">
+		<div class="page_title_new">
+			<h2><a href="javascript:;" class="btn_toggle"><span style="display: none"></span></a></h2>
+		</div>
+		<div class="menu_layer big_thumb">
+			<ul class="sub_cate_list"></ul>
+		</div>
+	</th:block>
+</th:block>
 
-<!-- 대카테고리 썸네일 리스트 4단 -->
+<!-- bigSale -->
+<th:block th:if="${displayMenuId}">
+	<th:block th:each="menu : ${gnbMap.get('main').submenus}">
+		<th:block th:if="${menu.displayMenuId == 'bigSale' && displayMenuId.indexOf('CTG') < 0}" >
+			<th:block th:each="submenu : ${menu.submenus}">
+				<div class="page_title_new" th:if="${submenu.displayMenuId == displayMenuId}">
+					<h2><a href="javascript:;" class="btn_toggle"><span th:text="${submenu.menuTitle}"></span></a></h2>
+				</div>
+			</th:block>
+			<div class="menu_layer one_depth">
+				<ul>
+					<li th:each="submenu : ${menu.submenus}">
+						<a href="javascript:;" th:href="@{'/display/' + ${submenu.displayMenuId}(displayMenuId=${submenu.displayMenuId})}" th:text="${submenu.menuTitle}"></a>
+					</li>
+				</ul>
+			</div>
+		</th:block>
+	</th:block>
+</th:block>
+
+<div class="cate_dimmed"></div>
+
+
+<!--
+// 대카테고리 썸네일 리스트 4단
 <div class="menu_layer big_thumb">
 	<ul class="sub_cate_list">
-		<!--
 		<li>
 			<a href="javascript:;" class="on">
 				<img alt="" src="/mo/ko/images/common/img_category_thumb_01.png">
@@ -56,29 +86,22 @@
 				<span>베이비</span>
 			</a>
 		</li>
-		-->
 	</ul>
 </div>
 
-<!-- 토글버튼 없음!!!! -->
-<!--
+// 토글버튼 없음!!!!
 <div class="page_title_new" style="display:none">
 	<h2><a href="javascript:;"><span>페이지 제목</span></a></h2>
 </div>
--->
 
-<!--/*  메뉴 레이어가 안나올 경우 */-->
-<!-- 공유하기 버튼이 나오는 경우
+
+// 메뉴 레이어가 안나올 경우 ( 공유하기 버튼이 나오는 경우 )
 <div class="page_title_new share" style="display: none;">
 	<button type="button" class="btn_share">공유하기</button>	// 버튼 클릭시 on toggle
 	<h2>페이지 제목</h2>
 </div>
--->
 
-
-
-<!-- 대카테고리 썸네일 리스트 1단 -->
-<!--
+// 대카테고리 썸네일 리스트 1단
 <div class="menu_layer one_depth">
 	<ul class="">
 		<li>
@@ -92,10 +115,8 @@
 		</li>
 	</ul>
 </div>
--->
 
-<!--/* 메뉴 레이어 1단 : 텍스트 형 */-->
-<!--
+// 메뉴 레이어 1단 : 텍스트 형
 <div class="menu_layer">
 	<ul>
 		<li><a href="#none"><span></span>메뉴1</a></li>
@@ -105,7 +126,7 @@
 		<li><a href="#none">메뉴5</a></li>
 	</ul>
 </div>
--->
 
-<!-- 카테고리 딤드 -->
+// 카테고리 딤드
 <div class="cate_dimmed"></div>
+-->

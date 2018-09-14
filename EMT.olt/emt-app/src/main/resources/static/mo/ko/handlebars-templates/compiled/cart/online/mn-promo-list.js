@@ -59,7 +59,15 @@ this["AP"]["handlebars"]["cart"]["online"]["mn-promo-list"] = Handlebars.templat
     + alias4(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias5 ? helper.call(alias1,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
     + ")\"><span class=\"sr_only\">없애기</span></button>\n						</div>\n						<div class=\"cart_item_info\">\n							<input type=\"hidden\" name=\"onlinePrdSn\" value=\""
     + alias4(alias3(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
-    + "\"/>\n							<input type=\"hidden\" name=\"cartProdSn\" cartProdQty=\""
+    + "\"/>\n							<input type=\"hidden\" name=\"cartProdSn\" value=\""
+    + alias4(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias5 ? helper.call(alias1,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
+    + "\"/>\n							<input type=\"hidden\" name=\"prdInfo_"
+    + alias4(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias5 ? helper.call(alias1,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
+    + "\" value=\""
+    + alias4(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias5 ? helper.call(alias1,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
+    + "\" prodName=\""
+    + alias4(alias3(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodName : stack1), depth0))
+    + "\" cartProdQty=\""
     + alias4(((helper = (helper = helpers.cartProdQty || (depth0 != null ? depth0.cartProdQty : depth0)) != null ? helper : alias2),(typeof helper === alias5 ? helper.call(alias1,{"name":"cartProdQty","hash":{},"data":data}) : helper)))
     + "\" minPurLimitQty=\""
     + alias4(alias3(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.minPurLimitQty : stack1), depth0))
@@ -67,12 +75,6 @@ this["AP"]["handlebars"]["cart"]["online"]["mn-promo-list"] = Handlebars.templat
     + alias4(alias3(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitYn : stack1), depth0))
     + "\" maxPurLimitQty=\""
     + alias4(alias3(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitQty : stack1), depth0))
-    + "\" value=\""
-    + alias4(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias5 ? helper.call(alias1,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
-    + "\"/>\n							<input type=\"hidden\" name=\"prdInfo_"
-    + alias4(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias5 ? helper.call(alias1,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
-    + "\" value=\""
-    + alias4(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias5 ? helper.call(alias1,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
     + "\"/>\n							<input type=\"hidden\" name=\"saleDisplayStatus_"
     + alias4(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias5 ? helper.call(alias1,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
     + "\" value=\""
@@ -194,9 +196,9 @@ this["AP"]["handlebars"]["cart"]["online"]["mn-promo-list"] = Handlebars.templat
 },"18":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "								<img src=\""
+  return "								<span class=\"thm_cart_item\"><img src=\""
     + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.repProdImgEx : stack1)) != null ? stack1.imgUrl : stack1), depth0))
-    + "\" class=\"thm_cart_item\" alt=\"\">\n";
+    + "\" alt=\"\"></span>\n";
 },"20":function(container,depth0,helpers,partials,data) {
     var stack1;
 
@@ -324,8 +326,9 @@ this["AP"]["handlebars"]["cart"]["online"]["mn-promo-list"] = Handlebars.templat
 },"66":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return container.escapeExpression(((helper = (helper = helpers.awardUnitQty || (depth0 != null ? depth0.awardUnitQty : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"awardUnitQty","hash":{},"data":data}) : helper)))
-    + "개 ";
+  return "("
+    + container.escapeExpression(((helper = (helper = helpers.awardUnitQty || (depth0 != null ? depth0.awardUnitQty : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"awardUnitQty","hash":{},"data":data}) : helper)))
+    + "개) ";
 },"68":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
@@ -425,7 +428,15 @@ this["AP"]["handlebars"]["cart"]["online"]["mn-promo-list"] = Handlebars.templat
     + alias4(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
     + ")\"><span class=\"sr_only\">없애기</span></button>\n						</div>\n						<div class=\"cart_item_info\">\n							<input type=\"hidden\" name=\"onlinePrdSn\" value=\""
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
-    + "\"/>\n							<input type=\"hidden\" name=\"cartProdSn\" cartProdQty=\""
+    + "\"/>\n							<input type=\"hidden\" name=\"cartProdSn\" value=\""
+    + alias4(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
+    + "\"/>\n							<input type=\"hidden\" name=\"prdInfo_"
+    + alias4(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
+    + "\" value=\""
+    + alias4(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
+    + "\" prodName=\""
+    + alias4(alias5(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodName : stack1), depth0))
+    + "\" cartProdQty=\""
     + alias4(((helper = (helper = helpers.cartProdQty || (depth0 != null ? depth0.cartProdQty : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"cartProdQty","hash":{},"data":data}) : helper)))
     + "\" minPurLimitQty=\""
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.minPurLimitQty : stack1), depth0))
@@ -433,12 +444,6 @@ this["AP"]["handlebars"]["cart"]["online"]["mn-promo-list"] = Handlebars.templat
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitYn : stack1), depth0))
     + "\" maxPurLimitQty=\""
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitQty : stack1), depth0))
-    + "\" value=\""
-    + alias4(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
-    + "\"/>\n							<input type=\"hidden\" name=\"prdInfo_"
-    + alias4(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
-    + "\" value=\""
-    + alias4(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
     + "\"/>\n							<input type=\"hidden\" name=\"saleDisplayStatus_"
     + alias4(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
     + "\" value=\""

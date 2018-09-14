@@ -42,7 +42,11 @@
             _$findBtn = _$target.find( '.btn_address_find' ),
             _$postcodeInput = _$target.find( '.post_code' ),
             _$addressFirstInput = _$target.find( '.address_first' ),
-            _$addressLastInput = _$target.find( '.address_last' );
+			_$addressLastInput = _$target.find( '.address_last' ),
+			_$findAddressResultTemplate = _$target.find( '#find-address-result-template' ),
+			_$resultArea = _$target.find( '.address_list' );
+
+		console.log(_$target.find( '.address_list' ));
 
         var _pluginName = pluginName,
             _options = options || {},
@@ -52,6 +56,9 @@
         /* ==================== Public Methods ==================== */
         this.clear = function () {
             _$findBtn.off( 'click', clickHandler );
+			_$keyword.off( 'keydown', clickHandler );
+			_$resultArea.off( 'click', 'a.result', selectedResultHandler );
+			_$resultArea.off( 'click', 'input.selRadio', selectedRadioHandler );
             plugin.remove( _$target, _pluginName );
         };
 
@@ -62,18 +69,78 @@
 
         function initialize () {
             _$findBtn.on( 'click', clickHandler );
+			_$keyword.on( 'keydown', clickHandler );
+			_$resultArea.on( 'click', 'a.result', selectedResultHandler );
+			_$resultArea.on( 'click', 'input.selRadio', selectedRadioHandler );
         }
 
-        function clickHandler (e) {
-            _keyword = _$keyword.val();
+		function selectedRadioHandler (e) {
+			var $el = $( e.currentTarget ),
+				selIndex = $el.data( 'sel-index' ),
+				postCode = $el.data( 'post-code' ),
+				address = $el.data( 'address' ),
+				detail = getDetailAddress( $el.data('detail-address') );
 
-            if ( _keyword ) {
-                openModal();
-            } else {
-                AP.modal.alert( '검색어를 입력해 주세요.' ).addListener( 'modal-close', function (e) {
-                    _$keyword.focus();
-                });
-            }
+			_$addressFirstInput.val( postCode + ' ' + address );
+			_$postCodeHidden.val( postCode );
+			_$addressFirstHidden.val( address );
+			_$addressLastInput.val( detail + ' ' );
+			_$addressLastInput.focus();
+
+			//선택된값 이벤트 전달
+			_$target.triggerHandler({
+				type: 'change-address',
+				selIndex : selIndex,
+				postCode: postCode,
+				address: address,
+				detailAddress: detail
+			});
+		}
+
+		function selectedResultHandler (e) {
+			var $el = $( e.currentTarget ),
+				postCode = $el.data( 'post-code' ),
+				address = $el.data( 'address' ),
+				detail = getDetailAddress( $el.data('detail-address') );
+
+			_$addressFirstInput.val( postCode + ' ' + address );
+			_$postCodeHidden.val( postCode );
+			_$addressFirstHidden.val( address );
+			_$addressLastInput.val( detail + ' ' );
+			_$addressLastInput.focus();
+
+			_$resultArea.hide();
+
+			//선택된값 이벤트 전달
+			_$target.triggerHandler({
+				type: 'change-address',
+				postCode: postCode,
+				address: address,
+				detailAddress: detail
+			});
+		}
+
+		function clickHandler (e) {
+			if(_$findAddressResultTemplate){
+				if ( e.type === 'keydown' ) {
+					if ( e.which === 13 ) {
+						e.preventDefault();
+						search();
+					}
+				} else {
+					search();
+				}
+			}else {
+				_keyword = _$keyword.val();
+
+				if (_keyword) {
+					openModal();
+				} else {
+					AP.modal.alert('검색어를 입력해 주세요.').addListener('modal-close', function (e) {
+						_$keyword.focus();
+					});
+				}
+			}
         }
 
         function openModal () {
@@ -129,66 +196,105 @@
         }
 
         function search ( $modal, page ) {
-            var $loading = $modal.find( '.loading' ),
-                $result = $modal.find( '.address_result' );
+			if(_$findAddressResultTemplate){
+				if ( _$keyword.val() ) {
+					AP.api.getAddresses({
+						keyword: _$keyword.val(),
+						currentPage: page
+					}).done( function ( data, commonData ) {
+						drawResult(null, data.juso, commonData );
+						if ( data.common.totalCount > 30 ) {
+							AP.modal.info({
+								title: '검색된 주소가 30개 이상입니다.',
+								contents: '검색어와 일치 순으로 30개만 보입니다.<br>찾으시는 주소가 없다면 주소를 더 상세하게 검색해 주세요.',
+								confirmLabel: '확인'
+							});
+						}
+					}).fail( function () {
+						drawResult(null, [], {totalCount: 0, currentPage: 1} );
+					});
+				} else {
+					AP.modal.alert( '검색할 지역명을 입력해 주세요.' );
+				}
+			}else{
+				var $loading = $modal.find( '.loading' ),
+					$result = $modal.find( '.address_result' );
 
-            _keyword = ( _keyword && page )? _keyword : $modal.find('.keyword').val();
+				_keyword = ( _keyword && page )? _keyword : $modal.find('.keyword').val();
 
-            if ( _keyword ) {
-                setLoading( true, $loading, $result );
+				if ( _keyword ) {
+					setLoading( true, $loading, $result );
 
-                AP.api.getAddresses({
-                    keyword: _keyword,
-                    currentPage: page
-                }).done( function ( data, commonData ) {
-                    if ( _modal ) {
-                        drawResult( $modal, data.juso, commonData );
-                    }
-                }).fail( function () {
-                    if ( _modal ) {
-                        drawResult( $modal, [], {totalCount: 0, currentPage: 1} );
-                    }
-                }).always( function () {
-                    if ( _modal ) {
-                        setLoading( false, $loading );
-                        //모달의 위치 다시 잡아주기
-                        _modal.resetPosition();
-                    }
-                });
+					AP.api.getAddresses({
+						keyword: _keyword,
+						currentPage: page
+					}).done( function ( data, commonData ) {
+						if ( _modal ) {
+							drawResult( $modal, data.juso, commonData );
+						}
+					}).fail( function () {
+						if ( _modal ) {
+							drawResult( $modal, [], {totalCount: 0, currentPage: 1} );
+						}
+					}).always( function () {
+						if ( _modal ) {
+							setLoading( false, $loading );
+							//모달의 위치 다시 잡아주기
+							_modal.resetPosition();
+						}
+					});
 
-                $modal.find( '.btn_search' ).focus();
-            } else {
-                AP.modal.alert( '검색어를 입력해 주세요.' ).addListener( 'modal-close', function (e) {
-                    $modal.find( '.keyword' ).focus();
-                });
-            }
+					$modal.find( '.btn_search' ).focus();
+				} else {
+					AP.modal.alert( '검색어를 입력해 주세요.' ).addListener( 'modal-close', function (e) {
+						$modal.find( '.keyword' ).focus();
+					});
+				}
+			}
         }
 
         //검색결과
         function drawResult ( $pop, data, commonData ) {
-            var resultHtml = AP.common.getTemplate( 'common.find-addresses-result', {
-                totalLength: commonData.totalCount,
-                totalLengthLabel: $B.string.numberFormat( commonData.totalCount ),
-                result: data
-            });
+        	if(_$findAddressResultTemplate){
+				var resultTemplate = "common.find-addresses-result";
 
-            $pop.find( '.address_result' ).html( resultHtml ).find( 'a' ).on( 'click', function (e) {
-                var $el = $( e.currentTarget );
+				//사용자가 지정한 템플릿 경로가 있을경우
+				if(_$findAddressResultTemplate != undefined && _$findAddressResultTemplate.text() != null &&
+					_$findAddressResultTemplate.text() != '') {
+					resultTemplate = _$findAddressResultTemplate.text();
+				}
+				var resultHtml = AP.common.getTemplate( resultTemplate, {
+					totalLength: commonData.totalCount,
+					totalLengthLabel: $B.string.numberFormat( commonData.totalCount ),
+					result: data
+				});
+				console.log(_$resultArea);
+				_$resultArea.show().html( resultHtml );
+			}else{
+				var resultHtml = AP.common.getTemplate( 'common.find-addresses-result', {
+					totalLength: commonData.totalCount,
+					totalLengthLabel: $B.string.numberFormat( commonData.totalCount ),
+					result: data
+				});
 
-                _modal.close({
-                    postCode: $el.data( 'post-code' ),
-                    address: $el.data( 'address' ),
-                    detailAddress: getDetailAddress( $el.data('detail-address') )
-                }, 'search');
-            });
+				$pop.find( '.address_result' ).html( resultHtml ).find( 'a' ).on( 'click', function (e) {
+					var $el = $( e.currentTarget );
 
-            $pop.find( '.ui_paging' ).paging( 'clear' ).paging({
-                currentPage: commonData.currentPage,
-                totalPage: Math.ceil( commonData.totalCount / VIEW_LIST_LENGTH )
-            }).on( 'paging-change', function (e) {
-                $( this ).paging( 'disable' );
-                search( $pop, e.page );
-            });
+					_modal.close({
+						postCode: $el.data( 'post-code' ),
+						address: $el.data( 'address' ),
+						detailAddress: getDetailAddress( $el.data('detail-address') )
+					}, 'search');
+				});
+
+				$pop.find( '.ui_paging' ).paging( 'clear' ).paging({
+					currentPage: commonData.currentPage,
+					totalPage: Math.ceil( commonData.totalCount / VIEW_LIST_LENGTH )
+				}).on( 'paging-change', function (e) {
+					$( this ).paging( 'disable' );
+					search( $pop, e.page );
+				});
+			}
         }
 
         function removeModalEvents ( $modal ) {

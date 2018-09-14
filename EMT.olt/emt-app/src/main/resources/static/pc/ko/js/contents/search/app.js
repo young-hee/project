@@ -39,7 +39,7 @@
 				,limit: 8
 				,attr: null
 				,flag: null
-				,prodSort: null
+				,prodSort: 'NewProd'
 				,includeFilters: true
 				,toSearchFor : this._searchWord
 			};
@@ -63,27 +63,31 @@
 		//초기 검색
 		_getEverything : function(){
 			this._$prodLoading.show();
+			console.log(this._searchWord);		
 			var param = $.extend(this._param, {
 				 toSearchFor : this._searchWord,
 				 prodReviewSort : 'RecentRegistDt'
 			});
+	 console.log('param = ');
+	 console.log(param);
 			AP.api.searchEverything( {},param ).done(function(result){
-				if( result.everything != undefined ){
+				console.log(result); 
+				if( result.everything != undefined ){ // everything 
 					var data = result.everything;
-					
-					if( data.articles != undefined ){
+ 					
+					if( data.articles != undefined ){ // artticles
 						this._setArticle( data.articles );
 					}
 					
-					if( data.planDisplays != undefined ){
+					if( data.planDisplays != undefined ){ // 기획전시
 						this._setEventDraw( data.planDisplays );
 					}
 					
-					if( data.prodReviews != undefined ){
+					if( data.prodReviews != undefined ){ // review
 						this._getReviewData( data.prodReviews ); 
 					}	
 					
-					if( data.prods != undefined ){
+					if( data.prods != undefined ){	 // 상품
 						this._setProduct( data.prods );
 					}
 				}

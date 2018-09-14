@@ -46,10 +46,10 @@
 							<span class="select_type02_new">
 								<select name="depositType" id="" tabindex="0"dir="rtl">
 									<option value="">전체내역 순</option>
-									<option value="Saving">예치금 적립 순</option>
-									<option value="Transfer">예치금 출금 순</option>
-									<option value="Pay">예치금 사용 순</option>
-									<option value="PayCancel">예치금 사용취소 순</option>
+									<option value="Saving">적립 순</option>
+									<option value="Transfer">출금 순</option>
+									<option value="Pay">사용 순</option>
+									<option value="PayCancel">사용취소 순</option>
 									<option value="ManualSaving">수동적립 순</option>
 									<option value="ManualDec">수동차감 순</option>
 								</select>
@@ -103,6 +103,8 @@
 
 var date = null;
 var pageNumber = 1;
+var progress = '<div id="m-loading" class="loading" style="height:20px;"><img alt="로딩중" src="/mo/ko/images/common/loading_sm.gif"></div>';
+
 if($('.data_table').size() == 0) {
 	$('.data_table').hide();
 	$('.btn_lg_more').hide();
@@ -115,7 +117,7 @@ if($('.data_table').size() == 0) {
 	}).on( 'multiple-date-picker-change', function (e) {
 		console.log( e.type, e.date );
 		date = e.date;
-    	$('#progress').show();
+		$('.btn_lg_more').before(progress);
     	pageNumber = 1;
     	
 		AP.api.depositHitoryListFragment({}, {
@@ -141,7 +143,7 @@ if($('.data_table').size() == 0) {
         }).fail(function(xhr, textStatus, errorThrown) {
         	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
         }).always(function() {
-	    	$('#progress').hide();
+			$("#m-loading").remove();
             //성공, 실패
         });
 	});
@@ -157,6 +159,7 @@ $('select[name=depositType]').change(function() {
 		endDtVal = date.endDate;
 	}
 	pageNumber = 1;
+	$('.btn_lg_more').before(progress);
 	AP.api.depositHitoryListFragment({}, {
 			pageNumber:1,
 			startDt:startDtVal,
@@ -179,7 +182,7 @@ $('select[name=depositType]').change(function() {
     }).fail(function(xhr, textStatus, errorThrown) {
     	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
     }).always(function() {
-    	$('#progress').hide();
+		$("#m-loading").remove();
         //성공, 실패
     });
 });
@@ -191,6 +194,7 @@ function more() {
 		startDtVal = date.startDate;
 		endDtVal = date.endDate;
 	}
+	$('.btn_lg_more').before(progress);
 	AP.api.depositHitoryListFragment({}, {
 			pageNumber:pageNumber,
 			startDt:startDtVal,
@@ -203,7 +207,7 @@ function more() {
     }).fail(function(xhr, textStatus, errorThrown) {
     	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
     }).always(function() {
-    	$('#progress').hide();
+		$("#m-loading").remove();
         //성공, 실패
     });
 	

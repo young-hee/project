@@ -1,0 +1,29 @@
+{{#xif this.totalLength '>' 0 }}
+	<p class="count">검색결과 {{this.totalLengthLabel}}건</p>
+	<ul>
+		{{#each this.result }}
+			<li>
+				<label for="item{{@index }}">
+					<p><span class="flag">도로명</span>{{ this.roadAddr }}</p>
+					{{#if this.jibunAddr}}
+					<p><span class="flag">지번</span>{{ this.jibunAddr }}</p>
+					{{/if}}
+					<p>우편번호 {{ this.zipNo }}</p>
+				</label>
+				<span class="rdo_h30">
+					<input type="radio" class="selRadio" name="select" id="item{{@index}}" data-sel-index="{{@index}}" data-post-code="{{ this.zipNo }}" data-detail-address="{{ this.roadAddrPart2 }}" data-address="{{ this.roadAddrPart1 }}">
+				</span>
+				<!-- 체크된 부분에 추가되는 input입니다 -->
+				<div class="add_input" id="addInput{{@index}}">
+					<span class="input_h48_gray"><input type="text" id="inputDetail{{@index}}" class="address_last" placeholder="상세주소 입력를 입력해주세요"></span>
+					<span class="input_h48_gray"><input type="text" id="inputDetailName{{@index}}" placeholder="받는고객 이름 입력"></span>
+					<span class="input_h48_gray"><input type="text" id="inputDetailHp{{@index}}" placeholder="휴대폰번호 000-0000-0000"></span>
+				</div>
+			</li>
+		{{/each}}
+	</ul>
+{{else}}
+	<p class="count">검색결과가 없습니다.</p>
+{{/xif}}
+
+

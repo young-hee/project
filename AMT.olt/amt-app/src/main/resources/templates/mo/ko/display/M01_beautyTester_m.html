@@ -26,8 +26,8 @@
                   <span class="tag_box bg_lightgreen" th:if="${item.status == 'TN'}">테스터발표</span>
                   <span class="tag_box bg_orange" th:if="${item.status == 'RR'}">후기등록중</span>
                   <span class="tag_box bg_skyblue" th:if="${item.status == 'BR'}">베스트리뷰발표</span>
-                  <p class="title ellipsis" th:text="${item.regularEvent.regularEventName}+'('+${item.status}+')'"></p>
-                  <p class="sub_txt">테스터 모집 인원 30명 / <span class="point_purple" th:text="${item.requesters.totalCount}"></span>명 신청중</p>
+                  <p class="title ellipsis" th:text="${item.regularEvent.regularEventName}"></p>
+                  <p class="sub_txt">테스터 모집 인원 [[${item.regularEvent.recruitmentPersonnelCnt==null?0:item.regularEvent.recruitmentPersonnelCnt}]]명 / <span class="point_purple" th:text="${item.requesters.totalCount}"></span>명 신청중</p>
                   <p class="date" th:text="|~${#dates.format(item.regularEvent.eventEndDt,'YYYY.MM.dd')}|"></p>
                 </div>
               </a>

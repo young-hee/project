@@ -1,0 +1,72 @@
+<!-- 포장 서비스  -->
+<div class="tgArea cart_list" th:if="${apMember}">
+	<dl>
+		<dt class="on">
+			<strong class="tit">포장 서비스</strong>
+			<button type="button"><span class="sr_only">열기</span></button>
+		</dt>
+		<dd>
+			<div class="cart_cont">
+				<div class="slide sprd_list" data-ix-options="view-length:5; auto-play:false;loop:false;datum-point:-60px">
+					<div class="ix-list-viewport">
+						<ul class="ix-list-items">
+							<th:block th:each="ordHistProdEx: ${ordEx.ordHistEx.ordHistProdExList}">
+								<th:block th:each="giftPackingEx: ${ordHistProdEx.ordProdEx.possibleGiftPackingExList}">
+									<li class="ix-list-item">
+										<span class="check_wrap chk_type2"><input type="checkbox" name="giftPackingCheck" id="check1_1"><label for="check1_1" class="test"><span class="sr_only">상품선택</span></label></span>
+										<th:block th:each="giftImgUrl, iterStat : ${giftPackingEx.giftPackingImgUrlList}">
+											<img th:src="${giftImgUrl}" th:if="${iterStat.first}">
+										</th:block>
+										<em class="tit" th:text="${ordHistProdEx.ordProdEx.onlineProdNameBlang}">헤라</em>
+										<p class="ellipsis" th:text="${ordHistProdEx.ordProdEx.prodNameBlang}"></p>
+									</li>
+								</th:block>
+							</th:block>
+						</ul>
+					</div>
+					<div class="ix-controller">
+						<div class="slide_direction">
+							<a class="ix-btn-prev" href="#none"><span class="sr_only">이전</span></a>
+							<a class="ix-btn-next" href="#none"><span class="sr_only">다음</span></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="guide_list">
+				<div class="expl">
+					<strong class="tit">포장서비스 안내</strong>
+					<ul>
+						<li>고객님의 구매등급에 따라 주문건당 무료포장 서비스를 이용하실 수 있습니다. </li>
+						<li> <span th:text="${apMember.name.name1}"></span>님은 [#고객등급#] 고객으로, [#포장가능수량#]개의 상품을 선택하실 수 있습니다. </li>
+						<li>포장이 어려운 상품은 선택 목록에서 자동 제외됩니다. </li>
+						<li>포장 서비스 이용 주문이 많을 경우, 배송이 지연될 수 있습니다. </li>
+					</ul>
+				</div>
+			</div>
+		</dd>
+	</dl>
+</div>
+<!-- // 포장 서비스 -->
+<script>
+	var memberLevelName = "";
+	var memberLevelRankingSn = 1;
+	$(function(){
+		$("input[name=giftPackingCheck]").on("click", function(){
+			var checkCnt = $("input[name=giftPackingCheck]:checked").length;
+			if(memberLevelRankingSn == 1 || memberLevelRankingSn == 2){
+				if(checkCnt > 1){
+					$(this).prop('checked', false);
+					AP.modal.alert("총 1개 선택이 가능합니다.");
+				}
+			}else if(memberLevelRankingSn == 3 || memberLevelRankingSn == 4){
+				if(checkCnt > 2){
+					$(this).prop('checked', false);
+					AP.modal.alert("총 2개 선택이 가능합니다.");
+				}
+			}else{
+				$(this).prop('checked', false);
+				AP.modal.alert("선택할 수 없는 등급입니다.");
+			}
+		})
+	})
+</script>

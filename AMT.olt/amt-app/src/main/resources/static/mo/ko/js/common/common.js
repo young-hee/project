@@ -414,64 +414,102 @@
         * @returns {{}}
         */
         getFormData: function ($form) {
-          var unindexed_array = $form.serializeArray();
-          var indexed_array = {};
+        	var unindexed_array = $form.serializeArray();
+        	var indexed_array = {};
 
-          $.map(unindexed_array, function (n, i) {
-            indexed_array[n['name']] = n['value'];
-          });
+        	$.map(unindexed_array, function (n, i) {
+        		indexed_array[n['name']] = n['value'];
+        	});
 
-          return indexed_array;
-        },
+        	return indexed_array;
+		},
 
-      /**
-       * time count down
-       *
-       * @param min
-       */
-      timeCountDown: function (min, callback) {
+		/**
+		* time count down
+		*
+		* @param min
+		*/
+		timeCountDown: function (min, callback) {
 
-        var timer = false;
+			var timer = false;
 
-        this.start = function () {
+			this.start = function () {
+				var countDownDate = new Date(new Date().getTime() + 60 * 1000);
 
-          var countDownDate = new Date(new Date().getTime() + 60 * 1000);
+				timer = setInterval(function () {
 
-          timer = setInterval(function () {
+					var distance = countDownDate - new Date().getTime();
 
-            var distance = countDownDate - new Date().getTime();
+					// Time calculations minutes and seconds
+					var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+					var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            // Time calculations minutes and seconds
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+					// Output the result in an element with id="time"
+					if (seconds < 10) seconds = "0" + seconds;
+					$('[name=timer]').html(minutes + ":" + seconds);
 
-            // Output the result in an element with id="time"
-            if (seconds < 10) seconds = "0" + seconds;
-            $('[name=timer]').html(minutes + ":" + seconds);
+					// If the count down is over, write some text
+					if (distance < 0) {
+						$('[name=timer]').html("0:00");
+						clearInterval(timer);
+						timer = false;
+						if(callback) {
+							callback();
+						}
+					}
+				}, 1000);
+			};
 
-            // If the count down is over, write some text
-            if (distance < 0) {
-              $('[name=timer]').html("0:00");
-              clearInterval(timer);
-              timer = false;
-              if(callback)
-            	  callback();
-            }
-          }, 1000);
-        };
+			this.isRunning = function () {
+				return timer !== false;
+			};
 
-        this.isRunning = function () {
-          return timer !== false;
-        };
+			this.stop = function () {
+				clearInterval(timer);
+				timer = false;
+			};
+		},
 
-        this.stop = function () {
-          clearInterval(timer);
-          timer = false;
-        };
-      }
-    };
+		/**
+		 * ease
+		 *
+		 */
+		ease: {
+			QuadIn: 'cubic-bezier(0.550, 0.085, 0.680, 0.530)',
+			QuadOut: 'cubic-bezier(0.250, 0.460, 0.450, 0.940)',
+			QuadInOut: 'cubic-bezier(0.455, 0.030, 0.515, 0.955)',
 
-    AP.common = AP.common || Common;
+			CubicIn: 'cubic-bezier(0.550, 0.055, 0.675, 0.190)',
+			CubicOut: 'cubic-bezier(0.215, 0.610, 0.355, 1.000)',
+			CubicInOut: 'cubic-bezier(0.645, 0.045, 0.355, 1.000)',
+
+			QuartIn: 'cubic-bezier(0.895, 0.030, 0.685, 0.220)',
+			QuartOut: 'cubic-bezier(0.165, 0.840, 0.440, 1.000)',
+			QuartInOut: 'cubic-bezier(0.770, 0.000, 0.175, 1.000)',
+
+			QuintIn: 'cubic-bezier(0.755, 0.050, 0.855, 0.060)',
+			QuintOut: 'cubic-bezier(0.230, 1.000, 0.320, 1.000)',
+			QuintInOut: 'cubic-bezier(0.860, 0.000, 0.070, 1.000)',
+
+			SineIn: 'cubic-bezier(0.470, 0.000, 0.745, 0.715)',
+			SineOut: 'cubic-bezier(0.390, 0.575, 0.565, 1.000)',
+			SineInOut: 'cubic-bezier(0.445, 0.050, 0.550, 0.950)',
+
+			ExpoIn: 'cubic-bezier(0.950, 0.050, 0.795, 0.035)',
+			ExpoOut: 'cubic-bezier(0.190, 1.000, 0.220, 1.000)',
+			ExpoInOut: 'cubic-bezier(1.000, 0.000, 0.000, 1.000)',
+
+			CircIn: 'cubic-bezier(0.600, 0.040, 0.980, 0.335)',
+			CircOut: 'cubic-bezier(0.075, 0.820, 0.165, 1.000)',
+			CircInOut: 'cubic-bezier(0.785, 0.135, 0.150, 0.860)',
+
+			BackIn: 'cubic-bezier(0.600, -0.280, 0.735, 0.045)',
+			BackOut: 'cubic-bezier(0.175, 0.885, 0.320, 1.275)',
+			BackInOut: 'cubic-bezier(0.680, -0.550, 0.265, 1.550)'
+		}
+	};
+
+	AP.common = AP.common || Common;
 
 
     /** ========== input, select, button, textarea Focus =========== */

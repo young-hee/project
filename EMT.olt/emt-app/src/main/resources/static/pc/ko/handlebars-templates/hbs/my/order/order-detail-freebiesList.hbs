@@ -1,34 +1,44 @@
 <dt class="on"><button type="button">{{condition (eq this.step 'two') this.title ''}} 사은품</button></dt>
 <dd>
-	<!-- 사은품 목록 -->
-	{{#each fList}}
-		<div class="panel_box">
-			<div class="product">
-				<!-- <div class="thumb"><img ap:src="@{/images/dummy/650000956_IM_01.png}" alt=""></div> -->
-				<div class="info">
-					<div class="align_left">
-						<p class="name">{{this.promoNameBlang}}</p>
-						<p class="flag">{{ordFreebiesCode 'promo' this.awardTgtCode}}</p>
+	<div class="cont">
+		<!-- 사은품 목록 -->
+		{{#each fList}}
+			<div class="panel_box">
+				<div class="product">
+					<!-- {{#if (and (eq ../this.viewYn.checkBox 'Y') (eq ../this.type 'exchange'))}}
+						<div class="check_wrap">
+							<input type="checkbox" id="ordFree_{{this.ordPromoOrdUnitAwardEx.ordUnitAwardSn}}" name="prod_{{this.ordPromoOrdUnitAwardEx.ordUnitAwardSn}}" value="{{json this}}">
+							<label for="ordFree_{{this.ordPromoOrdUnitAwardEx.ordUnitAwardSn}}">
+								<span class="sr_only">상품명</span>
+							</label>
+						</div>
+					{{/if}} -->
+					<div class="thumb"><img src="{{ordPromoOrdUnitAwardEx.ordProdEx.prodImgUrl}}" alt=""></div>
+					<div class="info">
+						<div class="align_left">
+							<p class="flag">{{promoNameBlang}}</p>
+							<p class="name">{{ordPromoOrdUnitAwardEx.ordProdEx.prodNameBlang}} {{ordPromoOrdUnitAwardEx.awardUnitQty}}개</p>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	{{/each}}
-	<!-- //사은품 목록 -->
+		{{/each}}
+		<!-- //사은품 목록 -->
 
-	<!-- 쿠폰 목록 -->
-	{{#each cList}}
-		<div class="panel_box">
-			<div class="product">
-				<!-- <div class="thumb"><img ap:src="@{/images/dummy/650000956_IM_01.png}" alt=""></div> -->
-				<div class="info">
-					<div class="align_left">
-						<p class="name">{{couponNameBlang}}</p>
-						<p class="flag">{{ordFreebiesCode 'coupon' couponBenefitTypeCode}}</p>
+		<!-- 쿠폰 목록 -->
+		{{#each cList}}
+			<div class="panel_box">
+				<div class="product">
+					<!-- <div class="thumb"><img ap:src="@{/images/dummy/650000956_IM_01.png}" alt=""></div> -->
+					<div class="info">
+						<div class="align_left">
+							<p class="name">{{couponNameBlang}}</p>
+							<p class="flag">{{ordFreebiesCode 'coupon' couponBenefitTypeCode}}</p>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	{{/each}}
-	<!-- //쿠폰 목록 -->
+		{{/each}}
+		<!-- //쿠폰 목록 -->
+	</div>
 </dd>

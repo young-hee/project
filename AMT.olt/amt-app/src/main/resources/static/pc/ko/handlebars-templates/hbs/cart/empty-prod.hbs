@@ -1,4 +1,28 @@
-<div class="panel notice">
-	<i class="ico"></i>
-	<p class="text color_gray">장바구니에 담긴 상품이 없습니다.</p>
+<!-- 빈 장바구니 -->
+<div class="basket_nodata" style="background:url(http://ecp-dev.amorepacificmall.com/pc/ko/images/cart/bg_nodata.jpg) no-repeat left top;">
+	<div class="item_area">
+		<p>장바구니에 담긴 상품이 없습니다.</p>
+		<div class="inner">
+			<div class="tumb_slide">
+				<!-- li 갯수는 최대 20개까지 -->
+				<div class="tumb_slideBox">
+					<ul class="clearfix">
+						{{#if (and (ne bestProdList.list null)(ne bestProdList.list undefined))}}
+							{{#each bestProdList.list}}
+								{{#each onlineProdImages}}
+									{{#if (eq ../repImgNo imgNo) }}
+										<li style="background:url({{imgUrl}});"></li>
+									{{/if}}
+								{{/each}}
+							{{/each}}
+						{{/if}}
+					</ul>
+				</div>
+				<div class="best_go">
+					<a href="/display/rank?displayMenuId=rank"><span>베스트 상품 보러가기</span></a>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+<!-- // 빈 장바구니 -->

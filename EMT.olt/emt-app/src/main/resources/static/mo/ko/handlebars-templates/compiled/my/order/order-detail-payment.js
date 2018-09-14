@@ -24,14 +24,14 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-payment"] = Handlebars.tem
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(alias1,(depth0 != null ? depth0.step : depth0),"===",2,{"name":"xif","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "    		<!--/* [S]추가배송비 발생 시에만 노출 */-->\n\n    	</dl>\n\n";
 },"5":function(container,depth0,helpers,partials,data) {
-    var stack1;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.addedPayYn : depth0),"===","N",{"name":"xif","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+  return ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.addedPayYn : depth0),"N",{"name":"eq","hash":{},"data":data}),(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,(depth0 != null ? depth0.payMethodTypeCode : depth0),"Point",{"name":"ne","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"6":function(container,depth0,helpers,partials,data) {
     var alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
   return "    						<dl class=\"table_layout\">\n								<dt><b>"
-    + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.payMethodTypeCode : depth0),"PG",{"name":"eq","hash":{},"data":data}),(depth0 != null ? depth0.payMethodNameBlang : depth0),(helpers.payServiceCodeName || (depth0 && depth0.payServiceCodeName) || alias2).call(alias1,(depth0 != null ? depth0.payServiceCode : depth0),(depth0 != null ? depth0[":"] : depth0),{"name":"payServiceCodeName","hash":{},"data":data}),{"name":"condition","hash":{},"data":data}))
+    + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.payMethodTypeCode : depth0),"PG",{"name":"eq","hash":{},"data":data}),(depth0 != null ? depth0.payMethodNameBlang : depth0),(helpers.payServiceCodeName || (depth0 && depth0.payServiceCodeName) || alias2).call(alias1,(depth0 != null ? depth0.payServiceCode : depth0),{"name":"payServiceCodeName","hash":{},"data":data}),{"name":"condition","hash":{},"data":data}))
     + "</b></dt>\n								<dd class=\"align_right\">"
     + alias3((helpers.currencyFormatDefault || (depth0 && depth0.currencyFormatDefault) || alias2).call(alias1,(helpers.calc || (depth0 && depth0.calc) || alias2).call(alias1,(depth0 != null ? depth0.beforePayAmt : depth0),"-",(depth0 != null ? depth0.afterPayAmt : depth0),{"name":"calc","hash":{},"data":data}),"원",{"name":"currencyFormatDefault","hash":{},"data":data}))
     + "</dd>\n							</dl>\n";

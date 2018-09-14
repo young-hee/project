@@ -9,22 +9,21 @@ package kr.ap.emt.display.controller;
 import kr.ap.comm.support.common.AbstractController;
 import net.g1project.ecp.api.model.offlinestore.store.BeaconEventCollectResult;
 import net.g1project.ecp.api.model.offlinestore.store.BeaconEventPost;
-import net.g1project.ecp.api.model.offlinestore.store.StoreEventRequesterResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/beacon")
+@RequestMapping("/etudems")
 public class BeaconRestController extends AbstractController {
 
     /** 비콘메시지 이벤트 수집
      * @param beaconEventPost
      * @return hashMap
      */
-	@RequestMapping("/etude/zoyi/beaconEventCollect")
-    public ResponseEntity<?> getApplicationVersion(@RequestBody BeaconEventPost beaconEventPost) {
+	@RequestMapping("/zoyi/reg")
+    public ResponseEntity<?> getBeaconEventCollect(@RequestBody BeaconEventPost beaconEventPost) {
       
 		BeaconEventCollectResult requesterResult = storeApi.beaconEventCollect(beaconEventPost);
 

@@ -10,7 +10,7 @@
 					</ul>
 				</dd>
 			{{/xif}}
-			{{#xif pointTypeCode '===' 'MembershipPoint'}}
+			{{#if (and (eq pointTypeCode 'MembershipPoint')(eq membershipServiceCode 'BP'))}}
 				<dd class="panel">
 					<ul class="info_list">
 						<li class="clear">
@@ -19,8 +19,8 @@
 						</li>
 					</ul>
 				</dd>
-			{{/xif}}
-			{{#xif pointTypeCode '===' 'ActivityPoint'}}
+			{{/if}}
+			{{#if (and (eq pointTypeCode 'MembershipPoint')(eq membershipServiceCode 'CP'))}}
 				<dd class="panel">
 					<ul class="info_list">
 						<li class="clear">
@@ -29,7 +29,7 @@
 						</li>
 					</ul>
 				</dd>
-			{{/xif}}
+			{{/if}}
 			{{#xif payMethodCode '===' 'wpay'}}
 				<dd class="panel">
 					<ul class="info_list">
@@ -38,8 +38,11 @@
 							<span>{{currencyFormatDefault payAmt '원'}}</span>
 						</li>
 						{{#if pgPayEx.cardCoCode}}
-							<li>{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})
-								<p>{{creditcardPayType pgPayEx.creditcardPayTypeCode}} / {{pgPayEx.instPeriod}}{{pgPayEx.intFreeInstPeriod}}</p>
+							<li>
+								{{pgPayEx.cardCoName}}{{#if pgPayEx.cardNo}}({{pgPayEx.cardNo}}){{/if}}
+								{{#if pgPayEx.cardCoCode}}
+									<p>{{creditcardPayType pgPayEx}}</p>
+								{{/if}}
 							</li>
 						{{/if}}
 					</ul>
@@ -53,8 +56,11 @@
 							<span>{{currencyFormatDefault payAmt '원'}}</span>
 						</li>
 						{{#if pgPayEx.cardCoCode}}
-							<li>{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})
-								<p>{{creditcardPayType pgPayEx.creditcardPayTypeCode}} / {{pgPayEx.instPeriod}}{{pgPayEx.intFreeInstPeriod}}</p>
+							<li>
+								{{pgPayEx.cardCoName}}{{#if pgPayEx.cardNo}}({{pgPayEx.cardNo}}){{/if}}
+								{{#if pgPayEx.cardCoCode}}
+									<p>{{creditcardPayType pgPayEx}}</p>
+								{{/if}}
 							</li>
 						{{/if}}
 					</ul>
@@ -68,8 +74,11 @@
 							<span>{{currencyFormatDefault payAmt '원'}}</span>
 						</li>
 						{{#if pgPayEx.cardCoCode}}
-							<li>{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})
-								<p>{{creditcardPayType pgPayEx.creditcardPayTypeCode}} / {{pgPayEx.instPeriod}}{{pgPayEx.intFreeInstPeriod}}</p>
+							<li>
+								{{pgPayEx.cardCoName}}{{#if pgPayEx.cardNo}}({{pgPayEx.cardNo}}){{/if}}
+								{{#if pgPayEx.cardCoCode}}
+									<p>{{creditcardPayType pgPayEx}}</p>
+								{{/if}}
 							</li>
 						{{/if}}
 					</ul>
@@ -83,8 +92,11 @@
 							<span>{{currencyFormatDefault payAmt '원'}}</span>
 						</li>
 						{{#if pgPayEx.cardCoCode}}
-							<li>{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})
-								<p>{{creditcardPayType pgPayEx.creditcardPayTypeCode}} / {{pgPayEx.instPeriod}}{{pgPayEx.intFreeInstPeriod}}</p>
+							<li>
+								{{pgPayEx.cardCoName}}{{#if pgPayEx.cardNo}}({{pgPayEx.cardNo}}){{/if}}
+								{{#if pgPayEx.cardCoCode}}
+									<p>{{creditcardPayType pgPayEx}}</p>
+								{{/if}}
 							</li>
 						{{/if}}
 					</ul>
@@ -98,8 +110,11 @@
 							<span>{{currencyFormatDefault payAmt '원'}}</span>
 						</li>
 						{{#if pgPayEx.cardCoCode}}
-							<li>{{pgPayEx.cardCoName}}({{pgPayEx.cardNo}})
-								<p>{{creditcardPayType pgPayEx.creditcardPayTypeCode}} / {{pgPayEx.instPeriod}}{{pgPayEx.intFreeInstPeriod}}</p>
+							<li>
+								{{pgPayEx.cardCoName}}{{#if pgPayEx.cardNo}}({{pgPayEx.cardNo}}){{/if}}
+								{{#if pgPayEx.cardCoCode}}
+									<p>{{creditcardPayType pgPayEx}}</p>
+								{{/if}}
 							</li>
 						{{/if}}
 					</ul>
@@ -113,7 +128,8 @@
 							<span>{{currencyFormatDefault payAmt '원'}}</span>
 						</li>
 						{{#if pgPayEx.virtualBankAcBankCode}}
-						<li>{{pgPayEx.virtualBankAcBankName}}({{pgPayEx.virtualDepositBankAcNo}})
+						<li>
+							{{pgPayEx.virtualBankAcBankName}}{{#if pgPayEx.virtualDepositBankAcNo}}({{pgPayEx.virtualDepositBankAcNo}}){{/if}}
 							<p>예금주: {{pgPayEx.virtualBankAcAcHolder}}</p>
 						</li>
 						{{/if}}
@@ -124,13 +140,16 @@
 				<dd class="panel">
 					<ul class="info_list">
 						<li class="clear">
-							<span>가상계좌</span>
+							<span>무통장 입금</span>
 							<span>{{currencyFormatDefault payAmt '원'}}</span>
 						</li>
 						{{#if pgPayEx.virtualBankAcBankCode}}
-						<li>{{pgPayEx.virtualBankAcBankName}}({{pgPayEx.virtualDepositBankAcNo}})
+						<li>
+							{{pgPayEx.virtualBankAcBankName}}{{#if pgPayEx.virtualDepositBankAcNo}}({{pgPayEx.virtualDepositBankAcNo}}){{/if}}
 							<p>예금주: {{pgPayEx.virtualBankAcAcHolder}}</p>
-							<p><em>입금기한 {{dateFormat pgPayEx.virtualBankAcDeadlineDt "YYYY-MM-DD"}} 까지</em></p>
+							{{#if pgPayEx.virtualBankAcDeadlineDt}}
+								<p><em>입금기한 {{dateFormat pgPayEx.virtualBankAcDeadlineDt "YYYY-MM-DD"}} 까지</em></p>
+							{{/if}}
 						</li>
 						{{/if}}
 					</ul>

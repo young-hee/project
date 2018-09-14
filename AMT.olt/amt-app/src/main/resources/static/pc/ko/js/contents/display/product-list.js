@@ -9,15 +9,16 @@
 	var ProductList = $B.Class.extend({
 		initialize: function ( options ) {
 			this._$target = options.$target;
+			this._component = options.component;
 			this._template = options.template;
 			this._displayMenuId = options.displayMenuId;
 			this._api = options.api;
 			this._key = ( options.key ) ? { displayMenuId: options.key } : {};
 
 			this._$title = this._$target.find( '.title_result' );
-			this._$list = this._$target.find( '.list_product > ul' );
+			this._$list = ( options.$targetList ) ? options.$targetList: this._$target.find( '.list_product > ul' );
 			this._$sort = this._$target.find( '.search_sort' );
-			this._$sortView = this._$sort.find( 'select' );
+			this._$sortView = this._$target.find( '.search_sort select' );
 			this._$paging = this._$target.find( '.pagination' );
 			this._$loading = this._$target.find( '.loading' );
 			this._$resultNone = this._$target.find( '.product_none' );
@@ -54,8 +55,7 @@
 			AP.api[this._api]( this._key, this._param ).done(function ( result ) {
 				this._done( result );
 			}.bind( this )).fail(function( error ) {
-				console.log( error.errorMessage );
-				console.log( error );
+				console.log( error.statusText + ' : ' + error.errorCode + error.errorMessage );
 				this.loadingStop();
 				this._$resultNone.show();
 			}.bind( this ));
@@ -64,6 +64,7 @@
 		},
 
 		loadingStart: function () {
+			this._isClearPaging = true;
 			this._isLoading = true;
 			this._$loading.show();
 			this._$list.empty();
@@ -78,10 +79,21 @@
 		/** =============== Private Methods ============== */
 		_done: function ( result ) {
 			if ( result['filterableOnlineProdList'] ) {
-				result = result['filterableOnlineProdList']
+				result = result['filterableOnlineProdList'];
 			} else if ( result['onlineProdList'] ) {
-				result = result['onlineProdList']
+				result = result['onlineProdList'];
 			}
+
+			// TODO: test
+			// result = {
+			// 	list: [0,1,2,3,4,5,6,7,8,9,10,11],
+			// 	offset: 0,
+			// 	limit: 50,
+			// 	totalCount:181,
+			// 	filter: {}
+			// };
+
+			result.displayMenuId = this._displayMenuId;
 
 			if( this._isLoading ) {
 				this.loadingStop();
@@ -89,13 +101,17 @@
 
 			if ( !this._isSearchFilterData ) {
 				this._isSearchFilterData = true;
-				if ( result.filter ) {
+				if ( result.filter && result.filter.addAttrs.length ) {
 					this.dispatch( 'init-search-filter', { data: result.filter });
+					this.dispatch( 'set-display-cate', {data: result.filter });
+				} else {
+					this.dispatch( 'clear-search-filter' );
 				}
 			}
 
 			if ( result.totalCount == 0 ) {
 				this._$resultNone.show();
+				this._$title.find( '.total' ).text( '' );
 			} else {
 				this._data = result.list;
 
@@ -107,33 +123,18 @@
 					this._clearPaging();
 				}
 				this._setPaging( this._param.limit, result.totalCount );
+
+				this._$list.find( '.item:not(.item-apply)' ).each(function ( index, target ) {
+					new AP.ProductItem({
+						$target: $( target ),
+						data: this._data[index],
+						displayMenuId: this._displayMenuId
+					});
+				}.bind( this ));
 			}
 		},
 
 		_setEvent: function () {
-			// 좋아요
-			this._$list.on( 'click', '.like', function (e) {
-				var $like = $( e.currentTarget ),
-					index = $like.closest( '.item' ).data( 'index' ),
-					prodSn = this._data[index].products[0].prodSn;
-
-				AP.login().done(function () {
-					// TODO: 좋아요
-					// AP.api.postRecommend({}, { prodSn: prodSn }).done(function ( result ) {
-					// 	$like.find( '.ico_favorite' ).toggleClass( 'on' );
-					// }.bind( this ));
-				}.bind( this ));
-
-				return false;
-			}.bind( this ));
-
-			// 장바구니
-			this._$list.on( 'click', '.cart', function (e) {
-				e.preventDefault();
-				var index = $( e.currentTarget ).closest( '.item' ).data( 'index' );
-				AP.addCart.add( this._data[index].products );
-			}.bind( this ));
-
 			// 정렬
 			if( this._$sort.length ) {
 				this._param.prodSort = this._$sort.find( 'a' ).eq(0).data( 'value' );

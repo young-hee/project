@@ -47,7 +47,7 @@
 							</dl>
 							<dl class="giftcard">
 								<dt>기프트카드</dt>
-								<dd><a href="/my/page/myGiftCardList"><strong>999,999</strong>원</a></dd>
+								<dd><a href="/my/page/myGiftCardList"><strong th:text="${#IntegUtil.toCommaNumber(giftCardPoint)}">999,999</strong>원</a></dd>
 							</dl>
 						</div>
 					</div>
@@ -629,6 +629,7 @@
 			        contents.contents = data;
 			        var modal = AP.modal.info(contents);
 			        var $modalEl = modal.getElement(); //jquery object
+    		        $modalEl.find('.layer_wrap.layer_md').addClass('grade_benefit');
 
 			        $modalEl.find('#terms-ok').click(function() {
 		    			sendPrivateInfo(data1);
@@ -652,6 +653,7 @@
 			        contents.contents = data;
 			        var modal = AP.modal.info(contents);
 			        var $modalEl = modal.getElement(); //jquery object
+			        
 
 			        $modalEl.find('.btn_fix_neutral').click(function() {
 			        	modal.close();

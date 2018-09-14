@@ -101,6 +101,7 @@
 			var nextUsePayMethodCode = /*[[${ordEx.nextUsePayMethodCode}]]*/ null;
 
 			if (nextUsePayMethodCode) {
+				var clicked = true; // 2018-09-10 추가
 				switch (nextUsePayMethodCode) {
 					case 'wpay':
 						<!--원터치 간편결제-->
@@ -138,10 +139,13 @@
 						<!--Paypal-->
 						break;
 					default:
+						clicked = false; // 2018-09-10 추가
 						break;
 				}
-
-				$('[name=nextPayUseYn]').trigger("click");
+				// 2018-09-10 추가
+				if(clicked){
+					$('[name=nextPayUseYn]').trigger("click");
+				}
 			}
 		}
 
@@ -208,6 +212,9 @@
 					$('[name=depositPrice]').val(depositAvailAmt);
 				}
 			}
+			//(20180912_ben수정사항)
+			// 결제수단이 체크되어 있으면..
+			//PayMethodCheck();
 		});
 
 		$('[name=depositPrice]').on('change', function(e){
@@ -240,7 +247,28 @@
 					$(this).val('');
 				}
 			}
+			//(20180912_ben수정사항)
+			// 결제수단이 체크되어 있으면..
+			//PayMethodCheck();
 		});
+
+		//(20180912_ben수정사항)
+		// 결제수단 체크검증
+		function PayMethodCheck() {
+			if ($('[name=payMethod]').hasClass("on")) {
+				var depositPrice = $('[name=depositPrice]').val();					// 입력한 사용가능금액
+				var finalPamtPcurPrice = $('[name="finalPamtPcurPrice"]').val();	// 최종결제금액
+				var payAmt = finalPamtPcurPrice - depositPrice;
+				var payMethodSn = $('[name=payMethodSn]').val();
+
+				console.log("depositPrice : " + depositPrice );
+				console.log("finalPamtPcurPrice : " + finalPamtPcurPrice );
+				console.log("payAmt : " + payAmt );
+				console.log("payMethodSn : " + payMethodSn );
+
+				calculationPayMethod(payMethodSn, payAmt);
+			}
+		}
 
 		// 예치금 사용 화면제어
 		function depositPriceInit() {
@@ -268,43 +296,17 @@
 					$('#w_pay').addClass('on');
 
 					isWpayMember(obj, payMethod, goPayMethod, payMethodSn, payServiceCode, payMethodCode);	//wpay 회원가입 여부 체크
+
+					// 결제수단 세팅
+					$('input[name=payMethod]').attr("value", payMethod);
+					$('input[name=payMethodSn]').attr("value", payMethodSn);
+					$('input[name=payServiceCode]').attr("value", payServiceCode);
+					$('input[name=payMethodCode]').attr("value", payMethodCode);
 				}
 
 				//validation
 				$('select[name=cardCo]').prop("required", false);
 				$('input[name=receipt]').prop("required", false);
-
-				/* var payMethod = $('[name="payMethod"]').val();
-				if(payMethod == null || payMethod == '') {
-					$('[name="payMethod"]').attr('checked', false);
-				} */
-
-				/*AP.modal.confirm( 'WPAY 회원가입이 필요합니다. 회원가입하시겠습니까?' ).addListener( 'modal-close', function (e) {
-					if(e.closeType == 'confirm'){// WPAY 회원가입 요청
-						//getWPayMemReqCall();
-					}
-				});
-				$("#choose_payment_01").hide();
-				$("#choose_payment_02").hide();
-				$('input[name=goPayMethod]').val('');
-				$("select[name=cardCo]").prop('selectedIndex',0); // 콤보박스 초기화
-				$('#checkedPayMethod').html($(obj).attr('title')); // 선택결제수단 Title
-
-				// 현금영수증신청 디폴드 설정
-				$("#receipt1").trigger('click');
-
-				// 결제수단 별 유의사항
-				$("#payment_info_01").show();
-				$("#payment_info_02").hide();
-				$("#payment_info_03").hide();
-				$("#payment_info_04").hide();
-				$("#payment_info_05").hide();
-
-				// 결제수단 세팅
-				$('input[name=payMethod]').attr("value", payMethod);
-				$('input[name=payMethodSn]').attr("value", payMethodSn);
-				$('input[name=payServiceCode]').attr("value", payServiceCode);
-				$('input[name=payMethodCode]').attr("value", payMethodCode);*/
 			}
 			else if(payMethod == 'wcard' && goPayMethod == ''){ // 신용카드
 				if ($('#credit').hasClass('on')) {
@@ -580,6 +582,26 @@
 				$('select[name=cardCo]').prop("required", false);
 				$('input[name=receipt]').prop("required", false);
 			}
+			//(20180912_ben수정사항)(20180912_ben수정사항)
+			// 결제수단 선택
+			//calculationPayMethod(payMethodSn, $('[name=price]').val());
+		}
+		//(20180912_ben수정사항)
+		/* 결제수단 선택 적용 */
+		function calculationPayMethod(payMethodSn, payAmt){
+			console.log("payAmt : " + payAmt);
+			$('#orderLoading').show();
+			AP.api.ordReceptChangePayMethod({}, {
+				ordSn : ordSn,
+				payMethodSn : payMethodSn,
+				payAmt : payAmt
+			}).done(function (data) {
+				if (data.ordHistEx != null) {
+					amtPcurInitAjax(data);
+				}
+			}).always(function(){
+				$('#orderLoading').hide();
+			});
 		}
 
 		/* 현금영수증 발급신청 구분 */
@@ -671,12 +693,6 @@
 			$("#payment_info_03").hide();
 			$("#payment_info_04").hide();
 			$("#payment_info_05").hide();
-
-			// 결제수단 세팅
-			$('input[name=payMethod]').attr("value", payMethod);
-			$('input[name=payMethodSn]').attr("value", payMethodSn);
-			$('input[name=payServiceCode]').attr("value", payServiceCode);
-			$('input[name=payMethodCode]').attr("value", payMethodCode);
 		}
 		
 		/*회원가입결과 메세지 출력*/

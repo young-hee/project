@@ -21,13 +21,13 @@
 		setDefaultData: function ( model ) {
 			this._defaultModel = model;
 			this._menuType = this._defaultModel.prodGrpDisplayMethodCode;
-			console.log(this._defaultModel.prodGroupList);
+			//console.log(this._defaultModel.prodGroupList);
 			this._setInProductsList();
 			this._setCouponDownload();
 			this._setComments();
-			console.log(this._defaultModel);
+			//console.log(this._defaultModel);
 			this._setEvents();
-			this._setOtherEventList();
+			//this._setOtherEventList();
 		},
 
 		/** =============== Private Methods =============== */
@@ -102,14 +102,15 @@
 		/**
 		 * 댓글 설정
 		 */
-		_setComments: function ( articleSn, liveSettingsYn ) {
+		_setComments: function () {
 			//if( this._defaultModel.eventType === 'Comment' ){
-				new AP.Comments({
-					isScrollType: liveSettingsYn === 'Y',
-					isLive: liveSettingsYn === 'Y',
-					planDisplaySn: this._defaultModel.planDisplaySn
-				});
+//				new AP.Comments({
+//					isScrollType: liveSettingsYn === 'Y',
+//					isLive: liveSettingsYn === 'Y',
+//					planDisplaySn: this._defaultModel.planDisplaySn
+//				});
 			//}
+			new AP.SimpleComments( this._$target.find('.comment_area'), this._defaultModel.planDisplaySn, this._title );
 		},
 		
 		//이벤트 핸들러
@@ -192,14 +193,15 @@
 		_setOtherEventList: function () {
 			var $otherArea = this._$target.find( '.event_list' );
 			if ( !$otherArea.length ) return;
-			//console.log("other" + $otherArea);
+			console.log("other" + $otherArea);
 			AP.api.planDisplayList( null, {
 				status: 'Progress',
-				types: 'General',
+				types: 'All',
 				order: 'StartDt',
 				offset: 0,
 				limit: 6
 			}).done(function ( result ) {
+				console.log(result.planDisplayEventListResult);
 				var html = AP.common.getTemplate( 'display.events.event-other-list', result.planDisplayEventListResult );
 				//$otherArea.find( '.loading' ).hide();
 				$otherArea.html( html );

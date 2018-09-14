@@ -1,0 +1,111 @@
+{{#each this.list}}
+	<li class="item" data-online-prod-sn="{{ this.onlineProdSn }}" data-index="{{@index}}">
+		<div class="product_box">
+			<a href="{{ productDetailPath this.onlineProdSn }}">
+				<div class="visual_section">
+					<img src="{{ this.onlineProdImages.[0].imgUrl }}" alt="">
+					{{#if this.onlineProdImages.[1].imgUrl}}
+						<img src="{{ this.onlineProdImages.[1].imgUrl }}" alt="">
+					{{else}}
+						<img src="{{ this.onlineProdImages.[0].imgUrl }}" alt="">
+					{{/if}}
+					<div class="benefit">
+						{{#xif this.onlineProdGift.giftProds '>' 0}}
+							<span class="special">스페셜기프트</span>
+						{{/xif}}
+						{{#xif this.onlineProdGift.giftcardTargetYn '==' 'Y'}}
+							<span class="gift">기프트카드</span>
+						{{/xif}}
+					</div>
+					{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+						<div class="soldout">
+							<span>일시품절</span>
+						</div>
+					{{/xif}}
+				</div>
+				<div class="info_section">
+					<p class="txt_name">{{ this.products.[0].brandName }}</p>
+					<p class="txt_summary ellipsis line2">{{ this.onlineProdName }}</p>
+					<div class="price_atc">
+						{{#xif this.onlineProdPriceSummary.maxFinalDiscountRate '>' 0}}
+							<span class="txt_sale">{{ this.onlineProdPriceSummary.maxFinalDiscountRate }}%</span>
+						{{/xif}}
+						<span class="txt_price"><em>{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountOnlinePrice }}</em>원{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}}~{{/xif}}</span>
+						{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+							<del class="txt_del">{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountBeforeSalePrice }}원</del>
+						{{/xif}}
+					</div>
+					<div class="user_atc">
+						<span class="mark_star_sm star{{ this.reviewScopeAvg }}"><span class="sr_only">구매 평점 별 5개 중 {{ this.reviewScopeAvg }}개</span></span>
+						<span class="txt_review">리뷰 {{ numberFormat this.reviewCount }}</span>
+					</div>
+				</div>
+			</a>
+			<div class="work_box">
+				<ul class="item_user">
+					<li>
+						<a href="#none" role="button" class="like">
+							<i class="ico_favorite {{#xif this.shoppingMarkExistYn '==' 'Y'}}on{{/xif}}"></i>
+							<span class="sr_only">좋아요</span>
+						</a>
+					</li>
+					<li>
+						<a href="#none" role="button" class="cart">
+							<i class="ico_basket"></i>
+							<span class="sr_only">장바구니</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			{{#xif ../displayMenuId '==' 'sale'}}
+				<div class="item_section">
+					<div class="rside">
+						<a href="javascript:;" class="link_brand">{{ this.products.[0].brandName }}</a>
+					</div>
+				</div>
+			{{/xif}}
+			{{#xif ../displayMenuId '==' 'onePlusOnePromo'}}
+				<div class="item_section">
+					<div class="rside">
+						<a href="javascript:;" class="link_brand">{{ this.products.[0].brandName }}</a>
+					</div>
+				</div>
+			{{/xif}}
+			{{#xif ../displayMenuId '==' 'specialGift'}}
+				<div class="item_section">
+					<div class="rside">
+						<a href="javascript:;" class="link_brand">{{ this.products.[0].brandName }}</a>
+					</div>
+				</div>
+			{{/xif}}
+		</div>
+
+		{{#xif ../displayMenuId '==' 'specialGift'}}
+			<div class="slide" data-ix-options="view-length:3; move-length:3;loop:false;datum-point:-25px">
+				<div class="ix-list-viewport">
+					<ul class="ix-list-items">
+						<li class="ix-list-item">
+							<a href="#"><img src="/pc/ko/images/dummy/img_product_thumb_06.jpg" alt=""></a>
+						</li>
+						<li class="ix-list-item">
+							<a href="#"><img src="/pc/ko/images/dummy/img_product_thumb_06.jpg" alt=""></a>
+						</li>
+						<li class="ix-list-item">
+							<a href="#"><img src="/pc/ko/images/dummy/img_product_thumb_06.jpg" alt=""></a>
+						</li>
+						<li class="ix-list-item">
+							<a href="#"><img src="/pc/ko/images/dummy/img_product_thumb_06.jpg" alt=""></a>
+						</li>
+					</ul>
+				</div>
+				<div class="ix-controller">
+					<div class="slide_direction">
+						<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
+						<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
+					</div>
+				</div>
+			</div>
+		{{/xif}}
+	</li>
+{{/each}}

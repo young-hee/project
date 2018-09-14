@@ -26,17 +26,21 @@
 					</a>
 				</td>
 				{{#if (eq ../type 'cashReceipts')}}
-					<td>가상계좌</td>
+					<td>{{this.payMethodNameBlang}}</td>
 				{{/if}}
 				<td>{{currencyFormat this.onlineOrdProdInfo.totalOrdAmt}}</td>
 				{{#xif ../type '===' 'cashReceipts'}}
 					<td class="status"><em>{{ordStatusCheck ../type this.onlineOrdProdInfo.ordDetailStatusCode}}</em></td>
-					{{#xif this.cashReceiptIssueYn '==' 'Y'}}
-						<td>발급완료</td>
+					{{#xif this.cashReceiptIssuePossibleYn '===' 'Y'}}
+						{{#xif this.cashReceiptIssueYn '===' 'Y'}}
+							<td rowspan="{{ condition (isEmpty this.storePickupOrdProdInfo) 1 2 }}">발급완료</td>
+						{{else}}
+							<td rowspan="{{ condition (isEmpty this.storePickupOrdProdInfo) 1 2 }}">
+								<button class="btn_sm_neutral" type="button" onclick="reqCashReceipts({{this.ordSn}}, {{json this}})"> 발급 신청</button>
+							</td>
+						{{/xif}}
 					{{else}}
-						<td rowspan="{{ condition (isEmpty this.storePickupOrdProdInfo) 1 2 }}">
-							<button class="btn_sm_neutral" type="button" onclick="reqCashReceipts({{this.ordSn}}, {{json this}})"> 발급 신청</button>
-						</td>
+						<td><button class="btn_sm_bordered" type="button" onclick="showCrditCardStatement({{json this}})">매출 전표</button></td>
 					{{/xif}}
 				{{else}}
 					<td class="status">
@@ -87,18 +91,22 @@
 					</a>
 				</td>
 				{{#if (eq ../type 'cashReceipts')}}
-					<td>가상계좌</td>
+					<td>{{this.payMethodNameBlang}}</td>
 				{{/if}}
 				<td>{{currencyFormat this.storePickupOrdProdInfo.totalOrdAmt}}</td>
-				{{#xif (eq ../type 'cashReceipts') '&&' (isEmpty this.onlineOrdProdInfo)}}
+				{{#xif ../type '===' 'cashReceipts'}}
 					<td class="status"><em>{{ordStatusCheck 'takeOut' this.storePickupOrdProdInfo.ordDetailStatusCode}}</em></td>
-					{{#xif this.cashReceiptIssueYn '==' 'Y'}}
-						<td>발급완료</td>
-					{{else}}
-						<td>
-							<button class="btn_sm_neutral" type="button" onclick="reqCashReceipts({{this.ordSn}}, {{json this}})"> 발급 신청</button>
-						</td>
-					{{/xif}}
+					{{#if this.onlineOrdProdInfo}}
+						{{#xif this.cashReceiptIssuePossibleYn '===' 'Y'}}
+							{{#xif this.cashReceiptIssueYn '===' 'Y'}}
+								<td>발급완료</td>
+							{{else}}
+								<td><button class="btn_sm_neutral" type="button" onclick="reqCashReceipts({{this.ordSn}}, {{json this}})"> 발급 신청</button></td>
+							{{/xif}}
+						{{else}}
+							<td><button class="btn_sm_bordered" type="button" onclick="showCrditCardStatement({{json this}})">매출 전표</button></td>
+						{{/xif}}
+					{{/if}}
 				{{else}}
 					<td class="status">
 						<p><em>{{ordStatusCheck 'takeOut' this.storePickupOrdProdInfo.ordDetailStatusCode}}</em></p>

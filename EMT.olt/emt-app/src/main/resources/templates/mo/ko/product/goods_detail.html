@@ -538,8 +538,7 @@
 					th:if="${#lists.size(#collections.where(prd.products, {storePickupBtnEnable: 'Y'})) > 0}">테이크아웃
 			</button>
 			
-			<button type="button" class="btn_md_primary btn_restock_notify_me"
-					th:if="${prd.saleDisplayStatus == 'OutOfStock'}">언제들어와?
+			<button type="button" class="btn_md_primary btn_restock_notify_me" th:if="${prd.saleDisplayStatus == 'OutOfStock'}">언제들어와?
 			</button>
 
 			<th:block th:if="${prd.prodTypeCode != 'Presale' and prd.saleDisplayStatus == 'OnSale'}">
@@ -570,6 +569,12 @@
 				<span class="btn_md_disabled" th:if="${prd.saleDisplayStatus == 'EndSale'}"><span><strong>판매 종료!</strong>다음을 기약해 주세요~</span></span>
 				<span class="btn_md_disabled" th:if="${prd.saleDisplayStatus == 'Exhaustion'}"><span><strong>판매 수량 모두 소진!</strong>다음을 기약해 주세요~</span></span>
 			</th:block>
+			
+			<!--/* 핫딜상품 판매종료 */-->
+			<th:block th:if="${prd.prodTypeCode == 'SpPriceSale'}">
+				<span class="btn_md_disabled" th:if="${prd.saleDisplayStatus == 'EndSale'}"><span><strong>판매 종료!</strong>다음을 기약해 주세요~</span></span>
+			</th:block>
+			
 		</div>
 
 		<!--/* 옵션만 열고 닫을때 class open 추가 */-->

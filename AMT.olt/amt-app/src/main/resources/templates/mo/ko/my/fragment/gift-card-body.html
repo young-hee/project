@@ -1,0 +1,46 @@
+<th:block layout:fragment="gift-card-body">
+	
+<div class="tab_cont" th:unless="${pageVo.totalRowCount == '0'}">
+	<dl class="giftcard_info" th:each="item : ${giftcardList}">
+		<dt class="title"><b th:text="${#IntegUtil.getGiftCardStatusName(item.status)}">사용완료</b><small>만료일 : <th:block th:text="${#IntegUtil.dateformat(item.expirationDate, 'yyyy.MM.dd')}">0000.00.00</th:block></small></dt>
+		<dd>
+			<div class="clear">
+				<div class="price">
+					<dl class="ui_table">
+						<dt>발행금액</dt>
+						<dd><b><th:block th:text="${#IntegUtil.toCommaNumber(item.faceprice)}">999,99</th:block>원</b></dd>
+					</dl>
+					<dl class="ui_table">
+						<dt>사용금액</dt>
+						<dd><b><th:block th:text="${#IntegUtil.toCommaNumber(item.amount)}">999,99</th:block>원</b></dd>
+					</dl>
+				</div>
+				<dl class="align_right">
+					<dt>잔액</dt>
+					<dd><b><th:block th:text="${#IntegUtil.toCommaNumber(item.balance)}">999,999</th:block>원</b></dd>
+				</dl>
+			</div>
+			<div class="color_light_gray">
+				<dl class="ui_table">
+					<dt>발급일</dt>
+					<dd th:text="${#IntegUtil.dateformat(item.issueDate, 'yyyy.MM.dd')}">2010.12.12</dd>
+				</dl>
+				<dl class="ui_table">
+					<dt>보낸사람</dt>
+					<dd><th:block th:if="${item.from != null}"><th:block th:text="${item.from}">모바일 리뉴얼 이벤트</th:block> 님</th:block></dd>
+				</dl>
+				<a href="javascript:;" th:text="${item.barcode}" class="b_num">250930180140</a>
+			</div>
+		</dd>
+	</dl>
+</div>
+
+<div class="tab_cont" th:if="${pageVo.totalRowCount == '0'}">
+	<h3 class="sr_only">전체</h3>
+	<div class="no_data">
+		<b>등록된 기프트카드가<br>
+			없습니다</b>
+	</div>
+</div>
+	
+</th:block>

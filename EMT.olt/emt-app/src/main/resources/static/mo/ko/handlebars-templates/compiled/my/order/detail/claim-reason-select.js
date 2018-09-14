@@ -17,7 +17,7 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["claim-reason-select"] = Handl
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "<fieldset class=\"form sel\" id=\""
+  return "<fieldset class=\"form\" id=\""
     + alias4(((helper = (helper = helpers.ordHistProdNo || (depth0 != null ? depth0.ordHistProdNo : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"ordHistProdNo","hash":{},"data":data}) : helper)))
     + "\">\n	<legend class=\"sr_only\">반품사유 선택 및 입력</legend>\n	<div class=\"input_group\">\n		<div>\n			<select name=\"\" id=\"rs_"
     + alias4(((helper = (helper = helpers.ordHistProdNo || (depth0 != null ? depth0.ordHistProdNo : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"ordHistProdNo","hash":{},"data":data}) : helper)))

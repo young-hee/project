@@ -1,5 +1,3 @@
-<html ap:decorate="~{layout/only-member-info}">
-<body>
         <!-- #ap_container -->
         <div ap:fragment="layout-contents">
             <div class="layer_popup fullpage layer_member">
@@ -30,7 +28,7 @@
 																</select>
 															</div>
 															<div>
-																<input type="text" name="phoneNumber2" placeholder="국번 제외한 나머지" title="전화번호 입력">
+																<input type="tel" name="phoneNumber2" placeholder="국번 제외한 나머지" title="전화번호 입력" required="required" data-msg-required="휴대폰번호를 입력해 주세요. 휴대폰번호 입력란으로 이동합니다.">
 															</div>
 															<div class="btn">
 																<button type="button" id="cert">인증</button>
@@ -41,12 +39,12 @@
 												<div class="grid">
 													<div class="boxing">
 														<div class="input_group">
-															<input type="text" placeholder="인증번호 입력">
+															<input type="text" placeholder="인증번호 입력" id="number">
 														</div>
 													</div>
 												</div>
 												<div class="grid">
-													<p class="txt_limit">입력 제한 시간 : 2분 59초</p>
+													<p class="txt_limit">입력 제한 시간 : <span name="timer"></span></p>
 												</div>
 											</div>
 											<div class="msg_area">
@@ -65,10 +63,3 @@
                 </div>
             </div>
         </div>
-
-    <!--/* 하단 js등을 실행하는 마지막 영역 */-->
-    <th:block ap:fragment="layout-endpoint">
-    </th:block>
-
-</body>
-</html>

@@ -49,7 +49,7 @@ this["AP"]["handlebars"]["main"]["home"]["hot-deal-list"] = Handlebars.template(
     + "\" class=\"lazy_load_wrap\">\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.saleDisplayStatus : depth0),"==","OutOfStock",{"name":"xif","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "											<img class=\"lazy_load\" src=\"\" data-src=\""
-    + alias3((helpers.replaceImagePath || (depth0 && depth0.replaceImagePath) || alias2).call(alias1,(depth0 != null ? depth0.imgUrl : depth0),208,208,{"name":"replaceImagePath","hash":{},"data":data}))
+    + alias3((helpers.replaceImagePath || (depth0 && depth0.replaceImagePath) || alias2).call(alias1,(depth0 != null ? depth0.imgUrl : depth0),270,270,{"name":"replaceImagePath","hash":{},"data":data}))
     + "\" alt=\""
     + alias3(container.lambda((depths[1] != null ? depths[1].onlineProdName : depths[1]), depth0))
     + "\">\n											</a>\n";
@@ -71,7 +71,7 @@ this["AP"]["handlebars"]["main"]["home"]["hot-deal-list"] = Handlebars.template(
     + "\" class=\"lazy_load_wrap\">\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.saleDisplayStatus : depth0),"==","OutOfStock",{"name":"xif","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "										<img class=\"lazy_load\" src=\"\" data-src=\""
-    + alias3((helpers.replaceImagePath || (depth0 && depth0.replaceImagePath) || alias2).call(alias1,(depth0 != null ? depth0.imgUrl : depth0),208,208,{"name":"replaceImagePath","hash":{},"data":data}))
+    + alias3((helpers.replaceImagePath || (depth0 && depth0.replaceImagePath) || alias2).call(alias1,(depth0 != null ? depth0.imgUrl : depth0),270,270,{"name":"replaceImagePath","hash":{},"data":data}))
     + "\" alt=\""
     + alias3(container.lambda((depths[1] != null ? depths[1].prodName : depths[1]), depth0))
     + "\"></a>\n";

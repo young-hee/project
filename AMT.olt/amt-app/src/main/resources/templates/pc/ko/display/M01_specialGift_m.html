@@ -1,0 +1,78 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='special-gift'">
+
+<body>
+<div ap:fragment="layout-contents">
+	<div class="ap_contents">
+		<div class="ap_com_cont overview">
+			<div class="event_overview">
+				<div class="com_banner evt_special_gift">
+					<div class="inner">스페셜 기프트</div>
+				</div>
+
+				<div class="sale_swipe">
+					<div class="sale_slide" data-ix-options="view-length:9; move-length:1;loop:false;datum-point:-37px">
+						<div class="ix-list-viewport">
+							<ul class="ix-list-items">
+								<li class="ix-list-item">
+									<a href="javascript:;">
+										<span class="cate_text">SALE</span>
+										<span>전체상품</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="ix-controller">
+							<div class="slide_direction">
+								<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
+								<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="inner_wrap product_list">
+					<div class="title_result">
+						<h3 class="h_title d2"><strong>전체상품 <span class="total"></span></strong></h3>
+						<div class="float_right">
+							<div class="search_sort">
+								<a href="#" class="on" data-value="Bestselling">판매순</a>
+								<a href="#" data-value="NewProd">신상품순</a>
+								<a href="#" data-value="MostProdReview">평점순</a>
+								<a href="#" data-value="HighestPrice">가격이 높은순</a>
+								<a href="#" data-value="LowestPrice">가격이 낮은순</a>
+							</div>
+						</div>
+					</div>
+
+					<div class="list_product special_gift_list">
+						<ul></ul>
+					</div>
+
+					<div class="loading" style="height: 400px">
+						<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+					</div>
+
+					<div class="product_none" style="display: none">
+						더 좋은 상품을 준비중입니다.
+					</div>
+
+					<div class="pagination" style="display: none"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<th:block ap:fragment="layout-endpoint">
+	<script type="text/javascript" th:inline="javascript">
+		var corners = /*[[${cornersMap}]]*/
+			console.log( corners );
+
+		AP.specialGift.init({
+			displayMenuId: AP.DISPLAY_MENU_ID
+		});
+	</script>
+</th:block>
+
+</body>
+</html>

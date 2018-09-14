@@ -45,10 +45,10 @@
 			});
 
 			//주문단위 증정 Tab
-			$('[name=freebies]').on('change', function () {
+			$('[name^=freebies_]').on('change', function () {
 				if ($(this).prop('checked')) {
-					$('.notFirstPur').hide();
-					$('.' + this.id).show();
+					$('.notFirstPur' + this.dataset.column).hide();
+					$('.freebies' + this.dataset.row + this.dataset.column).show();
 				}
 			});
 
@@ -67,10 +67,10 @@
 				changeOrdUnit();
 			});
 
-			//선택취소
-			$('#cancelBtn').off('click').on('click', function () {
-				if ($('[name^=ordUnitAward_]:checked').length > 0) {
-					$('[name^=ordUnitAward_]').each(function (item) {
+			//선택취소(같은promoSn 취소)
+			$('[name=cancelBtn]').off('click').on('click', function () {
+				if ($('[name=ordUnitAward_'+this.dataset.promosn+']:checked').length > 0) {
+					$('[name=ordUnitAward_'+this.dataset.promosn+']').each(function (item) {
 						$(this).attr("checked", false);
 					});
 					changeOrdUnit();
@@ -81,44 +81,54 @@
 		var xhr;
 		function changeOrdUnit(initLoading) {
 			var ordUnitAwardSnArr = [],
-				awardSelectQtyArr = [];
+				awardSelectQtyArr = [],
+				spPriceCnt = 0;
 
 			$('[name^=firstPur_]:checked').each(function () {
 				ordUnitAwardSnArr.push(this.id);
 				awardSelectQtyArr.push(this.dataset.qty);
+
+				if("SpPrice" == this.dataset.type){
+					spPriceCnt++;
+				}
 			});
 
 			$('[name^=ordUnitAward_]:checked').each(function () {
 				ordUnitAwardSnArr.push(this.id);
 				awardSelectQtyArr.push(this.dataset.qty);
+
+				if("SpPrice" == this.dataset.type){
+					spPriceCnt++;
+				}
 			});
 
 			if (ordUnitAwardSnArr != null && ordUnitAwardSnArr.length > 0) {
 				jQuery.ajaxSettings.traditional = true;
-			}
 
-			if (xhr != null) {
-				xhr.abort();
-			}
+				if ('initLoading' != initLoading) {
+					$('#orderLoading').show();
+				}
 
-			if (('initLoading' == initLoading && ordUnitAwardSnArr.length > 0 && awardSelectQtyArr.length > 0)
-				|| 'initLoading' != initLoading) {
+				if (xhr != null) {
+					xhr.abort();
+				}
 
 				xhr = AP.api.ordReceptChangeOrdUnit({}, {
 					ordSn : ordSn,
 					ordUnitAwardSnArr : ordUnitAwardSnArr,
 					awardSelectQtyArr : awardSelectQtyArr,
-					membershipSn : $('[name=beauty_point]').length > 0 ? $('[name=beauty_point]').data().membershipsn : null	//비회원: null
+					membershipSn : $('[name=beauty_point]').length > 0 ? $('[name=beauty_point]').data().membershipsn : null,	//비회원: null
+					spPriceCnt : spPriceCnt
 				}).done(function(data){
 					if (data.ordHistEx != null){
 
 						amtPcurInitAjax(data);
 
 						var isApMember = /*[[${isApMember}]]*/ null;
-						if (isApMember && 'initLoading' != initLoading) {
+						if (isApMember && 'initLoading' != initLoading && spPriceCnt > 0) {
 							if ($('[name="depositPrice"]').length > 0 && $('[name="depositPrice"]').val() != ""
 								|| $('[name="beauty_point"]').length > 0 && $('[name="beauty_point"]').val() != "") {
-								AP.modal.alert('포장/쇼핑백 추가로 인해 포인트 및 예치금 사용이 초기화됩니다.');
+								AP.modal.alert('보너스혜택 추가로 인해 포인트 및 예치금 사용이 초기화됩니다.');
 								$('[name="depositPrice"]').val('');
 								$('[name="beauty_point"]').val('');
 							}

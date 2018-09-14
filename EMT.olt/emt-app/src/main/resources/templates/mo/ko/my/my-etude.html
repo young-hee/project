@@ -8,7 +8,7 @@
 		<!--/* [S] 20180418 : 뷰티포인트 위치 및 마크업 변경 */-->
 		<div class="my_wallet_info">
 			<dl class="beautypoint clear">
-				<p><strong>뷰티포인트</strong> <span class="point" style="cursor: pointer;" onclick="location.href='/my/page/info/beautyPoint'"><b th:text="${#IntegUtil.toCommaNumber(point.rmnPt)}">999,999</b>P</span></p>
+				<p><strong>뷰티포인트</strong> <span class="point" style="cursor: pointer;" onclick="location.href='/my/page/info/beautyPoint'"><b th:text="${#IntegUtil.toCommaNumber(point.remainBeautyPoint)}">999,999</b>P</span></p>
 				<div>
 					<button th:unless="${#strings.isEmpty(session.LOGIN_USER.user_incsCardNoEc)}" type="button" onclick="pointCardBarcode()" class="btn_mobile_card"><img ap:src="@{/images/my/btn_barcode.png}" alt="뷰티포인트 멤버십카드 보기"></button>
 					<!--카드 신청 전 // 20180903:삭제 -->
@@ -44,7 +44,7 @@
 			<div class="table_layout">
 				<dl class="cushion" style="cursor: pointer;" onclick="location.href='/my/page/cushion'">
 					<dt>쿠션포인트</dt>
-					<dd><b class="num" th:text="${#IntegUtil.toCommaNumber(cushin.totRemainPt)}">0</b> p</dd>
+					<dd><b class="num" th:text="${#IntegUtil.toCommaNumber(cushin.remainCushionPoint)}">0</b> p</dd>
 				</dl>
 				<dl class="deposit" style="cursor: pointer;" onclick="location.href='/my/page/myDepositList'">
 					<dt>예치금</dt><!--/* 20180418 : 문구수정 */-->

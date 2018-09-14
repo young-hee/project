@@ -67,11 +67,24 @@
 
 			//전성분 확인하기
 			this._$target.find( '.btn_ingredient' ).on( 'click', function (e) {
+				var disclosures = [];
+				$.each(this._defaultModel.products, function(idx, prod){
+					var temp = {
+						 brandNm : prod.brandName
+						,onlineProdName : this._defaultModel.onlineProdName
+						,prodNm : prod.prodName
+						,desc : _.findWhere( prod.disclosures, {disclosureItemCode: '1807'} ).prodDisclosureInfo
+					};
+					disclosures.push(temp);	
+				}.bind(this));
 				
 				var modal = AP.modal.info({
-					title: '리뷰 작성하기',
+					title: '전성분 확인하기',
 					contents: {
-						templateKey: 'products.ingredient-modal'
+						templateKey: 'products.ingredient-modal',
+						templateModel : {
+							disclosures: disclosures
+						}
 					},
 					sizeType: 'L',
 					containerClass: 'btn_ingredient'
@@ -133,13 +146,56 @@
 				});
 			}.bind(this));
 			
-			//좋아요
+			//좋아요 on/off
 			this._$target.find( '#likeBtn').on( 'click', function (e) {
-				var $this = $(e.currentTarget);
-				if( $this.find('i').hasClass('on') ){
+				if( !AP.LOGIN_USER ){
+					AP.login.go();
 					return false;
 				}
-				$this.find('i').addClass( 'on' );
+				
+				var $this = $(e.currentTarget);
+				var prodSn = null;
+				var sendApi = '';
+				var selectedData = this._topOrder._selectedOptions.getSelectedData();
+				this._callback = null;
+				
+				//좋아요 off
+				if( $this.find('i').hasClass('on') ){
+					if( selectedData.length == 0 ){
+						sendApi = 'offRecommendFromOnline';
+					} else {
+						sendApi = 'offRecommend';
+						prodSn = selectedData[selectedData.length-1].prodSn;
+					}
+					this._callback  = function(){
+						$this.find('.num').text(Number( $this.find('.num').text() ) - 1);
+						$this.find('i').removeClass( 'on' );
+					}
+				} else { 
+					//좋아요 on
+					sendApi = 'postRecommend';
+					if( selectedData.length == 0 ){
+						prodSn = this._defaultModel.products[0].prodSn;
+					} else {
+						prodSn = selectedData[selectedData.length-1].prodSn;
+					}
+					
+					this._callback  = function(){
+						$this.find('.num').text(Number( $this.find('.num').text() ) + 1);
+						$this.find('i').addClass( 'on' );
+					}
+				}
+				
+				AP.api[sendApi]('', {
+					 shoppingMarkTgtCode : 'Prod' 
+			  		,prodSn : prodSn
+			  		,onlineProdSn : this._defaultModel.onlineProdSn
+				}).done(function(result){
+					this._callback();
+				}.bind(this)).fail(function(err){
+					console.log( err );
+				}.bind(this));
+				
 			}.bind(this));
 			
 			// 기프트카드 Toggle
@@ -163,9 +219,15 @@
 					prodReviewType : $this.data('review-type')
 					, prodReviewSn : $this.data('review-sn')
 				}).open();
-			}.bind(this)); 
+			}.bind(this));
 			
-			this._$target.find('.reviewDetail:first').click();
+			//고시정보 상품 수정
+			this._$target.find( 'select[name=ingredients]' ).on( 'change', function (e) {
+				this._$target.find('.disclosure').hide();
+				this._$target.find('[data-prodSn='+$(e.currentTarget).val()+']').show();
+			}.bind(this));
+			
+			//this._$target.find('.reviewDetail:first').click();
 			
 			/*
 			//언제 들어와? 알림 신청
@@ -173,12 +235,6 @@
 				AP.login().done(function () {
 					new AP.RestockNotify().open( this._defaultModel, memberMap );
 				}.bind(this));
-			}.bind(this));
-			
-			//고시정보 상품 수정
-			this._$target.find( 'select[name=ingredients]' ).on( 'change', function (e) {
-				this._$target.find('.disclosure').hide();
-				this._$target.find('[data-prodSn='+$(e.currentTarget).val()+']').show();
 			}.bind(this));
 			
 			//best review 더보기된 상태로 height 고정되는 현상 수정
@@ -281,6 +337,7 @@
 			this._$target.find( '.prd_info_wrap .prd_category_wrap' ).html( html );
 		},
 
+		// 옵션을 변경하였을 경우 썸네일 이미지 변경
 		_changePreview: function ( product ) {
 			var html = AP.common.getTemplate( 'products.option-slide-list', product ),
 				$wrap = this._$target.find( '.prd_img_wrap' ),
@@ -292,7 +349,22 @@
 
 			$wrap.html( html );
 			AP.lazyLoad.add( $wrap.find('img.lazy_load') );
+			
 			this._setPreviewSlide();
+			
+			//좋아요 상태갑 변경
+			this._changeLikeStatus( product );
+		},
+		
+		//좋아요 상태갑 변경
+		_changeLikeStatus : function( product ){
+			var $likeBtn = this._$target.find('#likeBtn');
+			if( product.shoppingMarkYn == 'Y' ){
+				$likeBtn.find('i').hasClass('on') ? '' : $likeBtn.find('i').addClass('on');
+			} else {
+				$likeBtn.find('i').removeClass('on');
+			}
+			$likeBtn.find('.num').text( product.shoppingMarkCount );
 		},
 		
 		//video plugin setting 

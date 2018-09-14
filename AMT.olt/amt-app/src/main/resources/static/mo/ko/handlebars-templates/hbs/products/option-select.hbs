@@ -10,8 +10,12 @@
 					{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
 						<small>일시품절</small>
 					{{else}}
-						{{#xif ( calc (availablePrices this.availablePrices 'onlineSalePriceDiscountRate') '+' (availablePrices this.availablePrices 'memberLevelDiscountRate') '+' (availablePrices this.availablePrices 'immedDiscountRate') ) '>' 0}}
-						<em class="discount">{{ calc (availablePrices this.availablePrices 'onlineSalePriceDiscountRate') '+' (availablePrices this.availablePrices 'memberLevelDiscountRate') '+' (availablePrices this.availablePrices 'immedDiscountRate') }}%</em>
+						{{#xif this.mPlusNPromoInfo.targetYN '==' 'Y'}}
+							<em class="discount">{{ this.mPlusNPromoInfo.baseOrdQty }}+{{ this.mPlusNPromoInfo.freeAwardQty }}</em>
+						{{else}}
+							{{#xif ( calc (availablePrices this.availablePrices 'onlineSalePriceDiscountRate') '+' (availablePrices this.availablePrices 'memberLevelDiscountRate') '+' (availablePrices this.availablePrices 'immedDiscountRate') ) '>' 0}}
+							<em class="discount">{{ calc (availablePrices this.availablePrices 'onlineSalePriceDiscountRate') '+' (availablePrices this.availablePrices 'memberLevelDiscountRate') '+' (availablePrices this.availablePrices 'immedDiscountRate') }}%</em>
+							{{/xif}}
 						{{/xif}}
 						<b class="num">{{ numberFormat (availablePrices this.availablePrices 'finalOnlinePrice') }}</b>원
 						{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}

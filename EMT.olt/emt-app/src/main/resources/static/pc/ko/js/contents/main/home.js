@@ -59,7 +59,7 @@
 			}.bind(this));
 		},
 
-		//신상품
+		//신상품  // 270 x 270 
 		_setNewProducts: function () {
 			var $section = this._$target.find( '.new_item' );
 			if ( !$section.length ) return;
@@ -77,7 +77,7 @@
 			}.bind(this));
 		},
 
-		//Today hot deal
+		//Today hot deal // 270 x 270
 		_setHotDeal: function () {
 			var $section = this._$target.find( '.hot_deal' );
 			if ( !$section.length ) return;
@@ -100,7 +100,7 @@
 			}.bind(this));
 		},
 
-		//베스트
+		//베스트 // 270 x 270 
 		_setBest: function () {
 			
 			var $section = this._$target.find( '.best' );
@@ -120,7 +120,7 @@
 			
 		},
 
-		//올해의 컬러
+		//올해의 컬러  // 208 x 208
 		_setColorOfYear: function (rmdColorProd) {
 		
 			var $section = this._$target.find( '.color_pick' );
@@ -277,9 +277,7 @@
 		},
 
 		_getPixleeData: function () {
-			AP.api.getPixleePhotos({
-				albumId: '2956835'//Homepage Gallery
-			}, {
+			AP.api.getPixleePhotos({}, {
 				page: 1,
 				per_page: 20
 			}).done(function ( data ) {

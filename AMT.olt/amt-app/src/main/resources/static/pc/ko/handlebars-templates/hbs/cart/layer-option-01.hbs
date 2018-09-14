@@ -1,0 +1,28 @@
+<div class="select_wrap">
+	<div class="ui_select">
+		<input type="hidden" name="prodSn">
+		<button type="button">옵션을 선택해주세요</button>
+		<ul class="select_options">
+			{{#each list}}
+				<li class="select_option">
+					<code class="label_markup" style="display:none">{{ prodName }}</code>
+					<a data-value="{{prodSn}}">
+						<div class="box">
+							{{#switch saleDisplayStatus}}
+								{{#case "OnSale"}}
+									<p class="op_name">{{ prodName }}</p><p class="op_price"><span>{{numberFormat onlineSalePrice }}원</span>{{#if null}}<del>30,000원</del>{{/if}}</p>
+								{{/case}}
+								{{#case "Exhaustion"}}
+									<p class="op_name">{{ prodName }}</p><p class="op_price"><span>[조기소진]</span>{{#if null}}<del>30,000원</del>{{/if}}</p>
+								{{/case}}
+								{{#case "OutOfStock"}}
+									<p class="op_name">{{ prodName }}</p><p class="op_price"><span>[일시품절]</span>{{#if null}}<del>30,000원</del>{{/if}}</p>
+								{{/case}}
+							{{/switch}}
+						</div>
+					</a>
+				</li>
+			{{/each}}
+		</ul>
+	</div>
+</div>

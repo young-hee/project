@@ -48,6 +48,7 @@ public class EmtAppConfiguration extends WebMvcConfigurerAdapter {
                 .excludePathPatterns(IncompatableBrowserChecker.INCOMPATIBLE_BROWSER_URI);
         registry.addInterceptor(loginInterceptor());
         registry.addInterceptor(new BreadCrumbInterceptor());
+        registry.addInterceptor(taggingInfoInterceptor());
     }
 
     @Bean
@@ -78,6 +79,11 @@ public class EmtAppConfiguration extends WebMvcConfigurerAdapter {
     @Bean
 	public AccessTokenHandlerInterceptor accessTokenHandlerInterceptor() {
     	return new AccessTokenHandlerInterceptor();
+	}
+
+	@Bean
+	public TaggingInfoInterceptor taggingInfoInterceptor() {
+    	return new TaggingInfoInterceptor();
 	}
 
 	@Bean

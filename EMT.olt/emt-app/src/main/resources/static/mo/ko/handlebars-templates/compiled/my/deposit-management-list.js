@@ -5,7 +5,7 @@ this["AP"]["handlebars"]["my"] = this["AP"]["handlebars"]["my"] || {};
 this["AP"]["handlebars"]["my"]["deposit-management-list"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
 
-  return "	<li>\n		<div class=\"table_layout\">\n			<div class=\"info\">\n				<p class=\"order_num2\"><span>주문번호</span><a href=\"#\">201703291064376</a></p>\n				<p class=\"\"><span>예금주</span><span>"
+  return "	<li>\n		<div class=\"table_layout\">\n			<div class=\"info\">\n				<p class=\"\"><span>예금주</span><span>"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.acHolderName : depth0)) != null ? stack1.name1 : stack1), depth0))
     + "</span></p>\n				<p class=\"\"><span>은행/계좌</span><span>"
     + alias2(alias1((depth0 != null ? depth0.bankName : depth0), depth0))

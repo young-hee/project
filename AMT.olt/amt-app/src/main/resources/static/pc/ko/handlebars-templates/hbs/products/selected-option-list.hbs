@@ -48,7 +48,8 @@
 	        {{#xif (eq ../productCount 1) '&&' (eq this.membershipExchOnly 'Y')}} 
 	          <b class="num item_total_price">{{ numberFormat this.exchMembershipPoint }}</b> P 
 	        {{else}} 
-	          <b class="num item_total_price">{{ numberFormat (availablePrices this.availablePrices 'finalOnlinePrice') }}</b> 원 
+	        	{{#if (eq this.mPlusNPromoInfo.targetYN 'Y') }}<em style="color: #f00;">{{this.mPlusNPromoInfo.baseOrdQty}}+{{this.mPlusNPromoInfo.freeAwardQty}}</em>{{/if}}
+				<b class="num item_total_price">{{ numberFormat (availablePrices this.availablePrices 'finalOnlinePrice') }}</b> 원 
 	        {{/xif}} 
 	      </div> 
 	    {{/xif}} 
@@ -60,12 +61,18 @@
 	    
 	</div>
 	
-	{{!-- 1+1  일 경우 
-	<div class="product_notice">
-		<p class="txt">해당 상품은 <em class="color_warning">1+1</em> 상품입니다.<br>
-			구매수량을 2개 선택시, 1개 가격으로 혜택이 적용됩니다.</p>
-	</div>
-	--}}
-	
+	{{!-- 1+1  일 경우  --}}
+	{{#if (eq this.mPlusNPromoInfo.targetYN 'Y') }}
+		<div class="product_notice">
+			{{#if (eq this.mPlusNPromoInfo.typeCode 'Different') }}
+				<p class="txt">해당 상품은 <em class="color_warning">교차</em>가능한<em class="color_warning">{{this.mPlusNPromoInfo.baseOrdQty}}+{{this.mPlusNPromoInfo.freeAwardQty}}</em> 상품입니다.
+				<br>구매수량을 {{calc this.mPlusNPromoInfo.baseOrdQty '+' this.mPlusNPromoInfo.freeAwardQty}}개 선택시, {{this.mPlusNPromoInfo.baseOrdQty}}개 가격으로 혜택이 적용됩니다.</p>
+			{{/if}}
+			{{#if (eq this.mPlusNPromoInfo.typeCode 'Same') }}
+				<p class="txt">해당 상품은 <em class="color_warning">동일</em>한 상품만 <em class="color_warning">{{this.mPlusNPromoInfo.baseOrdQty}}+{{this.mPlusNPromoInfo.freeAwardQty}}</em> 상품입니다.
+				<br>구매수량을 {{calc this.mPlusNPromoInfo.baseOrdQty '+' this.mPlusNPromoInfo.freeAwardQty}}개 선택시, {{this.mPlusNPromoInfo.baseOrdQty}}개 가격으로 혜택이 적용됩니다.</p>
+			{{/if}}
+		</div>
+	{{/if}}
 {{/each}}
 

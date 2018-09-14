@@ -107,7 +107,23 @@ function loginProcess() {
                 contents.confirmLabel = "비밀번호 변경";
 
                 AP.modal.info(contents).addListener('modal-close', function(e) {
-                    loginComplete();
+                    if (e.closeType == 'close' || e.closeType == 'cancel') {
+                        loginComplete();
+                    } else if (e.closeType == 'confirm') {
+
+                        if (/Android/i.test(navigator.userAgent)) {
+                        	try {
+                        		window.webview.mobile('login');
+                        	} catch(e) {
+                        	}
+                        } else if (/iPhone/i.test(navigator.userAgent)) {
+                            window.location = "webview://login";
+                        }
+                    	post_goto('/my/page/info/changeUserInfo', {'userPwdEc':$('[name=userPwdEc]').val()});
+                    }
+                    console.log(e.closeType); //close, confirm, cancel
+                });
+                AP.modal.info(contents).addListener('modal-close', function(e) {
                     console.log(e.closeType); //close, confirm, cancel
                 });
             } else {
@@ -445,7 +461,7 @@ function nbSuccess(data) {
             if (e.closeType == 'close' || e.closeType == 'cancel') {
                 location.href = returnUrl;
             } else if (e.closeType == 'confirm') {
-                changePassword();
+            	post_goto('/my/page/info/changeUserInfo', {'userPwdEc':$('[name=userPwdEc]').val()});
             }
             console.log(e.closeType); //close, confirm, cancel
         });

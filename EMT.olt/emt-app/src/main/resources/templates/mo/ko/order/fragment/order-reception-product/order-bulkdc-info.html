@@ -3,9 +3,19 @@
 				<div class="cart_name_wrap">
 					<img alt="" class="thm_cart_item" th:src="${bulkDcOnlineProd.bulkDcOnlineProdImgUrl}">
 					<div class="cart_table_cell">
+						<!--결제 히든값-->
+						<input type="hidden" name="bulkDcProdName" th:value="${bulkDcOnlineProd.bulkDcOnlineProdName}"/>
+						<th:block th:if="${#lists.size(bulkDcOnlineProd.ordOnlineProdFoList) > 0}" th:each="ordOnlineProd, iter : ${bulkDcOnlineProd.ordOnlineProdFoList}">
+							<input type="hidden" name="onlinePordSn" th:value="${ordOnlineProd.onlineProdCode}"/>
+							<input type="hidden" name="prodName" th:value="${ordOnlineProd.onlineProdName}"/>
+							<input type="hidden" name="prodQty" th:value="${ordOnlineProd.ordQtySum}"/>
+							<input type="hidden" id="ordHistProdCnt" name="ordHistProdCnt" th:value="${#lists.size(ordOnlineProd.ordHistProdList)}"/>
+						</th:block>
+						<!--//결제 히든값-->
+
 						<div class="cart_item_name" th:text="${bulkDcOnlineProd.bulkDcOnlineProdName}">디어 마이 블루밍 립스 톡 쉬폰</div>
 						<div class="price">
-							<span class="quantity"><th:block th:text="${bulkDcOnlineProd.ordQtySum > 0 ? bulkDcOnlineProd.ordQtySum + '개' : '0개'}">1개</th:block></span> /
+							<span class="quantity"><th:block th:text="${bulkDcOnlineProd.ordQtySum > 0 ? bulkDcOnlineProd.ordQtySum + '개' : ''}">1개</th:block></span> /
 							<strong class="eng"><th:block th:text="${#IntegUtil.toCommaNumber(bulkDcOnlineProd.totalBulkDcProductSaleAmount)}">2,600</th:block><em>원</em></strong>
 						</div>
 					</div>
@@ -13,13 +23,6 @@
 				<div class="cart_item_scroll type3">
 					<!--/* 상품들 */-->
 					<th:block th:if="${#lists.size(bulkDcOnlineProd.ordOnlineProdFoList) > 0}" th:each="ordOnlineProd, iter : ${bulkDcOnlineProd.ordOnlineProdFoList}">
-						<!--결제 히든값-->
-						<input type="hidden" name="onlinePordSn" th:value="${ordOnlineProd.onlineProdCode}"/>
-						<input type="hidden" name="prodName" th:value="${ordOnlineProd.onlineProdName}"/>
-						<input type="hidden" name="prodQty" th:value="${ordOnlineProd.ordQtySum}"/>
-						<!--//결제 히든값-->
-						<input type="hidden" id="ordHistProdCnt" name="ordHistProdCnt" th:value="${#lists.size(ordOnlineProd.ordHistProdList)}"/>
-
 						<!--구성상품-->
 						<th:block th:if="${#lists.size(ordOnlineProd.ordHistProdList) > 0}">
 							<th:block th:each="ordHistProd, iterStat : ${ordOnlineProd.ordHistProdList}">
@@ -29,6 +32,7 @@
 										<th:block th:unless="${ordHistProd.ordProdEx.prodImgUrl != null}"><img class="cart_option_name_thm" th:src="${ordHistProd.ordProdEx.onlineProdImgUrl}"></th:block>
 										<span><th:block th:text="${ordHistProd.ordProdEx.prodNameBlang}">RD302 말린딸기시럽</th:block></span>
 									</span>
+									<span class="prd_num"><th:block th:text="${ordHistProd.ordQty} + 개">1개</th:block></span>
 								</div>
 							</th:block>
 						</th:block>

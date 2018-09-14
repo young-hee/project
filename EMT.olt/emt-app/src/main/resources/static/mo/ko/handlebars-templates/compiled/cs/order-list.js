@@ -16,7 +16,7 @@ this["AP"]["handlebars"]["cs"]["order-list"] = Handlebars.template({"1":function
     + "\">\n			  <label for=\"o_"
     + alias2(alias1((depth0 != null ? depth0.ordSn : depth0), depth0))
     + "\"> 주문번호 : <span> "
-    + alias2(alias1((depth0 != null ? depth0.ordHistNo : depth0), depth0))
+    + alias2(alias1((depth0 != null ? depth0.ordNo : depth0), depth0))
     + " </span><br>\n				<span id=\"ordName_"
     + alias2(alias1((depth0 != null ? depth0.ordSn : depth0), depth0))
     + "\">"

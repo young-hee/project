@@ -158,6 +158,12 @@
 									<dd>{{getAmtMapPrice ordAmtMap 'ShipFeePromoDc' '원'}}</dd>
 								</dl>
 							{{/if}}
+							{{#if (checkAmtMapPrice ordAmtMap 'PayMethodDc')}}
+								<dl>
+									<dt>결제수단할인</dt>
+									<dd>{{getAmtMapPrice ordAmtMap 'PayMethodDc' '원'}}</dd>
+								</dl>
+							{{/if}}
 						</dd>
 					</dl>
 				{{/if}}
@@ -168,7 +174,7 @@
 			<div class="details">
 				<div class="panel bordered gray">
 					<dl>
-						<dt><b>결제 후 포인트 적립</b></dt>
+						<dt><b>적립 예정 포인트</b></dt>
 						<dd><span class="price"><strong>{{getAmtMapPrice ordAmtMap 'totalBeautyPointSaveSum' 'P'}}</strong></span></dd>
 						<dd>
 							<dl>

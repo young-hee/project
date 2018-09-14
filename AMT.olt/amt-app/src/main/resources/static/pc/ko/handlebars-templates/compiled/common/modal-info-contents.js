@@ -13,7 +13,8 @@ this["AP"]["handlebars"]["common"]["modal-info-contents"] = Handlebars.template(
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.type || (depth0 && depth0.type) || alias2).call(alias1,(depth0 != null ? depth0.contents : depth0),"Object",{"name":"type","hash":{},"data":data}),"&&",(helpers.type || (depth0 && depth0.type) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.contents : depth0)) != null ? stack1.templateKey : stack1),"String",{"name":"type","hash":{},"data":data}),{"name":"xif","hash":{},"fn":container.program(6, data, 0),"inverse":container.program(8, data, 0),"data":data})) != null ? stack1 : "")
     + "\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.isSome || (depth0 && depth0.isSome) || alias2).call(alias1,(depth0 != null ? depth0.btnConfirm : depth0),(depth0 != null ? depth0.btnCancel : depth0),{"name":"isSome","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(13, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "    </dd>\n";
+    + "    </dd>\n"
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.btnType : depth0),{"name":"if","hash":{},"fn":container.program(18, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"6":function(container,depth0,helpers,partials,data) {
     var stack1;
 
@@ -50,6 +51,16 @@ this["AP"]["handlebars"]["common"]["modal-info-contents"] = Handlebars.template(
 },"16":function(container,depth0,helpers,partials,data) {
     return "                    <button class=\"btn_lg_neutral btn_default_modal_confirm\" type=\"button\">"
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.confirmLabel : depth0), depth0))
+    + "</button>\n";
+},"18":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return "        <dd class=\"layer_btns\">\n"
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.btnType : depth0),"==","full",{"name":"xif","hash":{},"fn":container.program(19, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "        </dd>\n";
+},"19":function(container,depth0,helpers,partials,data) {
+    return "                <button class=\"btn_default_modal_confirm\" type=\"button\">"
+    + container.escapeExpression(container.lambda((depth0 != null ? depth0.confirmLayerLabel : depth0), depth0))
     + "</button>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});

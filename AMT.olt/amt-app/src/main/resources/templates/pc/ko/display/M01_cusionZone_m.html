@@ -1,0 +1,169 @@
+<html ap:decorate="~{layout/layout-sub}" th:with="_jsfile='cushion-zone'">
+<body>
+<div ap:fragment="layout-contents">
+
+	<div class="ap_contents goods_list">
+		<div class="ap_com_cont">
+			<div class="aside_area filter product">
+				<h2 class="h_title"><a>쿠션존</a></h2>
+				<fieldset class="form">
+					<legend class="sr_only">선택 옵션 선택</legend>
+					<button type="button" class="btn_lg_gradient init">선택 옵션 초기화</button>
+					<div class="filter_option">
+						<div class="loading" style="height: 400px;">
+							<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+						</div>
+					</div>
+				</fieldset>
+			</div>
+			<div class="cont_area">
+				<div class="category_area">
+					<div class="cushion_top">
+						<th:block th:if="${not #lists.isEmpty(cornersMap.get('M01_cusionZone_m.1'))}">
+							<th:block th:each="corner : ${cornersMap.get('M01_cusionZone_m.1')}">
+								<th:block th:each="contents : ${corner.contents}">
+									<th:block th:if="${contents.contentsTypeCode == 'Img'}">
+										<th:block th:if="${contents.imgUrl}" th:href="${contents.linkUrl}">
+											<a href="javascript:;">
+												<img th:src="${contents.imgUrl}" th:alt="${contents.text}">
+											</a>
+										</th:block>
+										<th:block th:unless="${contents.imgUrl}">
+											<a href="javascript:;">
+												<img ap:src="@{/images/dummy/banner591X322.jpg}" alt="일상의 완벽함을 더하다. 헤라 서울리스타 데이즈, 로지-샤틴 크림 미니 증정">
+											</a>
+										</th:block>
+									</th:block>
+									<th:block th:if="${contents.contentsTypeCode == 'Video'}">
+										<div class="cushion_unit unit_1">
+											<div th:if="${contents.videoUrl}" class="cushion_movie" th:data-video-url="${contents.videoUrl}" th:data-video-img-thumbnail-url="${contents.videoImgThumbnailUrl}">
+												<a href="javascript:;">
+													<div class="visual_section movie">
+														<img th:src="${contents.videoImgThumbnailUrl}" th:alt="${contents.text}">
+													</div>
+													<div class="info_section" th:style="background-color:${contents.bgColor}">
+														<p class="tit" th:text="${contents.text}"></p>
+														<p th:text="$contents.html"></p>
+													</div>
+												</a>
+											</div>
+											<!--// TODO -->
+											<div th:unless="${contents.videoUrl}" class="cushion_movie" data-video-src="https://www.youtube.com/embed/2Y33CX_MHwo">
+												<a href="#none">
+													<div class="visual_section movie">
+														<img ap:src="@{/images/dummy/img_magazine_04.jpg}" alt="이성경쿠션">
+													</div>
+													<div class="info_section" style="background-color: #8cd3ff">
+														<p class="tit">잡티와 피부요철, <br>모공을 완벽하게 커버</p>
+														<p>#컨실링베이스로 톡톡!<br>#세미매트한 피부표현 #이성경쿠션</p>
+													</div>
+												</a>
+											</div>
+											<!-- TODO // -->
+										</div>
+									</th:block>
+								</th:block>
+							</th:block>
+						</th:block>
+					</div>
+				</div>
+
+				<div class="category_area">
+					<div class="title_result">
+						<h3 class="h_title d2"><strong>실시간 인기 쿠션</strong><span class="update_time">업데이트 2018.02.02</span></h3>
+					</div>
+					<div class="loading" style="height: 200px;">
+						<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+					</div>
+					<div class="cushion_rank recommended_item recommend slide" data-ix-options="view-length:3; move-length:3;loop:false;datum-point:-20px" style="display: none;">
+						<div class="ix-list-viewport unit_1">
+
+							<ul class="ix-list-items"></ul>
+
+						</div>
+						<div class="ix-controller">
+							<div class="slide_direction">
+								<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
+								<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="category_area">
+					<div class="title_result">
+						<h3 class="h_title d2"><strong>쿠션에서 제안드리는 상품</strong></h3>
+					</div>
+					<div class="loading" style="height: 200px;">
+						<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+					</div>
+					<div class="recommended_item slide recommend has_count" data-ix-options="view-length:3; move-length:3;loop:false;datum-point:-20px" style="display: none;">
+						<div class="ix-list-viewport unit_1">
+
+							<ul class="ix-list-items"></ul>
+
+						</div>
+						<div class="ix-controller">
+							<div class="slide_direction">
+								<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
+								<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="category_area">
+					<div class="title_result">
+						<h3 class="h_title d2"><strong>전체상품 <span class="total"></span></strong></h3>
+						<div class="float_right">
+							<div class="search_sort">
+								<a href="#" class="on" data-value="Bestselling">판매순</a>
+								<a href="#" data-value="NewProd">신상품순</a>
+								<a href="#" data-value="MostProdReview">평점순</a>
+								<a href="#" data-value="HighestPrice">가격이 높은순</a>
+								<a href="#" data-value="LowestPrice">가격이 낮은순</a>
+								<div class="select_wrap xsm">
+									<select name="" id="" tabindex="-1">
+										<option value="50">50개씩 보기</option>
+										<option value="100">100개씩 보기</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="list_product cell04">
+						<ul></ul>
+					</div>
+
+					<div class="loading" style="height: 400px;">
+						<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+					</div>
+
+					<div class="product_none" style="display: none">
+						더 좋은 상품을 준비중입니다.
+					</div>
+
+					<div class="pagination" style="display: none;"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<th:block ap:fragment="layout-endpoint">
+	<script type="text/javascript" th:inline="javascript">
+		var _corners = /*[[${cornersMap}]]*/
+			console.log( _corners );
+
+		AP.cushionZone.init({
+			displayMenuId: AP.DISPLAY_MENU_ID,
+			param: {
+				includeFilters: true,
+				prodSort: 'Bestselling1'
+			}
+		});
+	</script>
+</th:block>
+</body>
+</html>

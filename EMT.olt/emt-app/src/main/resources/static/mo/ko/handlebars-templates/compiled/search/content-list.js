@@ -16,7 +16,7 @@ this["AP"]["handlebars"]["search"]["content-list"] = Handlebars.template({"1":fu
     + "</p>\n				<br>\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.couponYn : depth0),"==","Y",{"name":"xif","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "			</div>\n			<div>\n				<img src=\""
-    + alias2(alias1((depth0 != null ? depth0.bannerImgM : depth0), depth0))
+    + alias2(alias1((depth0 != null ? depth0.bannerImgM1 : depth0), depth0))
     + "\" alt=\"\">\n			</div>\n		</li>\n";
 },"3":function(container,depth0,helpers,partials,data) {
     return "				<span class=\"flag\">쿠폰지급</span>\n";

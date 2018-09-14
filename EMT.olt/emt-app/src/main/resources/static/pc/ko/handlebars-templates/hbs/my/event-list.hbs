@@ -20,9 +20,9 @@
 	<tr>
 		<td class="date">{{dateFormat this.participatedDt "YYYY.MM.DD"}}</td>
 		{{#xif this.displayStatus '==' 'End'}}
-			<td class="subj"><span>{{this.planDisplayTitle}}</span></td>
+			<td class="subj"><span class="sbj_flag">진행종료</span><span>{{this.planDisplayTitle}}</span></td>
 		{{else}}
-			<td class="subj"><span class="sbj_flag on">진행중</span><a href="#none"><span>{{this.planDisplaySn}} - {{this.planDisplayTitle}}</span></a></td>
+			<td class="subj"><span class="sbj_flag on">진행중</span><a href="/display/event_detail?planDisplaySn={{this.planDisplaySn}}"><span>{{this.planDisplaySn}} - {{this.planDisplayTitle}}</span></a></td>
 		{{/xif}}
 		<td class="date_range">{{dateFormat this.eventStartDt "YYYY.MM.DD"}}~{{dateFormat this.eventEndDt "YYYY.MM.DD"}}</td>
 		<td class="date">{{dateFormat this.winnerNoticeExpectedDt "YYYY.MM.DD"}}</td>

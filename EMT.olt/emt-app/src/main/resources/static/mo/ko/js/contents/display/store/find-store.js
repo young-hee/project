@@ -17,7 +17,7 @@
 
 			this._lat = '';
 			this._lng = '';
-			this._keyword = '서울';
+			this._keyword = '';
 
 			this._setPlugins();
 			this._setEvents();

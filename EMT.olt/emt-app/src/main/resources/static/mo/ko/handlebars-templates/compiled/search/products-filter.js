@@ -7,7 +7,9 @@ this["AP"]["handlebars"]["search"]["products-filter"] = Handlebars.template({"1"
 
   return "			<dl>\n				<dt class=\""
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.addAttrCode : depth0),"==","colorgroup",{"name":"xif","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\">\n					<span class=\"title\">"
+    + " "
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(data && data.index),"==",0,{"name":"xif","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\"> \n					<span class=\"title\">"
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.addAttrName : depth0), depth0))
     + "</span>\n					<button type=\"button\"><span class=\"sr_only\">더보기</span></button>\n				</dt>\n				<dd>\n					<div class=\"cont\">\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.addAttrCode : depth0),"==","colorgroup",{"name":"xif","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.program(12, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")

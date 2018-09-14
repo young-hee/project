@@ -1,0 +1,66 @@
+{{!--
+	hot deal
+--}}
+
+<dt class="slide_title">
+	<a href="#none" class="prd_h_tit"><strong>투데이핫딜</strong>
+		<div class="m_time_wrap">
+			<span class="ui_remain_timer hotdeal_timer" data-sale-end-dt="{{ this.saleEndDt }}">
+				<span class="hour">23</span>:<span class="minute">23</span>:<span class="second">23</span>
+			</span>
+		</div>
+	</a>
+</dt>
+<dd class="slide one_half" data-ix-options="view-length:2; move-length:1; datum-point:10%;">
+	<div class="ix-list-viewport">
+		<ul class="product_list_new prd_swipe_one ix-list-items">
+			{{#each this.list}}
+				<li class="ix-list-item">
+					<div class="product_one_view">
+						<a href="{{ productDetailPath this.onlineProdSn }}">
+							<p class="today_other">
+							{{#with remainCnt}}
+								{{#each this.products}}
+									{{calc remainCnt '+' this.salePossibleQty}}
+								{{/each}}
+								{{ ramainCnt }}
+							{{ this.salePossibleQty }}
+							{{/with}}
+							개 남음</p>
+							<span class="product_visual_new">
+								<span class="lazy_load_wrap">
+									{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+										<div class="item_state out_of_stock">일시품절</div>
+									{{/xif}}
+									<img src="" data-src="{{ this.onlineProdImages.0.imgUrl }}" alt="" class="lazy_load">
+								</span>
+							</span>
+							<!-- 상품 정보 -->
+							<span class="product_info_new">
+								<strong class="prd_brand">{{ this.products.0.brandName }}</strong>
+								<span class="prd_name">{{ this.onlineProdName }}</span>
+								<span class="price_wrap">
+									{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+										<strong class="discount">
+											{{#with (calc this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate '+' this.onlineProdPriceSummary.minMemberLevelDiscountRate '+' this.onlineProdPriceSummary.minOnlineMemberDiscountRate) as |disMinRate|}}
+												{{#with (calc ../onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.maxMemberLevelDiscountRate '+' ../onlineProdPriceSummary.maxOnlineMemberDiscountRate) as |disMaxRate|}}
+													{{#xif disMinRate '!=' disMaxRate}}<span class="from">~</span>{{/xif}}<span class="to">{{ disMaxRate }}<em>%</em></span>
+												{{/with}}
+											{{/with}}
+										</strong>
+									{{/xif}}
+									<strong class="price">{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>{{ condition ../isActivityPoint '알' '원' }}{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}} ~{{/xif}}</em></strong>
+									{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+										<del>{{ numberFormat this.onlineProdPriceSummary.minBeforeOnlineSalePrice }}<em>{{ condition ../isActivityPoint '알' '원' }}</em></del>
+									{{/xif}}
+								</span>
+	
+								<button type="button" class="btn_toggle like_btn"><i class="ico_heart_s {{#xif this.shoppingMarkExistYn '==' 'Y'}}on{{/xif}}"></i><span class="sr_only">좋아요</span></button>
+							</span>
+						</a>
+					</div>
+				</li>
+			{{/each}}
+		</ul>
+	</div>
+</dd>

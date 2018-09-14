@@ -1,0 +1,128 @@
+<html ap:decorate="~{layout/layout-sub}">
+ 
+<body>
+	<!-- #ap_container -->
+	<div ap:fragment="layout-contents">
+		<!-- page contents -->
+		<div class="ap_contents">
+
+			<!-- breadcrumbe -->
+			<th:block ap:replace="~{common/fragment/breadcrumb-only}"/>
+			<!-- // breadcrumbe -->
+			<div id="progress" style="top: calc(50% - 80px);left: calc(50% + 90px);position: fixed;z-index: 10;opacity: 1;display: none;">
+				   <div class="loading_full">
+						<span>
+							<img alt="" src="/pc/ko/images/common/loading.gif" style="-webkit-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.20);-moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.20);box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.20);background-color: white;border-radius: 80px;">
+						</span>
+				   </div>
+			 </div>
+
+			<!-- com_cont -->
+			<div class="ap_com_cont mypage">
+				<!-- aside_area -->
+				<th:block ap:replace="~{my/fragment/my-menu}"/>
+				<!-- aside_area -->
+
+				<!-- cont_area -->
+				<div class="cont_area my_gift_card">
+					<div class="sub_title">
+						<!-- page title -->
+						<th:block ap:replace="~{common/fragment/page-title}"/>
+						<!-- // page title -->
+					</div>
+					<div class="my_gift_status">
+						<dl>
+							<dt>보유 기프트카드</dt>
+							<dd><span th:text="${#IntegUtil.toCommaNumber(giftcardSummary.validCount)}">11</span>장</dd>
+						</dl>
+						<dl>
+							<dt>만료예정 기프트카드</dt>
+							<dd><span th:text="${#IntegUtil.toCommaNumber(giftcardSummary.endCount)}">11</span>장</dd>
+						</dl>
+						<dl>
+							<dt>사용가능 금액</dt>
+							<dd><span th:text="${#IntegUtil.toCommaNumber(giftcardSummary.balance)}">50,000</span>원</dd>
+						</dl>
+					</div>
+					<div class="coupon_apply">
+						<dl>
+							<dt>Apmall 기프트카드 등록</dt>
+							<dd>
+								<form id="regCard">
+									<div class="input_btn_wrap">
+										<div class="input_wrap bg_white">
+											<input type="number" name="barcode" giftCard="giftCard" placeholder="기프트카드 번호를 입력해 주세요" required="required" data-msg-required="기프트카드의 일련번호를 입력해 주세요.">
+										</div>
+										<button type="button" id="regBarcode" class="btn_lg">카드등록</button>
+									</div>
+								</form>
+							</dd>
+						</dl>
+					</div>
+
+					<div class="sort_btn_set">
+						<span><input type="radio" class="select_range_date" name="op" id="radio2_0" value="all"><label for="radio2_0">전체</label></span>
+						<span><input type="radio" class="select_range_date" name="op" id="radio2_1" value="valid" checked=""><label for="radio2_1">사용가능</label></span>
+						<span><input type="radio" class="select_range_date" name="op" id="radio2_2" value="use"><label for="radio2_2">사용완료</label></span>
+						<span><input type="radio" class="select_range_date" name="op" id="radio2_3" value="end"><label for="radio2_3">기간만료</label></span>
+					</div>
+
+					<div ap:replace="~{my/fragment/gift-card-body :: gift-card-body}"></div>
+				</div>
+				<!-- // cont_area -->
+
+			</div>
+			<!-- // com_cont -->
+
+		</div>
+		<!-- // page contents -->
+	</div><!-- // #ap_container -->
+
+	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+	<th:block ap:fragment="layout-endpoint">
+		<script>
+			$('input[name=op]').change(function() {
+				more(1);
+			});
+			
+			function more(page) {
+
+				if(page == 0 || page == null) return;
+		    	$('#progress').fadeIn(500);
+				AP.api.myGistCardFragment({}, {
+						pageNumber:page,
+						op:$('input[name=op]:checked').val()
+				}).done(function(data) {
+
+			    	$('.pagination').remove();
+			    	$(".gift_card").replaceWith(data);
+					
+	            }).fail(function(xhr, textStatus, errorThrown) {
+	            	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	            }).always(function() {
+			    	$('#progress').fadeOut(500);
+	                //성공, 실패
+	            });
+			}
+			$('#regBarcode').click(function() {
+				if(!$('[name=barcode]').valid()) return;
+
+		    	$('#progress').fadeIn(500);
+				AP.api.regGiftCard({}, {
+					barcode:$('[name=barcode]').val()
+				}).done(function(data) {
+
+			    	$('.pagination').remove();
+			    	$(".gift_card").replaceWith(data);
+					
+	            }).fail(function(xhr, textStatus, errorThrown) {
+	            	AP.modal.alert("기프트카드번호를 질못 입력하셨어요. 다시 한번 확인해보시고 입력해주세요.");
+	            }).always(function() {
+			    	$('#progress').fadeOut(500);
+	                //성공, 실패
+	            });
+			});
+		</script>
+	</th:block>
+</body>
+</html>

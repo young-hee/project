@@ -23,18 +23,6 @@
 					<th:block ap:replace="~{order/fragment/order-reception-product/order-bulkdc-info}"/>
 				</th:block>
 			</th:block>
-			<!--/* 뷰티포인트 */-->
-			<th:block th:if="${#lists.size(shippingOrdOnlineBeautyPointProdList) > 0}">
-				<div class="cart_item_box" th:each="ordOnlineProd : ${shippingOrdOnlineBeautyPointProdList}" th:with="memberShip='P'">
-					<th:block ap:replace="~{order/fragment/order-reception-product/order-ordonlineprod-info}"/>
-				</div>
-			</th:block>
-			<!--/* 활동포인트 */-->
-			<th:block th:if="${#lists.size(shippingOrdOnlineActivityPointProdList) > 0}">
-				<div class="cart_item_box" th:each="ordOnlineProd : ${shippingOrdOnlineActivityPointProdList}" th:with="memberShip='A'">
-					<th:block ap:replace="~{order/fragment/order-reception-product/order-ordonlineprod-info}"/>
-				</div>
-			</th:block>
 			<!--/* M+N프로모션 */-->
 			<th:block th:if="${#lists.size(shippingMNPromoList) > 0}">
 				<th:block th:each="mPlusNPromo : ${shippingMNPromoList}">
@@ -46,6 +34,18 @@
 				<th:block th:each="sameTimePromo : ${shippingSameTimePurPromoList}">
 					<th:block ap:replace="~{order/fragment/order-reception-product/order-sametimepromo-info}"/>
 				</th:block>
+			</th:block>
+			<!--/* 뷰티포인트 */-->
+			<th:block th:if="${#lists.size(shippingOrdOnlineBeautyPointProdList) > 0}">
+				<div class="cart_item_box" th:each="ordOnlineProd : ${shippingOrdOnlineBeautyPointProdList}" th:with="memberShip='P'">
+					<th:block ap:replace="~{order/fragment/order-reception-product/order-ordonlineprod-info}"/>
+				</div>
+			</th:block>
+			<!--/* 활동포인트 */-->
+			<th:block th:if="${#lists.size(shippingOrdOnlineActivityPointProdList) > 0}">
+				<div class="cart_item_box" th:each="ordOnlineProd : ${shippingOrdOnlineActivityPointProdList}" th:with="memberShip='A'">
+					<th:block ap:replace="~{order/fragment/order-reception-product/order-ordonlineprod-info}"/>
+				</div>
 			</th:block>
 		</th:block>
 

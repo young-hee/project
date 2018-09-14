@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>취소</title>
+</head>
+<body>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" style="background-color:#fafafa;">
+	<tbody>
+	<tr>
+		<td height="50"></td>
+	</tr>
+	<tr>
+		<td>
+			<table cellpadding="0" cellspacing="0" border="0" style="width:680px; margin:0 auto; font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:16px; color:#666; background-color:#fff;border-top: 5px solid #f54a7e;">
+				<tbody>
+				<tr><!-- header -->
+					<td align="center" height="120" style="background-color:#fff; font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:16px; color:#fff;">
+						<table width="90%" cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto;border-bottom: 1px solid #666;">
+							<tbody>
+							<tr>
+								<td height="120" align="center"><img th:src="@{'/pc/ko/images/mail/etude_pink_logo.png'}" alt="ETUDE HOUSE" width="80" height="66" border="0"></td>
+							</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+				<tr><!-- contents -->
+					<td>
+						<table width="100%" cellpadding="0" cellspacing="0" border="0">
+							<tbody>
+							<tr>
+								<td colspan="3" height="70"></td>
+							</tr>
+							<tr>
+								<td width="40"></td>
+								<td width="600">
+									<table width="100%" cellpadding="0" cellspacing="0" border="0"><!-- 주요 내용 -->
+										<tbody>
+										<tr>
+											<td align="center" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:34px;letter-spacing: -1px; font-weight:bold; color:#333;">
+												주문이 취소 되었습니다.
+											</td>
+										</tr>
+										<tr>
+											<td height="30"></td>
+										</tr>
+										<tr>
+											<td align="center" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:16px; color:#666; line-height:24px;">
+												<strong style="color: #333;" th:text="${ord.purchaserName}">홍길동</strong>님께서 <strong style="color: #333;" th:text="${#dates.format(ord.ordDate, 'yyyy년 MM월 dd일')}">2018년 05월 23일</strong> 주문하신 내역이 정상적으로 취소처리 되었습니다.
+											</td>
+										</tr>
+										<tr>
+											<td height="60"></td>
+										</tr>
+										<tr>
+											<td align="center" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:20px; color:#333; line-height:24px;">
+												주문 번호 <strong style="color:#f54a7e" th:text="${ordNo}">201811118956360</strong>의 주문취소 내역
+											</td>
+										</tr>
+										<tr>
+											<td height="50"></td>
+										</tr>
+										<tr>
+											<td>
+												<table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size: 14px;color: #888;line-height: 24px;">
+													<thead>
+													<tr>
+														<td colspan="4" height="1" bgcolor="#333"></td>
+													</tr>
+													<tr>
+														<td colspan="4" height="15" bgcolor="#f7f7f7"></td>
+													</tr>
+													<tr>
+														<th scope="col" width="210" align="center" bgcolor="#f7f7f7" style="font-size: 14px;color: #333;">상품명</th>
+														<th scope="col" width="180" align="center" bgcolor="#f7f7f7" style="font-size: 14px;color: #333;">옵션</th>
+														<th scope="col" width="90" align="center" bgcolor="#f7f7f7" style="font-size: 14px;color: #333;">수량</th>
+														<th scope="col" width="120" align="center" bgcolor="#f7f7f7" style="font-size: 14px;color: #333;">구매가</th>
+													</tr>
+													<tr>
+														<td colspan="4" height="15" bgcolor="#f7f7f7"></td>
+													</tr>
+													</thead>
+													<tbody>
+													<th:block th:each="o : ${ord.onlineProd}">
+														<tr>
+															<td colspan="4" height="1" bgcolor="#ebebeb"></td>
+														</tr>
+														<tr>
+															<td colspan="4" height="15"></td>
+														</tr>
+														<tr>
+															<td align="center" th:text="${o.ordProdEx.onlineProdNameBlang}">순정 스킨케어 2종 세트<br>[럭키퍼피]</td>
+															<td align="center" th:text="${o.ordProdEx.prodNameBlang}">핑크-RD302<br>말린딸기시럽</td>
+															<td align="center" th:if="${state == 'cancel'}" th:text="${o.cancelQty}">5</td>
+															<td align="center" th:unless="${state == 'cancel'}" th:text="${o.claimReceivedQty}">5</td>
+															<td align="center" th:text="|${#numbers.formatDecimal( o.finalOnlineSaleAmtPcur, 3, 'COMMA', 0, 'POINT')}원|">50,000원</td>
+														</tr>
+														<tr>
+															<td colspan="4" height="15"></td>
+														</tr>
+													</th:block>
+													</tbody>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td height="40"></td>
+										</tr>
+										<tr>
+											<td style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:16px; font-weight:bold; color:#333; line-height:24px;">
+												테이크아웃 주문 취소 정보
+											</td>
+										</tr>
+										<tr>
+											<td height="10"></td>
+										</tr>
+										<tr>
+											<td>
+												<table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size: 14px;color: #888;line-height: 24px;">
+													<thead>
+													<tr>
+														<td colspan="4" height="1" bgcolor="#333"></td>
+													</tr>
+													<tr>
+														<td colspan="4" height="15" bgcolor="#f7f7f7"></td>
+													</tr>
+													<tr>
+														<th scope="col" width="210" align="center" bgcolor="#f7f7f7" style="font-size: 14px;color: #333;">상품명</th>
+														<th scope="col" width="180" align="center" bgcolor="#f7f7f7" style="font-size: 14px;color: #333;">옵션</th>
+														<th scope="col" width="90" align="center" bgcolor="#f7f7f7" style="font-size: 14px;color: #333;">수량</th>
+														<th scope="col" width="120" align="center" bgcolor="#f7f7f7" style="font-size: 14px;color: #333;">구매가</th>
+													</tr>
+													<tr>
+														<td colspan="4" height="15" bgcolor="#f7f7f7"></td>
+													</tr>
+													</thead>
+													<tbody>
+													<th:block th:each="o : ${ord.takeProd}">
+														<tr>
+															<td colspan="4" height="1" bgcolor="#ebebeb"></td>
+														</tr>
+														<tr>
+															<td colspan="4" height="15"></td>
+														</tr>
+														<tr>
+															<td align="center" th:text="${o.ordProdEx.onlineProdNameBlang}">순정 스킨케어 2종 세트<br>[럭키퍼피]</td>
+															<td align="center" th:text="${o.ordProdEx.prodNameBlang}">핑크-RD302<br>말린딸기시럽</td>
+															<td align="center" th:text="${o.ordQty}">5</td>
+															<td align="center" th:text="|${#numbers.formatDecimal( o.finalOnlineSaleAmtPcur, 3, 'COMMA', 0, 'POINT')}원|">50,000원</td>
+														</tr>
+														<tr>
+															<td colspan="4" height="15"></td>
+														</tr>
+													</th:block>
+													</tbody>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td height="20"></td>
+										</tr>
+										<tr>
+											<td>
+												<table width="100%" cellpadding="0" cellspacing="0" border="0">
+													<tbody>
+													<tr>
+														<td valign="top" width="20" style="padding-top: 2px;">
+															<img src="/pc/ko/images/mail/ico_noti.gif" width="16" height="16" border="0">
+														</td>
+														<td valign="top" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:14px; color:#888; line-height:21px;">
+															주의 : 고객 과실(주소 오타, 수취거부 등)에 의한 반송시 배송비는 고객님 부담입니다.
+															한번 더 확인 주세요. (무료배송시 왕복배송비 고객부담)
+														</td>
+													</tr>
+													</tbody>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td height="40"></td>
+										</tr>
+										<tr th:if="${state == 'detail'}">
+											<td>
+												<table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size: 14px;color: #888;line-height: 24px;">
+													<tbody>
+													<tr>
+														<td colspan="3" height="2" bgcolor="#333"></td>
+													</tr>
+													<tr>
+														<td width="1" bgcolor="#d2d2d2"></td>
+														<td>
+															<table width="100%" border="0" cellspacing="0" cellpadding="0">
+																<tbody>
+																<tr>
+																	<td>
+																		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+																			<tbody>
+																			<tr>
+																				<td width="30"></td>
+																				<td>
+																					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+																						<tbody>
+																						<tr>
+																							<td colspan="2" height="15"></td>
+																						</tr>
+																						<tr>
+																							<td width="240"><strong style="color: #333;">환불 주문금액</strong></td>
+																							<td align="right" style="font-size: 18px;color: #333;"><strong style="vertical-align: middle;" th:text="|${#numbers.formatDecimal( ord.ordAmt.ordPayment, 3, 'COMMA', 0, 'POINT')}원|">170,000원</strong></td>
+																						</tr>
+																						<tr>
+																							<td colspan="2" height="15"></td>
+																						</tr>
+																						<tr>
+																							<td colspan="2" height="1" style="font-size: 0;line-height: 0;"><img src="/pc/ko/images/mail/line_dashed2.gif" width="535" height="1" border="0"></td>
+																						</tr>
+																						<tr>
+																							<td colspan="2" height="15"></td>
+																						</tr>
+																						<tr>
+																							<td width="240"><strong style="color: #333;">환불 할인금액</strong></td>
+																							<td align="right" style="font-size: 18px;color: #333;"><strong style="vertical-align: middle;" th:text="|${#numbers.formatDecimal( ord.ordAmt.salePoint, 3, 'COMMA', 0, 'POINT')}원|">12,000원</strong></td>
+																						</tr>
+																						<tr>
+																							<td colspan="2" height="15"></td>
+																						</tr>
+																						<tr>
+																							<td colspan="2" height="1" style="font-size: 0;line-height: 0;"><img src="/pc/ko/images/mail/line_dashed2.gif" width="535" height="1" border="0"></td>
+																						</tr>
+																						<tr>
+																							<td colspan="2" height="15"></td>
+																						</tr>
+																						<tr>
+																							<td width="240"><strong style="font-size:16px; color: #333;">총 환불금액</strong></td>
+																							<td align="right"><strong style="font-size:24px; color: #f54a7e;" th:text="${#numbers.formatDecimal( ord.ordAmt.totalPayment, 3, 'COMMA', 0, 'POINT')}">158,000</strong><strong style="font-size:18px; color: #f54a7e;">원</strong></td>
+																						</tr>
+																						<tr>
+																							<td colspan="2" height="15"></td>
+																						</tr>
+																						<tr>
+																							<td colspan="2" height="1" style="font-size: 0;line-height: 0;"><img src="/pc/ko/images/mail/line_dashed2.gif" width="535" height="1" border="0"></td>
+																						</tr>
+																						<tr>
+																							<td colspan="2" height="15"></td>
+																						</tr>
+																						<th:block th:each="pg : ${ord.ordPayResult.pgList}">
+																							<tr>
+																								<td th:if="${pg.payMethodTypeCode} == 'Deposit'" width="240">예치금</td>
+																								<td th:unless="${pg.payMethodCode} == 'Deposit'" width="240" th:text="${pg.payMethodNameBlang}">신용카드</td>
+
+																								<td align="right" th:text="|${#numbers.formatDecimal( pg.payAmt, 3, 'COMMA', 0, 'POINT')}원|">10,000원</td>
+																							</tr>
+																						</th:block>
+																						<tr>
+																							<td colspan="2" height="10"></td>
+																						</tr>
+																						<tr>
+																							<td colspan="2" height="20"></td>
+																						</tr>
+																						</tbody>
+																					</table>
+																				</td>
+																				<td width="30"></td>
+																			</tr>
+																			</tbody>
+																		</table>
+																	</td>
+																</tr>
+
+																</tbody>
+															</table>
+														</td>
+														<td width="1" bgcolor="#d2d2d2"></td>
+													</tr>
+													<tr>
+														<td colspan="3" height="1" bgcolor="#d2d2d2"></td>
+													</tr>
+													</tbody>
+												</table>
+											</td>
+										</tr>
+
+										<th:block th:unless="${state == 'cancel'}">
+
+											<tr th:if="${state == 'return'}">
+												<td>
+													<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#f7f7f7;">
+														<tbody>
+														<tr>
+															<td height="15"></td>
+														</tr>
+														<tr>
+															<td width="30"></td>
+															<td width="150" style="color:#999;">총 환불 예정 금액</td>
+															<td align="right"><strong style="font-size:24px; color:#333;" th:text="${#numbers.formatDecimal( ord.ordAmt.totalPayment, 3, 'COMMA', 0, 'POINT')}">999,000</strong>원</td>
+															<td width="30"></td>
+														</tr>
+														<tr>
+															<td height="15"></td>
+														</tr>
+														</tbody>
+													</table>
+												</td>
+											</tr>
+											<tr>
+												<td height="40"></td>
+											</tr>
+											<tr>
+												<td style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:16px; font-weight:bold; color:#333; line-height:24px;">
+													회수지 정보
+												</td>
+											</tr>
+											<tr>
+												<td height="10"></td>
+											</tr>
+											<tr>
+												<td>
+													<table width="100%" border="0" cellspacing="0" cellpadding="0">
+														<tbody>
+														<tr>
+															<td colspan="5" height="1" bgcolor="#333"></td>
+														</tr>
+														<tr>
+															<td colspan="5" height="17"></td>
+														</tr>
+														<tr>
+															<td width="20"></td>
+															<td valign="top" width="135" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:14px; font-weight:bold; color:#333; line-height:24px;">
+																주문하시는 분
+															</td>
+															<td width="30"></td>
+															<td valign="top" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:14px; color:#888; line-height:24px;" th:text="${ord.purchaserName}">
+																홍길동
+															</td>
+															<td width="20"></td>
+														</tr>
+														<tr>
+															<td colspan="5" height="17"></td>
+														</tr>
+														<tr>
+															<td colspan="5" height="1" bgcolor="#d2d2d2"></td>
+														</tr>
+														<tr>
+															<td colspan="5" height="17"></td>
+														</tr>
+														<tr>
+															<td width="20"></td>
+															<td valign="top" width="135" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:14px; font-weight:bold; color:#333; line-height:24px;">
+																받으시는 분
+															</td>
+															<td width="30"></td>
+															<td valign="top" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:14px; color:#888; line-height:24px;"
+																th:utext="|${ord.ordChangeShipAddress.recipientName.name1}<br>
+																	${ord.ordChangeShipAddress.recipientPhoneNo1.phoneNo}<br>
+																	(${ord.ordChangeShipAddress.recipientAddress.zipCode}) ${ord.ordChangeShipAddress.recipientAddress.address1} ${ord.ordChangeShipAddress.recipientAddress.address2}|">
+																홍길동<br>
+																010-000-0000 / 02-1234-5678<br>
+																(531575) 서울시 서문동 서울로 777
+															</td>
+															<td width="20"></td>
+														</tr>
+														<tr>
+															<td colspan="5" height="17"></td>
+														</tr>
+														<tr>
+															<td colspan="5" height="1" bgcolor="#d2d2d2"></td>
+														</tr>
+														</tbody>
+													</table>
+												</td>
+											</tr>
+
+										</th:block>
+
+										<tr>
+											<td height="10"></td>
+										</tr>
+										<tr>
+											<td>
+												<table width="100%" cellpadding="0" cellspacing="0" border="0">
+													<tbody>
+													<tr>
+														<td valign="top" width="10"></td>
+														<td valign="top" width="10">
+															<span style="display:block; width:2px; height:2px; margin-top:11px; background-color:#888;"></span>
+														</td>
+														<td valign="top" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:14px; color:#888; line-height:26px;">
+															자세한 취소 내역은 <strong style="color: #333;">마이에뛰드> 주문/배송조회</strong>에서 확인하실 수 있습니다.
+														</td>
+													</tr>
+													</tbody>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td height="40"></td>
+										</tr>
+										</tbody>
+									</table>
+								</td>
+								<td width="40"></td>
+							</tr>
+							<tr>
+								<td colspan="3" height="50"></td>
+							</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+				<tr><!-- footer -->
+					<td>
+						<table width="100%" cellpadding="0" cellspacing="0" border="0">
+							<tbody>
+							<tr>
+								<td width="30"></td>
+								<td width="620">
+									<table width="100%" border="0" cellspacing="0" cellpadding="0">
+										<tbody>
+										<tr>
+											<td>
+												<table width="100%" border="0" cellspacing="0" cellpadding="0">
+													<tbody>
+													<tr>
+														<td height="1" bgcolor="#333"></td>
+													</tr>
+													</tbody>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td height="20"></td>
+										</tr>
+										<tr>
+											<td>
+												<table width="100%" border="0" cellspacing="0" cellpadding="0">
+													<tbody>
+													<tr>
+														<td style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:14px; letter-spacing:-1px; color:#f54a7e;">
+															본 메일은 회신이 되지 않는 발신전용 메일입니다.
+														</td>
+													</tr>
+													<tr>
+														<td height="15"></td>
+													</tr>
+													<tr>
+														<td style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:12px; color:#888; line-height:26px;">
+															(주)에뛰드 │ 서울특별시 용산구 한강대로 100 (한강로2가) │ 대표이사 권금주 │ 사업자번호 135-81-05033<br>
+															통신판매업신고번호 제2017-서울용산-1292 │ 고객상담 1544-5418(쇼핑몰)/080-022-2285(제품및매장외)<br>
+															상담시간 월~금 09:00~1800(토/일공휴일 휴무) │ etudemall@etude.co.kr<br>
+															개인보호책임자 양민주 │ 호스팅제공자 (주)에뛰드
+														</td>
+													</tr>
+													</tbody>
+												</table>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+								</td>
+								<td width="30"></td>
+							</tr>
+							<tr>
+								<td colspan="3" height="50"></td>
+							</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td height="50"></td>
+	</tr>
+	</tbody>
+</table>
+</body>
+</html>

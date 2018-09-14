@@ -83,7 +83,7 @@
 		/* 클레임사유 */
 		var reason = /*[[${reason}]]*/;
 
-		/* 클레임상세여부 (status == 'detail' && type == 'cancel/return/exchange') */
+		/* 클레임상세여부 (status == 'detail' && type == 'return/exchange') */
 		var claimYn = /*[[${claimYn}]]*/;
 
 		var step = claimYn == 'Y' ? 'two' : 'one';
@@ -110,7 +110,7 @@
 													+ getTitle() + '하실 상품을 선택해 주세요.');
 					$('.check_all').show();
 					if (type == 'cancel') {
-						setViewYn('Y', 'Y', 'N', 'Y', 'N', 'N', 'Y');
+						setViewYn('Y', 'N', 'N', 'Y', 'N', 'N', 'Y');
 					} else {
 						setViewYn('Y', 'Y', 'N', 'N', 'N', 'N', 'N');
 					}
@@ -119,6 +119,8 @@
 					$('.check_all').hide();
 					if (type == 'exchange') {
 						setViewYn('N', 'N', 'Y', 'N', 'Y', 'N', 'Y');
+					} else if (type == 'cancel') {
+						setViewYn('N', 'N', 'N', 'Y', 'Y', 'N', 'Y');
 					} else {
 						setViewYn('N', 'N', 'Y', 'Y', 'Y', 'N', 'Y');
 					}
@@ -213,6 +215,7 @@
 			var orderDetailInfo = AP.common.getTemplate('my.order.order-detail-info', {
 				type : type,
 				ordInfo : ord.goods,
+				claimYn : claimYn,
 				title : getTitle(),
 				onlineCnt : ord.shipOrdOnlineProdCnt,
 				storeCnt : ord.storeOrdOnlineProdCnt
@@ -256,7 +259,8 @@
 					status : status,
 					step : step,
 					viewYn : viewYn,
-					takeOutYn : 'N'
+					takeOutYn : 'N',
+					type : type
 				});
 
 				$('.online').append(onlineProds);
@@ -290,6 +294,8 @@
 					fList : ord.ordHistPromoExList,
 					cList : ord.ordHistCouponExList,
 					step : step,
+					type : type,
+					viewYn : viewYn,
 					title : getTitle()
 				});
 
@@ -343,30 +349,59 @@
 		//claim 1단계 신청
 		function claimProdSelect() {
 			var chkReasonYn = true;
+			var rtnRequestPossibleYn = true;
 			var ordCancelAllYn = $('#checkAll').prop('checked') ? 'Y' : 'N';
 
 			selectProds = [];
 			$('[name^=prod_]').each(function() {
 				if($(this).prop('checked')) {
-					if(chkReasonYn) {
+					if(chkReasonYn && rtnRequestPossibleYn) {
 						var info = JSON.parse($(this).val());
-						var prodCode = $(this).data('promosn') != null ? $(this).data('promosn') : info.ordHistProdSn;
+						var prodCode;
 
-						info.receivedClaimReasonSn = $('#reason_'+prodCode).find('.ui_select').designSelectBox( 'getValue' );
-						info.foReceivedClaimReason = $('#reason_'+prodCode).find('.input_wrap > input').val();
-						selectProds.push(info);
+						if ($(this).data('promosn') != null && $(this).data('promosn') != '') {
+							prodCode = $(this).data('promosn');
+						} else {
+							prodCode = info.ordHistProdSn;
+						}
 
-						if(info.receivedClaimReasonSn == '') {
-							chkReasonYn = false;
-							AP.modal.alert(getTitle() + "유형을 선택해주세요").addListener( 'modal-close', function (e) {
+						info.ordOtfResultExList = [];
+						info.ordHistProdAwardExList = [];
+						info.ordHistProdPromoAwardExList = [];
+
+						if (type != 'cancel') {
+							info.receivedClaimReasonSn = $('#reason_'+prodCode).find('.ui_select').designSelectBox( 'getValue' );
+							info.foReceivedClaimReason = $('#reason_'+prodCode).find('.input_wrap > input').val();
+
+							selectProds.push(info);
+
+							if(info.receivedClaimReasonSn == '') {
+								chkReasonYn = false;
+								AP.modal.alert(getTitle() + "유형을 선택해주세요").addListener( 'modal-close', function (e) {
+									return;
+								});
+							} else if (info.foReceivedClaimReason == '' || info.foReceivedClaimReason == null) {
+								chkReasonYn = false;
+								AP.modal.alert(getTitle() + "사유를 입력해주세요").addListener( 'modal-close', function (e) {
+									$('#reason_'+prodCode).find('.input_wrap > input').focus();
+									return;
+								});
+							} else if (info.rtnRequestPossibleQty <= 0) {
+								AP.modal.alert(getTitle() + " 가능 수량이 0인 상품은 " + getTitle() + "이 불가능합니다.");
+								rtnRequestPossibleYn = false;
 								return;
+							}
+						} else {
+							reason.claimReasonExList.forEach( function (r) {
+								if (info.receivedClaimReasonSn == null) {
+									if (r.customerFaultYn == 'Y') {
+										info.receivedClaimReasonSn = r.claimReasonSn;
+										info.foReceivedClaimReason = '취소';
+									}
+								}
 							});
-						} else if (info.foReceivedClaimReason == '' || info.foReceivedClaimReason == null) {
-							chkReasonYn = false;
-							AP.modal.alert(getTitle() + "사유를 입력해주세요").addListener( 'modal-close', function (e) {
-								$('#reason_'+prodCode).find('.input_wrap > input').focus();
-								return;
-							});
+
+							selectProds.push(info);
 						}
 					}
 				}
@@ -377,7 +412,7 @@
 					$('html, body').scrollTop(0);
 				});
 				return;
-			} else if(!chkReasonYn) {
+			} else if(!chkReasonYn || !rtnRequestPossibleYn) {
 				return;
 			} else if (ord.goods.ordDetailStatusCode == 'OrdReceivedWaiting' && ordCancelAllYn == 'N') {
 				AP.modal.alert("죄송합니다. 주문접수 상태에서는 부분취소가 되지 않으므로, 해당 주문을 전체 취소하신 후 원하는 상품을 다시 결재해 주셔야 합니다.");
@@ -436,7 +471,32 @@
 				var $form = $('#f_shipAddressInfo');
 
 				if($form.valid()) {
-					var formData = AP.common.getFormData($form);
+					var formData = new FormData( $form.get(0) );
+
+					if (claimAddressInfo.shipAddressTypeCode == 'CStoreSelect') {
+						if (claimAddressInfo.cStoreAddress != null) {
+							formData.append('cStoreAddress.address1', claimAddressInfo.cStoreAddress.address1);
+							formData.append('cStoreAddress.address2', claimAddressInfo.cStoreAddress.address2);
+							formData.append('cStoreAddress.address3', claimAddressInfo.cStoreAddress.address3);
+							formData.append('cStoreAddress.address4', claimAddressInfo.cStoreAddress.address4);
+							formData.append('cStoreAddress.countryCode', claimAddressInfo.cStoreAddress.countryCode);
+							formData.append('cStoreAddress.zipCode', claimAddressInfo.cStoreAddress.zipCode);
+						}
+						formData.append('cStoreArrivalAreaBarcode', claimAddressInfo.cStoreArrivalAreaBarcode);
+						formData.append('cStoreArrivalAreaCode', claimAddressInfo.cStoreArrivalAreaCode);
+						formData.append('cStoreArrivalDongNm', claimAddressInfo.cStoreArrivalDongNm);
+						formData.append('cStoreCenterCode', claimAddressInfo.cStoreCenterCode);
+						formData.append('cStoreCenterName', claimAddressInfo.cStoreCenterName);
+						formData.append('cStoreCompany', claimAddressInfo.cStoreCompany);
+						formData.append('cStoreDockNo', claimAddressInfo.cStoreDockNo);
+						formData.append('cStoreHqCode', claimAddressInfo.cStoreHqCode);
+						formData.append('cStoreName', claimAddressInfo.cStoreName);
+						if (claimAddressInfo.cStorePhoneNo != null) {
+							formData.append('cStorePhoneNo.countryNo', claimAddressInfo.cStorePhoneNo.countryNo);
+							formData.append('cStorePhoneNo.phoneNo', claimAddressInfo.cStorePhoneNo.phoneNo);
+						}
+						formData.append('cStoreStoreCode', claimAddressInfo.cStoreStoreCode);
+					}
 
 					$('#b_chgAddress').attr('disabled', true);
 					AP.api.ordChangeShipAddress({

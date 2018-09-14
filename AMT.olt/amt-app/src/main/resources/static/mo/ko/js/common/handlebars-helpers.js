@@ -675,4 +675,311 @@
 		return AP.common.availablePrices( availablePrices, propName );
 	});
 
+	/** MyPage *****************************************************************/
+	Handlebars.registerHelper("couponTypeBenefitSwitch", function(value) {
+		var html = '';
+
+		if (value !== null && value.couponBenefitTypeCode != null) {
+			switch (value.couponBenefitTypeCode) {
+				case 'ProdDc' :
+					//상품할인쿠폰
+					switch (value.dcMethodCode) {
+						case 'FixedRate' :
+							//정률
+							html = '<b>' + value.dcRate * 100 + '%</b> <br>할인';
+							break;
+						case 'FixedAmt' :
+							//정액
+							html = '<b>' + value.dcAmt + '원</b> <br>할인';
+							break;
+						case 'FlatPrice' :
+							//균일가
+							html = '<b>' + value.flatPrice + '원</b> <br>균일가';
+							break;
+						default :
+							break;
+					}
+					break;
+				case 'CartDc' :
+					//장바구니할인쿠폰 - 정액/정률
+					switch (value.dcMethodCode) {
+						case 'FixedRate' :
+							//정률
+							html = '<b>' + value.dcRate * 100 + '%</b> <br>할인';
+							break;
+						case 'FixedAmt' :
+							//정액
+							html = '<b>' + value.dcAmt + '원</b> <br>할인';
+							break;
+						case 'FlatPrice' :
+							//균일가
+							html = '<b>' + value.flatPrice + '원</b> <br>균일가';
+							break;
+						default :
+							break;
+					}
+					break;
+					break;
+				case 'MPlusN' :
+					//M+N쿠폰
+					html = '<b>' + value.mplusnCoupon.baseOrdQty + ' + ' + value.mplusnCoupon.freeAwardQty + '</b>';
+					break;
+				case 'Buy1Get' :
+					//Buy1Get쿠폰 - 100%  50%
+					switch (value.buy1getDcRate) {
+						case 1 :
+							html = '<b>하나 더</b>';
+							break;
+						case 0.5 :
+							html = '<b>하나 반값</b>';
+							break;
+						default :
+							break;
+					}
+					break;
+				case 'CartAward' :
+					//장바구니증정쿠폰 - 사은품 증정
+					html = '<b>사은품 증정</b>';
+					break;
+				case 'ShipFeeFree' :
+					//배송비무료쿠폰
+					html = '<b>배송비 무료</b>';
+					break;
+				default :
+					break;
+			}
+		}
+		return html;
+	});
+
+	Handlebars.registerHelper("couponTypeSwitch", function(value) {
+		var html = '';
+
+		if (value != null && value.couponBenefitTypeCode != null) {
+			switch (value.couponBenefitTypeCode) {
+				case 'ProdDc' :
+					//상품할인쿠폰
+					html = '상품할인쿠폰';
+					break;
+				case 'CartDc' :
+					//장바구니할인쿠폰 - 정액/정률
+					html = '장바구니할인쿠폰';
+					break;
+				case 'MPlusN' :
+					//M+N쿠폰
+					html = 'M + N쿠폰';
+					break;
+				case 'Buy1Get' :
+					//Buy1Get쿠폰 - 100%  50%
+					html = 'Buy1 Get1 쿠폰';
+					break;
+				case 'CartAward' :
+					//장바구니증정쿠폰 - 사은품 증정
+					html = '사은품증정쿠폰';
+					break;
+				case 'ShipFeeFree' :
+					//배송비무료쿠폰
+					html = '배송비무료쿠폰';
+					break;
+				default :
+					break;
+			}
+		}
+		return html;
+	});
+
+	Handlebars.registerHelper("depositSwitch", function(price, unit) {
+		var price = Number( price ),
+			result = $B.string.numberFormat( Math.abs(price) ),
+			html = '';
+
+		if (price > 0) {
+			html = '( <em> + </em> )' + result + unit;
+		} else {
+			html = "( - )" + result + unit;
+		}
+		return html;
+	});
+
+	Handlebars.registerHelper("depositTypeName", function(value) {
+		var html = '';
+
+		if (value != null) {
+			switch (value) {
+				case 'Saving' :
+					//적립:Saving
+					html = '예치금 적립';
+					break;
+				case 'Transfer' :
+					//출금:Transfer
+					html = '예치금 출금';
+					break;
+				case 'Pay' :
+					//사용:Pay
+					html = '예치금 사용';
+					break;
+				case 'PayCancel' :
+					//취소:PayCancel
+					html = '예치금 취소';
+					break;
+				case 'ManualSaving' :
+					html = '수동적립';
+					break;
+				case 'ManualDec' :
+					html = '수동차감';
+					break;
+				default :
+					html = '';
+					break;
+			}
+		}
+		return html;
+	});
+
+	Handlebars.registerHelper("replaceImagePath", function(src, width, height) {
+		return AP.common.replaceImagePath(src, width, height);
+	});
+
+	/***********************************************************************
+	 * 주문서 helper
+	 */
+	Handlebars.registerHelper("dcMethodCodeSwitch", function(value) {
+		var html = '';
+
+		if (value != null && value.couponBenefitTypeCode != null) {
+			switch (value.couponBenefitTypeCode) {
+				case 'ProdDc' :
+					//상품할인쿠폰
+					switch (value.dcMethodCode) {
+						case 'FixedRate' :
+							//정률
+							html = value.dcRate * 100 + '% 할인';
+							break;
+						case 'FixedAmt' :
+							//정액
+							html = value.dcAmt + '원';
+							break;
+						case 'FlatPrice' :
+							//균일가
+							html = value.flatPrice + '원';
+							break;
+						default :
+							break;
+					}
+					break;
+				case 'CartDc' :
+					//장바구니할인쿠폰 - 정액/정률
+					switch (value.dcMethodCode) {
+						case 'FixedRate' :
+							//정률
+							html = value.dcRate * 100 + '% 할인';
+							break;
+						case 'FixedAmt' :
+							//정액
+							html = value.dcAmt + '원';
+							break;
+						case 'FlatPrice' :
+							//균일가
+							html = value.flatPrice + '원';
+							break;
+						default :
+							break;
+					}
+					break;
+				case 'MPlusN' :
+					//M+N쿠폰
+					html = 'M + N';
+					break;
+				case 'Buy1Get' :
+					//Buy1Get쿠폰 - 100%  50%
+					switch (value.buy1getDcRate) {
+						case 1 :
+							html = '하나 더';
+							break;
+						case 0.5 :
+							html = '하나 반값';
+							break;
+						default :
+							break;
+					}
+					break;
+				case 'CartAward' :
+					//장바구니증정쿠폰 - 사은품 증정
+					html = '사은품 증정';
+					break;
+				case 'ShipFeeFree' :
+					//배송비무료쿠폰
+					html = '배송비 무료';
+					break;
+				default :
+					break;
+			}
+		}
+		return html;
+	});
+
+	/**
+	 * 결제금액 0보다 크면 true
+	 * {{checkAmtMapPrice ordAmtMap 'OnlineShipProd'}}
+	 */
+	Handlebars.registerHelper('checkAmtMapPrice', function (map, key) {
+		var price = 0;
+		if (map != null && key != null) {
+			Object.keys( map ).map(function( prop ) {
+				if (prop == key) {
+					price = Number(map[ prop ]);
+				}
+			});
+		}
+		return price > 0;
+	});
+
+	/**
+	 * Formatting된 결제금액 Map Helper
+	 * {{getAmtMapPrice ordAmtMap 'OnlineShipProd' '원'}}
+	 */
+	Handlebars.registerHelper('getAmtMapPrice', function (map, key, str) {
+		var price = null;
+		if (map != null && key != null) {
+			Object.keys( map ).map(function( prop ) {
+				if (prop == key) {
+					price = $B.string.numberFormat( Number(map[ prop ]) );
+				}
+			});
+		}
+		return price + str;
+	});
+
+	/**
+	 * Formatting된 결제금액 Map Helper
+	 * {{getOtfAmtMapPrice otfTotalAmtMap 'OnlineShipProd' '원'}}
+	 */
+	Handlebars.registerHelper('getOtfAmtMapPrice', function (map, key1, key2, str) {
+		var price = null;
+		if (map != null && key1 != null && key2 != null) {
+			Object.keys( map ).map(function( prop ) {
+				if (prop == (key1+key2)) {
+					price = $B.string.numberFormat( Number(map[ prop ]) );
+				}
+			});
+		}
+		return price + str;
+	});
+
+	/**
+	 * 주문수량 Map Helper
+	 * {{getCntMap ordCntMap 'OnlineShipProd'}}
+	 */
+	Handlebars.registerHelper('getCntMap', function (map, key) {
+		var cnt = null;
+		if (map != null && key != null) {
+			Object.keys( map ).map(function( prop ) {
+				if (prop == key) {
+					cnt = Number(map[ prop ]);
+				}
+			});
+		}
+		return cnt;
+	});
+
 })( jQuery );

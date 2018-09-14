@@ -1,10 +1,11 @@
-<div class="inner_wrap">
+<div class="inner_wrap" th:with="_jsfile='beauty-tester'">
 	<h1><a href="/main"><img ap:src="@{/images/common/h1_logo.png}" alt="APmall"></a></h1>
 	<!--/* 검색폼 */-->
 	<fieldset class="search_form">
+      <form id="search-info" class="validate" method="post" action="/display/search">
 		<legend class="sr_only">검색</legend>
 		<div class="input_wrap">
-			<input type="text" value="" title="검색어입력" placeholder="검색어를 입력해주세요">
+			<input type="text" name="query" class="query" value="" title="검색어입력" placeholder="검색어를 입력해주세요" autocomplete="off">
 			<button type="button" class="btn_search"><span class="sr_only">검색</span></button>
 		</div>
 		<!--/* 검색어 자동완성 */-->
@@ -34,7 +35,7 @@
 				</ul>
 			</div>
 			<div class="layer_bottom">
-				<button type="button"><span class="ie_press">닫기<i class="ico_close"></i></span></button>
+				<button type="button" class="btn_close"><span class="ie_press">닫기<i class="ico_close"></i></span></button>
 			</div>
 		</div>
 		<!--/* 추천검색어 레이어 */-->
@@ -43,10 +44,10 @@
 				<div class="tab_menu underline">
 					<ul>
 						<li class="on">
-							<button type="button"><span>최근 검색어</span></button>
+							<button type="button" class="btn-latest-query"><span>최근 검색어</span></button>
 						</li>
 						<li>
-							<button type="button"><span>인기 검색어</span></button>
+							<button type="button" class="btn-favorite-words"><span>인기 검색어</span></button>
 						</li>
 						<li>
 							<button type="button"><span>급상승상품</span></button>
@@ -54,7 +55,7 @@
 					</ul>
 				</div>
 				<div class="tab_contents">
-					<div class="tab_cont">
+					<div class="tab_cont latest">
 						<h2 class="sr_only">최근검색어</h2>
 						<div class="nodata">궁금한 상품을 검색해주세요.</div><!--/* 데이터 없음 */-->
 						<div class="scroll_wrap">
@@ -88,14 +89,14 @@
 						<div class="clear layer_bottom">
 							<span>
 								<!-- button type="button">자동저장 끄기</button -->
-								<button type="button"><span class="ie_press">전체삭제</span></button>
+								<button type="button" class="latest-query-all"><span class="ie_press">전체삭제</span></button>
 							</span>
 							<button type="button" class="btn_close">
 								<span class="ie_press">닫기<i class="ico_close"></i></span>
 							</button>
 						</div>
 					</div>
-					<div class="tab_cont">
+					<div class="tab_cont favorite">
 						<h2 class="sr_only">인기 검색어</h2>
 						<div class="scroll_wrap">
 							<ul class="list">
@@ -196,48 +197,49 @@
 				</div>
 			</div>
 		</div>
+      </form>
 	</fieldset>
 
 	<div class="log_area">
 		<!--/* 로그인 전 */-->
-		<a th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}" href="#none" class="btn_login">안녕하세요<br><span>로그인</span>이 필요합니다.</a>
+		<a th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}" href="/login" class="btn_login">안녕하세요<br><span>로그인</span>이 필요합니다.</a>
 		
 		<!--/* 로그인 후 */--> 
-		<a th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}" href="#none" class="btn_login">홍길동님은<br><span>WELCOME</span>입니다.</a>
+		<a th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}" href="/my/page/info/changeUserInfo" class="btn_login">홍길동님은<br><span>WELCOME</span>입니다.</a>
 		
 		<!-- 09-03 메뉴 추가 및 삭제로 인한 마크업 수정 [S] -->
 		<div>
 			<!--/* 로그인 전 */-->
 			<ul th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
-				<li><a href="#none">쿠폰</a></li>
-				<li><a href="#none">뷰티포인트</a></li>
-				<li><a href="#none">기프트카드</a></li>
+				<li><a href="/my/page/myCouponList">쿠폰</a></li>
+				<li><a href="/my/page/info/beautyPoint">뷰티포인트</a></li>
+				<li><a href="/my/page/myGiftCardList">기프트카드</a></li>
 			</ul>
 			
 			<!--/* 로그인 후 */-->
 			<ul th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}">
-				<li><a href="#none">쿠폰</a> <em>1장</em></li>
-				<li><a href="#none">뷰티포인트</a> <em>3,000 P</em></li>
-				<li><a href="#none">기프트카드</a> <em>1,000원</em></li>
+				<li><a href="/my/page/myCouponList">쿠폰</a> <em><span th:text="${#IntegUtil.toCommaNumber(session.LOGIN_USER.member.keepingCouponQty)}" th:remove="tag">1</span>장</em></li>
+				<li><a href="/my/page/info/beautyPoint">뷰티포인트</a> <em><span th:text="${#IntegUtil.toCommaNumber(#IntegUtil.beautyPoint().remainBeautyPoint)}" th:remove="tag">3,000</span> P</em></li>
+				<li><a href="/my/page/myGiftCardList">기프트카드</a> <em><span th:text="${#IntegUtil.toCommaNumber(session.LOGIN_USER.member.remainDeposit)}" th:remove="tag">1,000</span>원</em></li>
 			</ul>
 			
 			<ul>
-				<li><a href="#none">마이파우치</a></li>
-				<li><a href="#none">배송지 관리</a></li>
-				<li th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}"><a href="#none">구매리뷰</a></li>
+				<li><a href="/my/page/info/myPouch">마이파우치</a></li>
+				<li><a href="/my/page/ship/address">배송지 관리</a></li>
+				<li th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}"><a href="/my/page/myReviewList">구매리뷰</a></li>
 				<!-- 로그인후 활성화표시 -->
-				<li th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}"><a href="#none" class="new">구매리뷰</a></li>
-				<li><a href="#none">회원정보수정</a></li>
-				<li><a href="#none">고객센터</a></li>
+				<li th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}"><a href="/my/page/myReviewList" class="new">구매리뷰</a></li>
+				<li><a href="/my/page/info/changeUserInfo">회원정보수정</a></li>
+				<li><a href="/cs/customerCenter">고객센터</a></li>
 			</ul>
 			<ul class="">
 				<li><a href="#none">APP 다운로드</a></li>
 			</ul>
 			<!--/* 로그인 전 */-->
-			<a th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}" href="#none" class="btn_join"><span>간편한 회원가입</span> <i class="ico_arr_s"></i></a>
+			<a th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}" href="/customer/signup" class="btn_join"><span>간편한 회원가입</span> <i class="ico_arr_s"></i></a>
 			
 			<!--/* 로그인 후 */-->
-			<a th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}" href="#none" class="btn_logout"><span>로그아웃</span></a>
+			<a th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}" href="/doLogout" class="btn_logout"><span>로그아웃</span></a>
 			
 		</div>
 		<!-- 09-03 메뉴 위치와 추가 및 삭제로 인한 마크업 수정 [E] -->
@@ -295,9 +297,16 @@
 					</li>
 				</th:block>
 			</th:block>
-			<li th:if="${menu.displayMenuId != 'issue'}"><a href="#" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}"  
+			<li th:if="${menu.displayMenuId != 'issue' && menu.displayMenuId != 'pacificShop'}"><a href="#" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}"  
 					th:class="${displayMenuId == menu.displayMenuId} ? 'on' : ''" th:data="${menu.displayMenuId}">GNBs</a>
 			</li>
+			<th:block th:if="${menu.displayMenuId == 'pacificShop'}">
+				<th:block th:if="${(session.LOGIN_USER != null && session.LOGIN_USER.member != null) && session.LOGIN_USER.member.employeeYn == 'Y'}">
+					<li><a href="#" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}"  
+						th:class="${displayMenuId == menu.displayMenuId} ? 'on' : ''">GNBs</a>
+					</li>
+				</th:block>
+			</th:block>
 			<!-- <li th:each="menuId : ${gnbMap.get('main').submenus}">
 				<a href="#" th:href="@{'/display/' + ${menuId.displayMenuId}(displayMenuId=${menuId.displayMenuId})}" th:text="${menuId.menuTitle}" th:class="${displayMenuId == menuId.displayMenuId} ? 'on' : ''"></a>
 			</li> -->
@@ -322,7 +331,7 @@
 		<!-- div class="align_right"><button class="btn_gradient btn_close" onclick="$('.category_wrap').slideUp();">닫기</button></div -->
 		<div class="category_menu">
 			<dl>
-				<dt class="sr_only">카테고리</dt>
+				<dt>카테고리</dt>
 				<dd>
 					<ul class="category" th:if="${not #lists.isEmpty(gnbMap.get('category'))}">
 						<th:block th:each="cate, inx : ${gnbMap.get('category').submenus}">
@@ -347,6 +356,73 @@
 								</th:block>
 							</ul>
 						</li>
+						</th:block>
+						
+						<li><a href="#none">브랜드</a>
+							<!-- 09-04 브랜드 영역 추가 [S] -->
+							<ul class="sub">
+								<li><a href="#none">아모레퍼시픽 브랜드</a>
+									<th:block th:each="brand, brandIndex : ${gnbMap.get('brandMain').submenus}">
+										<ul th:if="${brandIndex.index == 0 || brandIndex.index % 11 == 0}">
+											<th:block th:each="brand2, brandIndex2 : ${gnbMap.get('brandMain').submenus}">
+												<th:block th:if="${brandIndex2.index < 11*((brandIndex.index / 11)+1) && brandIndex2.index >= 11*(brandIndex.index / 11)}">
+													<li><a href="#none" th:href="@{'/brand/' + ${brand2.displayMenuId}(displayMenuId=${brand2.displayMenuId})}" th:text="${brand2.menuTitle}">메뉴</a></li>
+												</th:block>	
+											</th:block>
+										</ul>
+									</th:block>
+								</li>
+								<li><a href="#none">입점 브랜드</a>
+									<ul>
+										<li><a href="#none">메뉴</a></li>
+										<li><a href="#none">메뉴</a></li>
+										<li><a href="#none">메뉴</a></li>
+										<li><a href="#none">메뉴</a></li>
+										<li><a href="#none">메뉴</a></li>
+										<li><a href="#none">메뉴</a></li>
+									</ul>
+								</li>
+							</ul>
+							<!-- 09-04 브랜드 영역 추가 [E] -->
+						</li>
+					</ul>
+				</dd>
+			</dl>
+			<dl>
+				<dt>이벤트/기획전</dt>
+				<dd>
+					<ul>
+						<th:block th:if="${not #lists.isEmpty(gnbMap.get('AppH0202'))}">
+							<li th:each="menu : ${gnbMap.get('AppH0202').submenus}">
+								<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'URL'}" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}">On Sale</a>
+								<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'Menu'}" th:href="@{'/display/' + ${menu.linkDisplayMenuId}(displayMenuId=${menu.linkDisplayMenuId})}" th:text="${menu.menuTitle}">On Sale</a>
+							</li>
+						</th:block>
+					</ul>
+				</dd>
+			</dl>
+			<dl>
+				<dt>쿠폰/혜택</dt>
+				<dd>
+					<ul>
+						<th:block th:if="${not #lists.isEmpty(gnbMap.get('AppH0203'))}">
+							<li th:each="menu : ${gnbMap.get('AppH0203').submenus}">
+								<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'URL'}" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}">On Sale</a>
+								<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'Menu'}" th:href="@{'/display/' + ${menu.linkDisplayMenuId}(displayMenuId=${menu.linkDisplayMenuId})}" th:text="${menu.menuTitle}">On Sale</a>
+							</li>
+						</th:block>
+					</ul>
+				</dd>
+			</dl>
+			<dl>
+				<dt>쇼핑찬스</dt>
+				<dd>
+					<ul>
+						<th:block th:if="${not #lists.isEmpty(gnbMap.get('AppH0201'))}">
+							<li th:each="menu : ${gnbMap.get('AppH0201').submenus}">
+								<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'URL'}" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}">On Sale</a>
+								<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'Menu'}" th:href="@{'/display/' + ${menu.linkDisplayMenuId}(displayMenuId=${menu.linkDisplayMenuId})}" th:text="${menu.menuTitle}">On Sale</a>
+							</li>
 						</th:block>
 					</ul>
 				</dd>
@@ -378,5 +454,36 @@
 	$('.category_menu dd>ul>li>a').parent().mouseleave(function(){
 		$(this).removeClass('on').children('.sub').hide();
 	});
-
+	
+	$(document).ready(function(){
+		AP.header.init();
+		$(".search_form").find('.auto_complete').find('.layer_bottom').find('.btn_close').on('click', function(e){
+			$(".search_form").find('.auto_complete').css("display", "none");
+    	});
+    	
+		$(".search_form").find('.recommended_search').find('.btn_close').on('click', function(e){
+			$(".search_form").find('.recommended_search').css("display", "none");
+    	});
+	});
+	
+	function showLatestQuery(){
+		var tgtcont = $('.layer.recommended_search').find('.tab_cont.latest');		
+		if(!$.cookie("cookieKeyword")){
+			$(tgtcont).find('.nodata').css("display", "block");
+			$(tgtcont).find('.scroll_wrap').css("display", "none");
+		}else{
+			var cka = $.cookie("cookieKeyword").split("|");
+			$(tgtcont).find('.list').empty();
+			$(tgtcont).find('.nodata').css("display", "none");
+			$(tgtcont).find('.scroll_wrap').css("display", "block");
+			$.each(cka, function(i, item){
+				$(tgtcont).find('.list').append("<li><a href=\"#none\" class=\"rkwd\">"+item+"</a><button type=\"button\" class=\"btn_del latest-query\"><span class=\"ie_press\"><i class=\"ico_close\"><span class=\"sr_only\">검색어 삭제</span></i></span></button></li>");
+			});
+		}
+	}
+	
+	function search(){
+		var $form = $('form.validate');
+		$form.submit();
+	}
 </script>

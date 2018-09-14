@@ -10,6 +10,7 @@ import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
 import kr.ap.comm.support.constants.SessionKey;
 import kr.ap.comm.support.validator.MemberFormValidator;
+import kr.ap.comm.util.SessionUtils;
 import kr.ap.emt.api.pos.POSApiService;
 import kr.ap.emt.api.pos.vo.PosChannelInfo;
 import net.g1project.ecp.api.exception.ApiException;
@@ -700,7 +701,7 @@ public class SignupRestController extends AbstractController {
      * @return
      */
     @PostMapping("/stepThree")
-    public ResponseEntity<?> stepThree(@Valid MemberForm memberForm, BindingResult bindingResult) {
+    public ResponseEntity<?> stepThree(final HttpServletRequest request, @Valid MemberForm memberForm, BindingResult bindingResult) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
 		memberForm.setValidFlag("inputInfo");

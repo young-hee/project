@@ -1,6 +1,3 @@
-	<div class="modal_dimmed"></div>
-	<div class="layer_popup" style="display: block;">
-		<div class="layer_wrap photo_review" style="margin-top:-350px;">
 			<dl class="layer">
 				<dt class="layer_title"><span class="sr_only">리뷰</span></dt>
 				<dd class="layer_cont">
@@ -10,10 +7,10 @@
 					</div>
 					<dl class="review">
 						<dt class="review_header">
-							<span class="name">{{this.memberId}}</span><span class="grade">WELCOME</span>
+							<span class="name">{{this.prodReviewInfo.memberId}}</span><span class="grade">{{this.prodReviewInfo.memberLevelName}}</span>
 							<div class="product_rating">
-								<span class="mark_star_sm star4"><span class="sr_only">구매 평점 별 5개 중 1개</span></span>
-								<span class="count">4</span>
+								<span class="mark_star_sm star{{calc 5 '-' this.prodReviewInfo.scope}}"><span class="sr_only">구매 평점 별 5개 중 {{this.prodReviewInfo.scope}}개</span></span>
+								<span class="count">{{this.prodReviewInfo.scope}}</span>
 							</div>
 							</span>
 						</dt>
@@ -21,51 +18,32 @@
 						<dd class="attached">
 							<div class="review_cont">
 								<div class="title_box">
-									<p class="title">매트한 쿠션 찾는 분들에게 딱이에요 매트한 쿠션 찾는 분들에게 딱이에요</p>
-									<a href="#1" class="product_name"><em class="ellipsis">상품명, 옵션명 노출 길어지면 말줄임 상품명, 옵션명 노출 길어지면 말줄임 상품명, 옵션명 노출 길어지면 말줄임 상품명, 옵션명 노출 길어지면 말줄임</em><i class="ico_arr"></i></a>
+									<p class="title">{{this.prodReviewInfo.prodReviewTitle}}</p>
+									<a href="#1" class="product_name"><em class="ellipsis">{{this.prodReviewInfo.onlineProdName}}-{{this.prodReviewInfo.prodName}}</em><i class="ico_arr"></i></a>
 								</div>
 								<div class="inbox_cont">
-									<!-- 이미지만 -->
-									<div class="inbox type_01">
-										<img src="/mo/ko/images/display/img_beauty_tester_01.jpg" alt="이미지 내용 입력" />
-									</div>
-									<!-- 이미지+ 텍스트 -->
-									<div class="inbox type_02">
-										<img src="/mo/ko/images/display/img_beauty_tester_02.jpg" alt="이미지 내용 입력" />
-										<p>정말 유명한 블랙쿠션!!</p>
-										<p>너무 궁금해서 저도 한번 사용해봤어요</p>
-										<p>블랙박스에서 케이스를 꺼내면 고급진 블랙 케이스가 뙇!! ㅎㅎ  반들반들 만지기 아까워요 ㅠㅠ</p>
-									</div>
-									<div class="inbox type_02">
-										<img src="/mo/ko/images/display/img_beauty_tester_03.jpg" alt="이미지 내용 입력" />
-										<p>정말 유명한 블랙쿠션!!</p>
-										<p>너무 궁금해서 저도 한번 사용해봤어요</p>
-										<p>블랙박스에서 케이스를 꺼내면 고급진 블랙 케이스가 뙇!! ㅎㅎ  반들반들 만지기 아까워요 ㅠㅠ</p>
-									</div>
-									<div class="inbox type_02">
-										<img src="/mo/ko/images/display/img_beauty_tester_04.jpg" alt="이미지 내용 입력" />
-										<p>정말 유명한 블랙쿠션!!</p>
-										<p>너무 궁금해서 저도 한번 사용해봤어요</p>
-										<p>블랙박스에서 케이스를 꺼내면 고급진 블랙 케이스가 뙇!! ㅎㅎ  반들반들 만지기 아까워요 ㅠㅠ</p>
-									</div>
-									<!-- 이미지 두개 세로 half + 텍스트 -->
-									<div class="inbox type_03">
-										<img src="/mo/ko/images/display/img_beauty_tester_05_1.jpg" alt="이미지 내용 입력" />
-										<img src="/mo/ko/images/display/img_beauty_tester_05_2.jpg" alt="이미지 내용 입력" />
-										<p>정말 유명한 블랙쿠션!!</p>
-										<p>너무 궁금해서 저도 한번 사용해봤어요</p>
-										<p>블랙박스에서 케이스를 꺼내면 고급진 블랙 케이스가 뙇!! ㅎㅎ  반들반들 만지기 아까워요 ㅠㅠ</p>
-									</div>
-									<!-- 이미지 두개 가로 half + 텍스트 -->
-									<div class="inbox type_04">
-										<ul class="img_fl">
-											<li><img src="/mo/ko/images/display/img_beauty_tester_06_1.jpg" alt="이미지 내용 입력" /></li>
-											<li><img src="/mo/ko/images/display/img_beauty_tester_06_2.jpg" alt="이미지 내용 입력" /></li>
-										</ul>
-										<p>정말 유명한 블랙쿠션!!</p>
-										<p>너무 궁금해서 저도 한번 사용해봤어요</p>
-										<p>블랙박스에서 케이스를 꺼내면 고급진 블랙 케이스가 뙇!! ㅎㅎ  반들반들 만지기 아까워요 ㅠㅠ</p>
-									</div>
+									{{#each this.displayReviewImgList}}
+										{{#xif this.foTemplateNo '==' 0}}
+											<div class="inbox_cont">
+												기존 뷰티테스트 리뷰 영역
+											</div>
+										{{/xif}}
+										{{#xif this.foTemplateNo '!=' 0}}
+											<div class="inbox type_0{{this.foTemplateNo}}">
+												{{#xif this.foTemplateNo '==' 4}}<ul class="img_fl">{{/xif}}
+												{{#each this.imageInfoList}}
+													{{#xif ../foTemplateNo '==' 4}}<li>{{/xif}}<img src="{{this.[0]}}" alt="이미지 내용 입력" />{{#xif ../foTemplateNo '==' 4}}</li>{{/xif}}
+												{{/each}}
+												{{#xif this.foTemplateNo '==' 4}}</ul>{{/xif}}
+												
+												{{#each this.imageInfoList}}
+													{{#xif ../foTemplateNo '!=' 1}}
+													<p>{{this.[1]}}</p>
+													{{/xif}}
+												{{/each}}
+											</div>
+										{{/xif}}
+									{{/each}}
 								</div>
 							</div>
 						</dd>
@@ -76,10 +54,8 @@
 			<div class="fix_bottom_wrap">
 				<div class="fix_bottom">
 					<div class="inbox">
-						<span class="share_area"><a href="#1" class=""><img src="/pc/ko/images/event/ico_share.png" class="" alt="공유하기" /></a></span> <!-- 이미지경로 수정_2018-08-24 -->
-						<span class="recommend_area"><a href="#none" class="btn_help" onclick="$(this).toggleClass('on');">도움이 되요</a><span class="num">296</span></span> <!-- 좋아요_toggle_2018-08-24 -->
+						<span class="share_area"><a href="#1" class="btn_share"><img src="/pc/ko/images/event/ico_share.png" class="" alt="공유하기" /></a></span> <!-- 이미지경로 수정_2018-08-24 -->
+						<span class="recommend_area"><a href="#none" class="btn_help{{#xif this.prodReviewInfo.recommendYn '==' 'Y'}} on{{/xif}}" onclick="$(this).toggleClass('on');">도움이 되요</a><span class="num recommendCnt">{{this.prodReviewInfo.recommendCnt}}</span></span> <!-- 좋아요_toggle_2018-08-24 -->
 					</div>
 				</div>
 			</div>
-		</div>
-	</div>

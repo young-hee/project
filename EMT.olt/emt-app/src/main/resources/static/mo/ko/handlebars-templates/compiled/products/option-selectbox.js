@@ -40,8 +40,10 @@ this["AP"]["handlebars"]["products"]["option-selectbox"] = Handlebars.template({
     + alias2(alias1((depth0 != null ? depth0.prodName : depth0), depth0))
     + "\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.saleDisplayStatus : depth0),"==","OutOfStock",{"name":"xif","hash":{},"fn":container.program(15, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "							</span>\n\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.saleDisplayStatus : depth0),"==","OnSale",{"name":"xif","hash":{},"fn":container.program(17, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "							</span>\n"
+    + ((stack1 = helpers.each.call(alias3,(depth0 != null ? depth0.giftProds : depth0),{"name":"each","hash":{},"fn":container.program(17, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "							\n"
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.saleDisplayStatus : depth0),"==","OnSale",{"name":"xif","hash":{},"fn":container.program(19, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "						</a>\n";
 },"11":function(container,depth0,helpers,partials,data) {
     return "								<span class=\"color_box\" style=\"background-color:#"
@@ -53,37 +55,45 @@ this["AP"]["handlebars"]["products"]["option-selectbox"] = Handlebars.template({
     + "\">\n";
 },"15":function(container,depth0,helpers,partials,data) {
     return "									<span class=\"sold_out\"> [일시품절] </span>\n";
-},"17":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"17":function(container,depth0,helpers,partials,data) {
+    var alias1=container.lambda, alias2=container.escapeExpression;
+
+  return "								<span class=\"gifts\">[사은품] "
+    + alias2(alias1((depth0 != null ? depth0.prodName : depth0), depth0))
+    + " "
+    + alias2(alias1((depth0 != null ? depth0.qty : depth0), depth0))
+    + "개</span>\n";
+},"19":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"doublePriceDisplayYn",{"name":"availablePrices","hash":{},"data":data}),"==","Y",{"name":"xif","hash":{},"fn":container.program(18, data, 0, blockParams, depths),"inverse":container.program(21, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "");
-},"18":function(container,depth0,helpers,partials,data) {
+  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"doublePriceDisplayYn",{"name":"availablePrices","hash":{},"data":data}),"==","Y",{"name":"xif","hash":{},"fn":container.program(20, data, 0, blockParams, depths),"inverse":container.program(23, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "");
+},"20":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"minOnlineSalePriceDiff",{"name":"availablePrices","hash":{},"data":data}),">",0,{"name":"xif","hash":{},"fn":container.program(19, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
-},"19":function(container,depth0,helpers,partials,data) {
+  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"minOnlineSalePriceDiff",{"name":"availablePrices","hash":{},"data":data}),">",0,{"name":"xif","hash":{},"fn":container.program(21, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"21":function(container,depth0,helpers,partials,data) {
     return "										<strong class=\"num\">+"
     + container.escapeExpression((helpers.availablePrices || (depth0 && depth0.availablePrices) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.availablePrices : depth0),"minOnlineSalePriceDiff",{"name":"availablePrices","hash":{},"data":data}))
     + "<span>원</span></strong>\n";
-},"21":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"23":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
-  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.activityPointOnly : depth0),"==","Y",{"name":"xif","hash":{},"fn":container.program(22, data, 0, blockParams, depths),"inverse":container.program(24, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "");
-},"22":function(container,depth0,helpers,partials,data) {
+  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.activityPointOnly : depth0),"==","Y",{"name":"xif","hash":{},"fn":container.program(24, data, 0, blockParams, depths),"inverse":container.program(26, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "");
+},"24":function(container,depth0,helpers,partials,data) {
     return "										<strong class=\"num\">"
     + container.escapeExpression((helpers.numberFormat || (depth0 && depth0.numberFormat) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.exchActivityPoint : depth0),{"name":"numberFormat","hash":{},"data":data}))
     + "<span>알</span></strong>\n";
-},"24":function(container,depth0,helpers,partials,data,blockParams,depths) {
+},"26":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
   return "										<strong class=\"num\">"
     + container.escapeExpression((helpers.numberFormat || (depth0 && depth0.numberFormat) || alias2).call(alias1,(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"onlineSalePrice",{"name":"availablePrices","hash":{},"data":data}),{"name":"numberFormat","hash":{},"data":data}))
     + "\n											<span>\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].productCount : depths[1]),1,{"name":"eq","hash":{},"data":data}),"&&",(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.membershipExchOnly : depth0),"Y",{"name":"eq","hash":{},"data":data}),{"name":"xif","hash":{},"fn":container.program(25, data, 0, blockParams, depths),"inverse":container.program(27, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].productCount : depths[1]),1,{"name":"eq","hash":{},"data":data}),"&&",(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.membershipExchOnly : depth0),"Y",{"name":"eq","hash":{},"data":data}),{"name":"xif","hash":{},"fn":container.program(27, data, 0, blockParams, depths),"inverse":container.program(29, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "											</span>\n										</strong>\n";
-},"25":function(container,depth0,helpers,partials,data) {
-    return "													P\n";
 },"27":function(container,depth0,helpers,partials,data) {
+    return "													P\n";
+},"29":function(container,depth0,helpers,partials,data) {
     return "													원\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {});

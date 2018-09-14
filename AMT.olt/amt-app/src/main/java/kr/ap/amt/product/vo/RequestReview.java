@@ -32,6 +32,21 @@ public class RequestReview {
 	private Integer offset;
 	private Integer limit;
 	
+	private String displayMenuSetId;
+	private String displayMenuId;
+
+	public String getDisplayMenuSetId() {
+		return displayMenuSetId;
+	}
+	public void setDisplayMenuSetId(String displayMenuSetId) {
+		this.displayMenuSetId = displayMenuSetId;
+	}
+	public String getDisplayMenuId() {
+		return displayMenuId;
+	}
+	public void setDisplayMenuId(String displayMenuId) {
+		this.displayMenuId = displayMenuId;
+	}
 	
 	public String getScope() {
 		return scope;

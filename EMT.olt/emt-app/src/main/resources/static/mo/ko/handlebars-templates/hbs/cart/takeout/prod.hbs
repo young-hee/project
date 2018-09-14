@@ -13,10 +13,10 @@
 						<label for="takeoutChkBox{{ cartProdSn }}">체크</label>
 					</span>
 					{{#if (ne prodEx.repProdImgEx null) }}
-						<img src="{{ prodEx.repProdImgEx.imgUrl }}" class="thm_cart_item" alt="">
+						<span class="thm_cart_item"><img src="{{ prodEx.repProdImgEx.imgUrl }}" alt=""></span>
 					{{else}}
 						{{#if (ne ../repOnlineProdImgEx null) }}
-							<img src="{{ ../repOnlineProdImgEx.imgUrl }}" class="thm_cart_item" alt="">
+							<span class="thm_cart_item"><img src="{{ ../repOnlineProdImgEx.imgUrl }}" alt=""></span>
 						{{/if}}
 					{{/if}}
 					<div class="cart_table_cell">
@@ -43,8 +43,8 @@
 				</div>
 				<div class="cart_item_info">
 					<input type="hidden" name="takeoutPrdSn" value="{{prodEx.prodSn}}"/>
-					<input type="hidden" name="cartProdSn" prod="prod" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}" value="{{ cartProdSn }}"/>
-					<input type="hidden" name="takeoutPrdInfo_{{ cartProdSn }}" value="{{cartProdSn}}"/>
+					<input type="hidden" name="cartProdSn" prod="prod" value="{{ cartProdSn }}"/>
+					<input type="hidden" name="takeoutPrdInfo_{{ cartProdSn }}" value="{{cartProdSn}}" prodName="{{ prodEx.prodName }}" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}"/>
 					<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{prodEx.saleDisplayStatus}}"/>
 					<!--/* 상품수량 */-->
 					<span class="ui_spinner small" data-step="1" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} data-min="{{ prodEx.minPurLimitQty }}" {{else}} data-min="1" {{/if}} {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} {{#if (gt cartProdQty prodEx.maxPurLimitQty) }} data-max="{{ cartProdQty}}" {{else}} data-max="{{ prodEx.maxPurLimitQty }}" {{/if}} {{else}} data-max="99" {{/if}} {{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}} >
@@ -98,7 +98,7 @@
 								<span class="thm"><img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/></span>
 							{{/if}}
 							<span class="info">
-								<span>사은품 : {{ awardProdEx.prodName }} {{#if (gt awardUnitQty 0 ) }}{{ awardUnitQty }}개 {{/if}}</span>
+								<span>사은품 : {{ awardProdEx.prodName }} {{#if (gt awardUnitQty 0 ) }}({{ awardUnitQty }}개) {{/if}}</span>
 								<span>증정기간 : {{dateFormat awardStartDt "YYYY.MM.DD"}} ~ {{dateFormat awardEndDt "YYYY.MM.DD"}}</span>
 							</span>
 						</div>
@@ -117,9 +117,7 @@
 					<label for="takeoutChkBoxO_{{ onlineProdSn }}">체크</label>
 				</span>
 				{{#if (ne repOnlineProdImgEx null) }}
-					<img src="{{ repOnlineProdImgEx.imgUrl }}" class="thm_cart_item" alt="">
-				{{else}}
-					<img src="{{ absolutePath '/images/cart/no_img.png' }}" class="thm_cart_item" alt="">
+					<span class="thm_cart_item"><img src="{{ repOnlineProdImgEx.imgUrl }}" alt=""></span>
 				{{/if}}
 				<div class="cart_table_cell">
 					{{#if (gt onlineProdFlagExList.length 0) }}
@@ -156,8 +154,8 @@
 				{{#each cartProdExList}}
 					<div class="cart_item_info">
 						<input type="hidden" name="takeoutPrdSn" value="{{prodEx.prodSn}}"/>
-						<input type="hidden" name="cartProdSn" prod="prod" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}" value="{{ cartProdSn }}"/>
-						<input type="hidden" name="takeoutPrdInfo_O_{{ ../onlineProdSn }}" value="{{cartProdSn}}"/>
+						<input type="hidden" name="cartProdSn" prod="prod" value="{{ cartProdSn }}"/>
+						<input type="hidden" name="takeoutPrdInfo_O_{{ ../onlineProdSn }}" value="{{cartProdSn}}" prodName="{{ prodEx.prodName }}" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}"/>
 						<input type="hidden" name="saleDisplayStatus_O_{{ ../onlineProdSn }}" value="{{prodEx.saleDisplayStatus}}"/>
 						<div class="cart_option_name">
 							{{#if (ne prodEx.repProdImgEx null) }}
@@ -205,7 +203,7 @@
 							<div class="cart_free_gift">
 								{{#if (ne awardProdEx.repProdImgEx null) }} <span class="thm"><img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/></span> {{/if}}
 								<span class="info">
-									<span>사은품 : {{ awardProdEx.prodName }} {{#if (gt awardUnitQty 0 ) }}{{ awardUnitQty }}개 {{/if}}</span>
+									<span>사은품 : {{ awardProdEx.prodName }} {{#if (gt awardUnitQty 0 ) }}({{ awardUnitQty }}개) {{/if}}</span>
 									<span>증정기간 : {{dateFormat awardStartDt "YYYY.MM.DD"}} ~ {{dateFormat awardEndDt "YYYY.MM.DD"}}</span>
 								</span>
 							</div>

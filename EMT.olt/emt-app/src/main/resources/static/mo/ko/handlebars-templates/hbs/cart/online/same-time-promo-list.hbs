@@ -43,7 +43,7 @@
 				{{#if (gte @../index 0) }} <div class="cart_item_box ico_plus"> {{else}} <div class="cart_item_box"> {{/if}}
 					<div class="cart_name_wrap">
 						{{#if (ne prodEx.repProdImgEx null) }}
-							<img src="{{ prodEx.repProdImgEx.imgUrl }}" class="thm_cart_item" alt="">
+							<span class="thm_cart_item"><img src="{{ prodEx.repProdImgEx.imgUrl }}" alt=""></span>
 						{{/if}}
 						<div class="cart_table_cell">
 							<span class="cart_item_name">
@@ -85,7 +85,7 @@
 								<span class="thm"><img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/></span>
 							{{/if}}
 							<span class="info">
-								<span>사은품 : {{ awardProdEx.prodName }} {{#if (gt awardUnitQty 0 ) }}{{ awardUnitQty }}개 {{/if}}</span>
+								<span>사은품 : {{ awardProdEx.prodName }} {{#if (gt awardUnitQty 0 ) }}({{ awardUnitQty }}개) {{/if}}</span>
 								<span>증정기간 : {{dateFormat awardStartDt "YYYY.MM.DD"}} ~ {{dateFormat awardEndDt "YYYY.MM.DD"}}</span>
 							</span>
 						</div>

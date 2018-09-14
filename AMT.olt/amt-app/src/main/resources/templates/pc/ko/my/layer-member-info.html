@@ -1,0 +1,110 @@
+<html ap:decorate="~{layout/layout-sub}">
+
+<body>
+
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!-- page contents -->
+	<div class="ap_contents">
+
+		<!-- breadcrumbe -->
+		<th:block ap:replace="~{common/fragment/breadcrumb-only}"/>
+		<!-- // breadcrumbe -->
+
+		<!-- com_cont -->
+		<div class="ap_com_cont mypage password_area">
+
+			<!-- aside_area -->
+			<th:block ap:replace="~{my/fragment/my-menu}"/>
+			<!-- aside_area -->
+
+			<!-- cont_area -->
+			<div class="cont_area">
+				<div class="page_title_area">
+					<div class="page_title">
+						<h2 class="h_title page">회원정보 수2정</h2>
+					</div>
+				</div>
+
+				<div class="confirm_area">
+					<div class="text_area">
+						<p>비밀번호 확인</p>
+						<ul class="list_bullet_dot">
+							<li>아모레퍼시픽몰은 회원님의 개인정보를 신중히 취급하며, 회원님의 동의 없이는 기재하신 회원정보가 공개되지 않습니다. </li>
+							<li>보다 다양한 서비스를 받으시려면 정확한 정보를 항상 유지해 주셔야 합니다.</li>
+						</ul>
+					</div>
+
+					<fieldset class="form password_comfirm">
+						<legend class="sr_only">비밀번호 입력</legend>
+						<div class="password_area">
+							<p><span>아이디:</span><th:block th:text="${session.LOGIN_USER.member.memberId}">apmall***</th:block></p>
+							<div class="input_btn_wrap w100p">
+								<span class="input_wrap">
+									<input type="password" name="userPwdEc" required="required" title="비밀번호 입력" placeholder="본인 확인을 위해 비밀번호를 입력해 주세요." />
+								</span>
+								<button href="javascript:;" id="send" class="btn_md_primary md">확인</button>
+							</div>
+							<p class="color_primary">본인 확인을 위해 비밀번호를 입력해주세요.</p>
+						</div>
+					</fieldset>
+				</div>
+
+			</div>
+			<!-- // cont_area -->
+
+		</div>
+		<!-- // com_cont -->
+
+	</div>
+	<!-- // page contents -->
+</div><!-- // #ap_container -->
+
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+
+			<script>
+			var errorMsg = '[[${error}]]';
+			if(errorMsg != '') {
+					AP.modal.alert( errorMsg );
+			}
+
+			function post_goto(url, parm, target) {
+				  var f = document.createElement('form');
+
+				  var objs, value;
+				  for (var key in parm) {
+				    value = parm[key];
+				    objs = document.createElement('input');
+				    objs.setAttribute('type', 'hidden');
+				    objs.setAttribute('name', key);
+				    objs.setAttribute('value', value);
+				    f.appendChild(objs);
+				  }
+				        
+				  if (target)
+				    f.setAttribute('target', target);
+				  
+				  f.setAttribute('method', 'post');
+				  f.setAttribute('action', url);
+				  document.body.appendChild(f);
+				  f.submit();
+			}
+			$('#send').click(function() {
+				if(!$('[name=userPwdEc]').val()) {
+					AP.modal.alert( "비밀번호를 입력해 주세요." );
+					return;
+				}
+				
+				if($(this).attr("disabled") == "disabled") {
+					return;
+				}
+			    $(this).attr("disabled", "disabled");
+			    post_goto('/my/page/info/changeUserInfo', {'userPwdEc':$('[name=userPwdEc]').val()});
+			});
+			</script>
+</th:block>
+
+</body>
+</html>

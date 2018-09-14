@@ -83,8 +83,8 @@ public class CSRestController extends AbstractController {
 		for(OrdEx ordEx : ordListResult.getOrdExList()) {
 			OrderDTO orderDTO = new OrderDTO();
 			orderDTO.setOrdSn(ordEx.getOrdSn());
-			orderDTO.setOrdHistNo(ordEx.getOrdHistEx().getOrdHistNo());
-			orderDTO.setOrdName(ordEx.getOrdHistEx().getOrdHistProdExList().get(0).getOrdProdEx().getProdNameBlang());
+			orderDTO.setOrdNo(ordEx.getOrdNo());
+			orderDTO.setOrdName(ordEx.getOrdHistEx().getOrdHistProdExList().get(0).getOrdProdEx().getOnlineProdNameBlang());
 			orderDTO.setOrdStatusCode(ordEx.getOrdStatusCode());
 			orderDTO.setFinalOrdPrice(ordEx.getOrdHistEx().getFinalOrdAmtPcur());
 			orderDTO.setOrdQty(ordEx.getOrdHistEx().getOrdHistProdExList().size());

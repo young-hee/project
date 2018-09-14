@@ -46,6 +46,26 @@
 		/**
 		 * 공통 ***********************************************************
 		 */
+		//AP 전용 자동완성 검색어 목록
+		getAutoWords : {path:'/display/search/autoWords', method: 'POST', data:{
+			limit: 10,
+			prefix: null
+		}},
+		//AP 전용 인기검색어 목록
+		favoriteWords : {path:'/display/search/favoriteWords', method: 'POST', data:{
+			limit: 10
+		}},
+		//AP 전용 통합 검색
+		searchResult : {path:'/display/search/result', method: 'POST', data:{
+			query : null,
+			prodSort: null,
+			offset: 0,
+			limit: 10,
+			displayCate: 0,
+			priceRange: null,
+			attr: null
+		}},
+		
 
 		/**
 		 * 회원 ***********************************************************
@@ -84,6 +104,9 @@
 		//아이디 SMS 전송.
 		sendId: { path: '/customer/find/findId/sendId', method: 'POST' },
 
+		//임직원 인증.
+		authEmployee: { path: '/customer/authEmployee', method: 'POST' },
+
 		//비밀번호 찾기
 		//email
 		findPwdEmail: { path: '/customer/find/findPwd/email', method: 'POST' },
@@ -97,11 +120,15 @@
 		changePwd: { path: '/customer/find/findPwd/changePwd', method: 'POST' },
 		custSelfOnline: { path: '/customer/custSelfOnline', method: 'POST' },
 
+		//회원탈퇴.
+		closeMember: { path: '/my/api/closeMember', method: 'POST' },
+
 		//캡차키 발급.
 		getNewCaptchaKey: { path: '/captcha/getNewCaptchaKey', method: 'GET' },
 		//값 검증.
 		checkKeyAndValue: { path: '/captcha/checkKeyAndValue', method: 'POST' },
-		
+		//로그인한 멤버 정보 
+		getLoginMemberInfo : { path : '/common/getLoginMemberInfo', method: 'GET' },
 		/**
 		 * 단골 매장 **********************************************************
 		 */
@@ -183,6 +210,11 @@
 		beautyPointListFragment: { path: '/my/page/info/beautyPointListFragment', method: 'GET', dataType: 'html'},
 		beautyPointListBodyFragment: { path: '/my/page/info/beautyPointListBodyFragment', method: 'GET', dataType: 'html'},
 		
+		//쿠폰 상세.
+		getCouponProdInfo: { path: '/my/page/getCouponProdInfo', method: 'GET', dataType: 'html'},
+		//쿠폰 사은품 상세.
+		getCouponGiftProdInfo: { path: '/my/page/getCouponGiftProdInfo', method: 'GET', dataType: 'html'},
+		
 		//예치금 리스트.
 		depositHitoryListFragment: { path: '/my/page/info/depositHitoryListFragment', method: 'GET', dataType: 'html'},
 		depositHitoryListBodyFragment: { path: '/my/page/info/depositHitoryListFragment', method: 'GET', dataType: 'html'},
@@ -190,6 +222,10 @@
 		transferDeposit: { path:'/my/api/transferDeposit', method: 'POST'},
 		// 계좌정보 저장
 		saveRefundAccounts: { path:'/my/api/saveRefundAccounts', method: 'PUT'},
+
+		//기프트카드 리스트
+		myGistCardFragment: { path: '/my/page/myGistCardFragment', method: 'GET', dataType: 'html'},
+		regGiftCard: { path:'/my/api/regGiftCard', method: 'PUT'},
 		
 		//간단 점유인증 전송
 		simpleCertifySend: { path: '/my/api/simpleCertifySend', method: 'POST'},
@@ -297,12 +333,46 @@
 				flags: null, //대카(icon_reco_best_w), 온라인 전용(icon_reco_online,icon_reco_best_w), 뷰티포인트샵(icon_reco_hot,icon_membership1), (main 플래그 신상품 (icon_reco_new), 핫딜( icon_type_sp_today)베스트(icon_reco_best_w)
 				flag: null,
 				prodListUnit : 'OnlineProd',
-				prodSort: null, //판매순(Bestselling), 신상품순(NewProd), 높은 가격순(HighestPrice), 낮은가격순(LowestPrice), 상품평순(MostProdReview)
+				prodSort: '', //판매순(Bestselling), 신상품순(NewProd), 높은 가격순(HighestPrice), 낮은가격순(LowestPrice), 상품평순(MostProdReview)
 				offset: 0,
 				limit: 5, //대카(5), 온라인전용(5), 뷰티포인트(10)
 				includeFilters:false,
 				displayCateDepth: 0,
 				displayCate : null, //대카추천상품일 경우만 입력
+				brand:null,
+				attr:null,
+				priceRange:null
+			}
+		},
+		
+		//핫딜상품목록
+		hotDealItemList: { path:'/display/hotDealProdList', method: 'POST' , data: {
+				flags: null, 
+				flag: null,
+				prodListUnit : 'OnlineProd',
+				prodSort: 'NewProd', //판매순(Bestselling), 신상품순(NewProd), 높은 가격순(HighestPrice), 낮은가격순(LowestPrice), 상품평순(MostProdReview)
+				offset: 0,
+				limit: 5, //대카(5), 온라인전용(5), 뷰티포인트(10)
+				includeFilters:false,
+				displayCateDepth: 0,
+				displayCate : null, //대카추천상품일 경우만 입력
+				brand:null,
+				attr:null,
+				priceRange:null
+			}
+		},
+		
+		//카테고리상품목록
+		inDisplayCate: { path:'/display/inDisplayCate', method: 'POST' , data: {
+				flags: null, 
+				flag: null,
+				prodListUnit : 'OnlineProd',
+				prodSort: 'NewProd', //(필수) 판매순(Bestselling), 신상품순(NewProd), 높은 가격순(HighestPrice), 낮은가격순(LowestPrice), 상품평순(MostProdReview)
+				offset: 0, //(필수)
+				limit: 5, //(필수) 대카(5), 온라인전용(5), 뷰티포인트(10)
+				includeFilters:false,
+				displayCateDepth: 0,
+				displayCate : null, //(필수) display_cate.display_cate_sn 해당 전시카테고리 및 하위 카테고리들 상품목록을 리턴한다(메이크업  >  페이스  >  쿠션 :  131)
 				brand:null,
 				attr:null,
 				priceRange:null
@@ -351,9 +421,17 @@
 		},
 		
 		//상품평 상세 조회
-        getReviewDetail : {path : '/product/getReviewDetail', method : 'GET', data: {
+        getReviewDetail : {path : '/review/detail', method : 'GET', data: {
         		prodReviewSn  : '' //(필수) 상품평일련번호
 			}
+        },
+        
+        //상품평 신고
+        reportReview : {path : '/review/report', method : 'POST', data: {
+	        	prodReviewSn : '', 						//상품평일련번호
+	        	prodReviewReportTypeCode: '',	//답변내용 Inappropriate(부적절한 내용), Ad(광고성 글), Copyright(저작권 문제), Etc(기타)
+				reportBodyText: ''				//신고내용
+        	}
         },
 		
 		// 넷스루 상품조회
@@ -378,29 +456,180 @@
 		sendSms : {path : '/product/sendSms', method : 'GET', data: {
 			cellNum : ''
 		}},
-
+		
+		// 상품평 추천
+		reviewRecommend : {path : '/review/recommend', method : 'GET', data: {
+			prodReviewSn : ''
+		}},
+		
+		// 상품평 추천 삭제
+		removeReviewRecommend : {path : '/review/removeRecommend', method : 'GET', data: {
+			prodReviewSn : ''
+		}},
+		
 		/**
 		 * 장바구니(Cart) ***********************************************************
 		 */
+		// 상품상세
+		detailCartProd : { path: '/cart/detailCartProd', method: 'GET' },
+
+		// 주문계산 상세
+		getOrderCalcuation : { path: '/cart/getOrderCalcuation', method: 'GET' },
+
+		// 베리에이션 변경
+		getLayerPage : { path: '/cart/getLayerPage', method: 'GET' },
+
 		// 상품등록(일반/묶음) / 장바구니 담기
 		//data = JSON.stringify( {storePickupYn: 'N', membershipExch: 'N', activityPointYn: 'Y', cartProdExPostList: [{prodSn: 95, cartProdQty: 1}]} );
 		addCartProd : { path: '/cart/addCartProd', method: 'POST', contentType: 'application/json' },
+		// 상품등록(동시구매)
+		addCartProdSameTime : { path: '/cart/addCartProdSameTime', method: 'POST', contentType: 'application/json' },
+
+		// 상품수량 수정
+		modifyCartProd: { path: '/cart/modifyCartProd', method: 'PUT' },
+
+		// 단일삭제(단일상품)
+		removeCartProd: { path: '/cart/removeCartProd', method: 'POST' },
+
+		// 단일삭제(그룹상품)
+		removeRowCartProd: { path: '/cart/removeRowCartProd', method: 'POST' },
+
+		// 선택삭제
+		removeSelectCartProd: { path: '/cart/removeSelectCartProd', method: 'POST' },
+
+		// 픽업매장 검색
+		takeoutStore: { path: '/cart/takeoutStore', method: 'POST'},
+
+		// 단골매장 등록
+		addTakeoutStore: { path: '/cart/addTakeoutStore', method: 'POST'},
+
+		// 단골매장 등록
+		delTakeoutStore : { path: '/cart/delTakeoutStore', method: 'POST'},
+
+		// 매장지역 정보
+		storeAddressDivs: { path: '/cart/storeAddressDivs', method: 'GET'},
+
+		// 주문불가상품 삭제
+		orderRemoveCartProd: { path: '/cart/orderRemoveCartProd', method: 'POST' },
+
+		// 장바구니 담긴 건수
+		getCartCount: { path: '/cart/getCartCount', method: 'GET'},
+
+		// 바로구매
+		buyNowCartProd : { path: '/cart/buyNowCartProd', method: 'POST', contentType: 'application/json', data: {
+				prodSn : null, 						//상품일련번호 - required
+				cartProdQty : 1, 					//장바구니상품수량 - required
+				integrationMembershipExchYn : 'N', 	//통합멤버십교환여부 - required
+				activityPointExchYn : 'N', 			//활동포인트교환여부 - required
+				storePickupYn : 'N', 				//매장픽업여부 - required
+				storeSn : null, 					//매장일련번호
+				cartBulkIncludedProdExList : [] 	//장바구니묶음구성상품목록
+			}},
+
+		// 선택상품장바구니조회
+		getCartBySelectCartProds: { path: '/cart/getCartBySelectCartProds', method: 'GET'},
+
+		// 매장선택변경
+		changeStore: { path: '/cart/changeStore', method: 'PUT'},
+
+		/**
+		 * 주문 ****************************************************************
+		 */
+		// 주문/배송 건수
+		getOrderCount: { path: '/order/getOrderCount', method: 'GET'},
+
+		// 사용가능 쿠폰 목록
+		getCouponList: { path: '/order/getCouponList', method: 'GET'},
+
+		// 다운로드 쿠폰 목록
+		getDownloadCouponList: { path: '/order/getDownloadCouponList', method: 'GET'},
+
+		// 쿠폰 다운로드
+		orderDownloadCoupon: { path: '/order/downloadCoupon', method: 'POST'},
+
+		// 기본배송지 수정
+		orderAddAddress: { path: '/order/orderAddAddress', method: 'POST' },
+
+		// 기본배송지 등록
+		orderUpdateAddress: { path: '/order/orderUpdateAddress', method: 'PUT' },
+
+		// 배송지 목록
+		orderShipAddress: { path: '/order/orderShipAddress', method: 'GET'},
+
+		// 결제수단목록조회
+		getPayMethodList: { path: '/order/getPayMethodList', method: 'GET'},
+
+		// 결제금액확인
+		ordReceptPayAmt: { path: '/order/ordReceptPayAmt', method: 'POST'},
+
+		// 주문정보변경
+		ordReceptChange: { path: '/order/ordReceptChange', method: 'POST'},
+
+		// 쿠폰정보 적용 및 변경
+		ordReceptChangeCoupon: { path: '/order/ordReceptChangeCoupon', method: 'POST'},
+
+		// 포장박스, 쇼핑백 수량 변경
+		ordReceptChangeBag: { path: '/order/ordReceptChangeBag', method: 'POST'},
+
+		// 포인트 사용
+		ordReceptChangePoint: { path: '/order/ordReceptChangePoint', method: 'POST'},
+
+		//주문단위 사은품
+		ordReceptChangeOrdUnit: { path: '/order/ordReceptChangeOrdUnit', method: 'POST'},
+
+		// PC 이니시스 결제 데이터 조회
+		inipayReq: { path: '/payment/inipayReq', method: 'POST'},
+
+		// wpay회원정보 조회
+		getMemberWPayInfo: { path: '/payment/getMemberWPayInfo', method: 'GET'},
+
 
 		/**
 		 * 이벤트 *************************************************************
 		 */
-		
+
+		//출석체크 이력조회
+		//regularEventType  : Roulette - 룰렛 , PackageLetter - 패키지레터 , ProdExperienceGrp - 뷰티테스터신청 , SampleExperienceGrp - 샘플체험단신청 , AttendanceCheck - 출석체크
+        status: { path:'/display/status', method: 'POST', data: {
+        		regularEventType : null,
+        		day : null //yyyyMM
+			}
+		},
+
+		//
+		//regularEventType  : Roulette - 룰렛 , PackageLetter - 패키지레터 , ProdExperienceGrp - 뷰티테스터신청 , SampleExperienceGrp - 샘플체험단신청 , AttendanceCheck - 출석체크
+        regularEventSummary: { path:'/display/regularEventSummary', method: 'POST', data: {
+        		regularEventType : null
+			}
+		},
+
+		//행사참여
+		//regularEventType  : Roulette - 룰렛 , PackageLetter - 패키지레터 , ProdExperienceGrp - 뷰티테스터신청 , SampleExperienceGrp - 샘플체험단신청 , AttendanceCheck - 출석체크
+		participated: { path:'/display/participated', method: 'POST', data: {
+        		regularEventType : null, //상세행사유형코드
+        		requestTitle : null, //신청제목
+        		requestReason : null, //신청사유 (내용) 2000자
+        		emailAddress : null, //신청자이메일
+        		verifNo : null //인증번호 (패키지레터인경우 필수)
+			}
+		},
+
 		//AP 전용 뷰티테스터 행사 상세 조회
 		getRegularEventDetail : {path:'/display/beauty_test/regular_event_detail', method: 'POST', data:{
 				regularEventSn: null			// - integer($int64)	상시행사일련번호
 		}},
 		
-		//AP 전용 뷰티테스터 행사 상품 리뷰 조회
+		//AP 전용 뷰티테스터 행사 상품 리뷰 목록 조회
 		getRegularEventProdReviews : {path:'/display/beauty_test/regular_event_product_reviews', method: 'POST', data:{
 			regularEventSn: null,			// - integer($int64)	상시행사일련번호
 			offset: 0,
 			limit: 10,
 			reviewSort: null
+		}},
+		
+		//AP 전용 뷰티테스터 행사 상품 리뷰 상세 조회
+		getRegularEventProdReviewDetail : {path:'/display/beauty_test/regular_event_product_review_detail', method: 'POST', data:{
+			prodReviewSn: 0			// - integer($int64)	상품평일련번호
 		}},
 		
 		//AP 전용 뷰티테스터 행사 신청자 조회
@@ -409,8 +638,14 @@
 			offset: 0,
 			limit: 10
 		}},
+
+		//뷰티테스터 상품 리뷰 추천 토글
+		regularEventProductReviewRecommend: {path:'/display/beauty_test/regularEventProductReviewRecommend', method: 'POST', data: {
+				prodReviewSn: null	//상품평일련번호
+			}
+		},
 		
-		//AP 전용 상품 좋아용
+		//상품추천 (좋아요) - on
 		postRecommend : {path:'/product/postRecommend', method: 'POST', data:{
 				   shoppingMarkTgtCode : 'Prod' 
 				  ,prodSn : 0
@@ -421,7 +656,49 @@
 				  ,searchWord : '' 
 				  ,onlineProdSn : 0
 				  ,brandSn : 0
+		}},
+		
+		//상품추천 (좋아요) - off
+		offRecommend : {path:'/product/offRecommend', method: 'POST', data:{
+				   shoppingMarkTgtCode : 'Prod' 
+				  ,prodSn : 0
+				  ,articleSn : 0
+				  ,planDisplaySn : 0
+				  ,displayMenuId : '' 
+				  ,displayMenuSetId : '' 
+				  ,searchWord : '' 
+				  ,onlineProdSn : 0
+				  ,brandSn : 0
 	
+		}},
+		
+		//상품추천 (좋아요) - off(단위 상품 선택을 하지 않았을 경우)
+		offRecommendFromOnline : {path:'/product/offRecommendFromOnline', method: 'POST', data:{
+			onlineProdSn: 0
+		}},
+
+		/**
+		 * 행사참여 신청자 목록
+		 * @param: regularEventType * 필수(Roulette - 룰렛 , PackageLetter - 패키지레터 , ProdExperienceGrp - 상품체험단신청 , SampleExperienceGrp - 샘플체험단신청 , AttendanceCheck - 출석체크 , VIPLounge - VIP라운지 , VVIPLounge - VVIP라운지)
+		 *         regularEventSn 상시행사일련번호-미입력시 현재진행중인행사
+		 *         offset
+		 *         limit
+		 *  @response :  {offset, limit {regularEventRequesters : {regularEventRequesterSn,requestTitle,requestReason,emailAddress,memberId}}}
+		 */
+		regularEventRequesters: { path:'/display/regularEventRequesters', method: 'GET', data: {
+				regularEventType  : null, // 이벤트 유형
+				regularEventSn : null, // 상시행사일련번호-미입력시 현재진행중인행사
+				offset : null, //
+				limit : null //
+			}
+		},
+
+		//쿠폰 목록
+		couponZoneMyList: { path:'/display/downloadCoupons', method: 'GET'},
+
+		//다운로드 쿠폰 등록
+		downloadCoupon : { path:'/display/downloadCoupon', method: 'POST', data: {
+			couponSn: null //쿠폰일련번호
 		}},
 
 		/**

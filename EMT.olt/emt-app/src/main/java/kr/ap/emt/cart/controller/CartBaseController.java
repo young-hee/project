@@ -66,7 +66,7 @@ public class CartBaseController extends AbstractController{
 	}
 
 	/**
-	 * 판매표시상태에 따른 상품 정의(셀렉트제어)
+	 * 체크 선택 된 상품검증
 	 * @param cartEx
 	 * @return
 	 */
@@ -74,24 +74,24 @@ public class CartBaseController extends AbstractController{
 
 		// 장바구니-배송-온라인상품목록
 		setSaleDisplayStatusCartOnlineProdExList(cartEx.getCartDeliveryOnlineProdExList());
-		// 장바구니-배송-멤버십포인트교환-온라인상품목록
+		// 장바구니-배송-뷰티(멤버십)포인트교환상품목록
 		setSaleDisplayStatusCartPointExchOnlineProdExList(cartEx.getCartDeliveryMembershipPointExchOnlineProdExList());
-		// 장바구니-배송-활동포인트교환-온라인상품목록
+		// 장바구니-배송-진주알(활동)포인트교환상품목록
 		setSaleDisplayStatusCartPointExchOnlineProdExList(cartEx.getCartDeliveryActivityPointExchOnlineProdExList());
-		// 장바구니-배송-M+N프로모션목록-온라인상품목록
+		// 장바구니-배송-M+N프로모션목록
 		setSaleDisplayStatusCartMnPromoExList(cartEx.getCartDeliveryMNPromoExList());
-		// 장바구니-배송-동시구매프로모션목록-온라인상품목록
+		// 장바구니-배송-동시구매프로모션목록
 		setSaleDisplayStatusCartSameTimePromoExList(cartEx.getCartDeliverySameTimePurPromoExList());
 
 		// 장바구니-매장픽업-온라인상품목록
 		setSaleDisplayStatusCartOnlineProdExList(cartEx.getCartStorePickupOnlineProdExList());
-		// 장바구니-매장픽업-멤버십포인트교환-온라인상품목록
+		// 장바구니-매장픽업-뷰티(멤버십)포인트교환상품목록
 		setSaleDisplayStatusCartPointExchOnlineProdExList(cartEx.getCartStorePickupMembershipPointExchOnlineProdExList());
-		// 장바구니-매장픽업-활동포인트교환-온라인상품목록
+		// 장바구니-매장픽업-진주알(활동)포인트교환상품목록
 		setSaleDisplayStatusCartPointExchOnlineProdExList(cartEx.getCartStorePickupActivityPointExchOnlineProdExList());
-		// 장바구니-매장픽업-M+N프로모션목록-온라인상품목록
+		// 장바구니-매장픽업-M+N프로모션목록
 		setSaleDisplayStatusCartMnPromoExList(cartEx.getCartStorePickupMNPromoExList());
-		// 장바구니-매장픽업-동시구매프로모션목록-온라인상품목록
+		// 장바구니-매장픽업-동시구매프로모션목록
 		setSaleDisplayStatusCartSameTimePromoExList(cartEx.getCartStorePickupSameTimePurPromoExList());
 
 		return cartEx;
@@ -105,8 +105,6 @@ public class CartBaseController extends AbstractController{
 	 */
     protected CartEx calculationBySelect(Long cartSn,
                                          String selectedCartProdSnStr) {
-        /* 회원정보 조회 */
-        //MemberSession memberSession = getMemberSession();
 
         /* 재계산을 위한 최종 cartEx */
 		CartSession cartSession = getCartSession();
@@ -560,7 +558,7 @@ public class CartBaseController extends AbstractController{
 	}
 
 	/**
-	 * 장바구니-온라인상품-목록
+	 * 장바구니-온라인상품목록
 	 * @param cartOnlineProdExList
 	 */
 	private void setSaleDisplayStatusCartOnlineProdExList(List<CartOnlineProdEx> cartOnlineProdExList) {
@@ -592,7 +590,7 @@ public class CartBaseController extends AbstractController{
 	}
 
 	/**
-	 * 장바구니-포인트상품-목록
+	 * 장바구니-뷰티/진주알포인트교환-온라인상품목록
 	 * @param cartPointExchOnlineProdExList
 	 */
 	private void setSaleDisplayStatusCartPointExchOnlineProdExList(List<CartOnlineProdEx> cartPointExchOnlineProdExList) {
@@ -609,7 +607,7 @@ public class CartBaseController extends AbstractController{
 	}
 
 	/**
-	 * M+N 프로모션 상품
+	 * 장바구니-M+N프로모션목록
 	 * @param cartPromoExList
 	 */
 	private void setSaleDisplayStatusCartMnPromoExList(List<CartPromoEx> cartPromoExList) {
@@ -652,7 +650,7 @@ public class CartBaseController extends AbstractController{
 	}
 
 	/**
-	 * 동시구매 프로모션 상품
+	 * 장바구니-동시구매프로모션목록
 	 * @param cartPromoExList
 	 */
 	private void setSaleDisplayStatusCartSameTimePromoExList(List<CartPromoEx> cartPromoExList) {
@@ -708,13 +706,13 @@ public class CartBaseController extends AbstractController{
 	 */
     protected CartEx calculationCartEx(CartEx cartEx) {
 
-    	/* 선택 된 계산정보 */
+    	/* 체크 선택 된 상품검증 */
 		calculationBySelect(cartEx);
 
         /* M+N 프로모션 기준수량/증정수량계산 */
         if(cartEx.getCartDeliveryMNPromoExList() != null) {
             for(CartPromoEx cartPromoEx : cartEx.getCartDeliveryMNPromoExList()) {
-                // 동종M+N프로모션 기준수량/증정수량계산 
+                // 동종M+N프로모션 기준수량/증정수량계산
                 if(CartConst.MPLUSNTYPE_SAME.equals(cartPromoEx.getPromoMPlusNTypeCode())) {
                     calculationSameMNPromo(cartPromoEx, cartPromoEx.getPromoOnlineProdExList());
                 }
@@ -825,7 +823,8 @@ public class CartBaseController extends AbstractController{
         
         
         /* 계산결과수정 : 금액들의 합 */
-        // 교환통합포인트(뷰티포인트) 합
+
+		// 포인트상품 합계
         calculationExchPoint(cartEx);
 
         // 초도배송비합계
@@ -935,7 +934,7 @@ public class CartBaseController extends AbstractController{
     }
 
 	/**
-	 * 재 계산 포인트상품
+	 * 포인트 상품 계산
 	 * @param cartEx
 	 */
 	protected void calculationExchPoint(CartEx cartEx) {
@@ -954,6 +953,12 @@ public class CartBaseController extends AbstractController{
         }
     }
 
+	/**
+	 * 포인트 상품 계산합계
+	 * @param cartOnlineProdExList
+	 * @param cartEx
+	 * @param aPoint
+	 */
     private void addExchPointSum(List<CartOnlineProdEx> cartOnlineProdExList, CartEx cartEx, boolean aPoint) {
         CalculationResult calculationResult = cartEx.getCalculationResult();
         
@@ -999,14 +1004,16 @@ public class CartBaseController extends AbstractController{
 				}
             }
         }
-        
+
+        // 진주알 계산값( ex : 100알 /보유 100알 )
         if(aPoint) {
-            cartEx.setCartDeliveryExchActivityPointSum(cartEx.getCartDeliveryExchActivityPointSum() + exchPointSum);
-            calculationResult.setExchAPointSum(calculationResult.getExchAPointSum() + selectExchPointSum);
+            cartEx.setCartDeliveryExchActivityPointSum(cartEx.getCartDeliveryExchActivityPointSum() + exchPointSum);	// 전체계산합
+            calculationResult.setExchAPointSum(calculationResult.getExchAPointSum() + selectExchPointSum);				// 선택된 계산합
         }
+        // 뷰티포인트 계산값( ex : 100P /보유 100P )
         else {
-            cartEx.setCartDeliveryExchMembershipPointSum(cartEx.getCartDeliveryExchMembershipPointSum() + exchPointSum);
-            calculationResult.setExchIPointSum(calculationResult.getExchIPointSum() + selectExchPointSum);
+            cartEx.setCartDeliveryExchMembershipPointSum(cartEx.getCartDeliveryExchMembershipPointSum() + exchPointSum);// 전체계산합
+            calculationResult.setExchIPointSum(calculationResult.getExchIPointSum() + selectExchPointSum);				// 선택된 계산합
         }
     }
 
@@ -1031,7 +1038,7 @@ public class CartBaseController extends AbstractController{
 			if( "MPlusN".equals(cartPromoEx.getPromoTypeCode()) ){
 				for(CartOnlineProdEx cartOnlineProdEx : cartPromoEx.getPromoOnlineProdExList()) {
 					for(CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-						if ("Y".equals(cartProdEx.getSelectYn())) {
+						if (CartConst.Y.equals(cartProdEx.getSelectYn())) {
 							CalculationResultProduct resultProduct = cartProdEx.getCalculationResultProduct();
 							productSaleAmount = productSaleAmount.add(getStandardAmount(resultProduct.getProductSaleAmountInfo()));
 							finalOnlineSaleAmount = finalOnlineSaleAmount.add(getStandardAmount(resultProduct.getFinalOnlineSalesAmountInfo()));
@@ -1043,7 +1050,7 @@ public class CartBaseController extends AbstractController{
 			else{
 				for(CartOnlineProdEx cartOnlineProdEx : cartPromoEx.getPromoOnlineProdExList()) {
 					for(CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-						if ("Y".equals(cartProdEx.getSelectYn())) {
+						if (CartConst.Y.equals(cartProdEx.getSelectYn())) {
 							CalculationResultProduct resultProduct = cartProdEx.getCalculationResultProduct();
 							productSaleAmount = productSaleAmount.add(getStandardAmount(resultProduct.getProductSaleAmountInfo()));
 							finalOnlineSaleAmount = finalOnlineSaleAmount.add(getStandardAmount(resultProduct.getFinalOnlineSalesAmountInfo()));
@@ -1239,8 +1246,13 @@ public class CartBaseController extends AbstractController{
         currencyInfo.getStandardCurrency().setAmount(currencyInfo.getStandardCurrency().getAmount().subtract(subtrahend.getStandardCurrency().getAmount()));
         return currencyInfo;
     }
-    
-    private void calculationDiffMNPromo(CartPromoEx cartPromoEx, List<CartOnlineProdEx> cartOnlineProdExList) {
+
+	/**
+	 * M+N 이종상품 수량계산
+	 * @param cartPromoEx
+	 * @param cartOnlineProdExList
+	 */
+	private void calculationDiffMNPromo(CartPromoEx cartPromoEx, List<CartOnlineProdEx> cartOnlineProdExList) {
         if(cartOnlineProdExList == null) {
             return;
         }
@@ -1331,7 +1343,12 @@ public class CartBaseController extends AbstractController{
         
         setPromoApplyResultCode(cartPromoEx);
     }
-    
+
+	/**
+	 * 동종 M+N 수량
+	 * @param cartProdEx
+	 * @param cartPromoEx
+	 */
     private void setSameMNPromoApplyResultCode(CartProdEx cartProdEx, CartPromoEx cartPromoEx) {
         // 기준수량M
         long m = cartPromoEx.getBaseOrdQty().longValue();

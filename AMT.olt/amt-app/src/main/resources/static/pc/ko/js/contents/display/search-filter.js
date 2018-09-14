@@ -7,8 +7,9 @@
 		'use strict';
 
 	var SearchFilter = $B.Class.extend({
-		initialize: function ( $target, data ) {
+		initialize: function ( $target, component, data ) {
 			this._$target = $target;
+			this._component = component;
 			this._$filter = this._$target.find( '.filter_option' );
 
 			this._searchFilterData = data;
@@ -38,6 +39,13 @@
 
 		/** =============== Public Methods =============== */
 
+		reset: function () {
+			this._$filter.find( 'input' ).prop( 'checked', false );
+			this._$filter.find( '.price .direct_entry input' ).val( '' );
+			this._dataReset();
+			this._dispatch( true );
+		},
+
 		/** =============== Private Methods ============== */
 		_dataReset: function () {
 			for ( var i = 0; i < this._searchFilterData.addAttrs.length; ++i ) {
@@ -45,14 +53,14 @@
 					this._searchFilterData.addAttrs[i].addAttrVals[j].selected = false;
 				}
 			}
-			AP.category.searchFilterData = this._searchFilterData;
+			AP[this._component].searchFilterData = this._searchFilterData;
 		},
 
 		_setEvent: function () {
 			// 초기화
 			this._$target.on( 'click', 'button.init', function (e) {
 				e.preventDefault();
-				this._reset();
+				this.reset();
 			}.bind( this ));
 
 			// 더보기
@@ -213,33 +221,20 @@
 
 			// other
 			data = data.addAttrs;
-
-			var addAttrs = '';
+			var attrString = '';
 			for ( var i = 0; i < data.length - 1; ++i ) {
-				var attrStr = data[i].addAttrCode + '=';
 				_.each(data[i], function ( value, key ) {
 					if ( key == 'addAttrVals' ) {
 						for ( var j = 0; j < value.length; j++ ) {
 							if ( value[j].selected ) {
-								attrStr += value[j].addAttrValCode + ','
+								attrString += data[i].addAttrCode + '=' + value[j].addAttrValCode + ','
 							}
 						}
 					}
 				});
-				if ( attrStr.substr( -1 ) != '=' ) {
-					addAttrs += attrStr;
-				}
 			}
-			param.attr = addAttrs.substring( 0, addAttrs.length - 1 );
-
+			param.attr = attrString.substring( 0, attrString.length - 1 );
 			return param;
-		},
-
-		_reset: function () {
-			this._$filter.find( 'input' ).prop( 'checked', false );
-			this._$filter.find( '.price .direct_entry input' ).val( '' );
-			this._dataReset();
-			this._dispatch( true );
 		},
 
 		_apply: function () {
@@ -247,7 +242,7 @@
 				max = parseInt( this._$filter.find( '.max' ).val().replace( /,/g, '' ) || '' );
 
 			if ( this._comparePrice( min, max )) {
-				AP.category.searchFilterData = this._searchFilterData;
+				AP[this._component].searchFilterData = this._searchFilterData;
 				this._dispatch( false );
 			}
 		},
@@ -255,7 +250,7 @@
 		_dispatch: function ( isReset ) {
 			this.dispatch( 'apply-search-filter', {
 				reset: isReset,
-				filterParam: this._convertDataToString( AP.category.searchFilterData )
+				filterParam: this._convertDataToString( AP[this._component].searchFilterData )
 			});
 		}
 	});

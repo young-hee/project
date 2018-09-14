@@ -73,8 +73,10 @@
 
 			$more.hide();
 			$loading.show();
+			
 			if( prods == undefined ){
 				AP.api[this._api]( this._key, this._param ).done(function ( result ) {
+					
 					this._done( result, $itemList, $more, $loading, isMore );
 				}.bind( this )).fail(function () {
 					console.log( 'error' );
@@ -87,7 +89,7 @@
 		
 		_done:  function( result, $itemList, $more, $loading, isMore){
 			if ( !result ) return;
-
+			
 			var prodListData = null,
 				templatePath = 'display.products-list.item';
 
@@ -97,9 +99,17 @@
 				prodListData = result['onlineProdList'];
 			}
 
+	 		
 			if ( this._api == 'searchProdList' ) {
-				prodListData = result['everything']['prods'];
+				
+				if(result['everything']['prods']){
+					prodListData = result['everything']['prods'];
+				}else{
+					prodListData = result['everything'];
+				}
+			
 				var _$noProduct = this._$target.siblings('.noProduct');
+			
 				if ( prodListData['list'].length == 0 ) {
 					$itemList.find( '> ul' ).empty();
 					$loading.hide();
@@ -110,6 +120,8 @@
 					this._$target.show();
 					_$noProduct.hide();
 				}
+			}else {
+				console.log(this._api); 
 			}
 
 			// 상품이 존재하지 않습니다.
@@ -251,7 +263,6 @@
 				$.extend( this._param, this._sortOption.get() );
 				this._sortOption.addListener( 'change-sort', function (e) {
 					// sort
-					// this._param.sortData = this._sortOption.get();
 					$.extend( this._param, this._sortOption.get() );
 					this.load();
 

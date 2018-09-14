@@ -16,22 +16,24 @@
 		<div class="ui_tab">
 			<div class="tab_menu bar">
 				<ul>
-					<li class="on"><button type="button"><span>진행중</span></button></li>
-					<li><button type="button"><span>종료</span></button></li>
+					<li class="on"><button type="button" class="status_progress"><span>진행중</span></button></li>
+					<li><button type="button" class="status_end"><span>종료</span></button></li>
 				</ul>
 			</div>
 			<div class="tab_contents">
 				<div class="tab_cont">
 					<h3 class="sr_only">진행중</h3>
-
-					<div class="slide" data-ix-options="view-length:3; move-length:1;loop:false;datum-point:-20px">
+                    <div class="product_none" th:if="${regularEventsPrgs==null}">아쉽게도 해당하는 상품이 없습니다</div>
+					<div class="slide" data-ix-options="view-length:3; move-length:1;loop:false;datum-point:-20px" th:if="${regularEventsPrgs!=null}">
 						<div class="ix-list-viewport unit_1">
-							<ul class="ix-list-items tester_recruitment_list">
+							<ul class="ix-list-items tester_recruitment_list progress">
                               <th:block th:each="event, stat : ${regularEventsPrgs}">
                                 <li class="ix-list-item" th:id="${event.regularEvent.regularEventSn}">
                                 <!-- <th:block th:if="${stat.first}"><a href="#none" class="selected"></th:block> -->
-                                <th:block th:if="${event.status=='RQ'}"><a href="#none"></th:block>
-                                <th:block th:if="${event.status=='TN'}"><a href="#none" class="closing"></th:block>
+                                <th:block th:if="${event.status=='RQ'}"><a href="#none" th:classappend="${stat.index}==0?selected"></th:block>
+                                <th:block th:if="${event.status=='TN'}"><a href="#none" class="closing" th:classappend="${stat.index}==0?selected"></th:block>
+                                <th:block th:if="${event.status=='RR'}"><a href="#none" class="closing" th:classappend="${stat.index}==0?selected"></th:block>
+                                <th:block th:if="${event.status=='BR'}"><a href="#none" class="closing" th:classappend="${stat.index}==0?selected"></th:block>
 										<img ap:src="@{/images/dummy/img_beautytester.jpg}" alt="이미지 대체 텍스트">
                                         <!-- <img  th:src="${event.regularEvent.bannerImgP1}" alt="" > -->
 										<dl>
@@ -40,7 +42,7 @@
                                                 <span class="status" th:case="'TN'">테스터발표</span>
                                                 <span class="status" th:case="'RR'">후기등록중</span>
                                                 <span class="status" th:case="'BR'">베스트리뷰발표</span>
-												<b class="ellipsis" th:utext="${event.regularEvent.regularEventName}"></b>
+												<b class="ellipsis" th:utext="${event.regularEvent.regularEventName}+'-'+${event.status}"></b>
 											</dt>
 											<dd>
 												<p class="text">테스터 모집 인원 30명 / <b><em th:utext="${event.requesters.totalCount}+'명'"></em></b> 신청중</p>
@@ -64,7 +66,8 @@
 
 				<div class="tab_cont">
 					<h3 class="sr_only">종료</h3>
-					<ul class="tester_recruitment_list">
+                    <div class="product_none" th:if="${regularEventsEnd==null}">아쉽게도 해당하는 상품이 없습니다</div>
+					<ul class="tester_recruitment_list end" th:if="${regularEventsEnd!=null}">
                       <th:block th:each="event, stat : ${regularEventsEnd}">
                         <li class="ix-list-item" th:id="${event.regularEvent.regularEventSn}">
                           <a href="#none" class="closing">
@@ -88,36 +91,7 @@
 			</div>
 		</div>
 		<!--/* 뷰티테스터 모집 정보 */-->
-		<div class="section">
-			<dl class="tester_process">
-				<dt>-</dt>
-				<dd>
-					<p class="text">테스터 모집인원 00명 / <b><em>00명</em></b> 신청중</p>
-					<ul class="step">
-						<li class="on">
-							<span>참가신청</span>
-							<i class="ico"></i>
-							<span class="date">-</span>
-							<span class="sr_only">현재단계</span>
-						</li>
-						<li>
-							<span>테스터발표</span>
-							<i class="ico"></i>
-							<span class="date">-</span>
-						</li>
-						<li>
-							<span>리뷰등록</span>
-							<i class="ico"></i>
-							<span class="date">-</span>
-						</li>
-						<li>
-							<span>베스트리뷰발표</span>
-							<i class="ico"></i>
-							<span class="date">-</span>
-						</li>
-					</ul>
-				</dd>
-			</dl>
+		<div class="section process">
 		</div>
 		<!--/* 상품 정보 */-->
 		<div id="product_visual" class="section clear">
@@ -126,7 +100,7 @@
 		<div class="clear">
 			<div class="section product_detail">
 			</div>
-			<div class="section ui_tab">
+			<div class="section ui_tab request" style="display:none;">
 				<div class="tab_menu underline">
 					<ul>
 						<li class="on"><button type="button"><span>신청하기</span></button></li>
@@ -152,12 +126,24 @@
 		/* slide paging 개발필요 */
 		
 		$(document).ready(function(){
-			$(".tester_recruitment_list").find('a').each(function(){
+			
+			$(".page_title").text("뷰티테스터");
+			$(".breadcrumb").html("<a href=\"#none\">홈</a><a href=\"#none\">이벤트</a><b class=\"current\">뷰티테스터</b>");
+			
+			$('.status_progress').on('click', function(){
+				$(".section.ui_tab.request").css("display", "none");
+			});
+			$('.status_end').on('click', function(){
+				$(".section.ui_tab.request").css("display", "none");
+			});
+			
+			$(".tester_recruitment_list.progress").find('a').each(function(){
 				$(this).on('click', function(e){
-					$(".tester_recruitment_list").find('a').each(function(){
+					$(".tester_recruitment_list.progress").find('a').each(function(){
 						if($(this).hasClass("selected")) $(this).removeClass("selected");
 					});
 					$(this).addClass("selected");
+					$(".section.ui_tab.request").css("display", "block");
 					AP.beautytester.showDetail({regularEventSn: $(this).parent().attr('id')});
 				});
 			});

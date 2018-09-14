@@ -31,8 +31,8 @@
 					</div>
 					<div class="item_wrap">
 						<input type="hidden" name="onlinePrdSn" value="{{ prodEx.prodSn }}"/>
-						<input type="hidden" name="cartProdSn" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}" value="{{ cartProdSn }}"/>
-						<input type="hidden" name="prdInfo_{{ cartProdSn }}" value="{{ cartProdSn }}"/>
+						<input type="hidden" name="cartProdSn" value="{{ cartProdSn }}"/>
+						<input type="hidden" name="prdInfo_{{ cartProdSn }}" value="{{ cartProdSn }}" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}" />
 						<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{ prodEx.saleDisplayStatus }}"/>
 						<div class="item_info">
 							<!--/* 상품 선택 */-->
@@ -98,7 +98,7 @@
 											{{#if (ne awardProdEx.repProdImgEx null) }}
 												<img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/>
 											{{/if}}
-											사은품 : {{ awardProdEx.prodName }} {{#if (gt awardUnitQty 0 ) }}{{ awardUnitQty }}개 {{/if}}
+											사은품 : {{ awardProdEx.prodName }} {{#if (gt awardUnitQty 0 ) }}({{ awardUnitQty }}개) {{/if}}
 										</span>
 										<span class="term">
 											증정기간 : {{dateFormat awardStartDt "YYYY.MM.DD"}} ~ {{dateFormat awardEndDt "YYYY.MM.DD"}}
@@ -147,8 +147,8 @@
 					{{#if (or (gt @../index 0)(gt @index 0) ) }} <div class="item_wrap plus"> {{else}} <div class="item_wrap">  {{/if}}
 						<input type="hidden" name="index" value="{{ @index }}"/>
 						<input type="hidden" name="onlinePrdSn" value="{{ prodEx.prodSn }}"/>
-						<input type="hidden" name="cartProdSn" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}" value="{{ cartProdSn }}"/>
-						<input type="hidden" name="prdInfo_{{ cartProdSn }}" value="{{ cartProdSn }}"/>
+						<input type="hidden" name="cartProdSn" value="{{ cartProdSn }}"/>
+						<input type="hidden" name="prdInfo_{{ cartProdSn }}" value="{{ cartProdSn }}" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}" />
 						<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{ prodEx.saleDisplayStatus }}"/>
 						<div class="item_info">
 							<!--/* 상품 선택 */-->
@@ -214,7 +214,7 @@
 											{{#if (ne awardProdEx.repProdImgEx null) }}
 												<img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/>
 											{{/if}}
-											사은품 : {{ awardProdEx.prodName }} {{#if (gt awardUnitQty 0 ) }}{{ awardUnitQty }}개 {{/if}}
+											사은품 : {{ awardProdEx.prodName }} {{#if (gt awardUnitQty 0 ) }}({{ awardUnitQty }}개) {{/if}}
 										</span>
 										<span class="term">
 											증정기간 : {{dateFormat awardStartDt "YYYY.MM.DD"}} ~ {{dateFormat awardEndDt "YYYY.MM.DD"}}

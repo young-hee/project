@@ -21,18 +21,41 @@
 		/** =============== Private Methods ============== */
 		_setEvent: function () {
 			this._$target.on( 'click', function (e) {
-				e.preventDefault();
-				var products = this._defaultModel;
-				var options = {
-					title : "뷰티테스터 상세",
-					contents: {
-						templateKey: 'display.beauty-tester.review-detail-modal',
-						templateModel: products
-					},
-					sizeType : 'M',
-	            	containerClass : 'modal_info'
-	        	};
-	            AP.modal.info( options );
+				AP.api.getRegularEventProdReviewDetail( null, {prodReviewSn: this._defaultModel.prodReviewSn} )
+				.done(function ( result ) {
+					var options = {
+						contents: {
+							templateKey: 'display.beauty-tester.review-detail-modal',
+							templateModel: result
+						},
+						sizeType: 'M',
+		            	containerClass: '',
+		            	wrapperClass: 'photo_review'
+		        	};
+					$(".modal_popup").find(".layer_wrap").removeClass("modal_popup");
+					$(".modal_popup").find(".layer_wrap").removeClass("js_open");
+		            
+					AP.modal.info( options );
+					
+					$(".btn_help").click(function(e){
+						AP.api.regularEventProductReviewRecommend( null, {prodReviewSn: result.prodReviewSn} )
+						.done(function ( result ) {
+							if(result.toggleDiv == 'post'){
+								$(".btn_help").addClass("on");
+							}else{
+								$(".btn_help").removeClass("on");
+							}
+							$(".recommendCnt").text(result.recommendCnt);
+						});
+					});
+						
+				}.bind( this ))
+				.fail(function( error ) {
+					console.log( error );
+					alert("error");
+				})
+				.always(function () {
+				});
 			}.bind( this ));
 		}
 	});

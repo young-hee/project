@@ -3,6 +3,7 @@ package kr.ap.comm.support.common;
 import kr.ap.comm.api.AmoreAPIService;
 import kr.ap.comm.api.vo.MultiInfo;
 import kr.ap.comm.cart.CartSession;
+import kr.ap.comm.member.vo.BeautyPointSummary;
 import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.order.OrderSession;
 import kr.ap.comm.support.APRequestContext;
@@ -47,7 +48,6 @@ import org.springframework.web.util.WebUtils;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -59,7 +59,7 @@ import java.util.*;
  */
 public class AbstractController {
 
-	protected Logger logger = LoggerFactory.getLogger(getClass());
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	//upload image default width/height
 	private static final int DEFAULT_IMAGE_LENGTH = 1920;
@@ -477,7 +477,7 @@ public class AbstractController {
 	/**
 	 * 원본 이미지의 사이즈를 가져온다.
 	 *
-	 * @param imageFile 원본 이미지 파일
+	 * @param imageFile 원본 이미지 F
 	 * @return 이미지 사이즈
 	 */
 	protected int[] getImageSize(File imageFile) {

@@ -1,5 +1,5 @@
 <!--배송정보입력-->
-<dl class="delivery" th:if="${apMember != null}">
+<dl class="delivery" th:if="${isApMember}">
 	<dt class="on">
 		<div class="title clear">
 			<b>배송정보 입력</b>
@@ -10,25 +10,6 @@
 		<button type="button"><span class="sr_only">더보기</span></button>
 	</dt>
 	<dd class="panel">
-		<!--주문고객정보-->
-		<div class="buyer">
-			<div class="clear">
-				<h3 class="h_title cont"><strong>주문고객 정보</strong></h3>
-				<button type="button" th:onclick="|fnMemberChangeInfo('${apMember.name.name1}','${apMember.phoneNo1.phoneNo}','${apMember.emailAddress}')|">정보변경</button> <!--201807017 : 버튼추가-->
-			</div>
-			<div class="report_box">
-				<dl>
-					<dt>이름</dt>
-					<dd th:text="${apMember.name.name1}">홍길동</dd>
-					<dt>휴대폰번호</dt>
-					<dd th:text="${#IntegUtil.hyphenPhoneNumber(apMember.phoneNo1.phoneNo)}">010-0000-0000</dd>
-					<dt>이메일</dt>
-					<dd><input type="text" name="purchaserEmailAddress" title="이메일" th:value="${apMember.emailAddress}" required="required" data-msg-required="이메일을 입력하세요."><em>(필수)</em></dd>
-				</dl>
-			</div>
-			<p class="text_notice">주문관련 e-Mail과 SMS가 발송됩니다.</p>
-		</div>
-		<hr class="div m25">
 		<!--배송정보-->
 		<div class="address_wrap">
 			<h3 class="h_title cont"><strong>배송정보</strong></h3>
@@ -90,7 +71,7 @@
 									th:text="'(' + ${shipAddressInfo.addresseeAddress.zipCode} + ') '+ ${shipAddressInfo.addresseeAddress.address1} + ${shipAddressInfo.addresseeAddress.address2} ">(531575) 서울시 서울동 서울로 777 888 123
 								</dd>
 								<input type="hidden" id="addressName" th:value="${shipAddressInfo.addresseeName.name1}">
-								<input type="hidden" id="addressPhoneNo" th:value="${#IntegUtil.hyphenPhoneNumber(shipAddressInfo.phoneNo1.phoneNo)}">
+								<input type="hidden" id="addressPhoneNo" th:value="${shipAddressInfo.phoneNo1.phoneNo}">
 								<input type="hidden" id="addressZipCode" th:value="${shipAddressInfo.addresseeAddress.zipCode}">
 								<input type="hidden" id="addressAddress1" th:value="${shipAddressInfo.addresseeAddress.address1}">
 								<input type="hidden" id="addressAddress2" th:value="${shipAddressInfo.addresseeAddress.address2}">
@@ -143,8 +124,8 @@
 									<div class="input_group">
 										<div class="input_wrap">
 											<input type="hidden" class="post_code" name="userPostCode">
-											<!--<input type="hidden" class="address_first" name="address_first">-->
-											<input type="text" class="address_first" name="userAddress1" title="기본주소 입력" placeholder="주소" readonly="">
+											<input type="hidden" class="address_first" name="userAddress1">
+											<input type="text" class="address_first" name="address_first" title="기본주소 입력" placeholder="주소" readonly="">
 										</div>
 									</div>
 									<div class="input_group">
@@ -262,6 +243,27 @@
 			</form>
 		</div>
 		<!--//배송정보-->
+
+		<hr class="div m25">
+
+		<!--주문고객정보-->
+		<div class="buyer">
+			<div class="clear">
+				<h3 class="h_title cont"><strong>주문고객 정보</strong></h3>
+				<!--<button type="button" th:onclick="|fnMemberChangeInfo('${apMember.name.name1}','${apMember.phoneNo1.phoneNo}','${apMember.emailAddress}')|">정보변경</button> 201807017 : 버튼추가-->
+			</div>
+			<div class="report_box">
+				<dl>
+					<dt>이름</dt>
+					<dd th:text="${apMember.name.name1}">홍길동</dd>
+					<dt>휴대폰번호</dt>
+					<dd th:text="${#IntegUtil.hyphenPhoneNumber(apMember.phoneNo1.phoneNo)}">010-0000-0000</dd>
+					<dt>이메일</dt>
+					<dd><span class="input_wrap"><input type="text" name="purchaserEmailAddress" title="이메일" th:value="${apMember.emailAddress}" required="required" data-msg-required="이메일을 입력하세요."></span><em> (필수)</em></dd>
+				</dl>
+			</div>
+			<p class="text_notice">주문관련 e-Mail과 SMS가 발송됩니다.</p>
+		</div>
 	</dd>
 	<!--스크립트 정의-->
 	<script th:inline="javascript">
@@ -502,12 +504,12 @@
 		});
 
 		/* 편의점 찾기 */
-		function storeSearch(storeType, storePcUrl){ //id,UID
+		function storeSearch(storeType, storeMoUrl){
 			var id = "etude";
 			if('GS' == storeType) {
-				window.open("http://was.cvsnet.co.kr/GIS/chzero/cvsnet_shop_dt.jsp?id=" + id + "&UID=" + storePcUrl + "/order/orderStore", "storeMap", "width=1000,height=650,resizable=no,scrollbars=no");
+				window.open("http://www.cvsnet.co.kr/GIS/chzero/mobile/cvs_pickup.jsp?id=" + id + "&UID=" + storeMoUrl + "/order/orderStore", "storeMap", "width=1000,height=650,resizable=no,scrollbars=no");
 			} else if('CU' == storeType) {
-				window.open("http://www.cupost.co.kr/GIS/chzero/cupost_shop_dt.jsp?id=" + id + "&UID=" + storePcUrl + "/order/orderStore", "storeMap", "width=1000,height=650,resizable=no,scrollbars=no");
+				window.open("http://www.cupost.co.kr/GIS/chzero/mobile/cvs_pickup.jsp?id=" + id + "&UID=" + storeMoUrl + "/order/orderStore", "storeMap", "width=1000,height=650,resizable=no,scrollbars=no");
 			}
 		}
 

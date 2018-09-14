@@ -2,6 +2,7 @@ package kr.ap.amt.my.vo;
 
 import kr.ap.comm.api.vo.CicuemCuAdtInfTcVo;
 import kr.ap.comm.api.vo.CicuemCuInfTotTcVo;
+import kr.ap.amt.my.vo.TermsAgree;
 import net.g1project.ecp.api.model.ap.ap.MemberAddAttr;
 
 import java.util.List;
@@ -12,7 +13,10 @@ public class MyInfoDTO {
 	private List<TermsAgree> policy;
 	private List<TermsAgree> receive;
 	private List<TermsAgree> apReceive;
+	private List<TermsAgree> posReceive;
+	private List<TermsAgree> ehReceive;
 	private List<MemberAddAttr> attr;
+	private String birthType;
 	private String phoneNumber1;
 	private String phoneNumber2;
 	private String nickName;
@@ -87,6 +91,19 @@ public class MyInfoDTO {
 	public void setApReceive(List<TermsAgree> apReceive) {
 		this.apReceive = apReceive;
 	}
+	
+	public List<TermsAgree> getPosReceive() {
+		return posReceive;
+	}
+	public void setPosReceive(List<TermsAgree> posReceive) {
+		this.posReceive = posReceive;
+	}
+	public List<TermsAgree> getEhReceive() {
+		return ehReceive;
+	}
+	public void setEhReceive(List<TermsAgree> ehReceive) {
+		this.ehReceive = ehReceive;
+	}
 	public void setHomeZip(String homeZip) {
 		if(user == null) {
 			user = new CicuemCuInfTotTcVo();
@@ -119,6 +136,12 @@ public class MyInfoDTO {
 	}
 	public void setAttr(List<MemberAddAttr> attr) {
 		this.attr = attr;
+	}
+	public String getBirthType() {
+		return birthType;
+	}
+	public void setBirthType(String birthType) {
+		this.birthType = birthType;
 	}
 	
 }

@@ -46,33 +46,35 @@
 										<dd>{{ storeSelect.storeTypeName }}</dd>
 									</dl>
 									<br>
-								{{#if (ne storeSelect.phoneNo2 null) }}
 									<dl class="table_layout">
 										<dt class="w30p"><b>연락처</b></dt>
-										<dd>{{ storeSelect.phoneNo2.phoneNo }}</dd>
+										{{#if (or (ne storeSelect.phoneNo2 null)(ne storeSelect.phoneNo2.phoneNo null) ) }}
+											<dd>{{ storeSelect.phoneNo2.phoneNo }}</dd>
+										{{else}}
+											<dd>{{ storeSelect.phoneNo1.phoneNo }} </dd>
+										{{/if}}
 									</dl>
 									<br>
-								{{/if}}
-								{{#if (ne storeSelect.address null) }}
 									<dl class="table_layout">
 										<dt class="w30p"><b>사업장 소재지</b></dt>
-										<dd>{{ storeSelect.address.address1 }} {{ storeSelect.address.address2 }}</dd>
+										{{#if (or (ne storeSelect.address null)(ne storeSelect.address.address1 null) ) }}
+											<dd>{{ storeSelect.address.address1 }} {{ storeSelect.address.address2 }}</dd>
+										{{/if}}
 									</dl>
-								{{/if}}
 									<br>
-								{{#if (ne storeSelect.brn null) }}
 									<dl class="table_layout">
 										<dt class="w30p"><b>통신판매신고번호</b></dt>
-										<dd><a href="http://www.ftc.go.kr/bizCommPop.do?wrkr_no={{ storeSelect.brn }}&apv_perm_no=" title="새창" target="_blank" class="link">사업자정보 확인</a></dd>
+										{{#if (ne storeSelect.brn null) }}
+											<dd><a href="http://www.ftc.go.kr/bizCommPop.do?wrkr_no={{ storeSelect.brn }}&apv_perm_no=" title="새창" target="_blank" class="link">사업자정보 확인</a></dd>
+										{{/if}}
 									</dl>
-								{{/if}}
 									<br>
-								{{#if (ne storeSelect.emailAddress null) }}
 									<dl class="table_layout">
 										<dt class="w30p"><b>e-mail</b></dt>
-										<dd>{{ storeSelect.emailAddress }}</dd>
+										{{#if (ne storeSelect.emailAddress null) }}
+											<dd>{{ storeSelect.emailAddress }}</dd>
+										{{/if}}
 									</dl>
-								{{/if}}
 								</dd>
 							</dl>
 							<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>

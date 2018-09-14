@@ -183,7 +183,7 @@
 
 			//hide delay timer
 			_hideTimer = new $B.utils.Timer( 200, 1 ).addListener( 'timer', function (e) {
-				_this.hide();
+				// _this.hide();	스크롤바 선택시 닫힘현상 오류
 			});
 
 			$( 'body' ).on( 'mousedown', bodyClickHandler );

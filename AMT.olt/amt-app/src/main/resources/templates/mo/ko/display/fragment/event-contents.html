@@ -99,10 +99,10 @@
 				</div>
 				<div class="sort_box">
 					<p class="comment_total">댓글 <span class="num">121</span>개</p>
-					<ul class="sort_util">
+					<!-- <ul class="sort_util">
 						<li class="on" id="sort_new"><span class="icon_check_comment"></span><a href="#none">최신순</a></li>
 						<li id="sort_recommend"><span class="icon_check_comment"></span><a href="#none">도움순</a></li>
-					</ul>
+					</ul> -->
 				</div>
 				<ul class="comment_list">
 					<li>
@@ -160,11 +160,21 @@
 
 		<div class="section pd_md">
 			<h3 class="h_title fz19"><b>진행중인 이벤트</b></h3>
+			<th:block th:if="${otherList != null}">
 			<ul class="event_list">
-				<li><a href="#none"><img ap:src="@{/images/dummy/img_event_01.jpg}" alt="{이벤트명}"></a></li>
-				<li><a href="#none"><img ap:src="@{/images/dummy/img_event_02.jpg}" alt="{이벤트명}"></a></li>
-				<li><a href="#none"><img ap:src="@{/images/dummy/img_event_03.jpg}" alt="{이벤트명}"></a></li>
+				<li th:each="planDisplay : ${otherList}">
+					<a href="#none" th:if="${planDisplay.planDisplayTypeCode == 'Link'}" th:href="${planDisplay.linkNoticeUrl}">
+						<img th:src="${planDisplay.bannerImgM1}" th:alt="${planDisplay.planDisplayTitle}">
+					</a>
+					<a href="#none" th:if="${planDisplay.planDisplayTypeCode != 'Link'}" th:href="@{'/display/event_detail'(planDisplaySn=${planDisplay.planDisplaySn})}">
+						<img th:src="${planDisplay.bannerImgM1}" th:alt="${planDisplay.planDisplayTitle}">
+					</a>
+				</li>
 			</ul>
+			</th:block>
+			<th:block th:if="${otherList == null}">
+				<li><span>현재 진행중인 이벤트가 없습니다.</span></li>
+			</th:block>
 			<a href="/display/event?displayMenuId=event" class="btn_lg_more w100p">이벤트 전체 보기 <i class="ico_navi next"></i></a>
 		</div>
 </div>

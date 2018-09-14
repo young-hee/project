@@ -2,10 +2,12 @@ package kr.ap.comm.order;
 
 import kr.ap.comm.cart.OrdCartInfo;
 import net.g1project.ecp.api.model.order.order.OrdReceptChange;
+import net.g1project.ecp.api.model.sales.coupon.DownloadCoupons;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class OrderSession implements Serializable {
@@ -184,8 +186,8 @@ public class OrderSession implements Serializable {
 	public OrdReceptChange getOrdReceptChange() {
 		return ordReceptChange;
 	}
-
 	public void setOrdReceptChange(OrdReceptChange ordReceptChange) {
 		this.ordReceptChange = ordReceptChange;
 	}
+
 }

@@ -62,6 +62,9 @@
 			{{#case 'virtual-account' break=true}}
 				<ul>
 					<li class="clear"><b>무통장입금({{payMethodNameBlang}})</b><b>{{currencyFormatDefault payAmt '원'}}</b></li>
+					{{#if (ne this.refundAmtSum 0)}}
+						<li class="clear"><span>ㄴ환불</span><span>-{{currencyFormatDefault refundAmtSum '원'}}</span></li>
+					{{/if}}
 					<li class="clear">
 						<span>입금정보</span>
 						<span class="align_right line_h_20">{{pgPayEx.virtualBankAcBankName}} {{pgPayEx.virtualDepositBankAcNo}}<br>

@@ -1,0 +1,20 @@
+{{#xif downloadCoupon.couponCnt '>' 0}}
+	<ul class="available_coupon_list downloadCoupon">
+		{{#each downloadCoupon.list}}
+			<li>
+				<span class="text">{{ this.couponName }}</span>
+				<span><button type="button" id="{{ this.couponSn }}" name="downloadCoupon" class="btn_sm_neutral">쿠폰받기</button></span>
+			</li>
+		{{/each}}
+	</ul>
+{{else}}
+	<div class="panel notice downloadCouponEmpty">
+		<i class="ico"></i>
+		<p class="text font_lg"><b>다운로드 가능한 쿠폰이 없습니다.</b></p>
+		<br>
+		<p class="text">이벤트/행사 정보를 통해 할인 및 다양한 혜택이 담긴<br>
+			쿠폰 이벤트에 해당하는 제품을 주문해보세요.
+		</p>
+		<a href="/display/event?displayMenuId=event" class="btn_md_bordered mgt30">다양한 이벤트/행사 보러가기</a>
+	</div>
+{{/xif}}

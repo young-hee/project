@@ -1,33 +1,34 @@
 package kr.ap.comm.member.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import net.g1project.ecp.api.model.ap.ap.ApMember;
 
 import java.io.Serializable;
 
 public class MemberSession implements Serializable {
 
-    /**
-     * BO에서 저장된 항목
-     */
-    private Long member_sn;
+	/**
+	 * BO에서 저장된 항목
+	 */
+	private Long member_sn;
 
-    private ApMember member;
-    /**
-     * FO화면에서 사용할 항목
-     */
-    private String user_certNum;
-    private String user_check1;
-    private String user_check2;
-    private String user_check3;
+	private ApMember member;
+	/**
+	 * FO화면에서 사용할 항목
+	 */
+	private String user_certNum;
+	private String user_check1;
+	private String user_check2;
+	private String user_check3;
 
-    private String user_ciNo;
-    private String user_incsNo;
+	private String user_ciNo;
+	private String user_incsNo;
 
-    private String user_joinType;
+	private String user_joinType;
 
-    private String accessToken;
-    private String refreshToken;
-    private String autoLoginToken;
+	private String accessToken;
+	private String refreshToken;
+	private String autoLoginToken;
 
 	private String user_incsCardNoEc;
 
@@ -37,6 +38,11 @@ public class MemberSession implements Serializable {
 
 	public void setMember_sn(Long member_sn) {
 		this.member_sn = member_sn;
+	}
+
+	@JsonIgnore
+	public boolean isMember() {
+		return this.member_sn != null;
 	}
 
 	public ApMember getMember() {

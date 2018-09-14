@@ -8,22 +8,22 @@
 <script type="text/javascript">
 	
 	$(document).ready(function(){
-		
-		//새창을 종료하고 주문서 페이지에서 완료페이지로 이동		
+	
 		var $form = $("form[name='ini']");
-		
-		var resultCode = $form.find("input:hidden[name='resultCode']").val();
-		if(resultCode == '00') {	//결제 성공
+		// 결제 완료시 새창으로 연결됨
+		if(parent.iniBankCancel == undefined) {
 			
-			//부모창에서 서브밋
-			opener.window.name = "reception";
-			$form.attr("target", opener.window.name);
-			$form.attr("action", "/order/ordBankComplete")
+			$form.attr("target", "_self");
+			$form.attr("name", "iniBankPayResult");
+			$form.attr("action", "/order/ordBankComplete");
 			$form.submit();	
+		} else {
 			
+			// 결제 중도 취소시 현 iframe 유지됨
+			var msg = "사용자가 결제를 취소하였습니다.";
+			parent.iniBankCancel(msg);
 		} 
-		
-		self.close();
+		//self.close();
 		
 	});
 </script>

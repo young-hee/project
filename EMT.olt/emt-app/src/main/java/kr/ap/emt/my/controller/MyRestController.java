@@ -2,13 +2,16 @@ package kr.ap.emt.my.controller;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+
 import kr.ap.comm.api.WebDBApiService;
 import kr.ap.comm.api.vo.*;
 import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.support.ApPasswordEncoder;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
+import kr.ap.comm.support.constants.CookieKey;
 import kr.ap.comm.support.constants.SessionKey;
+import kr.ap.comm.util.CookieUtils;
 import kr.ap.emt.my.vo.MyInfoDTO;
 import kr.ap.emt.my.vo.TermsAgree;
 import net.g1project.ecp.api.exception.ApiException;
@@ -21,16 +24,20 @@ import net.g1project.ecp.api.model.offlinestore.store.RegularStoreForPost;
 import net.g1project.ecp.api.model.offlinestore.store.RegularStorePostResult;
 import net.g1project.ecp.api.model.offlinestore.store.StoreResult;
 import net.g1project.ecp.api.model.sales.terms.MemberTermsAgree;
+
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.WebUtils;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -212,7 +219,7 @@ public class MyRestController extends AbstractController {
 				memberSession.setMember(apMember);
 				setMemberSession(memberSession);
 			}  catch(Exception e) {
-			
+				logger.error(e.getMessage(), e);
 			}
 		} else {
 			throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "ERROR", "ERROR");
@@ -428,7 +435,7 @@ public class MyRestController extends AbstractController {
 				memberSession.setMember(apMember);
 				setMemberSession(memberSession);
 			} catch(Exception e) {
-				
+				logger.error(e.getMessage(), e);
 			}
 		} else {
 			throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, null, null);
@@ -575,7 +582,7 @@ public class MyRestController extends AbstractController {
 									memberSession.setMember(apMember);
 									setMemberSession(memberSession);
 								}  catch(Exception e) {
-								
+									logger.error(e.getMessage(), e);
 								}
 							} else {
 							}
@@ -920,6 +927,128 @@ public class MyRestController extends AbstractController {
 	 *  4. 회원탈퇴
 	 **********************************************************************************************/
 
+
+	
+	/**
+	 * 회원탈퇴
+	 * 
+	 * @param request
+	 * @param response 
+	 * @return
+	 */
+	@PostMapping("/closeMember")
+	public ResponseEntity<?> closeMember(HttpServletRequest request, HttpServletResponse response, CloseAcReasonInfo closeAcReasonInfo, String closePassword) {
+		CheckResult rsltVo = apApi.checkMemberPassword(getMemberSn(), closePassword);
+		if(!rsltVo.isResult()) {
+			throw error(HttpStatus.BAD_REQUEST, "PW_ERR", "비밀번호가 일치하지 않습니다.");
+		}
+		
+		MemberSession memberSession = getMemberSession();
+		if("Y".equals(closeAcReasonInfo.getIntegrationCloseAcYn())) {
+			String reasonCode = "99";
+			switch (closeAcReasonInfo.getReasonCode()) {
+			case "C01":
+				reasonCode = "02";
+				break;
+			case "C02":
+			case "C05":
+				reasonCode = "03";
+				break;
+			case "C04":
+				reasonCode = "01";
+				break;
+			default:
+				break;
+			}
+
+			CicuedleaveVo vo = new CicuedleaveVo();
+			String today = DateFormatUtils.format(new java.util.Date(), "yyyyMMdd");
+			vo.setIncsNo(memberSession.getUser_incsNo());
+			vo.setWtpsCd("10");
+			vo.setWtrsCd(reasonCode);
+			vo.setWtrqDttm(today);
+			vo.setWtdnDttm(today);
+			vo.setWtrqChCd(APConstant.EH_CH_CD);
+			if(isMobileDevice())
+				vo.setWtrdCd("M");
+			if(isPcDevice())
+				vo.setWtrdCd("W");
+			if(isAndroid() || isiOS())
+				vo.setWtrdCd("A");
+			vo.setWtrqChCd(APConstant.EH_CH_CD);
+			vo.setWtrqPrtnId(APConstant.EH_PRTN_ID);
+			vo.setWtrsCd("99");
+			vo.setWtrsTxt(closeAcReasonInfo.getClosedAcDetailReason());
+			vo.setFscrId(memberSession.getMember().getMemberId());
+			vo.setLschId(memberSession.getMember().getMemberId());
+			
+			try {
+				LeaverResultVo rslt = amoreAPIService.createcicuelcuwt(vo);
+				if(!"ICITSVCOM000".equals(rslt.getRsltCd())) {
+					throw error(HttpStatus.BAD_REQUEST, "ERROR","회원 탈퇴에 실패했습니다.");
+				}
+			} catch(Exception e) {
+				throw error(HttpStatus.BAD_REQUEST, "ERROR","회원 탈퇴에 실패했습니다.");
+			}
+			
+			
+		} else {
+			Deletecicuedcuchcustwt deletecicuedcuchcustwt = new Deletecicuedcuchcustwt();
+			List<CicuedCuChTcVo> cicuedCuChTcVoList = new ArrayList<CicuedCuChTcVo>();
+			CicuedCuChTcVo cicuedCuChTcVo = new CicuedCuChTcVo();
+			cicuedCuChTcVo.setChCd(APConstant.EH_CH_CD);
+			cicuedCuChTcVo.setIncsNo(memberSession.getMember().getIncsNo());
+			cicuedCuChTcVoList.add(cicuedCuChTcVo);
+			deletecicuedcuchcustwt.setCicuedCuChTcVo(cicuedCuChTcVoList);
+			try {
+				amoreAPIService.deletecicuedcuchcustwt(deletecicuedcuchcustwt);
+			} catch(Exception e) {
+				
+			}
+		}
+		
+		boolean closeComplete = false;
+		try {
+			apApi.closeMemberAc(memberSession.getMember_sn(), closeAcReasonInfo);
+			closeComplete = true;
+		} catch(Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+
+		if("Y".equals(closeAcReasonInfo.getIntegrationCloseAcYn()) || closeComplete) {
+
+			try {
+
+				Cookie token = CookieUtils.getCookie(request, CookieKey.AUTO_LOGIN);
+				CookieUtils.removeCookie(request, response, CookieKey.AUTO_LOGIN);
+				if (memberSession.getMember_sn() != 0) {
+					try {
+						ApLogoutInfo logoutInfo = new ApLogoutInfo();
+						if(token != null)
+							logoutInfo.setAutoLoginToken(token.getValue());
+						apApi.memberLogout(memberSession.getMember_sn(), logoutInfo);
+					} catch (Exception e) {
+						logger.error(e.getMessage());
+					}
+				}
+			} catch(Exception e) {
+				logger.error(e.getMessage(), e);
+			}
+
+			try {
+				HttpSession httpSession = request.getSession(false);
+				if(httpSession != null)
+					httpSession.invalidate();
+			} catch (IllegalStateException e) {
+				//Ignore already invalided session
+			}
+			
+			return ResponseEntity.ok("{}");
+		}
+
+		throw error(HttpStatus.BAD_REQUEST, "ERROR","회원 탈퇴에 실패했습니다.");
+		
+	}
 
 
 

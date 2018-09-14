@@ -34,6 +34,30 @@ public class JwtUtils {
 		return false;
 	}
 
+	/**
+	 * 입력받은 토큰의 payload 에서 memberSn 값을 가져온다.
+	 * @param token jwt access token
+	 * @return menberSn, 값이 없을경우 {@code null} 반환
+	 */
+	public static Long getMemberSn(String token) {
+		String body = decodedBody(token);
+		if (body == null) {
+			return null;
+		}
+
+		JsonNode root = readTree(body);
+		if (root == null) {
+			return null;
+		}
+
+		JsonNode loginResult = root.get("loginResult");
+		if (loginResult == null) {
+			return null;
+		}
+
+		return loginResult.get("memberSn").asLong();
+	}
+
 	public static String decodedBody(String token) {
 		try {
 			String[] split = token.split("\\.");

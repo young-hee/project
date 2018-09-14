@@ -2,9 +2,6 @@
 	<script th:inline="javascript">
 		$( document ).ready(function() {
 			amtPcurInit();
-			$( '.ui_spinner' ).spinner();
-			$( '.ui_tooltip' ).tooltip();
-
 			$('.spinner_increase').attr('disabled', true);
 		});
 
@@ -28,7 +25,13 @@
 			});
 			$('#amtPcur').html(html);
 			$("[name=finalPamtPcur]").val(ordHistEx.finalPamtPcur);
-			$("[name=depositAvailAmt]").val(depositAvailAmt);
+
+			if (isApMember) {
+				$("[name=depositAvailAmt]").val(depositAvailAmt);
+				//$("[name=beauty_point]").prop('max', data.membershipAvailPoint);
+			}
+
+			$( '.ui_tooltip' ).tooltip();
 			$("#orderPayment").html($B.string.numberFormat(ordHistEx.finalPamtPcur)+'원 결제하기');
 		}
 
@@ -50,7 +53,6 @@
 			if (isApMember) {
 				$("[name=depositAvailAmt]").val(data.depositAvailAmt);
 				//$("[name=beauty_point]").prop('max', data.membershipAvailPoint);
-				$("#orderPayment").html($B.string.numberFormat(data.ordHistEx.finalPamtPcur) + '원 결제하기');
 			}
 
 			$('#amtPriceTab').addClass("on");
@@ -59,6 +61,8 @@
 			//if ('initLoading' != initLoading) {
 			//	$('html, body').animate({scrollTop: $("#amtPcur").offset().top-50}, 1000);
 			//}
+			$( '.ui_tooltip' ).tooltip();
+			$("#orderPayment").html($B.string.numberFormat(data.ordHistEx.finalPamtPcur) + '원 결제하기');
 		}
 	</script>
 </dl>

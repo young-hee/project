@@ -31,17 +31,17 @@
 					<textarea name="" id="" cols="" rows="" placeholder="내용"></textarea>
 				</div>
 				
+				<!-- 2018-09-11 플러그인 추가 -->
 				<div class="ui_input_images">
 					<input type="file" id="i_picture" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="multiple" style="display:none" />
 					<label for="i_picture" class="btn_h40_bl">사진첨부</label>
 					<ul class="attach">
-						<li>
-							<img ap:src="@{/images/dummy/img_quick_menu_01.png}" alt="">
-							<button type="button" class="btn_del user_attach_img"><span class="sr_only">첨부파일 삭제</span></button>
-						</li>
 					</ul>
+
 					<p class="text_notice">첨부파일은 이미지 파일만 가능하며, 최대 10개까지 등록 하실 수 있습니다. (최대 파일 용량 3MB)</p>
 				</div>
+				<!-- // 2018-09-11 플러그인 추가 -->
+				
 				<div class="input_wrap">
 					<span class="input_h48_gray"><input type="text" placeholder="이메일 입력"></span>
 				</div>
@@ -64,6 +64,7 @@
 <th:block ap:fragment="layout-endpoint">
 	<script>
 		$( '.ui_select' ).designSelectBox();
+		$( '.ui_input_images' ).inputImages();
 	</script>
 </th:block>
 

@@ -88,54 +88,57 @@
 			//바로구매, 예약구매 클릭
 			this._$target.find( '.btn_buy_now, .btn_pre_purchase' ).on( 'click', function (e) {
 				var products = this._selectedOptions.getSelectedData();
-
-				this._productsInOutOfStock( products ).done( function () {
-					if ( AP.LOGIN_USER ) {
-						this._buyNowProd( products ).done( function () {
-							this._goToPage( 'order' );
-						}.bind(this)).fail( function ( xhr ) {
-							//에러처리
-							console.log( '-error:', xhr.errorCode );
-						}.bind(this));
-
-					} else {
+				if ( AP.LOGIN_USER ) {
+					this._buyNowProd( products ).done( function () {
+						this._goToPage( 'order' );
+					}.bind(this)).fail( function ( xhr ) {
+						//에러처리
+						console.log( '-error:', xhr.errorCode );
+					}.bind(this));
+				} else {
+					var modal = AP.modal.info({
+						 title : AP.message.BEFORE_BUY_MESSAGE
+						,contents : '<ul class="p_btn_area">'+
+									'<li><a href="javascript:;" class="moveLogin">로그인 구매</a></li>'+
+									'<li><a href="javascript:;" class="noneLogin">비로그인 구매</a></li>'+
+									'</ul>'
+						,confirmLabel : '닫기'
+						,containerClass : ' system_new_android'
+						,noneSystemAlert : true
+						,hideCloseBtn : true
+						,target : '#ap_container'
+					}),
+					$modal = modal.getElement();
+					
+					//로그인 페이지 이동
+					$modal.find('.moveLogin').on('click', function(e){
+						AP.login.go();
+					}.bind(this));
+					
+					//비회원 구매 이용약관 페이지로 이동
+					$modal.find('.noneLogin').on('click', function(e){
+						var $cur = $(e.currentTarget);
 						this._noneMemberOrderInfo( products, 'order' );
-					}
-				}.bind(this));
+					}.bind(this));
+					
+				}
 			}.bind(this));
 
 			//장바구니 클릭
 			this._$target.find( '.btn_basket' ).on( 'click', function (e) {
+				//예약 주문 상품일 경우 장바구니 비활성화
+				if ( this._defaultModel.prodTypeCode == 'Presale' )
+					return false;
+				
 				var products = this._selectedOptions.getSelectedData();
 				this._addCartProd( 'cart', products ).done( function () {
-					AP.modal.confirm({
-						 contents : AP.message.ADDED_CART_TO_CART_PAGE
-						,cancelLabel : '계속 쇼핑하기'
-						,confirmLabel : '장바구니로 이동'
-						,containerClass : 'system_alert'
-					}).addListener( 'modal-close', function (e) {
-						if ( e.closeType === 'confirm' ) {
-							this._goToPage( 'cart' );
-						}
-					}.bind(this));
+					this.close();
+					AP.addLike.add(this._$target, undefined, 'cart');
+					$('.toast_cart_msg').fadeIn().delay(2000).fadeOut();
 				}.bind(this)).fail( function ( xhr ) {
 					//에러처리
 					//console.log( '-error:', xhr.errorCode );
 				}.bind(this));
-				/*
-				this._productsInOutOfStock( products ).done( function () {
-					this._addCartProd( 'cart', products ).done( function () {
-						AP.modal.confirm( AP.message.ADDED_CART_TO_CART_PAGE )
-							.addListener( 'modal-close', function (e) {
-								if ( e.closeType === 'confirm' ) {
-									this._goToPage( 'cart' );
-								}
-							}.bind(this));
-					}.bind(this)).fail( function ( xhr ) {
-						//에러처리
-					}.bind(this));
-				}.bind(this));
-				*/
 			}.bind(this));
 
 			//언제 들어와? 알림 신청
@@ -145,11 +148,62 @@
 				}.bind(this));
 			}.bind(this));
 			
-			//좋아요  버튼 
+			//좋아요 on/off
 			this._$target.find( '.btn_good' ).on( 'click', function (e) {
-				AP.login().done(function () {
-					
+				if( !AP.LOGIN_USER ){
+					AP.login.go();
+					return false;
+				}
+				
+				var $this = $(e.currentTarget);
+				var prodSn = null;
+				var sendApi = '';
+				var selectedData = this._selectedOptions.getSelectedData();
+				this._callback = null;
+				
+				//좋아요 off
+				if( $this.hasClass('on') ){
+					if( selectedData.length == 0 ){
+						sendApi = 'offRecommendFromOnline';
+					} else {
+						sendApi = 'offRecommend';
+						prodSn = selectedData[selectedData.length-1].prodSn;
+					}
+					this._callback  = function(){
+						$this.find('.num').text(Number( $this.find('.num').text() ) - 1);
+						$this.removeClass( 'on' );
+						$this.find('i').removeClass( 'on' );
+						if( Number( $this.find('.num').text() ) == 0 ){
+							$this.addClass( 'none_like' );
+							$this.find('.num').hide();
+						}
+					}
+				} else { //좋아요 on	
+					//좋아요 on
+					sendApi = 'postRecommend';
+					if( selectedData.length == 0 ){
+						prodSn = this._defaultModel.products[0].prodSn;
+					} else {
+						prodSn = selectedData[selectedData.length-1].prodSn;
+					}
+					this._callback  = function(){
+						$this.find('.num').text(Number( $this.find('.num').text() ) + 1).show();
+						$this.addClass( 'on' ).removeClass('none_like');
+						$this.find('i').addClass( 'on' );
+						AP.addLike.add(this._$target);
+					}
+				}
+				
+				AP.api[sendApi]('', {
+					 shoppingMarkTgtCode : 'Prod' 
+			  		,prodSn : prodSn
+			  		,onlineProdSn : this._defaultModel.onlineProdSn
+				}).done(function(result){
+					this._callback();
+				}.bind(this)).fail(function(err){
+					console.log( err );
 				}.bind(this));
+				
 			}.bind(this));
 		},
 		
@@ -173,6 +227,7 @@
 					this._setSizeEvents();
 				}.bind(this)).addListener( 'select-option', function (e) {
 					this._selectedOptions.add( e.product );
+					this.dispatch('select-option', e);
 				}.bind(this));
 
 			//선택된 옵션들
@@ -267,7 +322,7 @@
 
 			if ( products.length ) {
 				AP.api.buyNowCartProd( null, JSON.stringify({cartProdExPostList: cartProdExPostList})).done( function ( result ) {
-					AP.header.resetCartCount();
+					//AP.header.resetCartCount();
 					defer.resolve();
 				})
 				.fail( function ( xhr ) {
@@ -327,6 +382,7 @@
 		},
 
 		_noneMemberOrderInfo: function ( products, type ) {
+			return false;
 			if ( products.length ) {
 				var modal = AP.modal.info({
 						title: '비회원 주문 안내',

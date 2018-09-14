@@ -8,30 +8,23 @@
 					<p class="text">{{ this.participantComment }}</p>
 					<a href="#none" class="read_more" style="display:none;">더읽기 <i class="ico_down"></i></a>
 					<a href="#none" class="more_view close" style="display:none;">닫기 <i class="ico_up"></i></a>
-					<div class="comment_edit" style="display:none;">
-						<div class="inbox">
-							<textarea cols="" rows="4" class="text_edit"></textarea>
-						</div>
-					</div>
 				</div>
+				
+				{{#if this.eventCommentImgs.length}}
+				<div class="img_review_ph01">
+					{{#each this.eventCommentImgs}}
+						<a class="btn_detail" href="javascript:;" data-event-participant-sn="{{ ../eventParticipantSn }}"><img src="{{ this.commentImgUrl }}" alt="" /></a>
+					{{/each}}
+				</div>
+				{{/if}}
+				
 				<div class="clear btns">
-					<button type="button" class="btn_good" data-planDisplay-comment-sn="{{ this.eventParticipantSn }}">
-						<i class="ico_thumb animated500ms rotate"></i>
-						<span>도움이 되요 
-							<span class="num">
-								{{#xif this.commentRecommendCnt '!=' '0'}}
-									{{ this.commentRecommendCnt }}
-								{{/xif}}
-							</span>
-						</span>
-					</button>
 					<button type="button" class="btn_report" data-planDisplay-comment-sn="{{ this.eventParticipantSn }}"><i class="ico_report"></i><span class="sr_only">신고하기</span></button>
-					<!--<a href="#none" class="btn_report"><i class="ico_report"></i><span class="sr_only">신고하기</span></a>-->
 				</div>
 				{{#xif this.myCommentYn '==' 'Y'}}
 				<div class="comment_btns">
-					<button type="button" data-planDisplay-comment-sn="{{ this.eventParticipantSn }}" id="btn_modify">수정</button>
-					<button type="button" data-planDisplay-comment-sn="{{ this.eventParticipantSn }}" id="btn_delete">삭제</button>
+					<button type="button" data-event-participant-sn="{{ this.eventParticipantSn }}" id="btn_modify">수정</button>
+					<button type="button" data-event-participant-sn="{{ this.eventParticipantSn }}" id="btn_delete">삭제</button>
 				</div>
 				{{/xif}}
 			</dd>

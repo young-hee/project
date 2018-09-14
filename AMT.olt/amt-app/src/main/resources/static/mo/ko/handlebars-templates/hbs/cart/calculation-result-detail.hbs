@@ -1,6 +1,12 @@
 <div class="price_box"><span class="price">
-	<b>{{numberFormat (calc prodSumAmount '+' shipFeeSumAmount '-' cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount ) }}</b>원</span> <span>{{totalProdCnt}}</span>개 상품
+	<b>{{numberFormat (calc prodSumAmount '+' shipFeeSumAmount '-' (calc cartEx.calculationResult.totalProdUnitDiscountAmountInfo.standardCurrency.amount '+' totalMemAmount )) }}</b>원</span> <span>{{totalProdCnt}}</span>개 상품
 </div>
-{{#if (ne cartEx.calculationResult.resultMembershipMap null) }}
-		<div class="point"><i class="ico_p"></i> <span class="num">{{numberFormat cartEx.calculationResult.resultMembershipMap.1.totalMembershipSavingPoint }}</span> 적립예정</div>
+{{#if (ne cartEx.cartMemberEx null) }}
+	{{#if (ne cartEx.calculationResult null)}}
+		{{#each cartEx.calculationResult.resultMembershipMap as |value key|}}
+			{{#if (eq key ../membershipSn) }}
+				<div class="point"><i class="ico_p"></i> <span class="num">{{numberFormat value.totalMembershipSavingPoint }}</span> 적립예정</div>
+			{{/if}}
+		{{/each}}
+	{{/if}}
 {{/if}}

@@ -28,10 +28,12 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-ship-address"] = Handlebar
 },"6":function(container,depth0,helpers,partials,data) {
     return "			<div><b class=\"font_lg\">배송정보</b></div>\n";
 },"8":function(container,depth0,helpers,partials,data) {
-    var stack1;
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "					<dd>"
-    + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.recipientAddress : stack1)) != null ? stack1.address1 : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.recipientAddress : stack1)) != null ? stack1.address1 : stack1), depth0))
+    + " "
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.recipientAddress : stack1)) != null ? stack1.address2 : stack1), depth0))
     + "</dd>\n";
 },"10":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;

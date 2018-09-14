@@ -13,9 +13,7 @@
 		},
 
 		/** =============== Public Methods =============== */
-		set: function () {
-			var data = AP.category.searchFilterData;
-
+		set: function ( data ) {
 			// 선택된 필터 표시
 			if ( this.isFilter( data )) {
 				var html = AP.common.getTemplate( 'display.category.invoked-filter', data );

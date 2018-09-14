@@ -8,10 +8,16 @@
 <script type="text/javascript">
 	
 	$(document).ready(function(){
+		alert("test");
+		var payPopup = window.open('about:self','payPopup', "width=1000,height=650,resizable=no,scrollbars=no");
+		var actionUrl = "https://wpay.inicis.com/stdwpay/su/payreqauth";
 		
-		var order_form = document.ini;		
-		order_form.action = "https://wpay.inicis.com/stdwpay/su/payreqauth";
-		order_form.submit();
+		var $form = $("form[name='ini']");
+		$form.attr("method", "post");
+		$form.attr("action", actionUrl);
+		$form.attr("target", 'payPopup');
+		
+		$form.submit();
 		
 	});
 </script>

@@ -1,0 +1,116 @@
+<div class="layer_popup fullpage btn_y bg_w">
+	<div class="layer_wrap">
+		<dl class="layer">
+			<dt class="layer_title">배송지 추가</dt>
+			<dd class="layer_cont">
+
+				<div class="section search_address ui_find_addresses">
+					<div class="step1">
+						<fieldset class="search_form">
+							<legend class="sr_only">우편번호 검색</legend>
+							<div class="input_wrap">
+								<!-- 결과 템플레이트 화면 변경 -->
+								<span id="find-address-result-template" style="display: none;">order.layer-find-address-result-template</span>
+								<input type="text" class="find_addresses_input" title="우편번호 검색어 입력" placeholder="도로명, 건물명, 번지로 검색해주세요">
+								<button type="button" class="btn_del"><i class="ico_close_s_w"></i><span class="sr_only">검색어 삭제</span></button>
+								<button type="button" class="btn_search btn_find_addresses"><i class="ico_search_p"></i><span class="sr_only">검색</span></button>
+							</div>
+						</fieldset>
+						<dl class="dl_cont">
+							<dt>우편번호 통합검색 Tip</dt>
+							<dd>
+								<p class="text">도로명 + <b>건물번호</b> (예 : 송파대로 570)<br>동/읍/면/리 + <b>번지/</b> (예 : 신천동 7-30)<br>건물명, 아파트명 (예 : 반포자이아파트)</p>
+							</dd>
+						</dl>
+					</div>
+
+					<!-- btn_search버튼 누른 후 검색결과 나오는부분 -->
+					<div class="step2" style="display: block;">
+						<div class="address_list"></div>
+					</div>
+				</div>
+			</dd>
+		</dl>
+		<div class="layer_btns">
+			<button type="button" id="btnFindAddrReg" class="btn_h50_pp" disabled>등록하기</button> <!--add_input내용 다 들어가면 disabled 빼주시면 됩니다-->
+		</div>
+		<button class="layer_close" type="button"><i class="ico_close"></i><span class="sr_only">레이어 닫기</span></button>
+		<!-- 로그인 여부 저장 -->
+		<span id="isLoginedMember" style="display: none;"></span>
+	</div>
+</div>
+
+
+<script>
+	var findAddrObj = {};
+
+	$( document ).ready(function() {
+
+		// 주소 찾기 초기화
+		$( '.ui_find_addresses' ).findAddresses();
+		//주소입력창 포커스
+		setTimeout(function() {
+			$( '.find_addresses_input' ).focus();
+		}, 500);
+
+	});
+
+	/** 주소 선택시 결과 이벤트 */
+	$('.ui_find_addresses').on('change-address', function (e) {
+
+		console.log( e.selIndex, e.postCode, e.address, e.detailAddress );
+
+		findAddrObj.selIndex = e.selIndex;
+		findAddrObj.postCode = e.postCode;
+		findAddrObj.address = e.address;
+		findAddrObj.detailAddress = e.detailAddress;
+
+		//등록하기 버튼 활성화
+		$("#btnFindAddrReg").removeProp("disabled");
+
+		//열렸던 모든 상세주소 입력창 숨기기
+		$(".add_input").hide();
+		//선택된 상세주소 입력창 보이기
+		$("#addInput" + e.selIndex).show();
+
+	});
+
+	/** 주소 등록하기 버튼 이벤트 */
+	$("#btnFindAddrReg").on("click", function() {
+
+		var inputDetail = $("#inputDetail" + findAddrObj.selIndex);
+		var inputDetailName = $("#inputDetailName" + findAddrObj.selIndex);
+		var inputDetailHp = $("#inputDetailHp" + findAddrObj.selIndex);
+
+		if(inputDetailName.val() == '') {
+			AP.modal.alert("받는고객 이름을 입력해 주세요.").addListener( 'modal-close', function (e) {
+				inputDetailName.focus();
+			});
+			return;
+		}
+		if(inputDetailHp.val() == '') {
+			AP.modal.alert("받는고객 휴대폰 번호를 입력해 주세요.").addListener( 'modal-close', function (e) {
+				inputDetailHp.focus();
+			});
+			return;
+		}
+
+		//배송지 추가 화면으로 선택된 값들을 보낸다.
+		var isLoginedMember = $("#isLoginedMember").text();
+		if(isLoginedMember == "true") {
+			//회원 새로운 주소지 수정/추가
+			addMemberAddr(inputDetailName.val(), inputDetailHp.val(), findAddrObj.postCode, findAddrObj.address + findAddrObj.detailAddress, inputDetail.val());
+		} else {
+			//비회원 새로운 주소지 수정/추가
+			addNonMemberAddr(inputDetailName.val(), inputDetailHp.val(), findAddrObj.postCode, findAddrObj.address + findAddrObj.detailAddress, inputDetail.val());
+		}
+
+		//주소찾기 clear
+		$( '.ui_find_addresses' ).findAddresses( 'clear' );
+
+		//모달 close
+		closeLayerFindAddress();
+
+	});
+
+</script>

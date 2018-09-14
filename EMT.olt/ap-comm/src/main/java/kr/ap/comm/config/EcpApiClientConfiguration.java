@@ -15,8 +15,10 @@ import kr.ap.comm.support.APRequestContext;
 import net.g1project.ecp.api.client.EcpApiClientTarget;
 import net.g1project.ecp.api.client.ap.ApApi;
 import net.g1project.ecp.api.client.ap.BbsApi;
+import net.g1project.ecp.api.client.ap.BixbyApi;
 import net.g1project.ecp.api.client.ap.VerifApi;
 import net.g1project.ecp.api.client.basis.MallApi;
+import net.g1project.ecp.api.client.basis.OAuthApi;
 import net.g1project.ecp.api.client.linker.LinkerApi;
 import net.g1project.ecp.api.client.offlinestore.StoreApi;
 import net.g1project.ecp.api.client.sales.DepositsApi;
@@ -247,6 +249,21 @@ public class EcpApiClientConfiguration {
 	@Bean
 	public LinkerApi linkerApi()	{	 return createApi(LinkerApi.class);	}
 
+	@Bean
+	public BixbyApi bixbyApi(){
+		return createApi(BixbyApi.class);
+	}
+
+	@Bean
+	public OAuthApi oAuthApi() {
+		return createApi(OAuthApi.class);
+	}
+	
+	@Bean
+	public GiftcardApi giftcardApi() {
+		return createApi(GiftcardApi.class);
+	}
+	
     @Bean
     public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();

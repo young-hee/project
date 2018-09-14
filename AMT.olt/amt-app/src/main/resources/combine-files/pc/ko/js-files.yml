@@ -11,6 +11,7 @@ combine-js:
     - /js/libs/imagesloaded.pkgd.min.js
     - /js/libs/masonry.pkgd.min.js
     - /js/libs/ixSnack_0.4.min.js
+    - /js/libs/jquery.cookie.js
     - /js/libs/jquery.easing.min.js
     - /js/libs/jquery.validate.min.js
     - /js/libs/jquery.fullscreen-min.js
@@ -74,6 +75,7 @@ combine-js:
 
   contents:
     - /js/contents/header/app.js
+    - /js/contents/header/search.js
     - /js/contents/footer/app.js
     # 공통 plugins 실행
     - /js/common/contents-exec.js
@@ -85,6 +87,7 @@ combine-js:
     - /js/contents/main/home.js
 
   category:
+    - /handlebars-templates/compiled/display/product-item.js
     - /handlebars-templates/compiled/display/search-filter.js
     - /handlebars-templates/compiled/display/category/category-menu-1.js
     - /handlebars-templates/compiled/display/category/category-menu-2.js
@@ -93,9 +96,10 @@ combine-js:
     - /handlebars-templates/compiled/display/category/best-review-item.js
     - /handlebars-templates/compiled/display/category/popular-brand-item.js
     - /handlebars-templates/compiled/display/category/recommend-item.js
-    - /handlebars-templates/compiled/display/category/category-item.js
+    - /js/contents/display/add-like.js
     - /js/contents/display/add-cart.js
     - /js/contents/display/search-filter.js
+    - /js/contents/display/product-item.js
     - /js/contents/display/product-list.js
     - /js/contents/display/category/category-menu.js
     - /js/contents/display/category/page-title.js
@@ -109,6 +113,7 @@ combine-js:
     
   #상품상세
   products:
+    - /handlebars-templates/compiled/products/report.js
     - /handlebars-templates/compiled/products/layer-app.js
     - /handlebars-templates/compiled/products/beautytester-review-contents.js
     - /handlebars-templates/compiled/products/review-detail.js
@@ -118,8 +123,10 @@ combine-js:
     - /handlebars-templates/compiled/products/layer-card-benefit.js
     - /handlebars-templates/compiled/products/option-selectbox.js
     - /handlebars-templates/compiled/products/selected-option-list.js
+    - /js/contents/display/add-like.js
     - /js/contents/review-write-modal.js
     - /js/contents/review-detail.js
+    - /js/contents/products/report.js
     - /js/contents/products/options-select-box.js
     - /js/contents/products/selected-options.js
     - /js/contents/products/order-layer.js
@@ -135,14 +142,39 @@ combine-js:
   issue:
     - /handlebars-templates/compiled/display/issue/product-list.js
     - /js/contents/display/issue/app.js
+
+  events-coupon-benefit:
+    - /handlebars-templates/compiled/display/events/attendance-calendar.js
+    - /handlebars-templates/compiled/display/events/attendance-success.js
+    - /handlebars-templates/compiled/display/events/coupon-list.js
+    - /handlebars-templates/compiled/display/events/mycoupon-list.js
+    - /handlebars-templates/compiled/display/events/vip-lounge-success.js
+    - /js/contents/display/events/attendance.js
+    - /js/contents/display/events/coupon-zone.js
+    - /js/contents/display/events/vip-lounge.js
     
   events-overview:
     - /handlebars-templates/compiled/display/events/event-progress.js
     - /handlebars-templates/compiled/display/events/event-over.js
     - /js/contents/display/events/event-progress.js
-    - /js/contents/display/events/event-over.js  
+    - /js/contents/display/events/event-over.js
+    
+  events-detail:
+    - /handlebars-templates/compiled/display/events/winning-pop.js
+    - /handlebars-templates/compiled/display/events/detail-product-list.js
+    - /handlebars-templates/compiled/display/events/comment-write-modal.js
+    - /handlebars-templates/compiled/display/events/comment-detail-modal.js
+    - /handlebars-templates/compiled/display/events/comment-list.js
+    - /handlebars-templates/compiled/display/events/simple-comment-list.js
+    - /js/contents/display/events/winning-pop.js
+    - /js/contents/display/events/comment-write-modal.js
+    - /js/contents/display/events/comments.js
+    - /js/contents/display/events/simpleComments.js
+    - /js/contents/display/events/detail.js
     
   beauty-tester:
+    - /handlebars-templates/compiled/products/layer-app.js
+    - /handlebars-templates/compiled/display/beauty-tester/modal-info-winners.js
     - /handlebars-templates/compiled/display/beauty-tester/process.js
     - /handlebars-templates/compiled/display/beauty-tester/product-info.js
     - /handlebars-templates/compiled/display/beauty-tester/request.js
@@ -154,3 +186,58 @@ combine-js:
     - /js/contents/display/beauty-tester/review-item.js
     - /js/contents/display/beauty-tester/beauty-tester-info.js
     - /js/contents/display/beauty-tester/app.js
+
+  special-gift:
+    - /handlebars-templates/compiled/display/category-menu.js
+    - /handlebars-templates/compiled/display/events/special-gift-item.js
+    - /js/contents/display/add-like.js
+    - /js/contents/display/add-cart.js
+    - /js/contents/display/product-item.js
+    - /js/contents/display/product-list.js
+    - /js/contents/display/events/special-gift.js
+
+  sale:
+    - /handlebars-templates/compiled/display/category-menu.js
+    - /handlebars-templates/compiled/display/product-item.js
+    - /js/contents/display/add-like.js
+    - /js/contents/display/add-cart.js
+    - /js/contents/display/product-item.js
+    - /js/contents/display/product-list.js
+    - /js/contents/display/big-sale/sale.js
+
+  one-plus-one:
+    - /handlebars-templates/compiled/display/category-menu.js
+    - /handlebars-templates/compiled/display/product-item.js
+    - /js/contents/display/add-like.js
+    - /js/contents/display/add-cart.js
+    - /js/contents/display/product-item.js
+    - /js/contents/display/product-list.js
+    - /js/contents/display/big-sale/one-plus-one.js
+
+  hotdeal:
+    - /handlebars-templates/compiled/display/events/hotdeal-item.js
+    - /handlebars-templates/compiled/display/events/hotdeal-coming-soon-item.js
+    - /js/contents/display/add-like.js
+    - /js/contents/display/add-cart.js
+    - /js/contents/display/product-item.js
+    - /js/contents/display/product-list.js
+    - /js/contents/display/big-sale/hotdeal.js
+
+  cushion-zone:
+    - /handlebars-templates/compiled/display/product-item.js
+    - /handlebars-templates/compiled/display/search-filter.js
+    - /handlebars-templates/compiled/display/category/recommend-item.js
+    - /handlebars-templates/compiled/display/events/cushion-zone-video.js
+    - /js/contents/display/add-like.js
+    - /js/contents/display/add-cart.js
+    - /js/contents/display/search-filter.js
+    - /js/contents/display/product-item.js
+    - /js/contents/display/product-list.js
+    - /js/contents/display/events/cushion-zone.js
+
+  search:
+    - /handlebars-templates/compiled/display/search/search-prod-filter.js
+    - /handlebars-templates/compiled/display/search/search-prod-list.js
+    - /js/contents/display/search/app.js
+    - /js/contents/display/search/search-prod-filter.js
+    - /js/contents/display/search/search-prod-list.js

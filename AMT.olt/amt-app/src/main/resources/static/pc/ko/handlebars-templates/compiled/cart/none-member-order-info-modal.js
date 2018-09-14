@@ -1,0 +1,7 @@
+this["AP"] = this["AP"] || {};
+this["AP"]["handlebars"] = this["AP"]["handlebars"] || {};
+this["AP"]["handlebars"]["cart"] = this["AP"]["handlebars"]["cart"] || {};
+
+this["AP"]["handlebars"]["cart"]["none-member-order-info-modal"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "<!--<div class=\"layer_dimmed\"></div>-->\n<div class=\"layer_popup system_alert round\" style=\"display:block; margin-top:-516px;\">\n	<div class=\"layer_wrap layer_sm\">\n		<dl class=\"layer\">\n\n			<!-- AP.modal.open() 의 contents 영역 -->\n			<dt class=\"layer_title\">구매 안내</dt>\n			<dd class=\"layer_cont\">\n				<div class=\"ly_info\">\n					<p class=\"color_black font_sl\">로그인 구매로 뷰티포인트 적립하시고 알뜰한 쇼핑하세요</p>\n					<div class=\"layer_btns\">\n						<a href=\"javascript:;\" class=\"btn_fix_bordered\" id=\"loginPurchase\">로그인 구매</a>\n						<a href=\"javascript:;\" class=\"btn_fix_neutral btn_default_modal_confirm\" id=\"nonSignInPurchase\">비로그인 구매</a>\n					</div>\n				</div>\n			</dd>\n			<!-- //AP.modal.open() 의 contents 영역 -->\n		</dl>\n		<button class=\"layer_close\" type=\"button\">레이어 닫기</button>\n	</div>\n</div>\n";
+},"useData":true});

@@ -1,5 +1,6 @@
 package kr.ap.emt.my.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,7 +11,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kr.ap.comm.api.vo.CicueaCuPtAccmTcVo;
 import kr.ap.comm.api.vo.CicuedCuTncaTcVo;
 import kr.ap.comm.api.vo.CicuedleaveVo;
 import kr.ap.comm.api.vo.CicuemCuInfTotTcVo;
@@ -26,8 +26,8 @@ import kr.ap.comm.support.constants.CookieKey;
 import kr.ap.comm.support.constants.SessionKey;
 import kr.ap.comm.util.CookieUtils;
 import kr.ap.comm.util.G1SecureRandom;
+import kr.ap.comm.util.SessionUtils;
 import kr.ap.emt.api.pos.POSApiService;
-import kr.ap.emt.api.pos.vo.CustCushinPoint;
 import kr.ap.emt.api.pos.vo.SkinToneMeasureInfo;
 import kr.ap.emt.my.vo.MyInfoDTO;
 import kr.ap.emt.my.vo.TermsAgree;
@@ -47,6 +47,7 @@ import net.g1project.ecp.api.model.sales.member.MemberAddAttrs;
 import net.g1project.ecp.api.model.sales.product.ProdReviewWritableOrderInfo;
 import net.g1project.ecp.api.model.sales.terms.MemberTermsAgree;
 import net.g1project.ecp.api.model.sales.terms.Terms;
+
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.WebUtils;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -89,7 +91,7 @@ public class MyViewControllor extends AbstractController {
 	 */
 	@GetMapping("/info/myEtude")
 	@PageTitle(title = "마이 에뛰드")
-	public String myEtude(Model model) {
+	public String myEtude(final HttpServletRequest request, Model model) {
 
 		//주문/배송 조회
 		Date endDate = new Date();
@@ -128,34 +130,10 @@ public class MyViewControllor extends AbstractController {
 		ProdReviewWritableOrderInfo productReviewWritableOrders = productApi.getProductReviewWritableOrders(getMemberSn(), null, 0, 10);
 		model.addAttribute("reviewCnt", productReviewWritableOrders.getTotalCount());
 
-		{//포인트 조회
-			CicueaCuPtAccmTcVo vo = new CicueaCuPtAccmTcVo();
-			vo.setIncsNo(memberSession.getUser_incsNo());
-			vo = amoreAPIService.getptinq(vo);
-			model.addAttribute("point", vo);
-		}
-		{
-			try {
-				CustCushinPoint cushin = posService.getCustCushinPoint(memberSession.getUser_incsNo());
-				if(cushin == null) {
-					cushin = new CustCushinPoint();
-					if(memberSession.getMember().getRemainCushionPoint() == null) {
-						cushin.setTotRemainPt(0);
-					} else {
-						cushin.setTotRemainPt(memberSession.getMember().getRemainCushionPoint());
-					}
-				}
-				model.addAttribute("cushin", cushin);
-			} catch(Exception e) {
-				CustCushinPoint cushin = new CustCushinPoint();
-				if(memberSession.getMember().getRemainCushionPoint() == null) {
-					cushin.setTotRemainPt(0);
-				} else {
-					cushin.setTotRemainPt(memberSession.getMember().getRemainCushionPoint());
-				}
-				model.addAttribute("cushin", cushin);
-			}
-		}
+		//뷰티 포인트 조회
+		model.addAttribute("point", SessionUtils.refreshBeautyPoint(request, this.pointApi));
+		//쿠션 포인트 조회
+		model.addAttribute("cushin", SessionUtils.refreshCushionPoint(request, this.pointApi));
 
 		//피부톤
 		try { 
@@ -196,7 +174,7 @@ public class MyViewControllor extends AbstractController {
 	@PageTitle(title = "회원정보수정", menuId = "myInfo", subMenuId = "changeUser")
 	public String changeUserInfo(Model model) {
 		model.addAttribute("url", "/my/page/info/changeUserInfo");
-		model.addAttribute("isPopup", true);
+		model.addAttribute("isPopup", false);
 		return "my/member-info";
 	}
 
@@ -436,39 +414,17 @@ public class MyViewControllor extends AbstractController {
 	 */
 	@PostMapping("/leaveId")
 	@PageTitle(title = "회원탈퇴", menuId = "myInfo", subMenuId = "leaverId")
-	public String leaverId(Model model, String userPwdEc) {
-		try {
-		
-			CheckResult pwResult = apApi.checkMemberPassword(getMemberSn(), userPwdEc);
-			if(pwResult.isResult()) {
-				CloseAcStatus status = apApi.getMemberCloseAcStstus(getMemberSn());
-				model.addAttribute("status", status);
-				
-				if(status.getOrdRelatedCount() != 0 || status.getClaimRelatedCount() != 0 || status.getRemainDeposit().longValue() != 0) {
-					if(isMobileDevice())
-						return "my/member-info-2";
-					if(isPcDevice())
-						return "my/member-info-6";
-				}
+	public String leaverId(Model model) {
 
-				{//포인트 조회
-					CicueaCuPtAccmTcVo vo = new CicueaCuPtAccmTcVo();
-					vo.setIncsNo(getMemberSession().getUser_incsNo());
-					vo = amoreAPIService.getptinq(vo);
-					model.addAttribute("point", vo);
-				}
-				
-				return leaverIdM(model);
-			}
-		} catch(Exception e) {
-			
-		}
-		model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
-		model.addAttribute("url", "/my/page/leaveId");
-		model.addAttribute("isPopup", false);
-		
-		return "my/member-info";
+		CloseAcStatus status = apApi.getMemberCloseAcStstus(getMemberSn());
+		model.addAttribute("status", status);
+		MemberSession memberSession = getMemberSession();
+		//뷰티 포인트 조회
+		model.addAttribute("point", SessionUtils.refreshBeautyPoint(getRequest(), this.pointApi));
+		//쿠션포인트 조회
+		model.addAttribute("cushin", SessionUtils.refreshCushionPoint(getRequest(), this.pointApi));
 
+		return leaverIdM(model);
 	}
 
 	/**
@@ -480,7 +436,7 @@ public class MyViewControllor extends AbstractController {
 	@PageTitle(title = "회원 탈퇴", menuId = "myInfo", subMenuId = "leaverId")
 	public String leaveId(Model model) {
 		model.addAttribute("url", "/my/page/leaveId");
-		model.addAttribute("isPopup", false);
+		model.addAttribute("isPopup", true);
 		return "my/member-info";
 	}
 	
@@ -609,7 +565,7 @@ public class MyViewControllor extends AbstractController {
 		memberSession.setMember(apApi.getMemberInfo(memberSession.getMember_sn()));
 		setMemberSession(memberSession);
 
-		List<SNS> snsInfo = apApi.getMemberSnsIfInfo(memberSession.getMember_sn());				
+		List<SNS> snsInfo = apApi.getMemberSnsIfInfo(memberSession.getMember_sn());
 
 		Map<String, Date> snsMap = new HashMap<String, Date>();
 		if(snsInfo != null) {
@@ -643,7 +599,9 @@ public class MyViewControllor extends AbstractController {
 
 		model.addAttribute("status", status);
 		
-		if(status.getOrdRelatedCount() != 0 || status.getClaimRelatedCount() != 0 || status.getRemainDeposit().longValue() != 0) {
+		if(status.getOrdRelatedCount() != 0
+			|| status.getClaimRelatedCount() != 0
+			|| status.getRemainDeposit().compareTo(BigDecimal.ZERO) != 0) {
 			if(isMobileDevice())
 				return "my/member-info-2";
 			if(isPcDevice())
@@ -683,13 +641,13 @@ public class MyViewControllor extends AbstractController {
 						return "my/member-info-6";
 				}
 			} catch (ApiException e) {
-				e.printStackTrace();
+				logger.error(e.getMessage(), e);
 				if(isMobileDevice())
 					return "my/member-info.2";
 				if(isPcDevice())
 					return "my/member-info-6";
 			} catch(Exception e) {
-				e.printStackTrace();
+				logger.error(e.getMessage(), e);
 				if(isMobileDevice())
 					return "my/member-info.2";
 				if(isPcDevice())
@@ -701,13 +659,17 @@ public class MyViewControllor extends AbstractController {
 			else
 				deleteMember.setClosedAcDetailReason(desc);
 			try {
-
+				//FIXME 탈퇴를 하고 로그아웃 해야함
 				Cookie token = CookieUtils.getCookie(request, CookieKey.AUTO_LOGIN);
 				CookieUtils.removeCookie(request, response, CookieKey.AUTO_LOGIN);
-				WebUtils.setSessionAttribute(request, SessionKey.LOGIN_USER, null);
-				WebUtils.setSessionAttribute(request, SessionKey.CART, null);
-				WebUtils.setSessionAttribute(request, SessionKey.ORDER, null);
-				if (memberSession.getMember_sn() != 0) {
+
+				synchronized (WebUtils.getSessionMutex(req.getSession(false))) {
+					WebUtils.setSessionAttribute(request, SessionKey.LOGIN_USER, null);
+					WebUtils.setSessionAttribute(request, SessionKey.CART, null);
+					WebUtils.setSessionAttribute(request, SessionKey.ORDER, null);
+				}
+				//FIXME 세션 invalidate 처리 해야함
+				if (memberSession.isMember()) {
 					try {
 						ApLogoutInfo logoutInfo = new ApLogoutInfo();
 						if(token != null)
@@ -743,19 +705,10 @@ public class MyViewControllor extends AbstractController {
 		MemberSession memberSession = getMemberSession();
 		memberSession.setMember(apApi.getMemberInfo(memberSession.getMember_sn()));
 		
-        /**
-         * Mobile
-         */
-        if(isMobileDevice()) {
-    		return "my/member-info-3";
-        }
-
-        /**
-         * PC
-         */
-        if(isPcDevice()) {//TODO
-    		return "my/member-info-4";
-        }
+		if(isMobileDevice())
+			return "my/fullpage-member-out-01";
+		if(isPcDevice())
+			return "my/layer-member-out-01";
         
         return null;
 		
@@ -887,6 +840,7 @@ public class MyViewControllor extends AbstractController {
 			} else {
 
 				if(isPcDevice()) {
+					model.addAttribute("isPopup", false);
 					model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
 					return "my/member-info";
 				}
@@ -895,6 +849,7 @@ public class MyViewControllor extends AbstractController {
 		} catch(Exception e) {
 			
 			if(isPcDevice()) {
+				model.addAttribute("isPopup", false);
 				model.addAttribute("error", "비밀번호가 일치하지 않습니다.");				
 				return "my/member-info";
 			}

@@ -44,7 +44,7 @@
 								<label for="chkBox{{ cartProdSn }}">체크</label>
 							</span>
 							{{#if (ne prodEx.repProdImgEx null) }}
-								<img src="{{ prodEx.repProdImgEx.imgUrl }}" class="thm_cart_item" alt="">
+								<span class="thm_cart_item"><img src="{{ prodEx.repProdImgEx.imgUrl }}" alt=""></span>
 							{{/if}}
 							<div class="cart_table_cell">
 								<div class="cart_item_exclusive_wrap">
@@ -71,8 +71,8 @@
 						</div>
 						<div class="cart_item_info">
 							<input type="hidden" name="onlinePrdSn" value="{{ prodEx.prodSn }}"/>
-							<input type="hidden" name="cartProdSn" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}" value="{{ cartProdSn }}"/>
-							<input type="hidden" name="prdInfo_{{ cartProdSn }}" value="{{ cartProdSn }}"/>
+							<input type="hidden" name="cartProdSn" value="{{ cartProdSn }}"/>
+							<input type="hidden" name="prdInfo_{{ cartProdSn }}" value="{{ cartProdSn }}" prodName="{{ prodEx.prodName }}" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}"/>
 							<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{ prodEx.saleDisplayStatus }}"/>
 							<span class="ui_spinner small" data-step="1" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} data-min="{{ prodEx.minPurLimitQty }}" {{else}} data-min="1" {{/if}} {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} {{#if (gt cartProdQty prodEx.maxPurLimitQty) }} data-max="{{ cartProdQty}}" {{else}} data-max="{{ prodEx.maxPurLimitQty }}" {{/if}} {{else}} data-max="99" {{/if}} {{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}} >
 								<button class="spinner_decrease" type="button" title="제품 수량 감소" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt cartProdQty 1)(gt cartProdQty prodEx.minPurLimitQty) ) }} {{else}} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '{{ activityPointExchYn }}', '{{ storePickupYn }}', '{{ storeSn }}', '-', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
@@ -103,7 +103,7 @@
 										<span class="thm"><img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/></span>
 									{{/if}}
 									<span class="info">
-										<span>사은품 : {{ awardProdEx.prodName }} {{#if (gt awardUnitQty 0 ) }}{{ awardUnitQty }}개 {{/if}}</span>
+										<span>사은품 : {{ awardProdEx.prodName }} {{#if (gt awardUnitQty 0 ) }}({{ awardUnitQty }}개) {{/if}}</span>
 										<span>증정기간 : {{dateFormat awardStartDt "YYYY.MM.DD"}} ~ {{dateFormat awardEndDt "YYYY.MM.DD"}}</span>
 									</span>
 								</div>
@@ -160,7 +160,7 @@
 								<label for="chkBox{{ cartProdSn }}">체크</label>
 							</span>
 							{{#if (ne prodEx.repProdImgEx null) }}
-								<img src="{{ prodEx.repProdImgEx.imgUrl }}" class="thm_cart_item" alt="">
+								<span class="thm_cart_item"><img src="{{ prodEx.repProdImgEx.imgUrl }}" alt=""></span>
 							{{/if}}
 							<div class="cart_table_cell">
 								{{#if (gt prodEx.prodFlagExList.length 0) }}
@@ -187,8 +187,8 @@
 						</div>
 						<div class="cart_item_info">
 							<input type="hidden" name="onlinePrdSn" value="{{ prodEx.prodSn }}"/>
-							<input type="hidden" name="cartProdSn" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}" value="{{ cartProdSn }}"/>
-							<input type="hidden" name="prdInfo_{{ cartProdSn }}" value="{{ cartProdSn }}"/>
+							<input type="hidden" name="cartProdSn" value="{{ cartProdSn }}"/>
+							<input type="hidden" name="prdInfo_{{ cartProdSn }}" value="{{ cartProdSn }}" prodName="{{ prodEx.prodName }}" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}"/>
 							<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{ prodEx.saleDisplayStatus }}"/>
 							<span class="ui_spinner small" data-step="1" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} data-min="{{ prodEx.minPurLimitQty }}" {{else}} data-min="1" {{/if}} {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} {{#if (gt cartProdQty prodEx.maxPurLimitQty) }} data-max="{{ cartProdQty}}" {{else}} data-max="{{ prodEx.maxPurLimitQty }}" {{/if}} {{else}} data-max="99" {{/if}} {{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}} >
 								<button class="spinner_decrease" type="button" title="제품 수량 감소" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt cartProdQty 1)(gt cartProdQty prodEx.minPurLimitQty) ) }} {{else}} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '{{ activityPointExchYn }}', '{{ storePickupYn }}', '{{ storeSn }}', '-', '{{prodEx.minPurLimitQty}}', '{{prodEx.maxPurLimitYn}}', '{{prodEx.maxPurLimitQty}}')"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
@@ -219,7 +219,7 @@
 										<span class="thm"><img src="{{ awardProdEx.repProdImgEx.imgUrl }}" alt=""/></span>
 									{{/if}}
 									<span class="info">
-										<span>사은품 : {{ awardProdEx.prodName }} {{#if (gt awardUnitQty 0 ) }}{{ awardUnitQty }}개 {{/if}}</span>
+										<span>사은품 : {{ awardProdEx.prodName }} {{#if (gt awardUnitQty 0 ) }}({{ awardUnitQty }}개) {{/if}}</span>
 										<span>증정기간 : {{dateFormat awardStartDt "YYYY.MM.DD"}} ~ {{dateFormat awardEndDt "YYYY.MM.DD"}}</span>
 									</span>
 								</div>

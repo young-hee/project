@@ -24,18 +24,13 @@
 			this._defaultModel = model;
 
 			AP.previewArea.setDefaultData( this._defaultModel, memberMap );
-
-			/*
-			//상단 리뷰 클릭
-			AP.previewArea.addListener( 'call-review', function () {
-				this._$target.find( '.ui_tab' ).tabs( 'change', 1 );
+			
+			this._orderLayer = new AP.Order( this._$target.find('.order_layer'), model, memberMap )
+			.addListener( 'select-option', function (e) {
+				this._changePreview( e.product );
 			}.bind(this));
-
-			 */
-			this._orderLayer = new AP.Order( this._$target.find('.order_layer'), model, memberMap );
 			this._setEvents();
 			/*
-			this._setArtistTalk( memberMap );
 			this._setRecommendList();
 			this._setTabs();
 			this._setVideoPlugin();
@@ -54,6 +49,7 @@
 			this._$target.find('#optionSelectBox, #optionSelectedBox').on('click', function(e){
 				var modal = AP.modal.full({
 					title: '옵션 선택',
+					noneSystemAlert : true,
 					contents: {
 						templateKey: 'products.option-select',
 						templateModel : {
@@ -125,6 +121,7 @@
 			this._$target.find( '.special_gift .more' ).on( 'click', function (e) { 
 				var modal = AP.modal.full({
 					title: '스페셜 기프트',
+					noneSystemAlert : true,
 					containerClass : 'fixed_top',
 					contents: {
 						templateKey: 'products.special-gift',
@@ -139,6 +136,7 @@
 			this._$target.find( '#cardMoreView' ).on( 'click', function (e) { 
 				var modal = AP.modal.full({
 					title: '카드사 혜택정보',
+					noneSystemAlert : true,
 					containerClass : 'fixed_top card_installment',
 					contents: {
 						templateKey: 'products.card-benefit'
@@ -150,6 +148,7 @@
 			this._$target.find( '#shipMoreView' ).on( 'click', function (e) { 
 				var modal = AP.modal.full({
 					title: '배송정보',
+					noneSystemAlert : true,
 					contents: '<div class="section list">' + this._defaultModel.shipPolicyInfo + '</div>'
 				});
 			}.bind(this));
@@ -166,16 +165,25 @@
 				if ( !data ) {
 					data = this._defaultModel.products[0];
 				}
-
+				
+				var disclosures = [];
+				$.each(this._defaultModel.products, function(idx, prod){
+					var temp = {
+						 brandNm : prod.brandName
+						,onlineProdName : this._defaultModel.onlineProdName
+						,prodNm : prod.prodName
+						,desc : _.findWhere( prod.disclosures, {disclosureItemCode: '1807'} ).prodDisclosureInfo
+					};
+					disclosures.push(temp);	
+				}.bind(this));	
 				var modal = AP.modal.full({
 						title: '전성분확인',
+						noneSystemAlert : true,
 						containerClass : 'fixed_top',
 						contents: {
-							templateKey: 'products.ingredients-modal',
+							templateKey: 'products.ingredient-modal',
 							templateModel : {
-								selectedData: data,
-								onlineProd: this._defaultModel,
-								products: this._defaultModel.products
+								disclosures: disclosures
 							}
 						}
 					});
@@ -191,6 +199,7 @@
 
 				var modal = AP.modal.full({
 						title: '상세정보제공공시',
+						noneSystemAlert : true,
 						containerClass : 'fixed_top',
 						contents: {
 							templateKey: 'products.detail_info_notice',
@@ -219,6 +228,7 @@
 			*/
 		},
 		
+		// 옵션을 변경하였을 경우 썸네일 이미지 변경
 		_changePreview: function ( product ) {
 			var html = AP.common.getTemplate( 'products.option-slide-list', product.prodImages ),
 				$wrap = this._$target.find( '.swiper-wrapper' ),
@@ -232,6 +242,27 @@
 			$wrap.html( html );
 			$slide.html('');
 			this._setPreviewSlide();
+			
+			//좋아요 상태갑 변경
+			this._changeLikeStatus( product );
+		},
+		
+		//좋아요 상태갑 변경
+		_changeLikeStatus : function( product ){
+			var $likeBtn = this._$target.find('#likeBtn');
+			if( product.shoppingMarkYn == 'Y' ){
+				$likeBtn.hasClass('on') ? '' : $likeBtn.addClass('on');
+				$likeBtn.find('i').hasClass('on') ? '' : $likeBtn.find('i').addClass('on');
+			} else {
+				$likeBtn.removeClass('on');
+				$likeBtn.find('i').removeClass('on');
+			}
+			$likeBtn.find('.num').text( product.shoppingMarkCount );
+			
+			if( product.shoppingMarkCount == 0 ){
+				$likeBtn.hasClass('none_like') ? '' : $likeBtn.addClass('none_like');
+				$likeBtn.find('.num').hide();
+			}
 		},
 		
 		_setPreviewSlide : function() {
@@ -414,41 +445,7 @@
 				$recommendArea.hide();
 			}.bind(this));
 
-		},
-
-		//아티스트톡 설정
-		_setArtistTalk: function ( memberMap ) {
-			this._$target.find( '.btn_artist_talk' ).on( 'click', function (e) {
-				var modal = AP.modal.full({
-						title: 'Artist Talk',
-						contents: {
-							templateKey: 'common.artist-talk-modal',
-							templateModel: {
-								banner: ''
-							}
-						},
-						containerClass: 'artist_talk'
-					}),
-					$btn = modal.getElement().find( '.btn_consultation' );
-
-				modal.addListener( 'modal-before-close', function (e) {
-					$btn.off( 'click' );
-				});
-
-				$btn.on( 'click', function (e) {
-					AP.login().done( function () {
-						var parms = 'CNTR_CD=1004';
-						parms += ( '&CSTMID=' + memberMap.id );
-						parms += ( '&CHCSTMID=' + memberMap.name );
-						parms += ( '&CSTMNM=' + memberMap.cstmid );
-						parms += ( '&RESIDNO1=' + memberMap.residno1 );
-						parms += ( '&GEND_DV_CD=' + memberMap.gendDvCd );
-						webChat( params );
-					});
-				});
-			});
 		}
-
 	});
 
 	AP.productDetail = new ProductDetail();

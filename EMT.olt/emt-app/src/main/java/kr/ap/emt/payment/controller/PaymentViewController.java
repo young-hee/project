@@ -129,9 +129,22 @@ public class PaymentViewController extends AbstractController {
      
     }
     
+    @PostMapping("/iniBankComplete")//주문완료페이지 - 실시간 계좌이체 
+    public String iniBankCompletePost(Model model, HttpServletRequest request) throws Exception {
+    	
+    	HashMap<String, String> resultMap = new HashMap<String, String>();
+        resultMap.put("resultCode", "00");
+        resultMap.put("P_STATUS", "00");
+        
+        model.addAttribute("resultMap", resultMap);
+    	
+    	return "payment/iniBankCompletePost";
+     
+    }
+    
     @GetMapping("/iniBankComplete")//주문완료페이지 - 실시간 계좌이체 
     public String iniBankComplete(Model model, HttpServletRequest request) throws Exception {
-        
+    	
     	HashMap<String, String> resultMap = new HashMap<String, String>();
         resultMap.put("resultCode", "00");
         resultMap.put("P_STATUS", "00");
@@ -141,17 +154,6 @@ public class PaymentViewController extends AbstractController {
     	return "payment/iniBankComplete";
      
     }
-    
-    
-   /* private String getEuckrStr(String str) {
-		try {
-			String euckr = new String(str.getBytes("iso-8859-1"), "euc-kr");
-			return euckr;
-		} catch (UnsupportedEncodingException e) {
-			logger.error(e.getMessage(), e);
-			return str;
-		}
-	}*/
     
     @PostMapping("/iniPayDrctReturn")//인증결과 리턴 - 카카오페이, 페이코결제
     public String iniPayDrctReturn(Model model, HttpServletRequest request) throws Exception {
@@ -279,6 +281,10 @@ public class PaymentViewController extends AbstractController {
         
         return "payment/naverPay/naverComplete";    //네이버 인증 및 승인 결과 페이지
     }
+    
+  
+    
+    
     
    /* @GetMapping("/naverPayCancel")// 네이버 결제취소
     public Map<String, String> naverPayCancel(Model model, PayCancelDTO payCancel) throws Exception {

@@ -29,11 +29,10 @@
 		 * pixlee api : 앨범의 사진 리스트 요청
 		 * @param {String}	albumId		해당리스트를 포함하고 있는 앨범 ID
 		 */
-		getPixleePhotos: { path:'//distillery.pixlee.com/api/v2/albums/{albumId}/photos', data: {
-				api_key: 'Qb96XS0UZhAN7jhR23',
-				sort: decodeURIComponent( '{"approved_time":true,"desc":true}' ),
-				filters: decodeURIComponent( '{"has_permission":true}' ),
-				per_page: 12
+		getPixleePhotos: { path:'/common/getPixleePhotos', metod:'POST' ,contentType: 'application/json' , data: {
+				sort: decodeURIComponent('{"approved_time":true,"desc":true}'),
+			    filters: decodeURIComponent( '{"has_permission":true}' ),
+			    per_page: 12
 			}
 		},
 
@@ -187,6 +186,10 @@
 		findIdForeigner: { path: '/customer/find/findId/foreigner', method: 'POST' },
 		//아이디 중복확인.
 		checkId: { path: '/customer/checkId', method: 'POST' },
+
+		//회원탈퇴.
+		closeMember: { path: '/my/api/closeMember', method: 'POST' },
+		
 		
 		//휴면계정 해제.
 		recoveryUser: { path: '/customer/recoveryUser', method: 'POST' },
@@ -799,6 +802,9 @@
 		// 매장지역 정보
 		storeAddressDivs: { path: '/cart/storeAddressDivs', method: 'GET'},
 
+		// 단골매장 조회
+		takeoutFavoriteStore: { path: '/cart/takeoutFavoriteStore', method: 'POST'},
+
 		// 장바구니 담긴 건수
 		getCartCount: { path: '/cart/getCartCount', method: 'GET'},
 		
@@ -837,6 +843,9 @@
 		// 쿠폰 다운로드
 		orderDownloadCoupon: { path: '/order/downloadCoupon', method: 'POST'},
 
+		// 쿠폰 등록
+		registerNoMemberCoupon: { path:'/order/registerCoupon', method: 'POST'},
+
 		// 기본배송지 수정
 		orderAddAddress: { path: '/order/orderAddAddress', method: 'POST' },
 
@@ -855,8 +864,14 @@
 		// 주문정보변경
 		ordReceptChange: { path: '/order/ordReceptChange', method: 'POST'},
 
-		// 쿠폰정보 적용 및 변경
+		// 회원 보유쿠폰 적용 및 변경
 		ordReceptChangeCoupon: { path: '/order/ordReceptChangeCoupon', method: 'POST'},
+
+		// 비회원 입력쿠폰 적용 및 변경
+		ordReceptChangeInputCoupon: { path: '/order/ordReceptChangeInputCoupon', method: 'POST'},
+
+		// 결제수단 변경 적용
+		ordReceptChangePayMethod: { path: '/order/ordReceptChangePayMethod', method: 'POST'},
 
 		// 포장박스, 쇼핑백 수량 변경
 		ordReceptChangeBag: { path: '/order/ordReceptChangeBag', method: 'POST'},
@@ -866,6 +881,12 @@
 
 		//주문단위 사은품
 		ordReceptChangeOrdUnit: { path: '/order/ordReceptChangeOrdUnit', method: 'POST'},
+		
+		// MO 이니시스 결제 데이터 조회
+		moInipayReq: { path: '/payment/moInipayReq', method: 'POST'},
+		
+		// MO 네이버 결제 데이터 조회
+		moNaverPay: { path: '/payment/moNaverPay', method: 'POST'},
 		
 		// wpay회원정보 조회
 		getMemberWPayInfo: { path: '/payment/getMemberWPayInfo', method: 'GET'},

@@ -1,16 +1,18 @@
 {{#each this.list}}
-
 	{{#xif ../type '===' 'returnExchange'}}
 		<div class="panel">
 			<div class="table_layout">
-				<div>주문번호</div>
-				<div class="num"><a href="javascript:;" onclick="showDetailView('{{claimTypeCode}}', '{{ordHistNo}}')" class="order_number_link">{{ordNo}}</a></div>
+				<div>
+					<p>주문일자<span class="num">{{dateFormat ordReceivedDt "YYYY-MM-DD"}}</span></p>
+					<p>주문번호<span class="num"><a href="javascript:;" onclick="showDetailView('{{claimTypeCode}}', '{{ordHistNo}}')" class="order_number_link">{{ordNo}}</a></span>
+					</p>
+				</div>
 				<div><button type="button" class="btn_sm_neutral type2" onclick="showDetailView('{{claimTypeCode}}', '{{ordHistNo}}')">상세 보기</button></div>
 			</div>
 			{{#if claimProdInfo}}
 
 				{{{prodPartial 'my.order.detail.order-list-prod' 'prodType' claimTypeCode 'info' this 'prodInfo' claimProdInfo 'typeName' '온라인주문'
-							   'statusCode' claimProdInfo.ordHistProdStatusCode 'ordAmt' claimProdInfo.finalOnlineSaleAmtPcur 'claimYn' 'Y'}}}
+							   'statusCode' claimProgressStatusCode 'ordAmt' claimProdInfo.finalOnlineSaleAmtPcur 'claimYn' 'Y'}}}
 			{{/if}}
 		</div>
 	{{/xif}}
@@ -18,17 +20,24 @@
 	{{#if (or (eq ../type 'online')(eq ../type 'cashReceipts'))}}
 		<div class="panel">
 			<div class="table_layout">
-				<div>주문번호</div>
-				<div class="num"><a href="javascript:;" onclick="showDetailView('{{../type}}', {{ordNo}})" class="order_number_link">{{this.ordNo}}</a></div>
+				<div>
+					<p>주문일자<span class="num">{{dateFormat ordReceivedDt "YYYY-MM-DD"}}</span></p>
+					<p>주문번호<span class="num"><a href="javascript:;" onclick="showDetailView('{{../type}}', {{ordNo}})" class="order_number_link">{{this.ordNo}}</a></span>
+					</p>
+				</div>
 				{{#xif onlineOrdProdInfo.ordDetailStatusCode '===' 'OrdHandlingComplete'}}
 					<div><button type="button" class="btn_sm_neutral type1" onclick="ordWriteReview({{ordNo}})">구매 리뷰 쓰기</button></div>
 				{{/xif}}
 
 				{{#xif ../type "===" "cashReceipts"}}
-					{{#xif cashReceiptIssueYn "===" "Y"}}
-						<div><button type="button" class="btn_sm_neutral type1" onclick="receiptIssue({{json this}})">발급 완료</button></div>
+					{{#xif cashReceiptIssuePossibleYn '===' 'Y'}}
+						{{#xif cashReceiptIssueYn "===" "Y"}}
+							<div><button type="button" class="btn_sm_neutral type1" disabled>발급 완료</button></div>
+						{{else}}
+							<div><button type="button" class="btn_sm_neutral type1" onclick="receiptIssue({{json this}})">발급 신청</button></div>
+						{{/xif}}
 					{{else}}
-						<div><button type="button" class="btn_sm_neutral type1" onclick="receiptIssue({{json this}})">발급 신청</button></div>
+						<div><button type="button" class="btn_sm_neutral type1" onclick="showCrditCardStatement({{json this}})">매출 전표</button></div>
 					{{/xif}}
 				{{/xif}}
 			</div>
@@ -46,8 +55,11 @@
 	{{#xif ../type '===' 'store'}}
 		<div class="panel">
 			<div class="table_layout">
-				<div>주문번호</div>
-				<div class="num"><a href="javascript:;" onclick="showDetailView('{{../type}}', {{ordNo}})" class="order_number_link">{{ordNo}}</a></div>
+				<div>
+					<p>주문일자<span class="num">{{dateFormat ordReceivedDt "YYYY-MM-DD"}}</span></p>
+					<p>주문번호<span class="num"><a href="javascript:;" onclick="showDetailView('{{../type}}', {{ordNo}})" class="order_number_link">{{this.ordNo}}</a></span>
+					</p>
+				</div>
 				{{#if (and (eq ../type "store")(eq onlineOrdProdInfo.ordHistProdStatusCode "ShipComplete"))}}
 					<div><button type="button" class="btn_sm_neutral type1">구매리뷰쓰기</button></div>
 				{{/if}}

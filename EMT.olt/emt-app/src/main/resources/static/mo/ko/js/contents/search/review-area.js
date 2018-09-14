@@ -17,7 +17,8 @@
 			this._keyword = '';
 
 			this._setEvents();
-		},
+		
+		},	
 
 		/** =============== Public Methods =============== */
 
@@ -62,6 +63,7 @@
 					limit: 5
 				}).done( function ( result ) {
 					this._draw( result );
+					
 				}.bind(this))
 				.fail( function ( xhr ) {
 					//
@@ -69,11 +71,15 @@
 		},
 
 		_draw: function ( data ) {
+			
+			var tempList = Array.prototype;
+			var cnt = tempList.length; 
+			
 			$.each(data.list, function(inx, review){
 				
 				review.prodReviewBodyText=
 				AP.common.replaceHtmlEntites(AP.common.removeHtmlTag(review.prodReviewBodyText).replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, ''));
-				 
+			
 			});
 			
 			var html = AP.common.getTemplate( 'search.review-list', data);
@@ -99,16 +105,30 @@
 					this._getData( nextOffset );
 				}.bind(this));
 			}
-
+			
 			//상세보기
 			this._$target.find( '.review_detail' ).on( 'click', function (e) {
-				e.preventDefault();
-				this._openDetail( data, $(e.currentTarget).data('prod-review-sn') );
+
+				this._api = AP.api.searchReviewList( null, { // 지금까지 조회된 모든 리뷰를 다시 조회해온다. 
+					toSearchFor: this._keyword,
+					prodReviewTypeCodes: this._$prodFilterCheck.is( ':checked' ) ? 'Pur' : '',
+					prodReviewSort: this._$sortSelect.val(),
+					offset: 0,
+					limit: (data.offset + data.limit) 
+				}).done( function ( result ) {
+				
+					this._openDetail( result, $(e.currentTarget).data('prod-review-sn') );
+					
+				}.bind(this))
+				.fail( function ( xhr ) {
+					//
+				}.bind(this));
+				
 			}.bind(this));
 		},
 
 		_openDetail: function ( data, prodReviewSn ) {
-			
+			 
 			AP.modal.full({
 				title: '리뷰/후기',
 				contents: {

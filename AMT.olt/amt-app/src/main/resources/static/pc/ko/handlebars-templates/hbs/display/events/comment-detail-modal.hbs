@@ -1,0 +1,27 @@
+<dl class="review_layer">
+	<dt class="review_header align_left">
+		<span class="writer">
+			<span>{{ this.memberId }}</span>
+			<small class="date">{{ dateFormat this.participatedDt }}</small>
+		</span>
+	</dt>
+	<dd class="review_cont">
+		<h3 class="h_title lare">{{ this.participantCommentTitle }}</h3>
+		{{#if this.eventCommentImgs.length}}
+			<div class="attach_img">
+				{{#each this.eventCommentImgs}}
+					<img src="{{ this.commentImgUrl }}" alt="">
+				{{/each}}
+			</div>
+		{{/if}}
+		<div class="cont">
+			{{ this.participantComment }}
+		</div>
+	</dd>
+</dl>
+
+{{#xif this.myCommentYn '==' 'Y'}}
+	<div class="page_btns">
+		<button type="button" class="btn_lg_bordered btn_modify" data-event-participant-sn="{{ this.eventParticipantSn }}">수정</button>
+	</div>
+{{/xif}}

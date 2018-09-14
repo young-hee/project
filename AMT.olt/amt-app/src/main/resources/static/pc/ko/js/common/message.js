@@ -20,7 +20,8 @@
 		DUPLICATE_SELECTED_PRODUCT: '이미 추가한 옵션입니다.',
 		APP_DOWNLOAD_LAYER_TITLE: 'APmall 앱으로 만나보세요!',
 		APP_DOWNLOAD_SENT_SMS : '앱 다운로드 문자를 발송하였습니다.<br>AP몰 앱 다운받고 즐거운 쇼핑되세요!',
-		INVALID_CELL_NUM : '유효한 휴대폰 번호가 아닙니다.'
+		INVALID_CELL_NUM : '유효한 휴대폰 번호가 아닙니다.',
+		BEFORE_BUY_MESSAGE : '로그인 후 구매하시면 쿠폰과 포인트로 알뜰한 쇼핑 가능하세요!'
 	};
 
 })( jQuery );

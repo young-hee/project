@@ -7,28 +7,33 @@
 		<dt>주문번호</dt>
 		<dd>{{this.ordInfo.ordNo}}</dd>
 	</dl>
-	{{#if this.ordInfo.ordAllCancelDt}}
-		<dl>
-			<dt>취소 처리일</dt>
-			<dd>{{dateFormat this.ordInfo.ordAllCancelDt "YYYY-MM-DD HH:mm:SS"}}</dd>
-		</dl>
-	{{/if}}
-	{{#if this.ordInfo.claimCompleteDt}}
-		<dl>
-			<dt>{{this.title}} 처리일</dt>
-			<dd>{{dateFormat this.ordInfo.claimCompleteDt "YYYY-MM-DD HH:mm:SS"}}</dd>
-		</dl>
-	{{/if}}
-	{{#if (eq this.type 'cashReceipts')}}
+	{{#xif this.type '!=' 'cashReceipts'}}
+		{{#if this.ordInfo.ordAllCancelDt}}
+			<dl>
+				<dt>취소 처리일</dt>
+				<dd>{{dateFormat this.ordInfo.ordAllCancelDt "YYYY-MM-DD HH:mm:SS"}}</dd>
+			</dl>
+		{{/if}}
+		{{#if this.ordInfo.claimCompleteDt}}
+			<dl>
+				<dt>{{this.title}} 처리일</dt>
+				<dd>{{dateFormat this.ordInfo.claimCompleteDt "YYYY-MM-DD HH:mm:SS"}}</dd>
+			</dl>
+		{{/if}}
+	{{else}}
 		<dl>
 			<dt>발급상태</dt>
-			{{#xif this.ordInfo.cashReceiptIssueYn '==' 'Y'}}
-				<dd><em>발급완료</em></dd>
+			{{#xif this.ordInfo.cashReceiptIssuePossibleYn '===' 'Y'}}
+				{{#xif this.ordInfo.cashReceiptIssueYn '===' 'Y'}}
+					<dd><em>발급완료</em></dd>
+				{{else}}
+					<dd><button class="btn_sm_neutral" type="button" onclick="reqCashReceipts({{this.ordInfo.ordSn}})">발급신청</button></dd>
+				{{/xif}}
 			{{else}}
-				<dd><<button class="btn_sm_neutral" type="button" onclick="reqCashReceipts({{this.ordInfo.ordSn}})">발급신청</button></dd>
+				<dd><button class="btn_sm_bordered" type="button">매출 전표</button></dd>
 			{{/xif}}
 		</dl>
-	{{/if}}
+	{{/xif}}
 </div>
 <div class="table_layout">
 	{{#xif this.type '==' 'store'}}
@@ -50,7 +55,11 @@
 			<dl>
 				<dt>온라인주문</dt>
 				<dd>
-					<em>{{ordStatusCheck 'online' ordInfo.ordDetailStatusCode}}</em>
+					{{#xif this.claimYn '===' 'Y'}}
+						<em>{{this.title}} {{ordStatusCheck 'returnExchange' ordInfo.claimProgressStatusCode}}</em>
+					{{else}}
+						<em>{{ordStatusCheck 'online' ordInfo.ordDetailStatusCode}}</em>
+					{{/xif}}
 					<!-- {{#if (or (eq ordInfo.ordDetailStatusCode 'Shipping') (eq ordInfo.ordDetailStatusCode 'OrdHandlingComplete'))}}
 						<a href="#" class="order_number_link">105712354700</a>
 					{{/if}} -->

@@ -1,5 +1,5 @@
 <!--결제수단-->
-<dl class="payment">
+<dl class="payment" th:if="${ordPayExList != null and #lists.size(ordPayExList) > 0 }">
 	<dt id="paymentArea">
 		<div class="title"><b>결제수단</b></div>
 		<button type="button"><span class="sr_only">더보기</span></button>
@@ -11,7 +11,7 @@
 		});
 
 		function ordUnitInit() {
-			var ordPayEx = /*[[${ordEx.ordHistEx.ordPayExList}]]*/ null;
+			var ordPayEx = /*[[${ordPayExList}]]*/ null;
 
 			if (ordPayEx.length > 0) {
 				var html = AP.common.getTemplate('order.complete-final-price-amt', {

@@ -46,6 +46,89 @@
 		        pageInfo.warning = setTimeout(warningEndOfSession, pageInfo.WARNING_TIME);
 		    });
 		});
+
+		var progressHtml = '<div id="progress2" style="top: 0;margin-top: 1050px;left: 0;margin-left: calc(50% - 5px);position: absolute;z-index: 10;opacity: 1;/* display: none; */">' +
+		'   <div class="loading_full_order">' +
+		'		<span>' +
+		'			<img alt="" src="/pc/ko/images/common/loading.gif">' +
+		'		</span>' +
+		'   </div>' +
+	 	'</div>';
+	 	
+		function leaver() {
+			$('body').append(progressHtml);
+			$('#progress2').fadeIn(500);
+		    $.post('/my/page/leaveId', function(data) {
+				$('#progress2').remove();
+		        /**
+		         * 동적으로 생성된 modal의 Node Element 접근하기
+		         * alert, confirm, info 모두 동일
+		         */
+
+		        var contents = new Object();
+		        contents.contents = data;
+		        var modal = AP.modal.info(contents);
+		        var $modalEl = modal.getElement(); //jquery object
+		        
+		        $modalEl.find('.layer_wrap.layer_md').addClass('modify_my_info');
+		        $modalEl.find('.layer_wrap.layer_md').addClass('layer_type2');
+
+				var outContent = $(".pointbox_out");
+				$("input[type='radio'][name=integrationCloseAcYn]").click(function(){
+					outContent.hide();
+					outContent.eq($("input[type='radio'][name=integrationCloseAcYn]").index(this)).show();
+				});
+				
+				$("input[name='reasonCode']").click(function () {
+				    $('#cause04 ~ .cause_box').css('display', ($(this).val() === 'C04') ? 'block':'none');
+				    $('#cause05 ~ .cause_box').css('display', ($(this).val() === 'C05') ? 'block':'none');
+				});		
+		        
+
+				$("#closeMember").click(function () {
+
+					if(!$('[name=closeAgree]').prop('checked')) {
+						AP.modal.alert( "탈퇴여부에 동의해 주세요." );
+						return;
+					}
+
+	        		if($("[name=reasonCode]:checked").length == 0) {
+		        		AP.modal.alert( "탈퇴사유를 체크 해주세요." );
+	        			return;
+	        		}
+	        		if($("#cause06:checked").length != 0 && $("#desc").val() == '') {
+		        		AP.modal.alert( "탈퇴사유를 입력 해주세요." );
+	        			return;
+	        		}
+	        		if(!$("[name=closePassword]").val()) {
+		        		AP.modal.alert( "비밀번호를 입력해주세요" );
+	        			return;
+	        		}
+	        		var closedAcDetailReason = $('.check_set input[name=reasonCode]:checked + label input[type=text]').val();
+	        		if(!closedAcDetailReason)
+	        			closedAcDetailReason = $.map($('.check_set input[name=reasonCode]:checked + label + div input:checkbox:checked + label'), function(n, i){return n.textContent;}).join(', ');
+					AP.api.closeMember({}, 
+					{
+					    reasonCode : $("[name=reasonCode]:checked").val(),
+					    closedAcDetailReason : closedAcDetailReason,
+					    integrationCloseAcYn : $("[name=integrationCloseAcYn]:checked").val(),
+					    closePassword : $("[name=closePassword]").val()
+					    	
+					}).done(function(data) {
+			            location.href = "/customer/leaveComplete";
+					}).fail(function(xhr, textStatus, errorThrown) {
+						if(xhr.errorCode == 'EAPI001') {
+		                    AP.modal.alert("비밀번호가 일치하지 않습니다.");
+						} else {
+		                    AP.modal.alert(xhr.errorMessage);
+						}
+					}).always(function() {
+		                //성공, 실패
+		            });
+				});
+		        
+		    });
+		}
 		
 		function logout(flag) {
 		

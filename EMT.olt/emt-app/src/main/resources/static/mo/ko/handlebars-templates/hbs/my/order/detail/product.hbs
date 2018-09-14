@@ -8,16 +8,16 @@
 {{/xif}}
 
 <div class="product">
-	<div class="check_wrap check_only" style="display: none">
-		{{#xif prod.ordHistProdTypeCode '===' 'BulkDc'}}
-			<input type="checkbox" name="goods" id="{{prod.bulkDcOnlineProdCode}}" value="{{prod.bulkDcOnlineProdCode}}" onclick="selectOnlineProd(this);">
-			<label for="{{prod.bulkDcOnlineProdCode}}"><span class="sr_only">선택</span></label>
-		{{else}}
-			<input type="checkbox" name="goods" id="{{prod.onlineProdCode}}" value="{{prod.onlineProdCode}}" onclick="selectOnlineProd(this);">
-			<label for="{{prod.onlineProdCode}}"><span class="sr_only">선택</span></label>
-		{{/xif}}
-	</div>
 	<div class="thumb">
+		<span class="check_wrap" style="display: none">
+			{{#xif prod.ordHistProdTypeCode '===' 'BulkDc'}}
+				<input type="checkbox" name="goods" id="{{prod.bulkDcOnlineProdCode}}" value="{{prod.bulkDcOnlineProdCode}}" onclick="selectOnlineProd(this);">
+				<label for="{{prod.bulkDcOnlineProdCode}}"><span class="sr_only">선택</span></label>
+			{{else}}
+				<input type="checkbox" name="goods" id="{{prod.onlineProdCode}}" value="{{prod.onlineProdCode}}" onclick="selectOnlineProd(this);">
+				<label for="{{prod.onlineProdCode}}"><span class="sr_only">선택</span></label>
+			{{/xif}}
+		</span>
 		<img src="{{prod.onlineProdImgUrl}}">
 	</div>
 	<div class="info">
@@ -30,9 +30,8 @@
 			<p class="name">{{prod.onlineProdName}}</p>
 		{{/xif}}
 
-		<p><strong class="num font_md">{{myOrdQty 'group' prod step claimYn}}</strong>개 /
-
-		<strong class="num font_md">{{currencyFormat prod.finalOnlineSaleAmtPcurSum}}</strong></p>
+		<p class="price"><span class="quantity">{{myOrdQty 'group' prod step type claimYn}}개</span> /
+		<strong class="eng">{{currencyFormat (condition (eq prod.ordHistProdStatusCode 'ProdCancel') prod.prodCancelAmtSum prod.finalOnlineSaleAmtPcurSum)}}</strong></p>
 	</div>
 	{{#xif prod.ordHistProdStatusCode '===' 'ProdCancel'}}
 		<div class="status">

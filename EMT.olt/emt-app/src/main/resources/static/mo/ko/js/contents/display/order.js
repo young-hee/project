@@ -179,7 +179,7 @@
 			//선택된 옵션들
 			this._selectedOptions = new AP.OrderSelectedOptions( this._$result )
 				.addListener( 'price-change', function (e) {
-					this._$totalCount.text( $B.string.format(e.totalCount, 2) );
+					this._$totalCount.text( $B.string.numberFormat(e.totalCount, 2) );
 					this._$totalPrice.text( $B.string.numberFormat(e.totalPrice) );
 				}.bind(this))
 				.addListener( 'remove-all', function (e) {
@@ -247,7 +247,19 @@
 					activityPointExchYn: (product.activityPointOnly == 'Y') ? product.activityPointOnly : activityPointExchYn
 				});
 			});
-
+			
+			//묶음 상품일 경우
+			if( this._selectedOptions._defaultModel.prodTypeCode == 'BulkFixedProd' ){
+				cartProdExPostList[0].cartBulkIncludedProdExList = []; 
+				$.each(this._selectedOptions._defaultModel.bulkIncludedProds, function(idx, obj){
+					cartProdExPostList[0].cartBulkIncludedProdExList.push({
+						 bulkDcIncludedProdGrpSn : obj.bulkDcIncludedProdGrpSn
+						,includedProdSn : obj.prodSn
+						,includedProdQty : obj.includedProdQty
+					});
+				});
+			}
+			
 			if ( products.length ) {
 				AP.api.buyNowCartProd( null, JSON.stringify({cartProdExPostList: cartProdExPostList})).done( function ( result ) {
 					AP.header.resetCartCount();
@@ -265,6 +277,7 @@
 		},
 
 		_addCartProd: function ( type, products ) {
+			
 			var defer = new $.Deferred(),
 				cartProdExPostList = [],
 				storePickupYn = ( type === 'takeout' ) ? 'Y' : 'N',//테이크아웃
@@ -280,7 +293,20 @@
 					activityPointExchYn: (product.activityPointOnly == 'Y') ? product.activityPointOnly : activityPointExchYn
 				});
 			});
-
+			
+			//묶음 상품일 경우
+			if( this._selectedOptions._defaultModel.prodTypeCode == 'BulkFixedProd' ){
+				cartProdExPostList[0].cartBulkIncludedProdExList = []; 
+				$.each(this._selectedOptions._defaultModel.bulkIncludedProds, function(idx, obj){
+					cartProdExPostList[0].cartBulkIncludedProdExList.push({
+						 bulkDcIncludedProdGrpSn : obj.bulkDcIncludedProdGrpSn
+						,includedProdSn : obj.prodSn
+						,includedProdQty : obj.includedProdQty
+					});
+					
+				});
+			}
+		
 			if ( products.length ) {
 				//장바구니 저장 api
 				AP.api.addCartProd( null, JSON.stringify({cartProdExPostList: cartProdExPostList})).done( function ( result ) {
@@ -325,7 +351,7 @@
 					} else if ( type == 'cart' ) {
 						// 장바구니 담기
 						this._addCartProd( 'cart', products ).done( function () {
-							AP.modal.confirm( AP.message.ADDED_CART_TO_CART_PAGE ).addListener( 'modal-close', function (e) {
+							AP.modal.confirm( AP.message.ADDED_CART_TO_CART_PAGE ).addListener( 'modal-before-close', function (e) {
 								if ( e.closeType === 'confirm' ) {
 									this._goToPage( 'cart', requiredLogin );
 								}

@@ -1,0 +1,167 @@
+	
+<div class="coupon_state">
+	{{#if this.myCouponListResult.length}}
+		<p>이달 <em>{{this.availCnt.availCnt}}</em>장의 쿠폰을 받으셨습니다.</p>
+	{{else}}
+		<p>이달 <em>{{this.availCnt.availCnt}}</em>장의 쿠폰을 모두 받으셨습니다.</p> <!-- 이달의 쿠폰을 모두 다운로드 받았을 경우 노출 : 쿠폰리스트 미노출 -->
+	{{/if}}
+	<a class="btn_mychk" href="/my/page/info/myPouch">마이파우치에서 확인하기</a>
+</div>
+<!-- 쿠폰 리스트 --> 
+{{#if this.myCouponListResult.length}}
+	<div class="section_boxing">
+		<div class="title_area">
+			<h4 class="h_title d2">등급혜택쿠폰</h4>
+		</div>
+		<ul class="couponzone_list">
+				{{#each this.myCouponListResult}}
+				{{#if this.couponBenefitTypeCode '==' 'ProdDc'}}
+				<li>
+					<div class="couponzone_box"><!-- 다운로드 완료 쿠폰 -->
+						<div class="coupon_bs">
+							<p>{{this.couponName}}</p>
+							{{#if this.prodDcCoupon.dcMethodCode '==' 'FlatPrice'}}
+								<p class="price">{{ numberFormat this.prodDcCoupon.flatPrice }}<span>원</span></p>
+							{{/if}}
+							{{#if this.prodDcCoupon.dcMethodCode '==' 'FixedRate'}}
+								<p class="price">{{ this.prodDcCoupon.dcRate '*' 100 }}<span>%</span></p>
+							{{/if}}
+							{{#if this.prodDcCoupon.dcMethodCode '==' 'FixedAmt'}}
+								<p class="price">{{ numberFormat this.prodDcCoupon.dcAmt }}<span>원</span></p>
+							{{/if}}
+							<p class="sub_txt">
+								{{#if this.prodDcCoupon.minPurProdPriceAssignYn '==' 'Y'}}
+									{{ numberFormat this.prodDcCoupon.minPurProdPrice }}원 이상 결제시 
+								{{/if}}
+								{{#if this.prodDcCoupon.maxDcAmtLimitYn '==' 'Y'}}
+									최대할인 {{ numberFormat this.prodDcCoupon.maxDcAmt }}원 
+								{{/if}}
+								<span>{{ dateFormat this.finalExpExpectedDt }}일까지 <em>({{this.dDay}}일남음)</em>
+								</span>
+							</p>
+						</div>
+						<button data-coupon-sn="{{ this.couponSn }}" id="downloadCoupon"><span class="ie_press"><img src="/pc/ko/images/coupon/btn_coupon_down.png" alt="쿠폰 다운로드"></span></button>
+					</div>
+				</li>
+				{{/if}}
+				{{#if this.couponBenefitTypeCode '==' 'CartDc'}}
+				<li>
+					<div class="couponzone_box"><!-- 다운로드 완료 쿠폰 -->
+						<div class="coupon_bs">
+							<p>{{this.couponName}}</p>
+							{{#if this.cartDcCoupon.dcMethodCode '==' 'FlatPrice'}}
+								<p class="price">{{ numberFormat this.cartDcCoupon.flatPrice }}<span>원</span></p>
+							{{/if}}
+							{{#if this.cartDcCoupon.dcMethodCode '==' 'FixedRate'}}
+								<p class="price">{{ this.cartDcCoupon.dcRate '*' 100 }}<span>%</span></p>
+							{{/if}}
+							{{#if this.cartDcCoupon.dcMethodCode '==' 'FixedAmt'}}
+								<p class="price">{{ numberFormat this.cartDcCoupon.dcAmt }}<span>원</span></p>
+							{{/if}}
+							<p class="sub_txt">
+								{{#if this.cartDcCoupon.sectionTypeCode '==' 'Amt'}}
+									{{ numberFormat this.cartDcCoupon.fromOrdAmt }}원 이상 결제시 
+								{{/if}}
+								{{#if this.cartDcCoupon.sectionTypeCode '==' 'Qty'}}
+									{{ numberFormat this.cartDcCoupon.fromOrdQty }}개 이상 구매시
+								{{/if}}
+								{{#if this.cartDcCoupon.maxDcAmtLimitYn '==' 'Y'}}
+									최대할인 {{ numberFormat this.cartDcCoupon.maxDcAmt }}원 
+								{{/if}}
+								<span>{{ dateFormat this.finalExpExpectedDt }}일까지 <em>({{this.dDay}}일남음)</em>
+								</span>
+							</p>
+						</div>
+						<button data-coupon-sn="{{ this.couponSn }}" id="downloadCoupon"><span class="ie_press"><img src="/pc/ko/images/coupon/btn_coupon_down.png" alt="쿠폰 다운로드"></span></button>
+					</div>
+				</li>
+				{{/if}}
+				{{#if this.couponBenefitTypeCode '==' 'MPlusN'}}
+				<li>
+					<div class="couponzone_box"><!-- 다운로드 완료 쿠폰 -->
+						<div class="coupon_bs">
+							<p>{{this.couponName}}</p>
+								<p class="price">
+									{{ this.mplusnCoupon.baseOrdQty }}+{{ this.mplusnCoupon.freeAwardQty }}
+									{{#if this.mplusnCoupon.couponMPlusNTypeCode '==' 'Same'}}
+										동일상품
+									{{/if}}
+									{{#if this.mplusnCoupon.couponMPlusNTypeCode '==' 'Different'}}
+										이종상품
+									{{/if}}
+								</p>
+
+							<p class="sub_txt">
+								{{#if this.mplusnCoupon.couponMPlusNTypeCode '==' 'Same'}}
+									동일상품 {{ this.mplusnCoupon.baseOrdQty }}개 구매시 {{ this.mplusnCoupon.freeAwardQty }}개 추가 증정
+								{{/if}}
+								{{#if this.mplusnCoupon.couponMPlusNTypeCode '==' 'Different'}}
+									이종상품 {{ this.mplusnCoupon.baseOrdQty }}개 구매시 {{ this.mplusnCoupon.freeAwardQty }}개 추가 증정
+								{{/if}}
+								<span>{{ dateFormat this.finalExpExpectedDt }}일까지 <em>({{this.dDay}}일남음)</em>
+								</span>
+							</p>
+						</div>
+						<button data-coupon-sn="{{ this.couponSn }}" id="downloadCoupon"><span class="ie_press"><img src="/pc/ko/images/coupon/btn_coupon_down.png" alt="쿠폰 다운로드"></span></button>
+					</div>
+				</li>
+				{{/if}}
+				{{#if this.couponBenefitTypeCode '==' 'CartAward'}}
+				<li>
+					<div class="couponzone_box"><!-- 다운로드 완료 쿠폰 -->
+						<div class="coupon_bs">
+							<p>{{this.couponName}}</p>
+							<p class="price">사은품 증정</p>
+							<p class="sub_txt">
+								{{#if this.cartAwardCoupon.sectionTypeCode '==' 'Amt'}}
+									{{ numberFormat this.cartAwardCoupon.fromOrdAmt }}원 이상 결제시 
+								{{/if}}
+								{{#if this.cartAwardCoupon.sectionTypeCode '==' 'Qty'}}
+									{{ numberFormat this.cartAwardCoupon.fromOrdQty }}개 이상 구매시
+								{{/if}}
+								<span>{{ dateFormat this.finalExpExpectedDt }}일까지 <em>({{this.dDay}}일남음)</em>
+								</span>
+							</p>
+						</div>
+						<button data-coupon-sn="{{ this.couponSn }}" id="downloadCoupon"><span class="ie_press"><img src="/pc/ko/images/coupon/btn_coupon_down.png" alt="쿠폰 다운로드"></span></button>
+					</div>
+				</li>
+				{{/if}}
+				{{#if this.couponBenefitTypeCode '==' 'Buy1Get'}}
+				<li>
+					<div class="couponzone_box"><!-- 다운로드 완료 쿠폰 -->
+						<div class="coupon_bs">
+							<p>{{this.couponName}}</p>
+							{{#if this.buyOneGetCoupon.buy1getDcRate '==' '1'}}
+								<p class="price">하나 더</p>
+							{{/if}}
+							{{#if this.buyOneGetCoupon.buy1getDcRate '!=' '1'}}
+								<p class="price">하나 반값</p>
+							{{/if}}
+							<p class="sub_txt">
+								<span>{{ dateFormat this.finalExpExpectedDt }}일까지 <em>({{this.dDay}}일남음)</em></span>
+							</p>
+						</div>
+						<button data-coupon-sn="{{ this.couponSn }}" id="downloadCoupon"><span class="ie_press"><img src="/pc/ko/images/coupon/btn_coupon_down.png" alt="쿠폰 다운로드"></span></button>
+					</div>
+				</li>
+				{{/if}}
+				{{#if this.couponBenefitTypeCode '==' 'ShipFeeFree'}}
+				<li>
+					<div class="couponzone_box"><!-- 다운로드 완료 쿠폰 -->
+						<div class="coupon_bs">
+							<p>{{this.couponName}}</p>
+							<p class="price">배송비 무료</p>
+							<p class="sub_txt">
+								<span>{{ dateFormat this.finalExpExpectedDt }}일까지 <em>({{this.dDay}}일남음)</em></span>
+							</p>
+						</div>
+						<button data-coupon-sn="{{ this.couponSn }}" id="downloadCoupon"><span class="ie_press"><img src="/pc/ko/images/coupon/btn_coupon_down.png" alt="쿠폰 다운로드"></span></button>
+					</div>
+				</li>
+				{{/if}}
+				{{/each}}
+		</ul>
+	</div>		
+
+{{/if}}

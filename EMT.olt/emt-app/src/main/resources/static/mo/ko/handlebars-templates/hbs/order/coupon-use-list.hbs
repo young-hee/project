@@ -1,26 +1,14 @@
-<div class="usage_details">
-	<p class="title">
-		<span class="flag coupon">{{ couponBenefitTypeCodeSwitch coupon.couponBenefitTypeCode }}</span>
-		{{#if (eq coupon.applyDcAmt 0)}}
-			<span>
-				{{#each coupon.couponAwardExList}}
-					{{#if (or (eq this.awardTgtCode 'Prod')(eq this.awardTgtCode 'SpPrice'))}}
-						<span class="price">[사은품 증정]{{ this.prodName }}</span>
-					{{/if}}
-					{{#if (eq this.awardTgtCode 'Point')}}
-						<span class="price">[뷰티포인트 증정]{{ this.applySavingPoint }}P</span>
-					{{/if}}
-					{{#if @first}}
-						<button type="button" name="removeCoupon" data-sn="{{../coupon.memberKeepingCouponSn}}"><em>취소</em></button></p>
-					{{/if}}
-					{{#if (and (gt coupon.couponAwardExList.length 1)(ne @last))}}
-						<br/>
-					{{/if}}
-				{{/each}}
-			</span>
-		{{else}}
-			-{{ currencyFormatDefault coupon.applyDcAmt '원' }}
-			<button type="button" name="removeCoupon" data-sn="{{coupon.memberKeepingCouponSn}}"><em>취소</em></button></p>
-		{{/if}}
-	<p class="desc">{{ coupon.couponName }}</p>
+<div class="coupon_order">
+	<div class="coupon_wrap">
+		<div class="info">
+			<div class="flag_wrap">
+				<span class="flag">온라인 전용</span>
+				<button type="button" class="btn_del" name="removeCoupon" data-sn="{{coupon.memberKeepingCouponSn}}"><span class="sr_only">삭제</span></button> <!-- //삭제 -->
+			</div>
+			<span class="coupon_name">{{ coupon.couponName }}</span>
+			<div class="price_wrap">
+				{{{ couponBenefitTypeCodeSwitchWithRemove coupon }}}
+			</div><!-- //price_wrap -->
+		</div><!-- //info -->
+	</div><!-- //coupon_wrap -->
 </div>

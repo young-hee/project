@@ -51,25 +51,26 @@
 	        ,termsAgreeYn : "true" 
 	      }).done(function ( result ) { 
 	          var data = result.planDisplayAwards; 
-	           
+	      
 	          //댓글 저장 후 '즉시당첨' 의 '당첨' 되었을 경우 
 	          if( data.eventWinStatus == 'Win' ){ 
 	            var awards = data.awards; 
-	            var prodObj = _.where(awards, {awardTgtCode : "Prod"}); 
-	            data.awards = prodObj; 
-	             
-	            //경품이 상품일 경우 배송지 입력 폼을 띄움 
-	            if( prodObj.length > 0 ){ 
-	              data.member = this._member; 
+	           
 	              AP.winningPop.open( this._eventTitle, data ); 
-	            }else{ 
-	              defer.resolve(); 
-	            } 
-	            this.dispatch( 'success' ); 
-	          } else { 
-	            defer.resolve(); 
-	            this.dispatch( 'success' ); 
+	           
+	          }else if(data.eventWinStatus === 'Participated'){ // 종료 후 결과 발표
+	        	 
+	        	  AP.modal.info({
+						title: '이벤트 참가',
+						contents: '이벤트에 참여 되었습니다. <br> 이벤트 종료 후 당첨 결과를 확인해 주세요.', 
+						confirmLabel: '확인',	
+					}).addListener( 'modal-close', function (e) {
+						if(e.closeType === 'close'){
+							this.close(); 
+						}
+					}.bind(this)); 
 	          } 
+	          
 	        }.bind(this)) 
 	        .fail(function ( xhr ) { 
 	          if ( xhr.errorCode === 'EAPI004' ) { 

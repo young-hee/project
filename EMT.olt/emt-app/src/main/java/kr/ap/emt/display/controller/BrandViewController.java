@@ -153,21 +153,28 @@ public class BrandViewController extends AbstractController {
     @PageTitle(title = "매장칭찬")
     public String store_review_write(Model model, String displayMenuId, String categoryType, String groupId, Long storeEvalSn) {
 
-		if(categoryType == null || "".equals(categoryType)) categoryType = "l_community";
-        
-        if(groupId == null || "".equals(groupId)) groupId = "l_store_location";
-        
-        if(storeEvalSn != null && storeEvalSn > 0) {
-        	StoreEvalEx storeEvalEx = storeApi.getStoreEval( storeEvalSn, getMemberSn());
-        	model.addAttribute("storeEvalEx", storeEvalEx);
-        }
-        
-        model.addAttribute("displayMenuId", displayMenuId);
-        model.addAttribute("categoryType", categoryType);
-        model.addAttribute("groupId", groupId);
-        model.addAttribute("storeEvalSn", storeEvalSn);
-        
-        return "display/brand-store-find-07";
+		if(isLoggedIn()) {
+			
+			if(categoryType == null || "".equals(categoryType)) categoryType = "l_community";
+	        
+	        if(groupId == null || "".equals(groupId)) groupId = "l_store_location";
+	        
+	        if(storeEvalSn != null && storeEvalSn > 0) {
+	        	StoreEvalEx storeEvalEx = storeApi.getStoreEval( storeEvalSn, getMemberSn());
+	        	model.addAttribute("storeEvalEx", storeEvalEx);
+	        }
+	        
+	        model.addAttribute("displayMenuId", displayMenuId);
+	        model.addAttribute("categoryType", categoryType);
+	        model.addAttribute("groupId", groupId);
+	        model.addAttribute("storeEvalSn", storeEvalSn);
+	        
+	        return "display/brand-store-find-07";
+	        
+		}else {
+			return "redirect:/login";
+		}
+		
     }
 	
 	/**
@@ -522,6 +529,7 @@ public class BrandViewController extends AbstractController {
 	
 	        SupportersRequesterInfo suppoters = bbsApi.getSupportersRequester(getMemberSn());
 	        
+	        model.addAttribute("displayMenuId", displayMenuId);
 	        model.addAttribute("suppoters", suppoters);
             
 	        return pageFileName;

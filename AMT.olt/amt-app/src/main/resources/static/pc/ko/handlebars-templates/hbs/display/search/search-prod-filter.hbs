@@ -1,0 +1,134 @@
+<style>
+	.aside_area.filter.search .filter_option input[type=radio]:checked + label {font-weight:700;color:#000;}
+</style>
+	<div class="category">
+		<ul>
+			{{#each this.displayCates}}
+			<li><a href="#" {{#xif @index '==' '0'}}class="on"{{/xif}} data-cate-sn="{{this.displayCateSn}}">{{this.displayCateName}}</a></li>
+			{{/each}}
+		</ul>
+	</div>
+	<fieldset class="form">
+		<legend class="sr_only">선택 옵션 선택</legend>
+		<button type="button" class="btn_lg_gradient init">선택 옵션 초기화</button>
+		<div class="filter_option">
+			<dl>
+				<dt>브랜드</dt>
+				<dd>
+					<ul class="leg_tgArea">
+						{{#each this.brands}}
+						<li><span class="check_wrap"><input type="checkbox" id="brand_{{calc @index '+' 1}}" data-brand-sn="{{this.brandSn}}"><label for="brand_{{calc @index '+' 1}}">{{this.brandName}}</label></span></li>
+						{{/each}}
+					</ul>
+					<button type="button" class="btn_src_more leg_btn">더보기</button>
+				</dd>
+			</dl>
+			{{#each this.addAttrs}}
+				{{#xif this.addAttrCode '!=' 'colorgroup'}}
+			<dl>
+				<dt data-attr-code="{{this.addAttrCode}}">{{this.addAttrName}}</dt>
+				<dd>
+					<ul class="leg_tgArea">
+                        <!--/*
+                        /*상품특징
+                        <li><span class="check_wrap"><input type="checkbox" id="feature_1"><label for="feature_1">호수 있어요</label></span></li>
+                        /*쇼핑찬스
+                        <li><span class="check_wrap"><input type="checkbox" id="chance_1"><label for="chance_1">뷰티포인트 적용</label></span></li>
+                        /*인기
+                        <li><span class="check_wrap"><input type="checkbox" id="popular_1"><label for="popular_1">최고인기</label></span></li>
+                        /*판매상태
+                        <li><span class="check_wrap"><input type="checkbox" id="saleStatus_1"><label for="saleStatus_1">최고인기</label></span></li>
+                        /*PA
+                        <li><span class="check_wrap"><input type="checkbox" id="pa_1"><label for="pa_1">+</label></span></li>
+                        /*피부타입
+                        <li><span class="check_wrap"><input type="checkbox" id="skintype_1"><label for="skintype_1">민감성</label></span></li>
+                        /*텍스처
+                        <li><span class="check_wrap"><input type="checkbox" id="texture_1"><label for="texture_1">크림</label></span></li>
+                        */-->
+                        {{#each this.addAttrVals}}
+                        <li><span class="check_wrap"><input type="checkbox" id="{{../addAttrCode}}_{{calc @index '+' 1}}" data-val-code="{{this.addAttrValCode}}"><label for="{{../addAttrCode}}_{{calc @index '+' 1}}">{{this.addAttrValName}}</label></span></li>
+                        {{/each}}
+						<!-- /*<li><span class="check_wrap"><input type="checkbox" id="feature_1"><label for="feature_1">호수 있어요</label></span></li>
+						<li><span class="check_wrap"><input type="checkbox" id="feature_2"><label for="feature_2">대용량 있어요</label></span></li>
+						<li><span class="check_wrap"><input type="checkbox" id="feature_3"><label for="feature_3">스페셜세트</label></span></li>
+						<li><span class="check_wrap"><input type="checkbox" id="feature_4"><label for="feature_4">옴므</label></span></li>
+						<li><span class="check_wrap"><input type="checkbox" id="feature_5"><label for="feature_5">Night 전용</label></span></li>*/-->
+					</ul>
+					<button type="button" class="btn_src_more leg_btn">더보기</button>
+				</dd>
+			</dl>
+				{{/xif}}
+			{{/each}}
+			
+			{{#each this.addAttrs}}
+				{{#xif this.addAttrCode '==' 'colorgroup'}}
+			<dl>
+				<dt>색상</dt>
+				<dd>
+					<ul class="colors">
+						{{#each this.addAttrVals}}
+						<li>
+							<span>
+								<input type="checkbox" id="{{../addAttrCode}}_{{calc @index '+' 1}}" data-val-code="{{this.addAttrValCode}}">
+								<label for="{{../addAttrCode}}_{{calc @index '+' 1}}" style="background-color:{{this.addAttrValCode}}">{{this.addAttrValName}}</label>
+							</span>
+						</li>
+						{{/each}}
+					</ul>
+				</dd>
+			</dl>
+				{{/xif}}
+			{{/each}}
+			
+			
+			<dl class="price">
+				<dt data-attr-code="price">가격</dt>
+				<dd>
+					<ul>
+						<li><span><input type="radio" name="price" id="price0" data-min="0" data-max="29999">
+							<label for="price0">3만원미만</label></span></li>
+						<li><span><input type="radio" name="price" id="price3" data-min="30000" data-max="49999">
+							<label for="price3">3~5만원</label></span></li>
+						<li><span><input type="radio" name="price" id="price5" data-min="50000" data-max="69999">
+							<label for="price5">5~7만원</label></span></li>
+						<li><span><input type="radio" name="price" id="price7" data-min="70000" data-max="-1">
+							<label for="price7">7만원</label></span></li>
+					</ul>
+					<div style="margin: 5px 0 5px 0";><span>직접입력</span></div>
+					<div class="direct_entry">
+						<span class="input_wrap"><input type="text" name="min" class="min" data-value="{{ this.value }}" placeholder="최소금액" number="number" data-msg="숫자만 입력해 주세요."></span>
+						<span class="input_wrap"><input type="text0" name="max" class="max" data-value="{{ this.value }}" placeholder="최대금액" number="number" data-msg="숫자만 입력해 주세요."></span>
+						<span><button class="btn_fix_gradient2 price_search" type="button">검색</button></span>
+					</div>
+				</dd>
+			</dl>
+		</div>
+	</fieldset>
+
+<script language="javascript" type="text/javascript">
+	// 갯수에 따른 더보기 토글 모션 관련 js
+	$('.leg_tgArea').each(function(){
+		var $legArea = $(this),
+			$legIp = $legArea.find('> li'),
+			$totalLeng = $legIp.length,
+			$showLeng = 5, // 노출 할 li 갯수
+			$showH = $legIp.height() * $showLeng,
+			$legMore = $legArea.parent().find('.leg_btn');
+
+		if ($totalLeng > $showLeng){
+			$legMore.show();
+			$legArea.css('height',$showH);
+			$legMore.on('click', function(){
+				var $moreThis = $(this);
+				$moreThis.toggleClass('on');
+				if ($moreThis.hasClass('on')){
+					$legArea.css('height','auto');
+				} else {
+					$legArea.css('height',$showH);
+				}
+			});
+		} else {
+			$legMore.hide();
+		}
+	}); 
+</script>

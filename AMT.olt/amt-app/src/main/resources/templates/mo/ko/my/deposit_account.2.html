@@ -131,6 +131,8 @@
 <th:block ap:fragment="layout-endpoint">
 <script>
 
+	var progress = '<div id="m-loading" class="loading" style="height:20px;"><img alt="로딩중" src="/mo/ko/images/common/loading_sm.gif"></div>';
+
 	$(document).on('click','.layer_dimmed, .btn_default_modal_confirm',function(){
 			$('.layer_popup').hide();
 	});
@@ -149,7 +151,7 @@
 		}).on( 'multiple-date-picker-change', function (e) {
 			console.log( e.type, e.date );
 			date = e.date;
-	    	$('#progress').show();
+			$('.btn_lg_more').before(progress);
 	    	pageNumber = 1;
 
 			AP.api.depositHitoryListFragment({}, {
@@ -175,7 +177,7 @@
 	        }).fail(function(xhr, textStatus, errorThrown) {
 	        	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
 	        }).always(function() {
-		    	$('#progress').hide();
+				$("#m-loading").remove();
 	            //성공, 실패
 	        });
 		});
@@ -183,7 +185,6 @@
 
 	$('select[name=depositType]').change(function() {
 
-		$('#progress').show();
 		var startDtVal = null;
 		var endDtVal = null;
 		if(date != null) {
@@ -191,6 +192,7 @@
 			endDtVal = date.endDate;
 		}
 		pageNumber = 1;
+		$('.btn_lg_more').before(progress);
 		AP.api.depositHitoryListFragment({}, {
 				pageNumber:1,
 				startDt:startDtVal,
@@ -213,7 +215,7 @@
 	    }).fail(function(xhr, textStatus, errorThrown) {
 	    	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
 	    }).always(function() {
-	    	$('#progress').hide();
+			$("#m-loading").remove();
 	        //성공, 실패
 	    });
 	});
@@ -225,6 +227,7 @@
 			startDtVal = date.startDate;
 			endDtVal = date.endDate;
 		}
+		$('.btn_lg_more').before(progress);
 		AP.api.depositHitoryListFragment({}, {
 				pageNumber:pageNumber,
 				startDt:startDtVal,
@@ -237,7 +240,7 @@
 	    }).fail(function(xhr, textStatus, errorThrown) {
 	    	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
 	    }).always(function() {
-	    	$('#progress').hide();
+			$("#m-loading").remove();
 	        //성공, 실패
 	    });
 
@@ -269,7 +272,7 @@
 					});
 
 	            }).fail(function(xhr, textStatus, errorThrown) {
-	            	AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	            	AP.modal.alert(xhr.errorMessage);
 	            }).always(function() {
 	                //성공, 실패
 	            });

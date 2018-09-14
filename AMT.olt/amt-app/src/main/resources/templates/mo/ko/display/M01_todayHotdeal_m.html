@@ -1,0 +1,63 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='hotdeal'">
+<body>
+<div ap:fragment="layout-contents">
+	<div class="ap_contents hot_deal title_two_depth">
+		<div class="section">
+			<th:block th:if="${not #lists.isEmpty(cornersMap.get('M01_todayHotdeal_m.1'))}">
+				<th:block th:each="corner : ${cornersMap.get('M01_todayHotdeal_m.1')}">
+					<th:block th:each="contents : ${corner.contents}">
+						<th:block th:if="${contents.menuPageCornerContentsId == 'M01_todayHotdeal_m.1.1'}">
+							<h3 th:if="${contents.imgUrl}">
+								<img th:src="${contents.imgUrl}" th:alt="${contents.text}">
+							</h3>
+							<h3 th:unless="${contents.imgUrl}">
+								<img ap:src="@{/images/display/img_visual_hotdeal.jpg}" alt="#싸다싸다싸다 #지금만이가격 투데이핫딜">
+							</h3>
+						</th:block>
+					</th:block>
+				</th:block>
+			</th:block>
+		</div>
+
+		<div class="hotdeal_current">
+			<div class="ui_remain_timer hotdeal_timer">
+				<i class="ico_clock"></i>
+				<span class="hour">00</span>:<span class="minute">00</span>:<span class="second">00</span>
+			</div>
+			<ul class="product_list_new"></ul>
+			<div class="loading" data-loading-first="300" data-loading-more="90" style="height: 300px">
+				<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+			</div>
+			<div class="section no_product" style="display: none">
+				<p class="text_center">더 좋은 상품을 준비중입니다.</p>
+			</div>
+		</div>
+
+		<div class="hotdeal_coming_soon">
+			<h4 class="tit_f_20"><strong>커밍쑨 상품</strong></h4>
+			<ul class="product_list_new gallery"></ul>
+			<div class="loading" data-loading-first="300" data-loading-more="90" style="height: 300px">
+				<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+			</div>
+			<div class="section no_product" style="display: none">
+				<p class="text_center">더 좋은 상품을 준비중입니다.</p>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script type="text/javascript" th:inline="javascript">
+		var corners = /*[[${cornersMap}]]*/
+			console.log( corners );
+
+		AP.hotdeal.init({
+			displayMenuId: AP.DISPLAY_MENU_ID
+		});
+	</script>
+</th:block>
+
+</body>
+</html>

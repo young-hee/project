@@ -151,14 +151,12 @@
     			<!--/* 예치금 환불 */-->
     			<div class="panel gray">
     				{{#each compareList}}
-    					{{#xif addedPayYn '===' 'N'}}
+    					{{#if (and (eq addedPayYn 'N')(ne payMethodTypeCode 'Point'))}}
     						<dl class="table_layout">
-								<dt><b>{{condition (eq payMethodTypeCode 'PG') payMethodNameBlang (payServiceCodeName payServiceCode
-									:
-								)}}</b></dt>
+								<dt><b>{{condition (eq payMethodTypeCode 'PG') payMethodNameBlang (payServiceCodeName payServiceCode)}}</b></dt>
 								<dd class="align_right">{{currencyFormatDefault (calc beforePayAmt '-' afterPayAmt) '원'}}</dd>
 							</dl>
-    					{{/xif}}
+    					{{/if}}
     				{{/each}}
     			</div>
     		</dd>

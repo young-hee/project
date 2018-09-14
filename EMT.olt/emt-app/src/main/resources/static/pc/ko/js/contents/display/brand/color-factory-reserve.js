@@ -101,6 +101,11 @@
 					this._$target.find( 'input[name=verifyCertification]' ).val( 'Y' );
 					this._$target.find( '.confirm' ).prop( 'disabled', true );
 					AP.modal.alert( '인증 되었습니다.' );
+					timer.stop(); 
+					
+					this._$target.find( '#reCertBtn' ).remove()
+					this._$target.find( '#certBtn' ).remove(); 
+					
 				} else {
 					AP.modal.alert( e.data.errorMessage );
 				}
@@ -127,10 +132,12 @@
 			// 국적
 			this._$target.find( 'select.nationality' ).on( 'change', function (e) {
 				var value = $( e.target ).val();
-				if ( value == 'KR' ) {
-					this._$target.find( 'input[name=alienYn]' ).val( 'Y' );
-				} else {
+				
+				if ( value === 'KR' ) {
 					this._$target.find( 'input[name=alienYn]' ).val( 'N' );
+					
+				} else {
+					this._$target.find( 'input[name=alienYn]' ).val( 'Y' );
 				}
 			}.bind( this ));
 

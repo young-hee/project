@@ -202,6 +202,42 @@ public class DisplayRestController extends AbstractController {
     }
 	
 	/**
+	 * 핫딜 상품목록
+	 * @param requestDisplay
+	 * @return
+	 */
+	@RequestMapping("/hotDealProdList")
+    @ResponseBody
+    public ResponseEntity<?> hotDealProdList( RequestDisplay requestDisplay) {
+        
+		HashMap<String, Object> result = new HashMap<String, Object>();
+
+		try {
+			OnlineProdList onlineProdList
+				= displayApi.getHotDealProdList(
+				false
+				, requestDisplay.getProdListUnit()
+				, requestDisplay.getProdSort()
+				, requestDisplay.getOffset()
+				, requestDisplay.getLimit()
+				, requestDisplay.getIncludeFilters()
+				, requestDisplay.getDisplayCateDepth()
+				, requestDisplay.getDisplayCate()
+				, requestDisplay.getBrand()
+				, requestDisplay.getFlag()
+				, requestDisplay.getAttr()
+				, requestDisplay.getPriceRange()
+			);
+			result.put("onlineProdList", onlineProdList);
+
+			return ResponseEntity.ok(result);
+		} catch (Exception e) {
+			result.put("errorData", e);
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+    }
+	
+	/**
 	 * 플래그상품순위 목록
 	 * @param requestDisplay
 	 * @return
@@ -713,6 +749,32 @@ public class DisplayRestController extends AbstractController {
 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
 		}
 	
+	}
+	
+	/**
+	 * 카테고리상품목록
+	 * 
+	 * @param requestDisplay
+	 * @return
+	 */
+	@RequestMapping({"/inDisplayCate", "/inDisplayCate/preview"})
+    @ResponseBody
+    public ResponseEntity<?> inDisplayCate(RequestDisplay requestDisplay) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+			OnlineProdList onlineProdList = displayApi.getInDisplayCateProdList(requestDisplay.getDisplayCate(),
+					requestDisplay.isExcludeSoldOut(), requestDisplay.getProdSort(), requestDisplay.getOffset(),
+					requestDisplay.getLimit(), requestDisplay.getIncludeFilters(), requestDisplay.getDisplayCateDepth(),
+					requestDisplay.getDisplayCate(), requestDisplay.getBrand(), requestDisplay.getFlag(),
+					requestDisplay.getAttr(), requestDisplay.getPriceRange());
+			result.put("onlineProdList", onlineProdList);
+		} catch (Exception e) {
+			result.put("errorData", e);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+		
+		return ResponseEntity.ok(result);
 	}
 	
     

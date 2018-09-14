@@ -49,6 +49,22 @@
 
 		/** =============== Public Methods =============== */
 		load: function ( regularEventSn ) {
+			
+			this._param = {
+				regularEventSn: regularEventSn
+			};
+			this._reviews_param = {
+				offset: 0,
+				limit: 15,
+				regularEventSn: regularEventSn,
+				reviewSort: 'HighScope'
+			};
+			this._requesters_param = {
+				offset: 0,
+				limit: 15,
+				regularEventSn: regularEventSn
+			};
+				
 			AP.api.getRegularEventDetail( null, {regularEventSn: regularEventSn} )
 				.done(function ( result ) {
 					this._done( regularEventSn, result );

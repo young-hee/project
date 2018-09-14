@@ -13,7 +13,7 @@
 			this._pagination = null;
 			this._param = {
 				offset: 0,
-				limit: 10
+				limit: 15
 			};
 			this._setEvent();
 		},
@@ -49,8 +49,18 @@
 		
 		_setEvent:function(){
 			
-			this._$target.find( '.event_control>ul>li' ).on('click', function () {
-				alert($(this).attr('id'));
+			this._$target.find( '.event_control>ul>li' ).on('click', function (e) {
+				if(!$(e.currentTarget).hasClass('current')){
+					this._$target.find( '.event_control>ul>li' ).removeClass('current');
+					$(e.currentTarget).addClass('current');
+					
+					if($(e.currentTarget).attr('id') == 'event_progress'){
+						this.load({ status: 'Progress' });
+					}else{
+						this.load({ status: 'End' });
+					}
+				}
+
 			}.bind( this ));
 
 		},

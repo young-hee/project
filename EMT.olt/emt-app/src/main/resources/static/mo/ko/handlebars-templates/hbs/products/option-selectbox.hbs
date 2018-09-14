@@ -32,7 +32,11 @@
 									<span class="sold_out"> [일시품절] </span>
 								{{/xif}}
 							</span>
-
+							{{!-- 사은품 --}}
+							{{#each this.giftProds}} 
+								<span class="gifts">[사은품] {{ this.prodName }} {{ this.qty }}개</span>
+							{{/each}}
+							
 							{{#xif this.saleDisplayStatus '==' 'OnSale'}}
 								{{#xif (availablePrices this.availablePrices 'doublePriceDisplayYn') '==' 'Y'}}
 									{{!-- 할인시 차액 가격 --}}

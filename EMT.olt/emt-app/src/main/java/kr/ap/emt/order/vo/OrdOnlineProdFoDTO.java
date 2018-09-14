@@ -15,6 +15,7 @@ public class OrdOnlineProdFoDTO {
     private String onlineProdCode;				 // 온라인상품코드
     private String onlineProdName;				 // 온라인상품명
 	private String onlineProdImgUrl;			 // 온라인상품 이미지
+	private String prodTypeCode;				//상품유형코드
 	private String prodImgUrl;
 	private String bulkDcOnlineProdCode;		 // 묶음할인온라인상품코드
 	private String bulkDcOnlineProdName;		 // 묶음할인온라인상품명
@@ -40,6 +41,7 @@ public class OrdOnlineProdFoDTO {
 	private List<OrdHistProdPromoAwardEx> ordHistProdPromoAwardExList;
 	private List<OrdHistProdAwardEx> ordHistProdAwardExList;
 	private StoreEx storeEx;
+	private BigDecimal prodCancelAmtSum = new BigDecimal(0); // 상품판매가(상품판매가 X 주문수량)
 
 	public void addOrdHistProdEx(OrdHistProdEx ordHistProdEx) {
 		setFinalOnlineSaleAmtPcurSumExchMembership(getFinalOnlineSaleAmtPcurSumExchMembership().add(new BigDecimal(ordHistProdEx.getExchMembership() * ordHistProdEx.getOrdQty())));
@@ -100,6 +102,14 @@ public class OrdOnlineProdFoDTO {
 
 	public void setOnlineProdImgUrl(String onlineProdImgUrl) {
 		this.onlineProdImgUrl = onlineProdImgUrl;
+	}
+
+	public String getProdTypeCode() {
+		return prodTypeCode;
+	}
+
+	public void setProdTypeCode(String prodTypeCode) {
+		this.prodTypeCode = prodTypeCode;
 	}
 
 	public String getProdImgUrl() {
@@ -296,5 +306,13 @@ public class OrdOnlineProdFoDTO {
 
 	public void setClaimQtySum(Integer claimQtySum) {
 		this.claimQtySum = claimQtySum;
+	}
+
+	public BigDecimal getProdCancelAmtSum() {
+		return prodCancelAmtSum;
+	}
+
+	public void setProdCancelAmtSum(BigDecimal prodCancelAmtSum) {
+		this.prodCancelAmtSum = prodCancelAmtSum;
 	}
 }

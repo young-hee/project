@@ -275,7 +275,7 @@
 				                    if (e.closeType == 'close' || e.closeType == 'cancel') {
 				                        location.href = returnUrl;
 				                    } else if (e.closeType == 'confirm') {
-				                        location.href = '/my/page/info/changeUserInfo';
+				                    	post_goto('/my/page/info/changeUserInfo', {'userPwdEc':$('[name=userPwdEc]').val()});
 				                    }
 				                    console.log(e.closeType); //close, confirm, cancel
 				                });
@@ -517,7 +517,7 @@
 					                    if (e.closeType == 'close' || e.closeType == 'cancel') {
 					                        location.href = returnUrl;
 					                    } else if (e.closeType == 'confirm') {
-					                        changePassword();
+					                    	post_goto('/my/page/info/changeUserInfo', {'userPwdEc':$('[name=userPwdEc]').val()});
 					                    }
 					                    console.log(e.closeType); //close, confirm, cancel
 					                });
@@ -911,7 +911,7 @@
 					            if (e.closeType == 'close' || e.closeType == 'cancel') {
 					                location.href = returnUrl;
 					            } else if (e.closeType == 'confirm') {
-					                changePassword();
+			                    	post_goto('/my/page/info/changeUserInfo', {'userPwdEc':$('[name=userPwdEc]').val()});
 					            }
 					            console.log(e.closeType); //close, confirm, cancel
 					        });

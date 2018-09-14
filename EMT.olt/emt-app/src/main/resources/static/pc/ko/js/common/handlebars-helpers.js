@@ -958,6 +958,64 @@
 		return html;
 	});
 
+	Handlebars.registerHelper("conditionSwitch", function(coupon) {
+		var html = '';
+
+		if (coupon != null && coupon.couponBenefitTypeCode != null) {
+			switch (coupon.couponBenefitTypeCode) {
+				case 'ProdDc' :
+					//상품할인쿠폰
+					//html = '상품쿠폰';
+					if (coupon.prodDcCoupon.maxDcAmt > 0) {
+						html = '최대' + coupon.prodDcCoupon.maxDcAmt + '원 활인';
+					}
+					break;
+				case 'CartDc' :
+					//장바구니할인쿠폰 - 정액/정률
+					//html = '장바구니쿠폰';
+					if (coupon.cartDcCoupon.fromOrdAmt > 0 ) {
+						html = coupon.cartDcCoupon.fromOrdAmt + '원 이상 구매 시';
+					} else if (coupon.cartDcCoupon.fromOrdQty > 0) {
+						html = coupon.cartDcCoupon.fromOrdQty + '개 이상 구매 시';
+					}
+					break;
+				case 'MPlusN' :
+					//M+N쿠폰
+					html = coupon.mplusnCoupon.baseOrdQty + ' + ' + coupon.mplusnCoupon.freeAwardQty;
+					break;
+				case 'Buy1Get' :
+					//Buy1Get쿠폰 - 100%  50%
+					switch (coupon.buyOneGetCoupon.buy1getDcRate) {
+						case 1 :
+							html = '하나 더';
+							break;
+						case 0.5 :
+							html = '하나 반값';
+							break;
+						default :
+							break;
+					}
+					break;
+				case 'CartAward' :
+					//장바구니증정쿠폰 - 사은품 증정
+					//html = '사은품증정쿠폰';
+					if (coupon.cartAwardCoupon.fromOrdAmt > 0 ) {
+						html = coupon.cartAwardCoupon.fromOrdAmt + '원 이상 구매 시';
+					} else if (coupon.cartAwardCoupon.fromOrdQty > 0) {
+						html = coupon.cartAwardCoupon.fromOrdQty + '개 이상 구매 시';
+					}
+					break;
+				case 'ShipFeeFree' :
+					//배송비무료쿠폰
+					html = '배송비무료쿠폰';
+					break;
+				default :
+					break;
+			}
+		}
+		return html;
+	});
+
 	Handlebars.registerHelper("depositSwitch", function(price, unit) {
 		var price = Number( price ),
 			result = $B.string.numberFormat( Math.abs(price) ),
@@ -988,15 +1046,14 @@
 					//사용:Pay
 					html = '예치금 사용';
 					break;
-				case 'PayCancel' :
-					//취소:PayCancel
-					html = '예치금 취소';
-					break;
 				case 'ManualSaving' :
 					html = '수동적립';
 					break;
 				case 'ManualDec' :
 					html = '수동차감';
+					break;
+				case 'PayCancel' :
+					html = '사용취소';
 					break;
 				default :
 					html = '';
@@ -1010,10 +1067,43 @@
 		return AP.common.replaceImagePath(src, width, height);
 	});
 
+
 	/***********************************************************************
 	 * 주문서 helper
 	 */
-	Handlebars.registerHelper("dcMethodCodeSwitch", function(value) {
+
+	/**
+	 * 진행주체코드
+	 */
+	Handlebars.registerHelper("marketingOrg", function(value) {
+		var html = '';
+
+		if (value != null) {
+			switch (value) {
+				case 'Online' :
+					html = '온라인전용';
+					break;
+				case 'IntergrationCampaign' :
+					html = '통합캠페인';
+					break;
+				case 'Co' :
+					html = '입점업체';
+					break;
+				case 'POS' :
+					html = 'POS';
+					break;
+				default :
+					html = '';
+					break;
+			}
+		}
+		return html;
+	});
+
+	/**
+	 * 보유한 쿠폰 목록
+	 */
+	Handlebars.registerHelper("couponBenefitTypeCodeSwitch", function(value) {
 		var html = '';
 
 		if (value != null && value.couponBenefitTypeCode != null) {
@@ -1058,7 +1148,7 @@
 					break;
 				case 'MPlusN' :
 					//M+N쿠폰
-					html = 'M + N';
+					html = value.mPlusNBaseOrdQty + ' + ' + value.mPlusNFreeAwardQty;
 					break;
 				case 'Buy1Get' :
 					//Buy1Get쿠폰 - 100%  50%
@@ -1075,7 +1165,213 @@
 					break;
 				case 'CartAward' :
 					//장바구니증정쿠폰 - 사은품 증정
-					html = '사은품 증정';
+					if (value.couponAwardExList > 0) {
+						$.each(value.couponAwardExList, function (index, item) {
+							if (item.awardTgtCode == 'Prod' || item.awardTgtCode == 'SpPrice') {
+								html += item.prodName +"/";
+							}
+							if (item.awardTgtCode == 'Point') {
+								html += item.applySavingPoint + "P";
+							}
+						});
+					} else {
+						html = '사은품 증정';
+					}
+					break;
+				case 'ShipFeeFree' :
+					//배송비무료쿠폰
+					html = '배송비 무료';
+					break;
+				default :
+					break;
+			}
+		}
+		return html;
+	});
+
+	/**
+	 * 적용한 쿠폰목록
+	 */
+	Handlebars.registerHelper("couponBenefitTypeCodeSwitchWithRemove", function(value) {
+
+		var html = "",
+			hb = '<span class="price">',
+			info = "",
+			ha = '</span>',
+			remove = '<a href="javascript:;" name="removeCoupon" data-sn="' + value.memberKeepingCouponSn + '"><em>[취소]</em></a>';
+
+		if (value != null && value.couponBenefitTypeCode != null) {
+			switch (value.couponBenefitTypeCode) {
+				case 'ProdDc' :
+					//상품할인쿠폰
+					switch (value.dcMethodCode) {
+						case 'FixedRate' :
+							//정률
+							info = value.dcRate * 100 + '% 할인';
+							break;
+						case 'FixedAmt' :
+							//정액
+							info = value.dcAmt + '원';
+							break;
+						case 'FlatPrice' :
+							//균일가
+							info = value.flatPrice + '원';
+							break;
+						default :
+							break;
+					}
+					html = hb + info + ha + remove;
+					break;
+				case 'CartDc' :
+					//장바구니할인쿠폰 - 정액/정률
+					switch (value.dcMethodCode) {
+						case 'FixedRate' :
+							//정률
+							info = value.dcRate * 100 + '% 할인';
+							break;
+						case 'FixedAmt' :
+							//정액
+							info = value.dcAmt + '원';
+							break;
+						case 'FlatPrice' :
+							//균일가
+							info = value.flatPrice + '원';
+							break;
+						default :
+							break;
+					}
+					html = hb + info + ha + remove;
+					break;
+				case 'MPlusN' :
+					//M+N쿠폰
+					info = value.mPlusNBaseOrdQty + ' + ' + value.mPlusNFreeAwardQty;
+					html = hb + info + ha + remove;
+					break;
+				case 'Buy1Get' :
+					//Buy1Get쿠폰 - 100%  50%
+					switch (value.buy1getDcRate) {
+						case 1 :
+							info = '하나 더';
+							break;
+						case 0.5 :
+							info = '하나 반값';
+							break;
+						default :
+							break;
+					}
+					html = hb + info + ha + remove;
+					break;
+				case 'CartAward' :
+					//장바구니증정쿠폰 - 사은품 증정
+					if (value.couponAwardExList.length > 0) {
+						$.each(value.couponAwardExList, function (index, item) {
+							if (item.awardTgtCode == 'Prod' || item.awardTgtCode == 'SpPrice') {
+								info = item.prodName;
+							}
+							if (item.awardTgtCode == 'Point') {
+								info = item.applySavingPoint + "P";
+							}
+							html += hb + info + ha;
+							if (index == 0) {
+								html += remove + "<br/>";
+							} else if (index != value.couponAwardExList.length - 1) {
+								html += "<br/>";
+							}
+						});
+					} else {
+						info = '사은품 증정';
+						html = hb + info + ha + remove;
+					}
+					break;
+				case 'ShipFeeFree' :
+					//배송비무료쿠폰
+					info = '배송비 무료';
+					html = hb + info + ha + remove;
+					break;
+				default :
+					break;
+			}
+		}
+		return html;
+	});
+
+	/**
+	 * 다운 가능한 쿠폰
+	 */
+	Handlebars.registerHelper("downloadCouponBenefitTypeCodeSwitch", function(value) {
+		var html = '';
+
+		if (value != null && value.couponBenefitTypeCode != null) {
+			switch (value.couponBenefitTypeCode) {
+				case 'ProdDc' :
+					//상품할인쿠폰
+					switch (value.prodDcCoupon.dcMethodCode) {
+						case 'FixedRate' :
+							//정률
+							html = value.prodDcCoupon.dcRate * 100 + '% 할인';
+							break;
+						case 'FixedAmt' :
+							//정액
+							html = value.prodDcCoupon.dcAmt + '원';
+							break;
+						case 'FlatPrice' :
+							//균일가
+							html = value.prodDcCoupon.flatPrice + '원';
+							break;
+						default :
+							break;
+					}
+					break;
+				case 'CartDc' :
+					//장바구니할인쿠폰 - 정액/정률
+					switch (value.cartDcCoupon.dcMethodCode) {
+						case 'FixedRate' :
+							//정률
+							html = value.cartDcCoupon.dcRate * 100 + '% 할인';
+							break;
+						case 'FixedAmt' :
+							//정액
+							html = value.cartDcCoupon.dcAmt + '원';
+							break;
+						case 'FlatPrice' :
+							//균일가
+							html = value.cartDcCoupon.flatPrice + '원';
+							break;
+						default :
+							break;
+					}
+					break;
+				case 'MPlusN' :
+					//M+N쿠폰
+					html = value.mplusnCoupon.mPlusNBaseOrdQty + ' + ' + value.mplusnCoupon.mPlusNFreeAwardQty;
+					break;
+				case 'Buy1Get' :
+					//Buy1Get쿠폰 - 100%  50%
+					switch (value.buyOneGetCoupon.buy1getDcRate) {
+						case 1 :
+							html = '하나 더';
+							break;
+						case 0.5 :
+							html = '하나 반값';
+							break;
+						default :
+							break;
+					}
+					break;
+				case 'CartAward' :
+					//장바구니증정쿠폰 - 사은품 증정
+					if (value.cartAwardCoupon.couponAwardExList > 0) {
+						$.each(value.cartAwardCoupon.couponAwardExList, function (index, item) {
+							if (item.awardTgtCode == 'Prod' || item.awardTgtCode == 'SpPrice') {
+								html += item.prodName +"/";
+							}
+							if (item.awardTgtCode == 'Point') {
+								html += item.applySavingPoint + "P";
+							}
+						});
+					} else {
+						html = '사은품 증정';
+					}
 					break;
 				case 'ShipFeeFree' :
 					//배송비무료쿠폰
@@ -1158,7 +1454,54 @@
 		return html;
 	});
 
+
 	/** MyPage - 나의 주문관리 *****************************************************************/
+
+	/**
+	 * PG정보 출력
+	 * pgPayEx.creditcardPayTypeCode
+	 * pgPayEx.instPeriod
+	 * pgPayEx.intFreeInstPeriod
+	 *
+	 * 일시불: 일시불
+	 * 일반할부: 2개월
+	 * 무이자할부: 무이자 2개월
+	 * 부분무이자할부: 12개월(무이자 6개월)
+	 *
+	 * @returns {String}
+	 */
+	Handlebars.registerHelper('creditcardPayType', function (type) {
+		var html = "";
+		switch (type.creditcardPayTypeCode) {
+			case 'LumpSum':
+				html = '일시불';
+			case 'Inst':
+				html = pgPayEx.instPeriod ? pgPayEx.instPeriod + '개월' : "";
+			case 'IntFreeInst':
+				html = '무이자' + pgPayEx.instPeriod ? pgPayEx.instPeriod + '개월' : "";
+			case 'PartIntFreeInst':
+				html = pgPayEx.instPeriod ? pgPayEx.instPeriod + '개월' : "" + pgPayEx.intFreeInstPeriod ? "(" + pgPayEx.intFreeInstPeriod + ")" : "";
+		}
+
+		return html;
+	});
+
+
+	/**
+	 * PG정보
+	 * @returns {String}
+	 */
+	Handlebars.registerHelper('prodCaseName', function (type) {
+		if (type != null) {
+			switch (type) {
+				case 'FreeGift': return '증정 사은품';
+				case 'Presale': return '예약판매상품';
+				case 'SpPriceSale': return '특가판매상품';
+			}
+		}
+
+		return '';
+	});
 
 	/**
 	 * 주문목록 경로
@@ -1199,7 +1542,7 @@
 	 * @returns {String}
 	 */
 	Handlebars.registerHelper('ordStatusCheck', function (type, condition) {
-		if (type === 'online') {
+		if (type === 'online' || type === 'cashReceipts') {
 			switch (condition) {
 				case 'OrdReceivedWaiting' :
 					return '주문접수';

@@ -25,7 +25,7 @@
 						<div class="left">
 							<dl>
 								<dt><span th:text="${session.LOGIN_USER.member.name.name1}">홍길동</span> 님의 뷰티포인트</dt>
-								<dd th:text="${#IntegUtil.toCommaNumber(point.rmnPt)}">20,000 P</dd>
+								<dd th:text="${#IntegUtil.toCommaNumber(point.remainBeautyPoint)}">20,000 P</dd>
 							</dl>
 							<div class="btns">
 								<button class="btn_md_neutral" onclick="location.href='/my/page/info/btpMobileCard'" type="button">멤버십 카드<i class="ico_plus"></i></button>
@@ -246,9 +246,6 @@
 
     								$("#giftPoint").change(function() {
     									var point = Number($(this).val());
-    									if(point > [[${point.rmnPt}]]) {
-    										$(this).val([[${point.rmnPt}]]);
-    									}
     									if(point%10 != 0) {
     										$(this).val(point - (point%10));
     									}
@@ -269,6 +266,24 @@
     								});
     								
     								$('#send').click(function() {
+
+    						        	if($('#giftPoint').val() == '0') {
+    										AP.modal.alert("선물할 뷰티포인트를 입력해 주세요.");
+    										$('#giftPoint').focus();
+    										return;
+    									}
+    									var point = Number($('#giftPoint').val());
+    									if(point > [[${point.remainBeautyPoint}]]) {
+    										AP.modal.alert("보유 포인트보다 더 많은 액수를 선물할 수 없습니다.");
+    										return;
+    									}
+    									if(point > 50000) {
+    										AP.modal.alert("포인트 선물하기는 1회 최대 50,000P까지 가능합니다.");
+    										return;
+    									}
+    									if(point%10 != 0) {
+    										$('#giftPoint').val(point - (point%10));
+    									}
 										var $form = $('form.step1');
         								var value = $('[name="changeMethod"]:checked').val();
         								if(value == '01') {
@@ -294,7 +309,10 @@
     						                        contents.confirmLabel = '비회원 선물하기';
     						                        AP.modal.info(contents).addListener('modal-close', function(e) {
     						                            if (e.closeType == 'confirm') {
-       						        			        	openModal(2);
+    						                            	if([[${session.LOGIN_USER.member.advanceRegistrationPhoneNo}]])
+       						        			        		openModal(3);
+    						                            	else
+       						        			        		openModal(2);
     						                            }
     						                        });
     						                    	

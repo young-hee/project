@@ -46,18 +46,23 @@
          */
         info: function ( options ) {
             if ( !_.isObject(options) ) options = {};
-
+            console.log("btnType1 : " + options.btnType);
             options.templateKey = 'common.modal-info-contents';
             options.templateModel = {
                 title: options.title || '',
                 contents: options.contents,
+                btnType: options.btnType,
+                confirmLayerLabel: options.confirmLayerLabel,
                 btnConfirm: !!options.confirmLabel,
                 btnCancel: !!options.cancelLabel,
                 confirmLabel: options.confirmLabel,
                 cancelLabel: options.cancelLabel
-            };
+            };          
             options.sizeType = options.sizeType? options.sizeType : 'M';
             options.containerClass = options.containerClass? 'modal_info ' + options.containerClass : 'modal_info';
+            //'system_alert' 클래스를 사용할 지 여부
+			if(options.noneSystemAlert)
+				options.containerClass = options.containerClass.replace('system_alert', '');
             options.wrapperClass = options.wrapperClass? options.wrapperClass : '';
             return this.open( options );
         },
@@ -81,11 +86,15 @@
                 title: '',
                 contents: options.contents,
                 textAlign: 'center',
-                btnConfirm: true,
+                btnConfirm: options.noneBtnConfirm ? false : true,
                 confirmLabel: options.confirmLabel || '확인'
             };
             options.sizeType = options.sizeType? options.sizeType : 'S';
             options.containerClass = options.containerClass? 'modal_alert ' + options.containerClass : 'modal_alert';
+            //'system_alert' 클래스를 사용할 지 여부
+			if(options.noneSystemAlert)
+				options.containerClass = options.containerClass.replace('system_alert', '');
+			options.wrapperClass = options.wrapperClass? options.wrapperClass : '';
             return this.open( options );
         },
 
@@ -256,9 +265,12 @@
 
             this._$win = $( window );
             this._$body = $( 'body' );
+            if( this._options.target )this._$body = $(this._options.target);
             this._$heightTarget = this._$body.find( '.ap_wrapper' );
             this._$modal = $( html ).siblings( '.modal_popup' );
             this._$iconClose = this._$modal.find( '.layer_close' );
+            if( this._options.hideCloseBtn )
+				this._$iconClose.hide();
             this._$btnConfirm = this._$modal.find( '.btn_default_modal_confirm' );
             this._$btnCancel = this._$modal.find( '.btn_default_modal_cancel' );
             this._$dimmed = $( '<div class="modal_dimmed ' + this.__uId__ + '"></div>' );

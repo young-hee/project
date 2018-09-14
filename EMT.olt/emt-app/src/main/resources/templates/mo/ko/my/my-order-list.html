@@ -27,7 +27,7 @@
 								</th:block>
 							</fieldset>
 							<!--/* 주문내역 */-->
-							<div class="order_list">
+							<div class="order_list v2">
 								<div id="order_list">
 								</div>
 								<ul class="loading" style="min-height: 200px;">
@@ -57,6 +57,8 @@
 
         <!--/* 하단 js등을 실행하는 마지막 영역 */-->
         <th:block ap:fragment="layout-endpoint">
+
+			<script language="JavaScript" src="https://iniweb.inicis.com/js/auth.js"></script>
 
 			<script ap:src="@{/handlebars-templates/compiled/my/order/orderList.js}"></script>
 			<script ap:src="@{/handlebars-templates/compiled/my/order/fullpage-cash-receipts.js}"></script>
@@ -260,7 +262,10 @@
 						formData.append("ordSn", ordSn);
 						AP.api.cashReceiptIssueRequest({}, formData).done(function(data) {
 							//성공
-							alert("success");
+							if ("success" == data.data) {
+								alert("success");
+							}
+
 						}).fail(function(e) {
 							AP.modal.alert(e.responseJSON.errorData.message);
 							//실패formData
@@ -304,6 +309,10 @@
 						AP.modal.alert(e);
 					}).always(function() {
 					});
+				}
+				
+				function showCrditCardStatement(data) {
+					showReceipt('https://iniweb.inicis.com/app/publication/apReceipt.jsp?noTid=' + data.pgTradeNo, '4', data.ordNo);
 				}
 
 				function SaveStatus() {

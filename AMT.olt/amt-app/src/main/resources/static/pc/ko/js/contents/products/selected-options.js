@@ -81,6 +81,7 @@
 				$el = this._$appendTarget.find( '.product_item' );
 			}
 
+			$el.next('.product_notice').remove();
 			$el.find( '.ui_spinner' ).spinner( 'clear' ).off( 'spinner-change' );
 			$el.remove();
 
@@ -192,10 +193,6 @@
 				$el = $( html );
 			
 			this._$appendTarget.append( $el );
-			/*
-			console.log( product.saleDisplayStatus );
-			console.log( this._$appendTarget );
-			*/
 			$el.find( '.ui_spinner' ).spinner().on( 'spinner-change', function (e) {
 				this._setProductValue( $el, product, e.value );
 				//구매수량 count

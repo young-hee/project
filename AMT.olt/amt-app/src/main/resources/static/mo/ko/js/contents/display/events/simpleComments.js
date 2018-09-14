@@ -1,37 +1,32 @@
 /**
- * 댓글 : 일반댓글
+ * 댓글 : 이벤트 댓글
  *
-*/
+ */
 ;(function ( $ ) {
 	'use strict';
 
-	/**
-	 * @param {Object}	options
-	 */
 	var SimpleComments = $B.Class.extend({
 
-		initialize: function ( $target, planDisplaySn, eventTitle ) {
+		/**
+		 * @param {jQuery}	$target
+		 * @param {Int}		planDisplaySn
+		 */
+		initialize: function ( $target, planDisplaySn, title ) {
 			this._$target = $( $target );
-			this._$total = this._$target.find( '.total_count' );
-			this._$input = this._$target.find( '.comment_input' );
 			this._$listArea = this._$target.find( '.comment_list' );
-			this._$saveBtn = this._$target.find( '.btn_save' );
-			this._$moreBtn = this._$target.find( '.btn_more' );
-			this._$loading = this._$target.find( '.loading' );
+			this._$participateBtn = this._$target.find( '.btn_participate' );
 
-			this._listApi = null;
-			this._offset = 0;
-			
 			this._planDisplaySn = planDisplaySn;
 			
-			this._eventTitle = eventTitle;
-
-			this._setPlugins();
+			this._title = title;
+			this._offset = 0;
+			this._limit = 20;
 			this._setEvents();
-			this._getListDate( true );
-			
-			this._member = null;
-			this._getLoginMemberInfo();
+			this._getListDate( 0 );
+		},
+		
+		getListData(){
+			this._getListDate( 0 );
 		},
 
 		/** =============== Public Methods =============== */
@@ -39,143 +34,131 @@
 
 		/** =============== Private Methods =============== */
 
-		_setPlugins: function () {
-			this._$input.inputLimits();
-		},
-		
-		//로그인 정보 가져오기
-		_getLoginMemberInfo : function(){
-			AP.api.getLoginMemberInfo()
-			.done(function(result){
-				this._member = result;
-			}.bind(this))
-			.fail(function(){
-				
-			}.bind(this));
-		},
-
 		_setEvents: function () {
+			this._writeModal = new AP.CommentWriteModal( this._planDisplaySn, this._title )
+				.addListener( 'success', function (e) {
+					//this._getListDate( 0 );
+				}.bind(this));
+			/*
 			//댓글 등록
-			this._$saveBtn.on( 'click', function (e) {
-				var value = this._$input.val();
-
-				if ( value ) {
-					AP.login().done( function () {
-						this._createComment( value );
-					}.bind(this));
-				}
-			}.bind(this));
-
-			//본인 댓글 삭제
-			this._$listArea.on( 'click', '.btn_delete', function (e) {
+			this._$participateBtn.on( 'click', function (e) {
 				AP.login().done( function () {
-					this._deleteComment( $(e.currentTarget).data('event-participant-sn') );
+					this._writeModal.open();
 				}.bind(this));
 			}.bind(this));
-
-			//더보기
-			this._$moreBtn.on( 'click', function (e) {
-				this._getListDate();
+			*/
+			
+			//참여하기
+			this._$participateBtn.on( 'click', function (e) {
+				AP.login().done( function () {
+					this._writeModal.participation();
+				}.bind(this));
 			}.bind(this));
+			
+			$('.input_wrap>input:text').on( 'click', function (e) {
+				AP.login().done( function () {
+					this._writeModal.open();
+				}.bind(this));
+			}.bind(this));
+			
+		},
+		
+		_openImg: function ( data ) {
+			var modal = AP.modal.full({
+				contents: {
+					templateKey: 'display.events.comment-detail-modal',
+					templateModel: data
+				},
+				containerClass: 'bg_bk'
+			})
 		},
 
-		_createComment: function ( str ) {
+		//댓글 삭제
+		_delete: function ( eventParticipantSn ) {
 			var defer = new $.Deferred();
-			AP.api.planDisplaySimpleParticipated( null, {
-				 planDisplaySn : this._planDisplaySn
-				,participantComment: str
-				,termsAgreeYn : "true"
-			}).done( function ( result ) {
-				var data = result.planDisplayAwards;
-				//댓글 저장 후 '즉시당첨' 의 '당첨' 되었을 경우
-				if( data.eventWinStatus == 'Win' ){
-					var awards = data.awards;
-					var prodObj = _.where(awards, {awardTgtCode : "Prod"});
-					data.awards = prodObj;
-					
-					//경품이 상품일 경우 배송지 입력 폼을 띄움
-					if( prodObj.length > 0 ){
-						data.member = this._member;
-						AP.winningPop.open( this._eventTitle, data );
-					}
-					AP.modal.alert( '입력이 완료되었습니다.' );
-				} else {
-					defer.resolve();
-					AP.modal.alert( '입력이 완료되었습니다.' );
-				}
-				this._getListDate( true );
-			}.bind(this)).fail( function ( xhr ) {
-				if ( xhr.errorCode === 'EAPI004' ) {
-					AP.login({trigger: true});
-				} else if( AP.message[xhr.errorCode] != undefined ){
-					AP.modal.alert( AP.message[xhr.errorCode] );
-				} else {
-					AP.modal.alert( xhr.errorMessage );
-				}
-			}.bind(this));
-		},
 
-		_deleteComment: function ( eventParticipantSn ) {
 			AP.api.deleteParticipated( null, {
-				planDisplaySn: this._planDisplaySn,
-				eventParticipantSn: eventParticipantSn
-			}).done( function ( result ) {
-				this._getListDate( true );
-				AP.modal.alert( '댓글이 삭제 되었습니다.' );
-			}.bind(this)).fail( function ( xhr ) {
-				if ( xhr.errorCode === 'EAPI004' ) {
-					AP.login({trigger: true});
-				}else if( AP.message[xhr.errorCode] != undefined ){
-					AP.modal.alert( AP.message[xhr.errorCode] );
-				}
-			}.bind(this));
+					planDisplaySn: this._planDisplaySn,
+					eventParticipantSn: eventParticipantSn
+				})
+				.done(function ( result ) {
+					this._getListDate( 0 );
+				}.bind(this))
+				.fail(function ( xhr ) {
+					if ( xhr.errorCode === 'EAPI004' ) {
+						AP.login({trigger: true});
+					} else {
+						AP.modal.alert( AP.message.API_SAVE_ERROR );
+					}
+				}.bind(this));
+
+			return defer.promise();
 		},
 
 		//댓글 목록 데이타 가져오기
-		_getListDate: function ( reset ) {
-			if ( reset ) this._offset = 0;
+		_getListDate: function ( offset ) {
 			if ( this._listApi ) this._listApi.abort();
 
 			this._listApi = AP.api.planDisplayComments( null, {
 				planDisplaySn: this._planDisplaySn,
-				offset: this._offset
+				offset: offset
 			}).done( function ( result ) {
 				var data = result.eventParticipantResult;
-				this._offset = data.offset + data.eventParticipants.length;
 				this._drawList( data );
-
-				if ( data.offset === 0 ) {
-					this._$input.val( '' );
-					this._$listArea.scrollTop( 0 );
-					if ( this._scrollEnd ) this._scrollEnd.enable();
-				}
 			}.bind(this));
 		},
 
 		_drawList: function ( data ) {
+			var totalCnt = data.totalCount;
 			var html = AP.common.getTemplate( 'display.events.simple-comment-list', data );
-			
-			if ( data.offset === 0 ) {
-				this._$listArea.html( html );
-			} else {
-				this._$listArea.find( '.inner_loading' ).remove();
+			this._$target.find( '.comment_total .num' ).text(totalCnt);
+			//remove events
+			this._$listArea.find( '.pagination' ).paging( 'clear' ).off( 'paging-change' );
+			this._$listArea.find( '.btn_detail' ).off( 'click' );
+
+			if(this._offset == 0){
+				this._$listArea.html( html );				
+			}else{
 				this._$listArea.append( html );
 			}
-			
-			this._$loading.hide();
-			this._$total.show().find( 'span' ).text( data.totalCount );
 
-			if ( this._offset < data.totalCount ) {
-				this._$moreBtn.html( '<span>더보기 (<em>' + this._offset + '</em>/' + data.totalCount + ')</span>' ).show();
+			this._offset += this._limit;
+			if(totalCnt > this._offset){
+				this._$target.find( '.btn_lg_more' ).show();
+			}else{
+				this._$target.find( '.btn_lg_more' ).hide();				
 			}
-			if ( this._scrollEnd && this._offset >= data.totalCount ) {
-				this._scrollEnd.disable();
-			}
+			this._$listArea.find( '.pagination' ).paging({
+				offset: data.offset,
+				limit: data.limit,
+				totalCount: data.totalCount
+			}).on( 'paging-change', function (e) {
+				this._getListDate( e.offset );
+			}.bind(this));
+
+			this._$target.find( '.btn_lg_more' ).on( 'click', function (e) {				
+				this._getListDate( this._offset );
+			}.bind(this));
 			
-			var memberId = this._$target.find('#memberId').val();
-			if( memberId != '' ){
-				this._$input.attr('placeholder', memberId.substring(0 , memberId.length -2) + '**' + '님 댓글을 남겨보세요.');
-			}
+			this._$listArea.find( '.btn_detail' ).on( 'click', function (e) {
+				var eventParticipantSn = $( e.currentTarget ).data( 'event-participant-sn' ),
+					selectedData = _.findWhere( data.eventParticipants, {eventParticipantSn: eventParticipantSn} );
+					console.log(selectedData);
+				this._openImg( selectedData );
+			}.bind(this));
+			
+			this._$listArea.on( 'click', '#btn_modify', function (e) {
+			//this._$listArea.find( '#btn_modify' ).on( 'click', function (e) {
+				var eventParticipantSn = $( e.currentTarget ).data( 'event-participant-sn' ),
+					selectedData = _.findWhere( data.eventParticipants, {eventParticipantSn: eventParticipantSn} );
+				this._writeModal.modify( selectedData );
+			}.bind(this));
+			
+			this._$listArea.on( 'click', '#btn_delete', function (e) {
+				//this._$listArea.find( '#btn_modify' ).on( 'click', function (e) {
+				var eventParticipantSn = $( e.currentTarget ).data( 'event-participant-sn' );
+				this._delete( eventParticipantSn );
+			}.bind(this));
 		}
 
 	});

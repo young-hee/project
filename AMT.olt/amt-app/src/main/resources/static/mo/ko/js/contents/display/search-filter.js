@@ -7,8 +7,9 @@
 		'use strict';
 
 	var SearchFilter = $B.Class.extend({
-		initialize: function ( data ) {
+		initialize: function ( component, data ) {
 			this._$modal = null;
+			this._component = component;
 			this._searchFilterData = data;
 
 			this._searchFilterData.addAttrs.push({
@@ -87,25 +88,29 @@
 			// other
 			data = data.addAttrs;
 
-			var addAttrs = '';
+			var attrString = '';
 			for ( var i = 0; i < data.length - 1; ++i ) {
-				var attrStr = data[i].addAttrCode + '=';
 				_.each(data[i], function ( value, key ) {
 					if ( key == 'addAttrVals' ) {
 						for ( var j = 0; j < value.length; j++ ) {
 							if ( value[j].selected ) {
-								attrStr += value[j].addAttrValCode + ','
+								attrString += data[i].addAttrCode + '=' + value[j].addAttrValCode + ','
 							}
 						}
 					}
 				});
-				if ( attrStr.substr( -1 ) != '=' ) {
-					addAttrs += attrStr;
-				}
 			}
-			param.attr = addAttrs.substring( 0, addAttrs.length - 1 );
+			param.attr = attrString.substring( 0, attrString.length - 1 );
 
 			return param;
+		},
+
+		reset: function () {
+			this._dataReset();
+			this._$modal.find( '.ui_accordion dt' ).addClass( 'on' );
+			this._$modal.find( '.ui_accordion' ).accordion( 'clear' ).accordion();
+			this._$modal.find( '.btn' ).removeClass( 'on' );
+			this._$modal.find( 'input' ).val( '' );
 		},
 
 		/** =============== Private Methods ============== */
@@ -121,14 +126,6 @@
 			this._$modal.find( '.price' ).find( 'input' ).off( 'focusin focusout' );
 		},
 
-		_reset: function () {
-			this._dataReset();
-			this._$modal.find( '.ui_accordion dt' ).addClass( 'on' );
-			this._$modal.find( '.ui_accordion' ).accordion( 'clear' ).accordion();
-			this._$modal.find( '.btn' ).removeClass( 'on' );
-			this._$modal.find( 'input' ).val( '' );
-		},
-
 		_dataReset: function () {
 			for ( var i = 0; i < this._searchFilterData.addAttrs.length; ++i ) {
 				this._searchFilterData.addAttrs[i].visible = true;
@@ -140,7 +137,7 @@
 					this._searchFilterData.addAttrs[i].max = '';
 				}
 			}
-			AP.category.searchFilterData = this._searchFilterData;
+			AP[this._component].searchFilterData = this._searchFilterData;
 		},
 
 		_setEvent: function () {
@@ -176,7 +173,7 @@
 				var $btn = $( e.currentTarget );
 				if ( $btn.hasClass( 'reset' )) {
 					// 초기화
-					this._reset();
+					this.reset();
 				} else if ( $btn.hasClass( 'apply' )) {
 					// 적용
 					this._apply();
@@ -289,7 +286,7 @@
 				max = parseInt( this._$modal.find( '.max' ).val().replace( /,/g, '' ) || '' );
 
 			if ( this._comparePrice( min, max )) {
-				AP.category.searchFilterData = this._searchFilterData;
+				AP[this._component].searchFilterData = this._searchFilterData;
 				this._dispatch( false );
 				this._close();
 			}
@@ -297,7 +294,7 @@
 
 		_dispatch: function () {
 			this.dispatch( 'apply-search-filter', {
-				filterData: AP.category.searchFilterData
+				filterData: AP[this._component].searchFilterData
 			});
 		}
 	});

@@ -24,7 +24,6 @@ configure(subprojects) {
     apply plugin: "org.springframework.boot"
 
 	repositories {
-		//mavenLocal()
 		maven { url apNexus }
 	}
 
@@ -91,7 +90,11 @@ configure(subprojects) {
             task "minify-js-${prefix}-${fileName}"(type: MinifyJsTask, group: 'minifyJs') {
                 source = "${buildDir}/${prefix}/${fileName}-all.js"
                 dest = "${buildDir}/${prefix}/${fileName}-all-min.js"
-                closure { warningLevel = 'QUIET' }
+                closure {
+					warningLevel = 'QUIET'
+					compilerOptions.languageIn = 'ECMASCRIPT6'
+					compilerOptions.languageOut = 'ECMASCRIPT5'
+				}
             }
         }
 

@@ -4,7 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.EnumUtils;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,8 @@ import kr.ap.comm.support.common.SnsEntity;
 import kr.ap.comm.support.constants.APConstant;
 import kr.ap.comm.support.constants.ProductSaleDisplayStatus;
 import net.g1project.ecp.api.exception.ApiException;
+import net.g1project.ecp.api.model.sales.product.AttributeInfo;
+import net.g1project.ecp.api.model.sales.product.AttributeValueInfo;
 import net.g1project.ecp.api.model.sales.product.OnlineProdInfo;
 import net.g1project.ecp.api.model.sales.product.PriceInfo;
 import net.g1project.ecp.api.model.sales.product.ProdReviewCountPerResItem;
@@ -50,6 +54,7 @@ public class ProductViewController extends AbstractController{
     @PageTitle(title = "상품상세")
 	public String productDetail(Model model, RequestReview requestReview, String previewKey, String onlyProd) {
 		OnlineProdInfo onlineProdInfo = productApi.getOnlineProduct( requestReview.getOnlineProdSn(), requestReview.getProdSn(), getMemberSn(), onlyProd);
+		List<AttributeValueInfo> awards = new ArrayList<>(); //어워드 정보
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 		ProductInfo maxProd = null;
 		boolean isMaxRate = false;
@@ -73,6 +78,17 @@ public class ProductViewController extends AbstractController{
 				if( curRate > maxRate ) {
 					maxProd = p;
 					isMaxRate = true;
+				}
+			}
+			
+			//product > attribute의 어워드 정보를 FO 에서 렌더링 하기 편하도록 수정
+			for (AttributeInfo attr : p.getAttributes()) {
+				if( "award".equalsIgnoreCase(attr.getAddAttrCode()) ) {
+					for (AttributeValueInfo valueInfo : attr.getAttrVals()) {
+						if( !"".equals(valueInfo.getAddAttrImg()) ) {
+							awards.add(valueInfo);
+						}
+					}
 				}
 			}
 			
@@ -184,6 +200,7 @@ public class ProductViewController extends AbstractController{
     			}
 			}
     	}
+    	model.addAttribute("awards", awards);
     	model.addAttribute("isMaxRate", isMaxRate);
     	model.addAttribute("maxProd", maxProd);
     	model.addAttribute("maxCountPerScope", maxCountPerScope);
@@ -299,6 +316,7 @@ public class ProductViewController extends AbstractController{
      */
     @GetMapping("/reviewList")
     public String reviewList(Model model, RequestReview requestReview) throws ParseException {
+    	List<Map<String, Object>> maxSurvey = new ArrayList<>();
     	if( requestReview.getProdReviewUnit() == null ) {
     		requestReview.setProdReviewUnit("OnlineProd");
     	}
@@ -331,19 +349,24 @@ public class ProductViewController extends AbstractController{
 			}
     		
     		//설문요약 
-    		ProdReviewSurveySummary maxSurvey = null;
     		for (ProdReviewSurveySummary tempSurvey : reviewStats.getProdReviewSurveys()) {
+    			Map<String, Object> map = new HashMap<>();
     			ProdReviewCountPerResItem resItem  = null;
     			for (ProdReviewCountPerResItem tempItem : tempSurvey.getCountPerResItems() ) {
-    				
+    				if( resItem == null ) {
+    					resItem = tempItem;
+    				}
+    				if( resItem.getCount() < tempItem.getCount() ) {
+    					resItem = tempItem;
+    				}
     			}
-    			/*
-    			if(maxSurvey == null) {
-    				maxSurvey = tempSurvey;
-    			} else if( tempSurvey.getPercent() >  maxCountPerScope.getPercent() ){
-    				maxSurvey = tempSurvey;
+    			if( resItem != null ) {
+    				map.put("questionHeader", tempSurvey.getQuestionHeader());
+    				map.put("responseBodyText", resItem.getResponseBodyText());
+    				map.put("count", resItem.getCount());
+    				map.put("rate", resItem.getRate());
+    				maxSurvey.add(map);
     			}
-    			*/
     		}
     	}
     	
@@ -359,6 +382,7 @@ public class ProductViewController extends AbstractController{
     	
     	model.addAttribute("maxCountPerScope", maxCountPerScope);
     	model.addAttribute("reviewStats", reviewStats);
+    	model.addAttribute("maxSurvey", maxSurvey);
     	model.addAttribute("purchaseReviewStats", purchaseReviewStats);
     	
 		return "product/review-list";

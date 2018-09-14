@@ -24,30 +24,31 @@
 			<dl>
 				<dt>상호</dt>
 				<dd>{{ storeSelect.storeTypeName }}</dd>
-				{{#if (ne storeSelect.phoneNo2 null) }}
+
 				<dt>연락처</dt>
-				<dd>{{ storeSelect.phoneNo2.phoneNo }}</dd>
+				{{#if (or (ne storeSelect.phoneNo2 null)(ne storeSelect.phoneNo2.phoneNo null) ) }}
+					<dd>{{ storeSelect.phoneNo2.phoneNo }}</dd>
+				{{else}}
+					<dd>{{ storeSelect.phoneNo1.phoneNo }} </dd>
 				{{/if}}
-				{{#if (ne storeSelect.address null) }}
+
 				<dt>사업장소재지</dt>
-				<dd>{{ storeSelect.address.address1 }} {{ storeSelect.address.address2 }}</dd>
+				{{#if (or (ne storeSelect.address null)(ne storeSelect.address.address1 null) ) }}
+					<dd>{{ storeSelect.address.address1 }} {{ storeSelect.address.address2 }}</dd>
 				{{/if}}
-				{{#if (ne storeSelect.brn null) }}
+
 				<dt>통신판매신고번호</dt>
-				<dd>
-					<a th:href="http://www.ftc.go.kr/bizCommPop.do?wrkr_no={{ storeSelect.brn }}&apv_perm_no=" target="_blank">사업자정보확인</a>
-				</dd>
+				{{#if (ne storeSelect.brn null) }}
+					<dd><a th:href="http://www.ftc.go.kr/bizCommPop.do?wrkr_no={{ storeSelect.brn }}&apv_perm_no=" target="_blank">사업자정보확인</a></dd>
 				{{/if}}
-				{{#if (ne storeSelect.emailAddress null) }}
+
 				<dt>e-mail</dt>
-				<dd>
-					<a th:href="mailto:{{ storeSelect.emailAddress }}"><span>{{ storeSelect.emailAddress }}</span></a>
-				</dd>
+				{{#if (ne storeSelect.emailAddress null) }}
+					<dd><a th:href="mailto:{{ storeSelect.emailAddress }}"><span>{{ storeSelect.emailAddress }}</span></a></dd>
 				{{/if}}
 			</dl>
 		</div>
 	{{/if}}
-
 	{{#xif storeRegularList.length '>' 0 }}
 		<div class="take_out_bottom_wrap">
 			<div class="take_out_favorite">단골매장</div>

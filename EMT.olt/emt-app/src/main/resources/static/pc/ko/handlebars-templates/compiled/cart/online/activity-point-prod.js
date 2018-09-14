@@ -12,7 +12,13 @@ this["AP"]["handlebars"]["cart"]["online"]["activity-point-prod"] = Handlebars.t
 
   return "			<div class=\"item_wrap\">\n				<input type=\"hidden\" name=\"onlineActivityPrdSn\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodSn : stack1), depth0))
-    + "\"/>\n				<input type=\"hidden\" name=\"cartProdSn\" cartProdQty=\""
+    + "\"/>\n				<input type=\"hidden\" name=\"cartProdSn\" value=\""
+    + alias2(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
+    + "\"/>\n				<input type=\"hidden\" name=\"prdInfo_"
+    + alias2(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
+    + "\" value=\""
+    + alias2(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
+    + "\" cartProdQty=\""
     + alias2(((helper = (helper = helpers.cartProdQty || (depth0 != null ? depth0.cartProdQty : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"cartProdQty","hash":{},"data":data}) : helper)))
     + "\" minPurLimitQty=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.minPurLimitQty : stack1), depth0))
@@ -20,12 +26,6 @@ this["AP"]["handlebars"]["cart"]["online"]["activity-point-prod"] = Handlebars.t
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitYn : stack1), depth0))
     + "\" maxPurLimitQty=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitQty : stack1), depth0))
-    + "\" value=\""
-    + alias2(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
-    + "\"/>\n				<input type=\"hidden\" name=\"prdInfo_"
-    + alias2(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
-    + "\" value=\""
-    + alias2(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
     + "\"/>\n				<input type=\"hidden\" name=\"saleDisplayStatus_"
     + alias2(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
     + "\" value=\""
@@ -299,8 +299,9 @@ this["AP"]["handlebars"]["cart"]["online"]["activity-point-prod"] = Handlebars.t
 },"61":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return container.escapeExpression(((helper = (helper = helpers.awardUnitQty || (depth0 != null ? depth0.awardUnitQty : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"awardUnitQty","hash":{},"data":data}) : helper)))
-    + "개 ";
+  return "("
+    + container.escapeExpression(((helper = (helper = helpers.awardUnitQty || (depth0 != null ? depth0.awardUnitQty : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"awardUnitQty","hash":{},"data":data}) : helper)))
+    + "개) ";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 

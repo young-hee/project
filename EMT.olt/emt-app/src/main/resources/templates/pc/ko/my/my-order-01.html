@@ -102,6 +102,8 @@
 
 	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
 	<th:block ap:fragment="layout-endpoint">
+		<script language="JavaScript" src="https://iniweb.inicis.com/js/auth.js"></script>
+
 		<script ap:src="@{/handlebars-templates/compiled/my/order/orderList-footer.js}"></script>
 		<script ap:src="@{/handlebars-templates/compiled/my/order/orderList.js}"></script>
 		<script ap:src="@{/handlebars-templates/compiled/my/order/layer-cash-receipts.js}"></script>
@@ -118,7 +120,7 @@
 
 			$( '.ui_tooltip' ).tooltip();
 			$( '.ui_multiple_date_picker' ).multipleDatePicker({
-				defaultRangeDate: '1months',
+				defaultRangeDate: '3months',
 				minDate: moment().subtract( 50, 'years' )
 			}).on( 'multiple-date-picker-change', function (e) {
 				c_RS_Date = e.date.startDate;
@@ -165,7 +167,6 @@
 
 			//tab 변경시
 			$( '.ui_tab' ).on( 'tabs-change', function (e) {
-				//var type = $('.tab_menu').find( 'ul > li' ).eq(e.index).find('button').val();
 				var type = $('.tab_menu').find( 'li.on > button' ).val();
 
 				getOrderList(type, 0, c_RS_Date, c_RD_Date);
@@ -271,18 +272,17 @@
 				var sCnt = data.storePickupOrdProdInfo == null ? 0 : data.storePickupOrdProdInfo.ordProdCnt;
 				var totalCnt = oCnt + sCnt;
 
-				var modal = AP.modal.info({
-					contents: {
-						templateKey: 'my.order.layer-cash-receipts',
-						templateModel: {
-							info : info,
-							amtPcur : data.cashReceiptIssueAmtPcur,
-							amtTax : data.cashReceiptIssueAmtPcur - data.cashReceiptIssueAmtItaxPcur,
-							amtItaxPcur : data.cashReceiptIssueAmtItaxPcur,
-							prodNameRlang : data.onlineOrdProdInfo.prodNameRlang,
-							totalCnt : totalCnt
-						}
-					}
+				var modal = AP.modal.open({
+					templateKey: 'my.order.layer-cash-receipts',
+					templateModel: {
+						info : info,
+						amtPcur : data.cashReceiptIssueAmtPcur,
+						amtTax : data.cashReceiptIssueAmtPcur - data.cashReceiptIssueAmtItaxPcur,
+						amtItaxPcur : data.cashReceiptIssueAmtItaxPcur,
+						prodNameRlang : data.onlineOrdProdInfo.prodNameRlang,
+						totalCnt : totalCnt
+					},
+					sizeType : 'L'
 				});
 
 				$('.btn_lg_primary').off('click').on('click', function(e){
@@ -297,7 +297,7 @@
 								modal.close();
 							});
 						}).fail(function(e) {
-							AP.modal.alert(e.responseJSON.message);
+							AP.modal.alert(e.responseJSON.errorData.message);
 						}).always(function() {
 						});
 					}
@@ -346,6 +346,10 @@
 				var c = new SaveStatus()
 				AP.common.setSessionStorage(sessionStatus, c, 5);
 				$(location).attr("href", "/my/page/" + type + "/" + ordSn);
+			}
+
+			function showCrditCardStatement(data) {
+				showReceipt('https://iniweb.inicis.com/app/publication/apReceipt.jsp?noTid=' + data.pgTradeNo, '4', data.ordNo);
 			}
 
 			function SaveStatus() {

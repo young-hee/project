@@ -16,6 +16,7 @@
 			this._$target = $target;
 			this._params = {};
 			this.reset( params );
+			this._data = [];
 		},
 
 		/** =============== Public Methods =============== */
@@ -26,20 +27,74 @@
 		 */
 		reset: function ( params ) {
 			this._params = $B.object.extend( this._params, params );
+			this._data = [];
 			this._getData( 0 );
 		},
 		
 		load : function(){
-			console.log( this._params );
 			this._getData( this._params.offset );
 		}, 
 
 		/** =============== Private Methods =============== */
 
 		_setEvents: function (e) {
-			//slide resize
-			AP.responsiveWidth.addListener( 'resize', function (e) {
-				this._$target.ixSlideMax( 'resize' );
+			//도움이되요
+			this._$target.find('.btn_help').off('click').on('click', function(e){
+				if( AP.LOGIN_USER ){
+					var $this = $(e.currentTarget);
+					var recommendCnt = Number($this.find('.recommendCnt').text());
+					if( $this.hasClass('on') ){
+						// 상품평 추천 삭제
+						AP.api.removeReviewRecommend({}, {
+							prodReviewSn : $this.data('review-sn')
+						}).done(function(){
+							$this.removeClass('on');
+							
+							$this.find('.recommendCnt').text( recommendCnt - 1 )
+							//추천수가 없을 경우 화면에서 감춤
+							if( $this.find('.recommendCnt').text() == 0 ){
+								$this.find('.recommendCnt').hide();
+							}
+							
+						}.bind(this));
+					} else {
+						// 상품평 추천
+						AP.api.reviewRecommend({}, {
+							prodReviewSn : $this.data('review-sn')
+						}).done(function(){
+							$this.addClass('on');
+							
+							$this.find('.recommendCnt').text( recommendCnt + 1 )
+							//추천수가 없을 경우 화면에서 감춤
+							if( $this.find('.recommendCnt').text() > 0 ){
+								$this.find('.recommendCnt').show();
+							}
+							
+						}.bind(this));
+					}
+				} else {
+					AP.login.go();
+				}
+			}.bind(this));
+			
+			//신고하기
+			this._$target.find('.btn_report').off('click').on('click', function(e){
+				var $cur = $(e.currentTarget);
+				var prodReviewSn = $cur.data('review-sn');
+				var review = {
+					review : _.findWhere(this._data, {prodReviewSn : prodReviewSn})
+				};
+				
+				if( AP.LOGIN_USER ){
+					var reportModal = new AP.Report(review).addListener( 'modal-close', function (e) { 
+						if( e.data == 'report' ){
+							$cur.addClass('on');
+						}
+					}.bind(this)); 
+					reportModal.open();
+				} else {
+					AP.login.go();
+				}
 			}.bind(this));
 		},
 
@@ -63,6 +118,7 @@
 
 		//리뷰
 		_draw: function ( data ) {
+			$.merge(this._data, data.prodReviewList);
 			$.each(data.prodReviewList, function(idx, obj){
 				if( obj.imgList.length > 0 || (obj.prodReviewBodyText != null && obj.prodReviewBodyText.length > 118) ){
 					obj.isMoreView = true;
@@ -79,6 +135,8 @@
 			
 			this._params.totalCnt = data.totalCount;
 			this._params.offset += this._params.limit;
+			
+			this._setEvents();
 			
 			this.dispatch( 'review-draw', this._params );
 			
@@ -211,23 +269,8 @@
 			
 		},
 
-		_openDetail: function ( data, prodReviewSn ) {
-			/*
-			var modal = AP.modal.info({
-					title: '리뷰/후기',
-					contents: {
-						templateKey: 'common.review-detail-modal',
-						templateModel: _.findWhere( data.prodReviewList, {prodReviewSn: prodReviewSn} )
-					},
-					containerClass: 'review',
-					sizeType: 'L'
-				}),
-				$modal = modal.getElement();
-
-			$modal.find( 'img' ).imagesLoaded().always( function () {
-				if ( modal ) modal.resetPosition();
-			});
-			*/
+		_openDetail: function ( prodReviewSn ) {
+		
 		}
 
 	});

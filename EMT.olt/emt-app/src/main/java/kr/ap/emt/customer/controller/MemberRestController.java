@@ -6,10 +6,12 @@ import kr.ap.comm.api.vo.CicuedCuChIdVo;
 import kr.ap.comm.api.vo.CicuemCuInfCoOutVo;
 import kr.ap.comm.api.vo.CicuemCuInfTotTcVo;
 import kr.ap.comm.member.vo.MemberSession;
+import kr.ap.comm.support.APRequestContext;
 import kr.ap.comm.support.ApPasswordEncoder;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
 import kr.ap.comm.support.constants.SessionKey;
+import kr.ap.comm.util.SessionUtils;
 import kr.ap.emt.customer.vo.AuthCheckDTO;
 import kr.ap.emt.customer.vo.MemberDTO;
 import net.g1project.ecp.api.exception.ApiException;
@@ -97,6 +99,18 @@ public class MemberRestController extends AbstractController {
 	@PostMapping("/checkId")
 	public ResponseEntity<?> checkId(String memberId, HttpServletRequest request) {
 		return checkIdM(memberId);
+	}
+	
+	/**
+	 * 휴면복원신청.
+	 */
+	@PostMapping("/recoveryUser")
+	public ResponseEntity<?> recoveryUser() {
+		String token = (String) SessionUtils.getAttribute(getRequest(), SessionKey.TEMP_MEMBER_SN);
+		APRequestContext.setAccessToken(token.substring(token.indexOf("||") + 2));
+		long memberSn = Long.parseLong(token.substring(0, token.indexOf("||")));
+		apApi.recoveryToNormalMember(memberSn);
+		return ResponseEntity.ok("{}");
 	}
 
 

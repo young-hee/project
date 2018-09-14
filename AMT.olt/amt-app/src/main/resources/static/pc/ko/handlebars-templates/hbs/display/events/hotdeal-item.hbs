@@ -1,0 +1,21 @@
+{{#each this.list}}
+	<div class="deal_box" data-online-prod-sn="{{ this.onlineProdSn }}" data-index="{{@index}}">
+		<div>
+			<a href="{{ productDetailPath this.onlineProdSn }}">
+				<img src="{{ this.onlineProdImages.[0].imgUrl }}" alt="">
+			</a>
+		</div>
+		<div class="info">
+			<p class="brand_name">{{ this.products.[0].brandName }}</p>
+			<p class="name">{{ this.onlineProdName }}</p>
+			<p class="discount">{{ this.onlineProdPriceSummary.maxFinalDiscountRate }}%</p>
+			<p class="price"><strong>{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountOnlinePrice }}원</strong> <del>{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountBeforeSalePrice }}원</del></p>
+			<div class="btns">
+				<p class="amount">남은수량 : {{ this.salePossibleQty }}개</p>
+				<!--/* 좋아요 클릭시 active : on */-->
+				<button type="button" class="like like_btn"><span class="sr_only">좋아요</span></button>
+				<button type="button" class="cart cart_btn"><span class="sr_only">장바구니</span></button>
+			</div>
+		</div>
+	</div>
+{{/each}}

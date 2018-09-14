@@ -38,8 +38,10 @@
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
-	<script>
-		$( '.youtube_video' ).video();
+	<script th:inline="javascript">
+		(function () {
+			$( '.youtube_video' ).video();
+		})();
 	</script>
 </th:block>
 </body>

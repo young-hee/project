@@ -15,20 +15,17 @@
 			this._$filter = this._$target.find( '.aside_area.filter.product' );
 
 			this._setEvent();
-			this._setRecommendProduct();
-			this._setBestProduct();
-			this._setPopularBrand();
-			this._setReviewBest();
 		},
 
 		/** =============== Public Methods =============== */
 		searchFilterData: null,
 
 		init: function ( options ) {
+			this._displayMenuId = options.displayMenuId;
 			this._productList = new AP.ProductList({
 				$target: this._$productList,
 				displayMenuId: options.displayMenuId,
-				template: 'display.category.category-item',
+				template: 'display.product-item',
 				api: 'itemList',
 				key: options.displayMenuId
 			}).load({ includeFilters: true }).addListener( 'init-search-filter', function (e) {
@@ -46,6 +43,11 @@
 				gnbMap: AP.GNBMAP,
 				$target: this._$target.find( '.aside_area .category_list' )
 			});
+
+			this._setRecommendProduct();
+			this._setBestProduct();
+			this._setPopularBrand();
+			this._setReviewBest();
 		},
 
 		/** =============== Private Methods ============== */
@@ -67,7 +69,7 @@
 		_initSearchFilter: function ( data ) {
 			this.searchFilterData = data;
 
-			this._searchFilter = new AP.searchFilter( this._$filter, this.searchFilterData );
+			this._searchFilter = new AP.searchFilter( this._$filter, 'category', this.searchFilterData );
 			this._searchFilter.addListener( 'apply-search-filter', function (e) {
 				this._productList.applyFilter( e.filterParam, e.reset );
 			}.bind( this ));
@@ -75,15 +77,27 @@
 
 		_initProductSlide: function ( options ) {
 			var listData = [];
-			options.api( {}, options.param ).done(function ( result ) {
-				result = {
-					list: [1,2,3,4,5,6,7,8,9,10,11,12]
-				};
 
-				listData = result.list;
+			options.api( {}, options.param ).done(function ( result ) {
+				if ( options.test == 'test' ) {
+					// TODO: category slide product
+					result = {
+						list: [1,2,3,4,5,6,7,8,9,10,11,12]
+					};
+					listData = result.list;
+				} else {
+					if ( result.onlineProdList ) {
+						result = result.onlineProdList;
+						listData = result.list;
+					} else if ( result.prodReviewListInfo ) {
+						result = result.prodReviewListInfo;
+						listData = result.prodReviewList;
+					}
+				}
 
 				options.$slide.siblings( '.loading' ).remove();
 				options.$slide.show();
+
 				var html = AP.common.getTemplate( options.template, result );
 				options.$slide.find( 'ul.ix-list-items' ).html( html );
 				options.$slide.ixSlideMax();
@@ -94,13 +108,17 @@
 			}.bind( this )).fail(function () {}.bind( this ));
 
 			options.$slide.on( 'click', '.like', function (e) {
-				$( e.currentTarget ).find( 'i' ).toggleClass( 'on' );
+				AP.login().done(function () {
+					$( e.currentTarget ).find( 'i' ).toggleClass( 'on' );
+					var index = $( e.currentTarget ).closest( '.item' ).data( 'index' );
+					AP.addLike.add( listData[index].products );
+				}.bind( this ))
 			}.bind( this ));
 
 			options.$slide.on( 'click', '.cart', function (e) {
 				e.preventDefault();
 				var index = $( e.currentTarget ).closest( '.item' ).data( 'index' );
-				AP.addCart.add( this._data[index].products );
+				AP.addCart.add( listData[index].products );
 			}.bind( this ));
 		},
 
@@ -108,6 +126,7 @@
 		_setRecommendProduct: function () {
 			if ( this._$target.find( '.recommended_item.slide.recommend' ).length == 0 ) return;
 			this._initProductSlide({
+				test: 'test',
 				api: AP.api.test,
 				param: {
 					offset: 0,
@@ -122,12 +141,14 @@
 		_setBestProduct: function () {
 			if ( this._$target.find( '.recommended_item.slide.popular' ).length == 0 ) return;
 			this._initProductSlide({
+				test: 'test',
 				api: AP.api.flaggedItemList,
 				param: {
 					offset: 0,
 					limit: 12,
 					flags: 'icon_reco_best_24h',
-					displayCate: ''
+					displayCate: '',
+					scope: 'All'
 				},
 				template: 'display.category.recommend-item',
 				$slide: this._$target.find( '.recommended_item.slide.popular' )
@@ -138,6 +159,7 @@
 		_setPopularBrand: function () {
 			if ( this._$target.find( '.brandWrap01.slide.popular_brand' ).length == 0 ) return;
 			this._initProductSlide({
+				test: 'test',
 				api: AP.api.test,
 				param: {
 					offset: 0,
@@ -152,8 +174,11 @@
 		_setReviewBest: function () {
 			if ( this._$target.find( '.bast_review.slide' ).length == 0 ) return;
 			this._initProductSlide({
-				api: AP.api.test,
+				api: AP.api.getReviewList,
 				param: {
+					displayMenuId: this._displayMenuId,
+					prodReviewType: 'Prod',
+					topReviewOnlyYn: 'Y',
 					offset: 0,
 					limit: 12
 				},

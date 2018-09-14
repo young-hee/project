@@ -6,41 +6,7 @@
 	</dt>
 	<dd>
 		<div class="cont delivery_info">
-			<!--/* 주문자 정보 */-->
-			<div class="title_area">
-				<h4 class="h_title sub">주문고객정보</h4>
-			</div>
-			<fieldset class="form">
-				<legend class="sr_only">주문고객 정보 입력</legend>
-				<div class="ui_table">
-					<dl>
-						<dt><label for="user_name"><b>이름(<em>필수</em>)</b></label></dt>
-						<dd>
-							<div class="input_wrap w100p">
-								<input type="text" id="user_name" name="purchaserName" placeholder="이름을 입력해 주세요." required="required" data-msg-required="이름을 입력해 주세요.">
-							</div>
-						</dd>
-					</dl>
-					<dl>
-						<dt><label for="user_phone"><b>휴대폰번호(<em>필수</em>)</b></label></dt>
-						<dd>
-							<div class="input_wrap w100p">
-								<input type="text" id="user_phone" name="purchaserPhoneNo" placeholder="‘-’없이 숫자만 입력" required="required" data-msg-required="휴대폰 번호를 입력해 주세요.">
-							</div>
-						</dd>
-					</dl>
-					<dl>
-						<dt><label for="user_email"><b>이메일(<em>필수</em>)</b></label></dt>
-						<dd>
-							<div class="input_wrap w100p">
-								<input type="text" id="user_email" name="purchaserEmailAddress" placeholder="이메일 주소를 입력해 주세요" required="required" data-msg-required="구매하시는 분의 이메일 주소를 입력하세요.">
-							</div>
-						</dd>
-					</dl>
-				</div>
-			</fieldset>
-			<br>
-			<p class="text_notice light">주문관련 e-Mail과 SMS가 발송됩니다.</p>
+
 			<!--/* 배송정보 */-->
 			<div class="title_area">
 				<h4 class="h_title sub">배송정보</h4>
@@ -197,6 +163,42 @@
 					</div>
 				</fieldset>
 			</div>
+
+			<!--/* 주문자 정보 */-->
+			<div class="title_area">
+				<h4 class="h_title sub">주문고객정보</h4>
+			</div>
+			<fieldset class="form">
+				<legend class="sr_only">주문고객 정보 입력</legend>
+				<div class="ui_table">
+					<dl>
+						<dt><label for="user_name"><b>이름(<em>필수</em>)</b></label></dt>
+						<dd>
+							<div class="input_wrap w100p">
+								<input type="text" id="user_name" name="purchaserName" placeholder="이름을 입력해 주세요." required="required" data-msg-required="이름을 입력해 주세요.">
+							</div>
+						</dd>
+					</dl>
+					<dl>
+						<dt><label for="user_phone"><b>휴대폰번호(<em>필수</em>)</b></label></dt>
+						<dd>
+							<div class="input_wrap w100p">
+								<input type="text" id="user_phone" name="purchaserPhoneNo" placeholder="‘-’없이 숫자만 입력" required="required" data-msg-required="휴대폰 번호를 입력해 주세요.">
+							</div>
+						</dd>
+					</dl>
+					<dl>
+						<dt><label for="user_email"><b>이메일(<em>필수</em>)</b></label></dt>
+						<dd>
+							<div class="input_wrap w100p">
+								<input type="text" id="user_email" name="purchaserEmailAddress" placeholder="이메일 주소를 입력해 주세요" required="required" data-msg-required="구매하시는 분의 이메일 주소를 입력하세요.">
+							</div>
+						</dd>
+					</dl>
+				</div>
+			</fieldset>
+			<br>
+			<p class="text_notice light">주문관련 e-Mail과 SMS가 발송됩니다.</p>
 		</div>
 	</dd>
 	<!--스크립트 정의-->
@@ -210,6 +212,10 @@
 				$('input[name=shipType]').val('SHIP');
 
 				//validation
+				$('input[name=userName]').prop("required", true);
+				$('input[name=userPhoneNo]').prop("required", true);
+				$('input[name=delivery_area]').prop("required", true);
+				$('input[name=userAddress2]').prop("required", true);
 				$('input[name=name02]').prop("required", false);
 				$('input[name=phone02]').prop("required", false);
 
@@ -227,6 +233,10 @@
 				$('input[name=addressStoreType]').attr('value','MEMBER');
 
 				//validation
+				$('input[name=userName]').prop("required", false);
+				$('input[name=userPhoneNo]').prop("required", false);
+				$('input[name=delivery_area]').prop("required", false);
+				$('input[name=userAddress2]').prop("required", false);
 				$('input[name=name02]').prop("required", false);
 				$('input[name=phone02]').prop("required", false);
 			}
@@ -272,16 +282,18 @@
 		}
 
 		//주문자정보 자동 입력
-		$('[name=purchaserName]').on('blur', function(e){
+		$('[name=purchaserName]').on('change', function(e){
 			if ($(this).val()) {
 				$('#orderNonmemberName').html($(this).val());
 				$('#name01').val($(this).val());
+				$('[name=recipientName]').val($(this).val());
 			}
 		});
-		$('[name=purchaserPhoneNo]').on('blur', function(e){
+		$('[name=purchaserPhoneNo]').on('change', function(e){
 			if ($(this).val()) {
 				$('#orderNonmemberMobile').html($(this).val());
 				$('#phone01').html($(this).val());
+				$('[name=recipientPhoneNo]').val($(this).val());
 			}
 		});
 

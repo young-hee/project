@@ -29,6 +29,8 @@ import kr.ap.comm.support.constants.APConstant;
 import kr.ap.comm.support.constants.CookieKey;
 import kr.ap.comm.support.constants.SessionKey;
 import kr.ap.comm.util.CookieUtils;
+import kr.ap.comm.util.SessionUtils;
+import net.g1project.ecp.api.client.sales.GiftcardApi;
 import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.ap.ap.ApLogoutInfo;
 import net.g1project.ecp.api.model.ap.ap.CheckResult;
@@ -52,6 +54,7 @@ import net.g1project.ecp.api.model.sales.terms.Terms;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -82,6 +85,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequestMapping("/my/page")
 public class MyViewControllor extends AbstractController {
 
+    @Autowired
+    protected GiftcardApi giftcardApi;
 
 	/**
 	 * 마이 파우치
@@ -142,7 +147,13 @@ public class MyViewControllor extends AbstractController {
 				vo = amoreAPIService.getptinq(vo);
 				model.addAttribute("point", vo);
 			}
-			
+			{
+				try {
+					model.addAttribute("giftCardPoint", giftcardApi.getCoupon().getBalance());
+				} catch(Exception e) {
+					
+				}
+			}
 			
 		} catch (Exception e) {
 			model.addAttribute("errorData", e);
@@ -199,7 +210,11 @@ public class MyViewControllor extends AbstractController {
 	public String changeUserInfo(Model model) {
 		model.addAttribute("url", "/my/page/info/changeUserInfo");
 		setMypageMapInfo(model, "myInfo", "changeUser");
-		return "my/member-info";
+		if(isMobileDevice())
+			return "my/fullpage-member-info.html";
+		if(isPcDevice())
+			return "my/layer-member-info";
+		return null;
 	}
 
 	@GetMapping("/info/changePwdForm")
@@ -438,39 +453,21 @@ public class MyViewControllor extends AbstractController {
 	 * @return
 	 */
 	@PostMapping("/leaveId")
-	@PageTitle(title = "회원탈퇴")
-	public String leaverId(Model model, String userPwdEc) {
+	@PageTitle(title = "회원탈퇴", menuId = "myInfo", subMenuId = "leaverId")
+	public String leaverId(Model model) {
 		try {
 		
-			CheckResult pwResult = apApi.checkMemberPassword(getMemberSn(), userPwdEc);
-			if(pwResult.isResult()) {
-				CloseAcStatus status = apApi.getMemberCloseAcStstus(getMemberSn());
-				model.addAttribute("status", status);
-				
-				if(status.getOrdRelatedCount() != 0 || status.getClaimRelatedCount() != 0 || status.getRemainDeposit().longValue() != 0) {
-					if(isMobileDevice())
-						return "my/member-info-2";
-					if(isPcDevice())
-						return "my/member-info-6";
-				}
-
-				{//포인트 조회
-					CicueaCuPtAccmTcVo vo = new CicueaCuPtAccmTcVo();
-					vo.setIncsNo(getMemberSession().getUser_incsNo());
-					vo = amoreAPIService.getptinq(vo);
-					model.addAttribute("point", vo);
-				}
-				
-				return leaverIdM(model);
+			CloseAcStatus status = apApi.getMemberCloseAcStstus(getMemberSn());
+			model.addAttribute("status", status);
+			MemberSession memberSession = getMemberSession();
+			{//뷰티 포인트 조회
+				model.addAttribute("point", SessionUtils.refreshBeautyPoint(getRequest(), this.pointApi));
 			}
+			return leaverIdM(model);
 		} catch(Exception e) {
 			
 		}
-		model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
-		model.addAttribute("url", "/my/page/leaveId");
-		model.addAttribute("isPopup", false);
-		
-		return "my/member-info";
+		return null;
 
 	}
 
@@ -480,10 +477,10 @@ public class MyViewControllor extends AbstractController {
 	 * @return
 	 */
 	@GetMapping("/leaveId")
-	@PageTitle(title = "회원 탈퇴")
+	@PageTitle(title = "회원 탈퇴", menuId = "myInfo", subMenuId = "leaverId")
 	public String leaveId(Model model) {
 		model.addAttribute("url", "/my/page/leaveId");
-		setMypageMapInfo(model, "myInfo", "leaverId");
+		model.addAttribute("isPopup", true);
 		return "my/member-info";
 	}
 	
@@ -493,10 +490,11 @@ public class MyViewControllor extends AbstractController {
 	 * @param code
 	 * @param desc
 	 * @param model 
+	 * @param resp 
 	 * @return
 	 */
 	@GetMapping("/doLeaveId")
-	@PageTitle(title = "회원탈퇴")
+	@PageTitle(title = "회원탈퇴", menuId = "myInfo", subMenuId = "leaverId")
 	public String doLeaverId(HttpServletRequest req, String code, String desc, Model model, HttpServletResponse resp) {
 		return doLeaverIdM(req, code, desc, req, resp, model);
 	}
@@ -655,7 +653,7 @@ public class MyViewControllor extends AbstractController {
 		 * PC
 		 */
 		if(isPcDevice()) {
-			return "customer/login.0";
+			return "customer/login-pacificshop";
 		}
 		
 		return null;
@@ -671,14 +669,14 @@ public class MyViewControllor extends AbstractController {
 		 * Mobile
 		 */
 		if(isMobileDevice()) {
-			return "customer/pacific-shop_benefit01";
+			return "my/pacificshop";
 		}
 
 		/**
 		 * PC
 		 */
 		if(isPcDevice()) {
-			return "customer/login.0";
+			return "my/pacificshop";
 		}
 		
 		return null;
@@ -692,12 +690,12 @@ public class MyViewControllor extends AbstractController {
 		return "my/my-review";
 	}
 	
-	@PageTitle(title = "1:1 상담")
-	@GetMapping("/inquiry")
-	public String inquiry(Model model) {
-		
-		return "my/my-inquiry";
-	}
+//	@PageTitle(title = "1:1 상담")
+//	@GetMapping("/inquiry")
+//	public String inquiry(Model model) {
+//		
+//		return "my/my-inquiry";
+//	}
 	
 	//=======================모바일 기능 구현 Method
 
@@ -812,14 +810,14 @@ public class MyViewControllor extends AbstractController {
          * Mobile
          */
         if(isMobileDevice()) {
-    		return "my/member-info-3";
+    		return "my/fullpage-member-out-01";
         }
 
         /**
          * PC
          */
         if(isPcDevice()) {//TODO
-    		return "my/member-info-4";
+    		return "my/layer-member-info-05";
         }
         
         return null;
@@ -841,7 +839,7 @@ public class MyViewControllor extends AbstractController {
 					Map<String, Boolean> apReceiveMap = new HashMap<String, Boolean>();
 					CicuemCuOptiTcResultVo tcVo = amoreAPIService.getcicuemcuoptilist(vo);
 					if(tcVo != null) {
-						CicuemCuOptiCsTcVo info = (CicuemCuOptiCsTcVo) getMultiinfoByChCd(tcVo.getCicuemCuOptiTcVo(), "030");
+						CicuemCuOptiCsTcVo info = (CicuemCuOptiCsTcVo) getMultiinfoByChCd(tcVo.getCicuemCuOptiTcVo(), "000");
 						if(info != null) {
 							apReceiveMap.put("Email", "Y".equals(info.getEmlOptiYn()));
 							apReceiveMap.put("SMS", "Y".equals(info.getSmsOptiYn()));
@@ -924,7 +922,11 @@ public class MyViewControllor extends AbstractController {
 		}
 		model.addAttribute("error", "비밀번호를 다시 한 번  확인해주세요.");
 		model.addAttribute("url", "/my/page/info/changeUserInfo");
-		return "my/member-info";
+		if(isMobileDevice())
+			return "my/fullpage-member-info.html";
+		if(isPcDevice())
+			return "my/layer-member-info";
+		return null;
 	}
 	/**
 	 * 약관코드로 약관내용을 가져옴.

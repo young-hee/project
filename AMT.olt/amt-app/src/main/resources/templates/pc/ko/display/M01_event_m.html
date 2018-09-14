@@ -22,8 +22,8 @@
 						<div class="event_wrap">
 							<div class="event_control">
 								<ul>
-									<li class="current"><button type="button">진행중 이벤트</button></li><!--/* active : current */-->
-									<li><button type="button">종료된 이벤트</button></li>
+									<li class="current" id="event_progress"><button type="button">진행중 이벤트</button></li><!--/* active : current */-->
+									<li id="event_over"><button type="button">종료된 이벤트</button></li>
 								</ul>
 								<a href="/display/notice" class="btn_xs_bordergray">당첨자발표<i class="ico_arr_r"></i></a>
 							</div>
@@ -73,7 +73,7 @@
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
-	<script>
+	<script th:inline="javascript">
 		AP.eventProgress.load({ status: 'Progress' });
 	</script>
 </th:block>

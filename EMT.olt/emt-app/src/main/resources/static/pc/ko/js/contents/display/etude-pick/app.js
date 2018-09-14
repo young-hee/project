@@ -85,9 +85,7 @@
 			this._page++;
 			this._$loading.show();
 
-			AP.api.getPixleePhotos({
-				albumId: '2956835'//Homepage Gallery
-			}, {
+			AP.api.getPixleePhotos({}, {
 				page: this._page
 			}).done(function ( result ) {
 				if ( result.total ) {

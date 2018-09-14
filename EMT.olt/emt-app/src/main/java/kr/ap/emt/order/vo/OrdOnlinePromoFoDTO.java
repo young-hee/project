@@ -33,13 +33,18 @@ public class OrdOnlinePromoFoDTO {
 	/* 묶음판매상품 합계정보 */
 	private BigDecimal totalBulkDcProductSaleAmount = BigDecimal.ZERO;
 	private BigDecimal totalBulkDcFinalOnlineSaleAmount = BigDecimal.ZERO;
+	private BigDecimal prodCancelAmtSum = BigDecimal.ZERO;
+
 
 	private String receivedClaimReasonName;
 	private String foReceivedClaimReason;
 
 	private Integer ordQtySum = 0;
+	private Integer cancelQtySum = 0;
 
 	private String singleProdYn;
+
+	private String ordHistProdStatusCode;
 
 	public Long getPromoSn() {
 		return promoSn;
@@ -169,11 +174,35 @@ public class OrdOnlinePromoFoDTO {
 		this.ordQtySum = ordQtySum;
 	}
 
+	public Integer getCancelQtySum() {
+		return cancelQtySum;
+	}
+
+	public void setCancelQtySum(Integer cancelQtySum) {
+		this.cancelQtySum = cancelQtySum;
+	}
+
 	public String getSingleProdYn() {
 		return singleProdYn;
 	}
 
 	public void setSingleProdYn(String singleProdYn) {
 		this.singleProdYn = singleProdYn;
+	}
+
+	public String getOrdHistProdStatusCode() {
+		return ordHistProdStatusCode;
+	}
+
+	public void setOrdHistProdStatusCode(String ordHistProdStatusCode) {
+		this.ordHistProdStatusCode = ordHistProdStatusCode;
+	}
+
+	public void setProdCancelAmtSum(BigDecimal prodCancelAmtSum) {
+		this.prodCancelAmtSum = prodCancelAmtSum;
+	}
+
+	public BigDecimal getProdCancelAmtSum() {
+		return prodCancelAmtSum;
 	}
 }

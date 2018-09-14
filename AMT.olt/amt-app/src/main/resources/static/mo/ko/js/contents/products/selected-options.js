@@ -14,6 +14,7 @@
 		 */
 		initialize: function ( $appendTarget, model ) {
 			this._$appendTarget = $appendTarget.find('.selected_option_wrap');
+			this._$orderBottom = $appendTarget.find('.order_bottom');
 			this._defaultModel = model;
 			this._selectedData = [];
 
@@ -74,6 +75,7 @@
 				$el = this._$appendTarget.find( '.product_item' );
 			}
 
+			this._$orderBottom.find('.promoInfo').hide();
 			$el.find( '.ui_spinner' ).spinner( 'clear' ).off( 'spinner-change' );
 			$el.remove();
 			
@@ -115,6 +117,22 @@
 				$el = $( html );
 
 			this._$appendTarget.append( $el );
+			
+			//M + N 프로모션 상품일 경우의 문구
+			if( product.mPlusNPromoInfo.targetYN == 'Y' ){
+				var info = product.mPlusNPromoInfo;
+				var type = info.baseOrdQty+'+'+info.freeAwardQty;
+				var sum = info.baseOrdQty+info.freeAwardQty;
+				var html = '';
+				if(info.typeCode == 'Different'){
+					html = '해당상품은 <em>교차</em>가능한<em>'+type+'</em> 상품입니다.<br>'+sum+'개 선택시, 장바구니나 주문서에서 '+info.baseOrdQty+'개 가격으로 구매가 가능합니다.';
+				}else{
+					html = '해당상품은 <em>동일</em>한 상품만 <em>'+type+'</em>로 구매가능한 상품입니다.<br>'+sum+'개 선택시, 장바구니나 주문서에서 '+info.baseOrdQty+'개 가격으로 구매가 가능합니다.';
+				}
+				this._$orderBottom.find('.promoInfo').html(html).show();
+			} else {
+				this._$orderBottom.find('.promoInfo').hide();
+			}
 
 			$el.find( '.ui_spinner' ).spinner().on( 'spinner-change', function (e) {
 				this._setProductValue( $el, product, e.value );

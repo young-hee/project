@@ -90,7 +90,9 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["amount-payment"] = Handlebars
     + alias3(((helper = (helper = helpers.payMethodNameBlang || (depth0 != null ? depth0.payMethodNameBlang : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"payMethodNameBlang","hash":{},"data":data}) : helper)))
     + ")</b><b>"
     + alias3((helpers.currencyFormatDefault || (depth0 && depth0.currencyFormatDefault) || alias2).call(alias1,(depth0 != null ? depth0.payAmt : depth0),"원",{"name":"currencyFormatDefault","hash":{},"data":data}))
-    + "</b></li>\n					<li class=\"clear\">\n						<span>입금정보</span>\n						<span class=\"align_right line_h_20\">"
+    + "</b></li>\n"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,(depth0 != null ? depth0.refundAmtSum : depth0),0,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(15, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "					<li class=\"clear\">\n						<span>입금정보</span>\n						<span class=\"align_right line_h_20\">"
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.virtualBankAcBankName : stack1), depth0))
     + " "
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.virtualDepositBankAcNo : stack1), depth0))

@@ -3,9 +3,12 @@ package kr.ap.emt.my.controller;
 import kr.ap.comm.api.vo.*;
 import kr.ap.comm.config.interceptor.FragmentPage;
 import kr.ap.comm.config.interceptor.PageTitle;
+import kr.ap.comm.member.vo.BeautyPointSummary;
+import kr.ap.comm.member.vo.CushionPointSummary;
 import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
+import kr.ap.comm.util.SessionUtils;
 import kr.ap.emt.api.pos.POSApiService;
 import kr.ap.emt.api.pos.vo.Cushin;
 import kr.ap.emt.api.pos.vo.CustCushinPoint;
@@ -22,6 +25,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.websocket.Session;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -61,15 +66,14 @@ public class MyPointViewController extends AbstractController {
 	 */
 	@GetMapping("/info/beautyPoint")
 	@PageTitle(title = "뷰티 포인트내역", menuId = "myPoint", subMenuId = "beautyPoint")
-	public String beautyPoint(Model model) {
+	public String beautyPoint(final HttpServletRequest request, Model model) {
+		//뷰티포인트 정보 갱신을 위해 기존 데이터 클리어
+		SessionUtils.clearBeautyPoint(request);
 
 		String userIncsNo = getMemberSession().getUser_incsNo();
 		
 		{//포인트 조회
-			CicueaCuPtAccmTcVo vo = new CicueaCuPtAccmTcVo();
-			vo.setIncsNo(userIncsNo);
-			vo = amoreAPIService.getptinq(vo);
-			model.addAttribute("point", vo);
+			model.addAttribute("point", SessionUtils.getBeautyPoint(request, this.pointApi));
 		}
 		{//고객등급조회.
 			CustGrdVo custGrdVo = new CustGrdVo();
@@ -328,13 +332,10 @@ public class MyPointViewController extends AbstractController {
 	 */
 	@GetMapping("/info/noMemberPopuop")
 	@FragmentPage
-	public String noMemberPopup(Model model) {
+	public String noMemberPopup(final HttpServletRequest request, Model model) {
 
 		{//포인트 조회
-			CicueaCuPtAccmTcVo vo = new CicueaCuPtAccmTcVo();
-			vo.setIncsNo(getMemberSession().getUser_incsNo());
-			vo = amoreAPIService.getptinq(vo);
-			model.addAttribute("point", vo);
+			model.addAttribute("point", SessionUtils.getBeautyPoint(request, this.pointApi));
 		}
 		if(isMobileDevice()) {
 			return "my/layer-point-present-02";
@@ -349,12 +350,10 @@ public class MyPointViewController extends AbstractController {
 	 */
 	@GetMapping("/info/noMemberAuthorized")
 	@PageTitle(title = "포인트 선물하기 - 비회원 인증", menuId = "myPoint", subMenuId = "beautyPoint")
-	public String noMemberAuthorize(Model model) {
+	public String noMemberAuthorize(final HttpServletRequest request, Model model) {
+
 		{//포인트 조회
-			CicueaCuPtAccmTcVo vo = new CicueaCuPtAccmTcVo();
-			vo.setIncsNo(getMemberSession().getUser_incsNo());
-			vo = amoreAPIService.getptinq(vo);
-			model.addAttribute("point", vo);
+			model.addAttribute("point", SessionUtils.getBeautyPoint(request, this.pointApi));
 		}
 		if(isMobileDevice()) {
 			return "my/point-present-03";
@@ -369,12 +368,10 @@ public class MyPointViewController extends AbstractController {
 	 */
 	@GetMapping("/info/noMemberPresent")
 	@PageTitle(title = "포인트 선물하기 - 비회원 선물하기", menuId = "myPoint", subMenuId = "beautyPoint")
-	public String noMemberPresent(Model model) {
+	public String noMemberPresent(final HttpServletRequest request, Model model) {
+
 		{//포인트 조회
-			CicueaCuPtAccmTcVo vo = new CicueaCuPtAccmTcVo();
-			vo.setIncsNo(getMemberSession().getUser_incsNo());
-			vo = amoreAPIService.getptinq(vo);
-			model.addAttribute("point", vo);
+			model.addAttribute("point", SessionUtils.getBeautyPoint(request, this.pointApi));
 		}
 		if(isMobileDevice()) {
 			return "my/point-present-04";
@@ -389,12 +386,10 @@ public class MyPointViewController extends AbstractController {
 	 */
 	@GetMapping("/info/giftPointCheck")
 	@PageTitle(title = "포인트 선물하기", menuId = "myPoint", subMenuId = "beautyPoint")
-	public String giftPointCheck(Model model) {
+	public String giftPointCheck(final HttpServletRequest request, Model model) {
+
 		{//포인트 조회
-			CicueaCuPtAccmTcVo vo = new CicueaCuPtAccmTcVo();
-			vo.setIncsNo(getMemberSession().getUser_incsNo());
-			vo = amoreAPIService.getptinq(vo);
-			model.addAttribute("point", vo);
+			model.addAttribute("point", SessionUtils.getBeautyPoint(request, this.pointApi));
 		}
 		if(isMobileDevice()) {
 			return "my/point-present-05";
@@ -409,12 +404,12 @@ public class MyPointViewController extends AbstractController {
 	 */
 	@GetMapping("/info/presentComplete")
 	@PageTitle(title = "포인트 선물하기", menuId = "myPoint", subMenuId = "beautyPoint")
-	public String presentComplete(Model model) {
+	public String presentComplete(final HttpServletRequest request, Model model) {
+		//뷰티포인트 선물완료 후 뷰티포인트 갱신
+		SessionUtils.clearBeautyPoint(request);
+
 		{//포인트 조회
-			CicueaCuPtAccmTcVo vo = new CicueaCuPtAccmTcVo();
-			vo.setIncsNo(getMemberSession().getUser_incsNo());
-			vo = amoreAPIService.getptinq(vo);
-			model.addAttribute("point", vo);
+			model.addAttribute("point", SessionUtils.getBeautyPoint(request, this.pointApi));
 		}
 		if(isMobileDevice()) {
 			return "my/point-present-06";
@@ -429,14 +424,12 @@ public class MyPointViewController extends AbstractController {
 	 */
 	@GetMapping("/info/pointPresent")
 	@PageTitle(title = "포인트 선물하기", menuId = "myPoint", subMenuId = "beautyPoint")
-	public String pointPresent(Model model) {
-
+	public String pointPresent(final HttpServletRequest request, Model model) {
+		//뷰티포인트 선물하기 진입 시점에 뷰티포인트 갱신
+		SessionUtils.clearBeautyPoint(request);
 
 		{//포인트 조회
-			CicueaCuPtAccmTcVo vo = new CicueaCuPtAccmTcVo();
-			vo.setIncsNo(getMemberSession().getUser_incsNo());
-			vo = amoreAPIService.getptinq(vo);
-			model.addAttribute("point", vo);
+			model.addAttribute("point", SessionUtils.getBeautyPoint(request, this.pointApi));
 		}
 
 		if(isMobileDevice()) {
@@ -673,24 +666,13 @@ public class MyPointViewController extends AbstractController {
 
 	@GetMapping("/cushion")
 	@PageTitle(title = "쿠션포인트", menuId = "myPoint", subMenuId = "cushion")
-	public String cushion(Model model) {
+	public String cushion(final HttpServletRequest request, Model model) {
 		Calendar c = Calendar.getInstance();
 		String onOffNum = getMemberSession().getUser_incsNo();
 		MemberSession memberSession = getMemberSession();
-		try {
-			CustCushinPoint cushin = posService.getCustCushinPoint(onOffNum);
-			model.addAttribute("cushin", cushin);
-		} catch(Exception e) {
-			CustCushinPoint cushin = new CustCushinPoint();
 
-			if(memberSession.getMember().getRemainCushionPoint() == null) {
-				cushin.setTotRemainPt(0);
-			} else {
-				cushin.setTotRemainPt(memberSession.getMember().getRemainCushionPoint());
-			}
-			model.addAttribute("cushin", cushin);
-		}
-		
+		final CushionPointSummary cushionPoint = SessionUtils.refreshCushionPoint(request, this.pointApi);
+		model.addAttribute("cushin", cushionPoint);
 		if(isMobileDevice()) {
 			c.add(Calendar.MONTH, -1);
 			CustCushinUseList listVo = posService.getCustCushinUseDetailList(onOffNum, c.getTime(), new Date(), 1, 10000);

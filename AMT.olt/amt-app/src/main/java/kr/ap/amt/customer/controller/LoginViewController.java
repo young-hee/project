@@ -1,9 +1,9 @@
 package kr.ap.amt.customer.controller;
 
-import kr.ap.amt.config.SSOLoginHandler;
 import kr.ap.comm.api.CaptchaAPI;
 import kr.ap.comm.config.interceptor.PageTitle;
 import kr.ap.comm.member.vo.MemberSession;
+import kr.ap.comm.support.APRequestContext;
 import kr.ap.comm.support.breadcrumb.BreadCrumb;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.CookieKey;
@@ -25,6 +25,7 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,9 +109,6 @@ public class LoginViewController extends AbstractController {
 		CookieUtils.removeCookie(request, response, CookieKey.AUTO_LOGIN);
 		MemberSession memberSession = getMemberSession();
 		String memberId = memberSession.getMember().getMemberId();
-		WebUtils.setSessionAttribute(request, SessionKey.LOGIN_USER, null);
-		WebUtils.setSessionAttribute(request, SessionKey.CART, null);
-		WebUtils.setSessionAttribute(request, SessionKey.ORDER, null);
 		if (memberSession.getMember_sn() != 0) {
 			try {
 				ApLogoutInfo logoutInfo = new ApLogoutInfo();
@@ -122,7 +120,15 @@ public class LoginViewController extends AbstractController {
 			}
 		}
 
-		if (env.acceptsProfiles("sso")) {
+		try {
+			HttpSession httpSession = request.getSession(false);
+			if(httpSession != null)
+				httpSession.invalidate();
+		} catch (IllegalStateException e) {
+			//Ignore already invalided session
+		}
+
+		if (env.acceptsProfiles("sso") && APRequestContext.isPC()) {
 			ssoLoginHandler.logout(request, memberId);
 		}
 

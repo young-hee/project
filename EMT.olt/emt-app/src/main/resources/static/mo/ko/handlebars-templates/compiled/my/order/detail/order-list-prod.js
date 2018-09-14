@@ -60,14 +60,12 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["order-list-prod"] = Handlebar
     + "', '"
     + alias4((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.claimYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),((stack1 = (depth0 != null ? depth0.info : depth0)) != null ? stack1.ordHistNo : stack1),((stack1 = (depth0 != null ? depth0.info : depth0)) != null ? stack1.ordNo : stack1),{"name":"condition","hash":{},"data":data}))
     + "')\">\n				"
-    + alias4(container.lambda(((stack1 = (depth0 != null ? depth0.prodInfo : depth0)) != null ? stack1.prodNameRlang : stack1), depth0))
+    + alias4(container.lambda(((stack1 = (depth0 != null ? depth0.prodInfo : depth0)) != null ? stack1.onlineProdNameRlang : stack1), depth0))
     + " "
     + alias4((helpers.ordCntCheck || (depth0 && depth0.ordCntCheck) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.prodInfo : depth0)) != null ? stack1.totalProdCnt : stack1),{"name":"ordCntCheck","hash":{},"data":data}))
     + "</a>\n		</p>\n		<p class=\"font_md\"><strong class=\"num\">"
     + alias4((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,(depth0 != null ? depth0.ordAmt : depth0),0,{"name":"currencyFormat","hash":{},"data":data}))
-    + "</strong></p>\n		<p class=\"num\"><small>"
-    + alias4((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.info : depth0)) != null ? stack1.ordReceivedDt : stack1),"YYYY-MM-DD",{"name":"dateFormat","hash":{},"data":data}))
-    + "</small></p>\n	</div>\n	<div>\n	<p>\n		<em>"
+    + "</strong></p>\n	</div>\n	<div>\n	<p>\n		<em>"
     + alias4((helpers.ordStatusCheck || (depth0 && depth0.ordStatusCheck) || alias2).call(alias1,(depth0 != null ? depth0.prodType : depth0),(depth0 != null ? depth0.statusCode : depth0),{"name":"ordStatusCheck","hash":{},"data":data}))
     + "</em>\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.statusCode : depth0),"===","PartialCancel",{"name":"xif","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")

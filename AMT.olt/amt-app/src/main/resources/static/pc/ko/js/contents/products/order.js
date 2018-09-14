@@ -90,20 +90,53 @@
 			//바로구매, 예약구매 클릭
 			this._$target.find( '.btn_buy_now, .btn_pre_purchase' ).on( 'click', function (e) {
 				var products = this._selectedOptions.getSelectedData();
+				if( products.length == 0 ){
+					AP.modal.alert({
+						contents : '<div class="ly_info">'+
+										'<p class="ly_txtSt1">옵션을 선택해 주세요.</p>'+
+										'<div class="layer_btns">'+
+											'<a href="#none" class="btn_fix_neutral btn_default_modal_confirm">확인</a>'+
+										'</div>'+
+								   '</div>'
+						,noneSystemAlert : true
+						,noneBtnConfirm:true
+					});
+					return false;
+				}
 
-				this._productsInOutOfStock( products ).done( function () {
-					if ( AP.LOGIN_USER ) {
-						this._buyNowProd( products ).done( function () {
-							this._goToPage( 'order' );
-						}.bind(this)).fail( function ( xhr ) {
-							//에러처리
-							console.log( '-error:', xhr.errorCode );
-						}.bind(this));
+				if ( AP.LOGIN_USER ) {
+					this._buyNowProd( products ).done( function () {
+						this._goToPage( 'order' );
+					}.bind(this)).fail( function ( xhr ) {
+						//에러처리
+						console.log( '-error:', xhr.errorCode );
+					}.bind(this));
 
-					} else {
+				} else {
+					var modal = AP.modal.info({
+						 title : '구매안내'
+						,contents : '<div class="ly_info">'+
+										'<p class="color_black font_sl">'+AP.message.BEFORE_BUY_MESSAGE+'</p>'+
+										'<div class="layer_btns">'+
+											'<a href="#none" class="btn_fix_bordered noneLogin">비로그인 구매</a>'+
+											'<a href="#none" class="btn_fix_neutral btn_default_modal_confirm moveLogin">로그인 구매</a>'+
+										'</div>'+
+									'</div>'
+						,noneSystemAlert : true
+					}),
+					$modal = modal.getElement();
+					
+					//로그인 페이지 이동
+					$modal.find('.moveLogin').on('click', function(e){
+						AP.login.go();
+					}.bind(this));
+					
+					//비회원 구매 이용약관 페이지로 이동
+					$modal.find('.noneLogin').on('click', function(e){
+						var $cur = $(e.currentTarget);
 						this._noneMemberOrderInfo( products, 'order' );
-					}
-				}.bind(this));
+					}.bind(this));
+				}
 			}.bind(this));
 
 			//테이크아웃 클릭
@@ -128,7 +161,25 @@
 
 			//장바구니 클릭
 			this._$target.find( '.btn_basket' ).on( 'click', function (e) {
+				//예약 주문 상품일 경우 장바구니 비활성화
+				if ( this._defaultModel.prodTypeCode == 'Presale' )
+					return false;
+				
 				var products = this._selectedOptions.getSelectedData();
+				if( products.length == 0 ){
+					AP.modal.alert({
+						contents : '<div class="ly_info">'+
+										'<p class="ly_txtSt1">옵션을 선택해 주세요.</p>'+
+										'<div class="layer_btns">'+
+											'<a href="#none" class="btn_fix_neutral btn_default_modal_confirm">확인</a>'+
+										'</div>'+
+								   '</div>'
+						,noneSystemAlert : true
+						,noneBtnConfirm:true
+					});
+					return false;
+				}
+				
 				this._productsInOutOfStock( products ).done( function () {
 					//if ( AP.LOGIN_USER ) {
 						this._addCartProd( 'order', products ).done( function () {

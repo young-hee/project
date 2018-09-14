@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,6 +45,9 @@ public class RestControllerSupport {
 			//API예외의 경우 해당 예외에서 정의한 Http응답코드로 변환
 			httpStatus = HttpStatus.valueOf(ApiException.class.cast(e).getStatus());
 			responseAttributes.put("errorData", new ErrorData((ApiException) e));
+		} else if (e instanceof MissingServletRequestParameterException) {
+			httpStatus = HttpStatus.BAD_REQUEST;
+			responseAttributes.put("errorData", new ErrorData(e.getMessage()));
 		} else {
 			responseAttributes.put("errorData", new ErrorData("처리중 에러가 발생했습니다."));
 		}

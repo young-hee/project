@@ -6,13 +6,13 @@
 			<dt>
 				<small th:text="${#IntegUtil.dateformat(item.saleDt, 'yyyy.MM.dd')}">2018.01.01</small>
 				<span th:text="${item.storNm}">에뛰드 쇼핑몰</span> │
-				<span>주문번호 <a href="#none" th:text="${item.ordNo}"><em>2017012102010101</em></a></span><!--/*20180628 : a태그 추가*/-->
+				<span>주문번호 <a th:href="'/my/page/order/detail/' + ${item.ordNo}" th:text="${item.ordNo}"><em>2017012102010101</em></a></span><!--/*20180628 : a태그 추가*/-->
 			</dt>
 			<dd>
 				<ul class="list">
 					<li class="clear">
 						<span>결제금액 <th:block th:text="${#IntegUtil.toCommaNumber(item.grdAmt)}">1,000,000</th:block>원</span>
-						<em>등급산정금액 <b class="num">-</b>원</em>
+						<em>등급산정금액 <th:block th:text="${#IntegUtil.toCommaNumber(item.grdAmt)}">1000</th:block></em>
 					</li>
 				</ul>
 			</dd>

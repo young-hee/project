@@ -6,12 +6,15 @@
  */
 package kr.ap.amt.display.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.g1project.ecp.api.model.sales.regularevent.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,14 +29,11 @@ import net.g1project.ecp.api.model.ap.ap.ShipAddressInfo;
 import net.g1project.ecp.api.model.ap.bbs.VisitEducationPost;
 import net.g1project.ecp.api.model.sales.guide.FoNotice;
 import net.g1project.ecp.api.model.sales.guide.FoNoticeResult;
+import net.g1project.ecp.api.model.sales.plandisplay.EventCommentImg;
 import net.g1project.ecp.api.model.sales.plandisplay.EventParticipantResult;
 import net.g1project.ecp.api.model.sales.plandisplay.EventParticipatedPost;
 import net.g1project.ecp.api.model.sales.plandisplay.PlanDisplay;
 import net.g1project.ecp.api.model.sales.plandisplay.PlanDisplayEventListResult;
-import net.g1project.ecp.api.model.sales.regularevent.AttendanceCheckHists;
-import net.g1project.ecp.api.model.sales.regularevent.Awards;
-import net.g1project.ecp.api.model.sales.regularevent.RegularEvent;
-import net.g1project.ecp.api.model.sales.regularevent.RegularEventRequesters;
 
 /**
  * @author Ria@g1project.net
@@ -158,11 +158,22 @@ public class EventRestController extends AbstractController {
 	@RequestMapping("/regularEventTermsAgree")
     public ResponseEntity<?> regularEventTermsAgree(RequestEvent requestEvent, HttpServletRequest req) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		
-		//	PAMRAM : Long eventParticipantSn, Long memberSn, String termsAgreeYn, String name, String telNo1, String telNo2, String address, String email
 
-		BooleanResult booleanResult = regulareventApi.regularEventTermsAgree(requestEvent.getEventParticipantSn(), requestEvent.getTermsAgreeYn()
-				, requestEvent.getName(), requestEvent.getPhoneNo1(), requestEvent.getPhoneNo2(), requestEvent.getAddress(), requestEvent.getEmailAddress());
+		// FIXME 임시수정. 값 확인 필요
+		ApRegularEventRequester requester = new ApRegularEventRequester();
+		requester.setTermsAgreeYn(requestEvent.getTermsAgreeYn());
+		requester.setRequesterName(requestEvent.getName());
+		EmbeddableTel telNo1 = new EmbeddableTel();
+		telNo1.setCountryNo(requestEvent.getCountryNo());
+		telNo1.setPhoneNo(req.getParameter("telNo1"));
+		requester.setTel(telNo1);
+		EmbeddableAddress addr = new EmbeddableAddress();
+		addr.setCountryCode(requestEvent.getCountryNo());
+		addr.setAddress1(requestEvent.getAddress());
+		requester.setAddress(addr);
+		requester.setEmailAddress(requestEvent.getEmailAddress());
+
+		BooleanResult booleanResult = regulareventApi.regularEventTermsAgree(requestEvent.getEventParticipantSn(), requester);
 
 		result.put("booleanResult", booleanResult);
 
@@ -294,10 +305,13 @@ public class EventRestController extends AbstractController {
 	 */
 	@RequestMapping("/planDisplayParticipated")
 	public ResponseEntity<?> planDisplayParticipated(RequestEvent requestEvent, EventParticipatedPost eventParticipatedPost, MultipartFile[] picture, HttpServletRequest req) {
+		System.out.println("========================== " + eventParticipatedPost.getTermsAgreeYn());
+		System.out.println("========================== " + requestEvent.getTermsAgreeYn());
 		
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
 		if (picture != null) {
+			System.out.println("length : " + picture.length);
 			eventParticipatedPost.setFiles(imageSettingList(picture));
 		}
 
@@ -351,12 +365,31 @@ public class EventRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/updateParticipated")
-	public ResponseEntity<?> updateParticipated(RequestEvent requestEvent,EventParticipatedPost eventParticipatedPost, MultipartFile[] picture) {
-		
-		HashMap<String, Object> result = new HashMap<String, Object>();
-		
+	public ResponseEntity<?> updateParticipated(RequestEvent requestEvent,EventParticipatedPost eventParticipatedPost, MultipartFile[] picture, HttpServletRequest req) {
+//		if(eventParticipatedPost.getEventCommentImgs() != null && eventParticipatedPost.getEventCommentImgs().size() > 0) {
+//			System.out.println("========================== " + eventParticipatedPost.getEventCommentImgs().size());
+//			System.out.println("========================== " + eventParticipatedPost.getEventCommentImgs().get(0).getEventCommentImgSn());
+//		}
+//		System.out.println("========================== " + req.getParameter("deleteEvalImgSnList"));
+//		System.out.println("========================== " + req.getParameter("eventCommentImgs"));
+//		System.out.println("========================== " + req.getParameter("eventCommentImgSn"));
 
-		eventParticipatedPost.setFiles(imageSettingList(picture));
+		if(!StringUtils.isEmpty(req.getParameter("eventCommentImgSn"))) {
+			List<EventCommentImg> eventCommentImgs = new ArrayList<EventCommentImg>();
+			EventCommentImg eventCommentImg = new EventCommentImg();
+			eventCommentImg.setEventCommentImgSn(Long.parseLong(req.getParameter("eventCommentImgSn")));
+			eventCommentImgs.add(eventCommentImg);
+			eventParticipatedPost.setEventCommentImgs(eventCommentImgs);
+		}
+
+		HashMap<String, Object> result = new HashMap<String, Object>();
+
+		if (picture != null) {
+			//System.out.println("length : " + picture.length);
+			eventParticipatedPost.setFiles(imageSettingList(picture));
+		}
+
+		//eventParticipatedPost.setFiles(imageSettingList(picture));
 		eventParticipatedPost.setMemberSn(getMemberSn());
 
 		if(eventParticipatedPost.getTermsAgreeYn().equals("true")) {

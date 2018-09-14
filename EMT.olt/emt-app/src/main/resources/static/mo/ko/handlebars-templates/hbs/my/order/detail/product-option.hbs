@@ -1,136 +1,176 @@
 {{#xif singleProdYn '===' 'Y'}}
-	<div class="product">
-		<div class="check_wrap check_only" style="display: none">
-			{{#xif promoSn '!=' null}}
-				<input type="checkbox" name="goods" prod="prod" onclick="selectProd(this);" promoSn="{{promoSn}}" onlineProdCode="{{oCode}}" ordHistProdNo="{{promoSn}}" id="{{sub.ordHistProdNo}}" val="{{json sub}}"><label for="{{sub.ordHistProdNo}}">
-			{{else}}
-				<input type="checkbox" name="goods" prod="prod" onclick="selectProd(this);" onlineProdCode="{{oCode}}" ordHistProdNo="{{sub.ordHistProdNo}}" id="{{sub.ordHistProdNo}}" val="{{json sub}}"><label for="{{sub.ordHistProdNo}}">
-			{{/xif}}
-			<span class="sr_only">선택</span></label>
-		</div>
+	{{#each prodList}}
+		{{#unless (and (eq ../status 'request')(eq ordHistProdStatusCode 'ProdCancel'))}}
+		<div class="product">
 
-		<div class="thumb">
-			<img src="{{sub.ordProdEx.prodImgUrl}}">
-		</div>
-		<div class="info">
-			{{#xif typeName '!=' null}}
-				<p class="flag">{{condition (eq typeName 'a') '진주알 상품' '뷰티포인트'}}</p>
-			{{/xif}}
-			<p class="name">{{sub.ordProdEx.prodNameBlang}}</p>
-
-			{{#xif claimYn '===' 'Y'}}
-			<p><strong class="num font_md">{{sub.claimReceivedQty}}</strong>개 /
-			{{else}}
-				{{#if (or (eq step 2)(eq sub.ordHistProdStatusCode 'ProdCancel'))}}
-				<p><strong class="num font_md">{{sub.cancelQty}}</strong>개 /
+			<div class="thumb">
+				{{#xif ../promoSn '!=' null}}
+					<div style="display: none">
+						<input type="checkbox" name="goods" prod="prod" onclick="selectProd(this);" promoSn="{{../promoSn}}" onlineProdCode="{{../oCode}}" ordHistProdNo="{{../promoSn}}" id="{{ordHistProdNo}}" val="{{json this}}"><label for="{{ordHistProdNo}}"></label>
+					</div>
 				{{else}}
-				<p><strong class="num font_md">{{calc (calc sub.ordQty '-' sub.cancelQty) '-' sub.claimReceivedQty}}</strong>개 /
-				{{/if}}
-			{{/xif}}
-
-			{{#xif typeName '!=' null}}
-				{{#xif typeName '==' 'b'}}
-					<strong class="num font_md">{{currencyFormatDefault sub.exchMembership 'P'}}</strong></p>
-				{{else}}
-					<strong class="num font_md">{{currencyFormatDefault sub.exchActivityPoint '알'}}</strong></p>
+					<div class="check_wrap" style="display: none">
+						<input type="checkbox" name="goods" prod="prod" onclick="selectProd(this);" onlineProdCode="{{../oCode}}" ordHistProdNo="{{ordHistProdNo}}" id="{{ordHistProdNo}}" val="{{json this}}"><label for="{{ordHistProdNo}}"></label>
+					</div>
 				{{/xif}}
 
-			{{else}}
-				<strong class="num font_md">{{currencyFormat sub.finalOnlineSaleAmtPcur}}</strong></p>
-			{{/xif}}
-		</div>
-		{{#xif sub.ordHistProdStatusCode '===' 'ProdCancel'}}
-			<div class="status">
-				<p><em>취소완료</em></p>
+				<img src="{{ordProdEx.prodImgUrl}}">
 			</div>
-		{{/xif}}
-	</div>
-	{{#xif sub.ordHistProdAwardExList '!=' null}}
-		{{#each sub.ordHistProdAwardExList}}
-			<div class="freebies table_layout">
-				<div><img src="{{awardOrdHistProdEx.ordProdEx.prodImgUrl}}"></div>
-				<div>
-					<p class="flag">사은품</p>
-					<p class="name">{{awardOrdHistProdEx.ordProdEx.onlineProdNameBlang}}</p>
-					<!--<p class="font_md"><strong class="num">10</strong>개/<strong class="num">0</strong>원</p>-->
-				</div>
-			</div>
-		{{/each}}
-	{{/xif}}
-	{{#xif sub.ordHistProdPromoAwardExList '!=' null}}
-		{{#each sub.ordHistProdPromoAwardExList}}
-			<div class="freebies table_layout">
-				<div><img src="{{awardOrdHistProdEx.ordProdEx.prodImgUrl}}"></div>
-				<div>
-					<p class="flag">사은품</p>
-					<p class="name">{{awardOrdHistProdEx.ordProdEx.onlineProdNameBlang}}</p>
-					<!--<p class="font_md"><strong class="num">10</strong>개/<strong class="num">0</strong>원</p>-->
-				</div>
-			</div>
-		{{/each}}
-	{{/xif}}
-{{else}}
-	{{#xif sub.ordProdEx.prodTypeCode '==='  'Prod'}}
-		<div class="prd_option">
-			<div class="table_layout">
-				<div>
-					<!-- /* 20180720:체크박스 추가*/ -->
-					{{#xif sub.ordHistProdTypeCode '===' 'BulkDc'}}
-						<div class="check_wrap" style="display: none">
-							<input type="checkbox" name="goods" prod="prod" onclick="selectProd(this);" onlineProdCode="{{oCode}}" ordHistProdNo="{{prodNo}}" id="{{prodNo}}" val="{{json sub}}"><label for="{{prodNo}}"><span class="sr_only">선택</span></label>
-						</div>
-					{{else}}
-						<div class="check_wrap check_only">
-							<input type="checkbox" name="goods" prod="prod" onclick="selectProd(this);" onlineProdCode="{{oCode}}" ordHistProdNo="{{prodNo}}" id="{{prodNo}}" val="{{json sub}}"><label for="{{prodNo}}"><span class="sr_only">선택</span></label>
-						</div>
-					{{/xif}}
+			<div class="info">
+				{{#xif typeName '!=' null}}
+					<div class="flag_wrap">
+						<p class="flag">{{condition (eq typeName 'a') '진주알 전용' '뷰티포인트 전용'}}</p>
+					</div>
+				{{/xif}}
+				<p class="name">{{ordProdEx.prodNameBlang}}</p>
 
-					<p>{{sub.ordProdEx.prodNameBlang}}</p>
-					{{#xif sub.ordHistProdAwardExList '!=' null}}
-						{{#each sub.ordHistProdAwardExList}}
-							<p class="color_light_gray">{{awardOrdHistProdEx.ordProdEx.onlineProdNameBlang}}</p>
-						{{/each}}
-					{{/xif}}
-					{{#xif sub.ordHistProdPromoAwardExList '!=' null}}
-						{{#each sub.ordHistProdPromoAwardExList}}
-							<p class="color_light_gray">{{awardOrdHistProdEx.ordProdEx.onlineProdNameBlang}}</p>
-						{{/each}}
-					{{/xif}}
-				</div>
-				<div>
 
-					{{#xif claimYn '===' 'Y'}}
-						<p>{{sub.claimReceivedQty}}개</p>
-					{{else}}
-						{{#if (or (eq step 2)(eq sub.ordHistProdStatusCode 'ProdCancel'))}}
-						<p>{{sub.cancelQty}}개</p>
+
+				<p class="price">
+					<span class="quantity">{{myOrdQty 'unit' this ../step ../type ../claimYn}}개</span> /
+					{{#xif typeName '!=' null}}
+						{{#xif typeName '==' 'b'}}
+							<strong class="eng">{{currencyFormatDefault exchMembership 'P'}}</strong>
 						{{else}}
-							<p>{{calc (calc sub.ordQty '-' sub.cancelQty) '-' sub.claimReceivedQty}}개</p>
-						{{/if}}
-					{{/xif}}
+							<strong class="eng">{{currencyFormatDefault exchActivityPoint '알'}}</strong>
+						{{/xif}}
 
-					{{#if (and (eq sub.ordProdEx.singleProdYn 'N')(eq sub.ordHistProdStatusCode 'OrdReceivedComplete'))}}
-						{{#if (and (eq step 1)(eq status 'detail'))}}
-							<button type="button"class="btn_sm_bordered" onclick="changeVar('{{sub.ordHistProdSn}}', '{{sub.ordHistProdNo}}', '{{sub.ordProdEx.prodSn}}')">옵션변경</button>
+					{{else}}
+						<strong class="eng">{{currencyFormat (condition (eq ordHistProdStatusCode 'ProdCancel') (calc cancelQty '*' finalOnlineSalePricePcur) finalOnlineSaleAmtPcur)}}</strong>
+					{{/xif}}
+				</p>
+				{{#xif ordHistProdStatusCode '===' 'ProdCancel'}}
+					<span class="status"><em>취소완료</em></span>
+				{{/xif}}
+			</div>
+		</div>
+		{{#xif ordHistProdAwardExList '!=' null}}
+			{{#each ordHistProdAwardExList}}
+				<div class="freebies table_layout">
+					<div><img src="{{awardOrdHistProdEx.ordProdEx.prodImgUrl}}"></div>
+					<div>
+						<p class="name">{{awardOrdHistProdEx.ordProdEx.onlineProdNameBlang}}</p>
+						<!--<p class="font_md"><strong class="num">10</strong>개/<strong class="num">0</strong>원</p>-->
+					</div>
+				</div>
+			{{/each}}
+		{{/xif}}
+		{{#xif ordHistProdPromoAwardExList '!=' null}}
+			{{#each ordHistProdPromoAwardExList}}
+				<div class="freebies table_layout">
+					<div><img src="{{awardOrdHistProdEx.ordProdEx.prodImgUrl}}"></div>
+					<div>
+						<p class="name">{{awardOrdHistProdEx.ordProdEx.onlineProdNameBlang}}</p>
+						<!--<p class="font_md"><strong class="num">10</strong>개/<strong class="num">0</strong>원</p>-->
+					</div>
+				</div>
+			{{/each}}
+		{{/xif}}
+
+		{{#xif ../promoSn '==' null}}
+			{{#if (and (and (eq ../status 'request')(eq ../step 1))(ne ../type 'cancel'))}}
+
+			{{!--/* 클레임 선택 */--}}
+				{{{prodPartial 'my.order.detail.claim-reason-select' 'ordHistProdNo' ordHistProdNo 'reason' ../reason}}}
+
+			{{/if}}
+
+			{{#if (and (or (eq ../claimYn 'Y')(eq ../step 2))(ne ../type 'cancel'))}}
+
+				<!--/* 클레임 사유 */-->
+				{{{prodPartial 'my.order.detail.claim-reason' 'type' ../type 'receivedClaimReasonName' receivedClaimReasonName 'foReceivedClaimReason' foReceivedClaimReason}}}
+
+			{{/if}}
+		{{/xif}}
+
+
+		{{/unless}}
+	{{/each}}
+{{else}}
+	<div class="prd_option">
+	{{#each prodList}}
+		{{#unless (and (eq ../status 'request')(eq ordHistProdStatusCode 'ProdCancel'))}}
+		{{#xif ordProdEx.prodTypeCode '==='  'Prod'}}
+			<div class="opt_box">
+				<div class="table_layout">
+					<!-- /* 20180720:체크박스 추가*/ -->
+					<p class="opt_chk" style="display: none">
+						{{#xif ordHistProdTypeCode '===' 'BulkDc'}}
+							<span style="display: none">
+								<input type="checkbox" name="goods" prod="prod" onclick="selectProd(this);" onlineProdCode="{{../oCode}}" ordHistProdNo="{{../oCode}}" id="{{ordHistProdNo}}" val="{{json this}}"><label for="{{ordHistProdNo}}"></label>
+							</span>
+						{{else}}
+							<span class="check_wrap">
+								<input type="checkbox" name="goods" prod="prod" onclick="selectProd(this);" onlineProdCode="{{../oCode}}" ordHistProdNo="{{ordHistProdNo}}" id="{{ordHistProdNo}}" val="{{json this}}"><label for="{{ordHistProdNo}}"></label>
+							</span>
+						{{/xif}}
+					</p>
+					<p class="opt_thm"><img alt="" src="{{ordProdEx.prodImgUrl}}"></p>
+					<p class="opt_name"><span>{{ordProdEx.prodNameBlang}}</span></p>
+
+					<p class="opt_num">{{myOrdQty 'unit' this ../step ../type ../claimYn}}개 / {{currencyFormat (condition (eq ordHistProdStatusCode 'ProdCancel') (calc cancelQty '*' finalOnlineSalePricePcur) finalOnlineSaleAmtPcur)}}</p>
+
+
+				</div>
+				{{#xif ordHistProdStatusCode '===' 'ProdCancel'}}
+					<span class="status"><em>취소완료</em></span>
+				{{/xif}}
+				{{#xif ordProdEx.singleProdYn '==' 'N'}}
+					{{#if (or (eq ordHistProdStatusCode 'OrdReceivedComplete')(eq ordHistProdStatusCode 'OrdReceivedWaiting'))}}
+						{{#if (and (eq ../step 1)(eq ../status 'detail'))}}
+							<button type="button"class="btn_sm_bordered" onclick="changeVar('{{ordHistProdSn}}', '{{ordHistProdNo}}', '{{ordProdEx.prodSn}}')">옵션변경</button>
 						{{/if}}
 					{{/if}}
-					{{#xif sub.ordHistProdStatusCode '===' 'ProdCancel'}}
-						<div class="status">
-							<p><em>취소완료</em></p>
+				{{/xif}}
+			</div>
+			{{#xif ordHistProdAwardExList '!=' null}}
+				{{#each ordHistProdAwardExList}}
+					<div class="freebies table_layout"><!--/* 상품아래 달리는 사은품 case */-->
+						<div><img src="{{awardOrdHistProdEx.ordProdEx.prodImgUrl}}"></div>
+						<div>
+							<p class="name">{{awardOrdHistProdEx.ordProdEx.onlineProdNameBlang}}</p>
 						</div>
-					{{/xif}}
+					</div>
+				{{/each}}
+			{{/xif}}
+			{{#xif ordHistProdPromoAwardExList '!=' null}}
+				{{#each ordHistProdPromoAwardExList}}
+					<div class="freebies table_layout"><!--/* 상품아래 달리는 사은품 case */-->
+						<div><img src="{{awardOrdHistProdEx.ordProdEx.prodImgUrl}}"></div>
+						<div>
+							<p class="name">{{awardOrdHistProdEx.ordProdEx.onlineProdNameBlang}}</p>
+						</div>
+					</div>
+				{{/each}}
+			{{/xif}}
+		{{else}}
+			<div class="freebies table_layout"><!--/* 상품아래 달리는 사은품 case */-->
+				<div><img src="{{ordProdEx.prodImgUrl}}"></div>
+				<div>
+					<p class="flag">{{prodCaseName ordProdEx.prodTypeCode}}</p>
+					<p class="name">{{ordProdEx.prodNameBlang}}</p>
+					<p class="font_md"><strong class="num">{{ordQty}}</strong>개/<strong class="num">{{finalOnlineSaleAmtPcur}}</strong>원</p>
 				</div>
 			</div>
-		</div>
-	{{else}}
-		<div class="freebies table_layout"><!--/* 상품아래 달리는 사은품 case */-->
-			<div><img src="{{sub.ordProdEx.prodImgUrl}}"></div>
-			<div>
-				<p class="flag">{{prodCaseName sub.ordProdEx.prodTypeCode}}</p>
-				<p class="name">{{sub.ordProdEx.prodNameBlang}}</p>
-				<p class="font_md"><strong class="num">{{sub.ordQty}}</strong>개/<strong class="num">{{sub.finalOnlineSaleAmtPcur}}</strong>원</p>
-			</div>
-		</div>
-	{{/xif}}
+		{{/xif}}
+		{{#xif ordHistProdTypeCode '!=' 'BulkDc'}}
+			{{#if (and (and (eq ../status 'request')(eq ../step 1))(ne ../type 'cancel'))}}
+
+			{{!--/* 클레임 선택 */--}}
+				{{{prodPartial 'my.order.detail.claim-reason-select' 'ordHistProdNo' ordHistProdNo 'reason' ../reason}}}
+
+			{{/if}}
+
+			{{#if (and (or (eq ../claimYn 'Y')(eq ../step 2))(ne ../type 'cancel'))}}
+
+				<!--/* 클레임 사유 */-->
+				{{{prodPartial 'my.order.detail.claim-reason' 'type' ../type 'receivedClaimReasonName' receivedClaimReasonName 'foReceivedClaimReason' foReceivedClaimReason}}}
+
+			{{/if}}
+		{{/xif}}
+
+		{{/unless}}
+	{{/each}}
+	</div>
 {{/xif}}
 

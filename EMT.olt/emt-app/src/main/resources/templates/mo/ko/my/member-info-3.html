@@ -15,7 +15,7 @@
                     <div class="point_summary">
                         <dl>
                             <dt>잔여 뷰티포인트</dt><!--20180125 문구 수정-->
-                            <dd th:text="${session.LOGIN_USER.member.remainBeautyPoint} + 'P'">2,000P</dd>
+                            <dd th:text="${#IntegUtil.toCommaNumber(#IntegUtil.beautyPoint().remainBeautyPoint)} + 'P'">2,000P</dd>
                         </dl>
                         <dl>
                             <dt>잔여 진주알</dt><!--20180125 문구 수정-->
@@ -29,7 +29,7 @@
                         <!--end : 20180125 항목 추가-->
                         <dl>
                             <dt>잔여 쿠션포인트</dt><!--20180125 문구 수정-->
-                            <dd th:text="${session.LOGIN_USER.member.remainCushionPoint} + 'P'">0P</dd>
+                            <dd th:text="#IntegUtil.toCommaNumber(#IntegUtil.cushionPoint().remainCushionPoint)">0P</dd>
                         </dl>
                     </div>
                     

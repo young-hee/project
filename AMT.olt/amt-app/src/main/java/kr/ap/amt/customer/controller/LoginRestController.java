@@ -2,7 +2,6 @@ package kr.ap.amt.customer.controller;
 
 import kr.ap.amt.api.pshop.PShopService;
 import kr.ap.amt.api.pshop.vo.PShopResult;
-import kr.ap.amt.config.SSOLoginHandler;
 import kr.ap.comm.api.vo.CicuemCuAdtInfTcVo;
 import kr.ap.comm.api.vo.CicuemCuInfCoOutVo;
 import kr.ap.comm.api.vo.CicuemCuInfTotTcVo;
@@ -63,7 +62,7 @@ public class LoginRestController extends AbstractController {
 			respMap = loginHandler.login(req, resp, memberId, password, autoLogin);
 
 			// TODO SSO Login??
-			if (env.acceptsProfiles("sso")) {
+			if (env.acceptsProfiles("sso") && APRequestContext.isPC()) {
 				// id, pwd, sso_session_key 정보 넘겨야 함
 				ssoLoginHandler.login(req);
 			}

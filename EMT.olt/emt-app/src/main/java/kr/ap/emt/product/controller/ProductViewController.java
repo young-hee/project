@@ -41,33 +41,34 @@ public class ProductViewController extends AbstractController {
     	OnlineProdInfo onlineProdInfo = productApi.getOnlineProduct( requestReview.getOnlineProdSn(), requestReview.getProdSn(), getMemberSn(), onlyProd);
     	
 		//단위상품 판매표시상태코드 체크 방어로직추가, 정의되지 않은 상태라면 main로 return한다.
-		for (ProductInfo p : onlineProdInfo.getProducts()) {
-			boolean validEnum = EnumUtils.isValidEnum(ProductSaleDisplayStatus.class, p.getSaleDisplayStatus());
-			if(!validEnum) {
-				return "redirect:/main"; // 상품상태에 따른 return  온라인상품 판매표시상태코드 - OnSale(판매중) - OutOfStock(품절) - Exhaustion(조기소진) - WaitingSale(판매대기) - SuspendSale(판매일시중지) - EndSale(판매종료)
+    		
+			for ( ProductInfo p : onlineProdInfo.getProducts()) {
+				
+				boolean validEnum = EnumUtils.isValidEnum(ProductSaleDisplayStatus.class, p.getSaleDisplayStatus());
+				if(!validEnum) {
+					return "redirect:/main"; // 상품상태에 따른 return  온라인상품 판매표시상태코드 - OnSale(판매중) - OutOfStock(품절) - Exhaustion(조기소진) - WaitingSale(판매대기) - SuspendSale(판매일시중지) - EndSale(판매종료)
+				}
 			}
-		}
     	
     	ArticleSearchResult relateArticle = articleApi.getProdArticleList(requestReview.getOnlineProdSn(), "SortOrder", "Y", 0, 1 );
     	
-    	ProdReviewSummaryInfo summary;
-    	PlanDisplayEventListResult relateEventList;
-    
     	//sns
     	String snsImage = null;
     	String snsTitle = null;
     	String snsDesc = null;
     	
     	//sns 이미지(default)
-    	if(!StringUtils.isEmpty(onlineProdInfo.getOnlineProdImages())) {
+    	if(!onlineProdInfo.getOnlineProdImages().isEmpty()) {
+    		
     		snsImage = onlineProdInfo.getOnlineProdImages().get(0).getImgUrl();
         }else {
-        	if(!StringUtils.isEmpty(onlineProdInfo.getProducts().get(0).getProdImages())) {
+        	if(!onlineProdInfo.getProducts().get(0).getProdImages().isEmpty()) {
         		snsImage = onlineProdInfo.getProducts().get(0).getProdImages().get(0).getImgUrl();
         	}
         }
     	//sns title(default)
     	if(!StringUtils.isEmpty(onlineProdInfo.getOnlineProdName())) {
+    		logger.info("onlineProdInfo.getOnlineProdName();");
     		snsTitle = onlineProdInfo.getOnlineProdName();
     	}else {
     		snsTitle = onlineProdInfo.getProducts().get(0).getProdName();
@@ -79,17 +80,12 @@ public class ProductViewController extends AbstractController {
     		snsDesc = onlineProdInfo.getProducts().get(0).getLineDesc();
     	}
     	
-    	try {
-    		requestReview.setProdReviewType("All"); //All(전체), Pur(구매후기), Prod(상품리뷰), ExperienceGrp(체험단)
-    		requestReview.setProdReviewUnit("OnlineProd"); //OnlineProd(온라인상품단위) - UnitProd(단위상품단위, 단위상품일련번호 필수) - StyleCode(스타일코드단위, 스타일코드 필수)
-    		summary = productApi.getProductReviewSummary(requestReview.getProdReviewUnit(), requestReview.getProdReviewType(), requestReview.getOnlineProdSn(), requestReview.getProdSn(), requestReview.getStyleCode());
-    		//relateEventList = plandisplayApi.getOnlineProdPlanDisplayEventList(requestReview.getOnlineProdSn(), "Progress", 0, 2, getMemberSn());
-    		relateEventList = plandisplayApi.getOnlineProdPlanDisplayEventList(requestReview.getOnlineProdSn(), requestReview.getStatus(), requestReview.getProdReviewType(), "Y", "SortOrder", 0, 0);
-    	}catch(ApiException apiEx) {
-    		summary = new ProdReviewSummaryInfo();
-    		relateEventList = new PlanDisplayEventListResult();
-    	}
-    	
+		requestReview.setProdReviewType("All"); //All(전체), Pur(구매후기), Prod(상품리뷰), ExperienceGrp(체험단)
+		requestReview.setProdReviewUnit("OnlineProd"); //OnlineProd(온라인상품단위) - UnitProd(단위상품단위, 단위상품일련번호 필수) - StyleCode(스타일코드단위, 스타일코드 필수)
+ 
+    	ProdReviewSummaryInfo	summary = productApi.getProductReviewSummary(requestReview.getProdReviewUnit(), requestReview.getProdReviewType(), requestReview.getOnlineProdSn(), requestReview.getProdSn(), requestReview.getStyleCode());
+    	PlanDisplayEventListResult relateEventList = plandisplayApi.getOnlineProdPlanDisplayEventList(requestReview.getOnlineProdSn(), requestReview.getStatus(), requestReview.getProdReviewType(), "Y", "SortOrder", 0, 0);
+    		
     	model.addAttribute("prd", onlineProdInfo);
     	model.addAttribute("summary", summary);
     	model.addAttribute("relateArticle", relateArticle);
@@ -97,6 +93,7 @@ public class ProductViewController extends AbstractController {
 
         SnsEntity snsEntity = new SnsEntity();
         snsEntity.setUrl(getFullUri());
+       
         if(StringUtils.isEmpty(onlineProdInfo.getSnsImg())) {
         	snsEntity.setImage(snsImage);
         }else {
@@ -112,6 +109,7 @@ public class ProductViewController extends AbstractController {
         }else {
         	snsEntity.setDescription(onlineProdInfo.getSnsInterfaceDesc());
         }
+        
         snsEntity.setHashtag(onlineProdInfo.getHashTag());
 		model.addAttribute("sns", snsEntity);
 

@@ -4,6 +4,11 @@ public class SessionKey {
 
 	public static final String MALL_ID = "MALL_ID";
 
+	/**
+	 * TaggingInfo
+	 */
+	public static final String TAGGING_INFO = "TAGGING_INFO";
+
     /**
      * Member
      */
@@ -24,6 +29,8 @@ public class SessionKey {
     public static final String RETURL = "RETURL";
     
     public static final String MOBILE_LOGIN_INFO = "MOBILE_LOGIN_INFO";
+    
+    public static final String TEMP_MEMBER_SN = "TEMP_MEMBER_SN";
 
     /**
      * Sns
@@ -56,4 +63,8 @@ public class SessionKey {
 	 * order
 	 */
 	public static final String ORDER = "ORDER";
+
+	public static final String BEAUTY_POINT = "_SESSION_KEY_BEAUTY_POINT";
+
+	public static final String CUSHION_POINT = "_SESSION_KEY_CUSHION_POINT";
 }

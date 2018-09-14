@@ -1,19 +1,17 @@
 <!--최종 결제금액-->
-<dl class="final_payment" id="amtPcur">
+<div class="ui_accordion" id="amtPcur" style="margin-top: 9px;">
 	<script th:inline="javascript">
 		$( document ).ready(function() {
 			amtPcurInit();
-			$( '.ui_spinner' ).spinner();
-			$( '.ui_tooltip' ).tooltip();
-
-			$('.spinner_increase').attr('disabled', true);
 		});
 
 		//결제금액 영역 그리기
 		function amtPcurInit() {
 			var ordHistEx = /*[[${ordEx.ordHistEx}]]*/ null, // 최종결제금액
+				ordOtfExList = /*[[${ordOtfExList}]]*/ null,
 				ordAmtMap = /*[[${ordAmtMap}]]*/ null,
 				ordCntMap = /*[[${ordCntMap}]]*/ null,
+				otfTotalAmtMap = /*[[${otfTotalAmtMap}]]*/ null,
 				depositAvailAmt = /*[[${ordEx.depositAvailAmt}]]*/ 0,
 				isApMember = /*[[${isApMember}]]*/ null;
 
@@ -23,33 +21,51 @@
 			 */
 			var html = AP.common.getTemplate( 'order.final-price-amt-pcur', {
 				ordHistEx : ordHistEx,
+				ordOtfExList : ordOtfExList,
 				ordAmtMap : ordAmtMap,
 				ordCntMap : ordCntMap,
+				otfTotalAmtMap : otfTotalAmtMap,
 				isApMember : isApMember
 			});
 			$('#amtPcur').html(html);
-			$("[name=finalPamtPcur]").val(ordHistEx.finalPamtPcur);
-			$("[name=depositAvailAmt]").val(depositAvailAmt);
+			$("[name=finalPamtPcur]").val(ordHistEx.finalPamtPcur); 	//최종결제금액
+			$("[name=depositAvailAmt]").val(depositAvailAmt); 		//예치금
 			$("#orderPayment").html($B.string.numberFormat(ordHistEx.finalPamtPcur)+'원 결제하기');
 		}
-
-		//결제금액 영역 그리기(ajax)
-		function amtPcurInitAjax(data) {
-			/**
-			 * 총결제금액
-			 * @type {*|String}
-			 */
-			var html = AP.common.getTemplate('order.final-price-amt-pcur', {
-				ordHistEx: data.ordHistEx,
-				ordAmtMap: data.ordAmtMap,
-				ordCntMap: data.ordCntMap,
-				isApMember: data.isApMember
-			});
-			$('#amtPcur').html(html);
-			$("[name=finalPamtPcur]").val(data.ordHistEx.finalPamtPcur);
-			$("[name=depositAvailAmt]").val(data.depositAvailAmt);
-			$("#orderPayment").html($B.string.numberFormat(data.ordHistEx.finalPamtPcur) + '원 결제하기');
-		}
 	</script>
-</dl>
+</div>
+
+<script th:inline="javascript">
+
+	//결제금액 영역 그리기(ajax)
+	function amtPcurInitAjax(data) {
+
+		/*** 쿠폰/포인트 사용 영역의 최종 할인금액 + 포인트 사용표시 ***/
+		$("#totalUsedSaleAmt").text( addComma(data.ordAmtMap.totalOrdDcPriceSum) + '원 할인' );
+		$("#totalUsedPointAmt").text( addComma(data.ordAmtMap.MembershipExch) + 'P 사용' );
+
+		/**
+		 * 총결제금액
+		 * @type {*|String}
+		 */
+		var html = AP.common.getTemplate('order.final-price-amt-pcur', {
+			ordHistEx: data.ordHistEx,
+			ordOtfExList : data.ordOtfExList,
+			ordAmtMap: data.ordAmtMap,
+			ordCntMap: data.ordCntMap,
+			otfTotalAmtMap : data.otfTotalAmtMap,
+			isApMember: data.isApMember
+		});
+		$('#amtPcur').html(html);
+		$("[name=finalPamtPcur]").val(data.ordHistEx.finalPamtPcur);	//최종결제금액
+		$("[name=depositAvailAmt]").val(data.depositAvailAmt);		//예치금
+		$("#orderPayment").html($B.string.numberFormat(data.ordHistEx.finalPamtPcur) + '원 결제하기');
+	};
+
+	function addComma(num) {
+		var regexp = /\B(?=(\d{3})+(?!\d))/g;
+		return num.toString().replace(regexp, ',');
+	}
+
+</script>
 <!--최종 결제금액-->

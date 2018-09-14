@@ -29,7 +29,7 @@
 				,limit: 8
 				,attr: null
 				,flag: null
-				,prodSort: null
+				,prodSort: 'NewProd'
 				,includeFilters: ( this._$target.find( '.sorting_group .btn.filter' ).length > 0 ) ? true : false
 				,toSearchFor : $('#searchWord').val()
 			};
@@ -41,6 +41,7 @@
 		/** =============== Public Methods =============== */
 		
 		load : function(){
+			 
 			this._getDefaultData();
 		},
 		
@@ -59,8 +60,10 @@
 		 * */
 		_getDefaultData : function(){
 			AP.api.searchEverything(null, {
-				toSearchFor : $('#searchWord').val()
+				toSearchFor : $('#searchWord').val(),
+				prodReviewSort : 'RecentRegistDt'
 			}).done(function(result){
+				 
 				if( result.everything != undefined && result.everything != null){
 					var articles = null;
 					var planDisplay = null;
@@ -100,10 +103,11 @@
 
 		_setProduct: function (data) {
 			this.productList = new AP.ProductList( this._$target.find('.tab_contents .tab_cont.product') );
+			
 			var option = {
 					 api : 'searchProdList'	
 					,key : 'search'
-					,param : $.extend(this._param, {toSearchFor : $('#searchWord').val(), limit : 10})
+					,param : $.extend(this._param, {toSearchFor : $('#searchWord').val(), limit : 8})
 			};
 			this._loadedTab.product = true;
 			this.productList.load(option, false, data);

@@ -1,0 +1,65 @@
+<div class="layer_popup fullpage btn_y benefit_layer">
+	<div class="layer_wrap">
+		<dl class="layer">
+			<dt class="layer_title">쿠폰조회</dt>
+			<dd class="layer_cont type2">
+
+				<fieldset class="section registration_form">
+					<legend class="sr_only">쿠폰 등록</legend>
+					<div class="input_wrap"><input type="text" name="couponIdentifier" title="쿠폰번호 입력" placeholder="쿠폰번호를 입력해주세요"></div>
+					<button type="button" class="btn_sm_bordered" id="registerBtn">등록</button>
+				</fieldset>
+
+				<!-- (180906) 쿠폰 케이스추가 -->
+				<dl class="section coupon_list">
+					<dt class="clear"><span>쿠폰사용 합계</span> <em><b>0</b>원</em></dt>
+					<dd>
+						<ul>
+							<div id="couponApplyLoading" style="height:100%; background:#ccc; display: none;">
+								<div class="loading_layer">
+									<img alt="로딩중" src="/mo/ko/images/common/loading.gif">
+								</div>
+							</div>
+							<!-- 쿠폰 리스트 -->
+							{{#each coupon.list}}
+								<li>
+									<div class="check_wrap large">
+										<label for="{{ this.memberKeepingCouponSn }}">
+											<span class="chk_h28 f_mid">
+												<input type="checkbox" id="{{ this.memberKeepingCouponSn }}" name="couponSn" data-code="{{ this.duplicationUseConditionCode }}">
+											</span>
+											<span class="cont">
+												<span class="text">{{ this.couponName }} &nbsp; {{ this.foGuide }}</span>
+												<span class="date"> {{ dateFormat this.expExpectedDt }} 까지</span>
+											</span>
+											<span class="price">
+												<!-- <b>5,000</b>원<br>할인 -->
+												{{{ couponTypeBenefitSwitch this }}}
+											</span>
+										</label>
+									</div>
+								</li>
+							{{/each}}
+						</ul>
+					</dd>
+				</dl>
+				<!--// (180906) 쿠폰 케이스추가 -->
+
+				<div class="section transparent">
+					<p class="text color_light_gray">쿠폰사용시 포인트를 적립받을 수 없습니다<br>상품쿠폰/증정쿠폰/플러스멤버십쿠폰 등이 해당됩니다<br>인증번호 쿠폰은 상단에 입력후 결제시 사용 가능합니다</p>
+				</div>
+
+				<div class="section no_coupon" style="display:none;">
+					<p class="txt">보유중인 쿠폰이 없습니다.</p>
+					<p class="color_light_gray">사용 가능 쿠폰보기에서<br>
+						다운로드 가능한 쿠폰을 확인하세요<br>
+						쿠폰을 다운받으면 다양한 혜택이 제공됩니다</p>
+				</div>
+			</dd>
+		</dl>
+		<div class="layer_btns">
+			<button type="button" class="btn_h50_pp" id="b_save" disabled>확인</button> <!--disabled 빼주시면 됩니다 활성화 버튼스타일 됩니다-->
+		</div>
+		<button type="button" class="layer_close" id="b_close"><i class="ico_close"></i><span class="sr_only">레이어 닫기</span></button>
+	</div>
+</div>

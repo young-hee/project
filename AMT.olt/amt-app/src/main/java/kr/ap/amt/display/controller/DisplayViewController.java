@@ -200,7 +200,187 @@ public class DisplayViewController extends AbstractController {
 		// return "display/product-list-12";
 		return "display/" + pageInfo.getMenuPageFileId();
 	}
-	
+
+	@RequestMapping({"/sale"})
+	@PageTitle(title = "Sale")
+	public String sale(Model model, String displayMenuId, String previewKey, String previewDate) {
+		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
+		model.addAttribute("displayMenuId", displayMenuId);
+		
+		// 메뉴페이지 코너정보 조회
+		String cornerIds = "";
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		cornerIds = "M01_sale_m.1";
+
+		try {
+			List<Corner> corners = displayApi.getMenuPageCorners(
+					APConstant.AP_DISPLAY_MENU_SET_ID, 
+					displayMenuId,
+					previewKey, 
+					previewDate != null ? sf.parse(previewDate) : null, 
+					cornerIds, 
+					false);
+
+			Map<String, List<CornerContentsSet>> cornersMap = new HashMap<String, List<CornerContentsSet>>();
+
+			for (Corner c : corners) {
+				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
+			}
+
+			model.addAttribute("cornersMap", cornersMap);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			model.addAttribute("cornersMap", null);
+		}
+
+		return "display/" + pageInfo.getMenuPageFileId();
+	}
+
+	@RequestMapping({"/onePlusOnePromo"})
+	@PageTitle(title = "1+1행사")
+	public String onePlusOnePromo(Model model, String displayMenuId, String previewKey, String previewDate) {
+		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
+		model.addAttribute("displayMenuId", displayMenuId);
+		
+		// 메뉴페이지 코너정보 조회
+		String cornerIds = "";
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+
+		cornerIds = "M01_onePlusOnePromo_m.1";
+
+		try {
+			List<Corner> corners = displayApi.getMenuPageCorners(
+					APConstant.AP_DISPLAY_MENU_SET_ID, 
+					displayMenuId,
+					previewKey, 
+					previewDate != null ? sf.parse(previewDate) : null, 
+					cornerIds, 
+					false);
+
+			Map<String, List<CornerContentsSet>> cornersMap = new HashMap<String, List<CornerContentsSet>>();
+
+			for (Corner c : corners) {
+				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
+			}
+
+			model.addAttribute("cornersMap", cornersMap);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			model.addAttribute("cornersMap", null);
+		}
+
+		return "display/" + pageInfo.getMenuPageFileId();
+	}
+
+	@RequestMapping({"/todayHotdeal"})
+	@PageTitle(title = "투데이핫딜")
+	public String todayHotdeal(Model model, String displayMenuId, String previewKey, String previewDate) {
+		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
+		model.addAttribute("displayMenuId", displayMenuId);
+		
+		// 메뉴페이지 코너정보 조회
+		String cornerIds = "";
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+
+		cornerIds = "M01_todayHotdeal_m.1";
+
+		try {
+			List<Corner> corners = displayApi.getMenuPageCorners(
+					APConstant.AP_DISPLAY_MENU_SET_ID, 
+					displayMenuId,
+					previewKey, 
+					previewDate != null ? sf.parse(previewDate) : null, 
+					cornerIds, 
+					false);
+
+			Map<String, List<CornerContentsSet>> cornersMap = new HashMap<String, List<CornerContentsSet>>();
+
+			for (Corner c : corners) {
+				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
+			}
+
+			model.addAttribute("cornersMap", cornersMap);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			model.addAttribute("cornersMap", null);
+		}
+
+		return "display/" + pageInfo.getMenuPageFileId();
+	}
+
+	@RequestMapping({"/specialGift"})
+	@PageTitle(title = "스페셜기프트")
+	public String specialGift(Model model, String displayMenuId, String previewKey, String previewDate) {
+		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
+		model.addAttribute("displayMenuId", displayMenuId);
+
+		// 메뉴페이지 코너정보 조회
+		String cornerIds = "";
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+
+		cornerIds = "M01_specialGift_m.1";
+
+		try {
+			List<Corner> corners = displayApi.getMenuPageCorners(
+					APConstant.AP_DISPLAY_MENU_SET_ID,
+					displayMenuId,
+					previewKey,
+					previewDate != null ? sf.parse(previewDate) : null,
+					cornerIds,
+					false);
+
+			Map<String, List<CornerContentsSet>> cornersMap = new HashMap<String, List<CornerContentsSet>>();
+
+			for (Corner c : corners) {
+				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
+			}
+
+			model.addAttribute("cornersMap", cornersMap);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			model.addAttribute("cornersMap", null);
+		}
+
+		return "display/" + pageInfo.getMenuPageFileId();
+	}
+
+	@RequestMapping({"/cusionZone"})
+	@PageTitle(title = "쿠션존")
+	public String cushionZone(Model model, String displayMenuId, String previewKey, String previewDate) {
+		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
+		model.addAttribute("displayMenuId", displayMenuId);
+
+		// 메뉴페이지 코너정보 조회
+		String cornerIds = "";
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+
+		cornerIds = "M01_cusionZone_m.1";
+
+		try {
+			List<Corner> corners = displayApi.getMenuPageCorners(
+				APConstant.AP_DISPLAY_MENU_SET_ID,
+				displayMenuId,
+				previewKey,
+				previewDate != null ? sf.parse(previewDate) : null,
+				cornerIds,
+				false);
+
+			Map<String, List<CornerContentsSet>> cornersMap = new HashMap<String, List<CornerContentsSet>>();
+
+			for (Corner c : corners) {
+				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
+			}
+
+			model.addAttribute("cornersMap", cornersMap);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			model.addAttribute("cornersMap", null);
+		}
+
+		return "display/" + pageInfo.getMenuPageFileId();
+	}
+
 	@RequestMapping({"/trendOnAir"})
     @PageTitle(title = "트렌드온에어")
     public String trendOnAir(Model model, String displayMenuId) {

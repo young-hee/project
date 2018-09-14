@@ -13,7 +13,8 @@ this["AP"]["handlebars"]["products"]["selected-option-list"] = Handlebars.templa
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.activityPointOnly : depth0),"==","Y",{"name":"xif","hash":{},"fn":container.program(8, data, 0, blockParams, depths),"inverse":container.program(10, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "	     \n	    <button class=\"ui_close btn_del\" type=\"button\" data-prod-sn=\""
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.prodSn : depth0), depth0))
-    + "\"> \n	      <span class=\"sr_only\">선택 옵션 삭제</span> \n	    </button> \n	    \n	</div>\n	\n	\n";
+    + "\"> \n	      <span class=\"sr_only\">선택 옵션 삭제</span> \n	    </button> \n	    \n	</div>\n	\n"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.targetYN : stack1),"Y",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(18, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"2":function(container,depth0,helpers,partials,data) {
     return "		<div class=\"soldout_alarm product_item\" data-prod-sn=\""
     + container.escapeExpression(container.lambda((depth0 != null ? depth0.prodSn : depth0), depth0))
@@ -57,11 +58,52 @@ this["AP"]["handlebars"]["products"]["selected-option-list"] = Handlebars.templa
     + container.escapeExpression((helpers.numberFormat || (depth0 && depth0.numberFormat) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.exchMembershipPoint : depth0),{"name":"numberFormat","hash":{},"data":data}))
     + "</b> P \n";
 },"15":function(container,depth0,helpers,partials,data) {
-    var alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return "	          <b class=\"num item_total_price\">"
+  return "	        	"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.targetYN : stack1),"Y",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(16, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n				<b class=\"num item_total_price\">"
     + container.escapeExpression((helpers.numberFormat || (depth0 && depth0.numberFormat) || alias2).call(alias1,(helpers.availablePrices || (depth0 && depth0.availablePrices) || alias2).call(alias1,(depth0 != null ? depth0.availablePrices : depth0),"finalOnlinePrice",{"name":"availablePrices","hash":{},"data":data}),{"name":"numberFormat","hash":{},"data":data}))
     + "</b> 원 \n";
+},"16":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
+
+  return "<em style=\"color: #f00;\">"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.baseOrdQty : stack1), depth0))
+    + "+"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.freeAwardQty : stack1), depth0))
+    + "</em>";
+},"18":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
+
+  return "		<div class=\"product_notice\">\n"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.typeCode : stack1),"Different",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(19, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.typeCode : stack1),"Same",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(21, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "		</div>\n";
+},"19":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
+
+  return "				<p class=\"txt\">해당 상품은 <em class=\"color_warning\">교차</em>가능한<em class=\"color_warning\">"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.baseOrdQty : stack1), depth0))
+    + "+"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.freeAwardQty : stack1), depth0))
+    + "</em> 상품입니다.\n				<br>구매수량을 "
+    + alias2((helpers.calc || (depth0 && depth0.calc) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.baseOrdQty : stack1),"+",((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.freeAwardQty : stack1),{"name":"calc","hash":{},"data":data}))
+    + "개 선택시, "
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.baseOrdQty : stack1), depth0))
+    + "개 가격으로 혜택이 적용됩니다.</p>\n";
+},"21":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
+
+  return "				<p class=\"txt\">해당 상품은 <em class=\"color_warning\">동일</em>한 상품만 <em class=\"color_warning\">"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.baseOrdQty : stack1), depth0))
+    + "+"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.freeAwardQty : stack1), depth0))
+    + "</em> 상품입니다.\n				<br>구매수량을 "
+    + alias2((helpers.calc || (depth0 && depth0.calc) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.baseOrdQty : stack1),"+",((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.freeAwardQty : stack1),{"name":"calc","hash":{},"data":data}))
+    + "개 선택시, "
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.mPlusNPromoInfo : depth0)) != null ? stack1.baseOrdQty : stack1), depth0))
+    + "개 가격으로 혜택이 적용됩니다.</p>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 

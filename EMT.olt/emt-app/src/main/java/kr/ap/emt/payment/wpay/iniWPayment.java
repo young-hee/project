@@ -19,7 +19,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.Security;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -27,19 +26,14 @@ import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -564,12 +558,12 @@ public static Map<String, String> decodeWpayCertResultParam(String seedkey, Stri
 	}
     
     private static String makeMobileConfirmParam(LinkedHashMap<String, String> linkedHashMap) {
-		
+
     	String data = "";
     	String and = "";
     	
     	for(Entry<String, String> elem : linkedHashMap.entrySet()){           
-            if(data != "") {
+            if(StringUtils.isNotEmpty(data)) {
             	and = "&";
             } 
             data = data.concat(and).concat(elem.getKey()).concat("=").concat(elem.getValue().toString());
@@ -586,7 +580,7 @@ public static Map<String, String> decodeWpayCertResultParam(String seedkey, Stri
     	//signature 생성 - *wpay 연동 규약서에 정의된 request 항목을 순차적으로 연결한다.
     	
     	for(Entry<String, String> elem : map.entrySet()){           
-            if(plaintext != "") {
+            if(StringUtils.isNotEmpty(plaintext)) {
             	and = "&";
             } 
             plaintext = plaintext.concat(and).concat(elem.getKey()).concat("=").concat(elem.getValue().toString());

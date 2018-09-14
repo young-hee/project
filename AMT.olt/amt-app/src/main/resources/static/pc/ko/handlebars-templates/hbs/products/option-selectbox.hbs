@@ -22,11 +22,15 @@
 							{{/if}}
 							
 							{{#if (eq this.saleDisplayStatus 'OnSale') }}
-								{{!-- 할인 경우 노출(온라인상품할인률 + 회원등급할인률 + 온라인회원할인률) --}}
-								{{#xif (availablePrices this.availablePrices 'doublePriceDisplayYn') '==' 'Y'}}
-								<b class="num discount">{{ calc (availablePrices this.availablePrices 'onlineSalePriceDiscountRate') '+'
-															    (availablePrices this.availablePrices 'memberLevelDiscountRate') '+'
-															    (availablePrices this.availablePrices 'onlineMemberDiscountRate') }}% </b>
+								{{#xif this.mPlusNPromoInfo.targetYN '==' 'Y'}}
+									<b class="num discount">{{ this.mPlusNPromoInfo.baseOrdQty }}+{{ this.mPlusNPromoInfo.freeAwardQty }}</b>
+								{{else}}
+									{{!-- 할인 경우 노출(온라인상품할인률 + 회원등급할인률 + 온라인회원할인률) --}}
+									{{#xif (availablePrices this.availablePrices 'doublePriceDisplayYn') '==' 'Y'}}
+									<b class="num discount">{{ calc (availablePrices this.availablePrices 'onlineSalePriceDiscountRate') '+'
+																    (availablePrices this.availablePrices 'memberLevelDiscountRate') '+'
+																    (availablePrices this.availablePrices 'onlineMemberDiscountRate') }}% </b>
+									{{/xif}}
 								{{/xif}}							   
 								<span>
 									<b class="num">{{ numberFormat (availablePrices this.availablePrices 'finalOnlinePrice') }}</b>

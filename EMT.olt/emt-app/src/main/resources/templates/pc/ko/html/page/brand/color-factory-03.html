@@ -90,8 +90,9 @@
 												</div></dd>
 											</dl>
 											<dl>
-												<dt><label for="phoneCorp">휴대폰 번호</label><span class="required"><span class="sr_only">필수입력(Required)</span></span></dt>
-												<dd>
+												<dt>
+												<label for="phoneCorp">휴대폰 번호</label><span class="required"><span class="sr_only">필수입력(Required)</span></span></dt>
+												<!-- <dd>
 													<span class="w70p input_group input_phone">
 														<span class="select_wrap">
 															<select name="phoneCorp" id="phoneCorp" title="통신사 선택" required="required" data-msg-required="통신사를 선택해 주세요.<br>Please select a your carrier.">
@@ -122,7 +123,7 @@
 															<em class="count">3:00</em>
 														</div>
 														<br>
-														<button class="btn_md_form w100p mgb10" id="" type="button">인증확인</button> <!--  /* 20180710:버튼추가 */ -->
+														<button class="btn_md_form w100p mgb10" id="" type="button">인증확인</button>  /* 20180710:버튼추가 */
 														<ul class="list_bullet_dot">
 															<li>3분 이내에 인증번호를 입력하셔야 합니다.</li>
 															<li>입력 시간 초과 시 재전송 버튼을 눌러주세요.</li>
@@ -130,7 +131,15 @@
 													</div>
 													<button class="btn_md_form" id="extTimeBtn" type="button">시간연장</button>
 												</dd>
-											</dl>
+											</dl> -->
+											<dd>
+											<div ap:replace="~{customer/fragment/member :: phoneCorp}"></div>
+									        <div ap:replace="~{customer/fragment/member :: cellNumWithBtn}"></div>
+									        <div ap:replace="~{customer/fragment/member :: smsNumWithBtn}"></div>
+											
+										<br> <!--/* 03-19 버튼 추가 */-->
+										<button type="button" class="btn_md_neutral w100p certification_btn">인증확인dddddddddddd</button>
+									</dd>
 											<dl>
 												<dt><label for="emailAddress">이메일(e-mail)</label></dt>
 												<dd><div class="w70p input_wrap">

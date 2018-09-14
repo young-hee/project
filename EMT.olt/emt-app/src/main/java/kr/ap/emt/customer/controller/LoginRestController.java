@@ -18,6 +18,8 @@ import net.g1project.ecp.api.model.order.order.OrdEx;
 import net.g1project.ecp.api.model.sales.applications.AgreeYN;
 import net.g1project.ecp.api.model.sales.applications.ApplicationVer;
 import net.g1project.ecp.api.model.sales.applications.ExecuteResult;
+import net.g1project.ecp.api.model.sales.applications.LocationAgree;
+import net.g1project.ecp.api.model.sales.applications.LoginUser;
 import net.g1project.ecp.api.model.sales.applications.PostAppInstall;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -103,6 +105,13 @@ public class LoginRestController extends AbstractController {
 			//보안조치
 			SessionUtils.applyFixationProtection(req);
 
+			respMap.put("sleep", resultInfo.getDormantAcConvertYn());
+			if("Y".equals(resultInfo.getDormantAcConvertYn())) {
+				respMap.put("userId", memberId.substring(0, memberId.length() - 2) + "**");
+				SessionUtils.setAttribute(getRequest(), SessionKey.TEMP_MEMBER_SN, resultInfo.getMemberSn() + "||" + resultInfo.getAccessToken());
+				return ResponseEntity.ok(respMap);
+			}
+
 			ApMember apMember = apApi.getMemberInfo(resultInfo.getMemberSn());
 
 			CartSession cartSession = getCartSession();
@@ -134,11 +143,6 @@ public class LoginRestController extends AbstractController {
 				long time = date.getTime() - System.currentTimeMillis();
 				CookieUtils.addCookie(resp, CookieKey.AUTO_LOGIN, resultInfo.getAutoLoginToken(), (int)(time/1000));
 
-			}
-			respMap.put("sleep", resultInfo.getDormantAcConvertYn());
-			if("Y".equals(resultInfo.getDormantAcConvertYn())) {
-				respMap.put("userId", apMember.getMemberId().substring(0, apMember.getMemberId().length() - 2) + "**");
-				memberSession.setMember(null);
 			}
 			setMemberSession(memberSession);
 			respMap.put("old", false);//FIXME 구회원 여부.
@@ -465,7 +469,7 @@ public class LoginRestController extends AbstractController {
      */
     @RequestMapping("/app/appToWeb")
     public ResponseEntity<?> appToWeb(String type, AppCumuData data) {
-    	logger.info("[appToWeb]{},{},{},{},{},{},{},{},{}", type, data.getAppUid(),data.getAppVer(),data.getDeviceModel(),data.getLocation(),data.getMarketing(),data.getOsVer(),data.getPush(),data.getTokenData());
+    	logger.info("[appToWeb]{},{},{},{},{},{},{},{},{}", type, data.getAppUid(),data.getAppVer(),data.getDeviceModel(),data.getLocation1(),data.getMarketing(),data.getOsVer(),data.getPush(),data.getTokenData());
     	Map<String, Object> result = new HashMap<String, Object>();
 
     	result.put("rsltCd", "SUCCESS");
@@ -483,15 +487,25 @@ public class LoginRestController extends AbstractController {
     			body.setOsVer(data.getOsVer());
     			body.setToken(data.getTokenData());
     			applicationsApi.saveAppInstall(isAndroid()? "Android" : "iOS", body);
+    		} else if(isLoggedIn()){
+    			LoginUser body = new LoginUser();
+    			body.setMemberSn(getMemberSn());
+				applicationsApi.updateAppLogin(data.getTokenData(), body);
     		}
-    	}
-    	if("pmAgree".equals(type)) {
+    	} else if("pmAgree".equals(type)) {
     		AgreeYN agreeYN = new AgreeYN();
     		agreeYN.setAgreeYn(data.getPush());
 			applicationsApi.updateAppAgree(data.getTokenData(), agreeYN);
 			agreeYN.setAgreeYn(data.getMarketing());
 			applicationsApi.updateAppMaktingAgree(data.getTokenData(), agreeYN);
+    	} else if("lAgree".equals(type)) {
+			LocationAgree locationAgree = new LocationAgree();
+			locationAgree.setLocation1(data.getLocation1());
+			locationAgree.setLocation2(data.getLocation2());
+			locationAgree.setLocation3(data.getLocation3());
+			applicationsApi.updateAppLocationAgree(data.getTokenData(), locationAgree);
     	}
+    	
 
     	return ResponseEntity.ok(result);
     }

@@ -35,7 +35,7 @@
 		
 		//리뷰 상세
 		openBestReviewDetail : function( prodReviewSn ){
-			//to-Do 김진수 책임 진행 후 개발
+		
 		},
 
 		/** =============== Private Methods =============== */
@@ -82,6 +82,7 @@
 				location.href = '/product/filterReviewList/stat?onlineProdSn='+this._onlineProdSn+'&keyword='+scope;
 				
 			}.bind(this));
+			
 		},
 		
 		//리뷰 리스트
@@ -126,21 +127,52 @@
 					
 					// 좋아요
 					$reviewList.find('.btn_good').off('click').on('click', function(e){
-						var $this = $(e.currentTarget);
-						if( $this.hasClass('on') ){
-							$this.removeClass('on');
+						if( AP.LOGIN_USER ){
+							var $this = $(e.currentTarget);
+							var recommendCnt = Number($this.find('.num').text());
+							if( $this.hasClass('on') ){
+								// 상품평 추천 삭제
+								AP.api.removeReviewRecommend({}, {
+									prodReviewSn : $this.data('review-sn')
+								}).done(function(){
+									$this.removeClass('on');
+									
+									$this.find('.num').text( recommendCnt - 1 )
+									//추천수가 없을 경우 화면에서 감춤
+									if( $this.find('.num').text() == 0 ){
+										$this.find('.num').hide();
+									}
+								}.bind(this));
+							} else {
+								// 상품평 추천
+								AP.api.reviewRecommend({}, {
+									prodReviewSn : $this.data('review-sn')
+								}).done(function(){
+									$this.addClass('on');
+									
+									$this.find('.num').text( recommendCnt + 1 )
+									//추천수가 없을 경우 화면에서 감춤
+									if( $this.find('.num').text() > 0 ){
+										$this.find('.num').show();
+									}
+								}.bind(this));
+							}
 						} else {
-							$this.addClass('on');
+							AP.login.go();
 						}
 					}.bind(this));
 					
-					// 신고하기 to-Do 김진수 책임 진행 후 개발
+					// 신고하기 
 					$reviewList.find('.btn_report').off('click').on('click', function(e){
-						var $this = $(e.currentTarget);
-						if( $this.hasClass('on') ){
-							$this.removeClass('on');
+						if( AP.LOGIN_USER ){
+							var $this = $(e.currentTarget);
+							if( $this.hasClass('on') ){
+								$this.removeClass('on');
+							} else {
+								$this.addClass('on');
+							}
 						} else {
-							$this.addClass('on');
+							AP.login.go();
 						}
 					}.bind(this));
 					
@@ -187,7 +219,7 @@
 					var html = '';
 					$.each(data.prodReviewList, function(idx, obj){
 						obj.imgList = dummyArr;
-						html += '<li><a href="javascript:AP.review.openBestReviewDetail('+obj.prodReviewSn+');"><img src="'+obj.imgList[0].imageFileUrl+'" alt="'+obj.prodReviewTitle+'"></a></li>';
+						html += '<li><a href="/review/detail/'+obj.prodReviewSn+'"><img src="'+obj.imgList[0].imageFileUrl+'" alt="'+obj.prodReviewTitle+'"></a></li>';
 					});
 					$bestReviewList.find('ul.three_half').html( html );
 					//$bestReviewList.find('ul.three_half li:first a')[0].click();

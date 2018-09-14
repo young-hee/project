@@ -119,7 +119,7 @@ public class MyBenefitViewController extends AbstractController {
 	@GetMapping("/myLevelList")
 	@PageTitle(title = "나의 회원 등급" , menuId = "myBenefit", subMenuId = "myLevel")
 	public String myReviewList(Model model) {
-
+		
 		String onOffNum = getMemberSession().getMember().getPosMemberIdentifier();
 		//회원등급정보
 		CustCstmAmt custCstmAmt = null;
@@ -148,7 +148,7 @@ public class MyBenefitViewController extends AbstractController {
 				model.addAttribute("pageNo", p);
 				
 			} catch(Exception e) {
-				
+				logger.error(e.getMessage(), e);
 			}
 		}
 		
@@ -159,6 +159,7 @@ public class MyBenefitViewController extends AbstractController {
 				model.addAttribute("custGradeDetail", custGradeDetail);
 				
 			} catch(Exception e) {
+				logger.error(e.getMessage(), e);
 			}
 		}
 		if(custGradeDetail == null) {
@@ -263,7 +264,7 @@ public class MyBenefitViewController extends AbstractController {
 						model.addAttribute("custGradeDetail", custGradeDetail);
 						
 					} catch(Exception e) {
-						
+						logger.error(e.getMessage(), e);
 					}
 				}
 				
@@ -274,11 +275,12 @@ public class MyBenefitViewController extends AbstractController {
 						model.addAttribute("custGradeDetail", custGradeDetail);
 						
 					} catch(Exception e) {
+						logger.error(e.getMessage(), e);
 					}
 				}
 			}
 		} catch(Exception e) {
-			
+			logger.error(e.getMessage(), e);
 		}
 		
 

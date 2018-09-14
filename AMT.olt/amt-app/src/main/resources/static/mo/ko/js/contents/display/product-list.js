@@ -9,6 +9,7 @@
 	var ProductList = $B.Class.extend({
 		initialize: function ( options ) {
 			this._$target = options.$target;
+			this._component = options.component;
 			this._template = options.template;
 			this._displayMenuId = options.displayMenuId;
 			this._api = options.api;
@@ -35,7 +36,7 @@
 				offset: 0,
 				limit: 10
 			};
-
+			this.resetIndex();
 			this._setEvent();
 		},
 
@@ -78,12 +79,21 @@
 		/** =============== Private Methods ============== */
 		_done: function ( result ) {
 			if ( result['filterableOnlineProdList'] ) {
-				result = result['filterableOnlineProdList']
+				result = result['filterableOnlineProdList'];
 			} else if ( result['onlineProdList'] ) {
-				result = result['onlineProdList']
+				result = result['onlineProdList'];
 			}
 
-			this._data = result;
+			// // TODO: test
+			// result = {
+			// 	list: [0,1,2,3,4,5,6,7,8,9,10,11],
+			// 	offset: 0,
+			// 	limit: 50,
+			// 	totalCount:181,
+			// 	filter: null
+			// };
+
+			result.displayMenuId = this._displayMenuId;
 
 			if( this._isLoading ) {
 				this.loadingStop();
@@ -93,6 +103,7 @@
 				this._isSearchFilterData = true;
 				if( result.filter ) {
 					this._initSearchFilter( result.filter );
+					this.dispatch( 'set-display-cate', {data: result.filter });
 				}
 			}
 
@@ -100,12 +111,22 @@
 				this._$resultNone.show();
 				this._winScrollend.clear();
 			} else {
+				this._data = result.list;
+
 				var html = AP.common.getTemplate( this._template, result );
 				if ( this._currentIndex == 0 ) {
 					this._$list.html( html );
 				} else {
 					this._$list.append( html );
 				}
+
+				this._$list.find( '.item:not(.item-apply)' ).each(function ( index, target ) {
+					new AP.ProductItem({
+						$target: $( target ),
+						data: this._data[index],
+						displayMenuId: this._displayMenuId
+					});
+				}.bind( this ));
 			}
 
 			this._$sort.find( '.f_prd_num' ).text( $B.string.numberFormat( result.totalCount ));
@@ -131,64 +152,50 @@
 				}
 			}.bind( this ));
 
-			// 좋아요
-			this._$list.on( 'click', '.btn_toggle', function (e) {
-				var $like = $( e.currentTarget ),
-					index = $like.closest( '.item' ).data( 'index' ),
-					prodSn = this._data[index].products[0].prodSn;
-
-				AP.login().done(function () {
-					// TODO: 좋아요
-					// AP.api.postRecommend({}, { prodSn: prodSn }).done(function ( result ) {
-					// 	$like.toggleClass( 'on' ).find( '.ico_heart_s' ).toggleClass( 'on' );
-					// }.bind( this ));
-				}.bind( this ));
-
-				return false;
-			}.bind( this ));
-
 			// 정렬
 			if( this._$sort.length ) {
 				this._param.prodSort = this._$sort.find( 'select' ).val();
 				this._$sort.find( '.select_type01_new select' ).on( 'change', function (e) {
 					this._param.prodSort = $( e.target ).val();
-					this._currentIndex = 0;
+					this.resetIndex();
 					this.load();
 				}.bind( this ));
 			}
 
 			// 필터
 			if( this._$sort.find( '.btn_filter' ).length ) {
-				this._$sort.find( '.btn_filter' ).on( 'click', function (e) {
+				this._$sort.find( '.btn_filter:not(.disabled)' ).on( 'click', function (e) {
 					this._searchFilter.open();
 				}.bind( this ));
 			}
 		},
 
 		_initSearchFilter: function ( data ) {
-			AP.category.searchFilterData = data;
+			if ( this._$sort.find( '.btn_filter.disabled' ).length > 0 ) return;
+
+			AP[this._component].searchFilterData = data;
 
 			this._isSearchFilterData = true;
 
-			this._searchFilter = new AP.searchFilter( AP.category.searchFilterData );
+			this._searchFilter = new AP.searchFilter( this._component, AP[this._component].searchFilterData );
 			this._invokedFilter = new AP.invokedFilter( this._$filterArea );
 
 			this._searchFilter.addListener( 'apply-search-filter', function (e) {
-				this._invokedFilter.set();
+				this._invokedFilter.set( AP[this._component].searchFilterData );
 				this._applyFilter() ;
 			}.bind( this ));
 
 			this._invokedFilter.addListener( 'delete-invoked-filter', function (e) {
 				if ( e.data.type == 'price' ) {
 					// 가격 filter data 삭제하기
-					var priceData = AP.category.searchFilterData.addAttrs[AP.category.searchFilterData.addAttrs.length - 1];
+					var priceData = AP[this._component].searchFilterData.addAttrs[AP[this._component].searchFilterData.addAttrs.length - 1];
 					priceData.min = null;
 					priceData.max = null;
 					for ( var i = 0; i < priceData.addAttrVals.length; ++i ) {
 						priceData.addAttrVals[i].selected = false;
 					}
 				} else {
-					_.each( AP.category.searchFilterData.addAttrs, function ( value, index ) {
+					_.each( AP[this._component].searchFilterData.addAttrs, function ( value, index ) {
 						if ( e.data.attr == value.addAttrCode ) {
 							_.each( value.addAttrVals, function ( value, index ) {
 								if ( e.data.value == value.addAttrValCode ) {
@@ -198,7 +205,7 @@
 						}
 					});
 				}
-				this._invokedFilter.set();
+				this._invokedFilter.set( AP[this._component].searchFilterData );
 				this._applyFilter();
 			}.bind( this ));
 		},
@@ -210,13 +217,13 @@
 				this._$target.find( '.btn_filter' ).removeClass( 'on' );
 			}
 
-			var filterParam = this._searchFilter.convertDataToString( AP.category.searchFilterData );
+			var filterParam = this._searchFilter.convertDataToString( AP[this._component].searchFilterData );
 			$.extend( this._param, filterParam );
 
-			this._currentIndex = 0;
+			this.resetIndex();
 			this.load();
 		}
 	});
 
-	AP.productList = ProductList;
+	AP.ProductList = ProductList;
 })( jQuery );

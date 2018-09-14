@@ -12,8 +12,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import kr.ap.comm.cart.CartSession;
+import net.g1project.ecp.api.model.order.order.OrdChangeShipAddress;
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +48,8 @@ import net.g1project.ecp.api.model.sales.cart.ProdEx;
 import net.g1project.ecp.api.model.sales.cart.SameTimePurCartProd;
 import net.g1project.ecp.api.model.sales.cart.SameTimePurCartProdSet;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/cart")
 public class CartRestController extends CartBaseController{
@@ -56,25 +60,23 @@ public class CartRestController extends CartBaseController{
 	 * @return
 	 */
 	@GetMapping("/getLayerPage")
-	public ResponseEntity<?> getLayerPage(Long cartProdSn, Long prodSn) {
-		HashMap<String, Object> result = new HashMap<String, Object>();
-		if(Long.valueOf(cartProdSn) != null && Long.valueOf(prodSn) != null){
-			List<ProdEx> prodExList = new ArrayList<>();
-			List<ProdEx> apiProdExList = cartApi.getOnlineProdUnitVariationProds(cartProdSn);
-			if(apiProdExList.size() > 0 ){
-				for(ProdEx pe : apiProdExList){
-					if(!prodSn.equals(pe.getProdSn())
-						&& CartConst.SALE_DISPLAY_STATUS_ONSALE.equals(pe.getSaleDisplayStatus())
-						|| CartConst.SALE_DISPLAY_STATUS_EXHAUSTION.equals(pe.getSaleDisplayStatus())
-						|| CartConst.SALE_DISPLAY_STATUS_OUTOFSTOCK.equals(pe.getSaleDisplayStatus())
-					){
-						prodExList.add(pe);
-					}
+	public ResponseEntity<?> getLayerPage(@RequestParam Long cartProdSn, @RequestParam Long prodSn) {
+		Map<String, Object> result = new HashMap<>();
+		List<ProdEx> prodExList = new ArrayList<>();
+		List<ProdEx> apiProdExList = cartApi.getOnlineProdUnitVariationProds(cartProdSn);
+		if(apiProdExList.size() > 0 ){
+			for(ProdEx pe : apiProdExList){
+				if(!prodSn.equals(pe.getProdSn())
+					&& CartConst.SALE_DISPLAY_STATUS_ONSALE.equals(pe.getSaleDisplayStatus())
+					|| CartConst.SALE_DISPLAY_STATUS_EXHAUSTION.equals(pe.getSaleDisplayStatus())
+					|| CartConst.SALE_DISPLAY_STATUS_OUTOFSTOCK.equals(pe.getSaleDisplayStatus())
+				){
+					prodExList.add(pe);
 				}
 			}
-			result.put("param", prodExList);
-			result.put("result", "success");
 		}
+		result.put("param", prodExList);
+		result.put("result", "success");
 		return ResponseEntity.ok(result);
 	}
 
@@ -282,22 +284,43 @@ public class CartRestController extends CartBaseController{
 		}
 
 		if(storePickupCartProdEx != null){
-			StoresInvtSearchInfo var1 = new StoresInvtSearchInfo();
-			var1.setMemberSn(getMemberSn());
-			var1.setRegularStoreSearchYn(regularStoreSearchYn);
-			var1.setKeyword(keyword);
-			var1.setLatitude(latitude != null ? BigDecimal.valueOf(latitude) : null);
-			var1.setLongitude(longitude != null ? BigDecimal.valueOf(longitude) : null);
-			var1.setRadius(radius != null ? BigDecimal.valueOf(radius) : null);
-			var1.setLimit(limit);
-			var1.setOffset(offSet);
-			var1.setSortBy(sortBy);
-			//var1.setProdInvtExList(prodInvtExList);
-			StoreResult storeResult = storeApi.getStoresInvt(var1);
-			result.put("param", storeResult);
-			result.put("result", "success");
-		}
+			try{
+				// 단골매장
+				StoresInvtSearchInfo var1 = new StoresInvtSearchInfo();
+				var1.setMemberSn(getMemberSn());
+				var1.setRegularStoreSearchYn(regularStoreSearchYn);
+				var1.setKeyword(keyword);
+				var1.setLatitude(latitude != null ? BigDecimal.valueOf(latitude) : null);
+				var1.setLongitude(longitude != null ? BigDecimal.valueOf(longitude) : null);
+				var1.setRadius(radius != null ? BigDecimal.valueOf(radius) : null);
+				var1.setLimit(limit);
+				var1.setOffset(offSet);
+				var1.setSortBy(sortBy);
+				var1.setProdInvtExList(prodInvtExList);
+				StoreResult storeResult = storeApi.getStoresInvt(var1);
+				result.put("param", storeResult);
+				result.put("result", "success");
+			}
+			catch (Exception e){
+				e.printStackTrace();
 
+				// 단골매장
+				StoresInvtSearchInfo var1 = new StoresInvtSearchInfo();
+				var1.setMemberSn(getMemberSn());
+				var1.setRegularStoreSearchYn(regularStoreSearchYn);
+				var1.setKeyword(keyword);
+				var1.setLatitude(latitude != null ? BigDecimal.valueOf(latitude) : null);
+				var1.setLongitude(longitude != null ? BigDecimal.valueOf(longitude) : null);
+				var1.setRadius(radius != null ? BigDecimal.valueOf(radius) : null);
+				var1.setLimit(limit);
+				var1.setOffset(offSet);
+				var1.setSortBy(sortBy);
+				//var1.setProdInvtExList(prodInvtExList);
+				StoreResult storeResult = storeApi.getStoresInvt(var1);
+				result.put("param", storeResult);
+				result.put("result", "success");
+			}
+		}
 		return ResponseEntity.ok(result);
 	}
 
@@ -337,7 +360,27 @@ public class CartRestController extends CartBaseController{
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		storeApi.deleteRegularStores(getMemberSn(), storeSn);
 		result.put("data", "success");
+		return ResponseEntity.ok(result);
+	}
 
+	/**
+	 * 단골매장 조회
+	 * @return
+	 */
+	@PostMapping("/takeoutFavoriteStore")
+	public ResponseEntity<?> takeoutFavoriteStore() {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		StoresInvtSearchInfo var1 = new StoresInvtSearchInfo();
+		var1.setMemberSn(getMemberSn());
+		var1.setRegularStoreSearchYn("Y"); // 단골매장검색여부
+		var1.setOffset(0);
+		var1.setLimit(10);
+		var1.setSortBy("StoreName");
+		StoreResult storeResult = storeApi.getStoresInvt(var1);
+		if(storeResult != null){
+			result.put("storeRegularList", storeResult.getStoreExList());
+			result.put("result", "success");
+		}
 		return ResponseEntity.ok(result);
 	}
 
@@ -347,7 +390,7 @@ public class CartRestController extends CartBaseController{
 	 * @return
 	 */
 	@GetMapping("/storeAddressDivs")
-	public ResponseEntity<?> storeAddressDivs(String addressDiv) { // 서울특별시
+	public ResponseEntity<?> storeAddressDivs(String addressDiv) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		if(!StringUtils.isEmpty(addressDiv)){
 			List<String> addressDetailList = new ArrayList<String>();
@@ -359,7 +402,6 @@ public class CartRestController extends CartBaseController{
 			result.put("param", addressDetailList);
 			result.put("result", "success");
 		}
-
 		return ResponseEntity.ok(result);
 	}
 

@@ -16,6 +16,8 @@
 
 			this._loading = false;
 			//this._setPlugins();
+			
+			//this._arrReviews = [];
 		},
 
 		/** =============== Public Methods =============== */
@@ -33,6 +35,15 @@
 			this._$regularEventListWrap.html(html);
 			//$(this).siblings('.loading').hide();
 			AP.lazyLoad.add( 'img.lazy_load' );
+			
+			/* consider...
+			this._$reviews.find( '.review_item' ).each(function ( index, target ) {
+				this._arrReviews.push( new AP.ReviewItem({
+					$target: $(target),
+					data: result.prodReviewListInfo.prodReviewList[index]
+				}));
+			}.bind( this ));
+			*/
 		}
 	});
 	AP.beautytester = new BeautyTester();

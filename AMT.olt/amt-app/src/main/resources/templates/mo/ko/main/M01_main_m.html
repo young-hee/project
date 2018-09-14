@@ -940,33 +940,51 @@
 		</div>
 
 		<!-- 실시간 이슈 상품-->
+		<th:block th:if="${not #lists.isEmpty(cornersMap.get('M01_main_m.4'))}">
 		<div class="real_time_prd">
 			<h3 class="tit_f_20">실시간 이슈 상품</h3>
 			<ul class="product_list_new">
-				<li>
+			<th:block th:each="corner, inx : ${cornersMap.get('M01_main_m.4')}">
+				<th:block th:each="contents, conInx : ${corner.contents}">
+				<li th:if="${conInx.count%2 == 0}" th:data-prod-sn="${conInx.count}">
 					<!-- 상품 리스트 -->
+					<th:block th:each="prod : ${contents.prodList}">
 					<div class="product_one_view wide_img"><!--  와이드 상품이미지 등록시 -->
 						<a href="javascript:;">
 							<!--  상품이미지  -->
 							<span class="product_visual_new">
+								<span class="out_of_stock" th:if="${prod.saleDisplayStatus == 'OutOfStock'}"><span class="img_badge">일시품절</span></span>
 								<span class="lazy_load_wrap">
-									<img src="" data-src="/mo/ko/images/dummy/img_oneView_w01.jpg" alt="" class="lazy_load">
+									<th:block th:each="contents2, conInx2 : ${corner.contents}" th:if="${conInx2.count == (conInx.count - 1)}">
+										<img th:if="${contents2.imgUrl != '' && contents2.contentsTypeCode == 'Img'}" th:src="${contents2.imgUrl}" data-src="/mo/ko/images/dummy/img_oneView_w01.jpg" alt="" class="lazy_load">
+										<th:block th:unless="${contents2.imgUrl != '' && contents2.contentsTypeCode == 'Img'}">
+
+												<th:block th:each="img, imgIdx : ${prod.onlineProdImages}" th:if="${imgIdx.count == 1}">
+													<img th:src="${img.imgUrl}" alt="플라워 에센스 마스크">
+												</th:block>
+
+										</th:block>
+										<!-- <img th:if="${contents.imgUrl != '' && contents.contentsTypeCode == 'Img'}" src="" data-src="/mo/ko/images/dummy/img_oneView_w01.jpg" alt="" class="lazy_load"> -->
+									</th:block>
 								</span>
 							</span>
 
 							<!-- 상품 정보 -->
 							<span class="product_info_new">
-								<span class="prd_name">Apmall x HERA 블랙쿠션 시크릿박스_17호</span>
+								<span class="prd_name" th:text="${prod.onlineProdName}">Apmall x HERA 블랙쿠션 시크릿박스_17호</span>
 								<span class="price_wrap">
-									<strong class="discount">5%</strong>
-									<strong class="price">129,600<em>원</em></strong>
-									<del>13,200원</del>
+									<th:block th:if="${prod.onlineProdPriceSummary.doublePriceDisplayYn == 'Y'}"
+									th:with="disMinRate=${prod.onlineProdPriceSummary.minOnlineSalePriceDiscountRate + prod.onlineProdPriceSummary.minMemberLevelDiscountRate + prod.onlineProdPriceSummary.minOnlineMemberDiscountRate},disMaxRate=${prod.onlineProdPriceSummary.maxOnlineSalePriceDiscountRate + prod.onlineProdPriceSummary.maxMemberLevelDiscountRate + prod.onlineProdPriceSummary.maxOnlineMemberDiscountRate}">
+									<strong class="discount"><span th:if="${disMinRate != disMaxRate}" th:remove="tag">~</span><span th:text="${disMaxRate}" th:remove="tag">30</span>%</strong>
+									</th:block>
+									<strong class="price"><span th:text="${#numbers.formatInteger( prod.onlineProdPriceSummary.minOnlineMemberDiscountPrice, 0, 'COMMA')}" th:remove="tag">129,600</span><em>원</em></strong>
+									<del><span th:text="${#numbers.formatInteger( prod.onlineProdPriceSummary.minBeforeOnlineSalePrice, 0, 'COMMA')}" th:remove="tag">230,000</span>원</del>
 								</span>
 
 								<!-- 평점 리뷰 -->
 								<span class="product_rating">
-									<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
-									<span class="prd_review">리뷰 828</span>
+									<span th:class="|mark_star_sm star${#numbers.formatInteger(prod.reviewScopeAvg, 0)}|"><span class="sr_only" th:text="${#numbers.formatInteger(prod.reviewScopeAvg, 0)}">구매 평점 별 5개 중 0개</span></span><!-- star0 ~ star5 -->
+									<span class="prd_review">리뷰 <span th:if="${prod.reviewCount > 0}" th:text="${prod.reviewCount}" th:remove="tag">2,454,000</span></span>
 								</span>
 
 								<!-- 태그 -->
@@ -978,126 +996,18 @@
 								<button type="button" class="btn_toggle" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
 							</span>
 						</a>
-						<a href="javascript:;" class="direct_brand">리리코스 마린에너지</a>
+						<th:block th:each="brand, brndIdx : ${prod.products}">
+							<a href="javascript:;" class="direct_brand" th:if="${brndIdx.count == 1}" th:text="${brand.brandName}">헤라</a>
+						</th:block>
 					</div>
+					</th:block>
 					<!-- // 상품 리스트 -->
 				</li>
-				<li>
-					<!-- 상품 리스트 -->
-					<div class="product_one_view">
-						<a href="javascript:;">
-							<!--  상품이미지  -->
-							<span class="product_visual_new">
-								<span class="out_of_stock"><span class="img_badge">일시품절</span></span>
-								<span class="lazy_load_wrap">
-									<img src="" data-src="/mo/ko/images/dummy/img_oneView_01.jpg" alt="" class="lazy_load">
-								</span>
-							</span>
-
-							<!-- 상품 정보 -->
-							<span class="product_info_new">
-								<span class="prd_name">Apmall x HERA 블랙쿠션 시크릿박스_17호</span>
-								<span class="price_wrap">
-									<strong class="discount">5%</strong>
-									<strong class="price">129,600<em>원</em></strong>
-									<del>13,200원</del>
-								</span>
-
-								<!-- 평점 리뷰 -->
-								<span class="product_rating">
-									<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
-									<span class="prd_review">리뷰 828</span>
-								</span>
-
-								<!-- 태그 -->
-								<span class="tags">
-									<em class="badge special">스페셜기프트</em>
-									<em class="badge gift">기프트카드</em>
-								</span>
-
-								<button type="button" class="btn_toggle" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
-							</span>
-							<a href="javascript:;" class="direct_brand">리리코스 마린에너지</a>
-						</a>
-					</div>
-					<!-- // 상품 리스트 -->
-				</li>
-				<li>
-					<!-- 상품 리스트 -->
-					<div class="product_one_view">
-						<a href="javascript:;">
-							<!--  상품이미지  -->
-							<span class="product_visual_new">
-								<span class="lazy_load_wrap">
-									<img src="" data-src="/mo/ko/images/dummy/img_oneView_01.jpg" alt="" class="lazy_load">
-								</span>
-							</span>
-
-							<!-- 상품 정보 -->
-							<span class="product_info_new">
-								<span class="prd_name">[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림[대용량] 더마 리페어 시카크림</span>
-								<span class="price_wrap">
-									<strong class="discount">1+1</strong>
-									<strong class="price">39,600<em>원</em></strong>
-								</span>
-
-								<!-- 평점 리뷰 -->
-								<span class="product_rating">
-									<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
-									<span class="prd_review">리뷰 828</span>
-								</span>
-
-								<button type="button" class="btn_toggle" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s on"></i><span class="sr_only">좋아요</span></button>
-							</span>
-							<a href="javascript:;" class="direct_brand">리리코스 마린에너지</a>
-						</a>
-					</div>
-					<!-- // 상품 리스트 -->
-				</li>
-				<li>
-					<!-- 상품 리스트 -->
-					<div class="product_one_view wide_video"><!-- 동영상 등록시 -->
-						<a href="javascript:;">
-							<!--  상품이미지  -->
-							<span class="product_visual_new">
-								<span class="lazy_load_wrap">
-									<img src="" data-src="/mo/ko/images/dummy/img_oneView_w01.jpg" alt="" class="lazy_load">
-								</span>
-							</span>
-							<span class="btn_prd_video"><img src="/mo/ko/images/common/ico_media_play01.png" alt="" /></span>
-						</a>
-
-						<a href="javascript:;">
-							<!-- 상품 정보 -->
-							<span class="product_info_new">
-								<span class="prd_name">Apmall x HERA 블랙쿠션 시크릿박스_17호</span>
-								<span class="price_wrap">
-									<strong class="discount">5%</strong>
-									<strong class="price">129,600<em>원</em></strong>
-									<del>13,200원</del>
-								</span>
-
-								<!-- 평점 리뷰 -->
-								<span class="product_rating">
-									<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 3개</span></span>
-									<span class="prd_review">리뷰 828</span>
-								</span>
-
-								<!-- 태그 -->
-								<span class="tags">
-									<em class="badge special">스페셜기프트</em>
-								</span>
-
-								<button type="button" class="btn_toggle" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
-							</span>
-						</a>
-						<a href="javascript:;" class="direct_brand">리리코스 마린에너지</a>
-					</div>
-					<!-- // 상품 리스트 -->
-				</li>
+				</th:block>
+				</th:block>
 			</ul>
 		</div>
-
+		</th:block>
 		<!-- basic -->
 		<div class="section m_basic">
 			<a href="javascript:;">
@@ -1254,7 +1164,7 @@
 		
 		<!-- 투데이 핫딜 -->
 		<div class="section center_slide add_new_type" style="background-color:#d8ffee; background-image:url(/mo/ko/images/dummy/bg_center_slide.png);"> <!-- Background BO 등록 -->
-			<dl class="display_prd_slide">
+			<dl class="display_prd_slide today_hot_deal">
 				<dt class="slide_title">
 					<a href="javascript:;" class="prd_h_tit"><strong>투데이핫딜</strong>
 						<div class="m_time_wrap">
@@ -1362,7 +1272,7 @@
 
 		<!-- 스페셜기프트 -->
 		<div class="section center_slide add_new_type" style="background-color:#ffdddb; background-image:url(/mo/ko/images/dummy/bg_center_slide.png);"> <!-- Background BO 등록 -->
-			<dl class="display_prd_slide">
+			<dl class="display_prd_slide special_gift">
 				<dt class="slide_title">
 					<a href="#none" class="prd_h_tit"><strong>스페셜기프트</strong>
 					</a>
@@ -1516,7 +1426,7 @@
 
 		<!-- 구매금액대별 사은품 -->
 		<div class="section center_slide add_new_type" style="background-color:#e2eaff; background-image:url(/mo/ko/images/dummy/bg_center_slide.png);"> <!-- Background BO 등록 -->
-			<dl class="display_prd_slide">
+			<dl class="display_prd_slide gift_per_amount">
 				<dt class="slide_title">
 					<a href="#none" class="prd_h_tit"><strong>구매금액대별 사은품</strong>
 					</a>

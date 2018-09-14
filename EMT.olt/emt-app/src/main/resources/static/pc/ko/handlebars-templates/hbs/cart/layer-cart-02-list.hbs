@@ -1,9 +1,3 @@
-<div class="clear">
-	<p class="text font_lg"><b>검색된 매장<em id="searchCnt">0</em>개</b></p>
-	<div>
-		<span class="check_wrap"><input type="radio" name="radioCheck" id="radioCheck" value="01"/><label for="radioCheck">단골매장</label></span>
-	</div>
-</div>
 <table class="ui_table_striped data_table thead_colored align_center mgt20">
 	<caption class="sr_only">테이크아웃매장 목록으로 단골등록, 매장, 전화번호, 주소, 매장위치로 구성</caption>
 	<colgroup>
@@ -35,9 +29,7 @@
 					<td>
 						<a href="#" onclick="fnChangeStore('{{ storeSn }}'); return false;">
 							{{ storeName }}
-							{{#if (eq defaultStoreYn 'Y') }}
-								<span class="store_default">기본</span>
-							{{/if}}
+							{{#if (eq defaultStoreYn 'Y') }}<span class="store_default">기본</span>{{/if}}
 							{{#if (eq invtEnoughType 'No') }} <em>[재고없음]</em> {{/if}}
 							{{#if (eq invtEnoughType 'Enough') }} <em class="color_light_blue">[재고있음]</em> {{/if}}
 							{{#if (eq invtEnoughType 'NotEnough') }} <em>[재고부족]</em> {{/if}}
@@ -54,10 +46,4 @@
 		{{/if}}
 	</tbody>
 </table>
-{{!-- <div class="pagination"> --}}
-<div class="ui_paging pagination" id="addPagination">
-	{{!--
-	<a href="#none" class="navi first">처음</a>
-	<a href="#none" class="navi prev">이전</a>
-	 --}}
-</div>
+<div class="ui_paging pagination"></div>

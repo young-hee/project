@@ -32,7 +32,7 @@ public class CartViewController extends CartBaseController{
 	 * @param model
 	 * @return
 	 */
-	@PageTitle(title = "장바구니|AP몰")
+	@PageTitle(title = "장바구니")
 	@GetMapping("/cartList")
 	public String cartList(Model model) {
 
@@ -43,6 +43,12 @@ public class CartViewController extends CartBaseController{
 		if(isLoggedIn()){
 			// 회원
 			CartSnResult cartSnResult = cartApi.getMemberCartSn(getMemberSn());
+
+			/* 장바구니 옮겨닮기 */
+			if(cartSession.getCartEx() != null){
+				cartApi.transferMemberCart(getMemberSn(), cartSession.getCartEx().getCartSn());
+			}
+
 			cartEx = getCartInfo(cartSnResult.getCartSn());
 
 			/* 뷰티포인트 정보 */
@@ -55,6 +61,9 @@ public class CartViewController extends CartBaseController{
 					}
 				}
 			}
+
+
+
 			model.addAttribute("bpCartMemberMembershipEx", bpCartMemberMembershipEx);
 		}
 		else{
@@ -87,10 +96,13 @@ public class CartViewController extends CartBaseController{
 
 		// Mobile
 		if (isMobileDevice()) {
+			model.addAttribute("randomeBrand", showRandomBrand());
 			return "cart/cart_01";
 		}
 		// PC
 		if (isPcDevice()) {
+
+			model.addAttribute("bestProdList", showBestProdList());
 			return "cart/cart";
 		}
 

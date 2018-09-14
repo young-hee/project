@@ -238,12 +238,12 @@ public interface AmoreAPIService {
 	CicuemCuInfCoOutVo athtchgcheck90(CicuemCuInfTotTcVo cicuemCuInfCoInVo);
 	
 	/**
-	 * 휴대전화인증/변경90일체크
+	 * 경로고객탈퇴
 	 * @param deletecicuedcuchcustwt
 	 * @return
 	 */
-	@RequestLine(value = "/cip/cit/custmgnt/custmgnt/svc/custinfrmgnt/athtchgcheck90/v1.00")
-	CicuemCuInfTotTcVo athtchgcheck90(Deletecicuedcuchcustwt deletecicuedcuchcustwt);
+	@RequestLine(value = "/cit/deletecicuedcuchcustwt/v1.00")
+	CicuemCuInfTotTcVo deletecicuedcuchcustwt(Deletecicuedcuchcustwt deletecicuedcuchcustwt);
 	
 	
 	

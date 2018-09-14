@@ -1,0 +1,63 @@
+
+{{#xif this.totalLength '>' 0}}
+	<div class="con_top_box">
+		<span class="title">검색결과</span><span class="total_num_purple">{{this.totalLengthLabel}}건</span>
+	</div>		<!-- // con_top_box -->
+	<div class="con_bottom_box">
+		<div class="coupon_ck_list_line">
+			<div class="scroll">
+				<ul class="address_ck_list">
+					{{#each this.result }}
+						<li>
+							<span class="check_wrap rdo_type2 right">
+								<input type="radio" id="item{{@index }}" name="select" id="item{{@index}}" data-sel-index="{{@index}}" data-post-code="{{ this.zipNo }}" data-detail-address="{{ this.roadAddrPart2 }}" data-address="{{ this.roadAddrPart1 }}">
+								<label for="item{{@index }}">
+									<span class="txt">
+										<span class="name"><span>도로명</span></span>
+										<em>{{ this.roadAddr }}</em>
+									</span>
+									<span class="txt">
+										<span class="name"><span>지번</span></span>
+										<em>{{ this.jibunAddr }} <strong class="zip">우편번호 {{ this.zipNo }}</strong></em>
+									</span>
+								</label>
+							</span>
+							<div class="detail">
+								<span class="input_wrap" id="addInput{{@index}}">
+									<input type="text" class="input_detail" id="inputDetail{{@index}}" placeholder="상세주소 입력">
+								</span>
+								<div class="mg_side">
+									<a href="#1" class="btn_full disabled">확인</a>
+								</div>
+							</div>
+						</li>
+					{{/each}}
+				</ul>
+			</div>
+		</div>
+	</div>
+{{else}}
+	<p class="count">검색결과가 없습니다.</p>
+{{/xif}}
+<script >
+	$('.address_ck_list li .check_wrap.rdo_type2.right').click(function(){
+		$('.input_detail').each(function(){
+			$(this).val(""); 
+		})
+		$('.btn_full').each(function(){
+			$(this).addClass("disabled");
+		})
+
+		$(this).closest("li").addClass('on').siblings().removeClass('on');
+	});
+
+	$('.input_detail').on('keyup', function(){
+		if($(this).val() == ""){
+			console.log($(this).val());
+			$('.btn_full').addClass("disabled");
+		}else{
+			console.log($(this).val());
+			$('.btn_full').removeClass("disabled");
+		}
+	})
+</script>

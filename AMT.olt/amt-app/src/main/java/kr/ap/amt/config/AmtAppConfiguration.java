@@ -5,6 +5,7 @@ import com.github.mxab.thymeleaf.extras.dataattribute.dialect.DataAttributeDiale
 import kr.ap.amt.api.pshop.PShopService;
 import kr.ap.amt.api.pshop.PShopServiceImpl;
 import kr.ap.amt.customer.controller.LoginHandler;
+import kr.ap.amt.customer.controller.SSOLoginHandler;
 import kr.ap.comm.config.filter.MallIdFilter;
 import kr.ap.comm.config.interceptor.*;
 import kr.ap.comm.config.thymeleaf.APCustomDialect;
@@ -28,11 +29,11 @@ public class AmtAppConfiguration extends WebMvcConfigurerAdapter {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		// 등록한 순서대로 interceptor 적용
-		registry.addInterceptor(new AccessTokenHandlerInterceptor());
+		registry.addInterceptor(accessTokenHandlerInterceptor());
 		registry.addInterceptor(new DisplayChannelResolver());
 		registry.addInterceptor(new IncompatableBrowserChecker())
 			.excludePathPatterns(IncompatableBrowserChecker.INCOMPATIBLE_BROWSER_URI);
-		registry.addInterceptor(new LoginInterceptor());
+		registry.addInterceptor(loginCheckInterceptor());
 		registry.addInterceptor(new BreadCrumbInterceptor());
 	}
 
@@ -79,6 +80,11 @@ public class AmtAppConfiguration extends WebMvcConfigurerAdapter {
 	@Bean
 	public MallIdFilter mallIdFilter() {
 		return new MallIdFilter();
+	}
+
+	@Bean
+	public AccessTokenHandlerInterceptor accessTokenHandlerInterceptor() {
+		return new AccessTokenHandlerInterceptor();
 	}
 
 	@Override

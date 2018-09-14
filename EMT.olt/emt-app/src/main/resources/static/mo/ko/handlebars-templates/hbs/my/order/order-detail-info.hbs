@@ -26,14 +26,19 @@
     		<dl class="table_layout">
     			<dt>온라인 주문</dt>
 				<dd>
-				{{#if (or (eq type 'return')(eq type 'exchange'))}}
-					<em>{{ordStatusCheck type ordEx.ordDetailStatusCode}}</em>
+				{{#xif claimYn '==' 'Y'}}
+					<em>{{ordStatusCheck ordEx.claimTypeCode ordEx.claimProgressStatusCode}}</em>
 				{{else}}
-					<em>{{ordStatusCheck type ordEx.ordDetailStatusCode}}</em>
-				{{/if}}
-				{{#xif ordEx.ordDetailStatusCode '===' 'PartialCancel'}}
-					<span class="color_gray2">(부분취소)</span>
+					{{#if (or (eq type 'return')(eq type 'exchange'))}}
+						<em>{{ordStatusCheck type ordEx.ordDetailStatusCode}}</em>
+					{{else}}
+						<em>{{ordStatusCheck type ordEx.ordDetailStatusCode}}</em>
+					{{/if}}
+					{{#xif ordEx.ordDetailStatusCode '===' 'PartialCancel'}}
+						<span class="color_gray2">(부분취소)</span>
+					{{/xif}}
 				{{/xif}}
+
 				</dd>
     		</dl>
     	{{/xif}}
@@ -48,7 +53,7 @@
     	{{/xif}}
 	{{/xif}}
 
-	{{#if (or (eq ordEx.ordDetailStatusCode 'OrdHandlingComplete')(eq ordEx.ordDetailStatusCode 'ShipComplete'))}}
+	{{#if (and (eq claimYn 'N')(or (eq ordEx.ordDetailStatusCode 'OrdHandlingComplete')(eq ordEx.ordDetailStatusCode 'ShipComplete')))}}
 
 		<button class="btn_md_primary w100p mgt15" type="button" onclick="ordWriteReview({{ordEx.ordNo}})">구매 리뷰 작성하고 진주알 받기</button>
 
@@ -59,7 +64,7 @@
 	{{#xif type '===' 'cashReceipts'}}
 		<dl class="table_layout">
 			<dt>발급 상태</dt>
-			<dd><span class="num color_gray2">{{condition (eq ordEx.cashReceiptIssueYn 'Y') '발급완료' '발급가능'}}</span></dd>
+			<dd><span class="num color_gray2">{{condition (eq cashReceiptIssueYn 'Y') '발급가능' '발급완료'}}</span></dd>
 		</dl>
 	{{/xif}}
 

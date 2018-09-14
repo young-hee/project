@@ -11,9 +11,16 @@
 					</li>
 				</th:block>
 			</th:block>
-			<li th:if="${menu.displayMenuId != 'Main' && menu.displayMenuId != 'issue'}"><a href="#" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}"  
+			<li th:if="${menu.displayMenuId != 'Main' && menu.displayMenuId != 'issue' && menu.displayMenuId != 'pacificShop'}"><a href="#" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}"  
 					th:class="${displayMenuId == menu.displayMenuId} ? 'on' : ''" th:data="${menu.displayMenuId}">GNBs</a>
 			</li>
+			<th:block th:if="${menu.displayMenuId == 'pacificShop'}">
+				<th:block th:if="${(session.LOGIN_USER != null && session.LOGIN_USER.member != null) && session.LOGIN_USER.member.employeeYn == 'Y'}">
+					<li><a href="#" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}"  
+						th:class="${displayMenuId == menu.displayMenuId} ? 'on' : ''">GNBs</a>
+					</li>
+				</th:block>
+			</th:block>
 		</th:block> 
 		<!--/*
 		<li><a href="#none" class="on">홈</a></li>  선택시 on 클래스

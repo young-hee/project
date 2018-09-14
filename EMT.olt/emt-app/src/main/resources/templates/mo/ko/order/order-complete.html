@@ -5,33 +5,36 @@
 <div ap:fragment="layout-contents">
 	<!-- page contents -->
 	<div class="ap_contents cart order_complete">
-		<div class="panel order_cmplt_info">
-						
-			<div class="img_order_complete"><img ap:src="@{/images/cart/img_order_complete.png}" alt="" class=""></div>
-			<h3 class="h_title"><strong>주문이 완료되었습니다.</strong></h3>
-			<div class="order_number_wrap">주문번호 : <em class="num" th:text="${ordEx.ordNo}">201711179727881</em></div>
-			<div class="align_center lh">결제 완료 이후에 주문 및 배송에 관한 확인은<br><strong class="font_md">마이 에뛰드 > 배송조회</strong>에서 확인하세요.</div>
-			<div class="panel gray mgt20">
-				<ul class="list_bullet_dot">
-					<li>기타 주문 상품의 교환/반품/환불에 대한 신청이나 문의는 고객센터 이하 1:1 문의 메뉴, 또는 주문 조회 리스트 페이지를 통해 처리가 가능합니다.</li>
-					<li>주문접수 이후에는 상품 변경이 불가 합니다. 부득이 상품 변경이 필요하신 경우에는 해당 주문건을 취소하신 후에 다시 주문해 주시기 바랍니다.</li>
-				</ul>
+
+		<th:block th:if="${ordEx != null}">
+			<div class="panel order_cmplt_info">
+				<div class="img_order_complete"><img ap:src="@{/images/cart/img_order_complete.png}" alt="" class=""></div>
+				<h3 class="h_title"><strong>주문이 완료되었습니다.</strong></h3>
+				<div class="order_number_wrap">주문번호 : <em class="num" th:text="${ordEx.ordNo}">201711179727881</em></div>
+				<div class="align_center lh">결제 완료 이후에 주문 및 배송에 관한 확인은<br><strong class="font_md">마이 에뛰드 > 배송조회</strong>에서 확인하세요.</div>
+				<div class="panel gray mgt20">
+					<ul class="list_bullet_dot">
+						<li>기타 주문 상품의 교환/반품/환불에 대한 신청이나 문의는 고객센터 이하 1:1 문의 메뉴, 또는 주문 조회 리스트 페이지를 통해 처리가 가능합니다.</li>
+						<li>주문접수 이후에는 상품 변경이 불가 합니다. 부득이 상품 변경이 필요하신 경우에는 해당 주문건을 취소하신 후에 다시 주문해 주시기 바랍니다.</li>
+					</ul>
+				</div>
 			</div>
-		</div>
-		<div class="ui_accordion" data-open-type="single">
-			<!--주문상품확인-->
-			<th:block ap:replace="~{order/fragment/order-complete/order-complete-01-product-info}"/>
-			<!--배송정보입력-->
-			<th:block ap:replace="~{order/fragment/order-complete/order-complete-02-ship-address-info}"/>
-			<!--포장/쇼핑백 추가신청-->
-			<th:block ap:replace="~{order/fragment/order-complete/order-complete-03-packing-info}"/>
-			<!--사은품 확인-->
-			<th:block ap:replace="~{order/fragment/order-complete/order-complete-04-freegift-info}"/>
-			<!--결제수단 선택-->
-			<th:block ap:replace="~{order/fragment/order-complete/order-complete-05-pay-method-info}"/>
-			<!--최종 결제금액-->
-			<th:block ap:replace="~{order/fragment/order-complete/order-complete-06-final-pay-amount-info}"/>
-		</div>
+			<div class="ui_accordion" data-open-type="single">
+				<!--주문상품확인-->
+				<th:block ap:replace="~{order/fragment/order-complete/order-complete-01-product-info}"/>
+				<!--배송정보입력-->
+				<th:block ap:replace="~{order/fragment/order-complete/order-complete-02-ship-address-info}"/>
+				<!--포장/쇼핑백 추가신청-->
+				<th:block ap:replace="~{order/fragment/order-complete/order-complete-03-packing-info}"/>
+				<!--사은품 확인-->
+				<th:block ap:replace="~{order/fragment/order-complete/order-complete-04-freegift-info}"/>
+				<!--결제수단 선택-->
+				<th:block ap:replace="~{order/fragment/order-complete/order-complete-05-pay-method-info}"/>
+				<!--최종 결제금액-->
+				<th:block ap:replace="~{order/fragment/order-complete/order-complete-06-final-pay-amount-info}"/>
+			</div>
+		</th:block>
+
 		<div class="panel btns">
 			<div class="page_btns">
 				<button class="btn_md_bordered" type="button" id="b_myOrder" onclick="javascript:location.href='/my/page/onlineOrderShipping'">배송/주문조회</button>
@@ -49,6 +52,18 @@
 	<script ap:src="@{/handlebars-templates/compiled/order/final-price-amt-pcur.js}"></script> 			<!-- 최종 결제금액 영역 -->
 
 	<script th:inline="javascript">
+
+		//주문완료화면 오류 발생시
+		var ordCompleteError = /*[[${ordCompleteError}]]*/ null;
+		if(ordCompleteError != null){
+			var result = ordCompleteError.result,
+				errorCode = ordCompleteError.errorCode,
+				errorMessage = ordCompleteError.errorMessage,
+				errorAdditional = ordCompleteError.errorAdditional;
+			if ("error" == result) {
+				AP.modal.alert(errorMessage + '(' + errorCode + ')<br/>' + errorAdditional.detail);
+			}
+		}
 	</script>
 </th:block>
 </body>

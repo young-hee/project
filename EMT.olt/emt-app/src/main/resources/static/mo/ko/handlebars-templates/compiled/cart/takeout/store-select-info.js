@@ -34,47 +34,56 @@ this["AP"]["handlebars"]["cart"]["takeout"]["store-select-info"] = Handlebars.te
 
   return "		<button type=\"button\" class=\"btn_seller_info on\" id=\"b_openSeller\"><span>판매자 정보 확인</span><i class=\"icon_arr\"></i></button><!--판매자 정보 확인 토글제어 클래스 on-->\n		<div class=\"seller_info_wrap\" >\n			<dl>\n				<dt>상호</dt>\n				<dd>"
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.storeSelect : depth0)) != null ? stack1.storeTypeName : stack1), depth0))
-    + "</dd>\n"
-    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.storeSelect : depth0)) != null ? stack1.phoneNo2 : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.storeSelect : depth0)) != null ? stack1.address : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.storeSelect : depth0)) != null ? stack1.brn : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(16, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.storeSelect : depth0)) != null ? stack1.emailAddress : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(18, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "</dd>\n\n				<dt>연락처</dt>\n"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.storeSelect : depth0)) != null ? stack1.phoneNo2 : stack1),null,{"name":"ne","hash":{},"data":data}),(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.storeSelect : depth0)) != null ? stack1.phoneNo2 : stack1)) != null ? stack1.phoneNo : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.program(14, data, 0),"data":data})) != null ? stack1 : "")
+    + "\n				<dt>사업장소재지</dt>\n"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.storeSelect : depth0)) != null ? stack1.address : stack1),null,{"name":"ne","hash":{},"data":data}),(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.storeSelect : depth0)) != null ? stack1.address : stack1)) != null ? stack1.address1 : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(16, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n				<dt>통신판매신고번호</dt>\n"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.storeSelect : depth0)) != null ? stack1.brn : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(18, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n				<dt>e-mail</dt>\n"
+    + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.storeSelect : depth0)) != null ? stack1.emailAddress : stack1),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(20, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "			</dl>\n		</div>\n";
 },"12":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "				<dt>연락처</dt>\n				<dd>"
+  return "					<dd>"
     + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.storeSelect : depth0)) != null ? stack1.phoneNo2 : stack1)) != null ? stack1.phoneNo : stack1), depth0))
     + "</dd>\n";
 },"14":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return "					<dd>"
+    + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.storeSelect : depth0)) != null ? stack1.phoneNo1 : stack1)) != null ? stack1.phoneNo : stack1), depth0))
+    + " </dd>\n";
+},"16":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "				<dt>사업장소재지</dt>\n				<dd>"
+  return "					<dd>"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.storeSelect : depth0)) != null ? stack1.address : stack1)) != null ? stack1.address1 : stack1), depth0))
     + " "
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.storeSelect : depth0)) != null ? stack1.address : stack1)) != null ? stack1.address2 : stack1), depth0))
     + "</dd>\n";
-},"16":function(container,depth0,helpers,partials,data) {
+},"18":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "				<dt>통신판매신고번호</dt>\n				<dd>\n					<a th:href=\"http://www.ftc.go.kr/bizCommPop.do?wrkr_no="
+  return "					<dd><a th:href=\"http://www.ftc.go.kr/bizCommPop.do?wrkr_no="
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.storeSelect : depth0)) != null ? stack1.brn : stack1), depth0))
-    + "&apv_perm_no=\" target=\"_blank\">사업자정보확인</a>\n				</dd>\n";
-},"18":function(container,depth0,helpers,partials,data) {
+    + "&apv_perm_no=\" target=\"_blank\">사업자정보확인</a></dd>\n";
+},"20":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "				<dt>e-mail</dt>\n				<dd>\n					<a th:href=\"mailto:"
+  return "					<dd><a th:href=\"mailto:"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.storeSelect : depth0)) != null ? stack1.emailAddress : stack1), depth0))
     + "\"><span>"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.storeSelect : depth0)) != null ? stack1.emailAddress : stack1), depth0))
-    + "</span></a>\n				</dd>\n";
-},"20":function(container,depth0,helpers,partials,data) {
+    + "</span></a></dd>\n";
+},"22":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "		<div class=\"take_out_bottom_wrap\">\n			<div class=\"take_out_favorite\">단골매장</div>\n			<div class=\"take_out_scroll\">\n				<ul>\n"
-    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.storeRegularList : depth0),{"name":"each","hash":{},"fn":container.program(21, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.storeRegularList : depth0),{"name":"each","hash":{},"fn":container.program(23, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "				</ul>\n			</div>\n		</div>\n";
-},"21":function(container,depth0,helpers,partials,data) {
+},"23":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "						<a href=\"#\" onclick=\"fnChangeStore("
@@ -82,9 +91,9 @@ this["AP"]["handlebars"]["cart"]["takeout"]["store-select-info"] = Handlebars.te
     + "); return false;\">\n							<li>\n								"
     + alias4(((helper = (helper = helpers.storeName || (depth0 != null ? depth0.storeName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"storeName","hash":{},"data":data}) : helper)))
     + "\n"
-    + ((stack1 = (helpers["switch"] || (depth0 && depth0["switch"]) || alias2).call(alias1,(depth0 != null ? depth0.invtEnoughType : depth0),{"name":"switch","hash":{},"fn":container.program(22, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers["switch"] || (depth0 && depth0["switch"]) || alias2).call(alias1,(depth0 != null ? depth0.invtEnoughType : depth0),{"name":"switch","hash":{},"fn":container.program(24, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "							</li>\n						</a>\n";
-},"22":function(container,depth0,helpers,partials,data) {
+},"24":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
   return "									"
@@ -94,7 +103,7 @@ this["AP"]["handlebars"]["cart"]["takeout"]["store-select-info"] = Handlebars.te
     + "\n									"
     + ((stack1 = (helpers["case"] || (depth0 && depth0["case"]) || alias2).call(alias1,"NotEnougho",{"name":"case","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n";
-},"24":function(container,depth0,helpers,partials,data) {
+},"26":function(container,depth0,helpers,partials,data) {
     return "		<div class=\"take_out_bottom_wrap\">\n			<div class=\"take_out_scroll empty\">\n				<p class=\"text_notice\">단골매장이 없습니다.</p>\n			</div>\n		</div>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
@@ -106,8 +115,7 @@ this["AP"]["handlebars"]["cart"]["takeout"]["store-select-info"] = Handlebars.te
     + container.escapeExpression((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.storeSelect : depth0),null,{"name":"eq","hash":{},"data":data}),"매장선택","매장변경",{"name":"condition","hash":{},"data":data}))
     + "</button>\n	</div>\n\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,(depth0 != null ? depth0.storeSelect : depth0),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.storeRegularList : depth0)) != null ? stack1.length : stack1),">",0,{"name":"xif","hash":{},"fn":container.program(20, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.storeRegularList : depth0)) != null ? stack1.length : stack1),"==",0,{"name":"xif","hash":{},"fn":container.program(24, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.storeRegularList : depth0)) != null ? stack1.length : stack1),">",0,{"name":"xif","hash":{},"fn":container.program(22, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.storeRegularList : depth0)) != null ? stack1.length : stack1),"==",0,{"name":"xif","hash":{},"fn":container.program(26, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "</div>";
 },"useData":true});

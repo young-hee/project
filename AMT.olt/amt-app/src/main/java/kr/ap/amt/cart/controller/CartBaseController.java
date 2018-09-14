@@ -10,8 +10,7 @@ import kr.ap.comm.cart.CartSession;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
 import net.g1project.ecp.api.model.sales.cart.*;
-import net.g1project.ecp.api.model.sales.display.BrandDisplayMainMenu;
-import net.g1project.ecp.api.model.sales.display.BrandDisplayMenu;
+import net.g1project.ecp.api.model.sales.display.OnlineProdList;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -49,25 +48,49 @@ public class CartBaseController extends AbstractController{
 		cartSession.setCartEx(cartEx);
 		setCartSession(cartSession);
 	}
-	
+
 	/**
-	 * 빈 장바구니에 보여줄 브랜드 선택
+	 * 빈 장바구니에 보여줄 브랜드 리턴
 	 *
 	 * @return
 	 */
-	protected BrandDisplayMenu showBrandSelect() {
+	protected OnlineProdList showRandomBrand() {
 
-		String displayMenuId = "brandMain";
-		Random random = new Random();
+		return null;
+	}
+
+	/**
+	 * 빈 장바구니에 보여줄 베스트 상품 리턴
+	 *
+	 * @return
+	 */
+	protected OnlineProdList showBestProdList() {
+
 		try {
-	        BrandDisplayMainMenu brandDisplayMainMenu = displayApi.getBrandMenu(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
-	        List<BrandDisplayMenu> brandSubMenuList = brandDisplayMainMenu.getSubmenus();
-			
-			return brandSubMenuList.get(random.nextInt(brandSubMenuList.size()));
+			OnlineProdList bestProdList
+				= displayApi.getFlaggedProdList(
+				APConstant.AP_BEST_PROD_FLAG_24H    	//flags
+				, false            	//excludeSoldOut
+				, "OnlineProd"        	//prodListUnit
+				, "Bestselling"               //prodSort
+				, 0                          //offset
+				, 20                          	//limit
+				, false               	//includeFilters
+				, null            //displayCateDepth
+				, null                 //displayCate
+				, null                      //brand
+				, APConstant.AP_BEST_PROD_FLAG_24H    	//flag
+				, null                        //attr
+				, null                 //priceRange
+			);
+
+			if(bestProdList.getList().size() > 0){
+				return bestProdList;
+			}
 		}catch(Exception e) {
 			e.printStackTrace();
-	    }
-		
+		}
+
 		return null;
 	}
 
@@ -84,18 +107,12 @@ public class CartBaseController extends AbstractController{
 		setSaleDisplayStatusCartPointExchOnlineProdExList(cartEx.getCartDeliveryMembershipPointExchOnlineProdExList());
 		// 장바구니-배송-M+N프로모션목록-온라인상품목록
 		setSaleDisplayStatusCartMnPromoExList(cartEx.getCartDeliveryMNPromoExList());
-		// 장바구니-배송-동시구매프로모션목록-온라인상품목록
-		setSaleDisplayStatusCartSameTimePromoExList(cartEx.getCartDeliverySameTimePurPromoExList());
 
 		for(CartOtfInfo cartOtfInfo : cartEx.getCartOtfInfoList()) {
 			// 장바구니-배송-온라인상품목록
 			setSaleDisplayStatusCartOnlineProdExList(cartOtfInfo.getCartDeliveryOnlineProdExList());
-			// 장바구니-배송-멤버십포인트교환-온라인상품목록
-			setSaleDisplayStatusCartPointExchOnlineProdExList(cartOtfInfo.getCartDeliveryMembershipPointExchOnlineProdExList());
 			// 장바구니-배송-M+N프로모션목록-온라인상품목록
 			setSaleDisplayStatusCartMnPromoExList(cartOtfInfo.getCartDeliveryMNPromoExList());
-			// 장바구니-배송-동시구매프로모션목록-온라인상품목록
-			setSaleDisplayStatusCartSameTimePromoExList(cartOtfInfo.getCartDeliverySameTimePurPromoExList());
 		}
 		return cartEx;
 	}
@@ -106,67 +123,61 @@ public class CartBaseController extends AbstractController{
 	 * @param selectedCartProdSnStr
 	 * @return
 	 */
-    protected CartEx calculationBySelect(Long cartSn, String selectedCartProdSnStr) {
+	protected CartEx calculationBySelect(Long cartSn, String selectedCartProdSnStr) {
 
 		/* 재계산을 위한 최종 cartEx */
 		CartSession cartSession = getCartSession();
 		CartEx cartEx = cartSession.getCartEx();
-        
-        if(cartEx == null
-                || !cartSn.equals(cartEx.getCartSn())) {
-            cartEx = cartApi.getCartBySelectCartProds(cartSn, selectedCartProdSnStr);
-        }
-        else {
-            
-            try {
 
-                List<Long> selectedCartProdSnList = new ArrayList<>();
-                
-                if(selectedCartProdSnStr != null
-                        && selectedCartProdSnStr.length() > 0) {
-                    String[] selectedCartProdSnArray = selectedCartProdSnStr.split("[,]");
-                    if(selectedCartProdSnArray != null
-                            && selectedCartProdSnArray.length > 0) {
-                        for(String cartProdSnStr : selectedCartProdSnArray) {
-                            selectedCartProdSnList.add(Long.parseLong(cartProdSnStr));
-                        }
-                    }
-                }
-                
-                // 장바구니-배송-온라인상품목록
+		if(cartEx == null
+			|| !cartSn.equals(cartEx.getCartSn())) {
+			cartEx = cartApi.getCartBySelectCartProds(cartSn, selectedCartProdSnStr);
+		}
+		else {
+
+			try {
+
+				List<Long> selectedCartProdSnList = new ArrayList<>();
+
+				if(selectedCartProdSnStr != null
+					&& selectedCartProdSnStr.length() > 0) {
+					String[] selectedCartProdSnArray = selectedCartProdSnStr.split("[,]");
+					if(selectedCartProdSnArray != null
+						&& selectedCartProdSnArray.length > 0) {
+						for(String cartProdSnStr : selectedCartProdSnArray) {
+							selectedCartProdSnList.add(Long.parseLong(cartProdSnStr));
+						}
+					}
+				}
+
+				// 장바구니-배송-온라인상품목록
 				setSelectCartOnlineProdExList(cartEx.getCartDeliveryOnlineProdExList(), selectedCartProdSnList);
-                // 장바구니-배송-멤버십포인트교환-온라인상품목록
+				// 장바구니-배송-멤버십포인트교환-온라인상품목록
 				setSelectCartOnlineProdExList(cartEx.getCartDeliveryMembershipPointExchOnlineProdExList(), selectedCartProdSnList);
-                // 장바구니-배송-M+N프로모션목록-온라인상품목록
+				// 장바구니-배송-M+N프로모션목록-온라인상품목록
 				setSelectCartPromoExList(cartEx.getCartDeliveryMNPromoExList(), selectedCartProdSnList);
-                // 장바구니-배송-동시구매프로모션목록-온라인상품목록
-				setSelectCartSameTimePromoExList(cartEx.getCartDeliverySameTimePurPromoExList(), selectedCartProdSnList);
 				for(CartOtfInfo cartOtfInfo : cartEx.getCartOtfInfoList()) {
 					// 장바구니-배송-온라인상품목록
 					setSelectCartOnlineProdExList(cartOtfInfo.getCartDeliveryOnlineProdExList(), selectedCartProdSnList);
-					// 장바구니-배송-멤버십포인트교환-온라인상품목록
-					setSelectCartOnlineProdExList(cartOtfInfo.getCartDeliveryMembershipPointExchOnlineProdExList(), selectedCartProdSnList);
 					// 장바구니-배송-M+N프로모션목록-온라인상품목록
 					setSelectCartPromoExList(cartOtfInfo.getCartDeliveryMNPromoExList(), selectedCartProdSnList);
-					// 장바구니-배송-동시구매프로모션목록-온라인상품목록
-					setSelectCartSameTimePromoExList(cartOtfInfo.getCartDeliverySameTimePurPromoExList(), selectedCartProdSnList);
 				}
 
 				// 카트상품 계산
 				cartEx = calculationCartEx(cartEx);
-            }
-            catch(Exception e) {
-                e.printStackTrace();
+			}
+			catch(Exception e) {
+				e.printStackTrace();
 
-                cartEx = cartApi.getCartBySelectCartProds(cartSn, selectedCartProdSnStr);
-            }
-        }
+				cartEx = cartApi.getCartBySelectCartProds(cartSn, selectedCartProdSnStr);
+			}
+		}
 
 		cartSession.setCartEx(cartEx);
-        setCartSession(cartSession);
-        
-        return cartEx;
-    }
+		setCartSession(cartSession);
+
+		return cartEx;
+	}
 
 	/**
 	 * 장바구니 체크박스 선택 시 프로모션 상품 정보
@@ -179,7 +190,7 @@ public class CartBaseController extends AbstractController{
 		}
 
 		for(CartPromoEx cartPromoEx : cartPromoExList) {
-			setSelectCartSingleProdExList(cartPromoEx.getPromoOnlineProdExList(), selectedCartProdSnList);
+			setSelectCartOnlineProdExList(cartPromoEx.getPromoOnlineProdExList(), selectedCartProdSnList);
 		}
 	}
 
@@ -216,35 +227,35 @@ public class CartBaseController extends AbstractController{
 	 * @param selectedCartProdSnList
 	 */
 	private void setSelectCartOnlineProdExList(List<CartOnlineProdEx> cartOnlineProdExList, List<Long> selectedCartProdSnList) {
-        boolean deselectAll = CollectionUtils.isEmpty(selectedCartProdSnList);
-        // 상품선택정보 변경
-        if(cartOnlineProdExList != null) {
-            for(CartOnlineProdEx cartOnlineProdEx : cartOnlineProdExList) {
-                if(deselectAll) {
-                    cartOnlineProdEx.setSelectYn("N");
+		boolean deselectAll = CollectionUtils.isEmpty(selectedCartProdSnList);
+		// 상품선택정보 변경
+		if(cartOnlineProdExList != null) {
+			for(CartOnlineProdEx cartOnlineProdEx : cartOnlineProdExList) {
+				if(deselectAll) {
+					cartOnlineProdEx.setSelectYn("N");
 					if(cartOnlineProdEx.getCartProdExList() != null) {
 						for(CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
 							cartProdEx.setSelectYn("N");
 						}
 					}
-                }
-                else {
-                    cartOnlineProdEx.setSelectYn("N");
-                    if(cartOnlineProdEx.getCartProdExList() != null) {
-                        for(CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-                            if(selectedCartProdSnList.contains(cartProdEx.getCartProdSn())) {
+				}
+				else {
+					cartOnlineProdEx.setSelectYn("N");
+					if(cartOnlineProdEx.getCartProdExList() != null) {
+						for(CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
+							if(selectedCartProdSnList.contains(cartProdEx.getCartProdSn())) {
 								cartOnlineProdEx.setSelectYn("Y");
 								cartProdEx.setSelectYn("Y");
-                            }
-                            else {
+							}
+							else {
 								cartProdEx.setSelectYn("N");
 							}
-                        }
-                    }
-                }
-            }
-        }
-    }
+						}
+					}
+				}
+			}
+		}
+	}
 
 	/**
 	 * 체크박스 선택 시 자기 자신만 Y,N 변경처리
@@ -267,7 +278,7 @@ public class CartBaseController extends AbstractController{
 				}
 				// 선택상품
 				else {
-					// 자기 자신만 설정한다..
+					// 자기자신과 온라인 상품 설정한다..
 					if(cartOnlineProdEx.getCartProdExList() != null) {
 						for(CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
 							if(selectedCartProdSnList.contains(cartProdEx.getCartProdSn())) {
@@ -299,16 +310,14 @@ public class CartBaseController extends AbstractController{
 			|| !cartSn.equals(cartEx.getCartSn())) {
 			cartEx = getCart(cartSn);
 		}
-        else {
-        	try {
+		else {
+			try {
 				// 장바구니-배송-온라인상품목록
 				setRemoveCartOnlineProdExList(cartEx.getCartDeliveryOnlineProdExList(), removeCartProdSnList);
 				// 장바구니-배송-멤버십포인트교환-온라인상품목록
 				setRemoveCartOnlineProdExList(cartEx.getCartDeliveryMembershipPointExchOnlineProdExList(), removeCartProdSnList);
 				// 장바구니-배송-M+N프로모션목록-온라인상품목록
 				setRemoveCartPromoOnlineProdExList(cartEx.getCartDeliveryMNPromoExList(), removeCartProdSnList);
-				// 장바구니-배송-동시구매프로모션목록-온라인상품목록
-				setRemoveCartPromoOnlineProdExList(cartEx.getCartDeliverySameTimePurPromoExList(), removeCartProdSnList);
 
 				for(CartOtfInfo cartOtfInfo : cartEx.getCartOtfInfoList()) {
 					// 장바구니-배송-온라인상품목록
@@ -317,8 +326,6 @@ public class CartBaseController extends AbstractController{
 					setRemoveCartOnlineProdExList(cartOtfInfo.getCartDeliveryMembershipPointExchOnlineProdExList(), removeCartProdSnList);
 					// 장바구니-배송-M+N프로모션목록-온라인상품목록
 					setRemoveCartPromoOnlineProdExList(cartOtfInfo.getCartDeliveryMNPromoExList(), removeCartProdSnList);
-					// 장바구니-배송-동시구매프로모션목록-온라인상품목록
-					setRemoveCartPromoOnlineProdExList(cartOtfInfo.getCartDeliverySameTimePurPromoExList(), removeCartProdSnList);
 				}
 
 				cartEx = calculationCartEx(cartEx);
@@ -328,13 +335,13 @@ public class CartBaseController extends AbstractController{
 				cartEx =  getCart(cartSn);
 			}
 
-        }
+		}
 
 		cartSession.setCartEx(cartEx);
-        setCartSession(cartSession);
-        
-        return cartEx;
-    }
+		setCartSession(cartSession);
+
+		return cartEx;
+	}
 
 	/**
 	 * 상품삭제 프로모션상품
@@ -398,9 +405,9 @@ public class CartBaseController extends AbstractController{
 	 * @param cartProdQty
 	 * @return
 	 */
-    protected CartEx calculationByChangeQty(Long cartSn,
-                                        Long cartProdSn,
-                                        Long cartProdQty) {
+	protected CartEx calculationByChangeQty(Long cartSn,
+											Long cartProdSn,
+											Long cartProdQty) {
 
 		/* 재계산을 위한 최종 cartEx */
 		CartSession cartSession = getCartSession();
@@ -410,16 +417,14 @@ public class CartBaseController extends AbstractController{
 			|| !cartSn.equals(cartEx.getCartSn())) {
 			cartEx =  getCart(cartSn);
 		}
-        else {
-            try {
-                // 장바구니-배송-온라인상품목록
-                setChangeQtyCartOnlineProdExList(cartEx.getCartDeliveryOnlineProdExList(), cartProdSn, cartProdQty);
-                // 장바구니-배송-멤버십포인트교환-온라인상품목록
-                setChangeQtyCartOnlineProdExList(cartEx.getCartDeliveryMembershipPointExchOnlineProdExList(), cartProdSn, cartProdQty);
-                // 장바구니-배송-M+N프로모션목록-온라인상품목록
-                setChangeQtyCartPromoOnlineProdExList(cartEx.getCartDeliveryMNPromoExList(), cartProdSn, cartProdQty);
-                // 장바구니-배송-동시구매프로모션목록-온라인상품목록
-                setChangeQtyCartPromoOnlineProdExList(cartEx.getCartDeliverySameTimePurPromoExList(), cartProdSn, cartProdQty);
+		else {
+			try {
+				// 장바구니-배송-온라인상품목록
+				setChangeQtyCartOnlineProdExList(cartEx.getCartDeliveryOnlineProdExList(), cartProdSn, cartProdQty);
+				// 장바구니-배송-멤버십포인트교환-온라인상품목록
+				setChangeQtyCartOnlineProdExList(cartEx.getCartDeliveryMembershipPointExchOnlineProdExList(), cartProdSn, cartProdQty);
+				// 장바구니-배송-M+N프로모션목록-온라인상품목록
+				setChangeQtyCartPromoOnlineProdExList(cartEx.getCartDeliveryMNPromoExList(), cartProdSn, cartProdQty);
 				for(CartOtfInfo cartOtfInfo : cartEx.getCartOtfInfoList()) {
 					// 장바구니-배송-온라인상품목록
 					setChangeQtyCartOnlineProdExList(cartOtfInfo.getCartDeliveryOnlineProdExList(), cartProdSn, cartProdQty);
@@ -427,24 +432,22 @@ public class CartBaseController extends AbstractController{
 					setChangeQtyCartOnlineProdExList(cartOtfInfo.getCartDeliveryMembershipPointExchOnlineProdExList(), cartProdSn, cartProdQty);
 					// 장바구니-배송-M+N프로모션목록-온라인상품목록
 					setChangeQtyCartPromoOnlineProdExList(cartOtfInfo.getCartDeliveryMNPromoExList(), cartProdSn, cartProdQty);
-					// 장바구니-배송-동시구매프로모션목록-온라인상품목록
-					setChangeQtyCartPromoOnlineProdExList(cartOtfInfo.getCartDeliverySameTimePurPromoExList(), cartProdSn, cartProdQty);
 				}
 
-                cartEx = calculationCartEx(cartEx);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-                cartEx =  getCart(cartSn);
-            }
-        }
+				cartEx = calculationCartEx(cartEx);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				cartEx =  getCart(cartSn);
+			}
+		}
 
 
 		cartSession.setCartEx(cartEx);
-        setCartSession(cartSession);
-        
-        return cartEx;
-    }
+		setCartSession(cartSession);
+
+		return cartEx;
+	}
 
 	/**
 	 * 상품수량 변경 프로모션상품
@@ -553,11 +556,11 @@ public class CartBaseController extends AbstractController{
 	 */
 	private void setSaleDisplayStatusCartOnlineProdExList(List<CartOnlineProdEx> cartOnlineProdExList) {
 		for(CartOnlineProdEx cartOnlineProdEx : cartOnlineProdExList){
-			cartOnlineProdEx.setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_ONSALE);
+			cartOnlineProdEx.setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_NOTSELECT);
 			for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
 				// 체크박스 선택(셀렉)여부 체크
-				if(isCartProdSelectable(cartProdEx) == false){
-					cartOnlineProdEx.setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_NOTSELECT);
+				if(isCartProdSelectable(cartProdEx) == true){
+					cartOnlineProdEx.setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_ONSALE);
 					break;
 				}
 				// 최소구매수량 > 주문수량 체크
@@ -586,7 +589,6 @@ public class CartBaseController extends AbstractController{
 	private void setSaleDisplayStatusCartPointExchOnlineProdExList(List<CartOnlineProdEx> cartPointExchOnlineProdExList) {
 		for (CartOnlineProdEx cartOnlineProdEx : cartPointExchOnlineProdExList) {
 			cartOnlineProdEx.setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_ONSALE);
-
 			for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
 				// 판매표시가 없을때
 				if(StringUtils.isEmpty(cartProdEx.getProdEx().getSaleDisplayStatus())){
@@ -594,8 +596,10 @@ public class CartBaseController extends AbstractController{
 				}
 				// 셀렉여부에 따른 판매표시상태와 셀렉상태 변경
 				setCartProdSelectable(cartProdEx, isCartProdSelectable(cartProdEx));
+
 			}
 		}
+		setSaleDisplayStatusOnlineProdExList(cartPointExchOnlineProdExList);
 	}
 
 	/**
@@ -607,10 +611,12 @@ public class CartBaseController extends AbstractController{
 			// 동종 M+N
 			if(CartConst.MPLUSNTYPE_SAME.equals(cartPromoEx.getPromoMPlusNTypeCode())){
 				setSaleDisplayStatusCartPromoSameProdExList(cartPromoEx.getPromoOnlineProdExList());
+				setSaleDisplayStatusOnlineProdExList(cartPromoEx.getPromoOnlineProdExList());
 			}
 			// 이종 M+N
 			else if(CartConst.MPLUSNTYPE_DIFF.equals(cartPromoEx.getPromoMPlusNTypeCode())){
 				setSaleDisplayStatusCartPromoDifferentProdExList(cartPromoEx.getPromoOnlineProdExList());
+				setSaleDisplayStatusOnlineProdExList(cartPromoEx.getPromoOnlineProdExList());
 			}
 		}
 	}
@@ -632,55 +638,6 @@ public class CartBaseController extends AbstractController{
 	}
 
 	/**
-	 * 동시구매 프로모션 상품
-	 * @param cartPromoExList
-	 */
-	private void setSaleDisplayStatusCartSameTimePromoExList(List<CartPromoEx> cartPromoExList) {
-		for (CartPromoEx cartPromoEx : cartPromoExList) {
-
-			// disableed 제어
-			cartPromoEx.setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_ONSALE);
-			for (CartOnlineProdEx cartOnlineProdEx : cartPromoEx.getPromoOnlineProdExList()) {
-				for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-					if(isCartProdSelectable(cartProdEx) == false){ // 선택여부 체크
-						cartPromoEx.setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_NOTSELECT);
-						cartPromoEx.setSelectYn(CartConst.N);
-						break;
-					}
-					// TODO : 주문수량 적용 시 주문수량 체크 부분 확인할 것!
-					// 최소구매수량 > 주문수량 체크
-					if(cartProdEx.getProdEx().getMinPurLimitQty() > cartProdEx.getCartProdQty()){
-						cartPromoEx.setSelectYn(CartConst.N);
-						cartProdEx.setSelectYn(CartConst.N);
-					}
-					// 주문수량 > 최대구매수량 체크
-					if(cartProdEx.getCartProdQty() > cartProdEx.getProdEx().getMaxPurLimitQty()){
-						cartPromoEx.setSelectYn(CartConst.N);
-						cartProdEx.setSelectYn(CartConst.N);
-					}
-				}
-			}
-			if(CartConst.SALE_DISPLAY_STATUS_NOTSELECT.equals(cartPromoEx.getSaleDisplayStatus())){
-				for (CartOnlineProdEx cartOnlineProdEx : cartPromoEx.getPromoOnlineProdExList()) {
-					for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-						cartProdEx.setSelectYn(CartConst.N);
-					}
-				}
-			}
-
-			// 체크제어
-			cartPromoEx.setSelectYn(CartConst.Y);
-			for (CartOnlineProdEx cartOnlineProdEx : cartPromoEx.getPromoOnlineProdExList()) {
-				for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-					if(CartConst.N.equals(cartProdEx.getSelectYn())){
-						cartPromoEx.setSelectYn(CartConst.N);
-						break;
-					}
-				}
-			}
-		}
-	}
-	/**
 	 * 이종 M+N 상품
 	 * @param cartOnlineProdExList
 	 */
@@ -697,14 +654,52 @@ public class CartBaseController extends AbstractController{
 	}
 
 	/**
+	 * 온라인 상품 체크박스 선택여부
+	 * @param cartOnlineProdExList
+	 */
+	private void setSaleDisplayStatusOnlineProdExList(List<CartOnlineProdEx> cartOnlineProdExList){
+		for(CartOnlineProdEx cartOnlineProdEx : cartOnlineProdExList){
+			cartOnlineProdEx.setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_NOTSELECT);
+			for (CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
+				if(isCartProdSelectable(cartProdEx) == true){	// 수량체크
+					cartOnlineProdEx.setSaleDisplayStatus(CartConst.SALE_DISPLAY_STATUS_ONSALE);
+					break;
+				}
+			}
+		}
+	}
+
+	/**
 	 * 장바구니 계산정보
 	 * @param cartEx
 	 * @return
 	 */
-    protected CartEx calculationCartEx(CartEx cartEx) {
+	protected CartEx calculationCartEx(CartEx cartEx) {
 
 		/* 선택 된 계산정보 */
 		calculationBySelect(cartEx);
+
+		/* 멤버십(뷰티포인트) 일련번호 가져오기*/
+		long membershipBPSn = -1; //값이 없는 경우 -1
+		if(cartEx.getCartMemberEx() != null && cartEx.getCartMemberEx().getMemberMembershipExList().size() > 0){
+			for(CartMemberMembershipEx cartMemberMembershipEx : cartEx.getCartMemberEx().getMemberMembershipExList()){
+				if(cartMemberMembershipEx.getMembershipServiceCode().equals("BP")){
+					membershipBPSn = cartMemberMembershipEx.getMembershipSn();
+				}
+			}
+		}
+
+		/* 멤버십(뷰티포인트) 적립금액절사코드 */
+		String membershipPointAmtTruncCode = null;
+		if(membershipBPSn != -1){
+			if(cartEx.getCalculationResult() != null){
+				HashMap<String, Object> requestMembershipMap = (HashMap<String, Object>) cartEx.getCalculationResult().getRequest().getRequestMembershipMap();
+				LinkedHashMap calculationRequestMembership = (LinkedHashMap) requestMembershipMap.get(String.valueOf(membershipBPSn));
+				if(calculationRequestMembership != null){
+					membershipPointAmtTruncCode = (String) calculationRequestMembership.get("membershipPointAmtTruncCode");
+				}
+			}
+		}
 
 		/* M+N 프로모션 기준수량/증정수량계산 */
 		if(cartEx.getCartDeliveryMNPromoExList() != null) {
@@ -731,38 +726,32 @@ public class CartBaseController extends AbstractController{
 		 * 프로모션상품금액들의 합
 		 */
 		{
-            // 장바구니-배송-온라인상품목록
-            calculationCartOnlineProdExList(cartEx.getCartDeliveryOnlineProdExList(), allCartProdExMap, allCartOnlineProdExMap);
-            // 장바구니-배송-멤버십포인트교환-온라인상품목록
-            calculationCartOnlineProdExList(cartEx.getCartDeliveryMembershipPointExchOnlineProdExList(), allCartProdExMap, allCartOnlineProdExMap);
-            // 장바구니-배송-M+N프로모션목록-온라인상품목록
-            calculationCartPromoOnlineProdExList(cartEx.getCartDeliveryMNPromoExList(), allCartProdExMap, allCartOnlineProdExMap);
-            // 장바구니-배송-동시구매프로모션목록-온라인상품목록
-            calculationCartPromoOnlineProdExList(cartEx.getCartDeliverySameTimePurPromoExList(), allCartProdExMap, allCartOnlineProdExMap);
+			// 장바구니-배송-온라인상품목록
+			calculationCartOnlineProdExList(cartEx.getCartDeliveryOnlineProdExList(), allCartProdExMap, allCartOnlineProdExMap);
+			// 장바구니-배송-멤버십포인트교환-온라인상품목록
+			calculationCartOnlineProdExList(cartEx.getCartDeliveryMembershipPointExchOnlineProdExList(), allCartProdExMap, allCartOnlineProdExMap);
+			// 장바구니-배송-M+N프로모션목록-온라인상품목록
+			calculationCartPromoOnlineProdExList(cartEx.getCartDeliveryMNPromoExList(), allCartProdExMap, allCartOnlineProdExMap);
 			for(CartOtfInfo cartOtfInfo : cartEx.getCartOtfInfoList()) {
 				// 장바구니-배송-온라인상품목록
 				calculationCartOnlineProdExList(cartOtfInfo.getCartDeliveryOnlineProdExList(), allCartProdExMap, allCartOnlineProdExMap);
-				// 장바구니-배송-멤버십포인트교환-온라인상품목록
-				calculationCartOnlineProdExList(cartOtfInfo.getCartDeliveryMembershipPointExchOnlineProdExList(), allCartProdExMap, allCartOnlineProdExMap);
 				// 장바구니-배송-M+N프로모션목록-온라인상품목록
 				calculationCartPromoOnlineProdExList(cartOtfInfo.getCartDeliveryMNPromoExList(), allCartProdExMap, allCartOnlineProdExMap);
-				// 장바구니-배송-동시구매프로모션목록-온라인상품목록
-				calculationCartPromoOnlineProdExList(cartOtfInfo.getCartDeliverySameTimePurPromoExList(), allCartProdExMap, allCartOnlineProdExMap);
 			}
-        }
+		}
 
-        CalculationResult calculationResult = cartEx.getCalculationResult();
+		CalculationResult calculationResult = cartEx.getCalculationResult();
 		if (calculationResult == null) {
 			return cartEx;
 		}
 
-        /* 배송지시계산결과수정 : 금액들의 합, 배송비 */
-        BigDecimal totalShipFee = BigDecimal.ZERO;
-        BigDecimal totalShipFeeDiscountAmount = BigDecimal.ZERO;
-        
-        if(calculationResult.getResultOtfList() != null) {
-            for(CalculationResultOtf calculationResultOtf : calculationResult.getResultOtfList()) {
-                CalculationRequestOtf requestOtf = calculationResultOtf.getRequestOtf();
+		/* 배송지시계산결과수정 : 금액들의 합, 배송비 */
+		BigDecimal totalShipFee = BigDecimal.ZERO;
+		BigDecimal totalShipFeeDiscountAmount = BigDecimal.ZERO;
+
+		if(calculationResult.getResultOtfList() != null) {
+			for(CalculationResultOtf calculationResultOtf : calculationResult.getResultOtfList()) {
+				CalculationRequestOtf requestOtf = calculationResultOtf.getRequestOtf();
 
 				// 온라인판매금액합계 정보
 				int cnt = 0;
@@ -773,19 +762,23 @@ public class CartBaseController extends AbstractController{
 						//CartOnlineProdEx cartOnlineProdEx = allCartOnlineProdExMap.get(Long.parseLong(productKey));
 						if(cartProdEx != null
 							&& CartConst.Y.equals(cartProdEx.getSelectYn())
-							&& cartProdEx.getCalculationResultProduct() != null) {
-							onlineSalesTotalAmount = onlineSalesTotalAmount.add(getStandardAmount(cartProdEx.getCalculationResultProduct().getFinalOnlineSalesAmountInfo()));
+							&& cartProdEx.getCalculationResultProduct() != null
+							&& CartConst.SALE_DISPLAY_STATUS_ONSALE.equals(cartProdEx.getProdEx().getSaleDisplayStatus())) {
+							//뷰티포인트 상품도 같이 합산됨.
+							onlineSalesTotalAmount = onlineSalesTotalAmount.add(getStandardAmount(cartProdEx.getCalculationResultProduct().getProductSaleAmountInfo()));
+
 							// 뷰티포인트 배송비 합산 추가
-							if(CartConst.Y.equals(cartProdEx.getIntegrationMembershipExchYn())){
-								onlineSalesTotalAmount = onlineSalesTotalAmount.add(new BigDecimal(cartProdEx.getExchPoint()));
-							}
+//							if(CartConst.Y.equals(cartProdEx.getIntegrationMembershipExchYn())){
+//								onlineSalesTotalAmount = onlineSalesTotalAmount.add(new BigDecimal(cartProdEx.getExchPoint()));
+//							}
+
 							cnt++;
 						}
 					}
 				}
 
 				// 배송비
-				BigDecimal shipFeeFreeBaseAmt = requestOtf.getShipFeeFreeBaseAmt() != null ? requestOtf.getShipFeeFreeBaseAmt() : BigDecimal.ZERO;
+				BigDecimal shipFeeFreeBaseAmt = requestOtf.getShipFeeFreeBaseAmt() != null ? requestOtf.getShipFeeFreeBaseAmt() : new BigDecimal("10000");
 
 				BigDecimal calcDefaultShipFee = BigDecimal.ZERO;
 				BigDecimal shipFeeDiscountAmount = BigDecimal.ZERO;
@@ -812,7 +805,7 @@ public class CartBaseController extends AbstractController{
 				totalShipFee = totalShipFee.add(calcDefaultShipFee);
 				totalShipFeeDiscountAmount = totalShipFeeDiscountAmount.add(shipFeeDiscountAmount);
 			}
-        }
+		}
 
 
 		/* 계산결과수정 : 금액들의 합 */
@@ -840,14 +833,14 @@ public class CartBaseController extends AbstractController{
 			BigDecimal dsicountAmountByOnlineMemberDc = BigDecimal.ZERO;
 			// 즉시할인쿠폰
 			BigDecimal dsicountAmountByinstantCouponDc = BigDecimal.ZERO;
-			// 동시구매할인
-			BigDecimal discountAmountBySameTimePurDc = BigDecimal.ZERO;
 			// M+N프로모션할인
 			BigDecimal discountAmountByMNPromotion = BigDecimal.ZERO;
 			// 상품할인금액총합
 			BigDecimal totalProdUnitDiscountAmount = BigDecimal.ZERO;
 			// 최종온라인판매금액합계
 			BigDecimal finalOnlineSalesTotalAmount = BigDecimal.ZERO;
+			// 적립포인트합계
+			BigDecimal totalMembershipSavingPoint = BigDecimal.ZERO;
 
 			for(CartProdEx cartProdEx : allCartProdExMap.values()) {
 				//CartOnlineProdEx cartOnlineProdEx = allCartOnlineProdExMap.get(cartProdEx.getCartProdSn());
@@ -857,12 +850,8 @@ public class CartBaseController extends AbstractController{
 					&& !CartConst.Y.equals(cartProdEx.getExchYn())) {
 
 					CalculationResultProduct resultProduct = cartProdEx.getCalculationResultProduct();
-					if(CartConst.Y.equals(cartProdEx.getStorePickupYn())) {
-						storePickupProdSaleTotalAmount = storePickupProdSaleTotalAmount.add(getStandardAmount(resultProduct.getProductSaleAmountInfo()));
-					}
-					else {
-						onlineShipProdSaleTotalAmount = onlineShipProdSaleTotalAmount.add(getStandardAmount(resultProduct.getProductSaleAmountInfo()));
-					}
+
+					onlineShipProdSaleTotalAmount = onlineShipProdSaleTotalAmount.add(getStandardAmount(resultProduct.getProductSaleAmountInfo()));
 
 					prodSaleTotalAmount = prodSaleTotalAmount.add(getStandardAmount(resultProduct.getProductSaleAmountInfo()));
 
@@ -874,8 +863,6 @@ public class CartBaseController extends AbstractController{
 					dsicountAmountByOnlineMemberDc = dsicountAmountByOnlineMemberDc.add(getStandardAmount(resultProduct.getQtyDiscountAmountInfoByOnlineMemberDiscount()));
 					// 즉시할인쿠폰
 					dsicountAmountByinstantCouponDc = dsicountAmountByinstantCouponDc.add(getStandardAmount(resultProduct.getQtyDiscountAmountInfoByInstantDiscountCoupon()));
-					// 동시구매할인
-					discountAmountBySameTimePurDc = discountAmountBySameTimePurDc.add(getStandardAmount(resultProduct.getQtyDiscountAmountInfoBySameTimePurDiscount()));
 					// M+N프로모션할인
 					discountAmountByMNPromotion = discountAmountByMNPromotion.add(getStandardAmount(resultProduct.getQtyDiscountAmountInfoByMNPromotion()));
 
@@ -885,8 +872,24 @@ public class CartBaseController extends AbstractController{
 					totalProdUnitDiscountAmount = totalProdUnitDiscountAmount
 						.add(getStandardAmount(resultProduct.getProductSaleAmountInfo()))
 						.subtract(getStandardAmount(resultProduct.getFinalOnlineSalesAmountInfo()));
-
-
+					// 적립포인트합계
+					if(membershipBPSn != -1){
+						HashMap<String, Object> requestProductMembershipMap = (HashMap<String, Object>) resultProduct.getRequestProduct().getRequestProductMembershipMap();
+						LinkedHashMap requestProductMembership = (LinkedHashMap) requestProductMembershipMap.get(String.valueOf(membershipBPSn));
+						if(requestProductMembership.get("membershipSavingTgtYn") != null && (requestProductMembership.get("membershipSavingTgtYn")).equals("Y")){
+							double membershipSavingRate = (double)(requestProductMembership.get("membershipSavingRate"));
+							double finalOnlineSalesAmount = getStandardAmount(resultProduct.getFinalOnlineSalesAmountInfo()).doubleValue();
+							BigDecimal membershipSavingPoint = BigDecimal.valueOf( finalOnlineSalesAmount * membershipSavingRate);
+							if(membershipPointAmtTruncCode == null || membershipPointAmtTruncCode.equals("RoundUp")){//올림
+								membershipSavingPoint = membershipSavingPoint.setScale(0, BigDecimal.ROUND_UP);
+							}else if(membershipPointAmtTruncCode.equals("RoundDown")){//버림
+								membershipSavingPoint = membershipSavingPoint.setScale(0,BigDecimal.ROUND_DOWN);
+							}else if(membershipPointAmtTruncCode.equals("RoundOff")){//반올림
+								membershipSavingPoint = membershipSavingPoint.setScale(0,BigDecimal.ROUND_HALF_UP);
+							}
+							totalMembershipSavingPoint = totalMembershipSavingPoint.add(membershipSavingPoint);
+						}
+					}
 				}
 			}
 
@@ -904,8 +907,6 @@ public class CartBaseController extends AbstractController{
 			calculationResult.setDsicountAmountInfoByOnlineMemberDc(setCalculationCurrencyInfo(calculationResult.getDsicountAmountInfoByOnlineMemberDc(), dsicountAmountByOnlineMemberDc));
 			// 즉시할인쿠폰
 			calculationResult.setDsicountAmountInfoByinstantCouponDc(setCalculationCurrencyInfo(calculationResult.getDsicountAmountInfoByinstantCouponDc(), dsicountAmountByinstantCouponDc));
-			// 동시구매할인
-			calculationResult.setDiscountAmountInfoBySameTimePurDc(setCalculationCurrencyInfo(calculationResult.getDiscountAmountInfoBySameTimePurDc(), discountAmountBySameTimePurDc));
 			// M+N프로모션할인
 			calculationResult.setDiscountAmountInfoByMNPromotion(setCalculationCurrencyInfo(calculationResult.getDiscountAmountInfoByMNPromotion(), discountAmountByMNPromotion));
 			// 상품할인금액총합
@@ -920,6 +921,13 @@ public class CartBaseController extends AbstractController{
 				, finalOnlineSalesTotalAmount
 					.add(calculationResult.getTotalExtraFeeInfo().getStandardCurrency().getAmount())
 					.add(calculationResult.getShipFeeSumInfo().getStandardCurrency().getAmount())));
+
+			// 적립포인트합계
+			if(membershipBPSn != -1){
+				LinkedHashMap calculationResultMembership = (LinkedHashMap) calculationResult.getResultMembershipMap().get(String.valueOf(membershipBPSn));
+				calculationResultMembership.put("totalMembershipSavingPoint", totalMembershipSavingPoint.longValue());
+				calculationResult.getResultMembershipMap().put(String.valueOf(membershipBPSn), calculationResultMembership);
+			}
 		}
 
 		return cartEx;
@@ -930,11 +938,7 @@ public class CartBaseController extends AbstractController{
 
 		if(calculationResult != null) {
 			calculationResult.setExchIPointSum(0);
-			calculationResult.setExchAPointSum(0);
-			cartEx.setCartDeliveryExchMembershipPointSum(0);
-
 			addExchPointSum(cartEx.getCartDeliveryMembershipPointExchOnlineProdExList(), cartEx, false);
-			addExchPointSum(cartEx.getCartStorePickupMembershipPointExchOnlineProdExList(), cartEx, false);
 		}
 	}
 
@@ -1001,7 +1005,7 @@ public class CartBaseController extends AbstractController{
 	}
 
 	/**
-	 * 프로모션, 동시구매 계산
+	 * 프로모션 M + N 계산
 	 * @param cartPromoExList
 	 * @param allCartProdExMap
 	 * @param allCartOnlineProdExMap
@@ -1028,24 +1032,6 @@ public class CartBaseController extends AbstractController{
 						}
 					}
 				}
-			}
-			// 동시구매
-			else{
-				for(CartOnlineProdEx cartOnlineProdEx : cartPromoEx.getPromoOnlineProdExList()) {
-					for(CartProdEx cartProdEx : cartOnlineProdEx.getCartProdExList()) {
-						if ("Y".equals(cartProdEx.getSelectYn())) {
-							CalculationResultProduct resultProduct = cartProdEx.getCalculationResultProduct();
-							productSaleAmount = productSaleAmount.add(getStandardAmount(resultProduct.getProductSaleAmountInfo()));
-							finalOnlineSaleAmount = finalOnlineSaleAmount.add(getStandardAmount(resultProduct.getFinalOnlineSalesAmountInfo()));
-						}
-					}
-				}
-				/*for(CartOnlineProdEx cartOnlineProdEx : cartPromoEx.getPromoOnlineProdExList()) {
-					if("Y".equals(cartOnlineProdEx.getSelectYn())){
-						productSaleAmount = productSaleAmount.add(getStandardAmount(cartOnlineProdEx.getProductSaleAmountInfo()));
-						finalOnlineSaleAmount = finalOnlineSaleAmount.add(getStandardAmount(cartOnlineProdEx.getFinalOnlineSalesAmountInfo()));
-					}
-				}*/
 			}
 			cartPromoEx.getProductSaleAmountInfo().getStandardCurrency().setAmount(productSaleAmount);
 			cartPromoEx.getFinalOnlineSalesAmountInfo().getStandardCurrency().setAmount(finalOnlineSaleAmount);
@@ -1108,8 +1094,6 @@ public class CartBaseController extends AbstractController{
 						setCalculationCurrencyInfo(resultProduct.getQtyDiscountAmountInfoByOnlineMemberDiscount(), resultProduct.getUnitDiscountAmountInfoByOnlineMemberDiscount(), realQty);
 						// 즉시할인쿠폰수량할인금액
 						setCalculationCurrencyInfo(resultProduct.getQtyDiscountAmountInfoByInstantDiscountCoupon(), resultProduct.getUnitDiscountAmountInfoByInstantDiscountCoupon(), realQty);
-						// 동시구매프로모션수량할인금액
-						setCalculationCurrencyInfo(resultProduct.getQtyDiscountAmountInfoBySameTimePurDiscount(), resultProduct.getUnitDiscountAmountInfoBySameTimePurDiscount(), realQty);
 
 						productSaleAmount = productSaleAmount.add(getStandardAmount(resultProduct.getProductSaleAmountInfo()));
 						finalOnlineSaleAmount = finalOnlineSaleAmount.add(getStandardAmount(resultProduct.getFinalOnlineSalesAmountInfo()));
@@ -1136,7 +1120,7 @@ public class CartBaseController extends AbstractController{
 	}
 
 	/**
-	 * 프로모션, 동시구매 계산
+	 * 프로모션 M + N 계산
 	 * @param cartPromoEx
 	 * @param cartOnlineProdExList
 	 */

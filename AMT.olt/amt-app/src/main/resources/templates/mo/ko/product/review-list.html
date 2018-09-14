@@ -16,24 +16,17 @@
 							<span class="num" >[[${#numbers.formatInteger( reviewStats.totalCount, 0, 'COMMA')}]]</span>명 중 <span class="bold_222">[[${maxCountPerScope.percent}]]%</span>의 고객이 <span class="bold_222">[[${maxCountPerScope.scope}]]점</span>을 주었습니다.
 						</p>
 						
-						<ul class="review_graph">
-							<th:block th:each="survey : ${reviewStats.prodReviewSurveys}"
-									  th:unless="${#lists.isEmpty(survey.countPerResItems)}"
-									  th:with="max=${survey.countPerResItems[0]}">
-									  <th:block th:each="item : ${survey.countPerResItems}" 
-									  			th:if="${max.count < item.count}" 
-									  			th:with="max=${item}"></th:block>
-								<li>
-									<span class="title" th:text="${survey.questionHeader}"></span>
-									<span>
-										<span class="graph">
-											<em style="width:[[${max.rate}]]%"></em>
-										</span>
-										<span class="data">[[${max.rate}]]%</span>
-										<span class="exp">[[${max.responseBodyText}]]</span>
+						<ul class="review_graph" th:if="${#lists.size(maxSurvey) > 0}">
+							<li th:each="max : ${maxSurvey}">
+								<span class="title" th:text="${max.questionHeader}"></span>
+								<span>
+									<span class="graph">
+										<em th:style="'width:'+@{${max.rate}}+'%'"></em>
 									</span>
-								</li>
-							</th:block>
+									<span class="data">[[${max.rate}]]%</span>
+									<span class="exp">[[${max.responseBodyText}]]</span>
+								</span>
+							</li>
 						</ul>
 						
 						<div class="ui_toggle_contents mgt30">
@@ -47,7 +40,7 @@
 												<span class="exp" th:text="${item.responseBodyText}"></span>
 												<span>
 													<span class="graph">
-														<span style="width:[[${item.rate}]]%"></span>
+														<span th:style="'width:'+@{${item.rate}}+'%'"></span>
 													</span>
 													<span class="data">[[${item.rate}]]%</span>
 												</span>
@@ -59,6 +52,7 @@
 							<button type="button" class="btn_border_round toggle_btn close"><span>접기</span> <i class="ico_up"></i></button>
 						</div>
 					</div>
+					
 					<!--/* 베스트 포토리뷰 */-->
 					<div class="section pd_md best_photo_review">
 						<dl>
@@ -69,6 +63,7 @@
 							</dd>
 						</dl>
 					</div>
+					
 					<!--/* 뷰티 테스터 리뷰 */-->
 					<div class="section pd_md beauty_tester">
 						<dl>
@@ -195,19 +190,14 @@
 							</dd>
 						</dl>
 					</div>
+					
 					<!--/* 태그 */-->
-					<div class="section hash">
+					<div class="section hash" th:if="${#lists.size(reviewStats.searchKeywords) > 0}">
 						<div class="tag_group scrollable_x">
-							<button type="button">#색상</button>
-							<button type="button">#발색</button>
-							<button type="button">#지속력</button>
-							<button type="button">#커버력</button>
-							<button type="button">#색상</button>
-							<button type="button">#발색</button>
-							<button type="button">#지속력</button>
-							<button type="button">#커버력</button>
+							<button type="button" th:each="keyword : ${reviewStats.searchKeywords}">#[[${keyword}]]</button>
 						</div>
 					</div>
+					
 					<!--/* 정렬 */-->
 					<div class="section ui_accordion review_sort">
 						<dl>

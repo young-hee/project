@@ -1,0 +1,24 @@
+			<dl class="layer">
+				<dt class="layer_title line">상품 안내</dt>
+				<dd class="layer_cont">
+					<div class="coupon_items prd_list" th:if="${not #lists.isEmpty(pridList)}"> <!-- 클래스 'prd_list' 추가_2018-08-17 -->
+						<div class="item" th:each="item : ${pridList}">
+							<div class="thumb"><img th:src="${item.imageUrl}" alt=""></div>
+							<div class="info">
+								<p class="brand_name" th:text="${item.brand}">프리메라</p>
+								<p class="ellipsis line2" th:text="${item.prodName}">[NEW] 베이비 선쿠션리미티드 SPF32 PA++</p>
+								<div class="price">
+									<strong th:text="${#IntegUtil.toCommaNumber(item.price)}">23,500</strong><span class="won">원</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div style="text-align: center;padding-top: 30px;font-size: 15px;" th:if="${#lists.isEmpty(pridList)}">
+						대상 상품이 존재하지 않습니다.
+					</div>
+					<div class="layer_btns_center">
+						<a href="javascript:;" class="btn_fix_neutral">확인</a>
+					</div>
+				</dd>
+			</dl>
+			<button class="layer_close" type="button"><span class="sr_only">레이어 닫기</span></button>

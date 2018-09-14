@@ -1,8 +1,8 @@
-<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='beauty-tester'">
+<html ap:decorate="~{layout/layout-item-only}" th:with="_jsfile='beauty-tester'">
 <body>
 <!-- #ap_container -->
 <div ap:fragment="layout-contents">
-	<div class="ap_contents title_two_depth beauty_tester_wrap">
+	<div class="ap_contents">
 
 		<div class="section top course_wrap">
 			<div class="cont_top">
@@ -33,7 +33,7 @@
 			</div>		<!-- // course_list_wrap -->
 		</div>		<!-- // course_wrap -->
         
-    <div class="section" th:if="${(status=='TN' or status=='RR') and isReview==true}">
+    <div class="section" th:if="${(status=='TN' or status=='RR') and isRequester==true and isReview==true}">
       <div class="prize_wrap">
         <ul class="prize_guide">
           <li><strong th:text="${memberInfo.name.name1}"></strong>님,<br />당첨을 축하드립니다.</li>
@@ -45,7 +45,7 @@
       </div>
     </div>
 
-    <div class="section" th:if="${(status=='TN' or status=='RR') and isReview==false}">
+    <div class="section" th:if="${(status=='TN' or status=='RR') and isRequester==true and isReview==false}">
       <div class="prize_wrap">
         <ul class="prize_guide">
           <li>아쉽게도 이번엔<br />당첨이 되지 않았습니다.</li>
@@ -180,7 +180,7 @@
 									<li>뷰티테스터는 앱에서만 신청 가능한 서비스입니다.</li>
 									<li>새롭게 바뀐 아모레퍼시픽 앱을 다운받아<br />뷰티테스터에 참여해보세요</li>
 								</ul>
-								<a href="https://itunes.apple.com/kr/app/id538275329" target="_blank" class="btn_h45_pp">Ap몰 앱에서 신청하기</a>
+								<a href="javascript:setApp();" target="_blank" class="btn_h45_pp">Ap몰 앱에서 신청하기</a>
 							</div>
 						</div>
 					</div>		<!-- // tab_cont -->
@@ -205,9 +205,9 @@
 									<div class="clear bottom">
 										<p class="date">[[${#dates.format(requester.requestDt,'MM.dd')}]]</p>
 										<!--/* 내가 작성한 글 수정 / 삭제 버튼 노출 */-->
-										<div class="btn_wrap" th:if="${requester.memberSn==memberSn}">
-											<a href="#none" class="btn_sm_bordered">수정</a>
-											<a href="#none" class="btn_sm_bordered">삭제</a>
+										<div th:id="${requester.regularEventRequesterSn}" class="btn_wrap" th:if="${requester.memberSn==memberSn}">
+											<a href="#none" class="btn_sm_bordered edit">수정</a>
+											<a href="#none" class="btn_sm_bordered delete">삭제</a>
 										</div>
 									</div>
 								</dd>
@@ -246,12 +246,12 @@
           <div class="realtime_review">
             <ul class="review_list grid" style="opacity: 0">
               <li class="grid-item" th:each="review:${reviews.prodReviewList}">
-                <a href="#none">
+                <a th:href="@{/display/beauty_test/review-detail(prodReviewSn=${review.prodReviewSn})}" target="_blank">
                   <!--/* 이미지 없는 경우 */-->
                   <div class="flag_box">
                     <div class="review_info">
                       <span class="rating_one">
-                        <span class="star_one"><img src="/mo/ko/images/display/bg_rating_one.png" alt=""></span><span class="count">3</span>
+                        <span class="star_one"><img src="/mo/ko/images/display/bg_rating_one.png" alt=""></span><span class="count">[[${review.scope}]]</span>
                       </span>
                       <p class="text">[[${review.prodReviewTitle}]]</p>
                       <p class="reviewer">[[${review.memberId}]]</p>
@@ -259,8 +259,8 @@
                     <div class="product_info">
                       <div class="img_product"><img alt="" ap:src="@{/images/dummy/img_item_05.jpg}"></div>
                       <ul class="product_name_wrap">
-                        <li>헤라 블랙쿠션 블랙쿠션 SPF34 PA+</li>
-                        <li>옵션명 옵션명 옵션명 옵션명 옵션명</li>
+                        <li>[[${review.onlineProdName}]]</li>
+                        <li>[[${review.prodName}]]</li>
                       </ul>
                     </div>
                     <div class="flag_best"><img src="/mo/ko/images/display/ico_best_64.png" alt="베스트"></div>
@@ -293,10 +293,9 @@
 
 	</div>		<!-- // ap_contents -->
 </div>
-
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
-	<script>
+	<script th:inline="javascript">
 		$( '.youtube_video' ).video();
 		
 		$(".applicant_wrap .review .read_more").click(function(){
@@ -306,6 +305,34 @@
 			$(this).parents(".cont").removeClass("open");
 		});
 		
+		function setApp(){
+			if($B.ua.ANDROID){
+				window.open("market://details?id=com.amorepacific.amorepacificmall");
+			}else{
+				window.open("https://itunes.apple.com/kr/app/id662044174");
+			}
+		}
+		
+		[#th:block th:if="${status=='RQ'}"]
+		function deleteParticipated(regularEventRequesterSn) {
+			
+			//AP.modal.confirm( '정말 삭제하시겠습니까? ' ).addListener( 'modal-close', function (e) {
+				//if(e.closeType == 'confirm'){
+					if(confirm("정말 삭제하시겠습니까?")){
+    				AP.api.regularEventDeleteParticipated( null, {regularEventSn: [[${regularEvent.regularEventSn}]], regularEventRequesterSn: regularEventRequesterSn} )
+        			.done(function ( result ) {
+        				if(result.result){
+        				//AP.modal.alert("삭제되었습니다.").addListener( 'modal-close', function (e) {
+						//});
+        				alert("삭제되었습니다.");
+    					}
+        			});
+					}
+				//}
+			//});
+		}
+		[/th:block]
+		
 		$(document).ready(function(){
     		$(".btn_toggle.like").click(function(){
     			AP.api.postRecommend( null, {prodSn: [[${prd.products[0].prodSn}]]} )
@@ -313,7 +340,23 @@
     			});
     		});
     		
-    		// 더보기
+    		$(".btn_sm_bordered.edit").click(function(){
+    		    [#th:block th:if="${status=='RQ'}"]
+    		    	setApp();
+    		    [/th:block]
+    		    [#th:block th:if="${status!='RQ'}"]
+    		    	alert("당첨자발표 이후 수정 삭제가 불가합니다.");
+    		   	[/th:block]
+    		});
+    		$(".btn_sm_bordered.delete").click(function(){
+    			[#th:block th:if="${status=='RQ'}"]
+    				deleteParticipated($(this).parent().attr("id"));
+    		    [/th:block]
+    		    [#th:block th:if="${status!='RQ'}"]
+    		    	alert("당첨자발표 이후 수정 삭제가 불가합니다.");
+    		   	[/th:block]
+    		});
+    		
     		$(".prize_list_wrap .btn_open").click(function(){
     			$(this).parents(".prize_list_wrap").addClass("open");
     		});

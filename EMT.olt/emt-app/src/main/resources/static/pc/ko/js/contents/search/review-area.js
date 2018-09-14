@@ -53,7 +53,8 @@
 
 		_getData: function ( offset ) {
 			this._$target.find( '.pagination' ).paging( 'disable' );
-
+			console.log('searchReviewList more');
+			console.log(this._keyword, this._$reviewType.val(), this._$reviewSort.val(), offset); 
 			//TODO: 해당 api로 변경
 			this._api = AP.api.searchReviewList( null, {
 					toSearchFor			: this._keyword,

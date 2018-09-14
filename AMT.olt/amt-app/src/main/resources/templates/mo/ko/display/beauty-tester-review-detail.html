@@ -1,0 +1,93 @@
+<html ap:decorate="~{layout/only-contents}">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+	<div class="layer_popup fullpage filter_layer ">
+		<div class="layer_wrap">
+			<dl class="layer bg_gray fixed">
+				<!--  역스크롤 시 헤더(타이틀) 영역 픽스 -->
+				<dt class="layer_title">뷰티테스터 리뷰</dt>
+				<dd class="layer_cont">
+					<div class="review tester_review_wrap">
+						<div class="review_header">
+							<span th:text="${prodReviewInfo.memberId}"></span><span th:text="${prodReviewInfo.memberLevelName}"></span>
+							<span class="rating">
+								<span th:classappend="|mark_star_sm star${prodReviewInfo.scope}|"><span class="sr_only">구매 평점 별 5개 중 [[${prodReviewInfo.scope}]]개</span></span> <!--평점에따라 클래스변경(star0~star5)-->
+								<span class="count">[[${prodReviewInfo.scope}]]</span>
+							</span>
+						</div>
+						<div class="review_cont">
+							<div class="title_box">
+								<p class="title">[[${prodReviewInfo.prodReviewTitle}]]</p>
+								<a href="#1" class="product_name"><em class="ellipsis">[[${prodReviewInfo.onlineProdName}]]-[[${prodReviewInfo.prodName}]]</em><i class="ico_arr"></i></a>
+							</div>
+							<div class="cont">
+                              <div class="inbox_cont"  th:each="imgInfo:${displayReviewImgList}" th:if="${imgInfo.foTemplateNo}==0">기존 뷰티테스트 리뷰 영역</div>
+                              <div class="inbox"  th:each="imgInfo:${displayReviewImgList}" th:if="${imgInfo.foTemplateNo}!=0" th:classappend="|type_0${imgInfo.foTemplateNo}|">
+                                <ul class="img_fl" th:if="${imgInfo.foTemplateNo}==4">
+                                  <li th:each="img:${imgInfo.imageInfoList}"><img th:src="${img[0]}" alt="이미지 내용 입력" /></li>
+                                </ul>
+                                <img th:each="img:${imgInfo.imageInfoList}" th:src="${img[0]}" alt="이미지 내용 입력"  th:if="${imgInfo.foTemplateNo}!=4"/>
+                                <p th:each="img:${imgInfo.imageInfoList}" th:text="${img[1]}"  th:if="${imgInfo.foTemplateNo}!=1"></p>
+                              </div>
+							</div>
+						</div>
+					</div>
+				</dd>
+			</dl>
+			<!-- 스크롤 시 하단 픽스 -->
+			<div class="fix_bottom_wrap">
+				<div class="fix_bottom">
+					<div class="inbox">
+						<span class="share_area"><a href="#1" class="btn_share"><img src="/mo/ko/images/display/ico_share.png" class="" alt="공유하기" /></a></span>
+						<span class="recommend_area" th:classappend="${prodReviewInfo.recommendYn}=='Y'?on"><a href="#1" class="review_recommend">도움이 되요</a><span class="num recommendCnt" th:text="${prodReviewInfo.recommendCnt}"></span></span>
+					</div>
+				</div>
+			</div>
+			<button class="layer_close" type="button"><i class="ico_close"></i><span class="sr_only">레이어 닫기</span></button>
+
+		</div>
+	</div>
+</div>
+
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+<script>
+	
+	$(".recommend_area a").click(function(){
+		if ($(this).parent().hasClass("on")) {
+			$(this).parent().removeClass("on");
+		} else {
+			$(this).parent().addClass("on");			
+		}
+	});
+	
+	$(document).ready(function(){
+		$(".layer_close").click(function(e){
+			//e.preventDefault();
+		    //history.back(1);
+		    window.close();
+		});
+		
+		$(".review_recommend").click(function(e){
+			AP.api.regularEventProductReviewRecommend( null, {prodReviewSn: [[${prodReviewInfo.prodReviewSn}]]} )
+			.done(function ( result ) {
+				if(result.toggleDiv == 'post'){
+					$(".recommend_area").addClass("on");
+				}else{
+					$(".recommend_area").removeClass("on");
+				}
+				$(".recommendCnt").text(result.recommendCnt);
+			});
+		});
+	});
+
+</script>
+	
+</th:block>
+
+</body>
+</html>

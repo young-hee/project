@@ -206,8 +206,10 @@ public class APConstant {
 	//청춘강연 약관
 	public static final String EH_MAKEUP_YOUR_DREAM_TERM_1 = "ET012";
 	
-	public static final String EH_MAKEUP_YOUR_DREAM_TERM_2 = "ET011";
+	public static final String EH_MAKEUP_YOUR_DREAM_TERM_2 = "ET013";
 	
-	public static final String EH_MAKEUP_YOUR_DREAM_TERM_3 = "ET013";
-	
+	public static final String EH_MAKEUP_YOUR_DREAM_TERM_3 = "ET014";
+
+	//AP Flag 코드
+	public static final String AP_BEST_PROD_FLAG_24H = "icon_reco_best_24h";
 }

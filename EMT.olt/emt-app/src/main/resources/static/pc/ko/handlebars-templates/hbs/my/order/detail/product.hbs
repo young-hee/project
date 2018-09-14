@@ -1,6 +1,6 @@
 <div class="product">
 	{{#if (eq this.viewYn.checkBox 'Y')}}
-		<div class="check_wrap check_only">
+		<div class="check_wrap">
 			<input type="checkbox" id="oProd_{{this.oProd.onlineProdCode}}" name="onlineProd" value="{{this.oProd.onlineProdCode}}">
 			<label for="oProd_{{this.oProd.onlineProdCode}}">
 				<span class="sr_only">선택</span>
@@ -15,23 +15,23 @@
 		{{/xif}}
 	</div>
 	<div class="info">
-		<div class="align_left">
-			{{#xif this.oProd.ordHistProdTypeCode '==' 'BulkDc'}}
-				<p class="name">{{this.oProd.bulkDcOnlineProdName}}</p>
-			{{else}}
-				<p class="name">{{this.oProd.onlineProdName}}</p>
-				{{#xif this.typeName '!==' null}}
-					<p class="flag">{{this.typeName}}</p>
-				{{/xif}}
-			{{/xif}}
-		</div>
-		<div class="align_right">
-			{{#if (eq this.oProd.ordHistProdStatusCode 'ProdCancel')}}
-				<p><em>취소완료</em></p>
-			{{/if}}
-			<p>
-				<strong class="num">{{currencyFormat this.oProd.finalOnlineSaleAmtPcurSum}}</strong>
-			</p>
-		</div>
+		{{#xif this.oProd.ordHistProdTypeCode '==' 'BulkDc'}}
+			<span class="name">
+				{{this.oProd.bulkDcOnlineProdName}}
+			</span>
+		{{else}}
+			<span class="name">
+				{{this.oProd.onlineProdName}}
+			</span>
+		{{/xif}}
+	</div>
+	<div class="price">
+		{{#xif this.oProd.ordHistProdStatusCode '===' 'ProdCancel'}}
+			<p class="font_lg mgb10"><em>취소 완료</em></p>
+			<span class="strong"><b>{{this.oProd.cancelQtySum}}</b>개</span> /
+		{{else}}
+			<span class="strong"><b>{{condition (eq this.step 'two') this.oProd.claimQtySum (calc this.oProd.ordQtySum '-' this.oProd.cancelQtySum)}}</b>개</span> /
+		{{/xif}}
+		<span class="strong"><b>{{currencyFormat this.oProd.finalOnlineSaleAmtPcurSum}}</b></span>
 	</div>
 </div>

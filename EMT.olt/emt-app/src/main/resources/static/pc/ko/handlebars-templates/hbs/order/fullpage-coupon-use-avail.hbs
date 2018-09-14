@@ -1,72 +1,41 @@
 {{#xif coupon.couponCnt '>' 0}}
-	<div class="ui_accordion coupon_list availCoupon">
-		<!--/* 쿠폰 한개 */-->
-		{{#each coupon.list}}
-		<dl>
-			<dt>
+	{{#each coupon.list}}
+		<div class="coupon_order">
 			<span class="check_wrap">
 				<input type="checkbox" id="{{ this.memberKeepingCouponSn }}" name="couponSn" data-code="{{ this.duplicationUseConditionCode }}">
 				<label for="{{ this.memberKeepingCouponSn }}">
 					<span>
-						<em class="d_day">D-{{ this.expDDays }}</em>
-						<small>{{{ dcMethodCodeSwitch this }}}</small>
+						<span class="flag">{{ marketingOrg this.mktgOrgCode }}</span> <span class="flag">D-{{ this.expDDays }}</span>
 					</span>
 					<span class="title">{{ this.couponName }}</span>
+					<em>{{{ couponBenefitTypeCodeSwitch this }}}</em>
 				</label>
 			</span>
-			{{#if (and (eq this.couponBenefitTypeCode 'CartAward')(gt this.couponAwardExList.size 0))}}
-				<span class="freebies">
-					{{#each this.couponAwardExList}}
-						{{#if (or (eq ../this.awardTgtCode 'Prod')(eq ../this.awardTgtCode 'SpPrice'))}}
-							<span class="table_layout">
-								<span class="thumb">
-									<img ap:src="@{/images/dummy/650010812_IM_01.png}" alt="">
-								</span>
-								<span>
-									<b>[사은품 증정]</b>{{ this.prodName }} - {{ this.prodSalePrice }}
-								</span>
-							</span>
-						{{/if}}
-						{{#if eq ../this.awardTgtCode 'Point'}}
-							<span class="table_layout">
-								<span>
-									<b>[포인트 증정]</b>{{ this.pointTypeCode }} - {{ this.pointSavingMethodCode }} - {{ this.savingPoint }} -{{ this.applySavingPoint }}
-								</span>
-							</span>
-						{{/if}}
-						{{#if eq ../this.awardTgtCode 'Giftcard'}}
-							<span class="table_layout">
-								<span>
-									<b>[기프트카드 증정]</b>
-								</span>
-							</span>
-						{{/if}}
-					{{/each}}
+			<span class="ui_tooltip">
+				<button type="button" class="btn_tooltip">유의사항 보기 </button>
+				<span class="arr"></span>
+				<span class="layer_tooltip">
+					<dl>
+						<dt class="title">쿠폰 안내  <span class="font_lg color_light_gray">(만료예정일:{{ dateFormat this.expExpectedDt }})</span></dt>
+						<dd>
+							<ul class="list_bullet_dot">
+								<li><pre>{{ this.foGuide }}</pre></li>
+							</ul>
+						</dd>
+					</dl>
+					<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
 				</span>
-			{{/if}}
-			<button type="button"><span class="sr_only">내용 보기</span></button>
-			</dt>
-			<dd>
-				<div class="panel gray">
-					<div class="panel_cont pd_sm">
-						<p class="text">쿠폰명 : {{ this.couponName }}</p>
-						<p class="text">만료예정일 : {{ dateFormat this.expExpectedDt }}</p>
-						{{#xif this.foGuide '!=' null}}
-						<dl class="dl_cont mgt30">
-							<dt><b>사용제한</b></dt>
-							<dd>
-								<ul class="list_bullet_dot">
-									<li><pre>{{ this.foGuide }}</pre></li>
-								</ul>
-							</dd>
-						</dl>
-						{{/xif}}
-					</div>
-				</div>
-			</dd>
-		</dl>
-		{{/each}}
-		<!--/* 쿠폰 : 사은품 타입 */-->
+			</span>
+		</div>
+	{{/each}}
+	<ul class="loading" id="couponApplyLoading" style="min-height: 100px; display: none">
+		<li></li>
+		<li></li>
+		<li></li>
+	</ul>
+	<div class="page_btns">
+		<button class="btn_lg_secondary" type="button" id="b_close">취소</button>
+		<button class="btn_lg_primary" type="button" id="b_save">적용</button>
 	</div>
 {{else}}
 	<div class="panel notice">

@@ -54,7 +54,7 @@ public class OrderRestController extends OrderBaseController {
 	}
 
 	/**
-	 * 사용가능 쿠폰목록
+	 * 사용가능 쿠폰목록(회원)
 	 *
 	 * @param ordSn
 	 * @return
@@ -72,7 +72,38 @@ public class OrderRestController extends OrderBaseController {
 	}
 
 	/**
-	 * 쿠폰 등록
+	 * 다운로드 쿠폰목록(회원)
+	 *
+	 * @return
+	 */
+	@GetMapping("/getDownloadCouponList")
+	public ResponseEntity<?> getDownloadCouponList() {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+        List<DownloadCoupons> downloadCoupons = couponApi.getDownloadCoupons("All", "Y", getMemberSn(), null, null);
+        result.put("downloadCouponCnt", downloadCoupons.size());	// 다운로드 쿠폰수
+        result.put("downloadCouponList", downloadCoupons); 		// 다운로드 쿠폰목록
+        result.put("result", "success");
+
+		return ResponseEntity.ok(result);
+	}
+
+	/**
+	 * 쿠폰 다운로드(회원)
+	 *
+	 * @return
+	 */
+	@PostMapping("/downloadCoupon")
+	public ResponseEntity<?> downloadCoupon(Long couponSn) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		BooleanResult booleanResult = couponApi.registDownloadCoupon(couponSn, getMemberSn());
+		result.put("downloadResult", booleanResult.isResult());
+
+		return ResponseEntity.ok(result);
+	}
+
+	/**
+	 * 쿠폰 등록(비회원)
+	 * 회원은 mypage참조
 	 *
 	 * @param couponIdentifier
 	 * @return
@@ -83,40 +114,8 @@ public class OrderRestController extends OrderBaseController {
 
 		if (!StringUtils.isEmpty(couponIdentifier)) {
 			DownloadCoupons downloadCoupons = couponApi.nonMemberInputCoupon(couponIdentifier);
-			result.put("DownloadCoupons", downloadCoupons);
+			result.put("nonMemberInputCoupon", downloadCoupons);
 		}
-
-		return ResponseEntity.ok(result);
-
-	}
-
-	/**
-	 * 다운로드 쿠폰목록
-	 *
-	 * @return
-	 */
-	@GetMapping("/getDownloadCouponList")
-	public ResponseEntity<?> getDownloadCouponList() {
-		HashMap<String, Object> result = new HashMap<String, Object>();
-        List<DownloadCoupons> downloadCoupons = couponApi.getDownloadCoupons("All", "N", getMemberSn(), null, null);
-        result.put("downloadCouponCnt", downloadCoupons.size());	// 다운로드 쿠폰수
-        result.put("downloadCouponList", downloadCoupons); 		// 다운로드 쿠폰목록
-        result.put("result", "success");
-
-		return ResponseEntity.ok(result);
-	}
-
-	/**
-	 * 쿠폰 다운로드
-	 *
-	 * @return
-	 */
-	@PostMapping("/downloadCoupon")
-	public ResponseEntity<?> downloadCoupon(Long couponSn) {
-		HashMap<String, Object> result = new HashMap<String, Object>();
-        BooleanResult booleanResult = couponApi.registDownloadCoupon(couponSn, getMemberSn());
-        result.put("downloadResult", booleanResult.isResult());
-
 		return ResponseEntity.ok(result);
 	}
 
@@ -200,12 +199,17 @@ public class OrderRestController extends OrderBaseController {
             body.setPurchaserPhoneNo1(et);											// 주문자전화번호1
             body.setPurchaserEmailAddress(ordRcDTO.getPurchaserEmailAddress());	// 주문자이메일주소
 
-			/** 일반 택백 *********************************************************/
-
 			/** 일반/편의점 구분 */
-			body.setShipAddressTypeCode("ShipAddressInput");
+			if ("01".equals(ordRcDTO.getDelivery())) {
+				/** 일반 택백 */
+				body.setShipAddressTypeCode("ShipAddressInput");
+			} else {
+				/** 편의점 */
+				body.setShipAddressTypeCode("CStoreSelect");
+			}
 
-            /** 수취인 정보 */
+			/** 일반 택백 *********************************************************/
+			/** 수취인 정보 */
             EmbeddableName en2 = new EmbeddableName();
             EmbeddableAddress ea2 = new EmbeddableAddress();
             EmbeddableTel et2 = new EmbeddableTel();
@@ -225,6 +229,7 @@ public class OrderRestController extends OrderBaseController {
                 ea2.setAddress2(ordRcDTO.getRecipientAddress2());
                 et2.setPhoneNo(ordRcDTO.getRecipientPhoneNo());
             }
+
             body.setRecipientName(en2);												// 수취인명
             body.setRecipientAddress(ea2);											// 수취인주소
             body.setRecipientPhoneNo1(et2);										// 수취인전화번호1
@@ -234,9 +239,6 @@ public class OrderRestController extends OrderBaseController {
 
             /** 편의점 택백 *********************************************************/
             if (StringUtils.isNotEmpty(ordRcDTO.getcStoreName()) && StringUtils.isNotEmpty(ordRcDTO.getcStorePhoneNo())) {
-
-				/** 일반/편의점 구분 */
-				body.setShipAddressTypeCode("CStoreSelect");
 
                 body.setcStoreName(ordRcDTO.getcStoreName());
                 EmbeddableTel cet = new EmbeddableTel();
@@ -257,6 +259,15 @@ public class OrderRestController extends OrderBaseController {
                 body.setcStoreArrivalAreaBarcode(ordRcDTO.getcStoreArrivalAreaBarcode());
                 body.setcStoreDongNmCode(ordRcDTO.getcStoreDongNmCode());
                 body.setcStoreArrivalDongNm(ordRcDTO.getcStoreArrivalDongNm());
+
+				// 수취인명
+				// 수취인전화번호1
+				EmbeddableAddress ea3 = new EmbeddableAddress();
+				ea3.setZipCode(ordRcDTO.getcStoreAddressZipCode());
+				ea3.setAddress1(ordRcDTO.getcStoreAddressAddress1());
+				ea3.setAddress2(ordRcDTO.getcStoreAddressAddress2());
+
+				body.setRecipientAddress(ea3);												// 수취인주소
             }
 
             orderApi.ordReceptChange(ordRcDTO.getOrdSn(), body);
@@ -302,7 +313,7 @@ public class OrderRestController extends OrderBaseController {
 	}
 
 	/**
-	 * 쿠폰정보 적용 및 변경
+	 * 회원 보유쿠폰 적용 및 변경
 	 *
 	 * @param ordSn
 	 * @param memberKeepingCouponSnArr
@@ -319,7 +330,6 @@ public class OrderRestController extends OrderBaseController {
         }
 
         List<Long> memberCouponSnList = new ArrayList<Long>();
-        List<String> inputCouponIdList = new ArrayList<String>();
 
         if (ordSn != null) {
             /* 보유쿠폰 */
@@ -346,6 +356,80 @@ public class OrderRestController extends OrderBaseController {
 			finalPriceAmtPcur(result, ordRc);
 
         }
+		return ResponseEntity.ok(result);
+	}
+
+	/**
+	 * 비회원 입력쿠폰 적용 및 변경
+	 *
+	 * @param ordSn
+	 * @param inputCouponIdArr
+	 * @return
+	 */
+	@PostMapping("/ordReceptChangeInputCoupon")
+	public ResponseEntity<?> ordReceptChangeInputCoupon(Long ordSn, String[] inputCouponIdArr){
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		OrderSession orderSession = getOrderSession();
+		OrdReceptChange body = orderSession.getOrdReceptChange();
+		if (body == null) {
+			body = new OrdReceptChange();
+		}
+
+		List<String> inputCouponIdList = new ArrayList<String>();
+
+		if (ordSn != null) {
+			/* 보유쿠폰 */
+			if (inputCouponIdArr == null) {
+				//전부 삭제시 'null'로 처리함
+				body.setMemberCouponSnList(null);
+			} else if(inputCouponIdArr.length > 0){
+				for(int i=0; i < inputCouponIdArr.length; i++){
+					if(inputCouponIdArr[i] != null){
+						inputCouponIdList.add(inputCouponIdArr[i]);
+					}
+				}
+				body.setInputCouponIdList(inputCouponIdList);
+			}
+
+			OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
+
+			orderSession.setOrdReceptChange(body);
+			setOrderSession(orderSession);
+
+			result.put("applyCouponExList", ordRc.getApplyCouponExList());
+			finalPriceAmtPcur(result, ordRc);
+
+		}
+		return ResponseEntity.ok(result);
+	}
+
+	/**
+	 * 결제수단 선택적용
+	 * //(20180912_ben수정사항)
+	 * @param ordSn
+	 * @param payMethodSn
+	 * @return
+	 */
+	@PostMapping("/ordReceptChangePayMethod")
+	public ResponseEntity<?> ordReceptChangePayMethod(Long ordSn, Long payMethodSn, String payAmt){
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		OrderSession orderSession = getOrderSession();
+		OrdReceptChange body = orderSession.getOrdReceptChange();
+		if (body == null) {
+			body = new OrdReceptChange();
+		}
+
+		if (ordSn != null) {
+			body.setPayMethodSn(payMethodSn);
+			BigDecimal parsePayAmt = new BigDecimal(payAmt.replaceAll(",", ""));
+			body.setPayMethodAmt(parsePayAmt);
+			OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
+
+			orderSession.setOrdReceptChange(body);
+			setOrderSession(orderSession);
+
+			finalPriceAmtPcur(result, ordRc);
+		}
 		return ResponseEntity.ok(result);
 	}
 
@@ -456,7 +540,7 @@ public class OrderRestController extends OrderBaseController {
 	 * @return
 	 */
 	@PostMapping("/ordReceptChangeOrdUnit")
-	public ResponseEntity<?> ordReceptChangeOrdUnit(Long ordSn, Long[] ordUnitAwardSnArr, Integer[] awardSelectQtyArr, Long membershipSn){
+	public ResponseEntity<?> ordReceptChangeOrdUnit(Long ordSn, Long[] ordUnitAwardSnArr, Integer[] awardSelectQtyArr, Long membershipSn, Integer spPriceCnt){
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		OrderSession orderSession = getOrderSession();
         OrdReceptChange body = orderSession.getOrdReceptChange();
@@ -481,7 +565,10 @@ public class OrderRestController extends OrderBaseController {
                 body.setOrdUnitAwardSelectList(null);
             }
 
-			initPoint(membershipSn, body);
+            //특가상품 선택시 포인트 초기화
+			if (spPriceCnt > 0) {
+				initPoint(membershipSn, body);
+			}
 
             OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
 

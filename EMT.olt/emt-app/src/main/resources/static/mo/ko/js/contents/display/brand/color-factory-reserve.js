@@ -99,6 +99,11 @@
 				if ( e.data.result) {
 					this._$target.find( 'input[name=verifyCertification]' ).val( 'Y' );
 					AP.modal.alert( '인증 되었습니다.' );
+					timer.stop(); 
+					
+					this._$target.find( '#reCertBtn' ).remove()
+					this._$target.find( '#certBtn' ).remove(); 
+					this._$target.find( '.certification_btn' ).prop( 'disabled', true );
 				} else {
 					AP.modal.alert( e.data.errorMessage );
 				}
@@ -126,9 +131,9 @@
 			this._$target.find( 'select.nationality' ).on( 'change', function (e) {
 				var value = $( e.target ).val();
 				if ( value == 'KR' ) {
-					this._$target.find( 'input[name=alienYn]' ).val( 'Y' );
-				} else {
 					this._$target.find( 'input[name=alienYn]' ).val( 'N' );
+				} else {
+					this._$target.find( 'input[name=alienYn]' ).val( 'Y' );
 				}
 			}.bind( this ));
 

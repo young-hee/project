@@ -41,6 +41,7 @@
             _$addressFirstHidden = _$target.find( '.address_first:hidden' ),
             _$postCodeHidden = _$target.find( '.post_code:hidden' ),
             _$addressLastInput = _$target.find( '.address_last' ),
+			_$findAddressResultTemplate = _$target.find( '#find-address-result-template' ),
             _$resultArea = _$target.find( '.address_list' );
 
         var _pluginName = pluginName,
@@ -51,7 +52,8 @@
         this.clear = function () {
             _$findBtn.off( 'click', clickHandler );
             _$findInput.off( 'keydown', clickHandler );
-            _$resultArea.off( 'click', 'a.result', selectedResultHandler )
+            _$resultArea.off( 'click', 'a.result', selectedResultHandler );
+			_$resultArea.off( 'click', 'input.selRadio', selectedRadioHandler );
             plugin.remove( _$target, _pluginName );
         };
 
@@ -63,8 +65,32 @@
         function initialize () {
             _$findBtn.on( 'click', clickHandler );
             _$findInput.on( 'keydown', clickHandler );
-            _$resultArea.on( 'click', 'a.result', selectedResultHandler )
+            _$resultArea.on( 'click', 'a.result', selectedResultHandler );
+			_$resultArea.on( 'click', 'input.selRadio', selectedRadioHandler );
         }
+
+		function selectedRadioHandler (e) {
+			var $el = $( e.currentTarget ),
+				selIndex = $el.data( 'sel-index' ),
+				postCode = $el.data( 'post-code' ),
+				address = $el.data( 'address' ),
+				detail = getDetailAddress( $el.data('detail-address') );
+
+			_$addressFirstInput.val( postCode + ' ' + address );
+			_$postCodeHidden.val( postCode );
+			_$addressFirstHidden.val( address );
+			_$addressLastInput.val( detail + ' ' );
+			_$addressLastInput.focus();
+
+			//선택된값 이벤트 전달
+			_$target.triggerHandler({
+				type: 'change-address',
+				selIndex : selIndex,
+				postCode: postCode,
+				address: address,
+				detailAddress: detail
+			});
+		}
 
         function selectedResultHandler (e) {
             var $el = $( e.currentTarget ),
@@ -125,7 +151,16 @@
 
         //검색결과
         function drawResult ( data, commonData ) {
-            var resultHtml = AP.common.getTemplate( 'common.find-addresses-result', {
+
+        	var resultTemplate = "common.find-addresses-result";
+
+        	//사용자가 지정한 템플릿 경로가 있을경우
+			if(_$findAddressResultTemplate != undefined && _$findAddressResultTemplate.text() != null &&
+				_$findAddressResultTemplate.text() != '') {
+				resultTemplate = _$findAddressResultTemplate.text();
+			}
+
+            var resultHtml = AP.common.getTemplate( resultTemplate, {
                 totalLength: commonData.totalCount,
                 totalLengthLabel: $B.string.numberFormat( commonData.totalCount ),
                 result: data

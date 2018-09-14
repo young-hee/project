@@ -44,6 +44,7 @@
 				if ( keyword ) {
 					this._keyword = keyword;
 					this._$findBtn.prop( 'disabled', true );
+					this._$favoriteFilterBtn.prop( 'disabled', false ).removeClass( 'on' );
 					this._getData( 0 );
 				} else {
 					AP.modal.alert({
@@ -68,7 +69,12 @@
 
 			//단골매장만 보기 필터링
 			this._$favoriteFilterBtn.on( 'click', function (e) {
-			
+				
+				this._$input.val('');
+				
+				this._$input.inputText();
+				this._$input.placeholder('updated');
+				
 				this._$favoriteFilterBtn.prop( 'disabled', true ).toggleClass( 'on' );
 				this._getData( 0 );
 			}.bind(this));
@@ -128,8 +134,11 @@
 			
 			if ( this._api ) this._api.abort();
 				
+			if(favoriteFilter === true){
+				this._keyword = '';
+			}
 			if(this._keyword === '' && favoriteFilter === false){
-				this._keyword = '서울';
+				this._keyword = '';
 			}
 			
 			this._api = AP.api.stores( null, {

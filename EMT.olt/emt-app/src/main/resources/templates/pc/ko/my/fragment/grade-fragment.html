@@ -24,12 +24,12 @@
         <tbody>
             <tr th:each="item : ${#IntegUtil.subList(custGradeDetail.custGradeList, 10)}">
                 <td class="application_date" th:text="${#IntegUtil.dateformat(item.saleDt, 'yyyy.MM.dd')}">2018.01.05</td>
-                <td class="order_number"><a href="javascript:;" th:text="${item.ordNo}">2017012102010101</a>
+                <td class="order_number"><a th:href="'/my/page/order/detail/' + ${item.ordNo}" th:text="${item.ordNo}">2017012102010101</a>
                 </td>
                 <td class="product_name" th:text="${item.itemNm}">룩 앳 마이 아이즈 카페</td>
                 <td class="store_name" th:text="${item.storNm}">에뛰드 쇼핑몰</td>
                 <td class="payment"><span th:text="${#IntegUtil.toCommaNumber(item.grdAmt)}">7,000</span> 원</td>
-                <td class="class_money">-</td>
+                <td class="class_money"><span th:text="${#IntegUtil.toCommaNumber(item.grdAmt)}">7,000</span> 원</td>
             </tr>
         </tbody>
     </table>

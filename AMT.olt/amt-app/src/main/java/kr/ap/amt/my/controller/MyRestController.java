@@ -5,12 +5,15 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import kr.ap.amt.my.vo.MyInfoDTO;
 import kr.ap.amt.my.vo.TermsAgree;
+import kr.ap.comm.api.WebDBApiService;
 import kr.ap.comm.api.vo.*;
 import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.support.ApPasswordEncoder;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
+import kr.ap.comm.support.constants.CookieKey;
 import kr.ap.comm.support.constants.SessionKey;
+import kr.ap.comm.util.CookieUtils;
 import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.BooleanResult;
 import net.g1project.ecp.api.model.EmbeddableAddress;
@@ -18,6 +21,7 @@ import net.g1project.ecp.api.model.EmbeddableTel;
 import net.g1project.ecp.api.model.ap.ap.*;
 import net.g1project.ecp.api.model.ap.ap.CheckResult;
 import net.g1project.ecp.api.model.ap.ap.MemberAddAttr;
+import net.g1project.ecp.api.model.ap.ap.MemberForChangePassword;
 import net.g1project.ecp.api.model.ap.ap.MemberForUpdate;
 import net.g1project.ecp.api.model.ap.ap.SignupReceiveAgree;
 import net.g1project.ecp.api.model.ap.ap.SignupTermsAgree;
@@ -28,6 +32,7 @@ import net.g1project.ecp.api.model.sales.member.*;
 import net.g1project.ecp.api.model.sales.terms.MemberTermsAgree;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -38,7 +43,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.WebUtils;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import java.io.IOException;
@@ -66,23 +74,30 @@ import java.util.Map;
 @RequestMapping("/my/api")
 public class MyRestController extends AbstractController {
 
-
-	/**********************************************************************************************
-	 *  1. 개인정보 수정
-	 **********************************************************************************************/
+    @Autowired
+	private WebDBApiService webDBApiService;
 
 	/**
-	 * SNS 연동
+	 * 비밀번호 확인.
 	 * 
 	 * @param request
 	 * @return
 	 */
-	@PostMapping("/snsConnect")
-	@ResponseBody
-	public ResponseEntity<?> snsloginProcess(HttpServletRequest request) {
-		return snsloginProcessM(request);
-	}
-	
+	@PostMapping("/checkPassword")
+	public ResponseEntity<?> checkPassword(HttpServletRequest request, String userPwdEc) {
+
+		
+		CheckResult pwResult = apApi.checkMemberPassword(getMemberSn(), userPwdEc);
+		if(pwResult.isResult()) {
+			
+			return ResponseEntity.ok("{}");
+		}
+		return ResponseEntity.status(403).body("{}");
+ 	}
+	/**********************************************************************************************
+	 *  1. 개인정보 수정
+	 **********************************************************************************************/
+
 	/**
 	 * SNS 연동해제
 	 * 
@@ -111,20 +126,6 @@ public class MyRestController extends AbstractController {
 	}
 	
 	/**
-	 * 약관동의 여부 확인.
-	 * 
-	 * @param request
-	 * @param sns
-	 * @return
-	 */
-	@PostMapping("/snsDisconnect")
-	@ResponseBody
-	public ResponseEntity<?> snsDisconnect(HttpServletRequest request, String sns) {
-		return snsDisconnectM(request, sns);
-	}
-	
-	
-	/**
 	 * 회원정보 수정. - 개인정보.
 	 * @param myinfo
 	 * @return
@@ -141,6 +142,24 @@ public class MyRestController extends AbstractController {
 		
 		MemberSession memberSession = getMemberSession();
 
+		EmbeddableTel phone = memberSession.getMember().getPhoneNo1();
+		if(phone != null && phone.getPhoneNo() != null && !phone.getPhoneNo().isEmpty()) {
+			
+			String phone2 = myinfo.getPhoneNumber1() + myinfo.getPhoneNumber2();
+			if(!phone.getPhoneNo().equals(phone2)) {
+				CicuemCuInfTotTcVo cicuemCuInfCoInVo = new CicuemCuInfTotTcVo();
+				cicuemCuInfCoInVo.setCellTidn(myinfo.getUser().getCellTidn());
+				cicuemCuInfCoInVo.setCellTexn(myinfo.getUser().getCellTexn());
+				cicuemCuInfCoInVo.setCellTlsn(myinfo.getUser().getCellTlsn());
+				cicuemCuInfCoInVo.setAtclCd("20");
+				CicuemCuInfCoOutVo resultVo = amoreAPIService.athtchgcheck90(cicuemCuInfCoInVo);
+				if("Y".equals(resultVo.getCert90Flag())) {
+					throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "CHECK90", "90일 이전에 변경된 휴대폰 번호입니다. 해당 휴대전화를 사용할 수 없습니다.");
+				}
+			}
+			
+		}
+		
 		CicuemCuInfTotTcVo vo1 = myinfo.getUser();
 		if(vo1 == null) {
 			vo1 = new CicuemCuInfTotTcVo();
@@ -151,10 +170,18 @@ public class MyRestController extends AbstractController {
 		vo1.setIncsNo(memberSession.getUser_incsNo());
 		if(!myinfo.getEmail().isEmpty()) {
 			vo1.setCustEmid(myinfo.getEmail().substring(0, myinfo.getEmail().indexOf("@")));
-			vo1.setCustEmdn(myinfo.getEmail().substring(myinfo.getEmail().indexOf("@")));
+			vo1.setCustEmdn(myinfo.getEmail().substring(myinfo.getEmail().indexOf("@") + 1));
+		}
+		
+		if(myinfo.getBirthType() != null) {
+			if(vo1.getCicuemCuAdtInfTcVo() == null) {
+				vo1.setCicuemCuAdtInfTcVo(new CicuemCuAdtInfTcVo());
+			}
+			vo1.getCicuemCuAdtInfTcVo().setSlccCd(myinfo.getBirthType());
 		}
 		
 		MemberForUpdate body = new MemberForUpdate();
+		body.setMemberId(memberSession.getMember().getMemberId());
 		body.setEmailAddress(myinfo.getEmail());
 		EmbeddableTel phoneNo1 = new EmbeddableTel();
 		phoneNo1.setPhoneNo(myinfo.getPhoneNumber1() + myinfo.getPhoneNumber2());
@@ -168,19 +195,22 @@ public class MyRestController extends AbstractController {
 			body.setAddress(address);
 		}
 		
+
 		CicuemCuInfCoOutVo resultVo = amoreAPIService.updatecicuemcuinfrfull(vo1);
 		if(APConstant.RESULT_OK.equals(resultVo.getRsltCd())) {
 			try {
 				apApi.putMember(memberSession.getMember_sn(), body);
 				ApMember apMember = apApi.getMemberInfo(memberSession.getMember_sn());
 				memberSession.setMember(apMember);
+				setMemberSession(memberSession);
 			}  catch(Exception e) {
 			
 			}
 		} else {
-			throw error(result, HttpStatus.FORBIDDEN, null, null);
+			throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "ERROR", "ERROR");
 		}
 			
+		
 		return ResponseEntity.ok(result);
 	}
 	/**
@@ -681,6 +711,126 @@ public class MyRestController extends AbstractController {
 	 **********************************************************************************************/
 
 
+	/**
+	 * 회원탈퇴
+	 * 
+	 * @param request
+	 * @param response 
+	 * @return
+	 */
+	@PostMapping("/closeMember")
+	public ResponseEntity<?> closeMember(HttpServletRequest request, HttpServletResponse response, CloseAcReasonInfo closeAcReasonInfo, String closePassword) {
+		CheckResult rsltVo = apApi.checkMemberPassword(getMemberSn(), closePassword);
+		if(!rsltVo.isResult()) {
+			throw error(HttpStatus.BAD_REQUEST, "PW_ERR", "비밀번호가 일치하지 않습니다.");
+		}
+		
+		MemberSession memberSession = getMemberSession();
+		if("Y".equals(closeAcReasonInfo.getIntegrationCloseAcYn())) {
+			String reasonCode = "99";
+			switch (closeAcReasonInfo.getReasonCode()) {
+			case "C01":
+				reasonCode = "02";
+				break;
+			case "C02":
+			case "C05":
+				reasonCode = "03";
+				break;
+			case "C04":
+				reasonCode = "01";
+				break;
+			default:
+				break;
+			}
+
+			CicuedleaveVo vo = new CicuedleaveVo();
+			String today = DateFormatUtils.format(new java.util.Date(), "yyyyMMdd");
+			vo.setIncsNo(memberSession.getUser_incsNo());
+			vo.setWtpsCd("10");
+			vo.setWtrsCd(reasonCode);
+			vo.setWtrqDttm(today);
+			vo.setWtdnDttm(today);
+			vo.setWtrqChCd(APConstant.EH_CH_CD);
+			if(isMobileDevice())
+				vo.setWtrdCd("M");
+			if(isPcDevice())
+				vo.setWtrdCd("W");
+			if(isAndroid() || isiOS())
+				vo.setWtrdCd("A");
+			vo.setWtrqChCd(APConstant.EH_CH_CD);
+			vo.setWtrqPrtnId(APConstant.EH_PRTN_ID);
+			vo.setWtrsCd("99");
+			vo.setWtrsTxt(closeAcReasonInfo.getClosedAcDetailReason());
+			vo.setFscrId(memberSession.getMember().getMemberId());
+			vo.setLschId(memberSession.getMember().getMemberId());
+			
+			try {
+				LeaverResultVo rslt = amoreAPIService.createcicuelcuwt(vo);
+				if(!"ICITSVCOM000".equals(rslt.getRsltCd())) {
+					throw error(HttpStatus.BAD_REQUEST, "ERROR","회원 탈퇴에 실패했습니다.");
+				}
+			} catch(Exception e) {
+				throw error(HttpStatus.BAD_REQUEST, "ERROR","회원 탈퇴에 실패했습니다.");
+			}
+			
+			
+		} else {
+			Deletecicuedcuchcustwt deletecicuedcuchcustwt = new Deletecicuedcuchcustwt();
+			List<CicuedCuChTcVo> cicuedCuChTcVoList = new ArrayList<CicuedCuChTcVo>();
+			CicuedCuChTcVo cicuedCuChTcVo = new CicuedCuChTcVo();
+			cicuedCuChTcVo.setChCd(APConstant.EH_CH_CD);
+			cicuedCuChTcVo.setIncsNo(memberSession.getMember().getIncsNo());
+			cicuedCuChTcVoList.add(cicuedCuChTcVo);
+			deletecicuedcuchcustwt.setCicuedCuChTcVo(cicuedCuChTcVoList);
+			try {
+				amoreAPIService.deletecicuedcuchcustwt(deletecicuedcuchcustwt);
+			} catch(Exception e) {
+				
+			}
+		}
+		
+		boolean closeComplete = false;
+		try {
+			apApi.closeMemberAc(memberSession.getMember_sn(), closeAcReasonInfo);
+			closeComplete = true;
+		} catch(Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+
+		if("Y".equals(closeAcReasonInfo.getIntegrationCloseAcYn()) || closeComplete) {
+
+			try {
+
+				Cookie token = CookieUtils.getCookie(request, CookieKey.AUTO_LOGIN);
+				CookieUtils.removeCookie(request, response, CookieKey.AUTO_LOGIN);
+				if (memberSession.getMember_sn() != 0) {
+					try {
+						ApLogoutInfo logoutInfo = new ApLogoutInfo();
+						if(token != null)
+							logoutInfo.setAutoLoginToken(token.getValue());
+						apApi.memberLogout(memberSession.getMember_sn(), logoutInfo);
+					} catch (Exception e) {
+						logger.error(e.getMessage());
+					}
+				}
+			} catch(Exception e) {
+				logger.error(e.getMessage(), e);
+			}
+
+			try {
+				HttpSession httpSession = request.getSession(false);
+				if(httpSession != null)
+					httpSession.invalidate();
+			} catch (IllegalStateException e) {
+				//Ignore already invalided session
+			}
+			
+			return ResponseEntity.ok("{}");
+		}
+
+		throw error(HttpStatus.BAD_REQUEST, "ERROR","회원 탈퇴에 실패했습니다.");
+		
+	}
 
 
 	/**********************************************************************************************
@@ -692,205 +842,47 @@ public class MyRestController extends AbstractController {
 
 	//=======================모바일 기능 구현 Method
     
-	private ResponseEntity<?> snsloginProcessM(HttpServletRequest req) {
-		Map<String, Object> respMap = new HashMap<String, Object>();
-
-		String snsCode = (String) WebUtils.getSessionAttribute(req, SessionKey.SNS_CODE);
-		String snsId = (String) WebUtils.getSessionAttribute(req, SessionKey.SNS_ID);
-		String accessToken = (String) WebUtils.getSessionAttribute(req, SessionKey.SNS_TOKEN);
-		PostSnsIf snsIdIf = new PostSnsIf();
-		snsIdIf.setSnsId(snsId);
-		snsIdIf.setAccessToken(accessToken);
-		SnsIfResult result = apApi.postMemberSns(getMemberSn(), snsCode, snsIdIf);
-		respMap.put("isLinked", result.isResult());
-		respMap.put("snsName", snsCode);
-		return ResponseEntity.ok(respMap);
-	}
-
-	private ResponseEntity<?> snsDisconnectM(HttpServletRequest request, String sns) {
-		Map<String, Object> respMap = new HashMap<String, Object>();
-		apApi.deleteMemberSns(getMemberSn(), sns);
-		return ResponseEntity.ok(respMap);
-	}
-
-	private ResponseEntity<?> changeMyInfoM(MyInfoDTO myinfo) {
-		//FIXME 회원정보 변경 API호출.
-		MemberSession memberSession = getMemberSession();
-		
-		
-		CicuemCuInfTotTcVo vo1 = myinfo.getUser();
-		vo1.setChCd(APConstant.AP_CH_CD);
-		CicuemCuOptiCsTcVo vo = new CicuemCuOptiCsTcVo();
-		vo1.setCicuemCuOptiTcVo(vo);
-		vo1.setIncsNo(memberSession.getUser_incsNo());
-		
-		MemberForUpdate body = new MemberForUpdate();
-		List<MemberAddAttr> memberAddAttr = myinfo.getAttr();
-		List<MemberAddAttr> memberAddAttrSub = new ArrayList<MemberAddAttr>();
-		MemberAddAttr attr = null;
-		for (int i = memberAddAttr.size() - 1; i>=0; i--) {
-			if(APConstant.NONE.equals(memberAddAttr.get(i).getMemberAddAttrValCode())) {
-				memberAddAttr.remove(i);
-			} else if(memberAddAttr.get(i).getMemberAddAttrValCode().contains(",")) {
-				for(String attrVal : memberAddAttr.get(i).getMemberAddAttrValCode().split(",")) {
-					attr = new MemberAddAttr();
-					attr.setMemberAddAttrCode(memberAddAttr.get(i).getMemberAddAttrCode());
-					attr.setMemberAddAttrValCode(attrVal);
-					memberAddAttrSub.add(attr);
-				}
-				memberAddAttr.remove(i);
-			}
-		}
-		memberAddAttr.addAll(memberAddAttrSub);
-		body.setMemberAddAttr(memberAddAttr);
-		body.setEmailAddress(myinfo.getEmail());
-		EmbeddableTel phoneNo1 = new EmbeddableTel();
-		phoneNo1.setPhoneNo(myinfo.getPhoneNumber1());
-		body.setPhoneNo1(phoneNo1);
-		EmbeddableTel phoneNo2 = new EmbeddableTel();
-		phoneNo2.setPhoneNo(myinfo.getPhoneNumber2());
-		body.setPhoneNo2(phoneNo2);
-		List<SignupReceiveAgree> memberReceiveAgrees = new ArrayList<SignupReceiveAgree>();
-		for(TermsAgree ta : myinfo.getReceive()) {
-			SignupReceiveAgree sa = new SignupReceiveAgree();
-			sa.setReceiveTypeCode(ta.getName());
-			sa.setReceiveAgreeCode(ta.isValue()? "Agree" : "NotAgree");
-			memberReceiveAgrees.add(sa);
-		}
-
-		String today = DateFormatUtils.format(new Date(System.currentTimeMillis()), "yyyyMMdd");
-		vo.setIncsNo(memberSession.getUser_incsNo());
-		vo.setChCd(APConstant.AP_CH_CD);
-		for(TermsAgree ta : myinfo.getApReceive()) {
-			if("Email".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setEmlOptiYn("Y");
-					vo.setEmlOptiDt(today);
-				} else {
-					vo.setEmlOptiYn("N");
-				}
-			} else if("SMS".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setSmsOptiYn("Y");
-					vo.setSmsOptiDt(today);
-				} else {
-					vo.setSmsOptiYn("N");
-				}
-			} else if("DM".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setDmOptiYn("Y");
-					vo.setDmOptiDt(today);
-				} else {
-					vo.setDmOptiYn("N");
-				}
-			} else if("TM".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setTmOptiYn("Y");
-					vo.setTmOptiDt(today);
-				} else {
-					vo.setTmOptiYn("N");
-				}
-			}
-			
-		}
-		
-		body.setMemberReceiveAgrees(memberReceiveAgrees);
-		
-		EmbeddableAddress address = new EmbeddableAddress();
-		
-		address.setZipCode(myinfo.getUser().getHomeZip());
-		address.setAddress1(myinfo.getUser().getHomeBscsAddr());
-		address.setAddress2(myinfo.getUser().getHomeDtlAddr());
-		body.setAddress(address);
-		
-		
-		Map<String, Boolean> agreeMap = new HashMap<String, Boolean>();
-		List<MemberTermsAgree> result = termsApi.getMemberAgreedTerms(memberSession.getMember_sn());
-		List<CicuedCuTncaTcVo> cicuedCuTncaTcVo = new ArrayList<CicuedCuTncaTcVo>();
-		CicuedCuTncaTcVo tncaTc = null;
-		for(int i = 3; i < 8; i++) {
-			boolean isAree = false;
-			for (MemberTermsAgree memberTermsAgree : result) {
-				if(("0" + i + "0").equals(memberTermsAgree.getTermsDisplayCode())) {
-					isAree = "Y".equals(memberTermsAgree.getAgreeYn());
-				}
-			}
-			agreeMap.put("0" + i + "0", isAree);
-		}
-		List<SignupTermsAgree> memberTermsAgrees = new ArrayList<SignupTermsAgree>();
-		for (TermsAgree ta : myinfo.getPolicy()) {
-
-			tncaTc = new CicuedCuTncaTcVo();
-			tncaTc.setTcatCd(ta.getName());
-			tncaTc.setTncAgrYn(ta.isValue()? "Y" : "N");
-
-			//FIXME 약관버전 및 통합고객번호 넣어야함.
-			tncaTc.setTncvNo("1");//약관버전
-			tncaTc.setIncsNo(memberSession.getUser_incsNo());//통합고객번호 세팅.
-			cicuedCuTncaTcVo.add(tncaTc);
-			
-			if(ta.isValue()) {
-				if(!agreeMap.get(ta.getName())) {
-					SignupTermsAgree terms = new SignupTermsAgree();
-					terms.setTermsDisplayCode(ta.getName());
-					terms.setAgreeYn(ta.isValue()? "Y" : "N");
-					memberTermsAgrees.add(terms);
-				}
-			} else {
-				if(agreeMap.get(ta.getName())) {
-
-					SignupTermsAgree terms = new SignupTermsAgree();
-					terms.setTermsDisplayCode(ta.getName());
-					terms.setAgreeYn(ta.isValue()? "Y" : "N");
-					memberTermsAgrees.add(terms);
-				}
-			}
-		}
-		
-		vo1.setCicuedCuTncaTcVo(cicuedCuTncaTcVo);
-
-		body.setMemberTermsAgrees(memberTermsAgrees);
-	
-		
-		try {
-			CicuemCuInfCoOutVo resultVo = amoreAPIService.updatecicuemcuinfrfull(vo1);
-			if(APConstant.RESULT_OK.equals(resultVo.getRsltCd())) {
-				apApi.putMember(memberSession.getMember_sn(), body);
-				ApMember apMember = apApi.getMemberInfo(memberSession.getMember_sn());
-				memberSession.setMember(apMember);
-			}
-			
-		} catch (ApiException e) {
-			e.printStackTrace();
-		}
-		
-		return null;
-	}
 	private ResponseEntity<?> changePwdM(String password,
 			String oriPassword) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		MemberSession memberSession = getMemberSession();
-		
 		CheckResult pwResult = apApi.checkMemberPassword(getMemberSn(), oriPassword);
 		if(!pwResult.isResult()) {
 			throw error(result, HttpStatus.UNAUTHORIZED, "EAPI001", "잘못된 패스워드 입니다.");
 		}
+
+		MemberSession memberSession = getMemberSession();
 		
-		CicuemCuInfTotTcVo vo = new CicuemCuInfTotTcVo();
-		vo.setIncsNo(memberSession.getUser_incsNo());
-		List<CicuedCuChCsTcVo> cicuedCuChCsTcVo = new ArrayList<CicuedCuChCsTcVo>();
-		CicuedCuChCsTcVo csTcVo = new CicuedCuChCsTcVo();
-		csTcVo.setChCd(APConstant.AP_CH_CD);
-		csTcVo.setChcsNo(memberSession.getMember().getMemberId());
-		csTcVo.setUserPwdEc((ApPasswordEncoder.encryptPassword(password)));
-		csTcVo.setPrtnNm("에뛰드");
-		cicuedCuChCsTcVo.add(csTcVo);
-		vo.setCicuedCuChCsTcVo(cicuedCuChCsTcVo);
-		CicuemCuInfCoOutVo resultVo = amoreAPIService.updatecicuemcuinfrfull(vo);
-		if(APConstant.RESULT_OK.equals(resultVo.getRsltCd())) {
-			return ResponseEntity.ok(result);
-		} else {
-			throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI001", "잘못된 패스워드 입니다.");
+		MemberForChangePassword body = new MemberForChangePassword();
+		body.setNewPassword(password);
+		apApi.changeMemberPassword(getMemberSn(), body);
+
+		WebDBSignupVo webDBSignupVo = new WebDBSignupVo();
+		webDBSignupVo.setParamSiteCd(APConstant.AP_CH_CD);
+		if(isMobileDevice())
+			webDBSignupVo.setAppChCd("M");
+		if(isPcDevice())
+			webDBSignupVo.setAppChCd("W");
+		if(isAndroid() || isiOS()) {
+			webDBSignupVo.setAppChCd("A");
 		}
+		webDBSignupVo.setCstmId(memberSession.getMember().getMemberId());
+		webDBSignupVo.setPswd(ApPasswordEncoder.encryptPassword(password));
+
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
+					Map<String, String> webDBResult = webDBApiService.editWebDBUser(webDBSignupVo);
+					logger.info("editWebDBUser:{},{}", webDBResult.get("RESULT"), webDBResult.get("CODE"));
+				} catch(Exception e) {
+					logger.error(e.getMessage(), e);
+				}
+			}
+		}).start();
+		
+		
+		return ResponseEntity.ok("{}");
+			
 	}
 }

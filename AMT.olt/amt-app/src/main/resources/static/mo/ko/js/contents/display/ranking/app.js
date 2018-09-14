@@ -31,7 +31,7 @@
 			this._$target.find( '.ui_tab' ).on( 'tabs-change', function(e) {
 				if ( e.index == 0 ) {
 					if ( !this._bestView ) {
-						this._bestView = new AP.productList({
+						this._bestView = new AP.ProductList({
 							$target: this._$bestView,
 							displayMenuId: this._displayMenuId,
 							template: 'display.ranking.ranking-item',
@@ -44,7 +44,7 @@
 					}
 				} else if ( e.index == 1 ) {
 					if ( !this._bestSell ) {
-						this._bestSell = new AP.productList({
+						this._bestSell = new AP.ProductList({
 							$target: this._$bestSell,
 							displayMenuId: this._displayMenuId,
 							template: 'display.ranking.ranking-item',
@@ -60,7 +60,7 @@
 			}.bind( this ));
 
 			this._$bestSell.on( 'change', '.check_btn_set input', function (e) {
-				this._bestSell.resetIndex();
+				this._bestSell.resetList();
 				this._bestSell.load({
 					priceRange: $( e.currentTarget ).val()
 				});

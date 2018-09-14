@@ -31,7 +31,7 @@
 			<dl>
 				<dt><a href="/my/page/info/beautyPoint"><span>뷰티포인트</span> <i class="ico_arr"></i></a></dt>
 				<dd>
-					<strong class="num" th:text="${#IntegUtil.toCommaNumber(session.LOGIN_USER.member.remainBeautyPoint)}"><em>3,306</em> P</strong>
+					<strong class="num" th:text="${#IntegUtil.toCommaNumber(#IntegUtil.beautyPoint().remainBeautyPoint)}"><em>3,306</em> P</strong>
 					<!-- <strong class="num"><em>3,306</em> P</strong> -->
 				</dd>
 			</dl>
@@ -40,14 +40,24 @@
 		<!-- 바로가기 메뉴 -->
 		<div class="section quick_menu">
 			<ul class="menu_list col_04">
-				<th:block th:each="menu : ${gnbMap.get('AppH0101').submenus}" th:if="${not #lists.isEmpty(gnbMap.get('AppH0101'))}">
-						<li>
-							<a href="#" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:data="${menu.displayMenuId}">
+				<th:block th:if="${not #lists.isEmpty(gnbMap.get('AppH01'))}">
+				<th:block th:each="AppHmenu : ${gnbMap.get('AppH01').submenus}">						
+						<li th:each="menu : ${AppHmenu.submenus}" th:if="${AppHmenu.displayMenuId == 'AppH0101'}">
+							<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'URL'}" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:data="${menu.displayMenuId}">
+								<i class="ico_pouch"></i>
+								<span th:text="${menu.menuTitle}">마이파우치</span>
+							</a>
+							<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'Menu' && menu.displayMenuId != 'AppH010108'}" th:href="@{'/my/page/info/' + ${menu.linkDisplayMenuId}(displayMenuId=${menu.linkDisplayMenuId})}" th:data="${menu.linkDisplayMenuId}">
+								<i class="ico_pouch"></i>
+								<span th:text="${menu.menuTitle}">마이파우치</span>
+							</a>
+							<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'Menu' && menu.displayMenuId == 'AppH010108'}" th:href="@{'/cs/' + ${menu.linkDisplayMenuId}(displayMenuId=${menu.linkDisplayMenuId})}" th:data="${menu.linkDisplayMenuId}">
 								<i class="ico_pouch"></i>
 								<span th:text="${menu.menuTitle}">마이파우치</span>
 							</a>
 							<!-- <span th:text="${menu.menuTitle}">마이파우치</span> -->
 						</li>
+				</th:block>
 				</th:block>
 				<!-- <li><a href="javascript:;"><i class="ico_pouch"></i><span>마이파우치</span></a></li>
 				<li><a href="javascript:;"><i class="ico_order"></i><span>주문/배송조회</span></a></li>
@@ -143,11 +153,18 @@
 		
 		<!-- 전체서비스  -->
 		<div class="section all_service">
-			<h2 class="h_tit01" th:text="${gnbMap.get('AppH0102').menuTitle}">전체서비스</h2>
+			<h2 class="h_tit01">전체서비스</h2>
 			<ul class="c_service_list service_menu">
-				<th:block th:each="menu : ${gnbMap.get('AppH0102').submenus}" th:if="${not #lists.isEmpty(gnbMap.get('AppH0102'))}">
-					<li>
-						<a href="#" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:data="${menu.displayMenuId}">
+				<th:block th:if="${not #lists.isEmpty(gnbMap.get('AppH01'))}">
+				<th:block th:each="AppHmenu : ${gnbMap.get('AppH01').submenus}">						
+					<li th:each="menu : ${AppHmenu.submenus}" th:if="${AppHmenu.displayMenuId == 'AppH0102'}">
+						<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'URL'}" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:data="${menu.displayMenuId}">
+							<i class="icon">
+								<img th:src="${menu.menuTitleImgUrl}" th:alt="${menu.menuTitle}">
+							</i>
+							<span class="txt" th:text="${menu.menuTitle}">마이파우치</span>
+						</a>
+						<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'Menu'}" th:href="@{'/display/' + ${menu.linkDisplayMenuId}(displayMenuId=${menu.linkDisplayMenuId})}" th:data="${menu.linkDisplayMenuId}">
 							<i class="icon">
 								<img th:src="${menu.menuTitleImgUrl}" th:alt="${menu.menuTitle}">
 							</i>
@@ -156,26 +173,37 @@
 						<!-- <span th:text="${menu.menuTitle}">마이파우치</span> -->
 					</li>
 				</th:block>
+				</th:block>
 				<!-- <li><a href="javascript:;"><i class="icon"><img src="/mo/ko/images/common/ico_all_service01.png" alt=""></i><span class="txt">플러스멤버십</span></a></li>
 				<li><a href="javascript:;"><i class="icon"><img src="/mo/ko/images/common/ico_all_service02.png" alt=""></i><span class="txt">출석체크</span></a></li>
 				<li><a href="javascript:;"><i class="icon"><img src="/mo/ko/images/common/ico_all_service03.png" alt=""></i><span class="txt">이벤트</span></a></li>
 				<li><a href="javascript:;"><i class="icon"><img src="/mo/ko/images/common/ico_all_service04.png" alt=""></i><span class="txt">매거진</span></a></li> -->
 			</ul>
 			
-			<h3 class="h_tit02" th:text="${gnbMap.get('AppH0103').menuTitle}">쇼핑 찬스</h3>
+			<h3 class="h_tit02">쇼핑 찬스</h3>
 			<ul class="more_c_list">
-				<th:block th:each="menu : ${gnbMap.get('AppH0103').submenus}" th:if="${not #lists.isEmpty(gnbMap.get('AppH0103'))}">
-					<li><a href="#" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}">On Sale</a></li>
+				<th:block th:if="${not #lists.isEmpty(gnbMap.get('AppH01'))}">
+				<th:block th:each="AppHmenu : ${gnbMap.get('AppH01').submenus}">						
+						<li th:each="menu : ${AppHmenu.submenus}" th:if="${AppHmenu.displayMenuId == 'AppH0103'}">
+						<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'URL'}" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}">On Sale</a>
+						<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'Menu'}" th:href="@{'/display/' + ${menu.linkDisplayMenuId}(displayMenuId=${menu.linkDisplayMenuId})}" th:text="${menu.menuTitle}">On Sale</a>
+					</li>
+				</th:block>
 				</th:block>
 				<!-- <li><a href="javascript:;">N+M 행사</a></li>
 				<li><a href="javascript:;">스페셜기프트</a></li>
 				<li><a href="javascript:;">투데이핫딜</a></li> -->
 			</ul>
 			
-			<h3 class="h_tit02" th:text="${gnbMap.get('AppH0104').menuTitle}">이벤트/기획전</h3>
+			<h3 class="h_tit02">이벤트/기획전</h3>
 			<ul class="more_c_list">
-				<th:block th:each="menu : ${gnbMap.get('AppH0104').submenus}" th:if="${not #lists.isEmpty(gnbMap.get('AppH0104'))}">
-					<li><a href="#" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}">On Sale</a></li>
+				<th:block th:if="${not #lists.isEmpty(gnbMap.get('AppH01'))}">
+				<th:block th:each="AppHmenu : ${gnbMap.get('AppH01').submenus}">						
+						<li th:each="menu : ${AppHmenu.submenus}" th:if="${AppHmenu.displayMenuId == 'AppH0104'}">
+						<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'URL'}" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}">On Sale</a>
+						<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'Menu'}" th:href="@{'/display/' + ${menu.linkDisplayMenuId}(displayMenuId=${menu.linkDisplayMenuId})}" th:text="${menu.menuTitle}">On Sale</a>
+					</li>
+				</th:block>
 				</th:block>
 				<!-- <li><a href="javascript:;">진행중인 이벤트</a></li>
 				<li><a href="javascript:;">구매금액대 사은품</a></li>
@@ -184,10 +212,15 @@
 				<li><a href="javascript:;">쿠션존</a></li> -->
 			</ul>
 			
-			<h3 class="h_tit02" th:text="${gnbMap.get('AppH0105').menuTitle}">쿠폰/혜택</h3>
+			<h3 class="h_tit02">쿠폰/혜택</h3>
 			<ul class="more_c_list">
-				<th:block th:each="menu : ${gnbMap.get('AppH0105').submenus}" th:if="${not #lists.isEmpty(gnbMap.get('AppH0105'))}">
-					<li><a href="#" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}">On Sale</a></li>
+				<th:block th:if="${not #lists.isEmpty(gnbMap.get('AppH01'))}">
+				<th:block th:each="AppHmenu : ${gnbMap.get('AppH01').submenus}">						
+						<li th:each="menu : ${AppHmenu.submenus}" th:if="${AppHmenu.displayMenuId == 'AppH0105'}">
+						<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'URL'}" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}">On Sale</a>
+						<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'Menu'}" th:href="@{'/display/' + ${menu.linkDisplayMenuId}(displayMenuId=${menu.linkDisplayMenuId})}" th:text="${menu.menuTitle}">On Sale</a>
+					</li>
+				</th:block>
 				</th:block>
 				<!-- <li><a href="javascript:;">쿠폰존</a></li>
 				<li><a href="javascript:;">플러스멤버십</a></li>
@@ -199,12 +232,12 @@
 		</div>
 		<!-- 로그인 전 -->
 		<div class="section">
-			<button type="button" class="btn_log"><span>로그인</span></button>
+			<button type="button" onclick="login()" th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}" class="btn_log"><span>로그인</span></button>
 		</div>
 		
 		<!--/* 로그인 후*/-->
 		<div class="section" style="display:none"><!-- 개발시 스타일 삭제요청 : 프론트 확인용 -->
-			<button type="button" class="btn_log"><span>로그아웃</span><em>honggildong</em></button>
+			<button type="button" onclick="logout()" th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}" class="btn_log"><span>로그아웃</span><em>honggildong</em></button>
 		</div>
 
 		<!-- 쇼핑팁 삭제

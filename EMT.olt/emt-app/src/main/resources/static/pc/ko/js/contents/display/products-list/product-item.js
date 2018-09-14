@@ -125,7 +125,9 @@
 		},
 
 		_addCart: function ( type ) {
-			var curObj = _.findWhere(this._data.products, {prodSn : this._prodSn});
+		 
+			var curObj = _.findWhere(this._data.products, {prodSn : Number(this._prodSn)});
+			 
 			var cartProdExPostList = [{
 				prodSn: this._prodSn,
 				cartProdQty: 1,

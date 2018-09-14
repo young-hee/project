@@ -66,8 +66,9 @@
 		}
 
 		function clickHandler (e) {
-			_modal = AP.modal.info({
-					title: '공유하기',
+			_modal = AP.modal.full({
+					title: '',
+					noneSystemAlert : true,
 					contents: {
 						templateKey: 'common.sns-share'
 					}

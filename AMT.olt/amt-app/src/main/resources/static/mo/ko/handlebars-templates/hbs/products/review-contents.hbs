@@ -14,7 +14,11 @@
 			<div class="product_slide">
 				<ul class="three_half">
 					{{#each this.imgList}}
-						<li><a href="#none"><img src="{{this.imageFileUrl}}" alt="{{../prodReviewTitle}}"></a></li>
+						<li>
+							<a href="/review/detail/{{../prodReviewSn}}">
+								<img src="{{this.imageFileUrl}}" alt="{{../prodReviewTitle}}">
+							</a>
+						</li>
 					{{/each}}
 				</ul>
 			</div>
@@ -37,12 +41,15 @@
 			</div>
 			
 			<div class="clear btns">
-				<button type="button" class="btn_good on">
+				<button type="button" class="btn_good {{#xif this.recommendYn '==' 'Y'}}on{{/xif}}" data-review-sn="{{ this.prodReviewSn }}">
 					<i class="ico_thumb animated500ms rotate"></i>
 					<span>도움이 되요 <span class="num">{{this.recommendCnt}}</span></span>
 				</button>
 				
-				<button type="button" class="btn_report"><i class="ico_report"></i><span class="sr_only">신고하기</span></button>
+				<button type="button" class="btn_report {{#xif this.recommendYn '==' 'Y'}}on{{/xif}}" data-review-sn="{{ this.prodReviewSn }}">
+					<i class="ico_report"></i>
+					<span class="sr_only">신고하기</span>
+				</button>
 			</div>
 			
 			<div class="clear bottom">

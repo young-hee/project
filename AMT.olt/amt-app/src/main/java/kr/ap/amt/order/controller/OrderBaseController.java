@@ -9,9 +9,11 @@ import kr.ap.comm.support.common.AbstractViewController;
 import kr.ap.amt.order.vo.OrdOnlineBulkDcFoDTO;
 import kr.ap.amt.order.vo.OrdOnlineProdFoDTO;
 import kr.ap.amt.order.vo.OrdOnlinePromoFoDTO;
+import kr.ap.comm.support.constants.APConstant;
 import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.ap.ap.ShipAddressInfo;
 import net.g1project.ecp.api.model.order.order.*;
+import net.g1project.ecp.api.model.sales.terms.Terms;
 import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +70,11 @@ public class OrderBaseController extends AbstractViewController {
 		//기존의 OrdOtfEx를 확장한 AP몰 전용 업체별 정보 리스트
 		List<OrdOtfExFoDTO> ordOtfExFoList = new ArrayList<OrdOtfExFoDTO>();
 		ObjectMapper mapper = new ObjectMapper();
+
+		/** 상품단위 증정프로모션증정품 목록 **/
+		List<OrdHistProdPromoAwardEx> ordHistProdPromoAwardExList = new ArrayList<>();
+		/** 상품단위 온라인상품증정품 목록 **/
+		List<OrdHistProdAwardEx> ordHistProdAwardExList = new ArrayList<>();
 
 		Map<String, OrdOnlineProdFoDTO> ordOnlineProdFoMap = new HashMap<String, OrdOnlineProdFoDTO>();
 
@@ -137,7 +144,13 @@ public class OrderBaseController extends AbstractViewController {
 
 					//충가격/수량 계산
 					ordOnlineProdFo.addOrdHistProdEx(ordHistProdEx);
-				}//end for
+
+					//상품단위 증정프로모션증정품 목록 통합
+					ordHistProdPromoAwardExList.addAll( ordHistProdEx.getOrdHistProdPromoAwardExList() );
+					//상품단위 온라인상품증정품 목록 통합
+					ordHistProdAwardExList.addAll( ordHistProdEx.getOrdHistProdAwardExList() );
+
+				}//end for - 업체안의 전체 상품목록
 
 				// 온라인쇼핑묶음판매상품 목록 추가
 				ordOtfExFoDTO.setShippingBulkDcList( new ArrayList<>(shippingBulkDcMap.values()) );
@@ -148,11 +161,205 @@ public class OrderBaseController extends AbstractViewController {
 
 				//업체별 정보 리스트에 저장
 				ordOtfExFoList.add(ordOtfExFoDTO);
-			}
+
+			}//end for - 업체별 분류
 		}
 
 		//업체별 정보 리스트에 저장
 		model.addAttribute("ordOtfExFoList", ordOtfExFoList);
+
+
+		/************** 추가 사은품 처리 Start *******************/
+		//***** 상품단위 증정 사은품 통합목록 저장 *****//
+		//상품단위 증정프로모션증정품 통합목록 저장
+		model.addAttribute("ordHistProdPromoAwardExList", ordHistProdPromoAwardExList);
+		//상품단위 온라인상품증정품 통합목록 저장
+		model.addAttribute("ordHistProdAwardExList", ordHistProdAwardExList);
+		//***** 상품단위 증정 사은품 통합목록 저장 *****//
+
+		//***** 주문단위 증정 사은품 통합목록 저장 *****//
+		/** 증정상품목록 */
+		List<OrdPromoOrdUnitAwardEx> ordUnitAwardExProdList = new ArrayList<>();
+		/** 증정쿠폰목록 */
+		List<OrdPromoOrdUnitAwardEx> ordUnitAwardExCouponList = new ArrayList<>();
+		/** 증정포인트목록 */
+		List<OrdPromoOrdUnitAwardEx> ordUnitAwardExPointList = new ArrayList<>();
+		/** 기프트카드목록 */
+		List<OrdPromoOrdUnitAwardEx> ordUnitAwardExGiftcardList = new ArrayList<>();
+
+		for(OrdUnitAwardOrdPromoEx ordUnitAwardOrdPromoEx : ordEx.getOrdHistEx().getOrdUnitAwardOrdPromoExList()) {
+			ordUnitAwardExProdList.addAll( ordUnitAwardOrdPromoEx.getOrdUnitAwardExProdList() );
+			ordUnitAwardExCouponList.addAll( ordUnitAwardOrdPromoEx.getOrdUnitAwardExCouponList() );
+			ordUnitAwardExPointList.addAll( ordUnitAwardOrdPromoEx.getOrdUnitAwardExPointList() );
+			ordUnitAwardExGiftcardList.addAll( ordUnitAwardOrdPromoEx.getOrdUnitAwardExGiftcardList() );
+		}
+		//주문단위 증정상품 통합목록 저장
+		model.addAttribute("ordUnitAwardExProdList", ordUnitAwardExProdList);
+		//주문단위 증정쿠폰 통합목록 저장
+		model.addAttribute("ordUnitAwardExCouponList", ordUnitAwardExCouponList);
+		//주문단위 증정포인트 통합목록 저장
+		model.addAttribute("ordUnitAwardExPointList", ordUnitAwardExPointList);
+		//주문단위 기프트카드 통합목록 저장
+		model.addAttribute("ordUnitAwardExGiftcardList", ordUnitAwardExGiftcardList);
+		//***** 주문단위 증정 사은품 통합목록 저장 *****//
+
+		//***** 증정쿠폰 통합목록 저장 *****//
+		//증정쿠폰 목록
+		List<CouponAwardEx> couponAwardExList = new ArrayList<>();
+
+		for(CouponEx couponEx : ordEx.getApplyCouponExList()) {
+			couponAwardExList.addAll( couponEx.getCouponAwardExList() );
+		}
+		model.addAttribute("applyCouponExList", couponAwardExList);
+		//***** 증정쿠폰 통합목록 저장 *****//
+
+		//화면에서 사용할수 있게 가공한다.
+		makeApMallAwardList(model);
+		/************** 추가 사은품 처리 End *******************/
+	};
+
+	/**
+	 * 화면에서 사용할 추가 사은품의 목록을 만든다.(스페셜 기프트, 이벤트 사은품, 쿠폰 사은품, 증정 기프트 카드)
+	 */
+	private void makeApMallAwardList(Model model) {
+		//스페셜 기프트
+		Map<String, Object> awardMapSpecialGift = new HashMap<>();
+		//이벤트 사은품
+		Map<String, Object> awardMapEventGift = new HashMap<>();
+		//쿠폰 사은품
+		Map<String, Object> awardMapCouponGift = new HashMap<>();
+		//증정 기프트 카드
+		Map<String, Object> awardMapAwardGift = new HashMap<>();
+
+		Map<String, Object> modelMap = model.asMap();
+
+		//(스페셜 기프트) 상품단위 온라인상품증정품 상품/사은품 목록
+		List<OrdHistProdAwardEx> ordHistProdAwardExListForProd = new ArrayList<>();
+		//맵에 통합
+		awardMapSpecialGift.put("ordHistProdAwardExListForProd", ordHistProdAwardExListForProd);
+
+		//(이벤트 사은품) 상품단위 증정프로모션증정품 목록
+		List<OrdHistProdPromoAwardEx> ordHistProdPromoAwardExList = new ArrayList<>();
+		//(이벤트 사은품) 주문단위 증정 프로모션 상품/사은품 목록
+		List<OrdPromoOrdUnitAwardEx> ordUnitAwardExProdList = new ArrayList<>();
+		//(이벤트 사은품) 주문단위 증정 프로모션 포인트 목록
+		List<OrdPromoOrdUnitAwardEx> ordUnitAwardExPointist = new ArrayList<>();
+		//맵에 통합
+		awardMapEventGift.put("ordHistProdPromoAwardExList", ordHistProdPromoAwardExList);
+		awardMapEventGift.put("ordUnitAwardExProdList", ordUnitAwardExProdList);
+		awardMapEventGift.put("ordUnitAwardExPointList", ordUnitAwardExPointist);
+
+		//(쿠폰 사은품) 장바구니 증정 쿠폰 상품/사은품
+		List<CouponAwardEx> couponAwardExListForProd = new ArrayList<>();
+		//(쿠폰 사은품) 장바구니 증정 쿠폰 포인트
+		List<CouponAwardEx> couponAwardExListForPoint = new ArrayList<>();
+		//맵에 통합
+		awardMapCouponGift.put("couponAwardExListForProd", couponAwardExListForProd);
+		awardMapCouponGift.put("couponAwardExListForPoint", couponAwardExListForPoint);
+
+		//(증정 기프트 카드) 상품단위 온라인상품증정품 기프트카드 목록
+		List<OrdHistProdAwardEx> ordHistProdAwardExListForGiftcard = new ArrayList<>();
+		//(증정 기프트 카드) 주문단위 증정 프로모션 기프트카드 목록
+		List<OrdPromoOrdUnitAwardEx> ordUnitAwardExGiftcardList = new ArrayList<>();
+		//맵에 통합
+		awardMapAwardGift.put("ordHistProdAwardExListForGiftcard", ordHistProdAwardExListForGiftcard);
+		awardMapAwardGift.put("ordUnitAwardExGiftcardList", ordUnitAwardExGiftcardList);
+
+
+		//상품단위 증정프로모션증정품 목록 분류
+		for(OrdHistProdPromoAwardEx ordHistProdPromoAwardEx : (List<OrdHistProdPromoAwardEx>)modelMap.get("ordHistProdPromoAwardExList")) {
+			if( "Prod".equals(ordHistProdPromoAwardEx.getAwardTgtCode()) ) {
+				ordHistProdPromoAwardExList.add(ordHistProdPromoAwardEx);
+			}
+		}
+
+		//상품단위 온라인상품증정품 목록 분류
+		for(OrdHistProdAwardEx ordHistProdAwardEx : (List<OrdHistProdAwardEx>)modelMap.get("ordHistProdAwardExList")) {
+			if( "Prod".equals(ordHistProdAwardEx.getAwardTgtCode()) ) {
+				ordHistProdAwardExListForProd.add(ordHistProdAwardEx);
+			}
+			if( "Giftcard".equals(ordHistProdAwardEx.getAwardTgtCode()) ) {
+				ordHistProdAwardExListForGiftcard.add(ordHistProdAwardEx);
+			}
+		}
+
+		//쿠폰 상품/사은품, 포인트 목록 분류
+		for(CouponAwardEx couponAwardEx : (List<CouponAwardEx>)modelMap.get("applyCouponExList")) {
+			if( "Prod".equals(couponAwardEx.getAwardTgtCode()) ) {
+				couponAwardExListForProd.add(couponAwardEx);
+			}
+			if( "Point".equals(couponAwardEx.getAwardTgtCode()) ) {
+				couponAwardExListForPoint.add(couponAwardEx);
+			}
+		}
+
+		//주문단위 증정상품목록 분류
+		for(OrdPromoOrdUnitAwardEx ordHistProdPromoAwardEx : (List<OrdPromoOrdUnitAwardEx>)modelMap.get("ordUnitAwardExProdList")) {
+			ordUnitAwardExProdList.add(ordHistProdPromoAwardEx);
+		}
+
+		//주문단위 증정포인트목록 분류
+		for(OrdPromoOrdUnitAwardEx ordHistProdPromoAwardEx : (List<OrdPromoOrdUnitAwardEx>)modelMap.get("ordUnitAwardExPointList")) {
+			ordUnitAwardExPointist.add(ordHistProdPromoAwardEx);
+		}
+
+		//주문단위 기프트카드목록 분류
+		for(OrdPromoOrdUnitAwardEx ordHistProdPromoAwardEx : (List<OrdPromoOrdUnitAwardEx>)modelMap.get("ordUnitAwardExGiftcardList")) {
+			ordUnitAwardExGiftcardList.add(ordHistProdPromoAwardEx);
+		}
+
+		/*** 항목별 총합계산 ***/
+		//스페셜 기프트
+		awardMapSpecialGift.put("totalCount", ordHistProdAwardExListForProd.size());
+		//이벤트 사은품
+		awardMapEventGift.put("totalCount", ordHistProdPromoAwardExList.size() + ordUnitAwardExProdList.size() + ordUnitAwardExPointist.size());
+		//쿠폰 사은품
+		awardMapCouponGift.put("totalCount", couponAwardExListForProd.size() + couponAwardExListForPoint.size());
+		//증정 기프트 카드
+		awardMapAwardGift.put("totalCount", ordHistProdAwardExListForGiftcard.size() + ordUnitAwardExGiftcardList.size());
+
+		model.addAttribute("awardMapSpecialGift", awardMapSpecialGift);
+		model.addAttribute("awardMapEventGift", awardMapEventGift);
+		model.addAttribute("awardMapCouponGift", awardMapCouponGift);
+		model.addAttribute("awardMapAwardGift", awardMapAwardGift);
+	};
+
+	/**
+	 * 결제 내역 상세 정보 생성(AP몰 전용) - 입점업체별 주문금액, 배송비 정보를 분류한다.
+	 * @author 유젠 Tim
+	 * @since 2018.09.07
+	 */
+	protected Map<String, BigDecimal> makeApMallOrdOtfProdTotal(OrdEx ordEx) {
+
+		Map<String, BigDecimal> sumMap = new HashMap<>();
+
+		for (OrdShipAddressEx ordShipAddressEx : ordEx.getOrdShipAddressExList()) {
+
+			//업체별 전체 배송비의 합
+			BigDecimal allOtfTotalShipAmt = new BigDecimal(0);
+
+			for (OrdOtfEx ordOtfEx : ordShipAddressEx.getOrdOtfExList()) {
+				//업체별 상품가격의 합
+				BigDecimal otfTotalProdAmt = new BigDecimal(0);
+				//업체별 배송비의 합
+				BigDecimal otfTotalShipAmt = new BigDecimal(0);
+				otfTotalShipAmt = otfTotalShipAmt.add(ordOtfEx.getShipFeeSumPcur());
+				//업체별 전체 배송비의 합
+				allOtfTotalShipAmt = allOtfTotalShipAmt.add(otfTotalShipAmt);
+
+				for (OrdHistProdEx ordHistProdEx : ordOtfEx.getOrdHistProdExList()) {
+					otfTotalProdAmt = otfTotalProdAmt.add(ordHistProdEx.getFinalOnlineSaleAmtPcur());
+				}
+
+				//업체고유 sn 별 합계저장
+				sumMap.put("otfTotalProdAmt" + ordOtfEx.getOrdOtfSn(), otfTotalProdAmt);
+				sumMap.put("otfTotalShipAmt" + ordOtfEx.getOrdOtfSn(), otfTotalShipAmt);
+			}
+			//업체별 전체 배송비의 합
+			sumMap.put("allOtfTotalShipAmt", allOtfTotalShipAmt);
+		}
+
+		return sumMap;
 	};
 
 
@@ -280,11 +487,21 @@ public class OrderBaseController extends AbstractViewController {
 			model.addAttribute("payMethodResult", payMethodList); 									// 결제수단목록
 			model.addAttribute("apMember", apApi.getMemberInfo(getMemberSn()));						// 회원정보
 			model.addAttribute("memberSn", getMemberSn());											// 회원일련번호
-		}else{
+		}else {
 			PayMethodListResult payMethodList = orderApi.getPayMethodList(PARAM_KEY_NONMEMBER);
 			//주문완료
-			model.addAttribute("ordShipAddressExList", ordEx.getOrdShipAddressExList());			// 주문배송지목록
+			model.addAttribute("ordShipAddressExList", ordEx.getOrdShipAddressExList());            // 주문배송지목록
 			model.addAttribute("payMethodResult", payMethodList); // 결제수단목록
+
+			//이용약관
+			List<Terms> personPolicy1 = termsApi.getTerms("020");                //개인정보 처리방침
+			List<Terms> personPolicy2 = termsApi.getTerms("040");                //개인정보 제3자 제공 동의
+			if (personPolicy1.size() > 0) {
+				model.addAttribute("personPolicy1", personPolicy1.get(personPolicy1.size()-1));
+			}
+			if( personPolicy2.size() > 0) {
+				model.addAttribute("personPolicy2", personPolicy2.get(personPolicy2.size()-1));
+			}
 		}
 
 		model.addAttribute("isApMember", isMember());
@@ -293,7 +510,8 @@ public class OrderBaseController extends AbstractViewController {
 		 * 주문금액 계산
 		 *****************************************************************/
 		model.addAttribute("ordAmtMap", makeOrdAmtList(ordEx, isMember()));
-
+		//업체별 상품 및 배송비 합계 계산
+		model.addAttribute("otfTotalAmtMap", makeApMallOrdOtfProdTotal(ordEx));
 		/*****************************************************************
 		 * 주문수량 계산
 		 *****************************************************************/

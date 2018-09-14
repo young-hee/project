@@ -70,12 +70,12 @@
 
 	var date = new Object();
 	var pageNumber = 1;
-	var progress = '<div id="m-loading">LOADING<ul class="loading"><li></li><li></li><li></li></ul></div>';
-		//multiple date picker적용
+	var progress = '<div id="m-loading" class="loading" style="height:20px;"><img alt="로딩중" src="/mo/ko/images/common/loading_sm.gif"></div>';
+	
 
 		$('select[name=date]').change(function() {
 
-			$('.pbody:last').after(progress);
+			$('.progress_area').after(progress);
 			$(".pbody").remove();
 			AP.api.beautyPointListFragment({}, {
 					pageNumber:1,
@@ -93,7 +93,7 @@
 		});
 		function more() {
 			pageNumber++;
-			$('.table-data:last').after(progress);
+			$('.progress_area').after(progress);
 			AP.api.beautyPointListBodyFragment({}, {
 					pageNumber:pageNumber,
 					date:$('select[name=date]').val()

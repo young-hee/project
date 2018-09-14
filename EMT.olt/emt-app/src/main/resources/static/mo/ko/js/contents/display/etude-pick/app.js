@@ -60,9 +60,7 @@
 			this._loading = true;
 			this._$loading.show();
 
-			AP.api.getPixleePhotos({
-				albumId: '2956835'//Homepage Gallery
-			}, {
+			AP.api.getPixleePhotos({}, {
 				page: this._page
 			}).done(function ( data ) {
 				//다음 데이타가 없으면

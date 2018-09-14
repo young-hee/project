@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:ap="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+ 	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<th:block ap:replace="~{common/fragment/js-libs}"/>
+<script type="text/javascript">
+	
+	$(document).ready(function(){
+	
+		var $form = $("form[name='ini']");
+		parent.iniBankComplete($form);
+		
+		//TODO 결제창 취소로 되돌아오는 경우 확인할 방법 확인 필요
+		
+	});
+</script>
+
+</head>
+
+<form id="iniPayForm" name="ini" method="post" accept-charset="utf-8">	
+	<th:block th:each="pr, stat: *{resultMap}">
+		<input type="hidden" th:name="${pr.key}" th:value="${pr.value}"/>
+	</th:block>
+		<!-- <input type="hidden" name="P_CHARSET" value="utf8"> -->
+ </form>
+</body>
+</html>

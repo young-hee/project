@@ -67,6 +67,7 @@
 								<h3 class="sr_only">사용가능쿠폰</h3>
 								<ul class="coupon_list">
 									<li th:each="item : ${availCoupons}">
+										<coupon-data th:id="${item.availCoupon.couponSn}" th:data="${#IntegUtil.toJson(item)}"></coupon-data>
 										<div class="coupon_box" th:if="${item.availCoupon.couponBenefitTypeCode == 'ProdDc'}">
 											<div>
 												<div class="date"><span class="num" th:if="${item.dDay > 0}">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
@@ -88,8 +89,8 @@
 												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
 												<p class="condition" th:if="${item.availCoupon.prodDcCoupon.minPurProdPriceAssignYn == 'Y'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.minPurProdPrice)}">30,000</th:block>원 이상 구매 시</p>
 												<div class="page_btns">
-													<a href="javascript:;">상품 안내</a>
-													<a href="javascript:;">쿠폰 안내</a>
+													<a href="javascript:;" th:if="${item.availCoupon.tgtProdCode == 'Prod'}" th:onclick="'prodGuide(' + ${item.availCoupon.couponSn} + ')'">상품 안내</a>
+													<a href="javascript:;" th:onclick="'couponGuide(' + ${item.availCoupon.couponSn} + ')'">쿠폰 안내</a>
 												</div>
 											</div>
 										</div>
@@ -115,7 +116,7 @@
 												<p class="condition" th:if="${item.availCoupon.cartDcCoupon.sectionTypeCode == 'Amt'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.fromOrdAmt)}">30,000</th:block>원 이상 구매 시</p>
 												<p class="condition" th:if="${item.availCoupon.cartDcCoupon.sectionTypeCode == 'Qty'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.fromOrdQty)}">10</th:block>개 이상 구매 시</p>
 												<div class="page_btns">
-													<a href="javascript:;">쿠폰 안내</a>
+													<a href="javascript:;" th:onclick="'couponGuide(' + ${item.availCoupon.couponSn} + ')'">쿠폰 안내</a>
 												</div>
 											</div>
 										</div>
@@ -132,8 +133,8 @@
 												<p class="condition" th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Same'}">동일상품 <span th:text="${item.availCoupon.mplusnCoupon.baseOrdQty}">N</span>개 구매시 <span th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">M</span>개 추가 증정</p>
 												<p class="condition" th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Different'}">이종상품 <span th:text="${item.availCoupon.mplusnCoupon.baseOrdQty}">N</span>개 구매시 <span th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">M</span>개 추가 증정</p>
 												<div class="page_btns">
-													<a href="javascript:;" th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Different'}">상품 안내</a>
-													<a href="javascript:;">쿠폰 안내</a>
+													<a href="javascript:;" th:if="${item.availCoupon.tgtProdCode == 'Prod'}" th:onclick="'prodGuide(' + ${item.availCoupon.couponSn} + ')'">상품 안내</a>
+													<a href="javascript:;" th:onclick="'couponGuide(' + ${item.availCoupon.couponSn} + ')'">쿠폰 안내</a>
 												</div>
 											</div>
 										</div>
@@ -141,7 +142,8 @@
 											<div>
 												<div class="date"><span class="num" th:if="${item.dDay > 0}">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
 												<div class="cp_name" >
-													<p><span class="num"><span class="won">사은품 증정</span></span></p>
+													<p th:if="${item.availCoupon.cartAwardCoupon.awardTgtCode == 'Prod'}"><span class="num"><span class="won">사은품 증정</span></span></p>
+													<p th:if="${item.availCoupon.cartAwardCoupon.awardTgtCode == 'Point'}"><span class="num"><span class="won">포인트 적립</span></span></p>
 												</div>
 											</div>
 											<div>
@@ -150,8 +152,9 @@
 												<p class="condition" th:if="${item.availCoupon.cartAwardCoupon.sectionTypeCode == 'Qty'}"><span th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartAwardCoupon.fromOrdQty)}">100</span>개 이상 구매 시</p>
 												<p class="condition" th:if="${item.availCoupon.cartAwardCoupon.sectionTypeCode == 'Amt'}"><span th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartAwardCoupon.fromOrdAmt)}">100</span>원 이상 구매 시</p>
 												<div class="page_btns">
-													<a href="javascript:;">상품 안내</a>
-													<a href="javascript:;">쿠폰 안내</a>
+													<a href="javascript:;" th:if="${item.availCoupon.tgtProdCode == 'Prod'}" th:onclick="'prodGuide(' + ${item.availCoupon.couponSn} + ')'">상품 안내</a>
+													<a href="javascript:;" th:if="${item.availCoupon.cartAwardCoupon.awardTgtCode == 'Prod'}" th:onclick="'awardGuide(' + ${item.availCoupon.couponSn} + ')'">사은품 안내</a>
+													<a href="javascript:;" th:onclick="'couponGuide(' + ${item.availCoupon.couponSn} + ')'">쿠폰 안내</a>
 												</div>
 											</div>
 										</div>
@@ -167,8 +170,8 @@
 												<div class="type app">APP coupon</div>
 												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
 												<div class="page_btns">
-													<a href="javascript:;">상품 안내</a>
-													<a href="javascript:;">쿠폰 안내</a>
+													<a href="javascript:;" th:if="${item.availCoupon.tgtProdCode == 'Prod'}" th:onclick="'prodGuide(' + ${item.availCoupon.couponSn} + ')'">상품 안내</a>
+													<a href="javascript:;" th:onclick="'couponGuide(' + ${item.availCoupon.couponSn} + ')'">쿠폰 안내</a>
 												</div>
 											</div>
 										</div>
@@ -183,7 +186,8 @@
 												<div class="type app">APP coupon</div>
 												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
 												<div class="page_btns">
-													<a href="javascript:;">쿠폰 안내</a>
+													<a href="javascript:;" th:if="${item.availCoupon.tgtProdCode == 'Prod'}" th:onclick="'prodGuide(' + ${item.availCoupon.couponSn} + ')'">상품 안내</a>
+													<a href="javascript:;" th:onclick="'couponGuide(' + ${item.availCoupon.couponSn} + ')'">쿠폰 안내</a>
 												</div>
 											</div>
 										</div>
@@ -215,8 +219,8 @@
 												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
 												<p class="condition" th:if="${item.availCoupon.prodDcCoupon.minPurProdPriceAssignYn == 'Y'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.minPurProdPrice)}">30,000</th:block>원 이상 구매 시</p>
 												<div class="page_btns">
-													<a href="javascript:;">상품 안내</a>
-													<a href="javascript:;">쿠폰 안내</a>
+													<a href="javascript:;" th:if="${item.availCoupon.tgtProdCode == 'Prod'}" th:onclick="'prodGuide(' + ${item.availCoupon.couponSn} + ')'">상품 안내</a>
+													<a href="javascript:;" th:onclick="'couponGuide(' + ${item.availCoupon.couponSn} + ')'">쿠폰 안내</a>
 												</div>
 											</div>
 										</div>
@@ -242,7 +246,8 @@
 												<p class="condition" th:if="${item.availCoupon.cartDcCoupon.sectionTypeCode == 'Amt'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.fromOrdAmt)}">30,000</th:block>원 이상 구매 시</p>
 												<p class="condition" th:if="${item.availCoupon.cartDcCoupon.sectionTypeCode == 'Qty'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.fromOrdQty)}">10</th:block>개 이상 구매 시</p>
 												<div class="page_btns">
-													<a href="javascript:;">쿠폰 안내</a>
+													<a href="javascript:;" th:if="${item.availCoupon.tgtProdCode == 'Prod'}" th:onclick="'prodGuide(' + ${item.availCoupon.couponSn} + ')'">상품 안내</a>
+													<a href="javascript:;" th:onclick="'couponGuide(' + ${item.availCoupon.couponSn} + ')'">쿠폰 안내</a>
 												</div>
 											</div>
 										</div>
@@ -259,8 +264,8 @@
 												<p class="condition" th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Same'}">동일상품 <span th:text="${item.availCoupon.mplusnCoupon.baseOrdQty}">N</span>개 구매시 <span th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">M</span>개 추가 증정</p>
 												<p class="condition" th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Different'}">이종상품 <span th:text="${item.availCoupon.mplusnCoupon.baseOrdQty}">N</span>개 구매시 <span th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">M</span>개 추가 증정</p>
 												<div class="page_btns">
-													<a href="javascript:;" th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Different'}">상품 안내</a>
-													<a href="javascript:;">쿠폰 안내</a>
+													<a href="javascript:;" th:if="${item.availCoupon.tgtProdCode == 'Prod'}" th:onclick="'prodGuide(' + ${item.availCoupon.couponSn} + ')'">상품 안내</a>
+													<a href="javascript:;" th:onclick="'couponGuide(' + ${item.availCoupon.couponSn} + ')'">쿠폰 안내</a>
 												</div>
 											</div>
 										</div>
@@ -277,8 +282,9 @@
 												<p class="condition" th:if="${item.availCoupon.cartAwardCoupon.sectionTypeCode == 'Qty'}"><span th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartAwardCoupon.fromOrdQty)}">100</span>개 이상 구매 시</p>
 												<p class="condition" th:if="${item.availCoupon.cartAwardCoupon.sectionTypeCode == 'Amt'}"><span th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartAwardCoupon.fromOrdAmt)}">100</span>원 이상 구매 시</p>
 												<div class="page_btns">
-													<a href="javascript:;">상품 안내</a>
-													<a href="javascript:;">쿠폰 안내</a>
+													<a href="javascript:;" th:if="${item.availCoupon.tgtProdCode == 'Prod'}" th:onclick="'prodGuide(' + ${item.availCoupon.couponSn} + ')'">상품 안내</a>
+													<a href="javascript:;" th:onclick="'awardGuide(' + ${item.availCoupon.couponSn} + ')'">사은품 안내</a>
+													<a href="javascript:;" th:onclick="'couponGuide(' + ${item.availCoupon.couponSn} + ')'">쿠폰 안내</a>
 												</div>
 											</div>
 										</div>
@@ -294,8 +300,8 @@
 												<div class="type app">APP coupon</div>
 												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
 												<div class="page_btns">
-													<a href="javascript:;">상품 안내</a>
-													<a href="javascript:;">쿠폰 안내</a>
+													<a href="javascript:;" th:if="${item.availCoupon.tgtProdCode == 'Prod'}" th:onclick="'prodGuide(' + ${item.availCoupon.couponSn} + ')'">상품 안내</a>
+													<a href="javascript:;" th:onclick="'couponGuide(' + ${item.availCoupon.couponSn} + ')'">쿠폰 안내</a>
 												</div>
 											</div>
 										</div>
@@ -310,7 +316,8 @@
 												<div class="type app">APP coupon</div>
 												<p class="cp_desc ellipsis line2" th:text="${item.availCoupon.couponName}">베리떼</p>
 												<div class="page_btns">
-													<a href="javascript:;">쿠폰 안내</a>
+													<a href="javascript:;" th:if="${item.availCoupon.tgtProdCode == 'Prod'}" th:onclick="'prodGuide(' + ${item.availCoupon.couponSn} + ')'">상품 안내</a>
+													<a href="javascript:;" th:onclick="'couponGuide(' + ${item.availCoupon.couponSn} + ')'">쿠폰 안내</a>
 												</div>
 											</div>
 										</div>
@@ -321,30 +328,30 @@
 								<h3 class="sr_only">사용/만료된 쿠폰</h3>
 								<ul class="coupon_list">
 									<li th:each="item : ${expCoupons}">
-										<div class="coupon_box" th:if="${item.expCoupon.couponBenefitTypeCode == 'CartDc'}">
+										<coupon-data th:id="${item.expCoupon.couponSn}" th:data="${#IntegUtil.toJson(item)}"></coupon-data>
+										<div class="coupon_box" th:if="${item.expCoupon.couponBenefitTypeCode == 'ProdDc'}">
 											<div>
-												<div class="date" th:if="${item.expDt}"><strong>만료일</strong> <span class="num" th:text="${#dates.format(item.expDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
-												<div class="date" th:if="${item.useDt}"><strong>사용일</strong> <span class="num" th:text="${#dates.format(item.useDt, 'yyyy-MM-dd')}">2018.08.12</span></div>
-												<div class="cp_name" th:if="${item.expCoupon.cartDcCoupon.dcMethodCode == 'FlatPrice'}">
-													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.flatPrice)}">3,000</span><span class="won">원</span></p>
+												<div class="date"><span class="num" th:if="${item.dDay > 0}">D-<th:block th:text="${item.dDay}">99</th:block></span></div>
+												<div class="cp_name" th:if="${item.expCoupon.prodDcCoupon.dcMethodCode == 'FlatPrice'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.expCoupon.prodDcCoupon.flatPrice)}">3,000</span><span class="won">원</span></p>
 													<p>균일가</p>
 												</div>
-												<div class="cp_name" th:if="${item.expCoupon.cartDcCoupon.dcMethodCode == 'FixedRate'}">
-													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.dcRate * 100)}">3,000</span><span class="won">%</span></p>
+												<div class="cp_name" th:if="${item.expCoupon.prodDcCoupon.dcMethodCode == 'FixedRate'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.expCoupon.prodDcCoupon.dcRate * 100)}">3,000</span><span class="won">%</span></p>
 													<p>할인</p>
 												</div>
-												<div class="cp_name" th:if="${item.expCoupon.cartDcCoupon.dcMethodCode == 'FixedAmt'}">
-													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.dcAmt)}">3,000</span><span class="won">원</span></p>
+												<div class="cp_name" th:if="${item.expCoupon.prodDcCoupon.dcMethodCode == 'FixedAmt'}">
+													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.expCoupon.prodDcCoupon.dcAmt)}">3,000</span><span class="won">원</span></p>
 													<p>할인</p>
 												</div>
 											</div>
 											<div>
 												<div class="type app">APP coupon</div>
 												<p class="cp_desc ellipsis line2" th:text="${item.expCoupon.couponName}">베리떼</p>
-												<p class="condition" th:if="${item.expCoupon.cartDcCoupon.sectionTypeCode == 'Amt'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.fromOrdAmt)}">30,000</th:block>원 이상 구매 시</p>
-												<p class="condition" th:if="${item.expCoupon.cartDcCoupon.sectionTypeCode == 'Qty'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.fromOrdQty)}">10</th:block>개 이상 구매 시</p>
+												<p class="condition" th:if="${item.expCoupon.prodDcCoupon.minPurProdPriceAssignYn == 'Y'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.expCoupon.prodDcCoupon.minPurProdPrice)}">30,000</th:block>원 이상 구매 시</p>
 												<div class="page_btns">
-													<a href="javascript:;">쿠폰 안내</a>
+													<a href="javascript:;" th:onclick="'prodGuide(' + ${item.expCoupon.couponSn} + ')'">상품 안내</a>
+													<a href="javascript:;" th:onclick="'couponGuide(' + ${item.expCoupon.couponSn} + ')'">쿠폰 안내</a>
 												</div>
 											</div>
 										</div>
@@ -362,7 +369,7 @@
 												</div>
 												<div class="cp_name" th:if="${item.expCoupon.cartDcCoupon.dcMethodCode == 'FixedAmt'}">
 													<p><span class="num" th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.dcAmt)}">3,000</span><span class="won">원</span></p>
-													<p>할인</p>
+													<p>균일가</p>
 												</div>
 											</div>
 											<div>
@@ -371,7 +378,8 @@
 												<p class="condition" th:if="${item.expCoupon.cartDcCoupon.sectionTypeCode == 'Amt'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.fromOrdAmt)}">30,000</th:block>원 이상 구매 시</p>
 												<p class="condition" th:if="${item.expCoupon.cartDcCoupon.sectionTypeCode == 'Qty'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartDcCoupon.fromOrdQty)}">10</th:block>개 이상 구매 시</p>
 												<div class="page_btns">
-													<a href="javascript:;">쿠폰 안내</a>
+													<a href="javascript:;" th:if="${item.availCoupon.tgtProdCode == 'Prod'}" th:onclick="'prodGuide(' + ${item.expCoupon.couponSn} + ')'">상품 안내</a>
+													<a href="javascript:;" th:onclick="'couponGuide(' + ${item.expCoupon.couponSn} + ')'">쿠폰 안내</a>
 												</div>
 											</div>
 										</div>
@@ -389,8 +397,8 @@
 												<p class="condition" th:if="${item.expCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Same'}">동일상품 <span th:text="${item.expCoupon.mplusnCoupon.baseOrdQty}">N</span>개 구매시 <span th:text="${item.expCoupon.mplusnCoupon.freeAwardQty}">M</span>개 추가 증정</p>
 												<p class="condition" th:if="${item.expCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Different'}">이종상품 <span th:text="${item.expCoupon.mplusnCoupon.baseOrdQty}">N</span>개 구매시 <span th:text="${item.expCoupon.mplusnCoupon.freeAwardQty}">M</span>개 추가 증정</p>
 												<div class="page_btns">
-													<a href="javascript:;" th:if="${item.expCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Different'}">상품 안내</a>
-													<a href="javascript:;">쿠폰 안내</a>
+													<a href="javascript:;" th:if="${item.availCoupon.tgtProdCode == 'Prod'}" th:onclick="'prodGuide(' + ${item.expCoupon.couponSn} + ')'">상품 안내</a>
+													<a href="javascript:;" th:onclick="'couponGuide(' + ${item.expCoupon.couponSn} + ')'">쿠폰 안내</a>
 												</div>
 											</div>
 										</div>
@@ -408,8 +416,9 @@
 												<p class="condition" th:if="${item.expCoupon.cartAwardCoupon.sectionTypeCode == 'Qty'}"><span th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartAwardCoupon.fromOrdQty)}">100</span>개 이상 구매 시</p>
 												<p class="condition" th:if="${item.expCoupon.cartAwardCoupon.sectionTypeCode == 'Amt'}"><span th:text="${#IntegUtil.toCommaNumber(item.expCoupon.cartAwardCoupon.fromOrdAmt)}">100</span>원 이상 구매 시</p>
 												<div class="page_btns">
-													<a href="javascript:;">상품 안내</a>
-													<a href="javascript:;">쿠폰 안내</a>
+													<a href="javascript:;" th:if="${item.availCoupon.tgtProdCode == 'Prod'}" th:onclick="'prodGuide(' + ${item.expCoupon.couponSn} + ')'">상품 안내</a>
+													<a href="javascript:;" th:onclick="'awardGuide(' + ${item.expCoupon.couponSn} + ')'">사은품 안내</a>
+													<a href="javascript:;" th:onclick="'couponGuide(' + ${item.expCoupon.couponSn} + ')'">쿠폰 안내</a>
 												</div>
 											</div>
 										</div>
@@ -426,8 +435,8 @@
 												<div class="type app">APP coupon</div>
 												<p class="cp_desc ellipsis line2" th:text="${item.expCoupon.couponName}">베리떼</p>
 												<div class="page_btns">
-													<a href="javascript:;">상품 안내</a>
-													<a href="javascript:;">쿠폰 안내</a>
+													<a href="javascript:;" th:if="${item.availCoupon.tgtProdCode == 'Prod'}" th:onclick="'prodGuide(' + ${item.expCoupon.couponSn} + ')'">상품 안내</a>
+													<a href="javascript:;" th:onclick="'couponGuide(' + ${item.expCoupon.couponSn} + ')'">쿠폰 안내</a>
 												</div>
 											</div>
 										</div>
@@ -443,8 +452,8 @@
 												<div class="type app">APP coupon</div>
 												<p class="cp_desc ellipsis line2" th:text="${item.expCoupon.couponName}">베리떼</p>
 												<div class="page_btns">
-													<a href="javascript:;">상품 안내</a>
-													<a href="javascript:;">쿠폰 안내</a>
+													<a href="javascript:;" th:if="${item.availCoupon.tgtProdCode == 'Prod'}" th:onclick="'prodGuide(' + ${item.expCoupon.couponSn} + ')'">상품 안내</a>
+													<a href="javascript:;" th:onclick="'couponGuide(' + ${item.expCoupon.couponSn} + ')'">쿠폰 안내</a>
 												</div>
 											</div>
 										</div>
@@ -497,6 +506,236 @@
 				}
 
 			});
+			
+			function prodGuide(couponSn) {
+
+				
+	    		AP.api.getCouponProdInfo({}, {
+					couponIdentifier: couponSn
+				}).done(function (data) {
+			        var contents = new Object();
+			        contents.contents = data;
+			        var modal = AP.modal.info(contents);
+			        var $modalEl = modal.getElement(); //jquery object
+
+			        $modalEl.find('.btn_fix_neutral').click(function() {
+			        	modal.close();
+			        });
+				}).fail(function(e) {
+				}).always(function() {
+					//성공, 실패
+				});
+				
+			}
+			function awardGuide(couponSn) {
+
+				
+	    		AP.api.getCouponGiftProdInfo({}, {
+					couponIdentifier: couponSn
+				}).done(function (data) {
+			        var contents = new Object();
+			        contents.contents = data;
+			        var modal = AP.modal.info(contents);
+			        var $modalEl = modal.getElement(); //jquery object
+
+			        $modalEl.find('.btn_fix_neutral').click(function() {
+			        	modal.close();
+			        });
+				}).fail(function(e) {
+				}).always(function() {
+					//성공, 실패
+				});
+				
+			}
+			function couponGuide(couponSn) {
+				var item = JSON.parse($('#' + couponSn).attr('data'));
+		        var contents = new Object();
+		        contents.contents = guideHtml;
+		        var modal = AP.modal.info(contents);
+		        var $modalEl = modal.getElement(); //jquery object
+				if(item.expCoupon) {
+					item.availCoupon = item.expCoupon;
+				}
+		        $modalEl.find('.btn_fix_neutral').click(function() {
+		        	modal.close();
+		        });
+		        
+		        var target;
+		        if(item.availCoupon.tgtLevelNames.length != 0) {
+		        	target = item.availCoupon.tgtLevelNames.join();
+		        } else if(item.availCoupon.tgtMemberCode == 'AllMember') {
+		        	target = '회원 전체';
+		        } else if(item.availCoupon.tgtMemberCode == 'FirstPur') {
+		        	target = 'AP몰 첫 구매 회원';
+		        } else if(item.availCoupon.tgtMemberCode == 'Employee') {
+		        	target = '임직원 전용';
+		        }
+		        
+				if(target)
+		        	$modalEl.find('.list').append('<li>대상 : <span>' + target + '</span>  </li>');
+				
+				if(item.availCoupon.duplicationUseConditionCode == 'SuperCoupon') {
+		        	$modalEl.find('.list').append('<li>슈퍼쿠폰 : <span>타 쿠폰과 중복 할인 가능합니다.</span>  </li>');
+				} else if(item.availCoupon.duplicationUseConditionCode == 'Duplication') {
+		        	$modalEl.find('.list').append('<li>중복사용가능쿠폰 : <span>쿠폰간 중복 할인 가능합니다.</span>  </li>');
+				} else {
+		        	$modalEl.find('.list').append('<li>단독사용쿠폰 : <span>단독으로 사용 가능합니다.</span>  </li>');
+				}
+				
+				var prod;
+				if(item.availCoupon.tgtProdCode == 'AllProd') {
+		        	$modalEl.find('.list').append('<li>대상상품 : <span>상품 전체</span>  </li>');
+				} else if(item.availCoupon.tgtProdCode == 'Brand') {
+		        	$modalEl.find('.list').append('<li>적용브랜드 : <span>' + item.availCoupon.tgtProdTypeNames.join() + '</span>  </li>');
+				} else if(item.availCoupon.tgtProdCode == 'StdCate') {
+		        	$modalEl.find('.list').append('<li>관리분류 : <span>' + item.availCoupon.tgtProdTypeNames.join() + '</span>  </li>');
+				} else if(item.availCoupon.tgtProdCode == 'Cate') {
+		        	$modalEl.find('.list').append('<li>카테고리 : <span>' + item.availCoupon.tgtProdTypeNames.join() + '</span>  </li>');
+				} else if(item.availCoupon.tgtProdCode == 'Prod') {
+		        	$modalEl.find('.list').append('<li>대상상품 : <span>상품 안내 참조</span>  </li>');
+				}
+				
+				if(item.availCoupon.couponBenefitTypeCode == 'ProdDc') {
+					
+					if(item.availCoupon.prodDcCoupon.prodDcCouponApplyCode == 'One') {
+			        	$modalEl.find('.list').append('<li>할인범위 : <span>상품 하나</span>  </li>');
+					} else {
+			        	$modalEl.find('.list').append('<li>할인범위 : <span>상품 전체</span>  </li>');
+					}
+					
+					if(item.availCoupon.prodDcCoupon.dcMethodCode == 'FlatPrice') {
+			        	$modalEl.find('.list').append('<li>혜택 : <span>' + $B.string.numberFormat(item.availCoupon.prodDcCoupon.flatPrice) + '원 균일가</span>  </li>');
+					} else if(item.availCoupon.prodDcCoupon.dcMethodCode == 'FixedRate') {
+			        	$modalEl.find('.list').append('<li>혜택 : <span>' + $B.string.numberFormat(item.availCoupon.prodDcCoupon.dcRate * 100) + '% 할인</span>  </li>');
+					} else if(item.availCoupon.prodDcCoupon.dcMethodCode == 'FixedAmt') {
+			        	$modalEl.find('.list').append('<li>혜택 : <span>' + $B.string.numberFormat(item.availCoupon.prodDcCoupon.dcAmt) + '원 할인</span>  </li>');
+					}
+					
+					if(item.availCoupon.prodDcCoupon.minPurProdPriceAssignYn == 'Y') {
+			        	$modalEl.find('.list').append('<li>최소결제금액 : <span>' + $B.string.numberFormat(item.availCoupon.prodDcCoupon.minPurProdPrice) + '원</span>  </li>');
+					}
+					if(item.availCoupon.prodDcCoupon.maxDcAmtLimitYn == 'Y') {
+			        	$modalEl.find('.list').append('<li>최대할인금액 : <span>' + $B.string.numberFormat(item.availCoupon.prodDcCoupon.maxDcAmt) + '원</span>  </li>');
+					}
+					
+				} else if(item.availCoupon.couponBenefitTypeCode == 'CartDc') {
+					if(item.availCoupon.cartDcCoupon.dcMethodCode == 'FlatPrice') {
+			        	$modalEl.find('.list').append('<li>혜택 : <span>' + $B.string.numberFormat(item.availCoupon.cartDcCoupon.flatPrice) + '원 할인</span>  </li>');
+					} else if(item.availCoupon.cartDcCoupon.dcMethodCode == 'FixedRate') {
+			        	$modalEl.find('.list').append('<li>혜택 : <span>' + $B.string.numberFormat(item.availCoupon.cartDcCoupon.dcRate * 100) + '% 할인</span>  </li>');
+					} else if(item.availCoupon.cartDcCoupon.dcMethodCode == 'FixedAmt') {
+			        	$modalEl.find('.list').append('<li>혜택 : <span>' + $B.string.numberFormat(item.availCoupon.cartDcCoupon.dcAmt) + '원 균일가</span>  </li>');
+					}
+
+					if(item.availCoupon.cartDcCoupon.sectionTypeCode == 'Amt') {
+			        	$modalEl.find('.list').append('<li>최소결제금액 : <span>' + $B.string.numberFormat(item.availCoupon.cartDcCoupon.fromOrdAmt) + '원</span>  </li>');
+					}
+					if(item.availCoupon.cartDcCoupon.sectionTypeCode == 'Qty') {
+			        	$modalEl.find('.list').append('<li>최소결제수량 : <span>' + $B.string.numberFormat(item.availCoupon.cartDcCoupon.fromOrdQty) + '개</span>  </li>');
+					}
+					if(item.availCoupon.cartDcCoupon.maxDcAmtLimitYn == 'Y') {
+			        	$modalEl.find('.list').append('<li>최대할인금액 : <span>' + $B.string.numberFormat(item.availCoupon.cartDcCoupon.maxDcAmt) + '원</span>  </li>');
+					}
+				} else if(item.availCoupon.couponBenefitTypeCode == 'MPlusN') {
+					if(item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Same')
+		        		$modalEl.find('.list').append('<li>혜택 : <span> 동일상품' + item.availCoupon.mplusnCoupon.baseOrdQty + '개 구매시, ' + item.availCoupon.mplusnCoupon.freeAwardQty + '개 증정!</span>  </li>');
+					if(item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Different') {
+						if(item.availCoupon.mplusnCoupon.freeAwardBaseCode == 'LowestPrice')
+		        			$modalEl.find('.list').append('<li>혜택 : <span> 대상상품' + item.availCoupon.mplusnCoupon.baseOrdQty + '개 구매시, ' + item.availCoupon.mplusnCoupon.freeAwardQty + '개 증정!(최저가 기준)</span>  </li>');
+						else
+		        			$modalEl.find('.list').append('<li>혜택 : <span> 대상상품' + item.availCoupon.mplusnCoupon.baseOrdQty + '개 구매시, ' + item.availCoupon.mplusnCoupon.freeAwardQty + '개 증정!(최고가 기준)</span>  </li>');
+					}
+				} else if(item.availCoupon.couponBenefitTypeCode == 'CartAward') {
+					if(item.availCoupon.cartAwardCoupon.awardTgtCode == 'Prod') {
+		        		$modalEl.find('.list').append('<li>혜택 : <span>사은품 증정!</span>  </li>');
+		        		var prodNm = '';
+		        		item.availCoupon.cartAwardCoupon.awardProds.forEach(function(prodVo) {
+		        			prodNm += ',' + prodVo.prodName + ' (' + prodVo.awardUnitQty + '개) ';
+		        		});
+		        		if(prodNm.length > 0) {
+		        			prodNm = prodNm.substring(1);
+		        		}
+		        		$modalEl.find('.list').append('<li>\t<span>' + prodNm + '</span></li>');
+						
+					}
+					else if(item.availCoupon.cartAwardCoupon.awardTgtCode == 'Point') {
+						if(item.availCoupon.cartAwardCoupon.pointSavingMethodCode == 'FixedRate') {
+			        		$modalEl.find('.list').append('<li>혜택 : <span>구매금액의 ' + $B.string.numberFormat(item.availCoupon.cartAwardCoupon.addPointSavingRate * 100) + '% 를 뷰티포인트로 추가 적립 (적립일로부터 ' + $B.string.numberFormat(item.availCoupon.cartAwardCoupon.addPointValidDays) + '일간 사용가능)</span>  </li>');
+						} else if(item.availCoupon.cartAwardCoupon.pointSavingMethodCode == 'FixedAmt') {
+			        		$modalEl.find('.list').append('<li>혜택 : <span>뷰티포인트 ' + $B.string.numberFormat(item.availCoupon.cartAwardCoupon.addSavingPoint) + 'P 추가적립(적립일로부터 ' + $B.string.numberFormat(item.availCoupon.cartAwardCoupon.addPointValidDays) + '일간 사용가능)</span>  </li>');
+						}
+					}
+		        	
+
+					if(item.availCoupon.cartAwardCoupon.sectionTypeCode == 'Qty') {
+			        	$modalEl.find('.list').append('<li>최소결제수량 : <span>' + $B.string.numberFormat(item.availCoupon.cartAwardCoupon.fromOrdQty) + '개</span>  </li>');
+					}
+					if(item.availCoupon.cartAwardCoupon.sectionTypeCode == 'Amt') {
+			        	$modalEl.find('.list').append('<li>최소결제금액 : <span>' + $B.string.numberFormat(item.availCoupon.cartAwardCoupon.fromOrdAmt) + '원</span>  </li>');
+					}
+				} else if(item.availCoupon.couponBenefitTypeCode == 'Buy1Get') {
+					if(item.availCoupon.buyOneGetCoupon.buy1getDcRate == 1) {
+			        	$modalEl.find('.list').append('<li>혜택 : <span>하나 더!</span>  </li>');
+					} else if(item.availCoupon.buyOneGetCoupon.buy1getDcRate != 1) {
+			        	$modalEl.find('.list').append('<li>혜택 : <span>하나 반값!</span>  </li>');
+					}
+				} else if(item.availCoupon.couponBenefitTypeCode == 'ShipFeeFree') {
+					if(item.availCoupon.shipFeeFreeCoupon.freeShipBenefitTgtCode == 'AllShipFee')
+		        		$modalEl.find('.list').append('<li>혜택 : <span>배송비 무료!</span>  </li>');
+					else {
+		        		$modalEl.find('.list').append('<li>혜택 : <span>배송비 무료!(최고가배송비)</span>  </li>');
+					}
+				}
+				
+				if(item.availCoupon.availCh == 'all')
+	        		$modalEl.find('.list').append('<li>사용가능채널 : <span>PC Web/Mobile Web/Mobile App</span>  </li>');
+				else if(item.availCoupon.availCh == 'onlyMW')
+	        		$modalEl.find('.list').append('<li>사용가능채널 : <span>Mobile Web</span>  </li>');
+				else if(item.availCoupon.availCh == 'onlyMA')
+	        		$modalEl.find('.list').append('<li>사용가능채널 : <span>Mobile App</span>  </li>');
+				else if(item.availCoupon.availCh == 'onlyPC')
+	        		$modalEl.find('.list').append('<li>사용가능채널 : <span>PC Web</span>  </li>');
+				else if(item.availCoupon.availCh == 'exceptMW')
+	        		$modalEl.find('.list').append('<li>사용가능채널 : <span>PC Web/Mobile App</span>  </li>');
+				else if(item.availCoupon.availCh == 'exceptMA')
+	        		$modalEl.find('.list').append('<li>사용가능채널 : <span>PC Web/Mobile Web</span>  </li>');
+				else if(item.availCoupon.availCh == 'exceptPC')
+	        		$modalEl.find('.list').append('<li>사용가능채널 : <span>Mobile Web/Mobile App</span>  </li>');
+					
+				
+				if(item.finalExpExpectedDt)
+	        		$modalEl.find('.list').append('<li>만료일자 : <span>' + formatDate(item.finalExpExpectedDt) + '</span>  </li>');
+		        if(item.expDt)
+	        		$modalEl.find('.list').append('<li>만료일자 : <span>' + formatDate(item.expDt) + '</span>  </li>');
+		        if(item.useDt)
+	        		$modalEl.find('.list').append('<li>사용일자 : <span>' + formatDate(item.useDt) + '</span>  </li>');
+			}
+			function formatDate(date) {
+			    var d = new Date(date),
+			        month = '' + (d.getMonth() + 1),
+			        day = '' + d.getDate(),
+			        year = d.getFullYear();
+
+			    if (month.length < 2) month = '0' + month;
+			    if (day.length < 2) day = '0' + day;
+
+			    return [year, month, day].join('-');
+			}
+
+			
+			var guideHtml = '<dl class="layer">' +
+							'<dt class="layer_title line">쿠폰안내</dt>' +
+							'<dd class="layer_cont">' +
+							'	<div class="coupon_desc">' +
+							'		<ul class="list">' +
+							'		</ul>' +
+							'	</div>' +
+							'	<div class="layer_btns_center">' +
+							'		<a href="javascript:;" class="btn_fix_neutral">확인</a>' +
+							'	</div>' +
+							'</dd>' +
+							'</dl>' +
+							'<button class="layer_close" type="button"><span class="sr_only">레이어 닫기</span></button>';
 		</script>
 	</th:block>
 </body>

@@ -154,7 +154,7 @@
 						this._$totalCount.parent().show();
 					}
 
-					this._$totalCount.text( $B.string.format(e.totalCount, 2) );
+					this._$totalCount.text( $B.string.numberFormat(e.totalCount, 2) );
 					this._$totalPrice.text( $B.string.numberFormat(e.totalPrice) );
 				}.bind(this))
 				.addListener( 'spinner-change', function (e) {

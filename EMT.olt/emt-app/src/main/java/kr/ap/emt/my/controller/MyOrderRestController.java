@@ -101,6 +101,7 @@ public class MyOrderRestController extends AbstractController {
 	@PostMapping("/cashReceiptIssueRequest")
 	public ResponseEntity<?> cashReceiptIssueRequest(Long ordSn, CashReceiptIssueRequest ir, String issueNum) {
 
+		HashMap<String, Object> result = new HashMap<String, Object>();
 		//휴대폰 번호, 카드번호, 사업자 등록번호 구분
 		String phoneRegex = "(010|011|016|017|018|019)\\d{7,8}";
 
@@ -113,13 +114,16 @@ public class MyOrderRestController extends AbstractController {
 			ir.setBrnNo(issueNum);
 		}
 
-		// 현금영수증 목록 조회 api
-		BooleanResult result = orderApi.cashReceiptIssueRequest(ordSn, ir);
-		if(!result.isResult()) {
-			throw error(HttpStatus.FORBIDDEN, "EAPI001", "fail");
-		}
+		System.out.println("ordSn: " + ordSn);
+		System.out.println("getPhoneNo: " + ir.getPhoneNo().getPhoneNo());
+		System.out.println("setCardNo: " + ir.getCardNo());
+		System.out.println("setBrnNo: " + ir.getBrnNo());
 
-		return ResponseEntity.ok(null);
+
+		// 현금영수증 목록 조회 api
+		BooleanResult br = orderApi.cashReceiptIssueRequest(ordSn, ir);
+		result.put("data", br.isResult() ? "success" : "fail");
+		return ResponseEntity.ok(result);
 	}
 
 	@GetMapping("/getOrderShippingList")
@@ -221,9 +225,19 @@ public class MyOrderRestController extends AbstractController {
 				break;
 
 			case "cancel" :
+				ClaimReasonListResult reasonResult = orderApi.getClaimReasonList("Cancel");
+				Integer sn = 1;
+				if (reasonResult != null && reasonResult.getTotalCount() > 0) {
+					for (ClaimReasonEx r : reasonResult.getClaimReasonExList()) {
+						if ("Y".equals(r.getCustomerFaultYn())) {
+							sn = r.getClaimReasonSn();
+						}
+					}
+				}
+
 				OrdCancelSelectInfo ocs = new OrdCancelSelectInfo();
 				ocs.setOrdCancelAllYn("N");
-				ocs.setCancelAllReasonSn(10L);
+				ocs.setCancelAllReasonSn(Long.valueOf(sn));
 				ocs.setCancelAllReason("cancel");
 
 				List<OrdCancelProd> cancelList = new ArrayList<>();
@@ -234,7 +248,7 @@ public class MyOrderRestController extends AbstractController {
 						ocp.setCancelQty(ex.getOrdQty());
 						ocp.setOrdHistProdNo(ex.getOrdHistProdNo());
 
-						ocp.setCancelReasonSn(ex.getReceivedClaimReasonSn());
+						ocp.setCancelReasonSn(Long.valueOf(sn));
 						ocp.setCancelReason(ex.getFoReceivedClaimReason());
 
 
@@ -325,10 +339,19 @@ public class MyOrderRestController extends AbstractController {
 				break;
 
 			case "cancel" :
+				ClaimReasonListResult reasonResult = orderApi.getClaimReasonList("Cancel");
+				Integer sn = 1;
+				if (reasonResult != null && reasonResult.getTotalCount() > 0) {
+					for (ClaimReasonEx r : reasonResult.getClaimReasonExList()) {
+						if ("Y".equals(r.getCustomerFaultYn())) {
+							sn = r.getClaimReasonSn();
+						}
+					}
+				}
 
 				OrdCancelCompleteInfo occ = new OrdCancelCompleteInfo();
 				occ.setOrdCancelAllYn("N");
-				occ.setCancelAllReasonSn(71L);
+				occ.setCancelAllReasonSn(Long.valueOf(sn));
 				List<OrdCancelProd> cancelList = new ArrayList<>();
 
 //					for (OrdOnlineProdFoDTO d : dto) {
@@ -337,7 +360,7 @@ public class MyOrderRestController extends AbstractController {
 						ocp.setOrdHistProdNo(ex.getOrdHistProdNo());
 						ocp.setCancelQty(ex.getOrdQty());
 
-						ocp.setCancelReasonSn(ex.getReceivedClaimReasonSn());
+						ocp.setCancelReasonSn(Long.valueOf(sn));
 						ocp.setCancelReason(ex.getFoReceivedClaimReason());
 
 						cancelList.add(ocp);

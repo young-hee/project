@@ -25,9 +25,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.emt.display.vo.RequestBrand;
 import net.g1project.ecp.api.model.BooleanResult;
@@ -124,20 +124,25 @@ public class BrandRestController extends AbstractController {
     public ResponseEntity<?> registStoreEval(@Valid StoreEvalPost storeEvalPost, MultipartFile[] picture, HttpServletRequest req) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 			   
-		if (!ObjectUtils.isEmpty(picture)) {
-			List<UploadingFile> files = imageSettingList(picture);
-			storeEvalPost.setFiles(files);
+		if(isLoggedIn()) {
+			
+			if (!ObjectUtils.isEmpty(picture)) {
+				List<UploadingFile> files = imageSettingList(picture);
+				storeEvalPost.setFiles(files);
+			}
+	
+			storeEvalPost.setMemberSn( getMemberSn());
+	
+			BooleanResult booleanResult = storeApi.postStoreEvaluation(storeEvalPost);
+	
+			result.put("booleanResult", booleanResult);
+
+			return ResponseEntity.ok(result);
+		}else {
+		
+			return ResponseEntity.ok(result);
 		}
-
-		storeEvalPost.setMemberSn( getMemberSn());
-
-		BooleanResult booleanResult = storeApi.postStoreEvaluation(storeEvalPost);
-
-		result.put("booleanResult", booleanResult);
-
-		return ResponseEntity.ok(result);
-
-    }
+	}
 	
 	/**
 	 * 매장칭찬수정
@@ -146,18 +151,26 @@ public class BrandRestController extends AbstractController {
     public ResponseEntity<?> updateStoreEval(@Valid StoreEvalPut storeEvalUpdateInfo, Long storeEvalSn, MultipartFile[] picture, HttpServletRequest req) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
-		if (!ObjectUtils.isEmpty(picture)) {
-			List<UploadingFile> files = imageSettingList(picture);
-			storeEvalUpdateInfo.setFiles(files);
+		if(isLoggedIn()) {
+			
+			if (!ObjectUtils.isEmpty(picture)) {
+				List<UploadingFile> files = imageSettingList(picture);
+				storeEvalUpdateInfo.setFiles(files);
+			}
+	
+			storeEvalUpdateInfo.setMemberSn( getMemberSn());
+			
+			
+			 storeEvalUpdateInfo.getStoreEvalBodyText(); // //html 필터
+			
+			BooleanResult booleanResult = storeApi.updateStoreEvaluation(storeEvalSn, storeEvalUpdateInfo);
+			result.put("booleanResult", booleanResult);
+	
+			return ResponseEntity.ok(result);
+		}else {
+		
+			return ResponseEntity.ok(result);
 		}
-
-		storeEvalUpdateInfo.setMemberSn( getMemberSn());
-
-		BooleanResult booleanResult = storeApi.updateStoreEvaluation(storeEvalSn, storeEvalUpdateInfo);
-		result.put("booleanResult", booleanResult);
-
-		return ResponseEntity.ok(result);
-
     }
 	
 	/**
@@ -169,10 +182,16 @@ public class BrandRestController extends AbstractController {
     public ResponseEntity<?> removeStoreEval( RequestBrand requestBrand) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
-		BooleanResult booleanResult = storeApi.removeStoreEval(requestBrand.getStoreEvalSn(), getMemberSn());
-		result.put("booleanResult", booleanResult);
-
+		if(isLoggedIn()) {
+			
+			BooleanResult booleanResult = storeApi.removeStoreEval(requestBrand.getStoreEvalSn(), getMemberSn());
+			result.put("booleanResult", booleanResult);
+	
+			return ResponseEntity.ok(result);
+		}else {
+	
 		return ResponseEntity.ok(result);
+		}
     }
 	
 	/**
@@ -330,23 +349,28 @@ public class BrandRestController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/postStoreEventRequester")
-    public ResponseEntity<?> postStoreEventRequester(StoreEventRequesterPost storeEventRequesterPost, String preName, String cellNum) {
+    public ResponseEntity<?> postStoreEventRequester(StoreEventRequesterPost storeEventRequesterPost, String preName, String prePhoneNo) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		
 		EmbeddableName embeddableName = new EmbeddableName();
 		embeddableName.setName1(preName);
 
 		EmbeddableTel embeddableTel = new EmbeddableTel();
-		embeddableTel.setPhoneNo(cellNum);
+		embeddableTel.setCountryNo(storeEventRequesterPost.getNationality());
+		embeddableTel.setPhoneNo(prePhoneNo);
 
 		storeEventRequesterPost.setName(embeddableName);
 		storeEventRequesterPost.setPhoneNo1(embeddableTel);
 
-		Long memberSn = getMemberSn();
-
 		if(isLoggedIn()) {
 			storeEventRequesterPost.setMemberYn("Y");
-			storeEventRequesterPost.setMemberSn(memberSn);
+			storeEventRequesterPost.setMemberSn(getMemberSn());
+			storeEventRequesterPost.setMemberId(getMemberSession().getMember().getMemberId());
+			
+		}else {
+			storeEventRequesterPost.setMemberYn("N");
+			//storeEventRequesterPost.setMemberSn(0L);
+			//storeEventRequesterPost.setMemberId("");
 		}
 
 		StoreEventRequesterResult storeEventRequesterResult = storeApi.postStoreEventRequester( storeEventRequesterPost);
@@ -511,13 +535,17 @@ public class BrandRestController extends AbstractController {
 			supportersRequester.setFiles(files);
 		}
 		
-
 		net.g1project.ecp.api.model.EmbeddableAddress address = new net.g1project.ecp.api.model.EmbeddableAddress();
 		address.setAddress1(req.getParameter("preLocal"));
 		supportersRequester.setRequesterAddress(address); // 지역 setting
 
 		EmbeddableTel tel = new EmbeddableTel();
-		tel.setPhoneNo(req.getParameter("prePhoneNo"));
+		
+		if(!isMobileDevice()) {
+			tel.setPhoneNo(req.getParameter("cellNum"));
+		}else {
+			tel.setPhoneNo(req.getParameter("prePhoneNo"));
+		}
 		supportersRequester.setRequesterPhoneNo(tel); // phone setting
 
 		supportersRequester.setMemberId(getMemberSession().getMember().getMemberId()); // 회원ID
@@ -526,19 +554,32 @@ public class BrandRestController extends AbstractController {
 
 		// 대외활동은 PC기준 10개
 		List<RequesterHist> requstHistList = new ArrayList<RequesterHist>();
-
+		String[] activityDate =null ;
+		String[] activityStartDate = null;
+		String[] activityEndDate = null; 
 		RequesterHist requestHist = new RequesterHist();
 		if(req.getParameterValues("activityType") != null) {
+			if(req.getParameterValues("activityDate") != null) {
+				activityDate = req.getParameterValues("activityDate");
+				activityStartDate = new String[activityDate.length];
+				activityEndDate = new String[activityDate.length];
+			}else {
+				activityStartDate = req.getParameterValues("activityStartDate");
+				activityEndDate = req.getParameterValues("activityEndDate");
+			}
+			
 			String[] activityType = req.getParameterValues("activityType");
 			String[] activityBodyText = req.getParameterValues("activityBodyText");
 			String[] activityName = req.getParameterValues("activityName");
-			String[] activityStartDate = req.getParameterValues("activityStartDate");
-			String[] activityEndDate = req.getParameterValues("activityEndDate");
+			
 			SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
 	
 			if(activityType.length > 0) {
 				for(int index = 0; index < activityType.length; index++) {
-	
+					if(req.getParameterValues("activityDate") != null) {
+						activityStartDate[index] = activityDate[index].split("~")[0];
+						activityEndDate[index] = activityDate[index].split("~")[1];
+					}
 					requestHist.setActivityType(activityType[index]);//activityType);
 					requestHist.setActivityBodyText(activityBodyText[index]);//activityBodyText);
 					requestHist.setActivityName(activityName[index]);//activityName);
@@ -550,15 +591,18 @@ public class BrandRestController extends AbstractController {
 				supportersRequester.setSupportersRequesterHist(requstHistList);
 			}	
 		}
-		if(("Complete").equals(supportersRequester.getRequestStatus())){
-			if(req.getParameter("check_all")!= null ||
-					(req.getParameter("check_agree_1").equals("on") && req.getParameter("check_agree_2").equals("on")
-							&& req.getParameter("check_agree_3").equals("on"))) { // 전체동의가 체크되어있거나 동의1,2,3 이 모두 체크되어있다면 동의 체크
-
-				supportersRequester.setTermsAgreeYn(req.getParameter("check_all").equals("on") ? "Y" : "N"); // 동의
+		
+		if(!isMobileDevice()) {
+			if(("Complete").equals(supportersRequester.getRequestStatus())){
+				if(req.getParameter("check_all")!= null ||
+						(req.getParameter("check_agree_1").equals("on") && req.getParameter("check_agree_2").equals("on")
+								&& req.getParameter("check_agree_3").equals("on"))) { // 전체동의가 체크되어있거나 동의1,2,3 이 모두 체크되어있다면 동의 체크
+	
+					supportersRequester.setTermsAgreeYn(req.getParameter("check_all").equals("on") ? "Y" : "N"); // 동의
+				}
 			}
 		}
-
+		
 		BooleanResult booleanResult = bbsApi.requestSupporters(supportersSn, supportersRequester);
 		result.put("booleanResult", booleanResult);
 

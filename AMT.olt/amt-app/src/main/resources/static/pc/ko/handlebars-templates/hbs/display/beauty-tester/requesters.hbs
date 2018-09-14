@@ -1,23 +1,29 @@
 						<h3 class="sr_only">신청자({{this.requesters.totalCount}})</h3>
 						<ul class="comment_list">
-							{{#each this.requesters.regularEventRequesters}}
-							<li>
-								<div>
-									<div class="user_area">
-										<p class="">{{this.memberId}}<span>{{this.memberLevel}}</span></p>
-										<div class="control">
-											{{#xif (contains ../ownRequesterSnList this.regularEventRequesterSn) '==' true}}
-                                            <button type="button" class="edit"><span class="ie_press">수정</span></button>
-                                            <button type="button" class="delete"><span class="ie_press">삭제</span></button>
-                                            {{/xif}}
-											<span>2018.05.06</span>
-                                        </div>
+							{{#xif this.requesters.regularEventRequesters.length '==' 0}}
+								<li><div><div class="cont" style="text-align:center;">신청자가 없습니다.</div></div></li>
+							{{/xif}}
+							{{#xif this.requesters.regularEventRequesters.length '>' 0}}
+								{{#each this.requesters.regularEventRequesters}}
+								<li>
+									<div>
+										<div class="user_area">
+											<p class="">{{this.memberId}}<span>{{this.memberLevel}}</span></p>
+											<div class="control">
+												{{#xif (contains ../ownRequesterSnList this.regularEventRequesterSn) '==' true}}
+	                                            <button type="button" class="edit"><span class="ie_press">수정</span></button>
+	                                            <button type="button" class="delete"><span class="ie_press">삭제</span></button>
+	                                            {{/xif}}
+												<span>2018.05.06</span>
+	                                        </div>
+										</div>
+										<div class="cont">
+											<p>{{this.requestReason}}</p>
+										</div>
+										<p class="url ellipsis"><a href="#none">{{this.personalHomepageUrl}}</a></p>
 									</div>
-									<div class="cont">
-										<p>{{this.requestReason}}</p>
-									</div>
-									<p class="url ellipsis"><a href="#none">{{this.personalHomepageUrl}}</a></p>
-								</div>
-							</li>
-							{{/each}}
+								</li>
+								{{/each}}
+							{{/xif}}
+							
 						</ul>

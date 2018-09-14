@@ -1,16 +1,19 @@
-<html ap:decorate="~{layout/only-member-info}">
+<html ap:decorate="~{layout/layout-member-modify}">
 <body>
         <!-- #ap_container -->
         <div ap:fragment="layout-contents">
 
-            <div class="layer_popup fullpage">
-                <div class="layer_wrap">
-                    <dl class="layer">
-                        <dt class="layer_title">회원정보</dt>
-                        <dd class="layer_cont">
+		<div id="progress" style="top: calc(30% - 80px);left: calc(50% - 80px);position: fixed;z-index: 10;opacity: 1;display: none;">
+			   <div class="loading_full">
+					<span>
+						<img alt="" src="/mo/ko/images/common/loading.gif" style="-webkit-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.20);-moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.20);box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.20);background-color: white;border-radius: 80px;">
+					</span>
+			   </div>
+		 </div>
+
 							<div class="member_wrap">
-								<form class="pass-check">
 									<!--/* [S] 비밀번호 수정 */-->
+									<form class="pass-check">
 										<fieldset>
 											<legend class="sr_only">비밀번호 수정</legend>
 											<div class="grid_area">
@@ -89,8 +92,8 @@
 																</div>
 															</div>
 															<div class="check_set clear">
-																<span class="check_wrap"><input type="radio" name="slccCd" id="radio1" value="P" checked=""><label for="radio1">양력</label></span><!--/* 공통 : input id 값 변경 시 label for 값도 동일하게 변경해주세요 */-->
-																<span class="check_wrap"><input type="radio" name="slccCd" id="radio2" value="L"><label for="radio2">음력</label></span>
+																<span class="check_wrap"><input type="radio" name="birthType" value="S" id="solar" th:checked="${session.LOGIN_USER.member.solarLunarCode == 'Solar'}"><label for="solar">양력</label></span>
+																<span class="check_wrap"><input type="radio" name="birthType" value="L" id="lunar" th:checked="${session.LOGIN_USER.member.solarLunarCode == 'Lunar'}"><label for="lunar">음력</label></span>
 															</div>
 														</div>
 													</div>
@@ -123,7 +126,7 @@
 												<div class="grid">
 													<div class="boxing">
 														<div class="input_group">
-															<input type="text" id="email" th:value="${session.LOGIN_USER.member.emailAddress}" email="email" name="email" title="이메일 주소 입력">
+															<input type="text" id="email" th:value="${session.LOGIN_USER.member.emailAddress}" email2="email2" name="email" title="이메일 주소 입력">
 															<div class="help">
 																<span class="rating completion on"><span class="sr_only">완료</span></span><!-- 공통 : 완료 시 class="on" 추가 -->
 															</div>
@@ -139,15 +142,15 @@
 																<button type="button" class="btn_find_addresses">검색</button>
 															</div>
 														</div>
-			                            				<div class="address_list"></div>
-			                            				
-														<input th:value="${session.LOGIN_USER.member.address != null? (session.LOGIN_USER.member.address.zipCode) : ''}" type="hidden" class="post_code" name="homeZip" title="우편번호 입력" placeholder="우편번호" readonly>
-														<div class="input_group">
+														<div class="address_list"></div>
+			                            				<input th:value="${session.LOGIN_USER.member.address != null? (session.LOGIN_USER.member.address.zipCode) : ''}" type="hidden" class="post_code" name="homeZip" title="우편번호 입력" placeholder="우편번호" readonly>
+														<div class="input_group mgtm1">
 															<input type="text"name="homeBscsAddr" th:value="${session.LOGIN_USER.member.address != null? (session.LOGIN_USER.member.address.address1) : ''}" class="address_first" title="기본주소 입력" placeholder="기본주소" readonly="">
 														</div>
 														<div class="input_group">
 															<input type="text" th:value="${session.LOGIN_USER.member.address != null? (session.LOGIN_USER.member.address.address2) : ''}" name="homeDtlAddr" class="address_last" title="상세주소 입력" placeholder="상세주소를 입력해주세요.">
 														</div>
+														
 													</div>
 												</div>
 												<div class="form_btns">
@@ -159,7 +162,6 @@
 									<!--/* [E] 개인정보 수정 */-->
 
 									<!--/* [S] 광고성 정보 수신 동의 */-->
-									
 									<form class="option-info grid_area">
 										<div class="grid_area">
 											<strong class="tit_member mgb40">광고성 정보 수신 동의</strong>
@@ -169,7 +171,10 @@
 											<dl class="agree_marketing">
 												<dt>뷰티포인트 수신 동의</dt>
 												<dd>
-													<div class="check_set">
+													<div class="check_set check1">
+														<span class="check_wrap">
+															<input type="checkbox" id="check_all1"><label for="check_all1">전체선택</label>
+														</span>
 					               						<span class="check_wrap">
 					               							<input type="checkbox" id="ap_agree2_1" name="apReceive[0].value" th:checked="${apReceiveMap.get('Email')}" />
 					               							
@@ -191,7 +196,10 @@
 												</dd>
 												<dt>온라인 사이트 수신 동의</dt>
 												<dd>
-													<div class="check_set">
+													<div class="check_set check2">
+														<span class="check_wrap">
+															<input type="checkbox" id="check_all2"><label for="check_all2">전체선택</label>
+														</span>
 					               						<span class="check_wrap">
 					               							<input type="checkbox" id="agree2_1" name="receive[0].value" th:checked="${receiveMap.get('Email')}" />
 					               							
@@ -272,159 +280,262 @@
 												<p>유의사항 안내를 확인하신 후<br> 신중하게 진행해 주시기 바랍니다.
 											</div>
 											<div class="form_btns">
-												<button type="button" onclick="location.href='/my/page/leaveId'" class="btn_md_bordered">회원탈퇴 이동</button>
+												<button type="button" onclick="leaver()" class="btn_md_bordered">회원탈퇴 이동</button>
 											</div>
 										</div>
 									</div>
 									<!--/* [E] 회원탈퇴 */-->
-								</form>
 							</div>
-						</dd>
-                    </dl>
-                    <button class="layer_close" onclick="changeTermsInfo()" type="button">레이어 닫기</button>
-                </div>
-            </div>
         </div>
 
     <!--/* 하단 js등을 실행하는 마지막 영역 */-->
     <th:block ap:fragment="layout-endpoint">
-    <style>
-	    .address_list ul li a p {
-		    display: block;
-		    padding: 15px 0;
-		    border-bottom: 1px solid #e5e5e5;
-		    color: #999;
-		    line-height: 1.5;
-		    padding-left: 10px;
-		}
-    </style>
-		<script>
-		$('.ui_find_addresses').findAddresses();
-		function checkSpecial(str) { 
-			var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
-			if(special_pattern.test(str) == true) {
-				return true; 
-			} else { 
-				return false; 
+	    <style>
+		    .address_list ul li a p {
+			    display: block;
+			    padding: 15px 0;
+			    border-bottom: 1px solid #e5e5e5;
+			    color: #999;
+			    line-height: 1.5;
+			    padding-left: 10px;
 			}
-		}
-		function lowerCheck(original) {
-		    var lower = original.toLowerCase();
-		    if (original != lower) {
-		    	return false;
-		    }
-		    	return true;
-		 }
-		$('#ori-pass').keyup( function() {
-			if($(this).val()) {
-				$(this).parent().parent().find('p').text('');
-			} else {
-				$(this).parent().parent().find('p').text('비밀번호를 입력하세요.');
-			}
-		});
-		$('#email').keyup( function() {
-			var email = $('#email');
-	    	var error = email.parent().find('div span');
-			if(email.valid()) {
-				if(email.val()) {
-					email.parent().parent().find('p').text('');
-					error.addClass('on');
-				} else {
-					email.parent().parent().find('p').text('이메일 주소를 입력하세요.');
-					error.removeClass('on');
-				}
-			} else {
-				error.removeClass('on');
-				if(email.val()) {
-					email.parent().parent().find('p').text('형식에 맞지 않는 메일주소 입니다.');
-				} else {
-					email.parent().parent().find('p').text('이메일 주소를 입력하세요.');
+	    </style>
+			<script>
+
+			$('.ui_find_addresses').findAddresses();
+			function checkSpecial(str) { 
+				var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+				if(special_pattern.test(str) == true) {
+					return true; 
+				} else { 
+					return false; 
 				}
 			}
-		});
-		$('#pass1').keyup(function() {
-
-		    var userPwdEc = $('#pass1');
-			if($(this).val()) {
-				$(this).parent().parent().find('p').text('');
-			} else {
-				$(this).parent().parent().find('p').text('비밀번호를 입력하세요.');
-			}
-		    if(userPwdEc.valid()) {
-		    	var password = $(this).val();
-		    	var point = 0;
-		    	var spacialCharPoint = 0;
-		    	for(var i = 0; i < password.length; i++) {
-		    		var c = password.charAt(i);
-		    		console.log('char=' + c);
-		    		if(checkSpecial(c)) {
-		    			spacialCharPoint += 5;
-		    		} else if(!lowerCheck(c)) {
-		    			spacialCharPoint += 2;
-		    		}
-		    		var temp = ((i - 4) * i);
-		    		if(temp > 0)
-		    			point += temp;
-		    	}
-		    	point += spacialCharPoint * password.length;
-			    	var error = $(this).parent().find('div span');
-				if(110 > point) {
-			    	error.removeClass('notused');
-			    	error.removeClass('safety');
-			    	error.removeClass('usually');
-			    	error.addClass('threat');
-			    	error.text('위험');
-				} else if(300 > point) {
-			    	error.removeClass('notused');
-			    	error.removeClass('safety');
-			    	error.addClass('usually');
-			    	error.removeClass('threat');
-			    	error.text('보통');
-				} else {
-			    	error.removeClass('notused');
-			    	error.addClass('safety');
-			    	error.removeClass('usually');
-			    	error.removeClass('threat');
-			    	error.text('안전');
-				}
-		    } else {
-		    	var error = $(this).parent().find('div span');
-		    	error.addClass('notused');
-		    	error.removeClass('safety');
-		    	error.removeClass('usually');
-		    	error.removeClass('threat');
-		    	error.text('사용불가');
-		    	
-		    }
-		});
-		$('#pass2').keyup(function() {
-
-
-	    	var error = $(this).parent().find('div span');
-		    if($(this).val() == $('#pass1').val()) {
-				$(this).parent().parent().find('p').text('');
-				error.addClass('on');
-		    } else {
+			$('#ori-pass').keyup( function() {
 				if($(this).val()) {
-					$(this).parent().parent().find('p').text('새 비밀번호가 일치하지 않습니다.');
+					$(this).parent().parent().find('p').text('');
 				} else {
-					$(this).parent().parent().find('p').text('비밀번호 확인을 입력하세요.');
+					$(this).parent().parent().find('p').text('비밀번호를 입력하세요.');
 				}
-				error.removeClass('on');
-		    	
-		    }
-		});
-		function changePassword() {
+			});
+			$('#email').keyup( function() {
+				var email = $('#email');
+		    	var error = email.parent().find('div span');
+				if(email.valid()) {
+					if(email.val()) {
+						email.parent().parent().find('p').text('');
+						error.addClass('on');
+					} else {
+						email.parent().parent().find('p').text('이메일 주소를 입력하세요.');
+						error.removeClass('on');
+					}
+				} else {
+					error.removeClass('on');
+					if(email.val()) {
+						email.parent().parent().find('p').text('형식에 맞지 않는 메일주소 입니다.');
+					} else {
+						email.parent().parent().find('p').text('이메일 주소를 입력하세요.');
+					}
+				}
+			});
+			$('#pass1').keyup(function() {
 
-	        if ($(".pass-check").valid()) {
+			    var userPwdEc = $('#pass1');
+				if($(this).val()) {
+					$(this).parent().parent().find('p').text('');
+				} else {
+					$(this).parent().parent().find('p').text('비밀번호를 입력하세요.');
+				}
+			    if(userPwdEc.valid()) {
+			    	var password = $(this).val();
+
+			    	var password = $(this).val();
+					var patt_cont = /(0123)|(1234)|(2345)|(3456)|(4567)|(5678)|(6789)|(7890)|(abcd)|(bcde)|(cdef)|(defg)(efgh)|(fghi)|(ghij)|(hijk)|(ijkl)|(jklm)|(klmn)|(lmno)|(mnop)|(nopq)|(opqr)|(pqrs)|(qrst)|(rstu)|(stuv)|(tuvw)|(uvwx)|(vwxy)|(wxyz)/;
+			    	var pattern1 = /(\w)\1\1\1/.test(password)
+					var pattern2 = patt_cont.test(password) || patt_cont.test(password.split("").reverse().join(""));
+			    	
+			    	var passwordArray = password.split('');
+			    	
+			    	var uniq = passwordArray.reduce(function(a,b) {
+			    		if(a.indexOf(b) < 0) a.push(b);
+			    		return a;
+			    	},[]); 
+			    	
+			    	var pattern3 = uniq.length < 4;
+			    	
+			    	var pattern4 = password.length < 10;
+
+					var regex1 = password.search(/[0-9]/g),
+						regex2 = password.search(/[a-z]/g),
+						regex3 = password.search(/[A-Z]/g),
+						regex4 = password.search(/[!"#$%&'()*+,-./:;<=>?@[＼\]^_`{|}~]/gi);
+
+					var i1 = regex1 >= 0 ? 1 : 0,
+						i2 = regex2 >= 0 ? 1 : 0,
+						i3 = regex3 >= 0 ? 1 : 0,
+						i4 = regex4 >= 0 ? 1 : 0;
+					var pattern5 =(i1+i2+i3+i4 < 3);
+					
+					var count = 0;
+					
+					if(pattern1 || pattern2) count++;
+					if(pattern3) count++;
+					if(pattern4 && pattern5) count++;
+					
+
+			    	var error = $(this).parent().find('div span');
+					if(count < 1) {
+				    	error.removeClass('notused');
+				    	error.addClass('safety');
+				    	error.removeClass('usually');
+				    	error.removeClass('threat');
+				    	error.text('안전');
+					} else if(count < 2) {
+				    	error.removeClass('notused');
+				    	error.removeClass('safety');
+				    	error.addClass('usually');
+				    	error.removeClass('threat');
+				    	error.text('보통');
+					} else {
+				    	error.removeClass('notused');
+				    	error.removeClass('safety');
+				    	error.removeClass('usually');
+				    	error.addClass('threat');
+				    	error.text('위험');
+					}
+			    } else {
+			    	var error = $(this).parent().find('div span');
+			    	error.addClass('notused');
+			    	error.removeClass('safety');
+			    	error.removeClass('usually');
+			    	error.removeClass('threat');
+			    	error.text('사용불가');
+			    	
+			    }
+			}
+			
+			    );
+			
+			
+			function reload() {
+				location.reload();
+			}
+
+			$('.check1 input').on('click', function() {
+			    if ($(this).attr('id') == 'check_all1') {
+			    	
+			    	$(this).parent().parent().find("input[type=checkbox]").prop('checked', $(this).prop('checked'));
+			    	
+			    } else {
+
+		    		var isAll = true;
+		    		
+			    	$(this).parent().parent().find("input[type=checkbox]").each(function() {
+			    		if($(this).attr('id') != 'check_all1') {
+			    			if(!$(this).prop('checked')) {
+			    				isAll = false;
+			    			}
+			    		}
+			    	});
+
+					$('#check_all1').prop('checked', isAll);
+			    }
+			});
+			$('.check2 input').on('click', function() {
+			    if ($(this).attr('id') == 'check_all2') {
+			    	
+			    	$(this).parent().parent().find("input[type=checkbox]").prop('checked', $(this).prop('checked'));
+			    	
+			    } else {
+
+		    		var isAll = true;
+		    		
+			    	$(this).parent().parent().find("input[type=checkbox]").each(function() {
+			    		if($(this).attr('id') != 'check_all2') {
+			    			if(!$(this).prop('checked')) {
+			    				isAll = false;
+			    			}
+			    		}
+			    	});
+
+					$('#check_all2').prop('checked', isAll);
+			    }
+			});
+			$('.check3 input').on('click', function() {
+			    if ($(this).attr('id') == 'check_all3') {
+			    	
+			    	$(this).parent().parent().find("input[type=checkbox]").prop('checked', $(this).prop('checked'));
+			    	
+			    } else {
+
+		    		var isAll = true;
+		    		
+			    	$(this).parent().parent().find("input[type=checkbox]").each(function() {
+			    		if($(this).attr('id') != 'check_all3') {
+			    			if(!$(this).prop('checked')) {
+			    				isAll = false;
+			    			}
+			    		}
+			    	});
+
+					$('#check_all3').prop('checked', isAll);
+			    }
+			});
+			$('.check4 input').on('click', function() {
+			    if ($(this).attr('id') == 'check_all4') {
+			    	
+			    	$(this).parent().parent().find("input[type=checkbox]").prop('checked', $(this).prop('checked'));
+			    	
+			    } else {
+
+		    		var isAll = true;
+		    		
+			    	$(this).parent().parent().find("input[type=checkbox]").each(function() {
+			    		if($(this).attr('id') != 'check_all4') {
+			    			if(!$(this).prop('checked')) {
+			    				isAll = false;
+			    			}
+			    		}
+			    	});
+
+					$('#check_all4').prop('checked', isAll);
+			    }
+			});
+			
+			$('#send').click(function() {
+				if(isPopup) {
+					pwd = $('[name=userPwdEc]').val();
+					$('#send').attr('disabled', 'disabled');
+		            AP.api.checkPassword({}, { userPwdEc : pwd }).done(function(data) {
+		            	$('[name=userPwdEc]').val('');
+		    			reload();
+		    			
+	                }).fail(function(xhr, textStatus, errorThrown) {
+	                	AP.modal.alert("비밀번호가 일치하지 않습니다");
+	    	            $("#send").removeAttr("disabled");
+	                }).always(function() {
+	                    //성공, 실패
+	                });
+				} else {
+		    	    $(this).attr("disabled", "disabled");
+					$('form').submit();
+				}
+			});
+
+			function changePassword() {
+
+				var $form = $('.pass-check');
+		        if (!$form.valid()) {
+		        	return;
+		        }
 	            if ($("#pass1").val() != $("#pass2").val()) {
 	                AP.modal.alert("새 비밀번호가 일치하지 않습니다.");
 	                return false;
 	            }
 
-	            AP.api.changePwd2({}, AP.common.getFormData($('.pass-check'))).done(function(data) {
+	            AP.api.changePwd2({}, AP.common.getFormData($form)).done(function(data) {
 	                AP.modal.alert("비밀번호가 변경되었습니다.").addListener('modal-close', function(e) {
-						location.reload(true);
+						reload();
 	                });
 	            }).fail(function(xhr, textStatus, errorThrown) {
 	                if (xhr.errorCode == 0) {
@@ -437,186 +548,353 @@
 	            }).always(function() {
 	                //성공, 실패
 	            });
+			}
+	        function phoneNumChange() {
+
+			    $.get("/my/page/info/changePhoneForm", function(data) {
+			        /**
+			         * 동적으로 생성된 modal의 Node Element 접근하기
+			         * alert, confirm, info 모두 동일
+			         */
+
+					var authVo = null;
+			        var contents = new Object();
+			        contents.contents = data;
+
+			        var t = new AP.common.timeCountDown(3, function() {
+			        	if($('#number').size() == 0) return;
+			    		window.alert('3분 이내에 인증번호를 입력 하지 않으셨습니다. 인증번호 전화번호 입력란으로 이동합니다.');
+			    		$('#number').focus();
+			    	});
+
+			        var modal = AP.modal.full(contents);
+			        var $modalEl = modal.getElement(); //jquery object
+
+			        $modalEl.find('input[type=tel]').keydown(function(event) {
+			    	    if (event.keyCode) {
+			    	        var code = event.keyCode;
+			    	        if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+			    	            return true;
+			    	        } else {
+			    	            return false;
+			    	        }
+			    	    } else if (e.which) {
+			    	        var code = e.which;
+			    	        if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+			    	            return true;
+			    	        } else {
+			    	            return false;
+			    	        }
+			    	    }
+			    	});
+
+			        $modalEl.find('input[type=tel]').keyup(function(event) {
+			    	    event = event || window.event;
+			    	    var keyID = (event.which) ? event.which : event.keyCode;
+			    	    if (keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39)
+			    	        return;
+			    	    else
+			    	        event.target.value = event.target.value.replace(/[^0-9]/g, "");
+			    	});
+			        $modalEl.find('#cert').click(function() {
+						if(!$modalEl.find('form').valid()) return;
+			        	
+			        	var data = AP.common.getFormData($modalEl.find('form'));
+			        	
+
+			            AP.api.simpleCertifySend({}, data).done(function(data) {
+			            	authVo = data;
+	                        if (t.isRunning()) {
+	                            t.stop();
+	                        }
+	                        t.start();
+		                    AP.modal.alert("인증번호가 전송되었습니다.");
+		                    
+			            	
+			            }).fail(function(xhr, textStatus, errorThrown) {
+			                if (xhr.errorCode == 0) {
+			                    AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+			                } else {
+			                    AP.modal.alert(xhr.errorMessage);
+			                }
+			            }).always(function() {
+			                //성공, 실패
+			            });
+			        	
+			        });
+			        $modalEl.find('button.btn_primary_md').click(function() {
+			        	var data = AP.common.getFormData($modalEl.find('form'));
+			        	if(!$('#number').val()) {
+						    AP.modal.alert("인증번호를 입력해 주세요.").addListener( 'modal-close', function (e) {
+						    	$('#number').focus();
+							});
+							return;
+			        	}
+			        	if(authVo != null) {
+							if(!t.isRunning()) {
+							    AP.modal.alert("입력시간 초과했습니다. 인증번호 재전송 버튼을 눌러 인증 절차를 다시 진행하십시오.");
+								return;
+							}
+				            AP.api.simpleCertifyCheck({}, {
+				            	mobileVerifSn : authVo.mobileVerifSn,
+				            	mobileVerifKey : $('#number').val()
+				            	
+				            }).done(function(data) {
+					        	var data = AP.common.getFormData($modalEl.find('form'));
+				            	
+			                    AP.modal.alert("인증번호가 확인되었습니다.").addListener( 'modal-close', function (e) {
+						        	$('form.private-info [name=phoneNumber1] option').attr('value', data.phoneNumber1);
+						        	$('form.private-info [name=phoneNumber1] option').html(data.phoneNumber1);
+						        	$('form.private-info [name=phoneNumber2]').val(data.phoneNumber2);
+						        	modal.close();
+								});
+				            }).fail(function(xhr, textStatus, errorThrown) {
+				                if (xhr.errorCode == 0) {
+				                    AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+				                } else {
+				                    AP.modal.alert(xhr.errorMessage);
+				                }
+				            }).always(function() {
+				                //성공, 실패
+				            });
+			        	} else {
+		                    AP.modal.alert("인증버튼을 클랙 하세요.");
+			        	}
+			        	
+			        });
+			        
+			        
+			    });
 	        }
-		}
-        function phoneNumChange() {
 
-		    $.get("/my/page/info/changePhoneForm", function(data) {
-		        /**
-		         * 동적으로 생성된 modal의 Node Element 접근하기
-		         * alert, confirm, info 모두 동일
-		         */
+	        
+	        function sendPrivateInfo(data) { 
+				AP.api.changePriveInfo({}, data).done(function(data) {
+					AP.modal.alert("개인정보가 수정 완료 되었습니다.").addListener( 'modal-close', function (e) {
+						reload();
+					});
+				}).fail(function(xhr, textStatus, errorThrown) {
+	            	if (xhr.errorCode == 0) {
+	                    AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+	                } else if (xhr.errorCode == 'CHECK90') {
+	                    AP.modal.alert("90일 이전에 변경된 휴대폰 번호입니다. 해당 휴대전화를 사용할 수 없습니다.");
+	                } else {
+		                AP.modal.alert("회원정보 수정에 실패했습니다.");
+	                }
+				}).always(function() {
+	                //성공, 실패
+	            });
+	        }
+	        
+	        function changePrivateInfo() {
+	        	var form = $('form.private-info');
+	        	if(!form.valid()) {
+	        		return;
+	        	}
+	        	var data1 = AP.common.getFormData(form);
+	        	
+	        	
+	        	if(data1.email || data1.homeBsceAddr || data1.homeDtlAddr) {
 
-		        var contents = new Object();
-		        contents.contents = data;
-		        var modal = AP.modal.full(contents);
-		        var $modalEl = modal.getElement(); //jquery object
-		        $modalEl.find('#cert').click(function() {
+		            AP.api.checkTerms({}, {
+		    			termsCode : '030'
+		    		}).done(function(data) {
+		    			sendPrivateInfo(data1);
+	                }).fail(function(xhr, textStatus, errorThrown) {
 
-		        	var data = AP.common.getFormData($modalEl.find('form'));
-		        	
-		        	window.alert(data.phoneNumber1 + data.phoneNumber2);
-		        });
-		        $modalEl.find('button.btn_primary_md').click(function() {
-		        	var data = AP.common.getFormData($modalEl.find('form'));
-		        	
-		        	$('form.private-info [name=phoneNumber1] option').attr('value', data.phoneNumber1);
-		        	$('form.private-info [name=phoneNumber1] option').html(data.phoneNumber1);
-		        	$('form.private-info [name=phoneNumber2]').val(data.phoneNumber2);
-		        	
-		        	modal.close();
-		        });
-		        
-		        
-		        
-		    });
-        }
+	        		    $.get("/my/page/info/termForm", function(data) {
+	        		        /**
+	        		         * 동적으로 생성된 modal의 Node Element 접근하기
+	        		         * alert, confirm, info 모두 동일
+	        		         */
 
-        
-        function sendPrivateInfo(data) { 
-			AP.api.changePriveInfo({}, data).done(function(data) {
-				AP.modal.alert("개인정보가 수정 완료 되었습니다.").addListener( 'modal-close', function (e) {
-					location.reload(true);
-				});
-			}).fail(function(xhr, textStatus, errorThrown) {
-                AP.modal.alert("회원정보 수정에 실패했습니다.");
-			}).always(function() {
-                //성공, 실패
-            });
-        }
-        
-        function changePrivateInfo() {
-        	var form = $('form.private-info');
-        	if(!form.valid()) {
-        		return;
-        	}
-        	var data1 = AP.common.getFormData(form);
-        	
-        	
-        	if(data1.email || data1.homeBsceAddr || data1.homeDtlAddr) {
+	        		        var contents = new Object();
+	        		        contents.contents = data;
+	        		        var modal = AP.modal.full(contents);
+	        		        var $modalEl = modal.getElement(); //jquery object
 
-	            AP.api.checkTerms({}, {
-	    			termsCode : '030'
-	    		}).done(function(data) {
-	    			sendPrivateInfo(data1);
-                }).fail(function(xhr, textStatus, errorThrown) {
-
-        		    $.get("/my/page/info/termForm", function(data) {
-        		        /**
-        		         * 동적으로 생성된 modal의 Node Element 접근하기
-        		         * alert, confirm, info 모두 동일
-        		         */
-
-        		        var contents = new Object();
-        		        contents.contents = data;
-        		        var modal = AP.modal.full(contents);
-        		        var $modalEl = modal.getElement(); //jquery object
-
-        		        $modalEl.find('#terms-ok').click(function() {
-        	    			sendPrivateInfo(data1);
-        		        });
-        		        $modalEl.find('#terms-cancel').click(function() {
-        		        	modal.close();
-        		        });
-        		        
-        		    });
-                }).always(function() {
-                    //성공, 실패
-                });
-        	} else {
-    			sendPrivateInfo(data1);
-        	}
-        }
-        
-        function changeOptionInfo() {
-
-        	var form = $('form.option-info');
-        	
-			AP.api.changeOptionInfo({},AP.common.getFormData(form)).done(function(data) {
-				AP.modal.alert("개인정보가 수정 완료 되었습니다.").addListener( 'modal-close', function (e) {
-					location.reload(true);
-				});
-			}).fail(function(xhr, textStatus, errorThrown) {
-                AP.modal.alert("회원정보 수정에 실패했습니다.");
-			}).always(function() {
-                //성공, 실패
-            });
-        }
-        function changeTermsInfo() {
-
-        	var form = $('form.terms--info');
-        	var data1 = AP.common.getFormData(form);
-        	if(data1['policy[0].value'] != 'on') {
-
-	            AP.api.checkTerms({}, {
-	    			termsCode : '030'
-	    		}).done(function(data) {
-
-	                var contents = new Object();
-	                contents.title = "[[#{common.alert}]]";
-	                contents.contents = '개인정보 이용 및 수집 동의를 철회하면 저장된 이메일 주소 및 주소 정보가 삭제되어 이벤트 및 혜택 안내 정보를 수령할 수 없습니다<br>' +
-	                						'개인정보 이용 및 수집 동의를 철회하시겠습니까?';
-	                contents.cancelLabel = "취소";
-	                contents.confirmLabel = "확인";
-	
-	                AP.modal.info(contents).addListener('modal-close', function(e) {
-	                    if (e.closeType == 'confirm') {
-	                    	sendTermsInfo(data1);
-	                    }
-	                    console.log(e.closeType); //close, confirm, cancel
+	        		        $modalEl.find('#terms-ok').click(function() {
+	        	    			sendPrivateInfo(data1);
+	        		        	modal.close();
+	        		        });
+	        		        $modalEl.find('#terms-cancel').click(function() {
+	        		        	modal.close();
+	        		        });
+	        		        
+	        		    });
+	                }).always(function() {
+	                    //성공, 실패
 	                });
-	    			
-                }).fail(function(xhr, textStatus, errorThrown) {
-                	sendTermsInfo(data1);
-                }).always(function() {
-                    //성공, 실패
-                });
-        	} else {
+	        	} else {
+	    			sendPrivateInfo(data1);
+	        	}
+	        }
+	        
+	        function changeOptionInfo() {
 
-	            AP.api.checkTerms({}, {
-	    			termsCode : '030'
-	    		}).done(function(data) {
-                	sendTermsInfo(data1);
-                }).fail(function(xhr, textStatus, errorThrown) {
+	        	var form = $('form.option-info');
+	        	
+				AP.api.changeOptionInfo({},AP.common.getFormData(form)).done(function(data) {
+					AP.modal.alert("개인정보가 수정 완료 되었습니다.").addListener( 'modal-close', function (e) {
+						reload();
+					});
+				}).fail(function(xhr, textStatus, errorThrown) {
+	                AP.modal.alert("회원정보 수정에 실패했습니다.");
+				}).always(function() {
+	                //성공, 실패
+	            });
+	        }
+	        function changeTermsInfo() {
 
-                	sendTermsInfo(data1, '1');
-                }).always(function() {
-                    //성공, 실패
-                });
-        		
-        	}
-        }
-        function sendTermsInfo(data, flag) { 
-			AP.api.changeTermsInfo({}, data).done(function(data) {
-					if(flag != '1') {
-						AP.modal.alert("개인정보가 수정 완료 되었습니다.").addListener( 'modal-close', function (e) {
-							location.reload(true);
-						});
-					}
-					else {
+	        	var form = $('form.terms--info');
+	        	var data1 = AP.common.getFormData(form);
+	        	if(data1['policy[0].value'] != 'on') {
+
+		            AP.api.checkTerms({}, {
+		    			termsCode : '030'
+		    		}).done(function(data) {
+
 		                var contents = new Object();
-		                contents.title = "[[#{common.alert}]]";
-		                contents.contents = '개인정보가 수정 완료되었습니다.<br>' +
-		                						'이메일 및 주소를 등록하시면 이벤트 및 혜택 안내 정보를 수령하실 수 있습니다.<br>' +
-		                						'등록하시겠습니까?';
+		                contents.title = "알림";
+		                contents.contents = '개인정보 이용 및 수집 동의를 철회하면 저장된 이메일 주소 및 주소 정보가 삭제되어 이벤트 및 혜택 안내 정보를 수령할 수 없습니다<br>' +
+		                						'개인정보 이용 및 수집 동의를 철회하시겠습니까?';
 		                contents.cancelLabel = "취소";
 		                contents.confirmLabel = "확인";
 		
-		                AP.modal.info(contents).addListener('modal-close', function(e) {
+		                AP.modal.full(contents).addListener('modal-close', function(e) {
 		                    if (e.closeType == 'confirm') {
-		                    	$('#private-title')[0].scrollIntoView();
-		                    } else {
-								location.reload(true);
+		                    	sendTermsInfo(data1);
 		                    }
+		                    console.log(e.closeType); //close, confirm, cancel
 		                });
-					}
-			}).fail(function(xhr, textStatus, errorThrown) {
-                AP.modal.alert("회원정보 수정에 실패했습니다.");
-			}).always(function() {
-                //성공, 실패
-            });
-        }
-		</script>
+		    			
+	                }).fail(function(xhr, textStatus, errorThrown) {
+	                	sendTermsInfo(data1);
+	                }).always(function() {
+	                    //성공, 실패
+	                });
+	        	} else {
+
+		            AP.api.checkTerms({}, {
+		    			termsCode : '030'
+		    		}).done(function(data) {
+	                	sendTermsInfo(data1);
+	                }).fail(function(xhr, textStatus, errorThrown) {
+
+	                	sendTermsInfo(data1, '1');
+	                }).always(function() {
+	                    //성공, 실패
+	                });
+	        		
+	        	}
+	        }
+	        function sendTermsInfo(data, flag) { 
+				AP.api.changeTermsInfo({}, data).done(function(data) {
+						if(flag != '1') {
+							AP.modal.alert("개인정보가 수정 완료 되었습니다.").addListener( 'modal-close', function (e) {
+								reload();
+							});
+						}
+						else {
+			                var contents = new Object();
+			                contents.title = "알림";
+			                contents.contents = '개인정보가 수정 완료되었습니다.<br>' +
+			                						'이메일 및 주소를 등록하시면 이벤트 및 혜택 안내 정보를 수령하실 수 있습니다.<br>' +
+			                						'등록하시겠습니까?';
+			                contents.cancelLabel = "취소";
+			                contents.confirmLabel = "확인";
+			
+			                AP.modal.info(contents).addListener('modal-close', function(e) {
+			                    if (e.closeType == 'confirm') {
+			                    	$('#private-title')[0].scrollIntoView();
+			                    } else {
+									reload();
+			                    }
+			                });
+						}
+				}).fail(function(xhr, textStatus, errorThrown) {
+	                AP.modal.alert("회원정보 수정에 실패했습니다.");
+				}).always(function() {
+	                //성공, 실패
+	            });
+	        }
+
+			function leaver() {
+
+		    	$('#progress').fadeIn(500);
+			    $.post('/my/page/leaveId', function(data) {
+			    	$('#progress').fadeOut(500);
+			        /**
+			         * 동적으로 생성된 modal의 Node Element 접근하기
+			         * alert, confirm, info 모두 동일
+			         */
+
+			        var contents = new Object();
+			        contents.contents = data;
+			        var modal = AP.modal.full(contents);
+			        var $modalEl = modal.getElement(); //jquery object
+    		        $modalEl.find('.layer_wrap.layer_md').addClass('modify_my_info');
+    		        $modalEl.find('.layer_wrap.layer_md').addClass('layer_type2');
+    		        $modalEl.addClass('layer_member');
+    		        
+    		        $modalEl.find('.layer_wrap > .layer > .layer_cont').removeClass('layer_cont');
+
+					var outContent = $(".pointbox_out");
+					$("input[type='radio'][name=member_out]").click(function(){
+						outContent.hide();
+						outContent.eq($("input[type='radio'][name=member_out]").index(this)).show();
+					});
+					
+					$("input[name='reasonCode']").click(function () {
+					    $('#cause04 ~ .cause_box').css('display', ($(this).val() === 'C04') ? 'block':'none');
+					    $('#cause05 ~ .cause_box').css('display', ($(this).val() === 'C05') ? 'block':'none');
+					});		
+
+					$("#closeMember").click(function () {
+
+						if(!$('[name=closeAgree]').prop('checked')) {
+							AP.modal.alert( "탈퇴여부에 동의해 주세요." );
+							return;
+						}
+
+		        		if($("[name=reasonCode]:checked").length == 0) {
+			        		AP.modal.alert( "탈퇴사유를 체크 해주세요." );
+		        			return;
+		        		}
+		        		if($("#cause06:checked").length != 0 && $("#desc").val() == '') {
+			        		AP.modal.alert( "탈퇴사유를 입력 해주세요." );
+		        			return;
+		        		}
+		        		if(!$("[name=closePassword]").val()) {
+			        		AP.modal.alert( "비밀번호를 입력해주세요" );
+		        			return;
+		        		}
+		        		var closedAcDetailReason = $('.check_set input[name=reasonCode]:checked + label input[type=text]').val();
+		        		if(!closedAcDetailReason)
+		        			closedAcDetailReason = $.map($('.check_set input[name=reasonCode]:checked + label + div input:checkbox:checked + label'), function(n, i){return n.textContent;}).join(', ');
+						AP.api.closeMember({}, 
+						{
+						    reasonCode : $("[name=reasonCode]:checked").val(),
+						    closedAcDetailReason : closedAcDetailReason,
+						    integrationCloseAcYn : $("[name=integrationCloseAcYn]:checked").val(),
+						    closePassword : $("[name=closePassword]").val()
+						    	
+						}).done(function(data) {
+				            location.href = "/customer/leaveComplete";
+						}).fail(function(xhr, textStatus, errorThrown) {
+							if(xhr.errorCode == 'EAPI001') {
+			                    AP.modal.alert("비밀번호가 일치하지 않습니다.");
+							} else {
+			                    AP.modal.alert(xhr.errorMessage);
+							}
+						}).always(function() {
+			                //성공, 실패
+			            });
+					});
+			        
+			    });
+			}
+			</script>
     </th:block>
 
 </body>

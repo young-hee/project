@@ -28,10 +28,12 @@
 			
 			//일반 상품 리뷰
 			this._list = new AP.ReviewList( this._$target.find('.review_list'), {
-				//onlineProdSn: this._defaultModel.onlineProdSn,
+				//prodReviewUnit : 'OnlineProd',
 				//prodReviewType: 'Pur',
+				//onlineProdSn: this._defaultModel.onlineProdSn,
 				offset : 0,
-				limit : 10
+				limit : 10,
+				prodReviewSort : 'Recommend'
 			}).addListener( 'review-draw', function (e) {
 				if( e.offset >= e.totalCnt ){this._$target.find('.btn_list_more').hide();}
 				this.dispatch( 'change-height' );
@@ -40,6 +42,23 @@
 			//더보기
 			this._$target.find('.btn_list_more').on('click', function(){
 				this._list.load();
+			}.bind(this));
+			
+			//sort option Click event
+			this._$target.find('.review_sort .filter').on('click', function(e){
+				var $this = $(e.currentTarget);
+				if( $this.hasClass('on') )return false;
+				$this.siblings('a').removeClass('on');
+				$this.addClass('on');
+				this._$target.find( '.review_cont' ).empty();
+				this._list.reset({
+					//prodReviewUnit : 'OnlineProd',
+					//prodReviewType : 'Pur',
+					//onlineProdSn : this._defaultModel.onlineProdSn,
+					offset : 0,
+					limit : 10,
+					prodReviewSort : $this.data('sort')
+				});
 			}.bind(this));
 			
 			//뷰티테스터 리뷰

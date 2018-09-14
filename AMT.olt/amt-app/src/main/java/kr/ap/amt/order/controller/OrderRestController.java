@@ -504,6 +504,8 @@ public class OrderRestController extends OrderBaseController {
 		result.put("ordHistEx", ordRc.getOrdHistEx());
 		result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
 		result.put("ordCntMap", makeOrdCntList(ordRc));
+		//업체별 상품 및 배송비 합계 계산
+		result.put("otfTotalAmtMap", makeApMallOrdOtfProdTotal(ordRc));
 
 		//가용 예치금
 		result.put("depositAvailAmt", ordRc.getDepositAvailAmt());

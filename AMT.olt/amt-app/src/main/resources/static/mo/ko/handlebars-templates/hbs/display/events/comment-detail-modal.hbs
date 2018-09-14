@@ -1,28 +1,6 @@
-<div class="panel detail_review_event">
-	<div class="summary">
-		<span>{{ this.memberId }}</span><span>{{ dateFormat this.participatedDt }}</span>
-	</div>
-	<div class="review_list">
-		<dl class="review_view">
-			<dt>{{ this.participantCommentTitle }}</dt>
-			<dd>
-				{{#if this.eventCommentImgs.length}}
-					<div class="attached">
-						{{#each this.eventCommentImgs}}
-							<img src="{{ this.commentImgUrl }}" alt="">
-						{{/each}}
-					</div>
-				{{/if}}
-				<div class="text_wrap">
-					{{ this.participantComment }}
-				</div>
-			</dd>
-		</dl>
-	</div>
 
-	{{#xif this.myCommentYn '==' 'Y'}}
-		<div class="page_btns">
-			<button type="button" class="btn_lg_bordered btn_modify" data-event-participant-sn="{{ this.eventParticipantSn }}">수정</button>
-		</div>
+	{{#each this.eventCommentImgs}}
+	{{#xif @index '==' 0}}
+		<div class="img_view01"><img src="{{ this.commentImgUrl }}" alt="" /></div><!-- 예시: 가로 긴 이미지 -->
 	{{/xif}}
-</div>
+	{{/each}}

@@ -1,0 +1,30 @@
+{{#each list}}
+	<li class="item" data-online-prod-sn="{{ this.onlineProdSn }}" data-index="{{@index}}">
+		<div class="product_new">
+			<a href="{{ productDetailPath this.onlineProdSn }}">
+				<!-- // TODO -->
+				<span class="d_day_com">D-1</span>
+				<!-- // TODO -->
+				<span class="product_visual_new">
+					<span class="lazy_load_wrap">
+						<img src="" data-src="{{ this.onlineProdImages.[0].imgUrl }}" alt="{{ this.onlineProdName }}" class="lazy_load">
+					</span>
+				</span>
+				<span class="product_info_new">
+					<strong class="prd_brand">{{ this.products.[0].brandName }}</strong>
+					<span class="prd_name">{{ this.onlineProdName }}</span>
+					<span class="product_rating">
+						<span class="mark_star_sm star{{ this.reviewScopeAvg }}"><span class="sr_only">구매 평점 별 5개 중 {{ this.reviewScopeAvg }}개</span></span>
+						<span class="prd_review">리뷰 {{ numberFormat this.reviewCount }}</span>
+					</span>
+					<span class="tags">
+						<!-- // TODO -->
+						<em class="badge_comming">2018.05.11 (금) 예정</em>
+						<!-- // TODO -->
+					</span>
+				</span>
+				<button type="button" class="btn_toggle like_btn"><i class="ico_heart_s {{#xif this.shoppingMarkExistYn '==' 'Y'}}on{{/xif}}"></i><span class="sr_only">좋아요</span></button>
+			</a>
+		</div>
+	</li>
+{{/each}}

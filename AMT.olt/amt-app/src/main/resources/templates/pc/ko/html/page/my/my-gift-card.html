@@ -58,9 +58,10 @@
 						<span><input type="radio" class="select_range_date" name="radio2" id="radio2_3" value=""><label for="radio2_3">기간만료</label></span>
 					</div>
 
-					<div class="date_search table_layout">
-						<div>조회 기간</div>
-						<div class="ui_multiple_date_picker">
+					<!-- 09-07 ui_multiple_date_picker 관련 마크업 수정 [S] -->
+					<div class="ui_multiple_date_picker">
+						<div class="date_search table_layout">
+							<div>조회 기간</div>
 							<div class="date_btn_set">
 								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_0" value="all" checked=""><label for="radio5_0">전체</label></span>
 								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_1" value="1weeks"><label for="radio5_1">1주일</label></span>
@@ -69,12 +70,10 @@
 								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_4" value="6months"><label for="radio5_4">6개월</label></span>
 								<span><input type="radio" class="select_range_date" name="radio5" id="radio5_5" value="1years"><label for="radio5_5">12개월</label></span>
 							</div>
+							<div><button class="btn_sm_form" type="button"><span class="ie_press">검색</span></button></div>
 						</div>
-						<div><button class="btn_sm_form" type="button"><span class="ie_press">검색</span></button></div>
-					</div>
 
-					<div class="date_search2 table_layout">
-						<div>
+						<div class="date_search2 table_layout">
 							<div class="input_date_group">
 								<div class="input_wrap" style="display:none;">
 									<input type="hidden" class="ui_date_picker start_date" placeholder="날짜 선택" title="날짜 선택" value="">
@@ -84,8 +83,6 @@
 									<span class="sr_only">시작일</span> <span class="start_date">2018.01.05</span> ~ <span class="sr_only">종료일</span> <span class="end_date">2018.01.12</span>까지의 내역
 								</div>
 							</div>
-						</div>
-						<div>
 							<div class="select_wrap xsm"><!-- 선택시 open 클래스  -->
 								<select name="" id="" tabindex="-1">
 									<option value="">전체내역</option>
@@ -98,6 +95,7 @@
 							</div>
 						</div>
 					</div>
+					<!-- 09-07 ui_multiple_date_picker 관련 마크업 수정 [E] -->
 
 					<div class="panel bg_white">
 						<div class="board_list type02 gift_card">
@@ -268,6 +266,14 @@
 		<script>
 			$( '.ui_input_images' ).inputImages();
 			$( '.recommended_item .slide' ).ixSlideMax();
+
+			//multiple date picker적용
+			$( '.ui_multiple_date_picker' ).multipleDatePicker({
+				defaultRangeDate: '1months',
+				minDate: moment().subtract( 50, 'years' )
+			}).on( 'multiple-date-picker-change', function (e) {
+				console.log( e.type, e.date );
+			});
 		</script>
 	</th:block>
 </body>

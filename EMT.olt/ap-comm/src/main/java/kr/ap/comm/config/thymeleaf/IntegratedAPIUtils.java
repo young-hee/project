@@ -1,13 +1,30 @@
 package kr.ap.comm.config.thymeleaf;
 
+import kr.ap.comm.api.AmoreAPIService;
 import kr.ap.comm.api.vo.PageVo;
 import kr.ap.comm.api.vo.PtTrBrkdInqVo;
+import kr.ap.comm.member.vo.BeautyPointSummary;
+import kr.ap.comm.member.vo.CushionPointSummary;
 import kr.ap.comm.member.vo.MemberSession;
+import kr.ap.comm.util.SessionUtils;
+import net.g1project.ecp.api.client.sales.PointApi;
 import net.g1project.ecp.api.model.EmbeddableTel;
 import net.g1project.ecp.api.model.sales.point.ActivityPointHists;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.context.ApplicationContext;
+import org.thymeleaf.context.IEngineContext;
+import org.thymeleaf.context.IExpressionContext;
+import org.thymeleaf.context.IWebContext;
+import org.thymeleaf.context.WebEngineContext;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.ParseException;
@@ -20,38 +37,81 @@ import java.util.List;
 
 public class IntegratedAPIUtils {
 
-	SimpleDateFormat sFormat = new SimpleDateFormat("yyyyMMdd");
+	private final SimpleDateFormat sFormat = new SimpleDateFormat("yyyyMMdd");
+	private static final ObjectMapper mapper;
+
+	static {
+		mapper = new ObjectMapper();
+		mapper.setSerializationInclusion(Include.NON_NULL);
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+	}
+
+	private final IExpressionContext context;
+	private final PointApi pointApi;
+
+	IntegratedAPIUtils(final IExpressionContext context, final PointApi pointApi) {
+		this.context = context;
+		this.pointApi = pointApi;
+	}
+
+	public String getGiftCardStatusName(String status) {
+		if(status == null) return "";
+		switch (status) {
+		case "00":
+			return "사용가능";
+		case "91":
+			return "발행취소";
+		case "92":
+			return "사용불가";
+
+		default:
+			break;
+		}
+		if(status.startsWith("8") && status.length() == 2) {
+			return "환불";
+		}
+		return "";
+	}
+	
 	public int countDate(Date date) {
 		return toInt((date.getTime() - System.currentTimeMillis()) / 1000 / 3600 / 24);
 	}
-	
+
+	public String toJson(Object object) {
+		try {
+			return mapper.writeValueAsString(object);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
 	public String currencyTypeConverter(String value) {
 
 		if (value != null) {
 			switch (value) {
 				case "Saving" :
 					//적립:Saving
-					return "예치금 적립";
+					return "적립";
 				case "Transfer" :
 					//출금:Transfer
-					return "예치금 출금";
+					return "출금";
 				case "Pay" :
 					//사용:Pay
-					return "예치금 사용";
-				case "PayCancel" :
-					//취소:PayCancel
-					return "예치금 취소";
+					return "사용";
 				case "ManualSaving" :
 					return "수동적립";
 				case "ManualDec" :
 					return "수동차감";
+				case "PayCancel" :
+					return "사용취소";
 				default :
 					return "";
 			}
 		}
 		return "";
 	}
-	
+
 	public String currencyConverter(Number price) {
 		StringBuffer sb = new StringBuffer();
 		if(toInt(price) >= 0) {
@@ -60,24 +120,24 @@ public class IntegratedAPIUtils {
 			sb.append("(-) ");
 		}
 		sb.append(toCommaNumber(Math.abs(toInt(price))));
-		
+
 		return sb.toString();
 	}
-	
+
 	public String btCardNumber(MemberSession member) {
 		if(member == null || member.getUser_incsCardNoEc() == null || member.getUser_incsCardNoEc().isEmpty()
 				 || member.getUser_incsCardNoEc().length() != 16) {
 			return "";
 		}
 		StringBuffer sb = new StringBuffer(member.getUser_incsCardNoEc());
-		
+
 		sb.insert(12, "-");
 		sb.insert(8, "-");
 		sb.insert(4, "-");
-		
+
 		return sb.toString();
 	}
-	
+
 	public String btCardBcd(MemberSession member, int width, int height) {
 		if(member == null || member.getUser_incsCardNoEc() == null || member.getUser_incsCardNoEc().isEmpty()) {
 			return "";
@@ -89,11 +149,11 @@ public class IntegratedAPIUtils {
 		sb.append(width);
 		sb.append("&height=");
 		sb.append(height);
-		
+
 		return sb.toString();
 	}
-	
-	
+
+
 	public String getPhoneNumber(EmbeddableTel phone) {
 		if(phone == null || phone.getPhoneNo() == null)
 			return "";
@@ -104,7 +164,7 @@ public class IntegratedAPIUtils {
 			return "";
 		return phone.getPhoneNo().substring(0, 3);
 	}
-	
+
 	public boolean isPearlType(String type) {
 
 		switch (type) {
@@ -121,7 +181,7 @@ public class IntegratedAPIUtils {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * 날짜 계산하여 카운트다운.
 	 * @param source
@@ -135,7 +195,7 @@ public class IntegratedAPIUtils {
 		Date to = c.getTime();
 		return "D - " + (to.getTime() - source.getTime()) / (1000 * 60 * 60 * 24);
 	}
-	
+
 	/**
 	 * 날짜 계산하여 카운트다운.
 	 * @param source
@@ -149,13 +209,13 @@ public class IntegratedAPIUtils {
 		Date to = c.getTime();
 		return to.getTime() > source.getTime();
 	}
-	
+
 	/**
 	 * @param code
 	 * @return
 	 */
 	public String pearlOccur(int flag, String name, String code, String type) {
-		
+
 		StringBuffer sb = new StringBuffer();
 		if(name != null) {
 			sb.append("[");
@@ -186,7 +246,7 @@ public class IntegratedAPIUtils {
 
 			sb.append(" ");
 		}
-		
+
 		if(code != null) {
 			switch (code) {
 			case "Saving":
@@ -213,16 +273,16 @@ public class IntegratedAPIUtils {
 		}
 		return sb.toString();
 	}
-	
+
 	public List<?> subList(List<?> list, int size) {
 		if(list == null) return Collections.EMPTY_LIST;
 		if(list.isEmpty() || size > list.size()) return list;
 		return list.subList(0, (size < list.size()) ? size : list.size());
 	}
 	/**
-	 * 
+	 *
 	 * 통합에서 사용하는 문자열 날짜를 클라이언트에서 사용 가능하도록 포멧팅 변경.
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public String dateformat(String source, String format) throws ParseException {
 		if(source == null || source.isEmpty())
@@ -250,19 +310,19 @@ public class IntegratedAPIUtils {
 			} else if(flag == 4 &&ptTrBrkdInqVo.getTlmcCd().equals("20")) {
 				count += toInt(ptTrBrkdInqVo.getAplyPt());
 			}
-				
+
 		}
-		
+
 		return String.format("%,d", count);
 	}
-	
+
 	public PageVo initPageInfo(ActivityPointHists activityPointHists, int size) {
 		PageVo pageVo = new PageVo();
 		pageVo.setTotalRowCount(activityPointHists.getTotalCount() + "");
 		pageVo.setPageSize(size + "");
 		pageVo.setCurPage((activityPointHists.getOffset() + activityPointHists.getLimit()) / size);
 		pageVo.setPageNumber(((activityPointHists.getOffset() + activityPointHists.getLimit()) / size) + "");
-		
+
 		if(pageVo.getTotalRowCount().equals("0")) {
 			pageVo.setIsFirstPage(true);
 			pageVo.setHasNextPage(false);
@@ -301,7 +361,7 @@ public class IntegratedAPIUtils {
 		pageVo.setPageList(list.toArray(new Integer[list.size()]));
 		return pageVo;
 	}
-	
+
 	public PageVo initPageInfo(PageVo pageVo, int size) {
 		if(pageVo.getTotalRowCount().equals("0")) {
 			pageVo.setIsFirstPage(true);
@@ -388,21 +448,21 @@ public class IntegratedAPIUtils {
 		}
 		return sb.toString();
 	}
-	
+
 	public boolean toBoolean(Object val) {
 		return toBoolean(val, false);
 	}
 	public boolean toBoolean(Object val, boolean defaultValue) {
-		if (val == null) 
+		if (val == null)
 			return defaultValue;
-		else if (val instanceof Boolean) 
+		else if (val instanceof Boolean)
 			return ((Boolean)val).booleanValue();
-		else if (val instanceof String) 
+		else if (val instanceof String)
 			return "true".equalsIgnoreCase((String)val) || "Y".equalsIgnoreCase((String)val);
-		else 
+		else
 			return defaultValue;
 	}
-	
+
 	public byte toByte(Object val) {
 		return toByte(val, (byte)0);
 	}
@@ -414,26 +474,26 @@ public class IntegratedAPIUtils {
 			catch (Exception e) { return defaultValue; }
 		else return defaultValue;
 	}
-	
+
 	public char toChar(Object val) {
 		return toChar(val, ' ');
 	}
-	
+
 	public char toChar(Object val, char defaultValue) {
 		if (val == null) return defaultValue;
-		else if (val instanceof Character) 
+		else if (val instanceof Character)
 			return ((Character)val).charValue();
 		else if ((val instanceof String) && ((String)val).length() > 0)
 			return ((String)val).charAt(0);
 		else return defaultValue;
 	}
-	
+
 	public int toInt(Object val) {
 		return toInt(val, 0);
 	}
-	
+
 	public int toInt(Object val, int defaultValue) {
-		if (val == null) 
+		if (val == null)
 			return defaultValue;
 		else if (val instanceof Number)
 			return ((Number)val).intValue();
@@ -447,13 +507,13 @@ public class IntegratedAPIUtils {
 		}
 		else return defaultValue;
 	}
-	
+
 	public long toLong(Object val) {
 		return toLong(val, 0L);
 	}
-	
+
 	public long toLong(Object val, long defaultValue) {
-		if (val == null) 
+		if (val == null)
 			return defaultValue;
 		else if (val instanceof Number)
 			return ((Number)val).longValue();
@@ -467,13 +527,13 @@ public class IntegratedAPIUtils {
 		}
 		else return defaultValue;
 	}
-	
+
 	public float toFloat(Object val) {
 		return toFloat(val, 0F);
 	}
-	
+
 	public float toFloat(Object val, float defaultValue) {
-		if (val == null) 
+		if (val == null)
 			return defaultValue;
 		else if (val instanceof Number)
 			return ((Number)val).floatValue();
@@ -491,9 +551,9 @@ public class IntegratedAPIUtils {
 	public double toDouble(Object val) {
 		return toDouble(val, 0.0);
 	}
-	
+
 	public double toDouble(Object val, double defaultValue) {
-		if (val == null) 
+		if (val == null)
 			return defaultValue;
 		else if (val instanceof Number)
 			return ((Number)val).doubleValue();
@@ -507,7 +567,7 @@ public class IntegratedAPIUtils {
 		}
 		else return defaultValue;
 	}
-	
+
 	public BigDecimal toBigDecimal(Object val) {
 		if (val instanceof BigDecimal) return (BigDecimal)val;
 		else if (val instanceof Number) return new BigDecimal(((Number)val).toString());
@@ -517,17 +577,17 @@ public class IntegratedAPIUtils {
 		}
 		else return null;
 	}
-	
+
 	public BigInteger toBigInteger(Object val) {
 		if (val instanceof BigInteger) return (BigInteger)val;
-		else if (val instanceof BigInteger) return new BigInteger(((Number)val).toString());
+		else if (val instanceof Number) return new BigInteger(((Number)val).toString());
 		else if (val instanceof String) {
 			try { return new BigInteger((String)val); }
 			catch (Exception e) { return null; }
 		}
 		else return null;
 	}
-	
+
 	public String toString(Object val) {
 		if (val == null)
 			return null;
@@ -538,12 +598,44 @@ public class IntegratedAPIUtils {
 		}
 		else return val.toString();
 	}
-	
+
 	public boolean equals(Object o1, Object o2) {
 		if (o1 == null && o2 == null)
 			return true;
 		else {
 			return o1 != null ? o1.equals(o2) : o2.equals(o1);
 		}
+	}
+
+	public BeautyPointSummary beautyPoint() {
+		BeautyPointSummary beautyPoint = (BeautyPointSummary) this.context.getVariable(BeautyPointSummary.class.getName());
+		//Context에 뷰티포인트 정보가 없을 경우 Session 조회
+		if (beautyPoint == null) {
+			beautyPoint = SessionUtils.getBeautyPoint(IWebContext.class.cast(this.context).getRequest(), this.pointApi);
+		}
+
+		//뷰티 포인트 정보를 취득하지 못한 경우
+		if (beautyPoint == null) {
+			beautyPoint = BeautyPointSummary.EMPTY;
+		}
+
+		IEngineContext.class.cast(this.context).setVariable(BeautyPointSummary.class.getName(), beautyPoint);
+		return beautyPoint;
+	}
+
+	public CushionPointSummary cushionPoint() {
+		CushionPointSummary cushionPoint = (CushionPointSummary) this.context.getVariable(CushionPointSummary.class.getName());
+		//Context에 쿠션포인트 정보가 없을 경우 Session 조회
+		if (cushionPoint == null) {
+			cushionPoint = SessionUtils.getCushionPoint(IWebContext.class.cast(this.context).getRequest(), this.pointApi);
+		}
+
+		//뷰티 포인트 정보를 취득하지 못한 경우
+		if (cushionPoint == null) {
+			cushionPoint = CushionPointSummary.EMPTY;
+		}
+
+		IEngineContext.class.cast(this.context).setVariable(CushionPointSummary.class.getName(), cushionPoint);
+		return cushionPoint;
 	}
 }
