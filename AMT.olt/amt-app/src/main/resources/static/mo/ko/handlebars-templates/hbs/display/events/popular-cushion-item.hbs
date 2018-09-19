@@ -1,0 +1,45 @@
+{{#each list}}
+	<li class="item" data-online-prod-sn="{{ this.onlineProdSn }}" data-index="{{@index}}">
+		<div class="product_one_view">
+			<a href="{{ productDetailPath this.onlineProdSn }}">
+				<span class="rank_num">{{ calc @index '+' 1 }}</span>
+				<span class="product_visual_new">
+					<span class="lazy_load_wrap">
+						<img src="" data-src="{{ this.onlineProdImages.[0].imgUrl }}" alt="{{ this.onlineProdName }}" class="lazy_load">
+					</span>
+				</span>
+
+				<span class="product_info_new">
+					<span class="prd_name">{{ this.onlineProdName }}</span>
+					<span class="price_wrap">
+						{{#xif this.onlineProdPriceSummary.maxFinalDiscountRate '>' 0}}
+							<strong class="discount">{{ this.onlineProdPriceSummary.maxFinalDiscountRate }}%</strong>
+						{{/xif}}
+						<strong class="price">{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountOnlinePrice }}<em>원</em></strong>
+						{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+							<del>{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountBeforeSalePrice }}원</del>
+						{{/xif}}
+					</span>
+
+					<span class="product_rating">
+						<span class="mark_star_sm star{{ this.reviewScopeAvg }}"><span class="sr_only">구매 평점 별 5개 중 {{ this.reviewScopeAvg }}개</span></span>
+						{{#xif this.reviewCount '>' 0 }}<span class="prd_review">리뷰 {{ numberFormat this.reviewCount }}</span>{{/xif}}
+					</span>
+
+					<span class="review_info_txt01">실시간 인기 급상승 쿠션! 리뷰를 작성해주세요실시간 인기 급상승 쿠션! 리뷰를 작성해주세요실시간 인기 급상승 쿠션! 리뷰를 작성해주세요실시간 인기 급상승 쿠션! 리뷰를 작성해주세요실시간 인기 급상승 쿠션! 리뷰를 작성해주세요실시간 인기 급상승 쿠션! 리뷰를 작성해주세요</span>
+
+					<button type="button" class="btn_toggle like_btn"><i class="ico_heart_s {{#xif this.shoppingMarkExistYn '==' 'Y'}}on{{/xif}}"></i><span class="sr_only">좋아요</span></button>
+				</span>
+
+				<span class="tags">
+					{{#xif this.onlineProdGift.giftProds.length '>' 0}}
+						<em class="badge special">스페셜기프트</em>
+					{{/xif}}
+					{{#xif this.onlineProdGift.giftcardTargetYn '==' 'Y'}}
+						<em class="badge gift">기프트카드</em>
+					{{/xif}}
+				</span>
+			</a>
+		</div>
+	</li>
+{{/each}}

@@ -88,7 +88,6 @@
 						defaultRangeDate: date,
 						minDate: moment().subtract( 50, 'years' )
 					}).on( 'multiple-date-picker-change', function (e) {
-						console.log(e);
 						c_RS_Date = e.date.startDate;
 						c_RD_Date = e.date.endDate;
 
@@ -96,12 +95,23 @@
 					});
 				}
 
+				window.onpageshow = function(event) {
+					if (event.persisted) {
+
+						var ss = AP.common.getSessionStorage(sessionStatus);
+						if (ss != "" && ss != 'undefined' && ss != null) {
+
+						}
+						else {
+							document.location.reload();
+							$('html, body').scrollTop(0);
+						}
+					}
+				};
 
 				$(document).ready(function() {
 
 					var ss = AP.common.getSessionStorage(sessionStatus);
-					console.log(ss)
-
 
 					if (ss != "" && ss != 'undefined' && ss != null) {
 						$('.loading').hide();
@@ -123,7 +133,7 @@
 						AP.common.setSessionStorage(sessionStatus, null)
 					}
 					else {
-						setMultipleDate('1months');
+						setMultipleDate('3months');
 						c_RS_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).startDate;
 						c_RD_Date = $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).endDate;
 

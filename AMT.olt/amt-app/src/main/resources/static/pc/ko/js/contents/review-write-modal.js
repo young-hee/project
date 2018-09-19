@@ -11,33 +11,32 @@
 		/**
 		 * @param {Object} model	{onlineProdSn, onlineProdName, products[{prodSn, prodName}]}
 		 */
-		initialize: function ( model ) {
-			this._defaultModel = model;
+		initialize: function ( ordNo, prodName ) {
+			AP.api.getProductReviewSurveys({}, {
+				 onlineProdSn : 343
+				,prodReviewType : 'Pur'
+			}).done(function(result){
+				result.prodName = prodName;
+				this._defaultModel = result;
+				console.log( this._defaultModel );
+				this.open();
+			}.bind(this));
 		},
 
 		/** =============== Public Methods =============== */
 		
-		prevGetData : function(){
-			
-			AP.api.getProductReviewSurveys( null, {
-				onlineProdSn : this._defaultModel.onlineProdSn
-			}).done(function ( result ) {
-				this._defaultModel.skinTone = result.prodReviewSurvey;
-				this.open();
-			}.bind(this)).fail(function ( xhr ) {
-			}.bind(this));
-		},
-
 		open: function () {
 			var modal = AP.modal.info({
-					title: '리뷰 작성하기',
+					title: '구매리뷰 작성',
 					contents: {
-						templateKey: 'common.review-write-modal',
+						templateKey: 'my.review-write-modal',
 						templateModel: this._defaultModel
 					},
-					sizeType: 'L'
+					sizeType: 'FULL',
+					wrapperClass: 'mypage'
 				}),
-				$modal = modal.getElement(),
+				$modal = modal.getElement()
+				/*,
 				validator = $modal.find( 'form.validate' ).validate({
 					submitHandler: function ( form, e ) {
 						e.preventDefault();
@@ -53,6 +52,7 @@
 						});
 					}.bind(this)
 				});
+				*/
 
 			modal.addListener( 'modal-before-close', function (e) {
 				$modal.find( '.ui_rating' ).rating( 'clear' );

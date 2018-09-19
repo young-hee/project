@@ -1,0 +1,117 @@
+{{!--
+	전시카드목록
+--}}
+{{#each this.displayCardList}}
+	{{#xif @index '>' 5}}
+		{{#xif this.displayCardTypeCode '==' 'Basic'}}
+			<div class="section m_basic">
+				<a href="javascript:;">
+					<span class="lazy_load_wrap">
+						<img src="{{ this.fileUrl }}" alt="" class="lazy_load">
+					</span>
+					<div class="banner_info">
+						<p class="copy"><span>{{this.title1}}</span><span>{{this.title2}}</span></p>
+						<!-- 상품 정보 -->
+						{{#each this.prodList}}
+							<span class="product_info_new">
+								<span class="prd_name">{{ this.onlineProdName }}</span>
+								<span class="price_wrap">
+									{{#xif this.onlineProdPriceSummary.maxFinalDiscountRate '>' 0}}
+										<strong class="discount">{{ this.onlineProdPriceSummary.maxFinalDiscountRate }}%</strong>
+									{{/xif}}
+										<strong class="price">{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountOnlinePrice }}<em>원</em>{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}}~{{/xif}}</strong>
+									{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+										<del>{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountBeforeSalePrice }}<em>원</em></del>
+									{{/xif}}
+								</span>
+				
+								<!-- 평점 리뷰 -->
+								<span class="product_rating">
+									<span class="mark_star_sm star{{ this.reviewScopeAvg }}"><span class="sr_only">구매 평점 별 5개 중 {{ this.reviewScopeAvg }}개</span></span>
+									<span class="txt_review">리뷰 {{ numberFormat this.reviewCount }}</span>
+								</span>
+				
+							</span>
+						{{/each}}
+						<!-- // 상품정보 -->
+					</div>
+				</a>
+				<span class="brand"><img src="/mo/ko/images/dummy/img_brand_04.png" alt="" /></span>
+			</div>
+		{{/xif}}
+		{{#xif this.displayCardTypeCode '==' 'Event'}}
+			<div class="section display_issue">
+				<a href="{{this.imgLinkUrl}}">
+					<span class="lazy_load_wrap">
+						<img src="{{ this.fileUrl }}" alt="" class="lazy_load">
+					</span>
+					<div class="banner_info">
+						<p class="copy" style="color:#fff"><span>{{this.title1}}</span><span>{{this.title2}}</span></p>
+						<p class="text" style="color:#fff"><span>{{this.subTitle1}}</span><span>{{this.subTitle2}}</span></p>
+					</div>
+				</a>
+			</div>
+		{{/xif}}
+		{{#xif this.displayCardTypeCode '==' 'BeautyContents'}}
+			<div class="section beauty_cont01">
+				<a href="{{this.imgLinkUrl}}">
+					<span class="lazy_load_wrap">
+						<img src="{{ this.fileUrl }}" alt="" class="lazy_load">
+					</span>
+					<div class="banner_info">
+						<p class="copy"><span>{{this.title1}}</span><span>{{this.title2}}</span></p>
+						<p class="text"><span>{{this.subTitle1}}</span><span>{{this.subTitle2}}</span></p>
+					</div>		
+				</a>
+				<div class="picks_area">
+					<p class="picks_tit01">{{this.prodGrpTitle}}</p>
+					<div class="picks_list01">
+						<ul>
+							{{#each this.prodList}}
+								<li>
+									<a href="{{ productDetailPath this.onlineProdSn }}">
+										<span class="prd_img">
+												<img src="{{ this.onlineProdImages.[0].imgUrl }}" alt="" class="lazy_load">
+										</span>
+										
+										<span class="prd_info">
+											<span class="prd_name">{{ this.onlineProdName }}</span>
+											<span class="prd_price">{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>{{ condition ../isActivityPoint '알' '원' }}{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}} ~{{/xif}}</em></span>
+										</span>
+									</a>
+								</li>
+							{{/each}}
+						</ul>
+					</div>
+				</div>
+			</div>
+		{{/xif}}
+		{{#xif this.displayCardTypeCode '==' 'BeautyVideo'}}
+			<div class="section m_video_area">
+				<div class="y_video_wrap">
+					<div class="video_wrap">
+						<iframe class="youtube_video ＠video-apply" width="750" height="420" src="{{this.videoUrl}}"></iframe>
+					</div>
+					
+					<!-- 썸네일 -->
+					<div class="video_thumb_area">
+						<a href="javascript:;">
+							<img src="{{ this.fileUrl }}" alt="" class="thumb_img">
+							<img src="/mo/ko/images/common/btn_video_play.png" alt="" class="btn_video_thumb">
+						</a>
+					</div>
+	
+				</div>
+	
+				<div class="y_text_wrap" style="background-color:#{{this.textAreaColorCode}}">
+					<a href="javascript:;">
+						<div class="banner_info">
+							<p class="copy" style="color:{{this.titleColorCode}}"><span>{{this.title1}}</span><span>{{this.title2}}</span></p>
+							<p class="text" style="color:{{this.titleColorCode}}"><span>{{this.subTitle1}}</span><span>{{this.subTitle2}}</span></p>
+						</div>
+					</a>							
+				</div>			
+			</div>
+		{{/xif}}
+	{{/xif}}
+{{/each}}

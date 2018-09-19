@@ -16,9 +16,9 @@ this["AP"]["handlebars"]["cart"]["takeout"]["same-time-promo-list"] = Handlebars
     + alias4((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.selectYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),"checked","",{"name":"condition","hash":{},"data":data}))
     + ">\n						<label for=\"takeoutChkBoxS_"
     + alias4(((helper = (helper = helpers.index || (data && data.index)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"index","hash":{},"data":data}) : helper)))
-    + "\">체크</label>\n					</span>\n					<div class=\"cart_table_cell\">\n						<h3>"
+    + "\">체크</label>\n					</span>\n					<div class=\"cart_table_cell\">\n						<a href=\"#none\" onclick=\"goSameTimeStore()\"><h3>"
     + alias4(((helper = (helper = helpers.promoName || (depth0 != null ? depth0.promoName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"promoName","hash":{},"data":data}) : helper)))
-    + "</h3>\n					</div>\n					<button type=\"button\" class=\"btn_cart_item_del\" onclick=\"sameTimeRemoveCartProd('"
+    + "</h3></a>\n					</div>\n					<button type=\"button\" class=\"btn_cart_item_del\" onclick=\"sameTimeRemoveCartProd('"
     + alias4(container.lambda((depths[1] != null ? depths[1].cartSn : depths[1]), depth0))
     + "', 'S_"
     + alias4(((helper = (helper = helpers.index || (data && data.index)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"index","hash":{},"data":data}) : helper)))

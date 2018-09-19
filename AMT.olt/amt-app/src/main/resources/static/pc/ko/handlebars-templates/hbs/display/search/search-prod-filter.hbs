@@ -23,6 +23,38 @@
 					<button type="button" class="btn_src_more leg_btn">더보기</button>
 				</dd>
 			</dl>
+			
+			<dl>
+				<dt>쇼핑찬스</dt>
+				<dd>
+					<ul class="leg_tgArea">
+						{{#each this.flags}}
+						<li><span class="check_wrap"><input type="checkbox" id="flag_{{calc @index '+' 1}}" data-val-code="{{this}}"><label for="flag_{{calc @index '+' 1}}">{{this}}</label></span></li>
+						{{/each}}
+					</ul>
+				</dd>
+			</dl>
+			
+			{{#each this.addAttrs}}
+				{{#xif this.addAttrCode '==' 'colorgroup'}}
+			<dl>
+				<dt>색상</dt>
+				<dd>
+					<ul class="colors">
+						{{#each this.addAttrVals}}
+						<li>
+							<span>
+								<input type="checkbox" id="{{../addAttrCode}}_{{calc @index '+' 1}}" data-val-code="{{this.addAttrValCode}}">
+								<label for="{{../addAttrCode}}_{{calc @index '+' 1}}" style="background-color:{{this.addAttrValCode}}">{{this.addAttrValName}}</label>
+							</span>
+						</li>
+						{{/each}}
+					</ul>
+				</dd>
+			</dl>
+				{{/xif}}
+			{{/each}}
+			
 			{{#each this.addAttrs}}
 				{{#xif this.addAttrCode '!=' 'colorgroup'}}
 			<dl>
@@ -59,27 +91,6 @@
 			</dl>
 				{{/xif}}
 			{{/each}}
-			
-			{{#each this.addAttrs}}
-				{{#xif this.addAttrCode '==' 'colorgroup'}}
-			<dl>
-				<dt>색상</dt>
-				<dd>
-					<ul class="colors">
-						{{#each this.addAttrVals}}
-						<li>
-							<span>
-								<input type="checkbox" id="{{../addAttrCode}}_{{calc @index '+' 1}}" data-val-code="{{this.addAttrValCode}}">
-								<label for="{{../addAttrCode}}_{{calc @index '+' 1}}" style="background-color:{{this.addAttrValCode}}">{{this.addAttrValName}}</label>
-							</span>
-						</li>
-						{{/each}}
-					</ul>
-				</dd>
-			</dl>
-				{{/xif}}
-			{{/each}}
-			
 			
 			<dl class="price">
 				<dt data-attr-code="price">가격</dt>

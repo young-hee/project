@@ -7,7 +7,7 @@
 
 			<li class="prod" data-online-prod-sn="{{ ../onlineProdSn }}">
 				<div class="item">
-					<div class="item_images">
+					<div class="item_images lazy_load_wrap">
 						<!-- /* 대표 이미지 */ -->
 						<img class="lazy_load" src="" data-src="{{ replaceImagePath this.prodImages.[0].imgUrl 280 280 }}" alt="">
 
@@ -18,15 +18,18 @@
 						{{!-- /* 상품명 */ --}}
 						<div class="prd_name">
 							<div>
-								<p class="s_name">
-									<em class="tag">{{stockTxt this.saleDisplayStatus this.prodTypeCode}}</em>
-									<span> {{{ this.linePromoDesc }}} </span>
+								<p class="s_name">{{{ this.linePromoDesc }}}</p>
+								<p class="name">
+									<em class="tag">{{stockTxt this.saleDisplayStatus this.prodTypeCode}}</em>								
+									{{{ ../onlineProdName }}}
 								</p>
-								<p class="name">{{ ../onlineProdName }}</p>
 							</div>
-
 							{{#xif ../singleUnitProdYn '==' 'N'}}
-								<p class="color_name">{{ this.prodName }}</p>
+								{{#xif ../onlineProdName '!=' this.prodName}}
+									<p class="color_name">{{ this.prodName }}</p>
+								{{else}}
+									<p class="color_name"></p>
+								{{/xif}}
 							{{/xif}}
 						</div>
 					</div>

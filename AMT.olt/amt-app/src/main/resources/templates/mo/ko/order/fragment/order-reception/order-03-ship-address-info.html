@@ -136,11 +136,14 @@
 						<ul id="addressListBlock" class="address_list" style="display: block;">
 							<!-- 임직원일 경우 본사주소 추가 -->
 							<li th:if="${apMember.employeeYn != null and #strings.toUpperCase(apMember.employeeYn) == 'Y'}"
-								th:onclick="|addressListBlockClick(this, 11111, '${apMember.name.name1}', '${apMember.phoneNo1.phoneNo}', '15051', '서울특별시 용산구 한강대로 100', '', false)|">
+								th:onclick="|addressListBlockClick(this, 11111, '${apMember.name.name1}', '${apMember.phoneNo1.phoneNo}', '15051', '서울특별시 용산구 한강대로 100', '아모레본사', false)|">
 								<button type="button">
 									<span id="employeeName" class="name" th:text="${apMember.name.name1}">홍길동</span>
 									<th:block th:if="${apMember.phoneNo1 != null and apMember.phoneNo1.phoneNo != null}">
 										<span id="employeeHp" class="phone_number" th:text="${#IntegUtil.hyphenPhoneNumber(apMember.phoneNo1.phoneNo)}">010-9924-3505</span>
+									</th:block>
+									<th:block th:unless="${apMember.phoneNo1 != null and apMember.phoneNo1.phoneNo != null}">
+										<span id="employeeHp" class="phone_number"></span>
 									</th:block>
 									<em class="flag blue">본사수령</em>
 									<span class="block address">(15051) 서울특별시 용산구 한강대로 100</span>
@@ -216,14 +219,12 @@
 							<label th:for="'request' + ${iterStat.index}" th:text="${shipMsg}" >부재시 경비실에 맡겨주세요</label>
 						</span>
 					</th:block>
-					<span class="rdo_h30"><input type="radio" name="selectShipMsg" th:id="'request' + ${#lists.size(ordEx.shipMsgList)}" class="textbox">
-						<label th:for="'request' + ${#lists.size(ordEx.shipMsgList)}">직접입력<em th:if="${apMember != null and #strings.toUpperCase(apMember.employeeYn) == 'Y'}">본사 수령시 행낭 문서실에 배송됩니다</em></label>
+					<span class="rdo_h30"><input type="radio" name="selectShipMsg" id="rdoShipMsg" class="textbox">
+						<label th:for="rdoShipMsg">직접입력<em th:if="${apMember != null and #strings.toUpperCase(apMember.employeeYn) == 'Y'}">본사 수령시 행낭 문서실에 배송됩니다</em></label>
 					</span>
 				</div>
 				<div class="input_wrap">
-					<span class="input_h48_gray"><input type="text" name="shipMsg" placeholder="배송요청사항을 입력해주세요"></span>
-					<!--임직원 본사수령일경우-->
-					<!-- <span class="input_h48_gray"><input type="text" placeholder="팀명, 층수, 코어 기입"></span> -->
+					<span class="input_h48_gray"><input type="text" id="inputShipMsg" name="shipMsg" placeholder="배송요청사항을 입력해주세요"></span>
 				</div>
 			</fieldset>
 		</dd>
@@ -357,13 +358,21 @@
 		}
 
 		if(isMember) {
-			modalLayerFindAddress = AP.modal.open({ templateKey : 'order.layer-find-address' });
+			modalLayerFindAddress = AP.modal.full({
+				contents: {
+					templateKey: 'order.layer-find-address'
+				}
+			});
 			var $modalEl = modalLayerFindAddress.getElement();
 			//로그인 정보 넣어주기
 			$modalEl.find("#isLoginedMember").text(true);
 		}
 		else if($(this).hasClass("on")) {
-			modalLayerFindAddress = AP.modal.open({ templateKey : 'order.layer-find-address' });
+			modalLayerFindAddress = AP.modal.full({
+				contents: {
+					templateKey: 'order.layer-find-address'
+				}
+			});
 			var $modalEl = modalLayerFindAddress.getElement();
 			//로그인 정보 넣어주기
 			$modalEl.find("#isLoginedMember").text(false);
@@ -470,6 +479,17 @@
 		//주문자 이메일
 		ordReceptChangeDTO.purchaserEmailAddress = $("#memberEmail").val();
 
+		//수취인 이름
+		ordReceptChangeDTO.recipientName = name;
+		//수취인 휴대폰번호
+		ordReceptChangeDTO.recipientPhoneNo = hp;
+		//수취인 우편번호
+		ordReceptChangeDTO.recipientZipCode = postCode;
+		//수취인 기본주소
+		ordReceptChangeDTO.recipientAddress1 = addr;
+		//수취인 상세주소
+		ordReceptChangeDTO.recipientAddress2 = addrDetail;
+
 		//새로입력 배송지일 경우
 		if(isInputNewAddress) {
 			/*새로입력 이름*/
@@ -482,19 +502,17 @@
 			ordReceptChangeDTO.userAddress1 = addr;
 			/*새로입력 상세주소*/
 			ordReceptChangeDTO.userAddress2 = addrDetail;
-		}
-		//최근배송지일 경우
-		else {
-			//수취인 이름
-			ordReceptChangeDTO.recipientName = name;
-			//수취인 휴대폰번호
-			ordReceptChangeDTO.recipientPhoneNo = hp;
-			//수취인 우편번호
-			ordReceptChangeDTO.recipientZipCode = postCode;
-			//수취인 기본주소
-			ordReceptChangeDTO.recipientAddress1 = addr;
-			//수취인 상세주소
-			ordReceptChangeDTO.recipientAddress2 = addrDetail;
+		} else {
+			/*새로입력 이름*/
+			ordReceptChangeDTO.userName = "";
+			/*새로입력 휴대폰번호*/
+			ordReceptChangeDTO.userPhoneNo = "";
+			/*새로입력 우편번호*/
+			ordReceptChangeDTO.userPostCode = "";
+			/*새로입력 기본주소*/
+			ordReceptChangeDTO.userAddress1 = "";
+			/*새로입력 상세주소*/
+			ordReceptChangeDTO.userAddress2 = "";
 		}
 
 		//배송지 정보 접었을 때 표시영역
@@ -505,7 +523,24 @@
 		//임직원 정보 수정
 		if(selIdx == 11111) {
 			$("#employeeName").text(name);
-			$("#employeeHp").text(hp);
+			$("#employeeHp").text( $("#memberHp1").val() + "-" + $("#memberHp2").val() + "-" + $("#memberHp3").val() );
+
+			if( $("#memberHp1").val() == '' || $("#memberHp2").val() == '' || $("#memberHp3").val() == '' ) {
+				AP.modal.alert("전화번호를 입력해 주세요.").addListener( 'modal-close', function (e) {
+					$(".btn_modify").trigger("click");
+					$("#memberHp1").focus();
+				});
+				//전화번호 입력 값을 받아서 바로 적용한다.
+				$("#memberHp1, #memberHp2, #memberHp3").on("keyup", function(e) {
+					$("#employeeHp").text( $("#memberHp1").val() + "-" + $("#memberHp2").val() + "-" + $("#memberHp3").val() );
+				});
+			}
+			$("input[name=shipMsg]").prop("placeholder", "팀명,층수,코어 기입");
+			$("input[name=shipMsg]").prop("required", true);
+		} else {
+			$("input[name=shipMsg]").prop("placeholder", "배송요청사항을 입력해주세요.");
+			$("input[name=shipMsg]").prop("required", false);
+			$("#memberHp1, #memberHp2, #memberHp3").unbind("keyup");
 		}
 
 	};
@@ -571,7 +606,7 @@
 	});
 
 	/* 배송메세지 직접입력 키이벤트 */
-	$('[name=shipMsg]').on('keyup', function(e){
+	$('#inputShipMsg').on('keyup', function(e){
 		$("#requestFolderText").text( $('[name=shipMsg]').val() );
 	});
 

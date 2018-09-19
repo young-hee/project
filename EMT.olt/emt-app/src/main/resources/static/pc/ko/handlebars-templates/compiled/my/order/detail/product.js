@@ -35,16 +35,45 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["product"] = Handlebars.templa
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.onlineProdName : stack1), depth0))
     + "\n			</span>\n";
 },"11":function(container,depth0,helpers,partials,data) {
-    var stack1;
+    var stack1, alias1=container.escapeExpression;
 
   return "			<p class=\"font_lg mgb10\"><em>취소 완료</em></p>\n			<span class=\"strong\"><b>"
-    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.cancelQtySum : stack1), depth0))
-    + "</b>개</span> /\n";
+    + alias1(container.lambda(((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.cancelQtySum : stack1), depth0))
+    + "</b>개</span> /\n			<span class=\"strong\"><b>"
+    + alias1((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.prodCancelAmtSum : stack1),{"name":"currencyFormat","hash":{},"data":data}))
+    + "</b></span>\n";
 },"13":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return "			<span class=\"strong\"><b>"
+  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.status : depth0),"===","detail",{"name":"xif","hash":{},"fn":container.program(14, data, 0),"inverse":container.program(19, data, 0),"data":data})) != null ? stack1 : "")
+    + "			<span class=\"strong\"><b>"
+    + container.escapeExpression((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.finalOnlineSaleAmtPcurSum : stack1),{"name":"currencyFormat","hash":{},"data":data}))
+    + "</b></span>\n";
+},"14":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
+
+  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.type : depth0),"return",{"name":"eq","hash":{},"data":data}),"||",(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.type : depth0),"exchange",{"name":"eq","hash":{},"data":data}),{"name":"xif","hash":{},"fn":container.program(15, data, 0),"inverse":container.program(17, data, 0),"data":data})) != null ? stack1 : "");
+},"15":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return "					<span class=\"strong\"><b>"
+    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.claimQtySum : stack1), depth0))
+    + "</b>개</span> /\n";
+},"17":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
+
+  return "					<span class=\"strong\"><b>"
     + container.escapeExpression((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.step : depth0),"two",{"name":"eq","hash":{},"data":data}),((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.claimQtySum : stack1),(helpers.calc || (depth0 && depth0.calc) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.ordQtySum : stack1),"-",((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.cancelQtySum : stack1),{"name":"calc","hash":{},"data":data}),{"name":"condition","hash":{},"data":data}))
+    + "</b>개</span> /\n";
+},"19":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.type : depth0),"===","cancel",{"name":"xif","hash":{},"fn":container.program(17, data, 0),"inverse":container.program(20, data, 0),"data":data})) != null ? stack1 : "");
+},"20":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
+
+  return "					<span class=\"strong\"><b>"
+    + container.escapeExpression((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.step : depth0),"two",{"name":"eq","hash":{},"data":data}),((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.claimQtySum : stack1),(helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.lt || (depth0 && depth0.lt) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.rtnRequestPossibleQtySum : stack1),0,{"name":"lt","hash":{},"data":data}),0,((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.rtnRequestPossibleQtySum : stack1),{"name":"condition","hash":{},"data":data}),{"name":"condition","hash":{},"data":data}))
     + "</b>개</span> /\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
@@ -57,7 +86,5 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["product"] = Handlebars.templa
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.ordHistProdTypeCode : stack1),"==","BulkDc",{"name":"xif","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(9, data, 0),"data":data})) != null ? stack1 : "")
     + "	</div>\n	<div class=\"price\">\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.ordHistProdStatusCode : stack1),"===","ProdCancel",{"name":"xif","hash":{},"fn":container.program(11, data, 0),"inverse":container.program(13, data, 0),"data":data})) != null ? stack1 : "")
-    + "		<span class=\"strong\"><b>"
-    + container.escapeExpression((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.oProd : depth0)) != null ? stack1.finalOnlineSaleAmtPcurSum : stack1),{"name":"currencyFormat","hash":{},"data":data}))
-    + "</b></span>\n	</div>\n</div>";
+    + "	</div>\n</div>";
 },"useData":true});

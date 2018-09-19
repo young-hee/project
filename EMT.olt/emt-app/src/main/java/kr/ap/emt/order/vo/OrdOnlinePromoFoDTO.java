@@ -40,7 +40,9 @@ public class OrdOnlinePromoFoDTO {
 	private String foReceivedClaimReason;
 
 	private Integer ordQtySum = 0;
+	private Integer claimQtySum = 0;
 	private Integer cancelQtySum = 0;
+	private Integer rtnRequestPossibleQtySum = 0;
 
 	private String singleProdYn;
 
@@ -204,5 +206,21 @@ public class OrdOnlinePromoFoDTO {
 
 	public BigDecimal getProdCancelAmtSum() {
 		return prodCancelAmtSum;
+	}
+
+	public void setClaimQtySum(Integer claimQtySum) {
+		this.claimQtySum = claimQtySum;
+	}
+
+	public Integer getClaimQtySum() {
+		return claimQtySum;
+	}
+
+	public void setRtnRequestPossibleQtySum(Integer rtnRequestPossibleQtySum) {
+		this.rtnRequestPossibleQtySum = rtnRequestPossibleQtySum;
+	}
+
+	public Integer getRtnRequestPossibleQtySum() {
+		return rtnRequestPossibleQtySum;
 	}
 }

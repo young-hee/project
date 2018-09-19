@@ -25,6 +25,7 @@
 				<fieldset class="form">
 				<legend class="sr_only">배송 정보 입력</legend>
 				<div class="ui_table" id="address01_3_01_layer">
+					<input type="hidden" name="address" value="03">
 					<dl>
 						<dt><label for="userName"><b>이름(<em>필수</em>)</b></label></dt>
 						<dd>
@@ -267,18 +268,13 @@
 				$('#address2_2_02_layer').show();
 				$('input[name=addressStoreType]').attr('value','NEW');
 
+				$('#name01').val($('input[name=name02]').val());
+				$('#phone01').val($('input[name=phone02]').val());
+
 				//validation
 				$('input[name=name02]').prop("required", true);
 				$('input[name=phone02]').prop("required", true);
 			}
-
-			$('#name02').blur(function(){
-				$('#name01').val($(this).val());
-			});
-
-			$('#phone02').blur(function(){
-				$('#phone01').val($(this).val());
-			});
 		}
 
 		//주문자정보 자동 입력
@@ -292,7 +288,7 @@
 		$('[name=purchaserPhoneNo]').on('change', function(e){
 			if ($(this).val()) {
 				$('#orderNonmemberMobile').html($(this).val());
-				$('#phone01').html($(this).val());
+				$('#phone01').val($(this).val());
 				$('[name=recipientPhoneNo]').val($(this).val());
 			}
 		});

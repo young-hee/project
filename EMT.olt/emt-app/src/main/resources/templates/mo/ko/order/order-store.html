@@ -4,7 +4,7 @@
 <th:block ap:fragment="layout-endpoint">
 	<script th:inline="javascript">
 		var orderStore = /*[[${ordStore}]]*/;
-		console.log("orderStore : " + orderStore);
+		//console.log("orderStore : " + orderStore);
 		opener.parent.document.orderForm.storeHeadCd.value = orderStore.storeHeadCd;
 		opener.parent.document.orderForm.storeShopCd.value = orderStore.storeShopCd;
 		opener.parent.document.orderForm.storeNm.value = orderStore.storeNm;
@@ -51,6 +51,10 @@
 		opener.parent.document.getElementById("cStoreDongNmCode").value =orderStore.storeDdBag;
 		opener.parent.document.getElementById("cStoreArrivalDongNm").value =orderStore.storeEupmyeon;
 
+		// 배송정보 입력(회원)
+		if (opener.parent.document.getElementById("checkedAddress") != null) {
+			opener.parent.document.getElementById("checkedAddress").innerText = orderStore.storeShopNm;
+		}
 
 		if (!window.opener.parent.closed) window.opener.parent.close();
 		if (!window.closed) window.close();

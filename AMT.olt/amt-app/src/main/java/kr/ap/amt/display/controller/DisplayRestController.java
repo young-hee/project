@@ -26,8 +26,10 @@ import kr.ap.amt.display.vo.RequestDisplay;
 import net.g1project.ecp.api.model.BooleanResult;
 import net.g1project.ecp.api.model.sales.coupon.DownloadCoupons;
 import net.g1project.ecp.api.model.sales.coupon.MemberKeepingCouponCount;
+import net.g1project.ecp.api.model.sales.display.BrandCard;
 import net.g1project.ecp.api.model.sales.display.Corner;
 import net.g1project.ecp.api.model.sales.display.CornerContentsSet;
+import net.g1project.ecp.api.model.sales.display.DisplayCard;
 import net.g1project.ecp.api.model.sales.display.FlaggedProdRankChange;
 import net.g1project.ecp.api.model.sales.display.OnlineProdList;
 import net.g1project.ecp.api.model.sales.display.OnlineProdListStp;
@@ -293,7 +295,7 @@ public class DisplayRestController extends AbstractController {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
         try {
-        	List<DownloadCoupons> myCouponListResult = couponApi.getDownloadCoupons("All", "Y", getMemberSn(), null, null);
+        	List<DownloadCoupons> myCouponListResult = couponApi.getDownloadCoupons("All", "Y", getMemberSn(), null);
         	MemberKeepingCouponCount memberKeepingCouponsCount = couponApi.getMemberKeepingCouponsCount(getMemberSn(), 90L);
 
         	result.put("myCouponListResult", myCouponListResult);
@@ -769,6 +771,52 @@ public class DisplayRestController extends AbstractController {
 					requestDisplay.getDisplayCate(), requestDisplay.getBrand(), requestDisplay.getFlag(),
 					requestDisplay.getAttr(), requestDisplay.getPriceRange());
 			result.put("onlineProdList", onlineProdList);
+		} catch (Exception e) {
+			result.put("errorData", e);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+		
+		return ResponseEntity.ok(result);
+	}
+	
+	/**
+	 * 전시카드목록
+	 * 
+	 * @param requestDisplay
+	 * @return
+	 */
+	@RequestMapping("/displayCardList")
+    @ResponseBody
+    public ResponseEntity<?> displayCardList(RequestDisplay requestDisplay) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+			List<DisplayCard> displayCardList = displayApi.getDisplayCards(requestDisplay.getLocation());
+			result.put("displayCardList", displayCardList);
+		} catch (Exception e) {
+			result.put("errorData", e);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+		
+		return ResponseEntity.ok(result);
+	}
+	
+	/**
+	 * 인기브랜드목록
+	 * 
+	 * @param requestDisplay
+	 * @return
+	 */
+	@RequestMapping("/brandCardList")
+    @ResponseBody
+    public ResponseEntity<?> brandCardList(RequestDisplay requestDisplay) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		try {
+			List<BrandCard> brandCardList = displayApi.getBrandCards(requestDisplay.getSort(),
+					requestDisplay.getFaveBrandCnt(),
+					0,
+					10);
+			result.put("brandCardList", brandCardList);
 		} catch (Exception e) {
 			result.put("errorData", e);
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);

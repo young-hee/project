@@ -8,7 +8,7 @@
 			<div>
 				<div class="ui_table">
 					<div>
-						<a href="#none"><b>지금, 구매리뷰를 작성해보세요</b> <span class="ico_arr_w"></span></a>
+						<a href="javascript:;" id="writeReview"><b>지금, 구매리뷰를 작성해보세요</b> <span class="ico_arr_w"></span></a>
 						<p class="text">이번 달 랭킹 리뷰어로 선정된 고객님들께<br>뷰티포인트 <em class="bg">10,000P</em>를 추가로 지급해드려요</p>
 					</div>
 				</div>
@@ -29,6 +29,7 @@
 				</div>
 			</div>
 		</div>
+		
 		<!--/* 이번주 랭킹 */-->
 		<div class="section pd_md mgt0" th:if="${thisWeekReviewRank.totalCount > 0}">
 			<dl>
@@ -52,32 +53,33 @@
 				</dd>
 			</dl>
 		</div>
+		
 		<!--/* 화제의 제품 리뷰 랭킹 */-->
-		<div class="section pd_md">
+		<div class="section pd_md" th:if="${thisWeekReviewRank.totalCount > 0}">
 			<dl>
 				<dt class="h_title">화제의 제품, 이번 주 리뷰 100개 돌파</dt>
 				<dd class="product_slide review_slide">
 					<ul class="three_half">
-						<!-- <li th:each="review, reviewIdx : ${bestProductReview.prodReviewList}"> -->
-						<li th:each="review, reviewIdx : ${thisWeekReviewRank.prodReviewList}">
+						<li th:each="review, reviewIdx : ${bestProductReview.list}">
 							<a href="#none">
 								<b class="rank" th:text="${reviewIdx.count}">1</b>
 								<div class="review_product">
-									<img th:src="${review.repProdImage}" alt="">
+									<img th:src="${review.onlineProdImages[0].imgUrl}" alt="">
 									<span class="product_info">
-										<span class="brand" th:text="${review.prodName}">라네즈</span>
-										<span class="product_name" th:text="${review.onlineProdName}">투톤립바</span>
+										<span class="brand" th:text="${review.products[0].brandName}"></span>
+										<span class="product_name" th:text="${review.onlineProdName}"></span>
 									</span>
 								</div>
-								<span class="reviewer" th:text="${review.memberId}">amore***</span>
+								<span class="reviewer" th:text="${review.memberId}"></span>
 							</a>
 						</li>
 					</ul>
 				</dd>
 			</dl>
 		</div>
+		
 		<!--/* 지난달 리뷰 랭킹 */-->
-		<div class="section pd_md">
+		<div class="section pd_md" th:if="${lastMonthReviewRank.totalCount > 0}">
 			<dl>
 				<dt class="h_title">지난 달 리뷰 랭킹</dt>
 				<dd class="product_slide review_slide">
@@ -92,13 +94,14 @@
 										<span class="product_name" th:text="${review.onlineProdName}">투톤립바</span>
 									</span>
 								</div>
-								<span class="reviewer" th:text="${review.memberId}">amore***</span>
+								<span class="reviewer" th:text="${review.memberId}"></span>
 							</a>
 						</li>
 					</ul>
 				</dd>
 			</dl>
 		</div>
+		
 		<!--/* 실시간 구매 리뷰 */-->
 		<div class="section realtime_wrap">
 			<dl class="realtime_review">
@@ -114,7 +117,7 @@
 					<ul class="review_list grid" style="opacity: 0">
 						<li class="grid-item" th:each="review, reviewIdx : ${onlineBuyReview.prodReviewList}">
 							<th:block th:if="${review.prodReviewTypeCode == 'Pur'|| review.prodReviewTypeCode == 'Prod'}">
-								<div class="flag_box">
+								<div class="flag_box" data:review-sn="${review.prodReviewSn}">
 									<th:block th:each="img, imgIdx : ${review.imgList}">
 										<th:block th:if="${imgIdx.count == 1}">
 											<img alt="" th:src="${img.imageFileUrl}">
@@ -124,23 +127,22 @@
 										<span class="rating_one">
 											<span class="star_one"><img src="/mo/ko/images/display/bg_rating_one.png" alt=""></span><span class="count" th:text="${review.scope}">3</span>
 										</span>
-										<p class="text" th:text="${review.prodReviewBodyText}">친구 선물 사려고 구매했는데 데 너무 좋아서 제껏도 샀어요 특히 피부색 칙칙한 날에는 ...</p>
-										<p class="reviewer" th:text="${review.memberId}">amorepaci***</p>
+										<p class="text" th:text="${review.prodReviewBodyText}"></p>
+										<p class="reviewer" th:text="${review.memberId}"></p>
 									</div>
 									<div class="product_info">
 										<div class="img_product">
 											<img alt="" th:src="${review.repProdImage}">
 										</div>
 										<ul class="product_name_wrap">
-											<li th:text="${review.prodName}">헤라 블랙쿠션 블랙쿠션 SPF34 PA+</li>
-											<li th:text="${review.onlineProdName}">옵션명 옵션명 옵션명 옵션명 옵션명</li>
+											<li th:text="${review.prodName}"></li>
+											<li th:text="${review.onlineProdName}"></li>
 										</ul>
 									</div>
 								</div>
-							</a>
 							</th:block>
 							<th:block th:unless="${review.prodReviewTypeCode == 'Pur' || review.prodReviewTypeCode == 'Prod'}">
-								<div class="flag_box">
+								<div class="flag_box bTester" data:review-sn="${review.prodReviewSn}">
 									<div class="beauty_tester">
 										<th:block th:each="img, imgIdx : ${review.imgList}">
 											<th:block th:if="${imgIdx.count == 1}">
@@ -188,6 +190,23 @@
 			$( '.review_list.grid' ).css( 'opacity', 1 );
 			_grid.masonry('layout');
 		});
+		
+		$('.flag_box').on('click', function(){
+			if( $(this).hasClass('bTester') ){
+				location.href = '/display/beauty_test/review-detail?prodReviewSn='+$(this).data('review-sn');
+			} else {
+				location.href = '/review/detail/'+$(this).data('review-sn');
+			}
+		});
+		
+		$('#writeReview').on('click', function(){
+			if( AP.LOGIN_USER ){
+				location.href = '/my/page/myReviewList';
+			} else {
+				AP.login.go();
+			}
+		});
+		
 	</script>
 </th:block>
 

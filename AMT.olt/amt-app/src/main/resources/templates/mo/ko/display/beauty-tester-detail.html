@@ -1,13 +1,13 @@
-<html ap:decorate="~{layout/layout-item-only}" th:with="_jsfile='beauty-tester'">
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='beauty-tester'">
 <body>
 <!-- #ap_container -->
 <div ap:fragment="layout-contents">
-	<div class="ap_contents">
+	<div class="ap_contents title_two_depth beauty_tester_wrap">
 
 		<div class="section top course_wrap">
 			<div class="cont_top">
 				<p class="tiile" th:text="${regularEvent.regularEventName}"></p>
-				<p class="sub_txt">테스터 모집인원 30명</p>
+				<p class="sub_txt">테스터 모집인원 [[${regularEvent.recruitmentPersonnelCnt==null?0:regularEvent.recruitmentPersonnelCnt}]]명</p>
 				<p class="apply"><span class="point_purple" th:text="${requesters.totalCount}+'명'"></span> 신청중</p>
 			</div>
 
@@ -85,22 +85,22 @@
 				<p class="title">뷰티테스터 상품</p>
 			</div>
 			<!-- 상품 리스트 -->
-			<div class="product_one_view">
-				<a href="javascript:;">
+			<div class="product_one_view" th:data-val="${prd.onlineProdSn}" th:each="prd : ${onlineProdInfos}">
+				<a th:href="@{/product/detail(prodSn=${prd.onlineProdSn})}">
 					<!--  상품이미지  -->
 					<span class="product_visual_new">
 						<span class="lazy_load_wrap">
-							<img th:src="${prodImage}" th:data-src="${prd.onlineProdImages[0].imgUrl}" alt="" class="lazy_load">
+							<img th:src="${prd.products[0].prodImages[0].imgUrl}" th:data-src="${prd.onlineProdImages[0].imgUrl}" alt="" class="lazy_load">
 						</span>
 					</span>
 
 					<!-- 상품 정보 -->
 					<span class="product_info_new">
 						<span class="prd_name" th:text="${prd.onlineProdName}"></span>
-						<span class="price_wrap">
-							<strong class="discount" th:text="${discountRate}" th:if="${dblPriceDispYn}=='Y'">5%</strong>
-							<strong class="price" th:utext="|${#numbers.formatDecimal(cPrice, 0, 'COMMA', 0, 'POINT')}<em>원</em>|"></strong>
-							<del th:text="${#numbers.formatDecimal(bPrice, 0, 'COMMA', 0, 'POINT')}+'원'" th:if="${dblPriceDispYn}=='Y'"></del>
+						<span class="price_wrap" th:with="price=${prd.availablePrices[0]}">
+							<strong class="discount" th:text="${price.maxOnlineSalePriceDiscountRate + price.maxMemberLevelDiscountRate + price.maxOnlineMemberDiscountRate + price.maxImmedDiscountRate}" th:if="${price.doublePriceDisplayYn}=='Y'">5%</strong>
+							<strong class="price" th:utext="|${#numbers.formatDecimal(price.minOnlineMemberDiscountPrice, 0, 'COMMA', 0, 'POINT')}<em>원</em>|"></strong>
+							<del th:text="${#numbers.formatDecimal(price.minBeforeOnlineSalePrice, 0, 'COMMA', 0, 'POINT')}+'원'" th:if="${price.doublePriceDisplayYn}=='Y'"></del>
 						</span>
 
 						<!-- 평점 리뷰 -->
@@ -118,7 +118,7 @@
                             </th:block>
 						</span>
 
-						<button type="button" class="btn_toggle like" onclick="$(this).toggleClass('on'); $(this).find('i').toggleClass('on')"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
+						<button type="button" class="btn_toggle like"><i class="ico_heart_s"></i><span class="sr_only">좋아요</span></button>
 					</span>
 					<a href="javascript:;" class="direct_brand" th:text="${prd.products[0].brandName}"></a>
 				</a>
@@ -127,12 +127,12 @@
 		</div>
 
 		<!--/* 상품 상세정보 */-->
-		<dl class="section detail_info ui_toggle_contents">
+		<dl class="section detail_info ui_toggle_contents" th:with="prd=${onlineProdInfos[0]}">
 			<dt class="title_box"><span class="title">상품 상세정보</span></dt>
 			<dd class="cont">
 				<img ap:src="@{/images/product/img_expand.jpg}" alt="상세 정보를 확대해서 보실 수 있어요"> 
 				<!-- <img ap:src="@{/images/dummy/img_detail_info.jpg}" alt="이미지 대체 텍스트 짧을 경우"> -->
-                <img th:src="${prodDetailImage}" alt="" class="lazy_load">
+                <img th:src="${prd.onlineProdImages[0].imgUrl}" alt="" class="lazy_load">
 				<div class="sr_only">
 					이미지 대체 텍스트 영역 텍스트가 길 경우
 				</div>
@@ -213,7 +213,7 @@
 								</dd>
 							</dl>
 						</div>
-						<div class="applicant_wrap" th:if="${requesters.totalCount==0}">
+						<div class="applicant_wrap none" th:if="${requesters.totalCount==0}" style="display:block;">
 							<p class="txt">아직 신청자가 없습니다.</p>
 							<a href="#none" class="btn_h45_pp">뷰티테스터 신청하기</a>
 						</div>
@@ -334,10 +334,21 @@
 		[/th:block]
 		
 		$(document).ready(function(){
-    		$(".btn_toggle.like").click(function(){
-    			AP.api.postRecommend( null, {prodSn: [[${prd.products[0].prodSn}]]} )
-    			.done(function ( result ) {
-    			});
+    		$(".btn_toggle.like").click(function(e){
+    			
+    			var obj = $( e.currentTarget );
+    			var products = [{prodSn: $(obj).parent().parent().parent().attr("data-val")}];
+    			
+				AP.login().done(function () {
+					if ( !$(obj).hasClass( 'on' )) {
+						$(obj).addClass( 'on' ).find( '.ico_heart_s' ).addClass( 'on' );
+						AP.addLike.add( $(".layout-contents > .ap_contents.beauty_tester_wrap"), products );
+					} else {
+						$(obj).removeClass( 'on' ).find( '.ico_heart_s' ).removeClass( 'on' );
+						AP.addLike.remove( products[0].prodSn );
+					}
+				}.bind( this ));
+				return false;
     		});
     		
     		$(".btn_sm_bordered.edit").click(function(){

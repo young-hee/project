@@ -40,18 +40,20 @@ this["AP"]["handlebars"]["my"]["order"]["fullpage-address-edit"] = Handlebars.te
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.cStoreDongNmCode : stack1), depth0))
     + "\">\n					<input type=\"hidden\" name=\"cStoreArrivalDongNm\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.cStoreArrivalDongNm : stack1), depth0))
+    + "\">\n					<input type=\"hidden\" name=\"cStoreStoreCode\" value=\""
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.cStoreStoreCode : stack1), depth0))
     + "\">\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
 
   return "<dl class=\"layer\">\n	<dt class=\"layer_title\">배송정보 수정</dt>\n	<dd class=\"layer_cont\">\n		<div class=\"panel\">\n			<h2 class=\"h_title page\">배송지 정보 수정</h2>\n			<ul class=\"list_bullet_dot type2\">\n				<li>설정된 배송지 정보를 수정해 주시기 바랍니다.</li>\n			</ul>\n			<hr class=\"div m30\" />\n			<h3 class=\"form_title\">기본정보 <small>(필수입력)</small></h3>\n\n			<form class=\"validate\" id=\"shipForm\" name=\"shipForm\">\n\n				<input type=\"hidden\" name=\"shipAddressTypeCode\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.shipAddressTypeCode : stack1), depth0))
     + "\">\n				<fieldset class=\"form\">\n					<legend class=\"sr_only\">배송지 추가/수정</legend>\n					<div class=\"input_group\">\n						<div class=\"label w30p\">\n							<label for=\"\">받는 사람</label>\n						</div>\n						<div>\n							<input type=\"text\" name=\"recipientName.name1\" placeholder=\"받는 분 성함을 입력해 주세요.\" value=\""
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.recipientName : stack1)) != null ? stack1.name1 : stack1), depth0))
     + "\" required=\"required\" user-fullname=\"user-fullname\" data-msg=\"받는 분 성함을 입력해 주세요.\">\n						</div>\n					</div>\n					<div class=\"input_group\">\n						<div class=\"label w30p\">\n							<label for=\"delivery_phone\">휴대전화</label>\n						</div>\n						<div>\n							<input type=\"tel\" name=\"recipientPhoneNo1.phoneNo\" placeholder=\"- 없이 입력해 주세요.\" value=\""
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.recipientPhoneNo1 : stack1)) != null ? stack1.phoneNo : stack1), depth0))
+    + alias2((helpers.removeSC || (depth0 && depth0.removeSC) || alias4).call(alias3,((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.recipientPhoneNo1 : stack1)) != null ? stack1.phoneNo : stack1),{"name":"removeSC","hash":{},"data":data}))
     + "\"\n								   required=\"required\" mobile-number=\"mobile-number\" data-msg-required=\"휴대폰번호를 입력해 주세요.\" data-msg-mobile-number=\"휴대폰 번호를 정확히 입력하세요.\">\n						</div>\n					</div>\n				</fieldset>\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.shipAddressTypeCode : stack1),"===","ShipAddressInput",{"name":"xif","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.shipAddressTypeCode : stack1),"===","ShipAddressInput",{"name":"xif","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
     + "				<h3 class=\"form_title\">배송 메시지</h3>\n				<fieldset class=\"form\">\n					<legend class=\"sr_only\">부가정보 입력</legend>\n					<div class=\"input_group default\">\n						<div>\n							<input type=\"text\" name=\"shipMsg\" id=\"delivery_title\" placeholder=\"배송 메시지를 입력해주세요.\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.shipMsg : stack1), depth0))
     + "\" data-msg=\"배송 메시지를 입력해주세요.\">\n						</div>\n					</div>\n\n				</fieldset>\n			</form>\n			<div class=\"form_btns\">\n				<a href=\"#none\" class=\"btn_lg_secondary\" id=\"editShipCancel\">취소</a>\n				<a href=\"javascript:void(0);\" onclick=\"editShipAddress();\" class=\"btn_lg_neutral\">등록</a>\n			</div>\n		</div>\n	</dd>\n</dl>";

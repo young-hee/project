@@ -25,8 +25,13 @@
     	              window.opener.nbSuccess(data);
     	              window.close();
     	    	  } else {
-    	              window.opener.doSnsLogin();
-    	              window.close();
+                	if(!data.error) {
+                        window.opener.doSnsLogin();
+                        window.close();
+                	} else {
+                		window.opener.AP.modal.alert("SNS 인증에 실패했습니다.");
+                        window.close();
+                	}
     	    	  }
 	    	      //성공
 	    	    },

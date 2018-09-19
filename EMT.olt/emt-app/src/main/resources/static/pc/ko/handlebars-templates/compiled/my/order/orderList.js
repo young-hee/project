@@ -275,7 +275,7 @@ this["AP"]["handlebars"]["my"]["order"]["orderList"] = Handlebars.template({"1":
     + "', '"
     + alias3(alias4((depth0 != null ? depth0.ordHistNo : depth0), depth0))
     + "')\">\n					"
-    + alias3(alias4(((stack1 = (depth0 != null ? depth0.claimProdInfo : depth0)) != null ? stack1.prodNameRlang : stack1), depth0))
+    + alias3(alias4(((stack1 = (depth0 != null ? depth0.claimProdInfo : depth0)) != null ? stack1.onlineProdNameRlang : stack1), depth0))
     + " "
     + alias3((helpers.checkCnt || (depth0 && depth0.checkCnt) || alias2).call(alias1,"cnt",((stack1 = (depth0 != null ? depth0.claimProdInfo : depth0)) != null ? stack1.totalProdCnt : stack1),{"name":"checkCnt","hash":{},"data":data}))
     + "\n				</a>\n			</td>\n			<td>"

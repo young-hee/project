@@ -33,7 +33,7 @@ public class MemberViewController extends AbstractController {
 	}
 	@PostMapping("/findPwd/complete")
 	@PageTitle(title = "비밀번호 변경")
-	public String findPwdComplete(Model model, String joinType, String incsNo) {
+	public String findPwdComplete(Model model, String joinType, String incsNo, String phoneNo) {
 
 		if("00".equals(joinType) || "05".equals(joinType)) {
 			return "/customer/find-id.3";
@@ -42,25 +42,14 @@ public class MemberViewController extends AbstractController {
 			return "/customer/find-id.4";
 		}
 
-		
-		CicuemCuInfTotTcVo cicuemCuInfTotTcVo = new CicuemCuInfTotTcVo();
-		cicuemCuInfTotTcVo.setIncsNo(incsNo);
-		cicuemCuInfTotTcVo = amoreAPIService.getcicuemcuinfrbyincsno(cicuemCuInfTotTcVo);
-		StringBuffer sb = new StringBuffer();
-		sb.append(cicuemCuInfTotTcVo.getCellTidn());
-		sb.append("-");
-		sb.append(cicuemCuInfTotTcVo.getCellTexn());
-		sb.append("-");
-		sb.append(cicuemCuInfTotTcVo.getCellTlsn());
+		StringBuffer sb = new StringBuffer(phoneNo);
 		sb.replace(sb.length() - 2, sb.length(), "**");
-
+		
 		ApIssueTemporaryPassword issueTemporaryPassword = new ApIssueTemporaryPassword();
 		issueTemporaryPassword.setIncsNo(Long.parseLong(incsNo));
-		EmbeddableTel phoneNo = new EmbeddableTel();
-		phoneNo.setPhoneNo(cicuemCuInfTotTcVo.getCellTidn() + cicuemCuInfTotTcVo.getCellTexn() + cicuemCuInfTotTcVo.getCellTlsn());
-		issueTemporaryPassword.setPhoneNo(phoneNo);
-		
-		
+		EmbeddableTel phoneNoVo = new EmbeddableTel();
+		phoneNoVo.setPhoneNo(phoneNo);
+		issueTemporaryPassword.setPhoneNo(phoneNoVo);
 		
 		model.addAttribute("phone", sb.toString());
 		WebUtils.setSessionAttribute(getRequest(), "TEMP_PW_CHANGE", issueTemporaryPassword);
@@ -70,18 +59,20 @@ public class MemberViewController extends AbstractController {
 
 	@PostMapping("/findId/complete")
 	@PageTitle(title = "아이디 찾기")
-	public String findIdComplete(Model model, String joinType, String userId) {
+	public String findIdComplete(Model model, String joinType, String userId, String phoneNo) {
 		switch (joinType) {
 		case "00":
 			return "/customer/find-id.3";
 		case "01":
 			model.addAttribute("userId", userId.substring(0, userId.length() - 2) + "**");
+			model.addAttribute("phoneNo", phoneNo);
 			return "/customer/find-id.2";
 		case "02":
 			return "/customer/find-id.4";
 		case "03":
         case "04": //통합ID회원 정보
 			model.addAttribute("userId", userId.substring(0, userId.length() - 2) + "**");
+			model.addAttribute("phoneNo", phoneNo);
 			return "/customer/find-id.2";
         case "05": //통합비ID회원 정보 //FIXME 나중에 수정.
 			return "/customer/find-id.3";

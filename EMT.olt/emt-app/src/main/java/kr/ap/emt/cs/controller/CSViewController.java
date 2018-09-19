@@ -9,6 +9,7 @@ package kr.ap.emt.cs.controller;
 import kr.ap.comm.config.interceptor.PageTitle;
 import kr.ap.comm.support.breadcrumb.BreadCrumb;
 import kr.ap.comm.support.common.AbstractController;
+import kr.ap.emt.my.vo.MyOrdTemplateDTO;
 import net.g1project.ecp.api.model.sales.guide.FaqSearchResult;
 import net.g1project.ecp.api.model.sales.guide.FaqSummary;
 import net.g1project.ecp.api.model.sales.guide.FoNoticeResult;
@@ -351,6 +352,26 @@ public class CSViewController extends AbstractController {
         return null;
     }
     
- // ============================  fragment end =============================== //
+ // ============================  fragment end =============================== /
+
+	@GetMapping("/template/{state}/{ordNo}")
+	@PageTitle(title = "주문상세 확인용")
+	public String ordTemplate(Model model, @PathVariable String state, @PathVariable String ordNo) {
+
+//		"180910200006973H0002"
+		model.addAttribute("state", state);
+		model.addAttribute("ord", ordNo);
+		String typeName = "취소";
+		if ("return".equals(state) || "exchange".equals(state)) {
+			typeName = "return".equals(state) ? "반품" : "교환";
+			model.addAttribute("ord", new MyOrdTemplateDTO(orderApi.getClaimOrdHist(ordNo), state));
+		}
+		else {
+			model.addAttribute("ord", new MyOrdTemplateDTO(orderApi.getCancelOrdHist(ordNo), state));
+		}
+		model.addAttribute("typeName", typeName);
+
+		return "my/order-template";
+	}
 
 }

@@ -388,16 +388,4 @@ public class ProductViewController extends AbstractController{
 		return "product/review-list";
     }
     
-    /**
-     * 리뷰 필터링
-     * @param requestReview
-     * @return
-     */
-    @GetMapping("/filterReviewList/{filterType}")
-    public String filterReviewList(@PathVariable String filterType, String keyword, Model model) throws ParseException {
-    	model.addAttribute("filterType", filterType);
-    	model.addAttribute("keyword", keyword);
-    	
-    	return "product/filter-review-list";
-    }
 }

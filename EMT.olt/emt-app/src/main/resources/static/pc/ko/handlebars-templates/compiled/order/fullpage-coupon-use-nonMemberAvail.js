@@ -11,11 +11,11 @@ this["AP"]["handlebars"]["order"]["fullpage-coupon-use-nonMemberAvail"] = Handle
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
 
   return "		<div class=\"coupon_order\">\n			<span class=\"check_wrap\">\n				<input type=\"checkbox\" id=\""
-    + alias2(alias1((depth0 != null ? depth0.couponSn : depth0), depth0))
+    + alias2(alias1((depth0 != null ? depth0.couponIdentifier : depth0), depth0))
     + "\" name=\"couponSn\" data-code=\""
     + alias2(alias1((depth0 != null ? depth0.duplicationUseConditionCode : depth0), depth0))
     + "\">\n				<label for=\""
-    + alias2(alias1((depth0 != null ? depth0.couponSn : depth0), depth0))
+    + alias2(alias1((depth0 != null ? depth0.couponIdentifier : depth0), depth0))
     + "\">\n					<span>\n						<span class=\"flag\">"
     + alias2((helpers.marketingOrg || (depth0 && depth0.marketingOrg) || alias4).call(alias3,(depth0 != null ? depth0.mktgOrgCode : depth0),{"name":"marketingOrg","hash":{},"data":data}))
     + "</span> <span class=\"flag\">D-"

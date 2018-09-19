@@ -304,6 +304,14 @@ public class CicuemCuInfTotTcVo {
 	 * 최초접촉거래처
 	 */
 	private String fstCnttPrtnId;
+	/**
+	 * 고객등급
+	 */
+	private String icsgNm;
+	/**
+	 * 고객등급코드.
+	 */
+	private String IcsgCd;
 
 	private List<CicuedCuTncaTcVo> cicuedCuTncaTcVo;
     private CicuemCuAdtInfTcVo cicuemCuAdtInfTcVo;
@@ -311,6 +319,23 @@ public class CicuemCuInfTotTcVo {
     private List<CicuemCuOptiCsTcVo> cicuemCuOptiCsTcVo;
     private List<CicuedCuChArrayTcVo> cicuedCuChArrayTcVo;
 	private CicuemCuOptiCsTcVo cicuemCuOptiTcVo;
+
+	
+	public String getIcsgNm() {
+		return icsgNm;
+	}
+
+	public void setIcsgNm(String icsgNm) {
+		this.icsgNm = icsgNm;
+	}
+
+	public String getIcsgCd() {
+		return IcsgCd;
+	}
+
+	public void setIcsgCd(String icsgCd) {
+		IcsgCd = icsgCd;
+	}
 
 	public String getFstCnttPrtnId() {
 		return fstCnttPrtnId;

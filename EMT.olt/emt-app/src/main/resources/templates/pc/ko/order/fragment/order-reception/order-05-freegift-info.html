@@ -101,46 +101,39 @@
 
 			if (ordUnitAwardSnArr != null && ordUnitAwardSnArr.length > 0) {
 				jQuery.ajaxSettings.traditional = true;
-
-
-				if ('initLoading' != initLoading) {
-					$('#orderLoading').show();
-				}
-
-				if (xhr != null) {
-					xhr.abort();
-				}
-
-				xhr = AP.api.ordReceptChangeOrdUnit({}, {
-					ordSn : ordSn,
-					ordUnitAwardSnArr : ordUnitAwardSnArr,
-					awardSelectQtyArr : awardSelectQtyArr,
-					membershipSn : $('[name=beauty_point]').length > 0 ? $('[name=beauty_point]').data().membershipsn : null,	//비회원: null
-					spPriceCnt : spPriceCnt
-				}).done(function(data){
-					if (data.ordHistEx != null){
-
-						amtPcurInitAjax(data, initLoading);
-
-						var isApMember = /*[[${isApMember}]]*/ null;
-						if (isApMember && 'initLoading' != initLoading && spPriceCnt > 0) {
-							if ($('[name="depositPrice"]').length > 0 && $('[name="depositPrice"]').val() != ""
-								|| $('[name="beauty_point"]').length > 0 && $('[name="beauty_point"]').val() != "") {
-								AP.modal.alert('보너스혜택 추가로 인해 포인트 및 예치금 사용이 초기화됩니다.');
-								$('[name="depositPrice"]').val('');
-								$('[name="beauty_point"]').val('');
-							}
-						}
-					}
-				}).fail(function (e) {
-					if (e.errorCode == "EAPI001") {
-						AP.modal.alert(e.responseJSON.errorData.message);
-					}
-				}).always(function () {
-					$('#orderLoading').hide();
-					jQuery.ajaxSettings.traditional = true;
-				});
 			}
+
+			if ('initLoading' != initLoading) {
+				$('#orderLoading').show();
+			}
+
+			if (xhr != null) {
+				xhr.abort();
+			}
+
+			xhr = AP.api.ordReceptChangeOrdUnit({}, {
+				ordSn : ordSn,
+				ordUnitAwardSnArr : ordUnitAwardSnArr,
+				awardSelectQtyArr : awardSelectQtyArr,
+				membershipSn : $('[name=beauty_point]').length > 0 ? $('[name=beauty_point]').data().membershipsn : null,	//비회원: null
+				spPriceCnt : spPriceCnt
+			}).done(function(data){
+				if (data.ordHistEx != null){
+
+					amtPcurInitAjax(data, initLoading);
+
+					if (isApMember && 'initLoading' != initLoading && spPriceCnt > 0) {
+						initPointAndDeposit('보너스혜택 추가로 인해 포인트 및 예치금 사용이 초기화됩니다.');
+					}
+				}
+			}).fail(function (e) {
+				if (e.errorCode == "EAPI001") {
+					AP.modal.alert(e.responseJSON.errorData.message);
+				}
+			}).always(function () {
+				$('#orderLoading').hide();
+				jQuery.ajaxSettings.traditional = true;
+			});
 		}
 	</script>
 </dl>

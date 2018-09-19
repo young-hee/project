@@ -1,0 +1,86 @@
+{{!--
+	hot deal
+--}}
+<h2 class="title"><b>투데이 핫딜</b>
+	<span class="ui_remain_timer">
+		<b class="hour">00</b>:<b class="minute">00</b>:<b class="second">00</b>
+	</span>
+</h2>
+<div class="recommended_item slide" data-ix-options="view-length:4; move-length:4;loop:false;datum-point:-20px">
+	<div class="ix-list-viewport unit_1">
+		<ul class="ix-list-items">
+			{{#each this.list}}
+				<li class="ix-list-item">
+					<div class="product_box">
+						<a href="{{ productDetailPath this.onlineProdSn }}">
+							<div class="visual_section">
+								<img src="{{ this.onlineProdImages.0.imgUrl }}" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="">
+								<div class="benefit">
+									<span class="special">스페셜기프트</span>
+									<span class="gift">기프트카드</span>
+								</div>
+								{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+									<div class="soldout"><span>일시품절</span></div>
+								{{/xif}}
+							</div>
+							<!-- 상품 정보 -->
+							<div class="info_section">
+								<p class="txt_name">{{ this.onlineProdName }}</p>
+								<div class="price_atc">
+									{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+										<span class="txt_sale">
+											{{#with (calc this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate '+' this.onlineProdPriceSummary.minMemberLevelDiscountRate '+' this.onlineProdPriceSummary.minOnlineMemberDiscountRate) as |disMinRate|}}
+												{{#with (calc ../onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.maxMemberLevelDiscountRate '+' ../onlineProdPriceSummary.maxOnlineMemberDiscountRate) as |disMaxRate|}}
+													{{#xif disMinRate '!=' disMaxRate}}<span class="from">~</span>{{/xif}}<span class="to">{{ disMaxRate }}<em>%</em></span>
+												{{/with}}
+											{{/with}}
+										</span>
+									{{/xif}}
+									<span class="txt_price">{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>{{ condition ../isActivityPoint '알' '원' }}{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}} ~{{/xif}}</em></span>
+									{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+										<del class="txt_del">{{ numberFormat this.onlineProdPriceSummary.minBeforeOnlineSalePrice }}<em>{{ condition ../isActivityPoint '알' '원' }}</em></del>
+									{{/xif}}
+								</div>
+		
+								<!-- 평점 리뷰 -->
+								<div class="user_atc">
+									<span class="mark_star_sm star{{this.reviewScopeAvg}}"><span class="sr_only">구매 평점 별 5개 중 {{reviewScopeAvg}}개</span></span>
+									<span class="txt_review">리뷰 {{ this.reviewCount }}</span>
+								</div>
+							</div>
+						</a>
+						<div class="work_box">
+							<ul class="item_user">
+								<li>
+									<a href="#none" role="button">
+										<i class="ico_favorite"></i><!-- active : on -->
+										<span class="sr_only">좋아요</span>
+									</a>
+								</li>
+								<li>
+									<a href="#none" role="button">
+										<i class="ico_basket"></i>
+										<span class="sr_only">장바구니</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="item_section">
+							<div class="rside">
+								<a href="#none" class="link_brand">{{ this.products.0.brandName }}</a>
+							</div>
+						</div>
+					</div>
+				</li>
+			{{/each}}
+		</ul>
+	</div>
+	<div class="ix-controller">
+		<div class="slide_direction">
+			<!-- "ix-btn-prev", "ix-btn-next" 는 "ix-controller" 안에 존재해야 한다.-->
+			<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
+			<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
+		</div>
+	</div>
+</div>
+<a href="#none" class="more">더보기</a>

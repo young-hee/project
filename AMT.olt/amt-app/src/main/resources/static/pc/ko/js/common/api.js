@@ -63,6 +63,7 @@
 			limit: 10,
 			displayCate: 0,
 			priceRange: null,
+			flag: null,
 			attr: null
 		}},
 		
@@ -259,6 +260,32 @@
 
 		// 쿠폰 등록
 		registerCoupon: { path:'/my/api/registerCoupon', method: 'POST'},
+		
+		// 상품평설문 목록
+		getProductReviewSurveys: { path:'/my/api/getProductReviewSurveys', method: 'GET'},
+		
+		//상품평 등록
+		postProdReview : {path : '/my/api/postProdReview', method : 'POST', contentType:false, processData: false, data: {
+        		prodReviewTypeCode : 'Pur', //품평유형코드. Pur(구매후기), Prod(상품리뷰), ExperienceGrp(체험단)
+        		onlineProdSn : null, //온라인상품일련번호
+        		prodSn : null, //단위상품일련번호
+        		scope : null, //상품평별점
+        		prodReviewTitle : null, //상품평제목
+        		prodReviewBodyText : null, //내용
+        		arrSurvey : null, //"[{prodReviewEvalQuestionSn: 상품평질문항목일련번호, prodReviewEvalResponseSn: 상품평답변항목일련번호}]"
+				multiWriteYn : 'N'
+			}
+        },
+        
+        //상품평 수정
+        updateProdReview : {path : '/my/api/updateProdReview', method : 'POST', contentType:false, processData: false, data: {
+        		prodReviewSn : null, //상품평일련번호
+        		scope : null, //상품평별점
+        		prodReviewTitle : null, //상품평제목
+        		prodReviewBodyText : null, //내용
+        		arrSurvey : null //"[{prodReviewEvalQuestionSn: 상품평질문항목일련번호, prodReviewEvalResponseSn: 상품평답변항목일련번호}]"
+			}
+        },
 
 		/**
 		 * 매장찾기 *************************************************************
@@ -321,7 +348,7 @@
 				offset: 0,
 				limit: 20,
 				includeFilters:false,
-				displayCateDepth: 0,
+				displayCateDepth: 1,
 				displayCate:null,
 				brand:null,
 				priceRange:null
@@ -379,6 +406,19 @@
 			}
 		},
 		
+		//전시카드목록
+		displayCardList: { path:'/display/displayCardList', method: 'POST' , data: {
+				location: 'PCMain'
+			}
+		},
+		
+		//브랜드카드목록
+		brandCardList: { path:'/display/brandCardList', method: 'POST' , data: {
+			sort: 'ShoppingMarkCnt',
+			faveBrandCnt: 0
+			}
+		},
+		
 		/**
 		 * 상품 *************************************************************
 		 */
@@ -395,6 +435,7 @@
 				topReviewFirstYn  : 'N', //(필수)우수상품평우선정렬여부
 				startDate: null,
 				endDate: null,
+				imageOnlyYn: 'N',
 				offset: 0, //(필수)
 				limit: 10, //(필수)
 				displayMenuSetId : null, //전시메뉴세트아이디
@@ -425,6 +466,34 @@
         		prodReviewSn  : '' //(필수) 상품평일련번호
 			}
         },
+        
+        //상품평 등록
+        reviewWithImages : {path : '/product/reviewWithImages', method : 'POST', contentType:false, processData: false, data: {
+        		prodReviewTypeCode : 'Prod', //품평유형코드. Pur(구매후기), Prod(상품리뷰), ExperienceGrp(체험단)
+        		onlineProdSn : null, //온라인상품일련번호
+        		prodSn : null, //단위상품일련번호
+        		scope : null, //상품평별점
+        		prodReviewTitle : null, //상품평제목
+        		prodReviewBodyText : null, //내용
+        		arrSurvey : null, //"[{prodReviewEvalQuestionSn: 상품평질문항목일련번호, prodReviewEvalResponseSn: 상품평답변항목일련번호}]"
+				multiWriteYn : 'N'
+			}
+        },
+        
+        //상품평 수정
+        updateReviewWithImages : {path : '/product/updateReviewWithImages', method : 'POST', contentType:false, processData: false, data: {
+        		prodReviewSn : null, //상품평일련번호
+        		scope : null, //상품평별점
+        		prodReviewTitle : null, //상품평제목
+        		prodReviewBodyText : null, //내용
+        		arrSurvey : null //"[{prodReviewEvalQuestionSn: 상품평질문항목일련번호, prodReviewEvalResponseSn: 상품평답변항목일련번호}]"
+			}
+        },
+        
+        //상품평 삭제
+        deleteProdReview : {path : '/product/deleteProdReview', method : 'POST', data: {
+	    		prodReviewSn: null //상품평일련번호
+		}},
         
         //상품평 신고
         reportReview : {path : '/review/report', method : 'POST', data: {
@@ -645,6 +714,21 @@
 			}
 		},
 		
+		// 좋아요 검색
+		getShoppingBookmarks : {path:'/product/getShoppingBookmarks', method: 'POST', data:{
+				   shoppingMarkTgtCode : 'Prod' 
+				  ,prodSn : 0
+				  ,articleSn : 0
+				  ,planDisplaySn : 0
+				  ,displayMenuId : '' 
+				  ,displayMenuSetId : '' 
+				  ,searchWord : '' 
+				  ,onlineProdSn : 0
+				  ,brandSn : 0
+				  ,offset : 0
+				  ,limit : 10
+		}},
+		
 		//상품추천 (좋아요) - on
 		postRecommend : {path:'/product/postRecommend', method: 'POST', data:{
 				   shoppingMarkTgtCode : 'Prod' 
@@ -844,6 +928,30 @@
 				priceRange:null
 			}
 		},
+		
+		/**
+	     * 브랜드관 *************************************************************
+	     */
+		// 브랜드관 바로가기
+		getBrandMenu: { path:'/display/getBrandMenu', method: 'GET', data: {
+		}},
+		
+		// 쇼핑마크 브랜드 정보
+		getBrandFaveList: { path:'/display/getBrandFaveList', method: 'GET', data: {
+		}},
+		
+		// 브랜드 카드 목록
+		getBrandCards: { path:'/display/getBrandCards', method: 'GET', data: {
+			sort : 'ShoppingMarkCnt', //(필수) 누적 좋아요 순 / 넷스루 추천 순 / 랜덤 순(장바구니용)
+			faveBrandCnt : 0, // 기본 브랜드 목록 앞에 덧붙여 보여줄, 회원이 좋아요 누른 브랜드 목록 개수 (브랜드 메인 상단에 회원이 좋아요 누른 브랜드 3개 먼저 보여주기 위해 필요)
+			offset : 0,
+			limit : 9999
+		}},
+		
+		// 브랜드콘텐츠 상세
+		getBrandContents: { path:'/display/getBrandContents', method: 'GET', data: {
+			displayMenuId : null //(필수) 전시메뉴아이디
+		}},
 		
 		/**
 		 * test *************************************************************

@@ -12,13 +12,13 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-payInfo"] = Handlebars.tem
 
   return ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.type : depth0),"cancel",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.type : depth0),"return",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "		<div class=\"refund_delivery\">\n			<dl>\n				<dt><b>추가 배송비</b></dt>\n				<dd>"
+    + "		<div class=\"refund_delivery\">\n			<dl>\n				<dt><b>추가결제금액</b></dt>\n				<dd>"
     + container.escapeExpression((helpers.currencyFormatDefault || (depth0 && depth0.currencyFormatDefault) || alias2).call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.ordAmt : depth0)) != null ? stack1.ordAmt : stack1)) != null ? stack1.AddShipFee : stack1),{"name":"currencyFormatDefault","hash":{},"data":data}))
     + "</dd>\n			</dl>\n			<dl>\n				<dt><b>결제수단</b></dt>\n				<dd>\n					<fieldset class=\"form\">\n						<legend class=\"sr_only\">결제수단 선택</legend>\n						<span class=\"check_wrap\"><input type=\"radio\" name=\"radio\" id=\"radio1\"><label for=\"radio1\">신용카드</label></span>\n						<span class=\"check_wrap\"><input type=\"radio\" name=\"radio\" id=\"radio2\"><label for=\"radio2\">휴대폰 결제</label></span>\n						<button class=\"btn_md_primary\" type=\"button\">배송비 결제</button>\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.type : depth0),"return",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "					</fieldset>\n				</dd>\n			</dl>\n		</div>\n";
 },"3":function(container,depth0,helpers,partials,data) {
-    return "			<h3 class=\"h_title sub mgb20\">배송비 추가 결제 <small>취소 후 최종 결제금액이 10,000원 미만인 경우 배송비 결제가 필요합니다.</small></h3>\n";
+    return "			<h3 class=\"h_title sub mgb20\">추가결제 <small>취소 후 최종 결제금액이 10,000원 미만인 경우 배송비 결제가 필요합니다.</small></h3>\n";
 },"5":function(container,depth0,helpers,partials,data) {
     return "			<h3 class=\"h_title sub mgb20\">반품 배송비 결제 <small>고객 변심에 의한 반품은 반품 배송비 결제가 필요합니다.</small></h3>\n";
 },"7":function(container,depth0,helpers,partials,data) {
@@ -33,7 +33,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-payInfo"] = Handlebars.tem
 
   return ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || helpers.helperMissing).call(alias1,(depth0 != null ? depth0.addedPayYn : depth0),"Y",{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"11":function(container,depth0,helpers,partials,data) {
-    return "			<h3 class=\"h_title sub mgb20\">반품 배송비 결제</h3>\n			<div class=\"refund_delivery\">\n				<dl>\n					<dt><b>추가 배송비</b></dt>\n					<dd>2,500원</dd>\n				</dl>\n				<dl>\n					<dt><b>결제정보</b></dt>\n					<dd>KB국민카드(123456******1234) / 일시불 / 2018-09-12  18:02:34</dd>\n				</dl>\n			</div>\n";
+    return "			<h3 class=\"h_title sub mgb20\">반품 배송비 결제</h3>\n			<div class=\"refund_delivery\">\n				<dl>\n					<dt><b>추가결제금액</b></dt>\n					<dd>2,500원</dd>\n				</dl>\n				<dl>\n					<dt><b>결제정보</b></dt>\n					<dd>KB국민카드(123456******1234) / 일시불 / 2018-09-12  18:02:34</dd>\n				</dl>\n			</div>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 

@@ -29,7 +29,7 @@
 							<ul class="ix-list-items tester_recruitment_list progress">
                               <th:block th:each="event, stat : ${regularEventsPrgs}">
                                 <li class="ix-list-item" th:id="${event.regularEvent.regularEventSn}">
-                                <!-- <th:block th:if="${stat.first}"><a href="#none" class="selected"></th:block> -->
+                                <a href="#none" th:classappend="${stat.first}?selected">
                                 <th:block th:if="${event.status=='RQ'}"><a href="#none" th:classappend="${stat.index}==0?selected"></th:block>
                                 <th:block th:if="${event.status=='TN'}"><a href="#none" class="closing" th:classappend="${stat.index}==0?selected"></th:block>
                                 <th:block th:if="${event.status=='RR'}"><a href="#none" class="closing" th:classappend="${stat.index}==0?selected"></th:block>
@@ -42,10 +42,10 @@
                                                 <span class="status" th:case="'TN'">테스터발표</span>
                                                 <span class="status" th:case="'RR'">후기등록중</span>
                                                 <span class="status" th:case="'BR'">베스트리뷰발표</span>
-												<b class="ellipsis" th:utext="${event.regularEvent.regularEventName}+'-'+${event.status}"></b>
+												<b class="ellipsis" th:utext="${event.regularEvent.regularEventName}"></b>
 											</dt>
 											<dd>
-												<p class="text">테스터 모집 인원 30명 / <b><em th:utext="${event.requesters.totalCount}+'명'"></em></b> 신청중</p>
+												<p class="text">테스터 모집 인원 [[${event.regularEvent.recruitmentPersonnelCnt==null?0:event.regularEvent.recruitmentPersonnelCnt}]]명 / <b><em th:utext="${event.requesters.totalCount}+'명'"></em></b> 신청중</p>
 												<p class="date" th:utext="'~'+${#dates.format(event.regularEvent.eventEndDt,'yyyy.MM.dd')}"></p>
 											</dd>
 										</dl>
@@ -79,7 +79,7 @@
                               <b class="ellipsis" th:utext="${event.regularEvent.regularEventName}"></b>
                             </dt>
                             <dd>
-                              <p class="text">테스터 모집 인원 30명 / <b><em th:utext="${event.requesters.totalCount}+'명'"></em></b> 신청중</p>
+                              <p class="text">테스터 모집 인원 [[${event.regularEvent.participantLimitCnt}]]명 / <b><em th:utext="${event.requesters.totalCount}+'명'"></em></b> 신청중</p>
                               <p class="date" th:utext="'~'+${#dates.format(event.regularEvent.eventEndDt,'yyyy.MM.dd')}"></p>
                             </dd>
                           </dl>

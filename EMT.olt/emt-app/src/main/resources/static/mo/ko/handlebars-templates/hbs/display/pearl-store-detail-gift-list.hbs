@@ -4,14 +4,18 @@
 {{#each this.list}}
 	<li class="gift" data-prod-sn="{{ this.prodSn }}">
 		<div class="item">
-			<div class="item_images">
+			<div class="item_images lazy_load_wrap" >
 				<!-- /* 대표 이미지 */ -->
 				<img class="lazy_load" src="" data-src="{{ replaceImagePath this.prodImages.[0].imgUrl 280 280 }}" alt="">
 			</div>
 			<div class="item_info_freebie list">
 				<div class="prd_name">
 					<div>
-						<p class="name">&lt;사은품&gt; {{ this.prodName }}</p>
+						<p class="s_name">{{{this.linePromoDesc }}}</p>
+						<p class="name">
+							<em class="tag">{{{stockTxt this.saleDisplayStatus this.prodTypeCode}}}</em> 
+							{{{ this.prodName }}}
+						</p>
 					</div>
 				</div>
 			</div>
@@ -21,6 +25,6 @@
 				</span>
 			</div>
 		</div>
-		<button class="btn_order" type="button" data-prod-sn="{{ this.prodSn }}">담기</button>
+		<button class="btn_order" type="button" data-prod-sn="{{ this.prodSn }}" {{{stockBtn this.saleDisplayStatus this.prodTypeCode}}}>담기</button>
 	</li>
 {{/each}}

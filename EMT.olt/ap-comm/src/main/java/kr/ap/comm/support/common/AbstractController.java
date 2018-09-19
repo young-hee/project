@@ -332,7 +332,7 @@ public class AbstractController {
 	protected String getDisplayChannel() {
 		String displayChannel = "";
 
-		if (isMobileDevice()) {
+		if (isMobileWeb()) {
 			//Mobile
 			displayChannel = "MobileWeb";
 		} else if (isPcDevice()) {

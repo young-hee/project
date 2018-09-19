@@ -25,7 +25,6 @@
 				<!-- <em>[예약판매중]</em> -->
 				{{this.prod.ordProdEx.onlineProdNameBlang}}
 			</span>
-			<p class="opt">{{this.prod.ordProdEx.prodNameRlang}}</p>
 		</div>
 		<div class="price">
 			{{#xif this.prod.ordHistProdStatusCode '===' 'ProdCancel'}}
@@ -77,19 +76,11 @@
 		{{{prodPartial 'my.order.detail.claim-reason' 'title' title 'receivedClaimReasonName' this.prod.receivedClaimReasonName 'foReceivedClaimReason' this.prod.foReceivedClaimReason}}}
 	{{/if}}
     <!-- 상품단위 증정 사은품 -->
-    {{#if (ne this.prod.ordHistProdAwardExList null)}}
+    {{#if this.prod.ordHistProdAwardExList}}
 		<ul class="freebies">
 			{{#each this.prod.ordHistProdAwardExList}}
 				<li>
 					<div class="free_opt_box">
-						{{#if (and (eq ../this.viewYn.checkBox 'Y') (eq ../type 'exchange'))}}
-							<div class="check_wrap">
-								<input type="checkbox" id="free_{{this.awardOrdHistProdEx.ordHistProdNo}}" name="prod_{{this.awardOrdHistProdEx.ordHistProdNo}}" value="{{json this.awardOrdHistProdEx}}">
-								<label for="free_{{this.awardOrdHistProdEx.ordHistProdNo}}">
-									<span class="sr_only">선택</span>
-								</label>
-							</div>
-						{{/if}}
 						<span class="name">
 							{{#if (ne awardOrdHistProdEx.ordProdEx.prodImgUrl null)}}
 								<img src="{{awardOrdHistProdEx.ordProdEx.prodImgUrl}}" alt="">
@@ -97,31 +88,15 @@
 							사은품 : {{awardOrdHistProdEx.ordProdEx.prodNameBlang}} ({{awardQty}}개)
 						</span>
 					</div>
-					<!-- 클레임 사유 선택 -->
-					{{#if (and (eq ../viewYn.selectReason 'Y') (eq ../type 'exchange'))}}
-						{{{prodPartial 'my.order.detail.claim-reason-select' 'ordProdCode' ../this.prod.ordHistProdSn 'reason' ../reason 'title' ../title}}}
-					{{/if}}
-					<!-- 클레임 사유 확정 -->
-					{{#if (and (eq viewYn.selectReasonResult 'Y') (eq ../type 'exchange'))}}
-						{{{prodPartial 'my.order.detail.claim-reason' 'title' ../title 'receivedClaimReasonName' this.awardOrdHistProdEx.receivedClaimReasonName 'foReceivedClaimReason' this.awardOrdHistProdEx.foReceivedClaimReason}}}
-					{{/if}}
 				</li>
 			{{/each}}
 		</ul>
 	{{/if}}
-	{{#if (ne this.prod.ordHistProdPromoAwardExList null)}}
+	{{#if this.prod.ordHistProdPromoAwardExList}}
 		<ul class="freebies">
 			{{#each this.prod.ordHistProdPromoAwardExList}}
 				<li>
 					<div class="free_opt_box">
-						{{#if (and (eq ../this.viewYn.checkBox 'Y') (eq ../type 'exchange'))}}
-							<div class="check_wrap">
-								<input type="checkbox" id="free_{{this.awardOrdHistProdEx.ordHistProdNo}}" name="prod_{{this.awardOrdHistProdEx.ordHistProdNo}}" value="{{json this.awardOrdHistProdEx}}">
-								<label for="free_{{this.awardOrdHistProdEx.ordHistProdNo}}">
-									<span class="sr_only">선택</span>
-								</label>
-							</div>
-						{{/if}}
 						<span class="name">
 							{{#if (ne awardOrdHistProdEx.ordProdEx.prodImgUrl null)}}
 								<img src="{{awardOrdHistProdEx.ordProdEx.prodImgUrl}}" alt="">
@@ -129,14 +104,6 @@
 							사은품 : {{awardOrdHistProdEx.ordProdEx.prodNameBlang}} ({{awardQty}}개)
 						</span>
 					</div>
-					<!-- 클레임 사유 선택 -->
-					{{#if (and (eq ../viewYn.selectReason 'Y') (eq ../type 'exchange'))}}
-						{{{prodPartial 'my.order.detail.claim-reason-select' 'ordProdCode' ../this.prod.ordHistProdSn 'reason' ../reason 'title' ../title}}}
-					{{/if}}
-					<!-- 클레임 사유 확정 -->
-					{{#if (and (eq viewYn.selectReasonResult 'Y') (eq ../type 'exchange'))}}
-						{{{prodPartial 'my.order.detail.claim-reason' 'title' ../title 'receivedClaimReasonName' this.awardOrdHistProdEx.receivedClaimReasonName 'foReceivedClaimReason' this.awardOrdHistProdEx.foReceivedClaimReason}}}
-					{{/if}}
 				</li>
 			{{/each}}
 		</ul>
@@ -149,7 +116,7 @@
 				{{#if (eq this.viewYn.checkBox 'Y')}}
 					<div class="check_wrap" style="display:{{condition (eq this.prod.ordHistProdTypeCode 'BulkDc') 'none' ''}}">
 						<input type="checkbox" id="prod_{{this.prod.ordHistProdNo}}" name="prod_{{oProdCode}}" value="{{json this.prod}}"
-							data-oProdCode="{{oProdCode}}" data-promoSn="{{this.promoSn}}" >
+							data-oProdCode="{{oProdCode}}" data-promoSn="{{this.promoSn}}">
 						<label for="prod_{{this.prod.ordHistProdNo}}">
 							<span class="sr_only">선택</span>
 						</label>
@@ -198,64 +165,32 @@
 		</li>
 	</ul>
 	<!-- 상품단위 증정 사은품 -->
-	{{#if (ne this.prod.ordHistProdAwardExList null)}}
+	{{#if this.prod.ordHistProdAwardExList}}
 		<ul class="freebies">
 			{{#each this.prod.ordHistProdAwardExList}}
 					<li>
 						<div class="free_opt_box">
-							{{#if (and (eq ../this.viewYn.checkBox 'Y') (eq ../type 'exchange'))}}
-								<div class="check_wrap">
-									<input type="checkbox" id="free_{{this.awardOrdHistProdEx.ordHistProdNo}}" name="prod_{{this.awardOrdHistProdEx.ordHistProdNo}}" value="{{json this.awardOrdHistProdEx}}">
-									<label for="free_{{this.awardOrdHistProdEx.ordHistProdNo}}">
-										<span class="sr_only">선택</span>
-									</label>
-								</div>
-							{{/if}}
 							<span class="name">
 							{{#if (ne awardOrdHistProdEx.ordProdEx.prodImgUrl null)}}
 								<img src="{{awardOrdHistProdEx.ordProdEx.prodImgUrl}}" alt="">
 							{{/if}}
 							사은품 : {{awardOrdHistProdEx.ordProdEx.prodNameBlang}} (1개)</span>
 						</div>
-						<!-- 클레임 사유 선택 -->
-						{{#if (and (eq ../viewYn.selectReason 'Y') (eq ../type 'exchange'))}}
-							{{{prodPartial 'my.order.detail.claim-reason-select' 'ordProdCode' ../this.prod.ordHistProdSn 'reason' ../reason 'title' ../title}}}
-						{{/if}}
-						<!-- 클레임 사유 확정 -->
-						{{#if (and (eq viewYn.selectReasonResult 'Y') (eq ../type 'exchange'))}}
-							{{{prodPartial 'my.order.detail.claim-reason' 'title' ../title 'receivedClaimReasonName' this.awardOrdHistProdEx.receivedClaimReasonName 'foReceivedClaimReason' this.awardOrdHistProdEx.foReceivedClaimReason}}}
-						{{/if}}
 					</li>
 			{{/each}}
 		</ul>
 	{{/if}}
-	{{#if (ne this.prod.ordHistProdPromoAwardExList null)}}
+	{{#if this.prod.ordHistProdPromoAwardExList}}
 		<ul class="freebies">
 			{{#each this.prod.ordHistProdPromoAwardExList}}
 				<li>
 					<div class="free_opt_box">
-						{{#if (and (eq ../this.viewYn.checkBox 'Y') (eq ../type 'exchange'))}}
-							<div class="check_wrap">
-								<input type="checkbox" id="free_{{this.awardOrdHistProdEx.ordHistProdNo}}" name="prod_{{this.awardOrdHistProdEx.ordHistProdNo}}" value="{{json this.awardOrdHistProdEx}}">
-								<label for="free_{{this.awardOrdHistProdEx.ordHistProdNo}}">
-									<span class="sr_only">선택</span>
-								</label>
-							</div>
-						{{/if}}
 						<span class="name">
 						{{#if (ne awardOrdHistProdEx.ordProdEx.prodImgUrl null)}}
 							<img src="{{awardOrdHistProdEx.ordProdEx.prodImgUrl}}" alt="">
 						{{/if}}
 						사은품 : {{awardOrdHistProdEx.ordProdEx.prodNameBlang}} (1개)</span>
 					</div>
-					<!-- 클레임 사유 선택 -->
-					{{#if (and (eq ../viewYn.selectReason 'Y') (eq ../type 'exchange'))}}
-						{{{prodPartial 'my.order.detail.claim-reason-select' 'ordProdCode' ../this.prod.ordHistProdSn 'reason' ../reason 'title' ../title}}}
-					{{/if}}
-					<!-- 클레임 사유 확정 -->
-					{{#if (and (eq viewYn.selectReasonResult 'Y') (eq ../type 'exchange'))}}
-						{{{prodPartial 'my.order.detail.claim-reason' 'title' ../title 'receivedClaimReasonName' this.awardOrdHistProdEx.receivedClaimReasonName 'foReceivedClaimReason' this.awardOrdHistProdEx.foReceivedClaimReason}}}
-					{{/if}}
 				</li>
 			{{/each}}
 		</ul>

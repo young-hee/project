@@ -24,24 +24,22 @@ this["AP"]["handlebars"]["display"]["events"]["hotdeal-item"] = Handlebars.templ
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.onlineProdPriceSummary : depth0)) != null ? stack1.maxFinalDiscountRate : stack1),">",0,{"name":"xif","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "						<strong class=\"price\">"
     + alias2((helpers.numberFormat || (depth0 && depth0.numberFormat) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.onlineProdPriceSummary : depth0)) != null ? stack1.maxFinalDiscountOnlinePrice : stack1),{"name":"numberFormat","hash":{},"data":data}))
-    + "<em>원</em>"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.onlineProdPriceSummary : depth0)) != null ? stack1.minOnlineSalePrice : stack1),"!=",((stack1 = (depth0 != null ? depth0.onlineProdPriceSummary : depth0)) != null ? stack1.maxOnlineSalePrice : stack1),{"name":"xif","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "</strong>\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.onlineProdPriceSummary : depth0)) != null ? stack1.doublePriceDisplayYn : stack1),"==","Y",{"name":"xif","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "<em>원</em></strong>\n"
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.onlineProdPriceSummary : depth0)) != null ? stack1.doublePriceDisplayYn : stack1),"==","Y",{"name":"xif","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "					</span>\n					<span class=\"product_rating\">\n						<span class=\"mark_star_sm star"
     + alias2(alias1((depth0 != null ? depth0.reviewScopeAvg : depth0), depth0))
     + "\"><span class=\"sr_only\">구매 평점 별 5개 중 "
     + alias2(alias1((depth0 != null ? depth0.reviewScopeAvg : depth0), depth0))
-    + "개</span></span>\n						<span class=\"prd_review\">리뷰 "
-    + alias2((helpers.numberFormat || (depth0 && depth0.numberFormat) || alias4).call(alias3,(depth0 != null ? depth0.reviewCount : depth0),{"name":"numberFormat","hash":{},"data":data}))
-    + "</span>\n					</span>\n					<span class=\"tags\">\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.onlineProdGift : depth0)) != null ? stack1.giftProds : stack1),">",0,{"name":"xif","hash":{},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "개</span></span>\n						"
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.reviewCount : depth0),">",0,{"name":"xif","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n					</span>\n					<span class=\"tags\">\n"
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,((stack1 = ((stack1 = (depth0 != null ? depth0.onlineProdGift : depth0)) != null ? stack1.giftProds : stack1)) != null ? stack1.length : stack1),">",0,{"name":"xif","hash":{},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.onlineProdGift : depth0)) != null ? stack1.giftcardTargetYn : stack1),"==","Y",{"name":"xif","hash":{},"fn":container.program(12, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "					</span>\n					<button type=\"button\" class=\"btn_toggle like_btn\"><i class=\"ico_heart_s "
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.shoppingMarkExistYn : depth0),"==","Y",{"name":"xif","hash":{},"fn":container.program(14, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\"></i><span class=\"sr_only\">좋아요</span></button>\n				</span>\n			</a>\n		</div>\n	</li>\n";
 },"2":function(container,depth0,helpers,partials,data) {
-    return "						<span class=\"out_of_stock\"><span class=\"img_badge\">일시품절</span></span>\n";
+    return "						<span class=\"out_of_stock soldout\"><span class=\"img_badge\">일시품절</span></span>\n";
 },"4":function(container,depth0,helpers,partials,data) {
     var stack1;
 
@@ -49,13 +47,15 @@ this["AP"]["handlebars"]["display"]["events"]["hotdeal-item"] = Handlebars.templ
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.onlineProdPriceSummary : depth0)) != null ? stack1.maxFinalDiscountRate : stack1), depth0))
     + "%</strong>\n";
 },"6":function(container,depth0,helpers,partials,data) {
-    return "~";
-},"8":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "							<del>"
     + container.escapeExpression((helpers.numberFormat || (depth0 && depth0.numberFormat) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.onlineProdPriceSummary : depth0)) != null ? stack1.maxFinalDiscountBeforeSalePrice : stack1),{"name":"numberFormat","hash":{},"data":data}))
     + "원</del>\n";
+},"8":function(container,depth0,helpers,partials,data) {
+    return "<span class=\"prd_review\">리뷰 "
+    + container.escapeExpression((helpers.numberFormat || (depth0 && depth0.numberFormat) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.reviewCount : depth0),{"name":"numberFormat","hash":{},"data":data}))
+    + "</span>";
 },"10":function(container,depth0,helpers,partials,data) {
     return "							<em class=\"badge special\">스페셜기프트</em>\n";
 },"12":function(container,depth0,helpers,partials,data) {

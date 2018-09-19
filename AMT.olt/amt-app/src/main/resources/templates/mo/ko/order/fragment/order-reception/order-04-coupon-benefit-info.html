@@ -182,12 +182,13 @@
 						</th:block>
 
 						<!-- P 포인트(임직원일 경우만 표시) -->
-						<th:block th:if="${apMember.employeeYn == 'Y' and ordMembershipEx.membershipServiceCode == 'CP'}">
+						<th:block th:if="${apMember.employeeYn == 'Y' and ordMembershipEx.membershipServiceCode == 'PP'}">
 							<dl>
 								<dt><span class="title">P 포인트</span><a href="javascript:allUsingPoint();" class="btn_h32_gradient">모두사용</a></dt>
 								<dd>
 									<div class="price">-<input type="text" title="P 포인트 입력">P</div>
-									<p class="text font_sm">보유 50,000P</p>
+									<input type="hidden" name="membershipKeepingPPoint" th:value="${ordMembershipEx.membershipKeepingPoint}">
+									<p class="text font_sm">보유 <th:block th:text="${#IntegUtil.toCommaNumber(ordMembershipEx.membershipKeepingPoint)}"></th:block>P</p>
 								</dd>
 							</dl>
 
@@ -662,7 +663,11 @@
 	///////////////////////////////////////// 기프트 카드 처리 Start //////////////////////////////////
 	/** 사용가능한 기프트카드 팝업 Layer **/
 	function openGiftcardList() {
-		var modal = AP.modal.open({ templateKey : 'order.fullpage-giftcard-list' });
+		var modal = AP.modal.full({
+			contents: {
+				templateKey: 'fullpage-giftcard-list'
+			}
+		});
 		var $modalEl = modal.getElement();
 	};
 	///////////////////////////////////////// 기프트 카드 처리 End ///////////////////////////////////

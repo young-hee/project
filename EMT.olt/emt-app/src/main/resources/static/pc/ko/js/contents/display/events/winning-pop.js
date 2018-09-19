@@ -18,17 +18,19 @@
 		/** =============== Public Methods =============== */
 		open: function ( title, result ) {
 
-			var prodCount = 0; 
-			_.each(result.awards ,function(list){
-				 
-				if(list.awardTgtCode === 'Prod'){
+			var prodCount = 0;
+  
+			_.each(result.awards ,function(award){
+				
+				console.log(award.awardTgtCode); 
+				if(award.awardTgtCode === 'Prod'){
+					
 					prodCount++; 
-				}else {
-					prodCount = 0;
 				}
 				
-				result.awards.prodCount = prodCount; 
 			});
+
+			result.awards.prodCount = prodCount; 
 
 			this._winningPop = AP.modal.info({
 				title: title,

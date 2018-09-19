@@ -81,15 +81,12 @@ public class MyPointViewController extends AbstractController {
 			custGrdVo = amoreAPIService.getcustgrd(custGrdVo);
 			model.addAttribute("rating", custGrdVo);
 		}
-		{//실적조회
-			String year = DateFormatUtils.format(new Date(), "yyyy");
-			PrfrInqInCbcVo prfrInqInCbcVo = new PrfrInqInCbcVo();
-			prfrInqInCbcVo.setStndYear(year);
-			prfrInqInCbcVo.setIncsNo(userIncsNo);
-			prfrInqInCbcVo.setChCd(APConstant.EH_CH_CD);
-			PrfrInqOutCbcVo prfrinq = amoreAPIService.getprfrinq(prfrInqInCbcVo);
-			model.addAttribute("prfrinq", prfrinq);
-			
+		{//고객등급조회.
+			CicuemCuInfTotTcVo cicuemCuInfTotTcVo = new CicuemCuInfTotTcVo();
+			cicuemCuInfTotTcVo.setIncsNo(userIncsNo);
+		 	CicuemCuInfTotTcVo rsltVo = amoreAPIService.getcicuemcuinfrbyincsno(cicuemCuInfTotTcVo);
+		 	
+			model.addAttribute("custInfo", rsltVo);
 		}
 
 		
@@ -819,6 +816,15 @@ public class MyPointViewController extends AbstractController {
 	private void calculSum(Model model, CustCushinUseList listVo, int pageNum) {
 		int savePoint = 0;
 		int usingPoint = 0;
+		if(listVo == null || listVo.getCushinList() == null) {
+
+			model.addAttribute("listVo", Collections.EMPTY_LIST);
+			model.addAttribute("savePoint", savePoint);
+			model.addAttribute("usingPoint", usingPoint);
+			createPageInfo(model, listVo, pageNum);
+			
+			return;
+		}
 		for (Cushin cushin : listVo.getCushinList()) {
 			if(cushin.getAccumptPoint() > 0) {
 				savePoint += cushin.getAccumptPoint();

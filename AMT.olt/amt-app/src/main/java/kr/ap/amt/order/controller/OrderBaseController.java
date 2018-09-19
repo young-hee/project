@@ -62,10 +62,10 @@ public class OrderBaseController extends AbstractViewController {
 	 * @author 유젠 Tim
 	 * @since 2018.08.30
 	 */
-	protected void makeOrdProdSetApMall(OrdEx ordEx, Model model) {
+	protected void makeOrdProdSetApMall(OrdEx ordEx, Model model, String callFlag) {
 
 		//기존 상품목록 생성호출
-		makeOrdProdSet(ordEx, model);
+		makeOrdProdSet(ordEx, model, callFlag);
 
 		//기존의 OrdOtfEx를 확장한 AP몰 전용 업체별 정보 리스트
 		List<OrdOtfExFoDTO> ordOtfExFoList = new ArrayList<OrdOtfExFoDTO>();
@@ -366,7 +366,7 @@ public class OrderBaseController extends AbstractViewController {
 	/**
 	 * 상품목록 생성(에뛰드 전용)
 	 */
-	protected void makeOrdProdSet(OrdEx ordEx, Model model){
+	protected void makeOrdProdSet(OrdEx ordEx, Model model, String callFlag){
 		/* 주문정보 */
 		List<OrdOnlineProdFoDTO> shippingOrdOnlineProdList = new ArrayList<OrdOnlineProdFoDTO>();
 		List<OrdOnlineProdFoDTO> shippingOrdOnlineBeautyPointProdList = new ArrayList<OrdOnlineProdFoDTO>();
@@ -471,40 +471,45 @@ public class OrderBaseController extends AbstractViewController {
 		model.addAttribute("ordOtfExList", ordOtfExList);									                                	// 주문배송지시 목록
 		model.addAttribute("ordUnitAwardOrdPromoExList", ordEx.getOrdHistEx().getOrdUnitAwardOrdPromoExList());				// 주문단위사은품 (주문서) 목록
 		model.addAttribute("ordHistPromoExList", ordEx.getOrdHistEx().getOrdHistPromoExList());									// 주문단위사은품(주문완료) 목록
+		model.addAttribute("isApMember", isMember());
 
-		if(isMember()){
-			List<ShipAddressInfo> shipAddressList = new ArrayList<ShipAddressInfo>();
-			for(ShipAddressInfo shipAddressInfo : apApi.getShipAddresses(getMemberSn())){
-				if("Y".equals(shipAddressInfo.getRepShipAddressYn())){
-					shipAddressList.add(shipAddressInfo);
+		if ("Reception".equals(callFlag)) {
+			//주문서 조회
+
+			if (isMember()) {
+				List<ShipAddressInfo> shipAddressList = new ArrayList<ShipAddressInfo>();
+				for (ShipAddressInfo shipAddressInfo : apApi.getShipAddresses(getMemberSn())) {
+					if ("Y".equals(shipAddressInfo.getRepShipAddressYn())) {
+						shipAddressList.add(shipAddressInfo);
+					}
+				}
+				OrdShipAddressListResult ordShipAddress = orderApi.getOrdShipAddressList(getMemberSn(), null, null, 0, 1);
+				PayMethodListResult payMethodList = orderApi.getPayMethodList(PARAM_KEY_MEMBER);
+
+				model.addAttribute("shipAddressList", shipAddressList);                                    // 기본배송지목록
+				model.addAttribute("ordShipAddressExList", ordShipAddress.getOrdShipAddressExList());    // 주문배송지목록
+				model.addAttribute("payMethodResult", payMethodList);                                    // 결제수단목록
+				model.addAttribute("apMember", apApi.getMemberInfo(getMemberSn()));                        // 회원정보
+				model.addAttribute("memberSn", getMemberSn());                                            // 회원일련번호
+			} else {
+				PayMethodListResult payMethodList = orderApi.getPayMethodList(PARAM_KEY_NONMEMBER);
+				model.addAttribute("payMethodResult", payMethodList); // 결제수단목록
+
+				//이용약관
+				List<Terms> personPolicy1 = termsApi.getTerms("020");                //개인정보 처리방침
+				List<Terms> personPolicy2 = termsApi.getTerms("040");                //개인정보 제3자 제공 동의
+				if (personPolicy1.size() > 0) {
+					model.addAttribute("personPolicy1", personPolicy1.get(personPolicy1.size() - 1));
+				}
+				if (personPolicy2.size() > 0) {
+					model.addAttribute("personPolicy2", personPolicy2.get(personPolicy2.size() - 1));
 				}
 			}
-			OrdShipAddressListResult ordShipAddress = orderApi.getOrdShipAddressList(getMemberSn(), null, null, 0, 1);
-			PayMethodListResult payMethodList = orderApi.getPayMethodList(PARAM_KEY_MEMBER);
-
-			model.addAttribute("shipAddressList", shipAddressList);									// 기본배송지목록
-			model.addAttribute("ordShipAddressExList", ordShipAddress.getOrdShipAddressExList());	// 주문배송지목록
-			model.addAttribute("payMethodResult", payMethodList); 									// 결제수단목록
-			model.addAttribute("apMember", apApi.getMemberInfo(getMemberSn()));						// 회원정보
-			model.addAttribute("memberSn", getMemberSn());											// 회원일련번호
-		}else {
-			PayMethodListResult payMethodList = orderApi.getPayMethodList(PARAM_KEY_NONMEMBER);
-			//주문완료
-			model.addAttribute("ordShipAddressExList", ordEx.getOrdShipAddressExList());            // 주문배송지목록
-			model.addAttribute("payMethodResult", payMethodList); // 결제수단목록
-
-			//이용약관
-			List<Terms> personPolicy1 = termsApi.getTerms("020");                //개인정보 처리방침
-			List<Terms> personPolicy2 = termsApi.getTerms("040");                //개인정보 제3자 제공 동의
-			if (personPolicy1.size() > 0) {
-				model.addAttribute("personPolicy1", personPolicy1.get(personPolicy1.size()-1));
-			}
-			if( personPolicy2.size() > 0) {
-				model.addAttribute("personPolicy2", personPolicy2.get(personPolicy2.size()-1));
-			}
 		}
-
-		model.addAttribute("isApMember", isMember());
+		if ("Complete".equals(callFlag)) {
+			model.addAttribute("ordHistPromoExList", ordEx.getOrdHistEx().getOrdHistPromoExList());
+			model.addAttribute("ordPayExList", ordEx.getOrdHistEx().getOrdPayExList());
+		}
 
 		/*****************************************************************
 		 * 주문금액 계산

@@ -101,7 +101,7 @@
 
 			if ( !this._isSearchFilterData ) {
 				this._isSearchFilterData = true;
-				if ( result.filter && result.filter.addAttrs.length ) {
+				if ( result.filter ) {
 					this.dispatch( 'init-search-filter', { data: result.filter });
 					this.dispatch( 'set-display-cate', {data: result.filter });
 				} else {

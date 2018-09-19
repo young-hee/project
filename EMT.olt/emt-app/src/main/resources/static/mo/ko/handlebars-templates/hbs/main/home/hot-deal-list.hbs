@@ -13,11 +13,16 @@
 						{{#if this.onlineProdImages}}
 							{{#each this.onlineProdImages}}
 								{{#if @first}}
+									
 									<a href="{{ productDetailPath ../../onlineProdSn }}" class="lazy_load_wrap">
-										{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+										<img class="lazy_load" src="" data-src="{{ replaceImagePath this.imgUrl 400 400 }}" alt="{{ ../onlineProdName }}">
+										
+										{{#xif ../saleDisplayStatus '==' 'OutOfStock'}}
 											<div class="item_state out_of_stock">일시품절</div>
 										{{/xif}}
-										<img class="lazy_load" src="" data-src="{{ replaceImagePath this.imgUrl 400 400 }}" alt="{{ ../onlineProdName }}">
+										{{#xif ../saleDisplayStatus '==' 'EndSale'}}
+											<div class="item_state out_of_stock">조기소진</div>
+										{{/xif}}
 									</a>
 								{{/if}}
 							{{/each}}
@@ -26,38 +31,42 @@
 							{{#each this.prodImages}}
 								{{#if @first}}
 									<a href="{{ productDetailPath ../../onlineProdSn ../prodSn }}" class="lazy_load_wrap">
-										{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+										<img class="lazy_load" src="" data-src="{{ replaceImagePath this.imgUrl 400 400 }}" alt="{{ ../prodName }}">
+										{{#xif ../saleDisplayStatus '==' 'OutOfStock'}}
 											<div class="item_state out_of_stock">일시품절</div>
 										{{/xif}}
-										<img class="lazy_load" src="" data-src="{{ replaceImagePath this.imgUrl 400 400 }}" alt="{{ ../prodName }}">
+										{{#xif ../saleDisplayStatus '==' 'EndSale'}}
+											<div class="item_state out_of_stock">조기소진</div>
+										{{/xif}}
 									</a>
 								{{/if}}
 							{{/each}}
 						{{/if}}
 					{{/if}}
 				{{/each}}
-					<div class="info">
-						<span class="title">{{ this.onlineProdName }}</span>
-						<span class="price_wrap">
-							<em class="discount">
+				<div class="info">
+						<span class="discount">
+							<em>
 								{{#with (calc this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate '+' this.onlineProdPriceSummary.minMemberLevelDiscountRate '+' this.onlineProdPriceSummary.minOnlineMemberDiscountRate) as |disMinRate|}}
 									{{#with (calc ../onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' ../onlineProdPriceSummary.maxMemberLevelDiscountRate '+' ../onlineProdPriceSummary.maxOnlineMemberDiscountRate) as |disMaxRate|}}
-										{{#xif disMinRate '!=' disMaxRate}}<span class="from">~</span>{{/xif}}{{#xif disMaxRate '!=' 0}}<span class="to">{{ disMaxRate }}<em>%</em></span>{{/xif}}
+										<span class="from">{{#xif disMinRate '!=' disMaxRate}}~{{/xif}}</span><span class="to">{{#xif disMaxRate '!=' 0}}{{ disMaxRate }}<em>%</em>{{/xif}}</span>
 									{{/with}}
 								{{/with}}
 							</em>
+						</span>
 						
+						<span class="item_title">{{ this.onlineProdName }}</span>	
+						
+						<span class="price_wrap">
+							<b>{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}</b>{{ condition ../isActivityPoint '알' '원' }}{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}} ~{{/xif}}
 							{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
-								<del>{{ numberFormat this.onlineProdPriceSummary.minBeforeOnlineSalePrice }}<em>{{ condition ../isActivityPoint '알' '원' }}</em></del>
+								<del>{{ numberFormat this.onlineProdPriceSummary.minBeforeOnlineSalePrice }}{{ condition ../isActivityPoint '알' '원' }}</del>
 							{{/xif}}
-							<span class="price">{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>{{ condition ../isActivityPoint '알' '원' }}{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}} ~{{/xif}}</em></span>
-
 							{{#if this.orderedQty}}
 								<span class="sale_count">{{ numberForamt this.orderedQty }}구매</span>
 							{{/if}}
 						</span>
-					</div>
-
+				</div>
 			</li>
 		{{/each}}
 	</ul>

@@ -5,6 +5,21 @@
     'use strict';
 
 	/**
+	 * 특수문자 제거
+	 * @returns {String}
+	 */
+	Handlebars.registerHelper('removeSC', function (no) {
+
+		var regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+		var r = no;
+		if (regExp.test(no)) {
+			r = no.replace(regExp, "");
+		}
+
+		return r;
+	});
+
+	/**
 	 * 결제 수단명
 	 * @returns {String}
 	 */
@@ -33,6 +48,25 @@
 		return '';
 	});
 
+
+	/**
+	 * 교환 반품 체크박스 처리
+	 * @returns {String}
+	 */
+	Handlebars.registerHelper('isDisabled', function (type, step, qty) {
+
+		var retDisabled = "";
+
+
+		if (((type == 'return' || type == 'exchange') && (step == 1 && qty == 0))) {
+			retDisabled = "disabled";
+		}
+
+		// console.log(qty + retDisabled);
+		return retDisabled;
+	});
+
+
 	/**
 	 * 수량
 	 * @returns {Integer}
@@ -56,75 +90,14 @@
 				else {
 					if (step == 2) {
 						qty = prod.claimQtySum;
-					}
-					else {
-						qty = (prod.ordQtySum - prod.cancelQtySum) - prod.claimQtySum;
-					}
-				}
-			}
-		}
-		else {
-			if ('Y' === claimYn) {
-				qty = prod.claimReceivedQty;
-			}
-			else {
-				if ('ProdCancel' == prod.ordHistProdStatusCode) {
-					if (step == 1)
-						qty = prod.cancelQty;
-					else
-						qty = prod.claimReceivedQty;
-				}
-				else {
-					if (step == 2) {
-						if (type == 'cancel') {
-							qty = prod.claimReceivedQty;
-						}
-						else {
-							qty = prod.rtnRequestPossibleQty;
-						}
 					}
 					else {
 						if (type == 'return' || type == 'exchange') {
-							qty = prod.rtnRequestPossibleQty;
+							qty = prod.rtnRequestPossibleQtySum;
 						}
 						else {
-							qty = (prod.ordQty - prod.cancelQty) - prod.claimReceivedQty;
+							qty = (prod.ordQtySum - prod.cancelQtySum) - prod.claimQtySum;
 						}
-					}
-
-				}
-			}
-		}
-
-		return qty;
-	});
-
-	/**
-	 * 수량
-	 * @returns {Integer}
-	 */
-	Handlebars.registerHelper('myOrdQty', function (prodType, prod, step, type, claimYn) {
-
-		var qty = 0;
-		if ('group' == prodType) {
-			if ('Y' == claimYn) {
-				qty = prod.claimQtySum;
-			}
-			else {
-				if ('ProdCancel' == prod.ordHistProdStatusCode) {
-					if (step == 1) {
-						qty = prod.cancelQtySum;
-					}
-					else {
-						qty = prod.claimQtySum;
-					}
-				}
-				else {
-					if (step == 2) {
-						qty = prod.claimQtySum;
-					}
-					else {
-						qty = (prod.ordQtySum - prod.cancelQtySum) - prod.claimQtySum;
 					}
 				}
 			}
@@ -142,12 +115,7 @@
 				}
 				else {
 					if (step == 2) {
-						if (type == 'cancel') {
-							qty = prod.claimReceivedQty;
-						}
-						else {
-							qty = prod.rtnRequestPossibleQty;
-						}
+						qty = prod.claimReceivedQty;
 					}
 					else {
 						if (type == 'return' || type == 'exchange') {
@@ -239,9 +207,9 @@
 	 *
 	 * @returns {String}
 	 */
-	Handlebars.registerHelper('creditcardPayType', function (type) {
+	Handlebars.registerHelper('creditcardPayType', function (pgPayEx) {
 		var html = "";
-		switch (type) {
+		switch (pgPayEx.creditcardPayTypeCode) {
 			case 'LumpSum':
 				html = '일시불';
 			case 'Inst':
@@ -384,7 +352,7 @@
 		 case 'WaitingSale':	//판매대기
 		 case 'SuspendSale':	//판매일시중지
 		 case 'EndSale':		//판매종료
-			 stockBtn = 'style="display:none;"';
+			 stockBtn = 'disabled';
 			 break;
 		 }
 
@@ -1556,19 +1524,19 @@
 		if (value != null) {
 			switch (value) {
 				case 'Online' :
-					html = '온라인전용';
+					html = '온라인 전용';
 					break;
 				case 'IntergrationCampaign' :
-					html = '통합캠페인';
+					html = '통합 쿠폰';
 					break;
-				case 'Co' :
-					html = '입점업체';
-					break;
+				//case 'Co' :
+				//	html = '입점업체';
+				//	break;
 				case 'POS' :
-					html = 'POS';
+					html = '오프라인 전용';
 					break;
 				default :
-					html = '';
+					html = '온라인 전용';
 					break;
 			}
 		}

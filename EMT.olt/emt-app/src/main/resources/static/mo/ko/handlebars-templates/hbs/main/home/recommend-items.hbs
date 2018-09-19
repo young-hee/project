@@ -9,31 +9,31 @@
 		<p class="text">추천컬러 상품이 존재하지 않습니다.</p>
 	</div>
 {{else}}
-
 	{{#each this}}
 		<li class="ix-list-item">
 		    <a href="{{ productDetailPath this.onlineProdSn }}">
-				<span class="lazy_load_wrap" style="background-color:#{{this.products.rgbVal}}";>
+		    	{{#xif this.products.colorchipTypeCode '==' 'RGB'}}
+		    		<span class="lazy_load_wrap" style="background-color:#{{this.products.rgbVal}}";>
+		    	{{/xif}}
+		    	{{#xif this.products.colorchipTypeCode '==' 'Img'}}
+		    		<span class="lazy_load_wrap" style="background:url({{this.products.colorchipImg}})";>
+		    	{{/xif}}
+				
 					{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
 						<div class="item_state out_of_stock">일시품절</div>
 					{{/xif}}
 					<img class="lazy_load" data-src="{{ replaceImagePath this.products.prodImages.0.imgUrl 260 260 }}">
 				</span>
-			<div class="info_box">
-				{{!-- 상품명  --}}
-				<div class="title_area">
+				<div class="item_info">
+					{{!-- 상품명  --}}
 					<span class="item_title">{{ this.onlineProdName }}</span>
-					<span class="option_name">{{ this.products.prodName }}</span>
-				</div>
-				{{!-- 가격,장바구니 --}}
-				<div class="price_area">
-					<div class="price">
+					<span class="color_name">{{ this.products.prodName }}</span>
+					{{!-- 가격,장바구니 --}}
+					<span class="price">
 						<b>{{ numberFormat this.products.prodPriceSummary.onlineSalePrice }}</b> 원
-					</div>
+					</span>
 				</div>
-			</div>
 		  </a>
 	   </li>
 	{{/each}}
-
 {{/xif}}

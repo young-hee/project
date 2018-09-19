@@ -15,7 +15,7 @@
 			this._api = options.api;
 			this._key = ( options.key ) ? { displayMenuId: options.key } : {};
 
-			this._$list = this._$target.find( '.product_list_new' );
+			this._$list = this._$target.find( '.product_list_new:not(.wide_swipe)' );
 			this._$sort = this._$target.find( '.sort_filter_wrap' );
 			this._$filterArea = this._$sort.find( '.filter_sel_area' );
 			this._$resultNone = this._$target.find( '.no_product' );

@@ -7,11 +7,13 @@ this["AP"]["handlebars"]["order"]["fullpage-coupon-use-download"] = Handlebars.t
 
   return "	<div class=\"\" data-open-type=\"single\">\n		<!--다운가능한 쿠폰리스트(MyPage참조)-->\n"
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.downloadCoupon : depth0)) != null ? stack1.list : stack1),{"name":"each","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "	</div>\n	<div class=\"page_btns\">\n		<button class=\"btn_lg_secondary\" type=\"button\" id=\"b_close\">취소</button>\n		<button class=\"btn_lg_neutral\" type=\"button\" id=\"b_download\">쿠폰받기</button>\n	</div>\n";
+    + "	</div>\n	<div class=\"page_btns download\">\n		<button class=\"btn_lg_secondary\" type=\"button\" id=\"b_close\">취소</button>\n		<button class=\"btn_lg_neutral\" type=\"button\" id=\"b_download\">쿠폰받기</button>\n	</div>\n";
 },"2":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
 
-  return "			<div class=\"coupon_order\">\n				<div class=\"coupon_wrap\">\n					<div class=\"check_wrap\">\n						<input type=\"checkbox\" id=\""
+  return "			<div class=\"coupon_order\" name=\"removeCouponSn\" data-couponSn=\""
+    + alias2(alias1((depth0 != null ? depth0.couponSn : depth0), depth0))
+    + "\">\n				<div class=\"coupon_wrap\">\n					<div class=\"check_wrap\">\n						<input type=\"checkbox\" id=\""
     + alias2(alias1((depth0 != null ? depth0.couponSn : depth0), depth0))
     + "\" name=\"couponSn\" data-code=\""
     + alias2(alias1((depth0 != null ? depth0.duplicationUseConditionCode : depth0), depth0))

@@ -8,11 +8,22 @@
 <script type="text/javascript">
 	
 	$(document).ready(function(){
-	
-		var $form = $("form[name='ini']");
-		parent.iniBankComplete($form);
 		
-		//TODO 결제창 취소로 되돌아오는 경우 확인할 방법 확인 필요
+		//새창을 종료하고 주문서 페이지에서 완료페이지로 이동		
+		var $form = $("form[name='ini']");
+		
+		var resultCode = $form.find("input:hidden[name='resultCode']").val();
+		if(resultCode == '00') {	//결제 성공
+			
+			//부모창에서 서브밋
+			opener.window.name = "reception";
+			$form.attr("target", opener.window.name);
+			$form.attr("action", "/order/ordBankComplete")
+			$form.submit();	
+			
+		} 
+		
+		self.close();
 		
 	});
 </script>

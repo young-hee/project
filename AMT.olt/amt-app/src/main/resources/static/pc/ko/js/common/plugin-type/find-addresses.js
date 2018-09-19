@@ -41,12 +41,12 @@
             _$keyword = _$target.find( '.address_keyword' ),
             _$findBtn = _$target.find( '.btn_address_find' ),
             _$postcodeInput = _$target.find( '.post_code' ),
+			_$postCodeHidden = _$target.find( '.post_code:hidden' ),
             _$addressFirstInput = _$target.find( '.address_first' ),
+			_$addressFirstHidden = _$target.find( '.address_first:hidden' ),
 			_$addressLastInput = _$target.find( '.address_last' ),
 			_$findAddressResultTemplate = _$target.find( '#find-address-result-template' ),
 			_$resultArea = _$target.find( '.address_list' );
-
-		console.log(_$target.find( '.address_list' ));
 
         var _pluginName = pluginName,
             _options = options || {},
@@ -203,10 +203,10 @@
 						currentPage: page
 					}).done( function ( data, commonData ) {
 						drawResult(null, data.juso, commonData );
-						if ( data.common.totalCount > 30 ) {
+						if ( data.common.totalCount > 10 ) {
 							AP.modal.info({
-								title: '검색된 주소가 30개 이상입니다.',
-								contents: '검색어와 일치 순으로 30개만 보입니다.<br>찾으시는 주소가 없다면 주소를 더 상세하게 검색해 주세요.',
+								title: '검색된 주소가 10개 이상입니다.',
+								contents: '검색어와 일치 순으로 10개만 보입니다.<br>찾으시는 주소가 없다면 주소를 더 상세하게 검색해 주세요.',
 								confirmLabel: '확인'
 							});
 						}
@@ -268,8 +268,8 @@
 					totalLengthLabel: $B.string.numberFormat( commonData.totalCount ),
 					result: data
 				});
-				console.log(_$resultArea);
-				_$resultArea.show().html( resultHtml );
+
+				_$resultArea.show().html( resultHtml )
 			}else{
 				var resultHtml = AP.common.getTemplate( 'common.find-addresses-result', {
 					totalLength: commonData.totalCount,

@@ -39,7 +39,7 @@
 					
 					<!-- review_header -->
 					<div class="review_header">
-						<span th:text="${review.memberId}"></span><span th:text="${review.memberLevelName}"></span>
+						<span id="memberId" th:text="${review.memberId}"></span><span th:text="${review.memberLevelName}"></span>
 						<span class="rating">
 							<span class="mark_star_sm" th:classappend="'star' + ${review.scope}"><span class="sr_only">구매 평점 별 5개 중 [[${review.scope}]]개</span></span>
 							<span class="count" th:text="${review.scope}"></span>
@@ -59,7 +59,7 @@
 						</div>
 						<div class="cont">
 							<!--/* 375 해상도 기준 6줄에 절삭 : 더읽기 클릭시 전체 보임 */-->
-							<p class="text" th:utext="${review.prodReviewBodyText}"></p>
+							<p class="text" id="reviewContent" th:utext="${review.prodReviewBodyText}"></p>
 						</div>
 					</div>		
 					<!--// review_cont -->
@@ -93,7 +93,7 @@
 	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
 	<th:block ap:fragment="layout-endpoint">
 		<script type="text/javascript" th:inline="javascript">
-			AP.reviewDetail.setDefaultData();
+			AP.reviewDetail.setDefaultData(/*[[${review.prodReviewSn}]]*/);
 		</script>
 	</th:block>
 

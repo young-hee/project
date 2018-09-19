@@ -17,10 +17,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -99,6 +96,21 @@ public class ProductRestController extends AbstractController {
 
 		return ResponseEntity.ok(result);
 
+    }
+    
+    /**
+     * 상품평 요약 정보 조회
+     * @param requestReview
+     * @return
+     */
+    @GetMapping("/getProductReviewSummary")
+    public ResponseEntity<?> getProductReviewSummary(RequestReview requestReview) {
+    	HashMap<String, Object> result = new HashMap<String, Object>();
+    	
+    	ProdReviewSummaryInfo prodReviewSummaryInfo = productApi.getProductReviewSummary(requestReview.getProdReviewUnit(), requestReview.getProdReviewType(), requestReview.getOnlineProdSn(), requestReview.getProdSn(), requestReview.getStyleCode());
+		result.put("reviewSummaryInfo", prodReviewSummaryInfo);
+
+		return ResponseEntity.ok(result);
     }
 
     /**
@@ -359,4 +371,7 @@ public class ProductRestController extends AbstractController {
 
 		return ResponseEntity.ok(result);
     }
+    
+    
+    
 }

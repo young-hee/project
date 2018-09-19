@@ -1,14 +1,32 @@
 <!--배송정보입력-->
-<dl class="delivery">
-	<dt class="on">
-		<div class="title"><b>배송정보 입력</b></div>
-		<button type="button"><span class="sr_only">더보기</span></button>
-	</dt>
-	<dd class="panel">
-		<ul class="info_list" th:if="${#lists.size(ordShipAddressExList) > 0 }" th:each="ordShipAddressExInfo : ${ordShipAddressExList}">
-			<li th:text="${ordShipAddressExInfo.recipientName.name1} + ' / ' + ${ordShipAddressExInfo.recipientPhoneNo1.phoneNo}">김이름 / 010-0000-0000</li>
-			<li th:text="'(' + ${ordShipAddressExInfo.recipientAddress.zipCode} + ') ' + ${ordShipAddressExInfo.recipientAddress.address1} + ' ' + ${ordShipAddressExInfo.recipientAddress.address2}">서울시 서울동 서울로 777 888 123</li>
-		</ul>
-	</dd>
-</dl>
-<!--//배송정보입력-->
+<th:block th:if="${#lists.size(ordEx.ordShipAddressExList) > 0 }" th:each="ordShipAddressExInfo : ${ordEx.ordShipAddressExList}">
+	<th:block th:if="${ordShipAddressExInfo.shipAddressTypeCode == 'ShipAddressInput'}">
+		<div class="section">
+			<dl class="dl_cont">
+				<dt class="h_title">주문/배송 정보</dt>
+				<dd>
+					<dl class="txt">
+						<dt th:text="${ordShipAddressExInfo.recipientName.name1}">김보영</dt>
+						<dd th:text="'(' + ${ordShipAddressExInfo.recipientAddress.zipCode} + ') ' + ${ordShipAddressExInfo.recipientAddress.address1} + ' ' + ${ordShipAddressExInfo.recipientAddress.address2}">531575 경기도 안양시 만안구 안양3동 873-274</dd>
+						<dd th:text="${#IntegUtil.hyphenPhoneNumber(ordShipAddressExInfo.recipientPhoneNo1.phoneNo)}">010-9924-3505</dd>
+					</dl>
+				</dd>
+			</dl>
+		</div>
+	</th:block>
+	</div>
+
+	<th:block th:if="${#lists.size(ordShipAddressExInfo.ordOtfExList) > 0}" th:each="ordOtfEx : ${ordShipAddressExInfo.ordOtfExList}">
+		<th:block th:if="${ordOtfEx.shipMsg != null and ordOtfEx.shipMsg != ''}">
+			<div class="section">
+				<dl class="dl_cont type2">
+					<dt class="h_title">배송요청사항</dt>
+					<dd>
+						<span th:text="${ordOtfEx.shipMsg}"> 부재시 경비실에 맡겨주세요</span>
+					</dd>
+				</dl>
+			</div>
+		</th:block>
+	</th:block>
+	<!--//배송정보입력-->
+</th:block>

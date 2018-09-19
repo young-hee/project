@@ -10,13 +10,15 @@
             this._$target = $( '#ap_container' );
 
             this._setPlugins();
-            //this._setTopBanner();
-            //this._setNewProducts();
-			//this._setEtudePick();
-			//this._setHotDeal();
-			//this._setBest();
-            //this._setChEtude();
-            //this._setFindYourLooks();
+            this._setEvent();
+            
+            this._setSpecialProducts();
+			this._setHotDeal();
+			this._setDisplayCards();
+			this._setBrandCards();
+			this._setPopularProducts(); 
+			//this._setBestReview(); //todo - API 확인 필요
+			//this._setThemeStory(); //todo pc만 corner처리
             this._data = null;
             //this._popUpload();
         },
@@ -24,8 +26,8 @@
         /** =============== Public Methods =============== */
         setData: function(data){
         	this._data = data;
-        	 
-        	this._setColorOfYear(this._data[0].contents); 
+        	//console.log(this._data);
+        	this._setThemeStory(this._data); 
         },
         /** =============== Private Methods =============== */
 
@@ -35,6 +37,15 @@
 			this._$target.find('.youtube_video').video();
 			
         },
+        
+        _setEvent: function () {
+			this._$target.on( 'click', '#display_card .vod', function (e) {
+//				console.log($(e.currentTarget).data('vod-url'));
+//				console.log($(e.currentTarget).data('vod-title'));
+				this._openVideo( $(e.currentTarget).data('vod-url'),$(e.currentTarget).data('vod-title'));
+				return false;
+			}.bind( this ));
+		},
 
 		//최상단 배너
 		_setTopBanner: function () {
@@ -59,19 +70,35 @@
 			}.bind(this));
 		},
 
-		//신상품
-		_setNewProducts: function () {
-			var $section = this._$target.find( '.new_item' );
+		//금액대별 사은품
+		_setGiftProducts: function () {
+			var $section = this._$target.find( '.gift_per_amount' );
 			if ( !$section.length ) return;
 
 			AP.api.flaggedItemList( null, {
-				flags: 'icon_reco_new'
+				flags: 'icon_award_order'
 			}).done( function ( result ) {
-				
 				var data = result.onlineProdList,
-					html = AP.common.getTemplate( 'main.home.new-product-list', data );
+					html = AP.common.getTemplate( 'main.gift-product-list', data );
+				
+				$section.html( html );
+				$section.find( '.slide' ).ixSlideMax();
+				AP.lazyLoad.add( $section.find('img.lazy_load') );
+			}.bind(this));
+		},
+		
+		//스폐셜 기프트
+		_setSpecialProducts: function () {
+			var $section = this._$target.find( '.special_gift_item' );
+			if ( !$section.length ) return;
 
-				$section.find( '.slide' ).html( html );
+			AP.api.flaggedItemList( null, {
+				flags: 'icon_award_gift'
+			}).done( function ( result ) {
+				var data = result.onlineProdList,
+					html = AP.common.getTemplate( 'main.special-product-list', data );
+				
+				$section.html( html );
 				$section.find( '.slide' ).ixSlideMax();
 				AP.lazyLoad.add( $section.find('img.lazy_load') );
 			}.bind(this));
@@ -79,17 +106,18 @@
 
 		//Today hot deal
 		_setHotDeal: function () {
-			var $section = this._$target.find( '.hot_deal' );
+			var $section = this._$target.find( '.today_hotdeal' );
 			if ( !$section.length ) return;
 
-			AP.api.flaggedItemList( null, {
-				flags: 'icon_type_sp_today',
-				prodListUnit: 'Prod'
+			AP.api.hotDealItemList( null, {
+				excludeSoldOut: 'true',
+				prodListUnit: 'OnlineProd',
+				prodSort: 'Rising',
 			}).done( function ( result ) {
 				var data = result.onlineProdList,
-					html = AP.common.getTemplate( 'main.home.hot-deal-list', data );
+					html = AP.common.getTemplate( 'main.hotdeal-product-list', data );
 
-				$section.find( '.ix-list-viewport' ).html( html );
+				$section.html( html );
 				$section.find( '.slide' ).ixSlideMax();
 				$section.find( '.ui_remain_timer' ).each( function ( idx, el ) {
 					$( el ).remainTimer({
@@ -100,137 +128,141 @@
 				AP.lazyLoad.add( $section.find('img.lazy_load') );
 			}.bind(this));
 		},
-
-		//베스트
-		_setBest: function () {
-			
-			var $section = this._$target.find( '.best' );
+		
+		//전시카드
+		_setDisplayCards: function () {
+			var $section = this._$target.find( '#display_card' );
 			if ( !$section.length ) return;
 
-			AP.api.flaggedItemList( null, {
-				flags: 'icon_reco_best_w',
-				limit: 10
+			AP.api.displayCardList( null, {
+				location: 'PCMain'
 			}).done( function ( result ) {
-				var data = result.onlineProdList,
-					html = AP.common.getTemplate( 'main.home.best-list', data );
-
-				$section.find( '.ix-list-viewport' ).html( html );
+				var data = result,
+					html = AP.common.getTemplate( 'main.display-card-list', data );
+				
+				$section.html( html );
 				$section.find( '.slide' ).ixSlideMax();
 				AP.lazyLoad.add( $section.find('img.lazy_load') );
 			}.bind(this));
-			
-			/*var $section = this._$target.find( '.best' );
+		},
+		
+		//브랜드카드
+		_setBrandCards: function () {
+			var $section = this._$target.find( '.pop_brand' );
 			if ( !$section.length ) return;
-			
-			AP.api.flaggedProdRankChanges().done( function ( result ) {
-				
-				var html = AP.common.getTemplate( 'main.home.best-list', result ),
-				
-				$slide = $section.find( '.slide' );
 
-				$slide.html( html );
-				$slide.ixSlideMax().ixSlideMax( 'stopTimer' );
+			AP.api.brandCardList( null, {
+				sort: 'ShoppingMarkCnt',
+				faveBrandCnt: 0
+			}).done( function ( result ) {
+				var data = result,
+					html = AP.common.getTemplate( 'main.brand-card-list', data );
 				
-
-				$section.on( 'touchstart touchend touchcancel', function (e) {
-					if ( e.type === 'touchstart' ) {
-						$slide.ixSlideMax( 'stopTimer' );
-					} else {
-						$slide.ixSlideMax( 'startTimer' );
-					}
-				});
-
-				$slide.on( 'bonding-rect-activate bonding-rect-deactivate', function (e) {
-					if ( e.type === 'bonding-rect-activate' ) {
-						$slide.ixSlideMax( 'startTimer' );
-					} else {
-						$slide.ixSlideMax( 'stopTimer' );
-					}
-				}).bondingRect();
-				
+				$section.html( html );
+				$section.find( '.slide' ).ixSlideMax();
 				AP.lazyLoad.add( $section.find('img.lazy_load') );
-				
-			}.bind(this));*/
+			}.bind(this));
 		},
 
-		//올해의 컬러
-		_setColorOfYear: function (rmdColorProd) {
+		//인기상품
+		_setPopularProducts: function () {
 			
-			var $section = this._$target.find( '.color_pick' );
+			var $section = this._$target.find( '.ap_pop_item' );
+			if ( !$section.length ) return;
+
+			AP.api.flaggedItemList( null, {
+				flags: 'icon_reco_pop_24h',
+				limit: 20
+			}).done( function ( result ) {
+				var data = result.onlineProdList,
+					html = AP.common.getTemplate( 'main.popular-product-list', data );
+
+				$section.html( html );
+				$section.find( '.slide' ).ixSlideMax();
+				AP.lazyLoad.add( $section.find('img.lazy_load') );
+			}.bind(this));
+		},
+		
+		//베스트포토리뷰
+		_setBestReview: function () {
+			
+			var $section = this._$target.find( '.best_photo_review' );
+			if ( !$section.length ) return;
+			var currentDay = new Date().getDay();
+			var endDt = AP.common.date( 'YYYY-MM-DD' );
+			var startDt = moment( endDt ).subtract( currentDay + 30, 'days' ).format( 'YYYY-MM-DD' );
+
+			//console.log('endDt : ' + endDt);
+			//console.log('startDt : ' + startDt);
+			AP.api.getReviewList( null, {
+				prodReviewType: 'Pur',
+				prodReviewSort: 'Recommend',
+				startDate: startDt,
+				endDate: endDt,
+				imageOnlyYn: 'Y',
+				limit: 20
+			}).done( function ( result ) {
+				console.log(result.prodReviewListInfo);
+//				var data = result.prodReviewListInfo,
+//					html = AP.common.getTemplate( 'main.best-review-list', data );
+//				$section.html( html );
+//				$section.find( '.slide' ).ixSlideMax();
+//				AP.lazyLoad.add( $section.find('img.lazy_load') );
+			}.bind(this));
+		},
+
+		//테마이야기
+		_setThemeStory: function (themeData) {
+			//console.log(data);
+			var $section = this._$target.find( '.ap_theme' );
 			if ( !$section.length ) return;
 			
+			//console.log(this._data);
 			var onlineprdList = []; 
 			var products = []; 
+			var themeList = []; 
+//			for(var i = 0 ; i < Object.keys(this._data).length ; i++){
+//				//console.log("aaaaaaaaaaaaaaaa");
+//				console.log(this._data['M01_main_m.6'][0].contents);
+//			}
+//
+//			$.each(themeData, function(index, object){
+//				
+//				if ( _.findWhere(themeData, {menuPageCornerContentsId: 'M01_main_p.5.2'})) {
+//					
+//					onlineprdList = object.prodList;
+//				}
+//			}); 
+			themeList.push(this._data['M01_main_m.6'][0].contents);
+			themeList.push(this._data['M01_main_m.7'][0].contents);
+			themeList.push(this._data['M01_main_m.8'][0].contents);
+			//console.log(themeList);
+			var html = AP.common.getTemplate( 'main.theme-tab-list', themeList);
 			
-			$.each(rmdColorProd, function(index, object){
-				
-				if ( _.findWhere(rmdColorProd, {menuPageCornerContentsId: 'M02_main_p.5.2'})) {
-					
-					onlineprdList = object.prodList;
-				}
-			}); 
-			
-			$.each(onlineprdList, function(index, object){
-				
-				object.products = _.findWhere(object.products , {prodSn : this.selectedProdSn});
-				
-			}); 
-			
-			var html = AP.common.getTemplate( 'main.home.recommend-items', onlineprdList);
-			
-			$section.find('.recommend_items').html(html);
-			
+			$section.find('.tab_contents').html(html);
+			$section.find( '.ui_tab' ).tabs();
+			$section.find( '.tab_cont' ).eq(0).show();
+			$section.find( '.tab_cont' ).css("display", "block");
+			$( '.ui_tab' ).on( 'tabs-change', function (e) {
+				console.log( e.index );
+				$section.find( '.tab_cont' ).hide();
+				$section.find( '.tab_cont' ).eq(e.index).show();
+			});
 			AP.lazyLoad.add( $section.find('img.lazy_load') );
 		},
-
-		//Ch.에뛰드
-		_setChEtude: function () {
-			var $section = this._$target.find( '.ch_etude' );
-			if ( !$section.length ) return;
-
-			AP.DISPLAY_MENU_ID = 'ch_etude';
-			
-			var articles_articleSn = null;  
-			
-			AP.api.articles( null, { // article num 
-				articleCateId: 'chEtude',
-				order : "Deadline", 
-				keyword : null, 
-				liveYn : "Y", 
-				hashTag : null,
-				offset: 0,
-				limit: 1			
-			}).done( function ( result ) {
-				
-				articles_articleSn = result.articleSearchResult.articleList[0].articleSn;  
-				
-				AP.api.article( null, { // article detail 
-					
-					articleSn: articles_articleSn
-					
-				}).done( function ( result ) { 
-				
-					// 동영상 URL 제목 , 라이브 유무 
-					var html = AP.common.getTemplate( 'main.home.ch-etude-video-info', result.article);
-
-					$section.find('.video_wrap').html(html);
-					$section.find('.youtube_video').video();  //detail 정보에 video정보가 있음
-					
-					var titleText = ''; 
-					
-					if(result.article.liveSettingsYn === 'Y'){
-						titleText ='[라이브쇼]'; 
+		
+		_openVideo: function ( vodUrl, vodTitle ) {
+			AP.modal.info({
+				title: vodTitle,
+				containerClass: 'yt_pop',
+				contents: {
+					templateKey: 'main.layer-movie',
+					templateModel: {
+						title: vodTitle,
+						vodUrl: vodUrl
 					}
-					titleText+= result.article.articleTitle; 
-					this._$target.find('.ch_etude dl dt').text(titleText);   
-					this._articleProdList(articles_articleSn) ; // 관련 상품 그리기
-					
-				}.bind(this)).fail(function ( xhr ) {
-					console.log( xhr.errorMessage );
-					$section.find('.youtube_video').video('clear');
-				}.bind( this ));
-				
-			}.bind(this)); 
+				}
+			});
 		},
 		
 		// article 상품 목록 그리기
@@ -287,47 +319,6 @@
 
 			}.bind( this ));
 
-			/*
-			AP.api.articles( null, { // article num 
-				articleCateId: 'Looks',
-				offset: 0,
-				limit: 3			
-			}).done( function ( result ) {
-				
-				var html = AP.common.getTemplate( 'main.home.looks-article-list', result.articleSearchResult);
-				var articleList = result.articleSearchResult.articleList;
-
-				$section.find( '.slide' ).html( html );
-				
-				var $slide = $section.find( '.slide' ),
-				viewLength = $slide.ixOptions( 'view-length' );
-
-				for(var i = 0 ; i <  articleList.length ; i++){
-
-					var hashTagList = articleList[i].snsHashTag.split(',');
-					var $cont = $section.find( '.cont' ).eq(i);
-					var contHtml = '<b class="eng">'+ articleList[i].articleTitle + '</b>';
-					
-					for(var j = 0 ; j <  hashTagList.length ; j++){
-						contHtml = contHtml + '<span class="tag">'+'#'+hashTagList[j]+'</span>';
-					}
-					
-					$cont.html(contHtml);
-				}
-				
-				$slide.on( 'ixSlideMax:init ixSlideMax:change', function (e) {
-					var currentPage = Math.ceil( e.currentIndex / viewLength ),
-						totalPage = Math.ceil( e.totalLength / viewLength );
-	
-					$slide.find( '.paging' ).show();
-					$slide.find( '.paging .current' ).text( currentPage + 1 );
-					$slide.find( '.paging .total' ).text( totalPage );
-				}).ixSlideMax();
-	
-				AP.lazyLoad.add( $section.find('img.lazy_load') );
-
-			}.bind(this)); 
-			*/
 		},
 
 		//에뛰드픽

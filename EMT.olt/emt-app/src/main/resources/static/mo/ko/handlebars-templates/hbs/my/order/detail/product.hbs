@@ -1,20 +1,11 @@
-{{#xif state '===' 'take'}}
-	{{#xif prod.storeEx '!=' null}}
-		<div class="takeout_title">
-			<p class="w70p"><strong>{{prod.storeEx.storeName}}</strong> <span class="color_gray2 font_md">({{prod.storeEx.phoneNo1.phoneNo}})</span></p>
-			<div><button type="button" class="btn_sm_neutral type2" onclick="takeOutStoreInfo({{json prod.storeEx}})">매장보기</button></div>
-		</div>
-	{{/xif}}
-{{/xif}}
-
 <div class="product">
 	<div class="thumb">
 		<span class="check_wrap" style="display: none">
 			{{#xif prod.ordHistProdTypeCode '===' 'BulkDc'}}
-				<input type="checkbox" name="goods" id="{{prod.bulkDcOnlineProdCode}}" value="{{prod.bulkDcOnlineProdCode}}" onclick="selectOnlineProd(this);">
+				<input type="checkbox" name="goods" id="{{prod.bulkDcOnlineProdCode}}" value="{{prod.bulkDcOnlineProdCode}}" onclick="selectOnlineProd(this);" {{isDisabled type step prod.rtnRequestPossibleQtySum}}>
 				<label for="{{prod.bulkDcOnlineProdCode}}"><span class="sr_only">선택</span></label>
 			{{else}}
-				<input type="checkbox" name="goods" id="{{prod.onlineProdCode}}" value="{{prod.onlineProdCode}}" onclick="selectOnlineProd(this);">
+				<input type="checkbox" name="goods" id="{{prod.onlineProdCode}}" value="{{prod.onlineProdCode}}" onclick="selectOnlineProd(this);" {{isDisabled type step prod.rtnRequestPossibleQtySum}}>
 				<label for="{{prod.onlineProdCode}}"><span class="sr_only">선택</span></label>
 			{{/xif}}
 		</span>

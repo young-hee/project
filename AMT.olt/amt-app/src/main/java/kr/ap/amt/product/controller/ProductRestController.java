@@ -1,5 +1,6 @@
 package kr.ap.amt.product.controller;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,12 +18,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -30,14 +35,23 @@ import kr.ap.amt.product.vo.ExternalVO;
 import kr.ap.amt.product.vo.RequestReview;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
+import net.g1project.ecp.api.model.BooleanResult;
+import net.g1project.ecp.api.model.UploadingFile;
 import net.g1project.ecp.api.model.sales.display.OnlineProdList;
 import net.g1project.ecp.api.model.sales.product.ProdRecommendReq;
 import net.g1project.ecp.api.model.sales.product.ProdReviewImg;
+import net.g1project.ecp.api.model.sales.product.ProdReviewImgPost;
+import net.g1project.ecp.api.model.sales.product.ProdReviewImgUpdate;
 import net.g1project.ecp.api.model.sales.product.ProdReviewInfo;
 import net.g1project.ecp.api.model.sales.product.ProdReviewListInfo;
+import net.g1project.ecp.api.model.sales.product.ProdReviewPost;
+import net.g1project.ecp.api.model.sales.product.ProdReviewSurveyPost;
+import net.g1project.ecp.api.model.sales.product.ProdReviewUpdate;
 import net.g1project.ecp.api.model.sales.product.ProdReviewWritableOrderInfo;
+import net.g1project.ecp.api.model.sales.product.ProdReviewWritableOrderProd;
 import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkPost;
 import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkPostForDelete;
+import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkSearchResult;
 
 /**
  * @author Simjaekyu@
@@ -190,6 +204,7 @@ public class ProductRestController extends AbstractController {
 						imgList.add(img);
 					}
 					info.setImgList(imgList);
+					info.setProdReviewSn(173L);
 					list.add(info);
 				}
     			prodReviewListInfo.setProdReviewList(list);
@@ -227,6 +242,25 @@ public class ProductRestController extends AbstractController {
     		result.put("errorData", e);
     		return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
     	}
+    }
+    
+    /**
+     * 상품추천 (좋아요) - on
+     */
+    @RequestMapping("/getShoppingBookmarks")
+    @ResponseBody
+    public ResponseEntity<?> getShoppingBookmarks(ShoppingMarkPost markPost, int offset, int limit) {
+        HashMap<String, Object> result = new HashMap<String, Object>();
+
+        try {
+        	ShoppingMarkSearchResult shoppingMarkSearchResult = shoppingmarkApi.getShoppingBookmarks(getMemberSn(), APConstant.AP_DISPLAY_MENU_SET_ID, offset, limit);
+        	result.put("shoppingMarkSearchResult", shoppingMarkSearchResult);
+        } catch (Exception e) {
+            result.put("errorData", e);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+        }
+        
+        return ResponseEntity.ok(result);
     }
     
     /**
@@ -296,5 +330,212 @@ public class ProductRestController extends AbstractController {
             result.put("errorData", e);
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
         }
+    }
+    
+    /**
+	 * 상품평 등록
+	 * @param prodReviewPost ProdReviewPost
+	 * @param picture MultipartFile[]
+	 * @param arrSurvey
+	 * @param multiWriteYn
+	 */
+	@RequestMapping("/reviewWithImages")
+    public ResponseEntity<?> reviewWithImages(ProdReviewPost prodReviewPost, MultipartFile[] picture, String arrSurvey, String multiWriteYn) throws IOException {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		BooleanResult booleanResult = new BooleanResult();
+		List<UploadingFile> fileDataList = new ArrayList<UploadingFile>();
+
+		if (!StringUtils.isEmpty(multiWriteYn) && "Y".equals(multiWriteYn)) {
+
+			//주문후기 작성시 복수개 처리
+			////-> 화면에 하나만 작성하고, 주문번호로 조회해서 복수개 등록
+			List<BooleanResult> brList = new ArrayList<BooleanResult>();
+			ProdReviewWritableOrderInfo productReviewWritableOrders = productApi.getProductReviewWritableOrders(getMemberSn(), prodReviewPost.getOrdNo(), 0, 1);
+			if (productReviewWritableOrders.getTotalCount() > 0) {
+				List<ProdReviewWritableOrderProd> orderProds = productReviewWritableOrders.getOrders().get(0).getOrderProds();
+				for (ProdReviewWritableOrderProd p : orderProds) {
+					if ("N".equals(p.getReviewWriteYn())) {
+						prodReviewPost.setOrdProdSn(p.getOrdProdSn());
+						prodReviewPost.setProdSn(Long.valueOf(p.getProdSn()));
+
+						brList.add( createProdReview(prodReviewPost, picture, arrSurvey, multiWriteYn, fileDataList) );
+					}
+				}
+
+				booleanResult.setResult(false);
+				for (BooleanResult br : brList) {
+					if (br.isResult()) {
+						//하나라도 성공이면 성공
+						booleanResult.setResult(true);
+					} else {
+						//실패건 있으면
+						result.put("failureExist", true);
+					}
+				}
+			} else {
+				booleanResult.setResult(false);
+			}
+
+		} else {
+			booleanResult = createProdReview(prodReviewPost, picture, arrSurvey, multiWriteYn, fileDataList);
+
+			//같은 주문에 리뷰 전부 작성완료 여부 확인
+			Boolean writableExist = false;
+			ProdReviewWritableOrderInfo productReviewWritableOrders = productApi.getProductReviewWritableOrders(getMemberSn(), prodReviewPost.getOrdNo(), 0, 1);
+			if (productReviewWritableOrders.getTotalCount() > 0) {
+				List<ProdReviewWritableOrderProd> orderProds = productReviewWritableOrders.getOrders().get(0).getOrderProds();
+				for (ProdReviewWritableOrderProd p : orderProds) {
+					if ("N".equals(p.getReviewWriteYn())) {
+						writableExist = true;
+						break;
+					}
+				}
+			}
+			result.put("writableExist", writableExist);
+		}
+
+		result.put("booleanResult", booleanResult);
+
+		return ResponseEntity.ok(result);
+    }
+
+	private BooleanResult createProdReview(ProdReviewPost prodReviewPost, MultipartFile[] picture, String arrSurvey, String multiWriteYn, List<UploadingFile> fileDataList) throws IOException {
+
+		List<ProdReviewImgPost> imgList = new ArrayList<ProdReviewImgPost>();
+
+		if ("Y".equals(multiWriteYn) && fileDataList.size() > 0) {
+			//복수 첫번째 리뷰 아닌 경우
+			for (int i = 0; i < fileDataList.size(); i++) {
+				ProdReviewImgPost prodReviewImgPost = new ProdReviewImgPost();
+				prodReviewImgPost.setSortOrder(i + 1);
+				prodReviewImgPost.setDetailSortOrder(1);
+				prodReviewImgPost.setMediaExistYn("Y");
+				prodReviewImgPost.setVideoYn("N");
+
+				prodReviewImgPost.setFile(fileDataList.get(i));
+				imgList.add(prodReviewImgPost);
+			}
+		} else {
+			//단수 혹은 복수 첫번째 리뷰
+			for (int i = 0; picture != null && i < picture.length; i++) {
+				ProdReviewImgPost prodReviewImgPost = new ProdReviewImgPost();
+				prodReviewImgPost.setSortOrder(i + 1);
+				prodReviewImgPost.setDetailSortOrder(1);
+				prodReviewImgPost.setMediaExistYn("Y");
+				prodReviewImgPost.setVideoYn("N");
+
+				UploadingFile singleTempFile = imageSetting(picture[i]);
+				prodReviewImgPost.setFile(singleTempFile);
+				imgList.add(prodReviewImgPost);
+
+				if ("Y".equals(multiWriteYn)) {
+					fileDataList.add(singleTempFile);
+				}
+			}
+		}
+
+		prodReviewPost.setMemberSn(getMemberSn());
+		prodReviewPost.setImgList(imgList);
+
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		if (arrSurvey != null && !"".equals(arrSurvey)) {
+			List<HashMap<String, String>> surveyList = objectMapper.readValue(arrSurvey, new TypeReference<List<HashMap<String, String>>>() {
+			});
+
+			List<ProdReviewSurveyPost> surveys = new ArrayList<ProdReviewSurveyPost>();
+
+			for (int i = 0; i < surveyList.size(); i++) {
+				Map<String, String> surveyMap = surveyList.get(i);
+				Long prodReviewEvalQuestionSn = Long.parseLong(surveyMap.get("prodReviewEvalQuestionSn"));
+				Long prodReviewEvalResponseSn = Long.parseLong(surveyMap.get("prodReviewEvalResponseSn"));
+
+				ProdReviewSurveyPost prodReviewSurveyPost = new ProdReviewSurveyPost();
+
+				prodReviewSurveyPost.setProdReviewEvalQuestionSn(prodReviewEvalQuestionSn);
+				prodReviewSurveyPost.setProdReviewEvalResponseSn(prodReviewEvalResponseSn);
+
+				surveys.add(prodReviewSurveyPost);
+			}
+
+			prodReviewPost.setSurveys(surveys);
+		}
+
+		return productApi.postProdReview(prodReviewPost);
+	}
+
+	/**
+	 * 상품평 수정
+	 * @param prodReviewUpdate, MultipartFile[] picture, HttpServletRequest req
+	 * @return
+	 */
+	@RequestMapping("/updateReviewWithImages")
+    public ResponseEntity<?> updateReviewWithImages(ProdReviewUpdate prodReviewUpdate, MultipartFile[] picture, HttpServletRequest req, String arrSurvey) throws IOException {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		
+		List<ProdReviewImgUpdate> imgList = new ArrayList<ProdReviewImgUpdate>();
+		for(int i=0; picture != null && i<picture.length; i++) {
+
+			ProdReviewImgUpdate prodReviewImgUpdate = new ProdReviewImgUpdate();
+			prodReviewImgUpdate.setSortOrder(i+1);
+			prodReviewImgUpdate.setDetailSortOrder(1);
+			prodReviewImgUpdate.setMediaExistYn("Y");
+			prodReviewImgUpdate.setVideoYn("N");
+			UploadingFile tempFile = imageSetting(picture[i]);
+			if( tempFile != null ) {
+				prodReviewImgUpdate.setFile(tempFile);
+				imgList.add(prodReviewImgUpdate);
+			}
+		}
+
+		prodReviewUpdate.setMemberSn( getMemberSn());
+		prodReviewUpdate.setImgList(imgList);
+
+		ObjectMapper objectMapper = new ObjectMapper();
+
+
+		if( arrSurvey != null && !"".equals(arrSurvey)) {
+			List<HashMap<String, String>> surveyList = objectMapper.readValue(arrSurvey, new TypeReference<List<HashMap<String, String>>>(){});
+
+			List<ProdReviewSurveyPost> surveys = new ArrayList <ProdReviewSurveyPost> ();
+
+			for(int i=0;i < surveyList.size(); i++) {
+				Map <String, String> surveyMap = surveyList.get(i);
+				Long prodReviewEvalQuestionSn = Long.parseLong( surveyMap.get("prodReviewEvalQuestionSn"));
+				Long prodReviewEvalResponseSn = Long.parseLong( surveyMap.get("prodReviewEvalResponseSn"));
+
+				ProdReviewSurveyPost prodReviewSurveyPost = new ProdReviewSurveyPost();
+
+				prodReviewSurveyPost.setProdReviewEvalQuestionSn(prodReviewEvalQuestionSn);
+				prodReviewSurveyPost.setProdReviewEvalResponseSn(prodReviewEvalResponseSn);
+
+				surveys.add(prodReviewSurveyPost);
+			}
+
+			prodReviewUpdate.setSurveys(surveys);
+		}
+
+		BooleanResult booleanResult = productApi.updateProdReview(prodReviewUpdate);
+
+		result.put("booleanResult", booleanResult);
+
+		return ResponseEntity.ok(result);
+
+    }
+
+    
+    /**
+     * 상품평 삭제
+     * @param prodReviewSn
+     * @return
+     */
+    @PostMapping("/deleteProdReview")
+    public ResponseEntity<?> deleteProdReview(Long prodReviewSn) {
+    	HashMap<String, Object> result = new HashMap<String, Object>();
+
+		BooleanResult booleanResult = productApi.deleteProductReview(prodReviewSn, getMemberSn());
+		result.put("booleanResult", booleanResult);
+
+		return ResponseEntity.ok(result);
     }
 }

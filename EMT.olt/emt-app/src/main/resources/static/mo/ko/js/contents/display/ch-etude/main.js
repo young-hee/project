@@ -65,13 +65,13 @@
 
 		_drawList: function ( data ) {
 			var html = AP.common.getTemplate( 'display.ch-etude.video-list', data );
-
+			
 			if ( data.offset > 0 ) {
 				this._$result.append( html );
 			} else {
 				this._$result.html( html );
 			}
-			
+			AP.lazyLoad.add(this._$result.find('img.lazy_load'));
 			if ( data.totalCount > this._offset ) {
 				this._$moreBtn.show().html( '<span>더보기 (<em>' + this._offset + '</em>/' + data.totalCount + ')</span>' );
 			} else {

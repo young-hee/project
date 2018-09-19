@@ -877,7 +877,13 @@ public class CartBaseController extends AbstractController{
 						HashMap<String, Object> requestProductMembershipMap = (HashMap<String, Object>) resultProduct.getRequestProduct().getRequestProductMembershipMap();
 						LinkedHashMap requestProductMembership = (LinkedHashMap) requestProductMembershipMap.get(String.valueOf(membershipBPSn));
 						if(requestProductMembership.get("membershipSavingTgtYn") != null && (requestProductMembership.get("membershipSavingTgtYn")).equals("Y")){
-							double membershipSavingRate = (double)(requestProductMembership.get("membershipSavingRate"));
+							double membershipSavingRate = 0;
+							if(requestProductMembership.get("membershipSavingRate") instanceof Integer){
+								membershipSavingRate = (double)(int)requestProductMembership.get("membershipSavingRate");
+							}else{
+								membershipSavingRate = (double)requestProductMembership.get("membershipSavingRate");
+							}
+
 							double finalOnlineSalesAmount = getStandardAmount(resultProduct.getFinalOnlineSalesAmountInfo()).doubleValue();
 							BigDecimal membershipSavingPoint = BigDecimal.valueOf( finalOnlineSalesAmount * membershipSavingRate);
 							if(membershipPointAmtTruncCode == null || membershipPointAmtTruncCode.equals("RoundUp")){//올림

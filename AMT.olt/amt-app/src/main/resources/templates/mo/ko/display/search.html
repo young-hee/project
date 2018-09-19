@@ -1,0 +1,106 @@
+<html ap:decorate="~{layout/layout-search}" th:with="_jsfile='search'">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+
+<div class="ap_contents ap_search">
+	<div class="ap_contents ap_product">
+
+		<!-- 상품 영역 -->
+		<div class="cate_prd_wrap01">
+
+			<!-- 필터링 영역 -->
+			<!-- 필터링 영역 -->
+			<div class="sort_filter_wrap">
+				<div class="sort_inner">
+					<div class="sort_filter_top">
+						<span class="tot_result_num"></span>
+
+						<!-- select -->
+						<span class="select_type01_new">
+							<select name="prodSort">
+								<option value="Bestselling">판매순</option>
+								<option value="NewProd">신상품순</option>
+								<option value="MostProdReview">평점순</option>
+								<option value="HighestPrice">높은 가격순</option>
+								<option value="LowestPrice">낮은 가격순</option>
+							</select>
+						</span>
+						<!-- // select -->
+
+						<!-- 상품 정렬 선택 버튼 -->
+							<a href="javascript:;" class="btn_align">상품 정렬 선택</a><!--  default : 리스트형 /  갤러리형 보기 : "gallery" 클래스 추가 -->
+
+							<a href="javascript:;" class="btn_filter on">필터</a><!-- 필터 선택시 "on" 클래스 추가 -->
+					</div>
+
+					<div class="filter_sel_area" style="display:none;"></div>
+				</div>
+
+
+			</div>
+
+			<script type="text/javascript">
+			 // 스크롤 시 탭 상단에 fixed
+				$(window).scroll(function() {
+					if(window.pageYOffset >= $(".cate_prd_wrap01").offset().top) {
+						$(".sort_filter_wrap").addClass("fixed");
+					} else {
+						$(".sort_filter_wrap").removeClass("fixed");
+					}
+				});
+			</script>
+
+			<!-- // 필터링 영역 -->
+      
+      <!--브랜드 : 배너타입-->
+      <div class="section brand_new01">
+      </div>
+      
+      <!-- 2018-09-11 브랜드 배너 추가 -->
+      <div class="section plan">
+      </div>
+      <!-- // 2018-09-11 브랜드 배너 추가 -->
+
+			<!-- 상품리스트 보기 : 리스트 or 갤러리 (5개노출) -->
+			<ul class="product_list_new">
+			</ul>
+			<!-- // 상품리스트 보기 : 리스트 or 갤러리 -->
+
+			<script type="text/javascript">
+				/* 상품리스트 보기 : 리스트 or 갤러리, 버튼 */
+				$(".btn_align").on('click', function(){
+					if($(".cate_prd_wrap01 .product_list_new, .cate_prd_wrap01 .btn_align").hasClass('gallery')){
+						$(".cate_prd_wrap01 .product_list_new, .cate_prd_wrap01 .btn_align").removeClass('gallery');
+					}else{
+						$(".cate_prd_wrap01 .product_list_new, .cate_prd_wrap01 .btn_align").addClass('gallery');
+					}
+				});
+			</script>
+		</div>
+
+		<div class="loading" style="height:50px;"> <!-- 로딩이 들어가야 하는 영역 높이값 inline으로..-->
+			<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+		</div>
+		<!--/* 상품목록 없을때 */-->
+		<div class="section no_product">
+			<p class="text_center">더 좋은 상품을 준비중입니다.</p>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+<script>
+$(document).ready(function(){
+	var query = "[[${query}]]";
+	$(".search_form").find('.placeholder').css("display","none");
+	$(".header_common .search_form .header-main-query").val(query);
+	AP.search.init({query: query});
+	AP.search.load();
+});
+</script>
+</th:block>
+
+</body>
+</html>

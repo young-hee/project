@@ -17,6 +17,7 @@
 			this._params = {};
 			this.reset( params );
 			this._data = [];
+			this._testerData = [];
 		},
 
 		/** =============== Public Methods =============== */
@@ -202,11 +203,12 @@
 		
 		//뷰티테스터 리뷰
 		_testerDraw: function ( data ) {
-			
 			if( data.totalCount == 0 ){
 				this._$target.hide();
 				return false;
 			}
+			
+			$.merge(this._testerData, data.prodReviewList);
 			
 			var html = AP.common.getTemplate( 'products.beautytester-review-contents', $B.object.extend(data, {topReviewOnlyYn: this._params.topReviewOnlyYn}) );
 			
@@ -219,58 +221,15 @@
 			this._params.totalCnt = data.totalCount;
 			this._params.offset += this._params.limit;
 			
+			this._$target.find( 'a.reviewDetail' ).each(function ( index, target ) {
+				 new AP.ReviewItem({
+					$target: $(target),
+					data: _.findWhere(this._testerData, { prodReviewSn : $(target).data('review-sn') })
+				});
+			}.bind( this ));
+			
 			this.dispatch( 'review-draw', this._params );
 			
-			//html 태그 삭제
-			/*
-			var strlength = 118;			
-			for ( var i = 0; i < data.prodReviewList.length; ++i ) {
-				var bodyText = data.prodReviewList[i].prodReviewBodyText;
-				var bodyTextReduce = data.prodReviewList[i].prodReviewBodyText;
-				var prodReviewSn = data.prodReviewList[i].prodReviewSn;
-
-				bodyTextReduce = bodyTextReduce.replace(/<br\/>/ig, "\n");
-				bodyTextReduce = bodyTextReduce.replace(/<\/br>/ig, "\n");
-				bodyTextReduce = bodyTextReduce.replace(/<br>/ig, "\n");
-				bodyTextReduce = bodyTextReduce.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "");
-				bodyText = bodyTextReduce;
-				if(bodyTextReduce.length > strlength){
-					bodyTextReduce = bodyTextReduce.substr(0, strlength-2) + '...';
-				}
-				if(this._params.topReviewOnlyYn === 'Y'){
-					$('.best_review .review' ).find('#bodyTextReduce'+prodReviewSn).attr('id', 'bestBodyTextReduce'+prodReviewSn);
-					$('.best_review .review' ).find('#bodyTextOrigin'+prodReviewSn).attr('id', 'bestBodyTextOrigin'+prodReviewSn);
-					document.getElementById('bestBodyTextReduce'+prodReviewSn).innerHTML = bodyTextReduce;
-					document.getElementById('bestBodyTextOrigin'+prodReviewSn).innerHTML = '<pre>' + bodyText + '</pre>';
-
-				}else{
-					document.getElementById('bodyTextReduce'+prodReviewSn).innerHTML = bodyTextReduce;
-					document.getElementById('bodyTextOrigin'+prodReviewSn).innerHTML = '<pre>' + bodyText + '</pre>';
-				}
-				
-			}
-			
-			
-			this._$target.find( '.pagination' ).paging({
-				offset: data.offset,
-				limit: data.limit,
-				totalCount: data.totalCount
-			}).on( 'paging-change', function (e) {
-				this._getData( e.offset );
-				$( window ).scrollTop( $('.review_filter').offset().top );
-			}.bind(this));
-			*/
-			
-			/*
-			if ( this._params.topReviewOnlyYn === 'Y' ) {
-				this._$target.ixSlideMax( 'clear' ).ixSlideMax();
-			}
-			*/
-			
-		},
-
-		_openDetail: function ( prodReviewSn ) {
-		
 		}
 
 	});

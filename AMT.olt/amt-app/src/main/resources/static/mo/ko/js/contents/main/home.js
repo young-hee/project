@@ -8,17 +8,20 @@
     var Home = $B.Class.extend({
         initialize: function () {
             this._$target = $( '#ap_container' );
+            this._$eventAllBtn = this._$target.find( '.btn_view_all' );
 
-            //this._setPlugins();
-            //this._setTopBanner();
+            this._setPlugins();
+            this._setEvent();
+            
             this._setGiftProducts();
             this._setSpecialProducts();
 			this._setHotDeal();
-			//this._setBest();
-			//this._setColorOfYear();
-            //this._setChEtude();
-            //this._setFindYourLooks();
+			this._setDisplayCards();
+			//this._setBrandCards();//todo -mobile X
+			//this._setPopularProducts(); //todo -mobile X
+			//this._setBestReview(); //todo -mobile X
             this._data = null; 
+            
             //this._popUpload(); 
 			// 공지사항
 			//this._$target.find( '.footer_notice .slide' ).ixSlideMax();
@@ -41,6 +44,12 @@
 			}.bind(this));
 			
         },
+        
+        _setEvent: function () {
+        	this._$eventAllBtn.on('click', function (e) {
+				this._openEventLayer();
+			}.bind( this ));
+		},
 
 		//최상단 배너
 		_setTopBanner: function () {
@@ -128,7 +137,78 @@
 				AP.lazyLoad.add( $section.find('img.lazy_load') );
 			}.bind(this));
 		},
+		
+		//전시카드
+		_setDisplayCards: function () {
+			var $section = this._$target.find( '#display_card' ),
+				$section2 = this._$target.find( '#display_card2' );
+			if ( !$section.length && !$section2.length ) return;
 
+			AP.api.displayCardList( null, {
+				location: 'MobileMain'
+			}).done( function ( result ) {
+				var data = result,
+					html = AP.common.getTemplate( 'main.display-card-list', data );
+				
+				$section.html( html );
+				$section.find( '.slide' ).ixSlideMax();
+				//$section.find( '.youtube_video' ).video('clear');
+				//$section.find( '.youtube_video' ).video();
+				AP.lazyLoad.add( $section.find('img.lazy_load') );
+				
+				if(data.length > 5){
+					$section2.html( html );
+					$section2.find( '.slide' ).ixSlideMax();
+					AP.lazyLoad.add( $section2.find('img.lazy_load') );
+				}
+
+				$( '.youtube_video' ).video();
+				$('.video_thumb_area').bind('click', function() {
+					var $ytb_iframe = $(this).prev().find("iframe");
+					  $(this).hide();
+					  $ytb_iframe.show();
+				 });
+			}.bind(this));
+		},
+		
+		//브랜드카드
+		_setBrandCards: function () {
+			var $section = this._$target.find( '.pop_brand' );
+			if ( !$section.length ) return;
+
+			AP.api.brandCardList( null, {
+				sort: 'ShoppingMarkCnt',
+				faveBrandCnt: 0
+			}).done( function ( result ) {
+				var data = result,
+					html = AP.common.getTemplate( 'main.brand-card-list', data );
+				
+				$section.html( html );
+				$section.find( '.slide' ).ixSlideMax();
+				AP.lazyLoad.add( $section.find('img.lazy_load') );
+			}.bind(this));
+		},
+		
+		_openEventLayer: function () {
+			AP.api.planDisplayList( null, {
+				status: 'Progress',
+				types: 'All',
+				order: 'StartDt',
+				offset: 0,
+				limit: 6
+			}).done(function ( result ) {
+				AP.modal.full({
+					title: '진행중인 이벤트',
+					contents: {
+						templateKey: 'main.layer-event-ing',
+						templateModel: result.planDisplayEventListResult
+					}
+				});
+			}.bind(this)).fail(function (e) {
+				//
+			}.bind(this));
+		},
+		
 		//베스트 랭킹정보가 필요하여 API flaggedProdRankChanges 사용
 		_setBest: function () {
 			var $section = this._$target.find( '.best_item' );

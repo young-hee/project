@@ -1,0 +1,104 @@
+{{!--
+	전시카드목록
+--}}
+<div class="slide event_card" data-ix-options="view-length:4; move-length:1;">
+	<div class="ix-list-viewport">
+		<ul class="ix-list-items">
+			{{#each this.displayCardList}}
+				{{#xif this.displayCardTypeCode '==' 'Basic'}}
+					<li class="ix-list-item">
+						<dl>
+							<dt><span class="brand"><img ap:src="@{/images/dummy/img_brand_01.png}" alt=""></span>{{this.title1}}<br>{{this.title2}}</dt>
+							<dd>
+								<div class="visual">
+									<img src="{{ this.fileUrl }}" alt="">
+								</div>
+								{{#each this.prodList}}
+									<div class="product_box">
+										<div class="info_section">
+											<p class="ellipsis">{{ this.onlineProdName }}</p>
+											<div class="price_atc">
+												{{#xif this.onlineProdPriceSummary.maxFinalDiscountRate '>' 0}}
+													<span class="txt_sale">{{ this.onlineProdPriceSummary.maxFinalDiscountRate }}%</span>
+												{{/xif}}
+												<span class="txt_price"><em>{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountOnlinePrice }}</em>원</span>
+												{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+													<del class="txt_del">{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountBeforeSalePrice }}원</del>
+												{{/xif}}
+											</div>
+											<div class="user_atc">
+												<span class="mark_star_sm star{{ this.reviewScopeAvg }}"><span class="sr_only">구매 평점 별 5개 중 {{ this.reviewScopeAvg }}개</span></span>
+												{{#xif this.reviewCount '>' 0 }}<span class="txt_review">리뷰 {{ numberFormat this.reviewCount }}</span>{{/xif}}
+											</div>
+										</div>
+									</div>
+								{{/each}}
+							</dd>
+						</dl>
+					</li>
+				{{/xif}}
+				{{#xif this.displayCardTypeCode '==' 'Event'}}
+					<li class="ix-list-item">
+						<dl>
+							<dt><span class="brand"><img src="/pc/ko/images/dummy/img_brand_01.png" alt=""></span>{{this.title1}}<br>{{this.title2}}</dt>
+							<dd>
+								<div class="visual">
+									<img src="{{ this.fileUrl }}" alt="">
+								</div>
+								<p class="text">{{this.subTitle1}}<br>{{this.subTitle2}}</p>
+							</dd>
+						</dl>
+					</li>
+				{{/xif}}
+				{{#xif this.displayCardTypeCode '==' 'BeautyContents'}}
+					<li class="ix-list-item">
+						<dl>
+							<dt>{{this.title1}}<br>{{this.title2}}</dt>
+							<dd>
+								<div class="visual">
+									<img src="{{ this.fileUrl }}" alt="">
+								</div>
+								<div class="slide" data-ix-options="view-length:3;">
+									<div class="ix-list-viewport">
+										<ul class="ix-list-items">
+											{{#each this.prodList}}
+												<li class="ix-list-item">
+													<a href="{{ productDetailPath this.onlineProdSn }}"><img src="{{ this.onlineProdImages.[0].imgUrl }}" alt=""></a>
+												</li>
+											{{/each}}
+										</ul>
+									</div>
+									<div class="ix-controller">
+										<div class="slide_direction">
+											<a class="ix-btn-prev" href="#none"><span class="sr_only">Prev</span></a>
+											<a class="ix-btn-next" href="#none"><span class="sr_only">Next</span></a>
+										</div>
+									</div>
+								</div>
+							</dd>
+						</dl>
+					</li>
+				{{/xif}}
+				{{#xif this.displayCardTypeCode '==' 'BeautyVideo'}}
+					<li class="ix-list-item">
+						<dl class="color_white" style="background: #{{this.textAreaColorCode}}">
+							<dt></span>{{this.title1}}<br>{{this.title2}}</dt>
+							<dd>
+								<a href="#none" class="visual vod" data-vod-url="{{this.videoUrl}}" data-vod-title="{{this.title1}} {{this.title2}}">
+									<img src="{{ this.fileUrl }}" alt="">
+								</a>
+								<p class="text">{{this.subTitle1}}<br>{{this.subTitle2}}</p>
+							</dd>
+						</dl>
+					</li>
+				{{/xif}}
+			{{/each}}
+		</ul>
+	</div>
+	<div class="ix-controller round_box">
+		<div class="slide_direction">
+			<a class="ix-btn-prev" href="#none"><span class="sr_only">Prev</span></a>
+			<a class="ix-btn-next" href="#none"><span class="sr_only">Next</span></a>
+		</div>
+	</div>
+</div>

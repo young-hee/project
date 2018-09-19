@@ -1,0 +1,92 @@
+<div class="srch_filter_wrap">
+	<div class="ui_accordion">
+		<!-- 브랜드 -->
+		<dl>
+			<dt class="on"><button type="button"><span>브랜드<i class="ico_navi"></i></span></button></dt>
+			<dd style="display:block">
+				<div class="srch_filter_list01">
+					<ul>
+						{{#each this.brands}}
+							<li><a href="javascript:;" data-attr-code="brand" data-brand-sn="{{this.brandSn}}">{{this.brandName}}</a></li>
+						{{/each}}
+					</ul>
+				</div>
+			</dd>
+		</dl>
+		<!-- 쇼핑찬스 -->
+		<dl>
+			<dt class="on"><button type="button"><span>쇼핑찬스<i class="ico_navi"></i></span></button></dt>
+			<dd style="display:block">
+				<div class="srch_filter_list01">
+					<ul class="chk_other">
+						{{#each this.flags}}
+							<li><a href="javascript:;" data-attr-code="flag" data-val-code="{{this}}">{{this}}</a></li>
+						{{/each}}
+					</ul>
+				</div>
+			</dd>
+		</dl>
+			
+		{{#each this.addAttrs}}
+			{{#xif this.addAttrCode '!=' 'colorgroup'}}
+				{{#xif this.addAttrCode '!=' 'price' }}
+					<dl>
+						<dt class="on"><button type="button"><span>{{ this.addAttrName }}<i class="ico_navi"></i></span></button></dt>
+						<dd>
+							<div class="srch_filter_list01">
+								<ul>
+									{{#each this.addAttrVals}}
+										<li><a href="javascript:;" data-attr-code="{{../addAttrCode}}" class="btn{{#xif this.selected '==' true}} on{{/xif}}" data-val-code="{{ this.addAttrValCode }}">{{ this.addAttrValName }}</a></li>
+									{{/each}}
+								</ul>
+							</div>
+						</dd>
+					</dl>
+				{{/xif}}
+			{{/xif}}
+		{{/each}}
+		
+		{{#each this.addAttrs}}
+			{{#xif this.addAttrCode '==' 'colorgroup'}}
+		<dl>
+			<dt class="on"><button type="button"><span>색상<i class="ico_navi"></i></span></button></dt>
+			<dd style="display:block">
+				<div class="color_ck_wrap">
+					<ul class="color_ck_list">
+						{{#each this.addAttrVals}}
+							<li><span style="background-color:{{this.addAttrValCode}}"></span></li>
+						{{/each}}
+						<!--<li><span class="img"><img src="/mo/ko/images/dummy/img_ck_col01.png" alt="" /></span></li>-->
+					</ul>
+				</div>
+			</dd>
+		</dl>
+			{{/xif}}
+		{{/each}}
+		
+		<!-- 가격 -->
+		<dl>
+			<dt class="on"><button type="button"><span>가격<i class="ico_navi"></i></span></button></dt>
+			<dd style="display:block">
+				<div class="price_sel01">
+					<ul>
+						<li><a href="javascript:;" data-attr-code="price" id="price0" data-min="0" data-max="29999">3만원미만</a></li>
+						<li><a href="javascript:;" data-attr-code="price" id="price3" data-min="30000" data-max="49999">3~5만원</a></li>
+						<li><a href="javascript:;" data-attr-code="price" id="price5" data-min="50000" data-max="69999">5~7만원이상</a></li>
+						<li><a href="javascript:;" data-attr-code="price" id="price7" data-min="70000" data-max="-1">7만원이상</a></li>
+					</ul>
+				</div>
+				<div class="price_input_area">
+					<span class="input_h48_gray"><input type="text" name="min" placeholder="최소금액" /></span><span class="p_bar">-</span><span class="input_h48_gray"><input type="text" name="max" placeholder="최대금액" /></span>
+				</div>
+
+			</dd>
+		</dl>
+	</div>
+	<div class="btn_wrap">
+		<ul class="btn_col2_area">
+			<li><a href="javascript:;" class="btn_h50_gy reset">초기화</a></li>
+			<li><a href="javascript:;" class="btn_h50_bk apply">적용</a></li>
+		</ul>
+	</div>
+</div>

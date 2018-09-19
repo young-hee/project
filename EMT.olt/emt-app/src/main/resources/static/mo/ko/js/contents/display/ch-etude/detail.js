@@ -26,6 +26,7 @@
 
 		//slide 적용
 		_setSlide: function () {
+			
 			this._$target.find( '.banner .slide' ).ixSlideMax();
 
 			AP.responsiveWidth.addListener( 'resize', function (e) {
@@ -57,6 +58,8 @@
 
 		//영상관련 상품 목록
 		_setInProductsList: function ( articleSn ) {
+			
+			
 			var $itemArea = this._$target.find( '.recommend_items' );
 			if ( !$itemArea.length ) return;
 
@@ -70,12 +73,35 @@
 					$.each(data.list, function(idx, obj){
 						obj.productCount = 1;
 						obj.onlineProdImages = obj.products[0].prodImages;
+						
 					})
+					
 				}
+				
+				
+				$.each(data.list , function(inx, prodInfo){
+					if(prodInfo.productCount > 1){
+						var colorCnt = 0;
+						var optionCnt = 0; 
+						$.each(prodInfo.products, function(index, product){
+							if(product.colorchipTypeCode != 'No'){
+								colorCnt++; // 컬러색상개수
+							}else{
+								optionCnt++; // 상품옵션개수
+							}
+						});
+						
+						prodInfo.colorCnt = colorCnt; 
+						prodInfo.optionCnt = optionCnt; 	
+					}
+				});
+				
 				var html = AP.common.getTemplate( 'display.ch-etude.detail-product-list', data );
 
 				$itemArea.find( '.loading' ).remove();
+				
 				$itemArea.find( '.slide' ).html( html ).ixSlideMax();
+				AP.lazyLoad.add($itemArea.find('img.lazy_load'));
 				orderLayer.setDefaultData( data );
 
 				//click evnet
@@ -103,6 +129,7 @@
 				var html = AP.common.getTemplate( 'display.ch-etude.video-list', result.articleSearchResult );
 				$otherArea.find( '.loading' ).hide();
 				$otherArea.find( '.video_list' ).html( html );
+				AP.lazyLoad.add($otherArea.find('img.lazy_load'));
 			}.bind(this)).fail(function (e) {
 				//
 			}.bind(this));

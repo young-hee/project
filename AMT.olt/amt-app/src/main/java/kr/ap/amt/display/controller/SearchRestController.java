@@ -6,20 +6,29 @@
  */
 package kr.ap.amt.display.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.collections.IteratorUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
+
 import kr.ap.comm.support.common.AbstractController;
 import net.g1project.ecp.api.model.sales.display.OnlineProdList;
 import net.g1project.ecp.api.model.sales.display.OnlineProdSummary;
+import net.g1project.ecp.api.model.sales.display.PlanDisplay;
+import net.g1project.ecp.api.model.sales.display.PlanDisplaySearchResult;
 import net.g1project.ecp.api.model.sales.display.ProdFilterInfo;
+import net.g1project.ecp.api.model.sales.display.SearchResult;
 import net.g1project.ecp.api.model.sales.display.SearchWordRankChange; 
 
 /**
@@ -68,10 +77,10 @@ public class SearchRestController extends AbstractController {
         }catch(Exception e) {
             System.out.print("    e : " + e.getMessage());
         }
-        System.out.print("    rsltCnt : " + list.size());
+        System.out.println("    rsltCnt : " + list.size());
         
-        /** Dummy */
-        if(list == null || list.size()<=0) {
+        /** Dummy *
+//        if(list == null || list.size()<=0) {
             SearchWordRankChange swrc;
             
             swrc = new SearchWordRankChange();
@@ -134,9 +143,10 @@ public class SearchRestController extends AbstractController {
             swrc.setRankChange(10);
             swrc.setNewEntry(true);
             list.add(swrc);
-        }
+//        }
         /**********/
         result.put("favoriteWordList", list);
+        result.put("favoriteWordAnalDt", new SimpleDateFormat("yyyy.MM.dd").format(new Date()));
         return ResponseEntity.ok(result);
     }
     
@@ -146,7 +156,7 @@ public class SearchRestController extends AbstractController {
      * @return
      */
     @RequestMapping("/result")
-    public ResponseEntity<?> result(Model model, String query, String prodSort, int offset, int limit, long displayCate, String priceRange, String attr) {
+    public ResponseEntity<?> result(Model model, String query, String prodSort, int offset, int limit, long displayCate, String priceRange, String flag, String attr) {
         
         System.out.println(this.getClass().getName() + ".result");
         System.out.println("  - query    : " + query);
@@ -155,8 +165,8 @@ public class SearchRestController extends AbstractController {
         System.out.println("  - limit    : " + limit);
         System.out.println("  - displayCate : " + displayCate);
         System.out.println("  - priceRange  : " + priceRange);
+        System.out.println("  - flag  : " + flag);
         System.out.println("  - attr     : " + attr);
-        Date sDate = new Date();
         
         HashMap<String, Object> result = new HashMap<String, Object>();
      
@@ -188,17 +198,44 @@ public class SearchRestController extends AbstractController {
         boolean includeFilters = true;
         int displayCateDepth = 1;
         long brand = -1;
-        String flag = "";
         
-        OnlineProdList onlineProdList = displayApi.searchProdList(toSearchFor, toBeExcluded, excludeSoldOut, prodSort, offset, limit, includeFilters, displayCateDepth, displayCate<0?null:displayCate, brand<0?null:brand, flag, attr, priceRange);
-        ProdFilterInfo prodFilterInfo = onlineProdList.getFilter();
-        List<OnlineProdSummary> prodList = onlineProdList.getList();
+//        SearchResult allList = displayApi.searchEverything(toSearchFor, toBeExcluded, excludeSoldOut, prodSort, limit, "", limit, limit, limit, includeFilters, displayCateDepth);
+        
+        OnlineProdList onlineProdList = new OnlineProdList();
+        ProdFilterInfo prodFilterInfo = new ProdFilterInfo();
+        List<OnlineProdSummary> prodList = new ArrayList();
+        try{
+            Date sDate = new Date();
+            onlineProdList = displayApi.searchProdList(toSearchFor, toBeExcluded, excludeSoldOut, prodSort, offset, limit, includeFilters, displayCateDepth, displayCate<0?null:displayCate, brand<0?null:brand, flag, attr, priceRange);
+            System.out.println("## get searchProdList..."+(new Date().getTime() - sDate.getTime())+"s");
+            prodFilterInfo = onlineProdList.getFilter();
+            prodList = onlineProdList.getList();
+        }catch(Exception e) {
+            
+        }
+
+        PlanDisplaySearchResult planAllList = displayApi.searchPlanDisplayList(toSearchFor, toBeExcluded, offset, limit);
+        Date cDate = new Date();
+        Iterator<PlanDisplay> filteredPlansIterator = planAllList.getList().stream().iterator();//.filter(o->o.getStartDt().before(cDate) && o.getEndDt().after(cDate)).iterator();
+        List<PlanDisplay> planList = IteratorUtils.toList(filteredPlansIterator);//Lists.newArrayList(filteredPlansIterator);
+        
+        List<?> brandList = new ArrayList();
+        
+        List<String> flags = new ArrayList();
+        flags.add("icon_giftpacking");  //선물포장
+        flags.add("icon_reco_online");  //온라인한정
+        flags.add("icon_type_package"); //묶음판매
+        flags.add("icon_type_ps");      //예약판매
+        flags.add("icon_member_dc");    //등급할인
+        flags.add("icon_membership1");  //통합멤버십교환
+        flags.add("icon_reco_outlet");  //아울렛상품
+        prodFilterInfo.setFlags(flags);
         
         result.put("prodFilterInfo", prodFilterInfo);
         result.put("prodList", prodList);
+        result.put("planList", planList);
+        result.put("brandList", brandList);
         result.put("totalCount", onlineProdList.getTotalCount());
-        
-        System.out.println("## processing..."+(new Date().getTime() - sDate.getTime())+"s");
         
         return ResponseEntity.ok(result);
     }

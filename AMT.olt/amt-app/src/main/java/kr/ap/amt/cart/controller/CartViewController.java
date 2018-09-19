@@ -8,18 +8,11 @@ package kr.ap.amt.cart.controller;
 
 import kr.ap.comm.cart.CartSession;
 import kr.ap.comm.config.interceptor.PageTitle;
-import net.g1project.ecp.api.model.offlinestore.store.ProdInvtEx;
-import net.g1project.ecp.api.model.offlinestore.store.StoreResult;
-import net.g1project.ecp.api.model.offlinestore.store.StoresInvtSearchInfo;
 import net.g1project.ecp.api.model.sales.cart.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/cart")
@@ -61,9 +54,6 @@ public class CartViewController extends CartBaseController{
 					}
 				}
 			}
-
-
-
 			model.addAttribute("bpCartMemberMembershipEx", bpCartMemberMembershipEx);
 		}
 		else{
@@ -71,15 +61,6 @@ public class CartViewController extends CartBaseController{
 			if (cartSession.getCartSn() == 0L) {
 				CartSnResult cartSnResult = cartApi.createNonmemberCart();
 				cartEx = getCartInfo(cartSnResult.getCartSn());
-				// 테스트 카트
-//				cartEx = getCartInfo((long)1604);	// test
-//				cartEx = getCartInfo((long)1523);	// test
-//				cartEx = getCartInfo((long)1420);	//일반상품
-//				cartEx = getCartInfo((long)1424);	//묶음판매
-//				cartEx = getCartInfo((long)1425);	//뷰티포인트 전용상품
-//				cartEx = getCartInfo((long)1426);	//M+N 프로모션
-//				cartEx = getCartInfo((long)1427);	//온라인상품에 사은품
-//				cartEx = getCartInfo((long)1428);	//단위상품에 사은품
 			}
 			else{
 				cartEx = getCartInfo(cartSession.getCartSn());

@@ -71,18 +71,15 @@ public class MemberRestController extends AbstractController {
 	 * 회원 아이디를 SMS로 전송.
 	 */
 	@PostMapping("/find/findId/sendId")
-	public ResponseEntity<?> sendId() {
+	public ResponseEntity<?> sendId(String phoneNo) {
 		ApRequestMemberIdGuide paramApRequestMemberIdGuide = new ApRequestMemberIdGuide();
 
 		String incsNo = getMemberSession().getUser_incsNo();
 		paramApRequestMemberIdGuide.setIncsNo(Long.parseLong(incsNo));
-		CicuemCuInfTotTcVo cicuemCuInfTotTcVo = new CicuemCuInfTotTcVo();
-		cicuemCuInfTotTcVo.setIncsNo(incsNo);
-		cicuemCuInfTotTcVo = amoreAPIService.getcicuemcuinfrbyincsno(cicuemCuInfTotTcVo);
 		
-		EmbeddableTel phoneNo = new EmbeddableTel();
-		phoneNo.setPhoneNo(cicuemCuInfTotTcVo.getCellTidn() + cicuemCuInfTotTcVo.getCellTexn() + cicuemCuInfTotTcVo.getCellTlsn());
-		paramApRequestMemberIdGuide.setPhoneNo(phoneNo);
+		EmbeddableTel phoneNoVo = new EmbeddableTel();
+		phoneNoVo.setPhoneNo(phoneNo);
+		paramApRequestMemberIdGuide.setPhoneNo(phoneNoVo);
 		
 		CheckResult rsltVo = apApi.requestMemberIdGuide(paramApRequestMemberIdGuide);
 		if(rsltVo.isResult()) {

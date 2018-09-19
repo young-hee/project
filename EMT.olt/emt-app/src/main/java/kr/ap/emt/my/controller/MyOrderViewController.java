@@ -286,26 +286,4 @@ public class MyOrderViewController extends AbstractController {
 
 		return "my/my-order-detail";
 	}
-
-	@GetMapping("/template/{state}/{ordNo}")
-	@PageTitle(title = "주문상세 확인용")
-	public String ordTemplate(Model model, @PathVariable String state, @PathVariable String ordNo) {
-
-//		"180910200006973H0002"
-		model.addAttribute("state", state);
-		model.addAttribute("ord", ordNo);
-		if("return".equals(state) || "exchange".equals(state)) {
-
-			model.addAttribute("ord", new MyOrdTemplateDTO(orderApi.getClaimOrdHist(ordNo), state));
-		}
-		else {
-			model.addAttribute("ord", new MyOrdTemplateDTO(orderApi.getOrd(Long.valueOf(ordNo)), state));
-		}
-
-
-		return "my/order-template";
-	}
-
-
-
 }

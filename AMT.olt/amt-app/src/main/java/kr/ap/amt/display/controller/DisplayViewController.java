@@ -9,7 +9,10 @@ package kr.ap.amt.display.controller;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +46,7 @@ import net.g1project.ecp.api.model.sales.article.ExecuteResult;
 import net.g1project.ecp.api.model.sales.article.PlanDisplayResult;
 import net.g1project.ecp.api.model.sales.display.Corner;
 import net.g1project.ecp.api.model.sales.display.CornerContentsSet;
+import net.g1project.ecp.api.model.sales.display.OnlineProdList;
 import net.g1project.ecp.api.model.sales.display.PageInfo;
 import net.g1project.ecp.api.model.sales.guide.FoPushResult;
 import net.g1project.ecp.api.model.sales.point.ActivityPointHists;
@@ -757,12 +761,8 @@ public class DisplayViewController extends AbstractController {
 	@RequestMapping({ "/review" })
 	@PageTitle(title = "리뷰")
 	public String review(Model model, String displayMenuId, String previewKey, String previewDate) {
-		
-		
-		String cornerIds =  "";
-		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 		displayMenuId = "review";
-		DateUtils.addDays(new Date(), -7);
+		DateUtils.addDays(new Date(), -7).getTime();
 		DateUtils.addMonths(new Date(), -1);
 		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
 		RequestReview requestReview = new RequestReview();
@@ -790,33 +790,28 @@ public class DisplayViewController extends AbstractController {
 				requestReview.getScope(),
 				requestReview.getTopReviewOnlyYn(),
 				requestReview.getTopReviewFirstYn(),
-				null,
-				null,
+				DateUtils.addDays(new Date(), -7),
+				new Date(),
 				requestReview.getImageOnlyYn(),	// imageOnlyYn
 				null,	// displayMenuSetId
 				null)	// displayMenuId
 				;
 		
 		// 화제의 제품 - API 추가후 개발
-//			ProdReviewListInfo bestProductReview = productApi.getProductReviews(
-//					requestReview.getProdReviewUnit(),
-//					requestReview.getProdReviewType(),
-//					requestReview.getOffset(),
-//					requestReview.getLimit(),
-//					getMemberSn(),
-//					requestReview.getOnlineProdSn(),
-//					requestReview.getProdSn(),
-//					requestReview.getStyleCode(),
-//					requestReview.getProdReviewSort(),
-//					requestReview.getScope(),
-//					requestReview.getTopReviewOnlyYn(),
-//					requestReview.getTopReviewFirstYn(),
-//					null,
-//					null,
-//					"N",	// imageOnlyYn
-//					null,	// displayMenuSetId
-//					null)	// displayMenuId
-//					;
+		OnlineProdList bestProductReview = displayApi.getApTalkedAboutProdList(requestReview.getOffset(), requestReview.getLimit());
+		
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		c.add(Calendar.MONTH, -1);
+		Date from = new Date();
+		c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.getActualMinimum(Calendar.DATE));
+		from.setTime(c.getTimeInMillis());
+		from = FromEndDateUtils.initFromDate(from);
+		
+		Date to = new Date();
+		c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.getActualMaximum(Calendar.DATE));
+		to.setTime(c.getTimeInMillis());
+		to = FromEndDateUtils.initFromDate(to);
 		
 		//지난달 리뷰랭킹 - 포토리뷰
 		requestReview.setImageOnlyYn("Y");
@@ -833,10 +828,8 @@ public class DisplayViewController extends AbstractController {
 				requestReview.getScope(),
 				requestReview.getTopReviewOnlyYn(),
 				requestReview.getTopReviewFirstYn(),
-//				DateUtils.addMonths(new Date(), -1),
-//				new Date(),
-				null,//임시
-				null,//임시
+				from,	//임시
+				to,		//임시
 				requestReview.getImageOnlyYn(),	// imageOnlyYn
 				null,	// displayMenuSetId
 				null)	// displayMenuId
@@ -849,7 +842,7 @@ public class DisplayViewController extends AbstractController {
 				requestReview.getProdReviewUnit(),
 				requestReview.getProdReviewType(),
 				requestReview.getOffset(),
-				requestReview.getLimit(),
+				1,
 				getMemberSn(),
 				requestReview.getOnlineProdSn(),
 				requestReview.getProdSn(),
@@ -858,10 +851,8 @@ public class DisplayViewController extends AbstractController {
 				requestReview.getScope(),
 				requestReview.getTopReviewOnlyYn(),
 				requestReview.getTopReviewFirstYn(),
-//				DateUtils.addDays(new Date(), -7),
-//				new Date(),
-				null,//임시
-				null,//임시
+				DateUtils.addDays(new Date(), -7),
+				new Date(),
 				requestReview.getImageOnlyYn(),	// imageOnlyYn
 				null,	// displayMenuSetId
 				null)	// displayMenuId
@@ -890,7 +881,7 @@ public class DisplayViewController extends AbstractController {
 				;
 		
 		model.addAttribute("thisWeekReviewRank", thisWeekReviewRank);
-		//model.addAttribute("bestProductReview", bestProductReview);
+		model.addAttribute("bestProductReview", bestProductReview);
 		model.addAttribute("lastMonthReviewRank", lastMonthReviewRank);
 		model.addAttribute("onlineBuyReviewCount", onlineBuyReviewCount);
 		model.addAttribute("onlineBuyReview", onlineBuyReview);
@@ -1225,4 +1216,6 @@ public class DisplayViewController extends AbstractController {
 
 		return "display/" + pageInfo.getMenuPageFileId();
 	}
+	
+	
 }

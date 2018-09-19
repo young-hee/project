@@ -77,6 +77,35 @@
 	<script type="application/javascript">
 		//Checkbox
 
+		function init() {
+
+	        var isAll = true;
+	        var isRequiredAll = true;
+	        $('.policy_form .dl_cont input[required=required]').each(function() {
+	            if (!$(this).prop('checked')) {
+	                isRequiredAll = false;
+	            }
+	        });
+	        if (isRequiredAll) {
+	            $('#agreeBtn').addClass("btn_lg_primary");
+	            $('#agreeBtn').removeClass("btn_lg_secondary");
+	            $('#agreeBtn').addClass("on");
+	        } else {
+	            $('#agreeBtn').addClass("btn_lg_secondary");
+	            $('#agreeBtn').removeClass("btn_lg_primary");
+	            $('#agreeBtn').removeClass("on");
+	        }
+	        $('.policy_form .dl_cont input').each(function() {
+	            if (!$(this).prop('checked')) {
+	                isAll = false;
+	                $('input[name=' + this.id + ']').val("");
+	            } else {
+	                $('input[name=' + this.id + ']').val("Y");
+	            }
+	        });
+		}
+		
+		init();
 		$('.policy_form input').on('change', function() {
 		    if ($(this).attr('id') == 'check_all') {
 		        $('.policy_form .dl_cont input').prop('checked', $(this).prop('checked'));

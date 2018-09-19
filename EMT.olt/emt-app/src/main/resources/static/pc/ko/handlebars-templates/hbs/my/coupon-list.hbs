@@ -1,5 +1,5 @@
 {{#xif this.searchType '==' 'Avail' }}
-	<table class="align_center benefit_table">
+	<table class="align_center benefit_table coupon_table">
 		<caption class="sr_only">사용 가능한 쿠폰 정보</caption>
 		<colgroup>
 			<col style="width:163px;"> <!-- 컬럼 사이즈 -->
@@ -24,7 +24,7 @@
 			<tr>
 				<td class="acquire">{{dateFormat this.issueDt "YYYY-MM-DD"}}</td>
 				<td class="coupon_type">{{{couponTypeSwitch this.availCoupon}}}</td>
-				<td class="coupon_name">{{this.availCoupon.couponName}}</td>
+				<td class="coupon_name"><div class="flag">{{ marketingOrg this.availCoupon.mktgOrgCode }}</div><div>{{this.availCoupon.couponName}}</div></td>
 				<td class="coupon_benefit_type">{{{couponTypeBenefitSwitch this.availCoupon}}}</td>
 				<td class="expiration_date">
 					{{dateFormat this.usePossibleStartDt "YYYY-MM-DD"}} ~ {{dateFormat this.finalExpExpectedDt "YYYY-MM-DD"}}
@@ -52,7 +52,7 @@
 		</tbody>
 	</table>
 {{else}}
-	<table class="align_center benefit_table">
+	<table class="align_center benefit_table coupon_table">
 		<caption class="sr_only">사용 가능한 쿠폰 정보</caption>
 		<colgroup>
 			<col style="width:163px;"> <!-- 컬럼 사이즈 -->

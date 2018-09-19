@@ -64,6 +64,12 @@
 				this._$target.find( '.company_info' ).slideToggle();
 			}.bind(this));
 
+			// 소비자피해보상보험
+			this._$target.find( '.btn_footer_consumer' ).on( 'click', function () {
+				$( '.btn_footer_consumer' ).toggleClass( 'on' );
+				this._$target.find( '.consumer_reward' ).slideToggle();
+			}.bind(this));			
+
 			//app 전용
 			if ( AP.webview.is() ) {
 				//app 에서 맴버쉽 영역 노출

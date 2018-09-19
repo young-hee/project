@@ -7,6 +7,7 @@
 package kr.ap.amt.display.controller;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,6 +20,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import kr.ap.amt.display.vo.RequestBrand;
@@ -32,6 +34,8 @@ import net.g1project.ecp.api.model.offlinestore.store.StoreEventRequesterEx;
 import net.g1project.ecp.api.model.offlinestore.store.StoreEventRequestersResult;
 import net.g1project.ecp.api.model.offlinestore.store.StoreEventScheduleInfo;
 import net.g1project.ecp.api.model.offlinestore.store.StoreResult;
+import net.g1project.ecp.api.model.sales.display.Corner;
+import net.g1project.ecp.api.model.sales.display.CornerContentsSet;
 import net.g1project.ecp.api.model.sales.display.PageInfo;
 import net.g1project.ecp.api.model.sales.terms.Terms;
 
@@ -1040,5 +1044,86 @@ public class BrandViewController extends AbstractController {
 
         return pageFileName;
     }
+	
+	@RequestMapping({"/brandMain"})
+	@PageTitle(title = "브랜드 메인")
+	public String brandMain(Model model, String displayMenuId, String previewKey, String previewDate) {
+		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
+		model.addAttribute("displayMenuId", displayMenuId);
+
+		// 메뉴페이지 코너정보 조회
+		String cornerIds = "";
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+
+		cornerIds = "M01_brandMain_m.1";
+
+		try {
+			List<Corner> corners = displayApi.getMenuPageCorners(
+				APConstant.AP_DISPLAY_MENU_SET_ID,
+				displayMenuId,
+				previewKey,
+				previewDate != null ? sf.parse(previewDate) : null,
+				cornerIds,
+				false);
+
+			Map<String, List<CornerContentsSet>> cornersMap = new HashMap<String, List<CornerContentsSet>>();
+
+			for (Corner c : corners) {
+				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
+			}
+
+			model.addAttribute("cornersMap", cornersMap);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			model.addAttribute("cornersMap", null);
+		}
+
+		return "display/" + pageInfo.getMenuPageFileId();
+	}
+
+	@RequestMapping({"/brand/{displayMenuId}"})
+	@PageTitle(title = "브랜드")
+	public String brand1(Model model, @PathVariable String displayMenuId, String previewKey, String previewDate) {
+		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
+		model.addAttribute("displayMenuId", displayMenuId);
+
+		// 메뉴페이지 코너정보 조회
+		String cornerIds = "";
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+
+		cornerIds = "M01_brand1_m.1";
+
+		try {
+			List<Corner> corners = displayApi.getMenuPageCorners(
+				APConstant.AP_DISPLAY_MENU_SET_ID,
+				displayMenuId,
+				previewKey,
+				previewDate != null ? sf.parse(previewDate) : null,
+				cornerIds,
+				false);
+
+			Map<String, List<CornerContentsSet>> cornersMap = new HashMap<String, List<CornerContentsSet>>();
+
+			for (Corner c : corners) {
+				cornersMap.put(c.getMenuPageCornerId(), c.getContentsSets());
+			}
+
+			model.addAttribute("cornersMap", cornersMap);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			model.addAttribute("cornersMap", null);
+		}
+
+		return "display/" + pageInfo.getMenuPageFileId();
+	}
+	
+	@RequestMapping({"/brand/detail"})
+	@PageTitle(title = "브랜드")
+	public String brand1(Model model, String brandSn) {
+		
+		model.addAttribute("brandSn", brandSn);
+		
+		return "display/brand/detail";
+	}
 
 }

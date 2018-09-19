@@ -3,9 +3,12 @@
 <!-- #ap_container -->
 <div ap:fragment="layout-contents">
 	<div class="ap_contents my_page my_review title_two_depth">
-		<div class="section"><!-- vip등급이상일 경우만 노출 -->
-			<a href="#"><p class="text_center">뷰티테스터에 참가하시고 <em class="color_blue">무료로 본품을</em> 체험하세요</p></a>
+		
+		<!-- vip등급이상일 경우만 노출 -->
+		<div class="section" th:if="${session.LOGIN_USER.member.memberLevelName.indexOf('VIP')>-1}">
+			<a href="/display/beautyTester?displayMenuId=beautyTester"><p class="text_center">뷰티테스터에 참가하시고 <em class="color_blue">무료로 본품을</em> 체험하세요</p></a>
 		</div>
+		
 		<div class="section">
 			<p class="text">
 				<b>구매리뷰 작성하시면 <br>뷰티포인트 최대 1,000P 지급해드려요</b><br>
@@ -13,129 +16,73 @@
 				구매확정이 완료된 상품은 교환, 반품이 불가합니다.
 			</p>
 		</div>
+		
 		<div class="ui_tab">
 			<div class="tab_menu equally">
 				<ul>
-					<li class="on"><button type="button">미작성 리뷰(999)</button></li>
-					<li><button type="button">작성한 리뷰(999+)</button></li>
+					<li class="on"><button type="button">미작성 리뷰(<em th:text="${reviewCnt}">0</em>)</button></li>
+					<li><button type="button">작성한 리뷰(<em th:text="${writedCnt}">0</em>)</button></li>
 				</ul>
 			</div>
 			<div class="tab_contents">
 				<div class="tab_cont">
 					<h3 class="sr_only">미작성 리뷰</h3>
 					<ul class="product_list review_writable">
+						
+						<th:block th:each="orders : ${prodReviewWritableOrderInfo.orders}">
 						<li class="product">
 							<div class="product_visual">
 								<div class="lazy_load_wrap">
-									<img src="" data-src="/mo/ko/images/dummy/img_item_01.jpg" alt="" class="lazy_load">
+									<img src="" th:src="${orders.orderProds.get(0).repProdImage}" alt="" class="lazy_load">
 								</div>
 							</div>
 							<span class="product_info">
-								<span class="brand">리리코스마린에너지</span>
-								<span class="product_name ellipsis">인텐시브 오일 20ml 제품명 제품명 여기까...</span>
-								<small>구매일 2018.05.16</small>
-								<a href="#" class="btn_border_round">리뷰작성</a>
+								<span class="brand" th:text="${orders.orderProds.get(0).onlineProdName}">리리코스마린에너지</span>
+								<span class="product_name ellipsis" th:text="${orders.orderProds.get(0).prodName}">인텐시브 오일 20ml 제품명 제품명 여기까...</span>
+								<small>구매일 <span th:text="${#dates.format(orders.orderCompleteDate, 'yyyy.MM.dd')}">2018.05.16</span></small>
+								<a href="#" class="btn_border_round" th:onclick="'writeReview(\''+ *{orders.ordNo} +'\')'">리뷰작성</a>
 							</span>
 						</li>
-						<li class="product">
-							<div class="product_visual">
-								<div class="lazy_load_wrap">
-									<img src="" data-src="/mo/ko/images/dummy/img_item_02.jpg" alt="" class="lazy_load">
-								</div>
-							</div>
-							<span class="product_info">
-								<span class="brand">리리코스마린에너지</span>
-								<span class="product_name ellipsis">인텐시브 오일 20ml 제품명 제품명 여기까...</span>
-								<small>구매일 2018.05.16</small>
-								<a href="#" class="btn_border_round">리뷰작성</a>
-							</span>
-						</li>
-						<li class="product">
-							<div class="product_visual">
-								<div class="lazy_load_wrap">
-									<img src="" data-src="/mo/ko/images/dummy/img_item_03.jpg" alt="" class="lazy_load">
-								</div>
-							</div>
-							<span class="product_info">
-								<span class="brand">리리코스마린에너지</span>
-								<span class="product_name ellipsis">인텐시브 오일 20ml 제품명 제품명 여기까...</span>
-								<small>구매일 2018.05.16</small>
-								<a href="#" class="btn_border_round">리뷰작성</a>
-							</span>
-						</li>
+						</th:block>
+						
 					</ul>
 				</div>
 				<div class="tab_cont">
 					<h3 class="sr_only">작성한 리뷰</h3>
-					<div class="review_list">
+					<div class="review_list">	
+						
+						<th:block th:each="prodReviewList : ${prodReviewListInfo.prodReviewList}">
 						<dl class="review">
 							<dt>
-								<span class="thumb"><img alt="" src="/mo/ko/images/dummy/img_item_04.jpg"></span>
-								<span class="product_name ellipsis row2">리리코스 마린에너지 인텐시브 오일 50ml 리리코스 마린에너지 인텐시브 오일 50ml 긴 이름...</span>
+								<span class="thumb"><img alt="" th:src="${prodReviewList.repProdImage}"></span>
+								<span class="product_name ellipsis row2" th:text="${prodReviewList.prodName}">리리코스 마린에너지 인텐시브 오일 50ml 리리코스 마린에너지 인텐시브 오일 50ml 긴 이름...</span>
 							</dt>
 							<dd>
 								<span class="rating">
-									<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 5개</span></span> <!--평점에따라 클래스변경(star0~star5)-->
-									<span class="count">3</span>
+									<span th:if="${prodReviewList.scope == 0}"><i class="mark_star_sm star0"></i></span>
+									<span th:if="${prodReviewList.scope == 1}"><i class="mark_star_sm star1"></i></span>
+									<span th:if="${prodReviewList.scope == 2}"><i class="mark_star_sm star2"></i></span>
+									<span th:if="${prodReviewList.scope == 3}"><i class="mark_star_sm star3"></i></span>
+									<span th:if="${prodReviewList.scope == 4}"><i class="mark_star_sm star4"></i></span>
+									<span th:if="${prodReviewList.scope == 5}"><i class="mark_star_sm star5"></i></span>
+									<span th:text="${prodReviewList.scope}">4</span><!-- score? 기획 확인 필요 -->
 								</span>
-								<p class="text"><a href="#">친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히 피부색 칙칙한 날에 쓰면 화사해 보이고 화사해 보이고 화사해 보이고 화사해 보이고</a></p>
+								
+								<p class="text" th:onclick="'modifyReview(\''+ *{prodReviewList.prodReviewSn} +'\', \''+ *{prodReviewList.prodReviewTypeCode} +'\')'">
+									<span class="flag" th:if="${prodReviewList.prodReviewTypeCode == 'ExperienceGrp'}">뷰티테스터</span>
+									<a href="#" th:text="${prodReviewList.prodReviewBodyText}">친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히 피부색 칙칙한 날에 쓰면 화사해 보이고 화사해 보이고 화사해 보이고 화사해 보이고</a>
+								</p>
 								<div class="clear bottom">
-									<p class="date">리뷰 작성일 2018.05.06</p>
+									<p class="date">리뷰 작성일 <span th:text="${#dates.format(prodReviewList.prodReviewRegistDt, 'yyyy.MM.dd')}">2018.05.06</span></p>
 									<div class="btn_area">
-										<a href="#none" class="btn_border_round">수정</a>
-										<a href="#none" class="btn_border_round">삭제</a>
+										<a href="#none" class="btn_border_round" th:onclick="'modifyReview(\''+ *{prodReviewList.prodReviewSn} +'\', \''+ *{prodReviewList.prodReviewTypeCode} +'\')'">수정</a>
+										<a href="#none" class="btn_border_round" th:onclick="'deleteReview(\''+ *{prodReviewList.prodReviewSn} +'\', \''+ *{prodReviewList.prodReviewTypeCode} +'\')'">삭제</a>
 									</div>
 								</div>
 							</dd>
 						</dl>
-						<dl class="review">
-							<dt>
-								<span class="thumb"><img alt="" src="/mo/ko/images/dummy/img_item_04.jpg"></span>
-								<span class="product_name ellipsis row2">리리코스 마린에너지 인텐시브 오일 50ml</span>
-							</dt>
-							<dd>
-								<span class="rating">
-										<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 5개</span></span> <!--평점에따라 클래스변경(star0~star5)-->
-										<span class="count">3</span>
-									</span>
-								<ul class="ui_attach scrollable_x">
-									<li class="attached"><a href="#" onclick="alert(1)"><img alt="" src="/mo/ko/images/dummy/img_best_photo.jpg"></a></li>
-									<li class="attached"><a href="#" onclick="alert(1)"><img alt="" src="/mo/ko/images/dummy/img_best_photo.jpg"></a></li>
-									<li class="attached"><a href="#"><img alt="" src="/mo/ko/images/dummy/img_best_photo.jpg"></a></li>
-									<li class="attached"><a href="#"><img alt="" src="/mo/ko/images/dummy/img_best_photo.jpg"></a></li>
-									<li class="attached"><a href="#"><img alt="" src="/mo/ko/images/dummy/img_best_photo.jpg"></a></li>
-									<li class="attached"><a href="#"><img alt="" src="/mo/ko/images/dummy/img_best_photo.jpg"></a></li>
-								</ul>
-								<p class="text"><a href="#">친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히 피부색 칙칙한 날에 쓰면 화사해 보이고..</a></p>
-								<div class="clear bottom">
-									<p class="date">리뷰 작성일 2018.05.06</p>
-									<div class="btn_area">
-										<a href="#none" class="btn_border_round">수정</a>
-										<a href="#none" class="btn_border_round">삭제</a>
-									</div>
-								</div>
-							</dd>
-						</dl>
-						<dl class="review">
-							<dt>
-								<span class="thumb"><img alt="" src="/mo/ko/images/dummy/img_item_04.jpg"></span>
-								<span class="product_name ellipsis row2">리리코스 마린에너지 인텐시브 오일 50ml</span>
-							</dt>
-							<dd>
-								<span class="rating">
-									<span class="mark_star_sm star3"><span class="sr_only">구매 평점 별 5개 중 5개</span></span> <!--평점에따라 클래스변경(star0~star5)-->
-									<span class="count">3</span>
-								</span>
-								<p class="text"><a href="#"><span class="flag">뷰티테스터</span> 매트한 쿠션 찾는 분들에게 딱이에요 매트한 쿠션 찾는 분들에게 딱이에요매트한 쿠션 찾는 분들에게 딱이에요매트한 쿠션 찾는 분들에게 딱이에요.</a></p>
-								<div class="clear bottom">
-									<p class="date">리뷰 작성일 2018.05.06</p>
-									<div class="btn_area">
-										<a href="#none" class="btn_border_round">수정</a>
-										<a href="#none" class="btn_border_round">삭제</a>
-									</div>
-								</div>
-							</dd>
-						</dl>
+						</th:block>
+						
 					</div>
 				</div>
 			</div>
@@ -147,6 +94,39 @@
 <th:block ap:fragment="layout-endpoint">
 	<script>
 		$( '.youtube_video' ).video();
+		
+		/* 리뷰작성 */
+		function writeReview(ordNo) {
+			alert(ordNo);
+		}
+		
+		/* 리뷰수정 */
+		function modifyReview(prodReviewSn, prodReviewTypeCode) {
+			if(prodReviewTypeCode == 'ExperienceGrp') {
+				alert('뷰티테스터는 앱에서만 신청 가능한 서비스 입니다.');
+				return;
+			}
+			else {
+				alert(prodReviewSn+','+prodReviewTypeCode);
+			}
+		}
+		
+		/* 리뷰삭제 */
+		function deleteReview(prodReviewSn, prodReviewTypeCode) {
+			alert(prodReviewSn);
+			if(confirm('정말 삭제하시겠습니까?')) {
+				AP.api.deleteProdReview( null, {
+					prodReviewSn: prodReviewSn
+				}).done( function ( result ) {
+					if(result.booleanResult.result) {
+						alert('구매 리뷰가 삭제되었습니다.');
+						location.href = "/my/page/myReviewList";
+					} else {
+						alert('삭제 실패했습니다.');
+					}
+				}.bind(this));
+			} 
+		}		
 	</script>
 </th:block>
 

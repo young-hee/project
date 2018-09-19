@@ -47,44 +47,30 @@
 				</th:block>
 			</th:block>
 
+			<!--테이크아웃쇼핑상품-->
 			<th:block th:if="${ordCntMap.get('storeOrdOnlineProdSumCnt') > 0 and isApMember}">
 				<h4 class="h_title sub">테이크아웃 상품 (<em th:text="${ordCntMap.get('storeOrdOnlineProdSumCnt')}">00</em>개)</h4>
-
-				<!--/* 옵션타입 */-->
-				<div class="item_wrap" th:each="storeOrdOnlineProd : ${storePickupOrdOnlineProdList}">
-					<div class="item_info" >
-						<!--결제 히든값-->
-						<input type="hidden" name="onlinePordSn" th:value="${storeOrdOnlineProd.onlineProdCode}"/>
-						<input type="hidden" name="prodName" th:value="${storeOrdOnlineProd.onlineProdName}"/>
-						<input type="hidden" name="prodQty" th:value="${storeOrdOnlineProd.ordQtySum}"/>
-						<!--//결제 히든값-->
-						<input type="hidden" id="storeOrdHistProdCnt" name="storeOrdHistProdCnt" th:value="${#lists.size(storeOrdOnlineProd.ordHistProdList)}"/>
-						<!--/* 상품 선택 */-->
-						<div class="item_thumb">
-							<img th:if="${storeOrdOnlineProd.onlineProdImgUrl != null}" th:src="${storeOrdOnlineProd.onlineProdImgUrl}" class="thm_cart_item">
-							<img th:if="${storeOrdOnlineProd.onlineProdImgUrl == null}" ap:src="@{/images/cart/no_img.png}" class="thm_cart_item">
-						</div>
-						<!--/* 상품/플래그/옵션명 */-->
-						<div class="item_name">
-							<span class="title" th:text="${storeOrdOnlineProd.onlineProdName}">애니 쿠편 올데이 퍼펙트 리필 SPF50+/PA+++</span>
-							<p class="opt">옵션 :
-								<th:block th:each="ordHistProd, iterStat : ${storeOrdOnlineProd.ordHistProdList}"
-										  th:text="!${iterStat.last} ? ${ordHistProd.ordProdEx.prodNameBlang} + ' (' + ${ordHistProd.ordQty} + ')개' + ' / ' : ${ordHistProd.ordProdEx.prodNameBlang} + ' (' + ${ordHistProd.ordQty} + ')개'"
-									></th:block>
-							</p>
-						</div>
-						<!--/* 상품 수량 */-->
-						<div class="count">
-							<p class="text_center" th:if="${storeOrdOnlineProd.ordHistProdTypeCode == 'Ord'}" th:text="${storeOrdOnlineProd.ordQtySum > 0 ? storeOrdOnlineProd.ordQtySum + '개' : '0개'}">0개</p>
-							<p class="text_center" th:if="${storeOrdOnlineProd.ordHistProdTypeCode == 'BulkDc'}" th:text="${storeOrdOnlineProd.ordQtySum > 0 ? storeOrdOnlineProd.ordQtySum + 'set' : '0set'}">0set</p>
-						</div>
-						<!--/* 포인트 및 가격 */-->
-						<div class="price">
-							<span class="strong"><b th:text="${#IntegUtil.toCommaNumber(storeOrdOnlineProd.finalOnlineSaleAmtPcurSum)}">0</b>원</span>
-						</div>
+				<!--/* 일단상품 */-->
+				<th:block th:if="${#lists.size(storePickupOrdOnlineProdList) > 0}">
+					<div class="item_wrap" th:each="ordOnlineProd : ${storePickupOrdOnlineProdList}">
+						<th:block ap:replace="~{order/fragment/order-reception-product/order-ordonlineprod-info}"/>
 					</div>
-				</div>
+				</th:block>
+				<!--/* M+N프로모션 */-->
+				<th:block th:if="${#lists.size(storePickupMNPromoList) > 0}">
+					<th:block th:each="mPlusNPromo : ${storePickupMNPromoList}">
+						<th:block ap:replace="~{order/fragment/order-reception-product/order-mnpromo-info}"/>
+					</th:block>
+				</th:block>
+				<!--/* 동시구매프로모션 */-->
+				<th:block th:if="${#lists.size(storePickupSameTimePurPromoList) > 0}">
+					<th:block th:each="sameTimePromo : ${storePickupSameTimePurPromoList}">
+						<th:block ap:replace="~{order/fragment/order-reception-product/order-sametimepromo-info}"/>
+					</th:block>
+				</th:block>
 			</th:block>
+			<!--테이크아웃쇼핑상품-->
 		</div>
 	</dd>
 </dl>
+<!--//주문상품확인-->

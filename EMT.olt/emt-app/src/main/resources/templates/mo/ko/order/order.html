@@ -3,12 +3,6 @@
 <!-- #ap_container -->
 <div ap:fragment="layout-contents">
 	
-	<!-- aki iframe test -->
-	<div id="mask">
-		<iframe id="paymentIframe" name="paymentIframe" style="display:none"></iframe>
-	</div>
-	<!-- //aki iframe test -->
-	
 	<!-- page contents -->
 	<div class="ap_contents cart order">
 		<form class="order-validate" id="order-recept-info" name="orderForm" method="post">
@@ -115,8 +109,6 @@
 	<script src="https://nsp.pay.naver.com/sdk/js/naverpay.min.js"></script>
 	<script th:inline="javascript">
 		
-		//aki iframe test
-		$("#paymentIframe").css({"position":"fixed", "top":"0", "left":"0","width":"100%", "height":"100%", "background":"rgba(0, 0, 0, 0.3)", "z-index":"100"});
 		var  payPopup,
 			isApMember = /*[[${isApMember}]]*/ false,
 			promoLimitedProdSnList	= /*[[${ordEx.promoLimitedProdSnList}]]*/ null;		//프로모션 제한된 상품목록
@@ -286,11 +278,25 @@
 				$('[name=price]').attr('value', pgPrice);
 			}
 
+			//Kakao Pay 1000원미만시 결제 불가
+			var goPayMethod = $('input[name=goPayMethod]').val();
+			if ("onlykakaopay" == goPayMethod && pgPrice < 1000) {
+				AP.modal.alert("카카오페이 결제금액이 천원 미만시 결제할 수 없습니다. <br/>다른 결제수단을 선택하세요.");
+				$('#kakao_pay').attr('checked', false);
+				return false;
+			}
+			//Payco 1000원미만시 결제 불가
+			if ("onlypayco" == goPayMethod && pgPrice < 1000) {
+				AP.modal.alert("페이코가 결제금액이 천원 미만시 결제할 수 없습니다. <br/>다른 결제수단을 선택하세요.");
+				$('#payco').attr('checked', false);
+				return false;
+			}
+
 			var $form = $('form.order-validate');
 			var formData = AP.common.getFormData($form);
 			formData['ordSn'] = ordSn;
 
-			//$('#orderLoading').show();
+			$('#orderLoading').show();
 			$.ajaxSettings.traditional = true;
 			AP.api.ordReceptChange({}, formData).done(function(data) {
 				//성공
@@ -305,7 +311,7 @@
 				} else {
 					AP.modal.alert(xhr.errorMessage);
 				}
-				//$('#orderLoading').hide();
+				$('#orderLoading').hide();
 			}).always(function() {
 				//성공, 실패
 			});
@@ -362,7 +368,7 @@
 				}
 			}).fail(function (e) {
 				AP.modal.alert(e.responseJSON.errorData.message);
-				//$('#orderLoading').hide();
+				$('#orderLoading').hide();
 			}).always(function () {
 			});
 		}
@@ -474,6 +480,7 @@
 			else if('WPAY' == selectedPaymethod) {
 				
 				payPopup = window.open('about:blank','payPopup');				
+				checkOpenPayPopup(payPopup);
 				
 				actionUrl = "/payment/wpay";
 				$form.attr("method", "post");
@@ -484,154 +491,33 @@
 			}
 			//기타 이니시스
 			else {
-				//actionUrl = "/payment/iniPay";
+				payPopup = window.open('about:blank','payPopup');			
+				checkOpenPayPopup(payPopup);
 				
-				$("form[name='inipayForm']").remove();
-
-				 AP.api.moInipayReq({}, AP.common.getFormData($form)).done(function(data) {
-
-					var iniParamMap = new Map();
-					iniParamMap = data;
-
-					var $iniform = $("<form />");
-
-					$.map(iniParamMap, function(value, key) {
-						$hidden = $("<input />");
-						$hidden.prop("type", "hidden");
-						$hidden.prop("name", key);
-						$hidden.prop("value", value);
-						$iniform.append($hidden);
-
-					});
-					
-					//<input type="hidden" name="P_CHARSET" value="utf8">
-					$hidden = $("<input />");
-					$hidden.prop("type", "hidden");
-					$hidden.prop("name", "P_CHARSET");
-					$hidden.prop("value", "utf8");
-					$iniform.append($hidden);
-					
-					var paymethod = $iniform.find("input:hidden[name='paymethod']").val();
-					var url = "https://mobile.inicis.com/smart/" + paymethod + "/";
-
-					$iniform.attr("method", "post");
-					$iniform.attr("name", "inipayForm");
-					$iniform.attr("target", "paymentIframe");
-					$iniform.attr("accept-charset", "euc-kr");
-					$iniform.attr("action", url);
-					$(document.body).append($iniform);
-					
-					//전체 dimm처리
-					wrapWindowByMask();
-					
-					//이니시스 아이프레임 활성화
-					$("#paymentIframe").css("display", "block");
-					 
-					//이니시스 아이프레임 화면의 높이와 너비를 구한다.
-			        var iframeHeight = $(window).height();  
-			        var iframeWidth = $(window).width();
-			        $("#paymentIframe").attr("width", iframeWidth);
-			        $("#paymentIframe").attr("height", iframeHeight);
-			        
-			        //호출
-					$iniform.submit();
-					
-				}).fail(function(xhr, textStatus, errorThrown) {
-					AP.modal.alert(xhr.errorMessage);
-					//$('#orderLoading').hide();
-				}).always(function() {
-					//성공, 실패
-				}); 
+				actionUrl = "/payment/iniPay";
+				$form.attr("method", "post");
+				$form.attr("action", actionUrl);
+				$form.attr("target", 'payPopup');
+				$form.submit();
 			}
-			
-		
-		}
-		
-		function iniComplete($resultForm) {
-			
-			var $form = $resultForm;
-			
-			var resultCode = $form.find("input:hidden[name='resultCode']").val();
-			if(resultCode == '00') {	//결제 성공
-				
-				$form.attr("target", "_parent");	//본창에서 submit
-				$form.attr("name", "inipayResult");
-				$form.attr("action", "/order/ordComplete");
-				$form.submit();	
-				
-			} else {
-				var msg;
-				   if($form.find("input:hidden[name='P_RMESG1']") != null) {
-						msg = $form.find("input:hidden[name='P_RMESG1']").val();
-						if(msg ==null || msg == '' || msg== 'undefined') {
-							
-							msg = "결제 중 시스템 오류가 발생하였습니다. 관리자 문의바랍니다.";	
-						}
-					} else {
-						msg = "결제 중 시스템 오류가 발생하였습니다. 관리자 문의바랍니다.";
-					}
-				payFailResult(msg);
-				$('#mask').css("display","none");
-			}
-			
-		}
-		
-		function iniBankComplete($resultForm) {
-			var $form = $resultForm;
-			$form.attr("target", "_parent");	//본창에서 submit
-			$form.attr("name", "inipayResult");
-			$form.attr("action", "/order/ordBankComplete");
-			$form.submit();	
-		}
-		
-		function iniBankCancel(msg) {			
-			payFailResult(msg);
-			$('#mask').css("display","none");
-		}
-		
-		function iniWpayComplete($resultForm) {
-			var resultCode = $form.find("input:hidden[name='resultCode']").val();
-			if(resultCode == '0000') {	//결제 성공
-				
-				//부모창에서 서브밋
-				opener.window.name = "reception";
-				$form.attr("target", "_parent");
-				$form.attr("action", "/order/ordComplete")
-				$form.submit();	
-				
-			} else {
-				var msg;
-				if($form.find("input:hidden[name='resultMsg']") != null) {
-					msg = $form.find("input:hidden[name='resultMsg']").val();
-					if(msg ==null || msg == '' || msg== 'undefined') {
-						
-						msg = "결제 중 시스템 오류가 발생하였습니다. 관리자 문의바랍니다.";	
-					}
-				} else {
-					msg = "결제 중 시스템 오류가 발생하였습니다. 관리자 문의바랍니다.";
-				}
-			   
-			   alert(msg);
-			}
-		} 
-		
-		//결제창 호출시 dimm처리 
-		function wrapWindowByMask(){
-	        //화면의 높이와 너비를 구한다.
-	        var maskHeight = $(document).height();  
-	        var maskWidth = $(window).width();  
-
-	        //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
-	        $('#mask').css({'width':maskWidth,'height':maskHeight});  
-
-	        //애니메이션 효과
-	        $('#mask').fadeIn(500);      
-	       
 		}
 
 		/* 결제실패 혹은 중간에 결제 종료시 메세지 출력 */
 		function payFailResult(msg) {
 			AP.modal.alert(msg);
+			$('#orderLoading').hide();
+		}
+		
+		/*결제 팝업창 닫혔는지 체크*/
+		function checkOpenPayPopup(payPopup) {
+			setInterval(function () {
+				if(payPopup.closed) {
+					$('#orderLoading').hide();
+					payPopup = false;
+				};
+			}, 3000);
+			
+			return;
 		}
 
 		/* 비회원 개인정보 수집,이용 동의 */
@@ -661,6 +547,21 @@
 				modal.close();
 				location.replace('/cart/cartList');
 			});
+		}
+
+		/* 공통 메시지 처리 */
+
+		/**
+		 * 금액변동인한 포인트 및 예치금 초기화
+		 * @param msg
+		 */
+		function initPointAndDeposit(msg) {
+			if ($('[name="depositPrice"]').length > 0 && $('[name="depositPrice"]').val() != ""
+				|| $('[name="beauty_point"]').length > 0 && $('[name="beauty_point"]').val() != "") {
+				AP.modal.alert(msg);
+				$('[name="depositPrice"]').val('');
+				$('[name="beauty_point"]').val('');
+			}
 		}
 	</script>
 </th:block>

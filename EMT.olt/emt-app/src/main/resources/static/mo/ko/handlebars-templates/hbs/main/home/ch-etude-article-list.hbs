@@ -10,7 +10,12 @@
 {{else}}
 	{{#each this.list}}
 		<li>
-			<a href="{{productDetailPath this.onlineProdSn}}">
+			{{#xif ../prodListUnitCode '==' 'OnlineProd'}}
+				<a href="{{productDetailPath this.onlineProdSn}}">
+			{{/xif}}
+			{{#xif ../prodListUnitCode '==' 'Prod'}}
+				<a href="{{productDetailPath this.onlineProdSn this.products.0.prodSn}}">
+			{{/xif}}
 				<span class="lazy_load_wrap">
 				{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
 					<div class="item_state out_of_stock">일시품절</div>
@@ -23,9 +28,22 @@
 				{{/xif}}
 				</span>
 				<span class="item_title">{{this.onlineProdName}}</span>
+				<span class="color_name">
 					{{#xif ../prodListUnitCode '==' 'Prod'}}
-						<p class="option_name">{{this.products.0.prodName}}</p>
+						{{#xif this.onlineProdName '!=' this.products.0.prodName}}
+							{{this.products.0.prodName}}
+						{{/xif}}
 					{{/xif}}
+					{{#xif ../prodListUnitCode '==' 'OnlineProd'}}
+						{{#xif ../colorCnt '>' 1}}
+							{{../colorCnt}} colors
+						{{/xif}}
+						{{#xif ../optionCnt '>' 1}}
+							{{../optionCnt}} options
+						{{/xif}}
+					{{/xif}}
+				</span>
+				
 				<span class="price"><b class="num">{{ numberFormat this.onlineProdPriceSummary.minOnlineSalePrice}}</b> 원</span>
 			</a>
 		</li>

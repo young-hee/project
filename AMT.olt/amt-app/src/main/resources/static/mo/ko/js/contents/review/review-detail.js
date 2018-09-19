@@ -7,12 +7,14 @@
 	var ReviewDetail = $B.Class.extend({
 		initialize: function () {
 			this._$target = $( '#ap_container' );
+			
 		},
 
 		/** =============== Public Methods =============== */
 		
 		//페이지를 구성한는 기본 데이타 설정
-		setDefaultData: function () {
+		setDefaultData: function (prodReviewSn) {
+			this._prodReviewSn = prodReviewSn;
 			this._setEvents();
 			
 			//상단 슬라이더
@@ -127,22 +129,24 @@
 			
 			//신고하기
 			this._$target.find('.btn_report').off('click').on('click', function(e){
-				/*
-				var $detailModal = $( '.layer_popup.review-detail' );
+				var $cur = $(e.currentTarget);
+				var prodReviewSn = $cur.data('review-sn');
 				if( AP.LOGIN_USER ){
-					var reportModal = new AP.Report(this._defaultData).addListener( 'modal-close', function (e) { 
-						if( e.data == 'report' ){
-							$detailModal.find('.btn_report').addClass('on');
+					var reportModal = new AP.Report({
+						review : {
+							 prodReviewSn : this._prodReviewSn
+							,memberId : this._$target.find('#memberId').text()
+							,prodReviewBodyText : this._$target.find('#reviewContent').text()
 						}
-						$detailModal.show();
-						this._modal.resetPosition();
+					}).addListener( 'modal-close', function (e) { 
+						if( e.data == 'report' ){
+							$cur.addClass('on');
+						}
 					}.bind(this)); 
-					$detailModal.hide();
 					reportModal.open();
 				} else {
 					AP.login.go();
 				}
-				*/
 			}.bind(this));
 		}
 	});

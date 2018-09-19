@@ -31,6 +31,9 @@ public class RequestDisplay {
 	private Long displayCate; //ex)1, 50
 	private Long brand; //2, 995
 	private String priceRange; //예1) “10000,”- 10000~ 예2) “2000,8000”- 2000~8000 예3) “,50000”- ~50000
+	private String location; //전시카드-전시위치구분
+	private String sort;
+	private Integer faveBrandCnt; 
 	
 	public Integer getTotalListSize() {
 		return totalListSize;
@@ -175,6 +178,24 @@ public class RequestDisplay {
 	}
 	public void setPriceRange(String priceRange) {
 		this.priceRange = priceRange;
+	}
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
+	}
+	public String getSort() {
+		return sort;
+	}
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
+	public Integer getFaveBrandCnt() {
+		return faveBrandCnt;
+	}
+	public void setFaveBrandCnt(Integer faveBrandCnt) {
+		this.faveBrandCnt = faveBrandCnt;
 	}
 
 	

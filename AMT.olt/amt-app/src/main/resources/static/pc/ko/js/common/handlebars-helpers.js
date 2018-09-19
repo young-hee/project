@@ -961,6 +961,23 @@
 		return price + str;
 	});
 
+
+	/**
+	 * Formatting된 결제금액 Map Helper
+	 * {{getOtfAmtMapPrice otfTotalAmtMap 'OnlineShipProd' '원'}}
+	 */
+	Handlebars.registerHelper('getOtfAmtMapPrice', function (map, key1, key2, str) {
+		var price = null;
+		if (map != null && key1 != null && key2 != null) {
+			Object.keys( map ).map(function( prop ) {
+				if (prop == (key1+key2)) {
+					price = $B.string.numberFormat( Number(map[ prop ]) );
+				}
+			});
+		}
+		return price + str;
+	});
+
 	/**
 	 * 주문수량 Map Helper
 	 * {{getCntMap ordCntMap 'OnlineShipProd'}}

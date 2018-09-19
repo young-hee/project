@@ -12,6 +12,11 @@ public class CartSession implements Serializable {
 	private Long cartSn = 0L;
 
 	/**
+	 * 장바구니번호(바로구매)
+	 */
+	private Long buyNowCartSn = 0L;
+
+	/**
 	 * 장바구니 상품번호 리스트
 	 */
 	private String cartProdSnList;
@@ -27,6 +32,14 @@ public class CartSession implements Serializable {
 
 	public void setCartSn(Long cartSn) {
 		this.cartSn = cartSn;
+	}
+
+	public Long getBuyNowCartSn() {
+		return buyNowCartSn;
+	}
+
+	public void setBuyNowCartSn(Long buyNowCartSn) {
+		this.buyNowCartSn = buyNowCartSn;
 	}
 
 	public String getCartProdSnList() {

@@ -13,6 +13,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
+import feign.RequestLine;
+
 
 public class APIServiceUtils {
 
@@ -28,10 +30,10 @@ public class APIServiceUtils {
 
 
 	private static String getMethod(final Method method) {
-//		RequestLine requestLine = method.getAnnotation(RequestLine.class);
-//		if(requestLine != null) {
-//			return requestLine.value();
-//		}
+		RequestLine requestLine = method.getAnnotation(RequestLine.class);
+		if(requestLine != null) {
+			return requestLine.value();
+		}
 		return methodBase.replace("$$", method.getName());
 	}
 	

@@ -1,0 +1,141 @@
+<!--결제수단 선택-->
+<!--<div class="section">-->
+
+	<dl class="dl_cont">
+		<dt class="h_title">결제 수단</dt>
+		{{#each pgList}}
+			{{#xif payMethodTypeCode '===' 'Deposit'}}
+				<!-- 예치금 -->
+				<dd>
+					<dl>
+						<dt>예치금 {{currencyFormat payAmt '원'}}</dt>
+					</dl>
+				</dd>
+			{{/xif}}
+			{{#if (and (eq pointTypeCode 'MembershipPoint')(eq membershipServiceCode 'BP'))}}
+				<!-- 뷰티 포인트 -->
+				<dd>
+					<dl>
+						<dt>뷰티 포인트 {{currencyFormat usePoint 'P'}}</dt>
+					</dl>
+				</dd>
+			{{/if}}
+			{{#if (and (eq pointTypeCode 'MembershipPoint')(eq membershipServiceCode 'PP'))}}
+				<!-- 임직원 포인트 -->
+				<dd>
+					<dl>
+						<dt>P 포인트 {{currencyFormat usePoint 'P'}}</dt>
+					</dl>
+				</dd>
+			{{/if}}
+			{{#xif payMethodCode '===' 'wpay'}}
+				<!-- 원터치 간편결제 -->
+				<dd>
+					<dl>
+						<dt>원터치 간편결제 {{currencyFormat payAmt '원'}}</dt>
+						{{#if pgPayEx.cardCoCode}}
+							<dd class="divide"><span>{{pgPayEx.cardCoName}}</span><span>{{#if pgPayEx.cardNo}}({{pgPayEx.cardNo}}){{/if}}</span></dd>
+							{{#if pgPayEx.cardCoCode}}
+								<dd class="divide"><span>{{creditcardPayType pgPayEx}}</span></dd>
+							{{/if}}
+						{{/if}}
+					</dl>
+				</dd>
+			{{/xif}}
+			{{#xif payMethodTypeCode '===' 'naverpay'}}
+				<!-- 네이버 페이 -->
+				<dd>
+					<dl>
+						<dt>네이버 페이 {{currencyFormat payAmt '원'}}</dt>
+						{{#if pgPayEx.cardCoCode}}
+							<dd class="divide"><span>{{pgPayEx.cardCoName}}</span><span>{{#if pgPayEx.cardNo}}({{pgPayEx.cardNo}}){{/if}}</span></dd>
+							{{#if pgPayEx.cardCoCode}}
+								<dd class="divide"><span>{{creditcardPayType pgPayEx}}</span></dd>
+							{{/if}}
+						{{/if}}
+					</dl>
+				</dd>
+			{{/xif}}
+			{{#xif payMethodCode '===' 'payco'}}
+				<!-- 페이코 -->
+				<dd>
+					<dl>
+						<dt>페이코 {{currencyFormat payAmt '원'}}</dt>
+						{{#if pgPayEx.cardCoCode}}
+							<dd class="divide"><span>{{pgPayEx.cardCoName}}</span><span>{{#if pgPayEx.cardNo}}({{pgPayEx.cardNo}}){{/if}}</span></dd>
+							{{#if pgPayEx.cardCoCode}}
+								<dd class="divide"><span>{{creditcardPayType pgPayEx}}</span></dd>
+							{{/if}}
+						{{/if}}
+					</dl>
+				</dd>
+			{{/xif}}
+			{{#xif payMethodCode '===' 'kakaopay'}}
+				<!-- 카카오 페이 -->
+				<dd>
+					<dl>
+						<dt>카카오 페이 {{currencyFormat payAmt '원'}}</dt>
+						{{#if pgPayEx.cardCoCode}}
+							<dd class="divide"><span>{{pgPayEx.cardCoName}}</span><span>{{#if pgPayEx.cardNo}}({{pgPayEx.cardNo}}){{/if}}</span></dd>
+							{{#if pgPayEx.cardCoCode}}
+								<dd class="divide"><span>{{creditcardPayType pgPayEx}}</span></dd>
+							{{/if}}
+						{{/if}}
+					</dl>
+				</dd>
+			{{/xif}}
+			{{#xif payMethodCode '===' 'credit-card'}}
+				<!-- 신용카드 결제 -->
+				<dd>
+					<dl>
+						<dt>신용카드 결제 {{currencyFormat payAmt '원'}}</dt>
+						{{#if pgPayEx.cardCoCode}}
+							<dd class="divide"><span>{{pgPayEx.cardCoName}}</span><span>{{#if pgPayEx.cardNo}}({{pgPayEx.cardNo}}){{/if}}</span></dd>
+							{{#if pgPayEx.cardCoCode}}
+								<dd class="divide"><span>{{creditcardPayType pgPayEx}}</span></dd>
+							{{/if}}
+						{{/if}}
+					</dl>
+				</dd>
+			{{/xif}}
+			{{#xif payMethodCode '===' 'bank-ac-transfer'}}
+				<!-- 실시간 계좌이체 -->
+				<dd>
+					<dl>
+						<dt>실시간 계좌이체 {{currencyFormat payAmt '원'}}</dt>
+						{{#if pgPayEx.virtualBankAcBankCode}}
+							<dd class="divide"><span>{{pgPayEx.virtualBankAcBankName}}</span>{{#if pgPayEx.virtualDepositBankAcNo}}<span>({{pgPayEx.virtualDepositBankAcNo}})</span>{{/if}}</dd>
+							<dd class="divide"><span>예금주</span><span>{{pgPayEx.virtualBankAcAcHolder}}</span></dd>
+						{{/if}}
+					</dl>
+				</dd>
+			{{/xif}}
+			{{#xif payMethodCode '===' 'virtual-account'}}
+				<!-- 무통장 입금 -->
+				<dd>
+					<dl>
+						<dt>무통장 입금 {{currencyFormat payAmt '원'}}</dt>
+						{{#if pgPayEx.virtualBankAcBankCode}}
+							<dd class="divide"><span>{{pgPayEx.virtualBankAcBankName}}</span>{{#if pgPayEx.virtualDepositBankAcNo}}<span>({{pgPayEx.virtualDepositBankAcNo}})</span>{{/if}}</dd>
+							<dd class="divide"><span>예금주</span><span>{{pgPayEx.virtualBankAcAcHolder}}</span></dd>
+							{{#if pgPayEx.virtualBankAcDeadlineDt}}
+								<dd class="divide"><span>입금기한</span><span>{{dateFormat pgPayEx.virtualBankAcDeadlineDt "YYYY-MM-DD"}} 까지</span></dd>
+							{{/if}}
+						{{/if}}
+					</dl>
+				</dd>
+			{{/xif}}
+			{{#xif payMethodCode '===' 'mobile-phone-pay'}}
+				<!-- 휴대폰결제 -->
+				<dd>
+					<dl>
+						<dt>휴대폰 결제 {{currencyFormat payAmt '원'}}</dt>
+						<dd class="divide">{{pgPayEx.mobilePhoneNo}}</dd>
+					</dl>
+				</dd>
+			{{/xif}}
+		{{/each}}
+	</dl>
+
+<!--</div>-->
+<!--결제수단 선택-->

@@ -10,12 +10,14 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-ship-address"] = Handlebar
 
   return "	<div class=\"title table_layout\">\n\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.type : depth0),"return",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.type : depth0),"exchange",{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.program(6, data, 0),"data":data})) != null ? stack1 : "")
-    + "\n		<div class=\"align_right\"><button type=\"button\" class=\"btn_sm_bordered\" onclick=\"changeShipAddress()\">배송정보 수정</button></div>\n	</div>\n	<div class=\"panel padding15\">\n		<div class=\"panel gray\">\n			<dl class=\"table_layout\">\n				<dt>이름</dt>\n				<dd>"
+    + "\n"
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.status : depth0),"==","detail",{"name":"xif","hash":{},"fn":container.program(8, data, 0),"inverse":container.program(11, data, 0),"data":data})) != null ? stack1 : "")
+    + "\n	</div>\n	<div class=\"panel padding15\">\n		<div class=\"panel gray\">\n			<dl class=\"table_layout\">\n				<dt>이름</dt>\n				<dd>"
     + alias4(alias3(((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.recipientName : stack1)) != null ? stack1.name1 : stack1), depth0))
     + "</dd>\n			</dl>\n			<dl class=\"table_layout\">\n				<dt>휴대폰 번호</dt>\n				<dd>"
     + alias4(alias3(((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.recipientPhoneNo1 : stack1)) != null ? stack1.phoneNo : stack1), depth0))
     + "</dd>\n			</dl>\n			<dl class=\"table_layout\">\n				<dt>주소</dt>\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.shipAddressTypeCode : stack1),"===","ShipAddressInput",{"name":"xif","hash":{},"fn":container.program(8, data, 0),"inverse":container.program(10, data, 0),"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.shipAddressTypeCode : stack1),"===","ShipAddressInput",{"name":"xif","hash":{},"fn":container.program(13, data, 0),"inverse":container.program(15, data, 0),"data":data})) != null ? stack1 : "")
     + "			</dl>\n			<dl class=\"table_layout\">\n				<dt>배송 시 요청사항</dt>\n				<dd>"
     + alias4(alias3(((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.shipMsg : stack1), depth0))
     + "</dd>\n			</dl>\n		</div>\n	</div>\n\n";
@@ -28,6 +30,14 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-ship-address"] = Handlebar
 },"6":function(container,depth0,helpers,partials,data) {
     return "			<div><b class=\"font_lg\">배송정보</b></div>\n";
 },"8":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
+
+  return ((stack1 = helpers["if"].call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.or || (depth0 && depth0.or) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.statusCode : depth0),"OrdReceivedWaiting",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.statusCode : depth0),"OrdReceivedComplete",{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.statusCode : depth0),"PartialCancel",{"name":"eq","hash":{},"data":data}),{"name":"or","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+},"9":function(container,depth0,helpers,partials,data) {
+    return "				<div class=\"align_right\"><button type=\"button\" class=\"btn_sm_bordered\" onclick=\"changeShipAddress()\">배송정보 수정</button></div>\n";
+},"11":function(container,depth0,helpers,partials,data) {
+    return "			<div class=\"align_right\"><button type=\"button\" class=\"btn_sm_bordered\" onclick=\"changeShipAddress()\">배송정보 수정</button></div>\n";
+},"13":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "					<dd>"
@@ -35,7 +45,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-ship-address"] = Handlebar
     + " "
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.recipientAddress : stack1)) != null ? stack1.address2 : stack1), depth0))
     + "</dd>\n";
-},"10":function(container,depth0,helpers,partials,data) {
+},"15":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "					<dd>편의점명 : "

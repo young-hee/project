@@ -90,6 +90,9 @@ public class MyOrdDTO {
 	// 테이크 아웃 카운트
 	private Integer storeOrdOnlineProdCnt;
 
+	// 매장 정보
+	private StoreEx storeEx;
+
 	public MyOrdDTO(OrdEx ordEx) {
 
 //		state = null;
@@ -224,11 +227,15 @@ public class MyOrdDTO {
 
 		for (OrdShipAddressEx ordShipAddressEx : ordShipAddressList) { // 주문배송지목록(확장)
 			if (ordChangeShipAddress == null) {
-				setShipAddress(ordShipAddressEx);
+				if ("N".equals(ordShipAddressEx.getStorePickupYn()))
+					setShipAddress(ordShipAddressEx);
 			}
 
 			List otfList = null;
-			StoreEx storeEx = ordShipAddressEx.getStoreEx();
+			if ("Y".equals(ordShipAddressEx.getStorePickupYn()) && storeEx == null) {
+				storeEx = ordShipAddressEx.getStoreEx();
+			}
+
 
 			if ("return".equals(state) || "exchange".equals(state)) {
 				otfList = ordShipAddressEx.getClaimRtnOrderExList();
@@ -373,6 +380,7 @@ public class MyOrdDTO {
 							ordOnlineProdFo.setProdCancelAmtSum(ordOnlineProdFo.getProdCancelAmtSum().add(ordHistProdEx.getFinalOnlineSalePricePcur().multiply(BigDecimal.valueOf(ordHistProdEx.getCancelQty()))));
 						}
 
+						ordOnlineProdFo.setRtnRequestPossibleQtySum(ordOnlineProdFo.getRtnRequestPossibleQtySum() + ordHistProdEx.getRtnRequestPossibleQty());
 						ordOnlineProdFo.setFinalOnlineSaleAmtPcurSum(ordOnlineProdFo.getFinalOnlineSaleAmtPcurSum().add(ordHistProdEx.getFinalOnlineSaleAmtPcur()));
 						ordOnlineProdFo.setOrdQtySum(ordOnlineProdFo.getOrdQtySum() + ordHistProdEx.getOrdQty());
 						ordOnlineProdFo.setCancelQtySum(ordOnlineProdFo.getCancelQtySum() + ordHistProdEx.getCancelQty());
@@ -391,7 +399,6 @@ public class MyOrdDTO {
 								List<OrdHistProdEx> ordHistProdList = ordOnlineProdFo.getPreSale(); // 주문이력상품목록
 								ordHistProdList.add(ordHistProdEx);
 							}
-
 						}
 
 
@@ -454,6 +461,11 @@ public class MyOrdDTO {
 		ordOnlinePromoFo.setBaseQty(ordOnlinePromoFo.getBaseQty() + ordHistProdEx.getmPlusNBaseQty());
 		ordOnlinePromoFo.setAwardQty(ordOnlinePromoFo.getAwardQty() + ordHistProdEx.getmPlusNAwardQty());
 
+		ordOnlinePromoFo.setOrdQtySum(ordOnlinePromoFo.getOrdQtySum() + ordHistProdEx.getOrdQty());
+		ordOnlinePromoFo.setCancelQtySum(ordOnlinePromoFo.getCancelQtySum() + ordHistProdEx.getCancelQty());
+		ordOnlinePromoFo.setClaimQtySum(ordOnlinePromoFo.getClaimQtySum() + ordHistProdEx.getClaimReceivedQty());
+		ordOnlinePromoFo.setRtnRequestPossibleQtySum(ordOnlinePromoFo.getRtnRequestPossibleQtySum() + ordHistProdEx.getRtnRequestPossibleQty());
+
 
 		return getOrdOnlineProdFo(ordHistProdEx, ordOnlinePromoFo);
 	}
@@ -479,8 +491,11 @@ public class MyOrdDTO {
 		if ("ProdCancel".equals(ordHistProdEx.getOrdHistProdStatusCode())) {
 			ordOnlinePromoFo.setProdCancelAmtSum(ordOnlinePromoFo.getProdCancelAmtSum().add(ordHistProdEx.getFinalOnlineSalePricePcur().multiply(BigDecimal.valueOf(ordHistProdEx.getCancelQty()))));
 		}
+
 		ordOnlinePromoFo.setOrdQtySum(ordOnlinePromoFo.getOrdQtySum() + ordHistProdEx.getOrdQty());
-		ordOnlinePromoFo.setCancelQtySum(ordOnlinePromoFo.getCancelQtySum() + ordHistProdEx.getClaimReceivedQty());
+		ordOnlinePromoFo.setCancelQtySum(ordOnlinePromoFo.getCancelQtySum() + ordHistProdEx.getCancelQty());
+		ordOnlinePromoFo.setClaimQtySum(ordOnlinePromoFo.getClaimQtySum() + ordHistProdEx.getClaimReceivedQty());
+		ordOnlinePromoFo.setRtnRequestPossibleQtySum(ordOnlinePromoFo.getRtnRequestPossibleQtySum() + ordHistProdEx.getRtnRequestPossibleQty());
 
 		ordOnlinePromoFo.setTotalProductSaleAmount(ordOnlinePromoFo.getTotalProductSaleAmount().add(ordHistProdEx.getFinalOnlineSaleAmtPcur()));
 		ordOnlinePromoFo.setTotalFinalOnlineSaleAmount(ordOnlinePromoFo.getTotalFinalOnlineSaleAmount().add(ordHistProdEx.getProdSalePricePcur()));
@@ -504,7 +519,12 @@ public class MyOrdDTO {
 		OrdOnlineProdFoDTO ordOnlineProdFo = new OrdOnlineProdFoDTO();
 		OrdProdEx ordProd = ordHistProd.getOrdProdEx();
 		ordOnlineProdFo.setOnlineProdSn(ordProd.getOnlineProdSn());
-		ordOnlineProdFo.setOnlineProdImgUrl(ordProd.getOnlineProdImgUrl());						// 이미지
+		if ("BulkDc".equals(ordHistProd.getOrdHistProdTypeCode())) {
+			ordOnlineProdFo.setOnlineProdImgUrl(ordProd.getBulkDcOnlineProdImgUrl()); // 이미지
+		}
+		else {
+			ordOnlineProdFo.setOnlineProdImgUrl(ordProd.getOnlineProdImgUrl()); // 이미지
+		}
 		ordOnlineProdFo.setOnlineProdCode(ordProd.getOnlineProdCode());							// 온라인상품코드
 		ordOnlineProdFo.setOnlineProdName(ordProd.getOnlineProdNameRlang());					// 온라인상품명
 		ordOnlineProdFo.setBulkDcOnlineProdCode(ordProd.getBulkDcOnlineProdCode());				// 묶음할인온라인상품코드
@@ -518,6 +538,7 @@ public class MyOrdDTO {
 		ordOnlineProdFo.setOrdQtySum(0);														// 주문수량(단위상품 X 주문수량)
 		ordOnlineProdFo.setCancelQtySum(0);														// 취소수량
 		ordOnlineProdFo.setClaimQtySum(0);
+		ordOnlineProdFo.setRtnRequestPossibleQtySum(0);
 		ordOnlineProdFo.setOrdHistProdList(new ArrayList<OrdHistProdEx>());						// 주문이력(확장)
 		ordOnlineProdFo.setPreSale(new ArrayList<OrdHistProdEx>());						// 주문이력(확장)
 		ordOnlineProdFo.setProdList(new ArrayList<OrdHistProdEx>());						// 주문이력(확장)
@@ -780,5 +801,13 @@ public class MyOrdDTO {
 
 	public void setOrdHistPromoExList(List<OrdHistPromoEx> ordHistPromoExList) {
 		this.ordHistPromoExList = ordHistPromoExList;
+	}
+
+	public void setStoreEx(StoreEx storeEx) {
+		this.storeEx = storeEx;
+	}
+
+	public StoreEx getStoreEx() {
+		return storeEx;
 	}
 }

@@ -205,7 +205,7 @@
 		<a th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}" href="/login" class="btn_login">안녕하세요<br><span>로그인</span>이 필요합니다.</a>
 		
 		<!--/* 로그인 후 */--> 
-		<a th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}" href="/my/page/info/changeUserInfo" class="btn_login">홍길동님은<br><span>WELCOME</span>입니다.</a>
+		<a th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}" href="/my/page/info/changeUserInfo" class="btn_login"><th:block th:text="${session.LOGIN_USER.member.name.name1}">홍길동</th:block><th:block th:if="${session.LOGIN_USER.member.employeeYn == 'Y'}">(임직원)</th:block>님은<br><span th:text="${session.LOGIN_USER.member.memberLevelName}">WELCOME</span>입니다.</a>
 		
 		<!-- 09-03 메뉴 추가 및 삭제로 인한 마크업 수정 [S] -->
 		<div>
@@ -335,6 +335,7 @@
 				<dd>
 					<ul class="category" th:if="${not #lists.isEmpty(gnbMap.get('category'))}">
 						<th:block th:each="cate, inx : ${gnbMap.get('category').submenus}">
+						<th:block th:if="${cate.displayMenuId != 'CTG009'}">
 						<li th:class="${displayMenuId == cate.displayMenuId or upperMenuId == cate.displayMenuId ? 'on' : #lists.isEmpty(pageType) and inx.index == 0 ? 'on' : ''}">
 							<a href="#none" 
 								th:href="@{'/display/category/'+ ${cate.displayMenuId}(upperMenuId=${cate.displayMenuId}, categoryType=category)}" 
@@ -358,13 +359,15 @@
 						</li>
 						</th:block>
 						
+						<th:block th:if="${cate.displayMenuId == 'CTG009'}">
 						<li><a href="#none">브랜드</a>
 							<!-- 09-04 브랜드 영역 추가 [S] -->
-							<ul class="sub">
-								<li><a href="#none">아모레퍼시픽 브랜드</a>
-									<th:block th:each="brand, brandIndex : ${gnbMap.get('brandMain').submenus}">
+							<ul class="sub" th:if="${not #lists.isEmpty(cate.submenus)}">
+								<th:block th:each="subCate : ${cate.submenus}">
+								<li th:class="${displayMenuId == subCate.displayMenuId ? 'on' : ''}"><span th:text="${subCate.menuTitle}">아모레퍼시픽 브랜드</span><!-- 09-17 'a태그' →'span태그' 로 수정 -->
+									<th:block th:each="brand, brandIndex : ${subCate.submenus}">
 										<ul th:if="${brandIndex.index == 0 || brandIndex.index % 11 == 0}">
-											<th:block th:each="brand2, brandIndex2 : ${gnbMap.get('brandMain').submenus}">
+											<th:block th:each="brand2, brandIndex2 : ${subCate.submenus}">
 												<th:block th:if="${brandIndex2.index < 11*((brandIndex.index / 11)+1) && brandIndex2.index >= 11*(brandIndex.index / 11)}">
 													<li><a href="#none" th:href="@{'/brand/' + ${brand2.displayMenuId}(displayMenuId=${brand2.displayMenuId})}" th:text="${brand2.menuTitle}">메뉴</a></li>
 												</th:block>	
@@ -372,19 +375,24 @@
 										</ul>
 									</th:block>
 								</li>
-								<li><a href="#none">입점 브랜드</a>
-									<ul>
-										<li><a href="#none">메뉴</a></li>
-										<li><a href="#none">메뉴</a></li>
-										<li><a href="#none">메뉴</a></li>
-										<li><a href="#none">메뉴</a></li>
-										<li><a href="#none">메뉴</a></li>
-										<li><a href="#none">메뉴</a></li>
-									</ul>
-								</li>
+								</th:block>
 							</ul>
 							<!-- 09-04 브랜드 영역 추가 [E] -->
 						</li>
+						</th:block>
+					</ul>
+				</dd>
+			</dl>
+			<dl>
+				<dt>쇼핑찬스</dt>
+				<dd>
+					<ul>
+						<th:block th:if="${not #lists.isEmpty(gnbMap.get('AppH0201'))}">
+							<li th:each="menu : ${gnbMap.get('AppH0201').submenus}">
+								<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'URL'}" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}">On Sale</a>
+								<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'Menu'}" th:href="@{'/display/' + ${menu.linkDisplayMenuId}(displayMenuId=${menu.linkDisplayMenuId})}" th:text="${menu.menuTitle}">On Sale</a>
+							</li>
+						</th:block>
 					</ul>
 				</dd>
 			</dl>
@@ -407,19 +415,6 @@
 					<ul>
 						<th:block th:if="${not #lists.isEmpty(gnbMap.get('AppH0203'))}">
 							<li th:each="menu : ${gnbMap.get('AppH0203').submenus}">
-								<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'URL'}" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}">On Sale</a>
-								<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'Menu'}" th:href="@{'/display/' + ${menu.linkDisplayMenuId}(displayMenuId=${menu.linkDisplayMenuId})}" th:text="${menu.menuTitle}">On Sale</a>
-							</li>
-						</th:block>
-					</ul>
-				</dd>
-			</dl>
-			<dl>
-				<dt>쇼핑찬스</dt>
-				<dd>
-					<ul>
-						<th:block th:if="${not #lists.isEmpty(gnbMap.get('AppH0201'))}">
-							<li th:each="menu : ${gnbMap.get('AppH0201').submenus}">
 								<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'URL'}" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:text="${menu.menuTitle}">On Sale</a>
 								<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'Menu'}" th:href="@{'/display/' + ${menu.linkDisplayMenuId}(displayMenuId=${menu.linkDisplayMenuId})}" th:text="${menu.menuTitle}">On Sale</a>
 							</li>

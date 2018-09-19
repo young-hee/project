@@ -1,0 +1,63 @@
+/**
+ * BrandDetail
+ *
+ */
+
+;(function ( $ ) {
+	'use strict';
+
+	var BrandDetail = $B.Class.extend({
+		
+		initialize: function () {
+			this._$target = $( '#ap_container .ap_contents.brand_detail' );
+			this._$productList = this._$target.find( '.cate_prd_wrap01' );
+			this._$sort = this._$target.find( '.sort_filter_wrap' );
+
+			this._param = {};
+		},
+
+		/** =============== Public Methods =============== */
+		init: function ( options ) {
+			this._displayMenuId = options.displayMenuId;
+			$.extend( this._param, options.param );
+
+			this._productList = new AP.ProductList({
+				component: 'brandDetail',
+				$target: this._$productList,
+				displayMenuId: options.displayMenuId,
+				template: 'display.product-item',
+				api: 'itemList',
+				key: options.displayMenuId
+			}).load( this._param );
+
+			this._setEvent();
+		},
+
+		/** =============== Private Methods ============== */
+		_setEvent: function () {
+			// scroll fixed
+			$( window ).on( 'scroll', function () {
+				if ( AP.header.getHeight() +  $( window ).scrollTop() > this._$sort.offset().top ) {
+					var isDisplay = this._$sort.find( '.filter_sel_area' ).css( 'display' ) == 'block',
+						filterAreaH = ( isDisplay ) ? this._$sort.find( '.filter_sel_area' ).outerHeight() : 0,
+						paddingBottom = this._$sort.find( '.sort_filter_top' ).height() + filterAreaH + 9;
+					this._$sort.addClass( 'fixed' ).css( 'padding-bottom', paddingBottom );
+				} else {
+					this._$sort.removeClass( 'fixed' ).css( 'padding-bottom', 0 );
+				}
+			}.bind( this ));
+
+			// view
+			this._$sort.find( '.btn_align' ).on( 'click', function (e) {
+				if ( this._$sort.find( '.btn_align' ).hasClass( 'gallery' )) {
+					this._$sort.find( '.btn_align' ).removeClass( 'gallery' );
+					this._$productList.find( '.product_list_new' ).removeClass( 'gallery' );
+				} else {
+					this._$sort.find( '.btn_align' ).addClass( 'gallery' );
+					this._$productList.find( '.product_list_new' ).addClass( 'gallery' );
+				}
+			}.bind( this ));
+		}
+	});
+	AP.brandDetail = new BrandDetail();
+})( jQuery );

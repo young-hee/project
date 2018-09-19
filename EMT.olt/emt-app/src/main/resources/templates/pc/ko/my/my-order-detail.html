@@ -54,6 +54,8 @@
 
 <!--/* 하단 js등을 실행하는 마지막 영역 */-->
 <th:block ap:fragment="layout-endpoint">
+	<script language="JavaScript" src="https://iniweb.inicis.com/js/auth.js"></script>
+
 	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-info.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-footer.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-prodList.js}"></script>
@@ -70,6 +72,7 @@
 	<script ap:src="@{/handlebars-templates/compiled/my/order/detail/claim-reason.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/detail/amount-payment.js}"></script>
 	<script th:inline="javascript">
+
 
 		/*  상태 - [detail, request] */
 		var status = /*[[${status}]]*/;
@@ -102,7 +105,11 @@
 		function init() {
 			if (status == 'detail') {
 				$('.check_all').hide();
-				setViewYn('N', 'N', claimYn, 'Y', 'N', claimYn, 'Y');
+				if (type == 'exchange') {
+					setViewYn('N', 'N', claimYn, 'N', 'N', claimYn, 'Y');
+				} else {
+					setViewYn('N', 'N', claimYn, 'Y', 'N', claimYn, 'Y');
+				}
 				getOrdInfo();
 			} else if (status == 'request') {
 				if (step == 'one') {
@@ -131,7 +138,7 @@
 			$('[name=onlineProd]').off('click').on('click', function(e) {
 				var oProdCode = $(this).val();
 
-				if( $(this).prop('checked')) {
+				if( $(this).prop('checked') ) {
 					var isCheckedAll = true;
 					$('[name=prod_' + oProdCode + ']').prop('checked', true);
 
@@ -240,8 +247,8 @@
 		}
 
 		function getProdList() {
-			$('.online').empty();
-			$('.takeout').empty();
+			$('.ui_accordion > .online').empty();
+			$('.ui_accordion > .takeout').empty();
 			$('.ui_accordion > .freebies').empty();
 
 			//온라인 주문 상품
@@ -263,7 +270,7 @@
 					type : type
 				});
 
-				$('.online').append(onlineProds);
+				$('.ui_accordion > .online').append(onlineProds);
 			}
 
 			//테이크아웃 주문 상품
@@ -280,12 +287,13 @@
 					title : getTitle(),
 					status : status,
 					step : step,
+					type : type,
 					viewYn : viewYn,
 					takeOutYn : 'Y',
 					storeInfo : ord.goods.ordShipAddressExList[0].storeEx
 				});
 
-				$('.takeout').append(takeoutProds);
+				$('.ui_accordion > .takeout').append(takeoutProds);
 			}
 
 			//사은품
@@ -294,8 +302,6 @@
 					fList : ord.ordHistPromoExList,
 					cList : ord.ordHistCouponExList,
 					step : step,
-					type : type,
-					viewYn : viewYn,
 					title : getTitle()
 				});
 
@@ -312,13 +318,10 @@
 			$('#payInfo').empty();
 			if (viewYn.payInfo == 'Y') {
 				var memberInfo = /*[[${session.LOGIN_USER.member}]]*/;
-				var memberName = memberInfo == null ? '홍길동' : memberInfo.name.name1;
-
 				var payInfo = AP.common.getTemplate('my.order.order-detail-payInfo', {
 					type : type,
 					step : step,
 					viewYn : viewYn,
-					memberName : memberName,
 					ordPayCompareList : ord.goods.ordPayCompareList,
 					ordPayResult : ord.ordPayResult,
 					ordSavingPoint : ord.ordSavingPoint,
@@ -415,7 +418,7 @@
 			} else if(!chkReasonYn || !rtnRequestPossibleYn) {
 				return;
 			} else if (ord.goods.ordDetailStatusCode == 'OrdReceivedWaiting' && ordCancelAllYn == 'N') {
-				AP.modal.alert("죄송합니다. 주문접수 상태에서는 부분취소가 되지 않으므로, 해당 주문을 전체 취소하신 후 원하는 상품을 다시 결재해 주셔야 합니다.");
+				AP.modal.alert("죄송합니다. 주문접수 상태에서는 부분취소가 되지 않으므로, 해당 주문을 전체 취소하신 후 원하는 상품을 다시 결제해 주셔야 합니다.");
 				return;
 			} else {
 				AP.api.reqOrdClaimSelect({
@@ -468,6 +471,7 @@
 			modal.getElement().find( '.ui_find_addresses' ).findAddresses();
 
 			$('#b_chgAddress').off('click').on('click', function(e) {
+				$('input[name=shipMsg]').val($.trim($('input[name=shipMsg]').val()));
 				var $form = $('#f_shipAddressInfo');
 
 				if($form.valid()) {
@@ -546,16 +550,18 @@
 					} else {
 						AP.modal.confirm('선택하신 옵션으로 변경하시겠습니까?').addListener( 'modal-close', function (e) {
 							if (e.closeType === 'confirm') {
+								var prodSn = $('[name=vars]').val();
+								modal.close();
 								AP.api.reqOrdProdChange({
 									ordSn : ord.goods.ordSn
 								}, {
 									ordHistProdNo : ordHistProdNo,
-									changeProdSn : $('[name=vars]').val()
+									changeProdSn : prodSn
 								}).done(function(data) {
 									ord = data.data;
 									AP.modal.alert('선택하신 옵션으로 주문이 변경되었습니다.').addListener( 'modal-close', function (e) {
 										getProdList();
-										modal.close();
+
 									});
 								}).fail(function(e) {
 									AP.modal.alert(e.responseJSON.errorData.message);
@@ -581,7 +587,7 @@
 		});
 
 		//상세에서 클레임 신청버튼 클릭
-		function chgStatus(type) {
+		function chgStatus(type, code) {
 			$('#review').hide();
 
 			this.type = type;
@@ -595,6 +601,12 @@
 				if (data) {
 					reason = data.data;
 					init();
+
+					if (code == 'online') {
+						$('.ui_accordion > .takeout').empty();
+					} else if (code == 'takeOut') {
+						$('.ui_accordion > .online').empty();
+					}
 				}
 			}).fail(function(e) {
 				AP.modal.alert(e.responseJSON.errorData.message);
@@ -699,6 +711,11 @@
 				$( '.map_area' ).mapApi( 'setCenter', storeInfo.latitude, storeInfo.longitude );
 			}
 			$( '.slide' ).ixSlideMax();
+		}
+
+		//매출 전표
+		function showCrditCardStatement(ordNo, pgTradeNo) {
+			showReceipt('https://iniweb.inicis.com/app/publication/apReceipt.jsp?noTid=' + pgTradeNo, '4', ordNo);
 		}
 
 		//배송조회 버튼 클릭

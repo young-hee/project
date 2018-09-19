@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import feign.Param;
+import kr.ap.amt.common.vo.SearchVO;
 import kr.ap.amt.product.vo.RequestReview;
 import kr.ap.comm.support.common.AbstractController;
+import net.g1project.ecp.api.model.sales.display.ProdReviewSearchResult;
 import net.g1project.ecp.api.model.sales.product.ProdReviewImg;
 import net.g1project.ecp.api.model.sales.product.ProdReviewInfo;
 import net.g1project.ecp.api.model.sales.product.ProdReviewRecommendPost;
@@ -24,6 +26,26 @@ import net.g1project.ecp.api.model.sales.product.ProdReviewSurveyInfo;
 @Controller
 @RequestMapping("/review")
 public class ReviewRestController  extends AbstractController {
+	
+	/**
+     * 해시태그 상품평 검색
+     * @param requestReview
+     * @return
+     */
+    @GetMapping("/searchProdReviewListWithin")
+    @ResponseBody
+	public ResponseEntity<?> searchProdReviewListWithin(Long onlineProdSn, SearchVO searchVO) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+			ProdReviewSearchResult searchResult = displayApi.searchProdReviewListWithin(onlineProdSn, searchVO.getToSearchFor(), searchVO.getProdReviewTypeCodes(), searchVO.getProdReviewSort(), searchVO.getScopes(), searchVO.getOffset(), searchVO.getLimit());
+			result.put("prodReviewListInfo", searchResult);
+			return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            result.put("errorData", e);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+        }
+	}
 	
     /**
      * 리뷰상세

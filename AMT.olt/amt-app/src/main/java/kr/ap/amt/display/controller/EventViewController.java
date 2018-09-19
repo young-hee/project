@@ -52,6 +52,7 @@ import net.g1project.ecp.api.model.sales.product.ProdReviewRecommendPost;
 import net.g1project.ecp.api.model.sales.product.ProdReviewRecommendResult;
 import net.g1project.ecp.api.model.sales.product.ProductInfo;
 import net.g1project.ecp.api.model.sales.regularevent.ApRegularEventRequester;
+import net.g1project.ecp.api.model.sales.regularevent.Award;
 import net.g1project.ecp.api.model.sales.regularevent.Awards;
 import net.g1project.ecp.api.model.sales.regularevent.RegularEvent;
 import net.g1project.ecp.api.model.sales.regularevent.RegularEventRequester;
@@ -88,8 +89,7 @@ public class EventViewController extends AbstractController {
         //이벤트 목록
         PlanDisplayEventListResult planDisplayEventListResult 
         	= plandisplayApi.getPlanDisplayEventList(
-        			  "" //keyword: 검색, 
-        			, "Progress" //status: 기획전시상태코드 (PlanDisplayStatus) , Progress - 진행 , End - 종료, 
+        			  "Progress" //status: 기획전시상태코드 (PlanDisplayStatus) , Progress - 진행 , End - 종료,
         			, "" //types: 기획전시 유형코드 리스트(PlanDisplayType) , Link - URL링크 , General - 일반구성기획전시 , SameTimePur - 동시구매기획전시, 
         			, "" //eventIncludeYn: 행사포함여부 , Y - 행사 포함 , N - 행사 미포함 , 미입력시 전체 (행사포함여부 조회조건 없음)
         			, "StartDt" //order: 정렬방식 (PlanDisplaySortMethod) , SortOrder , StartDt , Deadline
@@ -174,8 +174,7 @@ public class EventViewController extends AbstractController {
 		 //이벤트 목록
         PlanDisplayEventListResult planDisplayEventListResult 
         	= plandisplayApi.getPlanDisplayEventList(
-        			  "" //keyword: 검색, 
-        			, "Progress" //status: 기획전시상태코드 (PlanDisplayStatus) , Progress - 진행 , End - 종료, 
+        			  "Progress" //status: 기획전시상태코드 (PlanDisplayStatus) , Progress - 진행 , End - 종료,
         			, "" //types: 기획전시 유형코드 리스트(PlanDisplayType) , Link - URL링크 , General - 일반구성기획전시 , SameTimePur - 동시구매기획전시, 
         			, "" //eventIncludeYn: 행사포함여부 , Y - 행사 포함 , N - 행사 미포함 , 미입력시 전체 (행사포함여부 조회조건 없음)
         			, "StartDt" //order: 정렬방식 (PlanDisplaySortMethod) , SortOrder , StartDt , Deadline
@@ -369,8 +368,8 @@ public class EventViewController extends AbstractController {
 		 
 //		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
         
-        RegularEvents regularEventsP = regulareventApi.apRegularEvents("Progress", 0, 1000);//.regularEventSummary(APConstant.PROD_EXPERIENCE_GRP);
-        RegularEvents regularEventsE = regulareventApi.apRegularEvents("End", 0, 1000);//.regularEventSummary(APConstant.PROD_EXPERIENCE_GRP);
+        RegularEvents regularEventsP = regulareventApi.apRegularEvents("Progress", 0, 1000, "StartDt");//.regularEventSummary(APConstant.PROD_EXPERIENCE_GRP);
+        RegularEvents regularEventsE = regulareventApi.apRegularEvents("End", 0, 1000, "StartDt");//.regularEventSummary(APConstant.PROD_EXPERIENCE_GRP);
         
         List<Map<String, Object>> regularEventsPrgs = new ArrayList();
         List<Map<String, Object>> regularEventsEnd = new ArrayList();
@@ -487,42 +486,53 @@ public class EventViewController extends AbstractController {
             }
             model.addAttribute("regularEvent", regularEvent);
             
-            long onlineProdSn = (regularEvent.getAwards()==null || regularEvent.getAwards().size()==0)?-1:regularEvent.getAwards().get(0).getOnlineProdSn();
-            long prodSn = (regularEvent.getAwards()==null || regularEvent.getAwards().size()==0)?-1:regularEvent.getAwards().get(0).getProdSn();
             long memberSn = getMemberSn()==null?-1:getMemberSn();
-            String onlyProd = "N";  //단일단위상품여부
             
-            OnlineProdInfo op = new OnlineProdInfo();
+            List<OnlineProdInfo> onlineProdInfos = new ArrayList();
             try {
-                op = productApi.getOnlineProduct(onlineProdSn, prodSn, getMemberSn(), onlyProd);
+                for(Award award : regularEvent.getAwards()) {
+                    OnlineProdInfo op = productApi.getOnlineProduct(award.getOnlineProdSn(), award.getProdSn(), memberSn, "N");
+                    onlineProdInfos.add(op);
+                }
+                /*                
+                long onlineProdSn = (regularEvent.getAwards()==null || regularEvent.getAwards().size()==0)?-1:regularEvent.getAwards().get(0).getOnlineProdSn();
+                long prodSn = (regularEvent.getAwards()==null || regularEvent.getAwards().size()==0)?-1:regularEvent.getAwards().get(0).getProdSn();
+                String onlyProd = "N";  //단일단위상품여부
+                
+                OnlineProdInfo op = new OnlineProdInfo();
+                try {
+                    op = productApi.getOnlineProduct(onlineProdSn, prodSn, memberSn, onlyProd);
+                }catch(Exception e) {
+                    e.printStackTrace();
+                }
+                model.addAttribute("prodSn", prodSn);
+                model.addAttribute("prodName", op.getOnlineProdName());
+                model.addAttribute("prodImage", op.getProducts().get(0).getProdImages().get(0).getImgUrl());
+                model.addAttribute("prodDetailImage", op.getOnlineProdImages().get(0).getImgUrl());
+                model.addAttribute("detailDesc", op.getDetailDesc());
+                model.addAttribute("flags", op.getFlags());
+                model.addAttribute("brandName", op.getProducts().get(0).getBrandName());    //온라인제품정보에 브랜드 정보가 없어 첫번째 단위상품 정보에서 추출
+                //"onlineProdGift": {"giftProdTargetYn": "N", "giftProdImgDisplayYn": "N", "giftProds": [], "giftcardTargetYn": "N"},
+                model.addAttribute("reviewCount", op.getReviewCount());
+                model.addAttribute("reviewScopeAvg", op.getReviewScopeAvg());
+                model.addAttribute("prd", op);
+    
+                OnlineProdPriceInfo oppi = op.getAvailablePrices().get(0);
+                
+                int minRate = oppi.getMinOnlineSalePriceDiscountRate() + oppi.getMinMemberLevelDiscountRate() + oppi.getMinOnlineMemberDiscountRate() + oppi.getMinImmedDiscountRate();
+                int maxRate = oppi.getMaxOnlineSalePriceDiscountRate() + oppi.getMaxMemberLevelDiscountRate() + oppi.getMaxOnlineMemberDiscountRate() + oppi.getMaxImmedDiscountRate();
+                BigDecimal minPrice = oppi.getMinOnlineMemberDiscountPrice();
+                String dblPriceDispYn = oppi.getDoublePriceDisplayYn();
+                BigDecimal beforePrice = oppi.getMinBeforeOnlineSalePrice();        
+                model.addAttribute("discountRate", maxRate);
+                model.addAttribute("cPrice", minPrice);
+                model.addAttribute("bPrice", beforePrice);
+                model.addAttribute("dblPriceDispYn", dblPriceDispYn);
+                */
             }catch(Exception e) {
-                e.printStackTrace();
             }
-            model.addAttribute("prodSn", prodSn);
-            model.addAttribute("prodName", op.getOnlineProdName());
-            model.addAttribute("prodImage", op.getProducts().get(0).getProdImages().get(0).getImgUrl());
-            model.addAttribute("prodDetailImage", op.getOnlineProdImages().get(0).getImgUrl());
-            model.addAttribute("detailDesc", op.getDetailDesc());
-            model.addAttribute("flags", op.getFlags());
-            model.addAttribute("brandName", op.getProducts().get(0).getBrandName());    //온라인제품정보에 브랜드 정보가 없어 첫번째 단위상품 정보에서 추출
-            //"onlineProdGift": {"giftProdTargetYn": "N", "giftProdImgDisplayYn": "N", "giftProds": [], "giftcardTargetYn": "N"},
-            model.addAttribute("reviewCount", op.getReviewCount());
-            model.addAttribute("reviewScopeAvg", op.getReviewScopeAvg());
-            
-            model.addAttribute("prd", op);
+            model.addAttribute("onlineProdInfos", onlineProdInfos);
 
-            OnlineProdPriceInfo oppi = op.getAvailablePrices().get(0);
-            
-            int minRate = oppi.getMinOnlineSalePriceDiscountRate() + oppi.getMinMemberLevelDiscountRate() + oppi.getMinOnlineMemberDiscountRate() + oppi.getMinImmedDiscountRate();
-            int maxRate = oppi.getMaxOnlineSalePriceDiscountRate() + oppi.getMaxMemberLevelDiscountRate() + oppi.getMaxOnlineMemberDiscountRate() + oppi.getMaxImmedDiscountRate();
-            BigDecimal minPrice = oppi.getMinOnlineMemberDiscountPrice();
-            String dblPriceDispYn = oppi.getDoublePriceDisplayYn();
-            BigDecimal beforePrice = oppi.getMinBeforeOnlineSalePrice();        
-            model.addAttribute("discountRate", maxRate);
-            model.addAttribute("cPrice", minPrice);
-            model.addAttribute("bPrice", beforePrice);
-            model.addAttribute("dblPriceDispYn", dblPriceDispYn);
-            
             MemberSession membersession = getMemberSession();
             model.addAttribute("memberInfo", membersession.getMember());
             model.addAttribute("memberSn", membersession.getMember_sn());
@@ -575,7 +585,7 @@ public class EventViewController extends AbstractController {
                     Date startDate = null;//new Date();
                     Date endDate = null;//new Date();
                     String imageOnlyYn = "N";
-                    reviews = productApi.getProductReviews(prodReviewUnit, prodReviewType, null, null, memberSn, onlineProdSn, prodSn, styleCode, prodReviewSort, scope, topReviewOnlyYn, topReviewFirstYn, startDate, endDate, imageOnlyYn, null, null);
+                    reviews = productApi.getProductReviews(prodReviewUnit, prodReviewType, null, null, memberSn, regularEvent.getAwards().get(0).getOnlineProdSn(), regularEvent.getAwards().get(0).getProdSn(), styleCode, prodReviewSort, scope, topReviewOnlyYn, topReviewFirstYn, startDate, endDate, imageOnlyYn, null, null);
                 }catch(Exception e) {
                     e.printStackTrace();
                 }
@@ -706,33 +716,46 @@ public class EventViewController extends AbstractController {
             }
             result.put("regularEvent", regularEvent);
             
-            long onlineProdSn = /**360;/*/regularEvent.getAwards().get(0).getOnlineProdSn();/**/
-            long prodSn = /**261474;/*/regularEvent.getAwards().get(0).getProdSn();/**/
             long memberSn = getMemberSn();
-            String onlyProd = "N";  //단일단위상품여부
             
-            OnlineProdInfo op = new OnlineProdInfo();
+            List<OnlineProdInfo> onlineProdInfos = new ArrayList();
             try {
-                op = productApi.getOnlineProduct(onlineProdSn, prodSn, getMemberSn(), onlyProd);
+                for(Award award : regularEvent.getAwards()) {
+                    OnlineProdInfo op = productApi.getOnlineProduct(award.getOnlineProdSn(), award.getProdSn(), memberSn, "N");
+                    onlineProdInfos.add(op);
+                }
+                /*           
+                long onlineProdSn = regularEvent.getAwards().get(0).getOnlineProdSn();
+                long prodSn = regularEvent.getAwards().get(0).getProdSn();
+                String onlyProd = "N";  //단일단위상품여부
+                
+                OnlineProdInfo op = new OnlineProdInfo();
+                try {
+                    op = productApi.getOnlineProduct(onlineProdSn, prodSn, getMemberSn(), onlyProd);
+                }catch(Exception e) {
+                    e.printStackTrace();
+                }
+                result.put("prodSn", prodSn);
+                result.put("prodName", op.getOnlineProdName());
+                result.put("prodImage", op.getProducts().get(0).getProdImages().get(0).getImgUrl());
+                result.put("detailDesc", op.getDetailDesc());
+                OnlineProdPriceInfo oppi = op.getAvailablePrices().get(0);
+                
+                int minRate = oppi.getMinOnlineSalePriceDiscountRate() + oppi.getMinMemberLevelDiscountRate() + oppi.getMinOnlineMemberDiscountRate() + oppi.getMinImmedDiscountRate();
+                int maxRate = oppi.getMaxOnlineSalePriceDiscountRate() + oppi.getMaxMemberLevelDiscountRate() + oppi.getMaxOnlineMemberDiscountRate() + oppi.getMaxImmedDiscountRate();
+                BigDecimal minPrice = oppi.getMinOnlineMemberDiscountPrice();
+                String dblPriceDispYn = oppi.getDoublePriceDisplayYn();
+                BigDecimal beforePrice = oppi.getMinBeforeOnlineSalePrice();        
+                result.put("discountRate", maxRate);
+                result.put("cPrice", minPrice);
+                result.put("bPrice", beforePrice);
+                result.put("dblPriceDispYn", dblPriceDispYn);
+                result.put("prodDetailImage", op.getOnlineProdImages().get(0).getImgUrl());
+                */
             }catch(Exception e) {
-                e.printStackTrace();
+                
             }
-            result.put("prodSn", prodSn);
-            result.put("prodName", op.getOnlineProdName());
-            result.put("prodImage", op.getProducts().get(0).getProdImages().get(0).getImgUrl());
-            result.put("detailDesc", op.getDetailDesc());
-            OnlineProdPriceInfo oppi = op.getAvailablePrices().get(0);
-            
-            int minRate = oppi.getMinOnlineSalePriceDiscountRate() + oppi.getMinMemberLevelDiscountRate() + oppi.getMinOnlineMemberDiscountRate() + oppi.getMinImmedDiscountRate();
-            int maxRate = oppi.getMaxOnlineSalePriceDiscountRate() + oppi.getMaxMemberLevelDiscountRate() + oppi.getMaxOnlineMemberDiscountRate() + oppi.getMaxImmedDiscountRate();
-            BigDecimal minPrice = oppi.getMinOnlineMemberDiscountPrice();
-            String dblPriceDispYn = oppi.getDoublePriceDisplayYn();
-            BigDecimal beforePrice = oppi.getMinBeforeOnlineSalePrice();        
-            result.put("discountRate", maxRate);
-            result.put("cPrice", minPrice);
-            result.put("bPrice", beforePrice);
-            result.put("dblPriceDispYn", dblPriceDispYn);
-            result.put("prodDetailImage", op.getOnlineProdImages().get(0).getImgUrl());
+            result.put("onlineProdInfos", onlineProdInfos);
             
             MemberSession membersession = getMemberSession();
             result.put("memberInfo", membersession.getMember());

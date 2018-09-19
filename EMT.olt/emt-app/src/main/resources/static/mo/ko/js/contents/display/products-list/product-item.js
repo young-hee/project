@@ -76,17 +76,22 @@
 
 		// 대표이미지 설정
 		_setRepImage: function () {
+			
 			var repImg = '';
+			
 			if ( this._data.prodListUnitCode == 'OnlineProd' ) {
 				if ( this._data.repImgNo == 1 ) {
 					return;
 				}
 				repImg = this._data.onlineProdImages[this._data.repImgNo - 1];
 			} else {
+				// 컬러컬렉션 단위
+				console.log(this._data.products[0].repImgNo); 
 				if ( this._data.products[0].repImgNo == 1 ) {
 					return;
 				}
 				repImg = this._data.products[0].prodImages[this._data.products[0].repImgNo - 1];
+				 
 			}
 			this._$target.find( '.first_img img' ).attr( 'data-src', repImg.imgUrl );
 		},
@@ -131,6 +136,7 @@
 		},
 
 		_setSlide: function ( data ) {
+			
 			var html = AP.common.getTemplate( 'display.products-list.item-slide', data );
 			this._$target.find( '.goods_slide' ).ixSlideMax( 'clear' );
 			this._$target.find( '.goods_slide' ).html( html );
@@ -139,11 +145,25 @@
 		},
 
 		_setOptionName: function ( data ) {
+			
 			this._$target.find( '.option_name' ).show();
 			for ( var i = 0; i < data.flags.length; ++i ) {
 				if ( data.flags[i] == 'icon_reco_new' ) {
 					this._$target.find( '.flag_new' ).show();
 				}
+			}
+			if ( data.colorchipTypeCode === 'RGB'){
+				
+				this._$target.find( '.option_name span.flag_img' ).empty();
+				this._$target.find( '.option_name span.flag_img' ).removeAttr('style');
+				this._$target.find( '.option_name span.flag_img' ).attr('style','background-color:#'+data.rgbVal);
+				this._$target.find( '.option_name span.flag_img' ).html('<img src="/mo/ko/images/product/color_chips_img_blank.png">');
+				
+			}else if(data.colorchipTypeCode === 'Img'){
+				this._$target.find( '.option_name span.flag_img' ).removeAttr('style');
+				this._$target.find( '.option_name span.flag_img' ).empty();
+
+				this._$target.find( '.option_name span.flag_img' ).html('<img src='+data.colorchipImg+' >'); 
 			}
 			if ( data.onlineProdName ) {
 				this._$target.find( '.option_name span.flag_name' ).empty();

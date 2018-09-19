@@ -40,7 +40,7 @@
             _$addressFirstInput = _$target.find( '.address_first[type=text]' ),
             _$addressFirstHidden = _$target.find( '.address_first[type=hidden]' ),
             _$postCodeHidden = _$target.find( '.post_code:hidden' ),
-            _$addressLastInput = _$target.find( '.address_last' ),
+            _$addressLastInput = _$target.find( 'input.address_last' ),
             _$resultArea = _$target.find( '.address_list' );
 
         var _pluginName = pluginName,
@@ -75,8 +75,10 @@
             _$addressFirstInput.val( postCode + ', ' + address );
             _$postCodeHidden.val( postCode );
             _$addressFirstHidden.val( address );
-            _$addressLastInput.val( detail + ' ' );
-            _$addressLastInput.focus();
+			_$addressLastInput.val( detail + ' ' );
+			setTimeout(function () { // 주소 결과 선택 후 포커싱 오류 처리 ( ios )
+				_$addressLastInput.focus();
+			}, 1);
 
             _$resultArea.hide();
 

@@ -6,11 +6,13 @@ this["AP"]["handlebars"]["order"]["fullpage-coupon-use-download"] = Handlebars.t
     var stack1;
 
   return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.downloadCoupon : depth0)) != null ? stack1.list : stack1),{"name":"each","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "	<ul class=\"loading\" id=\"couponApplyLoading\" style=\"min-height: 100px; display: none\">\n		<li></li>\n		<li></li>\n		<li></li>\n	</ul>\n	<div class=\"page_btns\">\n		<button class=\"btn_lg_secondary\" type=\"button\" id=\"b_close\">취소</button>\n		<button class=\"btn_lg_primary\" type=\"button\" id=\"b_download\">쿠폰다운</button>\n	</div>\n";
+    + "	<ul class=\"loading\" id=\"couponApplyLoading\" style=\"min-height: 100px; display: none\">\n		<li></li>\n		<li></li>\n		<li></li>\n	</ul>\n	<div class=\"page_btns download\">\n		<button class=\"btn_lg_secondary\" type=\"button\" id=\"b_close\">취소</button>\n		<button class=\"btn_lg_primary\" type=\"button\" id=\"b_download\">쿠폰다운</button>\n	</div>\n";
 },"2":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
 
-  return "		<div class=\"coupon_order\">\n			<span class=\"check_wrap\">\n				<input type=\"checkbox\" id=\""
+  return "		<div class=\"coupon_order\" name=\"removeCouponSn\" data-couponSn=\""
+    + alias2(alias1((depth0 != null ? depth0.couponSn : depth0), depth0))
+    + "\">\n			<span class=\"check_wrap\">\n				<input type=\"checkbox\" id=\""
     + alias2(alias1((depth0 != null ? depth0.couponSn : depth0), depth0))
     + "\" name=\"couponSn\" data-code=\""
     + alias2(alias1((depth0 != null ? depth0.duplicationUseConditionCode : depth0), depth0))

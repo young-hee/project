@@ -194,11 +194,7 @@
 		},
 
 		_reset: function () {
-			this._clear();
-			this._$modal.html( this._resetHTML );
-			this._$modal.find( '.layer_close' ).hide();
-			this._setPlugin();
-			this._setEvent();
+			this._$modal.find('form')[0].reset();
 		}
 	});
 

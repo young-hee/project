@@ -14,17 +14,16 @@
 
 			this._isSetDisplayCate = false;
 			this._cateIndex = 0;
-			this._param = {
-				limit: 20,
-				includeFilters: true,
-				displayCate: ''
-			};
+			this._param = {};
 
 			this._setEvent();
 		},
 
 		/** =============== Public Methods =============== */
 		init: function ( options ) {
+			this._displayMenuId = options.displayMenuId;
+			$.extend( this._param, options.param );
+
 			this._productList = new AP.ProductList({
 				$target: this._$productList,
 				displayMenuId: options.displayMenuId,

@@ -6,8 +6,8 @@
 				<span>
 					{{#switch storeSelect.invtEnoughType }}
 						{{#case "No"}} <span>[재고없음]</span> {{/case}}
-						{{#case "Enough"}} <span>[재고있음]</span> {{/case}}
-						{{#case "NotEnougho"}} <span>[재고부족]</span> {{/case}}
+						{{#case "Enough"}} <span class="instock">[재고있음]</span> {{/case}}
+						{{#case "NotEnough"}} <span>[재고부족]</span> {{/case}}
 					{{/switch}}
 				</span>
 			</div>
@@ -15,7 +15,7 @@
 		{{#if (eq storeSelect null) }}
 			<div class="take_out_store_name"><strong>선택매장없음</strong></div>
 		{{/if}}
-		<button type="button" class="btn_take_store_change" onclick="fnLayerOpenStore()">{{condition (eq storeSelect null) '매장선택' '매장변경'}}</button>
+		<button type="button" class="btn_take_store_change" onclick="fnLayerOpenStore()">{{#if (eq storeSelect null) }} 매장선택 {{else}} 매장변경 {{/if}}</button>
 	</div>
 
 	{{#if (ne storeSelect null) }}
@@ -26,20 +26,20 @@
 				<dd>{{ storeSelect.storeTypeName }}</dd>
 
 				<dt>연락처</dt>
-				{{#if (or (ne storeSelect.phoneNo2 null)(ne storeSelect.phoneNo2.phoneNo null) ) }}
-					<dd>{{ storeSelect.phoneNo2.phoneNo }}</dd>
+				{{#if (ne storeSelect.phoneNo1.phoneNo null) }}
+					<dd>{{ storeSelect.phoneNo1.phoneNo }}</dd>
 				{{else}}
-					<dd>{{ storeSelect.phoneNo1.phoneNo }} </dd>
+					<dd>{{ storeSelect.phoneNo2.phoneNo }} </dd>
 				{{/if}}
 
 				<dt>사업장소재지</dt>
-				{{#if (or (ne storeSelect.address null)(ne storeSelect.address.address1 null) ) }}
+				{{#if (ne storeSelect.address.address1 null) }}
 					<dd>{{ storeSelect.address.address1 }} {{ storeSelect.address.address2 }}</dd>
 				{{/if}}
 
 				<dt>통신판매신고번호</dt>
 				{{#if (ne storeSelect.brn null) }}
-					<dd><a th:href="http://www.ftc.go.kr/bizCommPop.do?wrkr_no={{ storeSelect.brn }}&apv_perm_no=" target="_blank">사업자정보확인</a></dd>
+					<dd><a href="http://www.ftc.go.kr/bizCommPop.do?wrkr_no={{ storeSelect.brn }}&apv_perm_no=" title="새창" target="_blank">사업자정보확인</a></dd>
 				{{/if}}
 
 				<dt>e-mail</dt>
@@ -60,8 +60,8 @@
 								{{ storeName }}
 								{{#switch invtEnoughType }}
 									{{#case "No"}} <span>[재고없음]</span> {{/case}}
-									{{#case "Enough"}} <span>[재고있음]</span> {{/case}}
-									{{#case "NotEnougho"}} <span>[재고부족]</span> {{/case}}
+									{{#case "Enough"}} <span class="instock">[재고있음]</span> {{/case}}
+									{{#case "NotEnough"}} <span>[재고부족]</span> {{/case}}
 								{{/switch}}
 							</li>
 						</a>

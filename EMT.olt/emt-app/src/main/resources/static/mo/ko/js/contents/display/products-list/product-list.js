@@ -120,8 +120,6 @@
 					this._$target.show();
 					_$noProduct.hide();
 				}
-			}else {
-				console.log(this._api); 
 			}
 
 			// 상품이 존재하지 않습니다.
@@ -162,6 +160,7 @@
 			for ( var i = 0; i < prodListData.list.length; ++i ) {
 				var isSelectOption = true;
 				var colorCnt = 0;
+				var defer = new $.Deferred();
 				for ( var j = 0; j < prodListData.list[i].products.length; ++j ) {
 					if ( prodListData.list[i].products[j]['colorchipTypeCode'] != 'No' ) {
 						isSelectOption = false;
@@ -172,10 +171,11 @@
 				}
 				prodListData.list[i].colorCnt = colorCnt;
 				prodListData.list[i].isSelectOption = isSelectOption;
+				prodListData.list[i].uiType = $itemList[0].classList[1];
 			}
-			
+
 			if ( $itemList.length > 1 ) {
-				/** 주간 베스트 **/
+				/** 주간 베스트, 컬러 컬렉션 **/
 
 				var topResult = $B.object.clone( prodListData ),
 					bottomResult = $B.object.clone( prodListData );
@@ -184,7 +184,7 @@
 				var top = AP.common.getTemplate( templatePath, topResult ),
 					bottom = AP.common.getTemplate( templatePath, bottomResult );
 
-				this._$target.find( '.item_list.type1 ul' ).html( top );
+				this._$target.find( '.item_list.type1 ul' ).html( top ); 
 				this._$target.find( '.item_list.type2 ul' ).html( bottom );
 
 			} else {
@@ -225,11 +225,12 @@
 						this._$target.find( '.banner' ).hide();
 					}
 				} else {
-					// ul 1개 일때
+					// ul 1개 일때 
 					if ( !isMore ) {
 						this._itemLength = 0;
-					}
-					var html = AP.common.getTemplate( 'display.products-list.item', prodListData );
+					} 
+					 
+					var html = AP.common.getTemplate( templatePath, prodListData );
 					$itemList.find( '> ul' ).append( html );
 				}
 			}

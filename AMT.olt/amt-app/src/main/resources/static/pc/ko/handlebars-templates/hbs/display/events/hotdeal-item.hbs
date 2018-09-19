@@ -1,7 +1,7 @@
 {{#each this.list}}
-	<div class="deal_box" data-online-prod-sn="{{ this.onlineProdSn }}" data-index="{{@index}}">
-		<div>
-			<a href="{{ productDetailPath this.onlineProdSn }}">
+	<div class="deal_box item" data-online-prod-sn="{{ this.onlineProdSn }}" data-index="{{@index}}">
+		<div class="{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}soldout{{/xif}}">
+			<a href="{{ productDetailPath this.onlineProdSn }}" class="{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}soldout{{/xif}}">
 				<img src="{{ this.onlineProdImages.[0].imgUrl }}" alt="">
 			</a>
 		</div>

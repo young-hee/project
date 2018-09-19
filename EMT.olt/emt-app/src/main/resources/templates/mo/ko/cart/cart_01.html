@@ -101,8 +101,10 @@
 
 	var ret = false;
 	var pageLimit = 5;
-	var currentKeyword;
 	var currentOffset = 0;
+	var currentKeyword;
+	var currentAddressDiv;
+	var currentAddressDetailDivs;
 
 	/* 회원일련 번호*/
 	var memberSn = /*[[${memberSn}]]*/;
@@ -409,6 +411,10 @@
 			}
 		});
 
+		// 최초 시구군 초기화 설정
+		$('[name=addressDetailDivs]').empty();
+		$('[name=addressDetailDivs]').append('<option value="">시/구/군</option>');
+
 		var emptyHtml = "\<div class=\"panel notice\"><i class=\"ico\"></i><p class=\"text color_gray\">매장명 또는 지역으로 검색하세요.</p></div>";
 		$('#addStore').append(emptyHtml);
 
@@ -420,7 +426,7 @@
 				auth();
 			}else{
 				ret = true;
-				getFavoriteStore(currentOffset);
+				getFavoriteStore(null);
 			}
 		});
 
@@ -442,7 +448,7 @@
 				getFavoriteStore((currentOffset + pageLimit));
 			}
 			else{
-				getTakeoutStore((currentOffset + pageLimit));
+				getTakeoutStore(currentKeyword, currentAddressDiv, currentAddressDetailDivs, (currentOffset + pageLimit), null, null);
 			}
 		});
 
@@ -494,16 +500,16 @@
 
 			if (search != "") {
 				ret = false;
-				getTakeoutStore(search, 0, null, null);
+				getTakeoutStore(search, null, null, 0, null, null);
 			}else if (search == "" && addressDiv == "" && addressDetailDivs == "") {
 				ret = false;
-				getTakeoutStore(search, 0, null, null);
+				getTakeoutStore(search, null, null, 0, null, null);
 			}else if(addressDiv != "" && addressDetailDivs != "") {
 				ret = false;
-				getTakeoutStore(addressDiv + ' ' + addressDetailDivs, 0, null, null);
+				getTakeoutStore(null, addressDiv, addressDetailDivs, 0, null, null);
 			}else if(addressDiv != "") {
 				ret = false;
-				getTakeoutStore(addressDiv, 0, null, null);
+				getTakeoutStore(null, addressDiv, null, 0, null, null);
 			}else{
 				AP.modal.alert('매장명 또는 지역명을 선택해 주세요.');
 			}
@@ -515,36 +521,50 @@
 		var modal = AP.modal.open({
 			templateKey : 'my.location-auth'
 		});
-		var $modalEl = modal.getElement();
-		$("#cancel").on('click', function() {
+		modal.getElement().find("#cancel").on('click', function() {
 			modal.close();
 		});
-		$("#ok").on('click', function() {
+
+		modal.getElement().find("#ok").on('click', function() {
 			modal.close();
 			myLocation();
 		});
 	}
+
+	/* 위치기반 약관 */
+	function termsView() {
+
+		AP.modal.agreeTerms({
+			title: '위치기반 서비스 약관',
+			displayCode: 'ET002'
+		});
+	}
+
 	function myLocation() {
 		navigator.geolocation.getCurrentPosition(success, error, options);
 	}
+
 	var options = {
 		// enableHighAccuracy : true,
 		timeout : 5000
 	};
+
 	function success(pos) {
 		var crd = pos.coords;
-		/*console.log('Your current position is:');
+		console.log('Your current position is:');
         console.log('Latitude : ' + crd.latitude);
         console.log('Longitude: ' + crd.longitude);
-        console.log('More or less ' + crd.accuracy + ' meters.');*/
-		getTakeoutStore(null, 0, crd.latitude, crd.longitude);
+        console.log('More or less ' + crd.accuracy + ' meters.');
+		lsOffset = 0;
+		getTakeoutStore("", "", "", lsOffset, crd.latitude, crd.longitude);
 		/*AP.api.coord2Address( crd.latitude, crd.longitude ).done(function ( data ) {
 			//성공
-			$('#currentLocation').attr('value', data.formatted_address.replace('대한민국 ', ''));
+			$('#searchText').attr('value', data.formatted_address.replace('대한민국 ', ''));
 		}).fail(function ( e ) {
 			//실패
 		});*/
 	};
+
 	function error(err) {
 		switch (err.code) {
 			case err.PERMISSION_DENIED:
@@ -568,13 +588,19 @@
 	};
 
 	/* 주소입력 매장 검색 */
-	function getTakeoutStore(keyword, offset, latitude, longitude) {
-		// 로딩바 시작
+	function getTakeoutStore(keyword, addressDiv, addressDetailDivs, offset, latitude, longitude) {
+
 		$('#orderLoading').show();
+
 		currentKeyword = keyword;
+		currentAddressDiv = addressDiv;
+		currentAddressDetailDivs = addressDetailDivs;
 		currentOffset = offset;
+
 		AP.api.takeoutStore({}, {
 			keyword: keyword,
+			addressDiv: addressDiv,
+			addressDetailDivs: addressDetailDivs,
 			offSet: offset,
 			limit: pageLimit,
 			regularStoreSearchYn : "N",
@@ -584,15 +610,12 @@
 			if (data) {
 				showAddPage(data.param, keyword);
 			}
-			// 로딩바 종료
 			$('#orderLoading').hide();
 		}).fail(function (e) {
 			//실패
 			AP.modal.alert(e.responseJSON.errorData.message);
-			// 로딩바 종료
 			$('#orderLoading').hide();
 		}).always(function () {
-			// 로딩바 종료
 			$('#orderLoading').hide();
 		});
 	}
@@ -621,11 +644,16 @@
 	function getSearchFavoriteStore() {
 		$('#orderLoading').show();
 		AP.api.takeoutFavoriteStore({}, {
+			cartSn : cartSn
 		}).done(function (data) {
-			if(data.result == 'success'){
-				storeRegularList = data.storeRegularList;
-				setStoreSelect();
-			}
+			cartEx = data.cartEx;
+			storeSelect = data.storeSelect;
+			storeRegularList = data.storeRegularList;
+			setOnlineProd();
+			setStoreProd();
+			setCalculationResult();
+			setProdCnt();
+			setStoreSelect();
 			$('#orderLoading').hide();
 		}).fail(function (e) {
 			$('#orderLoading').hide();
@@ -650,6 +678,8 @@
 			$('#addStore').append(resultHtml);
 
 			var cnt = (data.offset + data.limit) > data.totalCount ? data.totalCount : (data.offset + data.limit);
+			console.log("cnt : " + cnt);
+
 			$('.btn_lg_more').html("\더보기 (<em>" + cnt + "</em>/" + data.totalCount + ")");
 
 			actionAddStore();
@@ -660,6 +690,7 @@
 		}
 	}
 
+	/* 지도 위치보기 */
 	function actionAddStore() {
 		$('.store_list_wrap > .store:not(.js-apply)').each(function() {
 			var $store = $(this), $mapArea = $store.find('.map_area'), $btnWrap = $store.find('.store_btn_wrap');
@@ -747,28 +778,38 @@
 		location.href = '/product/detail?onlineProdSn=' + onlineProdSn;
 	}
 
-	/* 매장선택 변경 */
+	/* 선택매장 변경(단골매장에서 선택) */
 	function fnChangeStore(storeSn) {
-		// 로딩바 시작
-		$('#orderLoading').show();
+		fnTakeoutChangeStore(storeSn)
+	}
+
+	/* 선택매장 변경(레이어창에서 선택) */
+	function fnLayerChangeStore(storeSn) {
 		takeoutModal.close();
+		fnTakeoutChangeStore(storeSn)
+	}
+
+	/* 선택매장 변경 */
+	function fnTakeoutChangeStore(storeSn) {
+		$('#orderLoading').show();
 		AP.api.changeStore({}, {
 			cartSn : cartSn,
 			storeSn : storeSn
 		}).done(function (data) {
 			if (data.storeSelect && data.storeRegularList) {
+				cartEx = data.cartEx;
 				storeSelect = data.storeSelect;
 				storeRegularList = data.storeRegularList;
+				setOnlineProd();
+				setStoreProd();
+				setCalculationResult();
+				setProdCnt();
 				setStoreSelect();
 			}
-			// 로딩바 종료
 			$('#orderLoading').hide();
 		}).fail(function (e) {
-			AP.modal.alert("fail");
-			// 로딩바 종료
 			$('#orderLoading').hide();
 		}).always(function () {
-			// 로딩바 종료
 			$('#orderLoading').hide();
 		});
 	}
@@ -776,31 +817,33 @@
 	/* 주문결제하기 */
 	function fnCheckOrder() {
 
-		var chkCnt 			= $("[name=chkBox]:checked").length;			// 온라인상품 선택갯수
-		var takeoutChkCnt	= $("[name=takeoutChkBox]:checked").length;		// 테이크아웃상품 선택갯수
-		var totalChkCnt		= $("[name=chkBox]:checked").length + $("[name=takeoutChkBox]:checked").length; // 온라인상품 + 테이크아웃상품 선택갯수
+		var chkCnt 			= $("[name=chkBox]:checked").length;		// 온라인상품 선택갯수
+		var takeoutChkCnt	= $("[name=takeoutChkBox]:checked").length;	// 테이크아웃상품 선택갯수
+		var totalChkCnt		= $("[name=chkBox]:checked").length +
+							  $("[name=takeoutChkBox]:checked").length;	// 온라인상품 + 테이크아웃상품 선택갯수
 
-		// 온라인+테이크아웃 상품이 체크되지 않았을때
+		// 온라인 + 테이크아웃 상품이 체크되지 않았을때
 		if (totalChkCnt == 0) {
 			AP.modal.alert("선택된 상품이 없습니다.");
 			return false;
 		}
 
 		// 테이크아웃 체크상품과 선택매장 확인
-		if(takeoutChkCnt > 0 && storeSelect == null){
-			AP.modal.alert('테이크아웃 매장을 선택해주세요.');
-			return false;
-		}
-
-		// 테이크아웃 체크상품과 선택매장 재고확인
-		if(takeoutChkCnt > 0 && storeSelect != null){
-			if(storeSelect.invtEnoughType == 'No'){
-				AP.modal.alert('선택하신 매장의 재고가 없습니다.<br>다른매장을 선택해주세요.');
+		if(takeoutChkCnt > 0){
+			if(storeSelect == null){
+				AP.modal.alert('테이크아웃 매장을 선택해주세요.');
 				return false;
 			}
-			else if(storeSelect.invtEnoughType == 'NotEnougho'){
-				AP.modal.alert('선택하신 매장의 재고가 부족합니다.<br>다른매장을 선택해주세요.');
-				return false;
+			// 테이크아웃 체크상품과 선택매장 재고확인
+			else{
+				if(storeSelect.invtEnoughType == 'No'){
+					AP.modal.alert('선택하신 [' + storeSelect.storeName + '] 매장의 재고가 없습니다.<br>다른매장을 선택해주세요.');
+					return false;
+				}
+				else if(storeSelect.invtEnoughType == 'NotEnough'){
+					AP.modal.alert('선택하신 [' + storeSelect.storeName + '] 매장의 재고가 부족합니다.<br>다른매장을 선택해주세요.');
+					return false;
+				}
 			}
 		}
 
@@ -1364,6 +1407,11 @@
 		else{
 			location.href = "/display/category/beauty_point_shop?upperMenuId=beauty_point_shop&categoryType=prod_thema";
 		}
+	}
+
+	/* 동시구매 페이지 이동*/
+	function goSameTimeStore(){
+		location.href = "/display/event?displayMenuId=event";
 	}
 	</script>
 </th:block>

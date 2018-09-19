@@ -2,7 +2,7 @@
 	<div class="" data-open-type="single">
 		<!--다운가능한 쿠폰리스트(MyPage참조)-->
 		{{#each downloadCoupon.list}}
-			<div class="coupon_order">
+			<div class="coupon_order" name="removeCouponSn" data-couponSn="{{ this.couponSn }}">
 				<div class="coupon_wrap">
 					<div class="check_wrap">
 						<input type="checkbox" id="{{ this.couponSn }}" name="couponSn" data-code="{{ this.duplicationUseConditionCode }}">
@@ -38,7 +38,7 @@
 			</div>
 		{{/each}}
 	</div>
-	<div class="page_btns">
+	<div class="page_btns download">
 		<button class="btn_lg_secondary" type="button" id="b_close">취소</button>
 		<button class="btn_lg_neutral" type="button" id="b_download">쿠폰받기</button>
 	</div>

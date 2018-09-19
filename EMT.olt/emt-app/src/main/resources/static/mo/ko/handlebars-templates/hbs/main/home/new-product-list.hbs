@@ -7,13 +7,37 @@
 			<li class="ix-list-item">
 				<a href="{{ productDetailPath this.onlineProdSn }}">
 					<span class="lazy_load_wrap">
-						{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
-						<div class="item_state out_of_stock">일시품절</div>
-						{{/xif}}
-						<img src="" data-src="{{ replaceImagePath this.onlineProdImages.0.imgUrl 380 380 }}" alt="" class="lazy_load">
+						{{{stockImg this.saleDisplayStatus this.prodTypeCode }}}
+						<img class="lazy_load" src="" data-src="{{ replaceImagePath this.onlineProdImages.0.imgUrl 380 380 }}" alt="">
 					</span>
-					<span class="item_title">{{ this.onlineProdName }}</span>
-					<span class="price"><b>{{ numberFormat this.onlineProdPriceSummary.minOnlineSalePrice }}</b> 원</span>
+					<div class="item_info">
+						<span class="item_title">
+							<em>{{stockTxt this.saleDisplayStatus this.prodTypeCode}}</em>
+								{{ this.onlineProdName }}
+						</span>
+						<span class="color_name">
+							{{#xif this.productCount '==' 1 }}
+								{{#xif this.onlineProdName '!=' this.products.0.prodName}}
+									{{this.products.0.prodName}}
+								{{/xif}}							
+							{{else}}
+								{{#xif this.colorCnt '>' 1 }}
+									{{ this.colorCnt }} colors
+								{{/xif}}
+								{{#xif this.optionCnt '>' 1 }}
+									{{ this.optionCnt }} options
+								{{/xif}}
+							{{/xif}}
+						</span>
+						<div class="price_area">
+							<span class="discount">
+								{{#xif this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate '>' 0}}
+									{{ this.onlineProdPriceSummary.minOnlineSalePriceDiscountRate }}<em>%</em>
+								{{/xif}}
+							</span>
+							<span class="price"><b>{{ numberFormat this.onlineProdPriceSummary.minOnlineSalePrice }}</b> 원</span>
+						</div>
+					</div>
 				</a>
 			</li>
 		{{/each}}

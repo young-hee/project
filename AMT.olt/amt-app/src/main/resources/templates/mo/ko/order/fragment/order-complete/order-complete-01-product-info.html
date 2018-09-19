@@ -1,66 +1,136 @@
 <!--주문상품확인-->
-<dl class="order_item_check">
-	<dt>
-		<span class="title"><b>주문상품 확인 (<strong id="totalOrdOnlineProdCnt">0</strong>개)</b></span>
-		<button type="button"><span class="sr_only">더보기</span></button>
-	</dt>
-	<dd>
-		<!--온라인쇼핑상품-->
-		<th:block th:if="${#lists.size(shippingOrdOnlineProdList) > 0}">
-			<p class="item_count">온라인 쇼핑 상품(<span id="shipOrdOnlineProdCnt">0</span>개)</p>
-			<div class="cart_item_box_wrap">
-				<div class="cart_item_box" th:each="ordOnlineProd : ${shippingOrdOnlineProdList}">
-					<div class="cart_name_wrap">
-						<input type="hidden" id="ordHistProdCnt" name="ordHistProdCnt" th:value="${#lists.size(ordOnlineProd.ordHistProdList)}"/>
-						<img th:if="${ordOnlineProd.onlineProdImgUrl != null}" th:src="${ordOnlineProd.onlineProdImgUrl}" class="thm_cart_item">
-						<img th:if="${ordOnlineProd.onlineProdImgUrl == null}" ap:src="@{/images/cart/no_img.png}" class="thm_cart_item">
-						<div class="cart_table_cell" >
-							<div class="cart_item_name"><span th:text="${ordOnlineProd.onlineProdName}">디어 마이 블루밍 립스 톡 쉬폰</span></div>
-							<div class="price">
-								<strong class="eng" th:text="${#IntegUtil.toCommaNumber(ordOnlineProd.finalOnlineSaleAmtPcurSum)}">0</strong><em>원</em>
-								<span class="quantity" th:if="${ordOnlineProd.ordHistProdTypeCode == 'Ord'}" th:text="${ordOnlineProd.ordQtySum > 0 ? ordOnlineProd.ordQtySum + '개' : '0개'}">0개</span>
-								<span class="quantity" th:if="${ordOnlineProd.ordHistProdTypeCode == 'BulkDc'}" th:text="${ordOnlineProd.ordQtySum > 0 ? ordOnlineProd.ordQtySum + 'set' : '0set'}">0set</span>
-								<span class="coupon">적립제외, 쿠폰제외</span>
-							</div>
-							<p class="cart_item_opt">
-								옵션 : <span th:each="ordHistProd, iterStat : ${ordOnlineProd.ordHistProdList}"
-										   th:text="!${iterStat.last} ? ${ordHistProd.ordProdEx.prodNameBlang} + ' (' + ${ordHistProd.ordQty} + ')개' + ' / ' : ${ordHistProd.ordProdEx.prodNameBlang} + ' (' + ${ordHistProd.ordQty} + ')개'">
-									   </span>
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</th:block>
+<div class="ui_accordion" th:each="ordOtfExFo : ${ordOtfExFoList}">
+	<dl>
+		<dt><b class="title"><th:block th:text="${ordOtfExFo.coName}"></th:block>상품 총 <strong th:text="${ordOtfExFo.ordHistProdExList.size()}">0</strong>개</b> <button type="button"><i class="ico_navi"></i><span class="sr_only">더보기</span></button></dt>
+		<dd aria-hidden="true" style="display: none;">
 
-		<!--테이크아웃쇼핑상품-->
-		<th:block th:if="${#lists.size(storePickupOrdOnlineProdList) > 0}">
-			<p class="item_count">테이크아웃 상품 (<span id="storeOrdOnlineProdCnt">0</span>개)</p>
-			<div class="cart_item_box_wrap">
-				<div class="cart_item_box" th:each="ordOnlineProd : ${storePickupOrdOnlineProdList}" >
-					<div class="cart_name_wrap">
-						<input type="hidden" id="storeOrdHistProdCnt" name="storeOrdHistProdCnt" th:value="${#lists.size(storeOrdOnlineProd.ordHistProdList)}"/>
-						<img th:if="${storeOrdOnlineProd.onlineProdImgUrl != null}" th:src="${storeOrdOnlineProd.onlineProdImgUrl}" class="thm_cart_item">
-						<img th:if="${storeOrdOnlineProd.onlineProdImgUrl == null}" ap:src="@{/images/cart/no_img.png}" class="thm_cart_item">
-						<div class="cart_table_cell" >
-							<div class="cart_item_name"><span th:text="${ordOnlineProd.onlineProdName}">디어 마이 블루밍 립스 톡 쉬폰</span></div>
-							<div class="price">
-								<strong class="eng" th:text="${#IntegUtil.toCommaNumber(ordOnlineProd.finalOnlineSaleAmtPcurSum)}">0</strong><em>원</em>
-								<span class="quantity" th:if="${ordOnlineProd.ordHistProdTypeCode == 'Ord'}" th:text="${ordOnlineProd.ordQtySum > 0 ? ordOnlineProd.ordQtySum + '개' : '0개'}">0개</span>
-								<span class="quantity" th:if="${ordOnlineProd.ordHistProdTypeCode == 'BulkDc'}" th:text="${ordOnlineProd.ordQtySum > 0 ? ordOnlineProd.ordQtySum + 'set' : '0set'}">0set</span>
-								<span class="coupon">적립제외, 쿠폰제외</span>
+			<ul class="product_list_order">
+				<!--/* 온라인 상품 Start */-->
+				<th:block th:if="${#lists.size(ordOtfExFo.shippingOrdOnlineProdList) > 0}">
+					<li class="product_order" th:each="ordOnlineProd : ${ordOtfExFo.shippingOrdOnlineProdList}">
+						<!--결제 히든값-->
+						<input type="hidden" name="onlinePordSn" th:value="${ordOnlineProd.onlineProdCode}"/>
+						<input type="hidden" name="prodName" th:value="${ordOnlineProd.onlineProdName}"/>
+						<input type="hidden" name="prodQty" th:value="${ordOnlineProd.ordQtySum}"/>
+						<input type="hidden" name="ordHistProdCnt" th:value="${#lists.size(ordOnlineProd.ordHistProdList)}"/>
+						<!--//결제 히든값-->
+
+						<a href="#none">
+							<div class="product_visual">
+								<img th:src="${ordOnlineProd.onlineProdImgUrl}">
 							</div>
-							<p class="cart_item_opt">
-								옵션 : <span th:each="storeOrdHistProd, iterStat : ${storeOrdOnlineProd.ordHistProdList}"
-									  th:text="!${iterStat.last} ? ${storeOrdHistProd.ordProdEx.prodNameBlang} + ' (' + ${storeOrdHistProd.ordQty} + ')개' + ' / ' : ${storeOrdHistProd.ordProdEx.prodNameBlang} + ' (' + ${storeOrdHistProd.ordQty} + ')개'">
-								</span>
-							  </span>
-							</p>
-						</div>
-					</div>
+							<div class="product_info" th:with="isPresaleDisp=${false}">
+								<th:block th:each="ordHistProd, iterStat : ${ordOnlineProd.ordHistProdList}">
+									<!-- 예약상품 -->
+									<div class="reservation_txt" th:if="${isPresaleDisp == false and ordHistProd.ordProdEx.prodTypeCode == 'Presale'}"><span th:with="isPresaleDisp=${true}">예약상품</span> <th:block th:text="${#dates.format(ordHistProd.ordProdEx.otfExpectedDt, 'MM월 dd일')}">11월 25일</th:block>부터 순차배송 예정</div>
+								</th:block>
+								<div class="product_name" th:text="${ordOnlineProd.onlineProdName}">브랜드명 상품명 또는 이벤트명 브랜드명</div>
+								<th:block th:each="ordHistProd, iterStat : ${ordOnlineProd.ordHistProdList}">
+									<!-- 옵션 -->
+									<div class="option_name"><th:block th:text="${ordHistProd.ordProdEx.prodNameBlang}"></th:block> <th:block th:text="${ordHistProd.ordQty}"></th:block>개</div>
+								</th:block>
+
+								<div class="price_area"><span class="price"><b th:text="${#IntegUtil.toCommaNumber(ordOnlineProd.finalOnlineSaleAmtPcurSum)}">0</b>원</span></div>
+							</div>
+						</a>
+					</li>
+				</th:block>
+				<!--/* 온라인 상품 End */-->
+
+
+				<!--/*  뷰티포인트 상품 Start */-->
+				<th:block th:if="${#lists.size(ordOtfExFo.shippingOrdOnlineBeautyPointProdList) > 0}">
+					<li class="product_order" th:each="ordOnlineProd : ${ordOtfExFo.shippingOrdOnlineBeautyPointProdList}">
+						<!--결제 히든값-->
+						<input type="hidden" name="onlinePordSn" th:value="${ordOnlineProd.onlineProdCode}"/>
+						<input type="hidden" name="prodName" th:value="${ordOnlineProd.onlineProdName}"/>
+						<input type="hidden" name="prodQty" th:value="${ordOnlineProd.ordQtySum}"/>
+						<input type="hidden" name="ordHistProdCnt" th:value="${#lists.size(ordOnlineProd.ordHistProdList)}"/>
+						<!--//결제 히든값-->
+
+						<a href="#none">
+							<div class="product_visual">
+								<img th:src="${ordOnlineProd.onlineProdImgUrl}">
+							</div>
+							<div class="product_info" th:with="isPresaleDisp=${false}">
+								<th:block th:each="ordHistProd, iterStat : ${ordOnlineProd.ordHistProdList}">
+									<!-- 예약상품 -->
+									<div class="reservation_txt" th:if="${isPresaleDisp == false and ordHistProd.ordProdEx.prodTypeCode == 'Presale'}"><span th:with="isPresaleDisp=${true}">예약상품</span> <th:block th:text="${#dates.format(ordHistProd.ordProdEx.otfExpectedDt, 'MM월 dd일')}">11월 25일</th:block>부터 순차배송 예정</div>
+								</th:block>
+								<div class="product_name" th:text="${ordOnlineProd.onlineProdName}">브랜드명 상품명 또는 이벤트명 브랜드명</div>
+								<th:block th:each="ordHistProd, iterStat : ${ordOnlineProd.ordHistProdList}">
+									<!-- 옵션 -->
+									<div class="option_name"><th:block th:text="${ordHistProd.ordProdEx.prodNameBlang}"></th:block> <th:block th:text="${ordHistProd.ordQty}"></th:block>개</div>
+								</th:block>
+
+								<div class="price_area"><span class="price"><b th:text="${#IntegUtil.toCommaNumber(ordOnlineProd.finalOnlineSaleAmtPcurSum)}">0</b>P</span></div>
+							</div>
+						</a>
+					</li>
+				</th:block>
+				<!--/* 뷰티포인트 상품 End */-->
+
+
+				<!--/* 묶음판매상품 Start */-->
+				<th:block th:if="${#lists.size(ordOtfExFo.shippingBulkDcList) > 0}">
+					<li class="product_order" th:each="bulkDcOnlineProd : ${ordOtfExFo.shippingBulkDcList}">
+						<a href="#none">
+							<div class="product_visual">
+								<img th:src="${bulkDcOnlineProd.bulkDcOnlineProdImgUrl}">
+							</div>
+							<div class="product_info">
+								<div class="product_name" th:text="${bulkDcOnlineProd.bulkDcOnlineProdName}">데미지 케어 샴푸 + 안티에이징 트리트먼트 묶음세트</div>
+								<th:block th:if="${#lists.size(bulkDcOnlineProd.ordOnlineProdFoList) > 0}" th:each="ordOnlineProd, iter : ${bulkDcOnlineProd.ordOnlineProdFoList}">
+									<!--결제 히든값-->
+									<input type="hidden" name="onlinePordSn" th:value="${ordOnlineProd.onlineProdCode}"/>
+									<input type="hidden" name="prodName" th:value="${ordOnlineProd.onlineProdName}"/>
+									<input type="hidden" name="prodQty" th:value="${ordOnlineProd.ordQtySum}"/>
+									<input type="hidden" id="ordHistProdCnt" name="ordHistProdCnt" th:value="${#lists.size(ordOnlineProd.ordHistProdList)}"/>
+									<!--//결제 히든값-->
+									<!-- 옵션 -->
+									<div class="option_name"><th:block th:text="${ordOnlineProd.onlineProdName}"></th:block> <th:block th:text="${ordOnlineProd.ordQtySum}"></th:block>개</div>
+								</th:block>
+								<div class="price_area"><span class="price"><b th:text="${#IntegUtil.toCommaNumber(bulkDcOnlineProd.totalBulkDcProductSaleAmount)}">0</b>원</span></div>
+							</div>
+						</a>
+					</li>
+				</th:block>
+				<!--/* 묶음판매상품 End */-->
+			</ul>
+
+			<!--/* M+N프로모션 Start */-->
+			<th:block th:if="${#lists.size(ordOtfExFo.shippingMNPromoList) > 0}">
+				<div class="event_product_wrap" th:each="mPlusNPromo : ${ordOtfExFo.shippingMNPromoList}">
+					<p class="h_title ellipsis"><span class="flag"><th:block th:text="${mPlusNPromo.baseQty + ' + ' + mPlusNPromo.awardQty}">2 + 1</th:block>적용</span> <th:block th:text="${mPlusNPromo.promoName}">M+M 상품일 경우, 길어지면 말줄임 우측여백 32px</th:block></p>
+					<ul class="product_list_order">
+						<th:block th:if="${#lists.size(mPlusNPromo.ordOnlineProdFoList) > 0}">
+							<th:block th:if="${mPlusNPromo.singleProdYn != 'Y'}">
+								<th:block th:each="ordOnlineProd, iter : ${mPlusNPromo.ordOnlineProdFoList}" >
+									<li class="product_order">
+										<a href="#none">
+											<div class="product_visual">
+												<th:block th:if="${ordOnlineProd.prodImgUrl != null}"><img th:src="${ordOnlineProd.prodImgUrl}"></th:block>
+												<th:block th:unless="${ordOnlineProd.prodImgUrl != null}"><img th:src="${ordOnlineProd.onlineProdImgUrl}"></th:block>
+											</div>
+											<div class="product_info" th:with="isPriceDisp=${false}">
+												<div class="product_name" th:text="${ordOnlineProd.onlineProdName}">브랜드명1 상품명 또는 이벤트명 </div>
+												<div class="option_name"><th:block th:text="${ordOnlineProd.onlineProdName}">20ml 촉촉 인텐시브 오일</th:block> <th:block th:text="(${ordOnlineProd.ordQtySum} + 개)">1개</th:block></div>
+												<!-- 가격 -->
+												<th:block th:each="ordHistProd, iter : ${ordOnlineProd.ordHistProdList}" >
+													<div class="price_area" th:if="${isPriceDisp == false}"><span class="price" th:with="isPriceDisp=${true}"><b th:text="${#IntegUtil.toCommaNumber(ordHistProd.finalOnlineSaleAmtPcur)}">0</b>원</span></div>
+												</th:block>
+											</div>
+										</a>
+									</li>
+								</th:block>
+							</th:block>
+						</th:block>
+					</ul>
 				</div>
-			</div>
-		</th:block>
-	</dd>
-</dl>
+			</th:block>
+			<!--/* M+N프로모션 End */-->
+
+		</dd>
+	</dl>
+</div>
 <!--//주문상품확인-->

@@ -5,10 +5,10 @@
 <div ap:fragment="layout-contents">
 	<div class="ap_contents event pearl_roulette">
 		<div class="roulette_wrap">
-			<img ap:src="@{/images/event/bg_roulette.jpg}" alt="">
+			<img ap:src="@{/images/event/bg_roulette.jpg}" alt=""> 
 			<h2 class="sr_only">반짝반짝 진주알 룰렛 </h2>
-			<p class="sr_only">3번 바로바로 당첨되는 진주알 행운 룰렛으로 선불 받아가자!</p>
-			<div class="roulette">
+			<p class="sr_only">번 바로바로 당첨되는 진주알 행운 룰렛으로 선불 받아가자!</p>
+			<div class="roulette" th:data-cnt="${rouletteInfo.participatedPossibleCnt}" th:data-point="${rouletteInfo.decActivityPoint}">
 				<img ap:src="@{/images/event/dummy_roulette.png}" alt="" class="dummy">
 				<div class="circle">
 					<img ap:src="@{/images/event/circle_roulette.png}" alt="">
@@ -16,14 +16,14 @@
 				<img ap:src="@{/images/event/top_roulette.png}" alt="" class="top">
 				<button type="button" class="btn_start"><img ap:src="@{/images/event/btn_roulette.png}" alt="진주알 룰렛 start"></button>
 				<img ap:src="@{/images/event/char_roulette.png}" alt="" class="character">
-				<p class="sr_only">행운 당첨은 1회 참여사 진주알 20알이 차감됩니다. 하루 3회까지 응모 가능합니다.</p>
+				<p class="sr_only">행운 당첨은 1회 참여시 진주알 [[${rouletteInfo.decActivityPoint}]]알이 차감됩니다. 하루 [[${rouletteInfo.participatedPossibleCnt}]]회까지 응모 가능합니다.</p>
 			</div>
 		</div>
 		<div class="panel">
 			<h3 class="h_title cont"><strong>읽어보세요!</strong></h3>
 			<br>
 			<ul class="list_bullet_dot">
-				<li>진주알 룰렛은 1회 참여 시 진주알 20알이 차감됩니다.<br>(1일 최대 3회 응모 가능)</li>
+				<li>진주알 룰렛은 1회 참여 시 진주알 [[${rouletteInfo.decActivityPoint}]]알이 차감됩니다.<br>(1일 최대 [[${rouletteInfo.participatedPossibleCnt}]]회 응모 가능)</li>
 				<li>에뛰드 BEST 상품, 팬시제품, 할인쿠폰, 진주알 등 다양한 형태의 당첨 경품이 마련되어 있으며, 응모 즉시 확인 가능합니다.</li>
 			</ul>
 			<hr class="div m30">
@@ -53,16 +53,7 @@
 <th:block ap:fragment="layout-endpoint">
 	<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
 	<script th:inline="javascript">
-		;(function () {
-			var member = {};
-			[# th:if="${memberMap}"]
-			member.id = /*[[${memberMap.id}]]*/;
-			member.name = /*[[${memberMap.name}]]*/;
-			member.memberSn = /*[[${memberMap.memberSn}]]*/;
-			[/]
-
-			AP.roulette.setMemberInfo( member );
-		}());
+		
 	</script>
 </th:block>
 

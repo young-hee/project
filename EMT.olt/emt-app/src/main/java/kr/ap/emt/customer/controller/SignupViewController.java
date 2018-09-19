@@ -49,6 +49,10 @@ public class SignupViewController extends AbstractController {
 		model.addAttribute("userId", userId);
 		model.addAttribute("custNm", custNm);
 
+		if("undefined".equals(mbrJoinDt)) {
+			model.addAttribute("mbrJoinDt", "");
+			return "customer/customernew/member-join.4.3";
+		}
 		StringBuffer sb = new StringBuffer(mbrJoinDt);
 		
 		sb.insert(6, ".");

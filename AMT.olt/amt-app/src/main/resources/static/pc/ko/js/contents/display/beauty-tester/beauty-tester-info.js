@@ -96,7 +96,7 @@
 			this._$product_info.html( product_info_html );
 			this._setEvent( result );
 			
-			var product_detail_html = "<h3 class=\"h_title\">상품 상세정보</h3>"+result.detailDesc;
+			var product_detail_html = "<h3 class=\"h_title\">상품 상세정보</h3>"+result.onlineProdInfos[0].detailDesc==null?"":result.onlineProdInfos[0].detailDesc;
 			this._$product_detail.html(product_detail_html);
 			
 			

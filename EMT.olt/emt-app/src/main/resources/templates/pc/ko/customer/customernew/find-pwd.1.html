@@ -128,7 +128,7 @@
 	    if ($form.valid()) {
 			if(userData) {
 
-	        	post_goto('/customer/findPwd/complete', {'joinType':userData.joinType, 'incsNo':userData.incsNo});
+	        	post_goto('/customer/findPwd/complete', {'joinType':userData.joinType, 'incsNo':userData.incsNo, 'phoneNo':$('[name=cellNum]').val()});
 	            
 			} else {
 	            AP.modal.alert("인증번호를 확인해주세요. 인증번호 입력란으로 이동합니다.");
@@ -212,16 +212,36 @@
 	            $('#complete').attr("disabled", "disabled");
 	            AP.api.stepOne({}, AP.common.getFormData($form)).done(function(data) {
 	                //성공
+                    
                     if (t.isRunning()) {
                         t.stop();
                     }
-                    if(data.chcsNo == null) {
-	                    AP.modal.alert("뷰티포인트 통합 회원이 아닙니다.");
+                    if(data.joinType == '02') {
+						if(data.oldMemberId == $('form.validate [name=chcsNo]').val()) {
+		                    userData = data;
+		                    $.get("/customer/popup?pageId=2", function(data) {
+
+		                        var contents = new Object();
+		                        contents.contents = data;
+		                        var modal = AP.modal.info(contents);
+		                        var $modalEl = modal.getElement(); //jquery object
+
+		                        $modalEl.find(".btn_md_primary").click(function() {
+		                            location.href = "/customer/signup?oldId=" + data.oldMemberId;
+		                        });
+		                    });
+							
+						} else
+		                    AP.modal.alert("입력하신 ID와 인증하신 회원 정보가 일치하지 않습니다.");
+							
+                    } else if(data.chcsNo == null) {
+	                    userData = data;
+	                    AP.modal.alert("본인인증이 완료되었습니다.");
                     } else if(data.chcsNo != $('form.validate [name=chcsNo]').val()) {
 	                    AP.modal.alert("입력하신 ID와 인증하신 회원 정보가 일치하지 않습니다.");
                     } else {
-	                    AP.modal.alert("본인인증이 완료되었습니다.");
 	                    userData = data;
+	                    AP.modal.alert("본인인증이 완료되었습니다.");
                     }
 	            }).fail(function(xhr, textStatus, errorThrown) {
 	                //실패

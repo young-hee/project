@@ -18,17 +18,17 @@
 					<li>
 						<span class="stit"><label>연락처</label></span>
 						<div class="tel">
-							<span class="input_wrap ph_input01"><input type="number" name="" id="nonMemberHp1" placeholder="연락처"></span>
+							<span class="input_wrap ph_input01"><input class='only_number' type="text" name="" id="nonMemberHp1" placeholder="연락처"></span>
 							<span class="gap">-</span>
-							<span class="input_wrap ph_input01"><input type="number" name="" id="nonMemberHp2" placeholder="숫자만"></span>
+							<span class="input_wrap ph_input01"><input class='only_number' type="text" name="" id="nonMemberHp2" placeholder="숫자만"></span>
 							<span class="gap">-</span>
-							<span class="input_wrap ph_input01"><input type="number" name="" id="nonMemberHp3" placeholder="입력"></span>
+							<span class="input_wrap ph_input01"><input class='only_number' type="text" name="" id="nonMemberHp3" placeholder="입력"></span>
 						</div>
 					</li>
 					<li>
 						<span class="stit"><label>이메일</label></span>
 						<div class="email">
-							<span class="input_wrap"><input type="email" name="" id="nonMemberEmail" placeholder="이메일 주소를 입력해주세요" required="required" data-msg-required="이메일 주소를 입력해주세요."></span>
+							<span class="input_wrap"><input type="text" name="" id="nonMemberEmail" placeholder="이메일 주소를 입력해주세요" required="required" data-msg-required="이메일 주소를 입력해주세요."></span>
 						</div>
 					</li>
 				</ul>
@@ -38,14 +38,6 @@
 				<span class="new"><a href="#none" class="btn_go">새로운 배송지를 추가해주세요</a></span>
 				<!-- 비회원 배송지 추가 영역 -->
 				<ul class="delivery_list">
-					<li style="display:none;">
-						<div class="name">
-							<div class="inner">
-								<em id="nonMemberRvsName">김이름</em><span id="nonMemberRvsHp">010-123-1234</span>
-							</div>
-							<p class="txt" id="nonMemberRvsAddress" >(04386) 서울특별시 용산구 한강대로 100</p>
-						</div>
-					</li>
 				</ul>
 			</div>
 		</dd>
@@ -75,24 +67,24 @@
 						<div class="tel">
 
 							<th:block th:if="${apMember.phoneNo1 != null and apMember.phoneNo1.phoneNo != null}">
-								<span class="input_wrap ph_input01"><input type="text" id="memberHp1" th:value="${#IntegUtil.hyphenPhoneNumber(apMember.phoneNo1.phoneNo).split('-')[0]}" placeholder="연락처"></span>
+								<span class="input_wrap ph_input01"><input class='only_number' type="text" id="memberHp1" th:value="${#IntegUtil.hyphenPhoneNumber(apMember.phoneNo1.phoneNo).split('-')[0]}" placeholder="연락처"></span>
 							</th:block>
 							<th:block th:unless="${apMember.phoneNo1 != null and apMember.phoneNo1.phoneNo != null}">
-								<span class="input_wrap ph_input01"><input type="text" id="memberHp1" placeholder="연락처"></span>
+								<span class="input_wrap ph_input01"><input class='only_number' type="text" id="memberHp1" placeholder="연락처"></span>
 							</th:block>
 							<span class="gap">-</span>
 							<th:block th:if="${apMember.phoneNo1 != null and apMember.phoneNo1.phoneNo != null}">
-								<span class="input_wrap ph_input01"><input type="text" id="memberHp2" th:value="${#IntegUtil.hyphenPhoneNumber(apMember.phoneNo1.phoneNo).split('-')[1]}" placeholder="숫자만"></span>
+								<span class="input_wrap ph_input01"><input class='only_number' type="text" id="memberHp2" th:value="${#IntegUtil.hyphenPhoneNumber(apMember.phoneNo1.phoneNo).split('-')[1]}" placeholder="숫자만"></span>
 							</th:block>
 							<th:block th:unless="${apMember.phoneNo1 != null and apMember.phoneNo1.phoneNo != null}">
-								<span class="input_wrap ph_input01"><input type="text" id="memberHp2" placeholder="숫자만"></span>
+								<span class="input_wrap ph_input01"><input class='only_number' type="text" id="memberHp2" placeholder="숫자만"></span>
 							</th:block>
 							<span class="gap">-</span>
 							<th:block th:if="${apMember.phoneNo1 != null and apMember.phoneNo1.phoneNo != null}">
-								<span class="input_wrap ph_input01"><input type="text" id="memberHp3" th:value="${#IntegUtil.hyphenPhoneNumber(apMember.phoneNo1.phoneNo).split('-')[2]}" placeholder="입력"></span>
+								<span class="input_wrap ph_input01"><input class='only_number' type="text" id="memberHp3" th:value="${#IntegUtil.hyphenPhoneNumber(apMember.phoneNo1.phoneNo).split('-')[2]}" placeholder="입력"></span>
 							</th:block>
 							<th:block th:unless="${apMember.phoneNo1 != null and apMember.phoneNo1.phoneNo != null}">
-								<span class="input_wrap ph_input01"><input type="text" id="memberHp3" placeholder="입력"></span>
+								<span class="input_wrap ph_input01"><input class='only_number' type="text" id="memberHp3" placeholder="입력"></span>
 							</th:block>
 						</div>
 					</li>
@@ -109,21 +101,20 @@
 				<span class="new"><a href="#none" class="btn_go">새로운 배송지를 추가해주세요</a></span>
 				<ul class="delivery_list">
 					<!-- 임직원일 경우 본사주소 추가 -->
-					<li class="on" th:if="${apMember.employeeYn != null and #strings.toUpperCase(apMember.employeeYn) == 'Y'}"
-						th:onclick="|addressListBlockClick(this, 11111, '${apMember.name.name1}', '${apMember.phoneNo1.phoneNo}', '15051', '서울특별시 용산구 한강대로 100', '', false)|">
+					<li th:if="${apMember.employeeYn != null and #strings.toUpperCase(apMember.employeeYn) == 'Y'}"
+						th:onclick="|addressListBlockClick(this, 11111, '${apMember.name.name1}', '${apMember.phoneNo1.phoneNo}', '15051', '서울특별시 용산구 한강대로 100', '아모레본사', false)|">
 						<div class="name">
 							<div class="inner">
 								<span class="benefit office">본사수령</span> <!-- 본사수령 신규추가_2018-08-23 -->
-								<em id="employeeName" th:text="${apMember.name.name1}">김이름</em>
+								<em id="employeeName" name="name" th:text="${apMember.name.name1}">김이름</em>
 								<th:block th:if="${apMember.phoneNo1 != null and apMember.phoneNo1.phoneNo != null}">
-									<span id="employeeHp" th:text="${#IntegUtil.hyphenPhoneNumber(apMember.phoneNo1.phoneNo)}">010-9924-3505</span>
+									<span id="employeeHp" th:text="${#IntegUtil.hyphenPhoneNumber(apMember.phoneNo1.phoneNo)}" name="hp">010-9924-3505</span>
+								</th:block>
+								<th:block th:unless="${apMember.phoneNo1 != null and apMember.phoneNo1.phoneNo != null}">
+									<span id="employeeHp" name="hp"></span>
 								</th:block>
 							</div>
-							<p class="txt">(04386) 서울특별시 용산구 한강대로 100</p>
-						</div>
-						<!-- 기본 배송지 설정 -->
-						<div class="check">
-							<span class="check_wrap"><input type="checkbox"  id="chkDefImsi" onclick="checkDefAddrClick(99999, false);"><label for="chkDefImsi">기본배송지설정</label></span>
+							<p class="txt">(04386) 서울특별시 용산구 한강대로 100 아모레본사</p>
 						</div>
 					</li>
 					<!-- 기본 배송지 선택 -->
@@ -133,14 +124,15 @@
 							<div class="name" id="btnDefAddrFlag99999">
 								<div class="inner">
 									<span class="benefit delivery">기본배송지</span>
-									<em th:text="${shipAddressInfo.addresseeName.name1}">김이름</em><span th:text="${shipAddressInfo.phoneNo1.phoneNo}">010-123-1234</span>
+									<em th:text="${shipAddressInfo.addresseeName.name1}" name="name">김이름</em>
+									<span th:text="${shipAddressInfo.phoneNo1.phoneNo}" name="hp">010-123-1234</span>
 								</div>
 								<p class="txt" th:text="'(' + ${shipAddressInfo.addresseeAddress.zipCode} + ') '+ ${shipAddressInfo.addresseeAddress.address1} + ${shipAddressInfo.addresseeAddress.address2} ">(04386) 서울특별시 용산구 한강대로 100</p>
 							</div>
 
 							<!-- 기본 배송지 설정 -->
-							<div class="check">
-								<span class="check_wrap"><input type="checkbox" id="chkDef99999" onclick="checkDefAddrClick(99999, false);"><label for="chkDef99999">기본배송지설정</label></span>
+							<div class="check chkDefArea">
+								<span class="check_wrap"><input type="checkbox" id="chkDef99999" onclick="checkDefAddrClick(99999, false);"><label for="chkDef99999" style="font-size:15px;">기본배송지설정</label></span>
 							</div>
 						</li>
 					</th:blcok>
@@ -150,12 +142,13 @@
 							th:onclick="|addressListBlockClick(this, ${iterStat.index}, '${ordShipAddressExInfo.recipientName.name1}', '${ordShipAddressExInfo.recipientPhoneNo1.phoneNo}', '${ordShipAddressExInfo.recipientAddress.zipCode}', '${ordShipAddressExInfo.recipientAddress.address1}', '${ordShipAddressExInfo.recipientAddress.address2}', false)|">
 							<div class="name" th:id="'btnDefAddrFlag' + ${iterStat.index}">
 								<div class="inner">
-									<em th:text="${ordShipAddressExInfo.recipientName.name1}">김이름</em><span th:text="${ordShipAddressExInfo.recipientPhoneNo1.phoneNo}">010-9924-3505</span>
+									<em th:text="${ordShipAddressExInfo.recipientName.name1}" name="name">김이름</em>
+									<span th:text="${ordShipAddressExInfo.recipientPhoneNo1.phoneNo}" name="hp">010-9924-3505</span>
 								</div>
 								<p class="txt" th:text="'(' + ${ordShipAddressExInfo.recipientAddress.zipCode} + ') '+ ${ordShipAddressExInfo.recipientAddress.address1} + ${ordShipAddressExInfo.recipientAddress.address2}">(04386) 서울특별시 용산구 한강대로 100 두줄 넘어갈 경우, 세줄 넘어갈 경우<br>줄바꿈 두줄 넘어갈 경우, 세줄 넘어갈 경우 줄바꿈두줄 넘어갈 경우, 세줄 넘어갈 경우</p>
 							</div>
-							<div class="check">
-								<span class="check_wrap"><input type="checkbox" th:id="|${'chkDef' + iterStat.index}|" th:onclick="|checkDefAddrClick(${iterStat.index}, false)|"><label th:for="|${'chkDef' + iterStat.index}|">기본배송지설정</label></span>
+							<div class="check chkDefArea">
+								<span class="check_wrap"><input type="checkbox" th:id="|${'chkDef' + iterStat.index}|" th:onclick="|checkDefAddrClick(${iterStat.index}, false)|"><label th:for="|${'chkDef' + iterStat.index}|" style="font-size:15px;">기본배송지설정</label></span>
 							</div>
 						</li>
 					</th:block>
@@ -184,12 +177,12 @@
 						<label th:for="'request' + ${iterStat.index}" th:text="${shipMsg}">부재시 경비실에 맡겨주세요</label>
 					</span>
 				</th:block>
-				<span class="check_wrap rdo_type2"><input type="radio" name="selectShipMsg" th:id="'request' + ${#lists.size(ordEx.shipMsgList)}" class="textbox">
-					<label th:for="'request' + ${#lists.size(ordEx.shipMsgList)}">직접입력</label><em th:if="${apMember != null and #strings.toUpperCase(apMember.employeeYn) == 'Y'}">본사 수령시 행낭 문서실에 배송됩니다</em>
+				<span class="check_wrap rdo_type2"><input type="radio" name="selectShipMsg" id="rdoShipMsg" class="textbox">
+					<label for="rdoShipMsg">직접입력</label><em th:if="${apMember != null and #strings.toUpperCase(apMember.employeeYn) == 'Y'}">본사 수령시 행낭 문서실에 배송됩니다</em>
 				</span>
 
 			</div>
-			<div class="input_wrap"><input type="text" name="shipMsg" id="input2_1" placeholder="배송요청사항을 입력해주세요. (팀명, 층수, 코어 기입)"></div>
+			<div class="input_wrap"><input type="text" name="shipMsg" id="inputShipMsg" placeholder="배송요청사항을 입력해주세요."></div>
 		</dd>
 	</dl>
 </div>
@@ -201,77 +194,58 @@
 
 	//새로운 배송지 추가 레이어 모달
 	var modalLayerFindAddress = null;
+	var memberSn = /*[[${memberSn}]]*/ '0'; // 회원키
+	var isMember = false;
+	if(memberSn > 0){
+		isMember = true;
+	}
 
 	$( document ).ready(function() {
-
-		//비회원 접혔을 때 주소정보 표시되는 영역의 초기셋팅
-		$("#nonMemberRvsName").text("받는사람 이름");
-		$("#nonMemberRvsHp").text("받는사람 휴대폰");
-		$("#nonMemberRvsAddress").text("받는사람 주소");
-		$("#nonMemberRcvArea").hide();
-
-		//회원 접혔을 때 주소정보 표시되는 영역의 초기셋팅
-		$("#memberRvsName").text("받는사람 이름");
-		$("#memberRvsHp").text("받는사람 휴대폰");
-		$("#memberRvsAddress").text("받는사람 주소");
-		$("#memberRvsDefDeliFlag").hide();
-		$("#memberModifyArea").hide();
 
 		var addressListLen = $("#addressListBlock").children().length;
 		if(addressListLen < 3) {
 			//원래 더보기가 표시되어 있는데 클릭해서 더보기를 없앤다.
-			$('.btn_md_more').click();
+			$('.delivery_list').addClass('on');
+			$('.btn_more').css('display', 'none');
 		}
-
 	});
 
 	/* 비회원 주문고객 이름, 휴대폰번호 선택, 이메일 주소 입력 이벤트 */
 	$('#nonMemberName, #nonMemberHp1, #nonMemberHp2, #nonMemberHp3, #nonMemberEmail').on("keyup", function(e) {
-		validateNonMemberInput();
+		validateNonMemberAndMemberInput('nonMemberName', '#nonMemberHp1', '#nonMemberHp2', '#nonMemberHp3', '#nonMemberEmail');
+	});
+
+	/* 회원 주문고객 이름, 휴대폰번호 선택, 이메일 주소 입력 이벤트 */
+	$('#memberName, #memberHp1, #memberHp2, #memberHp3, #memberEmail').on("keyup", function(e){
+		validateNonMemberAndMemberInput('memberName', '#memberHp1', '#memberHp2', '#memberHp3', '#memberEmail');
 	});
 
 	/* 비회원 주문고객 정보 입력 Validation 체크 */
-	function validateNonMemberInput() {
+	function validateNonMemberAndMemberInput(name, hp1, hp2, hp3, email) {
 		// 이메일 검증 스크립트 작성
-		var emailVal = $("#nonMemberEmail").val();
+		var emailVal = $(email).val();
 
 		// 검증에 사용할 정규식 변수 regExp에 저장
 		var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
-		if (emailVal && emailVal.match(regExp) != null && $("#nonMemberName").val() != '' && $("#nonMemberHp1").val() != '' && $("#nonMemberHp2").val() != '' && $("#nonMemberHp3").val() != '') {
+		if (emailVal.match(regExp) != null && $(name).val() != '' && $(hp1).val() != '' && $(hp2).val() != '' && $(hp3).val() != '') {
 			$('.btn_go').addClass("on");
 		}
 		else {
 			$('.btn_go').removeClass("on");
 		}
 
-		if( $("#nonMemberName").val() != '' ) {
+		if( $(name).val() != '' ) {
 			$("#nonMemberRvsName").text( $("#nonMemberName").val() );
+			$("input[name=name]").text( $(name).val() );
 		}
-		if(  $("#nonMemberHp1").val() != '' ) {
-			$("#nonMemberRvsHp").text( $("#nonMemberHp1").val() + "-" + $("#nonMemberHp2").val() + "-" + $("#nonMemberHp3").val() );
-		}
-		if(  $("#nonMemberHp2").val() != '' ) {
-			$("#nonMemberRvsHp").text( $("#nonMemberHp1").val() + "-" + $("#nonMemberHp2").val() + "-" + $("#nonMemberHp3").val() );
-		}
-		if(  $("#nonMemberHp3").val() != '' ) {
-			$("#nonMemberRvsHp").text( $("#nonMemberHp1").val() + "-" + $("#nonMemberHp2").val() + "-" + $("#nonMemberHp3").val() );
+		if(  $(hp1).val() != '' || $(hp2).val() != '' || $(hp3).val() != '') {
+			$("input[name=hp]").text( $(hp1).val() + "-" + $(hp2).val() + "-" + $(hp3).val() );
 		}
 	};
 
-	/* 주문 고객정보 수정버튼 */
-	$(".btn_modify").click(function() {
-		$("#memberModifyArea").toggle();
-	});
-
 	/* 새로운 배송지 추가하기 버튼 */
 	$('.btn_go').click(function(){
-		var memberSn = /*[[${memberSn}]]*/ '0'; // 회원키
-		var isMember = false;
-		if(memberSn > 0){
-			isMember = true;
-		}
-
 		var memberNameObj = isMember ? $("#memberName") : $("#nonMemberName");
 		var memberHp1Obj = isMember ? $("#memberHp1") : $("#nonMemberHp1");
 		var memberHp2Obj = isMember ? $("#memberHp2") : $("#nonMemberHp2");
@@ -317,13 +291,19 @@
 		}
 
 		if(isMember) {
-			modalLayerFindAddress = AP.modal.open({ templateKey : 'order.layer-find-address' });
+			modalLayerFindAddress = AP.modal.open({
+				templateKey : 'order.layer-find-address',
+				containerClass : 'coupon_wrap'
+			});
 			var $modalEl = modalLayerFindAddress.getElement();
 			//로그인 정보 넣어주기
 			$modalEl.find("#isLoginedMember").text(true);
 		}
 		else if(!isMember && $(this).hasClass("on")) {
-			modalLayerFindAddress = AP.modal.open({ templateKey : 'order.layer-find-address' });
+			modalLayerFindAddress = AP.modal.open({
+				templateKey : 'order.layer-find-address',
+				containerClass : 'coupon_wrap'
+			});
 			var $modalEl = modalLayerFindAddress.getElement();
 			//로그인 정보 넣어주기
 			$modalEl.find("#isLoginedMember").text(false);
@@ -337,26 +317,73 @@
 		}
 	};
 
-	/* 비회원 주소추가 (새로운 배송지로 레이어로부터) */
-	function addNonMemberAddr(name, hp, postCode, addr, addrDetail) {
-		//정상적인 주소 추가시 표시되는 정보
-		$("#nonMemberAddrName").text(name);
-		$("#nonMemberAddrHp").text(hp);
-		$("#nonMemberAddrAddress").text("(" + postCode + ") " + addr + " " + addrDetail);
-		$("#nonMemberRcvArea").show();
+	/* 회원/비회원 주소추가 (새로운 배송지로 레이어로부터) */
+	function addAddr(name, hp, postCode, addr, addrDetail) {
+		var email = '',
+			addIdx = $(".delivery_list").children().length + 1,
+			checkboxStr = "",
+			//회원일 경우 새로운 배송지 비회원은 최근배송지에 등록하기 위한 값
+			isInputNewAddress = false;
 
-		//접었을 때 표시되는 정보
-		$("#nonMemberRvsName").text(name);
-		$("#nonMemberRvsHp").text(hp);
-		$("#nonMemberRvsAddress").text("(" + postCode + ") " + addr + " " + addrDetail);
+		if(isMember) {
+			email = $("#memberEmail").val();
+			isInputNewAddress = true;
+
+			//기본배송지 설정 체크박스 String - 회원일 경우 추가
+			var checkboxStr = '<div class="check chkDefArea">'
+				+		'<span class="check_wrap"><input type="checkbox" id="chkDef' + addIdx + '" onclick="checkDefAddrClick(' + addIdx + ', true);"><label for="chkDef' + addIdx + '" style="font-size:15px;">기본배송지설정</label></span>'
+				+	'</div>'
+		}else{
+			email = $("#nonMemberEmail").val();
+
+			//비회원 경우 배송지 정보 1개만 보여주기
+			$(".delivery_list").html("");
+		}
+
+		var newAddrBlock =
+			'<li class="on" onclick="addressListBlockClick(this, \'' + addIdx + '\', \'' + name + '\', \'' + hp + '\', \'' + postCode + '\', \'' + addr + '\', \'' + addrDetail + '\', true);">'
+			+	'<div class="name" id="btnDefAddrFlag' + addIdx + '">'
+			+		'<div class="inner">'
+			+			'<em>' + name + '</em><span>' + hp + '</span>'
+			+		'</div>'
+			+		'<p class="txt">(' + postCode + ') ' + addr + ' ' + addrDetail + '</p>'
+			+	'</div>'
+			+	checkboxStr
+			+'</li>';
+
+		//기존 선택 활성화된 주소는 비활성화 처리한다.
+		$('.delivery_list li').removeClass('on');
+
+		//새로운 주소 블록 추가
+		$(".delivery_list").append(newAddrBlock);
 
 		/***** 주문서&수취인 작성 객체에 정보 저장 *****/
+		addressListBlockClick(null, addIdx, name, hp, email, postCode, addr, addrDetail, isInputNewAddress);
+
+	};
+
+	/*
+	 *	배송지 목록 선택시 활성/비활성 처리
+	 *	(선택된 Obj, 이름, 휴대폰, 우편번호, 주소기본, 주소상세, 새로입력된 주소인지여부-true/false, 기본배송지 체크박스 객체ID)
+	 */
+	function addressListBlockClick(target, selIdx, name, hp, email, postCode, addr, addrDetail, isInputNewAddress) {
+
+		if(target != undefined && target != null) {
+			$('.delivery_list li').removeClass('on');
+			$(target).addClass('on');
+		}
+
+		hp = hp == "null" ? "" : hp;
+
+		/***** 주문서&수취인 작성 객체에 정보 저장 *****/
+		//현재 선택된 Index 번호
+		ordReceptChangeDTO.selIdx = selIdx;
 		//주문자 이름
-		ordReceptChangeDTO.purchaserName = $("#nonMemberName").val();
+		ordReceptChangeDTO.purchaserName = name
 		//주문자 휴대폰번호
-		ordReceptChangeDTO.purchaserPhoneNo = $("#nonMemberHp1").val() + $("#nonMemberHp2").val() + $("#nonMemberHp3").val();
+		ordReceptChangeDTO.purchaserPhoneNo = hp
 		//주문자 이메일
-		ordReceptChangeDTO.purchaserEmailAddress = $("#nonMemberEmail").val();
+		ordReceptChangeDTO.purchaserEmailAddress = email;
 
 		//수취인 이름
 		ordReceptChangeDTO.recipientName = name;
@@ -368,67 +395,6 @@
 		ordReceptChangeDTO.recipientAddress1 = addr;
 		//수취인 상세주소
 		ordReceptChangeDTO.recipientAddress2 = addrDetail;
-	};
-
-	/* 회원 주소추가 (새로운 배송지로 레이어로부터) */
-	function addMemberAddr(name, hp, postCode, addr, addrDetail) {
-
-		var addIdx = $("#addressListBlock").children().length + 1;
-		console.log("addIdx:" + addIdx);
-
-		var newAddrBlock =
-			'<li class="selected" onclick="addressListBlockClick(this, ' + addIdx + ', \'' + name + '\', \'' + hp + '\', \'' + postCode + '\', \'' + addr + '\', \'' + addrDetail + '\', true);">'
-			+ '<button type="button" id="btnDefAddrFlag' + addIdx + '">'
-			+	'<span class="name">' + name + '</span><span class="phone_number">' + hp + '</span>'
-			+	'<span class="block address">(' + postCode + ') ' + addr + '</span>'
-			+'</button>'
-			+'<div class="check_set chkDefArea">'
-			+	'<span class="chk_round_h24"><input type="checkbox" name="chk" id="chkDef' + addIdx + '" onclick="checkDefAddrClick(' + addIdx + ', true);"><label for="chkDef' + addIdx + '">기본배송지 설정</label></span>'
-			+'</div>'
-			+'</li>';
-
-		//기존 선택 활성화된 주소는 비활성화 처리한다.
-		$('.delivery_info .address_list li').removeClass('selected');
-
-		//새로운 주소 블록 추가
-		$("#addressListBlock").append(newAddrBlock);
-
-		//배송지 정보 접었을 때 표시영역
-		$("#memberRvsName").text(name);
-		$("#memberRvsHp").text(hp);
-		$("#memberRvsAddress").text("(" + postCode + ") " + addr + " " + addrDetail);
-
-		//임직원 정보 수정
-		$("#employeeName").text(name);
-		$("#employeeHp").text(hp);
-
-		/***** 주문서&수취인 작성 객체에 정보 저장 *****/
-		addressListBlockClick(null, addIdx, name, hp, postCode, addr, addrDetail, true);
-
-	};
-
-	/*
-	 *	배송지 목록 선택시 활성/비활성 처리
-	 *	(선택된 Obj, 이름, 휴대폰, 우편번호, 주소기본, 주소상세, 새로입력된 주소인지여부-true/false, 기본배송지 체크박스 객체ID)
-	 */
-	function addressListBlockClick(target, selIdx, name, hp, postCode, addr, addrDetail, isInputNewAddress) {
-
-		if(target != undefined && target != null) {
-			$('.delivery_info .address_list li').removeClass('selected');
-			$(target).addClass('selected');
-		}
-
-		hp = hp == "null" ? "" : hp;
-
-		/***** 주문서&수취인 작성 객체에 정보 저장 *****/
-		//현재 선택된 Index 번호
-		ordReceptChangeDTO.selIdx = selIdx;
-		//주문자 이름
-		ordReceptChangeDTO.purchaserName = $("#memberName").val();
-		//주문자 휴대폰번호
-		ordReceptChangeDTO.purchaserPhoneNo = $("#memberHp1").val() + $("#memberHp2").val() + $("#memberHp3").val();
-		//주문자 이메일
-		ordReceptChangeDTO.purchaserEmailAddress = $("#memberEmail").val();
 
 		//새로입력 배송지일 경우
 		if(isInputNewAddress) {
@@ -445,39 +411,50 @@
 		}
 		//최근배송지일 경우
 		else {
-			//수취인 이름
-			ordReceptChangeDTO.recipientName = name;
-			//수취인 휴대폰번호
-			ordReceptChangeDTO.recipientPhoneNo = hp;
-			//수취인 우편번호
-			ordReceptChangeDTO.recipientZipCode = postCode;
-			//수취인 기본주소
-			ordReceptChangeDTO.recipientAddress1 = addr;
-			//수취인 상세주소
-			ordReceptChangeDTO.recipientAddress2 = addrDetail;
+			/*새로입력 이름*/
+			ordReceptChangeDTO.userName = "";
+			/*새로입력 휴대폰번호*/
+			ordReceptChangeDTO.userPhoneNo = "";
+			/*새로입력 우편번호*/
+			ordReceptChangeDTO.userPostCode = "";
+			/*새로입력 기본주소*/
+			ordReceptChangeDTO.userAddress1 = "";
+			/*새로입력 상세주소*/
+			ordReceptChangeDTO.userAddress2 = "";
 		}
-
-		//배송지 정보 접었을 때 표시영역
-		$("#memberRvsName").text(name);
-		$("#memberRvsHp").text(hp);
-		$("#memberRvsAddress").text("(" + postCode + ") " + addr + " " + addrDetail);
 
 		//임직원 정보 수정
 		if(selIdx == 11111) {
 			$("#employeeName").text(name);
-			$("#employeeHp").text(hp);
-		}
+			$("#employeeHp").text( $("#memberHp1").val() + "-" + $("#memberHp2").val() + "-" + $("#memberHp3").val() );
 
+			if( $("#memberHp1").val() == '' || $("#memberHp2").val() == '' || $("#memberHp3").val() == '' ) {
+				AP.modal.alert("전화번호를 입력해 주세요.").addListener( 'modal-close', function (e) {
+					$(".btn_modify").trigger("click");
+					$("#memberHp1").focus();
+				});
+				//전화번호 입력 값을 받아서 바로 적용한다.
+				$("#memberHp1, #memberHp2, #memberHp3").on("keyup", function(e) {
+					$("#employeeHp").text( $("#memberHp1").val() + "-" + $("#memberHp2").val() + "-" + $("#memberHp3").val() );
+				});
+			}
+			$("input[name=shipMsg]").closest('div.input_wrap').find('span.placeholder').html('팀명,층수,코어 기입');
+			$("input[name=shipMsg]").prop("required", true);
+		} else {
+			$("input[name=shipMsg]").closest('div.input_wrap').find('span.placeholder').html('배송요청사항을 입력해주세요');
+			$("input[name=shipMsg]").prop("required", false);
+			$("#memberHp1, #memberHp2, #memberHp3").unbind("keyup");
+		}
 	};
 
 	//기본배송지로 선택 체크박스의 클릭 이벤트 처리
 	function checkDefAddrClick(chkDefIdx, isInputNewAddress) {
 
 		//기본배송지 플래그 없애기 - 모든곳
-		$("em").remove(".defAddrFlag");
+		$("span.benefit.delivery").remove();
 		//선택한 곳의 기본배송지 플래그 생성
-		var appendFlagStr =  "<!-- 기본 배송지 플래그 --> <em class=\"flag purple defAddrFlag\">기본배송지</em>";
-		$(".delivery_info .address_list li #btnDefAddrFlag" + chkDefIdx + " .phone_number").append(appendFlagStr);
+		var appendFlagStr =  "<span class='benefit delivery'>기본배송지</span>";
+		$(".delivery_list li #btnDefAddrFlag" + chkDefIdx + " .inner").prepend(appendFlagStr);
 
 		//모든 인덱스의 체크박스 보이기
 		$(".chkDefArea").show();
@@ -506,17 +483,21 @@
 
 	};
 
-	//배송지 더보기버튼 클릭시 사라짐
-	$('.btn_md_more').click(function(){
-		$(this).hide();
-	});
-
 	/* 배송메세지 라디오 버튼 선택 */
 	$('[name=selectShipMsg]').on('change', function(e){
 		if ($(this).hasClass('textbox')) {
 			$(this).closest('.delivery_order').next('.input_wrap').show();
 		}else{
 			$(this).closest('.delivery_order').next('.input_wrap').hide();
+		}
+	});
+
+	/*숫자만 입력 받기*/
+	$('.only_number').on('keyup', function(e){
+		var regExp = /\D/g;
+		if(regExp.test($(this).val())){
+			$(this).val($(this).val().replace(regExp,''));
+			e.preventDefault();
 		}
 	});
 

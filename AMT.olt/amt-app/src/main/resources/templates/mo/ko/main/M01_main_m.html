@@ -64,55 +64,141 @@
 		<!--/* 로그인 전 */-->
 		<div class="section log_before" th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
 			<p class="log_txt01">로그인을 하시면 더 좋은 쇼핑 제안을 드립니다.</p> 
-			<a href="javascript:;" class="btn_h50_pp round">로그인</a> 
-			<p class="log_txt02"><a href="javascript:;">30초면 완료되는! 신규회원가입하기 <i class="ico_arr_p"></i></a></p> 
+			<a href="/login" class="btn_h50_pp round">로그인</a> 
+			<p class="log_txt02"><a href="/customer/signup">30초면 완료되는! 신규회원가입하기 <i class="ico_arr_p"></i></a></p> 
 		</div>
 		
 		<!--/* 로그인 후 */-->
 		<th:block th:if="${session.LOGIN_USER != null && session.LOGIN_USER.member != null}">
 		<div class="log_after"> 
-			<p class="welcome_text">반가워요 김보영님</p> 
+			<p class="welcome_text">반가워요 <th:block th:text="${session.LOGIN_USER.member.name.name1}">김보영</th:block>님</p> 
 			<div class="log_point_area"> 
-				<p class="text01">김보영님의 뷰티포인트를 확인하세요.</p> 
-				<p class="text02"><strong>210,000P</strong></p> 
+				<p class="text01"><th:block th:text="${session.LOGIN_USER.member.name.name1}">김보영</th:block>님의 뷰티포인트를 확인하세요.</p> 
+				<p class="text02"><strong><th:block th:text="${#IntegUtil.toCommaNumber(#IntegUtil.beautyPoint().remainBeautyPoint)}">210,000</th:block>P</strong></p> 
 			</div> 
 		</div>
 		</th:block>
 		<!--/* 쿠폰 영역 */-->
-		<div class="section m_coup_area01"> 
-			<p class="coupon_txt_tit01"><a href="javascript:;">쿠폰 사용기간이 얼마 안남았어요<span>나의 쿠폰보기</span></a></p> 
+		<div class="section m_coup_area01" th:if="${memberKeepingCoupons != null}"> 
+			<p class="coupon_txt_tit01"><a href="/my/page/myCouponList">쿠폰 사용기간이 얼마 안남았어요<span>나의 쿠폰보기</span></a></p> 
 			<div class="m_coup_list01"> 
 				<ul> 
-					<li> 
+					<li th:each="item : ${memberKeepingCoupons}"> 
+						<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'ProdDc'}">
 						<div class="benefit_coup_area down_ok"> 
 							<div class="coup_detail"> 
-								<p class="coup_name">라네즈 옴므  할인 쿠폰</p> 
-								<strong class="dis_price">30<em>%</em></strong> 
-								<p class="coup_benefit_txt01">10,000원 이상 결제시 <span>2017.7.30일까지 <em>(3일남음)</em></span></p> 
+								<p class="coup_name" th:text="${item.availCoupon.couponName}">라네즈 옴므  할인 쿠폰</p> 
+								<strong class="dis_price">
+									<th:block th:if="${item.availCoupon.prodDcCoupon.dcMethodCode == 'FlatPrice'}"><span th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.flatPrice)}" th:remove="tag">10,000</span><em>원</em></th:block>
+									<th:block th:if="${item.availCoupon.prodDcCoupon.dcMethodCode == 'FixedRate'}"><span th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.dcRate * 100)}" th:remove="tag">10</span><em>%</em></th:block>
+									<th:block th:if="${item.availCoupon.prodDcCoupon.dcMethodCode == 'FixedAmt'}"><span th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.dcAmt)}" th:remove="tag">10,000</span><em>원</em></th:block>
+								</strong> 
+								<p class="coup_benefit_txt01">
+									<span th:if="${item.availCoupon.prodDcCoupon.minPurProdPriceAssignYn == 'Y'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.minPurProdPrice)}">30,000</th:block>원 이상 결제시</span>
+									<span th:if="${item.availCoupon.prodDcCoupon.maxDcAmtLimitYn == 'Y'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.prodDcCoupon.maxDcAmt)}">30,000</th:block>원 까지</span>
+									<span><th:block th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2017.7.30</th:block>일까지 <em th:if="${item.dDay > 0}">(<th:block th:text="${item.dDay}">3</th:block>일남음)</em></span>
+								</p> 
+							</div> 
+						</div> 
+						
+						<div class="dis_possible_prd"><a href="javascript:;" th:onclick="'prodGuide(' + ${item.availCoupon.couponSn} + ')'">할인 가능한 상품</a></div>
+						</th:block>
+						
+						<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'CartDc'}">
+						<div class="benefit_coup_area down_ok"> 
+							<div class="coup_detail"> 
+								<p class="coup_name" th:text="${item.availCoupon.couponName}">라네즈 옴므  할인 쿠폰</p> 
+								<strong class="dis_price">
+									<th:block th:if="${item.availCoupon.cartDcCoupon.dcMethodCode == 'FlatPrice'}"><span th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.flatPrice)}" th:remove="tag">10,000</span><em>원</em></th:block>
+									<th:block th:if="${item.availCoupon.cartDcCoupon.dcMethodCode == 'FixedRate'}"><span th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.dcRate * 100)}" th:remove="tag">10</span><em>%</em></th:block>
+									<th:block th:if="${item.availCoupon.cartDcCoupon.dcMethodCode == 'FixedAmt'}"><span th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.dcAmt)}" th:remove="tag">10,000</span><em>원</em></th:block>
+								</strong> 
+								<p class="coup_benefit_txt01">
+									<span th:if="${item.availCoupon.cartDcCoupon.sectionTypeCode == 'Amt'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.fromOrdAmt)}">30,000</th:block>원 이상 결제시</span>
+									<span th:if="${item.availCoupon.cartDcCoupon.sectionTypeCode == 'Qty'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.fromOrdQty)}">30,000</th:block>개 이상 결제시</span>
+									<span th:if="${item.availCoupon.cartDcCoupon.maxDcAmtLimitYn == 'Y'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartDcCoupon.maxDcAmt)}">30,000</th:block>원 까지</span>
+									<span><th:block th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2017.7.30</th:block>일까지 <em th:if="${item.dDay > 0}">(<th:block th:text="${item.dDay}">3</th:block>일남음)</em></span>
+								</p> 
+							</div> 
+						</div> 
+						</th:block>
+						
+						<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'MPlusN'}">
+						<div class="benefit_coup_area down_ok"> 
+							<div class="coup_detail"> 
+								<p class="coup_name" th:text="${item.availCoupon.couponName}">라네즈 옴므  할인 쿠폰</p> 
+								<strong class="dis_price">
+									<th:block th:text="${item.availCoupon.mplusnCoupon.baseOrdQty}">M</th:block>+<th:block th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">N</th:block></span>
+									<small th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Same'}">동일상품</small>
+									<small th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Different'}">이종상품</small>
+								</strong> 
+								<p class="coup_benefit_txt01">
+									<span th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Same'}"><span>동일상품 </span><span><th:block th:text="${item.availCoupon.mplusnCoupon.baseOrdQty}">N</th:block>개 구매시 <th:block th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">M</th:block>개 추가 증정</span></span>
+									<span th:if="${item.availCoupon.mplusnCoupon.couponMPlusNTypeCode == 'Different'}"><span>이종상품 </span><span><th:block th:text="${item.availCoupon.mplusnCoupon.baseOrdQty}">N</th:block>개 구매시 <th:block th:text="${item.availCoupon.mplusnCoupon.freeAwardQty}">M</th:block>개 추가 증정</span></span>
+									<span><th:block th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2017.7.30</th:block>일까지 <em th:if="${item.dDay > 0}">(<th:block th:text="${item.dDay}">3</th:block>일남음)</em></span>
+								</p> 
+							</div> 
+						</div> 
+						
+						<div class="dis_possible_prd"><a href="javascript:;" th:onclick="'prodGuide(' + ${item.availCoupon.couponSn} + ')'">할인 가능한 상품</a></div>
+						</th:block>
+						
+						<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'CartAward'}">
+						<div class="benefit_coup_area down_ok"> 
+							<div class="coup_detail"> 
+								<p class="coup_name" th:text="${item.availCoupon.couponName}">라네즈 옴므  할인 쿠폰</p> 
+								<strong class="dis_price">
+									<span class="num">사은품</span>
+									<small>증정</small>
+								</strong> 
+								<p class="coup_benefit_txt01">
+									<span th:if="${item.availCoupon.cartAwardCoupon.sectionTypeCode == 'Amt'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartAwardCoupon.fromOrdAmt)}">30,000</th:block>원 이상 결제시</span>
+									<span th:if="${item.availCoupon.cartAwardCoupon.sectionTypeCode == 'Qty'}"><th:block th:text="${#IntegUtil.toCommaNumber(item.availCoupon.cartAwardCoupon.fromOrdQty)}">30,000</th:block>개 이상 결제시</span>
+									<span><th:block th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2017.7.30</th:block>일까지 <em th:if="${item.dDay > 0}">(<th:block th:text="${item.dDay}">3</th:block>일남음)</em></span>
+								</p> 
 							</div> 
 						</div> 
 
-						<div class="dis_possible_prd"><a href="javascript:;">할인 가능한 상품</a></div>
-					</li> 
-					<li> 
+						</th:block>
+						
+						<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'Buy1Get'}">
 						<div class="benefit_coup_area down_ok"> 
 							<div class="coup_detail"> 
-								<p class="coup_name">라네즈 옴므  할인 쿠폰</p> 
-								<strong class="dis_price">30<em>%</em></strong> 
-								<p class="coup_benefit_txt01">10,000원 이상 결제시 <span>2017.7.30일까지 <em>(3일남음)</em></span></p> 
-							</div> 
-						</div>
-						<div class="dis_possible_prd"><a href="javascript:;">할인 가능한 상품</a></div>
-					</li> 
-					<li> 
-						<div class="benefit_coup_area down_ok"> 
-							<div class="coup_detail"> 
-								<p class="coup_name">라네즈 옴므  할인 쿠폰</p> 
-								<strong class="dis_price">30<em>%</em></strong> 
-								<p class="coup_benefit_txt01">10,000원 이상 결제시 <span>2017.7.30일까지 <em>(3일남음)</em></span></p> 
+								<p class="coup_name" th:text="${item.availCoupon.couponName}">라네즈 옴므  할인 쿠폰</p> 
+								<strong class="dis_price">
+									<th:block th:if="${item.availCoupon.buyOneGetCoupon.buy1getDcRate == 1}">
+										<span class="num">하나</span>
+										<small>더</small>
+									</th:block>
+									<th:block th:if="${item.availCoupon.buyOneGetCoupon.buy1getDcRate != 1}">
+										<span class="num">하나</span>
+										<small>반값</small>
+									</th:block>
+								</strong> 
+								<p class="coup_benefit_txt01">
+									<span><th:block th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2017.7.30</th:block>일까지 <em th:if="${item.dDay > 0}">(<th:block th:text="${item.dDay}">3</th:block>일남음)</em></span>
+								</p> 
 							</div> 
 						</div> 
-						<div class="dis_possible_prd"><a href="javascript:;">할인 가능한 상품</a></div>
+						
+						<div class="dis_possible_prd"><a href="javascript:;" th:onclick="'prodGuide(' + ${item.availCoupon.couponSn} + ')'">할인 가능한 상품</a></div>
+						</th:block>
+						
+						<th:block th:if="${item.availCoupon.couponBenefitTypeCode == 'ShipFeeFree'}">
+						<div class="benefit_coup_area down_ok"> 
+							<div class="coup_detail"> 
+								<p class="coup_name" th:text="${item.availCoupon.couponName}">라네즈 옴므  할인 쿠폰</p> 
+								<strong class="dis_price">
+									<span class="num">배송비</span>
+									<small>무료</small>
+								</strong> 
+								<p class="coup_benefit_txt01">
+									<span><th:block th:text="${#IntegUtil.dateformat(item.finalExpExpectedDt, 'yyyy.MM.dd')}">2017.7.30</th:block>일까지 <em th:if="${item.dDay > 0}">(<th:block th:text="${item.dDay}">3</th:block>일남음)</em></span>
+								</p> 
+							</div> 
+						</div> 
+						
+						</th:block>
 					</li> 
 				</ul> 
 			</div> 
@@ -710,6 +796,7 @@
 			</div>
 		</div>
 		
+		<div id="display_card">
 		<!-- 이벤트 & 프로모션 -->
 		<div class="section display_issue">
 			<a href="javscript:;">
@@ -860,7 +947,7 @@
 			</div>
 
 		</div>
-
+		</div>
 		<!-- 상품 슬라이드 버티컬 -->
 		<div class="section v_slide_new">
 			<a href="javascript:;">
@@ -1008,6 +1095,7 @@
 			</ul>
 		</div>
 		</th:block>
+		<div id="display_card2">
 		<!-- basic -->
 		<div class="section m_basic">
 			<a href="javascript:;">
@@ -1161,7 +1249,7 @@
 			</div>
 
 		</div>
-		
+		</div>
 		<!-- 투데이 핫딜 -->
 		<div class="section center_slide add_new_type" style="background-color:#d8ffee; background-image:url(/mo/ko/images/dummy/bg_center_slide.png);"> <!-- Background BO 등록 -->
 			<dl class="display_prd_slide today_hot_deal">
@@ -1686,8 +1774,29 @@
 <th:block ap:fragment="layout-endpoint">
 	<script>
 		$('.slide').ixSlideMax();
-		$( '.youtube_video' ).video();
+		
+		function prodGuide(couponSn) {
+			
+			AP.api.getCouponProdInfo({}, {
+				couponIdentifier: couponSn
+			}).done(function (data) {
+		        var contents = new Object();
+		        contents.contents = data;
+		        var modal = AP.modal.info(contents);
+		        var $modalEl = modal.getElement(); //jquery object
+
+		        $modalEl.find('.btn_fix_neutral').click(function() {
+		        	modal.close();
+		        });
+			}).fail(function(e) {
+			}).always(function() {
+				//성공, 실패
+			});
+			
+		}
 	</script>
+	
+	<script ap:src="@{/handlebars-templates/compiled/main/layer-event-ing.js}"></script>
 </th:block>
 
 </body>

@@ -92,6 +92,13 @@ public class OrdReceptChangeDTO {
 
 	private String nextPayUseYn;
 
+	/*** 화면에서의 선택된 포장목록 리스트 각각 배열로 받는다. Start ***/
+	private Long ordHistProdSn[];
+	private Long giftPackingSn[];
+	private Integer giftPackingQty[];
+	/*** 화면에서의 선택된 포장목록 리스트 각각 배열로 받는다. End ***/
+
+
 	public String getDelivery() {
 		return delivery;
 	}
@@ -414,5 +421,29 @@ public class OrdReceptChangeDTO {
 
 	public void setNextPayUseYn(String nextPayUseYn) {
 		this.nextPayUseYn = nextPayUseYn;
+	}
+
+	public Long[] getOrdHistProdSn() {
+		return ordHistProdSn;
+	}
+
+	public void setOrdHistProdSn(Long[] ordHistProdSn) {
+		this.ordHistProdSn = ordHistProdSn;
+	}
+
+	public Long[] getGiftPackingSn() {
+		return giftPackingSn;
+	}
+
+	public void setGiftPackingSn(Long[] giftPackingSn) {
+		this.giftPackingSn = giftPackingSn;
+	}
+
+	public Integer[] getGiftPackingQty() {
+		return giftPackingQty;
+	}
+
+	public void setGiftPackingQty(Integer[] giftPackingQty) {
+		this.giftPackingQty = giftPackingQty;
 	}
 }

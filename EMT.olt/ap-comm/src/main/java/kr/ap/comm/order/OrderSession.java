@@ -13,6 +13,11 @@ import java.util.Map;
 public class OrderSession implements Serializable {
 
 	/**
+	 * 장바구니번호(주문서 진입시)
+	 */
+	private Long orderCartSn = 0L;
+
+	/**
 	 * 주문번호
 	 */
 	private Long ordSn = 0L;
@@ -69,20 +74,6 @@ public class OrderSession implements Serializable {
 	 */
 	private OrdReceptChange ordReceptChange;
 
-	/**
-	 * @return the ordCartInfoMap
-	 */
-	public Map<Long, OrdCartInfo> getOrdCartInfoMap() {
-		return ordCartInfoMap;
-	}
-
-	/**
-	 * @param ordCartInfoMap the ordCartInfoMap to set
-	 */
-	public void setOrdCartInfoMap(Map<Long, OrdCartInfo> ordCartInfoMap) {
-		this.ordCartInfoMap = ordCartInfoMap;
-	}
-
 	public void addOrdCartInfo(Long ordSn, OrdCartInfo ordCartInfo) {
 		if(ordCartInfoMap == null) {
 			ordCartInfoMap = new HashMap<>();
@@ -101,6 +92,14 @@ public class OrderSession implements Serializable {
 		if(ordCartInfoMap != null) {
 			ordCartInfoMap.remove(ordSn);
 		}
+	}
+
+	public Long getOrderCartSn() {
+		return orderCartSn;
+	}
+
+	public void setOrderCartSn(Long orderCartSn) {
+		this.orderCartSn = orderCartSn;
 	}
 
 	public Long getOrdSn() {
@@ -186,8 +185,23 @@ public class OrderSession implements Serializable {
 	public OrdReceptChange getOrdReceptChange() {
 		return ordReceptChange;
 	}
+
 	public void setOrdReceptChange(OrdReceptChange ordReceptChange) {
 		this.ordReceptChange = ordReceptChange;
+	}
+
+	/**
+	 * @return the ordCartInfoMap
+	 */
+	public Map<Long, OrdCartInfo> getOrdCartInfoMap() {
+		return ordCartInfoMap;
+	}
+
+	/**
+	 * @param ordCartInfoMap the ordCartInfoMap to set
+	 */
+	public void setOrdCartInfoMap(Map<Long, OrdCartInfo> ordCartInfoMap) {
+		this.ordCartInfoMap = ordCartInfoMap;
 	}
 
 }

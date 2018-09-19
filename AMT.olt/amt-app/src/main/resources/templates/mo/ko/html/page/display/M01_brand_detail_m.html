@@ -1,0 +1,57 @@
+<html ap:decorate="~{layout/layout-contents}" th:with="_jsfile='brand'">
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<div class="ap_contents brand_detail">
+
+		<div class="cate_prd_wrap01">
+			<div class="sort_filter_wrap">
+				<div class="sort_inner">
+					<div class="sort_filter_top">
+						<span class="tot_result_num">총 <em class="f_prd_num"></em> 개의 상품</span>
+						<span class="select_type01_new disabled">
+							<select name="prodSort" disabled>
+								<option value="Bestselling">판매순</option>
+								<option value="NewProd">신상품순</option>
+								<option value="MostProdReview">평점순</option>
+								<option value="HighestPrice">높은 가격순</option>
+								<option value="LowestPrice">낮은 가격순</option>
+							</select>
+						</span>
+						<a href="javascript:;" class="btn_align gallery">상품 정렬 선택</a>
+						<a href="javascript:;" class="btn_filter disabled">필터</a>
+					</div>
+
+					<div class="filter_sel_area" style="display: none"></div>
+				</div>
+			</div>
+
+			<ul class="product_list_new gallery"></ul>
+
+			<div class="loading" data-loading-first="300" data-loading-more="90" style="display: none">
+				<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+			</div>
+			<div class="section no_product" style="display: none">
+				<p class="text_center">더 좋은 상품을 준비중입니다.</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script type="text/javascript" th:inline="javascript">
+		// TODO: 브랜드 리미티드 에디션, 신제품, 브랜드 상품
+
+		AP.DISPLAY_MENU_ID = 'CTG001';
+		AP.brandDetail.init({
+			displayMenuId: AP.DISPLAY_MENU_ID,
+			param: {
+				// brand: 'brand1'
+			}
+		});
+	</script>
+</th:block>
+</body>
+</html>

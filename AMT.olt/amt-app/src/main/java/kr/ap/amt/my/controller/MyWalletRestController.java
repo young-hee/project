@@ -6,6 +6,7 @@ import net.g1project.ecp.api.model.sales.deposits.BankAccount;
 import net.g1project.ecp.api.model.sales.deposits.DepositHistoriesResult;
 import net.g1project.ecp.api.model.sales.deposits.DepositRefundAccount;
 import net.g1project.ecp.api.model.sales.giftcard.GiftcardCouponResult;
+import net.g1project.ecp.api.model.sales.giftcard.HistoryResult;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,11 +46,20 @@ public class MyWalletRestController extends AbstractController {
     @PutMapping("/regGiftCard")
 	@ResponseBody
 	public ResponseEntity<?> regGiftCard(String barcode) {
+    	HistoryResult history = giftcardApi.historyCoupon();
+    	if((history.getFailCnt() > 4) && (history.getFailCnt()%5 == 0)) {
+    		if(System.currentTimeMillis() < (history.getTradeDt().getTime() + 1800000))
+    			throw error(HttpStatus.BAD_REQUEST, "FAIL_COUNT_5", "기프트카드 5회 등록 실패로 인해 30분간 등록이 제한되었습니다.");
+    	}
 		GiftcardCouponResult rsltVo = giftcardApi.regCoupon(barcode);
 		if("0000".equals(rsltVo.getResCode())) {
 			return ResponseEntity.ok("{}");
 		}
-		throw error(HttpStatus.BAD_REQUEST, "ERROR", "기프트카드 등록에 실패했습니다.");
+
+    	if(history.getFailCnt() == 4) {
+    		throw error(HttpStatus.BAD_REQUEST, "ERROR", "기프트카드 5회 등록 실패로 인해 30분간 등록이 제한됩니다.");
+    	}
+		throw error(HttpStatus.BAD_REQUEST, "FAIL" + (history.getFailCnt() + 1), "기프트카드 등록에 실패했습니다.");
 	}
 	
 	

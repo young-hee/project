@@ -49,7 +49,9 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["amount-payment"] = Handlebars
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.virtualBankAcAcHolder : stack1), depth0))
     + "<br>\n					<em>입금기한 "
     + alias2((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.virtualBankAcDeadlineDt : stack1),"YYYY-MM-DD",{"name":"dateFormat","hash":{},"data":data}))
-    + " 까지</em>\n				</dd>\n			</dl>\n			<dl class=\"table_layout\">\n				<dt>송금자</dt>\n				<dd class=\"align_right\">홍길동</dd>\n			</dl>\n			<dl class=\"table_layout\">\n				<dt>결제 처리일</dt>\n				<dd class=\"align_right\">\n"
+    + " 까지</em>\n				</dd>\n			</dl>\n			<dl class=\"table_layout\">\n				<dt>송금자</dt>\n				<dd class=\"align_right\">"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.virtualBankAcRemitter : stack1), depth0))
+    + "</dd>\n			</dl>\n			<dl class=\"table_layout\">\n				<dt>결제 처리일</dt>\n				<dd class=\"align_right\">\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.payStatusCode : depth0),"==","Complete",{"name":"xif","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(9, data, 0),"data":data})) != null ? stack1 : "")
     + "				</dd>\n			</dl>\n";
 },"7":function(container,depth0,helpers,partials,data) {
@@ -68,7 +70,7 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["amount-payment"] = Handlebars
     + "("
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.cardNo : stack1), depth0))
     + ")<br>\n					"
-    + alias2((helpers.creditcardPayType || (depth0 && depth0.creditcardPayType) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.creditcardPayTypeCode : stack1),{"name":"creditcardPayType","hash":{},"data":data}))
+    + alias2((helpers.creditcardPayType || (depth0 && depth0.creditcardPayType) || alias4).call(alias3,(depth0 != null ? depth0.pgPayEx : depth0),{"name":"creditcardPayType","hash":{},"data":data}))
     + "<br>\n					"
     + alias2((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.payApprovalDt : stack1),"YYYY-MM-DD HH:MM:SS",{"name":"dateFormat","hash":{},"data":data}))
     + "</dd>\n			</dl>\n";
@@ -96,7 +98,7 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["amount-payment"] = Handlebars
     + "("
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.cardNo : stack1), depth0))
     + ")<br>\n					"
-    + alias2((helpers.creditcardPayType || (depth0 && depth0.creditcardPayType) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.creditcardPayTypeCode : stack1),{"name":"creditcardPayType","hash":{},"data":data}))
+    + alias2((helpers.creditcardPayType || (depth0 && depth0.creditcardPayType) || alias4).call(alias3,(depth0 != null ? depth0.pgPayEx : depth0),{"name":"creditcardPayType","hash":{},"data":data}))
     + "<br>\n					"
     + alias2((helpers.dateFormat || (depth0 && depth0.dateFormat) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.pgPayEx : depth0)) != null ? stack1.payApprovalDt : stack1),"YYYY-MM-DD HH:MM:SS",{"name":"dateFormat","hash":{},"data":data}))
     + "\n				</dd>\n			</dl>\n";

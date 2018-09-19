@@ -9,7 +9,14 @@
 			<div><b class="font_lg">배송정보</b></div>
 		{{/if}}
 
-		<div class="align_right"><button type="button" class="btn_sm_bordered" onclick="changeShipAddress()">배송정보 수정</button></div>
+		{{#xif status '==' 'detail'}}
+			{{#if (or (or (eq statusCode 'OrdReceivedWaiting') (eq statusCode 'OrdReceivedComplete')) (eq statusCode 'PartialCancel'))}}
+				<div class="align_right"><button type="button" class="btn_sm_bordered" onclick="changeShipAddress()">배송정보 수정</button></div>
+			{{/if}}
+		{{else}}
+			<div class="align_right"><button type="button" class="btn_sm_bordered" onclick="changeShipAddress()">배송정보 수정</button></div>
+		{{/xif}}
+
 	</div>
 	<div class="panel padding15">
 		<div class="panel gray">

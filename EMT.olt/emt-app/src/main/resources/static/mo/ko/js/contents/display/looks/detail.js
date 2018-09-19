@@ -14,7 +14,7 @@
 
 		/** =============== Public Methods =============== */
 
-		//페이지를 구성한는 기본 데이타 설정
+		//페이지를 구성하는 기본 데이타 설정
 		setDefaultData: function ( article ) {
 			this._setInProductsList( article.articleSn );
 		},
@@ -50,7 +50,30 @@
 				limit: 9
 			}).done(function ( result ) {
 				$itemArea.find( '.btn_order' ).off( 'click' );
-
+				
+				var onlineProdList = result.onlineProdList;
+				
+				$.each(onlineProdList.list, function(inx, onlineProdInfo){
+					
+					var colorCnt = 0; 
+					var optionCnt = 0; 
+					if(onlineProdInfo.productCount > 0){
+						
+						$.each(onlineProdInfo.products, function(inx, product){
+							if(product.colorchipTypeCode != 'No'){
+								colorCnt++;
+							}else {
+								optionCnt++;
+							}
+						});
+						
+						
+					}
+					
+					onlineProdInfo.colorCnt = colorCnt;
+					onlineProdInfo.optionCnt = optionCnt; 
+				});
+				
 				//draw list
 				var data = result.onlineProdList,
 					html = AP.common.getTemplate( 'display.detail-product-list', data );

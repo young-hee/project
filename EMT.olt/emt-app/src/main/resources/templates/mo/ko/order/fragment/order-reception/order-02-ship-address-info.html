@@ -264,6 +264,17 @@
 			</div>
 			<p class="text_notice">주문관련 e-Mail과 SMS가 발송됩니다.</p>
 		</div>
+
+		<th:block th:if="${storeEx != null}">
+
+		<hr class="div m25">
+
+		<!--테이크아웃-->
+		<h3 class="h_title cont"><strong>테이크아웃</strong></h3>
+		<div class="take_out_store">
+			<p><th:block th:text="${storeEx.storeName}">강남점</th:block><span class="text">[재고있음]</span></p>
+		</div>
+		</th:block>
 	</dd>
 	<!--스크립트 정의-->
 	<script th:inline="javascript">
@@ -458,6 +469,9 @@
 				$('#address2_2_01_layer').hide();
 				$('#address2_2_02_layer').hide();
 				$('input[name=addressStoreType]').attr('value','MEMBER');
+
+				$('#name01').val($('[name=purchaserName]').val());
+				$('#phone01').val($('[name=purchaserPhoneNo]').val());
 
 				//validation
 				$('input[name=userName]').prop("required", false);

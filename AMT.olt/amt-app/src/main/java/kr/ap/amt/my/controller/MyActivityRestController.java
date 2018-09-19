@@ -5,6 +5,9 @@ import net.g1project.ecp.api.model.BooleanResult;
 import net.g1project.ecp.api.model.sales.guide.InquiriesEvalResponse;
 import net.g1project.ecp.api.model.sales.guide.InquiriesSearchResult;
 import net.g1project.ecp.api.model.sales.guide.Inquiry;
+import net.g1project.ecp.api.model.sales.product.ProdReviewPost;
+import net.g1project.ecp.api.model.sales.product.ProdReviewSurvey;
+import net.g1project.ecp.api.model.sales.product.ProdReviewUpdate;
 import net.g1project.ecp.api.model.sales.product.ProdReviewWritableOrderInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import feign.Param;
+
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -50,6 +56,68 @@ public class MyActivityRestController extends AbstractController {
 			ProdReviewWritableOrderInfo productReviewWritableOrders = productApi.getProductReviewWritableOrders(getMemberSn(), null, offset, limit);
 			result.put("ProductReviewWritableOrders", productReviewWritableOrders);
 
+			return ResponseEntity.ok(result);
+		} catch (Exception e) {
+			result.put("errorData", e);
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+	}
+	
+	/**
+	 * 	상품평설문 목록
+	 *
+	 * @param odrNo
+	 * @return
+	 */
+	@GetMapping("/getProductReviewSurveys")
+	@ResponseBody
+	public ResponseEntity<?> getProductReviewSurveys(Long onlineProdSn, String prodReviewType) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+
+		try {
+			prodReviewType = "Pur";
+			onlineProdSn = 343L;
+			List<ProdReviewSurvey> productReviewSurveys = productApi.getProductReviewSurveys(onlineProdSn, prodReviewType);
+			
+			result.put("productReviewSurveys", productReviewSurveys);
+			return ResponseEntity.ok(result);
+		} catch (Exception e) {
+			result.put("errorData", e);
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+	}
+	
+	/**
+	 * 	상품평 등록
+	 *
+	 * @param body
+	 * @return
+	 */
+	@PostMapping("/postProdReview")
+	@ResponseBody
+	public ResponseEntity<?> postProdReview(ProdReviewPost body) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		try {
+			productApi.postProdReview(body);
+			return ResponseEntity.ok(result);
+		} catch (Exception e) {
+			result.put("errorData", e);
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+	}
+	
+	/**
+	 * 	상품평 수정
+	 *
+	 * @param body
+	 * @return
+	 */
+	@PostMapping("/updateProdReview")
+	@ResponseBody
+	public ResponseEntity<?> updateProdReview(ProdReviewUpdate body) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		try {
+			productApi.updateProdReview(body);
 			return ResponseEntity.ok(result);
 		} catch (Exception e) {
 			result.put("errorData", e);

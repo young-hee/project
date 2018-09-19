@@ -80,7 +80,7 @@ public class OrderViewController extends OrderBaseController {
 				orderSession.addOrdCartInfo(ordEx.getOrdSn(), new OrdCartInfo(Long.valueOf(cartSn), cartProdSnList));
 
 				/* 주문 상품목록 생성 */
-				makeOrdProdSetApMall(ordEx, model);
+				makeOrdProdSetApMall(ordEx, model, "Reception");
 
 				model.addAttribute("result", true);
 				model.addAttribute("pageTitle", pageTitle);
@@ -97,7 +97,7 @@ public class OrderViewController extends OrderBaseController {
 				orderSession.addOrdCartInfo(ordEx.getOrdSn(), new OrdCartInfo(cartSession.getCartSn(), null));
 
 				/* 주문 상품목록 생성 */
-				makeOrdProdSetApMall(ordEx, model);
+				makeOrdProdSetApMall(ordEx, model, "Reception");
 
 				model.addAttribute("result", true);
 				model.addAttribute("pageTitle", pageTitle);
@@ -177,7 +177,7 @@ public class OrderViewController extends OrderBaseController {
 		}
 		if(ordEx != null) {
 			/* 2.주문완료 상품목록 추출*/
-			makeOrdProdSet(ordEx, model);
+			makeOrdProdSetApMall(ordEx, model, "Complete");
 
 			/* 주문완료했을 때 장바구니상품삭제 */
 			//removeOrdCartInfo(ordEx.getOrdSn());
@@ -230,7 +230,7 @@ public class OrderViewController extends OrderBaseController {
 		}
         if(ordEx != null) {
             /* 2.주문완료 상품목록 추출*/
-            makeOrdProdSet(ordEx, model);
+			makeOrdProdSetApMall(ordEx, model, "Complete");
 
             /* 주문완료했을 때 장바구니상품삭제 */
             //removeOrdCartInfo(ordEx.getOrdSn());
@@ -257,7 +257,7 @@ public class OrderViewController extends OrderBaseController {
 			OrdEx ordEx = orderApi.getOrd(getOrderSession().getOrdSn());
 
 			/* 주문 상품목록 생성 */
-			makeOrdProdSet(ordEx, model);
+			makeOrdProdSetApMall(ordEx, model, "Reception");
 
 			model.addAttribute("result", true);
 			model.addAttribute("pageTitle", "주문/결제|에뛰드");

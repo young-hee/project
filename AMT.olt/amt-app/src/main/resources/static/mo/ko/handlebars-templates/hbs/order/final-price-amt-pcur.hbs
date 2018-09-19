@@ -144,31 +144,68 @@
 				{{/if}}
 				<!-- 할인 End -->
 
-				<!--/* 회원일 경우 */-->
+
 				{{#if isApMember}}
-					<div class="ui_tooltip ＠tooltip-apply">
-						<dl class="add_point">
-							<dt>적립예정 뷰티포인트<button type="button" class="btn_tooltip"><span>자세히</span></button> </dt>
-							<dd class="price"><b>{{getAmtMapPrice ordAmtMap 'totalBeautyPointSaveSum' 'P'}}</b></dd>
-						</dl>
-						<div class="layer_tooltip">
-							<dl>
-								<dt>뷰티포인트 적립안내</dt>
-								<!-- 레이아웃 변경 (180824) -->
-								<dd>
-									<p class="text"></p><p class="text">고객님의 아모레퍼시픽 뷰티포인트 통합회원 등급에 따라 결제금액의 기본 1%+우대 최대 4%가 적립됩니다. (고객별 상이)</p>
-									<p class="text">뷰티포인트 적립 기준금액은 [최종결제금액-뷰티포인트 적립 제외상품 금액-배송비]로 계산된 금액입니다.</p>
-									<p class="text">특가상품(투데이핫딜), 프로모션 상품(상품할인, M+N, 즉시할인, 동시구매 등)은 뷰티포인트 적립대상에서 제외됩니다.</p>
-									<p class="text">플러스멤버십 할인(10%)이 적용된 상품은 뷰티포인트 적립대상에 포함됩니다.</p>
-									<p class="text">적립 예정 뷰티포인트는 주문상품의 구매확정 시점에 자동으로 적립되며, 사용기한은 적립일로부터 1년입니다.</p>
-									<p class="text">주문 제품의 취소/환불/반품시 적립된 뷰티포인트도 자동 회수 처리됩니다.</p>
-									<p class="text">보다 자세한 뷰티포인트 이용 안내는 뷰티포인트 웹사이트(www.beautypoint.co.kr)에서 확인하실 수 있습니다.</p>
-									<button type="button" class="ui_close sm"><span class="sr_only">툴팁 닫기</span></button>
+					{{#if isComplete }}
+
+						<!--/* 회원일 경우, <주문완료> 화면일 경우 */-->
+						{{#if (getAmtMapPrice ordAmtMap 'totalBeautyPointSaveSum')}}
+							<dl class="add_point">
+								<dt>적립예정 뷰티포인트</dt>
+								<dd class="price"><b>{{getAmtMapPrice ordAmtMap 'totalBeautyPointSaveSum' 'P'}}</b></dd>
+								<!-- (180906) 뷰티포인트 상세 추가 -->
+								<dd class="details">
+									{{#each ordHistEx.ordSavingPointList}}
+										<dl>
+											<dt>{{this.pointName}}</dt>
+											<dd><span>{{numberFormat this.totalOnlineShipSavingPoint}}</span> P </dd>
+										</dl>
+									{{/each}}
 								</dd>
-								<!--// 레이아웃 변경 (180824) -->
+								<!--// (180906) 뷰티포인트 상세 추가 -->
 							</dl>
-						</div>
-					</div>
+						{{/if}}
+
+					{{else}}
+
+						<!--/* 회원일 경우, <주문서 작성> 화면일 경우 */-->
+						{{#if (getAmtMapPrice ordAmtMap 'totalBeautyPointSaveSum')}}
+							<div class="ui_tooltip">
+								<dl class="add_point">
+									<dt>적립예정 뷰티포인트<button type="button" class="btn_tooltip"><span>자세히</span></button> </dt>
+									<dd class="price"><b>{{getAmtMapPrice ordAmtMap 'totalBeautyPointSaveSum' 'P'}}</b></dd>
+									<!-- (180906) 뷰티포인트 상세 추가 -->
+									<dd class="details">
+										{{#each ordHistEx.ordSavingPointList}}
+											<dl>
+												<dt>{{this.pointName}}</dt>
+												<dd><span>{{numberFormat this.totalOnlineShipSavingPoint}}</span> P </dd>
+											</dl>
+										{{/each}}
+									</dd>
+									<!--// (180906) 뷰티포인트 상세 추가 -->
+								</dl>
+								<div class="layer_tooltip">
+									<dl>
+										<dt>뷰티포인트 적립안내</dt>
+										<!-- 레이아웃 변경 (180824) -->
+										<dd>
+											<p class="text"></p><p class="text">고객님의 아모레퍼시픽 뷰티포인트 통합회원 등급에 따라 결제금액의 기본 1%+우대 최대 4%가 적립됩니다. (고객별 상이)</p>
+											<p class="text">뷰티포인트 적립 기준금액은 [최종결제금액-뷰티포인트 적립 제외상품 금액-배송비]로 계산된 금액입니다.</p>
+											<p class="text">특가상품(투데이핫딜), 프로모션 상품(상품할인, M+N, 즉시할인, 동시구매 등)은 뷰티포인트 적립대상에서 제외됩니다.</p>
+											<p class="text">플러스멤버십 할인(10%)이 적용된 상품은 뷰티포인트 적립대상에 포함됩니다.</p>
+											<p class="text">적립 예정 뷰티포인트는 주문상품의 구매확정 시점에 자동으로 적립되며, 사용기한은 적립일로부터 1년입니다.</p>
+											<p class="text">주문 제품의 취소/환불/반품시 적립된 뷰티포인트도 자동 회수 처리됩니다.</p>
+											<p class="text">보다 자세한 뷰티포인트 이용 안내는 뷰티포인트 웹사이트(www.beautypoint.co.kr)에서 확인하실 수 있습니다.</p>
+											<button type="button" class="ui_close sm"><span class="sr_only">툴팁 닫기</span></button>
+										</dd>
+										<!--// 레이아웃 변경 (180824) -->
+									</dl>
+								</div>
+							</div>
+						{{/if}}
+
+					{{/if}}
 				{{/if}}
 
 				<dl class="total">

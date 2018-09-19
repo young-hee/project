@@ -79,6 +79,25 @@
 			AP.api.flaggedItemList( null, {
 				flags: 'icon_reco_new',
 			}).done( function ( result ) {
+				
+				var onlineProds = result.onlineProdList;
+				var colorCnt = 0; 
+				var optionCnt = 0; 
+				
+				$.each(onlineProds.list , function(inx , onlineProd){
+					if(onlineProd.productCount > 1){
+						$.each(onlineProd.products , function(index, product){
+							if(product.colorchipTypeCode != 'No'){
+								colorCnt++;
+							}else {
+								optionCnt++;
+							}
+						});
+						onlineProd.colorCnt = colorCnt;
+						onlineProd.optionCnt = optionCnt;
+					}
+				});
+ 
 				var data = result.onlineProdList,
 					html = AP.common.getTemplate( 'main.home.new-product-list', data );
 				
@@ -127,7 +146,7 @@
 						list.rank = Number(index+1);
 					});
 				});
-				 
+				  
 				var html = AP.common.getTemplate( 'main.home.best-list', result ),
 					$slide = $section.find( '.slide' );
 
@@ -168,11 +187,9 @@
 					onlineprdList = object.prodList;
 				}
 			}); 
-			
 			$.each(onlineprdList, function(index, object){
 				
 				object.products = _.findWhere(object.products , {prodSn : this.selectedProdSn});
-				
 			}); 
 			
 			var html = AP.common.getTemplate( 'main.home.recommend-items', onlineprdList);
@@ -203,23 +220,15 @@
 				offset: 0,
 				limit: 1			
 			}).done( function ( result ) {
-				
 				articles_articleSn = result.articleSearchResult.articleList[0].articleSn;  
-				
 				AP.api.article( null, { // article detail 
-					
 					articleSn: articles_articleSn
-					
 				}).done( function ( result ) { 
-				
 					// 동영상 URL 제목 , 라이브 유무 
 					var html = AP.common.getTemplate( 'main.home.ch-etude-video-info', result.article);
-	
 					$section.find('.video_wrap').html(html);
 					$section.find('.youtube_video').video(); // 비디오 그리기 디테일정보가 필요함 
-					
 					var titleText = ''; 
-					
 					if(result.article.liveSettingsYn === 'Y'){
 						titleText ='[라이브쇼]'; 
 					}
@@ -240,14 +249,30 @@
 			
 			var $section = this._$target.find( '.ch_etude' );
 			AP.api.articleRelated(null, { // article 연관상품 목록
-				 
 				articleSn: articleSn, //아티클일련번호
 				offset: 0,
 				limit: 3 // 화면에 3개까지만 출력되도록
-				
 			}).done( function ( result ) {  
 				this._$target.find( '.ch_etude .loading' ).remove();
-				 
+				
+				var onlineProds = result.onlineProdList;
+				var colorCnt = 0; 
+				var optionCnt = 0; 
+				
+				$.each(onlineProds.list , function(inx , onlineProd){
+					if(onlineProd.productCount > 1){
+						$.each(onlineProd.products , function(index, product){
+							if(product.colorchipTypeCode != 'No'){
+								colorCnt++;
+							}else {
+								optionCnt++;
+							}
+						});
+						onlineProd.colorCnt = colorCnt;
+						onlineProd.optionCnt = optionCnt;
+					}
+				});
+				
 				var html = '';
 					html = AP.common.getTemplate( 'main.home.ch-etude-article-list', result.onlineProdList);
 					
@@ -328,57 +353,46 @@
 			}.bind(this));
 		},
 		
+		
 		// 화면에 진입시 팝업 유무를 확인해서 팝업을 띄운다. 
 		_popUpload: function () {
 			
 			AP.api.mainPopups().done( function ( result ) {
-				
+			 
 				$.each(result.popupList, function(index, popupInfo){
+					 
+					if(AP.common.getSessionStorage( 'mainPopup_'+popupInfo.popupMgmtSn) !== 'Y'){ // [S] getSessionStorage
 					
-					var modal = AP.modal.info({
-						title: popupInfo.popupTitle +index + popupInfo.popupMgmtSn,
-						contents: popupInfo.popupBodyText,
-						containerClass : 'popup_check'
-					});
+						var modal = AP.modal.info({
+							title: popupInfo.popupTitle,
+							contents: popupInfo.popupBodyText,
+							containerClass : 'popup_check'
 					
-					var $modal = modal.getElement(); 
-					$modal.find( '.layer' ).append( '<dd class="popup_check"><span class="check_wrap"><input type="checkbox" id="check1" name="mainPop_'+popupInfo.popupMgmtSn+'"><label for="check1">오늘하루 다시보지않기</label></span></dd>' );
+						}).addListener( 'modal-close', function (e) {}.bind(this)) ; 
 					
-					modal.resetPosition();
+						var $modal = modal.getElement(); 
 					
-					$modal.find('.layer .popup_check input[name=mainPop_'+popupInfo.popupMgmtSn+']').on( 'change', function () {
-					/*
-						console.log(popupInfo.popupMgmtSn); 
-						console.log(this); */
+						$modal.find( '.layer_cont' ).after( '<pre><div class="popup_check"><span class="check_wrap"><input type="checkbox" id="check1"><label for="check1">오늘하루 다시보지않기</label></span></div></pre>' );
 					
-					}.bind( this ));
+						modal.resetPosition();
 					
-					//$modal.setSessionStorage(); // ( key, value, expireMinutes ) (1*60 *24) 
-					//AP.common.getSessionStorage();
-					//AP.common.setSessionStorage('mainPop'+popupInfo.popupMgmtSn, 'Y', 0.5); 
-				//	console.log($modal.find('.layer .popup_check input[name=mainPop_'+index+']').val());
-					//console.log(AP.common.getSessionStorage('mainPop'+popupInfo.popupMgmtSn));
-					
-				});
-				
-				
-				
-				$.each(result.popupList, function(index, popupInfo){
-					
-					$(this).find('.layer .popup_check input[name=mainPop_'+popupInfo.popupMgmtSn+']').on( 'change', function () {
+						$modal.find('.popup_check input').on( 'click', function (e) { 
+						 
+							if(e.currentTarget.checked){
+								
+								AP.common.setSessionStorage( 'mainPopup_'+popupInfo.popupMgmtSn, 'Y', (60 * 24)); // 세션기록 남김
+							}
 						
-						//console.log(this); 
-						//console.log(this); 
-					}.bind( this ));
-				
-				
+							modal.close();
+						
+						}.bind(this));
+					} // [E] getSessionStorage
+					
 				});
-				
+
 			}.bind(this));
-			
-			
-		
 		}
+		
     });
 
     AP.home = new Home();

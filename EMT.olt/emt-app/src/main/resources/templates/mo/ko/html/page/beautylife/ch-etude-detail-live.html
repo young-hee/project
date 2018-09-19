@@ -51,57 +51,67 @@
 						<ul class="ix-list-items">
 							<li class="ix-list-item item">
 								<a href="#item">
-									<div class="thumb">
-										<!-- /* 20180809:추천템리스트 플래그 삭제 */ -->
-										<!--<div class="flag_set">
-											<span class="best">베스트</span>
-											<span class="event">이벤트</span>
-											<span>MD추천</span>
-											<span>온라인전용</span>
-										</div> -->
+									<div class="thumb">	
+										<!--<div class="flag_set"><span class="best">베스트</span></div> --><!--// 20180914:플래그 노출안됨 -->	
 										<img ap:src="@{/images/dummy/20180309161931356.png}" alt="" />
 									</div>
 									<div class="item_info">
 										<div>
-											<!-- <p class="s_name">[곧 출시!]</p>  20180809:추천템리스트 한줄설명 삭제 -->
-											<p class="prd_name">플레이 네일 NEW</p>
-											<p class="color_name">85 colors</p><!--/* 20180809:컬러옵션 미노출시에도 영역은 고정*/-->
+											<p class="prd_name">
+												<span class="s_name">[예약구매중]</span><!--// 20180914:판매상태값 추가 -->
+												<!-- <em>[곧 출시!]</em>
+												<em>[일시품절]</em>
+												<em>[판매종료]</em>
+												<em>[조기소진]</em> -->
+												플레이 네일 NEW
+											</p>
+											<p class="color_name">85 colors</p><!--/* 20180914:컬러옵션 미노출시에도 영역은 고정*/-->
 										</div>
 										<div class="price_area">
-											<span class="discount">30<em>%</em></span>
+											<span class="discount">30<em>%</em></span><!--/* 20180914:직전가 노출안됨*/-->
 											<span class="price">3,500<em>원</em></span>
 										</div>
 									</div>
 								</a>
-								<button class="btn_order" type="button">담기</button>
+								<button class="btn_order" type="button">담기</button>	
 							</li>
-
+							
 							<li class="ix-list-item item">
 								<a href="#item">
-									<div class="thumb">
-										<!-- /* 20180809:추천템리스트 플래그 삭제 */ -->
-										<!--<div class="flag_set">
-											<span class="best">베스트</span>
-											<span class="event">이벤트</span>
-											<span>MD추천</span>
-											<span>온라인전용</span>
-										</div> -->
-										<img ap:src="@{/images/dummy/20180309161931356.png}" alt="" />
+									<div class="thumb">							
+										<img ap:src="@{/images/dummy/650001366_IM_01.png}" alt="" />
 									</div>
 									<div class="item_info">
 										<div>
-											<!-- <p class="s_name">[곧 출시!]</p>  20180809:추천템리스트 한줄설명 삭제 -->
-											<p class="prd_name">플레이 네일 NEW</p>
-											<p class="color_name">85 colors</p><!--/* 20180809:컬러옵션 미노출시에도 영역은 고정*/-->
+											<p class="prd_name">컬러풀 드로잉 소프트 핸드 워시</p>
+											<p class="color_name"></p>
 										</div>
 										<div class="price_area">
-											<span class="discount">30<em>%</em></span>
+											<span class="discount">30<em>% ~</em></span>
 											<span class="price">3,500<em>원</em></span>
 										</div>
 									</div>
 								</a>
-								<button class="btn_order" type="button">담기</button>
-							</li>							
+								<button class="btn_order" type="button">담기</button>	
+							</li>
+							
+							<li class="ix-list-item item">
+								<a href="#item">
+									<div class="thumb">							
+										<img ap:src="@{/images/dummy/650000767_IM_01.png}" alt="" />
+									</div>
+									<div class="item_info">
+										<div>
+											<p class="prd_name">보들 원형 화장솜</p>
+											<p class="color_name"></p>
+										</div>
+										<div class="price_area">
+											<span class="price">3,500<em>원 ~</em></span>
+										</div>
+									</div>
+								</a>
+								<button class="btn_order" type="button">담기</button>	
+							</li>				
 						</ul>
 					</div>
 				</div>
@@ -343,9 +353,27 @@
 					{id: '마지막구간ID', section: 9}
 				];
 
-			AP.chEtudeDetail.setVideo( sections );
+			AP.chEtudeDetail._setVideo( sections );
+			
 		})();
 	</script>
+	<script>
+
+		// test
+		AP.DISPLAY_MENU_ID = 'eye';
+		// test
+
+		/*
+		AP.display.init({
+			key: { displayMenuId: AP.DISPLAY_MENU_ID },
+			flagged: {
+				flags: 'icon_reco_best_w',
+				displayCate: 33
+			}
+		});
+		*/
+		$('.slide').ixSlideMax()
+	</script>	
 </th:block>
 
 </body>

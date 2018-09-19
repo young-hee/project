@@ -11,6 +11,33 @@
 				<!-- Swiper -->
 				<div class="swiper-container">
 					<div class="swiper-wrapper">
+
+						<!-- 2018-09-18 수정 : 유투브 영상 추가 -->
+						<div class="swiper-slide y_video_add">
+							
+							<!-- 비디오 영역 -->
+							<div class="y_video_wrap">
+								
+								<div class="y_dimmed"></div>
+
+								<div class="video_wrap">
+									<iframe class="youtube_video ＠video-apply" width="750" height="420" src="https://youtube.com/embed/85GbWBQgSok?wmode=transparent&amp;showinfo=0;&amp;autoplay=0&amp;enablejsapi=1" frameborder="0" allowfullscreen="" data-vendor="youtube" data-ratio="true" data-mute="false" id="widget2"></iframe>
+								</div>
+								
+								<!-- 썸네일 -->
+								<div class="video_thumb_area">
+									<a href="javascript:;">
+										<img src="/mo/ko/images/dummy/img_youtube_thumb03.jpg" alt="" class="thumb_img">
+										<img src="/mo/ko/images/common/btn_video_play.png" alt="" class="btn_video_thumb">
+									</a>
+								</div>
+
+							</div>
+							<!-- // 비디오 영역 -->
+
+						</div>
+						<!-- // 2018-09-18 수정 : 유투브 영상 추가 -->
+
 						<div class="swiper-slide"><img ap:src="@{/images/dummy/img_item_07.jpg}" alt=""></div>
 						<div class="swiper-slide"><img ap:src="@{/images/dummy/img_item_07.jpg}" alt=""></div>
 						<div class="swiper-slide"><img ap:src="@{/images/dummy/img_item_07.jpg}" alt=""></div>
@@ -1367,11 +1394,6 @@
  		}
  	});
 
-
-
-
-
-
 	$(window).scroll(function() {
  		header_bg();
  	});
@@ -1385,6 +1407,13 @@
 		}
 	}
 
+		/* Youtube 재생 스크립트 *//* 2018-09-18 */
+		$('.video_thumb_area').bind('click', function() {
+			var $ytb_iframe = $(this).prev(".video_wrap").find("iframe");
+			  $(this).hide();
+			  $(this).siblings(".y_dimmed").hide();
+			  $ytb_iframe.show();
+		 });	
 
 	</script>
 </th:block>

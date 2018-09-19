@@ -11,7 +11,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/custmgnt/svc/custselfcertify/certifycustselfonline/v1.00")
+	@RequestLine(value = "cit/certifycustselfonline/v1.00")
 	CicuemCuInfTotTcVo certifycustselfonline(CicuemCuInfTotTcVo cicuemCuInfTotTcVo);
 	/**
 	 * 고객본인인증2(가입인증)
@@ -19,7 +19,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/custmgnt/svc/custselfcertify/certifyconfirm/v1.00")
+	@RequestLine(value = "cit/certifyconfirm/v1.00")
 	CicuemCuInfTotTcVo certifyconfirm(CicuemCuInfTotTcVo cicuemCuInfTotTcVo);
 	/**
 	 * 고객본인인증2(단순본인인증)
@@ -27,7 +27,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/custmgnt/svc/custselfcertify/certifyselfconfirm/v1.00")
+	@RequestLine(value = "cit/certifyselfconfirm/v1.00")
 	CicuemCuInfTotTcVo certifyselfconfirm(CicuemCuInfTotTcVo cicuemCuInfTotTcVo);
 	/**
 	 * 점유인증1
@@ -35,7 +35,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/custmgnt/svc/custselfcertify/certifycompanyonline/v1.00")
+	@RequestLine(value = "cit/certifycompanyonline/v1.00")
 	CicuemCuInfTotTcVo certifycompanyonline(CicuemCuInfTotTcVo cicuemCuInfTotTcVo);
 	/**
 	 * 점유인증2(확인)
@@ -43,7 +43,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/custmgnt/svc/custselfcertify/certifycompanyconfirm/v1.00")
+	@RequestLine(value = "cit/certifycompanyconfirm/v1.00")
 	CicuemCuInfTotTcVo certifycompanyconfirm(CicuemCuInfTotTcVo cicuemCuInfTotTcVo);
 	/**
 	 * 외국인인증1(등록번호)
@@ -51,7 +51,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/custmgnt/svc/custselfcertify/certifyforeignonline/v1.00")
+	@RequestLine(value = "cit/certifyforeignonline/v1.00")
 	CicuemCuInfTotTcVo certifyforeignonline(CicuemCuInfTotTcVo cicuemCuInfTotTcVo);
 	/**
 	 * 외국인 인증2(전화번호)
@@ -59,7 +59,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/custmgnt/svc/custselfcertify/certifycustforeignselfonline/v1.00")
+	@RequestLine(value = "cit/certifycustforeignselfonline/v1.00")
 	CicuemCuInfTotTcVo certifycustforeignselfonline(CicuemCuInfTotTcVo cicuemCuInfTotTcVo);
 	/**
 	 * 본인인증 재전송
@@ -67,7 +67,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/custmgnt/svc/custselfcertify/certifyconfirmretry/v1.00")
+	@RequestLine(value = "cit/certifyconfirmretry/v1.00")
 	CicuemCuInfTotTcVo certifyconfirmretry(CicuemCuInfTotTcVo cicuemCuInfTotTcVo);
 	/**
 	 * 회원가입
@@ -75,7 +75,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/custmgnt/svc/custinfrcommgnt/createcicuemcuinfrjoin/v1.00")
+	@RequestLine(value = "cit/createcicuemcuinfrjoin/v1.10")
 	@CaseConverter({"cicuemCuAdtInfTcVo", "CicuemCuAdtInfTcVo",
 					"cicuedCuChCsTcVo", "CicuedCuChCsTcVo",
 					"cicuedCuTncaTcVo", "CicuedCuTncaTcVo",
@@ -88,7 +88,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/custmgnt/svc/custinfrcommgnt/createcicuemcuinfrjoin/v1.00")
+	@RequestLine(value = "cit/createcustchnjoin/v1.10")
 	CicuemCuInfCoOutVo createcustchnjoin(CicuedCuChListTcVo cicuedCuChListTcVo);
 	
 	/**
@@ -97,7 +97,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/custmgnt/svc/custinfrcommgnt/updatecicuemcuinfrfull/v1.00")
+	@RequestLine(value = "cit/updatecicuemcuinfrfull/v1.10")
 	@CaseConverter({"cicuedCuTncaTcVo", "CicuedCuTncaTcVo",
 					"cicuedCuChCsTcVo", "CicuedCuChCsTcVo",
 					"cicuemCuOptiTcVo", "CicuemCuOptiTcVo",
@@ -109,7 +109,8 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/custmgnt/svc/custinfrcommgnt/getcicuemcuinfrbyincsno/v1.00")
+	@RequestLine(value = "cit/getcicuemcuinfrbyincsno/v1.00")
+	@CaseConverter({"cicuedCuChArrayTcVo", "CicuedCuChArrayTcVo"})
 	CicuemCuInfTotTcVo getcicuemcuinfrbyincsno(CicuemCuInfTotTcVo cicuemCuInfTotTcVo);
 	
 	/**
@@ -117,7 +118,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/custmgnt/svc/custagreemgnt/savecicuedcutnca/v1.00")
+	@RequestLine(value = "cit//savecicuedcutnca/v1.00")
 	SimpleloVo savecicuedcutnca(CicuemCuInfTotTcVo cicuemCuInfTotTcVo);
 	
 	/**
@@ -125,7 +126,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/custmgnt/svc/custagreemgnt/savecicuemcuopti/v1.00")
+	@RequestLine(value = "cit/savecicuemcuopti/v1.10")
 	SimpleloVo savecicuemcuopti(CicuemCuOptiCsTcVo cicuemCuOptiCsTcVo);
 	
 	/**
@@ -133,7 +134,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "/cip/cit/custmgnt/custmgnt/svc/custagreemgnt/savecicuemcuoptilist/v1.00/")
+	@RequestLine(value = "cit/savecicuemcuoptilist/v1.10")
 	SimpleloVo savecicuemcuoptilist(CicuemCuOptiTcResultVo cicuemCuOptiTcResultVo);
 	
 	/**
@@ -141,7 +142,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/custmgnt/svc/custinfrmgnt/createcicuelcuwt/v1.00")
+	@RequestLine(value = "cit/createcicuelcuwt/v1.00")
 	LeaverResultVo createcicuelcuwt(CicuedleaveVo cicuedleaveVo);
 	
 	/**
@@ -149,7 +150,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/custmgnt/svc/custinfrmgnt/getcustidinq/v1.00")
+	@RequestLine(value = "cit/getcustwebidinq/v1.00")
 	CicuedCuChIdVo getcustwebidinq(CicuedCuChIdVo cicuedCuChIdVo);
 
 	/**
@@ -157,7 +158,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/custmgnt/svc/custagreemgnt/getcicuemcuoptilist/v1.00")
+	@RequestLine(value = "cit/getcicuemcuoptilist/v1.00")
 	CicuemCuOptiTcResultVo getcicuemcuoptilist(CicuemCuInfTotTcVo cicuemCuInfTotTcVo);
 	
 	
@@ -166,7 +167,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/ptmgnt/svc/ptinq/getptinq/v1.00")
+	@RequestLine(value = "cit/getptinq/v1.00")
 	CicueaCuPtAccmTcVo getptinq(CicueaCuPtAccmTcVo cicueaCuPtAccmTcVo);
 	
 	/**
@@ -174,7 +175,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/ptmgnt/svc/ptinq/getpttrbrkdinq/v1.00")
+	@RequestLine(value = "cit/getpttrbrkdinq/v1.10")
 	PtTrBrkdInqOutCbcVo getpttrbrkdinq(PtTrBrkdInqInCbcVo ptTrBrkdInqInCbcVo);
 	
 	/**
@@ -182,17 +183,23 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/ptmgnt/svc/ptacmlcncl/handleptac/v1.00")
+	@RequestLine(value = "cit/handleptac/v1.10")
 	PtAcmlCnclOutCbcVo handleptac(CicuedTrBrkdTcVo cicuedTrBrkdTcVo);
 	
+	/**
+	 * 포인트 선물하기
+	 * @return
+	 * @throws ApiException
+	 */
+	@RequestLine(value = "cit/handlegift/v1.00")
+	PtGiftOutCbcVo handlegift(CicuedTrBrkdTcVo cicuedTrBrkdTcVo);
+
 	/**
 	 * 고객카드등록
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "cip/cit/custmgnt/ptmgnt/svc/ptinq/getpttrbrkdinq/v1.00")
-	PtGiftOutCbcVo handlegift(CicuedTrBrkdTcVo cicuedTrBrkdTcVo);
-	
+	@RequestLine(value = "cit/handlegift/v1.00")
 	CicuemCuInfCoOutVo createcicuedcucard(CicuedCuCardTcVo cicuedCuCardTcVo);
 
 	/**
@@ -200,7 +207,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "/cip/cit/custmgnt/custsal/svc/custsal/getcustgrd/v1.00")
+	@RequestLine(value = "cit/getcustgrd/v1.00")
 	CustGrdVo getcustgrd(CustGrdVo custGrdVo);
 
 	/**
@@ -208,7 +215,7 @@ public interface AmoreAPIService {
 	 * @return
 	 * @throws ApiException
 	 */
-	@RequestLine(value = "/cip/cit/custmgnt/ptmgnt/svc/ptinq/getprfrinq/v1.00")
+	@RequestLine(value = "cit/getprfrinq/v1.10")
 	PrfrInqOutCbcVo getprfrinq(PrfrInqInCbcVo prfrInqInCbcVo);
 	
 	/**
@@ -216,7 +223,7 @@ public interface AmoreAPIService {
 	 * @param cicuemCuInfCoInVo
 	 * @return
 	 */
-	@RequestLine(value = "/cip/cit/custmgnt/custmgnt/svc/custinfrcommgnt/getcicumentcuinfralllist/v1.00")
+	@RequestLine(value = "cit/getcicuemcuinfrlist/v1.00")
 	CicuemCuInfTcVoList getcicuemcuinfrlist(CicuemCuInfCoInVo cicuemCuInfCoInVo);
 	
 
@@ -225,7 +232,7 @@ public interface AmoreAPIService {
 	 * @param cicuemCuInfCoInVo
 	 * @return
 	 */
-	@RequestLine(value = "/cip/cit/custmgnt/custmgnt/svc/custselfcertify/certifycheck90/v1.00")
+	@RequestLine(value = "/cit/certifycheck90/v1.00")
 	CicuemCuInfCoOutVo certifycheck90(CicuemCuInfTotTcVo cicuemCuInfCoInVo);
 	
 	
@@ -234,7 +241,7 @@ public interface AmoreAPIService {
 	 * @param cicuemCuInfCoInVo
 	 * @return
 	 */
-	@RequestLine(value = "/cip/cit/custmgnt/custmgnt/svc/custinfrmgnt/athtchgcheck90/v1.00")
+	@RequestLine(value = "cit/athtchgcheck90/v1.00")
 	CicuemCuInfCoOutVo athtchgcheck90(CicuemCuInfTotTcVo cicuemCuInfCoInVo);
 	
 	/**

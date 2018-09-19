@@ -115,7 +115,7 @@ this["AP"]["handlebars"]["display"]["search-filter"] = Handlebars.template({"1":
 },"14":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
-  return ((stack1 = helpers["if"].call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.addAttrValImgSrc : depth0),{"name":"if","hash":{},"fn":container.program(15, data, 0, blockParams, depths),"inverse":container.program(17, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "");
+  return ((stack1 = helpers["if"].call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.addAttrImg : depth0),{"name":"if","hash":{},"fn":container.program(15, data, 0, blockParams, depths),"inverse":container.program(17, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "");
 },"15":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
@@ -126,7 +126,7 @@ this["AP"]["handlebars"]["display"]["search-filter"] = Handlebars.template({"1":
     + "\">\n												<label for=\""
     + alias2(alias1((depth0 != null ? depth0.addAttrValCode : depth0), depth0))
     + "\"><img src=\""
-    + alias2(alias1((depth0 != null ? depth0.addAttrValImgSrc : depth0), depth0))
+    + alias2(alias1((depth0 != null ? depth0.addAttrImg : depth0), depth0))
     + "\" alt=\""
     + alias2(alias1((depth0 != null ? depth0.addAttrValName : depth0), depth0))
     + "\">"

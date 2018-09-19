@@ -1,0 +1,125 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='brand'">
+
+<body>
+<div ap:fragment="layout-contents">
+	<div class="ap_contents brand_detail">
+		<div class="ap_com_cont brand overview">
+			<div class="brand_hall">
+				<div class="brand_menu">
+					<button type="button" class="prev"><span class="sr_only">prev</span></button>
+					<div class="menu">
+						<div class="inbox">
+							<ul></ul>
+						</div>
+					</div>
+					<button type="button" class="next"><span class="sr_only">next</span></button>
+				</div>
+
+				<div class="sale_swipe">
+					<div class="sale_slide" data-ix-options="view-length:9; move-length:1;loop:false;datum-point:-37px">
+						<div class="ix-list-viewport">
+							<ul class="ix-list-items">
+								<li class="ix-list-item">
+									<a href="#none">
+										<img alt="" src="/pc/ko/images/brand/brand_sp_tag.png">
+										<span>전체상품</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="ix-controller">
+							<div class="slide_direction">
+								<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
+								<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="ap_contents goods_list">
+					<div class="page_title_area prd_category">
+						<div class="breadcrumb">
+							<a href="#none">홈</a>
+						</div>
+					</div>
+
+					<div class="ap_com_cont">
+						<div class="aside_area filter product">
+							<div class="category_list">
+								<div class="loading" style="height: 300px;">
+									<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+								</div>
+							</div>
+							<fieldset class="form">
+								<legend class="sr_only">선택 옵션 선택</legend>
+								<button type="button" class="btn_lg_gradient init">선택 옵션 초기화</button>
+								<div class="filter_option">
+									<div class="loading" style="height: 400px;">
+										<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+									</div>
+								</div>
+							</fieldset>
+						</div>
+
+						<div class="cont_area">
+							<div class="category_area">
+								<div class="title_none">
+									<div class="search_sort">
+										<a href="#" class="on" data-value="Bestselling">판매순</a>
+										<a href="#" data-value="NewProd">신상품순</a>
+										<a href="#" data-value="MostProdReview">평점순</a>
+										<a href="#" data-value="HighestPrice">가격이 높은순</a>
+										<a href="#" data-value="LowestPrice">가격이 낮은순</a>
+										<div class="select_wrap xsm">
+											<select name="" id="" tabindex="-1">
+												<option value="25">25개씩 보기</option>
+												<option value="50">50개씩 보기</option>
+												<option value="75">75개씩 보기</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="list_product cell04">
+
+									<ul></ul>
+
+								</div>
+
+								<div class="loading" style="height: 400px;">
+									<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+								</div>
+
+								<div class="product_none" style="display: none">
+									더 좋은 상품을 준비중입니다.
+								</div>
+
+								<div class="pagination" style="display: none;"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script type="text/javascript" th:inline="javascript">
+		// TODO: 브랜드 리미티드 에디션, 신제품, 브랜드 상품
+
+		AP.DISPLAY_MENU_ID = 'CTG001';
+		AP.brandDetail.init({
+			displayMenuId: AP.DISPLAY_MENU_ID,
+			param: {
+				includeFilters: true
+				// ,brand: 'brand1'
+			}
+		});
+
+		$( '.slide' ).ixSlideMax();
+	</script>
+</th:block>
+
+</body>
+</html>

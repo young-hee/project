@@ -1,27 +1,27 @@
 <!-- 추가 사은품 -->
-<div class="cart_list">
+<div class="cart_list" th:if="${awardMapSpecialGift.get('totalCount') > 0 or awardMapEventGift.get('totalCount') > 0 or awardMapCouponGift.get('totalCount') > 0 or awardMapAwardGift.get('totalCount') > 0}">
 	<dl>
 		<dt class="on">
 			<strong class="tit">추가 사은품</strong>
 			<span class="ui_tooltip detail">
-									<button type="button" class="btn_tooltip">자세히</button>
-									<span class="arr"></span>
-									<span class="layer_tooltip">
-										<dl>
-											<dt>추가 사은품 안내</dt>
-											<dd>
-												사은품의 재고가 부족할 경우 사은품이 대체되어 발송될 수 있습니다. <br>
-												사은품은 이미지와 상이할 수 있습니다.<br>
-												사은품의 교환이나 추가 증정은 불가하며 본품 반품/환불시 사은품도 동봉해주셔야 합니다.
-											</dd>
-										</dl>
-										<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
-									</span>
-								</span>
+				<button type="button" class="btn_tooltip">자세히</button>
+				<span class="arr"></span>
+				<span class="layer_tooltip">
+					<dl>
+						<dt>추가 사은품 안내</dt>
+						<dd>
+							사은품의 재고가 부족할 경우 사은품이 대체되어 발송될 수 있습니다. <br>
+							사은품은 이미지와 상이할 수 있습니다.<br>
+							사은품의 교환이나 추가 증정은 불가하며 본품 반품/환불시 사은품도 동봉해주셔야 합니다.
+						</dd>
+					</dl>
+					<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
+				</span>
+			</span>
 		</dt>
 		<dd class="single">
 			<!-- 스페셜기프트 -->
-			<div class="tgArea freegift">
+			<div class="tgArea freegift" th:if="${awardMapSpecialGift.get('totalCount') > 0}">
 				<dl>
 					<dt class="on">
 						<strong class="tit">스페셜기프트</strong>
@@ -29,49 +29,17 @@
 					<dd>
 						<div class="cart_cont">
 							<p class="caution">뷰티포인트 사용시 스페셜기프트가 증정되지 않습니다.</p>
-							<div class="slide sprd_list" data-ix-options="view-length:5; auto-play:false;loop:false;datum-point:-60px">
+							<div class="slide sprd_list">
 								<div class="ix-list-viewport">
 									<ul class="ix-list-items">
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
+										<!-- 상품단위 온라인상품증정품 상품/사은품 목록 -->
+										<th:block th:if="${#lists.size( awardMapSpecialGift.get('ordHistProdAwardExListForProd') ) > 0} ">
+											<li class="ix-list-item" th:each="ordHistProdAwardEx : ${awardMapSpecialGift.get('ordHistProdAwardExListForProd')}">
+												<img th:src="${ordHistProdAwardEx.awardOrdHistProdEx.ordProdEx.prodImgUrl}">
+												<em class="tit" th:text="${ordHistProdAwardEx.awardOrdHistProdEx.ordProdEx.onlineProdNameBlang}">헤라</em>
+												<p class="ellipsis" th:text="${ordHistProdAwardEx.awardOrdHistProdEx.ordProdEx.prodNameBlang}">증정품 이름 여기길어지면 말줄임...</p>
+											</li>
+										</th:block>
 									</ul>
 								</div>
 								<div class="ix-controller">
@@ -97,58 +65,33 @@
 				</dl>
 			</div>
 			<!-- // 스페셜기프트 -->
-
 			<!-- 이벤트 사은품 -->
-			<div class="tgArea freegift line">
+			<div class="tgArea freegift line" th:if="${awardMapEventGift.get('totalCount') > 0}">
 				<dl>
 					<dt class="on">
 						<strong class="tit">이벤트 사은품</strong>
 					</dt>
 					<dd>
 						<div class="cart_cont">
-							<div class="slide sprd_list" data-ix-options="view-length:5; auto-play:false;loop:false;datum-point:-60px">
+							<div class="slide sprd_list">
 								<div class="ix-list-viewport">
 									<ul class="ix-list-items">
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
+										<!-- 상품단위 증정프로모션증정품 목록 -->
+										<th:block th:if="${#lists.size( awardMapEventGift.get('ordHistProdPromoAwardExList') ) > 0} ">
+											<li class="ix-list-item" th:each="ordHistProdPromoAwardEx : ${awardMapEventGift.get('ordHistProdPromoAwardExList')}">
+												<img th:src="${ordHistProdPromoAwardEx.awardOrdHistProdEx.ordProdEx.prodImgUrl}">
+												<em class="tit" th:text="${ordHistProdPromoAwardEx.awardOrdHistProdEx.ordProdEx.onlineProdNameBlang}">헤라</em>
+												<p class="ellipsis" th:text="${ordHistProdPromoAwardEx.awardOrdHistProdEx.ordProdEx.prodNameBlang}">증정품 이름 여기길어지면 말줄임...</p>
+											</li>
+										</th:block>
+										<!-- 주문단위 증정 프로모션 상품/사은품 목록 -->
+										<th:block th:if="${#lists.size( awardMapEventGift.get('ordUnitAwardExProdList') ) > 0} ">
+											<li class="ix-list-item" th:each="ordUnitAwardExProd : ${awardMapEventGift.get('ordUnitAwardExProdList')}">
+												<img th:src="${ordUnitAwardExProd.ordProdEx.prodImgUrl}">
+												<em class="tit" th:text="${ordUnitAwardExProd.ordProdEx.onlineProdNameBlang}">헤라</em>
+												<p class="ellipsis" th:text="${ordUnitAwardExProd.ordProdEx.prodNameBlang}">증정품 이름 여기길어지면 말줄임...</p>
+											</li>
+										</th:block>
 									</ul>
 								</div>
 								<div class="ix-controller">
@@ -173,60 +116,26 @@
 				</dl>
 			</div>
 			<!-- // 이벤트 사은품 -->
-
-			<!-- 구매금액대 사은품 삭제_2018-08-23  -->
-
 			<!-- 쿠폰 사은품 -->
-			<div class="tgArea freegift line">
+			<div class="tgArea freegift line" th:if="${awardMapCouponGift.get('totalCount') > 0}">
 				<dl>
 					<dt class="on">
 						<strong class="tit">쿠폰 사은품</strong>
 					</dt>
 					<dd>
 						<div class="cart_cont">
-							<div class="slide sprd_list" data-ix-options="view-length:5; auto-play:false;loop:false;datum-point:-60px">
+							<div class="slide sprd_list">
 								<div class="ix-list-viewport">
 									<ul class="ix-list-items">
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
-										<li class="ix-list-item">
-											<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
-											<em class="tit">헤라</em>
-											<p class="ellipsis">증정품 이름 여기길어지면 말줄임...</p>
-										</li>
+										<!-- 쿠폰 상품/사은품 -->
+										<th:block th:if="${#lists.size( awardMapCouponGift.get('couponAwardExListForProd') ) > 0} ">
+											<li class="ix-list-item" th:each="couponAwardEx : ${awardMapCouponGift.get('couponAwardExListForProd')}">
+												<!-- TODO 쿠폰 소속의 상품 이미지가 없다??? 20180906 Zenith가 추가해주기로 함 -->
+												<img ap:src="@{/images/cart/img_thumb_109.jpg}" alt="">
+												<em class="tit" th:text="${couponAwardEx.onlineProdName}">헤라</em>
+												<p class="ellipsis" th:text="${couponAwardEx.prodName}">증정품 이름 여기길어지면 말줄임...</p>
+											</li>
+										</th:block>
 									</ul>
 								</div>
 								<div class="ix-controller">
@@ -251,9 +160,8 @@
 				</dl>
 			</div>
 			<!-- // 쿠폰 사은품 -->
-
 			<!-- 증정 기프트카드 -->
-			<div class="tgArea freegift line">
+			<div class="tgArea freegift line" th:if="${awardMapAwardGift.get('totalCount') > 0}">
 				<dl>
 					<dt class="on">
 						<strong class="tit">증정 기프트카드</strong>
@@ -262,17 +170,26 @@
 						<div class="cart_cont">
 							<p class="caution">증정 기프트카드는 다음 주문에서 사용할 수 있습니다</p>
 							<div class="giftcard">
-								<div class="txt">
-									<p class="ellipsis">기프트카드증정 이벤트명 or 상품명, 기프트카드증정 이벤트명 or 상품명, 넘어가면 말줄임...</p>
-									<strong class="price">10,000원</strong>
-								</div>
-								<div class="txt">
-									<p class="ellipsis">기프트카드증정 이벤트명 or 상품명, 기프트카드증정 이벤트명 or 상품명, 넘어가면 말줄임...</p>
-									<strong class="price">10,000원</strong>
-								</div>
+								<!-- 상품단위 온라인상품증정품 기프트카드 목록 -->
+								<th:block th:if="${#lists.size( awardMapAwardGift.get('ordUnitAwardExGiftcardList') ) > 0} ">
+									<th:block th:each="ordUnitAwardExGiftcard : ${awardMapAwardGift.get('ordUnitAwardExGiftcardList')}">
+										<div class="txt">
+											<p class="ellipsis" th:text="${ordUnitAwardExGiftcard.giftcardName}">기프트카드증정 이벤트명 or 상품명, 기프트카드증정 이벤트명 or 상품명, 넘어가면 말줄임...</p>
+											<strong class="price" th:text="${#IntegUtil.toCommaNumber(ordUnitAwardExGiftcard.giftcardBaseAmt)} + '원'">10,000원</strong>
+										</div>
+									</th:block>
+								</th:block>
+								<!-- 문단위 증정 프로모션 기프트카드 목록 -->
+								<th:block th:if="${#lists.size( awardMapAwardGift.get('ordHistProdAwardExListForGiftcard') ) > 0} ">
+									<th:block th:each="ordHistProdAwardEx : ${awardMapAwardGift.get('ordHistProdAwardExListForGiftcard')}">
+										<div class="txt">
+											<p class="ellipsis" th:text="${ordHistProdAwardEx.awardGiftcardEx.giftcardName}">기프트카드증정 이벤트명 or 상품명, 기프트카드증정 이벤트명 or 상품명, 넘어가면 말줄임...</p>
+											<strong class="price" th:text="${#IntegUtil.toCommaNumber(ordHistProdAwardEx.awardGiftcardEx.giftcardBaseAmt)} + '원'">10,000원</strong>
+										</div>
+									</th:block>
+								</th:block>
 							</div>
 						</div>
-
 						<div class="guide_list">
 							<div class="expl">
 								<strong class="tit">증정 기프트카드 안내</strong>

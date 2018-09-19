@@ -55,12 +55,11 @@ public class EventViewController extends AbstractController {
         	
         	pageName = "M02_event_p"; 
         }
-           
+
         //이벤트 목록
-        PlanDisplayEventListResult planDisplayEventListResult 
+        PlanDisplayEventListResult planDisplayEventListResult
         	= plandisplayApi.getPlanDisplayEventList(
-        			  "" //keyword: 검색, 
-        			, "" //status: 기획전시상태코드 (PlanDisplayStatus) , Progress - 진행 , End - 종료, 
+        			"" //status: 기획전시상태코드 (PlanDisplayStatus) , Progress - 진행 , End - 종료,
         			, "" //types: 기획전시 유형코드 리스트(PlanDisplayType) , Link - URL링크 , General - 일반구성기획전시 , SameTimePur - 동시구매기획전시, 
         			, "" //eventIncludeYn: 행사포함여부 , Y - 행사 포함 , N - 행사 미포함 , 미입력시 전체 (행사포함여부 조회조건 없음)
         			, "" //order: 정렬방식 (PlanDisplaySortMethod) , SortOrder , StartDt , Deadline
@@ -213,7 +212,7 @@ public class EventViewController extends AbstractController {
 	}
 	
 	@RequestMapping("/eventWinner_detail")
-	@PageTitle(title = "당첨자 발표")
+	@PageTitle(title = "당첨자 발표 상세")
 	public String eventWinnerDetail(Model model, String displayMenuId, String foNoticeSn) {
 		String pageName = "";
 		//Mobile
@@ -254,8 +253,11 @@ public class EventViewController extends AbstractController {
 		
         PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.EH_DISPLAY_MENU_SET_ID, displayMenuId);
         
+        RegularEvent regularEvent = regulareventApi.regularEventSummary(APConstant.EVENT_ROULETTE);
+       
         model.addAttribute("displayMenuId", displayMenuId);
-        
+        model.addAttribute("rouletteInfo", regularEvent );
+       
         return "display/" + pageInfo.getMenuPageFileId();
 
     }

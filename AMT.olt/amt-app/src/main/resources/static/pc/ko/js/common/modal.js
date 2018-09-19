@@ -46,7 +46,6 @@
          */
         info: function ( options ) {
             if ( !_.isObject(options) ) options = {};
-            console.log("btnType1 : " + options.btnType);
             options.templateKey = 'common.modal-info-contents';
             options.templateModel = {
                 title: options.title || '',

@@ -29,9 +29,22 @@
 		{{#xif this.oProd.ordHistProdStatusCode '===' 'ProdCancel'}}
 			<p class="font_lg mgb10"><em>취소 완료</em></p>
 			<span class="strong"><b>{{this.oProd.cancelQtySum}}</b>개</span> /
+			<span class="strong"><b>{{currencyFormat this.oProd.prodCancelAmtSum}}</b></span>
 		{{else}}
-			<span class="strong"><b>{{condition (eq this.step 'two') this.oProd.claimQtySum (calc this.oProd.ordQtySum '-' this.oProd.cancelQtySum)}}</b>개</span> /
+			{{#xif this.status '===' 'detail'}}
+				{{#xif (eq this.type 'return') '||' (eq this.type 'exchange')}}
+					<span class="strong"><b>{{this.oProd.claimQtySum}}</b>개</span> /
+				{{else}}
+					<span class="strong"><b>{{condition (eq this.step 'two') this.oProd.claimQtySum (calc this.oProd.ordQtySum '-' this.oProd.cancelQtySum)}}</b>개</span> /
+				{{/xif}}
+			{{else}}
+				{{#xif this.type '===' 'cancel'}}
+					<span class="strong"><b>{{condition (eq this.step 'two') this.oProd.claimQtySum (calc this.oProd.ordQtySum '-' this.oProd.cancelQtySum)}}</b>개</span> /
+				{{else}}
+					<span class="strong"><b>{{condition (eq this.step 'two') this.oProd.claimQtySum (condition (lt this.oProd.rtnRequestPossibleQtySum 0) 0 this.oProd.rtnRequestPossibleQtySum)}}</b>개</span> /
+				{{/xif}}
+			{{/xif}}
+			<span class="strong"><b>{{currencyFormat this.oProd.finalOnlineSaleAmtPcurSum}}</b></span>
 		{{/xif}}
-		<span class="strong"><b>{{currencyFormat this.oProd.finalOnlineSaleAmtPcurSum}}</b></span>
 	</div>
 </div>

@@ -1,5 +1,5 @@
 {{!--
-	베스트
+	베스트home
 --}}
 {{#if this.onlineProdList.totalCount }}
 	<div class="ix-list-viewport">
@@ -16,7 +16,12 @@
 							<span class="{{#xif this.rankChange '>' 0}}up{{/xif}} {{#xif this.rankChange '<' 0}}down{{/xif}}">{{ this.rankChange }}</span></span>
 						{{/xif}}
 						<span>
-							<span class="item_title">{{ this.products.0.prodName }}</span>
+							<span class="item_title">{{ this.onlineProdName }}</span>
+							<span class="color_name">
+								{{#xif this.onlineProdName '!=' this.products.0.prodName}}
+									{{ this.products.0.prodName }}
+								{{/xif}}
+							</span>
 							<span class="price"><b>{{ numberFormat this.products.0.prodPriceSummary.onlineSalePrice }}</b> 원</span>
 						</span>
 						<span class="img">

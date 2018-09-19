@@ -15,6 +15,8 @@
 			this._setFixed();
             this._setTitleArea();
             
+            this._searchLayer = new AP.searchLayer();
+            
             this._$target.find( '.btn_chat' ).on( 'click', function () {
 				window.open("http://www.amorepacificmall.com/mobile/cstm/mobile_cstm_chatbot_pop.do?i_sSeqCstmid=&i_sLoginFlag=N","","");
 			}.bind( this ));
@@ -41,8 +43,21 @@
 			this._$target.find( '.btn_previous' ).on( 'click', function () {
 				history.back();
 			}.bind( this ));
+			
+			this._$target.find( '.header_common .search_form .ico_search').on( 'click', function(){
+				this._showSearchLayer();
+			}.bind( this ));
+			this._$target.find( '.header_common .search_form .header-main-query').on( 'click', function(){
+				this._showSearchLayer();
+			}.bind( this ));
 		},
-
+		_showSearchLayer: function () {
+			
+			this._searchLayer.open();
+		},
+		_clear: function (){
+			
+		},
 		_setFixed: function () {
 			$( window ).on( 'scroll', function () {
 				var st = $( window ).scrollTop();

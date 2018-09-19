@@ -42,19 +42,17 @@ public class CartViewController extends CartBaseController{
 	@GetMapping("/cartList")
 	public String cartList(Model model) {
 
-		/* 카트세션 세팅*/
 		CartSession cartSession = getCartSession();
 
-		/* 카트정보 세팅*/
 		if(isLoggedIn()){
 			// 회원
 			CartSnResult cartSnResult = cartApi.getMemberCartSn(getMemberSn());
 			cartEx = getCartInfo(cartSnResult.getCartSn());
 
-			/* 테이크아웃 매장정보 */
+			// 테이크아웃 매장정보
 			makeSelectStore(cartEx, model, getMemberSn());
 
-			/* 뷰티포인트 정보 */
+			// 뷰티포인트 정보
 			CartMemberMembershipEx bpCartMemberMembershipEx = null;
 			if(cartEx.getCartMemberEx().getMemberMembershipExList() != null){
 				for(CartMemberMembershipEx cartMemberMembershipEx: cartEx.getCartMemberEx().getMemberMembershipExList()){
@@ -80,7 +78,6 @@ public class CartViewController extends CartBaseController{
 		model.addAttribute("memberSn", getMemberSn());
 		model.addAttribute("cartEx", cartEx);
 
-		/* 재 계산을 위해 세션정보 세팅 */
 		cartSession.setCartSn(cartEx.getCartSn());
 		cartSession.setCartEx(cartEx);
 		setCartSession(cartSession);
@@ -151,7 +148,7 @@ public class CartViewController extends CartBaseController{
 			try{
 				StoresInvtSearchInfo var1 = new StoresInvtSearchInfo();
 				var1.setMemberSn(memberSn);
-				var1.setRegularStoreSearchYn("Y"); // 단골매장검색여부
+				var1.setRegularStoreSearchYn("Y");
 				var1.setOffset(0);
 				var1.setLimit(10);
 				var1.setSortBy("StoreName");
@@ -164,11 +161,10 @@ public class CartViewController extends CartBaseController{
 
 				StoresInvtSearchInfo var1 = new StoresInvtSearchInfo();
 				var1.setMemberSn(memberSn);
-				var1.setRegularStoreSearchYn("Y"); // 단골매장검색여부
+				var1.setRegularStoreSearchYn("Y");
 				var1.setOffset(0);
 				var1.setLimit(10);
 				var1.setSortBy("StoreName");
-				//var1.setProdInvtExList(prodInvtExList); // 재고 제외하고 목록보여주기
 				StoreResult storeResult = storeApi.getStoresInvt(var1);
 				model.addAttribute("storeRegularList", storeResult.getStoreExList());				// 단골매장목록
 			}
@@ -191,7 +187,6 @@ public class CartViewController extends CartBaseController{
 					StoresInvtSearchInfo var2 = new StoresInvtSearchInfo();
 					var2.setMemberSn(memberSn);
 					var2.setStoreSn(storePickupCartProdEx.getStoreSn());
-					//var2.setProdInvtExList(prodInvtExList); // 재고 제외하고 목록보여주기
 					StoreResult storeResult2 = storeApi.getStoresInvt(var2);
 					if(storeResult2 != null && !CollectionUtils.isEmpty(storeResult2.getStoreExList())){
 						model.addAttribute("storeSelect", storeResult2.getStoreExList().get(0)); // 선택매장
@@ -199,7 +194,6 @@ public class CartViewController extends CartBaseController{
 				}
 			}
 		}
-		//model.addAttribute("selectStoreSn", storePickupCartProdEx.getStoreSn());			// 매장번호
 		model.addAttribute("addressDivInfoList", storeApi.getStoreAddressDivs(null));	// 지역시구군 목록
 	}
 

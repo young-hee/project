@@ -10,7 +10,7 @@
 						<img src="{{ this.onlineProdImages.[0].imgUrl }}" alt="">
 					{{/if}}
 					<div class="benefit">
-						{{#xif this.onlineProdGift.giftProds '>' 0}}
+						{{#xif this.onlineProdGift.giftProds.length '>' 0}}
 							<span class="special">스페셜기프트</span>
 						{{/xif}}
 						{{#xif this.onlineProdGift.giftcardTargetYn '==' 'Y'}}
@@ -30,14 +30,14 @@
 						{{#xif this.onlineProdPriceSummary.maxFinalDiscountRate '>' 0}}
 							<span class="txt_sale">{{ this.onlineProdPriceSummary.maxFinalDiscountRate }}%</span>
 						{{/xif}}
-						<span class="txt_price"><em>{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountOnlinePrice }}</em>원{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}}~{{/xif}}</span>
+						<span class="txt_price"><em>{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountOnlinePrice }}</em>원</span>
 						{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
 							<del class="txt_del">{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountBeforeSalePrice }}원</del>
 						{{/xif}}
 					</div>
 					<div class="user_atc">
 						<span class="mark_star_sm star{{ this.reviewScopeAvg }}"><span class="sr_only">구매 평점 별 5개 중 {{ this.reviewScopeAvg }}개</span></span>
-						<span class="txt_review">리뷰 {{ numberFormat this.reviewCount }}</span>
+						{{#xif this.reviewCount '>' 0 }}<span class="txt_review">리뷰 {{ numberFormat this.reviewCount }}</span>{{/xif}}
 					</div>
 				</div>
 			</a>

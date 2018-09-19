@@ -330,7 +330,7 @@
 							<dt>
 								<a href th:href="@{/my/page/myLevelList}">나의 등급은 <b><em th:text="${session.LOGIN_USER.member.memberLevelName}">FRIENDS</em></b> 입니다. <i class="ico_arr_m_r"></i></a>
 							</dt>
-							<dd class="coupons">
+							<dd class="coupons"><!-- //TODO: 쿠폰목록  -->
 								<th:block th:if="${not #lists.isEmpty(memberKeepingCoupons)}">
 									 <th:block th:each="availCoupons : ${memberKeepingCoupons.availCoupons}">
 									 	<th:block th:each="availCoupon, index : ${availCoupons.availCoupon}"> 
@@ -346,12 +346,12 @@
 					</dd>
 				</dl>
 				<div class="div"><img ap:src="@{/images/common/div_membership_layer.png}" alt=""></div>
-				<div class="layer_bottom"><!-- API 미개발 -->
+				<div class="layer_bottom"><!-- //TODO: API 미개발 -->
 					<p class="text">다음등급(<span class="color_block">PINK LOVE</span>) 까지 <b><em class="num">3,000</em></b>원 +</p>
 				</div>
 			</div>
 		</li>
-		<li><a href="/my/page/info/myEtude" class="my"><span>마이에뛰드</span></a></li>
+		<li><a href="" th:href="@{/my/page/info/myEtude}" class="my"><span>마이에뛰드</span></a></li>
 		<li><a href="#none" th:href="@{/display/notification(displayMenuId=notification)}" class="alarm"><span>알림</span><span class="noti" style="display:none;">있음</span></a></li>
 	</ul>
 	<button type="button" class="btn_top hide"><span class="sr_only">상단으로 이동</span></button>

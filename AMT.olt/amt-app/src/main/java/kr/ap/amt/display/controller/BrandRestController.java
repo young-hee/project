@@ -32,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.ap.amt.display.vo.RequestBrand;
 import kr.ap.comm.support.common.AbstractController;
+import kr.ap.comm.support.constants.APConstant;
 import net.g1project.ecp.api.model.BooleanResult;
 import net.g1project.ecp.api.model.EmbeddableName;
 import net.g1project.ecp.api.model.EmbeddableTel;
@@ -57,7 +58,11 @@ import net.g1project.ecp.api.model.offlinestore.store.StoreEventRequesterPost;
 import net.g1project.ecp.api.model.offlinestore.store.StoreEventRequesterResult;
 import net.g1project.ecp.api.model.offlinestore.store.StoreEventRequestersResult;
 import net.g1project.ecp.api.model.offlinestore.store.StoreEventScheduleInfo;
-import net.g1project.ecp.api.model.offlinestore.store.StoreResult; 
+import net.g1project.ecp.api.model.offlinestore.store.StoreResult;
+import net.g1project.ecp.api.model.sales.display.BrandCard;
+import net.g1project.ecp.api.model.sales.display.BrandContents;
+import net.g1project.ecp.api.model.sales.display.BrandMenu;
+import net.g1project.ecp.api.model.sales.display.FaveBrand; 
 
 /**
  * @author Ria@g1project.net
@@ -587,5 +592,85 @@ public class BrandRestController extends AbstractController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
 		}
     }
+	
+	/*
+	 * 브랜드관 바로가기 getBrandMenu
+	 * @param req
+	 * @return
+	 * */
+	@RequestMapping("/getBrandMenu")
+    public ResponseEntity<?> getBrandMenu(HttpServletRequest req) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+			List<BrandMenu> brandMenus =displayApi.getBrandMenu();
+			result.put("brandMenus", brandMenus);
+		} catch (Exception e) {
+			result.put("errorData", e);
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+		
+		return ResponseEntity.ok(result);
+	}
+	
+	/*
+	 * 쇼핑마크 브랜드 정보 getBrandFaveList
+	 * @param req
+	 * @return
+	 * */
+	@RequestMapping("/getBrandFaveList")
+    public ResponseEntity<?> getBrandFaveList(HttpServletRequest req) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+			List<FaveBrand> faveBrands = displayApi.getBrandFaveList();
+			result.put("faveBrands", faveBrands);
+		} catch (Exception e) {
+			result.put("errorData", e);
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+		
+		return ResponseEntity.ok(result);
+	}
+	
+	/*
+	 * 브랜드 카드 목록 getBrandCards
+	 * @param req
+	 * @return
+	 * */
+	@RequestMapping("/getBrandCards")
+    public ResponseEntity<?> getBrandCards(HttpServletRequest req, String sort, int faveBrandCnt, int offset, int limit) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+			List<BrandCard> brandCards = displayApi.getBrandCards(sort, faveBrandCnt, offset, limit);
+			result.put("brandCards", brandCards);
+		} catch (Exception e) {
+			result.put("errorData", e);
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+		
+		return ResponseEntity.ok(result);
+	}
+	
+	/*
+	 * 브랜드콘텐츠 상세 getBrandContents
+	 * @param req
+	 * @return
+	 * */
+	@RequestMapping("/getBrandContents")
+    public ResponseEntity<?> getBrandContents(HttpServletRequest req,  String displayMenuId) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+			BrandContents brandContents = displayApi.getBrandContents(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
+			result.put("brandContents", brandContents);
+		} catch (Exception e) {
+			result.put("errorData", e);
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+		}
+		
+		return ResponseEntity.ok(result);
+	}
 	
 }

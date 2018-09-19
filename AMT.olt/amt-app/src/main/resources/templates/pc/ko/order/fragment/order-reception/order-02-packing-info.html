@@ -1,5 +1,5 @@
 <!-- 포장 서비스  -->
-<div class="tgArea cart_list" th:if="${apMember}">
+<div id="selectPackingInfo" class="tgArea cart_list" th:if="${apMember}">
 	<dl>
 		<dt class="on">
 			<strong class="tit">포장 서비스</strong>
@@ -7,19 +7,25 @@
 		</dt>
 		<dd>
 			<div class="cart_cont">
-				<div class="slide sprd_list" data-ix-options="view-length:5; auto-play:false;loop:false;datum-point:-60px">
+				<div class="slide sprd_list">
 					<div class="ix-list-viewport">
 						<ul class="ix-list-items">
-							<th:block th:each="ordHistProdEx: ${ordEx.ordHistEx.ordHistProdExList}">
-								<th:block th:each="giftPackingEx: ${ordHistProdEx.ordProdEx.possibleGiftPackingExList}">
-									<li class="ix-list-item">
-										<span class="check_wrap chk_type2"><input type="checkbox" name="giftPackingCheck" id="check1_1"><label for="check1_1" class="test"><span class="sr_only">상품선택</span></label></span>
-										<th:block th:each="giftImgUrl, iterStat : ${giftPackingEx.giftPackingImgUrlList}">
-											<img th:src="${giftImgUrl}" th:if="${iterStat.first}">
-										</th:block>
-										<em class="tit" th:text="${ordHistProdEx.ordProdEx.onlineProdNameBlang}">헤라</em>
-										<p class="ellipsis" th:text="${ordHistProdEx.ordProdEx.prodNameBlang}"></p>
-									</li>
+							<th:block th:each="ordOtfEx: ${ordOtfExList}">
+								<th:block th:each="ordHistProdEx: ${ordOtfEx.ordHistProdExList}">
+									<th:block th:each="giftPackingEx, iterStat: ${ordHistProdEx.ordProdEx.possibleGiftPackingExList}">
+										<li class="ix-list-item">
+											<span class="check_wrap chk_type2">
+												<input type="checkbox" name="giftPackingCheck" th:id="|${'product_item' + iterStat.index}|"
+													   th:onclick="|selectPackingClick('${ordOtfEx.coSn}' , '${ordHistProdEx.ordHistProdSn}', '${giftPackingEx.giftPackingSn}', 1, this.checked)|">
+												<!--<label th:for="|${'product_item' + iterStat.index}|" class="test"><span class="sr_only">상품선택</span></label>-->
+											</span>
+											<th:block th:each="giftImgUrl, iterStat : ${giftPackingEx.giftPackingImgUrlList}">
+												<img th:src="${giftImgUrl}" th:if="${iterStat.first}">
+											</th:block>
+											<em class="tit" th:text="${ordHistProdEx.ordProdEx.onlineProdNameBlang}">헤라</em>
+											<p class="ellipsis" th:text="${ordHistProdEx.ordProdEx.prodNameBlang}"></p>
+										</li>
+									</th:block>
 								</th:block>
 							</th:block>
 						</ul>
@@ -37,7 +43,7 @@
 					<strong class="tit">포장서비스 안내</strong>
 					<ul>
 						<li>고객님의 구매등급에 따라 주문건당 무료포장 서비스를 이용하실 수 있습니다. </li>
-						<li> <span th:text="${apMember.name.name1}"></span>님은 [#고객등급#] 고객으로, [#포장가능수량#]개의 상품을 선택하실 수 있습니다. </li>
+						<li> <span th:text="${apMember.name.name1}"></span>님은 <th:block th:text="${ordEx.memberLevelName}"></th:block> 고객으로, <span name="giftPackingApplyCnt"></span>개의 상품을 선택하실 수 있습니다. </li>
 						<li>포장이 어려운 상품은 선택 목록에서 자동 제외됩니다. </li>
 						<li>포장 서비스 이용 주문이 많을 경우, 배송이 지연될 수 있습니다. </li>
 					</ul>
@@ -47,18 +53,31 @@
 	</dl>
 </div>
 <!-- // 포장 서비스 -->
-<script>
-	var memberLevelName = "";
-	var memberLevelRankingSn = 1;
+<script th:inline="javascript">
 	$(function(){
+		var memberLevelOrder = /*[[${ordEx.memberLevelOrder}]]*/ '0';
+
+		//선택할 수 있는 갯수가 없을 경우 전체 레이어를 숨긴다.
+		if( memberLevelOrder == 0 ) {
+			$("#selectPackingInfo").hide();
+		}
+
+		if(memberLevelOrder == 1 || memberLevelOrder == 2){
+			$("[name=giftPackingApplyCnt]").html("1")
+		}else if(memberLevelOrder == 3 || memberLevelOrder == 4){
+			$("[name=giftPackingApplyCnt]").html("2")
+		}else{
+			$("[name=giftPackingApplyCnt]").html("0")
+		}
+
 		$("input[name=giftPackingCheck]").on("click", function(){
 			var checkCnt = $("input[name=giftPackingCheck]:checked").length;
-			if(memberLevelRankingSn == 1 || memberLevelRankingSn == 2){
+			if(memberLevelOrder == 1 || memberLevelOrder == 2){
 				if(checkCnt > 1){
 					$(this).prop('checked', false);
 					AP.modal.alert("총 1개 선택이 가능합니다.");
 				}
-			}else if(memberLevelRankingSn == 3 || memberLevelRankingSn == 4){
+			}else if(memberLevelOrder == 3 || memberLevelOrder == 4){
 				if(checkCnt > 2){
 					$(this).prop('checked', false);
 					AP.modal.alert("총 2개 선택이 가능합니다.");
@@ -68,5 +87,37 @@
 				AP.modal.alert("선택할 수 없는 등급입니다.");
 			}
 		})
-	})
+	});
+
+	//선택된 포장상품 이벤트
+	function selectPackingClick(coSn, ordHistProdSn, giftPackingSn, giftPackingQty, checked) {
+
+		var ordSn = /*[[${ordEx.ordSn}]]*/ '0';
+		var newPackingObj = {};
+		newPackingObj.ordHistProdSn = ordHistProdSn;
+		newPackingObj.giftPackingSn = giftPackingSn;
+		newPackingObj.giftPackingQty = giftPackingQty;
+
+		//기존 리스트에 있는지를 검사한다.
+		var isAdded = false;
+		var addedIndex = -1;
+		var checkedGiftPackingList = ordReceptChangeDTO.prodGiftPackingSelectList;
+
+		for(var i=0; i<checkedGiftPackingList.length; i++) {
+			var giftPacking = checkedGiftPackingList[i];
+			if(giftPacking.giftPackingSn == newPackingObj.giftPackingSn) {
+				isAdded = true;
+				addedIndex = i;
+			}
+		}
+
+		if(!isAdded && checked) {
+			//기존 리스트에 없으면 추가하기
+			ordReceptChangeDTO.prodGiftPackingSelectList.push( newPackingObj );
+		} else if(isAdded && !checked) {
+			//기존 리스트에서 삭제한다.
+			ordReceptChangeDTO.prodGiftPackingSelectList.splice(addedIndex, 1);
+		}
+
+	};
 </script>

@@ -12,13 +12,13 @@
 				<dl>
 					<dt><label for="name">이름</label></dt>
 					<dd>
-						<div class="input_wrap w100p"><input type="text" name="recipientName.name1" value="{{this.info.recipientName.name1}}" user-name="user-name"/></div>
+						<div class="input_wrap w100p"><input type="text" name="recipientName.name1" value="{{this.info.recipientName.name1}}" user-name="user-name" required="required" data-msg-required="이름을 입력해 주세요."/></div>
 					</dd>
 				</dl>
 				<dl>
 					<dt><label for="addr_phone">휴대전화</label></dt>
 					<dd>
-						<div class="input_wrap w100p"><input type="text" name="recipientPhoneNo1.phoneNo"  value="{{this.info.recipientPhoneNo1.phoneNo}}"/></div>
+						<div class="input_wrap w100p"><input type="text" name="recipientPhoneNo1.phoneNo"  value="{{removeSC this.info.recipientPhoneNo1.phoneNo}}" digits="digits" mobile-number="mobile-number" required="required" data-msg-required="휴대폰번호를 입력해 주세요."/></div>
 					</dd>
 				</dl>
 				{{#if (eq this.code 'ShipAddressInput')}}
@@ -36,7 +36,7 @@
 								<span class="gap">&nbsp;</span>
 								<span class="input_wrap"><input type="text" class="address_first" name="recipientAddress.address1" title="기본주소 입력" placeholder="기본주소" value="{{this.info.recipientAddress.address1}}" readonly></span>
 							</div>
-							<div class="input_wrap w100p"><input type="text" class="address_last" name="recipientAddress.address2" title="상세주소 입력" placeholder="상세주소" value="{{this.info.recipientAddress.address2}}"/></div>
+							<div class="input_wrap w100p"><input type="text" class="address_last" name="recipientAddress.address2" title="상세주소 입력" placeholder="상세주소" value="{{this.info.recipientAddress.address2}}" required="required" data-msg-required="상세주소를 입력해 주세요."/></div>
 							<p class="text_notice">찾으시는 주소지 또는 건물명을 입력해 주세요.<br>(예 : 강남대로, 한강로2가, 한강대로 100)</p>
 						</dd>
 					</dl>

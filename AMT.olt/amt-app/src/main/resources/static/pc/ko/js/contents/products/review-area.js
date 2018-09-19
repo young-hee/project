@@ -44,7 +44,7 @@
 				this._list.load();
 			}.bind(this));
 			
-			//sort option Click event
+			//sort option Click event - 추천순 최신순
 			this._$target.find('.review_sort .filter').on('click', function(e){
 				var $this = $(e.currentTarget);
 				if( $this.hasClass('on') )return false;
@@ -57,7 +57,26 @@
 					//onlineProdSn : this._defaultModel.onlineProdSn,
 					offset : 0,
 					limit : 10,
+					scope : $this.parents('.review_sort').find('.statBtn.on').data('stat'),
 					prodReviewSort : $this.data('sort')
+				});
+			}.bind(this));
+			
+			//stat option Click event - 별점
+			this._$target.find('.statBtn').on('click', function(e){
+				var $this = $(e.currentTarget);
+				if( $this.hasClass('on') )return false;
+				$this.siblings('a').removeClass('on');
+				$this.addClass('on');
+				this._$target.find( '.review_cont' ).empty();
+				this._list.reset({
+					//prodReviewUnit : 'OnlineProd',
+					//prodReviewType : 'Pur',
+					//onlineProdSn : this._defaultModel.onlineProdSn,
+					offset : 0,
+					limit : 10,
+					scope : $this.data('stat'),
+					prodReviewSort : $this.parents('.review_sort').find('.filter.on').data('sort')
 				});
 			}.bind(this));
 			

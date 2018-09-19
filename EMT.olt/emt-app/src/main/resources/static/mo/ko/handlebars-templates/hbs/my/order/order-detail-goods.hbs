@@ -7,51 +7,66 @@
 	<button type="button"><span class="sr_only">더보기</span></button>
 </dt>
 
-{{#each list}}
-	<dd>
-		<div class="cont">
-
-			{{#xif ordHistProdTypeCode '===' 'Ord'}}
-				<div class="order_prd_panel">
-					{{#xif singleProdYn '===' 'N'}}
-						{{!--/* 온라인 상품 */--}}
-						{{{prodPartial 'my.order.detail.product' 'prod' this 'claimYn' ../claimYn 'step' ../step 'state' ../state}}}
-					{{/xif}}
-
-					{{{prodPartial 'my.order.detail.product-option' 'prodList' ordHistProdList 'oCode' onlineProdCode 'claimYn' ../claimYn 'step' ../step 'singleProdYn' singleProdYn 'status' ../status 'type' ../type 'reason' ../reason}}}
-				</div>
-			{{/xif}}
-
-			{{#xif ordHistProdTypeCode '===' 'BulkDc'}}
-				<div class="order_prd_panel">
-
-					{{{prodPartial 'my.order.detail.product' 'prod' this 'claimYn' ../claimYn 'step' ../step 'state' ../state}}}
-
-					{{#if (and (and (eq ../status 'request')(eq ../step 1))(ne ../type 'cancel'))}}
-
-						{{!--/* 클레임 선택 */--}}
-						{{{prodPartial 'my.order.detail.claim-reason-select' 'ordHistProdNo' bulkDcOnlineProdCode 'reason' ../reason}}}
-
-					{{/if}}
-
-					{{#if (and (or (eq ../claimYn 'Y')(eq ../step 2))(ne ../type 'cancel'))}}
-						<!--/* 클레임 사유 */-->
-						{{{prodPartial 'my.order.detail.claim-reason' 'type' ../type 'receivedClaimReasonName' claimReasonName 'foReceivedClaimReason' claimReason}}}
-
-					{{/if}}
-
-					{{{prodPartial 'my.order.detail.product-option' 'prodList' ordHistProdList 'oCode' bulkDcOnlineProdCode 'prodNo' bulkDcOnlineProdCode 'claimYn' ../claimYn 'step' ../step 'singleProdYn' 'N' 'status' ../../status 'type' ../type 'reason' ../reason}}}
-
-
-				</div>
-			{{/xif}}
-
-
+{{#xif state '===' 'take'}}
+	{{#xif storeEx '!=' null}}
+		<div class="takeout_title">
+			<div>
+				<p class="w70p"><strong>{{storeEx.storeName}}</strong> <span class="color_gray2 font_md">({{storeEx.phoneNo1.phoneNo}})</span></p>
+				<div><button type="button" class="btn_sm_neutral type2" onclick="takeOutStoreInfo({{json storeEx}})">매장보기</button></div>
+			</div>
 		</div>
-	</dd>
+	{{/xif}}
+{{/xif}}
+
+{{#each list}}
+	{{#unless (and (eq ../status 'request')(eq ordHistProdStatusCode 'ProdCancel'))}}
+		<dd>
+			<div class="cont">
+
+
+				{{#xif ordHistProdTypeCode '===' 'Ord'}}
+					<div class="order_prd_panel">
+						{{#xif singleProdYn '===' 'N'}}
+
+								{{{prodPartial 'my.order.detail.product' 'prod' this 'type' ../type 'claimYn' ../claimYn 'step' ../step 'state' ../state}}}
+						{{/xif}}
+
+						{{{prodPartial 'my.order.detail.product-option' 'prodList' ordHistProdList 'oCode' onlineProdCode 'claimYn' ../claimYn 'step' ../step 'singleProdYn' singleProdYn 'status' ../status 'type' ../type 'reason' ../reason}}}
+					</div>
+				{{/xif}}
+
+				{{#xif ordHistProdTypeCode '===' 'BulkDc'}}
+					<div class="order_prd_panel">
+
+						{{{prodPartial 'my.order.detail.product' 'prod' this 'type' ../type 'claimYn' ../claimYn 'step' ../step 'state' ../state}}}
+
+						{{#if (and (and (eq ../status 'request')(eq ../step 1))(ne ../type 'cancel'))}}
+
+							{{!--/* 클레임 선택 */--}}
+							{{{prodPartial 'my.order.detail.claim-reason-select' 'ordHistProdNo' bulkDcOnlineProdCode 'reason' ../reason}}}
+
+						{{/if}}
+
+						{{#if (and (or (eq ../claimYn 'Y')(eq ../step 2))(ne ../type 'cancel'))}}
+							<!--/* 클레임 사유 */-->
+							{{{prodPartial 'my.order.detail.claim-reason' 'type' ../type 'receivedClaimReasonName' claimReasonName 'foReceivedClaimReason' claimReason}}}
+
+						{{/if}}
+
+						{{{prodPartial 'my.order.detail.product-option' 'prodList' ordHistProdList 'oCode' bulkDcOnlineProdCode 'prodNo' bulkDcOnlineProdCode 'claimYn' ../claimYn 'step' ../step 'singleProdYn' 'N' 'status' ../../status 'type' ../type 'reason' ../reason}}}
+
+
+					</div>
+				{{/xif}}
+
+
+			</div>
+		</dd>
+	{{/unless}}
 {{/each}}
 
 {{#each bList}}
+	{{#unless (and (eq ../status 'request')(eq ordHistProdStatusCode 'ProdCancel'))}}
 	<dd>
 		<div class="cont">
 
@@ -60,7 +75,7 @@
 
 					{{#xif singleProdYn '===' 'N'}}
 					{{!--/* 온라인 상품 */--}}
-						{{{prodPartial 'my.order.detail.product' 'prod' this 'claimYn' ../claimYn 'step' ../step 'typeName' 'b'}}}
+						{{{prodPartial 'my.order.detail.product' 'prod' this 'type' ../type 'claimYn' ../claimYn 'step' ../step 'typeName' 'b'}}}
 					{{/xif}}
 
 					{{{prodPartial 'my.order.detail.product-option' 'prodList' ordHistProdList 'oCode' onlineProdCode 'claimYn' ../claimYn 'step' ../step 'singleProdYn' singleProdYn 'status' ../status 'type' ../type 'reason' ../reason 'typeName' 'b'}}}
@@ -70,9 +85,11 @@
 
 		</div>
 	</dd>
+	{{/unless}}
 {{/each}}
 
 {{#each aList}}
+	{{#unless (and (eq ../status 'request')(eq ordHistProdStatusCode 'ProdCancel'))}}
 	<dd>
 		<div class="cont">
 
@@ -81,7 +98,7 @@
 
 					{{#xif singleProdYn '===' 'N'}}
 					{{!--/* 온라인 상품 */--}}
-						{{{prodPartial 'my.order.detail.product' 'prod' this 'claimYn' ../claimYn 'step' ../step 'typeName' 'a'}}}
+						{{{prodPartial 'my.order.detail.product' 'prod' this 'type' ../type 'claimYn' ../claimYn 'step' ../step 'typeName' 'a'}}}
 					{{/xif}}
 
 					{{{prodPartial 'my.order.detail.product-option' 'prodList' ordHistProdList 'oCode' onlineProdCode 'claimYn' ../claimYn 'step' ../step 'singleProdYn' singleProdYn 'status' ../status 'type' ../type 'reason' ../reason 'typeName' 'a'}}}
@@ -90,6 +107,7 @@
 
 		</div>
 	</dd>
+	{{/unless}}
 {{/each}}
 
 {{#each mnList}}
@@ -148,68 +166,70 @@
 				{{/each}}
 
 			{{else}}
-				<div class="order_prd_panel type2">
-					<div class="title">
-						<p class="title_chk"  style="display: none"><span class="check_wrap">
-							<input type="checkbox" name="goods" id="{{promoSn}}" value="{{promoSn}}" onclick="selectOnlineProd(this);">
-							<label for="{{promoSn}}"><span class="sr_only">선택</span></label></span>
-						</p>
-						<div class="title_info">
-							<div>
-								<p class="mgb10"><em>{{baseQty}}+{{awardQty}}</em> 혜택 적용</p>
-							</div>
-							<p>{{promoName}}</p>
-							<p class="price">
-								<span class="left_num">
-									<strong class="num">{{currencyFormatDefault totalProductSaleAmount ''}}</strong><span></span>
-								</span>
-								<span class="right_num">
-									<del class="eng">{{currencyFormat totalFinalOnlineSaleAmount}}</del>
-								</span>
+				{{#unless (and (eq ../status 'request')(eq ordHistProdStatusCode 'ProdCancel'))}}
+					<div class="order_prd_panel type2">
+						<div class="title">
+							<p class="title_chk"  style="display: none"><span class="check_wrap">
+								<input type="checkbox" name="goods" id="{{promoSn}}" value="{{promoSn}}" onclick="selectOnlineProd(this);" {{isDisabled ../type ../step rtnRequestPossibleQtySum}}>
+								<label for="{{promoSn}}"><span class="sr_only">선택</span></label></span>
 							</p>
-						</div>
-						{{#if (and (and (eq ../status 'request')(eq ../step 1))(ne ../type 'cancel'))}}
-
-							{{!--/* 클레임 선택 */--}}
-							{{{prodPartial 'my.order.detail.claim-reason-select' 'ordHistProdNo' promoSn 'reason' ../reason}}}
-
-						{{/if}}
-
-						{{#if (and (or (eq ../claimYn 'Y')(eq ../step 2))(ne ../type 'cancel'))}}
-							<!--/* 클레임 사유 */-->
-							{{{prodPartial 'my.order.detail.claim-reason' 'type' ../type 'receivedClaimReasonName' receivedClaimReasonName 'foReceivedClaimReason' foReceivedClaimReason}}}
-
-						{{/if}}
-					</div>
-					{{#each ordOnlineProdFoList}}
-						{{#each ordHistProdList}}
-							<div class="{{condition (eq (condition (eq ../singleProdYn 'Y') @../index @index) 0) 'product' 'product ico_plus'}}">
-								<div style="display: none">
-									<input type="checkbox" prod="prod" onclick="selectProd(this);" promoSn="{{../../promoSn}}" onlineProdCode="{{../../promoSn}}" ordHistProdNo="{{../../promoSn}}" id="{{ordHistProdNo}}" val="{{json this}}"><label for="{{ordHistProdNo}}">
-									<span class="sr_only">선택</span></label>
-								</div><!--체크박스 주석처리-->
-								<div class="thumb">
-									<img src="{{ordProdEx.prodImgUrl}}">
+							<div class="title_info">
+								<div>
+									<p class="mgb10"><em>{{baseQty}}+{{awardQty}}</em> 혜택 적용</p>
 								</div>
-								<div class="info">
-									<p class="name">{{ordProdEx.onlineProdNameBlang}}</p>
-									<p class="opt">{{ordProdEx.prodNameBlang}}</p>
-									{{#if (or (eq ../step 2)(eq ../claimYn 'Y'))}}
-										<p class="price"><span class="quantity">{{claimConfirmQty}}개</span> /
-									{{else}}
-										<p class="price"><span class="quantity">{{ calc ordQty '-' rtnQty}}개</span> /
-									{{/if}}
-									<strong class="eng">{{currencyFormat (condition (eq ordHistProdStatusCode 'ProdCancel')(calc mPlusNBaseQty '*' finalOnlineSalePricePcur) finalOnlineSaleAmtPcur)}}</strong></p>
-									{{#xif ordHistProdStatusCode '===' 'ProdCancel'}}
-										<div class="status">
-											<span class="status"><em>취소완료</em></span>
-										</div>
-									{{/xif}}
-								</div>
+								<p>{{promoName}}</p>
+								<p class="price">
+									<span class="left_num">
+										<strong class="num">{{currencyFormatDefault totalProductSaleAmount ''}}</strong><span></span>
+									</span>
+									<span class="right_num">
+										<del class="eng">{{currencyFormat totalFinalOnlineSaleAmount}}</del>
+									</span>
+								</p>
 							</div>
+							{{#if (and (and (eq ../status 'request')(eq ../step 1))(ne ../type 'cancel'))}}
+
+								{{!--/* 클레임 선택 */--}}
+								{{{prodPartial 'my.order.detail.claim-reason-select' 'ordHistProdNo' promoSn 'reason' ../reason}}}
+
+							{{/if}}
+
+							{{#if (and (or (eq ../claimYn 'Y')(eq ../step 2))(ne ../type 'cancel'))}}
+								<!--/* 클레임 사유 */-->
+								{{{prodPartial 'my.order.detail.claim-reason' 'type' ../type 'receivedClaimReasonName' receivedClaimReasonName 'foReceivedClaimReason' foReceivedClaimReason}}}
+
+							{{/if}}
+						</div>
+						{{#each ordOnlineProdFoList}}
+							{{#each ordHistProdList}}
+								<div class="{{condition (eq (condition (eq ../singleProdYn 'Y') @../index @index) 0) 'product' 'product ico_plus'}}">
+									<div style="display: none">
+										<input type="checkbox" prod="prod" onclick="selectProd(this);" promoSn="{{../../promoSn}}" onlineProdCode="{{../../promoSn}}" ordHistProdNo="{{../../promoSn}}" id="{{ordHistProdNo}}" val="{{json this}}"><label for="{{ordHistProdNo}}">
+										<span class="sr_only">선택</span></label>
+									</div><!--체크박스 주석처리-->
+									<div class="thumb">
+										<img src="{{ordProdEx.prodImgUrl}}">
+									</div>
+									<div class="info">
+										<p class="name">{{ordProdEx.onlineProdNameBlang}}</p>
+										<p class="opt">{{ordProdEx.prodNameBlang}}</p>
+										{{#if (or (eq ../step 2)(eq ../claimYn 'Y'))}}
+											<p class="price"><span class="quantity">{{claimConfirmQty}}개</span> /
+										{{else}}
+											<p class="price"><span class="quantity">{{ calc ordQty '-' rtnQty}}개</span> /
+										{{/if}}
+										<strong class="eng">{{currencyFormat (condition (eq ordHistProdStatusCode 'ProdCancel')(calc mPlusNBaseQty '*' finalOnlineSalePricePcur) finalOnlineSaleAmtPcur)}}</strong></p>
+										{{#xif ordHistProdStatusCode '===' 'ProdCancel'}}
+											<div class="status">
+												<span class="status"><em>취소완료</em></span>
+											</div>
+										{{/xif}}
+									</div>
+								</div>
+							{{/each}}
 						{{/each}}
-					{{/each}}
-				</div>
+					</div>
+				{{/unless}}
 			{{/xif}}
 		</div>
 	</dd>
@@ -217,19 +237,20 @@
 
 {{#each sList}}
 
+	{{#unless (and (eq ../status 'request')(eq ordHistProdStatusCode 'ProdCancel'))}}
 	<dd>
 		<div class="cont">
 			<div class="order_prd_panel type2">
 				<div class="title">
 					<p class="title_chk" style="display: none">
 						<span class="check_wrap">
-							<input type="checkbox" name="goods" id="{{promoTypeCode}}" value="{{promoTypeCode}}" onclick="selectOnlineProd(this);">
+							<input type="checkbox" name="goods" id="{{promoTypeCode}}" value="{{promoTypeCode}}" onclick="selectOnlineProd(this);" {{isDisabled ../type ../step rtnRequestPossibleQtySum}}>
 							<label for="{{promoTypeCode}}"><span class="sr_only">선택</span></label>
 						</span>
 					</p>
 					<div class="title_info">
 						<p>{{promoName}}</p>
-						<p class="price"><span class="quantity">{{condition (eq ../step 2) cancelQtySum ordQtySum}}개</span> / <strong class="eng">{{currencyFormat (condition (eq ordHistProdStatusCode 'ProdCancel')prodCancelAmtSum totalProductSaleAmount)}}</strong></p>
+						<p class="price"><span class="quantity">{{myOrdQty 'group' this ../step ../type ../claimYn}}개</span> / <strong class="eng">{{currencyFormat (condition (eq ordHistProdStatusCode 'ProdCancel')prodCancelAmtSum totalProductSaleAmount)}}</strong></p>
 					</div>
 					{{#if (and (and (eq ../status 'request')(eq ../step 1))(ne ../type 'cancel'))}}
 
@@ -254,7 +275,7 @@
 			</div>
 		</div>
 	</dd>
-
+	{{/unless}}
 
 {{/each}}
 

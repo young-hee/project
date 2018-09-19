@@ -183,22 +183,27 @@
 
 			if (this.value == '' || useMembershipPoint == null)  useMembershipPoint = 0;
 
-			if (useMembershipPoint >= 0 && useMembershipPoint <= parseInt(this.max)) {
-				calculationPoint(membershipSn, useMembershipPoint);
+			if (useMembershipPoint % 10 != 0) {
+					AP.modal.alert("뷰티포인트 10P 단위로 사용 가능합니다.");
+					$('[name=beauty_point]').val('');
 			} else {
-				var max = this.max;
-				AP.modal.info({
-					contents: '사용가능한 뷰티포인트는 ' + max + 'P입니다.',
-					confirmLabel: '확인',
-					cancelLabel: '취소'
-				}).addListener('modal-close', function (e) {
-					if (e.closeType === 'confirm') {
-						$('[name=beauty_point]').val(max);
-						calculationPoint(membershipSn, max);
-					} else {
-						$('[name=beauty_point]').val('');
-					}
-				});
+				if (useMembershipPoint >= 0 && useMembershipPoint <= parseInt(this.max)) {
+					calculationPoint(membershipSn, useMembershipPoint);
+				} else {
+					var max = this.max;
+					AP.modal.info({
+						contents: '사용가능한 뷰티포인트는 ' + max + 'P입니다.',
+						confirmLabel: '확인',
+						cancelLabel: '취소'
+					}).addListener('modal-close', function (e) {
+						if (e.closeType === 'confirm') {
+							$('[name=beauty_point]').val(max);
+							calculationPoint(membershipSn, max);
+						} else {
+							$('[name=beauty_point]').val('');
+						}
+					});
+				}
 			}
 
 		});
@@ -212,9 +217,10 @@
 				useMembershipPoint : useMembershipPoint
 			}).done(function (data) {
 				if (data.ordHistEx != null) {
+
 					amtPcurInitAjax(data);
 
-					if ($('[name="depositPrice"]') != undefined && $('[name="depositPrice"]').val() != ""){
+					if ($('[name="depositPrice"]').length > 0 && $('[name="depositPrice"]').val() != ""){
 						AP.modal.alert('뷰티포인트 사용으로 예치금 사용이 초기화됩니다. <br/>예치금 사용액을 다시 입력해 주세요.');
 						$('[name="depositPrice"]').val('')
 					}
@@ -235,6 +241,12 @@
 		$('[name=okcashbag]').off('click').on('click', function() {
 			AP.modal.alert("OK Cashbag 서비스 준비중입니다...")
 		});
+
+		//회원: 1.보유쿠폰 조회 -> 쿠폰적용
+		//		2.다운로드 쿠폰 조회 -> 쿠폰 다운로드 -> 보유쿠폰 조회 -> 쿠폰적용
+		//		3.쿠폰등록 -> 보유쿠폰 조회 -> 쿠폰적용
+		//
+		//비회원:1.쿠폰등록 -> 보유쿠폰 조회 -> 쿠폰적용
 
 		//보유한 쿠폰 Layer
 		function getCouponLayer(){
@@ -295,21 +307,7 @@
 
 						}).fail(function(xhr) {
 							//실패
-							if (xhr.errorCode == 0) {
-								AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
-							} else if (xhr.errorCode == 'ESAL089') {
-								AP.modal.alert("발급가능횟수를 초과하였습니다.");
-							} else if (xhr.errorCode == 'ESAL090') {
-								AP.modal.alert("회원별 발급제한 횟수를  초과하였습니다.");
-							} else if (xhr.errorCode == 'ESAL091') {
-								AP.modal.alert("해당 쿠폰코드로 조회된 쿠폰정보가 없습니다.");
-							} else if (xhr.errorCode == 'ESAL092') {
-								AP.modal.alert("이미 발급된 쿠폰입니다.");
-							} else if (xhr.errorCode == 'ESAL093') {
-								AP.modal.alert("쿠폰 발급 기간이 아닙니다.");
-							} else {
-								AP.modal.alert("쿠폰등록 실패했습니다, 쿠폰번호 확인하세요.");
-							}
+							errorMsg(xhr);
 						}).always(function() {
 							//성공, 실패
 						});
@@ -319,26 +317,15 @@
 							couponIdentifier: coupon
 						}).done(function (data) {
 
+							//쿠폰식별자 저장
+							data.nonMemberInputCoupon.couponIdentifier = coupon;
+
 							//비회원 입력쿠폰 조회
 							getInputCouponList(data);
 
 						}).fail(function(xhr) {
 							//실패
-							if (xhr.errorCode == 0) {
-								AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
-							} else if (xhr.errorCode == 'ESAL089') {
-								AP.modal.alert("발급가능횟수를 초과하였습니다.");
-							} else if (xhr.errorCode == 'ESAL090') {
-								AP.modal.alert("회원별 발급제한 횟수를  초과하였습니다.");
-							} else if (xhr.errorCode == 'ESAL091') {
-								AP.modal.alert("해당 쿠폰코드로 조회된 쿠폰정보가 없습니다.");
-							} else if (xhr.errorCode == 'ESAL092') {
-								AP.modal.alert("이미 발급된 쿠폰입니다.");
-							} else if (xhr.errorCode == 'ESAL093') {
-								AP.modal.alert("쿠폰 발급 기간이 아닙니다.");
-							} else {
-								AP.modal.alert("쿠폰등록 실패했습니다, 쿠폰번호 확인하세요.");
-							}
+							errorMsg(xhr);
 						}).always(function() {
 							//성공, 실패
 						});
@@ -347,6 +334,35 @@
 					AP.modal.alert("쿠폰번호를 입력하세요.")
 				}
 			});
+		}
+
+		function errorMsg(xhr) {
+
+			if (xhr.errorCode == 0) {
+				AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+			} else if (xhr.errorCode == 'ESAL089') {
+				AP.modal.alert("발급가능횟수를 초과하였습니다.");
+			} else if (xhr.errorCode == 'ESAL090') {
+				AP.modal.alert("회원별 발급제한 횟수를  초과하였습니다.");
+			} else if (xhr.errorCode == 'ESAL091') {
+				AP.modal.alert("해당 쿠폰코드로 조회된 쿠폰정보가 없습니다.");
+			} else if (xhr.errorCode == 'ESAL092') {
+				AP.modal.alert("이미 발급된 쿠폰입니다.");
+			} else if (xhr.errorCode == 'ESAL093') {
+				AP.modal.alert("쿠폰 발급 기간이 아닙니다.");
+			} else if (xhr.errorCode == 'ESAL094') {
+				AP.modal.alert("모바일 앱에서 사용할수 없는 쿠폰입니다.");
+			} else if (xhr.errorCode == 'ESAL095') {
+				AP.modal.alert("모바일 웹에서 사용할수 없는 쿠폰입니다.");
+			} else if (xhr.errorCode == 'ESAL096') {
+				AP.modal.alert("PC 웹에서 사용할수 없는 쿠폰입니다.");
+			} else if (xhr.errorCode == 'ESAL097') {
+				AP.modal.alert("회원전용 입력쿠폰입니다.");
+			} else if (xhr.errorCode == 'ESAL098') {
+				AP.modal.alert("이미 사용된 쿠폰입니다.");
+			} else {
+				AP.modal.alert("쿠폰등록에 실패했습니다, 쿠폰번호를 확인해 주세요.");
+			}
 		}
 
 		//회원 보유쿠폰 목록
@@ -488,7 +504,7 @@
 				AP.modal.alert("온라인 전용 쿠폰 등록했습니다.");
 
 				var inputCoupon = {
-					couponCnt: 1,
+					couponCnt: nonMemberInputCouponList.length,
 					list: nonMemberInputCouponList
 				};
 
@@ -528,7 +544,7 @@
 			});
 		}
 
-		//주문서 화면 선택된 쿠폰 영역 그리기(회원)
+		//회원 쿠폰적용: 주문서 화면에 선택된 쿠폰 그리기
 		var a_xhr;
 		function drawCouponList(couponSnArr, flag){
 
@@ -586,7 +602,7 @@
 						} else {
 							//적용한 쿠폰 없을때
 							$('[name=couponSn]').attr("checked", false);
-							AP.modal.alert("이번 주문에 사용할 수 없는 쿠폰을 선택하셨습니다. 쿠폰을 다시 선택해 주세요. ");
+							AP.modal.alert("이번 주문에 사용할 수 없는 쿠폰을 선택하셨습니다. <br/>쿠폰을 다시 선택해 주세요. ");
 						}
 					} else {
 						//flag == 'remove'
@@ -607,7 +623,7 @@
 			});
 		}
 
-		//주문서 화면 선택된 쿠폰 영역 그리기(비회원)
+		//비회원: 주문서 화면에 선택된 쿠폰 그리기
 		var ai_xhr;
 		function drawInputCouponList(couponSnArr, flag){
 
@@ -665,7 +681,7 @@
 						} else {
 							//적용한 쿠폰 없을때
 							$('[name=couponSn]').attr("checked", false);
-							AP.modal.alert("이번 주문에 사용할 수 없는 쿠폰을 선택하셨습니다. 쿠폰을 다시 선택해 주세요. ");
+							AP.modal.alert("이번 주문에 사용할 수 없는 쿠폰을 선택하셨습니다. <br/>쿠폰을 다시 선택해 주세요. ");
 						}
 					} else {
 						//flag == 'remove'
@@ -702,6 +718,7 @@
 					});
 
 					$('.downloadCouponArea').html(html);
+					$( '.ui_tooltip' ).tooltip();
 
 					// 쿠폰 다운로드
 					/*$('[name=downloadCoupon]').off('click').on('click', function(e) {
@@ -737,14 +754,24 @@
 								, couponStr = '';
 							$.each(downloadCouponSnArr, function (index, item) {
 								if (item > 0) {
+									var couponSn = item;
 									AP.api.orderDownloadCoupon( null, {
-										couponSn: item
+										couponSn: couponSn
 									}).done( function ( result ) {
 											if (result != null && result.downloadResult == true) {
-												AP.modal.alert("다운로드 완료. 보유쿠폰 목록에서 확인하세요.");
-												$(this).prop('disabled', true);
+												AP.modal.alert("쿠폰 다운로드 완료, 보유쿠폰 목록에서 확인하세요.");
+
+												$('[name=removeCouponSn]').each(function(index, item){
+													if(item.dataset.couponsn == couponSn){
+														$(this).remove();
+
+														if ($('[name=removeCouponSn]').length == 0) {
+															$('.page_btns.download').remove();
+														}
+													}
+												});
 											} else {
-												AP.modal.alert("다운로드 실패했습니다.");
+												AP.modal.alert("쿠폰 다운로드에 실패했습니다.");
 											}
 										}.bind(this)
 									).fail( function (xhr) {
@@ -763,7 +790,7 @@
 			});
 		}
 
-		//적용된 쿠폰목록 그리기
+		//공동: 주문서 쿠폰목록 그리기
 		function drawCouponUnit(data) {
 
 			if (data != null) {
@@ -771,7 +798,7 @@
 					, couponStr = '';
 
 				$.each(data.applyCouponExList, function (idx, obj) {
-					if (obj.memberKeepingCouponSn > 0) {
+					if (obj.memberKeepingCouponSn > 0 || obj.couponIdentifier != null) {	//회원: memberKeepingCouponSn; 	비회원: couponIdentifier
 						couponStr += AP.common.getTemplate('order.coupon-use-list', {
 							coupon: obj
 						});
@@ -806,17 +833,18 @@
 						return item != sn
 					});
 
-					drawCouponList(removeCouponSnArr, 'remove');
+					if (isApMember) {
+						drawCouponList(removeCouponSnArr, 'remove');
+					} else {
+						drawInputCouponList(removeCouponSnArr, 'remove');
+					}
 				});
 			}
 
 			amtPcurInitAjax(data);
 
-			if ($('[name="depositPrice"]').length > 0 && $('[name="depositPrice"]').val() != ""
-				|| $('[name="beauty_point"]').length > 0 && $('[name="beauty_point"]').val() != "") {
-				AP.modal.alert('쿠폰 사용으로 포인트 및 예치금 사용이 초기화됩니다. <br/>포인트 및 예치금 사용액을 다시 입력해 주세요.');
-				$('[name="depositPrice"]').val('');
-				$('[name="beauty_point"]').val('');
+			if (isApMember) {
+				initPointAndDeposit('쿠폰 사용으로 포인트 및 예치금 사용이 초기화됩니다. <br/>포인트 및 예치금 사용액을 다시 입력해 주세요.');
 			}
 		}
 

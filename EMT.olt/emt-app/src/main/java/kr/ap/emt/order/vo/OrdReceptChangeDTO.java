@@ -20,6 +20,12 @@ public class OrdReceptChangeDTO {
 	 */
 	private String address;
 
+	/**
+	 * 01:주문자와 동일
+	 * 02:새로입력
+	 */
+	private String address2;
+
 	/*주문번호*/
 	private Long ordSn;
 
@@ -65,8 +71,6 @@ public class OrdReceptChangeDTO {
 
 	/*배송메세지*/
 	private String shipMsg;
-	/*배송메세지(모바일 직접입력)*/
-	private String shipMsg2;
 
 	/* 선물포장금액기준통화*/
 	private BigDecimal giftPackingAmtBcur;
@@ -106,6 +110,14 @@ public class OrdReceptChangeDTO {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public String getAddress2() {
+		return address2;
+	}
+
+	public void setAddress2(String address2) {
+		this.address2 = address2;
 	}
 
 	public Long getOrdSn() {
@@ -260,13 +272,7 @@ public class OrdReceptChangeDTO {
 		this.shipMsg = shipMsg;
 	}
 
-	public String getShipMsg2() { return shipMsg2; }
-
-	public void setShipMsg2(String shipMsg2) {
-		this.shipMsg2 = shipMsg2;
-	}
-
-		public BigDecimal getGiftPackingAmtBcur() {
+	public BigDecimal getGiftPackingAmtBcur() {
 		return giftPackingAmtBcur;
 	}
 

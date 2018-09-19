@@ -5,7 +5,7 @@ this["AP"]["handlebars"]["products"] = this["AP"]["handlebars"]["products"] || {
 this["AP"]["handlebars"]["products"]["beautytester-review-contents"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "	<li>\n		<a href=\"#none\" class=\"reviewDetail\" data-review-type=\"tester\" data-review-sn=\""
+  return "	<li>\n		<a href=\"javascript:;\" class=\"reviewDetail\" data-review-type=\"tester\" data-review-sn=\""
     + alias2(alias1((depth0 != null ? depth0.prodReviewSn : depth0), depth0))
     + "\">\n			<img data-src=\""
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.imgList : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.imageFileUrl : stack1), depth0))

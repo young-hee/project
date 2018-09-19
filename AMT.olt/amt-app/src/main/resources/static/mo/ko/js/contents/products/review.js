@@ -16,7 +16,7 @@
 			this._isLoading = false;
 			this._winScrollend = null;
 			this._sort = 'Recommend';
-			
+			this._data = [];
 			this._setEvents();
 		},
 
@@ -28,7 +28,7 @@
 				this._onlineProdSn = onlineProdSn[0];
 				this._memberSn = memberSn;
 			}
-			
+			this._data = [];
 			this._getReviewList();
 			this._getBestPhotoReviewList();
 		},
@@ -69,6 +69,7 @@
 				this._offset = 0;
 				this._totalCnt = 0;
 				this._$target.find( '.review_list' ).empty();
+				this._data = [];
 				this._getReviewList();
 			}.bind(this));
 			
@@ -79,10 +80,15 @@
 				var statCnt = $this.find('.statCnt').text().replace(/[( )]/gi, "");
 				//if( statCnt == 0 )return false;
 				
-				location.href = '/product/filterReviewList/stat?onlineProdSn='+this._onlineProdSn+'&keyword='+scope;
-				
+				location.href = '/review/filterReviewList/stat?onlineProdSn='+this._onlineProdSn+'&keyword='+scope;
 			}.bind(this));
 			
+			//tag Click event
+			this._$target.find('.tag_group button').on('click', function(e){
+				var $this = $(e.currentTarget);
+				var tag = $this.text().replace('#', '');
+				location.href = '/review/filterReviewList/tag?onlineProdSn='+this._onlineProdSn+'&keyword='+tag;
+			}.bind(this));
 		},
 		
 		//리뷰 리스트
@@ -97,6 +103,7 @@
 				prodReviewSort  : this._sort
 			}).done( function ( result ) {
 				var data = result.prodReviewListInfo;
+				$.merge(this._data, data.prodReviewList);
 				this._offset += data.limit;
 				this._totalCnt = data.totalCount;
 				data.memberSn = this._memberSn;
@@ -164,13 +171,18 @@
 					
 					// 신고하기 
 					$reviewList.find('.btn_report').off('click').on('click', function(e){
+						var $cur = $(e.currentTarget);
+						var prodReviewSn = $cur.data('review-sn');
+						var review = {
+							review : _.findWhere(this._data, {prodReviewSn : prodReviewSn})
+						};
 						if( AP.LOGIN_USER ){
-							var $this = $(e.currentTarget);
-							if( $this.hasClass('on') ){
-								$this.removeClass('on');
-							} else {
-								$this.addClass('on');
-							}
+							var reportModal = new AP.Report(review).addListener( 'modal-close', function (e) { 
+								if( e.data == 'report' ){
+									$cur.addClass('on');
+								}
+							}.bind(this)); 
+							reportModal.open();
 						} else {
 							AP.login.go();
 						}

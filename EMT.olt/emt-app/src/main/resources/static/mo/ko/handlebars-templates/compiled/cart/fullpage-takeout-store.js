@@ -5,7 +5,7 @@ this["AP"]["handlebars"]["cart"] = this["AP"]["handlebars"]["cart"] || {};
 this["AP"]["handlebars"]["cart"]["fullpage-takeout-store"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
 
-  return "	<div class=\"panel store\">\n		<div class=\"store_wrap\">\n			<h3 class=\"store_title\">\n				<a href=\"#\" onclick=\"fnChangeStore("
+  return "	<div class=\"panel store\">\n		<div class=\"store_wrap\">\n			<h3 class=\"store_title\">\n				<a href=\"#\" onclick=\"fnLayerChangeStore("
     + alias2(alias1((depth0 != null ? depth0.storeSn : depth0), depth0))
     + "); return false;\">\n					"
     + alias2(alias1((depth0 != null ? depth0.storeName : depth0), depth0))

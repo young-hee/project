@@ -1,15 +1,26 @@
 package kr.ap.amt.my.controller;
 
+import kr.ap.amt.my.vo.ReviewWritableOrderDTO;
 import kr.ap.comm.config.interceptor.PageTitle;
 import kr.ap.comm.support.common.AbstractController;
+import kr.ap.comm.support.constants.APConstant;
 import net.g1project.ecp.api.model.sales.guide.FaqSearchResult;
 import net.g1project.ecp.api.model.sales.product.CountResult;
 import net.g1project.ecp.api.model.sales.product.ProdReviewListInfo;
+import net.g1project.ecp.api.model.sales.product.ProdReviewWritableOrder;
 import net.g1project.ecp.api.model.sales.product.ProdReviewWritableOrderInfo;
+import net.g1project.ecp.api.model.sales.product.ProdReviewWritableOrderProd;
+import net.g1project.ecp.api.model.sales.terms.Terms;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,6 +38,31 @@ public class MyActivityViewController extends AbstractController {
 	/**********************************************************************************************
 	 * 8. 좋아요
 	 **********************************************************************************************/
+	/**
+	 * 좋아요
+	 *
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/myLike")
+	@PageTitle(title = "좋아요" , menuId = "myLike", subMenuId = "myLike")
+	public String myLike(Model model) {
+		/**
+		 * Mobile
+		 */
+		if(isMobileDevice()) {
+			return "my/my-like";
+		}
+
+		/**
+		 * PC
+		 */
+		if(isPcDevice()) {
+			return "my/my-like";
+		}
+
+		return null;
+	}
 
 
 	/**********************************************************************************************
@@ -39,34 +75,117 @@ public class MyActivityViewController extends AbstractController {
 	 * @return
 	 */
 	@GetMapping("/myReviewList")
-	@PageTitle(title = "나의 리뷰" , menuId = "myActivity", subMenuId = "myReview")
+	@PageTitle(title = "구매 리뷰" , menuId = "myActivity", subMenuId = "myReview")
 	public String myReviewList(Model model) {
-
-		ProdReviewWritableOrderInfo productReviewWritableOrders = productApi.getProductReviewWritableOrders(getMemberSn(), null, 0, 999);
-		model.addAttribute("reviewCnt", productReviewWritableOrders.getTotalCount());
-		model.addAttribute("productReviewWritableOrders", productReviewWritableOrders);
-
-//		CountResult productReviewCount = productApi.getProductReviewCount("Member", null, null, null, getMemberSn(), "All");
-//		model.addAttribute("writedCnt", productReviewCount.getCount());
+		//미작성리뷰
+//		List<ReviewWritableOrderDTO> list = new ArrayList<ReviewWritableOrderDTO>();
+		ProdReviewWritableOrderInfo prodReviewWritableOrderInfo = productApi.getProductReviewWritableOrders(getMemberSn(), null, 0, 100);
 		
-		ProdReviewListInfo prodReviewListInfo = productApi.getProductReviews("OnlineProd", "All", 0, 999, getMemberSn(),
-				null, null, null, "Last", "All", "N", "N", null, null, null, null, null);
-		model.addAttribute("writedCnt", prodReviewListInfo.getTotalCount());
-		model.addAttribute("prodReviewListInfo", prodReviewListInfo);
+		//dummy start
+		List<ProdReviewWritableOrder> dummyList = new ArrayList<ProdReviewWritableOrder>();
+		
+		for(int i=0; i<10; i++) {
+			List<ProdReviewWritableOrderProd> prdList = new ArrayList<ProdReviewWritableOrderProd>();
+			for(int j=0; j<5; j++) {
+				ProdReviewWritableOrderProd prd = new ProdReviewWritableOrderProd();
+				prd.setOrdProdSn(100L);
+				prd.setOnlineProdName("리리코스 마린에너지 "+j);
+				prd.setProdName("인텐시브 오일 20ml 제품명 제품명 인텐시브 오일 20ml 제품명 "+j);
+				prd.setProdSn(200L);
+				prd.setRepProdImage("repProdImage"+j);
+				prd.setReviewWriteYn("Y");
+				prdList.add(prd);
+			}
+			
+			ProdReviewWritableOrder order = new ProdReviewWritableOrder();			
+			order.setOrderCompleteDate(new Date());
+			order.setOrderProds(prdList);
+			order.setOrdNo("ordNo"+i);
+			order.setWritableDays(i);
+			order.setWritableProdCount(prdList.size());
+			dummyList.add(order);
+		}
+		
+		prodReviewWritableOrderInfo.setLimit(999);
+		prodReviewWritableOrderInfo.setOffset(0);
+		prodReviewWritableOrderInfo.setOrders(dummyList);
+		prodReviewWritableOrderInfo.setTotalCount(dummyList.size());
+		//dummy end
+		
+		model.addAttribute("reviewCnt", prodReviewWritableOrderInfo.getTotalCount());
+		if (prodReviewWritableOrderInfo.getTotalCount() > 999) {
+			model.addAttribute("reviewCnt", "999+");
+		}
+		model.addAttribute("prodReviewWritableOrderInfo", prodReviewWritableOrderInfo);
+		
+		
+		
+		
+		
+		
+		/*
+		try {
+			prodReviewWritableOrderInfo = productApi.getProductReviewWritableOrders(getMemberSn(), null, 0, 999);
+			model.addAttribute("reviewCnt", prodReviewWritableOrderInfo.getTotalCount());
+			if (prodReviewWritableOrderInfo.getTotalCount() > 999) {
+				model.addAttribute("reviewCnt", "999+");
+			}
+			model.addAttribute("prodReviewWritableOrderInfo", prodReviewWritableOrderInfo);
+			
+			for(ProdReviewWritableOrder prodReviewWritableOrder : productReviewWritableOrders.getOrders()) {
+				ReviewWritableOrderDTO dto = new ReviewWritableOrderDTO();
+				dto.setOrderNo(prodReviewWritableOrder.getOrdNo());
+				dto.setOrderDate(prodReviewWritableOrder.getOrderCompleteDate().toGMTString());
+				for(ProdReviewWritableOrderProd prodReviewWritableOrderProd : prodReviewWritableOrder.getOrderProds()) {
+					dto.setProductSn(prodReviewWritableOrderProd.getOrdProdSn().toString());
+					dto.setProductName(prodReviewWritableOrderProd.getProdName());
+					dto.setProductImage(prodReviewWritableOrderProd.getRepProdImage());
+					break;
+				}
+				list.add(dto);
+			}
+			
+			model.addAttribute("reviewWritableOrders", list);
+		} catch (Exception e) {
+			// TODO: handle exception
+			model.addAttribute("reviewCnt", "0");
+			model.addAttribute("prodReviewWritableOrderInfo", prodReviewWritableOrderInfo);
+			model.addAttribute("reviewWritableOrders", list);
+		}
+		*/
+		
+		//작성한 리뷰
+		ProdReviewListInfo prodReviewListInfo = new ProdReviewListInfo();
+		try {
+			//Member, OnlineProd
+			prodReviewListInfo = productApi.getProductReviews("OnlineProd", "All", 0, 999, getMemberSn(),
+					null, null, null, "Last", "All", "N", "N", null, null, null, APConstant.AP_DISPLAY_MENU_SET_ID, null);
+			model.addAttribute("writedCnt", prodReviewListInfo.getTotalCount());
+			if (prodReviewListInfo.getTotalCount() > 999) {
+				model.addAttribute("writedCnt", "999+");
+			}
+			model.addAttribute("prodReviewListInfo", prodReviewListInfo);
+		} catch (Exception e) {
+			// TODO: handle exception
+			model.addAttribute("writedCnt", "0");
+			model.addAttribute("prodReviewListInfo", prodReviewListInfo);
+		}
 
 		/**
 		 * Mobile
 		 */
 		if(isMobileDevice()) {
+			return "my/my-review";
 		}
 
 		/**
 		 * PC
 		 */
 		if(isPcDevice()) {
+			return "my/my-review.1";
 		}
 
-		return "my/my-review.1";
+		return null;
 	}
 
 	/**
@@ -76,7 +195,7 @@ public class MyActivityViewController extends AbstractController {
 	 * @return
 	 */
 	@GetMapping("/myWritedReviewList")
-	@PageTitle(title = "나의 리뷰" , menuId = "myActivity", subMenuId = "myReview")
+	@PageTitle(title = "작성한 리뷰 목록" , menuId = "myActivity", subMenuId = "myReview")
 	public String myWritedReviewList(Model model) {
 
 		ProdReviewWritableOrderInfo productReviewWritableOrders = productApi.getProductReviewWritableOrders(getMemberSn(), null, 0, 10);
@@ -100,6 +219,22 @@ public class MyActivityViewController extends AbstractController {
 		}
 
 		return null;
+	}
+	
+	/**
+	 * 구매리뷰 약관
+	 *
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/myReviewPolicy")
+	@PageTitle(title = "구매리뷰 약관" , menuId = "myActivity", subMenuId = "myReviewPolicy")
+	public String myReviewPolicy(Model model) {
+		List<Terms> terms= new ArrayList<Terms>();
+		terms = termsApi.getTerms("AP999"); //구매리뷰약관 (BO)미정의 향후 수정 : termsApi.getTerms(APConstant.AP_SERVICE_POLICY_TERM_1);
+		model.addAttribute("term", terms.get(0));
+		
+		return "my/my-review-policy";
 	}
 
 

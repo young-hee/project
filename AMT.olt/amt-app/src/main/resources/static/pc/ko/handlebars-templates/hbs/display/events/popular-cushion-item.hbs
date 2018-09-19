@@ -1,0 +1,71 @@
+{{#each this.list}}
+	<li class="item ix-list-item" data-online-prod-sn="{{ this.onlineProdSn }}" data-index="{{@index}}">
+		<div class="product_box">
+			<a href="{{ productDetailPath this.onlineProdSn }}">
+				<strong class="rank_num">{{ calc @index '+' 1}}</strong>
+				<div class="visual_section">
+					<img src="{{ this.onlineProdImages.[0].imgUrl }}" alt="">
+					{{#if this.onlineProdImages.[1].imgUrl}}
+						<img src="{{ this.onlineProdImages.[1].imgUrl }}" alt="">
+					{{else}}
+						<img src="{{ this.onlineProdImages.[0].imgUrl }}" alt="">
+					{{/if}}
+
+					<div class="benefit">
+						{{#xif this.onlineProdGift.giftProds.length '>' 0}}
+							<span class="special">스페셜기프트</span>
+						{{/xif}}
+						{{#xif this.onlineProdGift.giftcardTargetYn '==' 'Y'}}
+							<span class="gift">기프트카드</span>
+						{{/xif}}
+					</div>
+					{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+						<div class="soldout">
+							<span>일시품절</span>
+						</div>
+					{{/xif}}
+				</div>
+				<div class="info_section">
+					<p class="txt_summary ellipsis line2">{{ this.onlineProdName }}</p>
+					<div class="price_atc">
+						{{#xif this.onlineProdPriceSummary.maxFinalDiscountRate '>' 0}}
+							<span class="txt_sale">{{ this.onlineProdPriceSummary.maxFinalDiscountRate }}%</span>
+						{{/xif}}
+						<span class="txt_price"><em>{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountOnlinePrice }}</em>원</span>
+						{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+							<del class="txt_del">{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountBeforeSalePrice }}원</del>
+						{{/xif}}
+					</div>
+					<div class="user_atc">
+						<span class="mark_star_sm star{{ this.reviewScopeAvg }}"><span class="sr_only">구매 평점 별 5개 중 {{ this.reviewScopeAvg }}개</span></span>
+						{{#xif this.reviewCount '>' 0 }}<span class="txt_review">리뷰 {{ numberFormat this.reviewCount }}</span>{{/xif}}
+					</div>
+					<p class="txt_preview ellipsis line2">실시간 인기 급상승 쿠션 리뷰를 등록 해 주세요. 구매리뷰가 두줄 노출됩니다. 실시간 인기 급상승 쿠션 구매리뷰가 두줄 노출됩니다. 실시간 인기 급상승 쿠션</p>
+				</div>
+			</a>
+			<div class="work_box">
+				<ul class="item_user">
+					<li>
+						<a href="#none" role="button" class="like_btn">
+							<i class="ico_favorite {{#xif this.shoppingMarkExistYn '==' 'Y'}}on{{/xif}}"></i>
+							<span class="sr_only">좋아요</span>
+						</a>
+					</li>
+					<li>
+						<a href="#none" role="button" class="cart_btn">
+							<i class="ico_basket"></i>
+							<span class="sr_only">장바구니</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="item_section">
+				<div class="rside">
+					<a href="#none" class="link_brand">헤라</a>
+				</div>
+			</div>
+		</div>
+	</li>
+{{/each}}
+
+

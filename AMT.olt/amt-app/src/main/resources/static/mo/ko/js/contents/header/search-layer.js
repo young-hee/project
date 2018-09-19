@@ -6,7 +6,8 @@
 
 	var SearchLayer = $B.Class.extend({
 
-		initialize: function () {
+		initialize: function ( options ) {
+			this._$target;
 		},
 
 		/** =============== Public Methods =============== */
@@ -18,31 +19,36 @@
 		 * @param {Object}  searchData
 		 * @return {modal}
 		 */
-		open: function ( searchData ) {
-			this._model = $B.object.clone( searchData );
+		open: function () {
+			AP.api.favoriteWords(null, {limit: 10})
+			.done(function (result) {
+				
+				/** result {rank, searchWord, newEntry, rankChange} */
+				this._modal = AP.modal.full({
+					title: '',	//title 을 설정하면 dt.layer_title 이 활성화 되어 검색어 입력 창이 가려짐.
+					contents: {
+						templateKey: 'header.search-layer',
+						templateModel: result
+					},
+					containerClass: 'search_layer',
+					fixed: true
+				}).addListener( 'modal-before-close', function (e) {
+					this._clear();
+				}.bind( this )).addListener( 'modal-close', function (e) {
+					this._modal = null;
+				}.bind( this ));
 
-			this._modal = AP.modal.full({
-				contents: {
-					templateKey: 'header.search-layer',
-					templateModel: {
-						uId: this.__uId__,
-						model : this._model
-					}
-				},
-				containerClass: 'search_layer'
-			});
-
-			this._$modal = this._modal.getElement();
-
-			this._setPlugins();
-			this._setEvents();
-			this._setAutoCompletion();
-
-			this._modal.addListener( 'modal-before-close', function (e) {
-				this._removeEvents();
-			}.bind(this));
-
-			return this;
+				this._$modal = this._modal.getElement();
+				this._$modal.removeClass('modal_popup');
+				this._$modal.removeClass('js_open');
+				this._$modal.removeClass('system_alert');
+				
+				$( '.ui_tab' ).tabs();
+				this._$target = $('.search_layer').find('.layer_wrap').find('.layer_cont');
+				this._setEvents();
+				
+				this._showLatestQuery();
+			}.bind( this ));
 		},
 
 		/** =============== Private Methods =============== */
@@ -53,9 +59,118 @@
 		},
 
 		_setEvents: function () {
-			//TODO: 작업중..
-		},
+			this._$target.find('.btn-latest-query').on('click', function(e){
+				this._showLatestQuery();
+			}.bind(this));
+			
+			this._$target.find('.search_form input[name=query]').on('keyup',function(e){
+				var query = this._$target.find('.search_form input[name=query]').val();
+				
+				if($.trim(query) != ""){
 
+					this._$target.find('.auto_complete').css("display", "block");
+					this._toggleAutoComplete(query);
+//        			this._latestQuery = query;
+					
+					if(event.which == 13){
+						this._prevSearch(query);
+						this._doSearch();
+					}
+				}else{
+					this._$target.find('.auto_complete').css("display", "none");
+				}
+			}.bind(this));
+			
+			$('.layer.recommended_search').find('.tab_cont.latest').on("click", ".btn_del.latest-query", function(e){
+        		var kwd = $.trim($(e.currentTarget).parent().find('a').text());
+       			var cka = $.cookie("cookieKeyword").split("|");
+       			if($.inArray(kwd, cka)>-1){
+       				cka=cka.filter(v=>v!=kwd);
+           		}
+   				$.cookie('cookieKeyword', cka.join("|"));
+   				this._showLatestQuery();
+        	}.bind(this));
+			
+			this._$target.find('.section.keyword_area').find('.keyword_list').on("click", ".btn_del.latest-query", function(e){
+        		var kwd = $.trim($(e.currentTarget).parent().find('a').text());
+       			var cka = $.cookie("cookieKeyword").split("|");
+       			if($.inArray(kwd, cka)>-1){
+       				cka=cka.filter(v=>v!=kwd);
+           		}
+   				$.cookie('cookieKeyword', cka.join("|"));
+   				
+   				this._showLatestQuery();
+        	}.bind(this));
+			
+			this._$target.find('.section.keyword_area').find('.bottom').on("click", ".btn_del.latest-query-all", function(e){
+        		$.cookie('cookieKeyword', "");
+        		this._showLatestQuery();
+        	}.bind(this));
+			
+			this._$target.find('.section.keyword_area').find('.keyword_list').on("click", ".rkwd", function(e){
+				$('input[name="query"]').val($(e.currentTarget).attr("data-kwd"));
+				this._doSearch();
+			}.bind(this));
+		},
+		_toggleAutoComplete: function(query) {
+			this._$autoComplete = this._$target.find('.auto_complete');
+			AP.api.getAutoWords(null, {limit: 10, prefix: query})
+			.done(function (result) {
+//				console.log(result.autoWordList.length);
+				if(result.autoWordList.length > 0){
+					this._$autoComplete.find('.brand_info').css("display", "block");
+					this._$autoComplete.find('.keyword_list.list').css("display", "block");
+					this._$autoComplete.find('.keyword_list.no_data').css("display", "none");
+					
+					var tgtobj = this._$autoComplete.find('.keyword_list.list');
+					$(tgtobj).empty();
+					$.each(result.autoWordList, function(i, item){
+						$(tgtobj).append("<li><a href=\"#none\" class=\"rkwd\" data-kwd=\""+query+"\">"+item.replace(query, "<em>"+query+"</em>")+"</a></li>");
+					});
+				}else{
+					this._$autoComplete.find('.brand_info').css("display", "none");
+					this._$autoComplete.find('.keyword_list.list').css("display", "none");
+					this._$autoComplete.find('.keyword_list.no_data').css("display", "block");
+				}
+			}.bind( this ));
+		},
+		_prevSearch: function (query) {
+			var diff;
+    		if($.cookie("cookieKeyword")){
+        		var cka = $.cookie("cookieKeyword").split("|");
+        		if($.inArray(query, cka)>-1){
+        			cka=cka.filter(v=>v!=query);
+            	}
+        		cka.splice(0,0,query);
+        		cka = cka.slice(0,10);
+        		diff = cka.join("|");
+    		}else{
+    			diff = query;
+    		}
+   			$.cookie('cookieKeyword', diff);//, {expires: 0, path: '/', secure: 0});
+		},
+		_doSearch: function () {
+   			var $form = $('form.validate');
+   			$form.submit();
+		},
+		_showLatestQuery(){
+			var tgtcont = this._$target.find('.section.keyword_area');
+			if(!$.cookie("cookieKeyword")){
+				$(tgtcont).find('.no_keyword').css("display", "block");
+				$(tgtcont).find('.keyword_list.latest').css("display", "none");
+				$(tgtcont).find('.bottom').css("display", "none");
+			}else{
+				this._$target.find('.auto_complete').css("display", "none");
+				var cka = $.cookie("cookieKeyword").split("|");
+				$(tgtcont).find('.keyword_list.latest').empty();
+				$(tgtcont).find('.no_keyword').css("display", "none");
+				$(tgtcont).find('.keyword_list.latest').css("display", "block");
+				$(tgtcont).find('.bottom').css("display", "block");
+				$.each(cka, function(i, item){
+					$(tgtcont).find('.keyword_list.latest').append("<li><a href=\"#none\" class=\"rkwd\">"+item+"</a><button type=\"button\" class=\"btn_del latest-query\"><i class=\"ico_close_s\"><span class=\"sr_only\">검색어 삭제</span></i></button></li>");
+				});
+			}
+		},
 		_setAutoCompletion: function () {
 			// 자동완성
 			var _this = this,
@@ -152,7 +267,8 @@
 				};
 			}());
 		},
-
+		_clear: function() {
+		},
 		_removeEvents: function () {
 			var $input = this._$modal.find( '.search_form > input' );
 
@@ -162,5 +278,5 @@
 		}
 	});
 
-	AP.SearchLayer = SearchLayer;
+	AP.searchLayer = SearchLayer;
 })( jQuery );

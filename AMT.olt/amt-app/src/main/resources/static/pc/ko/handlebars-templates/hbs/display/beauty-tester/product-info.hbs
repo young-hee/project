@@ -1,15 +1,17 @@
+{{#each this.onlineProdInfos}}
+		<a href="{{ productDetailPath this.onlineProdSn }}">
 			<div class="product_visual">
-				<img src="{{this.prodImage}}" alt="">
+				<img src="{{this.products.[0].prodImages.[0].imgUrl}}" alt="">
 			</div>
 			<div class="product_info">
-				<p class="product_name">{{this.prodName}}</p>
+				<p class="product_name">{{this.onlineProdName}}</p>
 				<p class="price">
-					{{#xif '==' 'Y'}}
-					<em class="discount">{{this.discountRate}}%</em>
+					{{#xif this.availablePrices.[0].maxFinalDiscountRate '>' 0}}
+						<em class="discount">{{ this.availablePrices.[0].maxFinalDiscountRate }}%</em>
 					{{/xif}}
-					<b>{{ numberFormat this.cPrice }}원</b>
-					{{#xif '==' 'Y'}}
-					<del>{{ numberFormat this.bPrice }}원</del>
+					<b>{{ numberFormat this.availablePrices.[0].maxFinalDiscountOnlinePrice }}원</b>
+					{{#xif this.availablePrices.[0].doublePriceDisplayYn '==' 'Y'}}
+						<del>{{ numberFormat this.availablePrices.[0].maxFinalDiscountBeforeSalePrice }}원</del>
 					{{/xif}}
 				</p>
 				<div class="btns">
@@ -17,3 +19,5 @@
 					<button type="button" class="cart"><span class="sr_only">장바구니</span></button>
 				</div>
 			</div>
+		</a>
+{{/each}}

@@ -86,13 +86,11 @@
 					membershipSn : $('[name=beauty_point]').length > 0 ? $('[name=beauty_point]').data().membershipsn : null
 				}).done(function (data) {
 					if (data.ordHistEx != null){
+
 						amtPcurInitAjax(data);
 
-						if ($('[name="depositPrice"]').length > 0 && $('[name="depositPrice"]').val() != ""
-							|| $('[name="beauty_point"]').length > 0 && $('[name="beauty_point"]').val() != "") {
-							AP.modal.alert('포장/쇼핑백 추가로 인해 포인트 및 예치금 사용이 초기화됩니다.');
-							$('[name="depositPrice"]').val('');
-							$('[name="beauty_point"]').val('');
+						if (isApMember) {
+							initPointAndDeposit('포장/쇼핑백 추가로 인해 포인트 및 예치금 사용이 초기화됩니다.');
 						}
 					}
 				}).fail(function (xhr) {

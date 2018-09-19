@@ -5,84 +5,84 @@
 		<dd aria-hidden="false" style="display: block;">
 			<ul class="payment_list">
 				<th:block th:each="payMethod : ${payMethodResult.payMethodExList}">
-					<!-- 간편결제 ONE Pay -->
-					<li  th:if="${apMember != null and payMethod.payServiceCode == 'g1test-pg' and payMethod.payMethodCode == 'wpay'}" >
+					<li  th:if="${apMember != null and payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'wpay'}" >
+						<!-- 간편결제 ONE Pay -->
 						<span class="rdo_h30">
-							<input type="radio" name="payMethod" id="w_pay"  value="WPAY" checked="checked"
+							<input type="radio" name="rdoPayMethod" id="w_pay"  value="WPAY"
 								   th:onclick="|setPayment(this,'WPAY','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
 							<label for="w_pay" class="one_pay"><img alt="one pay" src="/mo/ko/images/order/img_one_pay.png"><em>간편한 원클릭 결제</em></label>
 						</span>
 					</li>
-					<!-- 신용카드 결제 -->
-					<li th:if="${payMethod.payServiceCode == 'g1test-pg' and payMethod.payMethodCode == 'credit-card'}" class="credit">
+					<li th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'credit-card'}" class="credit">
+						<!-- 신용카드 결제 -->
 						<span class="rdo_h30">
-							<input type="radio" name="payMethod" id="credit"
+							<input type="radio" name="rdoPayMethod" id="credit"
 								   th:onclick="|setPayment(this,'wcard','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
 							<label for="credit" class="credit">신용카드 결제</label>
 						</span>
 						<ul class="card_list col_04">
 							<th:block th:each="creditcardCo : ${payMethod.creditcardCoExList}">
-								<li th:if="${creditcardCo.creditcardCoCode == 'HD'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '04'}">
 									<div class="card"><input type="radio" name="credit" id="credit1" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit1"><img alt="" src="/mo/ko/images/order/img_card_01.jpg"><span>현대카드</span></label></div>
 								</li>
-								<li th:if="${creditcardCo.creditcardCoCode == 'KB'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '06'}">
 									<div class="card"><input type="radio" name="credit" id="credit2" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit2"><img alt="" src="/mo/ko/images/order/img_card_02.jpg"><span>KB국민카드</span></label></div>
 								</li>
-								<li th:if="${creditcardCo.creditcardCoCode == 'BC'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '11'}">
 									<div class="card"><input type="radio" name="credit" id="credit3" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit3"><img alt="" src="/mo/ko/images/order/img_card_03.jpg"><span>비씨카드</span></label></div>
 								</li>
-								<li th:if="${creditcardCo.creditcardCoCode == 'SC2'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '12'}">
 									<div class="card"><input type="radio" name="credit" id="credit4" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit4"><img alt="" src="/mo/ko/images/order/img_card_04.jpg"><span>삼성카드</span></label></div>
 								</li>
-								<li th:if="${creditcardCo.creditcardCoCode == 'LOTT'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '03'}">
 									<div class="card"><input type="radio" name="credit" id="credit5" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit5"><img alt="" src="/mo/ko/images/order/img_card_05.jpg"><span>롯데카드</span></label></div>
 								</li>
-								<li th:if="${creditcardCo.creditcardCoCode == 'WOORI'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '44'}">
 									<div class="card"><input type="radio" name="credit" id="credit6" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit6"><img alt="" src="/mo/ko/images/order/img_card_06.jpg"><span>우리카드<br>(구.평화VISA)</span></label></div>
 								</li>
-								<li th:if="${creditcardCo.creditcardCoCode == 'H'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '34'}">
 									<div class="card"><input type="radio" name="credit" id="credit7" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit7"><img alt="" src="/mo/ko/images/order/img_card_07.jpg"><span>하나카드</span></label></div>
 								</li>
-								<li th:if="${creditcardCo.creditcardCoCode == 'SH'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '14'}">
 									<div class="card"><input type="radio" name="credit" id="credit8" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit8"><img alt="" src="/mo/ko/images/order/img_card_08.jpg"><span>신한카드<br>(구.LG카드포함)</span></label></div>
 								</li>
-								<li th:if="${creditcardCo.creditcardCoCode == 'NH'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '41'}">
 									<div class="card"><input type="radio" name="credit" id="credit9" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit9"><img alt="" src="/mo/ko/images/order/img_card_09.jpg"><span>농협카드</span></label></div>
 								</li>
-								<li th:if="${creditcardCo.creditcardCoCode == 'CITY'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '43'}">
 									<div class="card"><input type="radio" name="credit" id="credit10" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit10"><img alt="" src="/mo/ko/images/order/img_card_10.jpg"><span>씨티카드</span></label></div>
 								</li>
-								<li th:if="${creditcardCo.creditcardCoCode == 'H'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '01'}">
 									<div class="card"><input type="radio" name="credit" id="credit11" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit11"><img alt="" src="/mo/ko/images/order/img_card_11.jpg"><span>외환카드</span></label></div>
 								</li>
-								<li th:if="${creditcardCo.creditcardCoCode == 'HD'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '55'}">
 									<div class="card"><input type="radio" name="credit" id="credit12" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit12"><img alt="" src="/mo/ko/images/order/img_card_12.jpg"><span>카카오뱅크</span></label></div>
 								</li>
-								<li th:if="${creditcardCo.creditcardCoCode == 'HD'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '71'}">
 									<div class="card"><input type="radio" name="credit" id="credit13" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit13"><img alt="" src="/mo/ko/images/order/img_card_13.jpg"><span>우체국체크</span></label></div>
 								</li>
-								<li th:if="${creditcardCo.creditcardCoCode == 'HD'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '32'}">
 									<div class="card"><input type="radio" name="credit" id="credit14" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit14"><img alt="" src="/mo/ko/images/order/img_card_14.jpg"><span>광주카드</span></label></div>
 								</li>
-								<li th:if="${creditcardCo.creditcardCoCode == 'HD'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '33'}">
 									<div class="card"><input type="radio" name="credit" id="credit14_1" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit14_1"><img alt="" src="/mo/ko/images/order/img_card_14.jpg"><span>전북카드</span></label></div>
 								</li>
-								<li th:if="${creditcardCo.creditcardCoCode == 'HD'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '51'}">
 									<div class="card"><input type="radio" name="credit" id="credit15" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit15"><img alt="" src="/mo/ko/images/order/img_card_15.jpg"><span>수협카드</span></label></div>
 								</li>
-								<li th:if="${creditcardCo.creditcardCoCode == 'HD'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '52'}">
 									<div class="card"><input type="radio" name="credit" id="credit20" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit20"><img alt="" src="/mo/ko/images/order/img_card_08.jpg"><span>제주카드</span></label></div>
 								</li>
-								<li th:if="${creditcardCo.creditcardCoCode == 'HD'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '95'}">
 									<div class="card"><input type="radio" name="credit" id="credit16" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit16"><img alt="" src="/mo/ko/images/order/img_card_16.jpg"><span>저축은행체크</span></label></div>
 								</li>
-								<li th:if="${creditcardCo.creditcardCoCode == 'HD'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '48'}">
 									<div class="card"><input type="radio" name="credit" id="credit17" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit17"><img alt="" src="/mo/ko/images/order/img_card_17.jpg"><span>신협체크</span></label></div>
 								</li>
 								<li th:if="${creditcardCo.creditcardCoCode == 'HD'}">
 									<div class="card"><input type="radio" name="credit" id="credit18" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit18"><img alt="" src="/mo/ko/images/order/img_card_18.jpg"><span>KDB산업체크</span></label></div>
 								</li>
-								<li th:if="${creditcardCo.creditcardCoCode == 'HD'}">
+								<li th:if="${creditcardCo.creditcardCoCode == '54'}">
 									<div class="card"><input type="radio" name="credit" id="credit19" th:onclick="|setCreditcardInfo('${creditcardCo.creditcardCoCode}', '${creditcardCo.creditcardCoSn}')|"><label for="credit19"><img alt="" src="/mo/ko/images/order/img_card_19.jpg"><span>MG새마을금고<br>체크</span></label></div>
 								</li>
 								<li th:if="${creditcardCo.creditcardCoCode == 'HD'}">
@@ -103,71 +103,73 @@
 							</th:block>
 						</ul>
 					</li>
-					<!-- 다른 결제 수단-->
-					<li th:if="${payMethod.payServiceCode == '1' and payMethod.payMethodGrpCode == 'Sub'}" class="other">
+				</th:block>
+
+					<!-- 다른 결제 수단 Start -->
+					<li class="other">
 						<span class="rdo_h30">
-							<input type="radio" name="payMethod" id="pay3"
-								   th:onclick="|setPayment(this,'other','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
+							<input type="radio" name="rdoPayMethod" id="pay3" onclick="setPayment(this,'other','','','','');">
 							<label for="pay3" class="other">다른 결제 수단</label>
 						</span>
 						<ul class="card_list col_04">
-							<li th:if="${payMethod.payServiceCode == 'naver-pg' and payMethod.payMethodCode == 'naverpay'}">
-								<div class="card">
-									<input type="radio" name="other" id="n_pay"
-										   th:onclick="|setPayment(this,'NAVERPAY','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
-									<label for="n_pay" class="naver_pay"><img alt="" src="/mo/ko/images/order/img_other_01.jpg"><span>네이버페이</span></label>
-								</div>
-							</li>
-							<li th:if="${payMethod.payServiceCode == 'inicis-pg' and paFyMethod.payMethodCode == 'payco'}">
-								<div class="card">
-									<input type="radio" name="other" id="payco"
-										   th:onclick="|setPayment(this,'wcard','onlypayco','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
-									<label for="payco"><img alt="" src="/mo/ko/images/order/img_other_02.jpg"><span>페이코</span></label>
-								</div>
-							</li>
-							<!-- <li><div class="card"><input type="radio" name="other" id="other3"><label for="other3"><img alt="" ap:src="@{/images/order/img_other_03.jpg}"><span>페이나우</span></label></div></li> 페이나우 삭제 (180823) -->
-							<li th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'virtual-account'}">
-								<div class="card">
-									<input type="radio" name="other" id="remit_bank"
-										   th:onclick="|setPayment(this,'vbank','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
-									<label for="remit_bank" class="cash"><img alt="" src="/mo/ko/images/order/img_other_04.jpg"><span>무통장입금<br>(가상계좌)</span></label>
-								</div>
-							</li>
-							<li th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'bank-ac-transfer'}">
-								<div class="card">
-									<input type="radio" name="other" id="account_transfer"
-										   th:onclick="|setPayment(this,'bank','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
-									<label for="account_transfer" class="real_time"><img alt="" src="/mo/ko/images/order/img_other_05.jpg"><span>실시간<br>계좌이체</span></label>
-								</div>
-							</li>
-							<li th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'mobile-phone-pay'}">
-								<div class="card">
-									<input type="radio" name="other" id="phone"
-										   th:onclick="|setPayment(this,'mobile','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
-									<label for="phone" class="phone"><img alt="" src="/mo/ko/images/order/img_other_06.jpg"><span>휴대폰결제</span></label>
-								</div>
-							</li>
-							<li>
-								<div class="card">
-									<input type="radio" name="other" id="other7"
-										   th:onclick="|setPayment(this,'globalCreditCard','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
-									<label for="other7"><img alt="" src="/mo/ko/images/order/img_other_07.jpg"><span>Global Credit<br>Card</span></label>
-								</div>
-							</li>
-							<li>
-								<div class="card">
-									<input type="radio" name="other" id="other8"
-										   th:onclick="|setPayment(this,'paypal','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
-									<label for="other8"><img alt="" src="/mo/ko/images/order/img_other_08.jpg"><span>PayPal</span></label>
-								</div>
-							</li>
-							<li>
-								<div class="card">
-									<input type="radio" name="other" id="other9"
-										   th:onclick="|setPayment(this,'salaryMinus','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
-									<label for="other9"><img alt="" src="/mo/ko/images/order/img_other_04.jpg"><span>급여차감</span></label>
-								</div>
-							</li>
+							<th:block th:each="payMethod : ${payMethodResult.payMethodExList}">
+								<li th:if="${payMethod.payServiceCode == 'naver-pg' and payMethod.payMethodCode == 'naverpay'}">
+									<div class="card">
+										<input type="radio" name="other" id="n_pay"
+											   th:onclick="|setPayment(this,'NAVERPAY','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
+										<label for="n_pay" class="naver_pay"><img alt="" src="/mo/ko/images/order/img_other_01.jpg"><span>네이버페이</span></label>
+									</div>
+								</li>
+								<li th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'payco'}">
+									<div class="card">
+										<input type="radio" name="other" id="payco"
+											   th:onclick="|setPayment(this,'wcard','onlypayco','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
+										<label for="payco"><img alt="" src="/mo/ko/images/order/img_other_02.jpg"><span>페이코</span></label>
+									</div>
+								</li>
+								<li th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'virtual-account'}">
+									<div class="card">
+										<input type="radio" name="other" id="remit_bank"
+											   th:onclick="|setPayment(this,'vbank','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
+										<label for="remit_bank" class="cash"><img alt="" src="/mo/ko/images/order/img_other_04.jpg"><span>무통장입금<br>(가상계좌)</span></label>
+									</div>
+								</li>
+								<li th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'bank-ac-transfer'}">
+									<div class="card">
+										<input type="radio" name="other" id="account_transfer"
+											   th:onclick="|setPayment(this,'bank','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
+										<label for="account_transfer" class="real_time"><img alt="" src="/mo/ko/images/order/img_other_05.jpg"><span>실시간<br>계좌이체</span></label>
+									</div>
+								</li>
+								<li th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'mobile-phone-pay'}">
+									<div class="card">
+										<input type="radio" name="other" id="phone"
+											   th:onclick="|setPayment(this,'mobile','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
+										<label for="phone" class="phone"><img alt="" src="/mo/ko/images/order/img_other_06.jpg"><span>휴대폰결제</span></label>
+									</div>
+								</li>
+								<li th:if="${payMethod.payServiceCode == 'eximpay' and payMethod.payMethodCode == 'eximpay'}">
+									<div class="card">
+										<input type="radio" name="other" id="ximpay"
+											   th:onclick="|setPayment(this,'globalCreditCard','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
+										<label for="ximpay"><img alt="" src="/mo/ko/images/order/img_other_07.jpg"><span>Global Credit<br>Card</span></label>
+									</div>
+								</li>
+								<li th:if="${payMethod.payServiceCode == 'paypal' and payMethod.payMethodCode == 'pay-pal'}">
+									<div class="card">
+										<input type="radio" name="other" id="paypal"
+											   th:onclick="|setPayment(this,'paypal','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
+										<label for="paypal"><img alt="" src="/mo/ko/images/order/img_other_08.jpg"><span>PayPal</span></label>
+									</div>
+								</li>
+								<li th:if="${payMethod.payServiceCode == 'salaryMinus' and payMethod.payMethodCode == 'salary-minus'}">
+									<div class="card">
+										<input type="radio" name="other" id="salaryMinus"
+											   th:onclick="|setPayment(this,'salaryMinus','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
+										<label for="salaryMinus"><img alt="" src="/mo/ko/images/order/img_other_04.jpg"><span>급여차감</span></label>
+									</div>
+								</li>
+							</th:block>
 						</ul>
 						<div class="other_noty_area">
 							<div class="naver_pay">
@@ -216,7 +218,7 @@
 									<!-- 서울보증보험 신청여부 영역 추가 (180824) -->
 									<div class="insurance_wrap">
 										<dl class="ui_table">
-											<dt>서울보증보험<br>신청여부</dt>
+											<dt style="font-size: 14px;">서울보증보험<br>신청여부</dt>
 											<dd>
 												<div class="rdo_wrap">
 													<span class="rdo_h30"><input type="radio" name="insurance" id="insurance1" checked="checked"><label for="insurance1">네</label></span>
@@ -303,7 +305,7 @@
 							<!--// 실시간계좌이체일경우 서울보증보험 영역 추가 (180824)  -->
 						</div>
 					</li>
-				</th:block>
+					<!-- 다른 결제 수단 End -->
 			</ul>
 		</dd>
 	</dl>
@@ -330,15 +332,23 @@
 					break;
 				case 'naverpay':
 					<!--네이버페이-->
+					$('#pay3').trigger("click");
 					$('#n_pay').trigger("click");
 					break;
 				case 'payco':
 					<!--페이코-->
+					$('#pay3').trigger("click");
 					$('#payco').trigger("click");
 					break;
 				case 'kakaopay':
 					<!--카카오페이-->
+					$('#pay3').trigger("click");
 					$('#kakao_pay').trigger("click");
+					break;
+				case 'paypal':
+					<!--Paypal-->
+					$('#pay3').trigger("click");
+					$('#paypal').trigger("click");
 					break;
 				case 'credit-card':
 					<!--신용카드-->
@@ -346,18 +356,18 @@
 					break;
 				case 'bank-ac-transfer':
 					<!--실시간계좌이체-->
+					$('#credit').trigger("click");
 					$('#account_transfer').trigger("click");
 					break;
 				case 'virtual-account':
 					<!--가상계좌-->
+					$('#credit').trigger("click");
 					$('#remit_bank').trigger("click");
 					break;
 				case 'mobile-phone-pay':
 					<!--휴대폰결제-->
+					$('#credit').trigger("click");
 					$('#phone').trigger("click");
-					break;
-				case 'paypal':
-					<!--Paypal-->
 					break;
 				default:
 					clicked = false; // 2018-09-10 추가
@@ -371,7 +381,7 @@
 	};
 
 	//결제 수단 선택 상태값
-	$('input:radio[name="payMethod"]').change(function() {
+	$('input:radio[name="rdoPayMethod"]').change(function() {
 		$('.other_noty_area > div').hide();
 		$('.payment_list').find('.card_list').hide();
 		$('.card_list .card').find('input').prop('checked',false);
@@ -392,7 +402,7 @@
 	/* 선택한 결제 수단을 다음에도 사용 */
 	$('[name=nextPayUseYn]').on('click', function(e){
 		if($(this).is(":checked")) {
-			var selectedPaymethod = $('input:radio[name="payMethod"]:checked').val();
+			var selectedPaymethod = $('input:radio[name="rdoPayMethod"]:checked').val();
 			if (selectedPaymethod == null || selectedPaymethod == '') {
 				AP.modal.alert("결제수단을 선택해 주세요.");
 				$('[name=nextPayUseYn]:checked').prop('checked', false);
@@ -466,6 +476,7 @@
 	/* 결제수단 선택된 값 셋팅 */
 	function setPaymentInput(payMethod, goPayMethod, payMethodSn, payServiceCode, payMethodCode) {
 		$('input:hidden[name=payMethod]').val(payMethod);
+		$('input:hidden[name=goPayMethod]').val(goPayMethod);
 		$('input:hidden[name=payMethodSn]').val(payMethodSn);
 		$('input:hidden[name=payServiceCode]').val(payServiceCode);
 		$('input:hidden[name=payMethodCode]').val(payMethodCode);

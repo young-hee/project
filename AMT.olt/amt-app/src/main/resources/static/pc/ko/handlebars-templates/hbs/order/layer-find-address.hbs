@@ -1,39 +1,27 @@
-<!-- 우편번호 검색 : 주소지 입력 -->
-<div class="layer_popup" style="display: block;">
-	<div class="layer_wrap layer_w510 coupon_wrap">
-		<dl class="layer">
-			<!-- AP.modal.open() 의 contents 영역 -->
-			<dt class="layer_title">우편번호 검색</dt>
-			<dd class="layer_cont">
-				<!-- AP.modal.info() 의 contents 영역 -->
-				<div class="ly_content ui_find_addresses">
-					<!-- 결과 템플레이트 화면 변경 -->
-					<span id="find-address-result-template" style="display: none;">order.layer-find-address-result-template</span>
-					<div class="address_search_wrap ">
-						<div class="input_wrap">
-							<input type="text" class="address_keyword" placeholder="도로명, 건물명, 번지로 검색해주세요" class="input_coupon" />
-							<a href="#1" title="검색" class="ico_search btn_address_find"><img src="/pc/ko/images/order/ico_search_purple.png" alt="검색"></a>
-						</div>
-					</div>		<!-- // address_search_wrap -->
+<dd class="layer_cont">
+	<!-- AP.modal.info() 의 contents 영역 -->
+	<div class="ly_content ui_find_addresses">
+		<!-- 결과 템플레이트 화면 변경 -->
+		<span id="find-address-result-template" style="display: none;">order.layer-find-address-result-template</span>
+		<div class="address_search_wrap ">
+			<div class="input_wrap">
+				<input type="text" class="address_keyword" placeholder="도로명, 건물명, 번지로 검색해주세요" class="input_coupon" />
+				<a href="#1" title="검색" class="ico_search btn_address_find"><img src="/pc/ko/images/order/ico_search_purple.png" alt="검색"></a>
+			</div>
+		</div>		<!-- // address_search_wrap -->
 
-					<div class="con_wrap address_list">
-						<dl class="tip">
-							<dt>우편번호 통합검색 <strong>Tip</strong></dt>
-							<dd>
-								도로명 + <strong>건물번호</strong> (예 : 송파대로 570)<br>
-								동/읍/면/리 + <strong>번지</strong> (예 : 신천동 7-30)<br>
-								건물명, 아파트명 (예 : 반포자이아파트)
-							</dd>
-						</dl>
-					</div>	<!-- // con_wrap -->
-
-				</div>
-			</dd>
-			<!-- //AP.modal.open() 의 contents 영역 -->
-		</dl>
-		<button class="layer_close" type="button" onClick="$('#sample1_1').hide();"><span class="sr_only">레이어 닫기</span></button>
+		<div class="con_wrap address_list">
+			<dl class="tip">
+				<dt>우편번호 통합검색 <strong>Tip</strong></dt>
+				<dd>
+					도로명 + <strong>건물번호</strong> (예 : 송파대로 570)<br>
+					동/읍/면/리 + <strong>번지</strong> (예 : 신천동 7-30)<br>
+					건물명, 아파트명 (예 : 반포자이아파트)
+				</dd>
+			</dl>
+		</div>	<!-- // con_wrap -->
 	</div>
-</div>
+</dd>
 
 
 <script>
@@ -52,7 +40,6 @@
 
 	/** 주소 선택시 결과 이벤트 */
 	$('.ui_find_addresses').on('change-address', function (e) {
-
 		console.log( e.selIndex, e.postCode, e.address, e.detailAddress );
 
 		findAddrObj.selIndex = e.selIndex;
@@ -69,43 +56,4 @@
 		$("#addInput" + e.selIndex).show();
 
 	});
-
-	/** 주소 등록하기 버튼 이벤트 */
-	$("#btnFindAddrReg").on("click", function() {
-
-		var inputDetail = $("#inputDetail" + findAddrObj.selIndex);
-		var inputDetailName = $("#inputDetailName" + findAddrObj.selIndex);
-		var inputDetailHp = $("#inputDetailHp" + findAddrObj.selIndex);
-
-		if(inputDetailName.val() == '') {
-			AP.modal.alert("받는고객 이름을 입력해 주세요.").addListener( 'modal-close', function (e) {
-				inputDetailName.focus();
-			});
-			return;
-		}
-		if(inputDetailHp.val() == '') {
-			AP.modal.alert("받는고객 휴대폰 번호를 입력해 주세요.").addListener( 'modal-close', function (e) {
-				inputDetailHp.focus();
-			});
-			return;
-		}
-
-		//배송지 추가 화면으로 선택된 값들을 보낸다.
-		var isLoginedMember = $("#isLoginedMember").text();
-		if(isLoginedMember == "true") {
-			//회원 새로운 주소지 수정/추가
-			addMemberAddr(inputDetailName.val(), inputDetailHp.val(), findAddrObj.postCode, findAddrObj.address + findAddrObj.detailAddress, inputDetail.val());
-		} else {
-			//비회원 새로운 주소지 수정/추가
-			addNonMemberAddr(inputDetailName.val(), inputDetailHp.val(), findAddrObj.postCode, findAddrObj.address + findAddrObj.detailAddress, inputDetail.val());
-		}
-
-		//주소찾기 clear
-		$( '.ui_find_addresses' ).findAddresses( 'clear' );
-
-		//모달 close
-		closeLayerFindAddress();
-
-	});
-
 </script>

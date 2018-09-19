@@ -26,7 +26,7 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["product-option"] = Handlebars
     + "</p>\n\n\n\n				<p class=\"price\">\n					<span class=\"quantity\">"
     + alias4((helpers.myOrdQty || (depth0 && depth0.myOrdQty) || alias2).call(alias1,"unit",depth0,(depths[1] != null ? depths[1].step : depths[1]),(depths[1] != null ? depths[1].type : depths[1]),(depths[1] != null ? depths[1].claimYn : depths[1]),{"name":"myOrdQty","hash":{},"data":data}))
     + "개</span> /\n"
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.typeName : depth0),"!=",null,{"name":"xif","hash":{},"fn":container.program(10, data, 0, blockParams, depths),"inverse":container.program(15, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depths[1] != null ? depths[1].typeName : depths[1]),"!=",null,{"name":"xif","hash":{},"fn":container.program(10, data, 0, blockParams, depths),"inverse":container.program(15, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "				</p>\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,(depth0 != null ? depth0.ordHistProdStatusCode : depth0),"===","ProdCancel",{"name":"xif","hash":{},"fn":container.program(17, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "			</div>\n		</div>\n"
@@ -48,7 +48,9 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["product-option"] = Handlebars
     + alias2(((helper = (helper = helpers.ordHistProdNo || (depth0 != null ? depth0.ordHistProdNo : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"ordHistProdNo","hash":{},"data":data}) : helper)))
     + "\" val=\""
     + alias2((helpers.json || (depth0 && depth0.json) || alias4).call(alias3,depth0,{"name":"json","hash":{},"data":data}))
-    + "\"><label for=\""
+    + "\" "
+    + alias2((helpers.isDisabled || (depth0 && depth0.isDisabled) || alias4).call(alias3,(depths[1] != null ? depths[1].type : depths[1]),(depths[1] != null ? depths[1].step : depths[1]),(depth0 != null ? depth0.rtnRequestPossibleQty : depth0),{"name":"isDisabled","hash":{},"data":data}))
+    + "><label for=\""
     + alias2(((helper = (helper = helpers.ordHistProdNo || (depth0 != null ? depth0.ordHistProdNo : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"ordHistProdNo","hash":{},"data":data}) : helper)))
     + "\"></label>\n					</div>\n";
 },"6":function(container,depth0,helpers,partials,data,blockParams,depths) {
@@ -62,19 +64,21 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["product-option"] = Handlebars
     + alias1(((helper = (helper = helpers.ordHistProdNo || (depth0 != null ? depth0.ordHistProdNo : depth0)) != null ? helper : alias3),(typeof helper === alias4 ? helper.call(alias2,{"name":"ordHistProdNo","hash":{},"data":data}) : helper)))
     + "\" val=\""
     + alias1((helpers.json || (depth0 && depth0.json) || alias3).call(alias2,depth0,{"name":"json","hash":{},"data":data}))
-    + "\"><label for=\""
+    + "\" "
+    + alias1((helpers.isDisabled || (depth0 && depth0.isDisabled) || alias3).call(alias2,(depths[1] != null ? depths[1].type : depths[1]),(depths[1] != null ? depths[1].step : depths[1]),(depth0 != null ? depth0.rtnRequestPossibleQty : depth0),{"name":"isDisabled","hash":{},"data":data}))
+    + "><label for=\""
     + alias1(((helper = (helper = helpers.ordHistProdNo || (depth0 != null ? depth0.ordHistProdNo : depth0)) != null ? helper : alias3),(typeof helper === alias4 ? helper.call(alias2,{"name":"ordHistProdNo","hash":{},"data":data}) : helper)))
     + "\"></label>\n					</div>\n";
-},"8":function(container,depth0,helpers,partials,data) {
+},"8":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
   return "					<div class=\"flag_wrap\">\n						<p class=\"flag\">"
-    + container.escapeExpression((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depth0 != null ? depth0.typeName : depth0),"a",{"name":"eq","hash":{},"data":data}),"진주알 전용","뷰티포인트 전용",{"name":"condition","hash":{},"data":data}))
+    + container.escapeExpression((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].typeName : depths[1]),"a",{"name":"eq","hash":{},"data":data}),"진주알 전용","뷰티포인트 전용",{"name":"condition","hash":{},"data":data}))
     + "</p>\n					</div>\n";
-},"10":function(container,depth0,helpers,partials,data) {
+},"10":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
-  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.typeName : depth0),"==","b",{"name":"xif","hash":{},"fn":container.program(11, data, 0),"inverse":container.program(13, data, 0),"data":data})) != null ? stack1 : "")
+  return ((stack1 = (helpers.xif || (depth0 && depth0.xif) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depths[1] != null ? depths[1].typeName : depths[1]),"==","b",{"name":"xif","hash":{},"fn":container.program(11, data, 0, blockParams, depths),"inverse":container.program(13, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "\n";
 },"11":function(container,depth0,helpers,partials,data) {
     return "							<strong class=\"eng\">"
@@ -172,7 +176,9 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["product-option"] = Handlebars
     + alias2(((helper = (helper = helpers.ordHistProdNo || (depth0 != null ? depth0.ordHistProdNo : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"ordHistProdNo","hash":{},"data":data}) : helper)))
     + "\" val=\""
     + alias2((helpers.json || (depth0 && depth0.json) || alias4).call(alias3,depth0,{"name":"json","hash":{},"data":data}))
-    + "\"><label for=\""
+    + "\" "
+    + alias2((helpers.isDisabled || (depth0 && depth0.isDisabled) || alias4).call(alias3,(depths[1] != null ? depths[1].type : depths[1]),(depths[1] != null ? depths[1].step : depths[1]),(depth0 != null ? depth0.rtnRequestPossibleQty : depth0),{"name":"isDisabled","hash":{},"data":data}))
+    + "><label for=\""
     + alias2(((helper = (helper = helpers.ordHistProdNo || (depth0 != null ? depth0.ordHistProdNo : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"ordHistProdNo","hash":{},"data":data}) : helper)))
     + "\"></label>\n							</span>\n";
 },"35":function(container,depth0,helpers,partials,data,blockParams,depths) {
@@ -186,7 +192,9 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["product-option"] = Handlebars
     + alias1(((helper = (helper = helpers.ordHistProdNo || (depth0 != null ? depth0.ordHistProdNo : depth0)) != null ? helper : alias3),(typeof helper === alias4 ? helper.call(alias2,{"name":"ordHistProdNo","hash":{},"data":data}) : helper)))
     + "\" val=\""
     + alias1((helpers.json || (depth0 && depth0.json) || alias3).call(alias2,depth0,{"name":"json","hash":{},"data":data}))
-    + "\"><label for=\""
+    + "\" "
+    + alias1((helpers.isDisabled || (depth0 && depth0.isDisabled) || alias3).call(alias2,(depths[1] != null ? depths[1].type : depths[1]),(depths[1] != null ? depths[1].step : depths[1]),(depth0 != null ? depth0.rtnRequestPossibleQty : depth0),{"name":"isDisabled","hash":{},"data":data}))
+    + "><label for=\""
     + alias1(((helper = (helper = helpers.ordHistProdNo || (depth0 != null ? depth0.ordHistProdNo : depth0)) != null ? helper : alias3),(typeof helper === alias4 ? helper.call(alias2,{"name":"ordHistProdNo","hash":{},"data":data}) : helper)))
     + "\"></label>\n							</span>\n";
 },"37":function(container,depth0,helpers,partials,data,blockParams,depths) {

@@ -1,120 +1,70 @@
 
 <!--/* rside_area */-->
-<div class="rside_area">
-	<div class="pay_list">
-		<dl>
-			<dt>결제 상세 내역</dt>
-			<dd class="result">
-				<div class="tit"><strong>주문금액</strong><span class="price">100,000원</span></div>
-				<ul>
-					<li>
-						<em>Apmall 상품 12개</em>
-						<span class="price">0원</span>
-					</li>
-					<li>
-						<em>이니스프리 상품 0개</em>
-						<span class="price">0원</span>
-					</li>
-					<li>
-						<em>데싱디바, 머지 상품 0개</em>
-						<span class="price">0원</span>
-					</li>
-				</ul>
-				<div class="tit"><strong>뷰티포인트 상품</strong><span class="price">100,000원</span></div>
-				<!--2018-09-06 삭제
-                <ul>
-                    <li>
-                        <em>뷰티포인트 상품(3개)</em>
-                        <span class="price">0원</span>
-                    </li>
-                </ul>
-                <div class="tit"><strong>포장신청</strong><span class="price">1개</span></div> -->
-				<div class="tit"><strong>배송비</strong><span class="price">6,500원</span></div>
-				<ul>
-					<li>
-						<em>Apmall 배송비</em>
-						<span class="price">2,500원</span>
-					</li>
-					<li>
-						<em>이니스프리 배송비</em>
-						<span class="price">2,500원</span>
-					</li>
-					<li>
-						<em>데싱디바, 머지 배송비</em>
-						<span class="price">2,500원</span>
-					</li>
-				</ul>
-				<div class="tit"><strong>총 할인</strong><span class="price">6,500원</span></div>
-				<ul>
-					<li>
-						<em>상품 할인</em>
-						<span class="price">2,500원</span>
-					</li>
-					<li>
-						<em>쿠폰 할인</em>
-						<span class="price">1,500원</span>
-					</li>
-					<li>
-						<em>뷰티포인트</em>
-						<span class="price">2,500원</span>
-					</li>
-				</ul>
-			</dd>
-			<dd class="total">
-				<div class="set"><strong>총 결제 예정 금액</strong><span class="price">113,500<span class="small">원</span></span></div>
-				<div class="beauty">
-					<strong>
-						적립예정 뷰티포인트
-						<span class="ui_tooltip">
-											<button type="button" class="btn_tooltip"><span class="sr_only">툴팁보기</span></button>
-											<span class="arr"></span>
-											<span class="layer_tooltip">
-												<dl>
-													<dt>뷰티포인트 적립안내</dt>
-													<dd>
-														고객님의 아모레퍼시픽 뷰티포인트 통합회원 등급에 따라 결제금액의 기본 1%+우대 최대 4%가 적립됩니다. (고객별 상이)<br>
-														뷰티포인트 적립 기준금액은 [최종결제금액-뷰티포인트 적립 제외상품 금액-배송비]로 계산된 금액입니다. (확인필요)<br>
-														특가상품(투데이핫딜), 프로모션 상품(상품할인, M+N, 즉시할인, 동시구매 등)은 뷰티포인트 적립대상에서 제외됩니다. <br>
-														플러스멤버십 할인(10%)이 적용된 상품은 뷰티포인트 적립대상에 포함됩니다. <br>
-														적립 예정 뷰티포인트는 주문상품의 구매확정 시점에 자동으로 적립되며, 사용기한은 적립일로부터 1년입니다.<br>
-														주문 제품의 취소/환불/반품시 적립된 뷰티포인트도 자동 회수 처리됩니다. <br>
-														보다 자세한 뷰티포인트 이용 안내는 뷰티포인트 웹사이트(www.beautypoint.co.kr)에서 확인하실 수 있습니다.
-													</dd>
-												</dl>
-												<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
-											</span>
-										</span>
-					</strong>
-					<span class="point">3,000P</span>
-				</div>
-				<!-- 09-05 마크업 추가 : 적립예정 뷰티포인트 부분 UI수정 건 [S] -->
-				<ul>
-					<li>
-						<em>구매 적립</em>
-						<span class="price">2,000P</span>
-					</li>
-					<li>
-						<em>쿠폰 적립</em>
-						<span class="price">1,000P</span>
-					</li>
-				</ul>
-				<!-- 09-05 마크업 추가 : 적립예정 뷰티포인트 부분 UI수정 건 [E] -->
-			</dd>
-		</dl>
-
-
-		<div class="buy_agree">
-			<span class="check_wrap"><input type="checkbox" id="check_fin"><label for="check_fin">구매조건 및 결제진행 동의</label></span>
-			<p class="txt">
-				주문할 상품의 상품명과 상품가격, 배송정보를 명확히<br>
-				확인하였으며 구매진행에 동의하시겠습니까?<br>
-				(전자상거래법 제 8조 2항)<br>
-				<em>ONE pay로 결제시 일시불만 가능합니다.</em>
-			</p>
-		</div>
-		<div class="btn_area">
-			<a href="#none" class="btn_xlg_primary">결제하기</a>
-		</div>
-	</div>
+<div class="rside_area" id="amtPcur">
 </div>
 <!--/* rside_area */-->
+
+<script th:inline="javascript">
+	$( document ).ready(function() {
+		amtPcurInit();
+	});
+
+	//결제금액 영역 그리기
+	function amtPcurInit() {
+		var ordHistEx = /*[[${ordEx.ordHistEx}]]*/ null, // 최종결제금액
+			ordOtfExList = /*[[${ordOtfExList}]]*/ null,
+			ordAmtMap = /*[[${ordAmtMap}]]*/ null,
+			ordCntMap = /*[[${ordCntMap}]]*/ null,
+			otfTotalAmtMap = /*[[${otfTotalAmtMap}]]*/ null,
+			depositAvailAmt = /*[[${ordEx.depositAvailAmt}]]*/ 0,
+			isApMember = /*[[${isApMember}]]*/ null;
+
+		/**
+		 * 총결제금액
+		 * @type {*|String}
+		 */
+		var html = AP.common.getTemplate( 'order.final-price-amt-pcur', {
+			ordHistEx : ordHistEx,
+			ordOtfExList : ordOtfExList,
+			ordAmtMap : ordAmtMap,
+			ordCntMap : ordCntMap,
+			otfTotalAmtMap : otfTotalAmtMap,
+			isComplete : false,
+			isApMember : isApMember
+		});
+		$('#amtPcur').html(html);
+		$("[name=finalPamtPcur]").val(ordHistEx.finalPamtPcur); 	//최종결제금액
+		$("[name=depositAvailAmt]").val(depositAvailAmt); 		//예치금
+	}
+	//결제금액 영역 그리기(ajax)
+	function amtPcurInitAjax(data) {
+
+		/*** 쿠폰/포인트 사용 영역의 최종 할인금액 + 포인트 사용표시 ***/
+		$("#totalUsedSaleAmt").text( addComma(data.ordAmtMap.totalOrdDcPriceSum) + '원 할인' );
+		$("#totalUsedPointAmt").text( addComma(data.ordAmtMap.MembershipExch) + 'P 사용' );
+
+		/**
+		 * 총결제금액
+		 * @type {*|String}
+		 */
+		var html = AP.common.getTemplate('order.final-price-amt-pcur', {
+			ordHistEx: data.ordHistEx,
+			ordOtfExList : data.ordOtfExList,
+			ordAmtMap: data.ordAmtMap,
+			ordCntMap: data.ordCntMap,
+			otfTotalAmtMap : data.otfTotalAmtMap,
+			isApMember: data.isApMember
+		});
+		$('#amtPcur').html(html);
+		$("[name=finalPamtPcur]").val(data.ordHistEx.finalPamtPcur);	//최종결제금액
+		$("[name=depositAvailAmt]").val(data.depositAvailAmt);		//예치금
+		$("#orderPayment").html($B.string.numberFormat(data.ordHistEx.finalPamtPcur) + '원 결제하기');
+	};
+
+	function addComma(num) {
+		var regexp = /\B(?=(\d{3})+(?!\d))/g;
+		return num.toString().replace(regexp, ',');
+	}
+
+</script>
+<!--최종 결제금액-->

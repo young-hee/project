@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:ap="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+ 	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<th:block ap:replace="~{common/fragment/js-libs}"/>
+<script type="text/javascript">
+	
+	$(document).ready(function(){
+		
+		//새창을 종료하고 주문서 페이지에서 완료페이지로 이동		
+		var $form = $("form[name='naver']");
+		var resultCode = $form.find("input:hidden[name='resultCode']").val();
+		if(resultCode == 'Success') {	//결제 성공
+			
+			//부모창에서 서브밋
+			opener.window.name = "reception";
+			$form.attr("target", opener.window.name);
+			$form.attr("action", "/order/ordComplete");
+			$form.submit();	
+			
+			
+		} else {
+			
+			var msg;
+			var reserveId = $form.find("input:hidden[name='reserveId']").val();	//인증결과인지 승인결과인지 해당 값의 존재여부로 판단. (인증실패인 경우 해당 값 셋팅됨)
+			//TODO : 승인실패 시 메세지 처리
+			 			
+			   if($form.find("input:hidden[name='resultMessage']") != null) {
+					msg = $form.find("input:hidden[name='resultMessage']").val();
+					if(msg ==null || msg == '' || msg== 'undefined') {
+						
+						msg = "결제 중 시스템 오류가 발생하였습니다. 관리자 문의바랍니다.";	
+					} else {
+						
+						//resultMessage 
+						if(msg == 'userCancel') {	//사용자 취소
+							msg = "사용자가 결제를 취소하였습니다.";
+						}
+						
+						else if(msg == 'webhookFail') {	//webhookUrl 호출 응답 실패
+							msg = "서버 응답 실패 다시 시도하여 주십시오.";
+						}
+						
+						else if(msg == 'paymentTimeExpire') {	//결제시간 초과
+							msg = "결제 시간을 초과하였습니다.";
+						}
+						
+						else if(msg == 'webhookFail') {	//본인 카드 인증 오류(네이버 로그인 계정과 카드의 명의자가 다른 경우)
+							msg = "본인 카드 인증 오류입니다.";
+						}
+					}
+				} else {
+					msg = "결제 중 시스템 오류가 발생하였습니다. 관리자 문의바랍니다.";
+				}
+			
+			window.opener.payFailResult(msg);
+		}
+		
+		self.close();
+		
+	});
+</script>
+
+</head>
+
+<form id="naverPayForm" name="naver" method="post" accept-charset="utf-8">	
+	<th:block th:each="pr, stat: *{resultMap}">
+		<input type="hidden" th:name="${pr.key}" th:value="${pr.value}"/>
+	</th:block>
+ </form>
+</body>
+</html>

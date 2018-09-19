@@ -7,7 +7,7 @@ this["AP"]["handlebars"]["my"]["coupon-list"] = Handlebars.template({"1":functio
 
   return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.list : depth0),{"name":"each","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"2":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
   return "		<div class=\"coupon\">\n			<div class=\"table_layout\">\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.dDay : depth0),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -15,8 +15,10 @@ this["AP"]["handlebars"]["my"]["coupon-list"] = Handlebars.template({"1":functio
     + ((stack1 = (helpers.channelSwitch || (depth0 && depth0.channelSwitch) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.availCoupon : depth0)) != null ? stack1.availCh : stack1),{"name":"channelSwitch","hash":{},"data":data})) != null ? stack1 : "")
     + "\n				</p>\n			</div>\n			<div class=\"table_layout\">\n				"
     + ((stack1 = (helpers.couponTypeBenefitSwitch || (depth0 && depth0.couponTypeBenefitSwitch) || alias2).call(alias1,(depth0 != null ? depth0.availCoupon : depth0),(depth0 != null ? depth0.finalExpExpectedDt : depth0),{"name":"couponTypeBenefitSwitch","hash":{},"data":data})) != null ? stack1 : "")
-    + "\n				<div>\n					<p class=\"coupon_name\">"
-    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.availCoupon : depth0)) != null ? stack1.couponName : stack1), depth0))
+    + "\n				<div>\n					<span class=\"flag\">"
+    + alias3((helpers.marketingOrg || (depth0 && depth0.marketingOrg) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.availCoupon : depth0)) != null ? stack1.mktgOrgCode : stack1),{"name":"marketingOrg","hash":{},"data":data}))
+    + "</span>\n					<p class=\"coupon_name\">"
+    + alias3(container.lambda(((stack1 = (depth0 != null ? depth0.availCoupon : depth0)) != null ? stack1.couponName : stack1), depth0))
     + "</p>\n					<p class=\"condition\">"
     + ((stack1 = (helpers.conditionSwitch || (depth0 && depth0.conditionSwitch) || alias2).call(alias1,(depth0 != null ? depth0.availCoupon : depth0),{"name":"conditionSwitch","hash":{},"data":data})) != null ? stack1 : "")
     + "</p>\n				</div>\n			</div>\n"

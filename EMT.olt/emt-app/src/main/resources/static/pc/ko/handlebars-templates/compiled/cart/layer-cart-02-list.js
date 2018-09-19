@@ -21,7 +21,7 @@ this["AP"]["handlebars"]["cart"]["layer-cart-02-list"] = Handlebars.template({"1
     + alias4(((helper = (helper = helpers.storeSn || (depth0 != null ? depth0.storeSn : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"storeSn","hash":{},"data":data}) : helper)))
     + "\"><span class=\"sr_only\" value=\""
     + alias4(((helper = (helper = helpers.storeSn || (depth0 != null ? depth0.storeSn : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"storeSn","hash":{},"data":data}) : helper)))
-    + "\">{단골매장}선택</span></label>\n						</span>\n					</td>\n					<td>\n						<a href=\"#\" onclick=\"fnChangeStore('"
+    + "\">{단골매장}선택</span></label>\n						</span>\n					</td>\n					<td>\n						<a href=\"#\" onclick=\"fnLayerChangeStore('"
     + alias4(((helper = (helper = helpers.storeSn || (depth0 != null ? depth0.storeSn : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"storeSn","hash":{},"data":data}) : helper)))
     + "'); return false;\">\n							"
     + alias4(((helper = (helper = helpers.storeName || (depth0 != null ? depth0.storeName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"storeName","hash":{},"data":data}) : helper)))
@@ -55,5 +55,5 @@ this["AP"]["handlebars"]["cart"]["layer-cart-02-list"] = Handlebars.template({"1
 
   return "<table class=\"ui_table_striped data_table thead_colored align_center mgt20\">\n	<caption class=\"sr_only\">테이크아웃매장 목록으로 단골등록, 매장, 전화번호, 주소, 매장위치로 구성</caption>\n	<colgroup>\n		<col style=\"width:67px\"/> <!-- /* 20180725:테이블 너비 수정*/ -->\n		<col style=\"width:137px\"/>\n		<col style=\"width:116px\"/>\n		<col style=\"width:189px\"/>\n		<col />\n	</colgroup>\n	<thead>\n	<tr>\n		<th scope=\"col\">단골매장</th>\n		<th scope=\"col\">매장</th>\n		<th scope=\"col\">전화번호</th>\n		<th scope=\"col\">주소</th>\n		<th scope=\"col\">매장위치</th>\n	</tr>\n	</thead>\n	<tbody>\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || helpers.helperMissing).call(alias1,(depth0 != null ? depth0.totalLength : depth0),0,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "	</tbody>\n</table>\n<div class=\"ui_paging pagination\"></div>";
+    + "	</tbody>\n</table>\n<div class=\"ui_paging pagination\"></div>\n";
 },"useData":true});

@@ -8,25 +8,25 @@
             <!-- // page title -->
             <!-- page contents -->
             <div class="ap_contents event pearl_roulette">
-				<div class="pear_roulette">
+				<div class="pear_roulette" th:data-cnt="${rouletteInfo.participatedPossibleCnt}" th:data-point="${rouletteInfo.decActivityPoint}">
 					<div class="sr_only">
-						<p>하루 3번 반짝반짝</p>
+						<p>하루 [[${rouletteInfo.participatedPossibleCnt}]]번 반짝반짝</p>
 						<p>진주알룰렛</p>
-						<p>3번 바로바로 당첨되는 진주알 행운 룰렛으로 선물받아가자!</p>
+						<p>[[${rouletteInfo.participatedPossibleCnt}]]번 바로바로 당첨되는 진주알 행운 룰렛으로 선물받아가자!</p>
 					</div>
 					<img class="top" ap:src="@{/images/event/top_roulette.png}" alt="">
 					<div class="circle">
 						<img ap:src="@{/images/event/circle_roulette.png}" alt="">
 					</div>
 					<button type="button" class="btn_start"><span class="sr_only">시작</span></button>
-					<p class="text">행운 당첨은 1회 참여 시 <em>진주알 20알</em>이 차감됩니다.<br><em>하루에 3회</em>까지 응모 가능합니다.</p>
+					<p class="text">행운 당첨은 1회 참여 시 <em>진주알 [[${rouletteInfo.decActivityPoint}]]알</em>이 차감됩니다.<br><em>하루에 [[${rouletteInfo.participatedPossibleCnt}]]회</em>까지 응모 가능합니다.</p>
 				</div>
 				<div class="event_benefit_info">
 					<dl>
 						<dt>읽어보세요!</dt>
 						<dd>
 							<ul class="list_bullet_dot">
-								<li>진주알 룰렛은 1회 참여 시 진주알 20알이 차감됩니다. <em>(1일 최대 3회 응모 가능)</em></li>
+								<li>진주알 룰렛은 1회 참여 시 진주알 [[${rouletteInfo.decActivityPoint}]]알이 차감됩니다. <em>(1일 최대 [[${rouletteInfo.participatedPossibleCnt}]]회 응모 가능)</em></li>
 								<li>에뛰드 BEST 상품, 팬시제품, 할인쿠폰, 진주알 등 다양한 형태의 당첨 경품이 마련되어 있으며, 응모 즉시 확인 가능합니다.</li>
 							</ul>
 						</dd>
@@ -63,16 +63,7 @@
 		<th:block ap:fragment="layout-endpoint">
 			<!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
 			<script th:inline="javascript">
-				;(function () {
-					var member = {};
-					[# th:if="${memberMap}"]
-					member.id = /*[[${memberMap.id}]]*/;
-					member.name = /*[[${memberMap.name}]]*/;
-					member.memberSn = /*[[${memberMap.memberSn}]]*/;
-					[/]
-
-					AP.roulette.setMemberInfo( member );
-				}());
+				
 			</script>
 		</th:block>
 </body>

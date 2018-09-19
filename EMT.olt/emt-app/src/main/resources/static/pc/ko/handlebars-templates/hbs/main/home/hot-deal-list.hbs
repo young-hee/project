@@ -13,11 +13,14 @@
 								{{#each this.onlineProdImages}}
 									{{#if @first}}
 										<a href="{{ productDetailPath ../../onlineProdSn }}" class="lazy_load_wrap">
-											{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+											{{#xif ../saleDisplayStatus '==' 'OutOfStock'}}
 												<div class="item_state out_of_stock">일시품절</div>
 											{{/xif}}
-											<img class="lazy_load" src="" data-src="{{ replaceImagePath this.imgUrl 270 270 }}" alt="{{ ../onlineProdName }}">
-											</a>
+											{{#xif ../saleDisplayStatus '==' 'EndSale'}}
+												<div class="item_state out_of_stock">조기소진</div>
+											{{/xif}} 
+											<img class="lazy_load" src="" data-src="{{ replaceImagePath this.imgUrl 270 270 }}" alt="{{ ../onlineProdName }}" >
+										</a>
 									{{/if}}
 								{{/each}}
 							{{/if}}
@@ -25,10 +28,14 @@
 								{{#each this.prodImages}}
 									{{#if @first}}
 										<a href="{{ productDetailPath ../../onlineProdSn ../prodSn }}" class="lazy_load_wrap">
-										{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+											{{#xif ../saleDisplayStatus '==' 'OutOfStock'}}
 												<div class="item_state out_of_stock">일시품절</div>
-										{{/xif}}
-										<img class="lazy_load" src="" data-src="{{ replaceImagePath this.imgUrl 270 270 }}" alt="{{ ../prodName }}"></a>
+											{{/xif}}
+											{{#xif ../saleDisplayStatus '==' 'EndSale'}}
+												<div class="item_state out_of_stock">조기소진</div>
+											{{/xif}}
+											<img class="lazy_load" src="" data-src="{{ replaceImagePath this.imgUrl 270 270 }}" alt="{{ ../prodName }}" >
+										</a>
 									{{/if}}
 								{{/each}}
 							{{/if}}

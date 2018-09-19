@@ -79,7 +79,7 @@ public class OrderRestController extends OrderBaseController {
 	@GetMapping("/getDownloadCouponList")
 	public ResponseEntity<?> getDownloadCouponList() {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-        List<DownloadCoupons> downloadCoupons = couponApi.getDownloadCoupons("All", "Y", getMemberSn(), null, null);
+        List<DownloadCoupons> downloadCoupons = couponApi.getDownloadCoupons("All", "Y", getMemberSn(), null);
         result.put("downloadCouponCnt", downloadCoupons.size());	// 다운로드 쿠폰수
         result.put("downloadCouponList", downloadCoupons); 		// 다운로드 쿠폰목록
         result.put("result", "success");
@@ -203,72 +203,81 @@ public class OrderRestController extends OrderBaseController {
 			if ("01".equals(ordRcDTO.getDelivery())) {
 				/** 일반 택백 */
 				body.setShipAddressTypeCode("ShipAddressInput");
+
+				/** 수취인 정보 */
+				EmbeddableName en2 = new EmbeddableName();
+				EmbeddableAddress ea2 = new EmbeddableAddress();
+				EmbeddableTel et2 = new EmbeddableTel();
+
+				if(StringUtils.isNotEmpty(ordRcDTO.getAddress()) && "03".equals(ordRcDTO.getAddress())){
+					/** 새로입력 정보*/
+					en2.setName1(ordRcDTO.getUserName());
+					ea2.setZipCode(ordRcDTO.getUserPostCode());
+					ea2.setAddress1(ordRcDTO.getUserAddress1());
+					ea2.setAddress2(ordRcDTO.getUserAddress2());
+					et2.setPhoneNo(ordRcDTO.getUserPhoneNo());
+				}else{
+					//최근배송지 및 기본배송지
+					en2.setName1(ordRcDTO.getRecipientName());
+					ea2.setZipCode(ordRcDTO.getRecipientZipCode());
+					ea2.setAddress1(ordRcDTO.getRecipientAddress1());
+					ea2.setAddress2(ordRcDTO.getRecipientAddress2());
+					et2.setPhoneNo(ordRcDTO.getRecipientPhoneNo());
+				}
+
+				body.setRecipientName(en2);												// 수취인명
+				body.setRecipientAddress(ea2);											// 수취인주소
+				body.setRecipientPhoneNo1(et2);										// 수취인전화번호1
+				body.setRecipientEmailAddress(ordRcDTO.getRecipientEmailAddress());	// 수취인이메일주소
+
+				body.setShipMsg(ordRcDTO.getShipMsg());								// 배송메세지
+
 			} else {
 				/** 편의점 */
 				body.setShipAddressTypeCode("CStoreSelect");
-			}
 
-			/** 일반 택백 *********************************************************/
-			/** 수취인 정보 */
-            EmbeddableName en2 = new EmbeddableName();
-            EmbeddableAddress ea2 = new EmbeddableAddress();
-            EmbeddableTel et2 = new EmbeddableTel();
+				body.setcStoreName(ordRcDTO.getcStoreName());
+				EmbeddableTel cet = new EmbeddableTel();
+				cet.setPhoneNo(ordRcDTO.getcStorePhoneNo());
+				body.setcStorePhoneNo(cet);
+				body.setcStoreHqCode(ordRcDTO.getcStoreHqCode());
+				body.setcStoreCenterCode(ordRcDTO.getcStoreCenterCode());
+				body.setcStoreCenterName(ordRcDTO.getcStoreCenterName());
+				body.setcStoreStoreCode(ordRcDTO.getcStoreStoreCode());
+				body.setcStoreCompany(ordRcDTO.getcStoreCompany());
+				body.setcStoreDockNo(ordRcDTO.getcStoreDockNo());
+				EmbeddableAddress cea = new EmbeddableAddress();
+				cea.setAddress1(ordRcDTO.getcStoreAddressAddress1());
+				cea.setAddress2(ordRcDTO.getcStoreAddressAddress2());
+				cea.setZipCode(ordRcDTO.getcStoreAddressZipCode());
+				body.setcStoreAddress(cea);
+				body.setcStoreArrivalAreaCode(ordRcDTO.getcStoreArrivalAreaCode());
+				body.setcStoreArrivalAreaBarcode(ordRcDTO.getcStoreArrivalAreaBarcode());
+				body.setcStoreDongNmCode(ordRcDTO.getcStoreDongNmCode());
+				body.setcStoreArrivalDongNm(ordRcDTO.getcStoreArrivalDongNm());
 
-            if(StringUtils.isNotBlank(ordRcDTO.getUserName()) && StringUtils.isNotBlank(ordRcDTO.getUserPhoneNo())){
-				/** 새로입력 정보*/
-                en2.setName1(ordRcDTO.getUserName());
-                ea2.setZipCode(ordRcDTO.getUserPostCode());
-                ea2.setAddress1(ordRcDTO.getUserAddress1());
-                ea2.setAddress2(ordRcDTO.getUserAddress2());
-                et2.setPhoneNo(ordRcDTO.getUserPhoneNo());
-            }else{
-            	//최근배송지
-                en2.setName1(ordRcDTO.getRecipientName());
-                ea2.setZipCode(ordRcDTO.getRecipientZipCode());
-                ea2.setAddress1(ordRcDTO.getRecipientAddress1());
-                ea2.setAddress2(ordRcDTO.getRecipientAddress2());
-                et2.setPhoneNo(ordRcDTO.getRecipientPhoneNo());
-            }
-
-            body.setRecipientName(en2);												// 수취인명
-            body.setRecipientAddress(ea2);											// 수취인주소
-            body.setRecipientPhoneNo1(et2);										// 수취인전화번호1
-            body.setRecipientEmailAddress(ordRcDTO.getRecipientEmailAddress());	// 수취인이메일주소
-
-            body.setShipMsg(ordRcDTO.getShipMsg());								// 배송메세지
-
-            /** 편의점 택백 *********************************************************/
-            if (StringUtils.isNotEmpty(ordRcDTO.getcStoreName()) && StringUtils.isNotEmpty(ordRcDTO.getcStorePhoneNo())) {
-
-                body.setcStoreName(ordRcDTO.getcStoreName());
-                EmbeddableTel cet = new EmbeddableTel();
-                cet.setPhoneNo(ordRcDTO.getcStorePhoneNo());
-                body.setcStorePhoneNo(cet);
-                body.setcStoreHqCode(ordRcDTO.getcStoreHqCode());
-                body.setcStoreCenterCode(ordRcDTO.getcStoreCenterCode());
-                body.setcStoreCenterName(ordRcDTO.getcStoreCenterName());
-                body.setcStoreStoreCode(ordRcDTO.getcStoreStoreCode());
-                body.setcStoreCompany(ordRcDTO.getcStoreCompany());
-                body.setcStoreDockNo(ordRcDTO.getcStoreDockNo());
-                EmbeddableAddress cea = new EmbeddableAddress();
-                cea.setAddress1(ordRcDTO.getcStoreAddressAddress1());
-                cea.setAddress2(ordRcDTO.getcStoreAddressAddress2());
-                cea.setZipCode(ordRcDTO.getcStoreAddressZipCode());
-                body.setcStoreAddress(cea);
-                body.setcStoreArrivalAreaCode(ordRcDTO.getcStoreArrivalAreaCode());
-                body.setcStoreArrivalAreaBarcode(ordRcDTO.getcStoreArrivalAreaBarcode());
-                body.setcStoreDongNmCode(ordRcDTO.getcStoreDongNmCode());
-                body.setcStoreArrivalDongNm(ordRcDTO.getcStoreArrivalDongNm());
-
-				// 수취인명
-				// 수취인전화번호1
+				/** 수취인 정보 */
+				EmbeddableName en3 = new EmbeddableName();
 				EmbeddableAddress ea3 = new EmbeddableAddress();
+				EmbeddableTel et3 = new EmbeddableTel();
+				if (StringUtils.isNotEmpty(ordRcDTO.getAddress2()) && "01".equals(ordRcDTO.getAddress2())) {
+					//주문자와 동일
+					en3.setName1(ordRcDTO.getRecipientName());
+					et3.setPhoneNo(ordRcDTO.getRecipientPhoneNo());
+				} else {
+					//새로입력
+					en3.setName1(ordRcDTO.getcStoreRecipientName());
+					et3.setPhoneNo(ordRcDTO.getcStoreRecipientPhoneNo());
+				}
+
+				body.setRecipientName(en3);											// 수취인명
 				ea3.setZipCode(ordRcDTO.getcStoreAddressZipCode());
 				ea3.setAddress1(ordRcDTO.getcStoreAddressAddress1());
 				ea3.setAddress2(ordRcDTO.getcStoreAddressAddress2());
+				body.setRecipientAddress(ea3);										// 수취인주소
+				body.setRecipientPhoneNo1(et3);									// 수취인전화번호1
 
-				body.setRecipientAddress(ea3);												// 수취인주소
-            }
+			}
 
             orderApi.ordReceptChange(ordRcDTO.getOrdSn(), body);
 

@@ -45,6 +45,7 @@
 				limit: 8,
 				displayCate: -1,
 				priceRange: "",
+				flag:"",
 				attr: ""
 			};
 			this._setEvent();
@@ -57,6 +58,10 @@
 				
 				this.showFilter({ filter: result.prodFilterInfo});
 				this.showList({ query: this._query, totalCount: result.totalCount, list: result.prodList});
+				
+				this._setPlanSLide({list: result.planList});
+				this._setBrandBox({list: result.brandList});
+				
 				$('.loading').hide();
 			}.bind( this )).fail(function( error ) {
 				console.log( error.statusText + ' : ' + error.errorCode + error.errorMessage );
@@ -76,17 +81,21 @@
 			
 			if(isClearPaging) this._param.offset = 0;
 //			this._searchProdList.empty();
+			var flag = "";
 			var attr = "";
 			this._$target.find( 'input[type=checkbox]' ).each(function (e) {
 //				console.log(this.id + " > " + this.checked);
 				if(this.checked){
 					var attrCode = this.id.split("_")[0];
-					if(attrCode != "brand"){
-						attr+=attrCode+"="+$(this).attr("data-val-code")+","
-					}
+					if(attrCode != "brand" && attrCode != "flag"){
+						attr+=(attr==""?"":",")+attrCode+"="+$(this).attr("data-val-code");
+					}else if(attrCode == "flag"){
+						flag+=(flag==""?"":",")+$(this).attr("data-val-code");
+					}					
 				}
 			});
 
+			this._param.flag = flag;
 			this._param.attr = attr;
 			
 			var pmin = -1;
@@ -132,7 +141,6 @@
 		},
 		/** =============== Private Methods ============== */
 		_setEvent: function () {
-			
 			// 정렬
 			if( this._$sort.length ) {
 				this._param.prodSort = this._$sort.find( 'a' ).eq(0).data( 'value' );
@@ -150,7 +158,15 @@
 					this.reloadList(true);
 				}.bind( this ));
 			}
-			
+		},
+		_setPlanSLide: function ( data ) {
+			var html = AP.common.getTemplate('display.search.search-plan-slide', data);
+			this._$target.find('.search_bottom .slide').html(html);
+			this._$target.find('.search_bottom .slide').ixSlideMax();
+		},
+		_setBrandBox: function ( data ) {
+			var html = AP.common.getTemplate('display.search.search-brand-box', data);
+			this._$target.find('.search_bottom').find('.ranking_article').html(html);
 		}
 	});
 

@@ -7,7 +7,12 @@
 	/** ==================== Rule Methods ==================== */
 
 	//필수항목
-	$.validator.addMethod( 'required', $.validator.methods.required, '필수입력 항목 입니다.' );
+//	$.validator.addMethod( 'required', $.validator.methods.required, '필수입력 항목 입니다.' );
+	$.validator.addMethod( 'required', function ( value, element, param ) {
+		value = $.trim(value);
+		return value != null && value != "" && value != undefined;
+	}, '필수입력 항목 입니다.' );
+
 	//최소갯수
 	$.validator.addMethod( 'minlength', $.validator.methods.minlength, '최소 {0}자이상 입력해야 합니다.' );
 	//최대갯수

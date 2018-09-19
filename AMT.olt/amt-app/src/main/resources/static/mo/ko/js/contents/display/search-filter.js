@@ -34,7 +34,7 @@
 				title: '검색필터',
 				contents: {
 					templateKey: 'display.search-filter',
-					templateModel: AP.category.searchFilterData
+					templateModel: AP[this._component].searchFilterData
 				},
 				containerClass: 'filter_layer',
 				fixed: true

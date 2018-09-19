@@ -21,6 +21,7 @@
 
 					<!--새로입력 선택시-->
 					<dl class="address_basic" id="address01_3_01_layer">
+						<input type="hidden" name="address" value="03">
 						<dt>기본정보</dt>
 						<dd>
 							<div class="input_group">
@@ -271,27 +272,21 @@
 				$('input[name=name02]').prop("required", true);
 				$('input[name=phone02]').prop("required", true);
 			}
-
-			$('#name02').blur(function(){
-				$('#name01').val($(this).val());
-			});
-
-			$('#phone02').blur(function(){
-				$('#phone01').val($(this).val());
-			});
 		}
 
 		//주문자정보 자동 입력
-		$('[name=purchaserName]').on('blur', function(e){
+		$('[name=purchaserName]').on('change', function(e){
 			if ($(this).val()) {
 				$('#orderNonmemberName').html($(this).val());
 				$('#name01').val($(this).val());
+				$('[name=recipientName]').val($(this).val());
 			}
 		});
-		$('[name=purchaserPhoneNo]').on('blur', function(e){
+		$('[name=purchaserPhoneNo]').on('change', function(e){
 			if ($(this).val()) {
 				$('#orderNonmemberMobile').html($(this).val());
-				$('#phone01').html($(this).val());
+				$('#phone01').val($(this).val());
+				$('[name=recipientPhoneNo]').val($(this).val());
 			}
 		});
 

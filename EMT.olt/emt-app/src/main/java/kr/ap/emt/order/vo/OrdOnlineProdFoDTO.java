@@ -28,6 +28,7 @@ public class OrdOnlineProdFoDTO {
 	private Integer ordQtySum;					 // 주문수량(단위상품 X 주문수량)
 	private Integer cancelQtySum;                // 취소수량
 	private Integer claimQtySum;                 // 반품, 교환수량
+	private Integer rtnRequestPossibleQtySum;	 // 반품 가능 수량
 	private Long claimReasonSn;				 	 // 클레임사유 일련번호
 	private String claimReasonName;				 // 클레임 사유명
 	private String claimReason;				 	 // 클레임사유
@@ -314,5 +315,13 @@ public class OrdOnlineProdFoDTO {
 
 	public void setProdCancelAmtSum(BigDecimal prodCancelAmtSum) {
 		this.prodCancelAmtSum = prodCancelAmtSum;
+	}
+
+	public Integer getRtnRequestPossibleQtySum() {
+		return rtnRequestPossibleQtySum;
+	}
+
+	public void setRtnRequestPossibleQtySum(Integer rtnRequestPossibleQtySum) {
+		this.rtnRequestPossibleQtySum = rtnRequestPossibleQtySum;
 	}
 }

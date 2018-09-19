@@ -105,7 +105,7 @@
 	            });
 			}
 			$('#regBarcode').click(function() {
-				if(!$('[name=barcode]').valid()) return;
+				if(!$('#regCard').valid()) return;
 
 		    	$('#progress').fadeIn(500);
 				AP.api.regGiftCard({}, {
@@ -116,7 +116,13 @@
 			    	$(".gift_card").replaceWith(data);
 					
 	            }).fail(function(xhr, textStatus, errorThrown) {
-	            	AP.modal.alert("기프트카드번호를 질못 입력하셨어요. 다시 한번 확인해보시고 입력해주세요.");
+	            	if(xhr.errorCode == 'FAIL_COUNT_5') {
+		            	AP.modal.alert("기프트카드 5회 등록 실패로 인해 30분간 등록이 제한되었습니다.");
+	            	} else if(xhr.errorCode.startsWith('FAIL')) {
+		            	AP.modal.alert("기프트카드번호를 질못 입력하셨어요. 다시 한번 확인해보시고 입력해주세요. (" + xhr.errorCode.replace('FAIL', '') + "회 오류. 카드번호 5회 입력오류 발생시 30분간 등록 제한.)");
+	            	} else {
+		            	AP.modal.alert("기프트카드번호를 질못 입력하셨어요. 다시 한번 확인해보시고 입력해주세요.");
+	            	}
 	            }).always(function() {
 			    	$('#progress').fadeOut(500);
 	                //성공, 실패

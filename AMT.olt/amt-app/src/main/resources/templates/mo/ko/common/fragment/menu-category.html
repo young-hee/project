@@ -3,8 +3,8 @@
 	<!--  로그인 전 - start -->
 	<div class="category_header" th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
 		<div class="login_before">
-			<a href="javascript:;" class="btn_bd_round01">로그인</a>
-			<a href="javascript:;" class="btn_bd_round01">회원가입</a>
+			<a href="/login" class="btn_bd_round01">로그인</a>
+			<a href="/customer/signup" class="btn_bd_round01">회원가입</a>
 		</div>
 		
 		<button class="btn_chat"><i class="ico_chat"></i><span class="sr_only">챗봇</span></button>
@@ -15,7 +15,7 @@
 	<!-- 로그인 후 - start -->
 	<div class="category_header" th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}"><!-- 개발시 스타일 삭제요청 : 프론트 확인용 -->
 		<div class="welcome">
-			<span class="name"><strong th:text="${session.LOGIN_USER.member.name.name1}">아모레퍼시픽아모레퍼시픽</strong><span>님</span></span><span class="eng grade" th:text="${session.LOGIN_USER.member.memberLevelName}">welcome</span>
+			<span class="name"><strong th:text="${session.LOGIN_USER.member.name.name1}">아모레퍼시픽아모레퍼시픽</strong><th:block th:if="${session.LOGIN_USER.member.employeeYn == 'Y'}">(임직원)</th:block><span>님</span></span><span class="eng grade" th:text="${session.LOGIN_USER.member.memberLevelName}">welcome</span>
 		</div>
 		
 		<button class="btn_chat"><i class="ico_chat"></i><span class="sr_only">챗봇</span></button>
@@ -31,7 +31,7 @@
 			<dl>
 				<dt><a href="/my/page/info/beautyPoint"><span>뷰티포인트</span> <i class="ico_arr"></i></a></dt>
 				<dd>
-					<strong class="num" th:text="${#IntegUtil.toCommaNumber(#IntegUtil.beautyPoint().remainBeautyPoint)}"><em>3,306</em> P</strong>
+					<strong class="num"><em th:text="${#IntegUtil.toCommaNumber(#IntegUtil.beautyPoint().remainBeautyPoint)}">3,306</em> P</strong>
 					<!-- <strong class="num"><em>3,306</em> P</strong> -->
 				</dd>
 			</dl>
@@ -40,7 +40,7 @@
 		<!-- 바로가기 메뉴 -->
 		<div class="section quick_menu">
 			<ul class="menu_list col_04">
-				<th:block th:if="${not #lists.isEmpty(gnbMap.get('AppH01'))}">
+				<!-- <th:block th:if="${not #lists.isEmpty(gnbMap.get('AppH01'))}">
 				<th:block th:each="AppHmenu : ${gnbMap.get('AppH01').submenus}">						
 						<li th:each="menu : ${AppHmenu.submenus}" th:if="${AppHmenu.displayMenuId == 'AppH0101'}">
 							<a href="#" th:if="${menu.linkDisplayMenuTypeCode == 'URL'}" th:href="@{'/display/' + ${menu.displayMenuId}(displayMenuId=${menu.displayMenuId})}" th:data="${menu.displayMenuId}">
@@ -55,24 +55,28 @@
 								<i class="ico_pouch"></i>
 								<span th:text="${menu.menuTitle}">마이파우치</span>
 							</a>
-							<!-- <span th:text="${menu.menuTitle}">마이파우치</span> -->
+							<span th:text="${menu.menuTitle}">마이파우치</span>
 						</li>
 				</th:block>
-				</th:block>
-				<!-- <li><a href="javascript:;"><i class="ico_pouch"></i><span>마이파우치</span></a></li>
-				<li><a href="javascript:;"><i class="ico_order"></i><span>주문/배송조회</span></a></li>
-				<li><a href="javascript:;"><i class="ico_coupon"></i><span>나의 쿠폰</span></a></li>
-				<li><a href="javascript:;"><i class="ico_good"></i><span>좋아요</span></a></li>
-				<li><a href="javascript:;"><i class="ico_pay"></i><span>ONE pay 카드</span></a></li>
-				<li><a href="javascript:;"><i class="ico_addr"></i><span>배송지관리</span></a></li>
-				<li><a href="javascript:;"><i class="ico_gift"></i><span>나의기프트카드</span></a></li>
-				<li><a href="javascript:;"><i class="ico_cs"></i><span>고객센터</span></a></li> -->
+				</th:block> -->
+
+				<!-- 2018-09-18 수정 -->
+				<li><a href="javascript:;"><img src="/mo/ko/images/common/img_direct01.png" alt="" /><span>마이파우치</span></a></li>
+				<li><a href="javascript:;"><img src="/mo/ko/images/common/img_direct02.png" alt="" /><span>주문/배송조회</span></a></li>
+				<li><a href="javascript:;"><img src="/mo/ko/images/common/img_direct03.png" alt="" /><span>나의 쿠폰</span></a></li>
+				<li><a href="javascript:;"><img src="/mo/ko/images/common/img_direct04.png" alt="" /><span>좋아요</span></a></li>
+				<li><a href="javascript:;"><img src="/mo/ko/images/common/img_direct05.png" alt="" /><span>ONE pay 카드</span></a></li>
+				<li><a href="javascript:;"><img src="/mo/ko/images/common/img_direct06.png" alt="" /><span>배송지관리</span></a></li>
+				<li><a href="javascript:;"><img src="/mo/ko/images/common/img_direct07.png" alt="" /><span>나의기프트카드</span></a></li>
+				<li><a href="javascript:;"><img src="/mo/ko/images/common/img_direct08.png" alt="" /><span>고객센터</span></a></li>
+				<!-- // 2018-09-18 수정 -->
+
 			</ul>
 		</div>
 		
 		<!-- 카테고리 -->
 		<div class="section cate01" th:if="${not #lists.isEmpty(gnbMap.get('category'))}">
-			<th:block th:each="cate, cateIndex : ${gnbMap.get('category').submenus}" th:with="rowNum=${cateIndex.index / 4}">
+			<th:block th:each="cate, cateIndex : ${gnbMap.get('category').submenus}" th:with="rowNum=${cateIndex.index / 4}" th:if="${cate.displayMenuId != 'CTG009'}">
 				<th:block th:if="${cateIndex.index == 0 || cateIndex.index % 4 == 0}">
 				<dl class="cate_depth1">
 					<dt class="c_tit_16" th:if="${cateIndex.index == 0}">카테고리</dt>
@@ -232,12 +236,12 @@
 		</div>
 		<!-- 로그인 전 -->
 		<div class="section">
-			<button type="button" onclick="login()" th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}" class="btn_log"><span>로그인</span></button>
+			<button type="button" onclick="location.href='/login'" th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}" class="btn_log"><span>로그인</span></button>
 		</div>
 		
 		<!--/* 로그인 후*/-->
-		<div class="section" style="display:none"><!-- 개발시 스타일 삭제요청 : 프론트 확인용 -->
-			<button type="button" onclick="logout()" th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}" class="btn_log"><span>로그아웃</span><em>honggildong</em></button>
+		<div class="section" th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}"><!-- 개발시 스타일 삭제요청 : 프론트 확인용 -->
+			<button type="button" onclick="logout()" class="btn_log"><span>로그아웃</span><em th:text="${session.LOGIN_USER.member.name.name1}">honggildong</em><th:block th:if="${session.LOGIN_USER.member.employeeYn == 'Y'}">(임직원)</th:block></button>
 		</div>
 
 		<!-- 쇼핑팁 삭제

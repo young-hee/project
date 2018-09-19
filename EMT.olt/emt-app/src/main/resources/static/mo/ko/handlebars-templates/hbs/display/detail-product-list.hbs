@@ -1,16 +1,11 @@
 {{!--
-	전시 : 구매버튼이 있는 상세 상품목록 (Looks, 진주알스토어)
+	전시 : 구매버튼이 있는 상세 상품목록 (Looks, 진주알스토어) uiType = 2단
 --}}
 {{#each this.list}}
 	<li class="online_prod" data-online-prod-sn="{{ this.onlineProdSn }}">
 		<div class="item">
 			<div class="item_images">
-				<!-- /* 대표 이미지 */ -->
-				<a href="{{ productDetailPath this.onlineProdSn }}" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="{{ this.onlineProdImages.0.imgUrl }}" alt=""></a>
-				{{{stockImg this.saleDisplayStatus this.prodTypeCode }}}
-			</div>
-
-			<div class="item_info list">
+			
 				{{#if this.flags.length}}
 					<div class="flag_set">
 						{{#each this.flags}}
@@ -32,15 +27,35 @@
 						{{/each}}
 					</div>
 				{{/if}}
+			
+				<!-- /* 대표 이미지 */ -->
+				<a href="{{ productDetailPath this.onlineProdSn }}" class="lazy_load_wrap"><img class="lazy_load" src="" data-src="{{ this.onlineProdImages.0.imgUrl }}" alt=""></a>
+				{{{stockImg this.saleDisplayStatus this.prodTypeCode }}}
+			</div>
+
+			<div class="item_info list">
+				
 				<div class="prd_name">
 					<div>
-						<p class="s_name"><em class="tag">{{stockTxt this.saleDisplayStatus this.prodTypeCode}}</em></p>
+						<p class="s_name">
 						{{#if this.lineDesc}}
-							<p class="s_name"><em class="tag">{{ this.lineDesc }}</em></p>
+							{{{ this.lineDesc }}}
 						{{/if}}
-						<p class="name">{{ this.onlineProdName }}</p>
+						</p>
+						<p class="name"><em>{{stockTxt this.saleDisplayStatus this.prodTypeCode}}</em>{{ this.onlineProdName }}</p>
 					</div>
-					{{!--<p class="color_name">85 colors</p>--}}
+					{{#xif this.colorCnt '>' 1}}
+						<p class="color_name">{{this.colorCnt}} colors</p>
+					{{/xif}}
+					{{#xif this.optionCnt '>' 1}}
+						<p class="color_name">{{this.optionCnt}} options</p>
+					{{/xif}}
+					{{#xif ../productCount  '==' 1}}
+						{{#xif ../onlineProdName '!=' this.prodName}}
+							<p class="color_name">{{this.prodName}}</p>
+						{{/xif}}
+					{{/xif}}
+					
 				</div>
 			</div>
 			<div class="price_area">
@@ -53,10 +68,7 @@
 						{{/with}}
 					</div>
 				{{/xif}}
-				<div class="price">
-					{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
-						<del>{{ numberFormat this.onlineProdPriceSummary.minBeforeOnlineSalePrice }}<em>{{ condition ../isActivityPoint '알' '원' }}</em></del>
-					{{/xif}}
+				<div class="price"> 
 					<span>{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>{{ condition ../isActivityPoint '알' '원' }}{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}} ~{{/xif}}</em></span>
 				</div>
 			</div>

@@ -263,8 +263,7 @@ public class EventRestController extends AbstractController {
 		
 		PlanDisplayEventListResult planDisplayEventListResult
 			= plandisplayApi.getPlanDisplayEventList(
-					  requestEvent.getKeyword() //keyword: 검색,
-					, requestEvent.getStatus() //status: 기획전시상태코드 (PlanDisplayStatus) , Progress - 진행 , End - 종료,
+					  requestEvent.getStatus() //status: 기획전시상태코드 (PlanDisplayStatus) , Progress - 진행 , End - 종료,
 					, requestEvent.getTypes() //types: 기획전시 유형코드 리스트(PlanDisplayType) , Link - planDisplayParticipatedURL링크 , General - 일반구성기획전시 , SameTimePur - 동시구매기획전시,
 					, requestEvent.getEventIncludeYn() //eventIncludeYn: 행사포함여부 , Y - 행사 포함 , N - 행사 미포함 , 미입력시 전체 (행사포함여부 조회조건 없음)
 					, requestEvent.getOrder() //order: 정렬방식 (PlanDisplaySortMethod) , SortOrder , StartDt , Deadline

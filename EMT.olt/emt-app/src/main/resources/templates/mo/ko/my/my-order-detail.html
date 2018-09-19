@@ -180,8 +180,8 @@
 			var orderDetailInfo = AP.common.getTemplate('my.order.order-detail-info', {
 				ordEx : customOrd.goods,
 				cashReceiptIssueYn : isCashReceiptIssued(),
-				onlineCnt : onlineCnt,
-				storeCnt : storeCnt,
+				onlineCnt : customOrd.shipOrdOnlineProdCnt,
+				storeCnt : customOrd.storeOrdOnlineProdCnt,
 				type : type,
 				claimYn : claimYn
 			});
@@ -201,6 +201,9 @@
 
 		/* 상품영역 */
 		function setProds() {
+			$('.online').empty();
+			$('.takeout').empty();
+			$('#freebies_gift').empty();
 			if (customOrd.shipOrdOnlineProdCnt > 0) {
 				var orderDetailGoods = AP.common.getTemplate('my.order.order-detail-goods', {
 					cnt : customOrd.shipOrdOnlineProdCnt,
@@ -220,7 +223,7 @@
 				});
 
 
-				$('.online').empty();
+
 				$('.online').append(orderDetailGoods);
 			}
 
@@ -228,6 +231,7 @@
 				var storDetailGoods = AP.common.getTemplate('my.order.order-detail-goods', {
 					cnt : customOrd.storeOrdOnlineProdCnt,
 					list : customOrd.storePickupOrdOnlineProdList,
+					storeEx : customOrd.storeEx,
 					state : 'take',
 					reason : reason,
 					type : type,
@@ -237,7 +241,7 @@
 					typeName : getTypeName(1)
 				});
 
-				$('.takeout').empty();
+
 				$('.takeout').append(storDetailGoods);
 			}
 
@@ -248,7 +252,7 @@
 					coupon : customOrd.ordHistCouponExList
 				});
 
-				$('#freebies_gift').empty();
+
 				$('#freebies_gift').append(freebies);
 			}
 
@@ -276,6 +280,7 @@
 					var html = AP.common.getTemplate('my.order.order-detail-ship-address', {
 						data : customOrd.ordChangeShipAddress,
 						status : status,
+						statusCode : customOrd.goods.ordDetailStatusCode,
 						step : step,
 						type : type
 					});
@@ -336,7 +341,7 @@
 				else {
 					// $('.check_wrap').hide();
 					checkBoxToggle(false);
-					// $('#allCheck').hide();
+					$('#allCheck').hide();
 					// $('label[for=all]').html('취소해 주세요.');
 					$('#checkMain').html(' ' + getTypeName(step));
 					// $('input[id=all]').hide();
@@ -352,7 +357,6 @@
 			if (customOrd.shippingOrdOnlineProdList) {
 				onlineCnt = customOrd.shippingOrdOnlineProdList.length;
 			}
-
 			if (customOrd.storePickupOrdOnlineProdList) {
 				storeCnt = customOrd.storePickupOrdOnlineProdList.length;
 			}
@@ -362,8 +366,8 @@
 				ordDetailStatusCode : customOrd.goods.ordDetailStatusCode,
 				cashReceiptIssueYn : isCashReceiptIssued(),
 				step : step,
-				onlineCnt : onlineCnt,
-				storeCnt : storeCnt
+				onlineCnt : customOrd.shipOrdOnlineProdCnt,
+				storeCnt : customOrd.storeOrdOnlineProdCnt
 			});
 
 			$('#bottomBtns').empty();
@@ -385,6 +389,34 @@
 			});
 
 			$('.ui_find_addresses').findAddresses();
+
+			$('input[type=tel]').keydown(function (event) {
+
+				if (event.keyCode) {
+					var code = event.keyCode;
+					if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+						return true;
+					} else {
+						return false;
+					}
+				} else if (e.which) {
+					var code = e.which;
+					if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+						return true;
+					} else {
+						return false;
+					}
+				}
+			});
+
+			$('input[type=tel]').keyup(function (event) {
+				event = event || window.event;
+				var keyID = (event.which) ? event.which : event.keyCode;
+				if ( keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39 )
+					return;
+				else
+					event.target.value = event.target.value.replace(/[^0-9]/g, "");
+			});
 
 			$("#editShipCancel").on('click', function() {
 				shipChangeModal.close();
@@ -415,7 +447,7 @@
 		function checkboxControl(type, check) {
 			var ss = type === 'all' ? '' : "[state=" + type + "]";
 			// $("input[name=goods]" + ss  + ":checkbox").prop('checked', check);
-			$("input:checkbox").prop('checked', check);
+			$("input:checkbox").not(":disabled").prop('checked', check);
 		}
 
 		function selectOnlineProd(cb) {
@@ -639,6 +671,7 @@
 
 		function editShipAddress() {
 
+			$('#delivery_title').val($.trim($('#delivery_title').val()));
 			var $form = $('#shipForm');
 			if ($form.valid()) {
 				var formData = AP.common.getFormData($form);

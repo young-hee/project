@@ -25,11 +25,12 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-footer"] = Handlebars.temp
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
   return ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ord : depth0)) != null ? stack1.shipOrdOnlineProdCnt : stack1),0,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ord : depth0)) != null ? stack1.storeOrdOnlineProdCnt : stack1),0,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+    + ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.ord : depth0)) != null ? stack1.storeOrdOnlineProdCnt : stack1),0,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "						<button class=\"btn_lg_bordered\" type=\"button\" onclick=\"chgStatus('cancel')\">전체 취소</button>\n";
 },"5":function(container,depth0,helpers,partials,data) {
-    return "							<button class=\"btn_lg_bordered\" type=\"button\" onclick=\"chgStatus('cancel')\">온라인 쇼핑 취소</button>\n";
+    return "							<button class=\"btn_lg_bordered\" type=\"button\" onclick=\"chgStatus('cancel', 'online')\">온라인 쇼핑 취소</button>\n";
 },"7":function(container,depth0,helpers,partials,data) {
-    return "							<button class=\"btn_lg_bordered\" type=\"button\" onclick=\"chgStatus('cancel')\">테이크아웃 쇼핑 취소</button>\n";
+    return "							<button class=\"btn_lg_bordered\" type=\"button\" onclick=\"chgStatus('cancel', 'takeOut')\">테이크아웃 쇼핑 취소</button>\n";
 },"9":function(container,depth0,helpers,partials,data) {
     return "					<button class=\"btn_lg_bordered\" type=\"button\" onclick=\"chkShippingStatus()\">배송조회</button>\n					<button class=\"btn_lg_bordered\" type=\"button\" onclick=\"chkShippingComplete()\">수령확인</button>\n";
 },"11":function(container,depth0,helpers,partials,data) {

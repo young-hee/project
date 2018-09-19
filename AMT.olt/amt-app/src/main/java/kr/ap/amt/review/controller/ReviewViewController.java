@@ -1,5 +1,6 @@
 package kr.ap.amt.review.controller;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,19 @@ import net.g1project.ecp.api.model.sales.product.ProdReviewSurveyInfo;
 @Controller
 @RequestMapping("/review")
 public class ReviewViewController  extends AbstractController{
+	
+	/**
+     * 리뷰 필터링
+     * @param requestReview
+     * @return
+     */
+    @GetMapping("/filterReviewList/{filterType}")
+    public String filterReviewList(@PathVariable String filterType, String keyword, Model model) throws ParseException {
+    	model.addAttribute("filterType", filterType);
+    	model.addAttribute("keyword", keyword);
+    	
+    	return "review/filter-review-list";
+    }
 
 	/**
 	 * 리뷰상세

@@ -306,6 +306,83 @@
 			</div>
 			<br>
 			<p class="text_notice light">주문관련 e-Mail과 SMS가 발송됩니다.</p>
+
+			<!--테이크아웃-->
+			<th:block th:if="${storeEx != null and storeEx.storeName != null}">
+				<div class="title_area">
+					<h4 class="h_title sub">테이크아웃</h4>
+				</div>
+				<div class="takeout_info">
+					<dl>
+						<dt><b>테이크아웃</b>
+							<span class="ui_tooltip">
+							<button type="button" class="btn_tooltip">툴팁보기</button>
+							<span class="arr"></span>
+							<span class="layer_tooltip">
+								<dl>
+									<dt class="title">테이크아웃</dt>
+									<dd>
+										<ul class="list_bullet_dot">
+											<li><pre><th:block th:text="${storeEx.foGuide}"></th:block></pre></li>
+										</ul>
+									</dd>
+								</dl>
+								<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
+							</span>
+						</span>
+						</dt>
+						<dd>
+							<div class="clear store_wrap">
+								<div><th:block th:text="${storeEx.storeName}">강남점</th:block><em class="color_light_blue">[재고있음]</em> <!--<em>[재고없음]</em>--></div>
+								<div>판매자 정보 확인
+
+									<div class="ui_tooltip ＠tooltip-apply">
+										<button type="button" class="btn_tooltip">툴팁보기</button>
+										<span class="arr"></span>
+										<div class="layer_tooltip">
+											<dl>
+												<dt class="title">판매자 정보 확인</dt>
+												<dd class="font_lg">
+													<dl class="table_layout">
+														<dt class="w30p"><b>상호</b></dt>
+														<dd><th:block th:text="${storeEx.storeName}">강남점</th:block></dd>
+													</dl>
+													<th:block th:if="${storeEx.phoneNo1 != null}">
+														<br>
+														<dl class="table_layout">
+															<dt class="w30p"><b>연락처</b></dt>
+															<dd><th:block th:text="${storeEx.phoneNo1.phoneNo}">032-578-5821</th:block></dd>
+														</dl>
+													</th:block>
+													<th:block th:if="${storeEx.address != null}">
+														<br>
+														<dl class="table_layout">
+															<dt class="w30p"><b>사업장 소재지</b></dt>
+															<dd><th:block th:text="${storeEx.address.address1} +' '+ ${storeEx.address.address2}">서울 강남구 신사동 660-2, 101</th:block></dd>
+														</dl>
+													</th:block>
+													<br>
+													<dl class="table_layout">
+														<dt class="w30p"><b>통신판매신고번호</b></dt>
+														<dd><a href="" title="새창" target="_blank" class="link">사업자정보확인</a></dd>
+													</dl>
+													<br>
+													<dl class="table_layout">
+														<dt class="w30p"><b>e-mail</b></dt>
+														<dd>honggildong@etudehouse.com</dd>
+													</dl>
+												</dd>
+											</dl>
+											<button type="button" class="ui_close"><span class="sr_only">툴팁 닫기</span></button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- <button class="btn_md_form" type="button">매장변경</button> -->
+						</dd>
+					</dl>
+				</div>
+			</th:block>
 		</div>
 	</dd>
 	<!--스크립트 정의-->
@@ -382,7 +459,9 @@
 				$('input[name=recipientAddress2]').attr('value',$('#recipientAddress2').val());
 
 				$('input[name=shipMsg]').attr('value', $('input[name=shipMsg1]').val());
-
+				$('input[name=shipMsg1]').on('change', function(e){
+					$('input[name=shipMsg]').attr('value', $('input[name=shipMsg1]').val());
+				});
 				// 새로입력정보 초기화
 				// $('input[name=userName]').val('');
 				// $('input[name=userPhoneNo]').val('');
@@ -428,6 +507,10 @@
 				$('input[name=recipientAddress2]').attr('value',$('#addressAddress2').val());
 
 				$('input[name=shipMsg]').attr('value', $('input[name=shipMsg2]').val());
+				$('input[name=shipMsg2]').on('change', function(e){
+					$('input[name=shipMsg]').attr('value', $('input[name=shipMsg2]').val());
+				});
+
 
 				// 새로입력정보 초기화
 				// $('input[name=userName]').val('');
@@ -473,6 +556,9 @@
 				$('input[name=recipientEmailAddress]').val('');
 
 				$('input[name=shipMsg]').attr('value', $('input[name=shipMsg3]').val());
+				$('input[name=shipMsg3]').on('change', function(e){
+					$('input[name=shipMsg]').attr('value', $('input[name=shipMsg3]').val());
+				});
 
 				//validation
 				$('input[name=userName]').prop("required", true);
@@ -507,6 +593,9 @@
 				$('#address2_2_01_layer').hide();
 				$('#address2_2_02_layer').hide();
 				$('input[name=addressStoreType]').attr('value','MEMBER');
+
+				$('#name01').val($('[name=purchaserName]').val());
+				$('#phone01').val($('[name=purchaserPhoneNo]').val());
 
 				//validation
 				$('input[name=userName]').prop("required", false);
@@ -553,6 +642,7 @@
 				$('[name=shipMsg]').val(selectedVal);
 			}
 		});
+
 
 		/* 편의점 찾기 */
 		function storeSearch(storeType, storePcUrl){ //id,UID

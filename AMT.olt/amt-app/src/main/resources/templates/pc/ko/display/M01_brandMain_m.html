@@ -1,0 +1,51 @@
+<html ap:decorate="~{layout/default}" th:with="_jsfile='brand'">
+
+<body>
+<!-- #ap_container -->
+<div ap:fragment="layout-contents">
+	<!--/* ap_contents */-->
+	<div class="ap_contents brand_overview">
+		<div class="ap_com_cont overview">
+			<div class="brand_hall">
+				<!--/* 배너 */-->
+				<div class="com_banner brand">
+					<div class="inner">BRAND - 브랜드별 다양한 상품 브랜드관</div>
+				</div>
+
+				<div class="inner_wrap section_wrap">
+					<!--/* 타이틀 */-->
+					<div class="title_wrap">
+						<h3 class="h_title d2"><strong>전체 브랜드</strong></h3>
+						<div class="float_right">
+							<div class="search_sort">
+								<a href="#" class="on" data-value="ShoppingMarkCnt">인기순</a>
+								<a href="#" data-value="faveBrandCnt">가나다순</a>
+							</div>
+						</div>
+					</div>
+					<div class="brand_list" style="display: none">
+						<ul></ul>
+					</div>
+					<div class="loading" style="height: 400px;">
+						<img ap:src="@{/images/common/loading_sm.gif}" alt="로딩중">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--/* 하단 js등을 실행하는 마지막 영역 */-->
+<th:block ap:fragment="layout-endpoint">
+	<script type="text/javascript" th:inline="javascript">
+		// TODO: brand main
+
+		var corners = /*[[${cornersMap}]]*/
+			console.log( corners );
+
+		AP.brand.init();
+	</script>
+</th:block>
+
+</body>
+</html>

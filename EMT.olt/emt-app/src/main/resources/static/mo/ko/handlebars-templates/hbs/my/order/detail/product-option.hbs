@@ -6,11 +6,11 @@
 			<div class="thumb">
 				{{#xif ../promoSn '!=' null}}
 					<div style="display: none">
-						<input type="checkbox" name="goods" prod="prod" onclick="selectProd(this);" promoSn="{{../promoSn}}" onlineProdCode="{{../oCode}}" ordHistProdNo="{{../promoSn}}" id="{{ordHistProdNo}}" val="{{json this}}"><label for="{{ordHistProdNo}}"></label>
+						<input type="checkbox" name="goods" prod="prod" onclick="selectProd(this);" promoSn="{{../promoSn}}" onlineProdCode="{{../oCode}}" ordHistProdNo="{{../promoSn}}" id="{{ordHistProdNo}}" val="{{json this}}" {{isDisabled ../type ../step rtnRequestPossibleQty}}><label for="{{ordHistProdNo}}"></label>
 					</div>
 				{{else}}
 					<div class="check_wrap" style="display: none">
-						<input type="checkbox" name="goods" prod="prod" onclick="selectProd(this);" onlineProdCode="{{../oCode}}" ordHistProdNo="{{ordHistProdNo}}" id="{{ordHistProdNo}}" val="{{json this}}"><label for="{{ordHistProdNo}}"></label>
+						<input type="checkbox" name="goods" prod="prod" onclick="selectProd(this);" onlineProdCode="{{../oCode}}" ordHistProdNo="{{ordHistProdNo}}" id="{{ordHistProdNo}}" val="{{json this}}" {{isDisabled ../type ../step rtnRequestPossibleQty}}><label for="{{ordHistProdNo}}"></label>
 					</div>
 				{{/xif}}
 
@@ -19,7 +19,7 @@
 			<div class="info">
 				{{#xif typeName '!=' null}}
 					<div class="flag_wrap">
-						<p class="flag">{{condition (eq typeName 'a') '진주알 전용' '뷰티포인트 전용'}}</p>
+						<p class="flag">{{condition (eq ../typeName 'a') '진주알 전용' '뷰티포인트 전용'}}</p>
 					</div>
 				{{/xif}}
 				<p class="name">{{ordProdEx.prodNameBlang}}</p>
@@ -28,8 +28,8 @@
 
 				<p class="price">
 					<span class="quantity">{{myOrdQty 'unit' this ../step ../type ../claimYn}}개</span> /
-					{{#xif typeName '!=' null}}
-						{{#xif typeName '==' 'b'}}
+					{{#xif ../typeName '!=' null}}
+						{{#xif ../typeName '==' 'b'}}
 							<strong class="eng">{{currencyFormatDefault exchMembership 'P'}}</strong>
 						{{else}}
 							<strong class="eng">{{currencyFormatDefault exchActivityPoint '알'}}</strong>
@@ -97,11 +97,11 @@
 					<p class="opt_chk" style="display: none">
 						{{#xif ordHistProdTypeCode '===' 'BulkDc'}}
 							<span style="display: none">
-								<input type="checkbox" name="goods" prod="prod" onclick="selectProd(this);" onlineProdCode="{{../oCode}}" ordHistProdNo="{{../oCode}}" id="{{ordHistProdNo}}" val="{{json this}}"><label for="{{ordHistProdNo}}"></label>
+								<input type="checkbox" name="goods" prod="prod" onclick="selectProd(this);" onlineProdCode="{{../oCode}}" ordHistProdNo="{{../oCode}}" id="{{ordHistProdNo}}" val="{{json this}}" {{isDisabled ../type ../step rtnRequestPossibleQty}}><label for="{{ordHistProdNo}}"></label>
 							</span>
 						{{else}}
 							<span class="check_wrap">
-								<input type="checkbox" name="goods" prod="prod" onclick="selectProd(this);" onlineProdCode="{{../oCode}}" ordHistProdNo="{{ordHistProdNo}}" id="{{ordHistProdNo}}" val="{{json this}}"><label for="{{ordHistProdNo}}"></label>
+								<input type="checkbox" name="goods" prod="prod" onclick="selectProd(this);" onlineProdCode="{{../oCode}}" ordHistProdNo="{{ordHistProdNo}}" id="{{ordHistProdNo}}" val="{{json this}}" {{isDisabled ../type ../step rtnRequestPossibleQty}}><label for="{{ordHistProdNo}}"></label>
 							</span>
 						{{/xif}}
 					</p>

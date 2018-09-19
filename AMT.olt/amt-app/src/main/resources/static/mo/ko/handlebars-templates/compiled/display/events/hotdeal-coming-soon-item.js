@@ -24,12 +24,16 @@ this["AP"]["handlebars"]["display"]["events"]["hotdeal-coming-soon-item"] = Hand
     + alias2(alias1((depth0 != null ? depth0.reviewScopeAvg : depth0), depth0))
     + "\"><span class=\"sr_only\">구매 평점 별 5개 중 "
     + alias2(alias1((depth0 != null ? depth0.reviewScopeAvg : depth0), depth0))
-    + "개</span></span>\n						<span class=\"prd_review\">리뷰 "
-    + alias2((helpers.numberFormat || (depth0 && depth0.numberFormat) || alias4).call(alias3,(depth0 != null ? depth0.reviewCount : depth0),{"name":"numberFormat","hash":{},"data":data}))
-    + "</span>\n					</span>\n					<span class=\"tags\">\n						<!-- // TODO -->\n						<em class=\"badge_comming\">2018.05.11 (금) 예정</em>\n						<!-- // TODO -->\n					</span>\n				</span>\n				<button type=\"button\" class=\"btn_toggle like_btn\"><i class=\"ico_heart_s "
-    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.shoppingMarkExistYn : depth0),"==","Y",{"name":"xif","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "개</span></span>\n						"
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.reviewCount : depth0),">",0,{"name":"xif","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n					</span>\n					<span class=\"tags\">\n						<!-- // TODO -->\n						<em class=\"badge_comming\">2018.05.11 (금) 예정</em>\n						<!-- // TODO -->\n					</span>\n				</span>\n				<button type=\"button\" class=\"btn_toggle like_btn\"><i class=\"ico_heart_s "
+    + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias4).call(alias3,(depth0 != null ? depth0.shoppingMarkExistYn : depth0),"==","Y",{"name":"xif","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\"></i><span class=\"sr_only\">좋아요</span></button>\n			</a>\n		</div>\n	</li>\n";
 },"2":function(container,depth0,helpers,partials,data) {
+    return "<span class=\"prd_review\">리뷰 "
+    + container.escapeExpression((helpers.numberFormat || (depth0 && depth0.numberFormat) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.reviewCount : depth0),{"name":"numberFormat","hash":{},"data":data}))
+    + "</span>";
+},"4":function(container,depth0,helpers,partials,data) {
     return "on";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;

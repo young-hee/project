@@ -5,11 +5,12 @@
 				{{#if (eq this.type 'online')}}
 					{{#if (or (or (eq this.ord.goods.ordDetailStatusCode 'OrdReceivedWaiting') (eq this.ord.goods.ordDetailStatusCode 'OrdReceivedComplete')) (eq this.ord.goods.ordDetailStatusCode 'PartialCancel'))}}
 						{{#if (gt this.ord.shipOrdOnlineProdCnt 0)}}
-							<button class="btn_lg_bordered" type="button" onclick="chgStatus('cancel')">온라인 쇼핑 취소</button>
+							<button class="btn_lg_bordered" type="button" onclick="chgStatus('cancel', 'online')">온라인 쇼핑 취소</button>
 						{{/if}}
 						{{#if (gt this.ord.storeOrdOnlineProdCnt 0)}}
-							<button class="btn_lg_bordered" type="button" onclick="chgStatus('cancel')">테이크아웃 쇼핑 취소</button>
+							<button class="btn_lg_bordered" type="button" onclick="chgStatus('cancel', 'takeOut')">테이크아웃 쇼핑 취소</button>
 						{{/if}}
+						<button class="btn_lg_bordered" type="button" onclick="chgStatus('cancel')">전체 취소</button>
 					{{/if}}
 				{{/if}}
 				{{#if (eq this.ord.goods.ordDetailStatusCode 'Shipping')}}

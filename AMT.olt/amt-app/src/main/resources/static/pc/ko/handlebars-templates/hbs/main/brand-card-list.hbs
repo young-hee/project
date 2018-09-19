@@ -1,0 +1,72 @@
+{{!--
+	brand card
+--}}
+<h2 class="title"><b>인기 브랜드</b></h2>
+<div class="slide" data-ix-options="view-length:3; move-length:1">
+	<div class="ix-list-viewport brand_list">
+		<ul class="ix-list-items">
+			{{#each this.brandCardList}}
+				<li class="ix-list-item">
+					<div class="brand_box">
+						<strong class="sr_only">{{this.brandName}}</strong>
+						<div class="brand_visual">
+							<a href="/display/{{this.displayMenuId}}?displayMenuId={{this.displayMenuId}}">
+								{{#if this.logos.length}}
+									{{#each this.logos}}
+										{{#xif this.logoType '==' 'BrandLogo02'}}
+											<span class="brand_logo">
+												<img alt="{{../brandName}}" src="{{this.fileUrl}}"><!-- 로고영역: 140 * 74  -->
+											</span>
+										{{/xif}}
+									{{/each}}
+								{{/if}}
+								<img alt="{{this.brandName}}" src="{{this.brandMainImgUrl}}">
+							</a>
+						</div>
+						<div class="brand_info">
+							{{#if this.planDisplayInfo}}
+								<div class="info_box">
+									<a href="/display/event_detail?planDisplaySn={{this.planDisplayInfo.planDisplaySn}}">
+										<p class="txt_type">EVENT</p>
+										<p class="txt_summary">{{this.planDisplayInfo.planDisplayTitle}}</p>
+										<p class="txt_day">{{this.planDisplayInfo.eventStartDt}}-{{this.planDisplayInfo.eventEndDt}}</p>
+									</a>
+								</div>
+							{{/if}}							
+							{{#if this.prods.list.length}}
+								<ul class="list_brand_relate">
+									{{#each this.prods.list}}
+										<li>
+											<a href="{{ productDetailPath this.onlineProdSn }}">
+												<img alt="{{this.onlineProdName}}" src="{{ this.onlineProdImages.0.imgUrl }}">
+											</a>
+										</li>
+									{{/each}}
+								</ul>
+							{{/if}}
+						</div>brandKeywordLinks
+						{{#if this.brandKeywordLinks.length}}
+							<div class="tags_box">
+								<ul class="list_tags">
+									{{#each this.brandKeywordLinks}}
+										<li><a href="{{this.keywordLinkUrl}}" class="hash_tags_md">#{{this.keywordLinkTitle}}</a></li>
+									{{/each}}
+								</ul>
+							</div>
+						{{/if}}
+						<a href="#none" class="like" role="button">
+							<i class="ico_like"><span class="sr_only">좋아요</span></i><!-- active : on -->
+						</a>
+					</div>
+				</li>
+			{{/each}}
+		</ul>
+	</div>
+	<div class="ix-controller round_box">
+		<div class="slide_direction">
+			<a class="ix-btn-prev" href="#"><span class="sr_only">Prev</span></a>
+			<a class="ix-btn-next" href="#"><span class="sr_only">Next</span></a>
+		</div>
+	</div>
+</div>
+<a href="#none" class="more">더보기</a>

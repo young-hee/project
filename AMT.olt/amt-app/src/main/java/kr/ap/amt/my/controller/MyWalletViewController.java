@@ -75,7 +75,7 @@ public class MyWalletViewController extends AbstractController {
 		PageVo pageVo = new PageVo();
 		pageVo.setPageSize(pageSize + "");
 		pageVo.setPageNumber("1");
-		pageVo.setTotalRowCount((giftcardResult.getValidCount() == null? 0 : giftcardResult.getValidCount() == null) + "");
+		pageVo.setTotalRowCount(( (giftcardResult.getValidCount() == null)? 0 : giftcardResult.getValidCount()) + "");
 
 		model.addAttribute("pageVo", pageVo);
 		
@@ -111,7 +111,7 @@ public class MyWalletViewController extends AbstractController {
 			PageVo pageVo = new PageVo();
 			pageVo.setPageSize(pageSize + "");
 			pageVo.setPageNumber(pageNumber + "");
-			pageVo.setTotalRowCount((result2.getValidCount() == null? 0 : result2.getValidCount() == null) + "");
+			pageVo.setTotalRowCount(((result2.getValidCount() == null)? 0 : result2.getValidCount()) + "");
 
 			model.addAttribute("pageVo", pageVo);
 			return "my/fragment/gift-card-body";

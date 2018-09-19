@@ -1,8 +1,9 @@
 {{#if this.articleList.length}}
 	{{#each this.articleList}}
 		<li>
-			<a href="{{ articleDetailPath this.articleSn }}">
-				<span class="img"><img src="{{ absolutePath this.bannerImgM1 }}" alt=""></span>
+			<a href="{{ articleDetailPath this.articleSn }}" >
+				<span class="img lazy_load_wrap">
+					<img class="lazy_load" src="{{ this.bannerImgM1 }}" data-src="{{this.bannerImgM1 }}" alt="" ></span>
 				<span class="info">
 					{{!--<span class="state live">LIVE</span>--}}
 					<span class="subj">{{ this.articleTitle }}</span>

@@ -278,6 +278,7 @@ public class LoginRestController extends AbstractController {
 			result.put("isLinked", true);
 		} catch(ApiException e) {
 			result.put("isLinked", false);
+			result.put("error", !(e.getStatus() == 401));
 
 		}
 

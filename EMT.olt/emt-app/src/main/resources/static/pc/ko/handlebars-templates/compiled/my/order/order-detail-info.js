@@ -41,7 +41,13 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-info"] = Handlebars.templa
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.ordInfo : depth0)) != null ? stack1.ordSn : stack1), depth0))
     + ")\">발급신청</button></dd>\n";
 },"12":function(container,depth0,helpers,partials,data) {
-    return "				<dd><button class=\"btn_sm_bordered\" type=\"button\">매출 전표</button></dd>\n";
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
+
+  return "				<dd><button class=\"btn_sm_bordered\" type=\"button\" onclick=\"showCrditCardStatement('"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.ordInfo : depth0)) != null ? stack1.ordNo : stack1), depth0))
+    + "', '"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.ordInfo : depth0)) != null ? stack1.pgTradeNo : stack1), depth0))
+    + "')\">매출 전표</button></dd>\n";
 },"14":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 

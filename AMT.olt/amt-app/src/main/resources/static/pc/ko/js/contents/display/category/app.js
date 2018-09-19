@@ -105,21 +105,15 @@
 				options.$slide.on( 'ixSlideMax:change', function (e) {
 					options.$slide.find( '.paging .current' ).text( Math.ceil( e.currentIndex / this.SLIDE_VIEW_LENGTH ) + 1 );
 				}.bind( this ));
+
+				options.$slide.find( '.item' ).each(function ( index, target ) {
+					new AP.ProductItem({
+						$target: $( target ),
+						data: listData[index],
+						displayMenuId: this._displayMenuId
+					});
+				}.bind( this ));
 			}.bind( this )).fail(function () {}.bind( this ));
-
-			options.$slide.on( 'click', '.like', function (e) {
-				AP.login().done(function () {
-					$( e.currentTarget ).find( 'i' ).toggleClass( 'on' );
-					var index = $( e.currentTarget ).closest( '.item' ).data( 'index' );
-					AP.addLike.add( listData[index].products );
-				}.bind( this ))
-			}.bind( this ));
-
-			options.$slide.on( 'click', '.cart', function (e) {
-				e.preventDefault();
-				var index = $( e.currentTarget ).closest( '.item' ).data( 'index' );
-				AP.addCart.add( listData[index].products );
-			}.bind( this ));
 		},
 
 		// 제안드리는 상품

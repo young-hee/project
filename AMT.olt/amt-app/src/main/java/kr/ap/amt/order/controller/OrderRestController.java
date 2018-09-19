@@ -79,7 +79,7 @@ public class OrderRestController extends OrderBaseController {
 	@GetMapping("/getDownloadCouponList")
 	public ResponseEntity<?> getDownloadCouponList() {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-        List<DownloadCoupons> downloadCoupons = couponApi.getDownloadCoupons("All", "N", getMemberSn(), null, null);
+        List<DownloadCoupons> downloadCoupons = couponApi.getDownloadCoupons("All", "N", getMemberSn(), null);
         result.put("downloadCouponCnt", downloadCoupons.size());	// 다운로드 쿠폰수
         result.put("downloadCouponList", downloadCoupons); 		// 다운로드 쿠폰목록
         result.put("result", "success");
@@ -199,12 +199,25 @@ public class OrderRestController extends OrderBaseController {
                 ea2.setAddress2(ordRcDTO.getRecipientAddress2());
                 et2.setPhoneNo(ordRcDTO.getRecipientPhoneNo());
             }
-            body.setRecipientName(en2);												// 수취인명
-            body.setRecipientAddress(ea2);											// 수취인주소
+            body.setRecipientName(en2);											// 수취인명
+            body.setRecipientAddress(ea2);										// 수취인주소
             body.setRecipientPhoneNo1(et2);										// 수취인전화번호1
             body.setRecipientEmailAddress(ordRcDTO.getRecipientEmailAddress());	// 수취인이메일주소
-
             body.setShipMsg(ordRcDTO.getShipMsg());								// 배송메세지
+
+			/** 상품단위선물포장목록 **/
+			List<ProdGiftPackingSelect> prodGiftPackingSelectList = new ArrayList<>();
+			if(ordRcDTO.getOrdHistProdSn() != null && ordRcDTO.getOrdHistProdSn().length > 0) {
+				for(int i=0; i<ordRcDTO.getOrdHistProdSn().length; i++) {
+					ProdGiftPackingSelect pgps = new ProdGiftPackingSelect();
+					pgps.setOrdHistProdSn( ordRcDTO.getOrdHistProdSn()[i] );
+					pgps.setGiftPackingSn( ordRcDTO.getGiftPackingSn()[i] );
+					pgps.setGiftPackingQty( ordRcDTO.getGiftPackingQty()[i] );
+
+					prodGiftPackingSelectList.add(pgps);
+				}
+			}
+			body.setProdGiftPackingSelectList(prodGiftPackingSelectList);
 
             /** 편의점 택백 */
             if (StringUtils.isNotEmpty(ordRcDTO.getcStoreName()) && StringUtils.isNotEmpty(ordRcDTO.getcStorePhoneNo())) {

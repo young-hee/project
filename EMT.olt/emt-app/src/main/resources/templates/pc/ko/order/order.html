@@ -161,7 +161,7 @@
 					}
 					//새로입력(form validation)
 					/*else if (addressType == 'NEW'
-                        && ($('#userName').val() == '''
+                        && ($('#userName').val() == ''
                             || $('#userPhoneNo').val() == ''
                             || $('#userPostCode').val() == ''
                             || $('#userAddress1').val() == ''
@@ -277,6 +277,20 @@
 					}
 				}
 				$('[name=price]').attr('value', pgPrice);
+			}
+
+			//Kakao Pay 1000원미만시 결제 불가
+			var goPayMethod = $('input[name=goPayMethod]').val();
+			if ("onlykakaopay" == goPayMethod && pgPrice < 1000) {
+				AP.modal.alert("카카오페이 결제금액이 천원 미만시 결제할 수 없습니다. <br/>다른 결제수단을 선택하세요.");
+				$('#kakao_pay').trigger("click");
+				return false;
+			}
+			//Payco 1000원미만시 결제 불가
+			if ("onlypayco" == goPayMethod && pgPrice < 1000) {
+				AP.modal.alert("페이코가 결제금액이 천원 미만시 결제할 수 없습니다. <br/>다른 결제수단을 선택하세요.");
+				$('#payco').trigger("click");
+				return false;
 			}
 
 			var $form = $('form.order-validate');
@@ -502,6 +516,21 @@
 				modal.close();
 				location.replace('/cart/cartList');
 			});
+		}
+
+		/* 공통 메시지 처리 */
+
+		/**
+		 * 금액변동인한 포인트 및 예치금 초기화
+		 * @param msg
+		 */
+		function initPointAndDeposit(msg) {
+			if ($('[name="depositPrice"]').length > 0 && $('[name="depositPrice"]').val() != ""
+				|| $('[name="beauty_point"]').length > 0 && $('[name="beauty_point"]').val() != "") {
+				AP.modal.alert(msg);
+				$('[name="depositPrice"]').val('');
+				$('[name="beauty_point"]').val('');
+			}
 		}
 	</script>
 </th:block>

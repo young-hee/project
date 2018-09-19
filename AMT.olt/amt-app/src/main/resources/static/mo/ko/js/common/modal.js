@@ -97,8 +97,7 @@
 			options.sizeType = 'FULL';
 			options.top = 0;
 			options.containerClass = options.containerClass? 'fullpage ' + options.containerClass : 'fullpage';
-			if(options.noneSystemAlert)
-				options.containerClass = options.containerClass.replace('system_alert', '');
+			options.noneSystemAlert = true;  
 			return this.open( options );
 		},
 

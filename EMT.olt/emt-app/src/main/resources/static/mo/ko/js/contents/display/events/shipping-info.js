@@ -173,18 +173,16 @@
 					AP.modal.alert( xhr.errorMessage ).addListener( 'modal-close', function (e) {
 						this._modal.close();
 					}.bind( this ));
-				} else {
+				} else{
 					this._modal.close();
 				}
 			}.bind( this )).always(function (e) {});
 		},
 
 		_reset: function () {
-			this._clear();
-			this._$modal.html( this._resetHTML );
-			this._$modal.find( '.layer_close' ).hide();
-			this._setPlugin();
-			this._setEvent();
+			
+			this._$modal.find('form')[0].reset();
+
 		}
 	});
 

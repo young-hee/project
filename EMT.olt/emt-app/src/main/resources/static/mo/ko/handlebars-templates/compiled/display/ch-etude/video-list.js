@@ -8,14 +8,16 @@ this["AP"]["handlebars"]["display"]["ch-etude"]["video-list"] = Handlebars.templ
 
   return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.articleList : depth0),{"name":"each","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"2":function(container,depth0,helpers,partials,data) {
-    var alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
+    var alias1=container.escapeExpression, alias2=container.lambda;
 
   return "		<li>\n			<a href=\""
-    + alias3((helpers.articleDetailPath || (depth0 && depth0.articleDetailPath) || alias2).call(alias1,(depth0 != null ? depth0.articleSn : depth0),{"name":"articleDetailPath","hash":{},"data":data}))
-    + "\">\n				<span class=\"img\"><img src=\""
-    + alias3((helpers.absolutePath || (depth0 && depth0.absolutePath) || alias2).call(alias1,(depth0 != null ? depth0.bannerImgM1 : depth0),{"name":"absolutePath","hash":{},"data":data}))
-    + "\" alt=\"\"></span>\n				<span class=\"info\">\n					<span class=\"subj\">"
-    + alias3(container.lambda((depth0 != null ? depth0.articleTitle : depth0), depth0))
+    + alias1((helpers.articleDetailPath || (depth0 && depth0.articleDetailPath) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.articleSn : depth0),{"name":"articleDetailPath","hash":{},"data":data}))
+    + "\" >\n				<span class=\"img lazy_load_wrap\">\n					<img class=\"lazy_load\" src=\""
+    + alias1(alias2((depth0 != null ? depth0.bannerImgM1 : depth0), depth0))
+    + "\" data-src=\""
+    + alias1(alias2((depth0 != null ? depth0.bannerImgM1 : depth0), depth0))
+    + "\" alt=\"\" ></span>\n				<span class=\"info\">\n					<span class=\"subj\">"
+    + alias1(alias2((depth0 != null ? depth0.articleTitle : depth0), depth0))
     + "</span>\n				</span>\n			</a>\n		</li>\n";
 },"4":function(container,depth0,helpers,partials,data) {
     return "	<div class=\"panel notice\">\n		<i class=\"ico\"></i>\n		<p class=\"text color_gray\">결과가 없습니다.</p>\n	</div>\n";

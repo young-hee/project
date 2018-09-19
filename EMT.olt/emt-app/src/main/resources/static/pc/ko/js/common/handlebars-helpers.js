@@ -4,6 +4,21 @@
 ;(function ( $ ) {
     'use strict';
 
+	/**
+	 * 특수문자 제거
+	 * @returns {String}
+	 */
+	Handlebars.registerHelper('removeSC', function (no) {
+
+		var regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+		var r = no;
+		if (regExp.test(no)) {
+			r = no.replace(regExp, "");
+		}
+
+		return r;
+	});
+
 	 /**
    	  * 판매 상태 이미지
    	  * @param {String}  saleDisplayStatus : OnSale(판매중) - OutOfStock(품절) - Exhaustion(조기소진) - WaitingSale(판매대기) - SuspendSale(판매일시중지) - EndSale(판매종료)
@@ -1081,19 +1096,19 @@
 		if (value != null) {
 			switch (value) {
 				case 'Online' :
-					html = '온라인전용';
+					html = '온라인 전용';
 					break;
 				case 'IntergrationCampaign' :
-					html = '통합캠페인';
+					html = '통합 쿠폰';
 					break;
-				case 'Co' :
-					html = '입점업체';
-					break;
+				//case 'Co' :
+				//	html = '입점업체';
+				//	break;
 				case 'POS' :
-					html = 'POS';
+					html = '오프라인 전용';
 					break;
 				default :
-					html = '';
+					html = '온라인 전용';
 					break;
 			}
 		}
@@ -1470,9 +1485,9 @@
 	 *
 	 * @returns {String}
 	 */
-	Handlebars.registerHelper('creditcardPayType', function (type) {
+	Handlebars.registerHelper('creditcardPayType', function (pgPayEx) {
 		var html = "";
-		switch (type.creditcardPayTypeCode) {
+		switch (pgPayEx.creditcardPayTypeCode) {
 			case 'LumpSum':
 				html = '일시불';
 			case 'Inst':

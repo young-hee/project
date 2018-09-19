@@ -26,7 +26,7 @@
 			this._$target.on( 'click', function (e) {
 				if ( this._displayMenuId == 'todayHotdeal' ) {
 					// 핫딜
-					if ( $( e.currentTarget ).find( '.img_badge' ).length ) {
+					if ( $( e.currentTarget ).find( '.soldout' ).length ) {
 						AP.modal.alert( '판매가 모두 완료되었어요. 다음 기회를 기다려주세요!' );
 						return false;
 					}

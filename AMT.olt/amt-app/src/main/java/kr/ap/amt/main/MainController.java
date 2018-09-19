@@ -3,6 +3,7 @@ package kr.ap.amt.main;
 import kr.ap.comm.config.interceptor.PageTitle;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
+import net.g1project.ecp.api.model.sales.coupon.MemberCoupon;
 import net.g1project.ecp.api.model.sales.display.Corner;
 import net.g1project.ecp.api.model.sales.display.CornerContentsSet;
 import net.g1project.ecp.api.model.sales.display.PageInfo;
@@ -67,6 +68,10 @@ public class MainController extends AbstractController {
         
 		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
         
+		if(isLoggedIn()) {
+			MemberCoupon memberKeepingCoupons = couponApi.getMemberKeepingCoupons("Avail", getMemberSn(), 0L, 0L);
+			model.addAttribute("memberKeepingCoupons", memberKeepingCoupons.getAvailCoupons()); //floating menu 쿠폰목록 조회
+		}
 		return "main/" + pageInfo.getMenuPageFileId();
 	}
 

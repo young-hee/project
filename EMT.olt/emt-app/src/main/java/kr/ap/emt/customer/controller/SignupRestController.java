@@ -565,8 +565,11 @@ public class SignupRestController extends AbstractController {
 						result.put("joinType", joinType);
 						result.put("chcsNo", signupStatusResult.getIncsMemberId());
 						result.put("incsNo", signupStatusResult.getIncsNo());
-						
-						result.put("mbrJoinDt", DateFormatUtils.format(signupStatusResult.getMemberSignupDt(), "yyyyMMdd"));
+						try {
+							result.put("mbrJoinDt", DateFormatUtils.format(signupStatusResult.getMemberSignupDt(), "yyyyMMdd"));
+						} catch(Exception e) {
+							
+						}
 						
 					} else if(signupStatusResult.isIncsMember()) {
 
@@ -851,27 +854,11 @@ public class SignupRestController extends AbstractController {
 
 				
 				cicuemCuInfTotTcVo.setCicuedCuChCsTcVo(list);
-				String is030Check = "";
-				String is040Check = "";
-				String is050Check = "";
-				String is060Check = "";
 				//회원가입 통합약관동의여부
 				List<CicuedCuTncaTcVo> cicuedCuTncaTcVos = new ArrayList<CicuedCuTncaTcVo>();
 				Map<String, String> termsMap = arrayToMap(termsChk);
 				for (Map.Entry<String, String> entry : termsMap.entrySet()) {
 					CicuedCuTncaTcVo cicuedCuTncaTcVo = new CicuedCuTncaTcVo();
-					if(entry.getKey().equals("030")) {
-						is030Check = entry.getValue();
-					}
-					if(entry.getKey().equals("040")) {
-						is040Check = entry.getValue();
-					}
-					if(entry.getKey().equals("050")) {
-						is050Check = entry.getValue();
-					}
-					if(entry.getKey().equals("060")) {
-						is060Check = entry.getValue();
-					}
 					cicuedCuTncaTcVo.setTcatCd(entry.getKey());
 					cicuedCuTncaTcVo.setTncvNo("1");
 					cicuedCuTncaTcVo.setTncAgrYn(entry.getValue());
@@ -885,8 +872,6 @@ public class SignupRestController extends AbstractController {
 				Map<String, String> olOptiYnMap = arrayToMap(optionYn);
 
 				//유형별 수신동의여부
-				String is000Email = "";
-				String is000SMS = "";
 				CicuemCuOptiCsTcVo cicuemCuOptiTcVo = new CicuemCuOptiCsTcVo();
 				for (Map.Entry<String, String> entry : olOptiYnMap.entrySet()) {
 					if(entry.getKey().contains("OptionB_")) continue;
@@ -894,11 +879,9 @@ public class SignupRestController extends AbstractController {
 					if ("OptionA_Email".equals(entry.getKey())) {
 						cicuemCuOptiTcVo.setEmlOptiYn(entry.getValue());
 						cicuemCuOptiTcVo.setEmlOptiDt(today);
-						is000Email = entry.getValue();
 					} else if ("OptionA_SMS".equals(entry.getKey())) {
 						cicuemCuOptiTcVo.setSmsOptiYn(entry.getValue());
 						cicuemCuOptiTcVo.setSmsOptiDt(today);
-						is000SMS = entry.getValue();
 					} else if ("OptionA_DM".equals(entry.getKey())) {
 						cicuemCuOptiTcVo.setDmOptiYn(entry.getValue());
 						cicuemCuOptiTcVo.setDmOptiDt(today);
@@ -912,8 +895,6 @@ public class SignupRestController extends AbstractController {
 				cicuemCuOptiTcVo.setFscrId(cicuemCuInfTotTcVo.getFscrId());
 				cicuemCuOptiTcVo.setLschId(cicuemCuInfTotTcVo.getLschId());
 				
-				String is030Email = "";
-				String is030SMS = "";
 				CicuemCuOptiCsTcVo CicuemCuOptiCsTcVo2 = new CicuemCuOptiCsTcVo();
 				for (Map.Entry<String, String> entry : olOptiYnMap.entrySet()) {
 					if(entry.getKey().contains("OptionA_")) continue;
@@ -922,11 +903,9 @@ public class SignupRestController extends AbstractController {
 					if ("OptionB_Email".equals(entry.getKey())) {
 						CicuemCuOptiCsTcVo2.setEmlOptiYn(entry.getValue());
 						CicuemCuOptiCsTcVo2.setEmlOptiDt(today);
-						is030Email = entry.getValue();
 					} else if ("OptionB_SMS".equals(entry.getKey())) {
 						CicuemCuOptiCsTcVo2.setSmsOptiYn(entry.getValue());
 						CicuemCuOptiCsTcVo2.setSmsOptiDt(today);
-						is030SMS = entry.getValue();
 					} else if ("OptionB_DM".equals(entry.getKey())) {
 						CicuemCuOptiCsTcVo2.setDmOptiYn(entry.getValue());
 						CicuemCuOptiCsTcVo2.setDmOptiDt(today);

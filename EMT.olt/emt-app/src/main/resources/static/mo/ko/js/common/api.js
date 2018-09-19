@@ -417,6 +417,15 @@
         		,prodReviewType : 'All'
 			}
         },
+        
+      //상품평 요약 정보 조회
+        getProductReviewSummary : {path : '/product/getProductReviewSummary', method : 'GET', data: {
+        		prodReviewUnit: null // 상품평단위코드. - OnlineProd(온라인상품단위) - UnitProd(단위상품단위, 단위상품일련번호 필수) - StyleCode(스타일코드단위, 스타일코드 필수)
+        	   ,prodReviewType : 'All'
+        	   ,onlineProdSn : null // 온라인 상품 일련번호 
+        	   ,prodSn: null // 단위상품일련번호
+			}
+        },
 
         //상품평 등록
         reviewWithImages : {path : '/product/reviewWithImages', method : 'POST', contentType:false, processData: false, data: {

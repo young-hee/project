@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
-	<title>취소</title>
+	<title th:text="${typeName}">취소</title>
 </head>
 <body>
 <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" style="background-color:#fafafa;">
@@ -38,24 +38,39 @@
 									<table width="100%" cellpadding="0" cellspacing="0" border="0"><!-- 주요 내용 -->
 										<tbody>
 										<tr>
-											<td align="center" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:34px;letter-spacing: -1px; font-weight:bold; color:#333;">
+											<td th:if="${state == 'cancel'}"align="center" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:34px;letter-spacing: -1px; font-weight:bold; color:#333;">
 												주문이 취소 되었습니다.
+											</td>
+											<td th:if="${state == 'return'}"align="center" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:34px;letter-spacing: -1px; font-weight:bold; color:#333;">
+												반품 상품이 처리중입니다.
+											</td>
+											<td th:if="${state == 'exchange'}"align="center" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:34px;letter-spacing: -1px; font-weight:bold; color:#333;">
+												교환 신청이 처리 중입니다.
 											</td>
 										</tr>
 										<tr>
 											<td height="30"></td>
 										</tr>
 										<tr>
-											<td align="center" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:16px; color:#666; line-height:24px;">
-												<strong style="color: #333;" th:text="${ord.purchaserName}">홍길동</strong>님께서 <strong style="color: #333;" th:text="${#dates.format(ord.ordDate, 'yyyy년 MM월 dd일')}">2018년 05월 23일</strong> 주문하신 내역이 정상적으로 취소처리 되었습니다.
+											<td th:if="${state == 'cancel'}" align="center" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:16px; color:#666; line-height:24px;">
+												<strong style="color: #333;" th:text="${ord.purchaserName}">홍길동</strong>님께서 <strong style="color: #333;" th:text="${#dates.format(ord.ordDate, 'yyyy년 MM월 dd일')}">2018년 05월 23일</strong>
+													<span th:text="|주문하신 내역이 정상적으로 ${typeName}처리 되었습니다.|">주문하신 내역이 정상적으로 취소처리 되었습니다.</span>
 											</td>
+											<td th:unless="${state == 'cancel'}" align="center" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:16px; color:#666; line-height:24px;">
+												<strong style="color: #333;" th:text="${ord.purchaserName}">홍길동</strong>님께서
+												<span th:utext="|접수하신 ${typeName}신청이 처리중입니다.<br>빠른 처리를 약속드리오며, 더 나은 서비스를 위해 노력하겠습니다.<br>쇼핑에 불편을 드려 죄송합니다.|">주문하신 내역이 정상적으로 취소처리 되었습니다.</span>
+											</td>
+
 										</tr>
 										<tr>
 											<td height="60"></td>
 										</tr>
 										<tr>
-											<td align="center" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:20px; color:#333; line-height:24px;">
-												주문 번호 <strong style="color:#f54a7e" th:text="${ordNo}">201811118956360</strong>의 주문취소 내역
+											<td th:if="${state == 'cancel'}" align="center" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:20px; color:#333; line-height:24px;">
+												주문 번호 <strong style="color:#f54a7e" th:text="${ordNo}">201811118956360</strong><span th:text="|의 주문${typeName} 내역|">의 주문취소 내역</span>
+											</td>
+											<td th:unless="${state == 'cancel'}" align="center" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:20px; color:#333; line-height:24px;">
+												주문 번호 <strong style="color:#f54a7e" th:text="${ordNo}">201811118956360</strong><span th:text="|의 ${typeName}신청 승인 상품|">의 주문취소 내역</span>
 											</td>
 										</tr>
 										<tr>
@@ -92,9 +107,12 @@
 														<tr>
 															<td align="center" th:text="${o.ordProdEx.onlineProdNameBlang}">순정 스킨케어 2종 세트<br>[럭키퍼피]</td>
 															<td align="center" th:text="${o.ordProdEx.prodNameBlang}">핑크-RD302<br>말린딸기시럽</td>
-															<td align="center" th:if="${state == 'cancel'}" th:text="${o.cancelQty}">5</td>
-															<td align="center" th:unless="${state == 'cancel'}" th:text="${o.claimReceivedQty}">5</td>
-															<td align="center" th:text="|${#numbers.formatDecimal( o.finalOnlineSaleAmtPcur, 3, 'COMMA', 0, 'POINT')}원|">50,000원</td>
+															<td align="center" th:text="${o.claimReceivedQty}">5</td>
+															<!---->
+															<!--<td align="center" th:text="|${#numbers.formatDecimal( o.finalOnlineSaleAmtPcur, 3, 'COMMA', 0, 'POINT')}원|">50,000원</td>-->
+
+															<td align="center" th:text="|${#numbers.formatInteger(o.finalOnlineSaleAmtPcur, 3, 'COMMA')}원|">50,000원</td>
+
 														</tr>
 														<tr>
 															<td colspan="4" height="15"></td>
@@ -146,7 +164,7 @@
 														<tr>
 															<td align="center" th:text="${o.ordProdEx.onlineProdNameBlang}">순정 스킨케어 2종 세트<br>[럭키퍼피]</td>
 															<td align="center" th:text="${o.ordProdEx.prodNameBlang}">핑크-RD302<br>말린딸기시럽</td>
-															<td align="center" th:text="${o.ordQty}">5</td>
+															<td align="center" th:text="${o.claimReceivedQty}">5</td>
 															<td align="center" th:text="|${#numbers.formatDecimal( o.finalOnlineSaleAmtPcur, 3, 'COMMA', 0, 'POINT')}원|">50,000원</td>
 														</tr>
 														<tr>
@@ -180,7 +198,7 @@
 										<tr>
 											<td height="40"></td>
 										</tr>
-										<tr th:if="${state == 'detail'}">
+										<tr th:if="${state == 'cancel'}">
 											<td>
 												<table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size: 14px;color: #888;line-height: 24px;">
 													<tbody>
@@ -219,7 +237,7 @@
 																						</tr>
 																						<tr>
 																							<td width="240"><strong style="color: #333;">환불 할인금액</strong></td>
-																							<td align="right" style="font-size: 18px;color: #333;"><strong style="vertical-align: middle;" th:text="|${#numbers.formatDecimal( ord.ordAmt.salePoint, 3, 'COMMA', 0, 'POINT')}원|">12,000원</strong></td>
+																							<td align="right" style="font-size: 18px;color: #333;"><strong style="vertical-align: middle;" th:text="|${#numbers.formatInteger( ord.ordAmt.salePoint, 1, 'COMMA')}원|">12,000원</strong></td>
 																						</tr>
 																						<tr>
 																							<td colspan="2" height="15"></td>
@@ -243,7 +261,7 @@
 																						<tr>
 																							<td colspan="2" height="15"></td>
 																						</tr>
-																						<th:block th:each="pg : ${ord.ordPayResult.pgList}">
+																						<th:block th:each="pg : ${ord.ordPayResult.refundPGList}">
 																							<tr>
 																								<td th:if="${pg.payMethodTypeCode} == 'Deposit'" width="240">예치금</td>
 																								<td th:unless="${pg.payMethodCode} == 'Deposit'" width="240" th:text="${pg.payMethodNameBlang}">신용카드</td>
@@ -384,9 +402,13 @@
 														<td valign="top" width="10">
 															<span style="display:block; width:2px; height:2px; margin-top:11px; background-color:#888;"></span>
 														</td>
-														<td valign="top" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:14px; color:#888; line-height:26px;">
+														<td th:if="${state == 'cancel'}" valign="top" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:14px; color:#888; line-height:26px;">
 															자세한 취소 내역은 <strong style="color: #333;">마이에뛰드> 주문/배송조회</strong>에서 확인하실 수 있습니다.
 														</td>
+														<td th:unless="${state == 'cancel'}" valign="top" style="font-family:'Malgun Gothic','맑은 고딕', 'dotum','돋움',sans-serif; font-size:14px; color:#888; line-height:26px;">
+															<span th:text="|자세한 ${typeName} 내역은 |">자세한 취소 내역은 </span><strong style="color: #333;">마이에뛰드> 교환/반품</strong>에서 확인하실 수 있습니다.
+														</td>
+
 													</tr>
 													</tbody>
 												</table>

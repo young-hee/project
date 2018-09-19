@@ -315,7 +315,10 @@
 					            } else if (xhr.errorCode == 'ESAL062') {
 					                AP.modal.alert("일일 인증실패 횟수를 초과했습니다.");
 					            } else if (xhr.status == 401) {
-					                AP.modal.alert("인증번호를 " + xhr.responseJSON.errorData.additional.dailyFailureCount + "회 잘못 입력하셨습니다.");
+					            	if(xhr.responseJSON.errorData.additional && xhr.responseJSON.errorData.additional.dailyFailureCount)
+					                	AP.modal.alert("인증번호를 " + xhr.responseJSON.errorData.additional.dailyFailureCount + "회 잘못 입력하셨습니다.");
+					            	else
+					                	AP.modal.alert("인증에 실패했습니다.");
 					            } else if (xhr.errorCode == 'EXTRA') {
 
 					                if (xhr.responseJSON.errorData.additional.cs == 1) {
@@ -882,7 +885,12 @@
 					                if (data.isLinked) {
 					                    nbSuccess(data);
 					                } else {
-					                    doSnsLogin();
+
+					                	if(!data.error) {
+						                    doSnsLogin();
+					                	} else {
+					                		AP.modal.alert("SNS 인증에 실패했습니다.");
+					                	}
 					                }
 					                //성공
 					            },
@@ -1003,7 +1011,7 @@
 				        if ($('#sub').attr('method') == 'POSTs')
 				            $('#sub').submit();
 				        else
-				            location.href = $('#sub').attr('action').replace('?isRequiredLogin=true', '').replace('/order/reception','/cart/cartList');
+				            location.href = $('#sub').attr('action').replace('?isRequiredLogin=true', '').replace('/order/reception','/cart/cartList').replace('/order/ordComplete', '/main');
 
 					}
 

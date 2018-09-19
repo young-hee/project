@@ -1,6 +1,6 @@
 {{#xif downloadCoupon.couponCnt '>' 0}}
 	{{#each downloadCoupon.list}}
-		<div class="coupon_order">
+		<div class="coupon_order" name="removeCouponSn" data-couponSn="{{ this.couponSn }}">
 			<span class="check_wrap">
 				<input type="checkbox" id="{{ this.couponSn }}" name="couponSn" data-code="{{ this.duplicationUseConditionCode }}">
 				<label for="{{ this.couponSn }}">
@@ -33,7 +33,7 @@
 		<li></li>
 		<li></li>
 	</ul>
-	<div class="page_btns">
+	<div class="page_btns download">
 		<button class="btn_lg_secondary" type="button" id="b_close">취소</button>
 		<button class="btn_lg_primary" type="button" id="b_download">쿠폰다운</button>
 	</div>

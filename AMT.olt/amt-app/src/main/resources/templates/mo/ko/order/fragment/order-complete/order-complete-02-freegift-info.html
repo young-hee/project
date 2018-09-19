@@ -1,57 +1,204 @@
-<!--사은품 확인-->
-<dl class="freebies">
-	<dt>
-		<div class="title"><b>보너스 혜택</b></div>
-		<button type="button"><span class="sr_only">더보기</span></button>
-	</dt>
-	<dd class="panel">
-		<div class="freebies_result">
-			<span class="thumb"><img ap:src="@{/images/dummy/cart_freebies_img1.jpg}" alt=""></span>
-			<h3 class="h_title cont"><strong>첫 구매 사은품</strong></h3>
-			<span class="text">뷰티포인트 2000P</span>
-		</div>
+<!--/* 추가 사운품 안내 */-->
+<div class="section" th:if="${awardMapSpecialGift.get('totalCount') > 0 or awardMapEventGift.get('totalCount') > 0 or awardMapCouponGift.get('totalCount') > 0 or awardMapAwardGift.get('totalCount') > 0}" style="margin-top: 9px;">
+	<dl class="special_gift ui_tooltip">
+		<dt><button type="button" class="btn_tooltip"><b class="title">추가 사은품 안내</b><span>자세히</span></button></dt>
+		<dd>
+			<div class="layer_tooltip">
+				<dl>
+					<dt>추가 사은품 안내</dt>
+					<!-- 레이아웃 변경 (180824) -->
+					<dd>
+						<p class="text">사은품의 재고가 부족할 경우 사은품이 대체되어 발송될 수 있습니다.</p>
+						<p class="text">사은품은 이미지와 상이할 수 있습니다.</p>
+						<p class="text">사은품의 교환이나 추가 증정은 불가하며 본품 반품/환불시 사은품도 동봉해주셔야 합니다.</p>
+						<button type="button" class="ui_close sm"><span class="sr_only">툴팁 닫기</span></button>
+					</dd>
+					<!--// 레이아웃 변경 (180824) -->
+				</dl>
+			</div>
 
-		<hr class="div m25">
+			<div class="ui_accordion">
 
-		<ul class="freebies_list">
-			<li>
-				<div class="item">
-					<div class="thumb"><img alt="" ap:src="@{/images/dummy/cart_freebies_img5.jpg}"></div>
-					<div class="item_info list">
-						<div class="prd_name">
-							<h3 class="h_title cont"><strong>사은품</strong></h3>
-							<p class="name"><사은품> 레드 에너지 스킨케어 4종 키트 1개 </p>
+				<!-- 스페셜 기프트 Start -->
+				<dl th:if="${awardMapSpecialGift.get('totalCount') > 0}">
+					<dt>
+						<b class="title">스페셜 기프트 <span><th:block th:text="${awardMapSpecialGift.get('totalCount')}">0</th:block>개</span></b>
+						<p class="text font_xs"><em class="color_warning">뷰티포인트 사용시 스페셜기프트가 증정되지 않습니다</em></p>
+						<button type="button"><i class="ico_navi"></i><span class="sr_only">더보기</span></button>
+					</dt>
+					<dd aria-hidden="true" style="display: none;">
+						<div class="product_slide_new">
+							<ul class="three_half type2">
+								<!-- 상품단위 온라인상품증정품 상품/사은품 목록 -->
+								<th:block th:if="${#lists.size( awardMapSpecialGift.get('ordHistProdAwardExListForProd') ) > 0} ">
+									<li th:each="ordHistProdAwardEx : ${awardMapSpecialGift.get('ordHistProdAwardExListForProd')}">
+										<a href="#none">
+											<div class="product_visual">
+												<img th:src="${ordHistProdAwardEx.awardOrdHistProdEx.ordProdEx.prodImgUrl}">
+											</div>
+											<div class="product_info">
+												<p class="brand" th:text="${ordHistProdAwardEx.awardOrdHistProdEx.ordProdEx.onlineProdNameBlang}">라네즈</p>
+												<p class="product_name" th:text="${ordHistProdAwardEx.awardOrdHistProdEx.ordProdEx.prodNameBlang}">더마 시카크림</p>
+											</div>
+										</a>
+									</li>
+								</th:block>
+							</ul>
 						</div>
-					</div>
-				</div>
-			</li>
-			<li>
-				<div class="item">
-					<div class="thumb"><img alt="" ap:src="@{/images/dummy/cart_freebies_img5.jpg}"></div>
-					<div class="item_info list">
-						<div class="prd_name">
-							<h3 class="h_title cont"><strong>사은품</strong></h3>
-							<p class="name"><사은품> 레드 에너지 스킨케어 4종 키트 1개 </p>
+						<div class="section bg_gray">
+							<dl class="dl_cont">
+								<dt>스페셜 기프트 안내</dt>
+								<dd>
+									<ul class="list">
+										<li>행사 상품 구매시 구매수량당 스페셜 기프트가 증정됩니다.</li>
+										<li>뷰티포인트 사용시 스페셜 기프트는 증정되지 않습니다. </li>
+										<li>일부 옵션 상품의 경우 스페셜 기프트 증정 대상에서 제외될 수 있습니다. </li>
+									</ul>
+								</dd>
+							</dl>
 						</div>
-					</div>
-				</div>
-			</li>
-		</ul>
-		<!-- 사은품이 한개일때 class 'single' 추가 -->
-		<ul class="freebies_list single">
-			<li>
-				<div class="item">
-					<div class="thumb"><img alt="" ap:src="@{/images/dummy/cart_freebies_img5.jpg}"></div>
-					<div class="item_info list">
-						<div class="prd_name">
-							<h3 class="h_title cont"><strong>사은품</strong></h3>
-							<p class="name"><사은품> 레드 에너지 스킨케어 4종 키트 1개 </p>
+					</dd>
+				</dl>
+				<!-- 스페셜 기프트 End -->
+
+				<!-- 이벤트 사은품 Start -->
+				<dl th:if="${awardMapEventGift.get('totalCount') > 0}">
+					<dt><b class="title">이벤트 사은품 <span><th:block th:text="${awardMapEventGift.get('totalCount')}">0</th:block>개</span></b> <button type="button"><i class="ico_navi"></i><span class="sr_only">더보기</span></button></dt>
+					<dd aria-hidden="true" style="display: none;">
+						<div class="product_slide_new">
+							<ul class="three_half type2">
+								<!-- 상품단위 증정프로모션증정품 목록 -->
+								<th:block th:if="${#lists.size( awardMapEventGift.get('ordHistProdPromoAwardExList') ) > 0} ">
+									<li th:each="ordHistProdPromoAwardEx : ${awardMapEventGift.get('ordHistProdPromoAwardExList')}">
+										<a href="#none">
+											<div class="product_visual">
+												<img th:src="${ordHistProdPromoAwardEx.awardOrdHistProdEx.ordProdEx.prodImgUrl}">
+											</div>
+											<div class="product_info">
+												<p class="brand" th:text="${ordHistProdPromoAwardEx.awardOrdHistProdEx.ordProdEx.onlineProdNameBlang}">라네즈</p>
+												<p class="product_name" th:text="${ordHistProdPromoAwardEx.awardOrdHistProdEx.ordProdEx.prodNameBlang}">더마 시카크림</p>
+											</div>
+										</a>
+									</li>
+								</th:block>
+								<!-- 주문단위 증정 프로모션 상품/사은품 목록 -->
+								<th:block th:if="${#lists.size( awardMapEventGift.get('ordUnitAwardExProdList') ) > 0} ">
+									<li th:each="ordUnitAwardExProd : ${awardMapEventGift.get('ordUnitAwardExProdList')}">
+										<a href="#none">
+											<div class="product_visual">
+												<img th:src="${ordUnitAwardExProd.ordProdEx.prodImgUrl}">
+											</div>
+											<div class="product_info">
+												<p class="brand" th:text="${ordUnitAwardExProd.ordProdEx.onlineProdNameBlang}">라네즈</p>
+												<p class="product_name" th:text="${ordUnitAwardExProd.ordProdEx.prodNameBlang}">더마 시카크림</p>
+											</div>
+										</a>
+									</li>
+								</th:block>
+							</ul>
 						</div>
-					</div>
-				</div>
-			</li>
-		</ul>
-		<!--//사은품이 한개일때-->
-	</dd>
-</dl>
-<!--사은품 확인-->
+						<div class="section bg_gray">
+							<dl class="dl_cont">
+								<dt>이벤트 사은품 안내</dt>
+								<dd>
+									<ul class="list">
+										<li>최종 결제금액을 기준으로 이벤트 조건을 만족하였을 경우, 주문건당 1회 이벤트 사은품이 증정됩니다. </li>
+										<li>뷰티포인트 사용시 포인트 금액을 제외한 최종 결제금액 기준으로 사은품이 증정됩니다. </li>
+									</ul>
+								</dd>
+							</dl>
+						</div>
+					</dd>
+				</dl>
+				<!-- 이벤트 사은품 End -->
+
+				<!-- 쿠폰 사은품 Start -->
+				<dl th:if="${awardMapCouponGift.get('totalCount') > 0}">
+					<dt><b class="title">쿠폰 사은품 <span><th:block th:text="${awardMapCouponGift.get('totalCount')}">0</th:block>개</span></b> <button type="button"><i class="ico_navi"></i><span class="sr_only">더보기</span></button></dt>
+					<dd aria-hidden="true" style="display: none;">
+						<div class="product_slide_new">
+							<ul class="three_half type2">
+								<!-- 쿠폰 상품/사은품 -->
+								<th:block th:if="${#lists.size( awardMapCouponGift.get('couponAwardExListForProd') ) > 0} ">
+									<li th:each="couponAwardEx : ${awardMapCouponGift.get('couponAwardExListForProd')}">
+										<a href="#none">
+											<div class="product_visual">
+												<!-- TODO 쿠폰 소속의 상품 이미지가 없다??? 20180906 Zenith가 추가해주기로 함 -->
+												<img src="">
+											</div>
+											<div class="product_info">
+												<p class="brand" th:text="${couponAwardEx.onlineProdName}">라네즈</p>
+												<p class="product_name" th:text="${couponAwardEx.prodName}">더마 시카크림</p>
+											</div>
+										</a>
+									</li>
+								</th:block>
+							</ul>
+						</div>
+						<div class="section bg_gray">
+							<dl class="dl_cont">
+								<dt>쿠폰 사은품 안내</dt>
+								<dd>
+									<ul class="list">
+										<li>보유하신 쿠폰을 사용하여 사은품을 추가로 받으실 수 있습니다. </li>
+										<li>보유한 쿠폰의 사용조건은 상이하며, 자세한 내용은 [마이파우치 - 쿠폰 - 쿠폰안내]에서 확인하실 수 있습니다. </li>
+									</ul>
+								</dd>
+							</dl>
+						</div>
+					</dd>
+				</dl>
+				<!-- 쿠폰 사은품 End -->
+
+				<!-- 증정 기프트 카드 Start -->
+				<dl th:if="${awardMapAwardGift.get('totalCount') > 0}">
+					<dt>
+						<b class="title">증정 기프트카드 <span><th:block th:text="${awardMapAwardGift.get('totalCount')}">0</th:block>개</span></b>
+						<p class="text font_xs"><em class="color_warning">증정 기프트카드는 다음 주문에서 사용할 수 있습니다</em></p>
+						<button type="button"><i class="ico_navi"></i><span class="sr_only">더보기</span></button>
+					</dt>
+					<dd aria-hidden="true" style="display: none;">
+						<ul class="list gift_card">
+							<!-- 상품단위 온라인상품증정품 기프트카드 목록 -->
+							<th:block th:if="${#lists.size( awardMapAwardGift.get('ordUnitAwardExGiftcardList') ) > 0} ">
+								<th:block th:each="ordUnitAwardExGiftcard : ${awardMapAwardGift.get('ordUnitAwardExGiftcardList')}">
+									<li>
+										<th:block th:text="${ordUnitAwardExGiftcard.giftcardName}">기프트카드증정 이벤트명 or 상품명</th:block>
+										<span class="price"><b th:text="${#IntegUtil.toCommaNumber(ordUnitAwardExGiftcard.giftcardBaseAmt)}">0</b>원</span>
+									</li>
+								</th:block>
+							</th:block>
+							<!-- 문단위 증정 프로모션 기프트카드 목록 -->
+							<th:block th:if="${#lists.size( awardMapAwardGift.get('ordHistProdAwardExListForGiftcard') ) > 0} ">
+								<th:block th:each="ordHistProdAwardEx : ${awardMapAwardGift.get('ordHistProdAwardExListForGiftcard')}">
+									<li>
+										<th:block th:text="${ordHistProdAwardEx.awardGiftcardEx.giftcardName}">기프트카드증정 이벤트명 or 상품명</th:block>
+										<span class="price"><b th:text="${#IntegUtil.toCommaNumber(ordHistProdAwardEx.awardGiftcardEx.giftcardBaseAmt)}">0</b>원</span>
+									</li>
+								</th:block>
+							</th:block>
+						</ul>
+						<div class="section bg_gray">
+							<dl class="dl_cont">
+								<dt>증정 기프트카드 안내</dt>
+								<dd>
+									<ul class="list">
+										<li>이벤트 상품을 구매하시거나 증정 조건 충족시 기프트카드가 증정됩니다.  </li>
+										<li>기프트카드는 해당 주문의 구매확정 시점에 고객님의 마이파우치로 자동 발급됩니다. </li>
+										<li>뷰티포인트 사용시 상품당 스페셜 기프트로 증정되는 기프트카드는 발급대상에서 제외됩니다. </li>
+										<li>증정된 기프트카드의 사용기한은 상이할 수 있으며, 만료된 기프트카드의 기간 연장 또는 복원은 불가합니다. </li>
+										<li>증정된 주문건의 취소/반품/환불시, 발급받으셨던 기프트카드가 사용되었을 경우 처리가 불가합니다. </li>
+									</ul>
+								</dd>
+							</dl>
+						</div>
+					</dd>
+				</dl>
+				<!-- 증정 기프트 카드 End -->
+
+			</div>
+
+		</dd>
+	</dl>
+</div>
+<!--/* 추가 사운품 안내 */-->

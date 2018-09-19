@@ -1,0 +1,46 @@
+{{!--
+	special gift
+--}}
+<h2 class="title"><b>스페셜기프트</b></h2>
+<div class="slide" data-ix-options="view-length:2; move-length:1">
+	<div class="ix-list-viewport list_product">
+		<ul class="ix-list-items">
+			{{#each this.list}}
+				<li class="ix-list-item product_box">
+					<a href="{{ productDetailPath this.onlineProdSn }}">
+						<div class="visual_section gradient">
+							{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+								<div class="item_state out_of_stock">일시품절</div>
+							{{/xif}}
+							<img src="" data-src="{{ this.onlineProdImages.0.imgUrl }}" alt="">
+						</div>
+						<ul class="special_gift_list">
+							{{#xif this.onlineProdGift.giftProds.length '>' 3}}
+								<li><img data-src="{{ absolutePath this.onlineProdGift.giftProds.0.repImgUrl }}" src="" alt="{{ this.onlineProdGift.giftProds.0.prodName }}"><span>{{ this.onlineProdGift.giftProds.0.prodName }}</span></li>
+								<li><img data-src="{{ absolutePath this.onlineProdGift.giftProds.1.repImgUrl }}" src="" alt="{{ this.onlineProdGift.giftProds.1.prodName }}"><span>{{ this.onlineProdGift.giftProds.1.prodName }}</span></li>
+								<li><img data-src="{{ absolutePath this.onlineProdGift.giftProds.2.repImgUrl }}" src="" alt="{{ this.onlineProdGift.giftProds.2.prodName }}"><span>{{ this.onlineProdGift.giftProds.2.prodName }}</span></li>
+							{{else}}
+								{{#each this.onlineProdGift.giftProds}}
+									<li><img data-src="{{ absolutePath this.repImgUrl }}" src="" alt="{{ this.prodName }}"><span>{{ this.prodName }}</span></li>
+								{{/each}}
+							{{/xif}}
+						</ul>
+						<div class="info_section">
+							<p class="txt_summary ellipsis line2">{{ this.onlineProdName }}</p>
+							<div class="price_atc">
+								<span class="txt_price"><em>{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}</em>{{ condition ../isActivityPoint '알' '원' }}{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}} ~{{/xif}}</span>
+							</div>
+						</div>
+					</a>
+				</li>
+			{{/each}}
+		</ul>
+	</div>
+	<div class="ix-controller round_box">
+		<div class="slide_direction">
+			<a class="ix-btn-prev" href="#none"><span class="sr_only">Prev</span></a>
+			<a class="ix-btn-next" href="#none"><span class="sr_only">Next</span></a>
+		</div>
+	</div>
+</div>
+<a href="#none" class="more">더보기</a>

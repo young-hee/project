@@ -15,17 +15,14 @@ import java.util.List;
 import java.util.Map;
 
 import kr.ap.comm.cart.CartSession;
-import net.g1project.ecp.api.model.order.order.OrdChangeShipAddress;
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import kr.ap.comm.member.vo.MemberSession;
 import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.BooleanResult;
 import net.g1project.ecp.api.model.offlinestore.store.AddressDivInfo;
@@ -47,8 +44,6 @@ import net.g1project.ecp.api.model.sales.cart.CartSnResult;
 import net.g1project.ecp.api.model.sales.cart.ProdEx;
 import net.g1project.ecp.api.model.sales.cart.SameTimePurCartProd;
 import net.g1project.ecp.api.model.sales.cart.SameTimePurCartProdSet;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/cart")
@@ -190,7 +185,7 @@ public class CartRestController extends CartBaseController{
 				if(takeoutCdArr[i] != null) {
 					BooleanResult br = cartApi.removeCartProd(cartSn, Long.parseLong(takeoutCdArr[i]));
 					if(br.isResult()){
-						removeCartProdSnList.add(Long.parseLong(prdCdArr[i]));
+						removeCartProdSnList.add(Long.parseLong(takeoutCdArr[i]));
 					}
 				}
 			}
@@ -245,6 +240,7 @@ public class CartRestController extends CartBaseController{
 	 */
 	@PostMapping("/takeoutStore")
 	public ResponseEntity<?> takeoutStore(String regularStoreSearchYn, String keyword,
+										  String addressDiv, String addressDetailDivs,
 										  Double latitude, Double longitude,
 										  Double radius, Integer offSet,
 										  Integer limit, String sortBy) {
@@ -285,11 +281,12 @@ public class CartRestController extends CartBaseController{
 
 		if(storePickupCartProdEx != null){
 			try{
-				// 단골매장
 				StoresInvtSearchInfo var1 = new StoresInvtSearchInfo();
 				var1.setMemberSn(getMemberSn());
 				var1.setRegularStoreSearchYn(regularStoreSearchYn);
 				var1.setKeyword(keyword);
+				var1.setAddressDiv(addressDiv);
+				var1.setAddressDetailDiv(addressDetailDivs);
 				var1.setLatitude(latitude != null ? BigDecimal.valueOf(latitude) : null);
 				var1.setLongitude(longitude != null ? BigDecimal.valueOf(longitude) : null);
 				var1.setRadius(radius != null ? BigDecimal.valueOf(radius) : null);
@@ -304,18 +301,18 @@ public class CartRestController extends CartBaseController{
 			catch (Exception e){
 				e.printStackTrace();
 
-				// 단골매장
 				StoresInvtSearchInfo var1 = new StoresInvtSearchInfo();
 				var1.setMemberSn(getMemberSn());
 				var1.setRegularStoreSearchYn(regularStoreSearchYn);
 				var1.setKeyword(keyword);
+				var1.setAddressDiv(addressDiv);
+				var1.setAddressDetailDiv(addressDetailDivs);
 				var1.setLatitude(latitude != null ? BigDecimal.valueOf(latitude) : null);
 				var1.setLongitude(longitude != null ? BigDecimal.valueOf(longitude) : null);
 				var1.setRadius(radius != null ? BigDecimal.valueOf(radius) : null);
 				var1.setLimit(limit);
 				var1.setOffset(offSet);
 				var1.setSortBy(sortBy);
-				//var1.setProdInvtExList(prodInvtExList);
 				StoreResult storeResult = storeApi.getStoresInvt(var1);
 				result.put("param", storeResult);
 				result.put("result", "success");
@@ -368,18 +365,92 @@ public class CartRestController extends CartBaseController{
 	 * @return
 	 */
 	@PostMapping("/takeoutFavoriteStore")
-	public ResponseEntity<?> takeoutFavoriteStore() {
+	public ResponseEntity<?> takeoutFavoriteStore(Long cartSn) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		StoresInvtSearchInfo var1 = new StoresInvtSearchInfo();
-		var1.setMemberSn(getMemberSn());
-		var1.setRegularStoreSearchYn("Y"); // 단골매장검색여부
-		var1.setOffset(0);
-		var1.setLimit(10);
-		var1.setSortBy("StoreName");
-		StoreResult storeResult = storeApi.getStoresInvt(var1);
-		if(storeResult != null){
-			result.put("storeRegularList", storeResult.getStoreExList());
-			result.put("result", "success");
+		if(Long.valueOf(cartSn) != null) {
+			CartProdEx storePickupCartProdEx = null;
+			List<ProdInvtEx> prodInvtExList = new ArrayList<>();
+
+			CartEx cartEx = getCart(cartSn);
+
+			// 장바구니매장픽업-온라인상품목록
+			if (!CollectionUtils.isEmpty(cartEx.getCartStorePickupOnlineProdExList())) {
+				prodInvtExList.addAll(getProdInvtExList(cartEx.getCartStorePickupOnlineProdExList()));
+				storePickupCartProdEx = cartEx.getCartStorePickupOnlineProdExList().get(0).getCartProdExList().get(0);
+			}
+			// 장바구니-매장픽업-멤버십포인트교환-온라인상품목록
+			if (!CollectionUtils.isEmpty(cartEx.getCartStorePickupMembershipPointExchOnlineProdExList())) {
+				prodInvtExList.addAll(getProdInvtExList(cartEx.getCartStorePickupMembershipPointExchOnlineProdExList()));
+				storePickupCartProdEx = cartEx.getCartStorePickupMembershipPointExchOnlineProdExList().get(0).getCartProdExList().get(0);
+			}
+			// 장바구니-매장픽업-활동포인트교환-온라인상품목록
+			if (!CollectionUtils.isEmpty(cartEx.getCartStorePickupActivityPointExchOnlineProdExList())) {
+				prodInvtExList.addAll(getProdInvtExList(cartEx.getCartStorePickupActivityPointExchOnlineProdExList()));
+				storePickupCartProdEx = cartEx.getCartStorePickupActivityPointExchOnlineProdExList().get(0).getCartProdExList().get(0);
+			}
+			// 장바구니-매장픽업-M+N-온라인상품목록
+			if (!CollectionUtils.isEmpty(cartEx.getCartStorePickupMNPromoExList())) {
+				prodInvtExList.addAll(getPromoProdInvtExList(cartEx.getCartStorePickupMNPromoExList()));
+				storePickupCartProdEx = cartEx.getCartStorePickupMNPromoExList().get(0).getPromoOnlineProdExList().get(0).getCartProdExList().get(0);
+			}
+			// 장바구니-매장픽업-동시구매-온라인상품목록
+			if (!CollectionUtils.isEmpty(cartEx.getCartStorePickupSameTimePurPromoExList())) {
+				prodInvtExList.addAll(getPromoProdInvtExList(cartEx.getCartStorePickupSameTimePurPromoExList()));
+				storePickupCartProdEx = cartEx.getCartStorePickupSameTimePurPromoExList().get(0).getPromoOnlineProdExList().get(0).getCartProdExList().get(0);
+			}
+
+			if (storePickupCartProdEx != null) {
+				try {
+					// 단골매장
+					StoresInvtSearchInfo var1 = new StoresInvtSearchInfo();
+					var1.setMemberSn(getMemberSn());
+					var1.setRegularStoreSearchYn("Y");
+					var1.setOffset(0);
+					var1.setLimit(10);
+					var1.setSortBy("StoreName");
+					var1.setProdInvtExList(prodInvtExList);
+					StoreResult storeResult = storeApi.getStoresInvt(var1);
+					result.put("storeRegularList", storeResult.getStoreExList());
+				} catch (Exception e) {
+					e.printStackTrace();
+
+					// 단골매장
+					StoresInvtSearchInfo var1 = new StoresInvtSearchInfo();
+					var1.setMemberSn(getMemberSn());
+					var1.setRegularStoreSearchYn("Y");
+					var1.setOffset(0);
+					var1.setLimit(10);
+					var1.setSortBy("StoreName");
+					StoreResult storeResult = storeApi.getStoresInvt(var1);
+					result.put("storeRegularList", storeResult.getStoreExList());
+				}
+
+				// 선택매장
+				if (storePickupCartProdEx.getStoreSn() != null) {
+					try {
+						StoresInvtSearchInfo var2 = new StoresInvtSearchInfo();
+						var2.setMemberSn(getMemberSn());
+						var2.setStoreSn(storePickupCartProdEx.getStoreSn());
+						var2.setProdInvtExList(prodInvtExList);
+						StoreResult storeResult2 = storeApi.getStoresInvt(var2);
+						if (storeResult2 != null && !CollectionUtils.isEmpty(storeResult2.getStoreExList())) {
+							result.put("storeSelect", storeResult2.getStoreExList().get(0));
+						}
+
+					} catch (Exception e) {
+						e.printStackTrace();
+
+						StoresInvtSearchInfo var2 = new StoresInvtSearchInfo();
+						var2.setMemberSn(getMemberSn());
+						var2.setStoreSn(storePickupCartProdEx.getStoreSn());
+						StoreResult storeResult2 = storeApi.getStoresInvt(var2);
+						if (storeResult2 != null && !CollectionUtils.isEmpty(storeResult2.getStoreExList())) {
+							result.put("storeSelect", storeResult2.getStoreExList().get(0));
+						}
+					}
+				}
+			}
+			result.put("cartEx", cartEx);
 		}
 		return ResponseEntity.ok(result);
 	}
@@ -450,7 +521,6 @@ public class CartRestController extends CartBaseController{
 				}
 
 				if(storePickupCartProdEx != null){
-					// 단골매장
 					try{
 						// 단골매장
 						StoresInvtSearchInfo var1 = new StoresInvtSearchInfo();
@@ -505,6 +575,7 @@ public class CartRestController extends CartBaseController{
 						}
 					}
 				}
+				result.put("cartEx", cartEx);
 			}
 		}
 
@@ -654,7 +725,6 @@ public class CartRestController extends CartBaseController{
 				CartSnResult nonmemberCart = cartApi.createNonmemberCart();
 				cartSn = nonmemberCart.getCartSn();
 				cartSession.setCartSn(cartSn);
-				// SpringSession with Redis 로 Session 사용변경. 세션값 변경이 있을 경우 명시적으로 setAttribute
 				setCartSession(cartSession);
 			}
 
@@ -676,31 +746,28 @@ public class CartRestController extends CartBaseController{
 	public ResponseEntity<?> buyNowCartProd(@RequestBody Object jsonObj) {
 
 		HashMap<String, Object> jsonMap = (HashMap<String, Object>) jsonObj;
+
 		List<LinkedHashMap> hashMapList = (List<LinkedHashMap>) jsonMap.get("cartProdExPostList");
 		List<CartProdExPost> cartProdExPostList = new ArrayList<CartProdExPost>();
+
 		cartProdExPostMapping(hashMapList, cartProdExPostList);
 
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
 		//TODO:주문하기위해 재고체크,
 
-
 		//임시장바구니 만들기
 		CartSnResult cartSnResult = cartApi.createBuynowCart();
 		Long cartSn = cartSnResult.getCartSn();
 
 		BooleanResult booleanResult = cartApi.addCartProds(cartSn, cartProdExPostList);
-
 		if (booleanResult.isResult()) {
-			//성공하면 주문서화면 진입하기 위해 cartSn 전달
 			CartSession cartSession = getCartSession();
-			cartSession.setCartSn(cartSn);
-			// SpringSession with Redis 로 Session 사용변경. 세션값 변경이 있을 경우 명시적으로 setAttribute
+			cartSession.setBuyNowCartSn(cartSn);
 			setCartSession(cartSession);
 		}
 
 		result.put("booleanResult", booleanResult);
-
 		return ResponseEntity.ok(result);
 	}
 
@@ -778,11 +845,11 @@ public class CartRestController extends CartBaseController{
 	public ResponseEntity<?> getCartCount() {
 
 		HashMap<String, Object> result = new HashMap<String, Object>();
+
 		Long cartSn = 0L;
 		Long memberSn = getMemberSn();
 
 		if (memberSn != null) {
-
 			cartSn = cartApi.getMemberCartSn(memberSn).getCartSn();
 			if (setCartCount(result, cartSn)) return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
 
@@ -791,7 +858,6 @@ public class CartRestController extends CartBaseController{
 			cartSn = cartSession.getCartSn();
 			if (setCartCount(result, cartSn)) return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
 		}
-
 		return ResponseEntity.ok(result);
 	}
 
@@ -802,7 +868,7 @@ public class CartRestController extends CartBaseController{
 	 * @return
 	 */
 	private boolean setCartCount(HashMap<String, Object> result, Long cartSn) {
-		if (cartSn != 0L) {
+		if (cartSn > 0L) {
 			CartProdCountInfo cartProdCountInfo = cartApi.getCartProdCount(cartSn);
 			result.put("cartProdCount", cartProdCountInfo.getCartProdCount());
 			result.put("cartProdQtySum", cartProdCountInfo.getCartProdQtySum());
