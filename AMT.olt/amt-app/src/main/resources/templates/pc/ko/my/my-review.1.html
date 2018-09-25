@@ -46,28 +46,30 @@
 								<h3 class="sr_only">미작성 리뷰</h3>
 								<div class="panel bg_white review_list">
 									<ul class="noneWriteReview">
-										<th:block th:each="orders : ${prodReviewWritableOrderInfo.orders}">
-										<li>
-											<div class="thumb"><img th:src="${orders.orderProds.get(0).repProdImage}" alt=""></div>
-											<div class="info">
-												<p class="brand_name" th:text="${orders.orderProds.get(0).onlineProdName}">리리코스 마린에너지</p>
-												<p class="name" th:text="${orders.orderProds.get(0).prodName}">인텐시브 오일 20ml 제품명 제품명 인텐시브 오일 20ml 제품명</p>
-												<div class="date">구매일 <span th:text="${#dates.format(orders.orderCompleteDate, 'yyyy.MM.dd')}">2018.05.16</span></div>
-											</div>
-											<div class="btns">
-												<button type="button" class="btn_lg_gradient" th:onclick="'writeReview(\''+ *{orders.ordNo} +'\', \''+ *{orders.orderProds.get(0).prodName} +'\')'">리뷰작성</button>
-											</div>
-										</li>
+										<th:block th:each="order : ${prodReviewWritableOrderInfo.orders}">
+											<li class="review" th:each="prod : ${order.orderProds}">
+												<div class="thumb"><img th:src="${prod.repProdImage}" alt=""></div>
+												<div class="info">
+													<p class="brand_name" th:text="${prod.onlineProdName}"></p>
+													<p class="name prodName" th:text="${prod.prodName}"></p>
+													<div class="date">구매일 <span th:text="${#dates.format(order.orderCompleteDate, 'yyyy.MM.dd')}"></span></div>
+												</div>
+												<div class="btns">
+													<button type="button" class="btn_lg_gradient" 
+															data:ord-no="${order.ordNo}" 
+															data:ord-prod-sn="${prod.ordProdSn}" 
+															data:online-prod-sn="${prod.onlineProdSn}"
+															data:prod-sn="${prod.prodSn}">리뷰작성</button>
+												</div>
+											</li>
 										</th:block>
-										
 									</ul>
 								</div>
 							</div>
 							<div class="tab_cont">
 							<h3 class="sr_only">작성한 리뷰</h3>
 							<div class="panel bg_white review_complete">
-								<ul>
-								
+								<ul class="wroteReview">
 									<th:block th:each="prodReviewList : ${prodReviewListInfo.prodReviewList}">
 									<li>
 										<div class="review_product">
@@ -77,29 +79,32 @@
 												<p class="name" th:text="${prodReviewList.prodName}">인텐시브 오일 20ml 제품명 제품명 인텐시브 오일 20ml 제품명</p>
 											</div>
 											<div class="btns">
-												<button type="button" class="btn_smx_bggray"
-													th:onclick="'modifyReview(\''+ *{prodReviewList.prodReviewSn} +'\', \''+ *{prodReviewList.prodReviewTypeCode} +'\')'">수정</button>
-												<button type="button" class="btn_smx_bggray"
-													th:onclick="'deleteReview(\''+ *{prodReviewList.prodReviewSn} +'\', \''+ *{prodReviewList.prodReviewTypeCode} +'\')'">삭제</button>
+												<button type="button" class="btn_smx_bggray modifyReview" data:review-sn="${prodReviewList.prodReviewSn}" data:typecode="${prodReviewList.prodReviewTypeCode}">수정</button>
+												<button type="button" class="btn_smx_bggray deleteReview" data:review-sn="${prodReviewList.prodReviewSn}" data:typecode="${prodReviewList.prodReviewTypeCode}">삭제</button>
 											</div>
 										</div>
 										<div class="review_cnt">
 											<div class="score">
-												<span th:if="${prodReviewList.scope == 0}"><i class="mark_star_sm star5"></i></span>
-												<span th:if="${prodReviewList.scope == 1}"><i class="mark_star_sm star4"></i></span>
-												<span th:if="${prodReviewList.scope == 2}"><i class="mark_star_sm star3"></i></span>
-												<span th:if="${prodReviewList.scope == 3}"><i class="mark_star_sm star2"></i></span>
-												<span th:if="${prodReviewList.scope == 4}"><i class="mark_star_sm star1"></i></span>
-												<span th:if="${prodReviewList.scope == 5}"><i class="mark_star_sm star0"></i></span>
-												<span th:text="${prodReviewList.scope}">4</span><!-- score? 기획 확인 필요 -->
+												<span th:if="${prodReviewList.scope == 0}"><i class="mark_star_sm star0"></i></span>
+												<span th:if="${prodReviewList.scope == 1}"><i class="mark_star_sm star1"></i></span>
+												<span th:if="${prodReviewList.scope == 2}"><i class="mark_star_sm star2"></i></span>
+												<span th:if="${prodReviewList.scope == 3}"><i class="mark_star_sm star3"></i></span>
+												<span th:if="${prodReviewList.scope == 4}"><i class="mark_star_sm star4"></i></span>
+												<span th:if="${prodReviewList.scope == 5}"><i class="mark_star_sm star5"></i></span>
+												<span th:text="${prodReviewList.scope}">4</span>
+											</div>
+											
+											<div class="photo" th:if="${#lists.size(prodReviewList.imgList) > 0}">
+												<ul>
+													<li th:each="img : ${prodReviewList.imgList}">
+														<img th:src="${img.imageFileUrl}" alt="${img.imgDesc}">
+													</li>
+												</ul>
 											</div>
 											
 											<div class="comment">
 												<span class="flag" th:if="${prodReviewList.prodReviewTypeCode == 'ExperienceGrp'}">뷰티테스터</span>
-												<span th:text="${prodReviewList.prodReviewBodyText}">
-												친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한 날에 쓰면 화사해 보이고
-												화장한듯 안한듯 완전 친구 선물 사려고 구매했는데 너무 좋아서 제껏도 샀어요 특히  피부색 칙칙한...
-												</span>
+												<span th:text="${prodReviewList.prodReviewBodyText}"></span>
 											</div>
 											<div class="date">리뷰작성일 <span th:text="${#dates.format(prodReviewList.prodReviewRegistDt, 'yyyy.MM.dd')}">2018.05.16</span></div>
 										</div>
@@ -124,41 +129,9 @@
 	<!--/* 하단 js등을 실행하는 마지막 영역 */-->
 	<th:block ap:fragment="layout-endpoint">
 		<script type="text/javascript" th:inline="javascript">
-		var reviewWriteModal = null;
-		/* 리뷰작성 */
-		function writeReview(ordNo, prodName) {
-			reviewWriteModal = new AP.ReviewWriteModal(ordNo, prodName);
-		}
-		
-		/* 리뷰수정 */
-		function modifyReview(prodReviewSn, prodReviewTypeCode) {
-			if(prodReviewTypeCode == 'ExperienceGrp') {
-				alert('뷰티테스터는 앱에서만 신청 가능한 서비스 입니다.');
-				return;
-			}
-			else {
-				alert(prodReviewSn+','+prodReviewTypeCode);
-			}
-		}
-		
-		/* 리뷰삭제 */
-		function deleteReview(prodReviewSn, prodReviewTypeCode) {
-			alert(prodReviewSn);
-			if(confirm('정말 삭제하시겠습니까?')) {
-				AP.api.deleteProdReview( null, {
-					prodReviewSn: prodReviewSn
-				}).done( function ( result ) {
-					if(result.booleanResult.result) {
-						alert('구매 리뷰가 삭제되었습니다.');
-						location.href = "/my/page/myReviewList";
-					} else {
-						alert('삭제 실패했습니다.');
-					}
-				}.bind(this));
-			} 
-		}	
-		
-		$('.noneWriteReview li:first').find('button').click();
+			 AP.myReviewList.setDefaultData( $('.tab_contents') );
+			 $( '.ui_tab' ).tabs( 'change', 1 );
+			 $('.wroteReview li:first').find('.modifyReview').click();
 		</script>
 	</th:block>
 </body>

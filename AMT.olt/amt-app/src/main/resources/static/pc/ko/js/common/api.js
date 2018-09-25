@@ -79,6 +79,10 @@
 		guestCert: { path: '/customer/guestCert', method: 'POST' },
 		//타인명의인증 확인(휴대폰인증)
 		guestConfirm: { path: '/customer/guestConfirm', method: 'POST' },
+		//타인명의인증 확인(휴대폰인증)
+		findGuestConfirm: { path: '/customer/find/guestConfirm', method: 'POST' },
+		//본인인증
+		findStepOne: { path: '/customer/find/stepOne', method: 'POST' },
 		//본인인증
 		stepOne: { path: '/customer/stepOne', method: 'POST' },
 		stepOneF: { path: '/customer/stepOneF', method: 'POST' },
@@ -264,29 +268,6 @@
 		// 상품평설문 목록
 		getProductReviewSurveys: { path:'/my/api/getProductReviewSurveys', method: 'GET'},
 		
-		//상품평 등록
-		postProdReview : {path : '/my/api/postProdReview', method : 'POST', contentType:false, processData: false, data: {
-        		prodReviewTypeCode : 'Pur', //품평유형코드. Pur(구매후기), Prod(상품리뷰), ExperienceGrp(체험단)
-        		onlineProdSn : null, //온라인상품일련번호
-        		prodSn : null, //단위상품일련번호
-        		scope : null, //상품평별점
-        		prodReviewTitle : null, //상품평제목
-        		prodReviewBodyText : null, //내용
-        		arrSurvey : null, //"[{prodReviewEvalQuestionSn: 상품평질문항목일련번호, prodReviewEvalResponseSn: 상품평답변항목일련번호}]"
-				multiWriteYn : 'N'
-			}
-        },
-        
-        //상품평 수정
-        updateProdReview : {path : '/my/api/updateProdReview', method : 'POST', contentType:false, processData: false, data: {
-        		prodReviewSn : null, //상품평일련번호
-        		scope : null, //상품평별점
-        		prodReviewTitle : null, //상품평제목
-        		prodReviewBodyText : null, //내용
-        		arrSurvey : null //"[{prodReviewEvalQuestionSn: 상품평질문항목일련번호, prodReviewEvalResponseSn: 상품평답변항목일련번호}]"
-			}
-        },
-
 		/**
 		 * 매장찾기 *************************************************************
 		 */
@@ -652,68 +633,6 @@
 		// wpay회원정보 조회
 		getMemberWPayInfo: { path: '/payment/getMemberWPayInfo', method: 'GET'},
 
-
-		/**
-		 * 이벤트 *************************************************************
-		 */
-
-		//출석체크 이력조회
-		//regularEventType  : Roulette - 룰렛 , PackageLetter - 패키지레터 , ProdExperienceGrp - 뷰티테스터신청 , SampleExperienceGrp - 샘플체험단신청 , AttendanceCheck - 출석체크
-        status: { path:'/display/status', method: 'POST', data: {
-        		regularEventType : null,
-        		day : null //yyyyMM
-			}
-		},
-
-		//
-		//regularEventType  : Roulette - 룰렛 , PackageLetter - 패키지레터 , ProdExperienceGrp - 뷰티테스터신청 , SampleExperienceGrp - 샘플체험단신청 , AttendanceCheck - 출석체크
-        regularEventSummary: { path:'/display/regularEventSummary', method: 'POST', data: {
-        		regularEventType : null
-			}
-		},
-
-		//행사참여
-		//regularEventType  : Roulette - 룰렛 , PackageLetter - 패키지레터 , ProdExperienceGrp - 뷰티테스터신청 , SampleExperienceGrp - 샘플체험단신청 , AttendanceCheck - 출석체크
-		participated: { path:'/display/participated', method: 'POST', data: {
-        		regularEventType : null, //상세행사유형코드
-        		requestTitle : null, //신청제목
-        		requestReason : null, //신청사유 (내용) 2000자
-        		emailAddress : null, //신청자이메일
-        		verifNo : null //인증번호 (패키지레터인경우 필수)
-			}
-		},
-
-		//AP 전용 뷰티테스터 행사 상세 조회
-		getRegularEventDetail : {path:'/display/beauty_test/regular_event_detail', method: 'POST', data:{
-				regularEventSn: null			// - integer($int64)	상시행사일련번호
-		}},
-		
-		//AP 전용 뷰티테스터 행사 상품 리뷰 목록 조회
-		getRegularEventProdReviews : {path:'/display/beauty_test/regular_event_product_reviews', method: 'POST', data:{
-			regularEventSn: null,			// - integer($int64)	상시행사일련번호
-			offset: 0,
-			limit: 10,
-			reviewSort: null
-		}},
-		
-		//AP 전용 뷰티테스터 행사 상품 리뷰 상세 조회
-		getRegularEventProdReviewDetail : {path:'/display/beauty_test/regular_event_product_review_detail', method: 'POST', data:{
-			prodReviewSn: 0			// - integer($int64)	상품평일련번호
-		}},
-		
-		//AP 전용 뷰티테스터 행사 신청자 조회
-		getRegularRequesters : {path:'/display/beauty_test/regular_event_requesters', method: 'POST', data:{
-			regularEventSn: null,			// - integer($int64)	상시행사일련번호
-			offset: 0,
-			limit: 10
-		}},
-
-		//뷰티테스터 상품 리뷰 추천 토글
-		regularEventProductReviewRecommend: {path:'/display/beauty_test/regularEventProductReviewRecommend', method: 'POST', data: {
-				prodReviewSn: null	//상품평일련번호
-			}
-		},
-		
 		// 좋아요 검색
 		getShoppingBookmarks : {path:'/product/getShoppingBookmarks', method: 'POST', data:{
 				   shoppingMarkTgtCode : 'Prod' 
@@ -825,6 +744,67 @@
 				memberSn: null //회원일련번호
 		}},
 
+		/**
+		 * 이벤트 *************************************************************
+		 */
+
+		//출석체크 이력조회
+		//regularEventType  : Roulette - 룰렛 , PackageLetter - 패키지레터 , ProdExperienceGrp - 뷰티테스터신청 , SampleExperienceGrp - 샘플체험단신청 , AttendanceCheck - 출석체크
+        status: { path:'/display/status', method: 'POST', data: {
+        		regularEventType : null,
+        		day : null //yyyyMM
+			}
+		},
+
+		//
+		//regularEventType  : Roulette - 룰렛 , PackageLetter - 패키지레터 , ProdExperienceGrp - 뷰티테스터신청 , SampleExperienceGrp - 샘플체험단신청 , AttendanceCheck - 출석체크
+        regularEventSummary: { path:'/display/regularEventSummary', method: 'POST', data: {
+        		regularEventType : null
+			}
+		},
+
+		//행사참여
+		//regularEventType  : Roulette - 룰렛 , PackageLetter - 패키지레터 , ProdExperienceGrp - 뷰티테스터신청 , SampleExperienceGrp - 샘플체험단신청 , AttendanceCheck - 출석체크
+		participated: { path:'/display/participated', method: 'POST', data: {
+        		regularEventType : null, //상세행사유형코드
+        		requestTitle : null, //신청제목
+        		requestReason : null, //신청사유 (내용) 2000자
+        		emailAddress : null, //신청자이메일
+        		verifNo : null //인증번호 (패키지레터인경우 필수)
+			}
+		},
+
+		//AP 전용 뷰티테스터 행사 상세 조회
+		getRegularEventDetail : {path:'/display/beauty_test/regular_event_detail', method: 'POST', data:{
+				regularEventSn: null			// - integer($int64)	상시행사일련번호
+		}},
+		
+		//AP 전용 뷰티테스터 행사 상품 리뷰 목록 조회
+		getRegularEventProdReviews : {path:'/display/beauty_test/regular_event_product_reviews', method: 'POST', data:{
+			regularEventSn: null,			// - integer($int64)	상시행사일련번호
+			offset: 0,
+			limit: 10,
+			reviewSort: null
+		}},
+		
+		//AP 전용 뷰티테스터 행사 상품 리뷰 상세 조회
+		getRegularEventProdReviewDetail : {path:'/display/beauty_test/regular_event_product_review_detail', method: 'POST', data:{
+			prodReviewSn: 0			// - integer($int64)	상품평일련번호
+		}},
+		
+		//AP 전용 뷰티테스터 행사 신청자 조회
+		getRegularRequesters : {path:'/display/beauty_test/regular_event_requesters', method: 'POST', data:{
+			regularEventSn: null,			// - integer($int64)	상시행사일련번호
+			offset: 0,
+			limit: 10
+		}},
+
+		//뷰티테스터 상품 리뷰 추천 토글
+		regularEventProductReviewRecommend: {path:'/display/beauty_test/regularEventProductReviewRecommend', method: 'POST', data: {
+				prodReviewSn: null	//상품평일련번호
+			}
+		},
+		
 		/**
 	     * 기획전시 댓글목록 (planDisplayComments, )  *************************************************************
 	     * @param  {String}
@@ -952,6 +932,12 @@
 		getBrandContents: { path:'/display/getBrandContents', method: 'GET', data: {
 			displayMenuId : null //(필수) 전시메뉴아이디
 		}},
+		
+		/**
+		 * 홈화면 진입시 등록한 팝업 노출
+		 * 
+		 */
+		mainPopups : { path: '/display/mainPopups' , method : 'GET'},
 		
 		/**
 		 * test *************************************************************

@@ -10,10 +10,7 @@ public class MyInfoDTO {
 	
 	private CicuemCuInfTotTcVo user;
 	private List<TermsAgree> policy;
-	private List<TermsAgree> receive;
-	private List<TermsAgree> apReceive;
-	private List<TermsAgree> posReceive;
-	private List<TermsAgree> ehReceive;
+	private List<ReceiveVo> receiveList;
 	private List<MemberAddAttr> attr;
 	private String birthType;
 	private String phoneNumber1;
@@ -78,30 +75,11 @@ public class MyInfoDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public List<TermsAgree> getReceive() {
-		return receive;
+	public List<ReceiveVo> getReceiveList() {
+		return receiveList;
 	}
-	public void setReceive(List<TermsAgree> receive) {
-		this.receive = receive;
-	}
-	public List<TermsAgree> getApReceive() {
-		return apReceive;
-	}
-	public void setApReceive(List<TermsAgree> apReceive) {
-		this.apReceive = apReceive;
-	}
-	
-	public List<TermsAgree> getPosReceive() {
-		return posReceive;
-	}
-	public void setPosReceive(List<TermsAgree> posReceive) {
-		this.posReceive = posReceive;
-	}
-	public List<TermsAgree> getEhReceive() {
-		return ehReceive;
-	}
-	public void setEhReceive(List<TermsAgree> ehReceive) {
-		this.ehReceive = ehReceive;
+	public void setReceiveList(List<ReceiveVo> receiveList) {
+		this.receiveList = receiveList;
 	}
 	public void setHomeZip(String homeZip) {
 		if(user == null) {
@@ -143,4 +121,21 @@ public class MyInfoDTO {
 		this.birthType = birthType;
 	}
 	
+	public static class ReceiveVo {
+		private List<TermsAgree> receive;
+		private String chCd;
+		public List<TermsAgree> getReceive() {
+			return receive;
+		}
+		public void setReceive(List<TermsAgree> receive) {
+			this.receive = receive;
+		}
+		public String getChCd() {
+			return chCd;
+		}
+		public void setChCd(String chCd) {
+			this.chCd = chCd;
+		}
+		
+	}
 }

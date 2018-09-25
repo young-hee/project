@@ -134,6 +134,24 @@
 					</dl>
 				</dd>
 			{{/xif}}
+			{{#xif payMethodCode '===' 'eximpay'}}
+				<!-- EximbayPay -->
+				<dd>
+					<dl>
+						<dt>Global Credit Card 결제 {{currencyFormat payAmt '원'}}</dt>
+						<dd class="divide">{{pgPayEx.cardNo}}</dd>
+					</dl>
+				</dd>
+			{{/xif}}
+			{{#xif payMethodCode '===' 'paypal'}}
+				<!-- PayPal -->
+				<dd>
+					<dl>
+						<dt>PayPal 결제 {{currencyFormat payAmt '원'}}</dt>
+						<dd class="divide">{{pgPayEx.cardNo}}</dd>
+					</dl>
+				</dd>
+			{{/xif}}
 		{{/each}}
 	</dl>
 

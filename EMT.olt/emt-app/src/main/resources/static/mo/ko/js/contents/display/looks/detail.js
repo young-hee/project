@@ -8,15 +8,15 @@
 	var LooksDetail = $B.Class.extend({
 		initialize: function () {
 			this._$target = $( '#ap_container' );
-
-			this._setPlugins();
 		},
 
 		/** =============== Public Methods =============== */
 
 		//페이지를 구성하는 기본 데이타 설정
 		setDefaultData: function ( article ) {
+			this._setPlugins();
 			this._setInProductsList( article.articleSn );
+			
 		},
 
 		/** =============== Private Methods =============== */

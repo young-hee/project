@@ -31,8 +31,9 @@
 						<!-- 단위상품 -->
 						{{#each this.ordHistProdList}}
 							{{#unless (and (eq ../../status 'request') (eq this.ordHistProdStatusCode 'ProdCancel'))}}
-								{{{prodPartial 'my.order.detail.product-option' 'prod' this 'viewYn' ../../viewYn 'oProdCode' ../this.onlineProdCode 'step'
-									../../step 'singleProdYn' ../singleProdYn 'promoSn' null 'status' ../../status 'type' ../../type 'title' ../../title 'reason' ../../reason}}}
+								{{{prodPartial 'my.order.detail.product-option' 'prod' this 'viewYn' ../../viewYn 'oProdCode' ../this.onlineProdCode
+									'step' ../../step 'singleProdYn' ../singleProdYn 'promoSn' null 'status' ../../status 'type' ../../type 'title' ../../title
+									'reason' ../../reason 'statusCode' ../../statusCode 'oProdStatusCode' ../ordHistProdStatusCode}}}
 							{{/unless}}
 						{{/each}}
 					</div>
@@ -58,7 +59,8 @@
 						{{#each this.ordHistProdList}}
 							{{#unless (and (eq this.ordHistProdStatusCode 'ProdCancel') (eq ../../status 'request'))}}
 								{{{prodPartial 'my.order.detail.product-option' 'prod' this 'viewYn' ../../viewYn 'oProdCode' ../this.onlineProdCode 'step'
-									../../step 'singleProdYn' 'N' 'promoSn' this.ordProdEx.bulkDcOnlineProdCode 'type' ../../type 'status' ../../status 'title' ../../title 'reason' ../../reason}}}
+									../../step 'singleProdYn' 'N' 'promoSn' this.ordProdEx.bulkDcOnlineProdCode 'type' ../../type 'status' ../../status
+									'title' ../../title 'reason' ../../reason 'oProdStatusCode' ../ordHistProdStatusCode}}}
 							{{/unless}}
 						{{/each}}
 					</div>
@@ -81,7 +83,8 @@
 								<!-- 단위상품 -->
 								{{{prodPartial 'my.order.detail.product-option' 'prod' this 'viewYn' ../../viewYn 'oProdCode' ../this.onlineProdCode 'step'
 									../../step 'singleProdYn' ../singleProdYn 'typeName' '뷰티포인트' 'promoSn' null
-									'type' ../../type 'status' ../../status 'title' ../../title 'reason' ../../reason}}}
+									'type' ../../type 'status' ../../status 'title' ../../title 'reason' ../../reason
+									'statusCode' ../../statusCode 'oProdStatusCode' ../ordHistProdStatusCode}}}
 							{{/unless}}
 						{{/each}}
 					</div>
@@ -103,7 +106,8 @@
 								<!-- 단위상품 -->
 								{{{prodPartial 'my.order.detail.product-option' 'prod' this 'viewYn' ../../viewYn
 									'oProdCode' ../this.onlineProdCode 'step' ../../step
-									'singleProdYn' ../singleProdYn 'typeName' '진주알상품' 'promoSn' null 'status' ../../status 'type' ../../type 'title' ../../title 'reason' ../../reason}}}
+									'singleProdYn' ../singleProdYn 'typeName' '진주알상품' 'promoSn' null 'status' ../../status 'type' ../../type
+									'title' ../../title 'reason' ../../reason 'statusCode' ../../statusCode 'oProdStatusCode' ../ordHistProdStatusCode}}}
 							{{/unless}}
 						{{/each}}
 					</div>
@@ -151,7 +155,7 @@
 								{{/unless}}
 							</div>
 						{{/if}}
-						{{#each this.prodList}}
+						{{#each this.ordHistProdList}}
 							{{#unless (and (eq ../this.ordHistProdStatusCode 'ProdCancel') (eq ../../../status 'request'))}}
 								<!-- 단위상품 -->
 								<div class="panel_box {{condition (gt (condition (eq ../singleProdYn 'Y') @../index @index) 0) 'bundle' ''}}">
@@ -225,7 +229,7 @@
 									<span class="strong"><b>{{this.ordQtySum}}</b>개</span> /
 									<span class="strong"><b>{{currencyFormat this.prodCancelAmtSum}}</b></span>
 								{{else}}
-									<span class="strong"><b>{{condition (eq ../step 'two') this.cancelQtySum this.ordQtySum}}</b>개</span> /
+									<span class="strong"><b>{{condition (eq ../step 'two') this.claimQtySum this.ordQtySum}}</b>개</span> /
 									<span class="strong"><b>{{currencyFormat this.totalProductSaleAmount}}</b></span>
 								{{/xif}}
 							</div>
@@ -240,7 +244,7 @@
 						{{/if}}
 					</div>
 					{{#each this.ordOnlineProdFoList}}
-						{{#each this.prodList}}
+						{{#each this.ordHistProdList}}
 							{{#unless (and (eq ../this.ordHistProdStatusCode 'ProdCancel') (eq ../../../status 'request'))}}
 								<!-- 단위상품 -->
 								<div class="panel_box {{condition (and (eq @../index 0) (eq @index 0)) '' 'bundle'}}">

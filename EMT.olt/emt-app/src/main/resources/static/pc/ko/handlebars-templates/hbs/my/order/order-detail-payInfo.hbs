@@ -81,18 +81,18 @@
 	</div>
 </div>
 
-{{#if (eq this.viewYn.addPay 'Y')}}
-	{{#if (gt this.ordAmt.ordAmt.AddShipFee 0)}}
-		{{#if (eq this.type 'cancel')}}
+{{#each ordPayCompareList}}
+	{{#if (eq this.addedPayYn 'Y')}}
+		{{#if (eq ../this.type 'cancel')}}
 			<h3 class="h_title sub mgb20">추가결제 <small>취소 후 최종 결제금액이 10,000원 미만인 경우 배송비 결제가 필요합니다.</small></h3>
 		{{/if}}
-		{{#if (eq this.type 'return')}}
+		{{#if (eq ../this.type 'return')}}
 			<h3 class="h_title sub mgb20">반품 배송비 결제 <small>고객 변심에 의한 반품은 반품 배송비 결제가 필요합니다.</small></h3>
 		{{/if}}
 		<div class="refund_delivery">
 			<dl>
 				<dt><b>추가결제금액</b></dt>
-				<dd>{{currencyFormatDefault this.ordAmt.ordAmt.AddShipFee}}</dd>
+				<dd>{{currencyFormatDefault afterPayAmt '원'}}</dd>
 			</dl>
 			<dl>
 				<dt><b>결제수단</b></dt>
@@ -101,7 +101,7 @@
 						<legend class="sr_only">결제수단 선택</legend>
 						<span class="check_wrap"><input type="radio" name="radio" id="radio1"><label for="radio1">신용카드</label></span>
 						<span class="check_wrap"><input type="radio" name="radio" id="radio2"><label for="radio2">휴대폰 결제</label></span>
-						<button class="btn_md_primary" type="button">배송비 결제</button>
+						<button class="btn_md_primary" type="button" onclick="doAddPay()">배송비 결제</button>
 						{{#if (eq this.type 'return')}}
 							<span class="check_wrap"><input type="checkbox" id="check1"><label for="check1">무료 반품 서비스 <em>(Pink Love 회원 월 1회)</em></label></span>
 						{{/if}}
@@ -110,22 +110,22 @@
 			</dl>
 		</div>
 	{{/if}}
-{{/if}}
+{{/each}}
 
-<!-- {{#if (and (eq this.viewYn.addPayResult 'Y'))}}
+{{#if (eq this.claimYn 'Y')}}
 	{{#each this.ordPayCompareList}}
 		{{#if (eq this.addedPayYn 'Y')}}
 			<h3 class="h_title sub mgb20">반품 배송비 결제</h3>
 			<div class="refund_delivery">
 				<dl>
 					<dt><b>추가결제금액</b></dt>
-					<dd>2,500원</dd>
+					<dd>{{currencyFormatDefault afterPayAmt '원'}}</dd>
 				</dl>
-				<dl>
+				<!-- <dl>
 					<dt><b>결제정보</b></dt>
 					<dd>KB국민카드(123456******1234) / 일시불 / 2018-09-12  18:02:34</dd>
-				</dl>
+				</dl> -->
 			</div>
 		{{/if}}
 	{{/each}}
-{{/if}} -->
+{{/if}}

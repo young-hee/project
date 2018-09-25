@@ -49,8 +49,8 @@ this["AP"]["handlebars"]["cart"]["takeout"]["activity-point-prod"] = Handlebars.
     + ((stack1 = helpers["if"].call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,(depths[1] != null ? depths[1].onlineProdSn : depths[1]),null,{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.prodTypeCode : stack1),"FreeGift",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(38, data, 0, blockParams, depths),"inverse":container.program(41, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "					</div>\n					<!--/* 상품 수량 */-->\n					<div class=\"count\">\n						<span class=\"ui_spinner\" data-step=\"1\" "
     + ((stack1 = helpers["if"].call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OnSale",{"name":"eq","hash":{},"data":data}),(helpers.gt || (depth0 && depth0.gt) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.minPurLimitQty : stack1),0,{"name":"gt","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(44, data, 0, blockParams, depths),"inverse":container.program(49, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
-    + "  "
-    + ((stack1 = helpers["if"].call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OnSale",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitYn : stack1),"Y",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(51, data, 0, blockParams, depths),"inverse":container.program(55, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
+    + " "
+    + ((stack1 = helpers["if"].call(alias3,(helpers.and || (depth0 && depth0.and) || alias4).call(alias3,(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OnSale",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitYn : stack1),"Y",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(51, data, 0, blockParams, depths),"inverse":container.program(57, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + " "
     + ((stack1 = helpers["if"].call(alias3,(helpers.ne || (depth0 && depth0.ne) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OnSale",{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(59, data, 0, blockParams, depths),"inverse":container.program(61, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + " >\n							<button class=\"spinner_decrease\" type=\"button\" title=\"제품 수량 감소\" "
@@ -264,16 +264,16 @@ this["AP"]["handlebars"]["cart"]["takeout"]["activity-point-prod"] = Handlebars.
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
 
   return " "
-    + ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || helpers.helperMissing).call(alias1,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitQty : stack1),99,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(55, data, 0),"inverse":container.program(57, data, 0),"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || helpers.helperMissing).call(alias1,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitQty : stack1),999,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(55, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + " ";
 },"55":function(container,depth0,helpers,partials,data) {
-    return " data-max=\"99\" ";
-},"57":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return " data-max=\""
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitQty : stack1), depth0))
     + "\" ";
+},"57":function(container,depth0,helpers,partials,data) {
+    return " data-max=\"999\" ";
 },"59":function(container,depth0,helpers,partials,data) {
     return " data-disabled=\"true\" ";
 },"61":function(container,depth0,helpers,partials,data) {
@@ -325,5 +325,5 @@ this["AP"]["handlebars"]["cart"]["takeout"]["activity-point-prod"] = Handlebars.
     + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,(depth0 != null ? depth0.activityPoints : depth0),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(5, data, 0, blockParams, depths),"inverse":container.program(3, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "</b>알</span>\n		</div>\n	</div>\n"
     + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.list : depth0),{"name":"each","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "</div>";
+    + "</div>\n";
 },"useData":true,"useDepths":true});

@@ -2,6 +2,7 @@ package kr.ap.amt.my.controller;
 
 import kr.ap.comm.support.common.AbstractController;
 import net.g1project.ecp.api.client.sales.GiftcardApi;
+import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.sales.deposits.BankAccount;
 import net.g1project.ecp.api.model.sales.deposits.DepositHistoriesResult;
 import net.g1project.ecp.api.model.sales.deposits.DepositRefundAccount;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -48,18 +50,21 @@ public class MyWalletRestController extends AbstractController {
 	public ResponseEntity<?> regGiftCard(String barcode) {
     	HistoryResult history = giftcardApi.historyCoupon();
     	if((history.getFailCnt() > 4) && (history.getFailCnt()%5 == 0)) {
-    		if(System.currentTimeMillis() < (history.getTradeDt().getTime() + 1800000))
-    			throw error(HttpStatus.BAD_REQUEST, "FAIL_COUNT_5", "기프트카드 5회 등록 실패로 인해 30분간 등록이 제한되었습니다.");
+    		if(System.currentTimeMillis() < (history.getTradeDt().getTime() + 1800000)) {
+    			ApiException error = new ApiException(401, "FAIL_COUNT_5", "기프트카드 5회 등록 실패로 인해 30분간 등록이 제한되었습니다.");
+    			Map<String, Object> additional = new HashMap<String, Object>();
+				long time = (history.getTradeDt().getTime() + 1800000) - System.currentTimeMillis();
+    			additional.put("lockReleaseDate", time/1000/60.0);
+    			
+				error.setAdditional(additional);
+				throw error;
+    		}
     	}
 		GiftcardCouponResult rsltVo = giftcardApi.regCoupon(barcode);
 		if("0000".equals(rsltVo.getResCode())) {
 			return ResponseEntity.ok("{}");
 		}
-
-    	if(history.getFailCnt() == 4) {
-    		throw error(HttpStatus.BAD_REQUEST, "ERROR", "기프트카드 5회 등록 실패로 인해 30분간 등록이 제한됩니다.");
-    	}
-		throw error(HttpStatus.BAD_REQUEST, "FAIL" + (history.getFailCnt() + 1), "기프트카드 등록에 실패했습니다.");
+		throw error(HttpStatus.BAD_REQUEST, "FAIL" + (history.getFailCnt()%5 + 1), "기프트카드 등록에 실패했습니다.");
 	}
 	
 	

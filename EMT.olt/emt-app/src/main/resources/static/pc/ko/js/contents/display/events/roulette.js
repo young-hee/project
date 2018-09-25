@@ -54,17 +54,14 @@
 							this._alert( 'point' );
 						} else {
 							
-							this._alert( 'start' ).addListener( 'modal-close', function (e) {
-								if ( e.closeType === 'confirm' ) {
-									this._winValue = 0;
-									this._rotate( this._arrAngle[this._winValue], {} );
-								}
-							}.bind( this ));
+							if ( e.closeType === 'confirm' ) {
+								this._winValue = 0;
+								this._rotate( this._arrAngle[this._winValue], {} );
+							}
 							 
 						}
 						
 					}.bind( this ));
-			
 			
 				}
 			}.bind( this ));

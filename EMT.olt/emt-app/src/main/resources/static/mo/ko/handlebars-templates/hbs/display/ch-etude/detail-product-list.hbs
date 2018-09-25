@@ -24,9 +24,9 @@
 										{{ this.optionCnt }} options
 									{{/xif}}
 									{{#xif this.productCount '==' 1 }}
-										{{#xif this.onlineProdName '!=' this.products.0.prodName }}
+										{{#if  (ne this.onlineProdName this.products.0.prodName) }}
 											{{this.products.0.prodName}}
-										{{/xif}}
+										{{/if}}
 									{{/xif}}
 								</p>
 							</div>
@@ -75,7 +75,11 @@
 							<div class="item_info">
 								<div>
 									<p class="prd_name">{{ ../onlineProdName }}</p>
-									<p class="color_name">{{ this.prodName }}</p>
+									<p class="color_name">
+										{{#if (ne ../onlineProdName this.prodName) }}
+											{{ this.prodName }}
+										{{/if}}
+									</p>
 								</div>
 								<div class="price_area">
 									<div class="discount">

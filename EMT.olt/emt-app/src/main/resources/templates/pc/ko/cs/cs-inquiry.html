@@ -295,9 +295,10 @@
 				$('.ui_paging').paging(options);
 			}
 
+			//글자수 체크
 			$('[name=inquiryBodyText]').on('keyup', function(e){
 				var cont = $(this).val();
-				var enterCount = AP.common.getEnterCount(cont);
+				var enterCount = getEnterCount(cont);
 				var totalTextCount = cont.length + enterCount;
 
 				if(totalTextCount > 2000) {
@@ -311,6 +312,21 @@
 			$(function() {
 				$('#phoneNo').on('blur', checkPhoneNo);
 			});
+
+			function getEnterCount( str ) {
+				var result = 0;
+
+				if ( !_.isEmpty( str ) ) {
+					var pattern = /\n/g;
+					if ( pattern.test( str ) ) {
+						result = str.match( pattern ).length;
+					} else {
+						result = 0;
+					}
+				}
+
+				return result;
+			}
 
 			</script>
 		</th:block>

@@ -51,10 +51,10 @@ this["AP"]["handlebars"]["cart"]["online"]["activity-point-prod"] = Handlebars.t
     + alias4(((helper = (helper = helpers.cartProdSn || (depth0 != null ? depth0.cartProdSn : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"cartProdSn","hash":{},"data":data}) : helper)))
     + "\" value=\""
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1), depth0))
-    + "\"/>\n\n					<span class=\"ui_spinner small\" data-step=\"1\" "
+    + "\"/>\n					<!--/* 상품 수량 */-->\n					<span class=\"ui_spinner small\" data-step=\"1\" "
     + ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OnSale",{"name":"eq","hash":{},"data":data}),(helpers.gt || (depth0 && depth0.gt) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.minPurLimitQty : stack1),0,{"name":"gt","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(38, data, 0, blockParams, depths),"inverse":container.program(43, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
-    + "  "
-    + ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OnSale",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitYn : stack1),"Y",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(45, data, 0, blockParams, depths),"inverse":container.program(49, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
+    + " "
+    + ((stack1 = helpers["if"].call(alias1,(helpers.and || (depth0 && depth0.and) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OnSale",{"name":"eq","hash":{},"data":data}),(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitYn : stack1),"Y",{"name":"eq","hash":{},"data":data}),{"name":"and","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(45, data, 0, blockParams, depths),"inverse":container.program(51, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + " "
     + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.saleDisplayStatus : stack1),"OnSale",{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(53, data, 0, blockParams, depths),"inverse":container.program(55, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + " >\n						<button class=\"spinner_decrease\" type=\"button\" title=\"제품 수량 감소\" "
@@ -95,7 +95,7 @@ this["AP"]["handlebars"]["cart"]["online"]["activity-point-prod"] = Handlebars.t
     + alias4(((helper = (helper = helpers.storeSn || (depth0 != null ? depth0.storeSn : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"storeSn","hash":{},"data":data}) : helper)))
     + "', '+')\"><img alt=\"제품 수량 증가\" src=\""
     + alias4((helpers.absolutePath || (depth0 && depth0.absolutePath) || alias2).call(alias1,"/images/common/icon_plus1.gif",{"name":"absolutePath","hash":{},"data":data}))
-    + "\"></button>\n					</span>\n\n					<span class=\"cart_price\">\n						<span class=\"left_num\">\n							<strong class=\"num\">"
+    + "\"></button>\n					</span>\n					<!--/* 포인트 및 가격 */-->\n					<span class=\"cart_price\">\n						<span class=\"left_num\">\n							<strong class=\"num\">"
     + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,(depth0 != null ? depth0.exchPoint : depth0),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(61, data, 0, blockParams, depths),"inverse":container.program(3, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "</strong><span>알</span>\n						</span>\n					</span>\n				</div>\n"
     + ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.cartProdAwardList : depth0)) != null ? stack1.length : stack1),0,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(63, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -248,16 +248,16 @@ this["AP"]["handlebars"]["cart"]["online"]["activity-point-prod"] = Handlebars.t
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
 
   return " "
-    + ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || helpers.helperMissing).call(alias1,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitQty : stack1),99,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(49, data, 0),"inverse":container.program(51, data, 0),"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(helpers.gt || (depth0 && depth0.gt) || helpers.helperMissing).call(alias1,((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitQty : stack1),999,{"name":"gt","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(49, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + " ";
 },"49":function(container,depth0,helpers,partials,data) {
-    return " data-max=\"99\" ";
-},"51":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return " data-max=\""
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.prodEx : depth0)) != null ? stack1.maxPurLimitQty : stack1), depth0))
     + "\" ";
+},"51":function(container,depth0,helpers,partials,data) {
+    return " data-max=\"999\" ";
 },"53":function(container,depth0,helpers,partials,data) {
     return " data-disabled=\"true\" ";
 },"55":function(container,depth0,helpers,partials,data) {
@@ -301,7 +301,7 @@ this["AP"]["handlebars"]["cart"]["online"]["activity-point-prod"] = Handlebars.t
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
-  return "<!--/* 진주알스토어 */-->\n<div class=\"cart_item_box_wrap type2 group\">\n	<div class=\"cart_item_box\">\n		<div class=\"top_tit_wrap\">\n			<a href=\"#none\" onclick=\"goStore('activity')\"><h3>진주알스토어</h3></a>\n			<div>\n				<span class=\"cart_price point\">\n					<span class=\"left_num\">\n						<strong class=\"num\">"
+  return "<!--/* 진주알스토어 */-->\n<div class=\"cart_item_box_wrap type2 group\">\n	<div class=\"cart_item_box\">\n		<div class=\"top_tit_wrap\">\n			<a href=\"#none\" onclick=\"goStore('activity')\"><h3>진주알스토어</h3></a>\n			<!--/* 가격이 들어갈 경우 */-->\n			<div>\n				<span class=\"cart_price point\">\n					<span class=\"left_num\">\n						<strong class=\"num\">"
     + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,(depth0 != null ? depth0.pointSum : depth0),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.program(3, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + "</strong><span>알</span>\n						<span>/</span>\n					</span>\n					<span class=\"right_num\">\n						<span>보유</span>\n						<strong class=\"num\">"
     + ((stack1 = helpers["if"].call(alias1,(helpers.ne || (depth0 && depth0.ne) || alias2).call(alias1,(depth0 != null ? depth0.activityPoints : depth0),null,{"name":"ne","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(5, data, 0, blockParams, depths),"inverse":container.program(3, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")

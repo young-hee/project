@@ -5,25 +5,26 @@
 		<div class="ui_rating">
 			<p class="font_lg color_light_gray">{{ this.prodName }}</p>
 			<span class="heart">
-				<span><input type="radio" name="rate_point" id="rate_point_1" value="1.0" required data-msg="평점을 선택해 주세요." checked=""><label for="rate_point_1"><span class="sr_only"> 1점</span></label></span>
-				<span><input type="radio" name="rate_point" id="rate_point_2" value="2.0"><label for="rate_point_2"><span class="sr_only"> 2점</span></label></span>
-				<span><input type="radio" name="rate_point" id="rate_point_3" value="3.0"><label for="rate_point_3"><span class="sr_only"> 3점</span></label></span>
-				<span><input type="radio" name="rate_point" id="rate_point_4" value="4.0"><label for="rate_point_4"><span class="sr_only"> 4점</span></label></span>
-				<span><input type="radio" name="rate_point" id="rate_point_5" value="5.0"><label for="rate_point_5"><span class="sr_only"> 5점</span></label></span>
+				<span><input type="radio" name="scope" id="rate_point_1" value="1" required data-msg="평점을 선택해 주세요." checked=""><label for="rate_point_1"><span class="sr_only"> 1점</span></label></span>
+				<span><input type="radio" name="scope" id="rate_point_2" value="2"><label for="rate_point_2"><span class="sr_only"> 2점</span></label></span>
+				<span><input type="radio" name="scope" id="rate_point_3" value="3"><label for="rate_point_3"><span class="sr_only"> 3점</span></label></span>
+				<span><input type="radio" name="scope" id="rate_point_4" value="4"><label for="rate_point_4"><span class="sr_only"> 4점</span></label></span>
+				<span><input type="radio" name="scope" id="rate_point_5" value="5"><label for="rate_point_5"><span class="sr_only"> 5점</span></label></span>
 			</span>
 			<span class="font_lg">별점을 선택해주세요.</span>
 		</div>
 	
 		<div class="review_rating">
 			<h3 class="h_title font_lg">상품을 자세히 평가해주세요.</h3>
-			{{#each this.productReviewSurveys}}
+			{{#each this.productReviewSurveys as |survey idx|}}
 			<dl>
-				<dt class="h_title font_lg"><strong>{{this.questionHeader}}은 어떤가요?</strong></dt>
+				<dt class="h_title font_lg"><strong>{{survey.questionHeader}}은 어떤가요?</strong></dt>
 				<dd class="check_set">
-					{{#each this.responses}}
+					<input type="hidden" name="surveys[{{idx}}].prodReviewEvalQuestionSn" value="{{survey.prodReviewEvalQuestionSn}}">
+					{{#each survey.responses as |response index|}}
 					<span>
-						<input type="radio" name="rate_check1" id="rate_check1_{{this.prodReviewEvalResponseSn}}" checked="">
-						<label for="rate_check1_{{this.prodReviewEvalResponseSn}}">{{this.responseBodyText}}</label>
+						<input type="radio" name="surveys[{{idx}}].prodReviewEvalResponseSn" value="{{response.prodReviewEvalResponseSn}}" id="rate_check1_{{response.prodReviewEvalResponseSn}}" {{#if (eq index 0)}}checked=""{{/if}}>
+						<label for="rate_check1_{{this.prodReviewEvalResponseSn}}">{{response.responseBodyText}}</label>
 					</span>
 					{{/each}}
 				</dd>
@@ -36,34 +37,32 @@
 			<p>사진 또는 동영상을 3장 이상 올리시면 <strong>뷰티포인트 1,000P</strong>가 추가로 지급됩니다.</p>
 	
 			<!--/* 사진 업로드 */-->
-			<div class="attach_wrap ui_input_images">
+			<div class="attach_wrap ui_input_images" data-pur-review="true">
+				<!--[if gt ie 9]><!-->
 				<ul class="attach">
-					<li class="attached"><img ap:src="@{/images/dummy/img_review.jpg}" alt=""><button type="button" class="btn_del"><span class="sr_only">첨부파일 삭제</span></button></li>
-					<li>
+					<li class="input_file_btn_area">
 						<div class="attach_file etc">
-							<input type="file" id="attach1">
-							<label for="attach1">
-								개봉전
-							</label>
+							<input type="file" id="attach1" multiple="multiple">
+							<label for="attach1"></label>
 						</div>
 					</li>
-					<li>
+					<li class="imageTypeWrap">
 						<div class="attach_file etc">
-							<input type="file" id="attach2">
-							<label for="attach2">
-								개봉후
-							</label>
+							<label class="noLabal">개봉전</label>
 						</div>
 					</li>
-					<li>
+					<li class="imageTypeWrap">
 						<div class="attach_file etc">
-							<input type="file" id="attach3">
-							<label for="attach3">
-								사용감
-							</label>
+							<label class="noLabal">개봉후</label>
+						</div>
+					</li>
+					<li class="imageTypeWrap">
+						<div class="attach_file etc">
+							<label class="noLabal">사용감</label>
 						</div>
 					</li>
 				</ul>
+				<!--<![endif]-->
 			</div>
 		</div>
 	
@@ -75,7 +74,7 @@
 	
 			<div>
 				<div class="textarea">
-					<textarea name="" id="" cols="30" rows="5" placeholder="리뷰는 최소 20자 이상 작성해주세요" maxlength="800"></textarea>
+					<textarea name="prodReviewBodyText" id="prodReviewBodyText" cols="30" rows="5" placeholder="리뷰는 최소 20자 이상 작성해주세요" maxlength="800"></textarea>
 				</div>
 				<p class="text_right"><small><em class="current">0</em>/<span class="limits">800</span></small></p>
 			</div>
@@ -87,7 +86,7 @@
 			<div class="tgArea">
 				<dl>
 					<dt>
-						<a href="#none">자세한 약관보기</a>
+						<a href="javascript:;">자세한 약관보기</a>
 					</dt>
 					<dd>
 						<p>아모레퍼시픽몰 구매리뷰 이용약관</p>
@@ -123,22 +122,9 @@
 			<!-- //약관보기-->
 		<button class="btn_xlg_primary w100p btn_default_modal_confirm" type="button" disabled><span class="ie_press">등록하기</span></button>
 	</div>
+	<input type="hidden" name="ordNo" value="{{this.ordNo}}">
+	<input type="hidden" name="ordProdSn" value="{{ this.ordProdSn }}">
+	<input type="hidden" name="onlineProdSn" value="{{ this.onlineProdSn }}">
+	<input type="hidden" name="prodSn" value="{{ prodSn }}">
+	<input type="hidden" name="prodReviewTypeCode" value="Pur">
 </form>
-<script>
-//rating
-$( '.ui_rating' ).rating().on( 'rating-change', function (e) {
-	console.log( e.type, e.value );
-});
-
-//토글 슬라이드
-$('.tgArea').each(function(){
-	$(this).find('dl > dt').on('click', function(){
-		$(this).toggleClass('on');
-		$( '.slide' ).ixSlideMax();
-	})
-});
-</script>
-
-
-</body>
-</html>

@@ -155,8 +155,12 @@ function loginProcess() {
                         contents.contents = data;
                         var modal = AP.modal.info(contents);
                         var $modalEl = modal.getElement(); //jquery object
-                        if (!t.isRunning()) {
-                            t = new AP.common.timeCountDown(xhr.responseJSON.lockReleaseDate, function() {});
+                        if(t == null) {
+                            t = new AP.common.timeCountDown(xhr.responseJSON.errorData.additional.lockReleaseDate, function() {});
+                            t.start();
+                        } else {
+                        	t.stop();
+                            t = new AP.common.timeCountDown(xhr.responseJSON.errorData.additional.lockReleaseDate, function() {});
                             t.start();
                         }
                         $modalEl.find(".btn_md_primary").click(function() {
@@ -190,7 +194,7 @@ function loginComplete() {
         if ($('#sub').attr('method') == 'POST')
             $('#sub').submit();
         else
-            location.href = $('#sub').attr('action').replace('?isRequiredLogin=true', '');
+            location.href = $('#sub').attr('action').replace('?isRequiredLogin=true', '').replace('/order/reception','/cart/cartList').replace('/order/ordComplete', '/main');
     }, 1);
 
 }

@@ -23,12 +23,12 @@
 				<legend class="sr_only">아모레퍼시픽 통합 멤버십 뷰티포인트 회원약관 약관 동의</legend>
 				<h3 class="h_title d4"><b>아모레퍼시픽 통합 멤버십 뷰티포인트 회원약관</b></h3>
 				<ul class="agree_list font_md dl_cont">
-					<li><span class="check_wrap"><input type="checkbox" id="TMS001" th:required="${termsMap.get('010').agreeMandatoryYn == 'Y'}"><label for="TMS001" th:text="${termsMap.get('010').termsName}">[필수] 뷰티포인트 서비스 이용약관</label></span> <a href="#none"><i class="ico_arr"></i><span class="sr_only">약관 자세히 보기</span></a></li>
-					<li><span class="check_wrap"><input type="checkbox" id="TMS002" th:required="${termsMap.get('020').agreeMandatoryYn == 'Y'}"><label for="TMS002" th:text="${termsMap.get('020').termsName}">[필수] 개인정보 이용 및 수집에 대한 동의</label></span> <a href="#none"><i class="ico_arr"></i><span class="sr_only">약관 자세히 보기</span></a></li>
-					<li><span class="check_wrap"><input type="checkbox" id="TMS003" th:required="${termsMap.get('030').agreeMandatoryYn == 'Y'}"><label for="TMS003" th:text="${termsMap.get('030').termsName}">[선택] 개인정보 이용 및 수집에 대한 동의</label></span> <a href="#none"><i class="ico_arr"></i><span class="sr_only">약관 자세히 보기</span></a></li>
-					<li><span class="check_wrap"><input type="checkbox" id="TMS004" th:required="${termsMap.get('040').agreeMandatoryYn == 'Y'}"><label for="TMS004" th:text="${termsMap.get('040').termsName}">[선택] 개인정보 제3자 제공 동의</label></span> <a href="#none"><i class="ico_arr"></i><span class="sr_only">약관 자세히 보기</span></a></li>
-					<li><span class="check_wrap"><input type="checkbox" id="TMS005" th:required="${termsMap.get('050').agreeMandatoryYn == 'Y'}"><label for="TMS005" th:text="${termsMap.get('050').termsName}">[선택] 개인정보 제3자 제공 동의 <br><small>※ 외부 컨텐츠 마케팅 활용</small></label></span> <a href="#none"><i class="ico_arr"></i><span class="sr_only">약관 자세히 보기</span></a></li>
-					<li><span class="check_wrap"><input type="checkbox" id="TMS006" th:required="${termsMap.get('060').agreeMandatoryYn == 'Y'}"><label for="TMS006" th:text="${termsMap.get('060').termsName}">[선택] 국외이전동의</label></span> <a href="#none"><i class="ico_arr"></i><span class="sr_only">약관 자세히 보기</span></a></li>
+					<li><span class="check_wrap"><input type="checkbox" id="TMS001" th:required="${termsMap.get('010').agreeMandatoryYn == 'Y'}"><label for="TMS001" th:text="${termsMap.get('010').termsName}">[필수] 뷰티포인트 서비스 이용약관</label></span> <a href="javascript:;" onclick="viewTerm('010')"><i class="ico_arr"></i><span class="sr_only">약관 자세히 보기</span></a></li>
+					<li><span class="check_wrap"><input type="checkbox" id="TMS002" th:required="${termsMap.get('020').agreeMandatoryYn == 'Y'}"><label for="TMS002" th:text="${termsMap.get('020').termsName}">[필수] 개인정보 이용 및 수집에 대한 동의</label></span> <a href="javascript:;" onclick="viewTerm('020')"><i class="ico_arr"></i><span class="sr_only">약관 자세히 보기</span></a></li>
+					<li><span class="check_wrap"><input type="checkbox" id="TMS003" th:required="${termsMap.get('030').agreeMandatoryYn == 'Y'}"><label for="TMS003" th:text="${termsMap.get('030').termsName}">[선택] 개인정보 이용 및 수집에 대한 동의</label></span> <a href="javascript:;" onclick="viewTerm('030')"><i class="ico_arr"></i><span class="sr_only">약관 자세히 보기</span></a></li>
+					<li><span class="check_wrap"><input type="checkbox" id="TMS004" th:required="${termsMap.get('040').agreeMandatoryYn == 'Y'}"><label for="TMS004" th:text="${termsMap.get('040').termsName}">[선택] 개인정보 제3자 제공 동의</label></span> <a href="javascript:;" onclick="viewTerm('040')"><i class="ico_arr"></i><span class="sr_only">약관 자세히 보기</span></a></li>
+					<li><span class="check_wrap"><input type="checkbox" id="TMS005" th:required="${termsMap.get('050').agreeMandatoryYn == 'Y'}"><label for="TMS005" th:text="${termsMap.get('050').termsName}">[선택] 개인정보 제3자 제공 동의 <br><small>※ 외부 컨텐츠 마케팅 활용</small></label></span> <a href="javascript:;" onclick="viewTerm('050')"><i class="ico_arr"></i><span class="sr_only">약관 자세히 보기</span></a></li>
+					<li><span class="check_wrap"><input type="checkbox" id="TMS006" th:required="${termsMap.get('060').agreeMandatoryYn == 'Y'}"><label for="TMS006" th:text="${termsMap.get('060').termsName}">[선택] 국외이전동의</label></span> <a href="javascript:;" onclick="viewTerm('060')"><i class="ico_arr"></i><span class="sr_only">약관 자세히 보기</span></a></li>
 				</ul>
 			</fieldset>
 			<fieldset class="form mgt30">
@@ -62,9 +62,9 @@
 		</div>
 
 		<div class="page_btns">
-			<a href="#none" onclick="stepOne()" class="btn_lg_secondary" id="agreeBtn"><span>동의하고 진행</span><i class="ico_arr_w"></i></a>
+			<a href="javascript:;" onclick="stepOne()" class="btn_lg_secondary" id="agreeBtn"><span>동의하고 진행</span><i class="ico_arr_w"></i></a>
 			<!-- 동의 체크 후 버튼
-			<a href="#none" class="btn_lg_primary"><span>동의하고 진행</span><i class="ico_arr_w"></i></a>
+			<a href="javascript:;" class="btn_lg_primary"><span>동의하고 진행</span><i class="ico_arr_w"></i></a>
 			-->
 		</div>
 	</div>
@@ -188,6 +188,12 @@
 		    this.StepTwo = stepTwo;
 		    this.TermsChk = termsChk;
 		    this.BtTermsChk = btTermsChk;
+		}
+		function viewTerm(termCode) {
+			AP.modal.agreeTerms({
+				title: '회원약관',
+				displayCode: termCode
+			});
 		}
 		</script>
 </th:block>

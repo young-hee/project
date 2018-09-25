@@ -55,6 +55,12 @@
 						<p class="text font_lg">작성한 구매 리뷰가 없습니다.</p>
 					</div>
 
+						<div class="loading" style="min-height: 200px; display: none">
+						<span>
+							<img ap:src="@{/images/common/loading.gif}" alt="">
+						</span>
+						</div>
+
 					<div class="writed_review_list board_list2"></div>
 					<div class="pagination"></div>
 				</div>
@@ -76,7 +82,7 @@
 				endDate: $('.ui_multiple_date_picker').multipleDatePicker( 'getDate' ).endDate
 			};
 
-			AP.myWritedReviewList._getList( param );
+			AP.myWritedReviewList._getList( param, true );
 		}());
 	</script>
 </th:block>

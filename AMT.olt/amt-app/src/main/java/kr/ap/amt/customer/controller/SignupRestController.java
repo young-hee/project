@@ -14,6 +14,7 @@ import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.EmbeddableName;
 import net.g1project.ecp.api.model.EmbeddableTel;
 import net.g1project.ecp.api.model.ap.ap.*;
+import net.g1project.ecp.api.model.sales.terms.Terms;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -724,21 +725,17 @@ public class SignupRestController extends AbstractController {
 				cicuemCuInfTotTcVo.setCiNo(getMemberSession().getUser_ciNo());
 				cicuemCuInfTotTcVo.setJoinChCd(APConstant.AP_CH_CD);
 				cicuemCuInfTotTcVo.setJoinPrtnId(APConstant.EH_PRTN_ID);
+				cicuemCuInfTotTcVo.setFscrId(chcsNo);
+				cicuemCuInfTotTcVo.setLschId(chcsNo);
 				if(isMobileDevice()) {
 					cicuemCuInfTotTcVo.setJndvCd("M");
-					cicuemCuInfTotTcVo.setFscrId("MOBILE");
-					cicuemCuInfTotTcVo.setLschId("MOBILE");
 				}
 				if(isPcDevice()) {
 					cicuemCuInfTotTcVo.setJndvCd("W");
-					cicuemCuInfTotTcVo.setFscrId("WEB");
-					cicuemCuInfTotTcVo.setLschId("WEB");
 					
 				}
 				if(isAndroid() || isiOS()) {
 					cicuemCuInfTotTcVo.setJndvCd("A");
-					cicuemCuInfTotTcVo.setFscrId("MOBILE");
-					cicuemCuInfTotTcVo.setLschId("MOBILE");
 				}
 				if(cicuemCuInfTotTcVo.getCiNo().endsWith("=="))
 					cicuemCuInfTotTcVo.setAtclCd("10");
@@ -813,29 +810,19 @@ public class SignupRestController extends AbstractController {
 				list.add(cicuedCuChCsTcVo);
 
 				cicuemCuInfTotTcVo.setCicuedCuChCsTcVo(list);
-				String is030Check = "";
-				String is040Check = "";
-				String is050Check = "";
-				String is060Check = "";
 				//회원가입 통합약관동의여부
 				List<CicuedCuTncaTcVo> cicuedCuTncaTcVos = new ArrayList<CicuedCuTncaTcVo>();
 				Map<String, String> termsMap = arrayToMap(termsChk);
+				List<Terms> terms = termsApi.getTerms("010,020,030,040,050,060");
 				for (Map.Entry<String, String> entry : termsMap.entrySet()) {
 					CicuedCuTncaTcVo cicuedCuTncaTcVo = new CicuedCuTncaTcVo();
-					if(entry.getKey().equals("030")) {
-						is030Check = entry.getValue();
-					}
-					if(entry.getKey().equals("040")) {
-						is040Check = entry.getValue();
-					}
-					if(entry.getKey().equals("050")) {
-						is050Check = entry.getValue();
-					}
-					if(entry.getKey().equals("060")) {
-						is060Check = entry.getValue();
-					}
 					cicuedCuTncaTcVo.setTcatCd(entry.getKey());
-					cicuedCuTncaTcVo.setTncvNo("1");
+					Terms t = getTermsByCode(terms, entry.getKey());
+					if(t != null) {
+						cicuedCuTncaTcVo.setTncvNo(t.getTermsVer());
+					} else {
+						cicuedCuTncaTcVo.setTncvNo("1");
+					}
 					cicuedCuTncaTcVo.setTncAgrYn(entry.getValue());
 					cicuedCuTncaTcVo.setFscrId(cicuemCuInfTotTcVo.getFscrId());
 					cicuedCuTncaTcVo.setLschId(cicuemCuInfTotTcVo.getLschId());
@@ -847,8 +834,6 @@ public class SignupRestController extends AbstractController {
 				Map<String, String> olOptiYnMap = arrayToMap(optionYn);
 
 				//유형별 수신동의여부
-				String is000Email = "";
-				String is000SMS = "";
 				CicuemCuOptiCsTcVo cicuemCuOptiTcVo = new CicuemCuOptiCsTcVo();
 				for (Map.Entry<String, String> entry : olOptiYnMap.entrySet()) {
 					if(entry.getKey().contains("OptionB_")) continue;
@@ -856,11 +841,9 @@ public class SignupRestController extends AbstractController {
 					if ("OptionA_Email".equals(entry.getKey())) {
 						cicuemCuOptiTcVo.setEmlOptiYn(entry.getValue());
 						cicuemCuOptiTcVo.setEmlOptiDt(today);
-						is000Email = entry.getValue();
 					} else if ("OptionA_SMS".equals(entry.getKey())) {
 						cicuemCuOptiTcVo.setSmsOptiYn(entry.getValue());
 						cicuemCuOptiTcVo.setSmsOptiDt(today);
-						is000SMS = entry.getValue();
 					} else if ("OptionA_DM".equals(entry.getKey())) {
 						cicuemCuOptiTcVo.setDmOptiYn(entry.getValue());
 						cicuemCuOptiTcVo.setDmOptiDt(today);
@@ -874,8 +857,6 @@ public class SignupRestController extends AbstractController {
 				cicuemCuOptiTcVo.setFscrId(cicuemCuInfTotTcVo.getFscrId());
 				cicuemCuOptiTcVo.setLschId(cicuemCuInfTotTcVo.getLschId());
 				
-				String is030Email = "";
-				String is030SMS = "";
 				CicuemCuOptiCsTcVo CicuemCuOptiCsTcVo2 = new CicuemCuOptiCsTcVo();
 				for (Map.Entry<String, String> entry : olOptiYnMap.entrySet()) {
 					if(entry.getKey().contains("OptionA_")) continue;
@@ -884,11 +865,9 @@ public class SignupRestController extends AbstractController {
 					if ("OptionB_Email".equals(entry.getKey())) {
 						CicuemCuOptiCsTcVo2.setEmlOptiYn(entry.getValue());
 						CicuemCuOptiCsTcVo2.setEmlOptiDt(today);
-						is030Email = entry.getValue();
 					} else if ("OptionB_SMS".equals(entry.getKey())) {
 						CicuemCuOptiCsTcVo2.setSmsOptiYn(entry.getValue());
 						CicuemCuOptiCsTcVo2.setSmsOptiDt(today);
-						is030SMS = entry.getValue();
 					} else if ("OptionB_DM".equals(entry.getKey())) {
 						CicuemCuOptiCsTcVo2.setDmOptiYn(entry.getValue());
 						CicuemCuOptiCsTcVo2.setDmOptiDt(today);
@@ -1077,7 +1056,17 @@ public class SignupRestController extends AbstractController {
 
 		return ResponseEntity.ok(result);
     }
-    private static String getPrntNm(String chCd) {
+    
+    private Terms getTermsByCode(List<Terms> termsList, String key) {
+    	for (Terms terms : termsList) {
+			if(terms.getTermsDisplayCode().equals(key))
+				return terms;
+		}
+		return null;
+	}
+
+
+	private static String getPrntNm(String chCd) {
     	if(APConstant.BT_CH_CD.equals(chCd)) {
 			return "뷰티포인트";
     	} else if(APConstant.CP_CH_CD.equals(chCd)) {

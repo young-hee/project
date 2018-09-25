@@ -59,16 +59,68 @@
 
 
 <script type="text/javascript">
+$(document).ready(function(){
+	getLatestProd();
+});
 /* 최근 본 상품 btn */
 $(".btn_recent").click(function(){
+	//getLatestProd();
 	$(".recently_item_wrap").show();
 	$(".dimmed_common").show();
+	
 })
 
 $(".dimmed_common").click(function(){
 	$(".recently_item_wrap").hide();
 	$(".dimmed_common").hide();
 });
+
+function getLatestProd(){
+	//테스트용
+	//var prod = '664*dfda*bddfd2bb*/pc/ko/images/dummy/img_item_01.jpg*8000*17000';
+	//this._addCookie(prod);
+	
+	var floatImg;
+	var latestProd = AP.common.getCookie('latestSeenProd');
+	//console.log(latestProd);
+	if(latestProd == 'undefined' || latestProd == undefined){
+		return false;
+	}
+	var itemArray = latestProd.split(',');
+	var prodArray = new Array();
+	var obj2 = new Object();
+
+	for(var i = 0 ; i < itemArray.length ; i++){
+		var obj = new Object();
+		var item = itemArray[i].split('*');
+		
+		obj.prodSn = item[0];
+		obj.prodName = item[1];
+		obj.prodOption = item[2];
+		obj.prodImgUrl = item[3];
+		obj.delPrice = item[4];
+		obj.realPrice = item[5];
+		
+		if(i == 0){
+			floatImg = obj.prodImgUrl;
+		}
+		
+		prodArray.push(obj);
+
+	}
+
+	obj2.list = prodArray;
+	
+	if(floatImg != 'undefined' && floatImg != undefined){
+		$('.floating_area .btn_recent').html('<img src="'+ floatImg +'" alt="최근본 상품">');
+	}
+
+	var html = AP.common.getTemplate( 'common.latest-product', obj2);
+	//console.log(html);
+	//console.log(this._$floating.find('.recently_item_wrap').html());
+	$('.recently_item_wrap .product_slide').html(html);
+
+}
 </script>
 	
 

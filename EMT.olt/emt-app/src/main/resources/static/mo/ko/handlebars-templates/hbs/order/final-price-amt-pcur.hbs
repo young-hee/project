@@ -1,7 +1,7 @@
 <dt id="amtPriceTab">
 	<div class="title clear">
 		<b>최종 결제금액</b>
-		<span class="price">{{currencyFormatDefault ordHistEx.finalPamtPcur '원'}}</span>
+		<span class="price">{{getAmtMapPrice ordAmtMap 'FinalPamtPcur' '원'}}</span>
 		<input type="hidden" name="finalPamtPcurPrice" value="{{ordHistEx.finalPamtPcur}}"/>
 	</div>
 	<button type="button"><span class="sr_only">더보기</span></button>
@@ -14,10 +14,10 @@
 				<b><strong class="num" >{{getAmtMapPrice ordAmtMap 'Prod' '원'}}</strong></b>
 			</p>
 			<ul>
-				{{#if (checkAmtMapPrice ordAmtMap 'onlineShipProdSum')}}
+				{{#if (checkAmtMapPrice ordAmtMap 'OnlineShipProdSum')}}
 					<li class="clear">
 						<span>온라인 상품(<em>{{getCntMap ordCntMap 'shipOrdOnlineProdCnt'}}</em>개)</span>
-						<span><span class="num">{{getAmtMapPrice ordAmtMap 'onlineShipProdSum' '원'}}</span></span>
+						<span><span class="num">{{getAmtMapPrice ordAmtMap 'OnlineShipProdSum' '원'}}</span></span>
 					</li>
 				{{/if}}
 				{{#if isApMember}}
@@ -69,12 +69,12 @@
 		{{/if}}
 
 		<!-- /* 활인 */-->
-		{{#if (checkAmtMapPrice ordAmtMap 'totalOrdDcPriceSum')}}
+		{{#if (checkAmtMapPrice ordAmtMap 'TotalOrdDcPriceSum')}}
 			<hr class="icon_minus">
 			<div class="inner_box">
 				<p class="total clear">
-					<strong>총 할인</strong>
-					<b><strong class="num">{{#if (checkAmtMapPrice ordAmtMap 'totalOrdDcPriceSum')}}-{{/if}}{{getAmtMapPrice ordAmtMap 'totalOrdDcPriceSum' '원'}}</strong></b>
+					<strong>총 할인 금액</strong>
+					<b><strong class="num">{{#if (checkAmtMapPrice ordAmtMap 'TotalOrdDcPriceSum')}}-{{/if}}{{getAmtMapPrice ordAmtMap 'TotalOrdDcPriceSum' '원'}}</strong></b>
 				</p>
 				<ul>
 					{{#if (checkAmtMapPrice ordAmtMap 'OnlineProdPromoDc')}}
@@ -171,11 +171,13 @@
 							<span><span class="num">{{getAmtMapPrice ordAmtMap 'ShipFeePromoDc' '원'}}</span></span>
 						</li>
 					{{/if}}
-					{{#if (checkAmtMapPrice ordAmtMap 'PayMethodDc')}}
-						<dl>
-							<dt>결제수단할인</dt>
-							<dd>{{getAmtMapPrice ordAmtMap 'PayMethodDc' '원'}}</dd>
-						</dl>
+					{{#if isApMember}}
+						{{#if (checkAmtMapPrice ordAmtMap 'DepositPrice')}}
+							<li class="clear">
+								<span>예치금</span>
+								<span><span class="num">{{getAmtMapPrice ordAmtMap 'DepositPrice' '원'}}</span></span>
+							</li>
+						{{/if}}
 					{{/if}}
 				</ul>
 			</div>
@@ -186,7 +188,7 @@
 				<div class="panel gray mgt15">
 					<p class="total clear">
 						<strong>적립 예정 포인트</strong>
-						<b><strong class="num">{{getAmtMapPrice ordAmtMap 'totalBeautyPointSaveSum' 'P'}}</strong></b>
+						<b><strong class="num">{{getAmtMapPrice ordAmtMap 'TotalBeautyPointSaveSum' 'P'}}</strong></b>
 					</p>
 					<ul>
 						<li class="clear">
@@ -210,7 +212,7 @@
 									</div>
 								</div>
 							</div>
-							<span><span class="num">{{getAmtMapPrice ordAmtMap 'totalBeautyPointSaveSum' 'P'}}</span></span>
+							<span><span class="num">{{getAmtMapPrice ordAmtMap 'TotalBeautyPointSaveSum' 'P'}}</span></span>
 						</li>
 					</ul>
 				</div>

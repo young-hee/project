@@ -825,5 +825,32 @@ public class DisplayRestController extends AbstractController {
 		return ResponseEntity.ok(result);
 	}
 	
+	/**
+	 * 최근 본 상품 목록
+	 * @param requestDisplay
+	 * @return
+	 */
+	@RequestMapping("/getWithOnlineProdCodesProdList")
+	@ResponseBody
+	public ResponseEntity<?> getWithOnlineProdCodesProdList( RequestDisplay requestDisplay) {
+        
+		HashMap<String, Object> result = new HashMap<String, Object>();
+        
+        try {
+        	OnlineProdList onlineProdList = displayApi.getWithOnlineProdCodesProdList(
+        			requestDisplay.getOnlineProdCodes(),
+        			false,
+        			requestDisplay.getProdListUnit(),
+        			requestDisplay.getProdSort(),
+        			requestDisplay.getOffset(),
+        			requestDisplay.getLimit());
+        	result.put("onlineProdList", onlineProdList);
+        	return ResponseEntity.ok(result);
+        } catch (Exception e) {
+        	result.put("errorData", e);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
+        }
+    }
+	
     
 }

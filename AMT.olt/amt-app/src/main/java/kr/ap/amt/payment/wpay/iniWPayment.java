@@ -6,38 +6,24 @@
  */
 package kr.ap.amt.payment.wpay;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.Security;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.ap.amt.payment.vo.PayDTO;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.codec.binary.Base64;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import kr.ap.amt.payment.vo.PayDTO;
+import java.io.*;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.Security;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * @author Administrator@g1project.net
@@ -557,12 +543,12 @@ public static Map<String, String> decodeWpayCertResultParam(String seedkey, Stri
 	}
     
     private static String makeMobileConfirmParam(LinkedHashMap<String, String> linkedHashMap) {
-		
+
     	String data = "";
     	String and = "";
     	
     	for(Entry<String, String> elem : linkedHashMap.entrySet()){           
-            if(data != "") {
+            if(StringUtils.isNotEmpty(data)) {
             	and = "&";
             } 
             data = data.concat(and).concat(elem.getKey()).concat("=").concat(elem.getValue().toString());
@@ -579,7 +565,7 @@ public static Map<String, String> decodeWpayCertResultParam(String seedkey, Stri
     	//signature 생성 - *wpay 연동 규약서에 정의된 request 항목을 순차적으로 연결한다.
     	
     	for(Entry<String, String> elem : map.entrySet()){           
-            if(plaintext != "") {
+            if(StringUtils.isNotEmpty(plaintext)) {
             	and = "&";
             } 
             plaintext = plaintext.concat(and).concat(elem.getKey()).concat("=").concat(elem.getValue().toString());
@@ -624,11 +610,4 @@ public static Map<String, String> decodeWpayCertResultParam(String seedkey, Stri
     	return SHA;
 
     }
-
-	
-
-	
-
-	
-
 }

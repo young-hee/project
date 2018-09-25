@@ -1,28 +1,23 @@
 {{#each this.list}}
 <li class="ix-list-item item">
-	<a href="{{ productDetailPath this.onlineProdSn }}">
-		<div class="thumb">
-			<div class="flag_set">
-				{{#each this.flags}}
-					{{#xif this.prodFlagCode '==' 'icon_reco_new'}}		<span class="new">신상품</span>			{{/xif}}
-					{{#xif this.prodFlagCode '==' 'icon_reco_best_w'}}	<span class="best">베스트</span>		{{/xif}}
-					{{#xif this.prodFlagCode '==' 'icon_pr_prod'}}		<span class="event">이벤트</span>		{{/xif}}
-					{{#xif this.prodFlagCode '==' 'icon_reco_md'}}		<span class="md">MD추천</span>			{{/xif}}
-					{{#xif this.prodFlagCode '==' 'icon_reco_online'}}	<span class="online">온라인전용</span>	{{/xif}}
-				{{/each}}
-			</div>
+	<a href="{{ productDetailPath this.onlineProdSn }}" >
+		<div class="thumb lazy_load_wrap">
 			<img class="lazy_load" src="" data-src="{{ this.onlineProdImages.0.imgUrl}}" alt="{{ this.onlineProdName }}">
 		</div>
 		<div class="item_info">
 			<div>
-				<p class="name">{{ this.onlineProdName }}</p>
+				<p class="prd_name">
+					<span class="s_name">{{stockTxt this.saleDisplayStatus this.prodTypeCode}}</span>
+					{{ this.onlineProdName }}
+				</p>
+				<p class="color_name"></p>
 			</div>
 			<div class="price_area">
 				{{#with (calc this.onlineProdPriceSummary.maxOnlineSalePriceDiscountRate '+' this.onlineProdPriceSummary.maxMemberLevelDiscountRate '+' this.onlineProdPriceSummary.maxOnlineMemberDiscountRate) as |maxRate|}}
 					{{#xif maxRate '!=' 0}}
-					<span class="discount">
-						{{ maxRate }}<em>%</em>
-					</span>
+						<span class="discount">
+							{{ maxRate }}<em>%</em>
+						</span>
 					{{/xif}}
 					<span class="price">{{ numberFormat ../onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>원</em></span>
 				{{/with}}

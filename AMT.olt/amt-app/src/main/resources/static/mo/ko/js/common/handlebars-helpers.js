@@ -843,6 +843,35 @@
 	/***********************************************************************
 	 * 주문서 helper
 	 */
+
+	/**
+	 * 진행주체코드
+	 */
+	Handlebars.registerHelper("marketingOrg", function(value) {
+		var html = '';
+
+		if (value != null) {
+			switch (value) {
+				case 'Online' :
+					html = '온라인 전용';
+					break;
+				case 'IntergrationCampaign' :
+					html = '통합 쿠폰';
+					break;
+				//case 'Co' :
+				//	html = '입점업체';
+				//	break;
+				case 'POS' :
+					html = '오프라인 전용';
+					break;
+				default :
+					html = '온라인 전용';
+					break;
+			}
+		}
+		return html;
+	});
+
 	Handlebars.registerHelper("dcMethodCodeSwitch", function(value) {
 		var html = '';
 

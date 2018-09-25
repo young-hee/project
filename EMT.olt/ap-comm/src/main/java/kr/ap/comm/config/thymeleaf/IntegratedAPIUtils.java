@@ -1,30 +1,29 @@
 package kr.ap.comm.config.thymeleaf;
 
-import kr.ap.comm.api.AmoreAPIService;
 import kr.ap.comm.api.vo.PageVo;
 import kr.ap.comm.api.vo.PtTrBrkdInqVo;
 import kr.ap.comm.member.vo.BeautyPointSummary;
 import kr.ap.comm.member.vo.CushionPointSummary;
 import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.util.SessionUtils;
+import net.g1project.ecp.api.client.order.OrderApi;
 import net.g1project.ecp.api.client.sales.PointApi;
 import net.g1project.ecp.api.model.EmbeddableTel;
+import net.g1project.ecp.api.model.order.order.OrdSummaryInfo;
 import net.g1project.ecp.api.model.sales.point.ActivityPointHists;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.context.ApplicationContext;
+
 import org.thymeleaf.context.IEngineContext;
 import org.thymeleaf.context.IExpressionContext;
 import org.thymeleaf.context.IWebContext;
-import org.thymeleaf.context.WebEngineContext;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.ParseException;
@@ -48,10 +47,24 @@ public class IntegratedAPIUtils {
 
 	private final IExpressionContext context;
 	private final PointApi pointApi;
+	private final OrderApi orderApi;
 
-	IntegratedAPIUtils(final IExpressionContext context, final PointApi pointApi) {
+	IntegratedAPIUtils(final IExpressionContext context, final PointApi pointApi, final OrderApi orderApi) {
 		this.context = context;
 		this.pointApi = pointApi;
+		this.orderApi = orderApi;
+	}
+	
+	public int getOrdSummary() {
+		MemberSession memberSession = SessionUtils.getMemberSession(IWebContext.class.cast(this.context).getRequest());
+		if(memberSession == null || memberSession.getMember_sn() == null || memberSession.getMember_sn() == 0)
+			return 0;
+		Date endDate = new Date();
+		Date startDate = DateUtils.addMonths(endDate, -3);
+		OrdSummaryInfo ordSummary = orderApi.getOrdSummary(memberSession.getMember_sn(), startDate, endDate, null);
+		if(ordSummary == null) return 0;
+		
+		return ordSummary.getOrdReceptCnt() + ordSummary.getPayCompleteCnt() + ordSummary.getPreparingCnt() + ordSummary.getShippingCnt();
 	}
 
 	public String getGiftCardStatusName(String status) {

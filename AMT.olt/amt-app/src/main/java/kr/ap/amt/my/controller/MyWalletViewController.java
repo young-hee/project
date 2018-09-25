@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MyWalletViewController extends AbstractController {
 	
 	private SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-	private static final int M_PAGE_SIZE = 100;
+	private static final int M_PAGE_SIZE = 5;
 	private static final int P_PAGE_SIZE = 10;
     
     @Autowired
@@ -272,7 +272,7 @@ public class MyWalletViewController extends AbstractController {
 				c.set(Calendar.MINUTE,      c.getMaximum(Calendar.MINUTE));
 				c.set(Calendar.SECOND,      c.getMaximum(Calendar.SECOND));
 				c.set(Calendar.MILLISECOND, c.getMaximum(Calendar.MILLISECOND));
-				depositHostory = depositsApi.getDepositHistories(getMemberSn(), format.parse(startDt), c.getTime(), depositType, (pageNumber - 1) * pageSize, pageNumber * pageSize);
+				depositHostory = depositsApi.getDepositHistories(getMemberSn(), format.parse(startDt), c.getTime(), depositType, (pageNumber - 1) * pageSize, pageSize);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -293,9 +293,9 @@ public class MyWalletViewController extends AbstractController {
 				} else if("1YEAR".equals(date)) {
 					c.add(Calendar.YEAR, -1);
 				}
-				depositHostory = depositsApi.getDepositHistories(getMemberSn(), c.getTime(), new Date(), depositType, (pageNumber - 1) * pageSize, pageNumber * pageSize);
+				depositHostory = depositsApi.getDepositHistories(getMemberSn(), c.getTime(), new Date(), depositType, (pageNumber - 1) * pageSize, pageSize);
 			} else {
-				depositHostory = depositsApi.getDepositHistories(getMemberSn(), null, null, depositType, (pageNumber - 1) * pageSize, pageNumber * pageSize);
+				depositHostory = depositsApi.getDepositHistories(getMemberSn(), null, null, depositType, (pageNumber - 1) * pageSize, pageSize);
 			}
 		}
 		model.addAttribute("depositHostory", depositHostory);

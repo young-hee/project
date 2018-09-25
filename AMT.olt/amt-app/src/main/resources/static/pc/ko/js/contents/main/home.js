@@ -10,6 +10,7 @@
             this._$target = $( '#ap_container' );
 
             this._setPlugins();
+            this._setTopBanner();
             this._setEvent();
             
             this._setSpecialProducts();
@@ -18,9 +19,8 @@
 			this._setBrandCards();
 			this._setPopularProducts(); 
 			//this._setBestReview(); //todo - API 확인 필요
-			//this._setThemeStory(); //todo pc만 corner처리
             this._data = null;
-            //this._popUpload();
+            this._popUpload();
         },
 
         /** =============== Public Methods =============== */
@@ -40,8 +40,6 @@
         
         _setEvent: function () {
 			this._$target.on( 'click', '#display_card .vod', function (e) {
-//				console.log($(e.currentTarget).data('vod-url'));
-//				console.log($(e.currentTarget).data('vod-title'));
 				this._openVideo( $(e.currentTarget).data('vod-url'),$(e.currentTarget).data('vod-title'));
 				return false;
 			}.bind( this ));
@@ -221,18 +219,7 @@
 			var onlineprdList = []; 
 			var products = []; 
 			var themeList = []; 
-//			for(var i = 0 ; i < Object.keys(this._data).length ; i++){
-//				//console.log("aaaaaaaaaaaaaaaa");
-//				console.log(this._data['M01_main_m.6'][0].contents);
-//			}
-//
-//			$.each(themeData, function(index, object){
-//				
-//				if ( _.findWhere(themeData, {menuPageCornerContentsId: 'M01_main_p.5.2'})) {
-//					
-//					onlineprdList = object.prodList;
-//				}
-//			}); 
+
 			themeList.push(this._data['M01_main_m.6'][0].contents);
 			themeList.push(this._data['M01_main_m.7'][0].contents);
 			themeList.push(this._data['M01_main_m.8'][0].contents);
@@ -265,115 +252,42 @@
 			});
 		},
 		
-		// article 상품 목록 그리기
-		_articleProdList : function(articleSn){
-			
-			AP.api.articleRelated(null, { // article 연관상품 목록
-				 
-				articleSn: articleSn, //아티클일련번호
-				offset: 0,
-				limit: 3 // 화면에 동영상 라인과 맞춰주려고.. 어차피 상세에 들어가서 봐야함
-				
-			}).done( function ( result ) {  
-				this._$target.find( '.ch_etude .loading' ).remove();
-				
-				var html = '';
-					html = AP.common.getTemplate( 'main.home.ch-etude-article-list', result.onlineProdList);
-					
-				this._$target.find('.ch_etude .clear dd ul' ).html( html );
-				
-				AP.lazyLoad.add('.ch_etude img.lazy_load');
-			
-			}.bind(this)); 
-		},
-
-		//Find your looks
-		_setFindYourLooks: function () {
-			var $section = this._$target.find( '.nine_looks' );
-			if ( !$section.length ) return;
-			
-			AP.DISPLAY_MENU_ID = 'Looks';
-
-			AP.api.getCornerInfo({}, {}).done(function ( result ) {
-				result = result.corners[0];
-				
-				var html = AP.common.getTemplate( 'main.home.looks-article-list', result );
-				$section.find( '.slide .ix-list-viewport' ).html( html );
-
-				var $slide = $section.find( '.slide' ),
-					viewLength = $slide.ixOptions( 'view-length' );
-
-				$slide.find( '.paging .total' ).text( result.contentsSets.length );
-				$slide.find( '.round_box' ).show();
-				$slide.ixSlideMax({ loop: ( result['rotationCycleAvailYn'] == 'Y' ) ? true : false });
-				$slide.on( 'ixSlideMax:change', function (e) {
-					var currentPage = Math.ceil( e.currentIndex / viewLength ),
-						totalPage = Math.ceil( e.totalLength / viewLength );
-
-					$slide.find( '.paging' ).show();
-					$slide.find( '.paging .current' ).text( currentPage + 1 );
-					$slide.find( '.paging .total' ).text( totalPage );
-				});
-
-				AP.lazyLoad.add( $section.find( 'img.lazy_load' ));
-
-			}.bind( this ));
-
-		},
-
-		//에뛰드픽
-		_setEtudePick: function () {
-			var $section = this._$target.find( '.etude_pick' );
-			if ( !$section.length ) return;
-
-			this._getPixleeData();
-
-			$section.find( '.ix-list-items' ).on( 'click', 'a', function (e) {
-				e.preventDefault();
-
-				var idx = $( e.currentTarget ).parent().index(),
-					pixleeModal = new AP.PixleeModal( this._pixleeModel ).open( idx );
-			}.bind(this));
-		},
-
-		_drawPixleeList: function ( data ) {
-			var html = AP.common.getTemplate( 'main.home.pixlee-list', data );
-			this._$target.find( '.etude_pick .ix-list-items' ).html( html );
-		},
-
-		_getPixleeData: function () {
-			AP.api.getPixleePhotos({
-				albumId: '2956835'//Homepage Gallery
-			}, {
-				page: 1,
-				per_page: 20
-			}).done(function ( data ) {
-				this._$target.find( '.etude_pick .loading' ).remove();
-
-				if ( data.total ) {
-					this._pixleeModel = data.data;
-					this._drawPixleeList( data );
-					this._$target.find( '.etude_pick .slide' ).ixSlideMax();
-					AP.lazyLoad.add( '.etude_pick .lazy_load' );
-				}
-			}.bind(this));
-		},
-		
 		// 화면에 진입시 팝업 유무를 확인해서 팝업을 띄운다. 
 		_popUpload: function () {
-		
-			AP.api.mainPopups().done( function ( result ) {
 			
+			AP.api.mainPopups().done( function ( result ) {
+			 
 				$.each(result.popupList, function(index, popupInfo){
 					
-					var modal = AP.modal.info({
-						title: popupInfo.popupTitle,
-						contents: popupInfo.popupBodyText,
-						containerClass: 'agree_terms'
-					});
+					if(AP.common.getSessionStorage( 'mainPopup_'+popupInfo.popupMgmtSn) !== 'Y'){ // [S] getSessionStorage
 					
-					modal.resetPosition();
+						var modal = AP.modal.info({
+							title: popupInfo.popupTitle,
+							contents: popupInfo.popupBodyText,
+							containerClass : 'popup_check'
+					
+						}).addListener( 'modal-close', function (e) {}.bind(this)) ; 
+					
+						var $modal = modal.getElement(); 
+					
+						$modal.find( '.layer_cont' ).after( '<pre><div class="popup_check align_right"><span class="check_wrap pdb10 pdr20"><input type="checkbox" id="check1"><label for="check1">오늘하루 다시보지않기</label></span></div></pre>' );
+					
+						modal.resetPosition();
+					
+						$modal.find('.popup_check input').on( 'click', function (e) { 
+						 
+							if(e.currentTarget.checked){
+								
+								AP.common.setSessionStorage( 'mainPopup_'+popupInfo.popupMgmtSn, 'Y', (60 * 24)); // 세션기록 남김
+							}
+						
+							modal.close();
+						
+						}.bind(this));
+					} // [E] getSessionStorage
+					
 				});
+
 			}.bind(this));
 		}
 		

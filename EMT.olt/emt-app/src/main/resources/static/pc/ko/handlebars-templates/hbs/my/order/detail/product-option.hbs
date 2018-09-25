@@ -130,7 +130,9 @@
 				</div>
 				<div class="price">
 					{{#xif this.prod.ordHistProdStatusCode '===' 'ProdCancel'}}
-						<p class="font_lg mgb10"><em>취소 완료</em></p>
+						{{#if (ne this.oProdStatusCode 'ProdCancel')}}
+							<p class="font_lg mgb10"><em>취소 완료</em></p>
+						{{/if}}
 						<span>{{this.prod.cancelQty}}개 / {{currencyFormat (calc this.prod.finalOnlineSalePricePcur '*' this.prod.cancelQty)}}</span>
 					{{else}}
 						{{#xif this.status '===' 'detail'}}
@@ -149,7 +151,7 @@
 					{{/xif}}
 				</div>
 				{{#if (and (eq this.status 'detail') (ne this.prod.ordHistProdTypeCode 'BulkDc'))}}
-					{{#if (or (eq this.prod.ordHistProdStatusCode 'OrdReceivedComplete') (eq this.prod.ordHistProdStatusCode 'OrdReceivedWaiting'))}}
+					{{#if (or (eq this.statusCode 'OrdReceivedComplete') (eq this.statusCode 'OrdReceivedWaiting'))}}
 						<div class="opt_btn_wrap"><button class="btn_sm_neutral" type="button" onclick="changeOption({{this.prod.ordHistProdSn}}, '{{this.prod.ordHistProdNo}}', {{this.prod.ordProdEx.prodSn}})">옵션변경</button></div>
 					{{/if}}
 				{{/if}}

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -22,7 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
-@RequestMapping("/order")
 public class OrderBaseController extends AbstractViewController {
 
 	/** logger  */
@@ -198,7 +196,7 @@ public class OrderBaseController extends AbstractViewController {
 		/*****************************************************************
 		 * 주문금액 계산
 		 *****************************************************************/
-		model.addAttribute("ordAmtMap", makeOrdAmtList(ordEx, isMember()));
+		model.addAttribute("ordAmtMap", makeOrdAmtList(ordEx, isMember(), 0));
 
 		/*****************************************************************
 		 * 주문수량 계산
@@ -375,7 +373,7 @@ public class OrderBaseController extends AbstractViewController {
 	/*****************************************************************
 	 * 주문금액 계산
 	 *****************************************************************/
-	protected Map<String, BigDecimal> makeOrdAmtList(OrdEx ordEx, boolean member) {
+	protected Map<String, BigDecimal> makeOrdAmtList(OrdEx ordEx, boolean member, Integer depositPrice) {
 		Map<String, BigDecimal> ordAmtMap = new HashMap<String, BigDecimal>();
 
 		if (ordEx != null && ordEx.getOrdHistEx() != null && ordEx.getOrdHistEx().getOrdHistAmtExList() != null) {
@@ -405,6 +403,7 @@ public class OrderBaseController extends AbstractViewController {
 				//		+ MPlusNPromoDc + SameTimePurPromoDc + OrdUnitPromoDc + *BeautyPointExchUse*
 				//		+ *CushionPointUse* + ActivityPointExch + ProdUnitCouponDc + MPlusNCouponDc
 				//		+ Buy1GetCouponDc + OrdUnitCouponDc + ShipFeePromoDc
+				//		+ depositPrice
 				if ("OnlineProdPromoDc".equals(o.getOrdHistAmtTypeCode())
 					|| "OnlineMemberPromoDc".equals(o.getOrdHistAmtTypeCode())
 					|| "MemberDcBenefit".equals(o.getOrdHistAmtTypeCode())
@@ -419,7 +418,7 @@ public class OrderBaseController extends AbstractViewController {
 					|| "OrdUnitCouponDc".equals(o.getOrdHistAmtTypeCode())
 					|| "ShipFeePromoDc".equals(o.getOrdHistAmtTypeCode())
 					|| "PayMethodDc".equals(o.getOrdHistAmtTypeCode())) { // 2018-09-11 결제수단 할인 추가
-					totalOrdDcPriceSum = totalOrdDcPriceSum.add(o.getAmtPcur()) ;
+					totalOrdDcPriceSum = totalOrdDcPriceSum.add(o.getAmtPcur());
 				}
 
 				if ("MembershipExch".equals(o.getOrdHistAmtTypeCode())) {
@@ -432,7 +431,7 @@ public class OrderBaseController extends AbstractViewController {
 			}
 
 			//온라인 상품 가격
-			ordAmtMap.put("onlineShipProdSum", onlineShipProdSum);
+			ordAmtMap.put("OnlineShipProdSum", onlineShipProdSum);
 
 			//포장재
 			ordAmtMap.put("ShipUnitPacking", packingAmtSum);
@@ -458,21 +457,28 @@ public class OrderBaseController extends AbstractViewController {
 			ordAmtMap.put("BeautyPointExchUse", beautyPointExchUseAmt);
 			ordAmtMap.put("CushionPointUse", cushionPointUseAmt);
 
-			ordAmtMap.put("totalOrdDcPriceSum", totalOrdDcPriceSum);
+			//예치금
+			ordAmtMap.put("DepositPrice", new BigDecimal(depositPrice));
+
+			ordAmtMap.put("TotalOrdDcPriceSum", totalOrdDcPriceSum.add(new BigDecimal(depositPrice)));
 
 			//정립예정포인트(뷰티포인트)
-			ordAmtMap.put("totalBeautyPointSaveSum", new BigDecimal(0)); // 기본 0으로 세팅..
+			ordAmtMap.put("TotalBeautyPointSaveSum", new BigDecimal(0)); // 기본 0으로 세팅..
 			if (ordEx.getOrdMembershipExList() != null && ordEx.getOrdMembershipExList().size() > 0) {
 				for (OrdMembershipEx o : ordEx.getOrdMembershipExList()) {
 					if ("BP".equals(o.getMembershipServiceCode())) {
-						ordAmtMap.put("totalBeautyPointSaveSum", new BigDecimal(o.getSavingExpectedPoint()));
+						ordAmtMap.put("TotalBeautyPointSaveSum", new BigDecimal(o.getSavingExpectedPoint()));
 					}
 				}
 			}
 			// 2018-09-10 적립예정포인트 null로 표기되는 영역 바깥쪽으로 빼서 변경처리..
 			/*else{
-				ordAmtMap.put("totalBeautyPointSaveSum", new BigDecimal(0));
+				ordAmtMap.put("TotalBeautyPointSaveSum", new BigDecimal(0));
 			}*/
+
+			//화면에 표시한 최종 결제금액
+			ordAmtMap.put("FinalPamtPcur", ordEx.getOrdHistEx().getFinalPamtPcur().subtract(new BigDecimal(depositPrice)));
+
 		}
 
 		return ordAmtMap;

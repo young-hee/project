@@ -142,28 +142,16 @@
 						<div class="coupon mgt15">
 							<div class="clear">
 								<div>
-									<span class="check_wrap pd0"><input type="checkbox" id="check04_1"><label for="check04_1" class="title">쿠션포인트</label></span>
-									<div class="ui_tooltip take_out ＠tooltip-apply">
-										<button type="button" class="btn_tooltip">툴팁보기</button>
-										<span class="arr" style="display: none;"></span>
-										<div class="layer_tooltip" style="display: none;">
-											<dl>
-												<dt>뷰티포인트 사용 안내</dt>
-												<dd>
-													<ul class="list_bullet_dot">
-														<li>보유 뷰티포인트내에서 일부 또는 전액을 결제금액으로 차감하여 사용이 가능합니다.</li>
-														<li>1+1 이벤트 등 일부 행사상품은 뷰티포인트를 적용할 수 없습니다.</li>
-														<li>상품 할인과 중복 적용되지 않습니다. (원판매가 기준 사용)</li>
-														<li>할인 쿠폰과 중복 사용할 수 없습니다.</li>
-													</ul>
-													<button type="button" class="ui_close sm"><span class="sr_only">툴팁 닫기</span></button>
-												</dd>
-											</dl>
-										</div>
-									</div>
+									<span class="check_wrap pd0">
+										<input type="checkbox" th:attrappend="disabled=${ordMembershipEx.membershipAvailPoint <= 0}?'disabled'" id="cushion_point" name="cushion_point" th:data-membershipSn="${ordMembershipEx.membershipSn}" th:max="${ordMembershipEx.membershipAvailPoint}">
+										<label for="cushion_point" class="title" th:text="${ordMembershipEx.membershipName}">쿠션포인트</label>
+									</span>
 								</div>
 								<div>
-									<span class="price"><strong class="num">10,000P /</strong><span> 보유 <strong class="num">100,000P</strong></span></span>
+									<span class="price">
+										<strong class="num"><strong th:text="${#IntegUtil.toCommaNumber(ordMembershipEx.membershipAvailPoint)}">10,000</strong>P / </strong>
+										<span>보유 <strong class="num"><th:block th:text="${#IntegUtil.toCommaNumber(ordMembershipEx.membershipKeepingPoint)}">100,000</th:block>P</strong></span>
+									</span>
 								</div>
 							</div>
 							<p class="text_notice">쿠션포인트는 쿠션상품 구매 시만 사용이 가능합니다.</p>
@@ -241,9 +229,34 @@
 
 		//쿠션포인트
 		$('#cushion_point').on('change', function() {
+			var membershipSn = this.dataset.membershipsn,
+				useMembershipPoint;
+
 			if ($(this).prop('checked')) {
-				console.log("cushion checked")
+				useMembershipPoint = parseInt(this.max);
+			} else {
+				useMembershipPoint = 0;
 			}
+
+			$('#orderLoading').show();
+
+			AP.api.ordReceptChangePoint({}, {
+				ordSn : ordSn,
+				membershipSn : membershipSn,
+				useMembershipPoint : useMembershipPoint
+			}).done(function (data) {
+				if (data.ordHistEx != null) {
+
+					amtPcurInitAjax(data);
+
+					if ($('[name="depositPrice"]').length > 0 && $('[name="depositPrice"]').val() != ""){
+						AP.modal.alert('쿠션포인트 사용으로 예치금 사용이 초기화됩니다. <br/>예치금 사용액을 다시 입력해 주세요.');
+						$('[name="depositPrice"]').val('')
+					}
+				}
+			}).always(function(){
+				$('#orderLoading').hide();
+			});
 		});
 
 		//OKCashbag조회

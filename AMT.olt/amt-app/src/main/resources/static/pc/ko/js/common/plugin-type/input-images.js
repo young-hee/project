@@ -46,6 +46,7 @@
 		var _pluginName = pluginName,
 			_isIE9 = _$target.find( '.input_file_name' ).hasClass( 'ie9_lte' ),
 			_isSingle = _$target.data( 'single-input' ),
+			_isPurReview = _$target.data( 'pur-review' ),
 			_fileUid = 0,
 			_files = [];
 
@@ -88,6 +89,12 @@
 			var uId = $B.string.unique();
 			_$findInput.attr( 'id', uId );
 			_$target.find( 'label' ).attr( 'for', uId );
+			
+			$.each(_$target.find( 'label' ), function(idx, el){
+				if( $(el).hasClass('noLabal') ){
+					$(el).attr( 'for', '' );
+				}
+			});
 
 			setEvents();
 			resizeThumbnail();
@@ -107,6 +114,11 @@
 			var uId = $( e.currentTarget ).data( 'uid' ),
 				length = _files.length;
 
+			var $imageTypeWrap = $( e.currentTarget ).parent().next('.imageTypeWrap');
+			if( $imageTypeWrap.length > 0 && !$imageTypeWrap.is(':visible') ){	
+				$imageTypeWrap.show();
+			}
+			
 			$( e.currentTarget ).parent().remove();
 
 			for ( var i = 0; i < length; ++i ) {
@@ -117,6 +129,7 @@
 					break;
 				}
 			}
+			
 			if(_$result.hasClass('fileName')){	
 				_$findInput.attr("disabled", false);
 			}
@@ -126,6 +139,11 @@
 		function fileChangeHandler (e) {
 			var files = Array.prototype.slice.call( e.target.files ),
 				attachFileLength = _$result.find( 'li:not(.input_file_btn_area)' ).length;
+			
+			if( _isPurReview ){
+				attachFileLength -= _$result.find( 'li.imageTypeWrap' ).length;
+			}
+			
 			//alert("files : " + files.length);
 			//alert("attachFileLength : " + attachFileLength);			
 			//alert("_files : " + _files.length);
@@ -192,10 +210,17 @@
 		}
 
 		function attach ( result, uid ) {
-			console.log("uid" + uid);
-
 			if ( _isSingle ) {
 				_$result.html( '<img src="' + result + '">' );
+			} else if( _isPurReview ) {
+				var html = '<li class="attached"><img src="' + result + '" alt=""><button type="button" class="btn_del user_attach_img" data-uid="' + uid + '"><span class="sr_only">첨부파일 삭제</span></button></li>';
+				
+				if( _$target.find('.imageTypeWrap:visible').length > 0 ){
+					_$target.find('.imageTypeWrap:visible:first').before(html).hide();
+				} else {
+					_$target.find('ul').append( html );
+				}
+				
 			} else {
 				if(_$result.hasClass('fileName')){	
 					//_$result.html( '<li><img src="' + result + '" style="height:100%"><button type="button" class="btn_del user_attach_img" data-uid="' + uid + '"><span class="sr_only">첨부파일 삭제</span></button></li>' );
@@ -209,7 +234,12 @@
 		}
 
 		function setFindInputBtnStae () {
-			if ( _$result.find('li:not(.input_file_btn_area)').length >= MAX_LENGTH ) {
+			var imgLen = _$result.find('li:not(.input_file_btn_area)').length
+			//구매후기의 경우 가이드문구 영역은 이미지 갯수에서 제외함.
+			if( _isPurReview )
+				imgLen -= _$result.find('li.imageTypeWrap').length;
+			
+			if ( imgLen >= MAX_LENGTH ) {
 				_$inputBtnArea.hide();
 			} else {
 				_$inputBtnArea.show();

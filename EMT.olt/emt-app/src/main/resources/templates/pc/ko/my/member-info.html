@@ -56,6 +56,7 @@
 			</style>
 			<script>
 				var errorMsg = '[[${error}]]';
+				var isPopup = [[${isPopup}]];
 				if(errorMsg != '') {
 	        			AP.modal.alert( errorMsg );
 				}
@@ -69,8 +70,51 @@
 						return;
 					}
 		    	    $(this).attr("disabled", "disabled");
-					$('form').submit();
+		    	    if(isPopup) {
+
+						pwd = $('[name=userPwdEc]').val();
+						$('#send').attr('disabled', 'disabled');
+			            AP.api.checkPassword({}, { userPwdEc : pwd }).done(function(data) {
+			            	$('[name=userPwdEc]').val('');
+		        		    $.post($('form').attr('action'), function(data) {
+		        		        /**
+		        		         * 동적으로 생성된 modal의 Node Element 접근하기
+		        		         * alert, confirm, info 모두 동일
+		        		         */
+
+		        		        var contents = new Object();
+		        		        contents.contents = data;
+		        		        var modal = AP.modal.info(contents);
+		        		        var $modalEl = modal.getElement(); //jquery object
+		        		        
+		        		        $modalEl.find('.layer_wrap.layer_md').addClass('modify_my_info');
+		        		        $modalEl.find('.layer_wrap.layer_md').addClass('layer_type2');
+
+								var outContent = $(".pointbox_out");
+								$("input[type='radio'][name=member_out]").click(function(){
+									outContent.hide();
+									outContent.eq($("input[type='radio'][name=member_out]").index(this)).show();
+								});
+								
+								$("input[name='cause']").click(function () {
+								    $('#cause04 ~ .cause_box').css('display', ($(this).val() === 'cause04') ? 'block':'none');
+								    $('#cause05 ~ .cause_box').css('display', ($(this).val() === 'cause05') ? 'block':'none');
+								});		
+		        		        
+		        		        
+		        		    });
+		                }).fail(function(xhr, textStatus, errorThrown) {
+		                	AP.modal.alert("비밀번호가 일치하지 않습니다");
+		    	            $("#send").removeAttr("disabled");
+		                }).always(function() {
+		    	            $("#send").removeAttr("disabled");
+		                    //성공, 실패
+		                });
+		    	    } else {
+						$('form').submit();
+		    	    }
 				});
+
 			</script>
         </th:block>
 </body>

@@ -1,26 +1,32 @@
 package kr.ap.amt.payment.controller;
 
-import java.util.HashMap;
-
+import kr.ap.amt.payment.config.InicisPgProperties;
+import kr.ap.amt.payment.config.NaverPgProperties;
+import kr.ap.amt.payment.ini.IniPayment;
+import kr.ap.amt.payment.vo.PayDTO;
+import kr.ap.amt.payment.vo.PayProd;
+import kr.ap.amt.payment.vo.ProductItem;
+import kr.ap.amt.payment.wpay.iniWPayment;
+import kr.ap.comm.member.vo.MemberSession;
+import kr.ap.comm.support.common.AbstractController;
+import net.g1project.ecp.api.model.ap.ap.ApMemberWPayInfo;
+import net.g1project.ecp.api.model.basis.mall.MallSalesPolicy;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import kr.ap.amt.payment.config.InicisPgProperties;
-import kr.ap.amt.payment.config.NaverPgProperties;
-import kr.ap.amt.payment.ini.IniPayment;
-import kr.ap.amt.payment.vo.PayDTO;
-import kr.ap.comm.member.vo.MemberSession;
-import kr.ap.comm.support.common.AbstractController;
-import net.g1project.ecp.api.model.ap.ap.ApMemberWPayInfo;
-import net.g1project.ecp.api.model.basis.mall.MallSalesPolicy;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author aki@g1project.net
@@ -84,6 +90,177 @@ public class PaymentRestController extends AbstractController {
 
  		return ResponseEntity.ok(result);
  	}
+ 	
+ 	 /**
+     * 이니시스 MO 결제정보 조회 AJAX
+     * 
+     * @param payDTO
+     * @return
+     */
+ 	@PostMapping("/moInipayReq")
+ 	public ResponseEntity<?> moInipayReq(PayDTO payDTO) throws Exception {
+ 		
+ 		HashMap<String, Object> result = new HashMap<String, Object>();
+
+ 		if(!StringUtils.isEmpty(payDTO.getGoPayMethod()) && 
+    			(KAKAO.equals(payDTO.getGoPayMethod()) || PAYCO.equals(payDTO.getGoPayMethod()))) {    		
+    		payDTO.setpMid(inicisPgProperties.getIniDrctMid());
+    		payDTO.setSignKey(inicisPgProperties.getIniDrctSignKey());
+    	} else {
+    		payDTO.setpMid(inicisPgProperties.getIniMid());
+    		payDTO.setSignKey(inicisPgProperties.getIniDrctSignKey());
+    	}
+    	
+    	payDTO.setSiteDomain(inicisPgProperties.getMoIniSiteDomain());
+    	
+    	//가상계좌
+    	if(VBANK.equals(payDTO.getPayMethod())) {
+    		MallSalesPolicy mallSalePolicy = mallApi.getMallPolicies();
+    		payDTO.setDepositWatingHours(mallSalePolicy.getDepositWatingHours());
+    		
+    	}
+    	
+    	//모바일 인증요청 param 셋팅
+    	result = IniPayment.makeRequestParamMobile(payDTO);
+    	 
+        return ResponseEntity.ok(result);
+ 	}
+ 	
+ 	 /**
+     * 이니시스 MO WPAY 결제정보 조회 AJAX
+     * 
+     * @param payDTO
+     * @return
+     */
+ 	@PostMapping("/moWpay")
+ 	public  ResponseEntity<?> wpayRequestCertification(Model model, PayDTO payDTO) throws Exception {
+        
+    	payDTO.setpMid(inicisPgProperties.getWpayMid());
+    	
+    	if(isPcDevice()) {
+    		payDTO.setSiteDomain(inicisPgProperties.getIniSiteDomain());	//PC
+    	} else {
+    		payDTO.setSiteDomain(inicisPgProperties.getMoIniSiteDomain());	//MO
+    	}
+    	
+    	MemberSession memberSession =  getMemberSession();
+    	ApMemberWPayInfo apMemberWpayInfo = apApi.getMemberWPayInfo(memberSession.getMember_sn());
+    	
+    	if(!apMemberWpayInfo.isUseWpay()) {
+    		throw new IllegalArgumentException("원클릭 간편결제 회원이 아닙니다.");
+    	}
+    	
+    	payDTO.setWpayUserKey(apMemberWpayInfo.getWpayUserKey());
+    	
+    	//원클릭 간편결제 가입 요청 parameter 셋팅
+    	HashMap<String, String> result = iniWPayment.makeWPayRequestCertificationParam(inicisPgProperties.getWpaySeedKey(), inicisPgProperties.getWpaySeedIv(), inicisPgProperties.getWpayHashKey(), payDTO);
+    
+        return ResponseEntity.ok(result);
+        
+    }
+ 	
+ 	 /**
+     * 이니시스 MO WPAY 회원가입페이지 호출 조회 AJAX
+     * 
+     * @param payDTO
+     * @return
+     */
+ 	@PostMapping("/moWpayRegist")//이니시스-원클릭 간편결제 가입 페이지 호출
+    public ResponseEntity<?> wPayRegist(PayDTO payDTO) throws Exception {
+    
+    	if(payDTO.getMobile() == null) {
+    		payDTO.setMobile("");
+    	}
+    	
+    	if(payDTO.getBirth() == null) {
+    		payDTO.setBirth("");
+    	}
+    	
+    	if(payDTO.getBuyerName() == null) {
+    		payDTO.setBuyerName("");
+    	}
+    	
+    	if(payDTO.getSocialNo2() == null) {
+    		payDTO.setSocialNo2("");
+    	}
+    	
+    	payDTO.setpMid(inicisPgProperties.getWpayMid());
+    	
+    	if(isPcDevice()) {
+    		payDTO.setSiteDomain(inicisPgProperties.getIniSiteDomain());	//PC
+    	} else {
+    		payDTO.setSiteDomain(inicisPgProperties.getMoIniSiteDomain());	//MO
+    	}
+    	
+    	//원클릭 간편결제 가입 요청 parameter 셋팅
+    	 HashMap<String, String> result = iniWPayment.makeWPayRegistParam(inicisPgProperties.getWpaySeedKey(), inicisPgProperties.getWpaySeedIv(), inicisPgProperties.getWpayHashKey(), payDTO);
+    
+    	 //model.addAttribute("payParam", paramMap);
+    	 return ResponseEntity.ok(result);
+        
+    }
+ 	
+ 	 /**
+     * 네이버 MO 결제정보 조회 AJAX
+     * 
+     * @param payDTO
+     * @return
+     */
+ 	@PostMapping("/moNaverPay")//네이버 결제페이지 호출
+    public ResponseEntity<?> moNaverPay(Model model, PayDTO payDTO) throws Exception {
+    	
+    	//모바일 인증요청 param 셋팅
+    	HashMap<String, Object> paramMap = new HashMap<String, Object>();
+    	
+    	 paramMap.put("clientId",naverPgProperties.getNaverCid());
+    	 paramMap.put("mode", naverPgProperties.getMode());
+    	
+    	 paramMap.put("merchantPayKey", payDTO.getOid());
+    	 paramMap.put("totalPayAmount", payDTO.getPrice().replace(",", ""));	//**컴마 제외 
+    	 paramMap.put("taxScopeAmount", payDTO.getPrice().replace(",", ""));	//확인필요
+    	 paramMap.put("taxExScopeAmount", 0);	//확인필요
+    	 if(isPcDevice()) {
+    		 paramMap.put("returnUrl", inicisPgProperties.getIniSiteDomain() + "/payment/naverPayReturn"); 
+     		
+     	} else {
+     		paramMap.put("returnUrl", inicisPgProperties.getMoIniSiteDomain() + "/payment/naverPayReturn"); 
+     		
+     	}
+    	 
+    	 
+    	     	 
+    	 List<PayProd> prods = payDTO.getProds();
+    	 List<ProductItem> productItems = new ArrayList<ProductItem>();
+    	
+    	 if(!CollectionUtils.isEmpty(prods)) {
+    		 int i = 0;
+    		 int qtyCnt = 0;
+    		 for(PayProd prod : prods) {
+    			 ProductItem prodItem = new ProductItem();
+    			 
+    			 prodItem.setUid(prod.getProdSn());		//uid 상품일련번호
+        		 prodItem.setName(prod.getProdName());	//상품명
+        		 prodItem.setCount(prod.getProdQty());	//상품수
+        		 
+        		 qtyCnt = qtyCnt + prod.getProdQty();
+        		 productItems.add(prodItem);
+        		 
+        		 if(i == 0) {
+        			 paramMap.put("productName", prod.getProdName());	//대표 상품명
+        		 }
+    			 
+    		 }
+    		 paramMap.put("productCount", qtyCnt);	//총 상품 수
+    	 }
+    	 
+    	 paramMap.put("productItems", productItems);
+    	
+    	 model.addAttribute("payParam", paramMap);
+        
+    	 return ResponseEntity.ok(paramMap);
+    }
+ 	
+ 	
  	
  	 /**
      * 현금영수증 신청

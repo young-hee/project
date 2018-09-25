@@ -56,7 +56,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-prodList"] = Handlebars.te
     var stack1;
 
   return "								"
-    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.product-option","prod",depth0,"viewYn",(depths[2] != null ? depths[2].viewYn : depths[2]),"oProdCode",(depths[1] != null ? depths[1].onlineProdCode : depths[1]),"step",(depths[2] != null ? depths[2].step : depths[2]),"singleProdYn",(depths[1] != null ? depths[1].singleProdYn : depths[1]),"promoSn",null,"status",(depths[2] != null ? depths[2].status : depths[2]),"type",(depths[2] != null ? depths[2].type : depths[2]),"title",(depths[2] != null ? depths[2].title : depths[2]),"reason",(depths[2] != null ? depths[2].reason : depths[2]),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.product-option","prod",depth0,"viewYn",(depths[2] != null ? depths[2].viewYn : depths[2]),"oProdCode",(depths[1] != null ? depths[1].onlineProdCode : depths[1]),"step",(depths[2] != null ? depths[2].step : depths[2]),"singleProdYn",(depths[1] != null ? depths[1].singleProdYn : depths[1]),"promoSn",null,"status",(depths[2] != null ? depths[2].status : depths[2]),"type",(depths[2] != null ? depths[2].type : depths[2]),"title",(depths[2] != null ? depths[2].title : depths[2]),"reason",(depths[2] != null ? depths[2].reason : depths[2]),"statusCode",(depths[2] != null ? depths[2].statusCode : depths[2]),"oProdStatusCode",(depths[1] != null ? depths[1].ordHistProdStatusCode : depths[1]),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
     + "\n";
 },"14":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
@@ -94,7 +94,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-prodList"] = Handlebars.te
     var stack1;
 
   return "								"
-    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.product-option","prod",depth0,"viewYn",(depths[2] != null ? depths[2].viewYn : depths[2]),"oProdCode",(depths[1] != null ? depths[1].onlineProdCode : depths[1]),"step",(depths[2] != null ? depths[2].step : depths[2]),"singleProdYn","N","promoSn",((stack1 = (depth0 != null ? depth0.ordProdEx : depth0)) != null ? stack1.bulkDcOnlineProdCode : stack1),"type",(depths[2] != null ? depths[2].type : depths[2]),"status",(depths[2] != null ? depths[2].status : depths[2]),"title",(depths[2] != null ? depths[2].title : depths[2]),"reason",(depths[2] != null ? depths[2].reason : depths[2]),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.product-option","prod",depth0,"viewYn",(depths[2] != null ? depths[2].viewYn : depths[2]),"oProdCode",(depths[1] != null ? depths[1].onlineProdCode : depths[1]),"step",(depths[2] != null ? depths[2].step : depths[2]),"singleProdYn","N","promoSn",((stack1 = (depth0 != null ? depth0.ordProdEx : depth0)) != null ? stack1.bulkDcOnlineProdCode : stack1),"type",(depths[2] != null ? depths[2].type : depths[2]),"status",(depths[2] != null ? depths[2].status : depths[2]),"title",(depths[2] != null ? depths[2].title : depths[2]),"reason",(depths[2] != null ? depths[2].reason : depths[2]),"oProdStatusCode",(depths[1] != null ? depths[1].ordHistProdStatusCode : depths[1]),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
     + "\n";
 },"23":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
@@ -126,7 +126,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-prodList"] = Handlebars.te
     var stack1;
 
   return "								<!-- 단위상품 -->\n								"
-    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.product-option","prod",depth0,"viewYn",(depths[2] != null ? depths[2].viewYn : depths[2]),"oProdCode",(depths[1] != null ? depths[1].onlineProdCode : depths[1]),"step",(depths[2] != null ? depths[2].step : depths[2]),"singleProdYn",(depths[1] != null ? depths[1].singleProdYn : depths[1]),"typeName","뷰티포인트","promoSn",null,"type",(depths[2] != null ? depths[2].type : depths[2]),"status",(depths[2] != null ? depths[2].status : depths[2]),"title",(depths[2] != null ? depths[2].title : depths[2]),"reason",(depths[2] != null ? depths[2].reason : depths[2]),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.product-option","prod",depth0,"viewYn",(depths[2] != null ? depths[2].viewYn : depths[2]),"oProdCode",(depths[1] != null ? depths[1].onlineProdCode : depths[1]),"step",(depths[2] != null ? depths[2].step : depths[2]),"singleProdYn",(depths[1] != null ? depths[1].singleProdYn : depths[1]),"typeName","뷰티포인트","promoSn",null,"type",(depths[2] != null ? depths[2].type : depths[2]),"status",(depths[2] != null ? depths[2].status : depths[2]),"title",(depths[2] != null ? depths[2].title : depths[2]),"reason",(depths[2] != null ? depths[2].reason : depths[2]),"statusCode",(depths[2] != null ? depths[2].statusCode : depths[2]),"oProdStatusCode",(depths[1] != null ? depths[1].ordHistProdStatusCode : depths[1]),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
     + "\n";
 },"31":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
@@ -158,7 +158,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-prodList"] = Handlebars.te
     var stack1;
 
   return "								<!-- 단위상품 -->\n								"
-    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.product-option","prod",depth0,"viewYn",(depths[2] != null ? depths[2].viewYn : depths[2]),"oProdCode",(depths[1] != null ? depths[1].onlineProdCode : depths[1]),"step",(depths[2] != null ? depths[2].step : depths[2]),"singleProdYn",(depths[1] != null ? depths[1].singleProdYn : depths[1]),"typeName","진주알상품","promoSn",null,"status",(depths[2] != null ? depths[2].status : depths[2]),"type",(depths[2] != null ? depths[2].type : depths[2]),"title",(depths[2] != null ? depths[2].title : depths[2]),"reason",(depths[2] != null ? depths[2].reason : depths[2]),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.prodPartial || (depth0 && depth0.prodPartial) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"my.order.detail.product-option","prod",depth0,"viewYn",(depths[2] != null ? depths[2].viewYn : depths[2]),"oProdCode",(depths[1] != null ? depths[1].onlineProdCode : depths[1]),"step",(depths[2] != null ? depths[2].step : depths[2]),"singleProdYn",(depths[1] != null ? depths[1].singleProdYn : depths[1]),"typeName","진주알상품","promoSn",null,"status",(depths[2] != null ? depths[2].status : depths[2]),"type",(depths[2] != null ? depths[2].type : depths[2]),"title",(depths[2] != null ? depths[2].title : depths[2]),"reason",(depths[2] != null ? depths[2].reason : depths[2]),"statusCode",(depths[2] != null ? depths[2].statusCode : depths[2]),"oProdStatusCode",(depths[1] != null ? depths[1].ordHistProdStatusCode : depths[1]),{"name":"prodPartial","hash":{},"data":data})) != null ? stack1 : "")
     + "\n";
 },"39":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
@@ -174,7 +174,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-prodList"] = Handlebars.te
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
 
   return ((stack1 = helpers["if"].call(alias1,(helpers.eq || (depth0 && depth0.eq) || helpers.helperMissing).call(alias1,(data && data.index),0,{"name":"eq","hash":{},"data":data}),{"name":"if","hash":{},"fn":container.program(42, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.prodList : depth0),{"name":"each","hash":{},"fn":container.program(52, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.ordHistProdList : depth0),{"name":"each","hash":{},"fn":container.program(52, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"42":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.lambda, alias4=container.escapeExpression;
 
@@ -339,7 +339,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-prodList"] = Handlebars.te
     var alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
   return "									<span class=\"strong\"><b>"
-    + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].step : depths[1]),"two",{"name":"eq","hash":{},"data":data}),(depth0 != null ? depth0.cancelQtySum : depth0),(depth0 != null ? depth0.ordQtySum : depth0),{"name":"condition","hash":{},"data":data}))
+    + alias3((helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,(depths[1] != null ? depths[1].step : depths[1]),"two",{"name":"eq","hash":{},"data":data}),(depth0 != null ? depth0.claimQtySum : depth0),(depth0 != null ? depth0.ordQtySum : depth0),{"name":"condition","hash":{},"data":data}))
     + "</b>개</span> /\n									<span class=\"strong\"><b>"
     + alias3((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,(depth0 != null ? depth0.totalProductSaleAmount : depth0),{"name":"currencyFormat","hash":{},"data":data}))
     + "</b></span>\n";
@@ -358,7 +358,7 @@ this["AP"]["handlebars"]["my"]["order"]["order-detail-prodList"] = Handlebars.te
 },"79":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
-  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.prodList : depth0),{"name":"each","hash":{},"fn":container.program(80, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.ordHistProdList : depth0),{"name":"each","hash":{},"fn":container.program(80, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"80":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 

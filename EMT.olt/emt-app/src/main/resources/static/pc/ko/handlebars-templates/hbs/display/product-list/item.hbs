@@ -103,7 +103,7 @@
 			<div class="info_box">
 
 			<!--// 상품명 -->
-				{{#xif this.displayMenuId '!=' 'beauty_select_shop'}}
+				
 				{{#xif this.displayMenuId '!=' 'hotdeal'}}
 
 					{{#xif this.flags.length '>' 0}}
@@ -137,13 +137,15 @@
 					{{/xif}}
 
 				{{/xif}}
-				{{/xif}}
+				
 				<div class="title_area">
 					<p class="s_title">
-						<em class="tag">{{stockTxt this.saleDisplayStatus this.prodTypeCode}}</em>
-						<span>{{{ this.linePromoDesc }}}</span>
+						{{{ this.linePromoDesc }}}
 					</p>
-					<h3 class="h_title">{{ this.onlineProdName }}</h3>
+					<h3 class="h_title">
+						<em>{{stockTxt this.saleDisplayStatus this.prodTypeCode}}</em>
+						{{ this.onlineProdName }}
+					</h3>
 				</div>
 				<!-- 상품명 //-->
 
@@ -155,8 +157,8 @@
 					<!--// 공용 ( 핫딜, 컬러컬렉션 제외 ) -->
 
 					<div class="item_option">
-						{{#xif this.productCount '>' 1 }}
-							{{#xif this.colorCnt '>' 0 }}
+						{{#xif this.productCount '>' 0 }}
+							{{#xif this.colorCnt '>' 1 }}
 								<p class="color_name">{{ this.colorCnt }} colors</p>
 							{{else}}
 								<p class="color_name">{{ this.productCount }} options</p>
@@ -169,7 +171,12 @@
 							</div>
 
 							<div class="color_chips">
-								<p class="btn_more"><button type="button" class="btn_color_more"><span></span><span class="sr_only">컬러 더보기</span></button></p>
+								<p class="btn_more">
+									<button type="button" class="btn_color_more">
+										<span></span>
+										<span class="sr_only">컬러 더보기</span>
+									</button>
+								</p>
 
 								<!--/* 컬러칩 */-->
 								<div class="chips slide" data-ix-options="view-length:1;">
@@ -189,7 +196,10 @@
 								<div class="option_select">
 									<div class="color_group ui_select" data-not-label-change="false">
 										<input type="hidden" name="">
-										<button type="button"><span style="background-color:#e1e1e1" data-color="e1e1e1"></span><span>컬러군 선택</span></button>
+										<button type="button">
+											<span style="background-color:#e1e1e1" data-color="e1e1e1"></span>
+												<span>컬러군 선택</span>
+										</button>
 										<ul class="select_options">
 											<li class="select_option"><code class="label_markup" style="display:none">전체</code><a data-value="00"><span style="background-color:#999999" data-color="999999">ALL</span><span>전체</span></a></li>
 											{{#each this.colorGroups}}
@@ -208,12 +218,12 @@
 								<p class="option_close"><button type="button">닫기</button></p>
 							</div>
 						{{else}}
-							<div class="option_wrap">
+							<div class="item_option">
 								<div class="select_wrap"><!-- 선택시 open 클래스  -->
 									<select name="options" tabindex="-1" title="상품 옵션 선택">
 										<option value="">옵션 선택</option>
 										{{#each this.products}}
-											<option value="{{ this.prodSn }}">{{ this.prodName }}</option>
+											<option value="{{ this.prodSn }}" data-status="{{this.saleDisplayStatus}}">{{ this.prodName }} {{stockTxt this.saleDisplayStatus this.prodTypeCode}}</option>
 										{{/each}}
 									</select>
 								</div>
@@ -339,13 +349,12 @@
 								</span>
 							{{/xif}}
 							<div class="price">
-								{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
-									<del>{{ numberFormat this.onlineProdPriceSummary.minBeforeOnlineSalePrice }}<em>원</em></del>
-								{{/xif}}
 								<strong>
 									{{ numberFormat this.onlineProdPriceSummary.minOnlineMemberDiscountPrice }}<em>원{{#xif this.onlineProdPriceSummary.minOnlineSalePrice '!=' this.onlineProdPriceSummary.maxOnlineSalePrice}}~{{/xif}}</em>
 								</strong>
-
+								{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+									<del>{{ numberFormat this.onlineProdPriceSummary.minBeforeOnlineSalePrice }}<em>원</em></del>
+								{{/xif}}
 							</div>
 
 						{{/xif}}

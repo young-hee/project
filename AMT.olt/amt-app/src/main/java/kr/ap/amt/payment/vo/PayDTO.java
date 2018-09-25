@@ -6,7 +6,6 @@
  */
 package kr.ap.amt.payment.vo;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -40,7 +39,11 @@ public class PayDTO {
     // INICIS 취소시 param
     private String tid;	//거래아이디
     private String cancelMsg;	//취소사유
-    
+
+	//KRP
+	private String krpSecretKey;
+	private String krpRequestUrl;
+	//private String tid;
     
     // NAVER
     //private String prodSn;	//상품일련번호
@@ -96,7 +99,6 @@ public class PayDTO {
 	public void setBuyerName(String buyerName) {
 		this.buyerName = buyerName;
 	}
-	
 	public String getRepProdName() {
 		return repProdName;
 	}
@@ -139,12 +141,23 @@ public class PayDTO {
 	public void setSiteDomain(String siteDomain) {
 		this.siteDomain = siteDomain;
 	}
-	
 	public Integer getDepositWatingHours() {
 		return depositWatingHours;
 	}
 	public void setDepositWatingHours(Integer depositWatingHours) {
 		this.depositWatingHours = depositWatingHours;
+	}
+	public String getKrpSecretKey() {
+		return krpSecretKey;
+	}
+	public void setKrpSecretKey(String krpSecretKey) {
+		this.krpSecretKey = krpSecretKey;
+	}
+	public String getKrpRequestUrl() {
+		return krpRequestUrl;
+	}
+	public void setKrpRequestUrl(String krpRequestUrl) {
+		this.krpRequestUrl = krpRequestUrl;
 	}
 	public String getTid() {
 		return tid;

@@ -4,10 +4,9 @@
 					<img alt="" class="thm_cart_item" th:src="${bulkDcOnlineProd.bulkDcOnlineProdImgUrl}">
 					<div class="cart_table_cell">
 						<!--결제 히든값-->
-						<input type="hidden" name="bulkDcProdName" th:value="${bulkDcOnlineProd.bulkDcOnlineProdName}"/>
 						<th:block th:if="${#lists.size(bulkDcOnlineProd.ordOnlineProdFoList) > 0}" th:each="ordOnlineProd, iter : ${bulkDcOnlineProd.ordOnlineProdFoList}">
 							<input type="hidden" name="onlinePordSn" th:value="${ordOnlineProd.onlineProdCode}"/>
-							<input type="hidden" name="prodName" th:value="${ordOnlineProd.onlineProdName}"/>
+							<input type="hidden" name="prodName" th:value="${bulkDcOnlineProd.bulkDcOnlineProdName}"/>
 							<input type="hidden" name="prodQty" th:value="${ordOnlineProd.ordQtySum}"/>
 							<input type="hidden" id="ordHistProdCnt" name="ordHistProdCnt" th:value="${#lists.size(ordOnlineProd.ordHistProdList)}"/>
 						</th:block>

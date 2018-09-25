@@ -90,8 +90,16 @@ public class MyOrdDTO {
 	// 테이크 아웃 카운트
 	private Integer storeOrdOnlineProdCnt;
 
+	// 온라인 취소 카운트
+	private Integer onlineCancelCnt;
+
+	// 테이크 아웃 카운트
+	private Integer storeCancelCnt;
+
 	// 매장 정보
 	private StoreEx storeEx;
+
+
 
 	public MyOrdDTO(OrdEx ordEx) {
 
@@ -201,6 +209,8 @@ public class MyOrdDTO {
 		totalOrdOnlineProdCnt = 0;
 		shipOrdOnlineProdCnt = 0;
 		storeOrdOnlineProdCnt = 0;
+		onlineCancelCnt = 0;
+		storeCancelCnt = 0;
 		BigDecimal finalOnlineSaleAmtPcurSum = new BigDecimal(0);
 
 		// List<OrdMembershipEx> ordMembershipList = ordEx.getOrdMembershipExList();
@@ -260,6 +270,23 @@ public class MyOrdDTO {
 					}
 					if (ooe.getOrdHistProdExList() != null && ooe.getOrdHistProdExList().size() > 0)
 						ohpe = ("cancel".equals(state)) ? ooe.getCancelOrdHistProdExList() : ooe.getOrdHistProdExList();
+
+					List<OrdHistProdEx> cancelList = ooe.getCancelOrdHistProdExList();
+					if (cancelList != null && cancelList.size() > 0) {
+						for (OrdHistProdEx p : cancelList) {
+							if ("Ord".equals(p.getOrdHistProdTypeCode())
+								|| "BulkDc".equals(p.getOrdHistProdTypeCode())
+								|| "SameTimePur".equals(p.getOrdHistProdTypeCode())) {
+								if ("Y".equals(p.getStorePickupProdYn())) {
+									storeCancelCnt++;
+								}
+								else {
+									onlineCancelCnt++;
+								}
+							}
+
+						}
+					}
 				}
 				else if (ordOtfEx instanceof ClaimRtnOrderEx) {
 					ClaimRtnOrderEx croe = (ClaimRtnOrderEx) ordOtfEx;
@@ -271,6 +298,7 @@ public class MyOrdDTO {
 					for (OrdHistProdEx ordHistProdEx : ohpe) { //주문이력상품 목록
 						// 매장번호가 존재하는지..
 						boolean storePickup = ordShipAddressEx.getStoreSn() != null;
+
 						String prodCode = ordHistProdEx.getOrdProdEx().getOnlineProdCode();
 						if (ordHistProdEx.getOrdProdEx().getBulkDcOnlineProdCode() != null) {
 							prodCode = ordHistProdEx.getOrdProdEx().getBulkDcOnlineProdCode();
@@ -365,6 +393,7 @@ public class MyOrdDTO {
 								}
 							}
 						}
+
 
 						totalOrdOnlineProdCnt++;
 
@@ -809,5 +838,21 @@ public class MyOrdDTO {
 
 	public StoreEx getStoreEx() {
 		return storeEx;
+	}
+
+	public Integer getOnlineCancelCnt() {
+		return onlineCancelCnt;
+	}
+
+	public void setOnlineCancelCnt(Integer onlineCancelCnt) {
+		this.onlineCancelCnt = onlineCancelCnt;
+	}
+
+	public Integer getStoreCancelCnt() {
+		return storeCancelCnt;
+	}
+
+	public void setStoreCancelCnt(Integer storeCancelCnt) {
+		this.storeCancelCnt = storeCancelCnt;
 	}
 }

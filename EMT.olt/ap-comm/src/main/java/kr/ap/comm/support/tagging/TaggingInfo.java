@@ -2,6 +2,10 @@ package kr.ap.comm.support.tagging;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import kr.ap.comm.support.tagging.TaggingInfo.Product;
 
 /**
  * GA/AA 태깅을 위한 정보
@@ -10,15 +14,19 @@ public class TaggingInfo implements Serializable {
 
 	private Customer customer;
 
-	private String site;
-	private String siteName;
-	private ChannelType channel;
+	private String site = "undefined";
+	private String siteName = "undefined";
+	private ChannelType channel = ChannelType.PC;
 
 	private Page page;
 
 	private Search search;
 
-	private String cid; // GA 에서 각 사용자에게 할당하는 CID 값
+	private String cid = "undefined"; // GA 에서 각 사용자에게 할당하는 CID 값
+	
+	private List<Product> prodList = new ArrayList<>();
+	
+	private Payment payment;
 
 	public static class Customer implements Serializable {
 		private String userId = "undefined";
@@ -123,8 +131,8 @@ public class TaggingInfo implements Serializable {
 	public static class Page implements Serializable {
 		private String countryCode = "KOR";
 		private String langCode = "KO";
-		private String name;
-		private String url;
+		private String name = "undefined";
+		private String url = "undefined";
 
 		public String getCountryCode() {
 			return countryCode;
@@ -160,9 +168,9 @@ public class TaggingInfo implements Serializable {
 	}
 
 	public class Search implements Serializable {
-		private String keyword;
-		private String result; // O,X
-		private String type; // 직접입력(KEY_IN), 추천검색어(RECOMMEND), 최근검색어(RECENT), 인기검색어(POPULAR)
+		private String keyword = "undefined";
+		private String result= "undefined"; // O,X
+		private String type= "undefined"; // 직접입력(KEY_IN), 추천검색어(RECOMMEND), 최근검색어(RECENT), 인기검색어(POPULAR)
 		private int resultCount;
 
 		public String getKeyword() {
@@ -199,16 +207,16 @@ public class TaggingInfo implements Serializable {
 	}
 
 	public static class Product implements Serializable {
-		private String sku;
-		private String name;
-		private String brand;
+		private String sku = "undefined";
+		private String name = "undefined";
+		private String brand = "undefined";
 		private BigDecimal price;
 		private int quantity;
-		private String variant; // 제품 옵션, 단일옵션인경우 '옵션없음'
-		private String coupon; // 쿠폰코드_쿠폰명, 특정 상품/카테고리/브랜드에 적용되는 쿠폰
+		private String variant = "undefined"; // 제품 옵션, 단일옵션인경우 '옵션없음'
+		private String coupon = "undefined"; // 쿠폰코드_쿠폰명, 특정 상품/카테고리/브랜드에 적용되는 쿠폰
 		private String shippingType = "Normal";
-		private String sapCode;
-		private String beautyPoint;
+		private String sapCode = "undefined";
+		private String beautyPoint = "undefined";
 
 		public String getSku() {
 			return sku;
@@ -292,13 +300,13 @@ public class TaggingInfo implements Serializable {
 	}
 
 	public static class Payment implements Serializable {
-		private String checkoutOption; // 결제수단
-		private String orderNo; // 주문번호
+		private String checkoutOption = "undefined"; // 결제수단
+		private String orderNo = "undefined"; // 주문번호
 		private BigDecimal amount; // 최종결제 금액
-		private BigDecimal tax = BigDecimal.ZERO;
+		private BigDecimal tax;
 		private BigDecimal shippingFee;
-		private String coupon; // 쿠폰코드_쿠폰명, 장바구니 쿠폰
-		private String detailPaymentMethod; // 은행명 or 카드명, 결제수단_카드명
+		private String coupon = "undefined"; // 쿠폰코드_쿠폰명, 장바구니 쿠폰
+		private String detailPaymentMethod = "undefined"; // 은행명 or 카드명, 결제수단_카드명
 
 		public String getCheckoutOption() {
 			return checkoutOption;
@@ -411,5 +419,21 @@ public class TaggingInfo implements Serializable {
 
 	public void setCid(String cid) {
 		this.cid = cid;
+	}
+	
+	public void setProdList(List<Product> prodList) {
+	    this.prodList = prodList;
+	}
+	
+	public List<Product> getProdList() {
+        return this.prodList;
+    }
+	
+	public void setPayment(Payment payment) {
+	    this.payment = payment;
+	}
+	
+	public Payment getPayment() {
+	    return this.payment;
 	}
 }

@@ -98,6 +98,10 @@
 		guestCert: { path: '/customer/guestCert', method: 'POST' },
 		//타인명의인증 확인(휴대폰인증)
 		guestConfirm: { path: '/customer/guestConfirm', method: 'POST' },
+		//타인명의인증 확인(휴대폰인증)
+		findGuestConfirm: { path: '/customer/find/guestConfirm', method: 'POST' },
+		//본인인증
+		findStepOne: { path: '/customer/find/stepOne', method: 'POST' },
 		//본인인증
 		stepOne: { path: '/customer/stepOne', method: 'POST' },
 		stepOneF: { path: '/customer/stepOneF', method: 'POST' },
@@ -232,9 +236,6 @@
 		// 쿠폰 등록
 		registerCoupon: { path:'/my/api/registerCoupon', method: 'POST'},
 
-		// 상품평설문 목록
-		getProductReviewSurveys: { path:'/my/api/getProductReviewSurveys', method: 'GET'},
-		
 		/**
 		 * 배송지 **********************************************************
 		 */
@@ -503,6 +504,16 @@
 			}
 		},
 		
+		//상품조회(최근본상품)
+		getWithOnlineProdCodesProdList: { path:'/display/getWithOnlineProdCodesProdList', method: 'POST' , data: {
+				onlineProdCodes: null, //온라인상품코드목록
+				prodListUnit : 'OnlineProd',
+				prodSort: 'NewProd', //판매순(Bestselling), 신상품순(NewProd), 높은 가격순(HighestPrice), 낮은가격순(LowestPrice), 상품평순(MostProdReview)
+				offset: 0,
+				limit: 10
+			}
+		},
+		
 		// 앱 다운 URL 문자 전송
 		sendSms : {path : '/product/sendSms', method : 'GET', data: {
 			cellNum : ''
@@ -670,9 +681,12 @@
 		//주문단위 사은품
 		ordReceptChangeOrdUnit: { path: '/order/ordReceptChangeOrdUnit', method: 'POST'},
 
-		// PC 이니시스 결제 데이터 조회
-		inipayReq: { path: '/payment/inipayReq', method: 'POST'},
-
+		// MO 이니시스 결제 데이터 조회
+		moInipayReq: { path: '/payment/moInipayReq', method: 'POST'},
+		
+		// MO 네이버 결제 데이터 조회
+		moNaverPay: { path: '/payment/moNaverPay', method: 'POST'},
+		
 		// wpay회원정보 조회
 		getMemberWPayInfo: { path: '/payment/getMemberWPayInfo', method: 'GET'},
 
@@ -826,7 +840,14 @@
         		verifNo : null //인증번호 (패키지레터인경우 필수)
 			}
 		},
-		
+		//AP 전용 뷰티테스터 행사 상품 리뷰 목록 조회
+		getRegularEventProdReviews : {path:'/display/beauty_test/regular_event_product_reviews', method: 'POST', data:{
+			regularEventSn: null,			// - integer($int64)	상시행사일련번호
+			offset: 0,
+			limit: 10,
+			reviewSort: null
+		}},
+    
 		//AP전용 뷰티테스터 신청내역 삭제
 		regularEventDeleteParticipated: { path:'/display/beauty_test/deleteParticipated', method: 'POST', data: {
 				regularEventSn  : null, //행사일련번호
@@ -839,6 +860,13 @@
 				prodReviewSn: null	//상품평일련번호
 			}
 		},
+		
+		//뷰티테스터 베스트 상품 리뷰 목록
+		regularEventBestProductReviews: {path:'/display/beauty_test/bestProductReviews', method: 'POST', data: {
+				order: null	//정렬방식 - Last(최근등록순) - HighScope(별점높은순) - LowScope(별점낮은순) - Recommend(추천많은순) - View(조회많은순) - WeeklyView(주간조회많은순)
+			}
+		},
+		
 		
 		/**
 		 * 행사참여 신청자 목록
@@ -981,8 +1009,8 @@
 		
 		// 브랜드 카드 목록
 		getBrandCards: { path:'/display/getBrandCards', method: 'GET', data: {
-			sort : null, //(필수) 누적 좋아요 순 / 넷스루 추천 순 / 랜덤 순(장바구니용)
-			faveBrandCnt : null, // 기본 브랜드 목록 앞에 덧붙여 보여줄, 회원이 좋아요 누른 브랜드 목록 개수 (브랜드 메인 상단에 회원이 좋아요 누른 브랜드 3개 먼저 보여주기 위해 필요)
+			sort : 'ShoppingMarkCnt', //(필수) 누적 좋아요 순 / 넷스루 추천 순 / 랜덤 순(장바구니용)
+			faveBrandCnt : 0, // 기본 브랜드 목록 앞에 덧붙여 보여줄, 회원이 좋아요 누른 브랜드 목록 개수 (브랜드 메인 상단에 회원이 좋아요 누른 브랜드 3개 먼저 보여주기 위해 필요)
 			offset : 0,
 			limit : 10 
 		}},
@@ -991,6 +1019,12 @@
 		getBrandContents: { path:'/display/getBrandContents', method: 'GET', data: {
 			displayMenuId : null //(필수) 전시메뉴아이디
 		}},
+		
+		/**
+		 * 홈화면 진입시 등록한 팝업 노출
+		 * 
+		 */
+		mainPopups : { path: '/display/mainPopups' , method : 'GET'},
 		
 		/**
 		 * test *************************************************************

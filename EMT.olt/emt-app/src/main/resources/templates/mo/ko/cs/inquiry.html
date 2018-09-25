@@ -210,15 +210,31 @@
 				temp = null;
 			}
 
+			//글자수 체크
 			$('[name=inquiryBodyText]').on('keyup', function(e){
 				var str = $(this).val();
-				var enterCount = AP.common.getEnterCount(str);
+				var enterCount = getEnterCount(str);
 
 				if(str.length + enterCount > 2000){
 					$(this).val(str.substring(0,(2000 - enterCount)));
 					AP.modal.alert('내용은 최대 2000자까지 입력 가능합니다.');
 				}
 			});
+
+			function getEnterCount( str ) {
+				var result = 0;
+
+				if ( !_.isEmpty( str ) ) {
+					var pattern = /\n/g;
+					if ( pattern.test( str ) ) {
+						result = str.match( pattern ).length;
+					} else {
+						result = 0;
+					}
+				}
+
+				return result;
+			}
 		</script>
 	</th:block>
 	<body>

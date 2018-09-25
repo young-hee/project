@@ -106,9 +106,9 @@
 			if (status == 'detail') {
 				$('.check_all').hide();
 				if (type == 'exchange') {
-					setViewYn('N', 'N', claimYn, 'N', 'N', claimYn, 'Y');
+					setViewYn('N', 'N', claimYn, 'N', 'Y');
 				} else {
-					setViewYn('N', 'N', claimYn, 'Y', 'N', claimYn, 'Y');
+					setViewYn('N', 'N', claimYn, 'Y', 'Y');
 				}
 				getOrdInfo();
 			} else if (status == 'request') {
@@ -117,19 +117,19 @@
 													+ getTitle() + '하실 상품을 선택해 주세요.');
 					$('.check_all').show();
 					if (type == 'cancel') {
-						setViewYn('Y', 'N', 'N', 'Y', 'N', 'N', 'Y');
+						setViewYn('Y', 'N', 'N', 'Y', 'Y');
 					} else {
-						setViewYn('Y', 'Y', 'N', 'N', 'N', 'N', 'N');
+						setViewYn('Y', 'Y', 'N', 'N', 'N');
 					}
 					getOrdInfo();
 				} else if (step == 'two') {
 					$('.check_all').hide();
 					if (type == 'exchange') {
-						setViewYn('N', 'N', 'Y', 'N', 'Y', 'N', 'Y');
+						setViewYn('N', 'N', 'Y', 'N', 'Y');
 					} else if (type == 'cancel') {
-						setViewYn('N', 'N', 'N', 'Y', 'Y', 'N', 'Y');
+						setViewYn('N', 'N', 'N', 'Y', 'Y');
 					} else {
-						setViewYn('N', 'N', 'Y', 'Y', 'Y', 'N', 'Y');
+						setViewYn('N', 'N', 'Y', 'Y', 'Y');
 					}
 				}
 			}
@@ -200,14 +200,12 @@
 			$('html, body').scrollTop(0);
 		}
 
-		function setViewYn(checkBox, selectReason, selectReasonResult, payInfo, addPay, addPayResult, addressInfo) {
+		function setViewYn(checkBox, selectReason, selectReasonResult, payInfo, addressInfo) {
 			viewYn = {
 				checkBox : checkBox,
 				selectReason : selectReason,
 				selectReasonResult : selectReasonResult,
 				payInfo : payInfo,
-				addPay : addPay,
-				addPayResult : addPayResult,
 				addressInfo : addressInfo
 			}
 
@@ -251,10 +249,19 @@
 			$('.ui_accordion > .takeout').empty();
 			$('.ui_accordion > .freebies').empty();
 
+			var onlineCnt =  ord.shipOrdOnlineProdCnt;
+			if ( status == 'request' && type == 'cancel' ) {
+				if (step == 'one') {
+					onlineCnt = ord.shipOrdOnlineProdCnt - ord.onlineCancelCnt;
+				} else {
+					onlineCnt = ord.onlineCancelCnt;
+				}
+			}
+
 			//온라인 주문 상품
 			if (ord.shipOrdOnlineProdCnt > 0) {
 				var onlineProds = AP.common.getTemplate('my.order.order-detail-prodList', {
-					cnt : ord.shipOrdOnlineProdCnt,
+					cnt : onlineCnt,
 					list : ord.shippingOrdOnlineProdList,
 					mnList : ord.shippingMNPromoProdList,
 					bList : ord.shippingOrdOnlineBeautyPointProdList,
@@ -273,10 +280,19 @@
 				$('.ui_accordion > .online').append(onlineProds);
 			}
 
+			var storeCnt =  ord.storeOrdOnlineProdCnt;
+			if ( status == 'request' && type == 'cancel' ) {
+				if (step == 'one') {
+					onlineCnt = ord.storeOrdOnlineProdCnt - ord.storeCancelCnt;
+				} else {
+					onlineCnt = ord.storeCancelCnt;
+				}
+			}
+
 			//테이크아웃 주문 상품
 			if (ord.storeOrdOnlineProdCnt > 0) {
 				var takeoutProds = AP.common.getTemplate('my.order.order-detail-prodList', {
-					cnt : ord.storeOrdOnlineProdCnt,
+					cnt : storeCnt,
 					list : ord.storePickupOrdOnlineProdList,
 					mnList : ord.storePickupMNPromoProdList,
 					bList : ord.shippingOrdOnlineBeautyPointProdList,
@@ -321,7 +337,7 @@
 				var payInfo = AP.common.getTemplate('my.order.order-detail-payInfo', {
 					type : type,
 					step : step,
-					viewYn : viewYn,
+					claimYn : claimYn,
 					ordPayCompareList : ord.goods.ordPayCompareList,
 					ordPayResult : ord.ordPayResult,
 					ordSavingPoint : ord.ordSavingPoint,
@@ -471,7 +487,7 @@
 			modal.getElement().find( '.ui_find_addresses' ).findAddresses();
 
 			$('#b_chgAddress').off('click').on('click', function(e) {
-				$('input[name=shipMsg]').val($.trim($('input[name=shipMsg]').val()));
+				$('#address2').val($.trim($('#address2').val()));
 				var $form = $('#f_shipAddressInfo');
 
 				if($form.valid()) {
@@ -730,6 +746,11 @@
 			AP.modal.alert('개발중입니다.');
 		}
 
+		//배송비 추가결제 버튼 클릭
+		function doAddPay() {
+			//TODO : 배송비 추가결제
+			AP.modal.alert('개발중입니다.');
+		}
 
 	</script>
 </th:block>

@@ -134,8 +134,12 @@
 		guestCert: { path: '/customer/guestCert', method: 'POST' },
 		//타인명의인증 확인(휴대폰인증)
 		guestConfirm: { path: '/customer/guestConfirm', method: 'POST' },
+		//타인명의인증 확인(휴대폰인증)
+		findGuestConfirm: { path: '/customer/find/guestConfirm', method: 'POST' },
 		//본인인증
 		stepOne: { path: '/customer/stepOne', method: 'POST' },
+		//본인인증
+		findStepOne: { path: '/customer/find/stepOne', method: 'POST' },
 		stepOneF: { path: '/customer/stepOneF', method: 'POST' },
 		//약관동의
 		stepTwo: { path: '/customer/stepTwo', method: 'POST' },
@@ -808,6 +812,9 @@
 
 		// 결제금액확인
 		ordReceptPayAmt: { path: '/order/ordReceptPayAmt', method: 'POST'},
+
+		// 예치금 변경
+		depositPriceChange: { path: '/order/depositPriceChange', method: 'POST'},
 
 		// 주문정보변경
 		ordReceptChange: { path: '/order/ordReceptChange', method: 'POST'},

@@ -281,14 +281,14 @@
 
 			//Kakao Pay 1000원미만시 결제 불가
 			var goPayMethod = $('input[name=goPayMethod]').val();
-			if ("onlykakaopay" == goPayMethod && pgPrice < 1000) {
-				AP.modal.alert("카카오페이 결제금액이 천원 미만시 결제할 수 없습니다. <br/>다른 결제수단을 선택하세요.");
+			if (pgPrice > 0 && "onlykakaopay" == goPayMethod && pgPrice < 1000) {
+				AP.modal.alert("결제금액이 천원 미만인 경우 카카오페이로 결제할 수 없습니다. <br/>다른 결제수단을 선택하세요.");
 				$('#kakao_pay').trigger("click");
 				return false;
 			}
 			//Payco 1000원미만시 결제 불가
-			if ("onlypayco" == goPayMethod && pgPrice < 1000) {
-				AP.modal.alert("페이코가 결제금액이 천원 미만시 결제할 수 없습니다. <br/>다른 결제수단을 선택하세요.");
+			if (pgPrice > 0 && "onlypayco" == goPayMethod && pgPrice < 1000) {
+				AP.modal.alert("결제금액이 천원 미만인 경우 페이코로 결제할 수 없습니다. <br/>다른 결제수단을 선택하세요.");
 				$('#payco').trigger("click");
 				return false;
 			}
@@ -387,14 +387,13 @@
 			}
 
 			var $form = $("form[name='orderForm']");
-			
+
 			//상품명 대표 상품명 한개로 셋팅
 			var $_productName = $(".item_info").find("input:hidden[name='prodName']").first();
-			var $_bulkDcProductName = $(".item_info").find("input:hidden[name='bulkDcProdName']").first();
 			$hidden = $("<input />");
 			$hidden.prop("type", "hidden");
 			$hidden.prop("name", "repProdName");
-			$hidden.prop("value", $_bulkDcProductName.val() ? $_bulkDcProductName.val() : $_productName.val());
+			$hidden.prop("value", $_productName.val());
 			$form.append($hidden);
 			
 			var actionUrl;
@@ -416,18 +415,27 @@
 					$hidden.prop("type", "hidden");
 					$hidden.prop("name", "prods[" + idx + "].prodSn");
 					$hidden.prop("value", $_onlinePordSn.val());
+					if ($('[name="prods[' + idx + '].prodSn"]').length > 0) {
+						$('[name="prods[' + idx + '].prodSn"]').remove();
+					}
 					$form.append($hidden);
 
 					$hidden = $("<input />");
 					$hidden.prop("type", "hidden");
 					$hidden.prop("name", "prods[" + idx + "].prodName");
 					$hidden.prop("value", $_productName.val());
+					if ($('[name="prods[' + idx + '].prodName"]').length > 0) {
+						$('[name="prods[' + idx + '].prodName"]').remove();
+					}
 					$form.append($hidden);
 
 					$hidden = $("<input />");
 					$hidden.prop("type", "hidden");
 					$hidden.prop("name", "prods[" + idx + "].prodQty");
 					$hidden.prop("value", $_prodQty.val());
+					if ($('[name="prods[' + idx + '].prodQty"]').length > 0) {
+						$('[name="prods[' + idx + '].prodQty"]').remove();
+					}
 					$form.append($hidden);
 				});
 

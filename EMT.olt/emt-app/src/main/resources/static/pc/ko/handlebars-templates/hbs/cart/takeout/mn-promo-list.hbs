@@ -19,12 +19,16 @@
 						<a href="#none"><strong>{{ ../../promoName }}</strong></a>
 						<!-- /* 가격이 들어갈 경우 */ -->
 						<div class="price">
-							{{#if (ne ../finalOnlineSalesAmountInfo null) }}
-								<span class="strong"><b>{{numberFormat ../finalOnlineSalesAmountInfo.standardCurrency.amount }}</b>원</span>
-							{{/if}}
-							{{#if (ne ../productSaleAmountInfo null) }}
-								{{#if (and (ne ../productSaleAmountInfo.standardCurrency.amount ../finalOnlineSalesAmountInfo.standardCurrency.amount) ) }}
-									<del><b>{{numberFormat ../productSaleAmountInfo.standardCurrency.amount }}</b>원</del>
+							{{#if (eq calculationResultYn 'Y') }}
+								{{#if (ne calculationResultProduct.finalOnlineSalesAmountInfo null) }}
+									<span class="strong"><b>{{numberFormat calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount }}</b>원</span>
+								{{/if}}
+								{{#if (gt calculationResultProduct.productSaleAmountInfo.standardCurrency.amount calculationResultProduct.finalOnlineSalesAmountInfo.standardCurrency.amount) }}
+									<del><b>{{numberFormat calculationResultProduct.productSaleAmountInfo.standardCurrency.amount }}</b>원</del>
+								{{/if}}
+							{{else}}
+								{{#if (ne prodEx.salePrice null) }}
+									<span class="strong"><b>{{numberFormat (calc prodEx.salePrice '*' cartProdQty) }}</b>원</span>
 								{{/if}}
 							{{/if}}
 						</div>
@@ -32,7 +36,7 @@
 					<div class="item_wrap">
 						<input type="hidden" name="takeoutPrdSn" value="{{ prodEx.prodSn }}"/>
 						<input type="hidden" name="cartProdSn" value="{{ cartProdSn }}"/>
-						<input type="hidden" name="takeoutPrdInfo_{{ cartProdSn }}" value="{{ cartProdSn }}" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}" />
+						<input type="hidden" name="takeoutPrdInfo_{{ cartProdSn }}" value="{{ cartProdSn }}" prodName="{{ prodEx.prodName }}" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}" />
 						<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{ prodEx.saleDisplayStatus }}"/>
 						<div class="item_info">
 							<!--/* 상품 선택 */-->
@@ -66,7 +70,7 @@
 							</div>
 							<!--/* 상품 수량 */-->
 							<div class="count">
-								<span class="ui_spinner" data-step="1" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} {{#if (gt prodEx.minPurLimitQty cartProdQty) }} data-min="{{ cartProdQty }}" {{else}} data-min="{{ prodEx.minPurLimitQty }}" {{/if}} {{else}} data-min="1" {{/if}}  {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} {{#if (gt cartProdQty prodEx.maxPurLimitQty) }} data-max="{{ cartProdQty}}" {{else}} {{#if (gt prodEx.maxPurLimitQty 99) }} data-max="99" {{else}} data-max="{{ prodEx.maxPurLimitQty }}" {{/if}} {{/if}} {{else}} data-max="99" {{/if}} {{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}} >
+								<span class="ui_spinner" data-step="1" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} {{#if (gt prodEx.minPurLimitQty cartProdQty) }} data-min="{{ cartProdQty }}" {{else}} data-min="{{ prodEx.minPurLimitQty }}" {{/if}} {{else}} data-min="1" {{/if}} {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} {{#if (gt cartProdQty prodEx.maxPurLimitQty) }} data-max="{{ cartProdQty }}" {{else}} {{#if (gt prodEx.maxPurLimitQty 999) }} data-max="{{ prodEx.maxPurLimitQty }}" {{/if}} {{/if}} {{else}} data-max="999" {{/if}} {{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}} >
 									<button class="spinner_decrease" type="button" title="제품 수량 감소" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt cartProdQty 1)(gt cartProdQty prodEx.minPurLimitQty) ) }} {{else}} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '{{ activityPointExchYn }}', '{{ storePickupYn }}', '{{ storeSn }}', '-')"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
 									<input class="spinner_input" type="text" name="cartProdQty" value="{{ cartProdQty }}">
 									<button class="spinner_increase" type="button" title="제품 수량 증가" {{#if (and (eq prodEx.maxPurLimitYn 'Y')(gt cartProdQty prodEx.maxPurLimitQty) ) }} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '{{ activityPointExchYn }}', '{{ storePickupYn }}', '{{ storeSn }}', '+')"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>
@@ -147,7 +151,7 @@
 					{{#if (or (gt @../index 0)(gt @index 0) ) }} <div class="item_wrap plus"> {{else}} <div class="item_wrap">  {{/if}}
 						<input type="hidden" name="takeoutPrdSn" value="{{ prodEx.prodSn }}"/>
 						<input type="hidden" name="cartProdSn" value="{{ cartProdSn }}"/>
-						<input type="hidden" name="takeoutPrdInfo_{{ cartProdSn }}" value="{{ cartProdSn }}" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}" />
+						<input type="hidden" name="takeoutPrdInfo_{{ cartProdSn }}" value="{{ cartProdSn }}" prodName="{{ prodEx.prodName }}" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}" />
 						<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{ prodEx.saleDisplayStatus }}"/>
 						<div class="item_info">
 							<!--/* 상품 선택 */-->
@@ -181,7 +185,7 @@
 							</div>
 							<!--/* 상품 수량 */-->
 							<div class="count">
-								<span class="ui_spinner" data-step="1" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} {{#if (gt prodEx.minPurLimitQty cartProdQty) }} data-min="{{ cartProdQty }}" {{else}} data-min="{{ prodEx.minPurLimitQty }}" {{/if}} {{else}} data-min="1" {{/if}}  {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} {{#if (gt cartProdQty prodEx.maxPurLimitQty) }} data-max="{{ cartProdQty}}" {{else}} {{#if (gt prodEx.maxPurLimitQty 99) }} data-max="99" {{else}} data-max="{{ prodEx.maxPurLimitQty }}" {{/if}} {{/if}} {{else}} data-max="99" {{/if}} {{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}} >
+								<span class="ui_spinner" data-step="1" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} {{#if (gt prodEx.minPurLimitQty cartProdQty) }} data-min="{{ cartProdQty }}" {{else}} data-min="{{ prodEx.minPurLimitQty }}" {{/if}} {{else}} data-min="1" {{/if}} {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} {{#if (gt cartProdQty prodEx.maxPurLimitQty) }} data-max="{{ cartProdQty }}" {{else}} {{#if (gt prodEx.maxPurLimitQty 999) }} data-max="{{ prodEx.maxPurLimitQty }}" {{/if}} {{/if}} {{else}} data-max="999" {{/if}} {{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}} >
 									<button class="spinner_decrease" type="button" title="제품 수량 감소" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt cartProdQty 1)(gt cartProdQty prodEx.minPurLimitQty) ) }} {{else}} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '{{ activityPointExchYn }}', '{{ storePickupYn }}', '{{ storeSn }}', '-')"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
 									<input class="spinner_input" type="text" name="cartProdQty" value="{{ cartProdQty }}">
 									<button class="spinner_increase" type="button" title="제품 수량 증가" {{#if (and (eq prodEx.maxPurLimitYn 'Y')(gt cartProdQty prodEx.maxPurLimitQty) ) }} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '{{ activityPointExchYn }}', '{{ storePickupYn }}', '{{ storeSn }}', '+')"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>

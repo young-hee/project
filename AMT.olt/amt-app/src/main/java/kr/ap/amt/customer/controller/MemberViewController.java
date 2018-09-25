@@ -1,10 +1,13 @@
 package kr.ap.amt.customer.controller;
 
+import java.util.Map;
+
 import kr.ap.comm.api.CaptchaAPI;
 import kr.ap.comm.api.vo.CicuemCuInfTotTcVo;
 import kr.ap.comm.config.interceptor.PageTitle;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.util.G1SecureRandom;
+import kr.ap.comm.util.SessionUtils;
 import net.g1project.ecp.api.model.EmbeddableTel;
 import net.g1project.ecp.api.model.ap.ap.ApIssueTemporaryPassword;
 import net.g1project.ecp.api.model.ap.ap.CheckResult;
@@ -33,8 +36,11 @@ public class MemberViewController extends AbstractController {
 	}
 	@PostMapping("/findPwd/complete")
 	@PageTitle(title = "비밀번호 변경")
-	public String findPwdComplete(Model model, String joinType, String incsNo, String phoneNo) {
+	public String findPwdComplete(Model model, String phoneNo) {
 
+		Map<String, Object> result = (Map<String, Object>) SessionUtils.getAttribute(getRequest(), "FIND_INFO");
+		String joinType = (String) result.get("joinType");
+		String incsNo = (String) result.get("incsNo");
 		if("00".equals(joinType) || "05".equals(joinType)) {
 			return "/customer/find-id.3";
 		}
@@ -59,7 +65,11 @@ public class MemberViewController extends AbstractController {
 
 	@PostMapping("/findId/complete")
 	@PageTitle(title = "아이디 찾기")
-	public String findIdComplete(Model model, String joinType, String userId, String phoneNo) {
+	public String findIdComplete(Model model, String phoneNo) {
+
+		Map<String, Object> result = (Map<String, Object>) SessionUtils.getAttribute(getRequest(), "FIND_INFO");
+		String joinType = (String) result.get("joinType");
+		String userId = (String) result.get("chcsNo");
 		switch (joinType) {
 		case "00":
 			return "/customer/find-id.3";

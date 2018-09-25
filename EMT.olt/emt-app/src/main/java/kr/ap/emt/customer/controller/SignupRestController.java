@@ -23,6 +23,7 @@ import net.g1project.ecp.api.model.ap.ap.ApSimplifiedMemberForPost;
 import net.g1project.ecp.api.model.ap.ap.SignupReceiveAgree;
 import net.g1project.ecp.api.model.ap.ap.SignupStatusResult;
 import net.g1project.ecp.api.model.ap.ap.SignupTermsAgree;
+import net.g1project.ecp.api.model.sales.terms.Terms;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -745,21 +746,18 @@ public class SignupRestController extends AbstractController {
 				cicuemCuInfTotTcVo.setCiNo(getMemberSession().getUser_ciNo());
 				cicuemCuInfTotTcVo.setJoinChCd(APConstant.EH_CH_CD);
 				cicuemCuInfTotTcVo.setJoinPrtnId(APConstant.EH_PRTN_ID);
+				cicuemCuInfTotTcVo.setFscrId(chcsNo);
+				cicuemCuInfTotTcVo.setLschId(chcsNo);
+				cicuemCuInfTotTcVo.setChgChCd(APConstant.EH_CH_CD);
 				if(isMobileDevice()) {
 					cicuemCuInfTotTcVo.setJndvCd("M");
-					cicuemCuInfTotTcVo.setFscrId("MOBILE");
-					cicuemCuInfTotTcVo.setLschId("MOBILE");
 				}
 				if(isPcDevice()) {
 					cicuemCuInfTotTcVo.setJndvCd("W");
-					cicuemCuInfTotTcVo.setFscrId("WEB");
-					cicuemCuInfTotTcVo.setLschId("WEB");
 					
 				}
 				if(isAndroid() || isiOS()) {
 					cicuemCuInfTotTcVo.setJndvCd("A");
-					cicuemCuInfTotTcVo.setFscrId("MOBILE");
-					cicuemCuInfTotTcVo.setLschId("MOBILE");
 				}
 				if(cicuemCuInfTotTcVo.getCiNo().endsWith("=="))
 					cicuemCuInfTotTcVo.setAtclCd("10");
@@ -857,10 +855,16 @@ public class SignupRestController extends AbstractController {
 				//회원가입 통합약관동의여부
 				List<CicuedCuTncaTcVo> cicuedCuTncaTcVos = new ArrayList<CicuedCuTncaTcVo>();
 				Map<String, String> termsMap = arrayToMap(termsChk);
+				List<Terms> terms = termsApi.getTerms("010,020,030,040,050,060");
 				for (Map.Entry<String, String> entry : termsMap.entrySet()) {
 					CicuedCuTncaTcVo cicuedCuTncaTcVo = new CicuedCuTncaTcVo();
 					cicuedCuTncaTcVo.setTcatCd(entry.getKey());
-					cicuedCuTncaTcVo.setTncvNo("1");
+					Terms t = getTermsByCode(terms, entry.getKey());
+					if(t != null) {
+						cicuedCuTncaTcVo.setTncvNo(t.getTermsVer());
+					} else {
+						cicuedCuTncaTcVo.setTncvNo("1");
+					}
 					cicuedCuTncaTcVo.setTncAgrYn(entry.getValue());
 					cicuedCuTncaTcVo.setFscrId(cicuemCuInfTotTcVo.getFscrId());
 					cicuedCuTncaTcVo.setLschId(cicuemCuInfTotTcVo.getLschId());
@@ -1186,7 +1190,16 @@ public class SignupRestController extends AbstractController {
     }
     
 
-    @PostMapping("/simpleJoin")
+    private Terms getTermsByCode(List<Terms> termsList, String key) {
+    	for (Terms terms : termsList) {
+			if(terms.getTermsDisplayCode().equals(key))
+				return terms;
+		}
+		return null;
+	}
+
+
+	@PostMapping("/simpleJoin")
     public ResponseEntity<?> simpleJoin(boolean terms, boolean sms, boolean email) {
     	if(!terms) throw new RuntimeException("약관동의 안됨.");
     	ApSimplifiedMemberForPost apMemberPostInfo = new ApSimplifiedMemberForPost();

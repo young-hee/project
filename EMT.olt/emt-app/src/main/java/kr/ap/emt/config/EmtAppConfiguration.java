@@ -1,12 +1,16 @@
 package kr.ap.emt.config;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mxab.thymeleaf.extras.dataattribute.dialect.DataAttributeDialect;
 
+import com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter;
 import kr.ap.comm.api.HttpsTrustManager;
 import kr.ap.comm.config.filter.MallIdFilter;
 import kr.ap.comm.config.interceptor.*;
 import kr.ap.comm.config.thymeleaf.APCustomDialect;
 import kr.ap.comm.support.breadcrumb.BreadCrumbPostProcessor;
+import kr.ap.comm.support.tagging.Pagenames;
 import kr.ap.emt.api.pos.POSAPIServiceUtils;
 import kr.ap.emt.api.pos.POSApiService;
 
@@ -15,9 +19,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -35,9 +40,9 @@ public class EmtAppConfiguration extends WebMvcConfigurerAdapter {
 
     @Value("${pos.api.base-url}")
     private String baseUrl;
-    
+
     @Autowired
-    ApplicationContext context;
+	private Environment env;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -87,11 +92,39 @@ public class EmtAppConfiguration extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
+	public Pagenames pagenames() {
+		Pagenames pagenames = new Pagenames();
+		String mallId = env.getProperty("platform.frontend.mall-id");
+		try {
+			pagenames.initialize(mallId);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return pagenames;
+	}
+
+	@Bean
 	public CharacterEncodingFilter characterEncodingFilter() {
 		CharacterEncodingFilter filter = new EmtCharacterEncodingFilter();
 		filter.setEncoding("utf-8");
 		filter.setForceEncoding(true);
     	return filter;
+	}
+
+	@Bean
+	public FilterRegistrationBean lucyXssFilter() {
+    	FilterRegistrationBean filter = new FilterRegistrationBean();
+    	filter.setFilter(new XssEscapeServletFilter());
+    	filter.setOrder(1);
+    	filter.addUrlPatterns("/*");
+    	return filter;
+	}
+
+	@Bean
+	public ObjectMapper objectMapper() {
+    	ObjectMapper mapper = new ObjectMapper();
+    	mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+    	return mapper;
 	}
 
 	@Bean

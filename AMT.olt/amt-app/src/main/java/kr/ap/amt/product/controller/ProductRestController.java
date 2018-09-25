@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,10 +32,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import feign.Param;
 import kr.ap.amt.product.vo.ExternalVO;
 import kr.ap.amt.product.vo.RequestReview;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
+import net.g1project.ecp.api.client.ISO8601DateTimeExpander;
 import net.g1project.ecp.api.model.BooleanResult;
 import net.g1project.ecp.api.model.UploadingFile;
 import net.g1project.ecp.api.model.sales.display.OnlineProdList;
@@ -190,7 +193,25 @@ public class ProductRestController extends AbstractController {
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
 		try {
-    		ProdReviewListInfo prodReviewListInfo = productApi.getProductReviews(requestReview.getProdReviewUnit(), requestReview.getProdReviewType(), requestReview.getOffset(), requestReview.getLimit(), getMemberSn(), requestReview.getOnlineProdSn(), requestReview.getProdSn(), requestReview.getStyleCode(), requestReview.getProdReviewSort(), requestReview.getScope(), requestReview.getTopReviewOnlyYn(), requestReview.getTopReviewFirstYn(), (!requestReview.getStartDate().isEmpty()) ? sf.parse(requestReview.getStartDate()) : null, (!requestReview.getEndDate().isEmpty()) ? sf.parse(requestReview.getEndDate()) : null, "N", APConstant.AP_DISPLAY_MENU_SET_ID, requestReview.getDisplayMenuId());
+			ProdReviewListInfo prodReviewListInfo = productApi.getProductReviews(
+				requestReview.getProdReviewUnit(),
+				requestReview.getProdReviewType(),
+				requestReview.getOffset(),
+				requestReview.getLimit(),
+				getMemberSn(),
+				requestReview.getOnlineProdSn(),
+				requestReview.getProdSn(),
+				requestReview.getStyleCode(),
+				null, /* regularEventSn */
+				requestReview.getProdReviewSort(),
+				requestReview.getScope(),
+				requestReview.getTopReviewOnlyYn(),
+				requestReview.getTopReviewFirstYn(),
+				(!requestReview.getStartDate().isEmpty()) ? sf.parse(requestReview.getStartDate()) : null,
+				(!requestReview.getEndDate().isEmpty()) ? sf.parse(requestReview.getEndDate()) : null,
+				"N",
+				APConstant.AP_DISPLAY_MENU_SET_ID,
+				requestReview.getDisplayMenuId());
     		
     		//뷰티테스터 더미데이터
     		if( "ExperienceGrp".equalsIgnoreCase(requestReview.getProdReviewType()) &&  prodReviewListInfo.getTotalCount() == 0) {

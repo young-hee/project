@@ -724,57 +724,23 @@ public class MyViewControllor extends AbstractController {
 				CicuemCuInfTotTcVo vo = new CicuemCuInfTotTcVo();
 				vo.setIncsNo(memberSession.getUser_incsNo());
 				try {
-					Map<String, Boolean> apReceiveMap = new HashMap<String, Boolean>();
 					CicuemCuOptiTcResultVo tcVo = amoreAPIService.getcicuemcuoptilist(vo);
-					if(tcVo != null) {
-						CicuemCuOptiCsTcVo info = (CicuemCuOptiCsTcVo) getMultiinfoByChCd(tcVo.getCicuemCuOptiTcVo(), "000");
-						if(info != null) {
-							apReceiveMap.put("Email", "Y".equals(info.getEmlOptiYn()));
-							apReceiveMap.put("SMS", "Y".equals(info.getSmsOptiYn()));
-							apReceiveMap.put("DM", "Y".equals(info.getDmOptiYn()));
-							apReceiveMap.put("TM", "Y".equals(info.getTmOptiYn()));
-						}
-					}
-					model.addAttribute("apReceiveMap", apReceiveMap);
-
-					Map<String, Boolean> receiveMap = new HashMap<String, Boolean>();
-					tcVo = amoreAPIService.getcicuemcuoptilist(vo);
-					if(tcVo != null) {
-						CicuemCuOptiCsTcVo info = (CicuemCuOptiCsTcVo) getMultiinfoByChCd(tcVo.getCicuemCuOptiTcVo(), "030");
-						if(info != null) {
+					Map<String, Object> receiveMap;
+					List<Map<String, Object>> receiveList = new ArrayList<Map<String,Object>>();
+					if(tcVo != null && tcVo.getCicuemCuOptiTcVo() != null) {
+						
+						for (CicuemCuOptiCsTcVo info : tcVo.getCicuemCuOptiTcVo()) {
+							receiveMap = new HashMap<String, Object>();
 							receiveMap.put("Email", "Y".equals(info.getEmlOptiYn()));
 							receiveMap.put("SMS", "Y".equals(info.getSmsOptiYn()));
 							receiveMap.put("DM", "Y".equals(info.getDmOptiYn()));
 							receiveMap.put("TM", "Y".equals(info.getTmOptiYn()));
+							receiveMap.put("name", info.getChNm());
+							receiveMap.put("chCd", info.getChCd());
+							receiveList.add(receiveMap);
 						}
 					}
-					model.addAttribute("receiveMap", receiveMap);
-
-					HashMap<String, Boolean> ehPosReceiveMap = new HashMap<String, Boolean>();
-					tcVo = amoreAPIService.getcicuemcuoptilist(vo);
-					if(tcVo != null) {
-						CicuemCuOptiCsTcVo info = (CicuemCuOptiCsTcVo) getMultiinfoByChCd(tcVo.getCicuemCuOptiTcVo(), "017");
-						if(info != null) {
-							ehPosReceiveMap.put("Email", "Y".equals(info.getEmlOptiYn()));
-							ehPosReceiveMap.put("SMS", "Y".equals(info.getSmsOptiYn()));
-							ehPosReceiveMap.put("DM", "Y".equals(info.getDmOptiYn()));
-							ehPosReceiveMap.put("TM", "Y".equals(info.getTmOptiYn()));
-						}
-					}
-					model.addAttribute("ehPosReceiveMap", ehPosReceiveMap);
-
-					HashMap<String, Boolean> ehReceiveMap = new HashMap<String, Boolean>();
-					tcVo = amoreAPIService.getcicuemcuoptilist(vo);
-					if(tcVo != null) {
-						CicuemCuOptiCsTcVo info = (CicuemCuOptiCsTcVo) getMultiinfoByChCd(tcVo.getCicuemCuOptiTcVo(), "035");
-						if(info != null) {
-							ehReceiveMap.put("Email", "Y".equals(info.getEmlOptiYn()));
-							ehReceiveMap.put("SMS", "Y".equals(info.getSmsOptiYn()));
-							ehReceiveMap.put("DM", "Y".equals(info.getDmOptiYn()));
-							ehReceiveMap.put("TM", "Y".equals(info.getTmOptiYn()));
-						}
-					}
-					model.addAttribute("ehReceiveMap", ehReceiveMap);
+					model.addAttribute("receiveList", receiveList);
 					
 				} catch(ApiException e) {
 					

@@ -36,7 +36,9 @@ this["AP"]["handlebars"]["display"]["events"]["winning-pop"] = Handlebars.templa
 },"8":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "				"
+  return "			"
+    + alias2(alias1((depth0 != null ? depth0.membershipName : depth0), depth0))
+    + "	"
     + alias2(alias1((depth0 != null ? depth0.membershipName : depth0), depth0))
     + " "
     + alias2(alias1((depth0 != null ? depth0.savingPoint : depth0), depth0))

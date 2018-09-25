@@ -25,6 +25,43 @@
 		open: function ( options ) {
 			return new ModalCore( options );
 		},
+		
+		/**
+         * AP 몰 전용 loading
+         * @param {Object}    options
+         *  - {String}          templateKey         Handlebars template key, ex) 'folder-name.file-name'
+         *  - {Object}          templateModel       template 에서 사용할 model object
+         *  - {String}          sizeType            layer size type : "S", "M", "L" (default:M)
+         *  - {Boolean}         middlePosition      auto top position middle (default:true)
+         *  - {String}          top                 top position을 강제로 지정할때 사용, ex) 200
+         *  - {String}          containerClass      추가로 들어가야 하는 CSS className 이 필요한경우 설정.
+         *  - {Boolean}         transparent         dimmed 투명하게 처리
+         *  - {jQueryObject}    returnFocusTarget   (default:modal을 열때 클릭한 대상)
+         * @return {ModalCore}
+         * ex) AP.modal.open().addListener( 'modal-before-close', function (e) { console.log(e.closeType, e.data) })
+         *     AP.modal.open().addListener( 'modal-close', function (e) { console.log(e.closeType, e.data) })
+         */
+		loading : function( options ){
+        	if ( !_.isObject(options) ) options = {};
+        	options.templateKey = 'common.loading-fix';
+        	options.hideCloseBtn = true;
+        	options.templateModel = {
+                    title: options.title || '',
+                    contents: options.contents,
+                    btnType: options.btnType,
+                    confirmLayerLabel: options.confirmLayerLabel,
+                    btnConfirm: !!options.confirmLabel,
+                    btnCancel: !!options.cancelLabel,
+                    confirmLabel: options.confirmLabel,
+                    cancelLabel: options.cancelLabel
+                };          
+            options.sizeType = options.sizeType? options.sizeType : 'M';
+            //'system_alert' 클래스를 사용할 지 여부
+			if(options.noneSystemAlert)
+				options.containerClass = options.containerClass.replace('system_alert', '');
+            options.wrapperClass = options.wrapperClass? options.wrapperClass : '';
+        	return this.open( options );
+        },
 
 		/**
 		 * title이 있는 모달 열기

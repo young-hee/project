@@ -47,6 +47,9 @@ public class ProductRestController extends AbstractController {
     @Autowired
     ReviewFormValidator reviewFormValidator;
 
+    @Autowired
+	private ObjectMapper objectMapper;
+
 	/**
      * 상품평 목록 조회
      * @param requestReview
@@ -66,6 +69,7 @@ public class ProductRestController extends AbstractController {
 			requestReview.getOnlineProdSn(),
 			requestReview.getProdSn(),
 			requestReview.getStyleCode(),
+			null /* regularEventSn */,
 			requestReview.getProdReviewSort(),
 			requestReview.getScope(),
 			requestReview.getTopReviewOnlyYn(),
@@ -217,8 +221,6 @@ public class ProductRestController extends AbstractController {
 
 		prodReviewPost.setMemberSn(getMemberSn());
 		prodReviewPost.setImgList(imgList);
-
-		ObjectMapper objectMapper = new ObjectMapper();
 
 		if (arrSurvey != null && !"".equals(arrSurvey)) {
 			List<HashMap<String, String>> surveyList = objectMapper.readValue(arrSurvey, new TypeReference<List<HashMap<String, String>>>() {

@@ -13,16 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
 import kr.ap.emt.display.vo.RequestBeautyLife;
+
 import net.g1project.ecp.api.model.sales.article.*;
 import net.g1project.ecp.api.model.sales.display.Corner;
-import net.g1project.ecp.api.model.sales.shoppingmark.ShoppingMarkPost;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -97,10 +94,14 @@ public class BeautyLifeRestController extends AbstractController {
     public ResponseEntity<?> createArticleComment( RequestBeautyLife requestBeautyLife, ArticleCommentPost articleCommentParam) {
       
         HashMap<String, Object> result = new HashMap<String, Object>();
-
-		ExecuteResult executeResult = articleApi.createArticleComment(requestBeautyLife.getArticleSn(), articleCommentParam);
-		result.put("executeResult", executeResult);
-
+        
+        if(isLoggedIn()) {
+        	 //TODO 등록할때 html 에 스크립트 삭제 코드 조회필터
+			ExecuteResult executeResult = articleApi.createArticleComment(requestBeautyLife.getArticleSn(), articleCommentParam);
+			result.put("executeResult", executeResult);
+			
+        }
+        
 		return ResponseEntity.ok(result);
 
     }
@@ -116,9 +117,33 @@ public class BeautyLifeRestController extends AbstractController {
     public ResponseEntity<?> deleteArticleComment( RequestBeautyLife requestBeautyLife, ArticleComment articleComment) {
       
         HashMap<String, Object> result = new HashMap<String, Object>();
+        ExecuteResult executeResult = new ExecuteResult(); 
+       
+        if(isLoggedIn()) {
+        	
+       		ArticleCommentResult articleCommentResult = articleApi.getArticleCommentList(requestBeautyLife.getArticleSn(), "Y", requestBeautyLife.getOrder(), requestBeautyLife.getOffset(), requestBeautyLife.getLimit());
+        	
+        	List<ArticleComment> commentList = articleCommentResult.getArticleCommentList();
+        	
+        	for(ArticleComment bo : commentList) {
+        		 
+        		if(articleComment.getArticleCommentSn() == bo.getArticleCommentSn()) {
+        			
+        			if(getMemberSn().equals(bo.getMemberSn())) {
+        				
+        				executeResult = articleApi.deleteArticleComment(requestBeautyLife.getArticleSn(), articleComment.getArticleCommentSn());
+        				result.put("executeResult", executeResult);
+        				
+        			}else {
+        				throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "ESAL022", "본인의 글만 삭제할 수 있습니다.");
+        			}
+        		}
+        	}
+        	
+        }else {
+        	throw error(result, HttpStatus.SERVICE_UNAVAILABLE, "EAPI004", "회원 정보가 확인되지 않습니다.");
+        }
         
-		ExecuteResult executeResult = articleApi.deleteArticleComment(requestBeautyLife.getArticleSn(), articleComment.getArticleCommentSn());
-		result.put("executeResult", executeResult);
 		return ResponseEntity.ok(result);
 
     }

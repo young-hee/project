@@ -36,10 +36,12 @@
 			};
 
 			this._setEvent();
+			this._setPlugins(); 
 		},
 
 		/** =============== Public Methods =============== */
 		load: function ( options ) {
+			
 			if( options ) {
 				if ( options.api ) {
 					this._api = options.api;
@@ -51,7 +53,7 @@
 					$.extend( this._param , options.param );
 				}
 			}
-
+						
 			var $itemList = this._$target.find( '.item_list' );
 			AP.api[this._api]( this._key, this._param ).done(function ( result ) {
 				done( result );
@@ -111,11 +113,13 @@
 
 				// colorGroups - isSelectOption
 				for ( var i = 0; i < prodListData.list.length; ++i ) {
-					var isSelectOption = true;
+					var isSelectOption = false;
 					var colorCnt = 0;
 					for ( var j = 0; j < prodListData.list[i].products.length; ++j ) {
+						
 						if ( prodListData.list[i].products[j]['colorchipTypeCode'] != 'No' ) {
-							isSelectOption = false;
+							
+							isSelectOption = true;
 						}
 						if( prodListData.list[i].products[j].colorGroups.length > 0 ){
 							colorCnt++;
@@ -123,8 +127,8 @@
 					}
 					prodListData.list[i].colorCnt = colorCnt;
 					prodListData.list[i].isSelectOption = isSelectOption;
+					
 				}
-				
 				if ( $itemList.length > 1 ) {
 					/** 주간 베스트 **/
 
@@ -138,7 +142,9 @@
 					this._$target.find( 'hr' ).show();
 					this._$target.find( '.item_list.column2 ul' ).html( column2Html );
 					this._$target.find( '.item_list.column4 ul' ).html( column4Html );
-
+					 
+					AP.lazyLoad.add( this._$target.find('.item_list img.lazy_load')).updated();;
+					
 				} else {
 					if ( $itemList.find( 'ul.before_list' ).length > 0 ) {
 						// ul 2개 일때
@@ -159,14 +165,19 @@
 								$itemList.find( '.banner' ).show();
 							}
 						}
+						
 					} else {
 						// ul 1개 일때
 
 						var html = AP.common.getTemplate( templatePath, prodListData );
 						$itemList.find( 'ul' ).html( html );
+						
 					}
-				}
 
+					AP.lazyLoad.add( $itemList.find('img.lazy_load')).updated();
+					
+				}
+				
 				if ( this._$target.find( '.sorting_group .total_count' ).length > 0 ) {
 					this._$target.find( '.sorting_group .total_count' ).html( '총 (' + $B.string.numberFormat( prodListData.totalCount ) + '개)');
 				}
@@ -271,7 +282,13 @@
 			this._$target.find( '.pagination' ).paging( 'clear' ).off( 'paging-change' );
 			this._isClearPaging = true;
 			this._param.offset = 0;
-		}
+		},
+		
+		_setPlugins: function () {
+			this._$target.find( '.youtube_video' ).video();
+			this._$target.find( '.slide' ).ixSlideMax();
+		},
+		
 	});
 
 	AP.ProductList = ProductList;

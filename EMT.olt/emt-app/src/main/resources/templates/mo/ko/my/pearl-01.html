@@ -199,7 +199,9 @@
 			                	if (xhr.errorCode == 0) {
 			                        AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
 			                    } else if (xhr.errorCode == 'EAPI002') {
-			                        AP.modal.alert("입력하신 이름과 휴대폰 정보의 회원을 찾을 수 없습니다.");
+				                    AP.modal.alert("포인트를 선물하였습니다.").addListener('modal-close', function(e) {
+				                    	location.reload();
+				                    });
 			                    } else if (xhr.errorCode == 'EAPI003') {
 			                        AP.modal.alert("입력하신 이름과 휴대폰 정보의 회원이 여러명으로 선물하기를 할 수 없습니다.");
 			                    } else if (xhr.errorCode == 'ESAL007') {

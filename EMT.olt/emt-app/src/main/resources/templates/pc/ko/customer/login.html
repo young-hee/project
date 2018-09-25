@@ -30,10 +30,10 @@
 		                            <div class="login_area">
 										<form id="main">
 			                                <div class="input_wrap">
-			                                	<input type="text" title="아이디 입력" name="chcsNo" placeholder="아이디" required="required" data-msg-required="아이디를 입력해 주세요. 아이디 입력란으로 이동합니다.">
+			                                	<input type="text" target="userPwdEc" title="아이디 입력" name="chcsNo" placeholder="아이디" required="required" data-msg-required="아이디를 입력해 주세요. 아이디 입력란으로 이동합니다.">
 											</div>
 			                                <div class="input_wrap">
-			                                	<input type="password" title="비밀번호 입력" name="userPwdEc" placeholder="비밀번호" required="required" data-msg-required="비밀번호를 입력해 주세요. 비밀번호 입력란으로 이동합니다.">
+			                                	<input type="password" target="login" title="비밀번호 입력" name="userPwdEc" placeholder="비밀번호" required="required" data-msg-required="비밀번호를 입력해 주세요. 비밀번호 입력란으로 이동합니다.">
 			                                </div>
 			                                <div class="clear">
 			                                    <div class="check_wrap"><input type="checkbox" id="save_id"><label for="save_id">아이디 저장</label></div>
@@ -47,7 +47,7 @@
 								<!-- // 휴대폰 로그인 -->                             
 	                            <div class="login_area" style="display:none;">
 									<form id="mobile">
-		                                <div class="input_wrap"><input type="text" title="이름 입력" name="custNm" placeholder="이름을 입력하세요" required="required"
+		                                <div class="input_wrap"><input type="text" target="phoneNumber2" title="이름 입력" name="custNm" placeholder="이름을 입력하세요" required="required"
 				 							data-msg-required="이름을 입력해 주세요. 이름 입력란으로 이동합니다." user-name="user-name"/></div>
 		                                <div class="input_wrap">                              
 		                                    <span class="input_group input_phone">
@@ -62,7 +62,7 @@
 													</select>
 		                                        </span>
 		                                        <span class="gap"></span>
-		                                        <div class="input_wrap certification"><input type="tel" name="phoneNumber2" required="required" title="휴대폰 번호 입력" maxlength="8" placeholder="휴대폰 번호 '-'없이 입력" data-msg-required="휴대폰번호를 입력해 주세요.">                                 
+		                                        <div class="input_wrap certification"><input type="tel" target="send-sms" name="phoneNumber2" required="required" title="휴대폰 번호 입력" maxlength="8" placeholder="휴대폰 번호 '-'없이 입력" data-msg-required="휴대폰번호를 입력해 주세요.">                                 
 		                                       		<button class="btn_round" id="send-sms" type="button">인증요청</button>
 													<button class="btn_round" style="display: none;" id="btn_re_send_sms" type="button">재인증요청</button>
 		                                       	</div>  
@@ -93,9 +93,9 @@
 								<!-- // 비회원로그인 -->                             
 	                            <div class="login_area" style="display:none;">
 	                            	<form>
-		                                <div class="input_wrap"><input type="text" name="custNm2" title="주문자 이름 입력" placeholder="주문자 이름"></div>
-		                                <div class="input_wrap"><input type="text" title="주문번호 입력" name="ordNo" placeholder="주문번호를 입력하세요"></div>
-		                                <button type="button" onclick="nomember()" class="btn_primary_login">주문조회</button>
+		                                <div class="input_wrap"><input type="text" target="ordNo" name="custNm2" title="주문자 이름 입력" placeholder="주문자 이름"></div>
+		                                <div class="input_wrap"><input type="text" target="no-member-view" title="주문번호 입력" name="ordNo" placeholder="주문번호를 입력하세요"></div>
+		                                <button type="button" onclick="nomember()" id="no-member-view" class="btn_primary_login">주문조회</button>
 		                                <br>
 	                        			<p class="text font_sl">비회원으로 구매하신 경우에만 주문조회가 가능합니다.</p>
 	                       			</form>
@@ -155,6 +155,20 @@
             <!--/* 예시, 적절한 위치에 옮겨 개발하세요 */-->
             <script>
 
+            $('input').keypress(function(f) {
+
+            	if(f.keyCode == 13){
+            		if(!$($(f).attr('target')).val()) return;
+            		var target = $($(f).attr('target')).attr('target');
+            		if(!target) return;
+            		if(target == 'login' || target == 'send-sms' || target == 'no-member-view') {
+            			$('#' + target + '').click();
+            		} else {
+            		
+            			$('[name=' + target + ']').focus();
+            		}
+            	}
+            });
             if (AP.common.getCookie('is-user-id')) {
                 var $id = $('[name=chcsNo]');
                 if (AP.common.getCookie('user-id', null, 1) != 'on') {
@@ -423,7 +437,11 @@
 					                }
 
 					            } else {
-					                AP.modal.alert(xhr.errorMessage)
+					            	if(xhr.errorMessage == 'error') {
+						                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+					            	} else {
+						                AP.modal.alert(xhr.errorMessage);
+					            	}
 					            }
 					        }).always(function() {
 					            //성공, 실패
@@ -546,7 +564,7 @@
 					            } else if (xhr.errorCode == 'ESAL002') {
 					                AP.modal.alert("아이디 또는 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
 					            } else if (xhr.errorCode == 'ESAL003') {
-					                if (xhr.responseJSON.isLock == true) {
+					                if (xhr.responseJSON.errorData.additional.isLock == true) {
 
 					                    var contents = new Object();
 					                    contents.title = "알림";
@@ -680,7 +698,11 @@
 					                }
 
 					            } else {
-					                AP.modal.alert(xhr.errorMessage)
+					            	if(xhr.errorMessage == 'error') {
+						                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+					            	} else {
+						                AP.modal.alert(xhr.errorMessage);
+					            	}
 					            }
 					        }).always(function() {
 					            //성공, 실패
@@ -1008,10 +1030,20 @@
 					}
 
 					function loginComplete() {
+						if([[${session.CART != null && session.CART.buyNowCartSn != null && session.CART.buyNowCartSn != 0}]]) {
+							if($('#sub').attr('action') == '/order/reception') {
+				    			post_goto('/order/reception', {});
+				    			return;
+							}
+						}
+						if($('#sub').attr('action').indexOf('/my/page/order/detail/') != -1) {
+							location.href = "/main";
+						}
+						
 				        if ($('#sub').attr('method') == 'POSTs')
 				            $('#sub').submit();
 				        else
-				            location.href = $('#sub').attr('action').replace('?isRequiredLogin=true', '').replace('/order/reception','/cart/cartList').replace('/order/ordComplete', '/main');
+				            location.href = $('#sub').attr('action').replace('?isRequiredLogin=true', '').replace('/order/reception','/cart/cartList').replace('/order/ordComplete', '/main').replace('/order/ordBankComplete', '/main').replace();
 
 					}
 

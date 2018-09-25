@@ -54,7 +54,7 @@ public class OrderRestController extends OrderBaseController {
 	}
 
 	/**
-	 * 사용가능 쿠폰목록
+	 * 사용가능 쿠폰목록(회원)
 	 *
 	 * @param ordSn
 	 * @return
@@ -72,14 +72,14 @@ public class OrderRestController extends OrderBaseController {
 	}
 
 	/**
-	 * 다운로드 쿠폰목록
+	 * 다운로드 쿠폰목록(회원)
 	 *
 	 * @return
 	 */
 	@GetMapping("/getDownloadCouponList")
 	public ResponseEntity<?> getDownloadCouponList() {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-        List<DownloadCoupons> downloadCoupons = couponApi.getDownloadCoupons("All", "N", getMemberSn(), null);
+        List<DownloadCoupons> downloadCoupons = couponApi.getDownloadCoupons("All", "Y", getMemberSn(), null);
         result.put("downloadCouponCnt", downloadCoupons.size());	// 다운로드 쿠폰수
         result.put("downloadCouponList", downloadCoupons); 		// 다운로드 쿠폰목록
         result.put("result", "success");
@@ -88,16 +88,34 @@ public class OrderRestController extends OrderBaseController {
 	}
 
 	/**
-	 * 쿠폰 다운로드
+	 * 쿠폰 다운로드(회원)
 	 *
 	 * @return
 	 */
 	@PostMapping("/downloadCoupon")
 	public ResponseEntity<?> downloadCoupon(Long couponSn) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-        BooleanResult booleanResult = couponApi.registDownloadCoupon(couponSn, getMemberSn());
-        result.put("downloadResult", booleanResult.isResult());
+		BooleanResult booleanResult = couponApi.registDownloadCoupon(couponSn, getMemberSn());
+		result.put("downloadResult", booleanResult.isResult());
 
+		return ResponseEntity.ok(result);
+	}
+
+	/**
+	 * 쿠폰 등록(비회원)
+	 * 회원은 mypage참조
+	 *
+	 * @param couponIdentifier
+	 * @return
+	 */
+	@PostMapping("/registerCoupon")
+	public ResponseEntity<?> registerCoupon(String couponIdentifier) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+
+		if (!StringUtils.isEmpty(couponIdentifier)) {
+			DownloadCoupons downloadCoupons = couponApi.nonMemberInputCoupon(couponIdentifier);
+			result.put("nonMemberInputCoupon", downloadCoupons);
+		}
 		return ResponseEntity.ok(result);
 	}
 
@@ -121,6 +139,7 @@ public class OrderRestController extends OrderBaseController {
         BigDecimal parsePayAmt = new BigDecimal(pgPrice.replaceAll(",", ""));
         OrdReceptPayAmt body = new OrdReceptPayAmt();
         List<PayAmt> PayAmtList = new ArrayList<PayAmt>();
+
         PayAmt pgPayAmt = new PayAmt();
         pgPayAmt.setDepositYn("N"); // 예치금여부('Y'면 결제수단일련번호 X)
         pgPayAmt.setPayMethodSn(payMethodSn); //결제수단일련번호
@@ -146,6 +165,7 @@ public class OrderRestController extends OrderBaseController {
 			orderSession.setNextPayUseYn(nextPayUseYn);
 			orderSession.setPayServiceCode(payServiceCode);
 			orderSession.setPayMethodCode(payMethodCode);
+			orderSession.setPgPayAmt(parsePayAmt);
 			setOrderSession(orderSession);
 
             result.put("result", "success");
@@ -285,7 +305,7 @@ public class OrderRestController extends OrderBaseController {
 	}
 
 	/**
-	 * 쿠폰정보 적용 및 변경
+	 * 회원 보유쿠폰 적용 및 변경
 	 *
 	 * @param ordSn
 	 * @param memberKeepingCouponSnArr
@@ -302,7 +322,6 @@ public class OrderRestController extends OrderBaseController {
         }
 
         List<Long> memberCouponSnList = new ArrayList<Long>();
-        List<String> inputCouponIdList = new ArrayList<String>();
 
         if (ordSn != null) {
             /* 보유쿠폰 */
@@ -329,6 +348,80 @@ public class OrderRestController extends OrderBaseController {
 			finalPriceAmtPcur(result, ordRc);
 
         }
+		return ResponseEntity.ok(result);
+	}
+
+	/**
+	 * 비회원 입력쿠폰 적용 및 변경
+	 *
+	 * @param ordSn
+	 * @param inputCouponIdArr
+	 * @return
+	 */
+	@PostMapping("/ordReceptChangeInputCoupon")
+	public ResponseEntity<?> ordReceptChangeInputCoupon(Long ordSn, String[] inputCouponIdArr){
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		OrderSession orderSession = getOrderSession();
+		OrdReceptChange body = orderSession.getOrdReceptChange();
+		if (body == null) {
+			body = new OrdReceptChange();
+		}
+
+		List<String> inputCouponIdList = new ArrayList<String>();
+
+		if (ordSn != null) {
+			/* 보유쿠폰 */
+			if (inputCouponIdArr == null) {
+				//전부 삭제시 'null'로 처리함
+				body.setMemberCouponSnList(null);
+			} else if(inputCouponIdArr.length > 0){
+				for(int i=0; i < inputCouponIdArr.length; i++){
+					if(inputCouponIdArr[i] != null){
+						inputCouponIdList.add(inputCouponIdArr[i]);
+					}
+				}
+				body.setInputCouponIdList(inputCouponIdList);
+			}
+
+			OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
+
+			orderSession.setOrdReceptChange(body);
+			setOrderSession(orderSession);
+
+			result.put("applyCouponExList", ordRc.getApplyCouponExList());
+			finalPriceAmtPcur(result, ordRc);
+
+		}
+		return ResponseEntity.ok(result);
+	}
+
+	/**
+	 * 결제수단 선택적용
+	 * //(20180912_ben수정사항)
+	 * @param ordSn
+	 * @param payMethodSn
+	 * @return
+	 */
+	@PostMapping("/ordReceptChangePayMethod")
+	public ResponseEntity<?> ordReceptChangePayMethod(Long ordSn, Long payMethodSn, String payAmt){
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		OrderSession orderSession = getOrderSession();
+		OrdReceptChange body = orderSession.getOrdReceptChange();
+		if (body == null) {
+			body = new OrdReceptChange();
+		}
+
+		if (ordSn != null) {
+			body.setPayMethodSn(payMethodSn);
+			BigDecimal parsePayAmt = new BigDecimal(payAmt.replaceAll(",", ""));
+			body.setPayMethodAmt(parsePayAmt);
+			OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
+
+			orderSession.setOrdReceptChange(body);
+			setOrderSession(orderSession);
+
+			finalPriceAmtPcur(result, ordRc);
+		}
 		return ResponseEntity.ok(result);
 	}
 
@@ -439,7 +532,7 @@ public class OrderRestController extends OrderBaseController {
 	 * @return
 	 */
 	@PostMapping("/ordReceptChangeOrdUnit")
-	public ResponseEntity<?> ordReceptChangeOrdUnit(Long ordSn, Long[] ordUnitAwardSnArr, Integer[] awardSelectQtyArr, Long membershipSn){
+	public ResponseEntity<?> ordReceptChangeOrdUnit(Long ordSn, Long[] ordUnitAwardSnArr, Integer[] awardSelectQtyArr, Long membershipSn, Integer spPriceCnt){
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		OrderSession orderSession = getOrderSession();
         OrdReceptChange body = orderSession.getOrdReceptChange();
@@ -464,7 +557,10 @@ public class OrderRestController extends OrderBaseController {
                 body.setOrdUnitAwardSelectList(null);
             }
 
-			initPoint(membershipSn, body);
+            //특가상품 선택시 포인트 초기화
+			if (spPriceCnt > 0) {
+				initPoint(membershipSn, body);
+			}
 
             OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
 

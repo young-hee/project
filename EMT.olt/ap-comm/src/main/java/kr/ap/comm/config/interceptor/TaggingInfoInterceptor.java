@@ -3,6 +3,7 @@ package kr.ap.comm.config.interceptor;
 import kr.ap.comm.member.vo.MemberSession;
 import kr.ap.comm.support.APRequestContext;
 import kr.ap.comm.support.tagging.TaggingInfo;
+import kr.ap.comm.support.tagging.TaggingInfo.Product;
 import kr.ap.comm.util.SessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +16,13 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TaggingInfoInterceptor extends HandlerInterceptorAdapter {
 
@@ -63,16 +68,53 @@ public class TaggingInfoInterceptor extends HandlerInterceptorAdapter {
 			TaggingInfo.Page page = new TaggingInfo.Page();
 			page.setCountryCode("KOR");
 			page.setLangCode("KO");
-			// TODO page name 정리된 내용으로 생성
-			page.setName("apmall-m^쇼핑^제품상세^UV 미스트 쿠션 커버 SPF50+/PA+++");
+			page.setName("undefined");
 
 			taggingInfo.setChannel(getChannelType());
-			taggingInfo.setCid("CID");
+			taggingInfo.setCid("CID"); // TODO cid 값 확인
 			taggingInfo.setCustomer(customer);
 			taggingInfo.setPage(page);
 
 			taggingInfo.setSite(getSite());
 			taggingInfo.setSiteName(getSiteName());
+			
+			TaggingInfo.Payment payment = new TaggingInfo.Payment();
+			payment.setOrderNo("ordNo:111111");
+			payment.setAmount(BigDecimal.TEN);
+			payment.setTax(BigDecimal.ZERO);
+			payment.setShippingFee(BigDecimal.TEN);
+			payment.setDetailPaymentMethod("신용카드_국민은행");
+			payment.setCoupon("Coupon");
+			taggingInfo.setPayment(payment);
+			
+			List<Product> prodList = new ArrayList<>();
+			TaggingInfo.Product product = new TaggingInfo.Product();
+            product.setSku("SKU:111111");
+            product.setName("Name:111111");
+            product.setBrand("Brand:111111");
+            product.setPrice(BigDecimal.valueOf(10000));
+            product.setQuantity(99);
+            product.setVariant("Variant#1");
+            product.setSapCode("SAP:1111111");
+            product.setCoupon("Coupon:1$2");
+            product.setShippingType("ShippingType");
+            product.setSapCode("SapCode:1111");
+            product.setBeautyPoint("BeautyPoint#1");
+            prodList.add(product);
+            product.setSku("SKU:111111");
+            product.setName("Name:111111");
+            product.setBrand("Brand:111111");
+            product.setPrice(BigDecimal.valueOf(10000));
+            product.setQuantity(99);
+            product.setVariant("Variant#2");
+            product.setSapCode("SAP:2222222");
+            product.setCoupon("Coupon:1$2");
+            product.setShippingType("ShippingType");
+            product.setSapCode("SapCode:1111");
+            product.setBeautyPoint("BeautyPoint#2");
+            prodList.add(product);
+			taggingInfo.setProdList(prodList);
+			
 		} catch (RuntimeException e) {
 			//TODO 로그 감시 어떻게 할건지
 			logger.error(e.getMessage(), e);

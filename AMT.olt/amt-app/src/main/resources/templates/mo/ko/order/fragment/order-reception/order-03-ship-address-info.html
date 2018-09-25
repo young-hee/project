@@ -48,8 +48,8 @@
 		</dd>
 		<dd class="reverse">
 			<div class="section customer_info">
-				<p class="text"><span id="nonMemberRvsName" class="name">홍길동</span><a href="#none" class="none_num"><span id="nonMemberRvsHp" class="phone_number">010-9924-3505</span></a></p>
-				<p id="nonMemberRvsAddress" class="text ellipsis">주소영역, 우편번호 비노출, 주소지 노출 한줄 넘어가면 말줄임</p>
+				<p class="text"><span id="nonMemberRvsName" class="name">받는사람 이름</span><a href="#none" class="none_num"><span id="nonMemberRvsHp" class="phone_number">받는사람 휴대폰</span></a></p>
+				<p id="nonMemberRvsAddress" class="text ellipsis">받는사람 주소</p>
 			</div>
 		</dd>
 	</dl>
@@ -150,22 +150,32 @@
 								</button>
 							</li>
 							<!-- 기본 배송지 선택 -->
-							<th:blcok th:if="${#lists.size(shipAddressList) > 0}">
-								<li class="selected" th:each="shipAddressInfo : ${shipAddressList}"
-									th:onclick="|addressListBlockClick(this, 99999, ${shipAddressInfo.addresseeName.name1}', '${shipAddressInfo.phoneNo1.phoneNo}', '${shipAddressInfo.addresseeAddress.zipCode}', '${shipAddressInfo.addresseeAddress.address1}', '${shipAddressInfo.addresseeAddress.address2}', false)|">
-									<button type="button" id="btnDefAddrFlag99999">
-										<span class="name" th:text="${shipAddressInfo.addresseeName.name1}">홍길동</span>
-										<span class="phone_number" th:text="${shipAddressInfo.phoneNo1.phoneNo}">010-9924-3505</span>
-										<!-- 기본 배송지 플래그 -->
-										<em class="flag purple defAddrFlag">기본배송지</em>
-										<span class="block address" th:text="'(' + ${shipAddressInfo.addresseeAddress.zipCode} + ') '+ ${shipAddressInfo.addresseeAddress.address1} + ${shipAddressInfo.addresseeAddress.address2} ">(10071) 성남시 분당구 수내로 38 두산위브센티움 1동 </span>
-									</button>
-									<!-- 기본 배송지 설정 -->
-									<div class="check_set chkDefArea" style="display: none;">
-										<span class="chk_round_h24"><input type="checkbox" id="chkDef99999" onclick="checkDefAddrClick(99999, false);"><label for="chkDef99999">기본배송지 설정</label></span>
-									</div>
-								</li>
-							</th:blcok>
+							<li class="selected" th:if="${#lists.size(shipAddressList) > 0}" th:each="shipAddressInfo : ${shipAddressList}"
+								th:onclick="|addressListBlockClick(this, 99999, '${shipAddressInfo.addresseeName.name1}', '${shipAddressInfo.phoneNo1.phoneNo}', '${shipAddressInfo.addresseeAddress.zipCode}', '${shipAddressInfo.addresseeAddress.address1}', '${shipAddressInfo.addresseeAddress.address2}', false)|">
+								<button type="button" id="btnDefAddrFlag99999">
+									<span class="name" th:text="${shipAddressInfo.addresseeName.name1}">홍길동</span>
+									<span class="phone_number" th:text="${shipAddressInfo.phoneNo1.phoneNo}">010-9924-3505</span>
+									<!-- 기본 배송지 플래그 -->
+									<em class="flag purple defAddrFlag">기본배송지</em>
+									<span class="block address" th:text="'(' + ${shipAddressInfo.addresseeAddress.zipCode} + ') '+ ${shipAddressInfo.addresseeAddress.address1} + ' ' + ${shipAddressInfo.addresseeAddress.address2} ">(10071) 성남시 분당구 수내로 38 두산위브센티움 1동 </span>
+								</button>
+								<script th:inline="javascript">
+									$( document ).ready(function() {
+										//기본 배송지를 클릭 선택 하게 만든다.
+										var shipName =  /*[[${shipAddressInfo.addresseeName.name1}]]*/ null;
+										var phoneNo =  /*[[${shipAddressInfo.phoneNo1.phoneNo}]]*/ null;
+										var zipCode =  /*[[${shipAddressInfo.addresseeAddress.zipCode}]]*/ null;
+										var addr1 =  /*[[${shipAddressInfo.addresseeAddress.address1}]]*/ null;
+										var addr2 =  /*[[${shipAddressInfo.addresseeAddress.address2}]]*/ null;
+
+										addressListBlockClick(null, 99999, shipName, phoneNo, zipCode, addr1, addr2, false);
+									});
+								</script>
+								<!-- 기본 배송지 설정 -->
+								<div class="check_set chkDefArea" style="display: none;">
+									<span class="chk_round_h24"><input type="checkbox" id="chkDef99999" onclick="checkDefAddrClick(99999, false);"><label for="chkDef99999">기본배송지 설정</label></span>
+								</div>
+							</li>
 							<!-- 최근 배송지 목록 -->
 							<th:block th:if="${#lists.size(ordShipAddressExList) > 0 }">
 								<li th:each="ordShipAddressExInfo, iterStat : ${ordShipAddressExList}"
@@ -173,7 +183,7 @@
 									<button type="button" th:id="'btnDefAddrFlag' + ${iterStat.index}">
 										<span class="name" th:text="${ordShipAddressExInfo.recipientName.name1}">홍길동</span>
 										<span class="phone_number" th:text="${ordShipAddressExInfo.recipientPhoneNo1.phoneNo}">010-9924-3505</span>
-										<span class="block address" th:text="'(' + ${ordShipAddressExInfo.recipientAddress.zipCode} + ') '+ ${ordShipAddressExInfo.recipientAddress.address1} + ${ordShipAddressExInfo.recipientAddress.address2}">(10071) 성남시 분당구 수내로 38 두산위브센티움 1동 두줄 넘어갈 경우, 세줄 넘어갈 경우 줄바꿈</span>
+										<span class="block address" th:text="'(' + ${ordShipAddressExInfo.recipientAddress.zipCode} + ') '+ ${ordShipAddressExInfo.recipientAddress.address1} + ' ' + ${ordShipAddressExInfo.recipientAddress.address2}">(10071) 성남시 분당구 수내로 38 두산위브센티움 1동 두줄 넘어갈 경우, 세줄 넘어갈 경우 줄바꿈</span>
 									</button>
 									<!-- 기본 배송지 설정 -->
 									<div class="check_set chkDefArea">
@@ -191,8 +201,8 @@
 		</dd>
 		<dd class="reverse" id="memberRcvArea">
 			<div class="section pd_md customer_info">
-				<p class="text"><span class="name" id="memberRvsName">홍길동</span><a href="#none" class="none_num"><span class="phone_number" id="memberRvsHp">010-9924-3505</span></a><em class="flag purple" id="memberRvsDefDeliFlag">기본배송지</em></p>
-				<p class="text ellipsis" id="memberRvsAddress">주소영역, 우편번호 비노출, 주소지 노출 한줄 넘어가면 말줄임</p>
+				<p class="text"><span class="name" id="memberRvsName">받는사람 이름</span><a href="#none" class="none_num"><span class="phone_number" id="memberRvsHp">받는사람 휴대폰</span></a><em class="flag purple" id="memberRvsDefDeliFlag">기본배송지</em></p>
+				<p class="text ellipsis" id="memberRvsAddress">받는사람 주소</p>
 			</div>
 		</dd>
 	</dl>
@@ -242,15 +252,9 @@
 	$( document ).ready(function() {
 
 		//비회원 접혔을 때 주소정보 표시되는 영역의 초기셋팅
-		$("#nonMemberRvsName").text("받는사람 이름");
-		$("#nonMemberRvsHp").text("받는사람 휴대폰");
-		$("#nonMemberRvsAddress").text("받는사람 주소");
 		$("#nonMemberRcvArea").hide();
 
 		//회원 접혔을 때 주소정보 표시되는 영역의 초기셋팅
-		$("#memberRvsName").text("받는사람 이름");
-		$("#memberRvsHp").text("받는사람 휴대폰");
-		$("#memberRvsAddress").text("받는사람 주소");
 		$("#memberRvsDefDeliFlag").hide();
 		$("#memberModifyArea").hide();
 
@@ -530,11 +534,11 @@
 					$(".btn_modify").trigger("click");
 					$("#memberHp1").focus();
 				});
-				//전화번호 입력 값을 받아서 바로 적용한다.
-				$("#memberHp1, #memberHp2, #memberHp3").on("keyup", function(e) {
-					$("#employeeHp").text( $("#memberHp1").val() + "-" + $("#memberHp2").val() + "-" + $("#memberHp3").val() );
-				});
 			}
+			//전화번호 입력 값을 받아서 바로 적용한다.
+			$("#memberHp1, #memberHp2, #memberHp3").on("keyup", function(e) {
+				$("#employeeHp").text( $("#memberHp1").val() + "-" + $("#memberHp2").val() + "-" + $("#memberHp3").val() );
+			});
 			$("input[name=shipMsg]").prop("placeholder", "팀명,층수,코어 기입");
 			$("input[name=shipMsg]").prop("required", true);
 		} else {

@@ -1,0 +1,230 @@
+<!-- Apmall 주문상품 -->
+<div th:each="ordOtfExFo,ordOtfExFoIterStat : ${ordOtfExFoList}" th:class="${ordOtfExFoIterStat.index} == 0 ? 'ui_accordion cart_list first' : 'ui_accordion cart_list'">
+	<dl>
+		<dt class="on">
+			<strong class="tit"><th:block th:text="${ordOtfExFo.coName}"></th:block> 주문상품 <th:block th:text="${ordOtfExFo.ordHistProdExList.size()}"></th:block>개</strong>
+			<button type="button"><span class="sr_only">열기</span></button>
+		</dt>
+		<dd>
+			<!--/*  온라인 상품 Start */-->
+			<th:block th:if="${#lists.size(ordOtfExFo.shippingOrdOnlineProdList) > 0}">
+				<ul class="item_list">
+					<th:block th:each="ordOnlineProd,iterStat : ${ordOtfExFo.shippingOrdOnlineProdList}">
+						<li th:class="${iterStat.index} == 0 ? 'first'">
+							<!--결제 히든값-->
+							<input type="hidden" name="onlinePordSn" th:value="${ordOnlineProd.onlineProdCode}"/>
+							<input type="hidden" name="prodName" th:value="${ordOnlineProd.onlineProdName}"/>
+							<input type="hidden" name="prodQty" th:value="${ordOnlineProd.ordQtySum}"/>
+							<input type="hidden" name="ordHistProdCnt" th:value="${#lists.size(ordOnlineProd.ordHistProdList)}"/>
+							<!--//결제 히든값-->
+							<div class="item_info" th:with="isPresaleDisp=${false}">
+								<div class="thumb">
+									<a href="#none"><img th:src="${ordOnlineProd.onlineProdImgUrl}"></a>
+								</div>
+								<div class="name">
+									<th:block th:each="ordHistProdAwardEx : ${ordOnlineProd.ordHistProdAwardExList}">
+										<th:block th:if="${ordHistProdAwardEx.awardTgtCode == 'Prod'} ">
+											<span class="benefit special">스페셜기프트</span>
+										</th:block>
+									</th:block>
+									<th:block th:each="ordHistProd,iterStat : ${ordOnlineProd.ordHistProdList}">
+										<!-- 예약상품 -->
+										<p class="reservation" th:if="${isPresaleDisp == false and ordHistProd.ordProdEx.prodTypeCode == 'Presale'}"><th:block th:with="isPresaleDisp=${true}">예약상품</th:block><span><th:block th:text="${#dates.format(ordHistProd.ordProdEx.otfExpectedDt, 'MM월 dd일')}"></th:block>부터 순차배송</span></p>
+									</th:block>
+									<p class="txt" th:text="${ordOnlineProd.onlineProdName}"></p>
+								</div>
+							</div>
+							<!-- 옵션 -->
+
+							<div class="item_option">
+								<th:block th:each="ordHistProd, iterStat : ${ordOnlineProd.ordHistProdList}">
+									<div class="inner">
+										<div class="name">
+											<p class="ellipsis"><th:block th:text="${ordHistProd.ordProdEx.prodNameBlang}"></th:block></p>
+										</div>
+										<div class="count"><th:block th:text="${ordHistProd.ordQty}"></th:block>개</div>
+										<div class="price">
+											<strong><th:block th:text="${#IntegUtil.toCommaNumber(ordHistProd.finalOnlineSaleAmtPcur)}"></th:block>원</strong>
+										</div>
+									</div>
+								</th:block>
+							</div>
+
+							<!-- // 옵션 -->
+						</li>
+					</th:block>
+				</ul>
+			</th:block>
+			<!--/*  온라인 상품 End */-->
+			<!--/* 묶음판매상품 Start */-->
+			<th:block th:if="${#lists.size(ordOtfExFo.shippingBulkDcList) > 0}">
+				<ul class="item_list">
+					<!-- 상품 -->
+					<li th:each="bulkDcOnlineProd : ${ordOtfExFo.shippingBulkDcList}">
+						<div class="item_info" th:with="isPresaleDisp=${false}">
+							<div class="thumb">
+								<a href="#none"><img th:src="${bulkDcOnlineProd.bulkDcOnlineProdImgUrl}"></a>
+							</div>
+							<div class="name">
+								<th:block th:each="ordOnlineProdFo : ${bulkDcOnlineProd.ordOnlineProdFoList}">
+									<th:block th:each="ordHistProdAwardEx : ${ordOnlineProdFo.ordHistProdAwardExList}">
+										<th:block th:if="${ordHistProdAwardEx.awardTgtCode == 'Prod'} ">
+											<span class="benefit special">스페셜기프트</span>
+										</th:block>
+									</th:block>
+								</th:block>
+								<th:block th:each="ordOnlineProdFo : ${bulkDcOnlineProd.ordOnlineProdFoList}">
+									<th:block th:each="ordHistProd, iterStat : ${ordOnlineProdFo.ordHistProdList}">
+										<!-- 예약상품 -->
+										<p class="reservation" th:if="${isPresaleDisp == false and ordHistProd.ordProdEx.prodTypeCode == 'Presale'}"><th:block th:with="isPresaleDisp=${true}">예약상품</th:block><span><th:block th:text="${#dates.format(ordHistProd.ordProdEx.otfExpectedDt, 'MM월 dd일')}"></th:block>부터 순차배송</span></p>
+									</th:block>
+								</th:block>
+								<p class="txt" th:text="${bulkDcOnlineProd.bulkDcOnlineProdName}"></p>
+							</div>
+						</div>
+						<!-- 옵션 -->
+						<div class="item_option">
+							<div class="inner">
+								<div class="name">
+									<p class="ellipsis"><th:block th:text="${bulkDcOnlineProd.bulkDcOnlineProdName}"></th:block></p>
+								</div>
+								<div class="count"><th:block th:text="${bulkDcOnlineProd.ordQtySum}"></th:block>개</div>
+								<div class="price">
+									<strong><th:block th:text="${#IntegUtil.toCommaNumber(bulkDcOnlineProd.totalBulkDcProductSaleAmount)}"></th:block>원</strong>
+								</div>
+							</div>
+						</div>
+						<!-- // 옵션 -->
+						<!--/* 묶음상품일 경우 */-->
+						<ul class="pack_prd">
+							<th:block th:if="${#lists.size(bulkDcOnlineProd.ordOnlineProdFoList) > 0}" th:each="ordOnlineProd, iter : ${bulkDcOnlineProd.ordOnlineProdFoList}">
+								<input type="hidden" name="onlinePordSn" th:value="${ordOnlineProd.onlineProdCode}"/>
+								<input type="hidden" name="prodName" th:value="${ordOnlineProd.onlineProdName}"/>
+								<input type="hidden" name="prodQty" th:value="${ordOnlineProd.ordQtySum}"/>
+								<input type="hidden" name="ordHistProdCnt" th:value="${#lists.size(ordOnlineProd.ordHistProdList)}"/>
+								<li><th:block th:text="${ordOnlineProd.onlineProdName}"></th:block><span><th:block th:text="${ordOnlineProd.ordQtySum}"></th:block>개</span></li>
+							</th:block>
+						</ul>
+					</li>
+					<!-- // 상품 -->
+				</ul>
+			</th:block>
+			<!--/* 묶음판매상품 End */-->
+			<!--/*  뷰티포인트 상품 Start */-->
+			<th:block th:if="${#lists.size(ordOtfExFo.shippingOrdOnlineBeautyPointProdList) > 0}">
+				<div class="promotion_bar beauty">
+					<strong class="tit">뷰티포인트 상품</strong>
+					<p class="point" th:value="${membershipTotalAmount}">
+						<th:block th:each="ordMembershipEx : ${ordEx.ordMembershipExList}">
+							<th:block th:if="${ordMembershipEx.membershipServiceCode == 'BP'}">
+								<span class="hold"><em>보유 <th:block th:text="${#IntegUtil.toCommaNumber(ordMembershipEx.membershipKeepingPoint)}"></th:block></em><span>P</span></span>
+							</th:block>
+						</th:block>
+						<span class="price"><th:block th:text="${#aggregates.sum(ordOtfExFo.shippingOrdOnlineBeautyPointProdList.![finalOnlineSaleAmtPcurSumExchMembership])}"></th:block>P</span>
+					</p>
+				</div>
+				<ul class="item_list">
+					<!-- 상품 -->
+					<th:block th:each="ordOnlineProd,iterStat : ${ordOtfExFo.shippingOrdOnlineBeautyPointProdList}">
+						<li th:class="${iterStat.index} == 0 ? 'first'">
+							<!--결제 히든값-->
+							<input type="hidden" name="onlinePordSn" th:value="${ordOnlineProd.onlineProdCode}"/>
+							<input type="hidden" name="prodName" th:value="${ordOnlineProd.onlineProdName}"/>
+							<input type="hidden" name="prodQty" th:value="${ordOnlineProd.ordQtySum}"/>
+							<input type="hidden" name="ordHistProdCnt" th:value="${#lists.size(ordOnlineProd.ordHistProdList)}"/>
+							<!--//결제 히든값-->
+							<div class="item_info" th:with="isPresaleDisp=${false}">
+								<div class="thumb">
+									<a href="#none"><img th:src="${ordOnlineProd.onlineProdImgUrl}"></a>
+								</div>
+								<div class="name">
+									<th:block th:each="ordHistProdAwardEx : ${ordOnlineProd.ordHistProdAwardExList}">
+										<th:block th:if="${ordHistProdAwardEx.awardTgtCode == 'Prod'} ">
+											<span class="benefit special">스페셜기프트</span>
+										</th:block>
+									</th:block>
+									<th:block th:each="ordHistProd, iterStat : ${ordOnlineProd.ordHistProdList}">
+										<!-- 예약상품 -->
+										<p class="reservation" th:if="${isPresaleDisp == false and ordHistProd.ordProdEx.prodTypeCode == 'Presale'}"><th:block th:with="isPresaleDisp=${true}">예약상품</th:block><span><th:block th:text="${#dates.format(ordHistProd.ordProdEx.otfExpectedDt, 'MM월 dd일')}"></th:block>부터 순차배송</span></p>
+									</th:block>
+									<p class="txt" th:text="${ordOnlineProd.onlineProdName}"></p>
+								</div>
+							</div>
+							<!-- 옵션 -->
+							<div class="item_option">
+								<div class="inner">
+									<th:block th:each="ordHistProd, iterStat : ${ordOnlineProd.ordHistProdList}">
+										<div class="name">
+											<p class="ellipsis"><th:block th:text="${ordHistProd.ordProdEx.prodNameBlang}"></th:block></p>
+										</div>
+										<div class="count"><th:block th:text="${ordHistProd.ordQty}"></th:block>개</div>
+										<div class="price">
+											<strong><th:block th:text="${#IntegUtil.toCommaNumber(ordHistProd.exchMembership)}"></th:block>P</strong>
+										</div>
+									</th:block>
+								</div>
+							</div>
+							<!-- // 옵션 -->
+						</li>
+						<!-- // 상품 -->
+					</th:block>
+				</ul>
+			</th:block>
+			<!--/* 뷰티포인트 상품 End */-->
+			<!--/* M+N프로모션 Start */-->
+			<th:block th:if="${#lists.size(ordOtfExFo.shippingMNPromoList) > 0}">
+				<th:block th:each="mPlusNPromo : ${ordOtfExFo.shippingMNPromoList}">
+					<div class="promotion_bar event">
+						<strong class="tit"><em><th:block th:text="${mPlusNPromo.baseQty + ' + ' + mPlusNPromo.awardQty}"></th:block></em><span class="txt"><th:block th:text="${mPlusNPromo.promoName}"></th:block></span></strong>
+						<p class="point">
+							<span class="price"><th:block th:text="${#aggregates.sum(mPlusNPromo.ordOnlineProdFoList.![finalOnlineSaleAmtPcurSum])}"></th:block>원</span>
+						</p>
+					</div>
+					<ul class="item_list">
+						<th:block th:each="ordOnlineProd, iter : ${mPlusNPromo.ordOnlineProdFoList}" >
+							<!-- 상품 -->
+							<li>
+								<div class="item_info" th:with="isPresaleDisp=${false}">
+									<div class="thumb">
+										<th:block th:if="${ordOnlineProd.prodImgUrl != null}"><a href="#none"><img th:src="${ordOnlineProd.prodImgUrl}" alt=""></a></th:block>
+										<th:block th:unless="${ordOnlineProd.prodImgUrl != null}"><a href="#none"><img th:src="${ordOnlineProd.onlineProdImgUrl}" alt=""></a></th:block>
+									</div>
+									<div class="name">
+										<th:block th:each="ordHistProdAwardEx : ${ordOnlineProd.ordHistProdAwardExList}">
+											<th:block th:if="${ordHistProdAwardEx.awardTgtCode == 'Prod'} ">
+												<span class="benefit special">스페셜기프트</span>
+											</th:block>
+										</th:block>
+										<th:block th:each="ordHistProd,iterStat : ${ordOnlineProd.ordHistProdList}">
+											<!-- 예약상품 -->
+											<p class="reservation" th:if="${isPresaleDisp == false and ordHistProd.ordProdEx.prodTypeCode == 'Presale'}"><th:block th:with="isPresaleDisp=${true}">예약상품</th:block><span><th:block th:text="${#dates.format(ordHistProd.ordProdEx.otfExpectedDt, 'MM월 dd일')}"></th:block>부터 순차배송</span></p>
+										</th:block>
+										<p class="txt" th:text="${ordOnlineProd.onlineProdName}"></p>
+									</div>
+								</div>
+
+								<!-- 옵션 -->
+								<div class="item_option">
+									<th:block th:each="ordHistProd : ${ordOnlineProd.ordHistProdList}" >
+										<div class="inner">
+											<div class="name">
+												<p class="ellipsis" th:text="${ordHistProd.ordProdEx.prodNameBlang}"></p>
+											</div>
+											<div class="count"><th:block th:text="(${ordHistProd.ordQty} + 개)"></th:block></div>
+											<div class="price">
+												<strong><th:block th:text="${#IntegUtil.toCommaNumber(ordHistProd.finalOnlineSaleAmtPcur)}"></th:block>원</strong>
+											</div>
+										</div>
+									</th:block>
+								</div>
+								<!-- // 옵션 -->
+							</li>
+							<!-- // 상품 -->
+						</th:block>
+					</ul>
+				</th:block>
+			</th:block>
+		</dd>
+	</dl>
+</div>
+<!-- // Apmall 주문상품 -->

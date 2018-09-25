@@ -131,6 +131,8 @@
 
 	var takeoutModal ;
 
+	var isSearchClick = false;
+
 	/* 온라인 체크시 */
 	$('#onlinePrdCheck').on('click', function(e) {
 		if($(this).is(":checked")){
@@ -420,16 +422,6 @@
 
 		var $modalEl = takeoutModal.getElement();
 
-		$modalEl.find("[name=searchGubun]").click(function() {
-			$('#addStore').empty();
-			if($(this).val() == '1'){
-				auth();
-			}else{
-				ret = true;
-				getFavoriteStore(null);
-			}
-		});
-
 		// 매장검색
 		$modalEl.find("#search").click(function() {
 			getSearchAddress();
@@ -443,7 +435,7 @@
 		});
 
 		// 더보기
-		$('#b_page').on('click', function(e) {
+		$modalEl.find('.btn_lg_more').click(function() {
 			if(ret){
 				getFavoriteStore((currentOffset + pageLimit));
 			}
@@ -453,13 +445,25 @@
 		});
 
 		// 지역선택 변경
-		$('[name=addressDiv]').change(function(){
+		$modalEl.find('[name=addressDiv]').change(function(){
 			$('[name=addressDetailDivs] option').each(function(index){
 				if(index > 0){
 					$(this).remove();
 				}
 			});
 			getAddressDetailDivs();
+		});
+
+		// 검색구분( 1:거리순, 2:단골매장 )
+		$modalEl.find("[name=searchGubun]").click(function() {
+			$('#addStore').empty();
+
+			if($(this).val() == '1'){
+				auth();
+			}else{
+				ret = true;
+				getFavoriteStore(null);
+			}
 		});
 
 		// 지역선택 검색
@@ -490,7 +494,7 @@
 			}
 		}
 
-		/* 매장선택 조건 */
+		// 매장선택 조건
 		function getSearchAddress(){
 			var addressDiv = $('#addressDiv').val();
 			var addressDetailDivs = $('#addressDetailDivs').val();
@@ -518,22 +522,26 @@
 
 	/* 위치기반 동의 Layer */
 	function auth() {
-		var modal = AP.modal.open({
-			templateKey : 'my.location-auth'
-		});
-		modal.getElement().find("#cancel").on('click', function() {
-			modal.close();
-		});
-
-		modal.getElement().find("#ok").on('click', function() {
-			modal.close();
+		if(isSearchClick){
 			myLocation();
-		});
+		}
+		else{
+			isSearchClick = true;
+			var modal = AP.modal.open({
+				templateKey : 'my.location-auth'
+			});
+			modal.getElement().find("#cancel").on('click', function() {
+				modal.close();
+			});
+			modal.getElement().find("#ok").on('click', function() {
+				modal.close();
+				myLocation();
+			});
+		}
 	}
 
 	/* 위치기반 약관 */
 	function termsView() {
-
 		AP.modal.agreeTerms({
 			title: '위치기반 서비스 약관',
 			displayCode: 'ET002'
@@ -649,10 +657,6 @@
 			cartEx = data.cartEx;
 			storeSelect = data.storeSelect;
 			storeRegularList = data.storeRegularList;
-			setOnlineProd();
-			setStoreProd();
-			setCalculationResult();
-			setProdCnt();
 			setStoreSelect();
 			$('#orderLoading').hide();
 		}).fail(function (e) {
@@ -778,15 +782,20 @@
 		location.href = '/product/detail?onlineProdSn=' + onlineProdSn;
 	}
 
+	/* 매장 전화걸기 */
+	function getCallNumber(num) {
+		location.href = "tel:" + num;
+	}
+
 	/* 선택매장 변경(단골매장에서 선택) */
 	function fnChangeStore(storeSn) {
-		fnTakeoutChangeStore(storeSn)
+		fnTakeoutChangeStore(storeSn);
 	}
 
 	/* 선택매장 변경(레이어창에서 선택) */
 	function fnLayerChangeStore(storeSn) {
 		takeoutModal.close();
-		fnTakeoutChangeStore(storeSn)
+		fnTakeoutChangeStore(storeSn);
 	}
 
 	/* 선택매장 변경 */
@@ -800,10 +809,6 @@
 				cartEx = data.cartEx;
 				storeSelect = data.storeSelect;
 				storeRegularList = data.storeRegularList;
-				setOnlineProd();
-				setStoreProd();
-				setCalculationResult();
-				setProdCnt();
 				setStoreSelect();
 			}
 			$('#orderLoading').hide();
@@ -1151,6 +1156,7 @@
 				}
 			});
 		});
+
 		return true;
 	}
 
@@ -1187,6 +1193,7 @@
 				}
 			});
 		});
+
 		return true;
 	}
 

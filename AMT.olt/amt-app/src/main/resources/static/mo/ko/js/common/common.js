@@ -434,7 +434,7 @@
 			var timer = false;
 
 			this.start = function () {
-				var countDownDate = new Date(new Date().getTime() + 60 * 1000);
+				var countDownDate = new Date(new Date().getTime() + min * 60 * 1000);
 
 				timer = setInterval(function () {
 

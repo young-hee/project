@@ -26,7 +26,7 @@
 		                 <div class="login_area">
 		                     <div class="input_group">
 		                     	<div>
-		                     		<input type="text" title="이름 입력" required="required" name="custNm" placeholder="이름을 입력하세요"data-msg-required="이름을 입력해 주세요. 이름 입력란으로 이동합니다." user-name="user-name">
+		                     		<input type="text" target="phoneNumber2" title="이름 입력" required="required" name="custNm" placeholder="이름을 입력하세요"data-msg-required="이름을 입력해 주세요. 이름 입력란으로 이동합니다." user-name="user-name">
 		                     	</div>
 		                     </div>
 	
@@ -44,7 +44,7 @@
 							</div>
 							<div class="input_group">
 								<div>
-									<input type="tel" name="phoneNumber2" required="required" title="휴대폰 번호 입력" maxlength="8" placeholder="휴대폰 번호 입력('-' 생략)" data-msg-required="휴대폰번호를 입력해 주세요.">
+									<input type="tel" target="send-sms" name="phoneNumber2" required="required" title="휴대폰 번호 입력" maxlength="8" placeholder="휴대폰 번호 입력('-' 생략)" data-msg-required="휴대폰번호를 입력해 주세요.">
 								</div>
 								<div class="btn">
 									<button type="button" id="send-sms">인증요청</button>
@@ -53,7 +53,7 @@
 							</div>
 		                    <div class="input_group">
 								<div>
-									<input type="tel" name="smsNum" required="required" title="인증번호를 입력하세요." maxlength="8" placeholder="인증번호를 입력하세요." data-msg-required="인증번호를 입력해 주세요.">
+									<input type="tel" name="smsNum" target="complete" required="required" title="인증번호를 입력하세요." maxlength="8" placeholder="인증번호를 입력하세요." data-msg-required="인증번호를 입력해 주세요.">
 									<em class="unit" name="timer">3:00</em> 
 								</div>
 								<div class="btn">
@@ -91,8 +91,8 @@
 				        <dd>
 				            <p class="text">가입 한번으로 많은 혜택을 누리세요.</p>
 				            <div>
-				            	<a href="#none" class="btn_lg_bordered w100p">회원가입</a>
-				            	<a href="#none" class="btn_lg_bordered w100p">비회원 주문조회</a>
+				            	<a href="/customer/signup" class="btn_lg_bordered w100p">회원가입</a>
+				            	<a href="/guestOrder" class="btn_lg_bordered w100p">비회원 주문조회</a>
 				            </div>
 				        </dd>
 				    </dl>
@@ -105,6 +105,20 @@
         <th:block ap:fragment="layout-endpoint">
 <script>
 
+$('input').keypress(function(f) {
+
+	if(f.keyCode == 13){
+		if(!$($(f).attr('target')).val()) return;
+		var target = $($(f).attr('target')).attr('target');
+		if(!target) return;
+		if(target == 'complete' || target == 'send-sms') {
+			$('#' + target + '').click();
+		} else {
+		
+			$('[name=' + target + ']').focus();
+		}
+	}
+});
 function back() {
     location.href = "/main";
 }
@@ -363,7 +377,7 @@ function mobileLoginComplete() {
 $('input[type=tel]').keydown(function (event) {
     if (event.keyCode) {
         var code = event.keyCode;
-        if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+        if ((code == 13) || (code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
             return true;
         } else {
             return false;

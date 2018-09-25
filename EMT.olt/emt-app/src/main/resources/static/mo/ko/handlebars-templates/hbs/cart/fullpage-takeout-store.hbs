@@ -13,7 +13,11 @@
 		<div class="store_info">
 			<p class="store_addr">
 				{{ this.address.address1 }}{{ this.address.address2 }}
-				<span class="store_phone">{{ phoneNumberFormat this.phoneNo1.phoneNo }}</span>
+				{{#if (ne this.phoneNo1 null) }}
+					<a href="#" onclick="getCallNumber('{{ this.phoneNo1.phoneNo }}');"> <span class="store_phone"> {{phoneNumberFormat this.phoneNo1.phoneNo }} </span></a>
+				{{else}}
+					<a href="#" onclick="getCallNumber('{{ this.phoneNo2.phoneNo }}');"> <span class="store_phone"> {{phoneNumberFormat this.phoneNo2.phoneNo }} </span></a>
+				{{/if}}
 			</p>
 			<div class="store_btn_wrap">
 				<button type="button" class="btn_md w50p map_call" id="b_storeMap" latitude="{{ this.latitude }}" longitude="{{ this.longitude }}">지도보기</button>

@@ -10,7 +10,7 @@ this["AP"]["handlebars"]["my"]["order"]["layer-address-edit"] = Handlebars.templ
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.info : depth0)) != null ? stack1.recipientAddress : stack1)) != null ? stack1.zipCode : stack1), depth0))
     + "\" readonly></span>\n								<span class=\"gap\">&nbsp;</span>\n								<span class=\"input_wrap\"><input type=\"text\" class=\"address_first\" name=\"recipientAddress.address1\" title=\"기본주소 입력\" placeholder=\"기본주소\" value=\""
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.info : depth0)) != null ? stack1.recipientAddress : stack1)) != null ? stack1.address1 : stack1), depth0))
-    + "\" readonly></span>\n							</div>\n							<div class=\"input_wrap w100p\"><input type=\"text\" class=\"address_last\" name=\"recipientAddress.address2\" title=\"상세주소 입력\" placeholder=\"상세주소\" value=\""
+    + "\" readonly></span>\n							</div>\n							<div class=\"input_wrap w100p\"><input type=\"text\" id=\"address2\" class=\"address_last\" name=\"recipientAddress.address2\" title=\"상세주소 입력\" placeholder=\"상세주소\" value=\""
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.info : depth0)) != null ? stack1.recipientAddress : stack1)) != null ? stack1.address2 : stack1), depth0))
     + "\" required=\"required\" data-msg-required=\"상세주소를 입력해 주세요.\"/></div>\n							<p class=\"text_notice\">찾으시는 주소지 또는 건물명을 입력해 주세요.<br>(예 : 강남대로, 한강로2가, 한강대로 100)</p>\n						</dd>\n					</dl>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {

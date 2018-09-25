@@ -85,7 +85,7 @@
 			
 			//뷰티테스터 상세 보기
 			this._$target.find( '.viewProdDetail' ).on( 'click', function (e) {
-				location.href = '/product/detail?onlineProdSn=' + $(e.currentTarget).data('online-prod-sn');
+				location.href = '/product/detail?onlineProdSn=' + $(e.currentTarget).data('online-prod-sn') +'&prodSn=' + $(e.currentTarget).data('prod-sn');
 			}.bind( this ));
 
 			AP.applicationForm.addListener( 'application-submit', function (e) {

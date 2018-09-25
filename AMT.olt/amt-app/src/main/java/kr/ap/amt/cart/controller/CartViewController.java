@@ -77,13 +77,11 @@ public class CartViewController extends CartBaseController{
 
 		// Mobile
 		if (isMobileDevice()) {
-			model.addAttribute("randomeBrand", showRandomBrand());
+			model.addAttribute("randomBrandList", showRandomBrand());
 			return "cart/cart_01";
 		}
 		// PC
 		if (isPcDevice()) {
-
-			model.addAttribute("bestProdList", showBestProdList());
 			return "cart/cart";
 		}
 

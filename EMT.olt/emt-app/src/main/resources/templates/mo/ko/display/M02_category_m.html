@@ -38,7 +38,15 @@
 
 		<!--추천템-->
 		<div class="recommend_items">
-			<h3 class="title">고객님을 위한 추천템</h3>
+			<h3 class="title">
+				<th:block th:if="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+					고객
+				</th:block>
+				<th:block th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
+					[[${session.LOGIN_USER.member.name.name1}]]
+				</th:block>
+				님을 위한 추천템
+			</h3>
 			<ul class="loading" style="min-height:100px">
 				<li></li>
 				<li></li>
@@ -73,8 +81,8 @@
 		<div class="sorting_group">
 			<span class="select_wrap">
 				<select tabindex="-1" name="" id="" title="선택하세요">
-					<option value="1" th:value="Bestselling">판매순</option>
-					<option value="2" th:value="NewProd">신상품순</option>
+					<option value="1" th:value="NewProd">신상품순</option>
+					<option value="2" th:value="Bestselling">판매순</option>
 					<option value="3" th:value="HighestPrice">높은가격순</option>
 					<option value="4" th:value="LowestPrice">낮은가격순</option>
 					<option value="5" th:value="MostProdReview">상품평순</option>
@@ -89,7 +97,7 @@
 		<!--/* [E] 20180423 : 검색영역 순서 변경 */-->
 
 		<!--상품리스트-->
-		<div class="item_list type2">
+		<div class="item_list type2 responsive_list">
 			<div class="panel notice no_result" style="display: none;">
 				<i class="ico"></i>
 				<p class="text">상품이 존재하지 않습니다.</p>

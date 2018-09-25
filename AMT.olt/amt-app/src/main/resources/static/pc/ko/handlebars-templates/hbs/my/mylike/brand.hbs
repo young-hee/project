@@ -1,0 +1,46 @@
+{{#each this.brandCards}}
+<li data-brand-sn="{{ this.brandSn }}">
+	<div class="brand_box">
+		<span class="check_wrap check_only"><input type="checkbox" id="check_{{ @index }}" data-plan-display-sn="{{ this.planDisplaySn }}"><label for="check_{{ @index }}"><span class="sr_only">선택</span></label></span>
+		<strong class="sr_only">{{ this.brandName }}</strong>
+		<div class="brand_visual">
+			<a href="/display/brand/{{ this.displayMenuId }}/{{ this.brandSn }}">
+				<img alt="HERA" src="{{ absolutePath this.brandMainImgUrl }}">
+			</a>
+		</div>
+		<div class="brand_info">
+			{{#xif this.planDisplayExistYn '==' 'Y'}}
+				<div class="info_box">
+					<a href="#none">
+						<p class="txt_type">EVENT</p>
+						<p class="txt_summary">{{ this.planDisplayInfos.[0].planDisplayTitle }}</p>
+						<p class="txt_day">{{ this.planDisplayInfos.[0].eventStartDt }}-{{ this.planDisplayInfos.[0].eventEndDt }}</p>
+					</a>
+				</div>
+			{{else}}
+				<ul class="list_brand_relate">
+					{{#each this.prods.list}}
+						{{#xif @index '<' 4}}
+							<li>
+								<a href="{{ productDetailPath this.onlineProdSn }}">
+									<img alt="{{ this.onlineProdName }}" src="{{ absolutePath onlineProdImages.[0].imgUrl }}">
+								</a>
+							</li>
+						{{/xif}}
+					{{/each}}
+				</ul>
+			{{/xif}}
+		</div>
+		<div class="tags_box">
+			<ul class="list_tags">
+				{{#each this.brandKeywordLinks }}
+					<li><a href="{{ this.keywordLinkUrl }}" class="hash_tags_md">#{{ this.keywordLinkTitle }}</a></li>
+				{{/each}}
+			</ul>
+		</div>
+		<a href="#none" class="like like_btn" role="button">
+			<i class="ico_like {{#xif this.memberShoppingMarkYn '==' 'Y'}}on{{/xif}}"><span class="sr_only">좋아요</span></i>
+		</a>
+	</div>
+</li>
+{{/each}}

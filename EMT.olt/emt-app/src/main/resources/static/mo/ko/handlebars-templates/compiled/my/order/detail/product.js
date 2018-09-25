@@ -47,7 +47,7 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["product"] = Handlebars.templa
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.prod : depth0)) != null ? stack1.onlineProdName : stack1), depth0))
     + "</p>\n";
 },"11":function(container,depth0,helpers,partials,data) {
-    return "		<div class=\"status\">\n			<p><em>취소완료</em></p>\n		</div>\n";
+    return "			<span class=\"status\">\n				<em>취소완료</em>\n			</span>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
@@ -62,7 +62,7 @@ this["AP"]["handlebars"]["my"]["order"]["detail"]["product"] = Handlebars.templa
     + alias3((helpers.myOrdQty || (depth0 && depth0.myOrdQty) || alias2).call(alias1,"group",(depth0 != null ? depth0.prod : depth0),(depth0 != null ? depth0.step : depth0),(depth0 != null ? depth0.type : depth0),(depth0 != null ? depth0.claimYn : depth0),{"name":"myOrdQty","hash":{},"data":data}))
     + "개</span> /\n		<strong class=\"eng\">"
     + alias3((helpers.currencyFormat || (depth0 && depth0.currencyFormat) || alias2).call(alias1,(helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(helpers.eq || (depth0 && depth0.eq) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.prod : depth0)) != null ? stack1.ordHistProdStatusCode : stack1),"ProdCancel",{"name":"eq","hash":{},"data":data}),((stack1 = (depth0 != null ? depth0.prod : depth0)) != null ? stack1.prodCancelAmtSum : stack1),((stack1 = (depth0 != null ? depth0.prod : depth0)) != null ? stack1.finalOnlineSaleAmtPcurSum : stack1),{"name":"condition","hash":{},"data":data}),{"name":"currencyFormat","hash":{},"data":data}))
-    + "</strong></p>\n	</div>\n"
+    + "</strong></p>\n"
     + ((stack1 = (helpers.xif || (depth0 && depth0.xif) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0.prod : depth0)) != null ? stack1.ordHistProdStatusCode : stack1),"===","ProdCancel",{"name":"xif","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\n</div>";
+    + "	</div>\n\n</div>";
 },"useData":true});

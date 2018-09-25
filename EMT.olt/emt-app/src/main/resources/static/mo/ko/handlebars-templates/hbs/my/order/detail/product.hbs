@@ -23,11 +23,11 @@
 
 		<p class="price"><span class="quantity">{{myOrdQty 'group' prod step type claimYn}}개</span> /
 		<strong class="eng">{{currencyFormat (condition (eq prod.ordHistProdStatusCode 'ProdCancel') prod.prodCancelAmtSum prod.finalOnlineSaleAmtPcurSum)}}</strong></p>
+		{{#xif prod.ordHistProdStatusCode '===' 'ProdCancel'}}
+			<span class="status">
+				<em>취소완료</em>
+			</span>
+		{{/xif}}
 	</div>
-	{{#xif prod.ordHistProdStatusCode '===' 'ProdCancel'}}
-		<div class="status">
-			<p><em>취소완료</em></p>
-		</div>
-	{{/xif}}
 
 </div>

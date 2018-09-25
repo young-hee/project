@@ -76,12 +76,12 @@
 										<div class="select_wrap xsm"><!-- 선택시 open 클래스  -->
 											<select name="depositType" id="" tabindex="0">
 												<option value="">전체내역</option>
-												<option value="Saving">적립</option>
-												<option value="Transfer">출금</option>
-												<option value="Pay">사용</option>
-												<option value="PayCancel">사용취소</option>
-												<option value="ManualSaving">수동적립</option>
-												<option value="ManualDec">수동차감</option>
+												<option value="Saving">적립내역</option>
+												<option value="Pay">사용내역</option>
+												<option value="Transfer">출금내역</option>
+												<option value="PayCancel">취소내역</option>
+												<option value="ManualSaving">수동적립내역</option>
+												<option value="ManualDec">수동차감내역</option>
 											</select>
 										</div>
 									</div>
@@ -99,7 +99,7 @@
 										<legend class="sr_only">예치금적립 항목</legend>
 										<div class="panel bg_white table_layout"> <!-- 등록된 계좌가 없을시 클래스 'disable' 추가 -->
 											<dl>
-												<dt><th:block th:text="${session.LOGIN_USER.member.name.name1}">홍길동</th:block>님의 계좌</dt>
+												<dt th:if="${depositRefundAccount.acHolderName}"><th:block th:text="${depositRefundAccount.acHolderName.name1}">홍길동</th:block>님의 계좌</dt>
 												<dd th:if="${depositRefundAccount.bankAcNo}"><th:block th:text="${depositRefundAccount.bankName}">국민은행</th:block> <th:block th:text="${depositRefundAccount.bankAcNo}">032-90204-154418</th:block></dd>
 												<dd th:unless="${depositRefundAccount.bankAcNo}">등록된 환불계좌가 없습니다.</dd>
 											</dl>

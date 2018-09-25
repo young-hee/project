@@ -29,11 +29,7 @@
 				{{#xif claimYn '==' 'Y'}}
 					<em>{{ordStatusCheck ordEx.claimTypeCode ordEx.claimProgressStatusCode}}</em>
 				{{else}}
-					{{#if (or (eq type 'return')(eq type 'exchange'))}}
-						<em>{{ordStatusCheck type ordEx.ordDetailStatusCode}}</em>
-					{{else}}
-						<em>{{ordStatusCheck type ordEx.ordDetailStatusCode}}</em>
-					{{/if}}
+					<em>{{ordStatusCheck 'online' ordEx.ordDetailStatusCode}}</em>
 					{{#xif ordEx.ordDetailStatusCode '===' 'PartialCancel'}}
 						<span class="color_gray2">(부분취소)</span>
 					{{/xif}}
@@ -45,9 +41,18 @@
     	{{#xif storeCnt ">" 0}}
         	<dl class="table_layout">
         		<dt>테이크 아웃</dt>
-        		<dd><em>주문접수</em></dd>
+				<dd>
+				{{#xif claimYn '==' 'Y'}}
+					<em>{{ordStatusCheck ordEx.claimTypeCode ordEx.claimProgressStatusCode}}</em>
+				{{else}}
+					<em>{{ordStatusCheck 'online' ordEx.ordDetailStatusCode}}</em>
+					{{#xif ordEx.ordDetailStatusCode '===' 'PartialCancel'}}
+						<span class="color_gray2">(부분취소)</span>
+					{{/xif}}
+				{{/xif}}
+				</dd>
         		<dd class="align_right">
-        			<button type="button" class="btn_take_out"><img src={{absolutePath '/images/my/btn_barcode.gif'}} alt="테이크아웃바코드 보기"></button>
+        			<button type="button" class="btn_take_out" onclick="showBarcodeImage({{ordEx.ordSn}})"><img src={{absolutePath '/images/my/btn_barcode.gif'}} alt="테이크아웃바코드 보기"></button>
         		</dd>
         	</dl>
     	{{/xif}}

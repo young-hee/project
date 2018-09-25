@@ -1,0 +1,43 @@
+{{#each list}}
+	<lidata-online-prod-sn="{{ this.onlineProdSn }}" data-index="{{@index}}">
+		<div class="product_new">
+			<a href="{{ productDetailPath this.onlineProdSn }}">
+				<span class="product_visual_new">
+					{{#xif this.saleDisplayStatus '==' 'OutOfStock'}}
+						<span class="out_of_stock"><span class="img_badge">일시품절</span></span>
+					{{/xif}}
+					<span class="lazy_load_wrap">
+						<img src="" data-src="{{ this.onlineProdImages.[0].imgUrl }}" alt="{{ this.onlineProdName }}" class="lazy_load">
+					</span>
+				</span>
+				<span class="product_info_new">
+					<strong class="prd_brand">{{ this.products.[0].brandName }}</strong>
+					<span class="prd_name">{{ this.onlineProdName }}</span>
+					<span class="price_wrap">
+						{{#xif this.onlineProdPriceSummary.maxFinalDiscountRate '>' 0}}
+							<strong class="discount">{{ this.onlineProdPriceSummary.maxFinalDiscountRate }}%</strong>
+						{{/xif}}
+						<strong class="price">{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountOnlinePrice }}<em>원</em></strong>
+						{{#xif this.onlineProdPriceSummary.doublePriceDisplayYn '==' 'Y'}}
+							<del>{{ numberFormat this.onlineProdPriceSummary.maxFinalDiscountBeforeSalePrice }}원</del>
+						{{/xif}}
+					</span>
+
+					<span class="product_rating">
+						<span class="mark_star_sm star{{ this.reviewScopeAvg }}"><span class="sr_only">구매 평점 별 5개 중 {{ this.reviewScopeAvg }}개</span></span>
+						{{#xif this.reviewCount '>' 0 }}<span class="prd_review">리뷰 {{ numberFormat this.reviewCount }}</span>{{/xif}}
+					</span>
+
+					<span class="tags">
+						{{#xif this.onlineProdGift.giftProds.length '>' 0}}
+							<em class="badge special">스페셜기프트</em>
+						{{/xif}}
+						{{#xif this.onlineProdGift.giftcardTargetYn '==' 'Y'}}
+							<em class="badge gift">기프트카드</em>
+						{{/xif}}
+					</span>
+				</span>
+			</a>
+		</div>
+	</li>
+{{/each}}

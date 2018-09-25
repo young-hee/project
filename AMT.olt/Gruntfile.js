@@ -6,6 +6,11 @@ module.exports = function ( grunt ) {
 
     var rootBase = '',
         templatePath = 'amt-app/src/main/resources/static/*/*/handlebars-templates/hbs/**/';
+    
+    var fileName = grunt.option('target');
+    if( fileName != undefined ){
+    	templatePath = 'amt-app/src/main/resources/static/*/*/handlebars-templates/hbs/'+fileName;
+    }
 	
     grunt.initConfig({
         handlebars: {

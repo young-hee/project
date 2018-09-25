@@ -19,8 +19,8 @@
 					if(result.awards[i].pointTypeCode === 'ActivityPoint'){ // 진주알
 						productName += ('진주알 ' + result.awards[i].savingPoint+' 알'); 
 					}
-					if(result.awards[i].pointTypeCode === 'BeautyPoint'){ // 뷰티포인트
-						productName += (result.awards[i].pointTypeName + result.awards[i].savingPoint+' 점'); 
+					if(result.awards[i].pointTypeCode === 'MembershipPoint'){ // 뷰티포인트
+						productName += (result.awards[i].membershipName +' ' + result.awards[i].savingPoint+' 점'); 
 					}
 				}
 				if(result.awards[i].awardTgtCode === 'Coupon'){ // 쿠폰

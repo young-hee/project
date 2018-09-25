@@ -88,6 +88,7 @@
 	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-bottom.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-change-var.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/fullpage-cash-receipts.js}"></script>
+	<script ap:src="@{/handlebars-templates/compiled/my/order/order-detail-takeout-barcode.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/detail/product.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/detail/product-option.js}"></script>
 	<script ap:src="@{/handlebars-templates/compiled/my/order/detail/claim-reason.js}"></script>
@@ -204,9 +205,18 @@
 			$('.online').empty();
 			$('.takeout').empty();
 			$('#freebies_gift').empty();
+
+			var onlineCnt =  customOrd.shipOrdOnlineProdCnt;
+			if ( status == 'request' && type == 'cancel' ) {
+				if (step == 1) {
+					onlineCnt = customOrd.shipOrdOnlineProdCnt - customOrd.onlineCancelCnt;
+				} else {
+					onlineCnt = customOrd.onlineCancelCnt;
+				}
+			}
 			if (customOrd.shipOrdOnlineProdCnt > 0) {
 				var orderDetailGoods = AP.common.getTemplate('my.order.order-detail-goods', {
-					cnt : customOrd.shipOrdOnlineProdCnt,
+					cnt : onlineCnt,
 					list : customOrd.shippingOrdOnlineProdList,
 					mnList : customOrd.shippingMNPromoProdList,
 					bList : customOrd.shippingOrdOnlineBeautyPointProdList,
@@ -227,9 +237,17 @@
 				$('.online').append(orderDetailGoods);
 			}
 
+			var storeCnt =  customOrd.storeOrdOnlineProdCnt;
+			if ( status == 'request' && type == 'cancel' ) {
+				if (step == 1) {
+					storeCnt = customOrd.storeOrdOnlineProdCnt - customOrd.storeCancelCnt;
+				} else {
+					storeCnt = customOrd.storeCancelCnt;
+				}
+			}
 			if (customOrd.storeOrdOnlineProdCnt > 0) {
 				var storDetailGoods = AP.common.getTemplate('my.order.order-detail-goods', {
-					cnt : customOrd.storeOrdOnlineProdCnt,
+					cnt : storeCnt,
 					list : customOrd.storePickupOrdOnlineProdList,
 					storeEx : customOrd.storeEx,
 					state : 'take',
@@ -432,7 +450,7 @@
 					}
 				}
 			});
-			$( '.map_area' ).mapApi('resize');
+			$( '.map_area' ).mapApi();
 			$( '.map_area' ).mapApi('setCenter', storeEx.latitude, storeEx.longitude);
 			$( '.map_area' ).mapApi('addMarker', storeEx.latitude, storeEx.longitude, 1);
 			$( '.slide' ).ixSlideMax();
@@ -671,7 +689,7 @@
 
 		function editShipAddress() {
 
-			$('#delivery_title').val($.trim($('#delivery_title').val()));
+			$('#address2').val($.trim($('#address2').val()));
 			var $form = $('#shipForm');
 			if ($form.valid()) {
 				var formData = AP.common.getFormData($form);
@@ -801,6 +819,28 @@
 				}
 				else {
 					AP.modal.alert('구매리뷰 작성 가능한 주문상품이 없습니다.');
+				}
+			}).fail(function(e) {
+				AP.modal.alert(e.errorMessage);
+			}).always(function() {
+			});
+		}
+
+		function showBarcodeImage(ordSn) {
+			AP.api.getBarcodeImage({ ordSn : ordSn},
+				{}).done(function(data) {
+				if (data.data) {
+					var modal = AP.modal.open({
+						templateKey: 'my.order.order-detail-takeout-barcode',
+						templateModel: { url : data.data , ordNo : customOrd.goods.ordNo },
+						sizeType: "M"
+					}).addListener( 'modal-close', function (e) {
+						// console.log( e.closeType ); //confirm, cancel, close
+						// alert(e.closeType);
+						if ('close' === e.closeType) {
+
+						}
+					});
 				}
 			}).fail(function(e) {
 				AP.modal.alert(e.errorMessage);

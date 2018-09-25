@@ -457,6 +457,13 @@ public class MyOrderRestController extends AbstractController {
 		OrdEx ord = orderApi.ordChangeProds(ordSn, body);
 		result.put("data", new MyOrdDTO(ord));
 		return ResponseEntity.ok(result);
+	}
 
+	@GetMapping("/getBarcodeImage/{ordSn}")
+	public ResponseEntity<?> getBarcodeImage(@PathVariable Long ordSn) {
+		HashMap<String, Object> resp = new HashMap<String, Object>();
+		BarcodeImageUrlResult result = orderApi.getOrdBarcodeImageUrl(ordSn);
+		resp.put("data", result.getUrl());
+		return ResponseEntity.ok(resp);
 	}
 }

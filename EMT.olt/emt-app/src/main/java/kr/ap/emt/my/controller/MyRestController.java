@@ -12,7 +12,9 @@ import kr.ap.comm.support.constants.APConstant;
 import kr.ap.comm.support.constants.CookieKey;
 import kr.ap.comm.support.constants.SessionKey;
 import kr.ap.comm.util.CookieUtils;
+import kr.ap.comm.util.SessionUtils;
 import kr.ap.emt.my.vo.MyInfoDTO;
+import kr.ap.emt.my.vo.MyInfoDTO.ReceiveVo;
 import kr.ap.emt.my.vo.TermsAgree;
 import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.BooleanResult;
@@ -24,6 +26,7 @@ import net.g1project.ecp.api.model.offlinestore.store.RegularStoreForPost;
 import net.g1project.ecp.api.model.offlinestore.store.RegularStorePostResult;
 import net.g1project.ecp.api.model.offlinestore.store.StoreResult;
 import net.g1project.ecp.api.model.sales.terms.MemberTermsAgree;
+import net.g1project.ecp.api.model.sales.terms.Terms;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,10 +146,11 @@ public class MyRestController extends AbstractController {
 	/**
 	 * 회원정보 수정. - 개인정보.
 	 * @param myinfo
+	 * @param request 
 	 * @return
 	 */
 	@PostMapping("/changePriveInfo")
-	public ResponseEntity<?> changePriveInfo(MyInfoDTO myinfo) {
+	public ResponseEntity<?> changePriveInfo(MyInfoDTO myinfo, HttpServletRequest request) {
 
 		if(!myinfo.getEmail().isEmpty() || !myinfo.getUser().getHomeBscsAddr().isEmpty())
 			if(!isAgreeTerms("030")) {
@@ -159,9 +163,15 @@ public class MyRestController extends AbstractController {
 
 		EmbeddableTel phone = memberSession.getMember().getPhoneNo1();
 		if(phone != null && phone.getPhoneNo() != null && !phone.getPhoneNo().isEmpty()) {
-			
+
 			String phone2 = myinfo.getPhoneNumber1() + myinfo.getPhoneNumber2();
 			if(!phone.getPhoneNo().equals(phone2)) {
+	
+				String phoneNo = (String) SessionUtils.getAttribute(request, "AUTH_PHONE_NO");
+				Boolean yn = (Boolean) SessionUtils.getAttribute(request, "AUTH_PHONE_NO_CHECK_YN");
+				if(!phone2.equals(phoneNo) || yn == null || !yn) {
+					throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "REQ_AUTH_CHECK", "인증되지 않은 휴대전화 번호로 변경할 수 없습니다.");
+				}
 				CicuemCuInfTotTcVo cicuemCuInfCoInVo = new CicuemCuInfTotTcVo();
 				cicuemCuInfCoInVo.setCellTidn(myinfo.getUser().getCellTidn());
 				cicuemCuInfCoInVo.setCellTexn(myinfo.getUser().getCellTexn());
@@ -183,6 +193,7 @@ public class MyRestController extends AbstractController {
 		CicuemCuOptiCsTcVo vo = new CicuemCuOptiCsTcVo();
 		vo1.setCicuemCuOptiTcVo(vo);
 		vo1.setIncsNo(memberSession.getUser_incsNo());
+		vo1.setChgChCd(APConstant.EH_CH_CD);
 		if(!myinfo.getEmail().isEmpty()) {
 			vo1.setCustEmid(myinfo.getEmail().substring(0, myinfo.getEmail().indexOf("@")));
 			vo1.setCustEmdn(myinfo.getEmail().substring(myinfo.getEmail().indexOf("@") + 1));
@@ -242,182 +253,65 @@ public class MyRestController extends AbstractController {
 
 		MemberForUpdate body = new MemberForUpdate();
 		body.setMemberId(memberSession.getMember().getMemberId());
-		List<SignupReceiveAgree> memberReceiveAgrees = new ArrayList<SignupReceiveAgree>();
-		for(TermsAgree ta : myinfo.getEhReceive()) {
-			SignupReceiveAgree sa = new SignupReceiveAgree();
-			sa.setReceiveTypeCode(ta.getName());
-			sa.setReceiveAgreeCode(ta.isValue()? "Agree" : "NotAgree");
-			memberReceiveAgrees.add(sa);
-		}
-		body.setMemberReceiveAgrees(memberReceiveAgrees);
 
 		List<CicuemCuOptiCsTcVo> list = new ArrayList<CicuemCuOptiCsTcVo>();
+
 		String userId = getMemberSession().getMember().getMemberId();
 		String today = DateFormatUtils.format(new Date(System.currentTimeMillis()), "yyyyMMdd");
-		CicuemCuOptiCsTcVo vo = new CicuemCuOptiCsTcVo();
-		vo.setIncsNo(memberSession.getUser_incsNo());
-		vo.setChCd(APConstant.BT_CH_CD);
-		for(TermsAgree ta : myinfo.getApReceive()) {
-			if("Email".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setEmlOptiYn("Y");
-					vo.setEmlOptiDt(today);
-				} else {
-					vo.setEmlOptiYn("N");
-				}
-			} else if("SMS".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setSmsOptiYn("Y");
-					vo.setSmsOptiDt(today);
-				} else {
-					vo.setSmsOptiYn("N");
-				}
-			} else if("DM".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setDmOptiYn("Y");
-					vo.setDmOptiDt(today);
-				} else {
-					vo.setDmOptiYn("N");
-				}
-			} else if("TM".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setTmOptiYn("Y");
-					vo.setTmOptiDt(today);
-				} else {
-					vo.setTmOptiYn("N");
-				}
-			}
-		}
-		vo.setLschId(userId);
-		list.add(vo);
 		
-		try {
-			vo = vo.clone();
-			vo.setChCd(APConstant.CP_CH_CD);
-			list.add(vo);
+		List<SignupReceiveAgree> memberReceiveAgrees = new ArrayList<SignupReceiveAgree>();
+		
+		for(ReceiveVo receiveVo :myinfo.getReceiveList()) {
+
+			if(APConstant.EH_CH_CD.equals(receiveVo.getChCd())) {
+
+				for(TermsAgree ta : receiveVo.getReceive()) {
+					SignupReceiveAgree sa = new SignupReceiveAgree();
+					sa.setReceiveTypeCode(ta.getName());
+					sa.setReceiveAgreeCode(ta.isValue()? "Agree" : "NotAgree");
+					memberReceiveAgrees.add(sa);
+				}
+				body.setMemberReceiveAgrees(memberReceiveAgrees);
+			}
 			
-		} catch (CloneNotSupportedException e1) {
-		}
-
-
-		vo = new CicuemCuOptiCsTcVo();
-		vo.setIncsNo(memberSession.getUser_incsNo());
-		vo.setChCd(APConstant.OS_CH_CD);
-		for(TermsAgree ta : myinfo.getReceive()) {
-			if("Email".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setEmlOptiYn("Y");
-					vo.setEmlOptiDt(today);
-				} else {
-					vo.setEmlOptiYn("N");
-				}
-			} else if("SMS".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setSmsOptiYn("Y");
-					vo.setSmsOptiDt(today);
-				} else {
-					vo.setSmsOptiYn("N");
-				}
-			} else if("DM".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setDmOptiYn("Y");
-					vo.setDmOptiDt(today);
-				} else {
-					vo.setDmOptiYn("N");
-				}
-			} else if("TM".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setTmOptiYn("Y");
-					vo.setTmOptiDt(today);
-				} else {
-					vo.setTmOptiYn("N");
+			CicuemCuOptiCsTcVo vo = new CicuemCuOptiCsTcVo();
+			vo.setIncsNo(memberSession.getUser_incsNo());
+			vo.setChCd(receiveVo.getChCd());
+			for(TermsAgree ta : receiveVo.getReceive()) {
+				if("Email".equals(ta.getName())) {
+					if(ta.isValue()) {
+						vo.setEmlOptiYn("Y");
+						vo.setEmlOptiDt(today);
+					} else {
+						vo.setEmlOptiYn("N");
+					}
+				} else if("SMS".equals(ta.getName())) {
+					if(ta.isValue()) {
+						vo.setSmsOptiYn("Y");
+						vo.setSmsOptiDt(today);
+					} else {
+						vo.setSmsOptiYn("N");
+					}
+				} else if("DM".equals(ta.getName())) {
+					if(ta.isValue()) {
+						vo.setDmOptiYn("Y");
+						vo.setDmOptiDt(today);
+					} else {
+						vo.setDmOptiYn("N");
+					}
+				} else if("TM".equals(ta.getName())) {
+					if(ta.isValue()) {
+						vo.setTmOptiYn("Y");
+						vo.setTmOptiDt(today);
+					} else {
+						vo.setTmOptiYn("N");
+					}
 				}
 			}
-		}
-		vo.setLschId(userId);
-		list.add(vo);
-
-		try {
-			vo = vo.clone();
-			vo.setChCd(APConstant.AP_CH_CD);
+			vo.setChgChCd(APConstant.EH_CH_CD);
+			vo.setLschId(userId);
 			list.add(vo);
-			
-		} catch (CloneNotSupportedException e1) {
 		}
-
-		vo = new CicuemCuOptiCsTcVo();
-		vo.setIncsNo(memberSession.getUser_incsNo());
-		vo.setChCd(APConstant.EH_POS_CH_CD);
-		for(TermsAgree ta : myinfo.getPosReceive()) {
-			if("Email".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setEmlOptiYn("Y");
-					vo.setEmlOptiDt(today);
-				} else {
-					vo.setEmlOptiYn("N");
-				}
-			} else if("SMS".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setSmsOptiYn("Y");
-					vo.setSmsOptiDt(today);
-				} else {
-					vo.setSmsOptiYn("N");
-				}
-			} else if("DM".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setDmOptiYn("Y");
-					vo.setDmOptiDt(today);
-				} else {
-					vo.setDmOptiYn("N");
-				}
-			} else if("TM".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setTmOptiYn("Y");
-					vo.setTmOptiDt(today);
-				} else {
-					vo.setTmOptiYn("N");
-				}
-			}
-		}
-		vo.setLschId(userId);
-		list.add(vo);
-
-		vo = new CicuemCuOptiCsTcVo();
-		vo.setIncsNo(memberSession.getUser_incsNo());
-		vo.setChCd(APConstant.EH_CH_CD);
-		for(TermsAgree ta : myinfo.getEhReceive()) {
-			if("Email".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setEmlOptiYn("Y");
-					vo.setEmlOptiDt(today);
-				} else {
-					vo.setEmlOptiYn("N");
-				}
-			} else if("SMS".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setSmsOptiYn("Y");
-					vo.setSmsOptiDt(today);
-				} else {
-					vo.setSmsOptiYn("N");
-				}
-			} else if("DM".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setDmOptiYn("Y");
-					vo.setDmOptiDt(today);
-				} else {
-					vo.setDmOptiYn("N");
-				}
-			} else if("TM".equals(ta.getName())) {
-				if(ta.isValue()) {
-					vo.setTmOptiYn("Y");
-					vo.setTmOptiDt(today);
-				} else {
-					vo.setTmOptiYn("N");
-				}
-			}
-		}
-		vo.setLschId(userId);
-		list.add(vo);
 		
 		CicuemCuOptiTcResultVo cicuemCuOptiTcResultVo = new CicuemCuOptiTcResultVo();
 		cicuemCuOptiTcResultVo.setCicuemCuOptiTcVo(list);
@@ -469,18 +363,24 @@ public class MyRestController extends AbstractController {
 		}
 		String agreed = "";
 		String removeAgreed = "";
+		List<Terms> terms = termsApi.getTerms("010,020,030,040,050,060");
 		for (TermsAgree ta : myinfo.getPolicy()) {
 
 			tncaTc = new CicuedCuTncaTcVo();
 			tncaTc.setTcatCd(ta.getName());
 			tncaTc.setTncAgrYn(ta.isValue()? "Y" : "N");
 
-			//FIXME 약관버전 및 통합고객번호 넣어야함.
-			tncaTc.setTncvNo("1");//약관버전
+
+			Terms t = getTermsByCode(terms, ta.getName());
+			if(t != null) {
+				tncaTc.setTncvNo(t.getTermsVer());
+			} else {
+				tncaTc.setTncvNo("1");
+			}
 			tncaTc.setIncsNo(memberSession.getUser_incsNo());//통합고객번호 세팅.
 			tncaTc.setLschId(memberSession.getMember().getMemberId());
 			tncaTc.setFscrId(memberSession.getMember().getMemberId());
-			tncaTc.setChgChCd(APConstant.OS_CH_CD);
+			tncaTc.setChgChCd(APConstant.EH_CH_CD);
 			tncaTc.setChCd(APConstant.OS_CH_CD);
 			cicuedCuTncaTcVo.add(tncaTc);
 			
@@ -607,7 +507,15 @@ public class MyRestController extends AbstractController {
 		return ResponseEntity.ok(resp);
 	}
 
-	
+
+    private Terms getTermsByCode(List<Terms> termsList, String key) {
+    	for (Terms terms : termsList) {
+			if(terms.getTermsDisplayCode().equals(key))
+				return terms;
+		}
+		return null;
+	}
+
 	/**
 	 * 비밀번호 변경.
 	 * @param password
@@ -635,6 +543,8 @@ public class MyRestController extends AbstractController {
 		mobileVerificationRequestInfo.setPhoneNo(phoneNo);
 		ApMobileVerificationResult result = verifApi.requestMobileVerification(mobileVerificationRequestInfo);
 		resp.put("mobileVerifSn", result.getMobileVerifSn());
+		SessionUtils.setAttribute(getRequest(), "AUTH_PHONE_NO", mobileVerificationRequestInfo.getPhoneNo().getPhoneNo());
+		SessionUtils.setAttribute(getRequest(), "AUTH_PHONE_NO_CHECK_YN", false);
 		return ResponseEntity.ok(resp);
 		
 	}
@@ -652,6 +562,7 @@ public class MyRestController extends AbstractController {
 		ApMobileVerificationResendRequestInfo mobileVerificationResendRequestInfo = new ApMobileVerificationResendRequestInfo();
 		mobileVerificationResendRequestInfo.setMobileVerifSn(mobileVerifSn);
 		ApMobileVerificationResult result = verifApi.resendMobileVerificationKey(mobileVerificationResendRequestInfo);
+		SessionUtils.setAttribute(getRequest(), "AUTH_PHONE_NO_CHECK_YN", false);
 		resp.put("mobileVerifSn", result.getMobileVerifSn());
 		return ResponseEntity.ok(resp);
 	}
@@ -671,9 +582,10 @@ public class MyRestController extends AbstractController {
 		mobileVerificationResendRequestInfo.setMobileVerifSn(mobileVerifSn);
 		mobileVerificationResendRequestInfo.setMobileVerifKey(mobileVerifKey);
 		ApMobileVerificationVerifyResult result = verifApi.verifyMobileVerificationKey(mobileVerificationResendRequestInfo);
-		if(result.isResult())
+		if(result.isResult()) {
 			resp.put("result", result.isResult());
-		else
+			SessionUtils.setAttribute(getRequest(), "AUTH_PHONE_NO_CHECK_YN", true);
+		} else
 			throw error(resp, HttpStatus.INTERNAL_SERVER_ERROR ,"CERTFAIL", "인증에 실패했습니다.");
 			
 		return ResponseEntity.ok(resp);

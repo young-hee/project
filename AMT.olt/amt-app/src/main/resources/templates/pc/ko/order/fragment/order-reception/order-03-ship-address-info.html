@@ -118,24 +118,36 @@
 						</div>
 					</li>
 					<!-- 기본 배송지 선택 -->
-					<th:blcok th:if="${#lists.size(shipAddressList) > 0}">
-						<li th:each="shipAddressInfo : ${shipAddressList}"
-							th:onclick="|addressListBlockClick(this, 99999, ${shipAddressInfo.addresseeName.name1}', '${shipAddressInfo.phoneNo1.phoneNo}', '${shipAddressInfo.addresseeAddress.zipCode}', '${shipAddressInfo.addresseeAddress.address1}', '${shipAddressInfo.addresseeAddress.address2}', false)|">
-							<div class="name" id="btnDefAddrFlag99999">
-								<div class="inner">
-									<span class="benefit delivery">기본배송지</span>
-									<em th:text="${shipAddressInfo.addresseeName.name1}" name="name">김이름</em>
-									<span th:text="${shipAddressInfo.phoneNo1.phoneNo}" name="hp">010-123-1234</span>
-								</div>
-								<p class="txt" th:text="'(' + ${shipAddressInfo.addresseeAddress.zipCode} + ') '+ ${shipAddressInfo.addresseeAddress.address1} + ${shipAddressInfo.addresseeAddress.address2} ">(04386) 서울특별시 용산구 한강대로 100</p>
+					<li th:if="${#lists.size(shipAddressList) > 0}" th:each="shipAddressInfo : ${shipAddressList}"
+						th:onclick="|addressListBlockClick(this, 99999, '${shipAddressInfo.addresseeName.name1}', '${shipAddressInfo.phoneNo1.phoneNo}', '${shipAddressInfo.addresseeAddress.zipCode}', '${shipAddressInfo.addresseeAddress.address1}', '${shipAddressInfo.addresseeAddress.address2}', false)|"
+						class="on">
+						<div class="name" id="btnDefAddrFlag99999">
+							<div class="inner">
+								<span class="benefit delivery">기본배송지</span>
+								<em th:text="${shipAddressInfo.addresseeName.name1}" name="name">김이름</em>
+								<span th:text="${shipAddressInfo.phoneNo1.phoneNo}" name="hp">010-123-1234</span>
 							</div>
+							<p class="txt" th:text="'(' + ${shipAddressInfo.addresseeAddress.zipCode} + ') '+ ${shipAddressInfo.addresseeAddress.address1} + ' ' + ${shipAddressInfo.addresseeAddress.address2} ">(04386) 서울특별시 용산구 한강대로 100</p>
+						</div>
 
-							<!-- 기본 배송지 설정 -->
-							<div class="check chkDefArea">
-								<span class="check_wrap"><input type="checkbox" id="chkDef99999" onclick="checkDefAddrClick(99999, false);"><label for="chkDef99999" style="font-size:15px;">기본배송지설정</label></span>
-							</div>
-						</li>
-					</th:blcok>
+						<script th:inline="javascript">
+							$( document ).ready(function() {
+								//기본 배송지를 클릭 선택 하게 만든다.
+								var shipName =  /*[[${shipAddressInfo.addresseeName.name1}]]*/ null;
+								var phoneNo =  /*[[${shipAddressInfo.phoneNo1.phoneNo}]]*/ null;
+								var zipCode =  /*[[${shipAddressInfo.addresseeAddress.zipCode}]]*/ null;
+								var addr1 =  /*[[${shipAddressInfo.addresseeAddress.address1}]]*/ null;
+								var addr2 =  /*[[${shipAddressInfo.addresseeAddress.address2}]]*/ null;
+
+								addressListBlockClick(null, 99999, shipName, phoneNo, zipCode, addr1, addr2, false);
+							});
+						</script>
+
+						<!-- 기본 배송지 설정 -->
+						<div class="check chkDefArea" style="display: none;">
+							<span class="check_wrap"><input type="checkbox" id="chkDef99999" onclick="checkDefAddrClick(99999, false);"><label for="chkDef99999" style="font-size:15px;">기본배송지설정</label></span>
+						</div>
+					</li>
 					<!-- 최근 배송지 목록 -->
 					<th:block th:if="${#lists.size(ordShipAddressExList) > 0 }">
 						<li th:each="ordShipAddressExInfo, iterStat : ${ordShipAddressExList}"
@@ -145,7 +157,7 @@
 									<em th:text="${ordShipAddressExInfo.recipientName.name1}" name="name">김이름</em>
 									<span th:text="${ordShipAddressExInfo.recipientPhoneNo1.phoneNo}" name="hp">010-9924-3505</span>
 								</div>
-								<p class="txt" th:text="'(' + ${ordShipAddressExInfo.recipientAddress.zipCode} + ') '+ ${ordShipAddressExInfo.recipientAddress.address1} + ${ordShipAddressExInfo.recipientAddress.address2}">(04386) 서울특별시 용산구 한강대로 100 두줄 넘어갈 경우, 세줄 넘어갈 경우<br>줄바꿈 두줄 넘어갈 경우, 세줄 넘어갈 경우 줄바꿈두줄 넘어갈 경우, 세줄 넘어갈 경우</p>
+								<p class="txt" th:text="'(' + ${ordShipAddressExInfo.recipientAddress.zipCode} + ') '+ ${ordShipAddressExInfo.recipientAddress.address1} + ' ' + ${ordShipAddressExInfo.recipientAddress.address2}">(04386) 서울특별시 용산구 한강대로 100 두줄 넘어갈 경우, 세줄 넘어갈 경우<br>줄바꿈 두줄 넘어갈 경우, 세줄 넘어갈 경우 줄바꿈두줄 넘어갈 경우, 세줄 넘어갈 경우</p>
 							</div>
 							<div class="check chkDefArea">
 								<span class="check_wrap"><input type="checkbox" th:id="|${'chkDef' + iterStat.index}|" th:onclick="|checkDefAddrClick(${iterStat.index}, false)|"><label th:for="|${'chkDef' + iterStat.index}|" style="font-size:15px;">기본배송지설정</label></span>
@@ -358,7 +370,7 @@
 		$(".delivery_list").append(newAddrBlock);
 
 		/***** 주문서&수취인 작성 객체에 정보 저장 *****/
-		addressListBlockClick(null, addIdx, name, hp, email, postCode, addr, addrDetail, isInputNewAddress);
+		addressListBlockClick(null, addIdx, name, hp, postCode, addr, addrDetail, isInputNewAddress);
 
 	};
 
@@ -366,7 +378,7 @@
 	 *	배송지 목록 선택시 활성/비활성 처리
 	 *	(선택된 Obj, 이름, 휴대폰, 우편번호, 주소기본, 주소상세, 새로입력된 주소인지여부-true/false, 기본배송지 체크박스 객체ID)
 	 */
-	function addressListBlockClick(target, selIdx, name, hp, email, postCode, addr, addrDetail, isInputNewAddress) {
+	function addressListBlockClick(target, selIdx, name, hp, postCode, addr, addrDetail, isInputNewAddress) {
 
 		if(target != undefined && target != null) {
 			$('.delivery_list li').removeClass('on');
@@ -378,12 +390,6 @@
 		/***** 주문서&수취인 작성 객체에 정보 저장 *****/
 		//현재 선택된 Index 번호
 		ordReceptChangeDTO.selIdx = selIdx;
-		//주문자 이름
-		ordReceptChangeDTO.purchaserName = name
-		//주문자 휴대폰번호
-		ordReceptChangeDTO.purchaserPhoneNo = hp
-		//주문자 이메일
-		ordReceptChangeDTO.purchaserEmailAddress = email;
 
 		//수취인 이름
 		ordReceptChangeDTO.recipientName = name;
@@ -433,11 +439,11 @@
 					$(".btn_modify").trigger("click");
 					$("#memberHp1").focus();
 				});
-				//전화번호 입력 값을 받아서 바로 적용한다.
-				$("#memberHp1, #memberHp2, #memberHp3").on("keyup", function(e) {
-					$("#employeeHp").text( $("#memberHp1").val() + "-" + $("#memberHp2").val() + "-" + $("#memberHp3").val() );
-				});
 			}
+			//전화번호 입력 값을 받아서 바로 적용한다.
+			$("#memberHp1, #memberHp2, #memberHp3").on("keyup", function(e) {
+				$("#employeeHp").text( $("#memberHp1").val() + "-" + $("#memberHp2").val() + "-" + $("#memberHp3").val() );
+			});
 			$("input[name=shipMsg]").closest('div.input_wrap').find('span.placeholder').html('팀명,층수,코어 기입');
 			$("input[name=shipMsg]").prop("required", true);
 		} else {
@@ -479,8 +485,6 @@
 			ordReceptChangeDTO.latelyRepShipAddressYn = "Y";
 		}
 
-		console.log("ordReceptChangeDTO: " + JSON.stringify(ordReceptChangeDTO));
-
 	};
 
 	/* 배송메세지 라디오 버튼 선택 */
@@ -492,13 +496,18 @@
 		}
 	});
 
-	/*숫자만 입력 받기*/
-	$('.only_number').on('keyup', function(e){
-		var regExp = /\D/g;
-		if(regExp.test($(this).val())){
-			$(this).val($(this).val().replace(regExp,''));
-			e.preventDefault();
-		}
+	$('.only_number').on('keyup', function(event){
+		onlyNumber(this, event);
 	});
+
+	/*숫자만 입력 받기*/
+	function onlyNumber(el, event){
+		var regExp = /\D/g;
+		if(regExp.test($(el).val())){
+			$(el).val($(el).val().replace(regExp,''));
+			console.log($(el).val());
+			event.preventDefault();
+		}
+	};
 
 </script>

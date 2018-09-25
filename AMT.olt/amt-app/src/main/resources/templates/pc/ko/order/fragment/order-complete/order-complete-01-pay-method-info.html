@@ -1,0 +1,27 @@
+<!--결제수단-->
+<div th:if="${ordEx.ordHistEx.ordPayExList != null and #lists.size(ordEx.ordHistEx.ordPayExList) > 0 }" class="ui_accordion cart_list" id="payMethodArea">
+	<dl>
+		<dt class="on">
+			<strong class="tit">결제수단</strong>
+			<button type="button"><span class="sr_only">열기</span></button>
+		</dt>
+
+	</dl>
+</div>
+<script th:inline="javascript">
+	$( document ).ready(function() {
+		ordUnitInit();
+	});
+
+	function ordUnitInit() {
+		var ordPayEx = /*[[${ordPayExList}]]*/ null;
+
+		if (ordPayEx.length > 0) {
+			var html = AP.common.getTemplate('order.complete-final-pay-method', {
+				pgList: ordPayEx
+			});
+			$('#payMethodArea').find("dl").append(html);
+		}
+	}
+</script>
+<!--결제수단-->

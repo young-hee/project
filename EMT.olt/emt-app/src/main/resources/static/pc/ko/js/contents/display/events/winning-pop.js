@@ -21,17 +21,13 @@
 			var prodCount = 0;
   
 			_.each(result.awards ,function(award){
-				
-				console.log(award.awardTgtCode); 
+				 
 				if(award.awardTgtCode === 'Prod'){
-					
 					prodCount++; 
 				}
-				
 			});
 
 			result.awards.prodCount = prodCount; 
-
 			this._winningPop = AP.modal.info({
 				title: title,
 				contents: {

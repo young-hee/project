@@ -40,7 +40,7 @@
 			<!-- /* 로그인 후 */ -->
 			<div class="after" th:unless="${session.LOGIN_USER == null || session.LOGIN_USER.member == null}">
 				<p class="text"><b th:text="${session.LOGIN_USER.member.name.name1}">홍길동</b>님은 <em class="friends" th:text="${session.LOGIN_USER.member.memberLevelName}">friends</em>입니다.</p>
-				<div class="clear"><a href="/my/page/onlineOrderShipping">주문배송(<b>6</b>)</a><a href="/my/page/myCouponList">나의쿠폰(<b th:text="${session.LOGIN_USER.member.keepingCouponQty}">0</b>)</a></div>
+				<div class="clear"><a href="/my/page/onlineOrderShipping">주문배송(<b th:text="${#IntegUtil.getOrdSummary()}">6</b>)</a><a href="/my/page/myCouponList">나의쿠폰(<b th:text="${session.LOGIN_USER.member.keepingCouponQty}">0</b>)</a></div>
 				<div class="bar_code">
 					<img src="/barcode/btPointBcd" alt="">
 					<p class="text" th:text="${#IntegUtil.btCardNumber(session.LOGIN_USER)}">2917-1009-2345-1234</p>

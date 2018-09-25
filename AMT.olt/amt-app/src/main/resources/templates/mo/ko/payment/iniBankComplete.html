@@ -18,22 +18,10 @@
 			//부모창에서 서브밋
 			opener.window.name = "reception";
 			$form.attr("target", opener.window.name);
-			$form.attr("action", "/order/ordComplete")
+			$form.attr("action", "/order/ordBankComplete")
 			$form.submit();	
 			
-		} else {
-			var msg;
-			   if($form.find("input:hidden[name='P_RMESG1']") != null) {
-					msg = $form.find("input:hidden[name='P_RMESG1']").val();
-					if(msg ==null || msg == '' || msg== 'undefined') {
-						
-						msg = "결제 중 시스템 오류가 발생하였습니다. 관리자 문의바랍니다.";	
-					}
-				} else {
-					msg = "결제 중 시스템 오류가 발생하였습니다. 관리자 문의바랍니다.";
-				}
-			window.opener.payFailResult(msg);
-		}
+		} 
 		
 		self.close();
 		

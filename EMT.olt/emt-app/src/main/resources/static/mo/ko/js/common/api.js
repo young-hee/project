@@ -155,6 +155,10 @@
 		guestCert: { path: '/customer/guestCert', method: 'POST' },
 		//타인명의인증 확인(휴대폰인증)
 		guestConfirm: { path: '/customer/guestConfirm', method: 'POST' },
+		//타인명의인증 확인(휴대폰인증)
+		findGuestConfirm: { path: '/customer/find/guestConfirm', method: 'POST' },
+		//본인인증
+		findStepOne: { path: '/customer/find/stepOne', method: 'POST' },
 		//본인인증
 		stepOne: { path: '/customer/stepOne', method: 'POST' },
 		stepOneF: { path: '/customer/stepOneF', method: 'POST' },
@@ -374,7 +378,11 @@
 		// 나의 주문 리뷰
 		myReview: { path:'/my/api/myReview', method: 'GET'},
 
-	    /**
+		// 테이크 아웃 바코드 이미지
+		getBarcodeImage: { path: '/my/api/getBarcodeImage/{ordSn}', method: 'GET' },
+
+
+		/**
 	     * CS *************************************************************
 	     */
         csSummary: { path:'/cs/summary/{type}', method: 'GET'},
@@ -869,6 +877,9 @@
 
 		// 결제금액확인
 		ordReceptPayAmt: { path: '/order/ordReceptPayAmt', method: 'POST'},
+
+		// 예치금 변경
+		depositPriceChange: { path: '/order/depositPriceChange', method: 'POST'},
 
 		// 주문정보변경
 		ordReceptChange: { path: '/order/ordReceptChange', method: 'POST'},
@@ -1446,7 +1457,7 @@
 				isAbort = false;
 
 			AP.common.mapApiReady.done(function () {
-				new google.maps.Geocoder().geocode({'location': {lat: lat, lng:lng}}, function ( results, status ) {
+				new google.maps.Geocoder().geocode({'location': {lat:lat, lng:lng}, 'region' : 'KR'}, function ( results, status ) {
 					if ( isAbort ) return;
 
 					if ( status === 'OK' ) {

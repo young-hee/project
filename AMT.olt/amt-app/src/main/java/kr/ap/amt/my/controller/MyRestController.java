@@ -14,6 +14,7 @@ import kr.ap.comm.support.constants.APConstant;
 import kr.ap.comm.support.constants.CookieKey;
 import kr.ap.comm.support.constants.SessionKey;
 import kr.ap.comm.util.CookieUtils;
+import kr.ap.comm.util.SessionUtils;
 import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.BooleanResult;
 import net.g1project.ecp.api.model.EmbeddableAddress;
@@ -25,6 +26,11 @@ import net.g1project.ecp.api.model.ap.ap.MemberForChangePassword;
 import net.g1project.ecp.api.model.ap.ap.MemberForUpdate;
 import net.g1project.ecp.api.model.ap.ap.SignupReceiveAgree;
 import net.g1project.ecp.api.model.ap.ap.SignupTermsAgree;
+import net.g1project.ecp.api.model.ap.verif.ApMobileVerificationRequestInfo;
+import net.g1project.ecp.api.model.ap.verif.ApMobileVerificationResendRequestInfo;
+import net.g1project.ecp.api.model.ap.verif.ApMobileVerificationResult;
+import net.g1project.ecp.api.model.ap.verif.ApMobileVerificationVerifyRequestInfo;
+import net.g1project.ecp.api.model.ap.verif.ApMobileVerificationVerifyResult;
 import net.g1project.ecp.api.model.offlinestore.store.RegularStoreForPost;
 import net.g1project.ecp.api.model.offlinestore.store.RegularStorePostResult;
 import net.g1project.ecp.api.model.offlinestore.store.StoreResult;
@@ -128,10 +134,11 @@ public class MyRestController extends AbstractController {
 	/**
 	 * 회원정보 수정. - 개인정보.
 	 * @param myinfo
+	 * @param request 
 	 * @return
 	 */
 	@PostMapping("/changePriveInfo")
-	public ResponseEntity<?> changePriveInfo(MyInfoDTO myinfo) {
+	public ResponseEntity<?> changePriveInfo(MyInfoDTO myinfo, HttpServletRequest request) {
 
 		if(!myinfo.getEmail().isEmpty() || !myinfo.getUser().getHomeBscsAddr().isEmpty())
 			if(!isAgreeTerms("030")) {
@@ -144,9 +151,16 @@ public class MyRestController extends AbstractController {
 
 		EmbeddableTel phone = memberSession.getMember().getPhoneNo1();
 		if(phone != null && phone.getPhoneNo() != null && !phone.getPhoneNo().isEmpty()) {
-			
+
 			String phone2 = myinfo.getPhoneNumber1() + myinfo.getPhoneNumber2();
+
 			if(!phone.getPhoneNo().equals(phone2)) {
+				String phoneNo = (String) SessionUtils.getAttribute(request, "AUTH_PHONE_NO");
+				Boolean yn = (Boolean) SessionUtils.getAttribute(request, "AUTH_PHONE_NO_CHECK_YN");
+				if(!phone2.equals(phoneNo) || yn == null || !yn) {
+					throw error(result, HttpStatus.INTERNAL_SERVER_ERROR, "REQ_AUTH_CHECK", "인증되지 않은 휴대전화 번호로 변경할 수 없습니다.");
+				}
+			
 				CicuemCuInfTotTcVo cicuemCuInfCoInVo = new CicuemCuInfTotTcVo();
 				cicuemCuInfCoInVo.setCellTidn(myinfo.getUser().getCellTidn());
 				cicuemCuInfCoInVo.setCellTexn(myinfo.getUser().getCellTexn());
@@ -165,6 +179,7 @@ public class MyRestController extends AbstractController {
 			vo1 = new CicuemCuInfTotTcVo();
 		}
 		vo1.setChCd(APConstant.AP_CH_CD);
+		vo1.setChgChCd(APConstant.AP_CH_CD);
 		CicuemCuOptiCsTcVo vo = new CicuemCuOptiCsTcVo();
 		vo1.setCicuemCuOptiTcVo(vo);
 		vo1.setIncsNo(memberSession.getUser_incsNo());
@@ -272,6 +287,7 @@ public class MyRestController extends AbstractController {
 				}
 			}
 		}
+		vo.setChgChCd(APConstant.AP_CH_CD);
 		vo.setLschId(userId);
 		list.add(vo);
 		
@@ -318,6 +334,7 @@ public class MyRestController extends AbstractController {
 				}
 			}
 		}
+		vo.setChgChCd(APConstant.AP_CH_CD);
 		vo.setLschId(userId);
 		list.add(vo);
 		
@@ -474,6 +491,70 @@ public class MyRestController extends AbstractController {
         return changePwdM(password, oriPassword);
 	}
 
+	/**
+	 * 간단 본인인증 전송.
+	 * @param password
+	 * @param oriPassword
+	 * @return
+	 */
+	@PostMapping("/simpleCertifySend")
+	public ResponseEntity<?> simpleCertifySend(String phoneNumber1, String phoneNumber2) {
+		
+		Map<String, Object> resp = new HashMap<String, Object>();
+		ApMobileVerificationRequestInfo mobileVerificationRequestInfo = new ApMobileVerificationRequestInfo();
+		EmbeddableTel phoneNo = new EmbeddableTel();
+		phoneNo.setPhoneNo(phoneNumber1 + phoneNumber2);
+		mobileVerificationRequestInfo.setPhoneNo(phoneNo);
+		ApMobileVerificationResult result = verifApi.requestMobileVerification(mobileVerificationRequestInfo);
+		resp.put("mobileVerifSn", result.getMobileVerifSn());
+		SessionUtils.setAttribute(getRequest(), "AUTH_PHONE_NO", mobileVerificationRequestInfo.getPhoneNo().getPhoneNo());
+		SessionUtils.setAttribute(getRequest(), "AUTH_PHONE_NO_CHECK_YN", false);
+		return ResponseEntity.ok(resp);
+		
+	}
+	
+	
+	/**
+	 * 모바일 점유인증 재전송
+	 * @param mobileVerifSn
+	 * @return
+	 */ 
+	@PostMapping("/simpleCertifyResend")
+	public ResponseEntity<?> simpleCertifyResend(long mobileVerifSn) {
+		
+		Map<String, Object> resp = new HashMap<String, Object>();
+		ApMobileVerificationResendRequestInfo mobileVerificationResendRequestInfo = new ApMobileVerificationResendRequestInfo();
+		mobileVerificationResendRequestInfo.setMobileVerifSn(mobileVerifSn);
+		ApMobileVerificationResult result = verifApi.resendMobileVerificationKey(mobileVerificationResendRequestInfo);
+		SessionUtils.setAttribute(getRequest(), "AUTH_PHONE_NO_CHECK_YN", false);
+		resp.put("mobileVerifSn", result.getMobileVerifSn());
+		return ResponseEntity.ok(resp);
+	}
+	
+	
+	/**
+	 * 간단 본인인증 확인
+	 * @param password
+	 * @param oriPassword
+	 * @return
+	 */
+	@PostMapping("/simpleCertifyCheck")
+	public ResponseEntity<?> simpleCertifyCheck(long mobileVerifSn, String mobileVerifKey) {
+		
+		Map<String, Object> resp = new HashMap<String, Object>();
+		ApMobileVerificationVerifyRequestInfo mobileVerificationResendRequestInfo = new ApMobileVerificationVerifyRequestInfo();
+		mobileVerificationResendRequestInfo.setMobileVerifSn(mobileVerifSn);
+		mobileVerificationResendRequestInfo.setMobileVerifKey(mobileVerifKey);
+		ApMobileVerificationVerifyResult result = verifApi.verifyMobileVerificationKey(mobileVerificationResendRequestInfo);
+		if(result.isResult()) {
+			resp.put("result", result.isResult());
+			SessionUtils.setAttribute(getRequest(), "AUTH_PHONE_NO_CHECK_YN", true);
+		} else
+			throw error(resp, HttpStatus.INTERNAL_SERVER_ERROR ,"CERTFAIL", "인증에 실패했습니다.");
+			
+		return ResponseEntity.ok(resp);
+		
+	}
 
 
 	/**********************************************************************************************

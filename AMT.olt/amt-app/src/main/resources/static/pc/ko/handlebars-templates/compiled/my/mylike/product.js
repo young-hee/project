@@ -10,7 +10,9 @@ this["AP"]["handlebars"]["my"]["mylike"]["product"] = Handlebars.template({"1":f
     + alias2(alias1((depth0 != null ? depth0.onlineProdSn : depth0), depth0))
     + "\" data-index=\""
     + alias2(((helper = (helper = helpers.index || (data && data.index)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"index","hash":{},"data":data}) : helper)))
-    + "\">\n		<div class=\"product_box\">\n			<span class=\"check_wrap check_only\"><input type=\"checkbox\" id=\"checkOnlineProduct\" data-online-prod-sn=\""
+    + "\">\n		<div class=\"product_box\">\n			<span class=\"check_wrap check_only\"><input type=\"checkbox\" id=\"check_"
+    + alias2(((helper = (helper = helpers.index || (data && data.index)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"index","hash":{},"data":data}) : helper)))
+    + "\" data-online-prod-sn=\""
     + alias2(alias1((depth0 != null ? depth0.onlineProdSn : depth0), depth0))
     + "\"><label for=\"check_"
     + alias2(((helper = (helper = helpers.index || (data && data.index)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"index","hash":{},"data":data}) : helper)))

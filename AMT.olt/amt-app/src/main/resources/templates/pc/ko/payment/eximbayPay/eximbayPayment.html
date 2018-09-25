@@ -7,24 +7,24 @@
 	<th:block ap:replace="~{common/fragment/js-libs}"/>
 <script type="text/javascript">
 	
-	$(document).ready(function(){
+	 $(document).ready(function(){
 		
-		var order_form = document.ini;
-		var paymethod = order_form.paymethod.value;
-		
-		order_form.action = "https://mobile.inicis.com/smart/" + paymethod + "/";
-		order_form.submit();
-		
-	});
+	 	var $form = $("form[name='eximbay']");
+		var requestUrl = $("#requestUrl").val();
+		$form.attr("action", requestUrl);
+		$form.submit();
+	 	
+	}); 
 </script>
 
 </head>
 
-<form id="payForm" name="ini" method="post" accept-charset="euc-kr">	
+<form id="payForm" name="eximbay" method="post" accept-charset="utf-8">	
 	<th:block th:each="pr, stat: *{payParam}">
 		<input type="hidden" th:name="${pr.key}" th:value="${pr.value}"/>
 	</th:block>
-		<input type="hidden" name="P_CHARSET" value="utf8">
  </form>
+ 
+ <input type="hidden" th:id="requestUrl" th:value="${requestUrl}"/>
 </body>
 </html>

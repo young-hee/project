@@ -3,6 +3,7 @@
 	<div class="cart_item_box">
 		<div class="top_tit_wrap">
 			<a href="#none" onclick="goStore('activity')"><h3>진주알스토어</h3></a>
+			<!--/* 가격이 들어갈 경우 */-->
 			<div>
 				<span class="cart_price point">
 					<span class="left_num">
@@ -72,13 +73,13 @@
 					<input type="hidden" name="cartProdSn" value="{{ cartProdSn }}"/>
 					<input type="hidden" name="prdInfo_{{ cartProdSn }}" value="{{ cartProdSn }}" prodName="{{ prodEx.prodName }}" cartProdQty="{{ cartProdQty }}" minPurLimitQty="{{ prodEx.minPurLimitQty }}" maxPurLimitYn="{{ prodEx.maxPurLimitYn }}" maxPurLimitQty="{{ prodEx.maxPurLimitQty }}"/>
 					<input type="hidden" name="saleDisplayStatus_{{ cartProdSn }}" value="{{ prodEx.saleDisplayStatus }}"/>
-
-					<span class="ui_spinner small" data-step="1" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} {{#if (gt prodEx.minPurLimitQty cartProdQty) }} data-min="{{ cartProdQty }}" {{else}} data-min="{{ prodEx.minPurLimitQty }}" {{/if}} {{else}} data-min="1" {{/if}}  {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} {{#if (gt cartProdQty prodEx.maxPurLimitQty) }} data-max="{{ cartProdQty}}" {{else}} {{#if (gt prodEx.maxPurLimitQty 99) }} data-max="99" {{else}} data-max="{{ prodEx.maxPurLimitQty }}" {{/if}} {{/if}} {{else}} data-max="99" {{/if}} {{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}} >
+					<!--/* 상품 수량 */-->
+					<span class="ui_spinner small" data-step="1" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt prodEx.minPurLimitQty 0) ) }} {{#if (gt prodEx.minPurLimitQty cartProdQty) }} data-min="{{ cartProdQty }}" {{else}} data-min="{{ prodEx.minPurLimitQty }}" {{/if}} {{else}} data-min="1" {{/if}} {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(eq prodEx.maxPurLimitYn 'Y') )}} {{#if (gt cartProdQty prodEx.maxPurLimitQty) }} data-max="{{ cartProdQty }}" {{else}} {{#if (gt prodEx.maxPurLimitQty 999) }} data-max="{{ prodEx.maxPurLimitQty }}" {{/if}} {{/if}} {{else}} data-max="999" {{/if}} {{#if (ne prodEx.saleDisplayStatus 'OnSale') }} data-disabled="true" {{else}} data-disabled="false" {{/if}} >
 						<button class="spinner_decrease" type="button" title="제품 수량 감소" {{#if (and (eq prodEx.saleDisplayStatus 'OnSale')(gt cartProdQty 1)(gt cartProdQty prodEx.minPurLimitQty) ) }} {{else}} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '{{ activityPointExchYn }}', '{{ storePickupYn }}', '{{ storeSn }}', '-')"><img alt="제품 수량 감소" src="{{ absolutePath '/images/common/ico_minus1.gif' }}"></button>
 						<input class="spinner_input" type="text" name="cartProdQty" value="{{ cartProdQty }}">
 						<button class="spinner_increase" type="button" title="제품 수량 증가" {{#if (and (eq prodEx.maxPurLimitYn 'Y')(gt cartProdQty prodEx.maxPurLimitQty) ) }} disabled {{/if}} onclick="prodQtyOperate(this, '{{ ../../cartSn }}', '{{ cartProdSn }}', '{{ prodEx.prodSn }}', '{{ integrationMembershipExchYn }}', '{{ activityPointExchYn }}', '{{ storePickupYn }}', '{{ storeSn }}', '+')"><img alt="제품 수량 증가" src="{{ absolutePath '/images/common/icon_plus1.gif' }}"></button>
 					</span>
-
+					<!--/* 포인트 및 가격 */-->
 					<span class="cart_price">
 						<span class="left_num">
 							<strong class="num">{{#if (ne exchPoint null) }}{{numberFormat exchPoint }}{{else}}0{{/if}}</strong><span>알</span>

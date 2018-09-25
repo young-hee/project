@@ -80,7 +80,9 @@
 			_$postCodeHidden.val( postCode );
 			_$addressFirstHidden.val( address );
 			_$addressLastInput.val( detail + ' ' );
-			// _$addressLastInput.focus(); // 주소 결과 선택 후 포커싱 제거
+			setTimeout(function () {	// 주소 결과 선택 후 포커싱 오류 처리 ( ios )
+				_$addressLastInput.focus();
+			}, 1);
 
 			//선택된값 이벤트 전달
 			_$target.triggerHandler({
@@ -102,7 +104,9 @@
             _$postCodeHidden.val( postCode );
             _$addressFirstHidden.val( address );
             _$addressLastInput.val( detail + ' ' );
-            // _$addressLastInput.focus(); // 주소 결과 선택 후 포커싱 제거
+			setTimeout(function () {	// 주소 결과 선택 후 포커싱 오류 처리 ( ios )
+				_$addressLastInput.focus();
+			}, 1);
 
             _$resultArea.hide();
 

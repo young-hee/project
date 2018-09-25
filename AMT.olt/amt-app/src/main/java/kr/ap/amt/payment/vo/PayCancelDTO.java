@@ -6,8 +6,6 @@
  */
 package kr.ap.amt.payment.vo;
 
-import java.math.BigDecimal;
-
 /**
  * @author Administrator@g1project.net
  * @since {version}

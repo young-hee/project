@@ -7,28 +7,30 @@
 	var RestockNotify = $B.Class.extend({
 
 		initialize: function () {
-			//
+			this._modal = null; 
+			
 		},
 
 		/** =============== Public Methods =============== */
-
+		
 		open: function ( model, memberMap ) {
-			var modal = AP.modal.info({
+			this._modal = AP.modal.info({
 					title: '언제 들어와? 알림 신청',
 					contents: {
 						templateKey: 'products.restock-notify-apply-modal',
 						templateModel : {
 							onlineProdName: model.onlineProdName,
 							products: this._getAvailableProducts( model.products ),
+							onlineProdSn: model.onlineProdSn,
 							memberMap: memberMap
 						}
 					},
 					sizeType: 'L'
 				}),
-				$modal = modal.getElement(),
-				validator = $modal.find( 'form.validate' ).validate({
+				this._$modal = this._modal.getElement();
+				 var validator = this._$modal.find( 'form.validate' ).validate({
 					submitHandler: function ( form, e ) {
-						if ( $modal.find('[name=sms_agreement]:checked').val() === 'N' ) {
+						if ( this._$modal.find('[name=sms_agreement]:checked').val() === 'N' ) {
 							AP.modal.alert( 'SMS(LMS) 수신여부 동의가 되어야합니다.' );
 						} else {
 							this._save( form );
@@ -36,14 +38,14 @@
 					}.bind(this)
 				});
 
-			modal.addListener( 'modal-before-close', function (e) {
+			this._modal.addListener( 'modal-before-close', function (e) {
 				validator.destroy();
-				$modal.find( 'select' ).selectBox( 'clear' );
-				$modal.find( 'input:text' ).placeholder( 'clear' );
+				this._$modal.find( 'select' ).selectBox( 'clear' );
+				this._$modal.find( 'input:text' ).placeholder( 'clear' );
 			});
-
-			$modal.find( 'select' ).selectBox();
-			$modal.find( 'input:text' ).placeholder();
+			
+			this._$modal.find( 'select' ).selectBox();
+			this._$modal.find( 'input:text' ).placeholder();
 		},
 
 		/** =============== Private Methods =============== */
@@ -51,14 +53,17 @@
 		_save: function ( form ) {
 			var defer = new $.Deferred(),
 				formData = new FormData( form );
-
-			AP.api.restockNotify( null, formData )
-				.done( function ( result ) {
-					AP.modal.alert( AP.message.RESTOCK_NOTIFY_APPLY_SUCCESS ).addListener( 'modal-close', function (e) {
+			
+			AP.api.restockNotify( null, formData ).done( function ( result ) {
+				 
+				AP.modal.alert( AP.message.RESTOCK_NOTIFY_APPLY_SUCCESS ).addListener( 'modal-close', function (e) {
 						defer.resolve();
+						if(e.closeType === 'confirm'){
+							this._modal.close();
+						}
 					}.bind(this));
-				}.bind(this))
-				.fail( function ( xhr ) {
+					
+				}.bind(this)).fail( function ( xhr ) {
 					defer.reject();
 
 					if ( xhr.errorCode === 'EAPI004' ) {
@@ -86,6 +91,6 @@
 
 	});
 
-
+	
 	AP.RestockNotify = RestockNotify;
 })( jQuery );

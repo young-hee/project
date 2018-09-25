@@ -24,13 +24,18 @@
 		},
 
 		/** =============== Public Methods =============== */
-		_getList: function ( param ) {
+		_getList: function ( param, reset ) {
 			param = param || this._param;
 
 			if ( param.offset == 0 ) {
 				this._$target.find( '.loading' ).show();
 				this._$target.find( '.writed_review_list' ).hide();
 				this._$target.find( '.result_none' ).hide();
+			}
+          
+			if ( reset ) {
+				this._$target.find( '.deposit_list' ).html('');
+				this._clearPaging();
 			}
 
 			if ( this._api ) this._api.abort();
@@ -86,7 +91,7 @@
 					endDate: e.date.endDate
 				};
 
-				AP.myWritedReviewList._getList( this._param );
+				AP.myWritedReviewList._getList( this._param, true );
 			});
 		},
 

@@ -321,7 +321,7 @@ public class MyPointViewController extends AbstractController {
 	@GetMapping("/info/beutyPointCard")
 	@FragmentPage
 	public String beutyPointCard() {
-		return "my/layer-takeout-order-barcode";
+		return "my/layer-beauty-point-01";
 	}
 
 	/**

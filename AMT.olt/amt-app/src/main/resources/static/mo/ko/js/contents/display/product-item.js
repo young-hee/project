@@ -35,13 +35,15 @@
 
 			// 좋아요
 			this._$target.on( 'click', '.like_btn', function (e) {
+				e.preventDefault();
+
 				var $like = $( e.currentTarget );
 				AP.login().done(function () {
-					if ( !$like.hasClass( 'on' )) {
-						$like.addClass( 'on' ).find( '.ico_heart_s' ).addClass( 'on' );
+					if ( !$like.find( '.ico_heart_s' ).hasClass( 'on' )) {
+						$like.find( '.ico_heart_s' ).addClass( 'on' );
 						AP.addLike.add( this._$target, this._data.products );
 					} else {
-						$like.removeClass( 'on' ).find( '.ico_heart_s' ).removeClass( 'on' );
+						$like.find( '.ico_heart_s' ).removeClass( 'on' );
 						AP.addLike.remove( this._data.onlineProdSn );
 					}
 				}.bind( this ));

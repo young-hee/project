@@ -77,51 +77,12 @@ public class MyActivityViewController extends AbstractController {
 	@GetMapping("/myReviewList")
 	@PageTitle(title = "구매 리뷰" , menuId = "myActivity", subMenuId = "myReview")
 	public String myReviewList(Model model) {
-		//미작성리뷰
-//		List<ReviewWritableOrderDTO> list = new ArrayList<ReviewWritableOrderDTO>();
 		ProdReviewWritableOrderInfo prodReviewWritableOrderInfo = productApi.getProductReviewWritableOrders(getMemberSn(), null, 0, 100);
-		
-		//dummy start
-		List<ProdReviewWritableOrder> dummyList = new ArrayList<ProdReviewWritableOrder>();
-		
-		for(int i=0; i<10; i++) {
-			List<ProdReviewWritableOrderProd> prdList = new ArrayList<ProdReviewWritableOrderProd>();
-			for(int j=0; j<5; j++) {
-				ProdReviewWritableOrderProd prd = new ProdReviewWritableOrderProd();
-				prd.setOrdProdSn(100L);
-				prd.setOnlineProdName("리리코스 마린에너지 "+j);
-				prd.setProdName("인텐시브 오일 20ml 제품명 제품명 인텐시브 오일 20ml 제품명 "+j);
-				prd.setProdSn(200L);
-				prd.setRepProdImage("repProdImage"+j);
-				prd.setReviewWriteYn("Y");
-				prdList.add(prd);
-			}
-			
-			ProdReviewWritableOrder order = new ProdReviewWritableOrder();			
-			order.setOrderCompleteDate(new Date());
-			order.setOrderProds(prdList);
-			order.setOrdNo("ordNo"+i);
-			order.setWritableDays(i);
-			order.setWritableProdCount(prdList.size());
-			dummyList.add(order);
-		}
-		
-		prodReviewWritableOrderInfo.setLimit(999);
-		prodReviewWritableOrderInfo.setOffset(0);
-		prodReviewWritableOrderInfo.setOrders(dummyList);
-		prodReviewWritableOrderInfo.setTotalCount(dummyList.size());
-		//dummy end
-		
 		model.addAttribute("reviewCnt", prodReviewWritableOrderInfo.getTotalCount());
 		if (prodReviewWritableOrderInfo.getTotalCount() > 999) {
 			model.addAttribute("reviewCnt", "999+");
 		}
 		model.addAttribute("prodReviewWritableOrderInfo", prodReviewWritableOrderInfo);
-		
-		
-		
-		
-		
 		
 		/*
 		try {
@@ -159,7 +120,9 @@ public class MyActivityViewController extends AbstractController {
 		try {
 			//Member, OnlineProd
 			prodReviewListInfo = productApi.getProductReviews("OnlineProd", "All", 0, 999, getMemberSn(),
-					null, null, null, "Last", "All", "N", "N", null, null, null, APConstant.AP_DISPLAY_MENU_SET_ID, null);
+				null, null, null,
+				null, /* regularEventSn */
+				"Last", "All", "N", "N", null, null, null, APConstant.AP_DISPLAY_MENU_SET_ID, null);
 			model.addAttribute("writedCnt", prodReviewListInfo.getTotalCount());
 			if (prodReviewListInfo.getTotalCount() > 999) {
 				model.addAttribute("writedCnt", "999+");
@@ -249,7 +212,7 @@ public class MyActivityViewController extends AbstractController {
 	 * @return
 	 */
 	@GetMapping("/myInquiryList")
-	@PageTitle(title = "나의 1:1 문의" , menuId = "myActivity", subMenuId = "myInquiry")
+	@PageTitle(title = "1:1상담" , menuId = "myActivity", subMenuId = "myInquiry")
 	public String myInquiryList(Model model, HttpServletRequest req) {
 		
 		/**

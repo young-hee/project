@@ -1,5 +1,16 @@
 package kr.ap.amt.my.controller;
 
+import java.util.HashMap;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import kr.ap.comm.support.common.AbstractController;
 import net.g1project.ecp.api.model.BooleanResult;
 import net.g1project.ecp.api.model.sales.guide.InquiriesEvalResponse;
@@ -9,18 +20,6 @@ import net.g1project.ecp.api.model.sales.product.ProdReviewPost;
 import net.g1project.ecp.api.model.sales.product.ProdReviewSurvey;
 import net.g1project.ecp.api.model.sales.product.ProdReviewUpdate;
 import net.g1project.ecp.api.model.sales.product.ProdReviewWritableOrderInfo;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import feign.Param;
-
-import java.util.HashMap;
-import java.util.List;
 
 /**
  *

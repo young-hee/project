@@ -174,6 +174,24 @@ public class OrderRestController extends OrderBaseController {
 	}
 
 	/**
+	 * 예치금 변경
+	 * @return
+	 */
+	@PostMapping("/depositPriceChange")
+	public ResponseEntity<?> depositPriceChange(Long ordSn, Integer depositPrice) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		OrderSession orderSession = getOrderSession();
+		OrdReceptChange body = orderSession.getOrdReceptChange();
+		if (body == null) {
+			body = new OrdReceptChange();
+		}
+		OrdEx ordRc = orderApi.ordReceptChange(ordSn, body);
+		finalPriceAmtPcur(result, ordRc, depositPrice);
+
+		return ResponseEntity.ok(result);
+	}
+
+	/**
 	 * 주문정보 변경
 	 * @return
 	 */
@@ -362,7 +380,7 @@ public class OrderRestController extends OrderBaseController {
 			setOrderSession(orderSession);
 
             result.put("applyCouponExList", ordRc.getApplyCouponExList());
-			finalPriceAmtPcur(result, ordRc);
+			finalPriceAmtPcur(result, ordRc, 0);
 
         }
 		return ResponseEntity.ok(result);
@@ -406,7 +424,7 @@ public class OrderRestController extends OrderBaseController {
 			setOrderSession(orderSession);
 
 			result.put("applyCouponExList", ordRc.getApplyCouponExList());
-			finalPriceAmtPcur(result, ordRc);
+			finalPriceAmtPcur(result, ordRc, 0);
 
 		}
 		return ResponseEntity.ok(result);
@@ -437,7 +455,7 @@ public class OrderRestController extends OrderBaseController {
 			orderSession.setOrdReceptChange(body);
 			setOrderSession(orderSession);
 
-			finalPriceAmtPcur(result, ordRc);
+			finalPriceAmtPcur(result, ordRc, 0);
 		}
 		return ResponseEntity.ok(result);
 	}
@@ -494,7 +512,7 @@ public class OrderRestController extends OrderBaseController {
 			orderSession.setOrdReceptChange(body);
 			setOrderSession(orderSession);
 
-			finalPriceAmtPcur(result, ordRc);
+			finalPriceAmtPcur(result, ordRc, 0);
         }
 		return ResponseEntity.ok(result);
 	}
@@ -534,7 +552,7 @@ public class OrderRestController extends OrderBaseController {
 			orderSession.setOrdReceptChange(body);
 			setOrderSession(orderSession);
 
-			finalPriceAmtPcur(result, ordRc);
+			finalPriceAmtPcur(result, ordRc, 0);
         }
 		return ResponseEntity.ok(result);
 	}
@@ -584,7 +602,7 @@ public class OrderRestController extends OrderBaseController {
 			orderSession.setOrdReceptChange(body);
 			setOrderSession(orderSession);
 
-			finalPriceAmtPcur(result, ordRc);
+			finalPriceAmtPcur(result, ordRc, 0);
         }
 		return ResponseEntity.ok(result);
 	}
@@ -626,9 +644,9 @@ public class OrderRestController extends OrderBaseController {
 		}
 	}
 
-	private void finalPriceAmtPcur(HashMap<String, Object> result, OrdEx ordRc) {
+	private void finalPriceAmtPcur(HashMap<String, Object> result, OrdEx ordRc, Integer depositPrice) {
 		result.put("ordHistEx", ordRc.getOrdHistEx());
-		result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember()));
+		result.put("ordAmtMap", makeOrdAmtList(ordRc, isMember(), depositPrice));
 		result.put("ordCntMap", makeOrdCntList(ordRc));
 
 		//가용 예치금

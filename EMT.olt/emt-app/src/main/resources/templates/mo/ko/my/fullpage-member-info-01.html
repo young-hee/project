@@ -166,104 +166,34 @@
 												광고/이벤트/행사/프로모션에 대한 수신 동의 여부
 											</div>
 											<dl class="agree_marketing">
-												<dt>뷰티포인트 수신 동의</dt>
+											<th:block th:each="receive,iter : ${receiveList}">
+												<dt><th:block th:text="${receive.get('name')}">뷰티포인트</th:block> 수신 동의</dt>
 												<dd>
 													<div class="check_set check1">
 														<span class="check_wrap">
-															<input type="checkbox" id="check_all1"><label for="check_all1">전체선택</label>
+															<input type="checkbox" th:id="'check_all' + ${iter.count}"><label th:for="'check_all' + ${iter.count}">전체선택</label>
+															<input type="hidden" th:name="'receiveList[' + ${iter.count -1} + '].chCd'" th:value="${receive.get('chCd')}">
 														</span>
 					               						<span class="check_wrap">
-					               							<input type="checkbox" id="ap_agree2_1" name="apReceive[0].value" th:checked="${apReceiveMap.get('Email')}" />
-					               							
-					               						<label for="ap_agree2_1">이메일</label><input type="hidden" name="apReceive[0].name" th:value="Email"></span>
+					               							<input type="checkbox" th:id="'agree' + ${iter.count} + '_1'" th:name="'receiveList[' + ${iter.count -1} + '].receive[0].value'" th:checked="${receive.get('Email')}" />
+				               							
+				               								<label th:for="'agree' + ${iter.count} + '_1'">이메일</label><input type="hidden" name="apReceive[0].name" th:value="Email"></span>
 					               						<span class="check_wrap">
-					               							<input type="checkbox" id="ap_agree2_2" name="apReceive[1].value" th:checked="${apReceiveMap.get('SMS')}" />
-					               							
-					               						<label for="ap_agree2_2">문자</label><input type="hidden" name="apReceive[1].name" th:value="SMS"></span>
+					               							<input type="checkbox" th:id="'agree' + ${iter.count} + '_2'" th:name="'receiveList[' + ${iter.count -1} + '].receive[1].value'" th:checked="${receive.get('SMS')}" />
+				               							
+				               								<label th:for="'agree' + ${iter.count} + '_2'">문자</label><input type="hidden" name="apReceive[1].name" th:value="SMS"></span>
 					               						<span class="check_wrap">
-					               							<input type="checkbox" id="ap_agree2_3" name="apReceive[2].value" th:checked="${apReceiveMap.get('DM')}" />
-					               							
-					               						<label for="ap_agree2_3">DM</label><input type="hidden" name="apReceive[2].name" th:value="DM"></span>
+					               							<input type="checkbox" th:id="'agree' + ${iter.count} + '_3'" th:name="'receiveList[' + ${iter.count -1} + '].receive[2].value'" th:checked="${receive.get('DM')}" />
+				               							
+				               								<label th:for="'agree' + ${iter.count} + '_3'">DM</label><input type="hidden" name="apReceive[2].name" th:value="DM"></span>
 					               						<span class="check_wrap">
-					               							<input type="checkbox" id="ap_agree2_4" name="apReceive[3].value" th:checked="${apReceiveMap.get('TM')}" />
-					               							
-					               						<label for="ap_agree2_4">TM</label><input type="hidden" name="apReceive[3].name" th:value="TM"></span>
+					               							<input type="checkbox" th:id="'agree' + ${iter.count} + '_4'" th:name="'receiveList[' + ${iter.count -1} + '].receive[3].value'" th:checked="${receive.get('TM')}" />
+				               							
+				               								<label th:for="'agree' + ${iter.count} + '_4'">TM</label><input type="hidden" name="apReceive[3].name" th:value="TM"></span>
 													</div>
 													<p class="txt_agree">※ <strong>아모레퍼시픽 통합 멤버십 혜택</strong>에 관한 수신 동의 항목입니다.</p>
 												</dd>
-												<dt>온라인 사이트 수신 동의</dt>
-												<dd>
-													<div class="check_set check2">
-														<span class="check_wrap">
-															<input type="checkbox" id="check_all2"><label for="check_all2">전체선택</label>
-														</span>
-					               						<span class="check_wrap">
-					               							<input type="checkbox" id="agree2_1" name="receive[0].value" th:checked="${receiveMap.get('Email')}" />
-					               							
-					               						<label for="agree2_1">이메일</label><input type="hidden" name="receive[0].name" th:value="Email"></span>
-					               						<span class="check_wrap">
-					               							<input type="checkbox" id="agree2_2" name="receive[1].value" th:checked="${receiveMap.get('SMS')}" />
-					               							
-					               						<label for="agree2_2">문자</label><input type="hidden" name="receive[1].name" th:value="SMS"></span>
-					               						<span class="check_wrap">
-					               							<input type="checkbox" id="agree2_3" name="receive[2].value" th:checked="${receiveMap.get('DM')}" />
-					               							
-					               						<label for="agree2_3">DM</label><input type="hidden" name="receive[2].name" th:value="DM"></span>
-					               						<span class="check_wrap">
-					               							<input type="checkbox" id="agree2_4" name="receive[3].value" th:checked="${receiveMap.get('TM')}" />
-					               							
-					               						<label for="agree2_4">TM</label><input type="hidden" name="receive[3].name" th:value="TM"></span>
-													</div>
-												</dd>
-												<dt>에뛰드 수신 동의</dt>
-												<dd>
-													<div class="check_set check3">
-														<span class="check_wrap">
-															<input type="checkbox" id="check_all3"><label for="check_all3">전체선택</label>
-														</span>
-					               						<span class="check_wrap">
-					               							<input type="checkbox" id="agree3_1" name="posReceive[0].value" th:checked="${ehPosReceiveMap.get('Email')}" />
-					               							
-					               						<label for="agree3_1">이메일</label><input type="hidden" name="posReceive[0].name" th:value="Email"></span>
-					               						<span class="check_wrap">
-					               							<input type="checkbox" id="agree3_2" name="posReceive[1].value" th:checked="${ehPosReceiveMap.get('SMS')}" />
-					               							
-					               						<label for="agree3_2">문자</label><input type="hidden" name="posReceive[1].name" th:value="SMS"></span>
-					               						<span class="check_wrap">
-					               							<input type="checkbox" id="agree3_3" name="posReceive[2].value" th:checked="${ehPosReceiveMap.get('DM')}" />
-					               							
-					               						<label for="agree3_3">DM</label><input type="hidden" name="posReceive[2].name" th:value="DM"></span>
-					               						<span class="check_wrap">
-					               							<input type="checkbox" id="agree3_4" name="posReceive[3].value" th:checked="${ehPosReceiveMap.get('TM')}" />
-					               							
-					               						<label for="agree3_4">TM</label><input type="hidden" name="posReceive[3].name" th:value="TM"></span>
-													</div>
-												</dd>
-												<dt>에뛰드 쇼핑몰 수신 동의</dt>
-												<dd>
-													<div class="check_set check4">
-														<span class="check_wrap">
-															<input type="checkbox" id="check_all4"><label for="check_all4">전체선택</label>
-														</span>
-					               						<span class="check_wrap">
-					               							<input type="checkbox" id="agree4_1" name="ehReceive[0].value" th:checked="${ehReceiveMap.get('Email')}" />
-					               							
-					               						<label for="agree4_1">이메일</label><input type="hidden" name="ehReceive[0].name" th:value="Email"></span>
-					               						<span class="check_wrap">
-					               							<input type="checkbox" id="agree4_2" name="ehReceive[1].value" th:checked="${ehReceiveMap.get('SMS')}" />
-					               							
-					               						<label for="agree4_2">문자</label><input type="hidden" name="ehReceive[1].name" th:value="SMS"></span>
-					               						<span class="check_wrap">
-					               							<input type="checkbox" id="agree4_3" name="ehReceive[2].value" th:checked="${ehReceiveMap.get('DM')}" />
-					               							
-					               						<label for="agree4_3">DM</label><input type="hidden" name="ehReceive[2].name" th:value="DM"></span>
-					               						<span class="check_wrap">
-					               							<input type="checkbox" id="agree4_4" name="ehReceive[3].value" th:checked="${ehReceiveMap.get('TM')}" />
-					               							
-					               						<label for="agree4_4">TM</label><input type="hidden" name="ehReceive[3].name" th:value="TM"></span>
-													</div>
-												</dd>
-											</dl>
+											</th:block>
 											<div class="form_btns">
 												<button type="button" onclick="changeOptionInfo()" class="btn_primary_md">수정 완료</button>
 											</div>
@@ -586,7 +516,7 @@
 
 	            AP.api.changePwd2({}, AP.common.getFormData($form)).done(function(data) {
 	                AP.modal.alert("비밀번호가 변경되었습니다.").addListener('modal-close', function(e) {
-						reload();
+	                	location.replace('/my/page/info/changeUserInfo');
 	                });
 	            }).fail(function(xhr, textStatus, errorThrown) {
 	                if (xhr.errorCode == 0) {
@@ -729,7 +659,9 @@
 	                    AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
 	                } else if (xhr.errorCode == 'CHECK90') {
 	                    AP.modal.alert("90일 이전에 변경된 휴대폰 번호입니다. 해당 휴대전화를 사용할 수 없습니다.");
-	                } else {
+	                } else if(xhr.errorCode ==  'REQ_AUTH_CHECK') {
+	                    AP.modal.alert("인증되지 않은 휴대전화 번호로 변경할 수 없습니다.");
+					} else {
 		                AP.modal.alert("회원정보 수정에 실패했습니다.");
 	                }
 				}).always(function() {

@@ -100,7 +100,7 @@
 		 case 'WaitingSale':	//판매대기	
 		 case 'SuspendSale':	//판매일시중지
 		 case 'EndSale':		//판매종료
-			 stockBtn = 'style="display:none;"';
+			 stockBtn = 'disabled';
 			 break;
 		 }
 		 
@@ -860,7 +860,6 @@
 	});
 
 	/** MyPage *****************************************************************/
-
 	Handlebars.registerHelper("couponTypeBenefitSwitch", function(value) {
 		var html = '';
 

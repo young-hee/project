@@ -4,10 +4,12 @@ import kr.ap.comm.cart.CartSession;
 import kr.ap.comm.config.interceptor.PageTitle;
 import kr.ap.comm.cart.OrdCartInfo;
 import kr.ap.comm.order.OrderSession;
+import kr.ap.emt.order.vo.OrdOnlineProdFoDTO;
 import kr.ap.emt.order.vo.OrdStoreDTO;
 import kr.ap.emt.payment.config.InicisPgProperties;
 import net.g1project.ecp.api.exception.ApiException;
 import net.g1project.ecp.api.model.BooleanResult;
+import net.g1project.ecp.api.model.ap.ap.ShipAddressInfo;
 import net.g1project.ecp.api.model.order.order.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -16,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -546,5 +550,97 @@ public class OrderViewController extends OrderBaseController {
  		
  		return times.toString();
     }
+
+    /****************************************************************/
+    /************************** E-Mail ******************************/
+    /****************************************************************/
+	/**
+	 * 주문완료 메일
+	 *
+	 * @param model
+	 * @param ordSn
+	 * @return
+	 */
+	@GetMapping("/getOrdDetail/{ordSn}")
+	public String getOrdDetail(HttpServletRequest request, Model model, @PathVariable String ordSn){
+
+		//상품목록
+		OrdEx ordEx = orderApi.getOrd(Long.valueOf(ordSn));
+
+		List<OrdHistProdEx> onlineProductList = new ArrayList<OrdHistProdEx>();		//온라인상품
+		List<OrdHistProdEx> storeProductList = new ArrayList<OrdHistProdEx>();			//테이크아웃상품
+		List<OrdHistProdEx> ordUnitAwardProductList = new ArrayList<OrdHistProdEx>();	//주문사은품
+		StoreEx storeEx = null;
+
+		List<OrdShipAddressEx> ordShipAddressList = ordEx.getOrdShipAddressExList();
+		for (OrdShipAddressEx ordShipAddressEx : ordShipAddressList) {
+
+			//온라인상품
+			if ("N".equals(ordShipAddressEx.getStorePickupYn())) {
+				for (OrdOtfEx ordOtfEx : ordShipAddressEx.getOrdOtfExList()) {
+					for (OrdHistProdEx ordHistProdEx : ordOtfEx.getOrdHistProdExList()) {
+						if (StringUtils.isNotEmpty(ordHistProdEx.getOrdHistProdTypeCode())) {
+							if ("Ord".equals(ordHistProdEx.getOrdHistProdTypeCode())
+								|| "SameTimePur".equals(ordHistProdEx.getOrdHistProdTypeCode())) {
+								onlineProductList.add(ordHistProdEx);
+							} else if ("OrdUnitAward".equals(ordHistProdEx.getOrdHistProdTypeCode())) {
+								ordUnitAwardProductList.add(ordHistProdEx);
+							}
+						}
+					}
+				}
+			}
+
+			//테이크아웃상품
+			if ("Y".equals(ordShipAddressEx.getStorePickupYn())) {
+				storeEx = new StoreEx();
+				storeEx = ordShipAddressEx.getStoreEx();
+
+				for (OrdOtfEx ordOtfEx : ordShipAddressEx.getOrdOtfExList()) {
+					for (OrdHistProdEx ordHistProdEx : ordOtfEx.getOrdHistProdExList()) {
+						if (StringUtils.isNotEmpty(ordHistProdEx.getOrdHistProdTypeCode())) {
+							if ("Ord".equals(ordHistProdEx.getOrdHistProdTypeCode())
+								|| "SameTimePur".equals(ordHistProdEx.getOrdHistProdTypeCode())) {
+								storeProductList.add(ordHistProdEx);
+							} else if ("OrdUnitAward".equals(ordHistProdEx.getOrdHistProdTypeCode())) {
+								ordUnitAwardProductList.add(ordHistProdEx);
+							}
+						}
+					}
+				}
+			}
+		}
+		model.addAttribute("ordEx", ordEx);
+
+		model.addAttribute("onlineProductList", onlineProductList);
+		model.addAttribute("storeProductList", storeProductList);
+		model.addAttribute("ordUnitAwardProductList", ordUnitAwardProductList);
+
+		model.addAttribute("isApMember", isMember());
+		model.addAttribute("storeEx", storeEx);
+
+		/*****************************************************************
+		 * 주문금액 계산
+		 *****************************************************************/
+		model.addAttribute("ordAmtMap", makeOrdAmtList(ordEx, isMember(), 0));
+
+
+		//이미지 domain
+		String uri = request.getScheme() + "://" +  // "http" + "://
+					request.getServerName();        // "myhost"
+		if(request.getServerPort() != -1){
+			uri += ":" + request.getServerPort();  // ":" + "8080"
+		}
+		model.addAttribute("imgUrl", uri);
+
+		//ordPayDt == null && payMethodCode = 가상계좌 && payStatusCode = waitting : 주문접수완료.
+		//결제완료.
+
+		if (ordEx.getOrdPayDt() == null) {
+			return "order/mail/mail-order-complete";
+		} else {
+			return "order/mail/mail-pay-complete";
+		}
+	}
 
 }

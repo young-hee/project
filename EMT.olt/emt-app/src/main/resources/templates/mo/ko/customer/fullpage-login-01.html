@@ -66,6 +66,20 @@
         <th:block ap:fragment="layout-endpoint">
 <script>
 
+$('input').keypress(function(f) {
+
+	if(f.keyCode == 13){
+		if(!$($(f).attr('target')).val()) return;
+		var target = $($(f).attr('target')).attr('target');
+		if(!target) return;
+		if(target == 'login' || target == 'send-sms' || target == 'no-member-view') {
+			$('#' + target + '').click();
+		} else {
+		
+			$('[name=' + target + ']').focus();
+		}
+	}
+});
 $('#login').on('click', function() {
     if ($(this).attr('disabled') == 'disabled') return;
     loginProcess();
@@ -281,7 +295,11 @@ function loginProcess() {
                 }
 
             } else {
-                AP.modal.alert(xhr.errorMessage)
+            	if(xhr.errorMessage == 'error') {
+	                AP.modal.alert("인터넷이 연결되지 않습니다. 연결 상태를 확인해주세요.");
+            	} else {
+	                AP.modal.alert(xhr.errorMessage);
+            	}
             }
         }).always(function() {
             //성공, 실패
@@ -488,7 +506,7 @@ function loginComplete() {
         if ($('#sub').attr('method') == 'POST')
             $('#sub').submit();
         else {
-            location.href = $('#sub').attr('action').replace('?isRequiredLogin=true', '').replace('/order/reception','/cart/cartList').replace('/order/ordComplete', '/main');
+            location.href = $('#sub').attr('action').replace('?isRequiredLogin=true', '').replace('/order/reception','/cart/cartList').replace('/order/ordComplete', '/main').replace('/order/ordBankComplete', '/main').replace();
         }
     }, 1);
 

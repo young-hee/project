@@ -570,7 +570,7 @@ function complete() {
             	post_goto('/customer/alreadyMember', {'mbrJoinDt':signupDate.mbrJoinDt, 'userId':signupDate.chcsNo, 'custNm':$('[name=custNm]').val()});
 				return;
             case "02": //etude구회원 정보
-            	if(oldId == '')
+            	if(oldId == '' && signupDate.oldMemberId != $('[name=chcsNo]').val()) {
 	                $.get("/customer/popup?pageId=3&userId1=" + signupDate.oldMemberId + "&userId2=" + $('[name=chcsNo]').val() , function(data) {
 	
 	                    var contents = new Object();
@@ -612,7 +612,7 @@ function complete() {
 	                    	
 	                    });
 	                });
-            	else {
+            	} else {
                 	$('#send').attr("disabled", "disabled");
                 	doComplete();
             	}

@@ -106,22 +106,28 @@
 
         // bottom floating menu
         _setFloatingMenu: function () {
-			if ( this._$target.siblings( '.ap_container' ).find( '.option_layer' ).length > 0 ) return;	// 구매하기 버튼 있을때 예외처리
+        	
+        	var $floatingMenu = this._$target.siblings( '.floating_menu' ),
+        		 $top = $floatingMenu.find('.btn_top');
 
-            var $floatingMenu = this._$target.siblings( '.floating_menu' ),
-                $top = $floatingMenu.find( '.btn_top' );
+        	 var oldScrollY = $( window ).scrollTop();
+        	 
+             //top btn
+        	 $top.on( 'click', function (e) {
+                 $( 'body, html' ).animate({
+                     scrollTop: 0
+                 });
+                 $( e.target ).triggerHandler( 'click-top' );
+             }.bind(this));
+         
+			if ( this._$target.siblings( '.ap_container' ).find( '.option_layer' ).length > 0 ) {
+				
+				$floatingMenu.find('ul').hide();
+				
+				return;	// 구매하기 버튼 있을때 예외처리
+			}
 
-            var oldScrollY = $( window ).scrollTop();
-
-            //top btn
-            $top.on( 'click', function (e) {
-                $( 'body, html' ).animate({
-                    scrollTop: 0
-                });
-                $( e.target ).triggerHandler( 'click-top' );
-            }.bind(this));
-
-            //aside menu btn
+			//aside menu btn
 			$floatingMenu.find( '.aside_menu_btn' ).on( 'click', function (e) {
 				e.preventDefault();
 				AP.asideMenu.open();

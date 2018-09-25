@@ -10,6 +10,9 @@
 	<title th:text="${pageTitle}">[Etude]layout:default</title>
 
     <th:block ap:replace="~{common/fragment/meta}" />
+    
+    <!--/* AA/GA Tagging Start */-->
+    <th:block ap:replace="~{common/fragment/tagstart}" />
 
     <!--/* css : common (모든페이지) */-->
     <link rel="stylesheet" type="text/css" ap:href="@{/css/default.css}">
@@ -19,6 +22,9 @@
     <th:block ap:replace="~{common/fragment/variable-api-common}" />
 </head>
 <body>
+    <!--/* js : tagging (AA/GA tagging) */-->
+    <th:block ap:replace="~{common/fragment/js-tagdata}"/>
+   
     <!--/* skip navigation */-->
     <div id="accessibility"><a href="#ap_container">본문 바로가기</a></div>
     
@@ -57,9 +63,11 @@
 
     <!--/* 하단 js file 을 include */-->
     <th:block ap:replace="~{common/fragment/custom-jsfiles}"></th:block>
-
+    
     <!--/* 하단 js등을 실행하는 마지막 영역 */-->
     <th:block ap:fragment="layout-endpoint"></th:block>
 
+    <!--/* AA/GA Tagging End */-->
+    <th:block ap:replace="~{common/fragment/tagend}" />
 </body>
 </html>

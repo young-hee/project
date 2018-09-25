@@ -694,18 +694,18 @@
 			switch (value.couponBenefitTypeCode) {
 				case 'ProdDc' :
 					//상품할인쿠폰
-					switch (value.prodDcCoupon.dcMethodCode) {
+					switch (value.dcMethodCode) {
 						case 'FixedRate' :
 							//정률
-							html = value.prodDcCoupon.dcRate * 100 + '% 할인';
+							html = '<b>' + value.dcRate * 100 + '%</b> <br>할인';
 							break;
 						case 'FixedAmt' :
 							//정액
-							html = value.prodDcCoupon.dcAmt + '원 할인';
+							html = '<b>' + value.dcAmt + '원</b> <br>할인';
 							break;
 						case 'FlatPrice' :
 							//균일가
-							html = value.prodDcCoupon.flatPrice + '원 균일가';
+							html = '<b>' + value.flatPrice + '원</b> <br>균일가';
 							break;
 						default :
 							break;
@@ -713,18 +713,18 @@
 					break;
 				case 'CartDc' :
 					//장바구니할인쿠폰 - 정액/정률
-					switch (value.cartDcCoupon.dcMethodCode) {
+					switch (value.dcMethodCode) {
 						case 'FixedRate' :
 							//정률
-							html = value.cartDcCoupon.dcRate * 100 + '% 할인';
+							html = '<b>' + value.dcRate * 100 + '%</b> <br>할인';
 							break;
 						case 'FixedAmt' :
 							//정액
-							html = value.cartDcCoupon.dcAmt + '원 할인';
+							html = '<b>' + value.dcAmt + '원</b> <br>할인';
 							break;
 						case 'FlatPrice' :
 							//균일가
-							html = value.cartDcCoupon.flatPrice + '원 균일가';
+							html = '<b>' + value.flatPrice + '원</b> <br>균일가';
 							break;
 						default :
 							break;
@@ -733,16 +733,16 @@
 					break;
 				case 'MPlusN' :
 					//M+N쿠폰
-					html = value.mplusnCoupon.baseOrdQty + ' + ' + value.mplusnCoupon.freeAwardQty;
+					html = '<b>' + value.mplusnCoupon.baseOrdQty + ' + ' + value.mplusnCoupon.freeAwardQty + '</b>';
 					break;
 				case 'Buy1Get' :
 					//Buy1Get쿠폰 - 100%  50%
-					switch (value.buyOneGetCoupon.buy1getDcRate) {
+					switch (value.buy1getDcRate) {
 						case 1 :
-							html = '하나 더';
+							html = '<b>하나 더</b>';
 							break;
 						case 0.5 :
-							html = '하나 반값';
+							html = '<b>하나 반값</b>';
 							break;
 						default :
 							break;
@@ -750,11 +750,11 @@
 					break;
 				case 'CartAward' :
 					//장바구니증정쿠폰 - 사은품 증정
-					html = '사은품 증정';
+					html = '<b>사은품 증정</b>';
 					break;
 				case 'ShipFeeFree' :
 					//배송비무료쿠폰
-					html = '배송비 무료';
+					html = '<b>배송비 무료</b>';
 					break;
 				default :
 					break;

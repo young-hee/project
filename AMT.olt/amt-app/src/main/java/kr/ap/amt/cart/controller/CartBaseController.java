@@ -10,6 +10,7 @@ import kr.ap.comm.cart.CartSession;
 import kr.ap.comm.support.common.AbstractController;
 import kr.ap.comm.support.constants.APConstant;
 import net.g1project.ecp.api.model.sales.cart.*;
+import net.g1project.ecp.api.model.sales.display.BrandCard;
 import net.g1project.ecp.api.model.sales.display.OnlineProdList;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Controller;
@@ -54,9 +55,8 @@ public class CartBaseController extends AbstractController{
 	 *
 	 * @return
 	 */
-	protected OnlineProdList showRandomBrand() {
-
-		return null;
+	protected List showRandomBrand() {
+		return displayApi.getBrandCards("Random",0,0,1);
 	}
 
 	/**

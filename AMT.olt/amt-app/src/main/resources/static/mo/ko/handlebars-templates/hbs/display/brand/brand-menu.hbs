@@ -1,11 +1,15 @@
 {{#each this.brandMenus}}
 	<li>
-		<a href="{{ this.clickUrl }}" data-brand-sn="{{ this.brandSn }}">
-			{{#each this.logos}}
-				{{#xif this.logoType '==' 'BrandLogo01'}}
-					<img alt="{{ ../brandName }}" src="{{ absolutePath this.fileUrl }}">
-				{{/xif}}
-			{{/each}}
+		<a href="/display/brand/{{ this.displayMenuId }}?displayMenuId={{ this.displayMenuId }}?brandSn={{ this.brandSn }}" data-brand-sn="{{ this.brandSn }}">
+			{{#xif this.logos.length '>' 0}}
+				{{#each this.logos}}
+					{{#xif this.logoType '==' 'BrandLogo01'}}
+						<img alt="{{ ../brandName }}" src="{{ absolutePath this.fileUrl }}">
+					{{/xif}}
+				{{/each}}
+			{{else}}
+				<span>{{ this.displayMenuId }}</span>
+			{{/xif}}
 		</a>
 	</li>
 {{/each}}

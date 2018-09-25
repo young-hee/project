@@ -10,8 +10,8 @@
 				<th:block th:each="payMethod : ${payMethodResult.payMethodExList}">
 				<!-- 원페이 -->
 				<dl th:if="${apMember != null and payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'wpay'}">
-					<dt class="onepay on">
-						<button type="button" name="rdoPayMethod" id="w_pay"  value="WPAY" checked="checked"
+					<dt class="onepay">
+						<button type="button" name="rdoPayMethod" id="w_pay"  value="WPAY"
 								th:onclick="|setPayment(this,'WPAY','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
 							<span class="ie_press"><img ap:src="@{/images/order/txt_onepay.png}" alt="ONE pay"> <em>간편한 원클릭 결제</em></span>
 						</button>
@@ -25,13 +25,15 @@
 				<!-- 신용카드 결제 -->
 				<dl th:if="${payMethod.payServiceCode == 'inicis-pg' and payMethod.payMethodCode == 'credit-card'}" class="line">
 					<dt>
-						<button type="button" name="rdoPayMethod" id="credit"
+						<button type="button" name="rdoPayMethod" id="credit" value="CREDIT_CARD"
 								th:onclick="|setPayment(this,'wcard','','${payMethod.payMethodSn}','${payMethod.payServiceCode}','${payMethod.payMethodCode}')|">
 							신용카드 결제
 						</button>
+						<th:block th:if="${isApMember}">
 						<span class="check_wrap">
 							<input type="checkbox" id="tobeContinueCredit"><label for="tobeContinueCredit">선택한 결제 수단을 다음에도 사용</label>
 						</span>
+						</th:block>
 					</dt>
 					<dd>
 						<ul class="credit_list">
@@ -202,12 +204,14 @@
 				<!-- 다른결제 수단 -->
 				<dl>
 					<dt>
-						<button type="button" name="rdoPayMethod" id="pay3" onclick="setPayment(this,'other','','','','');">
+						<button type="button" name="rdoPayMethod" id="pay3" value="OTHER" onclick="setPayment(this,'other','','','','');">
 							다른결제 수단
 						</button>
+						<th:block th:if="${isApMember}">
 						<span class="check_wrap">
 							<input type="checkbox" id="tobeContinueOther"><label for="tobeContinueOther">선택한 결제 수단을 다음에도 사용</label>
 						</span>
+						</th:block>
 					</dt>
 					<dd>
 						<div class="credit_list ">
@@ -305,7 +309,7 @@
 								<li>
 									<span class="stit top">현금영수증</span>
 									<div class="radio">
-										<span class="check_wrap rdo_type2"><input type="radio" name="radio3" id="radio3_1" checked="checked"><label for="radio3_1">네</label></span>
+										<span class="check_wrap rdo_type2"><input type="radio" name="radio3" id="receipt1" checked="checked"><label for="receipt1">네</label></span>
 										<span class="check_wrap rdo_type2"><input type="radio" name="radio3" id="radio3_2"><label for="radio3_2">아니오</label></span>
 										<span class="check_wrap rdo_type2"><input type="radio" name="radio3" id="radio3_3"><label for="radio3_3">미신청</label></span>
 										<div class="space">
@@ -412,40 +416,31 @@
 		}
 	};
 
-	//결제 수단 선택 상태값
-	$('input:radio[name="rdoPayMethod"]').change(function() {
-		$('.other_noty_area > div').hide();
-		$('.payment_list').find('.card_list').hide();
-		$('.card_list .card').find('input').prop('checked',false);
-		if (!$(this).next().hasClass('one_pay')) {
-			$(this).closest('li').find('.card_list').show();
-		}
-	});
-
-	//다른결제수단 선택시 레이어 노출
-	$('input:radio[name="other"]').change(function() {
-		var class_name = $(this).next().attr('class');
-		$('.other_noty_area > div').hide();
-		if ($(this).next().hasClass(class_name)) {
-			$(this).closest('.card_list').next('.other_noty_area').find('.'+class_name).show();
-		}
+	/** 결제 수단 선택 체크박스 클릭 이벤트 **/
+	$('button[name="rdoPayMethod"]').click(function() {
+		//선택한 결제 수단을 다음에도 사용 모든 체크버튼 초기화
+		$("#tobeContinueWPAY").prop('checked', false);
+		$("#tobeContinueCredit").prop('checked', false);
+		$("#tobeContinueOther").prop('checked', false);
+		//값 초기화
+		$("input:hidden[name=nextPayUseYn]").val("N");
 	});
 
 	/* 선택한 결제 수단을 다음에도 사용 */
-	$('[name=nextPayUseYn]').on('click', function(e){
+	$('#tobeContinueWPAY, #tobeContinueCredit, #tobeContinueOther').on('click', function(e){
 		if($(this).is(":checked")) {
-			var selectedPaymethod = $('input:radio[name="rdoPayMethod"]:checked').val();
-			if (selectedPaymethod == null || selectedPaymethod == '') {
-				AP.modal.alert("결제수단을 선택해 주세요.");
-				$('[name=nextPayUseYn]:checked').prop('checked', false);
-				$('[name=nextPayUseYn]').attr("value", "N");
-			} else {
-				$('[name=nextPayUseYn]:checked').prop('checked', true);
-				$('[name=nextPayUseYn]').attr("value","Y");
-			}
+			$("#tobeContinueWPAY").prop('checked', false);
+			$("#tobeContinueCredit").prop('checked', false);
+			$("#tobeContinueOther").prop('checked', false);
+
+			$(this).prop('checked', true);
+			$("input:hidden[name=nextPayUseYn]").val("Y");
 		}else{
-			$('[name=nextPayUseYn]:checked').prop('checked', false);
-			$('[name=nextPayUseYn]').attr("value","N");
+			$("#tobeContinueWPAY").prop('checked', false);
+			$("#tobeContinueCredit").prop('checked', false);
+			$("#tobeContinueOther").prop('checked', false);
+
+			$("input:hidden[name=nextPayUseYn]").val("N");
 		}
 	});
 
@@ -516,7 +511,6 @@
 
 	/* 신용카드 선택 정보 저장 */
 	function setCreditcardInfo(cardCo, creditcardCoSn) {
-		console.log("???");
 		$('input:hidden[name=cardCo]').attr("value", cardCo);
 		$('input:hidden[name=creditcardCoSn]').attr("value", creditcardCoSn);
 	};
@@ -558,7 +552,7 @@
 				});
 			} else {
 				//WPAY 회원일 경우
-
+				setViewWpay(obj, payMethod, goPayMethod, payMethodSn, payServiceCode, payMethodCode);
 			}
 		}).fail(function (e) {
 			AP.modal.alert("[ajax.fail]실패");
@@ -570,7 +564,7 @@
 	var wpayRegistPopup;
 	function getWPayMemReqCall() {
 
-		wpayRegistPopup = window.open('about:blank','wpayRegistPopup');
+		wpayRegistPopup = window.open('about:blank','wpayRegistPopup','width=850 height=750 menubar=no status=no');
 		var $form = $("form[name='orderForm']");
 
 		$form.attr("method", "post");
@@ -578,6 +572,16 @@
 		$form.attr("target", "wpayRegistPopup");
 		$form.submit();
 
+	};
+
+	/*wpay 회원인 경우 ui 처리*/
+	function setViewWpay(obj, payMethod, goPayMethod, payMethodSn, payServiceCode, payMethodCode){
+
+		$('input[name=goPayMethod]').val('');
+		$('#checkedPayMethod').html($(obj).attr('title')); // 선택결제수단 Title
+
+		// 현금영수증신청 디폴드 설정
+		$("#receipt1").trigger('click');
 	};
 
 </script>

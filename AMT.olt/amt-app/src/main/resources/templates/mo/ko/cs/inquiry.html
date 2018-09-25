@@ -24,7 +24,7 @@
 						<span class="input_h48_gray"><input type="text" name="inquiryTitle" placeholder="제목" required="required" data-msg="제목을 입력해 주세요." maxlength="200"></span>
 					</div>
 					<div class="textarea">
-						<textarea name="inquiryBodyText" placeholder="내용" required="required" data-msg="내용을 입력해 주세요."></textarea>
+						<textarea name="inquiryBodyText" id="inquiryBodyText" placeholder="내용" required="required" data-msg="내용을 입력해 주세요."></textarea>
 					</div>
 
 					<div class="ui_input_images">
@@ -79,9 +79,9 @@
 				AP.api.inquiry({}, formData ).done(function ( data ) {
 					if (data) {
 						AP.modal.alert("등록되었습니다.").addListener('modal-close', function(e) {
-						location.href="/my/page/myInquiryList"
-					});
-				}
+							location.href="/my/page/myInquiryList"
+						});
+					}
 				}).fail(function ( e ) {
 					AP.modal.alert(e.responseJSON.errorData.message);
 				}).always(function () {
@@ -99,6 +99,17 @@
 			}
 		});
 
+		// 글자수 체크
+		$('#inquiryBodyText').on('keyup', function(e){
+			var cont = $('#inquiryBodyText').val();
+			var enterCount = getEnterCount(cont);
+
+			if(cont.length + enterCount > 2000) {
+				$(this).val(cont.substring(0,(2000 - enterCount)));
+				AP.modal.alert('내용은 최대 2000자까지 입력 가능합니다.');
+			}
+		});
+
 		//문의할 제품/주문 선택
 		function selectOrd() {
 
@@ -107,7 +118,8 @@
 				contents : {
 					templateKey : 'cs.layer-inquiry'
 				},
-				sizeType : 'L'
+				sizeType : 'L',
+				containerClass : ' ly_inquiry'
 
 			});
 
@@ -200,6 +212,21 @@
 			$('.attached').empty();
 			$('#ordHistNo').attr('value', null);
 			temp = null;
+		}
+
+		function getEnterCount( str ) {
+			var result = 0;
+
+			if ( !_.isEmpty( str ) ) {
+				var pattern = /\n/g;
+				if ( pattern.test( str ) ) {
+					result = str.match( pattern ).length;
+				} else {
+					result = 0;
+				}
+			}
+
+			return result;
 		}
 
 	</script>

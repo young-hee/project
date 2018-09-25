@@ -42,28 +42,22 @@
 			//상단 order
 			this._topOrder = new AP.Order( this._$target.find('.prd_info_wrap .prd_total'), this._defaultModel, {
 					selectBoxThumbnail: true
-				})
-				.addListener( 'add-item', function (e) {
+				}).addListener( 'add-item', function (e) {
 					this._sideOrder.addItem( e.product );
-				}.bind(this))
-				.addListener( 'remove-item', function (e) {
+				}.bind(this)).addListener( 'remove-item', function (e) {
 					this._sideOrder.removeItem( e.prodSn );
-				}.bind(this))
-				.addListener( 'spinner-change', function (e) {
+				}.bind(this)).addListener( 'spinner-change', function (e) {
 					this._sideOrder.changeSpinner( e.prodSn, e.value );
 				}.bind(this));
 
 			//side order
 			this._sideOrder = new AP.Order( this._$target.find('.order_layer'), this._defaultModel, {
 					layerFixed: true
-				})
-				.addListener( 'add-item', function (e) {
+				}).addListener( 'add-item', function (e) {
 					this._topOrder.addItem( e.product );
-				}.bind(this))
-				.addListener( 'remove-item', function (e) {
+				}.bind(this)).addListener( 'remove-item', function (e) {
 					this._topOrder.removeItem( e.prodSn );
-				}.bind(this))
-				.addListener( 'spinner-change', function (e) {
+				}.bind(this)).addListener( 'spinner-change', function (e) {
 					this._topOrder.changeSpinner( e.prodSn, e.value );
 				}.bind(this));
 

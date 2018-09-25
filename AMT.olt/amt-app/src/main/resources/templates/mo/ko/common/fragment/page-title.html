@@ -13,7 +13,7 @@
 <!-- bigSale -->
 <th:block th:if="${displayMenuId}">
 	<th:block th:each="menu : ${gnbMap.get('main').submenus}">
-		<th:block th:if="${menu.displayMenuId == 'bigSale' && displayMenuId.indexOf('CTG') < 0}" >
+		<th:block th:if="${(menu.displayMenuId == 'bigSale' || menu.displayMenuId == 'event') && displayMenuId.indexOf('CTG') < 0}" >
 			<th:block th:each="submenu : ${menu.submenus}">
 				<div class="page_title_new" th:if="${submenu.displayMenuId == displayMenuId}">
 					<h2><a href="javascript:;" class="btn_toggle"><span th:text="${submenu.menuTitle}"></span></a></h2>
@@ -21,9 +21,16 @@
 			</th:block>
 			<div class="menu_layer one_depth">
 				<ul>
-					<li th:each="submenu : ${menu.submenus}">
-						<a href="javascript:;" th:href="@{'/display/' + ${submenu.displayMenuId}(displayMenuId=${submenu.displayMenuId})}" th:text="${submenu.menuTitle}"></a>
-					</li>
+					<th:block th:if="${menu.displayMenuId == 'bigSale'}" >
+						<li th:each="submenu : ${menu.submenus}">
+							<a href="javascript:;" th:href="@{'/display/' + ${submenu.displayMenuId}(displayMenuId=${submenu.displayMenuId})}" th:text="${submenu.menuTitle}"></a>
+						</li>
+					</th:block>
+					<th:block th:if="${menu.displayMenuId == 'event'}" >
+						<li th:each="submenu : ${menu.submenus}" th:if="${submenu.displayMenuId != displayMenuId}">
+							<a href="javascript:;" th:href="@{'/display/' + ${submenu.displayMenuId}(displayMenuId=${submenu.displayMenuId})}" th:text="${submenu.menuTitle}"></a>
+						</li>
+					</th:block>
 				</ul>
 			</div>
 		</th:block>

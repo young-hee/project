@@ -69,7 +69,7 @@
 		<div class="section product_price" id="calculationResult">
 		</div>
 		<!--/* 주문변경 레이어 */-->
-		<div class="order_layer"><!--/* 구매하기 클릭시 open 클래스 */-->
+		<div class="order_layer" style="display:none;"><!--/* 구매하기 클릭시 open 클래스 */-->
 			<!--/* 기본 버튼 */-->
 			<div class="default_btns">
 				<div class="order_summary" id="calculationResultDetail">
@@ -97,7 +97,7 @@
 
 	<script ap:src="@{/handlebars-templates/compiled/cart/empty-prod.js}"></script>							<!-- 상품목록이 존재하지 않을때 -->
 
-	<script ap:src="@{/handlebars-templates/compiled/cart/layer-option-02.js}"></script>					<!-- 옵션변경 -->
+	<script ap:src="@{/handlebars-templates/compiled/cart/layer-option-01.js}"></script>					<!-- 옵션변경 -->
 	<script ap:src="@{/handlebars-templates/compiled/cart/none-member-order-info-modal.js}"></script>		<!-- 로그인유도 모달 -->
 
 	<!-- <script ap:src="@{/handlebars-templates/compiled/products/none-member-order-info-modal.js}"></script>	비회원 동의 -->
@@ -122,6 +122,9 @@
 	var pageLimit = 5;
 	var currentKeyword;
 	var currentOffset = 0;
+
+	/* 빈 장바구니 추천브랜드 */
+	var randomBrandList = /*[[${randomBrandList}]]*/;
 
 	/* 회원일련 번호*/
 	var memberSn = /*[[${memberSn}]]*/;
@@ -171,10 +174,14 @@
 		setAllCartListProd();
 		setProdAwardViewData();
 
+		console.log(cartEx);
+		console.log(allCartProd);
 		//자사
 		if (cartEx.cartDeliveryOnlineProdExList.length > 0 ||
 			cartEx.cartDeliveryMembershipPointExchOnlineProdExList.length > 0 ||
 			cartEx.cartDeliveryMNPromoExList.length > 0) {
+
+			$(".order_layer").css("display", "block");
 
 			var prodCnt = getCalculationProdCntFromOnlineProd(cartEx.ownerCartCoEx.coSn);
 
@@ -193,6 +200,8 @@
 					cartEx.cartOtfInfoList[i].cartDeliveryMembershipPointExchOnlineProdExList.length > 0 ||
 					cartEx.cartOtfInfoList[i].cartDeliveryMNPromoExList.length > 0) {
 
+					$(".order_layer").css("display", "block");
+
 					var prodCnt = getCalculationProdCntFromOnlineProd(cartEx.cartOtfInfoList[i].cartCoEx.coSn);
 
 					var onlineHtml = AP.common.getTemplate('cart.online.prod', {
@@ -209,7 +218,7 @@
 			&& cartEx.cartDeliveryMNPromoExList.length == 0
 			&& cartEx.cartDeliveryMembershipPointExchOnlineProdExList.length == 0) {
 			var onlineHtml = AP.common.getTemplate('cart.empty-prod', {
-				//url : /emptyCartViewBrand.menuTitleImgUrl
+				randomBrand : randomBrandList[0]
 			});
 			$('#prodListView').empty();
 			$('#prodListView').append(onlineHtml);
@@ -321,7 +330,7 @@
 							if(!(list[i].cartOnlineProdAward.giftCardAmount)){
 								list[i].cartOnlineProdAward.giftCardAmount = 0;
 							}
-							list[i].cartOnlineProdAward.giftCardAmount += list[i].cartProdExList[j].cartProdAwardList[k].awardGiftcardEx.giftcardBaseAmt;
+							list[i].cartOnlineProdAward.giftCardAmount += list[i].cartProdExList[j].cartProdAwardList[k].awardGiftcardEx.giftcardBaseAmt * list[i].cartProdExList[j].cartProdAwardList[k].awardQty;
 						}
 					}
 				}

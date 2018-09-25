@@ -12,10 +12,10 @@
 						<legend class="sr_only">로그인 정보 입력</legend>
 						<div class="login_area">
 							<div class="input_group">
-								<div><input type="text" title="주문번호 입력" required="required" name="ordNo" placeholder="주문번호를 입력하세요" data-msg-required="주문번호를 입력해 주세요."></div>
+								<div><input type="text" target="phoneNumber" title="주문번호 입력" required="required" name="ordNo" placeholder="주문번호를 입력하세요" data-msg-required="주문번호를 입력해 주세요."></div>
 							</div>
 							<div class="input_group">
-								<div><input type="tel" title="휴대폰 번호 입력" mobile-number="mobile-number" name="phoneNumber" required="required" maxlength="11" placeholder="휴대폰 번호 입력('-' 생략)" data-msg-required="휴대폰번호를 입력해 주세요."></div>
+								<div><input type="tel" target="no-member-view" title="휴대폰 번호 입력" mobile-number="mobile-number" name="phoneNumber" required="required" maxlength="11" placeholder="휴대폰 번호 입력('-' 생략)" data-msg-required="휴대폰번호를 입력해 주세요."></div>
 							</div>
 						</div>
 						
@@ -24,7 +24,7 @@
 							<li>비회원 구매는 포인트 적립이나 쿠폰 할인 등의 혜택이 적용되지 않습니다.</li>
 						</ul>
 						
-						<button type="button" onclick="nomember()" class="btn_lg_primary w100p">주문 조회</button>
+						<button type="button" onclick="nomember()" id="no-member-view" class="btn_lg_primary w100p">주문 조회</button>
 					</fieldset>
 				</form>
 			</div>
@@ -37,12 +37,26 @@
         <script>
 
 
+        $('input').keypress(function(f) {
+
+        	if(f.keyCode == 13){
+        		if(!$($(f).attr('target')).val()) return;
+        		var target = $($(f).attr('target')).attr('target');
+        		if(!target) return;
+        		if(target == 'no-member-view') {
+        			$('#' + target + '').click();
+        		} else {
+        		
+        			$('[name=' + target + ']').focus();
+        		}
+        	}
+        });
 
 
 $('input[type=tel]').keydown(function (event) {
     if (event.keyCode) {
         var code = event.keyCode;
-        if ((code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
+        if ((code == 13) || (code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code == 8) || (code == 9) || (code == 46)) {
             return true;
         } else {
             return false;

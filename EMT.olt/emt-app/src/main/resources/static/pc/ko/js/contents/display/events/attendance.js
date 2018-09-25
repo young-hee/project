@@ -76,7 +76,7 @@
 					}.bind(this)).fail( function ( xhr ) {
 						if ( xhr.errorCode === 'EAPI004' ) {
 							AP.login({trigger: true});
-						} else if ( xhr.errorCode === 'ESAL037' ) {
+						} else if ( xhr.errorCode === 'ESAL037' || xhr.errorCode === 'ESAL031') {
 							//금일 출석체크 참여횟수 초과
 							AP.modal.alert( '이미 출석체크 되었습니다.' );
 						}

@@ -347,26 +347,6 @@
 		},
 
 		/**
-		 * \r\n값 체크
-		 * @param    {String}    str    대상문자열
-		 * @returns  {Int}
-		 */
-		getEnterCount: function ( str ) {
-			var result = 0;
-
-			if ( !_.isEmpty( str ) ) {
-				var pattern = /\n/g;
-				if ( pattern.test( str ) ) {
-					result = str.match( pattern ).length;
-				} else {
-					result = 0;
-				}
-			}
-
-			return result;
-		},
-
-		/**
 		 * 가로모드 인지 체크하여 반환
 		 * @returns {Boolean}
 		 */

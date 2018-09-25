@@ -1,8 +1,7 @@
+<!--// 랭킹정보가 있는 경우 1위는 숫자 크게 :: 컬러컬렉션, 베스트 -->
 {{#each this.list}}
-	<!--// 랭킹정보가 있는 경우 1위는 숫자 크게 :: 컬러컬렉션, 베스트 -->
 	<li> 
 		{{#if (or (eq this.displayMenuId 'best') (eq this.displayMenuId 'color_collection_shop')) }}
-			<!-- 랭킹정보가 있는 경우 1위는 숫자 크게 :: 컬러컬렉션, 베스트 //-->
 			<div class="ranking {{#xif this.ranking '==' 1 }}first{{/xif}}">
 				<span>{{ this.ranking }}</span>
 			</div>
@@ -12,7 +11,8 @@
 		{{#xif this.displayMenuId '==' 'hotdeal' }}
 			<div class="item_state">
 				<span>
-					<span><i class="ico_hot"></i><span class="sr_only">핫딜</span></span>
+					<span><i class="ico_hot"></i>
+					<span class="sr_only">핫딜</span></span>
 					<span class="ui_remain_timer">
 						<span class="hour">00</span>:<span class="minute">00</span>:<span class="second">00</span>
 					</span>
@@ -22,7 +22,6 @@
 		<!-- 핫딜 타이머 //-->
 
 		<div class="item">
-			
 			<!--// 상품 이미지 -->
 			<div class="item_images">
 				{{#xif this.displayMenuId '!=' 'hotdeal' }}
@@ -123,7 +122,7 @@
 						{{{this.linePromoDesc}}}
 					</p>
 					<p class="name">
-						<em class="tag">{{stockTxt this.saleDisplayStatus this.prodTypeCode}}</em>
+						<em>{{stockTxt this.saleDisplayStatus this.prodTypeCode}}</em>
 						{{ this.onlineProdName }}
 					</p>
 					
@@ -148,12 +147,13 @@
 									{{else}}
 										<p class="color_name"></p>
 									{{/xif}}
-								{{/xif}}
-								{{#xif this.productCount '>' 1 }}
-									{{#xif this.colorCnt '>' 0 }}
-										<p class="color_name">{{ this.colorCnt }} colors</p>
-									{{else}}
-										<p class="color_name">{{ this.productCount }} options</p>
+								{{else}}
+									{{#xif this.productCount '>' 1 }}
+										{{#xif this.colorCnt '>' 1 }}
+											<p class="color_name">{{ this.colorCnt }} colors</p>
+										{{else}}
+											<p class="color_name">{{ this.productCount }} options</p>
+										{{/xif}}
 									{{/xif}}
 								{{/xif}}
 							{{/xif}}
@@ -270,7 +270,6 @@
 											{{/each}}
 										</div>
 									</div>
-									<p class="option_close"><button type="button">닫기</button></p>
 								</div>
 
 							{{else}}

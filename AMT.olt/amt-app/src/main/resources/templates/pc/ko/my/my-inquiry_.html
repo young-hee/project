@@ -70,7 +70,7 @@
 						<!-- tab content -->
 						<div class="tab_cont" id="d_responseN">
 							<h3 class="sr_only">미해결 상담</h3>
-							<div class="board_list type02 inquiry">
+							<div class="board_list type02 inquiry non_answer">
 								<table>
 									<caption class="sr_only">미해결 상담 목록</caption>
 									<colgroup>
@@ -253,14 +253,12 @@
 
 			/* 1:1 문의하기 */
 			function doInquiry() {
-				var phoneNoInfo = /*[[${session.LOGIN_USER.member.phoneNo1.phoneNo}]]*/
 				AP.api.getInquiryTypes({}, {}).done(function ( data ) {
 					//성공
 					var modal = AP.modal.open({
 						templateKey : 'cs.layer-inquiry',
 						templateModel : {
-							types : data.data,
-							phoneNoInfo : phoneNoInfo
+							types : data.data
 						},
 						sizeType : 'L',
 						containerClass : 'advice_board'
@@ -275,6 +273,19 @@
 							$('#sms').prop('checked', false);
 						} else {
 							$('#sms').prop('checked', true);
+						}
+					});
+
+					// 글자수 체크
+					$('#inquiryBodyText').on('keyup', function(e){
+						var cont = $('#inquiryBodyText').val();
+						var enterCount = getEnterCount(cont);
+
+						$('.chk-bite').find('em').text(cont.length + enterCount);
+
+						if(cont.length + enterCount > 2000) {
+							$(this).val(cont.substring(0,(2000 - enterCount)));
+							AP.modal.alert('내용은 최대 2000자까지 입력 가능합니다.');
 						}
 					});
 
@@ -297,7 +308,7 @@
 					AP.modal.alert('문의 유형을 선택해주세요.');
 				} else {
 					if($form.valid()) {
-						var formData = new FormData( $('form').get(0) );
+						var formData = new FormData( $('#l_inquiry').get(0) );
 						$( '.ui_input_images' ).inputImages( 'extendFormData', formData );
 
 						AP.api.inquiry({}, formData ).done(function ( data ) {
@@ -308,8 +319,6 @@
 						}
 						}).fail(function ( e ) {
 							AP.modal.alert(e.responseJSON.errorData.message);
-						}).always(function () {
-							//성공, 실패
 						});
 					}
 				}
@@ -436,6 +445,21 @@
 				$('#b_evalCancel').off('click').on('click', function(e) {
 					modal.close();
 				});
+			}
+
+			function getEnterCount( str ) {
+				var result = 0;
+
+				if ( !_.isEmpty( str ) ) {
+					var pattern = /\n/g;
+					if ( pattern.test( str ) ) {
+						result = str.match( pattern ).length;
+					} else {
+						result = 0;
+					}
+				}
+
+				return result;
 			}
 		</script>
 </th:block>

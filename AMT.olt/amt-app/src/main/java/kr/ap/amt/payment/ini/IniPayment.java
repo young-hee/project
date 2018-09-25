@@ -6,33 +6,21 @@
  */
 package kr.ap.amt.payment.ini;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.util.StringUtils;
-
 import com.inicis.inipay.INIpay;
 import com.inicis.std.util.HttpUtil;
 import com.inicis.std.util.ParseUtil;
 import com.inicis.std.util.SignatureUtil;
-
 import kr.ap.amt.payment.vo.PayDTO;
+import org.springframework.util.StringUtils;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author Administrator@g1project.net
@@ -50,7 +38,7 @@ public class IniPayment {
     private static final String KAKAO = "onlykakaopay"; //카카오 결제
     private static final String PAYCO = "onlypayco"; //페이코 결제
     
-    public static HashMap<String, Object> makeRequestParamMobile(PayDTO payDTO) throws Exception{ 
+    public static HashMap<String, Object> makeRequestParamMobile(PayDTO payDTO) throws Exception{
    
        HashMap<String, Object> map = new HashMap<String, Object>();
         
@@ -99,9 +87,9 @@ public class IniPayment {
 	   	// 실시간 계좌이체
 	   	else if(BANK.equals(payDTO.getPayMethod())) {
 	   		
-	   		//승인결과 통보 Url
-	   		map.put("P_RETURN_URL", payDTO.getSiteDomain() + "/payment/iniComplete");	   		
 	   		//결제완료  Url
+	   		map.put("P_RETURN_URL", payDTO.getSiteDomain() + "/payment/iniBankComplete");	   		
+	   		//승인결과 통보 Url
 	   		map.put("P_NOTI_URL", payDTO.getSiteDomain() + "/order/iniPayNoti");
 	   		
 	   	}
@@ -165,7 +153,8 @@ public class IniPayment {
        map.put("mid", payDTO.getpMid());
        map.put("oid", oid);
        map.put("goodname", payDTO.getRepProdName());
-       map.put("price", price);
+	   map.put("goodsname", payDTO.getRepProdName());
+	   map.put("price", price);
        map.put("currency", currency);
        map.put("buyername", payDTO.getBuyerName());
        map.put("buyertel", payDTO.getMobile());

@@ -7,6 +7,8 @@ import net.g1project.ecp.api.model.sales.coupon.MemberCoupon;
 import net.g1project.ecp.api.model.sales.display.Corner;
 import net.g1project.ecp.api.model.sales.display.CornerContentsSet;
 import net.g1project.ecp.api.model.sales.display.PageInfo;
+import net.g1project.ecp.api.model.sales.keywordPopup.PopupInfo;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,10 +62,13 @@ public class MainController extends AbstractController {
 			}
 			
 			model.addAttribute("cornersMap", cornersMap);
+			
+			//공지팝업목록
+	        List <PopupInfo> popupInfo = keywordPopupApi.getPopups();
+			model.addAttribute("popupInfo", popupInfo);  // 공지 팝업
 		
 		}catch(Exception e) {
 			model.addAttribute("popupInfo", null);
-	        model.addAttribute("footerNotice", null);
 	    }
         
 		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);

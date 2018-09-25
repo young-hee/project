@@ -88,6 +88,8 @@
 	</dd>
 	<!--스크립트 정의-->
 	<script th:inline="javascript">
+		var ordSn = /*[[${ordEx.ordSn}]]*/ 0;
+
 		$( document ).ready(function() {
 			defaultPayMethodInit();
 			depositPriceInit();
@@ -198,6 +200,8 @@
 				if(depositAvailAmt - finalPamtPcur >= 0){
 					$('[name=depositPrice]').val(finalPamtPcur);
 
+					depositPriceChange(finalPamtPcur);
+
 					//결제수단 초기화
 					$('[name=nextPayUseYn]:checked').prop('checked', false);
 					$('[name=nextPayUseYn]').attr("value","N");
@@ -210,6 +214,8 @@
 					});
 				}else {
 					$('[name=depositPrice]').val(depositAvailAmt);
+
+					depositPriceChange(depositAvailAmt);
 				}
 			}
 			//(20180912_ben수정사항)
@@ -221,11 +227,19 @@
 			if ($(this).val()) {
 				var totDepositPrice = parseInt($(this).val());							// 입력한 사용가능금액
 				var finalPamtPcur = parseInt($('[name="finalPamtPcurPrice"]').val());	// 최종결제금액
-				if(totDepositPrice > 0){
+				if(totDepositPrice >= 0){
 					// 예치금 > 결제금액
 					if(totDepositPrice >= finalPamtPcur){
 						if(totDepositPrice > finalPamtPcur){
-							AP.modal.alert("예치금 사용금액이 최종결제금액보다 크므로 사용할수 없습니다.");
+							AP.modal.info({
+								contents: "예치금 사용금액이 최종결제금액보다 크므로 사용할수 없습니다.",
+								confirmLabel: '확인',
+								cancelLabel: '취소'
+							}).addListener('modal-close', function (e) {
+								if (e.closeType === 'confirm') {
+									depositPriceChange(finalPamtPcur);
+								}
+							});
 						}
 						$(this).val(finalPamtPcur);
 
@@ -241,6 +255,8 @@
 						});
 					} else {
 						$(this).val(totDepositPrice);
+
+						depositPriceChange(totDepositPrice);
 					}
 				} else {
 					AP.modal.alert("금액 정확히 입력해주세요.");
@@ -252,21 +268,26 @@
 			//PayMethodCheck();
 		});
 
-		//(20180912_ben수정사항)
-		// 결제수단 체크검증
-		function PayMethodCheck() {
-			if ($('[name=payMethod]').hasClass("on")) {
-				var depositPrice = $('[name=depositPrice]').val();					// 입력한 사용가능금액
-				var finalPamtPcurPrice = $('[name="finalPamtPcurPrice"]').val();	// 최종결제금액
-				var payAmt = finalPamtPcurPrice - depositPrice;
-				var payMethodSn = $('[name=payMethodSn]').val();
+		//예치금 변경
+		function depositPriceChange(depositPrice){
 
-				console.log("depositPrice : " + depositPrice );
-				console.log("finalPamtPcurPrice : " + finalPamtPcurPrice );
-				console.log("payAmt : " + payAmt );
-				console.log("payMethodSn : " + payMethodSn );
+			if (isApMember) {
+				$('#orderLoading').show();
 
-				calculationPayMethod(payMethodSn, payAmt);
+				AP.api.depositPriceChange({}, {
+					ordSn : ordSn,
+					depositPrice : depositPrice
+				}).done(function (data) {
+					if (data != null) {
+						amtPcurInitAjax(data);
+					} else {
+						AP.modal.alert("[api.depositPriceChange]실패");
+					}
+				}).fail(function (e) {
+					AP.modal.alert(e.responseJSON.errorData.message);
+				}).always(function () {
+					$('#orderLoading').hide();
+				});
 			}
 		}
 
@@ -698,6 +719,24 @@
 		/*회원가입결과 메세지 출력*/
 		function wpayMemberRegResultMsg(msg) {
 			AP.modal.alert(msg);
+		}
+
+		//(20180912_ben수정사항)
+		// 결제수단 체크검증
+		function PayMethodCheck() {
+			if ($('[name=payMethod]').hasClass("on")) {
+				var depositPrice = $('[name=depositPrice]').val();					// 입력한 사용가능금액
+				var finalPamtPcurPrice = $('[name="finalPamtPcurPrice"]').val();	// 최종결제금액
+				var payAmt = finalPamtPcurPrice - depositPrice;
+				var payMethodSn = $('[name=payMethodSn]').val();
+
+				console.log("depositPrice : " + depositPrice );
+				console.log("finalPamtPcurPrice : " + finalPamtPcurPrice );
+				console.log("payAmt : " + payAmt );
+				console.log("payMethodSn : " + payMethodSn );
+
+				calculationPayMethod(payMethodSn, payAmt);
+			}
 		}
 	</script>
 </dl>

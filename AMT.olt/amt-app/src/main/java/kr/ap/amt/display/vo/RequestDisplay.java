@@ -35,6 +35,8 @@ public class RequestDisplay {
 	private String sort;
 	private Integer faveBrandCnt; 
 	
+	private String onlineProdCodes; // 온라인상품코드목록
+	
 	public Integer getTotalListSize() {
 		return totalListSize;
 	}
@@ -196,6 +198,12 @@ public class RequestDisplay {
 	}
 	public void setFaveBrandCnt(Integer faveBrandCnt) {
 		this.faveBrandCnt = faveBrandCnt;
+	}
+	public String getOnlineProdCodes() {
+		return onlineProdCodes;
+	}
+	public void setOnlineProdCodes(String onlineProdCodes) {
+		this.onlineProdCodes = onlineProdCodes;
 	}
 
 	

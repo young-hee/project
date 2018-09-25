@@ -1,0 +1,51 @@
+
+<th:block th:if="${ordOtfExList != null and #lists.size(ordOtfExList) > 0}">
+	<th:block th:each="ordOtfEx : ${ordOtfExList}">
+		<th:block th:if="${#lists.size(ordOtfEx.ordOtfGiftPackingExList) > 0}">
+			<!-- 포장 서비스  -->
+			<div class="tgArea cart_list">
+				<dl>
+					<dt>
+						<th:block th:each="ordOtfEx : ${ordOtfExList}">
+							<th:block th:if="${#lists.size(ordOtfEx.ordOtfGiftPackingExList) > 0}">
+								<strong class="tit">포장 서비스 <th:block th:text="${#lists.size(ordOtfEx.ordOtfGiftPackingExList)}">0</th:block>개 신청</strong>
+							</th:block>
+							<th:block th:unless="${#lists.size(ordOtfEx.ordOtfGiftPackingExList) > 0}">
+								<strong class="tit">포장 서비스 신청안함</strong>
+							</th:block>
+						</th:block>
+						<button type="button"><span class="sr_only">열기</span></button>
+					</dt>
+					<dd>
+						<div class="cart_cont">
+							<div class="slide sprd_list" data-ix-options="view-length:5; auto-play:false;loop:false;datum-point:-60px">
+								<div class="ix-list-viewport">
+									<ul class="ix-list-items">
+										<th:block th:each="ordOtfEx : ${ordOtfExList}">
+											<th:block th:if="${#lists.size(ordOtfEx.ordOtfGiftPackingExList) > 0}">
+												<li class="ix-list-item" th:each="giftPackingEx : ${ordOtfEx.ordOtfGiftPackingExList}">
+													<th:block th:each="giftImgUrl, iterStat : ${giftPackingEx.giftPackingImgUrlList}">
+														<img th:src="${giftImgUrl}" th:if="${iterStat.first}">
+													</th:block>
+													<em class="tit" th:text="${ordHistProdEx.ordProdEx.onlineProdNameBlang}">헤라</em>
+													<p class="ellipsis" th:text="${ordHistProdEx.ordProdEx.prodNameBlang}">증정품 이름 여기길어지면 말줄임...</p>
+												</li>
+											</th:block>
+										</th:block>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="ix-controller">
+							<div class="slide_direction">
+								<a class="ix-btn-prev" href="#none"><span class="sr_only">이전</span></a>
+								<a class="ix-btn-next" href="#none"><span class="sr_only">다음</span></a>
+							</div>
+						</div>
+					</dd>
+				</dl>
+			</div>
+			<!-- // 포장 서비스 -->
+		</th:block>
+	</th:block>
+</th:block>

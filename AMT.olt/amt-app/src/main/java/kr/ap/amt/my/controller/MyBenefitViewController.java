@@ -9,6 +9,7 @@ import java.util.Map;
 import kr.ap.comm.config.interceptor.FragmentPage;
 import kr.ap.comm.config.interceptor.PageTitle;
 import kr.ap.comm.support.common.AbstractController;
+import net.g1project.ecp.api.model.sales.coupon.CntResult;
 import net.g1project.ecp.api.model.sales.coupon.MemberCoupon;
 import net.g1project.ecp.api.model.sales.coupon.MemberKeepingCoupon;
 import net.g1project.ecp.api.model.sales.coupon.MemberKeepingCouponCount;
@@ -63,6 +64,16 @@ public class MyBenefitViewController extends AbstractController {
 		
 		model.addAttribute("immCnt", immCoupons.size());
 		model.addAttribute("immCoupons", immCoupons);
+
+		if(isPcDevice())
+			try {
+				model.addAttribute("downloadCouponCnt", couponApi.getDownloadCouponsCnt());
+			} catch (Exception e) {
+				CntResult cnt = new CntResult();
+				cnt.setCnt(0);
+				model.addAttribute("downloadCouponCnt", cnt);
+			}
+		
 		
 		return "my/my-coupon";
 	}

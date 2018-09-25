@@ -1,0 +1,37 @@
+<dt>최근본상품<em id="totalCnt">20</em></dt>
+<div class="slide">
+	<div class="ix-list-viewport">
+		<ul class="ix-list-items">
+			{{#each this.list}}
+				{{#xif (calc @index '%' 3) '==' 0}}
+					<li class="ix-list-item">
+				{{/xif}}
+					<div class="product">
+						<a href="{{ productDetailPath this.prodSn}}">
+							<span class="info">
+								<span class="title">{{this.prodName}}</span>
+								<span class="option">{{this.prodOption}}</span>
+								<span class="price"><del>{{ numberFormat this.delPrice}}원</del> <em class="num">{{ numberFormat this.realPrice}}</em>원</span>
+							</span>
+							<img src="{{this.prodImgUrl}}" alt="" data-index="{{../list.length}}">
+						</a>
+						<button class="btn_del" data-product-sn={{this.prodSn}}><i class="ico_close_b_s"></i><span class="sr_only">최근 본 상품 삭제</span></button>
+					</div>    
+				{{#xif (calc @index '%' 3) '==' 2}}
+					{{#xif @index '!=' (calc ../list.length '-' 1)}}
+						</li>
+					{{/xif}}
+				{{/xif}}
+				{{#xif @index '==' (calc ../list.length '-' 1)}}
+					</li>
+				{{/xif}}
+			{{/each}}
+		</ul>
+	</div>
+	<div class="ix-controller">
+		<div class="slide_direction">
+			<button type="button" class="ix-btn-prev"><i class="ico_navi_s prev"></i><span class="sr_only">Prev</span></button>
+			<button type="button" class="ix-btn-next"><i class="ico_navi_s next"></i><span class="sr_only">Next</span></button>
+		</div>
+	</div>
+</div>

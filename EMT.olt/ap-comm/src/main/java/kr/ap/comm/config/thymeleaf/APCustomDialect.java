@@ -1,12 +1,14 @@
 package kr.ap.comm.config.thymeleaf;
 
 import kr.ap.comm.api.AmoreAPIService;
+import net.g1project.ecp.api.client.order.OrderApi;
 import net.g1project.ecp.api.client.sales.PointApi;
 import nz.net.ultraq.thymeleaf.decorators.SortingStrategy;
 import nz.net.ultraq.thymeleaf.decorators.TitlePatternProcessor;
 import nz.net.ultraq.thymeleaf.decorators.strategies.AppendingStrategy;
 import nz.net.ultraq.thymeleaf.fragments.FragmentProcessor;
 import nz.net.ultraq.thymeleaf.includes.InsertProcessor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.thymeleaf.context.IExpressionContext;
@@ -40,6 +42,9 @@ public class APCustomDialect extends AbstractProcessorDialect implements IExpres
 
 	@Autowired
 	private AmoreAPIService amoreAPIService;
+
+    @Autowired
+	protected OrderApi orderApi;
 
 	public APCustomDialect() {
 		super(NAME, PREFIX, PRECEDENCE);
@@ -94,7 +99,7 @@ public class APCustomDialect extends AbstractProcessorDialect implements IExpres
 					case DEVICE_EXPRESSION_OBJECT_NAME:
 						return new DeviceResolver();
 					case INTEGRATED_AIP_UTILS:
-						return new IntegratedAPIUtils(context, pointApi);
+						return new IntegratedAPIUtils(context, pointApi, orderApi);
 				}
 				return null;
 			}

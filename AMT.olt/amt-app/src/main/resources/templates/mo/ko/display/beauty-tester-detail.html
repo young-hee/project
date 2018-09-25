@@ -33,7 +33,7 @@
 			</div>		<!-- // course_list_wrap -->
 		</div>		<!-- // course_wrap -->
         
-    <div class="section" th:if="${(status=='TN' or status=='RR') and isRequester==true and isReview==true}">
+    <div class="section" th:if="${(status=='TN' or status=='RR') and isRequest==true and isReview==true}">
       <div class="prize_wrap">
         <ul class="prize_guide">
           <li><strong th:text="${memberInfo.name.name1}"></strong>님,<br />당첨을 축하드립니다.</li>
@@ -45,7 +45,7 @@
       </div>
     </div>
 
-    <div class="section" th:if="${(status=='TN' or status=='RR') and isRequester==true and isReview==false}">
+    <div class="section" th:if="${(status=='TN' or status=='RR') and isRequest==true and isReview==false}">
       <div class="prize_wrap">
         <ul class="prize_guide">
           <li>아쉽게도 이번엔<br />당첨이 되지 않았습니다.</li>
@@ -132,10 +132,9 @@
 			<dd class="cont">
 				<img ap:src="@{/images/product/img_expand.jpg}" alt="상세 정보를 확대해서 보실 수 있어요"> 
 				<!-- <img ap:src="@{/images/dummy/img_detail_info.jpg}" alt="이미지 대체 텍스트 짧을 경우"> -->
-                <img th:src="${prd.onlineProdImages[0].imgUrl}" alt="" class="lazy_load">
-				<div class="sr_only">
-					이미지 대체 텍스트 영역 텍스트가 길 경우
-				</div>
+                <!-- /*<img th:src="${prd.onlineProdImages[0].imgUrl}" alt="" class="lazy_load">*/ -->
+                <th:block th:utext="${prd.detailDesc}"/>
+				<div class="sr_only"></div>
 			</dd>
 			<dd>
 				<button type="button" class="toggle_btn view">상세정보 더보기 <i class="ico_down"></i></button>
@@ -220,75 +219,17 @@
 					</div>		<!-- // tab_cont -->
 				</div>		<!-- // tab_contents -->
 			</div>		<!-- // ui_tab -->
-      
-      <div class="section prize_review" th:if="${reviews.totalCount==0}">
+
+      <div class="section prize_review">
         <div class="title_box">
           <p class="title">등록된 리뷰</p>
           <ul class="util">
-            <li class="on"><a href="#1">추천순</a></li>
-            <li><a href="#1">최신순</a></li>
+            <li class="on"><a href="#1" class="sort review recommend">추천순</a></li>
+                <li><a href="#1" class="sort review latest">최신순</a></li>
           </ul>
-        </div>    <!-- // title_box -->
-        <div class="best_cont">
-          <p class="review_none_txt">아직 등록된 리뷰가 없습니다.</p>
         </div>
-      </div>
-      
-      <div class="section prize_review" th:if="${reviews.totalCount>0}">
-        <div class="title_box">
-          <p class="title">등록된 리뷰</p>
-          <ul class="util">
-            <li class="on"><a href="#1">추천순</a></li>
-            <li><a href="#1">최신순</a></li>
-          </ul>
-        </div>    <!-- // title_box -->
         <div class="best_cont">
-          <div class="realtime_review">
-            <ul class="review_list grid" style="opacity: 0">
-              <li class="grid-item" th:each="review:${reviews.prodReviewList}">
-                <a th:href="@{/display/beauty_test/review-detail(prodReviewSn=${review.prodReviewSn})}" target="_blank">
-                  <!--/* 이미지 없는 경우 */-->
-                  <div class="flag_box">
-                    <div class="review_info">
-                      <span class="rating_one">
-                        <span class="star_one"><img src="/mo/ko/images/display/bg_rating_one.png" alt=""></span><span class="count">[[${review.scope}]]</span>
-                      </span>
-                      <p class="text">[[${review.prodReviewTitle}]]</p>
-                      <p class="reviewer">[[${review.memberId}]]</p>
-                    </div>
-                    <div class="product_info">
-                      <div class="img_product"><img alt="" ap:src="@{/images/dummy/img_item_05.jpg}"></div>
-                      <ul class="product_name_wrap">
-                        <li>[[${review.onlineProdName}]]</li>
-                        <li>[[${review.prodName}]]</li>
-                      </ul>
-                    </div>
-                    <div class="flag_best"><img src="/mo/ko/images/display/ico_best_64.png" alt="베스트"></div>
-                  </div>
-                  <!--/* 이미지 있는 경우 */-->
-                  <div class="flag_box" th:if="${false}">
-                    <div class="beauty_tester">
-                      <img ap:src="@{/images/dummy/img_beautytester_review.jpg}" alt="{리뷰 제목}">
-                      <span class="info">
-                        <span class="grade"><i class="ico_star_s_w on"></i> <b>5.0</b></span>
-                        <b class="title">매트한 쿠션을 찾는 분들에게 딱이에요매트한 쿠션을 찾는 분들에게 딱이에요매트한 쿠션을 찾는 분들에게 딱이에요</b>
-                      </span>
-                      <span class="bg_gradient"></span>
-                    </div>
-                    <div class="product_info">
-                      <div class="img_product"><img alt="" ap:src="@{/images/dummy/img_item_05.jpg}"></div>
-                      <ul class="product_name_wrap">
-                        <li>헤라 블랙쿠션 블랙쿠션 SPF34 PA+</li>
-                        <li>옵션명 옵션명 옵션명 옵션명 옵션명</li>
-                      </ul>
-                    </div>
-                    <div class="flag_best"><img src="/mo/ko/images/display/ico_best_64.png" alt="베스트"></div>
-                  </div>
-                </a>
-              </li>
-            </ul>   <!-- // review_list -->
-          </div>    <!-- // realtime_review -->
-        </div>    <!-- // best_cont -->
+        </div>
       </div>
 
 	</div>		<!-- // ap_contents -->
@@ -314,78 +255,43 @@
 		}
 		
 		[#th:block th:if="${status=='RQ'}"]
-		function deleteParticipated(regularEventRequesterSn) {
-			
-			//AP.modal.confirm( '정말 삭제하시겠습니까? ' ).addListener( 'modal-close', function (e) {
-				//if(e.closeType == 'confirm'){
-					if(confirm("정말 삭제하시겠습니까?")){
+		function deleteParticipated(obj) {
+			var regularEventRequesterSn = $(obj).parent().attr("id")
+			var block = $(obj).parents().find(".review");
+			AP.modal.confirm( '정말 삭제하시겠습니까? ' ).addListener( 'modal-close', function (e) {
+				if(e.closeType == 'confirm'){
     				AP.api.regularEventDeleteParticipated( null, {regularEventSn: [[${regularEvent.regularEventSn}]], regularEventRequesterSn: regularEventRequesterSn} )
         			.done(function ( result ) {
         				if(result.result){
-        				//AP.modal.alert("삭제되었습니다.").addListener( 'modal-close', function (e) {
-						//});
-        				alert("삭제되었습니다.");
+            				AP.modal.alert("삭제되었습니다.").addListener( 'modal-close', function (e) {
+            					location.reload();
+    						});
     					}
         			});
-					}
-				//}
-			//});
+				}
+			});
 		}
 		[/th:block]
 		
+		$(".btn_sm_bordered.edit").click(function(){
+  		    [#th:block th:if="${status=='RQ'}"]
+  		    	setApp();
+  		    [/th:block]
+  		    [#th:block th:if="${status!='RQ'}"]
+  		    AP.modal.alert("당첨자발표 이후 수정 삭제가 불가합니다.");
+  		   	[/th:block]
+  		});
+  		$(".btn_sm_bordered.delete").click(function(){
+  			[#th:block th:if="${status=='RQ'}"]
+  				deleteParticipated($(this));
+  		    [/th:block]
+  		    [#th:block th:if="${status!='RQ'}"]
+  		    AP.modal.alert("당첨자발표 이후 수정 삭제가 불가합니다.");
+  		   	[/th:block]
+  		});
+		
 		$(document).ready(function(){
-    		$(".btn_toggle.like").click(function(e){
-    			
-    			var obj = $( e.currentTarget );
-    			var products = [{prodSn: $(obj).parent().parent().parent().attr("data-val")}];
-    			
-				AP.login().done(function () {
-					if ( !$(obj).hasClass( 'on' )) {
-						$(obj).addClass( 'on' ).find( '.ico_heart_s' ).addClass( 'on' );
-						AP.addLike.add( $(".layout-contents > .ap_contents.beauty_tester_wrap"), products );
-					} else {
-						$(obj).removeClass( 'on' ).find( '.ico_heart_s' ).removeClass( 'on' );
-						AP.addLike.remove( products[0].prodSn );
-					}
-				}.bind( this ));
-				return false;
-    		});
-    		
-    		$(".btn_sm_bordered.edit").click(function(){
-    		    [#th:block th:if="${status=='RQ'}"]
-    		    	setApp();
-    		    [/th:block]
-    		    [#th:block th:if="${status!='RQ'}"]
-    		    	alert("당첨자발표 이후 수정 삭제가 불가합니다.");
-    		   	[/th:block]
-    		});
-    		$(".btn_sm_bordered.delete").click(function(){
-    			[#th:block th:if="${status=='RQ'}"]
-    				deleteParticipated($(this).parent().attr("id"));
-    		    [/th:block]
-    		    [#th:block th:if="${status!='RQ'}"]
-    		    	alert("당첨자발표 이후 수정 삭제가 불가합니다.");
-    		   	[/th:block]
-    		});
-    		
-    		$(".prize_list_wrap .btn_open").click(function(){
-    			$(this).parents(".prize_list_wrap").addClass("open");
-    		});
-    		$(".prize_list_wrap .btn_close").click(function(){
-    			$(this).parents(".prize_list_wrap").removeClass("open");
-    		});
-
-    		
-    		// grid
-    		var _grid = $( '.review_list.grid' ).masonry({
-    			// options
-    			itemSelector: '.grid-item',
-    			columnWidth: '.grid-item',
-    			percentPosition: true
-    		}).imagesLoaded().progress( function() {
-    			$( '.review_list.grid' ).css( 'opacity', 1 );
-    			_grid.masonry('layout');
-    		});
+			AP.beautytesterDetail.load(/*[[${regularEvent.regularEventSn}]]*/);
 		});
 	</script>
 </th:block>

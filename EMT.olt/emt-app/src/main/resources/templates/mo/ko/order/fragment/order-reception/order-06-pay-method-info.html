@@ -204,6 +204,8 @@
 				if(depositAvailAmt - finalPamtPcur >= 0){
 					$('[name=depositPrice]').val(finalPamtPcur);
 
+					depositPriceChange(finalPamtPcur);
+
 					//결제수단 초기화
 					$('[name=nextPayUseYn]:checked').prop('checked', false);
 					$('[name=nextPayUseYn]').attr("value","N");
@@ -217,6 +219,8 @@
 
 				}else {
 					$('[name=depositPrice]').val(depositAvailAmt);
+
+					depositPriceChange(depositAvailAmt);
 				}
 			}
 		});
@@ -225,11 +229,19 @@
 			if ($(this).val()) {
 				var totDepositPrice = parseInt($(this).val());							// 입력한 사용가능금액
 				var finalPamtPcur = parseInt($('[name="finalPamtPcurPrice"]').val());	// 최종결제금액
-				if(totDepositPrice > 0){
+				if(totDepositPrice >= 0){
 					// 예치금 > 결제금액
 					if(totDepositPrice >= finalPamtPcur){
 						if(totDepositPrice > finalPamtPcur){
-							AP.modal.alert("예치금 사용금액이 최종결제금액보다 크므로 사용할수 없습니다.");
+							AP.modal.info({
+								contents: "예치금 사용금액이 최종결제금액보다 크므로 사용할수 없습니다.",
+								confirmLabel: '확인',
+								cancelLabel: '취소'
+							}).addListener('modal-close', function (e) {
+								if (e.closeType === 'confirm') {
+									depositPriceChange(finalPamtPcur);
+								}
+							});
 						}
 						$(this).val(finalPamtPcur);
 
@@ -245,6 +257,8 @@
 						});
 					} else {
 						$(this).val(totDepositPrice);
+
+						depositPriceChange(totDepositPrice);
 					}
 				} else {
 					AP.modal.alert("금액 정확히 입력해주세요.");
@@ -256,6 +270,29 @@
 				}
 			}
 		});
+
+		//예치금 변경
+		function depositPriceChange(depositPrice){
+
+			if (isApMember) {
+				$('#orderLoading').show();
+
+				AP.api.depositPriceChange({}, {
+					ordSn : ordSn,
+					depositPrice : depositPrice
+				}).done(function (data) {
+					if (data != null) {
+						amtPcurInitAjax(data);
+					} else {
+						AP.modal.alert("[api.depositPriceChange]실패");
+					}
+				}).fail(function (e) {
+					AP.modal.alert(e.responseJSON.errorData.message);
+				}).always(function () {
+					$('#orderLoading').hide();
+				});
+			}
+		}
 
 		// 예치금 사용 화면제어
 		function depositPriceInit() {

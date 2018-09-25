@@ -149,6 +149,7 @@ public class ProductViewController extends AbstractController{
     				, requestReview.getOnlineProdSn()
     				, requestReview.getProdSn()
     				, requestReview.getStyleCode()
+					, null /* regularEventSn */
     				, requestReview.getProdReviewSort()
     				, requestReview.getScope()
     				, requestReview.getTopReviewOnlyYn()
@@ -172,6 +173,7 @@ public class ProductViewController extends AbstractController{
     				, requestReview.getOnlineProdSn()
     				, requestReview.getProdSn()
     				, requestReview.getStyleCode()
+					, null /* regularEventSn */
     				, requestReview.getProdReviewSort()
     				, requestReview.getScope()
     				, requestReview.getTopReviewOnlyYn()

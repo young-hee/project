@@ -67,7 +67,7 @@ import net.g1project.ecp.api.model.sales.regularevent.RegularEvents;
 @RequestMapping("/display")
 public class EventViewController extends AbstractController {
 
-	@RequestMapping("/event")
+	@RequestMapping({"/event", "/nowEvent"})
     @PageTitle(title = "이벤트") // 기획전시
     public String event(Model model, String displayMenuId) {
 		
@@ -362,9 +362,9 @@ public class EventViewController extends AbstractController {
     @PageTitle(title = "뷰티테스터 신청 안내")
     public String beauty_test(Model model, String displayMenuId) {
 	    
-	    if(!isLoggedIn()) {
+	    /*if(!isLoggedIn()) {
             return "redirect:/login";
-        }
+        }*/
 		 
 //		PageInfo pageInfo = displayApi.getMenuPageInfo(APConstant.AP_DISPLAY_MENU_SET_ID, displayMenuId);
         
@@ -471,9 +471,9 @@ public class EventViewController extends AbstractController {
     @PageTitle(title = "뷰티테스터 상세")
     public String beautytesterDetail(Model model, String regularEventSn) {
         
-        if(!isLoggedIn()) {
+        /*if(!isLoggedIn()) {
             return "redirect:/login";
-        }
+        }*/
         
         System.out.println("#### regularEventSn : " + regularEventSn);
         try {
@@ -491,48 +491,14 @@ public class EventViewController extends AbstractController {
             List<OnlineProdInfo> onlineProdInfos = new ArrayList();
             try {
                 for(Award award : regularEvent.getAwards()) {
-                    OnlineProdInfo op = productApi.getOnlineProduct(award.getOnlineProdSn(), award.getProdSn(), memberSn, "N");
+                    OnlineProdInfo op = productApi.getOnlineProduct(award.getOnlineProdSn(), award.getProdSn(), memberSn<0?null:memberSn, "N");
                     onlineProdInfos.add(op);
                 }
-                /*                
-                long onlineProdSn = (regularEvent.getAwards()==null || regularEvent.getAwards().size()==0)?-1:regularEvent.getAwards().get(0).getOnlineProdSn();
-                long prodSn = (regularEvent.getAwards()==null || regularEvent.getAwards().size()==0)?-1:regularEvent.getAwards().get(0).getProdSn();
-                String onlyProd = "N";  //단일단위상품여부
-                
-                OnlineProdInfo op = new OnlineProdInfo();
-                try {
-                    op = productApi.getOnlineProduct(onlineProdSn, prodSn, memberSn, onlyProd);
-                }catch(Exception e) {
-                    e.printStackTrace();
-                }
-                model.addAttribute("prodSn", prodSn);
-                model.addAttribute("prodName", op.getOnlineProdName());
-                model.addAttribute("prodImage", op.getProducts().get(0).getProdImages().get(0).getImgUrl());
-                model.addAttribute("prodDetailImage", op.getOnlineProdImages().get(0).getImgUrl());
-                model.addAttribute("detailDesc", op.getDetailDesc());
-                model.addAttribute("flags", op.getFlags());
-                model.addAttribute("brandName", op.getProducts().get(0).getBrandName());    //온라인제품정보에 브랜드 정보가 없어 첫번째 단위상품 정보에서 추출
-                //"onlineProdGift": {"giftProdTargetYn": "N", "giftProdImgDisplayYn": "N", "giftProds": [], "giftcardTargetYn": "N"},
-                model.addAttribute("reviewCount", op.getReviewCount());
-                model.addAttribute("reviewScopeAvg", op.getReviewScopeAvg());
-                model.addAttribute("prd", op);
-    
-                OnlineProdPriceInfo oppi = op.getAvailablePrices().get(0);
-                
-                int minRate = oppi.getMinOnlineSalePriceDiscountRate() + oppi.getMinMemberLevelDiscountRate() + oppi.getMinOnlineMemberDiscountRate() + oppi.getMinImmedDiscountRate();
-                int maxRate = oppi.getMaxOnlineSalePriceDiscountRate() + oppi.getMaxMemberLevelDiscountRate() + oppi.getMaxOnlineMemberDiscountRate() + oppi.getMaxImmedDiscountRate();
-                BigDecimal minPrice = oppi.getMinOnlineMemberDiscountPrice();
-                String dblPriceDispYn = oppi.getDoublePriceDisplayYn();
-                BigDecimal beforePrice = oppi.getMinBeforeOnlineSalePrice();        
-                model.addAttribute("discountRate", maxRate);
-                model.addAttribute("cPrice", minPrice);
-                model.addAttribute("bPrice", beforePrice);
-                model.addAttribute("dblPriceDispYn", dblPriceDispYn);
-                */
             }catch(Exception e) {
             }
             model.addAttribute("onlineProdInfos", onlineProdInfos);
 
+            /** 당첨 시 당첨자명 표시목적, 신청자목록에서 본인 신청 항목 수정/삭제 버튼 표시 목적**/
             MemberSession membersession = getMemberSession();
             model.addAttribute("memberInfo", membersession.getMember());
             model.addAttribute("memberSn", membersession.getMember_sn());
@@ -558,36 +524,23 @@ public class EventViewController extends AbstractController {
 
             RegularEventRequesters requesters = new RegularEventRequesters();
             RegularEventRequesters winners = new RegularEventRequesters();
-            ProdReviewListInfo reviews = new ProdReviewListInfo();
             boolean isReview = false;
             
             
             requesters = regulareventApi.apRegularEventRequesters(Long.parseLong(regularEventSn), "All", null, null, "StartDt");   //신청자 목록 : winStatusCode = All 추가 필요
             boolean isRequest = requesters.getRegularEventRequesters().stream().anyMatch(o -> o.getMemberSn().equals(/**Long.parseLong("311")/*/memberSn/**/));
             
-            if(status.equals("TN") || status.equals("RR") || status.equals("BR")) {
+            if(!status.equals("RQ")) {
                 try {
                     winners = regulareventApi.apRegularEventRequesters(Long.parseLong(regularEventSn), "Win", null, null, "StartDt");      //당첨자 목록
-                    isReview = regulareventApi.apRegularEventIsReview(Long.parseLong(regularEventSn)).isResult();
-//                  requesters.getRegularEventRequesters().stream().filter(o -> o.getMemberSn().equals(/**Long.parseLong("311")/*/memberSn/**/)).forEach(o -> ownRequesterSnList.add(o.getRegularEventRequesterSn()));
-                    
-                    /** status 별 추가정보 조회 **/
-                    //review
-                    String prodReviewUnit = "OnlineProd";
-                    String prodReviewType = "ExperienceGrp";
-                    //int offset = 0;
-                    //int limit = 15;
-                    String styleCode = "";
-                    String prodReviewSort = "HighScope";    //정렬방식 - Last(최근등록순) - HighScope(별점높은순) - LowScope(별점낮은순) - Recommend(추천많은순) - View(조회많은순)
-                    String scope = "All";   //별점 필터. All(전체), 5, 4, 3, 2, 1
-                    String topReviewOnlyYn = "N";
-                    String topReviewFirstYn = "Y";
-                    Date startDate = null;//new Date();
-                    Date endDate = null;//new Date();
-                    String imageOnlyYn = "N";
-                    reviews = productApi.getProductReviews(prodReviewUnit, prodReviewType, null, null, memberSn, regularEvent.getAwards().get(0).getOnlineProdSn(), regularEvent.getAwards().get(0).getProdSn(), styleCode, prodReviewSort, scope, topReviewOnlyYn, topReviewFirstYn, startDate, endDate, imageOnlyYn, null, null);
                 }catch(Exception e) {
-                    e.printStackTrace();
+                    System.out.println("exception : getWinnersInfo..."+e.getMessage());
+                }
+                
+                try {
+                    isReview = regulareventApi.apRegularEventIsReview(Long.parseLong(regularEventSn)).isResult();
+                }catch(Exception e) {
+                    System.out.println("exception : checkPossibleReview..."+e.getMessage());
                 }
             }
             
@@ -595,8 +548,6 @@ public class EventViewController extends AbstractController {
             model.addAttribute("isRequest", isRequest);
             model.addAttribute("winners", winners);
             model.addAttribute("isReview", isReview);
-            model.addAttribute("reviews", reviews);
-            
         }catch(Exception e) {
             e.printStackTrace();
         }
@@ -616,9 +567,9 @@ public class EventViewController extends AbstractController {
     @PageTitle(title = "뷰티테스터 상세")
     public String beautytesterDetailReview(Model model, int prodReviewSn) {
         
-        if(!isLoggedIn()) {
-            return "redirect:/login";
-        }
+//        if(!isLoggedIn()) {
+//            return "redirect:/login";
+//        }
         
         System.out.println("#### prodReviewSn : " + prodReviewSn);
         
@@ -636,224 +587,9 @@ public class EventViewController extends AbstractController {
         return "display/beauty-tester-review-detail";
     }
     
-    @GetMapping("/beauty_test/request")
-    public String requestBeautyTester(String regularEventSn, String regularEventRequesterSn) {
-        
-        try {
-            System.out.println(getMemberSn()==null?"null":getMemberSn());
-            //long regularEventRequesterSn = 314;//getMemberSn()==null?280:getMemberSn();
-            ApRegularEventRequester body = new ApRegularEventRequester();
-            EmbeddableAddress addr = new EmbeddableAddress();
-            addr.setAddress1("address1");
-            addr.setZipCode("12345");
-            body.setAddress(addr);
-            body.setEmailAddress("aaa@bbb.com");
-            body.setPersonalHomepageUrl("http://personal.psn");
-            body.setRegularEventRequesterSn(Long.parseLong(regularEventRequesterSn));
-            body.setRequesterName("");
-            body.setRequestTitle("신청제목");
-            body.setRequestReason("신청사유");
-            body.setSnsUrl("http://facebook.com/tester");
-            EmbeddableTel tel = new EmbeddableTel();
-            tel.setCountryNo("82");
-            tel.setPhoneNo("1011112222");
-            body.setTel(tel);
-            body.setTermsAgreeYn("Y");
-            Awards awards = regulareventApi.apRegularEventParticipated(Long.parseLong(regularEventSn), body);
-            System.out.println("awards.eventParticipantSn : " + awards.getEventParticipantSn());
-            //BooleanResult result = regulareventApi.apRegularEventUpdateParticipated(Long.parseLong(regularEventSn), Long.parseLong(regularEventRequesterSn), body);
-//          System.out.println(result.isResult());
-        }catch(Exception e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-    
-    /**
-     *  AP 전용 뷰티테스터 신청내역 삭제
-     *
-     * @param regularEventSn
-     * @param regularEventRequesterSn
-     * @return
-     */
-    @RequestMapping("/beauty_test/deleteParticipated")
-    @ResponseBody
-    public ResponseEntity<?> regularEventDeleteParticipated(String regularEventSn, String regularEventRequesterSn) {
-        
-        HashMap<String, Object> result = new HashMap<String, Object>();
-        try {
-            System.out.println("regularEventDeleteParticipated");
-            System.out.println("  - regularEventSn  : " + regularEventSn);
-            System.out.println("  - regularEventRequesterSn  : " + regularEventRequesterSn);
-            BooleanResult brslt = regulareventApi.apRegularEventDeleteParticipated(Long.parseLong(regularEventSn), Long.parseLong(regularEventRequesterSn));
-            result.put("result", brslt.isResult());
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-            e.printStackTrace();
-            result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
-    }
-	
-	/**
-     *  AP 전용 뷰티테스터 행사 상세 조회
-     *
-     * @param regularEventSn
-     * @return
-     */
-    @RequestMapping({"/beauty_test/regular_event_detail"})
-    @ResponseBody
-    public ResponseEntity<?> regularEventDetail(String regularEventSn) {
-        System.out.println("#### " + regularEventSn);
-        HashMap<String, Object> result = new HashMap<String, Object>();
-        
-        try {
-            RegularEvent regularEvent = new RegularEvent();
-            try {
-                regularEvent = regulareventApi.apRegularEvent(Long.parseLong(regularEventSn));
-            }catch(Exception e) {
-                e.printStackTrace();
-            }
-            result.put("regularEvent", regularEvent);
-            
-            long memberSn = getMemberSn();
-            
-            List<OnlineProdInfo> onlineProdInfos = new ArrayList();
-            try {
-                for(Award award : regularEvent.getAwards()) {
-                    OnlineProdInfo op = productApi.getOnlineProduct(award.getOnlineProdSn(), award.getProdSn(), memberSn, "N");
-                    onlineProdInfos.add(op);
-                }
-                /*           
-                long onlineProdSn = regularEvent.getAwards().get(0).getOnlineProdSn();
-                long prodSn = regularEvent.getAwards().get(0).getProdSn();
-                String onlyProd = "N";  //단일단위상품여부
-                
-                OnlineProdInfo op = new OnlineProdInfo();
-                try {
-                    op = productApi.getOnlineProduct(onlineProdSn, prodSn, getMemberSn(), onlyProd);
-                }catch(Exception e) {
-                    e.printStackTrace();
-                }
-                result.put("prodSn", prodSn);
-                result.put("prodName", op.getOnlineProdName());
-                result.put("prodImage", op.getProducts().get(0).getProdImages().get(0).getImgUrl());
-                result.put("detailDesc", op.getDetailDesc());
-                OnlineProdPriceInfo oppi = op.getAvailablePrices().get(0);
-                
-                int minRate = oppi.getMinOnlineSalePriceDiscountRate() + oppi.getMinMemberLevelDiscountRate() + oppi.getMinOnlineMemberDiscountRate() + oppi.getMinImmedDiscountRate();
-                int maxRate = oppi.getMaxOnlineSalePriceDiscountRate() + oppi.getMaxMemberLevelDiscountRate() + oppi.getMaxOnlineMemberDiscountRate() + oppi.getMaxImmedDiscountRate();
-                BigDecimal minPrice = oppi.getMinOnlineMemberDiscountPrice();
-                String dblPriceDispYn = oppi.getDoublePriceDisplayYn();
-                BigDecimal beforePrice = oppi.getMinBeforeOnlineSalePrice();        
-                result.put("discountRate", maxRate);
-                result.put("cPrice", minPrice);
-                result.put("bPrice", beforePrice);
-                result.put("dblPriceDispYn", dblPriceDispYn);
-                result.put("prodDetailImage", op.getOnlineProdImages().get(0).getImgUrl());
-                */
-            }catch(Exception e) {
-                
-            }
-            result.put("onlineProdInfos", onlineProdInfos);
-            
-            MemberSession membersession = getMemberSession();
-            result.put("memberInfo", membersession.getMember());
-            
-            String status = "";
-            Date cDate = new Date();
-            try{
-                if(cDate.after(regularEvent.getRequestStartDt()) && cDate.before(regularEvent.getRequestEndDt())) {
-                    status = "RQ";
-                }else if(cDate.after(regularEvent.getWinnerNoticeExpectedDt()) && cDate.before(regularEvent.getReviewRegistStartDt())) {
-                    status = "TN";
-                }else if(cDate.after(regularEvent.getReviewRegistStartDt()) && cDate.before(regularEvent.getReviewRegistEndDt())) {
-                    status = "RR";
-                }else if(cDate.after(regularEvent.getBestReviewNoticeDt()) && cDate.before(regularEvent.getEventEndDt())){
-                    status = "BR";
-                }else if(cDate.after(regularEvent.getEventEndDt())){
-                    status = "EE";
-                }
-            }catch(Exception e){
-                
-            }
-            result.put("status", status);
-            
-            /****/
-            RegularEventRequesters requesters = new RegularEventRequesters();
-            RegularEventRequesters winners = new RegularEventRequesters();
-            boolean isRequest = false;
-            boolean isWin = false;
-            requesters = regulareventApi.apRegularEventRequesters(Long.parseLong(regularEventSn), "All", 0, 10000, null);   //신청자 목록 : winStatusCode = All 추가 필요
-            winners = regulareventApi.apRegularEventRequesters(Long.parseLong(regularEventSn), "Win", 0, 10000, null);      //당첨자 목록 : winStatusCode = Win 추가 필요
-            boolean isReview = regulareventApi.apRegularEventIsReview(Long.parseLong(regularEventSn)).isResult();
-            isRequest = requesters.getRegularEventRequesters().stream().anyMatch(o -> o.getMemberSn().equals(/**Long.parseLong("311")/*/memberSn/**/));
-            isWin = winners.getRegularEventRequesters().stream().anyMatch(o -> o.getMemberSn().equals(memberSn));
-            result.put("requesters", requesters);
-            result.put("winners", winners);
-            result.put("isRequest", isRequest);
-            result.put("win", isWin);
-            
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-            e.printStackTrace();
-            result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
-    }
-    
-    /**
-     *  AP 전용 뷰티테스터 행사 제품 리뷰 목록 조회
-     *
-     * @param regularEventSn
-     * @return
-     */
-    @RequestMapping({"/beauty_test/regular_event_product_reviews"})
-    @ResponseBody
-    public ResponseEntity<?> regularEventProductReviews(String regularEventSn, int offset, int limit, String reviewSort) {
-        System.out.println("#### regularEventSn : " + regularEventSn);
-        System.out.println("#### offset : " + offset);
-        System.out.println("#### limit : " + limit);
-        System.out.println("#### reviewSort : " + reviewSort);
-        HashMap<String, Object> result = new HashMap<String, Object>();
-        
-        try {
-            RegularEvent regularEvent = regulareventApi.apRegularEvent(Long.parseLong(regularEventSn));
-            result.put("regularEvent", regularEvent);
-            
-            long onlineProdSn = /**360;/*/regularEvent.getAwards().get(0).getOnlineProdSn();/**/
-            long prodSn = /**261474;/*/regularEvent.getAwards().get(0).getProdSn();/**/
-            long memberSn = getMemberSn();
-            String onlyProd = "N";  //단일단위상품여부
-            
-            /** status 별 추가정보 조회 **/
-            //review
-            String prodReviewUnit = "OnlineProd";
-            String prodReviewType = "ExperienceGrp";
-            //int offset = 0;
-            //int limit = 15;
-            String styleCode = "";
-            String prodReviewSort = "HighScope";    //정렬방식 - Last(최근등록순) - HighScope(별점높은순) - LowScope(별점낮은순) - Recommend(추천많은순) - View(조회많은순)
-            String scope = "All";   //별점 필터. All(전체), 5, 4, 3, 2, 1
-            String topReviewOnlyYn = "N";
-            String topReviewFirstYn = "Y";
-            Date startDate = null;//new Date();
-            Date endDate = null;//new Date();
-            String imageOnlyYn = "N";
-            ProdReviewListInfo prodReviewListInfo = productApi.getProductReviews(prodReviewUnit, prodReviewType, offset, limit, memberSn, onlineProdSn, prodSn, styleCode, prodReviewSort, scope, topReviewOnlyYn, topReviewFirstYn, startDate, endDate, imageOnlyYn, null, null);
-//            ProdReviewListInfo prodReviewListInfo = productApi.getProductReviews(prodReviewUnit, "All", offset, limit, null, null, null, null, prodReviewSort, scope, topReviewOnlyYn, topReviewFirstYn, null, null, imageOnlyYn, null, null);
-            result.put("prodReviewListInfo", prodReviewListInfo);            
-            
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-            e.printStackTrace();
-            result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
-    }
-    
     /**
      *  AP 전용 뷰티테스터 행사 제품 리뷰 상세 조회
+     *  REST-Controller 에 작성되어야 하나 getRegularEventProductReviewDetailInfo 공동사용목적으로 예외...
      *
      * @param regularEventSn
      * @return
@@ -876,16 +612,17 @@ public class EventViewController extends AbstractController {
         }
     }
     
-    // PC, MC share
+ // PC, MC share
     private HashMap<String, Object> getRegularEventProductReviewDetailInfo(int prodReviewSn) {
         System.out.println("getRegularEventProductReviewDetailInfo");
         System.out.println("#### prodReviewSn : " + prodReviewSn);
 
         HashMap<String, Object> result = new HashMap<String, Object>();
         
+        long memberSn = getMemberSn()==null?-1:getMemberSn();
+        
         try {
-            
-            ProdReviewInfo prodReviewInfo = productApi.getProductReviewDetail(Long.parseLong(String.valueOf(prodReviewSn)), getMemberSn());
+            ProdReviewInfo prodReviewInfo = productApi.getProductReviewDetail(Long.parseLong(String.valueOf(prodReviewSn)), memberSn<0?null:memberSn);
             
             /** Dummy **/
             prodReviewInfo.setProdName("뱀파이어 블랙");
@@ -1028,115 +765,6 @@ public class EventViewController extends AbstractController {
             e.printStackTrace();
         }
         return result;
-    }
-    
-    @RequestMapping("/beauty_test/regularEventProductReviewRecommend")
-    public ResponseEntity<?> reviewRecommendToggle(Model model, int prodReviewSn) {
-        
-        HashMap<String, Object> result = new HashMap<String, Object>();
-        try {
-    
-//            HashMap<String, Object> reviewDetailInfoMap = getRegularEventProductReviewDetailInfo(prodReviewSn);
-//            ProdReviewInfo prodReviewInfo =  (ProdReviewInfo) reviewDetailInfoMap.get("prodReviewInfo");
-            String toggleDiv = "";
-            boolean isSuccess = false;
-            
-            ProdReviewRecommendResult rslt = new ProdReviewRecommendResult();
-            try {
-                toggleDiv = "post";
-                ProdReviewRecommendPost body = new ProdReviewRecommendPost();
-                body.setMemberSn(getMemberSn());
-                rslt = productApi.postProductReviewRecommend(Long.parseLong(String.valueOf(prodReviewSn)), body);
-                isSuccess = true;
-            }catch(Exception e) {
-                if(e.getClass() == net.g1project.ecp.api.exception.ApiException.class && e.getMessage().indexOf("already recommended")>-1) {
-                    toggleDiv = "delete";
-                    rslt = productApi.deleteProductReviewRecommend(Long.parseLong(String.valueOf(prodReviewSn)), getMemberSn());
-                    isSuccess = true;
-                }
-            }
-            
-            ProdReviewInfo prodReviewInfo = productApi.getProductReviewDetail(Long.parseLong(String.valueOf(prodReviewSn)), getMemberSn());
-            
-            result.put("toggleDiv", toggleDiv);
-            result.put("isSuccess", isSuccess);
-            result.put("recommendCnt", prodReviewInfo.getRecommendCnt());
-            
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-            e.printStackTrace();
-            result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
-
-    }
-    
-    /**
-     *  AP 전용 뷰티테스터 행사 신청자 조회
-     *
-     * @param regularEventSn
-     * @return
-     */
-    @RequestMapping({"/beauty_test/regular_event_requesters"})
-    @ResponseBody
-    public ResponseEntity<?> regularEventRequesters(String regularEventSn, int offset, int limit, String order) {
-        System.out.println("#### regularEventSn : " + regularEventSn);
-        System.out.println("#### offset : " + offset);
-        System.out.println("#### limit : " + limit);
-        System.out.println("#### order : " + order);
-        HashMap<String, Object> result = new HashMap<String, Object>();
-        
-        try {
-            RegularEventRequesters requesters = new RegularEventRequesters();
-            RegularEventRequesters winners = new RegularEventRequesters();
-            
-            List<Long> ownRequesterSnList = new ArrayList();
-            boolean isRequest = false;
-            boolean isWin = false;
-            
-            try {
-                requesters = regulareventApi.apRegularEventRequesters(Long.parseLong(regularEventSn), "All", offset, limit, order);   //신청자 목록 : winStatusCode = All 추가 필요
-                winners = regulareventApi.apRegularEventRequesters(Long.parseLong(regularEventSn), "Win", offset, limit, order);      //당첨자 목록 : winStatusCode = Win 추가 필요
-                
-                boolean isReview = regulareventApi.apRegularEventIsReview(Long.parseLong(regularEventSn)).isResult();
-                
-                long memberSn = getMemberSn();
-/*                
-                for(RegularEventRequester rer : requesters.getRegularEventRequesters()) {
-                    System.out.println(rer.getMemberSn() + " : " + rer.getMemberId() + " : " + rer.getRequestTitle());
-                }
-*/                
-                isRequest = requesters.getRegularEventRequesters().stream().anyMatch(o -> o.getMemberSn().equals(/**Long.parseLong("311")/*/memberSn/**/));
-                isWin = isReview;//winners.getRegularEventRequesters().stream().anyMatch(o -> o.getMemberSn().equals(memberSn));
-                
-                /*
-                if(ownRequesterSnList.size()==0) {
-                    try {
-                        ApRegularEventRequester body = new ApRegularEventRequester();
-                        body.setRequesterName("홍길동");
-                        body.setRequestTitle("제목");
-                        body.setRequestReason("사연");
-                        regulareventApi.apRegularEventParticipated(Long.parseLong(regularEventSn), body);
-                    }catch(Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                */
-            }catch(Exception e) {
-                e.printStackTrace();
-            }
-            result.put("requesters", requesters);
-            result.put("ownRequesterSnList", ownRequesterSnList);
-            result.put("winners", winners);
-            result.put("isRequest", isRequest);
-            result.put("win", isWin);
-            
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-            e.printStackTrace();
-            result.put("errorData", e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
-        }
     }
     
 	@RequestMapping("/sweet_letter")

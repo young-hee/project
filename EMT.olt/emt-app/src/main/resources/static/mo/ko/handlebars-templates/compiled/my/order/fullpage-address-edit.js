@@ -12,9 +12,9 @@ this["AP"]["handlebars"]["my"]["order"]["fullpage-address-edit"] = Handlebars.te
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.recipientAddress : stack1)) != null ? stack1.address1 : stack1), depth0))
     + "\" required=\"required\" data-msg=\"주소를 입력해주세요\">\n									<input type=\"hidden\" class=\"address_first\" name=\"recipientAddress.address1\" id=\"recipientAddress.address1\" value=\""
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.recipientAddress : stack1)) != null ? stack1.address1 : stack1), depth0))
-    + "\">\n								</div>\n							</div>\n							<div class=\"input_group\">\n								<div class=\"input_wrap\">\n									<input type=\"text\" class=\"address_last\" name=\"recipientAddress.address2\" title=\"상세주소 입력\" placeholder=\"상세주소를 입력해주세요.\" value=\""
+    + "\">\n								</div>\n							</div>\n							<div class=\"input_group\">\n								<div class=\"input_wrap\">\n									<input type=\"text\" id=\"address2\" class=\"address_last\" name=\"recipientAddress.address2\" title=\"상세주소 입력\" placeholder=\"상세주소를 입력해주세요.\" value=\""
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.recipientAddress : stack1)) != null ? stack1.address2 : stack1), depth0))
-    + "\" data-msg=\"상세주소를 입력해 주세요\">\n								</div>\n							</div>\n							<!-- 지역 검색 결과 -->\n							<div class=\"address_list\"></div>\n							<!-- //지역 검색 결과 -->\n						</div>\n					</fieldset>\n";
+    + "\" required=\"required\" data-msg-required=\"상세주소를 입력해 주세요.\">\n								</div>\n							</div>\n							<!-- 지역 검색 결과 -->\n							<div class=\"address_list\"></div>\n							<!-- //지역 검색 결과 -->\n						</div>\n					</fieldset>\n";
 },"3":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 

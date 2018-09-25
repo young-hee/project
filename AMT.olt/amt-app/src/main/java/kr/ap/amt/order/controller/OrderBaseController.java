@@ -45,7 +45,8 @@ public class OrderBaseController extends AbstractViewController {
 	public static final String PAY_METHOD_CODE_BANK_AC_TRANSFER = "bank-ac-transfer";
 	public static final String PAY_METHOD_CODE_MOBILE_PHONE_PAY = "mobile-phone-pay";
 	public static final String PAY_METHOD_CODE_VIRTUAL_ACCOUNT = "virtual-account";
-	public static final String PAY_METHOD_CODE_PAYPAL = "paypal";
+	public static final String PAY_METHOD_CODE_GLOBAL_CREDIT_CARD = "eximpay";	//해외신용카드
+	public static final String PAY_METHOD_CODE_PAYPAL = "pay-pal";	//페이팔
 	public static final String PAY_METHOD_CODE_PAYCO = "payco";
 	public static final String PAY_METHOD_CODE_WPAY = "wpay";
 	public static final String PAY_METHOD_CODE_NAVERPAY = "naverpay";
@@ -367,6 +368,7 @@ public class OrderBaseController extends AbstractViewController {
 	 * 상품목록 생성(에뛰드 전용)
 	 */
 	protected void makeOrdProdSet(OrdEx ordEx, Model model, String callFlag){
+
 		/* 주문정보 */
 		List<OrdOnlineProdFoDTO> shippingOrdOnlineProdList = new ArrayList<OrdOnlineProdFoDTO>();
 		List<OrdOnlineProdFoDTO> shippingOrdOnlineBeautyPointProdList = new ArrayList<OrdOnlineProdFoDTO>();
@@ -381,7 +383,9 @@ public class OrderBaseController extends AbstractViewController {
         Map<String, OrdOnlineBulkDcFoDTO> shippingBulkDcMap = new HashMap<>(); 				// key : 주문구성상품묶음번호
         Map<Long, OrdOnlinePromoFoDTO> storePickupMNPromoMap = new HashMap<>();
         Map<String, OrdOnlinePromoFoDTO> storePickupSameTimePurPromoMap = new HashMap<>(); 	// key : 동시구매프로모션일련번호 + 동시구매묶음번호
-		Map<String, OrdOnlineBulkDcFoDTO> storeBulkDcPromoMap = new HashMap<>(); 				// key : 주문구성상품묶음번호
+		Map<String, OrdOnlineBulkDcFoDTO> storeBulkDcPromoMap = new HashMap<>(); 			// key : 주문구성상품묶음번호
+
+		StoreEx storeEx = null;
 
 		List<OrdShipAddressEx> ordShipAddressList = ordEx.getOrdShipAddressExList();
 		for (OrdShipAddressEx ordShipAddressEx : ordShipAddressList) {
@@ -454,6 +458,12 @@ public class OrderBaseController extends AbstractViewController {
 					ordOnlineProdFo.addOrdHistProdEx(ordHistProdEx);
 				}
 			}
+
+			//테이크아웃 매장
+			if ("Y".equals(ordShipAddressEx.getStorePickupYn())) {
+				storeEx = new StoreEx();
+				storeEx = ordShipAddressEx.getStoreEx();
+			}
 		}
 		model.addAttribute("ordEx", ordEx);
 
@@ -465,21 +475,23 @@ public class OrderBaseController extends AbstractViewController {
 		model.addAttribute("shippingOrdOnlineActivityPointProdList", shippingOrdOnlineActivityPointProdList);		        	// 온라인쇼핑 진주알 교환상품 목록
 
 		model.addAttribute("storePickupOrdOnlineProdList", storePickupOrdOnlineProdList);	                                 	// 테이크아웃일반상품 목록
-        model.addAttribute("storePickupMNPromoList", new ArrayList<>(storePickupMNPromoMap.values()));                      	// 온라인쇼핑M+N프로모션 목록
-        model.addAttribute("storePickupSameTimePurPromoList", new ArrayList<>(storePickupSameTimePurPromoMap.values()));    	// 온라인쇼핑동시구매프로모션 목록
+		model.addAttribute("storePickupMNPromoList", new ArrayList<>(storePickupMNPromoMap.values()));                      	// 온라인쇼핑M+N프로모션 목록
+		model.addAttribute("storePickupSameTimePurPromoList", new ArrayList<>(storePickupSameTimePurPromoMap.values()));    	// 온라인쇼핑동시구매프로모션 목록
 
 		model.addAttribute("ordOtfExList", ordOtfExList);									                                	// 주문배송지시 목록
 		model.addAttribute("ordUnitAwardOrdPromoExList", ordEx.getOrdHistEx().getOrdUnitAwardOrdPromoExList());				// 주문단위사은품 (주문서) 목록
 		model.addAttribute("ordHistPromoExList", ordEx.getOrdHistEx().getOrdHistPromoExList());									// 주문단위사은품(주문완료) 목록
 		model.addAttribute("isApMember", isMember());
 
+		model.addAttribute("storeEx", storeEx);
+
 		if ("Reception".equals(callFlag)) {
 			//주문서 조회
 
-			if (isMember()) {
+			if(isMember()){
 				List<ShipAddressInfo> shipAddressList = new ArrayList<ShipAddressInfo>();
-				for (ShipAddressInfo shipAddressInfo : apApi.getShipAddresses(getMemberSn())) {
-					if ("Y".equals(shipAddressInfo.getRepShipAddressYn())) {
+				for(ShipAddressInfo shipAddressInfo : apApi.getShipAddresses(getMemberSn())){
+					if("Y".equals(shipAddressInfo.getRepShipAddressYn())){
 						shipAddressList.add(shipAddressInfo);
 					}
 				}
@@ -553,8 +565,7 @@ public class OrderBaseController extends AbstractViewController {
 
     /* 동시구매 */
 	private OrdOnlineProdFoDTO getSameTimePurPromoOnlineProd(OrdHistProdEx ordHistProdEx, Map<String, OrdOnlinePromoFoDTO> ordOnlinePromoFoMap) {
-		//String key = ordHistProdEx.getSameTimePurPromoSn() + "_" + ordHistProdEx.getSameTimePurProdBulkNo();
-		String key = ordHistProdEx.getSameTimePurPromoSn() + "";
+		String key = ordHistProdEx.getSameTimePurPromoSn() + "_" + ordHistProdEx.getSameTimePurProdBulkNo();
 		OrdOnlinePromoFoDTO ordOnlinePromoFo = ordOnlinePromoFoMap.get(key);
 		if(ordOnlinePromoFo == null) {
 			ordOnlinePromoFo = new OrdOnlinePromoFoDTO();
@@ -567,15 +578,17 @@ public class OrderBaseController extends AbstractViewController {
 			ordOnlinePromoFoMap.put(key, ordOnlinePromoFo);
 		}
 
-		ordOnlinePromoFo.setTotalProductSaleAmount(ordOnlinePromoFo.getTotalProductSaleAmount().add(ordHistProdEx.getFinalOnlineSaleAmtPcur()));
-		ordOnlinePromoFo.setTotalFinalOnlineSaleAmount(ordOnlinePromoFo.getTotalFinalOnlineSaleAmount().add(ordHistProdEx.getProdSalePricePcur()));
+		ordOnlinePromoFo.setTotalProductSaleAmount(ordOnlinePromoFo.getTotalProductSaleAmount().add(ordHistProdEx.getProdSalePricePcur()));
+		ordOnlinePromoFo.setTotalFinalOnlineSaleAmount(ordOnlinePromoFo.getTotalFinalOnlineSaleAmount().add(ordHistProdEx.getFinalOnlineSaleAmtPcur()));
 
-		ordOnlinePromoFo.setOrdQtySum(ordOnlinePromoFo.getOrdQtySum() + ordHistProdEx.getOrdQty());
+		ordOnlinePromoFo.setOrdQtySum(ordHistProdEx.getOrdQty() / ordHistProdEx.getSameTimePurProdComposeQty());
 
 		return getOrdOnlineProdFo(ordHistProdEx, ordOnlinePromoFo);
 	}
 
 	private OrdOnlineProdFoDTO getOrdOnlineProdFo(OrdHistProdEx ordHistProdEx,  OrdOnlinePromoFoDTO ordOnlinePromoFo) {
+		/*
+		//같은 onlineProd 합치기
 		Map<String, OrdOnlineProdFoDTO> ordOnlineProdFoMap = ordOnlinePromoFo.getOrdOnlineProdFoMap();
 		OrdOnlineProdFoDTO ordOnlineProdFo = ordOnlineProdFoMap.get(ordHistProdEx.getOrdProdEx().getOnlineProdCode());
 		if(ordOnlineProdFo == null) {
@@ -583,28 +596,31 @@ public class OrderBaseController extends AbstractViewController {
 			ordOnlineProdFoMap.put(ordHistProdEx.getOrdProdEx().getOnlineProdCode(), ordOnlineProdFo);
 			ordOnlinePromoFo.getOrdOnlineProdFoList().add(ordOnlineProdFo);
 		}
+		*/
+		OrdOnlineProdFoDTO ordOnlineProdFo = makeOrdOnlineProdFo(ordHistProdEx);
+		ordOnlinePromoFo.getOrdOnlineProdFoList().add(ordOnlineProdFo);
+
 		return ordOnlineProdFo;
 	}
 
 	/* 묶음상품 */
 	private OrdOnlineProdFoDTO getBulkDcOnlineProd(OrdHistProdEx ordHistProdEx, Map<String, OrdOnlineBulkDcFoDTO> ordOnlineBulkDcFoMap) {
-		//String key = ordHistProdEx.getOrdProdEx().getBulkDcOnlineProdSn() + "_" + ordHistProdEx.getOrdIncludedProdBulkNo();
-		String key = ordHistProdEx.getOrdProdEx().getBulkDcOnlineProdSn() + "";
+		String key = ordHistProdEx.getOrdProdEx().getBulkDcOnlineProdSn() + "_" + ordHistProdEx.getOrdIncludedProdBulkNo();
 		OrdOnlineBulkDcFoDTO ordOnlineBulkDcFo = ordOnlineBulkDcFoMap.get(key);
 		if (ordOnlineBulkDcFo == null) {
 			ordOnlineBulkDcFo = new OrdOnlineBulkDcFoDTO();
 			ordOnlineBulkDcFo.setOrdOnlineProdFoMap(new HashMap<>());
 			ordOnlineBulkDcFo.setOrdOnlineProdFoList(new ArrayList<>());
 			ordOnlineBulkDcFo.setBulkDcOnlineProdName(ordHistProdEx.getOrdProdEx().getBulkDcOnlineProdNameRlang());
-			ordOnlineBulkDcFo.setBulkDcOnlineProdImgUrl(ordHistProdEx.getOrdProdEx().getOnlineProdImgUrl());
+			ordOnlineBulkDcFo.setBulkDcOnlineProdImgUrl(ordHistProdEx.getOrdProdEx().getBulkDcOnlineProdImgUrl());
 
 			ordOnlineBulkDcFoMap.put(key, ordOnlineBulkDcFo);
 		}
 
-		ordOnlineBulkDcFo.setTotalBulkDcProductSaleAmount(ordOnlineBulkDcFo.getTotalBulkDcProductSaleAmount().add(ordHistProdEx.getFinalOnlineSaleAmtPcur()));
-		ordOnlineBulkDcFo.setTotalBulkDcFinalOnlineSaleAmount(ordOnlineBulkDcFo.getTotalBulkDcFinalOnlineSaleAmount().add(ordHistProdEx.getProdSalePricePcur()));
+		ordOnlineBulkDcFo.setTotalBulkDcProductSaleAmount(ordOnlineBulkDcFo.getTotalBulkDcProductSaleAmount().add(ordHistProdEx.getProdSalePricePcur().multiply(new BigDecimal(ordHistProdEx.getOrdQty()))));
+		ordOnlineBulkDcFo.setTotalBulkDcFinalOnlineSaleAmount(ordOnlineBulkDcFo.getTotalBulkDcFinalOnlineSaleAmount().add(ordHistProdEx.getFinalOnlineSaleAmtPcur()));
 
-		ordOnlineBulkDcFo.setOrdQtySum(ordOnlineBulkDcFo.getOrdQtySum() + ordHistProdEx.getOrdQty());
+		ordOnlineBulkDcFo.setOrdQtySum(ordHistProdEx.getOrdQty() / ordHistProdEx.getOrdIncludedProdComposeQty());
 
 		return getOrdOnlineBulkDcProdFo(ordHistProdEx, ordOnlineBulkDcFo);
 	}
@@ -639,6 +655,7 @@ public class OrderBaseController extends AbstractViewController {
 		ordOnlineProdFo.setSingleProdYn(ordProd.getSingleProdYn());
 		ordOnlineProdFo.setOrdHistProdPromoAwardExList(ordHistProd.getOrdHistProdPromoAwardExList());
 		ordOnlineProdFo.setOrdHistProdAwardExList(ordHistProd.getOrdHistProdAwardExList());
+		ordOnlineProdFo.setProdTypeCode(ordHistProd.getOrdProdEx().getProdTypeCode());
 		return ordOnlineProdFo;
 	}
 
@@ -693,7 +710,8 @@ public class OrderBaseController extends AbstractViewController {
 		if (ordEx != null && ordEx.getOrdHistEx() != null && ordEx.getOrdHistEx().getOrdHistAmtExList() != null) {
 
 			BigDecimal totalOrdDcPriceSum = new BigDecimal(0);
-			BigDecimal membershipExchAmt = new BigDecimal(0);
+			BigDecimal beautyPointExchUseAmt = new BigDecimal(0);
+			BigDecimal cushionPointUseAmt = new BigDecimal(0);
 			BigDecimal packingAmtSum = new BigDecimal(0);
 			BigDecimal onlineShipProdSum = new BigDecimal(0);
 
@@ -728,12 +746,13 @@ public class OrderBaseController extends AbstractViewController {
 					|| "MPlusNCouponDc".equals(o.getOrdHistAmtTypeCode())
 					|| "Buy1GetCouponDc".equals(o.getOrdHistAmtTypeCode())
 					|| "OrdUnitCouponDc".equals(o.getOrdHistAmtTypeCode())
-					|| "ShipFeePromoDc".equals(o.getOrdHistAmtTypeCode())) {
+					|| "ShipFeePromoDc".equals(o.getOrdHistAmtTypeCode())
+					|| "PayMethodDc".equals(o.getOrdHistAmtTypeCode())) { // 2018-09-11 결제수단 할인 추가
 					totalOrdDcPriceSum = totalOrdDcPriceSum.add(o.getAmtPcur()) ;
 				}
 
 				if ("MembershipExch".equals(o.getOrdHistAmtTypeCode())) {
-					membershipExchAmt = o.getAmtPcur();
+					beautyPointExchUseAmt = o.getAmtPcur();
 				}
 
 				if ("ShipUnitPacking".equals(o.getOrdHistAmtTypeCode())) {
@@ -756,32 +775,33 @@ public class OrderBaseController extends AbstractViewController {
 			// CushionPointUse = CP -> ordEx.getOrdHistEx().getOrdHistMembershipExList().get(0).getMembershipUseAmtSumPcur();
 			for (OrdHistMembershipEx m : ordEx.getOrdHistEx().getOrdHistMembershipExList()) {
 				if ("BP".equals(m.getMembershipServiceCode())) {
-					ordAmtMap.put("BeautyPointExchUse", membershipExchAmt.add(m.getMembershipUseAmtSumPcur()));
-					totalOrdDcPriceSum = totalOrdDcPriceSum.add(membershipExchAmt.add(m.getMembershipUseAmtSumPcur()));
-				} else {
-					ordAmtMap.put("BeautyPointExchUse", new BigDecimal(0));
+					beautyPointExchUseAmt = beautyPointExchUseAmt.add(m.getMembershipUseAmtSumPcur());
+					totalOrdDcPriceSum = totalOrdDcPriceSum.add(beautyPointExchUseAmt);
 				}
 
 				if ("CP".equals(m.getMembershipServiceCode())) {
-					ordAmtMap.put("CushionPointUse", m.getMembershipUseAmtSumPcur());
-					totalOrdDcPriceSum = totalOrdDcPriceSum.add(m.getMembershipUseAmtSumPcur());
-				} else {
-					ordAmtMap.put("CushionPointUse", new BigDecimal(0));
+					cushionPointUseAmt = cushionPointUseAmt.add(m.getMembershipUseAmtSumPcur());
+					totalOrdDcPriceSum = totalOrdDcPriceSum.add(cushionPointUseAmt);
 				}
 			}
+			ordAmtMap.put("BeautyPointExchUse", beautyPointExchUseAmt);
+			ordAmtMap.put("CushionPointUse", cushionPointUseAmt);
 
 			ordAmtMap.put("totalOrdDcPriceSum", totalOrdDcPriceSum);
 
 			//정립예정포인트(뷰티포인트)
+			ordAmtMap.put("totalBeautyPointSaveSum", new BigDecimal(0)); // 기본 0으로 세팅..
 			if (ordEx.getOrdMembershipExList() != null && ordEx.getOrdMembershipExList().size() > 0) {
 				for (OrdMembershipEx o : ordEx.getOrdMembershipExList()) {
 					if ("BP".equals(o.getMembershipServiceCode())) {
 						ordAmtMap.put("totalBeautyPointSaveSum", new BigDecimal(o.getSavingExpectedPoint()));
 					}
 				}
-			} else {
-				ordAmtMap.put("totalBeautyPointSaveSum", new BigDecimal(0));
 			}
+			// 2018-09-10 적립예정포인트 null로 표기되는 영역 바깥쪽으로 빼서 변경처리..
+			/*else{
+				ordAmtMap.put("totalBeautyPointSaveSum", new BigDecimal(0));
+			}*/
 		}
 
 		return ordAmtMap;
@@ -796,10 +816,10 @@ public class OrderBaseController extends AbstractViewController {
 		if (ordEx != null && ordEx.getOrdHistEx() != null && ordEx.getOrdHistEx().getOrdHistAmtExList() != null) {
 
 			Integer onlineShipProdCnt = 0;
-			Integer ordIncludeProdBulkNo = 0;
 			Integer membershipExchCnt = 0;
 			Integer activityPointExchCnt = 0;
 			Integer storePickupProdCnt = 0;
+			Map<Integer, Integer> bulkDcCnt = new HashMap<Integer, Integer>();
 
 			List<OrdShipAddressEx> ordShipAddressList = ordEx.getOrdShipAddressExList();
 			for (OrdShipAddressEx ordShipAddressEx : ordShipAddressList) {
@@ -817,20 +837,25 @@ public class OrderBaseController extends AbstractViewController {
 								//AP
 								activityPointExchCnt++;
 							} else {
-								if ("Ord".equals(ordHistProdEx.getOrdHistProdTypeCode())) {
-									onlineShipProdCnt++;
-								}
+
 								if ("BulkDc".equals(ordHistProdEx.getOrdHistProdTypeCode())) {
-									if (ordIncludeProdBulkNo != ordHistProdEx.getOrdIncludedProdBulkNo()) {
-										onlineShipProdCnt++;
-										ordIncludeProdBulkNo = ordHistProdEx.getOrdIncludedProdBulkNo();
+									if (bulkDcCnt.get(ordHistProdEx.getOrdIncludedProdBulkNo()) == null) {
+										bulkDcCnt.put(ordHistProdEx.getOrdIncludedProdBulkNo(), 0);
 									}
+								}
+
+								if ("Ord".equals(ordHistProdEx.getOrdHistProdTypeCode())
+									|| "SameTimePur".equals(ordHistProdEx.getOrdHistProdTypeCode())) {
+									onlineShipProdCnt++;
 								}
 							}
 						}
 					}
 				}
 			}
+
+			//묶음상품 더하기
+			onlineShipProdCnt = onlineShipProdCnt + bulkDcCnt.size();
 
 			ordCntMap.put("shipOrdOnlineProdCnt", onlineShipProdCnt);
 			ordCntMap.put("membershipExchCnt", membershipExchCnt);
@@ -857,6 +882,15 @@ public class OrderBaseController extends AbstractViewController {
                 return makeNaverPayResult(request, orderSession);
             }
         }
+        
+        /*Eximbay 결제 (해외신용카드 , paypal)*/        
+        else if(PAY_METHOD_CODE_GLOBAL_CREDIT_CARD.equals(payMethodCode) || PAY_METHOD_CODE_PAYPAL.equals(payMethodCode)) {
+        	String resultCode = request.getParameter("rescode");
+        	if("0000".equals(resultCode)) { /* 거래상태 : "0000" 이외 실패 */
+				return makeEximbayPayResult(request, orderSession);
+			}
+        }
+        
         /* WPAY 결제(MOBILE/PC 동일) */
         else if(PAY_METHOD_CODE_WPAY.equals(payMethodCode)){
 			String resultCode = request.getParameter("resultCode");
@@ -887,6 +921,18 @@ public class OrderBaseController extends AbstractViewController {
         
         return null;
     }
+
+	/**
+	 * 모바일 실시간 계좌이체
+	 */
+	protected PayResult makePgPayBankResult(HttpServletRequest request, OrderSession orderSession) {
+		String pStatus = request.getParameter("P_STATUS");
+		if(pStatus == "00" || "00".equals(pStatus)){ /* 거래상태 : "00" 이외 실패 */
+			return makeINIMobilePayBankResult(request, orderSession);
+		}
+
+		return null;
+	}
 	
     /**
 	 * 네이버페이 결제정보
@@ -937,6 +983,50 @@ public class OrderBaseController extends AbstractViewController {
 		}
 		return payResult;
 	}
+	
+	/**
+	 * 해외신용카드, Paypal
+	 */
+	protected PayResult makeEximbayPayResult(HttpServletRequest request, OrderSession orderSession) {
+		
+		PayResult payResult = new PayResult();
+		Date date;
+		
+		try {
+			String pgTradeNo = request.getParameter("transid");	//거래 ID : transaction Id
+			SimpleDateFormat formatOutput = new SimpleDateFormat("yyyyMMddHHmmssZ");
+			String admissionYmdt = request.getParameter("resdt");	//거래일자시간
+			date = formatOutput.parse(admissionYmdt + "+0900");
+			
+			String authcode = request.getParameter("authcode"); //승인번호
+			String cardno1 = request.getParameter("cardno1"); //카드번호 앞 4자리
+			String cardno4 = request.getParameter("cardno4"); //카드번호 뒤 4자리
+			String payto = request.getParameter("payto"); //청구가맹점명
+			
+			String totalPayAmount = request.getParameter("amt");	// 결제된 총 금액
+			BigDecimal parseTotalPayAmount = new BigDecimal(totalPayAmount.replaceAll(",", ""));
+			
+			payResult.setPgTradeNo(pgTradeNo);
+			payResult.setPayApprovalDt(date);
+			payResult.setPayAmt(parseTotalPayAmount);
+			payResult.setCardNo(cardno1.concat("********").concat(cardno4)); 	//	카드번호 앞 4자리 + * 8자리 + 카드번호 뒤 4자리
+			payResult.setPayApprovalNo(authcode);                               // 결제승인번호
+			payResult.setPartialCancelAvailYn(CODE_Y); //부분취소 가능여부는 따로 결과값 없음 가능으로 셋팅
+	
+			payResult.setDepositYn(CODE_N);									// 예치금여부
+			payResult.setPayMethodSn(orderSession.getPayMethodSn());       // 결제수단일련번호
+			payResult.setPayServiceCode(orderSession.getPayServiceCode()); // 결제서비스코드
+			payResult.setPayMethodCode(orderSession.getPayMethodCode());   // 결제수단코드
+			payResult.setCreditcardCoSn(orderSession.getCreditcardCoSn()); // 신용카드업체일련번호
+			payResult.setNextPayUseYn(orderSession.getNextPayUseYn());     // 다음결제사용여부
+			
+			payResult.setOptAssignData(null);                               // 임의지정데이터
+		
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return payResult;
+	};
 
 	/**
 	 * W페이 결제정보
@@ -1133,13 +1223,13 @@ public class OrderBaseController extends AbstractViewController {
 					payResult.setPartialCancelAvailYn(CODE_Y);     // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 					break;
 
-				case PAY_METHOD_CODE_BANK_AC_TRANSFER:
-					/**
+				/*case PAY_METHOD_CODE_BANK_AC_TRANSFER:
+					*//**
 					 * 실시간계좌이체
-					 */
+					 *//*
 
 					payResult.setPartialCancelAvailYn(CODE_Y);     // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
-					break;
+					break;*/
 
 				case PAY_METHOD_CODE_VIRTUAL_ACCOUNT:
 					/**
@@ -1155,6 +1245,7 @@ public class OrderBaseController extends AbstractViewController {
 
 					String virtualBankAcDeadlineDt = request.getParameter("P_VACT_DATE");
 					String virtualBankAcDeadlineTime = request.getParameter("P_VACT_TIME");
+					String virtualBankAcRemitter = request.getParameter("VACT_InputName");
 					date = formatOutput.parse(virtualBankAcDeadlineDt + virtualBankAcDeadlineTime + "+0900");
 
 					String virtualBankAcAcHolder = request.getParameter("P_VACT_NAME");
@@ -1167,6 +1258,8 @@ public class OrderBaseController extends AbstractViewController {
 					payResult.setVirtualBankAcDeadlineDt(date);                     // 가상계좌기한일시
 					payResult.setVirtualBankAcDepositDt(date);                      // 가상계좌입금일시
 					payResult.setVirtualBankAcClosedSmsYn(null);                    // 가상계좌마감SMS여부
+					payResult.setVirtualBankAcRemitter(virtualBankAcRemitter);		//송금자명
+					payResult.setCashReceiptIssuePossibleYn(CODE_Y);					//현금영수증 발급여부
 					payResult.setPartialCancelAvailYn(CODE_Y);  // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 					break;
 
@@ -1187,6 +1280,34 @@ public class OrderBaseController extends AbstractViewController {
 		}
         return payResult;
     }
+
+
+	/**
+	 * 모바일 실시간 계좌이체
+	 */
+	protected PayResult makeINIMobilePayBankResult(HttpServletRequest request, OrderSession orderSession) {
+
+		PayResult payResult = new PayResult();
+
+		//payResult.setPgTradeNo(pgTradeNo);
+		//payResult.setPayApprovalDt(date);
+		payResult.setPayAmt(orderSession.getPgPayAmt());
+		//payResult.setMerchantId(merchantId);
+		payResult.setPartialCancelAvailYn(CODE_Y);     // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
+
+		/* 공통 파라미터 */
+		payResult.setDepositYn(CODE_N);           						// 예치금여부
+		payResult.setPayMethodSn(orderSession.getPayMethodSn());       // 결제수단일련번호
+		payResult.setPayServiceCode(orderSession.getPayServiceCode()); // 결제서비스코드
+		payResult.setPayMethodCode(orderSession.getPayMethodCode());   // 결제수단코드
+		payResult.setCreditcardCoSn(orderSession.getCreditcardCoSn()); // 신용카드업체일련번호
+		payResult.setNextPayUseYn(orderSession.getNextPayUseYn());     // 다음결제사용여부
+		payResult.setPayApprovalNo(null);                               // 결제승인번호
+		payResult.setOptAssignData(null);
+		payResult.setCashReceiptIssuePossibleYn(CODE_Y);					//현금영수증 발급여부
+
+		return payResult;
+	}
     
     /**
      * 이니시스 결제정보(PC)
@@ -1249,6 +1370,7 @@ public class OrderBaseController extends AbstractViewController {
 					 * CARD_SrcCode : 간편(앱)결제 구분(C : PAYCO, B : 삼성페이, D : 삼성페이(체크), G : SSGPAY, O : KAKAOPAY, L : LPAY, K : 국민앱카드, A : KPAY)
 					 */
 					String cardCoCode = request.getParameter("CARD_Code");
+					String cardCoName = request.getParameter("P_FN_NM");
 					String cardIssueBankCode = request.getParameter("CARD_BankCode");
 					String cardNo = request.getParameter("CARD_Num");
 					String partialCancelAvailYn = request.getParameter("CARD_PRTC_CODE");
@@ -1256,7 +1378,7 @@ public class OrderBaseController extends AbstractViewController {
 					String pRmesg2 = request.getParameter("CARD_Quota");
 
 					payResult.setCardCoCode(cardCoCode);
-					//payResult.setCardCoName(cardCoName);
+					payResult.setCardCoName(cardCoName);
 					payResult.setCardIssueBankCode(cardIssueBankCode);
 					payResult.setCardNo(cardNo);
 					if("1".equals(partialCancelAvailYn)){
@@ -1297,6 +1419,9 @@ public class OrderBaseController extends AbstractViewController {
 					String bankCode = request.getParameter("ACCT_BankCode");                    // 은행코드
 					String bankPCshrCode = request.getParameter("CSHR_ResultCode");             // 현금영수증 발행 정상여부
 					payResult.setPartialCancelAvailYn(CODE_Y);     // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
+					payResult.setBankCode(bankCode);
+					payResult.setPayTimeTypeCode("RealTime");
+					payResult.setCashReceiptIssuePossibleYn(CODE_Y);					//현금영수증 발급여부
 					break;
 
 				case PAY_METHOD_CODE_VIRTUAL_ACCOUNT: // 가상계좌
@@ -1317,6 +1442,7 @@ public class OrderBaseController extends AbstractViewController {
 
 					String virtualBankAcDeadlineDt = request.getParameter("VACT_Date");
 					String virtualBankAcDeadlineTime = request.getParameter("VACT_Time");
+					String virtualBankAcRemitter = request.getParameter("VACT_InputName");
 					date = formatOutput.parse(virtualBankAcDeadlineDt + virtualBankAcDeadlineTime + "+0900");
 
 					payResult.setVirtualBankAcBankCode(virtualBankAcBankCode);      // 가상계좌은행코드
@@ -1326,6 +1452,8 @@ public class OrderBaseController extends AbstractViewController {
 					payResult.setVirtualBankAcDeadlineDt(date);                     // 가상계좌기한일시
 					payResult.setVirtualBankAcDepositDt(date);                      // 가상계좌입금일시
 					payResult.setVirtualBankAcClosedSmsYn(null);                    // 가상계좌마감SMS여부
+					payResult.setVirtualBankAcRemitter(virtualBankAcRemitter);		//송금자명
+					payResult.setCashReceiptIssuePossibleYn(CODE_Y);					//현금영수증 발급여부
 					payResult.setPartialCancelAvailYn(CODE_Y);             // TODO : 부분결제취소여부에 따른 Y,N값 설정 추후 날라오는값에 따른 파라미터 변경예정!
 					break;
 			}

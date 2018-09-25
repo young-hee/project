@@ -1055,7 +1055,7 @@ public class BrandViewController extends AbstractController {
 		String cornerIds = "";
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
-		cornerIds = "M01_brandMain_m.1";
+		cornerIds = "M01_brandMain_m.1,M01_brandMain_m.2";
 
 		try {
 			List<Corner> corners = displayApi.getMenuPageCorners(

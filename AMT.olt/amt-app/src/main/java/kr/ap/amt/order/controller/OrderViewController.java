@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -106,6 +105,8 @@ public class OrderViewController extends OrderBaseController {
 			}
 		}
 
+		setOrderSession(orderSession);
+
 		// MOBILE
 		if (isMobileDevice()) {
 			model.addAttribute("storeMoUrl", storeMoUrl);	// 모바일편의점 택배
@@ -132,37 +133,42 @@ public class OrderViewController extends OrderBaseController {
 	}
 
 	/**
-	 * 주문서접수완료(실시간 계좌이체 Get)
+	 * 주문서접수완료(모바일 실시간 계좌이체)
 	 *
 	 * @param request
 	 * @param model
 	 * @return
 	 */
 	@PageTitle(title = "결제완료|에뛰드")
-    @GetMapping("/ordComplete")
+    @PostMapping("/ordBankComplete")
     public String ordBankComplete(HttpServletRequest request, Model model) {
         //TODO aki : 리턴되는 결과값 없음, 세션에서 주문번호 꺼내서 완료 페이지로 이동
+
 		OrderSession orderSession = getOrderSession();
 
 		OrdReceptComplete body = new OrdReceptComplete();
 		List<PayResult> payResultList = new ArrayList<PayResult>();
 
-		/* PG PayResult 만들기 */
-		PayResult pgPayResult = makePgPayResult(request, orderSession);
-		if(pgPayResult != null) {
-			payResultList.add(pgPayResult);
+		try {
+			/* PG PayResult 만들기 */
+			PayResult pgPayResult = makePgPayBankResult(request, orderSession);
+			if(pgPayResult != null) {
+				payResultList.add(pgPayResult);
+			}
+
+			/* Deposit PayResult 만들기 */
+			if(orderSession.getDepositPrice().compareTo(BigDecimal.ZERO) > 0) {
+				PayResult depositPayResult = new PayResult();
+				depositPayResult.setDepositYn(CODE_Y);
+				depositPayResult.setPayAmt(orderSession.getDepositPrice());
+
+				payResultList.add(depositPayResult);
+			}
+
+			body.setPayResultList(payResultList);
+		} catch (Exception e) {
+
 		}
-
-		/* Deposit PayResult 만들기 */
-		if(orderSession.getDepositPrice().compareTo(BigDecimal.ZERO) > 0) {
-			PayResult depositPayResult = new PayResult();
-			depositPayResult.setDepositYn(CODE_Y);
-			depositPayResult.setPayAmt(orderSession.getDepositPrice());
-
-			payResultList.add(depositPayResult);
-		}
-
-		body.setPayResultList(payResultList);
 
 		/* 1.주문완료 데이터 */
 		OrdEx ordEx = null;
@@ -170,28 +176,28 @@ public class OrderViewController extends OrderBaseController {
 			ordEx = orderApi.ordReceptComplete(orderSession.getOrdSn(), body);
 		} catch (ApiException e) {
 			Map<String, Object> map = new HashMap<String,Object>();
+			map.put("result", "error");
 			map.put("errorCode", e.getErrorCode());
 			map.put("errorMessage", e.getMessage());
 			map.put("errorAdditional", e.getAdditional());
 			model.addAttribute("ordCompleteError", map);
 		}
-		if(ordEx != null) {
+
+		if (ordEx != null) {
 			/* 2.주문완료 상품목록 추출*/
 			makeOrdProdSetApMall(ordEx, model, "Complete");
 
-			/* 주문완료했을 때 장바구니상품삭제 */
-			//removeOrdCartInfo(ordEx.getOrdSn());
-			return "order/order-complete";
-		} else {
-			//주문오류 발생시.
-			//return redirectOrderReception(request, model, redirectAttributes);
-			return "redirect:/order/reception";
+			/* 3.주문완료했을 때 장바구니상품삭제 */
+			removeOrdCartInfo(ordEx.getOrdSn());
 		}
+
+		return "order/order-complete";
     }
 
 	/**
 	 * 주문서접수완료(POST)
 	 */
+	@PageTitle(title = "결제완료|AP몰")
 	@PostMapping("/ordComplete")
 	public String ordComplete(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
 
@@ -200,22 +206,27 @@ public class OrderViewController extends OrderBaseController {
         OrdReceptComplete body = new OrdReceptComplete();
         List<PayResult> payResultList = new ArrayList<PayResult>();
 
-        /* PG PayResult 만들기 */
-        PayResult pgPayResult = makePgPayResult(request, orderSession);
-        if(pgPayResult != null) {
-            payResultList.add(pgPayResult);
-        }
+		try {
+			/* PG PayResult 만들기 */
+			PayResult pgPayResult = makePgPayResult(request, orderSession);
+			if (pgPayResult != null) {
+				payResultList.add(pgPayResult);
+			}
 
-        /* Deposit PayResult 만들기 */
-        if(orderSession.getDepositPrice().compareTo(BigDecimal.ZERO) > 0) {
-            PayResult depositPayResult = new PayResult();
-            depositPayResult.setDepositYn(CODE_Y);
-            depositPayResult.setPayAmt(orderSession.getDepositPrice());
+			/* Deposit PayResult 만들기 */
+			if (orderSession.getDepositPrice().compareTo(BigDecimal.ZERO) > 0) {
+				PayResult depositPayResult = new PayResult();
+				depositPayResult.setDepositYn(CODE_Y);
+				depositPayResult.setPayAmt(orderSession.getDepositPrice());
 
-            payResultList.add(depositPayResult);
-        }
+				payResultList.add(depositPayResult);
+			}
 
-        body.setPayResultList(payResultList);
+			body.setPayResultList(payResultList);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
         /* 1.주문완료 데이터 */
 		OrdEx ordEx = null;
@@ -223,60 +234,23 @@ public class OrderViewController extends OrderBaseController {
 			ordEx = orderApi.ordReceptComplete(orderSession.getOrdSn(), body);
 		} catch (ApiException e) {
 			Map<String, Object> map = new HashMap<String,Object>();
+			map.put("result", "error");
 			map.put("errorCode", e.getErrorCode());
 			map.put("errorMessage", e.getMessage());
 			map.put("errorAdditional", e.getAdditional());
 			model.addAttribute("ordCompleteError", map);
 		}
-        if(ordEx != null) {
-            /* 2.주문완료 상품목록 추출*/
+
+		if (ordEx != null) {
+			/* 2.주문완료 상품목록 추출*/
 			makeOrdProdSetApMall(ordEx, model, "Complete");
 
-            /* 주문완료했을 때 장바구니상품삭제 */
-            //removeOrdCartInfo(ordEx.getOrdSn());
-            return "order/order-complete";
-        } else {
-			//주문오류 발생시.
-			//return redirectOrderReception(request, model, redirectAttributes);
-			return "redirect:/order/reception";
-        }
+			/* 3.주문완료했을 때 장바구니상품삭제 */
+			removeOrdCartInfo(ordEx.getOrdSn());
+		}
+
+		return "order/order-complete";
 	}
-
-	/**
-	 * 주문서 조회
-	 *
-	 * @param request
-	 * @param model
-	 * @param redirectAttributes
-	 * @return
-	 */
-	@GetMapping("/reception")
-	public String redirectOrderReception(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
-
-		try {
-			OrdEx ordEx = orderApi.getOrd(getOrderSession().getOrdSn());
-
-			/* 주문 상품목록 생성 */
-			makeOrdProdSetApMall(ordEx, model, "Reception");
-
-			model.addAttribute("result", true);
-			model.addAttribute("pageTitle", "주문/결제|에뛰드");
-		} catch (ApiException e) {
-			return redirectOrdErr(request, redirectAttributes, e);
-		}
-
-		// MOBILE
-		if (isMobileDevice()) {
-			model.addAttribute("storeMoUrl", storeMoUrl);	// 모바일편의점 택배
-		}
-		// PC
-		if(isPcDevice()){
-			model.addAttribute("storePcUrl", storePcUrl);	// PC편의점 택배
-		}
-
-		return "order/order";
-	}
-
 
 	/**
 	 * 이니시스 결제 - 입금결과 통보 (PC)
@@ -377,7 +351,7 @@ public class OrderViewController extends OrderBaseController {
 				if ("VBANK".equals(pType)) {
 					NotifyAccountDeposit nad = new NotifyAccountDeposit();
 					nad.setPayMethodCode(PAY_METHOD_CODE_VIRTUAL_ACCOUNT);  // virtual-account
-					nad.setPgTradeNo(pTid);
+					//nad.setPgTradeNo(pTid);
 					nad.setVirtualBankAcDepositDt(date);
 					result = orderApi.notifyAccountDeposit(ordNo, nad);
 				}
@@ -389,8 +363,9 @@ public class OrderViewController extends OrderBaseController {
 					if ("BANK".equals(pType)) {
 						NotifyAccountDeposit nad = new NotifyAccountDeposit();
 						nad.setPayMethodCode(PAY_METHOD_CODE_BANK_AC_TRANSFER);  // bank-ac-transfer
-						nad.setPgTradeNo(pTid);
+						nad.setNewPgTradeNo(pTid);
 						//nad.setVirtualBankAcDepositDt(date);
+						nad.setNewApprovalDt(date);
 						result = orderApi.notifyAccountDeposit(ordNo, nad);
 					}
 				}

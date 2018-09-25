@@ -203,16 +203,22 @@
 
 	<div layout:fragment="captcha" th:remove="tag">
 	
-		<div class="input_group">
-			<div class="captcha_area">
-        		<img id="captchaimg" th:src="'/captcha/getCaptchaImage?keyword=' + ${captchaKey}" width="100%" height="100%" alt="캡차이미지">
+		
+		<div class="captcha clear">
+			<!-- captcha 영역 -->
+			<div class="img"><!-- 캡차 이미지 --><img id="captchaimg" th:src="'/captcha/getCaptchaImage?keyword=' + ${captchaKey}" width="100%"
+					 height="100%"
+					 alt="캡차이미지">
 			</div>
-			<div class="gap"></div>
-			<div class="input_wrap">
-				<input type="hidden" name="captchaKey" th:value="${captchaKey}" required="required">
-				<input type="text" id="captcha" name="captcha" tabindex="9" placeholder="자동입력 방지문자" class="int"
-					   required="required" data-msg-required="자동입력 방지문자를 입력해 주세요.">
+			<input type="hidden" name="captchaKey" th:value="${captchaKey}" required="required">
+			<div class="btns">
+				<button type="button" onclick="reCaptcha()">새로고침</button>
+				<button type="button" onclick="playCaptcha()">음성듣기</button>
 			</div>
+		</div>
+		<div class="input_wrap">
+			<input type="tel" id="captcha" name="captcha" tabindex="9" placeholder="자동입력 방지문자" class="int"
+				   required="required" data-msg-required="자동입력 방지문자를 입력해 주세요.">
 		</div>
 	
 	

@@ -375,7 +375,7 @@
 			}
 			// 2018-09-10 추가
 			if(clicked){
-				$('[name=nextPayUseYn]').trigger("click");
+				$('#nextPayAgree').trigger("click");
 			}
 		}
 	};
@@ -396,24 +396,6 @@
 		$('.other_noty_area > div').hide();
 		if ($(this).next().hasClass(class_name)) {
 			$(this).closest('.card_list').next('.other_noty_area').find('.'+class_name).show();
-		}
-	});
-
-	/* 선택한 결제 수단을 다음에도 사용 */
-	$('[name=nextPayUseYn]').on('click', function(e){
-		if($(this).is(":checked")) {
-			var selectedPaymethod = $('input:radio[name="rdoPayMethod"]:checked').val();
-			if (selectedPaymethod == null || selectedPaymethod == '') {
-				AP.modal.alert("결제수단을 선택해 주세요.");
-				$('[name=nextPayUseYn]:checked').prop('checked', false);
-				$('[name=nextPayUseYn]').attr("value", "N");
-			} else {
-				$('[name=nextPayUseYn]:checked').prop('checked', true);
-				$('[name=nextPayUseYn]').attr("value","Y");
-			}
-		}else{
-			$('[name=nextPayUseYn]:checked').prop('checked', false);
-			$('[name=nextPayUseYn]').attr("value","N");
 		}
 	});
 
@@ -525,7 +507,7 @@
 				});
 			} else {
 				//WPAY 회원일 경우
-
+				setViewWpay(obj, payMethod, goPayMethod, payMethodSn, payServiceCode, payMethodCode);
 			}
 		}).fail(function (e) {
 			AP.modal.alert("[ajax.fail]실패");
@@ -544,6 +526,15 @@
 		$form.attr("action", "/payment/wpayRegist");
 		$form.attr("target", "wpayRegistPopup");
 		$form.submit();
+
+	};
+
+	/*wpay 회원인 경우 ui 처리*/
+	function setViewWpay(obj, payMethod, goPayMethod, payMethodSn, payServiceCode, payMethodCode){
+
+		$('input[name=goPayMethod]').val('');
+		$("select[name=cardCo]").prop('selectedIndex',0); 	// 콤보박스 초기화
+		$('#checkedPayMethod').html($(obj).attr('title')); // 선택결제수단 Title
 
 	};
 

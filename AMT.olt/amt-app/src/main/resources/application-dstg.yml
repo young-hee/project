@@ -30,38 +30,56 @@ spring:
 store:
   url:
     pc:
-      base-url: http://ecp-dev.etudehouse.com:81
+      base-url: https://ecp-stg.amorepacificmall.com
     mo:
-      base-url: http://m-ecp-dev.etudehouse.com:81
+      base-url: https://m-ecp-stg.amorepacificmall.com
 
-#결제
+#결제    
 payment:
-  #inicis
+  #inicis 
   ini:
-    mid: etudetest1
+    inipayhome: /data/was/INIpay50
+    mid: amoreTest1
     keyPw: 1111
-    signKey : bGRtZXBXZU11UWQ1R3RNY2FvN1NPZz09
-    siteDomain :
-
+    signKey: eUtWWWpkYWhIeGxUY2NPOVRQRFUrUT09
+    pc:
+      siteDomain: https://ecp-stg.amorepacificmall.com
+    mo:
+      siteDomain: https://m-ecp-stg.amorepacificmall.com
+    # 이니시스 PC 결제 스크립트 import
+    # 테스트 https://stgstdpay.inicis.com/stdjs/INIStdPay.js
+    # 운영    https://stdpay.inicis.com/stdjs/INIStdPay.js
+    # paymentJsUrl: https://stgstdpay.inicis.com/stdjs/INIStdPay.js
+    
     #이니시스 다이렉트 결제 - 카카오페이, 페이코결제
-    direct:
-      mid: etudetest0
-
-  #네이버페이
+    direct: 
+      mid: amoreTest2
+      signKey: Q1F3Q3N2a2RGYW5lbG0xQkVvQ2ZBdz09
+  
+  #네이버페이  
   naver:
-    clientId: u86j4ripEt8LRfPGzQ8
+    partnerId: amorepacific-mall
+    clientId: HgNUQVYcJatk68lO2o0c
+    clientSecret: MdwcNKybxY
     mode: development
-
-  #inicis 간편결제 (wpay)
+    apiDomain: https://dev.apis.naver.com
+    confirmUrl: /naverpay/payments/v2/apply/payment
+    cancelUrl: /naverpay/payments/v1/cancel
+  
+  #inicis 간편결제 (wpay)  
   wpay:
-    mid: etudepay00
-    hashKey: F3149950A7B6289723F325833F588ETU
-    seedKey: qn0d/tcu6EChPFfXDnU76Q==
-    seedIv: WPAYETUDEPAY0000
+    mid: INIWPAYTST
+    hashKey: F3149950A7B6289723F325833F588STD
+    seedKey: YXfk5YpaAlFPjFpczsB/yA==
+    seedIv: WPAYINIWPAYTSTST
 
   krp:
     mid: 2E673024B7
     secretKey: 44D3FA8EB70206CC4DCB7018984364B7
+    requestUrl: https://secureapi.test.eximbay.com/Gateway/BasicProcessor.krp
+    #운영
+    #requestUrl: https://secureapi.eximbay.com/Gateway/BasicProcessor.krp
+
 
 bluewave:
   fileupload:
